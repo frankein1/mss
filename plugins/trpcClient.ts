@@ -1,5 +1,6 @@
 import { httpBatchLink, createTRPCNuxtClient } from 'trpc-nuxt/client'
 import { HttpBatchLinkOptions } from '@trpc/client'
+import superjson from 'superjson'
 import type { AppRouter } from '~/server/routers'
 
 export default defineNuxtPlugin(() => {
@@ -14,7 +15,8 @@ export default defineNuxtPlugin(() => {
     }
   }
   const client = createTRPCNuxtClient<AppRouter>({
-    links: [httpBatchLink(options)]
+    links: [httpBatchLink(options)],
+    transformer: superjson
   })
 
   return {

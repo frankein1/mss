@@ -28,7 +28,7 @@
     "openid-client": "^5.4.0",
     "pinia": "^2.0.35",
     "postcss-html": "^1.5.0",
-    "superjson": "^1.12.2",
+    "superjson": "^1.12.3",
     "trpc-nuxt": "^0.8.0",
     "uuid": "^9.0.0",
     "vue-scrollto": "^2.20.0",

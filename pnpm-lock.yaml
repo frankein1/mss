@@ -34,7 +34,7 @@ specifiers:
   stylelint: ^15.6.0
   stylelint-config-recommended-vue: ^1.4.0
   stylelint-config-standard-scss: ^8.0.0
-  superjson: ^1.12.2
+  superjson: ^1.12.3
   trpc-nuxt: ^0.8.0
   typescript: ^5.0.4
   uuid: ^9.0.0
