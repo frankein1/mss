@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:12.14-alpine
+    container_name: monsuivisocial_pg
+    environment:
+      - POSTGRES_DB=$DB_DATABASE
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+    ports:
+      - '$DB_PORT:5432'
+    volumes:
+      - monsuivisocial_pgdata:/var/lib/postgresql/data
+    networks:
+      - monsuivisocial_network
+    restart: always
+
+volumes:
+  monsuivisocial_pgdata:
+    name: monsuivisocial_pgdata
+
+networks:
+  monsuivisocial_network:
+    external: false
+    name: monsuivisocial_network

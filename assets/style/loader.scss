@@ -1,0 +1,7 @@
+@mixin loader {
+  border-style: solid;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  border-bottom-color: transparent;
+}

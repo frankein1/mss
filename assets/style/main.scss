@@ -1,0 +1,159 @@
+@use './variables' as *;
+@use '@gouvfr/dsfr/src/core/index' as dsfr;
+@use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
+:root {
+  --primary-light: #{$primary-light};
+  --primary-light-hover: #{$primary-light-hover};
+  --primary: #{$primary};
+  --primary-hover: #{$primary-hover};
+  --primary-active: #{$primary-active};
+
+  /* DSFR customisation */
+  --background-action-high-blue-france: #{$primary};
+  --border-action-high-blue-france: #{$primary};
+  --text-action-high-blue-france: #{$primary};
+
+  /* Couleurs theme rubriques */
+  --color-interview-light: #{$interview-light};
+  --color-interview-light-hover: #{$interview-light-hover};
+  --color-interview: var(--green-archipel-sun-391-moon-716);
+  --color-interview-hover: var(--green-archipel-sun-391-moon-716-hover);
+  --color-interview-active: var(--green-archipel-sun-391-moon-716);
+  --color-help-request-light: var(--primary-light);
+  --color-help-request-light-hover: var(--primary-light-hover);
+  --color-help-request: var(--primary);
+  --color-help-request-hover: var(--primary-hover);
+  --color-help-request-active: var(--primary-active);
+  --color-mes-droits-sociaux: var(--blue-cumulus-sun-368-moon-732);
+  --color-mes-droits-sociaux-hover: var(--blue-cumulus-sun-368-moon-732);
+  --color-mes-droits-sociaux-active: var(--blue-cumulus-sun-368-moon-732);
+}
+
+html,
+body,
+#__nuxt {
+  height: 100%;
+}
+
+.main-container {
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: $shadow-light;
+}
+
+.fr-badge {
+  text-transform: none;
+}
+
+.fr-table table {
+  display: table;
+}
+
+.table-container {
+  overflow-x: auto;
+
+  .fr-table {
+    width: max-content;
+    min-width: 100%;
+
+    tbody {
+      background-color: white;
+    }
+
+    thead,
+    &:not(.stripped-table) tbody {
+      background-color: white;
+    }
+
+    .clickable-row {
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--background-default-grey-hover);
+      }
+
+      &:active {
+        background-color: var(--background-default-grey-active);
+      }
+    }
+  }
+}
+
+.information-list {
+  @include dsfr.disable-list-style;
+
+  --li-bottom: 0.5rem;
+
+  .information-label {
+    font-weight: 700;
+  }
+
+  .information-line {
+    display: block;
+  }
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slide-down {
+  0% {
+    opacity: 0;
+    transform: translateY(-1.6rem);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+// FIXME: DSFR v1.8.* regression - See https://github.com/GouvernementFR/dsfr/issues/488
+@include dsfr-media-query.respond-from('md') {
+  .fr-container--fluid {
+    overflow: initial;
+  }
+}
+
+// It seems incredibly horrible but is necessary to be able to override DSFR when programmatically focusing an element
+.force-focus-visible:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+select:focus:not(:focus-visible) {
+  outline-style: solid !important;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+.landing-subtitle {
+  @include dsfr.title-style(h5);
+
+  display: block;
+  font-weight: normal;
+  text-align: center;
+}
+
+.landing-video {
+  background: none !important;
+
+  &:hover,
+  &:focus,
+  &:active {
+    background: none !important;
+  }
+
+  &::after {
+    display: none;
+  }
+}

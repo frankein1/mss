@@ -1,0 +1,7 @@
+node_modules
+.eslintcache
+.nuxt
+coverage
+.output
+.stylelintcache
+.env

@@ -1,0 +1,48 @@
+@use '~/assets/style/loader' as loader;
+
+.fr-btn {
+  border-radius: 1.25rem;
+
+  &.fr-btn--sm {
+    border-radius: 1rem;
+  }
+
+  &.fr-btn--lg {
+    border-radius: 1.5rem;
+  }
+}
+
+.fr-btns-group--lg .fr-btn {
+  border-radius: 1.5rem;
+}
+
+.submit-btn {
+  margin: 0 auto;
+  display: block;
+}
+
+button[type='submit'][submitting='true']::before {
+  width: 16px;
+  height: 16px;
+  border-width: 1px;
+  border-color: currentcolor;
+  display: inline-block;
+  content: '';
+  margin-right: 0.25rem;
+
+  @include loader.loader;
+}
+
+.btn-delete-action {
+  &:not(.fr-btn--tertiary-no-outline) {
+    --hover-tint: var(--hover);
+    --hover: var(--background-action-high-red-marianne-hover);
+    --active: var(--background-action-high-red-marianne-active);
+
+    background-color: var(--background-action-high-red-marianne);
+  }
+
+  &.fr-btn--tertiary-no-outline {
+    color: var(--text-default-error);
+  }
+}

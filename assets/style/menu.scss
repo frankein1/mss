@@ -1,0 +1,58 @@
+@use '~/assets/style/variables' as *;
+@use '@gouvfr/dsfr/src/core/index' as dsfr;
+@use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
+.autocomplete,
+.searchable-select,
+.multi-select {
+  position: relative;
+}
+
+.menu {
+  @include dsfr.disable-list-style;
+
+  background: #fff;
+  border-radius: 0 0 0.5rem 0.5rem;
+  box-shadow: $shadow-dark;
+  z-index: $over-z-index;
+  position: absolute;
+  width: 100%;
+  animation: slide-down 0.15s ease 1;
+  max-height: 18.75rem;
+  overflow-y: scroll;
+  min-height: 1.5rem;
+  padding: 4px; // As the overflow is set to scroll, menu item outline needs this extra padding
+}
+
+.menu-item:last-child {
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+
+:not(.fr-search-bar) > .menu > .menu-item {
+  padding: 0.5rem;
+  cursor: pointer;
+  outline-color: #0a76f6;
+  outline-offset: 2px;
+  outline-width: 2px;
+}
+
+.active-menu-item {
+  outline-style: solid;
+}
+
+.fr-grid-row--gutters > [class*=' fr-col-'].searchable-select .menu,
+.fr-grid-row--gutters.form-grid > .searchable-select .menu,
+.fr-grid-row--gutters > [class*=' fr-col-'].autocomplete .menu,
+.fr-grid-row--gutters.form-grid > .autocomplete .menu,
+.fr-grid-row--gutters > [class*=' fr-col-'].multi-select .menu,
+.fr-grid-row--gutters.form-grid > .multi-select .menu {
+  width: calc(100% - 1rem);
+
+  @include dsfr-media-query.respond-from('lg') {
+    width: calc(100% - 1.5rem);
+  }
+}
+
+.menu .fr-tag {
+  text-align: left;
+}

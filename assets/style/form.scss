@@ -1,0 +1,49 @@
+@use '@gouvfr/dsfr/src/core/index' as dsfr;
+@use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
+.form-grid {
+  width: 100%;
+}
+
+.form-grid > *:not(.fr-col-12, .fr-fieldset__legend) {
+  @include dsfr.grid-col(12);
+
+  padding: 0.5rem;
+
+  @include dsfr-media-query.respond-from('lg') {
+    @include dsfr.grid-col(4);
+
+    padding: 0.75rem;
+  }
+}
+
+.form-grid > {
+  .fr-input-group,
+  .fr-select-group {
+    align-self: flex-end;
+
+    &:last-child {
+      margin-bottom: 1.5rem;
+    }
+  }
+}
+
+.fr-input-group--disabled .fr-input-wrap {
+  cursor: not-allowed;
+
+  .fr-input:read-only {
+    color: var(--text-disabled-grey);
+    box-shadow: inset 0 -2px 0 0 var(--border-disabled-grey);
+    pointer-events: none;
+
+    &[type='date'] {
+      --data-uri-svg: url("data:image/svg+xml;charset=utf8,<svg xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 24 24'><path fill='%23929292' d='M17 3h4c.55 0 1 .45 1 1v16c0 .55-.45 1-1 1H3c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h4V1h2v2h6V1h2v2zm-2 2H9v2H7V5H4v4h16V5h-3v2h-2V5zm5 6H4v8h16v-8z'/></svg>");
+
+      background-image: var(--data-uri-svg);
+    }
+  }
+}
+
+.fr-select-group > .fr-hint-text {
+  margin-top: 1rem;
+}

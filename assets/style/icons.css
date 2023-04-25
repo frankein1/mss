@@ -1,0 +1,14 @@
+.fr-icon-inbox-archive-line::before,
+.fr-icon-inbox-archive-line::after {
+  mask-image: url('@/assets/icons/archive-inbox-line.svg');
+}
+
+.fr-icon-calendar-check-line::before,
+.fr-icon-calendar-check-line::after {
+  mask-image: url('@/assets/icons/calendar-check-line.svg');
+}
+
+.fr-icon-timer-line::before,
+.fr-icon-timer-line::after {
+  mask-image: url('@/assets/icons/timer-line.svg');
+}

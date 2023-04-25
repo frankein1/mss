@@ -1,0 +1,88 @@
+<template>
+  <dialog
+    id="global-modal"
+    ref="modal"
+    class="fr-modal"
+    role="dialog"
+    aria-labelledby="global-modal-title"
+  >
+    <div class="fr-container fr-container--fluid fr-container-md">
+      <div class="fr-grid-row fr-grid-row--center">
+        <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
+          <div class="fr-modal__body">
+            <div class="fr-modal__header">
+              <button
+                class="fr-btn--close fr-btn"
+                aria-controls="global-modal"
+                title="Fermer"
+              >
+                Fermer
+              </button>
+            </div>
+            <div class="fr-modal__content">
+              <h1
+                id="global-modal-title"
+                class="fr-modal__title"
+              >
+                <span
+                  class="fr-icon-arrow-right-line fr-icon--lg"
+                  aria-hidden="true"
+                ></span>
+                {{ title }}
+              </h1>
+              <component
+                :is="contentComponent"
+                v-if="contentComponent"
+                v-bind="contentComponentProps"
+                v-on="contentComponentEvents"
+              ></component>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </dialog>
+</template>
+
+<script setup>
+  const { $globalEventEmitter } = useNuxtApp()
+
+  const modal = ref(null)
+  const title = ref('')
+  const contentComponent = shallowRef('')
+  const contentComponentProps = ref(undefined)
+  const contentComponentEvents = ref(undefined)
+
+  onMounted(() => {
+    modal.value.addEventListener('dsfr.conceal', onClose)
+    $globalEventEmitter.on('openModal', onOpen)
+    $globalEventEmitter.on('closeModal', close)
+  })
+
+  onBeforeUnmount(() => {
+    modal.value.removeEventListener('dsfr.conceal', onClose)
+  })
+
+  function onOpen({
+    title: _title,
+    contentComponent: _contentComponent,
+    contentComponentProps: _contentComponentProps,
+    contentComponentEvents: _contentComponentEvents
+  }) {
+    title.value = _title
+    contentComponent.value = _contentComponent
+    contentComponentProps.value = _contentComponentProps
+    contentComponentEvents.value = _contentComponentEvents
+  }
+
+  function onClose() {
+    title.value = ''
+    contentComponent.value = ''
+    contentComponentProps.value = undefined
+    contentComponentEvents.value = undefined
+  }
+
+  function close() {
+    dsfr(modal.value).modal.conceal()
+  }
+</script>
