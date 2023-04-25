@@ -81,11 +81,11 @@
   import { Routes } from '~/utils/routing/routes'
 
   const MENU_ITEMS = [
-    // {
-    //   to: Routes.Overview,
-    //   label: 'Tableau de bord',
-    //   icon: 'fr-icon-home-4-line'
-    // },
+    {
+      to: Routes.LoginSuccess,
+      label: 'Tableau de bord',
+      icon: 'fr-icon-home-4-line'
+    }
     // {
     //   to: Routes.Beneficiaries,
     //   label: 'Bénéficiaires',

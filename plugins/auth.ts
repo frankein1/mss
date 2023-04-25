@@ -1,13 +1,13 @@
-import { parseJwt } from '~/utils/parseJwt'
+import { useAuthStore } from '~/store/auth'
 
-export function useAuthUser() {
+export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
   const sessionCookieKey = config.public.sessionCookieKey
   const cookie = useCookie(sessionCookieKey)
   if (!cookie || !cookie.value) {
-    return null
+    return
   }
   const { user } = parseJwt(cookie.value)
-
-  return user
-}
+  const store = useAuthStore()
+  store.setUser(user)
+})

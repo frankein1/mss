@@ -1,45 +1,61 @@
 import { StructureType, UserRole } from '@prisma/client'
 import { defineStore } from 'pinia'
-import { useAuthUser } from '~/composables/useAuthUser'
+import { JwtUser } from '~/types/user'
 
-export const useAuthStore = defineStore('auth', () => {
-  const user = useAuthUser()
-
-  const isAuthenticated = computed(() => {
-    return !!user
-  })
-  const isResponsableDeStructure = computed(
-    () => user?.role === UserRole.StructureManager
-  )
-  const isTravailleurSocial = computed(
-    () => user?.role === UserRole.SocialWorker
-  )
-  const isInstructeur = computed(() => user?.role === UserRole.Instructor)
-  const isReferent = computed(() => user?.role === UserRole.Referent)
-  const isAgentDAccueil = computed(() => user?.role === UserRole.ReceptionAgent)
-  const userId = computed(() => user?.id)
-  const userName = computed(() =>
-    user ? `${user?.firstName} ${user?.lastName}` : ''
-  )
-  const userOrganisationId = computed(() => user?.structureId)
-  const isMinistryAgent = computed(
-    () => user?.structureType === StructureType.Ministere
-  )
-  const isAssociationAgent = computed(
-    () => user?.structureType === StructureType.Association
-  )
-
-  return {
-    isAuthenticated,
-    isResponsableDeStructure,
-    isTravailleurSocial,
-    isInstructeur,
-    isReferent,
-    isAgentDAccueil,
-    userId,
-    userName,
-    userOrganisationId,
-    isMinistryAgent,
-    isAssociationAgent
+export const useAuthStore = defineStore({
+  id: 'auth',
+  state: () => {
+    const user: JwtUser | null = null as any
+    return {
+      user
+    }
+  },
+  actions: {
+    setUser(user: JwtUser) {
+      this.user = user
+    }
+  },
+  getters: {
+    isAuthenticated(): boolean {
+      return !!this.user
+    },
+    isResponsableDeStructure(): boolean {
+      return this.user?.role === UserRole.StructureManager
+    },
+    isTravailleurSocial(): boolean {
+      return this.user?.role === UserRole.SocialWorker
+    },
+    isInstructeur(): boolean {
+      return this.user?.role === UserRole.Instructor
+    },
+    isReferent(): boolean {
+      return this.user?.role === UserRole.Referent
+    },
+    isAgentDAccueil(): boolean {
+      return this.user?.role === UserRole.ReceptionAgent
+    },
+    userId(): string | null {
+      return this.user ? this.user.id : null
+    },
+    userName(): string | null {
+      return this.user ? `${this.user.firstName} ${this.user.lastName}` : 'null'
+    },
+    userOrganisationId(): string | null {
+      return this.user
+        ? this.user.structureId
+          ? this.user.structureId
+          : null
+        : null
+    },
+    isMinistryAgent(): boolean {
+      return this.user
+        ? this.user.structureType === StructureType.Ministere
+        : false
+    },
+    isAssociationAgent(): boolean {
+      return this.user
+        ? this.user.structureType === StructureType.Association
+        : false
+    }
   }
 })
