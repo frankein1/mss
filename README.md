@@ -17,13 +17,13 @@
 install dependencies
 
 ```sh
-npm install
+pnpm install
 ```
 
 copy env variables
 
 ```sh
-cp .env.dist .env
+cp .env.sample .env
 
 ## fill .env file
 ```
@@ -31,19 +31,19 @@ cp .env.dist .env
 start postgres
 
 ```sh
-npm run db:start
+pnpm db:start
 ```
 
 generate the prisma client
 
 ```sh
-npm run prisma generate
+pnpm prisma generate
 ```
 
 apply migrations
 
 ```sh
-npm run prisma migrate deploy
+pnpm prisma migrate deploy
 ```
 
 ## Sheatsheet
@@ -51,11 +51,11 @@ npm run prisma migrate deploy
 generate migration script with prisma
 
 ```sh
-npm run prisma migrate dev --name [MIGRATION_NAME]
+pnpm prisma migrate dev --name [MIGRATION_NAME]
 ```
 
 format prisma schema file
 
 ```sh
-npm run prisma format
+pnpm prisma format
 ```
