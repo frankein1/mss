@@ -3,8 +3,9 @@ import type { OpenSnackbar } from '~/types/snackbar'
 
 const DEFAULT_SNACKBAR_DURATION = 5000
 
-export default defineNuxtPlugin(() => {
+export function useSnackbar() {
   const { $globalEventEmitter } = useNuxtApp()
+
   const openSnackbar =
     (snackbarType: AlertType): OpenSnackbar =>
     (
@@ -20,13 +21,9 @@ export default defineNuxtPlugin(() => {
       })
 
   return {
-    provide: {
-      snackbar: {
-        success: openSnackbar(AlertType.Success),
-        error: openSnackbar(AlertType.Error),
-        info: openSnackbar(AlertType.Info),
-        warning: openSnackbar(AlertType.Warning)
-      }
-    }
+    success: openSnackbar(AlertType.Success),
+    error: openSnackbar(AlertType.Error),
+    info: openSnackbar(AlertType.Info),
+    warning: openSnackbar(AlertType.Warning)
   }
-})
+}

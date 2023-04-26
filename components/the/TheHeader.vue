@@ -31,11 +31,14 @@
   </div>
 </template>
 
-<script setup>
-  defineProps({
-    title: { type: String, required: true },
-    backLink: { type: String, default: '' }
-  })
+<script lang="ts" setup>
+  withDefaults(
+    defineProps<{
+      title: string
+      backLink?: string
+    }>(),
+    { backLink: '' }
+  )
 </script>
 
 <style lang="scss" scoped>

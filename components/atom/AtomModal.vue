@@ -44,30 +44,36 @@
   </dialog>
 </template>
 
-<script setup>
+<script lang="ts" setup>
   const { $globalEventEmitter } = useNuxtApp()
 
-  const modal = ref(null)
+  const modal = ref<HTMLDialogElement | null>(null)
   const title = ref('')
   const contentComponent = shallowRef('')
   const contentComponentProps = ref(undefined)
   const contentComponentEvents = ref(undefined)
 
   onMounted(() => {
-    modal.value.addEventListener('dsfr.conceal', onClose)
+    modal.value?.addEventListener('dsfr.conceal', onClose)
     $globalEventEmitter.on('openModal', onOpen)
     $globalEventEmitter.on('closeModal', close)
   })
 
   onBeforeUnmount(() => {
-    modal.value.removeEventListener('dsfr.conceal', onClose)
+    modal.value?.removeEventListener('dsfr.conceal', onClose)
   })
 
+  // FIXME: Type component
   function onOpen({
     title: _title,
     contentComponent: _contentComponent,
     contentComponentProps: _contentComponentProps,
     contentComponentEvents: _contentComponentEvents
+  }: {
+    title: string
+    contentComponent: any
+    contentComponentProps: any
+    contentComponentEvents: any
   }) {
     title.value = _title
     contentComponent.value = _contentComponent
@@ -83,6 +89,7 @@
   }
 
   function close() {
-    dsfr(modal.value).modal.conceal()
+    if (!modal.value) return
+    window.dsfr(modal.value).modal.conceal()
   }
 </script>

@@ -5,12 +5,15 @@
   ></span>
 </template>
 
-<script setup>
-  const props = defineProps({
-    inlined: { type: Boolean, default: false },
-    borderColor: { type: String, default: 'var(--primary)' },
-    diameter: { type: Number, default: 48 }
-  })
+<script lang="ts" setup>
+  const props = withDefaults(
+    defineProps<{
+      inlined?: boolean
+      borderColor?: string
+      diameter?: number
+    }>(),
+    { inlined: false, borderColor: 'var(--primary)', diameter: 48 }
+  )
 
   const BORDER_PERCENTAGE = 0.1
   const style = computed(() => ({
