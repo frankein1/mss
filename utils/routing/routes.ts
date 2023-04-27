@@ -15,5 +15,7 @@ export const Routes = {
   LoginSuccess: `${AppRoute}/success`,
   LogoutSuccess: `${AppRoute}/logout-success`,
 
+  Users: `${AppRoute}/users`,
+
   Stats: `${AppRoute}/stats`
 }

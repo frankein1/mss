@@ -7,9 +7,6 @@ export const getAgentsHandler = async ({
 }: {
   ctx: AppContext
 }) => {
-  if (!user) {
-    throw invalidError('SessionUser is null')
-  }
   if (!user.structureId) {
     throw invalidError('structureId is null')
   }
@@ -30,14 +27,7 @@ export const getAgentsHandler = async ({
     )
 }
 
-export const getBeneficiariesCitiesHandler = async ({
-  ctx: { user }
-}: {
-  ctx: AppContext
-}) => {
-  if (!user) {
-    throw invalidError('SessionUser is null')
-  }
+export const getBeneficiariesCitiesHandler = async () => {
   return await prismaClient.beneficiary.groupBy({
     by: ['city'],
     where: {
@@ -52,9 +42,6 @@ export const getStructureFollowupTypesHandler = async ({
 }: {
   ctx: AppContext
 }) => {
-  if (!user) {
-    throw invalidError('SessionUser is null')
-  }
   if (!user.structureId) {
     throw invalidError('structureId is null')
   }

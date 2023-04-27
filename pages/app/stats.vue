@@ -83,16 +83,16 @@
 
   // definePageMeta({ middleware: 'can-access-stats' })
 
-  const { $trpcClient } = useNuxtApp()
+  const trpcClient = useTrpcClient()
 
   const { data: followUpTypes, error: followUpTypesError } =
-    await $trpcClient.config.getStructureFollowupTypes.useQuery()
+    await trpcClient.config.getStructureFollowupTypes.useQuery()
 
   const { data: beneficiariesCities, error: beneficiariesCitiesError } =
-    await $trpcClient.config.getBeneficiariesCities.useQuery()
+    await trpcClient.config.getBeneficiariesCities.useQuery()
 
   const { data: agents, error: agentsError } =
-    await $trpcClient.config.getAgents.useQuery()
+    await trpcClient.config.getAgents.useQuery()
 
   const fetchError = computed(() => {
     if (followUpTypesError.value) {

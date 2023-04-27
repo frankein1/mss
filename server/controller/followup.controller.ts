@@ -13,9 +13,6 @@ export const addFollowupHandler = async ({
   input: AddFollowupInput
   ctx: AppContext
 }) => {
-  if (!user) {
-    throw invalidError('SessionUser is null')
-  }
   const target = await getBeneficiarySecurityTarget(input.beneficiaryId)
   if (!target) {
     throw invalidError('Beneficiary not found')

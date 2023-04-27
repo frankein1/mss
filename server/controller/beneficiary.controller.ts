@@ -1,4 +1,4 @@
-import { AppContext, invalidError } from '../trpc'
+import { AppContext } from '../trpc'
 import { createBeneficiary } from '~/server/query/beneficiaires/createBeneficiary'
 import { BeneficiaryCreationInput } from '~/server/schema'
 
@@ -9,10 +9,6 @@ export const createBeneficiaryHandler = async ({
   input: BeneficiaryCreationInput
   ctx: AppContext
 }) => {
-  if (!user) {
-    throw invalidError('SessionUser is null')
-  }
-
   const beneficiary = await createBeneficiary(input, user)
 
   return beneficiary

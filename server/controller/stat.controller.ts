@@ -9,9 +9,6 @@ export const getBeneficiaryCountHandler = async ({
   input: StatFilterInput
   ctx: AppContext
 }) => {
-  if (!user) {
-    throw invalidError('SessionUser is null')
-  }
   if (!user.structureId) {
     throw invalidError('structureId is null')
   }

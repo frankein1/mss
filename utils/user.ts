@@ -1,17 +1,8 @@
 import { User } from '@prisma/client'
 
+// [NUXT/PRISMA] Replaces utils/index.js@agentName
 export const getUserDisplayName = (
-  user: Pick<User, 'firstName' | 'lastName' | 'email' | 'name'>
+  user: Pick<User, 'firstName' | 'lastName' | 'email'>
 ): string => {
-  const name = `${user.firstName ?? ''} ${user.lastName ?? ''}`.trim()
-  if (name) {
-    return name
-  }
-
-  // Some oauth provider give the name in a single property
-  if (user.name) {
-    return user.name
-  }
-
-  return user.email
+  return `${user.firstName} ${user.lastName.toUpperCase()}`
 }
