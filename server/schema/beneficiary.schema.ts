@@ -16,6 +16,10 @@ import { PensionOrganisations } from '~/client/options/beneficiary'
 import { Nationalities } from '~/client/options/nationality'
 import { errorMessages, zodEnumFromObjectKeys } from '~/utils/zod'
 
+export const idSchema = z.object({
+  id: z.string()
+})
+
 export const searchBeneficiarySchema = z.object({
   query: z.string()
 })

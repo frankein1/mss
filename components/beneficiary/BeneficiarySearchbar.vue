@@ -31,7 +31,7 @@
   import { Routes } from '~/utils/routing/routes'
 
   async function searchBeneficiariesFn(query: string) {
-    const { beneficiaries } = await useTrpcClient().beneficiary.search.query({
+    const beneficiaries = await useTrpcClient().beneficiary.search.query({
       query
     })
     return beneficiaries

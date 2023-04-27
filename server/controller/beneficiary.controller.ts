@@ -5,6 +5,34 @@ import { createBeneficiary } from '~/server/query/beneficiaires/createBeneficiar
 import { BeneficiaryCreationInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 
+export const getBeneficiaryWithReferentsHandler = async ({
+  input,
+  ctx: { user }
+}: {
+  input: { id: string }
+  ctx: AppContext
+}) => {
+  const { structureId } = user
+  const conditions = {
+    id: input.id
+  }
+
+  const where = structureId
+    ? {
+        ...conditions,
+        structureId
+      }
+    : conditions
+
+  const beneficiary = await prismaClient.beneficiary.findFirst({
+    where,
+    include: {
+      referents: true
+    }
+  })
+  return beneficiary
+}
+
 export const createBeneficiaryHandler = async ({
   input,
   ctx: { user }
@@ -72,5 +100,5 @@ export const searchBeneficiaryHandler = async ({
     }
   })
 
-  return { beneficiaries }
+  return beneficiaries
 }
