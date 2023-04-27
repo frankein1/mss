@@ -28,7 +28,6 @@ export const iterateUsers = async ({
         id: true,
         firstName: true,
         lastName: true,
-        name: true,
         email: true,
         status: true,
         role: true,

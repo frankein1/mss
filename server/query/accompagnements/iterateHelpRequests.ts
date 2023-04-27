@@ -48,7 +48,6 @@ export const iterateHelpRequests = async ({
         createdBy: {
           select: {
             id: true,
-            name: true,
             email: true,
             firstName: true,
             lastName: true

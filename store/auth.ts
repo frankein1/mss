@@ -4,17 +4,20 @@ import { JwtUser } from '~/types/user'
 
 export const useAuthStore = defineStore({
   id: 'auth',
+
   state: () => {
     const user: JwtUser | null = null as any
     return {
       user
     }
   },
+
   actions: {
     setUser(user: JwtUser) {
       this.user = user
     }
   },
+
   getters: {
     isAuthenticated(): boolean {
       return !!this.user
@@ -34,18 +37,14 @@ export const useAuthStore = defineStore({
     isAgentDAccueil(): boolean {
       return this.user?.role === UserRole.ReceptionAgent
     },
-    userId(): string | null {
-      return this.user ? this.user.id : null
+    userId(): string {
+      return this.user?.id || ''
     },
-    userName(): string | null {
-      return this.user ? `${this.user.firstName} ${this.user.lastName}` : 'null'
+    userName(): string {
+      return this.user ? `${this.user.firstName} ${this.user.lastName}` : ''
     },
-    userOrganisationId(): string | null {
-      return this.user
-        ? this.user.structureId
-          ? this.user.structureId
-          : null
-        : null
+    userOrganisationId(): string {
+      return this.user?.structureId || ''
     },
     isMinistryAgent(): boolean {
       return this.user

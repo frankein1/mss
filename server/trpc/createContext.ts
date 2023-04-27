@@ -12,7 +12,11 @@ export const createContext = async (event: H3Event) => {
   const sessionToken = cookies[sessionCookieKey]
 
   if (!sessionToken) {
-    return { event, user: null }
+    // No token
+    throw new TRPCError({
+      code: 'FORBIDDEN',
+      message: 'Not authorized.'
+    })
   }
 
   const jwtKey = config.private.jwtKey

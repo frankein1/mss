@@ -45,7 +45,6 @@ export const iterateBeneficiaries = async ({
             id: true,
             firstName: true,
             lastName: true,
-            name: true,
             email: true
           }
         },

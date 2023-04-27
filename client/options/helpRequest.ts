@@ -33,15 +33,15 @@ export const helpRequestStatusBadgeClasses: {
 
 export const helpRequestStatusOptions = labelsToOptions(helpRequestStatusLabels)
 
-export const financialSupportOptions: Options = [
-  { value: 'true', name: 'Oui' },
-  { value: 'false', name: 'Non' }
-]
+export const financialSupportOptions: Options = new Map([
+  ['true', 'Oui'],
+  ['false', 'Non']
+])
 
-export const externalOrganisationOptions: Options = [
-  { value: 'false', name: 'En interne' },
-  { value: 'true', name: 'Par une organisation extérieure' }
-]
+export const externalOrganisationOptions: Options = new Map([
+  ['false', 'En interne'],
+  ['true', 'Par une organisation extérieure']
+])
 
 export const paymentMethodLabels: { [key in PaymentMethod]: string } = {
   [PaymentMethod.FoodStamps]: 'Bons alimentaires',
