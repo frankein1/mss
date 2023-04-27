@@ -17,5 +17,7 @@ export const Routes = {
 
   Users: `${AppRoute}/users`,
 
-  Stats: `${AppRoute}/stats`
+  Stats: `${AppRoute}/stats`,
+
+  Account: `${AppRoute}/account`
 }

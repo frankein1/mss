@@ -17,7 +17,7 @@
   const authStore = useAuthStore()
 
   const MENUS: Menu[] = [
-    // { label: 'Mon compte', to: Routes.Account, icon: 'fr-icon-user-line' }
+    { label: 'Mon compte', to: Routes.Account, icon: 'fr-icon-user-line' }
   ]
 
   // if (permissionsStore.canAddUsers) {
