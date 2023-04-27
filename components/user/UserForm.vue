@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
   import { TRPCClientError } from '@trpc/client'
-  import { withEmptyValue } from '~/utils'
+  import { withEmptyValue } from '~/utils/options'
   import { nonAdminUserRoleOptions } from '~/client/options/user'
   import { userFieldLabels } from '~/client/labels/user.labels'
   import { UserCreationInput } from '~/server/schema/user.schema'

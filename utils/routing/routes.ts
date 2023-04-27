@@ -12,12 +12,16 @@ export const Routes = {
   SsoCallback: `${ApiKeycloak}/callback`,
 
   App: `${AppRoute}`,
-  LoginSuccess: `${AppRoute}/success`,
+  Overview: `${AppRoute}/overview`,
   LogoutSuccess: `${AppRoute}/logout-success`,
 
   Users: `${AppRoute}/users`,
 
   Stats: `${AppRoute}/stats`,
 
-  Account: `${AppRoute}/account`
+  Account: `${AppRoute}/account`,
+
+  // beneficiaries
+  Beneficiaries: `${AppRoute}/beneficiaries`,
+  BeneficiariesAdd: `${AppRoute}/beneficiaries/add`
 }

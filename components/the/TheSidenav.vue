@@ -82,7 +82,7 @@
 
   const MENU_ITEMS = [
     {
-      to: Routes.LoginSuccess,
+      to: Routes.Overview,
       label: 'Tableau de bord',
       icon: 'fr-icon-home-4-line'
     }

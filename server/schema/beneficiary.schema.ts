@@ -16,6 +16,12 @@ import { PensionOrganisations } from '~/client/options/beneficiary'
 import { Nationalities } from '~/client/options/nationality'
 import { errorMessages, zodEnumFromObjectKeys } from '~/utils/zod'
 
+export const searchBeneficiarySchema = z.object({
+  query: z.string()
+})
+
+export type SearchBeneficiaryInput = z.infer<typeof searchBeneficiarySchema>
+
 const createBeneficiarySchema = z.object({
   structureId: z.string().uuid(),
   referents: z

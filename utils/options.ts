@@ -6,3 +6,15 @@ export const labelsToOptions = (object: Record<string, string>): Options =>
 export const arrayToOptions = <T extends string>(
   values: readonly T[] | T[]
 ): Options => new Map(values.map(value => [value, value]))
+
+export function toOptions(
+  arr: Array<Record<string, any>>,
+  valueKey: string,
+  labelKey: string
+) {
+  return new Map(arr.map(e => [e[valueKey], e[labelKey]]))
+}
+
+export function withEmptyValue(map: Map<string, string>, emptyLabel = '') {
+  return new Map([['', emptyLabel], ...map.entries()])
+}

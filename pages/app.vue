@@ -13,7 +13,7 @@
 
   onMounted(() => {
     if (route.path === Routes.App) {
-      navigateTo(Routes.LoginSuccess)
+      navigateTo(Routes.Overview)
     }
   })
 </script>

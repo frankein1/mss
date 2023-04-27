@@ -71,7 +71,7 @@ export default defineEventHandler(async event => {
     expires: new Date(Date.now() + expiresIn * 1000)
   })
 
-  return sendRedirect(event, Routes.LoginSuccess) // [NUXT/PRISMA]: Redirect depending on the redirect url in query params ?
+  return sendRedirect(event, Routes.Overview) // [NUXT/PRISMA]: Redirect depending on the redirect url in query params ?
 })
 
 async function fetchInclusionConnnectToken(
