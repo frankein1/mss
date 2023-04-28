@@ -1,5 +1,8 @@
 <template>
-  <div class="fr-container fr-p-5w">
+  <div
+    v-if="beneficiary"
+    class="fr-container fr-p-5w"
+  >
     <TheHeader
       :title="title"
       :back-link="backLink"
@@ -7,6 +10,7 @@
       <BeneficiaryDetailsHeader
         :beneficiary-id="beneficiaryId"
         :can-delete="canDelete"
+        @on-delete="onDelete"
       />
       <BeneficiaryDetailsTitle :beneficiary="beneficiary" />
     </TheHeader>
@@ -14,10 +18,6 @@
 </template>
 
 <script lang="ts" setup>
-  import BeneficiaryDetailsHeader from '~/components/BeneficiaryDetails/BeneficiaryDetailsHeader.vue'
-  import BeneficiaryDetailsTitle from '~/components/BeneficiaryDetails/BeneficiaryDetailsTitle.vue'
-  import TheHeader from '~/components/the/TheHeader.vue'
-
   const route = useRoute()
   const beneficiaryId = route.params.id as string
 
@@ -31,4 +31,8 @@
   })
 
   const canDelete = true
+
+  const onDelete = () => {}
+
+  const backLink = ''
 </script>

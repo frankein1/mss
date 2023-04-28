@@ -9,7 +9,6 @@
 </template>
 
 <script lang="ts" setup>
-  import BeneficiarySearchbar from '~/components/beneficiary/BeneficiarySearchbar.vue'
   import { useAuthStore } from '~/store/auth'
 
   const { userName: title } = useAuthStore()

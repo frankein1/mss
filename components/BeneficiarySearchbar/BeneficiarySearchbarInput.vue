@@ -64,18 +64,17 @@
 </template>
 
 <script lang="ts" setup>
+  import { SearchBeneficiaryResult } from './types'
   import { UNKNOWN_ERROR_MESSAGE } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
-
-  type Result = { [key: string]: string }
 
   const props = defineProps<{
     label: string
     name: string
-    searchFn: (search: string) => Promise<Result[]>
+    searchFn: (search: string) => Promise<any[]>
   }>()
 
-  const results = ref<Result[]>([])
+  const results = ref<SearchBeneficiaryResult[]>([])
   const timeout = ref<NodeJS.Timeout | null>(null)
   const error = ref<string>('')
 

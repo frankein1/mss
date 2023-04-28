@@ -2,7 +2,7 @@
   <ul class="fr-btns-group fr-btns-group--inline-md header-btn-group">
     <li>
       <NuxtLink
-        :to="`${Routes.beneficiaries}/${beneficiaryId}/edit`"
+        :to="`${Routes.Beneficiaries}/${beneficiaryId}/edit`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
         title="Modifier"
         target="_self"
@@ -12,7 +12,7 @@
     </li>
     <li>
       <NuxtLink
-        :to="`${Routes.beneficiaries}/${beneficiaryId}/print`"
+        :to="`${Routes.Beneficiaries}/${beneficiaryId}/print`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-printer-line"
         title="Imprimer"
         target="_self"
@@ -28,7 +28,7 @@
         data-fr-opened="false"
         aria-controls="global-modal"
         type="button"
-        @click="onDelete"
+        @click="$emit('onDelete')"
       >
         Supprimer
       </button>
@@ -41,6 +41,7 @@
 
   withDefaults(
     defineProps<{
+      beneficiaryId: string
       canDelete: boolean
     }>(),
     {}

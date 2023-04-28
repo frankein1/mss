@@ -1,10 +1,10 @@
 <template>
   <div class="beneficiary-toolbar">
-    <AtomSearchbar
+    <BeneficiarySearchbarInput
       class="beneficiary-search fr-mr-2w"
       label="Rechercher un·e bénéficiaire"
       name="beneficiary-search"
-      :search-fn="searchBeneficiariesFn"
+      :search-fn="searchBeneficiaries"
     >
       <template #result="{ result: beneficiary }">
         <NuxtLink
@@ -15,7 +15,7 @@
           {{ beneficiaryToSearchResult(beneficiary) }}
         </NuxtLink>
       </template>
-    </AtomSearchbar>
+    </BeneficiarySearchbarInput>
     <NuxtLink
       :to="Routes.BeneficiariesAdd"
       class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line add-beneficiary-btn"
@@ -30,7 +30,7 @@
   import { beneficiaryToSearchResult } from '~~/utils/beneficiary'
   import { Routes } from '~/utils/routing/routes'
 
-  async function searchBeneficiariesFn(query: string) {
+  async function searchBeneficiaries(query: string) {
     const beneficiaries = await useTrpcClient().beneficiary.search.query({
       query
     })
