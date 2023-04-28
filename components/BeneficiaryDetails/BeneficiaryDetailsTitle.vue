@@ -3,7 +3,7 @@
     <li>N° dossier : {{ fileNumber }}</li>
     <li>Agent(s) référent(s) : {{ referentNames }}</li>
     <li
-      v-if="beneficiary.aidant_connect_authorisation"
+      v-if="beneficiary.aidantConnectAuthorized"
       class="fr-icon-success-line"
     >
       Mandat Aidant Connect
