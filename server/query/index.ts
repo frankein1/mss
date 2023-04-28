@@ -7,8 +7,6 @@ export { getBeneficiarySecurityTarget } from './security/getBeneficiarySecurityT
 
 export {
   type GetAgeStatsReturn,
-  type GetFamilyStatsReturn,
-  type GetGenderStatsReturn,
   type GetSupportStatsReturn
 } from './statistics'
 export {

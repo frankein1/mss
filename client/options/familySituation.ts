@@ -1,4 +1,5 @@
 import { BeneficiaryFamilySituation } from '@prisma/client'
+import { STATS_NULL_LABEL } from '~/utils/constants'
 
 export const familySituationWording: {
   [familySituation in BeneficiaryFamilySituation]: string
@@ -19,4 +20,4 @@ export const familySituationWording: {
 export const getFamilySituationWording = (
   familySituation: BeneficiaryFamilySituation | null
 ): string =>
-  familySituation ? familySituationWording[familySituation] : 'Non renseigné'
+  familySituation ? familySituationWording[familySituation] : STATS_NULL_LABEL

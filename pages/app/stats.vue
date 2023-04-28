@@ -112,16 +112,22 @@
       ? toOptions(followUpTypes.value, 'id', 'name')
       : undefined
   )
-  const beneficiariesCitiesOptions = computed(() =>
-    beneficiariesCities.value
-      ? toOptions(beneficiariesCities.value, 'city', 'city')
+  const beneficiariesCitiesOptions = computed(() => {
+    const definedBeneficiariesCities =
+      beneficiariesCities.value?.filter(hasDefinedCity)
+    return definedBeneficiariesCities
+      ? toOptions(definedBeneficiariesCities, 'city', 'city')
       : undefined
-  )
+  })
   const agentsOptions = computed(() =>
     agents.value
       ? withEmptyValue(toOptions(agents.value, 'id', 'name'))
       : undefined
   )
+
+  function hasDefinedCity(b: { city: string | null }): b is { city: string } {
+    return b.city !== null
+  }
 </script>
 
 <style scoped>

@@ -16,6 +16,8 @@ export const NEW_OPTION_ID = 'new-option'
 export const NEW_OPTION_PREFIX = `${NEW_OPTION_ID}-`
 
 export const STATS_COLLAPSED_LIMIT = 4
+export const STATS_NULL_LABEL = 'Non renseigné'
+export const STATS_NULL_COLOR = '#AAA'
 
 export const ORIGIN_PAGE_PARAMETER = 'originPage'
 export const ORIGIN_TAB_PARAMETER = 'originTab'

@@ -7,12 +7,12 @@ export const arrayToOptions = <T extends string>(
   values: readonly T[] | T[]
 ): Options => new Map(values.map(value => [value, value]))
 
-export function toOptions(
-  arr: Array<Record<string, any>>,
-  valueKey: string,
-  labelKey: string
+export function toOptions<V extends string, L extends string>(
+  arr: Array<Record<V | L, string>>,
+  valueKey: V,
+  labelKey: L
 ) {
-  return new Map(arr.map(e => [e[valueKey], e[labelKey]]))
+  return new Map<string, string>(arr.map(e => [e[valueKey], e[labelKey]]))
 }
 
 export function withEmptyValue(map: Map<string, string>, emptyLabel = '') {
