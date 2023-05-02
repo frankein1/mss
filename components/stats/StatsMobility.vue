@@ -32,11 +32,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { BeneficiaryMobility } from '@prisma/client'
   import { beneficiaryMobilityLabels } from '~/client/options/beneficiary'
   import { StatFilterInput } from '~/server/schema/filter.schema'
-  import { STATS_NULL_LABEL } from '~/utils/constants'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
+  import { getStatLabel } from '~/client/options/stat'
 
   const trpcClient = useTrpcClient()
 
@@ -49,20 +50,19 @@
     data: mobilityCounts,
     pending,
     error
-  } = useAsyncData(
-    () => trpcClient.stat.getMobilityStats.query(props.filters),
-    {
-      default: () => [],
-      watch: [props.filters]
-    }
-  )
+  } = useAsyncData<
+    Array<{ mobility: BeneficiaryMobility | null; _count: number }>
+  >(() => trpcClient.stat.getMobilityStats.query(props.filters), {
+    default: () => [],
+    watch: [props.filters]
+  })
 
   const mobilityStats = computed(
     () =>
       mobilityCounts.value?.map(({ _count, mobility }) => ({
         key: mobility,
-        label: beneficiaryMobilityLabels[mobility] || STATS_NULL_LABEL,
-        count: parseInt(_count)
+        label: getStatLabel(beneficiaryMobilityLabels, mobility),
+        count: _count
       })) || []
   )
 </script>

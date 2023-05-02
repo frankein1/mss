@@ -1,5 +1,5 @@
+import { User } from '@prisma/client'
 import { FieldLabels } from '~/types/fieldLabels'
-import { User } from '~/server/prisma/prismaClient'
 
 type UserFieldLabels = Omit<User, 'password'>
 

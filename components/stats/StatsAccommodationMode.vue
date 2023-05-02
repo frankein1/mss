@@ -32,11 +32,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { BeneficiaryAccomodationMode } from '@prisma/client'
   import { beneficiaryAccomodationModeLabels } from '~/client/options/beneficiary'
   import { StatFilterInput } from '~/server/schema/filter.schema'
-  import { STATS_NULL_LABEL } from '~/utils/constants'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
+  import { getStatLabel } from '~/client/options/stat'
 
   const trpcClient = useTrpcClient()
 
@@ -49,22 +50,25 @@
     data: accommodationModesCounts,
     pending,
     error
-  } = useAsyncData(
-    () => trpcClient.stat.getAccommodationModeStats.query(props.filters),
-    {
-      default: () => [],
-      watch: [props.filters]
-    }
-  )
+  } = useAsyncData<
+    Array<{
+      accomodationMode: BeneficiaryAccomodationMode | null
+      _count: number
+    }>
+  >(() => trpcClient.stat.getAccommodationModeStats.query(props.filters), {
+    default: () => [],
+    watch: [props.filters]
+  })
 
   const accommodationModesStats = computed(
     () =>
       accommodationModesCounts.value?.map(({ _count, accomodationMode }) => ({
         key: accomodationMode,
-        label:
-          beneficiaryAccomodationModeLabels[accomodationMode] ||
-          STATS_NULL_LABEL,
-        count: parseInt(_count)
+        label: getStatLabel(
+          beneficiaryAccomodationModeLabels,
+          accomodationMode
+        ),
+        count: _count
       })) || []
   )
 </script>

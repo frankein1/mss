@@ -32,10 +32,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { getFamilySituationWording } from '~/client/options/familySituation'
+  import { BeneficiaryFamilySituation } from '@prisma/client'
   import { StatFilterInput } from '~/server/schema/filter.schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
+  import { getStatLabel } from '~/client/options/stat'
+  import { familySituationLabels } from '~/client/options/familySituation'
 
   const trpcClient = useTrpcClient()
 
@@ -48,7 +50,12 @@
     data: familySituationsCounts,
     pending,
     error
-  } = useAsyncData(() => trpcClient.stat.getFamilyStats.query(props.filters), {
+  } = useAsyncData<
+    Array<{
+      familySituation: BeneficiaryFamilySituation | null
+      _count: number
+    }>
+  >(() => trpcClient.stat.getFamilyStats.query(props.filters), {
     default: () => [],
     watch: [props.filters]
   })
@@ -57,8 +64,8 @@
     () =>
       familySituationsCounts.value?.map(({ _count, familySituation }) => ({
         key: familySituation,
-        label: getFamilySituationWording(familySituation),
-        count: parseInt(_count)
+        label: getStatLabel(familySituationLabels, familySituation),
+        count: _count
       })) || []
   )
 </script>

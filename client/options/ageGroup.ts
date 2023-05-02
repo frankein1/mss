@@ -1,4 +1,4 @@
-import { STATS_NULL_COLOR, STATS_NULL_LABEL } from '~/utils/constants'
+import { STATS_NULL_LABEL } from '~/client/options/stat'
 
 export enum AgeGroup {
   Less25 = 'less-25',
@@ -17,14 +17,4 @@ export const AgeGroupLabels = {
   [AgeGroup.Group55_64]: '55 à 64 ans',
   [AgeGroup.More65]: '65 ans et +',
   null: STATS_NULL_LABEL
-}
-
-export const AgeGroupColors = {
-  [AgeGroup.Less25]: '#BABAFF',
-  [AgeGroup.Group25_34]: '#A8A8FF',
-  [AgeGroup.Group35_44]: '#8585f6',
-  [AgeGroup.Group45_54]: '#6a6af4',
-  [AgeGroup.Group55_64]: '#313178',
-  [AgeGroup.More65]: '#272747',
-  null: STATS_NULL_COLOR
 }

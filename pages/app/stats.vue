@@ -60,16 +60,16 @@
             aria-labelledby="history-tab"
             tabindex="0"
           >
-            <!-- <AtomAlert
+            <AtomAlert
               v-if="fetchError"
               :alert-type="AlertType.Error"
               :message="fetchError"
             />
             <StatsHistory
-              :follow-up-type-options="followUpTypes"
+              :follow-up-type-options="followUpTypesOptions"
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
-              :agent-options="agentOptions"
-            /> -->
+              :agent-options="agentsOptions"
+            />
           </div>
         </main>
       </div>

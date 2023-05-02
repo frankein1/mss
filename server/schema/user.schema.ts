@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { UserStatus, UserRole } from '~/server/prisma/prismaClient'
+import { UserStatus, UserRole } from '@prisma/client'
 import { NonAdminUserRole } from '~/client/options/user'
 import {
   errorMessages,

@@ -59,7 +59,7 @@
       stats: StatsList
       statsBar?: boolean
       statsPercentage?: boolean
-      totalCount: number
+      totalCount?: number
     }>(),
     {
       statsBar: false,

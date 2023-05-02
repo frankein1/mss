@@ -1,7 +1,7 @@
 import { TRPCError } from '@trpc/server'
+import { UserRole } from '@prisma/client'
 import { AppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import { UserRole } from '~/server/prisma/prismaClient'
 import type {
   UserEditionInput,
   UserCreationInput

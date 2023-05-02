@@ -33,22 +33,29 @@
 
 <script lang="ts" setup>
   import dayjs, { Dayjs } from 'dayjs'
-  import {
-    AgeGroup,
-    AgeGroupLabels,
-    AgeGroupColors
-  } from '~/client/options/ageGroup'
+  import { AgeGroup, AgeGroupLabels } from '~/client/options/ageGroup'
   import { StatFilterInput } from '~/server/schema/filter.schema'
   import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
   import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
+  import { STATS_NULL_COLOR } from '~/utils/constants/colors/stats'
 
   type AgeGroupsFilter = { lower?: Dayjs; upper?: Dayjs }
   enum NullAgeGroup {
     null = 'null'
   }
   type AgeGroupOrNull = AgeGroup | NullAgeGroup
+
+  const AgeGroupColors = {
+    [AgeGroup.Less25]: '#BABAFF',
+    [AgeGroup.Group25_34]: '#A8A8FF',
+    [AgeGroup.Group35_44]: '#8585f6',
+    [AgeGroup.Group45_54]: '#6a6af4',
+    [AgeGroup.Group55_64]: '#313178',
+    [AgeGroup.More65]: '#272747',
+    [NullAgeGroup.null]: STATS_NULL_COLOR
+  }
 
   const trpcClient = useTrpcClient()
 
@@ -61,10 +68,13 @@
     data: ageCounts,
     pending,
     error
-  } = useAsyncData(() => trpcClient.stat.getAgeStats.query(props.filters), {
-    default: () => [],
-    watch: [props.filters]
-  })
+  } = useAsyncData<Array<{ birthDate: Date | null; _count: number }>>(
+    () => trpcClient.stat.getAgeStats.query(props.filters),
+    {
+      default: () => [],
+      watch: [props.filters]
+    }
+  )
 
   const ageStats = computed(() => {
     const ageGroupsFilters: { [k in AgeGroup]?: AgeGroupsFilter } = {}

@@ -31,10 +31,20 @@
 </template>
 
 <script lang="ts" setup>
+  import { Gender } from '@prisma/client'
   import { AlertType } from '~~/utils/constants/alert'
-  import { getGenderWording, getGenderColor } from '~/client/options/gender'
   import { Routes } from '~/utils/routing/routes'
   import { StatFilterInput } from '~/server/schema/filter.schema'
+  import { getStatColor } from '~/utils/constants/colors/stats'
+  import { getStatLabel } from '~/client/options/stat'
+  import { genderLabel } from '~/client/options/gender'
+  import { StatsPie } from '~/types/stat'
+
+  const GenderColor = {
+    [Gender.Female]: '#FF8886',
+    [Gender.Male]: '#8D81E4',
+    [Gender.Other]: '#FFCD56'
+  }
 
   const trpcClient = useTrpcClient()
 
@@ -47,19 +57,21 @@
     data: genderCounts,
     pending,
     error
-  } = useAsyncData(() => trpcClient.stat.getGenderStats.query(props.filters), {
-    default: () => [],
-    watch: [props.filters]
-  })
+  } = useAsyncData<Array<{ gender: Gender | null; _count: number }>>(
+    () => trpcClient.stat.getGenderStats.query(props.filters),
+    {
+      default: () => [],
+      watch: [props.filters]
+    }
+  )
 
-  const genderStats = computed(() => {
-    return (
+  const genderStats = computed(
+    () =>
       genderCounts.value?.map(({ _count, gender }) => ({
         key: gender,
-        label: getGenderWording(gender),
-        color: getGenderColor(gender),
-        count: parseInt(_count)
+        label: getStatLabel(genderLabel, gender),
+        color: getStatColor(GenderColor, gender),
+        count: _count
       })) || []
-    )
-  })
+  )
 </script>

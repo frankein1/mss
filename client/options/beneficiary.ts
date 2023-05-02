@@ -21,15 +21,6 @@ export const beneficiaryStatusLabels: { [key in BeneficiaryStatus]: string } = {
   [BeneficiaryStatus.Deceased]: 'Décédé·e'
 }
 
-export const beneficiaryStatusBadgeClasses: {
-  [key in BeneficiaryStatus]: string
-} = {
-  [BeneficiaryStatus.Active]: 'fr-badge--success',
-  [BeneficiaryStatus.Inactive]: 'fr-badge--warning',
-  [BeneficiaryStatus.Archived]: 'fr-badge--error',
-  [BeneficiaryStatus.Deceased]: 'fr-badge--error'
-}
-
 export const beneficiaryStatusOptions = labelsToOptions(beneficiaryStatusLabels)
 
 export const beneficiaryTitleLabels: { [key in BeneficiaryTitle]: string } = {

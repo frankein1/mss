@@ -1,15 +1,16 @@
 type StatBase = {
   key: string
   label: string
-  count: number
 }
 
-type StatList = StatsBase & {
+export type StatList = StatsBase & {
   color?: string
+  count: number | string
 }
 
 type StatPie = StatBase & {
   color: string
+  count: number
 }
 
 export type StatsList = Array<StatList>

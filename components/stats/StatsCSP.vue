@@ -32,11 +32,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { BeneficiarySocioProfessionalCategory } from '@prisma/client'
   import { beneficiarySocioProfessionalCategoryLabels } from '~/client/options/beneficiary'
   import { StatFilterInput } from '~/server/schema/filter.schema'
-  import { STATS_NULL_LABEL } from '~/utils/constants'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
+  import { getStatLabel } from '~/client/options/stat'
 
   const trpcClient = useTrpcClient()
 
@@ -49,7 +50,12 @@
     data: CSPCounts,
     pending,
     error
-  } = useAsyncData(() => trpcClient.stat.getCSPStats.query(props.filters), {
+  } = useAsyncData<
+    Array<{
+      socioProfessionalCategory: BeneficiarySocioProfessionalCategory | null
+      _count: number
+    }>
+  >(() => trpcClient.stat.getCSPStats.query(props.filters), {
     default: () => [],
     watch: [props.filters]
   })
@@ -58,11 +64,11 @@
     () =>
       CSPCounts.value?.map(({ _count, socioProfessionalCategory }) => ({
         key: socioProfessionalCategory,
-        label:
-          beneficiarySocioProfessionalCategoryLabels[
-            socioProfessionalCategory
-          ] || STATS_NULL_LABEL,
-        count: parseInt(_count)
+        label: getStatLabel(
+          beneficiarySocioProfessionalCategoryLabels,
+          socioProfessionalCategory
+        ),
+        count: _count
       })) || []
   )
 </script>

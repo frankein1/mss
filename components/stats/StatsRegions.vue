@@ -32,9 +32,9 @@
 
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema/filter.schema'
-  import { STATS_NULL_LABEL } from '~/utils/constants'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
+  import { STATS_NULL_LABEL } from '~/client/options/stat'
 
   const trpcClient = useTrpcClient()
 
@@ -47,17 +47,20 @@
     data: regionsCounts,
     pending,
     error
-  } = useAsyncData(() => trpcClient.stat.getRegionStats.query(props.filters), {
-    default: () => [],
-    watch: [props.filters]
-  })
+  } = useAsyncData<Array<{ region: string | null; _count: number }>>(
+    () => trpcClient.stat.getRegionStats.query(props.filters),
+    {
+      default: () => [],
+      watch: [props.filters]
+    }
+  )
 
   const regionsStats = computed(
     () =>
       regionsCounts.value?.map(({ _count, region }) => ({
         key: region,
         label: region || STATS_NULL_LABEL,
-        count: parseInt(_count)
+        count: _count
       })) || []
   )
 </script>

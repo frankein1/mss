@@ -272,7 +272,7 @@ model Followup {
   classified         Boolean?
   firstFollowup      Boolean?  @map("first_followup")
   forwardedToJustice Boolean?  @map("forwarded_to_justice")
-  ministre           String?
+  ministre           Minister?
   numeroPegase       String?   @map("numero_pegase")
 
   interventions FollowupIntervention[]
@@ -370,7 +370,7 @@ model HelpRequest {
   created DateTime? @default(now())
   updated DateTime? @default(now())
 
-  ministre     String?
+  ministre     Minister?
   numeroPegase String? @map("numero_pegase")
 
   @@map("help_request")
@@ -756,6 +756,21 @@ enum BeneficiaryOrientationType {
   Autre
 }
 
+enum Minister {
+  // François Braun (Santé et Prévention)
+  FrancoisBraun
+  // Agnès Firmin-Le Bodo (Santé et Prévention)
+  AgnesFirminLeBodo
+  // Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)
+  JeanChristopheCombe
+  // Geneviève Darrieussecq (Personnes handicapées)
+  GenevieveDarrieussecq
+  // Olivier Dussopt (Travail, Plein emploi et Insertion)
+  OlivierDussopt
+  // Carole Grandjean (Enseignement, Formation professionnels)
+  CaroleGrandjean
+}
+
 model Beneficiary {
   id String @id @db.Uuid
 
@@ -804,7 +819,7 @@ model Beneficiary {
   majorChildren                     Int?                         @map("major_children")
   mobility                          BeneficiaryMobility?
   administration                    String?
-  minister                          String?
+  minister                          Minister?
 
   ministereCategorie              String? @map("ministere_categorie")
   ministereDepartement_service_ac String? @map("ministere_departement_service_ac")

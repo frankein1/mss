@@ -1,7 +1,6 @@
 import { BeneficiaryFamilySituation } from '@prisma/client'
-import { STATS_NULL_LABEL } from '~/utils/constants'
 
-export const familySituationWording: {
+export const familySituationLabels: {
   [familySituation in BeneficiaryFamilySituation]: string
 } = {
   [BeneficiaryFamilySituation.Single]: 'Célibataire',
@@ -16,8 +15,3 @@ export const familySituationWording: {
   [BeneficiaryFamilySituation.Widow]: 'Veuf·ve',
   [BeneficiaryFamilySituation.Other]: 'Autre'
 }
-
-export const getFamilySituationWording = (
-  familySituation: BeneficiaryFamilySituation | null
-): string =>
-  familySituation ? familySituationWording[familySituation] : STATS_NULL_LABEL
