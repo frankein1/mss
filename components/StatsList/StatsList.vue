@@ -50,13 +50,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatsList } from '~/types/stat'
+  import { StatsListPropType } from '~/types/stat'
   import { STATS_COLLAPSED_LIMIT } from '~/utils/constants'
   import { getRandomId } from '~/utils/random'
 
   const props = withDefaults(
     defineProps<{
-      stats: StatsList
+      stats: StatsListPropType
       statsBar?: boolean
       statsPercentage?: boolean
       totalCount?: number

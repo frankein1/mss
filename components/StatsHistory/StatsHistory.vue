@@ -69,7 +69,7 @@
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsSupportType
+            <StatsHistorySupportType
               :total-count="helpRequestCount"
               collection="helpRequests"
               :filters="filters"
@@ -86,21 +86,21 @@
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHelpRequestStatus
+            <StatsHistoryHelpRequestStatus
               :total-count="helpRequestCount"
               collection="helpRequests"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsPrescribingOrganizations
+            <StatsHistoryPrescribingOrganizations
               :total-count="helpRequestCount"
               collection="helpRequests"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6">
-            <StatsFinancialHelpRequests :filters="filters" />
+            <StatsHistoryFinancialHelpRequests :filters="filters" />
           </div>
           <!-- TODO: implement "organismes instructeurs" then those statistics
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
@@ -129,14 +129,14 @@
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsSupportType
+            <StatsHistorySupportType
               :total-count="followupCount"
               collection="followups"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsFollowupMedium
+            <StatsHistoryFollowupMedium
               :total-count="followupCount"
               :filters="filters"
             />
@@ -152,19 +152,19 @@
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsFollowupStatus
+            <StatsHistoryFollowupStatus
               :total-count="followupCount"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsFollowupActionsEntreprises
+            <StatsHistoryFollowupActionsEntreprises
               :total-count="followupCount"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsPrescribingOrganizations
+            <StatsHistoryPrescribingOrganizations
               :total-count="followupCount"
               collection="followups"
               :filters="filters"

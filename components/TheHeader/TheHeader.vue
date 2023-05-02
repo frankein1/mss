@@ -26,7 +26,7 @@
       >
         Aide
       </NuxtLink>
-      <TheUserMenu class="user-menu" />
+      <TheHeaderUserMenu class="user-menu" />
     </div>
   </div>
 </template>

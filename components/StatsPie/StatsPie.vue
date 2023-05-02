@@ -12,13 +12,13 @@
 
 <script lang="ts" setup>
   import { ChartItem } from 'chart.js'
-  import { StatsPie } from '~/types/stat'
+  import { StatsPiePropType } from '~/types/stat'
 
   const { $buildChart } = useNuxtApp()
 
   const props = defineProps<{
     pieLabel: string
-    stats: StatsPie
+    stats: StatsPiePropType
     totalCount: number
   }>()
 

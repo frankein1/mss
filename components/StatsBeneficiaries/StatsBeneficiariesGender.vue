@@ -38,7 +38,7 @@
   import { getStatColor } from '~/utils/constants/colors/stats'
   import { getStatLabel } from '~/client/options/stat'
   import { genderLabel } from '~/client/options/gender'
-  import { StatsPie } from '~/types/stat'
+  import { StatsPiePropType } from '~/types/stat'
 
   const GenderColor = {
     [Gender.Female]: '#FF8886',
@@ -67,11 +67,11 @@
 
   const genderStats = computed(
     () =>
-      genderCounts.value?.map(({ _count, gender }) => ({
+      (genderCounts.value?.map(({ _count, gender }) => ({
         key: gender,
         label: getStatLabel(genderLabel, gender),
         color: getStatColor(GenderColor, gender),
         count: _count
-      })) || []
+      })) || []) as StatsPiePropType
   )
 </script>

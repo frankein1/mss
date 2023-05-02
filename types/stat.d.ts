@@ -13,5 +13,5 @@ type StatPie = StatBase & {
   count: number
 }
 
-export type StatsList = Array<StatList>
-export type StatsPie = Array<StatPie>
+export type StatsListPropType = Array<StatList>
+export type StatsPiePropType = Array<StatPie>

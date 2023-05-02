@@ -32,7 +32,8 @@
 </template>
 
 <script lang="ts" setup>
-  import dayjs, { Dayjs } from 'dayjs'
+  import dayjs from 'dayjs'
+  import { AgeGroupsFilter, NullAgeGroup, AgeGroupOrNull } from './types'
   import { AgeGroup, AgeGroupLabels } from '~/client/options/ageGroup'
   import { StatFilterInput } from '~/server/schema/filter.schema'
   import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
@@ -40,12 +41,6 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
   import { STATS_NULL_COLOR } from '~/utils/constants/colors/stats'
-
-  type AgeGroupsFilter = { lower?: Dayjs; upper?: Dayjs }
-  enum NullAgeGroup {
-    null = 'null'
-  }
-  type AgeGroupOrNull = AgeGroup | NullAgeGroup
 
   const AgeGroupColors = {
     [AgeGroup.Less25]: '#BABAFF',

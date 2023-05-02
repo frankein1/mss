@@ -23,25 +23,25 @@
     />
     <template v-else-if="beneficiaryCount">
       <div class="fr-col-12 fr-col-md-6 fr-col-xl-3">
-        <StatsGender
+        <StatsBeneficiariesGender
           :beneficiary-count="beneficiaryCount"
           :filters="filters"
         />
       </div>
       <div class="fr-col-12 fr-col-md-6 fr-col-xl-3">
-        <StatsAgeGroups
+        <StatsBeneficiariesAgeGroups
           :beneficiary-count="beneficiaryCount"
           :filters="filters"
         />
       </div>
       <div class="fr-col-12 fr-col-lg-6">
-        <StatsFamilySituations
+        <StatsBeneficiariesFamilySituations
           :beneficiary-count="beneficiaryCount"
           :filters="filters"
         />
       </div>
       <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-        <StatsRegions
+        <StatsBeneficiariesRegions
           :beneficiary-count="beneficiaryCount"
           :filters="filters"
         />
@@ -59,24 +59,24 @@
         v-if="isMinistryAgent"
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
       >
-        <StatsAccommodationMode
+        <StatsBeneficiariesAccommodationMode
           :beneficiary-count="beneficiaryCount"
           :filters="filters"
         />
       </div>
       <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-        <StatsMobility
+        <StatsBeneficiariesMobility
           :beneficiary-count="beneficiaryCount"
           :filters="filters"
         />
       </div>
       <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-        <StatsCSP
+        <StatsBeneficiariesCSP
           :beneficiary-count="beneficiaryCount"
           :filters="filters"
         />
       </div>
-      <!-- 
+      <!--
       <template v-if="isMinistryAgent">
         <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
           <StatsMinistereStructure
