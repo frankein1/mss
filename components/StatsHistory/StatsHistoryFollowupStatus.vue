@@ -31,7 +31,7 @@
   import { followupStatusLabels } from '~/client/options/followup'
   import { StatFilterInput } from '~/server/schema/filter.schema'
   import { AlertType } from '~~/utils/constants/alert'
-  import { followupStatusColors } from '~/utils/constants/colors/followup'
+  import { followupStatusColors } from '~/client/colors/followup'
 
   const trpcClient = useTrpcClient()
 

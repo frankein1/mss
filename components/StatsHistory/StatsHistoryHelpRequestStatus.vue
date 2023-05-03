@@ -31,7 +31,7 @@
   import { helpRequestStatusLabels } from '~/client/options/helpRequest'
   import { StatFilterInput } from '~/server/schema/filter.schema'
   import { AlertType } from '~~/utils/constants/alert'
-  import { helpRequestStatusColors } from '~/utils/constants/colors/helpRequest'
+  import { helpRequestStatusColors } from '~/client/colors/helpRequest'
 
   const trpcClient = useTrpcClient()
 

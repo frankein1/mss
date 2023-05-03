@@ -29,7 +29,7 @@
   import { FollowupMedium } from '@prisma/client'
   import { followupMediumLabels } from '~/client/options/followup'
   import { StatFilterInput } from '~/server/schema/filter.schema'
-  import { SupportColor } from '~/utils/constants/colors/support'
+  import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()

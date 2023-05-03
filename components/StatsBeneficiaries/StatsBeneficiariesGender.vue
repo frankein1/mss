@@ -35,7 +35,7 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
   import { StatFilterInput } from '~/server/schema/filter.schema'
-  import { getStatColor } from '~/utils/constants/colors/stats'
+  import { getStatColor } from '~/client/colors/stats'
   import { getStatLabel } from '~/client/options/stat'
   import { genderLabel } from '~/client/options/gender'
   import { StatsPiePropType } from '~/types/stat'

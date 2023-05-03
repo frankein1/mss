@@ -30,7 +30,7 @@
   import { StatList } from '~/types/stat'
   import { AlertType } from '~/utils/constants/alert'
   import { STATS_NULL_LABEL } from '~/client/options/stat'
-  import { SupportColor } from '~/utils/constants/colors/support'
+  import { SupportColor } from '~/client/colors/support'
 
   const trpcClient = useTrpcClient()
 

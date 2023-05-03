@@ -30,7 +30,7 @@
   import { ministerLabels } from '~/client/options/ministry'
   import { getStatLabel } from '~/client/options/stat'
   import { StatFilterInput } from '~/server/schema/filter.schema'
-  import { SupportColor } from '~/utils/constants/colors/support'
+  import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()

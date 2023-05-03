@@ -40,7 +40,7 @@
   import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
-  import { STATS_NULL_COLOR } from '~/utils/constants/colors/stats'
+  import { STATS_NULL_COLOR } from '~/client/colors/stats'
 
   const AgeGroupColors = {
     [AgeGroup.Less25]: '#BABAFF',
