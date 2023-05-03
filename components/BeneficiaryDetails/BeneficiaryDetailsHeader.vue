@@ -47,5 +47,7 @@
     {}
   )
 
-  defineEmits(['onDelete'])
+  defineEmits<{
+    (e: 'onDelete'): void
+  }>()
 </script>
