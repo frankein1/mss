@@ -51,3 +51,24 @@
     (e: 'onDelete'): void
   }>()
 </script>
+
+<style lang="scss" scoped>
+  @use '@gouvfr/dsfr/src/core/index' as dsfr;
+
+  .fr-btns-group {
+    position: sticky;
+    top: 2rem;
+
+    .fr-btn {
+      justify-content: flex-start;
+    }
+  }
+
+  .header-btn-group.fr-btns-group {
+    display: inline-flex;
+
+    .fr-btn {
+      margin-bottom: 0;
+    }
+  }
+</style>

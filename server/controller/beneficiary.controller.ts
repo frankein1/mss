@@ -4,8 +4,9 @@ import { SearchBeneficiaryInput } from '../schema/beneficiary.schema'
 import { createBeneficiary } from '~/server/query/beneficiaires/createBeneficiary'
 import { BeneficiaryCreationInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
+import { TRPCError } from '@trpc/server'
 
-export const getBeneficiaryWithReferentsHandler = async ({
+export const getBeneficiaryDetailsHandler = async ({
   input,
   ctx: { user }
 }: {
@@ -27,10 +28,23 @@ export const getBeneficiaryWithReferentsHandler = async ({
   const beneficiary = await prismaClient.beneficiary.findFirst({
     where,
     include: {
-      referents: true
+      referents: true,
+      relatives: {
+        include: {
+          beneficiary: true
+        }
+      }
     }
   })
-  return beneficiary
+  if(!beneficiary){
+    throw new TRPCError({code: "NOT_FOUND", message: `No beneficiary found with conditions ${JSON.stringify(where)}`})
+  }
+  const { relatives, ...beneficiaryData } = beneficiary
+
+  const taxHouseholds = (relatives || []).filter(relative => relative.hosted)
+  const entourages = (relatives || []).filter(relative => !relative.hosted)
+
+  return { beneficiary: beneficiaryData, taxHouseholds, entourages }
 }
 
 export const createBeneficiaryHandler = async ({

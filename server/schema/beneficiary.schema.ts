@@ -12,7 +12,7 @@ import {
   IncomeSource
 } from '@prisma/client'
 import { z } from 'zod'
-import { PensionOrganisations } from '~/client/options/beneficiary'
+import { PensionOrganisation } from '~/client/options/beneficiary'
 import { Nationalities } from '~/client/options/nationality'
 import { errorMessages, zodEnumFromObjectKeys } from '~/utils/zod'
 
@@ -135,7 +135,7 @@ export const createBeneficiaryWithFullDataSchema =
     majorChildrenMainIncomeAmount: z.number().nullish(),
     unemploymentNumber: z.string().nullish(),
     pensionOrganisations: z
-      .array(z.enum(PensionOrganisations, errorMessages))
+      .array(z.nativeEnum(PensionOrganisation, errorMessages))
       .optional(),
     cafNumber: z.string().nullish(),
     bank: z.string().nullish(),

@@ -1,7 +1,7 @@
 import {
   createBeneficiaryHandler,
   searchBeneficiaryHandler,
-  getBeneficiaryWithReferentsHandler
+  getBeneficiaryDetailsHandler
 } from '../controller/beneficiary.controller'
 import {
   idSchema,
@@ -17,7 +17,7 @@ export const beneficiaryRouter = router({
   add: protectedProcedure
     .input(createBeneficiarySchema)
     .mutation(createBeneficiaryHandler),
-  getBeneficiaryWithReferents: protectedProcedure
+  getBeneficiaryDetails: protectedProcedure
     .input(idSchema)
-    .query(getBeneficiaryWithReferentsHandler)
+    .query(getBeneficiaryDetailsHandler)
 })

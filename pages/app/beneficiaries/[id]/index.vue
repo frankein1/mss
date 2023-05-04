@@ -7,13 +7,23 @@
       :title="title"
       :back-link="backLink"
     >
-      <BeneficiaryDetailsHeader
-        :beneficiary-id="beneficiaryId"
-        :can-delete="canDelete"
-        @on-delete="onDelete"
-      />
-      <BeneficiaryDetailsTitle :beneficiary="beneficiary" />
+      <template #title-extension>
+        <BeneficiaryDetailsHeader
+          :beneficiary-id="beneficiaryId"
+          :can-delete="canDelete"
+          @on-delete="onDelete"
+        />
+      </template>
+      <template #subtitle>
+        <BeneficiaryDetailsTitle :beneficiary="beneficiary" />
+      </template>
     </TheHeader>
+
+    <BeneficiaryDetails
+      :beneficiary="beneficiary"
+      :entourages="entourages"
+      :tax-households="taxHouseholds"
+    />
   </div>
 </template>
 
@@ -21,10 +31,14 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
 
-  const { data: beneficiary } =
-    await useTrpcClient().beneficiary.getBeneficiaryWithReferents.useQuery({
+  const { data } =
+    await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
+
+  const beneficiary = computed(() => data.value?.beneficiary)
+  const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
+  const entourages = computed(() => data.value?.taxHouseholds || [])
 
   const title = computed(() => {
     return beneficiary.value ? beneficiaryName(beneficiary.value) : ''
@@ -36,3 +50,21 @@
 
   const backLink = ''
 </script>
+
+<style lang="scss">
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
+  @include dsfr-media-query.respond-from('lg') {
+    .beneficiary-details-col:nth-of-type(2) {
+      border-left: 1px solid rgb(151 151 151 / 30%);
+    }
+  }
+
+  .beneficiary-details-section {
+    --title-spacing: 0 0 0.75rem;
+
+    &:not(:last-child) {
+      margin-bottom: 2rem;
+    }
+  }
+</style>

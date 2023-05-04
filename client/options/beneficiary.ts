@@ -1,4 +1,5 @@
 import {
+  BeneficiaryAccomodationZone,
   BeneficiaryAccomodationMode,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
@@ -12,7 +13,7 @@ import {
   IncomeSource,
   RelativeRelationship
 } from '@prisma/client'
-import { arrayToOptions, labelsToOptions } from '~/utils/options'
+import { labelsToOptions } from '~/utils/options'
 
 export const beneficiaryStatusLabels: { [key in BeneficiaryStatus]: string } = {
   [BeneficiaryStatus.Active]: 'Actif',
@@ -204,22 +205,55 @@ export const relativeRelationshipOptions = labelsToOptions(
   relativeRelationshipLabels
 )
 
-export const PensionOrganisations = [
-  'AGIRC ARRCO',
-  'AG2R',
-  'CNAV/CARSAT',
-  'CIPAV',
-  'CNRACL',
-  'EDF',
-  'IRCANTEC',
-  'KLESIA',
-  'SRE',
-  'SSI (ex-RSI)',
-  'Malakoff Humanis',
-  'MSA',
-  'ProBTP',
-  'Retraite des mines',
-  'Autre(s)'
-] as const
-export type PensionOrganisation = (typeof PensionOrganisations)[number]
-export const pensionOrganisationOptions = arrayToOptions(PensionOrganisations)
+export enum PensionOrganisation {
+  AGIRC_ARRCO = 'agirc-arrco',
+  AG2R = 'ag2r',
+  CNAV_CARSAT = 'cnav-carsat',
+  CIPAV = 'cipav',
+  CNRACL = 'cnracl',
+  EDF = 'edf',
+  IRCANTEC = 'ircantec',
+  KLESIA = 'klesia',
+  SRE = 'sre',
+  SSI = 'ssi',
+  MalakoffHumanis = 'malakoff_humanis',
+  MSA = 'msa',
+  ProBTP = 'pro_btp',
+  RetraiteDesMines = 'retraite_des_mines',
+  Other = 'other'
+}
+
+export const pensionOrganisationLabels: {
+  [key in PensionOrganisation]: string
+} = {
+  [PensionOrganisation.AGIRC_ARRCO]: 'AGIRC ARRCO',
+  [PensionOrganisation.AG2R]: 'AG2R',
+  [PensionOrganisation.CNAV_CARSAT]: 'CNAV/CARSAT',
+  [PensionOrganisation.CIPAV]: 'CIPAV',
+  [PensionOrganisation.CNRACL]: 'CNRACL',
+  [PensionOrganisation.EDF]: 'EDF',
+  [PensionOrganisation.IRCANTEC]: 'IRCANTEC',
+  [PensionOrganisation.KLESIA]: 'KLESIA',
+  [PensionOrganisation.SRE]: 'SRE',
+  [PensionOrganisation.SSI]: 'SSI (ex-RSI)',
+  [PensionOrganisation.MalakoffHumanis]: 'Malakoff Humanis',
+  [PensionOrganisation.MSA]: 'MSA',
+  [PensionOrganisation.ProBTP]: 'ProBTP',
+  [PensionOrganisation.RetraiteDesMines]: 'Retraite des mines',
+  [PensionOrganisation.Other]: 'Autre(s)'
+}
+export const pensionOrganisationOptions = labelsToOptions(
+  pensionOrganisationLabels
+)
+
+export const beneficiaryAccomodationZoneLabels: {
+  [key in BeneficiaryAccomodationZone]: string
+} = {
+  [BeneficiaryAccomodationZone.France]: 'France',
+  [BeneficiaryAccomodationZone.Europe]: 'Europe',
+  [BeneficiaryAccomodationZone.OutsideEurope]: 'Hors Europe'
+}
+
+export const beneficiaryAccomodationZoneOptions = labelsToOptions(
+  beneficiaryAccomodationZoneLabels
+)

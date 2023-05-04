@@ -24,9 +24,22 @@
     {}
   )
 
-  const referentNames = props.beneficiary.referents
-    .map(referent => getUserDisplayName(referent))
-    .join(', ')
+  const referentNames = computed(() =>
+    props.beneficiary.referents
+      .map(referent => getUserDisplayName(referent))
+      .join(', ')
+  )
 
-  const fileNumber = readableFileNumber(props.beneficiary.id)
+  const fileNumber = computed(() => readableFileNumber(props.beneficiary.id))
 </script>
+
+<style lang="scss" scoped>
+  @use '@gouvfr/dsfr/src/core/index' as dsfr;
+
+  .beneficiary-file-details {
+    @include dsfr.disable-list-style;
+
+    font-weight: 700;
+    margin-top: 0.5rem;
+  }
+</style>
