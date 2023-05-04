@@ -37,7 +37,7 @@
   import { StatFilterInput } from '~/server/schema/filter.schema'
   import { getStatColor } from '~/client/colors/stats'
   import { getStatLabel } from '~/client/options/stat'
-  import { genderLabel } from '~/client/options/gender'
+  import { beneficiaryGenderLabels } from '~/client/options/beneficiary'
   import { StatsPiePropType } from '~/types/stat'
 
   const GenderColor = {
@@ -69,7 +69,7 @@
     () =>
       (genderCounts.value?.map(({ _count, gender }) => ({
         key: gender,
-        label: getStatLabel(genderLabel, gender),
+        label: getStatLabel(beneficiaryGenderLabels, gender),
         color: getStatColor(GenderColor, gender),
         count: _count
       })) || []) as StatsPiePropType

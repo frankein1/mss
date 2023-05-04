@@ -100,13 +100,13 @@
   })
 
   const financialHelpRequestsTotalAmount = computed(() =>
-    internalFinancialHelpRequests.value.reduce(
-      (total, request) =>
-        request.status === HelpRequestStatus.Accepted
-          ? total + (request.allocatedAmount?.toNumber() || 0)
-          : total,
-      0
-    )
+    internalFinancialHelpRequests.value.reduce((total, request) => {
+      if (request.status !== HelpRequestStatus.Accepted) return total
+      const allocatedAmount = new Prisma.Decimal(
+        request.allocatedAmount || 0
+      ).toNumber()
+      return total + allocatedAmount
+    }, 0)
   )
 
   const financialHelpRequestsAmountByType = computed(() => {
