@@ -69,7 +69,7 @@
       name: string
       required?: boolean
       options: Options
-      modelValue?: any
+      modelValue?: string | null
       disabled?: boolean
       disabledOptions?: string[]
     }>(),

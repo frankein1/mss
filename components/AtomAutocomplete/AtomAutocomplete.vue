@@ -87,7 +87,7 @@
       label: string
       name: string
       searchFn: (search: string) => Promise<Options>
-      value?: string
+      value?: string | null
       required?: boolean
     }>(),
     { value: '', required: false }

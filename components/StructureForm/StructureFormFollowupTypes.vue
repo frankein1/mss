@@ -56,10 +56,10 @@
 <script lang="ts" setup>
   import type {
     DefaultLegallyRequiredFollowupTypeWithSupportsCount,
-    FollowupTypeWithSupportsCount,
     DefaultLegallyNotRequiredFollowupTypeWithSupportsCount,
     CustomFollowupTypeWithSupportsCount
   } from './types'
+  import type { FollowupTypeWithSupportsCount } from '~/server/schema'
   import {
     defaultLegallyRequiredFollowupTypeOptions,
     defaultLegallyNotRequiredFollowupTypeOptions

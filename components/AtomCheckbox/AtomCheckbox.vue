@@ -4,7 +4,7 @@
       :id="id"
       type="checkbox"
       :name="name"
-      :checked="modelValue"
+      :checked="!!modelValue"
       :aria-labelledby="labelledBy"
       @input="onInput"
     />
@@ -26,7 +26,7 @@
       noLabel?: boolean
       labelledBy?: string
       name: string
-      modelValue?: boolean
+      modelValue?: boolean | null
     }>(),
     {
       noLabel: false,

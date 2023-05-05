@@ -24,7 +24,7 @@
       value?: string
       label: string
       required?: boolean
-      zipCode?: string
+      zipCode?: string | null
     }>(),
     { value: '', required: false, zipCode: '' }
   )

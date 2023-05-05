@@ -21,8 +21,8 @@
     defineProps<{
       label: string
       name: string
-      value?: string
-      zipCode?: string
+      value?: string | null
+      zipCode?: string | null
       required?: boolean
     }>(),
     { value: '', zipCode: '', required: false }

@@ -216,15 +216,15 @@
   const isDeceased = computed(() => status.value === BeneficiaryStatus.Deceased)
 
   async function updateCity({
-    codeRegion,
-    zipcode: _zipcode,
+    zipCode: _zipcode,
     city: _city,
+    codeRegion,
     region: _region
   }: {
-    codeRegion: string
-    zipcode: string
+    zipCode: string
     city: string
-    region: string
+    codeRegion?: string
+    region?: string
   }) {
     if (codeRegion) {
       region.value = await codeRegionToRegionName(codeRegion)
