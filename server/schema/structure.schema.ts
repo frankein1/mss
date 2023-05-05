@@ -1,4 +1,8 @@
-import { StructureType } from '@prisma/client'
+import {
+  StructureType,
+  DefaultLegallyRequiredFollowupType,
+  DefaultLegallyNotRequiredFollowupType
+} from '@prisma/client'
 import { z } from 'zod'
 import { errorMessages } from '~/utils/zod'
 
@@ -10,17 +14,32 @@ const createStructureSchema = z.object({
   address: z.string(errorMessages).min(2, errorMessages.invalid_type_error),
   phone: z.string(errorMessages).min(10, errorMessages.invalid_type_error),
   email: z.string(errorMessages).email(errorMessages.invalid_type_error),
-  // Ids of the followupTypes to propose
-  proposedFollowupTypes: z.array(z.string().uuid())
+  followupTypes: z
+    .array(
+      z.union([
+        z.string().uuid(),
+        z.nativeEnum(DefaultLegallyRequiredFollowupType),
+        z.nativeEnum(DefaultLegallyNotRequiredFollowupType),
+        z.string()
+      ])
+    )
+    .min(1, "Veuillez sélectionner au moins un type d'accompagnement.")
 })
 
 const editStructureSchema = createStructureSchema.omit({ type: true }).extend({
   structureId: z.string().uuid()
 })
 
-type CreateStructureInput = z.infer<typeof createStructureSchema>
-type EditStructureInput = z.infer<typeof editStructureSchema>
+const editCurrentUserStructureSchema = editStructureSchema.omit({
+  structureId: true
+})
 
-export { createStructureSchema, editStructureSchema }
+// type CreateStructureInput = z.infer<typeof createStructureSchema>
+// type EditStructureInput = z.infer<typeof editStructureSchema>
+type EditCurrentUserStructureInput = z.infer<
+  typeof editCurrentUserStructureSchema
+>
 
-export type { CreateStructureInput, EditStructureInput }
+export { editCurrentUserStructureSchema }
+
+export type { EditCurrentUserStructureInput }

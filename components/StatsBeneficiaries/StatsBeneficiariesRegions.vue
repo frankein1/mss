@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatFilterInput } from '~/server/schema/filter.schema'
+  import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
   import { STATS_NULL_LABEL } from '~/client/options/stat'

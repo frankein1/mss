@@ -9,12 +9,12 @@
     <label
       v-if="!noLabel"
       class="fr-label"
-      :for="name"
+      :for="id"
     >
       {{ displayLabel }}
     </label>
     <select
-      :id="name"
+      :id="id"
       class="fr-select"
       :class="{ 'fr-select--error': error }"
       :name="name"
@@ -88,15 +88,14 @@
     (e: 'update:modelValue', value: string): void
   }>()
 
+  const { id, errorId } = useFormFieldId(props.name)
+
   const error = ref('')
 
-  const errorId = computed(() => `${props.name}-error-desc-error`)
   const displayLabel = computed(() =>
     props.required ? `${props.label} *` : props.label
   )
-  const ariaDescribedby = computed(() =>
-    error.value ? errorId.value : undefined
-  )
+  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
 
   function onChange(event: Event) {
     emit('changeValue', (event.target as HTMLSelectElement).value)

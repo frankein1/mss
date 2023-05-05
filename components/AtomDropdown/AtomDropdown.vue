@@ -79,7 +79,9 @@
   }
 
   function onFocusOut({ relatedTarget }: FocusEvent) {
-    if ((relatedTarget as HTMLElement).closest(`#${DROPDOWN_ID}`)) return
+    if ((relatedTarget as HTMLElement | null)?.closest(`#${DROPDOWN_ID}`)) {
+      return
+    }
     expanded.value = false
   }
 </script>

@@ -29,7 +29,7 @@
 <script lang="ts" setup>
   import { FollowupStatus } from '@prisma/client'
   import { followupStatusLabels } from '~/client/options/followup'
-  import { StatFilterInput } from '~/server/schema/filter.schema'
+  import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { followupStatusColors } from '~/client/colors/followup'
 

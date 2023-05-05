@@ -5,7 +5,7 @@ import {
   getUsersHandler
 } from '../controller/user.controller'
 import { protectedProcedure, router } from '~/server/trpc'
-import { editUserSchema, createUserSchema } from '~/server/schema/user.schema'
+import { editUserSchema, createUserSchema } from '~/server/schema'
 
 export const userRouter = router({
   getUserInfo: protectedProcedure.query(getUserInfoHandler),

@@ -7,7 +7,7 @@ import {
   idSchema,
   searchBeneficiarySchema,
   createBeneficiarySchema
-} from '../schema/beneficiary.schema'
+} from '../schema'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryRouter = router({

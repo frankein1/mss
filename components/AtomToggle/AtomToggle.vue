@@ -1,7 +1,8 @@
 <template>
   <div class="fr-toggle">
     <input
-      :id="name"
+      :id="id"
+      :name="name"
       type="checkbox"
       class="fr-toggle__input"
       :checked="checked"
@@ -11,7 +12,7 @@
     <label
       class="fr-toggle__label"
       :class="{ 'no-label': noLabel }"
-      :for="name"
+      :for="id"
       :data-fr-checked-label="checkedLabel ? 'Activé' : undefined"
       :data-fr-unchecked-label="checkedLabel ? 'Désactivé' : undefined"
     >
@@ -23,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
       label: string
       noLabel?: boolean
@@ -43,6 +44,8 @@
   defineEmits<{
     (e: 'toggle', checked: boolean): void
   }>()
+
+  const { id } = useFormFieldId(props.name)
 </script>
 
 <style scoped>

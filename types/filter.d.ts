@@ -1,4 +1,5 @@
 import type { FilterType } from '~/utils/constants/filters'
+import type { Options } from '~/utils/options'
 
 type FilterPropBase = {
   name: string
@@ -7,7 +8,7 @@ type FilterPropBase = {
 
 type SelectFilterProp = FilterPropBase & {
   type: FilterType.SelectOne | FilterType.SelectMultiple
-  options: Map<string, string>
+  options: Options
 }
 
 type DateFilterProp = FilterPropBase & {

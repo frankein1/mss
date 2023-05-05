@@ -19,7 +19,7 @@ import {
   getRegionStatsHandler,
   getSupportStatsHandler
 } from '../controller/stat.controller'
-import { statFilterSchema } from '../schema/filter.schema'
+import { statFilterSchema } from '../schema'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const statRouter = router({

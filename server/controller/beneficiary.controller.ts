@@ -1,9 +1,8 @@
 import { TRPCError } from '@trpc/server'
 import { AppContext, forbiddenError } from '../trpc'
 import { canListBeneficiaries } from '../query/security/rules'
-import { SearchBeneficiaryInput } from '../schema/beneficiary.schema'
+import { SearchBeneficiaryInput, BeneficiaryCreationInput } from '../schema'
 import { createBeneficiary } from '~/server/query/beneficiaires/createBeneficiary'
-import { BeneficiaryCreationInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 
 export const getBeneficiaryDetailsHandler = async ({

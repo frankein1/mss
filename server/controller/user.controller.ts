@@ -2,10 +2,7 @@ import { TRPCError } from '@trpc/server'
 import { UserRole } from '@prisma/client'
 import { AppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import type {
-  UserEditionInput,
-  UserCreationInput
-} from '~/server/schema/user.schema'
+import type { UserEditionInput, UserCreationInput } from '~/server/schema'
 
 export const getUserInfoHandler = async ({
   ctx: { user }

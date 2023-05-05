@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatFilterInput } from '~/server/schema/filter.schema'
+  import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
 

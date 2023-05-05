@@ -44,7 +44,7 @@
   import { withEmptyValue } from '~/utils/options'
   import { nonAdminUserRoleOptions } from '~/client/options/user'
   import { userFieldLabels } from '~/client/labels/user.labels'
-  import { UserCreationInput } from '~/server/schema/user.schema'
+  import { UserCreationInput } from '~/server/schema'
 
   const snackbar = useSnackbar()
 

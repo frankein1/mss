@@ -13,7 +13,7 @@ const createUserSchema = z.object({
   email: z.string(errorMessages).email(validEmailMessage),
   role: z.nativeEnum(NonAdminUserRole, {
     ...errorMessages,
-    required_error: 'Veuillez renseigner le rôle'
+    required_error: 'Veuillez renseigner le rôle.'
   })
 })
 

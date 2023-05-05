@@ -2,7 +2,7 @@
   <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
     <div class="fr-col-12">
       <StatsFilters
-        :follow-up-type-options="followUpTypeOptions"
+        :followup-type-options="followupTypeOptions"
         :beneficiaries-cities-options="beneficiariesCitiesOptions"
         :agent-options="agentOptions"
         id-prefix="beneficiaries"
@@ -104,19 +104,19 @@
 <script lang="ts" setup>
   import { AlertType } from '~~/utils/constants/alert'
   import { Options } from '~/utils/options'
-  import { StatFilterInput } from '~/server/schema/filter.schema'
+  import { StatFilterInput } from '~/server/schema'
 
   const trpcClient = useTrpcClient()
   const isMinistryAgent = useMinistryAgent()
 
   withDefaults(
     defineProps<{
-      followUpTypeOptions?: Options
+      followupTypeOptions?: Options
       beneficiariesCitiesOptions?: Options
       agentOptions?: Options
     }>(),
     {
-      followUpTypeOptions: () => new Map<string, string>(),
+      followupTypeOptions: () => new Map<string, string>(),
       beneficiariesCitiesOptions: () => new Map<string, string>(),
       agentOptions: () => new Map<string, string>()
     }

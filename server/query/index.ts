@@ -1,14 +1,8 @@
 export { AccompagnementsQuery } from './accompagnements'
 export { BeneficiairesQuery } from './beneficiaires'
-export { StructureQuery } from './structure'
-export { StatisticsQuery } from './statistics'
 export { UtilisateursQuery } from './utilisateurs'
 export { getBeneficiarySecurityTarget } from './security/getBeneficiarySecurityTarget'
 
-export {
-  type GetAgeStatsReturn,
-  type GetSupportStatsReturn
-} from './statistics'
 export {
   type GetBeneficiaryToViewReturn,
   type SupportList,

@@ -20,6 +20,7 @@
     { label: 'Mon compte', to: Routes.Account, icon: 'fr-icon-user-line' }
   ]
 
+  // TODO
   // if (permissionsStore.canAddUsers) {
   MENUS.push({
     label: 'Utilisateurs',
@@ -28,12 +29,13 @@
   })
   // }
 
+  // TODO
   // if (permissionsStore.canEditOrganisation) {
-  // MENUS.push({
-  //   label: 'Structure',
-  //   to: Routes.OrganisationEdit,
-  //   icon: 'fr-icon-home-4-line'
-  // })
+  MENUS.push({
+    label: 'Structure',
+    to: Routes.StructureEdit,
+    icon: 'fr-icon-home-4-line'
+  })
   // }
 
   MENUS.push({

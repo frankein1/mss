@@ -1,7 +1,7 @@
 <template>
   <div class="fr-p-2w">
     <AtomLoader
-      v-if="!followUpTypeOptions || !beneficiariesCitiesOptions"
+      v-if="!followupTypeOptions || !beneficiariesCitiesOptions"
       class="fr-mx-auto"
     />
     <AtomFilters
@@ -26,7 +26,7 @@
   }>()
 
   const props = defineProps<{
-    followUpTypeOptions: Options
+    followupTypeOptions: Options
     beneficiariesCitiesOptions: Options
     agentOptions: Options
     idPrefix: string
@@ -45,11 +45,11 @@
         type: FilterType.Date
       }
     ]
-    if (props.followUpTypeOptions) {
+    if (props.followupTypeOptions) {
       filters.push({
         name: `${props.idPrefix}-followupTypes`,
         label: "Type d'accompagnement",
-        options: props.followUpTypeOptions,
+        options: props.followupTypeOptions,
         type: FilterType.SelectMultiple
       })
     }

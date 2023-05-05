@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
   import { Prisma, HelpRequestStatus } from '@prisma/client'
-  import { StatFilterInput } from '~/server/schema/filter.schema'
+  import { StatFilterInput } from '~/server/schema'
   import { StatList } from '~/types/stat'
   import { AlertType } from '~/utils/constants/alert'
 

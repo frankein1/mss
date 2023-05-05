@@ -1,7 +1,7 @@
 import { AppContext, invalidError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { Prisma } from '~/server/prisma/prismaClient'
-import { StatFilterInput } from '~/server/schema/filter.schema'
+import { StatFilterInput } from '~/server/schema'
 
 function prepareDateFilters(filters: StatFilterInput) {
   return {

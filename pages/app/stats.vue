@@ -48,7 +48,7 @@
               :message="fetchError"
             />
             <StatsBeneficiaries
-              :follow-up-type-options="followUpTypesOptions"
+              :followup-type-options="followupTypesOptions"
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
@@ -66,7 +66,7 @@
               :message="fetchError"
             />
             <StatsHistory
-              :follow-up-type-options="followUpTypesOptions"
+              :followup-type-options="followupTypesOptions"
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
@@ -85,7 +85,7 @@
 
   const trpcClient = useTrpcClient()
 
-  const { data: followUpTypes, error: followUpTypesError } =
+  const { data: followupTypes, error: followupTypesError } =
     await trpcClient.config.getStructureFollowupTypes.useQuery()
 
   const { data: beneficiariesCities, error: beneficiariesCitiesError } =
@@ -95,7 +95,7 @@
     await trpcClient.config.getAgents.useQuery()
 
   const fetchError = computed(() => {
-    if (followUpTypesError.value) {
+    if (followupTypesError.value) {
       return "La liste des types d'accompagnement n'a pas pu être chargée."
     }
     if (beneficiariesCitiesError.value) {
@@ -107,9 +107,9 @@
     return ''
   })
 
-  const followUpTypesOptions = computed(() =>
-    followUpTypes.value
-      ? toOptions(followUpTypes.value, 'id', 'name')
+  const followupTypesOptions = computed(() =>
+    followupTypes.value
+      ? toOptions(followupTypes.value, 'id', 'name')
       : undefined
   )
   const beneficiariesCitiesOptions = computed(() => {

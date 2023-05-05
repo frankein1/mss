@@ -119,7 +119,6 @@ model Structure {
   users                    User[]
   helpRequests             HelpRequest[]
   followups                Followup[]
-  proposedFollowupTypes    ProposedFollowupType[]
   prescribingOrganizations PrescribingOrganization[]
 
   beneficiaries Beneficiary[]
@@ -160,12 +159,68 @@ model Document {
   @@map("document")
 }
 
+enum DefaultLegallyRequiredFollowupType {
+  // Aide médicale d'État
+  AideMedicaleDEtat
+  // Aide sociale
+  AideSociale
+  // Allocation de solidarité aux personnes âgées
+  AllocationDeSolidariteAuxPersonnesAgees
+  // Allocation personnalisées d'autonomie
+  AllocationPersonnaliseesDAutonomie
+  // Complémentaire santé solidaire
+  ComplementaireSanteSolidaire
+  // Demande d'aides ménagères
+  DemandeDAidesMenageres
+  // Domiciliation
+  Domiciliation
+  // Entrée en établissement pour personnes handicapées
+  EntreeEnEtablissementPourPersonnesHandicapees
+  // Entrée en famille d'accueil
+  EntreeEnFamilleDAccueil
+  // Entrée en hébergement pour personnes âgées
+  EntreeEnHebergementPourPersonnesAgees
+  // Obligation alimentaire
+  ObligationAlimentaire
+  // PUMA
+  Puma
+  // Revenu de solidarité active
+  RevenuDeSolidariteActive
+}
+
+enum DefaultLegallyNotRequiredFollowupType {
+  // Accompagnement social
+  AccompagnementSocial
+  // Aide alimentaire
+  AideAlimentaire
+  // Aide au transport
+  AideAuTransport
+  // Aides financières non remboursables
+  AidesFinancieresNonRemboursables
+  // Aides financières remboursables
+  AidesFinancieresRemboursables
+  // Animations familles
+  AnimationsFamilles
+  // Animations seniors
+  AnimationsSeniors
+  // Inclusion numérique
+  InclusionNumerique
+  // Autre
+  Other
+  // Plan alerte et urgence
+  PlanAlerteEtUrgence
+  // Soutien administratif
+  SoutienAdministratif
+}
+
 model FollowupType {
-  id              String   @id @db.Uuid
-  name            String
-  legallyRequired Boolean  @map("legally_required")
-  legacyDefault   Boolean? @map("legacy_default")
-  legacyId        String?  @map("legacy_id") @db.Uuid
+  id                           String                                 @id @default(uuid()) @db.Uuid
+  name                         String
+  legallyRequired              Boolean                                @map("legally_required")
+  default                      Boolean                                @map("legacy_default") // FIXME: Can we change the column name in the database ?
+  defaultLegallyRequiredKey    DefaultLegallyRequiredFollowupType?    @map("default_legally_required_key")
+  defaultLegallyNotRequiredKey DefaultLegallyNotRequiredFollowupType? @map("default_legally_not_required_key")
+  legacyId                     String?                                @map("legacy_id") @db.Uuid // FIXME: What is the purpose of this ?
 
   created     DateTime? @default(now())
   createdBy   User?     @relation(fields: [createdById], references: [id])
@@ -174,26 +229,11 @@ model FollowupType {
   followups    Followup[]    @relation("followup_to_followup_type")
   helpRequests HelpRequest[]
 
-  proposedFollowupTypes ProposedFollowupType[]
-
-  ownedByStructure   Structure? @relation(fields: [ownedByStructureId], references: [id])
-  ownedByStructureId String?    @map("owned_by_structured_id") @db.Uuid
+  ownedByStructure   Structure @relation(fields: [ownedByStructureId], references: [id])
+  ownedByStructureId String    @map("owned_by_structured_id") @db.Uuid // FIXME: owned_by_structure**d**_id
 
   @@unique([name, ownedByStructureId])
   @@map("followup_type")
-}
-
-model ProposedFollowupType {
-  structure   Structure @relation(fields: [structureId], references: [id])
-  structureId String    @map("structure_id") @db.Uuid
-
-  followupType   FollowupType @relation(fields: [followupTypeId], references: [id])
-  followupTypeId String       @map("followup_type_id") @db.Uuid
-
-  created DateTime? @default(now())
-
-  @@id([structureId, followupTypeId])
-  @@map("proposed_followup_type")
 }
 
 enum FollowupMedium {

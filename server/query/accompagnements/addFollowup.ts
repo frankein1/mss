@@ -1,7 +1,7 @@
 import { v4 } from 'uuid'
 import { Prisma } from '@prisma/client'
 import { SecurityRuleGrantee } from '../security/rules'
-import { AddFollowupInput } from '~/server/schema/followup.schema'
+import { AddFollowupInput } from '~/server/schema'
 
 export const addFollowup = async ({
   input,

@@ -9,7 +9,7 @@
     <label
       v-if="!noLabel"
       class="fr-label"
-      :for="name"
+      :for="id"
     >
       {{ displayLabel }}
       <span
@@ -24,7 +24,7 @@
       :class="{ 'fr-icon-calendar-line': type === 'date' }"
     >
       <input
-        :id="name"
+        :id="id"
         ref="input"
         v-model="modelValue"
         class="fr-input"
@@ -98,10 +98,12 @@
     }
   )
 
+  // FIXME: Turn into a two-way binding value/event ?
   defineEmits<{
     (e: 'changeValue', value: string): void
   }>()
 
+  const { id, errorId } = useFormFieldId(props.name)
   const error = ref('')
 
   // This model is only used to prevent input value from being replace by initial value when custom error state changes
@@ -109,13 +111,10 @@
 
   const input = ref<HTMLInputElement | null>(null)
 
-  const errorId = computed(() => `${props.name}-error-desc-error`)
   const displayLabel = computed(() =>
     props.required ? `${props.label} *` : props.label
   )
-  const ariaDescribedby = computed(() =>
-    error.value ? errorId.value : undefined
-  )
+  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
 
   const placeholder = computed(() => {
     if (props.placeholder) return props.placeholder

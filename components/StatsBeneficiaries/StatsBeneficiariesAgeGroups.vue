@@ -35,7 +35,7 @@
   import dayjs from 'dayjs'
   import type { AgeGroupsFilter } from '~/components/StatsBeneficiaries/types'
   import { AgeGroup, AgeGroupLabels } from '~/client/options/ageGroup'
-  import { StatFilterInput } from '~/server/schema/filter.schema'
+  import { StatFilterInput } from '~/server/schema'
   import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
   import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
   import { AlertType } from '~~/utils/constants/alert'

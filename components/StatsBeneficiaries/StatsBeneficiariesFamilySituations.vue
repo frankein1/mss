@@ -33,7 +33,7 @@
 
 <script lang="ts" setup>
   import { BeneficiaryFamilySituation } from '@prisma/client'
-  import { StatFilterInput } from '~/server/schema/filter.schema'
+  import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
   import { getStatLabel } from '~/client/options/stat'

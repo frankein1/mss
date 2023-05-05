@@ -45,7 +45,7 @@
     />
     <!-- FIXME: As input is hidden, it can not be focused on submission failure -->
     <input
-      :id="name"
+      :id="id"
       ref="hiddenInput"
       :name="name"
       hidden
@@ -107,12 +107,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { ComponentPublicInstance, ComputedRef, Ref } from 'vue'
+  import type { ComponentPublicInstance, ComputedRef, Ref } from 'vue'
+  import type { Options } from '~/utils/options'
 
   const props = withDefaults(
     defineProps<{
       label: string
-      options: Map<string, string>
+      options: Options
       modelValue?: string[]
       labelClass?: string
       required?: boolean
@@ -142,6 +143,12 @@
     (e: 'changeValue', value: string): void
   }>()
 
+  const { id, errorId } = useFormFieldId(props.name)
+
+  const listboxId = `multi-select-${id}-listbox`
+  const displayInputId = `multi-select-${id}-fake-select`
+  const labelId = `multi-select-${id}-label`
+
   const selectedValues = ref<string[]>(
     (props.modelValue || []).filter(v => props.options.has(v))
   )
@@ -154,11 +161,8 @@
   const displayLabel = computed(() =>
     props.required ? `${props.label} *` : props.label
   )
-  const errorId = computed(() => `${props.name}-error-desc-error`)
 
-  const ariaDescribedby = computed(() =>
-    error.value ? errorId.value : undefined
-  )
+  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
 
   /**
    * The value stored in the hidden input
@@ -171,12 +175,6 @@
   const displayedValue = computed(() =>
     selectedValues.value.map(value => props.options.get(value)).join(', ')
   )
-
-  const listboxId = computed(() => `multi-select-${props.name}-listbox`)
-  const displayInputId = computed(
-    () => `multi-select-${props.name}-fake-select`
-  )
-  const labelId = computed(() => `multi-select-${props.name}-label`)
 
   /**
    * In dropdown mode, options can not be accessed through tab hits

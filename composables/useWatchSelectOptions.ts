@@ -1,4 +1,5 @@
-import { Ref } from 'vue'
+import type { Ref } from 'vue'
+import type { Options } from '~/utils/options'
 
 /**
  * Add a watcher that watches options.
@@ -8,7 +9,7 @@ import { Ref } from 'vue'
  * @param selectedValues The list of selected values
  */
 export function useWatchSelectOptions(
-  optionsSource: () => Map<string, string>,
+  optionsSource: () => Options,
   selectedValues: Ref<string[]>
 ) {
   /**

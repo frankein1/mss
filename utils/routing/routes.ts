@@ -23,6 +23,8 @@ export const Routes = {
 
   Account: `${AppRoute}/account`,
 
+  StructureEdit: `${AppRoute}/structure/edit`,
+
   // beneficiaries
   Beneficiaries: BeneficiariesRoute,
   BeneficiariesAdd: `${BeneficiariesRoute}/add`

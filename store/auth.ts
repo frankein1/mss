@@ -49,7 +49,7 @@ export const useAuthStore = defineStore({
     userName(): string {
       return this.user ? `${this.user.firstName} ${this.user.lastName}` : ''
     },
-    userOrganisationId(): string {
+    userStructureId(): string {
       return this.user?.structureId || ''
     },
     isMinistryAgent(): boolean {

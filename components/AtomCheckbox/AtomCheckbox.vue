@@ -1,7 +1,7 @@
 <template>
   <div class="fr-checkbox-group">
     <input
-      :id="name"
+      :id="id"
       type="checkbox"
       :name="name"
       :checked="modelValue"
@@ -10,7 +10,7 @@
     />
     <label
       class="fr-label"
-      :for="name"
+      :for="id"
     >
       <span :class="{ 'no-label': noLabel }">
         {{ label }}
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
       label: string
       noLabel?: boolean
@@ -38,6 +38,8 @@
   const emit = defineEmits<{
     (e: 'update:modelValue', checked: boolean): void
   }>()
+
+  const { id } = useFormFieldId(props.name)
 
   function onInput(event: Event) {
     emit('update:modelValue', (event.target as HTMLInputElement).checked)

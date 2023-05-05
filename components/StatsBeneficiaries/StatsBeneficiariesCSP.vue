@@ -34,7 +34,7 @@
 <script lang="ts" setup>
   import { BeneficiarySocioProfessionalCategory } from '@prisma/client'
   import { beneficiarySocioProfessionalCategoryLabels } from '~/client/options/beneficiary'
-  import { StatFilterInput } from '~/server/schema/filter.schema'
+  import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
   import { getStatLabel } from '~/client/options/stat'
