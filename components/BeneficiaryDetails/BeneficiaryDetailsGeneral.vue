@@ -101,7 +101,8 @@
         N'a pas de téléphone
       </li>
       <li v-if="!beneficiary.noPhone && beneficiary.phone1">
-        <span class="information-label">Téléphone :</span> {{ displayPhone }}
+        <span class="information-label">Téléphone :</span>
+        {{ getBeneficiaryDisplayPhone(beneficiary) }}
       </li>
       <li v-if="beneficiary.email">
         <span class="information-label">Email :</span>

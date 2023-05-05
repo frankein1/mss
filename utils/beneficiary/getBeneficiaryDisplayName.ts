@@ -1,0 +1,15 @@
+import { Beneficiary } from '@prisma/client'
+
+export function getBeneficiaryDisplayName(
+  beneficiary: Pick<Beneficiary, 'firstName' | 'usualName' | 'birthName'>
+): string {
+  let lastname = ''
+  if (beneficiary.usualName) {
+    lastname = beneficiary.usualName
+  } else if (beneficiary.birthName) {
+    lastname = `(${beneficiary.birthName})`
+  }
+  return `${nameOrEmpty(beneficiary.firstName)} ${nameOrEmpty(
+    lastname.toUpperCase()
+  )}`
+}

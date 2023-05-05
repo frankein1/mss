@@ -2,10 +2,9 @@ import type { StructureType, User as PrismaUser } from '@prisma/client'
 
 export type JwtUser = Pick<
   PrismaUser,
-  'id' | 'lastName' | 'firstName' | 'email' | 'role'
+  'id' | 'lastName' | 'firstName' | 'email' | 'role' | 'status' | 'structureId'
 > & {
   inclusionConnectId: string
-  structureId?: string
   structureType?: StructureType
 }
 

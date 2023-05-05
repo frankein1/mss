@@ -371,7 +371,7 @@ model HelpRequest {
   updated DateTime? @default(now())
 
   ministre     Minister?
-  numeroPegase String? @map("numero_pegase")
+  numeroPegase String?   @map("numero_pegase")
 
   @@map("help_request")
 }
@@ -815,12 +815,12 @@ model Beneficiary {
   zipcode                           String?
   city                              String?
   region                            String?
-  noPhone                           Boolean?                     @map("no_phone")
+  noPhone                           Boolean                      @default(false) @map("no_phone")
   phone1                            String?
   phone2                            String?
   email                             String?
   familySituation                   BeneficiaryFamilySituation?  @map("family_situation")
-  caregiver                         Boolean?
+  caregiver                         Boolean                      @default(false)
   minorChildren                     Int?                         @map("minor_children")
   majorChildren                     Int?                         @map("major_children")
   mobility                          BeneficiaryMobility?
@@ -866,8 +866,8 @@ model Beneficiary {
   serviceProviders     String?                       @map("service_providers")
   involvedPartners     String?                       @map("involved_partners")
 
-  additionalInformation String?           @map("additional_information")
-  numeroPegase          String?           @map("numero_pegase")
+  additionalInformation String?                      @map("additional_information")
+  numeroPegase          String?                      @map("numero_pegase")
   accommodationZone     BeneficiaryAccomodationZone? @map("accommodation_zone")
 
   documents    Document[]
@@ -912,8 +912,8 @@ model BeneficiaryRelative {
   email String?
   phone String?
 
-  hosted    Boolean?
-  caregiver Boolean?
+  hosted    Boolean @default(false)
+  caregiver Boolean @default(false)
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
   beneficiaryId String      @map("beneficiary_id") @db.Uuid

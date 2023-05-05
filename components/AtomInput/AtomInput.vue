@@ -76,7 +76,7 @@
       hint?: string
       pattern?: string
       customError?: string
-      value?: string | number | Date
+      value?: string | number | Date | null
       step?: string
       min?: number
       readonly?: boolean

@@ -26,9 +26,12 @@
             :to="`${Routes.Beneficiaries}/${relative.beneficiary.id}`"
             class="fr-link fr-icon-links-line fr-link--icon-left"
             target="_self"
-            >{{ beneficiaryName(relative.beneficiary) }}</NuxtLink
+            >{{ getBeneficiaryDisplayName(relative.beneficiary) }}</NuxtLink
           >
-          <template v-else>{{ beneficiaryName(names(relative)) }}</template> -
+          <template v-else>{{
+            getBeneficiaryDisplayName(names(relative))
+          }}</template>
+          -
           {{ typeLabel(relative) }}
         </span>
         <span
@@ -56,9 +59,9 @@
 
 <script setup lang="ts">
   import { Beneficiary, BeneficiaryRelative } from '@prisma/client'
-  import { BeneficiaryRelativeWithBeneficiary } from './types'
   import { relativeRelationshipLabels } from '~/client/options/beneficiary'
   import { familySituationLabels } from '~/client/options/familySituation'
+  import { BeneficiaryRelativeWithBeneficiary } from '~/utils/beneficiary'
   import { Routes } from '~/utils/routing/routes'
 
   const props = withDefaults(

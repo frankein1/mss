@@ -22,8 +22,8 @@
 </template>
 <script lang="ts" setup>
   import { Beneficiary } from '@prisma/client'
-  import { BeneficiaryRelativeWithBeneficiary } from './types'
   import { useAuthStore } from '~/store/auth'
+  import { BeneficiaryRelativeWithBeneficiary } from '~/utils'
 
   const props = defineProps<{
     beneficiary: Beneficiary

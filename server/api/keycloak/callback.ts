@@ -48,7 +48,7 @@ export default defineEventHandler(async event => {
     inclusionConnectToken
   })
 
-  const { firstName, lastName, id, role, structure } = user
+  const { firstName, lastName, id, role, structure, status } = user
 
   const jwtUser = {
     firstName,
@@ -56,8 +56,9 @@ export default defineEventHandler(async event => {
     id,
     email,
     role,
+    status,
     inclusionConnectId: sub,
-    structureId: structure?.id,
+    structureId: structure?.id || null,
     structureType: structure?.type
   }
 

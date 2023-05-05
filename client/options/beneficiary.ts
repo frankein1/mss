@@ -187,7 +187,8 @@ export const beneficiaryOrientationTypeLabels: {
 export const beneficiaryOrientationTypeOptions = labelsToOptions(
   beneficiaryOrientationTypeLabels
 )
-export const relativeRelationshipLabels: {
+
+export const entourageRelationshipLabels: {
   [key in RelativeRelationship]: string
 } = {
   [RelativeRelationship.Conjoint]: 'Conjoint·e',
@@ -201,8 +202,31 @@ export const relativeRelationshipLabels: {
   [RelativeRelationship.AutreMemberDeLaFamille]: 'Autre membre de la famille'
 }
 
-export const relativeRelationshipOptions = labelsToOptions(
-  relativeRelationshipLabels
+export const taxHouseHoldRelationshipLabels: {
+  [key in RelativeRelationship]: string
+} = {
+  [RelativeRelationship.Conjoint]: 'Conjoint·e',
+  [RelativeRelationship.EnfantMajeur]: 'Enfant majeur',
+  [RelativeRelationship.EnfantMineur]: 'Enfant mineur',
+  [RelativeRelationship.Sibling]: 'Fratrie',
+  [RelativeRelationship.Grandparent]: 'Grand-parent',
+  [RelativeRelationship.Parent]: 'Parent',
+  [RelativeRelationship.Tiers]: 'Tiers',
+  [RelativeRelationship.Neighbour]: 'Voisin·e',
+  [RelativeRelationship.AutreMemberDeLaFamille]: 'Autre membre de la famille'
+}
+
+export const relativeRelationshipLabels = {
+  ...taxHouseHoldRelationshipLabels,
+  ...entourageRelationshipLabels
+}
+
+export const taxHouseHoldRelationshipOptions = labelsToOptions(
+  taxHouseHoldRelationshipLabels
+)
+
+export const entourageRelationshipOptions = labelsToOptions(
+  entourageRelationshipLabels
 )
 
 export enum PensionOrganisation {

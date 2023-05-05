@@ -1,10 +1,10 @@
+import { TRPCError } from '@trpc/server'
 import { AppContext, forbiddenError } from '../trpc'
 import { canListBeneficiaries } from '../query/security/rules'
 import { SearchBeneficiaryInput } from '../schema/beneficiary.schema'
 import { createBeneficiary } from '~/server/query/beneficiaires/createBeneficiary'
 import { BeneficiaryCreationInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { TRPCError } from '@trpc/server'
 
 export const getBeneficiaryDetailsHandler = async ({
   input,
@@ -36,8 +36,11 @@ export const getBeneficiaryDetailsHandler = async ({
       }
     }
   })
-  if(!beneficiary){
-    throw new TRPCError({code: "NOT_FOUND", message: `No beneficiary found with conditions ${JSON.stringify(where)}`})
+  if (!beneficiary) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: `No beneficiary found with conditions ${JSON.stringify(where)}`
+    })
   }
   const { relatives, ...beneficiaryData } = beneficiary
 

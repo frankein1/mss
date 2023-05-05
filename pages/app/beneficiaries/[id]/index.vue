@@ -28,6 +28,9 @@
 </template>
 
 <script lang="ts" setup>
+  import { canDeleteBeneficiary } from '~/server/query/security/rules'
+  import { useAuthStore } from '~/store/auth'
+
   const route = useRoute()
   const beneficiaryId = route.params.id as string
 
@@ -41,10 +44,15 @@
   const entourages = computed(() => data.value?.taxHouseholds || [])
 
   const title = computed(() => {
-    return beneficiary.value ? beneficiaryName(beneficiary.value) : ''
+    return beneficiary.value ? getBeneficiaryDisplayName(beneficiary.value) : ''
   })
 
-  const canDelete = true
+  const authUser = useAuthStore().getAuthUser
+  const canDelete = computed(() => {
+    return beneficiary.value
+      ? canDeleteBeneficiary(authUser, beneficiary.value)
+      : false
+  })
 
   const onDelete = () => {}
 

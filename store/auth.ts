@@ -37,6 +37,12 @@ export const useAuthStore = defineStore({
     isAgentDAccueil(): boolean {
       return this.user?.role === UserRole.ReceptionAgent
     },
+    getAuthUser(): JwtUser {
+      if (!this.user) {
+        throw new Error('No auth user in store!')
+      }
+      return this.user
+    },
     userId(): string {
       return this.user?.id || ''
     },

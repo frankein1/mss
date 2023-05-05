@@ -15,3 +15,5 @@ export function dateIsBetween(
 ): boolean {
   return date.isBetween(lower, upper, 'day', '[]')
 }
+
+export * from './beneficiary'

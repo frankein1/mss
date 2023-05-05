@@ -12,7 +12,7 @@
           target="_self"
           class="fr-btn fr-btn--tertiary-no-outline"
         >
-          {{ beneficiaryToSearchResult(beneficiary) }}
+          {{ getBeneficiarySearchDisplayName(beneficiary) }}
         </NuxtLink>
       </template>
     </BeneficiarySearchbarInput>
@@ -27,7 +27,6 @@
 </template>
 
 <script setup lang="ts">
-  import { beneficiaryToSearchResult } from '~~/utils/beneficiary'
   import { Routes } from '~/utils/routing/routes'
 
   async function searchBeneficiaries(query: string) {
