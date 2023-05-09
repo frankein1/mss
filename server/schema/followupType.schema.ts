@@ -1,8 +1,7 @@
 import { z } from 'zod'
 import {
   DefaultLegallyRequiredFollowupType,
-  DefaultLegallyNotRequiredFollowupType,
-  FollowupType
+  DefaultLegallyNotRequiredFollowupType
 } from '@prisma/client'
 import { minStringLengthMessage } from '~/utils/zod'
 
@@ -35,17 +34,6 @@ type CreateCustomFollowupTypeInput = z.infer<
   typeof createCustomFollowupTypeSchema
 >
 
-type FollowupTypeWithSupportsCount = FollowupType & {
-  _count: {
-    followups: number
-    helpRequests: number
-  }
-}
-
 export { createFollowupTypeSchema, createCustomFollowupTypeSchema }
 
-export type {
-  CreateFollowupTypeInput,
-  CreateCustomFollowupTypeInput,
-  FollowupTypeWithSupportsCount
-}
+export type { CreateFollowupTypeInput, CreateCustomFollowupTypeInput }

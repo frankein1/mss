@@ -26,8 +26,7 @@ export {
 } from './followupType.schema'
 export type {
   CreateFollowupTypeInput,
-  CreateCustomFollowupTypeInput,
-  FollowupTypeWithSupportsCount
+  CreateCustomFollowupTypeInput
 } from './followupType.schema'
 
 export { editCurrentUserStructureSchema } from './structure.schema'

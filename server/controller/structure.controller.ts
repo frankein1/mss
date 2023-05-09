@@ -8,13 +8,13 @@ import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import type {
   EditCurrentUserStructureInput,
-  CreateFollowupTypeInput,
-  FollowupTypeWithSupportsCount
+  CreateFollowupTypeInput
 } from '~/server/schema'
 import {
   defaultLegallyRequiredFollowupTypeLabels,
   defaultLegallyNotRequiredFollowupTypeLabels
 } from '~/client/options/followupType'
+import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
 export const getCurrentUserStructureHandler = async ({
   ctx: { user }

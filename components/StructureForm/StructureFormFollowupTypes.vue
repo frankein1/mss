@@ -59,7 +59,7 @@
     DefaultLegallyNotRequiredFollowupTypeWithSupportsCount,
     CustomFollowupTypeWithSupportsCount
   } from './types'
-  import type { FollowupTypeWithSupportsCount } from '~/server/schema'
+  import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
   import {
     defaultLegallyRequiredFollowupTypeOptions,
     defaultLegallyNotRequiredFollowupTypeOptions
