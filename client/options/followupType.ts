@@ -1,35 +1,27 @@
-import {
-  DefaultLegallyRequiredFollowupType,
-  DefaultLegallyNotRequiredFollowupType
-} from '@prisma/client'
+import { DefaultFollowupType } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
 export const defaultLegallyRequiredFollowupTypeLabels: {
-  [key in DefaultLegallyRequiredFollowupType]: string
+  [key in DefaultFollowupType]?: string
 } = {
-  [DefaultLegallyRequiredFollowupType.AideMedicaleDEtat]:
-    "Aide médicale d'État",
-  [DefaultLegallyRequiredFollowupType.AideSociale]: 'Aide sociale',
-  [DefaultLegallyRequiredFollowupType.AllocationDeSolidariteAuxPersonnesAgees]:
+  [DefaultFollowupType.AideMedicaleDEtat]: "Aide médicale d'État",
+  [DefaultFollowupType.AideSociale]: 'Aide sociale',
+  [DefaultFollowupType.AllocationDeSolidariteAuxPersonnesAgees]:
     'Allocation de solidarité aux personnes âgées',
-  [DefaultLegallyRequiredFollowupType.AllocationPersonnaliseesDAutonomie]:
+  [DefaultFollowupType.AllocationPersonnaliseesDAutonomie]:
     "Allocation personnalisées d'autonomie",
-  [DefaultLegallyRequiredFollowupType.ComplementaireSanteSolidaire]:
+  [DefaultFollowupType.ComplementaireSanteSolidaire]:
     'Complémentaire santé solidaire',
-  [DefaultLegallyRequiredFollowupType.DemandeDAidesMenageres]:
-    "Demande d'aides ménagères",
-  [DefaultLegallyRequiredFollowupType.Domiciliation]: 'Domiciliation',
-  [DefaultLegallyRequiredFollowupType.EntreeEnEtablissementPourPersonnesHandicapees]:
+  [DefaultFollowupType.DemandeDAidesMenageres]: "Demande d'aides ménagères",
+  [DefaultFollowupType.Domiciliation]: 'Domiciliation',
+  [DefaultFollowupType.EntreeEnEtablissementPourPersonnesHandicapees]:
     'Entrée en établissement pour personnes handicapées',
-  [DefaultLegallyRequiredFollowupType.EntreeEnFamilleDAccueil]:
-    "Entrée en famille d'accueil",
-  [DefaultLegallyRequiredFollowupType.EntreeEnHebergementPourPersonnesAgees]:
+  [DefaultFollowupType.EntreeEnFamilleDAccueil]: "Entrée en famille d'accueil",
+  [DefaultFollowupType.EntreeEnHebergementPourPersonnesAgees]:
     'Entrée en hébergement pour personnes âgées',
-  [DefaultLegallyRequiredFollowupType.ObligationAlimentaire]:
-    'Obligation alimentaire',
-  [DefaultLegallyRequiredFollowupType.Puma]: 'PUMA',
-  [DefaultLegallyRequiredFollowupType.RevenuDeSolidariteActive]:
-    'Revenu de solidarité active'
+  [DefaultFollowupType.ObligationAlimentaire]: 'Obligation alimentaire',
+  [DefaultFollowupType.Puma]: 'PUMA',
+  [DefaultFollowupType.RevenuDeSolidariteActive]: 'Revenu de solidarité active'
 }
 
 export const defaultLegallyRequiredFollowupTypeOptions = labelsToOptions(
@@ -37,27 +29,21 @@ export const defaultLegallyRequiredFollowupTypeOptions = labelsToOptions(
 )
 
 export const defaultLegallyNotRequiredFollowupTypeLabels: {
-  [key in DefaultLegallyNotRequiredFollowupType]: string
+  [key in DefaultFollowupType]?: string
 } = {
-  [DefaultLegallyNotRequiredFollowupType.AccompagnementSocial]:
-    'Accompagnement social',
-  [DefaultLegallyNotRequiredFollowupType.AideAlimentaire]: 'Aide alimentaire',
-  [DefaultLegallyNotRequiredFollowupType.AideAuTransport]: 'Aide au transport',
-  [DefaultLegallyNotRequiredFollowupType.AidesFinancieresNonRemboursables]:
+  [DefaultFollowupType.AccompagnementSocial]: 'Accompagnement social',
+  [DefaultFollowupType.AideAlimentaire]: 'Aide alimentaire',
+  [DefaultFollowupType.AideAuTransport]: 'Aide au transport',
+  [DefaultFollowupType.AidesFinancieresNonRemboursables]:
     'Aides financières non remboursables',
-  [DefaultLegallyNotRequiredFollowupType.AidesFinancieresRemboursables]:
+  [DefaultFollowupType.AidesFinancieresRemboursables]:
     'Aides financières remboursables',
-  [DefaultLegallyNotRequiredFollowupType.AnimationsFamilles]:
-    'Animations familles',
-  [DefaultLegallyNotRequiredFollowupType.AnimationsSeniors]:
-    'Animations seniors',
-  [DefaultLegallyNotRequiredFollowupType.InclusionNumerique]:
-    'Inclusion numérique',
-  [DefaultLegallyNotRequiredFollowupType.Other]: 'Autre',
-  [DefaultLegallyNotRequiredFollowupType.PlanAlerteEtUrgence]:
-    'Plan alerte et urgence',
-  [DefaultLegallyNotRequiredFollowupType.SoutienAdministratif]:
-    'Soutien administratif'
+  [DefaultFollowupType.AnimationsFamilles]: 'Animations familles',
+  [DefaultFollowupType.AnimationsSeniors]: 'Animations seniors',
+  [DefaultFollowupType.InclusionNumerique]: 'Inclusion numérique',
+  [DefaultFollowupType.Other]: 'Autre',
+  [DefaultFollowupType.PlanAlerteEtUrgence]: 'Plan alerte et urgence',
+  [DefaultFollowupType.SoutienAdministratif]: 'Soutien administratif'
 }
 
 export const defaultLegallyNotRequiredFollowupTypeOptions = labelsToOptions(

@@ -148,13 +148,13 @@
   function isDefaultLegallyRequired(
     f: FollowupTypeWithSupportsCount
   ): f is DefaultLegallyRequiredFollowupTypeWithSupportsCount {
-    return !!(f.default && f.legallyRequired && f.defaultLegallyRequiredKey)
+    return !!(f.default && f.legallyRequired)
   }
 
   function isDefaultLegallyNotRequired(
     f: FollowupTypeWithSupportsCount
   ): f is DefaultLegallyNotRequiredFollowupTypeWithSupportsCount {
-    return !!(f.default && !f.legallyRequired && f.defaultLegallyNotRequiredKey)
+    return !!(f.default && !f.legallyRequired)
   }
 
   function isCustom(

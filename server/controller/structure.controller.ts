@@ -1,9 +1,4 @@
-import {
-  UserRole,
-  FollowupType,
-  DefaultLegallyNotRequiredFollowupType,
-  DefaultLegallyRequiredFollowupType
-} from '@prisma/client'
+import { UserRole, FollowupType, DefaultFollowupType } from '@prisma/client'
 import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import type {
@@ -133,7 +128,7 @@ function getFollowupTypesToCreate(
 ) {
   return updatedFollowupTypes.reduce((toCreate, updated) => {
     if (isDefaultLegallyRequiredFollowupType(updated)) {
-      if (isAlreadySelected(currentFollowupTypes, updated, true, true)) {
+      if (isAlreadySelected(currentFollowupTypes, updated, true)) {
         return toCreate
       }
 
@@ -144,7 +139,7 @@ function getFollowupTypesToCreate(
     }
 
     if (isDefaultLegallyNotRequiredFollowupType(updated)) {
-      if (isAlreadySelected(currentFollowupTypes, updated, true, false)) {
+      if (isAlreadySelected(currentFollowupTypes, updated, true)) {
         return toCreate
       }
 
@@ -154,7 +149,7 @@ function getFollowupTypesToCreate(
       ]
     }
 
-    if (isAlreadySelected(currentFollowupTypes, updated, false, false)) {
+    if (isAlreadySelected(currentFollowupTypes, updated, false)) {
       return toCreate
     }
 
@@ -167,35 +162,24 @@ function getFollowupTypesToCreate(
 
 function isDefaultLegallyRequiredFollowupType(
   id: string
-): id is DefaultLegallyRequiredFollowupType {
-  return Object.values(DefaultLegallyRequiredFollowupType).includes(
-    id as DefaultLegallyRequiredFollowupType
-  )
+): id is DefaultFollowupType {
+  return Object.values(DefaultFollowupType).includes(id as DefaultFollowupType)
 }
 
 function isDefaultLegallyNotRequiredFollowupType(
   id: string
-): id is DefaultLegallyNotRequiredFollowupType {
-  return Object.values(DefaultLegallyNotRequiredFollowupType).includes(
-    id as DefaultLegallyNotRequiredFollowupType
-  )
+): id is DefaultFollowupType {
+  return Object.values(DefaultFollowupType).includes(id as DefaultFollowupType)
 }
 
 function isAlreadySelected(
   currentFollowupTypes: FollowupType[],
   id: string,
-  isDefault: boolean,
-  legallyRequired: boolean
+  isDefault: boolean
 ) {
   if (isDefault) {
-    if (legallyRequired) {
-      return currentFollowupTypes.some(
-        ({ defaultLegallyRequiredKey }) => defaultLegallyRequiredKey === id
-      )
-    }
-
     return currentFollowupTypes.some(
-      ({ defaultLegallyNotRequiredKey }) => defaultLegallyNotRequiredKey === id
+      ({ default: isDefault }) => isDefault === id
     )
   }
 
@@ -210,16 +194,8 @@ function getFollowupTypeToCreate(
 ): CreateFollowupTypeInput {
   return {
     name: getFollowupTypeName(id, isDefault, legallyRequired),
-    default: isDefault,
+    default: isDefault ? (id as DefaultFollowupType) : undefined,
     legallyRequired,
-    defaultLegallyRequiredKey:
-      isDefault && legallyRequired
-        ? (id as DefaultLegallyRequiredFollowupType)
-        : undefined,
-    defaultLegallyNotRequiredKey:
-      isDefault && !legallyRequired
-        ? (id as DefaultLegallyNotRequiredFollowupType)
-        : undefined,
     ownedByStructureId: structureId
   }
 }
@@ -228,16 +204,16 @@ function getFollowupTypeName(
   id: string,
   isDefault: boolean,
   legallyRequired: boolean
-) {
+): string {
   if (isDefault) {
     if (legallyRequired) {
       return defaultLegallyRequiredFollowupTypeLabels[
-        id as DefaultLegallyRequiredFollowupType
-      ]
+        id as DefaultFollowupType
+      ] as string
     }
     return defaultLegallyNotRequiredFollowupTypeLabels[
-      id as DefaultLegallyNotRequiredFollowupType
-    ]
+      id as DefaultFollowupType
+    ] as string
   }
   return id
 }
@@ -250,15 +226,8 @@ function getFollowupTypesToDelete(
     // Prevent deleting followup types already used fos supports
     if (current._count.followups || current._count.helpRequests) return toDelete
 
-    if (current.defaultLegallyRequiredKey) {
-      if (updatedFollowupTypes.includes(current.defaultLegallyRequiredKey)) {
-        return toDelete
-      }
-      return [...toDelete, current.id]
-    }
-
-    if (current.defaultLegallyNotRequiredKey) {
-      if (updatedFollowupTypes.includes(current.defaultLegallyNotRequiredKey)) {
+    if (current.default) {
+      if (updatedFollowupTypes.includes(current.default)) {
         return toDelete
       }
       return [...toDelete, current.id]

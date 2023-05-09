@@ -1,8 +1,4 @@
-import {
-  StructureType,
-  DefaultLegallyRequiredFollowupType,
-  DefaultLegallyNotRequiredFollowupType
-} from '@prisma/client'
+import { StructureType, DefaultFollowupType } from '@prisma/client'
 import { z } from 'zod'
 import { errorMessages } from '~/utils/zod'
 
@@ -18,8 +14,7 @@ const createStructureSchema = z.object({
     .array(
       z.union([
         z.string().uuid(),
-        z.nativeEnum(DefaultLegallyRequiredFollowupType),
-        z.nativeEnum(DefaultLegallyNotRequiredFollowupType),
+        z.nativeEnum(DefaultFollowupType),
         z.string()
       ])
     )

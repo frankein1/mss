@@ -159,7 +159,7 @@ model Document {
   @@map("document")
 }
 
-enum DefaultLegallyRequiredFollowupType {
+enum DefaultFollowupType {
   // Aide médicale d'État
   AideMedicaleDEtat
   // Aide sociale
@@ -186,9 +186,6 @@ enum DefaultLegallyRequiredFollowupType {
   Puma
   // Revenu de solidarité active
   RevenuDeSolidariteActive
-}
-
-enum DefaultLegallyNotRequiredFollowupType {
   // Accompagnement social
   AccompagnementSocial
   // Aide alimentaire
@@ -214,13 +211,11 @@ enum DefaultLegallyNotRequiredFollowupType {
 }
 
 model FollowupType {
-  id                           String                                 @id @default(uuid()) @db.Uuid
-  name                         String
-  legallyRequired              Boolean                                @map("legally_required")
-  default                      Boolean                                @map("legacy_default") // FIXME: Can we change the column name in the database ?
-  defaultLegallyRequiredKey    DefaultLegallyRequiredFollowupType?    @map("default_legally_required_key")
-  defaultLegallyNotRequiredKey DefaultLegallyNotRequiredFollowupType? @map("default_legally_not_required_key")
-  legacyId                     String?                                @map("legacy_id") @db.Uuid // FIXME: What is the purpose of this ?
+  id              String               @id @default(uuid()) @db.Uuid
+  name            String
+  legallyRequired Boolean              @map("legally_required")
+  default         DefaultFollowupType?
+  legacyId        String?              @map("legacy_id") @db.Uuid // FIXME: What is the purpose of this ?
 
   created     DateTime? @default(now())
   createdBy   User?     @relation(fields: [createdById], references: [id])

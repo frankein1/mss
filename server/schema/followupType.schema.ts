@@ -1,8 +1,5 @@
 import { z } from 'zod'
-import {
-  DefaultLegallyRequiredFollowupType,
-  DefaultLegallyNotRequiredFollowupType
-} from '@prisma/client'
+import { DefaultFollowupType } from '@prisma/client'
 import { minStringLengthMessage } from '~/utils/zod'
 
 const createFollowupTypeSchema = z.object({
@@ -15,13 +12,7 @@ const createFollowupTypeSchema = z.object({
     .trim()
     .min(2, minStringLengthMessage(2)),
   legallyRequired: z.boolean(),
-  default: z.boolean(),
-  defaultLegallyRequiredKey: z
-    .nativeEnum(DefaultLegallyRequiredFollowupType)
-    .nullish(),
-  defaultLegallyNotRequiredKey: z
-    .nativeEnum(DefaultLegallyNotRequiredFollowupType)
-    .nullish(),
+  default: z.nativeEnum(DefaultFollowupType).nullish(),
   ownedByStructureId: z.string().uuid()
 })
 
