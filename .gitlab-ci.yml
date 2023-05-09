@@ -1,0 +1,41 @@
+stages:
+  - build
+  - test
+  - deploy
+  - dast
+
+include:
+  - project: vigigloo/gitlab-pipeline-fragments
+    ref: v1
+    file:
+      # Required
+      - /helm.yml
+
+      # build
+      - /docker.auto.yml
+
+      # test
+      - /proxy/license-scanning.yml
+      - /proxy/code-quality.yml
+      - /proxy/dependency-scanning.yml
+      - /proxy/container-scanning.yml
+      - /proxy/sast.yml
+      - /proxy/secret-scanning.yml
+      - /pnpm.auto.yml
+
+      # deploy
+      - /helm.reviews.auto.yml
+      - /helm.development.auto.yml
+      - /helm.production.auto.yml
+
+variables:
+  HELM_CHART: nodejs
+  HELM_REPOSITORY: https://gitlab.com/api/v4/projects/29298483/packages/helm/stable
+  HELM_NAME: app
+  HOST: ${BASE_DOMAIN}
+  HELM_INGRESS_HOST: ${HOST}
+
+
+.vigigloo:pnpm:install:
+  image:
+    name: registry.gitlab.com/vigigloo/tools/pnpm:node-18_pnpm-8.3.1
