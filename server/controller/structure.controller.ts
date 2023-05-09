@@ -54,7 +54,11 @@ export const editCurrentUserStructureHandler = async ({
     throw invalidError('Your user is not associated to a structure.')
   }
 
-  const { followupTypes, ...structure } = input
+  const {
+    legallyRequiredFollowupTypes,
+    legallyNotRequiredFollowupTypes,
+    ...structure
+  } = input
 
   const currentFollowupTypes = await prismaClient.followupType.findMany({
     where: { ownedByStructureId: structureId },
@@ -68,7 +72,10 @@ export const editCurrentUserStructureHandler = async ({
   const { toCreate, toDelete } = getFollowupTypeMutations(
     structureId,
     currentFollowupTypes,
-    followupTypes
+    [
+      ...legallyRequiredFollowupTypes.split(','),
+      ...legallyNotRequiredFollowupTypes.split(',')
+    ]
   )
 
   if (toCreate.length) {

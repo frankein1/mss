@@ -28,11 +28,3 @@ export type CustomFollowupTypeWithSupportsCount =
     default: false
     legallyRequired: false
   }
-
-export type EditCurrentUserStructureSubmit = Omit<
-  EditCurrentUserStructureInput,
-  'followupTypes'
-> & {
-  legallyRequiredFollowupTypes: string
-  legallyNotRequiredFollowupTypes: string
-}

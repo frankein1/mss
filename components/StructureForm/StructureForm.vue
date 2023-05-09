@@ -21,10 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type {
-    StructureWithFollowupTypesWithSupportsCount,
-    EditCurrentUserStructureSubmit
-  } from './types'
+  import type { StructureWithFollowupTypesWithSupportsCount } from './types'
   import type { EditCurrentUserStructureInput } from '~/server/schema'
 
   defineProps<{
@@ -38,19 +35,9 @@
 
   function onUpdateStructure(event: Event) {
     // TODO: https://nuxt.com/modules/vee-validate
-    const {
-      data: {
-        legallyRequiredFollowupTypes,
-        legallyNotRequiredFollowupTypes,
-        ...structure
-      }
-    } = useFormData<EditCurrentUserStructureSubmit>(event)
+    const { data: structure } =
+      useFormData<EditCurrentUserStructureInput>(event)
 
-    const followupTypes = [
-      ...legallyRequiredFollowupTypes.split(','),
-      ...legallyNotRequiredFollowupTypes.split(',')
-    ]
-
-    emit('updateStructure', { ...structure, followupTypes })
+    emit('updateStructure', structure)
   }
 </script>

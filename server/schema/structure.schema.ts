@@ -25,9 +25,19 @@ const editStructureSchema = createStructureSchema.omit({ type: true }).extend({
   structureId: z.string().uuid()
 })
 
-const editCurrentUserStructureSchema = editStructureSchema.omit({
-  structureId: true
-})
+const editCurrentUserStructureSchema = editStructureSchema
+  .omit({
+    structureId: true,
+    followupTypes: true
+  })
+  .extend({
+    legallyRequiredFollowupTypes: z
+      .string()
+      .min(2, errorMessages.invalid_type_error),
+    legallyNotRequiredFollowupTypes: z
+      .string()
+      .min(2, errorMessages.invalid_type_error)
+  })
 
 // type CreateStructureInput = z.infer<typeof createStructureSchema>
 // type EditStructureInput = z.infer<typeof editStructureSchema>
