@@ -57,7 +57,7 @@
   const ministreStats = computed(
     () =>
       ministreCounts.value?.map(({ _count, ministre }) => ({
-        key: ministre,
+        key: ministre || 'null',
         label: getStatLabel(ministerLabels, ministre),
         color: SupportColor[props.collection],
         count: _count

@@ -63,7 +63,7 @@
   const accommodationModesStats = computed(
     () =>
       accommodationModesCounts.value?.map(({ _count, accomodationMode }) => ({
-        key: accomodationMode,
+        key: accomodationMode || 'null',
         label: getStatLabel(
           beneficiaryAccomodationModeLabels,
           accomodationMode

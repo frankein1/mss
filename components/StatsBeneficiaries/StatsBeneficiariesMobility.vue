@@ -60,7 +60,7 @@
   const mobilityStats = computed(
     () =>
       mobilityCounts.value?.map(({ _count, mobility }) => ({
-        key: mobility,
+        key: mobility || 'null',
         label: getStatLabel(beneficiaryMobilityLabels, mobility),
         count: _count
       })) || []

@@ -1,10 +1,4 @@
-import type {
-  Structure,
-  FollowupType,
-  DefaultLegallyRequiredFollowupType,
-  DefaultLegallyNotRequiredFollowupType
-} from '@prisma/client'
-import type { EditCurrentUserStructureInput } from '~/server/schema'
+import type { Structure, DefaultFollowupType } from '@prisma/client'
 import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
 export type StructureWithFollowupTypesWithSupportsCount = Structure & {
@@ -13,14 +7,14 @@ export type StructureWithFollowupTypesWithSupportsCount = Structure & {
 
 export type DefaultLegallyRequiredFollowupTypeWithSupportsCount =
   FollowupTypeWithSupportsCount & {
-    defaultLegallyRequiredKey: DefaultLegallyRequiredFollowupType
-    defaultLegallyNotRequiredKey: null
+    default: DefaultFollowupType
+    legallyRequired: true
   }
 
 export type DefaultLegallyNotRequiredFollowupTypeWithSupportsCount =
   FollowupTypeWithSupportsCount & {
-    defaultLegallyRequiredKey: null
-    defaultLegallyNotRequiredKey: DefaultLegallyNotRequiredFollowupType
+    default: DefaultFollowupType
+    legallyRequired: false
   }
 
 export type CustomFollowupTypeWithSupportsCount =

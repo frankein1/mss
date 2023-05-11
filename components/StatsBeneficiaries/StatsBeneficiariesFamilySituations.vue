@@ -63,7 +63,7 @@
   const familySituationsStats = computed(
     () =>
       familySituationsCounts.value?.map(({ _count, familySituation }) => ({
-        key: familySituation,
+        key: familySituation || 'null',
         label: getStatLabel(familySituationLabels, familySituation),
         count: _count
       })) || []

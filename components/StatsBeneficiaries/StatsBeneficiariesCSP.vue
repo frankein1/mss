@@ -63,7 +63,7 @@
   const CSPStats = computed(
     () =>
       CSPCounts.value?.map(({ _count, socioProfessionalCategory }) => ({
-        key: socioProfessionalCategory,
+        key: socioProfessionalCategory || 'null',
         label: getStatLabel(
           beneficiarySocioProfessionalCategoryLabels,
           socioProfessionalCategory

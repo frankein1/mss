@@ -58,7 +58,7 @@
   const regionsStats = computed(
     () =>
       regionsCounts.value?.map(({ _count, region }) => ({
-        key: region,
+        key: region || 'null',
         label: region || STATS_NULL_LABEL,
         count: _count
       })) || []

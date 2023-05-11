@@ -3,9 +3,9 @@ type StatBase = {
   label: string
 }
 
-export type StatList = StatsBase & {
+export type StatList = StatBase & {
   color?: string
-  count: number | string
+  count: number
 }
 
 type StatPie = StatBase & {

@@ -15,7 +15,7 @@
           class="fr-text--bold"
           :style="{ color: !statsPercentage ? color : undefined }"
         >
-          {{ count }}
+          {{ count }}<template v-if="unit">{{ unit }}</template>
         </span>
         <span
           v-if="statsPercentage"
@@ -60,11 +60,13 @@
       statsBar?: boolean
       statsPercentage?: boolean
       totalCount?: number
+      unit?: string
     }>(),
     {
       statsBar: false,
       statsPercentage: true,
-      totalCount: 0
+      totalCount: 0,
+      unit: ''
     }
   )
 

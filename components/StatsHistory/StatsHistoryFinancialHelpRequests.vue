@@ -22,6 +22,7 @@
       <StatsList
         :stats="financialHelpRequestsAmountByType"
         :stats-percentage="false"
+        unit="€"
       />
     </template>
   </div>
@@ -118,14 +119,15 @@
         request.status === HelpRequestStatus.Accepted
       ) {
         if (request.type.id in requestsAmountByType) {
-          requestsAmountByType[request.type.id].count +=
+          requestsAmountByType[request.type.id].count += new Prisma.Decimal(
             request.allocatedAmount || 0
+          ).toNumber()
         } else {
           requestsAmountByType[request.type.id] = {
             key: request.type.id,
             label: request.type.name,
             color: '#E4794A',
-            count: request.allocatedAmount || 0
+            count: new Prisma.Decimal(request.allocatedAmount || 0).toNumber()
           }
         }
       }
@@ -135,9 +137,6 @@
     requestsAmountByTypeArray.sort(
       (a, b) => (b.count as number) - (a.count as number)
     )
-    requestsAmountByTypeArray.forEach(request => {
-      request.count = `${request.count}€`
-    })
     return requestsAmountByTypeArray
   })
 </script>
