@@ -93,5 +93,13 @@ export default defineNuxtConfig({
       sessionCookieKey: 'MSS_SESSION_TOKEN',
       authRefreshDelay: 0.75
     }
-  }
+  },
+
+  // Prevent nuxt to export types.ts files as components
+  components: [
+    {
+      path: '~/components',
+      extensions: ['.vue']
+    }
+  ]
 })
