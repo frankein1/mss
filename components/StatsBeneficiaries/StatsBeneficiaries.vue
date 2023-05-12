@@ -104,7 +104,7 @@
 <script lang="ts" setup>
   import { AlertType } from '~~/utils/constants/alert'
   import { Options } from '~/utils/options'
-  import { StatFilterInput } from '~/server/schema'
+  import { StatFilterRawInput } from '~/server/schema'
 
   const trpcClient = useTrpcClient()
   const isMinistryAgent = useMinistryAgent()
@@ -122,7 +122,7 @@
     }
   )
 
-  const filters = ref<StatFilterInput>({})
+  const filters = ref<StatFilterRawInput>({})
 
   const {
     data: beneficiaryCount,

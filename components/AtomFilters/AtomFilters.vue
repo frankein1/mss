@@ -10,31 +10,28 @@
         v-for="filter in filters"
         :key="filter.name"
       >
-        <AtomInput
+        <VeeInput
           v-if="filter.type === FilterType.Date"
           :name="filter.name"
           :label="filter.label"
-          :value="initialSelectedValues[filter.name]"
           type="date"
           @change-value="onChangeFilter($event, filter)"
         />
-        <AtomMultiSelect
+        <VeeMultiSelect
           v-else-if="filter.type === FilterType.SelectMultiple"
           class="multi-select-filters"
           :name="filter.name"
           :label="filter.label"
           :options="filter.options"
           :placeholder="filter.label"
-          :model-value="initialSelectedValues[filter.name]?.split(',')"
           dropdown
           @change-value="onChangeFilter($event, filter)"
         />
-        <AtomSelect
+        <VeeSelect
           v-else
           :name="filter.name"
           :label="filter.label"
           :options="filter.options"
-          :model-value="initialSelectedValues[filter.name]"
           @change-value="onChangeFilter($event, filter)"
         />
       </template>
@@ -127,6 +124,10 @@
   const selectedFilters = ref<SelectedFilters>(initialSelectedFilters.value)
   // This timeout is used to defer the emission of filters and thus prevent to many API calls or specific race conditions
   const timeout = ref<NodeJS.Timeout | null>(null)
+
+  useForm({
+    initialValues: props.initialSelectedValues
+  })
 
   const expandBtnLabel = computed(() =>
     expanded.value ? 'Masquer les filtres' : 'Afficher les filtres'

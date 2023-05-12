@@ -1,5 +1,6 @@
 import {
-  BeneficiaryAccomodationMode,
+  BeneficiaryAccommodationMode,
+  BeneficiaryAccommodationZone,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
   BeneficiaryMobility,
@@ -7,14 +8,19 @@ import {
   BeneficiaryProtectionMeasure,
   BeneficiarySocioProfessionalCategory,
   BeneficiaryStatus,
-  BeneficiaryTitle,
   Gender,
-  IncomeSource
+  IncomeSource,
+  BeneficiaryPensionOrganisation,
+  BeneficiaryTitle,
+  Nationality
 } from '@prisma/client'
 import { z } from 'zod'
-import { PensionOrganisation } from '~/client/options/beneficiary'
-import { Nationalities } from '~/client/options/nationality'
-import { errorMessages, zodEnumFromObjectKeys } from '~/utils/zod'
+import { createOrUpdateRelativeSchema } from './relative.schema'
+import {
+  errorMessages,
+  validZipcode,
+  multiSelectValueToArray
+} from '~/utils/zod'
 
 export const idSchema = z.object({
   id: z.string()
@@ -59,62 +65,69 @@ export { createBeneficiarySchema }
 
 export type { BeneficiaryCreationInput }
 
-export const createBeneficiaryWithGeneralInfoSchema = z.object({
-  // General information
+export const updateBeneficiarySchema = z.object({
+  id: z.string().uuid(),
   structureId: z.string().uuid(),
   referents: z
-    .array(z.string().uuid(), {
-      ...errorMessages,
-      required_error: 'Veuillez renseigner au moins un agent référent'
-    })
-    .min(1, 'Veuillez renseigner au moins un agent référent'),
+    .string()
+    .transform(multiSelectValueToArray)
+    .pipe(
+      z
+        .array(z.string().uuid(), {
+          ...errorMessages,
+          required_error: 'Veuillez renseigner au moins un agent référent.'
+        })
+        .min(1, 'Veuillez renseigner au moins un agent référent')
+    ),
   aidantConnectAuthorized: z.boolean().default(false),
-  status: z.nativeEnum(BeneficiaryStatus, errorMessages),
-  title: z.nativeEnum(BeneficiaryTitle).nullish(),
-  firstName: z.string().nullish(),
-  usualName: z.string().nullish(),
-  birthName: z.string().nullish(),
-  birthDate: z.date(errorMessages).nullish(),
-  birthPlace: z.string().nullish(),
-  deathDate: z.date(errorMessages).nullish(),
-  gender: z.nativeEnum(Gender).nullish(),
-  // nationality: z.enum(zodEnumFromObjectKeys(Nationalities)).nullish(),
-  nationality: z.enum(zodEnumFromObjectKeys(Nationalities)).nullish(),
-  accomodationMode: z.nativeEnum(BeneficiaryAccomodationMode).nullish(),
-  accomodationName: z.string().nullish(),
-  accomodationAdditionalInformation: z.string().nullish(),
-  street: z.string().nullish(),
-  streetNumber: z.string().nullish(),
-  addressComplement: z.string().nullish(),
-  zipcode: z.string().nullish(),
-  city: z.string().nullish(),
-  region: z.string().nullish(),
-  noPhone: z.boolean().default(false),
-  phone1: z.string().nullish(),
-  phone2: z.string().nullish(),
-  email: z.string().email().nullish(),
-  familySituation: z.nativeEnum(BeneficiaryFamilySituation).nullish(),
-  caregiver: z.boolean().default(false),
-  minorChildren: z.number().int().gte(0).nullish(),
-  majorChildren: z.number().int().gte(0).nullish(),
-  mobility: z.nativeEnum(BeneficiaryMobility).nullish(),
-  administration: z.string().nullish(),
-  minister: z.string().nullish(),
 
-  // Additional info
-  additionalInformation: z.string().nullish()
-})
-
-export const createBeneficiaryWithFullDataSchema =
-  createBeneficiaryWithGeneralInfoSchema.extend({
-    // Health
+  // General information
+  general: z.object({
+    status: z.nativeEnum(BeneficiaryStatus, errorMessages),
+    title: z.nativeEnum(BeneficiaryTitle).nullable(),
+    firstName: z.string(),
+    usualName: z.string().nullish(),
+    birthName: z.string(),
+    birthDate: z.coerce.date(errorMessages).nullish(),
+    birthPlace: z.string().nullish(),
+    deathDate: z.date(errorMessages).nullish(),
+    gender: z.nativeEnum(Gender).nullish(),
+    nationality: z.nativeEnum(Nationality).nullish(),
+    numeroPegase: z.string().nullish(),
+    accommodationMode: z.nativeEnum(BeneficiaryAccommodationMode).nullish(),
+    accommodationName: z.string().nullish(),
+    accommodationAdditionalInformation: z.string().nullish(),
+    zipcode: z.string().min(5, validZipcode).nullish(),
+    city: z.string().nullish(),
+    region: z.string().nullish(),
+    accommodationZone: z.nativeEnum(BeneficiaryAccommodationZone).nullish(),
+    streetNumber: z.string().nullish(),
+    street: z.string().nullish(),
+    addressComplement: z.string().nullish(),
+    noPhone: z.boolean().default(false),
+    phone1: z.string().nullish(),
+    phone2: z.string().nullish(),
+    email: z.string().email().nullish(),
+    caregiver: z.boolean().default(false),
+    mobility: z.nativeEnum(BeneficiaryMobility).nullish()
+  }),
+  taxHousehold: z.object({
+    familySituation: z.nativeEnum(BeneficiaryFamilySituation).nullish(),
+    minorChildren: z.coerce.number().gte(0).nullish(),
+    majorChildren: z.coerce.number().gte(0).nullish(),
+    taxHouseholds: z.array(z.object({}))
+  }),
+  entourage: z.object({
+    entourages: z.array(createOrUpdateRelativeSchema)
+  }),
+  health: z.object({
     gir: z.nativeEnum(BeneficiaryGir).nullish(),
     doctor: z.string().nullish(),
     healthAdditionalInformation: z.string().nullish(),
     socialSecurityNumber: z.string().nullish(),
-    insurance: z.string().nullish(),
-
-    // Occupation
+    insurance: z.string().nullish()
+  }),
+  occupation: z.object({
     socioProfessionalCategory: z
       .nativeEnum(BeneficiarySocioProfessionalCategory)
       .nullish(),
@@ -122,26 +135,42 @@ export const createBeneficiaryWithFullDataSchema =
     employer: z.string().nullish(),
     employerSiret: z.string().nullish(),
     mainIncomeSource: z
-      .array(z.nativeEnum(IncomeSource, errorMessages))
-      .optional(),
-    mainIncomeAmount: z.number().nullish(),
+      .string()
+      .optional()
+      .transform(multiSelectValueToArray)
+      .pipe(z.array(z.nativeEnum(IncomeSource, errorMessages)).optional()),
+    mainIncomeAmount: z.coerce.number().nullish(),
     partnerMainIncomeSource: z
-      .array(z.nativeEnum(IncomeSource, errorMessages))
-      .optional(),
-    partnerMainIncomeAmount: z.number().nullish(),
+      .string()
+      .optional()
+      .transform(multiSelectValueToArray)
+      .pipe(z.array(z.nativeEnum(IncomeSource, errorMessages)).optional()),
+    partnerMainIncomeAmount: z.coerce.number().nullish(),
     majorChildrenMainIncomeSource: z
-      .array(z.nativeEnum(IncomeSource, errorMessages))
-      .optional(),
-    majorChildrenMainIncomeAmount: z.number().nullish(),
+      .string()
+      .optional()
+      .transform(multiSelectValueToArray)
+      .pipe(z.array(z.nativeEnum(IncomeSource, errorMessages)).optional()),
+    majorChildrenMainIncomeAmount: z.coerce.number().nullish(),
     unemploymentNumber: z.string().nullish(),
     pensionOrganisations: z
-      .array(z.nativeEnum(PensionOrganisation, errorMessages))
-      .optional(),
+      .string()
+      .optional()
+      .transform(multiSelectValueToArray)
+      .pipe(
+        z
+          .array(z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages))
+          .optional()
+      ),
+    otherPensionOrganisations: z.string().nullish(),
     cafNumber: z.string().nullish(),
     bank: z.string().nullish(),
     funeralContract: z.string().nullish(),
-
-    // External Structures
+    ministereCategorie: z.string().nullish(),
+    ministereDepartementServiceAc: z.string().nullish(),
+    ministereStructure: z.string().nullish()
+  }),
+  external: z.object({
     protectionMeasure: z.nativeEnum(BeneficiaryProtectionMeasure).nullish(),
     representative: z.string().nullish(),
     prescribingStructure: z.string().nullish(),
@@ -149,17 +178,9 @@ export const createBeneficiaryWithFullDataSchema =
     orientationStructure: z.string().nullish(),
     serviceProviders: z.string().nullish(),
     involvedPartners: z.string().nullish()
-  })
+  }),
+  additionalInformation: z.string().nullish()
+})
 
-export const editBeneficiaryFullDataSchema = createBeneficiaryWithFullDataSchema
-  .extend({
-    beneficiaryId: z.string().uuid()
-  })
-  .omit({ structureId: true })
-
-export const editBeneficiaryGeneralInfoSchema =
-  createBeneficiaryWithGeneralInfoSchema
-    .extend({
-      beneficiaryId: z.string().uuid()
-    })
-    .omit({ structureId: true })
+export type UpdateBeneficiaryInput = z.infer<typeof updateBeneficiarySchema>
+export type UpdateBeneficiaryRawInput = z.input<typeof updateBeneficiarySchema>

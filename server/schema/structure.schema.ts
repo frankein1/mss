@@ -1,15 +1,21 @@
 import { StructureType, DefaultFollowupType } from '@prisma/client'
 import { z } from 'zod'
-import { errorMessages } from '~/utils/zod'
+import {
+  errorMessages,
+  minStringLengthMessage,
+  validEmailMessage,
+  validZipcode,
+  multiSelectValueToArray
+} from '~/utils/zod'
 
 const createStructureSchema = z.object({
   type: z.nativeEnum(StructureType),
-  name: z.string(errorMessages).min(2, errorMessages.invalid_type_error),
-  zipcode: z.string(errorMessages).min(5, errorMessages.invalid_type_error),
-  city: z.string(errorMessages).min(2, errorMessages.invalid_type_error),
-  address: z.string(errorMessages).min(2, errorMessages.invalid_type_error),
-  phone: z.string(errorMessages).min(10, errorMessages.invalid_type_error),
-  email: z.string(errorMessages).email(errorMessages.invalid_type_error),
+  name: z.string(errorMessages).min(2, minStringLengthMessage(2)),
+  zipcode: z.string(errorMessages).min(5, validZipcode),
+  city: z.string(errorMessages).min(2, minStringLengthMessage(2)),
+  address: z.string(errorMessages).min(2, minStringLengthMessage(2)),
+  phone: z.string(errorMessages).min(10, minStringLengthMessage(10)),
+  email: z.string(errorMessages).email(validEmailMessage),
   followupTypes: z
     .array(
       z.union([
@@ -33,18 +39,40 @@ const editCurrentUserStructureSchema = editStructureSchema
   .extend({
     legallyRequiredFollowupTypes: z
       .string()
-      .min(2, errorMessages.invalid_type_error),
+      .transform(multiSelectValueToArray)
+      .pipe(z.array(z.nativeEnum(DefaultFollowupType))),
     legallyNotRequiredFollowupTypes: z
       .string()
-      .min(2, errorMessages.invalid_type_error)
+      .transform(multiSelectValueToArray)
+      .pipe(
+        z.array(
+          z.union([
+            z.string().uuid(),
+            z.nativeEnum(DefaultFollowupType),
+            z.string()
+          ])
+        )
+      )
   })
+  .refine(
+    val =>
+      val.legallyRequiredFollowupTypes.length &&
+      val.legallyNotRequiredFollowupTypes.length,
+    {
+      message: "Veuillez sélectionner au moins un type d'accompagnement."
+    }
+  )
 
+// TODO
 // type CreateStructureInput = z.infer<typeof createStructureSchema>
 // type EditStructureInput = z.infer<typeof editStructureSchema>
+type EditCurrentUserStructureRawInput = z.input<
+  typeof editCurrentUserStructureSchema
+>
 type EditCurrentUserStructureInput = z.infer<
   typeof editCurrentUserStructureSchema
 >
 
 export { editCurrentUserStructureSchema }
 
-export type { EditCurrentUserStructureInput }
+export type { EditCurrentUserStructureRawInput, EditCurrentUserStructureInput }

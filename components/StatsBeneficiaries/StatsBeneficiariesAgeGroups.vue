@@ -35,7 +35,7 @@
   import dayjs from 'dayjs'
   import type { AgeGroupsFilter } from '~/components/StatsBeneficiaries/types'
   import { AgeGroup, AgeGroupLabels } from '~/client/options/ageGroup'
-  import { StatFilterInput } from '~/server/schema'
+  import { StatFilterRawInput } from '~/server/schema'
   import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
   import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
   import { AlertType } from '~~/utils/constants/alert'
@@ -62,7 +62,7 @@
 
   const props = defineProps<{
     beneficiaryCount: number
-    filters: StatFilterInput
+    filters: StatFilterRawInput
   }>()
 
   const {

@@ -8,7 +8,7 @@ dependencies:
     specifier: ^0.4.9
     version: 0.4.9(typescript@5.0.4)(vue@3.2.47)
   '@prisma/client':
-    specifier: ^4.12.0
+    specifier: ^4.13.0
     version: 4.13.0(prisma@4.13.0)
   '@trpc/client':
     specifier: ^10.21.1
@@ -16,6 +16,9 @@ dependencies:
   '@trpc/server':
     specifier: ^10.21.1
     version: 10.21.1
+  '@vee-validate/nuxt':
+    specifier: ^4.8.6
+    version: 4.8.6(vue@3.2.47)
   '@vee-validate/zod':
     specifier: ^4.8.6
     version: 4.8.6(vue@3.2.47)
@@ -106,7 +109,7 @@ devDependencies:
     specifier: 2.8.8
     version: 2.8.8
   prisma:
-    specifier: ^4.12.0
+    specifier: ^4.13.0
     version: 4.13.0
   sass:
     specifier: ^1.62.0
@@ -1521,6 +1524,18 @@ packages:
       unhead: 1.1.26
       vue: 3.2.47
     dev: true
+
+  /@vee-validate/nuxt@4.8.6(vue@3.2.47):
+    resolution: {integrity: sha512-4Bb7Xw7G6wrqfx7oK6UNmwG1hEocLg/YWOGIJ80y2cVovN+lo9Yf2zwEB7u45ugyAdhmtOVxxz/oEVhWOTNAKQ==}
+    dependencies:
+      '@nuxt/kit': 3.4.2
+      local-pkg: 0.4.3
+      vee-validate: 4.8.6(vue@3.2.47)
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+      - vue
+    dev: false
 
   /@vee-validate/zod@4.8.6(vue@3.2.47):
     resolution: {integrity: sha512-BG9UI0XleYXVphD462unkwwWsKiNqPwzoWaZh3YMU7VeZhcIbOQt3+derqhDdoIn5+C+Yj6o6n3NUtsKOrjOlQ==}

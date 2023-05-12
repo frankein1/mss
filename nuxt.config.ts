@@ -56,8 +56,9 @@ export default defineNuxtConfig({
     ['@nuxtjs/eslint-module', { lintOnStart: false }],
     // https://go.nuxtjs.dev/stylelint
     ['@nuxtjs/stylelint-module', { lintOnStart: false }],
-    '@pinia/nuxt',
-    'nuxt-vitest'
+    ['@pinia/nuxt', { lintOnStart: false }],
+    ['nuxt-vitest', { lintOnStart: false }],
+    ['@vee-validate/nuxt', { lintOnStart: false }]
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

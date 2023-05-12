@@ -1,5 +1,5 @@
 <template>
-  <AtomAutocomplete
+  <VeeAutocomplete
     :label="label"
     :name="name"
     :search-fn="searchCitiesFn"
@@ -21,11 +21,10 @@
     defineProps<{
       label: string
       name: string
-      value?: string | null
       zipCode?: string | null
       required?: boolean
     }>(),
-    { value: '', zipCode: '', required: false }
+    { zipCode: '', required: false }
   )
 
   const emit = defineEmits<{
@@ -33,16 +32,10 @@
   }>()
 
   const cities = ref<CityResult[]>([])
-  const selectedValue = ref(props.value)
-
-  watch(
-    () => props.value,
-    value => {
-      selectedValue.value = value
-    }
-  )
+  const selectedValue = ref<string | undefined>()
 
   async function searchCitiesFn(search: string) {
+    selectedValue.value = search
     if (search.length < 3) return new Map()
 
     const params: GeoApiGouvFrQueryParams = {
@@ -81,7 +74,10 @@
 
   function onSelectCity(codePostal: string) {
     const city = cities.value.find(a => a.codePostal === codePostal)
-    if (!city) return
+    if (!city) {
+      selectedValue.value = undefined
+      return
+    }
     selectedValue.value = city.nom
     emit('citySelected', {
       zipCode: city.codePostal,

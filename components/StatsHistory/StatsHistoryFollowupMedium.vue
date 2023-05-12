@@ -28,7 +28,7 @@
 <script lang="ts" setup>
   import { FollowupMedium } from '@prisma/client'
   import { followupMediumLabels } from '~/client/options/followup'
-  import { StatFilterInput } from '~/server/schema'
+  import { StatFilterRawInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~~/utils/constants/alert'
 
@@ -36,7 +36,7 @@
 
   const props = defineProps<{
     totalCount: number
-    filters: StatFilterInput
+    filters: StatFilterRawInput
   }>()
 
   const {

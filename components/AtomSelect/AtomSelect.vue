@@ -18,21 +18,16 @@
       class="fr-select"
       :class="{ 'fr-select--error': error }"
       :name="name"
-      :required="required"
       :aria-describedby="ariaDescribedby"
       :aria-labelledby="labelledBy"
       :disabled="disabled"
       @change="onChange"
-      @input="
-        $emit('update:modelValue', ($event.target as HTMLSelectElement).value)
-      "
-      @invalid="onValidate"
     >
       <option
         v-for="[optionValue, optionLabel] in options"
         :key="optionValue"
         :value="optionValue"
-        :selected="optionValue === modelValue"
+        :selected="optionValue === value"
         :disabled="disabledOptions.includes(optionValue)"
       >
         {{ optionLabel }}
@@ -42,7 +37,7 @@
       v-if="disabled"
       :name="name"
       :aria-describedby="ariaDescribedby"
-      :value="modelValue"
+      :value="value"
       hidden
     />
     <div
@@ -64,20 +59,24 @@
   const props = withDefaults(
     defineProps<{
       label: string
-      noLabel?: boolean
-      labelledBy?: string
       name: string
-      required?: boolean
       options: Options
-      modelValue?: string | null
+      required?: boolean
+      value?: string
+      handleChange?: (e: Event | unknown, shouldValidate?: boolean) => void
+      error?: string
       disabled?: boolean
       disabledOptions?: string[]
+      noLabel?: boolean
+      labelledBy?: string
     }>(),
     {
       noLabel: false,
       labelledBy: undefined,
       required: false,
-      modelValue: '',
+      value: '',
+      handleChange: () => {},
+      error: undefined,
       disabled: false,
       disabledOptions: () => []
     }
@@ -85,24 +84,17 @@
 
   const emit = defineEmits<{
     (e: 'changeValue', value: string): void
-    (e: 'update:modelValue', value: string): void
   }>()
 
   const { id, errorId } = useFormFieldId(props.name)
 
-  const error = ref('')
-
   const displayLabel = computed(() =>
     props.required ? `${props.label} *` : props.label
   )
-  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
+  const ariaDescribedby = computed(() => (props.error ? errorId : undefined))
 
   function onChange(event: Event) {
     emit('changeValue', (event.target as HTMLSelectElement).value)
-    onValidate(event)
-  }
-
-  function onValidate(event: Event) {
-    error.value = (event.target as HTMLSelectElement).validationMessage
+    props.handleChange(event)
   }
 </script>

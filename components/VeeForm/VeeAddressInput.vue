@@ -1,5 +1,5 @@
 <template>
-  <AtomAutocomplete
+  <VeeAutocomplete
     :label="label"
     :name="name"
     :search-fn="searchAddressesFn"
@@ -21,12 +21,11 @@
   const props = withDefaults(
     defineProps<{
       name: string
-      value?: string
       label: string
       required?: boolean
       zipCode?: string | null
     }>(),
-    { value: '', required: false, zipCode: '' }
+    { required: false, zipCode: '' }
   )
 
   const emit = defineEmits<{
@@ -34,9 +33,10 @@
   }>()
 
   const addresses = ref<BanAddress[]>([])
-  const selectedValue = ref<string>(props.value)
+  const selectedValue = ref<string | undefined>(undefined)
 
   async function searchAddressesFn(search: string): Promise<Options> {
+    selectedValue.value = search
     if (search.length < 3) return new Map()
 
     const params: BanQueryParams = {
@@ -61,7 +61,10 @@
 
   function onSelectAddress(addressId: string) {
     const address = addresses.value.find(a => a.id === addressId)
-    if (!address) return
+    if (!address) {
+      selectedValue.value = undefined
+      return
+    }
     selectedValue.value = address.name
     const region = address.context.split(',')[2].trim()
     emit('addressSelected', {

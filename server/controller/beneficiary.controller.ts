@@ -1,7 +1,19 @@
 import { TRPCError } from '@trpc/server'
 import { AppContext, forbiddenError } from '../trpc'
-import { canListBeneficiaries } from '../query/security/rules'
-import { SearchBeneficiaryInput, BeneficiaryCreationInput } from '../schema'
+import {
+  canEditBeneficiaryExternalOrganisations,
+  canEditBeneficiaryGeneralInformation,
+  canEditBeneficiaryHealthInfo,
+  canEditBeneficiaryOccupationIncome,
+  canListBeneficiaries,
+  canUpdateBeneficiaryReferents,
+  canUpdateBeneficiaryRelatives
+} from '../query/security/rules'
+import {
+  SearchBeneficiaryInput,
+  UpdateBeneficiaryInput,
+  BeneficiaryCreationInput
+} from '../schema/beneficiary.schema'
 import { createBeneficiary } from '~/server/query/beneficiaires/createBeneficiary'
 import { prismaClient } from '~/server/prisma'
 
@@ -12,35 +24,10 @@ export const getBeneficiaryDetailsHandler = async ({
   input: { id: string }
   ctx: AppContext
 }) => {
-  const { structureId } = user
-  const conditions = {
-    id: input.id
-  }
-
-  const where = structureId
-    ? {
-        ...conditions,
-        structureId
-      }
-    : conditions
-
-  const beneficiary = await prismaClient.beneficiary.findFirst({
-    where,
-    include: {
-      referents: true,
-      relatives: {
-        include: {
-          beneficiary: true
-        }
-      }
-    }
+  const beneficiary = await findWithReferentsAndRelatives({
+    id: input.id,
+    structureId: user.structureId
   })
-  if (!beneficiary) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: `No beneficiary found with conditions ${JSON.stringify(where)}`
-    })
-  }
   const { relatives, ...beneficiaryData } = beneficiary
 
   const taxHouseholds = (relatives || []).filter(relative => relative.hosted)
@@ -117,4 +104,153 @@ export const searchBeneficiaryHandler = async ({
   })
 
   return beneficiaries
+}
+
+export const updateBeneficiaryHandler = async ({
+  input,
+  ctx: { user }
+}: {
+  input: UpdateBeneficiaryInput
+  ctx: AppContext
+}) => {
+  const { referents: previousReferents, relatives: oldRelatives } =
+    await findWithReferentsAndRelatives({
+      id: input.id,
+      structureId: user.structureId
+    })
+
+  const previousIds = previousReferents.map(({ id }) => id)
+
+  const {
+    id,
+    structureId,
+    referents: updateIds,
+    aidantConnectAuthorized,
+    general,
+    health,
+    external,
+    occupation,
+    taxHousehold,
+    entourage
+  } = input
+
+  let data = {}
+
+  if (
+    canUpdateBeneficiaryReferents(user, {
+      structureId,
+      referents: previousReferents
+    })
+  ) {
+    const newIds =
+      updateIds.filter(updateId => !previousIds.includes(updateId)) || []
+    const trashIds = previousIds.filter(id => !updateIds.includes(id)) || []
+
+    const createIds = newIds.map(id => ({
+      id
+    }))
+    const deleteIds = trashIds.map(id => ({
+      id
+    }))
+
+    data = {
+      ...data,
+      referents: {
+        connect: createIds,
+        disconnect: deleteIds
+      }
+    }
+  }
+  if (canEditBeneficiaryGeneralInformation(user, input)) {
+    data = { ...data, ...general, aidantConnectAuthorized }
+  }
+  if (canEditBeneficiaryHealthInfo(user, input)) {
+    data = { ...data, ...health }
+  }
+
+  if (canEditBeneficiaryExternalOrganisations(user, input)) {
+    data = { ...data, ...external }
+  }
+  if (canEditBeneficiaryOccupationIncome(user, input)) {
+    data = { ...data, ...occupation }
+  }
+  if (canUpdateBeneficiaryRelatives(user, input)) {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { taxHouseholds, ...taxHouseholdDatas } = taxHousehold
+    data = { ...data, ...taxHouseholdDatas }
+  }
+
+  if (canUpdateBeneficiaryRelatives(user, input)) {
+    const { entourages: newEntourages } = entourage
+    const previousEntourages = oldRelatives.filter(r => !r.hosted)
+
+    const createEntourages =
+      newEntourages.filter(
+        ({ id }) => !previousEntourages.map(({ id }) => id).includes(id)
+      ) || []
+    const trashEntourages =
+      previousEntourages.filter(
+        ({ id }) => !newEntourages.map(({ id }) => id).includes(id)
+      ) || []
+    const updateEntourages =
+      newEntourages.filter(({ id }) =>
+        previousEntourages.map(({ id }) => id).includes(id)
+      ) || []
+
+    data = {
+      ...data,
+      relatives: {
+        create: createEntourages,
+        delete: trashEntourages.map(({ id }) => ({ id })),
+        update: updateEntourages.map(({ id, ...data }) => ({
+          where: { id },
+          data
+        }))
+      }
+    }
+  }
+
+  const beneficiary = await prismaClient.beneficiary.update({
+    where: { id },
+    data
+  })
+  return beneficiary
+}
+
+async function findWithReferentsAndRelatives({
+  structureId,
+  id
+}: {
+  structureId: string | null
+  id: string
+}) {
+  const conditions = {
+    id
+  }
+
+  const where = structureId
+    ? {
+        ...conditions,
+        structureId
+      }
+    : conditions
+
+  const beneficiary = await prismaClient.beneficiary.findFirst({
+    where,
+    include: {
+      referents: true,
+      relatives: {
+        include: {
+          beneficiary: true
+        }
+      }
+    }
+  })
+  if (!beneficiary) {
+    throw new TRPCError({
+      code: 'NOT_FOUND',
+      message: `No beneficiary found with conditions ${JSON.stringify(where)}`
+    })
+  }
+  return beneficiary
 }

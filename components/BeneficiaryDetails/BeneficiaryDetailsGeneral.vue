@@ -47,25 +47,27 @@
         <span class="information-label">Numéro Pégase :</span>
         {{ beneficiary.numeroPegase }}
       </li>
-      <li v-if="beneficiary.accomodationMode">
-        <span :class="{ 'information-line': beneficiary.accomodationName }">
+      <li v-if="beneficiary.accommodationMode">
+        <span :class="{ 'information-line': beneficiary.accommodationName }">
           <span class="information-label">Hébergement :</span>
-          {{ beneficiaryAccomodationModeLabels[beneficiary.accomodationMode] }}
+          {{
+            beneficiaryAccommodationModeLabels[beneficiary.accommodationMode]
+          }}
         </span>
         <span
-          v-if="beneficiary.accomodationName"
+          v-if="beneficiary.accommodationName"
           class="information-line"
         >
-          {{ beneficiary.accomodationName }}
+          {{ beneficiary.accommodationName }}
         </span>
       </li>
       <li v-if="isMinistryAgent && beneficiary.accommodationZone">
         <span class="information-label">Zone d'hébergement :</span>
-        {{ beneficiaryAccomodationZoneLabels[beneficiary.accommodationZone] }}
+        {{ beneficiaryAccommodationZoneLabels[beneficiary.accommodationZone] }}
       </li>
-      <li v-if="beneficiary.accomodationAdditionalInformation">
+      <li v-if="beneficiary.accommodationAdditionalInformation">
         <span class="information-label">Précisions hébergement :</span>
-        {{ beneficiary.accomodationAdditionalInformation }}
+        {{ beneficiary.accommodationAdditionalInformation }}
       </li>
       <li v-if="hasAddress">
         <span class="information-label information-line">Adresse :</span>
@@ -118,14 +120,6 @@
         <span class="information-label">Données mobilité :</span>
         {{ beneficiaryMobilityLabels[beneficiary.mobility] }}
       </li>
-      <li v-if="beneficiary.administration">
-        <span class="information-label">Administration :</span>
-        {{ beneficiary.administration }}
-      </li>
-      <li v-if="beneficiary.minister">
-        <span class="information-label">Ministre :</span>
-        {{ beneficiary.minister }}
-      </li>
     </ul>
   </section>
 </template>
@@ -135,9 +129,9 @@
   import {
     beneficiaryTitleLabels,
     beneficiaryGenderLabels,
-    beneficiaryAccomodationModeLabels,
     beneficiaryMobilityLabels,
-    beneficiaryAccomodationZoneLabels
+    beneficiaryAccommodationZoneLabels,
+    beneficiaryAccommodationModeLabels
   } from '~/client/options/beneficiary'
   import { Nationalities } from '~/client/options/nationality'
   import { useAuthStore } from '~/store/auth'

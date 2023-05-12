@@ -19,6 +19,6 @@ export type DefaultLegallyNotRequiredFollowupTypeWithSupportsCount =
 
 export type CustomFollowupTypeWithSupportsCount =
   FollowupTypeWithSupportsCount & {
-    default: false
+    default: null
     legallyRequired: false
   }

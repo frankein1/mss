@@ -26,22 +26,24 @@
 </template>
 
 <script lang="ts" setup>
-  import { Beneficiary } from '@prisma/client'
+  import { UpdateBeneficiaryRawInput } from '~/server/schema'
   import { Routes } from '~/utils/routing/routes'
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
+  const trpcClient = useTrpcClient()
 
-  const { data } =
-    await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({
-      id: beneficiaryId
-    })
+  const { data } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
+    id: beneficiaryId
+  })
 
-  const { data: agents } = await useTrpcClient().config.getAgents.useQuery()
+  const { data: agents } = await trpcClient.config.getAgents.useQuery()
+
+  const isSubmitting = ref(false)
 
   const beneficiary = computed(() => data.value?.beneficiary)
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
-  const entourages = computed(() => data.value?.taxHouseholds || [])
+  const entourages = computed(() => data.value?.entourages || [])
 
   const title = computed(() =>
     beneficiary.value
@@ -49,26 +51,12 @@
       : ''
   )
 
-  const isSubmitting = false
+  async function onUpdateBeneficiary(beneficiary: UpdateBeneficiaryRawInput) {
+    isSubmitting.value = true
+    // TODO: handle error
+    await trpcClient.beneficiary.update.mutate(beneficiary)
+    isSubmitting.value = false
 
-  // const canAccessRelatives = computed(() => permissionsStore.canAccessRelatives)
-
-  function onUpdateBeneficiary(beneficiary: Beneficiary) {
-    console.log(beneficiary)
-    // isSubmitting.value = true
-    // try {
-    //   const res = await $updateItem(
-    //     `beneficiary`,
-    //     beneficiary.value,
-    //     _beneficiary
-    //   )
-    //   if (res.status === 200) return navigateTo(beneficiaryPath.value)
-    //   throw new Error(errorResponseMessage(res))
-    // } catch {
-    //   $snackbar.error('La mise à jour du bénéficiaire a échoué.', () =>
-    //     formContainer.value?.querySelector('input')?.focus()
-    //   )
-    // }
-    // isSubmitting.value = false
+    navigateTo(`${Routes.Beneficiaries}/${beneficiary.id}`)
   }
 </script>

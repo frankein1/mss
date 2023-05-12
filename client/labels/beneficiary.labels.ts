@@ -1,4 +1,18 @@
-const beneficiaryFieldLabels = {
+import type { Beneficiary } from '@prisma/client'
+import type { FieldLabels } from '~/types/fieldLabels'
+
+type BeneficiaryFieldLabels = Omit<
+  Beneficiary & { referents: string },
+  | 'id'
+  | 'createdById'
+  | 'archivedById'
+  | 'archived'
+  | 'fileNumber'
+  | 'created'
+  | 'updated'
+>
+
+const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   structureId: 'Structure',
   referents: 'Agent(s) référent(s)',
   aidantConnectAuthorized: 'Mandat Aidant Connect',
@@ -11,9 +25,10 @@ const beneficiaryFieldLabels = {
   birthPlace: 'Lieu de naissance',
   gender: 'Genre',
   nationality: 'Nationalité',
-  accomodationMode: "Mode d'hébergement",
-  accomodationName: '',
-  accomodationAdditionalInformation: 'Précisions hébergement',
+  numeroPegase: 'Numéro Pégase',
+  accommodationMode: "Mode d'hébergement",
+  accommodationName: 'Dénomination de la structure / Nom et prénom du tiers',
+  accommodationAdditionalInformation: 'Précisions hébergement',
   city: 'Ville',
   zipcode: 'Code postal',
   region: 'Région',
@@ -57,7 +72,13 @@ const beneficiaryFieldLabels = {
   partnerMainIncomeAmount: 'Montant des ressources du conjoint',
   majorChildrenMainIncomeSource: 'Nature des ressources des enfants majeurs',
   majorChildrenMainIncomeAmount: 'Montant des ressources des enfants majeurs',
-  deathDate: 'Date de décès'
+  deathDate: 'Date de décès',
+  ministereCategorie: 'Catégorie',
+  ministereDepartementServiceAc:
+    "Département ou service de l'Administration Centrale",
+  ministereStructure: 'Structure de rattachement',
+  otherPensionOrganisations: 'Autre(s) organisme(s) de retraite',
+  accommodationZone: "Zone d'hébergement"
 }
 
 export { beneficiaryFieldLabels }

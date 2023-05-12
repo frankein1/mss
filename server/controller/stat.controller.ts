@@ -100,13 +100,13 @@ export const getAccommodationModeStatsHandler = async ({
     throw invalidError('structureId is null')
   }
   return await prismaClient.beneficiary.groupBy({
-    by: ['accomodationMode'],
+    by: ['accommodationMode'],
     where: {
       structureId: user.structureId,
       ...prepareBeneficiaryFilters(input)
     },
     _count: true,
-    orderBy: { _count: { accomodationMode: 'desc' } }
+    orderBy: { _count: { accommodationMode: 'desc' } }
   })
 }
 

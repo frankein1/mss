@@ -34,7 +34,7 @@
 <script lang="ts" setup>
   import { BeneficiaryMobility } from '@prisma/client'
   import { beneficiaryMobilityLabels } from '~/client/options/beneficiary'
-  import { StatFilterInput } from '~/server/schema'
+  import { StatFilterRawInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
   import { getStatLabel } from '~/client/options/stat'
@@ -43,7 +43,7 @@
 
   const props = defineProps<{
     beneficiaryCount: number
-    filters: StatFilterInput
+    filters: StatFilterRawInput
   }>()
 
   const {

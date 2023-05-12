@@ -29,7 +29,7 @@
 <script lang="ts" setup>
   import { FollowupStatus } from '@prisma/client'
   import { followupStatusLabels } from '~/client/options/followup'
-  import { StatFilterInput } from '~/server/schema'
+  import { StatFilterRawInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { followupStatusColors } from '~/client/colors/followup'
 
@@ -37,7 +37,7 @@
 
   const props = defineProps<{
     totalCount: number
-    filters: StatFilterInput
+    filters: StatFilterRawInput
   }>()
 
   const {

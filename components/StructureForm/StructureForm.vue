@@ -1,12 +1,22 @@
 <template>
   <form
     class="fr-container--fluid"
-    @submit.prevent="onUpdateStructure"
+    @submit="onUpdateStructure"
   >
-    <StructureFormInformation :structure="structure" />
+    <StructureFormInformation
+      :structure="structure"
+      :set-field-value="setFieldValue"
+    />
 
     <StructureFormFollowupTypes
       :structure-followup-types="structure.followupTypes"
+      :default-legally-required-selected-followup-types="
+        defaultLegallyRequiredSelectedFollowupTypes
+      "
+      :default-legally-not-required-selected-followup-types="
+        defaultLegallyNotRequiredSelectedFollowupTypes
+      "
+      :custom-followup-types="customFollowupTypes"
     />
 
     <button
@@ -21,23 +31,86 @@
 </template>
 
 <script lang="ts" setup>
-  import type { StructureWithFollowupTypesWithSupportsCount } from './types'
-  import type { EditCurrentUserStructureInput } from '~/server/schema'
+  import type {
+    CustomFollowupTypeWithSupportsCount,
+    DefaultLegallyNotRequiredFollowupTypeWithSupportsCount,
+    DefaultLegallyRequiredFollowupTypeWithSupportsCount,
+    StructureWithFollowupTypesWithSupportsCount
+  } from './types'
+  import type { EditCurrentUserStructureRawInput } from '~/server/schema'
+  import { editCurrentUserStructureSchema } from '~/server/schema'
+  import { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
-  defineProps<{
+  const props = defineProps<{
     structure: StructureWithFollowupTypesWithSupportsCount
     isSubmitting: boolean
   }>()
 
   const emit = defineEmits<{
-    (e: 'updateStructure', structure: EditCurrentUserStructureInput): void
+    (e: 'updateStructure', structure: EditCurrentUserStructureRawInput): void
   }>()
 
-  function onUpdateStructure(event: Event) {
-    // TODO: https://nuxt.com/modules/vee-validate
-    const { data: structure } =
-      useFormData<EditCurrentUserStructureInput>(event)
+  const defaultLegallyRequiredSelectedFollowupTypes = computed(() =>
+    props.structure.followupTypes.filter(isDefaultLegallyRequired)
+  )
 
+  const defaultLegallyNotRequiredSelectedFollowupTypes = computed(() =>
+    props.structure.followupTypes.filter(isDefaultLegallyNotRequired)
+  )
+
+  const customFollowupTypes = computed(() =>
+    props.structure.followupTypes.filter(isCustom)
+  )
+
+  const initialLegallyRequiredSelectedIds = computed(() =>
+    defaultLegallyRequiredSelectedFollowupTypes.value.map(
+      ({ default: defaultKey }) => defaultKey
+    )
+  )
+
+  const initialLegallyNotRequiredSelectedIds = computed(() => [
+    ...defaultLegallyNotRequiredSelectedFollowupTypes.value.map(
+      ({ default: defaultKey }) => defaultKey
+    ),
+    ...customFollowupTypes.value.map(({ id }) => id)
+  ])
+
+  const { handleSubmit, setFieldValue } =
+    useForm<EditCurrentUserStructureRawInput>({
+      validationSchema: toTypedSchema(editCurrentUserStructureSchema),
+      initialValues: {
+        name: props.structure.name,
+        zipcode: props.structure.zipcode,
+        city: props.structure.city,
+        address: props.structure.address,
+        phone: props.structure.phone,
+        email: props.structure.email,
+        legallyRequiredFollowupTypes:
+          initialLegallyRequiredSelectedIds.value.join(','),
+        legallyNotRequiredFollowupTypes:
+          initialLegallyNotRequiredSelectedIds.value.join(',')
+      }
+    })
+
+  const onUpdateStructure = handleSubmit(structure => {
     emit('updateStructure', structure)
+  })
+
+  function isDefaultLegallyRequired(
+    f: FollowupTypeWithSupportsCount
+  ): f is DefaultLegallyRequiredFollowupTypeWithSupportsCount {
+    return !!(f.default && f.legallyRequired)
+  }
+
+  function isDefaultLegallyNotRequired(
+    f: FollowupTypeWithSupportsCount
+  ): f is DefaultLegallyNotRequiredFollowupTypeWithSupportsCount {
+    return !!(f.default && !f.legallyRequired)
+  }
+
+  function isCustom(
+    f: FollowupTypeWithSupportsCount
+  ): f is CustomFollowupTypeWithSupportsCount {
+    return f.default === null
   }
 </script>

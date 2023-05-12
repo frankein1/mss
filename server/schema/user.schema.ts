@@ -1,10 +1,11 @@
 import { z } from 'zod'
-import { UserStatus, UserRole } from '@prisma/client'
+import { UserRole } from '@prisma/client'
 import { NonAdminUserRole } from '~/client/options/user'
 import {
   errorMessages,
   minStringLengthMessage,
-  validEmailMessage
+  validEmailMessage,
+  enumErrorMap
 } from '~/utils/zod'
 
 const createUserSchema = z.object({
@@ -12,29 +13,55 @@ const createUserSchema = z.object({
   lastName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
   email: z.string(errorMessages).email(validEmailMessage),
   role: z.nativeEnum(NonAdminUserRole, {
-    ...errorMessages,
-    required_error: 'Veuillez renseigner le rôle.'
+    errorMap: enumErrorMap
   })
 })
 
 type UserCreationInput = z.infer<typeof createUserSchema>
 
-const editUserSchema = z
-  .object({
-    id: z.string().uuid(),
-    status: z.nativeEnum(UserStatus).optional(),
-    role: z.nativeEnum(UserRole).optional(),
-    aidantConnectAuthorisation: z.boolean().nullable().optional()
-  })
-  .refine(
-    ({ status, role, aidantConnectAuthorisation }) =>
-      status !== undefined ||
-      role !== undefined ||
-      aidantConnectAuthorisation !== undefined
-  )
+const editUserRoleSchema = z.object({
+  id: z.string().uuid(),
+  role: z.nativeEnum(UserRole)
+})
+
+type UserRoleEditionInput = z.infer<typeof editUserRoleSchema>
+
+const editUserAidantConnectAuthorisationSchema = z.object({
+  id: z.string().uuid(),
+  aidantConnectAuthorisation: z.boolean()
+})
+
+type UserAidantConnectAuthorisationEditionInput = z.infer<
+  typeof editUserAidantConnectAuthorisationSchema
+>
+
+const editUserStatusSchema = z.object({
+  id: z.string().uuid(),
+  status: z.boolean()
+})
+
+type UserStatusEditionInput = z.infer<typeof editUserStatusSchema>
+
+const editUserSchema = z.union([
+  editUserRoleSchema,
+  editUserAidantConnectAuthorisationSchema,
+  editUserStatusSchema
+])
 
 type UserEditionInput = z.infer<typeof editUserSchema>
 
-export { createUserSchema, editUserSchema }
+export {
+  createUserSchema,
+  editUserSchema,
+  editUserRoleSchema,
+  editUserAidantConnectAuthorisationSchema,
+  editUserStatusSchema
+}
 
-export type { UserCreationInput, UserEditionInput }
+export type {
+  UserCreationInput,
+  UserEditionInput,
+  UserRoleEditionInput,
+  UserAidantConnectAuthorisationEditionInput,
+  UserStatusEditionInput
+}

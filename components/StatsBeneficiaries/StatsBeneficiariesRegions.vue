@@ -31,7 +31,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatFilterInput } from '~/server/schema'
+  import { StatFilterRawInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
   import { STATS_NULL_LABEL } from '~/client/options/stat'
@@ -40,7 +40,7 @@
 
   const props = defineProps<{
     beneficiaryCount: number
-    filters: StatFilterInput
+    filters: StatFilterRawInput
   }>()
 
   const {

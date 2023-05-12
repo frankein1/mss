@@ -1,12 +1,13 @@
 <template>
   <form
+    ref="form"
     class="fr-container--fluid"
-    @submit.prevent="onCreateFollowupType"
+    @submit="onCreateFollowupType"
   >
     <div
       class="fr-grid-row fr-grid-row--gutters form-grid follow-up-type-form-row"
     >
-      <AtomInput
+      <VeeInput
         name="name"
         :label="followupTypeFieldLabels.name + ' de la nouvelle aide'"
         required
@@ -25,18 +26,24 @@
 </template>
 
 <script lang="ts" setup>
-  import { CreateCustomFollowupTypeInput } from '~/server/schema'
+  import type { CreateCustomFollowupTypeInput } from '~/server/schema'
+  import { createCustomFollowupTypeSchema } from '~/server/schema'
   import { followupTypeFieldLabels } from '~/client/labels/followup-type.labels'
 
   const emit = defineEmits<{
     (e: 'createFollowupType', followupTypeName: string): void
   }>()
 
-  function onCreateFollowupType(event: Event) {
-    const { data, form } = useFormData<CreateCustomFollowupTypeInput>(event)
-    emit('createFollowupType', data.name)
-    form.reset()
-  }
+  const form = ref<HTMLFormElement | null>(null)
+
+  const { handleSubmit } = useForm<CreateCustomFollowupTypeInput>({
+    validationSchema: toTypedSchema(createCustomFollowupTypeSchema)
+  })
+
+  const onCreateFollowupType = handleSubmit(({ name }) => {
+    emit('createFollowupType', name)
+    form.value?.reset()
+  })
 </script>
 
 <style scoped>

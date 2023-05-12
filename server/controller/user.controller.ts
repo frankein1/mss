@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server'
-import { UserRole } from '@prisma/client'
+import { UserRole, UserStatus } from '@prisma/client'
 import { AppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import type { UserEditionInput, UserCreationInput } from '~/server/schema'
@@ -25,6 +25,12 @@ export const updateUserHandler = async ({
   // [NUXT/PRISMA]: Factorise with rules
   if (user.role !== UserRole.StructureManager) {
     throw forbiddenError()
+  }
+  if ('status' in rest) {
+    return await prismaClient.user.update({
+      where: { id },
+      data: { status: rest.status ? UserStatus.Active : UserStatus.Disabled }
+    })
   }
   return await prismaClient.user.update({ where: { id }, data: rest })
 }

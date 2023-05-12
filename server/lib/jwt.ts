@@ -20,6 +20,7 @@ export function signJwt(user: JwtUser, jwtKey: string) {
         lastName: user.lastName,
         firstName: user.firstName,
         role: user.role,
+        status: user.status,
         inclusionConnectId: user.inclusionConnectId,
         structureId: user.structureId,
         structureType: user.structureType

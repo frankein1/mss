@@ -1,7 +1,7 @@
 <template>
   <div
     class="autocomplete fr-input-group"
-    :class="{ 'fr-input-group--error': validationError }"
+    :class="{ 'fr-input-group--error': error }"
   >
     <label
       class="fr-label"
@@ -14,10 +14,9 @@
       ref="combobox"
       v-model="modelValue"
       class="fr-input"
-      :class="{ 'fr-input--error': validationError }"
+      :class="{ 'fr-input--error': error }"
       :name="name"
       autocomplete="off"
-      :required="required"
       aria-autocomplete="list"
       aria-haspopup="listbox"
       aria-expanded="false"
@@ -26,18 +25,17 @@
       :aria-activedescendant="activeOptionValue"
       role="combobox"
       @input="onSearch"
-      @invalid="onValidate"
       @focus="isFocused = true"
       @keydown="onInputKeyDown"
     />
     <div
-      v-if="validationError"
+      v-if="error"
       :id="errorId"
       class="fr-messages-group"
       aria-live="assertive"
     >
       <p class="fr-message fr-message--error">
-        {{ validationError }}
+        {{ error }}
       </p>
     </div>
 
@@ -52,7 +50,7 @@
         v-if="timeout"
         class="fr-mx-auto fr-my-5v"
       />
-      <template v-if="!timeout && !error">
+      <template v-if="!timeout && !fetchResultsError">
         <li
           v-for="([resultValue, resultLabel], index) in results"
           :ref="el => setOptionRef(el, resultValue)"
@@ -60,7 +58,7 @@
           class="menu-item"
           :class="{ 'active-menu-item': index === activeIndex }"
           role="option"
-          :aria-selected="modelValue === resultValue"
+          :aria-selected="value === resultValue"
           @mousedown="onOptionMouseDown"
           @click="onSelectOption(resultValue, index)"
         >
@@ -68,9 +66,9 @@
         </li>
       </template>
       <AtomAlert
-        v-if="error"
+        v-if="fetchResultsError"
         :alert-type="AlertType.Error"
-        :message="error"
+        :message="error || fetchResultsError"
       />
     </ul>
   </div>
@@ -89,8 +87,11 @@
       searchFn: (search: string) => Promise<Options>
       value?: string | null
       required?: boolean
+      handleChange?: (e: Event | unknown, shouldValidate?: boolean) => void
+      error?: string
+      setValue: (value: string) => void
     }>(),
-    { value: '', required: false }
+    { value: '', required: false, handleChange: () => {}, error: undefined }
   )
 
   const emit = defineEmits<{
@@ -102,9 +103,8 @@
 
   const results = ref<Options>(new Map<string, string>())
   const timeout = ref<NodeJS.Timeout | null>(null)
-  const error = ref('')
   const modelValue = ref(props.value)
-  const validationError = ref('')
+  const fetchResultsError = ref('')
   const combobox = ref<HTMLInputElement | null>(null)
 
   const optionRefs: { [key: string]: Ref<HTMLElement | null> } = {}
@@ -144,7 +144,7 @@
     props.required ? `${props.label} *` : props.label
   )
 
-  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
+  const ariaDescribedby = computed(() => (props.error ? errorId : undefined))
 
   watch(
     () => props.value,
@@ -161,7 +161,6 @@
 
   function onSearch(event: Event) {
     const input = event.target as HTMLInputElement
-    validationError.value = ''
     const search = input.value.trim().toLocaleLowerCase()
 
     if (timeout.value) {
@@ -169,7 +168,7 @@
       timeout.value = null
     }
     results.value = new Map()
-    error.value = ''
+    fetchResultsError.value = ''
 
     if (!search) return
 
@@ -177,16 +176,11 @@
       try {
         results.value = await props.searchFn(search)
       } catch {
-        error.value = UNKNOWN_ERROR_MESSAGE
+        fetchResultsError.value = UNKNOWN_ERROR_MESSAGE
       } finally {
         timeout.value = null
       }
     }, 400)
-  }
-
-  function onValidate(event: Event) {
-    const input = event.target as HTMLInputElement
-    validationError.value = input.validationMessage
   }
 
   function onOptionMouseDown() {
@@ -211,7 +205,7 @@
    */
   function onSelectOption(optionValue: string, optionIndex?: number) {
     if (optionIndex) activeIndex.value = optionIndex
-    modelValue.value = results.value.get(optionValue) || ''
+    props.setValue(results.value.get(optionValue) || '')
     emit('resultSelected', optionValue)
   }
 

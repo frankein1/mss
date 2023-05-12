@@ -100,12 +100,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { Beneficiary } from '@prisma/client'
+  import { Beneficiary, BeneficiaryPensionOrganisation } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryLabels,
     incomeSourceLabels,
-    pensionOrganisationLabels,
-    PensionOrganisation
+    pensionOrganisationLabels
   } from '~/client/options/beneficiary'
 
   const props = defineProps<{
@@ -155,7 +154,7 @@
   const pensionOrganisations = computed(() =>
     arrayToString(
       props.beneficiary.pensionOrganisations?.filter(
-        f => f !== PensionOrganisation.Other
+        f => f !== BeneficiaryPensionOrganisation.Other
       ),
       pensionOrganisationLabels
     )

@@ -49,12 +49,10 @@
       ref="hiddenInput"
       :name="name"
       hidden
-      :required="required"
       :value="currentValue"
       :disabled="disabled"
       :readonly="readonly"
       @change="onChange"
-      @invalid="onValidate"
     />
     <ul
       v-show="!dropdown || expanded"
@@ -114,7 +112,7 @@
     defineProps<{
       label: string
       options: Options
-      modelValue?: string[]
+      value?: string
       labelClass?: string
       required?: boolean
       name: string
@@ -124,9 +122,11 @@
       readonly?: boolean
       disabledOptions?: string[]
       hint?: string
+      handleChange?: (e: Event | unknown, shouldValidate?: boolean) => void
+      error?: string
     }>(),
     {
-      modelValue: () => [],
+      value: '',
       labelClass: '',
       required: false,
       dropdown: false,
@@ -134,12 +134,13 @@
       disabled: false,
       readonly: false,
       disabledOptions: () => [],
-      hint: ''
+      hint: '',
+      handleChange: () => {},
+      error: undefined
     }
   )
 
   const emit = defineEmits<{
-    (e: 'update:modelValue', values: string[]): void
     (e: 'changeValue', value: string): void
   }>()
 
@@ -150,9 +151,8 @@
   const labelId = `multi-select-${id}-label`
 
   const selectedValues = ref<string[]>(
-    (props.modelValue || []).filter(v => props.options.has(v))
+    (props.value.split(',') || []).filter(v => props.options.has(v))
   )
-  const error = ref<string>('')
 
   const hiddenInput = ref<HTMLInputElement | null>(null)
   const combobox = ref<HTMLDivElement | null>(null)
@@ -162,7 +162,7 @@
     props.required ? `${props.label} *` : props.label
   )
 
-  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
+  const ariaDescribedby = computed(() => (props.error ? errorId : undefined))
 
   /**
    * The value stored in the hidden input
@@ -230,7 +230,6 @@
     hiddenInput.value.value = _currentValue
     hiddenInput.value.dispatchEvent(new Event('change'))
     hiddenInput.value.closest('form')?.dispatchEvent(new Event('change'))
-    emit('changeValue', _currentValue)
   })
 
   onMounted(() => {
@@ -245,6 +244,7 @@
   })
 
   function listenFormReset() {
+    // FIXME: Still useful with vee-validate ?
     hiddenInput.value?.closest('form')?.addEventListener('reset', reset)
   }
 
@@ -293,16 +293,8 @@
   }
 
   function onChange(event: Event) {
-    if (!event.target) return
-    const target = event.target as HTMLInputElement
-    emit('update:modelValue', target.value.split(','))
-    onValidate(event)
-  }
-
-  function onValidate(event: Event) {
-    if (!event.target) return
-    const target = event.target as HTMLInputElement
-    error.value = target.validationMessage
+    emit('changeValue', (event.target as HTMLSelectElement).value)
+    props.handleChange(event)
   }
 
   function onInputKeyDown(e: KeyboardEvent) {

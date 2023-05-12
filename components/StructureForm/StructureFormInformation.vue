@@ -10,56 +10,50 @@
       Typologie
     </legend>
     <div class="fr-fieldset__element">
-      <AtomInput
+      <VeeInput
         name="name"
         :label="structureFieldLabels.name"
-        :value="structure.name"
         required
       />
     </div>
     <div class="fr-fieldset__element">
-      <AtomInput
+      <VeeInput
         name="zipcode"
         :label="structureFieldLabels.zipcode"
-        :value="zipCode"
         required
         @change-value="zipCode = $event"
       />
     </div>
     <div class="fr-fieldset__element">
-      <AtomCityInput
+      <VeeCityInput
         name="city"
         :label="structureFieldLabels.city"
-        :value="city"
         :zip-code="zipCode"
         required
         @city-selected="onCitySelected"
       />
     </div>
     <div class="fr-fieldset__element fr-col-12 fr-col-lg-8">
-      <AtomAddressInput
+      <VeeAddressInput
         name="address"
         :label="structureFieldLabels.address"
-        :value="structure.address"
         :zip-code="zipCode"
         required
         @address-selected="onAddressSelected"
       />
     </div>
     <div class="fr-fieldset__element">
-      <AtomInput
+      <VeeInput
         name="phone"
         :label="structureFieldLabels.phone"
         type="tel"
-        :value="structure.phone"
         required
       />
     </div>
     <div class="fr-fieldset__element fr-col-12 fr-col-lg-8">
-      <AtomInput
+      <VeeInput
         name="email"
         :label="structureFieldLabels.email"
-        :value="structure.email"
         required
       />
     </div>
@@ -68,24 +62,36 @@
 
 <script lang="ts" setup>
   import type { Structure } from '@prisma/client'
-  import type { CitySelected } from '~/components/AtomCityInput/types'
-  import type { AddressSelected } from '~/components/AtomAddressInput/types'
+  import type {
+    CitySelected,
+    AddressSelected
+  } from '~/components/VeeForm/types'
   import { structureFieldLabels } from '~/client/labels/structure.labels'
+  import type { EditCurrentUserStructureRawInput } from '~/server/schema'
 
   const props = defineProps<{
     structure: Structure
+    setFieldValue: (
+      field: keyof EditCurrentUserStructureRawInput,
+      value: EditCurrentUserStructureRawInput[keyof EditCurrentUserStructureRawInput]
+    ) => void
   }>()
 
   const zipCode = ref(props.structure.zipcode)
   const city = ref(props.structure.city)
 
   function onCitySelected(citySelected: CitySelected) {
-    zipCode.value = citySelected.zipCode
-    city.value = citySelected.city
+    updateZipCodeAndCity(citySelected.zipCode, citySelected.city)
   }
 
   function onAddressSelected(address: AddressSelected) {
-    zipCode.value = address.zipCode
-    city.value = address.city
+    updateZipCodeAndCity(address.zipCode, address.city)
+  }
+
+  function updateZipCodeAndCity(_zipCode: string, _city: string) {
+    zipCode.value = _zipCode
+    city.value = _city
+    props.setFieldValue('zipcode', _zipCode)
+    props.setFieldValue('city', _city)
   }
 </script>

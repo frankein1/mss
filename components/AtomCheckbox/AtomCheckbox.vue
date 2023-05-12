@@ -4,9 +4,10 @@
       :id="id"
       type="checkbox"
       :name="name"
-      :checked="!!modelValue"
+      :checked="checked"
+      :value="true"
       :aria-labelledby="labelledBy"
-      @input="onInput"
+      @input="handleChange"
     />
     <label
       class="fr-label"
@@ -23,27 +24,21 @@
   const props = withDefaults(
     defineProps<{
       label: string
+      name: string
       noLabel?: boolean
       labelledBy?: string
-      name: string
-      modelValue?: boolean | null
+      checked?: boolean
+      handleChange?: (e: Event | unknown, shouldValidate?: boolean) => void
     }>(),
     {
       noLabel: false,
       labelledBy: undefined,
-      modelValue: false
+      checked: false,
+      handleChange: () => {}
     }
   )
 
-  const emit = defineEmits<{
-    (e: 'update:modelValue', checked: boolean): void
-  }>()
-
   const { id } = useFormFieldId(props.name)
-
-  function onInput(event: Event) {
-    emit('update:modelValue', (event.target as HTMLInputElement).checked)
-  }
 </script>
 
 <style scoped>

@@ -1,6 +1,6 @@
 import {
-  BeneficiaryAccomodationZone,
-  BeneficiaryAccomodationMode,
+  BeneficiaryAccommodationZone,
+  BeneficiaryAccommodationMode,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
   BeneficiaryMobility,
@@ -11,9 +11,33 @@ import {
   BeneficiaryTitle,
   Gender,
   IncomeSource,
-  RelativeRelationship
+  RelativeRelationship,
+  BeneficiaryPensionOrganisation
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
+
+export const pensionOrganisationLabels: {
+  [key in BeneficiaryPensionOrganisation]: string
+} = {
+  AgircArrco: 'AGIRC ARRCO',
+  Agr: 'AG2R',
+  CnavCarsat: 'CNAV/CARSAT',
+  Cipav: 'CIPAV',
+  Cnracl: 'CNRACL',
+  Edf: 'EDF',
+  Ircantec: 'IRCANTEC',
+  Klesia: 'KLESIA',
+  Sre: 'SRE',
+  Ssi: 'SSI (ex-RSI)',
+  MalakoffHumanis: 'Malakoff Humanis',
+  Msa: 'MSA',
+  ProBtp: 'ProBTP',
+  RetraiteDesMines: 'Retraite des mines',
+  Other: 'Autre(s)'
+}
+export const pensionOrganisationOptions = labelsToOptions(
+  pensionOrganisationLabels
+)
 
 export const beneficiaryStatusLabels: { [key in BeneficiaryStatus]: string } = {
   [BeneficiaryStatus.Active]: 'Actif',
@@ -38,27 +62,6 @@ export const beneficiaryGenderLabels: { [key in Gender]: string } = {
 }
 
 export const beneficiaryGenderOptions = labelsToOptions(beneficiaryGenderLabels)
-
-export const beneficiaryAccomodationModeLabels: {
-  [key in BeneficiaryAccomodationMode]: string
-} = {
-  [BeneficiaryAccomodationMode.NursingHome]: 'EHPAD, résidence senior',
-  [BeneficiaryAccomodationMode.EmergencyHousing]:
-    'Hébergement de type CHRS, CHU, CPH, CADA...',
-  [BeneficiaryAccomodationMode.Parents]: 'Hébergé·e au domicile parental',
-  [BeneficiaryAccomodationMode.ThirdPerson]: 'Hébergé·e chez un tiers',
-  [BeneficiaryAccomodationMode.PrivateRenting]: 'Locataire parc privé',
-  [BeneficiaryAccomodationMode.SocialRenting]: 'Locataire parc social',
-  [BeneficiaryAccomodationMode.Fortune]: 'Logement de fortune',
-  [BeneficiaryAccomodationMode.Substandard]: 'Logement insalubre',
-  [BeneficiaryAccomodationMode.Owner]: 'Propriétaire',
-  [BeneficiaryAccomodationMode.None]: 'Sans hébergement',
-  [BeneficiaryAccomodationMode.Other]: 'Autre type de logement (hôtel...)'
-}
-
-export const beneficiaryAccomodationModeOptions = labelsToOptions(
-  beneficiaryAccomodationModeLabels
-)
 
 export const beneficiaryFamilySituationLabels: {
   [key in BeneficiaryFamilySituation]: string
@@ -229,55 +232,46 @@ export const entourageRelationshipOptions = labelsToOptions(
   entourageRelationshipLabels
 )
 
-export enum PensionOrganisation {
-  AGIRC_ARRCO = 'agirc-arrco',
-  AG2R = 'ag2r',
-  CNAV_CARSAT = 'cnav-carsat',
-  CIPAV = 'cipav',
-  CNRACL = 'cnracl',
-  EDF = 'edf',
-  IRCANTEC = 'ircantec',
-  KLESIA = 'klesia',
-  SRE = 'sre',
-  SSI = 'ssi',
-  MalakoffHumanis = 'malakoff_humanis',
-  MSA = 'msa',
-  ProBTP = 'pro_btp',
-  RetraiteDesMines = 'retraite_des_mines',
-  Other = 'other'
+export const beneficiaryAccommodationZoneLabels: {
+  [key in BeneficiaryAccommodationZone]: string
+} = {
+  France: 'France',
+  Europe: 'Europe',
+  OutsideEurope: 'Hors Europe'
 }
 
-export const pensionOrganisationLabels: {
-  [key in PensionOrganisation]: string
-} = {
-  [PensionOrganisation.AGIRC_ARRCO]: 'AGIRC ARRCO',
-  [PensionOrganisation.AG2R]: 'AG2R',
-  [PensionOrganisation.CNAV_CARSAT]: 'CNAV/CARSAT',
-  [PensionOrganisation.CIPAV]: 'CIPAV',
-  [PensionOrganisation.CNRACL]: 'CNRACL',
-  [PensionOrganisation.EDF]: 'EDF',
-  [PensionOrganisation.IRCANTEC]: 'IRCANTEC',
-  [PensionOrganisation.KLESIA]: 'KLESIA',
-  [PensionOrganisation.SRE]: 'SRE',
-  [PensionOrganisation.SSI]: 'SSI (ex-RSI)',
-  [PensionOrganisation.MalakoffHumanis]: 'Malakoff Humanis',
-  [PensionOrganisation.MSA]: 'MSA',
-  [PensionOrganisation.ProBTP]: 'ProBTP',
-  [PensionOrganisation.RetraiteDesMines]: 'Retraite des mines',
-  [PensionOrganisation.Other]: 'Autre(s)'
-}
-export const pensionOrganisationOptions = labelsToOptions(
-  pensionOrganisationLabels
+export const beneficiaryAccommodationZoneOptions = labelsToOptions(
+  beneficiaryAccommodationZoneLabels
 )
 
-export const beneficiaryAccomodationZoneLabels: {
-  [key in BeneficiaryAccomodationZone]: string
+export const beneficiaryAccommodationModeLabels: {
+  [key in BeneficiaryAccommodationMode]: string
 } = {
-  [BeneficiaryAccomodationZone.France]: 'France',
-  [BeneficiaryAccomodationZone.Europe]: 'Europe',
-  [BeneficiaryAccomodationZone.OutsideEurope]: 'Hors Europe'
+  [BeneficiaryAccommodationMode.NursingHome]: 'EHPAD, résidence senior',
+  [BeneficiaryAccommodationMode.EmergencyHousing]:
+    'Hébergement de type CHRS, CHU, CPH, CADA...',
+  [BeneficiaryAccommodationMode.Parents]: 'Hébergé·e au domicile parental',
+  [BeneficiaryAccommodationMode.ThirdPerson]: 'Hébergé·e chez un tiers',
+  [BeneficiaryAccommodationMode.PrivateRenting]: 'Locataire parc privé',
+  [BeneficiaryAccommodationMode.SocialRenting]: 'Locataire parc social',
+  [BeneficiaryAccommodationMode.Fortune]: 'Logement de fortune',
+  [BeneficiaryAccommodationMode.Substandard]: 'Logement insalubre',
+  [BeneficiaryAccommodationMode.Owner]: 'Propriétaire',
+  [BeneficiaryAccommodationMode.None]: 'Sans hébergement',
+  [BeneficiaryAccommodationMode.Other]: 'Autre type de logement (hôtel...)'
 }
 
-export const beneficiaryAccomodationZoneOptions = labelsToOptions(
-  beneficiaryAccomodationZoneLabels
+export const beneficiaryAccommodationModeOptions = labelsToOptions(
+  beneficiaryAccommodationModeLabels
 )
+
+export const OrganisationAccommodationModes: BeneficiaryAccommodationMode[] = [
+  BeneficiaryAccommodationMode.EmergencyHousing,
+  BeneficiaryAccommodationMode.NursingHome,
+  BeneficiaryAccommodationMode.Other
+]
+
+export const ThirdPartyAccommodationMode: BeneficiaryAccommodationMode[] = [
+  BeneficiaryAccommodationMode.ThirdPerson,
+  BeneficiaryAccommodationMode.Parents
+]

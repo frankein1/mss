@@ -32,18 +32,18 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryAccomodationMode } from '@prisma/client'
-  import { beneficiaryAccomodationModeLabels } from '~/client/options/beneficiary'
-  import { StatFilterInput } from '~/server/schema'
+  import { BeneficiaryAccommodationMode } from '@prisma/client'
+  import { StatFilterRawInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
   import { getStatLabel } from '~/client/options/stat'
+  import { beneficiaryAccommodationModeLabels } from '~/client/options/beneficiary'
 
   const trpcClient = useTrpcClient()
 
   const props = defineProps<{
     beneficiaryCount: number
-    filters: StatFilterInput
+    filters: StatFilterRawInput
   }>()
 
   const {
@@ -52,7 +52,7 @@
     error
   } = useAsyncData<
     Array<{
-      accomodationMode: BeneficiaryAccomodationMode | null
+      accommodationMode: BeneficiaryAccommodationMode | null
       _count: number
     }>
   >(() => trpcClient.stat.getAccommodationModeStats.query(props.filters), {
@@ -62,11 +62,11 @@
 
   const accommodationModesStats = computed(
     () =>
-      accommodationModesCounts.value?.map(({ _count, accomodationMode }) => ({
-        key: accomodationMode || 'null',
+      accommodationModesCounts.value?.map(({ _count, accommodationMode }) => ({
+        key: accommodationMode || 'null',
         label: getStatLabel(
-          beneficiaryAccomodationModeLabels,
-          accomodationMode
+          beneficiaryAccommodationModeLabels,
+          accommodationMode
         ),
         count: _count
       })) || []

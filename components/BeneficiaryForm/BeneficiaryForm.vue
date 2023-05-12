@@ -1,79 +1,87 @@
 <template>
   <form
     ref="form"
-    @submit.prevent="onSaveBeneficiary"
+    @submit="onSubmit"
   >
-    <AtomMultiSelect
+    <VeeMultiSelect
       name="referents"
       label="Agent(s) référent(s)"
       :options="referentOptions"
-      :model-value="initialReferentIds"
       required
       dropdown
       :readonly="!canSetReferents"
       :disabled-options="disabledReferentOptions"
     />
 
-    <AtomCheckbox
+    <VeeCheckbox
       class="fr-mb-4w"
       label="Mandat Aidant Connect"
-      name="aidant_connect_authorisation"
-      :model-value="beneficiary && beneficiary.aidantConnectAuthorized"
+      name="aidantConnectAuthorized"
     />
 
     <div
       ref="accordion"
       class="fr-accordions-group"
     >
-      <BeneficiaryFormGeneralInformation :beneficiary="beneficiary" />
-      <BeneficiaryFormRelatives
+      <AccordionFieldset label="Informations générales">
+        <BeneficiaryFormGeneralInformation :values="values" />
+      </AccordionFieldset>
+
+      <AccordionFieldset
         v-if="canSetRelatives"
-        :beneficiary="beneficiary"
-        :relatives="taxHouseholdsData"
-        household
-        @add-relative="() => onAddRelative(true)"
-        @remove-relative="$event => onRemoveRelative($event, true)"
-        @change-family-situation="familySituation = $event"
-        @change-major-children-nb="majorChildrenNb = $event"
-      />
-      <BeneficiaryFormRelatives
+        label="Foyer fiscal"
+      >
+        <BeneficiaryFormFamilySituation />
+        <!-- TODO -->
+        <BeneficiaryFormRelatives
+          :beneficiary-id="beneficiary.id"
+          :relatives="taxHouseholdsData"
+          household
+          @add-relative="() => onAddRelative(true)"
+          @remove-relative="$event => onRemoveRelative($event, true)"
+        />
+      </AccordionFieldset>
+      <AccordionFieldset
         v-if="canSetRelatives"
-        :beneficiary="beneficiary"
-        :relatives="entouragesData"
-        :household="false"
-        @add-relative="onAddRelative"
-        @remove-relative="onRemoveRelative"
-      />
-      <BeneficiaryFormHealth
+        label="Entourage"
+      >
+        <BeneficiaryFormEntourages />
+      </AccordionFieldset>
+      <AccordionFieldset
         v-if="canSetHealth"
-        :beneficiary="beneficiary"
-      />
-      <BeneficiaryFormOccupationIncome
+        label="Santé"
+      >
+        <BeneficiaryFormHealth />
+      </AccordionFieldset>
+      <AccordionFieldset
         v-if="canSetOccupationIncome"
-        :beneficiary="beneficiary"
-        :family-situation="familySituation"
-        :major-children-nb="majorChildrenNb"
-      />
-      <BeneficiaryFormExternalOrganisations
+        class="occupation-income-accordion-fieldset"
+        label="Activité/Revenu"
+      >
+        <BeneficiaryFormOccupationIncome :values="values" />
+      </AccordionFieldset>
+
+      <AccordionFieldset
         v-if="canSetExternalOrganisations"
-        :beneficiary="beneficiary"
-      />
+        label="Structures extérieures"
+      >
+        <BeneficiaryFormExternalOrganisations />
+      </AccordionFieldset>
     </div>
 
-    <AtomTextarea
+    <VeeTextarea
       v-if="canSetGeneralInformation"
       class="fr-col-12"
-      name="additional_information"
+      name="additionalInformation"
       label="Informations complémentaires"
       hint
-      :value="beneficiary?.additionalInformation || ''"
     >
       <template #hint>
         {{
           "Il est fortement recommandé de ne stocker que les informations utiles au suivi du bénéficiaire et d'éviter le recueil d'informations sensibles (données de santé, mots de passe, etc)."
         }}
       </template>
-    </AtomTextarea>
+    </VeeTextarea>
 
     <button
       class="fr-btn fr-btn--lg submit-btn"
@@ -88,36 +96,147 @@
 </template>
 
 <script setup lang="ts">
-  import { UserStatus } from '@prisma/client'
+  import { UserStatus, BeneficiaryRelative } from '@prisma/client'
+  import { useForm } from 'vee-validate'
+  import { toTypedSchema } from '@vee-validate/zod'
   import {
     BeneficiaryRelativeWithBeneficiary,
     BeneficiaryReferent,
     BeneficiaryWithReferents
   } from '~/utils/beneficiary'
   import {
-    canUpdateBeneficiaryReferents,
+    UpdateBeneficiaryRawInput,
+    updateBeneficiarySchema
+  } from '~/server/schema/beneficiary.schema'
+  import {
     canEditBeneficiaryHealthInfo,
+    canUpdateBeneficiaryReferents,
     canEditBeneficiaryOccupationIncome,
     canEditBeneficiaryExternalOrganisations,
     canEditBeneficiaryGeneralInformation,
     canUpdateBeneficiaryRelatives
   } from '~/server/query/security/rules'
+
   import { useAuthStore } from '~/store/auth'
 
   const props = defineProps<{
     beneficiary: BeneficiaryWithReferents
     taxHouseholds: BeneficiaryRelativeWithBeneficiary[]
-    entourages: BeneficiaryRelativeWithBeneficiary[]
+    entourages: BeneficiaryRelative[]
     isSubmitting: boolean
     agents: BeneficiaryReferent[]
   }>()
 
-  // const emit = defineEmits(['saveBeneficiary'])
+  const emit = defineEmits<{
+    (e: 'saveBeneficiary', beneficiary: UpdateBeneficiaryRawInput): void
+  }>()
+
+  const { handleSubmit, values } = useForm<UpdateBeneficiaryRawInput>({
+    validationSchema: toTypedSchema(updateBeneficiarySchema),
+    initialValues: {
+      id: props.beneficiary.id,
+      structureId: props.beneficiary.structureId,
+      referents: props.beneficiary.referents
+        .map(referent => referent.id)
+        .join(','),
+      aidantConnectAuthorized: props.beneficiary.aidantConnectAuthorized,
+      // General Info
+      general: {
+        status: props.beneficiary.status,
+        title: props.beneficiary.title,
+        firstName: props.beneficiary?.firstName || '',
+        usualName: props.beneficiary?.usualName,
+        birthName: props.beneficiary?.birthName || '',
+        birthDate: props.beneficiary.birthDate,
+        birthPlace: props.beneficiary.birthPlace,
+        deathDate: props.beneficiary.deathDate,
+        gender: props.beneficiary.gender,
+        nationality: props.beneficiary.nationality,
+        numeroPegase: props.beneficiary.numeroPegase,
+        accommodationMode: props.beneficiary.accommodationMode,
+        accommodationName: props.beneficiary.accommodationName,
+        accommodationAdditionalInformation:
+          props.beneficiary.accommodationAdditionalInformation,
+        zipcode: props.beneficiary.zipcode,
+        city: props.beneficiary.city,
+        region: props.beneficiary.region,
+        addressComplement: props.beneficiary.addressComplement,
+        accommodationZone: props.beneficiary.accommodationZone,
+        streetNumber: props.beneficiary.streetNumber,
+        street: props.beneficiary.street,
+        noPhone: props.beneficiary.noPhone,
+        phone1: props.beneficiary.phone1,
+        phone2: props.beneficiary.phone2,
+        email: props.beneficiary.email,
+        caregiver: props.beneficiary.caregiver,
+        mobility: props.beneficiary.mobility
+      },
+      // external orga
+      external: {
+        protectionMeasure: props.beneficiary.protectionMeasure,
+        representative: props.beneficiary.representative,
+        prescribingStructure: props.beneficiary.prescribingStructure,
+        orientationType: props.beneficiary.orientationType,
+        orientationStructure: props.beneficiary.orientationStructure,
+        serviceProviders: props.beneficiary.serviceProviders,
+        involvedPartners: props.beneficiary.involvedPartners
+      },
+      // Health
+      health: {
+        gir: props.beneficiary.gir,
+        doctor: props.beneficiary.doctor,
+        healthAdditionalInformation:
+          props.beneficiary.healthAdditionalInformation,
+        socialSecurityNumber: props.beneficiary.socialSecurityNumber,
+        insurance: props.beneficiary.insurance
+      },
+      // Occupation
+      occupation: {
+        socioProfessionalCategory: props.beneficiary.socioProfessionalCategory,
+        occupation: props.beneficiary.occupation,
+        employer: props.beneficiary.employer,
+        employerSiret: props.beneficiary.employerSiret,
+        mainIncomeSource: props.beneficiary.mainIncomeSource.join(','),
+        mainIncomeAmount: props.beneficiary.mainIncomeAmount,
+        partnerMainIncomeSource:
+          props.beneficiary.partnerMainIncomeSource.join(','),
+        partnerMainIncomeAmount: props.beneficiary.partnerMainIncomeAmount,
+        majorChildrenMainIncomeSource:
+          props.beneficiary.majorChildrenMainIncomeSource.join(','),
+        majorChildrenMainIncomeAmount:
+          props.beneficiary.majorChildrenMainIncomeAmount,
+        unemploymentNumber: props.beneficiary.unemploymentNumber,
+        pensionOrganisations: props.beneficiary.pensionOrganisations.join(','),
+        otherPensionOrganisations: props.beneficiary.otherPensionOrganisations,
+        cafNumber: props.beneficiary.cafNumber,
+        bank: props.beneficiary.bank,
+        funeralContract: props.beneficiary.funeralContract,
+        ministereCategorie: props.beneficiary.ministereCategorie,
+        ministereDepartementServiceAc:
+          props.beneficiary.ministereDepartementServiceAc,
+        ministereStructure: props.beneficiary.ministereStructure
+      },
+      // Relatives
+      taxHousehold: {
+        familySituation: props.beneficiary.familySituation,
+        minorChildren: props.beneficiary.minorChildren,
+        majorChildren: props.beneficiary.majorChildren,
+        taxHouseholds: props.taxHouseholds
+      },
+      entourage: {
+        entourages: props.entourages || []
+      },
+
+      // additionalInformation
+      additionalInformation: props.beneficiary.additionalInformation
+    }
+  })
+
+  const onSubmit = handleSubmit(values => {
+    emit('saveBeneficiary', values)
+  })
 
   const taxHouseholdsData = ref(props.taxHouseholds)
-  const entouragesData = ref(props.entourages)
-  const familySituation = ref('')
-  const majorChildrenNb = ref(0)
   const form = ref<HTMLFormElement>()
 
   const referentOptions = computed(() =>
@@ -139,15 +258,6 @@
     )
   )
 
-  const initialReferentIds = computed(() => {
-    if (!isEditing.value) {
-      return []
-    }
-    return props.beneficiary.referents.map(referent => referent.id)
-  })
-
-  const isEditing = computed(() => props.beneficiary)
-
   const authStore = useAuthStore()
   const user = authStore.getAuthUser
 
@@ -168,13 +278,6 @@
     props.beneficiary
   )
 
-  onMounted(() => {
-    if (isEditing.value) {
-      familySituation.value = props.beneficiary.familySituation || ''
-      majorChildrenNb.value = props.beneficiary.majorChildren || 0
-    }
-  })
-
   function onCheckValidationBeforeSubmit() {
     // Open the accordion containing the first invalid field
     const firstInvalidField = form.value?.querySelector(
@@ -190,35 +293,17 @@
     window.dsfr(closestAccordionCollapse as HTMLElement).collapse.disclose()
   }
 
-  function onSaveBeneficiary(event: any) {
-    console.log(event)
-    // const beneficiary = beneficiaryFromForm(
-    //   target,
-    //   props.beneficiary,
-    //   formHouseholdRelatives.value,
-    //   formRelatives.value,
-    //   permissionsStore.canSetRelatives
-    // )
-    // emit('saveBeneficiary', beneficiary)
-  }
-
   function onAddRelative(household: boolean) {
     if (household) {
       taxHouseholdsData.value.push({
         id: getRandomId('tax-household')
       })
-    } else {
-      entouragesData.value.push({ id: getRandomId('entourage') })
     }
   }
 
   function onRemoveRelative(relativeId: string, household: boolean) {
     if (household) {
       taxHouseholdsData.value = taxHouseholdsData.value.filter(
-        ({ id }) => id !== relativeId
-      )
-    } else {
-      entouragesData.value = entouragesData.value.filter(
         ({ id }) => id !== relativeId
       )
     }
@@ -228,5 +313,10 @@
 <style lang="scss" scoped>
   .fr-accordions-group {
     margin-bottom: 1.5rem;
+  }
+
+  /* Allow to display ministere_departement_service_ac searchable select options within the accordion, as overflow is hidden */
+  .occupation-income-accordion-fieldset.fr-accordion .fr-collapse--expanded {
+    padding-bottom: 9.625rem;
   }
 </style>

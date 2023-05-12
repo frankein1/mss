@@ -178,7 +178,7 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~~/utils/constants/alert'
-  import { StatFilterInput } from '~/server/schema'
+  import { StatFilterRawInput } from '~/server/schema'
   import { Options } from '~/utils/options'
 
   const trpcClient = useTrpcClient()
@@ -198,7 +198,7 @@
     }
   )
 
-  const filters = ref<StatFilterInput>({})
+  const filters = ref<StatFilterRawInput>({})
   const isFollowupsTabActive = ref<boolean>(false)
 
   const {

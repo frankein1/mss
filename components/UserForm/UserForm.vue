@@ -1,26 +1,27 @@
 <template>
   <form
+    ref="form"
     class="fr-container--fluid"
-    @submit.prevent="onInviteUser"
+    @submit="onInviteUser"
   >
     <div class="fr-grid-row fr-grid-row--gutters form-grid">
-      <AtomInput
+      <VeeInput
         name="firstName"
         :label="userFieldLabels.firstName"
         required
       />
-      <AtomInput
+      <VeeInput
         name="lastName"
         :label="userFieldLabels.lastName"
         required
       />
-      <AtomInput
+      <VeeInput
         name="email"
         :label="userFieldLabels.email"
         type="email"
         required
       />
-      <AtomSelect
+      <VeeSelect
         name="role"
         :label="userFieldLabels.role"
         :options="withEmptyValue(nonAdminUserRoleOptions)"
@@ -41,10 +42,12 @@
 
 <script lang="ts" setup>
   import { TRPCClientError } from '@trpc/client'
+  import { useForm } from 'vee-validate'
+  import { toTypedSchema } from '@vee-validate/zod'
   import { withEmptyValue } from '~/utils/options'
   import { nonAdminUserRoleOptions } from '~/client/options/user'
   import { userFieldLabels } from '~/client/labels/user.labels'
-  import { UserCreationInput } from '~/server/schema'
+  import { UserCreationInput, createUserSchema } from '~/server/schema'
 
   const snackbar = useSnackbar()
 
@@ -53,40 +56,43 @@
   }>()
 
   const isSubmitting = ref(false)
+  const form = ref<HTMLFormElement | null>(null)
 
-  async function onInviteUser(event: Event) {
+  const { handleSubmit } = useForm<UserCreationInput>({
+    validationSchema: toTypedSchema(createUserSchema)
+  })
+
+  const onInviteUser = handleSubmit(async user => {
     isSubmitting.value = true
-    const { form, data: user } = useFormData<UserCreationInput>(event)
 
     try {
       const res = await useTrpcClient().user.add.mutate(user)
 
       onSuccess(
         `Le nouvel utilisateur ${res.email} a correctement été créé. Il recevra dans quelques instants un email l'invitant à créer son compte Inclusion Connect. Pensez à l'informer de la réception de ce mail et de l'inviter si nécessaire à vérifier ses spams.`,
-        form,
         10000
       )
-      form.reset()
+      form.value?.reset()
       emit('usersRefresh')
     } catch (err) {
       if (err instanceof TRPCClientError && err.data.code === 'CONFLICT') {
-        onError('Cet email est déjà associé à un utilisateur.', form)
-      } else onError("La création de l'utilisateur a échoué.", form)
+        onError('Cet email est déjà associé à un utilisateur.')
+      } else onError("La création de l'utilisateur a échoué.")
     } finally {
       isSubmitting.value = false
     }
-  }
+  })
 
-  function onSuccess(message: string, form: HTMLFormElement, duration: number) {
+  function onSuccess(message: string, duration: number) {
     snackbar.success(
       message,
-      () => form.querySelector('input')?.focus(),
+      () => form.value?.querySelector('input')?.focus(),
       duration
     )
   }
 
-  function onError(message: string, form: HTMLFormElement) {
-    snackbar.error(message, () => form.querySelector('input')?.focus())
+  function onError(message: string) {
+    snackbar.error(message, () => form.value?.querySelector('input')?.focus())
   }
 </script>
 

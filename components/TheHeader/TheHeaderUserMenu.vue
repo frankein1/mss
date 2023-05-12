@@ -40,7 +40,7 @@
 
   MENUS.push({
     label: 'Déconnexion',
-    to: Routes.Logout,
+    href: Routes.Logout,
     icon: 'fr-icon-logout-box-r-line'
   })
 </script>

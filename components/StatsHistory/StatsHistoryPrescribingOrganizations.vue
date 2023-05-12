@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatFilterInput } from '~/server/schema'
+  import { StatFilterRawInput } from '~/server/schema'
   import { StatList } from '~/types/stat'
   import { AlertType } from '~/utils/constants/alert'
   import { STATS_NULL_LABEL } from '~/client/options/stat'
@@ -37,7 +37,7 @@
   const props = defineProps<{
     totalCount: number
     collection: 'helpRequests' | 'followups'
-    filters: StatFilterInput
+    filters: StatFilterRawInput
   }>()
 
   const {

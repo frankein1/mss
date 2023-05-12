@@ -6,8 +6,9 @@
       type="checkbox"
       class="fr-toggle__input"
       :checked="checked"
+      :value="true"
       :aria-labelledby="labelledBy"
-      @change="$emit('toggle', ($event.target as HTMLInputElement).checked)"
+      @input="handleChange"
     />
     <label
       class="fr-toggle__label"
@@ -32,18 +33,16 @@
       name: string
       checked?: boolean
       checkedLabel?: boolean
+      handleChange?: (e: Event | unknown, shouldValidate?: boolean) => void
     }>(),
     {
       noLabel: false,
       labelledBy: undefined,
       checked: false,
-      checkedLabel: true
+      checkedLabel: true,
+      handleChange: () => {}
     }
   )
-
-  defineEmits<{
-    (e: 'toggle', checked: boolean): void
-  }>()
 
   const { id } = useFormFieldId(props.name)
 </script>

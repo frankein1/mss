@@ -635,7 +635,7 @@ enum Nationality {
   ZWE
 }
 
-enum BeneficiaryAccomodationMode {
+enum BeneficiaryAccommodationMode {
   // Sans hébergement
   None
   // Propriétaire
@@ -806,10 +806,43 @@ enum Minister {
   CaroleGrandjean
 }
 
-enum BeneficiaryAccomodationZone {
+enum BeneficiaryAccommodationZone {
   France
   Europe
   OutsideEurope
+}
+
+enum BeneficiaryPensionOrganisation {
+  // AGIRC_ARRCO = 'agirc-arrco',
+  AgircArrco
+  // AG2R = 'ag2r',
+  Agr
+  // CNAV_CARSAT = 'cnav-carsat',
+  CnavCarsat
+  // CIPAV = 'cipav',
+  Cipav
+  // CNRACL = 'cnracl',
+  Cnracl
+  // EDF = 'edf',
+  Edf
+  // IRCANTEC = 'ircantec',
+  Ircantec
+  // KLESIA = 'klesia',
+  Klesia
+  // SRE = 'sre',
+  Sre
+  // SSI = 'ssi',
+  Ssi
+  // MalakoffHumanis = 'malakoff_humanis',
+  MalakoffHumanis
+  // MSA = 'msa',
+  Msa
+  // ProBTP = 'pro_btp',
+  ProBtp
+  // RetraiteDesMines = 'retraite_des_mines',
+  RetraiteDesMines
+  // Other = 'other'
+  Other
 }
 
 model Beneficiary {
@@ -830,37 +863,35 @@ model Beneficiary {
   aidantConnectAuthorized Boolean @default(false) @map("aidant_connect_authorized")
 
   // General information
-  fileNumber                        String                       @unique @map("file_number")
-  status                            BeneficiaryStatus
-  title                             BeneficiaryTitle?
-  usualName                         String?                      @map("usual_name")
-  birthName                         String?                      @map("birth_name")
-  firstName                         String?                      @map("first_name")
-  birthDate                         DateTime?                    @map("birth_date") @db.Date
-  birthPlace                        String?                      @map("birth_place")
-  deathDate                         DateTime?                    @map("death_date") @db.Date
-  gender                            Gender?
-  nationality                       Nationality?
-  accomodationMode                  BeneficiaryAccomodationMode? @map("accomodation_mode")
-  accomodationName                  String?                      @map("accomodation_name")
-  accomodationAdditionalInformation String?                      @map("accomodation_additional_information")
-  street                            String?
-  streetNumber                      String?                      @map("street_number")
-  addressComplement                 String?                      @map("address_complement")
-  zipcode                           String?
-  city                              String?
-  region                            String?
-  noPhone                           Boolean                      @default(false) @map("no_phone")
-  phone1                            String?
-  phone2                            String?
-  email                             String?
-  familySituation                   BeneficiaryFamilySituation?  @map("family_situation")
-  caregiver                         Boolean                      @default(false)
-  minorChildren                     Int?                         @map("minor_children")
-  majorChildren                     Int?                         @map("major_children")
-  mobility                          BeneficiaryMobility?
-  administration                    String?
-  minister                          Minister?
+  fileNumber                         String                        @unique @map("file_number")
+  status                             BeneficiaryStatus
+  title                              BeneficiaryTitle?
+  usualName                          String?                       @map("usual_name")
+  birthName                          String?                       @map("birth_name")
+  firstName                          String?                       @map("first_name")
+  birthDate                          DateTime?                     @map("birth_date") @db.Date
+  birthPlace                         String?                       @map("birth_place")
+  deathDate                          DateTime?                     @map("death_date") @db.Date
+  gender                             Gender?
+  nationality                        Nationality?
+  accommodationMode                  BeneficiaryAccommodationMode? @map("accommodation_mode")
+  accommodationName                  String?                       @map("accommodation_name")
+  accommodationAdditionalInformation String?                       @map("accommodation_additional_information")
+  street                             String?
+  streetNumber                       String?                       @map("street_number")
+  addressComplement                  String?                       @map("address_complement")
+  zipcode                            String?
+  city                               String?
+  region                             String?
+  noPhone                            Boolean                       @default(false) @map("no_phone")
+  phone1                             String?
+  phone2                             String?
+  email                              String?
+  familySituation                    BeneficiaryFamilySituation?   @map("family_situation")
+  caregiver                          Boolean                       @default(false)
+  minorChildren                      Int?                          @map("minor_children")
+  majorChildren                      Int?                          @map("major_children")
+  mobility                           BeneficiaryMobility?
 
   ministereCategorie            String? @map("ministere_categorie")
   ministereDepartementServiceAc String? @map("ministere_departement_service_ac")
@@ -881,13 +912,14 @@ model Beneficiary {
   employer                      String?
   employerSiret                 String?                               @map("employer_siret")
   mainIncomeSource              IncomeSource[]                        @map("main_income_source")
-  mainIncomeAmount              Decimal?                              @map("main_income_amount")
+  mainIncomeAmount              Int?                                  @map("main_income_amount")
   partnerMainIncomeSource       IncomeSource[]                        @map("partner_main_income_source")
-  partnerMainIncomeAmount       Decimal?                              @map("partner_main_income_amount")
+  partnerMainIncomeAmount       Int?                                  @map("partner_main_income_amount")
   majorChildrenMainIncomeSource IncomeSource[]                        @map("major_children_main_income_source")
-  majorChildrenMainIncomeAmount Decimal?                              @map("major_children_main_income_amount")
+  majorChildrenMainIncomeAmount Int?                                  @map("major_children_main_income_amount")
   unemploymentNumber            String?                               @map("unemployment_number")
-  pensionOrganisations          String[]                              @map("pension_organisations")
+  pensionOrganisations          BeneficiaryPensionOrganisation[]      @map("pension_organisations")
+  otherPensionOrganisations     String?                               @map("other_pension_organisations")
   cafNumber                     String?                               @map("caf_number")
   bank                          String?
   funeralContract               String?                               @map("funeral_contract")
@@ -901,9 +933,9 @@ model Beneficiary {
   serviceProviders     String?                       @map("service_providers")
   involvedPartners     String?                       @map("involved_partners")
 
-  additionalInformation String?                      @map("additional_information")
-  numeroPegase          String?                      @map("numero_pegase")
-  accommodationZone     BeneficiaryAccomodationZone? @map("accommodation_zone")
+  additionalInformation String?                       @map("additional_information")
+  numeroPegase          String?                       @map("numero_pegase")
+  accommodationZone     BeneficiaryAccommodationZone? @map("accommodation_zone")
 
   documents    Document[]
   followups    Followup[]

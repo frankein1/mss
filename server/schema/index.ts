@@ -1,11 +1,14 @@
 export {
   idSchema,
   createBeneficiarySchema,
-  searchBeneficiarySchema
+  searchBeneficiarySchema,
+  updateBeneficiarySchema
 } from './beneficiary.schema'
 export type {
   BeneficiaryCreationInput,
-  SearchBeneficiaryInput
+  SearchBeneficiaryInput,
+  UpdateBeneficiaryInput,
+  UpdateBeneficiaryRawInput
 } from './beneficiary.schema'
 
 export { addFollowupSchema, editFollowupSchema } from './followup.schema'
@@ -30,13 +33,31 @@ export type {
 } from './followupType.schema'
 
 export { editCurrentUserStructureSchema } from './structure.schema'
-export type { EditCurrentUserStructureInput } from './structure.schema'
+export type {
+  EditCurrentUserStructureInput,
+  EditCurrentUserStructureRawInput
+} from './structure.schema'
 
 export { accessTokenSchema } from './auth.schema'
 export type { AccessTokenInput } from './auth.schema'
 
-export { createUserSchema, editUserSchema } from './user.schema'
-export type { UserCreationInput, UserEditionInput } from './user.schema'
+export {
+  createUserSchema,
+  editUserSchema,
+  editUserRoleSchema,
+  editUserAidantConnectAuthorisationSchema,
+  editUserStatusSchema
+} from './user.schema'
+export type {
+  UserCreationInput,
+  UserEditionInput,
+  UserRoleEditionInput,
+  UserAidantConnectAuthorisationEditionInput,
+  UserStatusEditionInput
+} from './user.schema'
 
 export { statFilterSchema } from './filter.schema'
-export type { StatFilterInput } from './filter.schema'
+export type { StatFilterRawInput, StatFilterInput } from './filter.schema'
+
+export { createOrUpdateRelativeSchema } from './relative.schema'
+export type { CreateOrUpdateRelativeInput } from './relative.schema'

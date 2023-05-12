@@ -34,7 +34,7 @@
   import { Gender } from '@prisma/client'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
-  import { StatFilterInput } from '~/server/schema'
+  import { StatFilterRawInput } from '~/server/schema'
   import { getStatColor } from '~/client/colors/stats'
   import { getStatLabel } from '~/client/options/stat'
   import { beneficiaryGenderLabels } from '~/client/options/beneficiary'
@@ -50,7 +50,7 @@
 
   const props = defineProps<{
     beneficiaryCount: number
-    filters: StatFilterInput
+    filters: StatFilterRawInput
   }>()
 
   const {

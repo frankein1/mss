@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { EditCurrentUserStructureInput } from '~/server/schema'
+  import { EditCurrentUserStructureRawInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
 
   // FIXME: Missing permissions
@@ -55,7 +55,7 @@
   } = trpcClient.structure.getCurrentUserStructure.useQuery()
 
   async function onUpdateStructure(
-    updatedStructure: EditCurrentUserStructureInput
+    updatedStructure: EditCurrentUserStructureRawInput
   ) {
     isSubmitting.value = true
     try {

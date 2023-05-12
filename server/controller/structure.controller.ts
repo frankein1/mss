@@ -7,7 +7,9 @@ import type {
 } from '~/server/schema'
 import {
   defaultLegallyRequiredFollowupTypeLabels,
-  defaultLegallyNotRequiredFollowupTypeLabels
+  defaultLegallyRequiredFollowupTypeOptions,
+  defaultLegallyNotRequiredFollowupTypeLabels,
+  defaultLegallyNotRequiredFollowupTypeOptions
 } from '~/client/options/followupType'
 import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
@@ -72,10 +74,7 @@ export const editCurrentUserStructureHandler = async ({
   const { toCreate, toDelete } = getFollowupTypeMutations(
     structureId,
     currentFollowupTypes,
-    [
-      ...legallyRequiredFollowupTypes.split(','),
-      ...legallyNotRequiredFollowupTypes.split(',')
-    ]
+    [...legallyRequiredFollowupTypes, ...legallyNotRequiredFollowupTypes]
   )
 
   if (toCreate.length) {
@@ -170,13 +169,13 @@ function getFollowupTypesToCreate(
 function isDefaultLegallyRequiredFollowupType(
   id: string
 ): id is DefaultFollowupType {
-  return Object.values(DefaultFollowupType).includes(id as DefaultFollowupType)
+  return defaultLegallyRequiredFollowupTypeOptions.has(id)
 }
 
 function isDefaultLegallyNotRequiredFollowupType(
   id: string
 ): id is DefaultFollowupType {
-  return Object.values(DefaultFollowupType).includes(id as DefaultFollowupType)
+  return defaultLegallyNotRequiredFollowupTypeOptions.has(id)
 }
 
 function isAlreadySelected(
