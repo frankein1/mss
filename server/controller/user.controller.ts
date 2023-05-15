@@ -3,6 +3,7 @@ import { UserRole, UserStatus } from '@prisma/client'
 import { AppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import type { UserEditionInput, UserCreationInput } from '~/server/schema'
+import { canEditUser } from '~/server/query/security/rules'
 
 export const getUserInfoHandler = async ({
   ctx: { user }
@@ -22,8 +23,9 @@ export const updateUserHandler = async ({
   ctx: AppContext
   input: UserEditionInput
 }) => {
-  // [NUXT/PRISMA]: Factorise with rules
-  if (user.role !== UserRole.StructureManager) {
+  const target = await prismaClient.user.findUnique({ where: { id } })
+
+  if (!target || !canEditUser(user, target)) {
     throw forbiddenError()
   }
   if ('status' in rest) {
