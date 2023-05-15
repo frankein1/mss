@@ -3,6 +3,7 @@
     ref="form"
     @submit="onSubmit"
   >
+    {{ JSON.stringify(errors, undefined, 2) }}
     <VeeMultiSelect
       name="referents"
       label="Agent(s) référent(s)"
@@ -32,14 +33,7 @@
         label="Foyer fiscal"
       >
         <BeneficiaryFormFamilySituation />
-        <!-- TODO -->
-        <BeneficiaryFormRelatives
-          :beneficiary-id="beneficiary.id"
-          :relatives="taxHouseholdsData"
-          household
-          @add-relative="() => onAddRelative(true)"
-          @remove-relative="$event => onRemoveRelative($event, true)"
-        />
+        <BeneficiaryFormTaxHouseholds :values="values" />
       </AccordionFieldset>
       <AccordionFieldset
         v-if="canSetRelatives"
@@ -99,13 +93,14 @@
   import { UserStatus, BeneficiaryRelative } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
+  import BeneficiaryFormTaxHouseholds from './BeneficiaryFormTaxHouseholds.vue'
   import {
     BeneficiaryRelativeWithBeneficiary,
     BeneficiaryReferent,
     BeneficiaryWithReferents
   } from '~/utils/beneficiary'
   import {
-    UpdateBeneficiaryRawInput,
+    UpdateBeneficiaryInput,
     updateBeneficiarySchema
   } from '~/server/schema/beneficiary.schema'
   import {
@@ -128,17 +123,15 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'saveBeneficiary', beneficiary: UpdateBeneficiaryRawInput): void
+    (e: 'saveBeneficiary', beneficiary: UpdateBeneficiaryInput): void
   }>()
 
-  const { handleSubmit, values } = useForm<UpdateBeneficiaryRawInput>({
+  const { handleSubmit, values, errors } = useForm<UpdateBeneficiaryInput>({
     validationSchema: toTypedSchema(updateBeneficiarySchema),
     initialValues: {
       id: props.beneficiary.id,
       structureId: props.beneficiary.structureId,
-      referents: props.beneficiary.referents
-        .map(referent => referent.id)
-        .join(','),
+      referents: props.beneficiary.referents.map(referent => referent.id),
       aidantConnectAuthorized: props.beneficiary.aidantConnectAuthorized,
       // General Info
       general: {
@@ -196,17 +189,17 @@
         occupation: props.beneficiary.occupation,
         employer: props.beneficiary.employer,
         employerSiret: props.beneficiary.employerSiret,
-        mainIncomeSource: props.beneficiary.mainIncomeSource.join(','),
+        mainIncomeSource: props.beneficiary.mainIncomeSource || [],
         mainIncomeAmount: props.beneficiary.mainIncomeAmount,
         partnerMainIncomeSource:
-          props.beneficiary.partnerMainIncomeSource.join(','),
+          props.beneficiary.partnerMainIncomeSource || [],
         partnerMainIncomeAmount: props.beneficiary.partnerMainIncomeAmount,
         majorChildrenMainIncomeSource:
-          props.beneficiary.majorChildrenMainIncomeSource.join(','),
+          props.beneficiary.majorChildrenMainIncomeSource || [],
         majorChildrenMainIncomeAmount:
           props.beneficiary.majorChildrenMainIncomeAmount,
         unemploymentNumber: props.beneficiary.unemploymentNumber,
-        pensionOrganisations: props.beneficiary.pensionOrganisations.join(','),
+        pensionOrganisations: props.beneficiary.pensionOrganisations || [],
         otherPensionOrganisations: props.beneficiary.otherPensionOrganisations,
         cafNumber: props.beneficiary.cafNumber,
         bank: props.beneficiary.bank,
@@ -221,7 +214,7 @@
         familySituation: props.beneficiary.familySituation,
         minorChildren: props.beneficiary.minorChildren,
         majorChildren: props.beneficiary.majorChildren,
-        taxHouseholds: props.taxHouseholds
+        taxHouseholds: props.taxHouseholds || []
       },
       entourage: {
         entourages: props.entourages || []
@@ -236,7 +229,6 @@
     emit('saveBeneficiary', values)
   })
 
-  const taxHouseholdsData = ref(props.taxHouseholds)
   const form = ref<HTMLFormElement>()
 
   const referentOptions = computed(() =>
@@ -291,22 +283,6 @@
       return
     }
     window.dsfr(closestAccordionCollapse as HTMLElement).collapse.disclose()
-  }
-
-  function onAddRelative(household: boolean) {
-    if (household) {
-      taxHouseholdsData.value.push({
-        id: getRandomId('tax-household')
-      })
-    }
-  }
-
-  function onRemoveRelative(relativeId: string, household: boolean) {
-    if (household) {
-      taxHouseholdsData.value = taxHouseholdsData.value.filter(
-        ({ id }) => id !== relativeId
-      )
-    }
   }
 </script>
 

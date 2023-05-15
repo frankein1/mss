@@ -73,10 +73,10 @@
 <script lang="ts" setup>
   import { FieldEntry } from 'vee-validate'
   import { entourageRelationshipOptions } from '~/client/options/beneficiary'
-  import { CreateOrUpdateRelativeInput } from '~/server/schema'
+  import { CreateOrUpdateEntourageInput } from '~/server/schema'
 
   defineProps<{
-    entourage: FieldEntry<CreateOrUpdateRelativeInput>
+    entourage: FieldEntry<CreateOrUpdateEntourageInput>
     index: number
   }>()
 

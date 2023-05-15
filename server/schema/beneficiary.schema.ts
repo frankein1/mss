@@ -15,13 +15,12 @@ import {
   Nationality
 } from '@prisma/client'
 import { z } from 'zod'
-import { createOrUpdateRelativeSchema } from './relative.schema'
-import { beneficiaryFilterSchema } from './filter.schema'
 import {
-  errorMessages,
-  validZipcode,
-  multiSelectValueToArray
-} from '~/utils/zod'
+  createOrUpdateEntourageSchema,
+  createOrUpdateTaxHouseholdSchema
+} from './relative.schema'
+import { beneficiaryFilterSchema } from './filter.schema'
+import { errorMessages, validZipcode } from '~/utils/zod'
 import { SortOrder } from '~/types/table'
 
 export const idSchema = z.object({
@@ -71,16 +70,10 @@ export const updateBeneficiarySchema = z.object({
   id: z.string().uuid(),
   structureId: z.string().uuid(),
   referents: z
-    .string()
-    .transform(multiSelectValueToArray)
-    .pipe(
-      z
-        .array(z.string().uuid(), {
-          ...errorMessages,
-          required_error: 'Veuillez renseigner au moins un agent référent.'
-        })
-        .min(1, 'Veuillez renseigner au moins un agent référent')
-    ),
+    .array(z.string().uuid(), {
+      required_error: 'Veuillez renseigner au moins un agent référent'
+    })
+    .min(1, 'Veuillez renseigner au moins un agent référent'),
   aidantConnectAuthorized: z.boolean().default(false),
 
   // General information
@@ -117,10 +110,10 @@ export const updateBeneficiarySchema = z.object({
     familySituation: z.nativeEnum(BeneficiaryFamilySituation).nullish(),
     minorChildren: z.coerce.number().gte(0).nullish(),
     majorChildren: z.coerce.number().gte(0).nullish(),
-    taxHouseholds: z.array(z.object({}))
+    taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema)
   }),
   entourage: z.object({
-    entourages: z.array(createOrUpdateRelativeSchema)
+    entourages: z.array(createOrUpdateEntourageSchema)
   }),
   health: z.object({
     gir: z.nativeEnum(BeneficiaryGir).nullish(),
@@ -136,34 +129,18 @@ export const updateBeneficiarySchema = z.object({
     occupation: z.string().nullish(),
     employer: z.string().nullish(),
     employerSiret: z.string().nullish(),
-    mainIncomeSource: z
-      .string()
-      .optional()
-      .transform(multiSelectValueToArray)
-      .pipe(z.array(z.nativeEnum(IncomeSource, errorMessages)).optional()),
+    mainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
     mainIncomeAmount: z.coerce.number().nullish(),
-    partnerMainIncomeSource: z
-      .string()
-      .optional()
-      .transform(multiSelectValueToArray)
-      .pipe(z.array(z.nativeEnum(IncomeSource, errorMessages)).optional()),
+    partnerMainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
     partnerMainIncomeAmount: z.coerce.number().nullish(),
-    majorChildrenMainIncomeSource: z
-      .string()
-      .optional()
-      .transform(multiSelectValueToArray)
-      .pipe(z.array(z.nativeEnum(IncomeSource, errorMessages)).optional()),
+    majorChildrenMainIncomeSource: z.array(
+      z.nativeEnum(IncomeSource, errorMessages)
+    ),
     majorChildrenMainIncomeAmount: z.coerce.number().nullish(),
     unemploymentNumber: z.string().nullish(),
-    pensionOrganisations: z
-      .string()
-      .optional()
-      .transform(multiSelectValueToArray)
-      .pipe(
-        z
-          .array(z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages))
-          .optional()
-      ),
+    pensionOrganisations: z.array(
+      z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)
+    ),
     otherPensionOrganisations: z.string().nullish(),
     cafNumber: z.string().nullish(),
     bank: z.string().nullish(),
@@ -185,7 +162,6 @@ export const updateBeneficiarySchema = z.object({
 })
 
 export type UpdateBeneficiaryInput = z.infer<typeof updateBeneficiarySchema>
-export type UpdateBeneficiaryRawInput = z.input<typeof updateBeneficiarySchema>
 
 export const getBeneficiariesSchema = z.object({
   page: z.number(),

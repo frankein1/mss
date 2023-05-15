@@ -22,9 +22,9 @@
 
 <script setup lang="ts">
   import { v4 } from 'uuid'
-  import { CreateOrUpdateRelativeInput } from '~/server/schema'
+  import { CreateOrUpdateEntourageInput } from '~/server/schema'
 
-  const { push, remove, fields } = useFieldArray<CreateOrUpdateRelativeInput>(
+  const { push, remove, fields } = useFieldArray<CreateOrUpdateEntourageInput>(
     'entourage.entourages'
   )
 </script>

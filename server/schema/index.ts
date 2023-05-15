@@ -9,7 +9,6 @@ export type {
   BeneficiaryCreationInput,
   SearchBeneficiaryInput,
   UpdateBeneficiaryInput,
-  UpdateBeneficiaryRawInput,
   GetBeneficiariesInput
 } from './beneficiary.schema'
 
@@ -58,5 +57,11 @@ export type {
 export { statFilterSchema, beneficiaryFilterSchema } from './filter.schema'
 export type { StatFilterInput, BeneficiaryFilterInput } from './filter.schema'
 
-export { createOrUpdateRelativeSchema } from './relative.schema'
-export type { CreateOrUpdateRelativeInput } from './relative.schema'
+export {
+  createOrUpdateEntourageSchema,
+  createOrUpdateTaxHouseholdSchema
+} from './relative.schema'
+export type {
+  CreateOrUpdateEntourageInput,
+  CreateOrUpdateTaxHouseholdInput
+} from './relative.schema'

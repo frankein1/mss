@@ -137,11 +137,11 @@
     ministereDepartmentServiceAcOptions,
     ministereStructureOptions
   } from '~/client/options/ministry'
-  import { UpdateBeneficiaryRawInput } from '~/server/schema/beneficiary.schema'
+  import { UpdateBeneficiaryInput } from '~/server/schema/beneficiary.schema'
   import { useAuthStore } from '~/store/auth'
 
   const props = defineProps<{
-    values: UpdateBeneficiaryRawInput
+    values: UpdateBeneficiaryInput
   }>()
 
   const isMinistryAgent = useAuthStore().isMinistryAgent
@@ -163,7 +163,7 @@
   )
 
   const hasOtherPensionOrganisations = computed(() =>
-    (props.values.occupation.pensionOrganisations?.split(',') || []).includes(
+    (props.values.occupation.pensionOrganisations || []).includes(
       BeneficiaryPensionOrganisation.Other
     )
   )
