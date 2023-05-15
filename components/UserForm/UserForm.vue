@@ -77,7 +77,9 @@
     } catch (err) {
       if (err instanceof TRPCClientError && err.data.code === 'CONFLICT') {
         onError('Cet email est déjà associé à un utilisateur.')
-      } else onError("La création de l'utilisateur a échoué.")
+      } else {
+        onError("La création de l'utilisateur a échoué.")
+      }
     } finally {
       isSubmitting.value = false
     }

@@ -94,7 +94,9 @@
   }
 
   function close() {
-    if (!modal.value) return
+    if (!modal.value) {
+      return
+    }
     window.dsfr(modal.value).modal.conceal()
   }
 </script>

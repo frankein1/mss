@@ -103,7 +103,9 @@
     props.filters.reduce((_initialSelectedFilters, filter) => {
       if (filter.name in props.initialSelectedValues) {
         const initialSelectedValue = props.initialSelectedValues[filter.name]
-        if (!initialSelectedValue) return _initialSelectedFilters
+        if (!initialSelectedValue) {
+          return _initialSelectedFilters
+        }
         const selectedFilter: SelectedFilter = {
           filterLabel: filter.label,
           value: initialSelectedValue,
@@ -139,8 +141,11 @@
   )
 
   function onChangeFilter(value: string, filter: FilterProp) {
-    if (!value) delete selectedFilters.value[filter.name]
-    else addFilter(filter, value)
+    if (!value) {
+      delete selectedFilters.value[filter.name]
+    } else {
+      addFilter(filter, value)
+    }
 
     if (timeout.value) {
       clearTimeout(timeout.value)
@@ -176,12 +181,16 @@
       filter.type === FilterType.SelectOne
     ) {
       valueLabel = getSelectedOptionsLabel(filter, value)
-    } else valueLabel = value
+    } else {
+      valueLabel = value
+    }
     return valueLabel
   }
 
   function getSelectedOptionsLabel(filter: FilterProp, value: string): string {
-    if (filter.type === FilterType.Date) return ''
+    if (filter.type === FilterType.Date) {
+      return ''
+    }
     const selectedOptions = getSelectedOptions(
       value,
       filter.type === FilterType.SelectMultiple
@@ -190,7 +199,9 @@
   }
 
   function getSelectedOptions(value: string, multiple: boolean) {
-    if (multiple) return value.split(',')
+    if (multiple) {
+      return value.split(',')
+    }
     return [value]
   }
 

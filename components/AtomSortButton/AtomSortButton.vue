@@ -21,8 +21,11 @@
   )
 
   function onToggle() {
-    if (sort.value == null || sort.value === DSC_SORT) sort.value = ASC_SORT
-    else sort.value = DSC_SORT
+    if (sort.value == null || sort.value === DSC_SORT) {
+      sort.value = ASC_SORT
+    } else {
+      sort.value = DSC_SORT
+    }
     emit('sort', sort.value)
   }
 </script>

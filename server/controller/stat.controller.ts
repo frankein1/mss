@@ -36,7 +36,9 @@ function prepareBeneficiaryFilters(filters: StatFilterInput) {
     ]
   }
 
-  if (filters.cities) formattedFilters.city = { in: filters.cities }
+  if (filters.cities) {
+    formattedFilters.city = { in: filters.cities }
+  }
 
   if (filters.referent) {
     formattedFilters.referents = { some: { id: { equals: filters.referent } } }

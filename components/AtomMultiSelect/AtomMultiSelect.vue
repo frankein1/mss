@@ -187,7 +187,9 @@
     const sortedOptionsAsArray = optionsAsArray.sort(([aKey], [bKey]) => {
       const aSelected = selectedValues.value.includes(aKey)
       const bSelected = selectedValues.value.includes(bKey)
-      if (aSelected === bSelected) return 0
+      if (aSelected === bSelected) {
+        return 0
+      }
       return aSelected ? -1 : 1
     })
     return new Map(sortedOptionsAsArray)
@@ -226,7 +228,9 @@
    * Update the hidden input value
    */
   watch(currentValue, _currentValue => {
-    if (!hiddenInput.value) return
+    if (!hiddenInput.value) {
+      return
+    }
     hiddenInput.value.value = _currentValue
     hiddenInput.value.dispatchEvent(new Event('change'))
     hiddenInput.value.closest('form')?.dispatchEvent(new Event('change'))
@@ -286,10 +290,14 @@
    * @param optionIndex Optional - The option index to set as active when toggling from mouse click
    */
   function onToggleOption(value: string, optionIndex?: number) {
-    if (optionIndex) activeIndex.value = optionIndex
+    if (optionIndex) {
+      activeIndex.value = optionIndex
+    }
     if (selectedValues.value.includes(value)) {
       selectedValues.value = selectedValues.value.filter(o => o !== value)
-    } else selectedValues.value.push(value)
+    } else {
+      selectedValues.value.push(value)
+    }
   }
 
   function onChange(event: Event) {
@@ -298,7 +306,9 @@
   }
 
   function onInputKeyDown(e: KeyboardEvent) {
-    if (!props.dropdown) return
+    if (!props.dropdown) {
+      return
+    }
 
     if (!expanded.value) {
       if (e.key === 'Enter' || e.key === ' ') {
@@ -321,8 +331,12 @@
   }
 
   function onSelectActiveOption() {
-    if (!activeOptionValue.value) return
-    if (selectedValues.value.includes(activeOptionValue.value)) return
+    if (!activeOptionValue.value) {
+      return
+    }
+    if (selectedValues.value.includes(activeOptionValue.value)) {
+      return
+    }
     selectedValues.value.push(activeOptionValue.value)
   }
 
@@ -351,7 +365,9 @@
   ) {
     if (optionRefs[optionValue]) {
       optionRefs[optionValue].value = el as HTMLElement
-    } else optionRefs[optionValue] = ref(el as HTMLElement)
+    } else {
+      optionRefs[optionValue] = ref(el as HTMLElement)
+    }
   }
 </script>
 

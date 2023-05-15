@@ -145,13 +145,19 @@
 
     if (!beneficiary && city) {
       contact += city
-      if (relativePhone || relativeEmail) contact += ' / '
+      if (relativePhone || relativeEmail) {
+        contact += ' / '
+      }
     }
     if (relativePhone) {
       contact += relativePhone
-      if (relativeEmail) contact += ' / '
+      if (relativeEmail) {
+        contact += ' / '
+      }
     }
-    if (relativeEmail) contact += relativeEmail
+    if (relativeEmail) {
+      contact += relativeEmail
+    }
 
     return contact
   }

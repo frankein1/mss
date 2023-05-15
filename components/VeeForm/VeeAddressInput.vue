@@ -37,13 +37,17 @@
 
   async function searchAddressesFn(search: string): Promise<Options> {
     selectedValue.value = search
-    if (search.length < 3) return new Map()
+    if (search.length < 3) {
+      return new Map()
+    }
 
     const params: BanQueryParams = {
       q: search,
       limit: 3
     }
-    if (props.zipCode) params.postcode = props.zipCode
+    if (props.zipCode) {
+      params.postcode = props.zipCode
+    }
 
     const res = await $fetch<BanResponse>(
       'https://api-adresse.data.gouv.fr/search/',

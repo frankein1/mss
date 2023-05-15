@@ -95,8 +95,12 @@
   const ariaDescribedby = computed(() => (props.error ? errorId : undefined))
 
   const placeholder = computed(() => {
-    if (props.placeholder) return props.placeholder
-    if (props.type === 'tel') return '00 00 00 00 00'
+    if (props.placeholder) {
+      return props.placeholder
+    }
+    if (props.type === 'tel') {
+      return '00 00 00 00 00'
+    }
     if (props.type === 'social-security-number') {
       return '0 00 00 00 000 000'
     }

@@ -43,7 +43,9 @@
   watch(
     () => props.value,
     value => {
-      if (!value) return
+      if (!value) {
+        return
+      }
       setValue(value)
     }
   )

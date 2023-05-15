@@ -9,10 +9,14 @@ export function useBlurOut($el: Ref<HTMLElement | null>) {
   }
 
   function onBlurInEl(event: FocusEvent) {
-    if (!event.relatedTarget) isFocused.value = false
+    if (!event.relatedTarget) {
+      isFocused.value = false
+    }
     assertIsNode(event.relatedTarget)
     const isWithinEl = $el.value?.contains(event.relatedTarget)
-    if (!isWithinEl) isFocused.value = false
+    if (!isWithinEl) {
+      isFocused.value = false
+    }
   }
 
   onMounted(() => {

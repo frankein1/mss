@@ -20,7 +20,9 @@ export function useWatchSelectOptions(
     (options, prevOptions) => {
       options.forEach((_, value) => {
         const isNew = !prevOptions.has(value)
-        if (isNew) selectedValues.value.push(value)
+        if (isNew) {
+          selectedValues.value.push(value)
+        }
       })
       prevOptions.forEach((_, prevValue) => {
         const isRemoved = !options.has(prevValue)

@@ -56,7 +56,9 @@
   })
 
   onMounted(() => {
-    if (props.closeable) closeBtn.value?.focus()
+    if (props.closeable) {
+      closeBtn.value?.focus()
+    }
   })
 </script>
 

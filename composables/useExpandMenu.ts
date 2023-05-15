@@ -64,7 +64,9 @@ export function useExpandMenu(
   }
 
   function onUpdateMenuState(_expanded: boolean) {
-    if (disabled?.value) return
+    if (disabled?.value) {
+      return
+    }
     expanded.value = _expanded
   }
 
@@ -81,7 +83,9 @@ export function useExpandMenu(
     preventKeyDefault(e)
 
     if (!expanded.value) {
-      if (e.key === 'ArrowDown') onUpdateMenuState(true)
+      if (e.key === 'ArrowDown') {
+        onUpdateMenuState(true)
+      }
       return
     }
 
@@ -102,7 +106,9 @@ export function useExpandMenu(
   }
 
   function changeActiveIndex(newIndex: number) {
-    if (newIndex > optionValues.value.length - 1 || newIndex < 0) return
+    if (newIndex > optionValues.value.length - 1 || newIndex < 0) {
+      return
+    }
     activeIndex.value = newIndex
   }
 
@@ -112,7 +118,9 @@ export function useExpandMenu(
       return e.preventDefault()
     }
 
-    if (!expanded.value) return
+    if (!expanded.value) {
+      return
+    }
     switch (e.key) {
       case 'ArrowUp':
       case 'End':
@@ -126,15 +134,18 @@ export function useExpandMenu(
    * Ensure active option element is within the listbox's visible scroll area
    */
   function maintainActiveOptionScrollVisibility() {
-    if (!listbox.value || !activeOption.value) return
+    if (!listbox.value || !activeOption.value) {
+      return
+    }
     const { offsetHeight, offsetTop } = activeOption.value
     const { offsetHeight: parentOffsetHeight, scrollTop } = listbox.value
 
     const isAbove = offsetTop < scrollTop
     const isBelow = offsetTop + offsetHeight > scrollTop + parentOffsetHeight
 
-    if (isAbove) listbox.value.scrollTo(0, offsetTop)
-    else if (isBelow) {
+    if (isAbove) {
+      listbox.value.scrollTo(0, offsetTop)
+    } else if (isBelow) {
       listbox.value.scrollTo(0, offsetTop - parentOffsetHeight + offsetHeight)
     }
   }
@@ -151,7 +162,9 @@ export function useExpandMenu(
       callFocus.value = false
     }
 
-    if (isListboxScrollable.value) maintainActiveOptionScrollVisibility()
+    if (isListboxScrollable.value) {
+      maintainActiveOptionScrollVisibility()
+    }
   })
 
   onUnmounted(() => {

@@ -114,7 +114,9 @@
     results.value = []
     error.value = ''
 
-    if (!search) return
+    if (!search) {
+      return
+    }
 
     timeout.value = setTimeout(async () => {
       try {

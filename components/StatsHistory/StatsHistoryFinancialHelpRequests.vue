@@ -102,7 +102,9 @@
 
   const financialHelpRequestsTotalAmount = computed(() =>
     internalFinancialHelpRequests.value.reduce((total, request) => {
-      if (request.status !== HelpRequestStatus.Accepted) return total
+      if (request.status !== HelpRequestStatus.Accepted) {
+        return total
+      }
       const allocatedAmount = new Prisma.Decimal(
         request.allocatedAmount || 0
       ).toNumber()

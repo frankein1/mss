@@ -36,13 +36,17 @@
 
   async function searchCitiesFn(search: string) {
     selectedValue.value = search
-    if (search.length < 3) return new Map()
+    if (search.length < 3) {
+      return new Map()
+    }
 
     const params: GeoApiGouvFrQueryParams = {
       nom: search,
       limit: 3
     }
-    if (props.zipCode) params.codePostal = props.zipCode
+    if (props.zipCode) {
+      params.codePostal = props.zipCode
+    }
 
     const res = await $fetch<GeoApiGouvFrCommune[]>(
       'https://geo.api.gouv.fr/communes',

@@ -170,7 +170,9 @@
     results.value = new Map()
     fetchResultsError.value = ''
 
-    if (!search) return
+    if (!search) {
+      return
+    }
 
     timeout.value = setTimeout(async () => {
       try {
@@ -190,12 +192,16 @@
 
   function onInputKeyDown(e: KeyboardEvent) {
     if (!expanded.value) {
-      if (e.key !== 'Escape') isFocused.value = true
+      if (e.key !== 'Escape') {
+        isFocused.value = true
+      }
       return
     }
 
     // Keyboard interactions on the expanded listbox
-    if (e.key === 'Enter') onSelectOption(activeOptionValue.value)
+    if (e.key === 'Enter') {
+      onSelectOption(activeOptionValue.value)
+    }
   }
 
   /**
@@ -204,7 +210,9 @@
    * @param optionIndex Optional - The option index to set as active when selecting from mouse click
    */
   function onSelectOption(optionValue: string, optionIndex?: number) {
-    if (optionIndex) activeIndex.value = optionIndex
+    if (optionIndex) {
+      activeIndex.value = optionIndex
+    }
     props.setValue(results.value.get(optionValue) || '')
     emit('resultSelected', optionValue)
   }
@@ -215,6 +223,8 @@
   ) {
     if (optionRefs[optionValue]) {
       optionRefs[optionValue].value = el as HTMLElement
-    } else optionRefs[optionValue] = ref(el as HTMLElement)
+    } else {
+      optionRefs[optionValue] = ref(el as HTMLElement)
+    }
   }
 </script>

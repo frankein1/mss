@@ -230,7 +230,9 @@ function getFollowupTypesToDelete(
 ) {
   return currentFollowupTypes.reduce((toDelete, current) => {
     // Prevent deleting followup types already used fos supports
-    if (current._count.followups || current._count.helpRequests) return toDelete
+    if (current._count.followups || current._count.helpRequests) {
+      return toDelete
+    }
 
     if (current.default) {
       if (updatedFollowupTypes.includes(current.default)) {

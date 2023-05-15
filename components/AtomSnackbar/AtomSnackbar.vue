@@ -38,7 +38,9 @@
     message.value = _message
     closeCallback.value = _closeCallback
 
-    if (duration !== 0) setTimeout(onClose, duration)
+    if (duration !== 0) {
+      setTimeout(onClose, duration)
+    }
   }
 
   function onClose() {

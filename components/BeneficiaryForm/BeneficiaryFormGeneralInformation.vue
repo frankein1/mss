@@ -204,7 +204,9 @@
   const isDeceased = computed(() => status.value === BeneficiaryStatus.Deceased)
 
   const accommodationNameLabel = computed(() => {
-    if (!accommodationMode.value) return ''
+    if (!accommodationMode.value) {
+      return ''
+    }
     if (OrganisationAccommodationModes.includes(accommodationMode.value)) {
       return 'Dénomination de la structure'
     }

@@ -30,7 +30,9 @@
   const selectedValue = ref<string | undefined>(undefined)
 
   async function searchRegionsFn(search: string): Promise<Options> {
-    if (search.length < 3) return new Map()
+    if (search.length < 3) {
+      return new Map()
+    }
 
     const params = new URLSearchParams({
       nom: search,
@@ -47,7 +49,9 @@
 
   function onSelectRegion(code: string) {
     const region = regions.value.find(a => a.code === code)
-    if (!region) return
+    if (!region) {
+      return
+    }
     selectedValue.value = region.nom
     emit('regionSelected', region.nom)
   }

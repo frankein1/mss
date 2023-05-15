@@ -23,7 +23,9 @@ export function dateIsBetween(
  */
 export function getNestedValue(obj: Object, field: string) {
   const [firstNestedField, ...followingNestedFields] = field.split('.')
-  if (!(firstNestedField in obj)) return undefined
+  if (!(firstNestedField in obj)) {
+    return undefined
+  }
   const nestedValue = obj[firstNestedField]
   if (followingNestedFields.length) {
     if (typeof nestedValue === 'object' && nestedValue) {
@@ -45,14 +47,22 @@ export function sort(
 ) {
   return array.sort((a, b) => {
     return sorts.reduce((delta, sort) => {
-      if (delta) return delta
+      if (delta) {
+        return delta
+      }
 
       const valueA = getNestedValue(a, sort.field)
       const valueB = getNestedValue(b, sort.field)
 
-      if (!valueA && !valueB) return 0
-      if (!valueA) return -parseInt(`${sort.sort}1`)
-      if (!valueB) return parseInt(`${sort.sort}1`)
+      if (!valueA && !valueB) {
+        return 0
+      }
+      if (!valueA) {
+        return -parseInt(`${sort.sort}1`)
+      }
+      if (!valueB) {
+        return parseInt(`${sort.sort}1`)
+      }
 
       if (typeof valueA !== 'string' || typeof valueB !== 'string') {
         throw new TypeError(
@@ -63,8 +73,12 @@ export function sort(
       const insensitiveA = valueA.toLowerCase()
       const insensitiveB = valueB.toLowerCase()
 
-      if (insensitiveA < insensitiveB) return -parseInt(`${sort.sort}1`)
-      if (insensitiveA > insensitiveB) return parseInt(`${sort.sort}1`)
+      if (insensitiveA < insensitiveB) {
+        return -parseInt(`${sort.sort}1`)
+      }
+      if (insensitiveA > insensitiveB) {
+        return parseInt(`${sort.sort}1`)
+      }
       return 0
     }, 0)
   })

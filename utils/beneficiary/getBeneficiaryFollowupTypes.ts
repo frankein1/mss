@@ -26,7 +26,9 @@ function getUniqueFollowUpTypesTuplesFromFollowups(
   followups: Array<Followup & { types: Array<FollowupType> }>
 ) {
   return followups.reduce((uniques, followup) => {
-    if (!followup.types.length) return uniques
+    if (!followup.types.length) {
+      return uniques
+    }
     const followupUniqueFollowUpTypes = getUniqueFollowUpTypesFromFollowup(
       followup.types
     )
@@ -53,7 +55,9 @@ function getUniqueFollowUpTypesTuplesFromHelpRequests(
   helpRequests: Array<HelpRequest & { type: FollowupType }>
 ) {
   return helpRequests.reduce((uniques, helpRequest) => {
-    if (!helpRequest.type) return uniques
+    if (!helpRequest.type) {
+      return uniques
+    }
     return {
       ...uniques,
       [helpRequest.type.id]: helpRequest.type

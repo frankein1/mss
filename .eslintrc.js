@@ -6,7 +6,7 @@ module.exports = {
   },
   extends: ['@nuxtjs/eslint-config-typescript', 'prettier'],
   rules: {
-    'curly': ['error', 'multi-line'],
+    'curly': ['error', 'all'],
     'no-else-return': ['error', { allowElseIf: false }],
     '@typescript-eslint/no-unused-vars': [
       'error',

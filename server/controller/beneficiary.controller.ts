@@ -280,7 +280,9 @@ function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
     ]
   }
 
-  if (filters.cities) formattedFilters.city = { in: filters.cities }
+  if (filters.cities) {
+    formattedFilters.city = { in: filters.cities }
+  }
 
   if (filters.referents) {
     formattedFilters.referents = { some: { id: { in: filters.referents } } }
