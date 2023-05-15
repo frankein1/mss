@@ -97,7 +97,7 @@
   import type { BeneficiaryFilterRawInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import type { ErrorOutput } from '~/server/routers'
-  import type { SortOrder } from '~/components/AtomSortButton/types'
+  import type { SortOrder } from '~/types/table'
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()

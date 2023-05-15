@@ -22,7 +22,7 @@ import {
   validZipcode,
   multiSelectValueToArray
 } from '~/utils/zod'
-import { Prisma } from '~/server/prisma/prismaClient'
+import { SortOrder } from '~/types/table'
 
 export const idSchema = z.object({
   id: z.string()
@@ -190,7 +190,7 @@ export type UpdateBeneficiaryRawInput = z.input<typeof updateBeneficiarySchema>
 export const getBeneficiariesSchema = z.object({
   page: z.number(),
   perPage: z.number(),
-  orderBy: z.array(z.record(z.string(), z.nativeEnum(Prisma.SortOrder))),
+  orderBy: z.array(z.record(z.string(), z.nativeEnum(SortOrder))),
   filters: beneficiaryFilterSchema
 })
 

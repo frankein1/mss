@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { SortOrder } from './types'
+  import { SortOrder } from '~/types/table'
 
   const emit = defineEmits<{
     (e: 'sort', sort: SortOrder | null): void
