@@ -72,7 +72,7 @@
               v-show="!pending"
               class="fr-mt-4w fr-px-5v"
               :page="page"
-              :total-pages="beneficiariesRequest?.totalPages"
+              :total-pages="beneficiariesRequest?.totalPages || 0"
               @change-page="updatePagination($event)"
             />
 
@@ -90,25 +90,20 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    Beneficiary,
-    Followup,
-    HelpRequest,
-    FollowupType,
-    User
-  } from '@prisma/client'
+  import type { GetBeneficiariesOutput } from './types'
   import { useFiltersStore } from '~/store/filters'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
-  import { AlertType } from '~/utils/constants/alert'
-  import { getRandomId } from '~/utils/random'
   // import { Routes } from '~/utils/routing/routes'
   import type { BeneficiaryFilterRawInput } from '~/server/schema'
+  import { AlertType } from '~/utils/constants/alert'
+  import type { ErrorOutput } from '~/server/routers'
+  import type { SortOrder } from '~/components/AtomSortButton/types'
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
 
   const filters = ref<BeneficiaryFilterRawInput>(filtersStore.beneficiary || {})
-  const orderBy = ref<Array<{ [k: string]: string }>>([])
+  const orderBy = ref<Array<{ [k: string]: SortOrder }>>([])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
   const tableContainer = ref<HTMLDivElement | null>(null)
@@ -117,25 +112,23 @@
     data: beneficiariesRequest,
     pending,
     error
-  } = useLazyAsyncData<{
-    beneficiaries: Array<
-      Beneficiary & {
-        followups: Array<Followup & { types: Array<FollowupType> }>
-        helpRequests: Array<HelpRequest & { type: FollowupType }>
-        referents: Array<User>
-      }
-    >
-    count: number
-    totalPages: number
-  }>(getRandomId('beneficiaries'), loadBeneficiaries, {
-    server: false,
-    default: () => ({
-      beneficiaries: [],
-      count: 0,
-      totalPages: 0
-    }),
-    watch: [filters, page, perPage, orderBy]
-  })
+  } = useAsyncData<GetBeneficiariesOutput, ErrorOutput>(
+    () =>
+      trpcClient.beneficiary.getBeneficiaries.query({
+        page: page.value,
+        perPage: perPage.value,
+        orderBy: orderBy.value,
+        filters: filters.value
+      }),
+    {
+      default: () => ({
+        beneficiaries: [],
+        count: 0,
+        totalPages: 0
+      }),
+      watch: [filters, page, perPage, orderBy]
+    }
+  )
 
   const beneficiariesCount = computed(
     () => beneficiariesRequest.value?.count || 0
@@ -164,18 +157,11 @@
     perPage.value = limitValue
   }
 
-  async function loadBeneficiaries() {
-    const beneficiaries = await trpcClient.beneficiary.getBeneficiaries.query({
-      page: page.value,
-      perPage: perPage.value,
-      orderBy: orderBy.value,
-      filters: filters.value
-    })
-    return beneficiaries
-  }
-
-  function onSort(sortDir: string, field: string) {
+  function onSort(sortDir: SortOrder | null, field: string) {
     orderBy.value = orderBy.value.filter(s => Object.keys(s)[0] !== field)
+    if (!sortDir) {
+      return
+    }
     orderBy.value.push({ [field]: sortDir })
   }
 </script>

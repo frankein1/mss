@@ -9,22 +9,23 @@
 </template>
 
 <script lang="ts" setup>
-  const ASC_SORT = 'asc'
-  const DSC_SORT = 'desc'
+  import { SortOrder } from './types'
 
-  const emit = defineEmits(['sort'])
+  const emit = defineEmits<{
+    (e: 'sort', sort: SortOrder | null): void
+  }>()
 
-  const sort = ref<null | string>(null)
+  const sort = ref<SortOrder | null>(null)
 
   const label = computed(() =>
-    sort.value == null || sort.value === ASC_SORT ? 'A..Z' : 'Z..A'
+    sort.value == null || sort.value === SortOrder.Asc ? 'A..Z' : 'Z..A'
   )
 
   function onToggle() {
-    if (sort.value == null || sort.value === DSC_SORT) {
-      sort.value = ASC_SORT
+    if (sort.value == null || sort.value === SortOrder.Desc) {
+      sort.value = SortOrder.Asc
     } else {
-      sort.value = DSC_SORT
+      sort.value = SortOrder.Desc
     }
     emit('sort', sort.value)
   }

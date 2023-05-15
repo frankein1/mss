@@ -260,23 +260,16 @@ async function findWithReferentsAndRelatives({
 }
 
 function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
-  const followupsFilters: { [k: string]: {} } = {}
-  const helpRequestsFilters: { [k: string]: {} } = {}
-
-  if (filters.followupTypes) {
-    const typesListFilter = {
-      id: { in: filters.followupTypes }
-    }
-    followupsFilters.types = { some: typesListFilter }
-    helpRequestsFilters.type = typesListFilter
-  }
-
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
   if (filters.followupTypes) {
+    const typesListFilter: Prisma.FollowupTypeWhereInput = {
+      id: { in: filters.followupTypes }
+    }
+
     formattedFilters.OR = [
-      { followups: { some: followupsFilters } },
-      { helpRequests: { some: helpRequestsFilters } }
+      { followups: { some: { types: { some: typesListFilter } } } },
+      { helpRequests: { some: { type: typesListFilter } } }
     ]
   }
 
@@ -319,7 +312,7 @@ export const getBeneficiariesHandler = async ({
     page: input.page
   })
 
-  const where = {
+  const where: Prisma.BeneficiaryWhereInput = {
     structureId: user.structureId,
     archived: null,
     ...prepareBeneficiaryFilters(input.filters)

@@ -1,3 +1,5 @@
+import { TRPCClientError } from '@trpc/client'
+import type { inferRouterOutputs } from '@trpc/server'
 import { beneficiaryRouter } from './beneficiaryRouter'
 import { configRouter } from './configRouter'
 import { followupRouter } from './followupRouter'
@@ -16,3 +18,6 @@ export const appRouter = router({
 })
 // export type definition of API
 export type AppRouter = typeof appRouter
+
+export type RouterOutput = inferRouterOutputs<AppRouter>
+export type ErrorOutput = TRPCClientError<AppRouter>

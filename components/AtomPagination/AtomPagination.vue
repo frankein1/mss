@@ -118,7 +118,9 @@
     totalPages: number
   }>()
 
-  const emit = defineEmits(['changePage'])
+  const emit = defineEmits<{
+    (e: 'changePage', data: { pageNumber: number; limitValue: number }): void
+  }>()
 
   const limit = ref(REQUEST_LIMIT_DEFAULT)
 

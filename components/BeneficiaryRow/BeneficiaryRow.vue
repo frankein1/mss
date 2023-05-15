@@ -35,13 +35,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    Beneficiary,
-    Followup,
-    HelpRequest,
-    FollowupType,
-    User
-  } from '@prisma/client'
+  import type { BeneficiaryItem } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { getUserDisplayName } from '~/utils/user'
   import {
@@ -57,11 +51,7 @@
   const route = useRoute()
 
   const props = defineProps<{
-    beneficiary: Beneficiary & {
-      followups: Array<Followup & { types: Array<FollowupType> }>
-      helpRequests: Array<HelpRequest & { type: FollowupType }>
-      referents: Array<User>
-    }
+    beneficiary: BeneficiaryItem
   }>()
 
   const beneficiaryLink = computed(() => {

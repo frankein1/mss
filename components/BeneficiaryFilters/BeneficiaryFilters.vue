@@ -39,71 +39,62 @@
   const filtersStore = useFiltersStore()
   const INITIAL_VALUES = filtersStore.beneficiary || {}
 
+  // TODO: Try to use transform
   const {
-    data: followUpTypeOptions,
-    pending: followUpTypeOptionsPending,
-    error: followUpTypeOptionsError
-  } = useLazyAsyncData('followUpTypeOptions', loadFollowUpTypeOptions, {
-    server: false
-  })
+    data: followupTypes,
+    pending: followupTypesPending,
+    error: followupTypesError
+  } = trpcClient.config.getStructureFollowupTypes.useQuery()
 
   const {
-    data: agentOptions,
-    pending: agentOptionsPending,
-    error: agentOptionsError
-  } = useLazyAsyncData('agentOptions', loadAgentOptions, {
-    server: false
-  })
+    data: agents,
+    pending: agentsPending,
+    error: agentsError
+  } = trpcClient.config.getAgents.useQuery()
 
   const {
-    data: citiesOptions,
-    pending: citiesOptionsPending,
-    error: citiesOptionsError
-  } = useLazyAsyncData('citiesOptions', loadCitiesOptions, {
-    server: false
-  })
+    data: cities,
+    pending: citiesPending,
+    error: citiesError
+  } = trpcClient.config.getBeneficiariesCities.useQuery()
 
   const pending = computed(
     () =>
-      followUpTypeOptionsPending.value ||
-      agentOptionsPending.value ||
-      citiesOptionsPending.value
+      followupTypesPending.value || agentsPending.value || citiesPending.value
   )
 
   const fetchError = computed(() => {
-    if (followUpTypeOptionsError.value) {
+    if (followupTypesError.value) {
       return "La liste des types d'accompagnement n'a pas pu être chargée."
     }
-    if (agentOptionsError.value) {
+    if (agentsError.value) {
       return "La liste des agents n'a pas pu être chargée."
     }
-    if (citiesOptionsError.value) {
+    if (citiesError.value) {
       return "La liste des villes n'a pas pu être chargée."
     }
     return ''
   })
 
-  async function loadFollowUpTypeOptions() {
-    const followUpTypes =
-      await trpcClient.config.getStructureFollowupTypes.query()
-    return toOptions(followUpTypes, 'id', 'name')
-  }
+  const followupTypeOptions = computed(() =>
+    followupTypes.value ? toOptions(followupTypes.value, 'id', 'name') : null
+  )
 
-  async function loadAgentOptions() {
-    const agents = await trpcClient.config.getAgents.query()
-    return toOptions(agents, 'id', 'name')
-  }
+  const agentOptions = computed(() =>
+    agents.value ? toOptions(agents.value, 'id', 'name') : null
+  )
 
-  async function loadCitiesOptions() {
-    const cities = await trpcClient.config.getBeneficiariesCities.query()
-    const definedCities = cities.filter(hasDefinedCity)
+  const definedCities = computed(() =>
+    cities.value ? cities.value.filter(hasDefinedCity) : null
+  )
 
-    return toOptions(definedCities, 'city', 'city')
-  }
+  const citiesOptions = computed(() =>
+    definedCities.value ? toOptions(definedCities.value, 'city', 'city') : null
+  )
 
   const beneficiaryFilters = computed(() => {
     if (
-      !followUpTypeOptions.value ||
+      !followupTypeOptions.value ||
       !agentOptions.value ||
       !citiesOptions.value
     ) {
@@ -114,7 +105,7 @@
       {
         name: 'followupTypes',
         label: "Type d'accompagnement",
-        options: followUpTypeOptions.value,
+        options: followupTypeOptions.value,
         type: FilterType.SelectMultiple
       },
       {

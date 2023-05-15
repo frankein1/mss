@@ -1,16 +1,9 @@
-import {
-  Beneficiary,
-  Followup,
-  HelpRequest,
-  FollowupType
-} from '@prisma/client'
+import { FollowupType } from '@prisma/client'
 import { sort } from '~/utils'
+import { BeneficiaryItem } from '~/components/BeneficiaryRow/types'
 
 export function getBeneficiaryFollowUpTypes(
-  beneficiary: Beneficiary & {
-    followups: Array<Followup & { types: Array<FollowupType> }>
-    helpRequests: Array<HelpRequest & { type: FollowupType }>
-  }
+  beneficiary: BeneficiaryItem
 ): Array<FollowupType> {
   const uniqueFollowUpTypesTuples = {
     ...getUniqueFollowUpTypesTuplesFromFollowups(beneficiary.followups),
@@ -23,7 +16,7 @@ export function getBeneficiaryFollowUpTypes(
 }
 
 function getUniqueFollowUpTypesTuplesFromFollowups(
-  followups: Array<Followup & { types: Array<FollowupType> }>
+  followups: BeneficiaryItem['followups']
 ) {
   return followups.reduce((uniques, followup) => {
     if (!followup.types.length) {
@@ -40,7 +33,7 @@ function getUniqueFollowUpTypesTuplesFromFollowups(
 }
 
 function getUniqueFollowUpTypesFromFollowup(
-  followUpTypesArr: Array<FollowupType>
+  followUpTypesArr: BeneficiaryItem['followups'][0]['types']
 ) {
   return followUpTypesArr.reduce(
     (uniques, f) => ({
@@ -52,7 +45,7 @@ function getUniqueFollowUpTypesFromFollowup(
 }
 
 function getUniqueFollowUpTypesTuplesFromHelpRequests(
-  helpRequests: Array<HelpRequest & { type: FollowupType }>
+  helpRequests: BeneficiaryItem['helpRequests']
 ) {
   return helpRequests.reduce((uniques, helpRequest) => {
     if (!helpRequest.type) {
