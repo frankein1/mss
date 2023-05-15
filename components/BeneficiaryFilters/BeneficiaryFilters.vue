@@ -39,12 +39,11 @@
   const filtersStore = useFiltersStore()
   const INITIAL_VALUES = filtersStore.beneficiary || {}
 
-  // TODO: Waiting for correct type to use `useQuery` - See https://github.com/wobsoriano/trpc-nuxt/issues/92
   const {
     data: followupTypeOptions,
     pending: followupTypeOptionsPending,
     error: followupTypeOptionsError
-  } = useAsyncData(() => trpcClient.config.getStructureFollowupTypes.query(), {
+  } = await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
     transform: followupTypes => toOptions(followupTypes, 'id', 'name')
   })
 
@@ -52,7 +51,7 @@
     data: agentOptions,
     pending: agentOptionsPending,
     error: agentOptionsError
-  } = useAsyncData(() => trpcClient.config.getAgents.query(), {
+  } = await trpcClient.config.getAgents.useQuery(undefined, {
     transform: agents => toOptions(agents, 'id', 'name')
   })
 
@@ -60,7 +59,7 @@
     data: citiesOptions,
     pending: citieOptionsPending,
     error: citieOptionsError
-  } = useAsyncData(() => trpcClient.config.getBeneficiariesCities.query(), {
+  } = await trpcClient.config.getBeneficiariesCities.useQuery(undefined, {
     transform: cities => {
       const definedCities = cities.filter(hasDefinedCity)
       return toOptions(definedCities, 'city', 'city')

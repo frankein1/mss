@@ -48,6 +48,11 @@
               :message="fetchError"
             />
             <StatsBeneficiaries
+              v-if="
+                followupTypesOptions &&
+                beneficiariesCitiesOptions &&
+                agentsOptions
+              "
               :followup-type-options="followupTypesOptions"
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
@@ -66,6 +71,11 @@
               :message="fetchError"
             />
             <StatsHistory
+              v-if="
+                followupTypesOptions &&
+                beneficiariesCitiesOptions &&
+                agentsOptions
+              "
               :followup-type-options="followupTypesOptions"
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
@@ -86,45 +96,38 @@
 
   const trpcClient = useTrpcClient()
 
-  const { data: followupTypes, error: followupTypesError } =
-    await trpcClient.config.getStructureFollowupTypes.useQuery()
+  const { data: followupTypesOptions, error: followupTypesOptionsError } =
+    await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
+      transform: followupTypes => toOptions(followupTypes, 'id', 'name')
+    })
 
-  const { data: beneficiariesCities, error: beneficiariesCitiesError } =
-    await trpcClient.config.getBeneficiariesCities.useQuery()
+  const {
+    data: beneficiariesCitiesOptions,
+    error: beneficiariesCitiesOptionsError
+  } = await trpcClient.config.getBeneficiariesCities.useQuery(undefined, {
+    transform: beneficiariesCities => {
+      const definedCities = beneficiariesCities.filter(hasDefinedCity)
+      return toOptions(definedCities, 'city', 'city')
+    }
+  })
 
-  const { data: agents, error: agentsError } =
-    await trpcClient.config.getAgents.useQuery()
+  const { data: agentsOptions, error: agentsOptionsError } =
+    await trpcClient.config.getAgents.useQuery(undefined, {
+      transform: agents => withEmptyValue(toOptions(agents, 'id', 'name'))
+    })
 
   const fetchError = computed(() => {
-    if (followupTypesError.value) {
+    if (followupTypesOptionsError.value) {
       return "La liste des types d'accompagnement n'a pas pu être chargée."
     }
-    if (beneficiariesCitiesError.value) {
+    if (beneficiariesCitiesOptionsError.value) {
       return "La liste des villes n'a pas pu être chargée."
     }
-    if (agentsError.value) {
+    if (agentsOptionsError.value) {
       return "La liste des référents n'a pas pu être chargée."
     }
     return ''
   })
-
-  const followupTypesOptions = computed(() =>
-    followupTypes.value
-      ? toOptions(followupTypes.value, 'id', 'name')
-      : undefined
-  )
-  const beneficiariesCitiesOptions = computed(() => {
-    const definedBeneficiariesCities =
-      beneficiariesCities.value?.filter(hasDefinedCity)
-    return definedBeneficiariesCities
-      ? toOptions(definedBeneficiariesCities, 'city', 'city')
-      : undefined
-  })
-  const agentsOptions = computed(() =>
-    agents.value
-      ? withEmptyValue(toOptions(agents.value, 'id', 'name'))
-      : undefined
-  )
 </script>
 
 <style scoped>

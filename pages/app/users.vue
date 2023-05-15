@@ -34,5 +34,5 @@
     pending: usersPending,
     refresh: usersRefresh,
     error: usersError
-  } = useTrpcClient().user.getUsers.useQuery()
+  } = await useTrpcClient().user.getUsers.useQuery()
 </script>
