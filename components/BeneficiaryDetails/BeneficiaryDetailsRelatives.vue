@@ -23,7 +23,7 @@
         <span class="information-line">
           <NuxtLink
             v-if="household && relative.beneficiary"
-            :to="`${Routes.Beneficiaries}/${relative.beneficiary.id}`"
+            :to="`${Routes.Beneficiary(relative.beneficiary.id)}`"
             class="fr-link fr-icon-links-line fr-link--icon-left"
             target="_self"
             >{{ getBeneficiaryDisplayName(relative.beneficiary) }}</NuxtLink

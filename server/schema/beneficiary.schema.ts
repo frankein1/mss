@@ -16,6 +16,7 @@ import {
 } from '@prisma/client'
 import { z } from 'zod'
 import { createOrUpdateRelativeSchema } from './relative.schema'
+import { beneficiaryFilterSchema } from './filter.schema'
 import {
   errorMessages,
   validZipcode,
@@ -184,3 +185,12 @@ export const updateBeneficiarySchema = z.object({
 
 export type UpdateBeneficiaryInput = z.infer<typeof updateBeneficiarySchema>
 export type UpdateBeneficiaryRawInput = z.input<typeof updateBeneficiarySchema>
+
+export const getBeneficiariesSchema = z.object({
+  page: z.number(),
+  perPage: z.number(),
+  orderBy: z.array(z.record(z.string(), z.string())),
+  filters: beneficiaryFilterSchema
+})
+
+export type GetBeneficiariesInput = z.infer<typeof getBeneficiariesSchema>

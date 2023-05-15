@@ -8,7 +8,7 @@
     >
       <template #result="{ result: beneficiary }">
         <NuxtLink
-          :to="`${Routes.Beneficiaries}/${beneficiary.id}`"
+          :to="`${Routes.Beneficiary(beneficiary.id)}`"
           target="_self"
           class="fr-btn fr-btn--tertiary-no-outline"
         >

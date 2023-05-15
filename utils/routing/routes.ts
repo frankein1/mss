@@ -2,6 +2,8 @@ const AppRoute = '/app'
 const ApiKeycloak = '/api/keycloak'
 
 const BeneficiariesRoute = `${AppRoute}/beneficiaries`
+const BeneficiaryRoute = (beneficiaryId: string) =>
+  `${BeneficiariesRoute}/${beneficiaryId}`
 
 export const Routes = {
   Index: '/',
@@ -27,5 +29,11 @@ export const Routes = {
 
   // beneficiaries
   Beneficiaries: BeneficiariesRoute,
-  BeneficiariesAdd: `${BeneficiariesRoute}/add`
+  BeneficiariesAdd: `${BeneficiariesRoute}/add`,
+
+  Beneficiary: BeneficiaryRoute,
+  BeneficiaryPrint: (beneficiaryId: string) =>
+    `${BeneficiaryRoute(beneficiaryId)}/print`,
+  BeneficiaryEdit: (beneficiaryId: string) =>
+    `${BeneficiaryRoute(beneficiaryId)}/edit`
 }

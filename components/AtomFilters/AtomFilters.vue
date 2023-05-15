@@ -79,12 +79,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { useForm } from 'vee-validate'
   import { FilterType } from '~/utils/constants/filters'
   import type {
     FilterProp,
     SelectedFilters,
-    SelectedFilter,
-    FilterValues
+    SelectedFilter
   } from '~/types/filter'
   import { getRandomId } from '~/utils/random'
 
@@ -94,7 +94,7 @@
     defineProps<{
       filters: FilterProp[]
       fullWidthFilters?: boolean
-      initialSelectedValues?: { [filterName: string]: string }
+      initialSelectedValues?: { [filterName: string]: string | null }
     }>(),
     { fullWidthFilters: false, initialSelectedValues: () => ({}) }
   )
@@ -103,6 +103,7 @@
     props.filters.reduce((_initialSelectedFilters, filter) => {
       if (filter.name in props.initialSelectedValues) {
         const initialSelectedValue = props.initialSelectedValues[filter.name]
+        if (!initialSelectedValue) return _initialSelectedFilters
         const selectedFilter: SelectedFilter = {
           filterLabel: filter.label,
           value: initialSelectedValue,
@@ -115,7 +116,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'filter', filter: FilterValues): void
+    (e: 'filter', filter: { [key: string]: string }): void
   }>()
 
   const FILTERS_ID = getRandomId('filters-')

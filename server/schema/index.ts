@@ -2,13 +2,15 @@ export {
   idSchema,
   createBeneficiarySchema,
   searchBeneficiarySchema,
-  updateBeneficiarySchema
+  updateBeneficiarySchema,
+  getBeneficiariesSchema
 } from './beneficiary.schema'
 export type {
   BeneficiaryCreationInput,
   SearchBeneficiaryInput,
   UpdateBeneficiaryInput,
-  UpdateBeneficiaryRawInput
+  UpdateBeneficiaryRawInput,
+  GetBeneficiariesInput
 } from './beneficiary.schema'
 
 export { addFollowupSchema, editFollowupSchema } from './followup.schema'
@@ -56,8 +58,13 @@ export type {
   UserStatusEditionInput
 } from './user.schema'
 
-export { statFilterSchema } from './filter.schema'
-export type { StatFilterRawInput, StatFilterInput } from './filter.schema'
+export { statFilterSchema, beneficiaryFilterSchema } from './filter.schema'
+export type {
+  StatFilterRawInput,
+  StatFilterInput,
+  BeneficiaryFilterRawInput,
+  BeneficiaryFilterInput
+} from './filter.schema'
 
 export { createOrUpdateRelativeSchema } from './relative.schema'
 export type { CreateOrUpdateRelativeInput } from './relative.schema'

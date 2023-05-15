@@ -5,7 +5,6 @@
         :followup-type-options="followupTypeOptions"
         :beneficiaries-cities-options="beneficiariesCitiesOptions"
         :agent-options="agentOptions"
-        id-prefix="beneficiaries"
         @filter="filters = $event"
       />
     </div>

@@ -6,16 +6,26 @@ type FilterPropBase = {
   label: string
 }
 
-type SelectFilterProp = FilterPropBase & {
-  type: FilterType.SelectOne | FilterType.SelectMultiple
+export type SelectFilterProp = FilterPropBase & {
   options: Options
 }
 
-type DateFilterProp = FilterPropBase & {
+export type SelectOneFilterProp = SelectFilterProp & {
+  type: FilterType.SelectOne
+}
+
+export type SelectMultipleFilterProp = SelectFilterProp & {
+  type: FilterType.SelectMultiple
+}
+
+export type DateFilterProp = FilterPropBase & {
   type: FilterType.Date
 }
 
-export type FilterProp = DateFilterProp | SelectFilterProp
+export type FilterProp =
+  | DateFilterProp
+  | SelectOneFilterProp
+  | SelectMultipleFilterProp
 
 export type SelectedFilter = {
   filterLabel: string
@@ -26,5 +36,3 @@ export type SelectedFilter = {
 export type SelectedFilters = {
   [name: string]: SelectedFilter
 }
-
-export type FilterValues = { [key: string]: string | Date | Array<string> }

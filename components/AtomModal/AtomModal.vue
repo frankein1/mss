@@ -44,14 +44,19 @@
   </dialog>
 </template>
 
-<script lang="ts" setup>
+<script lang="ts" setup generic="C extends Component">
+  import type { Ref } from 'vue'
+  import type { ComponentProps, ComponentEmit } from '~/types/vue'
+
   const { $globalEventEmitter } = useNuxtApp()
 
   const modal = ref<HTMLDialogElement | null>(null)
   const title = ref('')
-  const contentComponent = shallowRef('')
-  const contentComponentProps = ref(undefined)
-  const contentComponentEvents = ref(undefined)
+  const contentComponent: Ref<C | null> = shallowRef(null)
+  const contentComponentProps: Ref<ComponentProps<C> | undefined> =
+    ref(undefined)
+  const contentComponentEvents: Ref<ComponentEmit<C> | undefined> =
+    ref(undefined)
 
   onMounted(() => {
     modal.value?.addEventListener('dsfr.conceal', onClose)
@@ -71,9 +76,9 @@
     contentComponentEvents: _contentComponentEvents
   }: {
     title: string
-    contentComponent: any
-    contentComponentProps: any
-    contentComponentEvents: any
+    contentComponent: C
+    contentComponentProps: ComponentProps<C>
+    contentComponentEvents: ComponentEmit<C>
   }) {
     title.value = _title
     contentComponent.value = _contentComponent
@@ -83,7 +88,7 @@
 
   function onClose() {
     title.value = ''
-    contentComponent.value = ''
+    contentComponent.value = null
     contentComponentProps.value = undefined
     contentComponentEvents.value = undefined
   }

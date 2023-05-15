@@ -1,5 +1,5 @@
 import { TRPCError } from '@trpc/server'
-import { AppContext, forbiddenError } from '../trpc'
+import { AppContext, forbiddenError, invalidError } from '../trpc'
 import {
   canEditBeneficiaryExternalOrganisations,
   canEditBeneficiaryGeneralInformation,
@@ -12,10 +12,15 @@ import {
 import {
   SearchBeneficiaryInput,
   UpdateBeneficiaryInput,
-  BeneficiaryCreationInput
+  BeneficiaryCreationInput,
+  GetBeneficiariesInput
 } from '../schema/beneficiary.schema'
 import { createBeneficiary } from '~/server/query/beneficiaires/createBeneficiary'
 import { prismaClient } from '~/server/prisma'
+import { Prisma } from '~/server/prisma/prismaClient'
+import { BeneficiaryFilterInput } from '~/server/schema'
+import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
+import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 
 export const getBeneficiaryDetailsHandler = async ({
   input,
@@ -175,8 +180,7 @@ export const updateBeneficiaryHandler = async ({
     data = { ...data, ...occupation }
   }
   if (canUpdateBeneficiaryRelatives(user, input)) {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { taxHouseholds, ...taxHouseholdDatas } = taxHousehold
+    const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
     data = { ...data, ...taxHouseholdDatas }
   }
 
@@ -253,4 +257,119 @@ async function findWithReferentsAndRelatives({
     })
   }
   return beneficiary
+}
+
+function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
+  const followupsFilters: { [k: string]: {} } = {}
+  const helpRequestsFilters: { [k: string]: {} } = {}
+
+  if (filters.followupTypes) {
+    const typesListFilter = {
+      id: { in: filters.followupTypes }
+    }
+    followupsFilters.types = { some: typesListFilter }
+    helpRequestsFilters.type = typesListFilter
+  }
+
+  const formattedFilters: Prisma.BeneficiaryWhereInput = {}
+
+  if (filters.followupTypes) {
+    formattedFilters.OR = [
+      { followups: { some: followupsFilters } },
+      { helpRequests: { some: helpRequestsFilters } }
+    ]
+  }
+
+  if (filters.cities) formattedFilters.city = { in: filters.cities }
+
+  if (filters.referents) {
+    formattedFilters.referents = { some: { id: { in: filters.referents } } }
+  }
+
+  if (filters.status) {
+    formattedFilters.status = filters.status
+  }
+
+  if (filters.ageGroup) {
+    const dateRange = ageGroupToDateRange(filters.ageGroup)
+    formattedFilters.birthDate = {
+      gte: dateRange.lower?.toDate(),
+      lte: dateRange.upper?.toDate()
+    }
+  }
+
+  return formattedFilters
+}
+
+export const getBeneficiariesHandler = async ({
+  input,
+  ctx: { user }
+}: {
+  input: GetBeneficiariesInput
+  ctx: AppContext
+}) => {
+  if (!user.structureId) {
+    throw invalidError('structureId is null')
+  }
+
+  const { take, skip } = takeAndSkipFromPagination({
+    perPage: input.perPage,
+    page: input.page
+  })
+
+  const where = {
+    structureId: user.structureId,
+    archived: null,
+    ...prepareBeneficiaryFilters(input.filters)
+  }
+
+  const [beneficiaries, count] = await Promise.all([
+    prismaClient.beneficiary.findMany({
+      where,
+      select: {
+        id: true,
+        usualName: true,
+        birthName: true,
+        firstName: true,
+        birthDate: true,
+        streetNumber: true,
+        street: true,
+        zipcode: true,
+        city: true,
+        phone1: true,
+        phone2: true,
+        status: true,
+        fileNumber: true,
+        referents: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true
+          }
+        },
+        followups: {
+          select: {
+            types: { select: { id: true, name: true }, distinct: ['id'] }
+          }
+        },
+        helpRequests: {
+          select: { type: { select: { id: true, name: true } } },
+          distinct: ['typeId']
+        },
+        _count: {
+          select: { followups: true, helpRequests: true, referents: true }
+        }
+      },
+      take,
+      skip,
+      orderBy: input.orderBy
+    }),
+    prismaClient.beneficiary.count({
+      where
+    })
+  ])
+  const totalPages = getTotalPages({ count, perPage: input.perPage })
+
+  return { beneficiaries, count, totalPages }
 }

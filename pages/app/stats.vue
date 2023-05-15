@@ -80,6 +80,7 @@
 <script lang="ts" setup>
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
+  import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
 
   // definePageMeta({ middleware: 'can-access-stats' })
 
@@ -124,10 +125,6 @@
       ? withEmptyValue(toOptions(agents.value, 'id', 'name'))
       : undefined
   )
-
-  function hasDefinedCity(b: { city: string | null }): b is { city: string } {
-    return b.city !== null
-  }
 </script>
 
 <style scoped>

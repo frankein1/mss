@@ -316,8 +316,7 @@ export const canViewBeneficiaryFollowupSynthesis = (
 
 export const canViewBeneficiaryFollowupPrivateSynthesis = (
   grantee: SecurityRuleGrantee,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
+  _: SecurityTargetWithStructure & SecurityTargetWithReferents,
   followup: SecurityTargetWithCreator
 ): boolean =>
   isCreator(grantee, followup, [

@@ -2,7 +2,7 @@
   <ul class="fr-btns-group fr-btns-group--inline-md header-btn-group">
     <li>
       <NuxtLink
-        :to="`${Routes.Beneficiaries}/${beneficiaryId}/edit`"
+        :to="`${Routes.BeneficiaryEdit(beneficiaryId)}`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
         title="Modifier"
         target="_self"
@@ -12,7 +12,7 @@
     </li>
     <li>
       <NuxtLink
-        :to="`${Routes.Beneficiaries}/${beneficiaryId}/print`"
+        :to="`${Routes.BeneficiaryPrint(beneficiaryId)}`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-printer-line"
         title="Imprimer"
         target="_self"

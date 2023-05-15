@@ -1,8 +1,7 @@
 import { UserRole } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const { Administrator, ...otherRoles } = UserRole
+const { Administrator: _, ...otherRoles } = UserRole
 export const NonAdminUserRole = otherRoles
 
 export type NonAdminUserRole = keyof typeof NonAdminUserRole

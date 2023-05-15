@@ -85,12 +85,12 @@
       to: Routes.Overview,
       label: 'Tableau de bord',
       icon: 'fr-icon-home-4-line'
+    },
+    {
+      to: Routes.Beneficiaries,
+      label: 'Bénéficiaires',
+      icon: 'fr-icon-user-line'
     }
-    // {
-    //   to: Routes.Beneficiaries,
-    //   label: 'Bénéficiaires',
-    //   icon: 'fr-icon-user-line'
-    // },
     // {
     //   to: Routes.History,
     //   label: 'Accompagnements',

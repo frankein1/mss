@@ -34,8 +34,8 @@
 <script lang="ts" setup>
   import dayjs from 'dayjs'
   import type { AgeGroupsFilter } from '~/components/StatsBeneficiaries/types'
-  import { AgeGroup, AgeGroupLabels } from '~/client/options/ageGroup'
   import { StatFilterRawInput } from '~/server/schema'
+  import { AgeGroup, ageGroupLabels } from '~/client/options/ageGroup'
   import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
   import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
   import { AlertType } from '~~/utils/constants/alert'
@@ -120,7 +120,7 @@
       Object.entries(ageGroupsCounts) as Array<[AgeGroupOrNull, number]>
     ).map(([key, value]) => ({
       key,
-      label: AgeGroupLabels[key],
+      label: ageGroupLabels[key],
       color: AgeGroupColors[key],
       count: value
     }))

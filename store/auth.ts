@@ -5,12 +5,9 @@ import { JwtUser } from '~/types/user'
 export const useAuthStore = defineStore({
   id: 'auth',
 
-  state: () => {
-    const user: JwtUser | null = null as any
-    return {
-      user
-    }
-  },
+  state: () => ({
+    user: null as JwtUser | null
+  }),
 
   actions: {
     setUser(user: JwtUser) {

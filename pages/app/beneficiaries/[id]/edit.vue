@@ -2,7 +2,7 @@
   <div class="fr-container fr-p-5w">
     <TheHeader
       :title="title"
-      :back-link="`${Routes.Beneficiaries}/${beneficiaryId}`"
+      :back-link="`${Routes.Beneficiary(beneficiaryId)}`"
     />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
