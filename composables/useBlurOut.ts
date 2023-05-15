@@ -1,5 +1,5 @@
 import { Ref } from 'vue'
-import { assertIsNode } from '~/utils/nodeCheck'
+import { isNode } from '~/utils/nodeCheck'
 
 export function useBlurOut($el: Ref<HTMLElement | null>) {
   const isFocused = ref<boolean>(false)
@@ -12,7 +12,7 @@ export function useBlurOut($el: Ref<HTMLElement | null>) {
     if (!event.relatedTarget) {
       isFocused.value = false
     }
-    assertIsNode(event.relatedTarget)
+    isNode(event.relatedTarget)
     const isWithinEl = $el.value?.contains(event.relatedTarget)
     if (!isWithinEl) {
       isFocused.value = false

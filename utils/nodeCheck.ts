@@ -1,5 +1,3 @@
-export function assertIsNode(e: EventTarget | null): asserts e is Node {
-  if (!e || !('nodeType' in e)) {
-    throw new Error(`Node expected`)
-  }
+export function isNode(e: EventTarget | null): e is Node {
+  return !e || !('nodeType' in e)
 }

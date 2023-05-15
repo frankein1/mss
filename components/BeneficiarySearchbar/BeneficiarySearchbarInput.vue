@@ -38,7 +38,7 @@
       role="listbox"
     >
       <AtomLoader
-        v-show="timeout"
+        v-if="timeout"
         class="fr-mx-auto fr-my-5v"
       />
       <li
