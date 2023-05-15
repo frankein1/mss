@@ -1,13 +1,13 @@
 <template>
   <div class="fr-grid-row fr-grid-row--middle">
-    <AtomSelect
-      class="fr-col-2"
-      label="Résultats par page"
-      name="results_per_page"
-      :options="REQUEST_LIMIT_OPTIONS"
-      :value="String(limit)"
-      @change-value="changeLimit"
-    />
+    <form class="fr-col-2">
+      <VeeSelect
+        label="Résultats par page"
+        name="resultsPerPage"
+        :options="REQUEST_LIMIT_OPTIONS"
+        @change-value="changeLimit"
+      />
+    </form>
     <nav
       role="navigation"
       class="fr-pagination"
@@ -123,6 +123,12 @@
   }>()
 
   const limit = ref(REQUEST_LIMIT_DEFAULT)
+
+  useForm<{ resultsPerPage: string }>({
+    initialValues: {
+      resultsPerPage: String(limit.value)
+    }
+  })
 
   function changeLimit(limitValue: string) {
     limit.value = Number(limitValue)

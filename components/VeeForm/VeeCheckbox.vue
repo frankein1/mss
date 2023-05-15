@@ -1,19 +1,29 @@
 <!--
   FIXME: VeeCheckbox is unstable, at least in development mode. When accessing
-  directly to page containing a VeeCheckbox, the component, or its AtomCheckbox
-  child seems to be wrongly initialized leading to a value toggle and validation
+  directly to page containing a VeeCheckbox, the component seems to be wrongly initialized leading to a value toggle and validation
   instability.
 -->
 
 <template>
-  <AtomCheckbox
-    :label="label"
-    :name="name"
-    :no-label="noLabel"
-    :labelled-by="labelledBy"
-    :checked="checked"
-    :handle-change="handleChange"
-  />
+  <div class="fr-checkbox-group">
+    <input
+      :id="id"
+      type="checkbox"
+      :name="name"
+      :checked="checked"
+      :value="true"
+      :aria-labelledby="labelledBy"
+      @input="handleChange"
+    />
+    <label
+      class="fr-label"
+      :for="id"
+    >
+      <span :class="{ 'no-label': noLabel }">
+        {{ label }}
+      </span>
+    </label>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -42,6 +52,8 @@
     checkedValue: true,
     uncheckedValue: false
   })
+
+  const { id } = useFormFieldId(props.name)
 </script>
 
 <style scoped>

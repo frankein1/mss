@@ -1,20 +1,33 @@
 <!--
   FIXME: VeeToggle is unstable, at least in development mode. When accessing
-  directly to page containing a VeeToggle, the component, or its AtomToggle
-  child seems to be wrongly initialized leading to a value toggle and validation
+  directly to page containing a VeeToggle, the component seems to be wrongly initialized leading to a value toggle and validation
   instability.
 -->
 
 <template>
-  <AtomToggle
-    :label="label"
-    :name="name"
-    :no-label="noLabel"
-    :labelled-by="labelledBy"
-    :checked="checked"
-    :checked-label="checkedLabel"
-    :handle-change="handleChange"
-  />
+  <div class="fr-toggle">
+    <input
+      :id="id"
+      :name="name"
+      type="checkbox"
+      class="fr-toggle__input"
+      :checked="checked"
+      :value="true"
+      :aria-labelledby="labelledBy"
+      @input="handleChange"
+    />
+    <label
+      class="fr-toggle__label"
+      :class="{ 'no-label': noLabel }"
+      :for="id"
+      :data-fr-checked-label="checkedLabel ? 'Activé' : undefined"
+      :data-fr-unchecked-label="checkedLabel ? 'Désactivé' : undefined"
+    >
+      <span v-show="!noLabel">
+        {{ label }}
+      </span>
+    </label>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -45,10 +58,12 @@
     checkedValue: true,
     uncheckedValue: false
   })
+
+  const { id } = useFormFieldId(props.name)
 </script>
 
 <style scoped>
-  .no-label {
-    visibility: hidden;
+  .fr-toggle__label.no-label {
+    padding-left: 0;
   }
 </style>

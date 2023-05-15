@@ -1,22 +1,54 @@
 <template>
-  <AtomInput
-    :label="label"
-    :name="name"
-    :no-label="noLabel"
-    :labelled-by="labelledBy"
-    :placeholder="placeholder"
-    :required="required"
-    :type="type"
-    :hint="hint"
-    :pattern="pattern"
-    :step="step"
-    :min="min"
-    :readonly="readonly"
-    :value="bindedValue"
-    :error="error"
-    :handle-change="handleChange"
-    @change-value="$emit('changeValue', formatValue($event))"
-  />
+  <div
+    class="fr-input-group"
+    :class="{
+      'fr-input-group--error': error,
+      'fr-input-group--disabled': readonly
+    }"
+  >
+    <label
+      v-if="!noLabel"
+      class="fr-label"
+      :for="id"
+    >
+      {{ displayLabel }}
+      <span
+        v-if="hint"
+        class="fr-hint-text"
+      >
+        {{ hint }}
+      </span>
+    </label>
+    <div
+      class="fr-input-wrap"
+      :class="{ 'fr-icon-calendar-line': type === 'date' }"
+    >
+      <input
+        :id="id"
+        ref="input"
+        class="fr-input"
+        :class="{ 'fr-input--error': error }"
+        :name="name"
+        :placeholder="placeholder"
+        :type="type"
+        :aria-describedby="ariaDescribedby"
+        :aria-labelledby="labelledBy"
+        :readonly="readonly"
+        :value="bindedValue"
+        @input="onChange"
+      />
+    </div>
+    <div
+      v-if="error"
+      :id="errorId"
+      class="fr-messages-group"
+      aria-live="assertive"
+    >
+      <p class="fr-message fr-message--error">
+        {{ error }}
+      </p>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -56,17 +88,42 @@
       min: undefined
     }
   )
+
+  const emit = defineEmits<{
+    (e: 'changeValue', value: string): void
+  }>()
+
   const {
     errorMessage: error,
     value: refValue,
     handleChange
   } = useField<string | number | Date>(props.name)
 
-  defineEmits<{
-    (e: 'changeValue', value: string): void
-  }>()
+  const { id, errorId } = useFormFieldId(props.name)
 
   const bindedValue = computed(() => formatValue(refValue?.value))
+
+  const displayLabel = computed(() =>
+    props.required ? `${props.label} *` : props.label
+  )
+  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
+
+  const placeholder = computed(() => {
+    if (props.placeholder) {
+      return props.placeholder
+    }
+    if (props.type === 'tel') {
+      return '00 00 00 00 00'
+    }
+    if (props.type === 'social-security-number') {
+      return '0 00 00 00 000 000'
+    }
+    return undefined
+  })
+
+  const type = computed(() =>
+    props.type === 'social-security-number' ? 'text' : props.type
+  )
 
   function formatValue(value: string | Date | number) {
     if (!value) {
@@ -102,5 +159,10 @@
     }
 
     return value
+  }
+
+  function onChange(event: Event) {
+    emit('changeValue', (event.target as HTMLSelectElement).value)
+    handleChange(event)
   }
 </script>
