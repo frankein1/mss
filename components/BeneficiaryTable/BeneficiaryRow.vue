@@ -38,10 +38,7 @@
   import type { BeneficiaryItem } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { getUserDisplayName } from '~/utils/user'
-  import {
-    calculateAge,
-    getBeneficiaryFollowUpTypes
-  } from '~/utils/beneficiary'
+  import { calculateAge } from '~/utils/beneficiary'
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { ORIGIN_PAGE_PARAMETER } from '~/utils/constants'
   import { beneficiaryStatusLabels } from '~/client/options/beneficiary'
@@ -64,9 +61,7 @@
   })
 
   const followUpTypes = computed(() =>
-    getBeneficiaryFollowUpTypes(props.beneficiary)
-      .map(({ name }) => name)
-      .join(', ')
+    props.beneficiary.followupTypes.map(({ name }) => name).join(', ')
   )
 
   const referents = computed(() =>

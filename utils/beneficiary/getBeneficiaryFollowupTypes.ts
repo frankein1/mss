@@ -1,22 +1,30 @@
 import { FollowupType } from '@prisma/client'
-import { sort } from '~/utils'
-import { BeneficiaryItem } from '~/components/BeneficiaryRow/types'
+import type {
+  BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests,
+  FollowupTypesFromFollowups,
+  FollowupTypesFromHelpRequests
+} from '~/server/controller/beneficiary.controller'
 
-export function getBeneficiaryFollowUpTypes(
-  beneficiary: BeneficiaryItem
-): Array<FollowupType> {
+type FollowupTypeIdAndName = Pick<FollowupType, 'id' | 'name'>
+type FollowupTypeSet = { [id: string]: FollowupTypeIdAndName }
+
+export function getBeneficiaryFollowUpTypes({
+  followups,
+  helpRequests
+}: Pick<
+  BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests,
+  'followups' | 'helpRequests'
+>): FollowupTypeIdAndName[] {
   const uniqueFollowUpTypesTuples = {
-    ...getUniqueFollowUpTypesTuplesFromFollowups(beneficiary.followups),
-    ...getUniqueFollowUpTypesTuplesFromHelpRequests(beneficiary.helpRequests)
+    ...getUniqueFollowUpTypesTuplesFromFollowups(followups),
+    ...getUniqueFollowUpTypesTuplesFromHelpRequests(helpRequests)
   }
   const followUpTypes = Object.values(uniqueFollowUpTypesTuples)
-  return sort(followUpTypes as Object[], [
-    { field: 'name', sort: '' }
-  ]) as Array<FollowupType>
+  return followUpTypes.sort(sortFollowupTypesByName)
 }
 
 function getUniqueFollowUpTypesTuplesFromFollowups(
-  followups: BeneficiaryItem['followups']
+  followups: FollowupTypesFromFollowups
 ) {
   return followups.reduce((uniques, followup) => {
     if (!followup.types.length) {
@@ -29,23 +37,23 @@ function getUniqueFollowUpTypesTuplesFromFollowups(
       ...uniques,
       ...followupUniqueFollowUpTypes
     }
-  }, {})
+  }, {} as FollowupTypeSet)
 }
 
 function getUniqueFollowUpTypesFromFollowup(
-  followUpTypesArr: BeneficiaryItem['followups'][0]['types']
+  followUpTypesArr: FollowupTypesFromFollowups[0]['types']
 ) {
   return followUpTypesArr.reduce(
     (uniques, f) => ({
       ...uniques,
       [f.id]: f
     }),
-    {}
+    {} as FollowupTypeSet
   )
 }
 
 function getUniqueFollowUpTypesTuplesFromHelpRequests(
-  helpRequests: BeneficiaryItem['helpRequests']
+  helpRequests: FollowupTypesFromHelpRequests
 ) {
   return helpRequests.reduce((uniques, helpRequest) => {
     if (!helpRequest.type) {
@@ -55,5 +63,21 @@ function getUniqueFollowUpTypesTuplesFromHelpRequests(
       ...uniques,
       [helpRequest.type.id]: helpRequest.type
     }
-  }, {})
+  }, {} as FollowupTypeSet)
+}
+
+function sortFollowupTypesByName(
+  a: FollowupTypeIdAndName,
+  b: FollowupTypeIdAndName
+) {
+  const insensitiveAName = a.name.toLowerCase()
+  const insensitiveBName = b.name.toLowerCase()
+
+  if (insensitiveAName < insensitiveBName) {
+    return -1
+  }
+  if (insensitiveAName > insensitiveBName) {
+    return 1
+  }
+  return 0
 }

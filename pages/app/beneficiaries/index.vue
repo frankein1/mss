@@ -24,50 +24,12 @@
               v-show="pending"
               class="fr-mx-auto"
             />
-            <div
+            <BeneficiaryTable
               v-show="!pending"
-              ref="tableContainer"
-              class="table-container"
-              tabindex="0"
-            >
-              <div
-                class="fr-table fr-table--bordered fr-table--no-caption fr-mb-0 fr-pt-0"
-              >
-                <table>
-                  <caption>
-                    Liste des bénéficiaires
-                  </caption>
-                  <thead>
-                    <tr>
-                      <th scope="col">
-                        Nom
-                        <AtomSortButton @sort="onSort($event, 'usualName')" />
-                      </th>
-                      <th scope="col">
-                        Prénom
-                        <AtomSortButton @sort="onSort($event, 'firstName')" />
-                      </th>
-                      <th scope="col">Âge</th>
-                      <th scope="col">Date de naissance</th>
-                      <th scope="col">Adresse postale</th>
-                      <th scope="col">Ville</th>
-                      <th scope="col">Téléphone</th>
-                      <th scope="col">Types d'accompagnement</th>
-                      <th scope="col">Référents</th>
-                      <th scope="col">Statut du dossier</th>
-                      <th scope="col">N° dossier</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <BeneficiaryRow
-                      v-for="beneficiary in beneficiaries"
-                      :key="beneficiary.id"
-                      :beneficiary="beneficiary"
-                    />
-                  </tbody>
-                </table>
-              </div>
-            </div>
+              :beneficiaries="beneficiaries"
+              :pending="pending"
+              @sort="onSort"
+            />
             <AtomPagination
               v-show="!pending"
               class="fr-mt-4w fr-px-5v"
@@ -105,7 +67,6 @@
   const orderBy = ref<Array<{ [k: string]: SortOrder }>>([])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
-  const tableContainer = ref<HTMLDivElement | null>(null)
 
   const {
     data: beneficiariesRequest,
@@ -137,14 +98,6 @@
     () => beneficiariesRequest.value?.beneficiaries || []
   )
 
-  watch(pending, _pending => {
-    const tableContainerValue = tableContainer.value
-    // Scroll the table container to top after reloading
-    if (tableContainerValue && !_pending) {
-      nextTick(() => (tableContainerValue.scrollTop = 0))
-    }
-  })
-
   function updatePagination({
     pageNumber,
     limitValue
@@ -161,7 +114,7 @@
     if (!sortDir) {
       return
     }
-    orderBy.value.push({ [field]: sortDir })
+    orderBy.value.unshift({ [field]: sortDir })
   }
 </script>
 
