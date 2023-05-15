@@ -75,7 +75,7 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              :to="Routes.DeclarationAccessibilite"
+              :to="Routes.DeclarationAccessibilite()"
               target="_self"
             >
               Accessibilité: non conforme
@@ -84,7 +84,7 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              :to="Routes.MentionsLegales"
+              :to="Routes.MentionsLegales()"
               target="_self"
               >Mentions légales</NuxtLink
             >

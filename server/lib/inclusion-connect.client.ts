@@ -168,8 +168,8 @@ function initClient() {
       issuer,
       clientId,
       clientSecret,
-      redirectUri: `${appUrl}${Routes.SsoCallback}`,
-      postLogoutRedirectUri: `${appUrl}${Routes.LogoutSuccess}`
+      redirectUri: `${appUrl}${Routes.SsoCallback()}`,
+      postLogoutRedirectUri: `${appUrl}${Routes.LogoutSuccess()}`
     }
     client = new InclusionConnectClient(config)
   }

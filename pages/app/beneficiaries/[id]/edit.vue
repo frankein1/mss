@@ -57,6 +57,6 @@
     await trpcClient.beneficiary.update.mutate(beneficiary)
     isSubmitting.value = false
 
-    navigateTo(`${Routes.Beneficiaries}/${beneficiary.id}`)
+    navigateTo(`${Routes.Beneficiary(beneficiary.id)}`)
   }
 </script>

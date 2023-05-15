@@ -6,7 +6,7 @@ export default defineNuxtRouteMiddleware(to => {
   const isAuthenticated = authStore.isAuthenticated
   if (!isAuthenticated) {
     return navigateTo({
-      path: Routes.Login,
+      path: Routes.Login(),
       query: { redirectUrl: to.fullPath }
     })
   }

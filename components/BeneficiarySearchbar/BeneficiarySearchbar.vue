@@ -17,7 +17,7 @@
       </template>
     </BeneficiarySearchbarInput>
     <NuxtLink
-      :to="Routes.BeneficiariesAdd"
+      :to="Routes.BeneficiariesAdd()"
       class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line add-beneficiary-btn"
       target="_self"
     >

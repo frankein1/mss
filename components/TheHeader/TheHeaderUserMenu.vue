@@ -17,14 +17,14 @@
   const authStore = useAuthStore()
 
   const MENUS: Menu[] = [
-    { label: 'Mon compte', to: Routes.Account, icon: 'fr-icon-user-line' }
+    { label: 'Mon compte', to: Routes.Account(), icon: 'fr-icon-user-line' }
   ]
 
   // TODO
   // if (permissionsStore.canAddUsers) {
   MENUS.push({
     label: 'Utilisateurs',
-    to: Routes.Users,
+    to: Routes.Users(),
     icon: 'fr-icon-team-line'
   })
   // }
@@ -33,14 +33,14 @@
   // if (permissionsStore.canEditOrganisation) {
   MENUS.push({
     label: 'Structure',
-    to: Routes.StructureEdit,
+    to: Routes.StructureEdit(),
     icon: 'fr-icon-home-4-line'
   })
   // }
 
   MENUS.push({
     label: 'Déconnexion',
-    href: Routes.Logout,
+    href: Routes.Logout(),
     icon: 'fr-icon-logout-box-r-line'
   })
 </script>

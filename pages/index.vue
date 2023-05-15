@@ -11,7 +11,7 @@
         </p>
         <NuxtLink
           class="fr-btn"
-          :to="Routes.Register"
+          :to="Routes.Register()"
           target="_self"
         >
           Enregistrer sa structure
@@ -81,7 +81,7 @@
         </ul>
         <NuxtLink
           class="fr-btn"
-          :to="Routes.Register"
+          :to="Routes.Register()"
           target="_self"
         >
           Enregistrer sa structure

@@ -10,7 +10,7 @@
             <div class="fr-header__brand-top">
               <div class="fr-header__logo">
                 <NuxtLink
-                  :to="Routes.Index"
+                  :to="Routes.Index()"
                   target="_self"
                   title="Accueil - Mon Suivi Social"
                 >
@@ -54,7 +54,7 @@
                 <li>
                   <NuxtLink
                     class="fr-btn register-btn fr-icon-add-circle-line"
-                    :to="Routes.Register"
+                    :to="Routes.Register()"
                     target="_self"
                   >
                     Enregistrer sa structure
@@ -63,7 +63,7 @@
                 <li>
                   <NuxtLink
                     class="fr-btn fr-btn--tertiary fr-icon-lock-line"
-                    :to="Routes.Login"
+                    :to="Routes.Login()"
                     target="_self"
                   >
                     Se connecter à son espace

@@ -20,7 +20,7 @@
       <p v-else>
         Commencez à
         <NuxtLink
-          :to="Routes.BeneficiariesAdd"
+          :to="Routes.BeneficiariesAdd()"
           target="_self"
           >créer des fiches de bénéficiaires</NuxtLink
         >

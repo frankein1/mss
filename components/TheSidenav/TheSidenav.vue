@@ -19,7 +19,7 @@
       >
         <div class="fr-sidemenu__title">
           <NuxtLink
-            :to="Routes.Overview"
+            :to="Routes.Overview()"
             target="_self"
             title="Retour au tableau de bord"
           >
@@ -65,7 +65,7 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              :to="Routes.DeclarationAccessibilite"
+              :to="Routes.DeclarationAccessibilite()"
               target="_self"
             >
               Accessibilité: non conforme
@@ -82,12 +82,12 @@
 
   const MENU_ITEMS = [
     {
-      to: Routes.Overview,
+      to: Routes.Overview(),
       label: 'Tableau de bord',
       icon: 'fr-icon-home-4-line'
     },
     {
-      to: Routes.Beneficiaries,
+      to: Routes.Beneficiaries(),
       label: 'Bénéficiaires',
       icon: 'fr-icon-user-line'
     }
@@ -100,7 +100,7 @@
 
   // if (permissionsStore.canAccessStats) {
   MENU_ITEMS.push({
-    to: Routes.Stats,
+    to: Routes.Stats(),
     label: 'Statistiques',
     icon: 'fr-icon-pie-chart-2-line'
   })

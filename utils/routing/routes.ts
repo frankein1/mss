@@ -6,30 +6,30 @@ const BeneficiaryRoute = (beneficiaryId: string) =>
   `${BeneficiariesRoute}/${beneficiaryId}`
 
 export const Routes = {
-  Index: '/',
-  Register: '/register',
-  DeclarationAccessibilite: `/declaration-accessibilite`,
-  MentionsLegales: `/mentions-legales`,
+  Index: () => '/',
+  Register: () => '/register',
+  DeclarationAccessibilite: () => `/declaration-accessibilite`,
+  MentionsLegales: () => `/mentions-legales`,
 
-  Login: '/login',
-  Logout: `${ApiKeycloak}/logout`,
-  SsoCallback: `${ApiKeycloak}/callback`,
+  Login: () => '/login',
+  Logout: () => `${ApiKeycloak}/logout`,
+  SsoCallback: () => `${ApiKeycloak}/callback`,
 
-  App: `${AppRoute}`,
-  Overview: `${AppRoute}/overview`,
-  LogoutSuccess: `${AppRoute}/logout-success`,
+  App: () => `${AppRoute}`,
+  Overview: () => `${AppRoute}/overview`,
+  LogoutSuccess: () => `${AppRoute}/logout-success`,
 
-  Users: `${AppRoute}/users`,
+  Users: () => `${AppRoute}/users`,
 
-  Stats: `${AppRoute}/stats`,
+  Stats: () => `${AppRoute}/stats`,
 
-  Account: `${AppRoute}/account`,
+  Account: () => `${AppRoute}/account`,
 
-  StructureEdit: `${AppRoute}/structure/edit`,
+  StructureEdit: () => `${AppRoute}/structure/edit`,
 
   // beneficiaries
-  Beneficiaries: BeneficiariesRoute,
-  BeneficiariesAdd: `${BeneficiariesRoute}/add`,
+  Beneficiaries: () => BeneficiariesRoute,
+  BeneficiariesAdd: () => `${BeneficiariesRoute}/add`,
 
   Beneficiary: BeneficiaryRoute,
   BeneficiaryPrint: (beneficiaryId: string) =>

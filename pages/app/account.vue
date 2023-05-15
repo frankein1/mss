@@ -39,7 +39,7 @@
 
   const params = new URLSearchParams({
     referrer: clientId,
-    referrer_uri: `${appUrl}${Routes.Account}`
+    referrer_uri: `${appUrl}${Routes.Account()}`
   })
 
   const inclusionConnectAccountUrl = `${inclusionConnectAccountUrlBase}?${params}`
