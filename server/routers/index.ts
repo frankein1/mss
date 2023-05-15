@@ -19,5 +19,8 @@ export const appRouter = router({
 // export type definition of API
 export type AppRouter = typeof appRouter
 
-export type RouterOutput = inferRouterOutputs<AppRouter>
+type RouterOutput = inferRouterOutputs<AppRouter>
 export type ErrorOutput = TRPCClientError<AppRouter>
+
+export type GetBeneficiariesOutput =
+  RouterOutput['beneficiary']['getBeneficiaries']

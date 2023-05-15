@@ -90,13 +90,12 @@
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiariesOutput } from './types'
   import { useFiltersStore } from '~/store/filters'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   // import { Routes } from '~/utils/routing/routes'
   import type { BeneficiaryFilterRawInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import type { ErrorOutput } from '~/server/routers'
+  import type { ErrorOutput, GetBeneficiariesOutput } from '~/server/routers'
   import type { SortOrder } from '~/types/table'
 
   const filtersStore = useFiltersStore()
