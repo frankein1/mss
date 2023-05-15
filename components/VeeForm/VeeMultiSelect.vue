@@ -54,7 +54,7 @@
   const name = toRef(props, 'name')
 
   defineEmits<{
-    (e: 'changeValue', value: string): void
+    (e: 'changeValue', value: string[]): void
   }>()
 
   // we don't provide any rules here because we are using form-level validation
@@ -63,5 +63,5 @@
     value,
     handleChange,
     errorMessage: error
-  } = useField<string>(name, undefined)
+  } = useField<string[]>(name, undefined)
 </script>

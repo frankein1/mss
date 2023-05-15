@@ -52,7 +52,6 @@
       :value="currentValue"
       :disabled="disabled"
       :readonly="readonly"
-      @change="onChange"
     />
     <ul
       v-show="!dropdown || expanded"
@@ -112,7 +111,7 @@
     defineProps<{
       label: string
       options: Options
-      value?: string
+      value?: string[]
       labelClass?: string
       required?: boolean
       name: string
@@ -126,7 +125,7 @@
       error?: string
     }>(),
     {
-      value: '',
+      value: () => [],
       labelClass: '',
       required: false,
       dropdown: false,
@@ -141,7 +140,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'changeValue', value: string): void
+    (e: 'changeValue', value: string[]): void
   }>()
 
   const { id, errorId } = useFormFieldId(props.name)
@@ -151,7 +150,7 @@
   const labelId = `multi-select-${id}-label`
 
   const selectedValues = ref<string[]>(
-    (props.value.split(',') || []).filter(v => props.options.has(v))
+    (props.value || []).filter(v => props.options.has(v))
   )
 
   const hiddenInput = ref<HTMLInputElement | null>(null)
@@ -232,7 +231,6 @@
       return
     }
     hiddenInput.value.value = _currentValue
-    hiddenInput.value.dispatchEvent(new Event('change'))
     hiddenInput.value.closest('form')?.dispatchEvent(new Event('change'))
   })
 
@@ -298,11 +296,9 @@
     } else {
       selectedValues.value.push(value)
     }
-  }
 
-  function onChange(event: Event) {
-    emit('changeValue', (event.target as HTMLSelectElement).value)
-    props.handleChange(event)
+    props.handleChange(selectedValues.value)
+    emit('changeValue', selectedValues.value)
   }
 
   function onInputKeyDown(e: KeyboardEvent) {

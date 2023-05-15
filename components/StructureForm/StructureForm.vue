@@ -37,7 +37,7 @@
     DefaultLegallyRequiredFollowupTypeWithSupportsCount,
     StructureWithFollowupTypesWithSupportsCount
   } from './types'
-  import type { EditCurrentUserStructureRawInput } from '~/server/schema'
+  import type { EditCurrentUserStructureInput } from '~/server/schema'
   import { editCurrentUserStructureSchema } from '~/server/schema'
   import { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
@@ -47,7 +47,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'updateStructure', structure: EditCurrentUserStructureRawInput): void
+    (e: 'updateStructure', structure: EditCurrentUserStructureInput): void
   }>()
 
   const defaultLegallyRequiredSelectedFollowupTypes = computed(() =>
@@ -76,7 +76,7 @@
   ])
 
   const { handleSubmit, setFieldValue } =
-    useForm<EditCurrentUserStructureRawInput>({
+    useForm<EditCurrentUserStructureInput>({
       validationSchema: toTypedSchema(editCurrentUserStructureSchema),
       initialValues: {
         name: props.structure.name,
@@ -85,10 +85,9 @@
         address: props.structure.address,
         phone: props.structure.phone,
         email: props.structure.email,
-        legallyRequiredFollowupTypes:
-          initialLegallyRequiredSelectedIds.value.join(','),
+        legallyRequiredFollowupTypes: initialLegallyRequiredSelectedIds.value,
         legallyNotRequiredFollowupTypes:
-          initialLegallyNotRequiredSelectedIds.value.join(',')
+          initialLegallyNotRequiredSelectedIds.value
       }
     })
 

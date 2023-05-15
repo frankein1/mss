@@ -67,13 +67,13 @@
     AddressSelected
   } from '~/components/VeeForm/types'
   import { structureFieldLabels } from '~/client/labels/structure.labels'
-  import type { EditCurrentUserStructureRawInput } from '~/server/schema'
+  import type { EditCurrentUserStructureInput } from '~/server/schema'
 
   const props = defineProps<{
     structure: Structure
     setFieldValue: (
-      field: keyof EditCurrentUserStructureRawInput,
-      value: EditCurrentUserStructureRawInput[keyof EditCurrentUserStructureRawInput]
+      field: keyof EditCurrentUserStructureInput,
+      value: EditCurrentUserStructureInput[keyof EditCurrentUserStructureInput]
     ) => void
   }>()
 

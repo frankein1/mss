@@ -29,7 +29,7 @@ export type FilterProp =
 
 export type SelectedFilter = {
   filterLabel: string
-  value: string
+  value: string | string[]
   valueLabel: string
 }
 

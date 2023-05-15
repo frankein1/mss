@@ -118,7 +118,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'filter', filter: { [key: string]: string }): void
+    (e: 'filter', filter: { [key: string]: string | string[] }): void
   }>()
 
   const FILTERS_ID = getRandomId('filters-')
@@ -140,7 +140,7 @@
     () => !!Object.keys(selectedFilters.value).length
   )
 
-  function onChangeFilter(value: string, filter: FilterProp) {
+  function onChangeFilter(value: string | string[], filter: FilterProp) {
     if (!value) {
       delete selectedFilters.value[filter.name]
     } else {
@@ -157,7 +157,7 @@
     }, DEFER_TIME)
   }
 
-  function addFilter(filter: FilterProp, value: string) {
+  function addFilter(filter: FilterProp, value: string | string[]) {
     selectedFilters.value = {
       ...selectedFilters.value,
       [filter.name]: {
@@ -174,7 +174,7 @@
     emit('filter', selectedFiltersToDataObject(selectedFilters.value))
   }
 
-  function getFilterValueLabel(filter: FilterProp, value: string) {
+  function getFilterValueLabel(filter: FilterProp, value: string | string[]) {
     let valueLabel: string
     if (
       filter.type === FilterType.SelectMultiple ||
@@ -182,12 +182,15 @@
     ) {
       valueLabel = getSelectedOptionsLabel(filter, value)
     } else {
-      valueLabel = value
+      valueLabel = value as string
     }
     return valueLabel
   }
 
-  function getSelectedOptionsLabel(filter: FilterProp, value: string): string {
+  function getSelectedOptionsLabel(
+    filter: FilterProp,
+    value: string | string[]
+  ): string {
     if (filter.type === FilterType.Date) {
       return ''
     }
@@ -198,15 +201,18 @@
     return selectedOptions.map(o => filter.options.get(o) || o).join(', ')
   }
 
-  function getSelectedOptions(value: string, multiple: boolean) {
+  function getSelectedOptions(
+    value: string | string[],
+    multiple: boolean
+  ): string[] {
     if (multiple) {
-      return value.split(',')
+      return value as string[]
     }
-    return [value]
+    return [value as string]
   }
 
   function selectedFiltersToDataObject(selectedFilters: SelectedFilters) {
-    const dataObject: { [k: string]: string } = {}
+    const dataObject: { [k: string]: string | string[] } = {}
     Object.entries(selectedFilters).forEach(([name, { value }]) => {
       dataObject[name] = value
     })

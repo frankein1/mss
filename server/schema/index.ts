@@ -35,10 +35,7 @@ export type {
 } from './followupType.schema'
 
 export { editCurrentUserStructureSchema } from './structure.schema'
-export type {
-  EditCurrentUserStructureInput,
-  EditCurrentUserStructureRawInput
-} from './structure.schema'
+export type { EditCurrentUserStructureInput } from './structure.schema'
 
 export { accessTokenSchema } from './auth.schema'
 export type { AccessTokenInput } from './auth.schema'

@@ -4,8 +4,7 @@ import {
   errorMessages,
   minStringLengthMessage,
   validEmailMessage,
-  validZipcode,
-  multiSelectValueToArray
+  validZipcode
 } from '~/utils/zod'
 
 const createStructureSchema = z.object({
@@ -37,22 +36,14 @@ const editCurrentUserStructureSchema = editStructureSchema
     followupTypes: true
   })
   .extend({
-    legallyRequiredFollowupTypes: z
-      .string()
-      .transform(multiSelectValueToArray)
-      .pipe(z.array(z.nativeEnum(DefaultFollowupType))),
-    legallyNotRequiredFollowupTypes: z
-      .string()
-      .transform(multiSelectValueToArray)
-      .pipe(
-        z.array(
-          z.union([
-            z.string().uuid(),
-            z.nativeEnum(DefaultFollowupType),
-            z.string()
-          ])
-        )
-      )
+    legallyRequiredFollowupTypes: z.array(z.nativeEnum(DefaultFollowupType)),
+    legallyNotRequiredFollowupTypes: z.array(
+      z.union([
+        z.string().uuid(),
+        z.nativeEnum(DefaultFollowupType),
+        z.string()
+      ])
+    )
   })
   .refine(
     val =>
@@ -66,13 +57,10 @@ const editCurrentUserStructureSchema = editStructureSchema
 // TODO
 // type CreateStructureInput = z.infer<typeof createStructureSchema>
 // type EditStructureInput = z.infer<typeof editStructureSchema>
-type EditCurrentUserStructureRawInput = z.input<
-  typeof editCurrentUserStructureSchema
->
 type EditCurrentUserStructureInput = z.infer<
   typeof editCurrentUserStructureSchema
 >
 
 export { editCurrentUserStructureSchema }
 
-export type { EditCurrentUserStructureRawInput, EditCurrentUserStructureInput }
+export type { EditCurrentUserStructureInput }
