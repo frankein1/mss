@@ -55,7 +55,7 @@
   import { useFiltersStore } from '~/store/filters'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   // import { Routes } from '~/utils/routing/routes'
-  import type { BeneficiaryFilterRawInput } from '~/server/schema'
+  import type { BeneficiaryFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import type { ErrorOutput, GetBeneficiariesOutput } from '~/server/routers'
   import type { SortOrder } from '~/types/table'
@@ -63,7 +63,7 @@
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
 
-  const filters = ref<BeneficiaryFilterRawInput>(filtersStore.beneficiary || {})
+  const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
   const orderBy = ref<Array<{ [k: string]: SortOrder }>>([])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)

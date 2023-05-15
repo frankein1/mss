@@ -94,7 +94,7 @@
     defineProps<{
       filters: FilterProp[]
       fullWidthFilters?: boolean
-      initialSelectedValues?: { [filterName: string]: string | null }
+      initialSelectedValues?: { [filterName: string]: string | string[] | null }
     }>(),
     { fullWidthFilters: false, initialSelectedValues: () => ({}) }
   )

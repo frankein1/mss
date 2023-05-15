@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { StatFilterRawInput } from '~/server/schema'
+  import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~~/utils/constants/alert'
 
@@ -28,7 +28,7 @@
 
   const props = defineProps<{
     totalCount: number
-    filters: StatFilterRawInput
+    filters: StatFilterInput
   }>()
 
   const {

@@ -16,7 +16,7 @@
   import { useAuthStore } from '~/store/auth'
   import { FilterType } from '~/utils/constants/filters'
   import type { Options } from '~/utils/options'
-  import type { StatFilterRawInput } from '~/server/schema'
+  import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
 
   const isMinistryAgent = useMinistryAgent()
@@ -29,7 +29,7 @@
   }>()
 
   defineEmits<{
-    (e: 'filter', filters: StatFilterRawInput): void
+    (e: 'filter', filters: StatFilterInput): void
   }>()
 
   const statsFilters = computed(() => {

@@ -30,14 +30,14 @@
 
 <script lang="ts" setup>
   import { Prisma, HelpRequestStatus } from '@prisma/client'
-  import { StatFilterRawInput } from '~/server/schema'
+  import { StatFilterInput } from '~/server/schema'
   import { StatList } from '~/types/stat'
   import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()
 
   const props = defineProps<{
-    filters: StatFilterRawInput
+    filters: StatFilterInput
   }>()
 
   const {

@@ -27,13 +27,13 @@
   import { ageGroupOptions } from '~/client/options/ageGroup'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
-  import type { BeneficiaryFilterRawInput } from '~/server/schema'
+  import type { BeneficiaryFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
 
   const trpcClient = useTrpcClient()
 
   const emit = defineEmits<{
-    (e: 'filter', filters: BeneficiaryFilterRawInput): void
+    (e: 'filter', filters: BeneficiaryFilterInput): void
   }>()
 
   const filtersStore = useFiltersStore()
@@ -138,7 +138,7 @@
     return filters
   })
 
-  function onFilter(filters: BeneficiaryFilterRawInput) {
+  function onFilter(filters: BeneficiaryFilterInput) {
     filtersStore.beneficiary = filters
     emit('filter', filters)
   }

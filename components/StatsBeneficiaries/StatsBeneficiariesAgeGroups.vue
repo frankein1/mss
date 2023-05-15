@@ -34,7 +34,7 @@
 <script lang="ts" setup>
   import dayjs from 'dayjs'
   import type { AgeGroupsFilter } from '~/components/StatsBeneficiaries/types'
-  import { StatFilterRawInput } from '~/server/schema'
+  import { StatFilterInput } from '~/server/schema'
   import { AgeGroup, ageGroupLabels } from '~/client/options/ageGroup'
   import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
   import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
@@ -62,7 +62,7 @@
 
   const props = defineProps<{
     beneficiaryCount: number
-    filters: StatFilterRawInput
+    filters: StatFilterInput
   }>()
 
   const {

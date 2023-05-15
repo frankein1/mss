@@ -26,5 +26,6 @@ export const enumErrorMap: z.ZodErrorMap = issue => {
   }
 }
 
+// FIXME: Delete
 export const multiSelectValueToArray = (value: string | undefined | null) =>
   value === undefined || value === null ? value : value.split(',')

@@ -29,7 +29,7 @@
 <script lang="ts" setup>
   import { HelpRequestStatus } from '@prisma/client'
   import { helpRequestStatusLabels } from '~/client/options/helpRequest'
-  import { StatFilterRawInput } from '~/server/schema'
+  import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { helpRequestStatusColors } from '~/client/colors/helpRequest'
 
@@ -37,7 +37,7 @@
 
   const props = defineProps<{
     totalCount: number
-    filters: StatFilterRawInput
+    filters: StatFilterInput
   }>()
 
   const {

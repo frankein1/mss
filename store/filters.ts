@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { BeneficiaryFilterRawInput } from '~/server/schema'
+import { BeneficiaryFilterInput } from '~/server/schema'
 
 export const useFiltersStore = defineStore({
   id: 'filters',
@@ -9,6 +9,6 @@ export const useFiltersStore = defineStore({
     // interviewHistory: null as FilterState<> | null,
     // helpRequestHistory: null as FilterState<> | null,
     // beneficiaryHistory: null as FilterState<> | null,
-    beneficiary: null as BeneficiaryFilterRawInput | null
+    beneficiary: null as BeneficiaryFilterInput | null
   })
 })

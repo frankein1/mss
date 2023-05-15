@@ -33,7 +33,7 @@
 
 <script lang="ts" setup>
   import { BeneficiaryFamilySituation } from '@prisma/client'
-  import { StatFilterRawInput } from '~/server/schema'
+  import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
   import { getStatLabel } from '~/client/options/stat'
@@ -43,7 +43,7 @@
 
   const props = defineProps<{
     beneficiaryCount: number
-    filters: StatFilterRawInput
+    filters: StatFilterInput
   }>()
 
   const {
