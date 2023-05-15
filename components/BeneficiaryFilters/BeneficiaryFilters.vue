@@ -39,58 +39,53 @@
   const filtersStore = useFiltersStore()
   const INITIAL_VALUES = filtersStore.beneficiary || {}
 
-  // TODO: Try to use transform
+  // TODO: Waiting for correct type to use `useQuery` - See https://github.com/wobsoriano/trpc-nuxt/issues/92
   const {
-    data: followupTypes,
-    pending: followupTypesPending,
-    error: followupTypesError
-  } = trpcClient.config.getStructureFollowupTypes.useQuery()
+    data: followupTypeOptions,
+    pending: followupTypeOptionsPending,
+    error: followupTypeOptionsError
+  } = useAsyncData(() => trpcClient.config.getStructureFollowupTypes.query(), {
+    transform: followupTypes => toOptions(followupTypes, 'id', 'name')
+  })
 
   const {
-    data: agents,
-    pending: agentsPending,
-    error: agentsError
-  } = trpcClient.config.getAgents.useQuery()
+    data: agentOptions,
+    pending: agentOptionsPending,
+    error: agentOptionsError
+  } = useAsyncData(() => trpcClient.config.getAgents.query(), {
+    transform: agents => toOptions(agents, 'id', 'name')
+  })
 
   const {
-    data: cities,
-    pending: citiesPending,
-    error: citiesError
-  } = trpcClient.config.getBeneficiariesCities.useQuery()
+    data: citiesOptions,
+    pending: citieOptionsPending,
+    error: citieOptionsError
+  } = useAsyncData(() => trpcClient.config.getBeneficiariesCities.query(), {
+    transform: cities => {
+      const definedCities = cities.filter(hasDefinedCity)
+      return toOptions(definedCities, 'city', 'city')
+    }
+  })
 
   const pending = computed(
     () =>
-      followupTypesPending.value || agentsPending.value || citiesPending.value
+      followupTypeOptionsPending.value ||
+      agentOptionsPending.value ||
+      citieOptionsPending.value
   )
 
   const fetchError = computed(() => {
-    if (followupTypesError.value) {
+    if (followupTypeOptionsError.value) {
       return "La liste des types d'accompagnement n'a pas pu être chargée."
     }
-    if (agentsError.value) {
+    if (agentOptionsError.value) {
       return "La liste des agents n'a pas pu être chargée."
     }
-    if (citiesError.value) {
+    if (citieOptionsError.value) {
       return "La liste des villes n'a pas pu être chargée."
     }
     return ''
   })
-
-  const followupTypeOptions = computed(() =>
-    followupTypes.value ? toOptions(followupTypes.value, 'id', 'name') : null
-  )
-
-  const agentOptions = computed(() =>
-    agents.value ? toOptions(agents.value, 'id', 'name') : null
-  )
-
-  const definedCities = computed(() =>
-    cities.value ? cities.value.filter(hasDefinedCity) : null
-  )
-
-  const citiesOptions = computed(() =>
-    definedCities.value ? toOptions(definedCities.value, 'city', 'city') : null
-  )
 
   const beneficiaryFilters = computed(() => {
     if (
