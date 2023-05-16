@@ -12,9 +12,6 @@ export {
   type BeneficiaryListItem
 } from './beneficiaires'
 export {
-  type FollowupsListResult,
-  type FollowupsList,
-  type FollowupsListItem,
   type HelpRequestsListResult,
   type HelpRequestsList,
   type HelpRequestsListItem

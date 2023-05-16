@@ -14,7 +14,7 @@
     <div class="fr-tabs">
       <ul
         class="fr-tabs__list"
-        :class="{ 'interviews-tab-active': isFollowupsTabActive }"
+        :class="{ 'followups-tab-active': isFollowupsTabActive }"
         role="tablist"
         aria-label="Accompagnements"
       >
@@ -33,12 +33,12 @@
         </li>
         <li role="presentation">
           <button
-            id="interviews-tab"
+            id="followups-tab"
             class="fr-tabs__tab"
             tabindex="0"
             role="tab"
             aria-selected="false"
-            aria-controls="interviews-panel"
+            aria-controls="followups-panel"
             @click="isFollowupsTabActive = true"
           >
             {{ followupCountLabel }}
@@ -108,10 +108,10 @@
         </div>
       </div>
       <div
-        id="interviews-panel"
+        id="followups-panel"
         class="fr-tabs__panel fr-tabs__panel--selected fr-px-0"
         role="tabpanel"
-        aria-labelledby="interviews-tab"
+        aria-labelledby="followups-tab"
         tabindex="0"
       >
         <AtomAlert
@@ -264,13 +264,13 @@
     column-gap: 0.5rem;
     border-bottom: 3px solid var(--primary);
 
-    &.interviews-tab-active {
-      border-bottom: 3px solid var(--color-interview);
+    &.followups-tab-active {
+      border-bottom: 3px solid var(--color-followup);
     }
   }
 
   #help-requests-tab,
-  #interviews-tab {
+  #followups-tab {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -301,23 +301,23 @@
     }
   }
 
-  #interviews-tab {
-    color: var(--color-interview);
-    background-color: var(--color-interview-light);
+  #followups-tab {
+    color: var(--color-followup);
+    background-color: var(--color-followup-light);
 
     span {
       font-size: 1rem;
     }
 
     &:hover {
-      background-color: var(--color-interview-light-hover);
+      background-color: var(--color-followup-light-hover);
     }
 
     &[aria-selected='true'] {
-      background-color: var(--color-interview);
+      background-color: var(--color-followup);
 
       &:hover {
-        background-color: var(--color-interview-hover);
+        background-color: var(--color-followup-hover);
       }
     }
   }

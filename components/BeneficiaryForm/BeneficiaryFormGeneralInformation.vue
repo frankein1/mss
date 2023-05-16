@@ -35,7 +35,7 @@
         :label="beneficiaryFieldLabels.birthPlace"
       />
       <VeeInput
-        v-show="isDeceased"
+        v-if="isDeceased"
         name="general.deathDate"
         :label="beneficiaryFieldLabels.deathDate"
         type="date"
@@ -66,7 +66,7 @@
         :options="withEmptyValue(beneficiaryAccommodationModeOptions)"
       />
       <VeeInput
-        v-show="isHosted"
+        v-if="isHosted"
         class="fr-col-12 fr-col-lg-6"
         name="general.accommodationName"
         :label="accommodationNameLabel"
@@ -121,18 +121,18 @@
         name="general.noPhone"
         :label="beneficiaryFieldLabels.noPhone"
       />
-      <VeeInput
-        v-show="!noPhone"
-        name="general.phone1"
-        :label="beneficiaryFieldLabels.phone1"
-        type="tel"
-      />
-      <VeeInput
-        v-show="!noPhone"
-        name="general.phone2"
-        :label="beneficiaryFieldLabels.phone2"
-        type="tel"
-      />
+      <template v-if="!noPhone">
+        <VeeInput
+          name="general.phone1"
+          :label="beneficiaryFieldLabels.phone1"
+          type="tel"
+        />
+        <VeeInput
+          name="general.phone2"
+          :label="beneficiaryFieldLabels.phone2"
+          type="tel"
+        />
+      </template>
       <VeeInput
         name="general.email"
         :label="beneficiaryFieldLabels.email"

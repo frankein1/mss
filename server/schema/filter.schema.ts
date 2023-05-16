@@ -1,6 +1,11 @@
 import { z } from 'zod'
-import { BeneficiaryStatus } from '@prisma/client'
 import dayjs from 'dayjs'
+import {
+  BeneficiaryStatus,
+  FollowupStatus,
+  HelpRequestStatus,
+  FollowupMedium
+} from '@prisma/client'
 import { AgeGroup } from '~/client/options/ageGroup'
 
 const statFilterSchema = z.object({
@@ -31,6 +36,51 @@ const beneficiaryFilterSchema = z.object({
 
 type BeneficiaryFilterInput = z.infer<typeof beneficiaryFilterSchema>
 
-export { statFilterSchema, beneficiaryFilterSchema }
+const followupFilterSchema = z.object({
+  status: z.nativeEnum(FollowupStatus).nullish(),
+  medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
+  followupTypes: z.array(z.string().uuid()).nullish(),
+  referents: z.array(z.string().uuid()).nullish()
+})
 
-export type { StatFilterInput, BeneficiaryFilterInput }
+type FollowupFilterInput = z.infer<typeof followupFilterSchema>
+
+const helpRequestHistoryFilterSchema = z.object({
+  status: z.nativeEnum(HelpRequestStatus).nullish(),
+  followupTypes: z.array(z.string().uuid()).nullish(),
+  referents: z.array(z.string().uuid()).nullish()
+  // TODO: examinationDate, handlingDate, externalStructure
+})
+
+type HelpRequestHistoryFilterInput = z.infer<
+  typeof helpRequestHistoryFilterSchema
+>
+
+const beneficiaryHistoryFilterSchema = z.object({
+  status: z.nativeEnum({ ...FollowupStatus, ...HelpRequestStatus }).nullish(),
+  medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
+  followupTypes: z.array(z.string().uuid()).nullish(),
+  referents: z.array(z.string().uuid()).nullish(),
+  typeSuivi: z.string().nullish()
+  // TODO: examinationDate, handlingDate, externalStructure
+})
+
+type BeneficiaryHistoryFilterInput = z.infer<
+  typeof beneficiaryHistoryFilterSchema
+>
+
+export {
+  statFilterSchema,
+  beneficiaryFilterSchema,
+  followupFilterSchema,
+  helpRequestHistoryFilterSchema,
+  beneficiaryHistoryFilterSchema
+}
+
+export type {
+  StatFilterInput,
+  BeneficiaryFilterInput,
+  FollowupFilterInput,
+  HelpRequestHistoryFilterInput,
+  BeneficiaryHistoryFilterInput
+}

@@ -5,7 +5,7 @@
       label="Rôle"
       :options="nonAdminUserRoleOptions"
       required
-      :no-label="true"
+      no-label
       labelled-by="role-col"
     />
   </form>

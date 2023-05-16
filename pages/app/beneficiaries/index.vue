@@ -20,10 +20,9 @@
             <p class="fr-mb-2w fr-mx-5v fr-hint-text">
               {{ beneficiariesCount }} bénéficiaire(s)
             </p>
-            <AtomLoader
-              v-show="pending"
-              class="fr-mx-auto"
-            />
+            <div v-show="pending">
+              <AtomLoader class="fr-mx-auto" />
+            </div>
             <BeneficiaryTable
               v-show="!pending"
               :beneficiaries="beneficiaries"
@@ -34,7 +33,7 @@
               v-show="!pending"
               class="fr-mt-4w fr-px-5v"
               :page="page"
-              :total-pages="beneficiariesRequest?.totalPages || 0"
+              :total-pages="totalPages"
               @change-page="updatePagination($event)"
             />
 
@@ -58,13 +57,13 @@
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import type { ErrorOutput, GetBeneficiariesOutput } from '~/server/routers'
-  import type { SortOrder } from '~/types/table'
+  import type { BeneficiarySort } from '~/types/table'
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
 
   const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
-  const orderBy = ref<Array<{ [k: string]: SortOrder }>>([])
+  const orderBy = ref<BeneficiarySort[]>([])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
 
@@ -98,6 +97,8 @@
     () => beneficiariesRequest.value?.beneficiaries || []
   )
 
+  const totalPages = computed(() => beneficiariesRequest.value?.totalPages || 0)
+
   function updatePagination({
     pageNumber,
     limitValue
@@ -109,12 +110,14 @@
     perPage.value = limitValue
   }
 
-  function onSort(sortDir: SortOrder | null, field: string) {
-    orderBy.value = orderBy.value.filter(s => Object.keys(s)[0] !== field)
-    if (!sortDir) {
+  function onSort(sort: BeneficiarySort) {
+    orderBy.value = orderBy.value.filter(
+      s => Object.keys(s)[0] !== Object.keys(sort)[0]
+    )
+    if (!Object.values(sort)) {
       return
     }
-    orderBy.value.unshift({ [field]: sortDir })
+    orderBy.value.unshift(sort)
   }
 </script>
 

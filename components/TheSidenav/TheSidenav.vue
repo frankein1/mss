@@ -90,12 +90,12 @@
       to: Routes.Beneficiaries(),
       label: 'Bénéficiaires',
       icon: 'fr-icon-user-line'
+    },
+    {
+      to: Routes.History(),
+      label: 'Accompagnements',
+      icon: 'fr-icon-inbox-archive-line'
     }
-    // {
-    //   to: Routes.History,
-    //   label: 'Accompagnements',
-    //   icon: 'fr-icon-inbox-archive-line'
-    // }
   ]
 
   // if (permissionsStore.canAccessStats) {

@@ -35,5 +35,7 @@ export const Routes = {
   BeneficiaryPrint: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
   BeneficiaryEdit: (beneficiaryId: string) =>
-    `${BeneficiaryRoute(beneficiaryId)}/edit`
+    `${BeneficiaryRoute(beneficiaryId)}/edit`,
+
+  History: () => `${AppRoute}/history`
 }

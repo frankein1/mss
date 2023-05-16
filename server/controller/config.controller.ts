@@ -37,6 +37,16 @@ export const getBeneficiariesCitiesHandler = async () => {
   })
 }
 
+export const getExaminationDatesHandler = async () => {
+  return await prismaClient.helpRequest.groupBy({
+    by: ['examinationDate'],
+    where: {
+      examinationDate: { not: null }
+    },
+    orderBy: [{ examinationDate: 'desc' }]
+  })
+}
+
 export const getStructureFollowupTypesHandler = async ({
   ctx: { user }
 }: {

@@ -31,7 +31,7 @@
       />
     </div>
     <div
-      v-show="hasPartner"
+      v-if="hasPartner"
       class="fr-grid-row fr-grid-row--gutters form-grid"
     >
       <VeeMultiSelect
@@ -48,7 +48,7 @@
     </div>
 
     <div
-      v-show="hasMajorChildren"
+      v-if="hasMajorChildren"
       class="fr-grid-row fr-grid-row--gutters form-grid"
     >
       <VeeMultiSelect
@@ -94,7 +94,7 @@
       />
     </div>
     <div
-      v-show="isMinistryAgent"
+      v-if="isMinistryAgent"
       class="fr-grid-row fr-grid-row--gutters form-grid"
     >
       <VeeSelect

@@ -1,14 +1,18 @@
 import { defineStore } from 'pinia'
-import { BeneficiaryFilterInput } from '~/server/schema'
+import type {
+  BeneficiaryFilterInput,
+  FollowupFilterInput,
+  HelpRequestHistoryFilterInput,
+  BeneficiaryHistoryFilterInput
+} from '~/server/schema'
 
 export const useFiltersStore = defineStore({
   id: 'filters',
 
   state: () => ({
-    // TODO
-    // interviewHistory: null as FilterState<> | null,
-    // helpRequestHistory: null as FilterState<> | null,
-    // beneficiaryHistory: null as FilterState<> | null,
+    followup: null as FollowupFilterInput | null,
+    helpRequestHistory: null as HelpRequestHistoryFilterInput | null,
+    beneficiaryHistory: null as BeneficiaryHistoryFilterInput | null,
     beneficiary: null as BeneficiaryFilterInput | null
   })
 })

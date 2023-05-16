@@ -63,7 +63,7 @@
     <button
       class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-delete-line fr-mt-2w delete-relative-btn"
       type="button"
-      @click="$emit('removeEntourage')"
+      @click="emit('removeEntourage')"
     >
       Supprimer ce proche
     </button>
@@ -80,7 +80,7 @@
     index: number
   }>()
 
-  defineEmits<{
+  const emit = defineEmits<{
     (e: 'removeEntourage'): void
   }>()
 </script>

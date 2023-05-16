@@ -12,7 +12,8 @@ import {
   IncomeSource,
   BeneficiaryPensionOrganisation,
   BeneficiaryTitle,
-  Nationality
+  Nationality,
+  Prisma
 } from '@prisma/client'
 import { z } from 'zod'
 import {
@@ -21,7 +22,6 @@ import {
 } from './relative.schema'
 import { beneficiaryFilterSchema } from './filter.schema'
 import { errorMessages, validZipcode } from '~/utils/zod'
-import { SortOrder } from '~/types/table'
 
 export const idSchema = z.object({
   id: z.string()
@@ -166,7 +166,12 @@ export type UpdateBeneficiaryInput = z.infer<typeof updateBeneficiarySchema>
 export const getBeneficiariesSchema = z.object({
   page: z.number(),
   perPage: z.number(),
-  orderBy: z.array(z.record(z.string(), z.nativeEnum(SortOrder))),
+  orderBy: z.array(
+    z.object({
+      firstName: z.nativeEnum(Prisma.SortOrder).optional(),
+      usualName: z.nativeEnum(Prisma.SortOrder).optional()
+    })
+  ),
   filters: beneficiaryFilterSchema
 })
 

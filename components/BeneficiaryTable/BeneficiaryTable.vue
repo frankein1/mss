@@ -15,11 +15,11 @@
           <tr>
             <th scope="col">
               {{ beneficiaryFieldLabels.usualName }}
-              <AtomSortButton @sort="$emit('sort', $event, 'usualName')" />
+              <AtomSortButton @sort="emit('sort', { usualName: $event })" />
             </th>
             <th scope="col">
               {{ beneficiaryFieldLabels.firstName }}
-              <AtomSortButton @sort="$emit('sort', $event, 'firstName')" />
+              <AtomSortButton @sort="emit('sort', { firstName: $event })" />
             </th>
             <th scope="col">Âge</th>
             <th scope="col">
@@ -49,15 +49,15 @@
 <script setup lang="ts">
   import { Beneficiaries } from './types'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { SortOrder } from '~/types/table'
+  import type { BeneficiarySort } from '~/types/table'
 
   const props = defineProps<{
     beneficiaries: Beneficiaries
     pending: boolean
   }>()
 
-  defineEmits<{
-    (e: 'sort', sortDir: SortOrder | null, field: string): void
+  const emit = defineEmits<{
+    (e: 'sort', sort: BeneficiarySort): void
   }>()
 
   const tableContainer = ref<HTMLDivElement | null>(null)

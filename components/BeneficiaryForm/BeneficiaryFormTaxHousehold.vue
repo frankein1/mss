@@ -94,7 +94,7 @@
     <button
       class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-delete-line fr-mt-2w delete-relative-btn"
       type="button"
-      @click="$emit('removeTaxHousehold')"
+      @click="emit('removeTaxHousehold')"
     >
       Supprimer ce membre du foyer
     </button>
@@ -112,7 +112,7 @@
     index: number
   }>()
 
-  defineEmits<{
+  const emit = defineEmits<{
     (e: 'removeTaxHousehold'): void
   }>()
 

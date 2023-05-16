@@ -7,7 +7,7 @@
     <AtomFilters
       v-else
       :filters="statsFilters"
-      @filter="$emit('filter', $event)"
+      @filter="emit('filter', $event)"
     />
   </div>
 </template>
@@ -28,7 +28,7 @@
     agentOptions: Options
   }>()
 
-  defineEmits<{
+  const emit = defineEmits<{
     (e: 'filter', filters: StatFilterInput): void
   }>()
 

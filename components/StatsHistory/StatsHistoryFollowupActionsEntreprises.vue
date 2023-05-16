@@ -71,10 +71,10 @@
       }
     })
 
-    const interviewsActionsEntreprisesValues = Object.values(
+    const followupsActionsEntreprisesValues = Object.values(
       _followupsActionsEntreprises
     )
-    interviewsActionsEntreprisesValues.sort((a, b) => b.count - a.count)
-    return interviewsActionsEntreprisesValues
+    followupsActionsEntreprisesValues.sort((a, b) => b.count - a.count)
+    return followupsActionsEntreprisesValues
   })
 </script>

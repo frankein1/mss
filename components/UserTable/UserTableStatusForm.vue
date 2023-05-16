@@ -3,7 +3,7 @@
     <VeeToggle
       name="status"
       label="Statut"
-      :no-label="true"
+      no-label
       :checked-label="false"
       labelled-by="status-col"
     />

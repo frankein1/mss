@@ -1,6 +1,7 @@
 import {
   getAgentsHandler,
   getBeneficiariesCitiesHandler,
+  getExaminationDatesHandler,
   getStructureFollowupTypesHandler
 } from '../controller/config.controller'
 import { protectedProcedure, router } from '~/server/trpc'
@@ -11,6 +12,7 @@ export const configRouter = router({
   getBeneficiariesCities: protectedProcedure.query(
     getBeneficiariesCitiesHandler
   ),
+  getExaminationDates: protectedProcedure.query(getExaminationDatesHandler),
   getStructureFollowupTypes: protectedProcedure.query(
     getStructureFollowupTypesHandler
   )

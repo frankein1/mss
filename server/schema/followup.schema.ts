@@ -1,6 +1,7 @@
-import { FollowupMedium, FollowupStatus } from '@prisma/client'
+import { FollowupMedium, FollowupStatus, Prisma } from '@prisma/client'
 import { z } from 'zod'
 import { errorMessages } from '~/utils/zod'
+import { followupFilterSchema } from '~/server/schema'
 
 const addFollowupSchema = z.object({
   beneficiaryId: z.string().uuid(),
@@ -31,6 +32,42 @@ const editFollowupSchema = addFollowupSchema.extend({
 type AddFollowupInput = z.infer<typeof addFollowupSchema>
 type EditFollowupInput = z.infer<typeof editFollowupSchema>
 
-export { addFollowupSchema, editFollowupSchema }
+const getFollowupsSchema = z.object({
+  page: z.number(),
+  perPage: z.number(),
+  orderBy: z.array(
+    z.object({
+      date: z.nativeEnum(Prisma.SortOrder).optional(),
+      dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
+      beneficiary: z
+        .object({
+          usualName: z.nativeEnum(Prisma.SortOrder).optional()
+        })
+        .optional()
+    })
+  ),
+  filters: followupFilterSchema
+})
 
-export type { AddFollowupInput, EditFollowupInput }
+type GetFollowupsInput = z.infer<typeof getFollowupsSchema>
+
+const editFollowupStatusSchema = z.object({
+  id: z.string().uuid(),
+  status: z.nativeEnum(FollowupStatus)
+})
+
+type EditFollowupStatusInput = z.infer<typeof editFollowupStatusSchema>
+
+export {
+  addFollowupSchema,
+  editFollowupSchema,
+  getFollowupsSchema,
+  editFollowupStatusSchema
+}
+
+export type {
+  AddFollowupInput,
+  EditFollowupInput,
+  GetFollowupsInput,
+  EditFollowupStatusInput
+}

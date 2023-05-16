@@ -28,7 +28,7 @@
         data-fr-opened="false"
         aria-controls="global-modal"
         type="button"
-        @click="$emit('onDelete')"
+        @click="emit('onDelete')"
       >
         Supprimer
       </button>
@@ -47,7 +47,7 @@
     {}
   )
 
-  defineEmits<{
+  const emit = defineEmits<{
     (e: 'onDelete'): void
   }>()
 </script>

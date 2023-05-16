@@ -3,7 +3,7 @@
     <VeeCheckbox
       name="aidantConnectAuthorisation"
       label="Aidant Connect"
-      :no-label="true"
+      no-label
       labelled-by="authorisation-col"
     />
   </form>

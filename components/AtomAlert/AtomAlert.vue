@@ -14,7 +14,7 @@
       v-if="closeable"
       ref="closeBtn"
       class="fr-btn--close fr-btn force-focus-visible"
-      @click="$emit('close')"
+      @click="emit('close')"
     >
       Masquer le message
     </button>
@@ -34,7 +34,7 @@
     { closeable: false, detailedMessage: '' }
   )
 
-  defineEmits<{ (e: 'close'): void }>()
+  const emit = defineEmits<{ (e: 'close'): void }>()
 
   const closeBtn = ref<HTMLButtonElement | null>(null)
 

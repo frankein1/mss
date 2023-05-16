@@ -12,8 +12,18 @@ export type {
   GetBeneficiariesInput
 } from './beneficiary.schema'
 
-export { addFollowupSchema, editFollowupSchema } from './followup.schema'
-export type { AddFollowupInput, EditFollowupInput } from './followup.schema'
+export {
+  addFollowupSchema,
+  editFollowupSchema,
+  getFollowupsSchema,
+  editFollowupStatusSchema
+} from './followup.schema'
+export type {
+  AddFollowupInput,
+  EditFollowupInput,
+  GetFollowupsInput,
+  EditFollowupStatusInput
+} from './followup.schema'
 
 export {
   createHelpRequestSchema,
@@ -54,8 +64,20 @@ export type {
   UserStatusEditionInput
 } from './user.schema'
 
-export { statFilterSchema, beneficiaryFilterSchema } from './filter.schema'
-export type { StatFilterInput, BeneficiaryFilterInput } from './filter.schema'
+export {
+  statFilterSchema,
+  beneficiaryFilterSchema,
+  followupFilterSchema,
+  helpRequestHistoryFilterSchema,
+  beneficiaryHistoryFilterSchema
+} from './filter.schema'
+export type {
+  StatFilterInput,
+  BeneficiaryFilterInput,
+  FollowupFilterInput,
+  HelpRequestHistoryFilterInput,
+  BeneficiaryHistoryFilterInput
+} from './filter.schema'
 
 export {
   createOrUpdateEntourageSchema,
