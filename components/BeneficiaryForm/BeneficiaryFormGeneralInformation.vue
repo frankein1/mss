@@ -169,7 +169,6 @@
     ThirdPartyAccommodationMode
   } from '~/client/options/beneficiary'
   import { nationalityOptions } from '~/client/options/nationality'
-  import { UpdateBeneficiaryRawInput } from '~/server/schema/beneficiary.schema'
   import { useAuthStore } from '~/store/auth'
   import type {
     CitySelected,
@@ -177,9 +176,10 @@
     GeoApiGouvFrRegion
   } from '~/components/VeeForm/types'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
+  import { UpdateBeneficiaryInput } from '~/server/schema'
 
   const props = defineProps<{
-    values: UpdateBeneficiaryRawInput
+    values: UpdateBeneficiaryInput
   }>()
 
   const authStore = useAuthStore()

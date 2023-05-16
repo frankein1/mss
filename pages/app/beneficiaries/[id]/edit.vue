@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { UpdateBeneficiaryRawInput } from '~/server/schema'
+  import { UpdateBeneficiaryInput } from '~/server/schema'
   import { Routes } from '~/utils/routing/routes'
 
   const route = useRoute()
@@ -51,7 +51,7 @@
       : ''
   )
 
-  async function onUpdateBeneficiary(beneficiary: UpdateBeneficiaryRawInput) {
+  async function onUpdateBeneficiary(beneficiary: UpdateBeneficiaryInput) {
     isSubmitting.value = true
     // TODO: handle error
     await trpcClient.beneficiary.update.mutate(beneficiary)
