@@ -28,7 +28,7 @@
 <script lang="ts" setup>
   import type { CreateCustomFollowupTypeInput } from '~/server/schema'
   import { createCustomFollowupTypeSchema } from '~/server/schema'
-  import { followupTypeFieldLabels } from '~/client/labels/followup-type.labels'
+  import { followupTypeFieldLabels } from '~/client/labels'
 
   const emit = defineEmits<{
     (e: 'createFollowupType', followupTypeName: string): void

@@ -24,7 +24,7 @@
                 Entretiens
               </button>
             </li>
-            <!-- <li role="presentation">
+            <li role="presentation">
               <button
                 id="help-requests-tab"
                 class="fr-tabs__tab"
@@ -35,19 +35,11 @@
               >
                 Demandes d'aide
               </button>
-            </li> -->
+            </li>
           </ul>
 
           <FollowupsTabPanel />
-          <!-- <div
-            id="help-requests-panel"
-            class="fr-tabs__panel fr-tabs__panel--selected fr-px-0"
-            role="tabpanel"
-            aria-labelledby="help-requests-tab"
-            tabindex="0"
-          >
-            <HelpRequestsTable />
-          </div> -->
+          <HelpRequestsTabPanel />
         </main>
       </div>
     </div>
@@ -90,5 +82,10 @@
 
   #help-requests-tab[aria-selected='true'] {
     border-color: var(--color-help-request);
+  }
+
+  :deep(.table-container) {
+    /* 21.5rem seems to come up out of the box. It corresponds to the total height of elements existing above and under the table */
+    max-height: calc(100vh - 23.5rem);
   }
 </style>

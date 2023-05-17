@@ -26,12 +26,22 @@ export type {
 } from './followup.schema'
 
 export {
-  createHelpRequestSchema,
-  editHelpRequestSchema
+  // createHelpRequestSchema,
+  editHelpRequestSchema,
+  getHelpRequestsSchema,
+  editHelpRequestStatusSchema,
+  editHelpRequestAllocatedAmountSchema,
+  editHelpRequestPaymentMethodSchema,
+  editHelpRequestPaymentDateSchema
 } from './helpRequest.schema'
 export type {
-  CreateHelpRequestInput,
-  EditHelpRequestInput
+  // CreateHelpRequestInput,
+  EditHelpRequestInput,
+  GetHelpRequestsInput,
+  EditHelpRequestStatusInput,
+  EditHelpRequestAllocatedAmountInput,
+  EditHelpRequestPaymentMethodInput,
+  EditHelpRequestPaymentDateInput
 } from './helpRequest.schema'
 
 export {
@@ -68,14 +78,14 @@ export {
   statFilterSchema,
   beneficiaryFilterSchema,
   followupFilterSchema,
-  helpRequestHistoryFilterSchema,
+  helpRequestFilterSchema,
   beneficiaryHistoryFilterSchema
 } from './filter.schema'
 export type {
   StatFilterInput,
   BeneficiaryFilterInput,
   FollowupFilterInput,
-  HelpRequestHistoryFilterInput,
+  HelpRequestFilterInput,
   BeneficiaryHistoryFilterInput
 } from './filter.schema'
 

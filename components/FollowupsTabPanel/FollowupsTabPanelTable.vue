@@ -16,16 +16,16 @@
               id="status-col"
               scope="col"
             >
-              Statut
+              {{ followupFieldLabels.status }}
             </th>
-            <th scope="col">Type d'entretien</th>
+            <th scope="col">{{ followupFieldLabels.medium }}</th>
             <th scope="col">Objet de l'entretien</th>
             <th scope="col">
-              Date d'échéance
+              {{ followupFieldLabels.dueDate }}
               <AtomSortButton @sort="emit('sort', { dueDate: $event })" />
             </th>
             <th scope="col">
-              Bénéficiaire
+              {{ followupFieldLabels.beneficiaryId }}
               <AtomSortButton
                 @sort="
                   emit('sort', {
@@ -55,6 +55,7 @@
 <script lang="ts" setup>
   import { Followups } from './types'
   import { FollowupSort } from '~/types/table'
+  import { followupFieldLabels } from '~/client/labels'
 
   defineProps<{
     followups: Followups
@@ -64,10 +65,3 @@
     (e: 'sort', sort: FollowupSort): void
   }>()
 </script>
-
-<style lang="scss" scoped>
-  .table-container {
-    // 21.5rem seems to come up out of the box. It corresponds to the total height of elements existing above and under the table
-    max-height: calc(100vh - 23.5rem);
-  }
-</style>

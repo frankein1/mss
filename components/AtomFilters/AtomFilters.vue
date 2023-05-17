@@ -80,6 +80,7 @@
 
 <script lang="ts" setup>
   import { useForm } from 'vee-validate'
+  import dayjs from 'dayjs'
   import { FilterType } from '~/utils/constants/filters'
   import type {
     FilterProp,
@@ -87,14 +88,15 @@
     SelectedFilter
   } from '~/types/filter'
   import { getRandomId } from '~/utils/random'
-
-  const DEFER_TIME = 400
+  import { INPUT_DEFER_TIME } from '~/utils/constants'
 
   const props = withDefaults(
     defineProps<{
       filters: FilterProp[]
       fullWidthFilters?: boolean
-      initialSelectedValues?: { [filterName: string]: string | string[] | null }
+      initialSelectedValues?: {
+        [filterName: string]: string | string[] | Date | null
+      }
     }>(),
     { fullWidthFilters: false, initialSelectedValues: () => ({}) }
   )
@@ -108,7 +110,7 @@
         }
         const selectedFilter: SelectedFilter = {
           filterLabel: filter.label,
-          value: initialSelectedValue,
+          value: getFilterInitialValue(filter, initialSelectedValue),
           valueLabel: getFilterValueLabel(filter, initialSelectedValue)
         }
         return { ..._initialSelectedFilters, [filter.name]: selectedFilter }
@@ -140,6 +142,15 @@
     () => !!Object.keys(selectedFilters.value).length
   )
 
+  function getFilterInitialValue(
+    filter: FilterProp,
+    initialSelectedValue: string | string[] | Date
+  ): string | string[] {
+    return filter.type === FilterType.Date
+      ? dayjs(initialSelectedValue as string | Date).format('YYYY-MM-DD')
+      : (initialSelectedValue as string | string[])
+  }
+
   function onChangeFilter(value: string | string[], filter: FilterProp) {
     if (!value) {
       delete selectedFilters.value[filter.name]
@@ -154,7 +165,7 @@
 
     timeout.value = setTimeout(() => {
       emit('filter', selectedFiltersToDataObject(selectedFilters.value))
-    }, DEFER_TIME)
+    }, INPUT_DEFER_TIME)
   }
 
   function addFilter(filter: FilterProp, value: string | string[]) {
@@ -174,13 +185,18 @@
     emit('filter', selectedFiltersToDataObject(selectedFilters.value))
   }
 
-  function getFilterValueLabel(filter: FilterProp, value: string | string[]) {
+  function getFilterValueLabel(
+    filter: FilterProp,
+    value: string | string[] | Date
+  ) {
     let valueLabel: string
-    if (
+    if (filter.type === FilterType.Date) {
+      valueLabel = dayjs(value as string | Date).format('YYYY-MM-DD')
+    } else if (
       filter.type === FilterType.SelectMultiple ||
       filter.type === FilterType.SelectOne
     ) {
-      valueLabel = getSelectedOptionsLabel(filter, value)
+      valueLabel = getSelectedOptionsLabel(filter, value as string | string[])
     } else {
       valueLabel = value as string
     }

@@ -67,6 +67,9 @@
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
 
+  const { updatePagination } = usePagination(page, perPage)
+  const { onSort } = useSort<BeneficiarySort>(orderBy)
+
   const {
     data: beneficiariesRequest,
     pending,
@@ -98,27 +101,6 @@
   )
 
   const totalPages = computed(() => beneficiariesRequest.value?.totalPages || 0)
-
-  function updatePagination({
-    pageNumber,
-    limitValue
-  }: {
-    pageNumber: number
-    limitValue: number
-  }) {
-    page.value = pageNumber
-    perPage.value = limitValue
-  }
-
-  function onSort(sort: BeneficiarySort) {
-    orderBy.value = orderBy.value.filter(
-      s => Object.keys(s)[0] !== Object.keys(sort)[0]
-    )
-    if (!Object.values(sort)) {
-      return
-    }
-    orderBy.value.unshift(sort)
-  }
 </script>
 
 <style lang="scss" scoped>

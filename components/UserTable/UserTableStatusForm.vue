@@ -1,8 +1,11 @@
 <template>
-  <form @change="onUpdateStatus">
+  <form
+    @change="onUpdateStatus"
+    @submit.prevent
+  >
     <VeeToggle
       name="status"
-      label="Statut"
+      :label="userFieldLabels.status"
       no-label
       :checked-label="false"
       labelled-by="status-col"
@@ -13,6 +16,7 @@
 <script setup lang="ts">
   import { User, UserStatus } from '@prisma/client'
   import { editUserStatusSchema, UserStatusEditionInput } from '~/server/schema'
+  import { userFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

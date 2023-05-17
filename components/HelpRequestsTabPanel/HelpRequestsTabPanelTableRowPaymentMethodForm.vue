@@ -1,0 +1,59 @@
+<template>
+  <form
+    @change="onUpdatePaymentMethod"
+    @submit.prevent
+  >
+    <VeeSelect
+      name="paymentMethod"
+      :label="helpRequestFieldLabels.paymentMethod"
+      :options="withEmptyValue(paymentMethodOptions)"
+      no-label
+      labelled-by="payment-method-col"
+    />
+  </form>
+</template>
+
+<script setup lang="ts">
+  import { HelpRequestItem } from './types'
+  import { paymentMethodOptions } from '~/client/options/helpRequest'
+  import {
+    EditHelpRequestPaymentMethodInput,
+    editHelpRequestPaymentMethodSchema
+  } from '~/server/schema'
+  import { helpRequestFieldLabels } from '~/client/labels'
+  import { withEmptyValue } from '~/utils/options'
+
+  const snackbar = useSnackbar()
+
+  const props = defineProps<{
+    helpRequest: HelpRequestItem
+  }>()
+
+  const emit = defineEmits<{
+    (e: 'updated', helpRequest: HelpRequestItem): void
+  }>()
+
+  const { handleSubmit } = useForm<EditHelpRequestPaymentMethodInput>({
+    validationSchema: toTypedSchema(editHelpRequestPaymentMethodSchema),
+    initialValues: {
+      id: props.helpRequest.id,
+      paymentMethod: props.helpRequest.paymentMethod
+    }
+  })
+
+  const onUpdatePaymentMethod = handleSubmit(async helpRequest => {
+    try {
+      const updatedHelpRequest =
+        await useTrpcClient().helpRequest.update.mutate(helpRequest)
+
+      snackbar.success(
+        "Le mode de paiment de l'instruction de demande d'aide a été modifié."
+      )
+      emit('updated', updatedHelpRequest)
+    } catch {
+      snackbar.error(
+        "La modification du mode de paiment de l'instruction de demande d'aide a échoué."
+      )
+    }
+  })
+</script>

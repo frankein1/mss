@@ -1,8 +1,8 @@
 <template>
-  <form @change="onUpdateRole">
+  <form @change="onUpdateRole" @submit.prevent>
     <VeeSelect
       name="role"
-      label="Rôle"
+      :label="userFieldLabels.role"
       :options="nonAdminUserRoleOptions"
       required
       no-label
@@ -15,6 +15,7 @@
   import { User } from '@prisma/client'
   import { nonAdminUserRoleOptions } from '~/client/options/user'
   import { editUserRoleSchema, UserRoleEditionInput } from '~/server/schema'
+  import { userFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

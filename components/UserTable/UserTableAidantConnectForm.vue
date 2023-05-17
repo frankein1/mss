@@ -1,8 +1,11 @@
 <template>
-  <form @change="onUpdateAidantConnectAuthorisation">
+  <form
+    @change="onUpdateAidantConnectAuthorisation"
+    @submit.prevent
+  >
     <VeeCheckbox
       name="aidantConnectAuthorisation"
-      label="Aidant Connect"
+      :label="userFieldLabels.aidantConnectAuthorisation"
       no-label
       labelled-by="authorisation-col"
     />
@@ -15,6 +18,7 @@
     editUserAidantConnectAuthorisationSchema,
     UserAidantConnectAuthorisationEditionInput
   } from '~/server/schema'
+  import { userFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

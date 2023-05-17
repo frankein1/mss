@@ -19,3 +19,13 @@ export type FollowupSort = Pick<
     'usualName'
   >
 }
+
+export type HelpRequestSort = Pick<
+  Prisma.HelpRequestOrderByWithRelationAndSearchRelevanceInput,
+  'dueDate' | 'openingDate'
+> & {
+  beneficiary?: Pick<
+    Prisma.BeneficiaryOrderByWithRelationAndSearchRelevanceInput,
+    'usualName'
+  >
+}

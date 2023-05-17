@@ -162,7 +162,7 @@
   }
 
   function onChange(event: Event) {
-    emit('changeValue', (event.target as HTMLSelectElement).value)
+    emit('changeValue', (event.target as HTMLInputElement).value)
     handleChange(event)
   }
 </script>

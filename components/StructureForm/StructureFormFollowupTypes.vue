@@ -63,7 +63,7 @@
     defaultLegallyNotRequiredFollowupTypeOptions
   } from '~/client/options/followupType'
   import { toOptions } from '~/utils/options'
-  import { structureFieldLabels } from '~/client/labels/structure.labels'
+  import { structureFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     structureFollowupTypes: FollowupTypeWithSupportsCount[]

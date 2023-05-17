@@ -87,7 +87,7 @@
     NonAdminUserRole,
     NonAdminUserRoleLabels
   } from '~/client/options/user'
-  import { userFieldLabels } from '~/client/labels/user.labels'
+  import { userFieldLabels } from '~/client/labels'
 
   defineProps<{
     users: User[] | null

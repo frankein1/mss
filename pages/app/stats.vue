@@ -131,7 +131,7 @@
 </script>
 
 <style scoped>
-  ::v-deep .main-container {
+  :deep(.main-container) {
     min-height: 100%;
   }
 </style>

@@ -46,7 +46,7 @@
   import { toTypedSchema } from '@vee-validate/zod'
   import { withEmptyValue } from '~/utils/options'
   import { nonAdminUserRoleOptions } from '~/client/options/user'
-  import { userFieldLabels } from '~/client/labels/user.labels'
+  import { userFieldLabels } from '~/client/labels'
   import { UserCreationInput, createUserSchema } from '~/server/schema'
 
   const snackbar = useSnackbar()

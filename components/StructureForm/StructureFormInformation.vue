@@ -66,7 +66,7 @@
     CitySelected,
     AddressSelected
   } from '~/components/VeeForm/types'
-  import { structureFieldLabels } from '~/client/labels/structure.labels'
+  import { structureFieldLabels } from '~/client/labels'
   import type { EditCurrentUserStructureInput } from '~/server/schema'
 
   const props = defineProps<{

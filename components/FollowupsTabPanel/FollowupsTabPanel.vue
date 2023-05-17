@@ -15,8 +15,6 @@
     <template v-else>
       <FollowupsTabPanelFilters
         class="fr-px-5v"
-        :is-in-followups-context="true"
-        :is-in-help-requests-context="false"
         @filter="filters = $event"
       />
       <hr />
@@ -29,6 +27,7 @@
       <FollowupsTabPanelTable
         v-show="!pending"
         :followups="followups"
+        @sort="onSort"
       />
       <AtomPagination
         v-show="!pending"
@@ -55,6 +54,9 @@
   const orderBy = ref<FollowupSort[]>([{ date: SortOrder.Desc }])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
+
+  const { updatePagination } = usePagination(page, perPage)
+  const { onSort } = useSort<FollowupSort>(orderBy)
 
   const {
     data: followupsRequest,
@@ -83,15 +85,4 @@
   const followups = computed(() => followupsRequest.value?.followups || [])
 
   const totalPages = computed(() => followupsRequest.value?.totalPages || 0)
-
-  function updatePagination({
-    pageNumber,
-    limitValue
-  }: {
-    pageNumber: number
-    limitValue: number
-  }) {
-    page.value = pageNumber
-    perPage.value = limitValue
-  }
 </script>

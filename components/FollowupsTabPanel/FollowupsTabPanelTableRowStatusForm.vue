@@ -1,8 +1,11 @@
 <template>
-  <form @change="onUpdateStatus">
+  <form
+    @change="onUpdateStatus"
+    @submit.prevent
+  >
     <VeeSelect
       name="status"
-      label="Statut"
+      :label="followupFieldLabels.status"
       :options="followupStatusOptions"
       required
       no-label
@@ -18,6 +21,7 @@
     EditFollowupStatusInput,
     editFollowupStatusSchema
   } from '~/server/schema'
+  import { followupFieldLabels } from '~/client/labels'
 
   const snackbar = useSnackbar()
 
@@ -37,9 +41,11 @@
     try {
       await useTrpcClient().followup.update.mutate(followup)
 
-      snackbar.success("Le statut de l'entretien a été modifié.")
+      snackbar.success("Le statut de la synthèse d'entretien a été modifié.")
     } catch {
-      snackbar.error("La modification du statut de l'entretien a échoué.")
+      snackbar.error(
+        "La modification du statut de la synthèse d'entretien a échoué."
+      )
     }
   })
 </script>
