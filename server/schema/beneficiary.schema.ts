@@ -110,10 +110,10 @@ export const updateBeneficiarySchema = z.object({
     familySituation: z.nativeEnum(BeneficiaryFamilySituation).nullish(),
     minorChildren: z.coerce.number().gte(0).nullish(),
     majorChildren: z.coerce.number().gte(0).nullish(),
-    taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema)
+    taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema).nullish()
   }),
   entourage: z.object({
-    entourages: z.array(createOrUpdateEntourageSchema)
+    entourages: z.array(createOrUpdateEntourageSchema).nullish()
   }),
   health: z.object({
     gir: z.nativeEnum(BeneficiaryGir).nullish(),

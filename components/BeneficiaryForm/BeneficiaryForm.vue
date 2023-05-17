@@ -3,7 +3,6 @@
     ref="form"
     @submit="onSubmit"
   >
-    {{ JSON.stringify(errors, undefined, 2) }}
     <VeeMultiSelect
       name="referents"
       label="Agent(s) référent(s)"
@@ -126,7 +125,7 @@
     (e: 'saveBeneficiary', beneficiary: UpdateBeneficiaryInput): void
   }>()
 
-  const { handleSubmit, values, errors } = useForm<UpdateBeneficiaryInput>({
+  const { handleSubmit, values } = useForm<UpdateBeneficiaryInput>({
     validationSchema: toTypedSchema(updateBeneficiarySchema),
     initialValues: {
       id: props.beneficiary.id,

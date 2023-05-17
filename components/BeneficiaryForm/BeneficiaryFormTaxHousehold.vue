@@ -10,7 +10,7 @@
     </legend>
     <div class="fr-grid-row fr-grid-row--gutters form-grid">
       <div
-        v-if="beneficiary"
+        v-if="linkedBeneficiary"
         class="fr-fieldset__element"
       >
         <div class="fr-input--group">
@@ -36,7 +36,7 @@
           </div>
         </div>
       </div>
-      <template v-if="!beneficiary">
+      <template v-if="!linkedBeneficiary">
         <div class="fr-fieldset__element">
           <VeeAutocomplete
             label="Nom"
@@ -61,7 +61,7 @@
           :options="withEmptyValue(taxHouseHoldRelationshipOptions)"
         />
       </div>
-      <template v-if="!beneficiary">
+      <template v-if="!linkedBeneficiary">
         <div class="fr-fieldset__element">
           <VeeInput
             :name="`taxHousehold.taxHouseholds[${index}].email`"
@@ -121,7 +121,9 @@
     ): void
   }>()
 
-  const beneficiary = computed(() => props.taxHousehold.value.beneficiary)
+  const linkedBeneficiary = computed(() => {
+    return props.taxHousehold.value.linkedBeneficiary
+  })
 
   const unlink = () => {
     emit('selectBeneficiary', {
@@ -147,10 +149,10 @@
   ])
 
   const getBeneficiaryLabel = computed(() => {
-    if (!beneficiary.value) {
+    if (!linkedBeneficiary.value) {
       return ''
     }
-    return getBeneficiaryDisplayName(beneficiary.value)
+    return getBeneficiaryDisplayName(linkedBeneficiary.value)
   })
 
   async function searchBeneficiariesFromLastname(search: string) {

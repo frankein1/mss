@@ -37,6 +37,6 @@
     beneficiary: BeneficiarySearchResult | null
   }) {
     const field = fields.value[index]
-    field.value.beneficiary = beneficiary
+    field.value.linkedBeneficiary = beneficiary
   }
 </script>

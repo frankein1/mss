@@ -85,15 +85,17 @@ export const updateBeneficiaryHandler = async ({
   }
 
   if (canUpdateBeneficiaryRelatives(user, input)) {
-    const entourages = entourage.entourages.map(e => ({ hosted: false, ...e }))
-    const taxHouseholds = taxHousehold.taxHouseholds.map(e => {
-      const { beneficiary, ...data } = e
-      return {
-        hosted: true,
-        beneficiary: { set: { id: beneficiary ? beneficiary.id : null } },
-        ...data
-      }
-    })
+    const entourages =
+      entourage.entourages?.map(e => ({ hosted: false, ...e })) || []
+    const taxHouseholds =
+      taxHousehold.taxHouseholds?.map(e => {
+        const { linkedBeneficiary, ...data } = e
+        return {
+          hosted: true,
+          linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null,
+          ...data
+        }
+      }) || []
 
     const newRelatives = [...entourages, ...taxHouseholds]
 
