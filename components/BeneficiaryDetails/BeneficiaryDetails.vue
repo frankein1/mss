@@ -23,12 +23,12 @@
 <script lang="ts" setup>
   import { Beneficiary } from '@prisma/client'
   import { useAuthStore } from '~/store/auth'
-  import { BeneficiaryRelativeWithBeneficiary } from '~/utils'
+  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/utils'
 
   const props = defineProps<{
     beneficiary: Beneficiary
-    taxHouseholds: BeneficiaryRelativeWithBeneficiary[]
-    entourages: BeneficiaryRelativeWithBeneficiary[]
+    taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
+    entourages: BeneficiaryRelativeWithLinkedBeneficiary[]
   }>()
 
   const authStore = useAuthStore()

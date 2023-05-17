@@ -22,11 +22,13 @@
       >
         <span class="information-line">
           <NuxtLink
-            v-if="household && relative.beneficiary"
-            :to="`${Routes.Beneficiary(relative.beneficiary.id)}`"
+            v-if="household && relative.linkedBeneficiary"
+            :to="`${Routes.Beneficiary(relative.linkedBeneficiary.id)}`"
             class="fr-link fr-icon-links-line fr-link--icon-left"
             target="_self"
-            >{{ getBeneficiaryDisplayName(relative.beneficiary) }}</NuxtLink
+            >{{
+              getBeneficiaryDisplayName(relative.linkedBeneficiary)
+            }}</NuxtLink
           >
           <template v-else>{{
             getBeneficiaryDisplayName(names(relative))
@@ -61,13 +63,13 @@
   import { Beneficiary, BeneficiaryRelative } from '@prisma/client'
   import { relativeRelationshipLabels } from '~/client/options/beneficiary'
   import { familySituationLabels } from '~/client/options/familySituation'
-  import { BeneficiaryRelativeWithBeneficiary } from '~/utils/beneficiary'
+  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/utils/beneficiary'
   import { Routes } from '~/utils/routing/routes'
 
   const props = withDefaults(
     defineProps<{
       beneficiary: Beneficiary
-      relatives: BeneficiaryRelativeWithBeneficiary[]
+      relatives: BeneficiaryRelativeWithLinkedBeneficiary[]
       household?: boolean
     }>(),
     {
@@ -113,37 +115,41 @@
     return relativeRelationshipLabels[relationship] || relationship
   }
 
-  function hasCity(relative: BeneficiaryRelativeWithBeneficiary) {
-    if (relative.beneficiary) {
+  function hasCity(relative: BeneficiaryRelativeWithLinkedBeneficiary) {
+    if (relative.linkedBeneficiary) {
       return false
     }
     return relative.city
   }
 
-  function hasPhone(relative: BeneficiaryRelativeWithBeneficiary) {
-    if (relative.beneficiary) {
-      return relative.beneficiary?.phone1 || relative.beneficiary?.phone2
+  function hasPhone(relative: BeneficiaryRelativeWithLinkedBeneficiary) {
+    if (relative.linkedBeneficiary) {
+      return (
+        relative.linkedBeneficiary?.phone1 || relative.linkedBeneficiary?.phone2
+      )
     }
     return relative.phone
   }
 
-  function hasEmail(relative: BeneficiaryRelativeWithBeneficiary) {
-    if (relative.beneficiary) {
-      return relative.beneficiary.email
+  function hasEmail(relative: BeneficiaryRelativeWithLinkedBeneficiary) {
+    if (relative.linkedBeneficiary) {
+      return relative.linkedBeneficiary.email
     }
     return relative.email
   }
 
-  function relativeContact(relative: BeneficiaryRelativeWithBeneficiary) {
-    const { city, phone, email, beneficiary } = relative
+  function relativeContact(relative: BeneficiaryRelativeWithLinkedBeneficiary) {
+    const { city, phone, email, linkedBeneficiary } = relative
     let contact = ''
     const relativePhone =
-      (beneficiary && (beneficiary.phone_1 || beneficiary.phone_2)) ||
-      (!beneficiary && phone)
+      (linkedBeneficiary &&
+        (linkedBeneficiary.phone1 || linkedBeneficiary.phone2)) ||
+      (!linkedBeneficiary && phone)
     const relativeEmail =
-      (beneficiary && beneficiary.email) || (!beneficiary && email)
+      (linkedBeneficiary && linkedBeneficiary.email) ||
+      (!linkedBeneficiary && email)
 
-    if (!beneficiary && city) {
+    if (!linkedBeneficiary && city) {
       contact += city
       if (relativePhone || relativeEmail) {
         contact += ' / '

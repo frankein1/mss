@@ -33,7 +33,7 @@
         label="Foyer fiscal"
       >
         <BeneficiaryFormFamilySituation />
-        <BeneficiaryFormTaxHouseholds :values="values" />
+        <BeneficiaryFormTaxHouseholds />
       </AccordionFieldset>
       <AccordionFieldset
         v-if="canSetRelatives"
@@ -95,7 +95,7 @@
   import { toTypedSchema } from '@vee-validate/zod'
   import BeneficiaryFormTaxHouseholds from './BeneficiaryFormTaxHouseholds.vue'
   import {
-    BeneficiaryRelativeWithBeneficiary,
+    BeneficiaryRelativeWithLinkedBeneficiary,
     BeneficiaryReferent,
     BeneficiaryWithReferents
   } from '~/utils/beneficiary'
@@ -116,7 +116,7 @@
 
   const props = defineProps<{
     beneficiary: BeneficiaryWithReferents
-    taxHouseholds: BeneficiaryRelativeWithBeneficiary[]
+    taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
     entourages: BeneficiaryRelative[]
     isSubmitting: boolean
     agents: BeneficiaryReferent[]

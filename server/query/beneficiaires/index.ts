@@ -1,22 +1,12 @@
-import { getBeneficiaryToView } from './getBeneficiaryToView'
-import { getBeneficiaryToUpdate } from './getBeneficiaryToUpdate'
-import { getDocuments } from './getDocuments'
-import { getFollowupTypes } from './getFollowupTypes'
-import { getSupports } from './getSupports'
-import { getBeneficiary } from './getBeneficiary'
-import { iterateBeneficiaries } from './iterateBeneficiaries'
-import { createBeneficiary } from './createBeneficiary'
-
-export const BeneficiairesQuery = {
-  getBeneficiaryToUpdate,
-  getDocuments,
-  getFollowupTypes,
-  getSupports,
-  getBeneficiaryToView,
-  getBeneficiary,
-  iterateBeneficiaries,
-  createBeneficiary
-}
+export { getBeneficiaryToView } from './getBeneficiaryToView'
+export { getBeneficiaryToUpdate } from './getBeneficiaryToUpdate'
+export { getDocuments } from './getDocuments'
+export { getFollowupTypes } from './getFollowupTypes'
+export { getSupports } from './getSupports'
+export { getBeneficiary } from './getBeneficiary'
+export { iterateBeneficiaries } from './iterateBeneficiaries'
+export { createBeneficiary } from './createBeneficiary'
+export { getBeneficiaryReferentsAndRelatives } from './getBeneficiaryReferentsAndRelatives'
 
 export type { SupportList, SupportListItem } from './getSupports'
 export type { GetBeneficiaryToViewReturn } from './getBeneficiaryToView'

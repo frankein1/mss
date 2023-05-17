@@ -19,7 +19,6 @@ services:
 volumes:
   monsuivisocial_pgdata:
     name: monsuivisocial_pgdata
-    external: true
 
 networks:
   monsuivisocial_network:

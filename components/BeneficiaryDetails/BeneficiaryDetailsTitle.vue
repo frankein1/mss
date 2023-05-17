@@ -12,14 +12,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { Beneficiary, User } from '@prisma/client'
+  import { BeneficiaryWithReferents } from '~/utils'
   import { readableFileNumber } from '~/utils/readableFileNumber'
 
   const props = withDefaults(
     defineProps<{
-      beneficiary: Pick<Beneficiary, 'id' | 'aidantConnectAuthorized'> & {
-        referents: Pick<User, 'id' | 'firstName' | 'lastName' | 'email'>[]
-      }
+      beneficiary: BeneficiaryWithReferents
     }>(),
     {}
   )

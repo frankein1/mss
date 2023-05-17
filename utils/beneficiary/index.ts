@@ -1,17 +1,16 @@
 import type {
   BeneficiarySearchResult,
   BeneficiaryReferent,
-  BeneficiaryRelativeWithBeneficiary,
+  BeneficiaryRelativeWithLinkedBeneficiary,
   BeneficiaryWithReferents
 } from './types'
 export type {
   BeneficiarySearchResult,
   BeneficiaryReferent,
-  BeneficiaryRelativeWithBeneficiary,
+  BeneficiaryRelativeWithLinkedBeneficiary,
   BeneficiaryWithReferents
 }
 export * from './calculateAge'
 export * from './getBeneficiaryDisplayName'
 export * from './getBeneficiaryDisplayPhone'
 export * from './getBeneficiarySearchDisplayName'
-export * from './getBeneficiaryFollowupTypes'

@@ -1,11 +1,4 @@
 import {
-  createBeneficiaryHandler,
-  searchBeneficiaryHandler,
-  getBeneficiaryDetailsHandler,
-  updateBeneficiaryHandler,
-  getBeneficiariesHandler
-} from '../controller/beneficiary.controller'
-import {
   idSchema,
   searchBeneficiarySchema,
   createBeneficiarySchema,
@@ -13,6 +6,13 @@ import {
   getBeneficiariesSchema
 } from '../schema'
 
+import {
+  createBeneficiaryHandler,
+  getBeneficiariesHandler,
+  getBeneficiaryDetailsHandler,
+  updateBeneficiaryHandler,
+  searchBeneficiaryHandler
+} from '../controller/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryRouter = router({

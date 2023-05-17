@@ -90,7 +90,8 @@ model User {
 
   doneMutations MutationLog[] @relation(name: "mutation_by")
 
-  targetForMutations MutationLog[] @relation(name: "mutation_target")
+  targetForMutations     MutationLog[]            @relation(name: "mutation_target")
+  InstructorOrganization InstructorOrganization[]
 
   @@map("user")
 }
@@ -123,9 +124,10 @@ model Structure {
 
   beneficiaries Beneficiary[]
 
-  created            DateTime?     @default(now())
-  updated            DateTime?     @default(now())
-  targetForMutations MutationLog[]
+  created                DateTime?                @default(now())
+  updated                DateTime?                @default(now())
+  targetForMutations     MutationLog[]
+  InstructorOrganization InstructorOrganization[]
 
   @@map("structure")
 }
@@ -150,11 +152,12 @@ model Document {
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
-  created      DateTime?     @default(now())
-  createdBy    User          @relation(fields: [createdById], references: [id])
-  createdById  String        @map("created_by_id") @db.Uuid
-  followups    Followup[]    @relation("document_to_followup")
-  helpRequests HelpRequest[] @relation("document_to_help_request")
+  created      DateTime?      @default(now())
+  createdBy    User           @relation(fields: [createdById], references: [id])
+  createdById  String         @map("created_by_id") @db.Uuid
+  followups    Followup[]     @relation("document_to_followup")
+  helpRequests HelpRequest[]  @relation("document_to_help_request")
+  Notification Notification[]
 
   @@map("document")
 }
@@ -315,8 +318,9 @@ model Followup {
 
   comments Comment[]
 
-  created DateTime? @default(now())
-  updated DateTime? @default(now())
+  created      DateTime?      @default(now())
+  updated      DateTime?      @default(now())
+  Notification Notification[]
 
   @@map("followup")
 }
@@ -366,6 +370,9 @@ model HelpRequest {
   prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
   prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
 
+  instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
+  instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
+
   openingDate DateTime @map("opening_date") @db.Date
 
   type   FollowupType @relation(fields: [typeId], references: [id])
@@ -406,7 +413,8 @@ model HelpRequest {
   updated DateTime? @default(now())
 
   ministre     Minister?
-  numeroPegase String?   @map("numero_pegase")
+  numeroPegase String?        @map("numero_pegase")
+  Notification Notification[]
 
   @@map("help_request")
 }
@@ -897,8 +905,6 @@ model Beneficiary {
   ministereDepartementServiceAc String? @map("ministere_departement_service_ac")
   ministereStructure            String? @map("ministere_structure")
 
-  relatives BeneficiaryRelative[]
-
   // Health
   gir                         BeneficiaryGir?
   doctor                      String?
@@ -945,6 +951,9 @@ model Beneficiary {
   updated            DateTime?     @default(now())
   targetForMutations MutationLog[]
 
+  relatives       BeneficiaryRelative[] @relation("ownerBeneficiary")
+  linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
+
   @@map("beneficiary")
 }
 
@@ -982,8 +991,11 @@ model BeneficiaryRelative {
   hosted    Boolean @default(false)
   caregiver Boolean @default(false)
 
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], name: "ownerBeneficiary")
+
+  linkedBeneficiaryId String?      @map("beneficiary_link_id") @db.Uuid
+  linkedBeneficiary   Beneficiary? @relation(fields: [linkedBeneficiaryId], references: [id], name: "linkedBeneficiary")
 
   additionalInformation String? @map("additional_information")
 
@@ -1064,8 +1076,8 @@ model PrescribingOrganization {
   legacyId Int? @map("legacy_id")
 
   created     DateTime? @default(now())
-  createdBy   User      @relation(fields: [createdById], references: [id])
-  createdById String    @map("created_by_id") @db.Uuid
+  createdBy   User?     @relation(fields: [createdById], references: [id])
+  createdById String?   @map("created_by_id") @db.Uuid
 
   name String
 
@@ -1076,6 +1088,25 @@ model PrescribingOrganization {
   followups    Followup[]
 
   @@map("prescribing_organization")
+}
+
+model InstructorOrganization {
+  id String @id @db.Uuid
+
+  legacyId Int? @map("legacy_id")
+
+  created DateTime? @default(now())
+
+  createdBy   User?   @relation(fields: [createdById], references: [id])
+  createdById String? @map("created_by_id") @db.Uuid
+
+  name String
+
+  structure   Structure?    @relation(fields: [structureId], references: [id])
+  structureId String?       @map("structure_id") @db.Uuid
+  HelpRequest HelpRequest[]
+
+  @@map("instructor_organization")
 }
 
 enum NotificationType {
@@ -1092,6 +1123,15 @@ model Notification {
 
   recipient   User   @relation(fields: [recipientId], references: [id])
   recipientId String @map("recipient_id") @db.Uuid
+
+  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id])
+  helpRequestId String?      @map("help_request_id") @db.Uuid
+
+  followup   Followup? @relation(fields: [followupId], references: [id])
+  followupId String?   @map("followup_id") @db.Uuid
+
+  document   Document? @relation(fields: [documentId], references: [key])
+  documentId String?   @map("document_id")
 
   read Boolean? @default(false)
 

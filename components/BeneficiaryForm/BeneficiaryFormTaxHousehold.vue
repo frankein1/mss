@@ -26,11 +26,12 @@
               ref="beneficiaryTag"
               class="fr-tag fr-tag--dismiss force-focus-visible"
               :aria-label="
-                'Retirer le lien vers la fiche bénéficiaire ' + beneficiaryLabel
+                'Retirer le lien vers la fiche bénéficiaire ' +
+                getBeneficiaryLabel
               "
               @click="unlink()"
             >
-              {{ beneficiaryLabel }}
+              {{ getBeneficiaryLabel }}
             </button>
           </div>
         </div>
@@ -114,12 +115,19 @@
 
   const emit = defineEmits<{
     (e: 'removeTaxHousehold'): void
+    (
+      e: 'selectBeneficiary',
+      data: { index: number; beneficiary: BeneficiarySearchResult | null }
+    ): void
   }>()
 
-  const beneficiary = ref(props.taxHousehold.value.beneficiary)
+  const beneficiary = computed(() => props.taxHousehold.value.beneficiary)
 
   const unlink = () => {
-    beneficiary.value = null
+    emit('selectBeneficiary', {
+      index: props.index,
+      beneficiary: null
+    })
   }
 
   /**
@@ -138,7 +146,7 @@
     ...lastResultsFromLastname.value
   ])
 
-  const beneficiaryLabel = computed(() => {
+  const getBeneficiaryLabel = computed(() => {
     if (!beneficiary.value) {
       return ''
     }
@@ -178,7 +186,10 @@
     if (!selectedBeneficiary) {
       return
     }
-    beneficiary.value = selectedBeneficiary
+    emit('selectBeneficiary', {
+      index: props.index,
+      beneficiary: selectedBeneficiary
+    })
   }
 </script>
 

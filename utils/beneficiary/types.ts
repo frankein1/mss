@@ -5,8 +5,8 @@ import {
   User
 } from '@prisma/client'
 
-export type BeneficiaryRelativeWithBeneficiary = BeneficiaryRelative & {
-  beneficiary?: Beneficiary
+export type BeneficiaryRelativeWithLinkedBeneficiary = BeneficiaryRelative & {
+  linkedBeneficiary: Beneficiary | null
 }
 
 export type BeneficiaryReferent = {

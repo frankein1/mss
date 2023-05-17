@@ -1,5 +1,4 @@
 export { AccompagnementsQuery } from './accompagnements'
-export { BeneficiairesQuery } from './beneficiaires'
 export { UtilisateursQuery } from './utilisateurs'
 export { getBeneficiarySecurityTarget } from './security/getBeneficiarySecurityTarget'
 
