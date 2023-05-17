@@ -499,7 +499,7 @@ export const getRegionStatsHandler = async ({
 }
 
 export const getSupportStatsHandler = async ({
-  input: _,
+  input,
   ctx: { user }
 }: {
   input: StatFilterInput
@@ -508,15 +508,24 @@ export const getSupportStatsHandler = async ({
   if (!user.structureId) {
     throw invalidError('structureId is null')
   }
-  // TODO: filters are not applied here
   return await prismaClient.followupType.findMany({
     select: {
       id: true,
       name: true,
       _count: {
         select: {
-          followups: { where: { structureId: user.structureId } },
-          helpRequests: { where: { structureId: user.structureId } }
+          followups: {
+            where: {
+              structureId: user.structureId,
+              ...prepareFollowupFilters(input)
+            }
+          },
+          helpRequests: {
+            where: {
+              structureId: user.structureId,
+              ...prepareHelpRequestFilters(input)
+            }
+          }
         }
       }
     }
