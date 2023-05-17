@@ -41,7 +41,7 @@
 
   const beneficiary = computed(() => data.value?.beneficiary)
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
-  const entourages = computed(() => data.value?.taxHouseholds || [])
+  const entourages = computed(() => data.value?.entourages || [])
 
   const title = computed(() => {
     return beneficiary.value ? getBeneficiaryDisplayName(beneficiary.value) : ''

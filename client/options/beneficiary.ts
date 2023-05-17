@@ -191,12 +191,7 @@ export const beneficiaryOrientationTypeOptions = labelsToOptions(
   beneficiaryOrientationTypeLabels
 )
 
-export const entourageRelationshipLabels: {
-  [key in RelativeRelationship]: string
-} = {
-  [RelativeRelationship.Conjoint]: 'Conjoint·e',
-  [RelativeRelationship.EnfantMajeur]: 'Enfant majeur',
-  [RelativeRelationship.EnfantMineur]: 'Enfant mineur',
+export const entourageRelationshipLabels = {
   [RelativeRelationship.Sibling]: 'Fratrie',
   [RelativeRelationship.Grandparent]: 'Grand-parent',
   [RelativeRelationship.Parent]: 'Parent',
@@ -205,18 +200,10 @@ export const entourageRelationshipLabels: {
   [RelativeRelationship.AutreMemberDeLaFamille]: 'Autre membre de la famille'
 }
 
-export const taxHouseHoldRelationshipLabels: {
-  [key in RelativeRelationship]: string
-} = {
+export const taxHouseHoldRelationshipLabels = {
   [RelativeRelationship.Conjoint]: 'Conjoint·e',
   [RelativeRelationship.EnfantMajeur]: 'Enfant majeur',
-  [RelativeRelationship.EnfantMineur]: 'Enfant mineur',
-  [RelativeRelationship.Sibling]: 'Fratrie',
-  [RelativeRelationship.Grandparent]: 'Grand-parent',
-  [RelativeRelationship.Parent]: 'Parent',
-  [RelativeRelationship.Tiers]: 'Tiers',
-  [RelativeRelationship.Neighbour]: 'Voisin·e',
-  [RelativeRelationship.AutreMemberDeLaFamille]: 'Autre membre de la famille'
+  [RelativeRelationship.EnfantMineur]: 'Enfant mineur'
 }
 
 export const relativeRelationshipLabels = {
