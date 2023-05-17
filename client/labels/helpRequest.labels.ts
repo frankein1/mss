@@ -8,6 +8,7 @@ type HelpRequestFieldLabels = Omit<
   | 'createdById'
   | 'updated'
   | 'prescribingOrganizationId'
+  | 'instructorOrganizationId'
   | 'openingDate' // TODO: Add missing labels
   | 'typeId'
   | 'decisionDate'

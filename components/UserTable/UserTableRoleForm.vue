@@ -1,5 +1,8 @@
 <template>
-  <form @change="onUpdateRole" @submit.prevent>
+  <form
+    @change="onUpdateRole"
+    @submit.prevent
+  >
     <VeeSelect
       name="role"
       :label="userFieldLabels.role"
