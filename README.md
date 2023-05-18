@@ -65,7 +65,7 @@ docker run --rm -p 8080:3000 \
     -e NUXT_PUBLIC_INCLUSION_CONNECT_CLIENT_ID='local_inclusion_connect' \
     -e NUXT_INCLUSION_CONNECT_CLIENT_SECRET='xxxxxxxxxxxxxxxx' \
     -e NUXT_JWT_KEY='secret' \
-    -e DATABASE_URL="postgresql://mss:password@localhost:5454/mss" \
+    -e DATABASE_URL="postgresql://mss:password@host.docker.internal:5453/mss" \
       monsuivisocial
 ``
 
