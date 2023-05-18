@@ -89,6 +89,14 @@
               >Mentions légales</NuxtLink
             >
           </li>
+          <li class="fr-footer__bottom-item">
+            <NuxtLink
+              class="fr-footer__bottom-link"
+              :to="Routes.Env()"
+              target="_self"
+              >Environnement</NuxtLink
+            >
+          </li>
           <!-- TODO: Set compulsory footer links -->
           <!-- <li class="fr-footer__bottom-item">
                     <NuxtLink class="fr-footer__bottom-link" to="#">Données personnelles</NuxtLink>

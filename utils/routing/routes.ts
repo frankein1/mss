@@ -10,6 +10,7 @@ export const Routes = {
   Register: () => '/register',
   DeclarationAccessibilite: () => `/declaration-accessibilite`,
   MentionsLegales: () => `/mentions-legales`,
+  Env: () => `/env`,
 
   Login: () => '/login',
   Logout: () => `${ApiKeycloak}/logout`,

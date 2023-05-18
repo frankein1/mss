@@ -16,7 +16,7 @@ export default defineEventHandler(event => {
     return
   }
 
-  const jwtKey = config.private.jwtKey
+  const jwtKey = config.jwtKey
 
   let payload
   try {

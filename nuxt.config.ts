@@ -76,20 +76,15 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    private: {
-      jwtKey: process.env.JWT_KEY,
-      inclusionConnect: {
-        secret: process.env.IC_CLIENT_SECRET
-      }
-    },
+    jwtKey: process.env.JWT_KEY,
+    inclusionConnectSecret: process.env.IC_CLIENT_SECRET,
     public: {
-      apiUrl: process.env.API_URL,
       appUrl: process.env.APP_URL,
       inclusionConnect: {
         issuer: process.env.IC_ISSUER,
         clientId: process.env.IC_CLIENT_ID,
-        type: process.env.IC_AUTH_TYPE,
-        provider: process.env.IC_PROVIDER
+        type: process.env.IC_AUTH_TYPE || 'keycloak',
+        provider: process.env.IC_PROVIDER || 'InclusionConnect'
       },
       sessionCookieKey: 'MSS_SESSION_TOKEN',
       authRefreshDelay: 0.75

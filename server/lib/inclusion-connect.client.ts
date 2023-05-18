@@ -160,9 +160,7 @@ function initClient() {
         inclusionConnect: { issuer, clientId },
         appUrl
       },
-      private: {
-        inclusionConnect: { secret: clientSecret }
-      }
+      inclusionConnectSecret: clientSecret
     } = useRuntimeConfig()
     const config = {
       issuer,

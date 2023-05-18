@@ -12,7 +12,7 @@ import { Routes } from '~/utils/routing/routes'
 const config = useRuntimeConfig()
 const { sessionCookieKey, inclusionConnect } = config.public
 const { provider, type } = inclusionConnect
-const jwtKey = config.private.jwtKey
+const jwtKey = config.jwtKey
 
 export default defineEventHandler(async event => {
   const { code } = getQuery(event)

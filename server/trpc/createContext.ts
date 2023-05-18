@@ -19,7 +19,7 @@ export const createContext = async (event: H3Event) => {
     })
   }
 
-  const jwtKey = config.private.jwtKey
+  const jwtKey = config.jwtKey
   const { user: userData } = verifyJwt(sessionToken, jwtKey)
   const user = await prismaClient.user.findUnique({
     where: { id: userData.id }
