@@ -58,6 +58,9 @@ dependencies:
   vue-scrollto:
     specifier: ^2.20.0
     version: 2.20.0
+  vue3-tabs-component:
+    specifier: ^1.3.2
+    version: 1.3.2(vue@3.3.2)
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -8581,6 +8584,14 @@ packages:
       semver: 7.5.1
       typescript: 5.0.4
     dev: true
+
+  /vue3-tabs-component@1.3.2(vue@3.3.2):
+    resolution: {integrity: sha512-ztugVoigD4vK2MXPVhkUboJseEILqGB3P0f/+DdQp2H/cITNc4J/pYmQJTHISOmbTWk53WGqICGEAi5Kx79XCQ==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      vue: 3.3.2
+    dev: false
 
   /vue@3.3.2:
     resolution: {integrity: sha512-98hJcAhyDwZoOo2flAQBSPVYG/o0HA9ivIy2ktHshjE+6/q8IMQ+kvDKQzOZTFPxvnNMcGM+zS2A00xeZMA7tA==}

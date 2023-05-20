@@ -19,15 +19,27 @@
       </template>
     </TheHeader>
 
-    <BeneficiaryDetails
-      :beneficiary="beneficiary"
-      :entourages="entourages"
-      :tax-households="taxHouseholds"
-    />
+    <Tabs
+      class="main-container fr-tabs fr-transition-none fr-tabs__shadow fr-tabs__shadow--right"
+      nav-class="fr-tabs__list"
+      nav-item-link-class="fr-tabs__tab"
+      panels-wrapper-class="fr-tabs__panel"
+    >
+      <Tab name="Infos">
+        <BeneficiaryDetails
+          :beneficiary="beneficiary"
+          :entourages="entourages"
+          :tax-households="taxHouseholds"
+        />
+      </Tab>
+      <Tab name="Documents">Documents</Tab>
+      <Tab name="Historiques">Historiques</Tab>
+    </Tabs>
   </div>
 </template>
 
 <script lang="ts" setup>
+  import { Tabs, Tab } from 'vue3-tabs-component'
   import { canDeleteBeneficiary } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
 
