@@ -5,7 +5,6 @@ export { getFollowupTypes } from './getFollowupTypes'
 export { getSupports } from './getSupports'
 export { getBeneficiary } from './getBeneficiary'
 export { iterateBeneficiaries } from './iterateBeneficiaries'
-export { createBeneficiary } from './createBeneficiary'
 export { getBeneficiaryReferentsAndRelatives } from './getBeneficiaryReferentsAndRelatives'
 
 export type { SupportList, SupportListItem } from './getSupports'

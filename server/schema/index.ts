@@ -6,7 +6,7 @@ export {
   getBeneficiariesSchema
 } from './beneficiary.schema'
 export type {
-  BeneficiaryCreationInput,
+  CreateBeneficiaryInput,
   SearchBeneficiaryInput,
   UpdateBeneficiaryInput,
   GetBeneficiariesInput

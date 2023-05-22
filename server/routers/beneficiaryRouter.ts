@@ -19,7 +19,7 @@ export const beneficiaryRouter = router({
   search: protectedProcedure
     .input(searchBeneficiarySchema)
     .query(searchBeneficiaryHandler),
-  add: protectedProcedure
+  create: protectedProcedure
     .input(createBeneficiarySchema)
     .mutation(createBeneficiaryHandler),
   update: protectedProcedure

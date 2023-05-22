@@ -33,38 +33,25 @@ export const searchBeneficiarySchema = z.object({
 
 export type SearchBeneficiaryInput = z.infer<typeof searchBeneficiarySchema>
 
-const createBeneficiarySchema = z.object({
+export const createBeneficiarySchema = z.object({
   structureId: z.string().uuid(),
+  status: z.nativeEnum(BeneficiaryStatus, errorMessages),
   referents: z
     .array(z.string().uuid(), {
       required_error: 'Veuillez renseigner au moins un agent référent'
     })
     .min(1, 'Veuillez renseigner au moins un agent référent'),
   aidantConnectAuthorized: z.boolean().default(false),
-  title: z.nativeEnum(BeneficiaryTitle).nullish(),
-  firstName: z.string().nullish(),
   usualName: z.string().nullish(),
-  birthName: z.string().nullish(),
-  birthDate: z.date(errorMessages).nullish(),
-  birthPlace: z.string().nullish(),
-  deathDate: z.date(errorMessages).nullish(),
-  gender: z.nativeEnum(Gender).nullish(),
-  street: z.string().nullish(),
-  streetNumber: z.string().nullish(),
-  addressComplement: z.string().nullish(),
-  zipcode: z.string().nullish(),
-  city: z.string().nullish(),
-  region: z.string().nullish(),
-  noPhone: z.boolean().default(false),
+  firstName: z.string().nullish(),
+  birthDate: z.coerce.date(errorMessages).nullish(),
   phone1: z.string().nullish(),
   email: z.string().email().nullish()
 })
 
-type BeneficiaryCreationInput = z.infer<typeof createBeneficiarySchema>
+type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>
 
-export { createBeneficiarySchema }
-
-export type { BeneficiaryCreationInput }
+export type { CreateBeneficiaryInput }
 
 export const updateBeneficiarySchema = z.object({
   id: z.string().uuid(),
