@@ -1,6 +1,6 @@
 <template>
-  <div class="fr-container fr-p-5w">
-    <TheHeader title="Statistiques" />
+  <PageContainer>
+    <PageTitle title="Statistiques" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main class="main-container fr-tabs">
@@ -84,7 +84,7 @@
         </main>
       </div>
     </div>
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>

@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-container fr-p-5w">
+  <PageContainer>
     <TheHeader
       :title="title"
       :back-link="`${Routes.Beneficiary(beneficiaryId)}`"
@@ -22,7 +22,7 @@
         </main>
       </div>
     </div>
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>

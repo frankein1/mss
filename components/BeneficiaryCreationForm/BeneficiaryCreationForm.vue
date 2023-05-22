@@ -1,5 +1,4 @@
 <template>
-  <PageTitle title="Créer un.e bénéficiaire" />
   <form @submit="onSubmit">
     <div
       class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-p-2w fr-mt-2w fr-mb-2w bg-color-white"
@@ -31,6 +30,7 @@
       class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-p-2w fr-mt-2w fr-mb-2w bg-color-white"
     >
       <div class="fr-col-6">
+        <div class="formgroup__title fr-pb-2w">Identité du bénéficiaire</div>
         <VeeInput
           name="usualName"
           :label="beneficiaryFieldLabels.usualName"
@@ -46,6 +46,7 @@
         />
       </div>
       <div class="fr-col-6">
+        <div class="formgroup__title fr-pb-2w">Coordonnées</div>
         <VeeInput
           name="phone1"
           :label="beneficiaryFieldLabels.phone1"
@@ -119,3 +120,9 @@
     withEmptyValue(toOptions(props.agents, 'id', 'name'))
   )
 </script>
+
+<style>
+  .formgroup__title {
+    font-weight: bold;
+  }
+</style>

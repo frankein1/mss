@@ -3,8 +3,7 @@
     <div>
       <div class="formtitle__title">{{ title }}</div>
       <div class="formtitle__subtitle">
-        Les champs avec <span class="formtitle__required">*</span> sont
-        obligatoires
+        <slot></slot>
       </div>
     </div>
   </div>

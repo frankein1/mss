@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="beneficiary"
-    class="fr-container fr-p-5w"
-  >
+  <PageContainer v-if="beneficiary">
     <TheHeader
       :title="title"
       :back-link="backLink"
@@ -35,7 +32,7 @@
       <Tab name="Documents">Documents</Tab>
       <Tab name="Historiques">Historiques</Tab>
     </Tabs>
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>

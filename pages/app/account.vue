@@ -1,6 +1,6 @@
 <template>
-  <div class="fr-container fr-p-5w">
-    <TheHeader title="Mon compte" />
+  <PageContainer>
+    <PageTitle title="Mon compte" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -22,7 +22,7 @@
         </main>
       </div>
     </div>
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>

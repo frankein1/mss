@@ -1,6 +1,6 @@
 <template>
-  <div class="fr-container fr-p-5w">
-    <TheHeader title="Modifier ma structure" />
+  <PageContainer>
+    <PageTitle title="Modifier ma structure" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -32,7 +32,7 @@
         </main>
       </div>
     </div>
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>

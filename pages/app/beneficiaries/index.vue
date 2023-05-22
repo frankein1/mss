@@ -1,6 +1,6 @@
 <template>
-  <div class="fr-container fr-p-5w">
-    <TheHeader title="Bénéficiaires" />
+  <PageContainer>
+    <PageTitle title="Bénéficiaires" />
     <BeneficiarySearchbar class="fr-mt-3w" />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
@@ -47,7 +47,7 @@
         </main>
       </div>
     </div>
-  </div>
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>

@@ -1,12 +1,17 @@
 <template>
-  <div class="fr-container fr-py-5w page-container">
+  <PageContainer class="page-container">
+    <PageTitle title="Créer un.e bénéficiaire">
+      <div>
+        Les champs avec <span class="color-red">*</span> sont obligatoires
+      </div>
+    </PageTitle>
     <BeneficiaryCreationForm
       v-if="agents?.length"
       :agents="agents"
       :is-submitting="isSubmitting"
       @save-beneficiary="onCreateBeneficiary"
     />
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
