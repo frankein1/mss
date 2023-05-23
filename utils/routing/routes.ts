@@ -11,6 +11,7 @@ export const Routes = {
   DeclarationAccessibilite: () => `/declaration-accessibilite`,
   MentionsLegales: () => `/mentions-legales`,
   Env: () => `/env`,
+  LogoutSuccess: () => `/logout-success`,
 
   Login: () => '/login',
   Logout: () => `${ApiKeycloak}/logout`,
@@ -18,7 +19,6 @@ export const Routes = {
 
   App: () => `${AppRoute}`,
   Overview: () => `${AppRoute}/overview`,
-  LogoutSuccess: () => `${AppRoute}/logout-success`,
 
   Users: () => `${AppRoute}/users`,
 

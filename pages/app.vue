@@ -11,6 +11,8 @@
     middleware: 'auth'
   })
 
+  useLogoutInactiveUser()
+
   onMounted(() => {
     if (route.path === Routes.App()) {
       navigateTo(Routes.Overview())

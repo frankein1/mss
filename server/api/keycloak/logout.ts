@@ -45,7 +45,9 @@ export default defineEventHandler(async event => {
     account.idToken || ''
   )
 
-  return sendRedirect(event, signoutUrl)
+  await fetch(signoutUrl)
+
+  return sendRedirect(event, client.getPostLogoutRedirectUri())
 })
 
 function redirect(event: H3Event, location: string) {
