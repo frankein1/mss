@@ -27,7 +27,7 @@
 
   const authStore = useAuthStore()
   const userName = authStore.userName
-  const user = authStore.user
+  const user = authStore.getAuthUser
   const structureId = user?.structureId
 
   const menus: Menu[] = []

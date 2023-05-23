@@ -2,7 +2,11 @@ import { onMounted, onUnmounted } from 'vue'
 import { Routes } from '~/utils/routing/routes'
 
 export function useLogoutInactiveUser() {
-  const INACTIVE_USER_TIME_THRESHOLD = 1000 * 60 * 15
+  const {
+    public: { inactiveUserTimeThreshold }
+  } = useRuntimeConfig()
+
+  const INACTIVE_USER_TIME_THRESHOLD = inactiveUserTimeThreshold * 60 * 1000
 
   let userActivityTimeout = startTimeout()
 

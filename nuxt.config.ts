@@ -80,6 +80,9 @@ export default defineNuxtConfig({
     inclusionConnectSecret: process.env.IC_CLIENT_SECRET,
     public: {
       appUrl: process.env.APP_URL,
+      inactiveUserTimeThreshold: parseInt(
+        process.env.INACTIVE_USER_TIME_THRESHOLD || '10'
+      ),
       inclusionConnect: {
         issuer: process.env.IC_ISSUER,
         clientId: process.env.IC_CLIENT_ID,

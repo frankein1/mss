@@ -10,8 +10,11 @@ export const useAuthStore = defineStore({
   }),
 
   actions: {
-    setUser(user: JwtUser) {
+    login(user: JwtUser) {
       this.user = user
+    },
+    logout() {
+      this.user = null
     }
   },
 
