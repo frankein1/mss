@@ -22,9 +22,11 @@ export function useLogoutInactiveUser() {
   }
 
   function inactiveUserAction() {
-    fetch(Routes.Logout()).then(() => {
-      navigateTo(Routes.LogoutSuccess() + '?inactive=true')
-    })
+    if (process.client) {
+      fetch(Routes.Logout()).then(() => {
+        navigateTo(Routes.LogoutSuccess() + '?inactive=true')
+      })
+    }
   }
 
   onMounted(() =>
