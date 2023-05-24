@@ -1,5 +1,5 @@
 <template>
-  <ul class="beneficiary-file-details">
+  <ul class="beneficiary-file-details fr-pb-2w">
     <li>N° dossier : {{ fileNumber }}</li>
     <li>Agent(s) référent(s) : {{ referentNames }}</li>
     <li

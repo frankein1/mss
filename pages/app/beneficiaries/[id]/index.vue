@@ -1,20 +1,15 @@
 <template>
   <PageContainer v-if="beneficiary">
-    <TheHeader
-      :title="title"
-      :back-link="backLink"
-    >
-      <template #title-extension>
-        <BeneficiaryDetailsHeader
-          :beneficiary-id="beneficiaryId"
-          :can-delete="canDelete"
-          @on-delete="onDelete"
-        />
-      </template>
-      <template #subtitle>
-        <BeneficiaryDetailsTitle :beneficiary="beneficiary" />
-      </template>
-    </TheHeader>
+    <div class="beneficiarytitle__container">
+      <PageTitle :title="title" />
+      <BeneficiaryDetailsHeader
+        :beneficiary-id="beneficiaryId"
+        :can-delete="canDelete"
+        @on-delete="onDelete"
+      />
+    </div>
+
+    <BeneficiaryDetailsTitle :beneficiary="beneficiary" />
 
     <Tabs
       class="main-container fr-tabs fr-transition-none fr-tabs__shadow fr-tabs__shadow--right"
@@ -64,8 +59,6 @@
   })
 
   const onDelete = () => {}
-
-  const backLink = ''
 </script>
 
 <style lang="scss">
@@ -75,6 +68,11 @@
     .beneficiary-details-col:nth-of-type(2) {
       border-left: 1px solid rgb(151 151 151 / 30%);
     }
+  }
+
+  .beneficiarytitle__container {
+    display: flex;
+    justify-items: center;
   }
 
   .beneficiary-details-section {

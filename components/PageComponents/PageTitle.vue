@@ -1,8 +1,8 @@
 <template>
-  <div class="formtitle__container">
-    <div>
-      <div class="formtitle__title">{{ title }}</div>
-      <div class="formtitle__subtitle">
+  <div class="pagetitle__container">
+    <div class="pagetitle__titles">
+      <div class="pagetitle__title">{{ title }}</div>
+      <div class="pagetitle__subtitle">
         <slot></slot>
       </div>
     </div>
@@ -16,22 +16,27 @@
 </script>
 
 <style lang="scss">
-  .formtitle__container {
+  .pagetitle__container {
     display: flex;
   }
 
-  .formtitle__title {
+  .pagetitle__titles {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .pagetitle__title {
     color: #00007d;
     font-size: xx-large;
     font-weight: bold;
-    padding-bottom: 0.5em;
   }
 
-  .formtitle__subtitle {
+  .pagetitle__subtitle {
     font-size: small;
   }
 
-  .formtitle__required {
+  .pagetitle__required {
     color: red;
   }
 </style>
