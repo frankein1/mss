@@ -47,7 +47,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'toogleReadState'): void
+    (e: 'toggleReadState'): void
   }>()
 
   const beneficiary = computed(() => props.beneficiary)
@@ -96,7 +96,7 @@
       id: props.notification.id,
       read: !isRead.value
     })
-    emit('toogleReadState')
+    emit('toggleReadState')
   }
 </script>
 

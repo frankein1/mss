@@ -7,12 +7,12 @@
       :alert-type="AlertType.Error"
       message="Les notifications n'ont pas pu être chargées."
     />
-    <!-- <AtomFilters
-      v-else-if="notifications?.length || filters"
-      :filters="NOTIFICATION_FILTERS"
+    <AtomFilters
+      v-else-if="data?.length || notificationType"
+      :filters="notificationFilters"
       full-width-filters
       @filter="onFilter"
-    /> -->
+    />
     <AtomLoader
       v-if="pending"
       class="fr-mx-auto"
@@ -27,7 +27,7 @@
           :key="item.notification.id"
           :notification="item.notification"
           :beneficiary="item.beneficiary"
-          @toggle-read-state="onToggleReadState()"
+          @toggle-read-state="onToggleReadState"
         />
       </ul>
       <p
@@ -48,18 +48,22 @@
 </template>
 
 <script setup lang="ts">
+  import { Beneficiary, Notification, NotificationType } from '@prisma/client'
   import { notificationTypeOptions } from '~/client/options/notification'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { FilterProp } from '~/types/filter'
+  import { AlertType } from '~/utils/constants/alert'
+  import { FilterType } from '~/utils/constants/filters'
 
-  const NOTIFICATION_FILTERS = [
+  const notificationFilters: FilterProp[] = [
     {
       name: 'type',
       label: 'Type',
-      options: withEmptyValue(notificationTypeOptions, 'Tous les types')
+      options: withEmptyValue(notificationTypeOptions, 'Tous les types'),
+      type: FilterType.SelectOne
     }
   ]
 
-  // const filters = ref(null)
+  const notificationType = ref<NotificationType | null>(null)
   const showReadNotifications = ref(false)
 
   const {
@@ -67,9 +71,22 @@
     error,
     pending,
     refresh: notificationsRefresh
-  } = useTrpcClient().notification.get.useQuery({
-    onlyUnread: !showReadNotifications.value
-  })
+  } = useAsyncData<
+    Array<{
+      beneficiary: Beneficiary
+      notification: Notification
+    }>
+  >(
+    () =>
+      useTrpcClient().notification.get.query({
+        onlyUnread: !showReadNotifications.value,
+        type: notificationType.value
+      }),
+    {
+      default: () => [],
+      watch: [showReadNotifications]
+    }
+  )
 
   const toggleReadNotificationsBtnLabel = computed(() =>
     showReadNotifications.value
@@ -77,7 +94,11 @@
       : 'Voir les notifications déjà lues'
   )
 
-  // watch(filters, notificationsRefresh)
+  function onFilter(filter: any) {
+    notificationType.value = filter.type
+  }
+
+  watch(notificationType, notificationsRefresh)
 
   function onToggleReadState() {
     notificationsRefresh()

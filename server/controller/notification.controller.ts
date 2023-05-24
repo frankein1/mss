@@ -1,3 +1,4 @@
+import { NotificationType, Prisma } from '@prisma/client'
 import { UpdateNotificationInput, GetNotificationInput } from '../schema'
 import { AppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
@@ -17,7 +18,7 @@ export const updateNotificationHandler = async ({
 
 export const getNotificationHandler = async ({
   ctx: { user },
-  input: { onlyUnread }
+  input: { onlyUnread, type }
 }: {
   ctx: AppContext
   input: GetNotificationInput
@@ -25,6 +26,7 @@ export const getNotificationHandler = async ({
   const where: {
     recipientId: string
     read?: boolean
+    type?: NotificationType
   } = {
     recipientId: user.id
   }
@@ -32,11 +34,17 @@ export const getNotificationHandler = async ({
   if (onlyUnread) {
     where.read = false
   }
+  if (type) {
+    where.type = type
+  }
 
   const notifications = await prismaClient.notification.findMany({
     where,
     include: {
       beneficiary: true
+    },
+    orderBy: {
+      created: 'desc'
     }
   })
 
@@ -45,3 +53,7 @@ export const getNotificationHandler = async ({
     return { beneficiary, notification: { ...notificationDatas } }
   })
 }
+
+export type GetNotificationOutput = Prisma.PromiseReturnType<
+  typeof getNotificationHandler
+>
