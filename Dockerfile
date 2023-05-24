@@ -5,7 +5,7 @@ RUN pnpm install --frozen-lockfile --prefer-offline
 COPY . .
 RUN pnpm run build
 
-FROM gcr.io/distroless/nodejs:18
+FROM gcr.io/distroless/nodejs18-debian11
 WORKDIR /app
 COPY --from=build /app/.output /app/
 
