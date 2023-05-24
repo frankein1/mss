@@ -7,10 +7,12 @@ import { statRouter } from './statRouter'
 import { userRouter } from './userRouter'
 import { structureRouter } from './structureRouter'
 import { helpRequestRouter } from './helpRequestRouter'
+import { notificationRouter } from './notificationRouter'
 import { router } from '~/server/trpc'
 
 export const appRouter = router({
   beneficiary: beneficiaryRouter,
+  notification: notificationRouter,
   config: configRouter,
   followup: followupRouter,
   stat: statRouter,

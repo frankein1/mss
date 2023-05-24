@@ -1,0 +1,47 @@
+import { UpdateNotificationInput, GetNotificationInput } from '../schema'
+import { AppContext } from '~/server/trpc'
+import { prismaClient } from '~/server/prisma'
+
+export const updateNotificationHandler = async ({
+  ctx: { user },
+  input: { id, read }
+}: {
+  ctx: AppContext
+  input: UpdateNotificationInput
+}) => {
+  await prismaClient.notification.updateMany({
+    where: { id, recipientId: user.id },
+    data: { read }
+  })
+}
+
+export const getNotificationHandler = async ({
+  ctx: { user },
+  input: { onlyUnread }
+}: {
+  ctx: AppContext
+  input: GetNotificationInput
+}) => {
+  const where: {
+    recipientId: string
+    read?: boolean
+  } = {
+    recipientId: user.id
+  }
+
+  if (onlyUnread) {
+    where.read = false
+  }
+
+  const notifications = await prismaClient.notification.findMany({
+    where,
+    include: {
+      beneficiary: true
+    }
+  })
+
+  return (notifications || []).map(n => {
+    const { beneficiary, ...notificationDatas } = n
+    return { beneficiary, notification: { ...notificationDatas } }
+  })
+}

@@ -97,3 +97,12 @@ export type {
   CreateOrUpdateEntourageInput,
   CreateOrUpdateTaxHouseholdInput
 } from './relative.schema'
+
+export {
+  updateNotificationSchema,
+  getNotificationSchema
+} from './notification.schema'
+export type {
+  UpdateNotificationInput,
+  GetNotificationInput
+} from './notification.schema'

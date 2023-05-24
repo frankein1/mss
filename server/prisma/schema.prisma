@@ -953,6 +953,7 @@ model Beneficiary {
 
   relatives       BeneficiaryRelative[] @relation("ownerBeneficiary")
   linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
+  Notification    Notification[]
 
   @@map("beneficiary")
 }
@@ -1123,6 +1124,9 @@ model Notification {
 
   recipient   User   @relation(fields: [recipientId], references: [id])
   recipientId String @map("recipient_id") @db.Uuid
+
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
+  beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
   helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id])
   helpRequestId String?      @map("help_request_id") @db.Uuid
