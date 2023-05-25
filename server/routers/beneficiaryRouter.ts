@@ -3,13 +3,15 @@ import {
   searchBeneficiarySchema,
   createBeneficiarySchema,
   updateBeneficiarySchema,
-  getBeneficiariesSchema
+  getBeneficiariesSchema,
+  getDocumentsSchema
 } from '../schema'
 
 import {
   createBeneficiaryHandler,
   getBeneficiariesHandler,
   getBeneficiaryDetailsHandler,
+  getBeneficiaryDocumentsHandler,
   updateBeneficiaryHandler,
   searchBeneficiaryHandler
 } from '../controller/beneficiary'
@@ -28,6 +30,9 @@ export const beneficiaryRouter = router({
   getBeneficiaryDetails: protectedProcedure
     .input(idSchema)
     .query(getBeneficiaryDetailsHandler),
+  getBeneficiaryDocuments: protectedProcedure
+    .input(getDocumentsSchema)
+    .query(getBeneficiaryDocumentsHandler),
   getBeneficiaries: protectedProcedure
     .input(getBeneficiariesSchema)
     .query(getBeneficiariesHandler)

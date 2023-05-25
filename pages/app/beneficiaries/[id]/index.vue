@@ -24,7 +24,11 @@
           :tax-households="taxHouseholds"
         />
       </Tab>
-      <Tab name="Documents">Documents</Tab>
+      <Tab name="Documents">
+        <BeneficiaryDocumentList
+          :beneficiary-id="beneficiaryId"
+        ></BeneficiaryDocumentList>
+      </Tab>
       <Tab name="Historiques">Historiques</Tab>
     </Tabs>
   </PageContainer>

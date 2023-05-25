@@ -27,6 +27,14 @@ export const idSchema = z.object({
   id: z.string()
 })
 
+export const getDocumentsSchema = z.object({
+  beneficiaryId: z.string()
+})
+
+type GetDocumentsInput = z.infer<typeof getDocumentsSchema>
+
+export type { GetDocumentsInput }
+
 export const searchBeneficiarySchema = z.object({
   query: z.string()
 })

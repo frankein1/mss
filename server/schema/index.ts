@@ -3,13 +3,15 @@ export {
   createBeneficiarySchema,
   searchBeneficiarySchema,
   updateBeneficiarySchema,
-  getBeneficiariesSchema
+  getBeneficiariesSchema,
+  getDocumentsSchema
 } from './beneficiary.schema'
 export type {
   CreateBeneficiaryInput,
   SearchBeneficiaryInput,
   UpdateBeneficiaryInput,
-  GetBeneficiariesInput
+  GetBeneficiariesInput,
+  GetDocumentsInput
 } from './beneficiary.schema'
 
 export {
