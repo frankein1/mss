@@ -1,34 +1,35 @@
 <template>
-  <li class="notification">
-    <h3 class="notification-type">
-      <NuxtLink
-        class="fr-link"
-        :to="itemLink"
-        target="_self"
-      >
-        {{ notificationTypeLabels[notification.type] }}
-      </NuxtLink>
-    </h3>
-    <span
-      :class="['notification-icon', notificationTypeClasses[notification.type]]"
-      aria-hidden="true"
-    ></span>
-    <span class="notification-date">{{
-      formatDate(notification.created)
-    }}</span>
-    <span class="notification-beneficiary">{{
-      getBeneficiaryDisplayName(beneficiary)
-    }}</span>
-    <button
-      ref="toggleReadButton"
-      class="notification-toggle-read fr-btn fr-btn--sm fr-icon-check-line"
-      :class="{ 'fr-btn--tertiary': !isRead }"
-      :title="toggleReadButtonLabel"
-      @click="onToggleRead"
+  <h3 class="notificationitem__type">
+    <NuxtLink
+      class="fr-link"
+      :to="itemLink"
+      target="_self"
     >
-      {{ toggleReadButtonLabel }}
-    </button>
-  </li>
+      {{ notificationTypeLabels[notification.type] }}
+    </NuxtLink>
+  </h3>
+  <span
+    :class="[
+      'notificationitem__icon',
+      notificationTypeClasses[notification.type]
+    ]"
+    aria-hidden="true"
+  ></span>
+  <span class="notificationitem__date">{{
+    formatDate(notification.created)
+  }}</span>
+  <span class="notificationitem__beneficiary">{{
+    getBeneficiaryDisplayName(beneficiary)
+  }}</span>
+  <button
+    ref="toggleReadButton"
+    class="notificationitem__button fr-btn fr-btn--sm fr-icon-check-line"
+    :class="{ 'fr-btn--tertiary': !isRead }"
+    :title="toggleReadButtonLabel"
+    @click="onToggleRead"
+  >
+    {{ toggleReadButtonLabel }}
+  </button>
 </template>
 
 <script setup lang="ts">
@@ -102,21 +103,8 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
-  @use '@gouvfr/dsfr/module/color/mixin/element' as dsfr-color-element;
 
-  .notification {
-    @include dsfr-color-element.box-shadow(default grey, (), all-1-out);
-
-    border-radius: 0.25rem;
-    display: grid;
-    row-gap: 0.25rem;
-    column-gap: 2rem;
-    grid-template-areas: 'type-icon beneficiary read' 'date type read';
-    grid-template-columns: min-content auto min-content;
-    padding: 0.5rem;
-  }
-
-  .notification-type {
+  .notificationitem__type {
     @include dsfr.text-style(sm);
 
     grid-area: type;
@@ -124,24 +112,24 @@
     color: var(--primary);
   }
 
-  .notification-icon {
+  .notificationitem__icon {
     grid-area: type-icon;
     color: var(--primary);
   }
 
-  .notification-date {
+  .notificationitem__date {
     @include dsfr.text-style(sm);
 
     grid-area: date;
     color: var(--primary);
   }
 
-  .notification-beneficiary {
+  .notificationitem__beneficiary {
     grid-area: beneficiary;
     font-weight: 700;
   }
 
-  .notification-toggle-read {
+  .notificationitem__button {
     grid-area: read;
     align-self: center;
   }

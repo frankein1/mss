@@ -1,7 +1,7 @@
 <template>
   <div class="fr-col-12 fr-col-lg-5 fr-col-offset-lg-7 main-container fr-p-2w">
     <h2 class="fr-text--lg fr-mb-1w">Notifications</h2>
-    <hr class="notification-separator" />
+    <hr class="notifications__separator" />
     <AtomAlert
       v-if="error"
       :alert-type="AlertType.Error"
@@ -20,25 +20,29 @@
     <template v-else-if="data">
       <ul
         v-if="data.length"
-        class="notification-list fr-mb-2w"
+        class="notifications__list fr-mb-2w"
       >
-        <NotificationItem
+        <li
           v-for="item in data"
           :key="item.notification.id"
-          :notification="item.notification"
-          :beneficiary="item.beneficiary"
-          @toggle-read-state="onToggleReadState"
-        />
+          class="notifications__item"
+        >
+          <NotificationItem
+            :notification="item.notification"
+            :beneficiary="item.beneficiary"
+            @toggle-read-state="onToggleReadState"
+          />
+        </li>
       </ul>
       <p
         v-else
-        class="fr-mb-2w no-notification-text"
+        class="fr-mb-2w notifications__info"
       >
         Aucune notification
       </p>
-      <hr class="notification-separator" />
+      <hr class="notifications__separator" />
       <button
-        class="fr-btn fr-btn--sm fr-btn--tertiary toggle-read-notifications-btn"
+        class="fr-btn fr-btn--sm fr-btn--tertiary notifications__button"
         @click="onToggleReadNotifications"
       >
         {{ toggleReadNotificationsBtnLabel }}
@@ -110,28 +114,42 @@
   }
 </script>
 
-<style scope>
-  .notification-list {
+<style lang="scss" scope>
+  @use '@gouvfr/dsfr/module/color/mixin/element' as dsfr-color-element;
+
+  .notifications__list {
     --ul-start: 0;
     --xl-block: 0;
     --ul-type: none;
   }
 
-  .notification-list > *:not(:last-child) {
+  .notifications__list > *:not(:last-child) {
     margin-bottom: 0.75rem;
   }
 
-  .no-notification-text {
+  .notifications__info {
     color: var(--text-mention-grey);
     text-align: center;
   }
 
-  .notification-separator {
+  .notifications__separator {
     --text-spacing: 0 0 0.5rem;
   }
 
-  .toggle-read-notifications-btn {
+  .notifications__button {
     margin: 0 auto;
     display: block;
+  }
+
+  .notifications__item {
+    @include dsfr-color-element.box-shadow(default grey, (), all-1-out);
+
+    border-radius: 0.25rem;
+    display: grid;
+    row-gap: 0.25rem;
+    column-gap: 2rem;
+    grid-template-areas: 'type-icon beneficiary read' 'date type read';
+    grid-template-columns: min-content auto min-content;
+    padding: 0.5rem;
   }
 </style>
