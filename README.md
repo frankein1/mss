@@ -68,8 +68,6 @@ DATABASE_URL="postgresql://mss:password@host.docker.internal:5433/mss"
 
 NUXT_PUBLIC_APP_URL='http://localhost:8080'
 
-NUXT_PUBLIC_INCLUSION_CONNECT_ISSUER='https://recette.connect.inclusion.beta.gouv.fr/realms/local'
-
 NUXT_AUTH_JWT_KEY='secret'
 NUXT_AUTH_KEYCLOAK_ISSUER_URL='https://recette.connect.inclusion.beta.gouv.fr/realms/local'
 NUXT_AUTH_KEYCLOAK_CLIENT_ID='monsuivisocial'
