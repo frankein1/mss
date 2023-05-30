@@ -25,6 +25,7 @@ export default defineEventHandler(event => {
   try {
     payload = verifyJwt(sessionToken, jwtKey)
   } catch (err) {
+    deleteCookie(event, sessionCookieKey)
     return redirectLogOut(event)
   }
 
