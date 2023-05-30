@@ -64,7 +64,7 @@ docker run --rm -p 8080:3000 --env-file .env-list monsuivisocial
 
 ```.env
 # env-list
-DATABASE_URL="postgresql://mss:password@host.docker.internal:5453/mss"
+DATABASE_URL="postgresql://mss:password@host.docker.internal:5433/mss"
 
 NUXT_PUBLIC_APP_URL='http://localhost:8080'
 
@@ -83,6 +83,13 @@ NUXT_EMAIL_SMTP_USER=contactincubateur@anct.gouv.fr
 NUXT_S3_BUCKET=anct-monsuivisocial-directus-production
 NUXT_S3_KEY=xxxxxxxxx
 NUXT_S3_SECRET=xxxxxxxxx
+```
+
+migrer le base de données
+
+```sh
+docker build . -t monsuivisocial-migrate -f ./prisma/Dockerfile
+docker run -e DATABASE_URL="postgresql://mss:password@host.docker.internal:5433/mss" monsuivisocial-migrate
 ```
 
 ## Sheatsheet
