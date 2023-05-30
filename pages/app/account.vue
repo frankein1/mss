@@ -11,7 +11,7 @@
             <li>
               <NuxtLink
                 class="fr-link"
-                :to="inclusionConnectAccountUrl"
+                :to="data"
                 target="_blank"
                 title="Nouvel onglet - Modifier mon mot de passe InclusionConnect"
               >
@@ -26,21 +26,5 @@
 </template>
 
 <script lang="ts" setup>
-  import { Routes } from '~/utils/routing/routes'
-
-  const {
-    public: {
-      inclusionConnect: { issuer, clientId },
-      appUrl
-    }
-  } = useRuntimeConfig()
-
-  const inclusionConnectAccountUrlBase = `${issuer}/account`
-
-  const params = new URLSearchParams({
-    referrer: clientId,
-    referrer_uri: `${appUrl}${Routes.Account()}`
-  })
-
-  const inclusionConnectAccountUrl = `${inclusionConnectAccountUrlBase}?${params}`
+  const data = await useTrpcClient().config.getInclusionConnectLogoutUrl.query()
 </script>

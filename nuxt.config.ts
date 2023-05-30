@@ -76,21 +76,35 @@ export default defineNuxtConfig({
   },
 
   runtimeConfig: {
-    jwtKey: process.env.JWT_KEY,
-    inclusionConnectSecret: process.env.IC_CLIENT_SECRET,
+    auth: {
+      jwtKey: process.env.AUTH_JWT_KEY,
+      keycloakIssuer: process.env.AUTH_KEYCLOAK_ISSUER_URL,
+      keycloakClientId: process.env.AUTH_KEYCLOAK_CLIENT_ID,
+      keycloakClientSecret: process.env.AUTH_KEYCLOAK_CLIENT_SECRET,
+      keycloakProvider: 'InclusionConnect',
+      keycloakLabel: 'keycloak'
+    },
+    s3: {
+      bucket: process.env.S3_BUCKET || '',
+      host: process.env.S3_ENDPOINT || 's3.fr-par.scw.cloud',
+      region: process.env.S3_REGION || 'fr-par',
+      key: process.env.S3_KEY || '',
+      secret: process.env.S3_SECRET || ''
+    },
+    email: {
+      from: process.env.EMAIL_FROM || '',
+      smtpHost: process.env.EMAIL_SMTP_HOST || '',
+      smtpPassword: process.env.EMAIL_SMTP_PASSWORD || '',
+      smtpPort: parseInt(process.env.EMAIL_SMTP_PORT || '587'),
+      smtpSecure: (process.env.EMAIL_SMTP_SECURE || 'false') === 'true',
+      smtpUser: process.env.EMAIL_SMTP_USER || ''
+    },
     public: {
       appUrl: process.env.APP_URL,
       inactiveUserTimeThreshold: parseInt(
         process.env.INACTIVE_USER_TIME_THRESHOLD || '10'
       ),
-      inclusionConnect: {
-        issuer: process.env.IC_ISSUER,
-        clientId: process.env.IC_CLIENT_ID,
-        type: process.env.IC_AUTH_TYPE || 'keycloak',
-        provider: process.env.IC_PROVIDER || 'InclusionConnect'
-      },
-      sessionCookieKey: 'MSS_SESSION_TOKEN',
-      authRefreshDelay: 0.75
+      sessionCookieKey: 'MSS_SESSION_TOKEN'
     }
   },
 

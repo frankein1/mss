@@ -156,16 +156,13 @@ let client: InclusionConnectClient
 function initClient() {
   if (!client) {
     const {
-      public: {
-        inclusionConnect: { issuer, clientId },
-        appUrl
-      },
-      inclusionConnectSecret: clientSecret
+      public: { appUrl },
+      auth: { keycloakIssuer, keycloakClientId, keycloakClientSecret }
     } = useRuntimeConfig()
     const config = {
-      issuer,
-      clientId,
-      clientSecret,
+      issuer: keycloakIssuer,
+      clientId: keycloakClientId,
+      clientSecret: keycloakClientSecret,
       redirectUri: `${appUrl}${Routes.SsoCallback()}`,
       postLogoutRedirectUri: `${appUrl}${Routes.LogoutSuccess()}`
     }

@@ -10,9 +10,12 @@ import { signJwt } from '~/server/lib/jwt'
 import { Routes } from '~/utils/routing/routes'
 
 const config = useRuntimeConfig()
-const { sessionCookieKey, inclusionConnect } = config.public
-const { provider, type } = inclusionConnect
-const jwtKey = config.jwtKey
+const {
+  public: { sessionCookieKey },
+  auth
+} = config
+
+const { keycloakProvider, keycloakLabel, jwtKey } = auth
 
 export default defineEventHandler(async event => {
   const { code } = getQuery(event)
@@ -113,11 +116,16 @@ async function upsertAccount({
   } = inclusionConnectToken
 
   return await prismaClient.account.upsert({
-    where: { provider_providerAccountId: { provider, providerAccountId } },
+    where: {
+      provider_providerAccountId: {
+        provider: keycloakProvider,
+        providerAccountId
+      }
+    },
     create: {
       userId: user.id,
-      type,
-      provider,
+      type: keycloakLabel,
+      provider: keycloakProvider,
       providerAccountId,
       accessToken,
       expiresAt: expiresIn,

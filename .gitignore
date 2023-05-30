@@ -5,3 +5,5 @@ coverage
 .output
 .stylelintcache
 .env
+.env.prod
+.env.build

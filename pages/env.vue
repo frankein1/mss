@@ -45,18 +45,18 @@
     layout: 'landing'
   })
   const config = useRuntimeConfig()
-  const {
-    appUrl,
-    inclusionConnect: { clientId, issuer, provider, type }
-  } = config.public
+  const { appUrl } = config.public
 
   if (process.server) {
+    const { s3, auth, email } = config
     // eslint-disable-next-line no-console
-    console.log('JWT_KEY:', config.jwtKey)
+    console.log('s3:', JSON.stringify(s3, undefined, 2))
     // eslint-disable-next-line no-console
-    console.log('IC_CLIENT_SECRET:', config.inclusionConnectSecret)
+    console.log('auth:', JSON.stringify(auth, undefined, 2))
     // eslint-disable-next-line no-console
-    console.log('DATABASE_URL:', process.env.DATABASE_URL)
+    console.log('email:', JSON.stringify(email, undefined, 2))
+    // eslint-disable-next-line no-console
+    console.log('database:', process.env.DATABASE_URL)
   }
 </script>
 

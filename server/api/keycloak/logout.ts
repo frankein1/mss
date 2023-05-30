@@ -29,7 +29,7 @@ export default defineEventHandler(async event => {
   const account = await prismaClient.account.findUniqueOrThrow({
     where: {
       provider_providerAccountId: {
-        provider: config.public.inclusionConnect.provider,
+        provider: config.auth.keycloakProvider,
         providerAccountId: jwtUser.inclusionConnectId
       }
     }

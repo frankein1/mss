@@ -16,7 +16,10 @@ export default defineEventHandler(event => {
     return
   }
 
-  const jwtKey = config.jwtKey
+  const {
+    auth: { jwtKey },
+    public: { inactiveUserTimeThreshold }
+  } = config
 
   let payload
   try {
@@ -26,10 +29,6 @@ export default defineEventHandler(event => {
   }
 
   const { user, exp } = payload
-
-  const {
-    public: { inactiveUserTimeThreshold }
-  } = useRuntimeConfig()
 
   if (exp && expiredInLess(exp, inactiveUserTimeThreshold)) {
     const { sessionToken: newSessionToken, expiresIn: newExpiresIn } = signJwt(

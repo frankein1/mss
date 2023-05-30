@@ -17,7 +17,7 @@
         />
         <h2 class="fr-h3">01. Participez au prochain webinaire</h2>
         <NuxtLink
-          to="https://app.livestorm.co/mon-suivi-social/demonstration-de-mon-suivi-social"
+          to="https://framaforms.org/inscription-au-webinaire-mensuel-de-demonstration-1685106308"
           target="_blank"
           class="fr-btn"
           title="Nouvel onglet - Inscription au webinaire"
