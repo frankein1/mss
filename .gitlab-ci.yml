@@ -9,24 +9,24 @@ include:
     ref: v1
     file:
       # Required
-      - /helm.yml
+#      - /helm.yml
 
       # build
       - /docker.auto.yml
 
       # test
-      - /proxy/license-scanning.yml
-      - /proxy/code-quality.yml
-      - /proxy/dependency-scanning.yml
-      - /proxy/container-scanning.yml
-      - /proxy/sast.yml
-      - /proxy/secret-scanning.yml
-      - /pnpm.auto.yml
+#      - /proxy/license-scanning.yml
+#      - /proxy/code-quality.yml
+#      - /proxy/dependency-scanning.yml
+#      - /proxy/container-scanning.yml
+#      - /proxy/sast.yml
+#      - /proxy/secret-scanning.yml
+#      - /pnpm.auto.yml
 
       # deploy
-      - /helm.reviews.auto.yml
-      - /helm.development.auto.yml
-      - /helm.production.auto.yml
+#      - /helm.reviews.auto.yml
+#      - /helm.development.auto.yml
+#      - /helm.production.auto.yml
 
 variables:
   HELM_CHART: nodejs
@@ -38,3 +38,17 @@ variables:
 .vigigloo:pnpm:install:
   image:
     name: registry.gitlab.com/vigigloo/tools/pnpm:node-18_pnpm-8.3.1
+
+.vigigloo:docker:kaniko:build:
+  parallel:
+    matrix:
+      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
+      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG-migrations
+        DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
+
+docker:kaniko:build:production:
+  parallel:
+    matrix:
+      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
+      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
+        DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
