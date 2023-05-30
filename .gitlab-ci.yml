@@ -8,9 +8,6 @@ include:
   - project: vigigloo/gitlab-pipeline-fragments
     ref: v1
     file:
-      # Required
-      - /helm.yml
-
       # build
       - /docker.auto.yml
 
@@ -38,3 +35,17 @@ variables:
 .vigigloo:pnpm:install:
   image:
     name: registry.gitlab.com/vigigloo/tools/pnpm:node-18_pnpm-8.3.1
+
+.vigigloo:docker:kaniko:build:
+  parallel:
+    matrix:
+      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
+      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG-migrations
+        DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
+
+docker:kaniko:build:production:
+  parallel:
+    matrix:
+      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
+      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
+        DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
