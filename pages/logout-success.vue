@@ -8,7 +8,7 @@
           class="logout__inactive"
         >
           Suite à 15 minutes d'inactivité sur votre espace Mon Suivi Social,
-          vous avez été déconnecté de votre automatiquement
+          vous avez été déconnecté de votre espace automatiquement.
         </div>
       </div>
     </div>
