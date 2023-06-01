@@ -47,6 +47,22 @@ export const getExaminationDatesHandler = async () => {
   })
 }
 
+export const getPrescribingOrganizationsHandler = async ({
+  ctx: { user }
+}: {
+  ctx: AppContext
+}) => {
+  if (!user.structureId) {
+    throw invalidError('structureId is null')
+  }
+  return await prismaClient.prescribingOrganization.findMany({
+    where: {
+      structureId: user.structureId
+    },
+    orderBy: [{ name: 'asc' }]
+  })
+}
+
 export const getStructureFollowupTypesHandler = async ({
   ctx: { user }
 }: {

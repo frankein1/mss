@@ -1,10 +1,7 @@
 <template>
   <PageContainer>
-    <TheHeader
-      :title="title"
-      :back-link="`${Routes.Beneficiary(beneficiaryId)}`"
-    />
-    <div class="fr-grid-row fr-grid-row--gutters">
+    <PageTitle :title="title" />
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
           ref="formContainer"

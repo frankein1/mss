@@ -1,4 +1,11 @@
-import { FollowupMedium, FollowupStatus, Prisma } from '@prisma/client'
+import {
+  FollowupMedium,
+  FollowupStatus,
+  Minister,
+  Prisma,
+  FollowupIntervention,
+  FollowupSignalement
+} from '@prisma/client'
 import { z } from 'zod'
 import { errorMessages } from '~/utils/zod'
 import { followupFilterSchema } from '~/server/schema'
@@ -13,7 +20,8 @@ const addFollowupSchema = z.object({
     .min(1, "Veuillez renseigner au moins un type d'accompagnement"),
   documents: z.array(z.string(), errorMessages).default([]),
   medium: z.nativeEnum(FollowupMedium, errorMessages),
-  date: z.date(errorMessages),
+  ministre: z.nativeEnum(Minister, errorMessages).nullish(),
+  date: z.coerce.date(errorMessages),
   synthesis: z.string().nullish(),
   privateSynthesis: z.string().nullish(),
   status: z.nativeEnum(FollowupStatus, errorMessages),
@@ -21,12 +29,25 @@ const addFollowupSchema = z.object({
   place: z.string().nullish(),
   redirected: z.boolean().default(false),
   structureName: z.string().nullish(),
-  dueDate: z.date(errorMessages).nullish(),
-  thirdPersonName: z.string().nullish()
+  dueDate: z.coerce.date(errorMessages).nullish(),
+  thirdPersonName: z.string().nullish(),
+  firstFollowup: z.boolean().default(false),
+  numeroPegase: z.string().nullish(),
+  prescribingOrganizationId: z.string().nullish(),
+  classified: z.boolean().default(false),
+  forwardedToJustice: z.boolean().default(false),
+  [FollowupIntervention.DeetsSiao]: z.boolean().default(false),
+  [FollowupIntervention.Prefecture]: z.boolean().default(false),
+  [FollowupIntervention.Bailleur]: z.boolean().default(false),
+  [FollowupIntervention.ActionLogement]: z.boolean().default(false),
+  [FollowupIntervention.SecoursMedecinTraitant]: z.boolean().default(false),
+  [FollowupSignalement.ChefCabinet]: z.boolean().default(false),
+  [FollowupSignalement.Prefet]: z.boolean().default(false),
+  [FollowupSignalement.OrganismeMenace]: z.boolean().default(false)
 })
 
 const editFollowupSchema = addFollowupSchema.extend({
-  followupId: z.string().uuid()
+  id: z.string().uuid()
 })
 
 type AddFollowupInput = z.infer<typeof addFollowupSchema>

@@ -1,30 +1,15 @@
 import mitt from 'mitt'
-import type { AlertType } from '~/utils/constants/alert'
+import type { OpenSnackbarEvent } from '~/types/snackbar'
+import type { OpenModalEvent, ModalComponent } from '~/types/modal'
 
-type OpenModalEvent = {
-  title: string
-  contentComponent: any
-  contentComponentProps: any
-  contentComponentEvents: any
-}
-
-type CloseModalEvent = undefined
-
-type OpenSnackbarEvent = {
-  snackbarType: AlertType
-  message: string
-  closeCallback: () => void
-  duration: number
-}
-
-type GlobalEvents = {
-  openModal: OpenModalEvent
-  closeModal: CloseModalEvent
+export type GlobalEvents<M extends ModalComponent> = {
+  openModal: OpenModalEvent<M>
+  closeModal: undefined
   openSnackbar: OpenSnackbarEvent
 }
 
 export default defineNuxtPlugin(() => ({
   provide: {
-    globalEventEmitter: mitt<GlobalEvents>()
+    globalEventEmitter: mitt<GlobalEvents<ModalComponent>>()
   }
 }))

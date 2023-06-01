@@ -13,7 +13,7 @@ datasource db {
 // Match next-auth model https://next-auth.js.org/adapters/prisma
 // Underscored names are because of this.
 model Account {
-  id                String  @id @default(cuid())
+  id                String  @id @default(cuid()) // FIXME: Why using cuid and not uuid ?
   userId            String  @map("user_id") @db.Uuid
   type              String
   provider          String
@@ -276,7 +276,7 @@ enum FollowupSignalement {
 }
 
 model Followup {
-  id String @id @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
   structure   Structure @relation(fields: [structureId], references: [id])
   structureId String    @map("structure_id") @db.Uuid
@@ -1072,7 +1072,7 @@ model Comment {
 }
 
 model PrescribingOrganization {
-  id String @id @db.Uuid
+  id String @id @default(uuid()) @db.Uuid
 
   legacyId Int? @map("legacy_id")
 

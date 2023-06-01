@@ -39,3 +39,5 @@ export const addDocumentSchema = z.object({
     size: documentSizeValidation
   })
 })
+
+export type AddDocumentInput = z.infer<typeof addDocumentSchema>

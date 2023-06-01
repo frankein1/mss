@@ -1,11 +1,15 @@
 import {
   addFollowupHandler,
   getFollowupsHandler,
+  getFollowupDetailsHandler,
+  updateFollowupStatusHandler,
   updateFollowupHandler
-} from '../controller/followup.controller'
+} from '~/server/controller/followup'
 import {
   addFollowupSchema,
   getFollowupsSchema,
+  idSchema,
+  editFollowupSchema,
   editFollowupStatusSchema
 } from '~/server/schema'
 import { protectedProcedure, router } from '~/server/trpc'
@@ -15,7 +19,13 @@ export const followupRouter = router({
   getFollowups: protectedProcedure
     .input(getFollowupsSchema)
     .query(getFollowupsHandler),
-  update: protectedProcedure
+  updateStatus: protectedProcedure
     .input(editFollowupStatusSchema)
-    .mutation(updateFollowupHandler)
+    .mutation(updateFollowupStatusHandler),
+  update: protectedProcedure
+    .input(editFollowupSchema)
+    .mutation(updateFollowupHandler),
+  getFollowupDetails: protectedProcedure
+    .input(idSchema)
+    .query(getFollowupDetailsHandler)
 })

@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <PageTitle title="Mon compte" />
-    <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
           ref="main"

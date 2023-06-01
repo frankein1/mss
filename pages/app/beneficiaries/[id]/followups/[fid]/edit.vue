@@ -1,0 +1,122 @@
+<template>
+  <PageContainer>
+    <PageTitle :title="title" />
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+      <div class="fr-col-12">
+        <main
+          ref="formContainer"
+          class="main-container fr-p-5w"
+        >
+          <AtomAlert
+            v-if="fetchError"
+            :alert-type="AlertType.Error"
+            :message="fetchError"
+          />
+
+          <AtomLoader
+            v-if="pending"
+            class="fr-mx-auto"
+          />
+          <FollowupForm
+            v-else-if="followup && followupTypes && prescribingOrganizations"
+            :is-submitting="isSubmitting"
+            :followup-types="followupTypes"
+            :prescribing-organizations="prescribingOrganizations"
+            :followup="followup"
+            :beneficiary-id="beneficiaryId"
+            @save-followup="onUpdateFollowup"
+          />
+        </main>
+      </div>
+    </div>
+  </PageContainer>
+</template>
+
+<script lang="ts" setup>
+  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { AlertType } from '~/utils/constants/alert'
+  import { Routes } from '~/utils/routing/routes'
+  import { EditFollowupInput } from '~/server/schema'
+
+  // TODO: page middlewares
+  // definePageMeta({
+  //   middleware: ['owns-interview', 'is-beneficiary-referent']
+  // })
+
+  const route = useRoute()
+  const snackbar = useSnackbar()
+  const trpcClient = useTrpcClient()
+
+  const isSubmitting = ref<boolean>(false)
+  const formContainer = ref<HTMLElement | null>(null)
+
+  const followupId = computed(() => route.params.fid as string)
+
+  const {
+    data: followup,
+    pending: followupPending,
+    error: followupError
+  } = await trpcClient.followup.getFollowupDetails.useQuery({
+    id: followupId.value
+  })
+
+  const {
+    data: followupTypes,
+    pending: followupTypesPending,
+    error: followupTypesError
+  } = await trpcClient.config.getStructureFollowupTypes.useQuery()
+
+  const {
+    data: prescribingOrganizations,
+    pending: prescribingOrganizationsPending,
+    error: prescribingOrganizationsError
+  } = await trpcClient.config.getPrescribingOrganizations.useQuery()
+
+  const pending = computed(
+    () =>
+      followupPending.value ||
+      followupTypesPending.value ||
+      prescribingOrganizationsPending.value
+  )
+
+  const fetchError = computed(() => {
+    if (followupError.value) {
+      return "La synthèse de l'entretien n'a pas pu être chargée."
+    }
+    if (followupTypesError.value) {
+      return "La liste des types d'accompagnement de votre structure n'a pas pu être chargée."
+    }
+    if (prescribingOrganizationsError.value) {
+      return "La liste des organismes prescripteurs de votre structure n'a pas pu être chargée."
+    }
+    return ''
+  })
+
+  const title = computed(() => {
+    if (!followup.value) {
+      return "Modifier l'entretien avec un·e bénéficiaire"
+    }
+    const { beneficiary } = followup.value
+    return `Modifier l'entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
+  })
+
+  const beneficiaryId = computed(() => route.params.id as string)
+
+  const beneficiaryPath = computed(() =>
+    Routes.Beneficiary(beneficiaryId.value)
+  )
+
+  async function onUpdateFollowup(followup: EditFollowupInput) {
+    isSubmitting.value = true
+    try {
+      await trpcClient.followup.update.mutate(followup)
+      navigateTo(`${beneficiaryPath.value}?tab=${BeneficiaryTab.History}`)
+    } catch {
+      snackbar.error('La mise à jour de la synthèse a échoué.', () =>
+        formContainer.value?.querySelector('input')?.focus()
+      )
+    }
+    isSubmitting.value = false
+  }
+</script>

@@ -5,7 +5,7 @@
   >
     <div>
       <AtomAlert
-        v-if="open"
+        v-if="open && alertType"
         :alert-type="alertType"
         :message="message"
         closeable
@@ -15,11 +15,14 @@
   </aside>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+  import type { AlertType } from '~/utils/constants/alert'
+  import type { OpenSnackbarEvent } from '~/types/snackbar'
+
   const { $globalEventEmitter } = useNuxtApp()
 
   const open = ref(false)
-  const alertType = ref(null)
+  const alertType = ref<AlertType | null>(null)
   const message = ref('')
   const closeCallback = ref(() => {})
 
@@ -32,7 +35,7 @@
     message: _message,
     closeCallback: _closeCallback,
     duration
-  }) {
+  }: OpenSnackbarEvent) {
     open.value = true
     alertType.value = snackbarType
     message.value = _message

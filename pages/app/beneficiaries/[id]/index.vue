@@ -29,7 +29,7 @@
           :beneficiary-id="beneficiaryId"
         ></BeneficiaryDocumentList>
       </Tab>
-      <Tab name="Historiques">Historiques</Tab>
+      <Tab name="Historique">Historique</Tab>
     </Tabs>
   </PageContainer>
 </template>

@@ -1,34 +1,8 @@
 import type { Prisma } from '@prisma/client'
-import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
-import {
-  AccompagnementsQuery,
-  getBeneficiarySecurityTarget
-} from '~/server/query'
-import type {
-  AddFollowupInput,
-  GetFollowupsInput,
-  EditFollowupStatusInput,
-  FollowupFilterInput
-} from '~/server/schema'
-import { prismaClient } from '~/server/prisma'
+import type { GetFollowupsInput, FollowupFilterInput } from '~/server/schema'
+import { AppContext, invalidError } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
-import { canEditBeneficiaryFollowup } from '~/server/query/security/rules'
-
-export const addFollowupHandler = async ({
-  input,
-  ctx: { user }
-}: {
-  input: AddFollowupInput
-  ctx: AppContext
-}) => {
-  const target = await getBeneficiarySecurityTarget(input.beneficiaryId)
-  if (!target) {
-    throw invalidError('Beneficiary not found')
-  }
-  return prismaClient.$transaction(transaction => {
-    return AccompagnementsQuery.addFollowup({ input, transaction, user })
-  })
-}
+import { prismaClient } from '~/server/prisma'
 
 function prepareFollowupFilters(filters: FollowupFilterInput) {
   const formattedFilters: Prisma.FollowupWhereInput = {}
@@ -117,32 +91,4 @@ export const getFollowupsHandler = async ({
   const totalPages = getTotalPages({ count, perPage: input.perPage })
 
   return { followups, count, totalPages }
-}
-
-export const updateFollowupHandler = async ({
-  input: { id, ...rest },
-  ctx: { user }
-}: {
-  input: EditFollowupStatusInput
-  ctx: AppContext
-}) => {
-  const target = await prismaClient.followup.findUnique({
-    where: { id },
-    include: {
-      beneficiary: {
-        include: {
-          referents: true
-        }
-      }
-    }
-  })
-
-  if (
-    !target ||
-    !canEditBeneficiaryFollowup(user, target.beneficiary, target)
-  ) {
-    throw forbiddenError()
-  }
-
-  return await prismaClient.followup.update({ where: { id }, data: rest })
 }

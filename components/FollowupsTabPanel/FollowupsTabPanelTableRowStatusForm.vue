@@ -39,7 +39,7 @@
 
   const onUpdateStatus = handleSubmit(async followup => {
     try {
-      await useTrpcClient().followup.update.mutate(followup)
+      await useTrpcClient().followup.updateStatus.mutate(followup)
 
       snackbar.success("Le statut de la synthèse d'entretien a été modifié.")
     } catch {

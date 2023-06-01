@@ -1,3 +1,6 @@
+export const NEW_OPTION_ID = 'new-option'
+export const NEW_OPTION_PREFIX = `${NEW_OPTION_ID}-`
+
 export type Options = Map<string, string>
 
 export const labelsToOptions = (object: Record<string, string>): Options =>
@@ -17,4 +20,11 @@ export function toOptions<V extends string, L extends string>(
 
 export function withEmptyValue(map: Map<string, string>, emptyLabel = '') {
   return new Map([['', emptyLabel], ...map.entries()])
+}
+
+/**
+ * Map a created option from a searchable select to the input label
+ */
+export function newOptionToLabel(newOption: string) {
+  return newOption.replace(NEW_OPTION_PREFIX, '').replace('_', ' ')
 }

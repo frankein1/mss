@@ -44,18 +44,18 @@
   </dialog>
 </template>
 
-<script lang="ts" setup generic="C extends Component">
-  import type { Ref } from 'vue'
+<script lang="ts" setup generic="M extends ModalComponent">
   import type { ComponentProps, ComponentEmit } from '~/types/vue'
+  import type { ModalComponent, OpenModalEvent } from '~/types/modal'
 
   const { $globalEventEmitter } = useNuxtApp()
 
   const modal = ref<HTMLDialogElement | null>(null)
   const title = ref('')
-  const contentComponent: Ref<C | null> = shallowRef(null)
-  const contentComponentProps: Ref<ComponentProps<C> | undefined> =
+  const contentComponent: Ref<M | null> = shallowRef(null)
+  const contentComponentProps: Ref<ComponentProps<M> | undefined> =
     ref(undefined)
-  const contentComponentEvents: Ref<ComponentEmit<C> | undefined> =
+  const contentComponentEvents: Ref<ComponentEmit<M> | undefined> =
     ref(undefined)
 
   onMounted(() => {
@@ -68,18 +68,12 @@
     modal.value?.removeEventListener('dsfr.conceal', onClose)
   })
 
-  // FIXME: Type component
   function onOpen({
     title: _title,
     contentComponent: _contentComponent,
     contentComponentProps: _contentComponentProps,
     contentComponentEvents: _contentComponentEvents
-  }: {
-    title: string
-    contentComponent: C
-    contentComponentProps: ComponentProps<C>
-    contentComponentEvents: ComponentEmit<C>
-  }) {
+  }: OpenModalEvent<M>) {
     title.value = _title
     contentComponent.value = _contentComponent
     contentComponentProps.value = _contentComponentProps

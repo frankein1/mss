@@ -1,5 +1,6 @@
+import { z } from 'zod'
+
 export {
-  idSchema,
   createBeneficiarySchema,
   searchBeneficiarySchema,
   updateBeneficiarySchema,
@@ -108,3 +109,9 @@ export type {
   UpdateNotificationInput,
   GetNotificationInput
 } from './notification.schema'
+export { addDocumentSchema } from './document.schema'
+export type { AddDocumentInput } from './document.schema'
+
+export const idSchema = z.object({
+  id: z.string()
+})

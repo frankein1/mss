@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <PageTitle title="Statistiques" />
-    <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main class="main-container fr-tabs">
           <ul
@@ -96,10 +96,15 @@
 
   const trpcClient = useTrpcClient()
 
+  // FIXME: For now, trpc-nuxt does not allow to define query key, and their defined key is not based on the transform option
   const { data: followupTypesOptions, error: followupTypesOptionsError } =
-    await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
-      transform: followupTypes => toOptions(followupTypes, 'id', 'name')
-    })
+    await useAsyncData(
+      'config.getStructureFollowupTypes.options',
+      () => trpcClient.config.getStructureFollowupTypes.query(),
+      {
+        transform: followupTypes => toOptions(followupTypes, 'id', 'name')
+      }
+    )
 
   const {
     data: beneficiariesCitiesOptions,

@@ -1,6 +1,5 @@
 export { getBeneficiaryToView } from './getBeneficiaryToView'
 export { getBeneficiaryToUpdate } from './getBeneficiaryToUpdate'
-export { getDocuments } from './getDocuments'
 export { getFollowupTypes } from './getFollowupTypes'
 export { getSupports } from './getSupports'
 export { getBeneficiary } from './getBeneficiary'

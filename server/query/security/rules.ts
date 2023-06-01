@@ -60,10 +60,10 @@ export const isReferentFor = (
 
 export const isCreator = (
   grantee: SecurityRuleGrantee,
-  target: { createdById?: string | null },
+  target: { createdById?: string | null } | null | undefined,
   allowedRoles: AllowedRoles
 ) =>
-  grantee.id === target.createdById &&
+  (!target || grantee.id === target.createdById) &&
   isActiveWithAllowedRole(grantee, allowedRoles)
 
 export type SecurityRule<
@@ -328,6 +328,18 @@ export const canViewBeneficiaryFollowupPrivateSynthesis = (
     'Referent'
   ])
 
+export const canEditBeneficiaryFollowupPrivateSynthesis = (
+  grantee: SecurityRuleGrantee,
+  followup: SecurityTargetWithCreator | null | undefined
+): boolean =>
+  isCreator(grantee, followup, [
+    'Administrator',
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'Referent'
+  ])
+
 export const canEditBeneficiaryFollowup = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
@@ -496,3 +508,14 @@ export const canExportStats = (
 ): boolean =>
   isAdministrator(grantee) ||
   isInSameStructureAs(grantee, target, ['StructureManager', 'SocialWorker'])
+
+export const canCreatePrescribingOrganization = (
+  grantee: SecurityRuleGrantee
+): boolean =>
+  isAdministrator(grantee) ||
+  isActiveWithAllowedRole(grantee, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'Referent'
+  ])

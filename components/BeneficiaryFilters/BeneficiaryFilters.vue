@@ -39,13 +39,18 @@
   const filtersStore = useFiltersStore()
   const INITIAL_VALUES = filtersStore.beneficiary || {}
 
+  // FIXME: For now, trpc-nuxt does not allow to define query key, and their defined key is not based on the transform option
   const {
     data: followupTypeOptions,
     pending: followupTypeOptionsPending,
     error: followupTypeOptionsError
-  } = await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
-    transform: followupTypes => toOptions(followupTypes, 'id', 'name')
-  })
+  } = await useAsyncData(
+    'config.getStructureFollowupTypes.options',
+    () => trpcClient.config.getStructureFollowupTypes.query(undefined),
+    {
+      transform: followupTypes => toOptions(followupTypes, 'id', 'name')
+    }
+  )
 
   const {
     data: agentOptions,

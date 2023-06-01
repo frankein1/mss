@@ -1,6 +1,5 @@
 export { AccompagnementsQuery } from './accompagnements'
 export { UtilisateursQuery } from './utilisateurs'
-export { getBeneficiarySecurityTarget } from './security/getBeneficiarySecurityTarget'
 
 export {
   type GetBeneficiaryToViewReturn,

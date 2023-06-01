@@ -30,6 +30,8 @@ export type GetBeneficiariesOutput =
   RouterOutput['beneficiary']['getBeneficiaries']
 
 export type GetFollowupsOutput = RouterOutput['followup']['getFollowups']
+export type GetFollowupDetailsOutput =
+  RouterOutput['followup']['getFollowupDetails']
 
 export type GetHelpRequestsOutput =
   RouterOutput['helpRequest']['getHelpRequests']

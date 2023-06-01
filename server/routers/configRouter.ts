@@ -2,6 +2,7 @@ import {
   getAgentsHandler,
   getBeneficiariesCitiesHandler,
   getExaminationDatesHandler,
+  getPrescribingOrganizationsHandler,
   getStructureFollowupTypesHandler
 } from '../controller/config.controller'
 import { protectedProcedure, router } from '~/server/trpc'
@@ -32,5 +33,8 @@ export const configRouter = router({
       referrer_uri: `${appUrl}${Routes.Account()}`
     })
     return `${inclusionConnectAccountUrlBase}?${params}`
-  })
+  }),
+  getPrescribingOrganizations: protectedProcedure.query(
+    getPrescribingOrganizationsHandler
+  )
 })

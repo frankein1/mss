@@ -4,7 +4,8 @@ import {
   createBeneficiarySchema,
   updateBeneficiarySchema,
   getBeneficiariesSchema,
-  getDocumentsSchema
+  getDocumentsSchema,
+  addDocumentSchema
 } from '../schema'
 
 import {
@@ -12,6 +13,7 @@ import {
   getBeneficiariesHandler,
   getBeneficiaryDetailsHandler,
   getBeneficiaryDocumentsHandler,
+  addDocumentHandler,
   updateBeneficiaryHandler,
   searchBeneficiaryHandler
 } from '../controller/beneficiary'
@@ -33,6 +35,9 @@ export const beneficiaryRouter = router({
   getBeneficiaryDocuments: protectedProcedure
     .input(getDocumentsSchema)
     .query(getBeneficiaryDocumentsHandler),
+  addBeneficiaryDocument: protectedProcedure
+    .input(addDocumentSchema)
+    .query(addDocumentHandler),
   getBeneficiaries: protectedProcedure
     .input(getBeneficiariesSchema)
     .query(getBeneficiariesHandler)

@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <PageTitle title="Gérer les utilisateurs" />
-    <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main class="main-container fr-p-5w">
           <UserTable
