@@ -11,6 +11,13 @@
 
     <BeneficiaryDetailsTitle :beneficiary="beneficiary" />
 
+    <hr />
+    <BeneficiaryDetailsActions
+      :beneficiary-id="beneficiaryId"
+      class="fr-pb-3w"
+    />
+    <hr />
+
     <Tabs
       class="main-container fr-tabs fr-transition-none fr-tabs__shadow fr-tabs__shadow--right"
       nav-class="fr-tabs__list"

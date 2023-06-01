@@ -376,7 +376,7 @@
       medium: props.followup?.medium,
       ministre: props.followup?.ministre,
       // FIXME: type issue
-      date: props.followup?.date,
+      date: props.followup?.date || new Date(),
       synthesis: props.followup?.synthesis,
       privateSynthesis: props.followup?.privateSynthesis,
       status: props.followup?.status || FollowupStatus.Done,

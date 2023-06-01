@@ -4,7 +4,6 @@
       <NuxtLink
         :to="`${Routes.BeneficiaryEdit(beneficiaryId)}`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
-        title="Modifier"
         target="_self"
       >
         Modifier
@@ -14,7 +13,6 @@
       <NuxtLink
         :to="`${Routes.BeneficiaryPrint(beneficiaryId)}`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-printer-line"
-        title="Imprimer"
         target="_self"
       >
         Imprimer
@@ -24,7 +22,6 @@
       <button
         v-if="canDelete"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-line btn-delete-action"
-        title="Supprimer"
         data-fr-opened="false"
         aria-controls="global-modal"
         type="button"
