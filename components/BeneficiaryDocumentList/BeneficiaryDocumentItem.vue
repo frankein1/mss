@@ -95,8 +95,8 @@
   withDefaults(
     defineProps<{
       document: Document
-      canDeleteDocuments: boolean
-      hasUnreadNotifications: boolean
+      canDeleteDocuments?: boolean
+      hasUnreadNotifications?: boolean
     }>(),
     {
       hasUnreadNotifications: false,

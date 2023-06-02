@@ -19,32 +19,34 @@ export {
   addFollowupSchema,
   editFollowupSchema,
   getFollowupsSchema,
-  editFollowupStatusSchema
+  quickEditFollowupSchema
 } from './followup.schema'
 export type {
   AddFollowupInput,
   EditFollowupInput,
   GetFollowupsInput,
-  EditFollowupStatusInput
+  QuickEditFollowupInput
 } from './followup.schema'
 
 export {
-  // createHelpRequestSchema,
-  editHelpRequestSchema,
+  createHelpRequestSchema,
+  quickEditHelpRequestSchema,
   getHelpRequestsSchema,
-  editHelpRequestStatusSchema,
-  editHelpRequestAllocatedAmountSchema,
-  editHelpRequestPaymentMethodSchema,
-  editHelpRequestPaymentDateSchema
+  quickEditHelpRequestStatusSchema,
+  quickEditHelpRequestAllocatedAmountSchema,
+  quickEditHelpRequestPaymentMethodSchema,
+  quickEditHelpRequestPaymentDateSchema,
+  editHelpRequestSchema
 } from './helpRequest.schema'
 export type {
-  // CreateHelpRequestInput,
-  EditHelpRequestInput,
+  CreateHelpRequestInput,
+  QuickEditHelpRequestInput,
   GetHelpRequestsInput,
-  EditHelpRequestStatusInput,
-  EditHelpRequestAllocatedAmountInput,
-  EditHelpRequestPaymentMethodInput,
-  EditHelpRequestPaymentDateInput
+  QuickEditHelpRequestStatusInput,
+  QuickEditHelpRequestAllocatedAmountInput,
+  QuickEditHelpRequestPaymentMethodInput,
+  QuickEditHelpRequestPaymentDateInput,
+  EditHelpRequestInput
 } from './helpRequest.schema'
 
 export {

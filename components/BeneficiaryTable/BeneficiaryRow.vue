@@ -40,7 +40,6 @@
   import { getUserDisplayName } from '~/utils/user'
   import { calculateAge } from '~/utils/beneficiary'
   import { readableFileNumber } from '~/utils/readableFileNumber'
-  import { ORIGIN_PAGE_PARAMETER } from '~/utils/constants'
   import { beneficiaryStatusLabels } from '~/client/options/beneficiary'
   import { nameOrEmpty } from '~/utils/nameOrEmpty'
   import { Routes } from '~/utils/routing/routes'
@@ -51,14 +50,9 @@
     beneficiary: BeneficiaryItem
   }>()
 
-  const beneficiaryLink = computed(() => {
-    return {
-      path: Routes.Beneficiary(props.beneficiary.id),
-      query: {
-        [ORIGIN_PAGE_PARAMETER]: route.path
-      }
-    }
-  })
+  const beneficiaryLink = computed(() =>
+    Routes.Beneficiary(props.beneficiary.id, { originPage: route.path })
+  )
 
   const followUpTypes = computed(() =>
     props.beneficiary.followupTypes.map(({ name }) => name).join(', ')

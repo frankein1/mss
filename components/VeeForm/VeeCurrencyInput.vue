@@ -85,7 +85,7 @@
       'ArrowUp',
       'ArrowRight',
       'ArrowDown',
-      ',',
+      '.',
       'Delete',
       '0',
       '1',
@@ -104,8 +104,9 @@
   }
 
   function onChange(event: Event) {
-    emit('changeValue', parseInt((event.target as HTMLInputElement).value))
-    handleChange(event)
+    const newValue = parseFloat((event.target as HTMLInputElement).value)
+    emit('changeValue', newValue)
+    handleChange(newValue)
   }
 </script>
 

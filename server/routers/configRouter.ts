@@ -2,6 +2,7 @@ import {
   getAgentsHandler,
   getBeneficiariesCitiesHandler,
   getExaminationDatesHandler,
+  getInstructorOrganizationHandler,
   getPrescribingOrganizationsHandler,
   getStructureFollowupTypesHandler
 } from '../controller/config.controller'
@@ -36,5 +37,8 @@ export const configRouter = router({
   }),
   getPrescribingOrganizations: protectedProcedure.query(
     getPrescribingOrganizationsHandler
+  ),
+  getInstructorOrganization: protectedProcedure.query(
+    getInstructorOrganizationHandler
   )
 })

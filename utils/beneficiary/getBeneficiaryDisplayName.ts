@@ -1,4 +1,5 @@
 import { Beneficiary } from '@prisma/client'
+import { nameOrEmpty } from '~/utils/nameOrEmpty'
 
 export function getBeneficiaryDisplayName(
   beneficiary: Pick<Beneficiary, 'firstName' | 'usualName' | 'birthName'>

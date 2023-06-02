@@ -1,15 +1,13 @@
 import type { Prisma } from '@prisma/client'
-import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
+import { AppContext, invalidError } from '~/server/trpc'
 import type {
   GetHelpRequestsInput,
-  EditHelpRequestInput,
   HelpRequestFilterInput
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
-import { canEditBeneficiaryHelpRequest } from '~/server/query/security/rules'
 
-const HELP_REQUEST_SELECT = {
+export const helpRequestGetPageSelect = {
   id: true,
   status: true,
   type: { select: { id: true, name: true } },
@@ -103,7 +101,7 @@ export const getHelpRequestsHandler = async ({
   const [helpRequests, count] = await Promise.all([
     prismaClient.helpRequest.findMany({
       where,
-      select: HELP_REQUEST_SELECT,
+      select: helpRequestGetPageSelect,
       take,
       skip,
       orderBy: input.orderBy
@@ -115,36 +113,4 @@ export const getHelpRequestsHandler = async ({
   const totalPages = getTotalPages({ count, perPage: input.perPage })
 
   return { helpRequests, count, totalPages }
-}
-
-export const updateHelpRequestHandler = async ({
-  input: { id, ...rest },
-  ctx: { user }
-}: {
-  input: EditHelpRequestInput
-  ctx: AppContext
-}) => {
-  const target = await prismaClient.helpRequest.findUnique({
-    where: { id },
-    include: {
-      beneficiary: {
-        include: {
-          referents: true
-        }
-      }
-    }
-  })
-
-  if (
-    !target ||
-    !canEditBeneficiaryHelpRequest(user, target.beneficiary, target)
-  ) {
-    throw forbiddenError()
-  }
-
-  return await prismaClient.helpRequest.update({
-    where: { id },
-    data: rest,
-    select: HELP_REQUEST_SELECT
-  })
 }

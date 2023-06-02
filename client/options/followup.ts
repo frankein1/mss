@@ -4,7 +4,7 @@ import {
   FollowupSignalement,
   FollowupStatus
 } from '@prisma/client'
-import { labelsToOptions } from '../../utils/options'
+import { labelsToOptions } from '~/utils/options'
 
 export const followupInterventionLabels: {
   [key in FollowupIntervention]: string

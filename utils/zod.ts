@@ -26,4 +26,4 @@ export const enumErrorMap: z.ZodErrorMap = issue => {
   }
 }
 
-export const kindOfBooleanSchema = z.enum(['', 'true', 'false'])
+export const kindOfBooleanSchema = z.enum(['true', 'false'])

@@ -110,10 +110,6 @@
 <script lang="ts" setup>
   import { HelpRequestStatus } from '@prisma/client'
   import { HelpRequestItem } from './types'
-  import {
-    ORIGIN_PAGE_PARAMETER,
-    ORIGIN_TAB_PARAMETER
-  } from '~/utils/constants'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import {
@@ -143,17 +139,14 @@
     (e: 'updated', helpRequest: HelpRequestItem): void
   }>()
 
-  const helpRequestPath = computed(() => {
-    return {
-      path: Routes.Beneficiary(props.helpRequest.beneficiary.id),
-      query: {
-        tab: BeneficiaryTab.History,
-        item: props.helpRequest.id,
-        [ORIGIN_PAGE_PARAMETER]: route.path,
-        [ORIGIN_TAB_PARAMETER]: HistoryTab.HelpRequests
-      }
-    }
-  })
+  const helpRequestPath = computed(() =>
+    Routes.Beneficiary(props.helpRequest.beneficiary.id, {
+      tab: BeneficiaryTab.History,
+      item: props.helpRequest.id,
+      originPage: route.path,
+      originTab: HistoryTab.HelpRequests
+    })
+  )
 
   const examiningOrganisation = computed(() =>
     props.helpRequest.externalStructure

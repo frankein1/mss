@@ -1,4 +1,5 @@
 import { Minister } from '@prisma/client'
+import { labelsToOptions } from '~/utils/options'
 
 const ministerLabels = {
   [Minister.FrancoisBraun]: 'François Braun (Santé et Prévention)',

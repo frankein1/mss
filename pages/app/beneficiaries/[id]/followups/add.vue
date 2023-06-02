@@ -33,10 +33,10 @@
 
 <script lang="ts" setup>
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
-  import { HISTORY_TAB } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~/utils/constants/alert'
   import { Routes } from '~/utils/routing/routes'
   import { AddFollowupInput } from '~/server/schema/followup.schema'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 
   // FIXME: Missing permissions
   // definePageMeta({
@@ -52,17 +52,10 @@
 
   const beneficiaryId = computed(() => route.params.id as string)
 
-  // FIXME: Should we define another query to get minimal beneficiary information ?
-  const {
-    data: beneficiary,
-    pending: beneficiaryPending,
-    error: beneficiaryError
-  } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery(
-    {
+  const { data: beneficiary, error: beneficiaryError } =
+    await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
       id: beneficiaryId.value
-    },
-    { transform: ({ beneficiary }) => beneficiary }
-  )
+    })
 
   const {
     data: followupTypes,
@@ -77,10 +70,7 @@
   } = await trpcClient.config.getPrescribingOrganizations.useQuery()
 
   const pending = computed(
-    () =>
-      beneficiaryPending.value ||
-      followupTypesPending.value ||
-      prescribingOrganizationsPending.value
+    () => followupTypesPending.value || prescribingOrganizationsPending.value
   )
 
   const fetchError = computed(() => {
@@ -103,15 +93,15 @@
     return `Entretien avec ${getBeneficiaryDisplayName(beneficiary.value)}`
   })
 
-  const beneficiaryHistoryPath = computed(
-    () => `${Routes.Beneficiary(beneficiaryId.value)}?tab=${HISTORY_TAB}`
-  )
-
   async function onAddFollowup(followup: AddFollowupInput) {
     isSubmitting.value = true
     try {
       await trpcClient.followup.add.mutate(followup)
-      navigateTo(beneficiaryHistoryPath.value)
+      navigateTo(
+        Routes.Beneficiary(beneficiaryId.value, {
+          tab: BeneficiaryTab.History
+        })
+      )
     } catch {
       snackbar.error("La création de la synthèse d'entretien a échoué.", () =>
         formContainer.value?.querySelector('input')?.focus()

@@ -3,7 +3,7 @@ import {
   HelpRequestStatus,
   PaymentMethod
 } from '@prisma/client'
-import { labelsToOptions, Options } from '../../utils/options'
+import { labelsToOptions } from '~/utils/options'
 
 export const helpRequestStatusLabels: { [key in HelpRequestStatus]: string } = {
   [HelpRequestStatus.WaitingAdditionalInformation]:
@@ -18,12 +18,12 @@ export const helpRequestStatusLabels: { [key in HelpRequestStatus]: string } = {
 
 export const helpRequestStatusOptions = labelsToOptions(helpRequestStatusLabels)
 
-export const financialSupportOptions: Options = new Map([
+export const financialSupportOptions = new Map([
   ['true', 'Oui'],
   ['false', 'Non']
 ])
 
-export const externalOrganisationOptions: Options = new Map([
+export const externalOrganisationOptions = new Map([
   ['false', 'En interne'],
   ['true', 'Par une organisation extérieure']
 ])

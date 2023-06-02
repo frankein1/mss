@@ -18,8 +18,8 @@
   import { FollowupItem } from './types'
   import { followupStatusOptions } from '~/client/options/followup'
   import {
-    EditFollowupStatusInput,
-    editFollowupStatusSchema
+    QuickEditFollowupInput,
+    quickEditFollowupSchema
   } from '~/server/schema'
   import { followupFieldLabels } from '~/client/labels'
 
@@ -29,8 +29,8 @@
     followup: FollowupItem
   }>()
 
-  const { handleSubmit } = useForm<EditFollowupStatusInput>({
-    validationSchema: toTypedSchema(editFollowupStatusSchema),
+  const { handleSubmit } = useForm<QuickEditFollowupInput>({
+    validationSchema: toTypedSchema(quickEditFollowupSchema),
     initialValues: {
       id: props.followup.id,
       status: props.followup.status
@@ -39,7 +39,7 @@
 
   const onUpdateStatus = handleSubmit(async followup => {
     try {
-      await useTrpcClient().followup.updateStatus.mutate(followup)
+      await useTrpcClient().followup.quickUpdate.mutate(followup)
 
       snackbar.success("Le statut de la synthèse d'entretien a été modifié.")
     } catch {

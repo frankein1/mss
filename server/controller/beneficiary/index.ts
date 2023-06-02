@@ -11,6 +11,7 @@ export { getBeneficiaryDocumentsHandler } from './get-documents.handler'
 export { createBeneficiaryHandler } from './create.handler'
 export { updateBeneficiaryHandler } from './update.handler'
 export { searchBeneficiaryHandler } from './search.handler'
+export { getBeneficiaryMinimalInfoHandler } from './get-minimal-info.controller'
 
 export type {
   BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests,

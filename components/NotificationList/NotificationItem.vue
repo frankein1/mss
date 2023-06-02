@@ -34,7 +34,6 @@
 
 <script setup lang="ts">
   import { Beneficiary, Notification, NotificationType } from '@prisma/client'
-  import { ORIGIN_PAGE_PARAMETER } from '~~/utils/constants'
   import { BeneficiaryTab } from '~~/utils/constants/beneficiary-tabs'
   import { Routes } from '~/utils/routing/routes'
   import { notificationTypeClasses } from '~/client/classes/notification'
@@ -59,10 +58,6 @@
     isRead.value ? 'Marquer comme non-lu' : 'Marquer comme lu'
   )
 
-  const beneficiaryLink = computed(() =>
-    Routes.Beneficiary(beneficiary.value.id)
-  )
-
   function getItemTab() {
     switch (props.notification.type) {
       case NotificationType.NewDocument:
@@ -78,19 +73,16 @@
 
   function getItemId() {
     const { documentId, helpRequestId, followupId } = props.notification
-    return documentId || helpRequestId || followupId
+    return documentId || helpRequestId || followupId || undefined
   }
 
-  const itemLink = computed(() => {
-    return {
-      path: `${beneficiaryLink.value}`,
-      query: {
-        tab: getItemTab(),
-        item: getItemId(),
-        [ORIGIN_PAGE_PARAMETER]: route.path
-      }
-    }
-  })
+  const itemLink = computed(() =>
+    Routes.Beneficiary(beneficiary.value.id, {
+      tab: getItemTab(),
+      item: getItemId(),
+      originPage: route.path
+    })
+  )
 
   async function onToggleRead() {
     await useTrpcClient().notification.update.mutate({

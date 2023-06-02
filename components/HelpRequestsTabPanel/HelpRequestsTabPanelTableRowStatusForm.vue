@@ -19,8 +19,8 @@
   import { HelpRequestItem } from './types'
   import { helpRequestStatusOptions } from '~/client/options/helpRequest'
   import {
-    EditHelpRequestStatusInput,
-    editHelpRequestStatusSchema
+    QuickEditHelpRequestStatusInput,
+    quickEditHelpRequestStatusSchema
   } from '~/server/schema'
   import { pastStatusesFromStatus } from '~/utils/helpRequest/pastStatusesFromStatus'
   import { helpRequestFieldLabels } from '~/client/labels'
@@ -35,8 +35,8 @@
     (e: 'updated', helpRequest: HelpRequestItem): void
   }>()
 
-  const { handleSubmit } = useForm<EditHelpRequestStatusInput>({
-    validationSchema: toTypedSchema(editHelpRequestStatusSchema),
+  const { handleSubmit } = useForm<QuickEditHelpRequestStatusInput>({
+    validationSchema: toTypedSchema(quickEditHelpRequestStatusSchema),
     initialValues: {
       id: props.helpRequest.id,
       status: props.helpRequest.status
@@ -50,7 +50,7 @@
   const onUpdateStatus = handleSubmit(async helpRequest => {
     try {
       const updatedHelpRequest =
-        await useTrpcClient().helpRequest.update.mutate(helpRequest)
+        await useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest)
 
       snackbar.success(
         "Le statut de l'instruction de demande d'aide a été modifié."

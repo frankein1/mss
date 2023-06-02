@@ -8,27 +8,52 @@ import {
   FollowupSignalement,
   FollowupType,
   FollowupMedium,
-  User,
-  Minister
+  User
 } from '@prisma/client'
-import { newOptionToLabel, NEW_OPTION_PREFIX } from '~/utils/options'
-import {
-  canEditBeneficiaryFollowupPrivateSynthesis,
-  canCreatePrescribingOrganization
-} from '~/server/query/security/rules'
+import { canEditBeneficiaryFollowupPrivateSynthesis } from '~/server/query/security/rules'
 import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
+import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
+import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+
+type FollowupTarget = Followup & {
+  beneficiary: Beneficiary & {
+    referents: User[]
+  }
+  documents: Document[]
+  types: FollowupType[]
+}
 
 function prepareMinistryData(
   type: StructureType,
-  interventionBooleans: { [k in FollowupIntervention]: boolean },
-  signalementBooleans: { [k in FollowupSignalement]: boolean },
-  ministryData: {
-    numeroPegase: string | null | undefined
-    ministre: Minister | null | undefined
-    classified: boolean
-    forwardedToJustice: boolean
-  }
+  {
+    ActionLogement,
+    Bailleur,
+    DeetsSiao,
+    Prefecture,
+    SecoursMedecinTraitant,
+    ChefCabinet,
+    OrganismeMenace,
+    Prefet,
+    numeroPegase,
+    ministre,
+    classified,
+    forwardedToJustice
+  }: AddFollowupInput | EditFollowupInput
 ) {
+  const interventionBooleans: { [k in FollowupIntervention]: boolean } = {
+    ActionLogement,
+    Bailleur,
+    DeetsSiao,
+    Prefecture,
+    SecoursMedecinTraitant
+  }
+
+  const signalementBooleans: { [k in FollowupSignalement]: boolean } = {
+    ChefCabinet,
+    OrganismeMenace,
+    Prefet
+  }
+
   if (type === StructureType.Ministere) {
     const interventions = Object.entries(interventionBooleans).reduce(
       (interventions, [intervention, enabled]) => {
@@ -51,7 +76,10 @@ function prepareMinistryData(
     )
 
     return {
-      ...ministryData,
+      numeroPegase,
+      ministre,
+      classified,
+      forwardedToJustice,
       interventions,
       signalements
     }
@@ -60,29 +88,38 @@ function prepareMinistryData(
   return {}
 }
 
-async function prepareCreatedPrescribingOrganization(
-  transaction: Prisma.TransactionClient,
-  user: User,
-  structureId: string,
-  prescribingOrganizationId: string | null | undefined
+function prepareFollowupTypesMutations(
+  inputTypes: string[],
+  targetTypes: FollowupType[] | undefined
 ) {
-  if (
-    canCreatePrescribingOrganization(user) &&
-    prescribingOrganizationId?.startsWith(NEW_OPTION_PREFIX)
-  ) {
-    const { id } = await transaction.prescribingOrganization.create({
-      data: {
-        name: newOptionToLabel(prescribingOrganizationId),
-        structureId,
-        createdById: user.id
-      }
-    })
-    return id
+  return {
+    connect: inputTypes.map(id => ({ id })),
+    disconnect: targetTypes
+      ?.filter(({ id }) => !inputTypes.includes(id))
+      .map(({ id }) => ({ id }))
   }
-
-  return undefined
 }
 
+export async function prepareFollowupData({
+  input,
+  transaction,
+  user
+}: {
+  input: AddFollowupInput
+  transaction: Prisma.TransactionClient
+  user: User
+}): Promise<Prisma.FollowupUncheckedCreateInput>
+export async function prepareFollowupData({
+  input,
+  transaction,
+  user,
+  target
+}: {
+  input: EditFollowupInput
+  transaction: Prisma.TransactionClient
+  user: User
+  target: FollowupTarget
+}): Promise<Prisma.FollowupUncheckedUpdateInput>
 export async function prepareFollowupData({
   input,
   transaction,
@@ -92,44 +129,12 @@ export async function prepareFollowupData({
   input: AddFollowupInput | EditFollowupInput
   transaction: Prisma.TransactionClient
   user: User
-  target?: Followup & {
-    beneficiary: Beneficiary & {
-      referents: User[]
-    }
-    documents: Document[]
-    types: FollowupType[]
-  }
-}) {
-  const {
-    beneficiaryId,
-    types,
-    documents,
-    date,
-    dueDate,
-    numeroPegase,
-    ministre,
-    medium,
-    place,
-    thirdPersonName,
-    privateSynthesis,
-    redirected,
-    structureName,
-    classified,
-    forwardedToJustice,
-    prescribingOrganizationId,
-    ActionLogement,
-    Bailleur,
-    DeetsSiao,
-    Prefecture,
-    SecoursMedecinTraitant,
-    ChefCabinet,
-    OrganismeMenace,
-    Prefet,
-    ...data
-  } = input
-
+  target?: FollowupTarget
+}): Promise<
+  Prisma.FollowupUncheckedCreateInput | Prisma.FollowupUncheckedUpdateInput
+> {
   const { structureId } = await transaction.beneficiary.findUniqueOrThrow({
-    where: { id: beneficiaryId },
+    where: { id: input.beneficiaryId },
     select: { structureId: true }
   })
 
@@ -140,56 +145,33 @@ export async function prepareFollowupData({
     }
   })
 
-  const ministryData = prepareMinistryData(
-    type,
-    { ActionLogement, Bailleur, DeetsSiao, Prefecture, SecoursMedecinTraitant },
-    { ChefCabinet, OrganismeMenace, Prefet },
-    { numeroPegase, ministre, classified, forwardedToJustice }
+  const ministryData = prepareMinistryData(type, input)
+
+  const prescribingOrganizationId = await preparePrescribingOrganization(
+    transaction,
+    user,
+    structureId,
+    input.prescribingOrganizationId
   )
 
-  const createdPrescribingOrganizationId =
-    await prepareCreatedPrescribingOrganization(
-      transaction,
-      user,
-      structureId,
-      prescribingOrganizationId
-    )
-
   return {
+    ...input,
     structureId,
-    beneficiaryId,
-    // TODO Helper for date string => Date
-    date: new Date(date),
-    dueDate: dueDate ? new Date(dueDate) : null,
-    types: {
-      connect: types.map(id => ({ id })),
-      disconnect: target?.types
-        .filter(type => !types.includes(type.id))
-        .map(type => ({ id: type.id }))
-    },
-    documents: {
-      connect: documents.map(key => ({ key })),
-      disconnect: target?.documents
-        .filter(document => !documents.includes(document.key))
-        .map(document => ({ key: document.key }))
-    },
+    types: prepareFollowupTypesMutations(input.types, target?.types),
+    documents: prepareDocumentsMutations(input.documents, target?.documents),
     createdById: user.id,
-    medium,
     place:
-      medium === FollowupMedium.ExternalAppointment && place ? place : null,
+      input.medium === FollowupMedium.ExternalAppointment ? input.place : null,
     thirdPersonName:
-      medium === FollowupMedium.ThirdParty && thirdPersonName
-        ? thirdPersonName
-        : null,
-    privateSynthesis:
-      canEditBeneficiaryFollowupPrivateSynthesis(user, null) && privateSynthesis
-        ? privateSynthesis
-        : null,
-    redirected,
-    structureName: redirected && structureName ? structureName : null,
-    prescribingOrganizationId:
-      createdPrescribingOrganizationId || prescribingOrganizationId,
-    ...ministryData,
-    ...data
+      input.medium === FollowupMedium.ThirdParty ? input.thirdPersonName : null,
+    privateSynthesis: canEditBeneficiaryFollowupPrivateSynthesis(
+      user,
+      target || null
+    )
+      ? input.privateSynthesis
+      : null,
+    structureName: input.redirected ? input.structureName : null,
+    prescribingOrganizationId,
+    ...ministryData
   }
 }

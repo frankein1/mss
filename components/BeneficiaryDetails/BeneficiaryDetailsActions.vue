@@ -12,7 +12,7 @@
         Synthèse d'entretien
       </NuxtLink>
     </li>
-    <!-- <li>
+    <li>
       <NuxtLink
         :to="`${Routes.BeneficiaryHelpRequestAdd(beneficiaryId)}`"
         class="fr-btn fr-icon-file-add-line help-request-btn"
@@ -21,7 +21,7 @@
       >
         Demande d'aide
       </NuxtLink>
-    </li> -->
+    </li>
     <li class="mesdroitssociaux-btn-container">
       <NuxtLink
         to="https://www.mesdroitssociaux.gouv.fr/dd1pnds-ria/#destination/simu-foyer"
@@ -53,6 +53,14 @@
 
     &:hover {
       background-color: var(--color-followup-hover);
+    }
+  }
+
+  .help-request-btn {
+    background-color: var(--color-help-request);
+
+    &:hover {
+      background-color: var(--color-help-request-hover);
     }
   }
 

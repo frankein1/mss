@@ -4,17 +4,7 @@ import type { AddFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { canCreateBeneficiaryFollowup } from '~/server/query/security/rules'
 import { prepareFollowupData } from '~/utils/followup/prepareFollowupData'
-
-function getBeneficiary(id: string) {
-  return prismaClient.beneficiary.findUnique({
-    where: { id },
-    select: {
-      id: true,
-      structureId: true,
-      referents: { select: { id: true } }
-    }
-  })
-}
+import { getBeneficiarySecurityTarget } from '~/server/query/security'
 
 async function createTransaction(
   transaction: Prisma.TransactionClient,
@@ -43,7 +33,7 @@ export const addFollowupHandler = async ({
   input: AddFollowupInput
   ctx: AppContext
 }) => {
-  const beneficiary = await getBeneficiary(input.beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
 
   if (!beneficiary) {
     throw invalidError('Beneficiary not found')

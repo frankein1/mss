@@ -1,5 +1,5 @@
 export { getFollowupsHandler } from './get-page.controller'
 export { getFollowupDetailsHandler } from './get-details.controller'
 export { updateFollowupHandler } from './update.controller'
-export { updateFollowupStatusHandler } from './update-status.controller'
+export { quickUpdateFollowupHandler } from './quick-update.controller'
 export { addFollowupHandler } from './create.controller'

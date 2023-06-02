@@ -103,15 +103,13 @@
 
   const beneficiaryId = computed(() => route.params.id as string)
 
-  const beneficiaryPath = computed(() =>
-    Routes.Beneficiary(beneficiaryId.value)
-  )
-
   async function onUpdateFollowup(followup: EditFollowupInput) {
     isSubmitting.value = true
     try {
       await trpcClient.followup.update.mutate(followup)
-      navigateTo(`${beneficiaryPath.value}?tab=${BeneficiaryTab.History}`)
+      navigateTo(
+        Routes.Beneficiary(beneficiaryId.value, { tab: BeneficiaryTab.History })
+      )
     } catch {
       snackbar.error('La mise à jour de la synthèse a échoué.', () =>
         formContainer.value?.querySelector('input')?.focus()

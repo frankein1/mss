@@ -72,23 +72,23 @@ const getFollowupsSchema = z.object({
 
 type GetFollowupsInput = z.infer<typeof getFollowupsSchema>
 
-const editFollowupStatusSchema = z.object({
+const quickEditFollowupSchema = z.object({
   id: z.string().uuid(),
   status: z.nativeEnum(FollowupStatus)
 })
 
-type EditFollowupStatusInput = z.infer<typeof editFollowupStatusSchema>
+type QuickEditFollowupInput = z.infer<typeof quickEditFollowupSchema>
 
 export {
   addFollowupSchema,
   editFollowupSchema,
   getFollowupsSchema,
-  editFollowupStatusSchema
+  quickEditFollowupSchema
 }
 
 export type {
   AddFollowupInput,
   EditFollowupInput,
   GetFollowupsInput,
-  EditFollowupStatusInput
+  QuickEditFollowupInput
 }

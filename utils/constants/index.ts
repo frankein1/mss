@@ -13,7 +13,4 @@ export const REQUEST_LIMIT_DEFAULT = 15
 
 export const STATS_COLLAPSED_LIMIT = 4
 
-export const ORIGIN_PAGE_PARAMETER = 'originPage'
-export const ORIGIN_TAB_PARAMETER = 'originTab'
-
 export const INPUT_DEFER_TIME = 400

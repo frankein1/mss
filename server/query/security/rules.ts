@@ -340,6 +340,18 @@ export const canEditBeneficiaryFollowupPrivateSynthesis = (
     'Referent'
   ])
 
+export const canEditBeneficiaryHelpRequestPrivateSynthesis = (
+  grantee: SecurityRuleGrantee,
+  followup: SecurityTargetWithCreator | null | undefined
+): boolean =>
+  isCreator(grantee, followup, [
+    'Administrator',
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'Referent'
+  ])
+
 export const canEditBeneficiaryFollowup = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
@@ -403,6 +415,19 @@ export const canAccessProtectedDataInHelpRequest = (
     'Referent'
   ])
 
+export const canViewBeneficiaryHelpRequest = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
+  followup: SecurityTargetWithCreator
+): boolean =>
+  isAdministrator(grantee) ||
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker'
+  ]) ||
+  isCreator(grantee, followup, ['Instructor']) ||
+  isReferentFor(grantee, beneficiary)
+
 export const canViewBeneficiaryHelpRequestSynthesis = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
@@ -418,7 +443,7 @@ export const canViewBeneficiaryHelpRequestSynthesis = (
 
 export const canViewBeneficiaryHelpRequestPrivateSynthesis = (
   grantee: SecurityRuleGrantee,
-  // beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
+  _: SecurityTargetWithStructure & SecurityTargetWithReferents,
   helpRequest: SecurityTargetWithCreator
 ): boolean =>
   isCreator(grantee, helpRequest, [
@@ -510,6 +535,17 @@ export const canExportStats = (
   isInSameStructureAs(grantee, target, ['StructureManager', 'SocialWorker'])
 
 export const canCreatePrescribingOrganization = (
+  grantee: SecurityRuleGrantee
+): boolean =>
+  isAdministrator(grantee) ||
+  isActiveWithAllowedRole(grantee, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'Referent'
+  ])
+
+export const canCreateInstructorOrganization = (
   grantee: SecurityRuleGrantee
 ): boolean =>
   isAdministrator(grantee) ||

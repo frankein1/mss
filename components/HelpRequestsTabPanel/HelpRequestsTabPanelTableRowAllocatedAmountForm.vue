@@ -16,8 +16,8 @@
   import { Prisma } from '@prisma/client'
   import { HelpRequestItem } from './types'
   import {
-    EditHelpRequestAllocatedAmountInput,
-    editHelpRequestAllocatedAmountSchema
+    QuickEditHelpRequestAllocatedAmountInput,
+    quickEditHelpRequestAllocatedAmountSchema
   } from '~/server/schema'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { INPUT_DEFER_TIME } from '~/utils/constants'
@@ -32,8 +32,8 @@
     (e: 'updated', helpRequest: HelpRequestItem): void
   }>()
 
-  const { handleSubmit } = useForm<EditHelpRequestAllocatedAmountInput>({
-    validationSchema: toTypedSchema(editHelpRequestAllocatedAmountSchema),
+  const { handleSubmit } = useForm<QuickEditHelpRequestAllocatedAmountInput>({
+    validationSchema: toTypedSchema(quickEditHelpRequestAllocatedAmountSchema),
     initialValues: {
       id: props.helpRequest.id,
       allocatedAmount: new Prisma.Decimal(
@@ -53,7 +53,7 @@
     timeout.value = setTimeout(async () => {
       try {
         const updateHelpRequest =
-          await useTrpcClient().helpRequest.update.mutate(helpRequest)
+          await useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest)
 
         snackbar.success(
           "Le montant alloué de l'instruction de demande d'aide a été modifié."

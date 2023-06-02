@@ -16,8 +16,8 @@
 <script setup lang="ts">
   import { HelpRequestItem } from './types'
   import {
-    EditHelpRequestPaymentDateInput,
-    editHelpRequestPaymentDateSchema
+    QuickEditHelpRequestPaymentDateInput,
+    quickEditHelpRequestPaymentDateSchema
   } from '~/server/schema'
   import { helpRequestFieldLabels } from '~/client/labels'
 
@@ -31,8 +31,8 @@
     (e: 'updated', helpRequest: HelpRequestItem): void
   }>()
 
-  const { handleSubmit } = useForm<EditHelpRequestPaymentDateInput>({
-    validationSchema: toTypedSchema(editHelpRequestPaymentDateSchema),
+  const { handleSubmit } = useForm<QuickEditHelpRequestPaymentDateInput>({
+    validationSchema: toTypedSchema(quickEditHelpRequestPaymentDateSchema),
     initialValues: {
       id: props.helpRequest.id,
       paymentDate: props.helpRequest.paymentDate
@@ -42,7 +42,7 @@
   const onUpdatePaymentDate = handleSubmit(async helpRequest => {
     try {
       const updatedHelpRequest =
-        await useTrpcClient().helpRequest.update.mutate(helpRequest)
+        await useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest)
 
       snackbar.success(
         "La date de paiement de l'instruction de demande d'aide a été modifié."

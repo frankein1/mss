@@ -1,4 +1,5 @@
 import { NotificationType } from '@prisma/client'
+import { labelsToOptions } from '~/utils/options'
 
 export const notificationTypeLabels: { [key in NotificationType]: string } = {
   [NotificationType.DueDate]: 'Échéance',

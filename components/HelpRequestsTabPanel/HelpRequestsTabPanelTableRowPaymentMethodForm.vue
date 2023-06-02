@@ -17,8 +17,8 @@
   import { HelpRequestItem } from './types'
   import { paymentMethodOptions } from '~/client/options/helpRequest'
   import {
-    EditHelpRequestPaymentMethodInput,
-    editHelpRequestPaymentMethodSchema
+    QuickEditHelpRequestPaymentMethodInput,
+    quickEditHelpRequestPaymentMethodSchema
   } from '~/server/schema'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { withEmptyValue } from '~/utils/options'
@@ -33,8 +33,8 @@
     (e: 'updated', helpRequest: HelpRequestItem): void
   }>()
 
-  const { handleSubmit } = useForm<EditHelpRequestPaymentMethodInput>({
-    validationSchema: toTypedSchema(editHelpRequestPaymentMethodSchema),
+  const { handleSubmit } = useForm<QuickEditHelpRequestPaymentMethodInput>({
+    validationSchema: toTypedSchema(quickEditHelpRequestPaymentMethodSchema),
     initialValues: {
       id: props.helpRequest.id,
       paymentMethod: props.helpRequest.paymentMethod
@@ -44,7 +44,7 @@
   const onUpdatePaymentMethod = handleSubmit(async helpRequest => {
     try {
       const updatedHelpRequest =
-        await useTrpcClient().helpRequest.update.mutate(helpRequest)
+        await useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest)
 
       snackbar.success(
         "Le mode de paiment de l'instruction de demande d'aide a été modifié."

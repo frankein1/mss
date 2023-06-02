@@ -46,10 +46,6 @@
 
 <script lang="ts" setup>
   import { FollowupItem } from './types'
-  import {
-    ORIGIN_PAGE_PARAMETER,
-    ORIGIN_TAB_PARAMETER
-  } from '~/utils/constants'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import {
@@ -73,15 +69,14 @@
     followup: FollowupItem
   }>()
 
-  const followupPath = computed(() => ({
-    path: Routes.Beneficiary(props.followup.beneficiary.id),
-    query: {
+  const followupPath = computed(() =>
+    Routes.Beneficiary(props.followup.beneficiary.id, {
       tab: BeneficiaryTab.History,
       item: props.followup.id,
-      [ORIGIN_PAGE_PARAMETER]: route.path,
-      [ORIGIN_TAB_PARAMETER]: HistoryTab.Followups
-    }
-  }))
+      originPage: route.path,
+      originTab: HistoryTab.Followups
+    })
+  )
 
   const followUpTypes = computed(() =>
     props.followup.types.map(({ name }) => name).join(', ')

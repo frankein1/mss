@@ -8,9 +8,7 @@
     >
       <template #result="{ result: beneficiary }">
         <NuxtLink
-          :to="`${Routes.Beneficiary(
-            beneficiary.id
-          )}?${ORIGIN_PAGE_PARAMETER}=${route.path}`"
+          :to="Routes.Beneficiary(beneficiary.id, { originPage: route.path })"
           target="_self"
           class="fr-btn fr-btn--tertiary-no-outline result"
         >
@@ -29,7 +27,6 @@
 </template>
 
 <script setup lang="ts">
-  import { ORIGIN_PAGE_PARAMETER } from '~/utils/constants'
   import { Routes } from '~/utils/routing/routes'
 
   const route = useRoute()
