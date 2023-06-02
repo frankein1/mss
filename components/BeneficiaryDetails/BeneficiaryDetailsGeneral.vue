@@ -1,5 +1,3 @@
-<!-- NOTE: When updating the beneficiary details, make sure to also update the printable version. -->
-
 <template>
   <section class="beneficiary-details-section">
     <h2 class="fr-h6">Bénéficiaire</h2>

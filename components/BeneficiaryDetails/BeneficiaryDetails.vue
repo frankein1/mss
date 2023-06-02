@@ -16,6 +16,7 @@
           :beneficiary="beneficiary"
           :relatives="entourages"
         />
+        <BeneficiaryDetailsOtherInformation :beneficiary="beneficiary" />
       </div>
     </div>
   </div>
