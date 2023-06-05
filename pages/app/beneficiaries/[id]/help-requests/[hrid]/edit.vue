@@ -17,7 +17,7 @@
             v-if="pending"
             class="fr-mx-auto"
           />
-          <HelpRequestForm
+          <HelpRequestFormEdition
             v-else-if="
               helpRequest &&
               followupTypes &&
@@ -25,9 +25,8 @@
               instructorOrganizations
             "
             :is-submitting="isSubmitting"
-            :follow-up-types="followupTypes"
+            :followup-types="followupTypes"
             :help-request="helpRequest"
-            :beneficiary-id="beneficiaryId"
             :prescribing-organizations="prescribingOrganizations"
             :instructor-organizations="instructorOrganizations"
             @save-help-request="onUpdateHelpRequest"

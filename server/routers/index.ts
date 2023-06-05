@@ -35,6 +35,8 @@ export type GetFollowupDetailsOutput =
 
 export type GetHelpRequestsOutput =
   RouterOutput['helpRequest']['getHelpRequests']
+export type GetHelpRequestDetailsOutput =
+  RouterOutput['helpRequest']['getHelpRequestDetails']
 
 export type GetExaminationDatesConfigOutput =
   RouterOutput['config']['getExaminationDates']

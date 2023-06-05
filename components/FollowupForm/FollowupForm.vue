@@ -1,7 +1,7 @@
 <template>
   <form
     class="fr-container--fluid"
-    @submit="onSubmit"
+    @submit="emit('submit', $event)"
   >
     <div class="fr-grid-row fr-grid-row--gutters form-grid">
       <VeeCheckbox
@@ -38,14 +38,14 @@
       />
 
       <VeeInput
-        v-if="values.medium === FollowupMedium.ExternalAppointment"
+        v-if="medium === FollowupMedium.ExternalAppointment"
         class="fr-col-12 fr-col-lg-8"
         name="place"
         :label="followupFieldLabels.place"
       />
 
       <VeeInput
-        v-if="values.medium === FollowupMedium.ThirdParty"
+        v-if="medium === FollowupMedium.ThirdParty"
         name="thirdPersonName"
         :label="followupFieldLabels.thirdPersonName"
       />
@@ -146,7 +146,7 @@
             </div>
             <div class="fr-fieldset__element fr-fieldset__element--inline">
               <VeeInput
-                v-if="values.redirected"
+                v-if="isRedirected"
                 name="structureName"
                 :label="followupFieldLabels.structureName"
               />
@@ -255,13 +255,8 @@
   import {
     FollowupType,
     PrescribingOrganization,
-    FollowupMedium,
-    FollowupStatus,
-    FollowupIntervention,
-    FollowupSignalement
+    FollowupMedium
   } from '@prisma/client'
-  import { useForm } from 'vee-validate'
-  import { toTypedSchema } from '@vee-validate/zod'
   import { ministerOptions } from '~/client/options/ministry'
   import {
     followupStatusOptions,
@@ -271,19 +266,9 @@
   } from '~/client/options/followup'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
-  import {
-    canEditBeneficiaryFollowupPrivateSynthesis,
-    canCreatePrescribingOrganization
-  } from '~/server/query/security/rules'
-  import {
-    AddFollowupInput,
-    EditFollowupInput,
-    addFollowupSchema,
-    editFollowupSchema
-  } from '~/server/schema/followup.schema'
+  import { canCreatePrescribingOrganization } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { Routes } from '~/utils/routing/routes'
-  import { GetFollowupDetailsOutput } from '~/server/routers'
   import { followupFieldLabels } from '~/client/labels'
 
   const authStore = useAuthStore()
@@ -293,48 +278,20 @@
       isSubmitting: boolean
       followupTypes: Array<FollowupType>
       prescribingOrganizations: Array<PrescribingOrganization>
-      followup?: GetFollowupDetailsOutput
       beneficiaryId: string
+      medium: FollowupMedium
+      isRedirected: boolean
+      canSetPrivateSynthesis?: boolean
     }>(),
-    { followup: undefined }
+    { canSetPrivateSynthesis: true }
   )
 
-  type SubmitType = typeof props.followup extends undefined
-    ? AddFollowupInput
-    : EditFollowupInput
-
   const emit = defineEmits<{
-    (e: 'saveFollowup', followup: SubmitType): void
+    (e: 'submit', payload: Event): void
   }>()
 
   const followupTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')
-  )
-
-  const initialFollowUpTypeIds = computed(
-    () => props.followup?.types.map(f => f.id) || []
-  )
-
-  const initialInterventions = computed<{
-    [k in FollowupIntervention]?: boolean
-  }>(() =>
-    Object.fromEntries(
-      Object.values(FollowupIntervention).map(key => [
-        key,
-        props.followup?.interventions.includes(key) || false
-      ])
-    )
-  )
-
-  const initialSignalements = computed<{
-    [k in FollowupSignalement]?: boolean
-  }>(() =>
-    Object.fromEntries(
-      Object.values(FollowupSignalement).map(key => [
-        key,
-        props.followup?.signalements.includes(key) || false
-      ])
-    )
   )
 
   const prescribingOrganizationOptions = computed(() => {
@@ -350,54 +307,9 @@
 
   const user = computed(() => authStore.getAuthUser)
 
-  const canSetPrivateSynthesis = computed(() =>
-    canEditBeneficiaryFollowupPrivateSynthesis(user.value, props.followup)
-  )
-
   const canEditStructure = computed(() => authStore.isResponsableDeStructure)
-
-  const initialDocumentIds = computed(
-    () => props.followup?.documents.map(d => d.key) || []
-  )
 
   const canCreateOrganisme = computed(() =>
     canCreatePrescribingOrganization(user.value)
   )
-
-  const { handleSubmit, values } = useForm<SubmitType>({
-    validationSchema: toTypedSchema(
-      props.followup?.id ? editFollowupSchema : addFollowupSchema
-    ),
-    initialValues: {
-      id: props.followup?.id,
-      beneficiaryId: props.beneficiaryId,
-      types: initialFollowUpTypeIds.value,
-      documents: initialDocumentIds.value,
-      medium: props.followup?.medium,
-      ministre: props.followup?.ministre,
-      // FIXME: type issue
-      date: props.followup?.date || new Date(),
-      synthesis: props.followup?.synthesis,
-      privateSynthesis: props.followup?.privateSynthesis,
-      status: props.followup?.status || FollowupStatus.Done,
-      helpRequested: props.followup?.helpRequested || false,
-      place: props.followup?.place,
-      redirected: props.followup?.redirected || false,
-      structureName: props.followup?.structureName,
-      // FIXME: type issue
-      dueDate: props.followup?.dueDate,
-      thirdPersonName: props.followup?.thirdPersonName,
-      firstFollowup: props.followup?.firstFollowup || false,
-      numeroPegase: props.followup?.numeroPegase,
-      prescribingOrganizationId: props.followup?.prescribingOrganizationId,
-      classified: props.followup?.classified || false,
-      forwardedToJustice: props.followup?.forwardedToJustice || false,
-      ...initialInterventions.value,
-      ...initialSignalements.value
-    }
-  })
-
-  const onSubmit = handleSubmit(values => {
-    emit('saveFollowup', values)
-  })
 </script>

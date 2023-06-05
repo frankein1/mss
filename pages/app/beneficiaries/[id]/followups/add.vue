@@ -17,7 +17,7 @@
             v-if="pending"
             class="fr-mx-auto"
           />
-          <FollowupForm
+          <FollowupFormCreation
             v-else-if="followupTypes && prescribingOrganizations"
             :is-submitting="isSubmitting"
             :followup-types="followupTypes"

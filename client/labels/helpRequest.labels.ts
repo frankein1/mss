@@ -7,23 +7,10 @@ type HelpRequestFieldLabels = Omit<
   | 'structureId'
   | 'createdById'
   | 'updated'
-  | 'prescribingOrganizationId'
-  | 'instructorOrganizationId'
-  | 'openingDate' // TODO: Add missing labels
-  | 'typeId'
-  | 'decisionDate'
   | 'financialSupport'
   | 'externalStructure'
-  | 'refusalReason'
-  | 'dispatchDate'
-  | 'synthesis'
-  | 'privateSynthesis'
-  | 'fullFile'
-  | 'reason'
   | 'created'
-  | 'ministre'
-  | 'numeroPegase'
->
+> & { documents: string }
 
 export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   status: 'Statut',
@@ -35,5 +22,19 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   allocatedAmount: 'Montant attribué',
   paymentMethod: 'Mode de paiement',
   paymentDate: 'Date du paiement',
-  handlingDate: 'Date de fin de prise en charge'
+  handlingDate: 'Date de fin de prise en charge',
+  openingDate: "Date d'ouverture du dossier",
+  numeroPegase: 'Numéro Pégase',
+  ministre: 'Ministre',
+  typeId: 'Objet de la demande',
+  prescribingOrganizationId: 'Organisme prescripteur',
+  fullFile: 'Dossier complet',
+  reason: 'Motif',
+  instructorOrganizationId: 'Organisme instructeur',
+  dispatchDate: "Date d'envoi du dossier",
+  decisionDate: 'Date de la décision',
+  refusalReason: 'Motif du refus',
+  synthesis: 'Compte rendu',
+  privateSynthesis: 'Compte rendu privé',
+  documents: 'Documents'
 }

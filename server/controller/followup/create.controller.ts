@@ -1,10 +1,78 @@
-import type { Prisma, User } from '@prisma/client'
+import { Prisma, User, FollowupMedium } from '@prisma/client'
 import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
 import type { AddFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { canCreateBeneficiaryFollowup } from '~/server/query/security/rules'
-import { prepareFollowupData } from '~/utils/followup/prepareFollowupData'
+import {
+  prepareMinistryData,
+  prepareFollowupTypesMutations
+} from '~/utils/followup/prepareFollowupData'
 import { getBeneficiarySecurityTarget } from '~/server/query/security'
+import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
+import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+
+export async function prepareFollowupData({
+  input,
+  transaction,
+  user
+}: {
+  input: AddFollowupInput
+  transaction: Prisma.TransactionClient
+  user: User
+}): Promise<Prisma.FollowupUncheckedCreateInput> {
+  const { structureId } = await transaction.beneficiary.findUniqueOrThrow({
+    where: { id: input.beneficiaryId },
+    select: { structureId: true }
+  })
+
+  const { type } = await transaction.structure.findUniqueOrThrow({
+    where: { id: structureId },
+    select: {
+      type: true
+    }
+  })
+
+  const {
+    ActionLogement,
+    Bailleur,
+    DeetsSiao,
+    Prefecture,
+    SecoursMedecinTraitant,
+    ChefCabinet,
+    OrganismeMenace,
+    Prefet,
+    ...data
+  } = input
+
+  const ministryData = prepareMinistryData(
+    type,
+    { ActionLogement, Bailleur, DeetsSiao, Prefecture, SecoursMedecinTraitant },
+    { ChefCabinet, OrganismeMenace, Prefet },
+    data
+  )
+
+  const prescribingOrganizationId = await preparePrescribingOrganization(
+    transaction,
+    user,
+    structureId,
+    input.prescribingOrganizationId
+  )
+
+  return {
+    ...data,
+    structureId,
+    types: prepareFollowupTypesMutations(input.types),
+    documents: prepareDocumentsMutations(input.documents),
+    createdById: user.id,
+    place:
+      input.medium === FollowupMedium.ExternalAppointment ? input.place : null,
+    thirdPersonName:
+      input.medium === FollowupMedium.ThirdParty ? input.thirdPersonName : null,
+    structureName: input.redirected ? input.structureName : null,
+    prescribingOrganizationId,
+    ...ministryData
+  }
+}
 
 async function createTransaction(
   transaction: Prisma.TransactionClient,

@@ -1,14 +1,15 @@
+<!-- TODO: Field label-->
+
 <template>
   <form
-    ref="form"
     class="fr-container--fluid"
-    @submit="onSubmit"
+    @submit="emit('submit', $event)"
   >
     <div class="fr-grid-row fr-grid-row--gutters form-grid">
       <VeeInput
         class="fr-col-12 fr-col-lg-6"
         name="openingDate"
-        label="Date d'ouverture du dossier"
+        :label="helpRequestFieldLabels.openingDate"
         type="date"
         required
       />
@@ -16,19 +17,19 @@
       <VeeInput
         v-if="isMinistryAgent"
         name="numeroPegase"
-        label="Numéro Pégase"
+        :label="helpRequestFieldLabels.numeroPegase"
       />
 
       <VeeSelect
         v-if="isMinistryAgent"
         name="ministre"
-        label="Ministre"
+        :label="helpRequestFieldLabels.ministre"
         :options="withEmptyValue(ministerOptions)"
       />
 
       <VeeSearchableSelect
         class="fr-col-12 fr-col-lg-6"
-        label="Objet de la demande"
+        :label="helpRequestFieldLabels.typeId"
         name="typeId"
         :options="followUpTypeOptions"
         required
@@ -52,7 +53,7 @@
       </VeeSearchableSelect>
 
       <VeeSearchableSelect
-        label="Organisme prescripteur"
+        :label="helpRequestFieldLabels.prescribingOrganizationId"
         name="prescribingOrganizationId"
         :options="withEmptyValue(prescribingOrganizationOptions)"
         :can-create-new-option="canCreateOrganisme"
@@ -60,14 +61,14 @@
 
       <VeeSelect
         name="status"
-        label="Statut"
+        :label="helpRequestFieldLabels.status"
         :options="helpRequestStatusOptions"
         :disabled-options="pastStatuses"
       />
 
       <VeeCheckbox
         name="fullFile"
-        label="Dossier complet"
+        :label="helpRequestFieldLabels.fullFile"
       />
 
       <VeeSelect
@@ -77,13 +78,13 @@
         name="financialSupport"
         :options="withEmptyValue(financialSupportOptions)"
         required
-        :disabled="!!props.helpRequest"
+        :disabled="isEditing"
       />
 
       <VeeSelect
         v-if="isFinancialSupport"
         name="reason"
-        label="Motif"
+        :label="helpRequestFieldLabels.reason"
         :options="withEmptyValue(helpRequestReasonOptions)"
         :disabled="isEditingAndIsLocked"
       />
@@ -97,23 +98,23 @@
         name="externalStructure"
         :options="withEmptyValue(externalOrganisationOptions)"
         required
-        :disabled="!!props.helpRequest"
+        :disabled="isEditing"
       />
 
       <VeeSearchableSelect
         v-if="isExternalSupport"
-        label="Organisme instructeur"
+        :label="helpRequestFieldLabels.instructorOrganizationId"
         name="instructorOrganizationId"
         :options="instructorOrganizationOptions"
         :readonly="isEditingAndIsLocked"
         :can-create-new-option="canCreateOrganisme"
       />
 
-      <template v-if="values.externalStructure && values.financialSupport">
+      <template v-if="externalStructure && financialSupport">
         <VeeCurrencyInput
           v-if="isFinancialSupport"
           name="askedAmount"
-          label="Montant demandé"
+          :label="helpRequestFieldLabels.askedAmount"
           :readonly="isEditingAndIsLocked"
         />
 
@@ -121,7 +122,7 @@
           <VeeInput
             v-if="isExternalSupport"
             name="dispatchDate"
-            label="Date d'envoi du dossier"
+            :label="helpRequestFieldLabels.dispatchDate"
             type="date"
             :readonly="isEditingAndIsLocked"
           />
@@ -129,7 +130,7 @@
           <VeeInput
             v-if="!isExternalSupport"
             name="examinationDate"
-            label="Date de passage en commission"
+            :label="helpRequestFieldLabels.examinationDate"
             type="date"
             :readonly="isEditingAndIsLocked"
           />
@@ -138,27 +139,27 @@
         <VeeInput
           v-if="isAnswered"
           name="decisionDate"
-          label="Date de la décision"
+          :label="helpRequestFieldLabels.decisionDate"
           type="date"
         />
 
-        <template v-if="values.status === HelpRequestStatus.Accepted">
+        <template v-if="status === HelpRequestStatus.Accepted">
           <template v-if="isFinancialSupport">
             <VeeCurrencyInput
               name="allocatedAmount"
-              label="Montant attribué"
+              :label="helpRequestFieldLabels.allocatedAmount"
             />
 
             <template v-if="!isExternalSupport">
               <VeeSelect
                 name="paymentMethod"
-                label="Mode de paiement"
+                :label="helpRequestFieldLabels.paymentMethod"
                 :options="withEmptyValue(paymentMethodOptions)"
               />
 
               <VeeInput
                 name="paymentDate"
-                label="Date du paiement"
+                :label="helpRequestFieldLabels.paymentDate"
                 type="date"
               />
             </template>
@@ -166,21 +167,21 @@
 
           <VeeInput
             name="handlingDate"
-            label="Date de fin de prise en charge"
+            :label="helpRequestFieldLabels.handlingDate"
             type="date"
           />
         </template>
 
         <VeeInput
-          v-if="values.status === HelpRequestStatus.Refused"
+          v-if="status === HelpRequestStatus.Refused"
           name="refusalReason"
-          label="Motif du refus"
+          :label="helpRequestFieldLabels.refusalReason"
         />
       </template>
 
       <VeeInput
         name="dueDate"
-        label="Date d'échéance"
+        :label="helpRequestFieldLabels.dueDate"
         type="date"
         :readonly="isDropped"
       />
@@ -188,14 +189,14 @@
       <VeeTextarea
         class="fr-col-12 large-textarea"
         name="synthesis"
-        label="Compte rendu"
+        :label="helpRequestFieldLabels.synthesis"
       />
 
       <VeeTextarea
         v-if="isOwnedByCurrentUser"
         class="fr-col-12 fr-mb-6v"
         name="privateSynthesis"
-        label="Compte rendu privé"
+        :label="helpRequestFieldLabels.privateSynthesis"
         label-icon="fr-icon-lock-line"
         hint
       >
@@ -212,7 +213,7 @@
       class="fr-mb-4w"
       :beneficiary-id="beneficiaryId"
       name="documents"
-      label="Documents"
+      :label="helpRequestFieldLabels.documents"
     />
 
     <ul
@@ -234,16 +235,11 @@
 
 <script lang="ts" setup>
   import {
-    Document,
     FollowupType,
-    HelpRequest,
     HelpRequestStatus,
     InstructorOrganization,
-    PrescribingOrganization,
-    Prisma
+    PrescribingOrganization
   } from '@prisma/client'
-  import { useForm } from 'vee-validate'
-  import { toTypedSchema } from '@vee-validate/zod'
   import {
     externalOrganisationOptions,
     financialSupportOptions,
@@ -252,21 +248,12 @@
     paymentMethodOptions
   } from '~/client/options/helpRequest'
   import { ministerOptions } from '~/client/options/ministry'
-  import {
-    CreateHelpRequestInput,
-    EditHelpRequestInput,
-    createHelpRequestSchema,
-    editHelpRequestSchema
-  } from '~/server/schema/helpRequest.schema'
-  import {
-    canCreatePrescribingOrganization,
-    isCreator
-  } from '~/server/query/security/rules'
+  import { canCreatePrescribingOrganization } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
-  import { pastStatusesFromStatus } from '~/utils/helpRequest/pastStatusesFromStatus'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { Routes } from '~/utils/routing/routes'
+  import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
 
   const authStore = useAuthStore()
   const user = authStore.getAuthUser
@@ -274,29 +261,26 @@
   const props = withDefaults(
     defineProps<{
       isSubmitting: boolean
-      followUpTypes: FollowupType[]
+      followupTypes: FollowupType[]
       prescribingOrganizations: PrescribingOrganization[]
       instructorOrganizations: InstructorOrganization[]
-      helpRequest?: (HelpRequest & { documents: Document[] }) | null
       beneficiaryId: string
+      status: HelpRequestStatus
+      externalStructure: 'true' | 'false' | undefined
+      financialSupport: 'true' | 'false' | undefined
+      pastStatuses?: HelpRequestStatus[]
+      isEditing?: boolean
+      isOwnedByCurrentUser?: boolean
     }>(),
-    {
-      helpRequest: null
-    }
+    { pastStatuses: undefined, isEditing: false, isOwnedByCurrentUser: true }
   )
 
-  type SubmitType = typeof props.helpRequest extends undefined
-    ? CreateHelpRequestInput
-    : EditHelpRequestInput
-
   const emit = defineEmits<{
-    (e: 'saveHelpRequest', helpRequest: SubmitType): void
+    (e: 'submit', payload: Event): void
   }>()
 
-  const form = ref<HTMLFormElement | null>(null)
-
   const followUpTypeOptions = computed(() =>
-    toOptions(props.followUpTypes, 'id', 'name')
+    toOptions(props.followupTypes, 'id', 'name')
   )
 
   const prescribingOrganizationOptions = computed(() => {
@@ -319,108 +303,33 @@
 
   const isMinistryAgent = computed(() => authStore.isMinistryAgent)
 
-  const isFinancialSupport = computed(() => values.financialSupport === 'true')
+  const isFinancialSupport = computed(() => props.financialSupport === 'true')
 
-  const isExternalSupport = computed(() => values.externalStructure === 'true')
+  const isExternalSupport = computed(() => props.externalStructure === 'true')
 
   const afterInvestigationOngoing = computed(
-    () => values.status !== HelpRequestStatus.WaitingAdditionalInformation
+    () => props.status !== HelpRequestStatus.WaitingAdditionalInformation
   )
 
   const isAnswered = computed(
     () =>
-      values.status === HelpRequestStatus.Accepted ||
-      values.status === HelpRequestStatus.Refused
+      props.status === HelpRequestStatus.Accepted ||
+      props.status === HelpRequestStatus.Refused
   )
 
   const isDropped = computed(
     () =>
-      values.status === HelpRequestStatus.ClosedByBeneficiary ||
-      values.status === HelpRequestStatus.Dismissed
+      props.status === HelpRequestStatus.ClosedByBeneficiary ||
+      props.status === HelpRequestStatus.Dismissed
   )
 
   const isEditingAndIsLocked = computed(
-    () => !!(props.helpRequest && (isAnswered.value || isDropped.value))
-  )
-
-  const pastStatuses = computed(() => {
-    if (!props.helpRequest) {
-      return []
-    }
-    return pastStatusesFromStatus(props.helpRequest.status)
-  })
-
-  const isOwnedByCurrentUser = computed(() =>
-    isCreator(user, props.helpRequest, [
-      'Administrator',
-      'StructureManager',
-      'SocialWorker',
-      'Instructor',
-      'ReceptionAgent',
-      'Referent'
-    ])
+    () => props.isEditing && (isAnswered.value || isDropped.value)
   )
 
   const canEditStructure = computed(() => authStore.isResponsableDeStructure)
 
-  const initialDocumentIds = computed(
-    () => props.helpRequest?.documents.map(d => d.key) || []
-  )
-
   const canCreateOrganisme = computed(() =>
     canCreatePrescribingOrganization(user)
   )
-
-  const { handleSubmit, values } = useForm<SubmitType>({
-    validationSchema: toTypedSchema(
-      props.helpRequest?.id ? editHelpRequestSchema : createHelpRequestSchema
-    ),
-    initialValues: {
-      id: props.helpRequest?.id,
-      beneficiaryId: props.beneficiaryId,
-      // FIXME: date type error
-      openingDate: props.helpRequest?.openingDate || new Date(),
-      typeId: props.helpRequest?.typeId,
-      documents: initialDocumentIds.value,
-      financialSupport: props.helpRequest?.financialSupport ? 'true' : 'false',
-      externalStructure: props.helpRequest?.externalStructure
-        ? 'true'
-        : 'false',
-      status:
-        props.helpRequest?.status ||
-        HelpRequestStatus.WaitingAdditionalInformation,
-      askedAmount: props.helpRequest?.askedAmount
-        ? new Prisma.Decimal(props.helpRequest?.askedAmount).toNumber()
-        : undefined,
-      // FIXME: date type error
-      examinationDate: props.helpRequest?.examinationDate,
-      // FIXME: date type error
-      decisionDate: props.helpRequest?.decisionDate,
-      allocatedAmount: props.helpRequest?.allocatedAmount
-        ? new Prisma.Decimal(props.helpRequest?.allocatedAmount).toNumber()
-        : undefined,
-      paymentMethod: props.helpRequest?.paymentMethod,
-      reason: props.helpRequest?.reason,
-      // FIXME: date type error
-      paymentDate: props.helpRequest?.paymentDate,
-      // FIXME: date type error
-      handlingDate: props.helpRequest?.handlingDate,
-      refusalReason: props.helpRequest?.refusalReason,
-      prescribingOrganizationId: props.helpRequest?.prescribingOrganizationId,
-      instructorOrganizationId: props.helpRequest?.instructorOrganizationId,
-      // FIXME: date type error
-      dispatchDate: props.helpRequest?.dispatchDate,
-      synthesis: props.helpRequest?.synthesis,
-      privateSynthesis: props.helpRequest?.privateSynthesis,
-      // FIXME: date type error
-      dueDate: props.helpRequest?.dueDate,
-      fullFile: props.helpRequest?.fullFile || false,
-      numeroPegase: props.helpRequest?.numeroPegase,
-      ministre: props.helpRequest?.ministre
-    }
-  })
-
-  const onSubmit = handleSubmit(values => {
-    emit('saveHelpRequest', values)
-  })
 </script>

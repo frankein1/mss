@@ -17,13 +17,12 @@
             v-if="pending"
             class="fr-mx-auto"
           />
-          <FollowupForm
+          <FollowupFormEdition
             v-else-if="followup && followupTypes && prescribingOrganizations"
             :is-submitting="isSubmitting"
             :followup-types="followupTypes"
             :prescribing-organizations="prescribingOrganizations"
             :followup="followup"
-            :beneficiary-id="beneficiaryId"
             @save-followup="onUpdateFollowup"
           />
         </main>
@@ -101,14 +100,14 @@
     return `Modifier l'entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
   })
 
-  const beneficiaryId = computed(() => route.params.id as string)
-
   async function onUpdateFollowup(followup: EditFollowupInput) {
     isSubmitting.value = true
     try {
       await trpcClient.followup.update.mutate(followup)
       navigateTo(
-        Routes.Beneficiary(beneficiaryId.value, { tab: BeneficiaryTab.History })
+        Routes.Beneficiary(followup.beneficiaryId, {
+          tab: BeneficiaryTab.History
+        })
       )
     } catch {
       snackbar.error('La mise à jour de la synthèse a échoué.', () =>

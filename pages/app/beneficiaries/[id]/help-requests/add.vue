@@ -17,14 +17,14 @@
             v-if="pending"
             class="fr-mx-auto"
           />
-          <HelpRequestForm
+          <HelpRequestFormCreation
             v-else-if="
               followupTypes &&
               prescribingOrganizations &&
               instructorOrganizations
             "
             :is-submitting="isSubmitting"
-            :follow-up-types="followupTypes"
+            :followup-types="followupTypes"
             :beneficiary-id="beneficiaryId"
             :prescribing-organizations="prescribingOrganizations"
             :instructor-organizations="instructorOrganizations"

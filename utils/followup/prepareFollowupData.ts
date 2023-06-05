@@ -1,5 +1,4 @@
 import {
-  Prisma,
   StructureType,
   Beneficiary,
   Document,
@@ -7,15 +6,11 @@ import {
   FollowupIntervention,
   FollowupSignalement,
   FollowupType,
-  FollowupMedium,
   User
 } from '@prisma/client'
-import { canEditBeneficiaryFollowupPrivateSynthesis } from '~/server/query/security/rules'
 import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
-import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 
-type FollowupTarget = Followup & {
+export type FollowupTarget = Followup & {
   beneficiary: Beneficiary & {
     referents: User[]
   }
@@ -23,37 +18,20 @@ type FollowupTarget = Followup & {
   types: FollowupType[]
 }
 
-function prepareMinistryData(
+export function prepareMinistryData(
   type: StructureType,
+  interventionBooleans: { [k in FollowupIntervention]: boolean },
+  signalementBooleans: { [k in FollowupSignalement]: boolean },
   {
-    ActionLogement,
-    Bailleur,
-    DeetsSiao,
-    Prefecture,
-    SecoursMedecinTraitant,
-    ChefCabinet,
-    OrganismeMenace,
-    Prefet,
     numeroPegase,
     ministre,
     classified,
     forwardedToJustice
-  }: AddFollowupInput | EditFollowupInput
+  }: Pick<
+    AddFollowupInput | EditFollowupInput,
+    'numeroPegase' | 'ministre' | 'classified' | 'forwardedToJustice'
+  >
 ) {
-  const interventionBooleans: { [k in FollowupIntervention]: boolean } = {
-    ActionLogement,
-    Bailleur,
-    DeetsSiao,
-    Prefecture,
-    SecoursMedecinTraitant
-  }
-
-  const signalementBooleans: { [k in FollowupSignalement]: boolean } = {
-    ChefCabinet,
-    OrganismeMenace,
-    Prefet
-  }
-
   if (type === StructureType.Ministere) {
     const interventions = Object.entries(interventionBooleans).reduce(
       (interventions, [intervention, enabled]) => {
@@ -88,90 +66,14 @@ function prepareMinistryData(
   return {}
 }
 
-function prepareFollowupTypesMutations(
+export function prepareFollowupTypesMutations(
   inputTypes: string[],
-  targetTypes: FollowupType[] | undefined
+  targetTypes?: FollowupType[]
 ) {
   return {
     connect: inputTypes.map(id => ({ id })),
     disconnect: targetTypes
       ?.filter(({ id }) => !inputTypes.includes(id))
       .map(({ id }) => ({ id }))
-  }
-}
-
-export async function prepareFollowupData({
-  input,
-  transaction,
-  user
-}: {
-  input: AddFollowupInput
-  transaction: Prisma.TransactionClient
-  user: User
-}): Promise<Prisma.FollowupUncheckedCreateInput>
-export async function prepareFollowupData({
-  input,
-  transaction,
-  user,
-  target
-}: {
-  input: EditFollowupInput
-  transaction: Prisma.TransactionClient
-  user: User
-  target: FollowupTarget
-}): Promise<Prisma.FollowupUncheckedUpdateInput>
-export async function prepareFollowupData({
-  input,
-  transaction,
-  user,
-  target
-}: {
-  input: AddFollowupInput | EditFollowupInput
-  transaction: Prisma.TransactionClient
-  user: User
-  target?: FollowupTarget
-}): Promise<
-  Prisma.FollowupUncheckedCreateInput | Prisma.FollowupUncheckedUpdateInput
-> {
-  const { structureId } = await transaction.beneficiary.findUniqueOrThrow({
-    where: { id: input.beneficiaryId },
-    select: { structureId: true }
-  })
-
-  const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structureId },
-    select: {
-      type: true
-    }
-  })
-
-  const ministryData = prepareMinistryData(type, input)
-
-  const prescribingOrganizationId = await preparePrescribingOrganization(
-    transaction,
-    user,
-    structureId,
-    input.prescribingOrganizationId
-  )
-
-  return {
-    ...input,
-    structureId,
-    types: prepareFollowupTypesMutations(input.types, target?.types),
-    documents: prepareDocumentsMutations(input.documents, target?.documents),
-    createdById: user.id,
-    place:
-      input.medium === FollowupMedium.ExternalAppointment ? input.place : null,
-    thirdPersonName:
-      input.medium === FollowupMedium.ThirdParty ? input.thirdPersonName : null,
-    privateSynthesis: canEditBeneficiaryFollowupPrivateSynthesis(
-      user,
-      target || null
-    )
-      ? input.privateSynthesis
-      : null,
-    structureName: input.redirected ? input.structureName : null,
-    prescribingOrganizationId,
-    ...ministryData
   }
 }

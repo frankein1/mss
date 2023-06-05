@@ -60,10 +60,10 @@ export const isReferentFor = (
 
 export const isCreator = (
   grantee: SecurityRuleGrantee,
-  target: { createdById?: string | null } | null | undefined,
+  target: { createdById?: string | null },
   allowedRoles: AllowedRoles
 ) =>
-  (!target || grantee.id === target.createdById) &&
+  grantee.id === target.createdById &&
   isActiveWithAllowedRole(grantee, allowedRoles)
 
 export type SecurityRule<
@@ -330,7 +330,7 @@ export const canViewBeneficiaryFollowupPrivateSynthesis = (
 
 export const canEditBeneficiaryFollowupPrivateSynthesis = (
   grantee: SecurityRuleGrantee,
-  followup: SecurityTargetWithCreator | null | undefined
+  followup: SecurityTargetWithCreator
 ): boolean =>
   isCreator(grantee, followup, [
     'Administrator',
@@ -342,9 +342,9 @@ export const canEditBeneficiaryFollowupPrivateSynthesis = (
 
 export const canEditBeneficiaryHelpRequestPrivateSynthesis = (
   grantee: SecurityRuleGrantee,
-  followup: SecurityTargetWithCreator | null | undefined
+  helpRequest: SecurityTargetWithCreator
 ): boolean =>
-  isCreator(grantee, followup, [
+  isCreator(grantee, helpRequest, [
     'Administrator',
     'StructureManager',
     'SocialWorker',

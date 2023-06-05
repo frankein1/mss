@@ -1,9 +1,85 @@
-import type { Prisma, User } from '@prisma/client'
+import {
+  Prisma,
+  User,
+  HelpRequest,
+  Beneficiary,
+  Document,
+  StructureType
+} from '@prisma/client'
 import { AppContext, forbiddenError } from '~/server/trpc'
 import type { EditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { canEditBeneficiaryHelpRequest } from '~/server/query/security/rules'
-import { prepareHelpRequestData } from '~/utils/helpRequest/prepareHelpRequestData'
+import {
+  canEditBeneficiaryHelpRequest,
+  canEditBeneficiaryHelpRequestPrivateSynthesis
+} from '~/server/query/security/rules'
+import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
+import { prepareInstructorOrganization } from '~/utils/instructorOrganization/prepareInstructorOrganization'
+import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+
+export async function prepareHelpRequestData({
+  input,
+  transaction,
+  user,
+  target
+}: {
+  input: EditHelpRequestInput
+  transaction: Prisma.TransactionClient
+  user: User
+  target: HelpRequest & {
+    beneficiary: Beneficiary & {
+      referents: User[]
+    }
+    documents: Document[]
+  }
+}): Promise<Prisma.HelpRequestUncheckedUpdateInput> {
+  const { structureId } = await transaction.beneficiary.findUniqueOrThrow({
+    where: { id: input.beneficiaryId },
+    select: { structureId: true }
+  })
+
+  const { type } = await transaction.structure.findUniqueOrThrow({
+    where: { id: structureId },
+    select: {
+      type: true
+    }
+  })
+
+  const ministryData =
+    type === StructureType.Ministere
+      ? { numeroPegase: input.numeroPegase, ministre: input.ministre }
+      : {}
+
+  const prescribingOrganizationId = await preparePrescribingOrganization(
+    transaction,
+    user,
+    structureId,
+    input.prescribingOrganizationId
+  )
+
+  const instructorOrganizationId = await prepareInstructorOrganization(
+    transaction,
+    user,
+    structureId,
+    input.instructorOrganizationId
+  )
+
+  return {
+    ...input,
+    documents: prepareDocumentsMutations(input.documents, target.documents),
+    financialSupport: input.financialSupport === 'true',
+    externalStructure: input.externalStructure === 'true',
+    prescribingOrganizationId,
+    instructorOrganizationId,
+    privateSynthesis: canEditBeneficiaryHelpRequestPrivateSynthesis(
+      user,
+      target
+    )
+      ? input.privateSynthesis
+      : undefined,
+    ...ministryData
+  }
+}
 
 function getHelpRequest(id: string) {
   return prismaClient.helpRequest.findUnique({
