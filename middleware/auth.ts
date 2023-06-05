@@ -7,7 +7,7 @@ export default defineNuxtRouteMiddleware(to => {
   if (!isAuthenticated) {
     return navigateTo({
       path: Routes.Login(),
-      query: { redirectUrl: to.fullPath }
+      query: { redirectUrl: to.fullPath } // FIXME: Hash containing the wanted tab is unknown on the server side (here in the middleware!), so it is not in the fullPath
     })
   }
 })

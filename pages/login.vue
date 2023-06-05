@@ -7,7 +7,7 @@
       <a
         class="inclusion-connect-btn"
         title="S'identifier avec InclusionConnect"
-        href="/api/keycloak/signin"
+        :href="signinUrl"
       >
         <span>
           Se connecter avec
@@ -40,9 +40,22 @@
   // import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~/utils/constants/alert'
 
+  const SIGNIN_PATH = '/api/keycloak/signin'
+
   definePageMeta({
     layout: 'landing'
     // middleware: 'skip-auth' // [NUXT/PRISMA]: Make it working
+  })
+
+  const route = useRoute()
+
+  const signinUrl = computed(() => {
+    const { redirectUrl } = route.query
+    if (!redirectUrl) {
+      return SIGNIN_PATH
+    }
+    const params = new URLSearchParams({ redirectUrl: redirectUrl as string })
+    return `${SIGNIN_PATH}?${params}`
   })
 </script>
 

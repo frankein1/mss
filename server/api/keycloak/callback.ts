@@ -18,7 +18,7 @@ const {
 const { keycloakProvider, keycloakLabel, jwtKey } = auth
 
 export default defineEventHandler(async event => {
-  const { code } = getQuery(event)
+  const { code, redirectUrl } = getQuery(event)
 
   if (!code) {
     return sendError(
@@ -31,7 +31,8 @@ export default defineEventHandler(async event => {
 
   const inclusionConnectToken = await fetchInclusionConnnectToken(
     client,
-    code as string
+    code as string,
+    redirectUrl as string | undefined
   )
 
   const { accessToken } = inclusionConnectToken
@@ -75,15 +76,20 @@ export default defineEventHandler(async event => {
     expires: new Date(Date.now() + expiresIn * 1000)
   })
 
-  return sendRedirect(event, Routes.Overview()) // [NUXT/PRISMA]: Redirect depending on the redirect url in query params ?
+  return sendRedirect(
+    event,
+    (redirectUrl as string | undefined) || Routes.Overview()
+  )
 })
 
 async function fetchInclusionConnnectToken(
   client: InclusionConnectClient,
-  code: string
+  code: string,
+  appRedirectUrl: string | undefined
 ) {
   const inclusionConnectTokenResponse = await client.getToken({
-    code
+    code,
+    appRedirectUrl
   })
 
   if (inclusionConnectTokenResponse.error) {

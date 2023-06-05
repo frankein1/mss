@@ -49,14 +49,24 @@ export class InclusionConnectClient {
     this.postLogoutRedirectUri = postLogoutRedirectUri
   }
 
+  public getRedirectUri(appRedirectUrl?: string) {
+    if (!appRedirectUrl) {
+      return this.redirectUri
+    }
+    const params = new URLSearchParams({ redirectUrl: appRedirectUrl })
+    return `${this.redirectUri}?${params}`
+  }
+
   public async getToken({
-    code
+    code,
+    appRedirectUrl
   }: {
     code: string
+    appRedirectUrl?: string
   }): Promise<InclusionConnectTokenResponse> {
     const params = new URLSearchParams({
       grant_type: 'authorization_code',
-      redirect_uri: this.redirectUri,
+      redirect_uri: this.getRedirectUri(appRedirectUrl),
       client_id: this.clientId,
       client_secret: this.clientSecret,
       code
@@ -107,7 +117,7 @@ export class InclusionConnectClient {
     }
   }
 
-  public getSigninUrl() {
+  public getSigninUrl(appRedirectUrl?: string) {
     const codeVerifier = generators.codeVerifier()
     const codeChallenge = generators.codeChallenge(codeVerifier)
 
@@ -115,7 +125,7 @@ export class InclusionConnectClient {
       client_id: this.clientId,
       scope: 'openid profile email',
       response_type: 'code',
-      redirect_uri: this.redirectUri,
+      redirect_uri: this.getRedirectUri(appRedirectUrl),
       state: codeChallenge,
       nonce: codeChallenge
       // code_challenge: codeChallenge,
