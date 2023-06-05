@@ -9,7 +9,7 @@
       @click="navigate"
     >
       <td>
-        <HelpRequestsTabPanelTableRowStatusForm
+        <HelpRequestsTableRowStatusForm
           v-if="canEditHistory"
           :help-request="helpRequest"
           @click.stop
@@ -53,7 +53,7 @@
         </td>
         <td>
           <template v-if="canDisplayDetailedHistory">
-            <HelpRequestsTabPanelTableRowAllocatedAmountForm
+            <HelpRequestsTableRowAllocatedAmountForm
               v-if="canEditAllocatedAmount"
               :help-request="helpRequest"
               @click.stop
@@ -66,7 +66,7 @@
         </td>
         <td>
           <template v-if="canDisplayDetailedHistory">
-            <HelpRequestsTabPanelTableRowPaymentMethodForm
+            <HelpRequestsTableRowPaymentMethodForm
               v-if="canEditPaymentMethod"
               :help-request="helpRequest"
               @click.stop
@@ -79,7 +79,7 @@
         </td>
         <td>
           <template v-if="canDisplayDetailedHistory">
-            <HelpRequestsTabPanelTableRowPaymentDateForm
+            <HelpRequestsTableRowPaymentDateForm
               v-if="canEditPaymentDate"
               :help-request="helpRequest"
               @click.stop

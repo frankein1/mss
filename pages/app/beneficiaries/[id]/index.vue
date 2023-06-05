@@ -18,33 +18,39 @@
     />
     <hr />
 
-    <Tabs
-      class="main-container fr-tabs fr-transition-none fr-tabs__shadow fr-tabs__shadow--right"
-      nav-class="fr-tabs__list"
-      nav-item-link-class="fr-tabs__tab"
-      panels-wrapper-class="fr-tabs__panel"
-    >
-      <Tab name="Infos">
+    <AtomTabs>
+      <Tab
+        :id="BeneficiaryTab.Details"
+        name="Infos"
+      >
         <BeneficiaryDetails
           :beneficiary="beneficiary"
           :entourages="entourages"
           :tax-households="taxHouseholds"
         />
       </Tab>
-      <Tab name="Documents">
+      <Tab
+        :id="BeneficiaryTab.Documents"
+        name="Documents"
+      >
         <BeneficiaryDocumentList
           :beneficiary-id="beneficiaryId"
         ></BeneficiaryDocumentList>
       </Tab>
-      <Tab name="Historique">Historique</Tab>
-    </Tabs>
+      <Tab
+        :id="BeneficiaryTab.History"
+        name="Historique"
+        >Historique</Tab
+      >
+    </AtomTabs>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
-  import { Tabs, Tab } from 'vue3-tabs-component'
+  import { Tab } from 'vue3-tabs-component'
   import { canDeleteBeneficiary } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string

@@ -3,45 +3,8 @@
     <PageTitle title="Statistiques" />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
-        <main class="main-container fr-tabs">
-          <ul
-            class="fr-tabs__list"
-            role="tablist"
-            aria-label="Statistiques"
-          >
-            <li role="presentation">
-              <button
-                id="beneficiaries-tab"
-                class="fr-tabs__tab"
-                tabindex="0"
-                role="tab"
-                aria-selected="true"
-                aria-controls="beneficiaries-panel"
-              >
-                Bénéficiaires
-              </button>
-            </li>
-            <li role="presentation">
-              <button
-                id="history-tab"
-                class="fr-tabs__tab"
-                tabindex="0"
-                role="tab"
-                aria-selected="false"
-                aria-controls="history-panel"
-              >
-                Accompagnements
-              </button>
-            </li>
-          </ul>
-
-          <div
-            id="beneficiaries-panel"
-            class="fr-tabs__panel fr-tabs__panel--selected fr-px-0"
-            role="tabpanel"
-            aria-labelledby="beneficiaries-tab"
-            tabindex="0"
-          >
+        <AtomTabs>
+          <Tab name="Bénéficiaires">
             <AtomAlert
               v-if="fetchError"
               :alert-type="AlertType.Error"
@@ -57,14 +20,8 @@
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
-          </div>
-          <div
-            id="history-panel"
-            class="fr-tabs__panel fr-tabs__panel--selected fr-px-0"
-            role="tabpanel"
-            aria-labelledby="history-tab"
-            tabindex="0"
-          >
+          </Tab>
+          <Tab name="Accompagnements">
             <AtomAlert
               v-if="fetchError"
               :alert-type="AlertType.Error"
@@ -80,14 +37,15 @@
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
-          </div>
-        </main>
+          </Tab>
+        </AtomTabs>
       </div>
     </div>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
+  import { Tab } from 'vue3-tabs-component'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'

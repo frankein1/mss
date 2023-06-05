@@ -8,7 +8,8 @@ const BeneficiariesRoute = `${AppRoute}/beneficiaries`
 
 const BeneficiaryRoute = (
   beneficiaryId: string,
-  params?: {
+
+  options?: {
     tab?: BeneficiaryTab
     item?: string
     originPage?: string
@@ -16,9 +17,14 @@ const BeneficiaryRoute = (
   }
 ) => {
   const base = `${BeneficiariesRoute}/${beneficiaryId}`
-  if (params) {
-    const urlParams = new URLSearchParams(params)
-    return `${base}?${urlParams}`
+  if (options) {
+    const { tab, ...params } = options
+    const tabHash = tab ? `#${tab}` : ''
+    if (Object.keys(params).length) {
+      const urlParams = new URLSearchParams(params)
+      return `${base}?${urlParams}${tabHash}`
+    }
+    return `${base}${tabHash}`
   }
   return base
 }

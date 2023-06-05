@@ -1,11 +1,5 @@
 <template>
-  <div
-    id="help-requests-panel"
-    class="fr-tabs__panel fr-tabs__panel--selected fr-px-0"
-    role="tabpanel"
-    aria-labelledby="help-requests-tab"
-    tabindex="0"
-  >
+  <div>
     <AtomAlert
       v-if="error"
       class="fr-mx-4w"
@@ -13,7 +7,7 @@
       message="La liste des instructions de demande d'aide n'a pas pu être chargée."
     />
     <template v-else>
-      <HelpRequestsTabPanelFilters
+      <HelpRequestsFilters
         class="fr-px-5v"
         @filter="filters = $event"
       />
@@ -24,7 +18,7 @@
       <div v-show="pending">
         <AtomLoader class="fr-mx-auto" />
       </div>
-      <HelpRequestsTabPanelTable
+      <HelpRequestsTable
         v-show="!pending"
         :help-requests="helpRequests"
         @sort="onSort"

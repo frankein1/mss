@@ -3,68 +3,28 @@
     <PageTitle title="Accompagnements" />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
-        <main
-          ref="tabsGroup"
-          class="main-container fr-tabs"
-        >
-          <ul
-            class="fr-tabs__list"
-            role="tablist"
-            aria-label="Accompagnements"
+        <AtomTabs>
+          <Tab
+            :id="HistoryTab.Followups"
+            name="Entretiens"
           >
-            <li role="presentation">
-              <button
-                id="followups-tab"
-                class="fr-tabs__tab"
-                tabindex="0"
-                role="tab"
-                aria-selected="true"
-                aria-controls="followups-panel"
-              >
-                Entretiens
-              </button>
-            </li>
-            <li role="presentation">
-              <button
-                id="help-requests-tab"
-                class="fr-tabs__tab"
-                tabindex="0"
-                role="tab"
-                aria-selected="true"
-                aria-controls="help-requests-panel"
-              >
-                Demandes d'aide
-              </button>
-            </li>
-          </ul>
-
-          <FollowupsTabPanel />
-          <HelpRequestsTabPanel />
-        </main>
+            <Followups />
+          </Tab>
+          <Tab
+            :id="HistoryTab.HelpRequests"
+            name="Demandes d'aide"
+          >
+            <HelpRequests />
+          </Tab>
+        </AtomTabs>
       </div>
     </div>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
-  import { focusTab } from '~/utils/tab'
-  import { HistoryTab, IndexedHistoryTabs } from '~/utils/constants/history'
-
-  const route = useRoute()
-
-  const tabsGroup = ref<HTMLDivElement | null>(null)
-
-  onMounted(async () => {
-    if (tabsGroup.value) {
-      await nextTick()
-      const { tab } = route.query
-      if (tab) {
-        focusTab(tab.toString(), tabsGroup.value, IndexedHistoryTabs)
-      } else {
-        focusTab(HistoryTab.Followups, tabsGroup.value, IndexedHistoryTabs)
-      }
-    }
-  })
+  import { Tab } from 'vue3-tabs-component'
+  import { HistoryTab } from '~/utils/constants/history'
 </script>
 
 <style scoped>
