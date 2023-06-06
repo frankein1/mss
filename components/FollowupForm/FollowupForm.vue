@@ -117,10 +117,10 @@
 
       <fieldset
         class="fr-fieldset fr-col-12"
-        aria-labelledby="interview-actions-entreprises-legend"
+        aria-labelledby="followup-actions-entreprises-legend"
       >
         <legend
-          id="interview-actions-entreprises-legend"
+          id="followup-actions-entreprises-legend"
           class="fr-fieldset__legend fr-h6"
         >
           Actions entreprises
@@ -129,10 +129,10 @@
         <div class="fr-fieldset__element fr-mb-0">
           <fieldset
             class="fr-fieldset fr-mb-0"
-            aria-labelledby="interview-reoriente-apres-entretien-legend"
+            aria-labelledby="followup-reoriente-apres-entretien-legend"
           >
             <legend
-              id="interview-reoriente-apres-entretien-legend"
+              id="followup-reoriente-apres-entretien-legend"
               hidden
             >
               {{ followupFieldLabels.redirected }}
@@ -179,10 +179,10 @@
           <div class="fr-fieldset__element fr-mb-0">
             <fieldset
               class="fr-fieldset fr-mb-0"
-              aria-labelledby="interview-interventions-legend"
+              aria-labelledby="followup-interventions-legend"
             >
               <legend
-                id="interview-interventions-legend"
+                id="followup-interventions-legend"
                 class="fr-fieldset__legend"
               >
                 {{ followupFieldLabels.interventions }}
@@ -203,10 +203,10 @@
           <div class="fr-fieldset__element fr-mb-0">
             <fieldset
               class="fr-fieldset fr-mb-0"
-              aria-labelledby="interview-signalements-legend"
+              aria-labelledby="followup-signalements-legend"
             >
               <legend
-                id="interview-signalements-legend"
+                id="followup-signalements-legend"
                 class="fr-fieldset__legend"
               >
                 {{ followupFieldLabels.signalements }}
