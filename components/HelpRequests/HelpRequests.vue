@@ -58,7 +58,7 @@
     data: helpRequestsRequest,
     pending,
     error
-  } = useAsyncData<GetHelpRequestsOutput, ErrorOutput>(
+  } = await useAsyncData<GetHelpRequestsOutput, ErrorOutput>(
     () =>
       useTrpcClient().helpRequest.getHelpRequests.query({
         page: page.value,

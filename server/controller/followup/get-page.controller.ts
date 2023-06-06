@@ -1,32 +1,9 @@
 import type { Prisma } from '@prisma/client'
-import type { GetFollowupsInput, FollowupFilterInput } from '~/server/schema'
+import type { GetFollowupsInput } from '~/server/schema'
 import { AppContext, invalidError } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
-
-function prepareFollowupFilters(filters: FollowupFilterInput) {
-  const formattedFilters: Prisma.FollowupWhereInput = {}
-
-  if (filters.status) {
-    formattedFilters.status = filters.status
-  }
-
-  if (filters.medium) {
-    formattedFilters.medium = { in: filters.medium }
-  }
-
-  if (filters.followupTypes) {
-    formattedFilters.types = { some: { id: { in: filters.followupTypes } } }
-  }
-
-  if (filters.referents) {
-    formattedFilters.beneficiary = {
-      referents: { some: { id: { in: filters.referents } } }
-    }
-  }
-
-  return formattedFilters
-}
+import { prepareFollowupFilters } from '~/utils/followup/filters'
 
 export const getFollowupsHandler = async ({
   input,

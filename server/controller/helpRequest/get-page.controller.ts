@@ -1,11 +1,9 @@
 import type { Prisma } from '@prisma/client'
 import { AppContext, invalidError } from '~/server/trpc'
-import type {
-  GetHelpRequestsInput,
-  HelpRequestFilterInput
-} from '~/server/schema'
+import type { GetHelpRequestsInput } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
+import { prepareHelpRequestFilters } from '~/utils/helpRequest/filters'
 
 export const helpRequestGetPageSelect = {
   id: true,
@@ -39,39 +37,6 @@ export const helpRequestGetPageSelect = {
       lastName: true
     }
   }
-}
-
-function prepareHelpRequestFilters(filters: HelpRequestFilterInput) {
-  const formattedFilters: Prisma.HelpRequestWhereInput = {}
-
-  if (filters.status) {
-    formattedFilters.status = filters.status
-  }
-
-  if (filters.followupTypes) {
-    formattedFilters.type = { id: { in: filters.followupTypes } }
-  }
-
-  if (filters.examinationDate) {
-    formattedFilters.examinationDate = filters.examinationDate
-  }
-
-  if (filters.handlingDate !== undefined) {
-    formattedFilters.handlingDate =
-      filters.handlingDate === 'true' ? { not: null } : null
-  }
-
-  if (filters.externalStructure !== undefined) {
-    formattedFilters.externalStructure = filters.externalStructure === 'true'
-  }
-
-  if (filters.referents) {
-    formattedFilters.beneficiary = {
-      referents: { some: { id: { in: filters.referents } } }
-    }
-  }
-
-  return formattedFilters
 }
 
 export const getHelpRequestsHandler = async ({
