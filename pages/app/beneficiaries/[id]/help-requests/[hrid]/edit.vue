@@ -56,14 +56,15 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
-  const helpRequestId = computed(() => route.params.hrid as string)
+  const helpRequestId = route.params.hrid as string
+  const beneficiaryId = route.params.id as string
 
   const {
     data: helpRequest,
     pending: helpRequestPending,
     error: helpRequestError
   } = await trpcClient.helpRequest.getHelpRequestDetails.useQuery({
-    id: helpRequestId.value
+    id: helpRequestId
   })
 
   const {
@@ -117,14 +118,12 @@
     )}`
   })
 
-  const beneficiaryId = computed(() => route.params.id as string)
-
   async function onUpdateHelpRequest(helpRequest: EditHelpRequestInput) {
     isSubmitting.value = true
     try {
       await trpcClient.helpRequest.update.mutate(helpRequest)
       return navigateTo(
-        Routes.Beneficiary(beneficiaryId.value, { tab: BeneficiaryTab.History })
+        Routes.Beneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
       )
     } catch {
       snackbar.error("La mise à jour de l'instruction a échoué.", () =>

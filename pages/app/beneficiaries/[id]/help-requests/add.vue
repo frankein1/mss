@@ -55,11 +55,14 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
-  const beneficiaryId = computed(() => route.params.id as string)
+  const beneficiaryId = route.params.id as string
+  const beneficiaryHistoryPath = Routes.Beneficiary(beneficiaryId, {
+    tab: BeneficiaryTab.History
+  })
 
   const { data: beneficiary, error: beneficiaryError } =
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
-      id: beneficiaryId.value
+      id: beneficiaryId
     })
 
   const {
@@ -112,17 +115,11 @@
     )}`
   })
 
-  const beneficiaryHistoryPath = computed(() =>
-    Routes.Beneficiary(beneficiaryId.value, {
-      tab: BeneficiaryTab.History
-    })
-  )
-
   async function onAddHelpRequest(helpRequest: CreateHelpRequestInput) {
     isSubmitting.value = true
     try {
       await trpcClient.helpRequest.add.mutate(helpRequest)
-      navigateTo(beneficiaryHistoryPath.value)
+      navigateTo(beneficiaryHistoryPath)
     } catch {
       snackbar.error(
         "La création de l'instruction de demande d'aide a échoué.",

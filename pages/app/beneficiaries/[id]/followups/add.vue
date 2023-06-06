@@ -50,11 +50,11 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
-  const beneficiaryId = computed(() => route.params.id as string)
+  const beneficiaryId = route.params.id as string
 
   const { data: beneficiary, error: beneficiaryError } =
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
-      id: beneficiaryId.value
+      id: beneficiaryId
     })
 
   const {
@@ -98,7 +98,7 @@
     try {
       await trpcClient.followup.add.mutate(followup)
       navigateTo(
-        Routes.Beneficiary(beneficiaryId.value, {
+        Routes.Beneficiary(beneficiaryId, {
           tab: BeneficiaryTab.History
         })
       )

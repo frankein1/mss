@@ -50,14 +50,14 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
-  const followupId = computed(() => route.params.fid as string)
+  const followupId = route.params.fid as string
 
   const {
     data: followup,
     pending: followupPending,
     error: followupError
   } = await trpcClient.followup.getFollowupDetails.useQuery({
-    id: followupId.value
+    id: followupId
   })
 
   const {
