@@ -13,14 +13,16 @@ export {
   searchBeneficiarySchema,
   updateBeneficiarySchema,
   getBeneficiariesSchema,
-  getDocumentsSchema
+  getDocumentsSchema,
+  getHistorySchema
 } from './beneficiary.schema'
 export type {
   CreateBeneficiaryInput,
   SearchBeneficiaryInput,
   UpdateBeneficiaryInput,
   GetBeneficiariesInput,
-  GetDocumentsInput
+  GetDocumentsInput,
+  GetHistoryInput
 } from './beneficiary.schema'
 
 export {
