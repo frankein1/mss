@@ -20,7 +20,7 @@
             </th>
             <th scope="col">Objet de la demande</th>
             <th
-              v-if="canAccessRestrictedFieldsInHelpRequest"
+              v-if="canAccessProtectedDataInHelpRequest(user)"
               scope="col"
             >
               {{ helpRequestFieldLabels.dueDate }}
@@ -32,7 +32,7 @@
                 @sort="emit('sort', { beneficiary: { usualName: $event } })"
               />
             </th>
-            <template v-if="canAccessRestrictedFieldsInHelpRequest">
+            <template v-if="canAccessProtectedDataInHelpRequest(user)">
               <th scope="col">
                 {{ helpRequestFieldLabels.examiningOrganisation }}
                 <!-- TODO: Add organisme instructeur -->
@@ -83,6 +83,10 @@
   import type { HelpRequests, HelpRequestItem } from './types'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { HelpRequestSort } from '~/types/table'
+  import { canAccessProtectedDataInHelpRequest } from '~/server/query/security/rules'
+  import { useAuthStore } from '~/store/auth'
+
+  const { getAuthUser: user } = useAuthStore()
 
   defineProps<{
     helpRequests: HelpRequests
@@ -92,9 +96,4 @@
     (e: 'sort', sort: HelpRequestSort): void
     (e: 'helpRequestUpdated', helpRequest: HelpRequestItem): void
   }>()
-
-  const canAccessRestrictedFieldsInHelpRequest = computed(
-    () => true
-    // () => permissionsStore.canAccessRestrictedFieldsInHelpRequest
-  )
 </script>
