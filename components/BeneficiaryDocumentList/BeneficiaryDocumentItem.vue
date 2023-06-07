@@ -72,11 +72,11 @@
           </li>
           <li>
             <button
-              @click="onDownload"
               :download="document.name"
               class="fr-download__link"
               target="_blank"
               :title="'Télécharger ' + document.name"
+              @click="onDownload"
             >
               Télécharger
             </button>
