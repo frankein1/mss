@@ -29,10 +29,9 @@
   import { HelpRequestFilterInput } from '~/server/schema'
   import { canAccessProtectedDataInHelpRequest } from '~/server/query/security/rules'
   import { useFiltersStore } from '~/store/filters'
-  import { FilterProp } from '~/types/filter'
+  import type { FilterProp } from '~/types/filter'
 
-  const authStore = useAuthStore()
-  const user = authStore.getAuthUser
+  const { getAuthUser: user } = useAuthStore()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
 
@@ -65,13 +64,10 @@
     data: examinationDateOptions,
     pending: examinationDateOptionsPending,
     error: examinationDateOptionsError
-  } = useAsyncData(loadExaminationDateOptions, {
-    transform: exmainationDates => {
-      const definedExminiationDates = exmainationDates.filter(
-        hasDefinedExaminationDate
-      )
+  } = await trpcClient.config.getExaminationDates.useQuery(undefined, {
+    transform: examinationDates => {
       return new Map(
-        definedExminiationDates.map(({ examinationDate }) => [
+        examinationDates.map(({ examinationDate }) => [
           examinationDate.toString(),
           formatDate(examinationDate)
         ])
@@ -100,7 +96,11 @@
   })
 
   const filters = computed<FilterProp[] | null>(() => {
-    if (!followupTypeOptions.value || !agentOptions.value) {
+    if (
+      !followupTypeOptions.value ||
+      !agentOptions.value ||
+      !examinationDateOptions.value
+    ) {
       return null
     }
 
@@ -118,10 +118,7 @@
         type: FilterType.SelectMultiple
       }
     ]
-    if (
-      canAccessProtectedDataInHelpRequest(user) &&
-      examinationDateOptions.value
-    ) {
+    if (examinationDateOptions.value.size) {
       filters.push({
         name: 'examinationDate',
         label: 'Date de passage en commission',
@@ -167,21 +164,8 @@
     return filters
   })
 
-  async function loadExaminationDateOptions() {
-    if (!canAccessProtectedDataInHelpRequest(user)) {
-      return []
-    }
-    return await trpcClient.config.getExaminationDates.query()
-  }
-
   function onFilter(filters: HelpRequestFilterInput) {
     filtersStore.helpRequest = filters
     emit('filter', filters)
-  }
-
-  function hasDefinedExaminationDate(h: {
-    examinationDate: Date | null
-  }): h is { examinationDate: Date } {
-    return h.examinationDate !== null
   }
 </script>

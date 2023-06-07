@@ -8,6 +8,7 @@ import {
 } from '@prisma/client'
 import { AgeGroup } from '~/client/options/ageGroup'
 import { kindOfBooleanSchema } from '~/utils/zod'
+import { TypeSuivi } from '~/types/history'
 
 const statFilterSchema = z.object({
   fromDate: z.coerce.date().nullish(),
@@ -59,11 +60,13 @@ type HelpRequestFilterInput = z.infer<typeof helpRequestFilterSchema>
 
 const beneficiaryHistoryFilterSchema = z.object({
   status: z.nativeEnum({ ...FollowupStatus, ...HelpRequestStatus }).nullish(),
+  typeSuivi: z.nativeEnum(TypeSuivi).nullish(),
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
-  referents: z.array(z.string().uuid()).nullish(),
-  typeSuivi: z.string().nullish()
-  // TODO: examinationDate, handlingDate, externalStructure
+  examinationDate: z.coerce.date().nullish(),
+  handlingDate: kindOfBooleanSchema.nullish(),
+  externalStructure: kindOfBooleanSchema.nullish(),
+  referents: z.array(z.string().uuid()).nullish()
 })
 
 type BeneficiaryHistoryFilterInput = z.infer<

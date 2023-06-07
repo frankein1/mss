@@ -20,12 +20,11 @@ import {
   createOrUpdateEntourageSchema,
   createOrUpdateTaxHouseholdSchema
 } from './relative.schema'
-import { beneficiaryFilterSchema } from './filter.schema'
+import {
+  beneficiaryFilterSchema,
+  beneficiaryHistoryFilterSchema
+} from './filter.schema'
 import { errorMessages, validZipcode } from '~/utils/zod'
-
-export const idSchema = z.object({
-  id: z.string()
-})
 
 export const getDocumentsSchema = z.object({
   beneficiaryId: z.string()
@@ -33,7 +32,14 @@ export const getDocumentsSchema = z.object({
 
 type GetDocumentsInput = z.infer<typeof getDocumentsSchema>
 
-export type { GetDocumentsInput }
+export const getHistorySchema = z.object({
+  beneficiaryId: z.string(),
+  filters: beneficiaryHistoryFilterSchema
+})
+
+type GetHistoryInput = z.infer<typeof getHistorySchema>
+
+export type { GetDocumentsInput, GetHistoryInput }
 
 export const searchBeneficiarySchema = z.object({
   query: z.string()

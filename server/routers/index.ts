@@ -30,6 +30,8 @@ export type ErrorOutput = TRPCClientError<AppRouter>
 
 export type GetBeneficiariesOutput =
   RouterOutput['beneficiary']['getBeneficiaries']
+export type GetBeneficiaryHistoryOutput =
+  RouterOutput['beneficiary']['getBeneficiaryHistory']
 
 export type GetFollowupsOutput = RouterOutput['followup']['getFollowups']
 export type GetFollowupDetailsOutput =

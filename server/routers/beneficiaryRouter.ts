@@ -5,8 +5,9 @@ import {
   updateBeneficiarySchema,
   getBeneficiariesSchema,
   getDocumentsSchema,
+  getHistorySchema,
   addDocumentSchema
-} from '../schema'
+} from '~/server/schema'
 
 import {
   createBeneficiaryHandler,
@@ -16,8 +17,9 @@ import {
   addDocumentHandler,
   updateBeneficiaryHandler,
   searchBeneficiaryHandler,
-  getBeneficiaryMinimalInfoHandler
-} from '../controller/beneficiary'
+  getBeneficiaryMinimalInfoHandler,
+  getBeneficiaryHistoryHandler
+} from '~/server/controller/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryRouter = router({
@@ -39,6 +41,9 @@ export const beneficiaryRouter = router({
   getBeneficiaryDocuments: protectedProcedure
     .input(getDocumentsSchema)
     .query(getBeneficiaryDocumentsHandler),
+  getBeneficiaryHistory: protectedProcedure
+    .input(getHistorySchema)
+    .query(getBeneficiaryHistoryHandler),
   addBeneficiaryDocument: protectedProcedure
     .input(addDocumentSchema)
     .query(addDocumentHandler),

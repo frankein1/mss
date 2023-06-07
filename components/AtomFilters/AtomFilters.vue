@@ -152,7 +152,7 @@
   }
 
   function onChangeFilter(value: string | string[], filter: FilterProp) {
-    if (!value) {
+    if (!value || !value.length) {
       delete selectedFilters.value[filter.name]
     } else {
       addFilter(filter, value)

@@ -57,14 +57,13 @@
   const route = useRoute()
   const authStore = useAuthStore()
 
-  const beneficiaryId = computed(() => route.params.id as string)
+  const beneficiaryId = route.params.id as string
+  const backLink = Routes.Beneficiary(beneficiaryId)
 
   const { data, pending, error } =
     await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({
-      id: beneficiaryId.value
+      id: beneficiaryId
     })
-
-  const backLink = computed(() => Routes.Beneficiary(beneficiaryId.value))
 
   const canAccessRelatives = computed(() => !authStore.isAgentDAccueil)
 

@@ -1,6 +1,7 @@
 import { AppContext, invalidError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getUserDisplayName } from '~/utils/user'
+import { canAccessProtectedDataInHelpRequest } from '~/server/query/security/rules'
 
 export const getAgentsHandler = async ({
   ctx: { user }
@@ -37,14 +38,30 @@ export const getBeneficiariesCitiesHandler = async () => {
   })
 }
 
-export const getExaminationDatesHandler = async () => {
-  return await prismaClient.helpRequest.groupBy({
+function hasDefinedExaminationDate(h: {
+  examinationDate: Date | null
+}): h is { examinationDate: Date } {
+  return h.examinationDate !== null
+}
+
+export const getExaminationDatesHandler = async ({
+  ctx: { user }
+}: {
+  ctx: AppContext
+}) => {
+  if (!canAccessProtectedDataInHelpRequest(user)) {
+    return []
+  }
+
+  const examinationDates = await prismaClient.helpRequest.groupBy({
     by: ['examinationDate'],
     where: {
       examinationDate: { not: null }
     },
     orderBy: [{ examinationDate: 'desc' }]
   })
+
+  return examinationDates.filter(hasDefinedExaminationDate)
 }
 
 export const getInstructorOrganizationHandler = async ({
