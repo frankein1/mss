@@ -70,9 +70,13 @@ export const Routes = {
 
   BeneficiaryFollowupAdd: (beneficiaryId: string) =>
     `${BeneficiaryFollowupsRoute(beneficiaryId)}/add`,
+  BeneficiaryFollowupEdit: (beneficiaryId: string, followupId: string) =>
+    `${BeneficiaryFollowupsRoute(beneficiaryId)}/${followupId}/edit`,
 
   BeneficiaryHelpRequestAdd: (beneficiaryId: string) =>
     `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/add`,
+  BeneficiaryHelpRequestEdit: (beneficiaryId: string, helpRequestId: string) =>
+    `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/${helpRequestId}/edit`,
 
   History: () => `${AppRoute}/history`
 }
