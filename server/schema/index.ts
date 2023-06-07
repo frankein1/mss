@@ -1,5 +1,13 @@
 import { z } from 'zod'
 
+export const idSchema = z.object({
+  id: z.string()
+})
+
+export const keySchema = z.object({
+  key: z.string()
+})
+
 export {
   createBeneficiarySchema,
   searchBeneficiarySchema,
@@ -111,9 +119,18 @@ export type {
   UpdateNotificationInput,
   GetNotificationInput
 } from './notification.schema'
-export { addDocumentSchema } from './document.schema'
-export type { AddDocumentInput } from './document.schema'
 
-export const idSchema = z.object({
-  id: z.string()
-})
+export {
+  addDocumentSchema,
+  editDocumentSchema,
+  deleteDocumentSchema,
+  createUploadUrlSchema,
+  createViewUrlSchema
+} from './document.schema'
+export type {
+  AddDocumentInput,
+  EditDocumentInput,
+  DeleteDocumentInput,
+  CreateUploadUrlInput,
+  CreateViewUrlInput
+} from './document.schema'

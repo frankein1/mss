@@ -40,4 +40,39 @@ export const addDocumentSchema = z.object({
   })
 })
 
-export type AddDocumentInput = z.infer<typeof addDocumentSchema>
+export const deleteDocumentSchema = z.object({
+  documentKey: z.string()
+})
+
+export const editDocumentSchema = addDocumentSchema
+  .omit({ file: true })
+  .extend({
+    key: z.string()
+  })
+
+export const createUploadUrlSchema = z.object({
+  name: z.string(),
+  mimeType: z.string(),
+  beneficiaryId: z.string()
+})
+
+export const createViewUrlSchema = z.object({ key: z.string() })
+
+type AddDocumentInput = z.infer<typeof addDocumentSchema>
+type EditDocumentInput = z.infer<typeof editDocumentSchema>
+type DeleteDocumentInput = z.infer<typeof deleteDocumentSchema>
+type CreateUploadUrlInput = z.infer<typeof createUploadUrlSchema>
+type CreateViewUrlInput = z.infer<typeof createViewUrlSchema>
+
+export type {
+  AddDocumentInput,
+  EditDocumentInput,
+  DeleteDocumentInput,
+  CreateUploadUrlInput,
+  CreateViewUrlInput
+}
+export const getDocumentKeySchema = z.object({
+  key: z.string().uuid()
+})
+
+export type GetDocumentKeyInput = z.infer<typeof getDocumentKeySchema>

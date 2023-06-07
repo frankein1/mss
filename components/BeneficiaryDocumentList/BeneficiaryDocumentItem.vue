@@ -71,15 +71,15 @@
             </NuxtLink>
           </li>
           <li>
-            <NuxtLink
-              :to="downloadLink"
+            <button
+              @click="onDownload"
               :download="document.name"
               class="fr-download__link"
               target="_blank"
               :title="'Télécharger ' + document.name"
             >
               Télécharger
-            </NuxtLink>
+            </button>
           </li>
         </ul>
       </div>
@@ -92,7 +92,7 @@
   import { getDocumenTagClass } from '~/client/classes/document'
   import { documentTagOptions } from '~/client/options/document'
 
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
       document: Document
       canDeleteDocuments?: boolean
@@ -104,7 +104,13 @@
     }
   )
   const openLink = ''
-  const downloadLink = ''
+
+  const onDownload = async () => {
+    const downloadLink = await useTrpcClient().documents.createViewUrl.mutate({
+      key: props.document.key
+    })
+    console.log({ downloadLink })
+  }
 
   function onEditDocument() {}
   function onDeleteDocument() {}

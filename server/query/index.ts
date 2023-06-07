@@ -19,3 +19,8 @@ export {
   type UserList,
   type UserListItem
 } from './utilisateurs'
+
+export {
+  getBeneficiarySecurityTarget,
+  beneficiarySecurityTargetInclude
+} from './security'

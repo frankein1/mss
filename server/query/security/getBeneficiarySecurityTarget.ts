@@ -6,6 +6,10 @@ export const beneficiarySecurityTargetSelect = {
   referents: { select: { id: true } }
 } as const
 
+export const beneficiarySecurityTargetInclude = {
+  select: beneficiarySecurityTargetSelect
+} as const
+
 export function getBeneficiarySecurityTarget(id: string) {
   return prismaClient.beneficiary.findUnique({
     where: { id },
