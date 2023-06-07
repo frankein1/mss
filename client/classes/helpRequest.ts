@@ -1,6 +1,6 @@
 import { HelpRequestStatus } from '@prisma/client'
 
-export const helpRequestStatusBadgeClasses: {
+export const helpRequestStatusClasses: {
   [key in HelpRequestStatus]: string
 } = {
   [HelpRequestStatus.Accepted]: 'fr-badge--success',
