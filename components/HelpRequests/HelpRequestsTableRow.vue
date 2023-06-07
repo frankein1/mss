@@ -18,7 +18,7 @@
         <span
           v-else
           class="fr-badge"
-          :class="[helpRequestStatusBadgeClasses[helpRequest.status]]"
+          :class="[helpRequestStatusClasses[helpRequest.status]]"
         >
           {{ helpRequestStatusOptions.get(helpRequest.status) }}
         </span>
@@ -116,12 +116,11 @@
     helpRequestStatusOptions,
     paymentMethodOptions
   } from '~/client/options/helpRequest'
-  import { helpRequestStatusBadgeClasses } from '~/client/classes/helpRequest'
-  // import { euros } from '~/utils/euros'
+  import { helpRequestStatusClasses } from '~/client/classes/helpRequest'
+  import { euros } from '~/utils/euros'
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { getUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
-  // import { withEmptyValue } from '~/utils/options'
   import { canAccessProtectedDataInHelpRequest } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
