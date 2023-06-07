@@ -90,7 +90,7 @@ docker build . -t monsuivisocial-migrate -f ./prisma/Dockerfile
 docker run -e DATABASE_URL="postgresql://mss:password@host.docker.internal:5433/mss" monsuivisocial-migrate
 ```
 
-## Sheatsheet
+## Cheat sheet
 
 generate migration script with prisma
 
