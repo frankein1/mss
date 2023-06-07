@@ -61,6 +61,17 @@ async function getFollowups(
           lastName: true,
           email: true
         }
+      },
+      beneficiary: {
+        select: {
+          structureId: true,
+          referents: true
+        }
+      },
+      prescribingOrganization: {
+        select: {
+          name: true
+        }
       }
     },
     orderBy: { date: 'desc' }
@@ -82,6 +93,22 @@ async function getHelpRequests(
           firstName: true,
           lastName: true,
           email: true
+        }
+      },
+      beneficiary: {
+        select: {
+          structureId: true,
+          referents: true
+        }
+      },
+      prescribingOrganization: {
+        select: {
+          name: true
+        }
+      },
+      instructorOrganization: {
+        select: {
+          name: true
         }
       }
     },
