@@ -35,7 +35,7 @@ variables:
 
 .vigigloo:pnpm:install:
   image:
-    name: registry.gitlab.com/vigigloo/tools/pnpm:node-18_pnpm-8.3.1
+    name: registry.gitlab.com/vigigloo/tools/pnpm:node-18_pnpm-8.6.1
 
 .vigigloo:helm:deploy:
   variables:
