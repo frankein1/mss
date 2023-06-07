@@ -10,32 +10,6 @@
           </div>
         </li>
       </ul>
-      <h2>Inclusion Connect</h2>
-      <ul>
-        <li>
-          <div>
-            <span class="env-label fr-pr-2w">Client</span
-            ><span>{{ clientId }}</span>
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="env-label fr-pr-2w">Issuer</span
-            ><span>{{ issuer }}</span>
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="env-label fr-pr-2w">Provider</span
-            ><span>{{ provider }}</span>
-          </div>
-        </li>
-        <li>
-          <div>
-            <span class="env-label fr-pr-2w">Type</span><span>{{ type }}</span>
-          </div>
-        </li>
-      </ul>
     </section>
   </div>
 </template>
