@@ -57,18 +57,16 @@
       <hr class="fr-pb-3v" />
     </template>
 
-    <!-- TODO: Add comments to history items -->
-    <!-- <BeneficiaryHistoryComments
-      class=""
+    <BeneficiaryHistoryComments
       :comments="comments"
       :history="history"
       @comment-added="onCommentAdded"
-    /> -->
+    />
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { HistoryItem } from './types'
+  import type { HistoryItem, HistoryItemComment } from './types'
   import { Routes } from '~/utils/routing/routes'
   import {
     canEditBeneficiaryFollowup,
@@ -93,7 +91,7 @@
     (e: 'deleted'): void
   }>()
 
-  // const comments = ref(props.history.comments || [])
+  const comments = ref(props.history.comments || [])
 
   const editLink = computed(() => {
     const routeWithParams = props.history.isFollowup
@@ -127,9 +125,9 @@
     // FIXME: Does it correspond to permissionsStore.canDisplayDetailedHistory(props.history) ?
   )
 
-  // function onCommentAdded(comment) {
-  //   comments.value.push(comment)
-  // }
+  function onCommentAdded(comment: HistoryItemComment) {
+    comments.value.push(comment)
+  }
 
   function onDelete() {
     // modal.open(

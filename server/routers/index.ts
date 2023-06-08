@@ -9,6 +9,7 @@ import { structureRouter } from './structureRouter'
 import { helpRequestRouter } from './helpRequestRouter'
 import { notificationRouter } from './notificationRouter'
 import { documentRouter } from './documentRouter'
+import { commentRouter } from './commentRouter'
 import { router } from '~/server/trpc'
 
 export const appRouter = router({
@@ -20,7 +21,8 @@ export const appRouter = router({
   structure: structureRouter,
   user: userRouter,
   helpRequest: helpRequestRouter,
-  documents: documentRouter
+  documents: documentRouter,
+  comment: commentRouter
 })
 // export type definition of API
 export type AppRouter = typeof appRouter

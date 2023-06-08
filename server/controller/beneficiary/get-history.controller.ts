@@ -46,6 +46,35 @@ function filtersAppliesToFollowupsAndHelpRequests(
   )
 }
 
+const createdBySelect = {
+  firstName: true,
+  lastName: true,
+  email: true
+}
+
+const historyItemInclude = {
+  Notification: { where: { read: false } },
+  createdBy: {
+    select: createdBySelect
+  },
+  beneficiary: {
+    select: {
+      structureId: true,
+      referents: true
+    }
+  },
+  prescribingOrganization: {
+    select: {
+      name: true
+    }
+  },
+  comments: {
+    include: {
+      createdBy: { select: createdBySelect }
+    }
+  }
+}
+
 async function getFollowups(
   beneficiaryId: string,
   filters: FollowupFilterInput
@@ -53,26 +82,8 @@ async function getFollowups(
   const followups = await prismaClient.followup.findMany({
     where: { beneficiaryId, ...prepareFollowupFilters(filters) },
     include: {
-      Notification: { where: { read: false } },
-      types: true,
-      createdBy: {
-        select: {
-          firstName: true,
-          lastName: true,
-          email: true
-        }
-      },
-      beneficiary: {
-        select: {
-          structureId: true,
-          referents: true
-        }
-      },
-      prescribingOrganization: {
-        select: {
-          name: true
-        }
-      }
+      ...historyItemInclude,
+      types: true
     },
     orderBy: { date: 'desc' }
   })
@@ -86,26 +97,8 @@ async function getHelpRequests(
   const helpRequests = await prismaClient.helpRequest.findMany({
     where: { beneficiaryId, ...prepareHelpRequestFilters(filters) },
     include: {
-      Notification: { where: { read: false } },
+      ...historyItemInclude,
       type: true,
-      createdBy: {
-        select: {
-          firstName: true,
-          lastName: true,
-          email: true
-        }
-      },
-      beneficiary: {
-        select: {
-          structureId: true,
-          referents: true
-        }
-      },
-      prescribingOrganization: {
-        select: {
-          name: true
-        }
-      },
       instructorOrganization: {
         select: {
           name: true
