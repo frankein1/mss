@@ -55,6 +55,7 @@
     "jsdom": "^21.1.1",
     "lint-staged": "^13.0.1",
     "nuxt": "^3.4.2",
+    "nuxt-scheduler": "^0.0.16",
     "nuxt-vitest": "^0.6.9",
     "prettier": "2.8.8",
     "prisma": "^4.13.0",
