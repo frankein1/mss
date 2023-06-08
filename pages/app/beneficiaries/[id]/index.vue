@@ -40,8 +40,9 @@
       <Tab
         :id="BeneficiaryTab.History"
         name="Historique"
-        >Historique</Tab
       >
+        <BeneficiaryHistory :beneficiary-id="beneficiaryId" />
+      </Tab>
     </AtomTabs>
   </PageContainer>
 </template>
