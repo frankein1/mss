@@ -6,11 +6,11 @@
       class="fr-mb-1w"
       :comment="comment"
     />
-    <!-- <BeneficiaryHistoryCommentAdd
+    <BeneficiaryHistoryCommentAdd
       :class="{ 'fr-mt-1w': comments.length }"
       :history="history"
-      @comment-added="$emit('commentAdded', $event)"
-    /> -->
+      @comment-added="emit('commentAdded', $event)"
+    />
   </section>
 </template>
 
@@ -22,7 +22,7 @@
     history: HistoryItem
   }>()
 
-  defineEmits<{
+  const emit = defineEmits<{
     (e: 'commentAdded', comment: HistoryItemComment): void
   }>()
 </script>

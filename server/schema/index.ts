@@ -136,3 +136,6 @@ export type {
   CreateUploadUrlInput,
   CreateViewUrlInput
 } from './document.schema'
+
+export { addCommentSchema } from './comment.schema'
+export type { AddCommentInput } from './comment.schema'

@@ -58,7 +58,6 @@
     </template>
 
     <BeneficiaryHistoryComments
-      class=""
       :comments="comments"
       :history="history"
       @comment-added="onCommentAdded"

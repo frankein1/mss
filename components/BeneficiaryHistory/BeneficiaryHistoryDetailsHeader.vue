@@ -60,7 +60,7 @@
       aria-expanded="false"
       :aria-controls="accordionId"
       :title="collapseBtnLabel"
-      @click="$emit('toggleExpand')"
+      @click="emit('toggleExpand')"
     >
       <span :class="[collapseBtnIcon]"></span>
       <span>{{ collapseBtnLabel }}</span>
@@ -87,7 +87,7 @@
     { expanded: false, hasUnreadNotifications: false }
   )
 
-  defineEmits<{
+  const emit = defineEmits<{
     (e: 'toggleExpand'): void
   }>()
 
