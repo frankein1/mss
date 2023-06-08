@@ -36,9 +36,10 @@ export const addDocumentHandler = async ({
   input: AddDocumentInput
 }) => {
   const { type, beneficiaryId, confidential, tags, file } = input
-
+  const ext = file.name.split('.').pop()
   const document = await prismaClient.document.create({
     data: {
+      filenameDisk: ext ? file.key + '.' + ext : file.key,
       beneficiaryId,
       type,
       confidential,
@@ -181,7 +182,7 @@ export const createViewUrlHandler = async ({
   const { s3 } = useRuntimeConfig()
 
   const { url } = await createSignedGetUrl({
-    key,
+    key: document.filenameDisk,
     bucket: s3.bucket
   })
 

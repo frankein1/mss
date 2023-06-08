@@ -61,18 +61,23 @@
       <div class="fr-card__footer">
         <ul class="fr-links-group">
           <li>
-            <NuxtLink
-              :to="openLink"
+            <button
               class="fr-link fr-icon-eye-line"
               target="_blank"
               :title="'Nouvel onglet - Voir ' + document.name"
+              @click="onView"
             >
               Voir
-            </NuxtLink>
+            </button>
+            <a
+              ref="downloadLink"
+              target="_blank"
+              :download="document.name"
+              hidden
+            />
           </li>
           <li>
             <button
-              :download="document.name"
               class="fr-download__link"
               target="_blank"
               :title="'Télécharger ' + document.name"
@@ -103,13 +108,30 @@
       canDeleteDocuments: true
     }
   )
-  const openLink = ''
+
+  const downloadLink = ref<HTMLLinkElement | null>(null)
 
   const onDownload = async () => {
-    const downloadLink = await useTrpcClient().documents.createViewUrl.mutate({
-      key: props.document.key
-    })
-    console.log({ downloadLink })
+    if (process.client) {
+      const { url } = await useTrpcClient().documents.createViewUrl.mutate({
+        key: props.document.key
+      })
+      const link = downloadLink.value
+      if (link) {
+        link.href = url
+        link.type = props.document.type
+        link.click()
+      }
+    }
+  }
+
+  const onView = async () => {
+    if (process.client) {
+      const { url } = await useTrpcClient().documents.createViewUrl.mutate({
+        key: props.document.key
+      })
+      window.open(url, '_blank')?.focus()
+    }
   }
 
   function onEditDocument() {}

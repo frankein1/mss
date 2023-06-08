@@ -5,7 +5,6 @@ import type {
 } from './get-page.handler'
 
 export { getBeneficiaryDetailsHandler } from './get-details.handler'
-export { addDocumentHandler } from './add-document.handler'
 export { getBeneficiariesHandler } from './get-page.handler'
 export { getBeneficiaryDocumentsHandler } from './get-documents.handler'
 export { createBeneficiaryHandler } from './create.handler'
