@@ -35,7 +35,7 @@
       <template v-if="canAccessRestrictedFieldsInHelpRequest">
         <td>
           <template v-if="canDisplayDetailedHistory">
-            {{ examiningOrganisation }}
+            {{ instructorOrganization }}
           </template>
         </td>
         <td>
@@ -147,11 +147,10 @@
     })
   )
 
-  const examiningOrganisation = computed(() =>
+  const instructorOrganization = computed(() =>
     props.helpRequest.externalStructure
-      ? props.helpRequest.examiningOrganisation || ''
-      : // ? props.helpRequest.organisme_instructeur?.name || '' // TODO: Add organisme instructeur relation
-        'Interne'
+      ? props.helpRequest.instructorOrganization?.name || ''
+      : 'Interne'
   )
 
   const canAccessRestrictedFieldsInHelpRequest = computed(() =>

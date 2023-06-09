@@ -1,5 +1,3 @@
-<!-- TODO: Field label-->
-
 <template>
   <form
     class="fr-container--fluid"

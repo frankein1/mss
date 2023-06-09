@@ -375,12 +375,11 @@ model HelpRequest {
 
   allocatedAmount Decimal? @map("allocated_amount")
 
-  paymentMethod         PaymentMethod? @map("payment_method")
-  paymentDate           DateTime?      @map("payment_date") @db.Date
-  handlingDate          DateTime?      @map("handling_date") @db.Date
-  refusalReason         String?        @map("refusal_reason")
-  examiningOrganisation String?        @map("examining_organisation")
-  dispatchDate          DateTime?      @map("dispatch_date") @db.Date
+  paymentMethod PaymentMethod? @map("payment_method")
+  paymentDate   DateTime?      @map("payment_date") @db.Date
+  handlingDate  DateTime?      @map("handling_date") @db.Date
+  refusalReason String?        @map("refusal_reason")
+  dispatchDate  DateTime?      @map("dispatch_date") @db.Date
 
   synthesis String?
 

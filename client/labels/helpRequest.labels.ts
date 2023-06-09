@@ -16,7 +16,6 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   status: 'Statut',
   dueDate: "Date d'échéance",
   beneficiaryId: 'Bénéficiaire',
-  examiningOrganisation: 'Organisme instructeur',
   examinationDate: 'Date de passage en commission',
   askedAmount: 'Montant demandé',
   allocatedAmount: 'Montant attribué',

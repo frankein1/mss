@@ -1,9 +1,17 @@
 import type { Prisma } from '@prisma/client'
 import { AppContext, invalidError } from '~/server/trpc'
-import type { GetHelpRequestsInput } from '~/server/schema'
+import type {
+  GetHelpRequestsInput,
+  GetHelpRequestsInputOrderBy
+} from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { prepareHelpRequestFilters } from '~/utils/helpRequest/filters'
+import { SortOrder } from '~/types/table'
+
+type GetHelpRequestsOrderBy = Array<
+  GetHelpRequestsInputOrderBy[0] & { externalStructure?: SortOrder.Desc }
+>
 
 export const helpRequestGetPageSelect = {
   id: true,
@@ -11,7 +19,6 @@ export const helpRequestGetPageSelect = {
   type: { select: { id: true, name: true } },
   dueDate: true,
   externalStructure: true,
-  examiningOrganisation: true,
   examinationDate: true,
   askedAmount: true,
   allocatedAmount: true,
@@ -36,6 +43,9 @@ export const helpRequestGetPageSelect = {
       firstName: true,
       lastName: true
     }
+  },
+  instructorOrganization: {
+    select: { name: true }
   }
 }
 
@@ -61,6 +71,12 @@ export const getHelpRequestsHandler = async ({
       archived: null
     },
     ...prepareHelpRequestFilters(input.filters)
+  }
+
+  const orderBy: GetHelpRequestsOrderBy = input.orderBy
+
+  if (orderBy.find(s => !!s.instructorOrganization)) {
+    orderBy.unshift({ externalStructure: SortOrder.Desc })
   }
 
   const [helpRequests, count] = await Promise.all([

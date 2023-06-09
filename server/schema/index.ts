@@ -56,7 +56,8 @@ export type {
   QuickEditHelpRequestAllocatedAmountInput,
   QuickEditHelpRequestPaymentMethodInput,
   QuickEditHelpRequestPaymentDateInput,
-  EditHelpRequestInput
+  EditHelpRequestInput,
+  GetHelpRequestsInputOrderBy
 } from './helpRequest.schema'
 
 export {

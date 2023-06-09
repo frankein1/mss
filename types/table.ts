@@ -28,4 +28,9 @@ export type HelpRequestSort = Pick<
     Prisma.BeneficiaryOrderByWithRelationAndSearchRelevanceInput,
     'usualName'
   >
+} & {
+  instructorOrganization?: Pick<
+    Prisma.InstructorOrganizationOrderByWithRelationAndSearchRelevanceInput,
+    'name'
+  >
 }

@@ -34,11 +34,12 @@
             </th>
             <template v-if="canAccessProtectedDataInHelpRequest(user)">
               <th scope="col">
-                {{ helpRequestFieldLabels.examiningOrganisation }}
-                <!-- TODO: Add organisme instructeur -->
-                <!-- <AtomSortButton
-                      @sort="onSort($event, 'organisme_instructeur.name')"
-                    /> -->
+                {{ helpRequestFieldLabels.instructorOrganizationId }}
+                <AtomSortButton
+                  @sort="
+                    emit('sort', { instructorOrganization: { name: $event } })
+                  "
+                />
               </th>
               <th scope="col">{{ helpRequestFieldLabels.examinationDate }}</th>
               <th scope="col">{{ helpRequestFieldLabels.askedAmount }}</th>

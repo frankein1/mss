@@ -22,9 +22,9 @@
       <span class="information-label">Organisme prescripteur :</span>
       {{ helpRequest.prescribingOrganization.name }}
     </li>
-    <li v-if="examiningOrganisation">
+    <li v-if="instructorOrganization">
       <span class="information-label">Instruction :</span>
-      {{ examiningOrganisation }}
+      {{ instructorOrganization }}
     </li>
     <li v-if="helpRequest.askedAmount">
       <span class="information-label">Montant demandé :</span>
@@ -76,7 +76,7 @@
     helpRequest: HistoryItem & { isFollowup: false }
   }>()
 
-  const examiningOrganisation = computed(() => {
+  const instructorOrganization = computed(() => {
     return props.helpRequest.externalStructure
       ? props.helpRequest.instructorOrganization?.name || ''
       : 'Interne'

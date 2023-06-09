@@ -52,6 +52,11 @@ const getHelpRequestsSchema = z.object({
         .object({
           usualName: z.nativeEnum(Prisma.SortOrder).optional()
         })
+        .optional(),
+      instructorOrganization: z
+        .object({
+          name: z.nativeEnum(Prisma.SortOrder).optional()
+        })
         .optional()
     })
   ),
@@ -91,6 +96,7 @@ const editHelpRequestSchema = createHelpRequestSchema.extend({
 
 type CreateHelpRequestInput = z.infer<typeof createHelpRequestSchema>
 type GetHelpRequestsInput = z.infer<typeof getHelpRequestsSchema>
+type GetHelpRequestsInputOrderBy = GetHelpRequestsInput['orderBy']
 type QuickEditHelpRequestStatusInput = z.infer<
   typeof quickEditHelpRequestStatusSchema
 >
@@ -125,5 +131,6 @@ export type {
   QuickEditHelpRequestAllocatedAmountInput,
   QuickEditHelpRequestPaymentMethodInput,
   QuickEditHelpRequestPaymentDateInput,
-  EditHelpRequestInput
+  EditHelpRequestInput,
+  GetHelpRequestsInputOrderBy
 }
