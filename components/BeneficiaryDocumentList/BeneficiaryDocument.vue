@@ -15,7 +15,7 @@
               class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
               data-fr-opened="false"
               aria-controls="global-modal"
-              @click="onEditDocument"
+              @click="onEdit"
             >
               Modifier le document
             </button>
@@ -94,8 +94,10 @@
 
 <script setup lang="ts">
   import { Document } from '@prisma/client'
+  import BeneficiaryDocumentFormEdition from './BeneficiaryDocumentFormEdition.vue'
   import { getDocumenTagClass } from '~/client/classes/document'
   import { documentTagOptions } from '~/client/options/document'
+  import { EditDocumentInput } from '~/server/schema'
 
   const props = withDefaults(
     defineProps<{
@@ -108,6 +110,10 @@
       canDeleteDocuments: true
     }
   )
+
+  const emit = defineEmits<{ (e: 'documentUpdated'): void }>()
+
+  const modal = useModal()
 
   const downloadLink = ref<HTMLLinkElement | null>(null)
 
@@ -134,7 +140,20 @@
     }
   }
 
-  function onEditDocument() {}
+  function onEdit() {
+    modal.open(
+      'Modifier le document',
+      BeneficiaryDocumentFormEdition,
+      { document: props.document },
+      {
+        edited: (values: EditDocumentInput) => {
+          useTrpcClient().documents.edit.mutate(values)
+          emit('documentUpdated')
+          modal.close()
+        }
+      }
+    )
+  }
   function onDeleteDocument() {}
 </script>
 

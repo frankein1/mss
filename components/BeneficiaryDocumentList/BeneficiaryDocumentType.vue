@@ -7,7 +7,10 @@
         :key="document.key"
         class="documentlist__item"
       >
-        <BeneficiaryDocumentItem :document="document" />
+        <BeneficiaryDocument
+          :document="document"
+          :on-document-updated="onDocumentUpdated"
+        />
       </div>
     </div>
   </div>
@@ -16,10 +19,16 @@
   import { Document, DocumentType } from '@prisma/client'
   import { documentTypeLabels } from '~/client/options/document'
 
-  defineProps<{
+  const props = defineProps<{
     documentType: DocumentType
     documents: Document[]
+    refetchDocuments: () => void
   }>()
+
+  const onDocumentUpdated = () => {
+    console.log('toto')
+    props.refetchDocuments()
+  }
 </script>
 
 <style lang="scss">
