@@ -876,6 +876,269 @@ enum BeneficiaryMinistereCategorie {
   NonCadreDroitPrive
 }
 
+enum BeneficiaryMinistereDepartementServiceAc {
+  // (01) Ain
+  Ain01
+  // (02) Aisne
+  Aisne02
+  // (03) Allier
+  Allier03
+  // (04) Alpes-de-Haute-Provence
+  AlpeDeHauteProvence04
+  // (05) Hautes-Alpes
+  HautesAlpes05
+  // (06) Alpes-Maritimes
+  AlpesMaritimes06
+  // (07) Ardèche
+  Ardeche07
+  // (08) Ardennes
+  Ardennes08
+  // (09) Ariège
+  Ariege09
+  // (10) Aube
+  Aube10
+  // (11) Aude
+  Aude11
+  // (12) Aveyron
+  Aveyron12
+  // (13) Bouches-du-Rhône
+  BouchesDuRhone13
+  // (14) Calvados
+  Calvados14
+  // (15) Cantal
+  Cantal15
+  // (16) Charente
+  Charente16
+  // (17) Charente-Maritime
+  CharenteMaritime17
+  // (18) Cher
+  Cher18
+  // (19) Corrèze
+  Correze19
+  // (21) Côte-d'Or
+  CoteDOr21
+  // (22) Côtes-d'Armor
+  CotesDArmor22
+  // (23) Creuse
+  Creuse23
+  // (24) Dordogne
+  Dordogne24
+  // (25) Doubs
+  Doubs25
+  // (26) Drôme
+  Drome26
+  // (27) Eure
+  Eure27
+  // (28) Eure-et-Loir
+  EureEtLoir28
+  // (29) Finistère
+  Finistere29
+  // (2A) Corse-du-Sud
+  CorseDuSud2a
+  // (2B) Haute-Corse
+  HauteCorse2b
+  // (30) Gard
+  Gard30
+  // (31) Haute-Garonne
+  HauteGaronne31
+  // (32) Gers
+  Gers32
+  // (33) Gironde
+  Gironde33
+  // (34) Hérault
+  Herault34
+  // (35) Ille-et-Vilaine
+  IlleEtVilaine35
+  // (36) Indre
+  Indre36
+  // (37) Indre-et-Loire
+  IndreEtLoire37
+  // (38) Isère
+  Isere38
+  // (39) Jura
+  Jura39
+  // (40) Landes
+  Landes40
+  // (41) Loir-et-Cher
+  LoirEtCher41
+  // (42) Loire
+  Loire42
+  // (43) Haute-Loire
+  HauteLoire43
+  // (44) Loire-Atlantique
+  LoireAtlantique44
+  // (45) Loiret
+  Loiret45
+  // (46) Lot
+  Lot46
+  // (47) Lot-et-Garonne
+  LotEtGaronne47
+  // (48) Lozère
+  Lozere48
+  // (49) Maine-et-Loire
+  MaineEtLoire49
+  // (50) Manche
+  Manche50
+  // (51) Marne
+  Marne51
+  // (52) Haute-Marne
+  HauteMarne52
+  // (53) Mayenne
+  Mayenne53
+  // (54) Meurthe-et-Moselle
+  MeurtheEtMoselle54
+  // (55) Meuse
+  Meuse55
+  // (56) Morbihan
+  Morbihan56
+  // (57) Moselle
+  Moselle57
+  // (58) Nièvre
+  Nievre58
+  // (59) Nord
+  Nord59
+  // (60) Oise
+  Oise60
+  // (61) Orne
+  Orne61
+  // (62) Pas-de-Calais
+  PasDeCalais62
+  // (63) Puy-de-Dôme
+  PuyDeDome63
+  // (64) Pyrénées-Atlantiques
+  PyreneesAtlantiques64
+  // (65) Hautes-Pyrénées
+  HautesPyrenees65
+  // (66) Pyrénées-Orientales
+  PyreneesOrientales66
+  // (67) Bas-Rhin
+  BasRhin67
+  // (68) Haut-Rhin
+  HautRhin68
+  // (69) Rhône
+  Rhone69
+  // (70) Haute-Saône
+  HauteSaone70
+  // (71) Saône-et-Loire
+  SaoneEtLoire71
+  // (72) Sarthe
+  Sarthe72
+  // (73) Savoie
+  Savoie73
+  // (74) Haute-Savoie
+  HauteSavoie74
+  // (75) Paris
+  Paris75
+  // (76) Seine-Maritime
+  SeineMaritime76
+  // (77) Seine-et-Marne
+  SeineEtMarne77
+  // (78) Yvelines
+  Yvelines78
+  // (79) Deux-Sèvres
+  DeuxSevres79
+  // (80) Somme
+  Somme80
+  // (81) Tarn
+  Tarn81
+  // (82) Tarn-et-Garonne
+  TarnEtGaronne82
+  // (83) Var
+  Var83
+  // (84) Vaucluse
+  Vaucluse84
+  // (85) Vendée
+  Vendee85
+  // (86) Vienne
+  Vienne86
+  // (87) Haute-Vienne
+  HauteVienne87
+  // (88) Vosges
+  Vosges88
+  // (89) Yonne
+  Yonne89
+  // (90) Territoire de Belfort
+  TerritoireDeBelfort90
+  // (91) Essonne
+  Essonne91
+  // (92) Hauts-de-Seine
+  HautsDeSeine92
+  // (93) Seine-Saint-Denis
+  SeineSaintDenis93
+  // (94) Val-de-Marne
+  ValDeMarne94
+  // (95) Val-d'Oise
+  ValDOise95
+  // (971) Guadeloupe
+  Guadeloupe971
+  // (972) Martinique
+  Martinique972
+  // (973) Guyane
+  Guyane973
+  // (974) La Réunion
+  LaReunion974
+  // (975) Saint-Pierre-et-Miquelon
+  SaintPierreEtMiquelon975
+  // (976) Mayotte
+  Mayotte976
+  // (984) Terres Australes et Antarctiques
+  TerresAustralesEtAntarctiques984
+  // (986) Wallis et Futuna
+  WallisEtFutuna986
+  // (987) Polynésie Française
+  PolynesieFrancaise987
+  // (988) Nouvelle-Calédonie
+  NouvelleCaledonie988
+  // Agents en instance d'affectation
+  AgentsEnInstanceDaffectation
+  // CHATEFP
+  Chatefp
+  // CNCP
+  Cncp
+  // CNEFOP
+  Cnefop
+  // CNG
+  Cng
+  // CNIT
+  Cnit
+  // CNML
+  Cnml
+  // COMJS
+  Comjs
+  // DAJ
+  Daj
+  // DARES
+  Dares
+  // DGEFP
+  Dgefp
+  // DGOS
+  Dgos
+  // DGP
+  Dgp
+  // DGS
+  Dgs
+  // DGT
+  Dgt
+  // DIGES
+  Diges
+  // DJEPVA
+  Djepva
+  // DNUM
+  Dnum
+  // DRH
+  Drh
+  // DS
+  Ds
+  // IGAS
+  Igas
+  // IGJS
+  Igjs
+  // Secrétariat aux personnes handicapées
+  SecretariatAuxPersonnesHandicapees
+  // SGMCAS
+  Sgmcas
+}
+
 model Beneficiary {
   id String @id @default(uuid()) @db.Uuid
 
@@ -924,9 +1187,9 @@ model Beneficiary {
   majorChildren                      Int?                          @map("major_children")
   mobility                           BeneficiaryMobility?
 
-  ministereCategorie            BeneficiaryMinistereCategorie? @map("ministere_categorie")
-  ministereDepartementServiceAc String?                        @map("ministere_departement_service_ac")
-  ministereStructure            BeneficiaryMinistereStructure? @map("ministere_structure")
+  ministereCategorie            BeneficiaryMinistereCategorie?            @map("ministere_categorie")
+  ministereDepartementServiceAc BeneficiaryMinistereDepartementServiceAc? @map("ministere_departement_service_ac")
+  ministereStructure            BeneficiaryMinistereStructure?            @map("ministere_structure")
 
   // Health
   gir                         BeneficiaryGir?

@@ -86,7 +86,11 @@
           <span class="information-label"
             >Département ou service de l'Administration Centrale :</span
           >
-          {{ beneficiary.ministereDepartementServiceAc }}
+          {{
+            ministereDepartmentServiceAcLabels[
+              beneficiary.ministereDepartementServiceAc
+            ]
+          }}
         </li>
         <li v-if="beneficiary.ministereStructure">
           <span class="information-label">Structure de rattachement :</span>
@@ -106,7 +110,8 @@
   } from '~/client/options/beneficiary'
   import {
     ministereStructureLabels,
-    ministereCategorieLabels
+    ministereCategorieLabels,
+    ministereDepartmentServiceAcLabels
   } from '~/client/options/ministry'
 
   const props = defineProps<{

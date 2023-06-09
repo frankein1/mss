@@ -102,13 +102,11 @@
         label="Catégorie"
         :options="withEmptyValue(ministereCategorieOptions)"
       />
-      <!-- TODO -->
-      <!-- <AtomSearchableSelect
-          name="occupation.ministereDepartementServiceAc"
-          label="Département ou service de l'Administration Centrale"
-          :options="ministereDepartmentServiceAcOptions"
-          :value="beneficiary?.ministereDepartementServiceAc || ''"
-        /> -->
+      <VeeSearchableSelect
+        name="occupation.ministereDepartementServiceAc"
+        label="Département ou service de l'Administration Centrale"
+        :options="withEmptyValue(ministereDepartmentServiceAcOptions)"
+      />
       <VeeSelect
         name="occupation.ministereDepartementServiceAc"
         label="Département ou service de l'Administration Centrale"

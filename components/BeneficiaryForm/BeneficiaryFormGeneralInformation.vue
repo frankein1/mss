@@ -115,7 +115,7 @@
         class="fr-col-12"
         name="general.addressComplement"
         :label="beneficiaryFieldLabels.addressComplement"
-        hint="Bâtiment, immeuble, escalier et numéro d’appartement"
+        hint="Bâtiment, immeuble, escalier et numéro d'appartement"
       />
       <VeeCheckbox
         name="general.noPhone"

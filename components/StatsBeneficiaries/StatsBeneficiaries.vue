@@ -82,13 +82,12 @@
             :filters="filters"
           />
         </div>
-        <!-- TODO -->
-        <!-- <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-          <StatsMinistereDepartementService
+        <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
+          <StatsBeneficiariesMinistereDepartementService
             :beneficiary-count="beneficiaryCount"
             :filters="filters"
           />
-        </div> -->
+        </div>
         <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
           <StatsBeneficiariesMinistereCategorie
             :beneficiary-count="beneficiaryCount"
