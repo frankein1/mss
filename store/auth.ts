@@ -1,4 +1,4 @@
-import { StructureType, UserRole } from '@prisma/client'
+import { StructureType, UserRole, UserStatus } from '@prisma/client'
 import { defineStore } from 'pinia'
 import { JwtUser } from '~/types/user'
 
@@ -61,6 +61,9 @@ export const useAuthStore = defineStore({
       return this.user
         ? this.user.structureType === StructureType.Association
         : false
+    },
+    isActive(): boolean {
+      return this.user?.status === UserStatus.Active
     }
   }
 })

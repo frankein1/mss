@@ -38,10 +38,11 @@ const BeneficiaryHelpRequestsRoute = (beneficiaryId: string) =>
 export const Routes = {
   Index: () => '/',
   Register: () => '/register',
-  DeclarationAccessibilite: () => `/declaration-accessibilite`,
-  MentionsLegales: () => `/mentions-legales`,
+  DeclarationAccessibilite: () => '/declaration-accessibilite',
+  MentionsLegales: () => '/mentions-legales',
   Env: () => `/env`,
-  LogoutSuccess: () => `/logout-success`,
+  LogoutSuccess: () => '/logout-success',
+  DisabledAccount: () => '/disabled-account',
 
   Login: () => '/login',
   Logout: () => `${ApiKeycloak}/logout`,
