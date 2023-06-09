@@ -75,15 +75,15 @@
           :filters="filters"
         />
       </div>
-      <!--
       <template v-if="isMinistryAgent">
         <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-          <StatsMinistereStructure
+          <StatsBeneficiariesMinistereStructure
             :beneficiary-count="beneficiaryCount"
             :filters="filters"
           />
         </div>
-        <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
+        <!-- TODO -->
+        <!-- <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
           <StatsMinistereDepartementService
             :beneficiary-count="beneficiaryCount"
             :filters="filters"
@@ -94,8 +94,8 @@
             :beneficiary-count="beneficiaryCount"
             :filters="filters"
           />
-        </div>
-      </template> -->
+        </div> -->
+      </template>
     </template>
   </div>
 </template>

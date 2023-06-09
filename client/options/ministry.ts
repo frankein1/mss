@@ -1,4 +1,4 @@
-import { Minister } from '@prisma/client'
+import { Minister, BeneficiaryMinistereStructure } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
 const ministerLabels = {
@@ -153,20 +153,25 @@ const ministereDepartmentServiceAcOptions = new Map([
   ['sgmcas', 'SGMCAS']
 ])
 
-const ministereStructureOptions = new Map([
-  ['administration_centrale', 'Administration centrale'],
-  ['ars', 'ARS'],
-  ['dreets_deets_outre_mer', 'DREETS/DEETS outre-mer'],
-  ['ddets', 'DDETS'],
-  ['ddetspp', 'DDETSPP'],
-  ['ddpp', 'DDPP'],
-  ['inja_injs', 'INJA/INJS'],
-  ['ehesp', 'EHESP'],
-  ['intefp', 'INTEFP'],
-  ['mnc', 'MNC'],
-  ['retraites', 'Retraites'],
-  ['other', 'Autre']
-])
+const ministereStructureLabels: {
+  [key in BeneficiaryMinistereStructure]: string
+} = {
+  [BeneficiaryMinistereStructure.AdministrationCentrale]:
+    'Administration centrale',
+  [BeneficiaryMinistereStructure.Ars]: 'ARS',
+  [BeneficiaryMinistereStructure.DreetsDeetsOutreMer]: 'DREETS/DEETS outre-mer',
+  [BeneficiaryMinistereStructure.Ddets]: 'DDETS',
+  [BeneficiaryMinistereStructure.Ddetspp]: 'DDETSPP',
+  [BeneficiaryMinistereStructure.Ddpp]: 'DDPP',
+  [BeneficiaryMinistereStructure.InjaInjs]: 'INJA/INJS',
+  [BeneficiaryMinistereStructure.Ehesp]: 'EHESP',
+  [BeneficiaryMinistereStructure.Intefp]: 'INTEFP',
+  [BeneficiaryMinistereStructure.Mnc]: 'MNC',
+  [BeneficiaryMinistereStructure.Retraites]: 'Retraites',
+  [BeneficiaryMinistereStructure.Other]: 'Autre'
+}
+
+const ministereStructureOptions = labelsToOptions(ministereStructureLabels)
 
 const ministerOptions = labelsToOptions(ministerLabels)
 
@@ -174,5 +179,6 @@ export {
   ministerLabels,
   ministerOptions,
   ministereDepartmentServiceAcOptions,
+  ministereStructureLabels,
   ministereStructureOptions
 }

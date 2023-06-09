@@ -13,7 +13,8 @@ import {
   BeneficiaryPensionOrganisation,
   BeneficiaryTitle,
   Nationality,
-  Prisma
+  Prisma,
+  BeneficiaryMinistereStructure
 } from '@prisma/client'
 import { z } from 'zod'
 import {
@@ -148,7 +149,7 @@ export const updateBeneficiarySchema = z.object({
     funeralContract: z.string().nullish(),
     ministereCategorie: z.string().nullish(),
     ministereDepartementServiceAc: z.string().nullish(),
-    ministereStructure: z.string().nullish()
+    ministereStructure: z.nativeEnum(BeneficiaryMinistereStructure).nullish()
   }),
   external: z.object({
     protectionMeasure: z.nativeEnum(BeneficiaryProtectionMeasure).nullish(),

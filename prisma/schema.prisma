@@ -836,6 +836,33 @@ enum BeneficiaryPensionOrganisation {
   Other
 }
 
+enum BeneficiaryMinistereStructure {
+  // Administration centrale'
+  AdministrationCentrale
+  // ARS'
+  Ars
+  // DREETS/DEETS outre-mer'
+  DreetsDeetsOutreMer
+  // DDETS'
+  Ddets
+  // DDETSPP'
+  Ddetspp
+  // DDPP'
+  Ddpp
+  // INJA/INJS'
+  InjaInjs
+  // EHESP'
+  Ehesp
+  // INTEFP'
+  Intefp
+  // MNC'
+  Mnc
+  // Retraites'
+  Retraites
+  // Autre
+  Other
+}
+
 model Beneficiary {
   id String @id @default(uuid()) @db.Uuid
 
@@ -884,9 +911,9 @@ model Beneficiary {
   majorChildren                      Int?                          @map("major_children")
   mobility                           BeneficiaryMobility?
 
-  ministereCategorie            String? @map("ministere_categorie")
-  ministereDepartementServiceAc String? @map("ministere_departement_service_ac")
-  ministereStructure            String? @map("ministere_structure")
+  ministereCategorie            String?                        @map("ministere_categorie")
+  ministereDepartementServiceAc String?                        @map("ministere_departement_service_ac")
+  ministereStructure            BeneficiaryMinistereStructure? @map("ministere_structure")
 
   // Health
   gir                         BeneficiaryGir?

@@ -90,7 +90,7 @@
         </li>
         <li v-if="beneficiary.ministereStructure">
           <span class="information-label">Structure de rattachement :</span>
-          {{ beneficiary.ministereStructure }}
+          {{ ministereStructureLabels[beneficiary.ministereStructure] }}
         </li>
       </template>
     </ul>
@@ -104,6 +104,7 @@
     incomeSourceLabels,
     pensionOrganisationLabels
   } from '~/client/options/beneficiary'
+  import { ministereStructureLabels } from '~/client/options/ministry'
 
   const props = defineProps<{
     beneficiary: Beneficiary
