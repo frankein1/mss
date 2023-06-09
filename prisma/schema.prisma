@@ -123,15 +123,16 @@ enum DocumentType {
 }
 
 model Document {
-  key          String       @id @default(uuid()) // FIXME: Cannot set as @db.Uuid as no cast is possible
-  mimeType     String       @map("mime_type")
-  name         String
-  filenameDisk String       @map("filename_disk")
-  type         DocumentType
+  key              String       @id @default(uuid()) // FIXME: Cannot set as @db.Uuid as no cast is possible
+  mimeType         String       @map("mime_type")
+  name             String
+  filenameDisk     String       @map("filename_disk")
+  filenameDownload String?      @map("filename_download")
+  type             DocumentType
   // Size in bytes
-  size         Int?
-  tags         String[]
-  confidential Boolean
+  size             Int?
+  tags             String[]
+  confidential     Boolean
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
   beneficiaryId String      @map("beneficiary_id") @db.Uuid

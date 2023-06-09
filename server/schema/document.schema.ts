@@ -2,14 +2,10 @@ import { DocumentType } from '@prisma/client'
 import { z } from 'zod'
 import {
   documentFileMaxSize,
-  DocumentTags,
   documentFileAllowedTypes
 } from '~/client/options/document'
 import { errorMessages } from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
-
-// const documentMimeTypeValidationErrorMessage =
-//   "Ce type de document n'est pas accepté"
 
 const documentSizeValidationErrorMessage = `La taille du document doit être inférieure à ${formatByteSize(
   documentFileMaxSize
@@ -26,16 +22,17 @@ export const documentSizeValidation = z
 
 export const addDocumentSchema = z.object({
   beneficiaryId: z.string(errorMessages),
+  name: z.string(),
   type: z.nativeEnum(DocumentType, {
     ...errorMessages,
     required_error: 'Veuillez renseigner le type du document'
   }),
-  tags: z.array(z.enum(DocumentTags)),
+  tags: z.array(z.string()),
   confidential: z.boolean().default(false),
   file: z.object({
     key: z.string({ required_error: 'Veuillez téléverser un document' }),
     mimeType: documentMimeTypeValidation,
-    name: z.string(),
+    filenameDownload: z.string(),
     size: documentSizeValidation
   })
 })
