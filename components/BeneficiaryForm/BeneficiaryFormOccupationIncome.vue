@@ -100,8 +100,9 @@
       <VeeSelect
         name="occupation.ministereCategorie"
         label="Catégorie"
-        :options="withEmptyValue(ministerOptions)"
+        :options="withEmptyValue(ministereCategorieOptions)"
       />
+      <!-- TODO -->
       <!-- <AtomSearchableSelect
           name="occupation.ministereDepartementServiceAc"
           label="Département ou service de l'Administration Centrale"
@@ -133,9 +134,9 @@
     pensionOrganisationOptions
   } from '~/client/options/beneficiary'
   import {
-    ministerOptions,
     ministereDepartmentServiceAcOptions,
-    ministereStructureOptions
+    ministereStructureOptions,
+    ministereCategorieOptions
   } from '~/client/options/ministry'
   import { UpdateBeneficiaryInput } from '~/server/schema/beneficiary.schema'
   import { useAuthStore } from '~/store/auth'

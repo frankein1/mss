@@ -88,13 +88,13 @@
             :beneficiary-count="beneficiaryCount"
             :filters="filters"
           />
-        </div>
+        </div> -->
         <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-          <StatsMinistereCategorie
+          <StatsBeneficiariesMinistereCategorie
             :beneficiary-count="beneficiaryCount"
             :filters="filters"
           />
-        </div> -->
+        </div>
       </template>
     </template>
   </div>

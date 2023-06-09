@@ -1,4 +1,8 @@
-import { Minister, BeneficiaryMinistereStructure } from '@prisma/client'
+import {
+  Minister,
+  BeneficiaryMinistereStructure,
+  BeneficiaryMinistereCategorie
+} from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
 const ministerLabels = {
@@ -13,6 +17,8 @@ const ministerLabels = {
   [Minister.CaroleGrandjean]:
     'Carole Grandjean (Enseignement, Formation professionnels)'
 }
+
+const ministerOptions = labelsToOptions(ministerLabels)
 
 const ministereDepartmentServiceAcOptions = new Map([
   ['ain_01', '(01) Ain'],
@@ -173,12 +179,24 @@ const ministereStructureLabels: {
 
 const ministereStructureOptions = labelsToOptions(ministereStructureLabels)
 
-const ministerOptions = labelsToOptions(ministerLabels)
+const ministereCategorieLabels: {
+  [key in BeneficiaryMinistereCategorie]: string
+} = {
+  [BeneficiaryMinistereCategorie.CategorieA]: 'Catégorie A',
+  [BeneficiaryMinistereCategorie.CategorieB]: 'Catégorie B',
+  [BeneficiaryMinistereCategorie.CategorieC]: 'Catégorie C',
+  [BeneficiaryMinistereCategorie.CadreDroitPrive]: 'Cadre droit privé',
+  [BeneficiaryMinistereCategorie.NonCadreDroitPrive]: 'Non cadre droit privé'
+}
+
+const ministereCategorieOptions = labelsToOptions(ministereCategorieLabels)
 
 export {
   ministerLabels,
   ministerOptions,
   ministereDepartmentServiceAcOptions,
   ministereStructureLabels,
-  ministereStructureOptions
+  ministereStructureOptions,
+  ministereCategorieLabels,
+  ministereCategorieOptions
 }

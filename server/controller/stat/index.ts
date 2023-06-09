@@ -8,7 +8,8 @@ export {
   getMobilityStatsHandler,
   getRegionStatsHandler,
   getAccommodationZoneStatsHandler,
-  getMinistereStructureStatsHandler
+  getMinistereStructureStatsHandler,
+  getMinistereCategorieStatsHandler
 } from './beneficiary'
 export {
   getFinancialHelpRequestsStats,

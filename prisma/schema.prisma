@@ -837,30 +837,43 @@ enum BeneficiaryPensionOrganisation {
 }
 
 enum BeneficiaryMinistereStructure {
-  // Administration centrale'
+  // Administration centrale
   AdministrationCentrale
-  // ARS'
+  // ARS
   Ars
-  // DREETS/DEETS outre-mer'
+  // DREETS/DEETS outre-mer
   DreetsDeetsOutreMer
-  // DDETS'
+  // DDETS
   Ddets
-  // DDETSPP'
+  // DDETSPP
   Ddetspp
-  // DDPP'
+  // DDPP
   Ddpp
-  // INJA/INJS'
+  // INJA/INJS
   InjaInjs
-  // EHESP'
+  // EHESP
   Ehesp
-  // INTEFP'
+  // INTEFP
   Intefp
-  // MNC'
+  // MNC
   Mnc
-  // Retraites'
+  // Retraites
   Retraites
   // Autre
   Other
+}
+
+enum BeneficiaryMinistereCategorie {
+  // Catégorie A
+  CategorieA
+  // Catégorie B
+  CategorieB
+  // Catégorie C
+  CategorieC
+  // Cadre droit privé
+  CadreDroitPrive
+  // Non cadre droit privé
+  NonCadreDroitPrive
 }
 
 model Beneficiary {
@@ -911,7 +924,7 @@ model Beneficiary {
   majorChildren                      Int?                          @map("major_children")
   mobility                           BeneficiaryMobility?
 
-  ministereCategorie            String?                        @map("ministere_categorie")
+  ministereCategorie            BeneficiaryMinistereCategorie? @map("ministere_categorie")
   ministereDepartementServiceAc String?                        @map("ministere_departement_service_ac")
   ministereStructure            BeneficiaryMinistereStructure? @map("ministere_structure")
 

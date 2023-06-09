@@ -80,7 +80,7 @@
       <template v-if="isMinistryAgent">
         <li v-if="beneficiary.ministereCategorie">
           <span class="information-label">Catégorie :</span>
-          {{ beneficiary.ministereCategorie }}
+          {{ ministereCategorieLabels[beneficiary.ministereCategorie] }}
         </li>
         <li v-if="beneficiary.ministereDepartementServiceAc">
           <span class="information-label"
@@ -104,7 +104,10 @@
     incomeSourceLabels,
     pensionOrganisationLabels
   } from '~/client/options/beneficiary'
-  import { ministereStructureLabels } from '~/client/options/ministry'
+  import {
+    ministereStructureLabels,
+    ministereCategorieLabels
+  } from '~/client/options/ministry'
 
   const props = defineProps<{
     beneficiary: Beneficiary

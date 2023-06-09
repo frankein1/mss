@@ -19,7 +19,8 @@ import {
   getRegionStatsHandler,
   getSupportStatsHandler,
   getAccommodationZoneStatsHandler,
-  getMinistereStructureStatsHandler
+  getMinistereStructureStatsHandler,
+  getMinistereCategorieStatsHandler
 } from '~/server/controller/stat'
 import { statFilterSchema } from '~/server/schema'
 import { protectedProcedure, router } from '~/server/trpc'
@@ -87,5 +88,8 @@ export const statRouter = router({
     .query(getSupportStatsHandler),
   getMinistereStructure: protectedProcedure
     .input(statFilterSchema)
-    .query(getMinistereStructureStatsHandler)
+    .query(getMinistereStructureStatsHandler),
+  getMinistereCategorie: protectedProcedure
+    .input(statFilterSchema)
+    .query(getMinistereCategorieStatsHandler)
 })
