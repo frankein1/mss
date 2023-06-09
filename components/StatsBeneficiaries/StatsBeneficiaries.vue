@@ -45,16 +45,15 @@
           :filters="filters"
         />
       </div>
-      <!-- TODO -->
-      <!-- <div
+      <div
         v-if="isMinistryAgent"
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
       >
-        <StatsAccommodationZone
+        <StatsBeneficiariesAccommodationZone
           :beneficiary-count="beneficiaryCount"
           :filters="filters"
         />
-      </div> -->
+      </div>
       <div
         v-if="isMinistryAgent"
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"

@@ -17,12 +17,16 @@ import {
   getHistoryCountsHandler,
   getMobilityStatsHandler,
   getRegionStatsHandler,
-  getSupportStatsHandler
+  getSupportStatsHandler,
+  getAccommodationZoneStatsHandler
 } from '~/server/controller/stat'
 import { statFilterSchema } from '~/server/schema'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const statRouter = router({
+  getAccommodationZoneStats: protectedProcedure
+    .input(statFilterSchema)
+    .query(getAccommodationZoneStatsHandler),
   getAccommodationModeStats: protectedProcedure
     .input(statFilterSchema)
     .query(getAccommodationModeStatsHandler),
