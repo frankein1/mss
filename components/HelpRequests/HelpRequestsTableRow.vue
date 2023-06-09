@@ -121,7 +121,10 @@
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { getUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/query/security/rules'
+  import {
+    canAccessProtectedDataInHelpRequest,
+    canEditBeneficiaryHelpRequest
+  } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Routes } from '~/utils/routing/routes'
@@ -166,10 +169,12 @@
     // })
   )
 
-  const canEditHistory = computed(
-    () => true
-    // TODO
-    // permissionsStore.canEditHistoryItem(props.history)
+  const canEditHistory = computed(() =>
+    canEditBeneficiaryHelpRequest(
+      user,
+      props.helpRequest.beneficiary,
+      props.helpRequest
+    )
   )
 
   const isAcceptedHelpRequest = computed(

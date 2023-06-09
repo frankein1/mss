@@ -26,14 +26,17 @@ export const helpRequestGetPageSelect = {
   paymentDate: true,
   handlingDate: true,
   financialSupport: true,
+  createdById: true,
   beneficiary: {
     select: {
       id: true,
+      structureId: true,
       fileNumber: true,
       firstName: true,
       birthName: true,
       usualName: true,
-      email: true
+      email: true,
+      referents: true
     }
   },
   createdBy: {
