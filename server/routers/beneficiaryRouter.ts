@@ -5,8 +5,7 @@ import {
   updateBeneficiarySchema,
   getBeneficiariesSchema,
   getDocumentsSchema,
-  getHistorySchema,
-  addDocumentSchema
+  getHistorySchema
 } from '~/server/schema'
 
 import {
@@ -14,7 +13,6 @@ import {
   getBeneficiariesHandler,
   getBeneficiaryDetailsHandler,
   getBeneficiaryDocumentsHandler,
-  addDocumentHandler,
   updateBeneficiaryHandler,
   searchBeneficiaryHandler,
   getBeneficiaryMinimalInfoHandler,
@@ -44,9 +42,6 @@ export const beneficiaryRouter = router({
   getBeneficiaryHistory: protectedProcedure
     .input(getHistorySchema)
     .query(getBeneficiaryHistoryHandler),
-  addBeneficiaryDocument: protectedProcedure
-    .input(addDocumentSchema)
-    .query(addDocumentHandler),
   getBeneficiaries: protectedProcedure
     .input(getBeneficiariesSchema)
     .query(getBeneficiariesHandler)

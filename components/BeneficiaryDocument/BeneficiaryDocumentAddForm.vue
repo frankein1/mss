@@ -44,7 +44,7 @@
 <script lang="ts" setup>
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { Document } from '@prisma/client'
+  // import { Document } from '@prisma/client'
   import { addDocumentSchema, AddDocumentInput } from '~/server/schema'
   import {
     documentTypeOptions,
@@ -58,9 +58,9 @@
     beneficiaryId: string
   }>()
 
-  const emit = defineEmits<{
-    (e: 'added', document: Document): void
-  }>()
+  // const emit = defineEmits<{
+  //   (e: 'added', document: Document): void
+  // }>()
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
@@ -77,9 +77,9 @@
   const onSubmit = handleSubmit(async values => {
     isSubmitting.value = true
     try {
-      const document =
-        await trpcClient.beneficiary.addBeneficiaryDocument.query(values)
-      emit('added', document)
+      const document = await trpcClient.documents.add.mutate(values)
+      console.log({ document })
+      // emit('added', document)
     } catch {
       snackbar.error("L'envoi du fichier a échoué.")
     } finally {
