@@ -20,11 +20,26 @@
 </template>
 <script setup lang="ts">
   import { Document, DocumentType } from '@prisma/client'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
+
+  const route = useRoute()
 
   const props = defineProps<{ beneficiaryId: string }>()
 
   const { data: documents } = useAsyncData<Document[]>(fetchDocuments, {
     default: () => []
+  })
+
+  onMounted(async () => {
+    const tab = route.hash.slice(1)
+    const { item } = route.query
+
+    if (tab === BeneficiaryTab.Documents && item) {
+      await nextTick()
+
+      focusAndScrollTo(`#document-${item}`)
+    }
   })
 
   function fetchDocuments() {

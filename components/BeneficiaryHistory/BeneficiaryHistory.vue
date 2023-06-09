@@ -41,10 +41,12 @@
   import { useFiltersStore } from '~/store/filters'
   import { AlertType } from '~~/utils/constants/alert'
   import { GetBeneficiaryHistoryOutput, ErrorOutput } from '~/server/routers'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
 
   // const { $focusAndScrollTo } = useNuxtApp()
   const filtersStore = useFiltersStore()
-  // const route = useRoute()
+  const route = useRoute()
 
   const props = defineProps<{
     beneficiaryId: string
@@ -68,22 +70,16 @@
     }
   )
 
-  // TODO
-  // watch(
-  //   [pending, error, () => route.query.tab, () => route.query.item],
-  //   async ([_pending, _error, tab, item]) => {
-  //     if (_pending || _error) {
-  //       return
-  //     }
+  onMounted(async () => {
+    const tab = route.hash.slice(1)
+    const { item } = route.query
 
-  //     await nextTick()
+    if (tab === BeneficiaryTab.History && item) {
+      await nextTick()
 
-  //     if (tab === BeneficiaryTab.History && item) {
-  //       $focusAndScrollTo(`#history-${item}`)
-  //     }
-  //   },
-  //   { deep: true }
-  // )
+      focusAndScrollTo(`#history-${item}`)
+    }
+  })
 
   function onHistoryItemDeleted() {
     refresh()
