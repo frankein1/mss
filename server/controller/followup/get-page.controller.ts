@@ -3,7 +3,7 @@ import type { GetFollowupsInput } from '~/server/schema'
 import { AppContext, invalidError } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
-import { prepareFollowupFilters } from '~/utils/followup/filters'
+import { prepareFollowupFilters } from '~/utils/filters'
 
 export const getFollowupsHandler = async ({
   input,

@@ -10,7 +10,6 @@ import { protectedProcedure, router } from '~/server/trpc'
 import { Routes } from '~/utils/routing/routes'
 
 export const configRouter = router({
-  // FIXME: Je déplacerai ça en fonction des modèles je crois ?
   getAgents: protectedProcedure.query(getAgentsHandler),
   getBeneficiariesCities: protectedProcedure.query(
     getBeneficiariesCitiesHandler

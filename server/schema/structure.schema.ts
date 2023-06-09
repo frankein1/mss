@@ -54,9 +54,6 @@ const editCurrentUserStructureSchema = editStructureSchema
     }
   )
 
-// TODO
-// type CreateStructureInput = z.infer<typeof createStructureSchema>
-// type EditStructureInput = z.infer<typeof editStructureSchema>
 type EditCurrentUserStructureInput = z.infer<
   typeof editCurrentUserStructureSchema
 >

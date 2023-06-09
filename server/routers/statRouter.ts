@@ -18,8 +18,8 @@ import {
   getMobilityStatsHandler,
   getRegionStatsHandler,
   getSupportStatsHandler
-} from '../controller/stat.controller'
-import { statFilterSchema } from '../schema'
+} from '~/server/controller/stat'
+import { statFilterSchema } from '~/server/schema'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const statRouter = router({

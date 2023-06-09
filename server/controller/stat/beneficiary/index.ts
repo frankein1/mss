@@ -1,0 +1,8 @@
+export { getAccommodationModeStatsHandler } from './get-accommodation-mode.controller'
+export { getAgeStatsHandler } from './get-age.controller'
+export { getBeneficiaryCountHandler } from './get-beneficiary-count.controller'
+export { getCSPStatsHandler } from './get-csp.controller'
+export { getFamilyStatsHandler } from './get-family.controller'
+export { getGenderStatsHandler } from './get-gender.controller'
+export { getMobilityStatsHandler } from './get-mobility.controller'
+export { getRegionStatsHandler } from './get-region.controller'

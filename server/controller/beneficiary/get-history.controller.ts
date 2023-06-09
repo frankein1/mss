@@ -8,7 +8,7 @@ import type {
   HelpRequestFilterInput
 } from '~/server/schema'
 import { TypeSuivi } from '~/types/history'
-import { prepareFollowupFilters } from '~/utils/followup/filters'
+import { prepareFollowupFilters } from '~/utils/filters'
 import { prepareHelpRequestFilters } from '~/utils/helpRequest/filters'
 
 function filtersAppliesToFollowups(
