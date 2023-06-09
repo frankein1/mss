@@ -36,9 +36,10 @@ export const addDocumentHandler = async ({
   input: AddDocumentInput
 }) => {
   const { type, beneficiaryId, confidential, tags, file } = input
-  const ext = file.name.split('.').pop()
+  const ext = file.filenameDownload.split('.').pop()
   const document = await prismaClient.document.create({
     data: {
+      name: file.filenameDownload,
       filenameDisk: ext ? file.key + '.' + ext : file.key,
       beneficiaryId,
       type,
