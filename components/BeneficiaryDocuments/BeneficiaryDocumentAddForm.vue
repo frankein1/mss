@@ -9,7 +9,6 @@
       :options="withEmptyValue(documentTypeOptions)"
       required
     />
-    <!-- FIXME: Arrow navigation is not working due to DSFR - See https://github.com/GouvernementFR/dsfr/issues/517 -->
     <VeeSearchableSelect
       label="Thèmes"
       name="tags"
@@ -21,20 +20,18 @@
       label="Confidentiel"
       name="confidential"
     />
-    <!-- TODO: file upload field -->
-    <!--
-    <AtomUpload
+
+    <VeeInputFile
       label="Ajouter un fichier"
       name="file"
       accept="application/pdf, image/*, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.oasis.opendocument.spreadsheet, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text"
       required
-    /> -->
+    />
     <button
       class="fr-btn fr-mt-3w"
       title="Ajouter"
       type="submit"
       :submitting="isSubmitting"
-      @click="onCheckValidationBeforeSubmit"
     >
       Ajouter
     </button>
@@ -44,29 +41,29 @@
 <script lang="ts" setup>
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  // import { Document } from '@prisma/client'
-  import { addDocumentSchema, AddDocumentInput } from '~/server/schema'
+  import {
+    UploadBrowserDocumentInput,
+    uploadBrowserDocumentSchema
+  } from '~/server/schema'
   import {
     documentTypeOptions,
     documentTagOptions
   } from '~/client/options/document'
 
-  const snackbar = useSnackbar()
-  const trpcClient = useTrpcClient()
-
   const props = defineProps<{
     beneficiaryId: string
   }>()
 
-  // const emit = defineEmits<{
-  //   (e: 'added', document: Document): void
-  // }>()
+  const emit = defineEmits<{
+    (e: 'newDocument'): void
+  }>()
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
+  const submitErrors = ref(null)
 
-  const { handleSubmit } = useForm<AddDocumentInput>({
-    validationSchema: toTypedSchema(addDocumentSchema),
+  const { handleSubmit } = useForm<UploadBrowserDocumentInput>({
+    validationSchema: toTypedSchema(uploadBrowserDocumentSchema),
     initialValues: {
       beneficiaryId: props.beneficiaryId,
       tags: [],
@@ -76,29 +73,41 @@
 
   const onSubmit = handleSubmit(async values => {
     isSubmitting.value = true
-    try {
-      const document = await trpcClient.documents.add.mutate(values)
-      console.log({ document })
-      // emit('added', document)
-    } catch {
-      snackbar.error("L'envoi du fichier a échoué.")
-    } finally {
-      isSubmitting.value = false
-    }
-  })
+    const { file } = values
+    const client = useTrpcClient()
+    const { url, key } = await client.documents.createUploadUrl.mutate({
+      name: file.name,
+      beneficiaryId: values.beneficiaryId,
+      mimeType: file.type
+    })
 
-  function onCheckValidationBeforeSubmit() {
-    // Open the accordion containing the first invalid field
-    const firstInvalidField = form.value?.querySelector(
-      'input:invalid, select:invalid'
-    )
-    if (!firstInvalidField) {
-      return
-    }
-    const closestAccordionCollapse = firstInvalidField.closest('.fr-collapse')
-    if (!closestAccordionCollapse) {
-      return
-    }
-    window.dsfr(closestAccordionCollapse as HTMLElement).collapse.disclose()
-  }
+    const data = new FormData()
+    data.append('file', file)
+
+    useFetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': file.type,
+        'Authorization': key
+      },
+      body: data
+    }).catch(error => {
+      submitErrors.value = error
+    })
+
+    client.documents.add.mutate({
+      beneficiaryId: values.beneficiaryId,
+      type: values.type,
+      tags: values.tags,
+      confidential: values.confidential,
+      file: {
+        name: file.name,
+        key,
+        mimeType: file.type,
+        size: file.size
+      }
+    })
+
+    emit('newDocument')
+  })
 </script>

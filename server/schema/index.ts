@@ -128,14 +128,16 @@ export {
   editDocumentSchema,
   deleteDocumentSchema,
   createUploadUrlSchema,
-  createViewUrlSchema
+  createViewUrlSchema,
+  uploadBrowserDocumentSchema
 } from './document.schema'
 export type {
   AddDocumentInput,
   EditDocumentInput,
   DeleteDocumentInput,
   CreateUploadUrlInput,
-  CreateViewUrlInput
+  CreateViewUrlInput,
+  UploadBrowserDocumentInput
 } from './document.schema'
 
 export { addCommentSchema } from './comment.schema'
