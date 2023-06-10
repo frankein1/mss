@@ -53,6 +53,7 @@ export const deleteDocumentSchema = z.object({
 
 export const editDocumentSchema = z.object({
   key: z.string(),
+  name: z.string(),
   beneficiaryId: z.string(errorMessages),
   type: z.nativeEnum(DocumentType, {
     ...errorMessages,
