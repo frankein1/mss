@@ -84,30 +84,30 @@
     const data = new FormData()
     data.append('file', file)
 
-    useFetch(url, {
+    await useFetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': file.type,
-        'Authorization': key
+        'Content-Type': file.type
       },
       body: data
-    }).catch(error => {
-      submitErrors.value = error
     })
-
-    client.documents.add.mutate({
-      beneficiaryId: values.beneficiaryId,
-      type: values.type,
-      tags: values.tags,
-      confidential: values.confidential,
-      file: {
-        name: file.name,
-        key,
-        mimeType: file.type,
-        size: file.size
-      }
-    })
-
-    emit('newDocument')
+      .then(async () => {
+        await client.documents.add.mutate({
+          beneficiaryId: values.beneficiaryId,
+          type: values.type,
+          tags: values.tags,
+          confidential: values.confidential,
+          file: {
+            name: file.name,
+            key,
+            mimeType: file.type,
+            size: file.size
+          }
+        })
+        emit('newDocument')
+      })
+      .catch(error => {
+        submitErrors.value = error
+      })
   })
 </script>
