@@ -20,9 +20,19 @@ export const documentSizeValidation = z
   .int()
   .max(documentFileMaxSize, documentSizeValidationErrorMessage)
 
+export const uploadBrowserDocumentSchema = z.object({
+  beneficiaryId: z.string(errorMessages),
+  type: z.nativeEnum(DocumentType, {
+    ...errorMessages,
+    required_error: 'Veuillez renseigner le type du document'
+  }),
+  tags: z.array(z.string()),
+  confidential: z.boolean().default(false),
+  file: z.instanceof(File)
+})
+
 export const addDocumentSchema = z.object({
   beneficiaryId: z.string(errorMessages),
-  name: z.string(),
   type: z.nativeEnum(DocumentType, {
     ...errorMessages,
     required_error: 'Veuillez renseigner le type du document'
@@ -30,9 +40,9 @@ export const addDocumentSchema = z.object({
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
   file: z.object({
+    name: z.string(),
     key: z.string({ required_error: 'Veuillez téléverser un document' }),
     mimeType: documentMimeTypeValidation,
-    filenameDownload: z.string(),
     size: documentSizeValidation
   })
 })
@@ -41,11 +51,16 @@ export const deleteDocumentSchema = z.object({
   documentKey: z.string()
 })
 
-export const editDocumentSchema = addDocumentSchema
-  .omit({ file: true })
-  .extend({
-    key: z.string()
-  })
+export const editDocumentSchema = z.object({
+  key: z.string(),
+  beneficiaryId: z.string(errorMessages),
+  type: z.nativeEnum(DocumentType, {
+    ...errorMessages,
+    required_error: 'Veuillez renseigner le type du document'
+  }),
+  tags: z.array(z.string()),
+  confidential: z.boolean().default(false)
+})
 
 export const createUploadUrlSchema = z.object({
   name: z.string(),
@@ -56,6 +71,7 @@ export const createUploadUrlSchema = z.object({
 export const createViewUrlSchema = z.object({ key: z.string() })
 
 type AddDocumentInput = z.infer<typeof addDocumentSchema>
+type UploadBrowserDocumentInput = z.infer<typeof uploadBrowserDocumentSchema>
 type EditDocumentInput = z.infer<typeof editDocumentSchema>
 type DeleteDocumentInput = z.infer<typeof deleteDocumentSchema>
 type CreateUploadUrlInput = z.infer<typeof createUploadUrlSchema>
@@ -66,7 +82,8 @@ export type {
   EditDocumentInput,
   DeleteDocumentInput,
   CreateUploadUrlInput,
-  CreateViewUrlInput
+  CreateViewUrlInput,
+  UploadBrowserDocumentInput
 }
 export const getDocumentKeySchema = z.object({
   key: z.string().uuid()
