@@ -7,7 +7,10 @@
         :key="document.key"
         class="documentlist__item"
       >
-        <BeneficiaryDocumentItem :document="document" />
+        <BeneficiaryDocument
+          :document="document"
+          @refresh-documents="emit('refreshDocuments')"
+        />
       </div>
     </div>
   </div>
@@ -19,6 +22,10 @@
   defineProps<{
     documentType: DocumentType
     documents: Document[]
+  }>()
+
+  const emit = defineEmits<{
+    (e: 'refreshDocuments'): void
   }>()
 </script>
 

@@ -3,18 +3,22 @@
     <BeneficiaryDocumentType
       :document-type="DocumentType.Cerfa"
       :documents="cerfas"
+      @refresh-documents="refresh"
     />
     <BeneficiaryDocumentType
       :document-type="DocumentType.Rapports"
       :documents="rapports"
+      @refresh-documents="refresh"
     />
     <BeneficiaryDocumentType
       :document-type="DocumentType.Justificatifs"
       :documents="justificatifs"
+      @refresh-documents="refresh"
     />
     <BeneficiaryDocumentType
       :document-type="DocumentType.HistoriqueCourrier"
       :documents="courriers"
+      @refresh-documents="refresh"
     />
   </div>
 </template>
@@ -27,9 +31,12 @@
 
   const props = defineProps<{ beneficiaryId: string }>()
 
-  const { data: documents } = useAsyncData<Document[]>(fetchDocuments, {
-    default: () => []
-  })
+  const { data: documents, refresh } = useAsyncData<Document[]>(
+    fetchDocuments,
+    {
+      default: () => []
+    }
+  )
 
   onMounted(async () => {
     const tab = route.hash.slice(1)
