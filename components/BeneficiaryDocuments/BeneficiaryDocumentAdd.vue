@@ -11,7 +11,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { Document } from '@prisma/client'
   import BeneficiaryDocumentAddForm from './BeneficiaryDocumentAddForm.vue'
 
   const modal = useModal()
@@ -21,7 +20,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'added', document: Document): void
+    (e: 'refreshDocuments'): void
   }>()
 
   function onAdd() {
@@ -35,8 +34,9 @@
     )
   }
 
-  function onDocumentAdded(document: Document) {
-    emit('added', document)
+  function onDocumentAdded() {
+    emit('refreshDocuments')
+    modal.close()
   }
 </script>
 

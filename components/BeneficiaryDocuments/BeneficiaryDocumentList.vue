@@ -26,7 +26,10 @@
       />
     </div>
     <div class="documents_actions">
-      <BeneficiaryDocumentAdd :beneficiary-id="beneficiaryId" />
+      <BeneficiaryDocumentAdd
+        :beneficiary-id="beneficiaryId"
+        @refresh-documents="refresh"
+      />
     </div>
   </div>
 </template>
