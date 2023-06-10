@@ -94,7 +94,7 @@
 
 <script setup lang="ts">
   import { Document } from '@prisma/client'
-  import BeneficiaryDocumentFormEdition from './BeneficiaryDocumentFormEdition.vue'
+  import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
   import { getDocumenTagClass } from '~/client/classes/document'
   import { documentTagOptions } from '~/client/options/document'
   import { EditDocumentInput } from '~/server/schema'
@@ -145,7 +145,7 @@
   function onEdit() {
     modal.open(
       'Modifier le document',
-      BeneficiaryDocumentFormEdition,
+      BeneficiaryDocumentEditForm,
       { document: props.document },
       {
         updateDocument: onUpdateDocument

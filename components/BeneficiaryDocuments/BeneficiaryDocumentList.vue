@@ -1,25 +1,36 @@
 <template>
-  <div v-if="documents?.length">
-    <BeneficiaryDocumentType
-      :document-type="DocumentType.Cerfa"
-      :documents="cerfas"
-      @refresh-documents="refresh"
-    />
-    <BeneficiaryDocumentType
-      :document-type="DocumentType.Rapports"
-      :documents="rapports"
-      @refresh-documents="refresh"
-    />
-    <BeneficiaryDocumentType
-      :document-type="DocumentType.Justificatifs"
-      :documents="justificatifs"
-      @refresh-documents="refresh"
-    />
-    <BeneficiaryDocumentType
-      :document-type="DocumentType.HistoriqueCourrier"
-      :documents="courriers"
-      @refresh-documents="refresh"
-    />
+  <div class="documents_container">
+    <div
+      v-if="documents?.length"
+      class="documents_content"
+    >
+      <BeneficiaryDocumentType
+        :document-type="DocumentType.Cerfa"
+        :documents="cerfas"
+        @refresh-documents="refresh"
+      />
+      <BeneficiaryDocumentType
+        :document-type="DocumentType.Rapports"
+        :documents="rapports"
+        @refresh-documents="refresh"
+      />
+      <BeneficiaryDocumentType
+        :document-type="DocumentType.Justificatifs"
+        :documents="justificatifs"
+        @refresh-documents="refresh"
+      />
+      <BeneficiaryDocumentType
+        :document-type="DocumentType.HistoriqueCourrier"
+        :documents="courriers"
+        @refresh-documents="refresh"
+      />
+    </div>
+    <div class="documents_actions">
+      <BeneficiaryDocumentAdd
+        :beneficiary-id="beneficiaryId"
+        @refresh-documents="refresh"
+      />
+    </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -72,3 +83,13 @@
   )
   const rapports = computed(() => getDocumentsByType(DocumentType.Rapports))
 </script>
+
+<style>
+  .documents_container {
+    display: flex;
+  }
+
+  .documents_content {
+    flex: 0 0 75%;
+  }
+</style>
