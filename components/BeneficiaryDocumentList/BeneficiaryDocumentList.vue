@@ -3,22 +3,22 @@
     <BeneficiaryDocumentType
       :document-type="DocumentType.Cerfa"
       :documents="cerfas"
-      :refetch-documents="refresh"
+      @refresh-documents="refresh"
     />
     <BeneficiaryDocumentType
       :document-type="DocumentType.Rapports"
       :documents="rapports"
-      :refetch-documents="refresh"
+      @refresh-documents="refresh"
     />
     <BeneficiaryDocumentType
       :document-type="DocumentType.Justificatifs"
       :documents="justificatifs"
-      :refetch-documents="refresh"
+      @refresh-documents="refresh"
     />
     <BeneficiaryDocumentType
       :document-type="DocumentType.HistoriqueCourrier"
       :documents="courriers"
-      :refetch-documents="refetchDocuments"
+      @refresh-documents="refresh"
     />
   </div>
 </template>
@@ -37,11 +37,6 @@
       default: () => []
     }
   )
-
-  const refetchDocuments = () => {
-    console.log('toto')
-    refresh()
-  }
 
   onMounted(async () => {
     const tab = route.hash.slice(1)

@@ -9,7 +9,7 @@
       >
         <BeneficiaryDocument
           :document="document"
-          :on-document-updated="onDocumentUpdated"
+          @refresh-documents="emit('refreshDocuments')"
         />
       </div>
     </div>
@@ -19,16 +19,14 @@
   import { Document, DocumentType } from '@prisma/client'
   import { documentTypeLabels } from '~/client/options/document'
 
-  const props = defineProps<{
+  defineProps<{
     documentType: DocumentType
     documents: Document[]
-    refetchDocuments: () => void
   }>()
 
-  const onDocumentUpdated = () => {
-    console.log('toto')
-    props.refetchDocuments()
-  }
+  const emit = defineEmits<{
+    (e: 'refreshDocuments'): void
+  }>()
 </script>
 
 <style lang="scss">

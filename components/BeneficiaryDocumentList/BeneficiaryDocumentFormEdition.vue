@@ -47,7 +47,9 @@
     document: Doc
   }>()
 
-  const emit = defineEmits<{ (e: 'edited', values: EditDocumentInput): void }>()
+  const emit = defineEmits<{
+    (e: 'updateDocument', values: EditDocumentInput): void
+  }>()
 
   const authStore = useAuthStore()
 
@@ -71,6 +73,6 @@
   })
 
   const onSubmit = handleSubmit(values => {
-    emit('edited', values)
+    emit('updateDocument', values)
   })
 </script>
