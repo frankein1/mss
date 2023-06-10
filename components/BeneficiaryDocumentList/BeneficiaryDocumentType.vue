@@ -19,10 +19,9 @@
   import { Document, DocumentType } from '@prisma/client'
   import { documentTypeLabels } from '~/client/options/document'
 
-  const props = defineProps<{
+  defineProps<{
     documentType: DocumentType
     documents: Document[]
-    refetchDocuments: () => void
   }>()
 
   const emit = defineEmits<{
