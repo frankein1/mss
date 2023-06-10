@@ -60,7 +60,7 @@
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
-  const submitErrors = ref(null)
+  // const submitErrors = ref(null)
 
   const { handleSubmit } = useForm<UploadBrowserDocumentInput>({
     validationSchema: toTypedSchema(uploadBrowserDocumentSchema),
@@ -75,7 +75,7 @@
     isSubmitting.value = true
     const { file } = values
     const client = useTrpcClient()
-    const { url, key } = await client.documents.createUploadUrl.mutate({
+    const { /* url, */ key } = await client.documents.createUploadUrl.mutate({
       name: file.name,
       beneficiaryId: values.beneficiaryId,
       mimeType: file.type
@@ -84,30 +84,30 @@
     const data = new FormData()
     data.append('file', file)
 
-    await useFetch(url, {
-      method: 'POST',
-      headers: {
-        'Content-Type': file.type
-      },
-      body: data
+    // await useFetch(url, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': file.type
+    //   },
+    //   body: data
+    // })
+    //   .then(async () => {
+    await client.documents.add.mutate({
+      beneficiaryId: values.beneficiaryId,
+      type: values.type,
+      tags: values.tags,
+      confidential: values.confidential,
+      file: {
+        name: file.name,
+        key,
+        mimeType: file.type,
+        size: file.size
+      }
     })
-      .then(async () => {
-        await client.documents.add.mutate({
-          beneficiaryId: values.beneficiaryId,
-          type: values.type,
-          tags: values.tags,
-          confidential: values.confidential,
-          file: {
-            name: file.name,
-            key,
-            mimeType: file.type,
-            size: file.size
-          }
-        })
-        emit('newDocument')
-      })
-      .catch(error => {
-        submitErrors.value = error
-      })
+    emit('newDocument')
+    // })
+    // .catch(error => {
+    //   submitErrors.value = error
+    // })
   })
 </script>
