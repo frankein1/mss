@@ -111,7 +111,9 @@
     }
   )
 
-  const emit = defineEmits<{ (e: 'documentUpdated'): void }>()
+  const emit = defineEmits<{
+    (e: 'refreshDocuments'): void
+  }>()
 
   const modal = useModal()
 
@@ -146,14 +148,17 @@
       BeneficiaryDocumentFormEdition,
       { document: props.document },
       {
-        edited: (values: EditDocumentInput) => {
-          useTrpcClient().documents.edit.mutate(values)
-          emit('documentUpdated')
-          modal.close()
-        }
+        updateDocument: onUpdateDocument
       }
     )
   }
+
+  async function onUpdateDocument(values: EditDocumentInput) {
+    await useTrpcClient().documents.edit.mutate(values)
+    emit('refreshDocuments')
+    modal.close()
+  }
+
   function onDeleteDocument() {}
 </script>
 
