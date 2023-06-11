@@ -30,7 +30,7 @@
       {
         beneficiaryId: props.beneficiaryId
       },
-      { added: onDocumentAdded }
+      { newDocument: onDocumentAdded }
     )
   }
 
