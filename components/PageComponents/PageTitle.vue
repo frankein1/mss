@@ -10,9 +10,22 @@
 </template>
 
 <script setup lang="ts">
-  defineProps<{
-    title: string
-  }>()
+  import { Beneficiary } from '@prisma/client'
+  import { RouteTitle, Route } from '~/utils/routing'
+
+  const props = withDefaults(
+    defineProps<{
+      beneficiary?: Pick<
+        Beneficiary,
+        'firstName' | 'usualName' | 'birthName'
+      > | null
+    }>(),
+    { beneficiary: undefined }
+  )
+
+  const route = useRoute()
+  const routeTitle = route.name ? RouteTitle[route.name as Route] : undefined
+  const title = routeTitle ? routeTitle(props.beneficiary) : ''
 </script>
 
 <style lang="scss">

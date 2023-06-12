@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle title="Statistiques" />
+    <PageTitle />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <AtomTabs>
@@ -49,8 +49,12 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
+  import { Route } from '~/utils/routing'
 
-  // definePageMeta({ middleware: 'can-access-stats' })
+  definePageMeta({
+    name: Route.Stats
+    // middleware: 'can-access-stats' // TODO
+  })
 
   const trpcClient = useTrpcClient()
 
