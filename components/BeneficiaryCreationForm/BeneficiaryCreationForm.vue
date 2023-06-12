@@ -75,7 +75,7 @@
   import { BeneficiaryStatus } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { BeneficiaryReferent } from '~/utils/beneficiary'
+  import { BeneficiaryReferent } from '~/types/beneficiary'
   import {
     CreateBeneficiaryInput,
     createBeneficiarySchema

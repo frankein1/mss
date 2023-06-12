@@ -63,7 +63,7 @@
   import { Beneficiary, BeneficiaryRelative } from '@prisma/client'
   import { relativeRelationshipLabels } from '~/client/options/beneficiary'
   import { familySituationLabels } from '~/client/options/familySituation'
-  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/utils/beneficiary'
+  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/beneficiary'
   import { RoutePath } from '~/utils/routing'
 
   const props = withDefaults(
