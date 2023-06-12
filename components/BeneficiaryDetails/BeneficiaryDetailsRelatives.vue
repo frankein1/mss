@@ -33,8 +33,8 @@
           <template v-else>{{
             getBeneficiaryDisplayName(names(relative))
           }}</template>
-          -
-          {{ typeLabel(relative) }}
+          <template v-if="relative.relationship">-</template>
+          {{ relationshipLabel(relative) }}
         </span>
         <span
           v-if="hasCity(relative) || hasPhone(relative) || hasEmail(relative)"
@@ -106,7 +106,7 @@
     }
   }
 
-  function typeLabel({
+  function relationshipLabel({
     relationship
   }: Pick<BeneficiaryRelative, 'relationship'>) {
     if (!relationship) {
