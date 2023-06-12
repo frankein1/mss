@@ -6,6 +6,7 @@
     <BeneficiaryFormTaxHousehold
       :tax-household="field"
       :index="idx"
+      :current-beneficiary-id="currentBeneficiaryId"
       @select-beneficiary="updateBeneficiary"
       @remove-tax-household="remove(idx)"
     />
@@ -25,6 +26,10 @@
   import { v4 } from 'uuid'
   import { CreateOrUpdateTaxHouseholdInput } from '~/server/schema'
   import { BeneficiarySearchResult } from '~/types/beneficiary'
+
+  defineProps<{
+    currentBeneficiaryId: string
+  }>()
 
   const { push, remove, fields } =
     useFieldArray<CreateOrUpdateTaxHouseholdInput>('taxHousehold.taxHouseholds')

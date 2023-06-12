@@ -45,7 +45,8 @@ type GetHistoryInput = z.infer<typeof getHistorySchema>
 export type { GetDocumentsInput, GetHistoryInput }
 
 export const searchBeneficiarySchema = z.object({
-  query: z.string()
+  query: z.string(),
+  excludedIds: z.array(z.string().uuid()).optional()
 })
 
 export type SearchBeneficiaryInput = z.infer<typeof searchBeneficiarySchema>
