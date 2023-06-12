@@ -1,6 +1,6 @@
 <template>
   <PageContainer class="page-container">
-    <PageTitle title="Créer un.e bénéficiaire">
+    <PageTitle>
       <div>
         Les champs avec <span class="color-red">*</span> sont obligatoires
       </div>
@@ -16,7 +16,11 @@
 
 <script setup lang="ts">
   import { CreateBeneficiaryInput } from '~/server/schema'
-  import { RoutePath } from '~/utils/routing'
+  import { Route, RoutePath } from '~/utils/routing'
+
+  definePageMeta({
+    name: Route.BeneficiariesAdd
+  })
 
   const trpcClient = useTrpcClient()
 

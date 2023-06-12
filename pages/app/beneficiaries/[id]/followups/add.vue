@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle :title="title" />
+    <PageTitle :beneficiary="beneficiary" />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -32,16 +32,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath } from '~/utils/routing'
+  import { Route, RoutePath } from '~/utils/routing'
   import { AddFollowupInput } from '~/server/schema/followup.schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 
-  // FIXME: Missing permissions
-  // definePageMeta({
-  //   middleware: 'is-beneficiary-referent'
-  // })
+  definePageMeta({
+    name: Route.BeneficiaryFollowupAdd
+    //   middleware: 'is-beneficiary-referent' // TODO
+  })
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -84,13 +83,6 @@
       return "La liste des organismes prescripteurs de votre structure n'a pas pu être chargée."
     }
     return ''
-  })
-
-  const title = computed(() => {
-    if (!beneficiary.value) {
-      return 'Entretien avec un·e bénéficiaire'
-    }
-    return `Entretien avec ${getBeneficiaryDisplayName(beneficiary.value)}`
   })
 
   async function onAddFollowup(followup: AddFollowupInput) {

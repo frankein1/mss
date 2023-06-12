@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle title="Modifier ma structure" />
+    <PageTitle />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -38,9 +38,12 @@
 <script lang="ts" setup>
   import { EditCurrentUserStructureInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
+  import { Route } from '~/utils/routing'
 
-  // FIXME: Missing permissions
-  // definePageMeta({ middleware: 'can-edit-organisation' })
+  definePageMeta({
+    name: Route.StructureEdit
+    // middleware: 'can-edit-organisation' // TODO
+  })
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

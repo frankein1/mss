@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle :title="title" />
+    <PageTitle :beneficiary="beneficiary" />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -24,7 +24,11 @@
 
 <script lang="ts" setup>
   import { UpdateBeneficiaryInput } from '~/server/schema'
-  import { RoutePath } from '~/utils/routing'
+  import { Route, RoutePath } from '~/utils/routing'
+
+  definePageMeta({
+    name: Route.BeneficiaryEdit
+  })
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
@@ -41,12 +45,6 @@
   const beneficiary = computed(() => data.value?.beneficiary)
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
-
-  const title = computed(() =>
-    beneficiary.value
-      ? `Modifier ${getBeneficiaryDisplayName(beneficiary.value)}`
-      : ''
-  )
 
   async function onUpdateBeneficiary(beneficiary: UpdateBeneficiaryInput) {
     isSubmitting.value = true
