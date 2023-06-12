@@ -8,7 +8,6 @@ const BeneficiariesRoute = `${AppRoute}/beneficiaries`
 
 const BeneficiaryRoute = (
   beneficiaryId: string,
-
   options?: {
     tab?: BeneficiaryTab
     item?: string

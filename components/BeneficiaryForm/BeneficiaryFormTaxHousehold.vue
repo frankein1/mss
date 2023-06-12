@@ -106,7 +106,7 @@
   import { FieldEntry } from 'vee-validate'
   import { taxHouseHoldRelationshipOptions } from '~/client/options/beneficiary'
   import { CreateOrUpdateTaxHouseholdInput } from '~/server/schema'
-  import { BeneficiarySearchResult } from '~/utils'
+  import { BeneficiarySearchResult } from '~/types/beneficiary'
 
   const props = defineProps<{
     taxHousehold: FieldEntry<CreateOrUpdateTaxHouseholdInput>

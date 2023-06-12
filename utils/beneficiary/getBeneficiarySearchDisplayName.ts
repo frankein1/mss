@@ -1,5 +1,5 @@
 import { getBeneficiaryDisplayName } from './getBeneficiaryDisplayName'
-import { BeneficiarySearchResult } from './types'
+import { BeneficiarySearchResult } from '~/types/beneficiary'
 
 export function getBeneficiarySearchDisplayName(
   beneficiary: BeneficiarySearchResult

@@ -1,11 +1,6 @@
-import type { Beneficiary } from '@prisma/client'
 import { Route } from './routes'
 import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
-
-type BeneficiaryNames = Pick<
-  Beneficiary,
-  'firstName' | 'usualName' | 'birthName'
->
+import { BeneficiaryNames } from '~/types/beneficiary'
 
 type RouteTitleFn = (beneficiary?: BeneficiaryNames | null) => string
 

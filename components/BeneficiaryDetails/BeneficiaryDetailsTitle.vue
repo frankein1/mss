@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryWithReferents } from '~/utils'
+  import { BeneficiaryWithReferents } from '~/types/beneficiary'
   import { readableFileNumber } from '~/utils/readableFileNumber'
 
   const props = withDefaults(
