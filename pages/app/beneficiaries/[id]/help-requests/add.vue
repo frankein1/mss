@@ -40,7 +40,7 @@
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~/utils/constants/alert'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema/helpRequest.schema'
 
   // FIXME: Missing permissions
@@ -56,7 +56,7 @@
   const formContainer = ref<HTMLElement | null>(null)
 
   const beneficiaryId = route.params.id as string
-  const beneficiaryHistoryPath = Routes.Beneficiary(beneficiaryId, {
+  const beneficiaryHistoryPath = RoutePath.Beneficiary(beneficiaryId, {
     tab: BeneficiaryTab.History
   })
 

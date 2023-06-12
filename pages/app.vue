@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   const route = useRoute()
 
@@ -14,8 +14,8 @@
   useLogoutInactiveUser()
 
   onMounted(() => {
-    if (route.path === Routes.App()) {
-      navigateTo(Routes.Overview())
+    if (route.path === RoutePath.App()) {
+      navigateTo(RoutePath.Overview())
     }
   })
 </script>

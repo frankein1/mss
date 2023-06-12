@@ -7,7 +7,7 @@ import {
   getStructureFollowupTypesHandler
 } from '../controller/config.controller'
 import { protectedProcedure, router } from '~/server/trpc'
-import { Routes } from '~/utils/routing/routes'
+import { RoutePath } from '~/utils/routing'
 
 export const configRouter = router({
   getAgents: protectedProcedure.query(getAgentsHandler),
@@ -30,7 +30,7 @@ export const configRouter = router({
 
     const params = new URLSearchParams({
       referrer: keycloakClientId,
-      referrer_uri: `${appUrl}${Routes.Account()}`
+      referrer_uri: `${appUrl}${RoutePath.Account()}`
     })
     return `${inclusionConnectAccountUrlBase}?${params}`
   }),

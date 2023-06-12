@@ -67,7 +67,7 @@
 
 <script setup lang="ts">
   import type { HistoryItem, HistoryItemComment } from './types'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
   import {
     canEditBeneficiaryFollowup,
     canEditBeneficiaryHelpRequest,
@@ -95,8 +95,8 @@
 
   const editLink = computed(() => {
     const routeWithParams = props.history.isFollowup
-      ? Routes.BeneficiaryFollowupEdit
-      : Routes.BeneficiaryHelpRequestEdit
+      ? RoutePath.BeneficiaryFollowupEdit
+      : RoutePath.BeneficiaryHelpRequestEdit
     return routeWithParams(props.history.beneficiaryId, props.history.id)
   })
 

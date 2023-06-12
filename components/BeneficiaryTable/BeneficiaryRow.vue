@@ -42,7 +42,7 @@
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { beneficiaryStatusLabels } from '~/client/options/beneficiary'
   import { nameOrEmpty } from '~/utils/nameOrEmpty'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   const route = useRoute()
 
@@ -51,7 +51,7 @@
   }>()
 
   const beneficiaryLink = computed(() =>
-    Routes.Beneficiary(props.beneficiary.id, { originPage: route.path })
+    RoutePath.Beneficiary(props.beneficiary.id, { originPage: route.path })
   )
 
   const followUpTypes = computed(() =>

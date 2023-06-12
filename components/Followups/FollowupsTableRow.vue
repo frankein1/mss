@@ -59,7 +59,7 @@
   import { canAccessProtectedDataInHelpRequest } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()
   const user = authStore.getAuthUser
@@ -70,7 +70,7 @@
   }>()
 
   const followupPath = computed(() =>
-    Routes.Beneficiary(props.followup.beneficiary.id, {
+    RoutePath.Beneficiary(props.followup.beneficiary.id, {
       tab: BeneficiaryTab.History,
       item: props.followup.id,
       originPage: route.path,

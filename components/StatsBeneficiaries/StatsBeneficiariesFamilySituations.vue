@@ -20,7 +20,7 @@
       <p v-else>
         Commencez à
         <NuxtLink
-          :to="Routes.BeneficiariesAdd()"
+          :to="RoutePath.BeneficiariesAdd()"
           target="_self"
           >créer des fiches de bénéficiaires</NuxtLink
         >
@@ -35,7 +35,7 @@
   import { BeneficiaryFamilySituation } from '@prisma/client'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
   import { getStatLabel } from '~/client/options/stat'
   import { familySituationLabels } from '~/client/options/familySituation'
 
