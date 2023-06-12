@@ -31,7 +31,7 @@
     currentBeneficiaryId: string
   }>()
 
-  const { push, remove, fields } =
+  const { push, remove, update, fields } =
     useFieldArray<CreateOrUpdateTaxHouseholdInput>('taxHousehold.taxHouseholds')
 
   function updateBeneficiary({
@@ -42,6 +42,9 @@
     beneficiary: BeneficiarySearchResult | null
   }) {
     const field = fields.value[index]
-    field.value.linkedBeneficiary = beneficiary
+    update(index, {
+      ...field.value,
+      linkedBeneficiary: beneficiary
+    })
   }
 </script>
