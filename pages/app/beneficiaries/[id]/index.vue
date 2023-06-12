@@ -1,7 +1,7 @@
 <template>
   <PageContainer v-if="beneficiary">
     <div class="beneficiarytitle__container">
-      <PageTitle :title="title" />
+      <PageTitle :beneficiary="beneficiary" />
       <BeneficiaryDetailsHeader
         :beneficiary-id="beneficiaryId"
         :can-delete="canDelete"
@@ -52,6 +52,11 @@
   import { canDeleteBeneficiary } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { Route } from '~/utils/routing'
+
+  definePageMeta({
+    name: Route.Beneficiary
+  })
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
@@ -64,10 +69,6 @@
   const beneficiary = computed(() => data.value?.beneficiary)
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
-
-  const title = computed(() => {
-    return beneficiary.value ? getBeneficiaryDisplayName(beneficiary.value) : ''
-  })
 
   const authUser = useAuthStore().getAuthUser
   const canDelete = computed(() => {

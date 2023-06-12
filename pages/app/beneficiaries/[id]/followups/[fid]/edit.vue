@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle :title="title" />
+    <PageTitle :beneficiary="followup?.beneficiary" />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -32,16 +32,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath } from '~/utils/routing'
+  import { Route, RoutePath } from '~/utils/routing'
   import { EditFollowupInput } from '~/server/schema'
 
-  // TODO: page middlewares
-  // definePageMeta({
-  //   middleware: ['owns-interview', 'is-beneficiary-referent']
-  // })
+  definePageMeta({
+    name: Route.BeneficiaryFollowupEdit
+    //   middleware: ['owns-interview', 'is-beneficiary-referent'] // TOOD
+  })
 
   const route = useRoute()
   const snackbar = useSnackbar()
@@ -90,14 +89,6 @@
       return "La liste des organismes prescripteurs de votre structure n'a pas pu être chargée."
     }
     return ''
-  })
-
-  const title = computed(() => {
-    if (!followup.value) {
-      return "Modifier l'entretien avec un·e bénéficiaire"
-    }
-    const { beneficiary } = followup.value
-    return `Modifier l'entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
   })
 
   async function onUpdateFollowup(followup: EditFollowupInput) {

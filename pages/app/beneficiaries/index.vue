@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle title="Bénéficiaires" />
+    <PageTitle />
     <BeneficiarySearchbar class="fr-mt-3w" />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
@@ -58,6 +58,11 @@
   import { AlertType } from '~/utils/constants/alert'
   import type { ErrorOutput, GetBeneficiariesOutput } from '~/server/routers'
   import type { BeneficiarySort } from '~/types/table'
+  import { Route } from '~/utils/routing'
+
+  definePageMeta({
+    name: Route.Beneficiaries
+  })
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()

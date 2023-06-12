@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle title="Accompagnements" />
+    <PageTitle />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <AtomTabs>
@@ -25,6 +25,11 @@
 <script lang="ts" setup>
   import { Tab } from 'vue3-tabs-component'
   import { HistoryTab } from '~/utils/constants/history'
+  import { Route } from '~/utils/routing'
+
+  definePageMeta({
+    name: Route.History
+  })
 </script>
 
 <style scoped>

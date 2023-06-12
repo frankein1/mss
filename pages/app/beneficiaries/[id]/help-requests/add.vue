@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle :title="title" />
+    <PageTitle :beneficiary="beneficiary" />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -37,16 +37,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath } from '~/utils/routing'
+  import { Route, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema/helpRequest.schema'
 
-  // FIXME: Missing permissions
-  // definePageMeta({
-  //   middleware: ['is-beneficiary-referent', 'can-add-help-requests']
-  // })
+  definePageMeta({
+    name: Route.BeneficiaryHelpRequestAdd
+    //   middleware: ['is-beneficiary-referent', 'can-add-help-requests'] // TODO
+  })
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -104,15 +103,6 @@
       return "La liste des organismes instructeurs de votre structure n'a pas pu être chargée."
     }
     return ''
-  })
-
-  const title = computed(() => {
-    if (!beneficiary.value) {
-      return "Instruction d'une demande d'aide"
-    }
-    return `Instruction d'une demande d'aide pour ${getBeneficiaryDisplayName(
-      beneficiary.value
-    )}`
   })
 
   async function onAddHelpRequest(helpRequest: CreateHelpRequestInput) {
