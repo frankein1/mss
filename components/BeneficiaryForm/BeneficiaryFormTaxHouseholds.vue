@@ -24,7 +24,7 @@
 <script setup lang="ts">
   import { v4 } from 'uuid'
   import { CreateOrUpdateTaxHouseholdInput } from '~/server/schema'
-  import { BeneficiarySearchResult } from '~/utils'
+  import { BeneficiarySearchResult } from '~/types/beneficiary'
 
   const { push, remove, fields } =
     useFieldArray<CreateOrUpdateTaxHouseholdInput>('taxHousehold.taxHouseholds')

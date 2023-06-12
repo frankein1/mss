@@ -97,7 +97,7 @@
     BeneficiaryRelativeWithLinkedBeneficiary,
     BeneficiaryReferent,
     BeneficiaryWithReferents
-  } from '~/utils/beneficiary'
+  } from '~/types/beneficiary'
   import {
     UpdateBeneficiaryInput,
     updateBeneficiarySchema

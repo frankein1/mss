@@ -1,8 +1,8 @@
-import { Beneficiary } from '@prisma/client'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
+import type { BeneficiaryNames } from '~/types/beneficiary'
 
 export function getBeneficiaryDisplayName(
-  beneficiary: Pick<Beneficiary, 'firstName' | 'usualName' | 'birthName'>
+  beneficiary: BeneficiaryNames
 ): string {
   let lastname = ''
   if (beneficiary.usualName) {
