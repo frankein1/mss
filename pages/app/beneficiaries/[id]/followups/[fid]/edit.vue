@@ -35,7 +35,7 @@
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~/utils/constants/alert'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
   import { EditFollowupInput } from '~/server/schema'
 
   // TODO: page middlewares
@@ -105,7 +105,7 @@
     try {
       await trpcClient.followup.update.mutate(followup)
       navigateTo(
-        Routes.Beneficiary(followup.beneficiaryId, {
+        RoutePath.Beneficiary(followup.beneficiaryId, {
           tab: BeneficiaryTab.History
         })
       )

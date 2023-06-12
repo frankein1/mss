@@ -42,7 +42,7 @@
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~~/utils/constants/alert'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   // FIXME: Missing permissions
   // definePageMeta({
@@ -123,7 +123,7 @@
     try {
       await trpcClient.helpRequest.update.mutate(helpRequest)
       return navigateTo(
-        Routes.Beneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
+        RoutePath.Beneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
       )
     } catch {
       snackbar.error("La mise à jour de l'instruction a échoué.", () =>

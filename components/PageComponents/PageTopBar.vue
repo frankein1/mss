@@ -23,7 +23,7 @@
   } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { Menu } from '~/types/menu'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()
   const userName = authStore.userName
@@ -35,13 +35,13 @@
   if (user && structureId) {
     menus.push({
       label: 'Mon compte',
-      to: Routes.Account(),
+      to: RoutePath.Account(),
       icon: 'fr-icon-user-line'
     })
     if (canCreateUser(user, { structureId })) {
       menus.push({
         label: 'Utilisateurs',
-        to: Routes.Users(),
+        to: RoutePath.Users(),
         icon: 'fr-icon-team-line'
       })
     }
@@ -49,14 +49,14 @@
     if (canEditStructure(user, { structureId })) {
       menus.push({
         label: 'Structure',
-        to: Routes.StructureEdit(),
+        to: RoutePath.StructureEdit(),
         icon: 'fr-icon-home-4-line'
       })
     }
 
     menus.push({
       label: 'Déconnexion',
-      href: Routes.Logout(),
+      href: RoutePath.Logout(),
       icon: 'fr-icon-logout-box-r-line'
     })
   }

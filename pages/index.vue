@@ -11,7 +11,7 @@
         </p>
         <NuxtLink
           class="fr-btn"
-          :to="Routes.Register()"
+          :to="RoutePath.Register()"
           target="_self"
         >
           Enregistrer sa structure
@@ -81,7 +81,7 @@
         </ul>
         <NuxtLink
           class="fr-btn"
-          :to="Routes.Register()"
+          :to="RoutePath.Register()"
           target="_self"
         >
           Enregistrer sa structure
@@ -151,7 +151,7 @@
 </template>
 
 <script setup>
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   definePageMeta({
     layout: 'landing'
