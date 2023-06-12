@@ -19,7 +19,7 @@
       >
         <div class="fr-sidemenu__title">
           <NuxtLink
-            :to="Routes.Overview()"
+            :to="RoutePath.Overview()"
             target="_self"
             title="Retour au tableau de bord"
           >
@@ -65,7 +65,7 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              :to="Routes.DeclarationAccessibilite()"
+              :to="RoutePath.DeclarationAccessibilite()"
               target="_self"
             >
               Accessibilité: non conforme
@@ -78,21 +78,21 @@
 </template>
 
 <script setup>
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   const MENU_ITEMS = [
     {
-      to: Routes.Overview(),
+      to: RoutePath.Overview(),
       label: 'Tableau de bord',
       icon: 'fr-icon-home-4-line'
     },
     {
-      to: Routes.Beneficiaries(),
+      to: RoutePath.Beneficiaries(),
       label: 'Bénéficiaires',
       icon: 'fr-icon-user-line'
     },
     {
-      to: Routes.History(),
+      to: RoutePath.History(),
       label: 'Accompagnements',
       icon: 'fr-icon-inbox-archive-line'
     }
@@ -100,7 +100,7 @@
 
   // if (permissionsStore.canAccessStats) {
   MENU_ITEMS.push({
-    to: Routes.Stats(),
+    to: RoutePath.Stats(),
     label: 'Statistiques',
     icon: 'fr-icon-pie-chart-2-line'
   })

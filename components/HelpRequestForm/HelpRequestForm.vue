@@ -37,7 +37,7 @@
           <span class="fr-icon-information-line fr-fi--sm">
             <NuxtLink
               v-if="canEditStructure"
-              :to="Routes.StructureEdit()"
+              :to="RoutePath.StructureEdit()"
               target="_self"
             >
               Personnaliser les objets des demandes de ma structure.
@@ -250,7 +250,7 @@
   import { useAuthStore } from '~/store/auth'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { toOptions, withEmptyValue } from '~/utils/options'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
 
   const authStore = useAuthStore()

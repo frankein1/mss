@@ -62,7 +62,7 @@
           <span class="fr-icon-information-line fr-fi--sm">
             <NuxtLink
               v-if="canEditStructure"
-              :to="Routes.StructureEdit()"
+              :to="RoutePath.StructureEdit()"
               target="_self"
             >
               Personnaliser les objets des entretiens de ma structure.
@@ -268,7 +268,7 @@
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { canCreatePrescribingOrganization } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'
 
   const authStore = useAuthStore()

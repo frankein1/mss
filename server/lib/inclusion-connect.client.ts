@@ -1,5 +1,5 @@
 import { generators } from 'openid-client'
-import { Routes } from '~/utils/routing/routes'
+import { RoutePath } from '~/utils/routing'
 
 export type InclusionConnectToken = {
   accessToken: string
@@ -173,8 +173,8 @@ function initClient() {
       issuer: keycloakIssuer,
       clientId: keycloakClientId,
       clientSecret: keycloakClientSecret,
-      redirectUri: `${appUrl}${Routes.SsoCallback()}`,
-      postLogoutRedirectUri: `${appUrl}${Routes.LogoutSuccess()}`
+      redirectUri: `${appUrl}${RoutePath.SsoCallback()}`,
+      postLogoutRedirectUri: `${appUrl}${RoutePath.LogoutSuccess()}`
     }
     client = new InclusionConnectClient(config)
   }

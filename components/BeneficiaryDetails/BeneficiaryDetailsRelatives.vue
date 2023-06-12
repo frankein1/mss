@@ -23,7 +23,7 @@
         <span class="information-line">
           <NuxtLink
             v-if="household && relative.linkedBeneficiary"
-            :to="`${Routes.Beneficiary(relative.linkedBeneficiary.id)}`"
+            :to="`${RoutePath.Beneficiary(relative.linkedBeneficiary.id)}`"
             class="fr-link fr-icon-links-line fr-link--icon-left"
             target="_self"
             >{{
@@ -64,7 +64,7 @@
   import { relativeRelationshipLabels } from '~/client/options/beneficiary'
   import { familySituationLabels } from '~/client/options/familySituation'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/utils/beneficiary'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   const props = withDefaults(
     defineProps<{

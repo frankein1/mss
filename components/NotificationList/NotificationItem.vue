@@ -35,7 +35,7 @@
 <script setup lang="ts">
   import { Beneficiary, Notification, NotificationType } from '@prisma/client'
   import { BeneficiaryTab } from '~~/utils/constants/beneficiary-tabs'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
   import { notificationTypeClasses } from '~/client/classes/notification'
   import { notificationTypeLabels } from '~/client/options/notification'
 
@@ -77,7 +77,7 @@
   }
 
   const itemLink = computed(() =>
-    Routes.Beneficiary(beneficiary.value.id, {
+    RoutePath.Beneficiary(beneficiary.value.id, {
       tab: getItemTab(),
       item: getItemId(),
       originPage: route.path

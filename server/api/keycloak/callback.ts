@@ -7,7 +7,7 @@ import {
   InclusionConnectToken
 } from '~/server/lib/inclusion-connect.client'
 import { signJwt } from '~/server/lib/jwt'
-import { Routes } from '~/utils/routing/routes'
+import { RoutePath } from '~/utils/routing'
 
 const config = useRuntimeConfig()
 const {
@@ -78,7 +78,7 @@ export default defineEventHandler(async event => {
 
   return sendRedirect(
     event,
-    (redirectUrl as string | undefined) || Routes.Overview()
+    (redirectUrl as string | undefined) || RoutePath.Overview()
   )
 })
 

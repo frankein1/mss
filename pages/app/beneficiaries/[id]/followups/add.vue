@@ -34,7 +34,7 @@
 <script lang="ts" setup>
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
   import { AddFollowupInput } from '~/server/schema/followup.schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 
@@ -98,7 +98,7 @@
     try {
       await trpcClient.followup.add.mutate(followup)
       navigateTo(
-        Routes.Beneficiary(beneficiaryId, {
+        RoutePath.Beneficiary(beneficiaryId, {
           tab: BeneficiaryTab.History
         })
       )

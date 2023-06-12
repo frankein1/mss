@@ -1,5 +1,5 @@
 import { onMounted, onUnmounted } from 'vue'
-import { Routes } from '~/utils/routing/routes'
+import { RoutePath } from '~/utils/routing'
 
 export function useLogoutInactiveUser() {
   const {
@@ -23,8 +23,8 @@ export function useLogoutInactiveUser() {
 
   function inactiveUserAction() {
     if (process.client) {
-      fetch(Routes.Logout()).then(() => {
-        navigateTo(Routes.LogoutSuccess() + '?inactive=true')
+      fetch(RoutePath.Logout()).then(() => {
+        navigateTo(RoutePath.LogoutSuccess() + '?inactive=true')
       })
     }
   }

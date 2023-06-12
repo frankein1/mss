@@ -24,7 +24,7 @@
 
 <script lang="ts" setup>
   import { UpdateBeneficiaryInput } from '~/server/schema'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
@@ -54,6 +54,6 @@
     await trpcClient.beneficiary.update.mutate(beneficiary)
     isSubmitting.value = false
 
-    navigateTo(`${Routes.Beneficiary(beneficiary.id)}`)
+    navigateTo(`${RoutePath.Beneficiary(beneficiary.id)}`)
   }
 </script>

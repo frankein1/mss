@@ -47,7 +47,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
   import { useAuthStore } from '~/store/auth'
 
   definePageMeta({
@@ -58,7 +58,7 @@
   const authStore = useAuthStore()
 
   const beneficiaryId = route.params.id as string
-  const backLink = Routes.Beneficiary(beneficiaryId)
+  const backLink = RoutePath.Beneficiary(beneficiaryId)
 
   const { data, pending, error } =
     await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({
