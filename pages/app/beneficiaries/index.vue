@@ -2,7 +2,7 @@
   <PageContainer>
     <PageBreadcrumb :links="Breadcrumb.Beneficiaries()" />
     <PageTitle :route="Route.Beneficiaries" />
-    <BeneficiarySearchbar class="fr-mt-3w" />
+    <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main class="main-container fr-py-3w">

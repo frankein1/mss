@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <PageBreadcrumb :links="Breadcrumb.Overview()" />
-    <BeneficiarySearchbar class="fr-mt-3w" />
+    <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <NotificationList />
     </div>
