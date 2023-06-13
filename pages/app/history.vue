@@ -2,7 +2,7 @@
   <PageContainer>
     <PageBreadcrumb :links="Breadcrumb.History()" />
     <PageTitle :route="Route.History" />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <AtomTabs>
           <Tab

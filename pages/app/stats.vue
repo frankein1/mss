@@ -2,7 +2,7 @@
   <PageContainer>
     <PageBreadcrumb :links="Breadcrumb.Stats()" />
     <PageTitle :route="Route.Stats" />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <AtomTabs>
           <Tab name="Bénéficiaires">
