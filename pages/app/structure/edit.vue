@@ -42,9 +42,7 @@
   import { Route, Breadcrumb } from '~/utils/routing'
 
   // TODO
-  // definePageMeta({
-  //   middleware: 'can-edit-organisation'
-  // })
+  // definePageMeta({ middleware: 'can-edit-organisation' })
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

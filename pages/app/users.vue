@@ -30,9 +30,7 @@
   import { Route, Breadcrumb } from '~/utils/routing'
 
   // TODO
-  // definePageMeta({
-  //   middleware: 'can-add-users'
-  // })
+  // definePageMeta({ middleware: 'can-add-users' })
 
   const {
     data: users,
