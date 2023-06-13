@@ -1,6 +1,7 @@
 import { AppContext, forbiddenError, invalidError } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query/security'
 import { canDeleteBeneficiary } from '~/server/query/security/rules'
+import { prismaClient } from '~/server/prisma'
 
 export const deleteBeneficiaryHandler = async ({
   input: { id },
@@ -19,5 +20,5 @@ export const deleteBeneficiaryHandler = async ({
     throw forbiddenError()
   }
 
-  await prismaClient?.beneficiary.delete({ where: { id } })
+  await prismaClient.beneficiary.delete({ where: { id } })
 }

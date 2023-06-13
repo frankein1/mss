@@ -3,7 +3,8 @@ import {
   getHelpRequestsHandler,
   getHelpRequestDetailsHandler,
   quickUpdateHelpRequestHandler,
-  updateHelpRequestHandler
+  updateHelpRequestHandler,
+  deleteHelpRequestHandler
 } from '~/server/controller/helpRequest'
 import {
   createHelpRequestSchema,
@@ -29,5 +30,6 @@ export const helpRequestRouter = router({
     .mutation(quickUpdateHelpRequestHandler),
   update: protectedProcedure
     .input(editHelpRequestSchema)
-    .mutation(updateHelpRequestHandler)
+    .mutation(updateHelpRequestHandler),
+  delete: protectedProcedure.input(idSchema).mutation(deleteHelpRequestHandler)
 })

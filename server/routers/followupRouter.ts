@@ -3,7 +3,8 @@ import {
   getFollowupsHandler,
   getFollowupDetailsHandler,
   quickUpdateFollowupHandler,
-  updateFollowupHandler
+  updateFollowupHandler,
+  deleteFollowupHandler
 } from '~/server/controller/followup'
 import {
   addFollowupSchema,
@@ -27,5 +28,6 @@ export const followupRouter = router({
     .mutation(updateFollowupHandler),
   getFollowupDetails: protectedProcedure
     .input(idSchema)
-    .query(getFollowupDetailsHandler)
+    .query(getFollowupDetailsHandler),
+  delete: protectedProcedure.input(idSchema).mutation(deleteFollowupHandler)
 })
