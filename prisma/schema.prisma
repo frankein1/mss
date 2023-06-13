@@ -266,7 +266,7 @@ model Followup {
   structure   Structure @relation(fields: [structureId], references: [id])
   structureId String    @map("structure_id") @db.Uuid
 
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
   createdById String? @map("created_by_id") @db.Uuid
@@ -346,7 +346,7 @@ model HelpRequest {
   structure   Structure @relation(fields: [structureId], references: [id])
   structureId String    @map("structure_id") @db.Uuid
 
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
   createdById String? @map("created_by_id") @db.Uuid
