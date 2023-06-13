@@ -25,7 +25,7 @@
         data-fr-opened="false"
         aria-controls="global-modal"
         type="button"
-        @click="emit('onDelete')"
+        @click="onDelete"
       >
         Supprimer
       </button>
@@ -35,8 +35,9 @@
 
 <script lang="ts" setup>
   import { Routes } from '~/utils/routing/routes'
+  import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
 
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
       beneficiaryId: string
       canDelete: boolean
@@ -45,8 +46,17 @@
   )
 
   const emit = defineEmits<{
-    (e: 'onDelete'): void
+    (e: 'deleted'): void
   }>()
+
+  function onDelete() {
+    useModal().open(
+      'Supprimer la fiche bénéficiaire',
+      BeneficiaryDeleteForm,
+      { beneficiaryId: props.beneficiaryId },
+      { deleted: () => emit('deleted') }
+    )
+  }
 </script>
 
 <style lang="scss" scoped>
