@@ -1,10 +1,7 @@
 <template>
   <PageContainer>
     <PageBreadcrumb :links="Breadcrumb.BeneficiaryFollowupAdd(beneficiary)" />
-    <PageTitle
-      :route="Route.BeneficiaryFollowupAdd"
-      :beneficiary="beneficiary"
-    />
+    <PageTitle :title="RouteTitle.BeneficiaryFollowupAdd(beneficiary)" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -37,7 +34,7 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { Route, RoutePath, Breadcrumb } from '~/utils/routing'
+  import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
   import { AddFollowupInput } from '~/server/schema/followup.schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 
