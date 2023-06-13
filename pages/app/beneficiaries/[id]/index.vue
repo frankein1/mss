@@ -2,10 +2,7 @@
   <PageContainer v-if="beneficiary">
     <PageBreadcrumb :links="Breadcrumb.Beneficiary(beneficiary, originPage)" />
     <div class="beneficiarytitle__container">
-      <PageTitle
-        :route="Route.Beneficiary"
-        :beneficiary="beneficiary"
-      />
+      <PageTitle :title="RouteTitle.Beneficiary(beneficiary || null)" />
       <BeneficiaryDetailsHeader
         :beneficiary-id="beneficiaryId"
         :can-delete="canDelete"
@@ -56,7 +53,7 @@
   import { canDeleteBeneficiary } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
-  import { Route, Breadcrumb } from '~/utils/routing'
+  import { Route, Breadcrumb, RouteTitle } from '~/utils/routing'
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string

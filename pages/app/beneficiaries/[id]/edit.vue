@@ -1,10 +1,7 @@
 <template>
   <PageContainer>
     <PageBreadcrumb :links="Breadcrumb.BeneficiaryEdit(beneficiary)" />
-    <PageTitle
-      :route="Route.BeneficiaryEdit"
-      :beneficiary="beneficiary"
-    />
+    <PageTitle :title="RouteTitle.BeneficiaryEdit(beneficiary || null)" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -28,7 +25,7 @@
 
 <script lang="ts" setup>
   import { UpdateBeneficiaryInput } from '~/server/schema'
-  import { Route, RoutePath, Breadcrumb } from '~/utils/routing'
+  import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string

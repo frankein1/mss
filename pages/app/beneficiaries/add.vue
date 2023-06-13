@@ -1,7 +1,7 @@
 <template>
   <PageContainer class="page-container">
     <PageBreadcrumb :links="Breadcrumb.BeneficiariesAdd()" />
-    <PageTitle :route="Route.BeneficiariesAdd">
+    <PageTitle :title="RouteTitle.BeneficiariesAdd()">
       <div>
         Les champs avec <span class="color-red">*</span> sont obligatoires
       </div>
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
   import { CreateBeneficiaryInput } from '~/server/schema'
-  import { Route, RoutePath, Breadcrumb } from '~/utils/routing'
+  import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
   const trpcClient = useTrpcClient()
 

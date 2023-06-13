@@ -10,20 +10,9 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryNames } from '~/types/beneficiary'
-  import { RouteTitle } from '~/utils/routing'
-
-  const props = withDefaults(
-    defineProps<{
-      route: keyof typeof RouteTitle
-      beneficiary?: BeneficiaryNames | null
-    }>(),
-    { beneficiary: undefined }
-  )
-
-  const title = computed(() =>
-    RouteTitle[props.route](props.beneficiary || null)
-  )
+  defineProps<{
+    title: string
+  }>()
 </script>
 
 <style lang="scss">
