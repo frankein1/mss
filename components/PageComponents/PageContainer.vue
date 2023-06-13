@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-container fr-py-5w fr-mx-2w">
+  <div class="fr-container fr-py-5w">
     <slot></slot>
   </div>
 </template>
