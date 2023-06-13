@@ -230,9 +230,7 @@
 
   const form = ref<HTMLFormElement>()
 
-  const referentOptions = computed(() =>
-    withEmptyValue(toOptions(props.agents, 'id', 'name'))
-  )
+  const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
 
   const disabledReferentOptions = computed(() =>
     props.agents.reduce(

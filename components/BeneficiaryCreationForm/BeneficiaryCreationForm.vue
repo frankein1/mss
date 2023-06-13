@@ -101,14 +101,7 @@
     validationSchema: toTypedSchema(createBeneficiarySchema),
     initialValues: {
       structureId: user.structureId || '',
-      referents: [],
-      aidantConnectAuthorized: false,
-      status: BeneficiaryStatus.Active,
-      firstName: '',
-      usualName: '',
-      birthDate: null,
-      phone1: '',
-      email: ''
+      status: BeneficiaryStatus.Active
     }
   })
 
@@ -116,9 +109,7 @@
     emit('saveBeneficiary', values)
   })
 
-  const referentOptions = computed(() =>
-    withEmptyValue(toOptions(props.agents, 'id', 'name'))
-  )
+  const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
 </script>
 
 <style>
