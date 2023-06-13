@@ -1,6 +1,7 @@
 <template>
   <PageContainer>
-    <PageTitle />
+    <PageBreadcrumb :links="Breadcrumb.Beneficiaries()" />
+    <PageTitle :route="Route.Beneficiaries" />
     <BeneficiarySearchbar class="fr-mt-3w" />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
@@ -58,7 +59,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import type { ErrorOutput, GetBeneficiariesOutput } from '~/server/routers'
   import type { BeneficiarySort } from '~/types/table'
-  import { Route } from '~/utils/routing'
+  import { Route, Breadcrumb } from '~/utils/routing'
 
   definePageMeta({
     name: Route.Beneficiaries

@@ -1,6 +1,10 @@
 <template>
   <PageContainer>
-    <PageTitle :beneficiary="beneficiary" />
+    <PageBreadcrumb :links="Breadcrumb.BeneficiaryEdit(beneficiary)" />
+    <PageTitle
+      :route="Route.BeneficiaryEdit"
+      :beneficiary="beneficiary"
+    />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -24,11 +28,7 @@
 
 <script lang="ts" setup>
   import { UpdateBeneficiaryInput } from '~/server/schema'
-  import { Route, RoutePath } from '~/utils/routing'
-
-  definePageMeta({
-    name: Route.BeneficiaryEdit
-  })
+  import { Route, RoutePath, Breadcrumb } from '~/utils/routing'
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
@@ -52,6 +52,6 @@
     await trpcClient.beneficiary.update.mutate(beneficiary)
     isSubmitting.value = false
 
-    navigateTo(`${RoutePath.Beneficiary(beneficiary.id)}`)
+    navigateTo(RoutePath.Beneficiary(beneficiary.id))
   }
 </script>
