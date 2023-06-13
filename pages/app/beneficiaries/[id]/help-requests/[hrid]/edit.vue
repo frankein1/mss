@@ -4,8 +4,9 @@
       :links="Breadcrumb.BeneficiaryHelpRequestEdit(helpRequest?.beneficiary)"
     />
     <PageTitle
-      :route="Route.BeneficiaryHelpRequestEdit"
-      :beneficiary="helpRequest?.beneficiary"
+      :title="
+        RouteTitle.BeneficiaryHelpRequestEdit(helpRequest?.beneficiary || null)
+      "
     />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -47,7 +48,7 @@
   import { EditHelpRequestInput } from '~/server/schema/helpRequest.schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~~/utils/constants/alert'
-  import { Breadcrumb, Route, RoutePath } from '~/utils/routing'
+  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
   // TODO
   // definePageMeta({

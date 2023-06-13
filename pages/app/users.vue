@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <PageBreadcrumb :links="Breadcrumb.Users()" />
-    <PageTitle :route="Route.Users" />
+    <PageTitle :title="RouteTitle.Users()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main class="main-container fr-p-5w">
@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Route, Breadcrumb } from '~/utils/routing'
+  import { Breadcrumb, RouteTitle } from '~/utils/routing'
 
   // TODO
   // definePageMeta({ middleware: 'can-add-users' })

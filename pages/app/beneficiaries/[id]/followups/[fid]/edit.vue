@@ -4,8 +4,7 @@
       :links="Breadcrumb.BeneficiaryFollowupEdit(followup?.beneficiary)"
     />
     <PageTitle
-      :route="Route.BeneficiaryFollowupEdit"
-      :beneficiary="followup?.beneficiary"
+      :title="RouteTitle.BeneficiaryFollowupEdit(followup?.beneficiary || null)"
     />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -40,7 +39,7 @@
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, Route, RoutePath } from '~/utils/routing'
+  import { Breadcrumb, RoutePath, RouteTitle } from '~/utils/routing'
   import { EditFollowupInput } from '~/server/schema'
 
   // TODO

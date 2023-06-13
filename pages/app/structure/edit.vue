@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <PageBreadcrumb :links="Breadcrumb.StructureEdit()" />
-    <PageTitle :route="Route.StructureEdit" />
+    <PageTitle :title="RouteTitle.StructureEdit()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -39,7 +39,7 @@
 <script lang="ts" setup>
   import { EditCurrentUserStructureInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { Route, Breadcrumb } from '~/utils/routing'
+  import { RouteTitle, Breadcrumb } from '~/utils/routing'
 
   // TODO
   // definePageMeta({ middleware: 'can-edit-organisation' })

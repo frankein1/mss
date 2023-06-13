@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <PageBreadcrumb :links="Breadcrumb.Stats()" />
-    <PageTitle :route="Route.Stats" />
+    <PageTitle :title="RouteTitle.Stats()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <AtomTabs>
@@ -50,7 +50,7 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
-  import { Route, Breadcrumb } from '~/utils/routing'
+  import { Breadcrumb, RouteTitle } from '~/utils/routing'
 
   // TODO
   // definePageMeta({ middleware: 'can-access-stats' })

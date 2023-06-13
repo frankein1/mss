@@ -4,8 +4,7 @@
       :links="Breadcrumb.BeneficiaryHelpRequestAdd(beneficiary)"
     />
     <PageTitle
-      :route="Route.BeneficiaryHelpRequestAdd"
-      :beneficiary="beneficiary"
+      :title="RouteTitle.BeneficiaryHelpRequestAdd(beneficiary || null)"
     />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -45,7 +44,7 @@
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, Route, RoutePath } from '~/utils/routing'
+  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema/helpRequest.schema'
 
   // TODO
