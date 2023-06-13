@@ -1,6 +1,12 @@
 <template>
   <PageContainer>
-    <PageTitle :beneficiary="followup?.beneficiary" />
+    <PageBreadcrumb
+      :links="Breadcrumb.BeneficiaryFollowupEdit(followup?.beneficiary)"
+    />
+    <PageTitle
+      :route="Route.BeneficiaryFollowupEdit"
+      :beneficiary="followup?.beneficiary"
+    />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -34,13 +40,13 @@
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~/utils/constants/alert'
-  import { Route, RoutePath } from '~/utils/routing'
+  import { Breadcrumb, Route, RoutePath } from '~/utils/routing'
   import { EditFollowupInput } from '~/server/schema'
 
-  definePageMeta({
-    name: Route.BeneficiaryFollowupEdit
-    //   middleware: ['owns-interview', 'is-beneficiary-referent'] // TOOD
-  })
+  // TOOD
+  // definePageMeta({
+  //   middleware: ['owns-interview', 'is-beneficiary-referent']
+  // })
 
   const route = useRoute()
   const snackbar = useSnackbar()

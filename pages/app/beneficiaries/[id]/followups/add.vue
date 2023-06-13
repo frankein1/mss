@@ -1,6 +1,10 @@
 <template>
   <PageContainer>
-    <PageTitle :beneficiary="beneficiary" />
+    <PageBreadcrumb :links="Breadcrumb.BeneficiaryFollowupAdd(beneficiary)" />
+    <PageTitle
+      :route="Route.BeneficiaryFollowupAdd"
+      :beneficiary="beneficiary"
+    />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -33,14 +37,14 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { Route, RoutePath } from '~/utils/routing'
+  import { Route, RoutePath, Breadcrumb } from '~/utils/routing'
   import { AddFollowupInput } from '~/server/schema/followup.schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 
-  definePageMeta({
-    name: Route.BeneficiaryFollowupAdd
-    //   middleware: 'is-beneficiary-referent' // TODO
-  })
+  // TODO
+  // definePageMeta({
+  //   middleware: 'is-beneficiary-referent'
+  // })
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

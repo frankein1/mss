@@ -1,6 +1,12 @@
 <template>
   <PageContainer>
-    <PageTitle :beneficiary="beneficiary" />
+    <PageBreadcrumb
+      :links="Breadcrumb.BeneficiaryHelpRequestAdd(beneficiary)"
+    />
+    <PageTitle
+      :route="Route.BeneficiaryHelpRequestAdd"
+      :beneficiary="beneficiary"
+    />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -39,13 +45,13 @@
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~/utils/constants/alert'
-  import { Route, RoutePath } from '~/utils/routing'
+  import { Breadcrumb, Route, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema/helpRequest.schema'
 
-  definePageMeta({
-    name: Route.BeneficiaryHelpRequestAdd
-    //   middleware: ['is-beneficiary-referent', 'can-add-help-requests'] // TODO
-  })
+  // TODO
+  // definePageMeta({
+  //   middleware: ['is-beneficiary-referent', 'can-add-help-requests']
+  // })
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -55,9 +61,6 @@
   const formContainer = ref<HTMLElement | null>(null)
 
   const beneficiaryId = route.params.id as string
-  const beneficiaryHistoryPath = RoutePath.Beneficiary(beneficiaryId, {
-    tab: BeneficiaryTab.History
-  })
 
   const { data: beneficiary, error: beneficiaryError } =
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
@@ -109,7 +112,9 @@
     isSubmitting.value = true
     try {
       await trpcClient.helpRequest.add.mutate(helpRequest)
-      navigateTo(beneficiaryHistoryPath)
+      navigateTo(
+        RoutePath.Beneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
+      )
     } catch {
       snackbar.error(
         "La création de l'instruction de demande d'aide a échoué.",

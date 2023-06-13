@@ -1,6 +1,7 @@
 <template>
   <PageContainer>
-    <PageTitle />
+    <PageBreadcrumb :links="Breadcrumb.StructureEdit()" />
+    <PageTitle :route="Route.StructureEdit" />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -38,12 +39,12 @@
 <script lang="ts" setup>
   import { EditCurrentUserStructureInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { Route } from '~/utils/routing'
+  import { Route, Breadcrumb } from '~/utils/routing'
 
-  definePageMeta({
-    name: Route.StructureEdit
-    // middleware: 'can-edit-organisation' // TODO
-  })
+  // TODO
+  // definePageMeta({
+  //   middleware: 'can-edit-organisation'
+  // })
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

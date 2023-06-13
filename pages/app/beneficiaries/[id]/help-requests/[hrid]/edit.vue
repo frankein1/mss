@@ -1,6 +1,12 @@
 <template>
   <PageContainer>
-    <PageTitle :beneficiary="helpRequest?.beneficiary" />
+    <PageBreadcrumb
+      :links="Breadcrumb.BeneficiaryHelpRequestEdit(helpRequest?.beneficiary)"
+    />
+    <PageTitle
+      :route="Route.BeneficiaryHelpRequestEdit"
+      :beneficiary="helpRequest?.beneficiary"
+    />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <main
@@ -41,12 +47,12 @@
   import { EditHelpRequestInput } from '~/server/schema/helpRequest.schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~~/utils/constants/alert'
-  import { Route, RoutePath } from '~/utils/routing'
+  import { Breadcrumb, Route, RoutePath } from '~/utils/routing'
 
-  definePageMeta({
-    name: Route.BeneficiaryHelpRequestEdit
-    //   middleware: ['owns-help-request', 'is-beneficiary-referent'] // TODO
-  })
+  // TODO
+  // definePageMeta({
+  //   middleware: ['owns-help-request', 'is-beneficiary-referent']
+  // })
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
