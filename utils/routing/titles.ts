@@ -2,18 +2,7 @@ import { Route } from './routes'
 import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
 import { BeneficiaryNames } from '~/types/beneficiary'
 
-type RouteTitleFn = (beneficiary?: BeneficiaryNames | null) => string
-
-export const RouteTitle: { [k in Route]: RouteTitleFn } = {
-  [Route.Index]: () => '',
-  [Route.Register]: () => '',
-  [Route.DeclarationAccessibilite]: () => "Déclaration d'accessibilité",
-  [Route.MentionsLegales]: () => 'Mentions légales',
-  [Route.Env]: () => '',
-  [Route.LogoutSuccess]: () => '',
-  [Route.DisabledAccount]: () => '',
-  [Route.Login]: () => '',
-
+export const RouteTitle = {
   [Route.App]: () => 'Accueil',
   [Route.Overview]: () => 'Tableau de bord',
 
@@ -30,7 +19,7 @@ export const RouteTitle: { [k in Route]: RouteTitleFn } = {
 
   [Route.Beneficiary]: (beneficiary?: BeneficiaryNames | null) =>
     beneficiary ? getBeneficiaryDisplayName(beneficiary) : '',
-  [Route.BeneficiaryPrint]: () => '',
+  [Route.BeneficiaryPrint]: () => 'Imprimer la fiche',
   [Route.BeneficiaryEdit]: (beneficiary?: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${getBeneficiaryDisplayName(beneficiary)}` : '',
 
@@ -54,5 +43,5 @@ export const RouteTitle: { [k in Route]: RouteTitleFn } = {
       ? `Modifier l'instruction de ${getBeneficiaryDisplayName(beneficiary)}`
       : "Modifier l'instruction d'un·e bénéficiaire",
 
-  [Route.History]: () => `Accompagnements`
+  [Route.History]: () => 'Accompagnements'
 }
