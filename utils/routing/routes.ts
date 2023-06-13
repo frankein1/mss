@@ -1,39 +1,6 @@
 import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 import { HistoryTab } from '~/utils/constants/history'
 
-const AppRoute = '/app'
-const ApiKeycloak = '/api/keycloak'
-
-const BeneficiariesRoute = `${AppRoute}/beneficiaries`
-
-const BeneficiaryRoute = (
-  beneficiaryId: string,
-  options?: {
-    tab?: BeneficiaryTab
-    item?: string
-    originPage?: string
-    originTab?: HistoryTab
-  }
-) => {
-  const base = `${BeneficiariesRoute}/${beneficiaryId}`
-  if (options) {
-    const { tab, ...params } = options
-    const tabHash = tab ? `#${tab}` : ''
-    if (Object.keys(params).length) {
-      const urlParams = new URLSearchParams(params)
-      return `${base}?${urlParams}${tabHash}`
-    }
-    return `${base}${tabHash}`
-  }
-  return base
-}
-
-const BeneficiaryFollowupsRoute = (beneficiaryId: string) =>
-  `${BeneficiaryRoute(beneficiaryId)}/followups`
-
-const BeneficiaryHelpRequestsRoute = (beneficiaryId: string) =>
-  `${BeneficiaryRoute(beneficiaryId)}/help-requests`
-
 export enum Route {
   Index = 'Index',
   Register = 'Register',
@@ -61,6 +28,42 @@ export enum Route {
   History = 'History'
 }
 
+const AppRoute = '/app'
+const ApiKeycloak = '/api/keycloak'
+
+const BeneficiariesRoute = `${AppRoute}/beneficiaries`
+
+const BeneficiaryRoute = (
+  beneficiaryId: string | undefined,
+  options?: {
+    tab?: BeneficiaryTab
+    item?: string
+    originPage?: Route.Overview | Route.Beneficiaries | Route.History
+    originTab?: HistoryTab
+  }
+) => {
+  if (!beneficiaryId) {
+    return ''
+  }
+  const base = `${BeneficiariesRoute}/${beneficiaryId}`
+  if (options) {
+    const { tab, ...params } = options
+    const tabHash = tab ? `#${tab}` : ''
+    if (Object.keys(params).length) {
+      const urlParams = new URLSearchParams(params)
+      return `${base}?${urlParams}${tabHash}`
+    }
+    return `${base}${tabHash}`
+  }
+  return base
+}
+
+const BeneficiaryFollowupsRoute = (beneficiaryId: string) =>
+  `${BeneficiaryRoute(beneficiaryId)}/followups`
+
+const BeneficiaryHelpRequestsRoute = (beneficiaryId: string) =>
+  `${BeneficiaryRoute(beneficiaryId)}/help-requests`
+
 export const RoutePath = {
   [Route.Index]: () => '/',
   [Route.Register]: () => '/register',
@@ -85,16 +88,18 @@ export const RoutePath = {
 
   [Route.StructureEdit]: () => `${AppRoute}/structure/edit`,
 
-  // beneficiaries
+  // Beneficiaries
   [Route.Beneficiaries]: () => BeneficiariesRoute,
   [Route.BeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
 
+  // Beneficiary
   [Route.Beneficiary]: BeneficiaryRoute,
   [Route.BeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
   [Route.BeneficiaryEdit]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/edit`,
 
+  // Beneficiary Followup
   [Route.BeneficiaryFollowupAdd]: (beneficiaryId: string) =>
     `${BeneficiaryFollowupsRoute(beneficiaryId)}/add`,
   [Route.BeneficiaryFollowupEdit]: (
@@ -102,6 +107,7 @@ export const RoutePath = {
     followupId: string
   ) => `${BeneficiaryFollowupsRoute(beneficiaryId)}/${followupId}/edit`,
 
+  // Beneficiary Help request
   [Route.BeneficiaryHelpRequestAdd]: (beneficiaryId: string) =>
     `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/add`,
   [Route.BeneficiaryHelpRequestEdit]: (

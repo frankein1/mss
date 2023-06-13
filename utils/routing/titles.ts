@@ -17,28 +17,28 @@ export const RouteTitle = {
   [Route.Beneficiaries]: () => 'Bénéficiaires',
   [Route.BeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
 
-  [Route.Beneficiary]: (beneficiary?: BeneficiaryNames | null) =>
+  [Route.Beneficiary]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? getBeneficiaryDisplayName(beneficiary) : '',
   [Route.BeneficiaryPrint]: () => 'Imprimer la fiche',
-  [Route.BeneficiaryEdit]: (beneficiary?: BeneficiaryNames | null) =>
+  [Route.BeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${getBeneficiaryDisplayName(beneficiary)}` : '',
 
-  [Route.BeneficiaryFollowupAdd]: (beneficiary?: BeneficiaryNames | null) =>
+  [Route.BeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
       : 'Entretien avec un·e bénéficiaire',
-  [Route.BeneficiaryFollowupEdit]: (beneficiary?: BeneficiaryNames | null) =>
+  [Route.BeneficiaryFollowupEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Modifier l'entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
       : "Modifier l'entretien avec un·e bénéficiaire",
 
-  [Route.BeneficiaryHelpRequestAdd]: (beneficiary?: BeneficiaryNames | null) =>
+  [Route.BeneficiaryHelpRequestAdd]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Instruction d'une demande d'aide pour ${getBeneficiaryDisplayName(
           beneficiary
         )}`
       : "Instruction d'une demande d'aide",
-  [Route.BeneficiaryHelpRequestEdit]: (beneficiary?: BeneficiaryNames | null) =>
+  [Route.BeneficiaryHelpRequestEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Modifier l'instruction de ${getBeneficiaryDisplayName(beneficiary)}`
       : "Modifier l'instruction d'un·e bénéficiaire",
