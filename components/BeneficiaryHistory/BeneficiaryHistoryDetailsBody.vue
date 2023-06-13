@@ -67,6 +67,7 @@
 
 <script setup lang="ts">
   import type { HistoryItem, HistoryItemComment } from './types'
+  import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import { Routes } from '~/utils/routing/routes'
   import {
     canEditBeneficiaryFollowup,
@@ -77,8 +78,6 @@
   } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
 
-  // const modal = useModal()
-  // const snackbar = useSnackbar()
   const { getAuthUser: user } = useAuthStore()
 
   const props = defineProps<{
@@ -86,8 +85,7 @@
     accordionId: string
   }>()
 
-  // const emit = defineEmits<{
-  defineEmits<{
+  const emit = defineEmits<{
     (e: 'deleted'): void
   }>()
 
@@ -130,25 +128,23 @@
   }
 
   function onDelete() {
-    // modal.open(
-    //   props.history.isFollowup
-    //     ? "Supprimer la synthèse d'entretien"
-    //     : "Supprimer l'instruction de demande d'aide",
-    //   DeleteForm,
-    //   {
-    //     itemId: props.history.id,
-    //     collection: props.history.isFollowup
-    //       ? INTERVIEWS_COLLECTION
-    //       : HELP_REQUESTS_COLLECTION
-    //   },
-    //   { deleted: onHistoryItemDeleted }
-    // )
+    useModal().open(
+      props.history.isFollowup
+        ? "Supprimer la synthèse d'entretien"
+        : "Supprimer l'instruction de demande d'aide",
+      BeneficiaryHistoryDeleteForm,
+      {
+        historyItemId: props.history.id,
+        isFollowup: props.history.isFollowup
+      },
+      { deleted: onHistoryItemDeleted }
+    )
   }
 
-  // function onHistoryItemDeleted() {
-  //   emit('deleted')
-  //   snackbar.success("L'accompagnement a été supprimé.")
-  // }
+  function onHistoryItemDeleted() {
+    emit('deleted')
+    useSnackbar().success("L'accompagnement a été supprimé.")
+  }
 </script>
 
 <style lang="scss" scoped>
