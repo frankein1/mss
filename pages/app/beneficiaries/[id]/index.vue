@@ -6,7 +6,7 @@
       <BeneficiaryDetailsHeader
         :beneficiary-id="beneficiaryId"
         :can-delete="canDelete"
-        @on-delete="onDelete"
+        @deleted="onBeneficiaryDeleted"
       />
     </div>
 
@@ -53,7 +53,7 @@
   import { canDeleteBeneficiary } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
-  import { Route, Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
@@ -62,6 +62,7 @@
     | Route.Beneficiaries
     | Route.History
     | undefined
+  const originTab = route.query.hash as string | undefined
 
   const { data } =
     await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({
@@ -79,7 +80,18 @@
       : false
   })
 
-  const onDelete = () => {}
+  const backLink = computed(() => {
+    if (originPage) {
+      const tabParam = originTab ? `?tab=${originTab}` : ''
+      return `${originPage}${tabParam}`
+    }
+    return RoutePath.Beneficiaries()
+  })
+
+  function onBeneficiaryDeleted() {
+    navigateTo(backLink.value)
+    useSnackbar().success('Le bénéficiaire a été supprimé.')
+  }
 </script>
 
 <style lang="scss">
