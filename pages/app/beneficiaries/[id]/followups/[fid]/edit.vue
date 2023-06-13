@@ -7,7 +7,7 @@
       :route="Route.BeneficiaryFollowupEdit"
       :beneficiary="followup?.beneficiary"
     />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
           ref="formContainer"
