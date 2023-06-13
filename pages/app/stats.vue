@@ -53,9 +53,7 @@
   import { Route, Breadcrumb } from '~/utils/routing'
 
   // TODO
-  // definePageMeta({
-  //   middleware: 'can-access-stats'
-  // })
+  // definePageMeta({ middleware: 'can-access-stats' })
 
   const trpcClient = useTrpcClient()
 
