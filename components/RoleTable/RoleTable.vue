@@ -64,7 +64,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* informations générales</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
           </tr>
           <tr>
