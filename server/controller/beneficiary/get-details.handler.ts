@@ -1,5 +1,6 @@
 import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaires'
-import { AppContext } from '~/server/trpc'
+import { AppContext, forbiddenError } from '~/server/trpc'
+import { canViewBeneficiary } from '~/server/security/rules'
 
 export const getBeneficiaryDetailsHandler = async ({
   input,
@@ -12,6 +13,10 @@ export const getBeneficiaryDetailsHandler = async ({
     id: input.id,
     structureId: user.structureId
   })
+
+  if (!canViewBeneficiary(user, beneficiary)) {
+    throw forbiddenError()
+  }
   const { relatives, ...beneficiaryData } = beneficiary
 
   const taxHouseholds = (relatives || []).filter(relative => relative.hosted)

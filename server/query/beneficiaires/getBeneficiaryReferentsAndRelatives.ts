@@ -8,16 +8,10 @@ export async function getBeneficiaryReferentsAndRelatives({
   structureId: string | null
   id: string
 }) {
-  const conditions = {
-    id
+  const where = {
+    id,
+    structureId: structureId || undefined
   }
-
-  const where = structureId
-    ? {
-        ...conditions,
-        structureId
-      }
-    : conditions
 
   const beneficiary = await prismaClient.beneficiary.findFirst({
     where,

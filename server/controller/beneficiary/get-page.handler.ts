@@ -1,12 +1,9 @@
 import { FollowupType, Prisma } from '@prisma/client'
 import { BeneficiaryFilterInput, GetBeneficiariesInput } from '~/server/schema'
-import { AppContext, forbiddenError } from '~/server/trpc'
+import { AppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
-import {
-  canListBeneficiaries,
-  canOnlyListItsBeneficiaries
-} from '~/server/security/rules'
+import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 
 type FollowupTypeIdAndName = Pick<FollowupType, 'id' | 'name'>
 type FollowupTypeSet = { [id: string]: FollowupTypeIdAndName }
@@ -19,10 +16,6 @@ export const getBeneficiariesHandler = async ({
   ctx: AppContext
 }) => {
   const { structureId } = user
-
-  if (!canListBeneficiaries(user)) {
-    throw forbiddenError()
-  }
 
   const { take, skip } = takeAndSkipFromPagination({
     perPage: input.perPage,
