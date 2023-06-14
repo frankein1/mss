@@ -1,47 +1,32 @@
-import { User, UserRole } from '@prisma/client'
+import type {
+  SecurityRuleGrantee,
+  SecurityTargetWithStructure,
+  AllowedRoles
+} from './types'
+import {
+  isAdministrator,
+  isStructureManager,
+  isActiveWithAllowedRole
+} from './utils'
 
-export type SecurityRuleGrantee = Pick<
-  User,
-  'id' | 'role' | 'structureId' | 'status'
->
+export type { SecurityTargetWithStructure }
+
+export {
+  canCreateUser,
+  canEditUser,
+  canEditUserRole,
+  canListUsers
+} from './user'
 
 export type SecurityTargetWithReferents = {
   referents: { id: string }[]
-}
-
-export type SecurityTargetWithStructure = {
-  structureId: string | null
 }
 
 export type SecurityTargetWithCreator = {
   createdById: string | null
 }
 
-// Helper type to safely type an array with at least one UserRole
-type AllowedRoles =
-  | [UserRole]
-  | [UserRole, UserRole]
-  | [UserRole, UserRole, UserRole]
-  | [UserRole, UserRole, UserRole, UserRole]
-  | [UserRole, UserRole, UserRole, UserRole, UserRole]
-  | [UserRole, UserRole, UserRole, UserRole, UserRole, UserRole]
-
 // Grantee role utilities
-export const isActiveWithAllowedRole = (
-  grantee: SecurityRuleGrantee,
-  allowedRoles: AllowedRoles
-) => grantee.status === 'Active' && allowedRoles.includes(grantee.role)
-
-export const isAdministrator = (grantee: SecurityRuleGrantee) =>
-  isActiveWithAllowedRole(grantee, ['Administrator'])
-
-export const isStructureManager = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure
-) =>
-  isActiveWithAllowedRole(grantee, ['StructureManager']) &&
-  grantee.structureId === target.structureId
-
 export const isInSameStructureAs = (
   grantee: SecurityRuleGrantee,
   target: SecurityTargetWithStructure,
@@ -80,34 +65,6 @@ export type SecurityRule<
 // -- grantee (the authenticated user)
 // -- target (aggregate info or scope of the action)
 // -- params (specifics about the action)
-
-export const canCreateUser = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure
-): boolean => isAdministrator(grantee) || isStructureManager(grantee, target)
-
-export const canEditUser = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure
-): boolean => isAdministrator(grantee) || isStructureManager(grantee, target)
-
-export const canDeleteUser = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure
-): boolean => isAdministrator(grantee) || isStructureManager(grantee, target)
-
-export const canListUsers = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure
-): boolean => isAdministrator(grantee) || isStructureManager(grantee, target)
-
-export const canChangeUserRole = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure,
-  parameters: { role: UserRole }
-): boolean =>
-  isAdministrator(grantee) ||
-  (isStructureManager(grantee, target) && parameters.role !== 'Administrator')
 
 export const canListStructures = (grantee: SecurityRuleGrantee): boolean =>
   isAdministrator(grantee)
