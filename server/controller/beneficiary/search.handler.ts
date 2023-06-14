@@ -1,6 +1,7 @@
 import { AppContext, forbiddenError } from '~/server/trpc'
-import { canListBeneficiaries } from '~/server/query/security/rules'
+import { canListBeneficiaries } from '~/server/security/rules'
 import { SearchBeneficiaryInput } from '~/server/schema/beneficiary.schema'
+
 import { prismaClient } from '~/server/prisma'
 
 const tokenToSearchCondition = (token: string) => ({

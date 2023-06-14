@@ -1,6 +1,6 @@
 import { Prisma, User } from '@prisma/client'
 import { newOptionToLabel, NEW_OPTION_PREFIX } from '~/utils/options'
-import { canCreatePrescribingOrganization } from '~/server/query/security/rules'
+import { canCreatePrescribingOrganization } from '~/server/security/rules'
 
 export async function preparePrescribingOrganization(
   transaction: Prisma.TransactionClient,

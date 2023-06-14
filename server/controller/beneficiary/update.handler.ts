@@ -6,7 +6,7 @@ import {
   canEditBeneficiaryOccupationIncome,
   canUpdateBeneficiaryReferents,
   canUpdateBeneficiaryRelatives
-} from '~/server/query/security/rules'
+} from '~/server/security/rules'
 import { UpdateBeneficiaryInput } from '~/server/schema'
 import { AppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'

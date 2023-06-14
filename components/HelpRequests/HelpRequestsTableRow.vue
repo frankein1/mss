@@ -124,7 +124,7 @@
   import {
     canAccessProtectedDataInHelpRequest,
     canEditBeneficiaryHelpRequest
-  } from '~/server/query/security/rules'
+  } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'

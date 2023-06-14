@@ -56,7 +56,7 @@
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { getUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/query/security/rules'
+  import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'

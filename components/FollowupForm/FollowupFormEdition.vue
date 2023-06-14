@@ -20,7 +20,7 @@
   } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { canEditBeneficiaryFollowupPrivateSynthesis } from '~/server/query/security/rules'
+  import { canEditBeneficiaryFollowupPrivateSynthesis } from '~/server/security/rules'
   import {
     EditFollowupInput,
     editFollowupSchema

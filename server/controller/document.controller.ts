@@ -2,23 +2,23 @@ import {
   DeleteDocumentInput,
   EditDocumentInput,
   CreateViewUrlInput
-} from '../schema'
+} from '~/server/schema'
 import {
   AppContext,
   forbiddenError,
   invalidError,
   notfoundError
-} from '../trpc'
+} from '~/server/trpc'
 import {
   canDeleteBeneficiaryDocument,
   canEditBeneficiaryDocument,
   canViewBeneficiaryDocuments
-} from '../query/security/rules'
-import { createSignedGetUrl, deleteUploadedFile } from '../lib/s3'
+} from '~/server/security/rules'
+import { createSignedGetUrl, deleteUploadedFile } from '~/server/lib/s3'
 import {
   getBeneficiarySecurityTarget,
   beneficiarySecurityTargetInclude
-} from '../query'
+} from '~/server/security'
 import { prismaClient } from '~/server/prisma'
 
 export const editDocumentHandler = async ({

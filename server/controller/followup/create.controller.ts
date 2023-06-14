@@ -2,12 +2,12 @@ import { Prisma, User, FollowupMedium } from '@prisma/client'
 import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
 import type { AddFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { canCreateBeneficiaryFollowup } from '~/server/query/security/rules'
+import { canCreateBeneficiaryFollowup } from '~/server/security/rules'
 import {
   prepareMinistryData,
   prepareFollowupTypesMutations
 } from '~/utils/followup/prepareFollowupData'
-import { getBeneficiarySecurityTarget } from '~/server/query/security'
+import { getBeneficiarySecurityTarget } from '~/server/security'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 
