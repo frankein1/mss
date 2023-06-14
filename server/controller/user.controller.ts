@@ -48,12 +48,7 @@ export const addUserHandler = async ({
   ctx: AppContext
   input: UserCreationInput
 }) => {
-  const data = {
-    structureId: user.structureId,
-    ...input
-  }
-
-  if (!canCreateUser(user, data)) {
+  if (!canCreateUser(user)) {
     throw forbiddenError()
   }
 
@@ -68,7 +63,12 @@ export const addUserHandler = async ({
     })
   }
 
-  const createdUser = await prismaClient.user.create({ data })
+  const createdUser = await prismaClient.user.create({
+    data: {
+      structureId: user.structureId,
+      ...input
+    }
+  })
 
   sendEmail({
     to: createdUser.email,

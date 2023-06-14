@@ -1,25 +1,25 @@
 import { UserRole } from '@prisma/client'
 import type { SecurityRuleGrantee, SecurityTargetWithStructure } from './types'
-import { isAdministrator, isStructureManager } from './helpers'
+import { hasAllowedRole, isStructureManager } from './helpers'
 
-export const canCreateUser = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure
-): boolean => isAdministrator(grantee) || isStructureManager(grantee, target)
+export const canCreateUser = (grantee: SecurityRuleGrantee): boolean =>
+  hasAllowedRole(grantee, ['Administrator', 'StructureManager'])
 
 export const canEditUser = (
   grantee: SecurityRuleGrantee,
   target: SecurityTargetWithStructure
-): boolean => isAdministrator(grantee) || isStructureManager(grantee, target)
+): boolean =>
+  hasAllowedRole(grantee, ['Administrator']) ||
+  isStructureManager(grantee, target)
 
 export const canEditUserRole = (
   grantee: SecurityRuleGrantee,
   target: SecurityTargetWithStructure,
   update: { role: UserRole }
 ): boolean =>
-  isAdministrator(grantee) ||
+  hasAllowedRole(grantee, ['Administrator']) ||
   (isStructureManager(grantee, target) &&
     update.role !== UserRole.Administrator)
 
 export const canListUsers = (grantee: SecurityRuleGrantee): boolean =>
-  isAdministrator(grantee) || isStructureManager(grantee)
+  hasAllowedRole(grantee, ['Administrator', 'StructureManager'])
