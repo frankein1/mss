@@ -1,15 +1,17 @@
 import type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
-  AllowedRoles
+  AllowedRoles,
+  SecurityTargetWithReferents
 } from './types'
 import {
   isAdministrator,
   isActiveWithAllowedRole,
-  isInSameStructureAs
+  isInSameStructureAs,
+  isReferentFor
 } from './helpers'
 
-export type { SecurityTargetWithStructure }
+export type { SecurityTargetWithStructure, SecurityTargetWithReferents }
 
 export {
   canCreateUser,
@@ -20,22 +22,24 @@ export {
 
 export { canViewStructure, canEditStructure } from './structure'
 
-export type SecurityTargetWithReferents = {
-  referents: { id: string }[]
-}
+export {
+  canListBeneficiaries,
+  canOnlyListItsBeneficiaries,
+  canCreateBeneficiary,
+  canEditBeneficiaryGeneralInformation,
+  canEditBeneficiaryRelatives,
+  canEditBeneficiaryHealthInfo,
+  canEditBeneficiaryOccupationIncome,
+  canEditBeneficiaryExternalOrganisations,
+  canDeleteBeneficiary,
+  canEditBeneficiaryReferents
+} from './beneficiary'
 
 export type SecurityTargetWithCreator = {
   createdById: string | null
 }
 
 // Grantee role utilities
-export const isReferentFor = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithReferents
-) =>
-  isActiveWithAllowedRole(grantee, ['Referent']) &&
-  target.referents.some(({ id }) => id === grantee.id)
-
 export const isCreator = (
   grantee: SecurityRuleGrantee,
   target: { createdById?: string | null },
@@ -58,99 +62,6 @@ export type SecurityRule<
 // -- grantee (the authenticated user)
 // -- target (aggregate info or scope of the action)
 // -- params (specifics about the action)
-
-export const canListBeneficiaries = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, target, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent',
-    'Referent'
-  ])
-
-export const canEditBeneficiaryGeneralInformation = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
-
-export const canUpdateBeneficiaryRelatives = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
-
-export const canEditBeneficiaryHealthInfo = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
-
-export const canEditBeneficiaryOccupationIncome = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
-
-export const canEditBeneficiaryExternalOrganisations = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
-
-export const canDeleteBeneficiary = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
-
-export const canUpdateBeneficiaryReferents = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) ||
-  isReferentFor(grantee, beneficiary)
-
-export const canExportBeneficiariesData = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, ['StructureManager'])
-
 export const canAddBeneficiaryDocument = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents

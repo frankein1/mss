@@ -9,6 +9,10 @@ export type SecurityTargetWithStructure = {
   structureId: string | null
 }
 
+export type SecurityTargetWithReferents = {
+  referents: { id: string }[]
+}
+
 // Helper type to safely type an array with at least one UserRole
 export type AllowedRoles =
   | [UserRole]
