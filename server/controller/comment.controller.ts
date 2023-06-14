@@ -6,8 +6,8 @@ import {
   canAddCommentToBeneficiaryHelpRequest,
   SecurityTargetWithStructure,
   SecurityTargetWithReferents
-} from '~/server/query/security/rules'
-import { getBeneficiarySecurityTarget } from '~/server/query/security'
+} from '~/server/security/rules'
+import { getBeneficiarySecurityTarget } from '~/server/security'
 import { prismaClient } from '~/server/prisma'
 
 const addCommentInclude = {

@@ -84,7 +84,7 @@
   import type { HelpRequests, HelpRequestItem } from './types'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { HelpRequestSort } from '~/types/table'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/query/security/rules'
+  import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
 
   const { getAuthUser: user } = useAuthStore()

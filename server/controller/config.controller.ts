@@ -1,7 +1,7 @@
 import { AppContext, invalidError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getUserDisplayName } from '~/utils/user'
-import { canAccessProtectedDataInHelpRequest } from '~/server/query/security/rules'
+import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
 
 export const getAgentsHandler = async ({
   ctx: { user }

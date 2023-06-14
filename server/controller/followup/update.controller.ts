@@ -5,7 +5,7 @@ import { prismaClient } from '~/server/prisma'
 import {
   canEditBeneficiaryFollowup,
   canEditBeneficiaryFollowupPrivateSynthesis
-} from '~/server/query/security/rules'
+} from '~/server/security/rules'
 import {
   FollowupTarget,
   prepareMinistryData,

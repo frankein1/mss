@@ -3,7 +3,7 @@ import {
   canViewBeneficiaryHelpRequest,
   canViewBeneficiaryHelpRequestSynthesis,
   canViewBeneficiaryHelpRequestPrivateSynthesis
-} from '~/server/query/security/rules'
+} from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
 
 export const getHelpRequestDetailsHandler = async ({

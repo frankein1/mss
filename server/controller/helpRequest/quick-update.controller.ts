@@ -2,7 +2,7 @@ import { helpRequestGetPageSelect } from './get-page.controller'
 import { AppContext, forbiddenError } from '~/server/trpc'
 import type { QuickEditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { canEditBeneficiaryHelpRequest } from '~/server/query/security/rules'
+import { canEditBeneficiaryHelpRequest } from '~/server/security/rules'
 
 export const quickUpdateHelpRequestHandler = async ({
   input: { id, ...rest },

@@ -266,7 +266,7 @@
   } from '~/client/options/followup'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
-  import { canCreatePrescribingOrganization } from '~/server/query/security/rules'
+  import { canCreatePrescribingOrganization } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'
