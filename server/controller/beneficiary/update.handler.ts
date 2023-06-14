@@ -4,8 +4,8 @@ import {
   canEditBeneficiaryGeneralInformation,
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
-  canUpdateBeneficiaryReferents,
-  canUpdateBeneficiaryRelatives
+  canEditBeneficiaryReferents,
+  canEditBeneficiaryRelatives
 } from '~/server/security/rules'
 import { UpdateBeneficiaryInput } from '~/server/schema'
 import { AppContext } from '~/server/trpc'
@@ -42,7 +42,7 @@ export const updateBeneficiaryHandler = async ({
   let data = {}
 
   if (
-    canUpdateBeneficiaryReferents(user, {
+    canEditBeneficiaryReferents(user, {
       structureId,
       referents: previousReferents
     })
@@ -79,12 +79,12 @@ export const updateBeneficiaryHandler = async ({
   if (canEditBeneficiaryOccupationIncome(user, input)) {
     data = { ...data, ...occupation }
   }
-  if (canUpdateBeneficiaryRelatives(user, input)) {
+  if (canEditBeneficiaryRelatives(user, input)) {
     const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
     data = { ...data, ...taxHouseholdDatas }
   }
 
-  if (canUpdateBeneficiaryRelatives(user, input)) {
+  if (canEditBeneficiaryRelatives(user, input)) {
     const entourages =
       entourage.entourages?.map(e => ({ hosted: false, ...e })) || []
     const taxHouseholds =

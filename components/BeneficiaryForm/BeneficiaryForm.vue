@@ -104,11 +104,11 @@
   } from '~/server/schema/beneficiary.schema'
   import {
     canEditBeneficiaryHealthInfo,
-    canUpdateBeneficiaryReferents,
+    canEditBeneficiaryReferents,
     canEditBeneficiaryOccupationIncome,
     canEditBeneficiaryExternalOrganisations,
     canEditBeneficiaryGeneralInformation,
-    canUpdateBeneficiaryRelatives
+    canEditBeneficiaryRelatives
   } from '~/server/security/rules'
 
   import { useAuthStore } from '~/store/auth'
@@ -250,8 +250,8 @@
   const authStore = useAuthStore()
   const user = authStore.getAuthUser
 
-  const canSetRelatives = canUpdateBeneficiaryRelatives(user, props.beneficiary)
-  const canSetReferents = canUpdateBeneficiaryReferents(user, props.beneficiary)
+  const canSetRelatives = canEditBeneficiaryRelatives(user, props.beneficiary)
+  const canSetReferents = canEditBeneficiaryReferents(user, props.beneficiary)
   const canSetHealth = canEditBeneficiaryHealthInfo(user, props.beneficiary)
   const canSetOccupationIncome = canEditBeneficiaryOccupationIncome(
     user,
