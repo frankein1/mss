@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { canEditStructure, canListUsers } from '~/server/security/rules'
+  import { canEditItsOwnStructure, canListUsers } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { Menu } from '~/types/menu'
   import { Routes } from '~/utils/routing/routes'
@@ -43,7 +43,7 @@
       })
     }
 
-    if (canEditStructure(user, { structureId })) {
+    if (canEditItsOwnStructure(user)) {
       menus.push({
         label: 'Structure',
         to: Routes.StructureEdit(),

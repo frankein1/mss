@@ -10,15 +10,12 @@ export const hasAllowedRole = (
   allowedRoles: AllowedRoles
 ) => allowedRoles.includes(grantee.role)
 
-export const isAdministrator = (grantee: SecurityRuleGrantee) =>
-  hasAllowedRole(grantee, ['Administrator'])
-
 export const isStructureManager = (
   grantee: SecurityRuleGrantee,
-  target?: SecurityTargetWithStructure
+  target: SecurityTargetWithStructure
 ) =>
   hasAllowedRole(grantee, ['StructureManager']) &&
-  (!target || grantee.structureId === target.structureId)
+  grantee.structureId === target.structureId
 
 export const isInSameStructureAs = (
   grantee: SecurityRuleGrantee,

@@ -12,7 +12,7 @@ import {
   defaultLegallyNotRequiredFollowupTypeOptions
 } from '~/client/options/followupType'
 import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
-import { canViewStructure, canEditStructure } from '~/server/security/rules'
+import { canEditItsOwnStructure } from '~/server/security/rules'
 
 export const getCurrentUserStructureHandler = async ({
   ctx: { user }
@@ -21,7 +21,7 @@ export const getCurrentUserStructureHandler = async ({
 }) => {
   const { structureId } = user
 
-  if (!canViewStructure(user, { structureId }) || !structureId) {
+  if (!structureId) {
     throw forbiddenError()
   }
 
@@ -48,7 +48,7 @@ export const editCurrentUserStructureHandler = async ({
 }) => {
   const { structureId } = user
 
-  if (!canEditStructure(user, { structureId }) || !structureId) {
+  if (!canEditItsOwnStructure(user) || !structureId) {
     throw forbiddenError()
   }
 

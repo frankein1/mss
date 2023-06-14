@@ -1,14 +1,11 @@
 import { useAuthStore } from '~/store/auth'
 import { Routes } from '~/utils/routing/routes'
-import { canEditStructure } from '~/server/security/rules'
+import { canEditItsOwnStructure } from '~/server/security/rules'
 
 export default defineNuxtRouteMiddleware(() => {
   const authStore = useAuthStore()
   const user = authStore.getAuthUser
-  if (
-    !authStore.isAuthenticated ||
-    !canEditStructure(user, { structureId: user.structureId })
-  ) {
+  if (!authStore.isAuthenticated || !canEditItsOwnStructure(user)) {
     return navigateTo(Routes.Overview())
   }
 })

@@ -248,7 +248,7 @@
   import { ministerOptions } from '~/client/options/ministry'
   import {
     canCreatePrescribingOrganization,
-    canEditStructure as canEditStructureRule
+    canEditItsOwnStructure
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
@@ -328,9 +328,7 @@
     () => props.isEditing && (isAnswered.value || isDropped.value)
   )
 
-  const canEditStructure = computed(() =>
-    canEditStructureRule(user, { structureId: user.structureId })
-  )
+  const canEditStructure = computed(() => canEditItsOwnStructure(user))
 
   const canCreateOrganisme = computed(() =>
     canCreatePrescribingOrganization(user)
