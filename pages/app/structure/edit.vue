@@ -41,8 +41,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RouteTitle, Breadcrumb } from '~/utils/routing'
 
-  // TODO
-  // definePageMeta({ middleware: 'can-edit-organisation' })
+  definePageMeta({ middleware: 'can-edit-structure' })
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
