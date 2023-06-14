@@ -10,17 +10,6 @@ import {
   canListUsers
 } from '~/server/security/rules'
 
-export const getUserInfoHandler = async ({
-  ctx: { user }
-}: {
-  ctx: AppContext
-}) => {
-  return await prismaClient.user.findUniqueOrThrow({
-    where: { id: user.id },
-    include: { structure: true }
-  })
-}
-
 export const updateUserHandler = async ({
   ctx: { user },
   input: { id, ...rest }
