@@ -18,7 +18,7 @@ export {
   canListUsers
 } from './user'
 
-export { canEditStructure } from './structure'
+export { canViewStructure, canEditStructure } from './structure'
 
 export type SecurityTargetWithReferents = {
   referents: { id: string }[]

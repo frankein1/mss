@@ -7,7 +7,10 @@ import {
 export const isActiveWithAllowedRole = (
   grantee: SecurityRuleGrantee,
   allowedRoles: AllowedRoles
-) => grantee.status === 'Active' && allowedRoles.includes(grantee.role)
+) =>
+  grantee.status === 'Active' &&
+  allowedRoles.includes(grantee.role) &&
+  (grantee.role === 'Administrator' || !!grantee.structureId)
 
 export const isAdministrator = (grantee: SecurityRuleGrantee) =>
   isActiveWithAllowedRole(grantee, ['Administrator'])

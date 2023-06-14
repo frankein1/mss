@@ -1,5 +1,5 @@
 import { FollowupType, DefaultFollowupType } from '@prisma/client'
-import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
+import { AppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import type {
   EditCurrentUserStructureInput,
@@ -12,21 +12,17 @@ import {
   defaultLegallyNotRequiredFollowupTypeOptions
 } from '~/client/options/followupType'
 import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
-import { canEditStructure } from '~/server/security/rules'
+import { canViewStructure, canEditStructure } from '~/server/security/rules'
 
 export const getCurrentUserStructureHandler = async ({
   ctx: { user }
 }: {
   ctx: AppContext
 }) => {
-  const { structureId, status } = user
+  const { structureId } = user
 
-  if (status !== 'Active') {
+  if (!canViewStructure(user, { structureId }) || !structureId) {
     throw forbiddenError()
-  }
-
-  if (!structureId) {
-    throw invalidError('Your user is not associated to a structure.')
   }
 
   return await prismaClient.structure.findUnique({
@@ -52,11 +48,7 @@ export const editCurrentUserStructureHandler = async ({
 }) => {
   const { structureId } = user
 
-  if (!structureId) {
-    throw invalidError('Your user is not associated to a structure.')
-  }
-
-  if (!canEditStructure(user, { structureId })) {
+  if (!canEditStructure(user, { structureId }) || !structureId) {
     throw forbiddenError()
   }
 
