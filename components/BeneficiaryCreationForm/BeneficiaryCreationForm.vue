@@ -36,6 +36,10 @@
           :label="beneficiaryFieldLabels.usualName"
         />
         <VeeInput
+          name="birthName"
+          :label="beneficiaryFieldLabels.birthName"
+        />
+        <VeeInput
           name="firstName"
           :label="beneficiaryFieldLabels.firstName"
         />

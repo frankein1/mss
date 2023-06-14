@@ -50,6 +50,18 @@ export const searchBeneficiarySchema = z.object({
 
 export type SearchBeneficiaryInput = z.infer<typeof searchBeneficiarySchema>
 
+const beneficiaryLastNameSchema = z.string().toUpperCase().nullish()
+const beneficiaryFirstNameSchema = z
+  .string()
+  .nullish()
+  .transform(v => {
+    if (!v) {
+      return v
+    }
+    const [firstLetter, ...rest] = v
+    return `${firstLetter.toUpperCase()}${rest.join('')}`
+  })
+
 export const createBeneficiarySchema = z.object({
   structureId: z.string().uuid(),
   status: z.nativeEnum(BeneficiaryStatus, errorMessages),
@@ -59,8 +71,9 @@ export const createBeneficiarySchema = z.object({
     })
     .min(1, 'Veuillez renseigner au moins un agent référent'),
   aidantConnectAuthorized: z.boolean().default(false),
-  usualName: z.string().nullish(),
-  firstName: z.string().nullish(),
+  usualName: beneficiaryLastNameSchema,
+  birthName: beneficiaryLastNameSchema,
+  firstName: beneficiaryFirstNameSchema,
   birthDate: z.coerce.date(errorMessages).nullish(),
   phone1: z.string().nullish(),
   email: z.string().email().nullish()
@@ -84,9 +97,9 @@ export const updateBeneficiarySchema = z.object({
   general: z.object({
     status: z.nativeEnum(BeneficiaryStatus, errorMessages),
     title: z.nativeEnum(BeneficiaryTitle).nullable(),
-    firstName: z.string(),
-    usualName: z.string().nullish(),
-    birthName: z.string(),
+    firstName: beneficiaryFirstNameSchema,
+    usualName: beneficiaryLastNameSchema,
+    birthName: beneficiaryLastNameSchema,
     birthDate: z.coerce.date(errorMessages).nullish(),
     birthPlace: z.string().nullish(),
     deathDate: z.date(errorMessages).nullish(),
