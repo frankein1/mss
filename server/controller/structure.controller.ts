@@ -1,4 +1,4 @@
-import { UserRole, FollowupType, DefaultFollowupType } from '@prisma/client'
+import { FollowupType, DefaultFollowupType } from '@prisma/client'
 import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import type {
@@ -12,6 +12,7 @@ import {
   defaultLegallyNotRequiredFollowupTypeOptions
 } from '~/client/options/followupType'
 import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
+import { canEditStructure } from '~/server/security/rules'
 
 export const getCurrentUserStructureHandler = async ({
   ctx: { user }
@@ -45,15 +46,14 @@ export const editCurrentUserStructureHandler = async ({
   ctx: AppContext
   input: EditCurrentUserStructureInput
 }) => {
-  // [NUXT/PRISMA]: Factorise with rules
-  if (user.role !== UserRole.StructureManager) {
-    throw forbiddenError()
-  }
-
   const { structureId } = user
 
   if (!structureId) {
     throw invalidError('Your user is not associated to a structure.')
+  }
+
+  if (!canEditStructure(user, { structureId })) {
+    throw forbiddenError()
   }
 
   const {

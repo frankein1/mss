@@ -39,8 +39,7 @@
   import { EditCurrentUserStructureInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
 
-  // FIXME: Missing permissions
-  // definePageMeta({ middleware: 'can-edit-organisation' })
+  definePageMeta({ middleware: 'can-edit-structure' })
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()

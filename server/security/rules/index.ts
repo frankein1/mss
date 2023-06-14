@@ -5,9 +5,9 @@ import type {
 } from './types'
 import {
   isAdministrator,
-  isStructureManager,
-  isActiveWithAllowedRole
-} from './utils'
+  isActiveWithAllowedRole,
+  isInSameStructureAs
+} from './helpers'
 
 export type { SecurityTargetWithStructure }
 
@@ -18,6 +18,8 @@ export {
   canListUsers
 } from './user'
 
+export { canEditStructure } from './structure'
+
 export type SecurityTargetWithReferents = {
   referents: { id: string }[]
 }
@@ -27,15 +29,6 @@ export type SecurityTargetWithCreator = {
 }
 
 // Grantee role utilities
-export const isInSameStructureAs = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure,
-  allowedRoles: AllowedRoles
-) =>
-  !!grantee.structureId &&
-  grantee.structureId === target.structureId &&
-  isActiveWithAllowedRole(grantee, allowedRoles)
-
 export const isReferentFor = (
   grantee: SecurityRuleGrantee,
   target: SecurityTargetWithReferents
@@ -65,27 +58,6 @@ export type SecurityRule<
 // -- grantee (the authenticated user)
 // -- target (aggregate info or scope of the action)
 // -- params (specifics about the action)
-
-export const canListStructures = (grantee: SecurityRuleGrantee): boolean =>
-  isAdministrator(grantee)
-
-export const canViewStructure = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, target, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent',
-    'Referent'
-  ])
-
-export const canEditStructure = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure
-): boolean => isAdministrator(grantee) || isStructureManager(grantee, target)
 
 export const canListBeneficiaries = (
   grantee: SecurityRuleGrantee,

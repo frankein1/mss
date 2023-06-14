@@ -1,6 +1,6 @@
 import { UserRole } from '@prisma/client'
 import type { SecurityRuleGrantee, SecurityTargetWithStructure } from './types'
-import { isAdministrator, isStructureManager } from './utils'
+import { isAdministrator, isStructureManager } from './helpers'
 
 export const canCreateUser = (
   grantee: SecurityRuleGrantee,
