@@ -1,8 +1,5 @@
-import { AppContext, forbiddenError } from '~/server/trpc'
-import {
-  canListBeneficiaries,
-  canOnlyListItsBeneficiaries
-} from '~/server/security/rules'
+import { AppContext } from '~/server/trpc'
+import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SearchBeneficiaryInput } from '~/server/schema/beneficiary.schema'
 import { prismaClient } from '~/server/prisma'
 
@@ -20,9 +17,6 @@ export const searchBeneficiaryHandler = async ({
 }) => {
   const { structureId } = user
 
-  if (!canListBeneficiaries(user)) {
-    throw forbiddenError()
-  }
   // TODO unit test
   const tokens = query.trim().replace(/%/g, '').split(/\s+/g)
 

@@ -10,6 +10,11 @@ export const hasAllowedRole = (
   allowedRoles: AllowedRoles
 ) => allowedRoles.includes(grantee.role)
 
+export const hasNotDisallowedRole = (
+  grantee: SecurityRuleGrantee,
+  disallowedRoles: AllowedRoles
+) => !disallowedRoles.includes(grantee.role)
+
 export const isStructureManager = (
   grantee: SecurityRuleGrantee,
   target: SecurityTargetWithStructure

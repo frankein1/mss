@@ -4,31 +4,21 @@ import type {
   SecurityTargetWithReferents
 } from './types'
 import {
-  isAdministrator,
   isInSameStructureAs,
   isReferentFor,
-  isActiveWithAllowedRole
+  hasAllowedRole,
+  hasNotDisallowedRole
 } from './helpers'
-
-export const canListBeneficiaries = (grantee: SecurityRuleGrantee): boolean =>
-  isAdministrator(grantee) ||
-  isActiveWithAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent',
-    'Referent'
-  ])
 
 export const canOnlyListItsBeneficiaries = (
   grantee: SecurityRuleGrantee
-): boolean => isActiveWithAllowedRole(grantee, ['Referent'])
+): boolean => hasAllowedRole(grantee, ['Referent'])
 
 export const canCreateBeneficiary = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure
 ): boolean =>
-  isAdministrator(grantee) ||
+  hasAllowedRole(grantee, ['Administrator']) ||
   isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker',
@@ -37,61 +27,63 @@ export const canCreateBeneficiary = (
     'Referent'
   ])
 
-export const canEditBeneficiaryGeneralInformation = (
+export const canViewBeneficiary = (
   grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  isAdministrator(grantee) ||
+  hasAllowedRole(grantee, ['Administrator']) ||
   isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
-    'SocialWorker'
-  ])
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) ||
+  isReferentFor(grantee, beneficiary)
 
-export const canEditBeneficiaryRelatives = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
+export const canViewBeneficiaryGeneralInformation = canViewBeneficiary
 
-export const canEditBeneficiaryHealthInfo = (
+export const canViewBeneficiaryRelatives = (
   grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
+  canViewBeneficiary(grantee, beneficiary) &&
+  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
 
-export const canEditBeneficiaryOccupationIncome = (
+export const canViewBeneficiaryHealthInfo = (
   grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
+  canViewBeneficiary(grantee, beneficiary) &&
+  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
 
-export const canEditBeneficiaryExternalOrganisations = (
+export const canViewBeneficiaryOccupationIncome = (
   grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
+  canViewBeneficiary(grantee, beneficiary) &&
+  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
+
+export const canViewBeneficiaryExternalOrganisations = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  canViewBeneficiary(grantee, beneficiary) &&
+  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
+
+export const canEditBeneficiaryGeneralInformation =
+  canViewBeneficiaryGeneralInformation
+export const canEditBeneficiaryRelatives = canViewBeneficiaryRelatives
+export const canEditBeneficiaryHealthInfo = canViewBeneficiaryHealthInfo
+export const canEditBeneficiaryOccupationIncome =
+  canViewBeneficiaryOccupationIncome
+export const canEditBeneficiaryExternalOrganisations =
+  canViewBeneficiaryExternalOrganisations
 
 export const canEditBeneficiaryReferents = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  isAdministrator(grantee) ||
+  hasAllowedRole(grantee, ['Administrator']) ||
   isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker',
@@ -103,8 +95,5 @@ export const canDeleteBeneficiary = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure
 ): boolean =>
-  isAdministrator(grantee) ||
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ])
+  hasAllowedRole(grantee, ['Administrator']) ||
+  isInSameStructureAs(grantee, beneficiary, ['StructureManager'])

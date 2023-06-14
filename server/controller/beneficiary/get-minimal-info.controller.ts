@@ -1,24 +1,41 @@
-import { AppContext, invalidError } from '~/server/trpc'
+import { AppContext, forbiddenError, notfoundError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
+import { canViewBeneficiary } from '~/server/security/rules'
 
-export const getBeneficiaryMinimalInfoHandler = ({
+export const getBeneficiaryMinimalInfoHandler = async ({
   input: { id },
   ctx: { user }
 }: {
   input: { id: string }
   ctx: AppContext
 }) => {
-  if (!user.structureId) {
-    throw invalidError('structureId is null')
-  }
-
-  return prismaClient.beneficiary.findFirst({
-    where: { id, structureId: user.structureId },
+  const beneficiary = await prismaClient.beneficiary.findFirst({
+    where: { id, structureId: user.structureId || undefined },
     select: {
       id: true,
       firstName: true,
       usualName: true,
-      birthName: true
+      birthName: true,
+      referents: true,
+      structureId: true
     }
   })
+
+  if (!beneficiary) {
+    throw notfoundError()
+  }
+
+  const { referents, structureId, ...beneficiaryMinimalInfo } = beneficiary
+
+  if (
+    !canViewBeneficiary(user, {
+      referents,
+      structureId,
+      ...beneficiaryMinimalInfo
+    })
+  ) {
+    throw forbiddenError()
+  }
+
+  return beneficiaryMinimalInfo
 }
