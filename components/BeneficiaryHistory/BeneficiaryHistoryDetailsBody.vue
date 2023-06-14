@@ -74,7 +74,7 @@
     canDeleteBeneficiaryFollowup,
     canDeleteBeneficiaryHelpRequest,
     canAccessProtectedDataInHelpRequest
-  } from '~/server/query/security/rules'
+  } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
 
   // const modal = useModal()

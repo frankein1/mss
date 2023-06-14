@@ -1,6 +1,6 @@
-import { AppContext, forbiddenError } from '../../trpc'
-import { canListBeneficiaries } from '../../query/security/rules'
-import { SearchBeneficiaryInput } from '../../schema/beneficiary.schema'
+import { AppContext, forbiddenError } from '~/server/trpc'
+import { canListBeneficiaries } from '~/server/security/rules'
+import { SearchBeneficiaryInput } from '~/server/schema/beneficiary.schema'
 
 import { prismaClient } from '~/server/prisma'
 

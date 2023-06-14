@@ -4,28 +4,28 @@ import {
   EditDocumentInput,
   CreateUploadUrlInput,
   CreateViewUrlInput
-} from '../schema'
+} from '~/server/schema'
 import {
   AppContext,
   forbiddenError,
   invalidError,
   notfoundError
-} from '../trpc'
+} from '~/server/trpc'
 import {
   canAddBeneficiaryDocument,
   canDeleteBeneficiaryDocument,
   canEditBeneficiaryDocument,
   canViewBeneficiaryDocuments
-} from '../query/security/rules'
+} from '~/server/security/rules'
 import {
   createSignedGetUrl,
   createSignedUploadUrl,
   deleteUploadedFile
-} from '../lib/s3'
+} from '~/server/lib/s3'
 import {
   getBeneficiarySecurityTarget,
   beneficiarySecurityTargetInclude
-} from '../query'
+} from '~/server/security'
 import { prismaClient } from '~/server/prisma'
 
 export const addDocumentHandler = async ({

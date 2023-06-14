@@ -17,10 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    canEditStructure,
-    canCreateUser
-  } from '~/server/query/security/rules'
+  import { canEditStructure, canCreateUser } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { Menu } from '~/types/menu'
   import { Routes } from '~/utils/routing/routes'

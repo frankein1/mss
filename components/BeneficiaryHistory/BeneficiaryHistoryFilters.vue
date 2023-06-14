@@ -32,7 +32,7 @@
   } from '~/client/options/followup'
   import { helpRequestStatusOptions } from '~/client/options/helpRequest'
   import { typeSuiviOptions } from '~/client/options/history'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/query/security/rules'
+  import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
 

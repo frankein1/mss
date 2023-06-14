@@ -109,7 +109,7 @@
     canEditBeneficiaryExternalOrganisations,
     canEditBeneficiaryGeneralInformation,
     canUpdateBeneficiaryRelatives
-  } from '~/server/query/security/rules'
+  } from '~/server/security/rules'
 
   import { useAuthStore } from '~/store/auth'
 

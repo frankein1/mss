@@ -4,7 +4,7 @@ import {
   canViewBeneficiaryFollowup,
   canViewBeneficiaryFollowupSynthesis,
   canViewBeneficiaryFollowupPrivateSynthesis
-} from '~/server/query/security/rules'
+} from '~/server/security/rules'
 
 export const getFollowupDetailsHandler = async ({
   input: { id },

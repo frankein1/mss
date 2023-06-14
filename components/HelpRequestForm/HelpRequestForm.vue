@@ -246,7 +246,7 @@
     paymentMethodOptions
   } from '~/client/options/helpRequest'
   import { ministerOptions } from '~/client/options/ministry'
-  import { canCreatePrescribingOrganization } from '~/server/query/security/rules'
+  import { canCreatePrescribingOrganization } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { toOptions, withEmptyValue } from '~/utils/options'
