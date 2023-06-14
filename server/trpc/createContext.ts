@@ -27,7 +27,11 @@ export const createContext = async (event: H3Event) => {
     where: { id: userData.id }
   })
 
-  if (!user) {
+  if (
+    !user ||
+    user.status !== 'Active' ||
+    (user.role !== 'Administrator' && !user.structureId)
+  ) {
     // Not Signed in
     throw new TRPCError({
       code: 'FORBIDDEN',
