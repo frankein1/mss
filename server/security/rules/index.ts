@@ -18,10 +18,14 @@ export {
 export { canEditItsOwnStructure } from './structure'
 
 export {
-  canListBeneficiaries,
   canOnlyListItsBeneficiaries,
   canCreateBeneficiary,
   canViewBeneficiary,
+  canViewBeneficiaryGeneralInformation,
+  canViewBeneficiaryRelatives,
+  canViewBeneficiaryHealthInfo,
+  canViewBeneficiaryOccupationIncome,
+  canViewBeneficiaryExternalOrganisations,
   canEditBeneficiaryGeneralInformation,
   canEditBeneficiaryRelatives,
   canEditBeneficiaryHealthInfo,
