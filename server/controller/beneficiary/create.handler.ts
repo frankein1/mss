@@ -1,8 +1,8 @@
-import { v4 } from 'uuid'
 import { CreateBeneficiaryInput } from '~/server/schema'
-import { AppContext } from '~/server/trpc'
+import { AppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { generateFileNumber } from '~/utils/generateFileNumber'
+import { canCreateBeneficiary } from '~/server/security/rules'
 
 export const createBeneficiaryHandler = async ({
   input,
@@ -13,12 +13,14 @@ export const createBeneficiaryHandler = async ({
 }) => {
   const { structureId, referents, ...data } = input
 
-  const id = v4()
+  if (!canCreateBeneficiary(user, input)) {
+    throw forbiddenError()
+  }
+
   const fileNumber = generateFileNumber()
 
   const beneficiary = await prismaClient.beneficiary.create({
     data: {
-      id,
       structureId,
       fileNumber,
       referents: {

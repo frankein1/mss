@@ -1,7 +1,9 @@
 import { AppContext, forbiddenError } from '~/server/trpc'
-import { canListBeneficiaries } from '~/server/security/rules'
+import {
+  canListBeneficiaries,
+  canOnlyListItsBeneficiaries
+} from '~/server/security/rules'
 import { SearchBeneficiaryInput } from '~/server/schema/beneficiary.schema'
-
 import { prismaClient } from '~/server/prisma'
 
 const tokenToSearchCondition = (token: string) => ({
@@ -18,7 +20,7 @@ export const searchBeneficiaryHandler = async ({
 }) => {
   const { structureId } = user
 
-  if (!canListBeneficiaries(user, { structureId })) {
+  if (!canListBeneficiaries(user)) {
     throw forbiddenError()
   }
   // TODO unit test
@@ -32,11 +34,16 @@ export const searchBeneficiaryHandler = async ({
     }))
   }))
 
+  const referentsCondition = canOnlyListItsBeneficiaries(user)
+    ? { some: { id: user.id } }
+    : undefined
+
   const where = {
     archived: null,
     AND: searchConditions,
     id: { notIn: excludedIds },
-    structureId: structureId || undefined
+    structureId: structureId || undefined,
+    referents: referentsCondition
   }
 
   // TODO benchmark this and stress tes, then create indexes for case-insensitive filtering.

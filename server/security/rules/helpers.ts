@@ -1,6 +1,7 @@
 import {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
+  SecurityTargetWithReferents,
   AllowedRoles
 } from './types'
 
@@ -30,3 +31,10 @@ export const isInSameStructureAs = (
   !!grantee.structureId &&
   grantee.structureId === target.structureId &&
   isActiveWithAllowedRole(grantee, allowedRoles)
+
+export const isReferentFor = (
+  grantee: SecurityRuleGrantee,
+  target: SecurityTargetWithReferents
+) =>
+  isActiveWithAllowedRole(grantee, ['Referent']) &&
+  target.referents.some(({ id }) => id === grantee.id)
