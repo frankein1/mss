@@ -5,22 +5,19 @@ import {
   AllowedRoles
 } from './types'
 
-export const isActiveWithAllowedRole = (
+export const hasAllowedRole = (
   grantee: SecurityRuleGrantee,
   allowedRoles: AllowedRoles
-) =>
-  grantee.status === 'Active' &&
-  allowedRoles.includes(grantee.role) &&
-  (grantee.role === 'Administrator' || !!grantee.structureId)
+) => allowedRoles.includes(grantee.role)
 
 export const isAdministrator = (grantee: SecurityRuleGrantee) =>
-  isActiveWithAllowedRole(grantee, ['Administrator'])
+  hasAllowedRole(grantee, ['Administrator'])
 
 export const isStructureManager = (
   grantee: SecurityRuleGrantee,
   target?: SecurityTargetWithStructure
 ) =>
-  isActiveWithAllowedRole(grantee, ['StructureManager']) &&
+  hasAllowedRole(grantee, ['StructureManager']) &&
   (!target || grantee.structureId === target.structureId)
 
 export const isInSameStructureAs = (
@@ -30,11 +27,11 @@ export const isInSameStructureAs = (
 ) =>
   !!grantee.structureId &&
   grantee.structureId === target.structureId &&
-  isActiveWithAllowedRole(grantee, allowedRoles)
+  hasAllowedRole(grantee, allowedRoles)
 
 export const isReferentFor = (
   grantee: SecurityRuleGrantee,
   target: SecurityTargetWithReferents
 ) =>
-  isActiveWithAllowedRole(grantee, ['Referent']) &&
+  hasAllowedRole(grantee, ['Referent']) &&
   target.referents.some(({ id }) => id === grantee.id)
