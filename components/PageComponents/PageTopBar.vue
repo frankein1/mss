@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { canEditStructure, canCreateUser } from '~/server/security/rules'
+  import { canEditStructure, canListUsers } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { Menu } from '~/types/menu'
   import { RoutePath } from '~/utils/routing'
@@ -35,7 +35,7 @@
       to: RoutePath.Account(),
       icon: 'fr-icon-user-line'
     })
-    if (canCreateUser(user, { structureId })) {
+    if (canListUsers(user)) {
       menus.push({
         label: 'Utilisateurs',
         to: RoutePath.Users(),

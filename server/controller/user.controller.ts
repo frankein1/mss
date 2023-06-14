@@ -1,9 +1,14 @@
 import { TRPCError } from '@trpc/server'
-import { UserRole, UserStatus } from '@prisma/client'
-import { AppContext, forbiddenError } from '~/server/trpc'
+import { UserStatus } from '@prisma/client'
+import { AppContext, forbiddenError, invalidError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import type { UserEditionInput, UserCreationInput } from '~/server/schema'
-import { canEditUser } from '~/server/security/rules'
+import {
+  canEditUser,
+  canEditUserRole,
+  canCreateUser,
+  canListUsers
+} from '~/server/security/rules'
 
 export const getUserInfoHandler = async ({
   ctx: { user }
@@ -25,9 +30,17 @@ export const updateUserHandler = async ({
 }) => {
   const target = await prismaClient.user.findUnique({ where: { id } })
 
-  if (!target || !canEditUser(user, target)) {
+  if (!target) {
+    throw invalidError('User not found')
+  }
+
+  if (
+    !canEditUser(user, target) ||
+    ('role' in rest && !canEditUserRole(user, target, rest))
+  ) {
     throw forbiddenError()
   }
+
   if ('status' in rest) {
     return await prismaClient.user.update({
       where: { id },
@@ -44,8 +57,12 @@ export const addUserHandler = async ({
   ctx: AppContext
   input: UserCreationInput
 }) => {
-  // [NUXT/PRISMA]: Factorise with rules
-  if (user.role !== UserRole.StructureManager) {
+  const data = {
+    structureId: user.structureId,
+    ...input
+  }
+
+  if (!canCreateUser(user, data)) {
     throw forbiddenError()
   }
 
@@ -60,14 +77,9 @@ export const addUserHandler = async ({
     })
   }
 
-  const createdUser = await prismaClient.user.create({
-    data: {
-      structureId: user.structureId,
-      ...input
-    }
-  })
+  const createdUser = await prismaClient.user.create({ data })
 
-  // [NUXT/PRISMA]: Sent email
+  // [NUXT/PRISMA]: Send email
 
   return createdUser
 }
@@ -77,10 +89,10 @@ export const getUsersHandler = async ({
 }: {
   ctx: AppContext
 }) => {
-  // [NUXT/PRISMA]: Factorise with rules
-  if (user.role !== UserRole.StructureManager) {
+  if (!canListUsers(user)) {
     throw forbiddenError()
   }
+
   return await prismaClient.user.findMany({
     where: { structureId: user.structureId },
     orderBy: { role: 'asc' }
