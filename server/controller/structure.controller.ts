@@ -19,7 +19,11 @@ export const getCurrentUserStructureHandler = async ({
 }: {
   ctx: AppContext
 }) => {
-  const { structureId } = user
+  const { structureId, status } = user
+
+  if (status !== 'Active') {
+    throw forbiddenError()
+  }
 
   if (!structureId) {
     throw invalidError('Your user is not associated to a structure.')
