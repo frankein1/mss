@@ -18,6 +18,7 @@ export const getBeneficiaryDetailsHandler = async ({
     throw forbiddenError()
   }
   const { relatives, ...beneficiaryData } = beneficiary
+  // TODO: split beneficiary data ?
 
   const taxHouseholds = (relatives || []).filter(relative => relative.hosted)
   const entourages = (relatives || []).filter(relative => !relative.hosted)
