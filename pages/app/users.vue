@@ -33,7 +33,7 @@
   import { canCreateUser as canCreateUserRule } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
 
-  definePageMeta({ middleware: 'can-add-users' })
+  definePageMeta({ middleware: 'can-list-users' })
 
   const { getAuthUser: user } = useAuthStore()
 
@@ -44,7 +44,5 @@
     error: usersError
   } = await useTrpcClient().user.getUsers.useQuery()
 
-  const canCreateUser = computed(() =>
-    canCreateUserRule(user, { structureId: user.structureId })
-  )
+  const canCreateUser = computed(() => canCreateUserRule(user))
 </script>
