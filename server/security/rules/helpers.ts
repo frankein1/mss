@@ -18,3 +18,12 @@ export const isStructureManager = (
 ) =>
   isActiveWithAllowedRole(grantee, ['StructureManager']) &&
   (!target || grantee.structureId === target.structureId)
+
+export const isInSameStructureAs = (
+  grantee: SecurityRuleGrantee,
+  target: SecurityTargetWithStructure,
+  allowedRoles: AllowedRoles
+) =>
+  !!grantee.structureId &&
+  grantee.structureId === target.structureId &&
+  isActiveWithAllowedRole(grantee, allowedRoles)
