@@ -32,7 +32,9 @@
         label="Foyer fiscal"
       >
         <BeneficiaryFormFamilySituation />
-        <BeneficiaryFormTaxHouseholds />
+        <BeneficiaryFormTaxHouseholds
+          :current-beneficiary-id="beneficiary.id"
+        />
       </AccordionFieldset>
       <AccordionFieldset
         v-if="canSetRelatives"

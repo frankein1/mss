@@ -6,6 +6,7 @@
     <BeneficiaryFormTaxHousehold
       :tax-household="field"
       :index="idx"
+      :current-beneficiary-id="currentBeneficiaryId"
       @select-beneficiary="updateBeneficiary"
       @remove-tax-household="remove(idx)"
     />
@@ -26,7 +27,11 @@
   import { CreateOrUpdateTaxHouseholdInput } from '~/server/schema'
   import { BeneficiarySearchResult } from '~/types/beneficiary'
 
-  const { push, remove, fields } =
+  defineProps<{
+    currentBeneficiaryId: string
+  }>()
+
+  const { push, remove, update, fields } =
     useFieldArray<CreateOrUpdateTaxHouseholdInput>('taxHousehold.taxHouseholds')
 
   function updateBeneficiary({
@@ -37,6 +42,9 @@
     beneficiary: BeneficiarySearchResult | null
   }) {
     const field = fields.value[index]
-    field.value.linkedBeneficiary = beneficiary
+    update(index, {
+      ...field.value,
+      linkedBeneficiary: beneficiary
+    })
   }
 </script>
