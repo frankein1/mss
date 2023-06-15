@@ -1,21 +1,50 @@
 import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 import { HistoryTab } from '~/utils/constants/history'
 
+export enum Route {
+  Index = 'Index',
+  Register = 'Register',
+  DeclarationAccessibilite = 'DeclarationAccessibilite',
+  MentionsLegales = 'MentionsLegales',
+  Env = 'Env',
+  LogoutSuccess = 'LogoutSuccess',
+  DisabledAccount = 'DisabledAccount',
+  Login = 'Login',
+  App = 'App',
+  Overview = 'Overview',
+  Users = 'Users',
+  Stats = 'Stats',
+  Account = 'Account',
+  StructureEdit = 'StructureEdit',
+  Beneficiaries = 'Beneficiaries',
+  BeneficiariesAdd = 'BeneficiariesAdd',
+  Beneficiary = 'Beneficiary',
+  BeneficiaryPrint = 'BeneficiaryPrint',
+  BeneficiaryEdit = 'BeneficiaryEdit',
+  BeneficiaryFollowupAdd = 'BeneficiaryFollowupAdd',
+  BeneficiaryFollowupEdit = 'BeneficiaryFollowupEdit',
+  BeneficiaryHelpRequestAdd = 'BeneficiaryHelpRequestAdd',
+  BeneficiaryHelpRequestEdit = 'BeneficiaryHelpRequestEdit',
+  History = 'History'
+}
+
 const AppRoute = '/app'
 const ApiKeycloak = '/api/keycloak'
 
 const BeneficiariesRoute = `${AppRoute}/beneficiaries`
 
 const BeneficiaryRoute = (
-  beneficiaryId: string,
-
+  beneficiaryId: string | undefined,
   options?: {
     tab?: BeneficiaryTab
     item?: string
-    originPage?: string
+    originPage?: Route.Overview | Route.Beneficiaries | Route.History
     originTab?: HistoryTab
   }
 ) => {
+  if (!beneficiaryId) {
+    return ''
+  }
   const base = `${BeneficiariesRoute}/${beneficiaryId}`
   if (options) {
     const { tab, ...params } = options
@@ -35,49 +64,56 @@ const BeneficiaryFollowupsRoute = (beneficiaryId: string) =>
 const BeneficiaryHelpRequestsRoute = (beneficiaryId: string) =>
   `${BeneficiaryRoute(beneficiaryId)}/help-requests`
 
-export const Routes = {
-  Index: () => '/',
-  Register: () => '/register',
-  DeclarationAccessibilite: () => '/declaration-accessibilite',
-  MentionsLegales: () => '/mentions-legales',
-  Env: () => `/env`,
-  LogoutSuccess: () => '/logout-success',
-  DisabledAccount: () => '/disabled-account',
+export const RoutePath = {
+  [Route.Index]: () => '/',
+  [Route.Register]: () => '/register',
+  [Route.DeclarationAccessibilite]: () => '/declaration-accessibilite',
+  [Route.MentionsLegales]: () => '/mentions-legales',
+  [Route.Env]: () => `/env`,
+  [Route.LogoutSuccess]: () => '/logout-success',
+  [Route.DisabledAccount]: () => '/disabled-account',
 
-  Login: () => '/login',
+  [Route.Login]: () => '/login',
   Logout: () => `${ApiKeycloak}/logout`,
   SsoCallback: () => `${ApiKeycloak}/callback`,
 
-  App: () => `${AppRoute}`,
-  Overview: () => `${AppRoute}/overview`,
+  [Route.App]: () => `${AppRoute}`,
+  [Route.Overview]: () => `${AppRoute}/overview`,
 
-  Users: () => `${AppRoute}/users`,
+  [Route.Users]: () => `${AppRoute}/users`,
 
-  Stats: () => `${AppRoute}/stats`,
+  [Route.Stats]: () => `${AppRoute}/stats`,
 
-  Account: () => `${AppRoute}/account`,
+  [Route.Account]: () => `${AppRoute}/account`,
 
-  StructureEdit: () => `${AppRoute}/structure/edit`,
+  [Route.StructureEdit]: () => `${AppRoute}/structure/edit`,
 
-  // beneficiaries
-  Beneficiaries: () => BeneficiariesRoute,
-  BeneficiariesAdd: () => `${BeneficiariesRoute}/add`,
+  // Beneficiaries
+  [Route.Beneficiaries]: () => BeneficiariesRoute,
+  [Route.BeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
 
-  Beneficiary: BeneficiaryRoute,
-  BeneficiaryPrint: (beneficiaryId: string) =>
+  // Beneficiary
+  [Route.Beneficiary]: BeneficiaryRoute,
+  [Route.BeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
-  BeneficiaryEdit: (beneficiaryId: string) =>
+  [Route.BeneficiaryEdit]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/edit`,
 
-  BeneficiaryFollowupAdd: (beneficiaryId: string) =>
+  // Beneficiary Followup
+  [Route.BeneficiaryFollowupAdd]: (beneficiaryId: string) =>
     `${BeneficiaryFollowupsRoute(beneficiaryId)}/add`,
-  BeneficiaryFollowupEdit: (beneficiaryId: string, followupId: string) =>
-    `${BeneficiaryFollowupsRoute(beneficiaryId)}/${followupId}/edit`,
+  [Route.BeneficiaryFollowupEdit]: (
+    beneficiaryId: string,
+    followupId: string
+  ) => `${BeneficiaryFollowupsRoute(beneficiaryId)}/${followupId}/edit`,
 
-  BeneficiaryHelpRequestAdd: (beneficiaryId: string) =>
+  // Beneficiary Help request
+  [Route.BeneficiaryHelpRequestAdd]: (beneficiaryId: string) =>
     `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/add`,
-  BeneficiaryHelpRequestEdit: (beneficiaryId: string, helpRequestId: string) =>
-    `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/${helpRequestId}/edit`,
+  [Route.BeneficiaryHelpRequestEdit]: (
+    beneficiaryId: string,
+    helpRequestId: string
+  ) => `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/${helpRequestId}/edit`,
 
-  History: () => `${AppRoute}/history`
+  [Route.History]: () => `${AppRoute}/history`
 }

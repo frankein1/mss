@@ -1,7 +1,8 @@
 <template>
   <PageContainer>
-    <PageTitle title="Statistiques" />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <PageBreadcrumb :links="Breadcrumb.Stats()" />
+    <PageTitle :title="RouteTitle.Stats()" />
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <AtomTabs>
           <Tab name="Bénéficiaires">
@@ -49,7 +50,9 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
+  import { Breadcrumb, RouteTitle } from '~/utils/routing'
 
+  // TODO
   // definePageMeta({ middleware: 'can-access-stats' })
 
   const trpcClient = useTrpcClient()

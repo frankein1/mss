@@ -1,7 +1,8 @@
 <template>
   <PageContainer>
-    <PageTitle :title="title" />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <PageBreadcrumb :links="Breadcrumb.BeneficiaryFollowupAdd(beneficiary)" />
+    <PageTitle :title="RouteTitle.BeneficiaryFollowupAdd(beneficiary)" />
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
           ref="formContainer"
@@ -32,13 +33,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
   import { AddFollowupInput } from '~/server/schema/followup.schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 
-  // FIXME: Missing permissions
+  // TODO
   // definePageMeta({
   //   middleware: 'is-beneficiary-referent'
   // })
@@ -86,19 +86,12 @@
     return ''
   })
 
-  const title = computed(() => {
-    if (!beneficiary.value) {
-      return 'Entretien avec un·e bénéficiaire'
-    }
-    return `Entretien avec ${getBeneficiaryDisplayName(beneficiary.value)}`
-  })
-
   async function onAddFollowup(followup: AddFollowupInput) {
     isSubmitting.value = true
     try {
       await trpcClient.followup.add.mutate(followup)
       navigateTo(
-        Routes.Beneficiary(beneficiaryId, {
+        RoutePath.Beneficiary(beneficiaryId, {
           tab: BeneficiaryTab.History
         })
       )

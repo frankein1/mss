@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiarySearchResult } from '~/utils'
+  import { BeneficiarySearchResult } from '~/types/beneficiary'
   import { UNKNOWN_ERROR_MESSAGE } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
 

@@ -1,7 +1,8 @@
 <template>
   <PageContainer>
-    <PageTitle :title="title" />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <PageBreadcrumb :links="Breadcrumb.BeneficiaryEdit(beneficiary)" />
+    <PageTitle :title="RouteTitle.BeneficiaryEdit(beneficiary || null)" />
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
           ref="formContainer"
@@ -24,7 +25,7 @@
 
 <script lang="ts" setup>
   import { UpdateBeneficiaryInput } from '~/server/schema'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
@@ -42,18 +43,12 @@
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
 
-  const title = computed(() =>
-    beneficiary.value
-      ? `Modifier ${getBeneficiaryDisplayName(beneficiary.value)}`
-      : ''
-  )
-
   async function onUpdateBeneficiary(beneficiary: UpdateBeneficiaryInput) {
     isSubmitting.value = true
     // TODO: handle error
     await trpcClient.beneficiary.update.mutate(beneficiary)
     isSubmitting.value = false
 
-    navigateTo(`${Routes.Beneficiary(beneficiary.id)}`)
+    navigateTo(RoutePath.Beneficiary(beneficiary.id))
   }
 </script>

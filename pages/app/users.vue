@@ -1,7 +1,8 @@
 <template>
   <PageContainer>
-    <PageTitle title="Gérer les utilisateurs" />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <PageBreadcrumb :links="Breadcrumb.Users()" />
+    <PageTitle :title="RouteTitle.Users()" />
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main class="main-container fr-p-5w">
           <UserTable
@@ -26,6 +27,8 @@
 </template>
 
 <script lang="ts" setup>
+  import { Breadcrumb, RouteTitle } from '~/utils/routing'
+
   // TODO
   // definePageMeta({ middleware: 'can-add-users' })
 

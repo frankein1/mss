@@ -23,3 +23,8 @@ export type BeneficiarySearchResult = Pick<
   Beneficiary,
   'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
 >
+
+export type BeneficiaryNames = Pick<
+  Beneficiary,
+  'firstName' | 'usualName' | 'birthName'
+>

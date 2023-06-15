@@ -1,7 +1,12 @@
 <template>
   <PageContainer>
-    <PageTitle :title="title" />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <PageBreadcrumb
+      :links="Breadcrumb.BeneficiaryHelpRequestAdd(beneficiary)"
+    />
+    <PageTitle
+      :title="RouteTitle.BeneficiaryHelpRequestAdd(beneficiary || null)"
+    />
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
           ref="formContainer"
@@ -37,13 +42,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~/utils/constants/alert'
-  import { Routes } from '~/utils/routing/routes'
+  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema/helpRequest.schema'
 
-  // FIXME: Missing permissions
+  // TODO
   // definePageMeta({
   //   middleware: ['is-beneficiary-referent', 'can-add-help-requests']
   // })
@@ -56,9 +60,6 @@
   const formContainer = ref<HTMLElement | null>(null)
 
   const beneficiaryId = route.params.id as string
-  const beneficiaryHistoryPath = Routes.Beneficiary(beneficiaryId, {
-    tab: BeneficiaryTab.History
-  })
 
   const { data: beneficiary, error: beneficiaryError } =
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
@@ -106,20 +107,13 @@
     return ''
   })
 
-  const title = computed(() => {
-    if (!beneficiary.value) {
-      return "Instruction d'une demande d'aide"
-    }
-    return `Instruction d'une demande d'aide pour ${getBeneficiaryDisplayName(
-      beneficiary.value
-    )}`
-  })
-
   async function onAddHelpRequest(helpRequest: CreateHelpRequestInput) {
     isSubmitting.value = true
     try {
       await trpcClient.helpRequest.add.mutate(helpRequest)
-      navigateTo(beneficiaryHistoryPath)
+      navigateTo(
+        RoutePath.Beneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
+      )
     } catch {
       snackbar.error(
         "La création de l'instruction de demande d'aide a échoué.",

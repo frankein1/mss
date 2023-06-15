@@ -1,7 +1,14 @@
 <template>
   <PageContainer>
-    <PageTitle :title="title" />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <PageBreadcrumb
+      :links="Breadcrumb.BeneficiaryHelpRequestEdit(helpRequest?.beneficiary)"
+    />
+    <PageTitle
+      :title="
+        RouteTitle.BeneficiaryHelpRequestEdit(helpRequest?.beneficiary || null)
+      "
+    />
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
           ref="formContainer"
@@ -39,12 +46,11 @@
 
 <script lang="ts" setup>
   import { EditHelpRequestInput } from '~/server/schema/helpRequest.schema'
-  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { AlertType } from '~~/utils/constants/alert'
-  import { Routes } from '~/utils/routing/routes'
+  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
-  // FIXME: Missing permissions
+  // TODO
   // definePageMeta({
   //   middleware: ['owns-help-request', 'is-beneficiary-referent']
   // })
@@ -109,21 +115,12 @@
     return ''
   })
 
-  const title = computed(() => {
-    if (!helpRequest.value) {
-      return "Modifier l'instruction d'un·e bénéficiaire"
-    }
-    return `Modifier l'instruction de ${getBeneficiaryDisplayName(
-      helpRequest.value.beneficiary
-    )}`
-  })
-
   async function onUpdateHelpRequest(helpRequest: EditHelpRequestInput) {
     isSubmitting.value = true
     try {
       await trpcClient.helpRequest.update.mutate(helpRequest)
       return navigateTo(
-        Routes.Beneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
+        RoutePath.Beneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
       )
     } catch {
       snackbar.error("La mise à jour de l'instruction a échoué.", () =>

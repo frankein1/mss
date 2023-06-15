@@ -1,7 +1,8 @@
 <template>
   <PageContainer>
-    <PageTitle title="Accompagnements" />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <PageBreadcrumb :links="Breadcrumb.History()" />
+    <PageTitle :title="RouteTitle.History()" />
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <AtomTabs>
           <Tab
@@ -25,6 +26,7 @@
 <script lang="ts" setup>
   import { Tab } from 'vue3-tabs-component'
   import { HistoryTab } from '~/utils/constants/history'
+  import { Breadcrumb, RouteTitle } from '~/utils/routing'
 </script>
 
 <style scoped>

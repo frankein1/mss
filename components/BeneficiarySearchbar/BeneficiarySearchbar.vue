@@ -8,7 +8,7 @@
     >
       <template #result="{ result: beneficiary }">
         <NuxtLink
-          :to="Routes.Beneficiary(beneficiary.id, { originPage: route.path })"
+          :to="RoutePath.Beneficiary(beneficiary.id, { originPage: routeName })"
           target="_self"
           class="fr-btn fr-btn--tertiary-no-outline result"
         >
@@ -17,7 +17,7 @@
       </template>
     </BeneficiarySearchbarInput>
     <NuxtLink
-      :to="Routes.BeneficiariesAdd()"
+      :to="RoutePath.BeneficiariesAdd()"
       class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line add-beneficiary-btn"
       target="_self"
     >
@@ -27,9 +27,13 @@
 </template>
 
 <script setup lang="ts">
-  import { Routes } from '~/utils/routing/routes'
+  import { Route, RoutePath } from '~/utils/routing'
 
   const route = useRoute()
+  const routeName = route.name as
+    | Route.Overview
+    | Route.Beneficiaries
+    | undefined
 
   async function searchBeneficiaries(query: string) {
     const beneficiaries = await useTrpcClient().beneficiary.search.query({

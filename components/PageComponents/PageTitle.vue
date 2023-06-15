@@ -1,5 +1,5 @@
 <template>
-  <div class="pagetitle__container">
+  <div class="pagetitle__container fr-mb-3w">
     <div class="pagetitle__titles">
       <div class="pagetitle__title">{{ title }}</div>
       <div class="pagetitle__subtitle">

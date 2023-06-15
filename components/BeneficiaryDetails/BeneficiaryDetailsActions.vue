@@ -4,7 +4,7 @@
   >
     <li>
       <NuxtLink
-        :to="`${Routes.BeneficiaryFollowupAdd(beneficiaryId)}`"
+        :to="`${RoutePath.BeneficiaryFollowupAdd(beneficiaryId)}`"
         class="fr-btn fr-icon-file-add-line followup-btn"
         title="Ajouter une synthèse d'entretien"
         target="_self"
@@ -14,7 +14,7 @@
     </li>
     <li>
       <NuxtLink
-        :to="`${Routes.BeneficiaryHelpRequestAdd(beneficiaryId)}`"
+        :to="`${RoutePath.BeneficiaryHelpRequestAdd(beneficiaryId)}`"
         class="fr-btn fr-icon-file-add-line help-request-btn"
         title="Ajouter une instruction de demande d'aide"
         target="_self"
@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   defineProps<{
     beneficiaryId: string

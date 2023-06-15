@@ -1,7 +1,8 @@
 <template>
   <PageContainer v-if="beneficiary">
+    <PageBreadcrumb :links="Breadcrumb.Beneficiary(beneficiary, originPage)" />
     <div class="beneficiarytitle__container">
-      <PageTitle :title="title" />
+      <PageTitle :title="RouteTitle.Beneficiary(beneficiary || null)" />
       <BeneficiaryDetailsHeader
         :beneficiary-id="beneficiaryId"
         :can-delete="canDelete"
@@ -52,9 +53,15 @@
   import { canDeleteBeneficiary } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { Route, Breadcrumb, RouteTitle } from '~/utils/routing'
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
+  const originPage = route.query.originPage as
+    | Route.Overview
+    | Route.Beneficiaries
+    | Route.History
+    | undefined
 
   const { data } =
     await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({
@@ -64,10 +71,6 @@
   const beneficiary = computed(() => data.value?.beneficiary)
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
-
-  const title = computed(() => {
-    return beneficiary.value ? getBeneficiaryDisplayName(beneficiary.value) : ''
-  })
 
   const authUser = useAuthStore().getAuthUser
   const canDelete = computed(() => {

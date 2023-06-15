@@ -1,7 +1,8 @@
 <template>
   <PageContainer>
-    <PageTitle title="Mon compte" />
-    <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
+    <PageBreadcrumb :links="Breadcrumb.Account()" />
+    <PageTitle :title="RouteTitle.Account()" />
+    <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
           ref="main"
@@ -26,5 +27,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { Breadcrumb, RouteTitle } from '~/utils/routing'
+
   const data = await useTrpcClient().config.getInclusionConnectLogoutUrl.query()
 </script>

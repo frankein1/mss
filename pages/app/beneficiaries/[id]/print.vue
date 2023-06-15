@@ -5,14 +5,10 @@
 
 <template>
   <div>
-    <NuxtLink
-      :to="backLink"
-      class="fr-link fr-icon-arrow-left-line fr-link--icon-left no-print"
-      target="_self"
-    >
-      Retour
-    </NuxtLink>
-
+    <PageBreadcrumb
+      :links="Breadcrumb.BeneficiaryPrint(beneficiary)"
+      class="no-print"
+    />
     <AtomAlert
       v-if="error"
       :alert-type="AlertType.Error"
@@ -47,7 +43,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { Routes } from '~/utils/routing/routes'
+  import { Breadcrumb } from '~/utils/routing'
   import { useAuthStore } from '~/store/auth'
 
   definePageMeta({
@@ -58,7 +54,6 @@
   const authStore = useAuthStore()
 
   const beneficiaryId = route.params.id as string
-  const backLink = Routes.Beneficiary(beneficiaryId)
 
   const { data, pending, error } =
     await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({

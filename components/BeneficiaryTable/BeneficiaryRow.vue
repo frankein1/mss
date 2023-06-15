@@ -2,7 +2,7 @@
   <NuxtLink
     v-slot="{ navigate }"
     custom
-    :to="beneficiaryLink"
+    :to="RoutePath.Beneficiary(props.beneficiary.id)"
     target="_self"
   >
     <tr
@@ -42,17 +42,11 @@
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { beneficiaryStatusLabels } from '~/client/options/beneficiary'
   import { nameOrEmpty } from '~/utils/nameOrEmpty'
-  import { Routes } from '~/utils/routing/routes'
-
-  const route = useRoute()
+  import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     beneficiary: BeneficiaryItem
   }>()
-
-  const beneficiaryLink = computed(() =>
-    Routes.Beneficiary(props.beneficiary.id, { originPage: route.path })
-  )
 
   const followUpTypes = computed(() =>
     props.beneficiary.followupTypes.map(({ name }) => name).join(', ')

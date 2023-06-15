@@ -2,7 +2,7 @@
   <ul class="fr-btns-group fr-btns-group--inline-md header-btn-group">
     <li>
       <NuxtLink
-        :to="`${Routes.BeneficiaryEdit(beneficiaryId)}`"
+        :to="`${RoutePath.BeneficiaryEdit(beneficiaryId)}`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
         target="_self"
       >
@@ -11,7 +11,7 @@
     </li>
     <li>
       <NuxtLink
-        :to="`${Routes.BeneficiaryPrint(beneficiaryId)}`"
+        :to="`${RoutePath.BeneficiaryPrint(beneficiaryId)}`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-printer-line"
         target="_self"
       >
@@ -34,7 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath } from '~/utils/routing'
 
   withDefaults(
     defineProps<{

@@ -1,6 +1,7 @@
 <template>
   <PageContainer class="page-container">
-    <PageTitle title="Créer un.e bénéficiaire">
+    <PageBreadcrumb :links="Breadcrumb.BeneficiariesAdd()" />
+    <PageTitle :title="RouteTitle.BeneficiariesAdd()">
       <div>
         Les champs avec <span class="color-red">*</span> sont obligatoires
       </div>
@@ -16,7 +17,7 @@
 
 <script setup lang="ts">
   import { CreateBeneficiaryInput } from '~/server/schema'
-  import { Routes } from '~/utils/routing/routes'
+  import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
   const trpcClient = useTrpcClient()
 
@@ -30,7 +31,7 @@
     const { id } = await trpcClient.beneficiary.create.mutate(beneficiary)
     isSubmitting.value = false
 
-    navigateTo(`${Routes.Beneficiary(id)}`)
+    navigateTo(RoutePath.Beneficiary(id))
   }
 </script>
 

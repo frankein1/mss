@@ -127,11 +127,10 @@
   } from '~/server/query/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
-  import { Routes } from '~/utils/routing/routes'
+  import { Route, RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()
   const user = authStore.getAuthUser
-  const route = useRoute()
 
   const props = defineProps<{
     helpRequest: HelpRequestItem
@@ -142,10 +141,10 @@
   }>()
 
   const helpRequestPath = computed(() =>
-    Routes.Beneficiary(props.helpRequest.beneficiary.id, {
+    RoutePath.Beneficiary(props.helpRequest.beneficiary.id, {
       tab: BeneficiaryTab.History,
       item: props.helpRequest.id,
-      originPage: route.path,
+      originPage: Route.History,
       originTab: HistoryTab.HelpRequests
     })
   )
