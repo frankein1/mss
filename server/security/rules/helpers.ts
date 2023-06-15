@@ -36,4 +36,6 @@ export const isReferentFor = (
   target: SecurityTargetWithReferents
 ) =>
   hasAllowedRole(grantee, ['Referent']) &&
-  target.referents.some(({ id }) => id === grantee.id)
+  target.referents.some(r =>
+    typeof r === 'string' ? r === grantee.id : r.id === grantee.id
+  )
