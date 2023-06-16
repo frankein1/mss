@@ -73,16 +73,12 @@ export const deleteDocumentHandler = async ({
     throw forbiddenError()
   }
 
-  await prismaClient.document.delete({
-    where: { key: documentKey },
-    include: {
-      beneficiary: {
-        select: { id: true, structureId: true }
-      }
-    }
-  })
-  deleteUploadedFile({ key: documentKey }).catch(error => {
+  await deleteUploadedFile({ key: document.filenameDisk }).catch(error => {
     throw error
+  })
+
+  await prismaClient.document.delete({
+    where: { key: documentKey }
   })
 }
 

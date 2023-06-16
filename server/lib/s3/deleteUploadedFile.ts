@@ -6,7 +6,7 @@ export const deleteUploadedFile = ({ key }: { key: string }) => {
   return s3.send(
     new DeleteObjectCommand({
       Key: key,
-      Bucket: config.S3.documentsBucket
+      Bucket: config.s3.bucket
     })
   )
 }
