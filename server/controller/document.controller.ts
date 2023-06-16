@@ -1,8 +1,6 @@
 import {
-  AddDocumentInput,
   DeleteDocumentInput,
   EditDocumentInput,
-  CreateUploadUrlInput,
   CreateViewUrlInput
 } from '../schema'
 import {
@@ -12,55 +10,16 @@ import {
   notfoundError
 } from '../trpc'
 import {
-  canAddBeneficiaryDocument,
   canDeleteBeneficiaryDocument,
   canEditBeneficiaryDocument,
   canViewBeneficiaryDocuments
 } from '../query/security/rules'
-import {
-  createSignedGetUrl,
-  createSignedUploadUrl,
-  deleteUploadedFile
-} from '../lib/s3'
+import { createSignedGetUrl, deleteUploadedFile } from '../lib/s3'
 import {
   getBeneficiarySecurityTarget,
   beneficiarySecurityTargetInclude
 } from '../query'
 import { prismaClient } from '~/server/prisma'
-
-export const addDocumentHandler = async ({
-  ctx: { user },
-  input
-}: {
-  ctx: AppContext
-  input: AddDocumentInput
-}) => {
-  const { type, beneficiaryId, confidential, tags, file } = input
-  const document = await prismaClient.document.create({
-    data: {
-      key: file.key,
-      name: file.name,
-      filenameDisk: file.key,
-      beneficiaryId,
-      mimeType: file.mimeType,
-      confidential,
-      tags,
-      createdById: user.id,
-      type
-    },
-    include: {
-      beneficiary: {
-        select: {
-          id: true,
-          structureId: true,
-          fileNumber: true
-        }
-      }
-    }
-  })
-
-  return { document }
-}
 
 export const editDocumentHandler = async ({
   ctx: { user },
@@ -123,41 +82,8 @@ export const deleteDocumentHandler = async ({
     }
   })
   deleteUploadedFile({ key: documentKey }).catch(error => {
-    // Sentry.captureException(error, { tags: { sensitive: true } })
     throw error
   })
-}
-
-export const createUploadUrlHandler = async ({
-  ctx: { user },
-  input
-}: {
-  ctx: AppContext
-  input: CreateUploadUrlInput
-}) => {
-  const { beneficiaryId, name, mimeType } = input
-  const beneficiary = await getBeneficiarySecurityTarget(beneficiaryId)
-
-  if (!beneficiary) {
-    throw invalidError()
-  }
-
-  if (!canAddBeneficiaryDocument(user, beneficiary)) {
-    throw forbiddenError()
-  }
-
-  const directory = `users/${user.id}/uploaded-documents`
-
-  const { s3 } = useRuntimeConfig()
-
-  const { url, key } = await createSignedUploadUrl({
-    name,
-    type: mimeType,
-    directory,
-    bucket: s3.bucket
-  })
-
-  return { url, key }
 }
 
 export const createViewUrlHandler = async ({
