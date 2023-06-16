@@ -39,6 +39,6 @@
     padding-right: 1em;
     padding-bottom: 1em;
     flex: 0 1 30%;
-    height: 200px;
+    min-height: 150px;
   }
 </style>

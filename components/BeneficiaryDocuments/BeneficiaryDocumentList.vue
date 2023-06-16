@@ -90,6 +90,6 @@
   }
 
   .documents_content {
-    flex: 0 0 75%;
+    flex: 0 0 80%;
   }
 </style>

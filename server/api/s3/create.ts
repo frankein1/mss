@@ -1,4 +1,6 @@
 import { defineEventHandler, readMultipartFormData } from 'h3'
+import { Document, NotificationType } from '@prisma/client'
+import { v4 } from 'uuid'
 import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { uploadFile } from '~/server/lib/s3'
@@ -42,10 +44,30 @@ export default defineEventHandler(async event => {
 
   const key = await uploadFile(file)
 
-  addDocument(key, input, user)
+  const document = await addDocument(key, input, user)
+  await addNotification(document, beneficiary.referents, beneficiary.id)
 
   return send(event, key)
 })
+
+async function addNotification(
+  document: Document,
+  referents: { id: string }[],
+  beneficiaryId: string
+) {
+  const notifications = []
+  for (const referent of referents) {
+    if (document.createdById !== referent.id) {
+      notifications.push({
+        recipientId: referent.id,
+        beneficiaryId,
+        documentId: document.key,
+        type: NotificationType.NewDocument
+      })
+    }
+  }
+  await prismaClient.notification.createMany({ data: notifications })
+}
 
 async function addDocument(
   key: string,
@@ -55,7 +77,7 @@ async function addDocument(
   const { type, beneficiaryId, confidential, tags, file } = input
   const document = await prismaClient.document.create({
     data: {
-      key,
+      key: v4(),
       name: file.name,
       filenameDisk: key,
       beneficiaryId,
@@ -64,20 +86,12 @@ async function addDocument(
       tags,
       createdById: user.id,
       type,
-      size: file.size
-    },
-    include: {
-      beneficiary: {
-        select: {
-          id: true,
-          structureId: true,
-          fileNumber: true
-        }
-      }
+      size: file.size,
+      filenameDownload: file.name
     }
   })
 
-  return { document }
+  return document
 }
 
 function getFormData(multipartFormData: MultiPartData[]) {
