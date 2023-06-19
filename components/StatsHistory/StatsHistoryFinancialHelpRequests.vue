@@ -101,15 +101,17 @@
   })
 
   const financialHelpRequestsTotalAmount = computed(() =>
-    internalFinancialHelpRequests.value.reduce((total, request) => {
-      if (request.status !== HelpRequestStatus.Accepted) {
-        return total
-      }
-      const allocatedAmount = new Prisma.Decimal(
-        request.allocatedAmount || 0
-      ).toNumber()
-      return total + allocatedAmount
-    }, 0)
+    internalFinancialHelpRequests.value
+      .reduce((total, request) => {
+        if (request.status !== HelpRequestStatus.Accepted) {
+          return total
+        }
+        const allocatedAmount = new Prisma.Decimal(
+          request.allocatedAmount || 0
+        ).toNumber()
+        return total + allocatedAmount
+      }, 0)
+      .toFixed(2)
   )
 
   const financialHelpRequestsAmountByType = computed(() => {
