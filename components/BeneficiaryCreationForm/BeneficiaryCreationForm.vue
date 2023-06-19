@@ -22,6 +22,7 @@
           :options="referentOptions"
           required
           dropdown
+          :disabled-options="disabledReferentOptions"
         />
       </div>
     </div>
@@ -76,7 +77,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryStatus } from '@prisma/client'
+  import { BeneficiaryStatus, UserStatus } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import { BeneficiaryReferent } from '~/types/beneficiary'
@@ -114,6 +115,16 @@
   })
 
   const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
+
+  const disabledReferentOptions = computed(() =>
+    props.agents.reduce(
+      (disabledOptions: string[], agent: BeneficiaryReferent) => {
+        const disabledAgent = agent.status !== UserStatus.Active
+        return disabledAgent ? [...disabledOptions, agent.id] : disabledOptions
+      },
+      []
+    )
+  )
 </script>
 
 <style>
