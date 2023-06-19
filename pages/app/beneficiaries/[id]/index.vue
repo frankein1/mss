@@ -55,6 +55,10 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
+  definePageMeta({
+    middleware: 'is-beneficiary-referent'
+  })
+
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const originPage = route.query.originPage as
