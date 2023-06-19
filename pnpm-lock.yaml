@@ -47,6 +47,9 @@ dependencies:
   mitt:
     specifier: ^3.0.0
     version: 3.0.0
+  nodemailer:
+    specifier: ^6.9.3
+    version: 6.9.3
   openid-client:
     specifier: ^5.4.0
     version: 5.4.0
@@ -91,6 +94,9 @@ devDependencies:
   '@types/jsonwebtoken':
     specifier: ^9.0.1
     version: 9.0.1
+  '@types/nodemailer':
+    specifier: ^6.4.8
+    version: 6.4.8
   '@types/uuid':
     specifier: ^9.0.1
     version: 9.0.1
@@ -2412,6 +2418,12 @@ packages:
 
   /@types/node@20.1.5:
     resolution: {integrity: sha512-IvGD1CD/nego63ySR7vrAKEX3AJTcmrAN2kn+/sDNLi1Ff5kBzDeEdqWDplK+0HAEoLYej137Sk0cUU8OLOlMg==}
+    dev: true
+
+  /@types/nodemailer@6.4.8:
+    resolution: {integrity: sha512-oVsJSCkqViCn8/pEu2hfjwVO+Gb3e+eTWjg3PcjeFKRItfKpKwHphQqbYmPQrlMk+op7pNNWPbsJIEthpFN/OQ==}
+    dependencies:
+      '@types/node': 20.1.5
     dev: true
 
   /@types/normalize-package-data@2.4.1:
@@ -6766,6 +6778,11 @@ packages:
 
   /node-releases@2.0.10:
     resolution: {integrity: sha512-5GFldHPXVG/YZmFzJvKK2zDSzPKhEp0+ZR5SVaoSag9fsL5YgHbUHDfnG5494ISANDcK4KwPXAx2xqVEydmd7w==}
+
+  /nodemailer@6.9.3:
+    resolution: {integrity: sha512-fy9v3NgTzBngrMFkDsKEj0r02U7jm6XfC3b52eoNV+GCrGj+s8pt5OqhiJdWKuw51zCTdiNR/IUD1z33LIIGpg==}
+    engines: {node: '>=6.0.0'}
+    dev: false
 
   /nopt@5.0.0:
     resolution: {integrity: sha512-Tbj67rffqceeLpcRXrT7vKAN8CwfPeIBgM7E6iBkmKLV7bEMwpGgYLGv0jACUsECaa/vuxP0IjEont6umdMgtQ==}

@@ -1,5 +1,7 @@
 import { TRPCError } from '@trpc/server'
 import { UserRole, UserStatus } from '@prisma/client'
+import { sendEmail } from '../lib/email/sendEmail'
+import { getInclusionConnectClient } from '../lib'
 import { AppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import type { UserEditionInput, UserCreationInput } from '~/server/schema'
@@ -67,7 +69,11 @@ export const addUserHandler = async ({
     }
   })
 
-  // [NUXT/PRISMA]: Sent email
+  sendEmail({
+    to: createdUser.email,
+    subject: 'Mon Suivi Social | Ouverture de votre compte',
+    html: getEmailContent()
+  })
 
   return createdUser
 }
@@ -85,4 +91,29 @@ export const getUsersHandler = async ({
     where: { structureId: user.structureId },
     orderBy: { role: 'asc' }
   })
+}
+
+function getEmailContent() {
+  const {
+    email: { from }
+  } = useRuntimeConfig()
+
+  const client = getInclusionConnectClient()
+  const registrationUrl = client.getRegistrationUrl()
+
+  const content = `Bonjour,
+</br></br></br>
+  Votre responsable de structure ou l'équipe de Mon Suivi Social vous a ouvert des accès à l'application Mon Suivi Social.
+</br></br>
+Pour s'authentifier, Mon Suivi Social utilise l'outil Inclusion Connect.
+</br></br>
+Afin d'accéder à l'application, veuillez créer un compte InclusionConnect   lors de votre premier accès.
+</br></br>
+<a href=${registrationUrl}>Créer son compte Inclusion Connect</a>
+</br></br>
+En cas de difficulté, contactez-nous à ${from}.
+</br></br></br>
+L'équipe de Mon Suivi Social`
+
+  return content
 }
