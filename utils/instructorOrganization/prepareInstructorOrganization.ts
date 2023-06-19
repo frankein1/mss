@@ -1,6 +1,6 @@
 import { Prisma, User } from '@prisma/client'
 import { newOptionToLabel, NEW_OPTION_PREFIX } from '~/utils/options'
-import { canCreateInstructorOrganization } from '~/server/query/security/rules'
+import { canCreateInstructorOrganization } from '~/server/security/rules'
 
 export async function prepareInstructorOrganization(
   transaction: Prisma.TransactionClient,

@@ -12,7 +12,7 @@ import { prismaClient } from '~/server/prisma'
 import {
   canEditBeneficiaryHelpRequest,
   canEditBeneficiaryHelpRequestPrivateSynthesis
-} from '~/server/query/security/rules'
+} from '~/server/security/rules'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
 import { prepareInstructorOrganization } from '~/utils/instructorOrganization/prepareInstructorOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'

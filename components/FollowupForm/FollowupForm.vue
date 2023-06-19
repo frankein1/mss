@@ -266,7 +266,10 @@
   } from '~/client/options/followup'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
-  import { canCreatePrescribingOrganization } from '~/server/query/security/rules'
+  import {
+    canCreatePrescribingOrganization,
+    canEditItsOwnStructure
+  } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'
@@ -307,7 +310,7 @@
 
   const user = computed(() => authStore.getAuthUser)
 
-  const canEditStructure = computed(() => authStore.isResponsableDeStructure)
+  const canEditStructure = computed(() => canEditItsOwnStructure(user.value))
 
   const canCreateOrganisme = computed(() =>
     canCreatePrescribingOrganization(user.value)

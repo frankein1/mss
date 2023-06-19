@@ -28,7 +28,7 @@
     EditHelpRequestInput,
     editHelpRequestSchema
   } from '~/server/schema/helpRequest.schema'
-  import { isCreator } from '~/server/query/security/rules'
+  import { isCreator } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { pastStatusesFromStatus } from '~/utils/helpRequest/pastStatusesFromStatus'
   import { GetHelpRequestDetailsOutput } from '~/server/routers'

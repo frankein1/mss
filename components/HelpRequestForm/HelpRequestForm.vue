@@ -246,7 +246,10 @@
     paymentMethodOptions
   } from '~/client/options/helpRequest'
   import { ministerOptions } from '~/client/options/ministry'
-  import { canCreatePrescribingOrganization } from '~/server/query/security/rules'
+  import {
+    canCreatePrescribingOrganization,
+    canEditItsOwnStructure
+  } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { toOptions, withEmptyValue } from '~/utils/options'
@@ -325,7 +328,7 @@
     () => props.isEditing && (isAnswered.value || isDropped.value)
   )
 
-  const canEditStructure = computed(() => authStore.isResponsableDeStructure)
+  const canEditStructure = computed(() => canEditItsOwnStructure(user))
 
   const canCreateOrganisme = computed(() =>
     canCreatePrescribingOrganization(user)

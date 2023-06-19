@@ -1,6 +1,6 @@
 import { AppContext, forbiddenError, invalidError } from '~/server/trpc'
-import { getBeneficiarySecurityTarget } from '~/server/query/security'
-import { canDeleteBeneficiary } from '~/server/query/security/rules'
+import { getBeneficiarySecurityTarget } from '~/server/security'
+import { canDeleteBeneficiary } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
 
 export const deleteBeneficiaryHandler = async ({

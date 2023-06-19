@@ -50,7 +50,7 @@
 
 <script lang="ts" setup>
   import { Tab } from 'vue3-tabs-component'
-  import { canDeleteBeneficiary } from '~/server/query/security/rules'
+  import { canDeleteBeneficiary } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'

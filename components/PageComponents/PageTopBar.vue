@@ -17,10 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    canEditStructure,
-    canCreateUser
-  } from '~/server/query/security/rules'
+  import { canEditItsOwnStructure, canListUsers } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { Menu } from '~/types/menu'
   import { RoutePath } from '~/utils/routing'
@@ -28,7 +25,7 @@
   const authStore = useAuthStore()
   const userName = authStore.userName
   const user = authStore.getAuthUser
-  const structureId = user?.structureId
+  const structureId = user.structureId
 
   const menus: Menu[] = []
 
@@ -38,7 +35,7 @@
       to: RoutePath.Account(),
       icon: 'fr-icon-user-line'
     })
-    if (canCreateUser(user, { structureId })) {
+    if (canListUsers(user)) {
       menus.push({
         label: 'Utilisateurs',
         to: RoutePath.Users(),
@@ -46,7 +43,7 @@
       })
     }
 
-    if (canEditStructure(user, { structureId })) {
+    if (canEditItsOwnStructure(user)) {
       menus.push({
         label: 'Structure',
         to: RoutePath.StructureEdit(),

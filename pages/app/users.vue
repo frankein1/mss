@@ -18,8 +18,10 @@
             En savoir plus sur les rôles et habilitations
           </button>
           <RoleTable id="roles-details" />
-          <hr />
-          <UserForm @users-refresh="usersRefresh" />
+          <template v-if="canCreateUser">
+            <hr />
+            <UserForm @users-refresh="usersRefresh" />
+          </template>
         </main>
       </div>
     </div>
@@ -28,9 +30,12 @@
 
 <script lang="ts" setup>
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { canCreateUser as canCreateUserRule } from '~/server/security/rules'
+  import { useAuthStore } from '~/store/auth'
 
-  // TODO
-  // definePageMeta({ middleware: 'can-add-users' })
+  definePageMeta({ middleware: 'can-list-users' })
+
+  const { getAuthUser: user } = useAuthStore()
 
   const {
     data: users,
@@ -38,4 +43,6 @@
     refresh: usersRefresh,
     error: usersError
   } = await useTrpcClient().user.getUsers.useQuery()
+
+  const canCreateUser = computed(() => canCreateUserRule(user))
 </script>

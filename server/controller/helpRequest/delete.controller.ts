@@ -1,5 +1,5 @@
 import { AppContext, forbiddenError, invalidError } from '~/server/trpc'
-import { canDeleteBeneficiaryHelpRequest } from '~/server/query/security/rules'
+import { canDeleteBeneficiaryHelpRequest } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
 
 function getHelpRequest(id: string) {
