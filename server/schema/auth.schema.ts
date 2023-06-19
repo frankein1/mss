@@ -1,14 +1,11 @@
 import { z } from 'zod'
 
-const accessTokenSchema = z.object({
-  code: z.string(),
-  state: z.string(),
-  redirectUri: z.string()
+export const adminLoginSchema = z.object({
+  email: z.string()
 })
+type AdminLoginInput = z.infer<typeof adminLoginSchema>
 
-type AccessTokenInput = z.infer<typeof accessTokenSchema>
-
-const acceptCGUSchema = z.object({
+export const acceptCGUSchema = z.object({
   read: z.coerce
     .boolean()
     .refine(value => value === true, { message: 'Veuillez lire les CGU.' }),
@@ -19,6 +16,4 @@ const acceptCGUSchema = z.object({
 
 type AcceptCGUInput = z.infer<typeof acceptCGUSchema>
 
-export { accessTokenSchema, acceptCGUSchema }
-
-export type { AccessTokenInput, AcceptCGUInput }
+export type { AcceptCGUInput, AdminLoginInput }
