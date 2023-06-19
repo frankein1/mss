@@ -160,11 +160,13 @@
   }
 
   async function onDelete() {
+    if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce document ?')) {
+      return
+    }
     await useTrpcClient().documents.delete.mutate({
       documentKey: props.document.key
     })
     emit('refreshDocuments')
-    modal.close()
   }
 </script>
 
