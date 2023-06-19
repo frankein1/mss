@@ -1,13 +1,8 @@
 import { z } from 'zod'
 
-const accessTokenSchema = z.object({
-  code: z.string(),
-  state: z.string(),
-  redirectUri: z.string()
+export const adminLoginSchema = z.object({
+  email: z.string()
 })
+type AdminLoginInput = z.infer<typeof adminLoginSchema>
 
-type AccessTokenInput = z.infer<typeof accessTokenSchema>
-
-export { accessTokenSchema }
-
-export type { AccessTokenInput }
+export type { AdminLoginInput }
