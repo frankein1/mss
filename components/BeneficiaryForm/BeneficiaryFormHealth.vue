@@ -20,6 +20,7 @@
         v-if="hasNirAccess"
         name="health.socialSecurityNumber"
         label="N° Sécurité Sociale"
+        type="social-security-number"
       />
       <VeeInput
         name="health.insurance"
