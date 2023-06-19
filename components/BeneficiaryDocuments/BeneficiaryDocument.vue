@@ -22,7 +22,7 @@
             <button
               v-if="canDeleteDocuments"
               class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-line btn-delete-action"
-              @click="onDeleteDocument"
+              @click="onDelete"
             >
               Supprimer le document
             </button>
@@ -159,7 +159,13 @@
     modal.close()
   }
 
-  function onDeleteDocument() {}
+  async function onDelete() {
+    await useTrpcClient().documents.delete.mutate({
+      documentKey: props.document.key
+    })
+    emit('refreshDocuments')
+    modal.close()
+  }
 </script>
 
 <style lang="scss" scoped>

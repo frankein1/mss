@@ -41,7 +41,6 @@ export const addDocumentSchema = z.object({
   confidential: z.boolean().default(false),
   file: z.object({
     name: z.string(),
-    key: z.string({ required_error: 'Veuillez téléverser un document' }),
     mimeType: documentMimeTypeValidation,
     size: documentSizeValidation
   })

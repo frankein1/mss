@@ -73,41 +73,25 @@
 
   const onSubmit = handleSubmit(async values => {
     isSubmitting.value = true
-    const { file } = values
-    const client = useTrpcClient()
-    const { /* url, */ key } = await client.documents.createUploadUrl.mutate({
-      name: file.name,
-      beneficiaryId: values.beneficiaryId,
-      mimeType: file.type
-    })
+    const { file, ...data } = values
 
-    const data = new FormData()
-    data.append('file', file)
-
-    // await useFetch(url, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': file.type
-    //   },
-    //   body: data
-    // })
-    //   .then(async () => {
-    await client.documents.add.mutate({
-      beneficiaryId: values.beneficiaryId,
-      type: values.type,
-      tags: values.tags,
-      confidential: values.confidential,
+    const input = JSON.stringify({
+      ...data,
       file: {
-        name: file.name,
-        key,
+        size: file.size,
         mimeType: file.type,
-        size: file.size
+        name: file.name
       }
     })
+
+    const formData = new FormData()
+    formData.append('file', file)
+    formData.append('input', input)
+
+    await useFetch('/api/s3/create', {
+      method: 'POST',
+      body: formData
+    })
     emit('newDocument')
-    // })
-    // .catch(error => {
-    //   submitErrors.value = error
-    // })
   })
 </script>

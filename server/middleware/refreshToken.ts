@@ -31,6 +31,8 @@ export default defineEventHandler(event => {
 
   const { user, exp } = payload
 
+  event.context.auth = { user }
+
   if (exp && expiredInLess(exp, inactiveUserTimeThreshold)) {
     const { sessionToken: newSessionToken, expiresIn: newExpiresIn } = signJwt(
       user,
