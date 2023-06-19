@@ -12,12 +12,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryWithReferents } from '~/types/beneficiary'
+  import type { GetBeneficiaryOutput } from '~/server/routers'
   import { readableFileNumber } from '~/utils/readableFileNumber'
 
   const props = withDefaults(
     defineProps<{
-      beneficiary: BeneficiaryWithReferents
+      beneficiary: GetBeneficiaryOutput
     }>(),
     {}
   )

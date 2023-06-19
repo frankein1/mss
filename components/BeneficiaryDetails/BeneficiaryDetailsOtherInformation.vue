@@ -43,13 +43,13 @@
 </template>
 
 <script setup lang="ts">
-  import { Beneficiary } from '@prisma/client'
+  import type { GetBeneficiaryOutput } from '~/server/routers'
   import {
     beneficiaryOrientationTypeLabels,
     beneficiaryProtectionMeasureLabels
   } from '~/client/options/beneficiary'
 
   defineProps<{
-    beneficiary: Beneficiary
+    beneficiary: GetBeneficiaryOutput
   }>()
 </script>

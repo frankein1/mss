@@ -21,7 +21,6 @@ export {
   canOnlyListItsBeneficiaries,
   canCreateBeneficiary,
   canViewBeneficiary,
-  canViewBeneficiaryGeneralInformation,
   canViewBeneficiaryRelatives,
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,

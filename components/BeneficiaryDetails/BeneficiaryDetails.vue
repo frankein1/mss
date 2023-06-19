@@ -22,12 +22,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { Beneficiary } from '@prisma/client'
+  import type { GetBeneficiaryOutput } from '~/server/routers'
   import { useAuthStore } from '~/store/auth'
-  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/beneficiary'
+  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
 
   const props = defineProps<{
-    beneficiary: Beneficiary
+    beneficiary: GetBeneficiaryOutput
     taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
     entourages: BeneficiaryRelativeWithLinkedBeneficiary[]
   }>()
