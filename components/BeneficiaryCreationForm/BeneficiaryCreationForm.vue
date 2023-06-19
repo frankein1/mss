@@ -117,13 +117,11 @@
   const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
 
   const disabledReferentOptions = computed(() =>
-    props.agents.reduce(
-      (disabledOptions: string[], agent: BeneficiaryReferent) => {
-        const disabledAgent = agent.status !== UserStatus.Active
-        return disabledAgent ? [...disabledOptions, agent.id] : disabledOptions
-      },
-      []
-    )
+    props.agents
+      .filter(
+        (agent: BeneficiaryReferent) => agent.status !== UserStatus.Active
+      )
+      .map((agent: BeneficiaryReferent) => agent.id)
   )
 </script>
 
