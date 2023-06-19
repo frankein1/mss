@@ -137,7 +137,13 @@ export const updateBeneficiarySchema = z.object({
     gir: z.nativeEnum(BeneficiaryGir).nullish(),
     doctor: z.string().nullish(),
     healthAdditionalInformation: z.string().nullish(),
-    socialSecurityNumber: z.string().nullish(),
+    socialSecurityNumber: z
+      .string()
+      .regex(
+        /^(\d \d{2} \d{2} \d{2} \d{3} \d{3})( \d{2})?$|^$/,
+        'Veuillez entrer un numéro de sécurité sociale valide'
+      )
+      .nullish(),
     insurance: z.string().nullish()
   }),
   occupation: z.object({
