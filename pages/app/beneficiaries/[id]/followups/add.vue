@@ -38,10 +38,9 @@
   import { AddFollowupInput } from '~/server/schema/followup.schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 
-  // TODO
-  // definePageMeta({
-  //   middleware: 'is-beneficiary-referent'
-  // })
+  definePageMeta({
+    middleware: 'is-beneficiary-referent'
+  })
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

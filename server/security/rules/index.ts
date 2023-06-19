@@ -21,18 +21,21 @@ export {
   canOnlyListItsBeneficiaries,
   canCreateBeneficiary,
   canViewBeneficiary,
-  canViewBeneficiaryRelatives,
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,
   canViewBeneficiaryExternalOrganisations,
-  canEditBeneficiaryGeneralInformation,
-  canEditBeneficiaryRelatives,
+  canEditBeneficiary,
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
   canEditBeneficiaryExternalOrganisations,
   canDeleteBeneficiary,
   canEditBeneficiaryReferents
 } from './beneficiary'
+
+export {
+  canListBeneficiaryRelatives,
+  canEditBeneficiaryRelatives
+} from './relative'
 
 export type SecurityTargetWithCreator = {
   createdById: string | null

@@ -37,13 +37,6 @@ export const canViewBeneficiary = (
     'ReceptionAgent'
   ]) || isReferentFor(grantee, beneficiary)
 
-export const canViewBeneficiaryRelatives = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  canViewBeneficiary(grantee, beneficiary) &&
-  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
-
 export const canViewBeneficiaryHealthInfo = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
@@ -65,8 +58,7 @@ export const canViewBeneficiaryExternalOrganisations = (
   canViewBeneficiary(grantee, beneficiary) &&
   hasNotDisallowedRole(grantee, ['ReceptionAgent'])
 
-export const canEditBeneficiaryGeneralInformation = canViewBeneficiary
-export const canEditBeneficiaryRelatives = canViewBeneficiaryRelatives
+export const canEditBeneficiary = canViewBeneficiary
 export const canEditBeneficiaryHealthInfo = canViewBeneficiaryHealthInfo
 export const canEditBeneficiaryOccupationIncome =
   canViewBeneficiaryOccupationIncome
