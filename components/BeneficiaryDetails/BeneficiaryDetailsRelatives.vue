@@ -60,15 +60,16 @@
 </template>
 
 <script setup lang="ts">
-  import { Beneficiary, BeneficiaryRelative } from '@prisma/client'
+  import { BeneficiaryRelative } from '@prisma/client'
   import { relativeRelationshipLabels } from '~/client/options/beneficiary'
   import { familySituationLabels } from '~/client/options/familySituation'
-  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/beneficiary'
+  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
   import { RoutePath } from '~/utils/routing'
+  import type { GetBeneficiaryOutput } from '~/server/routers'
 
   const props = withDefaults(
     defineProps<{
-      beneficiary: Beneficiary
+      beneficiary: GetBeneficiaryOutput
       relatives: BeneficiaryRelativeWithLinkedBeneficiary[]
       household?: boolean
     }>(),

@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Beneficiary } from '@prisma/client'
+  import type { GetBeneficiaryOutput } from '~/server/routers'
   import {
     beneficiaryTitleLabels,
     beneficiaryGenderLabels,
@@ -135,7 +135,7 @@
   import { useAuthStore } from '~/store/auth'
 
   const props = defineProps<{
-    beneficiary: Beneficiary
+    beneficiary: GetBeneficiaryOutput
   }>()
 
   const isMinistryAgent = useAuthStore().isMinistryAgent

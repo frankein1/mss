@@ -95,11 +95,8 @@
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import BeneficiaryFormTaxHouseholds from './BeneficiaryFormTaxHouseholds.vue'
-  import {
-    BeneficiaryRelativeWithLinkedBeneficiary,
-    BeneficiaryReferent,
-    BeneficiaryWithReferents
-  } from '~/types/beneficiary'
+  import { BeneficiaryReferent } from '~/types/beneficiary'
+  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
   import {
     UpdateBeneficiaryInput,
     updateBeneficiarySchema
@@ -112,11 +109,12 @@
     canEditBeneficiaryGeneralInformation,
     canEditBeneficiaryRelatives
   } from '~/server/security/rules'
+  import type { GetBeneficiaryOutput } from '~/server/routers'
 
   import { useAuthStore } from '~/store/auth'
 
   const props = defineProps<{
-    beneficiary: BeneficiaryWithReferents
+    beneficiary: GetBeneficiaryOutput
     taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
     entourages: BeneficiaryRelative[]
     isSubmitting: boolean

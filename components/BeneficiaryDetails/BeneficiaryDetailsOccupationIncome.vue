@@ -102,7 +102,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Beneficiary, BeneficiaryPensionOrganisation } from '@prisma/client'
+  import { BeneficiaryPensionOrganisation } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryLabels,
     incomeSourceLabels,
@@ -113,9 +113,10 @@
     ministereCategorieLabels,
     ministereDepartmentServiceAcLabels
   } from '~/client/options/ministry'
+  import type { GetBeneficiaryOutput } from '~/server/routers'
 
   const props = defineProps<{
-    beneficiary: Beneficiary
+    beneficiary: GetBeneficiaryOutput
   }>()
 
   const isMinistryAgent = useMinistryAgent()
@@ -144,16 +145,19 @@
   )
 
   const mainIncomeSource = computed(() =>
-    arrayToString(props.beneficiary.mainIncomeSource, incomeSourceLabels)
+    arrayToString(props.beneficiary.mainIncomeSource || [], incomeSourceLabels)
   )
 
   const partnerMainIncomeSource = computed(() =>
-    arrayToString(props.beneficiary.partnerMainIncomeSource, incomeSourceLabels)
+    arrayToString(
+      props.beneficiary.partnerMainIncomeSource || [],
+      incomeSourceLabels
+    )
   )
 
   const majorChildrenMainIncomeType = computed(() =>
     arrayToString(
-      props.beneficiary.majorChildrenMainIncomeSource,
+      props.beneficiary.majorChildrenMainIncomeSource || [],
       incomeSourceLabels
     )
   )
@@ -162,7 +166,7 @@
     arrayToString(
       props.beneficiary.pensionOrganisations?.filter(
         f => f !== BeneficiaryPensionOrganisation.Other
-      ),
+      ) || [],
       pensionOrganisationLabels
     )
   )
