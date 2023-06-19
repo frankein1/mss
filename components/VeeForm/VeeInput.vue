@@ -60,6 +60,7 @@
       label: string
       type?:
         | 'text'
+        | 'password'
         | 'date'
         | 'number'
         | 'tel'

@@ -8,12 +8,14 @@ import { userRouter } from './userRouter'
 import { structureRouter } from './structureRouter'
 import { helpRequestRouter } from './helpRequestRouter'
 import { notificationRouter } from './notificationRouter'
+import { adminRouter } from './adminRouter'
 import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
 import { mutationLogsRouter } from './mutationLogsRouter'
 import { router } from '~/server/trpc'
 
 export const appRouter = router({
+  admin: adminRouter,
   beneficiary: beneficiaryRouter,
   notification: notificationRouter,
   config: configRouter,
