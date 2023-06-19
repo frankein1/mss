@@ -1,5 +1,5 @@
 import { AppContext, forbiddenError, invalidError } from '~/server/trpc'
-import { canDeleteBeneficiaryFollowup } from '~/server/query/security/rules'
+import { canDeleteBeneficiaryFollowup } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
 
 function getFollowup(id: string) {
