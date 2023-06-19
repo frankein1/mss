@@ -68,7 +68,7 @@ export const canViewBeneficiaryExternalOrganisations = (
   canViewBeneficiary(grantee, beneficiary) &&
   hasNotDisallowedRole(grantee, ['ReceptionAgent'])
 
-export const canEditBeneficiaryGeneralInformation = canViewBeneficiary
+export const canEditBeneficiary = canViewBeneficiary
 export const canEditBeneficiaryRelatives = canViewBeneficiaryRelatives
 export const canEditBeneficiaryHealthInfo = canViewBeneficiaryHealthInfo
 export const canEditBeneficiaryOccupationIncome =

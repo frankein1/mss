@@ -1,15 +1,16 @@
 import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaires'
 import {
+  canEditBeneficiary,
   canEditBeneficiaryExternalOrganisations,
-  canEditBeneficiaryGeneralInformation,
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
   canEditBeneficiaryReferents,
   canEditBeneficiaryRelatives
 } from '~/server/security/rules'
 import { UpdateBeneficiaryInput } from '~/server/schema'
-import { AppContext } from '~/server/trpc'
+import { AppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
+import { getBeneficiarySecurityTarget } from '~/server/security'
 
 export const updateBeneficiaryHandler = async ({
   input,
@@ -18,6 +19,12 @@ export const updateBeneficiaryHandler = async ({
   input: UpdateBeneficiaryInput
   ctx: AppContext
 }) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+
+  if (!beneficiary || !canEditBeneficiary(user, beneficiary)) {
+    throw forbiddenError()
+  }
+
   const { referents: previousReferents, relatives: previousRelatives } =
     await getBeneficiaryReferentsAndRelatives({
       id: input.id,
@@ -40,6 +47,7 @@ export const updateBeneficiaryHandler = async ({
   } = input
 
   let data = {}
+  data = { ...general, aidantConnectAuthorized }
 
   if (
     canEditBeneficiaryReferents(user, {
@@ -65,9 +73,6 @@ export const updateBeneficiaryHandler = async ({
         disconnect: deleteIds
       }
     }
-  }
-  if (canEditBeneficiaryGeneralInformation(user, input)) {
-    data = { ...data, ...general, aidantConnectAuthorized }
   }
   if (canEditBeneficiaryHealthInfo(user, input)) {
     data = { ...data, ...health }
@@ -125,9 +130,8 @@ export const updateBeneficiaryHandler = async ({
     }
   }
 
-  const beneficiary = await prismaClient.beneficiary.update({
+  return await prismaClient.beneficiary.update({
     where: { id },
     data
   })
-  return beneficiary
 }

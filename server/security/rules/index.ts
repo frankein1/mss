@@ -25,7 +25,7 @@ export {
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,
   canViewBeneficiaryExternalOrganisations,
-  canEditBeneficiaryGeneralInformation,
+  canEditBeneficiary,
   canEditBeneficiaryRelatives,
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
