@@ -25,10 +25,13 @@ export enum Route {
   BeneficiaryFollowupEdit = 'BeneficiaryFollowupEdit',
   BeneficiaryHelpRequestAdd = 'BeneficiaryHelpRequestAdd',
   BeneficiaryHelpRequestEdit = 'BeneficiaryHelpRequestEdit',
-  History = 'History'
+  History = 'History',
+  Admin = 'Admin',
+  AdminStructures = 'AdminStructures'
 }
 
 const AppRoute = '/app'
+const AdminRoute = '/admin'
 const ApiKeycloak = '/api/keycloak'
 
 const BeneficiariesRoute = `${AppRoute}/beneficiaries`
@@ -115,5 +118,9 @@ export const RoutePath = {
     helpRequestId: string
   ) => `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/${helpRequestId}/edit`,
 
-  [Route.History]: () => `${AppRoute}/history`
+  [Route.History]: () => `${AppRoute}/history`,
+
+  // ADMIN
+  [Route.Admin]: () => `${AdminRoute}`,
+  [Route.AdminStructures]: () => `${AdminRoute}/structures`
 }
