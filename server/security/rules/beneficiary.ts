@@ -18,7 +18,6 @@ export const canCreateBeneficiary = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure
 ): boolean =>
-  hasAllowedRole(grantee, ['Administrator']) ||
   isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker',
@@ -31,14 +30,12 @@ export const canViewBeneficiary = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  hasAllowedRole(grantee, ['Administrator']) ||
   isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker',
     'Instructor',
     'ReceptionAgent'
-  ]) ||
-  isReferentFor(grantee, beneficiary)
+  ]) || isReferentFor(grantee, beneficiary)
 
 export const canViewBeneficiaryRelatives = (
   grantee: SecurityRuleGrantee,
@@ -80,17 +77,13 @@ export const canEditBeneficiaryReferents = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  hasAllowedRole(grantee, ['Administrator']) ||
   isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker',
     'Instructor'
-  ]) ||
-  isReferentFor(grantee, beneficiary)
+  ]) || isReferentFor(grantee, beneficiary)
 
 export const canDeleteBeneficiary = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure
-): boolean =>
-  hasAllowedRole(grantee, ['Administrator']) ||
-  isInSameStructureAs(grantee, beneficiary, ['StructureManager'])
+): boolean => isInSameStructureAs(grantee, beneficiary, ['StructureManager'])
