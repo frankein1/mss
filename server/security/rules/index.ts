@@ -1,10 +1,15 @@
 import type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
-  AllowedRoles,
-  SecurityTargetWithReferents
+  SecurityTargetWithReferents,
+  SecurityTargetWithCreator
 } from './types'
-import { hasAllowedRole, isInSameStructureAs, isReferentFor } from './helpers'
+import {
+  hasAllowedRole,
+  isInSameStructureAs,
+  isReferentFor,
+  isCreator
+} from './helpers'
 
 export type { SecurityTargetWithStructure, SecurityTargetWithReferents }
 
@@ -37,64 +42,20 @@ export {
   canEditBeneficiaryRelatives
 } from './relative'
 
-export type SecurityTargetWithCreator = {
-  createdById: string | null
-}
-
-// Grantee role utilities
-export const isCreator = (
-  grantee: SecurityRuleGrantee,
-  target: { createdById?: string | null },
-  allowedRoles: AllowedRoles
-) => grantee.id === target.createdById && hasAllowedRole(grantee, allowedRoles)
-
-export type SecurityRule<
-  Grantee extends SecurityRuleGrantee = SecurityRuleGrantee,
-  Target = unknown,
-  SecurityParameters = unknown
-> = (
-  grantee: Grantee,
-  target: Target,
-  securityParameters: SecurityParameters
-) => boolean
+export {
+  canAddDocument,
+  canDeleteDocument,
+  canEditDocument,
+  canListDocuments,
+  canListConfidentialDocuments,
+  canOnlyListItsUploadedDocuments,
+  canViewDocument
+} from './document'
 
 // A rule is a synchronous function taking
 // -- grantee (the authenticated user)
 // -- target (aggregate info or scope of the action)
 // -- params (specifics about the action)
-export const canAddBeneficiaryDocument = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
-export const canEditBeneficiaryDocument = canAddBeneficiaryDocument
-
-export const canViewBeneficiaryDocuments = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
-export const canDeleteBeneficiaryDocument = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ]) || isReferentFor(grantee, beneficiary)
-
 export const canCreateBeneficiaryFollowup = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents

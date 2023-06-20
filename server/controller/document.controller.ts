@@ -10,9 +10,9 @@ import {
   notfoundError
 } from '~/server/trpc'
 import {
-  canDeleteBeneficiaryDocument,
-  canEditBeneficiaryDocument,
-  canViewBeneficiaryDocuments
+  canDeleteDocument,
+  canEditDocument,
+  canViewDocument
 } from '~/server/security/rules'
 import { createSignedGetUrl, deleteUploadedFile } from '~/server/lib/s3'
 import {
@@ -20,6 +20,16 @@ import {
   beneficiarySecurityTargetInclude
 } from '~/server/security'
 import { prismaClient } from '~/server/prisma'
+
+function getDocumentSecurityTarget(key: string) {
+  return prismaClient.document.findUnique({
+    where: { key },
+    select: {
+      createdById: true,
+      confidential: true
+    }
+  })
+}
 
 export const editDocumentHandler = async ({
   ctx: { user },
@@ -36,11 +46,17 @@ export const editDocumentHandler = async ({
     throw invalidError()
   }
 
-  if (!canEditBeneficiaryDocument(user, beneficiary)) {
+  const document = await getDocumentSecurityTarget(key)
+
+  if (!document) {
+    throw invalidError()
+  }
+
+  if (!canEditDocument(user, beneficiary, document)) {
     throw forbiddenError()
   }
 
-  const document = await prismaClient.document.update({
+  const updatedDocument = await prismaClient.document.update({
     where: { key },
     data: {
       ...data
@@ -48,7 +64,7 @@ export const editDocumentHandler = async ({
     include: { beneficiary: { select: { id: true, structureId: true } } }
   })
 
-  return { document }
+  return { document: updatedDocument }
 }
 
 export const deleteDocumentHandler = async ({
@@ -69,7 +85,7 @@ export const deleteDocumentHandler = async ({
     throw invalidError()
   }
 
-  if (!canDeleteBeneficiaryDocument(user, document.beneficiary)) {
+  if (!canDeleteDocument(user, document.beneficiary)) {
     throw forbiddenError()
   }
 
@@ -98,7 +114,7 @@ export const createViewUrlHandler = async ({
   if (!document) {
     throw notfoundError()
   }
-  if (!canViewBeneficiaryDocuments(user, document.beneficiary)) {
+  if (!canViewDocument(user, document.beneficiary, document)) {
     throw forbiddenError()
   }
 

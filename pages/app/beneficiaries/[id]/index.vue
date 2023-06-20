@@ -34,9 +34,7 @@
         :id="BeneficiaryTab.Documents"
         name="Documents"
       >
-        <BeneficiaryDocumentList
-          :beneficiary-id="beneficiaryId"
-        ></BeneficiaryDocumentList>
+        <BeneficiaryDocumentList :beneficiary="beneficiary" />
       </Tab>
       <Tab
         :id="BeneficiaryTab.History"
