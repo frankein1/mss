@@ -85,30 +85,36 @@
   const authStore = useAuthStore()
 
   const menuItems = computed(() => {
-    const menuItems = [
-      {
+    const items = []
+    if (authStore.isAdmin) {
+      items.push({
+        to: RoutePath.AdminStructures(),
+        label: 'Structures',
+        icon: 'fr-icon-home-4-line'
+      })
+    } else {
+      items.push({
         to: RoutePath.Overview(),
         label: 'Tableau de bord',
         icon: 'fr-icon-home-4-line'
-      },
-      {
+      })
+      items.push({
         to: RoutePath.Beneficiaries(),
         label: 'Bénéficiaires',
         icon: 'fr-icon-user-line'
-      },
-      {
+      })
+      items.push({
         to: RoutePath.History(),
         label: 'Accompagnements',
         icon: 'fr-icon-inbox-archive-line'
-      }
-    ]
-
-    if (authStore.isAuthenticated && canViewStats(authStore.getAuthUser)) {
-      menuItems.push({
-        to: RoutePath.Stats(),
-        label: 'Statistiques',
-        icon: 'fr-icon-pie-chart-2-line'
       })
+      if (authStore.isAuthenticated && canViewStats(authStore.getAuthUser)) {
+        items.push({
+          to: RoutePath.Stats(),
+          label: 'Statistiques',
+          icon: 'fr-icon-pie-chart-2-line'
+        })
+      }
     }
 
     return menuItems
