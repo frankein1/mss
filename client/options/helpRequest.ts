@@ -8,7 +8,7 @@ import { labelsToOptions } from '~/utils/options'
 export const helpRequestStatusLabels: { [key in HelpRequestStatus]: string } = {
   [HelpRequestStatus.WaitingAdditionalInformation]:
     'En attente de justificatifs',
-  [HelpRequestStatus.InvestigationOngoing]: 'En cours',
+  [HelpRequestStatus.InvestigationOngoing]: "En cours d'instruction",
   [HelpRequestStatus.Accepted]: 'Accepté',
   [HelpRequestStatus.Refused]: 'Refusé',
   [HelpRequestStatus.Adjourned]: 'Ajourné',
