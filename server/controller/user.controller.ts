@@ -2,7 +2,11 @@ import { TRPCError } from '@trpc/server'
 import { UserStatus, User } from '@prisma/client'
 import { sendEmail } from '../lib/email/sendEmail'
 import { getInclusionConnectClient } from '../lib'
-import { AppContext, forbiddenError, invalidError } from '~/server/trpc'
+import {
+  ProtectedAppContext,
+  forbiddenError,
+  invalidError
+} from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import type { UserEditionInput, UserCreationInput } from '~/server/schema'
 import {
@@ -16,7 +20,7 @@ export const updateUserHandler = async ({
   ctx: { user },
   input: { id, ...rest }
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
   input: UserEditionInput
 }) => {
   const target = await prismaClient.user.findUnique({ where: { id } })
@@ -45,7 +49,7 @@ export const addUserHandler = async ({
   ctx: { user },
   input
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
   input: UserCreationInput
 }) => {
   if (!canCreateUser(user)) {
@@ -82,7 +86,7 @@ export const addUserHandler = async ({
 export const getUsersHandler = async ({
   ctx: { user }
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   if (!canListUsers(user)) {
     throw forbiddenError()

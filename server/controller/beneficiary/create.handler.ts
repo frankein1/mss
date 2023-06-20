@@ -1,5 +1,5 @@
 import { CreateBeneficiaryInput } from '~/server/schema'
-import { AppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { canCreateBeneficiary } from '~/server/security/rules'
@@ -9,7 +9,7 @@ export const createBeneficiaryHandler = async ({
   ctx: { user }
 }: {
   input: CreateBeneficiaryInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const { structureId, referents, ...data } = input
 

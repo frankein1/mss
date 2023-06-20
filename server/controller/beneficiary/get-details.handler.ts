@@ -1,6 +1,6 @@
 import type { User } from '@prisma/client'
 import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaires'
-import { AppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import {
   canViewBeneficiary,
   canViewBeneficiaryRelatives,
@@ -15,7 +15,7 @@ export const getBeneficiaryDetailsHandler = async ({
   ctx: { user }
 }: {
   input: { id: string }
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiaryReferentsAndRelatives({
     id: input.id,

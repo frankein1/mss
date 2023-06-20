@@ -1,5 +1,5 @@
 import { Prisma, User, FollowupMedium } from '@prisma/client'
-import { AppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import {
@@ -131,7 +131,7 @@ export const updateFollowupHandler = async ({
   ctx: { user }
 }: {
   input: EditFollowupInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const target = await getFollowup(input.id)
 

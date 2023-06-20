@@ -1,5 +1,5 @@
 import { FollowupType, DefaultFollowupType } from '@prisma/client'
-import { AppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import type {
   EditCurrentUserStructureInput,
@@ -17,13 +17,9 @@ import { canEditItsOwnStructure } from '~/server/security/rules'
 export const getCurrentUserStructureHandler = async ({
   ctx: { user }
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const { structureId } = user
-
-  if (!structureId) {
-    throw forbiddenError()
-  }
 
   return await prismaClient.structure.findUnique({
     where: { id: structureId },
@@ -43,12 +39,12 @@ export const editCurrentUserStructureHandler = async ({
   ctx: { user },
   input
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
   input: EditCurrentUserStructureInput
 }) => {
   const { structureId } = user
 
-  if (!canEditItsOwnStructure(user) || !structureId) {
+  if (!canEditItsOwnStructure(user)) {
     throw forbiddenError()
   }
 

@@ -1,4 +1,4 @@
-import { AppContext, invalidError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getUserDisplayName } from '~/utils/user'
 import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
@@ -6,11 +6,8 @@ import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
 export const getAgentsHandler = async ({
   ctx: { user }
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
-  if (!user.structureId) {
-    throw invalidError('structureId is null')
-  }
   return await prismaClient.user
     .findMany({
       where: {
@@ -47,7 +44,7 @@ function hasDefinedExaminationDate(h: {
 export const getExaminationDatesHandler = async ({
   ctx: { user }
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   if (!canAccessProtectedDataInHelpRequest(user)) {
     return []
@@ -67,11 +64,8 @@ export const getExaminationDatesHandler = async ({
 export const getInstructorOrganizationHandler = async ({
   ctx: { user }
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
-  if (!user.structureId) {
-    throw invalidError('structureId is null')
-  }
   return await prismaClient.instructorOrganization.findMany({
     where: {
       structureId: user.structureId
@@ -83,11 +77,8 @@ export const getInstructorOrganizationHandler = async ({
 export const getPrescribingOrganizationsHandler = async ({
   ctx: { user }
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
-  if (!user.structureId) {
-    throw invalidError('structureId is null')
-  }
   return await prismaClient.prescribingOrganization.findMany({
     where: {
       structureId: user.structureId
@@ -99,11 +90,8 @@ export const getPrescribingOrganizationsHandler = async ({
 export const getStructureFollowupTypesHandler = async ({
   ctx: { user }
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
-  if (!user.structureId) {
-    throw invalidError('structureId is null')
-  }
   return await prismaClient.followupType.findMany({
     where: {
       ownedByStructureId: user.structureId

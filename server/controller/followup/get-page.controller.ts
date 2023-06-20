@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import type { GetFollowupsInput } from '~/server/schema'
-import { AppContext, invalidError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { prepareFollowupFilters } from '~/utils/filters'
@@ -10,12 +10,8 @@ export const getFollowupsHandler = async ({
   ctx: { user }
 }: {
   input: GetFollowupsInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
-  if (!user.structureId) {
-    throw invalidError('structureId is null')
-  }
-
   const { take, skip } = takeAndSkipFromPagination({
     perPage: input.perPage,
     page: input.page

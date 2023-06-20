@@ -1,6 +1,8 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
+import type { User } from '@prisma/client'
 import { AppContext } from './createContext'
+import { forbiddenError } from './trpcErrors'
 
 const t = initTRPC.context<AppContext>().create({
   transformer: superjson
@@ -35,17 +37,26 @@ const isAuthenticated = t.middleware(({ ctx, next }) => {
  * Reusable middleware to ensure
  * users are active
  */
-const isActive = t.middleware(({ ctx, next }) => {
-  if (ctx.user?.status !== 'Active') {
-    throw new TRPCError({
-      code: 'UNAUTHORIZED',
-      message: 'User status non active'
-    })
+const isActive = isAuthenticated.unstable_pipe(({ ctx, next }) => {
+  if (ctx.user.status !== 'Active') {
+    throw forbiddenError('User status non active')
   }
   return next({
     ctx: {
-      // infers the user as non-nullable
+      // infers the user as active
       user: ctx.user
+    }
+  })
+})
+
+const isPartOfStructure = isAuthenticated.unstable_pipe(({ ctx, next }) => {
+  if (ctx.user.role !== 'Administrator' && !ctx.user.structureId) {
+    throw forbiddenError('User is not part of any structure')
+  }
+  return next({
+    ctx: {
+      // infers the user as part of structure
+      user: ctx.user as User & { structureId: string }
     }
   })
 })
@@ -53,4 +64,12 @@ const isActive = t.middleware(({ ctx, next }) => {
 /**
  * Protected procedure
  * */
-export const protectedProcedure = t.procedure.use(isAuthenticated).use(isActive)
+export const protectedProcedure = t.procedure
+  .use(isAuthenticated)
+  .use(isActive)
+  .use(isPartOfStructure)
+
+// FIXME: There is no way to infer the context type of protectedProcedure
+export type ProtectedAppContext = AppContext & {
+  user: User & { structureId: string }
+}

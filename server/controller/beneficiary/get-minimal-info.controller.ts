@@ -1,4 +1,8 @@
-import { AppContext, forbiddenError, notfoundError } from '~/server/trpc'
+import {
+  ProtectedAppContext,
+  forbiddenError,
+  notfoundError
+} from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { canViewBeneficiary } from '~/server/security/rules'
 
@@ -7,10 +11,10 @@ export const getBeneficiaryMinimalInfoHandler = async ({
   ctx: { user }
 }: {
   input: { id: string }
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const beneficiary = await prismaClient.beneficiary.findFirst({
-    where: { id, structureId: user.structureId || undefined },
+    where: { id, structureId: user.structureId },
     select: {
       id: true,
       firstName: true,

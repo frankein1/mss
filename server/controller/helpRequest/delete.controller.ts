@@ -1,4 +1,8 @@
-import { AppContext, forbiddenError, invalidError } from '~/server/trpc'
+import {
+  ProtectedAppContext,
+  forbiddenError,
+  invalidError
+} from '~/server/trpc'
 import { canDeleteBeneficiaryHelpRequest } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
 
@@ -20,7 +24,7 @@ export const deleteHelpRequestHandler = async ({
   ctx: { user }
 }: {
   input: { id: string }
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const helpRequest = await getHelpRequest(id)
 

@@ -1,4 +1,4 @@
-import { AppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { QuickEditFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { canEditBeneficiaryFollowup } from '~/server/security/rules'
@@ -8,7 +8,7 @@ export const quickUpdateFollowupHandler = async ({
   ctx: { user }
 }: {
   input: QuickEditFollowupInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const target = await prismaClient.followup.findUnique({
     where: { id },
