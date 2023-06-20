@@ -4,7 +4,7 @@ import { prismaClient } from '~/server/prisma'
 import { forbiddenError, AppContext } from '~/server/trpc'
 import { signJwt } from '~/server/lib/jwt'
 
-export const loginHandler = async ({
+export const loginController = async ({
   ctx,
   input
 }: {
