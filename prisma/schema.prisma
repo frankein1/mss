@@ -75,6 +75,7 @@ model User {
   prescribingOrganizations PrescribingOrganization[]
 
   InstructorOrganization InstructorOrganization[]
+  CGUHistory             CGUHistory[]
 
   @@map("user")
 }
@@ -1380,4 +1381,15 @@ model Notification {
   type NotificationType
 
   @@map("notification")
+}
+
+model CGUHistory {
+  id      String   @id @default(uuid()) @db.Uuid
+  userId  String   @map("user_id") @db.Uuid
+  date    DateTime @default(now())
+  version String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("cgu_history")
 }
