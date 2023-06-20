@@ -62,6 +62,9 @@ export const useAuthStore = defineStore({
         ? this.user.structureType === StructureType.Association
         : false
     },
+    isAdmin(): boolean {
+      return this.user?.role === UserRole.Administrator
+    },
     isActive(): boolean {
       return this.user?.status === UserStatus.Active
     }

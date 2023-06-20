@@ -1,15 +1,13 @@
 <template>
   <form
-    class="fr-container--fluid"
+    class="login-form"
     @submit="onSubmit"
   >
-    <div class="fr-grid-row fr-grid-row--gutters form-grid">
-      <VeeInput
-        name="email"
-        label="email"
-        required
-      />
-    </div>
+    <VeeInput
+      name="email"
+      label="email"
+      required
+    />
     <button
       class="fr-btn submit-btn"
       type="submit"
@@ -20,6 +18,7 @@
 </template>
 <script setup lang="ts">
   import { AdminLoginInput, adminLoginSchema } from '~/server/schema'
+  import { RoutePath } from '~/utils/routing'
 
   definePageMeta({
     layout: 'landing'
@@ -32,7 +31,15 @@
   const onSubmit = handleSubmit(async input => {
     const { user } = await useTrpcClient().admin.login.mutate(input)
     if (user) {
-      navigateTo('/admin/structures')
+      navigateTo(RoutePath.AdminStructures())
     }
   })
 </script>
+
+<style lang="scss" scope>
+  .login-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+</style>
