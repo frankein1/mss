@@ -34,7 +34,7 @@
         </div>
         <ul class="fr-sidemenu__list">
           <NuxtLink
-            v-for="menuItem in MENU_ITEMS"
+            v-for="menuItem in menuItems"
             v-slot="{ href, navigate, isActive }"
             :key="menuItem.to"
             custom
@@ -78,33 +78,43 @@
 </template>
 
 <script setup>
+  import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
 
-  const MENU_ITEMS = [
-    {
-      to: RoutePath.Overview(),
-      label: 'Tableau de bord',
-      icon: 'fr-icon-home-4-line'
-    },
-    {
-      to: RoutePath.Beneficiaries(),
-      label: 'Bénéficiaires',
-      icon: 'fr-icon-user-line'
-    },
-    {
-      to: RoutePath.History(),
-      label: 'Accompagnements',
-      icon: 'fr-icon-inbox-archive-line'
+  const authStore = useAuthStore()
+  const menuItems = computed(() => {
+    const items = []
+    if (authStore.isAdmin) {
+      items.push({
+        to: RoutePath.AdminStructures(),
+        label: 'Structures',
+        icon: 'fr-icon-home-4-line'
+      })
+    } else {
+      items.push({
+        to: RoutePath.Overview(),
+        label: 'Tableau de bord',
+        icon: 'fr-icon-home-4-line'
+      })
+      items.push({
+        to: RoutePath.Beneficiaries(),
+        label: 'Bénéficiaires',
+        icon: 'fr-icon-user-line'
+      })
+      items.push({
+        to: RoutePath.History(),
+        label: 'Accompagnements',
+        icon: 'fr-icon-inbox-archive-line'
+      })
+      // if (permissionsStore.canAccessStats) {
+      items.push({
+        to: RoutePath.Stats(),
+        label: 'Statistiques',
+        icon: 'fr-icon-pie-chart-2-line'
+      })
     }
-  ]
-
-  // if (permissionsStore.canAccessStats) {
-  MENU_ITEMS.push({
-    to: RoutePath.Stats(),
-    label: 'Statistiques',
-    icon: 'fr-icon-pie-chart-2-line'
+    return items
   })
-  // }
 </script>
 
 <style lang="scss" scoped>
