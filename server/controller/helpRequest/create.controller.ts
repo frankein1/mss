@@ -1,5 +1,9 @@
 import { Prisma, User, StructureType } from '@prisma/client'
-import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
+import {
+  ProtectedAppContext,
+  invalidError,
+  forbiddenError
+} from '~/server/trpc'
 import type { CreateHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { canCreateBeneficiaryHelpRequest } from '~/server/security/rules'
@@ -88,7 +92,7 @@ export const addHelpRequestHandler = async ({
   ctx: { user }
 }: {
   input: CreateHelpRequestInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const target = await getBeneficiarySecurityTarget(input.beneficiaryId)
 

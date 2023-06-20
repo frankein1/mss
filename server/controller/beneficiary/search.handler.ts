@@ -1,4 +1,4 @@
-import { AppContext } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SearchBeneficiaryInput } from '~/server/schema/beneficiary.schema'
 import { prismaClient } from '~/server/prisma'
@@ -13,7 +13,7 @@ export const searchBeneficiaryHandler = async ({
   ctx: { user }
 }: {
   input: SearchBeneficiaryInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const { structureId } = user
 
@@ -36,7 +36,7 @@ export const searchBeneficiaryHandler = async ({
     archived: null,
     AND: searchConditions,
     id: { notIn: excludedIds },
-    structureId: structureId || undefined,
+    structureId,
     referents: referentsCondition
   }
 

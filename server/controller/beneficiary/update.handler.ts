@@ -8,7 +8,7 @@ import {
   canEditBeneficiaryRelatives
 } from '~/server/security/rules'
 import { UpdateBeneficiaryInput } from '~/server/schema'
-import { AppContext } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 
 export const updateBeneficiaryHandler = async ({
@@ -16,7 +16,7 @@ export const updateBeneficiaryHandler = async ({
   ctx: { user }
 }: {
   input: UpdateBeneficiaryInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const { referents: previousReferents, relatives: previousRelatives } =
     await getBeneficiaryReferentsAndRelatives({

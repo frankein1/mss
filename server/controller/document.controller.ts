@@ -4,7 +4,7 @@ import {
   CreateViewUrlInput
 } from '~/server/schema'
 import {
-  AppContext,
+  ProtectedAppContext,
   forbiddenError,
   invalidError,
   notfoundError
@@ -25,7 +25,7 @@ export const editDocumentHandler = async ({
   ctx: { user },
   input
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
   input: EditDocumentInput
 }) => {
   const { key, beneficiaryId, ...data } = input
@@ -55,7 +55,7 @@ export const deleteDocumentHandler = async ({
   ctx: { user },
   input
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
   input: DeleteDocumentInput
 }) => {
   const { documentKey } = input
@@ -86,7 +86,7 @@ export const createViewUrlHandler = async ({
   ctx: { user },
   input
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
   input: CreateViewUrlInput
 }) => {
   const { key } = input

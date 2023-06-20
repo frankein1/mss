@@ -1,5 +1,5 @@
 import { helpRequestGetPageSelect } from './get-page.controller'
-import { AppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { QuickEditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { canEditBeneficiaryHelpRequest } from '~/server/security/rules'
@@ -9,7 +9,7 @@ export const quickUpdateHelpRequestHandler = async ({
   ctx: { user }
 }: {
   input: QuickEditHelpRequestInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const target = await prismaClient.helpRequest.findUnique({
     where: { id },

@@ -1,4 +1,4 @@
-import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import {
   canViewBeneficiaryFollowup,
@@ -11,12 +11,8 @@ export const getFollowupDetailsHandler = async ({
   ctx: { user }
 }: {
   input: { id: string }
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
-  if (!user.structureId) {
-    throw invalidError('structureId is null')
-  }
-
   const followup = await prismaClient.followup.findUnique({
     where: { id },
     include: {

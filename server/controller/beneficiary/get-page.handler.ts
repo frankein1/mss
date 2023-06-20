@@ -1,6 +1,6 @@
 import { FollowupType, Prisma } from '@prisma/client'
 import { BeneficiaryFilterInput, GetBeneficiariesInput } from '~/server/schema'
-import { AppContext } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
@@ -13,7 +13,7 @@ export const getBeneficiariesHandler = async ({
   ctx: { user }
 }: {
   input: GetBeneficiariesInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const { structureId } = user
 
@@ -27,7 +27,7 @@ export const getBeneficiariesHandler = async ({
     : undefined
 
   const where: Prisma.BeneficiaryWhereInput = {
-    structureId: structureId || undefined,
+    structureId,
     archived: null,
     referents: referentsCondition,
     ...prepareBeneficiaryFilters(input.filters)

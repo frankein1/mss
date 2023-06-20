@@ -1,13 +1,13 @@
 import { NotificationType, Prisma } from '@prisma/client'
 import { UpdateNotificationInput, GetNotificationInput } from '../schema'
-import { AppContext } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 
 export const updateNotificationHandler = async ({
   ctx: { user },
   input: { id, read }
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
   input: UpdateNotificationInput
 }) => {
   await prismaClient.notification.updateMany({
@@ -20,7 +20,7 @@ export const getNotificationHandler = async ({
   ctx: { user },
   input: { onlyUnread, type }
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
   input: GetNotificationInput
 }) => {
   const where: {

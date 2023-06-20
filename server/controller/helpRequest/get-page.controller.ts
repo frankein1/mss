@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { AppContext, invalidError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import type {
   GetHelpRequestsInput,
   GetHelpRequestsInputOrderBy
@@ -57,12 +57,8 @@ export const getHelpRequestsHandler = async ({
   ctx: { user }
 }: {
   input: GetHelpRequestsInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
-  if (!user.structureId) {
-    throw invalidError('structureId is null')
-  }
-
   const { take, skip } = takeAndSkipFromPagination({
     perPage: input.perPage,
     page: input.page

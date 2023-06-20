@@ -1,5 +1,9 @@
 import { User, Prisma, NotificationType } from '@prisma/client'
-import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
+import {
+  ProtectedAppContext,
+  invalidError,
+  forbiddenError
+} from '~/server/trpc'
 import { AddCommentInput } from '~/server/schema'
 import {
   canAddCommentToBeneficiaryFollowup,
@@ -130,7 +134,7 @@ export const addCommentHandler = async ({
   ctx: { user },
   input
 }: {
-  ctx: AppContext
+  ctx: ProtectedAppContext
   input: AddCommentInput
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)

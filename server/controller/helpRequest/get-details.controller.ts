@@ -1,4 +1,4 @@
-import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import {
   canViewBeneficiaryHelpRequest,
   canViewBeneficiaryHelpRequestSynthesis,
@@ -11,12 +11,8 @@ export const getHelpRequestDetailsHandler = async ({
   ctx: { user }
 }: {
   input: { id: string }
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
-  if (!user.structureId) {
-    throw invalidError('structureId is null')
-  }
-
   const helpRequest = await prismaClient.helpRequest.findUnique({
     where: { id },
     include: {

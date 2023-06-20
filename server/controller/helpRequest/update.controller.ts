@@ -6,7 +6,7 @@ import {
   Document,
   StructureType
 } from '@prisma/client'
-import { AppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import {
@@ -131,7 +131,7 @@ export const updateHelpRequestHandler = async ({
   ctx: { user }
 }: {
   input: EditHelpRequestInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const target = await getHelpRequest(input.id)
 

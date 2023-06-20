@@ -1,5 +1,9 @@
 import { Prisma, User, FollowupMedium } from '@prisma/client'
-import { AppContext, invalidError, forbiddenError } from '~/server/trpc'
+import {
+  ProtectedAppContext,
+  invalidError,
+  forbiddenError
+} from '~/server/trpc'
 import type { AddFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { canCreateBeneficiaryFollowup } from '~/server/security/rules'
@@ -99,7 +103,7 @@ export const addFollowupHandler = async ({
   ctx: { user }
 }: {
   input: AddFollowupInput
-  ctx: AppContext
+  ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
 
