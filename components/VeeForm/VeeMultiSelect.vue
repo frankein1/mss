@@ -226,7 +226,7 @@
     callFocus
   } = _useExpandMenu()
 
-  useWatchSelectOptions(() => props.options, selectedValues)
+  useWatchSelectOptions(() => props.options, selectedValues, changedValues)
 
   /**
    * Update the hidden input value
@@ -249,6 +249,11 @@
   onBeforeUnmount(() => {
     unlistenFormReset()
   })
+
+  function changedValues() {
+    handleChange(selectedValues.value)
+    emit('changeValue', selectedValues.value)
+  }
 
   function listenFormReset() {
     // FIXME: Still useful with vee-validate ?
@@ -302,8 +307,7 @@
       selectedValues.value.push(value)
     }
 
-    handleChange(selectedValues.value)
-    emit('changeValue', selectedValues.value)
+    changedValues()
   }
 
   function onInputKeyDown(e: KeyboardEvent) {

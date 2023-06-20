@@ -284,7 +284,7 @@
     computed(() => props.readonly)
   )
 
-  useWatchSelectOptions(() => props.options, selectedValues)
+  useWatchSelectOptions(() => props.options, selectedValues, changedValues)
 
   const createTagIsActive = computed(
     () =>
@@ -319,6 +319,16 @@
   onBeforeUnmount(() => {
     unlistenFormReset()
   })
+
+  function changedValues() {
+    handleChange(
+      props.multiple ? selectedValues.value : selectedValues.value[0]
+    )
+    emit(
+      'changeValue',
+      props.multiple ? selectedValues.value : selectedValues.value[0]
+    )
+  }
 
   function listenFormReset() {
     // FIXME: Still useful with vee-validate ?
@@ -424,13 +434,7 @@
     } else {
       selectedValues.value.push(value)
     }
-    handleChange(
-      props.multiple ? selectedValues.value : selectedValues.value[0]
-    )
-    emit(
-      'changeValue',
-      props.multiple ? selectedValues.value : selectedValues.value[0]
-    )
+    changedValues()
   }
 
   function setDisplayedValueToSelected() {
@@ -486,13 +490,7 @@
     } else {
       selectedValues.value = [newOptionValue]
     }
-    handleChange(
-      props.multiple ? selectedValues.value : selectedValues.value[0]
-    )
-    emit(
-      'changeValue',
-      props.multiple ? selectedValues.value : selectedValues.value[0]
-    )
+    changedValues()
   }
 
   function initOptionRefs(): { [key: string]: Ref<HTMLElement | null> } {

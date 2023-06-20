@@ -10,7 +10,8 @@ import type { Options } from '~/utils/options'
  */
 export function useWatchSelectOptions(
   optionsSource: () => Options,
-  selectedValues: Ref<string[]>
+  selectedValues: Ref<string[]>,
+  changedValues: () => void
 ) {
   /**
    * When options list changes, the new options are added to selected values
@@ -32,6 +33,7 @@ export function useWatchSelectOptions(
           )
         }
       })
+      changedValues()
     },
     { deep: true }
   )
