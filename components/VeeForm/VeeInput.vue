@@ -116,7 +116,7 @@
       return '00 00 00 00 00'
     }
     if (props.type === 'social-security-number') {
-      return '0 00 00 00 000 000'
+      return '0 00 00 00 000 000 00'
     }
     return undefined
   })
@@ -146,7 +146,7 @@
      * Checking data allows to prevent adding a whitespace when removing the whitespace
      */
     if (props.type === 'social-security-number' && typeof value === 'string') {
-      const WHITESPACE_POSITIONS = [1, 4, 7, 10, 14]
+      const WHITESPACE_POSITIONS = [1, 4, 7, 10, 14, 18]
 
       const formattedValue = WHITESPACE_POSITIONS.reduce((val, pos) => {
         if (val.length > pos) {

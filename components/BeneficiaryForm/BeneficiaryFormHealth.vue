@@ -20,6 +20,8 @@
         v-if="hasNirAccess"
         name="health.socialSecurityNumber"
         label="N° Sécurité Sociale"
+        type="social-security-number"
+        hint="La clé du n° de sécurité sociale est optionnelle"
       />
       <VeeInput
         name="health.insurance"
