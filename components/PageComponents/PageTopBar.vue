@@ -54,7 +54,8 @@
         icon: 'fr-icon-home-4-line'
       })
     }
-
+  }
+  if (user) {
     menus.push({
       label: 'Déconnexion',
       href: RoutePath.Logout(),

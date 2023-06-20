@@ -8,8 +8,7 @@
   const route = useRoute()
 
   definePageMeta({
-    middleware: 'auth',
-    layout: 'admin'
+    middleware: 'auth'
   })
 
   useLogoutInactiveUser()
