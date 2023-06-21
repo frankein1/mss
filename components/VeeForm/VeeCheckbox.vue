@@ -13,6 +13,7 @@
       :checked="checked"
       :value="true"
       :aria-labelledby="labelledBy"
+      :required="required"
       @input="handleChange"
     />
     <label
@@ -20,7 +21,7 @@
       :for="id"
     >
       <span :class="{ 'no-label': noLabel }">
-        {{ label }}
+        {{ displayLabel }}
       </span>
     </label>
   </div>
@@ -35,10 +36,12 @@
       label: string
       noLabel?: boolean
       labelledBy?: string
+      required?: boolean
     }>(),
     {
       noLabel: false,
-      labelledBy: undefined
+      labelledBy: undefined,
+      required: false
     }
   )
 
@@ -54,6 +57,10 @@
   })
 
   const { id } = useFormFieldId(props.name)
+
+  const displayLabel = computed(() =>
+    props.required ? `${props.label} *` : props.label
+  )
 </script>
 
 <style scoped>

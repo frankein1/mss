@@ -98,6 +98,34 @@ export const getUsersHandler = async ({
   })
 }
 
+export const acceptCGUHandler = async ({
+  ctx: { user }
+}: {
+  ctx: ProtectedAppContext
+}) => {
+  const {
+    public: { cguVersion }
+  } = useRuntimeConfig()
+
+  return await prismaClient.user.update({
+    where: { id: user.id },
+    data: {
+      CGUHistory: {
+        create: {
+          version: cguVersion
+        }
+      }
+    },
+    include: {
+      CGUHistory: {
+        orderBy: {
+          date: 'desc'
+        }
+      }
+    }
+  })
+}
+
 function getEmailContent(user: User) {
   const {
     email: { from }

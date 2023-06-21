@@ -52,7 +52,7 @@ export default defineEventHandler(async event => {
     inclusionConnectToken
   })
 
-  const { firstName, lastName, id, role, structure, status } = user
+  const { firstName, lastName, id, role, structure, status, CGUHistory } = user
 
   const jwtUser = {
     firstName,
@@ -63,7 +63,8 @@ export default defineEventHandler(async event => {
     status,
     inclusionConnectId: sub,
     structureId: structure?.id || null,
-    structureType: structure?.type
+    structureType: structure?.type,
+    CGUHistoryVersion: CGUHistory.length ? CGUHistory[0].version : null
   }
 
   const { sessionToken, expiresIn } = signJwt(jwtUser, jwtKey)
@@ -148,7 +149,12 @@ async function getUser(email: string) {
   return await prismaClient.user.findUniqueOrThrow({
     where: { email },
     include: {
-      structure: true
+      structure: true,
+      CGUHistory: {
+        orderBy: {
+          date: 'desc'
+        }
+      }
     }
   })
 }
