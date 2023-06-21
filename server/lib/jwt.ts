@@ -23,7 +23,8 @@ export function signJwt(user: JwtUser, jwtKey: string) {
         status: user.status,
         inclusionConnectId: user.inclusionConnectId,
         structureId: user.structureId,
-        structureType: user.structureType
+        structureType: user.structureType,
+        CGUHistoryVersion: user.CGUHistoryVersion
       }
     },
     jwtKey,

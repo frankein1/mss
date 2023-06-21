@@ -6,6 +6,8 @@ export enum Route {
   Register = 'Register',
   DeclarationAccessibilite = 'DeclarationAccessibilite',
   MentionsLegales = 'MentionsLegales',
+  CGUManager = 'CGUManager',
+  CGUUser = 'CGUUser',
   Env = 'Env',
   LogoutSuccess = 'LogoutSuccess',
   DisabledAccount = 'DisabledAccount',
@@ -30,6 +32,7 @@ export enum Route {
 
 const AppRoute = '/app'
 const ApiKeycloak = '/api/keycloak'
+const CGURoute = '/cgu'
 
 const BeneficiariesRoute = `${AppRoute}/beneficiaries`
 
@@ -72,6 +75,8 @@ export const RoutePath = {
   [Route.Env]: () => `/env`,
   [Route.LogoutSuccess]: () => '/logout-success',
   [Route.DisabledAccount]: () => '/disabled-account',
+  [Route.CGUManager]: () => `${CGURoute}/manager`,
+  [Route.CGUUser]: () => `${CGURoute}/user`,
 
   [Route.Login]: () => '/login',
   Logout: () => `${ApiKeycloak}/logout`,

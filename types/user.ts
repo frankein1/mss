@@ -6,6 +6,7 @@ export type JwtUser = Pick<
 > & {
   inclusionConnectId: string
   structureType?: StructureType
+  CGUHistoryVersion: string | null
 }
 
 export type JwtData = {

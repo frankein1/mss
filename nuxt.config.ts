@@ -101,6 +101,7 @@ export default defineNuxtConfig({
       smtpUser: process.env.EMAIL_SMTP_USER || ''
     },
     public: {
+      cguVersion: '1.0',
       appUrl: process.env.APP_URL,
       inactiveUserTimeThreshold: parseInt(
         process.env.INACTIVE_USER_TIME_THRESHOLD || '10'
