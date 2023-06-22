@@ -34,9 +34,7 @@
         :id="BeneficiaryTab.Documents"
         name="Documents"
       >
-        <BeneficiaryDocumentList
-          :beneficiary-id="beneficiaryId"
-        ></BeneficiaryDocumentList>
+        <BeneficiaryDocumentList :beneficiary="beneficiary" />
       </Tab>
       <Tab
         :id="BeneficiaryTab.History"
@@ -54,6 +52,10 @@
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+
+  definePageMeta({
+    middleware: 'is-beneficiary-referent'
+  })
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string

@@ -10,7 +10,7 @@
     :financial-support="values.financialSupport"
     :past-statuses="pastStatuses"
     is-editing
-    :is-owned-by-current-user="isOwnedByCurrentUser"
+    :can-edit-private-synthesis="canEditPrivateSynthesis"
     @submit="onSubmit"
   />
 </template>
@@ -28,7 +28,7 @@
     EditHelpRequestInput,
     editHelpRequestSchema
   } from '~/server/schema/helpRequest.schema'
-  import { isCreator } from '~/server/security/rules'
+  import { canEditBeneficiaryHelpRequestPrivateSynthesis } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { pastStatusesFromStatus } from '~/utils/helpRequest/pastStatusesFromStatus'
   import { GetHelpRequestDetailsOutput } from '~/server/routers'
@@ -54,15 +54,11 @@
     return pastStatusesFromStatus(props.helpRequest.status)
   })
 
-  const isOwnedByCurrentUser = computed(() =>
-    isCreator(authStore.getAuthUser, props.helpRequest, [
-      'Administrator',
-      'StructureManager',
-      'SocialWorker',
-      'Instructor',
-      'ReceptionAgent',
-      'Referent'
-    ])
+  const canEditPrivateSynthesis = computed(() =>
+    canEditBeneficiaryHelpRequestPrivateSynthesis(
+      authStore.getAuthUser,
+      props.helpRequest
+    )
   )
 
   const initialDocumentIds = computed(

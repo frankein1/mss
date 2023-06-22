@@ -6,7 +6,7 @@ import { prismaClient } from '~/server/prisma'
 import { uploadFile } from '~/server/lib/s3'
 import { forbiddenError, invalidError } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/security'
-import { canAddBeneficiaryDocument } from '~/server/security/rules'
+import { canAddDocument } from '~/server/security/rules'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
 
@@ -32,7 +32,7 @@ export default defineEventHandler(async event => {
     throw invalidError('No beneficiary')
   }
 
-  if (!canAddBeneficiaryDocument(user, beneficiary)) {
+  if (!canAddDocument(user, beneficiary)) {
     throw forbiddenError()
   }
 

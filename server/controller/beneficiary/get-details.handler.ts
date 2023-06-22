@@ -3,7 +3,7 @@ import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaire
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import {
   canViewBeneficiary,
-  canViewBeneficiaryRelatives,
+  canListBeneficiaryRelatives,
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,
   canViewBeneficiaryExternalOrganisations
@@ -125,7 +125,7 @@ function getBeneficiaryRelatives(
   user: User,
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
-  if (!canViewBeneficiaryRelatives(user, beneficiary)) {
+  if (!canListBeneficiaryRelatives(user, beneficiary)) {
     return {}
   }
 

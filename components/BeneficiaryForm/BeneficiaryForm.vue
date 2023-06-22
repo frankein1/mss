@@ -65,7 +65,6 @@
     </div>
 
     <VeeTextarea
-      v-if="canSetGeneralInformation"
       class="fr-col-12"
       name="additionalInformation"
       label="Informations complémentaires"
@@ -106,7 +105,6 @@
     canEditBeneficiaryReferents,
     canEditBeneficiaryOccupationIncome,
     canEditBeneficiaryExternalOrganisations,
-    canEditBeneficiaryGeneralInformation,
     canEditBeneficiaryRelatives
   } from '~/server/security/rules'
   import type { GetBeneficiaryOutput } from '~/server/routers'
@@ -258,11 +256,6 @@
     props.beneficiary
   )
   const canSetExternalOrganisations = canEditBeneficiaryExternalOrganisations(
-    user,
-    props.beneficiary
-  )
-
-  const canSetGeneralInformation = canEditBeneficiaryGeneralInformation(
     user,
     props.beneficiary
   )

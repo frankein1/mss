@@ -42,10 +42,11 @@
   import { Breadcrumb, RoutePath, RouteTitle } from '~/utils/routing'
   import { EditFollowupInput } from '~/server/schema'
 
-  // TODO
-  // definePageMeta({
-  //   middleware: ['owns-interview', 'is-beneficiary-referent']
-  // })
+  definePageMeta({
+    // TODO
+    //   middleware: ['owns-interview', 'is-beneficiary-referent']
+    middleware: 'is-beneficiary-referent'
+  })
 
   const route = useRoute()
   const snackbar = useSnackbar()

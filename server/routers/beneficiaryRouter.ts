@@ -17,7 +17,8 @@ import {
   searchBeneficiaryHandler,
   getBeneficiaryMinimalInfoHandler,
   getBeneficiaryHistoryHandler,
-  deleteBeneficiaryHandler
+  deleteBeneficiaryHandler,
+  isBeneficiaryReferentHandler
 } from '~/server/controller/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
 
@@ -31,6 +32,9 @@ export const beneficiaryRouter = router({
   update: protectedProcedure
     .input(updateBeneficiarySchema)
     .mutation(updateBeneficiaryHandler),
+  isBeneficiaryReferent: protectedProcedure
+    .input(idSchema)
+    .query(isBeneficiaryReferentHandler),
   getBeneficiaryMinimalInfo: protectedProcedure
     .input(idSchema)
     .query(getBeneficiaryMinimalInfoHandler),

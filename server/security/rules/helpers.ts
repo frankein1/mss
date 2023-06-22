@@ -39,3 +39,9 @@ export const isReferentFor = (
   target.referents.some(r =>
     typeof r === 'string' ? r === grantee.id : r.id === grantee.id
   )
+
+export const isCreator = (
+  grantee: SecurityRuleGrantee,
+  target: { createdById?: string | null },
+  allowedRoles: AllowedRoles
+) => grantee.id === target.createdById && hasAllowedRole(grantee, allowedRoles)

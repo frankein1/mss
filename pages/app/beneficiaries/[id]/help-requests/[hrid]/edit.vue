@@ -50,10 +50,11 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
-  // TODO
-  // definePageMeta({
-  //   middleware: ['owns-help-request', 'is-beneficiary-referent']
-  // })
+  definePageMeta({
+    // TODO
+    //   middleware: ['owns-help-request', 'is-beneficiary-referent']
+    middleware: 'is-beneficiary-referent'
+  })
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
