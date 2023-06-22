@@ -24,7 +24,6 @@ export { canEditItsOwnStructure } from './structure'
 
 export {
   canOnlyListItsBeneficiaries,
-  canCreateBeneficiary,
   canViewBeneficiary,
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,

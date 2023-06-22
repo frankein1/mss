@@ -14,18 +14,6 @@ export const canOnlyListItsBeneficiaries = (
   grantee: SecurityRuleGrantee
 ): boolean => hasAllowedRole(grantee, ['Referent'])
 
-export const canCreateBeneficiary = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent',
-    'Referent'
-  ])
-
 export const canViewBeneficiary = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents

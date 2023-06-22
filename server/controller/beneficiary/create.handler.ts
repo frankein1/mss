@@ -1,8 +1,7 @@
 import { CreateBeneficiaryInput } from '~/server/schema'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { generateFileNumber } from '~/utils/generateFileNumber'
-import { canCreateBeneficiary } from '~/server/security/rules'
 
 export const createBeneficiaryHandler = async ({
   input,
@@ -11,18 +10,13 @@ export const createBeneficiaryHandler = async ({
   input: CreateBeneficiaryInput
   ctx: ProtectedAppContext
 }) => {
-  // FIXME: Should the structureId be set on the server side ?
-  const { structureId, referents, ...data } = input
-
-  if (!canCreateBeneficiary(user, input)) {
-    throw forbiddenError()
-  }
+  const { referents, ...data } = input
 
   const fileNumber = generateFileNumber()
 
   const beneficiary = await prismaClient.beneficiary.create({
     data: {
-      structureId,
+      structureId: user.structureId,
       fileNumber,
       referents: {
         connect: referents.map(referent => ({ id: referent }))
