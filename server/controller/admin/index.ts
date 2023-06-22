@@ -1,2 +1,2 @@
-export { loginController } from './login.controller'
-export { getStructuresController } from './get-structures.controller'
+export * from './get-structures.controller'
+export * from './get-users.controller'

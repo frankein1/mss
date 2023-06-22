@@ -1,23 +1,5 @@
-import { z } from 'zod'
 import { UserRole } from '@prisma/client'
-import { NonAdminUserRole } from '~/client/options/user'
-import {
-  errorMessages,
-  minStringLengthMessage,
-  validEmailMessage,
-  enumErrorMap
-} from '~/utils/zod'
-
-const createUserSchema = z.object({
-  firstName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
-  lastName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
-  email: z.string(errorMessages).email(validEmailMessage),
-  role: z.nativeEnum(NonAdminUserRole, {
-    errorMap: enumErrorMap
-  })
-})
-
-type UserCreationInput = z.infer<typeof createUserSchema>
+import { z } from 'zod'
 
 const editUserRoleSchema = z.object({
   id: z.string().uuid(),
@@ -51,7 +33,6 @@ const editUserSchema = z.union([
 type UserEditionInput = z.infer<typeof editUserSchema>
 
 export {
-  createUserSchema,
   editUserSchema,
   editUserRoleSchema,
   editUserAidantConnectAuthorisationSchema,
@@ -59,7 +40,6 @@ export {
 }
 
 export type {
-  UserCreationInput,
   UserEditionInput,
   UserRoleEditionInput,
   UserAidantConnectAuthorisationEditionInput,

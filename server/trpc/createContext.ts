@@ -1,4 +1,4 @@
-import { inferAsyncReturnType, TRPCError } from '@trpc/server'
+import { inferAsyncReturnType } from '@trpc/server'
 import { H3Event, parseCookies } from 'h3'
 import { verifyJwt } from '../lib/jwt'
 import { prismaClient } from '@/server/prisma'

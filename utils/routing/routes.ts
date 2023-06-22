@@ -27,7 +27,8 @@ export enum Route {
   BeneficiaryHelpRequestEdit = 'BeneficiaryHelpRequestEdit',
   History = 'History',
   Admin = 'Admin',
-  AdminStructures = 'AdminStructures'
+  AdminStructures = 'AdminStructures',
+  AdminUsers = 'AdminUsers'
 }
 
 const AppRoute = '/app'
@@ -122,5 +123,6 @@ export const RoutePath = {
 
   // ADMIN
   [Route.Admin]: () => `${AdminRoute}`,
-  [Route.AdminStructures]: () => `${AdminRoute}/structures`
+  [Route.AdminStructures]: () => `${AdminRoute}/structures`,
+  [Route.AdminUsers]: () => `${AdminRoute}/users`
 }
