@@ -24,7 +24,6 @@ export { canEditItsOwnStructure } from './structure'
 
 export {
   canOnlyListItsBeneficiaries,
-  canCreateBeneficiary,
   canViewBeneficiary,
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,
@@ -52,116 +51,36 @@ export {
   canViewDocument
 } from './document'
 
+export {
+  canCreateFollowup,
+  canDeleteFollowup,
+  canEditFollowup,
+  canEditFollowupPrivateSynthesis,
+  canListBeneficiaryFollowups,
+  canViewFollowup,
+  canViewFollowupPrivateSynthesis,
+  canViewFollowupDetails,
+  canEditFollowupStatus
+} from './followup'
+
+export { canAddCommentToFollowup, canListCommentsToFollowup } from './comment'
+
 // A rule is a synchronous function taking
 // -- grantee (the authenticated user)
 // -- target (aggregate info or scope of the action)
 // -- params (specifics about the action)
-export const canCreateBeneficiaryFollowup = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
-export const canListBeneficiaryFollowups = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
-export const canViewBeneficiaryFollowup = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  followup: SecurityTargetWithCreator
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) ||
-  isCreator(grantee, followup, ['ReceptionAgent']) ||
-  isReferentFor(grantee, beneficiary)
-
-export const canViewBeneficiaryFollowupSynthesis = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  followup: SecurityTargetWithCreator
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ]) ||
-  isCreator(grantee, followup, ['Instructor']) ||
-  isReferentFor(grantee, beneficiary)
-
-export const canViewBeneficiaryFollowupPrivateSynthesis = (
-  grantee: SecurityRuleGrantee,
-  _: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  followup: SecurityTargetWithCreator
-): boolean =>
-  isCreator(grantee, followup, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent',
-    'Referent'
-  ])
-
-export const canEditBeneficiaryFollowupPrivateSynthesis = (
-  grantee: SecurityRuleGrantee,
-  followup: SecurityTargetWithCreator
-): boolean =>
-  isCreator(grantee, followup, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
 
 export const canEditBeneficiaryHelpRequestPrivateSynthesis = (
   grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure,
   helpRequest: SecurityTargetWithCreator
 ): boolean =>
-  isCreator(grantee, helpRequest, [
+  isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker',
     'Instructor',
     'Referent'
-  ])
-
-export const canEditBeneficiaryFollowup = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  followup: SecurityTargetWithCreator
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, ['StructureManager']) ||
-  isCreator(grantee, followup, [
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent',
-    'Referent'
-  ])
-
-export const canAddCommentToBeneficiaryFollowup = canListBeneficiaryFollowups
-export const canListCommentsToBeneficiaryFollowup = canViewBeneficiaryFollowup
-
-export const canDeleteBeneficiaryFollowup = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  followup: SecurityTargetWithCreator
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, ['StructureManager']) ||
-  isCreator(grantee, followup, ['SocialWorker', 'Instructor']) ||
-  isReferentFor(grantee, beneficiary)
+  ]) && isCreator(grantee, helpRequest)
 
 export const canCreateBeneficiaryHelpRequest = (
   grantee: SecurityRuleGrantee,
@@ -197,13 +116,14 @@ export const canAccessProtectedDataInHelpRequest = (
 export const canViewBeneficiaryHelpRequest = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  followup: SecurityTargetWithCreator
+  helpRequest: SecurityTargetWithCreator
 ): boolean =>
   isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker'
   ]) ||
-  isCreator(grantee, followup, ['Instructor']) ||
+  (isInSameStructureAs(grantee, beneficiary, ['Instructor']) &&
+    isCreator(grantee, helpRequest)) ||
   isReferentFor(grantee, beneficiary)
 
 export const canViewBeneficiaryHelpRequestSynthesis = (
@@ -215,29 +135,29 @@ export const canViewBeneficiaryHelpRequestSynthesis = (
     'StructureManager',
     'SocialWorker'
   ]) ||
-  isCreator(grantee, helpRequest, ['Instructor']) ||
+  (isInSameStructureAs(grantee, beneficiary, ['Instructor']) &&
+    isCreator(grantee, helpRequest)) ||
   isReferentFor(grantee, beneficiary)
 
 export const canViewBeneficiaryHelpRequestPrivateSynthesis = (
   grantee: SecurityRuleGrantee,
-  _: SecurityTargetWithStructure & SecurityTargetWithReferents,
+  beneficiary: SecurityTargetWithStructure,
   helpRequest: SecurityTargetWithCreator
 ): boolean =>
-  isCreator(grantee, helpRequest, [
+  isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker',
     'Instructor',
     'ReceptionAgent'
-  ])
+  ]) && isCreator(grantee, helpRequest)
 
 export const canEditBeneficiaryHelpRequest = (
   grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  helpRequest: SecurityTargetWithCreator
+  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
 ): boolean =>
-  isInSameStructureAs(grantee, beneficiary, ['StructureManager']) ||
-  isCreator(grantee, helpRequest, ['SocialWorker', 'Instructor']) ||
-  isReferentFor(grantee, beneficiary)
+  isInSameStructureAs(grantee, helpRequest, ['StructureManager']) ||
+  (isInSameStructureAs(grantee, helpRequest, ['SocialWorker', 'Instructor']) &&
+    isCreator(grantee, helpRequest))
 
 export const canAddCommentToBeneficiaryHelpRequest =
   canListBeneficiaryHelpRequests
@@ -253,15 +173,14 @@ export const canListCommentsToBeneficiaryHelpRequest = (
 
 export const canDeleteBeneficiaryHelpRequest = (
   grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  helpRequest: SecurityTargetWithCreator
+  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
 ): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
+  isInSameStructureAs(grantee, helpRequest, [
     'StructureManager',
     'SocialWorker'
   ]) ||
-  isCreator(grantee, helpRequest, ['Instructor']) ||
-  isReferentFor(grantee, beneficiary)
+  (isInSameStructureAs(grantee, helpRequest, ['Instructor']) &&
+    isCreator(grantee, helpRequest))
 
 export const canAccessSocialRightsSimulator = (): boolean => true
 

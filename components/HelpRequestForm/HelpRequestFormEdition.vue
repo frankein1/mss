@@ -57,6 +57,7 @@
   const canEditPrivateSynthesis = computed(() =>
     canEditBeneficiaryHelpRequestPrivateSynthesis(
       authStore.getAuthUser,
+      props.helpRequest.beneficiary,
       props.helpRequest
     )
   )

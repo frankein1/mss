@@ -3,14 +3,24 @@ import type {
   SecurityTargetWithReferents,
   SecurityTargetWithStructure
 } from './types'
-import { hasNotDisallowedRole } from './helpers'
-import { canViewBeneficiary } from './beneficiary'
+import { isInSameStructureAs, isReferentFor } from './helpers'
 
 export const canListBeneficiaryRelatives = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  canViewBeneficiary(grantee, beneficiary) &&
-  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) || isReferentFor(grantee, beneficiary)
 
-export const canEditBeneficiaryRelatives = canListBeneficiaryRelatives
+export const canEditBeneficiaryRelatives = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) || isReferentFor(grantee, beneficiary)

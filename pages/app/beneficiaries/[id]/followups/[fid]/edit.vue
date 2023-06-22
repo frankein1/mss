@@ -43,9 +43,7 @@
   import { EditFollowupInput } from '~/server/schema'
 
   definePageMeta({
-    // TODO
-    //   middleware: ['owns-interview', 'is-beneficiary-referent']
-    middleware: 'is-beneficiary-referent'
+    middleware: ['can-edit-followup', 'is-beneficiary-referent']
   })
 
   const route = useRoute()

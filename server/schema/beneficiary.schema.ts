@@ -64,7 +64,6 @@ const beneficiaryFirstNameSchema = z
   })
 
 export const createBeneficiarySchema = z.object({
-  structureId: z.string().uuid(),
   status: z.nativeEnum(BeneficiaryStatus, errorMessages),
   referents: z
     .array(z.string().uuid(), {

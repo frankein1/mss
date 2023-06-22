@@ -1,4 +1,4 @@
-import type { Prisma } from '@prisma/client'
+import type { Prisma, User } from '@prisma/client'
 import { HelpRequestStatus, FollowupStatus } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import type {
@@ -10,6 +10,12 @@ import type {
 import { TypeSuivi } from '~/types/history'
 import { prepareFollowupFilters } from '~/utils/filters'
 import { prepareHelpRequestFilters } from '~/utils/helpRequest/filters'
+import {
+  getBeneficiarySecurityTarget,
+  BeneficiarySecurityTarget
+} from '~/server/security'
+import { notfoundError, ProtectedAppContext } from '~/server/trpc'
+import { canListBeneficiaryFollowups } from '~/server/security/rules'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput
@@ -76,11 +82,19 @@ const historyItemInclude = {
 }
 
 async function getFollowups(
-  beneficiaryId: string,
+  user: User,
+  beneficiary: NonNullable<BeneficiarySecurityTarget>,
   filters: FollowupFilterInput
 ) {
+  if (!canListBeneficiaryFollowups(user, beneficiary)) {
+    return []
+  }
+
   const followups = await prismaClient.followup.findMany({
-    where: { beneficiaryId, ...prepareFollowupFilters(filters) },
+    where: {
+      beneficiaryId: beneficiary.id,
+      ...prepareFollowupFilters(filters)
+    },
     include: {
       ...historyItemInclude,
       types: true
@@ -126,14 +140,22 @@ function sortHistoryItem(a: HistoryItem, b: HistoryItem) {
 }
 
 export const getBeneficiaryHistoryHandler = async ({
-  input
+  input,
+  ctx: { user }
 }: {
   input: GetHistoryInput
+  ctx: ProtectedAppContext
 }) => {
   const { beneficiaryId, filters } = input
 
+  const beneficiary = await getBeneficiarySecurityTarget(beneficiaryId)
+
+  if (!beneficiary) {
+    throw notfoundError()
+  }
+
   if (filtersAppliesToFollowups(filters)) {
-    return getFollowups(beneficiaryId, filters)
+    return getFollowups(user, beneficiary, filters)
   }
 
   if (filtersAppliesToHelpRequests(filters)) {
@@ -145,7 +167,7 @@ export const getBeneficiaryHistoryHandler = async ({
   }
 
   const [followups, helpRequests] = await Promise.all([
-    getFollowups(beneficiaryId, filters),
+    getFollowups(user, beneficiary, filters),
     getHelpRequests(beneficiaryId, filters)
   ])
 

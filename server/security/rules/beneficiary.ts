@@ -3,28 +3,11 @@ import type {
   SecurityTargetWithStructure,
   SecurityTargetWithReferents
 } from './types'
-import {
-  isInSameStructureAs,
-  isReferentFor,
-  hasAllowedRole,
-  hasNotDisallowedRole
-} from './helpers'
+import { isInSameStructureAs, isReferentFor, hasAllowedRole } from './helpers'
 
 export const canOnlyListItsBeneficiaries = (
   grantee: SecurityRuleGrantee
 ): boolean => hasAllowedRole(grantee, ['Referent'])
-
-export const canCreateBeneficiary = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent',
-    'Referent'
-  ])
 
 export const canViewBeneficiary = (
   grantee: SecurityRuleGrantee,
@@ -41,22 +24,31 @@ export const canViewBeneficiaryHealthInfo = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  canViewBeneficiary(grantee, beneficiary) &&
-  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) || isReferentFor(grantee, beneficiary)
 
 export const canViewBeneficiaryOccupationIncome = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  canViewBeneficiary(grantee, beneficiary) &&
-  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) || isReferentFor(grantee, beneficiary)
 
 export const canViewBeneficiaryExternalOrganisations = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  canViewBeneficiary(grantee, beneficiary) &&
-  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) || isReferentFor(grantee, beneficiary)
 
 export const canEditBeneficiary = canViewBeneficiary
 export const canEditBeneficiaryHealthInfo = canViewBeneficiaryHealthInfo

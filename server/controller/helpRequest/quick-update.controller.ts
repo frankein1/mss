@@ -22,10 +22,7 @@ export const quickUpdateHelpRequestHandler = async ({
     }
   })
 
-  if (
-    !target ||
-    !canEditBeneficiaryHelpRequest(user, target.beneficiary, target)
-  ) {
+  if (!target || !canEditBeneficiaryHelpRequest(user, target)) {
     throw forbiddenError()
   }
 

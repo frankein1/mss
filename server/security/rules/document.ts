@@ -6,39 +6,61 @@ import type {
 } from './types'
 import {
   hasAllowedRole,
-  hasNotDisallowedRole,
   isInSameStructureAs,
   isReferentFor,
   isCreator
 } from './helpers'
-import { canViewBeneficiary } from './beneficiary'
 
-export const canAddDocument = canViewBeneficiary
+export const canAddDocument = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) || isReferentFor(grantee, beneficiary)
 
-export const canListDocuments = canViewBeneficiary
+export const canListDocuments = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) || isReferentFor(grantee, beneficiary)
 
 export const canListConfidentialDocuments = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+  grantee: SecurityRuleGrantee
 ): boolean =>
-  canListDocuments(grantee, beneficiary) &&
-  hasNotDisallowedRole(grantee, ['Instructor'])
+  hasAllowedRole(grantee, [
+    'StructureManager',
+    'SocialWorker',
+    'ReceptionAgent',
+    'Referent'
+  ])
 
 export const canOnlyListItsUploadedDocuments = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  canListDocuments(grantee, beneficiary) &&
-  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
+  grantee: SecurityRuleGrantee
+): boolean => hasAllowedRole(grantee, ['ReceptionAgent'])
 
 export const canViewDocument = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
   document: SecurityTargetWithCreator & { confidential: boolean }
 ): boolean =>
-  canListDocuments(grantee, beneficiary) &&
-  ((hasAllowedRole(grantee, ['Instructor']) && document.confidential) ||
-    isCreator(grantee, document, ['ReceptionAgent']))
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker'
+  ]) ||
+  isReferentFor(grantee, beneficiary) ||
+  (isInSameStructureAs(grantee, beneficiary, ['Instructor']) &&
+    document.confidential) ||
+  (isInSameStructureAs(grantee, beneficiary, ['ReceptionAgent']) &&
+    isCreator(grantee, document))
 
 export const canEditDocument = canViewDocument
 

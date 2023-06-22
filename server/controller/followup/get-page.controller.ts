@@ -4,6 +4,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { prepareFollowupFilters } from '~/utils/filters'
+import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 
 export const getFollowupsHandler = async ({
   input,
@@ -17,10 +18,15 @@ export const getFollowupsHandler = async ({
     page: input.page
   })
 
+  const referents = canOnlyListItsBeneficiaries(user)
+    ? { some: { id: user.id } }
+    : undefined
+
   const where: Prisma.FollowupWhereInput = {
     structureId: user.structureId,
     beneficiary: {
-      archived: null
+      archived: null,
+      referents
     },
     ...prepareFollowupFilters(input.filters)
   }
@@ -41,7 +47,9 @@ export const getFollowupsHandler = async ({
             firstName: true,
             birthName: true,
             usualName: true,
-            email: true
+            email: true,
+            referents: true,
+            structureId: true
           }
         },
         createdBy: {
@@ -51,7 +59,8 @@ export const getFollowupsHandler = async ({
             firstName: true,
             lastName: true
           }
-        }
+        },
+        structureId: true
       },
       take,
       skip,

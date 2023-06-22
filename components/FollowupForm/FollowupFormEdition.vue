@@ -20,7 +20,7 @@
   } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { canEditBeneficiaryFollowupPrivateSynthesis } from '~/server/security/rules'
+  import { canEditFollowupPrivateSynthesis } from '~/server/security/rules'
   import {
     EditFollowupInput,
     editFollowupSchema
@@ -51,7 +51,7 @@
     Object.fromEntries(
       Object.values(FollowupIntervention).map(key => [
         key,
-        props.followup.interventions.includes(key)
+        props.followup.interventions?.includes(key)
       ])
     )
   )
@@ -62,7 +62,7 @@
     Object.fromEntries(
       Object.values(FollowupSignalement).map(key => [
         key,
-        props.followup.signalements.includes(key)
+        props.followup.signalements?.includes(key)
       ])
     )
   )
@@ -70,11 +70,11 @@
   const user = computed(() => authStore.getAuthUser)
 
   const canSetPrivateSynthesis = computed(() =>
-    canEditBeneficiaryFollowupPrivateSynthesis(user.value, props.followup)
+    canEditFollowupPrivateSynthesis(user.value, props.followup)
   )
 
   const initialDocumentIds = computed(
-    () => props.followup.documents.map(d => d.key) || []
+    () => props.followup.documents?.map(d => d.key) || []
   )
 
   const { handleSubmit, values } = useForm<EditFollowupInput>({

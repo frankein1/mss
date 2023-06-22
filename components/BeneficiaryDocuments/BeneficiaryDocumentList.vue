@@ -25,10 +25,7 @@
         @refresh-documents="refresh"
       />
     </div>
-    <div
-      v-if="canAddDocument"
-      class="documents_actions"
-    >
+    <div class="documents_actions">
       <BeneficiaryDocumentAdd
         :beneficiary-id="beneficiary.id"
         @refresh-documents="refresh"
@@ -38,14 +35,11 @@
 </template>
 <script setup lang="ts">
   import { Document, DocumentType } from '@prisma/client'
-  import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
-  import { canAddDocument as canAddDocumentRule } from '~/server/security/rules'
   import { GetBeneficiaryOutput } from '~/server/routers'
 
   const route = useRoute()
-  const authStore = useAuthStore()
 
   const props = defineProps<{ beneficiary: GetBeneficiaryOutput }>()
 
@@ -66,10 +60,6 @@
       focusAndScrollTo(`#document-${item}`)
     }
   })
-
-  const canAddDocument = computed(() =>
-    canAddDocumentRule(authStore.getAuthUser, props.beneficiary)
-  )
 
   function fetchDocuments() {
     return useTrpcClient().beneficiary.getBeneficiaryDocuments.query({
