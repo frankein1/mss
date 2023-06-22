@@ -1,11 +1,13 @@
 import { publicProcedure, router } from '../trpc'
-import { adminLoginSchema } from '~/server/schema'
+import { adminGetStructuresSchema, adminGetUsersSchema } from '~/server/schema'
 import {
-  loginController,
-  getStructuresController
+  getStructuresController,
+  getUsersController
 } from '~/server/controller/admin'
 
 export const adminRouter = router({
-  login: publicProcedure.input(adminLoginSchema).mutation(loginController),
-  getStructures: publicProcedure.query(getStructuresController)
+  getStructures: publicProcedure
+    .input(adminGetStructuresSchema)
+    .query(getStructuresController),
+  getUsers: publicProcedure.input(adminGetUsersSchema).query(getUsersController)
 })

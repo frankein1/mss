@@ -69,26 +69,11 @@ export type {
   CreateCustomFollowupTypeInput
 } from './followupType.schema'
 
-export { editCurrentUserStructureSchema } from './structure.schema'
-export type { EditCurrentUserStructureInput } from './structure.schema'
-
 export { adminLoginSchema } from './auth.schema'
 export type { AdminLoginInput } from './auth.schema'
 
-export {
-  createUserSchema,
-  editUserSchema,
-  editUserRoleSchema,
-  editUserAidantConnectAuthorisationSchema,
-  editUserStatusSchema
-} from './user.schema'
-export type {
-  UserCreationInput,
-  UserEditionInput,
-  UserRoleEditionInput,
-  UserAidantConnectAuthorisationEditionInput,
-  UserStatusEditionInput
-} from './user.schema'
+export * from './user'
+export * from './structure'
 
 export {
   statFilterSchema,

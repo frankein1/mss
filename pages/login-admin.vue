@@ -18,7 +18,6 @@
 </template>
 <script setup lang="ts">
   import { AdminLoginInput, adminLoginSchema } from '~/server/schema'
-  import { RoutePath } from '~/utils/routing'
 
   definePageMeta({
     layout: 'landing'
@@ -29,10 +28,10 @@
   })
 
   const onSubmit = handleSubmit(async input => {
-    const { user } = await useTrpcClient().admin.login.mutate(input)
-    if (user) {
-      navigateTo(RoutePath.AdminStructures())
-    }
+    await useFetch('/api/admin/login', {
+      method: 'POST',
+      body: input
+    })
   })
 </script>
 

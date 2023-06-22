@@ -50,3 +50,8 @@ export type GetHelpRequestDetailsOutput =
 
 export type GetExaminationDatesConfigOutput =
   RouterOutput['config']['getExaminationDates']
+
+export type {
+  AdminStructuresOutput,
+  AdminUsersOutput
+} from '~/server/controller/admin'
