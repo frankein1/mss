@@ -13,8 +13,8 @@ export const getBeneficiaryMinimalInfoHandler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await prismaClient.beneficiary.findFirst({
-    where: { id, structureId: user.structureId },
+  const beneficiary = await prismaClient.beneficiary.findUnique({
+    where: { id },
     select: {
       id: true,
       firstName: true,
@@ -29,15 +29,13 @@ export const getBeneficiaryMinimalInfoHandler = async ({
     throw notfoundError()
   }
 
-  const { referents, structureId, ...beneficiaryMinimalInfo } = beneficiary
+  const {
+    referents: _,
+    structureId: __,
+    ...beneficiaryMinimalInfo
+  } = beneficiary
 
-  if (
-    !canViewBeneficiary(user, {
-      referents,
-      structureId,
-      ...beneficiaryMinimalInfo
-    })
-  ) {
+  if (!canViewBeneficiary(user, beneficiary)) {
     throw forbiddenError()
   }
 

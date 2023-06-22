@@ -3,12 +3,7 @@ import type {
   SecurityTargetWithStructure,
   SecurityTargetWithReferents
 } from './types'
-import {
-  isInSameStructureAs,
-  isReferentFor,
-  hasAllowedRole,
-  hasNotDisallowedRole
-} from './helpers'
+import { isInSameStructureAs, isReferentFor, hasAllowedRole } from './helpers'
 
 export const canOnlyListItsBeneficiaries = (
   grantee: SecurityRuleGrantee
@@ -23,28 +18,45 @@ export const canViewBeneficiary = (
     'SocialWorker',
     'Instructor',
     'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+  ]) ||
+  (isInSameStructureAs(grantee, beneficiary, ['Referent']) &&
+    isReferentFor(grantee, beneficiary))
 
 export const canViewBeneficiaryHealthInfo = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  canViewBeneficiary(grantee, beneficiary) &&
-  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) ||
+  (isInSameStructureAs(grantee, beneficiary, ['Referent']) &&
+    isReferentFor(grantee, beneficiary))
 
 export const canViewBeneficiaryOccupationIncome = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  canViewBeneficiary(grantee, beneficiary) &&
-  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) ||
+  (isInSameStructureAs(grantee, beneficiary, ['Referent']) &&
+    isReferentFor(grantee, beneficiary))
 
 export const canViewBeneficiaryExternalOrganisations = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>
-  canViewBeneficiary(grantee, beneficiary) &&
-  hasNotDisallowedRole(grantee, ['ReceptionAgent'])
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) ||
+  (isInSameStructureAs(grantee, beneficiary, ['Referent']) &&
+    isReferentFor(grantee, beneficiary))
 
 export const canEditBeneficiary = canViewBeneficiary
 export const canEditBeneficiaryHealthInfo = canViewBeneficiaryHealthInfo
@@ -61,7 +73,9 @@ export const canEditBeneficiaryReferents = (
     'StructureManager',
     'SocialWorker',
     'Instructor'
-  ]) || isReferentFor(grantee, beneficiary)
+  ]) ||
+  (isInSameStructureAs(grantee, beneficiary, ['Referent']) &&
+    isReferentFor(grantee, beneficiary))
 
 export const canDeleteBeneficiary = (
   grantee: SecurityRuleGrantee,

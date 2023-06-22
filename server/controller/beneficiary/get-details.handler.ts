@@ -17,10 +17,7 @@ export const getBeneficiaryDetailsHandler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiaryReferentsAndRelatives({
-    id: input.id,
-    structureId: user.structureId
-  })
+  const beneficiary = await getBeneficiaryReferentsAndRelatives(input.id)
 
   if (!canViewBeneficiary(user, beneficiary)) {
     throw forbiddenError()

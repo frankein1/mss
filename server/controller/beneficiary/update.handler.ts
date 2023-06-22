@@ -26,10 +26,7 @@ export const updateBeneficiaryHandler = async ({
   }
 
   const { referents: previousReferents, relatives: previousRelatives } =
-    await getBeneficiaryReferentsAndRelatives({
-      id: input.id,
-      structureId: user.structureId
-    })
+    await getBeneficiaryReferentsAndRelatives(input.id)
 
   const previousIds = previousReferents.map(({ id }) => id)
 

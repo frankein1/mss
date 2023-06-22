@@ -1,20 +1,9 @@
-import { TRPCError } from '@trpc/server'
 import { prismaClient } from '~/server/prisma'
+import { notfoundError } from '~/server/trpc'
 
-export async function getBeneficiaryReferentsAndRelatives({
-  structureId,
-  id
-}: {
-  structureId: string | null
-  id: string
-}) {
-  const where = {
-    id,
-    structureId: structureId || undefined
-  }
-
-  const beneficiary = await prismaClient.beneficiary.findFirst({
-    where,
+export async function getBeneficiaryReferentsAndRelatives(id: string) {
+  const beneficiary = await prismaClient.beneficiary.findUnique({
+    where: { id },
     include: {
       referents: true,
       relatives: {
@@ -25,10 +14,7 @@ export async function getBeneficiaryReferentsAndRelatives({
     }
   })
   if (!beneficiary) {
-    throw new TRPCError({
-      code: 'NOT_FOUND',
-      message: `No beneficiary found with conditions ${JSON.stringify(where)}`
-    })
+    throw notfoundError()
   }
   return beneficiary
 }
