@@ -23,16 +23,18 @@ export const updateUserHandler = async ({
   ctx: ProtectedAppContext
   input: UserEditionInput
 }) => {
-  const target = await prismaClient.user.findUnique({ where: { id } })
+  const target = await prismaClient.user.findFirst({
+    where: {
+      id,
+      structureId: user.structureId
+    }
+  })
 
   if (!target) {
     throw invalidError('User not found')
   }
 
-  if (
-    !canEditUser(user, target) ||
-    ('role' in rest && !canEditUserRole(user, target, rest))
-  ) {
+  if (!canEditUser(user) || ('role' in rest && !canEditUserRole(user, rest))) {
     throw forbiddenError()
   }
 
