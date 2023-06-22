@@ -10,7 +10,7 @@
             <div class="fr-header__brand-top">
               <div class="fr-header__logo">
                 <NuxtLink
-                  :to="RoutePath.Index()"
+                  :to="homePage"
                   target="_self"
                   title="Accueil - Mon Suivi Social"
                 >
@@ -95,7 +95,10 @@
 </template>
 
 <script setup>
+  import { useHomePage } from '~/composables/useHomePage'
   import { RoutePath } from '~/utils/routing'
+
+  const homePage = useHomePage()
 </script>
 
 <style lang="scss" scoped>
