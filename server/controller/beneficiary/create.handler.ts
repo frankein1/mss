@@ -11,6 +11,7 @@ export const createBeneficiaryHandler = async ({
   input: CreateBeneficiaryInput
   ctx: ProtectedAppContext
 }) => {
+  // FIXME: Should the structureId be set on the server side ?
   const { structureId, referents, ...data } = input
 
   if (!canCreateBeneficiary(user, input)) {

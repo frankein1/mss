@@ -15,7 +15,7 @@ export const canEditUserRole = (
   target: SecurityTargetWithStructure,
   update: { role: UserRole }
 ): boolean =>
-  isStructureManager(grantee, target) && update.role !== UserRole.Administrator
+  isStructureManager(grantee, target) && update.role !== 'Administrator'
 
 export const canListUsers = (grantee: SecurityRuleGrantee): boolean =>
   hasAllowedRole(grantee, ['StructureManager'])
