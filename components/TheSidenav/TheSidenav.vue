@@ -19,7 +19,7 @@
       >
         <div class="fr-sidemenu__title">
           <NuxtLink
-            :to="RoutePath.Overview()"
+            :to="homePage"
             target="_self"
             title="Retour au tableau de bord"
           >
@@ -79,9 +79,11 @@
 
 <script setup>
   import { canViewStats } from '~/server/security/rules'
+  import { useHomePage } from '~/composables/useHomePage'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
 
+  const homePage = useHomePage()
   const authStore = useAuthStore()
 
   const menuItems = computed(() => {
@@ -91,6 +93,11 @@
         to: RoutePath.AdminStructures(),
         label: 'Structures',
         icon: 'fr-icon-home-4-line'
+      })
+      items.push({
+        to: RoutePath.AdminUsers(),
+        label: 'Utilisateurs',
+        icon: 'fr-icon-user-line'
       })
     } else {
       items.push({

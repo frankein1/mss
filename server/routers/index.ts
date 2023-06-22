@@ -56,7 +56,14 @@ export type GetExaminationDatesConfigOutput =
 export type GetBeneficiaryDocumentsOutput =
   RouterOutput['beneficiary']['getBeneficiaryDocuments']
 export type GetBeneficiaryDocumentOutput = GetBeneficiaryDocumentsOutput[0]
+<<<<<<< HEAD
 
 // FIXME: Replace by mutation log type when it exists in Prisma schema
 export type GetBeneficiariesMutationLogsOutput =
   RouterOutput['mutationLogs']['beneficiaries']
+=======
+export type {
+  AdminStructuresOutput,
+  AdminUsersOutput
+} from '~/server/controller/admin'
+>>>>>>> feat(admin): add users page
