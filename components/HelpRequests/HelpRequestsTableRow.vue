@@ -169,11 +169,7 @@
   )
 
   const canEditHistory = computed(() =>
-    canEditBeneficiaryHelpRequest(
-      user,
-      props.helpRequest.beneficiary,
-      props.helpRequest
-    )
+    canEditBeneficiaryHelpRequest(user, props.helpRequest)
   )
 
   const isAcceptedHelpRequest = computed(

@@ -1,7 +1,7 @@
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { QuickEditFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { canEditBeneficiaryFollowup } from '~/server/security/rules'
+import { canEditFollowupStatus } from '~/server/security/rules'
 
 export const quickUpdateFollowupHandler = async ({
   input: { id, ...rest },
@@ -21,10 +21,7 @@ export const quickUpdateFollowupHandler = async ({
     }
   })
 
-  if (
-    !target ||
-    !canEditBeneficiaryFollowup(user, target.beneficiary, target)
-  ) {
+  if (!target || !canEditFollowupStatus(user, target.beneficiary, target)) {
     throw forbiddenError()
   }
 

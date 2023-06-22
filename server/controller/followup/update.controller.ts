@@ -3,8 +3,8 @@ import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import {
-  canEditBeneficiaryFollowup,
-  canEditBeneficiaryFollowupPrivateSynthesis
+  canEditFollowup,
+  canEditFollowupPrivateSynthesis
 } from '~/server/security/rules'
 import {
   FollowupTarget,
@@ -13,6 +13,10 @@ import {
 } from '~/utils/followup/prepareFollowupData'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import {
+  FollowupWithBeneficiaryDocumentsAndTypes,
+  getFollowupWithBeneficiaryDocumentsAndTypes
+} from '~/server/query/followups'
 
 export async function prepareFollowupData({
   input,
@@ -25,10 +29,7 @@ export async function prepareFollowupData({
   user: User
   target: FollowupTarget
 }): Promise<Prisma.FollowupUncheckedUpdateInput> {
-  const { structureId } = await transaction.beneficiary.findUniqueOrThrow({
-    where: { id: input.beneficiaryId },
-    select: { structureId: true }
-  })
+  const { structureId } = target.beneficiary
 
   const { type } = await transaction.structure.findUniqueOrThrow({
     where: { id: structureId },
@@ -71,7 +72,7 @@ export async function prepareFollowupData({
       input.medium === FollowupMedium.ExternalAppointment ? input.place : null,
     thirdPersonName:
       input.medium === FollowupMedium.ThirdParty ? input.thirdPersonName : null,
-    privateSynthesis: canEditBeneficiaryFollowupPrivateSynthesis(user, target)
+    privateSynthesis: canEditFollowupPrivateSynthesis(user, target)
       ? input.privateSynthesis
       : undefined,
     structureName: input.redirected ? input.structureName : null,
@@ -79,25 +80,6 @@ export async function prepareFollowupData({
     ...ministryData
   }
 }
-
-function getFollowup(id: string) {
-  return prismaClient.followup.findUnique({
-    where: { id },
-    include: {
-      beneficiary: {
-        include: {
-          referents: true
-        }
-      },
-      documents: true,
-      types: true
-    }
-  })
-}
-
-type FollowupWithBeneficiaryDocumentsAndTypes = Prisma.PromiseReturnType<
-  typeof getFollowup
->
 
 async function updateTransaction(
   transaction: Prisma.TransactionClient,
@@ -133,12 +115,9 @@ export const updateFollowupHandler = async ({
   input: EditFollowupInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await getFollowup(input.id)
+  const target = await getFollowupWithBeneficiaryDocumentsAndTypes(input.id)
 
-  if (
-    !target ||
-    !canEditBeneficiaryFollowup(user, target.beneficiary, target)
-  ) {
+  if (!target || !canEditFollowup(user, target)) {
     throw forbiddenError()
   }
 

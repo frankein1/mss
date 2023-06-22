@@ -20,9 +20,7 @@ export const canAddDocument = (
     'SocialWorker',
     'Instructor',
     'ReceptionAgent'
-  ]) ||
-  (isInSameStructureAs(grantee, beneficiary, ['Referent']) &&
-    isReferentFor(grantee, beneficiary))
+  ]) || isReferentFor(grantee, beneficiary)
 
 export const canListDocuments = (
   grantee: SecurityRuleGrantee,
@@ -33,9 +31,7 @@ export const canListDocuments = (
     'SocialWorker',
     'Instructor',
     'ReceptionAgent'
-  ]) ||
-  (isInSameStructureAs(grantee, beneficiary, ['Referent']) &&
-    isReferentFor(grantee, beneficiary))
+  ]) || isReferentFor(grantee, beneficiary)
 
 export const canListConfidentialDocuments = (
   grantee: SecurityRuleGrantee
@@ -60,12 +56,11 @@ export const canViewDocument = (
     'StructureManager',
     'SocialWorker'
   ]) ||
-  (isInSameStructureAs(grantee, beneficiary, ['Referent']) &&
-    isReferentFor(grantee, beneficiary)) ||
+  isReferentFor(grantee, beneficiary) ||
   (isInSameStructureAs(grantee, beneficiary, ['Instructor']) &&
     document.confidential) ||
   (isInSameStructureAs(grantee, beneficiary, ['ReceptionAgent']) &&
-    isCreator(grantee, document, ['ReceptionAgent']))
+    isCreator(grantee, document))
 
 export const canEditDocument = canViewDocument
 

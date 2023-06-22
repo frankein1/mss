@@ -32,9 +32,7 @@ export const deleteHelpRequestHandler = async ({
     throw invalidError('HelpRequest not found')
   }
 
-  if (
-    !canDeleteBeneficiaryHelpRequest(user, helpRequest.beneficiary, helpRequest)
-  ) {
+  if (!canDeleteBeneficiaryHelpRequest(user, helpRequest)) {
     throw forbiddenError()
   }
 

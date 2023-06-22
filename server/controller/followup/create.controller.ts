@@ -6,7 +6,7 @@ import {
 } from '~/server/trpc'
 import type { AddFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { canCreateBeneficiaryFollowup } from '~/server/security/rules'
+import { canCreateFollowup } from '~/server/security/rules'
 import {
   prepareMinistryData,
   prepareFollowupTypesMutations
@@ -111,7 +111,7 @@ export const addFollowupHandler = async ({
     throw invalidError('Beneficiary not found')
   }
 
-  if (!canCreateBeneficiaryFollowup(user, beneficiary)) {
+  if (!canCreateFollowup(user, beneficiary)) {
     throw forbiddenError()
   }
 

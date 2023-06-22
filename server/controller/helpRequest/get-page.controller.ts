@@ -49,7 +49,8 @@ export const helpRequestGetPageSelect = {
   },
   instructorOrganization: {
     select: { name: true }
-  }
+  },
+  structureId: true
 }
 
 export const getHelpRequestsHandler = async ({

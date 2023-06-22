@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 
 export const beneficiarySecurityTargetSelect = {
@@ -20,3 +21,7 @@ export function getBeneficiarySecurityTarget(id: string) {
     }
   })
 }
+
+export type BeneficiarySecurityTarget = Prisma.PromiseReturnType<
+  typeof getBeneficiarySecurityTarget
+>

@@ -6,7 +6,7 @@ import {
 } from '~/server/trpc'
 import { AddCommentInput } from '~/server/schema'
 import {
-  canAddCommentToBeneficiaryFollowup,
+  canAddCommentToFollowup,
   canAddCommentToBeneficiaryHelpRequest,
   SecurityTargetWithStructure,
   SecurityTargetWithReferents
@@ -89,7 +89,7 @@ function addCommentToFollowup(
   user: User,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ) {
-  if (!canAddCommentToBeneficiaryFollowup(user, beneficiary)) {
+  if (!canAddCommentToFollowup(user, beneficiary)) {
     throw forbiddenError()
   }
 

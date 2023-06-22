@@ -7,15 +7,15 @@ export const canCreateUser = (grantee: SecurityRuleGrantee): boolean =>
 
 export const canEditUser = (
   grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure
-): boolean => isStructureManager(grantee, target)
+  user: SecurityTargetWithStructure
+): boolean => isStructureManager(grantee, user)
 
 export const canEditUserRole = (
   grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure,
+  user: SecurityTargetWithStructure,
   update: { role: UserRole }
 ): boolean =>
-  isStructureManager(grantee, target) && update.role !== 'Administrator'
+  isStructureManager(grantee, user) && update.role !== 'Administrator'
 
 export const canListUsers = (grantee: SecurityRuleGrantee): boolean =>
   hasAllowedRole(grantee, ['StructureManager'])

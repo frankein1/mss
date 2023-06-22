@@ -33,13 +33,13 @@ export async function prepareHelpRequestData({
     documents: Document[]
   }
 }): Promise<Prisma.HelpRequestUncheckedUpdateInput> {
-  const { structureId } = await transaction.beneficiary.findUniqueOrThrow({
+  const beneficiary = await transaction.beneficiary.findUniqueOrThrow({
     where: { id: input.beneficiaryId },
     select: { structureId: true }
   })
 
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structureId },
+    where: { id: beneficiary.structureId },
     select: {
       type: true
     }
@@ -53,14 +53,14 @@ export async function prepareHelpRequestData({
   const prescribingOrganizationId = await preparePrescribingOrganization(
     transaction,
     user,
-    structureId,
+    beneficiary.structureId,
     input.prescribingOrganizationId
   )
 
   const instructorOrganizationId = await prepareInstructorOrganization(
     transaction,
     user,
-    structureId,
+    beneficiary.structureId,
     input.instructorOrganizationId
   )
 
@@ -73,6 +73,7 @@ export async function prepareHelpRequestData({
     instructorOrganizationId,
     privateSynthesis: canEditBeneficiaryHelpRequestPrivateSynthesis(
       user,
+      beneficiary,
       target
     )
       ? input.privateSynthesis
@@ -135,10 +136,7 @@ export const updateHelpRequestHandler = async ({
 }) => {
   const target = await getHelpRequest(input.id)
 
-  if (
-    !target ||
-    !canEditBeneficiaryHelpRequest(user, target.beneficiary, target)
-  ) {
+  if (!target || !canEditBeneficiaryHelpRequest(user, target)) {
     throw forbiddenError()
   }
 

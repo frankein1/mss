@@ -10,7 +10,7 @@
     >
       <td>
         <FollowupsTableRowStatusForm
-          v-if="canEditHistory"
+          v-if="canEditFollowupStatus"
           :followup="followup"
           @click.stop
         />
@@ -56,7 +56,10 @@
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { getUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
+  import {
+    canAccessProtectedDataInHelpRequest,
+    canEditFollowupStatus as canEditFollowupStatusRule
+  } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
@@ -94,9 +97,7 @@
     // })
   )
 
-  const canEditHistory = computed(
-    () => true
-    // TODO
-    // permissionsStore.canEditHistoryItem(props.history)
+  const canEditFollowupStatus = computed(() =>
+    canEditFollowupStatusRule(user, props.followup.beneficiary, props.followup)
   )
 </script>
