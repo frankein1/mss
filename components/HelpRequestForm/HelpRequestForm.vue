@@ -191,7 +191,7 @@
       />
 
       <VeeTextarea
-        v-if="isOwnedByCurrentUser"
+        v-if="canEditPrivateSynthesis"
         class="fr-col-12 fr-mb-6v"
         name="privateSynthesis"
         :label="helpRequestFieldLabels.privateSynthesis"
@@ -271,9 +271,9 @@
       financialSupport: 'true' | 'false' | undefined
       pastStatuses?: HelpRequestStatus[]
       isEditing?: boolean
-      isOwnedByCurrentUser?: boolean
+      canEditPrivateSynthesis?: boolean
     }>(),
-    { pastStatuses: undefined, isEditing: false, isOwnedByCurrentUser: true }
+    { pastStatuses: undefined, isEditing: false, canEditPrivateSynthesis: true }
   )
 
   const emit = defineEmits<{
