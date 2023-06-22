@@ -31,12 +31,8 @@ export const getBeneficiaryDocumentsHandler = async ({
   return await prismaClient.document.findMany({
     where: {
       beneficiaryId,
-      confidential: canListConfidentialDocuments(user, beneficiary)
-        ? undefined
-        : false,
-      createdById: canOnlyListItsUploadedDocuments(user, beneficiary)
-        ? user.id
-        : undefined
+      confidential: canListConfidentialDocuments(user) ? undefined : false,
+      createdById: canOnlyListItsUploadedDocuments(user) ? user.id : undefined
     }
   })
 }

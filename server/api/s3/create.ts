@@ -11,8 +11,13 @@ import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
 
 export default defineEventHandler(async event => {
-  const { user } = event.context.auth
-  if (!user) {
+  const { user }: { user: JwtUser } = event.context.auth
+  if (
+    !user ||
+    user.status !== 'Active' ||
+    user.role === 'Administrator' ||
+    !user.structureId
+  ) {
     throw forbiddenError()
   }
   const multipartFormData = await readMultipartFormData(event)
