@@ -3,10 +3,7 @@ import type { BeneficiaryNames } from '~/types/beneficiary'
 
 type BeneficiaryNamesWithId = BeneficiaryNames & { id: string }
 
-const AppBreadcrumb = () => [{ text: RouteTitle.App(), to: RoutePath.App() }]
-
 const OverviewBreadcrumb = (isLast = true) => [
-  ...AppBreadcrumb(),
   {
     text: RouteTitle.Overview(),
     to: isLast ? undefined : RoutePath.Overview()
@@ -14,7 +11,6 @@ const OverviewBreadcrumb = (isLast = true) => [
 ]
 
 const BeneficiariesBreadcrumb = (isLast = true) => [
-  ...AppBreadcrumb(),
   {
     text: RouteTitle.Beneficiaries(),
     to: isLast ? undefined : RoutePath.Beneficiaries()
@@ -22,7 +18,6 @@ const BeneficiariesBreadcrumb = (isLast = true) => [
 ]
 
 const HistoryBreadcrumb = (isLast = true) => [
-  ...AppBreadcrumb(),
   { text: RouteTitle.History(), to: isLast ? undefined : RoutePath.History() }
 ]
 
@@ -49,20 +44,17 @@ const BeneficiaryBreadcrumb = (
 }
 
 export const Breadcrumb = {
-  [Route.Account]: () => [...AppBreadcrumb(), { text: RouteTitle.Account() }],
+  [Route.Account]: () => [{ text: RouteTitle.Account() }],
 
   [Route.History]: () => HistoryBreadcrumb(),
 
   [Route.Overview]: () => OverviewBreadcrumb(),
 
-  [Route.Stats]: () => [...AppBreadcrumb(), { text: RouteTitle.Stats() }],
+  [Route.Stats]: () => [{ text: RouteTitle.Stats() }],
 
-  [Route.Users]: () => [...AppBreadcrumb(), { text: RouteTitle.Users() }],
+  [Route.Users]: () => [{ text: RouteTitle.Users() }],
 
-  [Route.StructureEdit]: () => [
-    ...AppBreadcrumb(),
-    { text: RouteTitle.StructureEdit() }
-  ],
+  [Route.StructureEdit]: () => [{ text: RouteTitle.StructureEdit() }],
 
   [Route.Beneficiaries]: () => BeneficiariesBreadcrumb(),
 
