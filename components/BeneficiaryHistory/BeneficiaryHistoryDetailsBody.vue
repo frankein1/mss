@@ -82,7 +82,8 @@
     canViewFollowupDetails,
     canViewFollowupPrivateSynthesis,
     canListCommentsToFollowup,
-    canListCommentsToHelpRequest
+    canListCommentsToHelpRequest,
+    canViewHelpRequestPrivateSynthesis
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
 
@@ -124,11 +125,10 @@
       : canViewHelpRequestDetails(user, props.history.beneficiary)
   )
 
-  const canViewPrivateSynthesis = computed(
-    () =>
-      props.history.isFollowup
-        ? canViewFollowupPrivateSynthesis(user, props.history)
-        : true // FIXME: Add the rule for the private synthesis of help requests
+  const canViewPrivateSynthesis = computed(() =>
+    props.history.isFollowup
+      ? canViewFollowupPrivateSynthesis(user, props.history)
+      : canViewHelpRequestPrivateSynthesis(user, props.history)
   )
 
   const canListCommentsRule = computed(() =>
