@@ -69,11 +69,9 @@ export type {
   CreateCustomFollowupTypeInput
 } from './followupType.schema'
 
-export { adminLoginSchema } from './auth.schema'
-export type { AdminLoginInput } from './auth.schema'
-
 export * from './user'
 export * from './structure'
+export * from './auth'
 
 export {
   statFilterSchema,
