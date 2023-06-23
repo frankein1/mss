@@ -1,4 +1,5 @@
 import { onMounted, onUnmounted } from 'vue'
+import { useAuthStore } from '~/store/auth'
 import { RoutePath } from '~/utils/routing'
 
 export function useLogoutInactiveUser() {
@@ -24,6 +25,7 @@ export function useLogoutInactiveUser() {
   function inactiveUserAction() {
     if (process.client) {
       fetch(RoutePath.Logout()).then(() => {
+        useAuthStore().logout()
         navigateTo(RoutePath.LogoutSuccess() + '?inactive=true')
       })
     }

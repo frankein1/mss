@@ -69,14 +69,9 @@ export type {
   CreateCustomFollowupTypeInput
 } from './followupType.schema'
 
-export { editCurrentUserStructureSchema } from './structure.schema'
-export type { EditCurrentUserStructureInput } from './structure.schema'
-
-export { acceptCGUSchema, adminLoginSchema } from './auth.schema'
-export type { AcceptCGUInput, AdminLoginInput } from './auth.schema'
-
 export * from './user'
 export * from './structure'
+export * from './auth'
 
 export {
   statFilterSchema,
