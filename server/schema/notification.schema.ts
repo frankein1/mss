@@ -1,5 +1,3 @@
-// [NUXT/PRISMA]: Move to root folder
-
 import { NotificationType } from '@prisma/client'
 import { z } from 'zod'
 

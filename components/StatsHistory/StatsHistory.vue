@@ -101,10 +101,9 @@
           <div class="fr-col-12 fr-col-sm-6">
             <StatsHistoryFinancialHelpRequests :filters="filters" />
           </div>
-          <!-- TODO: implement "organismes instructeurs" then those statistics
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsOrganismesInstructeurs :filters="helpRequestFilters" />
-          </div> -->
+            <StatsHistoryInstructorOrganizations :filters="filters" />
+          </div>
         </div>
       </div>
       <div

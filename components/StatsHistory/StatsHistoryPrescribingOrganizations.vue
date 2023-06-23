@@ -47,7 +47,6 @@
   } = useAsyncData<
     Array<{ prescribingOrganization: { id: string; name: string } | null }>
   >(
-    `${props.collection}PrescribingOrganizationCounts`,
     () =>
       trpcClient.stat[
         props.collection === 'helpRequests'
@@ -63,13 +62,13 @@
   const prescribingOrganizationStats = computed(() => {
     const _prescribingOrganizationStats: { [k: string]: StatList } = {}
     prescribingOrganizationCounts.value?.forEach(historyItem => {
-      const organismePrescripteurId =
+      const prescribingOrganizationId =
         historyItem.prescribingOrganization?.id || 'null'
-      if (organismePrescripteurId in _prescribingOrganizationStats) {
-        _prescribingOrganizationStats[organismePrescripteurId].count++
+      if (prescribingOrganizationId in _prescribingOrganizationStats) {
+        _prescribingOrganizationStats[prescribingOrganizationId].count++
       } else {
-        _prescribingOrganizationStats[organismePrescripteurId] = {
-          key: organismePrescripteurId,
+        _prescribingOrganizationStats[prescribingOrganizationId] = {
+          key: prescribingOrganizationId,
           label: historyItem.prescribingOrganization?.name || STATS_NULL_LABEL,
           color: SupportColor[props.collection],
           count: 1
@@ -82,40 +81,6 @@
     _prescribingOrganizationStatsValues.sort((a, b) => b.count - a.count)
     return _prescribingOrganizationStatsValues
   })
-
-  // TODO
-  // async function loadFollowUpOrganismesCounts() {
-  //   const res = await $getItems(props.collection, {
-  //     fields: ['organisme_prescripteur.id', 'organisme_prescripteur.name'],
-  //     filter: {
-  //       ...props.filters
-  //     }
-  //   })
-
-  //   if (res.status === 200) {
-  //     const followUpOrganismesResCounts = {}
-  //     res.data.data.forEach(historyItem => {
-  //       const organismePrescripteurId =
-  //         historyItem.organisme_prescripteur?.id || null
-  //       if (organismePrescripteurId in followUpOrganismesResCounts) {
-  //         followUpOrganismesResCounts[organismePrescripteurId].count++
-  //       } else {
-  //         followUpOrganismesResCounts[organismePrescripteurId] = {
-  //           key: organismePrescripteurId,
-  //           label: historyItem.organisme_prescripteur?.name || 'Non renseigné',
-  //           color: SupportColor[props.collection],
-  //           count: 1
-  //         }
-  //       }
-  //     })
-  //     const followUpOrganismesResCountsValues = Object.values(
-  //       followUpOrganismesResCounts
-  //     )
-  //     followUpOrganismesResCountsValues.sort((a, b) => b.count - a.count)
-  //     return followUpOrganismesResCountsValues
-  //   }
-  //   throw new Error(errorResponseMessage(res))
-  // }
 
   const emptyResultMessage = computed(() => {
     return `Commencez à créer des ${

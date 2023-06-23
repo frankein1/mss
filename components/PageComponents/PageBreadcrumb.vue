@@ -12,6 +12,6 @@
     }>
   }>()
 
-  // FIXME: For now, the type of DsfrBreadcrumb links is wrong - See https://github.com/dnum-mi/vue-dsfr/blob/main/src/com
+  // FIXME: For now, the type of DsfrBreadcrumb links is wrong - See https://github.com/dnum-mi/vue-dsfr/issues/546
   const anyLinks = computed(() => props.links as any)
 </script>

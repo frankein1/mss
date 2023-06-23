@@ -1,5 +1,3 @@
-// [NUXT/PRISMA]: Move to root folder
-
 import { z } from 'zod'
 
 const accessTokenSchema = z.object({
