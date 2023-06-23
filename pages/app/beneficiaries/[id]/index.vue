@@ -14,7 +14,7 @@
 
     <hr />
     <BeneficiaryDetailsActions
-      :beneficiary-id="beneficiaryId"
+      :beneficiary="beneficiary"
       class="fr-pb-3w"
     />
     <hr />

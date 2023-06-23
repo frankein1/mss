@@ -27,7 +27,7 @@
   import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
+  import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
 
@@ -129,7 +129,8 @@
         type: FilterType.SelectOne
       })
     }
-    if (canAccessProtectedDataInHelpRequest(user)) {
+
+    if (canViewAnyHelpRequestDetails(user)) {
       filters.push(
         {
           name: 'handlingDate',

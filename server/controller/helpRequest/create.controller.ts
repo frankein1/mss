@@ -6,7 +6,7 @@ import {
 } from '~/server/trpc'
 import type { CreateHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { canCreateBeneficiaryHelpRequest } from '~/server/security/rules'
+import { canCreateHelpRequest } from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
 import { prepareInstructorOrganization } from '~/utils/instructorOrganization/prepareInstructorOrganization'
@@ -100,7 +100,7 @@ export const addHelpRequestHandler = async ({
     throw invalidError('Beneficiary not found')
   }
 
-  if (!canCreateBeneficiaryHelpRequest(user, target)) {
+  if (!canCreateHelpRequest(user, target)) {
     throw forbiddenError()
   }
 

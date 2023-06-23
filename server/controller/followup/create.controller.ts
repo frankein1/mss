@@ -10,7 +10,7 @@ import { canCreateFollowup } from '~/server/security/rules'
 import {
   prepareMinistryData,
   prepareFollowupTypesMutations
-} from '~/utils/followup/prepareFollowupData'
+} from '~/utils/followup'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'

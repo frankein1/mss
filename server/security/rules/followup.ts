@@ -4,7 +4,12 @@ import type {
   SecurityTargetWithReferents,
   SecurityTargetWithCreator
 } from './types'
-import { isInSameStructureAs, isReferentFor, isCreator } from './helpers'
+import {
+  isInSameStructureAs,
+  isReferentFor,
+  isCreator,
+  hasAllowedRole
+} from './helpers'
 
 export const canCreateFollowup = (
   grantee: SecurityRuleGrantee,
@@ -41,17 +46,26 @@ export const canViewFollowup = (
 
 export const canViewFollowupDetails = (
   grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  followup: SecurityTargetWithCreator
+  followup: SecurityTargetWithCreator & SecurityTargetWithStructure
 ): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
+  isInSameStructureAs(grantee, followup, [
     'StructureManager',
     'SocialWorker',
-    'Instructor'
+    'Instructor',
+    'Referent'
   ]) ||
-  (isInSameStructureAs(grantee, beneficiary, ['ReceptionAgent']) &&
-    isCreator(grantee, followup)) ||
-  isReferentFor(grantee, beneficiary)
+  (isInSameStructureAs(grantee, followup, ['ReceptionAgent']) &&
+    isCreator(grantee, followup))
+
+export const canViewAnyFollowupDetails = (
+  grantee: SecurityRuleGrantee
+): boolean =>
+  hasAllowedRole(grantee, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'Referent'
+  ])
 
 export const canViewFollowupPrivateSynthesis = (
   grantee: SecurityRuleGrantee,
@@ -89,20 +103,6 @@ export const canEditFollowup = (
     'Referent'
   ]) &&
     isCreator(grantee, followup))
-
-export const canEditFollowupStatus = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  followup: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, followup, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) ||
-  (isInSameStructureAs(grantee, followup, ['ReceptionAgent']) &&
-    isCreator(grantee, followup)) ||
-  isReferentFor(grantee, beneficiary)
 
 export const canDeleteFollowup = (
   grantee: SecurityRuleGrantee,

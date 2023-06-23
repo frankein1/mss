@@ -20,7 +20,7 @@
   import { useAuthStore } from '~/store/auth'
   import {
     canAddCommentToFollowup,
-    canAddCommentToBeneficiaryHelpRequest
+    canAddCommentToHelpRequest
   } from '~/server/security/rules'
 
   const authStore = useAuthStore()
@@ -37,7 +37,7 @@
   const canAddCommentsRule = computed(() =>
     props.history.isFollowup
       ? canAddCommentToFollowup
-      : canAddCommentToBeneficiaryHelpRequest
+      : canAddCommentToHelpRequest
   )
 
   const canAddComments = computed(() =>

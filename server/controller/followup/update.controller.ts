@@ -10,7 +10,7 @@ import {
   FollowupTarget,
   prepareMinistryData,
   prepareFollowupTypesMutations
-} from '~/utils/followup/prepareFollowupData'
+} from '~/utils/followup'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import {

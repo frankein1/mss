@@ -26,3 +26,25 @@ export const canListCommentsToFollowup = (
     'Instructor',
     'ReceptionAgent'
   ]) || isReferentFor(grantee, beneficiary)
+
+export const canAddCommentToHelpRequest = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) || isReferentFor(grantee, beneficiary)
+
+export const canListCommentsToHelpRequest = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) || isReferentFor(grantee, beneficiary)
