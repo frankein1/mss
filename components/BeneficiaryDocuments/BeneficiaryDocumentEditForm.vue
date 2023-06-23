@@ -42,9 +42,12 @@
   } from '~/client/options/document'
   import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
+  import { canSetDocumentAsConfidential as canSetDocumentAsConfidentialRule } from '~/server/security/rules'
+  import { GetBeneficiaryOutput } from '~/server/routers'
 
   const props = defineProps<{
     document: Doc
+    beneficiary: GetBeneficiaryOutput
   }>()
 
   const emit = defineEmits<{
@@ -56,8 +59,11 @@
   const isSubmitting = ref(false)
 
   const canSetDocumentAsConfidential = computed(() => {
-    const document = props.document
-    return document.createdById === authStore.userId || !authStore.isInstructeur
+    return canSetDocumentAsConfidentialRule(
+      authStore.getAuthUser,
+      props.beneficiary,
+      props.document
+    )
   })
 
   const { handleSubmit } = useForm<EditDocumentInput>({

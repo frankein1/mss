@@ -5,12 +5,16 @@ import {
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
   canEditBeneficiaryReferents,
-  canEditBeneficiaryRelatives
+  canEditBeneficiaryRelatives,
+  canSetBeneficiaryNir
 } from '~/server/security/rules'
 import { UpdateBeneficiaryInput } from '~/server/schema'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import {
+  getBeneficiarySecurityTarget,
+  getUserStructureType
+} from '~/server/security'
 
 export const updateBeneficiaryHandler = async ({
   input,
@@ -72,7 +76,14 @@ export const updateBeneficiaryHandler = async ({
     }
   }
   if (canEditBeneficiaryHealthInfo(user, input)) {
-    data = { ...data, ...health }
+    const { socialSecurityNumber, ...otherHealthInfo } = health
+    data = { ...data, ...otherHealthInfo }
+
+    const userStructureType = await getUserStructureType(user)
+
+    if (canSetBeneficiaryNir(userStructureType)) {
+      data = { ...data, socialSecurityNumber }
+    }
   }
 
   if (canEditBeneficiaryExternalOrganisations(user, input)) {

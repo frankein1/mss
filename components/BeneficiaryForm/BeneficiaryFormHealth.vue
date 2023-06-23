@@ -34,11 +34,11 @@
 <script lang="ts" setup>
   import { beneficiaryGirOptions } from '~/client/options/beneficiary'
   import { useAuthStore } from '~/store/auth'
+  import { canSetBeneficiaryNir } from '~/server/security/rules'
 
   const authStore = useAuthStore()
-  const isMinistryAgent = useMinistryAgent()
 
-  const hasNirAccess = computed(
-    () => !isMinistryAgent.value && !authStore.isAssociationAgent
+  const hasNirAccess = computed(() =>
+    canSetBeneficiaryNir(authStore.userStructureType)
   )
 </script>
