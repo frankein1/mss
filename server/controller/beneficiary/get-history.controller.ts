@@ -15,7 +15,10 @@ import {
   BeneficiarySecurityTarget
 } from '~/server/security'
 import { notfoundError, ProtectedAppContext } from '~/server/trpc'
-import { canListBeneficiaryFollowups } from '~/server/security/rules'
+import {
+  canListBeneficiaryFollowups,
+  canListCommentsToFollowup
+} from '~/server/security/rules'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput
@@ -73,11 +76,6 @@ const historyItemInclude = {
     select: {
       name: true
     }
-  },
-  comments: {
-    include: {
-      createdBy: { select: createdBySelect }
-    }
   }
 }
 
@@ -90,6 +88,14 @@ async function getFollowups(
     return []
   }
 
+  const commentsInclude = canListCommentsToFollowup(user, beneficiary)
+    ? {
+        include: {
+          createdBy: { select: createdBySelect }
+        }
+      }
+    : undefined
+
   const followups = await prismaClient.followup.findMany({
     where: {
       beneficiaryId: beneficiary.id,
@@ -97,6 +103,7 @@ async function getFollowups(
     },
     include: {
       ...historyItemInclude,
+      comments: commentsInclude,
       types: true
     },
     orderBy: { date: 'desc' }
@@ -112,6 +119,11 @@ async function getHelpRequests(
     where: { beneficiaryId, ...prepareHelpRequestFilters(filters) },
     include: {
       ...historyItemInclude,
+      comments: {
+        include: {
+          createdBy: { select: createdBySelect }
+        }
+      },
       type: true,
       instructorOrganization: {
         select: {

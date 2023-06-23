@@ -3,7 +3,7 @@
     :id="accordionId"
     class="fr-collapse beneficiary-history-details-body"
   >
-    <template v-if="displayDetailedHistory">
+    <template v-if="canViewHistoryDetails">
       <BeneficiaryFollowupDetailsBodyMetas
         v-if="history.isFollowup"
         :followup="history"
@@ -54,10 +54,14 @@
         </li>
       </ul>
 
-      <hr class="fr-pb-3v" />
+      <hr
+        v-if="canListComments"
+        class="fr-pb-3v"
+      />
     </template>
 
     <BeneficiaryHistoryComments
+      v-if="canListComments"
       :comments="comments"
       :history="history"
       @comment-added="onCommentAdded"
@@ -76,7 +80,9 @@
     canDeleteBeneficiaryHelpRequest,
     canAccessProtectedDataInHelpRequest,
     canViewFollowupDetails,
-    canViewFollowupPrivateSynthesis
+    canViewFollowupPrivateSynthesis,
+    canListCommentsToFollowup,
+    canListCommentsToBeneficiaryHelpRequest
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
 
@@ -114,7 +120,7 @@
 
   const canDelete = computed(() => canDeleteRule.value(user, props.history))
 
-  const displayDetailedHistory = computed(
+  const canViewHistoryDetails = computed(
     () =>
       props.history.isFollowup
         ? canViewFollowupDetails(user, props.history.beneficiary, props.history)
@@ -127,6 +133,16 @@
       props.history.isFollowup
         ? canViewFollowupPrivateSynthesis(user, props.history)
         : true // FIXME: Add the rule for the private synthesis of help requests
+  )
+
+  const canListCommentsRule = computed(() =>
+    props.history.isFollowup
+      ? canListCommentsToFollowup
+      : canListCommentsToBeneficiaryHelpRequest
+  )
+
+  const canListComments = computed(() =>
+    canListCommentsRule.value(user, props.history.beneficiary)
   )
 
   function onCommentAdded(comment: HistoryItemComment) {
