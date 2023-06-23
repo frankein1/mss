@@ -86,7 +86,7 @@
     color: #fff;
     border: 0.25rem solid var(--background-active-blue-france);
     background-color: var(--background-active-blue-france);
-    background-image: url('../assets/img/logo-inclusion-connect-bg.svg');
+    background-image: url('../../assets/img/logo-inclusion-connect-bg.svg');
     background-repeat: no-repeat;
     margin-bottom: 0.5rem;
 

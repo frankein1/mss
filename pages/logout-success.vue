@@ -22,6 +22,7 @@
     layout: 'landing'
   })
 
+  useAuthStore().logout()
   const route = useRoute()
   const authStore = useAuthStore()
 

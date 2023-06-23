@@ -12,10 +12,12 @@ import { adminRouter } from './adminRouter'
 import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
 import { mutationLogsRouter } from './mutationLogsRouter'
+import { authRouter } from './authRouter'
 import { router } from '~/server/trpc'
 
 export const appRouter = router({
   admin: adminRouter,
+  auth: authRouter,
   beneficiary: beneficiaryRouter,
   notification: notificationRouter,
   config: configRouter,
@@ -56,14 +58,11 @@ export type GetExaminationDatesConfigOutput =
 export type GetBeneficiaryDocumentsOutput =
   RouterOutput['beneficiary']['getBeneficiaryDocuments']
 export type GetBeneficiaryDocumentOutput = GetBeneficiaryDocumentsOutput[0]
-<<<<<<< HEAD
 
 // FIXME: Replace by mutation log type when it exists in Prisma schema
 export type GetBeneficiariesMutationLogsOutput =
   RouterOutput['mutationLogs']['beneficiaries']
-=======
 export type {
   AdminStructuresOutput,
   AdminUsersOutput
 } from '~/server/controller/admin'
->>>>>>> feat(admin): add users page

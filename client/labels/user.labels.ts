@@ -14,5 +14,7 @@ export const userFieldLabels: FieldLabels<UserFieldLabels> = {
   lastAccess: 'Dernier accès',
   created: 'Date de création',
   updated: 'Date de mise à jour',
-  structureId: 'Identifiant de la structure'
+  structureId: 'Identifiant de la structure',
+  accessToken: "Token d'accès",
+  accessTokenValidity: "Date d'expiration du token"
 }
