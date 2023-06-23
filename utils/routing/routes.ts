@@ -10,6 +10,8 @@ export enum Route {
   LogoutSuccess = 'LogoutSuccess',
   DisabledAccount = 'DisabledAccount',
   Login = 'Login',
+  LoginAdmin = 'LoginAdmin',
+  ValidateToken = 'ValidateToken',
   App = 'App',
   Overview = 'Overview',
   Users = 'Users',
@@ -27,6 +29,7 @@ export enum Route {
   BeneficiaryHelpRequestEdit = 'BeneficiaryHelpRequestEdit',
   History = 'History',
   Admin = 'Admin',
+  AdminLogin = 'AdminLogin',
   AdminStructures = 'AdminStructures',
   AdminUsers = 'AdminUsers'
 }
@@ -77,7 +80,11 @@ export const RoutePath = {
   [Route.LogoutSuccess]: () => '/logout-success',
   [Route.DisabledAccount]: () => '/disabled-account',
 
+  // LOGIN
   [Route.Login]: () => '/login',
+  [Route.LoginAdmin]: () => '/login/admin',
+  [Route.ValidateToken]: () => '/login/validate-token',
+
   Logout: () => `${ApiKeycloak}/logout`,
   SsoCallback: () => `${ApiKeycloak}/callback`,
 
