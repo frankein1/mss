@@ -80,7 +80,7 @@ export {
 // -- grantee (the authenticated user)
 // -- target (aggregate info or scope of the action)
 // -- params (specifics about the action)
-export const canAccessStatsPage = (grantee: SecurityRuleGrantee): boolean =>
+export const canViewStats = (grantee: SecurityRuleGrantee): boolean =>
   hasAllowedRole(grantee, [
     'StructureManager',
     'SocialWorker',

@@ -3,6 +3,7 @@ import superjson from 'superjson'
 import type { User } from '@prisma/client'
 import { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
+import { canViewStats } from '~/server/security/rules'
 
 const t = initTRPC.context<AppContext>().create({
   transformer: superjson
@@ -61,6 +62,18 @@ const isPartOfStructure = isAuthenticated.unstable_pipe(({ ctx, next }) => {
   })
 })
 
+const statsMiddleware = isPartOfStructure.unstable_pipe(({ ctx, next }) => {
+  if (canViewStats(ctx.user)) {
+    throw forbiddenError('User can not view stats')
+  }
+  return next({
+    ctx: {
+      // infers the user as part of structure
+      user: ctx.user
+    }
+  })
+})
+
 /**
  * Protected procedure
  * */
@@ -73,3 +86,8 @@ export const protectedProcedure = t.procedure
 export type ProtectedAppContext = AppContext & {
   user: User & { structureId: string }
 }
+
+/**
+ * Stats procedure
+ */
+export const statsProcedure = protectedProcedure.use(statsMiddleware)
