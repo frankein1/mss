@@ -275,6 +275,7 @@
   import { followupFieldLabels } from '~/client/labels'
 
   const authStore = useAuthStore()
+  const isMinistryAgent = useMinistryAgent()
 
   const props = withDefaults(
     defineProps<{
@@ -305,8 +306,6 @@
       }))
     return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
   })
-
-  const isMinistryAgent = computed(() => authStore.isMinistryAgent)
 
   const user = computed(() => authStore.getAuthUser)
 

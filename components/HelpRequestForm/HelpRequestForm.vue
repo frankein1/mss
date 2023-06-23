@@ -258,7 +258,7 @@
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
 
   const authStore = useAuthStore()
-  const user = authStore.getAuthUser
+  const isMinistryAgent = useMinistryAgent()
 
   const props = withDefaults(
     defineProps<{
@@ -281,6 +281,8 @@
     (e: 'submit', payload: Event): void
   }>()
 
+  const user = computed(() => authStore.getAuthUser)
+
   const followUpTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')
   )
@@ -302,8 +304,6 @@
       }))
     return toOptions(instructorOrganizationsWithStringId, 'id', 'name')
   })
-
-  const isMinistryAgent = computed(() => authStore.isMinistryAgent)
 
   const isFinancialSupport = computed(() => props.financialSupport === 'true')
 
@@ -329,13 +329,13 @@
     () => props.isEditing && (isAnswered.value || isDropped.value)
   )
 
-  const canEditStructure = computed(() => canEditItsOwnStructure(user))
+  const canEditStructure = computed(() => canEditItsOwnStructure(user.value))
 
   const canCreatePrescribingOrganization = computed(() =>
-    canCreatePrescribingOrganizationRule(user)
+    canCreatePrescribingOrganizationRule(user.value)
   )
 
   const canCreateInstructorOrganization = computed(() =>
-    canCreateInstructorOrganizationRule(user)
+    canCreateInstructorOrganizationRule(user.value)
   )
 </script>
