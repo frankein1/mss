@@ -64,6 +64,19 @@ export const canViewDocument = (
 
 export const canEditDocument = canViewDocument
 
+export const canSetDocumentAsConfidential = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
+  document: SecurityTargetWithCreator
+): boolean =>
+  (isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'ReceptionAgent'
+  ]) ||
+    isReferentFor(grantee, beneficiary)) &&
+  isCreator(grantee, document)
+
 export const canDeleteDocument = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents

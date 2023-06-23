@@ -9,6 +9,7 @@
       >
         <BeneficiaryDocument
           :document="document"
+          :beneficiary="beneficiary"
           @refresh-documents="emit('refreshDocuments')"
         />
       </div>
@@ -18,10 +19,12 @@
 <script setup lang="ts">
   import { Document, DocumentType } from '@prisma/client'
   import { documentTypeLabels } from '~/client/options/document'
+  import { GetBeneficiaryOutput } from '~/server/routers'
 
   defineProps<{
     documentType: DocumentType
     documents: Document[]
+    beneficiary: GetBeneficiaryOutput
   }>()
 
   const emit = defineEmits<{

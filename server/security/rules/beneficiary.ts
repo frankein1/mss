@@ -1,3 +1,4 @@
+import { StructureType } from '@prisma/client'
 import type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
@@ -50,12 +51,20 @@ export const canViewBeneficiaryExternalOrganisations = (
     'Instructor'
   ]) || isReferentFor(grantee, beneficiary)
 
+export const canViewBeneficiaryNir = (
+  type: StructureType | undefined
+): boolean =>
+  type === StructureType.Ccas ||
+  type === StructureType.Cias ||
+  type === StructureType.Commune
+
 export const canEditBeneficiary = canViewBeneficiary
 export const canEditBeneficiaryHealthInfo = canViewBeneficiaryHealthInfo
 export const canEditBeneficiaryOccupationIncome =
   canViewBeneficiaryOccupationIncome
 export const canEditBeneficiaryExternalOrganisations =
   canViewBeneficiaryExternalOrganisations
+export const canSetBeneficiaryNir = canViewBeneficiaryNir
 
 export const canEditBeneficiaryReferents = (
   grantee: SecurityRuleGrantee,

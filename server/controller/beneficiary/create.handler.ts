@@ -14,6 +14,7 @@ export const createBeneficiaryHandler = async ({
 
   const fileNumber = generateFileNumber()
 
+  // FIXME: Should it prevent creating forbidden data (nir, etc.) ?
   const beneficiary = await prismaClient.beneficiary.create({
     data: {
       structureId: user.structureId,

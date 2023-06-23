@@ -25,13 +25,13 @@
       <BeneficiaryDetailsHealth :beneficiary="beneficiary" />
       <BeneficiaryDetailsOccupationIncome :beneficiary="beneficiary" />
       <BeneficiaryDetailsRelatives
-        v-if="canAccessRelatives && houseHoldSection"
+        v-if="houseHoldSection"
         :beneficiary="beneficiary"
         :relatives="taxHouseholds"
         household
       />
       <BeneficiaryDetailsRelatives
-        v-if="canAccessRelatives && entourages.length"
+        v-if="entourages.length"
         :beneficiary="beneficiary"
         :relatives="entourages"
       />
@@ -44,14 +44,12 @@
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb } from '~/utils/routing'
-  import { useAuthStore } from '~/store/auth'
 
   definePageMeta({
     layout: false
   })
 
   const route = useRoute()
-  const authStore = useAuthStore()
 
   const beneficiaryId = route.params.id as string
 
@@ -59,8 +57,6 @@
     await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
-
-  const canAccessRelatives = computed(() => !authStore.isAgentDAccueil)
 
   const beneficiary = computed(() => data.value?.beneficiary)
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])

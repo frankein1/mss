@@ -18,6 +18,7 @@
   import type { Options } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
+  import { canViewStatsByReferent } from '~/server/security/rules'
 
   const isMinistryAgent = useMinistryAgent()
   const authStore = useAuthStore()
@@ -61,7 +62,10 @@
         type: FilterType.SelectMultiple
       })
     }
-    if (authStore.isResponsableDeStructure && isMinistryAgent.value) {
+    if (
+      canViewStatsByReferent(authStore.getAuthUser) &&
+      isMinistryAgent.value
+    ) {
       filters.push({
         name: 'referent',
         label: 'Référent',

@@ -12,7 +12,8 @@ import {
 import {
   canDeleteDocument,
   canEditDocument,
-  canViewDocument
+  canViewDocument,
+  canSetDocumentAsConfidential
 } from '~/server/security/rules'
 import { createSignedGetUrl, deleteUploadedFile } from '~/server/lib/s3'
 import {
@@ -56,11 +57,16 @@ export const editDocumentHandler = async ({
     throw forbiddenError()
   }
 
+  if (
+    data.confidential !== document.confidential &&
+    !canSetDocumentAsConfidential(user, beneficiary, document)
+  ) {
+    throw forbiddenError()
+  }
+
   const updatedDocument = await prismaClient.document.update({
     where: { key },
-    data: {
-      ...data
-    },
+    data,
     include: { beneficiary: { select: { id: true, structureId: true } } }
   })
 

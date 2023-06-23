@@ -22,20 +22,8 @@ export const useAuthStore = defineStore({
     isAuthenticated(): boolean {
       return !!this.user
     },
-    isResponsableDeStructure(): boolean {
-      return this.user?.role === UserRole.StructureManager
-    },
-    isTravailleurSocial(): boolean {
-      return this.user?.role === UserRole.SocialWorker
-    },
-    isInstructeur(): boolean {
-      return this.user?.role === UserRole.Instructor
-    },
     isReferent(): boolean {
       return this.user?.role === UserRole.Referent
-    },
-    isAgentDAccueil(): boolean {
-      return this.user?.role === UserRole.ReceptionAgent
     },
     getAuthUser(): JwtUser {
       if (!this.user) {
@@ -52,14 +40,12 @@ export const useAuthStore = defineStore({
     userStructureId(): string {
       return this.user?.structureId || ''
     },
+    userStructureType(): StructureType | undefined {
+      return this.user?.structureType
+    },
     isMinistryAgent(): boolean {
       return this.user
         ? this.user.structureType === StructureType.Ministere
-        : false
-    },
-    isAssociationAgent(): boolean {
-      return this.user
-        ? this.user.structureType === StructureType.Association
         : false
     },
     isActive(): boolean {
