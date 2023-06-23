@@ -102,7 +102,10 @@
             <StatsHistoryFinancialHelpRequests :filters="filters" />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHistoryInstructorOrganizations :filters="filters" />
+            <StatsHistoryInstructorOrganizations
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
           </div>
         </div>
       </div>
