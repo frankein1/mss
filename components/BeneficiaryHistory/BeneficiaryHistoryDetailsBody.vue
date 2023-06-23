@@ -75,14 +75,14 @@
   import { RoutePath } from '~/utils/routing'
   import {
     canEditFollowup,
-    canEditBeneficiaryHelpRequest,
+    canEditHelpRequest,
     canDeleteFollowup,
-    canDeleteBeneficiaryHelpRequest,
-    canAccessProtectedDataInHelpRequest,
+    canDeleteHelpRequest,
+    canViewHelpRequestDetails,
     canViewFollowupDetails,
     canViewFollowupPrivateSynthesis,
     canListCommentsToFollowup,
-    canListCommentsToBeneficiaryHelpRequest
+    canListCommentsToHelpRequest
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
 
@@ -107,25 +107,21 @@
   })
 
   const canEditRule = computed(() =>
-    props.history.isFollowup ? canEditFollowup : canEditBeneficiaryHelpRequest
+    props.history.isFollowup ? canEditFollowup : canEditHelpRequest
   )
 
   const canEdit = computed(() => canEditRule.value(user, props.history))
 
   const canDeleteRule = computed(() =>
-    props.history.isFollowup
-      ? canDeleteFollowup
-      : canDeleteBeneficiaryHelpRequest
+    props.history.isFollowup ? canDeleteFollowup : canDeleteHelpRequest
   )
 
   const canDelete = computed(() => canDeleteRule.value(user, props.history))
 
-  const canViewHistoryDetails = computed(
-    () =>
-      props.history.isFollowup
-        ? canViewFollowupDetails(user, props.history.beneficiary, props.history)
-        : canAccessProtectedDataInHelpRequest(user)
-    // FIXME: Does it correspond to permissionsStore.canDisplayDetailedHistory(props.history) ?
+  const canViewHistoryDetails = computed(() =>
+    props.history.isFollowup
+      ? canViewFollowupDetails(user, props.history)
+      : canViewHelpRequestDetails(user, props.history.beneficiary)
   )
 
   const canViewPrivateSynthesis = computed(
@@ -138,7 +134,7 @@
   const canListCommentsRule = computed(() =>
     props.history.isFollowup
       ? canListCommentsToFollowup
-      : canListCommentsToBeneficiaryHelpRequest
+      : canListCommentsToHelpRequest
   )
 
   const canListComments = computed(() =>

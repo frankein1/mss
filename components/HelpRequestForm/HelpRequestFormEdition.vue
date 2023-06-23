@@ -28,9 +28,9 @@
     EditHelpRequestInput,
     editHelpRequestSchema
   } from '~/server/schema/helpRequest.schema'
-  import { canEditBeneficiaryHelpRequestPrivateSynthesis } from '~/server/security/rules'
+  import { canEditHelpRequestPrivateSynthesis } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
-  import { pastStatusesFromStatus } from '~/utils/helpRequest/pastStatusesFromStatus'
+  import { pastStatusesFromStatus } from '~/utils/helpRequest'
   import { GetHelpRequestDetailsOutput } from '~/server/routers'
 
   const authStore = useAuthStore()
@@ -55,15 +55,11 @@
   })
 
   const canEditPrivateSynthesis = computed(() =>
-    canEditBeneficiaryHelpRequestPrivateSynthesis(
-      authStore.getAuthUser,
-      props.helpRequest.beneficiary,
-      props.helpRequest
-    )
+    canEditHelpRequestPrivateSynthesis(authStore.getAuthUser, props.helpRequest)
   )
 
   const initialDocumentIds = computed(
-    () => props.helpRequest.documents.map(d => d.key) || []
+    () => props.helpRequest.documents?.map(d => d.key) || []
   )
 
   const { handleSubmit, values } = useForm<EditHelpRequestInput>({

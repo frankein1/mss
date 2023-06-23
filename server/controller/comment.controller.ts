@@ -7,7 +7,7 @@ import {
 import { AddCommentInput } from '~/server/schema'
 import {
   canAddCommentToFollowup,
-  canAddCommentToBeneficiaryHelpRequest,
+  canAddCommentToHelpRequest,
   SecurityTargetWithStructure,
   SecurityTargetWithReferents
 } from '~/server/security/rules'
@@ -112,7 +112,7 @@ function addCommentToHelpRequest(
   user: User,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ) {
-  if (!canAddCommentToBeneficiaryHelpRequest(user, beneficiary)) {
+  if (!canAddCommentToHelpRequest(user, beneficiary)) {
     throw forbiddenError()
   }
 

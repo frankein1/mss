@@ -48,9 +48,7 @@
   import { CreateHelpRequestInput } from '~/server/schema/helpRequest.schema'
 
   definePageMeta({
-    // TODO
-    //   middleware: ['is-beneficiary-referent', 'can-add-help-requests']
-    middleware: 'is-beneficiary-referent'
+    middleware: ['is-beneficiary-referent', 'can-add-help-request']
   })
 
   const snackbar = useSnackbar()

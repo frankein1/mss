@@ -51,9 +51,7 @@
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
   definePageMeta({
-    // TODO
-    //   middleware: ['owns-help-request', 'is-beneficiary-referent']
-    middleware: 'is-beneficiary-referent'
+    middleware: ['can-edit-help-request', 'is-beneficiary-referent']
   })
 
   const snackbar = useSnackbar()
