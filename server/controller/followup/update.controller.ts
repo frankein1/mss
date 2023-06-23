@@ -1,4 +1,4 @@
-import { Prisma, User, FollowupMedium } from '@prisma/client'
+import { Prisma, FollowupMedium } from '@prisma/client'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
@@ -11,7 +11,7 @@ import {
   prepareMinistryData,
   prepareFollowupTypesMutations
 } from '~/utils/followup'
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
+import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import {
   FollowupWithBeneficiaryDocumentsAndTypes,
@@ -26,13 +26,11 @@ export async function prepareFollowupData({
 }: {
   input: EditFollowupInput
   transaction: Prisma.TransactionClient
-  user: User
+  user: ProtectedAppContext['user']
   target: FollowupTarget
 }): Promise<Prisma.FollowupUncheckedUpdateInput> {
-  const { structureId } = target.beneficiary
-
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structureId },
+    where: { id: user.structureId },
     select: {
       type: true
     }
@@ -60,7 +58,6 @@ export async function prepareFollowupData({
   const prescribingOrganizationId = await preparePrescribingOrganization(
     transaction,
     user,
-    structureId,
     input.prescribingOrganizationId
   )
 
@@ -84,7 +81,7 @@ export async function prepareFollowupData({
 async function updateTransaction(
   transaction: Prisma.TransactionClient,
   input: EditFollowupInput,
-  user: User,
+  user: ProtectedAppContext['user'],
   target: Exclude<FollowupWithBeneficiaryDocumentsAndTypes, null>
 ) {
   const data = await prepareFollowupData({

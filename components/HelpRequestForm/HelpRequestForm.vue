@@ -54,7 +54,7 @@
         :label="helpRequestFieldLabels.prescribingOrganizationId"
         name="prescribingOrganizationId"
         :options="withEmptyValue(prescribingOrganizationOptions)"
-        :can-create-new-option="canCreateOrganisme"
+        :can-create-new-option="canCreatePrescribingOrganization"
       />
 
       <VeeSelect
@@ -105,7 +105,7 @@
         name="instructorOrganizationId"
         :options="instructorOrganizationOptions"
         :readonly="isEditingAndIsLocked"
-        :can-create-new-option="canCreateOrganisme"
+        :can-create-new-option="canCreateInstructorOrganization"
       />
 
       <template v-if="externalStructure && financialSupport">
@@ -247,8 +247,9 @@
   } from '~/client/options/helpRequest'
   import { ministerOptions } from '~/client/options/ministry'
   import {
-    canCreatePrescribingOrganization,
-    canEditItsOwnStructure
+    canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
+    canEditItsOwnStructure,
+    canCreateInstructorOrganization as canCreateInstructorOrganizationRule
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
@@ -330,7 +331,11 @@
 
   const canEditStructure = computed(() => canEditItsOwnStructure(user))
 
-  const canCreateOrganisme = computed(() =>
-    canCreatePrescribingOrganization(user)
+  const canCreatePrescribingOrganization = computed(() =>
+    canCreatePrescribingOrganizationRule(user)
+  )
+
+  const canCreateInstructorOrganization = computed(() =>
+    canCreateInstructorOrganizationRule(user)
   )
 </script>

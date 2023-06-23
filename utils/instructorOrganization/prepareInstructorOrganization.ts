@@ -5,7 +5,6 @@ import { canCreateInstructorOrganization } from '~/server/security/rules'
 export async function prepareInstructorOrganization(
   transaction: Prisma.TransactionClient,
   user: User,
-  structureId: string,
   instructorOrganizationId: string | null | undefined
 ) {
   if (
@@ -15,7 +14,7 @@ export async function prepareInstructorOrganization(
     const { id } = await transaction.instructorOrganization.create({
       data: {
         name: newOptionToLabel(instructorOrganizationId),
-        structureId,
+        structureId: user.structureId,
         createdById: user.id
       }
     })

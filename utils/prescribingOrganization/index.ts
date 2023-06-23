@@ -1,0 +1,1 @@
+export { preparePrescribingOrganization } from './preparePrescribingOrganization'

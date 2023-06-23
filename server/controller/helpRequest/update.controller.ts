@@ -1,11 +1,4 @@
-import {
-  Prisma,
-  User,
-  HelpRequest,
-  Beneficiary,
-  Document,
-  StructureType
-} from '@prisma/client'
+import { Prisma, StructureType } from '@prisma/client'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
@@ -13,70 +6,9 @@ import {
   canEditHelpRequest,
   canEditHelpRequestPrivateSynthesis
 } from '~/server/security/rules'
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
-import { prepareInstructorOrganization } from '~/utils/instructorOrganization/prepareInstructorOrganization'
+import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
+import { prepareInstructorOrganization } from '~/utils/instructorOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
-
-export async function prepareHelpRequestData({
-  input,
-  transaction,
-  user,
-  target
-}: {
-  input: EditHelpRequestInput
-  transaction: Prisma.TransactionClient
-  user: User
-  target: HelpRequest & {
-    beneficiary: Beneficiary & {
-      referents: User[]
-    }
-    documents: Document[]
-  }
-}): Promise<Prisma.HelpRequestUncheckedUpdateInput> {
-  const beneficiary = await transaction.beneficiary.findUniqueOrThrow({
-    where: { id: input.beneficiaryId },
-    select: { structureId: true }
-  })
-
-  const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: beneficiary.structureId },
-    select: {
-      type: true
-    }
-  })
-
-  const ministryData =
-    type === StructureType.Ministere
-      ? { numeroPegase: input.numeroPegase, ministre: input.ministre }
-      : {}
-
-  const prescribingOrganizationId = await preparePrescribingOrganization(
-    transaction,
-    user,
-    beneficiary.structureId,
-    input.prescribingOrganizationId
-  )
-
-  const instructorOrganizationId = await prepareInstructorOrganization(
-    transaction,
-    user,
-    beneficiary.structureId,
-    input.instructorOrganizationId
-  )
-
-  return {
-    ...input,
-    documents: prepareDocumentsMutations(input.documents, target.documents),
-    financialSupport: input.financialSupport === 'true',
-    externalStructure: input.externalStructure === 'true',
-    prescribingOrganizationId,
-    instructorOrganizationId,
-    privateSynthesis: canEditHelpRequestPrivateSynthesis(user, target)
-      ? input.privateSynthesis
-      : undefined,
-    ...ministryData
-  }
-}
 
 function getHelpRequest(id: string) {
   return prismaClient.helpRequest.findUnique({
@@ -96,11 +28,60 @@ type HelpRequestWithBeneficiaryAndDocuments = Prisma.PromiseReturnType<
   typeof getHelpRequest
 >
 
+export async function prepareHelpRequestData({
+  input,
+  transaction,
+  user,
+  target
+}: {
+  input: EditHelpRequestInput
+  transaction: Prisma.TransactionClient
+  user: ProtectedAppContext['user']
+  target: NonNullable<HelpRequestWithBeneficiaryAndDocuments>
+}): Promise<Prisma.HelpRequestUncheckedUpdateInput> {
+  const { type } = await transaction.structure.findUniqueOrThrow({
+    where: { id: user.structureId },
+    select: {
+      type: true
+    }
+  })
+
+  const ministryData =
+    type === StructureType.Ministere
+      ? { numeroPegase: input.numeroPegase, ministre: input.ministre }
+      : {}
+
+  const prescribingOrganizationId = await preparePrescribingOrganization(
+    transaction,
+    user,
+    input.prescribingOrganizationId
+  )
+
+  const instructorOrganizationId = await prepareInstructorOrganization(
+    transaction,
+    user,
+    input.instructorOrganizationId
+  )
+
+  return {
+    ...input,
+    documents: prepareDocumentsMutations(input.documents, target.documents),
+    financialSupport: input.financialSupport === 'true',
+    externalStructure: input.externalStructure === 'true',
+    prescribingOrganizationId,
+    instructorOrganizationId,
+    privateSynthesis: canEditHelpRequestPrivateSynthesis(user, target)
+      ? input.privateSynthesis
+      : undefined,
+    ...ministryData
+  }
+}
+
 async function updateTransaction(
   transaction: Prisma.TransactionClient,
   input: EditHelpRequestInput,
-  user: User,
-  target: Exclude<HelpRequestWithBeneficiaryAndDocuments, null>
+  user: ProtectedAppContext['user'],
+  target: NonNullable<HelpRequestWithBeneficiaryAndDocuments>
 ) {
   const data = await prepareHelpRequestData({
     input,
