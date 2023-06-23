@@ -7,6 +7,7 @@
       :comment="comment"
     />
     <BeneficiaryHistoryCommentAdd
+      v-if="canAddComments"
       :class="{ 'fr-mt-1w': comments.length }"
       :history="history"
       @comment-added="emit('commentAdded', $event)"
@@ -16,8 +17,15 @@
 
 <script setup lang="ts">
   import { HistoryItem, HistoryItemComment, HistoryItemComments } from './types'
+  import { useAuthStore } from '~/store/auth'
+  import {
+    canAddCommentToFollowup,
+    canAddCommentToHelpRequest
+  } from '~/server/security/rules'
 
-  defineProps<{
+  const authStore = useAuthStore()
+
+  const props = defineProps<{
     comments: HistoryItemComments
     history: HistoryItem
   }>()
@@ -25,4 +33,14 @@
   const emit = defineEmits<{
     (e: 'commentAdded', comment: HistoryItemComment): void
   }>()
+
+  const canAddCommentsRule = computed(() =>
+    props.history.isFollowup
+      ? canAddCommentToFollowup
+      : canAddCommentToHelpRequest
+  )
+
+  const canAddComments = computed(() =>
+    canAddCommentsRule.value(authStore.getAuthUser, props.history.beneficiary)
+  )
 </script>

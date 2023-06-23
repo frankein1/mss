@@ -9,13 +9,18 @@ import type {
 } from '~/server/schema'
 import { TypeSuivi } from '~/types/history'
 import { prepareFollowupFilters } from '~/utils/filters'
-import { prepareHelpRequestFilters } from '~/utils/helpRequest/filters'
+import { prepareHelpRequestFilters } from '~/utils/helpRequest'
 import {
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
 } from '~/server/security'
 import { notfoundError, ProtectedAppContext } from '~/server/trpc'
-import { canListBeneficiaryFollowups } from '~/server/security/rules'
+import {
+  canListBeneficiaryFollowups,
+  canListCommentsToFollowup,
+  canListCommentsToHelpRequest,
+  canListBeneficiaryHelpRequests
+} from '~/server/security/rules'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput
@@ -73,11 +78,6 @@ const historyItemInclude = {
     select: {
       name: true
     }
-  },
-  comments: {
-    include: {
-      createdBy: { select: createdBySelect }
-    }
   }
 }
 
@@ -90,6 +90,14 @@ async function getFollowups(
     return []
   }
 
+  const commentsInclude = canListCommentsToFollowup(user, beneficiary)
+    ? {
+        include: {
+          createdBy: { select: createdBySelect }
+        }
+      }
+    : undefined
+
   const followups = await prismaClient.followup.findMany({
     where: {
       beneficiaryId: beneficiary.id,
@@ -97,6 +105,7 @@ async function getFollowups(
     },
     include: {
       ...historyItemInclude,
+      comments: commentsInclude,
       types: true
     },
     orderBy: { date: 'desc' }
@@ -105,13 +114,30 @@ async function getFollowups(
 }
 
 async function getHelpRequests(
-  beneficiaryId: string,
+  user: User,
+  beneficiary: NonNullable<BeneficiarySecurityTarget>,
   filters: HelpRequestFilterInput
 ) {
+  if (!canListBeneficiaryHelpRequests(user, beneficiary)) {
+    return []
+  }
+
+  const commentsInclude = canListCommentsToHelpRequest(user, beneficiary)
+    ? {
+        include: {
+          createdBy: { select: createdBySelect }
+        }
+      }
+    : undefined
+
   const helpRequests = await prismaClient.helpRequest.findMany({
-    where: { beneficiaryId, ...prepareHelpRequestFilters(filters) },
+    where: {
+      beneficiaryId: beneficiary.id,
+      ...prepareHelpRequestFilters(filters)
+    },
     include: {
       ...historyItemInclude,
+      comments: commentsInclude,
       type: true,
       instructorOrganization: {
         select: {
@@ -159,7 +185,7 @@ export const getBeneficiaryHistoryHandler = async ({
   }
 
   if (filtersAppliesToHelpRequests(filters)) {
-    return getHelpRequests(beneficiaryId, filters)
+    return getHelpRequests(user, beneficiary, filters)
   }
 
   if (!filtersAppliesToFollowupsAndHelpRequests(filters)) {
@@ -168,7 +194,7 @@ export const getBeneficiaryHistoryHandler = async ({
 
   const [followups, helpRequests] = await Promise.all([
     getFollowups(user, beneficiary, filters),
-    getHelpRequests(beneficiaryId, filters)
+    getHelpRequests(user, beneficiary, filters)
   ])
 
   return [...followups, ...helpRequests].sort(sortHistoryItem)

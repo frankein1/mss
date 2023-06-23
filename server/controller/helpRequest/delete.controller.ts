@@ -3,7 +3,7 @@ import {
   forbiddenError,
   invalidError
 } from '~/server/trpc'
-import { canDeleteBeneficiaryHelpRequest } from '~/server/security/rules'
+import { canDeleteHelpRequest } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
 
 function getHelpRequest(id: string) {
@@ -32,7 +32,7 @@ export const deleteHelpRequestHandler = async ({
     throw invalidError('HelpRequest not found')
   }
 
-  if (!canDeleteBeneficiaryHelpRequest(user, helpRequest)) {
+  if (!canDeleteHelpRequest(user, helpRequest)) {
     throw forbiddenError()
   }
 

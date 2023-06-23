@@ -1,7 +1,7 @@
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getUserDisplayName } from '~/utils/user'
-import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
+import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
 
 export const getAgentsHandler = async ({
   ctx: { user }
@@ -46,7 +46,7 @@ export const getExaminationDatesHandler = async ({
 }: {
   ctx: ProtectedAppContext
 }) => {
-  if (!canAccessProtectedDataInHelpRequest(user)) {
+  if (!canViewAnyHelpRequestDetails(user)) {
     return []
   }
 

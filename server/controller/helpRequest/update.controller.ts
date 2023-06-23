@@ -10,8 +10,8 @@ import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import {
-  canEditBeneficiaryHelpRequest,
-  canEditBeneficiaryHelpRequestPrivateSynthesis
+  canEditHelpRequest,
+  canEditHelpRequestPrivateSynthesis
 } from '~/server/security/rules'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
 import { prepareInstructorOrganization } from '~/utils/instructorOrganization/prepareInstructorOrganization'
@@ -71,11 +71,7 @@ export async function prepareHelpRequestData({
     externalStructure: input.externalStructure === 'true',
     prescribingOrganizationId,
     instructorOrganizationId,
-    privateSynthesis: canEditBeneficiaryHelpRequestPrivateSynthesis(
-      user,
-      beneficiary,
-      target
-    )
+    privateSynthesis: canEditHelpRequestPrivateSynthesis(user, target)
       ? input.privateSynthesis
       : undefined,
     ...ministryData
@@ -136,7 +132,7 @@ export const updateHelpRequestHandler = async ({
 }) => {
   const target = await getHelpRequest(input.id)
 
-  if (!target || !canEditBeneficiaryHelpRequest(user, target)) {
+  if (!target || !canEditHelpRequest(user, target)) {
     throw forbiddenError()
   }
 

@@ -10,7 +10,7 @@
     >
       <td>
         <FollowupsTableRowStatusForm
-          v-if="canEditFollowupStatus"
+          v-if="canQuickEditFollowup"
           :followup="followup"
           @click.stop
         />
@@ -26,10 +26,12 @@
         {{ followupMediumOptions.get(followup.medium) }}
       </td>
       <td>{{ followUpTypes }}</td>
-      <td v-if="canAccessRestrictedFieldsInHelpRequest">
-        <template v-if="canDisplayDetailedHistory">
-          {{ followup.dueDate ? formatDate(followup.dueDate) : undefined }}
-        </template>
+      <td>
+        {{
+          canViewFollowupDetails && followup.dueDate
+            ? formatDate(followup.dueDate)
+            : undefined
+        }}
       </td>
       <td>
         {{ getBeneficiaryDisplayName(followup.beneficiary) }}
@@ -57,8 +59,8 @@
   import { getUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
   import {
-    canAccessProtectedDataInHelpRequest,
-    canEditFollowupStatus as canEditFollowupStatusRule
+    canViewFollowupDetails as canViewFollowupDetailsRule,
+    canEditFollowup
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
@@ -84,20 +86,11 @@
     props.followup.types.map(({ name }) => name).join(', ')
   )
 
-  const canAccessRestrictedFieldsInHelpRequest = computed(() =>
-    canAccessProtectedDataInHelpRequest(user)
+  const canViewFollowupDetails = computed(() =>
+    canViewFollowupDetailsRule(user, props.followup)
   )
 
-  const canDisplayDetailedHistory = computed(
-    () => true
-    // TODO
-    // permissionsStore.canDisplayDetailedHistory({
-    //   ...props.history,
-    //   isInterview: props.isInterview
-    // })
-  )
-
-  const canEditFollowupStatus = computed(() =>
-    canEditFollowupStatusRule(user, props.followup.beneficiary, props.followup)
+  const canQuickEditFollowup = computed(() =>
+    canEditFollowup(user, props.followup)
   )
 </script>

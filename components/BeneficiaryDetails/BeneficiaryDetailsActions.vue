@@ -12,7 +12,7 @@
         Synthèse d'entretien
       </NuxtLink>
     </li>
-    <li>
+    <li v-if="canCreateHelpRequest">
       <NuxtLink
         :to="`${RoutePath.BeneficiaryHelpRequestAdd(beneficiaryId)}`"
         class="fr-btn fr-icon-file-add-line help-request-btn"
@@ -37,10 +37,21 @@
 
 <script setup lang="ts">
   import { RoutePath } from '~/utils/routing'
+  import { canCreateHelpRequest as canCreateHelpRequestRule } from '~/server/security/rules'
+  import { useAuthStore } from '~/store/auth'
+  import { GetBeneficiaryOutput } from '~/server/routers'
 
-  defineProps<{
-    beneficiaryId: string
+  const authStore = useAuthStore()
+
+  const props = defineProps<{
+    beneficiary: GetBeneficiaryOutput
   }>()
+
+  const beneficiaryId = computed(() => props.beneficiary.id)
+
+  const canCreateHelpRequest = computed(() =>
+    canCreateHelpRequestRule(authStore.getAuthUser, props.beneficiary)
+  )
 </script>
 
 <style scoped lang="scss">

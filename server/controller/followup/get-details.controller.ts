@@ -47,7 +47,7 @@ function getFollowupDetails(
   user: User,
   followup: NonNullable<FollowupWithBeneficiaryDocumentsAndTypes>
 ) {
-  if (!canViewFollowupDetails(user, followup.beneficiary, followup)) {
+  if (!canViewFollowupDetails(user, followup)) {
     return {}
   }
 

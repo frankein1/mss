@@ -1,8 +1,7 @@
-import { RoutePath } from '~/utils/routing/routes'
 import { canEditFollowup } from '~/server/security/rules'
 import { useAuthStore } from '~/store/auth'
 
-export default defineNuxtRouteMiddleware(async to => {
+export default defineNuxtRouteMiddleware(async (to, from) => {
   const authStore = useAuthStore()
 
   let allowed = false
@@ -20,6 +19,6 @@ export default defineNuxtRouteMiddleware(async to => {
   }
 
   if (!allowed) {
-    return navigateTo(RoutePath.History())
+    return navigateTo(from)
   }
 })

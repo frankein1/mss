@@ -5,6 +5,7 @@ import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { prepareFollowupFilters } from '~/utils/filters'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+import { prepareGetFollowupsPageSelect } from '~/utils/followup'
 
 export const getFollowupsHandler = async ({
   input,
@@ -31,37 +32,12 @@ export const getFollowupsHandler = async ({
     ...prepareFollowupFilters(input.filters)
   }
 
+  const select = prepareGetFollowupsPageSelect(user)
+
   const [followups, count] = await Promise.all([
     prismaClient.followup.findMany({
       where,
-      select: {
-        id: true,
-        status: true,
-        medium: true,
-        types: { select: { id: true, name: true } },
-        dueDate: true,
-        beneficiary: {
-          select: {
-            id: true,
-            fileNumber: true,
-            firstName: true,
-            birthName: true,
-            usualName: true,
-            email: true,
-            referents: true,
-            structureId: true
-          }
-        },
-        createdBy: {
-          select: {
-            id: true,
-            email: true,
-            firstName: true,
-            lastName: true
-          }
-        },
-        structureId: true
-      },
+      select,
       take,
       skip,
       orderBy: input.orderBy

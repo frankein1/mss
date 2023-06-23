@@ -32,7 +32,7 @@
   } from '~/client/options/followup'
   import { helpRequestStatusOptions } from '~/client/options/helpRequest'
   import { typeSuiviOptions } from '~/client/options/history'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
+  import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
 
@@ -153,7 +153,7 @@
       })
     }
 
-    if (canAccessProtectedDataInHelpRequest(user)) {
+    if (canViewAnyHelpRequestDetails(user)) {
       filters.push(
         {
           name: 'handlingDate',
