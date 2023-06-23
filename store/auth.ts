@@ -34,19 +34,8 @@ export const useAuthStore = defineStore({
     userId(): string {
       return this.user?.id || ''
     },
-    userName(): string {
-      return this.user ? `${this.user.firstName} ${this.user.lastName}` : ''
-    },
-    userStructureId(): string {
-      return this.user?.structureId || ''
-    },
     userStructureType(): StructureType | undefined {
       return this.user?.structureType
-    },
-    isMinistryAgent(): boolean {
-      return this.user
-        ? this.user.structureType === StructureType.Ministere
-        : false
     },
     isActive(): boolean {
       return this.user?.status === UserStatus.Active

@@ -116,7 +116,6 @@
   import { Route, RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()
-  const user = authStore.getAuthUser
 
   const props = defineProps<{
     helpRequest: HelpRequestItem
@@ -125,6 +124,8 @@
   const emit = defineEmits<{
     (e: 'updated', helpRequest: HelpRequestItem): void
   }>()
+
+  const user = computed(() => authStore.getAuthUser)
 
   const helpRequestPath = computed(() =>
     RoutePath.Beneficiary(props.helpRequest.beneficiary.id, {
@@ -142,11 +143,11 @@
   )
 
   const canViewHelpRequestDetails = computed(() =>
-    canViewHelpRequestDetailsRule(user, props.helpRequest.beneficiary)
+    canViewHelpRequestDetailsRule(user.value, props.helpRequest.beneficiary)
   )
 
   const canQuickEditHelpRequest = computed(() =>
-    canEditHelpRequest(user, props.helpRequest)
+    canEditHelpRequest(user.value, props.helpRequest)
   )
 
   const isAcceptedHelpRequest = computed(
