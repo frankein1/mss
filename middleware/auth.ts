@@ -5,8 +5,9 @@ export default defineNuxtRouteMiddleware(to => {
   const authStore = useAuthStore()
   const isAuthenticated = authStore.isAuthenticated
   if (!isAuthenticated) {
+    const admin = to.fullPath.startsWith(RoutePath.Admin())
     return navigateTo({
-      path: RoutePath.Login(),
+      path: admin ? RoutePath.LoginAdmin() : RoutePath.Login(),
       query: { redirectUrl: to.fullPath }
     })
   }

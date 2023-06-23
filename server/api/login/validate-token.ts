@@ -1,21 +1,21 @@
-import { UserRole } from '@prisma/client'
 import { signJwt } from '~/server/lib/jwt'
 import { prismaClient } from '~/server/prisma'
 import { forbiddenError } from '~/server/trpc'
-import { RoutePath } from '~/utils/routing'
 
 export default defineEventHandler(async event => {
-  const { email: input } = await readBody(event)
+  const { token } = await readBody(event)
 
-  const user = await prismaClient.user.findUnique({
-    where: {
-      email: input
-    }
-  })
-  if (!user) {
+  if (!token) {
     throw forbiddenError()
   }
-  if (user.role !== UserRole.Administrator) {
+
+  const user = await prismaClient.user.findFirst({
+    where: {
+      accessToken: token
+    }
+  })
+
+  if (!user) {
     throw forbiddenError()
   }
 
@@ -44,5 +44,6 @@ export default defineEventHandler(async event => {
     secure: process.env.NODE_ENV === 'production',
     expires: new Date(Date.now() + expiresIn * 1000)
   })
-  return sendRedirect(event, RoutePath.AdminStructures())
+
+  return { user }
 })
