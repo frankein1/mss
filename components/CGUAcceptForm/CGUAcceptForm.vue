@@ -40,16 +40,18 @@
 </template>
 
 <script lang="ts" setup>
+  import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
+  const auth = useAuthStore()
 
   async function onAcceptCGU() {
     try {
-      // FIXME: uer not updated because JWT not refreshed
-      await trpcClient.user.acceptCGU.mutate()
-      navigateTo(RoutePath.Overview())
+      const user = await trpcClient.user.acceptCGU.mutate()
+      auth.login(user)
+      return navigateTo(RoutePath.Overview())
     } catch {
       snackbar.error("L'acceptation des CGU a échoué.")
     }
