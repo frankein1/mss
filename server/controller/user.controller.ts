@@ -2,6 +2,7 @@ import { TRPCError } from '@trpc/server'
 import { UserStatus, User } from '@prisma/client'
 import { sendEmail } from '../lib/email/sendEmail'
 import { getInclusionConnectClient } from '../lib'
+import { signJwt, verifyJwt } from '~/server/lib/jwt'
 import {
   ProtectedAppContext,
   forbiddenError,
@@ -99,15 +100,16 @@ export const getUsersHandler = async ({
 }
 
 export const acceptCGUHandler = async ({
-  ctx: { user }
+  ctx: { user, event }
 }: {
   ctx: ProtectedAppContext
 }) => {
   const {
-    public: { cguVersion }
+    public: { cguVersion, sessionCookieKey },
+    auth: { jwtKey }
   } = useRuntimeConfig()
 
-  return await prismaClient.user.update({
+  const updatedUser = await prismaClient.user.update({
     where: { id: user.id },
     data: {
       CGUHistory: {
@@ -124,6 +126,45 @@ export const acceptCGUHandler = async ({
       }
     }
   })
+
+  const cookies = parseCookies(event)
+  if (!cookies) {
+    throw invalidError()
+  }
+
+  const previousSessionToken = cookies[sessionCookieKey]
+  if (!previousSessionToken) {
+    throw invalidError()
+  }
+
+  let payload
+  try {
+    payload = verifyJwt(previousSessionToken, jwtKey)
+  } catch (err) {
+    deleteCookie(event, sessionCookieKey)
+    throw forbiddenError()
+  }
+
+  const { user: savedUser } = payload
+
+  const newUser = {
+    ...savedUser,
+    CGUHistoryVersion: updatedUser.CGUHistory.length
+      ? updatedUser.CGUHistory[0].version
+      : null
+  }
+
+  event.context.auth = { newUser }
+
+  const { sessionToken, expiresIn } = signJwt(newUser, jwtKey)
+  setCookie(event, sessionCookieKey, sessionToken, {
+    httpOnly: true,
+    path: '/',
+    secure: process.env.NODE_ENV === 'production',
+    expires: new Date(Date.now() + expiresIn * 1000)
+  })
+
+  return newUser
 }
 
 function getEmailContent(user: User) {
