@@ -114,20 +114,20 @@
             <td>* si il est référent</td>
           </tr>
           <tr>
-            <td>Consultation des documents</td>
+            <td>Consultation et modification des documents</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* non confidentiels</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* si ajoutés par lui</td>
             <td>* si il est référent</td>
           </tr>
           <tr>
-            <td>Modification d'un document</td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* non confidentiels</td>
+            <td>Consultation et modification des documents confidentiels</td>
             <td>* si ajoutés par lui</td>
-            <td>* si il est référent</td>
+            <td>* si ajoutés par lui</td>
+            <td>* si ajoutés par lui</td>
+            <td>* si ajoutés par lui</td>
+            <td>* si ajoutés par lui</td>
           </tr>
           <tr>
             <td>Suppression d'un document</td>
@@ -316,7 +316,7 @@
 
   th:nth-child(2),
   td:nth-child(2) {
-    max-width: 8rem;
+    max-width: 10rem;
   }
 
   td:not(:first-child) {
