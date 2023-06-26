@@ -103,7 +103,7 @@
       }
     ]
 
-    if (canViewStats(authStore.getAuthUser)) {
+    if (authStore.isAuthenticated && canViewStats(authStore.getAuthUser)) {
       menuItems.push({
         to: RoutePath.Stats(),
         label: 'Statistiques',
