@@ -40,10 +40,7 @@ export default defineEventHandler(async event => {
 
   await updateAccount(account)
 
-  const signoutUrl = client.getLogoutUrl(
-    account.sessionState || '',
-    account.idToken || ''
-  )
+  const signoutUrl = client.getLogoutUrl(account.idToken || '')
 
   await fetch(signoutUrl)
 
@@ -67,7 +64,6 @@ async function updateAccount(account: Account) {
       refreshToken: null,
       tokenType: null,
       idToken: null,
-      sessionState: null,
       scope: null
     }
   })

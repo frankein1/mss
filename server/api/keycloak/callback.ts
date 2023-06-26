@@ -35,8 +35,8 @@ export default defineEventHandler(async event => {
     redirectUrl as string | undefined
   )
 
-  const { accessToken } = inclusionConnectToken
-  const { email, sub } = parseInclusionConnectJwt(accessToken)
+  const { idToken } = inclusionConnectToken
+  const { email, sub } = parseInclusionConnectJwt(idToken)
 
   const user = await getUser(email)
 
@@ -111,15 +111,8 @@ async function upsertAccount({
   providerAccountId: string
   inclusionConnectToken: InclusionConnectToken
 }) {
-  const {
-    accessToken,
-    expiresIn,
-    refreshToken,
-    tokenType,
-    idToken,
-    sessionState,
-    scope
-  } = inclusionConnectToken
+  const { accessToken, expiresIn, refreshToken, tokenType, idToken, scope } =
+    inclusionConnectToken
 
   return await prismaClient.account.upsert({
     where: {
@@ -138,7 +131,6 @@ async function upsertAccount({
       refreshToken,
       tokenType,
       idToken,
-      sessionState,
       scope
     },
     update: {
@@ -147,7 +139,6 @@ async function upsertAccount({
       refreshToken,
       tokenType,
       idToken,
-      sessionState,
       scope
     }
   })
