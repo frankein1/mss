@@ -50,13 +50,13 @@
         icon: 'fr-icon-home-4-line'
       })
     }
-  }
-  if (user) {
-    menus.push({
-      label: 'Déconnexion',
-      href: RoutePath.Logout(),
-      icon: 'fr-icon-logout-box-r-line'
-    })
+    if (user) {
+      menus.push({
+        label: 'Déconnexion',
+        href: RoutePath.Logout(),
+        icon: 'fr-icon-logout-box-r-line'
+      })
+    }
 
     return menus
   })
