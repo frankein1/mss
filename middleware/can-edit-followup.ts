@@ -8,7 +8,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
   try {
     const followup = await useTrpcClient().followup.getFollowupDetails.query({
-      id: to.params.iid as string
+      id: to.params.fid as string
     })
 
     if (canEditFollowup(authStore.getAuthUser, followup)) {
