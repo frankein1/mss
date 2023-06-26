@@ -75,10 +75,10 @@
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
 
-  const authUser = useAuthStore().getAuthUser
+  const authStore = useAuthStore()
   const canDelete = computed(() => {
     return beneficiary.value
-      ? canDeleteBeneficiary(authUser, beneficiary.value)
+      ? canDeleteBeneficiary(authStore.getAuthUser, beneficiary.value)
       : false
   })
 

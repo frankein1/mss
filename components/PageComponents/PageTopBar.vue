@@ -24,8 +24,12 @@
 
   const authStore = useAuthStore()
 
-  const user = computed(() => authStore.getAuthUser)
-  const userName = computed(() => getUserDisplayName(user.value))
+  const user = computed(() =>
+    authStore.isAuthenticated ? authStore.getAuthUser : null
+  )
+  const userName = computed(() =>
+    user.value ? getUserDisplayName(user.value) : ''
+  )
 
   const menus = computed(() => {
     const menus = []
@@ -35,7 +39,7 @@
       to: RoutePath.Account(),
       icon: 'fr-icon-user-line'
     })
-    if (canListUsers(user.value)) {
+    if (user.value && canListUsers(user.value)) {
       menus.push({
         label: 'Utilisateurs',
         to: RoutePath.Users(),
@@ -43,7 +47,7 @@
       })
     }
 
-    if (canEditItsOwnStructure(user.value)) {
+    if (user.value && canEditItsOwnStructure(user.value)) {
       menus.push({
         label: 'Structure',
         to: RoutePath.StructureEdit(),

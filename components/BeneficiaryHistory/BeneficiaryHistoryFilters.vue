@@ -36,7 +36,7 @@
   import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
 
-  const { getAuthUser: user } = useAuthStore()
+  const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
 
@@ -153,7 +153,7 @@
       })
     }
 
-    if (canViewAnyHelpRequestDetails(user)) {
+    if (canViewAnyHelpRequestDetails(authStore.getAuthUser)) {
       filters.push(
         {
           name: 'handlingDate',

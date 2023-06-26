@@ -31,7 +31,7 @@
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
 
-  const { getAuthUser: user } = useAuthStore()
+  const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
 
@@ -130,7 +130,7 @@
       })
     }
 
-    if (canViewAnyHelpRequestDetails(user)) {
+    if (canViewAnyHelpRequestDetails(authStore.getAuthUser)) {
       filters.push(
         {
           name: 'handlingDate',

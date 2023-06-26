@@ -42,7 +42,7 @@
   import { useAuthStore } from '~/store/auth'
   import { AddCommentInput, addCommentSchema } from '~/server/schema'
 
-  const { getAuthUser: currentUser } = useAuthStore()
+  const authStore = useAuthStore()
   const snackbar = useSnackbar()
   const form = ref<HTMLFormElement | null>(null)
 
@@ -64,6 +64,8 @@
       isFollowup: props.history.isFollowup
     }
   })
+
+  const currentUser = computed(() => authStore.getAuthUser)
 
   const onAddComment = handleSubmit(async values => {
     isSubmitting.value = true

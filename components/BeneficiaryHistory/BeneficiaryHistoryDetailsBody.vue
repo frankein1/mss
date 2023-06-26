@@ -87,7 +87,7 @@
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
 
-  const { getAuthUser: user } = useAuthStore()
+  const authStore = useAuthStore()
 
   const props = defineProps<{
     history: HistoryItem
@@ -100,6 +100,8 @@
 
   const comments = ref(props.history.comments || [])
 
+  const user = computed(() => authStore.getAuthUser)
+
   const editLink = computed(() => {
     const routeWithParams = props.history.isFollowup
       ? RoutePath.BeneficiaryFollowupEdit
@@ -111,24 +113,26 @@
     props.history.isFollowup ? canEditFollowup : canEditHelpRequest
   )
 
-  const canEdit = computed(() => canEditRule.value(user, props.history))
+  const canEdit = computed(() => canEditRule.value(user.value, props.history))
 
   const canDeleteRule = computed(() =>
     props.history.isFollowup ? canDeleteFollowup : canDeleteHelpRequest
   )
 
-  const canDelete = computed(() => canDeleteRule.value(user, props.history))
+  const canDelete = computed(() =>
+    canDeleteRule.value(user.value, props.history)
+  )
 
   const canViewHistoryDetails = computed(() =>
     props.history.isFollowup
-      ? canViewFollowupDetails(user, props.history)
-      : canViewHelpRequestDetails(user, props.history.beneficiary)
+      ? canViewFollowupDetails(user.value, props.history)
+      : canViewHelpRequestDetails(user.value, props.history.beneficiary)
   )
 
   const canViewPrivateSynthesis = computed(() =>
     props.history.isFollowup
-      ? canViewFollowupPrivateSynthesis(user, props.history)
-      : canViewHelpRequestPrivateSynthesis(user, props.history)
+      ? canViewFollowupPrivateSynthesis(user.value, props.history)
+      : canViewHelpRequestPrivateSynthesis(user.value, props.history)
   )
 
   const canListCommentsRule = computed(() =>
@@ -138,7 +142,7 @@
   )
 
   const canListComments = computed(() =>
-    canListCommentsRule.value(user, props.history.beneficiary)
+    canListCommentsRule.value(user.value, props.history.beneficiary)
   )
 
   function onCommentAdded(comment: HistoryItemComment) {
