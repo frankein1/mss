@@ -11,16 +11,17 @@
     />
     <template v-else-if="ministreStats">
       <h2 class="fr-h5">Ministres</h2>
-      <p>
-        Pourcentage calculé sur le nombre total
-        {{ collection === 'helpRequests' ? 'de demandes' : "d'entretiens" }}
-      </p>
+      <p>Pourcentage calculé sur le nombre total de demandes d'aide</p>
       <StatsList
         v-if="ministreStats.length"
         :total-count="totalCount"
         :stats="ministreStats"
       />
-      <p v-else>{{ emptyResultMessage }}</p>
+      <p v-else>
+        Commencez à créer des instructions de demande d'aides dans les fiches de
+        bénéficiaires pour voir apparaître les statistiques de la répartition
+        des ministres.
+      </p>
     </template>
   </div>
 </template>
@@ -37,7 +38,6 @@
 
   const props = defineProps<{
     totalCount: number
-    collection: 'helpRequests' | 'followups'
     filters: StatFilterInput
   }>()
 
@@ -46,7 +46,6 @@
     pending,
     error
   } = useAsyncData<Array<{ ministre: Minister | null; _count: number }>>(
-    `${props.collection}MinistreStats`,
     () => trpcClient.stat.getHelpRequestMinistreStats.query(props.filters),
     {
       default: () => [],
@@ -59,16 +58,8 @@
       ministreCounts.value?.map(({ _count, ministre }) => ({
         key: ministre || 'null',
         label: getStatLabel(ministerLabels, ministre),
-        color: SupportColor[props.collection],
+        color: SupportColor.helpRequests,
         count: _count
       })) || []
   )
-
-  const emptyResultMessage = computed(() => {
-    return `Commencez à créer des ${
-      props.collection === 'helpRequests'
-        ? "instructions de demande d'aides"
-        : "synthèses d'entretien"
-    } dans les fiches de bénéficiaires pour voir apparaître les statistiques de la répartition des ministres.`
-  })
 </script>

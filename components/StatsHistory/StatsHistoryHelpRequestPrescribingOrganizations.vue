@@ -11,16 +11,17 @@
     />
     <template v-else-if="prescribingOrganizationStats">
       <h2 class="fr-h5">Organismes prescripteurs</h2>
-      <p>
-        Pourcentage calculé sur le nombre total
-        {{ collection === 'helpRequests' ? 'de demandes' : "d'entretiens" }}
-      </p>
+      <p>Pourcentage calculé sur le nombre total de demandes d'aide</p>
       <StatsList
         v-if="prescribingOrganizationStats.length"
         :total-count="totalCount"
         :stats="prescribingOrganizationStats"
       />
-      <p v-else>{{ emptyResultMessage }}</p>
+      <p v-else>
+        Commencez à créer des instructions de demande d'aides dans les fiches de
+        bénéficiaires pour voir apparaître les statistiques de la répartition
+        des organismes prescripteurs.
+      </p>
     </template>
   </div>
 </template>
@@ -36,7 +37,6 @@
 
   const props = defineProps<{
     totalCount: number
-    collection: 'helpRequests' | 'followups'
     filters: StatFilterInput
   }>()
 
@@ -48,11 +48,9 @@
     Array<{ prescribingOrganization: { id: string; name: string } | null }>
   >(
     () =>
-      trpcClient.stat[
-        props.collection === 'helpRequests'
-          ? 'getHelpRequestPrescribingOrganizationStats'
-          : 'getFollowupPrescribingOrganizationStats'
-      ].query(props.filters),
+      trpcClient.stat.getHelpRequestPrescribingOrganizationStats.query(
+        props.filters
+      ),
     {
       default: () => [],
       watch: [props.filters]
@@ -70,7 +68,7 @@
         _prescribingOrganizationStats[prescribingOrganizationId] = {
           key: prescribingOrganizationId,
           label: historyItem.prescribingOrganization?.name || STATS_NULL_LABEL,
-          color: SupportColor[props.collection],
+          color: SupportColor.helpRequests,
           count: 1
         }
       }
@@ -80,13 +78,5 @@
     )
     _prescribingOrganizationStatsValues.sort((a, b) => b.count - a.count)
     return _prescribingOrganizationStatsValues
-  })
-
-  const emptyResultMessage = computed(() => {
-    return `Commencez à créer des ${
-      props.collection === 'helpRequests'
-        ? "instructions de demande d'aides"
-        : "synthèses d'entretien"
-    } dans les fiches de bénéficiaires pour voir apparaître les statistiques de la répartition des organismes prescripteurs.`
   })
 </script>

@@ -23,7 +23,7 @@ export default defineEventHandler(async event => {
   if (!code) {
     return sendError(
       event,
-      new Error(`[IC] no code returned from InclusionConnect`)
+      new Error('[IC] no code returned from InclusionConnect')
     )
   }
 
@@ -96,7 +96,7 @@ async function fetchInclusionConnnectToken(
     throw new Error(`[IC] ${inclusionConnectTokenResponse.error.description}`)
   }
   if (!inclusionConnectTokenResponse.data) {
-    throw new Error(`[IC] no access token found un inclusion connect response`)
+    throw new Error('[IC] no access token found un inclusion connect response')
   }
 
   return inclusionConnectTokenResponse.data

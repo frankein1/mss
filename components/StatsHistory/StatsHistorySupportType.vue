@@ -13,7 +13,9 @@
       <h2 class="fr-h5">Objets des {{ historyTypeLabel }}</h2>
       <p>
         Pourcentage calculé sur le nombre total
-        {{ collection === 'helpRequests' ? 'de demandes' : "d'entretiens" }}
+        {{
+          collection === 'helpRequests' ? "de demande d'aides" : "d'entretiens"
+        }}
       </p>
       <StatsList
         v-if="supportTypesStats.length"

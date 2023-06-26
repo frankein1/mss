@@ -71,7 +71,7 @@
     try {
       const comment = await useTrpcClient().comment.add.mutate(values)
 
-      snackbar.success(`Nouveau commentaire ajouté.`, () =>
+      snackbar.success('Nouveau commentaire ajouté.', () =>
         form.value?.querySelector('textarea')?.focus()
       )
       form.value?.reset()

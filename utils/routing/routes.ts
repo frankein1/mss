@@ -69,7 +69,7 @@ export const RoutePath = {
   [Route.Register]: () => '/register',
   [Route.DeclarationAccessibilite]: () => '/declaration-accessibilite',
   [Route.MentionsLegales]: () => '/mentions-legales',
-  [Route.Env]: () => `/env`,
+  [Route.Env]: () => '/env',
   [Route.LogoutSuccess]: () => '/logout-success',
   [Route.DisabledAccount]: () => '/disabled-account',
 

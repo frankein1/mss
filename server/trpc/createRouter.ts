@@ -63,7 +63,7 @@ const isPartOfStructure = isAuthenticated.unstable_pipe(({ ctx, next }) => {
 })
 
 const statsMiddleware = isPartOfStructure.unstable_pipe(({ ctx, next }) => {
-  if (canViewStats(ctx.user)) {
+  if (!canViewStats(ctx.user)) {
     throw forbiddenError('User can not view stats')
   }
   return next({

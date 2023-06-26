@@ -45,7 +45,6 @@
     error,
     pending
   } = useAsyncData<Array<{ status: HelpRequestStatus; _count: number }>>(
-    `helpRequestStatusStats`,
     () => trpcClient.stat.getHelpRequestStatusStats.query(props.filters),
     {
       default: () => [],
