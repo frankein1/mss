@@ -67,11 +67,12 @@
   import { Route, RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()
-  const user = authStore.getAuthUser
 
   const props = defineProps<{
     followup: FollowupItem
   }>()
+
+  const user = computed(() => authStore.getAuthUser)
 
   const followupPath = computed(() =>
     RoutePath.Beneficiary(props.followup.beneficiary.id, {
@@ -87,10 +88,10 @@
   )
 
   const canViewFollowupDetails = computed(() =>
-    canViewFollowupDetailsRule(user, props.followup)
+    canViewFollowupDetailsRule(user.value, props.followup)
   )
 
   const canQuickEditFollowup = computed(() =>
-    canEditFollowup(user, props.followup)
+    canEditFollowup(user.value, props.followup)
   )
 </script>

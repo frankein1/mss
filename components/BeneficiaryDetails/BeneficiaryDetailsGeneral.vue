@@ -132,13 +132,12 @@
     beneficiaryAccommodationModeLabels
   } from '~/client/options/beneficiary'
   import { Nationalities } from '~/client/options/nationality'
-  import { useAuthStore } from '~/store/auth'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
   }>()
 
-  const isMinistryAgent = useAuthStore().isMinistryAgent
+  const isMinistryAgent = useMinistryAgent()
 
   const hasAddress =
     props.beneficiary.street ||
