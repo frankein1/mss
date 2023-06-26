@@ -1,4 +1,4 @@
-FROM registry.gitlab.com/vigigloo/tools/pnpm:node-18_pnpm-8.3.1 as build
+FROM registry.gitlab.com/vigigloo/tools/pnpm:node-18_pnpm-8.6.2 as build
 WORKDIR /app
 
 COPY prisma /app/
