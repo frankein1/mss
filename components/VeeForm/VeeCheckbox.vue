@@ -5,13 +5,17 @@
 -->
 
 <template>
-  <div class="fr-checkbox-group">
+  <div
+    class="fr-checkbox-group"
+    :class="{ 'fr-checkbox-group--error': error }"
+  >
     <input
       :id="id"
       type="checkbox"
       :name="name"
       :checked="checked"
       :value="true"
+      :aria-describedby="ariaDescribedby"
       :aria-labelledby="labelledBy"
       @input="handleChange"
     />
@@ -20,9 +24,17 @@
       :for="id"
     >
       <span :class="{ 'no-label': noLabel }">
-        {{ label }}
+        {{ displayLabel }}
       </span>
     </label>
+    <div
+      v-if="error"
+      :id="errorId"
+      class="fr-messages-group"
+      aria-live="assertive"
+    >
+      <p class="fr-message fr-message--error">{{ error }}</p>
+    </div>
   </div>
 </template>
 
@@ -35,10 +47,12 @@
       label: string
       noLabel?: boolean
       labelledBy?: string
+      required?: boolean
     }>(),
     {
       noLabel: false,
-      labelledBy: undefined
+      labelledBy: undefined,
+      required: false
     }
   )
 
@@ -47,13 +61,22 @@
   // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
   const { name } = toRefs(props)
 
-  const { handleChange, checked } = useField(name, undefined, {
+  const {
+    handleChange,
+    checked,
+    errorMessage: error
+  } = useField(name, undefined, {
     type: 'checkbox',
     checkedValue: true,
     uncheckedValue: false
   })
 
-  const { id } = useFormFieldId(props.name)
+  const { id, errorId } = useFormFieldId(props.name)
+
+  const displayLabel = computed(() =>
+    props.required ? `${props.label} *` : props.label
+  )
+  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
 </script>
 
 <style scoped>
