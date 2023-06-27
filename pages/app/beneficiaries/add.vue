@@ -25,13 +25,20 @@
 
   const isSubmitting = ref(false)
 
-  async function onCreateBeneficiary(beneficiary: CreateBeneficiaryInput) {
+  async function onCreateBeneficiary(
+    beneficiary: CreateBeneficiaryInput,
+    complete: boolean
+  ) {
     isSubmitting.value = true
     // TODO: handle error
     const { id } = await trpcClient.beneficiary.create.mutate(beneficiary)
     isSubmitting.value = false
 
-    navigateTo(RoutePath.Beneficiary(id))
+    if (complete) {
+      navigateTo(RoutePath.BeneficiaryEdit(id))
+    } else {
+      navigateTo(RoutePath.Beneficiary(id))
+    }
   }
 </script>
 
