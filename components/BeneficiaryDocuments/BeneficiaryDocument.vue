@@ -12,6 +12,7 @@
             class="fr-btns-group fr-btns-group--inline fr-btns-group--sm fr-ml-1v"
           >
             <button
+              v-if="canEdit"
               class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
               data-fr-opened="false"
               aria-controls="global-modal"
@@ -20,7 +21,7 @@
               Modifier le document
             </button>
             <button
-              v-if="canDeleteDocuments"
+              v-if="canDelete"
               class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-line btn-delete-action"
               @click="onDelete"
             >
@@ -93,25 +94,23 @@
 </template>
 
 <script setup lang="ts">
-  import { Document } from '@prisma/client'
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
   import { getDocumenTagClass } from '~/client/classes/document'
   import { documentTagOptions } from '~/client/options/document'
   import { EditDocumentInput } from '~/server/schema'
-  import { GetBeneficiaryOutput } from '~/server/routers'
+  import {
+    GetBeneficiaryDocumentOutput,
+    GetBeneficiaryOutput
+  } from '~/server/routers'
+  import { canEditDocument, canDeleteDocument } from '~/server/security/rules'
+  import { useAuthStore } from '~/store/auth'
 
-  const props = withDefaults(
-    defineProps<{
-      document: Document
-      beneficiary: GetBeneficiaryOutput
-      canDeleteDocuments?: boolean
-      hasUnreadNotifications?: boolean
-    }>(),
-    {
-      hasUnreadNotifications: false,
-      canDeleteDocuments: true
-    }
-  )
+  const authStore = useAuthStore()
+
+  const props = defineProps<{
+    document: GetBeneficiaryDocumentOutput
+    beneficiary: GetBeneficiaryOutput
+  }>()
 
   const emit = defineEmits<{
     (e: 'refreshDocuments'): void
@@ -120,6 +119,20 @@
   const modal = useModal()
 
   const downloadLink = ref<HTMLLinkElement | null>(null)
+
+  const user = computed(() => authStore.getAuthUser)
+
+  const canEdit = computed(() =>
+    canEditDocument(user.value, props.beneficiary, props.document)
+  )
+
+  const canDelete = computed(() =>
+    canDeleteDocument(user.value, props.beneficiary)
+  )
+
+  const hasUnreadNotifications = computed(
+    () => !!props.document._count.Notification
+  )
 
   const onDownload = async () => {
     if (process.client) {

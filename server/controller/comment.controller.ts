@@ -79,7 +79,7 @@ async function addNewCommentNotificationForHelpRequest(
       transaction,
       helpRequest.createdById,
       input.beneficiaryId,
-      { followupId: input.historyId }
+      { helpRequestId: input.historyId }
     )
   }
 }

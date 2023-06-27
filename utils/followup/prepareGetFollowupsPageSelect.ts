@@ -1,4 +1,4 @@
-import type { User } from '@prisma/client'
+import { User, Prisma } from '@prisma/client'
 import { canViewAnyFollowupDetails } from '~/server/security/rules'
 
 export function prepareGetFollowupsPageSelect(user: User) {
@@ -6,7 +6,10 @@ export function prepareGetFollowupsPageSelect(user: User) {
     id: true,
     status: true,
     medium: true,
-    types: { select: { id: true, name: true } },
+    types: {
+      select: { id: true, name: true },
+      orderBy: { name: Prisma.SortOrder.asc }
+    },
     dueDate: canViewAnyFollowupDetails(user),
     beneficiary: {
       select: {

@@ -42,7 +42,6 @@ export {
   canDeleteDocument,
   canEditDocument,
   canListDocuments,
-  canListConfidentialDocuments,
   canOnlyListItsUploadedDocuments,
   canViewDocument,
   canSetDocumentAsConfidential
