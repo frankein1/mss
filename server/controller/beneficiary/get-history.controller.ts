@@ -64,7 +64,13 @@ const createdBySelect = {
 }
 
 const historyItemInclude = {
-  Notification: { where: { read: false } },
+  _count: {
+    select: {
+      Notification: {
+        where: { read: false }
+      }
+    }
+  },
   createdBy: {
     select: createdBySelect
   },
