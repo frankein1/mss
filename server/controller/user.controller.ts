@@ -149,9 +149,7 @@ export const acceptCGUHandler = async ({
 
   const newUser = {
     ...savedUser,
-    CGUHistoryVersion: updatedUser.CGUHistory.length
-      ? updatedUser.CGUHistory[0].version
-      : null
+    CGUHistoryVersion: updatedUser.CGUHistory[0].version
   }
 
   event.context.auth = { newUser }
