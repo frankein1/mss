@@ -2,7 +2,6 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getUserDisplayName } from '~/utils/user'
 import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
-import { OptionalIdInput } from '~/server/schema'
 
 export const getAgentsHandler = async ({
   ctx: { user }
@@ -43,10 +42,10 @@ function hasDefinedExaminationDate(h: {
 }
 
 export const getExaminationDatesHandler = async ({
-  input: { id },
+  input,
   ctx: { user }
 }: {
-  input: OptionalIdInput
+  input: { id: string } | undefined
   ctx: ProtectedAppContext
 }) => {
   if (!canViewAnyHelpRequestDetails(user)) {
@@ -57,7 +56,7 @@ export const getExaminationDatesHandler = async ({
     by: ['examinationDate'],
     where: {
       examinationDate: { not: null },
-      beneficiaryId: id || undefined
+      beneficiaryId: input?.id || undefined
     },
     orderBy: [{ examinationDate: 'desc' }]
   })

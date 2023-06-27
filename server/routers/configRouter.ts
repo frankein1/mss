@@ -8,7 +8,7 @@ import {
 } from '../controller/config.controller'
 import { protectedProcedure, router } from '~/server/trpc'
 import { RoutePath } from '~/utils/routing'
-import { optionalIdSchema } from '~/server/schema'
+import { idSchema } from '~/server/schema'
 
 export const configRouter = router({
   getAgents: protectedProcedure.query(getAgentsHandler),
@@ -16,7 +16,7 @@ export const configRouter = router({
     getBeneficiariesCitiesHandler
   ),
   getExaminationDates: protectedProcedure
-    .input(optionalIdSchema)
+    .input(idSchema.optional())
     .query(getExaminationDatesHandler),
   getStructureFollowupTypes: protectedProcedure.query(
     getStructureFollowupTypesHandler
