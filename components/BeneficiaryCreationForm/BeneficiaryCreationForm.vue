@@ -65,11 +65,25 @@
       </div>
     </div>
 
+    <AtomAlert
+      class="fr-mt-2w fr-mb-2w"
+      message="Souhaitez-vous ajouter plus d'informations sur ce bénéficiaire ?"
+      detailed-message="Renseignez des informations complémentaires concernant le bénéficiaire dès maintenant.<br />Vous pourrez également les compléter plus tard via sa fiche bénéficiaire."
+      :alert-type="AlertType.Info"
+      :action="{
+        iconClass: 'fr-icon-edit-line',
+        title: 'Compléter',
+        type: 'submit'
+      }"
+      @action="complete = true"
+    />
+
     <button
       class="fr-btn fr-btn--lg submit-btn"
       type="submit"
       :submitting="isSubmitting"
       :disabled="isSubmitting"
+      @click="complete = false"
     >
       Enregistrer
     </button>
@@ -85,6 +99,7 @@
     CreateBeneficiaryInput,
     createBeneficiarySchema
   } from '~/server/schema/beneficiary.schema'
+  import { AlertType } from '~/utils/constants/alert'
 
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
@@ -95,8 +110,14 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'saveBeneficiary', beneficiary: CreateBeneficiaryInput): void
+    (
+      e: 'saveBeneficiary',
+      beneficiary: CreateBeneficiaryInput,
+      complete: boolean
+    ): void
   }>()
+
+  const complete = ref<boolean>(false)
 
   const { handleSubmit } = useForm<CreateBeneficiaryInput>({
     validationSchema: toTypedSchema(createBeneficiarySchema),
@@ -106,7 +127,7 @@
   })
 
   const onSubmit = handleSubmit(values => {
-    emit('saveBeneficiary', values)
+    emit('saveBeneficiary', values, complete.value)
   })
 
   const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
