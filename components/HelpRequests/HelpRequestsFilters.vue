@@ -64,16 +64,19 @@
     data: examinationDateOptions,
     pending: examinationDateOptionsPending,
     error: examinationDateOptionsError
-  } = await trpcClient.config.getExaminationDates.useQuery(undefined, {
-    transform: examinationDates => {
-      return new Map(
-        examinationDates.map(({ examinationDate }) => [
-          examinationDate.toString(),
-          formatDate(examinationDate)
-        ])
-      )
+  } = await trpcClient.config.getExaminationDates.useQuery(
+    {},
+    {
+      transform: examinationDates => {
+        return new Map(
+          examinationDates.map(({ examinationDate }) => [
+            examinationDate.toString(),
+            formatDate(examinationDate)
+          ])
+        )
+      }
     }
-  })
+  )
 
   const pending = computed(
     () =>

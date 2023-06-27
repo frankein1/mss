@@ -1,6 +1,9 @@
 <template>
   <div>
-    <BeneficiaryHistoryFilters @filter="filters = $event" />
+    <BeneficiaryHistoryFilters
+      :beneficiary-id="beneficiaryId"
+      @filter="filters = $event"
+    />
     <hr />
     <AtomLoader
       v-if="pending"

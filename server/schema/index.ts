@@ -4,6 +4,12 @@ export const idSchema = z.object({
   id: z.string()
 })
 
+export const optionalIdSchema = z.object({
+  id: z.string().nullish()
+})
+
+export type OptionalIdInput = z.infer<typeof optionalIdSchema>
+
 export const keySchema = z.object({
   key: z.string()
 })
