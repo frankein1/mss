@@ -60,7 +60,8 @@
     switch (props.notification.type) {
       case NotificationType.NewDocument:
         return BeneficiaryTab.Documents
-      case NotificationType.DueDate:
+      case NotificationType.DueDateToday:
+      case NotificationType.DueDateOneMonth:
       case NotificationType.EndOfSupport:
       case NotificationType.NewComment:
         return BeneficiaryTab.History

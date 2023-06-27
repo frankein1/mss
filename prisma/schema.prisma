@@ -1351,7 +1351,8 @@ model InstructorOrganization {
 enum NotificationType {
   NewDocument
   NewComment
-  DueDate
+  DueDateToday    @map("DueDate")
+  DueDateOneMonth
   EndOfSupport
 }
 

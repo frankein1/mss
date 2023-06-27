@@ -1,4 +1,5 @@
-import { Prisma, NotificationType } from '@prisma/client'
+import { NotificationType, HelpRequest, Followup } from '@prisma/client'
+import dayjs from 'dayjs'
 import { useScheduler } from '#scheduler'
 import { prismaClient } from '~/server/prisma'
 
@@ -12,48 +13,92 @@ function hasDefinedCreatedBy<T extends { createdById: string | null }>(
   return item.createdById !== null
 }
 
-async function createDueFollowupNotifications() {
-  const dueFollowups = await prismaClient.followup.findMany({
-    where: {
-      dueDate: new Date()
-    }
-  })
-
-  const dueFollowupNotifications: Prisma.Enumerable<Prisma.NotificationCreateManyInput> =
-    dueFollowups
-      .filter(hasDefinedCreatedBy)
-      .map(({ id, createdById, beneficiaryId }) => ({
-        recipientId: createdById,
-        beneficiaryId,
-        followupId: id,
-        type: NotificationType.DueDate
-      }))
+async function createDueFollowupNotifications(
+  dueFollowups: Followup[],
+  type: 'DueDateToday' | 'DueDateOneMonth'
+) {
+  const dueFollowupNotifications = dueFollowups
+    .filter(hasDefinedCreatedBy)
+    .map(({ id, createdById, beneficiaryId }) => ({
+      recipientId: createdById,
+      beneficiaryId,
+      followupId: id,
+      type
+    }))
 
   await prismaClient.notification.createMany({
     data: dueFollowupNotifications
   })
 }
 
-async function createDueHelpRequestNotifications() {
+async function createDueInAMonthFollowupNotifications() {
+  const dueFollowups = await prismaClient.followup.findMany({
+    where: {
+      dueDate: dayjs().add(1, 'month').toDate()
+    }
+  })
+
+  await createDueFollowupNotifications(
+    dueFollowups,
+    NotificationType.DueDateOneMonth
+  )
+}
+
+async function createDueTodayFollowupNotifications() {
+  const dueFollowups = await prismaClient.followup.findMany({
+    where: {
+      dueDate: new Date()
+    }
+  })
+
+  await createDueFollowupNotifications(
+    dueFollowups,
+    NotificationType.DueDateToday
+  )
+}
+
+async function createDueHelpRequestNotifications(
+  dueHelpRequests: HelpRequest[],
+  type: 'DueDateToday' | 'DueDateOneMonth'
+) {
+  const dueHelpRequestNotifications = dueHelpRequests
+    .filter(hasDefinedCreatedBy)
+    .map(({ id, createdById, beneficiaryId }) => ({
+      recipientId: createdById,
+      beneficiaryId,
+      helpRequestId: id,
+      type
+    }))
+
+  await prismaClient.notification.createMany({
+    data: dueHelpRequestNotifications
+  })
+}
+
+async function createDueInAMonthHelpRequestNotifications() {
+  const dueHelpRequests = await prismaClient.helpRequest.findMany({
+    where: {
+      dueDate: dayjs().add(1, 'month').toDate()
+    }
+  })
+
+  await createDueHelpRequestNotifications(
+    dueHelpRequests,
+    NotificationType.DueDateOneMonth
+  )
+}
+
+async function createDueTodayHelpRequestNotifications() {
   const dueHelpRequests = await prismaClient.helpRequest.findMany({
     where: {
       dueDate: new Date()
     }
   })
 
-  const dueHelpRequestNotifications: Prisma.Enumerable<Prisma.NotificationCreateManyInput> =
-    dueHelpRequests
-      .filter(hasDefinedCreatedBy)
-      .map(({ id, createdById, beneficiaryId }) => ({
-        recipientId: createdById,
-        beneficiaryId,
-        helpRequestId: id,
-        type: NotificationType.DueDate
-      }))
-
-  await prismaClient.notification.createMany({
-    data: dueHelpRequestNotifications
-  })
+  await createDueHelpRequestNotifications(
+    dueHelpRequests,
+    NotificationType.DueDateToday
+  )
 }
 
 async function createEndOfSupportHelpRequestNotifications() {
@@ -63,15 +108,14 @@ async function createEndOfSupportHelpRequestNotifications() {
     }
   })
 
-  const endOfSupportHelpRequestNotifications: Prisma.Enumerable<Prisma.NotificationCreateManyInput> =
-    endOfSupportHelpRequests
-      .filter(hasDefinedCreatedBy)
-      .map(({ id, createdById, beneficiaryId }) => ({
-        recipientId: createdById,
-        beneficiaryId,
-        helpRequestId: id,
-        type: NotificationType.EndOfSupport
-      }))
+  const endOfSupportHelpRequestNotifications = endOfSupportHelpRequests
+    .filter(hasDefinedCreatedBy)
+    .map(({ id, createdById, beneficiaryId }) => ({
+      recipientId: createdById,
+      beneficiaryId,
+      helpRequestId: id,
+      type: NotificationType.EndOfSupport
+    }))
 
   await prismaClient.notification.createMany({
     data: endOfSupportHelpRequestNotifications
@@ -83,8 +127,10 @@ function startScheduler() {
 
   scheduler
     .run(async () => {
-      await createDueFollowupNotifications()
-      await createDueHelpRequestNotifications()
+      await createDueInAMonthFollowupNotifications()
+      await createDueTodayFollowupNotifications()
+      await createDueInAMonthHelpRequestNotifications()
+      await createDueTodayHelpRequestNotifications()
       await createEndOfSupportHelpRequestNotifications()
     })
     .dailyAt(1, 0)
