@@ -52,14 +52,10 @@ export default defineNuxtConfig({
 
   // Modules: https://v3.nuxtjs.org/api/configuration/nuxt.config#modules
   modules: [
-    // https://go.nuxtjs.dev/eslint
-    ['@nuxtjs/eslint-module', { lintOnStart: false }],
-    // https://go.nuxtjs.dev/stylelint
-    ['@nuxtjs/stylelint-module', { lintOnStart: false }],
-    ['@pinia/nuxt', { lintOnStart: false }],
-    ['nuxt-vitest', { lintOnStart: false }],
-    ['@vee-validate/nuxt', { lintOnStart: false }],
-    ['nuxt-scheduler', { lintOnStart: false }]
+    '@pinia/nuxt',
+    'nuxt-vitest',
+    '@vee-validate/nuxt',
+    'nuxt-scheduler'
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

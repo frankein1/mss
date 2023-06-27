@@ -169,7 +169,6 @@
     ThirdPartyAccommodationMode
   } from '~/client/options/beneficiary'
   import { nationalityOptions } from '~/client/options/nationality'
-  import { useAuthStore } from '~/store/auth'
   import type {
     CitySelected,
     AddressSelected,
@@ -182,8 +181,7 @@
     values: UpdateBeneficiaryInput
   }>()
 
-  const authStore = useAuthStore()
-  const isMinistryAgent = authStore.isMinistryAgent
+  const isMinistryAgent = useMinistryAgent()
 
   const { setValue: setZipcodeValue } = useField<string>('general.zipcode')
   const { setValue: setCityValue } = useField<string>('general.city')

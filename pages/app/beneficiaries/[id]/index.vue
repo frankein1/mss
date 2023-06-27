@@ -14,7 +14,7 @@
 
     <hr />
     <BeneficiaryDetailsActions
-      :beneficiary-id="beneficiaryId"
+      :beneficiary="beneficiary"
       class="fr-pb-3w"
     />
     <hr />
@@ -34,9 +34,7 @@
         :id="BeneficiaryTab.Documents"
         name="Documents"
       >
-        <BeneficiaryDocumentList
-          :beneficiary-id="beneficiaryId"
-        ></BeneficiaryDocumentList>
+        <BeneficiaryDocumentList :beneficiary="beneficiary" />
       </Tab>
       <Tab
         :id="BeneficiaryTab.History"
@@ -54,6 +52,10 @@
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+
+  definePageMeta({
+    middleware: 'is-beneficiary-referent'
+  })
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
@@ -73,10 +75,10 @@
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
 
-  const authUser = useAuthStore().getAuthUser
+  const authStore = useAuthStore()
   const canDelete = computed(() => {
     return beneficiary.value
-      ? canDeleteBeneficiary(authUser, beneficiary.value)
+      ? canDeleteBeneficiary(authStore.getAuthUser, beneficiary.value)
       : false
   })
 

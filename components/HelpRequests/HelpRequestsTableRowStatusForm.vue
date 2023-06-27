@@ -22,7 +22,7 @@
     QuickEditHelpRequestStatusInput,
     quickEditHelpRequestStatusSchema
   } from '~/server/schema'
-  import { pastStatusesFromStatus } from '~/utils/helpRequest/pastStatusesFromStatus'
+  import { pastStatusesFromStatus } from '~/utils/helpRequest'
   import { helpRequestFieldLabels } from '~/client/labels'
 
   const snackbar = useSnackbar()

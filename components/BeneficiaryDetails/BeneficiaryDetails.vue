@@ -6,13 +6,13 @@
         <BeneficiaryDetailsHealth :beneficiary="beneficiary" />
         <BeneficiaryDetailsOccupationIncome :beneficiary="beneficiary" />
         <BeneficiaryDetailsRelatives
-          v-if="canAccessRelatives && houseHoldSection"
+          v-if="houseHoldSection"
           :beneficiary="beneficiary"
           :relatives="taxHouseholds"
           household
         />
         <BeneficiaryDetailsRelatives
-          v-if="canAccessRelatives && entourages?.length"
+          v-if="entourages.length"
           :beneficiary="beneficiary"
           :relatives="entourages"
         />
@@ -23,7 +23,6 @@
 </template>
 <script lang="ts" setup>
   import type { GetBeneficiaryOutput } from '~/server/routers'
-  import { useAuthStore } from '~/store/auth'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
 
   const props = defineProps<{
@@ -31,10 +30,6 @@
     taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
     entourages: BeneficiaryRelativeWithLinkedBeneficiary[]
   }>()
-
-  const authStore = useAuthStore()
-
-  const canAccessRelatives = computed(() => !authStore.isAgentDAccueil)
 
   const houseHoldSection = computed(
     () =>

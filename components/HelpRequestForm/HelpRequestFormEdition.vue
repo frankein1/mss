@@ -10,7 +10,7 @@
     :financial-support="values.financialSupport"
     :past-statuses="pastStatuses"
     is-editing
-    :is-owned-by-current-user="isOwnedByCurrentUser"
+    :can-edit-private-synthesis="canEditPrivateSynthesis"
     @submit="onSubmit"
   />
 </template>
@@ -28,9 +28,9 @@
     EditHelpRequestInput,
     editHelpRequestSchema
   } from '~/server/schema/helpRequest.schema'
-  import { isCreator } from '~/server/security/rules'
+  import { canEditHelpRequestPrivateSynthesis } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
-  import { pastStatusesFromStatus } from '~/utils/helpRequest/pastStatusesFromStatus'
+  import { pastStatusesFromStatus } from '~/utils/helpRequest'
   import { GetHelpRequestDetailsOutput } from '~/server/routers'
 
   const authStore = useAuthStore()
@@ -54,19 +54,12 @@
     return pastStatusesFromStatus(props.helpRequest.status)
   })
 
-  const isOwnedByCurrentUser = computed(() =>
-    isCreator(authStore.getAuthUser, props.helpRequest, [
-      'Administrator',
-      'StructureManager',
-      'SocialWorker',
-      'Instructor',
-      'ReceptionAgent',
-      'Referent'
-    ])
+  const canEditPrivateSynthesis = computed(() =>
+    canEditHelpRequestPrivateSynthesis(authStore.getAuthUser, props.helpRequest)
   )
 
   const initialDocumentIds = computed(
-    () => props.helpRequest.documents.map(d => d.key) || []
+    () => props.helpRequest.documents?.map(d => d.key) || []
   )
 
   const { handleSubmit, values } = useForm<EditHelpRequestInput>({

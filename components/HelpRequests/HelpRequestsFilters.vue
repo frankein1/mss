@@ -27,11 +27,11 @@
   import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
+  import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
 
-  const { getAuthUser: user } = useAuthStore()
+  const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
 
@@ -129,7 +129,8 @@
         type: FilterType.SelectOne
       })
     }
-    if (canAccessProtectedDataInHelpRequest(user)) {
+
+    if (canViewAnyHelpRequestDetails(authStore.getAuthUser)) {
       filters.push(
         {
           name: 'handlingDate',

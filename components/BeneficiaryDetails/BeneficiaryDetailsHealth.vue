@@ -33,6 +33,7 @@
   import type { GetBeneficiaryOutput } from '~/server/routers'
   import { beneficiaryGirLabels } from '~/client/options/beneficiary'
   import { useAuthStore } from '~/store/auth'
+  import { canViewBeneficiaryNir } from '~/server/security/rules'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
@@ -51,7 +52,7 @@
     )
   })
 
-  const hasNirAccess = computed(
-    () => !authStore.isMinistryAgent && !authStore.isAssociationAgent
+  const hasNirAccess = computed(() =>
+    canViewBeneficiaryNir(authStore.userStructureType)
   )
 </script>

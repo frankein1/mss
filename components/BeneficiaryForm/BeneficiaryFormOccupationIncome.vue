@@ -137,13 +137,12 @@
     ministereCategorieOptions
   } from '~/client/options/ministry'
   import { UpdateBeneficiaryInput } from '~/server/schema/beneficiary.schema'
-  import { useAuthStore } from '~/store/auth'
 
   const props = defineProps<{
     values: UpdateBeneficiaryInput
   }>()
 
-  const isMinistryAgent = useAuthStore().isMinistryAgent
+  const isMinistryAgent = useMinistryAgent()
 
   const hasPartner = computed(() => {
     const familySituation = props.values.taxHousehold.familySituation

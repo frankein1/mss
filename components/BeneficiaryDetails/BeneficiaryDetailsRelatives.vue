@@ -82,14 +82,14 @@
 
   const minorChildrenLabel = computed(() =>
     props.beneficiary.minorChildren || 0 > 1
-      ? `enfants mineurs`
-      : `enfant mineur`
+      ? 'enfants mineurs'
+      : 'enfant mineur'
   )
 
   const majorChildrenLabel = computed(() =>
     props.beneficiary.majorChildren || 0 > 1
-      ? `enfants majeurs`
-      : `enfant majeur`
+      ? 'enfants majeurs'
+      : 'enfant majeur'
   )
 
   const sectionTitle = computed(() =>

@@ -19,23 +19,27 @@
 <script lang="ts" setup>
   import { canEditItsOwnStructure, canListUsers } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
-  import { Menu } from '~/types/menu'
   import { RoutePath } from '~/utils/routing'
+  import { getUserDisplayName } from '~/utils/user'
 
   const authStore = useAuthStore()
-  const userName = authStore.userName
-  const user = authStore.getAuthUser
-  const structureId = user.structureId
 
-  const menus: Menu[] = []
+  const user = computed(() =>
+    authStore.isAuthenticated ? authStore.getAuthUser : null
+  )
+  const userName = computed(() =>
+    user.value ? getUserDisplayName(user.value) : ''
+  )
 
-  if (user && structureId) {
+  const menus = computed(() => {
+    const menus = []
+
     menus.push({
       label: 'Mon compte',
       to: RoutePath.Account(),
       icon: 'fr-icon-user-line'
     })
-    if (canListUsers(user)) {
+    if (user.value && canListUsers(user.value)) {
       menus.push({
         label: 'Utilisateurs',
         to: RoutePath.Users(),
@@ -43,7 +47,7 @@
       })
     }
 
-    if (canEditItsOwnStructure(user)) {
+    if (user.value && canEditItsOwnStructure(user.value)) {
       menus.push({
         label: 'Structure',
         to: RoutePath.StructureEdit(),
@@ -56,7 +60,9 @@
       href: RoutePath.Logout(),
       icon: 'fr-icon-logout-box-r-line'
     })
-  }
+
+    return menus
+  })
 </script>
 
 <style lang="scss" scoped>

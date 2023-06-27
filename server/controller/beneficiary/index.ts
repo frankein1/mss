@@ -13,6 +13,8 @@ export { searchBeneficiaryHandler } from './search.handler'
 export { getBeneficiaryMinimalInfoHandler } from './get-minimal-info.controller'
 export { getBeneficiaryHistoryHandler } from './get-history.controller'
 export { deleteBeneficiaryHandler } from './delete.controller'
+export { isBeneficiaryReferentHandler } from './is-beneficiary-referent.controller'
+export { getBeneficiarySecurityTargetHandler } from './get-security-target.controller'
 
 export type {
   BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests,

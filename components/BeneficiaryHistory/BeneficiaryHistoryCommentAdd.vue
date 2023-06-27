@@ -42,7 +42,7 @@
   import { useAuthStore } from '~/store/auth'
   import { AddCommentInput, addCommentSchema } from '~/server/schema'
 
-  const { getAuthUser: currentUser } = useAuthStore()
+  const authStore = useAuthStore()
   const snackbar = useSnackbar()
   const form = ref<HTMLFormElement | null>(null)
 
@@ -65,13 +65,15 @@
     }
   })
 
+  const currentUser = computed(() => authStore.getAuthUser)
+
   const onAddComment = handleSubmit(async values => {
     isSubmitting.value = true
 
     try {
       const comment = await useTrpcClient().comment.add.mutate(values)
 
-      snackbar.success(`Nouveau commentaire ajouté.`, () =>
+      snackbar.success('Nouveau commentaire ajouté.', () =>
         form.value?.querySelector('textarea')?.focus()
       )
       form.value?.reset()

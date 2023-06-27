@@ -1,18 +1,22 @@
-import { Prisma, User, FollowupMedium } from '@prisma/client'
+import { Prisma, FollowupMedium } from '@prisma/client'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import {
-  canEditBeneficiaryFollowup,
-  canEditBeneficiaryFollowupPrivateSynthesis
+  canEditFollowup,
+  canEditFollowupPrivateSynthesis
 } from '~/server/security/rules'
 import {
   FollowupTarget,
   prepareMinistryData,
   prepareFollowupTypesMutations
-} from '~/utils/followup/prepareFollowupData'
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
+} from '~/utils/followup'
+import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import {
+  FollowupWithBeneficiaryDocumentsAndTypes,
+  getFollowupWithBeneficiaryDocumentsAndTypes
+} from '~/server/query/followups'
 
 export async function prepareFollowupData({
   input,
@@ -22,16 +26,11 @@ export async function prepareFollowupData({
 }: {
   input: EditFollowupInput
   transaction: Prisma.TransactionClient
-  user: User
+  user: ProtectedAppContext['user']
   target: FollowupTarget
 }): Promise<Prisma.FollowupUncheckedUpdateInput> {
-  const { structureId } = await transaction.beneficiary.findUniqueOrThrow({
-    where: { id: input.beneficiaryId },
-    select: { structureId: true }
-  })
-
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structureId },
+    where: { id: user.structureId },
     select: {
       type: true
     }
@@ -59,7 +58,6 @@ export async function prepareFollowupData({
   const prescribingOrganizationId = await preparePrescribingOrganization(
     transaction,
     user,
-    structureId,
     input.prescribingOrganizationId
   )
 
@@ -71,7 +69,7 @@ export async function prepareFollowupData({
       input.medium === FollowupMedium.ExternalAppointment ? input.place : null,
     thirdPersonName:
       input.medium === FollowupMedium.ThirdParty ? input.thirdPersonName : null,
-    privateSynthesis: canEditBeneficiaryFollowupPrivateSynthesis(user, target)
+    privateSynthesis: canEditFollowupPrivateSynthesis(user, target)
       ? input.privateSynthesis
       : undefined,
     structureName: input.redirected ? input.structureName : null,
@@ -80,29 +78,10 @@ export async function prepareFollowupData({
   }
 }
 
-function getFollowup(id: string) {
-  return prismaClient.followup.findUnique({
-    where: { id },
-    include: {
-      beneficiary: {
-        include: {
-          referents: true
-        }
-      },
-      documents: true,
-      types: true
-    }
-  })
-}
-
-type FollowupWithBeneficiaryDocumentsAndTypes = Prisma.PromiseReturnType<
-  typeof getFollowup
->
-
 async function updateTransaction(
   transaction: Prisma.TransactionClient,
   input: EditFollowupInput,
-  user: User,
+  user: ProtectedAppContext['user'],
   target: Exclude<FollowupWithBeneficiaryDocumentsAndTypes, null>
 ) {
   const data = await prepareFollowupData({
@@ -133,12 +112,9 @@ export const updateFollowupHandler = async ({
   input: EditFollowupInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await getFollowup(input.id)
+  const target = await getFollowupWithBeneficiaryDocumentsAndTypes(input.id)
 
-  if (
-    !target ||
-    !canEditBeneficiaryFollowup(user, target.beneficiary, target)
-  ) {
+  if (!target || !canEditFollowup(user, target)) {
     throw forbiddenError()
   }
 

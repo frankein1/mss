@@ -18,9 +18,8 @@
         Imprimer
       </NuxtLink>
     </li>
-    <li>
+    <li v-if="canDelete">
       <button
-        v-if="canDelete"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-line btn-delete-action"
         data-fr-opened="false"
         aria-controls="global-modal"

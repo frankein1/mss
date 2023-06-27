@@ -3,7 +3,7 @@
     :id="accordionId"
     class="fr-collapse beneficiary-history-details-body"
   >
-    <template v-if="displayDetailedHistory">
+    <template v-if="canViewHistoryDetails">
       <BeneficiaryFollowupDetailsBodyMetas
         v-if="history.isFollowup"
         :followup="history"
@@ -24,7 +24,7 @@
         <p class="synthesis-content">{{ history.synthesis }}</p>
       </template>
 
-      <template v-if="history.privateSynthesis">
+      <template v-if="canViewPrivateSynthesis && history.privateSynthesis">
         <h3 class="synthesis-title fr-icon-lock-line">Compte rendu privé</h3>
         <p class="synthesis-content">{{ history.privateSynthesis }}</p>
       </template>
@@ -54,10 +54,14 @@
         </li>
       </ul>
 
-      <hr class="fr-pb-3v" />
+      <hr
+        v-if="canListComments"
+        class="fr-pb-3v"
+      />
     </template>
 
     <BeneficiaryHistoryComments
+      v-if="canListComments"
       :comments="comments"
       :history="history"
       @comment-added="onCommentAdded"
@@ -70,15 +74,20 @@
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import { RoutePath } from '~/utils/routing'
   import {
-    canEditBeneficiaryFollowup,
-    canEditBeneficiaryHelpRequest,
-    canDeleteBeneficiaryFollowup,
-    canDeleteBeneficiaryHelpRequest,
-    canAccessProtectedDataInHelpRequest
+    canEditFollowup,
+    canEditHelpRequest,
+    canDeleteFollowup,
+    canDeleteHelpRequest,
+    canViewHelpRequestDetails,
+    canViewFollowupDetails,
+    canViewFollowupPrivateSynthesis,
+    canListCommentsToFollowup,
+    canListCommentsToHelpRequest,
+    canViewHelpRequestPrivateSynthesis
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
 
-  const { getAuthUser: user } = useAuthStore()
+  const authStore = useAuthStore()
 
   const props = defineProps<{
     history: HistoryItem
@@ -91,6 +100,8 @@
 
   const comments = ref(props.history.comments || [])
 
+  const user = computed(() => authStore.getAuthUser)
+
   const editLink = computed(() => {
     const routeWithParams = props.history.isFollowup
       ? RoutePath.BeneficiaryFollowupEdit
@@ -99,28 +110,39 @@
   })
 
   const canEditRule = computed(() =>
-    props.history.isFollowup
-      ? canEditBeneficiaryFollowup
-      : canEditBeneficiaryHelpRequest
+    props.history.isFollowup ? canEditFollowup : canEditHelpRequest
   )
 
-  const canEdit = computed(() =>
-    canEditRule.value(user, props.history.beneficiary, props.history)
-  )
+  const canEdit = computed(() => canEditRule.value(user.value, props.history))
 
   const canDeleteRule = computed(() =>
-    props.history.isFollowup
-      ? canDeleteBeneficiaryFollowup
-      : canDeleteBeneficiaryHelpRequest
+    props.history.isFollowup ? canDeleteFollowup : canDeleteHelpRequest
   )
 
   const canDelete = computed(() =>
-    canDeleteRule.value(user, props.history.beneficiary, props.history)
+    canDeleteRule.value(user.value, props.history)
   )
 
-  const displayDetailedHistory = computed(
-    () => props.history.isFollowup || canAccessProtectedDataInHelpRequest(user)
-    // FIXME: Does it correspond to permissionsStore.canDisplayDetailedHistory(props.history) ?
+  const canViewHistoryDetails = computed(() =>
+    props.history.isFollowup
+      ? canViewFollowupDetails(user.value, props.history)
+      : canViewHelpRequestDetails(user.value, props.history.beneficiary)
+  )
+
+  const canViewPrivateSynthesis = computed(() =>
+    props.history.isFollowup
+      ? canViewFollowupPrivateSynthesis(user.value, props.history)
+      : canViewHelpRequestPrivateSynthesis(user.value, props.history)
+  )
+
+  const canListCommentsRule = computed(() =>
+    props.history.isFollowup
+      ? canListCommentsToFollowup
+      : canListCommentsToHelpRequest
+  )
+
+  const canListComments = computed(() =>
+    canListCommentsRule.value(user.value, props.history.beneficiary)
   )
 
   function onCommentAdded(comment: HistoryItemComment) {

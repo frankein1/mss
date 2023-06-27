@@ -98,10 +98,12 @@
   import { getDocumenTagClass } from '~/client/classes/document'
   import { documentTagOptions } from '~/client/options/document'
   import { EditDocumentInput } from '~/server/schema'
+  import { GetBeneficiaryOutput } from '~/server/routers'
 
   const props = withDefaults(
     defineProps<{
       document: Document
+      beneficiary: GetBeneficiaryOutput
       canDeleteDocuments?: boolean
       hasUnreadNotifications?: boolean
     }>(),
@@ -146,7 +148,7 @@
     modal.open(
       'Modifier le document',
       BeneficiaryDocumentEditForm,
-      { document: props.document },
+      { document: props.document, beneficiary: props.beneficiary },
       {
         updateDocument: onUpdateDocument
       }

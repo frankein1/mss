@@ -23,7 +23,7 @@ export default defineEventHandler(async event => {
   if (!code) {
     return sendError(
       event,
-      new Error(`[IC] no code returned from InclusionConnect`)
+      new Error('[IC] no code returned from InclusionConnect')
     )
   }
 
@@ -35,8 +35,8 @@ export default defineEventHandler(async event => {
     redirectUrl as string | undefined
   )
 
-  const { accessToken } = inclusionConnectToken
-  const { email, sub } = parseInclusionConnectJwt(accessToken)
+  const { idToken } = inclusionConnectToken
+  const { email, sub } = parseInclusionConnectJwt(idToken)
 
   const user = await getUser(email)
 
@@ -97,7 +97,7 @@ async function fetchInclusionConnnectToken(
     throw new Error(`[IC] ${inclusionConnectTokenResponse.error.description}`)
   }
   if (!inclusionConnectTokenResponse.data) {
-    throw new Error(`[IC] no access token found un inclusion connect response`)
+    throw new Error('[IC] no access token found un inclusion connect response')
   }
 
   return inclusionConnectTokenResponse.data
@@ -112,15 +112,8 @@ async function upsertAccount({
   providerAccountId: string
   inclusionConnectToken: InclusionConnectToken
 }) {
-  const {
-    accessToken,
-    expiresIn,
-    refreshToken,
-    tokenType,
-    idToken,
-    sessionState,
-    scope
-  } = inclusionConnectToken
+  const { accessToken, expiresIn, refreshToken, tokenType, idToken, scope } =
+    inclusionConnectToken
 
   return await prismaClient.account.upsert({
     where: {
@@ -139,7 +132,6 @@ async function upsertAccount({
       refreshToken,
       tokenType,
       idToken,
-      sessionState,
       scope
     },
     update: {
@@ -148,7 +140,6 @@ async function upsertAccount({
       refreshToken,
       tokenType,
       idToken,
-      sessionState,
       scope
     }
   })

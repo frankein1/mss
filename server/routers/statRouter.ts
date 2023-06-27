@@ -21,79 +21,79 @@ import {
   getAccommodationZoneStatsHandler,
   getMinistereStructureStatsHandler,
   getMinistereCategorieStatsHandler,
-  getMinistereDepartementServiceAcStatsHandler
+  getMinistereDepartementServiceAcStatsHandler,
+  getInstructorOrganizationStatsHandler
 } from '~/server/controller/stat'
 import { statFilterSchema } from '~/server/schema'
-import { protectedProcedure, router } from '~/server/trpc'
+import { statsProcedure, router } from '~/server/trpc'
 
 export const statRouter = router({
-  getAccommodationZoneStats: protectedProcedure
+  getAccommodationZoneStats: statsProcedure
     .input(statFilterSchema)
     .query(getAccommodationZoneStatsHandler),
-  getAccommodationModeStats: protectedProcedure
+  getAccommodationModeStats: statsProcedure
     .input(statFilterSchema)
     .query(getAccommodationModeStatsHandler),
-  getAgeStats: protectedProcedure
-    .input(statFilterSchema)
-    .query(getAgeStatsHandler),
-  getBeneficiaryCount: protectedProcedure
+  getAgeStats: statsProcedure.input(statFilterSchema).query(getAgeStatsHandler),
+  getBeneficiaryCount: statsProcedure
     .input(statFilterSchema)
     .query(getBeneficiaryCountHandler),
-  getCSPStats: protectedProcedure
-    .input(statFilterSchema)
-    .query(getCSPStatsHandler),
-  getFamilyStats: protectedProcedure
+  getCSPStats: statsProcedure.input(statFilterSchema).query(getCSPStatsHandler),
+  getFamilyStats: statsProcedure
     .input(statFilterSchema)
     .query(getFamilyStatsHandler),
-  getFinancialHelpRequestsStats: protectedProcedure
+  getFinancialHelpRequestsStats: statsProcedure
     .input(statFilterSchema)
     .query(getFinancialHelpRequestsStats),
-  getFollowupActionsEntreprisesStats: protectedProcedure
+  getFollowupActionsEntreprisesStats: statsProcedure
     .input(statFilterSchema)
     .query(getFollowupActionsEntreprisesStatsHandler),
-  getFollowupMediumStats: protectedProcedure
+  getFollowupMediumStats: statsProcedure
     .input(statFilterSchema)
     .query(getFollowupMediumStatsHandler),
-  getFollowupMinistreStats: protectedProcedure
+  getFollowupMinistreStats: statsProcedure
     .input(statFilterSchema)
     .query(getFollowupMinistreStatsHandler),
-  getFollowupPrescribingOrganizationStats: protectedProcedure
+  getFollowupPrescribingOrganizationStats: statsProcedure
     .input(statFilterSchema)
     .query(getFollowupPrescribingOrganizationStatsHandler),
-  getFollowupStatusStats: protectedProcedure
+  getFollowupStatusStats: statsProcedure
     .input(statFilterSchema)
     .query(getFollowupStatusStatsHandler),
-  getGenderStats: protectedProcedure
+  getGenderStats: statsProcedure
     .input(statFilterSchema)
     .query(getGenderStatsHandler),
-  getHelpRequestMinistreStats: protectedProcedure
+  getHelpRequestMinistreStats: statsProcedure
     .input(statFilterSchema)
     .query(getHelpRequestMinistreStatsHandler),
-  getHelpRequestPrescribingOrganizationStats: protectedProcedure
+  getHelpRequestPrescribingOrganizationStats: statsProcedure
     .input(statFilterSchema)
     .query(getHelpRequestPrescribingOrganizationStatsHandler),
-  getHelpRequestStatusStats: protectedProcedure
+  getHelpRequestStatusStats: statsProcedure
     .input(statFilterSchema)
     .query(getHelpRequestStatusStatsHandler),
-  getHistoryCounts: protectedProcedure
+  getHistoryCounts: statsProcedure
     .input(statFilterSchema)
     .query(getHistoryCountsHandler),
-  getMobilityStats: protectedProcedure
+  getMobilityStats: statsProcedure
     .input(statFilterSchema)
     .query(getMobilityStatsHandler),
-  getRegionStats: protectedProcedure
+  getRegionStats: statsProcedure
     .input(statFilterSchema)
     .query(getRegionStatsHandler),
-  getSupportStats: protectedProcedure
+  getSupportStats: statsProcedure
     .input(statFilterSchema)
     .query(getSupportStatsHandler),
-  getMinistereStructure: protectedProcedure
+  getMinistereStructure: statsProcedure
     .input(statFilterSchema)
     .query(getMinistereStructureStatsHandler),
-  getMinistereCategorie: protectedProcedure
+  getMinistereCategorie: statsProcedure
     .input(statFilterSchema)
     .query(getMinistereCategorieStatsHandler),
-  getMinistereDepartementServiceAc: protectedProcedure
+  getMinistereDepartementServiceAc: statsProcedure
     .input(statFilterSchema)
-    .query(getMinistereDepartementServiceAcStatsHandler)
+    .query(getMinistereDepartementServiceAcStatsHandler),
+  getInstructorOrganizationStats: statsProcedure
+    .input(statFilterSchema)
+    .query(getInstructorOrganizationStatsHandler)
 })

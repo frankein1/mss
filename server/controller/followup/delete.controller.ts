@@ -3,7 +3,7 @@ import {
   forbiddenError,
   invalidError
 } from '~/server/trpc'
-import { canDeleteBeneficiaryFollowup } from '~/server/security/rules'
+import { canDeleteFollowup } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
 
 function getFollowup(id: string) {
@@ -32,7 +32,7 @@ export const deleteFollowupHandler = async ({
     throw invalidError('Followup not found')
   }
 
-  if (!canDeleteBeneficiaryFollowup(user, followup.beneficiary, followup)) {
+  if (!canDeleteFollowup(user, followup)) {
     throw forbiddenError()
   }
 

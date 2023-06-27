@@ -7,27 +7,31 @@
       <BeneficiaryDocumentType
         :document-type="DocumentType.Cerfa"
         :documents="cerfas"
+        :beneficiary="beneficiary"
         @refresh-documents="refresh"
       />
       <BeneficiaryDocumentType
         :document-type="DocumentType.Rapports"
         :documents="rapports"
+        :beneficiary="beneficiary"
         @refresh-documents="refresh"
       />
       <BeneficiaryDocumentType
         :document-type="DocumentType.Justificatifs"
         :documents="justificatifs"
+        :beneficiary="beneficiary"
         @refresh-documents="refresh"
       />
       <BeneficiaryDocumentType
         :document-type="DocumentType.HistoriqueCourrier"
         :documents="courriers"
+        :beneficiary="beneficiary"
         @refresh-documents="refresh"
       />
     </div>
     <div class="documents_actions">
       <BeneficiaryDocumentAdd
-        :beneficiary-id="beneficiaryId"
+        :beneficiary-id="beneficiary.id"
         @refresh-documents="refresh"
       />
     </div>
@@ -37,10 +41,11 @@
   import { Document, DocumentType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
+  import { GetBeneficiaryOutput } from '~/server/routers'
 
   const route = useRoute()
 
-  const props = defineProps<{ beneficiaryId: string }>()
+  const props = defineProps<{ beneficiary: GetBeneficiaryOutput }>()
 
   const { data: documents, refresh } = useAsyncData<Document[]>(
     fetchDocuments,
@@ -62,7 +67,7 @@
 
   function fetchDocuments() {
     return useTrpcClient().beneficiary.getBeneficiaryDocuments.query({
-      beneficiaryId: props.beneficiaryId
+      beneficiaryId: props.beneficiary.id
     })
   }
 

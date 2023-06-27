@@ -4,11 +4,9 @@ import { RoutePath } from '~/utils/routing'
 export type InclusionConnectToken = {
   accessToken: string
   expiresIn: number
-  refreshExpiresIn: number
   refreshToken: string
   tokenType: string
   idToken: string
-  sessionState: string
   scope: string
 }
 
@@ -95,23 +93,19 @@ export class InclusionConnectClient {
     const {
       access_token: accessToken,
       expires_in: expiresIn,
-      refresh_expires_in: refreshExpiresIn,
-      refresh_token: refreshToken,
       token_type: tokenType,
-      id_token: idToken,
-      session_state: sessionState,
-      scope
+      scope,
+      refresh_token: refreshToken,
+      id_token: idToken
     } = responseJson
 
     return {
       data: {
         accessToken,
         expiresIn,
-        refreshExpiresIn,
         refreshToken,
         tokenType,
         idToken,
-        sessionState,
         scope
       }
     }
@@ -134,9 +128,8 @@ export class InclusionConnectClient {
     return `${this.issuer}/protocol/openid-connect/auth?${params}`
   }
 
-  public getLogoutUrl(sessionState: string, idToken: string) {
+  public getLogoutUrl(idToken: string) {
     const params = new URLSearchParams({
-      state: sessionState || '',
       id_token_hint: idToken || '',
       post_logout_redirect_uri: `${this.postLogoutRedirectUri}`
     })

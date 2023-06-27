@@ -1,4 +1,4 @@
-import { Prisma, User, FollowupMedium } from '@prisma/client'
+import { Prisma, FollowupMedium } from '@prisma/client'
 import {
   ProtectedAppContext,
   invalidError,
@@ -6,13 +6,13 @@ import {
 } from '~/server/trpc'
 import type { AddFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { canCreateBeneficiaryFollowup } from '~/server/security/rules'
+import { canCreateFollowup } from '~/server/security/rules'
 import {
   prepareMinistryData,
   prepareFollowupTypesMutations
-} from '~/utils/followup/prepareFollowupData'
+} from '~/utils/followup'
 import { getBeneficiarySecurityTarget } from '~/server/security'
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
+import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 
 export async function prepareFollowupData({
@@ -22,15 +22,10 @@ export async function prepareFollowupData({
 }: {
   input: AddFollowupInput
   transaction: Prisma.TransactionClient
-  user: User
+  user: ProtectedAppContext['user']
 }): Promise<Prisma.FollowupUncheckedCreateInput> {
-  const { structureId } = await transaction.beneficiary.findUniqueOrThrow({
-    where: { id: input.beneficiaryId },
-    select: { structureId: true }
-  })
-
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structureId },
+    where: { id: user.structureId },
     select: {
       type: true
     }
@@ -58,13 +53,12 @@ export async function prepareFollowupData({
   const prescribingOrganizationId = await preparePrescribingOrganization(
     transaction,
     user,
-    structureId,
     input.prescribingOrganizationId
   )
 
   return {
     ...data,
-    structureId,
+    structureId: user.structureId,
     types: prepareFollowupTypesMutations(input.types),
     documents: prepareDocumentsMutations(input.documents),
     createdById: user.id,
@@ -81,7 +75,7 @@ export async function prepareFollowupData({
 async function createTransaction(
   transaction: Prisma.TransactionClient,
   input: AddFollowupInput,
-  user: User
+  user: ProtectedAppContext['user']
 ) {
   const data = await prepareFollowupData({ input, transaction, user })
 
@@ -111,7 +105,7 @@ export const addFollowupHandler = async ({
     throw invalidError('Beneficiary not found')
   }
 
-  if (!canCreateBeneficiaryFollowup(user, beneficiary)) {
+  if (!canCreateFollowup(user, beneficiary)) {
     throw forbiddenError()
   }
 

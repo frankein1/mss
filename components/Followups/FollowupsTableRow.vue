@@ -10,7 +10,7 @@
     >
       <td>
         <FollowupsTableRowStatusForm
-          v-if="canEditHistory"
+          v-if="canQuickEditFollowup"
           :followup="followup"
           @click.stop
         />
@@ -26,10 +26,12 @@
         {{ followupMediumOptions.get(followup.medium) }}
       </td>
       <td>{{ followUpTypes }}</td>
-      <td v-if="canAccessRestrictedFieldsInHelpRequest">
-        <template v-if="canDisplayDetailedHistory">
-          {{ followup.dueDate ? formatDate(followup.dueDate) : undefined }}
-        </template>
+      <td>
+        {{
+          canViewFollowupDetails && followup.dueDate
+            ? formatDate(followup.dueDate)
+            : undefined
+        }}
       </td>
       <td>
         {{ getBeneficiaryDisplayName(followup.beneficiary) }}
@@ -56,17 +58,21 @@
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { getUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
+  import {
+    canViewFollowupDetails as canViewFollowupDetailsRule,
+    canEditFollowup
+  } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()
-  const user = authStore.getAuthUser
 
   const props = defineProps<{
     followup: FollowupItem
   }>()
+
+  const user = computed(() => authStore.getAuthUser)
 
   const followupPath = computed(() =>
     RoutePath.Beneficiary(props.followup.beneficiary.id, {
@@ -81,22 +87,11 @@
     props.followup.types.map(({ name }) => name).join(', ')
   )
 
-  const canAccessRestrictedFieldsInHelpRequest = computed(() =>
-    canAccessProtectedDataInHelpRequest(user)
+  const canViewFollowupDetails = computed(() =>
+    canViewFollowupDetailsRule(user.value, props.followup)
   )
 
-  const canDisplayDetailedHistory = computed(
-    () => true
-    // TODO
-    // permissionsStore.canDisplayDetailedHistory({
-    //   ...props.history,
-    //   isInterview: props.isInterview
-    // })
-  )
-
-  const canEditHistory = computed(
-    () => true
-    // TODO
-    // permissionsStore.canEditHistoryItem(props.history)
+  const canQuickEditFollowup = computed(() =>
+    canEditFollowup(user.value, props.followup)
   )
 </script>

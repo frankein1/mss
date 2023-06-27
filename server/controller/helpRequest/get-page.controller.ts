@@ -6,51 +6,16 @@ import type {
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
-import { prepareHelpRequestFilters } from '~/utils/helpRequest/filters'
+import {
+  prepareHelpRequestFilters,
+  prepareGetHelpRequestsPageSelect
+} from '~/utils/helpRequest'
 import { SortOrder } from '~/types/table'
+import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 
 type GetHelpRequestsOrderBy = Array<
   GetHelpRequestsInputOrderBy[0] & { externalStructure?: SortOrder.Desc }
 >
-
-export const helpRequestGetPageSelect = {
-  id: true,
-  status: true,
-  type: { select: { id: true, name: true } },
-  dueDate: true,
-  externalStructure: true,
-  examinationDate: true,
-  askedAmount: true,
-  allocatedAmount: true,
-  paymentMethod: true,
-  paymentDate: true,
-  handlingDate: true,
-  financialSupport: true,
-  createdById: true,
-  beneficiary: {
-    select: {
-      id: true,
-      structureId: true,
-      fileNumber: true,
-      firstName: true,
-      birthName: true,
-      usualName: true,
-      email: true,
-      referents: true
-    }
-  },
-  createdBy: {
-    select: {
-      id: true,
-      email: true,
-      firstName: true,
-      lastName: true
-    }
-  },
-  instructorOrganization: {
-    select: { name: true }
-  }
-}
 
 export const getHelpRequestsHandler = async ({
   input,
@@ -64,10 +29,15 @@ export const getHelpRequestsHandler = async ({
     page: input.page
   })
 
+  const referents = canOnlyListItsBeneficiaries(user)
+    ? { some: { id: user.id } }
+    : undefined
+
   const where: Prisma.HelpRequestWhereInput = {
     structureId: user.structureId,
     beneficiary: {
-      archived: null
+      archived: null,
+      referents
     },
     ...prepareHelpRequestFilters(input.filters)
   }
@@ -78,10 +48,12 @@ export const getHelpRequestsHandler = async ({
     orderBy.unshift({ externalStructure: SortOrder.Desc })
   }
 
+  const select = prepareGetHelpRequestsPageSelect(user)
+
   const [helpRequests, count] = await Promise.all([
     prismaClient.helpRequest.findMany({
       where,
-      select: helpRequestGetPageSelect,
+      select,
       take,
       skip,
       orderBy: input.orderBy

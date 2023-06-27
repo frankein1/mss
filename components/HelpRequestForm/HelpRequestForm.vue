@@ -54,7 +54,7 @@
         :label="helpRequestFieldLabels.prescribingOrganizationId"
         name="prescribingOrganizationId"
         :options="withEmptyValue(prescribingOrganizationOptions)"
-        :can-create-new-option="canCreateOrganisme"
+        :can-create-new-option="canCreatePrescribingOrganization"
       />
 
       <VeeSelect
@@ -105,7 +105,7 @@
         name="instructorOrganizationId"
         :options="instructorOrganizationOptions"
         :readonly="isEditingAndIsLocked"
-        :can-create-new-option="canCreateOrganisme"
+        :can-create-new-option="canCreateInstructorOrganization"
       />
 
       <template v-if="externalStructure && financialSupport">
@@ -191,7 +191,7 @@
       />
 
       <VeeTextarea
-        v-if="isOwnedByCurrentUser"
+        v-if="canEditPrivateSynthesis"
         class="fr-col-12 fr-mb-6v"
         name="privateSynthesis"
         :label="helpRequestFieldLabels.privateSynthesis"
@@ -247,8 +247,9 @@
   } from '~/client/options/helpRequest'
   import { ministerOptions } from '~/client/options/ministry'
   import {
-    canCreatePrescribingOrganization,
-    canEditItsOwnStructure
+    canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
+    canEditItsOwnStructure,
+    canCreateInstructorOrganization as canCreateInstructorOrganizationRule
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
@@ -257,7 +258,7 @@
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
 
   const authStore = useAuthStore()
-  const user = authStore.getAuthUser
+  const isMinistryAgent = useMinistryAgent()
 
   const props = withDefaults(
     defineProps<{
@@ -271,14 +272,16 @@
       financialSupport: 'true' | 'false' | undefined
       pastStatuses?: HelpRequestStatus[]
       isEditing?: boolean
-      isOwnedByCurrentUser?: boolean
+      canEditPrivateSynthesis?: boolean
     }>(),
-    { pastStatuses: undefined, isEditing: false, isOwnedByCurrentUser: true }
+    { pastStatuses: undefined, isEditing: false, canEditPrivateSynthesis: true }
   )
 
   const emit = defineEmits<{
     (e: 'submit', payload: Event): void
   }>()
+
+  const user = computed(() => authStore.getAuthUser)
 
   const followUpTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')
@@ -301,8 +304,6 @@
       }))
     return toOptions(instructorOrganizationsWithStringId, 'id', 'name')
   })
-
-  const isMinistryAgent = computed(() => authStore.isMinistryAgent)
 
   const isFinancialSupport = computed(() => props.financialSupport === 'true')
 
@@ -328,9 +329,13 @@
     () => props.isEditing && (isAnswered.value || isDropped.value)
   )
 
-  const canEditStructure = computed(() => canEditItsOwnStructure(user))
+  const canEditStructure = computed(() => canEditItsOwnStructure(user.value))
 
-  const canCreateOrganisme = computed(() =>
-    canCreatePrescribingOrganization(user)
+  const canCreatePrescribingOrganization = computed(() =>
+    canCreatePrescribingOrganizationRule(user.value)
+  )
+
+  const canCreateInstructorOrganization = computed(() =>
+    canCreateInstructorOrganizationRule(user.value)
   )
 </script>

@@ -23,3 +23,9 @@ export type AllowedRoles =
   | [UserRole, UserRole, UserRole, UserRole]
   | [UserRole, UserRole, UserRole, UserRole, UserRole]
   | [UserRole, UserRole, UserRole, UserRole, UserRole, UserRole]
+
+export type SecurityTargetWithCreator =
+  | {
+      createdById: string | null
+    }
+  | { createdBy: { id: string } | null }

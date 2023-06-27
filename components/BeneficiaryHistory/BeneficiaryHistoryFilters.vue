@@ -32,11 +32,11 @@
   } from '~/client/options/followup'
   import { helpRequestStatusOptions } from '~/client/options/helpRequest'
   import { typeSuiviOptions } from '~/client/options/history'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
+  import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
 
-  const { getAuthUser: user } = useAuthStore()
+  const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
 
@@ -153,7 +153,7 @@
       })
     }
 
-    if (canAccessProtectedDataInHelpRequest(user)) {
+    if (canViewAnyHelpRequestDetails(authStore.getAuthUser)) {
       filters.push(
         {
           name: 'handlingDate',

@@ -1,14 +1,15 @@
-import type { User } from '@prisma/client'
 import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaires'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import {
   canViewBeneficiary,
-  canViewBeneficiaryRelatives,
+  canListBeneficiaryRelatives,
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,
-  canViewBeneficiaryExternalOrganisations
+  canViewBeneficiaryExternalOrganisations,
+  canViewBeneficiaryNir
 } from '~/server/security/rules'
 import type { BeneficiaryWithReferentsAndRelatives } from '~/types/beneficiary'
+import { getUserStructureType } from '~/server/security'
 
 export const getBeneficiaryDetailsHandler = async ({
   input,
@@ -17,15 +18,13 @@ export const getBeneficiaryDetailsHandler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiaryReferentsAndRelatives({
-    id: input.id,
-    structureId: user.structureId
-  })
+  const beneficiary = await getBeneficiaryReferentsAndRelatives(input.id)
 
   if (!canViewBeneficiary(user, beneficiary)) {
     throw forbiddenError()
   }
-  const beneficiaryAccessibleData = getBeneficiaryAccessibleData(
+
+  const beneficiaryAccessibleData = await getBeneficiaryAccessibleData(
     user,
     beneficiary
   )
@@ -33,12 +32,12 @@ export const getBeneficiaryDetailsHandler = async ({
   return beneficiaryAccessibleData
 }
 
-function getBeneficiaryAccessibleData(
-  user: User,
+async function getBeneficiaryAccessibleData(
+  user: ProtectedAppContext['user'],
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
   const meta = getBeneficiaryMeta(beneficiary)
-  const generalInformation = getBeneficiaryGeneralInformation(user, beneficiary)
+  const generalInformation = getBeneficiaryGeneralInformation(beneficiary)
   const {
     taxHouseholds,
     entourages,
@@ -46,7 +45,7 @@ function getBeneficiaryAccessibleData(
     majorChildren,
     minorChildren
   } = getBeneficiaryRelatives(user, beneficiary)
-  const health = getBeneficiaryHealth(user, beneficiary)
+  const health = await getBeneficiaryHealth(user, beneficiary)
   const occupationIncome = getBeneficiaryOccupationIncome(user, beneficiary)
   const externalOrganisations = getBeneficiaryExternalOrganisations(
     user,
@@ -87,7 +86,6 @@ function getBeneficiaryMeta(beneficiary: BeneficiaryWithReferentsAndRelatives) {
 }
 
 function getBeneficiaryGeneralInformation(
-  user: User,
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
   return {
@@ -122,10 +120,10 @@ function getBeneficiaryGeneralInformation(
 }
 
 function getBeneficiaryRelatives(
-  user: User,
+  user: ProtectedAppContext['user'],
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
-  if (!canViewBeneficiaryRelatives(user, beneficiary)) {
+  if (!canListBeneficiaryRelatives(user, beneficiary)) {
     return {}
   }
 
@@ -144,24 +142,29 @@ function getBeneficiaryRelatives(
   }
 }
 
-function getBeneficiaryHealth(
-  user: User,
+async function getBeneficiaryHealth(
+  user: ProtectedAppContext['user'],
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
   if (!canViewBeneficiaryHealthInfo(user, beneficiary)) {
     return {}
   }
+
+  const userStructureType = await getUserStructureType(user)
+
   return {
     gir: beneficiary.gir,
     doctor: beneficiary.doctor,
     healthAdditionalInformation: beneficiary.healthAdditionalInformation,
-    socialSecurityNumber: beneficiary.socialSecurityNumber,
+    socialSecurityNumber: canViewBeneficiaryNir(userStructureType)
+      ? beneficiary.socialSecurityNumber
+      : undefined,
     insurance: beneficiary.insurance
   }
 }
 
 function getBeneficiaryOccupationIncome(
-  user: User,
+  user: ProtectedAppContext['user'],
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
   if (!canViewBeneficiaryOccupationIncome(user, beneficiary)) {
@@ -191,7 +194,7 @@ function getBeneficiaryOccupationIncome(
 }
 
 function getBeneficiaryExternalOrganisations(
-  user: User,
+  user: ProtectedAppContext['user'],
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
   if (!canViewBeneficiaryExternalOrganisations(user, beneficiary)) {

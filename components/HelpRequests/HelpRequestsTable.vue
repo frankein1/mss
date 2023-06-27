@@ -20,7 +20,7 @@
             </th>
             <th scope="col">Objet de la demande</th>
             <th
-              v-if="canAccessProtectedDataInHelpRequest(user)"
+              v-if="canViewAnyHelpRequestDetails"
               scope="col"
             >
               {{ helpRequestFieldLabels.dueDate }}
@@ -32,7 +32,7 @@
                 @sort="emit('sort', { beneficiary: { usualName: $event } })"
               />
             </th>
-            <template v-if="canAccessProtectedDataInHelpRequest(user)">
+            <template v-if="canViewAnyHelpRequestDetails">
               <th scope="col">
                 {{ helpRequestFieldLabels.instructorOrganizationId }}
                 <AtomSortButton
@@ -84,10 +84,10 @@
   import type { HelpRequests, HelpRequestItem } from './types'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { HelpRequestSort } from '~/types/table'
-  import { canAccessProtectedDataInHelpRequest } from '~/server/security/rules'
+  import { canViewAnyHelpRequestDetails as canViewAnyHelpRequestDetailsRule } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
 
-  const { getAuthUser: user } = useAuthStore()
+  const authStore = useAuthStore()
 
   defineProps<{
     helpRequests: HelpRequests
@@ -97,4 +97,10 @@
     (e: 'sort', sort: HelpRequestSort): void
     (e: 'helpRequestUpdated', helpRequest: HelpRequestItem): void
   }>()
+
+  const user = computed(() => authStore.getAuthUser)
+
+  const canViewAnyHelpRequestDetails = computed(() =>
+    canViewAnyHelpRequestDetailsRule(user.value)
+  )
 </script>

@@ -16,7 +16,8 @@ export {
   getFinancialHelpRequestsStats,
   getHelpRequestMinistreStatsHandler,
   getHelpRequestPrescribingOrganizationStatsHandler,
-  getHelpRequestStatusStatsHandler
+  getHelpRequestStatusStatsHandler,
+  getInstructorOrganizationStatsHandler
 } from './helpRequest'
 export {
   getFollowupActionsEntreprisesStatsHandler,

@@ -86,7 +86,6 @@
     createBeneficiarySchema
   } from '~/server/schema/beneficiary.schema'
 
-  import { useAuthStore } from '~/store/auth'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
 
@@ -95,9 +94,6 @@
     agents: BeneficiaryReferent[]
   }>()
 
-  const authStore = useAuthStore()
-  const user = authStore.getAuthUser
-
   const emit = defineEmits<{
     (e: 'saveBeneficiary', beneficiary: CreateBeneficiaryInput): void
   }>()
@@ -105,7 +101,6 @@
   const { handleSubmit } = useForm<CreateBeneficiaryInput>({
     validationSchema: toTypedSchema(createBeneficiarySchema),
     initialValues: {
-      structureId: user.structureId || '',
       status: BeneficiaryStatus.Active
     }
   })

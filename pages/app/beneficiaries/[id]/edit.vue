@@ -27,6 +27,10 @@
   import { UpdateBeneficiaryInput } from '~/server/schema'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
+  definePageMeta({
+    middleware: 'is-beneficiary-referent'
+  })
+
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const trpcClient = useTrpcClient()

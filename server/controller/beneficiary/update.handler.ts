@@ -1,15 +1,20 @@
 import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaires'
 import {
+  canEditBeneficiary,
   canEditBeneficiaryExternalOrganisations,
-  canEditBeneficiaryGeneralInformation,
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
   canEditBeneficiaryReferents,
-  canEditBeneficiaryRelatives
+  canEditBeneficiaryRelatives,
+  canSetBeneficiaryNir
 } from '~/server/security/rules'
 import { UpdateBeneficiaryInput } from '~/server/schema'
-import { ProtectedAppContext } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
+import {
+  getBeneficiarySecurityTarget,
+  getUserStructureType
+} from '~/server/security'
 
 export const updateBeneficiaryHandler = async ({
   input,
@@ -18,11 +23,14 @@ export const updateBeneficiaryHandler = async ({
   input: UpdateBeneficiaryInput
   ctx: ProtectedAppContext
 }) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+
+  if (!beneficiary || !canEditBeneficiary(user, beneficiary)) {
+    throw forbiddenError()
+  }
+
   const { referents: previousReferents, relatives: previousRelatives } =
-    await getBeneficiaryReferentsAndRelatives({
-      id: input.id,
-      structureId: user.structureId
-    })
+    await getBeneficiaryReferentsAndRelatives(input.id)
 
   const previousIds = previousReferents.map(({ id }) => id)
 
@@ -40,6 +48,7 @@ export const updateBeneficiaryHandler = async ({
   } = input
 
   let data = {}
+  data = { ...general, aidantConnectAuthorized }
 
   if (
     canEditBeneficiaryReferents(user, {
@@ -66,11 +75,15 @@ export const updateBeneficiaryHandler = async ({
       }
     }
   }
-  if (canEditBeneficiaryGeneralInformation(user, input)) {
-    data = { ...data, ...general, aidantConnectAuthorized }
-  }
   if (canEditBeneficiaryHealthInfo(user, input)) {
-    data = { ...data, ...health }
+    const { socialSecurityNumber, ...otherHealthInfo } = health
+    data = { ...data, ...otherHealthInfo }
+
+    const userStructureType = await getUserStructureType(user)
+
+    if (canSetBeneficiaryNir(userStructureType)) {
+      data = { ...data, socialSecurityNumber }
+    }
   }
 
   if (canEditBeneficiaryExternalOrganisations(user, input)) {
@@ -125,9 +138,8 @@ export const updateBeneficiaryHandler = async ({
     }
   }
 
-  const beneficiary = await prismaClient.beneficiary.update({
+  return await prismaClient.beneficiary.update({
     where: { id },
     data
   })
-  return beneficiary
 }

@@ -16,12 +16,20 @@
 </template>
 
 <script setup lang="ts">
+  import { useAuthStore } from '~/store/auth'
+
   definePageMeta({
     layout: 'landing'
   })
 
   const route = useRoute()
+  const authStore = useAuthStore()
+
   const inactive = route.query.inactive
+
+  onMounted(() => {
+    authStore.logout()
+  })
 </script>
 
 <style lang="scss" scoped>

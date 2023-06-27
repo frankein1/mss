@@ -2,3 +2,4 @@ export { getFinancialHelpRequestsStats } from './get-financial-help-requests.con
 export { getHelpRequestMinistreStatsHandler } from './get-ministre.controller'
 export { getHelpRequestPrescribingOrganizationStatsHandler } from './get-prescribing-organization.controller'
 export { getHelpRequestStatusStatsHandler } from './get-status.controller'
+export { getInstructorOrganizationStatsHandler } from './get-instructor-organization.controller'

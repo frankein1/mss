@@ -79,7 +79,7 @@
         :label="followupFieldLabels.prescribingOrganizationId"
         name="prescribingOrganizationId"
         :options="withEmptyValue(prescribingOrganizationOptions)"
-        :can-create-new-option="canCreateOrganisme"
+        :can-create-new-option="canCreatePrescribingOrganization"
       />
 
       <VeeSelect
@@ -267,7 +267,7 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import {
-    canCreatePrescribingOrganization,
+    canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
     canEditItsOwnStructure
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
@@ -275,6 +275,7 @@
   import { followupFieldLabels } from '~/client/labels'
 
   const authStore = useAuthStore()
+  const isMinistryAgent = useMinistryAgent()
 
   const props = withDefaults(
     defineProps<{
@@ -306,13 +307,11 @@
     return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
   })
 
-  const isMinistryAgent = computed(() => authStore.isMinistryAgent)
-
   const user = computed(() => authStore.getAuthUser)
 
   const canEditStructure = computed(() => canEditItsOwnStructure(user.value))
 
-  const canCreateOrganisme = computed(() =>
-    canCreatePrescribingOrganization(user.value)
+  const canCreatePrescribingOrganization = computed(() =>
+    canCreatePrescribingOrganizationRule(user.value)
   )
 </script>

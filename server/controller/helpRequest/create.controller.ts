@@ -1,4 +1,4 @@
-import { Prisma, User, StructureType } from '@prisma/client'
+import { Prisma, StructureType } from '@prisma/client'
 import {
   ProtectedAppContext,
   invalidError,
@@ -6,10 +6,10 @@ import {
 } from '~/server/trpc'
 import type { CreateHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { canCreateBeneficiaryHelpRequest } from '~/server/security/rules'
+import { canCreateHelpRequest } from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/security'
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization/preparePrescribingOrganization'
-import { prepareInstructorOrganization } from '~/utils/instructorOrganization/prepareInstructorOrganization'
+import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
+import { prepareInstructorOrganization } from '~/utils/instructorOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 
 export async function prepareHelpRequestData({
@@ -19,15 +19,10 @@ export async function prepareHelpRequestData({
 }: {
   input: CreateHelpRequestInput
   transaction: Prisma.TransactionClient
-  user: User
+  user: ProtectedAppContext['user']
 }): Promise<Prisma.HelpRequestUncheckedCreateInput> {
-  const { structureId } = await transaction.beneficiary.findUniqueOrThrow({
-    where: { id: input.beneficiaryId },
-    select: { structureId: true }
-  })
-
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structureId },
+    where: { id: user.structureId },
     select: {
       type: true
     }
@@ -41,20 +36,18 @@ export async function prepareHelpRequestData({
   const prescribingOrganizationId = await preparePrescribingOrganization(
     transaction,
     user,
-    structureId,
     input.prescribingOrganizationId
   )
 
   const instructorOrganizationId = await prepareInstructorOrganization(
     transaction,
     user,
-    structureId,
     input.instructorOrganizationId
   )
 
   return {
     ...input,
-    structureId,
+    structureId: user.structureId,
     documents: prepareDocumentsMutations(input.documents),
     financialSupport: input.financialSupport === 'true',
     externalStructure: input.externalStructure === 'true',
@@ -68,7 +61,7 @@ export async function prepareHelpRequestData({
 const createTransaction = async (
   transaction: Prisma.TransactionClient,
   input: CreateHelpRequestInput,
-  user: User
+  user: ProtectedAppContext['user']
 ) => {
   const data = await prepareHelpRequestData({ input, transaction, user })
 
@@ -100,7 +93,7 @@ export const addHelpRequestHandler = async ({
     throw invalidError('Beneficiary not found')
   }
 
-  if (!canCreateBeneficiaryHelpRequest(user, target)) {
+  if (!canCreateHelpRequest(user, target)) {
     throw forbiddenError()
   }
 

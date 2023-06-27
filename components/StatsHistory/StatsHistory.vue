@@ -78,33 +78,32 @@
             v-if="isMinistryAgent"
             class="fr-col-12 fr-col-lg-6"
           >
-            <StatsHistoryMinistre
+            <StatsHistoryHelpRequestMinistre
               :total-count="helpRequestCount"
-              collection="helpRequests"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
             <StatsHistoryHelpRequestStatus
               :total-count="helpRequestCount"
-              collection="helpRequests"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHistoryPrescribingOrganizations
+            <StatsHistoryHelpRequestPrescribingOrganizations
               :total-count="helpRequestCount"
-              collection="helpRequests"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6">
             <StatsHistoryFinancialHelpRequests :filters="filters" />
           </div>
-          <!-- TODO: implement "organismes instructeurs" then those statistics
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsOrganismesInstructeurs :filters="helpRequestFilters" />
-          </div> -->
+            <StatsHistoryInstructorOrganizations
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </div>
         </div>
       </div>
       <div
@@ -144,9 +143,8 @@
             v-if="isMinistryAgent"
             class="fr-col-12 fr-col-lg-6"
           >
-            <StatsHistoryMinistre
+            <StatsHistoryFollowupMinistre
               :total-count="followupCount"
-              collection="followups"
               :filters="filters"
             />
           </div>
@@ -163,9 +161,8 @@
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHistoryPrescribingOrganizations
+            <StatsHistoryFollowupPrescribingOrganizations
               :total-count="followupCount"
-              collection="followups"
               :filters="filters"
             />
           </div>

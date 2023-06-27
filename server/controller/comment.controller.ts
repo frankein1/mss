@@ -6,8 +6,8 @@ import {
 } from '~/server/trpc'
 import { AddCommentInput } from '~/server/schema'
 import {
-  canAddCommentToBeneficiaryFollowup,
-  canAddCommentToBeneficiaryHelpRequest,
+  canAddCommentToFollowup,
+  canAddCommentToHelpRequest,
   SecurityTargetWithStructure,
   SecurityTargetWithReferents
 } from '~/server/security/rules'
@@ -89,7 +89,7 @@ function addCommentToFollowup(
   user: User,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ) {
-  if (!canAddCommentToBeneficiaryFollowup(user, beneficiary)) {
+  if (!canAddCommentToFollowup(user, beneficiary)) {
     throw forbiddenError()
   }
 
@@ -112,7 +112,7 @@ function addCommentToHelpRequest(
   user: User,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ) {
-  if (!canAddCommentToBeneficiaryHelpRequest(user, beneficiary)) {
+  if (!canAddCommentToHelpRequest(user, beneficiary)) {
     throw forbiddenError()
   }
 

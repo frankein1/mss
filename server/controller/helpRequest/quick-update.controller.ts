@@ -1,8 +1,8 @@
-import { helpRequestGetPageSelect } from './get-page.controller'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { QuickEditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { canEditBeneficiaryHelpRequest } from '~/server/security/rules'
+import { canEditHelpRequest } from '~/server/security/rules'
+import { prepareGetHelpRequestsPageSelect } from '~/utils/helpRequest'
 
 export const quickUpdateHelpRequestHandler = async ({
   input: { id, ...rest },
@@ -22,16 +22,15 @@ export const quickUpdateHelpRequestHandler = async ({
     }
   })
 
-  if (
-    !target ||
-    !canEditBeneficiaryHelpRequest(user, target.beneficiary, target)
-  ) {
+  if (!target || !canEditHelpRequest(user, target)) {
     throw forbiddenError()
   }
+
+  const select = prepareGetHelpRequestsPageSelect(user)
 
   return await prismaClient.helpRequest.update({
     where: { id },
     data: rest,
-    select: helpRequestGetPageSelect
+    select
   })
 }
