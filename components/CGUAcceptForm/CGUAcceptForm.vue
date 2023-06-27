@@ -1,7 +1,7 @@
 <template>
   <form
     class="fr-container--fluid"
-    @submit.prevent="onAcceptCGU"
+    @submit="onSubmit"
   >
     <VeeCheckbox
       class="fr-mt-2w"
@@ -40,6 +40,9 @@
 </template>
 
 <script lang="ts" setup>
+  import { useForm } from 'vee-validate'
+  import { toTypedSchema } from '@vee-validate/zod'
+  import { AcceptCGUInput, acceptCGUSchema } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
 
@@ -47,7 +50,11 @@
   const snackbar = useSnackbar()
   const auth = useAuthStore()
 
-  async function onAcceptCGU() {
+  const { handleSubmit } = useForm<AcceptCGUInput>({
+    validationSchema: toTypedSchema(acceptCGUSchema)
+  })
+
+  const onSubmit = handleSubmit(async () => {
     try {
       const user = await trpcClient.user.acceptCGU.mutate()
       auth.login(user)
@@ -55,5 +62,5 @@
     } catch {
       snackbar.error("L'acceptation des CGU a échoué.")
     }
-  }
+  })
 </script>

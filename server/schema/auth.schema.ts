@@ -8,6 +8,17 @@ const accessTokenSchema = z.object({
 
 type AccessTokenInput = z.infer<typeof accessTokenSchema>
 
-export { accessTokenSchema }
+const acceptCGUSchema = z.object({
+  read: z.coerce
+    .boolean()
+    .refine(value => value === true, { message: 'Veuillez lire les CGU.' }),
+  accept: z.coerce
+    .boolean()
+    .refine(value => value === true, { message: 'Veuillez accepter les CGU.' })
+})
 
-export type { AccessTokenInput }
+type AcceptCGUInput = z.infer<typeof acceptCGUSchema>
+
+export { accessTokenSchema, acceptCGUSchema }
+
+export type { AccessTokenInput, AcceptCGUInput }

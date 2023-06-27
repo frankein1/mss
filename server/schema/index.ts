@@ -72,8 +72,8 @@ export type {
 export { editCurrentUserStructureSchema } from './structure.schema'
 export type { EditCurrentUserStructureInput } from './structure.schema'
 
-export { accessTokenSchema } from './auth.schema'
-export type { AccessTokenInput } from './auth.schema'
+export { accessTokenSchema, acceptCGUSchema } from './auth.schema'
+export type { AccessTokenInput, AcceptCGUInput } from './auth.schema'
 
 export {
   createUserSchema,
