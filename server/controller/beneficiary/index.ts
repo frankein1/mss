@@ -2,14 +2,14 @@ import type {
   BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests,
   FollowupTypesFromFollowups,
   FollowupTypesFromHelpRequests
-} from './get-page.handler'
+} from './get-page.controller'
 
-export { getBeneficiaryDetailsHandler } from './get-details.handler'
-export { getBeneficiariesHandler } from './get-page.handler'
-export { getBeneficiaryDocumentsHandler } from './get-documents.handler'
-export { createBeneficiaryHandler } from './create.handler'
-export { updateBeneficiaryHandler } from './update.handler'
-export { searchBeneficiaryHandler } from './search.handler'
+export { getBeneficiaryDetailsHandler } from './get-details.controller'
+export { getBeneficiariesHandler } from './get-page.controller'
+export { getBeneficiaryDocumentsHandler } from './get-documents.controller'
+export { createBeneficiaryHandler } from './create.controller'
+export { updateBeneficiaryHandler } from './update.controller'
+export { searchBeneficiaryHandler } from './search.controller'
 export { getBeneficiaryMinimalInfoHandler } from './get-minimal-info.controller'
 export { getBeneficiaryHistoryHandler } from './get-history.controller'
 export { deleteBeneficiaryHandler } from './delete.controller'

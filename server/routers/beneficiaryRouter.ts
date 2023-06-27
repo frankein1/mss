@@ -7,7 +7,6 @@ import {
   getDocumentsSchema,
   getHistorySchema
 } from '~/server/schema'
-
 import {
   createBeneficiaryHandler,
   getBeneficiariesHandler,
