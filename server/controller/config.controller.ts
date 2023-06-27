@@ -42,8 +42,10 @@ function hasDefinedExaminationDate(h: {
 }
 
 export const getExaminationDatesHandler = async ({
+  input,
   ctx: { user }
 }: {
+  input: { id: string } | undefined
   ctx: ProtectedAppContext
 }) => {
   if (!canViewAnyHelpRequestDetails(user)) {
@@ -53,7 +55,8 @@ export const getExaminationDatesHandler = async ({
   const examinationDates = await prismaClient.helpRequest.groupBy({
     by: ['examinationDate'],
     where: {
-      examinationDate: { not: null }
+      examinationDate: { not: null },
+      beneficiaryId: input?.id || undefined
     },
     orderBy: [{ examinationDate: 'desc' }]
   })

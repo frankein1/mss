@@ -40,6 +40,10 @@
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
 
+  const props = defineProps<{
+    beneficiaryId: string
+  }>()
+
   const emit = defineEmits<{
     (e: 'filter', filters: BeneficiaryHistoryFilterInput): void
   }>()
@@ -69,16 +73,21 @@
     data: examinationDateOptions,
     pending: examinationDateOptionsPending,
     error: examinationDateOptionsError
-  } = await trpcClient.config.getExaminationDates.useQuery(undefined, {
-    transform: examinationDates => {
-      return new Map(
-        examinationDates.map(({ examinationDate }) => [
-          examinationDate.toString(),
-          formatDate(examinationDate)
-        ])
-      )
+  } = await trpcClient.config.getExaminationDates.useQuery(
+    {
+      id: props.beneficiaryId
+    },
+    {
+      transform: examinationDates => {
+        return new Map(
+          examinationDates.map(({ examinationDate }) => [
+            examinationDate.toString(),
+            formatDate(examinationDate)
+          ])
+        )
+      }
     }
-  })
+  )
 
   const pending = computed(
     () =>
