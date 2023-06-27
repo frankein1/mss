@@ -5,11 +5,27 @@
     :class="[alertClass]"
     role="alert"
   >
-    <p
-      class="fr-alert__title"
-      v-html="text"
-    ></p>
-    <p v-if="detailedMessage">{{ detailedMessage }}</p>
+    <div class="info-container">
+      <div>
+        <p
+          class="fr-alert__title"
+          v-html="text"
+        ></p>
+        <p
+          v-if="detailedMessage"
+          v-html="detailedMessage"
+        ></p>
+      </div>
+      <div v-if="action">
+        <button
+          :class="`fr-btn fr-btn--md fr-btn--secondary fr-btn--icon-left ${action.iconClass}`"
+          :type="action.type"
+          @click="emit('action')"
+        >
+          {{ action.title }}
+        </button>
+      </div>
+    </div>
     <button
       v-if="closeable"
       ref="closeBtn"
@@ -30,11 +46,19 @@
       closeable?: boolean
       message: string
       detailedMessage?: string
+      action?: {
+        title: string
+        iconClass?: string
+        type?: 'button' | 'submit' | 'reset'
+      } | null
     }>(),
-    { closeable: false, detailedMessage: '' }
+    { closeable: false, detailedMessage: '', action: null }
   )
 
-  const emit = defineEmits<{ (e: 'close'): void }>()
+  const emit = defineEmits<{
+    (e: 'close'): void
+    (e: 'action'): void
+  }>()
 
   const closeBtn = ref<HTMLButtonElement | null>(null)
 
@@ -62,8 +86,26 @@
   })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
   .fr-alert {
     background-color: #fff;
+  }
+
+  .info-container {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+
+    @include dsfr-media-query.respond-from('lg') {
+      flex-direction: row;
+    }
+
+    div {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
   }
 </style>
