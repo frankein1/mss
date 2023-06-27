@@ -7,7 +7,7 @@
         CGU.
       </p>
     </article>
-    <article>
+    <article class="cgu-container">
       <h1>Conditions générales d'utilisation de Mon Suivi Social</h1>
       <p>
         Les présentes conditions générales d'utilisation (dites « CGU ») fixent

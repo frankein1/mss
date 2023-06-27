@@ -10,10 +10,3 @@
 
   useLogoutInactiveUser()
 </script>
-
-<style>
-  .fr-container article:nth-child(2) {
-    max-height: 85vh;
-    overflow: scroll;
-  }
-</style>

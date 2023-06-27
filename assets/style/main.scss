@@ -88,6 +88,11 @@ body,
   }
 }
 
+.cgu-container {
+  max-height: 85vh;
+  overflow: scroll;
+}
+
 .information-list {
   @include dsfr.disable-list-style;
 

@@ -7,7 +7,7 @@
         CGU.
       </p>
     </article>
-    <article>
+    <article class="cgu-container">
       <h1>
         Conditions générales d'utilisation de Mon Suivi Social - Responsable de
         CCAS ou de CIAS ou d'association d'accompagnement social
