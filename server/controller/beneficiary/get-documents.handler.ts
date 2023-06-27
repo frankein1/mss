@@ -6,10 +6,19 @@ import {
 import { prismaClient } from '~/server/prisma'
 import {
   canListDocuments,
-  canListConfidentialDocuments,
   canOnlyListItsUploadedDocuments
 } from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/security'
+
+function getPermissionConditions(user: ProtectedAppContext['user']) {
+  if (canOnlyListItsUploadedDocuments(user)) {
+    return { createdById: user.id }
+  }
+
+  return {
+    OR: [{ confidential: false }, { confidential: true, createdById: user.id }]
+  }
+}
 
 export const getBeneficiaryDocumentsHandler = async ({
   ctx: { user },
@@ -28,11 +37,21 @@ export const getBeneficiaryDocumentsHandler = async ({
     throw forbiddenError()
   }
 
+  const permissionConditions = getPermissionConditions(user)
+
   return await prismaClient.document.findMany({
     where: {
       beneficiaryId,
-      confidential: canListConfidentialDocuments(user) ? undefined : false,
-      createdById: canOnlyListItsUploadedDocuments(user) ? user.id : undefined
+      ...permissionConditions
+    },
+    include: {
+      _count: {
+        select: {
+          Notification: {
+            where: { read: false }
+          }
+        }
+      }
     }
   })
 }

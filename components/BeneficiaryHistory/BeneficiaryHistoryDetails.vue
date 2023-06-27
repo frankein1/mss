@@ -41,7 +41,7 @@
   )
 
   const hasUnreadNotifications = computed(
-    () => !!props.history.Notification.length
+    () => !!props.history._count.Notification
   )
 </script>
 
