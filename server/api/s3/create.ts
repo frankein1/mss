@@ -5,8 +5,11 @@ import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { uploadFile } from '~/server/lib/s3'
 import { forbiddenError, invalidError } from '~/server/trpc'
-import { getBeneficiarySecurityTarget } from '~/server/security'
-import { canAddDocument } from '~/server/security/rules'
+import {
+  getBeneficiarySecurityTarget,
+  BeneficiarySecurityTarget
+} from '~/server/security'
+import { canAddDocument, canViewDocument } from '~/server/security/rules'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
 
@@ -50,22 +53,27 @@ export default defineEventHandler(async event => {
   const key = await uploadFile(file)
 
   const document = await addDocument(key, input, user)
-  await addNotification(document, beneficiary.referents, beneficiary.id)
+  await addNotification(document, beneficiary)
 
   return send(event, key)
 })
 
 async function addNotification(
   document: Document,
-  referents: { id: string }[],
-  beneficiaryId: string
+  beneficiary: NonNullable<BeneficiarySecurityTarget>
 ) {
+  if (document.confidential) {
+    return
+  }
   const notifications = []
-  for (const referent of referents) {
-    if (document.createdById !== referent.id) {
+  for (const referent of beneficiary.referents) {
+    if (
+      document.createdById !== referent.id &&
+      canViewDocument(referent, beneficiary, document)
+    ) {
       notifications.push({
         recipientId: referent.id,
-        beneficiaryId,
+        beneficiaryId: beneficiary.id,
         documentId: document.key,
         type: NotificationType.NewDocument
       })

@@ -17,7 +17,9 @@ export function getBeneficiarySecurityTarget(id: string) {
     select: {
       id: true,
       structureId: true,
-      referents: { select: { id: true } }
+      referents: {
+        select: { id: true, role: true, structureId: true }
+      }
     }
   })
 }
