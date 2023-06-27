@@ -33,34 +33,46 @@ export const canListDocuments = (
     'ReceptionAgent'
   ]) || isReferentFor(grantee, beneficiary)
 
-export const canListConfidentialDocuments = (
-  grantee: SecurityRuleGrantee
-): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'ReceptionAgent',
-    'Referent'
-  ])
-
 export const canOnlyListItsUploadedDocuments = (
   grantee: SecurityRuleGrantee
 ): boolean => hasAllowedRole(grantee, ['ReceptionAgent'])
+
+const canViewConfidentialDocument = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
+  document: SecurityTargetWithCreator
+): boolean =>
+  (isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) ||
+    isReferentFor(grantee, beneficiary)) &&
+  isCreator(grantee, document)
+
+const canViewNonConfidentialDocument = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
+  document: SecurityTargetWithCreator
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) ||
+  isReferentFor(grantee, beneficiary) ||
+  (isInSameStructureAs(grantee, beneficiary, ['ReceptionAgent']) &&
+    isCreator(grantee, document))
 
 export const canViewDocument = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
   document: SecurityTargetWithCreator & { confidential: boolean }
 ): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ]) ||
-  isReferentFor(grantee, beneficiary) ||
-  (isInSameStructureAs(grantee, beneficiary, ['Instructor']) &&
-    document.confidential) ||
-  (isInSameStructureAs(grantee, beneficiary, ['ReceptionAgent']) &&
-    isCreator(grantee, document))
+  document.confidential
+    ? canViewConfidentialDocument(grantee, beneficiary, document)
+    : canViewNonConfidentialDocument(grantee, beneficiary, document)
 
 export const canEditDocument = canViewDocument
 
@@ -72,6 +84,7 @@ export const canSetDocumentAsConfidential = (
   (isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker',
+    'Instructor',
     'ReceptionAgent'
   ]) ||
     isReferentFor(grantee, beneficiary)) &&

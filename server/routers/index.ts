@@ -48,3 +48,7 @@ export type GetHelpRequestDetailsOutput =
 
 export type GetExaminationDatesConfigOutput =
   RouterOutput['config']['getExaminationDates']
+
+export type GetBeneficiaryDocumentsOutput =
+  RouterOutput['beneficiary']['getBeneficiaryDocuments']
+export type GetBeneficiaryDocumentOutput = GetBeneficiaryDocumentsOutput[0]
