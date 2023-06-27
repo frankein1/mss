@@ -38,12 +38,11 @@
               @change-page="updatePagination($event)"
             />
 
-            <!-- TODO: add this component -->
-            <!-- <HistoryItem
+            <MutationLogs
               class="fr-mt-4w fr-px-5v"
-              collection="beneficiary"
+              collection="beneficiaries"
               :route-with-params="RoutePath.Beneficiary"
-            /> -->
+            />
           </template>
         </main>
       </div>
@@ -59,7 +58,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import type { ErrorOutput, GetBeneficiariesOutput } from '~/server/routers'
   import type { BeneficiarySort } from '~/types/table'
-  import { Route, Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
   definePageMeta({
     name: Route.Beneficiaries
