@@ -17,13 +17,16 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { Document, DocumentType } from '@prisma/client'
+  import { DocumentType } from '@prisma/client'
   import { documentTypeLabels } from '~/client/options/document'
-  import { GetBeneficiaryOutput } from '~/server/routers'
+  import {
+    GetBeneficiaryDocumentsOutput,
+    GetBeneficiaryOutput
+  } from '~/server/routers'
 
   defineProps<{
     documentType: DocumentType
-    documents: Document[]
+    documents: GetBeneficiaryDocumentsOutput
     beneficiary: GetBeneficiaryOutput
   }>()
 

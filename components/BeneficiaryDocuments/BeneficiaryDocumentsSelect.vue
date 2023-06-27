@@ -31,7 +31,9 @@
     data: documents,
     pending,
     error
-  } = await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery({
+  } = await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery<
+    Document[]
+  >({
     beneficiaryId: props.beneficiaryId
   })
 

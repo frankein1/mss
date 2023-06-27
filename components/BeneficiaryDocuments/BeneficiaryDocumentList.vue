@@ -38,21 +38,22 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { Document, DocumentType } from '@prisma/client'
+  import { DocumentType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
-  import { GetBeneficiaryOutput } from '~/server/routers'
+  import {
+    GetBeneficiaryDocumentsOutput,
+    GetBeneficiaryOutput
+  } from '~/server/routers'
 
   const route = useRoute()
 
   const props = defineProps<{ beneficiary: GetBeneficiaryOutput }>()
 
-  const { data: documents, refresh } = useAsyncData<Document[]>(
-    fetchDocuments,
-    {
+  const { data: documents, refresh } =
+    useAsyncData<GetBeneficiaryDocumentsOutput>(fetchDocuments, {
       default: () => []
-    }
-  )
+    })
 
   onMounted(async () => {
     const tab = route.hash.slice(1)
