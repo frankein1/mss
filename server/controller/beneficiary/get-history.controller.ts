@@ -63,11 +63,11 @@ const createdBySelect = {
   email: true
 }
 
-const historyItemInclude = {
+const historyItemInclude = (userId: string) => ({
   _count: {
     select: {
       Notification: {
-        where: { read: false }
+        where: { read: false, recipientId: userId }
       }
     }
   },
@@ -85,7 +85,7 @@ const historyItemInclude = {
       name: true
     }
   }
-}
+})
 
 async function getFollowups(
   user: User,
@@ -110,7 +110,7 @@ async function getFollowups(
       ...prepareFollowupFilters(filters)
     },
     include: {
-      ...historyItemInclude,
+      ...historyItemInclude(user.id),
       comments: commentsInclude,
       types: true
     },
@@ -142,7 +142,7 @@ async function getHelpRequests(
       ...prepareHelpRequestFilters(filters)
     },
     include: {
-      ...historyItemInclude,
+      ...historyItemInclude(user.id),
       comments: commentsInclude,
       type: true,
       instructorOrganization: {

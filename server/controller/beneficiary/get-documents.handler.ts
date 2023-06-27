@@ -48,7 +48,7 @@ export const getBeneficiaryDocumentsHandler = async ({
       _count: {
         select: {
           Notification: {
-            where: { read: false }
+            where: { read: false, recipientId: user.id }
           }
         }
       }
