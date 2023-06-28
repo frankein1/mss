@@ -44,15 +44,9 @@
     data: supportTypesCounts,
     error,
     pending
-  } = useAsyncData<
-    Array<{
-      id: string
-      name: string
-      _count: { followups: number; helpRequests: number }
-    }>
-  >(() => trpcClient.stat.getSupportStats.query(props.filters), {
+  } = await trpcClient.stat.getSupportStats.useQuery(props.filters, {
     default: () => [],
-    watch: [props.filters]
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
   })
 
   const supportTypesStats = computed(

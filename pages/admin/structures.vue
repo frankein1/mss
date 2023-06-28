@@ -52,18 +52,12 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { AdminStructuresOutput } from '~/server/routers'
-
   const search = ref<string>()
 
-  const { data } = useAsyncData<AdminStructuresOutput>(
-    () =>
-      useTrpcClient().admin.getStructures.query({
-        search: search.value
-      }),
-    {
-      watch: [search]
-    }
+  const queryInput = computed(() => ({ search: search.value }))
+
+  const { data } = await useTrpcClient().admin.getStructures.useQuery(
+    queryInput
   )
 
   function onSearch(event: Event) {

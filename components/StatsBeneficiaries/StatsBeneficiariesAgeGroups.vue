@@ -69,13 +69,10 @@
     data: ageCounts,
     pending,
     error
-  } = useAsyncData<Array<{ birthDate: Date | null; _count: number }>>(
-    () => trpcClient.stat.getAgeStats.query(props.filters),
-    {
-      default: () => [],
-      watch: [props.filters]
-    }
-  )
+  } = await trpcClient.stat.getAgeStats.useQuery(props.filters, {
+    default: () => [],
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+  })
 
   const ageStats = computed(() => {
     const ageGroupsFilters: { [k in AgeGroup]?: AgeGroupsFilter } = {}

@@ -56,7 +56,6 @@
   // import { RoutePath } from '~/utils/routing'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import type { ErrorOutput, GetBeneficiariesOutput } from '~/server/routers'
   import type { BeneficiarySort } from '~/types/table'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
@@ -75,27 +74,25 @@
   const { updatePagination } = usePagination(page, perPage)
   const { onSort } = useSort<BeneficiarySort>(orderBy)
 
+  const queryInput = computed(() => ({
+    page: page.value,
+    perPage: perPage.value,
+    orderBy: orderBy.value,
+    filters: filters.value
+  }))
+
   const {
     data: beneficiariesRequest,
     pending,
     error
-  } = useAsyncData<GetBeneficiariesOutput, ErrorOutput>(
-    () =>
-      trpcClient.beneficiary.getBeneficiaries.query({
-        page: page.value,
-        perPage: perPage.value,
-        orderBy: orderBy.value,
-        filters: filters.value
-      }),
-    {
-      default: () => ({
-        beneficiaries: [],
-        count: 0,
-        totalPages: 0
-      }),
-      watch: [filters, page, perPage, orderBy]
-    }
-  )
+  } = await trpcClient.beneficiary.getBeneficiaries.useQuery(queryInput, {
+    default: () => ({
+      beneficiaries: [],
+      count: 0,
+      totalPages: 0
+    }),
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+  })
 
   const beneficiariesCount = computed(
     () => beneficiariesRequest.value?.count || 0

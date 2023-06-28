@@ -41,7 +41,6 @@
   import type { FollowupFilterInput } from '~/server/schema'
   import { useFiltersStore } from '~/store/filters'
   import { FollowupSort, SortOrder } from '~/types/table'
-  import { GetFollowupsOutput, ErrorOutput } from '~/server/routers'
 
   const filtersStore = useFiltersStore()
 
@@ -53,27 +52,25 @@
   const { updatePagination } = usePagination(page, perPage)
   const { onSort } = useSort<FollowupSort>(orderBy)
 
+  const queryInput = computed(() => ({
+    page: page.value,
+    perPage: perPage.value,
+    orderBy: orderBy.value,
+    filters: filters.value
+  }))
+
   const {
     data: followupsRequest,
     pending,
     error
-  } = useAsyncData<GetFollowupsOutput, ErrorOutput>(
-    () =>
-      useTrpcClient().followup.getFollowups.query({
-        page: page.value,
-        perPage: perPage.value,
-        orderBy: orderBy.value,
-        filters: filters.value
-      }),
-    {
-      default: () => ({
-        followups: [],
-        count: 0,
-        totalPages: 0
-      }),
-      watch: [filters, page, perPage, orderBy]
-    }
-  )
+  } = await useTrpcClient().followup.getFollowups.useQuery(queryInput, {
+    default: () => ({
+      followups: [],
+      count: 0,
+      totalPages: 0
+    }),
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+  })
 
   const followupsCount = computed(() => followupsRequest.value?.count || 0)
 

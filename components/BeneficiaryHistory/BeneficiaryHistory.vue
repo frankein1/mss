@@ -43,11 +43,9 @@
 <script setup lang="ts">
   import { useFiltersStore } from '~/store/filters'
   import { AlertType } from '~~/utils/constants/alert'
-  import { GetBeneficiaryHistoryOutput, ErrorOutput } from '~/server/routers'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
 
-  // const { $focusAndScrollTo } = useNuxtApp()
   const filtersStore = useFiltersStore()
   const route = useRoute()
 
@@ -57,20 +55,18 @@
 
   const filters = ref(filtersStore.beneficiaryHistory || {})
 
+  const queryInput = computed(() => ({
+    beneficiaryId: props.beneficiaryId,
+    filters: filters.value
+  }))
+
   const {
     data: history,
     pending,
     error,
     refresh
-  } = await useAsyncData<GetBeneficiaryHistoryOutput, ErrorOutput>(
-    () =>
-      useTrpcClient().beneficiary.getBeneficiaryHistory.query({
-        beneficiaryId: props.beneficiaryId,
-        filters: filters.value
-      }),
-    {
-      watch: [filters]
-    }
+  } = await useTrpcClient().beneficiary.getBeneficiaryHistory.useQuery(
+    queryInput
   )
 
   onMounted(async () => {

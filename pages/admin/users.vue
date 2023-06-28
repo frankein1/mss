@@ -34,20 +34,13 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { AdminUsersOutput } from '~/server/routers'
   import { UserRoleLabels } from '~/client/options/user'
 
   const search = ref<string>()
 
-  const { data } = useAsyncData<AdminUsersOutput>(
-    () =>
-      useTrpcClient().admin.getUsers.query({
-        search: search.value
-      }),
-    {
-      watch: [search]
-    }
-  )
+  const queryInput = computed(() => ({ search: search.value }))
+
+  const { data } = await useTrpcClient().admin.getUsers.useQuery(queryInput)
 
   function onSearch(event: Event) {
     const input = event.target as HTMLInputElement
