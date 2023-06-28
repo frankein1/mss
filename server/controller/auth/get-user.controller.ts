@@ -12,6 +12,9 @@ export const getUserController = async ({ ctx }: { ctx: AppContext }) => {
   const user = await prismaClient.user.findUnique({
     where: {
       id: ctxUser.id
+    },
+    include: {
+      CGUHistory: true
     }
   })
 
@@ -19,7 +22,9 @@ export const getUserController = async ({ ctx }: { ctx: AppContext }) => {
     throw forbiddenError()
   }
 
-  const { firstName, lastName, id, role, status, email } = user
+  const { firstName, lastName, id, role, status, email, CGUHistory } = user
+
+  const CGUHistoryVersion = CGUHistory?.length ? CGUHistory[0].version : null
 
   const jwtUser: JwtUser = {
     firstName,
@@ -29,7 +34,8 @@ export const getUserController = async ({ ctx }: { ctx: AppContext }) => {
     role,
     status,
     inclusionConnectId: '',
-    structureId: ''
+    structureId: '',
+    CGUHistoryVersion
   }
 
   return jwtUser
