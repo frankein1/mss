@@ -128,10 +128,10 @@
   const user = computed(() => authStore.getAuthUser)
 
   const helpRequestPath = computed(() =>
-    RoutePath.Beneficiary(props.helpRequest.beneficiary.id, {
+    RoutePath.AppBeneficiary(props.helpRequest.beneficiary.id, {
       tab: BeneficiaryTab.History,
       item: props.helpRequest.id,
-      originPage: Route.History,
+      originPage: Route.AppHistory,
       originTab: HistoryTab.HelpRequests
     })
   )

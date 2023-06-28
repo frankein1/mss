@@ -15,7 +15,7 @@
 
   onMounted(() => {
     if (route.path === RoutePath.App()) {
-      navigateTo(RoutePath.Overview())
+      navigateTo(RoutePath.AppOverview())
     }
   })
 </script>

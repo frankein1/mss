@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.BeneficiaryEdit(beneficiary)" />
-    <PageTitle :title="RouteTitle.BeneficiaryEdit(beneficiary || null)" />
+    <PageBreadcrumb :links="Breadcrumb.AppBeneficiaryEdit(beneficiary)" />
+    <PageTitle :title="RouteTitle.AppBeneficiaryEdit(beneficiary || null)" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -53,6 +53,6 @@
     await trpcClient.beneficiary.update.mutate(beneficiary)
     isSubmitting.value = false
 
-    navigateTo(RoutePath.Beneficiary(beneficiary.id))
+    navigateTo(RoutePath.AppBeneficiary(beneficiary.id))
   }
 </script>

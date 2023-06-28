@@ -1,8 +1,10 @@
 <template>
   <PageContainer v-if="beneficiary">
-    <PageBreadcrumb :links="Breadcrumb.Beneficiary(beneficiary, originPage)" />
+    <PageBreadcrumb
+      :links="Breadcrumb.AppBeneficiary(beneficiary, originPage)"
+    />
     <div class="beneficiarytitle__container">
-      <PageTitle :title="RouteTitle.Beneficiary(beneficiary || null)" />
+      <PageTitle :title="RouteTitle.AppBeneficiary(beneficiary || null)" />
       <BeneficiaryDetailsHeader
         :beneficiary-id="beneficiaryId"
         :can-delete="canDelete"
@@ -60,9 +62,9 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const originPage = route.query.originPage as
-    | Route.Overview
-    | Route.Beneficiaries
-    | Route.History
+    | Route.AppOverview
+    | Route.AppBeneficiaries
+    | Route.AppHistory
     | undefined
   const originTab = route.query.hash as string | undefined
 
@@ -87,7 +89,7 @@
       const tabParam = originTab ? `?tab=${originTab}` : ''
       return `${originPage}${tabParam}`
     }
-    return RoutePath.Beneficiaries()
+    return RoutePath.AppBeneficiaries()
   })
 
   function onBeneficiaryDeleted() {

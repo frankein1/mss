@@ -18,7 +18,7 @@ export default defineNuxtRouteMiddleware(async to => {
   if (!isAuthenticated) {
     const admin = to.fullPath.startsWith(RoutePath.Admin())
     return navigateTo({
-      path: admin ? RoutePath.LoginAdmin() : RoutePath.Login(),
+      path: admin ? RoutePath.AuthAdmin() : RoutePath.AuthLogin(),
       query: { redirectUrl: to.fullPath }
     })
   }

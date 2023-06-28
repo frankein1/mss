@@ -7,5 +7,5 @@ export function useHomePage() {
     return RoutePath.AdminStructures()
   }
 
-  return RoutePath.Overview()
+  return RoutePath.AppOverview()
 }

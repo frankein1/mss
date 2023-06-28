@@ -5,6 +5,6 @@ import { canListUsers } from '~/server/security/rules'
 export default defineNuxtRouteMiddleware(() => {
   const authStore = useAuthStore()
   if (!authStore.isAuthenticated || !canListUsers(authStore.getAuthUser)) {
-    return navigateTo(RoutePath.Overview())
+    return navigateTo(RoutePath.AppOverview())
   }
 })

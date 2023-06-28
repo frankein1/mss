@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.Beneficiaries()" />
-    <PageTitle :title="RouteTitle.Beneficiaries()" />
+    <PageBreadcrumb :links="Breadcrumb.AppBeneficiaries()" />
+    <PageTitle :title="RouteTitle.AppBeneficiaries()" />
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
@@ -41,7 +41,7 @@
             <MutationLogs
               class="fr-mt-4w fr-px-5v"
               collection="beneficiaries"
-              :route-with-params="RoutePath.Beneficiary"
+              :route-with-params="RoutePath.AppBeneficiary"
             />
           </template>
         </main>
@@ -61,7 +61,7 @@
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
   definePageMeta({
-    name: Route.Beneficiaries
+    name: Route.AppBeneficiaries
   })
 
   const filtersStore = useFiltersStore()

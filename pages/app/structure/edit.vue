@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.StructureEdit()" />
-    <PageTitle :title="RouteTitle.StructureEdit()" />
+    <PageBreadcrumb :links="Breadcrumb.AppStructureEdit()" />
+    <PageTitle :title="RouteTitle.AppStructureEdit()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main

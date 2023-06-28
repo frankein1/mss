@@ -1,11 +1,15 @@
 <template>
   <PageContainer>
     <PageBreadcrumb
-      :links="Breadcrumb.BeneficiaryHelpRequestEdit(helpRequest?.beneficiary)"
+      :links="
+        Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest?.beneficiary)
+      "
     />
     <PageTitle
       :title="
-        RouteTitle.BeneficiaryHelpRequestEdit(helpRequest?.beneficiary || null)
+        RouteTitle.AppBeneficiaryHelpRequestEdit(
+          helpRequest?.beneficiary || null
+        )
       "
     />
     <div class="fr-grid-row fr-grid-row--gutters">
@@ -119,7 +123,7 @@
     try {
       await trpcClient.helpRequest.update.mutate(helpRequest)
       return navigateTo(
-        RoutePath.Beneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
+        RoutePath.AppBeneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
       )
     } catch {
       snackbar.error("La mise à jour de l'instruction a échoué.", () =>

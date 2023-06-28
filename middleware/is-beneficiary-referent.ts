@@ -14,9 +14,9 @@ export default defineNuxtRouteMiddleware(async to => {
       })
 
     if (!isBeneficiaryReferent) {
-      return navigateTo(RoutePath.Beneficiaries())
+      return navigateTo(RoutePath.AppBeneficiaries())
     }
   } catch {
-    return navigateTo(RoutePath.Beneficiaries())
+    return navigateTo(RoutePath.AppBeneficiaries())
   }
 })

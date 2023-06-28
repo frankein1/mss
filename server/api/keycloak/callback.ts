@@ -62,7 +62,7 @@ export default defineEventHandler(async event => {
 
   const { appUrl } = config.public
 
-  let validateTokenUrl = `${appUrl}${RoutePath.ValidateToken()}?token=${userAccessToken}`
+  let validateTokenUrl = `${appUrl}${RoutePath.AuthValidateToken()}?token=${userAccessToken}`
   if (redirectUrl) {
     validateTokenUrl = `${validateTokenUrl}&redirectUrl=${redirectUrl}`
   }

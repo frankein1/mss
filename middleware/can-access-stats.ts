@@ -5,6 +5,6 @@ import { canViewStats } from '~/server/security/rules'
 export default defineNuxtRouteMiddleware(() => {
   const { getAuthUser: user } = useAuthStore()
   if (!canViewStats(user)) {
-    return navigateTo(RoutePath.Overview())
+    return navigateTo(RoutePath.AppOverview())
   }
 })

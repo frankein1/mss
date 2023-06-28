@@ -19,13 +19,13 @@
       class="fr-btns-group fr-btns-group--inline-lg fr-btns-group--icon-left fr-mt-2w"
     >
       <li>
-        <a
-          :href="RoutePath.Logout()"
+        <NuxtLink
+          :to="RoutePath.AuthLogout()"
           target="_self"
           class="fr-btn fr-btn--secondary fr-icon-logout-box-r-line"
         >
           Déconnexion
-        </a>
+        </NuxtLink>
       </li>
       <li>
         <button
@@ -58,7 +58,7 @@
     try {
       const user = await trpcClient.user.acceptCGU.mutate()
       auth.login(user)
-      return navigateTo(RoutePath.Overview())
+      return navigateTo(RoutePath.AppOverview())
     } catch {
       snackbar.error("L'acceptation des CGU a échoué.")
     }

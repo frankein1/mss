@@ -6,7 +6,7 @@
 <template>
   <div>
     <PageBreadcrumb
-      :links="Breadcrumb.BeneficiaryPrint(beneficiary)"
+      :links="Breadcrumb.AppBeneficiaryPrint(beneficiary)"
       class="no-print"
     />
     <AtomAlert

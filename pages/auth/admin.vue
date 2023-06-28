@@ -51,7 +51,7 @@
   })
 
   const onSubmit = handleSubmit(async input => {
-    await useFetch('/api/login/magic-email', {
+    await useFetch('/api/auth/magic-email', {
       method: 'POST',
       body: input,
       onResponse({ response }) {

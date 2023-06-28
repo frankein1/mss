@@ -63,7 +63,7 @@
                 <li>
                   <NuxtLink
                     class="fr-btn fr-btn--tertiary fr-icon-lock-line"
-                    :to="RoutePath.Login()"
+                    :to="RoutePath.AuthLogin()"
                     target="_self"
                   >
                     Se connecter à son espace

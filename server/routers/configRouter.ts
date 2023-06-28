@@ -33,7 +33,7 @@ export const configRouter = router({
 
     const params = new URLSearchParams({
       referrer: keycloakClientId,
-      referrer_uri: `${appUrl}${RoutePath.Account()}`
+      referrer_uri: `${appUrl}${RoutePath.AppAccount()}`
     })
     return `${inclusionConnectAccountUrlBase}?${params}`
   }),
