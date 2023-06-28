@@ -70,13 +70,21 @@
       message="Souhaitez-vous ajouter plus d'informations sur ce bénéficiaire ?"
       detailed-message="Renseignez des informations complémentaires concernant le bénéficiaire dès maintenant.<br />Vous pourrez également les compléter plus tard via sa fiche bénéficiaire."
       :alert-type="AlertType.Info"
-      :action="{
-        iconClass: 'fr-icon-edit-line',
-        title: 'Compléter',
-        type: 'submit'
-      }"
-      @action="complete = true"
-    />
+    >
+      <template #action>
+        <ul class="fr-btns-group fr-btns-group--icon-left">
+          <li>
+            <button
+              :class="`fr-btn fr-btn--secondary fr-icon-edit-line`"
+              type="submit"
+              @click="complete = true"
+            >
+              Compléter
+            </button>
+          </li>
+        </ul>
+      </template>
+    </AtomAlert>
 
     <button
       class="fr-btn fr-btn--lg submit-btn"
@@ -141,8 +149,12 @@
   )
 </script>
 
-<style>
+<style scoped>
   .formgroup__title {
     font-weight: bold;
+  }
+
+  .fr-btns-group {
+    align-items: center;
   }
 </style>
