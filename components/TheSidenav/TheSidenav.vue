@@ -124,7 +124,7 @@
       }
     }
 
-    return menuItems
+    return items
   })
 </script>
 
