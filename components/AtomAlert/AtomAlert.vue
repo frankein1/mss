@@ -11,10 +11,7 @@
           class="fr-alert__title"
           v-html="text"
         ></p>
-        <p
-          v-if="detailedMessage"
-          v-html="detailedMessage"
-        ></p>
+        <slot name="detailedMessage"></slot>
       </div>
       <slot name="action"></slot>
     </div>
@@ -37,9 +34,8 @@
       alertType: AlertType
       closeable?: boolean
       message: string
-      detailedMessage?: string
     }>(),
-    { closeable: false, detailedMessage: '' }
+    { closeable: false }
   )
 
   const emit = defineEmits<{
