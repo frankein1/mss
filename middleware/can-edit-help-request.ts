@@ -9,7 +9,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   try {
     const helpRequest =
       await useTrpcClient().helpRequest.getHelpRequestDetails.query({
-        id: to.params.iid as string
+        id: to.params.hrid as string
       })
 
     if (canEditHelpRequest(authStore.getAuthUser, helpRequest)) {
