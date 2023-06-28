@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Beneficiary, Notification, NotificationType } from '@prisma/client'
+  import { NotificationType } from '@prisma/client'
   import { notificationTypeOptions } from '~/client/options/notification'
   import { FilterProp } from '~/types/filter'
   import { AlertType } from '~/utils/constants/alert'
@@ -70,27 +70,20 @@
   const notificationType = ref<NotificationType | null>(null)
   const showReadNotifications = ref(false)
 
+  const queryInput = computed(() => ({
+    onlyUnread: !showReadNotifications.value,
+    type: notificationType.value
+  }))
+
   const {
     data,
     error,
     pending,
     refresh: notificationsRefresh
-  } = useAsyncData<
-    Array<{
-      beneficiary: Beneficiary
-      notification: Notification
-    }>
-  >(
-    () =>
-      useTrpcClient().notification.get.query({
-        onlyUnread: !showReadNotifications.value,
-        type: notificationType.value
-      }),
-    {
-      default: () => [],
-      watch: [showReadNotifications]
-    }
-  )
+  } = await useTrpcClient().notification.get.useQuery(queryInput, {
+    default: () => [],
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+  })
 
   const toggleReadNotificationsBtnLabel = computed(() =>
     showReadNotifications.value

@@ -35,14 +35,11 @@
     data: followupActionsEntreprises,
     error,
     pending
-  } = useAsyncData<
-    Array<{ redirected: boolean | null; helpRequested: boolean | null }>
-  >(
-    () =>
-      trpcClient.stat.getFollowupActionsEntreprisesStats.query(props.filters),
+  } = await trpcClient.stat.getFollowupActionsEntreprisesStats.useQuery(
+    props.filters,
     {
       default: () => [],
-      watch: [props.filters]
+      transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
     }
   )
 

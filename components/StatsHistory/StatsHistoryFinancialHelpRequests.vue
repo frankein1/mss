@@ -44,17 +44,13 @@
     data: financialHelpRequests,
     pending,
     error
-  } = useAsyncData<
-    Array<{
-      type: { id: string; name: string }
-      allocatedAmount: Prisma.Decimal | null
-      externalStructure: boolean | null
-      status: HelpRequestStatus
-    }>
-  >(() => trpcClient.stat.getFinancialHelpRequestsStats.query(props.filters), {
-    default: () => [],
-    watch: [props.filters]
-  })
+  } = await trpcClient.stat.getFinancialHelpRequestsStats.useQuery(
+    props.filters,
+    {
+      default: () => [],
+      transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+    }
+  )
 
   const financialHelpRequestsCount = computed(
     () => financialHelpRequests.value?.length || 0

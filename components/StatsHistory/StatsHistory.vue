@@ -201,13 +201,9 @@
     data: historyCounts,
     pending,
     error
-  } = useAsyncData(
-    () => trpcClient.stat.getHistoryCounts.query(filters.value),
-    {
-      default: () => ({ helpRequests: 0, followups: 0, firstFollowups: 0 }),
-      watch: [filters]
-    }
-  )
+  } = await trpcClient.stat.getHistoryCounts.useQuery(filters.value, {
+    default: () => ({ helpRequests: 0, followups: 0, firstFollowups: 0 })
+  })
 
   const helpRequestCount = computed(
     () => historyCounts.value?.helpRequests || 0
