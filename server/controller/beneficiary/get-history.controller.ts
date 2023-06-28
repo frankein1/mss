@@ -84,6 +84,12 @@ const historyItemInclude = (userId: string) => ({
     select: {
       name: true
     }
+  },
+  documents: {
+    select: {
+      key: true,
+      name: true
+    }
   }
 })
 

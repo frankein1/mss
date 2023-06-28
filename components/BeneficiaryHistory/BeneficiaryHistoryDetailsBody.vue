@@ -13,11 +13,10 @@
         :help-request="history"
       />
 
-      <!-- TODO: Add documents to history items -->
-      <!-- <BeneficiaryHistoryDetailsBodyDocuments
+      <BeneficiaryHistoryDetailsBodyDocuments
         v-if="history.documents?.length"
         :documents="history.documents"
-      /> -->
+      />
 
       <template v-if="history.synthesis">
         <h3 class="synthesis-title">Compte rendu</h3>
