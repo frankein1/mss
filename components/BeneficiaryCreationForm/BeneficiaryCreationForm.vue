@@ -65,11 +65,39 @@
       </div>
     </div>
 
+    <AtomAlert
+      class="fr-mt-2w fr-mb-2w"
+      message="Souhaitez-vous ajouter plus d'informations sur ce bénéficiaire ?"
+      :alert-type="AlertType.Info"
+    >
+      <template #detailedMessage
+        ><p>
+          Renseignez des informations complémentaires concernant le bénéficiaire
+          dès maintenant.<br />Vous pourrez également les compléter plus tard
+          via sa fiche bénéficiaire.
+        </p></template
+      >
+      <template #action>
+        <ul class="fr-btns-group fr-btns-group--icon-left">
+          <li>
+            <button
+              :class="`fr-btn fr-btn--secondary fr-icon-edit-line`"
+              type="submit"
+              @click="complete = true"
+            >
+              Compléter
+            </button>
+          </li>
+        </ul>
+      </template>
+    </AtomAlert>
+
     <button
       class="fr-btn fr-btn--lg submit-btn"
       type="submit"
       :submitting="isSubmitting"
       :disabled="isSubmitting"
+      @click="complete = false"
     >
       Enregistrer
     </button>
@@ -85,6 +113,7 @@
     CreateBeneficiaryInput,
     createBeneficiarySchema
   } from '~/server/schema/beneficiary.schema'
+  import { AlertType } from '~/utils/constants/alert'
 
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
@@ -95,8 +124,14 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'saveBeneficiary', beneficiary: CreateBeneficiaryInput): void
+    (
+      e: 'saveBeneficiary',
+      beneficiary: CreateBeneficiaryInput,
+      complete: boolean
+    ): void
   }>()
+
+  const complete = ref<boolean>(false)
 
   const { handleSubmit } = useForm<CreateBeneficiaryInput>({
     validationSchema: toTypedSchema(createBeneficiarySchema),
@@ -106,7 +141,7 @@
   })
 
   const onSubmit = handleSubmit(values => {
-    emit('saveBeneficiary', values)
+    emit('saveBeneficiary', values, complete.value)
   })
 
   const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
@@ -120,8 +155,12 @@
   )
 </script>
 
-<style>
+<style scoped>
   .formgroup__title {
     font-weight: bold;
+  }
+
+  .fr-btns-group {
+    align-items: center;
   }
 </style>

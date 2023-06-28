@@ -5,11 +5,16 @@
     :class="[alertClass]"
     role="alert"
   >
-    <p
-      class="fr-alert__title"
-      v-html="text"
-    ></p>
-    <p v-if="detailedMessage">{{ detailedMessage }}</p>
+    <div class="info-container">
+      <div>
+        <p
+          class="fr-alert__title"
+          v-html="text"
+        ></p>
+        <slot name="detailedMessage"></slot>
+      </div>
+      <slot name="action"></slot>
+    </div>
     <button
       v-if="closeable"
       ref="closeBtn"
@@ -29,12 +34,13 @@
       alertType: AlertType
       closeable?: boolean
       message: string
-      detailedMessage?: string
     }>(),
-    { closeable: false, detailedMessage: '' }
+    { closeable: false }
   )
 
-  const emit = defineEmits<{ (e: 'close'): void }>()
+  const emit = defineEmits<{
+    (e: 'close'): void
+  }>()
 
   const closeBtn = ref<HTMLButtonElement | null>(null)
 
@@ -62,8 +68,20 @@
   })
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
   .fr-alert {
     background-color: #fff;
+  }
+
+  .info-container {
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+
+    @include dsfr-media-query.respond-from('lg') {
+      flex-direction: row;
+    }
   }
 </style>
