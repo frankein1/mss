@@ -166,8 +166,8 @@ function initClient() {
       issuer: keycloakIssuer,
       clientId: keycloakClientId,
       clientSecret: keycloakClientSecret,
-      redirectUri: `${appUrl}${RoutePath.SsoCallback()}`,
-      postLogoutRedirectUri: `${appUrl}${RoutePath.LogoutSuccess()}`
+      redirectUri: `${appUrl}${RoutePath.ApiSsoCallback()}`,
+      postLogoutRedirectUri: `${appUrl}${RoutePath.AuthLogout()}`
     }
     client = new InclusionConnectClient(config)
   }

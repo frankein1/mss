@@ -75,10 +75,10 @@
   const user = computed(() => authStore.getAuthUser)
 
   const followupPath = computed(() =>
-    RoutePath.Beneficiary(props.followup.beneficiary.id, {
+    RoutePath.AppBeneficiary(props.followup.beneficiary.id, {
       tab: BeneficiaryTab.History,
       item: props.followup.id,
-      originPage: Route.History,
+      originPage: Route.AppHistory,
       originTab: HistoryTab.Followups
     })
   )

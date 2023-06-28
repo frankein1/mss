@@ -37,7 +37,7 @@
           <span class="fr-icon-information-line fr-fi--sm">
             <NuxtLink
               v-if="canEditStructure"
-              :to="RoutePath.StructureEdit()"
+              :to="RoutePath.AppStructureEdit()"
               target="_self"
             >
               Personnaliser les objets des demandes de ma structure.

@@ -46,7 +46,7 @@ Veuillez cliquer sur le lien ci-dessous pour accéder à votre espace Administra
 </br></br>
 <a href="${
     config.public.appUrl
-  }${RoutePath.ValidateToken()}?token=${accessToken}">Accéder à mon Mon Suivi Social</a>
+  }${RoutePath.AuthValidateToken()}?token=${accessToken}">Accéder à mon Mon Suivi Social</a>
   </br></br>
 L'équipe de Mon Suivi Social
 `

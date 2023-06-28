@@ -1,10 +1,10 @@
 <template>
   <PageContainer>
     <PageBreadcrumb
-      :links="Breadcrumb.BeneficiaryHelpRequestAdd(beneficiary)"
+      :links="Breadcrumb.AppBeneficiaryHelpRequestAdd(beneficiary)"
     />
     <PageTitle
-      :title="RouteTitle.BeneficiaryHelpRequestAdd(beneficiary || null)"
+      :title="RouteTitle.AppBeneficiaryHelpRequestAdd(beneficiary || null)"
     />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -111,7 +111,7 @@
     try {
       await trpcClient.helpRequest.add.mutate(helpRequest)
       navigateTo(
-        RoutePath.Beneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
+        RoutePath.AppBeneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
       )
     } catch {
       snackbar.error(

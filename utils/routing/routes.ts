@@ -9,27 +9,33 @@ export enum Route {
   CGUManager = 'CGUManager',
   CGUUser = 'CGUUser',
   Env = 'Env',
-  LogoutSuccess = 'LogoutSuccess',
   DisabledAccount = 'DisabledAccount',
-  Login = 'Login',
-  LoginAdmin = 'LoginAdmin',
-  ValidateToken = 'ValidateToken',
+
+  // AUTH
+  AuthLogin = 'AuthLogin',
+  AuthAdmin = 'AuthAdmin',
+  AuthValidateToken = 'AuthValidateToken',
+  AuthLogout = 'AuthLogout',
+
+  // APP
   App = 'App',
-  Overview = 'Overview',
-  Users = 'Users',
-  Stats = 'Stats',
-  Account = 'Account',
-  StructureEdit = 'StructureEdit',
-  Beneficiaries = 'Beneficiaries',
-  BeneficiariesAdd = 'BeneficiariesAdd',
-  Beneficiary = 'Beneficiary',
-  BeneficiaryPrint = 'BeneficiaryPrint',
-  BeneficiaryEdit = 'BeneficiaryEdit',
-  BeneficiaryFollowupAdd = 'BeneficiaryFollowupAdd',
-  BeneficiaryFollowupEdit = 'BeneficiaryFollowupEdit',
-  BeneficiaryHelpRequestAdd = 'BeneficiaryHelpRequestAdd',
-  BeneficiaryHelpRequestEdit = 'BeneficiaryHelpRequestEdit',
-  History = 'History',
+  AppOverview = 'AppOverview',
+  AppUsers = 'AppUsers',
+  AppStats = 'AppStats',
+  AppAccount = 'AppAccount',
+  AppStructureEdit = 'AppStructureEdit',
+  AppBeneficiaries = 'AppBeneficiaries',
+  AppBeneficiariesAdd = 'AppBeneficiariesAdd',
+  AppBeneficiary = 'AppBeneficiary',
+  AppBeneficiaryPrint = 'AppBeneficiaryPrint',
+  AppBeneficiaryEdit = 'AppBeneficiaryEdit',
+  AppBeneficiaryFollowupAdd = 'AppBeneficiaryFollowupAdd',
+  AppBeneficiaryFollowupEdit = 'AppBeneficiaryFollowupEdit',
+  AppBeneficiaryHelpRequestAdd = 'AppBeneficiaryHelpRequestAdd',
+  AppBeneficiaryHelpRequestEdit = 'AppBeneficiaryHelpRequestEdit',
+  AppHistory = 'AppHistory',
+
+  // ADMIN
   Admin = 'Admin',
   AdminLogin = 'AdminLogin',
   AdminStructures = 'AdminStructures',
@@ -48,7 +54,7 @@ const BeneficiaryRoute = (
   options?: {
     tab?: BeneficiaryTab
     item?: string
-    originPage?: Route.Overview | Route.Beneficiaries | Route.History
+    originPage?: Route.AppOverview | Route.AppBeneficiaries | Route.AppHistory
     originTab?: HistoryTab
   }
 ) => {
@@ -80,58 +86,47 @@ export const RoutePath = {
   [Route.DeclarationAccessibilite]: () => '/declaration-accessibilite',
   [Route.MentionsLegales]: () => '/mentions-legales',
   [Route.Env]: () => '/env',
-  [Route.LogoutSuccess]: () => '/logout-success',
   [Route.DisabledAccount]: () => '/disabled-account',
   [Route.CGUManager]: () => `${CGURoute}/manager`,
   [Route.CGUUser]: () => `${CGURoute}/user`,
 
-  // LOGIN
-  [Route.Login]: () => '/login',
-  [Route.LoginAdmin]: () => '/login/admin',
-  [Route.ValidateToken]: () => '/login/validate-token',
+  // AUTH
+  [Route.AuthLogin]: () => '/auth/login',
+  [Route.AuthAdmin]: () => '/auth/admin',
+  [Route.AuthValidateToken]: () => '/auth/validate-token',
+  [Route.AuthLogout]: () => '/auth/logout',
 
-  Logout: () => `${ApiKeycloak}/logout`,
-  SsoCallback: () => `${ApiKeycloak}/callback`,
+  // API
+  ApiLogout: () => `${ApiKeycloak}/logout`,
+  ApiSsoCallback: () => `${ApiKeycloak}/callback`,
 
+  // APP
   [Route.App]: () => `${AppRoute}`,
-  [Route.Overview]: () => `${AppRoute}/overview`,
-
-  [Route.Users]: () => `${AppRoute}/users`,
-
-  [Route.Stats]: () => `${AppRoute}/stats`,
-
-  [Route.Account]: () => `${AppRoute}/account`,
-
-  [Route.StructureEdit]: () => `${AppRoute}/structure/edit`,
-
-  // Beneficiaries
-  [Route.Beneficiaries]: () => BeneficiariesRoute,
-  [Route.BeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
-
-  // Beneficiary
-  [Route.Beneficiary]: BeneficiaryRoute,
-  [Route.BeneficiaryPrint]: (beneficiaryId: string) =>
+  [Route.AppOverview]: () => `${AppRoute}/overview`,
+  [Route.AppUsers]: () => `${AppRoute}/users`,
+  [Route.AppStats]: () => `${AppRoute}/stats`,
+  [Route.AppAccount]: () => `${AppRoute}/account`,
+  [Route.AppStructureEdit]: () => `${AppRoute}/structure/edit`,
+  [Route.AppBeneficiaries]: () => BeneficiariesRoute,
+  [Route.AppBeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
+  [Route.AppBeneficiary]: BeneficiaryRoute,
+  [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
-  [Route.BeneficiaryEdit]: (beneficiaryId: string) =>
+  [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/edit`,
-
-  // Beneficiary Followup
-  [Route.BeneficiaryFollowupAdd]: (beneficiaryId: string) =>
+  [Route.AppBeneficiaryFollowupAdd]: (beneficiaryId: string) =>
     `${BeneficiaryFollowupsRoute(beneficiaryId)}/add`,
-  [Route.BeneficiaryFollowupEdit]: (
+  [Route.AppBeneficiaryFollowupEdit]: (
     beneficiaryId: string,
     followupId: string
   ) => `${BeneficiaryFollowupsRoute(beneficiaryId)}/${followupId}/edit`,
-
-  // Beneficiary Help request
-  [Route.BeneficiaryHelpRequestAdd]: (beneficiaryId: string) =>
+  [Route.AppBeneficiaryHelpRequestAdd]: (beneficiaryId: string) =>
     `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/add`,
-  [Route.BeneficiaryHelpRequestEdit]: (
+  [Route.AppBeneficiaryHelpRequestEdit]: (
     beneficiaryId: string,
     helpRequestId: string
   ) => `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/${helpRequestId}/edit`,
-
-  [Route.History]: () => `${AppRoute}/history`,
+  [Route.AppHistory]: () => `${AppRoute}/history`,
 
   // ADMIN
   [Route.Admin]: () => `${AdminRoute}`,

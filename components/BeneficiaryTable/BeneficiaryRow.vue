@@ -2,7 +2,7 @@
   <NuxtLink
     v-slot="{ navigate }"
     custom
-    :to="RoutePath.Beneficiary(props.beneficiary.id)"
+    :to="RoutePath.AppBeneficiary(props.beneficiary.id)"
     target="_self"
   >
     <tr

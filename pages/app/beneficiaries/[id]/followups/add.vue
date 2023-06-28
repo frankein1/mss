@@ -1,7 +1,9 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.BeneficiaryFollowupAdd(beneficiary)" />
-    <PageTitle :title="RouteTitle.BeneficiaryFollowupAdd(beneficiary)" />
+    <PageBreadcrumb
+      :links="Breadcrumb.AppBeneficiaryFollowupAdd(beneficiary)"
+    />
+    <PageTitle :title="RouteTitle.AppBeneficiaryFollowupAdd(beneficiary)" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -90,7 +92,7 @@
     try {
       await trpcClient.followup.add.mutate(followup)
       navigateTo(
-        RoutePath.Beneficiary(beneficiaryId, {
+        RoutePath.AppBeneficiary(beneficiaryId, {
           tab: BeneficiaryTab.History
         })
       )

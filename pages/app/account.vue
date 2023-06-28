@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.Account()" />
-    <PageTitle :title="RouteTitle.Account()" />
+    <PageBreadcrumb :links="Breadcrumb.AppAccount()" />
+    <PageTitle :title="RouteTitle.AppAccount()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main

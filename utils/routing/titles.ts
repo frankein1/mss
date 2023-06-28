@@ -4,44 +4,48 @@ import { BeneficiaryNames } from '~/types/beneficiary'
 
 export const RouteTitle = {
   [Route.App]: () => 'Accueil',
-  [Route.Overview]: () => 'Tableau de bord',
+  [Route.AppOverview]: () => 'Tableau de bord',
 
-  [Route.Users]: () => 'Gérer les utilisateurs',
+  [Route.AppUsers]: () => 'Gérer les utilisateurs',
 
-  [Route.Stats]: () => 'Statistiques',
+  [Route.AppStats]: () => 'Statistiques',
 
-  [Route.Account]: () => 'Mon compte',
+  [Route.AppAccount]: () => 'Mon compte',
 
-  [Route.StructureEdit]: () => 'Modifier ma structure',
+  [Route.AppStructureEdit]: () => 'Modifier ma structure',
 
-  [Route.Beneficiaries]: () => 'Bénéficiaires',
-  [Route.BeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
+  [Route.AppBeneficiaries]: () => 'Bénéficiaires',
+  [Route.AppBeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
 
-  [Route.Beneficiary]: (beneficiary: BeneficiaryNames | null) =>
+  [Route.AppBeneficiary]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? getBeneficiaryDisplayName(beneficiary) : '',
-  [Route.BeneficiaryPrint]: () => 'Imprimer la fiche',
-  [Route.BeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
+  [Route.AppBeneficiaryPrint]: () => 'Imprimer la fiche',
+  [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${getBeneficiaryDisplayName(beneficiary)}` : '',
 
-  [Route.BeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
+  [Route.AppBeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
       : 'Entretien avec un·e bénéficiaire',
-  [Route.BeneficiaryFollowupEdit]: (beneficiary: BeneficiaryNames | null) =>
+  [Route.AppBeneficiaryFollowupEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Modifier l'entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
       : "Modifier l'entretien avec un·e bénéficiaire",
 
-  [Route.BeneficiaryHelpRequestAdd]: (beneficiary: BeneficiaryNames | null) =>
+  [Route.AppBeneficiaryHelpRequestAdd]: (
+    beneficiary: BeneficiaryNames | null
+  ) =>
     beneficiary
       ? `Instruction d'une demande d'aide pour ${getBeneficiaryDisplayName(
           beneficiary
         )}`
       : "Instruction d'une demande d'aide",
-  [Route.BeneficiaryHelpRequestEdit]: (beneficiary: BeneficiaryNames | null) =>
+  [Route.AppBeneficiaryHelpRequestEdit]: (
+    beneficiary: BeneficiaryNames | null
+  ) =>
     beneficiary
       ? `Modifier l'instruction de ${getBeneficiaryDisplayName(beneficiary)}`
       : "Modifier l'instruction d'un·e bénéficiaire",
 
-  [Route.History]: () => 'Accompagnements'
+  [Route.AppHistory]: () => 'Accompagnements'
 }

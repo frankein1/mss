@@ -76,10 +76,10 @@
   }
 
   const itemLink = computed(() =>
-    RoutePath.Beneficiary(beneficiary.value.id, {
+    RoutePath.AppBeneficiary(beneficiary.value.id, {
       tab: getItemTab(),
       item: getItemId(),
-      originPage: Route.Overview
+      originPage: Route.AppOverview
     })
   )
 

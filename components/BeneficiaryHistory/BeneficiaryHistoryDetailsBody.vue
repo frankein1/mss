@@ -104,8 +104,8 @@
 
   const editLink = computed(() => {
     const routeWithParams = props.history.isFollowup
-      ? RoutePath.BeneficiaryFollowupEdit
-      : RoutePath.BeneficiaryHelpRequestEdit
+      ? RoutePath.AppBeneficiaryFollowupEdit
+      : RoutePath.AppBeneficiaryHelpRequestEdit
     return routeWithParams(props.history.beneficiaryId, props.history.id)
   })
 

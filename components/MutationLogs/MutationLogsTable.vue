@@ -72,7 +72,7 @@
        * Used for the mutation logs of a collection
        * It defines the URL base to access the item within the application
        */
-      routeWithParams?: typeof RoutePath.Beneficiary
+      routeWithParams?: typeof RoutePath.AppBeneficiary
     }>(),
     { routeWithParams: undefined }
   )

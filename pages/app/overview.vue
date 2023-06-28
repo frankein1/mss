@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.Overview()" />
+    <PageBreadcrumb :links="Breadcrumb.AppOverview()" />
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <NotificationList />
@@ -12,6 +12,6 @@
   import { Breadcrumb, Route } from '~/utils/routing'
 
   definePageMeta({
-    name: Route.Overview
+    name: Route.AppOverview
   })
 </script>

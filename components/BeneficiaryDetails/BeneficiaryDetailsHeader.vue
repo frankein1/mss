@@ -2,7 +2,7 @@
   <ul class="fr-btns-group fr-btns-group--inline-md header-btn-group">
     <li>
       <NuxtLink
-        :to="`${RoutePath.BeneficiaryEdit(beneficiaryId)}`"
+        :to="`${RoutePath.AppBeneficiaryEdit(beneficiaryId)}`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
         target="_self"
       >
@@ -11,7 +11,7 @@
     </li>
     <li>
       <NuxtLink
-        :to="`${RoutePath.BeneficiaryPrint(beneficiaryId)}`"
+        :to="`${RoutePath.AppBeneficiaryPrint(beneficiaryId)}`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-printer-line"
         target="_self"
       >

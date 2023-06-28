@@ -101,17 +101,17 @@
       })
     } else {
       items.push({
-        to: RoutePath.Overview(),
+        to: RoutePath.AppOverview(),
         label: 'Tableau de bord',
         icon: 'fr-icon-home-4-line'
       })
       items.push({
-        to: RoutePath.Beneficiaries(),
+        to: RoutePath.AppBeneficiaries(),
         label: 'Bénéficiaires',
         icon: 'fr-icon-user-line'
       })
       items.push({
-        to: RoutePath.History(),
+        to: RoutePath.AppHistory(),
         label: 'Accompagnements',
         icon: 'fr-icon-inbox-archive-line'
       })

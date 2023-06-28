@@ -4,7 +4,7 @@
   >
     <li>
       <NuxtLink
-        :to="`${RoutePath.BeneficiaryFollowupAdd(beneficiaryId)}`"
+        :to="`${RoutePath.AppBeneficiaryFollowupAdd(beneficiaryId)}`"
         class="fr-btn fr-icon-file-add-line followup-btn"
         title="Ajouter une synthèse d'entretien"
         target="_self"
@@ -14,7 +14,7 @@
     </li>
     <li v-if="canCreateHelpRequest">
       <NuxtLink
-        :to="`${RoutePath.BeneficiaryHelpRequestAdd(beneficiaryId)}`"
+        :to="`${RoutePath.AppBeneficiaryHelpRequestAdd(beneficiaryId)}`"
         class="fr-btn fr-icon-file-add-line help-request-btn"
         title="Ajouter une instruction de demande d'aide"
         target="_self"

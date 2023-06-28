@@ -17,20 +17,19 @@
 
 <script setup lang="ts">
   import { useAuthStore } from '~/store/auth'
+  import { RoutePath } from '~/utils/routing'
 
   definePageMeta({
     layout: 'landing'
   })
 
-  useAuthStore().logout()
+  $fetch(RoutePath.ApiLogout()).then(() => {
+    useAuthStore().logout()
+  })
+
   const route = useRoute()
-  const authStore = useAuthStore()
 
   const inactive = route.query.inactive
-
-  onMounted(() => {
-    authStore.logout()
-  })
 </script>
 
 <style lang="scss" scoped>

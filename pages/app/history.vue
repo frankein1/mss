@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.History()" />
-    <PageTitle :title="RouteTitle.History()" />
+    <PageBreadcrumb :links="Breadcrumb.AppHistory()" />
+    <PageTitle :title="RouteTitle.AppHistory()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <AtomTabs>

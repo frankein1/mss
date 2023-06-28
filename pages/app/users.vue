@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.Users()" />
-    <PageTitle :title="RouteTitle.Users()" />
+    <PageBreadcrumb :links="Breadcrumb.AppUsers()" />
+    <PageTitle :title="RouteTitle.AppUsers()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main class="main-container fr-p-5w">

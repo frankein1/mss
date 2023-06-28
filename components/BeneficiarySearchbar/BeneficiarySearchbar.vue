@@ -8,7 +8,9 @@
     >
       <template #result="{ result: beneficiary }">
         <NuxtLink
-          :to="RoutePath.Beneficiary(beneficiary.id, { originPage: routeName })"
+          :to="
+            RoutePath.AppBeneficiary(beneficiary.id, { originPage: routeName })
+          "
           target="_self"
           class="fr-btn fr-btn--tertiary-no-outline result"
         >
@@ -17,7 +19,7 @@
       </template>
     </BeneficiarySearchbarInput>
     <NuxtLink
-      :to="RoutePath.BeneficiariesAdd()"
+      :to="RoutePath.AppBeneficiariesAdd()"
       class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line add-beneficiary-btn"
       target="_self"
     >
@@ -31,8 +33,8 @@
 
   const route = useRoute()
   const routeName = route.name as
-    | Route.Overview
-    | Route.Beneficiaries
+    | Route.AppOverview
+    | Route.AppBeneficiaries
     | undefined
 
   async function searchBeneficiaries(query: string) {

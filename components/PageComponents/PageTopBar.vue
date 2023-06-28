@@ -36,13 +36,13 @@
 
     menus.push({
       label: 'Mon compte',
-      to: RoutePath.Account(),
+      to: RoutePath.AppAccount(),
       icon: 'fr-icon-user-line'
     })
     if (user.value && canListUsers(user.value)) {
       menus.push({
         label: 'Utilisateurs',
-        to: RoutePath.Users(),
+        to: RoutePath.AppUsers(),
         icon: 'fr-icon-team-line'
       })
     }
@@ -50,14 +50,14 @@
     if (user.value && canEditItsOwnStructure(user.value)) {
       menus.push({
         label: 'Structure',
-        to: RoutePath.StructureEdit(),
+        to: RoutePath.AppStructureEdit(),
         icon: 'fr-icon-home-4-line'
       })
     }
     if (user) {
       menus.push({
         label: 'Déconnexion',
-        href: RoutePath.Logout(),
+        to: RoutePath.AuthLogout(),
         icon: 'fr-icon-logout-box-r-line'
       })
     }

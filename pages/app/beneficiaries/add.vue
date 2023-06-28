@@ -1,7 +1,7 @@
 <template>
   <PageContainer class="page-container">
-    <PageBreadcrumb :links="Breadcrumb.BeneficiariesAdd()" />
-    <PageTitle :title="RouteTitle.BeneficiariesAdd()">
+    <PageBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" />
+    <PageTitle :title="RouteTitle.AppBeneficiariesAdd()">
       <div>
         Les champs avec <span class="color-red">*</span> sont obligatoires
       </div>
@@ -35,9 +35,9 @@
     isSubmitting.value = false
 
     if (complete) {
-      navigateTo(RoutePath.BeneficiaryEdit(id))
+      navigateTo(RoutePath.AppBeneficiaryEdit(id))
     } else {
-      navigateTo(RoutePath.Beneficiary(id))
+      navigateTo(RoutePath.AppBeneficiary(id))
     }
   }
 </script>
