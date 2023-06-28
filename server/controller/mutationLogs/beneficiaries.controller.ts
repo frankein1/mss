@@ -4,6 +4,19 @@ import { prismaClient } from '~/server/prisma'
 import { MutationLogAction } from '~/types/mutationLogs'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 
+function sortMutationLogs(
+  { date: a }: { date: Date | null },
+  { date: b }: { date: Date | null }
+) {
+  if (!a) {
+    return 1
+  }
+  if (!b) {
+    return -1
+  }
+  return a >= b ? -1 : 1
+}
+
 export const getBeneficiariesMutationLogsHandler = async ({
   ctx: { user }
 }: {
@@ -69,5 +82,7 @@ export const getBeneficiariesMutationLogsHandler = async ({
     author: archiving.archivedBy
   }))
 
-  return [...creationMutationLogs, ...archivingMutationLogs]
+  return [...creationMutationLogs, ...archivingMutationLogs].sort(
+    sortMutationLogs
+  )
 }
