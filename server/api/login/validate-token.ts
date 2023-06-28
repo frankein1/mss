@@ -25,7 +25,16 @@ export default defineEventHandler(async event => {
 
   const config = useRuntimeConfig()
 
-  const { firstName, lastName, id, role, status, email, CGUHistory } = user
+  const {
+    firstName,
+    lastName,
+    id,
+    role,
+    status,
+    email,
+    CGUHistory,
+    structureId
+  } = user
 
   const CGUHistoryVersion = CGUHistory?.length ? CGUHistory[0].version : null
 
@@ -37,7 +46,7 @@ export default defineEventHandler(async event => {
     role,
     status,
     inclusionConnectId: '',
-    structureId: '',
+    structureId,
     CGUHistoryVersion
   }
 

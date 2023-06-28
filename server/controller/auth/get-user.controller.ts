@@ -22,7 +22,16 @@ export const getUserController = async ({ ctx }: { ctx: AppContext }) => {
     throw forbiddenError()
   }
 
-  const { firstName, lastName, id, role, status, email, CGUHistory } = user
+  const {
+    firstName,
+    lastName,
+    id,
+    role,
+    status,
+    email,
+    CGUHistory,
+    structureId
+  } = user
 
   const CGUHistoryVersion = CGUHistory?.length ? CGUHistory[0].version : null
 
@@ -34,7 +43,7 @@ export const getUserController = async ({ ctx }: { ctx: AppContext }) => {
     role,
     status,
     inclusionConnectId: '',
-    structureId: '',
+    structureId,
     CGUHistoryVersion
   }
 
