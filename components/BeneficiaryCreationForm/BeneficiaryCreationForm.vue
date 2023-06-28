@@ -68,9 +68,15 @@
     <AtomAlert
       class="fr-mt-2w fr-mb-2w"
       message="Souhaitez-vous ajouter plus d'informations sur ce bénéficiaire ?"
-      detailed-message="Renseignez des informations complémentaires concernant le bénéficiaire dès maintenant.<br />Vous pourrez également les compléter plus tard via sa fiche bénéficiaire."
       :alert-type="AlertType.Info"
     >
+      <template #detailedMessage
+        ><p>
+          Renseignez des informations complémentaires concernant le bénéficiaire
+          dès maintenant.<br />Vous pourrez également les compléter plus tard
+          via sa fiche bénéficiaire.
+        </p></template
+      >
       <template #action>
         <ul class="fr-btns-group fr-btns-group--icon-left">
           <li>
