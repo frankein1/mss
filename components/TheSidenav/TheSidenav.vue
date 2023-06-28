@@ -117,7 +117,7 @@
       })
       if (authStore.isAuthenticated && canViewStats(authStore.getAuthUser)) {
         items.push({
-          to: RoutePath.Stats(),
+          to: RoutePath.AppStats(),
           label: 'Statistiques',
           icon: 'fr-icon-pie-chart-2-line'
         })
