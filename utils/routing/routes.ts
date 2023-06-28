@@ -12,6 +12,8 @@ export enum Route {
   LogoutSuccess = 'LogoutSuccess',
   DisabledAccount = 'DisabledAccount',
   Login = 'Login',
+  LoginAdmin = 'LoginAdmin',
+  ValidateToken = 'ValidateToken',
   App = 'App',
   Overview = 'Overview',
   Users = 'Users',
@@ -27,10 +29,15 @@ export enum Route {
   BeneficiaryFollowupEdit = 'BeneficiaryFollowupEdit',
   BeneficiaryHelpRequestAdd = 'BeneficiaryHelpRequestAdd',
   BeneficiaryHelpRequestEdit = 'BeneficiaryHelpRequestEdit',
-  History = 'History'
+  History = 'History',
+  Admin = 'Admin',
+  AdminLogin = 'AdminLogin',
+  AdminStructures = 'AdminStructures',
+  AdminUsers = 'AdminUsers'
 }
 
 const AppRoute = '/app'
+const AdminRoute = '/admin'
 const ApiKeycloak = '/api/keycloak'
 const CGURoute = '/cgu'
 
@@ -78,7 +85,11 @@ export const RoutePath = {
   [Route.CGUManager]: () => `${CGURoute}/manager`,
   [Route.CGUUser]: () => `${CGURoute}/user`,
 
+  // LOGIN
   [Route.Login]: () => '/login',
+  [Route.LoginAdmin]: () => '/login/admin',
+  [Route.ValidateToken]: () => '/login/validate-token',
+
   Logout: () => `${ApiKeycloak}/logout`,
   SsoCallback: () => `${ApiKeycloak}/callback`,
 
@@ -120,5 +131,10 @@ export const RoutePath = {
     helpRequestId: string
   ) => `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/${helpRequestId}/edit`,
 
-  [Route.History]: () => `${AppRoute}/history`
+  [Route.History]: () => `${AppRoute}/history`,
+
+  // ADMIN
+  [Route.Admin]: () => `${AdminRoute}`,
+  [Route.AdminStructures]: () => `${AdminRoute}/structures`,
+  [Route.AdminUsers]: () => `${AdminRoute}/users`
 }

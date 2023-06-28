@@ -8,12 +8,16 @@ import { userRouter } from './userRouter'
 import { structureRouter } from './structureRouter'
 import { helpRequestRouter } from './helpRequestRouter'
 import { notificationRouter } from './notificationRouter'
+import { adminRouter } from './adminRouter'
 import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
 import { mutationLogsRouter } from './mutationLogsRouter'
+import { authRouter } from './authRouter'
 import { router } from '~/server/trpc'
 
 export const appRouter = router({
+  admin: adminRouter,
+  auth: authRouter,
   beneficiary: beneficiaryRouter,
   notification: notificationRouter,
   config: configRouter,
@@ -58,3 +62,7 @@ export type GetBeneficiaryDocumentOutput = GetBeneficiaryDocumentsOutput[0]
 // FIXME: Replace by mutation log type when it exists in Prisma schema
 export type GetBeneficiariesMutationLogsOutput =
   RouterOutput['mutationLogs']['beneficiaries']
+export type {
+  AdminStructuresOutput,
+  AdminUsersOutput
+} from '~/server/controller/admin'

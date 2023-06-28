@@ -1,3 +1,4 @@
+import { v4 } from 'uuid'
 import { User } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { parseInclusionConnectJwt } from '~/server/lib'
@@ -6,16 +7,12 @@ import {
   InclusionConnectClient,
   InclusionConnectToken
 } from '~/server/lib/inclusion-connect.client'
-import { signJwt } from '~/server/lib/jwt'
 import { RoutePath } from '~/utils/routing'
 
 const config = useRuntimeConfig()
-const {
-  public: { sessionCookieKey },
-  auth
-} = config
+const { auth } = config
 
-const { keycloakProvider, keycloakLabel, jwtKey } = auth
+const { keycloakProvider, keycloakLabel } = auth
 
 export default defineEventHandler(async event => {
   const { code, redirectUrl } = getQuery(event)
@@ -53,35 +50,24 @@ export default defineEventHandler(async event => {
     inclusionConnectToken
   })
 
-  const { firstName, lastName, id, role, structure, status, CGUHistory } = user
+  const userAccessToken = v4()
 
-  const jwtUser = {
-    firstName,
-    lastName,
-    id,
-    email,
-    role,
-    status,
-    inclusionConnectId: sub,
-    structureId: structure?.id || null,
-    structureType: structure?.type,
-    CGUHistoryVersion: CGUHistory.length ? CGUHistory[0].version : null
-  }
-
-  const { sessionToken, expiresIn } = signJwt(jwtUser, jwtKey)
-
-  // Set sessionToken in Cookie
-  setCookie(event, sessionCookieKey, sessionToken, {
-    httpOnly: true,
-    path: '/',
-    secure: process.env.NODE_ENV === 'production',
-    expires: new Date(Date.now() + expiresIn * 1000)
+  await prismaClient.user.update({
+    where: { id: user.id },
+    data: {
+      accessToken: userAccessToken,
+      accessTokenValidity: new Date(Date.now() + 60 * 10 * 1000)
+    }
   })
 
-  return sendRedirect(
-    event,
-    (redirectUrl as string | undefined) || RoutePath.Overview()
-  )
+  const { appUrl } = config.public
+
+  let validateTokenUrl = `${appUrl}${RoutePath.ValidateToken()}?token=${userAccessToken}`
+  if (redirectUrl) {
+    validateTokenUrl = `${validateTokenUrl}&redirectUrl=${redirectUrl}`
+  }
+
+  return sendRedirect(event, validateTokenUrl)
 })
 
 async function fetchInclusionConnnectToken(
