@@ -13,6 +13,9 @@ export default defineEventHandler(async event => {
   const user = await prismaClient.user.findFirst({
     where: {
       accessToken: token
+    },
+    include: {
+      CGUHistory: true
     }
   })
 
@@ -22,7 +25,9 @@ export default defineEventHandler(async event => {
 
   const config = useRuntimeConfig()
 
-  const { firstName, lastName, id, role, status, email } = user
+  const { firstName, lastName, id, role, status, email, CGUHistory } = user
+
+  const CGUHistoryVersion = CGUHistory?.length ? CGUHistory[0].version : null
 
   const jwtUser: JwtUser = {
     firstName,
@@ -32,7 +37,8 @@ export default defineEventHandler(async event => {
     role,
     status,
     inclusionConnectId: '',
-    structureId: ''
+    structureId: '',
+    CGUHistoryVersion
   }
 
   const { sessionToken, expiresIn } = signJwt(jwtUser, config.auth.jwtKey)

@@ -1,10 +1,5 @@
 import { z } from 'zod'
 
-export const adminLoginSchema = z.object({
-  email: z.string()
-})
-type AdminLoginInput = z.infer<typeof adminLoginSchema>
-
 export const acceptCGUSchema = z.object({
   read: z.coerce
     .boolean()
@@ -16,4 +11,4 @@ export const acceptCGUSchema = z.object({
 
 type AcceptCGUInput = z.infer<typeof acceptCGUSchema>
 
-export type { AcceptCGUInput, AdminLoginInput }
+export type { AcceptCGUInput }
