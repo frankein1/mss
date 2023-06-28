@@ -41,6 +41,7 @@ export default defineEventHandler(async event => {
   const user = await getUser(email)
 
   // [NUXT/PRISMA]: Redirect when error
+  // TODO: Unknown user page
   if (!user) {
     return sendError(event, new Error(`[IC] No user found with email ${email}`))
   }
@@ -145,10 +146,14 @@ async function upsertAccount({
 }
 
 async function getUser(email: string) {
-  return await prismaClient.user.findUniqueOrThrow({
-    where: { email },
-    include: {
-      structure: true
-    }
-  })
+  try {
+    return await prismaClient.user.findUniqueOrThrow({
+      where: { email },
+      include: {
+        structure: true
+      }
+    })
+  } catch {
+    return null
+  }
 }
