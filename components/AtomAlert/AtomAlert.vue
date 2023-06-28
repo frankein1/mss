@@ -16,15 +16,7 @@
           v-html="detailedMessage"
         ></p>
       </div>
-      <div v-if="action">
-        <button
-          :class="`fr-btn fr-btn--md fr-btn--secondary fr-btn--icon-left ${action.iconClass}`"
-          :type="action.type"
-          @click="emit('action')"
-        >
-          {{ action.title }}
-        </button>
-      </div>
+      <slot name="action"></slot>
     </div>
     <button
       v-if="closeable"
@@ -46,18 +38,12 @@
       closeable?: boolean
       message: string
       detailedMessage?: string
-      action?: {
-        title: string
-        iconClass?: string
-        type?: 'button' | 'submit' | 'reset'
-      } | null
     }>(),
-    { closeable: false, detailedMessage: '', action: null }
+    { closeable: false, detailedMessage: '' }
   )
 
   const emit = defineEmits<{
     (e: 'close'): void
-    (e: 'action'): void
   }>()
 
   const closeBtn = ref<HTMLButtonElement | null>(null)
@@ -100,12 +86,6 @@
 
     @include dsfr-media-query.respond-from('lg') {
       flex-direction: row;
-    }
-
-    div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
     }
   }
 </style>
