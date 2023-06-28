@@ -41,19 +41,22 @@
   import { DocumentType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
-  import {
-    GetBeneficiaryDocumentsOutput,
-    GetBeneficiaryOutput
-  } from '~/server/routers'
+  import { GetBeneficiaryOutput } from '~/server/routers'
 
   const route = useRoute()
 
   const props = defineProps<{ beneficiary: GetBeneficiaryOutput }>()
 
   const { data: documents, refresh } =
-    useAsyncData<GetBeneficiaryDocumentsOutput>(fetchDocuments, {
-      default: () => []
-    })
+    await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery(
+      {
+        beneficiaryId: props.beneficiary.id
+      },
+      {
+        default: () => [],
+        transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+      }
+    )
 
   onMounted(async () => {
     const tab = route.hash.slice(1)
@@ -65,12 +68,6 @@
       focusAndScrollTo(`#document-${item}`)
     }
   })
-
-  function fetchDocuments() {
-    return useTrpcClient().beneficiary.getBeneficiaryDocuments.query({
-      beneficiaryId: props.beneficiary.id
-    })
-  }
 
   function getDocumentsByType(type: DocumentType) {
     return (

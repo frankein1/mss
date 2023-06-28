@@ -42,7 +42,6 @@
   import { AlertType } from '~/utils/constants/alert'
   import { useFiltersStore } from '~/store/filters'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
-  import { GetHelpRequestsOutput, ErrorOutput } from '~/server/routers'
 
   const filtersStore = useFiltersStore()
 
@@ -54,27 +53,25 @@
   const { updatePagination } = usePagination(page, perPage)
   const { onSort } = useSort<HelpRequestSort>(orderBy)
 
+  const queryInput = computed(() => ({
+    page: page.value,
+    perPage: perPage.value,
+    orderBy: orderBy.value,
+    filters: filters.value
+  }))
+
   const {
     data: helpRequestsRequest,
     pending,
     error
-  } = await useAsyncData<GetHelpRequestsOutput, ErrorOutput>(
-    () =>
-      useTrpcClient().helpRequest.getHelpRequests.query({
-        page: page.value,
-        perPage: perPage.value,
-        orderBy: orderBy.value,
-        filters: filters.value
-      }),
-    {
-      default: () => ({
-        helpRequests: [],
-        count: 0,
-        totalPages: 0
-      }),
-      watch: [filters, page, perPage, orderBy]
-    }
-  )
+  } = await useTrpcClient().helpRequest.getHelpRequests.useQuery(queryInput, {
+    default: () => ({
+      helpRequests: [],
+      count: 0,
+      totalPages: 0
+    }),
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+  })
 
   const helpRequestsCount = computed(
     () => helpRequestsRequest.value?.count || 0

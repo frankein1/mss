@@ -27,7 +27,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { Minister } from '@prisma/client'
   import { ministerLabels } from '~/client/options/ministry'
   import { getStatLabel } from '~/client/options/stat'
   import { StatFilterInput } from '~/server/schema'
@@ -45,11 +44,11 @@
     data: ministreCounts,
     pending,
     error
-  } = useAsyncData<Array<{ ministre: Minister | null; _count: number }>>(
-    () => trpcClient.stat.getHelpRequestMinistreStats.query(props.filters),
+  } = await trpcClient.stat.getHelpRequestMinistreStats.useQuery(
+    props.filters,
     {
       default: () => [],
-      watch: [props.filters]
+      transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
     }
   )
 

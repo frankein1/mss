@@ -32,7 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiarySocioProfessionalCategory } from '@prisma/client'
   import { beneficiarySocioProfessionalCategoryLabels } from '~/client/options/beneficiary'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
@@ -50,14 +49,9 @@
     data: CSPCounts,
     pending,
     error
-  } = useAsyncData<
-    Array<{
-      socioProfessionalCategory: BeneficiarySocioProfessionalCategory | null
-      _count: number
-    }>
-  >(() => trpcClient.stat.getCSPStats.query(props.filters), {
+  } = await trpcClient.stat.getCSPStats.useQuery(props.filters, {
     default: () => [],
-    watch: [props.filters]
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
   })
 
   const CSPStats = computed(
