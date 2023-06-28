@@ -1,18 +1,22 @@
 import { signJwt } from '~/server/lib/jwt'
 import { prismaClient } from '~/server/prisma'
-import { forbiddenError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
 
 export default defineEventHandler(async event => {
   const { token } = await readBody(event)
 
   if (!token) {
-    throw forbiddenError()
+    return {
+      error: 'Aucun jeton fourni. Merci de vous authentifier à nouveau.'
+    }
   }
 
   const user = await prismaClient.user.findFirst({
     where: {
-      accessToken: token
+      accessToken: token,
+      accessTokenValidity: {
+        gte: new Date()
+      }
     },
     include: {
       CGUHistory: true
@@ -20,7 +24,10 @@ export default defineEventHandler(async event => {
   })
 
   if (!user) {
-    throw forbiddenError()
+    return {
+      error:
+        "Votre jeton n'est plus valide. Merci de vous authentifier à nouveau."
+    }
   }
 
   const config = useRuntimeConfig()
@@ -61,5 +68,15 @@ export default defineEventHandler(async event => {
     expires: new Date(Date.now() + expiresIn * 1000)
   })
 
-  return user
+  await prismaClient.user.update({
+    where: {
+      id: user.id
+    },
+    data: {
+      accessToken: null,
+      accessTokenValidity: null
+    }
+  })
+
+  return { user: jwtUser }
 })
