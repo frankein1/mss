@@ -52,7 +52,6 @@ export default defineEventHandler(async event => {
     email,
     role,
     status,
-    inclusionConnectId: '',
     structureId,
     CGUHistoryVersion
   }

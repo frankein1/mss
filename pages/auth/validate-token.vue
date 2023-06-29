@@ -5,7 +5,11 @@
         v-if="user"
         class="fr-col fr-col-lg-8 fr-col-offset-lg-2 text-center"
       >
-        <h1 class="fr-text--regular">Bonjour {{ name }}!</h1>
+        <h1 class="fr-text--regular">
+          <span v-if="pending">Jeton en cours de vérification...</span>
+          <span v-else-if="user">Bonjour {{ name }}!</span>
+          <span v-else-if="errorMessage">{{ errorMessage }}</span>
+        </h1>
       </div>
     </div>
   </main>
@@ -21,20 +25,32 @@
   const store = useAuthStore()
   const token = route.query.token as string
 
-  const user = await $fetch<JwtUser>('/api/login/validate-token', {
-    method: 'POST',
-    body: JSON.stringify({ token })
-  })
+  type ValidateTokenOutput = {
+    user: JwtUser
+    error: string
+  }
 
-  onMounted(() => {
-    if (user) {
-      store.login(user)
+  const pending = ref(true)
+  const errorMessage = ref<string>()
+  const user = ref<JwtUser>()
+
+  if (process.client) {
+    const res = await $fetch<ValidateTokenOutput>('/api/auth/validate-token', {
+      method: 'POST',
+      body: JSON.stringify({ token })
+    })
+    if (res.error) {
+      errorMessage.value = res.error
+    }
+    if (res.user) {
+      user.value = res.user
+      store.login(user.value)
       navigateTo(useHomePage())
     }
-  })
+  }
 
   const name = computed(() => {
-    return getUserDisplayName(user)
+    return user.value ? getUserDisplayName(user.value) : ''
   })
 </script>
 

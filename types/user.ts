@@ -4,7 +4,6 @@ export type JwtUser = Pick<
   PrismaUser,
   'id' | 'lastName' | 'firstName' | 'email' | 'role' | 'status' | 'structureId'
 > & {
-  inclusionConnectId: string
   structureType?: StructureType
   CGUHistoryVersion: string | null
 }

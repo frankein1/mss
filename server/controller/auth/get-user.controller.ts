@@ -42,7 +42,6 @@ export const getUserController = async ({ ctx }: { ctx: AppContext }) => {
     email,
     role,
     status,
-    inclusionConnectId: '',
     structureId,
     CGUHistoryVersion
   }

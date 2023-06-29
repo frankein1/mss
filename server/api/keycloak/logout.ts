@@ -26,12 +26,10 @@ export default defineEventHandler(async event => {
     return redirect(event, client.getPostLogoutRedirectUri())
   }
 
-  const account = await prismaClient.account.findUnique({
+  const account = await prismaClient.account.findFirst({
     where: {
-      provider_providerAccountId: {
-        provider: config.auth.keycloakProvider,
-        providerAccountId: jwtUser.inclusionConnectId
-      }
+      userId: user.id,
+      provider: config.auth.keycloakProvider
     }
   })
   if (!account) {
