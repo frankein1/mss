@@ -16,43 +16,51 @@
         :key="structure.id"
         class="structures__row"
       >
-        <div class="structures__name">
-          <div>{{ structure.name }}</div>
-          <div class="type">{{ structure.type }}</div>
-          <div>{{ structure.siret }}</div>
-        </div>
-        <div class="structures__address">
-          <div>{{ structure.address }}</div>
-          <div>
-            {{ `${structure.zipcode} ${structure.city}` }}
+        <div class="structures__infos">
+          <div class="structures__name">
+            <div>{{ structure.name }}</div>
+            <div class="type">{{ structure.type }}</div>
+            <div>{{ structure.siret }}</div>
+          </div>
+          <div class="structures__address">
+            <div>{{ structure.address }}</div>
+            <div>
+              {{ `${structure.zipcode} ${structure.city}` }}
+            </div>
+          </div>
+          <div class="structures__contact">
+            <div>{{ structure.phone }}</div>
+            <div class="email">
+              {{ structure.email }}
+            </div>
+          </div>
+          <div class="structures__detail">
+            <div>
+              {{ structure.inhabitantsNumber }}
+              {{ structure.inseeCode }}
+            </div>
+          </div>
+          <div class="structures__count">
+            <div>
+              {{ `${structure._count.beneficiaries} bénéficiaires` }}
+            </div>
+            <div>
+              {{ `${structure._count.users || 0} utilisateurs` }}
+            </div>
           </div>
         </div>
-        <div class="structures__contact">
-          <div>{{ structure.phone }}</div>
-          <div class="email">
-            {{ structure.email }}
-          </div>
-        </div>
-        <div class="structures__detail">
-          <div>
-            {{ structure.inhabitantsNumber }}
-            {{ structure.inseeCode }}
-          </div>
-        </div>
-        <div class="structures__count">
-          <div>
-            {{ `${structure._count.beneficiaries} bénéficiaires` }}
-          </div>
-          <div>
-            {{ `${structure._count.users || 0} utilisateurs` }}
-          </div>
-        </div>
+        <NuxtLink
+          :to="RoutePath.AdminStructure(structure.id)"
+          class="fr-link"
+          >Modifier</NuxtLink
+        >
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
   import { AdminStructuresOutput } from '~/server/routers'
+  import { RoutePath } from '~/utils/routing'
 
   const search = ref<string>()
 
@@ -75,9 +83,12 @@
 
 <style lang="scss" scoped>
   .structures__row {
-    display: flex;
     padding: 1rem;
     border-bottom: 1px blue solid;
+  }
+
+  .structures__infos {
+    display: flex;
   }
 
   .structures__name {
