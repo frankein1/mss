@@ -32,7 +32,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryAccommodationMode } from '@prisma/client'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
@@ -50,14 +49,9 @@
     data: accommodationModesCounts,
     pending,
     error
-  } = useAsyncData<
-    Array<{
-      accommodationMode: BeneficiaryAccommodationMode | null
-      _count: number
-    }>
-  >(() => trpcClient.stat.getAccommodationModeStats.query(props.filters), {
+  } = await trpcClient.stat.getAccommodationModeStats.useQuery(props.filters, {
     default: () => [],
-    watch: [props.filters]
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
   })
 
   const accommodationModesStats = computed(

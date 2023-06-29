@@ -26,7 +26,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupMedium } from '@prisma/client'
   import { followupMediumLabels } from '~/client/options/followup'
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
@@ -43,13 +42,10 @@
     data: followupMediumCounts,
     error,
     pending
-  } = useAsyncData<Array<{ medium: FollowupMedium; _count: number }>>(
-    () => trpcClient.stat.getFollowupMediumStats.query(props.filters),
-    {
-      default: () => [],
-      watch: [props.filters]
-    }
-  )
+  } = await trpcClient.stat.getFollowupMediumStats.useQuery(props.filters, {
+    default: () => [],
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+  })
 
   const followupMediumStats = computed(
     () =>

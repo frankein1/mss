@@ -27,7 +27,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupStatus } from '@prisma/client'
   import { followupStatusLabels } from '~/client/options/followup'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
@@ -44,13 +43,10 @@
     data: statusCounts,
     error,
     pending
-  } = useAsyncData<Array<{ status: FollowupStatus; _count: number }>>(
-    () => trpcClient.stat.getFollowupStatusStats.query(props.filters),
-    {
-      default: () => [],
-      watch: [props.filters]
-    }
-  )
+  } = await trpcClient.stat.getFollowupStatusStats.useQuery(props.filters, {
+    default: () => [],
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+  })
 
   const statusStats = computed(
     () =>

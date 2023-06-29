@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { AdminGetStructuresInput } from '~/server/schema'
 
@@ -50,7 +49,3 @@ export const getStructuresController = async ({
 
   return { structures }
 }
-
-export type AdminStructuresOutput = Prisma.PromiseReturnType<
-  typeof getStructuresController
->

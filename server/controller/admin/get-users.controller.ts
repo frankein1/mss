@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { AdminGetUsersInput } from '~/server/schema'
 
@@ -32,7 +31,3 @@ export const getUsersController = async ({
 
   return { users }
 }
-
-export type AdminUsersOutput = Prisma.PromiseReturnType<
-  typeof getUsersController
->
