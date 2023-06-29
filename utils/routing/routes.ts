@@ -37,6 +37,7 @@ export enum Route {
 
   // ADMIN
   Admin = 'Admin',
+  AdminOverview = 'AdminOverview',
   AdminLogin = 'AdminLogin',
   AdminStructures = 'AdminStructures',
   AdminUsers = 'AdminUsers'
@@ -130,6 +131,7 @@ export const RoutePath = {
 
   // ADMIN
   [Route.Admin]: () => `${AdminRoute}`,
+  [Route.AdminOverview]: () => `${AdminRoute}/overview`,
   [Route.AdminStructures]: () => `${AdminRoute}/structures`,
   [Route.AdminUsers]: () => `${AdminRoute}/users`
 }

@@ -2,7 +2,8 @@ import { protectedProcedure, router } from '../trpc'
 import { adminGetStructuresSchema, adminGetUsersSchema } from '~/server/schema'
 import {
   getStructuresController,
-  getUsersController
+  getUsersController,
+  getOverviewController
 } from '~/server/controller/admin'
 
 export const adminRouter = router({
@@ -11,5 +12,6 @@ export const adminRouter = router({
     .query(getStructuresController),
   getUsers: protectedProcedure
     .input(adminGetUsersSchema)
-    .query(getUsersController)
+    .query(getUsersController),
+  getOverview: protectedProcedure.query(getOverviewController)
 })

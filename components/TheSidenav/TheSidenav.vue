@@ -90,6 +90,11 @@
     const items = []
     if (authStore.isAdmin) {
       items.push({
+        to: RoutePath.AdminOverview(),
+        label: 'Tableau de bord',
+        icon: 'fr-icon-home-4-line'
+      })
+      items.push({
         to: RoutePath.AdminStructures(),
         label: 'Structures',
         icon: 'fr-icon-home-4-line'
