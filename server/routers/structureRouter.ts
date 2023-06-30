@@ -1,7 +1,7 @@
 import {
   getCurrentUserStructureHandler,
   editCurrentUserStructureHandler
-} from '~/server/controller/structure.controller'
+} from '~/server/controller/structure'
 import { protectedProcedure, router } from '~/server/trpc'
 import { editCurrentUserStructureSchema } from '~/server/schema'
 

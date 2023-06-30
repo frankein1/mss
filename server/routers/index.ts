@@ -8,7 +8,7 @@ import { userRouter } from './userRouter'
 import { structureRouter } from './structureRouter'
 import { helpRequestRouter } from './helpRequestRouter'
 import { notificationRouter } from './notificationRouter'
-import { adminRouter } from './adminRouter'
+import { adminRouter } from './admin/router'
 import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
 import { mutationLogsRouter } from './mutationLogsRouter'
@@ -62,3 +62,5 @@ export type GetBeneficiaryDocumentOutput = GetBeneficiaryDocumentsOutput[0]
 // FIXME: Replace by mutation log type when it exists in Prisma schema
 export type GetBeneficiariesMutationLogsOutput =
   RouterOutput['mutationLogs']['beneficiaries']
+
+export * from '~/server/routers/admin'

@@ -1,3 +1,4 @@
+import { UserActivityType } from '@prisma/client'
 import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaires'
 import {
   canEditBeneficiary,
@@ -15,6 +16,7 @@ import {
   getBeneficiarySecurityTarget,
   getUserStructureType
 } from '~/server/security'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 export const updateBeneficiaryHandler = async ({
   input,
@@ -138,8 +140,17 @@ export const updateBeneficiaryHandler = async ({
     }
   }
 
-  return await prismaClient.beneficiary.update({
+  const updatedBeneficiary = await prismaClient.beneficiary.update({
     where: { id },
     data
   })
+
+  await addUserActivity({
+    userId: user.id,
+    activity: UserActivityType.UPDATE,
+    object: 'Beneficiary',
+    objectId: beneficiary.id
+  })
+
+  return updatedBeneficiary
 }

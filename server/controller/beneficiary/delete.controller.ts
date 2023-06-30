@@ -1,3 +1,4 @@
+import { UserActivityType } from '@prisma/client'
 import {
   ProtectedAppContext,
   forbiddenError,
@@ -6,6 +7,7 @@ import {
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { canDeleteBeneficiary } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 export const deleteBeneficiaryHandler = async ({
   input: { id },
@@ -25,4 +27,11 @@ export const deleteBeneficiaryHandler = async ({
   }
 
   await prismaClient.beneficiary.delete({ where: { id } })
+
+  await addUserActivity({
+    userId: user.id,
+    activity: UserActivityType.DELETE,
+    object: 'Beneficiary',
+    objectId: beneficiary.id
+  })
 }
