@@ -17,6 +17,7 @@
         defaultLegallyNotRequiredSelectedFollowupTypes
       "
       :custom-followup-types="customFollowupTypes"
+      :admin-view="adminView"
     />
 
     <button
@@ -25,7 +26,7 @@
       :disabled="isSubmitting"
       :submitting="isSubmitting"
     >
-      Modifier ma structure
+      Modifier {{ adminView ? 'la' : 'ma' }} structure
     </button>
   </form>
 </template>
@@ -41,10 +42,16 @@
   import { editCurrentUserStructureSchema } from '~/server/schema'
   import { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
-  const props = defineProps<{
-    structure: StructureWithFollowupTypesWithSupportsCount
-    isSubmitting: boolean
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      structure: StructureWithFollowupTypesWithSupportsCount
+      isSubmitting: boolean
+      adminView?: boolean
+    }>(),
+    {
+      adminView: false
+    }
+  )
 
   const emit = defineEmits<{
     (e: 'updateStructure', structure: EditCurrentUserStructureInput): void

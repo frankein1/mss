@@ -7,7 +7,8 @@
       id="organisation-follow-up-types-legend"
       class="fr-fieldset__legend fr-h4"
     >
-      Types d'accompagnement proposés par ma structure
+      Types d'accompagnement proposés par
+      {{ adminView ? 'la' : 'ma' }} structure
     </legend>
     <div class="fr-fieldset__element">
       <VeeMultiSelect
@@ -65,12 +66,18 @@
   import { toOptions } from '~/utils/options'
   import { structureFieldLabels } from '~/client/labels'
 
-  const props = defineProps<{
-    structureFollowupTypes: FollowupTypeWithSupportsCount[]
-    defaultLegallyRequiredSelectedFollowupTypes: DefaultLegallyRequiredFollowupTypeWithSupportsCount[]
-    defaultLegallyNotRequiredSelectedFollowupTypes: DefaultLegallyNotRequiredFollowupTypeWithSupportsCount[]
-    customFollowupTypes: CustomFollowupTypeWithSupportsCount[]
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      structureFollowupTypes: FollowupTypeWithSupportsCount[]
+      defaultLegallyRequiredSelectedFollowupTypes: DefaultLegallyRequiredFollowupTypeWithSupportsCount[]
+      defaultLegallyNotRequiredSelectedFollowupTypes: DefaultLegallyNotRequiredFollowupTypeWithSupportsCount[]
+      customFollowupTypes: CustomFollowupTypeWithSupportsCount[]
+      adminView?: boolean
+    }>(),
+    {
+      adminView: false
+    }
+  )
 
   const isAdding = ref(false)
   const createdFollowupTypes = ref<string[]>([])
