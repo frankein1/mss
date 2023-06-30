@@ -1,7 +1,8 @@
-import { Account } from '@prisma/client'
+import { Account, UserActivityType } from '@prisma/client'
 import { H3Event } from 'h3'
 import { getInclusionConnectClient } from '~/server/lib'
 import { prismaClient } from '~/server/prisma'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { parseJwt } from '~/utils/parseJwt'
 
 export default defineEventHandler(async event => {
@@ -25,6 +26,13 @@ export default defineEventHandler(async event => {
   if (!user) {
     return redirect(event, client.getPostLogoutRedirectUri())
   }
+
+  await addUserActivity({
+    userId: user.id,
+    activity: UserActivityType.LOGOUT,
+    object: 'User',
+    objectId: user.id
+  })
 
   const account = await prismaClient.account.findFirst({
     where: {

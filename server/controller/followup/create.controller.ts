@@ -1,4 +1,4 @@
-import { Prisma, FollowupMedium } from '@prisma/client'
+import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
 import {
   ProtectedAppContext,
   invalidError,
@@ -14,6 +14,7 @@ import {
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 export async function prepareFollowupData({
   input,
@@ -79,7 +80,7 @@ async function createTransaction(
 ) {
   const data = await prepareFollowupData({ input, transaction, user })
 
-  return await transaction.followup.create({
+  const fu = await transaction.followup.create({
     data,
     include: {
       beneficiary: {
@@ -90,6 +91,15 @@ async function createTransaction(
       }
     }
   })
+
+  await addUserActivity({
+    transaction,
+    userId: user.id,
+    activity: UserActivityType.CREATE,
+    object: 'Followup',
+    objectId: fu.id
+  })
+  return fu
 }
 
 export const addFollowupHandler = async ({

@@ -1,3 +1,4 @@
+import { UserActivityType } from '@prisma/client'
 import {
   ProtectedAppContext,
   forbiddenError,
@@ -5,6 +6,7 @@ import {
 } from '~/server/trpc'
 import { canDeleteFollowup } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 function getFollowup(id: string) {
   return prismaClient.followup.findUnique({
@@ -37,4 +39,11 @@ export const deleteFollowupHandler = async ({
   }
 
   await prismaClient.followup.delete({ where: { id } })
+
+  await addUserActivity({
+    userId: user.id,
+    activity: UserActivityType.DELETE,
+    object: 'Followup',
+    objectId: id
+  })
 }

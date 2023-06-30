@@ -1,4 +1,4 @@
-import { Prisma, FollowupMedium } from '@prisma/client'
+import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
@@ -17,6 +17,7 @@ import {
   FollowupWithBeneficiaryDocumentsAndTypes,
   getFollowupWithBeneficiaryDocumentsAndTypes
 } from '~/server/query/followups'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 export async function prepareFollowupData({
   input,
@@ -91,7 +92,7 @@ async function updateTransaction(
     target
   })
 
-  return await transaction.followup.update({
+  const fu = await transaction.followup.update({
     where: { id: input.id },
     data,
     include: {
@@ -103,6 +104,15 @@ async function updateTransaction(
       }
     }
   })
+
+  await addUserActivity({
+    transaction,
+    userId: user.id,
+    activity: UserActivityType.UPDATE,
+    object: 'Followup',
+    objectId: input.id
+  })
+  return fu
 }
 
 export const updateFollowupHandler = async ({
