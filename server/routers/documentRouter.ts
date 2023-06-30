@@ -2,7 +2,7 @@ import {
   createViewUrlHandler,
   deleteDocumentHandler,
   editDocumentHandler
-} from '../controller/document.controller'
+} from '../controller/document'
 import {
   editDocumentSchema,
   createViewUrlSchema,

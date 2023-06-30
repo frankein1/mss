@@ -1,5 +1,7 @@
+import { UserActivityType } from '@prisma/client'
 import { signJwt } from '~/server/lib/jwt'
 import { prismaClient } from '~/server/prisma'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { JwtUser } from '~/types/user'
 
 export default defineEventHandler(async event => {
@@ -75,6 +77,13 @@ export default defineEventHandler(async event => {
       accessToken: null,
       accessTokenValidity: null
     }
+  })
+
+  await addUserActivity({
+    userId: user.id,
+    activity: UserActivityType.LOGIN,
+    object: 'User',
+    objectId: user.id
   })
 
   return { user: jwtUser }

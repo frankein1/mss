@@ -1,3 +1,4 @@
+import { UserActivityType } from '@prisma/client'
 import {
   ProtectedAppContext,
   forbiddenError,
@@ -5,6 +6,7 @@ import {
 } from '~/server/trpc'
 import { canDeleteHelpRequest } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 function getHelpRequest(id: string) {
   return prismaClient.helpRequest.findUnique({
@@ -37,4 +39,11 @@ export const deleteHelpRequestHandler = async ({
   }
 
   await prismaClient.helpRequest.delete({ where: { id } })
+
+  await addUserActivity({
+    userId: user.id,
+    activity: UserActivityType.DELETE,
+    object: 'HelpRequest',
+    objectId: helpRequest.id
+  })
 }
