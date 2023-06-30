@@ -1,4 +1,4 @@
-import { Prisma, StructureType } from '@prisma/client'
+import { Prisma, StructureType, UserActivityType } from '@prisma/client'
 import {
   ProtectedAppContext,
   invalidError,
@@ -11,6 +11,7 @@ import { getBeneficiarySecurityTarget } from '~/server/security'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareInstructorOrganization } from '~/utils/instructorOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 export async function prepareHelpRequestData({
   input,
@@ -75,6 +76,14 @@ const createTransaction = async (
         }
       }
     }
+  })
+
+  await addUserActivity({
+    transaction,
+    userId: user.id,
+    activity: UserActivityType.CREATE,
+    object: 'HelpRequest',
+    objectId: helpRequest.id
   })
 
   return { helpRequest }

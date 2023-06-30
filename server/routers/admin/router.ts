@@ -1,4 +1,4 @@
-import { protectedProcedure, router } from '../trpc'
+import { protectedProcedure, router } from '../../trpc'
 import {
   adminEditStructureSchema,
   adminGetStructuresSchema,

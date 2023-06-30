@@ -4,27 +4,6 @@ import type { EditCurrentUserStructureInput } from '~/server/schema'
 import { canEditItsOwnStructure } from '~/server/security/rules'
 import { editFollowupTypes } from '~/utils/structure'
 
-export const getCurrentUserStructureHandler = async ({
-  ctx: { user }
-}: {
-  ctx: ProtectedAppContext
-}) => {
-  const { structureId } = user
-
-  return await prismaClient.structure.findUnique({
-    where: { id: structureId },
-    include: {
-      followupTypes: {
-        include: {
-          _count: {
-            select: { followups: true, helpRequests: true }
-          }
-        }
-      }
-    }
-  })
-}
-
 export const editCurrentUserStructureHandler = async ({
   ctx: { user },
   input

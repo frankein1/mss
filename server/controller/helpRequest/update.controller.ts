@@ -1,4 +1,4 @@
-import { Prisma, StructureType } from '@prisma/client'
+import { Prisma, StructureType, UserActivityType } from '@prisma/client'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
@@ -9,6 +9,7 @@ import {
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareInstructorOrganization } from '~/utils/instructorOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 function getHelpRequest(id: string) {
   return prismaClient.helpRequest.findUnique({
@@ -101,6 +102,14 @@ async function updateTransaction(
       }
     }
   })
+
+  await addUserActivity({
+    userId: user.id,
+    activity: UserActivityType.UPDATE,
+    object: 'HelpRequest',
+    objectId: helpRequest.id
+  })
+
   return { helpRequest }
 }
 

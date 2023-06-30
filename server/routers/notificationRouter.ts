@@ -1,7 +1,7 @@
 import {
   updateNotificationHandler,
   getNotificationHandler
-} from '~/server/controller/notification.controller'
+} from '~/server/controller/notification'
 import { protectedProcedure, router } from '~/server/trpc'
 import {
   updateNotificationSchema,

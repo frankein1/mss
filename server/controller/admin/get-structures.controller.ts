@@ -38,6 +38,12 @@ export const getStructuresController = async ({
       email: true,
       inhabitantsNumber: true,
       inseeCode: true,
+      userActivities: {
+        take: 1,
+        orderBy: {
+          date: 'desc'
+        }
+      },
       siret: true,
       _count: {
         select: {

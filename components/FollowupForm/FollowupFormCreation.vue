@@ -38,7 +38,6 @@
     validationSchema: toTypedSchema(addFollowupSchema),
     initialValues: {
       beneficiaryId: props.beneficiaryId,
-      // FIXME: date type error
       date: new Date(),
       status: FollowupStatus.Done
     }
