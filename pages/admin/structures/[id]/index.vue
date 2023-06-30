@@ -31,6 +31,7 @@
 </template>
 
 <script setup lang="ts">
+  import { AdminEditStructureInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
 
   const route = useRoute()
@@ -49,14 +50,12 @@
     id: structureId
   })
 
-  // TODO: updatedStructure parameter with its type
-  function onUpdateStructure() {
+  async function onUpdateStructure(updatedStructure: AdminEditStructureInput) {
     isSubmitting.value = true
     try {
-      // TODO: mutation
-      // const res = await trpcClient.admin.editStructure.mutate()
+      const res = await trpcClient.admin.editStructure.mutate(updatedStructure)
 
-      // structure.value = res
+      structure.value = res
       snackbar.success('Les informations de la structure ont été mises à jour.')
     } catch {
       snackbar.error('La mise à jour de la structure a échoué.', () =>

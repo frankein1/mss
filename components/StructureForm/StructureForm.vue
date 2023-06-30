@@ -38,8 +38,14 @@
     DefaultLegallyRequiredFollowupTypeWithSupportsCount,
     StructureWithFollowupTypesWithSupportsCount
   } from './types'
-  import type { EditCurrentUserStructureInput } from '~/server/schema'
-  import { editCurrentUserStructureSchema } from '~/server/schema'
+  import type {
+    AdminEditStructureInput,
+    EditCurrentUserStructureInput
+  } from '~/server/schema'
+  import {
+    editCurrentUserStructureSchema,
+    adminEditStructureSchema
+  } from '~/server/schema'
   import { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
   const props = withDefaults(
@@ -54,7 +60,10 @@
   )
 
   const emit = defineEmits<{
-    (e: 'updateStructure', structure: EditCurrentUserStructureInput): void
+    (
+      e: 'updateStructure',
+      structure: EditCurrentUserStructureInput & AdminEditStructureInput
+    ): void
   }>()
 
   const defaultLegallyRequiredSelectedFollowupTypes = computed(() =>
@@ -82,21 +91,27 @@
     ...customFollowupTypes.value.map(({ id }) => id)
   ])
 
-  const { handleSubmit, setFieldValue } =
-    useForm<EditCurrentUserStructureInput>({
-      validationSchema: toTypedSchema(editCurrentUserStructureSchema),
-      initialValues: {
-        name: props.structure.name,
-        zipcode: props.structure.zipcode,
-        city: props.structure.city,
-        address: props.structure.address,
-        phone: props.structure.phone,
-        email: props.structure.email,
-        legallyRequiredFollowupTypes: initialLegallyRequiredSelectedIds.value,
-        legallyNotRequiredFollowupTypes:
-          initialLegallyNotRequiredSelectedIds.value
-      }
-    })
+  const { handleSubmit, setFieldValue } = useForm<
+    EditCurrentUserStructureInput & AdminEditStructureInput
+  >({
+    validationSchema: toTypedSchema(
+      props.adminView
+        ? adminEditStructureSchema
+        : editCurrentUserStructureSchema
+    ),
+    initialValues: {
+      structureId: props.adminView ? props.structure.id : undefined,
+      name: props.structure.name,
+      zipcode: props.structure.zipcode,
+      city: props.structure.city,
+      address: props.structure.address,
+      phone: props.structure.phone,
+      email: props.structure.email,
+      legallyRequiredFollowupTypes: initialLegallyRequiredSelectedIds.value,
+      legallyNotRequiredFollowupTypes:
+        initialLegallyNotRequiredSelectedIds.value
+    }
+  })
 
   const onUpdateStructure = handleSubmit(structure => {
     emit('updateStructure', structure)
