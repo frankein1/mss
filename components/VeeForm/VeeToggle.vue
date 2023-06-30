@@ -1,9 +1,3 @@
-<!--
-  FIXME: VeeToggle is unstable, at least in development mode. When accessing
-  directly to page containing a VeeToggle, the component seems to be wrongly initialized leading to a value toggle and validation
-  instability.
--->
-
 <template>
   <div class="fr-toggle">
     <input

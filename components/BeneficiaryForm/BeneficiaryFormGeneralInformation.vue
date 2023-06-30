@@ -79,7 +79,7 @@
       <VeeInput
         name="general.zipcode"
         :label="beneficiaryFieldLabels.zipcode"
-        @change-value="zipcode = $event"
+        @change-value="setZipcodeValue($event)"
       />
       <VeeCityInput
         name="general.city"
@@ -90,7 +90,7 @@
       <VeeRegionInput
         name="general.region"
         :label="beneficiaryFieldLabels.region"
-        @region-selected="region = $event"
+        @region-selected="setRegionvalue($event)"
       />
       <VeeSelect
         v-if="isMinistryAgent"
@@ -175,10 +175,13 @@
     GeoApiGouvFrRegion
   } from '~/components/VeeForm/types'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
-  import { UpdateBeneficiaryInput } from '~/server/schema'
 
   const props = defineProps<{
-    values: UpdateBeneficiaryInput
+    status: BeneficiaryStatus
+    noPhone: boolean
+    zipcode: string | null | undefined
+    city: string | null | undefined
+    region: string | null | undefined
   }>()
 
   const isMinistryAgent = useMinistryAgent()
@@ -190,16 +193,9 @@
     'general.accommodationMode'
   )
 
-  const status = computed(() => props.values?.general.status)
-  const noPhone = computed(() => props.values?.general.noPhone)
-
-  const zipcode = ref(props.values.general.zipcode)
-  const city = ref(props.values.general.city)
-  const region = ref(props.values.general.region)
-
   const isHosted = computed(() => accommodationMode.value)
 
-  const isDeceased = computed(() => status.value === BeneficiaryStatus.Deceased)
+  const isDeceased = computed(() => props.status === BeneficiaryStatus.Deceased)
 
   const accommodationNameLabel = computed(() => {
     if (!accommodationMode.value) {
@@ -226,20 +222,13 @@
     selection: CitySelected | AddressSelected
   ) {
     if ('codeRegion' in selection && selection.codeRegion) {
-      setRegion(await codeRegionToRegionName(selection.codeRegion))
+      setRegionvalue(await codeRegionToRegionName(selection.codeRegion))
     }
     if ('region' in selection && selection.region) {
-      setRegion(selection.region)
+      setRegionvalue(selection.region)
     }
-    zipcode.value = selection.zipCode
-    city.value = selection.city
     setZipcodeValue(selection.zipCode)
     setCityValue(selection.city)
-  }
-
-  function setRegion(_region: string) {
-    region.value = _region
-    setRegionvalue(_region)
   }
 
   async function codeRegionToRegionName(codeRegion: string) {

@@ -136,16 +136,17 @@
     ministereStructureOptions,
     ministereCategorieOptions
   } from '~/client/options/ministry'
-  import { UpdateBeneficiaryInput } from '~/server/schema/beneficiary.schema'
 
   const props = defineProps<{
-    values: UpdateBeneficiaryInput
+    familySituation: BeneficiaryFamilySituation | null | undefined
+    majorChildren: number | null | undefined
+    pensionOrganisations: readonly BeneficiaryPensionOrganisation[]
   }>()
 
   const isMinistryAgent = useMinistryAgent()
 
   const hasPartner = computed(() => {
-    const familySituation = props.values.taxHousehold.familySituation
+    const familySituation = props.familySituation
     if (!familySituation) {
       return false
     }
@@ -156,12 +157,10 @@
     )
   })
 
-  const hasMajorChildren = computed(
-    () => (props.values.taxHousehold.majorChildren || 0) > 0
-  )
+  const hasMajorChildren = computed(() => (props.majorChildren || 0) > 0)
 
   const hasOtherPensionOrganisations = computed(() =>
-    (props.values.occupation.pensionOrganisations || []).includes(
+    (props.pensionOrganisations || []).includes(
       BeneficiaryPensionOrganisation.Other
     )
   )

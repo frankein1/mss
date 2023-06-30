@@ -66,7 +66,6 @@
     validationSchema: toTypedSchema(editHelpRequestSchema),
     initialValues: {
       ...props.helpRequest,
-      // FIXME: date type error
       openingDate: props.helpRequest.openingDate,
       documents: initialDocumentIds.value,
       financialSupport: props.helpRequest.financialSupport ? 'true' : 'false',

@@ -24,7 +24,13 @@
       class="fr-accordions-group"
     >
       <AccordionFieldset label="Informations générales">
-        <BeneficiaryFormGeneralInformation :values="values" />
+        <BeneficiaryFormGeneralInformation
+          :status="values.general.status"
+          :no-phone="values.general.noPhone"
+          :zipcode="values.general.zipcode"
+          :city="values.general.city"
+          :region="values.general.region"
+        />
       </AccordionFieldset>
 
       <AccordionFieldset
@@ -53,7 +59,11 @@
         class="occupation-income-accordion-fieldset"
         label="Activité/Revenu"
       >
-        <BeneficiaryFormOccupationIncome :values="values" />
+        <BeneficiaryFormOccupationIncome
+          :family-situation="values.taxHousehold.familySituation"
+          :major-children="values.taxHousehold.majorChildren"
+          :pension-organisations="values.occupation.pensionOrganisations"
+        />
       </AccordionFieldset>
 
       <AccordionFieldset

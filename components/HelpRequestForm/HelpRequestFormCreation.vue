@@ -42,7 +42,6 @@
     validationSchema: toTypedSchema(createHelpRequestSchema),
     initialValues: {
       beneficiaryId: props.beneficiaryId,
-      // FIXME: date type error
       openingDate: new Date(),
       status: HelpRequestStatus.WaitingAdditionalInformation
     }
