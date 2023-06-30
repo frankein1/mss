@@ -47,13 +47,10 @@
     data: regionsCounts,
     pending,
     error
-  } = useAsyncData<Array<{ region: string | null; _count: number }>>(
-    () => trpcClient.stat.getRegionStats.query(props.filters),
-    {
-      default: () => [],
-      watch: [props.filters]
-    }
-  )
+  } = await trpcClient.stat.getRegionStats.useQuery(props.filters, {
+    default: () => [],
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+  })
 
   const regionsStats = computed(
     () =>

@@ -57,13 +57,10 @@
     data: genderCounts,
     pending,
     error
-  } = useAsyncData<Array<{ gender: Gender | null; _count: number }>>(
-    () => trpcClient.stat.getGenderStats.query(props.filters),
-    {
-      default: () => [],
-      watch: [props.filters]
-    }
-  )
+  } = await trpcClient.stat.getGenderStats.useQuery(props.filters, {
+    default: () => [],
+    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+  })
 
   const genderStats = computed(
     () =>
