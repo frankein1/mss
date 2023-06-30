@@ -45,11 +45,15 @@
           </div>
         </div>
         <div class="structures__last">
-          <div>
-            {{ `${structure._count.beneficiaries} bénéficiaires` }}
-          </div>
-          <div>
-            {{ `${structure._count.users || 0} utilisateurs` }}
+          <div v-if="structure.userActivities.length">
+            <div>
+              {{ formatDate(structure.userActivities[0].date) }}
+            </div>
+            <div>
+              {{
+                `${structure.userActivities[0].activity} ${structure.userActivities[0].object}`
+              }}
+            </div>
           </div>
         </div>
       </div>
@@ -58,6 +62,7 @@
 </template>
 <script lang="ts" setup>
   import { AdminStructuresOutput } from '~/server/routers'
+  import { formatDate } from '~/utils/formatDate'
 
   const search = ref<string>()
 
@@ -97,6 +102,18 @@
   }
 
   .structures__address {
+    width: 200px;
+    padding-left: 0.5rem;
+    overflow-wrap: break-word;
+  }
+
+  .structures__last {
+    width: 200px;
+    padding-left: 0.5rem;
+    overflow-wrap: break-word;
+  }
+
+  .structures__count {
     width: 200px;
     padding-left: 0.5rem;
     overflow-wrap: break-word;
