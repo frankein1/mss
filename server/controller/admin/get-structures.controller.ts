@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { AdminGetStructuresInput } from '~/server/schema'
 
@@ -37,6 +38,12 @@ export const getStructuresController = async ({
       email: true,
       inhabitantsNumber: true,
       inseeCode: true,
+      userActivities: {
+        take: 1,
+        orderBy: {
+          date: 'desc'
+        }
+      },
       siret: true,
       _count: {
         select: {
@@ -49,3 +56,7 @@ export const getStructuresController = async ({
 
   return { structures }
 }
+
+export type AdminStructuresOutput = Prisma.PromiseReturnType<
+  typeof getStructuresController
+>

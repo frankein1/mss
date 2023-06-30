@@ -21,24 +21,21 @@
           <div class="type">{{ structure.type }}</div>
           <div>{{ structure.siret }}</div>
         </div>
-        <div class="structures__address">
-          <div>{{ structure.address }}</div>
-          <div>
-            {{ `${structure.zipcode} ${structure.city}` }}
-          </div>
-        </div>
-        <div class="structures__contact">
-          <div>{{ structure.phone }}</div>
-          <div class="email">
-            {{ structure.email }}
-          </div>
-        </div>
         <div class="structures__detail">
           <div>
             {{ structure.inhabitantsNumber }}
             {{ structure.inseeCode }}
           </div>
         </div>
+        <div class="structures__address">
+          <div>
+            {{ structure.zipcode }}
+          </div>
+          <div>
+            {{ structure.city }}
+          </div>
+        </div>
+
         <div class="structures__count">
           <div>
             {{ `${structure._count.beneficiaries} bénéficiaires` }}
@@ -47,17 +44,36 @@
             {{ `${structure._count.users || 0} utilisateurs` }}
           </div>
         </div>
+        <div class="structures__last">
+          <div v-if="structure.userActivities.length">
+            <div>
+              {{ formatDate(structure.userActivities[0].date) }}
+            </div>
+            <div>
+              {{
+                `${structure.userActivities[0].activity} ${structure.userActivities[0].object}`
+              }}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
+  import { AdminStructuresOutput } from '~/server/routers'
+  import { formatDate } from '~/utils/formatDate'
+
   const search = ref<string>()
 
-  const queryInput = computed(() => ({ search: search.value }))
-
-  const { data } = await useTrpcClient().admin.getStructures.useQuery(
-    queryInput
+  const { data } = useAsyncData<AdminStructuresOutput>(
+    () =>
+      useTrpcClient().admin.getStructures.query({
+        search: search.value
+      }),
+    {
+      watch: [search]
+    }
   )
 
   function onSearch(event: Event) {
@@ -89,16 +105,17 @@
     width: 200px;
     padding-left: 0.5rem;
     overflow-wrap: break-word;
-    font-size: x-small;
   }
 
-  .structures__contact {
+  .structures__last {
     width: 200px;
     padding-left: 0.5rem;
     overflow-wrap: break-word;
+  }
 
-    .email {
-      font-size: x-small;
-    }
+  .structures__count {
+    width: 200px;
+    padding-left: 0.5rem;
+    overflow-wrap: break-word;
   }
 </style>

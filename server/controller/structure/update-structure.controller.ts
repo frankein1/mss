@@ -1,39 +1,23 @@
-import { FollowupType, DefaultFollowupType } from '@prisma/client'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
-import type {
-  EditCurrentUserStructureInput,
-  CreateFollowupTypeInput
-} from '~/server/schema'
 import {
-  defaultLegallyRequiredFollowupTypeLabels,
-  defaultLegallyRequiredFollowupTypeOptions,
+  DefaultFollowupType,
+  FollowupType,
+  UserActivityType
+} from '@prisma/client'
+import {
   defaultLegallyNotRequiredFollowupTypeLabels,
-  defaultLegallyNotRequiredFollowupTypeOptions
+  defaultLegallyNotRequiredFollowupTypeOptions,
+  defaultLegallyRequiredFollowupTypeLabels,
+  defaultLegallyRequiredFollowupTypeOptions
 } from '~/client/options/followupType'
-import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
+import { prismaClient } from '~/server/prisma'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import {
+  CreateFollowupTypeInput,
+  EditCurrentUserStructureInput
+} from '~/server/schema'
 import { canEditItsOwnStructure } from '~/server/security/rules'
-
-export const getCurrentUserStructureHandler = async ({
-  ctx: { user }
-}: {
-  ctx: ProtectedAppContext
-}) => {
-  const { structureId } = user
-
-  return await prismaClient.structure.findUnique({
-    where: { id: structureId },
-    include: {
-      followupTypes: {
-        include: {
-          _count: {
-            select: { followups: true, helpRequests: true }
-          }
-        }
-      }
-    }
-  })
-}
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
 export const editCurrentUserStructureHandler = async ({
   ctx: { user },
@@ -95,6 +79,13 @@ export const editCurrentUserStructureHandler = async ({
         }
       }
     }
+  })
+
+  await addUserActivity({
+    userId: user.id,
+    activity: UserActivityType.UPDATE,
+    object: 'Structure',
+    objectId: updatedStructure.id
   })
 
   return updatedStructure
