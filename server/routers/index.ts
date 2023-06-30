@@ -62,3 +62,5 @@ export type GetBeneficiaryDocumentOutput = GetBeneficiaryDocumentsOutput[0]
 // FIXME: Replace by mutation log type when it exists in Prisma schema
 export type GetBeneficiariesMutationLogsOutput =
   RouterOutput['mutationLogs']['beneficiaries']
+
+export * from '~/server/controller/admin'
