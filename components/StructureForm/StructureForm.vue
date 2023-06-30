@@ -3,6 +3,11 @@
     class="fr-container--fluid"
     @submit="onUpdateStructure"
   >
+    <StructureFormAdmin
+      v-if="adminView"
+      :structure="structure"
+    />
+
     <StructureFormInformation
       :structure="structure"
       :set-field-value="setFieldValue"
@@ -100,7 +105,11 @@
         : editCurrentUserStructureSchema
     ),
     initialValues: {
-      structureId: props.adminView ? props.structure.id : undefined,
+      structureId: props.structure.id,
+      type: props.structure.type,
+      inhabitantsNumber: props.structure.inhabitantsNumber,
+      inseeCode: props.structure.inseeCode,
+      siret: props.structure.siret,
       name: props.structure.name,
       zipcode: props.structure.zipcode,
       city: props.structure.city,
