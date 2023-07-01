@@ -3,10 +3,7 @@
     class="fr-container--fluid"
     @submit="onUpdateStructure"
   >
-    <StructureFormAdmin
-      v-if="adminView"
-      :structure="structure"
-    />
+    <StructureFormAdmin v-if="adminView" />
 
     <StructureFormInformation
       :structure="structure"

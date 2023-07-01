@@ -31,7 +31,7 @@
       <VeeSelect
         name="type"
         label="Type"
-        :options="structureTypeOptions"
+        :options="withEmptyValue(structureTypeOptions)"
         required
       />
     </div>
@@ -39,10 +39,5 @@
 </template>
 
 <script lang="ts" setup>
-  import type { Structure } from '@prisma/client'
   import { structureTypeOptions } from '~/client/options/structure'
-
-  defineProps<{
-    structure: Structure
-  }>()
 </script>

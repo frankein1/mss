@@ -67,18 +67,23 @@
     AddressSelected
   } from '~/components/VeeForm/types'
   import { structureFieldLabels } from '~/client/labels'
-  import type { EditCurrentUserStructureInput } from '~/server/schema'
+  import type { AdminCreateStructureInput } from '~/server/schema'
 
-  const props = defineProps<{
-    structure: Structure
-    setFieldValue: (
-      field: keyof EditCurrentUserStructureInput,
-      value: EditCurrentUserStructureInput[keyof EditCurrentUserStructureInput]
-    ) => void
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      structure?: Structure | null
+      setFieldValue: (
+        field: keyof AdminCreateStructureInput,
+        value: AdminCreateStructureInput[keyof AdminCreateStructureInput]
+      ) => void
+    }>(),
+    {
+      structure: null
+    }
+  )
 
-  const zipCode = ref(props.structure.zipcode)
-  const city = ref(props.structure.city)
+  const zipCode = ref(props.structure?.zipcode)
+  const city = ref(props.structure?.city)
 
   function onCitySelected(citySelected: CitySelected) {
     updateZipCodeAndCity(citySelected.zipCode, citySelected.city)

@@ -9,6 +9,13 @@
           @input="onSearch"
         />
       </div>
+      <NuxtLink
+        :to="RoutePath.AdminStructuresAdd()"
+        class="fr-btn fr-mt-2w"
+        target="_self"
+      >
+        Ajouter une structure
+      </NuxtLink>
     </div>
     <div v-if="data?.structures?.length">
       <div
