@@ -34,42 +34,61 @@
           </tr>
         </thead>
         <tbody>
-          <tr
-            v-for="user in structure.users"
-            :key="user.id"
+          <!-- FIXME: user edit link -->
+          <NuxtLink
+            v-slot="{ navigate }"
+            custom
+            :to="RoutePath.AdminOverview()"
+            target="_self"
           >
-            <td>{{ user.lastName }}</td>
-            <td>{{ user.firstName }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ NonAdminUserRoleLabels[user.role as NonAdminUserRole] }}</td>
-            <td>
-              <span
-                v-if="!!user.aidantConnectAuthorisation"
-                class="fr-icon-checkbox-line"
-                aria-hidden="true"
-              ></span>
-              <span
-                v-else
-                class="fr-icon-close-circle-line"
-                aria-hidden="true"
-              ></span>
-            </td>
-            <td>
-              <span
-                v-if="user.status === UserStatus.Active"
-                class="fr-icon-checkbox-line"
-                aria-hidden="true"
-              ></span>
-              <span
-                v-else
-                class="fr-icon-close-circle-line"
-                aria-hidden="true"
-              ></span>
-            </td>
-          </tr>
+            <tr
+              v-for="user in structure.users"
+              :key="user.id"
+              class="clickable-row"
+              @click="navigate"
+            >
+              <td>{{ user.lastName }}</td>
+              <td>{{ user.firstName }}</td>
+              <td>{{ user.email }}</td>
+              <td>
+                {{ NonAdminUserRoleLabels[user.role as NonAdminUserRole] }}
+              </td>
+              <td>
+                <span
+                  v-if="!!user.aidantConnectAuthorisation"
+                  class="fr-icon-checkbox-line"
+                  aria-hidden="true"
+                ></span>
+                <span
+                  v-else
+                  class="fr-icon-close-circle-line"
+                  aria-hidden="true"
+                ></span>
+              </td>
+              <td>
+                <span
+                  v-if="user.status === UserStatus.Active"
+                  class="fr-icon-checkbox-line"
+                  aria-hidden="true"
+                ></span>
+                <span
+                  v-else
+                  class="fr-icon-close-circle-line"
+                  aria-hidden="true"
+                ></span>
+              </td></tr
+          ></NuxtLink>
         </tbody>
       </table>
     </div>
+    <!-- FIXME: user add link -->
+    <NuxtLink
+      :to="RoutePath.AdminOverview()"
+      class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-user-add-line"
+      target="_self"
+    >
+      Ajouter un utilisateur
+    </NuxtLink>
   </div>
 </template>
 
@@ -81,6 +100,7 @@
     NonAdminUserRoleLabels
   } from '~/client/options/user'
   import { AdminStructureOutput } from '~/server/routers'
+  import { RoutePath } from '~/utils/routing'
 
   defineProps<{
     structure: AdminStructureOutput
