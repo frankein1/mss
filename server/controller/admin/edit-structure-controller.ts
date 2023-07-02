@@ -30,6 +30,17 @@ export const editStructureController = async ({
             select: { followups: true, helpRequests: true }
           }
         }
+      },
+      users: {
+        select: {
+          id: true,
+          lastName: true,
+          firstName: true,
+          email: true,
+          role: true,
+          aidantConnectAuthorisation: true,
+          status: true
+        }
       }
     }
   })

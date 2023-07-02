@@ -22,6 +22,11 @@
       :admin-view="adminView"
     />
 
+    <StructureFormAdminUsers
+      v-if="adminView"
+      :structure="(structure as AdminStructureOutput)"
+    />
+
     <button
       class="fr-btn fr-btn--lg submit-btn"
       type="submit"
@@ -40,6 +45,7 @@
     DefaultLegallyRequiredFollowupTypeWithSupportsCount,
     StructureWithFollowupTypesWithSupportsCount
   } from './types'
+  import { AdminStructureOutput } from '~/server/routers'
   import type {
     AdminEditStructureInput,
     EditCurrentUserStructureInput
@@ -52,7 +58,9 @@
 
   const props = withDefaults(
     defineProps<{
-      structure: StructureWithFollowupTypesWithSupportsCount
+      structure:
+        | StructureWithFollowupTypesWithSupportsCount
+        | AdminStructureOutput
       isSubmitting: boolean
       adminView?: boolean
     }>(),
