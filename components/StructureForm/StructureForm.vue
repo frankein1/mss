@@ -3,6 +3,8 @@
     class="fr-container--fluid"
     @submit="onUpdateStructure"
   >
+    <StructureFormAdmin v-if="adminView" />
+
     <StructureFormInformation
       :structure="structure"
       :set-field-value="setFieldValue"
@@ -17,6 +19,12 @@
         defaultLegallyNotRequiredSelectedFollowupTypes
       "
       :custom-followup-types="customFollowupTypes"
+      :admin-view="adminView"
+    />
+
+    <StructureFormAdminUsers
+      v-if="adminView"
+      :structure="(structure as AdminStructureOutput)"
     />
 
     <button
@@ -25,7 +33,7 @@
       :disabled="isSubmitting"
       :submitting="isSubmitting"
     >
-      Modifier ma structure
+      Modifier {{ adminView ? 'la' : 'ma' }} structure
     </button>
   </form>
 </template>
@@ -37,17 +45,35 @@
     DefaultLegallyRequiredFollowupTypeWithSupportsCount,
     StructureWithFollowupTypesWithSupportsCount
   } from './types'
-  import type { EditCurrentUserStructureInput } from '~/server/schema'
-  import { editCurrentUserStructureSchema } from '~/server/schema'
+  import { AdminStructureOutput } from '~/server/routers'
+  import type {
+    AdminEditStructureInput,
+    EditCurrentUserStructureInput
+  } from '~/server/schema'
+  import {
+    editCurrentUserStructureSchema,
+    adminEditStructureSchema
+  } from '~/server/schema'
   import { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
-  const props = defineProps<{
-    structure: StructureWithFollowupTypesWithSupportsCount
-    isSubmitting: boolean
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      structure:
+        | StructureWithFollowupTypesWithSupportsCount
+        | AdminStructureOutput
+      isSubmitting: boolean
+      adminView?: boolean
+    }>(),
+    {
+      adminView: false
+    }
+  )
 
   const emit = defineEmits<{
-    (e: 'updateStructure', structure: EditCurrentUserStructureInput): void
+    (
+      e: 'updateStructure',
+      structure: EditCurrentUserStructureInput & AdminEditStructureInput
+    ): void
   }>()
 
   const defaultLegallyRequiredSelectedFollowupTypes = computed(() =>
@@ -75,21 +101,31 @@
     ...customFollowupTypes.value.map(({ id }) => id)
   ])
 
-  const { handleSubmit, setFieldValue } =
-    useForm<EditCurrentUserStructureInput>({
-      validationSchema: toTypedSchema(editCurrentUserStructureSchema),
-      initialValues: {
-        name: props.structure.name,
-        zipcode: props.structure.zipcode,
-        city: props.structure.city,
-        address: props.structure.address,
-        phone: props.structure.phone,
-        email: props.structure.email,
-        legallyRequiredFollowupTypes: initialLegallyRequiredSelectedIds.value,
-        legallyNotRequiredFollowupTypes:
-          initialLegallyNotRequiredSelectedIds.value
-      }
-    })
+  const { handleSubmit, setFieldValue } = useForm<
+    EditCurrentUserStructureInput & AdminEditStructureInput
+  >({
+    validationSchema: toTypedSchema(
+      props.adminView
+        ? adminEditStructureSchema
+        : editCurrentUserStructureSchema
+    ),
+    initialValues: {
+      structureId: props.structure.id,
+      type: props.structure.type,
+      inhabitantsNumber: props.structure.inhabitantsNumber,
+      inseeCode: props.structure.inseeCode,
+      siret: props.structure.siret,
+      name: props.structure.name,
+      zipcode: props.structure.zipcode,
+      city: props.structure.city,
+      address: props.structure.address,
+      phone: props.structure.phone,
+      email: props.structure.email,
+      legallyRequiredFollowupTypes: initialLegallyRequiredSelectedIds.value,
+      legallyNotRequiredFollowupTypes:
+        initialLegallyNotRequiredSelectedIds.value
+    }
+  })
 
   const onUpdateStructure = handleSubmit(structure => {
     emit('updateStructure', structure)

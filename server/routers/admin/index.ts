@@ -1,1 +1,4 @@
-export type { AdminStructuresOutput } from '~/server/controller/admin'
+export type {
+  AdminStructuresOutput,
+  AdminStructureOutput
+} from '~/server/controller/admin'

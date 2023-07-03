@@ -9,6 +9,13 @@
           @input="onSearch"
         />
       </div>
+      <NuxtLink
+        :to="RoutePath.AdminStructuresAdd()"
+        class="fr-btn fr-mt-2w"
+        target="_self"
+      >
+        Ajouter une structure
+      </NuxtLink>
     </div>
     <div v-if="data?.structures?.length">
       <div
@@ -16,53 +23,59 @@
         :key="structure.id"
         class="structures__row"
       >
-        <div class="structures__name">
-          <div>{{ structure.name }}</div>
-          <div class="type">{{ structure.type }}</div>
-          <div>{{ structure.siret }}</div>
-        </div>
-        <div class="structures__detail">
-          <div>
-            {{ structure.inhabitantsNumber }}
-            {{ structure.inseeCode }}
+        <div class="structures__infos">
+          <div class="structures__name">
+            <div>{{ structure.name }}</div>
+            <div class="type">{{ structure.type }}</div>
+            <div>{{ structure.siret }}</div>
           </div>
-        </div>
-        <div class="structures__address">
-          <div>
-            {{ structure.zipcode }}
-          </div>
-          <div>
-            {{ structure.city }}
-          </div>
-        </div>
-
-        <div class="structures__count">
-          <div>
-            {{ `${structure._count.beneficiaries} bénéficiaires` }}
-          </div>
-          <div>
-            {{ `${structure._count.users || 0} utilisateurs` }}
-          </div>
-        </div>
-        <div class="structures__last">
-          <div v-if="structure.userActivities.length">
+          <div class="structures__detail">
             <div>
-              {{ formatDate(structure.userActivities[0].date) }}
-            </div>
-            <div>
-              {{
-                `${structure.userActivities[0].activity} ${structure.userActivities[0].object}`
-              }}
+              {{ structure.inhabitantsNumber }}
+              {{ structure.inseeCode }}
             </div>
           </div>
+          <div class="structures__address">
+            <div>
+              {{ structure.zipcode }}
+            </div>
+            <div>
+              {{ structure.city }}
+            </div>
+          </div>
+          <div class="structures__count">
+            <div>
+              {{ `${structure._count.beneficiaries} bénéficiaires` }}
+            </div>
+            <div>
+              {{ `${structure._count.users || 0} utilisateurs` }}
+            </div>
+          </div>
+          <div class="structures__last">
+            <div v-if="structure.userActivities.length">
+              <div>
+                {{ formatDate(structure.userActivities[0].date) }}
+              </div>
+              <div>
+                {{
+                  `${structure.userActivities[0].activity} ${structure.userActivities[0].object}`
+                }}
+              </div>
+            </div>
+          </div>
         </div>
+        <NuxtLink
+          :to="RoutePath.AdminStructure(structure.id)"
+          class="fr-link"
+          >Modifier</NuxtLink
+        >
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
   import { AdminStructuresOutput } from '~/server/routers'
-  import { formatDate } from '~/utils/formatDate'
+  import { RoutePath } from '~/utils/routing'
 
   const search = ref<string>()
 
@@ -85,9 +98,12 @@
 
 <style lang="scss" scoped>
   .structures__row {
-    display: flex;
     padding: 1rem;
     border-bottom: 1px blue solid;
+  }
+
+  .structures__infos {
+    display: flex;
   }
 
   .structures__name {
