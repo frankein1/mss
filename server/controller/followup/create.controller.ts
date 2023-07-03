@@ -1,6 +1,7 @@
 import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
 import {
   ProtectedAppContext,
+  ProtectedAppContextUser,
   invalidError,
   forbiddenError
 } from '~/server/trpc'
@@ -23,7 +24,7 @@ export async function prepareFollowupData({
 }: {
   input: AddFollowupInput
   transaction: Prisma.TransactionClient
-  user: ProtectedAppContext['user']
+  user: ProtectedAppContextUser
 }): Promise<Prisma.FollowupUncheckedCreateInput> {
   const { type } = await transaction.structure.findUniqueOrThrow({
     where: { id: user.structureId },
@@ -76,7 +77,7 @@ export async function prepareFollowupData({
 async function createTransaction(
   transaction: Prisma.TransactionClient,
   input: AddFollowupInput,
-  user: ProtectedAppContext['user']
+  user: ProtectedAppContextUser
 ) {
   const data = await prepareFollowupData({ input, transaction, user })
 

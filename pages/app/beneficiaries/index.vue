@@ -38,7 +38,7 @@
               @change-page="updatePagination($event)"
             />
 
-            <MutationLogs
+            <UsersActivity
               class="fr-mt-4w fr-px-5v"
               collection="beneficiaries"
               :route-with-params="RoutePath.AppBeneficiary"

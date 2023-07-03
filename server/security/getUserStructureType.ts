@@ -1,7 +1,7 @@
 import { prismaClient } from '~/server/prisma'
-import type { ProtectedAppContext } from '~/server/trpc'
+import type { ProtectedAppContextUser } from '~/server/trpc'
 
-export async function getUserStructureType(user: ProtectedAppContext['user']) {
+export async function getUserStructureType(user: ProtectedAppContextUser) {
   const structure = await prismaClient.structure.findUnique({
     where: {
       id: user.structureId

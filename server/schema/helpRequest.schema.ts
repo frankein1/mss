@@ -6,7 +6,8 @@ import {
   PaymentMethod
 } from '@prisma/client'
 import { z } from 'zod'
-import { helpRequestFilterSchema } from '~/server/schema'
+import { paginatedSchema } from './helpers.schema'
+import { helpRequestFilterSchema } from './filter.schema'
 import { errorMessages, kindOfBooleanSchema } from '~/utils/zod'
 
 const createHelpRequestSchema = z.object({
@@ -37,31 +38,27 @@ const createHelpRequestSchema = z.object({
   fullFile: z.boolean().default(false)
 })
 
-// const editHelpRequestSchema = createHelpRequestSchema.extend({
-//   helpRequestId: z.string().uuid()
-// })
-
-const getHelpRequestsSchema = z.object({
-  page: z.number(),
-  perPage: z.number(),
-  orderBy: z.array(
-    z.object({
-      openingDate: z.nativeEnum(Prisma.SortOrder).optional(),
-      dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
-      beneficiary: z
-        .object({
-          usualName: z.nativeEnum(Prisma.SortOrder).optional()
-        })
-        .optional(),
-      instructorOrganization: z
-        .object({
-          name: z.nativeEnum(Prisma.SortOrder).optional()
-        })
-        .optional()
-    })
-  ),
-  filters: helpRequestFilterSchema
-})
+const getHelpRequestsSchema = z
+  .object({
+    orderBy: z.array(
+      z.object({
+        openingDate: z.nativeEnum(Prisma.SortOrder).optional(),
+        dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
+        beneficiary: z
+          .object({
+            usualName: z.nativeEnum(Prisma.SortOrder).optional()
+          })
+          .optional(),
+        instructorOrganization: z
+          .object({
+            name: z.nativeEnum(Prisma.SortOrder).optional()
+          })
+          .optional()
+      })
+    ),
+    filters: helpRequestFilterSchema
+  })
+  .merge(paginatedSchema)
 
 const quickEditHelpRequestStatusSchema = z.object({
   id: z.string().uuid(),
