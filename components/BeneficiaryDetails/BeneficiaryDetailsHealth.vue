@@ -3,7 +3,7 @@
     v-if="hasHealthSection"
     class="beneficiary-details-section"
   >
-    <h2 class="fr-h6">Santé</h2>
+    <h2 class="fr-h5">Santé</h2>
     <ul class="information-list">
       <li v-if="beneficiary.gir">
         <span class="information-label">GIR :</span>

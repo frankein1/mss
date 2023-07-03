@@ -3,7 +3,7 @@
     v-if="hasOtherInformationSection"
     class="beneficiary-details-section"
   >
-    <h2 class="fr-h6">Autres informations</h2>
+    <h2 class="fr-h5">Autres informations</h2>
     <ul class="information-list">
       <li v-if="beneficiary.protectionMeasure">
         <span class="information-label">Mesure de protection :</span>

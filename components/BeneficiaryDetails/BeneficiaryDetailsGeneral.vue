@@ -1,6 +1,6 @@
 <template>
   <section class="beneficiary-details-section">
-    <h2 class="fr-h6">Bénéficiaire</h2>
+    <h2 class="fr-h5">Bénéficiaire</h2>
     <ul class="information-list">
       <li v-if="beneficiary.title">
         <span class="information-label">Civilité :</span>

@@ -3,7 +3,7 @@
     v-if="hasOccupationIncomeSection"
     class="beneficiary-details-section"
   >
-    <h2 class="fr-h6">Activité/Revenu</h2>
+    <h2 class="fr-h5">Activité/Revenu</h2>
     <ul class="information-list">
       <li v-if="beneficiary.socioProfessionalCategory">
         <span class="information-label">Catégorie socio-professionnelle :</span>
