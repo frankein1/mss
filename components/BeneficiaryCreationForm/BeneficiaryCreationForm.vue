@@ -65,32 +65,34 @@
       </div>
     </div>
 
-    <AtomAlert
-      class="fr-mt-2w fr-mb-2w"
-      message="Souhaitez-vous ajouter plus d'informations sur ce bénéficiaire ?"
-      :alert-type="AlertType.Info"
-    >
-      <template #detailedMessage
-        ><p>
-          Renseignez des informations complémentaires concernant le bénéficiaire
-          dès maintenant.<br />Vous pourrez également les compléter plus tard
-          via sa fiche bénéficiaire.
-        </p></template
+    <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-mb-2w">
+      <AtomAlert
+        class="fr-mt-2w fr-mb-2w"
+        message="Souhaitez-vous ajouter plus d'informations sur ce bénéficiaire ?"
+        :alert-type="AlertType.Info"
       >
-      <template #action>
-        <ul class="fr-btns-group fr-btns-group--icon-left">
-          <li>
-            <button
-              :class="`fr-btn fr-btn--secondary fr-icon-edit-line`"
-              type="submit"
-              @click="complete = true"
-            >
-              Compléter
-            </button>
-          </li>
-        </ul>
-      </template>
-    </AtomAlert>
+        <template #detailedMessage
+          ><p>
+            Renseignez des informations complémentaires concernant le
+            bénéficiaire dès maintenant.<br />Vous pourrez également les
+            compléter plus tard via sa fiche bénéficiaire.
+          </p></template
+        >
+        <template #action>
+          <ul class="fr-btns-group fr-btns-group--icon-left">
+            <li>
+              <button
+                :class="`fr-btn fr-btn--secondary fr-icon-edit-line`"
+                type="submit"
+                @click="complete = true"
+              >
+                Compléter
+              </button>
+            </li>
+          </ul>
+        </template>
+      </AtomAlert>
+    </div>
 
     <button
       class="fr-btn fr-btn--lg submit-btn"
