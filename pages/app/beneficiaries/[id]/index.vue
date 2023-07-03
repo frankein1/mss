@@ -26,7 +26,17 @@
         :id="BeneficiaryTab.Details"
         name="Infos"
       >
+        <AtomLoader
+          v-if="pending"
+          class="fr-mx-auto"
+        />
+        <AtomAlert
+          v-else-if="error"
+          :alert-type="AlertType.Error"
+          message="La fiche bénéficaire n'a pas pu être chargée."
+        />
         <BeneficiaryDetails
+          v-else
           :beneficiary="beneficiary"
           :entourages="entourages"
           :tax-households="taxHouseholds"
@@ -37,7 +47,19 @@
         :id="BeneficiaryTab.Documents"
         name="Documents"
       >
-        <BeneficiaryDocumentList :beneficiary="beneficiary" />
+        <AtomLoader
+          v-if="pending"
+          class="fr-mx-auto"
+        />
+        <AtomAlert
+          v-else-if="error"
+          :alert-type="AlertType.Error"
+          message="La fiche bénéficaire n'a pas pu être chargée."
+        />
+        <BeneficiaryDocumentList
+          v-else
+          :beneficiary="beneficiary"
+        />
       </Tab>
       <Tab
         :id="BeneficiaryTab.History"
@@ -55,12 +77,14 @@
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { AlertType } from '~/utils/constants/alert'
 
   definePageMeta({
     middleware: 'is-beneficiary-referent'
   })
 
   const route = useRoute()
+  const trpcClient = useTrpcClient()
   const beneficiaryId = route.params.id as string
   const originPage = route.query.originPage as
     | Route.AppOverview
@@ -69,6 +93,13 @@
     | undefined
   const originTab = route.query.hash as string | undefined
 
+  const {
+    data,
+    pending: beneficiaryPending,
+    error: beneficiaryError
+  } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
+    id: beneficiaryId
+  })
 
   const {
     data: followupTypesData,
@@ -81,6 +112,10 @@
   const beneficiary = computed(() => data.value?.beneficiary)
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
+  const followupTypes = computed(
+    () =>
+      followupTypesData.value || { legallyRequired: [], legallyNotRequired: [] }
+  )
 
   const authStore = useAuthStore()
   const canDelete = computed(() => {
@@ -96,6 +131,14 @@
     }
     return RoutePath.AppBeneficiaries()
   })
+
+  const pending = computed(
+    () => beneficiaryPending.value || followupTypesPending.value
+  )
+
+  const error = computed(
+    () => beneficiaryError.value || followupTypesError.value
+  )
 
   function onBeneficiaryDeleted() {
     navigateTo(backLink.value)
