@@ -3,14 +3,13 @@ import type { BeneficiaryNames } from '~/types/beneficiary'
 
 type BeneficiaryNamesWithId = BeneficiaryNames & { id: string }
 
-const OverviewBreadcrumb = (isLast = true) => [
-  {
-    text: RouteTitle.AppOverview(),
-    to: isLast ? undefined : RoutePath.AppOverview()
-  }
-]
+const OverviewBreadcrumb = {
+  text: RouteTitle.AppOverview(),
+  to: RoutePath.AppOverview()
+}
 
 const BeneficiariesBreadcrumb = (isLast = true) => [
+  OverviewBreadcrumb,
   {
     text: RouteTitle.AppBeneficiaries(),
     to: isLast ? undefined : RoutePath.AppBeneficiaries()
@@ -18,6 +17,7 @@ const BeneficiariesBreadcrumb = (isLast = true) => [
 ]
 
 const HistoryBreadcrumb = (isLast = true) => [
+  OverviewBreadcrumb,
   {
     text: RouteTitle.AppHistory(),
     to: isLast ? undefined : RoutePath.AppHistory()
@@ -42,7 +42,7 @@ const BeneficiaryBreadcrumb = (
 
   switch (originPage) {
     case Route.AppOverview:
-      return [...OverviewBreadcrumb(false), beneficiaryBreadcrumbSegment]
+      return [OverviewBreadcrumb, beneficiaryBreadcrumbSegment]
     case Route.AppHistory:
       return [...HistoryBreadcrumb(false), beneficiaryBreadcrumbSegment]
     default:
@@ -51,17 +51,23 @@ const BeneficiaryBreadcrumb = (
 }
 
 export const Breadcrumb = {
-  [Route.AppAccount]: () => [{ text: RouteTitle.AppAccount() }],
+  [Route.AppAccount]: () => [
+    OverviewBreadcrumb,
+    { text: RouteTitle.AppAccount() }
+  ],
 
   [Route.AppHistory]: () => HistoryBreadcrumb(),
 
-  [Route.AppOverview]: () => OverviewBreadcrumb(),
+  [Route.AppOverview]: () => [OverviewBreadcrumb],
 
-  [Route.AppStats]: () => [{ text: RouteTitle.AppStats() }],
+  [Route.AppStats]: () => [OverviewBreadcrumb, { text: RouteTitle.AppStats() }],
 
-  [Route.AppUsers]: () => [{ text: RouteTitle.AppUsers() }],
+  [Route.AppUsers]: () => [OverviewBreadcrumb, { text: RouteTitle.AppUsers() }],
 
-  [Route.AppStructureEdit]: () => [{ text: RouteTitle.AppStructureEdit() }],
+  [Route.AppStructureEdit]: () => [
+    OverviewBreadcrumb,
+    { text: RouteTitle.AppStructureEdit() }
+  ],
 
   [Route.AppBeneficiaries]: () => BeneficiariesBreadcrumb(),
 
