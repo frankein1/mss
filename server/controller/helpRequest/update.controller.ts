@@ -1,5 +1,9 @@
 import { Prisma, StructureType, UserActivityType } from '@prisma/client'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import {
+  ProtectedAppContext,
+  ProtectedAppContextUser,
+  forbiddenError
+} from '~/server/trpc'
 import type { EditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import {
@@ -37,7 +41,7 @@ export async function prepareHelpRequestData({
 }: {
   input: EditHelpRequestInput
   transaction: Prisma.TransactionClient
-  user: ProtectedAppContext['user']
+  user: ProtectedAppContextUser
   target: NonNullable<HelpRequestWithBeneficiaryAndDocuments>
 }): Promise<Prisma.HelpRequestUncheckedUpdateInput> {
   const { type } = await transaction.structure.findUniqueOrThrow({
@@ -81,7 +85,7 @@ export async function prepareHelpRequestData({
 async function updateTransaction(
   transaction: Prisma.TransactionClient,
   input: EditHelpRequestInput,
-  user: ProtectedAppContext['user'],
+  user: ProtectedAppContextUser,
   target: NonNullable<HelpRequestWithBeneficiaryAndDocuments>
 ) {
   const data = await prepareHelpRequestData({

@@ -17,33 +17,33 @@
           </th>
         </tr>
       </thead>
-      <tfoot v-if="shownRevisionsNb && shownRevisionsNb < mutationLogs.length">
+      <tfoot v-if="hasNextPage">
         <td colspan="100%">
           <button
             class="fr-btn fr-btn--secondary see-all-btn"
-            @click="shownRevisionsNb = null"
+            @click="emit('nextPage')"
           >
-            Tout voir
+            Voir plus
           </button>
         </td>
       </tfoot>
       <tbody>
         <tr
-          v-for="mutationLog in displayedMutationLogs"
-          :key="mutationLog.id"
+          v-for="userActivity in usersActivity"
+          :key="userActivity.id"
         >
-          <td>{{ formatDate(mutationLog.date, 'DD/MM/YYYY HH:mm') }}</td>
+          <td>{{ formatDate(userActivity.date, 'DD/MM/YYYY HH:mm') }}</td>
           <td>
             {{
-              mutationLog.author
-                ? getUserDisplayName(mutationLog.author)
+              userActivity.user
+                ? getUserDisplayName(userActivity.user)
                 : '(inconnu)'
             }}
           </td>
-          <td>{{ mutationLogActionLabels[mutationLog.action] }}</td>
+          <td>{{ userActivityTypeLabels[userActivity.activity] }}</td>
           <td v-if="routeWithParams">
             <NuxtLink
-              :to="routeWithParams(mutationLog.itemId)"
+              :to="routeWithParams(userActivity.objectId)"
               class="fr-link"
               target="_self"
             >
@@ -57,33 +57,28 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiariesMutationLogsOutput } from '~/server/routers'
+  import { GetBeneficiariesUsersActivityOutput } from '~/server/routers'
   import { formatDate } from '~/utils/formatDate'
   import { RoutePath } from '~/utils/routing'
   import { getUserDisplayName } from '~/utils/user'
-  import { mutationLogActionLabels } from '~/client/options/mutationLog'
+  import { userActivityTypeLabels } from '~/client/options/userActivity'
 
-  const DEFAULT_SHOWN_REVISIONS_NB = 5
-
-  const props = withDefaults(
+  withDefaults(
     defineProps<{
-      mutationLogs: GetBeneficiariesMutationLogsOutput
+      usersActivity: GetBeneficiariesUsersActivityOutput['activity']
       /**
        * Used for the mutation logs of a collection
        * It defines the URL base to access the item within the application
        */
       routeWithParams?: typeof RoutePath.AppBeneficiary
+      hasNextPage: boolean
     }>(),
     { routeWithParams: undefined }
   )
 
-  const shownRevisionsNb = ref<number | null>(DEFAULT_SHOWN_REVISIONS_NB)
-
-  const displayedMutationLogs = computed(() => {
-    return shownRevisionsNb.value
-      ? props.mutationLogs.slice(0, shownRevisionsNb.value)
-      : props.mutationLogs
-  })
+  const emit = defineEmits<{
+    (e: 'nextPage'): void
+  }>()
 </script>
 
 <style scoped>

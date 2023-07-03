@@ -8,6 +8,9 @@ export const keySchema = z.object({
   key: z.string()
 })
 
+export { paginatedSchema } from './helpers.schema'
+export type { PaginatedInput } from './helpers.schema'
+
 export {
   createBeneficiarySchema,
   searchBeneficiarySchema,
