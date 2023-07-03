@@ -1,6 +1,6 @@
 <template>
   <PageContainer class="page-container">
-    <PageBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" />
+    <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" />
     <PageTitle :title="RouteTitle.AppBeneficiariesAdd()">
       <div>
         Les champs avec <span class="color-red">*</span> sont obligatoires

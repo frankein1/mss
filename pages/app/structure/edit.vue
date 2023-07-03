@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.AppStructureEdit()" />
+    <DsfrBreadcrumb :links="Breadcrumb.AppStructureEdit()" />
     <PageTitle :title="RouteTitle.AppStructureEdit()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">

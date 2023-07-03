@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.AppAccount()" />
+    <DsfrBreadcrumb :links="Breadcrumb.AppAccount()" />
     <PageTitle :title="RouteTitle.AppAccount()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
