@@ -1,5 +1,8 @@
 <template>
-  <section class="beneficiary-details-section">
+  <section
+    v-if="hasOtherInformationSection"
+    class="beneficiary-details-section"
+  >
     <h2 class="fr-h6">Autres informations</h2>
     <ul class="information-list">
       <li v-if="beneficiary.protectionMeasure">
@@ -49,7 +52,19 @@
     beneficiaryProtectionMeasureLabels
   } from '~/client/options/beneficiary'
 
-  defineProps<{
+  const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
   }>()
+
+  const hasOtherInformationSection = computed(
+    () =>
+      props.beneficiary.protectionMeasure ||
+      props.beneficiary.representative ||
+      props.beneficiary.prescribingStructure ||
+      props.beneficiary.orientationType ||
+      props.beneficiary.orientationStructure ||
+      props.beneficiary.serviceProviders ||
+      props.beneficiary.involvedPartners ||
+      props.beneficiary.additionalInformation
+  )
 </script>
