@@ -7,8 +7,9 @@ import {
   FollowupSignalement
 } from '@prisma/client'
 import { z } from 'zod'
+import { paginatedSchema } from './helpers.schema'
+import { followupFilterSchema } from './filter.schema'
 import { errorMessages } from '~/utils/zod'
-import { followupFilterSchema } from '~/server/schema'
 
 const addFollowupSchema = z.object({
   beneficiaryId: z.string().uuid(),
@@ -53,22 +54,22 @@ const editFollowupSchema = addFollowupSchema.extend({
 type AddFollowupInput = z.infer<typeof addFollowupSchema>
 type EditFollowupInput = z.infer<typeof editFollowupSchema>
 
-const getFollowupsSchema = z.object({
-  page: z.number(),
-  perPage: z.number(),
-  orderBy: z.array(
-    z.object({
-      date: z.nativeEnum(Prisma.SortOrder).optional(),
-      dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
-      beneficiary: z
-        .object({
-          usualName: z.nativeEnum(Prisma.SortOrder).optional()
-        })
-        .optional()
-    })
-  ),
-  filters: followupFilterSchema
-})
+const getFollowupsSchema = z
+  .object({
+    orderBy: z.array(
+      z.object({
+        date: z.nativeEnum(Prisma.SortOrder).optional(),
+        dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
+        beneficiary: z
+          .object({
+            usualName: z.nativeEnum(Prisma.SortOrder).optional()
+          })
+          .optional()
+      })
+    ),
+    filters: followupFilterSchema
+  })
+  .merge(paginatedSchema)
 
 type GetFollowupsInput = z.infer<typeof getFollowupsSchema>
 

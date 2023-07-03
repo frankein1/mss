@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb
+    <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryFollowupAdd(beneficiary)"
     />
     <PageTitle :title="RouteTitle.AppBeneficiaryFollowupAdd(beneficiary)" />

@@ -86,6 +86,7 @@ export const protectedProcedure = t.procedure
 export type ProtectedAppContext = AppContext & {
   user: User & { structureId: string }
 }
+export type ProtectedAppContextUser = ProtectedAppContext['user']
 
 /**
  * Stats procedure

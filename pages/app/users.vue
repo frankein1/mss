@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.AppUsers()" />
+    <DsfrBreadcrumb :links="Breadcrumb.AppUsers()" />
     <PageTitle :title="RouteTitle.AppUsers()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">

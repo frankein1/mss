@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.AppHistory()" />
+    <DsfrBreadcrumb :links="Breadcrumb.AppHistory()" />
     <PageTitle :title="RouteTitle.AppHistory()" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">

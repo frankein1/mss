@@ -11,7 +11,7 @@ import { notificationRouter } from './notificationRouter'
 import { adminRouter } from './admin/router'
 import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
-import { mutationLogsRouter } from './mutationLogsRouter'
+import { usersActivityRouter } from './usersActivityRouter/usersActivityRouter'
 import { authRouter } from './authRouter'
 import { router } from '~/server/trpc'
 
@@ -28,7 +28,7 @@ export const appRouter = router({
   helpRequest: helpRequestRouter,
   documents: documentRouter,
   comment: commentRouter,
-  mutationLogs: mutationLogsRouter
+  usersActivity: usersActivityRouter
 })
 // export type definition of API
 export type AppRouter = typeof appRouter
@@ -59,8 +59,5 @@ export type GetBeneficiaryDocumentsOutput =
   RouterOutput['beneficiary']['getBeneficiaryDocuments']
 export type GetBeneficiaryDocumentOutput = GetBeneficiaryDocumentsOutput[0]
 
-// FIXME: Replace by mutation log type when it exists in Prisma schema
-export type GetBeneficiariesMutationLogsOutput =
-  RouterOutput['mutationLogs']['beneficiaries']
-
-export * from '~/server/controller/admin'
+export * from '~/server/routers/usersActivityRouter'
+export * from '~/server/routers/admin'

@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.AppBeneficiaryEdit(beneficiary)" />
+    <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaryEdit(beneficiary)" />
     <PageTitle :title="RouteTitle.AppBeneficiaryEdit(beneficiary || null)" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">

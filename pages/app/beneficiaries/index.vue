@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb :links="Breadcrumb.AppBeneficiaries()" />
+    <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaries()" />
     <PageTitle :title="RouteTitle.AppBeneficiaries()" />
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
@@ -38,7 +38,7 @@
               @change-page="updatePagination($event)"
             />
 
-            <MutationLogs
+            <UsersActivity
               class="fr-mt-4w fr-px-5v"
               collection="beneficiaries"
               :route-with-params="RoutePath.AppBeneficiary"
@@ -53,7 +53,6 @@
 <script lang="ts" setup>
   import { useFiltersStore } from '~/store/filters'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
-  // import { RoutePath } from '~/utils/routing'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import type { BeneficiarySort } from '~/types/table'

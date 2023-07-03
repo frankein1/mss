@@ -1,5 +1,6 @@
 import {
   ProtectedAppContext,
+  ProtectedAppContextUser,
   invalidError,
   forbiddenError
 } from '~/server/trpc'
@@ -10,7 +11,7 @@ import {
 } from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 
-function getPermissionConditions(user: ProtectedAppContext['user']) {
+function getPermissionConditions(user: ProtectedAppContextUser) {
   if (canOnlyListItsUploadedDocuments(user)) {
     return { createdById: user.id }
   }

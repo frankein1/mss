@@ -5,7 +5,7 @@
 
 <template>
   <div>
-    <PageBreadcrumb
+    <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryPrint(beneficiary)"
       class="no-print"
     />

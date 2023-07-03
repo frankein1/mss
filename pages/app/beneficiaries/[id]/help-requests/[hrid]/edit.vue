@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageBreadcrumb
+    <DsfrBreadcrumb
       :links="
         Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest?.beneficiary)
       "
