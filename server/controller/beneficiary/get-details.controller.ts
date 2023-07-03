@@ -1,5 +1,9 @@
 import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaires'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import {
+  ProtectedAppContext,
+  ProtectedAppContextUser,
+  forbiddenError
+} from '~/server/trpc'
 import {
   canViewBeneficiary,
   canListBeneficiaryRelatives,
@@ -33,7 +37,7 @@ export const getBeneficiaryDetailsHandler = async ({
 }
 
 async function getBeneficiaryAccessibleData(
-  user: ProtectedAppContext['user'],
+  user: ProtectedAppContextUser,
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
   const meta = getBeneficiaryMeta(beneficiary)
@@ -120,7 +124,7 @@ function getBeneficiaryGeneralInformation(
 }
 
 function getBeneficiaryRelatives(
-  user: ProtectedAppContext['user'],
+  user: ProtectedAppContextUser,
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
   if (!canListBeneficiaryRelatives(user, beneficiary)) {
@@ -143,7 +147,7 @@ function getBeneficiaryRelatives(
 }
 
 async function getBeneficiaryHealth(
-  user: ProtectedAppContext['user'],
+  user: ProtectedAppContextUser,
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
   if (!canViewBeneficiaryHealthInfo(user, beneficiary)) {
@@ -164,7 +168,7 @@ async function getBeneficiaryHealth(
 }
 
 function getBeneficiaryOccupationIncome(
-  user: ProtectedAppContext['user'],
+  user: ProtectedAppContextUser,
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
   if (!canViewBeneficiaryOccupationIncome(user, beneficiary)) {
@@ -194,7 +198,7 @@ function getBeneficiaryOccupationIncome(
 }
 
 function getBeneficiaryExternalOrganisations(
-  user: ProtectedAppContext['user'],
+  user: ProtectedAppContextUser,
   beneficiary: BeneficiaryWithReferentsAndRelatives
 ) {
   if (!canViewBeneficiaryExternalOrganisations(user, beneficiary)) {

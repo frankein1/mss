@@ -4,6 +4,7 @@ export {
   protectedProcedure,
   statsProcedure,
   router,
-  ProtectedAppContext
+  ProtectedAppContext,
+  ProtectedAppContextUser
 } from './createRouter'
 export { AppContext, createContext } from './createContext'
