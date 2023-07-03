@@ -40,7 +40,7 @@ export const createViewUrlHandler = async ({
 
   await addUserActivity({
     userId: user.id,
-    activity: UserActivityType.UPDATE,
+    activity: UserActivityType.VIEW,
     object: 'Document',
     objectId: key
   })
