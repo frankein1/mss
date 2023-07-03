@@ -1,11 +1,12 @@
-import { FollowupType, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { BeneficiaryFilterInput, GetBeneficiariesInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
+import { FollowupTypeIdAndName } from '~/types/followupType'
 
-type FollowupTypeIdAndName = Pick<FollowupType, 'id' | 'name'>
 type FollowupTypeSet = { [id: string]: FollowupTypeIdAndName }
 
 export const getBeneficiariesHandler = async ({
@@ -52,6 +53,10 @@ export const getBeneficiariesHandler = async ({
     totalPages
   }
 }
+
+export type GetBeneficiariesOutput = Prisma.PromiseReturnType<
+  typeof getBeneficiariesHandler
+>
 
 function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
@@ -220,20 +225,4 @@ function getUniqueFollowUpTypesTuplesFromHelpRequests(
       [helpRequest.type.id]: helpRequest.type
     }
   }, {} as FollowupTypeSet)
-}
-
-function sortFollowupTypesByName(
-  a: FollowupTypeIdAndName,
-  b: FollowupTypeIdAndName
-) {
-  const insensitiveAName = a.name.toLowerCase()
-  const insensitiveBName = b.name.toLowerCase()
-
-  if (insensitiveAName < insensitiveBName) {
-    return -1
-  }
-  if (insensitiveAName > insensitiveBName) {
-    return 1
-  }
-  return 0
 }

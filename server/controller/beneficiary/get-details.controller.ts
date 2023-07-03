@@ -1,3 +1,4 @@
+import type { Prisma } from '@prisma/client'
 import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaires'
 import {
   ProtectedAppContext,
@@ -35,6 +36,10 @@ export const getBeneficiaryDetailsHandler = async ({
 
   return beneficiaryAccessibleData
 }
+
+export type GetBeneficiaryOutput = Prisma.PromiseReturnType<
+  typeof getBeneficiaryDetailsHandler
+>['beneficiary']
 
 async function getBeneficiaryAccessibleData(
   user: ProtectedAppContextUser,

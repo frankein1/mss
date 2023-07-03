@@ -18,7 +18,8 @@ import {
   getBeneficiarySecurityTargetHandler,
   getBeneficiaryHistoryHandler,
   deleteBeneficiaryHandler,
-  isBeneficiaryReferentHandler
+  isBeneficiaryReferentHandler,
+  getBeneficiaryFollowupTypesHandler
 } from '~/server/controller/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
 
@@ -53,5 +54,8 @@ export const beneficiaryRouter = router({
   getBeneficiaries: protectedProcedure
     .input(getBeneficiariesSchema)
     .query(getBeneficiariesHandler),
-  delete: protectedProcedure.input(idSchema).mutation(deleteBeneficiaryHandler)
+  delete: protectedProcedure.input(idSchema).mutation(deleteBeneficiaryHandler),
+  getBeneficiaryFollowupTypes: protectedProcedure
+    .input(idSchema)
+    .query(getBeneficiaryFollowupTypesHandler)
 })

@@ -26,17 +26,40 @@
         :id="BeneficiaryTab.Details"
         name="Infos"
       >
+        <AtomLoader
+          v-if="pending"
+          class="fr-mx-auto"
+        />
+        <AtomAlert
+          v-else-if="error"
+          :alert-type="AlertType.Error"
+          message="La fiche bénéficaire n'a pas pu être chargée."
+        />
         <BeneficiaryDetails
+          v-else
           :beneficiary="beneficiary"
           :entourages="entourages"
           :tax-households="taxHouseholds"
+          :followup-types="followupTypes"
         />
       </Tab>
       <Tab
         :id="BeneficiaryTab.Documents"
         name="Documents"
       >
-        <BeneficiaryDocumentList :beneficiary="beneficiary" />
+        <AtomLoader
+          v-if="pending"
+          class="fr-mx-auto"
+        />
+        <AtomAlert
+          v-else-if="error"
+          :alert-type="AlertType.Error"
+          message="La fiche bénéficaire n'a pas pu être chargée."
+        />
+        <BeneficiaryDocumentList
+          v-else
+          :beneficiary="beneficiary"
+        />
       </Tab>
       <Tab
         :id="BeneficiaryTab.History"
@@ -54,12 +77,14 @@
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { AlertType } from '~/utils/constants/alert'
 
   definePageMeta({
     middleware: 'is-beneficiary-referent'
   })
 
   const route = useRoute()
+  const trpcClient = useTrpcClient()
   const beneficiaryId = route.params.id as string
   const originPage = route.query.originPage as
     | Route.AppOverview
@@ -68,14 +93,29 @@
     | undefined
   const originTab = route.query.hash as string | undefined
 
-  const { data } =
-    await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({
-      id: beneficiaryId
-    })
+  const {
+    data,
+    pending: beneficiaryPending,
+    error: beneficiaryError
+  } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
+    id: beneficiaryId
+  })
+
+  const {
+    data: followupTypesData,
+    pending: followupTypesPending,
+    error: followupTypesError
+  } = await trpcClient.beneficiary.getBeneficiaryFollowupTypes.useQuery({
+    id: beneficiaryId
+  })
 
   const beneficiary = computed(() => data.value?.beneficiary)
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
+  const followupTypes = computed(
+    () =>
+      followupTypesData.value || { legallyRequired: [], legallyNotRequired: [] }
+  )
 
   const authStore = useAuthStore()
   const canDelete = computed(() => {
@@ -92,13 +132,21 @@
     return RoutePath.AppBeneficiaries()
   })
 
+  const pending = computed(
+    () => beneficiaryPending.value || followupTypesPending.value
+  )
+
+  const error = computed(
+    () => beneficiaryError.value || followupTypesError.value
+  )
+
   function onBeneficiaryDeleted() {
     navigateTo(backLink.value)
     useSnackbar().success('Le bénéficiaire a été supprimé.')
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
 
   @include dsfr-media-query.respond-from('lg') {
@@ -112,11 +160,7 @@
     justify-items: center;
   }
 
-  .beneficiary-details-section {
-    --title-spacing: 0 0 0.75rem;
-
-    &:not(:last-child) {
-      margin-bottom: 2rem;
-    }
+  :deep(.beneficiary-details-section):not(:last-child) {
+    margin-bottom: 1.5rem;
   }
 </style>

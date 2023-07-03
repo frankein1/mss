@@ -6,3 +6,5 @@ export type FollowupTypeWithSupportsCount = FollowupType & {
     helpRequests: number
   }
 }
+
+export type FollowupTypeIdAndName = Pick<FollowupType, 'id' | 'name'>

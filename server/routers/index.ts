@@ -1,6 +1,6 @@
 import { TRPCClientError } from '@trpc/client'
 import type { inferRouterOutputs } from '@trpc/server'
-import { beneficiaryRouter } from './beneficiaryRouter'
+import { beneficiaryRouter } from './beneficiary/router'
 import { configRouter } from './configRouter'
 import { followupRouter } from './followupRouter'
 import { statRouter } from './statRouter'
@@ -11,7 +11,7 @@ import { notificationRouter } from './notificationRouter'
 import { adminRouter } from './admin/router'
 import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
-import { usersActivityRouter } from './usersActivityRouter/usersActivityRouter'
+import { usersActivityRouter } from './usersActivity/router'
 import { authRouter } from './authRouter'
 import { router } from '~/server/trpc'
 
@@ -36,13 +36,6 @@ export type AppRouter = typeof appRouter
 type RouterOutput = inferRouterOutputs<AppRouter>
 export type ErrorOutput = TRPCClientError<AppRouter>
 
-export type GetBeneficiariesOutput =
-  RouterOutput['beneficiary']['getBeneficiaries']
-export type GetBeneficiaryOutput =
-  RouterOutput['beneficiary']['getBeneficiaryDetails']['beneficiary']
-export type GetBeneficiaryHistoryOutput =
-  RouterOutput['beneficiary']['getBeneficiaryHistory']
-
 export type GetFollowupsOutput = RouterOutput['followup']['getFollowups']
 export type GetFollowupDetailsOutput =
   RouterOutput['followup']['getFollowupDetails']
@@ -59,5 +52,6 @@ export type GetBeneficiaryDocumentsOutput =
   RouterOutput['beneficiary']['getBeneficiaryDocuments']
 export type GetBeneficiaryDocumentOutput = GetBeneficiaryDocumentsOutput[0]
 
-export * from '~/server/routers/usersActivityRouter'
+export * from '~/server/routers/beneficiary'
+export * from '~/server/routers/usersActivity'
 export * from '~/server/routers/admin'
