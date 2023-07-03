@@ -27,6 +27,7 @@ import {
   beneficiaryFilterSchema,
   beneficiaryHistoryFilterSchema
 } from './filter.schema'
+import { paginatedSchema } from './helpers.schema'
 import { errorMessages, validZipcode } from '~/utils/zod'
 
 export const getDocumentsSchema = z.object({
@@ -188,16 +189,16 @@ export const updateBeneficiarySchema = z.object({
 
 export type UpdateBeneficiaryInput = z.infer<typeof updateBeneficiarySchema>
 
-export const getBeneficiariesSchema = z.object({
-  page: z.number(),
-  perPage: z.number(),
-  orderBy: z.array(
-    z.object({
-      firstName: z.nativeEnum(Prisma.SortOrder).optional(),
-      usualName: z.nativeEnum(Prisma.SortOrder).optional()
-    })
-  ),
-  filters: beneficiaryFilterSchema
-})
+export const getBeneficiariesSchema = z
+  .object({
+    orderBy: z.array(
+      z.object({
+        firstName: z.nativeEnum(Prisma.SortOrder).optional(),
+        usualName: z.nativeEnum(Prisma.SortOrder).optional()
+      })
+    ),
+    filters: beneficiaryFilterSchema
+  })
+  .merge(paginatedSchema)
 
 export type GetBeneficiariesInput = z.infer<typeof getBeneficiariesSchema>

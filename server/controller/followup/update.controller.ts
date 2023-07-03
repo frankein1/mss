@@ -1,5 +1,9 @@
 import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import {
+  ProtectedAppContext,
+  ProtectedAppContextUser,
+  forbiddenError
+} from '~/server/trpc'
 import type { EditFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import {
@@ -27,7 +31,7 @@ export async function prepareFollowupData({
 }: {
   input: EditFollowupInput
   transaction: Prisma.TransactionClient
-  user: ProtectedAppContext['user']
+  user: ProtectedAppContextUser
   target: FollowupTarget
 }): Promise<Prisma.FollowupUncheckedUpdateInput> {
   const { type } = await transaction.structure.findUniqueOrThrow({
@@ -82,7 +86,7 @@ export async function prepareFollowupData({
 async function updateTransaction(
   transaction: Prisma.TransactionClient,
   input: EditFollowupInput,
-  user: ProtectedAppContext['user'],
+  user: ProtectedAppContextUser,
   target: Exclude<FollowupWithBeneficiaryDocumentsAndTypes, null>
 ) {
   const data = await prepareFollowupData({

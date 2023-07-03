@@ -1,6 +1,7 @@
 import { Prisma, StructureType, UserActivityType } from '@prisma/client'
 import {
   ProtectedAppContext,
+  ProtectedAppContextUser,
   invalidError,
   forbiddenError
 } from '~/server/trpc'
@@ -20,7 +21,7 @@ export async function prepareHelpRequestData({
 }: {
   input: CreateHelpRequestInput
   transaction: Prisma.TransactionClient
-  user: ProtectedAppContext['user']
+  user: ProtectedAppContextUser
 }): Promise<Prisma.HelpRequestUncheckedCreateInput> {
   const { type } = await transaction.structure.findUniqueOrThrow({
     where: { id: user.structureId },
@@ -62,7 +63,7 @@ export async function prepareHelpRequestData({
 const createTransaction = async (
   transaction: Prisma.TransactionClient,
   input: CreateHelpRequestInput,
-  user: ProtectedAppContext['user']
+  user: ProtectedAppContextUser
 ) => {
   const data = await prepareHelpRequestData({ input, transaction, user })
 
