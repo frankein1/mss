@@ -30,6 +30,7 @@
           :beneficiary="beneficiary"
           :entourages="entourages"
           :tax-households="taxHouseholds"
+          :followup-types="followupTypes"
         />
       </Tab>
       <Tab
@@ -68,10 +69,14 @@
     | undefined
   const originTab = route.query.hash as string | undefined
 
-  const { data } =
-    await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({
-      id: beneficiaryId
-    })
+
+  const {
+    data: followupTypesData,
+    pending: followupTypesPending,
+    error: followupTypesError
+  } = await trpcClient.beneficiary.getBeneficiaryFollowupTypes.useQuery({
+    id: beneficiaryId
+  })
 
   const beneficiary = computed(() => data.value?.beneficiary)
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
@@ -98,7 +103,7 @@
   }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
 
   @include dsfr-media-query.respond-from('lg') {
@@ -112,11 +117,7 @@
     justify-items: center;
   }
 
-  .beneficiary-details-section {
-    --title-spacing: 0 0 0.75rem;
-
-    &:not(:last-child) {
-      margin-bottom: 2rem;
-    }
+  :deep(.beneficiary-details-section):not(:last-child) {
+    margin-bottom: 1.5rem;
   }
 </style>

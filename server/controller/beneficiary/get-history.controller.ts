@@ -211,3 +211,7 @@ export const getBeneficiaryHistoryHandler = async ({
 
   return [...followups, ...helpRequests].sort(sortHistoryItem)
 }
+
+export type GetBeneficiaryHistoryOutput = Prisma.PromiseReturnType<
+  typeof getBeneficiaryHistoryHandler
+>

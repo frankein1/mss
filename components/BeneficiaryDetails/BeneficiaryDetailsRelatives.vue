@@ -1,6 +1,6 @@
 <template>
   <section class="beneficiary-details-section">
-    <h2 class="fr-h6">{{ sectionTitle }}</h2>
+    <h2 class="fr-h5">{{ sectionTitle }}</h2>
     <ul class="information-list">
       <template v-if="household">
         <li v-if="beneficiary?.familySituation">

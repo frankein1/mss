@@ -1,7 +1,7 @@
 <template>
   <div class="fr-container--fluid">
     <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12 fr-col-lg-6 beneficiary-details-col">
+      <div class="fr-col-12 fr-col-lg-8 beneficiary-details-col">
         <BeneficiaryDetailsGeneral :beneficiary="beneficiary" />
         <BeneficiaryDetailsHealth :beneficiary="beneficiary" />
         <BeneficiaryDetailsOccupationIncome :beneficiary="beneficiary" />
@@ -18,17 +18,25 @@
         />
         <BeneficiaryDetailsOtherInformation :beneficiary="beneficiary" />
       </div>
+      <div class="fr-col-12 fr-col-lg-4 beneficiary-details-col">
+        <BeneficiaryDetailsFollowupTypes :followup-types="followupTypes" />
+      </div>
     </div>
   </div>
 </template>
+
 <script lang="ts" setup>
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type {
+    GetBeneficiaryOutput,
+    GetBeneficiaryFollowupTypesOutput
+  } from '~/server/routers'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
     taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
     entourages: BeneficiaryRelativeWithLinkedBeneficiary[]
+    followupTypes: GetBeneficiaryFollowupTypesOutput
   }>()
 
   const houseHoldSection = computed(
@@ -39,3 +47,16 @@
       props.beneficiary.majorChildren
   )
 </script>
+
+<style scoped lang="scss">
+  .beneficiary-details-col {
+    &:first-child {
+      padding-right: 1.5rem;
+      border-right: 1px solid var(--border-default-grey);
+    }
+
+    &:last-child {
+      padding-left: 1rem;
+    }
+  }
+</style>
