@@ -80,9 +80,8 @@
         </tbody>
       </table>
     </div>
-    <!-- FIXME: user add link -->
     <NuxtLink
-      :to="RoutePath.AdminOverview()"
+      :to="RoutePath.AdminUsersAdd()"
       class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-user-add-line"
       target="_self"
     >

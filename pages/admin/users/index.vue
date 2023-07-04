@@ -9,6 +9,13 @@
           @input="onSearch"
         />
       </div>
+      <NuxtLink
+        :to="RoutePath.AdminUsersAdd()"
+        class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-user-add-line"
+        target="_self"
+      >
+        Ajouter un utilisateur
+      </NuxtLink>
     </div>
     <div
       v-if="data?.users?.length"

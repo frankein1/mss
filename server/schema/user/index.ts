@@ -1,3 +1,4 @@
+export * from './adminCreateUser.schema'
 export * from './adminGetUser.schema'
 export * from './adminEditUser.schema'
 export * from './createUser.schema'
