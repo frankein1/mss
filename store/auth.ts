@@ -35,7 +35,7 @@ export const useAuthStore = defineStore({
       return this.user?.id || ''
     },
     userStructureType(): StructureType | undefined {
-      return this.user?.structureType
+      return this.user?.structureType || undefined
     },
     isAdmin(): boolean {
       return this.user?.role === UserRole.Administrator

@@ -21,7 +21,8 @@ export default defineEventHandler(async event => {
       }
     },
     include: {
-      CGUHistory: true
+      CGUHistory: true,
+      structure: { select: { id: true, type: true } }
     }
   })
 
@@ -42,7 +43,7 @@ export default defineEventHandler(async event => {
     status,
     email,
     CGUHistory,
-    structureId
+    structure
   } = user
 
   const CGUHistoryVersion = CGUHistory?.length ? CGUHistory[0].version : null
@@ -54,8 +55,9 @@ export default defineEventHandler(async event => {
     email,
     role,
     status,
-    structureId,
-    CGUHistoryVersion
+    structureId: structure?.id || null,
+    CGUHistoryVersion,
+    structureType: structure?.type || null
   }
 
   const { sessionToken, expiresIn } = signJwt(jwtUser, config.auth.jwtKey)
