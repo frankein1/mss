@@ -17,63 +17,76 @@
         Ajouter une structure
       </NuxtLink>
     </div>
-    <div v-if="data?.structures?.length">
+    <div
+      v-if="data?.structures?.length"
+      class="table-container fr-mt-3w"
+      tabindex="0"
+    >
       <div
-        v-for="structure in data.structures"
-        :key="structure.id"
-        class="structures__row"
+        class="fr-table fr-table--bordered fr-table--no-caption fr-mb-0 fr-pt-0"
       >
-        <div class="structures__infos">
-          <div class="structures__name">
-            <div>{{ structure.name }}</div>
-            <div class="type">{{ structure.type }}</div>
-            <div>{{ structure.siret }}</div>
-          </div>
-          <div class="structures__detail">
-            <div>
-              {{ structure.inhabitantsNumber }}
-              {{ structure.inseeCode }}
-            </div>
-          </div>
-          <div class="structures__address">
-            <div>
-              {{ structure.zipcode }}
-            </div>
-            <div>
-              {{ structure.city }}
-            </div>
-          </div>
-          <div class="structures__count">
-            <div>
-              {{ `${structure._count.beneficiaries} bénéficiaires` }}
-            </div>
-            <div>
-              {{ `${structure._count.users || 0} utilisateurs` }}
-            </div>
-          </div>
-          <div class="structures__last">
-            <div v-if="structure.userActivities.length">
-              <div>
-                {{ formatDate(structure.userActivities[0].date) }}
-              </div>
-              <div>
-                {{
-                  `${structure.userActivities[0].activity} ${structure.userActivities[0].object}`
-                }}
-              </div>
-            </div>
-          </div>
-        </div>
-        <NuxtLink
-          :to="RoutePath.AdminStructure(structure.id)"
-          class="fr-link"
-          >Modifier</NuxtLink
-        >
+        <table>
+          <caption>
+            Liste des structures
+          </caption>
+          <thead>
+            <tr>
+              <th scope="col">Nom</th>
+              <th scope="col">Type</th>
+              <th scope="col">SIRET</th>
+              <th scope="col">Nombre d'habitants</th>
+              <th scope="col">Code INSEE</th>
+              <th scope="col">Code postal</th>
+              <th scope="col">Ville</th>
+              <th scope="col">Bénéficiaires</th>
+              <th scope="col">Utilisateurs</th>
+              <th scope="col">Dernière activité</th>
+            </tr>
+          </thead>
+          <tbody>
+            <NuxtLink
+              v-for="structure in data.structures"
+              :key="structure.id"
+              v-slot="{ navigate }"
+              custom
+              :to="RoutePath.AdminStructure(structure.id)"
+              target="_self"
+            >
+              <tr
+                class="clickable-row"
+                @click="navigate"
+              >
+                <td>{{ structure.name }}</td>
+                <td>{{ StructureTypeLabels[structure.type] }}</td>
+                <td>{{ structure.siret }}</td>
+                <td>{{ structure.inhabitantsNumber }}</td>
+                <td>{{ structure.inseeCode }}</td>
+                <td>{{ structure.zipcode }}</td>
+                <td>{{ structure.city }}</td>
+                <td>{{ structure._count.beneficiaries }}</td>
+                <td>{{ structure._count.users || 0 }}</td>
+                <td>
+                  <div v-if="structure.userActivities.length">
+                    <div>
+                      {{ formatDate(structure.userActivities[0].date) }}
+                    </div>
+                    <div>
+                      {{
+                        `${structure.userActivities[0].activity} ${structure.userActivities[0].object}`
+                      }}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </NuxtLink>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 </template>
 <script lang="ts" setup>
+  import { StructureTypeLabels } from '~/client/options/structure'
   import { AdminStructuresOutput } from '~/server/routers'
   import { RoutePath } from '~/utils/routing'
 
