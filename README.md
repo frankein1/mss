@@ -31,7 +31,7 @@ cp .env.sample .env
 start postgres
 
 ```sh
-pnpm db:start
+pnpm dev:db:start
 ```
 
 generate the prisma client
