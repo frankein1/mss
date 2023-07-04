@@ -9,7 +9,7 @@ import {
 import { z } from 'zod'
 import { paginatedSchema } from './helpers.schema'
 import { followupFilterSchema } from './filter.schema'
-import { errorMessages } from '~/utils/zod'
+import { errorMessages, enumErrorMap } from '~/utils/zod'
 
 const addFollowupSchema = z.object({
   beneficiaryId: z.string().uuid(),
@@ -20,7 +20,9 @@ const addFollowupSchema = z.object({
     })
     .min(1, "Veuillez renseigner au moins un type d'accompagnement"),
   documents: z.array(z.string(), errorMessages).default([]),
-  medium: z.nativeEnum(FollowupMedium, errorMessages),
+  medium: z.nativeEnum(FollowupMedium, {
+    errorMap: enumErrorMap
+  }),
   ministre: z.nativeEnum(Minister, errorMessages).nullish(),
   date: z.coerce.date(errorMessages),
   synthesis: z.string().nullish(),
