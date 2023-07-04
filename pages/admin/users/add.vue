@@ -8,7 +8,7 @@
         >
           <UserFormAdmin
             :is-submitting="isSubmitting"
-            @update-user="onAddUser"
+            @update-user="onAddUser($event as AdminCreateUserInput)"
           />
         </main>
       </div>

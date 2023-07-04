@@ -21,7 +21,7 @@
             v-else-if="user"
             :user="user"
             :is-submitting="isSubmitting"
-            @update-user="onUpdateUser"
+            @update-user="onUpdateUser($event as AdminEditUserInput)"
           />
         </main>
       </div>
