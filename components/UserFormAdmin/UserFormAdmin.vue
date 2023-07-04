@@ -18,11 +18,19 @@
           required
         />
       </div>
-      <div class="fr-col-12">
+      <div class="fr-col-6">
         <VeeInput
           name="email"
           :label="userFieldLabels.email"
           type="email"
+          required
+        />
+      </div>
+      <div class="fr-col-6">
+        <VeeSearchableSelect
+          name="structureId"
+          :label="userFieldLabels.structureId"
+          :options="withEmptyValue(structureOptions)"
           required
         />
       </div>
@@ -66,9 +74,11 @@
   import { toTypedSchema } from '@vee-validate/zod'
   import { userFieldLabels } from '~/client/labels'
   import { userRoleOptions, userStatusOptions } from '~/client/options/user'
-  import { withEmptyValue } from '~/utils/options'
   import { AdminUserOutput } from '~/server/routers'
   import { AdminEditUserInput, adminEditUserSchema } from '~/server/schema'
+  import { toOptions, withEmptyValue } from '~/utils/options'
+
+  const trpcClient = useTrpcClient()
 
   const props = defineProps<{
     user?: AdminUserOutput
@@ -79,6 +89,14 @@
     (e: 'updateUser', user: AdminEditUserInput): void
   }>()
 
+  const { data: structures } = await trpcClient.admin.getStructures.useQuery({})
+
+  const structureOptions = computed(() =>
+    structures.value?.structures.length
+      ? toOptions(structures.value?.structures, 'id', 'name')
+      : new Map<string, string>()
+  )
+
   const { handleSubmit } = useForm<AdminEditUserInput>({
     validationSchema: toTypedSchema(adminEditUserSchema),
     initialValues: {
@@ -88,7 +106,8 @@
       email: props.user?.email,
       role: props.user?.role,
       status: props.user?.status,
-      aidantConnectAuthorisation: !!props.user?.aidantConnectAuthorisation
+      aidantConnectAuthorisation: !!props.user?.aidantConnectAuthorisation,
+      structureId: props.user?.structureId || ''
     }
   })
 

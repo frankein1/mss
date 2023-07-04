@@ -18,7 +18,8 @@ const adminEditUserSchema = z.object({
   status: z.nativeEnum(UserStatus, {
     errorMap: enumErrorMap
   }),
-  aidantConnectAuthorisation: z.boolean()
+  aidantConnectAuthorisation: z.boolean(),
+  structureId: z.string().uuid()
 })
 
 type AdminEditUserInput = z.infer<typeof adminEditUserSchema>
