@@ -34,16 +34,15 @@
           </tr>
         </thead>
         <tbody>
-          <!-- FIXME: user edit link -->
           <NuxtLink
+            v-for="user in structure.users"
+            :key="user.id"
             v-slot="{ navigate }"
             custom
-            :to="RoutePath.AdminOverview()"
+            :to="RoutePath.AdminUser(user.id)"
             target="_self"
           >
             <tr
-              v-for="user in structure.users"
-              :key="user.id"
               class="clickable-row"
               @click="navigate"
             >
