@@ -81,7 +81,10 @@
       </table>
     </div>
     <NuxtLink
-      :to="RoutePath.AdminUsersAdd()"
+      :to="{
+        path: RoutePath.AdminUsersAdd(),
+        query: { structureId: structure.id }
+      }"
       class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-user-add-line"
       target="_self"
     >

@@ -85,6 +85,8 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
 
   const trpcClient = useTrpcClient()
+  const route = useRoute()
+  const urlStructureId = route.query.structureId as string | undefined
 
   const props = defineProps<{
     user?: AdminUserOutput
@@ -115,7 +117,7 @@
       role: props.user?.role,
       status: props.user?.status || UserStatus.Active,
       aidantConnectAuthorisation: !!props.user?.aidantConnectAuthorisation,
-      structureId: props.user?.structureId || ''
+      structureId: props.user?.structureId || urlStructureId || ''
     }
   })
 
