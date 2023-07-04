@@ -104,11 +104,12 @@
 <script setup lang="ts">
   import { useField } from 'vee-validate'
   import { toRef } from 'vue'
+  import type { Options } from '~/utils/options'
 
   const props = withDefaults(
     defineProps<{
       label: string
-      options: Map<string, string>
+      options: Options
       labelClass?: string
       required?: boolean
       name: string
