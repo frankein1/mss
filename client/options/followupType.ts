@@ -40,8 +40,8 @@ export const defaultLegallyNotRequiredFollowupTypeLabels: {
     'Aides financières remboursables',
   [DefaultFollowupType.AnimationsFamilles]: 'Animations familles',
   [DefaultFollowupType.AnimationsSeniors]: 'Animations seniors',
-  [DefaultFollowupType.InclusionNumerique]: 'Inclusion numérique',
   [DefaultFollowupType.Other]: 'Autre',
+  [DefaultFollowupType.InclusionNumerique]: 'Inclusion numérique',
   [DefaultFollowupType.PlanAlerteEtUrgence]: 'Plan alerte et urgence',
   [DefaultFollowupType.SoutienAdministratif]: 'Soutien administratif'
 }

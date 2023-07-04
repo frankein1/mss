@@ -65,6 +65,7 @@
   } from '~/client/options/followupType'
   import { toOptions } from '~/utils/options'
   import { structureFieldLabels } from '~/client/labels'
+  import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 
   const props = withDefaults(
     defineProps<{
@@ -82,14 +83,23 @@
   const isAdding = ref(false)
   const createdFollowupTypes = ref<string[]>([])
 
-  const legallyNotRequiredFollowupTypeOptions = computed(
-    () =>
-      new Map<string, string>([
-        ...defaultLegallyNotRequiredFollowupTypeOptions,
-        ...toOptions(props.customFollowupTypes, 'id', 'name'),
-        ...arrayToOptions(createdFollowupTypes.value)
-      ])
-  )
+  const legallyNotRequiredFollowupTypeOptions = computed(() => {
+    const legallyNotRequiredFollowupTypes = [
+      ...Array.from(defaultLegallyNotRequiredFollowupTypeOptions).map(
+        ([id, name]) => ({ id, name })
+      ),
+      ...props.customFollowupTypes,
+      ...createdFollowupTypes.value.map(name => ({ id: name, name }))
+    ]
+
+    return new Map<string, string>(
+      toOptions(
+        legallyNotRequiredFollowupTypes.sort(sortFollowupTypesByName),
+        'id',
+        'name'
+      )
+    )
+  })
 
   const legallyNotRequiredSelectedFollowupTypes = computed(() => [
     ...props.defaultLegallyNotRequiredSelectedFollowupTypes,
