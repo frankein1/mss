@@ -16,6 +16,9 @@ export const getCurrentUserStructureHandler = async ({
           _count: {
             select: { followups: true, helpRequests: true }
           }
+        },
+        orderBy: {
+          name: 'asc'
         }
       }
     }
