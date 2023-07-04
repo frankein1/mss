@@ -1,18 +1,10 @@
-import { Prisma, UserActivityType } from '@prisma/client'
+import { Prisma, UserActivityType, UserActivityObject } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 
 export type AddUserActivityInput = {
   transaction?: Prisma.TransactionClient
   userId: string
-  object:
-    | 'Comment'
-    | 'Beneficiary'
-    | 'HelpRequest'
-    | 'Followup'
-    | 'Structure'
-    | 'Document'
-    | 'Notification'
-    | 'User'
+  object: UserActivityObject
   objectId: string
   activity: UserActivityType
 }
