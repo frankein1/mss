@@ -46,7 +46,6 @@
       ref="hiddenInput"
       :name="name"
       hidden
-      :required="required"
       :value="currentValue"
       :readonly="readonly"
     />
