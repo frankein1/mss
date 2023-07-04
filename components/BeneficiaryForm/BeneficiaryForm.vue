@@ -118,7 +118,7 @@
     canEditBeneficiaryRelatives
   } from '~/server/security/rules'
   import type { GetBeneficiaryOutput } from '~/server/routers'
-
+  import { toOptions } from '~/utils/options'
   import { useAuthStore } from '~/store/auth'
 
   const props = defineProps<{
