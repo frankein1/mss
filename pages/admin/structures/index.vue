@@ -11,7 +11,7 @@
       </div>
       <NuxtLink
         :to="RoutePath.AdminStructuresAdd()"
-        class="fr-btn fr-mt-2w"
+        class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-home-4-line"
         target="_self"
       >
         Ajouter une structure
