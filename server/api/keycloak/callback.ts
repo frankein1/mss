@@ -37,10 +37,11 @@ export default defineEventHandler(async event => {
 
   const user = await getUser(email)
 
-  // [NUXT/PRISMA]: Redirect when error
-  // TODO: Unknown user page
+  const { appUrl } = config.public
+
   if (!user) {
-    return sendError(event, new Error(`[IC] No user found with email ${email}`))
+    const unknownUserUrl = `${appUrl}${RoutePath.ErrorUnknownUser()}`
+    return sendRedirect(event, unknownUserUrl)
   }
 
   // upsert account
@@ -59,8 +60,6 @@ export default defineEventHandler(async event => {
       accessTokenValidity: new Date(Date.now() + 60 * 10 * 1000)
     }
   })
-
-  const { appUrl } = config.public
 
   let validateTokenUrl = `${appUrl}${RoutePath.AuthValidateToken()}?token=${userAccessToken}`
   if (redirectUrl) {

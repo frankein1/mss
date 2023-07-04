@@ -9,7 +9,10 @@ export enum Route {
   CGUManager = 'CGUManager',
   CGUUser = 'CGUUser',
   Env = 'Env',
-  DisabledAccount = 'DisabledAccount',
+
+  // ERROR
+  ErrorDisabledAccount = 'ErrorDisabledAccount',
+  ErrorUnknownUser = 'ErrorUnknownUser',
 
   // AUTH
   AuthLogin = 'AuthLogin',
@@ -49,6 +52,7 @@ const AppRoute = '/app'
 const AdminRoute = '/admin'
 const ApiKeycloak = '/api/keycloak'
 const CGURoute = '/cgu'
+const ErrorRoute = '/error'
 
 const BeneficiariesRoute = `${AppRoute}/beneficiaries`
 
@@ -89,9 +93,12 @@ export const RoutePath = {
   [Route.DeclarationAccessibilite]: () => '/declaration-accessibilite',
   [Route.MentionsLegales]: () => '/mentions-legales',
   [Route.Env]: () => '/env',
-  [Route.DisabledAccount]: () => '/disabled-account',
   [Route.CGUManager]: () => `${CGURoute}/manager`,
   [Route.CGUUser]: () => `${CGURoute}/user`,
+
+  // ERROR
+  [Route.ErrorDisabledAccount]: () => `${ErrorRoute}/disabled-account`,
+  [Route.ErrorUnknownUser]: () => `${ErrorRoute}/unknown-user`,
 
   // AUTH
   [Route.AuthLogin]: () => '/auth/login',

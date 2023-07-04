@@ -23,6 +23,6 @@ export default defineNuxtRouteMiddleware(async to => {
     })
   }
   if (!authStore.isActive) {
-    return navigateTo(RoutePath.DisabledAccount())
+    return navigateTo(RoutePath.ErrorDisabledAccount())
   }
 })
