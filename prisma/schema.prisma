@@ -1427,7 +1427,7 @@ model UserActivity {
 
   date     DateTime           @default(now())
   object   UserActivityObject
-  objectId String             @map("object_id")
+  objectId String             @map("object_id") // FIXME: Should be uuid ?
   activity UserActivityType
 
   user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)

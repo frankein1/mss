@@ -1,17 +1,21 @@
-import type { Prisma } from '@prisma/client'
+import { Prisma, UserActivityType } from '@prisma/client'
 import { ProtectedAppContext, ProtectedAppContextUser } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import type { PaginatedInput } from '~/server/schema'
 import { takeAndSkipFromPagination } from '~/utils/table'
 
-function getBeneficiariesUsersActivity(
-  where: Prisma.UserActivityWhereInput,
+function getAnyBeneficiariesUsersActivity(
+  structureId: string,
   take: number,
   skip: number
 ) {
   return prismaClient.userActivity.findMany({
-    where,
+    where: {
+      structureId,
+      object: 'Beneficiary',
+      activity: { in: ['CREATE', 'ARCHIVE', 'DELETE'] }
+    },
     select: {
       id: true,
       date: true,
@@ -29,54 +33,112 @@ function getBeneficiariesUsersActivity(
   })
 }
 
-type BeneficiariesUsersActivityOutput = Prisma.PromiseReturnType<
-  typeof getBeneficiariesUsersActivity
->
+function getAnyBeneficiariesUsersActivityCount(structureId: string) {
+  return prismaClient.userActivity.count({
+    where: {
+      structureId,
+      object: 'Beneficiary',
+      activity: { in: ['CREATE', 'ARCHIVE', 'DELETE'] }
+    }
+  })
+}
 
-function getBeneficiariesUsersActivityWithCount(
+async function getOnlyItsBeneficiariesUsersActivity(
+  userId: string,
   structureId: string,
   take: number,
   skip: number
 ) {
-  const where: Prisma.UserActivityWhereInput = {
-    structureId,
-    object: 'Beneficiary',
-    activity: { in: ['CREATE', 'ARCHIVE', 'DELETE'] }
-  }
+  const rawResult = await prismaClient.$queryRaw<
+    Array<{
+      id: string
+      date: Date
+      activity: UserActivityType
+      object_id: string
+      first_name: string
+      last_name: string
+    }>
+  >(Prisma.sql`
+select "ua"."id", "ua"."date", "ua"."activity", "ua"."object_id", "u"."first_name", "u"."last_name"
+from "user_activity" ua
+inner join "user" u
+  on "ua"."user_id" = "u"."id"
+inner join "beneficiary" b
+  on "b"."id" = uuid("ua"."object_id")
+inner join "_beneficiary_referents" br
+  on "br"."A" = "b"."id"
+where
+  "ua"."structure_id" = uuid(${structureId}) and
+  "ua"."object" = 'Beneficiary' and
+  "ua"."activity" in ('CREATE', 'ARCHIVE', 'DELETE') and
+  "br"."B" = uuid(${userId})
+order by "ua"."date" asc
+limit ${take}
+offset ${skip};
+`)
 
-  return Promise.all([
-    getBeneficiariesUsersActivity(where, take, skip),
-    prismaClient.userActivity.count({ where })
-  ])
+  const activity = rawResult.map(
+    ({
+      first_name: firstName,
+      last_name: lastName,
+      object_id: objectId,
+      ...rest
+    }) => ({
+      ...rest,
+      objectId,
+      user: { firstName, lastName }
+    })
+  )
+
+  return activity
 }
 
-async function filterAuthorizedBeneficiaries(
-  user: ProtectedAppContextUser,
-  beneficiariesUsersActivity: BeneficiariesUsersActivityOutput
+async function getOnlyItsBeneficiariesUsersActivityCount(
+  userId: string,
+  structureId: string
 ) {
-  if (!canOnlyListItsBeneficiaries(user)) {
-    return beneficiariesUsersActivity
+  const [{ count }] = await prismaClient.$queryRaw<
+    Array<{
+      count: number
+    }>
+  >(Prisma.sql`
+select count(*)
+from "user_activity" ua
+inner join "beneficiary" b
+  on "b"."id" = uuid("ua"."object_id")
+inner join "_beneficiary_referents" br
+  on "br"."A" = "b"."id"
+where
+  "ua"."structure_id" = uuid(${structureId}) and
+  "ua"."object" = 'Beneficiary' and
+  "ua"."activity" in ('CREATE', 'ARCHIVE', 'DELETE') and
+  "br"."B" = uuid(${userId});
+`)
+
+  return count
+}
+
+function getBeneficiariesUsersActivity(
+  user: ProtectedAppContextUser,
+  take: number,
+  skip: number
+) {
+  if (canOnlyListItsBeneficiaries(user)) {
+    return getOnlyItsBeneficiariesUsersActivity(
+      user.id,
+      user.structureId,
+      take,
+      skip
+    )
   }
+  return getAnyBeneficiariesUsersActivity(user.structureId, take, skip)
+}
 
-  const beneficiaryIds = beneficiariesUsersActivity.map(
-    ({ objectId }) => objectId
-  )
-
-  const authorizedBeneficiaries = await prismaClient.beneficiary.findMany({
-    where: {
-      id: {
-        in: beneficiaryIds
-      },
-      referents: { some: { id: user.id } }
-    },
-    select: { id: true }
-  })
-
-  const authorizedBeneficiaryIds = authorizedBeneficiaries.map(({ id }) => id)
-
-  return beneficiariesUsersActivity.filter(({ objectId }) =>
-    authorizedBeneficiaryIds.includes(objectId)
-  )
+function getBeneficiariesUsersActivityCount(user: ProtectedAppContextUser) {
+  if (canOnlyListItsBeneficiaries(user)) {
+    return getOnlyItsBeneficiariesUsersActivityCount(user.id, user.structureId)
+  }
+  return getAnyBeneficiariesUsersActivityCount(user.structureId)
 }
 
 export const getBeneficiariesUsersActivityHandler = async ({
@@ -88,17 +150,12 @@ export const getBeneficiariesUsersActivityHandler = async ({
 }) => {
   const { take, skip } = takeAndSkipFromPagination(input)
 
-  const [beneficiariesUsersActivity, count] =
-    await getBeneficiariesUsersActivityWithCount(user.structureId, take, skip)
+  const [activity, count] = await Promise.all([
+    getBeneficiariesUsersActivity(user, take, skip),
+    getBeneficiariesUsersActivityCount(user)
+  ])
 
-  // FIXME: Due to object relation being unknown by Prisma, the referent condition can not be applied directly
-  return {
-    activity: await filterAuthorizedBeneficiaries(
-      user,
-      beneficiariesUsersActivity
-    ),
-    count
-  }
+  return { activity, count }
 }
 
 export type GetBeneficiariesUsersActivityOutput = Prisma.PromiseReturnType<
