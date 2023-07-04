@@ -61,11 +61,11 @@
     () => !!count.value && count.value > usersActivity.value.length
   )
 
-  watch(usersActivityWithCount, _usersActivityWithCount => {
-    if (!_usersActivityWithCount) {
+  onMounted(() => {
+    if (!usersActivityWithCount.value) {
       usersActivity.value = []
     } else {
-      usersActivity.value = _usersActivityWithCount.activity
+      usersActivity.value = [...usersActivityWithCount.value.activity]
     }
   })
 
