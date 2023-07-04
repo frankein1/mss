@@ -22,7 +22,6 @@
       :value="value"
       :class="{ 'fr-input--error': error }"
       :name="name"
-      :required="required"
       @input="handleChange"
     ></textarea>
     <div
