@@ -14,7 +14,13 @@ export const getUserController = async ({ ctx }: { ctx: AppContext }) => {
       id: ctxUser.id
     },
     include: {
-      CGUHistory: true
+      CGUHistory: true,
+      structure: {
+        select: {
+          id: true,
+          type: true
+        }
+      }
     }
   })
 
@@ -30,7 +36,7 @@ export const getUserController = async ({ ctx }: { ctx: AppContext }) => {
     status,
     email,
     CGUHistory,
-    structureId
+    structure
   } = user
 
   const CGUHistoryVersion = CGUHistory?.length ? CGUHistory[0].version : null
@@ -42,7 +48,8 @@ export const getUserController = async ({ ctx }: { ctx: AppContext }) => {
     email,
     role,
     status,
-    structureId,
+    structureId: structure?.id || null,
+    structureType: structure?.type || null,
     CGUHistoryVersion
   }
 
