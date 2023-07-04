@@ -24,6 +24,8 @@
   const route = useRoute()
   const store = useAuthStore()
   const token = route.query.token as string
+  const redirectUrl =
+    (route.query.redirectUrl as string | undefined) || useHomePage()
 
   type ValidateTokenOutput = {
     user: JwtUser
@@ -45,7 +47,7 @@
     if (res.user) {
       user.value = res.user
       store.login(user.value)
-      navigateTo(useHomePage())
+      navigateTo(redirectUrl)
     }
   }
 
