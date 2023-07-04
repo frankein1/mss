@@ -116,9 +116,9 @@
     createBeneficiarySchema
   } from '~/server/schema/beneficiary.schema'
   import { AlertType } from '~/utils/constants/alert'
-
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
+  import { toOptions } from '~/utils/options'
 
   const props = defineProps<{
     isSubmitting: boolean
