@@ -1,4 +1,4 @@
-const emailRegex = /^[\w\\-.]+@([\w\\-]+\.)+[\w\\-]{2,4}$/
+import * as EmailValidator from 'email-validator'
 
 export function isValidEmail(email: string) {
   if (!email) {
@@ -9,7 +9,7 @@ export function isValidEmail(email: string) {
     return false
   }
 
-  const valid = emailRegex.test(email)
+  const valid = EmailValidator.validate(email)
   if (!valid) {
     return false
   }
