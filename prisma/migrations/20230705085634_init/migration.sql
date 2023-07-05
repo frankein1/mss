@@ -80,13 +80,25 @@ CREATE TYPE "BeneficiaryAccommodationZone" AS ENUM ('France', 'Europe', 'Outside
 CREATE TYPE "BeneficiaryPensionOrganisation" AS ENUM ('AgircArrco', 'Agr', 'CnavCarsat', 'Cipav', 'Cnracl', 'Edf', 'Ircantec', 'Klesia', 'Sre', 'Ssi', 'MalakoffHumanis', 'Msa', 'ProBtp', 'RetraiteDesMines', 'Other');
 
 -- CreateEnum
+CREATE TYPE "BeneficiaryMinistereStructure" AS ENUM ('AdministrationCentrale', 'Ars', 'DreetsDeetsOutreMer', 'Ddets', 'Ddetspp', 'Ddpp', 'InjaInjs', 'Ehesp', 'Intefp', 'Mnc', 'Retraites', 'Other');
+
+-- CreateEnum
+CREATE TYPE "BeneficiaryMinistereCategorie" AS ENUM ('CategorieA', 'CategorieB', 'CategorieC', 'CadreDroitPrive', 'NonCadreDroitPrive');
+
+-- CreateEnum
+CREATE TYPE "BeneficiaryMinistereDepartementServiceAc" AS ENUM ('Ain01', 'Aisne02', 'Allier03', 'AlpeDeHauteProvence04', 'HautesAlpes05', 'AlpesMaritimes06', 'Ardeche07', 'Ardennes08', 'Ariege09', 'Aube10', 'Aude11', 'Aveyron12', 'BouchesDuRhone13', 'Calvados14', 'Cantal15', 'Charente16', 'CharenteMaritime17', 'Cher18', 'Correze19', 'CoteDOr21', 'CotesDArmor22', 'Creuse23', 'Dordogne24', 'Doubs25', 'Drome26', 'Eure27', 'EureEtLoir28', 'Finistere29', 'CorseDuSud2a', 'HauteCorse2b', 'Gard30', 'HauteGaronne31', 'Gers32', 'Gironde33', 'Herault34', 'IlleEtVilaine35', 'Indre36', 'IndreEtLoire37', 'Isere38', 'Jura39', 'Landes40', 'LoirEtCher41', 'Loire42', 'HauteLoire43', 'LoireAtlantique44', 'Loiret45', 'Lot46', 'LotEtGaronne47', 'Lozere48', 'MaineEtLoire49', 'Manche50', 'Marne51', 'HauteMarne52', 'Mayenne53', 'MeurtheEtMoselle54', 'Meuse55', 'Morbihan56', 'Moselle57', 'Nievre58', 'Nord59', 'Oise60', 'Orne61', 'PasDeCalais62', 'PuyDeDome63', 'PyreneesAtlantiques64', 'HautesPyrenees65', 'PyreneesOrientales66', 'BasRhin67', 'HautRhin68', 'Rhone69', 'HauteSaone70', 'SaoneEtLoire71', 'Sarthe72', 'Savoie73', 'HauteSavoie74', 'Paris75', 'SeineMaritime76', 'SeineEtMarne77', 'Yvelines78', 'DeuxSevres79', 'Somme80', 'Tarn81', 'TarnEtGaronne82', 'Var83', 'Vaucluse84', 'Vendee85', 'Vienne86', 'HauteVienne87', 'Vosges88', 'Yonne89', 'TerritoireDeBelfort90', 'Essonne91', 'HautsDeSeine92', 'SeineSaintDenis93', 'ValDeMarne94', 'ValDOise95', 'Guadeloupe971', 'Martinique972', 'Guyane973', 'LaReunion974', 'SaintPierreEtMiquelon975', 'Mayotte976', 'TerresAustralesEtAntarctiques984', 'WallisEtFutuna986', 'PolynesieFrancaise987', 'NouvelleCaledonie988', 'AgentsEnInstanceDaffectation', 'Chatefp', 'Cncp', 'Cnefop', 'Cng', 'Cnit', 'Cnml', 'Comjs', 'Daj', 'Dares', 'Dgefp', 'Dgos', 'Dgp', 'Dgs', 'Dgt', 'Diges', 'Djepva', 'Dnum', 'Drh', 'Ds', 'Igas', 'Igjs', 'SecretariatAuxPersonnesHandicapees', 'Sgmcas');
+
+-- CreateEnum
 CREATE TYPE "RelativeRelationship" AS ENUM ('Conjoint', 'EnfantMineur', 'EnfantMajeur', 'Parent', 'Grandparent', 'Neighbour', 'Sibling', 'Tiers', 'AutreMemberDeLaFamille');
 
 -- CreateEnum
-CREATE TYPE "MutationSource" AS ENUM ('User', 'Admin', 'System');
+CREATE TYPE "NotificationType" AS ENUM ('NewDocument', 'NewComment', 'DueDate', 'DueDateOneMonth', 'EndOfSupport');
 
 -- CreateEnum
-CREATE TYPE "NotificationType" AS ENUM ('NewDocument', 'NewComment', 'DueDate', 'EndOfSupport');
+CREATE TYPE "UserActivityType" AS ENUM ('LOGIN', 'LOGOUT', 'CREATE', 'UPDATE', 'DELETE', 'VIEW', 'ARCHIVE');
+
+-- CreateEnum
+CREATE TYPE "UserActivityObject" AS ENUM ('Comment', 'Beneficiary', 'HelpRequest', 'Followup', 'Structure', 'Document', 'Notification', 'User');
 
 -- CreateTable
 CREATE TABLE "account" (
@@ -101,7 +113,6 @@ CREATE TABLE "account" (
     "token_type" TEXT,
     "scope" TEXT,
     "id_token" TEXT,
-    "session_state" TEXT,
 
     CONSTRAINT "account_pkey" PRIMARY KEY ("id")
 );
@@ -117,6 +128,8 @@ CREATE TABLE "user" (
     "aidant_connect_authorisation" BOOLEAN DEFAULT false,
     "last_access" TIMESTAMP(3),
     "password" TEXT,
+    "access_token" TEXT,
+    "access_token_validity" TIMESTAMP(3),
     "created" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "structure_id" UUID,
@@ -148,6 +161,8 @@ CREATE TABLE "document" (
     "key" TEXT NOT NULL,
     "mime_type" TEXT NOT NULL,
     "name" TEXT NOT NULL,
+    "filename_disk" TEXT NOT NULL,
+    "filename_download" TEXT,
     "type" "DocumentType" NOT NULL,
     "size" INTEGER,
     "tags" TEXT[],
@@ -225,7 +240,6 @@ CREATE TABLE "help_request" (
     "payment_date" DATE,
     "handling_date" DATE,
     "refusal_reason" TEXT,
-    "examining_organisation" TEXT,
     "dispatch_date" DATE,
     "synthesis" TEXT,
     "private_synthesis" TEXT,
@@ -277,9 +291,9 @@ CREATE TABLE "beneficiary" (
     "minor_children" INTEGER,
     "major_children" INTEGER,
     "mobility" "BeneficiaryMobility",
-    "ministere_categorie" TEXT,
-    "ministere_departement_service_ac" TEXT,
-    "ministere_structure" TEXT,
+    "ministere_categorie" "BeneficiaryMinistereCategorie",
+    "ministere_departement_service_ac" "BeneficiaryMinistereDepartementServiceAc",
+    "ministere_structure" "BeneficiaryMinistereStructure",
     "gir" "BeneficiaryGir",
     "doctor" TEXT,
     "health_additional_information" TEXT,
@@ -338,30 +352,6 @@ CREATE TABLE "beneficiary_relative" (
 );
 
 -- CreateTable
-CREATE TABLE "verification_token" (
-    "token" TEXT NOT NULL,
-    "identifier" TEXT NOT NULL,
-    "expires" TIMESTAMP(3) NOT NULL,
-
-    CONSTRAINT "verification_token_pkey" PRIMARY KEY ("token")
-);
-
--- CreateTable
-CREATE TABLE "mutation_log" (
-    "id" UUID NOT NULL,
-    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "by_id" UUID,
-    "name" TEXT NOT NULL,
-    "target_user_id" UUID,
-    "target_structure_id" UUID,
-    "target_beneficiary_id" UUID,
-    "target_id" TEXT,
-    "diff" JSONB NOT NULL,
-
-    CONSTRAINT "mutation_log_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
 CREATE TABLE "comment" (
     "id" UUID NOT NULL,
     "created" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
@@ -402,6 +392,7 @@ CREATE TABLE "notification" (
     "id" UUID NOT NULL,
     "created" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "recipient_id" UUID NOT NULL,
+    "beneficiary_id" UUID NOT NULL,
     "help_request_id" UUID,
     "followup_id" UUID,
     "document_id" TEXT,
@@ -409,6 +400,29 @@ CREATE TABLE "notification" (
     "type" "NotificationType" NOT NULL,
 
     CONSTRAINT "notification_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "cgu_history" (
+    "id" UUID NOT NULL,
+    "user_id" UUID NOT NULL,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "version" TEXT NOT NULL,
+
+    CONSTRAINT "cgu_history_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "user_activity" (
+    "id" UUID NOT NULL,
+    "user_id" UUID NOT NULL,
+    "structure_id" UUID,
+    "date" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "object" "UserActivityObject" NOT NULL,
+    "object_id" TEXT NOT NULL,
+    "activity" "UserActivityType" NOT NULL,
+
+    CONSTRAINT "user_activity_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -446,9 +460,6 @@ CREATE UNIQUE INDEX "followup_type_name_owned_by_structured_id_key" ON "followup
 
 -- CreateIndex
 CREATE UNIQUE INDEX "beneficiary_file_number_key" ON "beneficiary"("file_number");
-
--- CreateIndex
-CREATE UNIQUE INDEX "verification_token_identifier_token_key" ON "verification_token"("identifier", "token");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "_document_to_followup_AB_unique" ON "_document_to_followup"("A", "B");
@@ -496,7 +507,7 @@ ALTER TABLE "followup_type" ADD CONSTRAINT "followup_type_owned_by_structured_id
 ALTER TABLE "followup" ADD CONSTRAINT "followup_structure_id_fkey" FOREIGN KEY ("structure_id") REFERENCES "structure"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "followup" ADD CONSTRAINT "followup_beneficiary_id_fkey" FOREIGN KEY ("beneficiary_id") REFERENCES "beneficiary"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "followup" ADD CONSTRAINT "followup_beneficiary_id_fkey" FOREIGN KEY ("beneficiary_id") REFERENCES "beneficiary"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "followup" ADD CONSTRAINT "followup_created_by_id_fkey" FOREIGN KEY ("created_by_id") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -508,7 +519,7 @@ ALTER TABLE "followup" ADD CONSTRAINT "followup_prescribing_organization_id_fkey
 ALTER TABLE "help_request" ADD CONSTRAINT "help_request_structure_id_fkey" FOREIGN KEY ("structure_id") REFERENCES "structure"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "help_request" ADD CONSTRAINT "help_request_beneficiary_id_fkey" FOREIGN KEY ("beneficiary_id") REFERENCES "beneficiary"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "help_request" ADD CONSTRAINT "help_request_beneficiary_id_fkey" FOREIGN KEY ("beneficiary_id") REFERENCES "beneficiary"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "help_request" ADD CONSTRAINT "help_request_created_by_id_fkey" FOREIGN KEY ("created_by_id") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -538,18 +549,6 @@ ALTER TABLE "beneficiary_relative" ADD CONSTRAINT "beneficiary_relative_benefici
 ALTER TABLE "beneficiary_relative" ADD CONSTRAINT "beneficiary_relative_beneficiary_link_id_fkey" FOREIGN KEY ("beneficiary_link_id") REFERENCES "beneficiary"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "mutation_log" ADD CONSTRAINT "mutation_log_by_id_fkey" FOREIGN KEY ("by_id") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "mutation_log" ADD CONSTRAINT "mutation_log_target_user_id_fkey" FOREIGN KEY ("target_user_id") REFERENCES "user"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "mutation_log" ADD CONSTRAINT "mutation_log_target_structure_id_fkey" FOREIGN KEY ("target_structure_id") REFERENCES "structure"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "mutation_log" ADD CONSTRAINT "mutation_log_target_beneficiary_id_fkey" FOREIGN KEY ("target_beneficiary_id") REFERENCES "beneficiary"("id") ON DELETE SET NULL ON UPDATE CASCADE;
-
--- AddForeignKey
 ALTER TABLE "comment" ADD CONSTRAINT "comment_created_by_id_fkey" FOREIGN KEY ("created_by_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -574,6 +573,9 @@ ALTER TABLE "instructor_organization" ADD CONSTRAINT "instructor_organization_st
 ALTER TABLE "notification" ADD CONSTRAINT "notification_recipient_id_fkey" FOREIGN KEY ("recipient_id") REFERENCES "user"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
+ALTER TABLE "notification" ADD CONSTRAINT "notification_beneficiary_id_fkey" FOREIGN KEY ("beneficiary_id") REFERENCES "beneficiary"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
 ALTER TABLE "notification" ADD CONSTRAINT "notification_help_request_id_fkey" FOREIGN KEY ("help_request_id") REFERENCES "help_request"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
@@ -581,6 +583,15 @@ ALTER TABLE "notification" ADD CONSTRAINT "notification_followup_id_fkey" FOREIG
 
 -- AddForeignKey
 ALTER TABLE "notification" ADD CONSTRAINT "notification_document_id_fkey" FOREIGN KEY ("document_id") REFERENCES "document"("key") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cgu_history" ADD CONSTRAINT "cgu_history_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_activity" ADD CONSTRAINT "user_activity_user_id_fkey" FOREIGN KEY ("user_id") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "user_activity" ADD CONSTRAINT "user_activity_structure_id_fkey" FOREIGN KEY ("structure_id") REFERENCES "structure"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "_document_to_followup" ADD CONSTRAINT "_document_to_followup_A_fkey" FOREIGN KEY ("A") REFERENCES "document"("key") ON DELETE CASCADE ON UPDATE CASCADE;
