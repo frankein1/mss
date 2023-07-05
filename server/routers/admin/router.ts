@@ -1,18 +1,23 @@
 import { protectedProcedure, router } from '../../trpc'
 import {
   adminCreateStructureSchema,
+  adminCreateUserSchema,
   adminEditStructureSchema,
+  adminEditUserSchema,
   adminGetStructuresSchema,
   adminGetUsersSchema,
   idSchema
 } from '~/server/schema'
 import {
   createStructureController,
+  createUserController,
   editStructureController,
   getStructuresController,
   getStructureController,
   getUsersController,
-  getOverviewController
+  getUserController,
+  getOverviewController,
+  editUserController
 } from '~/server/controller/admin'
 
 export const adminRouter = router({
@@ -28,8 +33,15 @@ export const adminRouter = router({
   editStructure: protectedProcedure
     .input(adminEditStructureSchema)
     .mutation(editStructureController),
+  createUser: protectedProcedure
+    .input(adminCreateUserSchema)
+    .mutation(createUserController),
   getUsers: protectedProcedure
     .input(adminGetUsersSchema)
     .query(getUsersController),
+  getUser: protectedProcedure.input(idSchema).query(getUserController),
+  editUser: protectedProcedure
+    .input(adminEditUserSchema)
+    .mutation(editUserController),
   getOverview: protectedProcedure.query(getOverviewController)
 })

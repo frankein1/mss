@@ -45,7 +45,9 @@ export enum Route {
   AdminStructures = 'AdminStructures',
   AdminStructuresAdd = 'AdminStructuresAdd',
   AdminStructure = 'AdminStructure',
-  AdminUsers = 'AdminUsers'
+  AdminUsers = 'AdminUsers',
+  AdminUsersAdd = 'AdminUsersAdd',
+  AdminUser = 'AdminUser'
 }
 
 const AppRoute = '/app'
@@ -145,5 +147,7 @@ export const RoutePath = {
   [Route.AdminStructuresAdd]: () => `${AdminRoute}/structures/add`,
   [Route.AdminStructure]: (structureId: string) =>
     `${AdminRoute}/structures/${structureId}`,
-  [Route.AdminUsers]: () => `${AdminRoute}/users`
+  [Route.AdminUsers]: () => `${AdminRoute}/users`,
+  [Route.AdminUsersAdd]: () => `${AdminRoute}/users/add`,
+  [Route.AdminUser]: (userId: string) => `${AdminRoute}/users/${userId}`
 }

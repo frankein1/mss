@@ -1,4 +1,4 @@
-import { UserRole } from '@prisma/client'
+import { UserRole, UserStatus } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
 const { Administrator: _, ...otherRoles } = UserRole
@@ -20,3 +20,12 @@ export const UserRoleLabels: { [key in UserRole]: string } = {
   ...NonAdminUserRoleLabels,
   [UserRole.Administrator]: 'Administrateur'
 }
+
+export const userRoleOptions = labelsToOptions(UserRoleLabels)
+
+export const UserStatusLabels: { [key in UserStatus]: string } = {
+  [UserStatus.Active]: 'Activé',
+  [UserStatus.Disabled]: 'Désactivé'
+}
+
+export const userStatusOptions = labelsToOptions(UserStatusLabels)
