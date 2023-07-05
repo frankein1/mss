@@ -26,7 +26,7 @@ export const deleteBeneficiaryHandler = async ({
     throw forbiddenError()
   }
 
-  await updateBeneficiaryRelatives(beneficiary.id)
+  await updateBeneficiaryRelatives(id)
 
   await prismaClient.beneficiary.delete({ where: { id } })
 
@@ -48,20 +48,24 @@ async function updateBeneficiaryRelatives(linkedBeneficiaryId: string) {
     }
   })
 
-  if (relatives?.length) {
+  if (!relatives?.length) {
     return
   }
 
-  relatives.forEach(relative => {
-    const { linkedBeneficiary } = relative
-    relative.linkedBeneficiaryId = null
-    relative.email = linkedBeneficiary?.email || null
-    relative.firstName = linkedBeneficiary?.firstName || null
-    relative.lastName = linkedBeneficiary?.usualName || null
-    relative.city = linkedBeneficiary?.city || null
-    relative.phone =
-      linkedBeneficiary?.phone1 || linkedBeneficiary?.phone2 || null
-  })
-
-  await prismaClient.beneficiaryRelative.updateMany({ data: relatives })
+  for (const relative of relatives) {
+    const { linkedBeneficiary: lb } = relative
+    await prismaClient.beneficiaryRelative.update({
+      data: {
+        linkedBeneficiaryId: null,
+        email: lb?.email || null,
+        firstName: lb?.firstName || null,
+        lastName: lb?.usualName || null,
+        city: lb?.city || null,
+        phone: lb?.phone1 || lb?.phone2 || null
+      },
+      where: {
+        id: relative.id
+      }
+    })
+  }
 }
