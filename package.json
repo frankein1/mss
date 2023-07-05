@@ -29,6 +29,7 @@
     "@vee-validate/zod": "^4.10.3",
     "chart.js": "^4.3.0",
     "dayjs": "^1.11.8",
+    "email-validator": "^2.0.4",
     "jsonwebtoken": "^9.0.0",
     "mitt": "^3.0.0",
     "nodemailer": "^6.9.3",

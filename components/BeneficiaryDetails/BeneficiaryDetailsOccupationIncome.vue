@@ -127,14 +127,14 @@
       props.beneficiary.occupation ||
       props.beneficiary.employer ||
       props.beneficiary.employerSiret ||
-      props.beneficiary.mainIncomeSource ||
+      props.beneficiary.mainIncomeSource?.length ||
       props.beneficiary.mainIncomeAmount ||
-      props.beneficiary.partnerMainIncomeSource ||
+      props.beneficiary.partnerMainIncomeSource?.length ||
       props.beneficiary.partnerMainIncomeAmount ||
-      props.beneficiary.majorChildrenMainIncomeSource ||
+      props.beneficiary.majorChildrenMainIncomeSource?.length ||
       props.beneficiary.majorChildrenMainIncomeAmount ||
       props.beneficiary.unemploymentNumber ||
-      props.beneficiary.pensionOrganisations ||
+      props.beneficiary.pensionOrganisations?.length ||
       props.beneficiary.cafNumber ||
       props.beneficiary.bank ||
       props.beneficiary.funeralContract ||

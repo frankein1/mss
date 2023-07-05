@@ -29,6 +29,7 @@ import {
 } from './filter.schema'
 import { paginatedSchema } from './helpers.schema'
 import { errorMessages, validZipcode } from '~/utils/zod'
+import { isValidEmail } from '~/utils/isValidEmail'
 
 export const getDocumentsSchema = z.object({
   beneficiaryId: z.string()
@@ -77,7 +78,9 @@ export const createBeneficiarySchema = z.object({
   firstName: beneficiaryFirstNameSchema,
   birthDate: z.coerce.date(errorMessages).nullish(),
   phone1: z.string().nullish(),
-  email: z.string().email().nullish()
+  email: z.custom(value => {
+    return isValidEmail(value as string)
+  }, 'Email non valide')
 })
 
 type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>
@@ -120,7 +123,9 @@ export const updateBeneficiarySchema = z.object({
     noPhone: z.boolean().default(false),
     phone1: z.string().nullish(),
     phone2: z.string().nullish(),
-    email: z.string().email().nullish(),
+    email: z.custom(value => {
+      return isValidEmail(value as string)
+    }, 'Email non valide'),
     caregiver: z.boolean().default(false),
     mobility: z.nativeEnum(BeneficiaryMobility).nullish()
   }),
