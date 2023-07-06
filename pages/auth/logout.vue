@@ -28,10 +28,13 @@
   const inactive = route.query.inactive
 
   if (process.client) {
-    const res = await $fetch(RoutePath.ApiLogout(), {
-      method: 'POST',
-      body: { inactive: !!inactive }
-    })
+    const res = await $fetch<{ url: string | null; success: boolean }>(
+      RoutePath.ApiLogout(),
+      {
+        method: 'POST',
+        body: { inactive: !!inactive }
+      }
+    )
     if (res.url) {
       useAuthStore().logout()
       window.location.href = res.url

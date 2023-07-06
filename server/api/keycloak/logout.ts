@@ -25,7 +25,7 @@ export default defineEventHandler(async event => {
   deleteCookie(event, sessionCookieKey)
 
   if (!user) {
-    return { success: true }
+    return { success: true, url: null }
   }
 
   await addUserActivity({
@@ -42,13 +42,13 @@ export default defineEventHandler(async event => {
     }
   })
   if (!account) {
-    return { success: true }
+    return { success: true, url: null }
   }
 
   await updateAccount(account)
 
   const url = client.getLogoutUrl(account.idToken || '', !!inactive)
-  return { url }
+  return { success: false, url }
 })
 
 async function findUser(email: string) {
