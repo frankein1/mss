@@ -9,7 +9,11 @@ import {
 import { z } from 'zod'
 import { paginatedSchema } from './helpers.schema'
 import { followupFilterSchema } from './filter.schema'
-import { errorMessages } from '~/utils/zod'
+import {
+  errorMessages,
+  requiredNativeEnum,
+  withEmptyValueOptionalNativeEnum
+} from '~/utils/zod'
 
 const addFollowupSchema = z.object({
   beneficiaryId: z.string().uuid(),
@@ -20,12 +24,12 @@ const addFollowupSchema = z.object({
     })
     .min(1, "Veuillez renseigner au moins un type d'accompagnement"),
   documents: z.array(z.string(), errorMessages).default([]),
-  medium: z.nativeEnum(FollowupMedium, errorMessages),
-  ministre: z.nativeEnum(Minister, errorMessages).nullish(),
+  medium: requiredNativeEnum(FollowupMedium),
+  ministre: withEmptyValueOptionalNativeEnum(Minister),
   date: z.coerce.date(errorMessages),
   synthesis: z.string().nullish(),
   privateSynthesis: z.string().nullish(),
-  status: z.nativeEnum(FollowupStatus, errorMessages),
+  status: requiredNativeEnum(FollowupStatus),
   helpRequested: z.boolean().default(false),
   place: z.string().nullish(),
   redirected: z.boolean().default(false),
@@ -75,7 +79,7 @@ type GetFollowupsInput = z.infer<typeof getFollowupsSchema>
 
 const quickEditFollowupSchema = z.object({
   id: z.string().uuid(),
-  status: z.nativeEnum(FollowupStatus)
+  status: requiredNativeEnum(FollowupStatus)
 })
 
 type QuickEditFollowupInput = z.infer<typeof quickEditFollowupSchema>
