@@ -128,10 +128,12 @@ export class InclusionConnectClient {
     return `${this.issuer}/protocol/openid-connect/auth?${params}`
   }
 
-  public getLogoutUrl(idToken: string) {
+  public getLogoutUrl(idToken: string, inactive: boolean) {
     const params = new URLSearchParams({
       id_token_hint: idToken || '',
-      post_logout_redirect_uri: `${this.postLogoutRedirectUri}`
+      post_logout_redirect_uri: inactive
+        ? `${this.postLogoutRedirectUri}?inactive`
+        : this.postLogoutRedirectUri
     })
     return `${this.issuer}/protocol/openid-connect/logout?${params}`
   }

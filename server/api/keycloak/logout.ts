@@ -1,20 +1,21 @@
 import { Account, UserActivityType } from '@prisma/client'
-import { H3Event } from 'h3'
 import { getInclusionConnectClient } from '~/server/lib'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { parseJwt } from '~/utils/parseJwt'
 
 export default defineEventHandler(async event => {
+  const { inactive } = getQuery(event)
   const config = useRuntimeConfig()
+
+  const client = getInclusionConnectClient()
+
   const sessionCookieKey = config.public.sessionCookieKey
 
   const sessionToken = getCookie(event, sessionCookieKey)
 
-  const client = getInclusionConnectClient()
-
   if (!sessionToken) {
-    return redirect(event, client.getPostLogoutRedirectUri())
+    return { success: true }
   }
 
   const { user: jwtUser } = parseJwt(sessionToken)
@@ -24,7 +25,7 @@ export default defineEventHandler(async event => {
   deleteCookie(event, sessionCookieKey)
 
   if (!user) {
-    return redirect(event, client.getPostLogoutRedirectUri())
+    return { success: true }
   }
 
   await addUserActivity({
@@ -41,21 +42,14 @@ export default defineEventHandler(async event => {
     }
   })
   if (!account) {
-    return redirect(event, client.getPostLogoutRedirectUri())
+    return { success: true }
   }
 
   await updateAccount(account)
 
-  const signoutUrl = client.getLogoutUrl(account.idToken || '')
-
-  await fetch(signoutUrl)
-
-  return sendRedirect(event, client.getPostLogoutRedirectUri())
+  const url = client.getLogoutUrl(account.idToken || '', !!inactive)
+  return { url }
 })
-
-function redirect(event: H3Event, location: string) {
-  return sendRedirect(event, location)
-}
 
 async function findUser(email: string) {
   return await prismaClient.user.findUniqueOrThrow({ where: { email } })
