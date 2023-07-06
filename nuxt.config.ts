@@ -102,7 +102,12 @@ export default defineNuxtConfig({
       inactiveUserTimeThreshold: parseInt(
         process.env.INACTIVE_USER_TIME_THRESHOLD || '10'
       ),
-      sessionCookieKey: 'MSS_SESSION_TOKEN'
+      sessionCookieKey: 'MSS_SESSION_TOKEN',
+      matomo: {
+        host: 'https://matomo.incubateur.anct.gouv.fr/',
+        siteId: 11
+      },
+      environment: process.env.ENVIRONMENT || 'local'
     }
   },
 
