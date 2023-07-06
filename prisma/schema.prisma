@@ -62,7 +62,7 @@ model User {
   created DateTime? @default(now())
   updated DateTime? @default(now())
 
-  structure             Structure?     @relation(fields: [structureId], references: [id])
+  structure             Structure?     @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId           String?        @map("structure_id") @db.Uuid
   createdFollowups      Followup[]     @relation(name: "created_followups")
   createdHelpRequests   HelpRequest[]  @relation(name: "created_help_requests")
@@ -138,7 +138,7 @@ model Document {
   tags             String[]
   confidential     Boolean
 
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
   created      DateTime?      @default(now())
@@ -216,7 +216,7 @@ model FollowupType {
   followups    Followup[]    @relation("followup_to_followup_type")
   helpRequests HelpRequest[]
 
-  ownedByStructure   Structure @relation(fields: [ownedByStructureId], references: [id])
+  ownedByStructure   Structure @relation(fields: [ownedByStructureId], references: [id], onDelete: Cascade)
   ownedByStructureId String    @map("owned_by_structured_id") @db.Uuid // FIXME: owned_by_structure**d**_id
 
   @@unique([name, ownedByStructureId])
@@ -267,7 +267,7 @@ enum FollowupSignalement {
 model Followup {
   id String @id @default(uuid()) @db.Uuid
 
-  structure   Structure @relation(fields: [structureId], references: [id])
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
@@ -347,7 +347,7 @@ enum HelpRequestReason {
 model HelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
-  structure   Structure @relation(fields: [structureId], references: [id])
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
@@ -1147,7 +1147,7 @@ enum BeneficiaryMinistereDepartementServiceAc {
 model Beneficiary {
   id String @id @default(uuid()) @db.Uuid
 
-  structure   Structure @relation(fields: [structureId], references: [id])
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
 
   createdById String? @map("created_by_id") @db.Uuid
@@ -1305,10 +1305,10 @@ model Comment {
 
   content String
 
-  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id])
+  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id], onDelete: Cascade)
   helpRequestId String?      @map("help_request_id") @db.Uuid
 
-  followup   Followup? @relation(fields: [followupId], references: [id])
+  followup   Followup? @relation(fields: [followupId], references: [id], onDelete: Cascade)
   followupId String?   @map("followup_id") @db.Uuid
 
   @@map("comment")
@@ -1325,7 +1325,7 @@ model PrescribingOrganization {
 
   name String
 
-  structure   Structure @relation(fields: [structureId], references: [id])
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
 
   helpRequests HelpRequest[]
@@ -1346,7 +1346,7 @@ model InstructorOrganization {
 
   name String
 
-  structure   Structure?    @relation(fields: [structureId], references: [id])
+  structure   Structure?    @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String?       @map("structure_id") @db.Uuid
   HelpRequest HelpRequest[]
 
@@ -1366,19 +1366,19 @@ model Notification {
 
   created DateTime? @default(now())
 
-  recipient   User   @relation(fields: [recipientId], references: [id])
+  recipient   User   @relation(fields: [recipientId], references: [id], onDelete: Cascade)
   recipientId String @map("recipient_id") @db.Uuid
 
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
-  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id])
+  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id], onDelete: Cascade)
   helpRequestId String?      @map("help_request_id") @db.Uuid
 
-  followup   Followup? @relation(fields: [followupId], references: [id])
+  followup   Followup? @relation(fields: [followupId], references: [id], onDelete: Cascade)
   followupId String?   @map("followup_id") @db.Uuid
 
-  document   Document? @relation(fields: [documentId], references: [key])
+  document   Document? @relation(fields: [documentId], references: [key], onDelete: Cascade)
   documentId String?   @map("document_id")
 
   read Boolean? @default(false)
@@ -1394,7 +1394,7 @@ model CGUHistory {
   date    DateTime @default(now())
   version String
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade, onDelete: Cascade)
 
   @@map("cgu_history")
 }
