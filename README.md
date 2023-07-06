@@ -1,105 +1,110 @@
 # Mon Suivi Social
 
-## Requirements
+[Mon Suivi Social](https://monsuivisocial.incubateur.anct.gouv.fr/) est une startup d'État portée par [beta.gouv.fr](beta.gouv.fr) et l'[Incubateur des Territoires](https://incubateur.anct.gouv.fr/).
 
-- [Node](https://nodejs.org/en)
+Mon Suivi Social est un outil simple d'utilisation et complet pour gérer l'accompagnement social.
+
+## Dépendances
+
+Pour lancer le projet, vous avez besoin de :
+
+- [Node.js](https://nodejs.org/en)
 - [Docker](https://www.docker.com/)
+- [pnpm](https://pnpm.io/)
 
-## Libraries
+## Technologies
+
+Le projet utilise les technologies Node.js suivantes :
 
 - [Nuxt](https://nuxt.com/)
 - [Prisma](https://www.prisma.io/)
 
-## Environment
+## Pour commencer
 
-### Local
+- Installez les dépendances Node.js
 
-install dependencies
+  ```sh
+  pnpm install
+  ```
 
-```sh
-pnpm install
-```
+  **À SAVOIR** : Si vous voulez contribuer au projet, merci d'exécuter la commande `pnpm simple-git-hooks` une fois les dépendances Node.js installées pour que votre code soit _linté_ et _formatté_ lorsque vous le _commitez_.
 
-copy env variables
+- Copiez les variables d'environnement
 
-```sh
-cp .env.sample .env
+  ```sh
+  cp .env.sample .env
+  ```
 
-## fill .env file
-```
+  Puis remplissez le fichier `.env` avec les valeurs manquantes.
 
-start postgres
+- Démarrez la base de données Postgres (utilise Docker)
 
-```sh
-pnpm dev:db:start
-```
+  ```sh
+  pnpm dev:db:start
+  ```
 
-generate the prisma client
+- Générez le client Prisma
 
-```sh
-pnpm prisma generate
-```
+  ```sh
+  pnpm prisma generate
+  ```
 
-apply migrations
+- Appliquez les migrations Prisma
 
-```sh
-pnpm prisma migrate deploy
-```
+  ```sh
+  pnpm prisma migrate deploy
+  ```
+
+- Démarrez le serveur de développement
+
+  ```sh
+  pnpm dev
+  ```
+
+  Il est alors disponible à l'adresse [localhost:3000](http://localhost:3000/).
 
 ## Déploiement
 
-### local
+- Construire l'image docker
 
-build l'image docker
+  ```sh
+  docker build . -t monsuivisocial
+  ```
 
-```sh
-docker build . -t monsuivisocial
-```
+- Démarrer l'image docker
 
-lancer l'image docker
+  ```sh
+  docker run --rm -p 8080:3000 --env-file .env-list monsuivisocial
+  ```
 
-```sh
-docker run --rm -p 8080:3000 --env-file .env-list monsuivisocial
-```
+## Travailler en local sur l'espace documents
 
-```.env
-# env-list
-DATABASE_URL="postgresql://mss:password@host.docker.internal:5433/mss"
+<!-- TODO -->
 
-NUXT_PUBLIC_APP_URL='http://localhost:8080'
+## Antisèche
 
-NUXT_AUTH_JWT_KEY='secret'
-NUXT_AUTH_KEYCLOAK_ISSUER='https://recette.connect.inclusion.beta.gouv.fr/realms/local'
-NUXT_AUTH_KEYCLOAK_CLIENT_ID='monsuivisocial'
-NUXT_AUTH_KEYCLOAK_CLIENT_SECRET=xxxxxxxxxxx
+- Générer une migration Prisma suite à une modification du schéma
 
-NUXT_EMAIL_FROM=contactincubateur@anct.gouv.fr
-NUXT_EMAIL_SMTP_HOST=smtp-relay.sendinblue.com
-NUXT_EMAIL_SMTP_PASSWORD=xxxxxxx
-NUXT_EMAIL_SMTP_USER=contactincubateur@anct.gouv.fr
+  ```sh
+  pnpm prisma migrate dev --name [MIGRATION_NAME]
+  ```
 
-NUXT_S3_BUCKET=anct-monsuivisocial-directus-production
-NUXT_S3_KEY=xxxxxxxxx
-NUXT_S3_SECRET=xxxxxxxxx
-```
+## Conventions de code
 
-migrer le base de données
+Au-delà des conventions définies grâce aux _linters_ et _formatters_ ESLint, Stylelint et Prettier, le projet suis les [conventions de code proposées par la communauté de Vue.js](https://vuejs.org/style-guide/).
 
-```sh
-docker build . -t monsuivisocial-migrate -f ./prisma/Dockerfile
-docker run -e DATABASE_URL="postgresql://mss:password@host.docker.internal:5433/mss" monsuivisocial-migrate
-```
+En supplément, deux choix ont été faits sur le nommage des composants :
 
-## Cheat sheet
+- Le préfixe `Atom` a été choisi pour les [composants de base](https://vuejs.org/style-guide/rules-strongly-recommended.html#base-component-names),
+- Le préfixe `The` a été choisi pour les [composants à instance unique](https://vuejs.org/style-guide/rules-strongly-recommended.html#single-instance-component-names).
 
-generate migration script with prisma
+## Environnements
 
-```sh
-pnpm prisma migrate dev --name [MIGRATION_NAME]
-```
+L'application de Mon Suivi Social existe sur plusieurs environnements :
 
-format prisma schema file
-
-```sh
-pnpm prisma format
-```
+- production :
+  - Lien d'accès : https://monsuivisocial.incubateur.anct.gouv.fr/
+  - Mode de déploiement : _**Process à venir**_
+- développement :
+  - Lien d'accès : https://next.monsuivisocial.dev.incubateur.anct.gouv.fr/
+  - Mode de déploiement : Poussée sur la branche `main`
