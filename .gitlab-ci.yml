@@ -67,12 +67,12 @@ docker:kaniko:build:production:
 
 deploy:demo:
   extends:
-  - deploy:production
+    - deploy:production
   environment:
     name: demo
     on_stop: deploy:demo:uninstall
 deploy:demo:uninstall:
   extends:
-  - deploy:production:uninstall
+    - deploy:production:uninstall
   environment:
     name: demo
