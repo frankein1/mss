@@ -1,13 +1,14 @@
 import { DefaultFollowupType, StructureType } from '@prisma/client'
 import { z } from 'zod'
 import { editStructureSchema } from './editStructure.schema'
+import { requiredNativeEnum } from '~/utils/zod'
 
 export const adminEditStructureSchemaBase = editStructureSchema
   .omit({
     followupTypes: true
   })
   .extend({
-    type: z.nativeEnum(StructureType),
+    type: requiredNativeEnum(StructureType),
     inhabitantsNumber: z.string().nullish(),
     inseeCode: z.string().nullish(),
     siret: z.string().nullish()

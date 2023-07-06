@@ -4,7 +4,7 @@ import {
   documentFileMaxSize,
   documentFileAllowedTypes
 } from '~/client/options/document'
-import { errorMessages } from '~/utils/zod'
+import { errorMessages, requiredNativeEnum } from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
 
 const documentSizeValidationErrorMessage = `La taille du document doit être inférieure à ${formatByteSize(
@@ -22,10 +22,7 @@ export const documentSizeValidation = z
 
 export const uploadBrowserDocumentSchema = z.object({
   beneficiaryId: z.string(errorMessages),
-  type: z.nativeEnum(DocumentType, {
-    ...errorMessages,
-    required_error: 'Veuillez renseigner le type du document'
-  }),
+  type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
   file: z.instanceof(File)
@@ -33,10 +30,7 @@ export const uploadBrowserDocumentSchema = z.object({
 
 export const addDocumentSchema = z.object({
   beneficiaryId: z.string(errorMessages),
-  type: z.nativeEnum(DocumentType, {
-    ...errorMessages,
-    required_error: 'Veuillez renseigner le type du document'
-  }),
+  type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
   file: z.object({
@@ -54,10 +48,7 @@ export const editDocumentSchema = z.object({
   key: z.string(),
   name: z.string(),
   beneficiaryId: z.string(errorMessages),
-  type: z.nativeEnum(DocumentType, {
-    ...errorMessages,
-    required_error: 'Veuillez renseigner le type du document'
-  }),
+  type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false)
 })

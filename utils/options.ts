@@ -14,11 +14,11 @@ export function toOptions<V extends string, L extends string>(
   arr: Array<Record<V | L, string>>,
   valueKey: V,
   labelKey: L
-) {
-  return new Map<string, string>(arr.map(e => [e[valueKey], e[labelKey]]))
+): Options {
+  return new Map(arr.map(e => [e[valueKey], e[labelKey]]))
 }
 
-export function withEmptyValue(map: Map<string, string>, emptyLabel = '') {
+export function withEmptyValue(map: Options, emptyLabel = '') {
   return new Map([['', emptyLabel], ...map.entries()])
 }
 

@@ -1,9 +1,10 @@
 import { UserRole } from '@prisma/client'
 import { z } from 'zod'
+import { requiredNativeEnum } from '~/utils/zod'
 
 const editUserRoleSchema = z.object({
   id: z.string().uuid(),
-  role: z.nativeEnum(UserRole)
+  role: requiredNativeEnum(UserRole)
 })
 
 type UserRoleEditionInput = z.infer<typeof editUserRoleSchema>

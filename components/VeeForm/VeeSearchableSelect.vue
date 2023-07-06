@@ -46,7 +46,6 @@
       ref="hiddenInput"
       :name="name"
       hidden
-      :required="required"
       :value="currentValue"
       :readonly="readonly"
     />
@@ -132,13 +131,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { NEW_OPTION_PREFIX, NEW_OPTION_ID } from '~/utils/options'
+  import { NEW_OPTION_PREFIX, NEW_OPTION_ID, Options } from '~/utils/options'
 
   const props = withDefaults(
     defineProps<{
       label: string
       name: string
-      options: Map<string, string>
+      options: Options
       required?: boolean
       hint?: boolean
       multiple?: boolean
