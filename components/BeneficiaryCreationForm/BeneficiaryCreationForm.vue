@@ -62,6 +62,11 @@
           :label="beneficiaryFieldLabels.email"
           type="email"
         />
+        <VeeInput
+          v-if="isMinistryAgent"
+          name="numeroPegase"
+          :label="beneficiaryFieldLabels.numeroPegase"
+        />
       </div>
     </div>
 
@@ -119,6 +124,8 @@
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
   import { toOptions } from '~/utils/options'
+
+  const isMinistryAgent = useMinistryAgent()
 
   const props = defineProps<{
     isSubmitting: boolean
