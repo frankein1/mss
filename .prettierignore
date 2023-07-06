@@ -2,3 +2,4 @@
 .output
 pnpm-lock.yaml
 coverage
+CHANGELOG.md
