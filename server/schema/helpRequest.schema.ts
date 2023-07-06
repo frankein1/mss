@@ -8,24 +8,29 @@ import {
 import { z } from 'zod'
 import { paginatedSchema } from './helpers.schema'
 import { helpRequestFilterSchema } from './filter.schema'
-import { errorMessages, kindOfBooleanSchema } from '~/utils/zod'
+import {
+  errorMessages,
+  kindOfBooleanSchema,
+  withEmptyValueOptionalNativeEnum,
+  requiredNativeEnum
+} from '~/utils/zod'
 
 const createHelpRequestSchema = z.object({
   beneficiaryId: z.string().uuid(),
   openingDate: z.coerce.date(errorMessages),
   numeroPegase: z.string().nullish(),
-  ministre: z.nativeEnum(Minister, errorMessages).nullish(),
+  ministre: withEmptyValueOptionalNativeEnum(Minister),
   typeId: z.string(errorMessages).uuid(),
   documents: z.array(z.string(), errorMessages).default([]),
   financialSupport: kindOfBooleanSchema,
   externalStructure: kindOfBooleanSchema,
-  status: z.nativeEnum(HelpRequestStatus, errorMessages),
+  status: requiredNativeEnum(HelpRequestStatus),
   askedAmount: z.number().min(0).nullish(),
   examinationDate: z.coerce.date(errorMessages).nullish(),
   decisionDate: z.coerce.date(errorMessages).nullish(),
   allocatedAmount: z.number().min(0).nullish(),
-  paymentMethod: z.nativeEnum(PaymentMethod).nullish(),
-  reason: z.nativeEnum(HelpRequestReason).nullish(),
+  paymentMethod: withEmptyValueOptionalNativeEnum(PaymentMethod),
+  reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
   paymentDate: z.coerce.date(errorMessages).nullish(),
   handlingDate: z.coerce.date(errorMessages).nullish(),
   refusalReason: z.string().nullish(),
@@ -62,7 +67,7 @@ const getHelpRequestsSchema = z
 
 const quickEditHelpRequestStatusSchema = z.object({
   id: z.string().uuid(),
-  status: z.nativeEnum(HelpRequestStatus)
+  status: requiredNativeEnum(HelpRequestStatus)
 })
 
 const quickEditHelpRequestAllocatedAmountSchema = z.object({
@@ -72,7 +77,7 @@ const quickEditHelpRequestAllocatedAmountSchema = z.object({
 
 const quickEditHelpRequestPaymentMethodSchema = z.object({
   id: z.string().uuid(),
-  paymentMethod: z.nativeEnum(PaymentMethod).nullable()
+  paymentMethod: withEmptyValueOptionalNativeEnum(PaymentMethod)
 })
 
 const quickEditHelpRequestPaymentDateSchema = z.object({
