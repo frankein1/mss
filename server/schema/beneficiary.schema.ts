@@ -80,7 +80,8 @@ export const createBeneficiarySchema = z.object({
   phone1: z.string().nullish(),
   email: z.custom(value => {
     return isValidEmail(value as string)
-  }, 'Email non valide')
+  }, 'Email non valide'),
+  numeroPegase: z.string().nullish()
 })
 
 type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>
