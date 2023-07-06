@@ -61,6 +61,7 @@
     "nuxt-scheduler": "^0.0.16",
     "nuxt-vitest": "^0.6.9",
     "prettier": "2.8.8",
+    "prettier-plugin-prisma": "^4.13.0",
     "prisma": "^4.13.0",
     "sass": "^1.62.0",
     "simple-git-hooks": "^2.8.1",
