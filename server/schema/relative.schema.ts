@@ -1,11 +1,12 @@
 import { z } from 'zod'
 import { RelativeRelationship } from '@prisma/client'
+import { withEmptyValueOptionalNativeEnum } from '~/utils/zod'
 
 export const createOrUpdateEntourageSchema = z.object({
   id: z.string().uuid().nonempty(),
   lastName: z.string().nullish(),
   firstName: z.string().nullish(),
-  relationship: z.nativeEnum(RelativeRelationship).nullish(),
+  relationship: withEmptyValueOptionalNativeEnum(RelativeRelationship),
   city: z.string().nullish(),
   email: z.string().nullish(),
   phone: z.string().nullish(),

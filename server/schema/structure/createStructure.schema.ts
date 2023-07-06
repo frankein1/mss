@@ -4,11 +4,12 @@ import {
   errorMessages,
   minStringLengthMessage,
   validZipcode,
-  validEmailMessage
+  validEmailMessage,
+  requiredNativeEnum
 } from '~/utils/zod'
 
 export const createStructureSchema = z.object({
-  type: z.nativeEnum(StructureType),
+  type: requiredNativeEnum(StructureType),
   name: z.string(errorMessages).min(2, minStringLengthMessage(2)),
   zipcode: z.string(errorMessages).min(5, validZipcode),
   city: z.string(errorMessages).min(2, minStringLengthMessage(2)),

@@ -4,19 +4,15 @@ import {
   errorMessages,
   minStringLengthMessage,
   validEmailMessage,
-  enumErrorMap
+  requiredNativeEnum
 } from '~/utils/zod'
 
 const adminCreateUserSchema = z.object({
   firstName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
   lastName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
   email: z.string(errorMessages).email(validEmailMessage),
-  role: z.nativeEnum(UserRole, {
-    errorMap: enumErrorMap
-  }),
-  status: z.nativeEnum(UserStatus, {
-    errorMap: enumErrorMap
-  }),
+  role: requiredNativeEnum(UserRole),
+  status: requiredNativeEnum(UserStatus),
   aidantConnectAuthorisation: z.boolean(),
   structureId: z.string().uuid()
 })
