@@ -64,3 +64,15 @@ docker:kaniko:build:production:
       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
         DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
+
+deploy:demo:
+  extends:
+    - deploy:production
+  environment:
+    name: demo
+    on_stop: deploy:demo:uninstall
+deploy:demo:uninstall:
+  extends:
+    - deploy:production:uninstall
+  environment:
+    name: demo
