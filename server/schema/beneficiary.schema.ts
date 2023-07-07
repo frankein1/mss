@@ -35,6 +35,7 @@ import {
   withEmptyValueOptionalNativeEnum
 } from '~/utils/zod'
 import { isValidEmail } from '~/utils/isValidEmail'
+import { isValidZipCode } from '~/utils/isValidZipCode'
 
 export const getDocumentsSchema = z.object({
   beneficiaryId: z.string()
@@ -121,7 +122,9 @@ export const updateBeneficiarySchema = z.object({
     ),
     accommodationName: z.string().nullish(),
     accommodationAdditionalInformation: z.string().nullish(),
-    zipcode: z.string().min(5, validZipcode).nullish(),
+    zipcode: z.custom(value => {
+      return isValidZipCode(value as string)
+    }, validZipcode),
     city: z.string().nullish(),
     region: z.string().nullish(),
     accommodationZone: withEmptyValueOptionalNativeEnum(
