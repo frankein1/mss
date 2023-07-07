@@ -52,8 +52,8 @@ const helpRequestFilterSchema = z.object({
   followupTypes: z.array(z.string().uuid()).nullish(),
   referents: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
-  handlingDate: kindOfBooleanSchema.nullish(),
-  externalStructure: kindOfBooleanSchema.nullish()
+  handlingDate: kindOfBooleanSchema().nullish(),
+  externalStructure: kindOfBooleanSchema().nullish()
 })
 
 type HelpRequestFilterInput = z.infer<typeof helpRequestFilterSchema>
@@ -64,8 +64,8 @@ const beneficiaryHistoryFilterSchema = z.object({
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
-  handlingDate: kindOfBooleanSchema.nullish(),
-  externalStructure: kindOfBooleanSchema.nullish(),
+  handlingDate: kindOfBooleanSchema().nullish(),
+  externalStructure: kindOfBooleanSchema().nullish(),
   referents: z.array(z.string().uuid()).nullish()
 })
 
