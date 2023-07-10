@@ -2,7 +2,6 @@
   <main class="fr-container fr-my-8w">
     <section class="fr-grid-row fr-grid-row--center fr-mb-16w">
       <div class="fr-col-12 fr-col-lg-5 landing-container-left">
-        <p>{{ publicConfig.environment }}</p>
         <h1 class="landing-title">
           Libérez du temps pour l'accompagnement social
         </h1>
@@ -157,8 +156,6 @@
   definePageMeta({
     layout: 'landing'
   })
-
-  const { public: publicConfig } = useRuntimeConfig()
 </script>
 
 <style lang="scss" scoped>
