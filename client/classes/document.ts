@@ -1,30 +1,26 @@
-export function getDocumenTagClass(tag: string) {
-  if (tag === 'emploi') {
-    return 'fr-badge--purple-glycine'
+import { DocumentTag } from '~/types/document'
+
+export function getDocumentTagClass(tag: string) {
+  switch (tag) {
+    case DocumentTag.Emploi:
+      return 'fr-badge--purple-glycine'
+    case DocumentTag.SanteHandicap:
+      return 'fr-badge--green-emeraude'
+    case DocumentTag.MaintienADomicile:
+      return 'fr-badge--brown-caramel'
+    case DocumentTag.BudgetRessources:
+      return 'fr-badge--green-bourgeon'
+    case DocumentTag.Logement:
+      return 'fr-badge--brown-cafe-creme'
+    case DocumentTag.Impot:
+      return 'fr-badge--yellow-tournesol'
+    case DocumentTag.Justice:
+      return 'fr-badge--blue-cumulus'
+    case DocumentTag.Retraite:
+      return 'fr-badge--pink-macaron'
+    case DocumentTag.PrestationsSociales:
+      return 'fr-badge--pink-tuile'
+    default:
+      return ''
   }
-  if (tag === 'santeHandicap') {
-    return 'fr-badge--green-emeraude'
-  }
-  if (tag === 'maintienADomicile') {
-    return 'fr-badge--brown-caramel'
-  }
-  if (tag === 'budgetRessources') {
-    return 'fr-badge--green-bourgeon'
-  }
-  if (tag === 'logement') {
-    return 'fr-badge--brown-cafe-creme'
-  }
-  if (tag === 'impot') {
-    return 'fr-badge--yellow-tournesol'
-  }
-  if (tag === 'justice') {
-    return 'fr-badge--blue-cumulus'
-  }
-  if (tag === 'retraite') {
-    return 'fr-badge--pink-macaron'
-  }
-  if (tag === 'prestationsSociales') {
-    return 'fr-badge--pink-tuile'
-  }
-  return ''
 }

@@ -40,7 +40,7 @@
             >
               <p
                 class="fr-badge"
-                :class="getDocumenTagClass(tag)"
+                :class="getDocumentTagClass(tag)"
               >
                 {{ documentTagOptions.get(tag) }}
               </p>
@@ -95,7 +95,7 @@
 
 <script setup lang="ts">
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
-  import { getDocumenTagClass } from '~/client/classes/document'
+  import { getDocumentTagClass } from '~/client/classes/document'
   import { documentTagOptions } from '~/client/options/document'
   import { EditDocumentInput } from '~/server/schema'
   import {
