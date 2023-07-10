@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.2.0...v1.3.0) (2023-07-10)
+
+
+### Features
+
+* **document:** set added document into followup and help request ([69ee23e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/69ee23ebd64c8485093d48383daea688a88c2511))
+* **tax-household:** remove deletion action ([dc45960](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/dc4596013866aeac17e3d23293f04f30ea0fa968))
+
+
+### Bug Fixes
+
+* environment variable is not set ([bb9bff0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/bb9bff0c2503ee7d91ef54957090d6decd309a5b))
+
 ## [1.2.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.1.1...v1.2.0) (2023-07-10)
 
 
