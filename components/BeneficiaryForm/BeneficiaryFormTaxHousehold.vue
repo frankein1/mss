@@ -21,18 +21,9 @@
             Fiche bénéficiaire liée
           </label>
           <div class="fr-input-wrap">
-            <button
-              :id="'beneficiary_file_number' + index"
-              ref="beneficiaryTag"
-              class="fr-tag fr-tag--dismiss force-focus-visible"
-              :aria-label="
-                'Retirer le lien vers la fiche bénéficiaire ' +
-                getBeneficiaryLabel
-              "
-              @click="unlink()"
-            >
+            <span class="fr-tag fr-tag--dismiss force-focus-visible">
               {{ getBeneficiaryLabel }}
-            </button>
+            </span>
           </div>
         </div>
       </div>
@@ -125,13 +116,6 @@
   const linkedBeneficiary = computed(() => {
     return props.taxHousehold.value.linkedBeneficiary
   })
-
-  const unlink = () => {
-    emit('selectBeneficiary', {
-      index: props.index,
-      beneficiary: null
-    })
-  }
 
   /**
    * The beneficiaries search is done based on firstname, birth_name and
