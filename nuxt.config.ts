@@ -107,7 +107,7 @@ export default defineNuxtConfig({
         host: 'https://matomo.incubateur.anct.gouv.fr/',
         siteId: 11
       },
-      environment: process.env.ENVIRONMENT || 'local'
+      environment: process.env.MSS_ENVIRONMENT || 'local'
     }
   },
 
