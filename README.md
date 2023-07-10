@@ -104,7 +104,7 @@ L'application de Mon Suivi Social existe sur plusieurs environnements :
 
 - production :
   - Lien d'accès : https://monsuivisocial.incubateur.anct.gouv.fr/
-  - Mode de déploiement : _**Process à venir**_
+  - Mode de déploiement : `pnpm release`
 - développement :
   - Lien d'accès : https://next.monsuivisocial.dev.incubateur.anct.gouv.fr/
   - Mode de déploiement : Poussée sur la branche `main`
