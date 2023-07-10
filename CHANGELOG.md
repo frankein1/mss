@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.1.1...v1.2.0) (2023-07-10)
+
+
+### Features
+
+* ajoute matomo ([c92afa8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c92afa83c7a271ca30fc50c048eb76392e10bff3))
+
+
+### Bug Fixes
+
+* **beneficiaire:** ajoute le numéro pégase au formulaire de création de bénéficiaire pour les structures de type Ministère ([0d3d7fc](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0d3d7fc4687fb2b7f0f7beac259efb8cac47549c))
+* **beneficiaire:** corrige un bug qui empêche de vider le champ code postal ([132c281](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/132c2818d29f1f0c21de833977d7c1d142e6faa7))
+* **formulaire:** Affiche des erreurs intelligibles sur les sélecteurs ([4509659](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4509659656b13ef8f308dd4201ca4b33fef7b8de))
+* les tags de document ne sont pas correctement affichés ([bce44a8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/bce44a8c5f3457b0cf255ba081c03e9ec0cb74a6))
+* **logout:** call inclusion connect from client ([4751305](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4751305a492e0c7115c966b531c95ebeda703f01))
+* use custom validation for zip code ([d0fe83f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d0fe83f2e0c7243f28352cb41c629d30073d195d))
+
 ### [1.1.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.1.0...v1.1.1) (2023-07-06)
 
 ## 1.1.0 (2023-07-06)
