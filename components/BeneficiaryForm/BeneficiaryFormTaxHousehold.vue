@@ -21,7 +21,7 @@
             Fiche bénéficiaire liée
           </label>
           <div class="fr-input-wrap">
-            <span class="fr-tag fr-tag--dismiss force-focus-visible">
+            <span class="fr-tag force-focus-visible">
               {{ getBeneficiaryLabel }}
             </span>
           </div>
