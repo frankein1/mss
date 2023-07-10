@@ -13,7 +13,7 @@
       />
       <hr />
       <p class="fr-mb-2w fr-mx-5v fr-hint-text">
-        {{ helpRequestsCount }} instructions(s) de demande d'aide
+        {{ helpRequestsCount }} instruction(s) de demande d'aide
       </p>
       <div v-show="pending">
         <AtomLoader class="fr-mx-auto" />
