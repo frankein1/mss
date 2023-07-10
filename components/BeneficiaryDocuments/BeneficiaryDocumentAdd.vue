@@ -21,6 +21,7 @@
 
   const emit = defineEmits<{
     (e: 'refreshDocuments'): void
+    (e: 'newDocument', key: String): void
   }>()
 
   function onAdd() {
@@ -30,12 +31,13 @@
       {
         beneficiaryId: props.beneficiaryId
       },
-      { newDocument: onDocumentAdded }
+      { newDocument: onNewDocument }
     )
   }
 
-  function onDocumentAdded() {
+  function onNewDocument(key: String) {
     emit('refreshDocuments')
+    emit('newDocument', key)
     modal.close()
   }
 </script>

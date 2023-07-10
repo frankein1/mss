@@ -211,6 +211,15 @@
    */
   const currentValue = computed<string>(() => selectedValues.value.join(','))
 
+  const selectValue = (value: string) => {
+    selectedValues.value.push(value)
+    changedValues()
+  }
+
+  defineExpose({
+    selectValue
+  })
+
   const selectedValuesLabels = computed<string>(() =>
     selectedValues.value
       .map(value => existingOptions.value.get(value))

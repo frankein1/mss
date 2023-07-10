@@ -2,6 +2,7 @@
   <div class="beneficiary-documents-select">
     <VeeSearchableSelect
       v-if="!pending && !error"
+      ref="selectDocInput"
       class="beneficiary-documents-search"
       :name="name"
       :label="label"
@@ -11,13 +12,17 @@
 
     <BeneficiaryDocumentAdd
       :beneficiary-id="beneficiaryId"
-      @added="onDocumentAdded"
+      @new-document="onNewDocument"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
   import { Document } from '@prisma/client'
+  import { ref } from 'vue'
+  import VeeSearchableSelect from '../VeeForm/VeeSearchableSelect.vue'
+
+  const selectDocInput = ref<typeof VeeSearchableSelect | null>(null)
 
   const snackbar = useSnackbar()
 
@@ -30,7 +35,8 @@
   const {
     data: documents,
     pending,
-    error
+    error,
+    refresh
   } = await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery<
     Document[]
   >({
@@ -41,11 +47,13 @@
     () => new Map(documents.value?.map(d => [d.key, d.name]))
   )
 
-  function onDocumentAdded(document: Document) {
-    documents.value?.push(document)
-    snackbar.success(
-      "Le document a été ajouté à la fiche bénéficiaire. Enregistrez l'instruction de demande d'aide pour conserver le lien entre les deux."
-    )
+  function onNewDocument(key: String) {
+    refresh().then(() => {
+      selectDocInput.value?.selectValue(key)
+      snackbar.success(
+        "Le document a été ajouté à la fiche bénéficiaire. Enregistrez l'instruction de demande d'aide pour conserver le lien entre les deux."
+      )
+    })
   }
 </script>
 

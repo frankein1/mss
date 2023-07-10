@@ -55,7 +55,7 @@ export default defineEventHandler(async event => {
   const document = await addDocument(key, input, user)
   await addNotification(document, beneficiary)
 
-  return send(event, key)
+  return send(event, document.key)
 })
 
 async function addNotification(
