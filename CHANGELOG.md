@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.3.1...v1.3.2) (2023-07-10)
+
+
+### Bug Fixes
+
+* **logout:** remove user from auth store ([9baa27d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9baa27d04336deeaaf87973fe64019f99637f2e1))
+
 ### [1.3.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.3.0...v1.3.1) (2023-07-10)
 
 ## [1.3.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.2.0...v1.3.0) (2023-07-10)
