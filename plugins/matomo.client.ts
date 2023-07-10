@@ -5,7 +5,7 @@ export default defineNuxtPlugin(() => {
   const router = useRouter()
   const { public: publicConfig } = useRuntimeConfig()
 
-  if (publicConfig.environment !== 'production') {
+  if (publicConfig.mssEnvironment !== 'production') {
     return
   }
 

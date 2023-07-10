@@ -5,9 +5,11 @@
       <h2>Variables publiques</h2>
       <ul>
         <li>
-          <div>
-            <span class="env-label fr-pr-2w">URL</span><span>{{ appUrl }}</span>
-          </div>
+          <span class="env-label fr-pr-2w">URL</span><span>{{ appUrl }}</span>
+        </li>
+        <li>
+          <span class="env-label fr-pr-2w">Environnement</span
+          ><span>{{ mssEnvironment }}</span>
         </li>
       </ul>
     </section>
@@ -19,7 +21,7 @@
     layout: 'landing'
   })
   const config = useRuntimeConfig()
-  const { appUrl } = config.public
+  const { appUrl, mssEnvironment } = config.public
 
   if (process.server) {
     const { s3, auth, email } = config
