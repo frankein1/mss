@@ -32,10 +32,9 @@ import {
   errorMessages,
   validZipcode,
   requiredNativeEnum,
-  withEmptyValueOptionalNativeEnum
+  withEmptyValueOptionalNativeEnum,
+  emailOrEmpty
 } from '~/utils/zod'
-import { isValidEmail } from '~/utils/isValidEmail'
-import { isValidZipCode } from '~/utils/isValidZipCode'
 
 export const getDocumentsSchema = z.object({
   beneficiaryId: z.string()
@@ -84,9 +83,7 @@ export const createBeneficiarySchema = z.object({
   firstName: beneficiaryFirstNameSchema,
   birthDate: z.coerce.date(errorMessages).nullish(),
   phone1: z.string().nullish(),
-  email: z.custom(value => {
-    return isValidEmail(value as string)
-  }, 'Email non valide'),
+  email: emailOrEmpty(),
   numeroPegase: z.string().nullish()
 })
 
@@ -122,9 +119,7 @@ export const updateBeneficiarySchema = z.object({
     ),
     accommodationName: z.string().nullish(),
     accommodationAdditionalInformation: z.string().nullish(),
-    zipcode: z.custom(value => {
-      return isValidZipCode(value as string)
-    }, validZipcode),
+    zipcode: z.string().min(5, validZipcode).nullish().or(z.literal('')),
     city: z.string().nullish(),
     region: z.string().nullish(),
     accommodationZone: withEmptyValueOptionalNativeEnum(
@@ -136,9 +131,7 @@ export const updateBeneficiarySchema = z.object({
     noPhone: z.boolean().default(false),
     phone1: z.string().nullish(),
     phone2: z.string().nullish(),
-    email: z.custom(value => {
-      return isValidEmail(value as string)
-    }, 'Email non valide'),
+    email: emailOrEmpty(),
     caregiver: z.boolean().default(false),
     mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility)
   }),

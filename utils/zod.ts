@@ -26,9 +26,10 @@ export const enumErrorMap: z.ZodErrorMap = issue => {
   }
 }
 
-export const kindOfBooleanSchema = z.enum(['true', 'false'], {
-  errorMap: enumErrorMap
-})
+export const kindOfBooleanSchema = () =>
+  z.enum(['true', 'false'], {
+    errorMap: enumErrorMap
+  })
 
 export const requiredNativeEnum = <T extends z.EnumLike>(nativeEnum: T) =>
   z.nativeEnum(nativeEnum, { errorMap: enumErrorMap })
@@ -40,3 +41,6 @@ export const withEmptyValueOptionalNativeEnum = <T extends z.EnumLike>(
     arg => (arg === '' ? null : arg),
     z.nativeEnum(nativeEnum, { errorMap: enumErrorMap }).nullish()
   )
+
+export const emailOrEmpty = () =>
+  z.string().email('Email non valide').nullish().or(z.literal(''))
