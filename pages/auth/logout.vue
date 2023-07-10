@@ -35,8 +35,10 @@
         body: { inactive: !!inactive }
       }
     )
-    if (res.url) {
+    if (res.success) {
       useAuthStore().logout()
+    }
+    if (res.url) {
       window.location.href = res.url
     }
   }

@@ -15,7 +15,7 @@ export default defineEventHandler(async event => {
   const sessionToken = getCookie(event, sessionCookieKey)
 
   if (!sessionToken) {
-    return { success: true }
+    return { success: true, url: null }
   }
 
   const { user: jwtUser } = parseJwt(sessionToken)
