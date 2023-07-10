@@ -1,5 +1,6 @@
 import { DocumentType } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
+import { DocumentTag } from '~/types/document'
 
 // Max size in bytes
 export const documentFileMaxSize = 15_000_000
@@ -18,22 +19,6 @@ export const documentFileAllowedTypes = [
   'application/vnd.oasis.opendocument.text'
 ]
 
-export const DocumentTags = [
-  'emploi',
-  'santeHandicap',
-  'maintienADomicile',
-  'budgetRessources',
-  'logement',
-  'impot',
-  'justice',
-  'retraite',
-  'prestationsSociales'
-] as const
-
-export type DocumentTag = (typeof DocumentTags)[number]
-
-export const DocumentTypes = Object.values(DocumentType) satisfies string[]
-
 export const documentTypeLabels: {
   [scope in DocumentType]: string
 } = {
@@ -46,15 +31,15 @@ export const documentTypeLabels: {
 export const documentTypeOptions = labelsToOptions(documentTypeLabels)
 
 export const documentTagLabels: { [scope in DocumentTag]: string } = {
-  budgetRessources: 'Budget-Ressources',
-  emploi: 'Emploi',
-  impot: 'Impôt',
-  justice: 'Justice',
-  logement: 'Logement',
-  maintienADomicile: 'Maintien à domicile',
-  prestationsSociales: 'Prestations sociales',
-  retraite: 'Retraite',
-  santeHandicap: 'Santé-Handicap'
+  BudgetRessources: 'Budget-Ressources',
+  Emploi: 'Emploi',
+  Impot: 'Impôt',
+  Justice: 'Justice',
+  Logement: 'Logement',
+  MaintienADomicile: 'Maintien à domicile',
+  PrestationsSociales: 'Prestations sociales',
+  Retraite: 'Retraite',
+  SanteHandicap: 'Santé-Handicap'
 }
 
 export const documentTagOptions = labelsToOptions(documentTagLabels)
