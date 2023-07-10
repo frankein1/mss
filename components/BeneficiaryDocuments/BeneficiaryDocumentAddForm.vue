@@ -55,7 +55,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'newDocument'): void
+    (e: 'newDocument', key: String): void
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
@@ -88,10 +88,10 @@
     formData.append('file', file)
     formData.append('input', input)
 
-    await useFetch('/api/s3/create', {
+    const key = await $fetch<String>('/api/s3/create', {
       method: 'POST',
       body: formData
     })
-    emit('newDocument')
+    emit('newDocument', key)
   })
 </script>
