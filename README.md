@@ -63,7 +63,7 @@ Le projet utilise les technologies Node.js suivantes :
   pnpm dev
   ```
 
-  Il est alors disponible à l'adresse [localhost:3000](http://localhost:3000/).
+Il est alors disponible à l'adresse [localhost:3000](http://localhost:3000/).
 
 ## Déploiement
 
