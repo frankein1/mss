@@ -37,6 +37,8 @@ Le projet utilise les technologies Node.js suivantes :
 
   Puis remplissez le fichier `.env` avec les valeurs manquantes.
 
+  Pour utiliser l'espace documents en local, ajoutez la configuration du stockage S3 de l'environnement de développement à votre fichier `.env`. Ces valeurs sont disponibles dans les variables d'environnement des paramètres _CI/CD_ du [dépôt GitLab](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2).
+
 - Démarrez la base de données Postgres (utilise Docker)
 
   ```sh
@@ -76,10 +78,6 @@ Le projet utilise les technologies Node.js suivantes :
   ```sh
   docker run --rm -p 8080:3000 --env-file .env-list monsuivisocial
   ```
-
-## Travailler en local sur l'espace documents
-
-<!-- TODO -->
 
 ## Antisèche
 
