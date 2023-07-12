@@ -292,7 +292,7 @@
     computed(() => props.readonly)
   )
 
-// FIXME: Somehow, the watcher is not reacting to options changes
+  // FIXME: Somehow, the watcher is not reacting to options changes
   useWatchSelectOptions(() => props.options, selectedValues, changedValues)
 
   const createTagIsActive = computed(
