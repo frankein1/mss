@@ -7,14 +7,21 @@ export default defineNuxtRouteMiddleware(async to => {
   await useLogUserFromCookie()
 
   const isAuthenticated = authStore.isAuthenticated
+  const isAdminRoute = to.fullPath.startsWith(RoutePath.Admin())
+
   if (!isAuthenticated) {
-    const admin = to.fullPath.startsWith(RoutePath.Admin())
     return navigateTo({
-      path: admin ? RoutePath.AuthAdmin() : RoutePath.AuthLogin(),
+      path: isAdminRoute ? RoutePath.AuthAdmin() : RoutePath.AuthLogin(),
       query: { redirectUrl: to.fullPath }
     })
   }
   if (!authStore.isActive) {
     return navigateTo(RoutePath.ErrorDisabledAccount())
+  }
+  if (
+    (isAdminRoute && !authStore.isAdmin) ||
+    (!isAdminRoute && authStore.isAdmin)
+  ) {
+    return navigateTo(useHomePage())
   }
 })

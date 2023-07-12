@@ -1,4 +1,4 @@
-import { protectedProcedure, router } from '../../trpc'
+import { adminProcedure, router } from '~/server/trpc'
 import {
   adminCreateStructureSchema,
   adminCreateUserSchema,
@@ -21,27 +21,23 @@ import {
 } from '~/server/controller/admin'
 
 export const adminRouter = router({
-  createStructure: protectedProcedure
+  createStructure: adminProcedure
     .input(adminCreateStructureSchema)
     .mutation(createStructureController),
-  getStructures: protectedProcedure
+  getStructures: adminProcedure
     .input(adminGetStructuresSchema)
     .query(getStructuresController),
-  getStructure: protectedProcedure
-    .input(idSchema)
-    .query(getStructureController),
-  editStructure: protectedProcedure
+  getStructure: adminProcedure.input(idSchema).query(getStructureController),
+  editStructure: adminProcedure
     .input(adminEditStructureSchema)
     .mutation(editStructureController),
-  createUser: protectedProcedure
+  createUser: adminProcedure
     .input(adminCreateUserSchema)
     .mutation(createUserController),
-  getUsers: protectedProcedure
-    .input(adminGetUsersSchema)
-    .query(getUsersController),
-  getUser: protectedProcedure.input(idSchema).query(getUserController),
-  editUser: protectedProcedure
+  getUsers: adminProcedure.input(adminGetUsersSchema).query(getUsersController),
+  getUser: adminProcedure.input(idSchema).query(getUserController),
+  editUser: adminProcedure
     .input(adminEditUserSchema)
     .mutation(editUserController),
-  getOverview: protectedProcedure.query(getOverviewController)
+  getOverview: adminProcedure.query(getOverviewController)
 })

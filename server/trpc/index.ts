@@ -3,6 +3,7 @@ export {
   publicProcedure,
   protectedProcedure,
   statsProcedure,
+  adminProcedure,
   router,
   ProtectedAppContext,
   ProtectedAppContextUser
