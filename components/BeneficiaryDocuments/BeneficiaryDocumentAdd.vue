@@ -21,7 +21,7 @@
 
   const emit = defineEmits<{
     (e: 'refreshDocuments'): void
-    (e: 'newDocument', key: String): void
+    (e: 'newDocument', key: string): void
   }>()
 
   function onAdd() {
@@ -35,7 +35,7 @@
     )
   }
 
-  function onNewDocument(key: String) {
+  function onNewDocument(key: string) {
     emit('refreshDocuments')
     emit('newDocument', key)
     modal.close()

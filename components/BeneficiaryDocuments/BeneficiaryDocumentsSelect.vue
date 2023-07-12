@@ -47,7 +47,7 @@
     () => new Map(documents.value?.map(d => [d.key, d.name]))
   )
 
-  function onNewDocument(key: String) {
+  function onNewDocument(key: string) {
     refresh().then(() => {
       selectDocInput.value?.selectValue(key)
       snackbar.success(
