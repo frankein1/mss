@@ -34,6 +34,7 @@ const isAuthenticated = t.middleware(({ ctx, next }) => {
     }
   })
 })
+
 /**
  * Reusable middleware to ensure
  * users are active
@@ -75,6 +76,22 @@ const statsMiddleware = isPartOfStructure.unstable_pipe(({ ctx, next }) => {
 })
 
 /**
+ * Reusable middleware to ensure
+ * user is an administrator
+ */
+const isAdmin = isAuthenticated.unstable_pipe(({ ctx, next }) => {
+  if (ctx.user.role !== 'Administrator') {
+    throw forbiddenError('User is not an administrator')
+  }
+  return next({
+    ctx: {
+      // infers the user as admin
+      user: ctx.user
+    }
+  })
+})
+
+/**
  * Protected procedure
  * */
 export const protectedProcedure = t.procedure
@@ -92,3 +109,11 @@ export type ProtectedAppContextUser = ProtectedAppContext['user']
  * Stats procedure
  */
 export const statsProcedure = protectedProcedure.use(statsMiddleware)
+
+/**
+ * Admin procedure
+ */
+export const adminProcedure = t.procedure
+  .use(isAuthenticated)
+  .use(isActive)
+  .use(isAdmin)
