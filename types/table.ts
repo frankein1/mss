@@ -5,32 +5,26 @@ export enum SortOrder {
   Desc = 'desc'
 }
 
-export type BeneficiarySort = Pick<
-  Prisma.BeneficiaryOrderByWithRelationAndSearchRelevanceInput,
-  'usualName' | 'firstName'
->
-
-export type FollowupSort = Pick<
-  Prisma.FollowupOrderByWithRelationAndSearchRelevanceInput,
-  'dueDate' | 'date'
-> & {
-  beneficiary?: Pick<
-    Prisma.BeneficiaryOrderByWithRelationAndSearchRelevanceInput,
-    'usualName'
-  >
+export type BeneficiarySort = {
+  usualName?: Prisma.SortOrder
+  firstName?: Prisma.SortOrder
 }
 
-export type HelpRequestSort = Pick<
-  Prisma.HelpRequestOrderByWithRelationAndSearchRelevanceInput,
-  'dueDate' | 'openingDate'
-> & {
-  beneficiary?: Pick<
-    Prisma.BeneficiaryOrderByWithRelationAndSearchRelevanceInput,
-    'usualName'
-  >
-} & {
-  instructorOrganization?: Pick<
-    Prisma.InstructorOrganizationOrderByWithRelationAndSearchRelevanceInput,
-    'name'
-  >
+export type FollowupSort = {
+  dueDate?: Prisma.SortOrder
+  date?: Prisma.SortOrder
+  beneficiary?: {
+    usualName?: Prisma.SortOrder
+  }
+}
+
+export type HelpRequestSort = {
+  dueDate?: Prisma.SortOrder
+  openingDate?: Prisma.SortOrder
+  beneficiary?: {
+    usualName?: Prisma.SortOrder
+  }
+  instructorOrganization?: {
+    name?: Prisma.SortOrder
+  }
 }
