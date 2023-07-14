@@ -93,6 +93,18 @@ body,
   overflow: scroll;
 }
 
+.results-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+
+  p {
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+}
+
 .information-list {
   @include dsfr.disable-list-style;
 
