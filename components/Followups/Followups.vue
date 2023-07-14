@@ -13,9 +13,13 @@
         @filter="filters = $event"
       />
       <hr />
-      <p class="fr-mb-2w fr-mx-5v fr-hint-text">
-        {{ followupsCount }} synthèse(s) d'entretien
-      </p>
+      <div class="fr-mb-2w fr-mx-5v results-container">
+        <p class="fr-hint-text">{{ followupsCount }} synthèse(s) d'entretien</p>
+        <ExportDataButton
+          :is-downloading="isDownloading"
+          @export="exportFollowups"
+        />
+      </div>
       <div v-show="pending">
         <AtomLoader class="fr-mx-auto" />
       </div>
@@ -41,29 +45,36 @@
   import type { FollowupFilterInput } from '~/server/schema'
   import { useFiltersStore } from '~/store/filters'
   import { FollowupSort, SortOrder } from '~/types/table'
+  import { getExportUrl } from '~/utils/export/getExportUrl'
 
   const filtersStore = useFiltersStore()
+  const trpcClient = useTrpcClient()
 
   const filters = ref<FollowupFilterInput>(filtersStore.followup || {})
   const orderBy = ref<FollowupSort[]>([{ date: SortOrder.Desc }])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
+  const isDownloading = ref(false)
 
   const { updatePagination } = usePagination(page, perPage)
   const { onSort } = useSort<FollowupSort>(orderBy)
 
-  const queryInput = computed(() => ({
-    page: page.value,
-    perPage: perPage.value,
+  const exportInput = computed(() => ({
     orderBy: orderBy.value,
     filters: filters.value
+  }))
+
+  const queryInput = computed(() => ({
+    ...exportInput.value,
+    page: page.value,
+    perPage: perPage.value
   }))
 
   const {
     data: followupsRequest,
     pending,
     error
-  } = await useTrpcClient().followup.getFollowups.useQuery(queryInput, {
+  } = await trpcClient.followup.getFollowups.useQuery(queryInput, {
     default: () => ({
       followups: [],
       count: 0,
@@ -77,4 +88,21 @@
   const followups = computed(() => followupsRequest.value?.followups || [])
 
   const totalPages = computed(() => followupsRequest.value?.totalPages || 0)
+
+  async function exportFollowups() {
+    isDownloading.value = true
+    try {
+      const exportedFollowups = await trpcClient.followup.exportFollowups.query(
+        exportInput.value
+      )
+      if (!exportedFollowups.data) {
+        throw new Error('no data')
+      }
+      window.location.href = getExportUrl(exportedFollowups.data)
+    } catch {
+      useSnackbar().error('Le téléchargement a échoué.')
+    } finally {
+      isDownloading.value = false
+    }
+  }
 </script>

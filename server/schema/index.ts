@@ -31,12 +31,14 @@ export type {
 export {
   addFollowupSchema,
   editFollowupSchema,
+  exportFollowupsSchema,
   getFollowupsSchema,
   quickEditFollowupSchema
 } from './followup.schema'
 export type {
   AddFollowupInput,
   EditFollowupInput,
+  ExportFollowupsInput,
   GetFollowupsInput,
   QuickEditFollowupInput
 } from './followup.schema'
