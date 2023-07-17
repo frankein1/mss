@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="tableContainer"
     class="table-container fr-pb-0"
     tabindex="0"
   >
@@ -66,26 +67,18 @@
   const props = defineProps<{
     followups: GetFollowupsOutput
     sort: FollowupSort[]
+    pending: boolean
   }>()
 
   const emit = defineEmits<{
     (e: 'update:sort', sort: FollowupSort[]): void
   }>()
 
-  const innerSort = ref(props.sort)
-
-  const { onSort } = useSort<FollowupSort>(innerSort)
-
-  const dateSort = computed(() => props.sort?.find(s => s.date)?.date)
-
-  watch(
-    () => props.sort,
-    sort => {
-      innerSort.value = sort
-    }
+  const { onSort, tableContainer } = useTable<FollowupSort>(
+    toRef(() => props.sort),
+    toRef(() => props.pending),
+    emit
   )
 
-  watch(innerSort, sort => {
-    emit('update:sort', sort)
-  })
+  const dateSort = computed(() => props.sort?.find(s => s.date)?.date)
 </script>
