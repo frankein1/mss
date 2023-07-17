@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE "followup" ALTER COLUMN "date" SET DEFAULT CURRENT_TIMESTAMP;
+
+-- AlterTable
+ALTER TABLE "help_request" ALTER COLUMN "opening_date" SET DEFAULT CURRENT_TIMESTAMP;
