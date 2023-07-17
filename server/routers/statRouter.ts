@@ -17,12 +17,13 @@ import {
   getHistoryCountsHandler,
   getMobilityStatsHandler,
   getRegionStatsHandler,
-  getSupportStatsHandler,
+  getFollowupFollowupTypesStatsHandler,
   getAccommodationZoneStatsHandler,
   getMinistereStructureStatsHandler,
   getMinistereCategorieStatsHandler,
   getMinistereDepartementServiceAcStatsHandler,
-  getInstructorOrganizationStatsHandler
+  getInstructorOrganizationStatsHandler,
+  getHelpRequestFollowupTypesStatsHandler
 } from '~/server/controller/stat'
 import { statFilterSchema } from '~/server/schema'
 import { statsProcedure, router } from '~/server/trpc'
@@ -81,9 +82,12 @@ export const statRouter = router({
   getRegionStats: statsProcedure
     .input(statFilterSchema)
     .query(getRegionStatsHandler),
-  getSupportStats: statsProcedure
+  getFollowupFollowupTypeStats: statsProcedure
     .input(statFilterSchema)
-    .query(getSupportStatsHandler),
+    .query(getFollowupFollowupTypesStatsHandler),
+  getHelpRequestFollowupTypeStats: statsProcedure
+    .input(statFilterSchema)
+    .query(getHelpRequestFollowupTypesStatsHandler),
   getMinistereStructure: statsProcedure
     .input(statFilterSchema)
     .query(getMinistereStructureStatsHandler),
