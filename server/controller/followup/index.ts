@@ -1,4 +1,4 @@
-export { getFollowupsHandler } from './get-page.controller'
+export * from './get-page.controller'
 export { getFollowupDetailsHandler } from './get-details.controller'
 export { updateFollowupHandler } from './update.controller'
 export { quickUpdateFollowupHandler } from './quick-update.controller'

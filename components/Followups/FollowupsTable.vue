@@ -18,11 +18,8 @@
             >
               {{ followupFieldLabels.status }}
             </th>
-            <th scope="col">{{ followupFieldLabels.medium }}</th>
-            <th scope="col">Objet de l'entretien</th>
             <th scope="col">
-              {{ followupFieldLabels.dueDate }}
-              <AtomSortButton @sort="emit('sort', { dueDate: $event })" />
+              {{ followupFieldLabels.date }}
             </th>
             <th scope="col">
               {{ followupFieldLabels.beneficiaryId }}
@@ -35,6 +32,11 @@
                   })
                 "
               />
+            </th>
+            <th scope="col">Objet de l'entretien</th>
+            <th scope="col">
+              {{ followupFieldLabels.dueDate }}
+              <AtomSortButton @sort="emit('sort', { dueDate: $event })" />
             </th>
             <th scope="col">Agent</th>
             <th scope="col">N° de dossier</th>
@@ -53,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Followups } from './types'
+  import { GetFollowupsOutput } from '~/server/routers'
   import { FollowupSort } from '~/types/table'
   import { followupFieldLabels } from '~/client/labels'
 

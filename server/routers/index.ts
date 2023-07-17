@@ -2,7 +2,7 @@ import { TRPCClientError } from '@trpc/client'
 import type { inferRouterOutputs } from '@trpc/server'
 import { beneficiaryRouter } from './beneficiary/router'
 import { configRouter } from './configRouter'
-import { followupRouter } from './followupRouter'
+import { followupRouter } from './followup/router'
 import { statRouter } from './statRouter'
 import { userRouter } from './userRouter'
 import { structureRouter } from './structureRouter'
@@ -36,7 +36,6 @@ export type AppRouter = typeof appRouter
 type RouterOutput = inferRouterOutputs<AppRouter>
 export type ErrorOutput = TRPCClientError<AppRouter>
 
-export type GetFollowupsOutput = RouterOutput['followup']['getFollowups']
 export type GetFollowupDetailsOutput =
   RouterOutput['followup']['getFollowupDetails']
 
@@ -55,3 +54,4 @@ export type GetBeneficiaryDocumentOutput = GetBeneficiaryDocumentsOutput[0]
 export * from '~/server/routers/beneficiary'
 export * from '~/server/routers/usersActivity'
 export * from '~/server/routers/admin'
+export * from '~/server/routers/followup'
