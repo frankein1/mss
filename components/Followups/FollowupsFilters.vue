@@ -30,9 +30,12 @@
   import type { FollowupFilterInput } from '~/server/schema'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
+  import { followupFieldLabels } from '~/client/labels'
+  import { ministerOptions } from '~/client/options/ministry'
 
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
+  const isMinistryAgent = useMinistryAgent()
 
   const emit = defineEmits<{
     (e: 'filter', filters: FollowupFilterInput): void
@@ -78,16 +81,16 @@
       return null
     }
 
-    return [
+    const filters = [
       {
         name: 'status',
-        label: 'Statut',
+        label: followupFieldLabels.status,
         options: withEmptyValue(followupStatusOptions, 'Tous les statuts'),
         type: FilterType.SelectOne
       },
       {
         name: 'medium',
-        label: "Type d'entretien",
+        label: followupFieldLabels.medium,
         options: followupMediumOptions,
         type: FilterType.SelectMultiple
       },
@@ -104,6 +107,17 @@
         type: FilterType.SelectMultiple
       }
     ]
+
+    if (isMinistryAgent.value) {
+      filters.push({
+        name: 'ministre',
+        label: followupFieldLabels.ministre,
+        options: ministerOptions,
+        type: FilterType.SelectMultiple
+      })
+    }
+
+    return filters
   })
 
   function onFilter(filters: FollowupFilterInput) {

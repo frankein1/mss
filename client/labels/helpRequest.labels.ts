@@ -8,7 +8,6 @@ type HelpRequestFieldLabels = Omit<
   | 'createdById'
   | 'updated'
   | 'financialSupport'
-  | 'externalStructure'
   | 'created'
 > & { documents: string }
 
@@ -35,5 +34,6 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   refusalReason: 'Motif du refus',
   synthesis: 'Compte rendu',
   privateSynthesis: 'Compte rendu privé',
-  documents: 'Documents'
+  documents: 'Documents',
+  externalStructure: 'Instruction'
 }
