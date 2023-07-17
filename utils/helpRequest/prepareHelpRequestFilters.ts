@@ -36,5 +36,9 @@ export function prepareHelpRequestFilters(filters: HelpRequestFilterInput) {
     }
   }
 
+  if (filters.ministre) {
+    formattedFilters.ministre = { in: filters.ministre }
+  }
+
   return formattedFilters
 }
