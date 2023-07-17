@@ -26,3 +26,5 @@ export type HelpRequestSort = {
     name?: SortOrder
   }
 }
+
+export type TableSort = BeneficiarySort | FollowupSort | HelpRequestSort

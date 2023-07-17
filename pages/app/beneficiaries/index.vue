@@ -26,9 +26,9 @@
             </div>
             <BeneficiaryTable
               v-show="!pending"
+              v-model:sort="orderBy"
               :beneficiaries="beneficiaries"
               :pending="pending"
-              @sort="onSort"
             />
             <AtomPagination
               v-show="!pending"
@@ -55,7 +55,7 @@
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import type { BeneficiarySort } from '~/types/table'
+  import { BeneficiarySort, SortOrder } from '~/types/table'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
   definePageMeta({
@@ -66,12 +66,11 @@
   const trpcClient = useTrpcClient()
 
   const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
-  const orderBy = ref<BeneficiarySort[]>([])
+  const orderBy = ref<BeneficiarySort[]>([{ usualName: SortOrder.Asc }])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
 
   const { updatePagination } = usePagination(page, perPage)
-  const { onSort } = useSort<BeneficiarySort>(orderBy)
 
   const queryInput = computed(() => ({
     page: page.value,

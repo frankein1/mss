@@ -20,8 +20,9 @@
       </div>
       <HelpRequestsTable
         v-show="!pending"
+        v-model:sort="orderBy"
         :help-requests="helpRequests"
-        @sort="onSort"
+        :pending="pending"
         @help-request-updated="onHelpRequestUpdated"
       />
       <AtomPagination
@@ -51,7 +52,6 @@
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
 
   const { updatePagination } = usePagination(page, perPage)
-  const { onSort } = useSort<HelpRequestSort>(orderBy)
 
   const queryInput = computed(() => ({
     page: page.value,
