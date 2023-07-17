@@ -65,6 +65,14 @@ Le projet utilise les technologies Node.js suivantes :
 
 Il est alors disponible à l'adresse [localhost:3000](http://localhost:3000/).
 
+### Données de test
+
+Si besoin, il est possible d'alimenter la base de donnée avec des données de test en exécutant :
+
+```sh
+pnpm prisma db seed
+```
+
 ## Déploiement
 
 - Construire l'image docker
