@@ -1,12 +1,9 @@
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
-import {
-  prepareFollowupStatFilters,
-  prepareHelpRequestStatFilters
-} from '~/utils/filters'
+import { prepareFollowupStatFilters } from '~/utils/filters'
 
-export const getSupportStatsHandler = async ({
+export const getFollowupFollowupTypesStatsHandler = async ({
   input,
   ctx: { user }
 }: {
@@ -24,15 +21,10 @@ export const getSupportStatsHandler = async ({
               structureId: user.structureId,
               ...prepareFollowupStatFilters(input)
             }
-          },
-          helpRequests: {
-            where: {
-              structureId: user.structureId,
-              ...prepareHelpRequestStatFilters(input)
-            }
           }
         }
       }
-    }
+    },
+    orderBy: [{ followups: { _count: 'desc' } }]
   })
 }
