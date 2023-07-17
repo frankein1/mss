@@ -24,19 +24,23 @@
               scope="col"
             >
               {{ helpRequestFieldLabels.dueDate }}
-              <AtomSortButton @sort="emit('sort', { dueDate: $event })" />
+              <AtomSortButton
+                @update:sort="emit('sort', { dueDate: $event })"
+              />
             </th>
             <th scope="col">
               {{ helpRequestFieldLabels.beneficiaryId }}
               <AtomSortButton
-                @sort="emit('sort', { beneficiary: { usualName: $event } })"
+                @update:sort="
+                  emit('sort', { beneficiary: { usualName: $event } })
+                "
               />
             </th>
             <template v-if="canViewAnyHelpRequestDetails">
               <th scope="col">
                 {{ helpRequestFieldLabels.instructorOrganizationId }}
                 <AtomSortButton
-                  @sort="
+                  @update:sort="
                     emit('sort', { instructorOrganization: { name: $event } })
                   "
                 />

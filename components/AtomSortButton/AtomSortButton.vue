@@ -1,7 +1,7 @@
 <template>
   <button
     class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
-    :class="{ enabled: sort != undefined }"
+    :class="{ enabled: innerSort != undefined }"
     @click="onToggle"
   >
     {{ label }}
@@ -11,23 +11,39 @@
 <script lang="ts" setup>
   import { SortOrder } from '~/types/table'
 
+  const props = withDefaults(
+    defineProps<{
+      sort?: SortOrder
+    }>(),
+    { sort: undefined }
+  )
+
   const emit = defineEmits<{
-    (e: 'sort', sort: SortOrder | undefined): void
+    (e: 'update:sort', sort: SortOrder | undefined): void
   }>()
 
-  const sort = ref<SortOrder | undefined>(undefined)
+  const innerSort = ref<SortOrder | undefined>(props.sort)
 
   const label = computed(() =>
-    sort.value === undefined || sort.value === SortOrder.Asc ? 'A..Z' : 'Z..A'
+    innerSort.value === undefined || innerSort.value === SortOrder.Asc
+      ? 'A..Z'
+      : 'Z..A'
+  )
+
+  watch(
+    () => props.sort,
+    sort => {
+      innerSort.value = sort
+    }
   )
 
   function onToggle() {
-    if (sort.value === undefined || sort.value === SortOrder.Desc) {
-      sort.value = SortOrder.Asc
+    if (innerSort.value === undefined || innerSort.value === SortOrder.Desc) {
+      innerSort.value = SortOrder.Asc
     } else {
-      sort.value = SortOrder.Desc
+      innerSort.value = SortOrder.Desc
     }
-    emit('sort', sort.value)
+    emit('update:sort', innerSort.value)
   }
 </script>
 
