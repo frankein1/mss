@@ -23,6 +23,7 @@
         v-show="!pending"
         v-model:sort="orderBy"
         :followups="followups"
+        :pending="pending"
       />
       <AtomPagination
         v-show="!pending"

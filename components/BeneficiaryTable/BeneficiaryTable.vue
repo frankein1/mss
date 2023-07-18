@@ -16,14 +16,13 @@
             <th scope="col">
               {{ beneficiaryFieldLabels.usualName }}
               <AtomSortButton
-                @update:sort="emit('sort', { usualName: $event })"
+                :sort="usualNameSort"
+                @update:sort="onSort({ usualName: $event })"
               />
             </th>
             <th scope="col">
               {{ beneficiaryFieldLabels.firstName }}
-              <AtomSortButton
-                @update:sort="emit('sort', { firstName: $event })"
-              />
+              <AtomSortButton @update:sort="onSort({ firstName: $event })" />
             </th>
             <th scope="col">Âge</th>
             <th scope="col">
@@ -58,23 +57,20 @@
   const props = defineProps<{
     beneficiaries: Beneficiaries
     pending: boolean
+    sort: BeneficiarySort[]
   }>()
 
   const emit = defineEmits<{
-    (e: 'sort', sort: BeneficiarySort): void
+    (e: 'update:sort', sort: BeneficiarySort[]): void
   }>()
 
-  const tableContainer = ref<HTMLDivElement | null>(null)
+  const { onSort, tableContainer } = useTable<BeneficiarySort>(
+    toRef(() => props.sort),
+    toRef(() => props.pending),
+    emit
+  )
 
-  watch(
-    () => props.pending,
-    pending => {
-      const tableContainerValue = tableContainer.value
-      // Scroll the table container to top after reloading
-      if (tableContainerValue && !pending) {
-        nextTick(() => (tableContainerValue.scrollTop = 0))
-      }
-    },
-    { deep: true }
+  const usualNameSort = computed(
+    () => props.sort?.find(s => s.usualName)?.usualName
   )
 </script>
