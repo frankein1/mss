@@ -17,14 +17,15 @@ export {
   getHelpRequestMinistreStatsHandler,
   getHelpRequestPrescribingOrganizationStatsHandler,
   getHelpRequestStatusStatsHandler,
-  getInstructorOrganizationStatsHandler
+  getInstructorOrganizationStatsHandler,
+  getHelpRequestFollowupTypesStatsHandler
 } from './helpRequest'
 export {
   getFollowupActionsEntreprisesStatsHandler,
   getFollowupMediumStatsHandler,
   getFollowupMinistreStatsHandler,
   getFollowupPrescribingOrganizationStatsHandler,
-  getFollowupStatusStatsHandler
+  getFollowupStatusStatsHandler,
+  getFollowupFollowupTypesStatsHandler
 } from './followup'
 export { getHistoryCountsHandler } from './get-history-count.controller'
-export { getSupportStatsHandler } from './get-support.controller'

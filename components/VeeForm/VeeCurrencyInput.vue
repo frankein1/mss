@@ -28,7 +28,7 @@
         :aria-labelledby="labelledBy"
         :readonly="readonly"
         @keypress="onKeypress"
-        @input="onChange"
+        @input="handleChange"
       />
     </div>
     <div
@@ -55,10 +55,6 @@
     }>(),
     { noLabel: false, labelledBy: undefined, readonly: false }
   )
-
-  const emit = defineEmits<{
-    (e: 'changeValue', value: number): void
-  }>()
 
   const {
     errorMessage: error,
@@ -101,12 +97,6 @@
     if (!ALLOWED_KEYS.includes((e as KeyboardEvent).key)) {
       e.preventDefault()
     }
-  }
-
-  function onChange(event: Event) {
-    const newValue = parseFloat((event.target as HTMLInputElement).value)
-    emit('changeValue', newValue)
-    handleChange(newValue)
   }
 </script>
 

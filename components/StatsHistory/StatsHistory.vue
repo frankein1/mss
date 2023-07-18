@@ -68,9 +68,8 @@
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsHistorySupportType
+            <StatsHistoryHelpRequestFollowupTypes
               :total-count="helpRequestCount"
-              collection="helpRequests"
               :filters="filters"
             />
           </div>
@@ -127,9 +126,8 @@
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsHistorySupportType
+            <StatsHistoryFollowupFollowupTypes
               :total-count="followupCount"
-              collection="followups"
               :filters="filters"
             />
           </div>
