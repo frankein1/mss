@@ -89,7 +89,6 @@ export default defineNuxtConfig({
       secret: process.env.S3_SECRET || ''
     },
     email: {
-      from: process.env.EMAIL_FROM || '',
       smtpHost: process.env.EMAIL_SMTP_HOST || '',
       smtpPassword: process.env.EMAIL_SMTP_PASSWORD || '',
       smtpPort: parseInt(process.env.EMAIL_SMTP_PORT || '587'),
@@ -107,7 +106,10 @@ export default defineNuxtConfig({
         host: 'https://matomo.incubateur.anct.gouv.fr/',
         siteId: 11
       },
-      mssEnvironment: process.env.MSS_ENVIRONMENT || 'local'
+      mssEnvironment: process.env.MSS_ENVIRONMENT || 'local',
+      email: {
+        from: process.env.EMAIL_FROM || ''
+      }
     }
   },
 

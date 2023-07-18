@@ -24,6 +24,7 @@ export type InclusionConnectConfig = {
   clientSecret: string
   redirectUri: string
   postLogoutRedirectUri: string
+  postPasswordEditRedirectUri: string
 }
 
 export class InclusionConnectClient {
@@ -32,19 +33,22 @@ export class InclusionConnectClient {
   private clientSecret: string
   private redirectUri: string
   private postLogoutRedirectUri: string
+  private postPasswordEditRedirectUri: string
 
   public constructor({
     issuer,
     clientId,
     clientSecret,
     redirectUri,
-    postLogoutRedirectUri
+    postLogoutRedirectUri,
+    postPasswordEditRedirectUri
   }: InclusionConnectConfig) {
     this.issuer = issuer
     this.clientId = clientId
     this.clientSecret = clientSecret
     this.redirectUri = redirectUri
     this.postLogoutRedirectUri = postLogoutRedirectUri
+    this.postPasswordEditRedirectUri = postPasswordEditRedirectUri
   }
 
   public getRedirectUri(appRedirectUrl?: string) {
@@ -154,6 +158,16 @@ export class InclusionConnectClient {
 
     return `${inclusionConnectRegistration}?${params}`
   }
+
+  public getEditPasswordUrl() {
+    const inclusionConnectAccountUrlBase = `${this.issuer}/account`
+
+    const params = new URLSearchParams({
+      referrer: this.clientId,
+      referrer_uri: this.postPasswordEditRedirectUri
+    })
+    return `${inclusionConnectAccountUrlBase}?${params}`
+  }
 }
 
 let client: InclusionConnectClient
@@ -169,7 +183,8 @@ function initClient() {
       clientId: keycloakClientId,
       clientSecret: keycloakClientSecret,
       redirectUri: `${appUrl}${RoutePath.ApiSsoCallback()}`,
-      postLogoutRedirectUri: `${appUrl}${RoutePath.AuthLogout()}`
+      postLogoutRedirectUri: `${appUrl}${RoutePath.AuthLogout()}`,
+      postPasswordEditRedirectUri: `${appUrl}${RoutePath.AppAccount()}`
     }
     client = new InclusionConnectClient(config)
   }

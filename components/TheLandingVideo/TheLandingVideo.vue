@@ -90,10 +90,16 @@
       </ol>
       <p>
         Contactez-nous :
-        <NuxtLink to="mailto:monsuivisocial@anct.gouv.fr"
-          >monsuivisocial@anct.gouv.fr</NuxtLink
-        >
+        <NuxtLink :to="`mailto:${supportEmail}`">{{ supportEmail }}</NuxtLink>
       </p>
     </div>
   </figure>
 </template>
+
+<script setup lang="ts">
+  const {
+    public: {
+      email: { from: supportEmail }
+    }
+  } = useRuntimeConfig()
+</script>
