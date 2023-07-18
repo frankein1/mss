@@ -27,5 +27,9 @@ export function prepareFollowupFilters(filters: FollowupFilterInput) {
     }
   }
 
+  if (filters.ministre) {
+    formattedFilters.ministre = { in: filters.ministre }
+  }
+
   return formattedFilters
 }

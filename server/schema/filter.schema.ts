@@ -4,7 +4,8 @@ import {
   BeneficiaryStatus,
   FollowupStatus,
   HelpRequestStatus,
-  FollowupMedium
+  FollowupMedium,
+  Minister
 } from '@prisma/client'
 import { AgeGroup } from '~/client/options/ageGroup'
 import { kindOfBooleanSchema } from '~/utils/zod'
@@ -42,7 +43,8 @@ const followupFilterSchema = z.object({
   status: z.nativeEnum(FollowupStatus).nullish(),
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
-  referents: z.array(z.string().uuid()).nullish()
+  referents: z.array(z.string().uuid()).nullish(),
+  ministre: z.array(z.nativeEnum(Minister)).nullish()
 })
 
 type FollowupFilterInput = z.infer<typeof followupFilterSchema>
@@ -53,7 +55,8 @@ const helpRequestFilterSchema = z.object({
   referents: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
   handlingDate: kindOfBooleanSchema().nullish(),
-  externalStructure: kindOfBooleanSchema().nullish()
+  externalStructure: kindOfBooleanSchema().nullish(),
+  ministre: z.array(z.nativeEnum(Minister)).nullish()
 })
 
 type HelpRequestFilterInput = z.infer<typeof helpRequestFilterSchema>
