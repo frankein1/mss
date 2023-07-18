@@ -29,5 +29,6 @@
 <script lang="ts" setup>
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
 
-  const data = await useTrpcClient().config.getInclusionConnectLogoutUrl.query()
+  const data =
+    await useTrpcClient().config.getInclusionConnectEditPasswordUrl.query()
 </script>

@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.3.3...v1.3.4) (2023-07-18)
+
+
+### Bug Fixes
+
+* **email:** add a banner on top of the user form to inform about the brevo incident ([735debe](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/735debe8ff4453f577710744a7ff2de7b7df30db)), closes [#91](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/91)
+
 ### [1.3.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.3.2...v1.3.3) (2023-07-12)
 
 
