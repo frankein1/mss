@@ -28,22 +28,20 @@
             >
               <template #detailedMessage>
                 <p>
-                  En raison d'un incidant sur notre plateforme d'envoi d'email,
-                  l'email d'invitation ne parviendra pas aux utilisateurs
-                  nouvellement créés. Merci de leur transmettre le lien
-                  d'inscription de compte InclusionConnect :
+                  En raison d'un incident sur notre plateforme d'envoi d'email,
+                  l'email d'invitation normalement reçu par les utilisateurs
+                  nouvelle créé ne parviendra jusqu'à eux. Vous pouvez leur
+                  transmettre le lien d'inscription suivant après avoir finalisé
+                  la création dans le formulaire ci-dessous :
                   <NuxtLink
                     :to="registrationUrl || ''"
                     class="registration-link"
                     >{{ registrationUrl }}</NuxtLink
-                  >
-                  afin de pouvoir finaliser le processur de création
-                  d'utilisateur une fois le formulaire ci-dessous rempli. En cas
-                  de difficulté, contactez-nous à
+                  >. En cas de difficulté, contactez-nous à
                   <NuxtLink :to="`mailto:${supportEmail}`">{{
                     supportEmail
                   }}</NuxtLink
-                  >.
+                  >. Nous nous excusons pour la gêne occasionnée.
                 </p>
               </template>
             </AtomAlert>
