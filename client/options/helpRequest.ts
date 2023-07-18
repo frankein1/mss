@@ -16,7 +16,12 @@ export const helpRequestStatusLabels: { [key in HelpRequestStatus]: string } = {
   [HelpRequestStatus.Dismissed]: 'Classé sans suite'
 }
 
-export const helpRequestStatusOptions = labelsToOptions(helpRequestStatusLabels)
+export const ministryHelpRequestStatusLabels: {
+  [key in HelpRequestStatus]: string
+} = {
+  ...helpRequestStatusLabels,
+  [HelpRequestStatus.Accepted]: 'Traité'
+}
 
 export const financialSupportOptions = new Map([
   ['true', 'Oui'],
