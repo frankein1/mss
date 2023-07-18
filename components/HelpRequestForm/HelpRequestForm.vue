@@ -242,7 +242,6 @@
     externalOrganisationOptions,
     financialSupportOptions,
     helpRequestReasonOptions,
-    helpRequestStatusOptions,
     paymentMethodOptions
   } from '~/client/options/helpRequest'
   import { ministerOptions } from '~/client/options/ministry'
@@ -259,6 +258,7 @@
 
   const authStore = useAuthStore()
   const isMinistryAgent = useMinistryAgent()
+  const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const props = withDefaults(
     defineProps<{

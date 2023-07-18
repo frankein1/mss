@@ -17,7 +17,6 @@
 
 <script setup lang="ts">
   import { HelpRequestItem } from './types'
-  import { helpRequestStatusOptions } from '~/client/options/helpRequest'
   import {
     QuickEditHelpRequestStatusInput,
     quickEditHelpRequestStatusSchema
@@ -26,6 +25,7 @@
   import { helpRequestFieldLabels } from '~/client/labels'
 
   const snackbar = useSnackbar()
+  const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const props = defineProps<{
     helpRequest: HelpRequestItem

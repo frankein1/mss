@@ -71,11 +71,12 @@
 <script setup lang="ts">
   import type { HistoryItem } from './types'
   import { followupStatusLabels } from '~/client/options/followup'
-  import { helpRequestStatusLabels } from '~/client/options/helpRequest'
   import { followupStatusClasses } from '~/client/classes/followup'
   import { helpRequestStatusClasses } from '~/client/classes/helpRequest'
   import { formatDate } from '~/utils/formatDate'
   import { getUserDisplayName } from '~/utils/user'
+
+  const { helpRequestStatusLabels } = useHelpRequestStatus()
 
   const props = withDefaults(
     defineProps<{
@@ -99,7 +100,7 @@
     if (props.history.isFollowup) {
       return followupStatusLabels[props.history.status]
     }
-    return helpRequestStatusLabels[props.history.status]
+    return helpRequestStatusLabels.value[props.history.status]
   })
 
   const statusClass = computed(() => {

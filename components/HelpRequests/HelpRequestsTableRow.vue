@@ -98,10 +98,7 @@
   import { HelpRequestItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
-  import {
-    helpRequestStatusOptions,
-    paymentMethodOptions
-  } from '~/client/options/helpRequest'
+  import { paymentMethodOptions } from '~/client/options/helpRequest'
   import { helpRequestStatusClasses } from '~/client/classes/helpRequest'
   import { euros } from '~/utils/euros'
   import { readableFileNumber } from '~/utils/readableFileNumber'
@@ -116,6 +113,7 @@
   import { Route, RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()
+  const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const props = defineProps<{
     helpRequest: HelpRequestItem
