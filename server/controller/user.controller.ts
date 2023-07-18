@@ -167,7 +167,9 @@ export const acceptCGUHandler = async ({
 
 function getEmailContent(user: User) {
   const {
-    email: { from }
+    public: {
+      email: { from }
+    }
   } = useRuntimeConfig()
 
   const client = getInclusionConnectClient()
