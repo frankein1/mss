@@ -20,7 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { helpRequestStatusOptions } from '~/client/options/helpRequest'
   import { formatDate } from '~/utils/formatDate'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
@@ -37,6 +36,7 @@
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
   const isMinistryAgent = useMinistryAgent()
+  const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const emit = defineEmits<{
     (e: 'filter', filters: HelpRequestFilterInput): void
@@ -111,7 +111,10 @@
       {
         name: 'status',
         label: helpRequestFieldLabels.status,
-        options: withEmptyValue(helpRequestStatusOptions, 'Tous les statuts'),
+        options: withEmptyValue(
+          helpRequestStatusOptions.value,
+          'Tous les statuts'
+        ),
         type: FilterType.SelectOne
       },
       {
