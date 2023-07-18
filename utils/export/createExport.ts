@@ -1,20 +1,52 @@
 import { readFileSync } from 'fs'
 // FIXME: ExcelJS import error
 import Excel from 'exceljs/lib/exceljs.nodejs'
+import { Column, Cell } from 'exceljs'
+import { EXPORT_DEFAULT_FONT } from '../constants'
+import { RowType } from '~/types/export'
 
 export async function createExport(
   worksheetName: string,
   columns: { key: string; header: string }[],
-  // TODO: find better type than any
-  rows: { [k: string]: any }[]
+  rows: RowType[]
 ) {
   const workbook = new Excel.Workbook()
   const worksheet = workbook.addWorksheet(worksheetName)
 
   worksheet.columns = columns
-  // TODO: column headers style: https://blog.tericcabrel.com/write-data-excel-file-nodejs-typescript/
+
+  // Export styles
+  worksheet.columns.forEach((sheetColumn: Column) => {
+    sheetColumn.font = EXPORT_DEFAULT_FONT
+    sheetColumn.width = 30
+  })
+  worksheet.getRow(1).font = {
+    ...EXPORT_DEFAULT_FONT,
+    bold: true
+  }
 
   rows.forEach(row => worksheet.addRow(row))
+
+  // Remove empty columns
+  const lastColumnIndex = worksheet.columns.length
+  for (let columnIndex = lastColumnIndex; columnIndex >= 1; columnIndex--) {
+    const column: Column = worksheet.getColumn(columnIndex)
+
+    let isBlankColumn = true
+    column.eachCell((cell: Cell) => {
+      if (
+        cell.value !== null &&
+        cell.value !== '' &&
+        parseInt(cell.row) !== 1
+      ) {
+        isBlankColumn = false
+      }
+    })
+
+    if (isBlankColumn) {
+      worksheet.spliceColumns(columnIndex, 1)
+    }
+  }
 
   await workbook.xlsx.writeFile('/tmp/mss-test.xlsx')
   const stream = readFileSync('/tmp/mss-test.xlsx')

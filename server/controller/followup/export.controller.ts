@@ -1,25 +1,145 @@
-// import { ExportFollowupsInput } from '~/server/schema'
-// import { ProtectedAppContext } from '~/server/trpc'
+import { Prisma } from '@prisma/client'
+import { followupFieldLabels, type FollowupFieldLabels } from '~/client/labels'
+import {
+  followupInterventionLabels,
+  followupMediumLabels,
+  followupSignalementLabels,
+  followupStatusLabels
+} from '~/client/options/followup'
+import { prismaClient } from '~/server/prisma'
+import { ExportFollowupsInput } from '~/server/schema'
+import {
+  canOnlyListItsBeneficiaries,
+  canViewFollowup
+} from '~/server/security/rules'
+import { ProtectedAppContext } from '~/server/trpc'
+import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
+import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
+import { prepareFollowupFilters } from '~/utils/filters'
+import { getFollowupAccessibleData } from '~/utils/followup'
+import { formatDate } from '~/utils/formatDate'
+import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
+import { ministerLabels } from '~/client/options/ministry'
 
-export const exportFollowupsHandler = async () =>
-  // {
-  //   input,
-  //   ctx: { user }
-  // }: {
-  //   input: ExportFollowupsInput
-  //   ctx: ProtectedAppContext
-  // }
-  {
-    // TODO: request followups using order, all fields, and handle permissions
-    // Example data:
-    const columns = [
-      { key: 'test1', header: 'Test 1' },
-      { key: 'test2', header: 'Test 2' }
-    ]
-    const data = [
-      { test1: 'ABC', test2: '123' },
-      { test1: 'DEF', test2: '456' }
-    ]
-    return await createExport('Entretiens', columns, data)
+export const exportFollowupsHandler = async ({
+  input,
+  ctx: { user }
+}: {
+  input: ExportFollowupsInput
+  ctx: ProtectedAppContext
+}) => {
+  const EXPORTED_FIELDS: (keyof FollowupFieldLabels)[] = [
+    'id',
+    'date',
+    'firstFollowup',
+    'status',
+    'redirected',
+    'types',
+    'beneficiaryId',
+    'medium',
+    'classified',
+    'documents',
+    'dueDate',
+    'forwardedToJustice',
+    'helpRequested',
+    'interventions',
+    'ministre',
+    'numeroPegase',
+    'place',
+    'signalements',
+    'structureName',
+    'synthesis',
+    'thirdPersonName',
+    'privateSynthesis'
+  ]
+
+  const columns = EXPORTED_FIELDS.map(key => ({
+    key,
+    header: followupFieldLabels[key]
+  }))
+
+  const referents = canOnlyListItsBeneficiaries(user)
+    ? { some: { id: user.id } }
+    : undefined
+
+  const where: Prisma.FollowupWhereInput = {
+    structureId: user.structureId,
+    beneficiary: {
+      archived: null,
+      referents
+    },
+    ...prepareFollowupFilters(input.filters)
   }
+
+  const dataRequest = await prismaClient.followup.findMany({
+    where,
+    orderBy: input.orderBy,
+    include: {
+      beneficiary: {
+        include: {
+          referents: true
+        }
+      },
+      documents: true,
+      types: true,
+      prescribingOrganization: true
+    }
+  })
+
+  const data = dataRequest.reduce((followups: RowType[], followup) => {
+    if (followup && canViewFollowup(user, followup.beneficiary)) {
+      const withPermissionsFollowup = getFollowupAccessibleData(user, followup)
+      followups.push({
+        id: withPermissionsFollowup.id,
+        date: formatDate(withPermissionsFollowup.date, 'DD-MM-YYYY'),
+        firstFollowup: getBooleanOrEmpty(withPermissionsFollowup.firstFollowup),
+        status: followupStatusLabels[withPermissionsFollowup.status],
+        redirected: getBooleanOrEmpty(withPermissionsFollowup.redirected),
+        types: withPermissionsFollowup.types.map(type => type.name).join(','),
+        beneficiaryId: getBeneficiaryDisplayName(
+          withPermissionsFollowup.beneficiary
+        ),
+        medium: withPermissionsFollowup.medium
+          ? followupMediumLabels[withPermissionsFollowup.medium]
+          : '',
+        classified: getBooleanOrEmpty(withPermissionsFollowup.classified),
+        documents:
+          withPermissionsFollowup.documents
+            ?.map(document => document.name)
+            .join(',') || '',
+        dueDate: formatDate(withPermissionsFollowup.dueDate, 'DD-MM-YYYY'),
+        forwardedToJustice: getBooleanOrEmpty(
+          withPermissionsFollowup.forwardedToJustice
+        ),
+        helpRequested: getBooleanOrEmpty(withPermissionsFollowup.helpRequested),
+        interventions: withPermissionsFollowup.interventions
+          ? withPermissionsFollowup.interventions
+              .map(intervention => followupInterventionLabels[intervention])
+              .join(',')
+          : '',
+        ministre: withPermissionsFollowup.ministre
+          ? ministerLabels[withPermissionsFollowup.ministre]
+          : '',
+        numeroPegase: withPermissionsFollowup.numeroPegase || '',
+        place: withPermissionsFollowup.place || '',
+        // TODO: createdBy
+        // TODO: prescribing organization
+        // TODO: comments ?
+        signalements: withPermissionsFollowup.signalements
+          ? withPermissionsFollowup.signalements
+              .map(signalement => followupSignalementLabels[signalement])
+              .join(',')
+          : '',
+        structureName: withPermissionsFollowup.structureName || '',
+        synthesis: withPermissionsFollowup.synthesis || '',
+        thirdPersonName: withPermissionsFollowup.thirdPersonName || '',
+        privateSynthesis: withPermissionsFollowup.privateSynthesis || ''
+        // TODO: last updated date
+      })
+    }
+    return followups
+  }, [])
+
+  return await createExport('Entretiens', columns, data)
+}
