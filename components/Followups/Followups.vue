@@ -41,11 +41,15 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
+  import {
+    FAILED_DOWNLOAD_ERROR_MESSAGE,
+    REQUEST_LIMIT_DEFAULT
+  } from '~/utils/constants'
   import type { FollowupFilterInput } from '~/server/schema'
   import { useFiltersStore } from '~/store/filters'
   import { FollowupSort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
+  import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
@@ -98,9 +102,13 @@
       if (!exportedFollowups.data) {
         throw new Error('no data')
       }
-      window.location.href = getExportUrl(exportedFollowups.data)
+      const downloadLink = document.createElement('a')
+      downloadLink.href = getExportUrl(exportedFollowups.data)
+      downloadLink.download = getExportFilename('entretiens')
+      downloadLink.click()
+      downloadLink.remove()
     } catch {
-      useSnackbar().error('Le téléchargement a échoué.')
+      useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
     } finally {
       isDownloading.value = false
     }
