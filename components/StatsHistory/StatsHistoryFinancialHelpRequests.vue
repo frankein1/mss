@@ -9,16 +9,16 @@
       :alert-type="AlertType.Error"
       message="Les statistiques des aides financières n'ont pas pu être chargées."
     />
-    <template v-else-if="financialHelpRequests">
+    <template v-else-if="data">
       <h2 class="fr-h5">Aides financières</h2>
       <StatsList
-        :stats="financialHelpRequestsCounts"
+        :stats="financialHelpRequestCounts"
         :stats-percentage="false"
       />
       <p class="fr-text--bold stats-total-amount">
         Montant total des aides délivrées par la structure
         <span class="fr-h3"
-          >{{ financialHelpRequestsTotalAmount.toFixed(2) }}€</span
+          >{{ financialHelpRequestTotalAmount.toFixed(2) }}€</span
         >
       </p>
       <StatsList
@@ -32,9 +32,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Prisma, HelpRequestStatus } from '@prisma/client'
   import { StatFilterInput } from '~/server/schema'
-  import { StatList } from '~/types/stat'
   import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()
@@ -43,55 +41,49 @@
     filters: StatFilterInput
   }>()
 
-  const {
-    data: financialHelpRequests,
-    pending,
-    error
-  } = await trpcClient.stat.getFinancialHelpRequestsStats.useQuery(
-    props.filters,
-    {
-      default: () => [],
-      transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-    }
+  const { data, pending, error } =
+    await trpcClient.stat.getFinancialHelpRequestsStats.useQuery(
+      props.filters,
+      {
+        default: () => ({
+          financialHelpRequestCount: 0,
+          internalFinancialHelpRequestCount: 0,
+          financialHelpRequestTotalAmount: 0,
+          financialHelpRequestAmountByType: []
+        }),
+        transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+      }
+    )
+
+  const financialHelpRequestCount = computed(
+    () => data.value?.financialHelpRequestCount || 0
   )
 
-  const financialHelpRequestsCount = computed(
-    () => financialHelpRequests.value?.length || 0
+  const internalFinancialHelpRequestCount = computed(
+    () => data.value?.internalFinancialHelpRequestCount || 0
   )
 
-  const internalFinancialHelpRequests = computed(
+  const externalFinancialHelpRequestCount = computed(
     () =>
-      financialHelpRequests.value?.filter(
-        request => !request.externalStructure
-      ) || []
+      financialHelpRequestCount.value - internalFinancialHelpRequestCount.value
   )
 
-  const internalFinancialHelpRequestsCount = computed(
-    () => internalFinancialHelpRequests.value.length
-  )
-
-  const externalFinancialHelpRequestsCount = computed(
-    () =>
-      financialHelpRequestsCount.value -
-      internalFinancialHelpRequestsCount.value
-  )
-
-  const financialHelpRequestsCounts = computed(() => {
+  const financialHelpRequestCounts = computed(() => {
     const requestsCounts = {
       total: {
         key: 'total',
         label: 'Nombre de demandes',
-        count: financialHelpRequestsCount.value
+        count: financialHelpRequestCount.value
       },
       internal: {
         key: 'internal',
         label: 'Instruites en interne',
-        count: internalFinancialHelpRequestsCount.value
+        count: internalFinancialHelpRequestCount.value
       },
       external: {
         key: 'external',
         label: 'Instruites en externe',
-        count: externalFinancialHelpRequestsCount.value
+        count: externalFinancialHelpRequestCount.value
       }
     }
     const requestsCountsArray = Object.values(requestsCounts)
@@ -99,49 +91,21 @@
     return requestsCountsArray
   })
 
-  const financialHelpRequestsTotalAmount = computed(() =>
-    internalFinancialHelpRequests.value
-      .reduce((total, request) => {
-        if (request.status !== HelpRequestStatus.Accepted) {
-          return total
-        }
-        const allocatedAmount = new Prisma.Decimal(
-          request.allocatedAmount || 0
-        ).toNumber()
-        return total + allocatedAmount
-      }, 0)
-      .toFixed(2)
+  const financialHelpRequestTotalAmount = computed(
+    () => data.value?.financialHelpRequestTotalAmount || 0
   )
 
-  const financialHelpRequestsAmountByType = computed(() => {
-    const requestsAmountByType: { [k: string]: StatList & { count: number } } =
-      {}
-    internalFinancialHelpRequests.value.forEach(request => {
-      if (
-        request.allocatedAmount &&
-        request.status === HelpRequestStatus.Accepted
-      ) {
-        if (request.type.id in requestsAmountByType) {
-          requestsAmountByType[request.type.id].count += new Prisma.Decimal(
-            request.allocatedAmount || 0
-          ).toNumber()
-        } else {
-          requestsAmountByType[request.type.id] = {
-            key: request.type.id,
-            label: request.type.name,
-            color: '#E4794A',
-            count: new Prisma.Decimal(request.allocatedAmount || 0).toNumber()
-          }
-        }
-      }
-    })
-    const requestsAmountByTypeArray: Array<StatList> =
-      Object.values(requestsAmountByType)
-    requestsAmountByTypeArray.sort(
-      (a, b) => (b.count as number) - (a.count as number)
-    )
-    return requestsAmountByTypeArray
-  })
+  const financialHelpRequestsAmountByType = computed(
+    () =>
+      data.value?.financialHelpRequestAmountByType.map(
+        ({ type, allocatedAmount }) => ({
+          key: type.id,
+          label: type.name,
+          color: '#E4794A',
+          count: allocatedAmount
+        })
+      ) || []
+  )
 </script>
 
 <style scoped>
