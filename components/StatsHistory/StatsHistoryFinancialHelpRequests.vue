@@ -17,12 +17,15 @@
       />
       <p class="fr-text--bold stats-total-amount">
         Montant total des aides délivrées par la structure
-        <span class="fr-h3">{{ financialHelpRequestsTotalAmount }}€</span>
+        <span class="fr-h3"
+          >{{ financialHelpRequestsTotalAmount.toFixed(2) }}€</span
+        >
       </p>
       <StatsList
         :stats="financialHelpRequestsAmountByType"
         :stats-percentage="false"
         unit="€"
+        :to-fixed="2"
       />
     </template>
   </div>
