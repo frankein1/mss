@@ -199,7 +199,7 @@
     data: historyCounts,
     pending,
     error
-  } = await trpcClient.stat.getHistoryCounts.useQuery(filters.value, {
+  } = await trpcClient.stat.getHistoryCounts.useQuery(filters, {
     default: () => ({ helpRequests: 0, followups: 0, firstFollowups: 0 })
   })
 
