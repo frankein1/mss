@@ -15,11 +15,15 @@
           <tr>
             <th scope="col">
               {{ beneficiaryFieldLabels.usualName }}
-              <AtomSortButton @sort="emit('sort', { usualName: $event })" />
+              <AtomSortButton
+                @update:sort="emit('sort', { usualName: $event })"
+              />
             </th>
             <th scope="col">
               {{ beneficiaryFieldLabels.firstName }}
-              <AtomSortButton @sort="emit('sort', { firstName: $event })" />
+              <AtomSortButton
+                @update:sort="emit('sort', { firstName: $event })"
+              />
             </th>
             <th scope="col">Âge</th>
             <th scope="col">

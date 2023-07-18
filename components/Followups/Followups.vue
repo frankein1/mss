@@ -21,8 +21,8 @@
       </div>
       <FollowupsTable
         v-show="!pending"
+        v-model:sort="orderBy"
         :followups="followups"
-        @sort="onSort"
       />
       <AtomPagination
         v-show="!pending"
@@ -50,7 +50,6 @@
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
 
   const { updatePagination } = usePagination(page, perPage)
-  const { onSort } = useSort<FollowupSort>(orderBy)
 
   const queryInput = computed(() => ({
     page: page.value,

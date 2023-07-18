@@ -1,30 +1,28 @@
-import type { Prisma } from '@prisma/client'
-
 export enum SortOrder {
   Asc = 'asc',
   Desc = 'desc'
 }
 
 export type BeneficiarySort = {
-  usualName?: Prisma.SortOrder
-  firstName?: Prisma.SortOrder
+  usualName?: SortOrder
+  firstName?: SortOrder
 }
 
 export type FollowupSort = {
-  dueDate?: Prisma.SortOrder
-  date?: Prisma.SortOrder
+  dueDate?: SortOrder
+  date?: SortOrder
   beneficiary?: {
-    usualName?: Prisma.SortOrder
+    usualName?: SortOrder
   }
 }
 
 export type HelpRequestSort = {
-  dueDate?: Prisma.SortOrder
-  openingDate?: Prisma.SortOrder
+  dueDate?: SortOrder
+  openingDate?: SortOrder
   beneficiary?: {
-    usualName?: Prisma.SortOrder
+    usualName?: SortOrder
   }
   instructorOrganization?: {
-    name?: Prisma.SortOrder
+    name?: SortOrder
   }
 }
