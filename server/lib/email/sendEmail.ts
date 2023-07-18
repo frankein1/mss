@@ -11,7 +11,12 @@ export const sendEmail = async ({
   text?: string
   html?: string
 }) => {
-  const { email } = useRuntimeConfig()
+  const {
+    email,
+    public: {
+      email: { from }
+    }
+  } = useRuntimeConfig()
   const transporter = createTransport({
     host: email.smtpHost,
     port: email.smtpPort,
@@ -23,7 +28,7 @@ export const sendEmail = async ({
   })
 
   await transporter.sendMail({
-    from: email.from,
+    from,
     to,
     subject,
     text,
