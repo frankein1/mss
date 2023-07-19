@@ -52,7 +52,8 @@ export const exportFollowupsHandler = async ({
     'synthesis',
     'thirdPersonName',
     'privateSynthesis',
-    'updated'
+    'updated',
+    'prescribingOrganizationId'
   ]
 
   const columns = EXPORTED_FIELDS.map(key => ({
@@ -124,9 +125,9 @@ export const exportFollowupsHandler = async ({
           : '',
         numeroPegase: withPermissionsFollowup.numeroPegase || '',
         place: withPermissionsFollowup.place || '',
-        // TODO: createdBy
-        // TODO: prescribing organization
-        // TODO: comments ?
+        prescribingOrganizationId:
+          withPermissionsFollowup.prescribingOrganization?.name || '',
+        // TODO: export comments, depending on structures' feedbacks
         signalements: withPermissionsFollowup.signalements
           ? withPermissionsFollowup.signalements
               .map(signalement => followupSignalementLabels[signalement])

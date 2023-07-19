@@ -1,7 +1,9 @@
 import type { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 
-export function getFollowupWithBeneficiaryDocumentsAndTypes(id: string) {
+export function getFollowupWithBeneficiaryDocumentsAndTypesAndPrescribingOrganization(
+  id: string
+) {
   return prismaClient.followup.findUnique({
     where: { id },
     include: {
@@ -11,11 +13,13 @@ export function getFollowupWithBeneficiaryDocumentsAndTypes(id: string) {
         }
       },
       documents: true,
-      types: true
+      types: true,
+      prescribingOrganization: true
     }
   })
 }
 
-export type FollowupWithBeneficiaryDocumentsAndTypes = Prisma.PromiseReturnType<
-  typeof getFollowupWithBeneficiaryDocumentsAndTypes
->
+export type FollowupWithBeneficiaryDocumentsAndTypesAndPrescribingOrganization =
+  Prisma.PromiseReturnType<
+    typeof getFollowupWithBeneficiaryDocumentsAndTypesAndPrescribingOrganization
+  >
