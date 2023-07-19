@@ -12,7 +12,7 @@ import {
   canOnlyListItsBeneficiaries,
   canViewFollowup
 } from '~/server/security/rules'
-import { ProtectedAppContext } from '~/server/trpc'
+import { forbiddenError, ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
 import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
@@ -21,6 +21,7 @@ import { getFollowupAccessibleData } from '~/utils/followup'
 import { formatDate } from '~/utils/formatDate'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { ministerLabels } from '~/client/options/ministry'
+import { canExport } from '~/server/security/rules/export'
 
 export const exportFollowupsHandler = async ({
   input,
@@ -29,6 +30,10 @@ export const exportFollowupsHandler = async ({
   input: ExportFollowupsInput
   ctx: ProtectedAppContext
 }) => {
+  if (!canExport(user)) {
+    throw forbiddenError()
+  }
+
   const EXPORTED_FIELDS: (keyof FollowupFieldLabels)[] = [
     'id',
     'date',
