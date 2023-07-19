@@ -20,31 +20,6 @@
           <RoleTable id="roles-details" />
           <template v-if="canCreateUser">
             <hr />
-            <!-- FIXME: Delete once Brevo issue is fixed -->
-            <AtomAlert
-              :alert-type="AlertType.Warning"
-              message="Problème d'envoi de mail"
-              class="fr-mb-2w"
-            >
-              <template #detailedMessage>
-                <p>
-                  En raison d'un incident sur notre plateforme d'envoi d'email,
-                  l'email d'invitation normalement reçu par les utilisateurs
-                  nouvelle créé ne parviendra jusqu'à eux. Vous pouvez leur
-                  transmettre le lien d'inscription suivant après avoir finalisé
-                  la création dans le formulaire ci-dessous :
-                  <NuxtLink
-                    :to="registrationUrl || ''"
-                    class="registration-link"
-                    >{{ registrationUrl }}</NuxtLink
-                  >. En cas de difficulté, contactez-nous à
-                  <NuxtLink :to="`mailto:${supportEmail}`">{{
-                    supportEmail
-                  }}</NuxtLink
-                  >. Nous nous excusons pour la gêne occasionnée.
-                </p>
-              </template>
-            </AtomAlert>
             <UserForm @users-refresh="usersRefresh" />
           </template>
         </main>
@@ -57,17 +32,11 @@
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
   import { canCreateUser as canCreateUserRule } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
-  import { AlertType } from '~/utils/constants/alert'
 
   definePageMeta({ middleware: 'can-list-users' })
 
   const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
-  const {
-    public: {
-      email: { from: supportEmail }
-    }
-  } = useRuntimeConfig()
 
   const {
     data: users,
@@ -76,14 +45,5 @@
     error: usersError
   } = await trpcClient.user.getUsers.useQuery()
 
-  const { data: registrationUrl } =
-    await trpcClient.config.getInclusionConnectRegistrationUrl.useQuery()
-
   const canCreateUser = computed(() => canCreateUserRule(authStore.getAuthUser))
 </script>
-
-<style scoped lang="scss">
-  .registration-link {
-    word-break: break-all;
-  }
-</style>
