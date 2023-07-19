@@ -30,7 +30,6 @@
     followupMediumOptions,
     followupStatusOptions
   } from '~/client/options/followup'
-  import { helpRequestStatusOptions } from '~/client/options/helpRequest'
   import { typeSuiviOptions } from '~/client/options/history'
   import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
@@ -39,6 +38,7 @@
   const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
+  const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const props = defineProps<{
     beneficiaryId: string
@@ -111,7 +111,7 @@
 
   const statusOptions = new Map([
     ...followupStatusOptions,
-    ...helpRequestStatusOptions
+    ...helpRequestStatusOptions.value
   ])
 
   const filters = computed<FilterProp[] | null>(() => {

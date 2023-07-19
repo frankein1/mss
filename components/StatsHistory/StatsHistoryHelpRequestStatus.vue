@@ -27,12 +27,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { helpRequestStatusLabels } from '~/client/options/helpRequest'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
   import { helpRequestStatusColors } from '~/client/colors/helpRequest'
 
   const trpcClient = useTrpcClient()
+  const { helpRequestStatusLabels } = useHelpRequestStatus()
 
   const props = defineProps<{
     totalCount: number
@@ -52,7 +52,7 @@
     () =>
       statusCounts.value?.map(({ _count, status }) => ({
         key: status,
-        label: helpRequestStatusLabels[status],
+        label: helpRequestStatusLabels.value[status],
         color: helpRequestStatusColors[status],
         count: _count
       })) || []
