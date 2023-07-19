@@ -13,6 +13,7 @@ function getFollowupMeta(
     structureId: followup.structureId,
     created: followup.created,
     createdById: followup.createdById,
+    updated: followup.updated,
     date: followup.date,
     firstFollowup: followup.firstFollowup,
     status: followup.status,
