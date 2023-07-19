@@ -60,7 +60,7 @@ model User {
   accessTokenValidity        DateTime? @map("access_token_validity")
 
   created DateTime? @default(now())
-  updated DateTime? @default(now())
+  updated DateTime? @updatedAt
 
   structure             Structure?     @relation(fields: [structureId], references: [id])
   structureId           String?        @map("structure_id") @db.Uuid
@@ -112,7 +112,7 @@ model Structure {
   beneficiaries Beneficiary[]
 
   created                DateTime?                @default(now())
-  updated                DateTime?                @default(now())
+  updated                DateTime?                @updatedAt
   instructorOrganization InstructorOrganization[]
   userActivities         UserActivity[]
 
@@ -308,7 +308,7 @@ model Followup {
   comments Comment[]
 
   created      DateTime?      @default(now())
-  updated      DateTime?      @default(now())
+  updated      DateTime?      @updatedAt
   Notification Notification[]
 
   @@map("followup")
@@ -398,7 +398,7 @@ model HelpRequest {
   comments Comment[]
 
   created DateTime? @default(now())
-  updated DateTime? @default(now())
+  updated DateTime? @updatedAt
 
   ministre     Minister?
   numeroPegase String?        @map("numero_pegase")
@@ -1239,7 +1239,7 @@ model Beneficiary {
   helpRequests HelpRequest[]
 
   created DateTime? @default(now())
-  updated DateTime? @default(now())
+  updated DateTime? @updatedAt
 
   relatives       BeneficiaryRelative[] @relation("ownerBeneficiary")
   linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
@@ -1291,7 +1291,7 @@ model BeneficiaryRelative {
   additionalInformation String? @map("additional_information")
 
   created DateTime? @default(now())
-  updated DateTime? @default(now())
+  updated DateTime? @updatedAt
 
   @@map("beneficiary_relative")
 }
