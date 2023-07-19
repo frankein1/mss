@@ -8,7 +8,8 @@ import { RowType } from '~/types/export'
 export async function createExport(
   worksheetName: string,
   columns: { key: string; header: string }[],
-  rows: RowType[]
+  rows: RowType[],
+  userId: string
 ) {
   const workbook = new Excel.Workbook()
   const worksheet = workbook.addWorksheet(worksheetName)
@@ -48,8 +49,10 @@ export async function createExport(
     }
   }
 
-  await workbook.xlsx.writeFile('/tmp/mss-test.xlsx')
-  const stream = readFileSync('/tmp/mss-test.xlsx')
+  const exportName = `/tmp/mss-export-${userId}.xlsx`
+
+  await workbook.xlsx.writeFile(exportName)
+  const stream = readFileSync(exportName)
 
   // Forced to return base64 encoded version of the file in tRPC
   // Cf. https://github.com/trpc/trpc/discussions/658 & https://stackoverflow.com/questions/73715285/exceljs-download-xlsx-file-with-trpc-router
