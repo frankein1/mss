@@ -25,10 +25,6 @@ export const configRouter = router({
     const client = getInclusionConnectClient()
     return client.getEditPasswordUrl()
   }),
-  getInclusionConnectRegistrationUrl: protectedProcedure.query(() => {
-    const client = getInclusionConnectClient()
-    return client.getRegistrationUrl()
-  }),
   getPrescribingOrganizations: protectedProcedure.query(
     getPrescribingOrganizationsHandler
   ),
