@@ -25,11 +25,16 @@ export const getAgentsHandler = async ({
     )
 }
 
-export const getBeneficiariesCitiesHandler = async () => {
+export const getBeneficiariesCitiesHandler = async ({
+  ctx: { user }
+}: {
+  ctx: ProtectedAppContext
+}) => {
   return await prismaClient.beneficiary.groupBy({
     by: ['city'],
     where: {
-      city: { not: null }
+      city: { not: null },
+      structureId: user.structureId
     },
     orderBy: [{ city: 'asc' }]
   })
@@ -56,7 +61,8 @@ export const getExaminationDatesHandler = async ({
     by: ['examinationDate'],
     where: {
       examinationDate: { not: null },
-      beneficiaryId: input?.id || undefined
+      beneficiaryId: input?.id || undefined,
+      structureId: user.structureId
     },
     orderBy: [{ examinationDate: 'desc' }]
   })
