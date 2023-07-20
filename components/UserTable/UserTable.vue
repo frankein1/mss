@@ -83,11 +83,9 @@
   import { DefaultErrorShape } from '@trpc/server'
   import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~/utils/constants/alert'
-  import {
-    NonAdminUserRole,
-    NonAdminUserRoleLabels
-  } from '~/client/options/user'
+  import { NonAdminUserRoleLabels } from '~/client/options/user'
   import { userFieldLabels } from '~/client/labels'
+  import type { NonAdminUserRole } from '~/types/user'
 
   defineProps<{
     users: User[] | null

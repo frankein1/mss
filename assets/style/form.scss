@@ -5,7 +5,7 @@
   width: 100%;
 }
 
-.form-grid > *:not(.fr-col-12, .fr-fieldset__legend) {
+.form-grid > *:not(.fr-col-12, .fr-col-6, .fr-fieldset__legend) {
   @include dsfr.grid-col(12);
 
   padding: 0.5rem;

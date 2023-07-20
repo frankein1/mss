@@ -96,12 +96,10 @@
 <script lang="ts" setup>
   import { UserStatus } from '@prisma/client'
   import { userFieldLabels } from '~/client/labels'
-  import {
-    NonAdminUserRole,
-    NonAdminUserRoleLabels
-  } from '~/client/options/user'
+  import { NonAdminUserRoleLabels } from '~/client/options/user'
   import { AdminStructureOutput } from '~/server/routers'
   import { RoutePath } from '~/utils/routing'
+  import type { NonAdminUserRole } from '~/types/user'
 
   defineProps<{
     structure: AdminStructureOutput
