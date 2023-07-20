@@ -56,7 +56,6 @@ export const exportFollowupsHandler = async ({
     'structureName',
     'synthesis',
     'thirdPersonName',
-    'privateSynthesis',
     'updated',
     'prescribingOrganizationId'
   ]
@@ -141,7 +140,6 @@ export const exportFollowupsHandler = async ({
         structureName: withPermissionsFollowup.structureName || '',
         synthesis: withPermissionsFollowup.synthesis || '',
         thirdPersonName: withPermissionsFollowup.thirdPersonName || '',
-        privateSynthesis: withPermissionsFollowup.privateSynthesis || '',
         updated: formatDate(withPermissionsFollowup.updated, 'DD-MM-YYYY HH:mm')
       })
     }
