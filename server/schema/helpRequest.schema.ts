@@ -43,27 +43,27 @@ const createHelpRequestSchema = z.object({
   fullFile: z.boolean().default(false)
 })
 
-const getHelpRequestsSchema = z
-  .object({
-    orderBy: z.array(
-      z.object({
-        openingDate: z.nativeEnum(Prisma.SortOrder).optional(),
-        dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
-        beneficiary: z
-          .object({
-            usualName: z.nativeEnum(Prisma.SortOrder).optional()
-          })
-          .optional(),
-        instructorOrganization: z
-          .object({
-            name: z.nativeEnum(Prisma.SortOrder).optional()
-          })
-          .optional()
-      })
-    ),
-    filters: helpRequestFilterSchema
-  })
-  .merge(paginatedSchema)
+const exportHelpRequestsSchema = z.object({
+  orderBy: z.array(
+    z.object({
+      openingDate: z.nativeEnum(Prisma.SortOrder).optional(),
+      dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
+      beneficiary: z
+        .object({
+          usualName: z.nativeEnum(Prisma.SortOrder).optional()
+        })
+        .optional(),
+      instructorOrganization: z
+        .object({
+          name: z.nativeEnum(Prisma.SortOrder).optional()
+        })
+        .optional()
+    })
+  ),
+  filters: helpRequestFilterSchema
+})
+
+const getHelpRequestsSchema = exportHelpRequestsSchema.merge(paginatedSchema)
 
 const quickEditHelpRequestStatusSchema = z.object({
   id: z.string().uuid(),
@@ -97,6 +97,7 @@ const editHelpRequestSchema = createHelpRequestSchema.extend({
 })
 
 type CreateHelpRequestInput = z.infer<typeof createHelpRequestSchema>
+type ExportHelpRequestsInput = z.infer<typeof exportHelpRequestsSchema>
 type GetHelpRequestsInput = z.infer<typeof getHelpRequestsSchema>
 type GetHelpRequestsInputOrderBy = GetHelpRequestsInput['orderBy']
 type QuickEditHelpRequestStatusInput = z.infer<
@@ -122,7 +123,8 @@ export {
   quickEditHelpRequestAllocatedAmountSchema,
   quickEditHelpRequestPaymentMethodSchema,
   quickEditHelpRequestPaymentDateSchema,
-  editHelpRequestSchema
+  editHelpRequestSchema,
+  exportHelpRequestsSchema
 }
 
 export type {
@@ -134,5 +136,6 @@ export type {
   QuickEditHelpRequestPaymentMethodInput,
   QuickEditHelpRequestPaymentDateInput,
   EditHelpRequestInput,
-  GetHelpRequestsInputOrderBy
+  GetHelpRequestsInputOrderBy,
+  ExportHelpRequestsInput
 }

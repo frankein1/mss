@@ -12,9 +12,15 @@
         @filter="filters = $event"
       />
       <hr />
-      <p class="fr-mb-2w fr-mx-5v fr-hint-text">
-        {{ helpRequestsCount }} instruction(s) de demande d'aide
-      </p>
+      <div class="fr-mb-2w fr-mx-5v results-container">
+        <p class="fr-hint-text">
+          {{ helpRequestsCount }} instruction(s) de demande d'aide
+        </p>
+        <ExportDataButton
+          :is-downloading="isDownloading"
+          @export="exportHelpRequests"
+        />
+      </div>
       <div v-show="pending">
         <AtomLoader class="fr-mx-auto" />
       </div>
@@ -41,30 +47,41 @@
   import { HelpRequestSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
   import { useFiltersStore } from '~/store/filters'
-  import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
+  import {
+    REQUEST_LIMIT_DEFAULT,
+    FAILED_DOWNLOAD_ERROR_MESSAGE
+  } from '~/utils/constants'
+  import { getExportUrl } from '~/utils/export/getExportUrl'
+  import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const filtersStore = useFiltersStore()
+  const trpcClient = useTrpcClient()
 
   const filters = ref<HelpRequestFilterInput>(filtersStore.helpRequest || {})
   const orderBy = ref<HelpRequestSort[]>([{ openingDate: SortOrder.Desc }])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
+  const isDownloading = ref(false)
 
   const { updatePagination } = usePagination(page, perPage)
   const { onSort } = useSort<HelpRequestSort>(orderBy)
 
-  const queryInput = computed(() => ({
-    page: page.value,
-    perPage: perPage.value,
+  const exportInput = computed(() => ({
     orderBy: orderBy.value,
     filters: filters.value
+  }))
+
+  const queryInput = computed(() => ({
+    ...exportInput.value,
+    page: page.value,
+    perPage: perPage.value
   }))
 
   const {
     data: helpRequestsRequest,
     pending,
     error
-  } = await useTrpcClient().helpRequest.getHelpRequests.useQuery(queryInput, {
+  } = await trpcClient.helpRequest.getHelpRequests.useQuery(queryInput, {
     default: () => ({
       helpRequests: [],
       count: 0,
@@ -91,5 +108,25 @@
       helpRequestsRequest.value.helpRequests.map(h =>
         h.id === updatedHelpRequest.id ? updatedHelpRequest : h
       )
+  }
+
+  async function exportHelpRequests() {
+    isDownloading.value = true
+    try {
+      const exportedFollowups =
+        await trpcClient.helpRequest.exportHelpRequests.query(exportInput.value)
+      if (!exportedFollowups.data) {
+        throw new Error('no data')
+      }
+      const downloadLink = document.createElement('a')
+      downloadLink.href = getExportUrl(exportedFollowups.data)
+      downloadLink.download = getExportFilename('demandes_daide')
+      downloadLink.click()
+      downloadLink.remove()
+    } catch {
+      useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+    } finally {
+      isDownloading.value = false
+    }
   }
 </script>

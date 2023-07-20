@@ -6,4 +6,7 @@ export {
   type FollowupFieldLabels
 } from './followup.labels'
 export { structureFieldLabels } from './structure.labels'
-export { helpRequestFieldLabels } from './helpRequest.labels'
+export {
+  helpRequestFieldLabels,
+  type HelpRequestFieldLabels
+} from './helpRequest.labels'
