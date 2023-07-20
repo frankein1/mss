@@ -9,8 +9,8 @@ export function useHelpRequestStatus() {
 
   const statusLabels = computed(() =>
     isMinistryAgent.value
-      ? helpRequestStatusLabels
-      : ministryHelpRequestStatusLabels
+      ? ministryHelpRequestStatusLabels
+      : helpRequestStatusLabels
   )
   const statusOptions = computed(() => labelsToOptions(statusLabels.value))
 
