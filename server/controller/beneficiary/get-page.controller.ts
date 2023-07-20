@@ -6,6 +6,7 @@ import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 import { FollowupTypeIdAndName } from '~/types/followupType'
+import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 
 type FollowupTypeSet = { [id: string]: FollowupTypeIdAndName }
 
