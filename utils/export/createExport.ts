@@ -10,7 +10,7 @@ const { Workbook } = ExcelPkg
 
 export async function createExport(
   worksheetName: string,
-  columns: Column[],
+  columns: Partial<Column>[],
   rows: RowType[],
   userId: string
 ) {
