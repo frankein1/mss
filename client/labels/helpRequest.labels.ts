@@ -3,12 +3,7 @@ import type { FieldLabels } from '~/types/fieldLabels'
 
 export type HelpRequestFieldLabels = Omit<
   HelpRequest,
-  | 'structureId'
-  | 'createdById'
-  | 'updated'
-  | 'financialSupport'
-  | 'externalStructure'
-  | 'created'
+  'structureId' | 'createdById' | 'created'
 > & { documents: string }
 
 export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
@@ -35,5 +30,8 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   refusalReason: 'Motif du refus',
   synthesis: 'Compte rendu',
   privateSynthesis: 'Compte rendu privé',
-  documents: 'Documents'
+  documents: 'Documents',
+  financialSupport: 'Aide financière',
+  externalStructure: 'Organisation extérieure',
+  updated: 'Dernière mise à jour'
 }
