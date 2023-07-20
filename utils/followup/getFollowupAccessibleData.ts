@@ -3,11 +3,9 @@ import {
   canViewFollowupDetails,
   canViewFollowupPrivateSynthesis
 } from '~/server/security/rules'
-import { FollowupWithBeneficiaryDocumentsAndTypesAndPrescribingOrganization } from '~/server/query/followups'
+import { FollowupWithRelations } from '~/server/query/followups'
 
-function getFollowupMeta(
-  followup: NonNullable<FollowupWithBeneficiaryDocumentsAndTypesAndPrescribingOrganization>
-) {
+function getFollowupMeta(followup: NonNullable<FollowupWithRelations>) {
   return {
     id: followup.id,
     structureId: followup.structureId,
@@ -26,7 +24,7 @@ function getFollowupMeta(
 
 function getFollowupDetails(
   user: User,
-  followup: NonNullable<FollowupWithBeneficiaryDocumentsAndTypesAndPrescribingOrganization>
+  followup: NonNullable<FollowupWithRelations>
 ) {
   if (!canViewFollowupDetails(user, followup)) {
     return {}
@@ -54,7 +52,7 @@ function getFollowupDetails(
 
 function getFollowupPrivateSynthesis(
   user: User,
-  followup: NonNullable<FollowupWithBeneficiaryDocumentsAndTypesAndPrescribingOrganization>
+  followup: NonNullable<FollowupWithRelations>
 ) {
   if (!canViewFollowupPrivateSynthesis(user, followup)) {
     return {}
@@ -67,7 +65,7 @@ function getFollowupPrivateSynthesis(
 
 export function getFollowupAccessibleData(
   user: User,
-  followup: NonNullable<FollowupWithBeneficiaryDocumentsAndTypesAndPrescribingOrganization>
+  followup: NonNullable<FollowupWithRelations>
 ) {
   const meta = getFollowupMeta(followup)
   const details = getFollowupDetails(user, followup)

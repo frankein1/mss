@@ -1,4 +1,4 @@
 export {
-  FollowupWithBeneficiaryDocumentsAndTypesAndPrescribingOrganization,
-  getFollowupWithBeneficiaryDocumentsAndTypesAndPrescribingOrganization
+  FollowupWithRelations,
+  getFollowupWithRelations
 } from './getFollowupWithBeneficiaryDocumentsAndTypes'
