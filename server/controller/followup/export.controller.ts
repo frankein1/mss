@@ -148,5 +148,5 @@ export const exportFollowupsHandler = async ({
     return followups
   }, [])
 
-  return await createExport('Entretiens', columns, data)
+  return await createExport('Entretiens', columns, data, user.id)
 }
