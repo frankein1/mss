@@ -1,23 +1,26 @@
 import { readFileSync } from 'fs'
-// FIXME: ExcelJS import error
-import Excel from 'exceljs/lib/exceljs.nodejs'
-import { Column, Cell } from 'exceljs'
+// FIXME: ExcelJS type error (Cf. https://github.com/exceljs/exceljs/issues/960)
+// eslint-disable-next-line import/default
+import ExcelPkg, { Column, Cell } from 'exceljs'
 import { EXPORT_DEFAULT_FONT } from '../constants'
 import { RowType } from '~/types/export'
 
+// eslint-disable-next-line import/no-named-as-default-member
+const { Workbook } = ExcelPkg
+
 export async function createExport(
   worksheetName: string,
-  columns: { key: string; header: string }[],
+  columns: Column[],
   rows: RowType[],
   userId: string
 ) {
-  const workbook = new Excel.Workbook()
+  const workbook = new Workbook()
   const worksheet = workbook.addWorksheet(worksheetName)
 
   worksheet.columns = columns
 
   // Export styles
-  worksheet.columns.forEach((sheetColumn: Column) => {
+  worksheet.columns.forEach(sheetColumn => {
     sheetColumn.font = EXPORT_DEFAULT_FONT
     sheetColumn.width = 30
   })
