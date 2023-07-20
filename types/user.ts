@@ -1,4 +1,4 @@
-import type { StructureType, User as PrismaUser } from '@prisma/client'
+import { StructureType, User as PrismaUser, UserRole } from '@prisma/client'
 
 export type JwtUser = Pick<
   PrismaUser,
@@ -13,3 +13,7 @@ export type JwtData = {
   iat: number
   exp: number
 }
+
+const { Administrator: _, ...otherRoles } = UserRole
+export const NonAdminUserRole = otherRoles
+export type NonAdminUserRole = keyof typeof NonAdminUserRole

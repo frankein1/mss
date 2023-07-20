@@ -33,7 +33,8 @@ import {
   validZipcode,
   requiredNativeEnum,
   withEmptyValueOptionalNativeEnum,
-  emailOrEmpty
+  emailOrEmpty,
+  stringOrEmpty
 } from '~/utils/zod'
 
 export const getDocumentsSchema = z.object({
@@ -119,7 +120,7 @@ export const updateBeneficiarySchema = z.object({
     ),
     accommodationName: z.string().nullish(),
     accommodationAdditionalInformation: z.string().nullish(),
-    zipcode: z.string().min(5, validZipcode).nullish().or(z.literal('')),
+    zipcode: stringOrEmpty(z.string().min(5, validZipcode)),
     city: z.string().nullish(),
     region: z.string().nullish(),
     accommodationZone: withEmptyValueOptionalNativeEnum(

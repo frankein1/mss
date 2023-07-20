@@ -3,7 +3,7 @@
     class="fr-container--fluid"
     @submit="onUpdateUser"
   >
-    <div class="fr-grid-row fr-grid-row--gutters">
+    <div class="fr-grid-row fr-grid-row--gutters form-grid">
       <div class="fr-col-6">
         <VeeInput
           name="firstName"
@@ -31,7 +31,7 @@
           name="structureId"
           :label="userFieldLabels.structureId"
           :options="withEmptyValue(structureOptions)"
-          required
+          :required="!isAdmin"
         />
       </div>
       <div class="fr-col-6">
@@ -50,7 +50,10 @@
           required
         />
       </div>
-      <div class="fr-col-6">
+      <div
+        v-if="!isAdmin"
+        class="fr-col-6"
+      >
         <VeeCheckbox
           :label="userFieldLabels.aidantConnectAuthorisation"
           name="aidantConnectAuthorisation"
@@ -59,7 +62,7 @@
     </div>
 
     <button
-      class="fr-btn fr-btn--lg submit-btn"
+      class="fr-btn fr-btn--lg submit-btn fr-mt-2w"
       type="submit"
       :disabled="isSubmitting"
       :submitting="isSubmitting"
@@ -105,7 +108,9 @@
       : new Map<string, string>()
   )
 
-  const { handleSubmit } = useForm<AdminEditUserInput | AdminCreateUserInput>({
+  const { handleSubmit, values } = useForm<
+    AdminEditUserInput | AdminCreateUserInput
+  >({
     validationSchema: toTypedSchema(
       props.user ? adminEditUserSchema : adminCreateUserSchema
     ),
@@ -120,6 +125,8 @@
       structureId: props.user?.structureId || urlStructureId || ''
     }
   })
+
+  const isAdmin = computed(() => values.role === 'Administrator')
 
   const onUpdateUser = handleSubmit(user => {
     emit('updateUser', user)
