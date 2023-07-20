@@ -10,7 +10,10 @@ export function getHelpRequestWithRelations(id: string) {
           referents: true
         }
       },
-      documents: true
+      documents: true,
+      prescribingOrganization: true,
+      instructorOrganization: true,
+      type: true
     }
   })
 }

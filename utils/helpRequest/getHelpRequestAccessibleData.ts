@@ -28,10 +28,12 @@ function getHelpRequestMeta(
     structureId: helpRequest.structureId,
     created: helpRequest.created,
     createdById: helpRequest.createdById,
+    updated: helpRequest.updated,
     openingDate: helpRequest.openingDate,
     fullFile: helpRequest.fullFile,
     status: helpRequest.status,
     typeId: helpRequest.typeId,
+    type: helpRequest.type,
     beneficiary: helpRequest.beneficiary,
     beneficiaryId: helpRequest.beneficiaryId
   }
@@ -57,11 +59,13 @@ function getHelpRequestDetails(
     financialSupport: helpRequest.financialSupport,
     handlingDate: helpRequest.handlingDate,
     instructorOrganizationId: helpRequest.instructorOrganizationId,
+    instructorOrganization: helpRequest.instructorOrganization,
     ministre: helpRequest.ministre,
     numeroPegase: helpRequest.numeroPegase,
     paymentDate: helpRequest.paymentDate,
     paymentMethod: helpRequest.paymentMethod,
     prescribingOrganizationId: helpRequest.prescribingOrganizationId,
+    prescribingOrganization: helpRequest.prescribingOrganization,
     reason: helpRequest.reason,
     refusalReason: helpRequest.refusalReason,
     synthesis: helpRequest.synthesis
