@@ -1,6 +1,6 @@
 <template>
   <div>
-    <p>Les données seront exportées avec les filtres actuels</p>
+    <p>Les données seront exportées avec les filtres actuels.</p>
     <button
       class="fr-btn"
       @click="emit('export')"
