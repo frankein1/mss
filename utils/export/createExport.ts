@@ -1,12 +1,34 @@
 import { readFileSync } from 'fs'
 // FIXME: ExcelJS type error (Cf. https://github.com/exceljs/exceljs/issues/960)
 // eslint-disable-next-line import/default
-import ExcelPkg, { Column, Cell } from 'exceljs'
+import ExcelPkg, { Column, Cell, Worksheet } from 'exceljs'
 import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
 import { RowType } from '~/types/export'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const { Workbook } = ExcelPkg
+
+function removeEmptyColumns(worksheet: Worksheet) {
+  const lastColumnIndex = worksheet.columns.length
+  for (let columnIndex = lastColumnIndex; columnIndex >= 1; columnIndex--) {
+    const column: Column = worksheet.getColumn(columnIndex)
+
+    let isBlankColumn = true
+    column.eachCell((cell: Cell) => {
+      if (
+        cell.value !== null &&
+        cell.value !== '' &&
+        parseInt(cell.row) !== 1
+      ) {
+        isBlankColumn = false
+      }
+    })
+
+    if (isBlankColumn) {
+      worksheet.spliceColumns(columnIndex, 1)
+    }
+  }
+}
 
 export async function createExport(
   worksheetName: string,
@@ -31,26 +53,7 @@ export async function createExport(
 
   rows.forEach(row => worksheet.addRow(row))
 
-  // Remove empty columns
-  const lastColumnIndex = worksheet.columns.length
-  for (let columnIndex = lastColumnIndex; columnIndex >= 1; columnIndex--) {
-    const column: Column = worksheet.getColumn(columnIndex)
-
-    let isBlankColumn = true
-    column.eachCell((cell: Cell) => {
-      if (
-        cell.value !== null &&
-        cell.value !== '' &&
-        parseInt(cell.row) !== 1
-      ) {
-        isBlankColumn = false
-      }
-    })
-
-    if (isBlankColumn) {
-      worksheet.spliceColumns(columnIndex, 1)
-    }
-  }
+  removeEmptyColumns(worksheet)
 
   const exportName = `/tmp/mss-export-${userId}.xlsx`
 
