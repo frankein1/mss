@@ -1,9 +1,12 @@
 import type { FilterType } from '~/utils/constants/filters'
 import type { Options } from '~/utils/options'
+import type { EventCategory, EventAction } from '~/types/matomo'
 
 type FilterPropBase = {
   name: string
   label: string
+  matomoEventCategory?: EventCategory
+  matomoEventAction?: EventAction
 }
 
 export type SelectFilterProp = FilterPropBase & {

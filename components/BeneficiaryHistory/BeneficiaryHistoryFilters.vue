@@ -34,6 +34,13 @@
   import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
+  import {
+    EventCategory,
+    BeneficiaryHistoryFilterEventAction,
+    FollowupFilterEventAction,
+    HelpRequestFilterEventAction
+  } from '~/types/matomo'
+  import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
 
   const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
@@ -114,7 +121,7 @@
     ...helpRequestStatusOptions.value
   ])
 
-  const filters = computed<FilterProp[] | null>(() => {
+  const filters = computed(() => {
     if (
       !followupTypeOptions.value ||
       !examinationDateOptions.value ||
@@ -123,42 +130,52 @@
       return null
     }
 
-    const filters = [
+    const filters: FilterProp[] = [
       {
         name: 'status',
-        label: 'Statut',
+        label: followupFieldLabels.status,
         options: withEmptyValue(statusOptions, 'Tous les statuts'),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction: FollowupFilterEventAction.Status
       },
       {
         name: 'typeSuivi',
         label: 'Type de suivi',
         options: withEmptyValue(typeSuiviOptions, 'Tous les suivis'),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction: BeneficiaryHistoryFilterEventAction.TypeSuivi
       },
       {
         name: 'medium',
-        label: "Type d'entretien",
+        label: followupFieldLabels.medium,
         options: followupMediumOptions,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction: FollowupFilterEventAction.Medium
       },
       {
         name: 'followupTypes',
         label: "Type d'accompagnement",
         options: followupTypeOptions.value,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction: BeneficiaryHistoryFilterEventAction.FollowupType
       }
     ]
 
     if (examinationDateOptions.value.size) {
       filters.push({
         name: 'examinationDate',
-        label: 'Date de passage en commission',
+        label: helpRequestFieldLabels.examinationDate,
         options: withEmptyValue(
           examinationDateOptions.value,
           'Toutes les commissions'
         ),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
       })
     }
 
@@ -166,13 +183,15 @@
       filters.push(
         {
           name: 'handlingDate',
-          label: 'Fin de prise en charge',
+          label: helpRequestFieldLabels.handlingDate,
           options: new Map([
             ['', 'Non sélectionné'],
             ['true', 'Oui'],
             ['false', 'Non']
           ]),
-          type: FilterType.SelectOne
+          type: FilterType.SelectOne,
+          matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+          matomoEventAction: HelpRequestFilterEventAction.HandlingDate
         },
         {
           name: 'externalStructure',
@@ -182,7 +201,9 @@
             ['false', 'Interne'],
             ['true', 'Organisme externe']
           ]),
-          type: FilterType.SelectOne
+          type: FilterType.SelectOne,
+          matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+          matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
         }
       )
     }
@@ -191,7 +212,9 @@
       name: 'referents',
       label: 'Référent',
       options: agentOptions.value,
-      type: FilterType.SelectMultiple
+      type: FilterType.SelectMultiple,
+      matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+      matomoEventAction: FollowupFilterEventAction.Referent
     })
 
     return filters
