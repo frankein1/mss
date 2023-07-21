@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { followupFieldLabels, type FollowupFieldLabels } from '~/client/labels'
+import { followupFieldLabels } from '~/client/labels'
 import {
   followupInterventionLabels,
   followupMediumLabels,
@@ -34,7 +34,7 @@ export const exportFollowupsHandler = async ({
     throw forbiddenError()
   }
 
-  const EXPORTED_FIELDS: (keyof FollowupFieldLabels)[] = [
+  const EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
     'id',
     'date',
     'firstFollowup',

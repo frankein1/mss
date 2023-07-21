@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { HelpRequestFieldLabels, helpRequestFieldLabels } from '~/client/labels'
+import { helpRequestFieldLabels } from '~/client/labels'
 import { prismaClient } from '~/server/prisma'
 import { ExportHelpRequestsInput } from '~/server/schema'
 import {
@@ -35,7 +35,7 @@ export const exportHelpRequestsHandler = async ({
     throw forbiddenError()
   }
 
-  const EXPORTED_FIELDS: (keyof HelpRequestFieldLabels)[] = [
+  const EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
     'id',
     'beneficiaryId',
     'prescribingOrganizationId',
