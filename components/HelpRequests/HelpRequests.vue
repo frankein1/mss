@@ -66,13 +66,9 @@
 
   const { updatePagination } = usePagination(page, perPage)
 
-  const exportInput = computed(() => ({
-    orderBy: orderBy.value,
-    filters: filters.value
-  }))
-
   const queryInput = computed(() => ({
-    ...exportInput.value,
+    orderBy: orderBy.value,
+    filters: filters.value,
     page: page.value,
     perPage: perPage.value
   }))
@@ -114,7 +110,10 @@
     isDownloading.value = true
     try {
       const exportedFollowups =
-        await trpcClient.helpRequest.exportHelpRequests.query(exportInput.value)
+        await trpcClient.helpRequest.exportHelpRequests.query({
+          orderBy: orderBy.value,
+          filters: filters.value
+        })
       if (!exportedFollowups.data) {
         throw new Error('no data')
       }
