@@ -13,6 +13,7 @@ import { prepareFollowupFilters } from '~/utils/filters'
 import { getFollowupAccessibleData } from '~/utils/followup'
 import { canExportHistory } from '~/server/security/rules/export'
 import { getFollowupExportData } from '~/utils/export/getFollowupExportData'
+import { FOLLOWUP_EXPORTED_FIELDS } from '~/utils/constants/export'
 
 export const exportFollowupsHandler = async ({
   input,
@@ -25,33 +26,7 @@ export const exportFollowupsHandler = async ({
     throw forbiddenError()
   }
 
-  const EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
-    'id',
-    'date',
-    'firstFollowup',
-    'status',
-    'redirected',
-    'types',
-    'beneficiaryId',
-    'medium',
-    'classified',
-    'documents',
-    'dueDate',
-    'forwardedToJustice',
-    'helpRequested',
-    'interventions',
-    'ministre',
-    'numeroPegase',
-    'place',
-    'signalements',
-    'structureName',
-    'synthesis',
-    'thirdPersonName',
-    'updated',
-    'prescribingOrganizationId'
-  ]
-
-  const columns = EXPORTED_FIELDS.map(key => ({
+  const columns = FOLLOWUP_EXPORTED_FIELDS.map(key => ({
     key,
     header: followupFieldLabels[key]
   }))

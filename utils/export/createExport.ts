@@ -2,7 +2,7 @@ import { readFileSync } from 'fs'
 // FIXME: ExcelJS type error (Cf. https://github.com/exceljs/exceljs/issues/960)
 // eslint-disable-next-line import/default
 import ExcelPkg, { Column, Cell } from 'exceljs'
-import { EXPORT_DEFAULT_FONT } from '../constants'
+import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
 import { RowType } from '~/types/export'
 
 // eslint-disable-next-line import/no-named-as-default-member

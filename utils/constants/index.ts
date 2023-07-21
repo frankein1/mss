@@ -15,8 +15,3 @@ export const REQUEST_LIMIT_DEFAULT = 15
 export const STATS_COLLAPSED_LIMIT = 4
 
 export const INPUT_DEFER_TIME = 400
-
-export const EXPORT_DEFAULT_FONT = {
-  name: 'Calibri',
-  size: 12
-}

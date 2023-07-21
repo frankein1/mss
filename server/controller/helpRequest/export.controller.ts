@@ -15,6 +15,7 @@ import {
   getHelpRequestAccessibleData
 } from '~/utils/helpRequest'
 import { getHelpRequestExportData } from '~/utils/export/getHelpRequestExportData'
+import { HELP_REQUEST_EXPORTED_FIELDS } from '~/utils/constants/export'
 
 export const exportHelpRequestsHandler = async ({
   input,
@@ -27,36 +28,7 @@ export const exportHelpRequestsHandler = async ({
     throw forbiddenError()
   }
 
-  const EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
-    'id',
-    'beneficiaryId',
-    'prescribingOrganizationId',
-    'externalStructure',
-    'instructorOrganizationId',
-    'openingDate',
-    'typeId',
-    'documents',
-    'financialSupport',
-    'status',
-    'askedAmount',
-    'examinationDate',
-    'decisionDate',
-    'allocatedAmount',
-    'paymentMethod',
-    'paymentDate',
-    'handlingDate',
-    'refusalReason',
-    'dispatchDate',
-    'synthesis',
-    'dueDate',
-    'fullFile',
-    'reason',
-    'updated',
-    'ministre',
-    'numeroPegase'
-  ]
-
-  const columns = EXPORTED_FIELDS.map(key => ({
+  const columns = HELP_REQUEST_EXPORTED_FIELDS.map(key => ({
     key,
     header: helpRequestFieldLabels[key]
   }))
