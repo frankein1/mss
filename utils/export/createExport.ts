@@ -1,4 +1,4 @@
-import { readFileSync } from 'fs'
+import { readFileSync, unlinkSync } from 'fs'
 // FIXME: ExcelJS type error (Cf. https://github.com/exceljs/exceljs/issues/960)
 // eslint-disable-next-line import/default
 import ExcelPkg, { Column, Cell, Worksheet } from 'exceljs'
@@ -62,5 +62,9 @@ export async function createExport(
 
   // Forced to return base64 encoded version of the file in tRPC
   // Cf. https://github.com/trpc/trpc/discussions/658 & https://stackoverflow.com/questions/73715285/exceljs-download-xlsx-file-with-trpc-router
-  return { data: stream.toString('base64') }
+  const data = stream.toString('base64')
+
+  unlinkSync(exportName)
+
+  return { data }
 }
