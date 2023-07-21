@@ -4,16 +4,16 @@ export default defineNuxtPlugin(() => {
   const nuxtApp = useNuxtApp()
   const router = useRouter()
   const { public: publicConfig } = useRuntimeConfig()
+  const { isProduction } = useEnvironment()
 
-  if (publicConfig.mssEnvironment !== 'production') {
+  if (!isProduction) {
     return
   }
 
   nuxtApp.vueApp.use(VueMatomo, {
     host: publicConfig.matomo.host,
     siteId: publicConfig.matomo.siteId,
-    // Enables automatically registering pageviews on the router
-    router,
+    router, // Enables automatically registering page views on the router
     enableLinkTracking: true,
     trackInitialView: true,
     disableCookies: true
