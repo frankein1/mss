@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { UserStatus } from '@prisma/client'
+  import { UserStatus, UserRole } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import { userFieldLabels } from '~/client/labels'
@@ -126,7 +126,7 @@
     }
   })
 
-  const isAdmin = computed(() => values.role === 'Administrator')
+  const isAdmin = computed(() => values.role === UserRole.Administrator)
 
   const onUpdateUser = handleSubmit(user => {
     emit('updateUser', user)
