@@ -21,7 +21,8 @@
   display: block;
 }
 
-button[type='submit'][submitting='true']::before {
+button[type='submit'][submitting='true']::before,
+.btn-loading::before {
   width: 16px;
   height: 16px;
   border-width: 1px;
