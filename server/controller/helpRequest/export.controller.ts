@@ -6,7 +6,7 @@ import {
   canOnlyListItsBeneficiaries,
   canViewHelpRequest
 } from '~/server/security/rules'
-import { canExport } from '~/server/security/rules/export'
+import { canExportHistory } from '~/server/security/rules/export'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
@@ -31,7 +31,7 @@ export const exportHelpRequestsHandler = async ({
   input: ExportHelpRequestsInput
   ctx: ProtectedAppContext
 }) => {
-  if (!canExport(user)) {
+  if (!canExportHistory(user)) {
     throw forbiddenError()
   }
 

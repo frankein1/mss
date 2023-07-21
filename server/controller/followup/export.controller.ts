@@ -21,7 +21,7 @@ import { getFollowupAccessibleData } from '~/utils/followup'
 import { formatDate } from '~/utils/formatDate'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { ministerLabels } from '~/client/options/ministry'
-import { canExport } from '~/server/security/rules/export'
+import { canExportHistory } from '~/server/security/rules/export'
 
 export const exportFollowupsHandler = async ({
   input,
@@ -30,7 +30,7 @@ export const exportFollowupsHandler = async ({
   input: ExportFollowupsInput
   ctx: ProtectedAppContext
 }) => {
-  if (!canExport(user)) {
+  if (!canExportHistory(user)) {
     throw forbiddenError()
   }
 
