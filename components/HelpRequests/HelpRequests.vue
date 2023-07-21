@@ -13,7 +13,7 @@
       />
       <hr />
       <div class="fr-mb-2w fr-mx-5v results-container">
-        <p class="fr-hint-text">
+        <p class="fr-hint-text results-count">
           {{ helpRequestsCount }} instruction(s) de demande d'aide
         </p>
         <ExportDataButton

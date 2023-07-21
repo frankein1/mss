@@ -14,7 +14,9 @@
       />
       <hr />
       <div class="fr-mb-2w fr-mx-5v results-container">
-        <p class="fr-hint-text">{{ followupsCount }} synthèse(s) d'entretien</p>
+        <p class="fr-hint-text results-count">
+          {{ followupsCount }} synthèse(s) d'entretien
+        </p>
         <ExportDataButton
           :is-downloading="isDownloading"
           @export="exportFollowups"
