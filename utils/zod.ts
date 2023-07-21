@@ -4,8 +4,10 @@ import { Options } from '~/utils/options'
 export const zodEnumFromOptions = (options: Options): [string, ...string[]] =>
   Array.from(options).map(([value]) => value) as [string, ...string[]]
 
+export const requiredErrorMessage = 'Veuillez renseigner ce champ.'
+
 export const errorMessages = {
-  required_error: 'Veuillez renseigner ce champ.',
+  required_error: requiredErrorMessage,
   invalid_type_error: 'Cette valeur est incorrecte.'
 }
 
@@ -42,5 +44,8 @@ export const withEmptyValueOptionalNativeEnum = <T extends z.EnumLike>(
     z.nativeEnum(nativeEnum, { errorMap: enumErrorMap }).nullish()
   )
 
+export const stringOrEmpty = (schema: z.ZodString) =>
+  schema.nullish().or(z.literal(''))
+
 export const emailOrEmpty = () =>
-  z.string().email('Email non valide').nullish().or(z.literal(''))
+  stringOrEmpty(z.string().email('Email non valide'))

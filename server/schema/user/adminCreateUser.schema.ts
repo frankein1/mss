@@ -4,21 +4,30 @@ import {
   errorMessages,
   minStringLengthMessage,
   validEmailMessage,
-  requiredNativeEnum
+  requiredNativeEnum,
+  requiredErrorMessage,
+  stringOrEmpty
 } from '~/utils/zod'
 
-const adminCreateUserSchema = z.object({
+const adminCreateUserBaseSchema = z.object({
   firstName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
   lastName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
   email: z.string(errorMessages).email(validEmailMessage),
   role: requiredNativeEnum(UserRole),
   status: requiredNativeEnum(UserStatus),
-  aidantConnectAuthorisation: z.boolean(),
-  structureId: z.string().uuid()
+  aidantConnectAuthorisation: z.coerce.boolean().nullish(),
+  structureId: stringOrEmpty(
+    z.string(errorMessages).uuid({ message: requiredErrorMessage })
+  ).transform(v => (v === '' ? undefined : v))
 })
+
+const adminCreateUserSchema = adminCreateUserBaseSchema.refine(
+  ({ role, structureId }) => role === 'Administrator' || structureId,
+  v => ({ message: `Blabla: ${requiredErrorMessage}: ${v}` })
+)
 
 type AdminCreateUserInput = z.infer<typeof adminCreateUserSchema>
 
-export { adminCreateUserSchema }
+export { adminCreateUserSchema, adminCreateUserBaseSchema }
 
 export type { AdminCreateUserInput }
