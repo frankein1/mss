@@ -1,10 +1,6 @@
 import { UserRole, UserStatus } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
-
-const { Administrator: _, ...otherRoles } = UserRole
-export const NonAdminUserRole = otherRoles
-
-export type NonAdminUserRole = keyof typeof NonAdminUserRole
+import { NonAdminUserRole } from '~/types/user'
 
 export const NonAdminUserRoleLabels: { [key in NonAdminUserRole]: string } = {
   [UserRole.ReceptionAgent]: "Agent d'accueil/CNFS",

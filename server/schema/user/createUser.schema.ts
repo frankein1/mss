@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { NonAdminUserRole } from '~/client/options/user'
+import { NonAdminUserRole } from '~/types/user'
 import {
   errorMessages,
   minStringLengthMessage,
