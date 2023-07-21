@@ -50,3 +50,9 @@ export const getFollowupsHandler = async ({
 
   return { followups, count, totalPages }
 }
+
+export type GetFollowupsOutput = Prisma.PromiseReturnType<
+  typeof getFollowupsHandler
+>['followups']
+
+export type FollowupItem = GetFollowupsOutput[0]

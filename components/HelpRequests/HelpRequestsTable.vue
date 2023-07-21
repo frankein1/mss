@@ -1,5 +1,6 @@
 <template>
   <div
+    ref="tableContainer"
     class="table-container fr-pb-0"
     tabindex="0"
   >
@@ -24,20 +25,20 @@
               scope="col"
             >
               {{ helpRequestFieldLabels.dueDate }}
-              <AtomSortButton @sort="emit('sort', { dueDate: $event })" />
+              <AtomSortButton @update:sort="onSort({ dueDate: $event })" />
             </th>
             <th scope="col">
               {{ helpRequestFieldLabels.beneficiaryId }}
               <AtomSortButton
-                @sort="emit('sort', { beneficiary: { usualName: $event } })"
+                @update:sort="onSort({ beneficiary: { usualName: $event } })"
               />
             </th>
             <template v-if="canViewAnyHelpRequestDetails">
               <th scope="col">
                 {{ helpRequestFieldLabels.instructorOrganizationId }}
                 <AtomSortButton
-                  @sort="
-                    emit('sort', { instructorOrganization: { name: $event } })
+                  @update:sort="
+                    onSort({ instructorOrganization: { name: $event } })
                   "
                 />
               </th>
@@ -89,14 +90,22 @@
 
   const authStore = useAuthStore()
 
-  defineProps<{
+  const props = defineProps<{
     helpRequests: HelpRequests
+    sort: HelpRequestSort[]
+    pending: boolean
   }>()
 
   const emit = defineEmits<{
-    (e: 'sort', sort: HelpRequestSort): void
+    (e: 'update:sort', sort: HelpRequestSort[]): void
     (e: 'helpRequestUpdated', helpRequest: HelpRequestItem): void
   }>()
+
+  const { onSort, tableContainer } = useTable<HelpRequestSort>(
+    toRef(() => props.sort),
+    toRef(() => props.pending),
+    emit
+  )
 
   const user = computed(() => authStore.getAuthUser)
 

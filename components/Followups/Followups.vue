@@ -25,8 +25,9 @@
       </div>
       <FollowupsTable
         v-show="!pending"
+        v-model:sort="orderBy"
         :followups="followups"
-        @sort="onSort"
+        :pending="pending"
       />
       <AtomPagination
         v-show="!pending"
@@ -61,7 +62,6 @@
   const isDownloading = ref(false)
 
   const { updatePagination } = usePagination(page, perPage)
-  const { onSort } = useSort<FollowupSort>(orderBy)
 
   const exportInput = computed(() => ({
     orderBy: orderBy.value,

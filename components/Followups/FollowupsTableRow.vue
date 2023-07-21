@@ -22,8 +22,9 @@
           {{ followupStatusOptions.get(followup.status) }}
         </span>
       </td>
+      <td>{{ formatDate(followup.date) }}</td>
       <td>
-        {{ followupMediumOptions.get(followup.medium) }}
+        {{ getBeneficiaryDisplayName(followup.beneficiary) }}
       </td>
       <td>{{ followUpTypes }}</td>
       <td>
@@ -32,9 +33,6 @@
             ? formatDate(followup.dueDate)
             : undefined
         }}
-      </td>
-      <td>
-        {{ getBeneficiaryDisplayName(followup.beneficiary) }}
       </td>
       <td>
         <template v-if="followup.createdBy">
@@ -47,13 +45,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupItem } from './types'
+  import { FollowupItem } from '~/server/routers'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
-  import {
-    followupStatusOptions,
-    followupMediumOptions
-  } from '~/client/options/followup'
+  import { followupStatusOptions } from '~/client/options/followup'
   import { followupStatusClasses } from '~/client/classes/followup'
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { getUserDisplayName } from '~/utils/user'

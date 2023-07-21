@@ -5,7 +5,7 @@ export function prepareGetFollowupsPageSelect(user: User) {
   return {
     id: true,
     status: true,
-    medium: true,
+    date: true,
     types: {
       select: { id: true, name: true },
       orderBy: { name: Prisma.SortOrder.asc }

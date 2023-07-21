@@ -1,0 +1,6 @@
+export { fixtureStructure } from './structures'
+export { fixturesFollowupTypes } from './followupTypes'
+export { fixturesUsers } from './users'
+export { fixturesBeneficiaries } from './beneficiaries'
+export { fixturesFollowups } from './followups'
+export { fixturesHelpRequests } from './helpRequests'

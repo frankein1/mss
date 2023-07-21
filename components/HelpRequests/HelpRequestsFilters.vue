@@ -20,7 +20,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { helpRequestStatusOptions } from '~/client/options/helpRequest'
   import { formatDate } from '~/utils/formatDate'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
@@ -30,10 +29,14 @@
   import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
+  import { helpRequestFieldLabels } from '~/client/labels'
+  import { ministerOptions } from '~/client/options/ministry'
 
   const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
+  const isMinistryAgent = useMinistryAgent()
+  const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const emit = defineEmits<{
     (e: 'filter', filters: HelpRequestFilterInput): void
@@ -107,13 +110,16 @@
     const filters = [
       {
         name: 'status',
-        label: 'Statut',
-        options: withEmptyValue(helpRequestStatusOptions, 'Tous les statuts'),
+        label: helpRequestFieldLabels.status,
+        options: withEmptyValue(
+          helpRequestStatusOptions.value,
+          'Tous les statuts'
+        ),
         type: FilterType.SelectOne
       },
       {
         name: 'followupTypes',
-        label: 'Objet de la demande',
+        label: helpRequestFieldLabels.typeId,
         options: followupTypeOptions.value,
         type: FilterType.SelectMultiple
       }
@@ -121,7 +127,7 @@
     if (examinationDateOptions.value.size) {
       filters.push({
         name: 'examinationDate',
-        label: 'Date de passage en commission',
+        label: helpRequestFieldLabels.examinationDate,
         options: withEmptyValue(
           examinationDateOptions.value,
           'Toutes les commissions'
@@ -161,6 +167,15 @@
       options: agentOptions.value,
       type: FilterType.SelectMultiple
     })
+
+    if (isMinistryAgent.value) {
+      filters.push({
+        name: 'ministre',
+        label: helpRequestFieldLabels.ministre,
+        options: ministerOptions,
+        type: FilterType.SelectMultiple
+      })
+    }
 
     return filters
   })

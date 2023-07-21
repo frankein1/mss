@@ -36,13 +36,14 @@
   definePageMeta({ middleware: 'can-list-users' })
 
   const authStore = useAuthStore()
+  const trpcClient = useTrpcClient()
 
   const {
     data: users,
     pending: usersPending,
     refresh: usersRefresh,
     error: usersError
-  } = await useTrpcClient().user.getUsers.useQuery()
+  } = await trpcClient.user.getUsers.useQuery()
 
   const canCreateUser = computed(() => canCreateUserRule(authStore.getAuthUser))
 </script>

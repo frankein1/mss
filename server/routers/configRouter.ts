@@ -7,8 +7,8 @@ import {
   getStructureFollowupTypesHandler
 } from '../controller/config.controller'
 import { protectedProcedure, router } from '~/server/trpc'
-import { RoutePath } from '~/utils/routing'
 import { idSchema } from '~/server/schema'
+import { getInclusionConnectClient } from '~/server/lib'
 
 export const configRouter = router({
   getAgents: protectedProcedure.query(getAgentsHandler),
@@ -21,21 +21,9 @@ export const configRouter = router({
   getStructureFollowupTypes: protectedProcedure.query(
     getStructureFollowupTypesHandler
   ),
-  getInclusionConnectLogoutUrl: protectedProcedure.query(() => {
-    const {
-      public: { appUrl },
-      auth
-    } = useRuntimeConfig()
-
-    const { keycloakIssuer, keycloakClientId } = auth
-
-    const inclusionConnectAccountUrlBase = `${keycloakIssuer}/account`
-
-    const params = new URLSearchParams({
-      referrer: keycloakClientId,
-      referrer_uri: `${appUrl}${RoutePath.AppAccount()}`
-    })
-    return `${inclusionConnectAccountUrlBase}?${params}`
+  getInclusionConnectEditPasswordUrl: protectedProcedure.query(() => {
+    const client = getInclusionConnectClient()
+    return client.getEditPasswordUrl()
   }),
   getPrescribingOrganizations: protectedProcedure.query(
     getPrescribingOrganizationsHandler

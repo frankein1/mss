@@ -280,7 +280,7 @@ model Followup {
   prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
 
   medium FollowupMedium
-  date   DateTime       @db.Date
+  date   DateTime       @default(now()) @db.Date
 
   types     FollowupType[] @relation("followup_to_followup_type")
   documents Document[]     @relation("document_to_followup")
@@ -362,7 +362,7 @@ model HelpRequest {
   instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
   instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
 
-  openingDate DateTime @map("opening_date") @db.Date
+  openingDate DateTime @default(now()) @map("opening_date") @db.Date
 
   type   FollowupType @relation(fields: [typeId], references: [id])
   typeId String       @map("type_id") @db.Uuid

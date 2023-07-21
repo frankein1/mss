@@ -1,0 +1,70 @@
+<template>
+  <div class="main-container fr-p-2w">
+    <AtomLoader
+      v-if="pending"
+      class="fr-mx-auto"
+    />
+    <AtomAlert
+      v-else-if="error"
+      :alert-type="AlertType.Error"
+      :message="`Les statistiques de la répartion des objets des entretiens n'ont pas pu être chargées.`"
+    />
+    <template v-else-if="followupTypesStats">
+      <h2 class="fr-h5">Objets des entretiens</h2>
+      <p>Pourcentage calculé sur le nombre total de synthèses d'entretien</p>
+      <StatsList
+        v-if="followupTypesStats.length"
+        :total-count="totalCount"
+        :stats="followupTypesStats"
+      />
+      <p v-else>
+        Commencez à créer des synthèses d'entretien dans les fiches de
+        bénéficiaires pour voir apparaître les statistiques de la répartition
+        des objets des entretiens.
+      </p>
+    </template>
+  </div>
+</template>
+
+<script lang="ts" setup>
+  import { StatFilterInput } from '~/server/schema'
+  import { SupportColor } from '~/client/colors/support'
+  import { AlertType } from '~/utils/constants/alert'
+
+  const trpcClient = useTrpcClient()
+
+  const props = defineProps<{
+    totalCount: number
+    filters: StatFilterInput
+  }>()
+
+  const {
+    data: followupTypesCounts,
+    error,
+    pending
+  } = await trpcClient.stat.getFollowupFollowupTypeStats.useQuery(
+    props.filters,
+    {
+      default: () => [],
+      transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
+    }
+  )
+
+  const followupTypesStats = computed(
+    () =>
+      followupTypesCounts.value
+        ?.map(({ id, name, _count }) => ({
+          key: id,
+          label: name,
+          count: _count.followups,
+          color: SupportColor.followups
+        }))
+        .filter(typeCount => typeCount.count > 0) || []
+  )
+</script>
+
+<style scoped>
+  h2 {
+    word-break: break-word;
+  }
+</style>

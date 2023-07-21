@@ -68,9 +68,8 @@
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsHistorySupportType
+            <StatsHistoryHelpRequestFollowupTypes
               :total-count="helpRequestCount"
-              collection="helpRequests"
               :filters="filters"
             />
           </div>
@@ -127,9 +126,8 @@
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsHistorySupportType
+            <StatsHistoryFollowupFollowupTypes
               :total-count="followupCount"
-              collection="followups"
               :filters="filters"
             />
           </div>
@@ -201,7 +199,7 @@
     data: historyCounts,
     pending,
     error
-  } = await trpcClient.stat.getHistoryCounts.useQuery(filters.value, {
+  } = await trpcClient.stat.getHistoryCounts.useQuery(filters, {
     default: () => ({ helpRequests: 0, followups: 0, firstFollowups: 0 })
   })
 
