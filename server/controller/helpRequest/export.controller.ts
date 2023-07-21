@@ -99,7 +99,7 @@ export const exportHelpRequestsHandler = async ({
   })
 
   const data = dataRequest.reduce((helpRequests: RowType[], helpRequest) => {
-    if (helpRequest && canViewHelpRequest(user, helpRequest.beneficiary)) {
+    if (canViewHelpRequest(user, helpRequest.beneficiary)) {
       const withPermissionsHelpRequest = getHelpRequestAccessibleData(
         user,
         helpRequest

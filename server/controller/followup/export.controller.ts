@@ -94,7 +94,7 @@ export const exportFollowupsHandler = async ({
   })
 
   const data = dataRequest.reduce((followups: RowType[], followup) => {
-    if (followup && canViewFollowup(user, followup.beneficiary)) {
+    if (canViewFollowup(user, followup.beneficiary)) {
       const withPermissionsFollowup = getFollowupAccessibleData(user, followup)
       followups.push({
         id: withPermissionsFollowup.id,
