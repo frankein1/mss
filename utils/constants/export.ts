@@ -1,4 +1,8 @@
-import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
+import {
+  beneficiaryFieldLabels,
+  followupFieldLabels,
+  helpRequestFieldLabels
+} from '~/client/labels'
 
 export const EXPORT_DEFAULT_FONT = {
   name: 'Calibri',
@@ -60,3 +64,6 @@ export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)
     'ministre',
     'numeroPegase'
   ]
+
+export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[] =
+  ['id']

@@ -18,9 +18,16 @@
               @filter="filters = $event"
             />
             <hr />
-            <p class="fr-mb-2w fr-mx-5v fr-hint-text">
-              {{ beneficiariesCount }} bénéficiaire(s)
-            </p>
+            <div class="fr-mb-2w fr-mx-5v results-container">
+              <p class="fr-hint-text results-count">
+                {{ beneficiariesCount }} bénéficiaire(s)
+              </p>
+              <ExportDataButton
+                v-if="canExportBeneficiaries(authStore.getAuthUser)"
+                :is-downloading="isDownloading"
+                @export="exportBeneficiaries"
+              />
+            </div>
             <div v-show="pending">
               <AtomLoader class="fr-mx-auto" />
             </div>
@@ -52,10 +59,17 @@
 
 <script lang="ts" setup>
   import { useFiltersStore } from '~/store/filters'
-  import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
+  import {
+    REQUEST_LIMIT_DEFAULT,
+    FAILED_DOWNLOAD_ERROR_MESSAGE
+  } from '~/utils/constants'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
+  import { canExportBeneficiaries } from '~/server/security/rules/export'
+  import { useAuthStore } from '~/store/auth'
   import { BeneficiarySort, SortOrder } from '~/types/table'
+  import { getExportUrl } from '~/utils/export/getExportUrl'
+  import { getExportFilename } from '~/utils/export/getExportFilename'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
   definePageMeta({
@@ -64,11 +78,13 @@
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
+  const authStore = useAuthStore()
 
   const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
   const orderBy = ref<BeneficiarySort[]>([{ usualName: SortOrder.Asc }])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
+  const isDownloading = ref(false)
 
   const { updatePagination } = usePagination(page, perPage)
 
@@ -101,6 +117,29 @@
   )
 
   const totalPages = computed(() => beneficiariesRequest.value?.totalPages || 0)
+
+  async function exportBeneficiaries() {
+    isDownloading.value = true
+    try {
+      const exportedBeneficiaries =
+        await trpcClient.beneficiary.exportBeneficiaries.query({
+          orderBy: orderBy.value,
+          filters: filters.value
+        })
+      if (!exportedBeneficiaries.data) {
+        throw new Error('no data')
+      }
+      const downloadLink = document.createElement('a')
+      downloadLink.href = getExportUrl(exportedBeneficiaries.data)
+      downloadLink.download = getExportFilename('demandes_daide')
+      downloadLink.click()
+      downloadLink.remove()
+    } catch {
+      useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+    } finally {
+      isDownloading.value = false
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

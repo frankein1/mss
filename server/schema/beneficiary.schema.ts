@@ -211,16 +211,19 @@ export const updateBeneficiarySchema = z.object({
 
 export type UpdateBeneficiaryInput = z.infer<typeof updateBeneficiarySchema>
 
-export const getBeneficiariesSchema = z
-  .object({
-    orderBy: z.array(
-      z.object({
-        firstName: z.nativeEnum(Prisma.SortOrder).optional(),
-        usualName: z.nativeEnum(Prisma.SortOrder).optional()
-      })
-    ),
-    filters: beneficiaryFilterSchema
-  })
-  .merge(paginatedSchema)
+export const exportBeneficiariesSchema = z.object({
+  orderBy: z.array(
+    z.object({
+      firstName: z.nativeEnum(Prisma.SortOrder).optional(),
+      usualName: z.nativeEnum(Prisma.SortOrder).optional()
+    })
+  ),
+  filters: beneficiaryFilterSchema
+})
+
+export type ExportBeneficiariesInput = z.infer<typeof exportBeneficiariesSchema>
+
+export const getBeneficiariesSchema =
+  exportBeneficiariesSchema.merge(paginatedSchema)
 
 export type GetBeneficiariesInput = z.infer<typeof getBeneficiariesSchema>

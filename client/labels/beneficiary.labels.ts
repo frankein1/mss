@@ -3,7 +3,6 @@ import type { FieldLabels } from '~/types/fieldLabels'
 
 type BeneficiaryFieldLabels = Omit<
   Beneficiary & { referents: string },
-  | 'id'
   | 'createdById'
   | 'archivedById'
   | 'archived'
@@ -13,6 +12,7 @@ type BeneficiaryFieldLabels = Omit<
 >
 
 const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
+  id: 'Identifiant',
   structureId: 'Structure',
   referents: 'Agent(s) référent(s)',
   aidantConnectAuthorized: 'Mandat Aidant Connect',

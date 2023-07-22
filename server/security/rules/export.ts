@@ -8,3 +8,6 @@ export const canExportHistory = (grantee: SecurityRuleGrantee): boolean =>
     'Instructor',
     'SocialWorker'
   ])
+
+export const canExportBeneficiaries = (grantee: SecurityRuleGrantee): boolean =>
+  hasAllowedRole(grantee, ['StructureManager'])
