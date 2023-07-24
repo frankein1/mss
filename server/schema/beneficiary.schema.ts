@@ -111,7 +111,7 @@ export const updateBeneficiarySchema = z.object({
     birthName: beneficiaryLastNameSchema,
     birthDate: z.coerce.date(errorMessages).nullish(),
     birthPlace: z.string().nullish(),
-    deathDate: z.date(errorMessages).nullish(),
+    deathDate: z.coerce.date(errorMessages).nullish(),
     gender: withEmptyValueOptionalNativeEnum(Gender),
     nationality: withEmptyValueOptionalNativeEnum(Nationality),
     numeroPegase: z.string().nullish(),
