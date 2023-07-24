@@ -3,14 +3,14 @@
     :disabled="isDownloading"
     data-fr-opened="false"
     aria-controls="global-modal"
-    class="fr-btn fr-btn--secondary fr-btn--icon-left"
+    class="fr-link fr-link--icon-left"
     :class="{
       'fr-icon-download-line': !isDownloading,
       'btn-loading': isDownloading
     }"
     @click="exportConfirm"
   >
-    Télécharger les données
+    Exporter le tableau (.xlsx)
   </button>
 </template>
 
@@ -27,7 +27,7 @@
 
   function exportConfirm() {
     modal.open(
-      'Confirmation du téléchargement',
+      'Confirmez le téléchargement',
       ExportDataConfirm,
       {},
       { export: onExport }
