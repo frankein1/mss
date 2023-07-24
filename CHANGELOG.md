@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.4.0...v1.4.1) (2023-07-24)
+
+
+### Bug Fixes
+
+* death date error ([c43c363](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c43c363d0adaeebc8a45a48a6102b700ace75bbf))
+
 ## [1.4.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.3.6...v1.4.0) (2023-07-24)
 
 
