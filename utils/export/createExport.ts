@@ -1,33 +1,36 @@
 import { readFileSync, unlinkSync } from 'fs'
 // FIXME: ExcelJS type error (Cf. https://github.com/exceljs/exceljs/issues/960)
 // eslint-disable-next-line import/default
-import ExcelPkg, { Column, Cell, Worksheet } from 'exceljs'
+import ExcelPkg, { Column } from 'exceljs'
 import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
 import { RowType } from '~/types/export'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const { Workbook } = ExcelPkg
 
-function removeEmptyColumns(worksheet: Worksheet) {
-  const lastColumnIndex = worksheet.columns.length
-  for (let columnIndex = lastColumnIndex; columnIndex >= 1; columnIndex--) {
-    const column: Column = worksheet.getColumn(columnIndex)
+function getFullColumns(columns: Partial<Column>[], rows: RowType[]) {
+  const fullColumns: Partial<Column>[] = []
 
+  columns.forEach(column => {
     let isBlankColumn = true
-    column.eachCell((cell: Cell) => {
+
+    rows.forEach(row => {
       if (
-        cell.value !== null &&
-        cell.value !== '' &&
-        parseInt(cell.row) !== 1
+        column.key &&
+        row[column.key] &&
+        row[column.key] !== null &&
+        row[column.key] !== ''
       ) {
         isBlankColumn = false
       }
     })
 
-    if (isBlankColumn) {
-      worksheet.spliceColumns(columnIndex, 1)
+    if (!isBlankColumn) {
+      fullColumns.push(column)
     }
-  }
+  })
+
+  return fullColumns
 }
 
 export async function createExport(
@@ -39,7 +42,7 @@ export async function createExport(
   const workbook = new Workbook()
   const worksheet = workbook.addWorksheet(worksheetName)
 
-  worksheet.columns = columns
+  worksheet.columns = getFullColumns(columns, rows)
 
   // Export styles
   worksheet.columns.forEach(sheetColumn => {
@@ -52,8 +55,6 @@ export async function createExport(
   }
 
   rows.forEach(row => worksheet.addRow(row))
-
-  removeEmptyColumns(worksheet)
 
   const exportName = `/tmp/mss-export-${userId}.xlsx`
 
