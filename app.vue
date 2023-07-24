@@ -46,8 +46,10 @@
       return
     }
 
+    const matomoScriptSrc = `${publicConfig.matomo.host}/${MATOMO_SCRIPT_FILENAME}`
+
     const matomoScript = document.querySelector<HTMLScriptElement>(
-      `script[src='${publicConfig.matomo.host}/${MATOMO_SCRIPT_FILENAME}']`
+      `script[src='${matomoScriptSrc}']`
     )
 
     if (!matomoScript) {
