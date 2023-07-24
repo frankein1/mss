@@ -31,12 +31,14 @@ export type {
 export {
   addFollowupSchema,
   editFollowupSchema,
+  exportFollowupsSchema,
   getFollowupsSchema,
   quickEditFollowupSchema
 } from './followup.schema'
 export type {
   AddFollowupInput,
   EditFollowupInput,
+  ExportFollowupsInput,
   GetFollowupsInput,
   QuickEditFollowupInput
 } from './followup.schema'
@@ -49,7 +51,8 @@ export {
   quickEditHelpRequestAllocatedAmountSchema,
   quickEditHelpRequestPaymentMethodSchema,
   quickEditHelpRequestPaymentDateSchema,
-  editHelpRequestSchema
+  editHelpRequestSchema,
+  exportHelpRequestsSchema
 } from './helpRequest.schema'
 export type {
   CreateHelpRequestInput,
@@ -60,7 +63,8 @@ export type {
   QuickEditHelpRequestPaymentMethodInput,
   QuickEditHelpRequestPaymentDateInput,
   EditHelpRequestInput,
-  GetHelpRequestsInputOrderBy
+  GetHelpRequestsInputOrderBy,
+  ExportHelpRequestsInput
 } from './helpRequest.schema'
 
 export {

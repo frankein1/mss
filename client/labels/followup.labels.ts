@@ -3,10 +3,11 @@ import type { FieldLabels } from '~/types/fieldLabels'
 
 type FollowupFieldLabels = Omit<
   Followup & { types: string; documents: string },
-  'created' | 'id' | 'structureId' | 'createdById' | 'updated'
+  'created' | 'structureId' | 'createdById'
 >
 
 export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
+  id: 'Identifiant',
   beneficiaryId: 'Bénéficiaire',
   types: "Objet(s) de l'entretien",
   medium: "Type d'entretien",
@@ -28,5 +29,6 @@ export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
   numeroPegase: 'Numéro Pégase',
   interventions: 'Interventions',
   signalements: 'Signalements',
-  prescribingOrganizationId: 'Organisme prescripteur'
+  prescribingOrganizationId: 'Organisme prescripteur',
+  updated: 'Dernière mise à jour'
 }

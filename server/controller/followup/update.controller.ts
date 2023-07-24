@@ -18,8 +18,8 @@ import {
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import {
-  FollowupWithBeneficiaryDocumentsAndTypes,
-  getFollowupWithBeneficiaryDocumentsAndTypes
+  FollowupWithRelations,
+  getFollowupWithRelations
 } from '~/server/query/followups'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
@@ -87,7 +87,7 @@ async function updateTransaction(
   transaction: Prisma.TransactionClient,
   input: EditFollowupInput,
   user: ProtectedAppContextUser,
-  target: Exclude<FollowupWithBeneficiaryDocumentsAndTypes, null>
+  target: Exclude<FollowupWithRelations, null>
 ) {
   const data = await prepareFollowupData({
     input,
@@ -126,7 +126,7 @@ export const updateFollowupHandler = async ({
   input: EditFollowupInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await getFollowupWithBeneficiaryDocumentsAndTypes(input.id)
+  const target = await getFollowupWithRelations(input.id)
 
   if (!target || !canEditFollowup(user, target)) {
     throw forbiddenError()

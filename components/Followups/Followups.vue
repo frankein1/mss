@@ -13,9 +13,16 @@
         @filter="filters = $event"
       />
       <hr />
-      <p class="fr-mb-2w fr-mx-5v fr-hint-text">
-        {{ followupsCount }} synthèse(s) d'entretien
-      </p>
+      <div class="fr-mb-2w fr-mx-5v results-container">
+        <p class="fr-hint-text results-count">
+          {{ followupsCount }} synthèse(s) d'entretien
+        </p>
+        <ExportDataButton
+          v-if="canExportHistory(authStore.getAuthUser)"
+          :is-downloading="isDownloading"
+          @export="exportFollowups"
+        />
+      </div>
       <div v-show="pending">
         <AtomLoader class="fr-mx-auto" />
       </div>
@@ -38,32 +45,42 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
+  import {
+    FAILED_DOWNLOAD_ERROR_MESSAGE,
+    REQUEST_LIMIT_DEFAULT
+  } from '~/utils/constants'
   import type { FollowupFilterInput } from '~/server/schema'
+  import { canExportHistory } from '~/server/security/rules/export'
+  import { useAuthStore } from '~/store/auth'
   import { useFiltersStore } from '~/store/filters'
   import { FollowupSort, SortOrder } from '~/types/table'
+  import { getExportUrl } from '~/utils/export/getExportUrl'
+  import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const filtersStore = useFiltersStore()
+  const trpcClient = useTrpcClient()
+  const authStore = useAuthStore()
 
   const filters = ref<FollowupFilterInput>(filtersStore.followup || {})
   const orderBy = ref<FollowupSort[]>([{ date: SortOrder.Desc }])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
+  const isDownloading = ref(false)
 
   const { updatePagination } = usePagination(page, perPage)
 
   const queryInput = computed(() => ({
-    page: page.value,
-    perPage: perPage.value,
     orderBy: orderBy.value,
-    filters: filters.value
+    filters: filters.value,
+    page: page.value,
+    perPage: perPage.value
   }))
 
   const {
     data: followupsRequest,
     pending,
     error
-  } = await useTrpcClient().followup.getFollowups.useQuery(queryInput, {
+  } = await trpcClient.followup.getFollowups.useQuery(queryInput, {
     default: () => ({
       followups: [],
       count: 0,
@@ -77,4 +94,28 @@
   const followups = computed(() => followupsRequest.value?.followups || [])
 
   const totalPages = computed(() => followupsRequest.value?.totalPages || 0)
+
+  async function exportFollowups() {
+    isDownloading.value = true
+    try {
+      const exportedFollowups = await trpcClient.followup.exportFollowups.query(
+        {
+          orderBy: orderBy.value,
+          filters: filters.value
+        }
+      )
+      if (!exportedFollowups.data) {
+        throw new Error('no data')
+      }
+      const downloadLink = document.createElement('a')
+      downloadLink.href = getExportUrl(exportedFollowups.data)
+      downloadLink.download = getExportFilename('entretiens')
+      downloadLink.click()
+      downloadLink.remove()
+    } catch {
+      useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+    } finally {
+      isDownloading.value = false
+    }
+  }
 </script>

@@ -58,22 +58,24 @@ const editFollowupSchema = addFollowupSchema.extend({
 type AddFollowupInput = z.infer<typeof addFollowupSchema>
 type EditFollowupInput = z.infer<typeof editFollowupSchema>
 
-const getFollowupsSchema = z
-  .object({
-    orderBy: z.array(
-      z.object({
-        date: z.nativeEnum(Prisma.SortOrder).optional(),
-        dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
-        beneficiary: z
-          .object({
-            usualName: z.nativeEnum(Prisma.SortOrder).optional()
-          })
-          .optional()
-      })
-    ),
-    filters: followupFilterSchema
-  })
-  .merge(paginatedSchema)
+const exportFollowupsSchema = z.object({
+  orderBy: z.array(
+    z.object({
+      date: z.nativeEnum(Prisma.SortOrder).optional(),
+      dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
+      beneficiary: z
+        .object({
+          usualName: z.nativeEnum(Prisma.SortOrder).optional()
+        })
+        .optional()
+    })
+  ),
+  filters: followupFilterSchema
+})
+
+type ExportFollowupsInput = z.infer<typeof exportFollowupsSchema>
+
+const getFollowupsSchema = exportFollowupsSchema.merge(paginatedSchema)
 
 type GetFollowupsInput = z.infer<typeof getFollowupsSchema>
 
@@ -87,6 +89,7 @@ type QuickEditFollowupInput = z.infer<typeof quickEditFollowupSchema>
 export {
   addFollowupSchema,
   editFollowupSchema,
+  exportFollowupsSchema,
   getFollowupsSchema,
   quickEditFollowupSchema
 }
@@ -94,6 +97,7 @@ export {
 export type {
   AddFollowupInput,
   EditFollowupInput,
+  ExportFollowupsInput,
   GetFollowupsInput,
   QuickEditFollowupInput
 }

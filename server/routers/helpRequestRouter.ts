@@ -4,14 +4,16 @@ import {
   getHelpRequestDetailsHandler,
   quickUpdateHelpRequestHandler,
   updateHelpRequestHandler,
-  deleteHelpRequestHandler
+  deleteHelpRequestHandler,
+  exportHelpRequestsHandler
 } from '~/server/controller/helpRequest'
 import {
   createHelpRequestSchema,
   getHelpRequestsSchema,
   quickEditHelpRequestSchema,
   editHelpRequestSchema,
-  idSchema
+  idSchema,
+  exportHelpRequestsSchema
 } from '~/server/schema'
 import { protectedProcedure, router } from '~/server/trpc'
 
@@ -22,6 +24,9 @@ export const helpRequestRouter = router({
   getHelpRequests: protectedProcedure
     .input(getHelpRequestsSchema)
     .query(getHelpRequestsHandler),
+  exportHelpRequests: protectedProcedure
+    .input(exportHelpRequestsSchema)
+    .query(exportHelpRequestsHandler),
   getHelpRequestDetails: protectedProcedure
     .input(idSchema)
     .query(getHelpRequestDetailsHandler),

@@ -150,7 +150,7 @@
         },
         {
           name: 'externalStructure',
-          label: helpRequestFieldLabels.externalStructure,
+          label: 'Instruction',
           options: new Map([
             ['', 'Toutes les instructions'],
             ['false', 'Interne'],
