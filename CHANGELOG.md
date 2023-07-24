@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.3.6...v1.4.0) (2023-07-24)
+
+
+### Features
+
+* **beneficiaries:** sort beneficiaries by the usual name by default ([6c45830](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6c458303a1cb9a9c2831369c870c664344269f3c)), closes [#80](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/80)
+* **followups:** add date column and remove medium column ([850d0e4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/850d0e4e6d11dd627c2ee02c0437fa835e28b2cf)), closes [#78](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/78)
+* **help-request:** update the label of the accepted status in help requests for minister structure ([56b869c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/56b869c9b3ee3964ccbed17705e9b060f9ff454d)), closes [#83](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/83)
+* **history:** add minister filters for minitry structures ([0cfcf80](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0cfcf8052f37e74f4ff01cf7155c7e924c3c491e)), closes [#83](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/83)
+* **seed:** add minimal seed ([bef53e3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/bef53e3b222e39f0646e68268aa49a3dc573025e)), closes [#89](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/89)
+* **stats:** sort stats related to followup types ([d57cdf2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d57cdf298d698d81e8f609dfe5a9a171c8708849)), closes [#79](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/79)
+
+
+### Bug Fixes
+
+* **admin:** impossible to create an admin user not linked to a structure ([1e141bd](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1e141bd55a93fcbb43f6107f5720e9f229c9c787)), closes [#88](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/88)
+* **beneficiaries,help-requests:** filtering by age group fails and cities and examination dates contains other structure data ([7ed1934](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7ed19342b87173271b20a1301bc3cfaa94793650)), closes [#98](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/98)
+* **followups:** the follow-up types row is too wide ([184ee1c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/184ee1c6c64a10b95df4f0c66b9cbca8b24430d1))
+* **help-request:** status for ministry are mismatched ([831e059](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/831e0598464633ca6f62ba5afdfbe75fc248ee56)), closes [#83](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/83)
+* prisma updated date not updated ([934b6b1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/934b6b16d8d0305b2217c5d47bd598ffde7d5ae0))
+* **table:** change the label of the sort button for numeric sort ([f2a1752](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f2a17527c5f26ee80b993c4364c7ffad02ce0e44))
+
 ### [1.3.6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.3.5...v1.3.6) (2023-07-19)
 
 
