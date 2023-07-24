@@ -113,16 +113,16 @@
   async function exportHelpRequests() {
     isDownloading.value = true
     try {
-      const exportedFollowups =
+      const exportedHelpRequests =
         await trpcClient.helpRequest.exportHelpRequests.query({
           orderBy: orderBy.value,
           filters: filters.value
         })
-      if (!exportedFollowups.data) {
+      if (!exportedHelpRequests.data) {
         throw new Error('no data')
       }
       const downloadLink = document.createElement('a')
-      downloadLink.href = getExportUrl(exportedFollowups.data)
+      downloadLink.href = getExportUrl(exportedHelpRequests.data)
       downloadLink.download = getExportFilename('demandes_daide')
       downloadLink.click()
       downloadLink.remove()
