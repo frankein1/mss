@@ -26,7 +26,7 @@
       </td>
       <td>{{ beneficiary.city }}</td>
       <td>{{ beneficiary.phone1 }}</td>
-      <td class="follow-up-types-data">{{ followUpTypes }}</td>
+      <td class="followup-types-data">{{ followUpTypes }}</td>
       <td>{{ referents }}</td>
       <td>{{ beneficiaryStatusLabels[beneficiary.status] }}</td>
       <td>{{ readableFileNumber(beneficiary.id) }}</td>
@@ -72,9 +72,5 @@
 <style lang="scss" scoped>
   .address-data {
     max-width: 15rem;
-  }
-
-  .follow-up-types-data {
-    max-width: 25rem;
   }
 </style>
