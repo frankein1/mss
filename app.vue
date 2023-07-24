@@ -27,9 +27,46 @@
 </template>
 
 <script setup lang="ts">
+  import { useMatomoStore } from '~/store/matomo'
+
+  const MATOMO_SCRIPT_FILENAME = 'matomo.js'
+
+  const { public: publicConfig } = useRuntimeConfig()
+  const matomoStore = useMatomoStore()
+
   useHead({
     htmlAttrs: {
       lang: 'fr'
     }
   })
+
+  onMounted(() => {
+    if (window.Matomo) {
+      loadTracker()
+      return
+    }
+
+    const matomoScript = document.querySelector<HTMLScriptElement>(
+      `script[src='${publicConfig.matomo.host}/${MATOMO_SCRIPT_FILENAME}']`
+    )
+
+    if (!matomoScript) {
+      return
+    }
+
+    matomoScript.addEventListener('load', injectMatomo)
+  })
+
+  function injectMatomo() {
+    if (!window.Matomo) {
+      return
+    }
+
+    loadTracker()
+  }
+
+  function loadTracker() {
+    const tracker = window.Matomo?.getAsyncTracker()
+    matomoStore.loadTracker(tracker)
+  }
 </script>

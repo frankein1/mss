@@ -1,28 +1,21 @@
-import { inject } from 'vue'
 import type { MatomoApi } from '~/types/matomo'
+import { useMatomoStore } from '~/store/matomo'
 
 export function useMatomo() {
-  const matomo = inject<MatomoApi>('Matomo')
+  const matomoStore = useMatomoStore()
 
-  if (!matomo) {
-    const { isProduction } = useEnvironment()
-    if (!isProduction) {
-      return {
-        matomo: {
-          trackEvent: () => {}
-        } as MatomoApi
-      }
-    }
+  const storeTracker = matomoStore.tracker
 
-    return {
-      matomo: {
-        trackEvent: () => {
-          // eslint-disable-next-line no-console
-          console.error('Matomo not installed')
-        }
-      } as MatomoApi
-    }
+  if (storeTracker) {
+    return { matomo: storeTracker }
   }
 
-  return { matomo }
+  return {
+    matomo: {
+      trackEvent: () => {
+        // eslint-disable-next-line no-console
+        console.error('Matomo not installed')
+      }
+    } as MatomoApi
+  }
 }

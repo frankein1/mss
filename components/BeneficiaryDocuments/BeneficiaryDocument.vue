@@ -104,6 +104,7 @@
   } from '~/server/routers'
   import { canEditDocument, canDeleteDocument } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
+  import { DocumentEventAction, EventCategory } from '~/types/matomo'
 
   const authStore = useAuthStore()
 
@@ -117,6 +118,7 @@
   }>()
 
   const modal = useModal()
+  const { matomo } = useMatomo()
 
   const downloadLink = ref<HTMLLinkElement | null>(null)
 
@@ -136,6 +138,7 @@
 
   const onDownload = async () => {
     if (process.client) {
+      matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
       const { url } = await useTrpcClient().documents.createViewUrl.mutate({
         key: props.document.key
       })
@@ -150,6 +153,7 @@
 
   const onView = async () => {
     if (process.client) {
+      matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
       const { url } = await useTrpcClient().documents.createViewUrl.mutate({
         key: props.document.key
       })

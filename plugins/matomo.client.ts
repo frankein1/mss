@@ -4,11 +4,6 @@ export default defineNuxtPlugin(() => {
   const nuxtApp = useNuxtApp()
   const router = useRouter()
   const { public: publicConfig } = useRuntimeConfig()
-  const { isProduction } = useEnvironment()
-
-  if (!isProduction) {
-    return
-  }
 
   nuxtApp.vueApp.use(VueMatomo, {
     host: publicConfig.matomo.host,

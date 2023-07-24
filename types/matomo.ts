@@ -2,7 +2,10 @@ export enum EventCategory {
   BeneficiaryFilter = 'Filtre Bénéficiaires',
   BeneficiaryHistoryFilter = "Filtre Historique d'un bénéficiaire",
   FollowupFilter = 'Filtre Entretien',
-  HelpRequestFilter = "Filtre Demande d'aide"
+  HelpRequestFilter = "Filtre Demande d'aide",
+  Document = 'Document',
+  CreateBeneficiary = 'Créer un bénéficiaire',
+  UsersActivity = 'Historique des changements'
 }
 
 export enum BeneficiaryFilterEventAction {
@@ -36,11 +39,27 @@ export enum HelpRequestFilterEventAction {
   Ministre = 'Ministre'
 }
 
+export enum DocumentEventAction {
+  See = 'Voir',
+  Download = 'Télécharger'
+}
+
+export enum CreateBeneficiaryEventAction {
+  Complete = 'Compléter'
+}
+
+export enum UserActivityEventAction {
+  ExpandBeneficiaries = 'Déplie Bénéficiaires'
+}
+
 export type EventAction =
   | BeneficiaryFilterEventAction
   | BeneficiaryHistoryFilterEventAction
   | FollowupFilterEventAction
   | HelpRequestFilterEventAction
+  | DocumentEventAction
+  | CreateBeneficiaryEventAction
+  | UserActivityEventAction
 
 export type MatomoApi = {
   trackEvent: (category: EventCategory, action: EventAction) => void
