@@ -55,17 +55,17 @@ export const exportBeneficiariesHandler = async ({
     }
   })
 
-  // FIXME: async/await in reduce function
-  const data = dataRequest.reduce((beneficiaries: RowType[], beneficiary) => {
+  const data: RowType[] = []
+
+  for (const beneficiary of dataRequest) {
     if (canViewBeneficiary(user, beneficiary)) {
       const withPermissionsBeneficiary = await getBeneficiaryAccessibleData(
         user,
         beneficiary
       )
-      beneficiaries.push(getBeneficiaryExportData(withPermissionsBeneficiary))
+      data.push(getBeneficiaryExportData(withPermissionsBeneficiary))
     }
-    return beneficiaries
-  }, [])
+  }
 
   return await createExport('Bénéficiaires', columns, data, user.id)
 }
