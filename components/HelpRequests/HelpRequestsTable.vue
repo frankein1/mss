@@ -25,7 +25,10 @@
               scope="col"
             >
               {{ helpRequestFieldLabels.dueDate }}
-              <AtomSortButton @update:sort="onSort({ dueDate: $event })" />
+              <AtomSortButton
+                numeric
+                @update:sort="onSort({ dueDate: $event })"
+              />
             </th>
             <th scope="col">
               {{ helpRequestFieldLabels.beneficiaryId }}
