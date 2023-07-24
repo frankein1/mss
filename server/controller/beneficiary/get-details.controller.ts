@@ -2,7 +2,7 @@ import type { Prisma } from '@prisma/client'
 import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaires'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { canViewBeneficiary } from '~/server/security/rules'
-import { getBeneficiaryAccessibleData } from '~/utils/beneficiary'
+import { getBeneficiaryAccessibleData } from '~/utils/beneficiary/getBeneficiaryAccessibleData'
 
 export const getBeneficiaryDetailsHandler = async ({
   input,

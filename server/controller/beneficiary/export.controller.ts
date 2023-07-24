@@ -9,7 +9,7 @@ import {
 import { canExportBeneficiaries } from '~/server/security/rules/export'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { RowType } from '~/types/export'
-import { getBeneficiaryAccessibleData } from '~/utils/beneficiary'
+import { getBeneficiaryAccessibleData } from '~/utils/beneficiary/getBeneficiaryAccessibleData'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
 import { getBeneficiaryExportData } from '~/utils/export/getBeneficiaryExportData'
