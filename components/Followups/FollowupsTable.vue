@@ -23,6 +23,7 @@
               {{ followupFieldLabels.date }}
               <AtomSortButton
                 :sort="dateSort"
+                numeric
                 @update:sort="onSort({ date: $event })"
               />
             </th>
@@ -41,7 +42,10 @@
             <th scope="col">Objet de l'entretien</th>
             <th scope="col">
               {{ followupFieldLabels.dueDate }}
-              <AtomSortButton @update:sort="onSort({ dueDate: $event })" />
+              <AtomSortButton
+                numeric
+                @update:sort="onSort({ dueDate: $event })"
+              />
             </th>
             <th scope="col">Agent</th>
             <th scope="col">N° de dossier</th>
