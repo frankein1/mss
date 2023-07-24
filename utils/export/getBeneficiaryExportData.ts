@@ -25,11 +25,11 @@ export function getBeneficiaryExportData(
     title: beneficiary.beneficiary.title
       ? beneficiaryTitleLabels[beneficiary.beneficiary.title]
       : '',
-    usualName: beneficiary.beneficiary.usualName,
-    birthName: beneficiary.beneficiary.birthName,
-    firstName: beneficiary.beneficiary.firstName,
+    usualName: beneficiary.beneficiary.usualName || '',
+    birthName: beneficiary.beneficiary.birthName || '',
+    firstName: beneficiary.beneficiary.firstName || '',
     birthDate: formatDate(beneficiary.beneficiary.birthDate, 'DD-MM-YYYY'),
-    birthPlace: beneficiary.beneficiary.birthPlace,
+    birthPlace: beneficiary.beneficiary.birthPlace || '',
     deathDate: formatDate(beneficiary.beneficiary.deathDate, 'DD-MM-YYYY')
   }
 }
