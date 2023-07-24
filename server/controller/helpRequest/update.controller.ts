@@ -14,24 +14,10 @@ import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareInstructorOrganization } from '~/utils/instructorOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-
-function getHelpRequest(id: string) {
-  return prismaClient.helpRequest.findUnique({
-    where: { id },
-    include: {
-      beneficiary: {
-        include: {
-          referents: true
-        }
-      },
-      documents: true
-    }
-  })
-}
-
-type HelpRequestWithBeneficiaryAndDocuments = Prisma.PromiseReturnType<
-  typeof getHelpRequest
->
+import {
+  HelpRequestWithRelations,
+  getHelpRequestWithRelations
+} from '~/server/query/helpRequests'
 
 export async function prepareHelpRequestData({
   input,
@@ -42,7 +28,7 @@ export async function prepareHelpRequestData({
   input: EditHelpRequestInput
   transaction: Prisma.TransactionClient
   user: ProtectedAppContextUser
-  target: NonNullable<HelpRequestWithBeneficiaryAndDocuments>
+  target: NonNullable<HelpRequestWithRelations>
 }): Promise<Prisma.HelpRequestUncheckedUpdateInput> {
   const { type } = await transaction.structure.findUniqueOrThrow({
     where: { id: user.structureId },
@@ -86,7 +72,7 @@ async function updateTransaction(
   transaction: Prisma.TransactionClient,
   input: EditHelpRequestInput,
   user: ProtectedAppContextUser,
-  target: NonNullable<HelpRequestWithBeneficiaryAndDocuments>
+  target: NonNullable<HelpRequestWithRelations>
 ) {
   const data = await prepareHelpRequestData({
     input,
@@ -124,7 +110,7 @@ export const updateHelpRequestHandler = async ({
   input: EditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await getHelpRequest(input.id)
+  const target = await getHelpRequestWithRelations(input.id)
 
   if (!target || !canEditHelpRequest(user, target)) {
     throw forbiddenError()
