@@ -1,11 +1,11 @@
 <template>
   <div>
-    <p>Les données seront exportées avec les filtres actuels.</p>
+    <p>Toutes les pages seront exportées avec les filtres actuels.</p>
     <button
       class="fr-btn"
       @click="emit('export')"
     >
-      Télécharger
+      Exporter
     </button>
   </div>
 </template>

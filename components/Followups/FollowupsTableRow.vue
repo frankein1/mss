@@ -26,7 +26,7 @@
       <td>
         {{ getBeneficiaryDisplayName(followup.beneficiary) }}
       </td>
-      <td>{{ followUpTypes }}</td>
+      <td class="followup-types-data">{{ followUpTypes }}</td>
       <td>
         {{
           canViewFollowupDetails && followup.dueDate
