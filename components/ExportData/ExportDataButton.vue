@@ -27,7 +27,7 @@
 
   function exportConfirm() {
     modal.open(
-      'Confirmez le téléchargement',
+      "Confirmer l'export du tableau",
       ExportDataConfirm,
       {},
       { export: onExport }
