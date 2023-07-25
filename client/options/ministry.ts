@@ -6,7 +6,16 @@ import {
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
+const currentMinisterLabels = {
+  [Minister.AurelienRousseau]: 'Aurélien Rousseau (Santé et Prévention)',
+  [Minister.AuroreBerge]: 'Aurore Berge (Solidarités et Familles)',
+  [Minister.FadilaKhattabi]: 'Fadila Khattabi (Personnes handicapées)'
+}
+
+const currentMinisterOptions = labelsToOptions(currentMinisterLabels)
+
 const ministerLabels = {
+  ...currentMinisterLabels,
   [Minister.FrancoisBraun]: 'François Braun (Santé et Prévention)',
   [Minister.AgnesFirminLeBodo]: 'Agnès Firmin-Le Bodo (Santé et Prévention)',
   [Minister.JeanChristopheCombe]:
@@ -223,6 +232,7 @@ const ministereCategorieLabels: {
 const ministereCategorieOptions = labelsToOptions(ministereCategorieLabels)
 
 export {
+  currentMinisterOptions,
   ministerLabels,
   ministerOptions,
   ministereDepartmentServiceAcLabels,
