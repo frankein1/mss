@@ -29,6 +29,8 @@
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
+  import { EventCategory, BeneficiaryFilterEventAction } from '~/types/matomo'
+  import { beneficiaryFieldLabels } from '~/client/labels'
 
   const trpcClient = useTrpcClient()
 
@@ -105,22 +107,28 @@
         name: 'followupTypes',
         label: "Type d'accompagnement",
         options: followupTypeOptions.value,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.FollowupType
       },
       {
         name: 'referents',
         label: 'Référent',
         options: agentOptions.value,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.Referent
       }
     ]
 
     if (citiesOptions.value.size) {
       filters.push({
         name: 'cities',
-        label: 'Ville',
+        label: beneficiaryFieldLabels.city,
         options: citiesOptions.value,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.City
       })
     }
 
@@ -129,13 +137,17 @@
         name: 'status',
         label: 'Statut',
         options: withEmptyValue(beneficiaryStatusOptions, 'Tous les statuts'),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.Status
       },
       {
         name: 'ageGroup',
         label: "Tranche d'âge",
         options: withEmptyValue(ageGroupOptions, "Toutes les tranches d'âge"),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.AgeGroup
       }
     )
 

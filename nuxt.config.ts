@@ -103,8 +103,8 @@ export default defineNuxtConfig({
       ),
       sessionCookieKey: 'MSS_SESSION_TOKEN',
       matomo: {
-        host: 'https://matomo.incubateur.anct.gouv.fr/',
-        siteId: 11
+        host: process.env.MATOMO_HOST,
+        siteId: parseInt(process.env.MATOMO_SITE_ID || '1')
       },
       mssEnvironment: process.env.MSS_ENVIRONMENT || 'local',
       email: {

@@ -31,6 +31,7 @@
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options/ministry'
+  import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
   const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
@@ -98,7 +99,7 @@
     return ''
   })
 
-  const filters = computed<FilterProp[] | null>(() => {
+  const filters = computed(() => {
     if (
       !followupTypeOptions.value ||
       !agentOptions.value ||
@@ -107,7 +108,7 @@
       return null
     }
 
-    const filters = [
+    const filters: FilterProp[] = [
       {
         name: 'status',
         label: helpRequestFieldLabels.status,
@@ -115,13 +116,17 @@
           helpRequestStatusOptions.value,
           'Tous les statuts'
         ),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.Status
       },
       {
         name: 'followupTypes',
         label: helpRequestFieldLabels.typeId,
         options: followupTypeOptions.value,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.FollowupType
       }
     ]
     if (examinationDateOptions.value.size) {
@@ -132,7 +137,9 @@
           examinationDateOptions.value,
           'Toutes les commissions'
         ),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
       })
     }
 
@@ -146,7 +153,10 @@
             ['true', 'Oui'],
             ['false', 'Non']
           ]),
-          type: FilterType.SelectOne
+          type: FilterType.SelectOne,
+
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.HandlingDate
         },
         {
           name: 'externalStructure',
@@ -156,7 +166,10 @@
             ['false', 'Interne'],
             ['true', 'Organisme externe']
           ]),
-          type: FilterType.SelectOne
+          type: FilterType.SelectOne,
+
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
         }
       )
     }
@@ -165,7 +178,10 @@
       name: 'referents',
       label: 'Référent',
       options: agentOptions.value,
-      type: FilterType.SelectMultiple
+      type: FilterType.SelectMultiple,
+
+      matomoEventCategory: EventCategory.HelpRequestFilter,
+      matomoEventAction: HelpRequestFilterEventAction.Referent
     })
 
     if (isMinistryAgent.value) {
@@ -173,7 +189,9 @@
         name: 'ministre',
         label: helpRequestFieldLabels.ministre,
         options: ministerOptions,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.Ministre
       })
     }
 
