@@ -3,9 +3,13 @@
 </template>
 
 <script setup lang="ts">
-  import { RoutePath } from '~/utils/routing'
+  import { RoutePath, RouteTitle } from '~/utils/routing'
 
   const route = useRoute()
+
+  useHead({
+    title: RouteTitle.Admin()
+  })
 
   definePageMeta({
     middleware: 'auth'

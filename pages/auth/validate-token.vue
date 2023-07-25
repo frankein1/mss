@@ -1,12 +1,9 @@
 <template>
   <main class="fr-container fr-my-8w">
     <div class="fr-grid-row fr-my-5w">
-      <div
-        v-if="user"
-        class="fr-col fr-col-lg-8 fr-col-offset-lg-2 text-center"
-      >
+      <div class="fr-col fr-col-lg-8 fr-col-offset-lg-2 text-center">
         <h1 class="fr-text--regular">
-          <span v-if="pending">Jeton en cours de vérification...</span>
+          <span v-if="pending">{{ RouteTitle.AuthValidateToken() }}...</span>
           <span v-else-if="user">Bonjour {{ name }}!</span>
           <span v-else-if="errorMessage">{{ errorMessage }}</span>
         </h1>
@@ -17,6 +14,11 @@
 <script setup lang="ts">
   import { useAuthStore } from '~/store/auth'
   import { JwtUser } from '~/types/user'
+  import { RouteTitle } from '~/utils/routing'
+
+  useHead({
+    title: RouteTitle.AuthValidateToken()
+  })
 
   definePageMeta({
     layout: 'landing'

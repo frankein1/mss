@@ -3,7 +3,7 @@
     <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryFollowupAdd(beneficiary)"
     />
-    <PageTitle :title="RouteTitle.AppBeneficiaryFollowupAdd(beneficiary)" />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -57,6 +57,12 @@
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
       id: beneficiaryId
     })
+
+  const title = computed(() =>
+    RouteTitle.AppBeneficiaryFollowupAdd(beneficiary.value || null)
+  )
+
+  useHead({ title })
 
   const {
     data: followupTypes,

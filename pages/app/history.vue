@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppHistory()" />
-    <PageTitle :title="RouteTitle.AppHistory()" />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <AtomTabs>
@@ -27,6 +27,10 @@
   import { Tab } from 'vue3-tabs-component'
   import { HistoryTab } from '~/utils/constants/history'
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
+
+  const title = RouteTitle.AppHistory()
+
+  useHead({ title })
 </script>
 
 <style scoped>
