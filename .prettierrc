@@ -6,5 +6,12 @@
   "trailingComma": "none",
   "vueIndentScriptAndStyle": true,
   "singleAttributePerLine": true,
-  "plugins": ["prettier-plugin-prisma"]
+  "overrides": [
+    {
+      "files": ["prisma/schema.prisma"],
+      "options": {
+        "plugins": ["prettier-plugin-prisma"]
+      }
+    }
+  ]
 }

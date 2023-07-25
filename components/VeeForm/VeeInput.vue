@@ -149,12 +149,15 @@
     if (props.type === 'social-security-number' && typeof value === 'string') {
       const WHITESPACE_POSITIONS = [1, 4, 7, 10, 14, 18]
 
-      const formattedValue = WHITESPACE_POSITIONS.reduce((val, pos) => {
-        if (val.length > pos) {
-          return `${val.slice(0, pos)} ${val.slice(pos)}`
-        }
-        return val
-      }, value.replace(/\s/g, ''))
+      const formattedValue = WHITESPACE_POSITIONS.reduce(
+        (val, pos) => {
+          if (val.length > pos) {
+            return `${val.slice(0, pos)} ${val.slice(pos)}`
+          }
+          return val
+        },
+        value.replace(/\s/g, '')
+      )
 
       return formattedValue
     }
