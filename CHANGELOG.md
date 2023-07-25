@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.4.1...v1.5.0) (2023-07-25)
+
+
+### Features
+
+* **followup,help-request:** update ministers after the last cabinet reshuffle ([5c0f6fe](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5c0f6feff72b3755dad6a8767faa1ad1f99a7bfd)), closes [#99](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/99)
+* **matomo:** add matomo events ([6de414a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6de414a328f8b5cc1302333cbd9ab01024536f72)), closes [#65](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/65)
+
 ### [1.4.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.4.0...v1.4.1) (2023-07-24)
 
 
