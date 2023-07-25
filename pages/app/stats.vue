@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppStats()" />
-    <PageTitle :title="RouteTitle.AppStats()" />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <AtomTabs>
@@ -51,6 +51,10 @@
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
+
+  const title = RouteTitle.AppStats()
+
+  useHead({ title })
 
   definePageMeta({ middleware: 'can-access-stats' })
 

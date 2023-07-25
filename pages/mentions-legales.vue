@@ -1,6 +1,6 @@
 <template>
   <div class="fr-container">
-    <h1>Mentions légales</h1>
+    <h1>{{ RouteTitle.MentionsLegales() }}</h1>
     <h2>Éditeur de la Plateforme</h2>
     <p>
       La Plateforme Mon Suivi Social est éditée par l'Incubateur des Territoires
@@ -65,6 +65,12 @@
 </template>
 
 <script setup>
+  import { RouteTitle } from '~/utils/routing/titles'
+
+  useHead({
+    title: RouteTitle.MentionsLegales()
+  })
+
   definePageMeta({
     layout: 'landing'
   })

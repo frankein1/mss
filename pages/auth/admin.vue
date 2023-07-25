@@ -22,7 +22,11 @@
 <script setup lang="ts">
   import { AdminLoginInput, adminLoginSchema } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
-  import { RoutePath } from '~/utils/routing'
+  import { RoutePath, RouteTitle } from '~/utils/routing'
+
+  useHead({
+    title: RouteTitle.AuthAdmin()
+  })
 
   definePageMeta({
     layout: 'landing'

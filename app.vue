@@ -1,7 +1,6 @@
 <template>
   <NuxtLayout>
     <Head>
-      <Title>Mon Suivi Social</Title>
       <Meta charset="utf-8" />
       <Meta
         name="viewport"
@@ -37,6 +36,9 @@
   useHead({
     htmlAttrs: {
       lang: 'fr'
+    },
+    titleTemplate: pageTitle => {
+      return pageTitle ? `${pageTitle} | Mon Suivi Social` : 'Mon Suivi Social'
     }
   })
 

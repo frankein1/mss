@@ -1,7 +1,7 @@
 <template>
   <div>
     <h1 class="fr-text--regular">
-      Votre compte InclusionConnect n'est pas rattaché
+      {{ RouteTitle.ErrorUnknownUser() }}
     </h1>
     <p class="fr-px-9w">
       Aucun compte Mon Suivi Social n'est rattaché à votre compte
@@ -12,6 +12,12 @@
 </template>
 
 <script setup lang="ts">
+  import { RouteTitle } from '~/utils/routing'
+
+  useHead({
+    title: RouteTitle.ErrorUnknownUser()
+  })
+
   definePageMeta({
     layout: 'error'
   })

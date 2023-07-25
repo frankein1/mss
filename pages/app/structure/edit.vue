@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppStructureEdit()" />
-    <PageTitle :title="RouteTitle.AppStructureEdit()" />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -40,6 +40,10 @@
   import { EditCurrentUserStructureInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RouteTitle, Breadcrumb } from '~/utils/routing'
+
+  const title = RouteTitle.AppStructureEdit()
+
+  useHead({ title })
 
   definePageMeta({ middleware: 'can-edit-structure' })
 

@@ -67,6 +67,12 @@
 </template>
 
 <script setup lang="ts">
+  import { RouteTitle } from '~/utils/routing'
+
+  useHead({
+    title: RouteTitle.Register()
+  })
+
   definePageMeta({
     layout: 'landing'
   })

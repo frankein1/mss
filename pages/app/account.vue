@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppAccount()" />
-    <PageTitle :title="RouteTitle.AppAccount()" />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -28,6 +28,10 @@
 
 <script lang="ts" setup>
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
+
+  const title = RouteTitle.AppAccount()
+
+  useHead({ title })
 
   const data =
     await useTrpcClient().config.getInclusionConnectEditPasswordUrl.query()
