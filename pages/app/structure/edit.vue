@@ -73,8 +73,9 @@
         'Les informations de votre structure ont été mises à jour.'
       )
     } catch {
-      snackbar.error('La mise à jour de votre structure a échoué.', () =>
-        formContainer.value?.querySelector('select')?.focus()
+      snackbar.error(
+        'La mise à jour de votre structure a échoué.',
+        () => formContainer.value?.querySelector('select')?.focus()
       )
     }
     isSubmitting.value = false

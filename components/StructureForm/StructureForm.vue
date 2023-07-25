@@ -24,7 +24,7 @@
 
     <StructureFormAdminUsers
       v-if="adminView"
-      :structure="(structure as AdminStructureOutput)"
+      :structure="structure as AdminStructureOutput"
     />
 
     <button
