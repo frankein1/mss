@@ -34,8 +34,9 @@
       navigateTo(RoutePath.AdminUsers())
       snackbar.success("L'utilisateur a été ajouté.")
     } catch {
-      snackbar.error("L'ajout de l'utilisateur a échoué.", () =>
-        formContainer.value?.querySelector('select')?.focus()
+      snackbar.error(
+        "L'ajout de l'utilisateur a échoué.",
+        () => formContainer.value?.querySelector('select')?.focus()
       )
     }
     isSubmitting.value = false

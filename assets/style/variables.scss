@@ -5,8 +5,12 @@ $primary-hover: var(--background-action-high-blue-france-hover);
 $primary-active: var(--background-action-high-blue-france-active);
 $followup-light: #e5fbfd;
 $followup-light-hover: #c8fbe6;
-$shadow-light: 0 7px 14px 0 rgb(44 39 56 / 2%), 0 18px 37px 0 rgb(44 39 56 / 4%);
-$shadow-dark: 0 8px 8px 0 rgb(0 0 0 / 10%), 0 8px 16px -16px rgb(0 0 0 / 32%);
+$shadow-light:
+  0 7px 14px 0 rgb(44 39 56 / 2%),
+  0 18px 37px 0 rgb(44 39 56 / 4%);
+$shadow-dark:
+  0 8px 8px 0 rgb(0 0 0 / 10%),
+  0 8px 16px -16px rgb(0 0 0 / 32%);
 $over-z-index: 600;
 $above-z-index: 500;
 $home-gradient: linear-gradient(
