@@ -65,7 +65,7 @@
     "prettier": "2.8.8",
     "prettier-plugin-prisma": "^4.13.0",
     "prisma": "^4.13.0",
-    "sass": "^1.62.0",
+    "sass": "^1.64.1",
     "simple-git-hooks": "^2.9.0",
     "standard-version": "^9.5.0",
     "stylelint": "^15.10.2",
