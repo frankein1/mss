@@ -90,6 +90,8 @@
   import { getRandomId } from '~/utils/random'
   import { INPUT_DEFER_TIME } from '~/utils/constants'
 
+  const { matomo } = useMatomo()
+
   const props = withDefaults(
     defineProps<{
       filters: FilterProp[]
@@ -166,6 +168,10 @@
     timeout.value = setTimeout(() => {
       emit('filter', selectedFiltersToDataObject(selectedFilters.value))
     }, INPUT_DEFER_TIME)
+
+    if (filter.matomoEventCategory && filter.matomoEventAction) {
+      matomo.trackEvent(filter.matomoEventCategory, filter.matomoEventAction)
+    }
   }
 
   function addFilter(filter: FilterProp, value: string | string[]) {

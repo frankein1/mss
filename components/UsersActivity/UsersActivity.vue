@@ -4,9 +4,11 @@
     <section class="fr-accordion">
       <div class="fr-accordion__title">
         <button
+          ref="expandBtn"
           class="fr-accordion__btn"
           aria-expanded="false"
           :aria-controls="usersActivityId"
+          @click="onExpand"
         >
           Historique des changements
         </button>
@@ -30,6 +32,9 @@
 <script setup lang="ts">
   import { GetBeneficiariesUsersActivityOutput } from '~/server/routers'
   import { RoutePath } from '~/utils/routing'
+  import { EventCategory, UserActivityEventAction } from '~/types/matomo'
+
+  const { matomo } = useMatomo()
 
   const PAGE_SIZE = 5
 
@@ -45,6 +50,7 @@
 
   const usersActivity = ref<GetBeneficiariesUsersActivityOutput['activity']>([])
   const page = ref(1)
+  const expandBtn = ref<HTMLButtonElement | null>(null)
 
   const usersActivityId = computed(
     () => `users-activity-${props.id || props.collection}`
@@ -89,6 +95,19 @@
   async function onNextPage() {
     const nextPage = await loadUsersActivity()
     usersActivity.value.push(...nextPage.activity)
+  }
+
+  function onExpand() {
+    if (!expandBtn.value) {
+      return
+    }
+    const isExpanded = expandBtn.value.getAttribute('aria-expanded') === 'true'
+    if (!isExpanded) {
+      matomo.trackEvent(
+        EventCategory.UsersActivity,
+        UserActivityEventAction.ExpandBeneficiaries
+      )
+    }
   }
 </script>
 

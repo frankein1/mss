@@ -32,6 +32,7 @@
   import type { FilterProp } from '~/types/filter'
   import { followupFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options/ministry'
+  import { EventCategory, FollowupFilterEventAction } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
@@ -76,35 +77,43 @@
     return ''
   })
 
-  const filters = computed<FilterProp[] | null>(() => {
+  const filters = computed(() => {
     if (!followupTypeOptions.value || !agentOptions.value) {
       return null
     }
 
-    const filters = [
+    const filters: FilterProp[] = [
       {
         name: 'status',
         label: followupFieldLabels.status,
         options: withEmptyValue(followupStatusOptions, 'Tous les statuts'),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.FollowupFilter,
+        matomoEventAction: FollowupFilterEventAction.Status
       },
       {
         name: 'medium',
         label: followupFieldLabels.medium,
         options: followupMediumOptions,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.FollowupFilter,
+        matomoEventAction: FollowupFilterEventAction.Medium
       },
       {
         name: 'followupTypes',
         label: "Objet de l'entretien",
         options: followupTypeOptions.value,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.FollowupFilter,
+        matomoEventAction: FollowupFilterEventAction.FollowupType
       },
       {
         name: 'referents',
         label: 'Référent',
         options: agentOptions.value,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.FollowupFilter,
+        matomoEventAction: FollowupFilterEventAction.Referent
       }
     ]
 
@@ -113,7 +122,9 @@
         name: 'ministre',
         label: followupFieldLabels.ministre,
         options: ministerOptions,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.FollowupFilter,
+        matomoEventAction: FollowupFilterEventAction.Ministre
       })
     }
 
