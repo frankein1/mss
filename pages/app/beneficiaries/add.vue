@@ -1,7 +1,7 @@
 <template>
   <PageContainer class="page-container">
     <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" />
-    <PageTitle :title="RouteTitle.AppBeneficiariesAdd()">
+    <PageTitle :title="title">
       <div>
         Les champs avec <span class="color-red">*</span> sont obligatoires
       </div>
@@ -18,6 +18,10 @@
 <script setup lang="ts">
   import { CreateBeneficiaryInput } from '~/server/schema'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
+
+  const title = RouteTitle.AppBeneficiariesAdd()
+
+  useHead({ title })
 
   const trpcClient = useTrpcClient()
 

@@ -1,6 +1,6 @@
 <template>
   <div class="fr-container">
-    <h1>Déclaration d'accessibilité</h1>
+    <h1>{{ RouteTitle.DeclarationAccessibilite() }}</h1>
     <p>Établie le <span>17 mai 2022</span>.</p>
     <p>
       <span>Agence National de la Cohésion des Territoires</span> s'engage à
@@ -84,6 +84,12 @@
 </template>
 
 <script setup>
+  import { RouteTitle } from '~/utils/routing'
+
+  useHead({
+    title: RouteTitle.DeclarationAccessibilite()
+  })
+
   definePageMeta({
     layout: 'landing'
   })

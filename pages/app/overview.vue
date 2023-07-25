@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <PageTitle
-      :title="RouteTitle.AppOverview()"
+      :title="title"
       class="fr-mt-2w"
     />
     <BeneficiarySearchbar />
@@ -13,6 +13,10 @@
 
 <script setup lang="ts">
   import { RouteTitle, Route } from '~/utils/routing'
+
+  const title = RouteTitle.AppOverview()
+
+  useHead({ title })
 
   definePageMeta({
     name: Route.AppOverview

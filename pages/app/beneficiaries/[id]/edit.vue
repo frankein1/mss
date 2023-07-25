@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaryEdit(beneficiary)" />
-    <PageTitle :title="RouteTitle.AppBeneficiaryEdit(beneficiary || null)" />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -44,6 +44,13 @@
   const isSubmitting = ref(false)
 
   const beneficiary = computed(() => data.value?.beneficiary)
+
+  const title = computed(() =>
+    RouteTitle.AppBeneficiaryEdit(beneficiary.value || null)
+  )
+
+  useHead({ title })
+
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
 

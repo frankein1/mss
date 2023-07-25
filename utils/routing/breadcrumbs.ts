@@ -100,7 +100,7 @@ export const Breadcrumb = {
     beneficiary: BeneficiaryNamesWithId | null | undefined
   ) => [
     ...BeneficiaryBreadcrumb(false, beneficiary || null),
-    { text: RouteTitle.AppBeneficiaryPrint() }
+    { text: RouteTitle.AppBeneficiaryPrint(beneficiary || null) }
   ],
 
   // FIXME: BeneficiaryFollowupAdd depends on the access to Beneficiary

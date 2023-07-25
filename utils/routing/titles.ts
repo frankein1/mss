@@ -3,8 +3,24 @@ import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDis
 import { BeneficiaryNames } from '~/types/beneficiary'
 
 export const RouteTitle = {
+  [Route.CGUManager]: () => "Conditions générales d'utilisation",
+  [Route.DeclarationAccessibilite]: () => "Déclaration d'accessibilité",
+  [Route.MentionsLegales]: () => 'Mentions légales',
+  [Route.Register]: () => 'Enregistrer ma structure',
+
+  // AUTH
+  [Route.AuthAdmin]: () => "Se connecter à l'espace d'administration",
+  [Route.AuthLogin]: () => 'Se connecter à ma structure',
+  [Route.AuthLogout]: () => 'Vous êtes déconnecté·e·s',
+  [Route.AuthValidateToken]: () => 'Jeton en cours de vérification',
+
+  // ERROR
+  [Route.ErrorDisabledAccount]: () => 'Votre compte est désactivé',
+  [Route.ErrorUnknownUser]: () =>
+    "Votre compte InclusionConnect n'est pas rattaché",
+
   // APP
-  [Route.App]: () => 'Accueil',
+  [Route.App]: () => 'Mon espace',
   [Route.AppOverview]: () => 'Tableau de bord',
   [Route.AppUsers]: () => 'Gérer les utilisateurs',
   [Route.AppStats]: () => 'Statistiques',
@@ -14,7 +30,10 @@ export const RouteTitle = {
   [Route.AppBeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
   [Route.AppBeneficiary]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? getBeneficiaryDisplayName(beneficiary) : '',
-  [Route.AppBeneficiaryPrint]: () => 'Imprimer la fiche',
+  [Route.AppBeneficiaryPrint]: (beneficiary: BeneficiaryNames | null) =>
+    beneficiary
+      ? `Imprimer la fiche de ${getBeneficiaryDisplayName(beneficiary)}`
+      : '',
   [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${getBeneficiaryDisplayName(beneficiary)}` : '',
   [Route.AppBeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
@@ -43,5 +62,6 @@ export const RouteTitle = {
   [Route.AppHistory]: () => 'Accompagnements',
 
   // ADMIN
+  [Route.Admin]: () => "Mon espace d'administration",
   [Route.AdminOverview]: () => 'Tableau de bord'
 }

@@ -1,17 +1,9 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="
-        Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest?.beneficiary)
-      "
+      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(beneficiary)"
     />
-    <PageTitle
-      :title="
-        RouteTitle.AppBeneficiaryHelpRequestEdit(
-          helpRequest?.beneficiary || null
-        )
-      "
-    />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -75,6 +67,14 @@
   } = await trpcClient.helpRequest.getHelpRequestDetails.useQuery({
     id: helpRequestId
   })
+
+  const beneficiary = computed(() => helpRequest.value?.beneficiary || null)
+
+  const title = computed(() =>
+    RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
+  )
+
+  useHead({ title })
 
   const {
     data: followupTypes,

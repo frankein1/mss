@@ -3,9 +3,7 @@
     <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryHelpRequestAdd(beneficiary)"
     />
-    <PageTitle
-      :title="RouteTitle.AppBeneficiaryHelpRequestAdd(beneficiary || null)"
-    />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -64,6 +62,12 @@
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
       id: beneficiaryId
     })
+
+  const title = computed(() =>
+    RouteTitle.AppBeneficiaryHelpRequestAdd(beneficiary.value || null)
+  )
+
+  useHead({ title })
 
   const {
     data: followupTypes,
