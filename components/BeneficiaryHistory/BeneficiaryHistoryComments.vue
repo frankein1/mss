@@ -31,7 +31,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'commentAdded', comment: HistoryItemComment): void
+    commentAdded: [comment: HistoryItemComment]
   }>()
 
   const canAddCommentsRule = computed(() =>

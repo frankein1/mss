@@ -52,7 +52,7 @@
   const snackbar = useSnackbar()
 
   const emit = defineEmits<{
-    (e: 'usersRefresh'): void
+    usersRefresh: []
   }>()
 
   const isSubmitting = ref(false)

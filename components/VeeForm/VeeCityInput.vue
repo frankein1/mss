@@ -28,7 +28,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'citySelected', city: CitySelected): void
+    citySelected: [city: CitySelected]
   }>()
 
   const cities = ref<CityResult[]>([])

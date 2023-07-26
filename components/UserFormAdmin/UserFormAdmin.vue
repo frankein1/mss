@@ -97,7 +97,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'updateUser', user: AdminEditUserInput | AdminCreateUserInput): void
+    updateUser: [user: AdminEditUserInput | AdminCreateUserInput]
   }>()
 
   const { data: structures } = await trpcClient.admin.getStructures.useQuery({})

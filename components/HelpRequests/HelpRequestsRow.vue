@@ -120,7 +120,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'updated', helpRequest: HelpRequestItem): void
+    updated: [helpRequest: HelpRequestItem]
   }>()
 
   const user = computed(() => authStore.getAuthUser)

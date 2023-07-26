@@ -45,7 +45,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'toggleReadState'): void
+    toggleReadState: []
   }>()
 
   const beneficiary = computed(() => props.beneficiary)

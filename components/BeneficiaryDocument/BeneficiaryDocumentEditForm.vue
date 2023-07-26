@@ -51,7 +51,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'updateDocument', values: EditDocumentInput): void
+    updateDocument: [values: EditDocumentInput]
   }>()
 
   const authStore = useAuthStore()

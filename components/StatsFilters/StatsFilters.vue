@@ -30,7 +30,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'filter', filters: StatFilterInput): void
+    filter: [filters: StatFilterInput]
   }>()
 
   const statsFilters = computed(() => {
