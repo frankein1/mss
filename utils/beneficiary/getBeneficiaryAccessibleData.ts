@@ -29,7 +29,8 @@ function getBeneficiaryMeta(
     aidantConnectAuthorized: beneficiary.aidantConnectAuthorized,
     documents: beneficiary.documents.filter(document =>
       canViewDocument(user, beneficiary, document)
-    )
+    ),
+    historyTotal: beneficiary.helpRequests.length + beneficiary.followups.length
   }
 }
 

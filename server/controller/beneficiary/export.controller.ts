@@ -52,7 +52,9 @@ export const exportBeneficiariesHandler = async ({
           linkedBeneficiary: true
         }
       },
-      documents: true
+      documents: true,
+      followups: true,
+      helpRequests: true
     }
   })
 

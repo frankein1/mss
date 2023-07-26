@@ -1,4 +1,11 @@
-import type { Beneficiary, UserStatus, User, Document } from '@prisma/client'
+import type {
+  Beneficiary,
+  UserStatus,
+  User,
+  Document,
+  Followup,
+  HelpRequest
+} from '@prisma/client'
 import type { BeneficiaryRelativeWithLinkedBeneficiary } from './relative'
 
 export type BeneficiaryReferent = {
@@ -14,6 +21,8 @@ export type BeneficiaryWithReferents = Beneficiary & {
 export type BeneficiaryWithRelations = BeneficiaryWithReferents & {
   relatives: BeneficiaryRelativeWithLinkedBeneficiary[]
   documents: Document[]
+  followups: Followup[]
+  helpRequests: HelpRequest[]
 }
 
 export type BeneficiarySearchResult = Pick<

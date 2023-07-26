@@ -179,6 +179,7 @@ export function getBeneficiaryExportData(
         .join(',') || '',
     documents: beneficiary.beneficiary.documents
       .map(document => document.name)
-      .join(',')
+      .join(','),
+    historyTotal: beneficiary.beneficiary.historyTotal.toString()
   }
 }
