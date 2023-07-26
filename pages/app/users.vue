@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppUsers()" />
-    <PageTitle :title="RouteTitle.AppUsers()" />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main class="main-container fr-p-5w">
@@ -32,6 +32,10 @@
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
   import { canCreateUser as canCreateUserRule } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
+
+  const title = RouteTitle.AppUsers()
+
+  useHead({ title })
 
   definePageMeta({ middleware: 'can-list-users' })
 

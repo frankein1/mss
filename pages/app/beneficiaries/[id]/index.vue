@@ -4,7 +4,7 @@
       :links="Breadcrumb.AppBeneficiary(beneficiary, originPage)"
     />
     <div class="beneficiarytitle__container">
-      <PageTitle :title="RouteTitle.AppBeneficiary(beneficiary || null)" />
+      <PageTitle :title="title" />
       <BeneficiaryDetailsHeader
         :beneficiary-id="beneficiaryId"
         :can-delete="canDelete"
@@ -110,6 +110,11 @@
   })
 
   const beneficiary = computed(() => data.value?.beneficiary)
+
+  const title = RouteTitle.AppBeneficiary(beneficiary.value || null)
+
+  useHead({ title })
+
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
   const followupTypes = computed(

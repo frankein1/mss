@@ -1,7 +1,6 @@
 <template>
   <NuxtLayout>
     <Head>
-      <Title>Mon Suivi Social</Title>
       <Meta charset="utf-8" />
       <Meta
         name="viewport"
@@ -27,9 +26,51 @@
 </template>
 
 <script setup lang="ts">
+  import { useMatomoStore } from '~/store/matomo'
+
+  const MATOMO_SCRIPT_FILENAME = 'matomo.js'
+
+  const { public: publicConfig } = useRuntimeConfig()
+  const matomoStore = useMatomoStore()
+
   useHead({
     htmlAttrs: {
       lang: 'fr'
+    },
+    titleTemplate: pageTitle => {
+      return pageTitle ? `${pageTitle} | Mon Suivi Social` : 'Mon Suivi Social'
     }
   })
+
+  onMounted(() => {
+    if (window.Matomo) {
+      loadTracker()
+      return
+    }
+
+    const matomoScriptSrc = `${publicConfig.matomo.host}/${MATOMO_SCRIPT_FILENAME}`
+
+    const matomoScript = document.querySelector<HTMLScriptElement>(
+      `script[src='${matomoScriptSrc}']`
+    )
+
+    if (!matomoScript) {
+      return
+    }
+
+    matomoScript.addEventListener('load', injectMatomo)
+  })
+
+  function injectMatomo() {
+    if (!window.Matomo) {
+      return
+    }
+
+    loadTracker()
+  }
+
+  function loadTracker() {
+    const tracker = window.Matomo?.getAsyncTracker()
+    matomoStore.loadTracker(tracker)
+  }
 </script>

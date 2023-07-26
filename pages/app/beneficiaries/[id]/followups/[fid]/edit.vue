@@ -1,13 +1,7 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryFollowupEdit(followup?.beneficiary)"
-    />
-    <PageTitle
-      :title="
-        RouteTitle.AppBeneficiaryFollowupEdit(followup?.beneficiary || null)
-      "
-    />
+    <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaryFollowupEdit(followup)" />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -65,6 +59,14 @@
     id: followupId
   })
 
+  const beneficiary = computed(() => followup.value?.beneficiary || null)
+
+  const title = computed(() =>
+    RouteTitle.AppBeneficiaryFollowupEdit(beneficiary.value)
+  )
+
+  useHead({ title })
+
   const {
     data: followupTypes,
     pending: followupTypesPending,
@@ -107,8 +109,9 @@
         })
       )
     } catch {
-      snackbar.error('La mise à jour de la synthèse a échoué.', () =>
-        formContainer.value?.querySelector('input')?.focus()
+      snackbar.error(
+        'La mise à jour de la synthèse a échoué.',
+        () => formContainer.value?.querySelector('input')?.focus()
       )
     }
     isSubmitting.value = false

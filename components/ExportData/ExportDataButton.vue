@@ -3,7 +3,7 @@
     :disabled="isDownloading"
     data-fr-opened="false"
     aria-controls="global-modal"
-    class="fr-link fr-link--icon-left"
+    class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left"
     :class="{
       'fr-icon-download-line': !isDownloading,
       'btn-loading': isDownloading

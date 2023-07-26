@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb } from '~/utils/routing'
+  import { Breadcrumb, RouteTitle } from '~/utils/routing'
 
   definePageMeta({
     layout: false
@@ -58,7 +58,12 @@
       id: beneficiaryId
     })
 
-  const beneficiary = computed(() => data.value?.beneficiary)
+  const beneficiary = computed(() => data.value?.beneficiary || null)
+
+  useHead({
+    title: RouteTitle.AppBeneficiaryPrint(beneficiary.value)
+  })
+
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
 

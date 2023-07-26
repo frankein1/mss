@@ -51,12 +51,7 @@ export default defineNuxtConfig({
   ],
 
   // Modules: https://v3.nuxtjs.org/api/configuration/nuxt.config#modules
-  modules: [
-    '@pinia/nuxt',
-    'nuxt-vitest',
-    '@vee-validate/nuxt',
-    'nuxt-scheduler'
-  ],
+  modules: ['@pinia/nuxt', '@vee-validate/nuxt', 'nuxt-scheduler'],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
@@ -103,8 +98,8 @@ export default defineNuxtConfig({
       ),
       sessionCookieKey: 'MSS_SESSION_TOKEN',
       matomo: {
-        host: 'https://matomo.incubateur.anct.gouv.fr/',
-        siteId: 11
+        host: process.env.MATOMO_HOST,
+        siteId: parseInt(process.env.MATOMO_SITE_ID || '1')
       },
       mssEnvironment: process.env.MSS_ENVIRONMENT || 'local',
       email: {

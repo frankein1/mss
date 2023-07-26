@@ -800,6 +800,12 @@ enum Minister {
   OlivierDussopt
   // Carole Grandjean (Enseignement, Formation professionnels)
   CaroleGrandjean
+  // Aurélien Rousseau (Santé et Prévention)
+  AurelienRousseau
+  // Aurore Berge (Solidarités et Familles)
+  AuroreBerge
+  // Fadila Khattabi (Personnes handicapées)
+  FadilaKhattabi
 }
 
 enum BeneficiaryAccommodationZone {

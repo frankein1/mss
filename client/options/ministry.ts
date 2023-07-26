@@ -6,17 +6,26 @@ import {
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
+const currentMinisterLabels = {
+  [Minister.AurelienRousseau]: 'Aurélien Rousseau (Santé et Prévention)',
+  [Minister.AuroreBerge]: 'Aurore Berge (Solidarités et Familles)',
+  [Minister.FadilaKhattabi]: 'Fadila Khattabi (Personnes handicapées)',
+  [Minister.OlivierDussopt]:
+    'Olivier Dussopt (Travail, Plein emploi et Insertion)',
+  [Minister.CaroleGrandjean]:
+    'Carole Grandjean (Enseignement, Formation professionnels)'
+}
+
+const currentMinisterOptions = labelsToOptions(currentMinisterLabels)
+
 const ministerLabels = {
+  ...currentMinisterLabels,
   [Minister.FrancoisBraun]: 'François Braun (Santé et Prévention)',
   [Minister.AgnesFirminLeBodo]: 'Agnès Firmin-Le Bodo (Santé et Prévention)',
   [Minister.JeanChristopheCombe]:
     'Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)',
   [Minister.GenevieveDarrieussecq]:
-    'Geneviève Darrieussecq (Personnes handicapées)',
-  [Minister.OlivierDussopt]:
-    'Olivier Dussopt (Travail, Plein emploi et Insertion)',
-  [Minister.CaroleGrandjean]:
-    'Carole Grandjean (Enseignement, Formation professionnels)'
+    'Geneviève Darrieussecq (Personnes handicapées)'
 }
 
 const ministerOptions = labelsToOptions(ministerLabels)
@@ -223,6 +232,7 @@ const ministereCategorieLabels: {
 const ministereCategorieOptions = labelsToOptions(ministereCategorieLabels)
 
 export {
+  currentMinisterOptions,
   ministerLabels,
   ministerOptions,
   ministereDepartmentServiceAcLabels,

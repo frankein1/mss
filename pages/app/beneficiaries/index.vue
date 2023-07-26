@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaries()" />
-    <PageTitle :title="RouteTitle.AppBeneficiaries()" />
+    <PageTitle :title="title" />
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
@@ -71,6 +71,10 @@
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+
+  const title = RouteTitle.AppBeneficiaries()
+
+  useHead({ title })
 
   definePageMeta({
     name: Route.AppBeneficiaries

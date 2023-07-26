@@ -1,17 +1,9 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="
-        Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest?.beneficiary)
-      "
+      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest)"
     />
-    <PageTitle
-      :title="
-        RouteTitle.AppBeneficiaryHelpRequestEdit(
-          helpRequest?.beneficiary || null
-        )
-      "
-    />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -76,6 +68,14 @@
     id: helpRequestId
   })
 
+  const beneficiary = computed(() => helpRequest.value?.beneficiary || null)
+
+  const title = computed(() =>
+    RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
+  )
+
+  useHead({ title })
+
   const {
     data: followupTypes,
     pending: followupTypesPending,
@@ -126,8 +126,9 @@
         RoutePath.AppBeneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
       )
     } catch {
-      snackbar.error("La mise à jour de l'instruction a échoué.", () =>
-        formContainer.value?.querySelector('input')?.focus()
+      snackbar.error(
+        "La mise à jour de l'instruction a échoué.",
+        () => formContainer.value?.querySelector('input')?.focus()
       )
     }
     isSubmitting.value = false

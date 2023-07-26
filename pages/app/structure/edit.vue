@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppStructureEdit()" />
-    <PageTitle :title="RouteTitle.AppStructureEdit()" />
+    <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -41,6 +41,10 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RouteTitle, Breadcrumb } from '~/utils/routing'
 
+  const title = RouteTitle.AppStructureEdit()
+
+  useHead({ title })
+
   definePageMeta({ middleware: 'can-edit-structure' })
 
   const trpcClient = useTrpcClient()
@@ -69,8 +73,9 @@
         'Les informations de votre structure ont été mises à jour.'
       )
     } catch {
-      snackbar.error('La mise à jour de votre structure a échoué.', () =>
-        formContainer.value?.querySelector('select')?.focus()
+      snackbar.error(
+        'La mise à jour de votre structure a échoué.',
+        () => formContainer.value?.querySelector('select')?.focus()
       )
     }
     isSubmitting.value = false

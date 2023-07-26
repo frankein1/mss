@@ -1,6 +1,6 @@
 <template>
   <main class="fr-container">
-    <h1 class="login-title fr-h2 fr-mb-5w">Se connecter à ma structure</h1>
+    <h1 class="login-title fr-h2 fr-mb-5w">{{ RouteTitle.AuthLogin() }}</h1>
 
     <div class="inclusion-connect-section">
       <!-- NOTE: It is compulsory to use <a> tag here instead of the <NuxtLink> component to prevent Nuxt to consider the API endpoint as a page route -->
@@ -38,8 +38,13 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
+  import { RouteTitle } from '~/utils/routing'
 
   const SIGNIN_PATH = '/api/keycloak/signin'
+
+  useHead({
+    title: RouteTitle.AuthLogin()
+  })
 
   definePageMeta({
     layout: 'landing',
@@ -81,7 +86,8 @@
     padding: 0.5rem 1rem 0.5rem 3.875rem;
     border-radius: 50rem;
     user-select: none;
-    transition: background-color 0.15s ease-in-out,
+    transition:
+      background-color 0.15s ease-in-out,
       border-color 0.15s ease-in-out;
     color: #fff;
     border: 0.25rem solid var(--background-active-blue-france);

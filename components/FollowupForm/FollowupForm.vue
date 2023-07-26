@@ -34,7 +34,7 @@
         v-if="isMinistryAgent"
         name="ministre"
         :label="followupFieldLabels.ministre"
-        :options="withEmptyValue(ministerOptions)"
+        :options="withEmptyValue(currentMinisterOptions)"
       />
 
       <VeeInput
@@ -257,7 +257,7 @@
     PrescribingOrganization,
     FollowupMedium
   } from '@prisma/client'
-  import { ministerOptions } from '~/client/options/ministry'
+  import { currentMinisterOptions } from '~/client/options/ministry'
   import {
     followupStatusOptions,
     followupMediumOptions,
