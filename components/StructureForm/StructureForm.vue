@@ -70,10 +70,9 @@
   )
 
   const emit = defineEmits<{
-    (
-      e: 'updateStructure',
+    updateStructure: [
       structure: EditCurrentUserStructureInput & AdminEditStructureInput
-    ): void
+    ]
   }>()
 
   const defaultLegallyRequiredSelectedFollowupTypes = computed(() =>

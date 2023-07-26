@@ -11,5 +11,5 @@
 </template>
 
 <script lang="ts" setup>
-  const emit = defineEmits<{ (e: 'export'): void }>()
+  const emit = defineEmits<{ export: [] }>()
 </script>

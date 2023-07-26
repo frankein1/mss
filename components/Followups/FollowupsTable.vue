@@ -75,7 +75,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'update:sort', sort: FollowupSort[]): void
+    'update:sort': [sort: FollowupSort[]]
   }>()
 
   const { onSort, tableContainer } = useTable<FollowupSort>(

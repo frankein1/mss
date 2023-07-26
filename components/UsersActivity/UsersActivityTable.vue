@@ -77,7 +77,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'nextPage'): void
+    nextPage: []
   }>()
 </script>
 

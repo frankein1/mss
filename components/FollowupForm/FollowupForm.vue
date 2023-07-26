@@ -291,7 +291,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'submit', payload: Event): void
+    submit: [payload: Event]
   }>()
 
   const followupTypeOptions = computed(() =>

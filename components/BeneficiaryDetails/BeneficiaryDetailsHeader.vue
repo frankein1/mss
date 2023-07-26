@@ -45,7 +45,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'deleted'): void
+    deleted: []
   }>()
 
   function onDelete() {

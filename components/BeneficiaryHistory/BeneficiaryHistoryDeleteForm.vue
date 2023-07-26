@@ -49,7 +49,7 @@
     isFollowup: boolean
   }>()
 
-  const emit = defineEmits<{ (e: 'deleted'): void }>()
+  const emit = defineEmits<{ deleted: [] }>()
 
   const isSubmitting = ref(false)
 

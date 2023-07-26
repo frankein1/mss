@@ -40,7 +40,7 @@
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const emit = defineEmits<{
-    (e: 'filter', filters: HelpRequestFilterInput): void
+    filter: [filters: HelpRequestFilterInput]
   }>()
 
   const {

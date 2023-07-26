@@ -130,7 +130,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'saveBeneficiary', beneficiary: UpdateBeneficiaryInput): void
+    saveBeneficiary: [beneficiary: UpdateBeneficiaryInput]
   }>()
 
   const { handleSubmit, values } = useForm<UpdateBeneficiaryInput>({

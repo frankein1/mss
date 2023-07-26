@@ -89,7 +89,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'toggleExpand'): void
+    toggleExpand: []
   }>()
 
   const date = computed(() =>

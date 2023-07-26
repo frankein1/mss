@@ -44,7 +44,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'saveHelpRequest', helpRequest: EditHelpRequestInput): void
+    saveHelpRequest: [helpRequest: EditHelpRequestInput]
   }>()
 
   const pastStatuses = computed(() => {

@@ -31,7 +31,7 @@
   import { followupTypeFieldLabels } from '~/client/labels'
 
   const emit = defineEmits<{
-    (e: 'createFollowupType', followupTypeName: string): void
+    createFollowupType: [followupTypeName: string]
   }>()
 
   const form = ref<HTMLFormElement | null>(null)

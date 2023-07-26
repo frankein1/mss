@@ -52,7 +52,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'filter', filters: BeneficiaryHistoryFilterInput): void
+    filter: [filters: BeneficiaryHistoryFilterInput]
   }>()
 
   const {

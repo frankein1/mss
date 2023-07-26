@@ -28,7 +28,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'deleted'): void
+    deleted: []
   }>()
 
   const expanded = ref(false)
