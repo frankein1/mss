@@ -30,7 +30,7 @@
       />
     </div>
     <div class="documents_actions">
-      <BeneficiaryDocumentAdd
+      <BeneficiaryDocumentAddButton
         :beneficiary-id="beneficiary.id"
         @refresh-documents="refresh"
       />
@@ -48,15 +48,9 @@
   const props = defineProps<{ beneficiary: GetBeneficiaryOutput }>()
 
   const { data: documents, refresh } =
-    await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery(
-      {
-        beneficiaryId: props.beneficiary.id
-      },
-      {
-        default: () => [],
-        transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-      }
-    )
+    await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery({
+      beneficiaryId: props.beneficiary.id
+    })
 
   onMounted(async () => {
     const tab = route.hash.slice(1)

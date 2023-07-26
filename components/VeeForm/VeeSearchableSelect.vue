@@ -159,7 +159,7 @@
   const name = toRef(() => props.name)
 
   const emit = defineEmits<{
-    (e: 'changeValue', value: string[] | string): void
+    changeValue: [value: string[] | string]
   }>()
 
   // we don't provide any rules here because we are using form-level validation

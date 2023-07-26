@@ -81,7 +81,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'removeEntourage'): void
+    removeEntourage: []
   }>()
 </script>
 

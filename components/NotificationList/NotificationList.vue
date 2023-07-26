@@ -80,10 +80,7 @@
     error,
     pending,
     refresh: notificationsRefresh
-  } = await useTrpcClient().notification.get.useQuery(queryInput, {
-    default: () => [],
-    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-  })
+  } = await useTrpcClient().notification.get.useQuery(queryInput)
 
   const toggleReadNotificationsBtnLabel = computed(() =>
     showReadNotifications.value

@@ -57,9 +57,7 @@
   )
 
   // FIXME: For now, trpc-nuxt does not allow to define query key, and their defined key is not based on the transform option
-  const { data: usersActivityWithCount } = useAsyncData(loadUsersActivity, {
-    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-  })
+  const { data: usersActivityWithCount } = useAsyncData(loadUsersActivity)
 
   const count = computed(() => usersActivityWithCount.value?.count)
 

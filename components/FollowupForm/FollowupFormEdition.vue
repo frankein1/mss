@@ -38,7 +38,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'saveFollowup', followup: EditFollowupInput): void
+    saveFollowup: [followup: EditFollowupInput]
   }>()
 
   const initialFollowUpTypeIds = computed(

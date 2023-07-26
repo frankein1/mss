@@ -7,20 +7,20 @@
     <AtomAlert
       v-else-if="error"
       :alert-type="AlertType.Error"
-      :message="`Les statistiques de la répartion des objets des demandes d'aide n'ont pas pu être chargées.`"
+      :message="`Les statistiques de la répartion des objets des entretiens n'ont pas pu être chargées.`"
     />
     <template v-else-if="followupTypesStats">
-      <h2 class="fr-h5">Objets des demandes d'aide</h2>
-      <p>Pourcentage calculé sur le nombre total de demandes d'aide</p>
+      <h2 class="fr-h5">Objets des entretiens</h2>
+      <p>Pourcentage calculé sur le nombre total de synthèses d'entretien</p>
       <StatsList
         v-if="followupTypesStats.length"
         :total-count="totalCount"
         :stats="followupTypesStats"
       />
       <p v-else>
-        Commencez à créer des demandes d'aide dans les fiches de bénéficiaires
-        pour voir apparaître les statistiques de la répartition des objets des
-        demandes d'aide.
+        Commencez à créer des synthèses d'entretien dans les fiches de
+        bénéficiaires pour voir apparaître les statistiques de la répartition
+        des objets des entretiens.
       </p>
     </template>
   </div>
@@ -42,13 +42,7 @@
     data: followupTypesCounts,
     error,
     pending
-  } = await trpcClient.stat.getHelpRequestFollowupTypeStats.useQuery(
-    props.filters,
-    {
-      default: () => [],
-      transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-    }
-  )
+  } = await trpcClient.stat.getFollowupFollowupTypeStats.useQuery(props.filters)
 
   const followupTypesStats = computed(
     () =>
@@ -56,8 +50,8 @@
         ?.map(({ id, name, _count }) => ({
           key: id,
           label: name,
-          count: _count.helpRequests,
-          color: SupportColor.helpRequests
+          count: _count.followups,
+          color: SupportColor.followups
         }))
         .filter(typeCount => typeCount.count > 0) || []
   )

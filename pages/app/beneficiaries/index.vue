@@ -103,14 +103,7 @@
     data: beneficiariesRequest,
     pending,
     error
-  } = await trpcClient.beneficiary.getBeneficiaries.useQuery(queryInput, {
-    default: () => ({
-      beneficiaries: [],
-      count: 0,
-      totalPages: 0
-    }),
-    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-  })
+  } = await trpcClient.beneficiary.getBeneficiaries.useQuery(queryInput)
 
   const beneficiariesCount = computed(
     () => beneficiariesRequest.value?.count || 0

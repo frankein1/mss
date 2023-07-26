@@ -61,7 +61,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'update:sort', sort: BeneficiarySort[]): void
+    'update:sort': [sort: BeneficiarySort[]]
   }>()
 
   const { onSort, tableContainer } = useTable<BeneficiarySort>(

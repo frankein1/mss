@@ -19,7 +19,7 @@
 
   const modal = useModal()
 
-  const emit = defineEmits<{ (e: 'export'): void }>()
+  const emit = defineEmits<{ export: [] }>()
 
   defineProps<{
     isDownloading: boolean

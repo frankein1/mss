@@ -32,7 +32,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'updated', helpRequest: HelpRequestItem): void
+    updated: [helpRequest: HelpRequestItem]
   }>()
 
   const { handleSubmit } = useForm<QuickEditHelpRequestStatusInput>({
