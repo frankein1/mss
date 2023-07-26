@@ -1,3 +1,20 @@
+// https://github.com/prisma/prisma/issues/12504#issuecomment-1372635653
+import { createRequire } from 'module'
+import path from 'path'
+
+const require = createRequire(import.meta.url)
+
+const prismaClient = require
+  .resolve('@prisma/client')
+  .replace(
+    /@prisma(\/|\\)client(\/|\\)index\.js/,
+    '.prisma/client/index-browser.js'
+  )
+
+const prismaIndexBrowser = path.normalize(
+  path.relative(process.cwd(), prismaClient)
+)
+
 export default defineNuxtConfig({
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
@@ -60,6 +77,11 @@ export default defineNuxtConfig({
         scss: {
           includePaths: ['./node_modules', './node_modules/@gouvfr/dsfr']
         }
+      }
+    },
+    resolve: {
+      alias: {
+        '.prisma/client/index-browser': prismaIndexBrowser
       }
     }
   },
