@@ -122,7 +122,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'filter', filter: { [key: string]: string | string[] }): void
+    filter: [filter: { [key: string]: string | string[] }]
   }>()
 
   const FILTERS_ID = getRandomId('filters-')

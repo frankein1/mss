@@ -39,7 +39,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'close'): void
+    close: []
   }>()
 
   const closeBtn = ref<HTMLButtonElement | null>(null)

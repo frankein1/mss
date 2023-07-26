@@ -80,14 +80,7 @@
     data: followupsRequest,
     pending,
     error
-  } = await trpcClient.followup.getFollowups.useQuery(queryInput, {
-    default: () => ({
-      followups: [],
-      count: 0,
-      totalPages: 0
-    }),
-    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-  })
+  } = await trpcClient.followup.getFollowups.useQuery(queryInput)
 
   const followupsCount = computed(() => followupsRequest.value?.count || 0)
 

@@ -9,7 +9,7 @@
       @click="navigate"
     >
       <td>
-        <HelpRequestsTableRowStatusForm
+        <HelpRequestsStatusForm
           v-if="canQuickEditHelpRequest"
           :help-request="helpRequest"
           @click.stop
@@ -45,7 +45,7 @@
           </template>
         </td>
         <td v-if="canViewHelpRequestDetails">
-          <HelpRequestsTableRowAllocatedAmountForm
+          <HelpRequestsAllocatedAmountForm
             v-if="canEditAllocatedAmount"
             :help-request="helpRequest"
             @click.stop
@@ -56,7 +56,7 @@
           </template>
         </td>
         <td v-if="canViewHelpRequestDetails">
-          <HelpRequestsTableRowPaymentMethodForm
+          <HelpRequestsPaymentMethodForm
             v-if="canEditPaymentMethod"
             :help-request="helpRequest"
             @click.stop
@@ -67,7 +67,7 @@
           </template>
         </td>
         <td v-if="canViewHelpRequestDetails">
-          <HelpRequestsTableRowPaymentDateForm
+          <HelpRequestsPaymentDateForm
             v-if="canEditPaymentDate"
             :help-request="helpRequest"
             @click.stop
@@ -120,7 +120,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'updated', helpRequest: HelpRequestItem): void
+    updated: [helpRequest: HelpRequestItem]
   }>()
 
   const user = computed(() => authStore.getAuthUser)

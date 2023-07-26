@@ -35,7 +35,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'saveHelpRequest', helpRequest: CreateHelpRequestInput): void
+    saveHelpRequest: [helpRequest: CreateHelpRequestInput]
   }>()
 
   const { handleSubmit, values } = useForm<CreateHelpRequestInput>({

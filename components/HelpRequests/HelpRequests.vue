@@ -81,14 +81,7 @@
     data: helpRequestsRequest,
     pending,
     error
-  } = await trpcClient.helpRequest.getHelpRequests.useQuery(queryInput, {
-    default: () => ({
-      helpRequests: [],
-      count: 0,
-      totalPages: 0
-    }),
-    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-  })
+  } = await trpcClient.helpRequest.getHelpRequests.useQuery(queryInput)
 
   const helpRequestsCount = computed(
     () => helpRequestsRequest.value?.count || 0

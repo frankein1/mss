@@ -68,7 +68,7 @@
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsHistoryHelpRequestFollowupTypes
+            <StatsHelpRequestFollowupTypes
               :total-count="helpRequestCount"
               :filters="filters"
             />
@@ -77,25 +77,25 @@
             v-if="isMinistryAgent"
             class="fr-col-12 fr-col-lg-6"
           >
-            <StatsHistoryHelpRequestMinistre
+            <StatsHelpRequestMinistre
               :total-count="helpRequestCount"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHistoryHelpRequestStatus
+            <StatsHelpRequestStatus
               :total-count="helpRequestCount"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHistoryHelpRequestPrescribingOrganizations
+            <StatsHelpRequestPrescribingOrganizations
               :total-count="helpRequestCount"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6">
-            <StatsHistoryFinancialHelpRequests :filters="filters" />
+            <StatsFinancialHelpRequests :filters="filters" />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
             <StatsHistoryInstructorOrganizations
@@ -126,13 +126,13 @@
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsHistoryFollowupFollowupTypes
+            <StatsFollowupFollowupTypes
               :total-count="followupCount"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsHistoryFollowupMedium
+            <StatsFollowupMedium
               :total-count="followupCount"
               :filters="filters"
             />
@@ -141,25 +141,25 @@
             v-if="isMinistryAgent"
             class="fr-col-12 fr-col-lg-6"
           >
-            <StatsHistoryFollowupMinistre
+            <StatsFollowupMinistre
               :total-count="followupCount"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHistoryFollowupStatus
+            <StatsFollowupStatus
               :total-count="followupCount"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHistoryFollowupActionsEntreprises
+            <StatsFollowupActionsEntreprises
               :total-count="followupCount"
               :filters="filters"
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHistoryFollowupPrescribingOrganizations
+            <StatsFollowupPrescribingOrganizations
               :total-count="followupCount"
               :filters="filters"
             />
@@ -199,9 +199,7 @@
     data: historyCounts,
     pending,
     error
-  } = await trpcClient.stat.getHistoryCounts.useQuery(filters, {
-    default: () => ({ helpRequests: 0, followups: 0, firstFollowups: 0 })
-  })
+  } = await trpcClient.stat.getHistoryCounts.useQuery(filters)
 
   const helpRequestCount = computed(
     () => historyCounts.value?.helpRequests || 0

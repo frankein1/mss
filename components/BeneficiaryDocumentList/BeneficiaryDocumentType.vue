@@ -31,7 +31,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'refreshDocuments'): void
+    refreshDocuments: []
   }>()
 </script>
 

@@ -31,7 +31,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'saveFollowup', followup: AddFollowupInput): void
+    saveFollowup: [followup: AddFollowupInput]
   }>()
 
   const { handleSubmit, values } = useForm<AddFollowupInput>({

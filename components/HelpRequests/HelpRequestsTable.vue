@@ -72,7 +72,7 @@
           </tr>
         </thead>
         <tbody>
-          <HelpRequestsTableRow
+          <HelpRequestsRow
             v-for="helpRequest in helpRequests"
             :key="helpRequest.id"
             :help-request="helpRequest"
@@ -100,8 +100,8 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'update:sort', sort: HelpRequestSort[]): void
-    (e: 'helpRequestUpdated', helpRequest: HelpRequestItem): void
+    'update:sort': [sort: HelpRequestSort[]]
+    'helpRequestUpdated': [helpRequest: HelpRequestItem]
   }>()
 
   const { onSort, tableContainer } = useTable<HelpRequestSort>(

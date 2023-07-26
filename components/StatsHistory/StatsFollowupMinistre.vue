@@ -11,14 +11,14 @@
     />
     <template v-else-if="ministreStats">
       <h2 class="fr-h5">Ministres</h2>
-      <p>Pourcentage calculé sur le nombre total de demandes d'aide</p>
+      <p>Pourcentage calculé sur le nombre total d'entretiens</p>
       <StatsList
         v-if="ministreStats.length"
         :total-count="totalCount"
         :stats="ministreStats"
       />
       <p v-else>
-        Commencez à créer des instructions de demande d'aides dans les fiches de
+        Commencez à créer des synthèses d'entretien dans les fiches de
         bénéficiaires pour voir apparaître les statistiques de la répartition
         des ministres.
       </p>
@@ -44,20 +44,14 @@
     data: ministreCounts,
     pending,
     error
-  } = await trpcClient.stat.getHelpRequestMinistreStats.useQuery(
-    props.filters,
-    {
-      default: () => [],
-      transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-    }
-  )
+  } = await trpcClient.stat.getFollowupMinistreStats.useQuery(props.filters)
 
   const ministreStats = computed(
     () =>
       ministreCounts.value?.map(({ _count, ministre }) => ({
         key: ministre || 'null',
         label: getStatLabel(ministerLabels, ministre),
-        color: SupportColor.helpRequests,
+        color: SupportColor.followups,
         count: _count
       })) || []
   )

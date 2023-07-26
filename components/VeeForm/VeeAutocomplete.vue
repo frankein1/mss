@@ -100,7 +100,7 @@
   } = useField<string | null>(props.name)
 
   const emit = defineEmits<{
-    (e: 'resultSelected', value: string): void
+    resultSelected: [value: string]
   }>()
 
   const { id, errorId } = useFormFieldId(props.name)

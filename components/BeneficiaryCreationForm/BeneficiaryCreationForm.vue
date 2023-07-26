@@ -135,11 +135,7 @@
   }>()
 
   const emit = defineEmits<{
-    (
-      e: 'saveBeneficiary',
-      beneficiary: CreateBeneficiaryInput,
-      complete: boolean
-    ): void
+    saveBeneficiary: [beneficiary: CreateBeneficiaryInput, complete: boolean]
   }>()
 
   const complete = ref<boolean>(false)

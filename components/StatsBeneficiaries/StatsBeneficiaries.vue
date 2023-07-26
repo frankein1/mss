@@ -126,9 +126,7 @@
     data: beneficiaryCount,
     pending,
     error
-  } = await trpcClient.stat.getBeneficiaryCount.useQuery(filters, {
-    default: () => 0
-  })
+  } = await trpcClient.stat.getBeneficiaryCount.useQuery(filters)
 
   const beneficiaryCountLabel = computed(
     () =>

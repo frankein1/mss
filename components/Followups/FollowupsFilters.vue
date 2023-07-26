@@ -39,7 +39,7 @@
   const isMinistryAgent = useMinistryAgent()
 
   const emit = defineEmits<{
-    (e: 'filter', filters: FollowupFilterInput): void
+    filter: [filters: FollowupFilterInput]
   }>()
 
   const {

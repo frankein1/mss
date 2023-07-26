@@ -18,7 +18,7 @@
         :total-count="totalCount"
       />
       <p v-else>
-        Commencez à créer des synthèses d'entretien dans les fiches de
+        Commencez à créer des instructions de demande d'aide dans les fiches de
         bénéficiaires pour voir apparaître les statistiques de la répartition
         des statuts.
       </p>
@@ -27,12 +27,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { followupStatusLabels } from '~/client/options/followup'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
-  import { followupStatusColors } from '~/client/colors/followup'
+  import { helpRequestStatusColors } from '~/client/colors/helpRequest'
 
   const trpcClient = useTrpcClient()
+  const { helpRequestStatusLabels } = useHelpRequestStatus()
 
   const props = defineProps<{
     totalCount: number
@@ -43,17 +43,14 @@
     data: statusCounts,
     error,
     pending
-  } = await trpcClient.stat.getFollowupStatusStats.useQuery(props.filters, {
-    default: () => [],
-    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-  })
+  } = await trpcClient.stat.getHelpRequestStatusStats.useQuery(props.filters)
 
   const statusStats = computed(
     () =>
       statusCounts.value?.map(({ _count, status }) => ({
         key: status,
-        label: followupStatusLabels[status],
-        color: followupStatusColors[status],
+        label: helpRequestStatusLabels.value[status],
+        color: helpRequestStatusColors[status],
         count: _count
       })) || []
   )

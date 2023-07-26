@@ -27,7 +27,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'addStructure', structure: AdminCreateStructureInput): void
+    addStructure: [structure: AdminCreateStructureInput]
   }>()
 
   const { handleSubmit, setFieldValue } = useForm<AdminCreateStructureInput>({
