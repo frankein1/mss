@@ -43,11 +43,9 @@
 
   const isSubmitting = ref(false)
 
-  const beneficiary = computed(() => data.value?.beneficiary)
+  const beneficiary = computed(() => data.value?.beneficiary || null)
 
-  const title = computed(() =>
-    RouteTitle.AppBeneficiaryEdit(beneficiary.value || null)
-  )
+  const title = computed(() => RouteTitle.AppBeneficiaryEdit(beneficiary.value))
 
   useHead({ title })
 

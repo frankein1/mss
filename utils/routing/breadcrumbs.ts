@@ -3,29 +3,30 @@ import type { BeneficiaryNames } from '~/types/beneficiary'
 
 type BeneficiaryNamesWithId = BeneficiaryNames & { id: string }
 
-const OverviewBreadcrumb = {
-  text: RouteTitle.AppOverview(),
-  to: RoutePath.AppOverview()
-}
-
-const BeneficiariesBreadcrumb = (isLast = true) => [
-  OverviewBreadcrumb,
+const OverviewBreadcrumb = () => [
   {
-    text: RouteTitle.AppBeneficiaries(),
-    to: isLast ? undefined : RoutePath.AppBeneficiaries()
+    text: RouteTitle.AppOverview(),
+    to: RoutePath.AppOverview()
   }
 ]
 
-const HistoryBreadcrumb = (isLast = true) => [
-  OverviewBreadcrumb,
+const BeneficiariesBreadcrumb = () => [
+  ...OverviewBreadcrumb(),
+  {
+    text: RouteTitle.AppBeneficiaries(),
+    to: RoutePath.AppBeneficiaries()
+  }
+]
+
+const HistoryBreadcrumb = () => [
+  ...OverviewBreadcrumb(),
   {
     text: RouteTitle.AppHistory(),
-    to: isLast ? undefined : RoutePath.AppHistory()
+    to: RoutePath.AppHistory()
   }
 ]
 
 const BeneficiaryBreadcrumb = (
-  isLast = true,
   beneficiary: BeneficiaryNamesWithId | null,
   originPage?:
     | Route.AppOverview
@@ -35,46 +36,53 @@ const BeneficiaryBreadcrumb = (
 ) => {
   const beneficiaryBreadcrumbSegment = {
     text: RouteTitle.AppBeneficiary(beneficiary),
-    to: isLast
-      ? undefined
-      : RoutePath.AppBeneficiary(beneficiary?.id, { originPage })
+    to: RoutePath.AppBeneficiary(beneficiary?.id, { originPage })
   }
 
   switch (originPage) {
     case Route.AppOverview:
-      return [OverviewBreadcrumb, beneficiaryBreadcrumbSegment]
+      return [...OverviewBreadcrumb(), beneficiaryBreadcrumbSegment]
     case Route.AppHistory:
-      return [...HistoryBreadcrumb(false), beneficiaryBreadcrumbSegment]
+      return [...HistoryBreadcrumb(), beneficiaryBreadcrumbSegment]
     default:
-      return [...BeneficiariesBreadcrumb(false), beneficiaryBreadcrumbSegment]
+      return [...BeneficiariesBreadcrumb(), beneficiaryBreadcrumbSegment]
   }
 }
 
 export const Breadcrumb = {
   [Route.AppAccount]: () => [
-    OverviewBreadcrumb,
-    { text: RouteTitle.AppAccount() }
+    ...OverviewBreadcrumb(),
+    { text: RouteTitle.AppAccount(), to: RoutePath.AppAccount() }
   ],
 
   [Route.AppHistory]: () => HistoryBreadcrumb(),
 
-  [Route.AppOverview]: () => [OverviewBreadcrumb],
+  [Route.AppOverview]: () => [...OverviewBreadcrumb()],
 
-  [Route.AppStats]: () => [OverviewBreadcrumb, { text: RouteTitle.AppStats() }],
+  [Route.AppStats]: () => [
+    ...OverviewBreadcrumb(),
+    { text: RouteTitle.AppStats(), to: RoutePath.AppStats() }
+  ],
 
-  [Route.AppUsers]: () => [OverviewBreadcrumb, { text: RouteTitle.AppUsers() }],
+  [Route.AppUsers]: () => [
+    ...OverviewBreadcrumb(),
+    { text: RouteTitle.AppUsers(), to: RoutePath.AppUsers() }
+  ],
 
   [Route.AppStructureEdit]: () => [
-    OverviewBreadcrumb,
-    { text: RouteTitle.AppStructureEdit() }
+    ...OverviewBreadcrumb(),
+    { text: RouteTitle.AppStructureEdit(), to: RoutePath.AppStructureEdit() }
   ],
 
   [Route.AppBeneficiaries]: () => BeneficiariesBreadcrumb(),
 
   // FIXME: BeneficiariesAdd can be accessed from Overview, Beneficiaries and Stats
   [Route.AppBeneficiariesAdd]: () => [
-    ...BeneficiariesBreadcrumb(false),
-    { text: RouteTitle.AppBeneficiariesAdd() }
+    ...BeneficiariesBreadcrumb(),
+    {
+      text: RouteTitle.AppBeneficiariesAdd(),
+      to: RoutePath.AppBeneficiariesAdd()
+    }
   ],
 
   // FIXME: Beneficiary can be accessed from Overview, Beneficiaries, Stats and History
@@ -85,53 +93,77 @@ export const Breadcrumb = {
       | Route.AppBeneficiaries
       | Route.AppHistory
       | undefined
-  ) => BeneficiaryBreadcrumb(true, beneficiary, originPage),
+  ) => BeneficiaryBreadcrumb(beneficiary, originPage),
 
   // FIXME: BeneficiaryEdit depends on the access to Beneficiary
-  [Route.AppBeneficiaryEdit]: (
-    beneficiary: BeneficiaryNamesWithId | null | undefined
-  ) => [
-    ...BeneficiaryBreadcrumb(false, beneficiary || null),
-    { text: RouteTitle.AppBeneficiaryEdit(beneficiary || null) }
+  [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNamesWithId | null) => [
+    ...BeneficiaryBreadcrumb(beneficiary),
+    {
+      text: RouteTitle.AppBeneficiaryEdit(beneficiary),
+      to: RoutePath.AppBeneficiaryEdit(beneficiary?.id || '')
+    }
   ],
 
   // FIXME: BeneficiaryPrint depends on the access to Beneficiary
-  [Route.AppBeneficiaryPrint]: (
-    beneficiary: BeneficiaryNamesWithId | null | undefined
-  ) => [
-    ...BeneficiaryBreadcrumb(false, beneficiary || null),
-    { text: RouteTitle.AppBeneficiaryPrint(beneficiary || null) }
+  [Route.AppBeneficiaryPrint]: (beneficiary: BeneficiaryNamesWithId | null) => [
+    ...BeneficiaryBreadcrumb(beneficiary),
+    {
+      text: RouteTitle.AppBeneficiaryPrint(beneficiary),
+      to: RoutePath.AppBeneficiaryPrint(beneficiary?.id || '')
+    }
   ],
 
   // FIXME: BeneficiaryFollowupAdd depends on the access to Beneficiary
   [Route.AppBeneficiaryFollowupAdd]: (
     beneficiary: BeneficiaryNamesWithId | null
   ) => [
-    ...BeneficiaryBreadcrumb(false, beneficiary),
-    { text: RouteTitle.AppBeneficiaryFollowupAdd(beneficiary) }
+    ...BeneficiaryBreadcrumb(beneficiary),
+    {
+      text: RouteTitle.AppBeneficiaryFollowupAdd(beneficiary),
+      to: RoutePath.AppBeneficiaryFollowupAdd(beneficiary?.id || '')
+    }
   ],
 
   // FIXME: BeneficiaryFollowupEdit depends on the access to Beneficiary
   [Route.AppBeneficiaryFollowupEdit]: (
-    beneficiary: BeneficiaryNamesWithId | null | undefined
+    followup: { id: string; beneficiary: BeneficiaryNamesWithId } | null
   ) => [
-    ...BeneficiaryBreadcrumb(false, beneficiary || null),
-    { text: RouteTitle.AppBeneficiaryFollowupEdit(beneficiary || null) }
+    ...BeneficiaryBreadcrumb(followup?.beneficiary || null),
+    {
+      text: RouteTitle.AppBeneficiaryFollowupEdit(
+        followup?.beneficiary || null
+      ),
+      to: RoutePath.AppBeneficiaryFollowupEdit(
+        followup?.beneficiary.id || '',
+        followup?.id || ''
+      )
+    }
   ],
 
   // FIXME: BeneficiaryHelpRequestAdd depends on the access to Beneficiary
   [Route.AppBeneficiaryHelpRequestAdd]: (
     beneficiary: BeneficiaryNamesWithId | null
   ) => [
-    ...BeneficiaryBreadcrumb(false, beneficiary),
-    { text: RouteTitle.AppBeneficiaryHelpRequestAdd(beneficiary) }
+    ...BeneficiaryBreadcrumb(beneficiary),
+    {
+      text: RouteTitle.AppBeneficiaryHelpRequestAdd(beneficiary),
+      to: RoutePath.AppBeneficiaryHelpRequestAdd(beneficiary?.id || '')
+    }
   ],
 
   // FIXME: BeneficiaryHelpRequestEdit depends on the access to Beneficiary
   [Route.AppBeneficiaryHelpRequestEdit]: (
-    beneficiary: BeneficiaryNamesWithId | null | undefined
+    helpRequest: { id: string; beneficiary: BeneficiaryNamesWithId } | null
   ) => [
-    ...BeneficiaryBreadcrumb(false, beneficiary || null),
-    { text: RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary || null) }
+    ...BeneficiaryBreadcrumb(helpRequest?.beneficiary || null),
+    {
+      text: RouteTitle.AppBeneficiaryHelpRequestEdit(
+        helpRequest?.beneficiary || null
+      ),
+      to: RoutePath.AppBeneficiaryHelpRequestEdit(
+        helpRequest?.beneficiary.id || '',
+        helpRequest?.id || ''
+      )
+    }
   ]
 }

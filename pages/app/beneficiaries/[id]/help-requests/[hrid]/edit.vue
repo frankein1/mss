@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(beneficiary)"
+      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest)"
     />
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">

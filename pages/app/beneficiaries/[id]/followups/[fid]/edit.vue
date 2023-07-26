@@ -1,8 +1,6 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryFollowupEdit(beneficiary)"
-    />
+    <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaryFollowupEdit(followup)" />
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">

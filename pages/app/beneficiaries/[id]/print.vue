@@ -58,10 +58,10 @@
       id: beneficiaryId
     })
 
-  const beneficiary = computed(() => data.value?.beneficiary)
+  const beneficiary = computed(() => data.value?.beneficiary || null)
 
   useHead({
-    title: RouteTitle.AppBeneficiaryPrint(beneficiary.value || null)
+    title: RouteTitle.AppBeneficiaryPrint(beneficiary.value)
   })
 
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
