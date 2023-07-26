@@ -52,7 +52,7 @@
           </tr>
         </thead>
         <tbody>
-          <FollowupsTableRow
+          <FollowupsRow
             v-for="followup in followups"
             :key="followup.id"
             :followup="followup"

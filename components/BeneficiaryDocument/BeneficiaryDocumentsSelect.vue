@@ -10,7 +10,7 @@
       multiple
     />
 
-    <BeneficiaryDocumentAdd
+    <BeneficiaryDocumentAddButton
       :beneficiary-id="beneficiaryId"
       @new-document="onNewDocument"
     />

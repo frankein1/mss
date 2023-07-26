@@ -30,7 +30,7 @@
       />
     </div>
     <div class="documents_actions">
-      <BeneficiaryDocumentAdd
+      <BeneficiaryDocumentAddButton
         :beneficiary-id="beneficiary.id"
         @refresh-documents="refresh"
       />
