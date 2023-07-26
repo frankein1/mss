@@ -54,17 +54,17 @@
               <td>{{ user.email }}</td>
               <td>
                 <template v-if="authUserId !== user.id">
-                  <UserTableRoleForm :user="user" />
+                  <UserRoleForm :user="user" />
                 </template>
                 <template v-else>{{
                   NonAdminUserRoleLabels[user.role as NonAdminUserRole]
                 }}</template>
               </td>
               <td>
-                <UserTableAidantConnectForm :user="user" />
+                <UserAidantConnectForm :user="user" />
               </td>
               <td>
-                <UserTableStatusForm
+                <UserStatusForm
                   v-if="authUserId !== user.id"
                   :user="user"
                 />

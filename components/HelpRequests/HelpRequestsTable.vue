@@ -72,7 +72,7 @@
           </tr>
         </thead>
         <tbody>
-          <HelpRequestsTableRow
+          <HelpRequestsRow
             v-for="helpRequest in helpRequests"
             :key="helpRequest.id"
             :help-request="helpRequest"

@@ -9,7 +9,7 @@
       @click="navigate"
     >
       <td>
-        <FollowupsTableRowStatusForm
+        <FollowupsStatusForm
           v-if="canQuickEditFollowup"
           :followup="followup"
           @click.stop
