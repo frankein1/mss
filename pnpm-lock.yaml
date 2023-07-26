@@ -6,17 +6,17 @@ settings:
 
 dependencies:
   '@aws-sdk/client-s3':
-    specifier: ^3.374.0
-    version: 3.374.0
+    specifier: ^3.377.0
+    version: 3.377.0
   '@aws-sdk/s3-request-presigner':
-    specifier: ^3.375.0
-    version: 3.375.0
+    specifier: ^3.377.0
+    version: 3.377.0
   '@gouvfr/dsfr':
-    specifier: ~1.9.2
-    version: 1.9.2
+    specifier: ~1.9.3
+    version: 1.9.3
   '@gouvminint/vue-dsfr':
-    specifier: ^4.0.2
-    version: 4.0.2(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.3)(vue@3.3.4)
+    specifier: ^4.2.0
+    version: 4.2.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.3)(vue@3.3.4)
   '@pinia/nuxt':
     specifier: ^0.4.11
     version: 0.4.11(typescript@5.0.4)(vue@3.3.4)
@@ -256,14 +256,14 @@ packages:
       tslib: 1.14.1
     dev: false
 
-  /@aws-sdk/client-s3@3.374.0:
-    resolution: {integrity: sha512-1qhzOHN48DPAvHi/G2FQfx1DXpbiOfOUqJvnSCRKKo7UaPPN1426Ufw2qizTRiLo/suK2ABCb7spbTxqEFjvLw==}
+  /@aws-sdk/client-s3@3.377.0:
+    resolution: {integrity: sha512-sbZ3iJKhwMRVAK/AFVzUFcmojRhGvDfUDF1ouB/zLOCeGY0UekP/HnUNHmowYpFQsvHiEo0rQjmbbrGrlFPijw==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-crypto/sha1-browser': 3.0.0
       '@aws-crypto/sha256-browser': 3.0.0
       '@aws-crypto/sha256-js': 3.0.0
-      '@aws-sdk/client-sts': 3.370.0
+      '@aws-sdk/client-sts': 3.377.0
       '@aws-sdk/credential-provider-node': 3.370.0
       '@aws-sdk/hash-stream-node': 3.374.0
       '@aws-sdk/middleware-bucket-endpoint': 3.370.0
@@ -401,8 +401,8 @@ packages:
       - aws-crt
     dev: false
 
-  /@aws-sdk/client-sts@3.370.0:
-    resolution: {integrity: sha512-utFxOPWIzbN+3kc415Je2o4J72hOLNhgR2Gt5EnRSggC3yOnkC4GzauxG8n7n5gZGBX45eyubHyPOXLOIyoqQA==}
+  /@aws-sdk/client-sts@3.377.0:
+    resolution: {integrity: sha512-K/yTHxVtTIwU42qCxbv78eT74j+GZMCcQ5TUd2fwxEWeq8HcIWcTIhujv7F6UtdrQHrou20wZ/+jMQtVKfkXXQ==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-crypto/sha256-browser': 3.0.0
@@ -666,8 +666,8 @@ packages:
       tslib: 2.6.0
     dev: false
 
-  /@aws-sdk/s3-request-presigner@3.375.0:
-    resolution: {integrity: sha512-C6hAM7Vl7DjO5Txs+9infZlEqelVH3piCu+GPox+x2IiELOdQ/PeaOcHnmaejNyAwF/oS0OYbRmdCI04bUYQ8Q==}
+  /@aws-sdk/s3-request-presigner@3.377.0:
+    resolution: {integrity: sha512-sv1QEemyg/AxvKXPfLNHBAVuWBsKljA1VcvuC53rfqBMC94JE1ULRFcvuHQwDsRYFOiMwHcaq+eEVssjc2YI7g==}
     engines: {node: '>=14.0.0'}
     dependencies:
       '@aws-sdk/signature-v4-multi-region': 3.370.0
@@ -1576,18 +1576,13 @@ packages:
       lodash.uniq: 4.5.0
     dev: false
 
-  /@gouvfr/dsfr@1.9.2:
-    resolution: {integrity: sha512-uVo+z3xo2FFANa/cYdP2z21ieEXAeABKKrTE2FdKE8HXjhyh9tIcfsju8ux6nFA+pfBeOeUCwBXfOjPQD0eT5w==}
-    engines: {node: '>=14.18.0'}
-    dev: false
-
   /@gouvfr/dsfr@1.9.3:
     resolution: {integrity: sha512-toPM1nvzSxPAwpLhnIgf7a/TJV0WOUa6sDqYummvMhZ9PBolFPGuD+3r8e3vg0bR5BkYxOt9hFErOPDU1tU4sQ==}
     engines: {node: '>=14.18.0'}
     dev: false
 
-  /@gouvminint/vue-dsfr@4.0.2(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.3)(vue@3.3.4):
-    resolution: {integrity: sha512-lPi3tnvuXqgjlNdiVgrIHe4BODtNXjIwRHsiYmkU15hQe5R34hYMSpGpejsbvsJc1L0PvNHUKCm6aJWCsM68qA==}
+  /@gouvminint/vue-dsfr@4.2.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.3)(vue@3.3.4):
+    resolution: {integrity: sha512-Go/l2E8LWo0zFNO+0XdirB1p35f6rbl70Ky2bzAoFtJdnoyGUfbeTfeTdEHK94VjqvlW91uKOuwPNEf0LbHemg==}
     engines: {node: '>=18.x.x', npm: '>=8.x.x'}
     peerDependencies:
       oh-vue-icons: 1.0.0-rc3
