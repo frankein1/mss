@@ -133,6 +133,8 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'additionalInformation',
     'numeroPegase',
     'accommodationZone',
-    'updated'
-    // TODO: documents, relatives, linkedRelatives, total history number
+    'updated',
+    'entourages',
+    'taxHouseholds'
+    // TODO: documents, total history number
   ]

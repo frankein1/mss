@@ -23,6 +23,7 @@ import { Nationalities } from '~/client/options/nationality'
 import { getBeneficiaryAccessibleData } from '~/utils/beneficiary/getBeneficiaryAccessibleData'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
+import { getBeneficiaryRelativeDisplayName } from '~/utils/beneficiary/getBeneficiaryRelativeDisplayName'
 import { readableFileNumber } from '~/utils/readableFileNumber'
 import { getUserDisplayName } from '~/utils/user'
 
@@ -167,6 +168,14 @@ export function getBeneficiaryExportData(
           beneficiary.beneficiary.accommodationZone
         ]
       : '',
-    updated: formatDate(beneficiary.beneficiary.updated, 'DD-MM-YYYY HH:mm')
+    updated: formatDate(beneficiary.beneficiary.updated, 'DD-MM-YYYY HH:mm'),
+    entourages:
+      beneficiary.entourages
+        ?.map(relative => getBeneficiaryRelativeDisplayName(relative))
+        .join(',') || '',
+    taxHouseholds:
+      beneficiary.taxHouseholds
+        ?.map(relative => getBeneficiaryRelativeDisplayName(relative))
+        .join(',') || ''
   }
 }

@@ -1,8 +1,13 @@
-import type { Beneficiary, Document } from '@prisma/client'
+import type { Beneficiary } from '@prisma/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type BeneficiaryFieldLabels = Omit<
-  Beneficiary & { referents: string; documents: Document[] },
+  Beneficiary & {
+    referents: string
+    documents: string
+    entourages: string
+    taxHouseholds: string
+  },
   'createdById' | 'archivedById' | 'archived' | 'created'
 >
 
@@ -76,7 +81,9 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   otherPensionOrganisations: 'Autre(s) organisme(s) de retraite',
   accommodationZone: "Zone d'hébergement",
   documents: 'Documents',
-  updated: 'Dernière mise à jour'
+  updated: 'Dernière mise à jour',
+  entourages: 'Entourage',
+  taxHouseholds: 'Foyer fiscal'
 }
 
 export { beneficiaryFieldLabels }
