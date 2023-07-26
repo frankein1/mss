@@ -1,1 +1,1 @@
-export { getBeneficiaryReferentsAndRelatives } from './getBeneficiaryReferentsAndRelatives'
+export { getBeneficiaryWithRelations } from './getBeneficiaryWithRelations'

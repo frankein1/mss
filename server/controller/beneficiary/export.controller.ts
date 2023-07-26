@@ -51,7 +51,8 @@ export const exportBeneficiariesHandler = async ({
         include: {
           linkedBeneficiary: true
         }
-      }
+      },
+      documents: true
     }
   })
 

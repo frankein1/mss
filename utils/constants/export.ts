@@ -135,6 +135,7 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'accommodationZone',
     'updated',
     'entourages',
-    'taxHouseholds'
-    // TODO: documents, total history number
+    'taxHouseholds',
+    'documents'
+    // TODO: total history number
   ]

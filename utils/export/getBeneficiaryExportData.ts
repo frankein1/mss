@@ -176,6 +176,9 @@ export function getBeneficiaryExportData(
     taxHouseholds:
       beneficiary.taxHouseholds
         ?.map(relative => getBeneficiaryRelativeDisplayName(relative))
-        .join(',') || ''
+        .join(',') || '',
+    documents: beneficiary.beneficiary.documents
+      .map(document => document.name)
+      .join(',')
   }
 }

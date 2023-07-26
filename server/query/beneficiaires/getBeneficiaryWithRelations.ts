@@ -1,7 +1,7 @@
 import { prismaClient } from '~/server/prisma'
 import { notfoundError } from '~/server/trpc'
 
-export async function getBeneficiaryReferentsAndRelatives(id: string) {
+export async function getBeneficiaryWithRelations(id: string) {
   const beneficiary = await prismaClient.beneficiary.findUnique({
     where: { id },
     include: {
@@ -10,7 +10,8 @@ export async function getBeneficiaryReferentsAndRelatives(id: string) {
         include: {
           linkedBeneficiary: true
         }
-      }
+      },
+      documents: true
     }
   })
   if (!beneficiary) {

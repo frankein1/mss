@@ -4,12 +4,16 @@ import {
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,
   canViewBeneficiaryExternalOrganisations,
-  canViewBeneficiaryNir
+  canViewBeneficiaryNir,
+  canViewDocument
 } from '~/server/security/rules'
-import type { BeneficiaryWithReferentsAndRelatives } from '~/types/beneficiary'
+import type { BeneficiaryWithRelations } from '~/types/beneficiary'
 import { getUserStructureType } from '~/server/security'
 
-function getBeneficiaryMeta(beneficiary: BeneficiaryWithReferentsAndRelatives) {
+function getBeneficiaryMeta(
+  user: ProtectedAppContextUser,
+  beneficiary: BeneficiaryWithRelations
+) {
   return {
     id: beneficiary.id,
     fileNumber: beneficiary.fileNumber,
@@ -22,12 +26,15 @@ function getBeneficiaryMeta(beneficiary: BeneficiaryWithReferentsAndRelatives) {
     updated: beneficiary.updated,
     archivedById: beneficiary.archivedById,
     archived: beneficiary.archived,
-    aidantConnectAuthorized: beneficiary.aidantConnectAuthorized
+    aidantConnectAuthorized: beneficiary.aidantConnectAuthorized,
+    documents: beneficiary.documents.filter(document =>
+      canViewDocument(user, beneficiary, document)
+    )
   }
 }
 
 function getBeneficiaryGeneralInformation(
-  beneficiary: BeneficiaryWithReferentsAndRelatives
+  beneficiary: BeneficiaryWithRelations
 ) {
   return {
     title: beneficiary.title,
@@ -62,7 +69,7 @@ function getBeneficiaryGeneralInformation(
 
 function getBeneficiaryRelatives(
   user: ProtectedAppContextUser,
-  beneficiary: BeneficiaryWithReferentsAndRelatives
+  beneficiary: BeneficiaryWithRelations
 ) {
   if (!canListBeneficiaryRelatives(user, beneficiary)) {
     return {}
@@ -85,7 +92,7 @@ function getBeneficiaryRelatives(
 
 async function getBeneficiaryHealth(
   user: ProtectedAppContextUser,
-  beneficiary: BeneficiaryWithReferentsAndRelatives
+  beneficiary: BeneficiaryWithRelations
 ) {
   if (!canViewBeneficiaryHealthInfo(user, beneficiary)) {
     return {}
@@ -106,7 +113,7 @@ async function getBeneficiaryHealth(
 
 function getBeneficiaryOccupationIncome(
   user: ProtectedAppContextUser,
-  beneficiary: BeneficiaryWithReferentsAndRelatives
+  beneficiary: BeneficiaryWithRelations
 ) {
   if (!canViewBeneficiaryOccupationIncome(user, beneficiary)) {
     return {}
@@ -136,7 +143,7 @@ function getBeneficiaryOccupationIncome(
 
 function getBeneficiaryExternalOrganisations(
   user: ProtectedAppContextUser,
-  beneficiary: BeneficiaryWithReferentsAndRelatives
+  beneficiary: BeneficiaryWithRelations
 ) {
   if (!canViewBeneficiaryExternalOrganisations(user, beneficiary)) {
     return {}
@@ -155,9 +162,9 @@ function getBeneficiaryExternalOrganisations(
 
 export async function getBeneficiaryAccessibleData(
   user: ProtectedAppContextUser,
-  beneficiary: BeneficiaryWithReferentsAndRelatives
+  beneficiary: BeneficiaryWithRelations
 ) {
-  const meta = getBeneficiaryMeta(beneficiary)
+  const meta = getBeneficiaryMeta(user, beneficiary)
   const generalInformation = getBeneficiaryGeneralInformation(beneficiary)
   const {
     taxHouseholds,
