@@ -44,10 +44,7 @@
     data: ministreCounts,
     pending,
     error
-  } = await trpcClient.stat.getFollowupMinistreStats.useQuery(props.filters, {
-    default: () => [],
-    transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-  })
+  } = await trpcClient.stat.getFollowupMinistreStats.useQuery(props.filters)
 
   const ministreStats = computed(
     () =>

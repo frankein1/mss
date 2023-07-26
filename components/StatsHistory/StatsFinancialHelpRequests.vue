@@ -42,18 +42,7 @@
   }>()
 
   const { data, pending, error } =
-    await trpcClient.stat.getFinancialHelpRequestsStats.useQuery(
-      props.filters,
-      {
-        default: () => ({
-          financialHelpRequestCount: 0,
-          internalFinancialHelpRequestCount: 0,
-          financialHelpRequestTotalAmount: 0,
-          financialHelpRequestAmountByType: []
-        }),
-        transform: v => v // FIXME: Nuxt can't type array picks too. You can use the transform option for now to get proper types - https://github.com/wobsoriano/trpc-nuxt/issues/22#issuecomment-1270863820
-      }
-    )
+    await trpcClient.stat.getFinancialHelpRequestsStats.useQuery(props.filters)
 
   const financialHelpRequestCount = computed(
     () => data.value?.financialHelpRequestCount || 0
