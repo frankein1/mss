@@ -20,8 +20,8 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'refreshDocuments'): void
-    (e: 'newDocument', key: string): void
+    refreshDocuments: []
+    newDocument: [key: string]
   }>()
 
   function onAdd() {

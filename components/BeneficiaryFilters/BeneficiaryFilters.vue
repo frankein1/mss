@@ -35,7 +35,7 @@
   const trpcClient = useTrpcClient()
 
   const emit = defineEmits<{
-    (e: 'filter', filters: BeneficiaryFilterInput): void
+    filter: [filters: BeneficiaryFilterInput]
   }>()
 
   const filtersStore = useFiltersStore()

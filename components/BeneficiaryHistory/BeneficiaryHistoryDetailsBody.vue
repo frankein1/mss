@@ -94,7 +94,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'deleted'): void
+    deleted: []
   }>()
 
   const comments = ref(props.history.comments || [])

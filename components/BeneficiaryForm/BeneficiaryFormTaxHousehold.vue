@@ -106,11 +106,10 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'removeTaxHousehold'): void
-    (
-      e: 'selectBeneficiary',
+    removeTaxHousehold: []
+    selectBeneficiary: [
       data: { index: number; beneficiary: BeneficiarySearchResult | null }
-    ): void
+    ]
   }>()
 
   const linkedBeneficiary = computed(() => {

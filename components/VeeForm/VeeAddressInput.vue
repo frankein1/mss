@@ -29,7 +29,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'addressSelected', address: AddressSelected): void
+    addressSelected: [address: AddressSelected]
   }>()
 
   const addresses = ref<BanAddress[]>([])

@@ -23,7 +23,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'regionSelected', region: string): void
+    regionSelected: [region: string]
   }>()
 
   const regions = ref<GeoApiGouvFrRegion[]>([])

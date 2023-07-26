@@ -78,7 +78,7 @@
   )
 
   const emit = defineEmits<{
-    (e: 'changeValue', value: string): void
+    changeValue: [value: string]
   }>()
 
   const {

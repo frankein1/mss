@@ -114,7 +114,7 @@
   }>()
 
   const emit = defineEmits<{
-    (e: 'refreshDocuments'): void
+    refreshDocuments: []
   }>()
 
   const modal = useModal()
