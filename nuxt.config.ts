@@ -51,12 +51,7 @@ export default defineNuxtConfig({
   ],
 
   // Modules: https://v3.nuxtjs.org/api/configuration/nuxt.config#modules
-  modules: [
-    '@pinia/nuxt',
-    'nuxt-vitest',
-    '@vee-validate/nuxt',
-    'nuxt-scheduler'
-  ],
+  modules: ['@pinia/nuxt', '@vee-validate/nuxt', 'nuxt-scheduler'],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
