@@ -135,7 +135,7 @@
       }
       const downloadLink = document.createElement('a')
       downloadLink.href = getExportUrl(exportedBeneficiaries.data)
-      downloadLink.download = getExportFilename('demandes_daide')
+      downloadLink.download = getExportFilename('beneficiaires')
       downloadLink.click()
       downloadLink.remove()
     } catch {
