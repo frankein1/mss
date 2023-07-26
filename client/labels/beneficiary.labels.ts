@@ -1,9 +1,9 @@
-import type { Beneficiary } from '@prisma/client'
+import type { Beneficiary, Document } from '@prisma/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type BeneficiaryFieldLabels = Omit<
-  Beneficiary & { referents: string },
-  'createdById' | 'archivedById' | 'archived' | 'created' | 'updated'
+  Beneficiary & { referents: string; documents: Document[] },
+  'createdById' | 'archivedById' | 'archived' | 'created'
 >
 
 const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
@@ -74,7 +74,9 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
     "Département ou service de l'Administration Centrale",
   ministereStructure: 'Structure de rattachement',
   otherPensionOrganisations: 'Autre(s) organisme(s) de retraite',
-  accommodationZone: "Zone d'hébergement"
+  accommodationZone: "Zone d'hébergement",
+  documents: 'Documents',
+  updated: 'Dernière mise à jour'
 }
 
 export { beneficiaryFieldLabels }
