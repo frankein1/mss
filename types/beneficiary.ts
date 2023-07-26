@@ -4,7 +4,8 @@ import type {
   User,
   Document,
   Followup,
-  HelpRequest
+  HelpRequest,
+  FollowupType
 } from '@prisma/client'
 import type { BeneficiaryRelativeWithLinkedBeneficiary } from './relative'
 
@@ -21,8 +22,8 @@ export type BeneficiaryWithReferents = Beneficiary & {
 export type BeneficiaryWithRelations = BeneficiaryWithReferents & {
   relatives: BeneficiaryRelativeWithLinkedBeneficiary[]
   documents: Document[]
-  followups: Followup[]
-  helpRequests: HelpRequest[]
+  followups: (Followup & { types: FollowupType[] })[]
+  helpRequests: (HelpRequest & { type: FollowupType })[]
 }
 
 export type BeneficiarySearchResult = Pick<

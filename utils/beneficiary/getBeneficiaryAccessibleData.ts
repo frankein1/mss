@@ -9,6 +9,7 @@ import {
 } from '~/server/security/rules'
 import type { BeneficiaryWithRelations } from '~/types/beneficiary'
 import { getUserStructureType } from '~/server/security'
+import { getBeneficiaryFollowUpTypes } from '~/utils/beneficiary'
 
 function getBeneficiaryMeta(
   user: ProtectedAppContextUser,
@@ -29,8 +30,21 @@ function getBeneficiaryMeta(
     aidantConnectAuthorized: beneficiary.aidantConnectAuthorized,
     documents: beneficiary.documents.filter(document =>
       canViewDocument(user, beneficiary, document)
-    ),
-    historyTotal: beneficiary.helpRequests.length + beneficiary.followups.length
+    )
+  }
+}
+
+function getBeneficiaryHistory(
+  user: ProtectedAppContextUser,
+  beneficiary: BeneficiaryWithRelations
+) {
+  return {
+    historyTotal:
+      beneficiary.helpRequests.length + beneficiary.followups.length,
+    types: getBeneficiaryFollowUpTypes({
+      followups: beneficiary.followups,
+      helpRequests: beneficiary.helpRequests
+    })
   }
 }
 
@@ -180,6 +194,7 @@ export async function getBeneficiaryAccessibleData(
     user,
     beneficiary
   )
+  const history = getBeneficiaryHistory(user, beneficiary)
 
   return {
     beneficiary: {
@@ -188,6 +203,7 @@ export async function getBeneficiaryAccessibleData(
       ...health,
       ...occupationIncome,
       ...externalOrganisations,
+      ...history,
       familySituation,
       majorChildren,
       minorChildren

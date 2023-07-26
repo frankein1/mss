@@ -180,6 +180,7 @@ export function getBeneficiaryExportData(
     documents: beneficiary.beneficiary.documents
       .map(document => document.name)
       .join(','),
-    historyTotal: beneficiary.beneficiary.historyTotal.toString()
+    historyTotal: beneficiary.beneficiary.historyTotal.toString(),
+    types: beneficiary.beneficiary.types.map(({ name }) => name).join(',')
   }
 }

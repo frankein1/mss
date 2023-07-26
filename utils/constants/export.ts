@@ -137,5 +137,6 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'entourages',
     'taxHouseholds',
     'documents',
-    'historyTotal'
+    'historyTotal',
+    'types'
   ]

@@ -12,8 +12,16 @@ export async function getBeneficiaryWithRelations(id: string) {
         }
       },
       documents: true,
-      followups: true,
-      helpRequests: true
+      followups: {
+        include: {
+          types: true
+        }
+      },
+      helpRequests: {
+        include: {
+          type: true
+        }
+      }
     }
   })
   if (!beneficiary) {

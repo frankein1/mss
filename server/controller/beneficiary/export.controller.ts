@@ -53,8 +53,16 @@ export const exportBeneficiariesHandler = async ({
         }
       },
       documents: true,
-      followups: true,
-      helpRequests: true
+      followups: {
+        include: {
+          types: true
+        }
+      },
+      helpRequests: {
+        include: {
+          type: true
+        }
+      }
     }
   })
 

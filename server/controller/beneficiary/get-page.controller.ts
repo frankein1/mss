@@ -4,11 +4,8 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+import { getBeneficiaryFollowUpTypes } from '~/utils'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
-import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
-import { FollowupTypeIdAndName } from '~/types/followupType'
-
-type FollowupTypeSet = { [id: string]: FollowupTypeIdAndName }
 
 export const getBeneficiariesHandler = async ({
   input,
@@ -131,62 +128,4 @@ function prepareBeneficiariesWithFollowupTypes(
     }),
     ...beneficiary
   }))
-}
-
-function getBeneficiaryFollowUpTypes({
-  followups,
-  helpRequests
-}: Pick<
-  BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests,
-  'followups' | 'helpRequests'
->): FollowupTypeIdAndName[] {
-  const uniqueFollowUpTypesTuples = {
-    ...getUniqueFollowUpTypesTuplesFromFollowups(followups),
-    ...getUniqueFollowUpTypesTuplesFromHelpRequests(helpRequests)
-  }
-  const followUpTypes = Object.values(uniqueFollowUpTypesTuples)
-  return followUpTypes.sort(sortFollowupTypesByName)
-}
-
-function getUniqueFollowUpTypesTuplesFromFollowups(
-  followups: FollowupTypesFromFollowups
-) {
-  return followups.reduce((uniques, followup) => {
-    if (!followup.types.length) {
-      return uniques
-    }
-    const followupUniqueFollowUpTypes = getUniqueFollowUpTypesFromFollowup(
-      followup.types
-    )
-    return {
-      ...uniques,
-      ...followupUniqueFollowUpTypes
-    }
-  }, {} as FollowupTypeSet)
-}
-
-function getUniqueFollowUpTypesFromFollowup(
-  followUpTypesArr: FollowupTypesFromFollowups[0]['types']
-) {
-  return followUpTypesArr.reduce(
-    (uniques, f) => ({
-      ...uniques,
-      [f.id]: f
-    }),
-    {} as FollowupTypeSet
-  )
-}
-
-function getUniqueFollowUpTypesTuplesFromHelpRequests(
-  helpRequests: FollowupTypesFromHelpRequests
-) {
-  return helpRequests.reduce((uniques, helpRequest) => {
-    if (!helpRequest.type) {
-      return uniques
-    }
-    return {
-      ...uniques,
-      [helpRequest.type.id]: helpRequest.type
-    }
-  }, {} as FollowupTypeSet)
 }
