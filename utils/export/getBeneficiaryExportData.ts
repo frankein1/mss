@@ -34,7 +34,7 @@ export function getBeneficiaryExportData(
     id: beneficiary.beneficiary.id,
     referents: beneficiary.beneficiary.referents
       .map(referent => getUserDisplayName(referent))
-      .join(','),
+      .join(', '),
     aidantConnectAuthorized: getBooleanOrEmpty(
       beneficiary.beneficiary.aidantConnectAuthorized
     ),
@@ -113,14 +113,14 @@ export function getBeneficiaryExportData(
     mainIncomeSource: beneficiary.beneficiary.mainIncomeSource
       ? beneficiary.beneficiary.mainIncomeSource
           .map(incomeSource => incomeSourceLabels[incomeSource])
-          .join(',')
+          .join(', ')
       : '',
     mainIncomeAmount:
       beneficiary.beneficiary.mainIncomeAmount?.toString() || '',
     partnerMainIncomeSource: beneficiary.beneficiary.partnerMainIncomeSource
       ? beneficiary.beneficiary.partnerMainIncomeSource
           .map(incomeSource => incomeSourceLabels[incomeSource])
-          .join(',')
+          .join(', ')
       : '',
     partnerMainIncomeAmount:
       beneficiary.beneficiary.partnerMainIncomeAmount?.toString() || '',
@@ -128,7 +128,7 @@ export function getBeneficiaryExportData(
       .majorChildrenMainIncomeSource
       ? beneficiary.beneficiary.majorChildrenMainIncomeSource
           .map(incomeSource => incomeSourceLabels[incomeSource])
-          .join(',')
+          .join(', ')
       : '',
     majorChildrenMainIncomeAmount:
       beneficiary.beneficiary.majorChildrenMainIncomeAmount?.toString() || '',
@@ -139,7 +139,7 @@ export function getBeneficiaryExportData(
             pensionOrganisation =>
               pensionOrganisationLabels[pensionOrganisation]
           )
-          .join(',')
+          .join(', ')
       : '',
     otherPensionOrganisations:
       beneficiary.beneficiary.otherPensionOrganisations || '',
@@ -172,15 +172,15 @@ export function getBeneficiaryExportData(
     entourages:
       beneficiary.entourages
         ?.map(relative => getBeneficiaryRelativeDisplayName(relative))
-        .join(',') || '',
+        .join(', ') || '',
     taxHouseholds:
       beneficiary.taxHouseholds
         ?.map(relative => getBeneficiaryRelativeDisplayName(relative))
-        .join(',') || '',
+        .join(', ') || '',
     documents: beneficiary.beneficiary.documents
       .map(document => document.name)
-      .join(','),
+      .join(', '),
     historyTotal: beneficiary.beneficiary.historyTotal.toString(),
-    types: beneficiary.beneficiary.types.map(({ name }) => name).join(',')
+    types: beneficiary.beneficiary.types.map(({ name }) => name).join(', ')
   }
 }

@@ -19,19 +19,19 @@ export function getFollowupExportData(
     firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
     status: followupStatusLabels[followup.status],
     redirected: getBooleanOrEmpty(followup.redirected),
-    types: followup.types.map(type => type.name).join(','),
+    types: followup.types.map(type => type.name).join(', '),
     beneficiaryId: getBeneficiaryDisplayName(followup.beneficiary),
     medium: followup.medium ? followupMediumLabels[followup.medium] : '',
     classified: getBooleanOrEmpty(followup.classified),
     documents:
-      followup.documents?.map(document => document.name).join(',') || '',
+      followup.documents?.map(document => document.name).join(', ') || '',
     dueDate: formatDate(followup.dueDate, 'DD-MM-YYYY'),
     forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
     helpRequested: getBooleanOrEmpty(followup.helpRequested),
     interventions: followup.interventions
       ? followup.interventions
           .map(intervention => followupInterventionLabels[intervention])
-          .join(',')
+          .join(', ')
       : '',
     ministre: followup.ministre ? ministerLabels[followup.ministre] : '',
     numeroPegase: followup.numeroPegase || '',
@@ -41,7 +41,7 @@ export function getFollowupExportData(
     signalements: followup.signalements
       ? followup.signalements
           .map(signalement => followupSignalementLabels[signalement])
-          .join(',')
+          .join(', ')
       : '',
     structureName: followup.structureName || '',
     synthesis: followup.synthesis || '',
