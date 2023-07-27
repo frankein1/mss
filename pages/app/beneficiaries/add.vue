@@ -16,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+  import { useAuthStore } from '~/store/auth'
   import { CreateBeneficiaryInput } from '~/server/schema'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
@@ -24,6 +25,7 @@
   useHead({ title })
 
   const trpcClient = useTrpcClient()
+  const authStore = useAuthStore()
 
   const { data: agents } = await trpcClient.config.getAgents.useQuery()
 
@@ -39,7 +41,7 @@
     isSubmitting.value = false
 
     if (complete) {
-      navigateTo(RoutePath.AppBeneficiaryEdit(id, true))
+      navigateTo(RoutePath.AppBeneficiaryEdit(authStore.userRole, id, true))
     } else {
       navigateTo(RoutePath.AppBeneficiary(id))
     }

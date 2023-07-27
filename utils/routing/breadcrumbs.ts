@@ -1,3 +1,4 @@
+import type { UserRole } from '@prisma/client'
 import { Route, RoutePath, RouteTitle } from './'
 import type { BeneficiaryNames } from '~/types/beneficiary'
 
@@ -96,11 +97,14 @@ export const Breadcrumb = {
   ) => BeneficiaryBreadcrumb(beneficiary, originPage),
 
   // FIXME: BeneficiaryEdit depends on the access to Beneficiary
-  [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNamesWithId | null) => [
+  [Route.AppBeneficiaryEdit]: (
+    userRole: UserRole,
+    beneficiary: BeneficiaryNamesWithId | null
+  ) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
       text: RouteTitle.AppBeneficiaryEdit(beneficiary),
-      to: RoutePath.AppBeneficiaryEdit(beneficiary?.id || '')
+      to: RoutePath.AppBeneficiaryEdit(userRole, beneficiary?.id || '')
     }
   ],
 

@@ -1,3 +1,4 @@
+import { UserRole } from '@prisma/client'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
 import { HistoryTab } from '~/utils/constants/history'
 
@@ -125,13 +126,21 @@ export const RoutePath = {
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
 
-  [Route.AppBeneficiaryEdit]: (beneficiaryId: string, complete?: boolean) => {
+  [Route.AppBeneficiaryEdit]: (
+    userRole: UserRole,
+    beneficiaryId: string,
+    complete?: boolean
+  ) => {
     const base = `${BeneficiaryRoute(beneficiaryId)}/edit`
+    const baseWithRole =
+      userRole === UserRole.ReceptionAgent
+        ? base.replace('/app', '/app/reception-agent')
+        : base
     if (complete) {
       const params = new URLSearchParams({ complete: 'true' })
-      return `${base}?${params}`
+      return `${baseWithRole}?${params}`
     }
-    return base
+    return baseWithRole
   },
 
   [Route.AppBeneficiaryFollowupAdd]: (beneficiaryId: string) =>

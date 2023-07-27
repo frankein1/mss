@@ -2,7 +2,10 @@
   <ul class="fr-btns-group fr-btns-group--inline-md header-btn-group">
     <li>
       <NuxtLink
-        :to="`${RoutePath.AppBeneficiaryEdit(beneficiaryId)}`"
+        :to="`${RoutePath.AppBeneficiaryEdit(
+          authStore.userRole,
+          beneficiaryId
+        )}`"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
         target="_self"
       >
@@ -35,6 +38,7 @@
 <script lang="ts" setup>
   import { RoutePath } from '~/utils/routing'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
+  import { useAuthStore } from '~/store/auth'
 
   const props = withDefaults(
     defineProps<{
@@ -47,6 +51,8 @@
   const emit = defineEmits<{
     deleted: []
   }>()
+
+  const authStore = useAuthStore()
 
   function onDelete() {
     useModal().open(

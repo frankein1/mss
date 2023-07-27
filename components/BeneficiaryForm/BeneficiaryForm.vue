@@ -103,30 +103,26 @@
   import { UserStatus, BeneficiaryRelative } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  import BeneficiaryFormTaxHouseholds from './BeneficiaryFormTaxHouseholds.vue'
   import { BeneficiaryReferent } from '~/types/beneficiary'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
   import {
     UpdateBeneficiaryInput,
     updateBeneficiarySchema
   } from '~/server/schema/beneficiary.schema'
-  import {
-    canEditBeneficiaryHealthInfo,
-    canEditBeneficiaryReferents,
-    canEditBeneficiaryOccupationIncome,
-    canEditBeneficiaryExternalOrganisations,
-    canEditBeneficiaryRelatives
-  } from '~/server/security/rules'
   import type { GetBeneficiaryOutput } from '~/server/routers'
   import { toOptions } from '~/utils/options'
-  import { useAuthStore } from '~/store/auth'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
-    taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
-    entourages: BeneficiaryRelative[]
+    taxHouseholds?: BeneficiaryRelativeWithLinkedBeneficiary[]
+    entourages?: BeneficiaryRelative[]
     isSubmitting: boolean
     agents: BeneficiaryReferent[]
+    canSetRelatives?: boolean
+    canSetReferents?: boolean
+    canSetHealth?: boolean
+    canSetOccupationIncome?: boolean
+    canSetExternalOrganisations?: boolean
   }>()
 
   const emit = defineEmits<{
@@ -253,30 +249,6 @@
       },
       []
     )
-  )
-
-  const authStore = useAuthStore()
-  const user = computed(() => authStore.getAuthUser)
-
-  const canSetRelatives = canEditBeneficiaryRelatives(
-    user.value,
-    props.beneficiary
-  )
-  const canSetReferents = canEditBeneficiaryReferents(
-    user.value,
-    props.beneficiary
-  )
-  const canSetHealth = canEditBeneficiaryHealthInfo(
-    user.value,
-    props.beneficiary
-  )
-  const canSetOccupationIncome = canEditBeneficiaryOccupationIncome(
-    user.value,
-    props.beneficiary
-  )
-  const canSetExternalOrganisations = canEditBeneficiaryExternalOrganisations(
-    user.value,
-    props.beneficiary
   )
 
   function onCheckValidationBeforeSubmit() {
