@@ -1,6 +1,6 @@
 {
   "name": "monsuivisocial-v2",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "scripts": {
     "dev": "nuxt dev",
     "dev:db:start": "docker compose -f docker-compose.dev.yml up -d",
