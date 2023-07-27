@@ -42,6 +42,9 @@ export const useAuthStore = defineStore({
     },
     isActive(): boolean {
       return this.user?.status === UserStatus.Active
+    },
+    isReceptionAgent(): boolean {
+      return this.user?.role === UserRole.ReceptionAgent
     }
   }
 })
