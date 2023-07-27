@@ -8,15 +8,29 @@
           ref="formContainer"
           class="main-container fr-p-5w"
         >
-          <BeneficiaryForm
-            v-if="beneficiary && agents?.length"
-            :beneficiary="beneficiary"
-            :agents="agents"
-            :is-submitting="isSubmitting"
-            :tax-households="taxHouseholds"
-            :entourages="entourages"
-            @save-beneficiary="onUpdateBeneficiary"
-          />
+          <template v-if="beneficiary && agents?.length">
+            <ReceptionAgentBeneficiaryForm
+              v-if="isReceptionAgent"
+              :beneficiary="beneficiary"
+              :agents="agents"
+              :is-submitting="isSubmitting"
+              @save-beneficiary="onUpdateBeneficiary"
+            />
+            <BeneficiaryForm
+              v-else
+              :beneficiary="beneficiary"
+              :agents="agents"
+              :is-submitting="isSubmitting"
+              :tax-households="taxHouseholds"
+              :entourages="entourages"
+              can-set-relatives
+              can-set-referents
+              can-set-health
+              can-set-occupation-income
+              can-set-external-organisations
+              @save-beneficiary="onUpdateBeneficiary"
+            />
+          </template>
         </main>
       </div>
     </div>
@@ -27,6 +41,7 @@
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { UpdateBeneficiaryInput } from '~/server/schema'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { useAuthStore } from '~/store/auth'
 
   definePageMeta({
     middleware: 'is-beneficiary-referent'
@@ -36,6 +51,7 @@
   const beneficiaryId = route.params.id as string
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
+  const authStore = useAuthStore()
 
   const { data } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
     id: beneficiaryId
@@ -45,6 +61,7 @@
 
   const isSubmitting = ref(false)
 
+  const isReceptionAgent = computed(() => authStore.isReceptionAgent)
   const beneficiary = computed(() => data.value?.beneficiary || null)
 
   const title = computed(() => RouteTitle.AppBeneficiaryEdit(beneficiary.value))
