@@ -24,6 +24,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { UpdateBeneficiaryInput } from '~/server/schema'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
@@ -34,6 +35,7 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const trpcClient = useTrpcClient()
+  const { matomo } = useMatomo()
 
   const { data } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
     id: beneficiaryId
@@ -52,6 +54,13 @@
     // TODO: handle error
     await trpcClient.beneficiary.update.mutate(beneficiary)
     isSubmitting.value = false
+
+    if (route.params.complete) {
+      matomo.trackEvent(
+        EventCategory.CreateBeneficiary,
+        CreateBeneficiaryEventAction.SaveCompleteForm
+      )
+    }
 
     navigateTo(RoutePath.AppBeneficiary(beneficiary.id))
   }

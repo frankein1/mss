@@ -157,6 +157,11 @@
         EventCategory.CreateBeneficiary,
         CreateBeneficiaryEventAction.Complete
       )
+    } else {
+      matomo.trackEvent(
+        EventCategory.CreateBeneficiary,
+        CreateBeneficiaryEventAction.SavePartialForm
+      )
     }
     emit('saveBeneficiary', values, complete.value)
   })
