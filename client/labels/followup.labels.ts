@@ -1,7 +1,7 @@
 import type { Followup } from '@prisma/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
-export type FollowupFieldLabels = Omit<
+type FollowupFieldLabels = Omit<
   Followup & { types: string; documents: string },
   'created' | 'structureId' | 'createdById'
 >
