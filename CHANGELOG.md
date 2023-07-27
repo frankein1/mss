@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.5.1...v1.5.2) (2023-07-27)
+
+
+### Bug Fixes
+
+* **matomo:** add missing events to track beneficiary creation ([c4e3c94](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c4e3c949839398d2a57e7243581013c332a53bec))
+
 ### [1.5.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.5.0...v1.5.1) (2023-07-25)
 
 
