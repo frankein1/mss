@@ -40,7 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema/helpRequest.schema'

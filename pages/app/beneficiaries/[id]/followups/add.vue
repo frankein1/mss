@@ -38,7 +38,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
   import { AddFollowupInput } from '~/server/schema/followup.schema'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   definePageMeta({
     middleware: 'is-beneficiary-referent'

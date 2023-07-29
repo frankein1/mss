@@ -10,6 +10,7 @@ import { canExportBeneficiaries } from '~/server/security/rules/export'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { getBeneficiaryAccessibleData } from '~/utils/beneficiary/getBeneficiaryAccessibleData'
+import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
 import { getBeneficiaryExportData } from '~/utils/export/getBeneficiaryExportData'
@@ -45,25 +46,7 @@ export const exportBeneficiariesHandler = async ({
   const dataRequest = await prismaClient.beneficiary.findMany({
     where,
     orderBy: input.orderBy,
-    include: {
-      referents: true,
-      relatives: {
-        include: {
-          linkedBeneficiary: true
-        }
-      },
-      documents: true,
-      followups: {
-        include: {
-          types: true
-        }
-      },
-      helpRequests: {
-        include: {
-          type: true
-        }
-      }
-    }
+    include: BENEFICIARY_RELATIONS_INCLUDE
   })
 
   const data: RowType[] = []

@@ -43,7 +43,7 @@
 <script setup lang="ts">
   import { useFiltersStore } from '~/store/filters'
   import { AlertType } from '~~/utils/constants/alert'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
 
   const filtersStore = useFiltersStore()

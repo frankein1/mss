@@ -1,4 +1,4 @@
-import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
 
 export enum Route {

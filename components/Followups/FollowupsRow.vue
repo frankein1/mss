@@ -47,7 +47,7 @@
 <script lang="ts" setup>
   import { FollowupItem } from '~/server/routers'
   import { HistoryTab } from '~/utils/constants/history'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { followupStatusOptions } from '~/client/options/followup'
   import { followupStatusClasses } from '~/client/classes/followup'
   import { readableFileNumber } from '~/utils/readableFileNumber'
