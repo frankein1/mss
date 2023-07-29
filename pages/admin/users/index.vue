@@ -67,6 +67,7 @@
 <script lang="ts" setup>
   import { RoutePath } from '~/utils/routing'
   import { UserRoleLabels } from '~/client/options/user'
+  import { getUserDisplayName } from '~/utils/user'
 
   const search = ref<string>()
 

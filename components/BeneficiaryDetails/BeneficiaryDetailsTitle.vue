@@ -14,6 +14,7 @@
 <script lang="ts" setup>
   import type { GetBeneficiaryOutput } from '~/server/routers'
   import { readableFileNumber } from '~/utils/readableFileNumber'
+  import { getUserDisplayName } from '~/utils/user'
 
   const props = withDefaults(
     defineProps<{

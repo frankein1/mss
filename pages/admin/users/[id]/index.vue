@@ -32,6 +32,7 @@
 <script setup lang="ts">
   import { AdminEditUserInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
+  import { getUserDisplayName } from '~/utils/user'
 
   const route = useRoute()
   const userId = route.params.id as string
