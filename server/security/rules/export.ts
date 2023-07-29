@@ -11,3 +11,11 @@ export const canExportHistory = (grantee: SecurityRuleGrantee): boolean =>
 
 export const canExportBeneficiaries = (grantee: SecurityRuleGrantee): boolean =>
   hasAllowedRole(grantee, ['StructureManager'])
+
+export const canExportStats = (grantee: SecurityRuleGrantee): boolean =>
+  hasAllowedRole(grantee, [
+    'StructureManager',
+    'Referent',
+    'SocialWorker',
+    'Instructor'
+  ])
