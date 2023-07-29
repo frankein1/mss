@@ -49,7 +49,7 @@ export const exportBeneficiariesHandler = async ({
     include: BENEFICIARY_RELATIONS_INCLUDE
   })
 
-  const data: RowType[] = []
+  const rows: RowType[] = []
 
   for (const beneficiary of dataRequest) {
     if (canViewBeneficiary(user, beneficiary)) {
@@ -57,9 +57,9 @@ export const exportBeneficiariesHandler = async ({
         user,
         beneficiary
       )
-      data.push(getBeneficiaryExportData(withPermissionsBeneficiary))
+      rows.push(getBeneficiaryExportData(withPermissionsBeneficiary))
     }
   }
 
-  return await createExport('Bénéficiaires', columns, data, user.id)
+  return await createExport(user.id, [{ name: 'Bénéficiaires', columns, rows }])
 }
