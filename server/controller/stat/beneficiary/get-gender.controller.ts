@@ -1,7 +1,6 @@
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
-import { prepareBeneficiaryStatFilters } from '~/utils/filters'
+import { getGenderStatsQuery } from '~/server/query/stats'
 
 export const getGenderStatsHandler = async ({
   input,
@@ -10,13 +9,5 @@ export const getGenderStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.beneficiary.groupBy({
-    by: ['gender'],
-    where: {
-      structureId: user.structureId,
-      ...prepareBeneficiaryStatFilters(input)
-    },
-    _count: true,
-    orderBy: { _count: { gender: 'desc' } }
-  })
+  return await getGenderStatsQuery(user.structureId, input)
 }

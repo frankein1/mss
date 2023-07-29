@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
   import { StatsListPropType } from '~/types/stat'
-  import { STATS_COLLAPSED_LIMIT } from '~/utils/constants'
+  import { STATS_COLLAPSED_LIMIT } from '~/utils/constants/stats'
   import { getRandomId } from '~/utils/random'
 
   const props = withDefaults(

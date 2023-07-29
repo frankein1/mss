@@ -1,0 +1,1 @@
+export { getGenderStatsQuery } from './getGenderStatsQuery'

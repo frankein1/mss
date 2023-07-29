@@ -10,7 +10,8 @@ export {
   getAccommodationZoneStatsHandler,
   getMinistereStructureStatsHandler,
   getMinistereCategorieStatsHandler,
-  getMinistereDepartementServiceAcStatsHandler
+  getMinistereDepartementServiceAcStatsHandler,
+  exportBeneficiaryStatsHandler
 } from './beneficiary'
 export {
   getFinancialHelpRequestsStats,

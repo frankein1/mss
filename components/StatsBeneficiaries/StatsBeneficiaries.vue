@@ -113,6 +113,8 @@
   import { canExportStats } from '~/server/security/rules/export'
   import { useAuthStore } from '~/store/auth'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
+  import { getExportUrl } from '~/utils/export/getExportUrl'
+  import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const trpcClient = useTrpcClient()
   const isMinistryAgent = useMinistryAgent()
@@ -147,10 +149,19 @@
       }`
   )
 
-  function exportStats() {
+  async function exportStats() {
     isDownloading.value = true
     try {
-      // TODO: export beneficiaries' stats
+      const exportedBeneficiaries =
+        await trpcClient.stat.exportBeneficiaryStats.query(filters.value)
+      if (!exportedBeneficiaries.data) {
+        throw new Error('no data')
+      }
+      const downloadLink = document.createElement('a')
+      downloadLink.href = getExportUrl(exportedBeneficiaries.data)
+      downloadLink.download = getExportFilename('stats_beneficiaires')
+      downloadLink.click()
+      downloadLink.remove()
     } catch {
       useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
     } finally {
