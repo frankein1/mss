@@ -45,7 +45,9 @@ export enum DocumentEventAction {
 }
 
 export enum CreateBeneficiaryEventAction {
-  Complete = 'Compléter'
+  Complete = 'Compléter',
+  SavePartialForm = 'Enregistrer Formulaire partiel',
+  SaveCompleteForm = 'Enregistrer Formulaire complet'
 }
 
 export enum UserActivityEventAction {

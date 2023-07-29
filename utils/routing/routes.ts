@@ -124,8 +124,16 @@ export const RoutePath = {
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
-  [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
-    `${BeneficiaryRoute(beneficiaryId)}/edit`,
+
+  [Route.AppBeneficiaryEdit]: (beneficiaryId: string, complete?: boolean) => {
+    const base = `${BeneficiaryRoute(beneficiaryId)}/edit`
+    if (complete) {
+      const params = new URLSearchParams({ complete: 'true' })
+      return `${base}?${params}`
+    }
+    return base
+  },
+
   [Route.AppBeneficiaryFollowupAdd]: (beneficiaryId: string) =>
     `${BeneficiaryFollowupsRoute(beneficiaryId)}/add`,
   [Route.AppBeneficiaryFollowupEdit]: (
