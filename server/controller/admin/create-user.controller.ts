@@ -1,3 +1,4 @@
+import { TRPCError } from '@trpc/server'
 import { sendEmail } from '~/server/lib/email'
 import { prismaClient } from '~/server/prisma'
 import { AdminCreateUserInput } from '~/server/schema'
@@ -8,6 +9,17 @@ export const createUserController = async ({
 }: {
   input: AdminCreateUserInput
 }) => {
+  const existingUser = await prismaClient.user.findUnique({
+    where: { email: input.email }
+  })
+
+  if (existingUser) {
+    throw new TRPCError({
+      code: 'CONFLICT',
+      message: 'A user with this email already exists'
+    })
+  }
+
   const createdUser = await prismaClient.user.create({
     data: input
   })
