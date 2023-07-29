@@ -15,6 +15,7 @@
   import { useAuthStore } from '~/store/auth'
   import { JwtUser } from '~/types/user'
   import { RouteTitle } from '~/utils/routing'
+  import { getUserDisplayName } from '~/utils/user'
 
   useHead({
     title: RouteTitle.AuthValidateToken()
