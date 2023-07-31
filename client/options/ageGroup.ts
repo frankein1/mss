@@ -1,4 +1,3 @@
-import { STATS_NULL_LABEL } from '~/client/options/stat'
 import { labelsToOptions } from '~/utils/options'
 
 export enum AgeGroup {
@@ -16,10 +15,7 @@ export const ageGroupLabels = {
   [AgeGroup.Group35_44]: '35 à 44 ans',
   [AgeGroup.Group45_54]: '45 à 54 ans',
   [AgeGroup.Group55_64]: '55 à 64 ans',
-  [AgeGroup.More65]: '65 ans et +',
-  null: STATS_NULL_LABEL
+  [AgeGroup.More65]: '65 ans et +'
 }
 
-const { null: _, ...ageGroupLabelsWithoutNull } = ageGroupLabels
-
-export const ageGroupOptions = labelsToOptions(ageGroupLabelsWithoutNull)
+export const ageGroupOptions = labelsToOptions(ageGroupLabels)

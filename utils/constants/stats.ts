@@ -1,3 +1,3 @@
 export const STATS_COLLAPSED_LIMIT = 4
 
-export const STATS_NOT_SPECIFIED_KEY = 'NotSpecified'
+export const STATS_NULL_KEY = 'null'
