@@ -1,4 +1,3 @@
-import { getStatLabel } from '~/client/options/stat'
 import { beneficiaryGenderLabels } from '~/client/options/beneficiary'
 import {
   getBeneficiaryCountQuery,
@@ -7,11 +6,10 @@ import {
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
-import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import { createExport } from '~/utils/export/createExport'
-import { RowType } from '~/types/export'
-import { getPercentage } from '~/utils/stats'
 import { ageGroupLabels } from '~/client/options/ageGroup'
+import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
+import { getRowsFromData } from '~/utils/export/getRowsFromData'
 
 export const exportBeneficiaryStatsHandler = async ({
   input,
@@ -28,26 +26,8 @@ export const exportBeneficiaryStatsHandler = async ({
   )
 
   const genderData = await getGenderStatsQuery(user.structureId, input)
-  const genderColumns = [
-    ...Object.keys(beneficiaryGenderLabels),
-    STATS_NULL_KEY
-  ].map(key => ({
-    key,
-    header: getStatLabel(beneficiaryGenderLabels, key)
-  }))
-  const genderRows = [
-    genderData.reduce((row: RowType, { _count, gender }) => {
-      row[gender || STATS_NULL_KEY] = _count.toString()
-      return row
-    }, {}),
-    genderData.reduce((row: RowType, { _count, gender }) => {
-      row[gender || STATS_NULL_KEY] = `${getPercentage(
-        _count,
-        beneficiaryCount
-      )}%`
-      return row
-    }, {})
-  ]
+  const genderColumns = getColumnsFromLabels(beneficiaryGenderLabels)
+  const genderRows = getRowsFromData(genderData, 'gender', beneficiaryCount)
   exportData.push({
     name: 'Genres',
     columns: genderColumns,
@@ -55,25 +35,8 @@ export const exportBeneficiaryStatsHandler = async ({
   })
 
   const ageData = await getAgeStatsQuery(user.structureId, input)
-  const ageColumns = [...Object.keys(ageGroupLabels), STATS_NULL_KEY].map(
-    key => ({
-      key,
-      header: getStatLabel(ageGroupLabels, key)
-    })
-  )
-  const ageRows = [
-    ageData.reduce((row: RowType, { _count, ageGroup }) => {
-      row[ageGroup || STATS_NULL_KEY] = _count.toString()
-      return row
-    }, {}),
-    ageData.reduce((row: RowType, { _count, ageGroup }) => {
-      row[ageGroup || STATS_NULL_KEY] = `${getPercentage(
-        _count,
-        beneficiaryCount
-      )}%`
-      return row
-    }, {})
-  ]
+  const ageColumns = getColumnsFromLabels(ageGroupLabels)
+  const ageRows = getRowsFromData(ageData, 'ageGroup', beneficiaryCount)
   exportData.push({
     name: "Tranches d'âge",
     columns: ageColumns,
