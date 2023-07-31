@@ -35,9 +35,15 @@ export const exportBeneficiaryStatsHandler = async ({
   }))
   const genderRows = [
     genderData.reduce((row: RowType, { _count, gender }) => {
-      row[
-        gender || STATS_NOT_SPECIFIED_KEY
-      ] = `${_count.toString()} (${getPercentage(_count, beneficiaryCount)}%)`
+      row[gender || STATS_NOT_SPECIFIED_KEY] = _count.toString()
+      // getPercentage(_count, beneficiaryCount)
+      return row
+    }, {}),
+    genderData.reduce((row: RowType, { _count, gender }) => {
+      row[gender || STATS_NOT_SPECIFIED_KEY] = `${getPercentage(
+        _count,
+        beneficiaryCount
+      )}%`
       return row
     }, {})
   ]
