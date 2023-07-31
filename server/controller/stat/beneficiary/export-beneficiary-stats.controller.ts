@@ -1,8 +1,10 @@
 import { beneficiaryGenderLabels } from '~/client/options/beneficiary'
+import { familySituationLabels } from '~/client/options/familySituation'
 import {
   getBeneficiaryCountQuery,
   getGenderStatsQuery,
-  getAgeStatsQuery
+  getAgeStatsQuery,
+  getFamilyStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -41,6 +43,19 @@ export const exportBeneficiaryStatsHandler = async ({
     name: "Tranches d'âge",
     columns: ageColumns,
     rows: ageRows
+  })
+
+  const familyData = await getFamilyStatsQuery(user.structureId, input)
+  const familyColumns = getColumnsFromLabels(familySituationLabels)
+  const familyRows = getRowsFromData(
+    familyData,
+    'familySituation',
+    beneficiaryCount
+  )
+  exportData.push({
+    name: 'Types de situations familiales',
+    columns: familyColumns,
+    rows: familyRows
   })
 
   return await createExport(user.id, exportData)
