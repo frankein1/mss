@@ -22,7 +22,7 @@
           v-if="statsPercentage"
           :style="{ color: color }"
         >
-          {{ getPercentage(count) }}%
+          {{ getPercentage(count, totalCount) }}%
         </span>
         <div
           v-if="statsBar"
@@ -30,8 +30,8 @@
         >
           <div
             role="progressbar"
-            :style="`width:${getPercentage(count)}%;`"
-            :aria-valuenow="getPercentage(count)"
+            :style="`width:${getPercentage(count, totalCount)}%;`"
+            :aria-valuenow="getPercentage(count, totalCount)"
             aria-valuemin="0"
             aria-valuemax="100"
           ></div>
@@ -54,6 +54,7 @@
   import { StatsListPropType } from '~/types/stat'
   import { STATS_COLLAPSED_LIMIT } from '~/utils/constants/stats'
   import { getRandomId } from '~/utils/random'
+  import { getPercentage } from '~/utils/stats'
 
   const props = withDefaults(
     defineProps<{
@@ -85,10 +86,6 @@
   const expandBtnLabel = computed(() =>
     expandStats.value ? 'Voir moins' : 'Voir plus'
   )
-
-  function getPercentage(count: number) {
-    return ((count / props.totalCount) * 100).toFixed(1)
-  }
 </script>
 
 <style lang="scss" scoped>

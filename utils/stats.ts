@@ -6,3 +6,7 @@ export function labelOrUnprovided(value: string, options: Options) {
   }
   return options.get(value)
 }
+
+export function getPercentage(count: number, total: number) {
+  return ((count / total) * 100).toFixed(1)
+}

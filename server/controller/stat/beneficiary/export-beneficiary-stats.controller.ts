@@ -1,11 +1,15 @@
 import { getStatLabel } from '~/client/options/stat'
 import { beneficiaryGenderLabels } from '~/client/options/beneficiary'
-import { getGenderStatsQuery } from '~/server/query/stats'
+import {
+  getBeneficiaryCountQuery,
+  getGenderStatsQuery
+} from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { STATS_NOT_SPECIFIED_KEY } from '~/utils/constants/stats'
 import { createExport } from '~/utils/export/createExport'
 import { RowType } from '~/types/export'
+import { getPercentage } from '~/utils/stats'
 
 export const exportBeneficiaryStatsHandler = async ({
   input,
@@ -16,7 +20,11 @@ export const exportBeneficiaryStatsHandler = async ({
 }) => {
   const exportData = []
 
-  // TODO: add percentages
+  const beneficiaryCount = await getBeneficiaryCountQuery(
+    user.structureId,
+    input
+  )
+
   const genderData = await getGenderStatsQuery(user.structureId, input)
   const genderColumns = [
     ...Object.keys(beneficiaryGenderLabels),
@@ -27,7 +35,9 @@ export const exportBeneficiaryStatsHandler = async ({
   }))
   const genderRows = [
     genderData.reduce((row: RowType, { _count, gender }) => {
-      row[gender || STATS_NOT_SPECIFIED_KEY] = _count.toString()
+      row[
+        gender || STATS_NOT_SPECIFIED_KEY
+      ] = `${_count.toString()} (${getPercentage(_count, beneficiaryCount)}%)`
       return row
     }, {})
   ]
