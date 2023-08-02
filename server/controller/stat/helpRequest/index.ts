@@ -4,3 +4,4 @@ export { getHelpRequestPrescribingOrganizationStatsHandler } from './get-prescri
 export { getHelpRequestStatusStatsHandler } from './get-status.controller'
 export { getInstructorOrganizationStatsHandler } from './get-instructor-organization.controller'
 export { getHelpRequestFollowupTypesStatsHandler } from './get-followup-types.controller'
+export { exportHelpRequestStatsHandler } from './export-help-request-stats.controller'

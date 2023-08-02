@@ -19,7 +19,8 @@ export {
   getHelpRequestPrescribingOrganizationStatsHandler,
   getHelpRequestStatusStatsHandler,
   getInstructorOrganizationStatsHandler,
-  getHelpRequestFollowupTypesStatsHandler
+  getHelpRequestFollowupTypesStatsHandler,
+  exportHelpRequestStatsHandler
 } from './helpRequest'
 export {
   getFollowupActionsEntreprisesStatsHandler,
@@ -27,6 +28,7 @@ export {
   getFollowupMinistreStatsHandler,
   getFollowupPrescribingOrganizationStatsHandler,
   getFollowupStatusStatsHandler,
-  getFollowupFollowupTypesStatsHandler
+  getFollowupFollowupTypesStatsHandler,
+  exportFollowupStatsHandler
 } from './followup'
 export { getHistoryCountsHandler } from './get-history-count.controller'

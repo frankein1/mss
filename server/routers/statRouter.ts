@@ -24,7 +24,9 @@ import {
   getMinistereDepartementServiceAcStatsHandler,
   getInstructorOrganizationStatsHandler,
   getHelpRequestFollowupTypesStatsHandler,
-  exportBeneficiaryStatsHandler
+  exportBeneficiaryStatsHandler,
+  exportHelpRequestStatsHandler,
+  exportFollowupStatsHandler
 } from '~/server/controller/stat'
 import { statFilterSchema } from '~/server/schema'
 import { statsProcedure, router } from '~/server/trpc'
@@ -103,5 +105,11 @@ export const statRouter = router({
     .query(getInstructorOrganizationStatsHandler),
   exportBeneficiaryStats: statsProcedure
     .input(statFilterSchema)
-    .query(exportBeneficiaryStatsHandler)
+    .query(exportBeneficiaryStatsHandler),
+  exportHelpRequestStats: statsProcedure
+    .input(statFilterSchema)
+    .query(exportHelpRequestStatsHandler),
+  exportFollowupStats: statsProcedure
+    .input(statFilterSchema)
+    .query(exportFollowupStatsHandler)
 })

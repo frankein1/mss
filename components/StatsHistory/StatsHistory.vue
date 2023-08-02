@@ -8,9 +8,16 @@
         @filter="filters = $event"
       />
     </div>
-    <h2 class="fr-col-12 stats-main-title">
-      {{ historyCountLabel }}
-    </h2>
+    <div class="fr-col-12 results-container">
+      <h2 class="stats-main-title results-count">
+        {{ historyCountLabel }}
+      </h2>
+      <ExportDataButton
+        v-if="canExportStats(authStore.getAuthUser)"
+        :is-downloading="isDownloading"
+        @export="exportStats"
+      />
+    </div>
     <div class="fr-tabs">
       <ul
         class="fr-tabs__list"
@@ -173,11 +180,17 @@
 <script lang="ts" setup>
   import { AlertType } from '~~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
+  import { canExportStats } from '~/server/security/rules/export'
+  import { useAuthStore } from '~/store/auth'
   import { Options } from '~/utils/options'
+  import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
+  import { getExportUrl } from '~/utils/export/getExportUrl'
+  import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const trpcClient = useTrpcClient()
 
   const isMinistryAgent = useMinistryAgent()
+  const authStore = useAuthStore()
 
   withDefaults(
     defineProps<{
@@ -192,6 +205,7 @@
     }
   )
 
+  const isDownloading = ref(false)
   const filters = ref<StatFilterInput>({})
   const isFollowupsTabActive = ref<boolean>(false)
 
@@ -240,6 +254,29 @@
           : 'Premier entretien'
       }`
   )
+
+  async function exportStats() {
+    isDownloading.value = true
+    try {
+      const exportedFile = isFollowupsTabActive.value
+        ? await trpcClient.stat.exportFollowupStats.query(filters.value)
+        : await trpcClient.stat.exportHelpRequestStats.query(filters.value)
+      if (!exportedFile.data) {
+        throw new Error('no data')
+      }
+      const downloadLink = document.createElement('a')
+      downloadLink.href = getExportUrl(exportedFile.data)
+      downloadLink.download = getExportFilename(
+        isFollowupsTabActive.value ? 'stats_entretiens' : 'stats_demandes_daide'
+      )
+      downloadLink.click()
+      downloadLink.remove()
+    } catch {
+      useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+    } finally {
+      isDownloading.value = false
+    }
+  }
 </script>
 
 <style lang="scss" scoped>
