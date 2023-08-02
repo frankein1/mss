@@ -1,3 +1,4 @@
+import { StructureType } from '@prisma/client'
 import {
   beneficiaryAccommodationModeLabels,
   beneficiaryAccommodationZoneLabels,
@@ -6,6 +7,7 @@ import {
   beneficiarySocioProfessionalCategoryLabels
 } from '~/client/options/beneficiary'
 import { familySituationLabels } from '~/client/options/familySituation'
+import { prismaClient } from '~/server/prisma'
 import {
   getBeneficiaryCountQuery,
   getGenderStatsQuery,
@@ -15,7 +17,8 @@ import {
   getAccommodationZoneStatsQuery,
   getAccommodationModeStatsQuery,
   getMobilityStatsQuery,
-  getCSPStatsQuery
+  getCSPStatsQuery,
+  getMinistereStructureStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -25,6 +28,7 @@ import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
 import { getRowsFromData } from '~/utils/export/getRowsFromData'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import { STATS_NULL_LABEL } from '~/client/options/stat'
+import { ministereStructureLabels } from '~/client/options/ministry'
 
 export const exportBeneficiaryStatsHandler = async ({
   input,
@@ -147,6 +151,30 @@ export const exportBeneficiaryStatsHandler = async ({
     columns: CSPColumns,
     rows: CSPRows
   })
+
+  const userStructure = await prismaClient.structure.findUnique({
+    where: { id: user.structureId }
+  })
+
+  if (userStructure?.type === StructureType.Ministere) {
+    const ministereStructureData = await getMinistereStructureStatsQuery(
+      user.structureId,
+      input
+    )
+    const ministereStructureColumns = getColumnsFromLabels(
+      ministereStructureLabels
+    )
+    const ministereStructureRows = getRowsFromData(
+      ministereStructureData,
+      'ministereStructure',
+      beneficiaryCount
+    )
+    exportData.push({
+      name: 'Structures de rattachement',
+      columns: ministereStructureColumns,
+      rows: ministereStructureRows
+    })
+  }
 
   return await createExport(user.id, exportData)
 }

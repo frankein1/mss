@@ -7,3 +7,4 @@ export { getAccommodationZoneStatsQuery } from './getAccommodationZoneStatsQuery
 export { getAccommodationModeStatsQuery } from './getAccommodationModeStatsQuery'
 export { getMobilityStatsQuery } from './getMobilityStatsQuery'
 export { getCSPStatsQuery } from './getCSPStatsQuery'
+export { getMinistereStructureStatsQuery } from './getMinistereStructureStatsQuery'
