@@ -2,7 +2,8 @@ import {
   beneficiaryAccommodationModeLabels,
   beneficiaryAccommodationZoneLabels,
   beneficiaryGenderLabels,
-  beneficiaryMobilityLabels
+  beneficiaryMobilityLabels,
+  beneficiarySocioProfessionalCategoryLabels
 } from '~/client/options/beneficiary'
 import { familySituationLabels } from '~/client/options/familySituation'
 import {
@@ -13,7 +14,8 @@ import {
   getRegionStatsQuery,
   getAccommodationZoneStatsQuery,
   getAccommodationModeStatsQuery,
-  getMobilityStatsQuery
+  getMobilityStatsQuery,
+  getCSPStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -128,6 +130,22 @@ export const exportBeneficiaryStatsHandler = async ({
     name: 'Données mobilité',
     columns: mobilityColumns,
     rows: mobilityRows
+  })
+
+  const CSPData = await getCSPStatsQuery(user.structureId, input)
+  const CSPColumns = getColumnsFromLabels(
+    beneficiarySocioProfessionalCategoryLabels
+  )
+  const CSPRows = getRowsFromData(
+    CSPData,
+    'socioProfessionalCategory',
+    beneficiaryCount
+  )
+  exportData.push({
+    // ExcelJS 31 characters limit for worksheet names
+    name: 'CSP',
+    columns: CSPColumns,
+    rows: CSPRows
   })
 
   return await createExport(user.id, exportData)

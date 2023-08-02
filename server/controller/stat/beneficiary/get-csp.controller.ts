@@ -1,7 +1,6 @@
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
-import { prepareBeneficiaryStatFilters } from '~/utils/filters'
+import { getCSPStatsQuery } from '~/server/query/stats'
 
 export const getCSPStatsHandler = async ({
   input,
@@ -10,13 +9,5 @@ export const getCSPStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.beneficiary.groupBy({
-    by: ['socioProfessionalCategory'],
-    where: {
-      structureId: user.structureId,
-      ...prepareBeneficiaryStatFilters(input)
-    },
-    _count: true,
-    orderBy: { _count: { socioProfessionalCategory: 'desc' } }
-  })
+  return await getCSPStatsQuery(user.structureId, input)
 }
