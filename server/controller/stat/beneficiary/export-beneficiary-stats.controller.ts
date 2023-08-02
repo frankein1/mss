@@ -19,7 +19,8 @@ import {
   getMobilityStatsQuery,
   getCSPStatsQuery,
   getMinistereStructureStatsQuery,
-  getMinistereDepartementServiceAcStatsQuery
+  getMinistereDepartementServiceAcStatsQuery,
+  getMinistereCategorieStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -30,6 +31,7 @@ import { getRowsFromData } from '~/utils/export/getRowsFromData'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import { STATS_NULL_LABEL } from '~/client/options/stat'
 import {
+  ministereCategorieLabels,
   ministereDepartmentServiceAcLabels,
   ministereStructureLabels
 } from '~/client/options/ministry'
@@ -198,6 +200,24 @@ export const exportBeneficiaryStatsHandler = async ({
       name: "Départements de l'AC",
       columns: ministereDepartementColumns,
       rows: ministereDepartementRows
+    })
+
+    const ministereCategorieData = await getMinistereCategorieStatsQuery(
+      user.structureId,
+      input
+    )
+    const ministereCategorieColumns = getColumnsFromLabels(
+      ministereCategorieLabels
+    )
+    const ministereCategorieRows = getRowsFromData(
+      ministereCategorieData,
+      'ministereCategorie',
+      beneficiaryCount
+    )
+    exportData.push({
+      name: 'Catégories',
+      columns: ministereCategorieColumns,
+      rows: ministereCategorieRows
     })
   }
 
