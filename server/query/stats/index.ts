@@ -8,3 +8,4 @@ export { getAccommodationModeStatsQuery } from './getAccommodationModeStatsQuery
 export { getMobilityStatsQuery } from './getMobilityStatsQuery'
 export { getCSPStatsQuery } from './getCSPStatsQuery'
 export { getMinistereStructureStatsQuery } from './getMinistereStructureStatsQuery'
+export { getMinistereDepartementServiceAcStatsQuery } from './getMinistereDepartementServiceAcStatsQuery'

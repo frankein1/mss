@@ -18,7 +18,8 @@ import {
   getAccommodationModeStatsQuery,
   getMobilityStatsQuery,
   getCSPStatsQuery,
-  getMinistereStructureStatsQuery
+  getMinistereStructureStatsQuery,
+  getMinistereDepartementServiceAcStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -28,7 +29,10 @@ import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
 import { getRowsFromData } from '~/utils/export/getRowsFromData'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import { STATS_NULL_LABEL } from '~/client/options/stat'
-import { ministereStructureLabels } from '~/client/options/ministry'
+import {
+  ministereDepartmentServiceAcLabels,
+  ministereStructureLabels
+} from '~/client/options/ministry'
 
 export const exportBeneficiaryStatsHandler = async ({
   input,
@@ -146,7 +150,9 @@ export const exportBeneficiaryStatsHandler = async ({
     beneficiaryCount
   )
   exportData.push({
-    // ExcelJS 31 characters limit for worksheet names
+    // FIXME:  ExcelJS 31 characters limit for worksheet names
+    // Cf. https://github.com/exceljs/exceljs/issues/398
+    // name: 'Catégories socio-professionnelles',
     name: 'CSP',
     columns: CSPColumns,
     rows: CSPRows
@@ -173,6 +179,25 @@ export const exportBeneficiaryStatsHandler = async ({
       name: 'Structures de rattachement',
       columns: ministereStructureColumns,
       rows: ministereStructureRows
+    })
+
+    const ministereDepartementData =
+      await getMinistereDepartementServiceAcStatsQuery(user.structureId, input)
+    const ministereDepartementColumns = getColumnsFromLabels(
+      ministereDepartmentServiceAcLabels
+    )
+    const ministereDepartementRows = getRowsFromData(
+      ministereDepartementData,
+      'ministereDepartementServiceAc',
+      beneficiaryCount
+    )
+    exportData.push({
+      // FIXME: ExcelJS 31 characters limit for worksheet names
+      // Cf. https://github.com/exceljs/exceljs/issues/398
+      // name: "Départements ou services de l'administration centrale",
+      name: "Départements de l'AC",
+      columns: ministereDepartementColumns,
+      rows: ministereDepartementRows
     })
   }
 
