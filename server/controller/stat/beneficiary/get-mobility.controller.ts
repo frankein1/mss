@@ -1,7 +1,6 @@
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
-import { prepareBeneficiaryStatFilters } from '~/utils/filters'
+import { getMobilityStatsQuery } from '~/server/query/stats'
 
 export const getMobilityStatsHandler = async ({
   input,
@@ -10,13 +9,5 @@ export const getMobilityStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.beneficiary.groupBy({
-    by: ['mobility'],
-    where: {
-      structureId: user.structureId,
-      ...prepareBeneficiaryStatFilters(input)
-    },
-    _count: true,
-    orderBy: { _count: { mobility: 'desc' } }
-  })
+  return await getMobilityStatsQuery(user.structureId, input)
 }
