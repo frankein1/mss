@@ -4,7 +4,8 @@ import {
   getBeneficiaryCountQuery,
   getGenderStatsQuery,
   getAgeStatsQuery,
-  getFamilyStatsQuery
+  getFamilyStatsQuery,
+  getRegionStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -12,6 +13,8 @@ import { createExport } from '~/utils/export/createExport'
 import { ageGroupLabels } from '~/client/options/ageGroup'
 import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
 import { getRowsFromData } from '~/utils/export/getRowsFromData'
+import { STATS_NULL_KEY } from '~/utils/constants/stats'
+import { STATS_NULL_LABEL } from '~/client/options/stat'
 
 export const exportBeneficiaryStatsHandler = async ({
   input,
@@ -56,6 +59,18 @@ export const exportBeneficiaryStatsHandler = async ({
     name: 'Types de situations familiales',
     columns: familyColumns,
     rows: familyRows
+  })
+
+  const regionData = await getRegionStatsQuery(user.structureId, input)
+  const regionColumns = regionData.map(({ region }) => ({
+    key: region || STATS_NULL_KEY,
+    header: region || STATS_NULL_LABEL
+  }))
+  const regionRows = getRowsFromData(regionData, 'region', beneficiaryCount)
+  exportData.push({
+    name: 'Régions',
+    columns: regionColumns,
+    rows: regionRows
   })
 
   return await createExport(user.id, exportData)

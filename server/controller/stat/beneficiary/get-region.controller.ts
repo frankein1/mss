@@ -1,7 +1,6 @@
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
-import { prepareBeneficiaryStatFilters } from '~/utils/filters'
+import { getRegionStatsQuery } from '~/server/query/stats'
 
 export const getRegionStatsHandler = async ({
   input,
@@ -10,13 +9,5 @@ export const getRegionStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.beneficiary.groupBy({
-    by: ['region'],
-    where: {
-      structureId: user.structureId,
-      ...prepareBeneficiaryStatFilters(input)
-    },
-    _count: true,
-    orderBy: { _count: { region: 'desc' } }
-  })
+  return await getRegionStatsQuery(user.structureId, input)
 }
