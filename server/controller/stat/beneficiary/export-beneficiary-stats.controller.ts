@@ -1,4 +1,5 @@
 import {
+  beneficiaryAccommodationModeLabels,
   beneficiaryAccommodationZoneLabels,
   beneficiaryGenderLabels
 } from '~/client/options/beneficiary'
@@ -9,7 +10,8 @@ import {
   getAgeStatsQuery,
   getFamilyStatsQuery,
   getRegionStatsQuery,
-  getAccommodationZoneStatsQuery
+  getAccommodationZoneStatsQuery,
+  getAccommodationModeStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -93,6 +95,24 @@ export const exportBeneficiaryStatsHandler = async ({
     name: "Zones d'hébergement",
     columns: accommodationZoneColumns,
     rows: accommodationZoneRows
+  })
+
+  const accommodationModeData = await getAccommodationModeStatsQuery(
+    user.structureId,
+    input
+  )
+  const accommodationModeColumns = getColumnsFromLabels(
+    beneficiaryAccommodationModeLabels
+  )
+  const accommodationModeRows = getRowsFromData(
+    accommodationModeData,
+    'accommodationMode',
+    beneficiaryCount
+  )
+  exportData.push({
+    name: "Modes d'hébergement",
+    columns: accommodationModeColumns,
+    rows: accommodationModeRows
   })
 
   return await createExport(user.id, exportData)
