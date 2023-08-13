@@ -6,6 +6,7 @@ import { prismaClient } from '~/server/prisma'
 import {
   getHelpRequestCountQuery,
   getHelpRequestFollowupTypesStatsQuery,
+  getHelpRequestInstructorOrganizationStatsQuery,
   getHelpRequestMinistreStatsQuery,
   getHelpRequestPrescribingOrganizationStatsQuery,
   getHelpRequestStatusStatsQuery
@@ -118,6 +119,29 @@ export const exportHelpRequestStatsHandler = async ({
     name: 'Organismes prescripteurs',
     columns: helpRequestPrescribingOrganizationColumns,
     rows: helpRequestPrescribingOrganizationRows
+  })
+
+  const helpRequestInstructorOrganizationData =
+    await getHelpRequestInstructorOrganizationStatsQuery(
+      user.structureId,
+      input
+    )
+  const helpRequestInstructorOrganizationColumns =
+    helpRequestInstructorOrganizationData.map(
+      ({ instructorOrganizationId, instructorOrganization }) => ({
+        key: instructorOrganizationId,
+        header: instructorOrganization
+      })
+    )
+  const helpRequestInstructorOrganizationRows = getRowsFromData(
+    helpRequestInstructorOrganizationData,
+    'instructorOrganizationId',
+    helpRequestCount
+  )
+  exportData.push({
+    name: 'Organismes instructeurs',
+    columns: helpRequestInstructorOrganizationColumns,
+    rows: helpRequestInstructorOrganizationRows
   })
 
   return await createExport(user.id, exportData)
