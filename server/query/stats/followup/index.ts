@@ -3,3 +3,4 @@ export { getFollowupFollowupTypesStatsQuery } from './getFollowupFollowupTypesSt
 export { getFollowupMediumStatsQuery } from './getFollowupMediumStatsQuery'
 export { getFollowupMinistreStatsQuery } from './getFollowupMinistreStatsQuery'
 export { getFollowupStatusStatsQuery } from './getFollowupStatusStatsQuery'
+export { getFollowupPrescribingOrganizationStatsQuery } from './getFollowupPrescribingOrganizationStatsQuery'

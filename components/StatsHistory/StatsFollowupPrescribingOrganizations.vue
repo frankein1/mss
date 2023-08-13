@@ -28,9 +28,7 @@
 
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
-  import { StatList } from '~/types/stat'
   import { AlertType } from '~/utils/constants/alert'
-  import { STATS_NULL_LABEL } from '~/client/options/stat'
   import { SupportColor } from '~/client/colors/support'
 
   const trpcClient = useTrpcClient()
@@ -48,26 +46,15 @@
     props.filters
   )
 
-  const prescribingOrganizationStats = computed(() => {
-    const _prescribingOrganizationStats: { [k: string]: StatList } = {}
-    prescribingOrganizationCounts.value?.forEach(historyItem => {
-      const prescribingOrganizationId =
-        historyItem.prescribingOrganization?.id || 'null'
-      if (prescribingOrganizationId in _prescribingOrganizationStats) {
-        _prescribingOrganizationStats[prescribingOrganizationId].count++
-      } else {
-        _prescribingOrganizationStats[prescribingOrganizationId] = {
+  const prescribingOrganizationStats = computed(
+    () =>
+      prescribingOrganizationCounts.value?.map(
+        ({ _count, prescribingOrganization, prescribingOrganizationId }) => ({
           key: prescribingOrganizationId,
-          label: historyItem.prescribingOrganization?.name || STATS_NULL_LABEL,
+          label: prescribingOrganization,
           color: SupportColor.followups,
-          count: 1
-        }
-      }
-    })
-    const _prescribingOrganizationStatsValues = Object.values(
-      _prescribingOrganizationStats
-    )
-    _prescribingOrganizationStatsValues.sort((a, b) => b.count - a.count)
-    return _prescribingOrganizationStatsValues
-  })
+          count: _count
+        })
+      ) || []
+  )
 </script>

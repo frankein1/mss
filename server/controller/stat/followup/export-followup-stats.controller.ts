@@ -11,6 +11,7 @@ import {
   getFollowupFollowupTypesStatsQuery,
   getFollowupMediumStatsQuery,
   getFollowupMinistreStatsQuery,
+  getFollowupPrescribingOrganizationStatsQuery,
   getFollowupStatusStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
@@ -111,6 +112,26 @@ export const exportFollowupStatsHandler = async ({
     name: 'Statuts',
     columns: followupStatusColumns,
     rows: followupStatusRows
+  })
+
+  const followupPrescribingOrganizationData =
+    await getFollowupPrescribingOrganizationStatsQuery(user.structureId, input)
+  const followupPrescribingOrganizationColumns =
+    followupPrescribingOrganizationData.map(
+      ({ prescribingOrganizationId, prescribingOrganization }) => ({
+        key: prescribingOrganizationId,
+        header: prescribingOrganization
+      })
+    )
+  const followupPrescribingOrganizationRows = getRowsFromData(
+    followupPrescribingOrganizationData,
+    'prescribingOrganizationId',
+    followupCount
+  )
+  exportData.push({
+    name: 'Organismes prescripteurs',
+    columns: followupPrescribingOrganizationColumns,
+    rows: followupPrescribingOrganizationRows
   })
 
   return await createExport(user.id, exportData)

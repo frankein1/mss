@@ -2,3 +2,4 @@ export { getHelpRequestFollowupTypesStatsQuery } from './getHelpRequestFollowupT
 export { getHelpRequestCountQuery } from './getHelpRequestCountQuery'
 export { getHelpRequestMinistreStatsQuery } from './getHelpRequestMinistreStatsQuery'
 export { getHelpRequestStatusStatsQuery } from './getHelpRequestStatusStatsQuery'
+export { getHelpRequestPrescribingOrganizationStatsQuery } from './getHelpRequestPrescribingOrganizationStatsQuery'

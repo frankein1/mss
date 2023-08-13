@@ -7,6 +7,7 @@ import {
   getHelpRequestCountQuery,
   getHelpRequestFollowupTypesStatsQuery,
   getHelpRequestMinistreStatsQuery,
+  getHelpRequestPrescribingOrganizationStatsQuery,
   getHelpRequestStatusStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
@@ -94,6 +95,29 @@ export const exportHelpRequestStatsHandler = async ({
     name: 'Statuts',
     columns: helpRequestStatusColumns,
     rows: helpRequestStatusRows
+  })
+
+  const helpRequestPrescribingOrganizationData =
+    await getHelpRequestPrescribingOrganizationStatsQuery(
+      user.structureId,
+      input
+    )
+  const helpRequestPrescribingOrganizationColumns =
+    helpRequestPrescribingOrganizationData.map(
+      ({ prescribingOrganizationId, prescribingOrganization }) => ({
+        key: prescribingOrganizationId,
+        header: prescribingOrganization
+      })
+    )
+  const helpRequestPrescribingOrganizationRows = getRowsFromData(
+    helpRequestPrescribingOrganizationData,
+    'prescribingOrganizationId',
+    helpRequestCount
+  )
+  exportData.push({
+    name: 'Organismes prescripteurs',
+    columns: helpRequestPrescribingOrganizationColumns,
+    rows: helpRequestPrescribingOrganizationRows
   })
 
   return await createExport(user.id, exportData)
