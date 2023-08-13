@@ -1,9 +1,13 @@
+import { StructureType } from '@prisma/client'
 import { followupMediumLabels } from '~/client/options/followup'
+import { ministerLabels } from '~/client/options/ministry'
 import { RowType } from '~/types/export'
+import { prismaClient } from '~/server/prisma'
 import {
   getFollowupCountQuery,
   getFollowupFollowupTypesStatsQuery,
-  getFollowupMediumStatsQuery
+  getFollowupMediumStatsQuery,
+  getFollowupMinistreStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -66,6 +70,28 @@ export const exportFollowupStatsHandler = async ({
     columns: followupMediumColumns,
     rows: followupMediumRows
   })
+
+  const userStructure = await prismaClient.structure.findUnique({
+    where: { id: user.structureId }
+  })
+
+  if (userStructure?.type === StructureType.Ministere) {
+    const followupMinistreData = await getFollowupMinistreStatsQuery(
+      user.structureId,
+      input
+    )
+    const followupMinistreColumns = getColumnsFromLabels(ministerLabels)
+    const followupMinistreRows = getRowsFromData(
+      followupMinistreData,
+      'ministre',
+      followupCount
+    )
+    exportData.push({
+      name: 'Ministres',
+      columns: followupMinistreColumns,
+      rows: followupMinistreRows
+    })
+  }
 
   return await createExport(user.id, exportData)
 }

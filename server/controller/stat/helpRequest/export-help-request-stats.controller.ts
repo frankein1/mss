@@ -1,12 +1,18 @@
+import { StructureType } from '@prisma/client'
+import { ministerLabels } from '~/client/options/ministry'
 import { RowType } from '~/types/export'
+import { prismaClient } from '~/server/prisma'
 import {
   getHelpRequestCountQuery,
-  getHelpRequestFollowupTypesStatsQuery
+  getHelpRequestFollowupTypesStatsQuery,
+  getHelpRequestMinistreStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
+import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
+import { getRowsFromData } from '~/utils/export/getRowsFromData'
 
 export const exportHelpRequestStatsHandler = async ({
   input,
@@ -49,6 +55,28 @@ export const exportHelpRequestStatsHandler = async ({
     columns: followupTypesColumns,
     rows: followupTypesRows
   })
+
+  const userStructure = await prismaClient.structure.findUnique({
+    where: { id: user.structureId }
+  })
+
+  if (userStructure?.type === StructureType.Ministere) {
+    const helpRequestMinistreData = await getHelpRequestMinistreStatsQuery(
+      user.structureId,
+      input
+    )
+    const helpRequestMinistreColumns = getColumnsFromLabels(ministerLabels)
+    const helpRequestMinistreRows = getRowsFromData(
+      helpRequestMinistreData,
+      'ministre',
+      helpRequestCount
+    )
+    exportData.push({
+      name: 'Ministres',
+      columns: helpRequestMinistreColumns,
+      rows: helpRequestMinistreRows
+    })
+  }
 
   return await createExport(user.id, exportData)
 }
