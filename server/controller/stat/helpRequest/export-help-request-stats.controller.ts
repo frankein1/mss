@@ -1,11 +1,13 @@
 import { StructureType } from '@prisma/client'
+import { helpRequestStatusLabels } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
 import { RowType } from '~/types/export'
 import { prismaClient } from '~/server/prisma'
 import {
   getHelpRequestCountQuery,
   getHelpRequestFollowupTypesStatsQuery,
-  getHelpRequestMinistreStatsQuery
+  getHelpRequestMinistreStatsQuery,
+  getHelpRequestStatusStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -77,6 +79,22 @@ export const exportHelpRequestStatsHandler = async ({
       rows: helpRequestMinistreRows
     })
   }
+
+  const helpRequestStatusData = await getHelpRequestStatusStatsQuery(
+    user.structureId,
+    input
+  )
+  const helpRequestStatusColumns = getColumnsFromLabels(helpRequestStatusLabels)
+  const helpRequestStatusRows = getRowsFromData(
+    helpRequestStatusData,
+    'status',
+    helpRequestCount
+  )
+  exportData.push({
+    name: 'Statuts',
+    columns: helpRequestStatusColumns,
+    rows: helpRequestStatusRows
+  })
 
   return await createExport(user.id, exportData)
 }
