@@ -1,12 +1,16 @@
+import { followupMediumLabels } from '~/client/options/followup'
 import { RowType } from '~/types/export'
 import {
   getFollowupCountQuery,
-  getFollowupFollowupTypesStatsQuery
+  getFollowupFollowupTypesStatsQuery,
+  getFollowupMediumStatsQuery
 } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
+import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
+import { getRowsFromData } from '~/utils/export/getRowsFromData'
 
 export const exportFollowupStatsHandler = async ({
   input,
@@ -45,6 +49,22 @@ export const exportFollowupStatsHandler = async ({
     name: 'Objets des entretiens',
     columns: followupTypesColumns,
     rows: followupTypesRows
+  })
+
+  const followupMediumData = await getFollowupMediumStatsQuery(
+    user.structureId,
+    input
+  )
+  const followupMediumColumns = getColumnsFromLabels(followupMediumLabels)
+  const followupMediumRows = getRowsFromData(
+    followupMediumData,
+    'medium',
+    followupCount
+  )
+  exportData.push({
+    name: "Types d'entretiens",
+    columns: followupMediumColumns,
+    rows: followupMediumRows
   })
 
   return await createExport(user.id, exportData)
