@@ -10,7 +10,7 @@
     }"
     @click="exportConfirm"
   >
-    Exporter le tableau (.xlsx)
+    Exporter {{ stats ? 'les statistiques' : 'le tableau' }} (.xlsx)
   </button>
 </template>
 
@@ -21,9 +21,15 @@
 
   const emit = defineEmits<{ export: [] }>()
 
-  defineProps<{
-    isDownloading: boolean
-  }>()
+  withDefaults(
+    defineProps<{
+      isDownloading: boolean
+      stats?: boolean
+    }>(),
+    {
+      stats: false
+    }
+  )
 
   function exportConfirm() {
     modal.open(

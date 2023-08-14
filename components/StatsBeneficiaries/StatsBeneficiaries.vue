@@ -15,6 +15,7 @@
       <ExportDataButton
         v-if="canExportStats(authStore.getAuthUser)"
         :is-downloading="isDownloading"
+        stats
         @export="exportStats"
       />
     </div>
