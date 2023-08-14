@@ -33,9 +33,6 @@
             <tr>
               <th scope="col">Nom</th>
               <th scope="col">Type</th>
-              <th scope="col">SIRET</th>
-              <th scope="col">Nombre d'habitants</th>
-              <th scope="col">Code INSEE</th>
               <th scope="col">Code postal</th>
               <th scope="col">Ville</th>
               <th scope="col">Bénéficiaires</th>
@@ -58,9 +55,6 @@
               >
                 <td>{{ structure.name }}</td>
                 <td>{{ StructureTypeLabels[structure.type] }}</td>
-                <td>{{ structure.siret }}</td>
-                <td>{{ structure.inhabitantsNumber }}</td>
-                <td>{{ structure.inseeCode }}</td>
                 <td>{{ structure.zipcode }}</td>
                 <td>{{ structure.city }}</td>
                 <td>{{ structure._count.beneficiaries }}</td>
