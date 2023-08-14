@@ -7,6 +7,7 @@ import { ministerLabels } from '~/client/options/ministry'
 import { RowType } from '~/types/export'
 import { prismaClient } from '~/server/prisma'
 import {
+  getFollowupActionsEntreprisesStatsQuery,
   getFollowupCountQuery,
   getFollowupFollowupTypesStatsQuery,
   getFollowupMediumStatsQuery,
@@ -112,6 +113,25 @@ export const exportFollowupStatsHandler = async ({
     name: 'Statuts',
     columns: followupStatusColumns,
     rows: followupStatusRows
+  })
+
+  const followupActionsEntreprisesData =
+    await getFollowupActionsEntreprisesStatsQuery(user.structureId, input)
+  const followupActionsEntreprisesColumns = followupActionsEntreprisesData.map(
+    ({ actionEntrepriseId, actionEntreprise }) => ({
+      key: actionEntrepriseId,
+      header: actionEntreprise
+    })
+  )
+  const followupActionsEntreprisesRows = getRowsFromData(
+    followupActionsEntreprisesData,
+    'actionEntrepriseId',
+    followupCount
+  )
+  exportData.push({
+    name: 'Actions entreprises',
+    columns: followupActionsEntreprisesColumns,
+    rows: followupActionsEntreprisesRows
   })
 
   const followupPrescribingOrganizationData =

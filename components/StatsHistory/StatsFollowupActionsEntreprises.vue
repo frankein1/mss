@@ -39,35 +39,15 @@
     props.filters
   )
 
-  const followupActionsEntreprisesStats = computed(() => {
-    const _followupsActionsEntreprises = {
-      redirected: {
-        key: 'redirected',
-        label: 'Réorientation',
-        color: SupportColor.followups,
-        count: 0
-      },
-      helpRequested: {
-        key: 'helpRequested',
-        label: 'Instruction',
-        color: SupportColor.followups,
-        count: 0
-      }
-    }
-
-    followupActionsEntreprises.value?.forEach(followup => {
-      if (followup.redirected) {
-        _followupsActionsEntreprises.redirected.count++
-      }
-      if (followup.helpRequested) {
-        _followupsActionsEntreprises.helpRequested.count++
-      }
-    })
-
-    const followupsActionsEntreprisesValues = Object.values(
-      _followupsActionsEntreprises
-    )
-    followupsActionsEntreprisesValues.sort((a, b) => b.count - a.count)
-    return followupsActionsEntreprisesValues
-  })
+  const followupActionsEntreprisesStats = computed(
+    () =>
+      followupActionsEntreprises.value?.map(
+        ({ _count, actionEntrepriseId, actionEntreprise }) => ({
+          key: actionEntrepriseId,
+          label: actionEntreprise,
+          color: SupportColor.followups,
+          count: _count
+        })
+      ) || []
+  )
 </script>
