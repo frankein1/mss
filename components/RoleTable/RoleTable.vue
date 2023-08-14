@@ -281,17 +281,14 @@
             <td></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
           </tr>
-          <!--
-            NOTE: Not implemented
-            <tr>
-              <td>Exporter les statistiques</td>
-              <td class="fr-icon-check-line allowed-action-bg"></td>
-              <td class="fr-icon-check-line allowed-action-bg"></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          -->
+          <tr>
+            <td>Exporter les statistiques</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
         </tbody>
       </table>
     </div>
