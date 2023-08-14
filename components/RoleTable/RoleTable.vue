@@ -94,17 +94,14 @@
             <td></td>
             <td>* si il est référent</td>
           </tr>
-          <!--
-            NOTE: Not implemented
-            <tr>
-              <td>Export de la base de données bénéficiaires</td>
-              <td class="fr-icon-check-line allowed-action-bg"></td>
-              <td></td>
-              <td></td>
-              <td></td>
-              <td></td>
-            </tr>
-          -->
+          <tr>
+            <td>Export de la base de données bénéficiaires</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
           <tr>
             <td>Ajout de documents</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
