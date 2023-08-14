@@ -12,7 +12,7 @@
     <template v-else-if="data">
       <h2 class="fr-h5">Aides financières</h2>
       <StatsList
-        :stats="financialHelpRequestCounts"
+        :stats="data.financialHelpRequestCounts"
         :stats-percentage="false"
       />
       <p class="fr-text--bold stats-total-amount">
@@ -43,42 +43,6 @@
 
   const { data, pending, error } =
     await trpcClient.stat.getFinancialHelpRequestsStats.useQuery(props.filters)
-
-  const financialHelpRequestCount = computed(
-    () => data.value?.financialHelpRequestCount || 0
-  )
-
-  const internalFinancialHelpRequestCount = computed(
-    () => data.value?.internalFinancialHelpRequestCount || 0
-  )
-
-  const externalFinancialHelpRequestCount = computed(
-    () =>
-      financialHelpRequestCount.value - internalFinancialHelpRequestCount.value
-  )
-
-  const financialHelpRequestCounts = computed(() => {
-    const requestsCounts = {
-      total: {
-        key: 'total',
-        label: 'Nombre de demandes',
-        count: financialHelpRequestCount.value
-      },
-      internal: {
-        key: 'internal',
-        label: 'Instruites en interne',
-        count: internalFinancialHelpRequestCount.value
-      },
-      external: {
-        key: 'external',
-        label: 'Instruites en externe',
-        count: externalFinancialHelpRequestCount.value
-      }
-    }
-    const requestsCountsArray = Object.values(requestsCounts)
-    requestsCountsArray.sort((a, b) => b.count - a.count)
-    return requestsCountsArray
-  })
 
   const financialHelpRequestTotalAmount = computed(
     () => data.value?.financialHelpRequestTotalAmount || 0

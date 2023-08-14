@@ -5,6 +5,7 @@ import { RowType } from '~/types/export'
 import { prismaClient } from '~/server/prisma'
 import {
   getHelpRequestCountQuery,
+  getHelpRequestFinancialStatsQuery,
   getHelpRequestFollowupTypesStatsQuery,
   getHelpRequestInstructorOrganizationStatsQuery,
   getHelpRequestMinistreStatsQuery,
@@ -119,6 +120,39 @@ export const exportHelpRequestStatsHandler = async ({
     name: 'Organismes prescripteurs',
     columns: helpRequestPrescribingOrganizationColumns,
     rows: helpRequestPrescribingOrganizationRows
+  })
+
+  const helpRequestFinancialData = await getHelpRequestFinancialStatsQuery(
+    user.structureId,
+    input
+  )
+  const helpRequestFinancialColumns = [
+    ...Object.values(helpRequestFinancialData.financialHelpRequestCounts).map(
+      ({ key, label }) => ({ key, header: label })
+    ),
+    {
+      key: 'totalAllocatedAmount',
+      header: 'Montant total des aides délivrées par la structure'
+    },
+    ...helpRequestFinancialData.financialHelpRequestAmountByType.map(
+      ({ type: { id, name } }) => ({ key: id, header: name })
+    )
+  ]
+  const helpRequestFinancialRow: RowType = {}
+  Object.values(helpRequestFinancialData.financialHelpRequestCounts).forEach(
+    ({ key, count }) => (helpRequestFinancialRow[key] = count.toString())
+  )
+  helpRequestFinancialRow.totalAllocatedAmount = `${helpRequestFinancialData.financialHelpRequestTotalAmount.toFixed(
+    2
+  )}€`
+  helpRequestFinancialData.financialHelpRequestAmountByType.forEach(
+    ({ type: { id }, allocatedAmount }) =>
+      (helpRequestFinancialRow[id] = `${allocatedAmount}€`)
+  )
+  exportData.push({
+    name: 'Aides financières',
+    columns: helpRequestFinancialColumns,
+    rows: [helpRequestFinancialRow]
   })
 
   const helpRequestInstructorOrganizationData =
