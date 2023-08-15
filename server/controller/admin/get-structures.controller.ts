@@ -48,7 +48,9 @@ export const getStructuresController = async ({
       _count: {
         select: {
           beneficiaries: true,
-          users: true
+          users: true,
+          helpRequests: true,
+          followups: true
         }
       }
     },

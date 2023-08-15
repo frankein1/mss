@@ -26,6 +26,8 @@
                 @update:sort="onSort({ beneficiaries: { _count: $event } })"
               />
             </th>
+            <th scope="col">Demandes d'aide</th>
+            <th scope="col">Entretiens</th>
             <th scope="col">Utilisateurs</th>
             <th scope="col">Dernière activité</th>
           </tr>
@@ -48,6 +50,8 @@
               <td>{{ structure.zipcode }}</td>
               <td>{{ structure.city }}</td>
               <td>{{ structure._count.beneficiaries }}</td>
+              <td>{{ structure._count.helpRequests }}</td>
+              <td>{{ structure._count.followups }}</td>
               <td>{{ structure._count.users || 0 }}</td>
               <td>
                 <div v-if="structure.userActivities.length">
