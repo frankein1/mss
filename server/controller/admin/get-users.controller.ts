@@ -1,14 +1,16 @@
+import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
-import { AdminGetUsersInput } from '~/server/schema'
+import { AdminGetUsersInput, UserAdminFilterInput } from '~/server/schema'
 
 export const getUsersController = async ({
   input
 }: {
   input: AdminGetUsersInput
 }) => {
-  let where = {}
+  let where = prepareUserFilters(input.filters)
   if (input.search) {
     where = {
+      ...where,
       OR: [
         {
           lastName: {
@@ -40,4 +42,14 @@ export const getUsersController = async ({
   })
 
   return { users }
+}
+
+function prepareUserFilters(filters: UserAdminFilterInput) {
+  const formattedFilters: Prisma.UserWhereInput = {}
+
+  if (filters.role) {
+    formattedFilters.role = filters.role
+  }
+
+  return formattedFilters
 }

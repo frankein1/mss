@@ -17,6 +17,10 @@
         Ajouter un utilisateur
       </NuxtLink>
     </div>
+    <UserFiltersAdmin
+      class="fr-px-5v fr-mt-2w"
+      @filter="filters = $event"
+    />
     <div
       v-if="data?.users?.length"
       class="table-container fr-mt-3w"
@@ -65,12 +69,17 @@
   </div>
 </template>
 <script lang="ts" setup>
+  import type { UserAdminFilterInput } from '~/server/schema'
   import { RoutePath } from '~/utils/routing'
   import { UserRoleLabels } from '~/client/options/user'
 
   const search = ref<string>()
+  const filters = ref<UserAdminFilterInput>({})
 
-  const queryInput = computed(() => ({ search: search.value }))
+  const queryInput = computed(() => ({
+    search: search.value,
+    filters: filters.value
+  }))
 
   const { data } = await useTrpcClient().admin.getUsers.useQuery(queryInput)
 
