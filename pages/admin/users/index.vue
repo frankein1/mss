@@ -5,7 +5,7 @@
         <label class="fr-label"> Recherche </label>
         <input
           class="fr-input"
-          placeholder="nom"
+          placeholder="nom, email"
           @input="onSearch"
         />
       </div>

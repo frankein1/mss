@@ -9,10 +9,20 @@ export const getUsersController = async ({
   let where = {}
   if (input.search) {
     where = {
-      lastName: {
-        contains: input.search,
-        mode: 'insensitive'
-      }
+      OR: [
+        {
+          lastName: {
+            contains: input.search,
+            mode: 'insensitive'
+          }
+        },
+        {
+          email: {
+            contains: input.search,
+            mode: 'insensitive'
+          }
+        }
+      ]
     }
   }
   const users = await prismaClient.user.findMany({
