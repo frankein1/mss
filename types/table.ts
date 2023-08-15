@@ -27,4 +27,12 @@ export type HelpRequestSort = {
   }
 }
 
-export type TableSort = BeneficiarySort | FollowupSort | HelpRequestSort
+export type StructureAdminSort = {
+  beneficiaries?: { _count?: SortOrder }
+}
+
+export type TableSort =
+  | BeneficiarySort
+  | FollowupSort
+  | HelpRequestSort
+  | StructureAdminSort

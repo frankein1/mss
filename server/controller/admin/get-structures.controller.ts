@@ -51,7 +51,8 @@ export const getStructuresController = async ({
           users: true
         }
       }
-    }
+    },
+    orderBy: input.orderBy
   })
 
   return { structures }
