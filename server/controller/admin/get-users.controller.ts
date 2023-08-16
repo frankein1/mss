@@ -38,11 +38,16 @@ export const getUsersController = async ({
       role: true,
       status: true,
       structure: true
-    }
+    },
+    orderBy: input.orderBy
   })
 
   return { users }
 }
+
+export type AdminUsersOutput = Prisma.PromiseReturnType<
+  typeof getUsersController
+>
 
 function prepareUserFilters(filters: UserAdminFilterInput) {
   const formattedFilters: Prisma.UserWhereInput = {}

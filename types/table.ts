@@ -31,8 +31,13 @@ export type StructureAdminSort = {
   beneficiaries?: { _count?: SortOrder }
 }
 
+export type UserAdminSort = {
+  lastAccess?: SortOrder
+}
+
 export type TableSort =
   | BeneficiarySort
   | FollowupSort
   | HelpRequestSort
   | StructureAdminSort
+  | UserAdminSort
