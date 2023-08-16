@@ -29,7 +29,13 @@
             <th scope="col">Demandes d'aide</th>
             <th scope="col">Entretiens</th>
             <th scope="col">Utilisateurs</th>
-            <th scope="col">Dernière activité</th>
+            <th scope="col">
+              Dernière activité
+              <AtomSortButton
+                numeric
+                @update:sort="onSort({ lastActivity: $event })"
+              />
+            </th>
           </tr>
         </thead>
         <tbody>

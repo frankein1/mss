@@ -8,7 +8,8 @@ export const adminGetStructuresSchema = z.object({
         .object({
           _count: z.nativeEnum(Prisma.SortOrder).optional()
         })
-        .optional()
+        .optional(),
+      lastActivity: z.nativeEnum(Prisma.SortOrder).optional()
     })
   ),
   search: z.string().nullish()

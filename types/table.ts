@@ -29,6 +29,7 @@ export type HelpRequestSort = {
 
 export type StructureAdminSort = {
   beneficiaries?: { _count?: SortOrder }
+  lastActivity?: SortOrder
 }
 
 export type UserAdminSort = {
