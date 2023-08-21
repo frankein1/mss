@@ -265,17 +265,14 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* les dossiers dont il est référent</td>
           </tr>
-          <!--
-            NOTE: Not implemented
-            <tr>
-              <td>Exporter le tableau des accompagnements</td>
-              <td class="fr-icon-check-line allowed-action-bg"></td>
-              <td class="fr-icon-check-line allowed-action-bg"></td>
-              <td class="fr-icon-check-line allowed-action-bg"></td>
-              <td></td>
-              <td>* les dossiers dont il est référent</td>
-            </tr>
-          -->
+          <tr>
+            <td>Exporter le tableau des accompagnements</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td></td>
+            <td>* les dossiers dont il est référent</td>
+          </tr>
           <tr>
             <td>Visualiser les statistiques</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
