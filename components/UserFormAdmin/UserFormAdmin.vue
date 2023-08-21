@@ -100,7 +100,9 @@
     updateUser: [user: AdminEditUserInput | AdminCreateUserInput]
   }>()
 
-  const { data: structures } = await trpcClient.admin.getStructures.useQuery({})
+  const { data: structures } = await trpcClient.admin.getStructures.useQuery({
+    orderBy: []
+  })
 
   const structureOptions = computed(() =>
     structures.value?.structures.length

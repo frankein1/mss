@@ -5,7 +5,7 @@
         <label class="fr-label"> Recherche </label>
         <input
           class="fr-input"
-          placeholder="nom"
+          placeholder="nom, email"
           @input="onSearch"
         />
       </div>
@@ -17,62 +17,38 @@
         Ajouter un utilisateur
       </NuxtLink>
     </div>
-    <div
-      v-if="data?.users?.length"
-      class="table-container fr-mt-3w"
-      tabindex="0"
-    >
-      <div
-        class="fr-table fr-table--bordered fr-table--no-caption fr-mb-0 fr-pt-0"
-      >
-        <table>
-          <caption>
-            Liste des utilisateurs
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col">Nom</th>
-              <th scope="col">Structure</th>
-              <th scope="col">Rôle</th>
-              <th scope="col">Email</th>
-              <th scope="col">Dernière connexion</th>
-            </tr>
-          </thead>
-          <tbody>
-            <NuxtLink
-              v-for="user in data.users"
-              :key="user.id"
-              v-slot="{ navigate }"
-              custom
-              :to="RoutePath.AdminUser(user.id)"
-              target="_self"
-            >
-              <tr
-                class="clickable-row"
-                @click="navigate"
-              >
-                <td>{{ getUserDisplayName(user) }}</td>
-                <td>{{ user.structure?.name || '-' }}</td>
-                <td>{{ UserRoleLabels[user.role] }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ formatDate(user.lastAccess) }}</td>
-              </tr>
-            </NuxtLink>
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <UserFiltersAdmin
+      class="fr-px-5v fr-mt-2w"
+      @filter="filters = $event"
+    />
+    <UserTableAdmin
+      v-show="!pending"
+      v-model:sort="orderBy"
+      :users="users"
+      :pending="pending"
+    />
   </div>
 </template>
 <script lang="ts" setup>
+  import { UserAdminSort } from '~/types/table'
+  import type { UserAdminFilterInput } from '~/server/schema'
   import { RoutePath } from '~/utils/routing'
-  import { UserRoleLabels } from '~/client/options/user'
+
+  const trpcClient = useTrpcClient()
 
   const search = ref<string>()
+  const filters = ref<UserAdminFilterInput>({})
+  const orderBy = ref<UserAdminSort[]>([])
 
-  const queryInput = computed(() => ({ search: search.value }))
+  const queryInput = computed(() => ({
+    search: search.value,
+    filters: filters.value,
+    orderBy: orderBy.value
+  }))
 
-  const { data } = await useTrpcClient().admin.getUsers.useQuery(queryInput)
+  const { data, pending } = await trpcClient.admin.getUsers.useQuery(queryInput)
+
+  const users = computed(() => data.value?.users || [])
 
   function onSearch(event: Event) {
     const input = event.target as HTMLInputElement

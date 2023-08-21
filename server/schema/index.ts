@@ -85,14 +85,16 @@ export {
   beneficiaryFilterSchema,
   followupFilterSchema,
   helpRequestFilterSchema,
-  beneficiaryHistoryFilterSchema
+  beneficiaryHistoryFilterSchema,
+  userAdminFilterSchema
 } from './filter.schema'
 export type {
   StatFilterInput,
   BeneficiaryFilterInput,
   FollowupFilterInput,
   HelpRequestFilterInput,
-  BeneficiaryHistoryFilterInput
+  BeneficiaryHistoryFilterInput,
+  UserAdminFilterInput
 } from './filter.schema'
 
 export {

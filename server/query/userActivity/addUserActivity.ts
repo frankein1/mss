@@ -19,13 +19,32 @@ export async function addUserActivity(input: AddUserActivityInput) {
   if (!user) {
     return
   }
-  await conn.userActivity.create({
-    data: {
-      userId: user.id,
-      structureId: user.structureId,
-      object: input.object,
-      objectId: input.objectId,
-      activity: input.activity
-    }
-  })
+  const activityDate = new Date()
+  const activityData = {
+    userId: user.id,
+    object: input.object,
+    objectId: input.objectId,
+    activity: input.activity,
+    date: activityDate
+  }
+  if (user.structureId) {
+    await conn.structure.update({
+      where: { id: user.structureId },
+      data: {
+        // Forced to use an external field `lastActivity`, used by orderBy (in admin section's structures table)
+        // Cf. https://github.com/prisma/prisma/issues/5837 & https://github.com/prisma/prisma/issues/7593 (no orderBy for relations)
+        lastActivity: activityDate,
+        userActivities: {
+          create: activityData
+        }
+      }
+    })
+  } else {
+    await conn.userActivity.create({
+      data: {
+        structureId: user.structureId,
+        ...activityData
+      }
+    })
+  }
 }

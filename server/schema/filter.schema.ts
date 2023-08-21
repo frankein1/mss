@@ -5,7 +5,8 @@ import {
   FollowupStatus,
   HelpRequestStatus,
   FollowupMedium,
-  Minister
+  Minister,
+  UserRole
 } from '@prisma/client'
 import { AgeGroup } from '~/client/options/ageGroup'
 import { kindOfBooleanSchema } from '~/utils/zod'
@@ -76,12 +77,19 @@ type BeneficiaryHistoryFilterInput = z.infer<
   typeof beneficiaryHistoryFilterSchema
 >
 
+const userAdminFilterSchema = z.object({
+  role: z.nativeEnum(UserRole).nullish()
+})
+
+type UserAdminFilterInput = z.infer<typeof userAdminFilterSchema>
+
 export {
   statFilterSchema,
   beneficiaryFilterSchema,
   followupFilterSchema,
   helpRequestFilterSchema,
-  beneficiaryHistoryFilterSchema
+  beneficiaryHistoryFilterSchema,
+  userAdminFilterSchema
 }
 
 export type {
@@ -89,5 +97,6 @@ export type {
   BeneficiaryFilterInput,
   FollowupFilterInput,
   HelpRequestFilterInput,
-  BeneficiaryHistoryFilterInput
+  BeneficiaryHistoryFilterInput,
+  UserAdminFilterInput
 }
