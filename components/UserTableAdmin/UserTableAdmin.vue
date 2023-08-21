@@ -55,9 +55,9 @@
 
 <script setup lang="ts">
   import { Users } from './types'
-  import { getUserDisplayName } from 'utils/user'
   import { UserRoleLabels } from '~/client/options/user'
   import type { UserAdminSort } from '~/types/table'
+  import { getUserDisplayName } from '~/utils/user'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
