@@ -48,6 +48,7 @@
   import { nonAdminUserRoleOptions } from '~/client/options/user'
   import { userFieldLabels } from '~/client/labels'
   import { UserCreationInput, createUserSchema } from '~/server/schema'
+  import { getUserCreationMessage } from '~/utils/user'
 
   const snackbar = useSnackbar()
 
@@ -68,10 +69,7 @@
     try {
       const res = await useTrpcClient().user.add.mutate(user)
 
-      onSuccess(
-        `Le nouvel utilisateur ${res.email} a correctement été créé. Il recevra dans quelques instants un email l'invitant à créer son compte Inclusion Connect. Pensez à l'informer de la réception de ce mail et de l'inviter si nécessaire à vérifier ses spams.`,
-        10000
-      )
+      onSuccess(getUserCreationMessage(res.email), 10000)
       form.value?.reset()
       emit('usersRefresh')
     } catch (err) {

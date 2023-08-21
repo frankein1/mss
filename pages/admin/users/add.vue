@@ -17,8 +17,10 @@
 </template>
 
 <script setup lang="ts">
+  import { TRPCClientError } from '@trpc/client'
   import { AdminCreateUserInput } from '~/server/schema'
   import { RoutePath } from '~/utils/routing'
+  import { getUserCreationMessage } from '~/utils/user'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
@@ -29,15 +31,16 @@
   async function onAddUser(user: AdminCreateUserInput) {
     isSubmitting.value = true
     try {
-      await trpcClient.admin.createUser.mutate(user)
+      const res = await trpcClient.admin.createUser.mutate(user)
 
       navigateTo(RoutePath.AdminUsers())
-      snackbar.success("L'utilisateur a été ajouté.")
-    } catch {
-      snackbar.error(
-        "L'ajout de l'utilisateur a échoué.",
-        () => formContainer.value?.querySelector('select')?.focus()
-      )
+      snackbar.success(getUserCreationMessage(res.email))
+    } catch (err) {
+      if (err instanceof TRPCClientError && err.data.code === 'CONFLICT') {
+        snackbar.error('Cet email est déjà associé à un utilisateur.')
+      } else {
+        snackbar.error("La création de l'utilisateur a échoué.")
+      }
     }
     isSubmitting.value = false
   }
