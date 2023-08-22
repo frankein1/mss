@@ -13,7 +13,6 @@ export function getHelpRequestExportData(
   helpRequest: ReturnType<typeof getHelpRequestAccessibleData>
 ) {
   return {
-    id: helpRequest.id,
     beneficiaryId: getBeneficiaryDisplayName(helpRequest.beneficiary),
     prescribingOrganizationId: helpRequest.prescribingOrganization?.name || '',
     externalStructure: getBooleanOrEmpty(helpRequest.externalStructure),

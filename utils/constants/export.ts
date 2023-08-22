@@ -10,7 +10,6 @@ export const EXPORT_DEFAULT_FONT = {
 }
 
 export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
-  'id',
   'date',
   'firstFollowup',
   'status',
@@ -37,7 +36,6 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
 
 export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)[] =
   [
-    'id',
     'beneficiaryId',
     'prescribingOrganizationId',
     'externalStructure',
