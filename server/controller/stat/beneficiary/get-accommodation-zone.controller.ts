@@ -1,7 +1,6 @@
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
-import { prepareBeneficiaryStatFilters } from '~/utils/filters'
+import { getAccommodationZoneStatsQuery } from '~/server/query/stats'
 
 export const getAccommodationZoneStatsHandler = async ({
   input,
@@ -10,13 +9,5 @@ export const getAccommodationZoneStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.beneficiary.groupBy({
-    by: ['accommodationZone'],
-    where: {
-      structureId: user.structureId,
-      ...prepareBeneficiaryStatFilters(input)
-    },
-    _count: true,
-    orderBy: { _count: { accommodationZone: 'desc' } }
-  })
+  return await getAccommodationZoneStatsQuery(user.structureId, input)
 }

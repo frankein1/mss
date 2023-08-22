@@ -1,7 +1,6 @@
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
+import { getFollowupMediumStatsQuery } from '~/server/query/stats'
 import { StatFilterInput } from '~/server/schema'
-import { prepareFollowupStatFilters } from '~/utils/filters'
 
 export const getFollowupMediumStatsHandler = async ({
   input,
@@ -10,13 +9,5 @@ export const getFollowupMediumStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.followup.groupBy({
-    by: ['medium'],
-    where: {
-      structureId: user.structureId,
-      ...prepareFollowupStatFilters(input)
-    },
-    _count: true,
-    orderBy: { _count: { medium: 'desc' } }
-  })
+  return await getFollowupMediumStatsQuery(user.structureId, input)
 }

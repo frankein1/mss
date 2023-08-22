@@ -10,3 +10,4 @@ export { getAccommodationZoneStatsHandler } from './get-accommodation-zone.contr
 export { getMinistereStructureStatsHandler } from './get-ministere-structure.controller'
 export { getMinistereCategorieStatsHandler } from './get-ministere-categorie.controller'
 export { getMinistereDepartementServiceAcStatsHandler } from './get-ministere-departement-service-ac.controller'
+export { exportBeneficiaryStatsHandler } from './export-beneficiary-stats.controller'

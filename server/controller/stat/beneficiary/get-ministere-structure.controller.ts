@@ -1,7 +1,6 @@
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
-import { prepareBeneficiaryStatFilters } from '~/utils/filters'
+import { getMinistereStructureStatsQuery } from '~/server/query/stats'
 
 export const getMinistereStructureStatsHandler = async ({
   input,
@@ -10,13 +9,5 @@ export const getMinistereStructureStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.beneficiary.groupBy({
-    by: ['ministereStructure'],
-    where: {
-      structureId: user.structureId,
-      ...prepareBeneficiaryStatFilters(input)
-    },
-    _count: true,
-    orderBy: { _count: { ministereStructure: 'desc' } }
-  })
+  return await getMinistereStructureStatsQuery(user.structureId, input)
 }

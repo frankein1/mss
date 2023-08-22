@@ -12,6 +12,4 @@ export const REQUEST_LIMIT_OPTIONS = new Map([
 ])
 export const REQUEST_LIMIT_DEFAULT = 15
 
-export const STATS_COLLAPSED_LIMIT = 4
-
 export const INPUT_DEFER_TIME = 400

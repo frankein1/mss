@@ -8,9 +8,17 @@
         @filter="filters = $event"
       />
     </div>
-    <h2 class="fr-col-12 stats-main-title">
-      {{ beneficiaryCountLabel }}
-    </h2>
+    <div class="fr-col-12 results-container">
+      <h2 class="stats-main-title results-count">
+        {{ beneficiaryCountLabel }}
+      </h2>
+      <ExportDataButton
+        v-if="canExportStats(authStore.getAuthUser)"
+        :is-downloading="isDownloading"
+        stats
+        @export="exportStats"
+      />
+    </div>
     <AtomAlert
       v-if="error"
       :alert-type="AlertType.Error"
@@ -103,9 +111,15 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { Options } from '~/utils/options'
   import { StatFilterInput } from '~/server/schema'
+  import { canExportStats } from '~/server/security/rules/export'
+  import { useAuthStore } from '~/store/auth'
+  import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
+  import { getExportUrl } from '~/utils/export/getExportUrl'
+  import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const trpcClient = useTrpcClient()
   const isMinistryAgent = useMinistryAgent()
+  const authStore = useAuthStore()
 
   withDefaults(
     defineProps<{
@@ -120,6 +134,7 @@
     }
   )
 
+  const isDownloading = ref(false)
   const filters = ref<StatFilterInput>({})
 
   const {
@@ -134,4 +149,24 @@
         beneficiaryCount.value || 0 > 1 ? 'Bénéficiaires' : 'Bénéficiaire'
       }`
   )
+
+  async function exportStats() {
+    isDownloading.value = true
+    try {
+      const exportedBeneficiaries =
+        await trpcClient.stat.exportBeneficiaryStats.query(filters.value)
+      if (!exportedBeneficiaries.data) {
+        throw new Error('no data')
+      }
+      const downloadLink = document.createElement('a')
+      downloadLink.href = getExportUrl(exportedBeneficiaries.data)
+      downloadLink.download = getExportFilename('stats_beneficiaires')
+      downloadLink.click()
+      downloadLink.remove()
+    } catch {
+      useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+    } finally {
+      isDownloading.value = false
+    }
+  }
 </script>

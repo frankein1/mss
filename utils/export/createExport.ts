@@ -1,12 +1,12 @@
 import { readFileSync, unlinkSync } from 'fs'
 // FIXME: ExcelJS type error (Cf. https://github.com/exceljs/exceljs/issues/960)
 // eslint-disable-next-line import/default
-import ExcelPkg, { Column } from 'exceljs'
+import ExcelPkg, { Column, Workbook } from 'exceljs'
 import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
-import { RowType } from '~/types/export'
+import { RowType, WorksheetType } from '~/types/export'
 
 // eslint-disable-next-line import/no-named-as-default-member
-const { Workbook } = ExcelPkg
+const { Workbook: WorkbookConstructor } = ExcelPkg
 
 function getFullColumns(columns: Partial<Column>[], rows: RowType[]) {
   const fullColumns: Partial<Column>[] = []
@@ -33,16 +33,10 @@ function getFullColumns(columns: Partial<Column>[], rows: RowType[]) {
   return fullColumns
 }
 
-export async function createExport(
-  worksheetName: string,
-  columns: Partial<Column>[],
-  rows: RowType[],
-  userId: string
-) {
-  const workbook = new Workbook()
-  const worksheet = workbook.addWorksheet(worksheetName)
+function createWorksheet(workbook: Workbook, worksheetData: WorksheetType) {
+  const worksheet = workbook.addWorksheet(worksheetData.name)
 
-  worksheet.columns = getFullColumns(columns, rows)
+  worksheet.columns = getFullColumns(worksheetData.columns, worksheetData.rows)
 
   // Export styles
   worksheet.columns.forEach(sheetColumn => {
@@ -54,7 +48,16 @@ export async function createExport(
     bold: true
   }
 
-  rows.forEach(row => worksheet.addRow(row))
+  worksheetData.rows.forEach(row => worksheet.addRow(row))
+}
+
+export async function createExport(
+  userId: string,
+  worksheets: WorksheetType[]
+) {
+  const workbook = new WorkbookConstructor()
+
+  worksheets.forEach(worksheet => createWorksheet(workbook, worksheet))
 
   const exportName = `/tmp/mss-export-${userId}.xlsx`
 

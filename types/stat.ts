@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs'
+
 type StatBase = {
   key: string
   label: string
@@ -15,3 +17,5 @@ type StatPie = StatBase & {
 
 export type StatsListPropType = Array<StatList>
 export type StatsPiePropType = Array<StatPie>
+
+export type AgeGroupsFilter = { lower?: Dayjs; upper?: Dayjs }

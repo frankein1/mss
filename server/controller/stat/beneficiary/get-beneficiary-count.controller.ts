@@ -1,7 +1,6 @@
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
-import { prepareBeneficiaryStatFilters } from '~/utils/filters'
+import { getBeneficiaryCountQuery } from '~/server/query/stats'
 
 export const getBeneficiaryCountHandler = async ({
   input,
@@ -10,10 +9,5 @@ export const getBeneficiaryCountHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.beneficiary.count({
-    where: {
-      structureId: user.structureId,
-      ...prepareBeneficiaryStatFilters(input)
-    }
-  })
+  return await getBeneficiaryCountQuery(user.structureId, input)
 }

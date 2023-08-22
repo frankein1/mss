@@ -1,10 +1,11 @@
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
+import { prepareFollowupStatFilters } from '~/utils/filters'
 import {
-  prepareFollowupStatFilters,
-  prepareHelpRequestStatFilters
-} from '~/utils/filters'
+  getFollowupCountQuery,
+  getHelpRequestCountQuery
+} from '~/server/query/stats'
 
 export const getHistoryCountsHandler = async ({
   input,
@@ -13,18 +14,8 @@ export const getHistoryCountsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  const helpRequests = await prismaClient.helpRequest.count({
-    where: {
-      structureId: user.structureId,
-      ...prepareHelpRequestStatFilters(input)
-    }
-  })
-  const followups = await prismaClient.followup.count({
-    where: {
-      structureId: user.structureId,
-      ...prepareFollowupStatFilters(input)
-    }
-  })
+  const helpRequests = await getHelpRequestCountQuery(user.structureId, input)
+  const followups = await getFollowupCountQuery(user.structureId, input)
   const firstFollowups = await prismaClient.followup.count({
     where: {
       structureId: user.structureId,

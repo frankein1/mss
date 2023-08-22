@@ -1,0 +1,7 @@
+export { getFollowupCountQuery } from './getFollowupCountQuery'
+export { getFollowupFollowupTypesStatsQuery } from './getFollowupFollowupTypesStatsQuery'
+export { getFollowupMediumStatsQuery } from './getFollowupMediumStatsQuery'
+export { getFollowupMinistreStatsQuery } from './getFollowupMinistreStatsQuery'
+export { getFollowupStatusStatsQuery } from './getFollowupStatusStatsQuery'
+export { getFollowupPrescribingOrganizationStatsQuery } from './getFollowupPrescribingOrganizationStatsQuery'
+export { getFollowupActionsEntreprisesStatsQuery } from './getFollowupActionsEntreprisesStatsQuery'

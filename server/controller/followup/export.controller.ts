@@ -59,7 +59,7 @@ export const exportFollowupsHandler = async ({
     }
   })
 
-  const data = dataRequest.reduce((followups: RowType[], followup) => {
+  const rows = dataRequest.reduce((followups: RowType[], followup) => {
     if (canViewFollowup(user, followup.beneficiary)) {
       const withPermissionsFollowup = getFollowupAccessibleData(user, followup)
       followups.push(getFollowupExportData(withPermissionsFollowup))
@@ -67,5 +67,5 @@ export const exportFollowupsHandler = async ({
     return followups
   }, [])
 
-  return await createExport('Entretiens', columns, data, user.id)
+  return await createExport(user.id, [{ name: 'Entretiens', columns, rows }])
 }

@@ -31,9 +31,7 @@
 
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
-  import { StatList } from '~/types/stat'
   import { AlertType } from '~/utils/constants/alert'
-  import { STATS_NULL_LABEL } from '~/client/options/stat'
   import { SupportColor } from '~/client/colors/support'
 
   const props = defineProps<{
@@ -49,26 +47,15 @@
     props.filters
   )
 
-  const instructorOrganizationStats = computed(() => {
-    const _instructorOrganizationStats: { [k: string]: StatList } = {}
-    instructorOrganizationCounts.value?.forEach(historyItem => {
-      const instructorOrganizationId =
-        historyItem.instructorOrganization?.id || 'null'
-      if (instructorOrganizationId in _instructorOrganizationStats) {
-        _instructorOrganizationStats[instructorOrganizationId].count++
-      } else {
-        _instructorOrganizationStats[instructorOrganizationId] = {
+  const instructorOrganizationStats = computed(
+    () =>
+      instructorOrganizationCounts.value?.map(
+        ({ _count, instructorOrganization, instructorOrganizationId }) => ({
           key: instructorOrganizationId,
-          label: historyItem.instructorOrganization?.name || STATS_NULL_LABEL,
+          label: instructorOrganization,
           color: SupportColor.helpRequests,
-          count: 1
-        }
-      }
-    })
-    const _instructorOrganizationStatsValues = Object.values(
-      _instructorOrganizationStats
-    )
-    _instructorOrganizationStatsValues.sort((a, b) => b.count - a.count)
-    return _instructorOrganizationStatsValues
-  })
+          count: _count
+        })
+      ) || []
+  )
 </script>

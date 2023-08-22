@@ -62,7 +62,7 @@ export const exportHelpRequestsHandler = async ({
     orderBy: input.orderBy
   })
 
-  const data = dataRequest.reduce((helpRequests: RowType[], helpRequest) => {
+  const rows = dataRequest.reduce((helpRequests: RowType[], helpRequest) => {
     if (canViewHelpRequest(user, helpRequest.beneficiary)) {
       const withPermissionsHelpRequest = getHelpRequestAccessibleData(
         user,
@@ -73,5 +73,7 @@ export const exportHelpRequestsHandler = async ({
     return helpRequests
   }, [])
 
-  return await createExport("Demandes d'aide", columns, data, user.id)
+  return await createExport(user.id, [
+    { name: "Demandes d'aide", columns, rows }
+  ])
 }
