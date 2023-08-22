@@ -10,13 +10,16 @@ export const EXPORT_DEFAULT_FONT = {
 }
 
 export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
-  'date',
-  'firstFollowup',
   'status',
-  'redirected',
-  'types',
+  'date',
   'beneficiaryId',
+  'types',
   'medium',
+  'prescribingOrganizationId',
+  'firstFollowup',
+  'synthesis',
+  'redirected',
+  'structureName',
   'classified',
   'documents',
   'dueDate',
@@ -27,24 +30,22 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'numeroPegase',
   'place',
   'signalements',
-  'structureName',
-  'synthesis',
   'thirdPersonName',
-  'updated',
-  'prescribingOrganizationId'
+  'updated'
 ]
 
 export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)[] =
   [
+    'status',
+    'openingDate',
     'beneficiaryId',
+    'typeId',
     'prescribingOrganizationId',
+    'synthesis',
     'externalStructure',
     'instructorOrganizationId',
-    'openingDate',
-    'typeId',
     'documents',
     'financialSupport',
-    'status',
     'askedAmount',
     'examinationDate',
     'decisionDate',
@@ -54,7 +55,6 @@ export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)
     'handlingDate',
     'refusalReason',
     'dispatchDate',
-    'synthesis',
     'dueDate',
     'fullFile',
     'reason',
