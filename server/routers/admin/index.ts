@@ -1,5 +1,6 @@
 export type {
   AdminStructuresOutput,
   AdminStructureOutput,
-  AdminUserOutput
+  AdminUserOutput,
+  AdminUsersOutput
 } from '~/server/controller/admin'
