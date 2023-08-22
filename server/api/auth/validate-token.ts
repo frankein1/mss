@@ -77,7 +77,8 @@ export default defineEventHandler(async event => {
     },
     data: {
       accessToken: null,
-      accessTokenValidity: null
+      accessTokenValidity: null,
+      lastAccess: new Date()
     }
   })
 
