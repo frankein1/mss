@@ -14,7 +14,6 @@ export function getFollowupExportData(
   followup: ReturnType<typeof getFollowupAccessibleData>
 ) {
   return {
-    id: followup.id,
     date: formatDate(followup.date, 'DD-MM-YYYY'),
     firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
     status: followupStatusLabels[followup.status],
