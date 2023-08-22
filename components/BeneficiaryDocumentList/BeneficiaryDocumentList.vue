@@ -39,7 +39,7 @@
 </template>
 <script setup lang="ts">
   import { DocumentType } from '@prisma/client'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
   import { GetBeneficiaryOutput } from '~/server/routers'
 

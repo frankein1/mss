@@ -1,5 +1,5 @@
 import { UserActivityType } from '@prisma/client'
-import { getBeneficiaryReferentsAndRelatives } from '~/server/query/beneficiaires'
+import { getBeneficiaryWithRelations } from '~/server/query/beneficiaires'
 import {
   canEditBeneficiary,
   canEditBeneficiaryExternalOrganisations,
@@ -32,7 +32,7 @@ export const updateBeneficiaryHandler = async ({
   }
 
   const { referents: previousReferents, relatives: previousRelatives } =
-    await getBeneficiaryReferentsAndRelatives(input.id)
+    await getBeneficiaryWithRelations(input.id)
 
   const previousIds = previousReferents.map(({ id }) => id)
 

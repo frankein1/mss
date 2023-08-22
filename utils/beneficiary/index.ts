@@ -1,4 +1,5 @@
 export * from './calculateAge'
 export * from './getBeneficiaryDisplayName'
 export * from './getBeneficiaryDisplayPhone'
+export * from './getBeneficiaryFollowUpTypes'
 export * from './getBeneficiarySearchDisplayName'

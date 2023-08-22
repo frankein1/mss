@@ -31,7 +31,7 @@
             <th scope="col">Adresse postale</th>
             <th scope="col">{{ beneficiaryFieldLabels.city }}</th>
             <th scope="col">Téléphone</th>
-            <th scope="col">Types d'accompagnement</th>
+            <th scope="col">{{ beneficiaryFieldLabels.types }}</th>
             <th scope="col">Référents</th>
             <th scope="col">{{ beneficiaryFieldLabels.status }}</th>
             <th scope="col">N° Dossier</th>

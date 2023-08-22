@@ -1,14 +1,11 @@
 import { Prisma } from '@prisma/client'
-import { BeneficiaryFilterInput, GetBeneficiariesInput } from '~/server/schema'
+import { GetBeneficiariesInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
-import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
-import { FollowupTypeIdAndName } from '~/types/followupType'
-import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
-
-type FollowupTypeSet = { [id: string]: FollowupTypeIdAndName }
+import { getBeneficiaryFollowUpTypes } from '~/utils'
+import { prepareBeneficiaryFilters } from '~/utils/filters'
 
 export const getBeneficiariesHandler = async ({
   input,
@@ -58,43 +55,6 @@ export const getBeneficiariesHandler = async ({
 export type GetBeneficiariesOutput = Prisma.PromiseReturnType<
   typeof getBeneficiariesHandler
 >
-
-function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
-  const formattedFilters: Prisma.BeneficiaryWhereInput = {}
-
-  if (filters.followupTypes) {
-    const typesListFilter: Prisma.FollowupTypeWhereInput = {
-      id: { in: filters.followupTypes }
-    }
-
-    formattedFilters.OR = [
-      { followups: { some: { types: { some: typesListFilter } } } },
-      { helpRequests: { some: { type: typesListFilter } } }
-    ]
-  }
-
-  if (filters.cities) {
-    formattedFilters.city = { in: filters.cities }
-  }
-
-  if (filters.referents) {
-    formattedFilters.referents = { some: { id: { in: filters.referents } } }
-  }
-
-  if (filters.status) {
-    formattedFilters.status = filters.status
-  }
-
-  if (filters.ageGroup) {
-    const dateRange = ageGroupToDateRange(filters.ageGroup)
-    formattedFilters.birthDate = {
-      gte: dateRange.lower?.toDate(),
-      lte: dateRange.upper?.toDate()
-    }
-  }
-
-  return formattedFilters
-}
 
 function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
   where: Prisma.BeneficiaryWhereInput,
@@ -168,62 +128,4 @@ function prepareBeneficiariesWithFollowupTypes(
     }),
     ...beneficiary
   }))
-}
-
-function getBeneficiaryFollowUpTypes({
-  followups,
-  helpRequests
-}: Pick<
-  BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests,
-  'followups' | 'helpRequests'
->): FollowupTypeIdAndName[] {
-  const uniqueFollowUpTypesTuples = {
-    ...getUniqueFollowUpTypesTuplesFromFollowups(followups),
-    ...getUniqueFollowUpTypesTuplesFromHelpRequests(helpRequests)
-  }
-  const followUpTypes = Object.values(uniqueFollowUpTypesTuples)
-  return followUpTypes.sort(sortFollowupTypesByName)
-}
-
-function getUniqueFollowUpTypesTuplesFromFollowups(
-  followups: FollowupTypesFromFollowups
-) {
-  return followups.reduce((uniques, followup) => {
-    if (!followup.types.length) {
-      return uniques
-    }
-    const followupUniqueFollowUpTypes = getUniqueFollowUpTypesFromFollowup(
-      followup.types
-    )
-    return {
-      ...uniques,
-      ...followupUniqueFollowUpTypes
-    }
-  }, {} as FollowupTypeSet)
-}
-
-function getUniqueFollowUpTypesFromFollowup(
-  followUpTypesArr: FollowupTypesFromFollowups[0]['types']
-) {
-  return followUpTypesArr.reduce(
-    (uniques, f) => ({
-      ...uniques,
-      [f.id]: f
-    }),
-    {} as FollowupTypeSet
-  )
-}
-
-function getUniqueFollowUpTypesTuplesFromHelpRequests(
-  helpRequests: FollowupTypesFromHelpRequests
-) {
-  return helpRequests.reduce((uniques, helpRequest) => {
-    if (!helpRequest.type) {
-      return uniques
-    }
-    return {
-      ...uniques,
-      [helpRequest.type.id]: helpRequest.type
-    }
-  }, {} as FollowupTypeSet)
 }

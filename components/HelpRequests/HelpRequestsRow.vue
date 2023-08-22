@@ -97,7 +97,7 @@
   import { HelpRequestStatus } from '@prisma/client'
   import { HelpRequestItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { paymentMethodOptions } from '~/client/options/helpRequest'
   import { helpRequestStatusClasses } from '~/client/classes/helpRequest'
   import { euros } from '~/utils/euros'

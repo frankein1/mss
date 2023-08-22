@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary-tabs'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RoutePath, RouteTitle } from '~/utils/routing'
   import { EditFollowupInput } from '~/server/schema'

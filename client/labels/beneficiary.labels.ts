@@ -2,17 +2,20 @@ import type { Beneficiary } from '@prisma/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type BeneficiaryFieldLabels = Omit<
-  Beneficiary & { referents: string },
-  | 'id'
-  | 'createdById'
-  | 'archivedById'
-  | 'archived'
-  | 'fileNumber'
-  | 'created'
-  | 'updated'
+  Beneficiary & {
+    referents: string
+    documents: string
+    entourages: string
+    taxHouseholds: string
+    historyTotal: string
+    types: string
+  },
+  'createdById' | 'archivedById' | 'archived' | 'created'
 >
 
 const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
+  id: 'Identifiant',
+  fileNumber: 'N° dossier',
   structureId: 'Structure',
   referents: 'Agent(s) référent(s)',
   aidantConnectAuthorized: 'Mandat Aidant Connect',
@@ -78,7 +81,13 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
     "Département ou service de l'Administration Centrale",
   ministereStructure: 'Structure de rattachement',
   otherPensionOrganisations: 'Autre(s) organisme(s) de retraite',
-  accommodationZone: "Zone d'hébergement"
+  accommodationZone: "Zone d'hébergement",
+  documents: 'Documents',
+  updated: 'Dernière mise à jour',
+  entourages: 'Entourage',
+  taxHouseholds: 'Foyer fiscal',
+  historyTotal: 'Nombre de suivis',
+  types: "Types d'accompagnement"
 }
 
 export { beneficiaryFieldLabels }

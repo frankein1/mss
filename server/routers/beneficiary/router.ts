@@ -22,6 +22,8 @@ import {
   getBeneficiaryFollowupTypesHandler
 } from '~/server/controller/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
+import { exportBeneficiariesSchema } from '~/server/schema/beneficiary.schema'
+import { exportBeneficiariesHandler } from '~/server/controller/beneficiary/export.controller'
 
 export const beneficiaryRouter = router({
   search: protectedProcedure
@@ -54,6 +56,9 @@ export const beneficiaryRouter = router({
   getBeneficiaries: protectedProcedure
     .input(getBeneficiariesSchema)
     .query(getBeneficiariesHandler),
+  exportBeneficiaries: protectedProcedure
+    .input(exportBeneficiariesSchema)
+    .query(exportBeneficiariesHandler),
   delete: protectedProcedure.input(idSchema).mutation(deleteBeneficiaryHandler),
   getBeneficiaryFollowupTypes: protectedProcedure
     .input(idSchema)

@@ -21,7 +21,7 @@ export function getHelpRequestExportData(
     openingDate: formatDate(helpRequest.openingDate, 'DD-MM-YYYY'),
     typeId: helpRequest.type.name,
     documents:
-      helpRequest.documents?.map(document => document.name).join(',') || '',
+      helpRequest.documents?.map(document => document.name).join(', ') || '',
     financialSupport: getBooleanOrEmpty(helpRequest.financialSupport),
     status: helpRequestStatusLabels[helpRequest.status],
     askedAmount: helpRequest.askedAmount?.toString() || '',
@@ -44,5 +44,6 @@ export function getHelpRequestExportData(
     updated: formatDate(helpRequest.updated, 'DD-MM-YYYY HH:mm'),
     ministre: helpRequest.ministre ? ministerLabels[helpRequest.ministre] : '',
     numeroPegase: helpRequest.numeroPegase || ''
+    // TODO: export comments, depending on structures' feedbacks
   }
 }
