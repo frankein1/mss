@@ -1,3 +1,4 @@
+import { getUserDisplayName } from '~/utils/user'
 import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
@@ -42,7 +43,10 @@ export function getHelpRequestExportData(
       : '',
     updated: formatDate(helpRequest.updated, 'DD-MM-YYYY HH:mm'),
     ministre: helpRequest.ministre ? ministerLabels[helpRequest.ministre] : '',
-    numeroPegase: helpRequest.numeroPegase || ''
+    numeroPegase: helpRequest.numeroPegase || '',
+    createdById: helpRequest.createdBy
+      ? getUserDisplayName(helpRequest.createdBy)
+      : ''
     // TODO: export comments, depending on structures' feedbacks
   }
 }

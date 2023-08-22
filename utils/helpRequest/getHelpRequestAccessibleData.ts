@@ -27,6 +27,7 @@ function getHelpRequestMeta(
     id: helpRequest.id,
     structureId: helpRequest.structureId,
     created: helpRequest.created,
+    createdBy: helpRequest.createdBy,
     createdById: helpRequest.createdById,
     updated: helpRequest.updated,
     openingDate: helpRequest.openingDate,

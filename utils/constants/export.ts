@@ -31,7 +31,8 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'place',
   'signalements',
   'thirdPersonName',
-  'updated'
+  'updated',
+  'createdById'
 ]
 
 export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)[] =
@@ -60,7 +61,8 @@ export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)
     'reason',
     'updated',
     'ministre',
-    'numeroPegase'
+    'numeroPegase',
+    'createdById'
   ]
 
 export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[] =

@@ -57,7 +57,8 @@ export const exportHelpRequestsHandler = async ({
       documents: true,
       prescribingOrganization: true,
       instructorOrganization: true,
-      type: true
+      type: true,
+      createdBy: true
     },
     orderBy: input.orderBy
   })
