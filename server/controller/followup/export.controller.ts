@@ -55,7 +55,8 @@ export const exportFollowupsHandler = async ({
       },
       documents: true,
       types: true,
-      prescribingOrganization: true
+      prescribingOrganization: true,
+      createdBy: true
     }
   })
 

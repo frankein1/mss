@@ -1,10 +1,9 @@
 import type { HelpRequest } from '@prisma/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
-type HelpRequestFieldLabels = Omit<
-  HelpRequest,
-  'structureId' | 'createdById' | 'created'
-> & { documents: string }
+type HelpRequestFieldLabels = Omit<HelpRequest, 'structureId' | 'created'> & {
+  documents: string
+}
 
 export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   id: 'Identifiant',
@@ -33,5 +32,6 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   documents: 'Documents',
   financialSupport: 'Aide financière',
   externalStructure: 'Organisation extérieure',
-  updated: 'Dernière mise à jour'
+  updated: 'Dernière mise à jour',
+  createdById: 'Référent'
 }

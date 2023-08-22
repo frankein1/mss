@@ -10,6 +10,7 @@ function getFollowupMeta(followup: NonNullable<FollowupWithRelations>) {
     id: followup.id,
     structureId: followup.structureId,
     created: followup.created,
+    createdBy: followup.createdBy,
     createdById: followup.createdById,
     updated: followup.updated,
     date: followup.date,

@@ -13,7 +13,8 @@ export function getHelpRequestWithRelations(id: string) {
       documents: true,
       prescribingOrganization: true,
       instructorOrganization: true,
-      type: true
+      type: true,
+      createdBy: true
     }
   })
 }
