@@ -3,94 +3,27 @@ import {
   BeneficiaryAccommodationZone,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
+  BeneficiaryMinistereCategorie,
+  BeneficiaryMinistereDepartementServiceAc,
+  BeneficiaryMinistereStructure,
   BeneficiaryMobility,
   BeneficiaryOrientationType,
+  BeneficiaryPensionOrganisation,
   BeneficiaryProtectionMeasure,
   BeneficiarySocioProfessionalCategory,
   BeneficiaryStatus,
+  BeneficiaryTitle,
   Gender,
   IncomeSource,
-  BeneficiaryPensionOrganisation,
-  BeneficiaryTitle,
-  Nationality,
-  Prisma,
-  BeneficiaryMinistereStructure,
-  BeneficiaryMinistereCategorie,
-  BeneficiaryMinistereDepartementServiceAc
+  Nationality
 } from '@prisma/client'
 import { z } from 'zod'
 import {
   createOrUpdateEntourageSchema,
   createOrUpdateTaxHouseholdSchema
-} from './relative.schema'
-import {
-  beneficiaryFilterSchema,
-  beneficiaryHistoryFilterSchema
-} from './filter.schema'
-import { paginatedSchema } from './helpers.schema'
-import {
-  errorMessages,
-  validZipcode,
-  requiredNativeEnum,
-  withEmptyValueOptionalNativeEnum,
-  emailOrEmpty,
-  stringOrEmpty
-} from '~/utils/zod'
-
-export const getDocumentsSchema = z.object({
-  beneficiaryId: z.string()
-})
-
-type GetDocumentsInput = z.infer<typeof getDocumentsSchema>
-
-export const getHistorySchema = z.object({
-  beneficiaryId: z.string(),
-  filters: beneficiaryHistoryFilterSchema
-})
-
-type GetHistoryInput = z.infer<typeof getHistorySchema>
-
-export type { GetDocumentsInput, GetHistoryInput }
-
-export const searchBeneficiarySchema = z.object({
-  query: z.string(),
-  excludedIds: z.array(z.string().uuid()).optional()
-})
-
-export type SearchBeneficiaryInput = z.infer<typeof searchBeneficiarySchema>
-
-const beneficiaryLastNameSchema = z.string().toUpperCase().nullish()
-const beneficiaryFirstNameSchema = z
-  .string()
-  .nullish()
-  .transform(v => {
-    if (!v) {
-      return v
-    }
-    const [firstLetter, ...rest] = v
-    return `${firstLetter.toUpperCase()}${rest.join('')}`
-  })
-
-export const createBeneficiarySchema = z.object({
-  status: requiredNativeEnum(BeneficiaryStatus),
-  referents: z
-    .array(z.string().uuid(), {
-      required_error: 'Veuillez renseigner au moins un agent référent'
-    })
-    .min(1, 'Veuillez renseigner au moins un agent référent'),
-  aidantConnectAuthorized: z.boolean().default(false),
-  usualName: beneficiaryLastNameSchema,
-  birthName: beneficiaryLastNameSchema,
-  firstName: beneficiaryFirstNameSchema,
-  birthDate: z.coerce.date(errorMessages).nullish(),
-  phone1: z.string().nullish(),
-  email: emailOrEmpty(),
-  numeroPegase: z.string().nullish()
-})
-
-type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>
-
-export type { CreateBeneficiaryInput }
+} from '../relative.schema'
+import { beneficiaryFirstNameSchema } from './beneficiaryFirstName.schema'
+import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
 
 export const updateBeneficiarySchema = z.object({
   id: z.string().uuid(),
@@ -210,20 +143,3 @@ export const updateBeneficiarySchema = z.object({
 })
 
 export type UpdateBeneficiaryInput = z.infer<typeof updateBeneficiarySchema>
-
-export const exportBeneficiariesSchema = z.object({
-  orderBy: z.array(
-    z.object({
-      firstName: z.nativeEnum(Prisma.SortOrder).optional(),
-      usualName: z.nativeEnum(Prisma.SortOrder).optional()
-    })
-  ),
-  filters: beneficiaryFilterSchema
-})
-
-export type ExportBeneficiariesInput = z.infer<typeof exportBeneficiariesSchema>
-
-export const getBeneficiariesSchema =
-  exportBeneficiariesSchema.merge(paginatedSchema)
-
-export type GetBeneficiariesInput = z.infer<typeof getBeneficiariesSchema>

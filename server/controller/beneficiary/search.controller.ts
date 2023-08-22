@@ -1,6 +1,6 @@
 import { ProtectedAppContext } from '~/server/trpc'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
-import { SearchBeneficiaryInput } from '~/server/schema/beneficiary.schema'
+import { SearchBeneficiaryInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 
 const tokenToSearchCondition = (token: string) => ({

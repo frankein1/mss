@@ -1,0 +1,7 @@
+export * from './createBeneficiary.schema'
+export * from './exportBeneficiaries.schema'
+export * from './getBeneficiaries.schema'
+export * from './searchBeneficiary.schema'
+export * from './updateBeneficiary.schema'
+export * from './getDocument.schema'
+export * from './getHistory.schema'

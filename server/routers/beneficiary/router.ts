@@ -5,7 +5,8 @@ import {
   updateBeneficiarySchema,
   getBeneficiariesSchema,
   getDocumentsSchema,
-  getHistorySchema
+  getHistorySchema,
+  exportBeneficiariesSchema
 } from '~/server/schema'
 import {
   createBeneficiaryHandler,
@@ -22,7 +23,6 @@ import {
   getBeneficiaryFollowupTypesHandler
 } from '~/server/controller/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
-import { exportBeneficiariesSchema } from '~/server/schema/beneficiary.schema'
 import { exportBeneficiariesHandler } from '~/server/controller/beneficiary/export.controller'
 
 export const beneficiaryRouter = router({
