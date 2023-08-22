@@ -24,6 +24,14 @@ import {
 } from '../relative.schema'
 import { beneficiaryFirstNameSchema } from './beneficiaryFirstName.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
+import {
+  emailOrEmpty,
+  errorMessages,
+  requiredNativeEnum,
+  stringOrEmpty,
+  validZipcode,
+  withEmptyValueOptionalNativeEnum
+} from '~/utils/zod'
 
 export const updateBeneficiarySchema = z.object({
   id: z.string().uuid(),

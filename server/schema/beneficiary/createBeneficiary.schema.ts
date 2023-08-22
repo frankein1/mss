@@ -2,6 +2,7 @@ import { BeneficiaryStatus } from '@prisma/client'
 import { z } from 'zod'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
 import { beneficiaryFirstNameSchema } from './beneficiaryFirstName.schema'
+import { emailOrEmpty, errorMessages, requiredNativeEnum } from '~/utils/zod'
 
 export const createBeneficiarySchema = z.object({
   status: requiredNativeEnum(BeneficiaryStatus),
