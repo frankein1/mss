@@ -282,9 +282,9 @@
             <td>Exporter les statistiques</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
           </tr>
         </tbody>
       </table>
