@@ -109,7 +109,7 @@
   import {
     UpdateBeneficiaryInput,
     updateBeneficiarySchema
-  } from '~/server/schema/beneficiary.schema'
+  } from '~/server/schema'
   import {
     canEditBeneficiaryHealthInfo,
     canEditBeneficiaryReferents,

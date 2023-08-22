@@ -11,22 +11,7 @@ export const keySchema = z.object({
 export { paginatedSchema } from './helpers.schema'
 export type { PaginatedInput } from './helpers.schema'
 
-export {
-  createBeneficiarySchema,
-  searchBeneficiarySchema,
-  updateBeneficiarySchema,
-  getBeneficiariesSchema,
-  getDocumentsSchema,
-  getHistorySchema
-} from './beneficiary.schema'
-export type {
-  CreateBeneficiaryInput,
-  SearchBeneficiaryInput,
-  UpdateBeneficiaryInput,
-  GetBeneficiariesInput,
-  GetDocumentsInput,
-  GetHistoryInput
-} from './beneficiary.schema'
+export * from './beneficiary'
 
 export {
   addFollowupSchema,

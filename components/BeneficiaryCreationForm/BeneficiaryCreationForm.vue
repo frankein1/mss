@@ -119,7 +119,7 @@
   import {
     CreateBeneficiaryInput,
     createBeneficiarySchema
-  } from '~/server/schema/beneficiary.schema'
+  } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'

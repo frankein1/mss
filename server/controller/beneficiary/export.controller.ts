@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client'
 import { beneficiaryFieldLabels } from '~/client/labels'
 import { prismaClient } from '~/server/prisma'
-import { ExportBeneficiariesInput } from '~/server/schema/beneficiary.schema'
+import { ExportBeneficiariesInput } from '~/server/schema'
 import {
   canOnlyListItsBeneficiaries,
   canViewBeneficiary
