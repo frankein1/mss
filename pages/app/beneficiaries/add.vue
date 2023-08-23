@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-  import { CreateBeneficiaryEventAction, EventCategory } from 'types/matomo'
+  import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { CreateBeneficiaryInput } from '~/server/schema'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
