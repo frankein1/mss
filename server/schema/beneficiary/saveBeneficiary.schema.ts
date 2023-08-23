@@ -24,6 +24,14 @@ import {
 } from '../relative.schema'
 import { beneficiaryFirstNameSchema } from './beneficiaryFirstName.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
+import {
+  errorMessages,
+  requiredNativeEnum,
+  stringOrEmpty,
+  withEmptyValueOptionalNativeEnum,
+  validZipcode,
+  emailOrEmpty
+} from '~/utils/zod'
 
 export const saveBeneficiarySchema = z.object({
   referents: z
