@@ -1,4 +1,5 @@
 import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
+import { getUserDisplayName } from '~/utils/user'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
@@ -14,7 +15,6 @@ export function getFollowupExportData(
   followup: ReturnType<typeof getFollowupAccessibleData>
 ) {
   return {
-    id: followup.id,
     date: formatDate(followup.date, 'DD-MM-YYYY'),
     firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
     status: followupStatusLabels[followup.status],
@@ -46,6 +46,9 @@ export function getFollowupExportData(
     structureName: followup.structureName || '',
     synthesis: followup.synthesis || '',
     thirdPersonName: followup.thirdPersonName || '',
-    updated: formatDate(followup.updated, 'DD-MM-YYYY HH:mm')
+    updated: formatDate(followup.updated, 'DD-MM-YYYY HH:mm'),
+    createdById: followup.createdBy
+      ? getUserDisplayName(followup.createdBy)
+      : ''
   }
 }

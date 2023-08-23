@@ -10,14 +10,16 @@ export const EXPORT_DEFAULT_FONT = {
 }
 
 export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
-  'id',
-  'date',
-  'firstFollowup',
   'status',
-  'redirected',
-  'types',
+  'date',
   'beneficiaryId',
+  'types',
   'medium',
+  'prescribingOrganizationId',
+  'firstFollowup',
+  'synthesis',
+  'redirected',
+  'structureName',
   'classified',
   'documents',
   'dueDate',
@@ -28,25 +30,23 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'numeroPegase',
   'place',
   'signalements',
-  'structureName',
-  'synthesis',
   'thirdPersonName',
   'updated',
-  'prescribingOrganizationId'
+  'createdById'
 ]
 
 export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)[] =
   [
-    'id',
+    'status',
+    'openingDate',
     'beneficiaryId',
+    'typeId',
     'prescribingOrganizationId',
+    'synthesis',
     'externalStructure',
     'instructorOrganizationId',
-    'openingDate',
-    'typeId',
     'documents',
     'financialSupport',
-    'status',
     'askedAmount',
     'examinationDate',
     'decisionDate',
@@ -56,13 +56,13 @@ export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)
     'handlingDate',
     'refusalReason',
     'dispatchDate',
-    'synthesis',
     'dueDate',
     'fullFile',
     'reason',
     'updated',
     'ministre',
-    'numeroPegase'
+    'numeroPegase',
+    'createdById'
   ]
 
 export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[] =
