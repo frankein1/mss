@@ -24,8 +24,8 @@
 </template>
 
 <script lang="ts" setup>
+  import { UpdateBeneficiaryInput } from 'server/schema'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
-  import { UpdateBeneficiaryInput } from '~/server/schema'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
   definePageMeta({
