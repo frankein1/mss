@@ -28,7 +28,7 @@
   import { BeneficiarySearchResult } from '~/types/beneficiary'
 
   defineProps<{
-    currentBeneficiaryId: string
+    currentBeneficiaryId: string | null
   }>()
 
   const { push, remove, update, fields } =

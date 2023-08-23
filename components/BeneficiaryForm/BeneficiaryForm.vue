@@ -39,7 +39,7 @@
       >
         <BeneficiaryFormFamilySituation />
         <BeneficiaryFormTaxHouseholds
-          :current-beneficiary-id="beneficiary.id"
+          :current-beneficiary-id="currentBeneficiaryId"
         />
       </AccordionFieldset>
       <AccordionFieldset
@@ -106,125 +106,54 @@
   import BeneficiaryFormTaxHouseholds from './BeneficiaryFormTaxHouseholds.vue'
   import { BeneficiaryReferent } from '~/types/beneficiary'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
-  import {
-    UpdateBeneficiaryInput,
-    updateBeneficiarySchema
-  } from '~/server/schema'
-  import {
-    canEditBeneficiaryHealthInfo,
-    canEditBeneficiaryReferents,
-    canEditBeneficiaryOccupationIncome,
-    canEditBeneficiaryExternalOrganisations,
-    canEditBeneficiaryRelatives
-  } from '~/server/security/rules'
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import { SaveBeneficiaryInput, saveBeneficiarySchema } from '~/server/schema'
   import { toOptions } from '~/utils/options'
-  import { useAuthStore } from '~/store/auth'
 
   const props = defineProps<{
-    beneficiary: GetBeneficiaryOutput
+    currentBeneficiaryId: string | null
+    beneficiary: SaveBeneficiaryInput
     taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
     entourages: BeneficiaryRelative[]
     isSubmitting: boolean
     agents: BeneficiaryReferent[]
+    canSetReferents: boolean
+    canSetExternalOrganisations: boolean
+    canSetHealth: boolean
+    canSetOccupationIncome: boolean
+    canSetRelatives: boolean
   }>()
 
   const emit = defineEmits<{
-    saveBeneficiary: [beneficiary: UpdateBeneficiaryInput]
+    saveBeneficiary: [beneficiary: SaveBeneficiaryInput]
   }>()
 
-  const { handleSubmit, values } = useForm<UpdateBeneficiaryInput>({
-    validationSchema: toTypedSchema(updateBeneficiarySchema),
+  const { handleSubmit, values } = useForm<SaveBeneficiaryInput>({
+    validationSchema: toTypedSchema(saveBeneficiarySchema),
     initialValues: {
-      id: props.beneficiary.id,
-      structureId: props.beneficiary.structureId,
-      referents: props.beneficiary.referents.map(referent => referent.id),
+      referents: props.beneficiary.referents,
       aidantConnectAuthorized: props.beneficiary.aidantConnectAuthorized,
       // General Info
       general: {
-        status: props.beneficiary.status,
-        title: props.beneficiary.title,
-        firstName: props.beneficiary?.firstName || '',
-        usualName: props.beneficiary?.usualName,
-        birthName: props.beneficiary?.birthName || '',
-        birthDate: props.beneficiary.birthDate,
-        birthPlace: props.beneficiary.birthPlace,
-        deathDate: props.beneficiary.deathDate,
-        gender: props.beneficiary.gender,
-        nationality: props.beneficiary.nationality,
-        numeroPegase: props.beneficiary.numeroPegase,
-        accommodationMode: props.beneficiary.accommodationMode,
-        accommodationName: props.beneficiary.accommodationName,
-        accommodationAdditionalInformation:
-          props.beneficiary.accommodationAdditionalInformation,
-        zipcode: props.beneficiary.zipcode,
-        city: props.beneficiary.city,
-        region: props.beneficiary.region,
-        addressComplement: props.beneficiary.addressComplement,
-        accommodationZone: props.beneficiary.accommodationZone,
-        streetNumber: props.beneficiary.streetNumber,
-        street: props.beneficiary.street,
-        noPhone: props.beneficiary.noPhone,
-        phone1: props.beneficiary.phone1,
-        phone2: props.beneficiary.phone2,
-        email: props.beneficiary.email,
-        caregiver: props.beneficiary.caregiver,
-        mobility: props.beneficiary.mobility
+        ...props.beneficiary.general
       },
       // external orga
       external: {
-        protectionMeasure: props.beneficiary.protectionMeasure,
-        representative: props.beneficiary.representative,
-        prescribingStructure: props.beneficiary.prescribingStructure,
-        orientationType: props.beneficiary.orientationType,
-        orientationStructure: props.beneficiary.orientationStructure,
-        serviceProviders: props.beneficiary.serviceProviders,
-        involvedPartners: props.beneficiary.involvedPartners
+        ...props.beneficiary.external
       },
       // Health
       health: {
-        gir: props.beneficiary.gir,
-        doctor: props.beneficiary.doctor,
-        healthAdditionalInformation:
-          props.beneficiary.healthAdditionalInformation,
-        socialSecurityNumber: props.beneficiary.socialSecurityNumber,
-        insurance: props.beneficiary.insurance
+        ...props.beneficiary.health
       },
       // Occupation
       occupation: {
-        socioProfessionalCategory: props.beneficiary.socioProfessionalCategory,
-        occupation: props.beneficiary.occupation,
-        employer: props.beneficiary.employer,
-        employerSiret: props.beneficiary.employerSiret,
-        mainIncomeSource: props.beneficiary.mainIncomeSource || [],
-        mainIncomeAmount: props.beneficiary.mainIncomeAmount,
-        partnerMainIncomeSource:
-          props.beneficiary.partnerMainIncomeSource || [],
-        partnerMainIncomeAmount: props.beneficiary.partnerMainIncomeAmount,
-        majorChildrenMainIncomeSource:
-          props.beneficiary.majorChildrenMainIncomeSource || [],
-        majorChildrenMainIncomeAmount:
-          props.beneficiary.majorChildrenMainIncomeAmount,
-        unemploymentNumber: props.beneficiary.unemploymentNumber,
-        pensionOrganisations: props.beneficiary.pensionOrganisations || [],
-        otherPensionOrganisations: props.beneficiary.otherPensionOrganisations,
-        cafNumber: props.beneficiary.cafNumber,
-        bank: props.beneficiary.bank,
-        funeralContract: props.beneficiary.funeralContract,
-        ministereCategorie: props.beneficiary.ministereCategorie,
-        ministereDepartementServiceAc:
-          props.beneficiary.ministereDepartementServiceAc,
-        ministereStructure: props.beneficiary.ministereStructure
+        ...props.beneficiary.occupation
       },
       // Relatives
       taxHousehold: {
-        familySituation: props.beneficiary.familySituation,
-        minorChildren: props.beneficiary.minorChildren,
-        majorChildren: props.beneficiary.majorChildren,
-        taxHouseholds: props.taxHouseholds || []
+        ...props.beneficiary.taxHousehold
       },
       entourage: {
-        entourages: props.entourages || []
+        ...props.beneficiary.entourage
       },
 
       // additionalInformation
@@ -246,37 +175,13 @@
         const disabledAgent = agent.status !== UserStatus.Active
         const agentIsBeneficiaryReferent = (
           props.beneficiary?.referents || []
-        ).some(referent => referent.id === agent.id)
+        ).includes(agent.id)
         return disabledAgent && !agentIsBeneficiaryReferent
           ? [...disabledOptions, agent.id]
           : disabledOptions
       },
       []
     )
-  )
-
-  const authStore = useAuthStore()
-  const user = computed(() => authStore.getAuthUser)
-
-  const canSetRelatives = canEditBeneficiaryRelatives(
-    user.value,
-    props.beneficiary
-  )
-  const canSetReferents = canEditBeneficiaryReferents(
-    user.value,
-    props.beneficiary
-  )
-  const canSetHealth = canEditBeneficiaryHealthInfo(
-    user.value,
-    props.beneficiary
-  )
-  const canSetOccupationIncome = canEditBeneficiaryOccupationIncome(
-    user.value,
-    props.beneficiary
-  )
-  const canSetExternalOrganisations = canEditBeneficiaryExternalOrganisations(
-    user.value,
-    props.beneficiary
   )
 
   function onCheckValidationBeforeSubmit() {

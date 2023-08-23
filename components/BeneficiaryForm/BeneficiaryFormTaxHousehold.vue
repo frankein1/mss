@@ -102,7 +102,7 @@
   const props = defineProps<{
     taxHousehold: FieldEntry<CreateOrUpdateTaxHouseholdInput>
     index: number
-    currentBeneficiaryId: string
+    currentBeneficiaryId: string | null
   }>()
 
   const emit = defineEmits<{
@@ -142,7 +142,9 @@
   async function searchBeneficiariesFromLastname(search: string) {
     const beneficiaries = await useTrpcClient().beneficiary.search.query({
       query: search,
-      excludedIds: [props.currentBeneficiaryId]
+      excludedIds: props.currentBeneficiaryId
+        ? [props.currentBeneficiaryId]
+        : []
     })
     lastResultsFromLastname.value = beneficiaries
     return beneficiariesToAutocompleteResults(beneficiaries)
@@ -151,7 +153,9 @@
   async function searchBeneficiariesFromFirstname(search: string) {
     const beneficiaries = await useTrpcClient().beneficiary.search.query({
       query: search,
-      excludedIds: [props.currentBeneficiaryId]
+      excludedIds: props.currentBeneficiaryId
+        ? [props.currentBeneficiaryId]
+        : []
     })
     lastResultsFromFirstname.value = beneficiaries
     return beneficiariesToAutocompleteResults(beneficiaries)

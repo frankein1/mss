@@ -29,6 +29,7 @@ export enum Route {
   AppStructureEdit = 'AppStructureEdit',
   AppBeneficiaries = 'AppBeneficiaries',
   AppBeneficiariesAdd = 'AppBeneficiariesAdd',
+  AppBeneficiariesSave = 'AppBeneficiariesSave',
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
@@ -121,17 +122,13 @@ export const RoutePath = {
   [Route.AppStructureEdit]: () => `${AppRoute}/structure/edit`,
   [Route.AppBeneficiaries]: () => BeneficiariesRoute,
   [Route.AppBeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
+  [Route.AppBeneficiariesSave]: () => `${BeneficiariesRoute}/save`,
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
 
-  [Route.AppBeneficiaryEdit]: (beneficiaryId: string, complete?: boolean) => {
-    const base = `${BeneficiaryRoute(beneficiaryId)}/edit`
-    if (complete) {
-      const params = new URLSearchParams({ complete: 'true' })
-      return `${base}?${params}`
-    }
-    return base
+  [Route.AppBeneficiaryEdit]: (beneficiaryId: string) => {
+    return `${BeneficiaryRoute(beneficiaryId)}/edit`
   },
 
   [Route.AppBeneficiaryFollowupAdd]: (beneficiaryId: string) =>

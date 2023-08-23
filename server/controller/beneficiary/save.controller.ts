@@ -84,5 +84,5 @@ export const saveBeneficiaryHandler = async ({
     objectId: savedBeneficiary.id
   })
 
-  return savedBeneficiary
+  return { id: savedBeneficiary.id }
 }

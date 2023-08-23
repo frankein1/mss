@@ -39,7 +39,7 @@
     isSubmitting.value = false
 
     if (complete) {
-      navigateTo(RoutePath.AppBeneficiaryEdit(id, true))
+      navigateTo(RoutePath.AppBeneficiariesSave())
     } else {
       navigateTo(RoutePath.AppBeneficiary(id))
     }
