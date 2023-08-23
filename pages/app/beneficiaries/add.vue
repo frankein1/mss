@@ -39,7 +39,12 @@
     isSubmitting.value = false
 
     if (complete) {
-      navigateTo(RoutePath.AppBeneficiariesSave())
+      navigateTo({
+        path: RoutePath.AppBeneficiariesSave(),
+        query: {
+          initialValues: JSON.stringify(beneficiary)
+        }
+      })
     } else {
       navigateTo(RoutePath.AppBeneficiary(id))
     }

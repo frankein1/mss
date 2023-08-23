@@ -34,8 +34,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryStatus } from '@prisma/client'
-  import { SaveBeneficiaryInput, saveBeneficiarySchema } from '~/server/schema'
+  import { CreateBeneficiaryInput, SaveBeneficiaryInput } from '~/server/schema'
   import { canSaveBeneficiaryWithCompleteInfo } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
@@ -53,24 +52,44 @@
   const isSubmitting = ref(false)
 
   const authStore = useAuthStore()
+  const route = useRoute()
+
+  const initialValues = route.query.initialValues
+  let values = {} as CreateBeneficiaryInput
+  if (initialValues) {
+    values = JSON.parse(initialValues.toString())
+  }
 
   const user = authStore.getAuthUser
 
   const beneficiary = computed(() => {
-    return saveBeneficiarySchema.parse({
+    return {
       structureId: user.structureId,
-      referents: [],
-      aidantConnectAuthorized: false,
+      referents: values.referents || [],
+      aidantConnectAuthorized: values.aidantConnectAuthorized,
       // General Info
       general: {
-        status: BeneficiaryStatus.Active,
-        firstName: '',
-        usualName: '',
-        birthName: '',
-        birthPlace: '',
-        numeroPegase: ''
-      }
-    })
+        status: values.status,
+        firstName: values.firstName,
+        usualName: values.usualName,
+        birthName: values.birthName,
+        birthDate: values.birthDate,
+        numeroPegase: values.numeroPegase,
+        noPhone: false,
+        phone1: values.phone1,
+        email: values.email
+      },
+      taxHousehold: {},
+      entourage: {},
+      external: {},
+      occupation: {
+        mainIncomeSource: [],
+        pensionOrganisations: [],
+        majorChildrenMainIncomeSource: [],
+        partnerMainIncomeSource: []
+      },
+      health: {}
+    } as unknown as SaveBeneficiaryInput
   })
 
   const canSetRelatives = computed(() =>

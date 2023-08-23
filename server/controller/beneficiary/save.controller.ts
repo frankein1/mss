@@ -3,6 +3,7 @@ import { SaveBeneficiaryInput } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getUserStructureType } from '~/server/security'
+import { generateFileNumber } from '~/utils/generateFileNumber'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   canSaveBeneficiaryWithCompleteInfo,
