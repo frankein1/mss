@@ -16,6 +16,7 @@
 </template>
 
 <script setup lang="ts">
+  import { CreateBeneficiaryEventAction, EventCategory } from 'types/matomo'
   import { CreateBeneficiaryInput } from '~/server/schema'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
@@ -24,6 +25,8 @@
   useHead({ title })
 
   const trpcClient = useTrpcClient()
+
+  const { matomo } = useMatomo()
 
   const { data: agents } = await trpcClient.config.getAgents.useQuery()
 
@@ -34,10 +37,6 @@
     complete: boolean
   ) {
     isSubmitting.value = true
-    // TODO: handle error
-    const { id } = await trpcClient.beneficiary.create.mutate(beneficiary)
-    isSubmitting.value = false
-
     if (complete) {
       navigateTo({
         path: RoutePath.AppBeneficiariesSave(),
@@ -46,8 +45,15 @@
         }
       })
     } else {
+      // TODO: handle error
+      const { id } = await trpcClient.beneficiary.create.mutate(beneficiary)
+      matomo.trackEvent(
+        EventCategory.CreateBeneficiary,
+        CreateBeneficiaryEventAction.SavePartialForm
+      )
       navigateTo(RoutePath.AppBeneficiary(id))
     }
+    isSubmitting.value = false
   }
 </script>
 

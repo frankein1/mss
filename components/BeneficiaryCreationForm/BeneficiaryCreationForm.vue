@@ -124,10 +124,8 @@
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
   import { toOptions } from '~/utils/options'
-  import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
 
   const isMinistryAgent = useMinistryAgent()
-  const { matomo } = useMatomo()
 
   const props = defineProps<{
     isSubmitting: boolean
@@ -148,17 +146,6 @@
   })
 
   const onSubmit = handleSubmit(values => {
-    if (complete.value) {
-      matomo.trackEvent(
-        EventCategory.CreateBeneficiary,
-        CreateBeneficiaryEventAction.Complete
-      )
-    } else {
-      matomo.trackEvent(
-        EventCategory.CreateBeneficiary,
-        CreateBeneficiaryEventAction.SavePartialForm
-      )
-    }
     emit('saveBeneficiary', values, complete.value)
   })
 
