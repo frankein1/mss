@@ -37,15 +37,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { SaveBeneficiaryInput } from 'server/schema'
+  import { SaveBeneficiaryInput } from '~/server/schema'
   import {
     canEditBeneficiaryExternalOrganisations,
     canEditBeneficiaryHealthInfo,
     canEditBeneficiaryOccupationIncome,
     canEditBeneficiaryReferents,
     canEditBeneficiaryRelatives
-  } from 'server/security/rules'
-  import { useAuthStore } from 'store/auth'
+  } from '~/server/security/rules'
+  import { useAuthStore } from '~/store/auth'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
   definePageMeta({

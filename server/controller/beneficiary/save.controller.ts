@@ -4,8 +4,10 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getUserStructureType } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { canSaveBeneficiaryWithCompleteInfo } from 'server/security/rules/beneficiary'
-import { canSetBeneficiaryNir } from 'server/security/rules'
+import {
+  canSaveBeneficiaryWithCompleteInfo,
+  canSetBeneficiaryNir
+} from '~/server/security/rules'
 
 export const saveBeneficiaryHandler = async ({
   input,

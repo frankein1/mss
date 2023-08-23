@@ -35,9 +35,9 @@
 
 <script lang="ts" setup>
   import { BeneficiaryStatus } from '@prisma/client'
-  import { SaveBeneficiaryInput, saveBeneficiarySchema } from 'server/schema'
-  import { canSaveBeneficiaryWithCompleteInfo } from 'server/security/rules'
-  import { useAuthStore } from 'store/auth'
+  import { SaveBeneficiaryInput, saveBeneficiarySchema } from '~/server/schema'
+  import { canSaveBeneficiaryWithCompleteInfo } from '~/server/security/rules'
+  import { useAuthStore } from '~/store/auth'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
 
