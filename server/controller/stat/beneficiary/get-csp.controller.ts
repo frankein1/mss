@@ -9,5 +9,5 @@ export const getCSPStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getCSPStatsQuery(user.structureId, input)
+  return await getCSPStatsQuery(user, input)
 }

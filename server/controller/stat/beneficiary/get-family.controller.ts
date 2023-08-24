@@ -9,5 +9,5 @@ export const getFamilyStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getFamilyStatsQuery(user.structureId, input)
+  return await getFamilyStatsQuery(user, input)
 }

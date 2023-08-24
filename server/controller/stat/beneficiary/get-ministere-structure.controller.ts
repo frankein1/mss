@@ -9,5 +9,5 @@ export const getMinistereStructureStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getMinistereStructureStatsQuery(user.structureId, input)
+  return await getMinistereStructureStatsQuery(user, input)
 }

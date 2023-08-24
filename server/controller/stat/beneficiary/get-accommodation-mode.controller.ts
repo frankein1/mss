@@ -9,5 +9,5 @@ export const getAccommodationModeStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getAccommodationModeStatsQuery(user.structureId, input)
+  return await getAccommodationModeStatsQuery(user, input)
 }

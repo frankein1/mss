@@ -9,5 +9,5 @@ export const getGenderStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getGenderStatsQuery(user.structureId, input)
+  return await getGenderStatsQuery(user, input)
 }
