@@ -115,7 +115,7 @@ model Structure {
   updated                DateTime?                @updatedAt
   instructorOrganization InstructorOrganization[]
   userActivities         UserActivity[]
-  lastActivity           DateTime?
+  lastActivity           DateTime?                @map("last_activity")
 
   @@map("structure")
 }
