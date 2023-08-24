@@ -33,5 +33,5 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   financialSupport: 'Aide financière',
   externalStructure: 'Organisation extérieure',
   updated: 'Dernière mise à jour',
-  createdById: 'Référent'
+  createdById: 'Agent'
 }
