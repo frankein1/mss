@@ -116,7 +116,7 @@ export default defineNuxtConfig({
       cguVersion: '1.0',
       appUrl: process.env.APP_URL,
       inactiveUserTimeThreshold: parseInt(
-        process.env.INACTIVE_USER_TIME_THRESHOLD || '10'
+        process.env.INACTIVE_USER_TIME_THRESHOLD || '30'
       ),
       sessionCookieKey: 'MSS_SESSION_TOKEN',
       matomo: {
