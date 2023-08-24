@@ -29,7 +29,8 @@ export {
   canDeleteBeneficiary,
   canEditBeneficiaryReferents,
   canViewBeneficiaryNir,
-  canSetBeneficiaryNir
+  canSetBeneficiaryNir,
+  canSaveBeneficiaryWithCompleteInfo
 } from './beneficiary'
 
 export {

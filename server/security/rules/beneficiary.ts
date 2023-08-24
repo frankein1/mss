@@ -66,6 +66,11 @@ export const canEditBeneficiaryExternalOrganisations =
   canViewBeneficiaryExternalOrganisations
 export const canSetBeneficiaryNir = canViewBeneficiaryNir
 
+export const canSaveBeneficiaryWithCompleteInfo = (
+  grantee: SecurityRuleGrantee
+): boolean =>
+  hasAllowedRole(grantee, ['StructureManager', 'SocialWorker', 'Instructor'])
+
 export const canEditBeneficiaryReferents = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
