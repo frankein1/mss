@@ -6,7 +6,7 @@ RUN pnpm install --frozen-lockfile --prefer-offline
 COPY . .
 RUN pnpm run build
 
-FROM node:lts-bullseye-slim
+FROM gcr.io/distroless/nodejs20-debian11
 WORKDIR /app
 COPY --from=build /app/.output /app/
 
