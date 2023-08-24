@@ -9,5 +9,5 @@ export const getMobilityStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getMobilityStatsQuery(user.structureId, input)
+  return await getMobilityStatsQuery(user, input)
 }

@@ -9,5 +9,5 @@ export const getBeneficiaryCountHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getBeneficiaryCountQuery(user.structureId, input)
+  return await getBeneficiaryCountQuery(user, input)
 }

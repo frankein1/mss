@@ -9,5 +9,5 @@ export const getRegionStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getRegionStatsQuery(user.structureId, input)
+  return await getRegionStatsQuery(user, input)
 }

@@ -9,5 +9,5 @@ export const getAccommodationZoneStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getAccommodationZoneStatsQuery(user.structureId, input)
+  return await getAccommodationZoneStatsQuery(user, input)
 }
