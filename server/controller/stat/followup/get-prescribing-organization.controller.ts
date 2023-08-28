@@ -9,8 +9,5 @@ export const getFollowupPrescribingOrganizationStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getFollowupPrescribingOrganizationStatsQuery(
-    user.structureId,
-    input
-  )
+  return await getFollowupPrescribingOrganizationStatsQuery(user, input)
 }
