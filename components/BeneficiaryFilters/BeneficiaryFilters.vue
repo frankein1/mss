@@ -55,7 +55,8 @@
     pending: agentOptionsPending,
     error: agentOptionsError
   } = await trpcClient.config.getAgents.useQuery(undefined, {
-    transform: agents => toOptions(agents, 'id', 'name')
+    transform: agents => toOptions(agents, 'id', 'name'),
+    queryKey: 'config.getAgents.options'
   })
 
   const {
