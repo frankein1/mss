@@ -78,7 +78,8 @@
 
   const { data: agentsOptions, error: agentsOptionsError } =
     await trpcClient.config.getAgents.useQuery(undefined, {
-      transform: agents => withEmptyValue(toOptions(agents, 'id', 'name'))
+      transform: agents => withEmptyValue(toOptions(agents, 'id', 'name')),
+      queryKey: 'config.getAgents.options'
     })
 
   const fetchError = computed(() => {
