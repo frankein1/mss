@@ -56,8 +56,7 @@
     () => `users-activity-${props.id || props.collection}`
   )
 
-  // FIXME: For now, trpc-nuxt does not allow to define query key, and their defined key is not based on the transform option
-  const { data: usersActivityWithCount } = useAsyncData(loadUsersActivity)
+  const { data: usersActivityWithCount } = await useAsyncData(loadUsersActivity)
 
   const count = computed(() => usersActivityWithCount.value?.count)
 
