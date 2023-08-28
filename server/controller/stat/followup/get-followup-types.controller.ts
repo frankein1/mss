@@ -9,5 +9,5 @@ export const getFollowupFollowupTypesStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getFollowupFollowupTypesStatsQuery(user.structureId, input)
+  return await getFollowupFollowupTypesStatsQuery(user, input)
 }
