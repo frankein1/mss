@@ -9,5 +9,5 @@ export const getHelpRequestStatusStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getHelpRequestStatusStatsQuery(user.structureId, input)
+  return await getHelpRequestStatusStatsQuery(user, input)
 }

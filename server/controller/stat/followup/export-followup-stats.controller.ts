@@ -31,10 +31,10 @@ export const exportFollowupStatsHandler = async ({
 }) => {
   const exportData = []
 
-  const followupCount = await getFollowupCountQuery(user.structureId, input)
+  const followupCount = await getFollowupCountQuery(user, input)
 
   const followupTypesData = await getFollowupFollowupTypesStatsQuery(
-    user.structureId,
+    user,
     input
   )
   const followupTypesColumns = followupTypesData.map(({ id, name }) => ({
@@ -61,10 +61,7 @@ export const exportFollowupStatsHandler = async ({
     rows: followupTypesRows
   })
 
-  const followupMediumData = await getFollowupMediumStatsQuery(
-    user.structureId,
-    input
-  )
+  const followupMediumData = await getFollowupMediumStatsQuery(user, input)
   const followupMediumColumns = getColumnsFromLabels(followupMediumLabels)
   const followupMediumRows = getRowsFromData(
     followupMediumData,
@@ -83,7 +80,7 @@ export const exportFollowupStatsHandler = async ({
 
   if (userStructure?.type === StructureType.Ministere) {
     const followupMinistreData = await getFollowupMinistreStatsQuery(
-      user.structureId,
+      user,
       input
     )
     const followupMinistreColumns = getColumnsFromLabels(ministerLabels)
@@ -99,10 +96,7 @@ export const exportFollowupStatsHandler = async ({
     })
   }
 
-  const followupStatusData = await getFollowupStatusStatsQuery(
-    user.structureId,
-    input
-  )
+  const followupStatusData = await getFollowupStatusStatsQuery(user, input)
   const followupStatusColumns = getColumnsFromLabels(followupStatusLabels)
   const followupStatusRows = getRowsFromData(
     followupStatusData,
@@ -116,7 +110,7 @@ export const exportFollowupStatsHandler = async ({
   })
 
   const followupActionsEntreprisesData =
-    await getFollowupActionsEntreprisesStatsQuery(user.structureId, input)
+    await getFollowupActionsEntreprisesStatsQuery(user, input)
   const followupActionsEntreprisesColumns = followupActionsEntreprisesData.map(
     ({ actionEntrepriseId, actionEntreprise }) => ({
       key: actionEntrepriseId,
@@ -135,7 +129,7 @@ export const exportFollowupStatsHandler = async ({
   })
 
   const followupPrescribingOrganizationData =
-    await getFollowupPrescribingOrganizationStatsQuery(user.structureId, input)
+    await getFollowupPrescribingOrganizationStatsQuery(user, input)
   const followupPrescribingOrganizationColumns =
     followupPrescribingOrganizationData.map(
       ({ prescribingOrganizationId, prescribingOrganization }) => ({

@@ -45,12 +45,9 @@ export const exportBeneficiaryStatsHandler = async ({
 }) => {
   const exportData = []
 
-  const beneficiaryCount = await getBeneficiaryCountQuery(
-    user.structureId,
-    input
-  )
+  const beneficiaryCount = await getBeneficiaryCountQuery(user, input)
 
-  const genderData = await getGenderStatsQuery(user.structureId, input)
+  const genderData = await getGenderStatsQuery(user, input)
   const genderColumns = getColumnsFromLabels(beneficiaryGenderLabels)
   const genderRows = getRowsFromData(genderData, 'gender', beneficiaryCount)
   exportData.push({
@@ -59,7 +56,7 @@ export const exportBeneficiaryStatsHandler = async ({
     rows: genderRows
   })
 
-  const ageData = await getAgeStatsQuery(user.structureId, input)
+  const ageData = await getAgeStatsQuery(user, input)
   const ageColumns = getColumnsFromLabels(ageGroupLabels)
   const ageRows = getRowsFromData(ageData, 'ageGroup', beneficiaryCount)
   exportData.push({
@@ -68,7 +65,7 @@ export const exportBeneficiaryStatsHandler = async ({
     rows: ageRows
   })
 
-  const familyData = await getFamilyStatsQuery(user.structureId, input)
+  const familyData = await getFamilyStatsQuery(user, input)
   const familyColumns = getColumnsFromLabels(familySituationLabels)
   const familyRows = getRowsFromData(
     familyData,
@@ -81,7 +78,7 @@ export const exportBeneficiaryStatsHandler = async ({
     rows: familyRows
   })
 
-  const regionData = await getRegionStatsQuery(user.structureId, input)
+  const regionData = await getRegionStatsQuery(user, input)
   const regionColumns = regionData.map(({ region }) => ({
     key: region || STATS_NULL_KEY,
     header: region || STATS_NULL_LABEL
@@ -94,7 +91,7 @@ export const exportBeneficiaryStatsHandler = async ({
   })
 
   const accommodationZoneData = await getAccommodationZoneStatsQuery(
-    user.structureId,
+    user,
     input
   )
   const accommodationZoneColumns = getColumnsFromLabels(
@@ -112,7 +109,7 @@ export const exportBeneficiaryStatsHandler = async ({
   })
 
   const accommodationModeData = await getAccommodationModeStatsQuery(
-    user.structureId,
+    user,
     input
   )
   const accommodationModeColumns = getColumnsFromLabels(
@@ -129,7 +126,7 @@ export const exportBeneficiaryStatsHandler = async ({
     rows: accommodationModeRows
   })
 
-  const mobilityData = await getMobilityStatsQuery(user.structureId, input)
+  const mobilityData = await getMobilityStatsQuery(user, input)
   const mobilityColumns = getColumnsFromLabels(beneficiaryMobilityLabels)
   const mobilityRows = getRowsFromData(
     mobilityData,
@@ -142,7 +139,7 @@ export const exportBeneficiaryStatsHandler = async ({
     rows: mobilityRows
   })
 
-  const CSPData = await getCSPStatsQuery(user.structureId, input)
+  const CSPData = await getCSPStatsQuery(user, input)
   const CSPColumns = getColumnsFromLabels(
     beneficiarySocioProfessionalCategoryLabels
   )
@@ -166,7 +163,7 @@ export const exportBeneficiaryStatsHandler = async ({
 
   if (userStructure?.type === StructureType.Ministere) {
     const ministereStructureData = await getMinistereStructureStatsQuery(
-      user.structureId,
+      user,
       input
     )
     const ministereStructureColumns = getColumnsFromLabels(
@@ -184,7 +181,7 @@ export const exportBeneficiaryStatsHandler = async ({
     })
 
     const ministereDepartementData =
-      await getMinistereDepartementServiceAcStatsQuery(user.structureId, input)
+      await getMinistereDepartementServiceAcStatsQuery(user, input)
     const ministereDepartementColumns = getColumnsFromLabels(
       ministereDepartmentServiceAcLabels
     )
@@ -203,7 +200,7 @@ export const exportBeneficiaryStatsHandler = async ({
     })
 
     const ministereCategorieData = await getMinistereCategorieStatsQuery(
-      user.structureId,
+      user,
       input
     )
     const ministereCategorieColumns = getColumnsFromLabels(
