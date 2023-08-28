@@ -10,18 +10,23 @@ import {
 import { ministerLabels } from '~/client/options/ministry'
 import { getHelpRequestAccessibleData } from '~/utils/helpRequest/getHelpRequestAccessibleData'
 
+function getExternalStructure(externalStructure: boolean | null | undefined) {
+  if (externalStructure === true) {
+    return 'Organisation extérieure'
+  }
+  if (externalStructure === false) {
+    return 'Interne'
+  }
+  return ''
+}
+
 export function getHelpRequestExportData(
   helpRequest: ReturnType<typeof getHelpRequestAccessibleData>
 ) {
   return {
     beneficiaryId: getBeneficiaryDisplayName(helpRequest.beneficiary),
     prescribingOrganizationId: helpRequest.prescribingOrganization?.name || '',
-    externalStructure:
-      helpRequest.externalStructure === true
-        ? 'Organisation extérieure'
-        : helpRequest.externalStructure === false
-        ? 'Interne'
-        : '',
+    externalStructure: getExternalStructure(helpRequest.externalStructure),
     instructorOrganizationId: helpRequest.instructorOrganization?.name || '',
     openingDate: formatDate(helpRequest.openingDate, 'DD-MM-YYYY'),
     typeId: helpRequest.type.name,
