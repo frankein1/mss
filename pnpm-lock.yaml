@@ -69,8 +69,8 @@ dependencies:
     specifier: ^1.13.1
     version: 1.13.1
   trpc-nuxt:
-    specifier: ^0.10.6
-    version: 0.10.6(@trpc/client@10.35.0)(@trpc/server@10.35.0)
+    specifier: ^0.10.7
+    version: 0.10.7(@trpc/client@10.35.0)(@trpc/server@10.35.0)
   uuid:
     specifier: ^9.0.0
     version: 9.0.0
@@ -8937,8 +8937,8 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
-  /trpc-nuxt@0.10.6(@trpc/client@10.35.0)(@trpc/server@10.35.0):
-    resolution: {integrity: sha512-d1eaHtra3rE2TnwvenyrLqRQZkV3/bILji8pYnodVIODbpdEpx2cibDMkhW3y6+fnP2fWvV/MufB2oUSLBzzEw==}
+  /trpc-nuxt@0.10.7(@trpc/client@10.35.0)(@trpc/server@10.35.0):
+    resolution: {integrity: sha512-OrqsDAcN9j8FbquM0+wfDcKg6mdm+tdHO/FYCyVIhKx+CBMYRe+kXpUCmhDHXxMB3vEgxVqrVVVvzHfoCBofvg==}
     peerDependencies:
       '@trpc/client': ^10.26.0
       '@trpc/server': ^10.26.0
