@@ -25,7 +25,8 @@ export const saveBeneficiaryHandler = async ({
     external,
     occupation,
     taxHousehold,
-    entourage
+    entourage,
+    additionalInformation
   } = input
 
   const fileNumber = generateFileNumber()
@@ -38,7 +39,8 @@ export const saveBeneficiaryHandler = async ({
     referents: {
       connect: referents.map(referent => ({ id: referent }))
     },
-    createdById: user.id
+    createdById: user.id,
+    additionalInformation
   } as any
 
   if (canSaveBeneficiaryWithCompleteInfo(user)) {

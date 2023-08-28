@@ -46,11 +46,12 @@ export const updateBeneficiaryHandler = async ({
     external,
     occupation,
     taxHousehold,
-    entourage
+    entourage,
+    additionalInformation
   } = input
 
   let data = {}
-  data = { ...general, aidantConnectAuthorized }
+  data = { ...general, aidantConnectAuthorized, additionalInformation }
 
   if (
     canEditBeneficiaryReferents(user, {
