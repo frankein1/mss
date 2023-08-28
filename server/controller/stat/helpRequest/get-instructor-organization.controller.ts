@@ -9,8 +9,5 @@ export const getInstructorOrganizationStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getHelpRequestInstructorOrganizationStatsQuery(
-    user.structureId,
-    input
-  )
+  return await getHelpRequestInstructorOrganizationStatsQuery(user, input)
 }

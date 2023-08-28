@@ -9,5 +9,5 @@ export const getFinancialHelpRequestsStats = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getHelpRequestFinancialStatsQuery(user.structureId, input)
+  return await getHelpRequestFinancialStatsQuery(user, input)
 }
