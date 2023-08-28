@@ -14,7 +14,12 @@
       :class="[dropdown ? 'fr-label' : 'fr-fieldset__legend', labelClass]"
       :for="displayInputId"
     >
-      {{ displayLabel }}
+      {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
       <span
         v-if="hint"
         class="fr-hint-text"
@@ -162,10 +167,6 @@
   const hiddenInput = ref<HTMLInputElement | null>(null)
   const combobox = ref<HTMLDivElement | null>(null)
   const optionRefs = initOptionRefs()
-
-  const displayLabel = computed(() =>
-    props.required ? `${props.label} *` : props.label
-  )
 
   const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
 

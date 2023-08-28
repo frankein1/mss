@@ -18,7 +18,12 @@
       :for="id"
     >
       <span :class="{ 'no-label': noLabel }">
-        {{ displayLabel }}
+        {{ label }}
+        <span
+          v-if="required"
+          class="color-red"
+          >*</span
+        >
       </span>
     </label>
     <div
@@ -67,9 +72,6 @@
 
   const { id, errorId } = useFormFieldId(props.name)
 
-  const displayLabel = computed(() =>
-    props.required ? `${props.label} *` : props.label
-  )
   const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
 </script>
 
