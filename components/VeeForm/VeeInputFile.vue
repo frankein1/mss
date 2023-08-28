@@ -10,7 +10,12 @@
       class="fr-label"
       :for="id"
     >
-      {{ displayLabel }}
+      {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
       <span
         v-if="hint"
         class="fr-hint-text"
@@ -71,9 +76,6 @@
 
   const { id, errorId } = useFormFieldId(props.name)
 
-  const displayLabel = computed(() =>
-    props.required ? `${props.label} *` : props.label
-  )
   const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
 
   function onChange(event: any) {

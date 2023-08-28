@@ -12,7 +12,12 @@
       class="fr-label"
       :for="displayInputId"
     >
-      {{ displayLabel }}
+      {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
       <span
         v-if="hint"
         class="fr-hint-text"
@@ -196,10 +201,6 @@
     () =>
       isFocused.value &&
       (!!filteredOptions.value.size || props.canCreateNewOption)
-  )
-
-  const displayLabel = computed<string>(() =>
-    props.required ? `${props.label} *` : props.label
   )
 
   const ariaDescribedby = computed<string | undefined>(() =>
