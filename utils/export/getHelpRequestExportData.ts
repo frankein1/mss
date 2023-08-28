@@ -16,7 +16,12 @@ export function getHelpRequestExportData(
   return {
     beneficiaryId: getBeneficiaryDisplayName(helpRequest.beneficiary),
     prescribingOrganizationId: helpRequest.prescribingOrganization?.name || '',
-    externalStructure: getBooleanOrEmpty(helpRequest.externalStructure),
+    externalStructure:
+      helpRequest.externalStructure === true
+        ? 'Organisation extérieure'
+        : helpRequest.externalStructure === false
+        ? 'Interne'
+        : '',
     instructorOrganizationId: helpRequest.instructorOrganization?.name || '',
     openingDate: formatDate(helpRequest.openingDate, 'DD-MM-YYYY'),
     typeId: helpRequest.type.name,
