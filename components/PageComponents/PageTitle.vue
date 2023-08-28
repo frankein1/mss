@@ -1,5 +1,14 @@
 <template>
   <div class="pagetitle__container fr-mb-3w">
+    <div
+      v-if="icon"
+      class="pagetitle__icon"
+    >
+      <span
+        :class="[icon]"
+        aria-hidden="true"
+      ></span>
+    </div>
     <div class="pagetitle__titles">
       <div class="pagetitle__title">{{ title }}</div>
       <div class="pagetitle__subtitle">
@@ -12,16 +21,33 @@
 <script setup lang="ts">
   defineProps<{
     title: string
+    icon?: string
   }>()
 </script>
 
 <style lang="scss">
   .pagetitle__container {
     display: flex;
+    gap: 1rem;
+  }
+
+  .pagetitle__icon {
+    color: var(--primary);
+    background-color: var(--primary-light);
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+
+    span::before {
+      --icon-size: 2rem;
+    }
   }
 
   .pagetitle__titles {
     display: flex;
+    gap: 0.5rem;
     flex-direction: column;
     justify-content: center;
   }
