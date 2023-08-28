@@ -31,7 +31,7 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   privateSynthesis: 'Compte rendu privé',
   documents: 'Documents',
   financialSupport: 'Aide financière',
-  externalStructure: 'Organisation extérieure',
+  externalStructure: 'Demande réalisée',
   updated: 'Dernière mise à jour',
   createdById: 'Référent'
 }
