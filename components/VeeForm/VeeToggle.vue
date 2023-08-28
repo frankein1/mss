@@ -17,7 +17,10 @@
       :data-fr-checked-label="checkedLabel ? 'Activé' : undefined"
       :data-fr-unchecked-label="checkedLabel ? 'Désactivé' : undefined"
     >
-      <span v-show="!noLabel">
+      <span
+        v-show="!noLabel"
+        class="fr-label"
+      >
         {{ label }}
       </span>
     </label>

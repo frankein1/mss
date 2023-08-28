@@ -10,9 +10,10 @@
           :options="beneficiaryStatusOptions"
           required
         />
-        <VeeCheckbox
+        <VeeToggle
           :label="beneficiaryFieldLabels.aidantConnectAuthorized"
           name="aidantConnectAuthorized"
+          :checked-label="false"
         />
       </div>
       <div class="fr-col-6">
