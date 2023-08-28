@@ -1,17 +1,6 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb
-      :links="
-        Breadcrumb.AppBeneficiaryEdit(
-          beneficiary
-            ? {
-                id: beneficiary.id,
-                ...beneficiary.general
-              }
-            : null
-        )
-      "
-    />
+    <DsfrBreadcrumb :links="breadcrumb" />
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -206,6 +195,16 @@
   const title = computed(() =>
     RouteTitle.AppBeneficiaryEdit(beneficiary.value?.general || null)
   )
+
+  const breadcrumb = computed(() => {
+    if (beneficiary.value) {
+      return Breadcrumb.AppBeneficiaryEdit({
+        id: beneficiary.value.id,
+        ...beneficiary.value.general
+      })
+    }
+    return Breadcrumb.AppBeneficiaryEdit(null)
+  })
 
   useHead({ title })
 
