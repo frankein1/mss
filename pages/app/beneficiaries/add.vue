@@ -1,7 +1,10 @@
 <template>
   <PageContainer class="page-container">
     <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" />
-    <PageTitle :title="title">
+    <PageTitle
+      :title="title"
+      icon="fr-icon-user-add-line"
+    >
       <div>
         Les champs avec <span class="color-red">*</span> sont obligatoires
       </div>
