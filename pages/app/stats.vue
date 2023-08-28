@@ -60,15 +60,11 @@
 
   const trpcClient = useTrpcClient()
 
-  // FIXME: For now, trpc-nuxt does not allow to define query key, and their defined key is not based on the transform option
   const { data: followupTypesOptions, error: followupTypesOptionsError } =
-    await useAsyncData(
-      'config.getStructureFollowupTypes.options',
-      () => trpcClient.config.getStructureFollowupTypes.query(),
-      {
-        transform: followupTypes => toOptions(followupTypes, 'id', 'name')
-      }
-    )
+    await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
+      transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
+      queryKey: 'config.getStructureFollowupTypes.options'
+    })
 
   const {
     data: beneficiariesCitiesOptions,
