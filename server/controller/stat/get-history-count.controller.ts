@@ -14,7 +14,7 @@ export const getHistoryCountsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  const helpRequests = await getHelpRequestCountQuery(user.structureId, input)
+  const helpRequests = await getHelpRequestCountQuery(user, input)
   const followups = await getFollowupCountQuery(user, input)
   const firstFollowups = await prismaClient.followup.count({
     where: {

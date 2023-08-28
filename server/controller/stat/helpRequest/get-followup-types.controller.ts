@@ -9,5 +9,5 @@ export const getHelpRequestFollowupTypesStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getHelpRequestFollowupTypesStatsQuery(user.structureId, input)
+  return await getHelpRequestFollowupTypesStatsQuery(user, input)
 }

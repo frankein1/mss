@@ -1,6 +1,8 @@
 import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
+import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+import { ProtectedAppContextUser } from '~/server/trpc'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
 function getFinancialHelpRequestCount(
@@ -104,10 +106,27 @@ async function getFinancialHelpRequestAmountByType(
 }
 
 export async function getHelpRequestFinancialStatsQuery(
-  structureId: string,
+  user: ProtectedAppContextUser,
   input: StatFilterInput
 ) {
-  const filters = prepareHelpRequestStatFilters(input)
+  const referents = canOnlyListItsBeneficiaries(user)
+    ? { some: { id: user.id } }
+    : undefined
+
+  const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
+    prepareHelpRequestStatFilters(input)
+
+  const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
+    preparedBeneficiaryFilters
+      ? {
+          ...preparedBeneficiaryFilters,
+          referents
+        }
+      : {
+          referents
+        }
+
+  const filters = { ...preparedFilters, beneficiary: beneficiaryFilters }
 
   const [
     financialHelpRequestCount,
@@ -115,10 +134,10 @@ export async function getHelpRequestFinancialStatsQuery(
     financialHelpRequestTotalAmount,
     financialHelpRequestAmountByType
   ] = await Promise.all([
-    getFinancialHelpRequestCount(structureId, filters),
-    getInternalFinancialHelpRequestCount(structureId, filters),
-    getFinancialHelpRequestTotalAmount(structureId, filters),
-    getFinancialHelpRequestAmountByType(structureId, filters)
+    getFinancialHelpRequestCount(user.structureId, filters),
+    getInternalFinancialHelpRequestCount(user.structureId, filters),
+    getFinancialHelpRequestTotalAmount(user.structureId, filters),
+    getFinancialHelpRequestAmountByType(user.structureId, filters)
   ])
 
   const requestsCounts = {

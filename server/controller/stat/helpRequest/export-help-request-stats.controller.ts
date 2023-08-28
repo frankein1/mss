@@ -28,13 +28,10 @@ export const exportHelpRequestStatsHandler = async ({
 }) => {
   const exportData = []
 
-  const helpRequestCount = await getHelpRequestCountQuery(
-    user.structureId,
-    input
-  )
+  const helpRequestCount = await getHelpRequestCountQuery(user, input)
 
   const followupTypesData = await getHelpRequestFollowupTypesStatsQuery(
-    user.structureId,
+    user,
     input
   )
   const followupTypesColumns = followupTypesData.map(({ id, name }) => ({
@@ -67,7 +64,7 @@ export const exportHelpRequestStatsHandler = async ({
 
   if (userStructure?.type === StructureType.Ministere) {
     const helpRequestMinistreData = await getHelpRequestMinistreStatsQuery(
-      user.structureId,
+      user,
       input
     )
     const helpRequestMinistreColumns = getColumnsFromLabels(ministerLabels)
@@ -84,7 +81,7 @@ export const exportHelpRequestStatsHandler = async ({
   }
 
   const helpRequestStatusData = await getHelpRequestStatusStatsQuery(
-    user.structureId,
+    user,
     input
   )
   const helpRequestStatusColumns = getColumnsFromLabels(helpRequestStatusLabels)
@@ -100,10 +97,7 @@ export const exportHelpRequestStatsHandler = async ({
   })
 
   const helpRequestPrescribingOrganizationData =
-    await getHelpRequestPrescribingOrganizationStatsQuery(
-      user.structureId,
-      input
-    )
+    await getHelpRequestPrescribingOrganizationStatsQuery(user, input)
   const helpRequestPrescribingOrganizationColumns =
     helpRequestPrescribingOrganizationData.map(
       ({ prescribingOrganizationId, prescribingOrganization }) => ({
@@ -123,7 +117,7 @@ export const exportHelpRequestStatsHandler = async ({
   })
 
   const helpRequestFinancialData = await getHelpRequestFinancialStatsQuery(
-    user.structureId,
+    user,
     input
   )
   const helpRequestFinancialColumns = [
@@ -156,10 +150,7 @@ export const exportHelpRequestStatsHandler = async ({
   })
 
   const helpRequestInstructorOrganizationData =
-    await getHelpRequestInstructorOrganizationStatsQuery(
-      user.structureId,
-      input
-    )
+    await getHelpRequestInstructorOrganizationStatsQuery(user, input)
   const helpRequestInstructorOrganizationColumns =
     helpRequestInstructorOrganizationData.map(
       ({ instructorOrganizationId, instructorOrganization }) => ({
