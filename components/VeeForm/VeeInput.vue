@@ -11,7 +11,12 @@
       class="fr-label"
       :for="id"
     >
-      {{ displayLabel }}
+      {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
       <span
         v-if="hint"
         class="fr-hint-text"
@@ -104,9 +109,6 @@
 
   const bindedValue = computed(() => formatValue(refValue?.value))
 
-  const displayLabel = computed(() =>
-    props.required ? `${props.label} *` : props.label
-  )
   const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
 
   const placeholder = computed(() => {
