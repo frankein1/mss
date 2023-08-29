@@ -2,6 +2,11 @@
   <main class="fr-container fr-my-8w">
     <section class="fr-grid-row fr-grid-row--center fr-mb-16w">
       <div class="fr-col-12 fr-col-lg-5 landing-container-left">
+        <button @click="debugSentry">Test sentry</button>
+        <button @click="debugSentryBackend">Test sentry backend</button>
+        <button @click="debugSentryBackendCatched">
+          Test sentry backend catched
+        </button>
         <h1 class="landing-title">
           Libérez du temps pour l'accompagnement social
         </h1>
@@ -156,6 +161,27 @@
   definePageMeta({
     layout: 'landing'
   })
+
+  function debugSentry() {
+    console.error('Test sentry')
+    throw new Error('Test sentry error')
+  }
+
+  async function debugSentryBackend() {
+    console.error('Test sentry backend')
+
+    await useTrpcClient().config.testSentry.query()
+  }
+
+  async function debugSentryBackendCatched() {
+    console.error('Test sentry backend catched')
+
+    try {
+      await useTrpcClient().config.testSentry.query()
+    } catch {
+      throw new Error('Test sentry backend catched done !')
+    }
+  }
 </script>
 
 <style lang="scss" scoped>

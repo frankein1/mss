@@ -6,7 +6,7 @@ import {
   getPrescribingOrganizationsHandler,
   getStructureFollowupTypesHandler
 } from '../controller/config.controller'
-import { protectedProcedure, router } from '~/server/trpc'
+import { protectedProcedure, router, publicProcedure } from '~/server/trpc'
 import { idSchema } from '~/server/schema'
 import { getInclusionConnectClient } from '~/server/lib'
 
@@ -30,5 +30,8 @@ export const configRouter = router({
   ),
   getInstructorOrganization: protectedProcedure.query(
     getInstructorOrganizationHandler
-  )
+  ),
+  testSentry: publicProcedure.query(() => {
+    throw new Error('Test sentry backend')
+  })
 })
