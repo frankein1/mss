@@ -6,7 +6,9 @@ export default defineNuxtPlugin(nuxtApp => {
   const router = useRouter()
 
   Sentry.init({
-    // enabled: publicConfig.mssEnvironment === 'production', // FIXME
+    enabled:
+      publicConfig.mssEnvironment === 'production' ||
+      publicConfig.mssEnvironment === 'development', // FIXME: On deploy to production, remove sentry from development
     app: nuxtApp.vueApp,
     debug: publicConfig.mssEnvironment !== 'production',
     dsn: publicConfig.sentry.dsn,
@@ -20,7 +22,11 @@ export default defineNuxtPlugin(nuxtApp => {
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
-    tracesSampleRate: publicConfig.mssEnvironment === 'production' ? 0.2 : 1.0,
+    tracesSampleRate:
+      publicConfig.mssEnvironment === 'production' ||
+      publicConfig.mssEnvironment === 'development'
+        ? 0.2
+        : 1.0, // FIXME: On deploy to production, remove sentry from development
 
     // Capture Replay for 10% of all sessions,
     // plus for 100% of sessions with an error
