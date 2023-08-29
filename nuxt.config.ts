@@ -1,7 +1,6 @@
 // https://github.com/prisma/prisma/issues/12504#issuecomment-1372635653
 import { createRequire } from 'module'
 import path from 'path'
-import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 const require = createRequire(import.meta.url)
 
@@ -73,9 +72,6 @@ export default defineNuxtConfig({
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
-    build: {
-      sourcemap: true
-    },
     css: {
       preprocessorOptions: {
         scss: {
@@ -87,17 +83,7 @@ export default defineNuxtConfig({
       alias: {
         '.prisma/client/index-browser': prismaIndexBrowser
       }
-    },
-    plugins: [
-      sentryVitePlugin({
-        url: process.env.SENTRY_URL,
-        org: process.env.SENTRY_ORG,
-        project: process.env.SENTRY_PROJECT,
-        telemetry: false,
-        disable: false, // TODO: process.env.NODE_ENV !== 'production',
-        debug: true // TODO: process.env.NODE_ENV !== 'production'
-      })
-    ]
+    }
   },
   build: {
     transpile: ['trpc-nuxt']
@@ -140,9 +126,6 @@ export default defineNuxtConfig({
       mssEnvironment: process.env.MSS_ENVIRONMENT || 'local',
       email: {
         from: process.env.EMAIL_FROM || ''
-      },
-      sentry: {
-        dsn: process.env.SENTRY_DSN
       }
     }
   },
@@ -154,11 +137,5 @@ export default defineNuxtConfig({
       pathPrefix: false,
       extensions: ['.vue']
     }
-  ],
-
-  // Adds sourcemaps for Sentry (may not been working until releases and auth token are used)
-  sourcemap: {
-    client: true,
-    server: true
-  }
+  ]
 })
