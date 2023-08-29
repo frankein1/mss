@@ -94,8 +94,10 @@ export default defineNuxtConfig({
         org: process.env.SENTRY_ORG,
         project: process.env.SENTRY_PROJECT,
         telemetry: false,
-        disable: false, // TODO: process.env.NODE_ENV !== 'production',
-        debug: true // TODO: process.env.NODE_ENV !== 'production'
+        disable:
+          process.env.MSS_ENVIRONMENT !== 'production' &&
+          process.env.MSS_ENVIRONMENT !== 'development', // FIXME: On deploy to production, remove sentry from development
+        debug: process.env.MSS_ENVIRONMENT !== 'production'
       })
     ]
   },
