@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { BeneficiaryFilterInput } from '~/server/schema'
+import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 
 export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
