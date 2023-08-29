@@ -67,12 +67,10 @@ export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)
 
 export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[] =
   [
-    'id',
     'referents',
     'aidantConnectAuthorized',
     'fileNumber',
     'status',
-    'title',
     'usualName',
     'birthName',
     'firstName',
@@ -90,7 +88,6 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'zipcode',
     'city',
     'region',
-    'noPhone',
     'phone1',
     'phone2',
     'email',

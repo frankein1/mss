@@ -9,7 +9,6 @@ import {
   beneficiaryProtectionMeasureLabels,
   beneficiarySocioProfessionalCategoryLabels,
   beneficiaryStatusLabels,
-  beneficiaryTitleLabels,
   incomeSourceLabels,
   pensionOrganisationLabels
 } from '~/client/options/beneficiary'
@@ -31,7 +30,6 @@ export function getBeneficiaryExportData(
   beneficiary: inferAsyncReturnType<typeof getBeneficiaryAccessibleData>
 ) {
   return {
-    id: beneficiary.beneficiary.id,
     referents: beneficiary.beneficiary.referents
       .map(referent => getUserDisplayName(referent))
       .join(', '),
@@ -40,9 +38,6 @@ export function getBeneficiaryExportData(
     ),
     fileNumber: readableFileNumber(beneficiary.beneficiary.id),
     status: beneficiaryStatusLabels[beneficiary.beneficiary.status],
-    title: beneficiary.beneficiary.title
-      ? beneficiaryTitleLabels[beneficiary.beneficiary.title]
-      : '',
     usualName: beneficiary.beneficiary.usualName || '',
     birthName: beneficiary.beneficiary.birthName || '',
     firstName: beneficiary.beneficiary.firstName || '',
@@ -69,7 +64,6 @@ export function getBeneficiaryExportData(
     zipcode: beneficiary.beneficiary.zipcode || '',
     city: beneficiary.beneficiary.city || '',
     region: beneficiary.beneficiary.region || '',
-    noPhone: getBooleanOrEmpty(beneficiary.beneficiary.noPhone),
     phone1: beneficiary.beneficiary.phone1 || '',
     phone2: beneficiary.beneficiary.phone2 || '',
     email: beneficiary.beneficiary.email || '',
