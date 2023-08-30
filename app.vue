@@ -37,6 +37,21 @@
     htmlAttrs: {
       lang: 'fr'
     },
+    bodyAttrs: {
+      class: computed(() => {
+        const { mssEnvironment } = publicConfig
+        if (mssEnvironment === 'demo') {
+          return 'ribbon ribbon-demo'
+        }
+        if (mssEnvironment === 'development') {
+          return 'ribbon ribbon-development'
+        }
+        if (mssEnvironment === 'local') {
+          return 'ribbon ribbon-local'
+        }
+        return ''
+      })
+    },
     titleTemplate: pageTitle => {
       return pageTitle ? `${pageTitle} | Mon Suivi Social` : 'Mon Suivi Social'
     }
@@ -74,3 +89,36 @@
     matomoStore.loadTracker(tracker)
   }
 </script>
+
+<style>
+  .ribbon::after {
+    position: fixed;
+    width: 100px;
+    height: 25px;
+    top: 10px;
+    left: -30px;
+    text-align: center;
+    font-size: 13px;
+    font-family: sans-serif;
+    text-transform: uppercase;
+    font-weight: bold;
+    color: #fff;
+    line-height: 27px;
+    transform: rotate(-45deg);
+  }
+
+  .ribbon-local::after {
+    content: 'LOCAL';
+    background: #30bb76;
+  }
+
+  .ribbon-demo::after {
+    content: 'DEMO';
+    background: #ee8e4a;
+  }
+
+  .ribbon-development::after {
+    content: 'DEV';
+    background: #d12b23;
+  }
+</style>
