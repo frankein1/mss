@@ -22,7 +22,7 @@
         v-if="isMinistryAgent"
         name="ministre"
         :label="helpRequestFieldLabels.ministre"
-        :options="withEmptyValue(currentMinisterOptions)"
+        :options="withEmptyValue(ministerOptions)"
       />
 
       <VeeSearchableSelect
@@ -244,7 +244,7 @@
     helpRequestReasonOptions,
     paymentMethodOptions
   } from '~/client/options/helpRequest'
-  import { currentMinisterOptions } from '~/client/options/ministry'
+  import { ministerOptions } from '~/client/options/ministry'
   import {
     canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
     canEditItsOwnStructure,
