@@ -4,9 +4,9 @@ import { prismaClient } from '~/server/prisma'
 import { ExportBeneficiariesInput } from '~/server/schema'
 import {
   canOnlyListItsBeneficiaries,
-  canViewBeneficiary
+  canViewBeneficiary,
+  canExportBeneficiaries
 } from '~/server/security/rules'
-import { canExportBeneficiaries } from '~/server/security/rules/export'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { getBeneficiaryAccessibleData } from '~/utils/beneficiary/getBeneficiaryAccessibleData'
@@ -40,7 +40,10 @@ export const exportBeneficiariesHandler = async ({
     structureId: user.structureId,
     archived: null,
     referents: referentsCondition,
-    ...prepareBeneficiaryFilters(input.filters)
+    ...prepareBeneficiaryFilters(
+      input.filters,
+      canOnlyListItsBeneficiaries(user)
+    )
   }
 
   const dataRequest = await prismaClient.beneficiary.findMany({

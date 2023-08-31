@@ -2,7 +2,10 @@ import { Prisma } from '@prisma/client'
 import { BeneficiaryFilterInput } from '~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 
-export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
+export function prepareBeneficiaryFilters(
+  filters: BeneficiaryFilterInput,
+  canOnlyListItsBeneficiaries: boolean
+) {
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
   if (filters.followupTypes) {
@@ -20,7 +23,7 @@ export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
     formattedFilters.city = { in: filters.cities }
   }
 
-  if (filters.referents) {
+  if (filters.referents && !canOnlyListItsBeneficiaries) {
     formattedFilters.referents = { some: { id: { in: filters.referents } } }
   }
 

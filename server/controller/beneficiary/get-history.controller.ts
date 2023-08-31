@@ -8,8 +8,10 @@ import type {
   HelpRequestFilterInput
 } from '~/server/schema'
 import { TypeSuivi } from '~/types/history'
-import { prepareFollowupFilters } from '~/utils/filters'
-import { prepareHelpRequestFilters } from '~/utils/helpRequest'
+import {
+  prepareFollowupFilters,
+  prepareHelpRequestFilters
+} from '~/utils/filters'
 import {
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
@@ -19,7 +21,8 @@ import {
   canListBeneficiaryFollowups,
   canListCommentsToFollowup,
   canListCommentsToHelpRequest,
-  canListBeneficiaryHelpRequests
+  canListBeneficiaryHelpRequests,
+  canOnlyListItsBeneficiaries
 } from '~/server/security/rules'
 
 function filtersAppliesToFollowups(
@@ -113,7 +116,7 @@ async function getFollowups(
   const followups = await prismaClient.followup.findMany({
     where: {
       beneficiaryId: beneficiary.id,
-      ...prepareFollowupFilters(filters)
+      ...prepareFollowupFilters(filters, canOnlyListItsBeneficiaries(user))
     },
     include: {
       ...historyItemInclude(user.id),
@@ -145,7 +148,7 @@ async function getHelpRequests(
   const helpRequests = await prismaClient.helpRequest.findMany({
     where: {
       beneficiaryId: beneficiary.id,
-      ...prepareHelpRequestFilters(filters)
+      ...prepareHelpRequestFilters(filters, canOnlyListItsBeneficiaries(user))
     },
     include: {
       ...historyItemInclude(user.id),

@@ -4,16 +4,14 @@ import { prismaClient } from '~/server/prisma'
 import { ExportHelpRequestsInput } from '~/server/schema'
 import {
   canOnlyListItsBeneficiaries,
-  canViewHelpRequest
+  canViewHelpRequest,
+  canExportHistory
 } from '~/server/security/rules'
-import { canExportHistory } from '~/server/security/rules/export'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
-import {
-  prepareHelpRequestFilters,
-  getHelpRequestAccessibleData
-} from '~/utils/helpRequest'
+import { getHelpRequestAccessibleData } from '~/utils/helpRequest'
+import { prepareHelpRequestFilters } from '~/utils/filters'
 import { getHelpRequestExportData } from '~/utils/export/getHelpRequestExportData'
 import { HELP_REQUEST_EXPORTED_FIELDS } from '~/utils/constants/export'
 
@@ -43,7 +41,10 @@ export const exportHelpRequestsHandler = async ({
       archived: null,
       referents
     },
-    ...prepareHelpRequestFilters(input.filters)
+    ...prepareHelpRequestFilters(
+      input.filters,
+      canOnlyListItsBeneficiaries(user)
+    )
   }
 
   const dataRequest = await prismaClient.helpRequest.findMany({

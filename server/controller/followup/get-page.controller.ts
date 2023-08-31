@@ -29,7 +29,7 @@ export const getFollowupsHandler = async ({
       archived: null,
       referents
     },
-    ...prepareFollowupFilters(input.filters)
+    ...prepareFollowupFilters(input.filters, canOnlyListItsBeneficiaries(user))
   }
 
   const select = prepareGetFollowupsPageSelect(user)

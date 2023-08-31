@@ -5,3 +5,4 @@ export {
 } from './prepareStatFilters'
 export { prepareFollowupFilters } from './prepareFollowupFilters'
 export { prepareBeneficiaryFilters } from './prepareBeneficiaryFilters'
+export { prepareHelpRequestFilters } from './prepareHelpRequestFilters'

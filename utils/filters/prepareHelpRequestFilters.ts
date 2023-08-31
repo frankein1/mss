@@ -6,7 +6,10 @@ import type { HelpRequestFilterInput } from '~/server/schema'
  * @param filters The inferred type of the filters zod schema for help requests
  * @returns The prisma where input for help requests
  */
-export function prepareHelpRequestFilters(filters: HelpRequestFilterInput) {
+export function prepareHelpRequestFilters(
+  filters: HelpRequestFilterInput,
+  canOnlyListItsBeneficiaries: boolean
+) {
   const formattedFilters: Prisma.HelpRequestWhereInput = {}
 
   if (filters.status) {
@@ -30,7 +33,7 @@ export function prepareHelpRequestFilters(filters: HelpRequestFilterInput) {
     formattedFilters.externalStructure = filters.externalStructure === 'true'
   }
 
-  if (filters.referents) {
+  if (filters.referents && !canOnlyListItsBeneficiaries) {
     formattedFilters.beneficiary = {
       referents: { some: { id: { in: filters.referents } } }
     }
