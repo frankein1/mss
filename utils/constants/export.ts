@@ -72,6 +72,7 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'firstName',
     'birthDate',
     'status',
+    'deathDate',
     'gender',
     'nationality',
     'accommodationMode',
@@ -92,9 +93,6 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'minorChildren',
     'majorChildren',
     'taxHouseholds',
-    'fileNumber',
-    'birthPlace',
-    'deathDate',
     'caregiver',
     'ministereCategorie',
     'ministereDepartementServiceAc',
@@ -135,5 +133,6 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'types',
     'referents',
     'aidantConnectAuthorized',
-    'updated'
+    'updated',
+    'fileNumber'
   ]
