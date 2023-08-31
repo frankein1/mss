@@ -3,7 +3,6 @@ import {
   beneficiaryAccommodationModeLabels,
   beneficiaryAccommodationZoneLabels,
   beneficiaryGenderLabels,
-  beneficiaryGirLabels,
   beneficiaryMobilityLabels,
   beneficiaryOrientationTypeLabels,
   beneficiaryProtectionMeasureLabels,
@@ -101,14 +100,6 @@ export function getBeneficiaryExportData(
     ministereStructure: beneficiary.beneficiary.ministereStructure
       ? ministereStructureLabels[beneficiary.beneficiary.ministereStructure]
       : '',
-    gir: beneficiary.beneficiary.gir
-      ? beneficiaryGirLabels[beneficiary.beneficiary.gir]
-      : '',
-    doctor: beneficiary.beneficiary.doctor || '',
-    healthAdditionalInformation:
-      beneficiary.beneficiary.healthAdditionalInformation || '',
-    socialSecurityNumber: beneficiary.beneficiary.socialSecurityNumber || '',
-    insurance: beneficiary.beneficiary.insurance || '',
     socioProfessionalCategory: beneficiary.beneficiary.socioProfessionalCategory
       ? beneficiarySocioProfessionalCategoryLabels[
           beneficiary.beneficiary.socioProfessionalCategory
