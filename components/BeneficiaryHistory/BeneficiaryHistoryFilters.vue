@@ -31,7 +31,10 @@
     followupStatusOptions
   } from '~/client/options/followup'
   import { typeSuiviOptions } from '~/client/options/history'
-  import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
+  import {
+    canViewAnyHelpRequestDetails,
+    canOnlyListItsBeneficiaries
+  } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
   import {
@@ -205,14 +208,16 @@
       )
     }
 
-    filters.push({
-      name: 'referents',
-      label: 'Référent',
-      options: agentOptions.value,
-      type: FilterType.SelectMultiple,
-      matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-      matomoEventAction: FollowupFilterEventAction.Referent
-    })
+    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+      filters.push({
+        name: 'referents',
+        label: 'Référent',
+        options: agentOptions.value,
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction: FollowupFilterEventAction.Referent
+      })
+    }
 
     return filters
   })

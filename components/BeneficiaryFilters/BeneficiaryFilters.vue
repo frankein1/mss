@@ -31,8 +31,11 @@
   import type { FilterProp } from '~/types/filter'
   import { EventCategory, BeneficiaryFilterEventAction } from '~/types/matomo'
   import { beneficiaryFieldLabels } from '~/client/labels'
+  import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+  import { useAuthStore } from '~/store/auth'
 
   const trpcClient = useTrpcClient()
+  const authStore = useAuthStore()
 
   const emit = defineEmits<{
     filter: [filters: BeneficiaryFilterInput]
@@ -107,16 +110,19 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.FollowupType
-      },
-      {
+      }
+    ]
+
+    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+      filters.push({
         name: 'referents',
         label: 'Référent',
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.Referent
-      }
-    ]
+      })
+    }
 
     if (citiesOptions.value.size) {
       filters.push({

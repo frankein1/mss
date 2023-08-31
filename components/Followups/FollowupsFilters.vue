@@ -33,10 +33,13 @@
   import { followupFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options/ministry'
   import { EventCategory, FollowupFilterEventAction } from '~/types/matomo'
+  import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+  import { useAuthStore } from '~/store/auth'
 
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
   const isMinistryAgent = useMinistryAgent()
+  const authStore = useAuthStore()
 
   const emit = defineEmits<{
     filter: [filters: FollowupFilterInput]
@@ -103,16 +106,19 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,
         matomoEventAction: FollowupFilterEventAction.FollowupType
-      },
-      {
+      }
+    ]
+
+    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+      filters.push({
         name: 'referents',
         label: 'Référent',
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,
         matomoEventAction: FollowupFilterEventAction.Referent
-      }
-    ]
+      })
+    }
 
     if (isMinistryAgent.value) {
       filters.push({

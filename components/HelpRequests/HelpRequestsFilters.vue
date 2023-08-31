@@ -26,7 +26,10 @@
   import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
-  import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
+  import {
+    canViewAnyHelpRequestDetails,
+    canOnlyListItsBeneficiaries
+  } from '~/server/security/rules'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
@@ -171,15 +174,17 @@
       )
     }
 
-    filters.push({
-      name: 'referents',
-      label: 'Référent',
-      options: agentOptions.value,
-      type: FilterType.SelectMultiple,
+    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+      filters.push({
+        name: 'referents',
+        label: 'Référent',
+        options: agentOptions.value,
+        type: FilterType.SelectMultiple,
 
-      matomoEventCategory: EventCategory.HelpRequestFilter,
-      matomoEventAction: HelpRequestFilterEventAction.Referent
-    })
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.Referent
+      })
+    }
 
     if (isMinistryAgent.value) {
       filters.push({
