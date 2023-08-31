@@ -3,10 +3,7 @@ import {
   beneficiaryAccommodationModeLabels,
   beneficiaryAccommodationZoneLabels,
   beneficiaryGenderLabels,
-  beneficiaryGirLabels,
   beneficiaryMobilityLabels,
-  beneficiaryOrientationTypeLabels,
-  beneficiaryProtectionMeasureLabels,
   beneficiarySocioProfessionalCategoryLabels,
   beneficiaryStatusLabels,
   incomeSourceLabels,
@@ -101,14 +98,6 @@ export function getBeneficiaryExportData(
     ministereStructure: beneficiary.beneficiary.ministereStructure
       ? ministereStructureLabels[beneficiary.beneficiary.ministereStructure]
       : '',
-    gir: beneficiary.beneficiary.gir
-      ? beneficiaryGirLabels[beneficiary.beneficiary.gir]
-      : '',
-    doctor: beneficiary.beneficiary.doctor || '',
-    healthAdditionalInformation:
-      beneficiary.beneficiary.healthAdditionalInformation || '',
-    socialSecurityNumber: beneficiary.beneficiary.socialSecurityNumber || '',
-    insurance: beneficiary.beneficiary.insurance || '',
     socioProfessionalCategory: beneficiary.beneficiary.socioProfessionalCategory
       ? beneficiarySocioProfessionalCategoryLabels[
           beneficiary.beneficiary.socioProfessionalCategory
@@ -153,21 +142,6 @@ export function getBeneficiaryExportData(
     cafNumber: beneficiary.beneficiary.cafNumber || '',
     bank: beneficiary.beneficiary.bank || '',
     funeralContract: beneficiary.beneficiary.funeralContract || '',
-    protectionMeasure: beneficiary.beneficiary.protectionMeasure
-      ? beneficiaryProtectionMeasureLabels[
-          beneficiary.beneficiary.protectionMeasure
-        ]
-      : '',
-    representative: beneficiary.beneficiary.representative || '',
-    prescribingStructure: beneficiary.beneficiary.prescribingStructure || '',
-    orientationType: beneficiary.beneficiary.orientationType
-      ? beneficiaryOrientationTypeLabels[
-          beneficiary.beneficiary.orientationType
-        ]
-      : '',
-    orientationStructure: beneficiary.beneficiary.orientationStructure || '',
-    serviceProviders: beneficiary.beneficiary.serviceProviders || '',
-    involvedPartners: beneficiary.beneficiary.involvedPartners || '',
     additionalInformation: beneficiary.beneficiary.additionalInformation || '',
     numeroPegase: beneficiary.beneficiary.numeroPegase || '',
     accommodationZone: beneficiary.beneficiary.accommodationZone
