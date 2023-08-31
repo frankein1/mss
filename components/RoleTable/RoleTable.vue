@@ -284,7 +284,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td></td>
-            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td>* les dossiers dont il est référent</td>
           </tr>
         </tbody>
       </table>
