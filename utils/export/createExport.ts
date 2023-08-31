@@ -8,7 +8,10 @@ import { RowType, WorksheetType } from '~/types/export'
 // eslint-disable-next-line import/no-named-as-default-member
 const { Workbook: WorkbookConstructor } = ExcelPkg
 
-function getFullColumns(columns: Partial<Column>[], rows: RowType[]) {
+function getFullColumns(
+  columns: Partial<Column>[],
+  rows: (string[] | RowType)[]
+) {
   const fullColumns: Partial<Column>[] = []
 
   columns.forEach(column => {
@@ -17,6 +20,7 @@ function getFullColumns(columns: Partial<Column>[], rows: RowType[]) {
     rows.forEach(row => {
       if (
         column.key &&
+        !Array.isArray(row) &&
         row[column.key] &&
         row[column.key] !== null &&
         row[column.key] !== ''
