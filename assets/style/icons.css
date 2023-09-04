@@ -12,3 +12,8 @@
 .fr-icon-timer-line::after {
   mask-image: url('@/assets/icons/timer-line.svg');
 }
+
+.fr-icon-zzz-line::before,
+.fr-icon-zzz-line::after {
+  mask-image: url('@/assets/icons/zzz-line.svg');
+}

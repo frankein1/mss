@@ -2,6 +2,17 @@
   <section class="beneficiary-details-section">
     <h2 class="fr-h5">Bénéficiaire</h2>
     <ul class="information-list">
+      <li>
+        <span class="information-label">Agent(s) référent(s) :</span>
+        {{ referentNames }}
+      </li>
+      <li
+        v-if="beneficiary.aidantConnectAuthorized"
+        class="fr-icon-success-line"
+      >
+        Mandat Aidant Connect
+      </li>
+
       <li v-if="beneficiary.title">
         <span class="information-label">Civilité :</span>
         {{ beneficiaryTitleLabels[beneficiary.title] }}
@@ -17,13 +28,6 @@
       <li>
         <span class="information-label">Prénom(s) :</span>
         {{ nameOrEmpty(beneficiary.firstName) }}
-      </li>
-      <li v-if="beneficiary.birthDate">
-        <span class="information-label">Date de naissance :</span>
-        {{ formatDate(beneficiary.birthDate) }} ({{
-          calculateAge(beneficiary.birthDate)
-        }}
-        ans)
       </li>
       <li v-if="beneficiary.birthPlace">
         <span class="information-label">Ville de naissance :</span>
@@ -132,6 +136,7 @@
     beneficiaryAccommodationModeLabels
   } from '~/client/options/beneficiary'
   import { Nationalities } from '~/client/options/nationality'
+  import { getUserDisplayName } from '~/utils/user'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
@@ -139,9 +144,17 @@
 
   const isMinistryAgent = useMinistryAgent()
 
-  const hasAddress =
-    props.beneficiary.street ||
-    props.beneficiary.zipcode ||
-    props.beneficiary.city ||
-    props.beneficiary.region
+  const referentNames = computed(() =>
+    props.beneficiary.referents
+      .map(referent => getUserDisplayName(referent))
+      .join(', ')
+  )
+
+  const hasAddress = computed(
+    () =>
+      props.beneficiary.street ||
+      props.beneficiary.zipcode ||
+      props.beneficiary.city ||
+      props.beneficiary.region
+  )
 </script>
