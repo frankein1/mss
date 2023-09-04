@@ -3,19 +3,16 @@
     <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiary(beneficiary, originPage)"
     />
-    <div class="beneficiarytitle__container">
-      <PageTitle :title="title" />
-      <BeneficiaryDetailsHeader
-        :beneficiary-id="beneficiaryId"
-        :can-delete="canDelete"
-        @deleted="onBeneficiaryDeleted"
-      />
-    </div>
 
-    <BeneficiaryDetailsTitle :beneficiary="beneficiary" />
+    <BeneficiaryDetailsHeader
+      :beneficiary="beneficiary"
+      :title="title"
+      :can-delete="canDelete"
+      @deleted="onBeneficiaryDeleted"
+    />
 
     <hr />
-    <BeneficiaryDetailsActions
+    <BeneficiaryDetailsHistoryActions
       :beneficiary="beneficiary"
       class="fr-pb-3w"
     />
@@ -158,11 +155,6 @@
     .beneficiary-details-col:nth-of-type(2) {
       border-left: 1px solid rgb(151 151 151 / 30%);
     }
-  }
-
-  .beneficiarytitle__container {
-    display: flex;
-    justify-items: center;
   }
 
   :deep(.beneficiary-details-section):not(:last-child) {

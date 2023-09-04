@@ -4,7 +4,8 @@ export const beneficiaryStatusBadgeClasses: {
   [key in BeneficiaryStatus]: string
 } = {
   [BeneficiaryStatus.Active]: 'fr-badge--success',
-  [BeneficiaryStatus.Inactive]: 'fr-badge--warning',
+  [BeneficiaryStatus.Inactive]:
+    'inactive-status-badge fr-badge--icon-left fr-icon-zzz-line',
   [BeneficiaryStatus.Archived]: 'fr-badge--error',
   [BeneficiaryStatus.Deceased]: 'fr-badge--error'
 }

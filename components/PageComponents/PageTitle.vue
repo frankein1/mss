@@ -1,7 +1,10 @@
 <template>
-  <div class="pagetitle__container fr-mb-3w">
+  <div
+    class="pagetitle__container"
+    :class="{ 'fr-mb-3w': !noMargin }"
+  >
     <div class="pagetitle__titles">
-      <div class="pagetitle__title">{{ title }}</div>
+      <h1 class="pagetitle__title fr-mb-0">{{ title }}</h1>
       <div class="pagetitle__subtitle">
         <slot></slot>
       </div>
@@ -10,9 +13,13 @@
 </template>
 
 <script setup lang="ts">
-  defineProps<{
-    title: string
-  }>()
+  withDefaults(
+    defineProps<{
+      title: string
+      noMargin?: boolean
+    }>(),
+    { noMargin: false }
+  )
 </script>
 
 <style lang="scss">
@@ -28,8 +35,6 @@
 
   .pagetitle__title {
     color: #00007d;
-    font-size: xx-large;
-    font-weight: bold;
   }
 
   .pagetitle__subtitle {

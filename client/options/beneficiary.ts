@@ -46,6 +46,15 @@ export const beneficiaryStatusLabels: { [key in BeneficiaryStatus]: string } = {
   [BeneficiaryStatus.Deceased]: 'Décédé·e'
 }
 
+export const beneficiaryStatusDetailedLabels: {
+  [key in BeneficiaryStatus]: string
+} = {
+  [BeneficiaryStatus.Active]: 'Dossier actif',
+  [BeneficiaryStatus.Inactive]: 'Dossier inactif',
+  [BeneficiaryStatus.Archived]: 'Dossier archivé',
+  [BeneficiaryStatus.Deceased]: 'Décédé·e'
+}
+
 export const beneficiaryStatusOptions = labelsToOptions(beneficiaryStatusLabels)
 
 export const beneficiaryTitleLabels: { [key in BeneficiaryTitle]: string } = {
