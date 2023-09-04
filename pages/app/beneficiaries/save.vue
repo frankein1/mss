@@ -2,9 +2,7 @@
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" />
     <PageTitle :title="title">
-      <div>
-        Les champs avec <span class="color-red">*</span> sont obligatoires
-      </div>
+      <RequiredFields />
     </PageTitle>
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">

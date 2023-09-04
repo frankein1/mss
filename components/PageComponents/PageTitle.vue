@@ -1,8 +1,20 @@
 <template>
   <div class="pagetitle__container fr-mb-3w">
+    <div
+      v-if="icon"
+      class="pagetitle__icon fr-mr-2w"
+    >
+      <span
+        :class="[icon]"
+        aria-hidden="true"
+      ></span>
+    </div>
     <div class="pagetitle__titles">
       <div class="pagetitle__title">{{ title }}</div>
-      <div class="pagetitle__subtitle">
+      <div
+        v-if="hasSubtitle"
+        class="pagetitle__subtitle fr-mt-1w"
+      >
         <slot></slot>
       </div>
     </div>
@@ -12,12 +24,31 @@
 <script setup lang="ts">
   defineProps<{
     title: string
+    icon?: string
   }>()
+
+  const slots = useSlots()
+
+  const hasSubtitle = computed(() => slots.default)
 </script>
 
 <style lang="scss">
   .pagetitle__container {
     display: flex;
+  }
+
+  .pagetitle__icon {
+    color: var(--primary);
+    background-color: var(--primary-light);
+    border-radius: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 1.5rem;
+
+    span::before {
+      --icon-size: 2rem;
+    }
   }
 
   .pagetitle__titles {

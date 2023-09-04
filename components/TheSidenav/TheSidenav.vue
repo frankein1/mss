@@ -60,6 +60,15 @@
               </a>
             </li>
           </NuxtLink>
+          <li v-if="!authStore.isAdmin">
+            <NuxtLink
+              class="fr-btn btn-primary-on-primary fr-mt-3w fr-mx-1w fr-icon-user-add-line fr-btn--icon-left"
+              target="_self"
+              :to="RoutePath.AppBeneficiariesAdd()"
+            >
+              Créer un·e bénéficiaire
+            </NuxtLink>
+          </li>
         </ul>
         <ul class="fr-footer__bottom-list">
           <li class="fr-footer__bottom-item">

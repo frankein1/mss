@@ -1,10 +1,11 @@
 <template>
   <PageContainer class="page-container">
     <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" />
-    <PageTitle :title="title">
-      <div>
-        Les champs avec <span class="color-red">*</span> sont obligatoires
-      </div>
+    <PageTitle
+      :title="title"
+      icon="fr-icon-user-add-line"
+    >
+      <RequiredFields />
     </PageTitle>
     <BeneficiaryCreationForm
       v-if="agents?.length"

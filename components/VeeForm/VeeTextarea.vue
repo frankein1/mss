@@ -8,7 +8,12 @@
       :class="[labelIcon]"
       :for="name"
     >
-      {{ displayLabel }}
+      {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
       <span
         v-if="hint"
         class="fr-hint-text"
@@ -57,10 +62,6 @@
   const name = toRef(() => props.name)
 
   const { errorMessage: error, value, handleChange } = useField<string>(name)
-
-  const displayLabel = computed(() =>
-    props.required ? `${props.label} *` : props.label
-  )
 </script>
 
 <style scoped>
