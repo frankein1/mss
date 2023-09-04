@@ -1,38 +1,41 @@
 <template>
-  <ul
-    class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--icon-left benficiarydetailsactions_btns-group"
-  >
-    <li>
-      <NuxtLink
-        :to="`${RoutePath.AppBeneficiaryFollowupAdd(beneficiaryId)}`"
-        class="fr-btn fr-icon-file-add-line followup-btn"
-        title="Ajouter une synthèse d'entretien"
-        target="_self"
-      >
-        Synthèse d'entretien
-      </NuxtLink>
-    </li>
-    <li v-if="canCreateHelpRequest">
-      <NuxtLink
-        :to="`${RoutePath.AppBeneficiaryHelpRequestAdd(beneficiaryId)}`"
-        class="fr-btn fr-icon-file-add-line help-request-btn"
-        title="Ajouter une instruction de demande d'aide"
-        target="_self"
-      >
-        Demande d'aide
-      </NuxtLink>
-    </li>
-    <li class="mesdroitssociaux-btn-container">
-      <NuxtLink
-        to="https://www.mesdroitssociaux.gouv.fr/dd1pnds-ria/#destination/simu-foyer"
-        class="fr-link"
-        title="Nouvel onglet - Accéder à l'outil de simulation de droits sociaux mesdroitssociaux.gouv.fr"
-        target="_blank"
-      >
-        Simulation de droits sociaux
-      </NuxtLink>
-    </li>
-  </ul>
+  <div class="beneficiarydetailshistoryactions_container">
+    <span class="fr-text--bold fr-mr-2w"> Créer :</span>
+    <ul
+      class="fr-btns-group fr-btns-group--inline-sm fr-btns-group--icon-left benficiarydetailshistoryactions_btns-group"
+    >
+      <li>
+        <NuxtLink
+          :to="`${RoutePath.AppBeneficiaryFollowupAdd(beneficiaryId)}`"
+          class="fr-btn fr-icon-file-add-line followup-btn"
+          title="Ajouter une synthèse d'entretien"
+          target="_self"
+        >
+          Synthèse d'entretien
+        </NuxtLink>
+      </li>
+      <li v-if="canCreateHelpRequest">
+        <NuxtLink
+          :to="`${RoutePath.AppBeneficiaryHelpRequestAdd(beneficiaryId)}`"
+          class="fr-btn fr-icon-file-add-line help-request-btn"
+          title="Ajouter une instruction de demande d'aide"
+          target="_self"
+        >
+          Demande d'aide
+        </NuxtLink>
+      </li>
+      <li class="mesdroitssociaux-btn-container">
+        <NuxtLink
+          to="https://www.mesdroitssociaux.gouv.fr/dd1pnds-ria/#destination/simu-foyer"
+          class="fr-link"
+          title="Nouvel onglet - Accéder à l'outil de simulation de droits sociaux mesdroitssociaux.gouv.fr"
+          target="_blank"
+        >
+          Simulation de droits sociaux
+        </NuxtLink>
+      </li>
+    </ul>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -55,8 +58,17 @@
 </script>
 
 <style scoped lang="scss">
-  .benficiarydetailsactions_btns-group .fr-btn {
-    margin-bottom: 0;
+  .beneficiarydetailshistoryactions_container {
+    display: flex;
+    align-items: center;
+  }
+
+  .benficiarydetailshistoryactions_btns-group {
+    flex: 1;
+
+    .fr-btn {
+      margin-bottom: 0;
+    }
   }
 
   .followup-btn {
