@@ -60,23 +60,15 @@
               </a>
             </li>
           </NuxtLink>
-          <NuxtLink
-            v-if="!authStore.isAdmin"
-            v-slot="{ href, navigate }"
-            custom
-            :to="RoutePath.AppBeneficiariesAdd()"
-          >
-            <li>
-              <a
-                :href="href"
-                class="fr-btn fr-btn--secondary fr-mt-3w create-beneficiary-btn fr-icon-user-add-line fr-btn--icon-left"
-                target="_self"
-                @click="navigate"
-              >
-                Créer un·e bénéficaire
-              </a>
-            </li>
-          </NuxtLink>
+          <li v-if="!authStore.isAdmin">
+            <NuxtLink
+              class="fr-btn btn-primary-on-primary fr-mt-3w fr-mx-1w fr-icon-user-add-line fr-btn--icon-left"
+              target="_self"
+              :to="RoutePath.AppBeneficiariesAdd()"
+            >
+              Créer un·e bénéficaire
+            </NuxtLink>
+          </li>
         </ul>
         <ul class="fr-footer__bottom-list">
           <li class="fr-footer__bottom-item">
@@ -210,10 +202,5 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-  }
-
-  .create-beneficiary-btn {
-    background-color: #fff;
-    margin-left: 8px;
   }
 </style>
