@@ -33,7 +33,7 @@
         <AtomAlert
           v-else-if="error"
           :alert-type="AlertType.Error"
-          message="La fiche bénéficaire n'a pas pu être chargée."
+          message="La fiche bénéficiaire n'a pas pu être chargée."
         />
         <BeneficiaryDetails
           v-else
@@ -54,7 +54,7 @@
         <AtomAlert
           v-else-if="error"
           :alert-type="AlertType.Error"
-          message="La fiche bénéficaire n'a pas pu être chargée."
+          message="La fiche bénéficiaire n'a pas pu être chargée."
         />
         <BeneficiaryDocumentList
           v-else

@@ -66,7 +66,7 @@
               target="_self"
               :to="RoutePath.AppBeneficiariesAdd()"
             >
-              Créer un·e bénéficaire
+              Créer un·e bénéficiaire
             </NuxtLink>
           </li>
         </ul>
