@@ -21,10 +21,33 @@
     />
     <hr />
 
-    <AtomTabs>
-      <Tab
-        :id="BeneficiaryTab.Details"
-        name="Infos"
+    <AtomTabsV2
+      tab-list-name="Détails de la fiche bénéficiaire"
+      :tab-titles="[
+        {
+          tabId: BeneficiaryTab.Details,
+          panelId: panelId(BeneficiaryTab.Details),
+          title: 'Informations',
+          icon: 'fr-icon-information-fill'
+        },
+        {
+          tabId: BeneficiaryTab.Documents,
+          panelId: panelId(BeneficiaryTab.Documents),
+          title: 'Documents',
+          icon: 'fr-icon-folder-2-line'
+        },
+        {
+          tabId: BeneficiaryTab.History,
+          panelId: panelId(BeneficiaryTab.History),
+          title: 'Historique',
+          icon: 'fr-icon-history-line'
+        }
+      ]"
+    >
+      <AtomTabV2
+        :tab-id="BeneficiaryTab.Details"
+        :panel-id="panelId(BeneficiaryTab.Details)"
+        selected
       >
         <AtomLoader
           v-if="pending"
@@ -42,10 +65,10 @@
           :tax-households="taxHouseholds"
           :followup-types="followupTypes"
         />
-      </Tab>
-      <Tab
-        :id="BeneficiaryTab.Documents"
-        name="Documents"
+      </AtomTabV2>
+      <AtomTabV2
+        :tab-id="BeneficiaryTab.Documents"
+        :panel-id="panelId(BeneficiaryTab.Documents)"
       >
         <AtomLoader
           v-if="pending"
@@ -60,19 +83,18 @@
           v-else
           :beneficiary="beneficiary"
         />
-      </Tab>
-      <Tab
-        :id="BeneficiaryTab.History"
-        name="Historique"
+      </AtomTabV2>
+      <AtomTabV2
+        :tab-id="BeneficiaryTab.History"
+        :panel-id="panelId(BeneficiaryTab.History)"
       >
         <BeneficiaryHistory :beneficiary-id="beneficiaryId" />
-      </Tab>
-    </AtomTabs>
+      </AtomTabV2>
+    </AtomTabsV2>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
-  import { Tab } from 'vue3-tabs-component'
   import { canDeleteBeneficiary } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -148,6 +170,10 @@
   function onBeneficiaryDeleted() {
     navigateTo(backLink.value)
     useSnackbar().success('Le bénéficiaire a été supprimé.')
+  }
+
+  function panelId(tab: BeneficiaryTab) {
+    return `${tab}-panel`
   }
 </script>
 
