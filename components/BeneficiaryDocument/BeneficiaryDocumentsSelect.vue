@@ -26,11 +26,18 @@
 
   const snackbar = useSnackbar()
 
-  const props = defineProps<{
-    beneficiaryId: string
-    label: string
-    name: string
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      beneficiaryId: string
+      label: string
+      name: string
+      snackbarSuccessMessage?: string
+    }>(),
+    {
+      snackbarSuccessMessage:
+        'Le document a été ajouté à la fiche bénéficiaire.'
+    }
+  )
 
   const {
     data: documents,
@@ -50,9 +57,7 @@
   function onNewDocument(key: string) {
     refresh().then(() => {
       selectDocInput.value?.selectValue(key)
-      snackbar.success(
-        "Le document a été ajouté à la fiche bénéficiaire. Enregistrez l'instruction de demande d'aide pour conserver le lien entre les deux."
-      )
+      snackbar.success(props.snackbarSuccessMessage)
     })
   }
 </script>
