@@ -58,9 +58,8 @@
       structure.value = res
       snackbar.success('Les informations de la structure ont été mises à jour.')
     } catch {
-      snackbar.error(
-        'La mise à jour de la structure a échoué.',
-        () => formContainer.value?.querySelector('select')?.focus()
+      snackbar.error('La mise à jour de la structure a échoué.', () =>
+        formContainer.value?.querySelector('select')?.focus()
       )
     }
     isSubmitting.value = false

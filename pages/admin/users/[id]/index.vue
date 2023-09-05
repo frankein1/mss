@@ -60,9 +60,8 @@
         "Les informations de l'utilisateur ont été mises à jour."
       )
     } catch {
-      snackbar.error(
-        "La mise à jour de l'utilisateur a échoué.",
-        () => formContainer.value?.querySelector('select')?.focus()
+      snackbar.error("La mise à jour de l'utilisateur a échoué.", () =>
+        formContainer.value?.querySelector('select')?.focus()
       )
     }
     isSubmitting.value = false

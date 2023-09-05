@@ -126,9 +126,8 @@
         RoutePath.AppBeneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
       )
     } catch {
-      snackbar.error(
-        "La mise à jour de l'instruction a échoué.",
-        () => formContainer.value?.querySelector('input')?.focus()
+      snackbar.error("La mise à jour de l'instruction a échoué.", () =>
+        formContainer.value?.querySelector('input')?.focus()
       )
     }
     isSubmitting.value = false

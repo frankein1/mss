@@ -73,16 +73,14 @@
     try {
       const comment = await useTrpcClient().comment.add.mutate(values)
 
-      snackbar.success(
-        'Nouveau commentaire ajouté.',
-        () => form.value?.querySelector('textarea')?.focus()
+      snackbar.success('Nouveau commentaire ajouté.', () =>
+        form.value?.querySelector('textarea')?.focus()
       )
       form.value?.reset()
       emit('commentAdded', comment)
     } catch {
-      snackbar.error(
-        "L'ajout du commentaire a échoué.",
-        () => form.value?.querySelector('textarea')?.focus()
+      snackbar.error("L'ajout du commentaire a échoué.", () =>
+        form.value?.querySelector('textarea')?.focus()
       )
     } finally {
       isSubmitting.value = false
