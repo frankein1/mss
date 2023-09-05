@@ -86,7 +86,8 @@
     padding: 0.5rem 1rem 0.5rem 3.875rem;
     border-radius: 50rem;
     user-select: none;
-    transition: background-color 0.15s ease-in-out,
+    transition:
+      background-color 0.15s ease-in-out,
       border-color 0.15s ease-in-out;
     color: #fff;
     border: 0.25rem solid var(--background-active-blue-france);

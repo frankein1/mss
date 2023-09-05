@@ -64,17 +64,19 @@
   ) {
     isSubmitting.value = true
     try {
-      const res = await trpcClient.structure.editCurrentUserStructure.mutate(
-        updatedStructure
-      )
+      const res =
+        await trpcClient.structure.editCurrentUserStructure.mutate(
+          updatedStructure
+        )
 
       structure.value = res
       snackbar.success(
         'Les informations de votre structure ont été mises à jour.'
       )
     } catch {
-      snackbar.error('La mise à jour de votre structure a échoué.', () =>
-        formContainer.value?.querySelector('select')?.focus()
+      snackbar.error(
+        'La mise à jour de votre structure a échoué.',
+        () => formContainer.value?.querySelector('select')?.focus()
       )
     }
     isSubmitting.value = false
