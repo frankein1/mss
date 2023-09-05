@@ -41,9 +41,8 @@
     search: search.value
   }))
 
-  const { data, pending } = await trpcClient.admin.getStructures.useQuery(
-    queryInput
-  )
+  const { data, pending } =
+    await trpcClient.admin.getStructures.useQuery(queryInput)
 
   const structures = computed(() => data.value?.structures || [])
 
