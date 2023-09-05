@@ -24,6 +24,7 @@
     "@gouvminint/vue-dsfr": "^4.2.0",
     "@pinia/nuxt": "^0.4.11",
     "@prisma/client": "^4.15.0",
+    "@sentry/vue": "^7.65.0",
     "@trpc/client": "^10.35.0",
     "@trpc/server": "^10.35.0",
     "@vee-validate/nuxt": "^4.10.8",
