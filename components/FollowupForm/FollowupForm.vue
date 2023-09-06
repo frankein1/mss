@@ -232,6 +232,7 @@
       :beneficiary-id="beneficiaryId"
       name="documents"
       :label="followupFieldLabels.documents"
+      snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez la synthèse d'entretien pour conserver le lien entre les deux."
     />
 
     <ul

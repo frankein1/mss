@@ -72,6 +72,10 @@ export default defineNuxtConfig({
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
+    // Adds sourcemaps for Sentry (may not been working until releases and auth token are used)
+    build: {
+      sourcemap: true
+    },
     css: {
       preprocessorOptions: {
         scss: {
@@ -126,6 +130,9 @@ export default defineNuxtConfig({
       mssEnvironment: process.env.MSS_ENVIRONMENT || 'local',
       email: {
         from: process.env.EMAIL_FROM || ''
+      },
+      sentry: {
+        dsn: process.env.SENTRY_DSN
       }
     }
   },
@@ -137,5 +144,11 @@ export default defineNuxtConfig({
       pathPrefix: false,
       extensions: ['.vue']
     }
-  ]
+  ],
+
+  // Adds sourcemaps for Sentry (may not been working until releases and auth token are used)
+  sourcemap: {
+    client: true,
+    server: true
+  }
 })

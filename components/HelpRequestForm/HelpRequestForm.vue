@@ -212,6 +212,7 @@
       :beneficiary-id="beneficiaryId"
       name="documents"
       :label="helpRequestFieldLabels.documents"
+      snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez l'instruction de demande d'aide pour conserver le lien entre les deux."
     />
 
     <ul
