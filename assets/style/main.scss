@@ -109,9 +109,13 @@ body,
   @include dsfr.disable-list-style;
 
   --li-bottom: 0.5rem;
+  
+  font-weight: 500;
 
   .information-label {
-    font-weight: 700;
+    display: block;
+    font-weight: 400;
+    color: var(--text-mention-grey);
   }
 
   .information-line {

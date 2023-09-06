@@ -191,6 +191,13 @@
     justify-items: center;
   }
 
+  :deep(.beneficiary-details-section) {
+    background-color: #fff;
+    border-radius: 0.5rem;
+    border: 1px solid var(--border-default-grey);
+    padding: 40px;
+  }
+
   :deep(.beneficiary-details-section):not(:last-child) {
     margin-bottom: 1.5rem;
   }
