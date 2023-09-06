@@ -48,7 +48,7 @@
   import { HelpRequestFilterInput } from '~/server/schema'
   import { HelpRequestSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
-  import { canExportHistory } from '~/server/security/rules/export'
+  import { canExportHistory } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { useFiltersStore } from '~/store/filters'
   import {

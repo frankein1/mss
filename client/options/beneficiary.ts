@@ -258,7 +258,12 @@ export const OrganisationAccommodationModes: BeneficiaryAccommodationMode[] = [
   BeneficiaryAccommodationMode.Other
 ]
 
-export const ThirdPartyAccommodationMode: BeneficiaryAccommodationMode[] = [
+export const ThirdPartyAccommodationModes: BeneficiaryAccommodationMode[] = [
   BeneficiaryAccommodationMode.ThirdPerson,
   BeneficiaryAccommodationMode.Parents
+]
+
+export const HostedAccommodationMode: BeneficiaryAccommodationMode[] = [
+  ...OrganisationAccommodationModes,
+  ...ThirdPartyAccommodationModes
 ]

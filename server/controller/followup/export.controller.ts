@@ -4,14 +4,14 @@ import { prismaClient } from '~/server/prisma'
 import { ExportFollowupsInput } from '~/server/schema'
 import {
   canOnlyListItsBeneficiaries,
-  canViewFollowup
+  canViewFollowup,
+  canExportHistory
 } from '~/server/security/rules'
 import { forbiddenError, ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareFollowupFilters } from '~/utils/filters'
 import { getFollowupAccessibleData } from '~/utils/followup'
-import { canExportHistory } from '~/server/security/rules/export'
 import { getFollowupExportData } from '~/utils/export/getFollowupExportData'
 import { FOLLOWUP_EXPORTED_FIELDS } from '~/utils/constants/export'
 
@@ -41,7 +41,7 @@ export const exportFollowupsHandler = async ({
       archived: null,
       referents
     },
-    ...prepareFollowupFilters(input.filters)
+    ...prepareFollowupFilters(input.filters, canOnlyListItsBeneficiaries(user))
   }
 
   const dataRequest = await prismaClient.followup.findMany({

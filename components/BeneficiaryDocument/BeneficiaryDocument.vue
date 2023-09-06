@@ -162,6 +162,7 @@
   }
 
   function onEdit() {
+    matomo.trackEvent(EventCategory.Document, DocumentEventAction.Edit)
     modal.open(
       'Modifier le document',
       BeneficiaryDocumentEditForm,

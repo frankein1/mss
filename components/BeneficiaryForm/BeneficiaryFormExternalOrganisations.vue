@@ -15,7 +15,7 @@
         label="Organisme prescripteur"
       />
       <VeeSelect
-        name="external.orientation_type"
+        name="external.orientationType"
         label="Mode d'orientation"
         :options="withEmptyValue(beneficiaryOrientationTypeOptions)"
       />

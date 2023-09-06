@@ -27,8 +27,6 @@ Le projet utilise les technologies Node.js suivantes :
   pnpm install
   ```
 
-  **À SAVOIR** : Si vous voulez contribuer au projet, merci d'exécuter la commande `pnpm simple-git-hooks` une fois les dépendances Node.js installées pour que votre code soit _linté_ et _formatté_ lorsque vous le _commitez_.
-
 - Copiez les variables d'environnement
 
   ```sh

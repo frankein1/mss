@@ -31,7 +31,10 @@
     followupStatusOptions
   } from '~/client/options/followup'
   import { typeSuiviOptions } from '~/client/options/history'
-  import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
+  import {
+    canViewAnyHelpRequestDetails,
+    canOnlyListItsBeneficiaries
+  } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
   import {
@@ -60,21 +63,18 @@
     pending: agentOptionsPending,
     error: agentOptionsError
   } = await trpcClient.config.getAgents.useQuery(undefined, {
-    transform: agents => toOptions(agents, 'id', 'name')
+    transform: agents => toOptions(agents, 'id', 'name'),
+    queryKey: 'config.getAgents.options'
   })
 
-  // FIXME: For now, trpc-nuxt does not allow to define query key, and their defined key is not based on the transform option
   const {
     data: followupTypeOptions,
     pending: followupTypeOptionsPending,
     error: followupTypeOptionsError
-  } = await useAsyncData(
-    'config.getStructureFollowupTypes.options',
-    () => trpcClient.config.getStructureFollowupTypes.query(),
-    {
-      transform: followupTypes => toOptions(followupTypes, 'id', 'name')
-    }
-  )
+  } = await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
+    transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
+    queryKey: 'config.getStructureFollowupTypes.options'
+  })
 
   const {
     data: examinationDateOptions,
@@ -208,14 +208,16 @@
       )
     }
 
-    filters.push({
-      name: 'referents',
-      label: 'Référent',
-      options: agentOptions.value,
-      type: FilterType.SelectMultiple,
-      matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-      matomoEventAction: FollowupFilterEventAction.Referent
-    })
+    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+      filters.push({
+        name: 'referents',
+        label: 'Référent',
+        options: agentOptions.value,
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction: FollowupFilterEventAction.Referent
+      })
+    }
 
     return filters
   })

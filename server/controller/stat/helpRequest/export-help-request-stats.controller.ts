@@ -50,7 +50,10 @@ export const exportHelpRequestStatsHandler = async ({
         row[id] = `${getPercentage(_count.helpRequests, helpRequestCount)}%`
       }
       return row
-    }, {})
+    }, {}),
+    [],
+    [],
+    [`${helpRequestCount} demandes d'aide instruites`]
   ]
   exportData.push({
     name: "Objets des demandes d'aide",

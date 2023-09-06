@@ -31,8 +31,11 @@
   import type { FilterProp } from '~/types/filter'
   import { EventCategory, BeneficiaryFilterEventAction } from '~/types/matomo'
   import { beneficiaryFieldLabels } from '~/client/labels'
+  import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+  import { useAuthStore } from '~/store/auth'
 
   const trpcClient = useTrpcClient()
+  const authStore = useAuthStore()
 
   const emit = defineEmits<{
     filter: [filters: BeneficiaryFilterInput]
@@ -41,25 +44,22 @@
   const filtersStore = useFiltersStore()
   const INITIAL_VALUES = filtersStore.beneficiary || {}
 
-  // FIXME: For now, trpc-nuxt does not allow to define query key, and their defined key is not based on the transform option
   const {
     data: followupTypeOptions,
     pending: followupTypeOptionsPending,
     error: followupTypeOptionsError
-  } = await useAsyncData(
-    'config.getStructureFollowupTypes.options',
-    () => trpcClient.config.getStructureFollowupTypes.query(undefined),
-    {
-      transform: followupTypes => toOptions(followupTypes, 'id', 'name')
-    }
-  )
+  } = await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
+    transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
+    queryKey: 'config.getStructureFollowupTypes.options'
+  })
 
   const {
     data: agentOptions,
     pending: agentOptionsPending,
     error: agentOptionsError
   } = await trpcClient.config.getAgents.useQuery(undefined, {
-    transform: agents => toOptions(agents, 'id', 'name')
+    transform: agents => toOptions(agents, 'id', 'name'),
+    queryKey: 'config.getAgents.options'
   })
 
   const {
@@ -110,16 +110,19 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.FollowupType
-      },
-      {
+      }
+    ]
+
+    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+      filters.push({
         name: 'referents',
         label: 'Référent',
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.Referent
-      }
-    ]
+      })
+    }
 
     if (citiesOptions.value.size) {
       filters.push({

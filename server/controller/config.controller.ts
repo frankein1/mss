@@ -1,7 +1,10 @@
-import { ProtectedAppContext } from '~/server/trpc'
+import { ProtectedAppContext, ProtectedAppContextUser } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getUserDisplayName } from '~/utils/user'
-import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
+import {
+  canViewAnyHelpRequestDetails,
+  canOnlyListItsBeneficiaries
+} from '~/server/security/rules'
 
 export const getAgentsHandler = async ({
   ctx: { user }
@@ -30,11 +33,16 @@ export const getBeneficiariesCitiesHandler = async ({
 }: {
   ctx: ProtectedAppContext
 }) => {
+  const referentsCondition = canOnlyListItsBeneficiaries(user)
+    ? { some: { id: user.id } }
+    : undefined
+
   return await prismaClient.beneficiary.groupBy({
     by: ['city'],
     where: {
       city: { not: null },
-      structureId: user.structureId
+      structureId: user.structureId,
+      referents: referentsCondition
     },
     orderBy: [{ city: 'asc' }]
   })
@@ -44,6 +52,19 @@ function hasDefinedExaminationDate(h: {
   examinationDate: Date | null
 }): h is { examinationDate: Date } {
   return h.examinationDate !== null
+}
+
+function prepareExaminationDatesBeneficiaryCondition(
+  beneficiaryId: string | undefined,
+  user: ProtectedAppContextUser
+) {
+  if (beneficiaryId) {
+    return { id: beneficiaryId }
+  }
+  if (canOnlyListItsBeneficiaries(user)) {
+    return { referents: { some: { id: user.id } } }
+  }
+  return undefined
 }
 
 export const getExaminationDatesHandler = async ({
@@ -57,12 +78,17 @@ export const getExaminationDatesHandler = async ({
     return []
   }
 
+  const beneficiaryCondition = prepareExaminationDatesBeneficiaryCondition(
+    input?.id,
+    user
+  )
+
   const examinationDates = await prismaClient.helpRequest.groupBy({
     by: ['examinationDate'],
     where: {
       examinationDate: { not: null },
-      beneficiaryId: input?.id || undefined,
-      structureId: user.structureId
+      structureId: user.structureId,
+      beneficiary: beneficiaryCondition
     },
     orderBy: [{ examinationDate: 'desc' }]
   })

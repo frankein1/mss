@@ -1,13 +1,6 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb
-      :links="
-        Breadcrumb.AppBeneficiaryEdit({
-          id: beneficiary.id,
-          ...beneficiary.general
-        })
-      "
-    />
+    <DsfrBreadcrumb :links="breadcrumb" />
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -15,8 +8,18 @@
           ref="formContainer"
           class="main-container fr-p-5w"
         >
+          <AtomLoader
+            v-if="pending"
+            class="fr-mx-auto"
+          />
+          <AtomAlert
+            v-else-if="fetchError"
+            :alert-type="AlertType.Error"
+            :message="fetchError"
+          />
+
           <BeneficiaryForm
-            v-if="beneficiary && agents?.length"
+            v-else-if="beneficiary && agents?.length"
             :beneficiary="beneficiary"
             :agents="agents"
             :is-submitting="isSubmitting"
@@ -37,6 +40,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { AlertType } from '~/utils/constants/alert'
   import { SaveBeneficiaryInput } from '~/server/schema'
   import {
     canEditBeneficiaryExternalOrganisations,
@@ -55,16 +59,46 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const trpcClient = useTrpcClient()
+  const snackbar = useSnackbar()
 
-  const { data } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
+  const {
+    data,
+    pending: beneficiaryPending,
+    error: beneficiaryError
+  } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
     id: beneficiaryId
   })
 
-  const { data: agents } = await trpcClient.config.getAgents.useQuery()
+  const {
+    data: agents,
+    pending: agentsPending,
+    error: agentsError
+  } = await trpcClient.config.getAgents.useQuery()
 
   const isSubmitting = ref(false)
+  const formContainer = ref<HTMLElement | null>(null)
+
+  const pending = computed(
+    () => beneficiaryPending.value || agentsPending.value
+  )
+
+  const fetchError = computed(() => {
+    if (beneficiaryError.value) {
+      return "Les informations du bénéficiaires n'ont pas pu être chargées."
+    }
+    if (agentsError.value) {
+      return "La liste des agents référents n'a pas pu être chargée."
+    }
+    return ''
+  })
+
+  const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
+  const entourages = computed(() => data.value?.entourages || [])
 
   const beneficiary = computed(() => {
+    if (!data.value) {
+      return null
+    }
     const b = data.value.beneficiary
     return {
       id: b.id,
@@ -147,10 +181,10 @@
         familySituation: b.familySituation,
         minorChildren: b.minorChildren,
         majorChildren: b.majorChildren,
-        taxHouseholds: data.value.taxHouseholds || []
+        taxHouseholds: taxHouseholds.value
       },
       entourage: {
-        entourages: data.value.entourages || []
+        entourages: entourages.value
       },
 
       // additionalInformation
@@ -159,43 +193,72 @@
   })
 
   const title = computed(() =>
-    RouteTitle.AppBeneficiaryEdit(beneficiary.value.general)
+    RouteTitle.AppBeneficiaryEdit(beneficiary.value?.general || null)
   )
 
-  useHead({ title })
+  const breadcrumb = computed(() => {
+    if (beneficiary.value) {
+      return Breadcrumb.AppBeneficiaryEdit({
+        id: beneficiary.value.id,
+        ...beneficiary.value.general
+      })
+    }
+    return Breadcrumb.AppBeneficiaryEdit(null)
+  })
 
-  const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
-  const entourages = computed(() => data.value?.entourages || [])
+  useHead({ title })
 
   const authStore = useAuthStore()
   const user = computed(() => authStore.getAuthUser)
 
   const canSetRelatives = computed(() =>
-    canEditBeneficiaryRelatives(user.value, beneficiary.value)
+    beneficiary.value
+      ? canEditBeneficiaryRelatives(user.value, beneficiary.value)
+      : false
   )
   const canSetReferents = computed(() =>
-    canEditBeneficiaryReferents(user.value, beneficiary.value)
+    beneficiary.value
+      ? canEditBeneficiaryReferents(user.value, beneficiary.value)
+      : false
   )
   const canSetHealth = computed(() =>
-    canEditBeneficiaryHealthInfo(user.value, beneficiary.value)
+    beneficiary.value
+      ? canEditBeneficiaryHealthInfo(user.value, beneficiary.value)
+      : false
   )
   const canSetOccupationIncome = computed(() =>
-    canEditBeneficiaryOccupationIncome(user.value, beneficiary.value)
+    beneficiary.value
+      ? canEditBeneficiaryOccupationIncome(user.value, beneficiary.value)
+      : false
   )
   const canSetExternalOrganisations = computed(() =>
-    canEditBeneficiaryExternalOrganisations(user.value, beneficiary.value)
+    beneficiary.value
+      ? canEditBeneficiaryExternalOrganisations(user.value, beneficiary.value)
+      : false
   )
 
   async function onUpdateBeneficiary(beneficiary: SaveBeneficiaryInput) {
-    isSubmitting.value = true
-    // TODO: handle error
-    await trpcClient.beneficiary.update.mutate({
-      id: beneficiaryId,
-      structureId: data.value.beneficiary.structureId,
-      ...beneficiary
-    })
-    isSubmitting.value = false
+    if (!data.value) {
+      return
+    }
 
-    navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+    isSubmitting.value = true
+
+    try {
+      await trpcClient.beneficiary.update.mutate({
+        id: beneficiaryId,
+        structureId: data.value.beneficiary.structureId,
+        ...beneficiary
+      })
+
+      navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+    } catch {
+      snackbar.error(
+        'La mise à jour de la synthèse a échoué.',
+        () => formContainer.value?.querySelector('input')?.focus()
+      )
+    } finally {
+      isSubmitting.value = false
+    }
   }
 </script>

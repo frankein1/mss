@@ -4,7 +4,7 @@ import {
   followupStatusLabels
 } from '~/client/options/followup'
 import { ministerLabels } from '~/client/options/ministry'
-import { RowType } from '~/types/export'
+import { RowType, WorksheetType } from '~/types/export'
 import { prismaClient } from '~/server/prisma'
 import {
   getFollowupActionsEntreprisesStatsQuery,
@@ -29,7 +29,7 @@ export const exportFollowupStatsHandler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  const exportData = []
+  const exportData: WorksheetType[] = []
 
   const followupCount = await getFollowupCountQuery(user, input)
 
@@ -41,19 +41,34 @@ export const exportFollowupStatsHandler = async ({
     key: id,
     header: name
   }))
+  followupTypesColumns.push({ key: 'total', header: 'Total' })
+
+  const followupTypeCountTotal = followupTypesData
+    .reduce((total, { _count }) => total + _count.followups, 0)
+    .toString()
+
   const followupTypesRows = [
-    followupTypesData.reduce((row: RowType, { _count, id }) => {
-      if (_count.followups > 0) {
-        row[id] = _count.followups.toString()
-      }
-      return row
-    }, {}),
-    followupTypesData.reduce((row: RowType, { _count, id }) => {
-      if (_count.followups > 0) {
-        row[id] = `${getPercentage(_count.followups, followupCount)}%`
-      }
-      return row
-    }, {})
+    followupTypesData.reduce(
+      (row: RowType, { _count, id }) => {
+        if (_count.followups > 0) {
+          row[id] = _count.followups.toString()
+        }
+        return row
+      },
+      { total: followupTypeCountTotal }
+    ),
+    followupTypesData.reduce(
+      (row: RowType, { _count, id }) => {
+        if (_count.followups > 0) {
+          row[id] = `${getPercentage(_count.followups, followupCount)}%`
+        }
+        return row
+      },
+      { total: '100%' }
+    ),
+    [],
+    [],
+    [`${followupCount} entretiens menés`]
   ]
   exportData.push({
     name: 'Objets des entretiens',

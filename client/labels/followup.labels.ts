@@ -31,5 +31,5 @@ export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
   signalements: 'Signalements',
   prescribingOrganizationId: 'Organisme prescripteur',
   updated: 'Dernière mise à jour',
-  createdById: 'Référent'
+  createdById: 'Agent'
 }

@@ -95,7 +95,6 @@ export const RoutePath = {
   [Route.Register]: () => '/register',
   [Route.DeclarationAccessibilite]: () => '/declaration-accessibilite',
   [Route.MentionsLegales]: () => '/mentions-legales',
-  [Route.Env]: () => '/env',
   [Route.CGUManager]: () => `${CGURoute}/manager`,
   [Route.CGUUser]: () => `${CGURoute}/user`,
 

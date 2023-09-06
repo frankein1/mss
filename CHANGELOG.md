@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.6.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.5.2...v1.6.0) (2023-09-04)
+
+
+### Features
+
+*  beneficiaries export ([28cf1d7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/28cf1d7d17e8f80f1ac9219a849930c73519121d)), closes [#55](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/55)
+* **a11y:** adapt title for each page ([1f0ba7e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1f0ba7e09a857da3253b9c8cfa011c2f872c1f38)), closes [#87](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/87)
+* **admin:** améliorations espace admin ([9d200fa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9d200fafafeb939b8b3e340911cad8af37516d79)), closes [#103](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/103)
+* **admin:** Problèmes de création d'un utilisateur depuis la partie admin ([b497867](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b4978671be9c1abd333919850f1b63f028e55604)), closes [#102](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/102)
+* Ajout d'un ruban indiquant l'environnement ([f572be8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f572be89c90284de3ffe8833c3bc19e95f7e6ef2))
+* **beneficiaire:** Gestion du formulaire complet de création d'un bénéficiaire ([64e3f69](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/64e3f694bac38b725b86364790a4e07e52f69ce4))
+* **export:** add followup count, followup type total for followups and help request count ([d40f115](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d40f115841a428be68dc5ef8d357fa7fba1885b3)), closes [#56](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/56)
+* **export:** Ajout de l'export des statistiques ([a7ea908](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a7ea908bcb8b407ce5593ccdc9fb19ea0a6763c3)), closes [#56](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/56)
+* **export:** external organisation column name ([d81e1af](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d81e1af8a0272555cf3e82035637e3c9cc3e0214))
+* **export:** Résolution des retours sur les exports d'historique ([76ff8ca](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/76ff8cab7b5599b22d93992aea656322ac73aee0)), closes [#54](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/54)
+* **followup,help-request:** update ministers after the last cabinet reshuffle ([b6ba784](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b6ba784da23941dcfed990700ee50ab72e9ca90c)), closes [#99](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/99)
+* **history:** add export to Excel sheet ([dd58721](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/dd58721557c7f01356ca2b56313468f8eb05d6a4)), closes [#54](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/54)
+* **matomo:** add matomo events ([776c393](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/776c3937a25b0d6c0b64287445f6bd3ad7eb8bbb)), closes [#65](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/65)
+* **matomo:** add tracking on the document edit button ([580c234](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/580c2342d9c4620f6cb8e920bcb17618bb33d653)), closes [#113](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/113)
+* update roles table for history export ([0548ed7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0548ed78efa8c3e5193c10d37c3480c34107ffe1)), closes [#54](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/54)
+
+
+### Bug Fixes
+
+* **beneficiaries:** age group filter is not working ([8943335](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8943335ed3bd9549befdc06716442d9d22f23bd8)), closes [#117](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/117)
+* **beneficiary:** the accommodation mode additional information input is shown even if the beneficiary is not hosted ([1e2ec05](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1e2ec05287c5180e745f7eebe9c6675eac21f2a2))
+* can not edit additional information of beneficiaries ([64ab031](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/64ab0317d443f74eda45ed665847eef512f8daea)), closes [#105](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/105)
+* death date error ([968718e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/968718e800d4e7b2df571f6896fb96a1d53d11bf))
+* **export:** correct stats export permissions ([0a6a340](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0a6a3401663a97c6cf149cf8806ebb13e2c919ba)), closes [#56](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/56)
+* **export:** minor fixes in the beneficiary export ([cb45cf8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/cb45cf8ec1f68dc00d71f50e9c4fdb21fc518009)), closes [#55](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/55)
+* **export:** minor fixes on history exports ([9e67dcc](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9e67dcc45b5471019ec6e6b6a7701656b8b9b027)), closes [/gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/54#note_1533726687](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/54/issues/note_1533726687)
+* **export:** resolve beneficiary export issues ([d48c2e4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d48c2e4fb663268594238886714dffe553edc0f0)), closes [/gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/55#note_1533255992](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/55/issues/note_1533255992)
+* **export:** use the dsfr button instead of a link ([c771f98](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c771f98b6e8bea64aac330d6421c427eb346c461))
+* **export:** wrong column label for the followup referent ([12539b4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/12539b47f48d593e6c05d3624bc1a4d05af09814)), closes [#54](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/54)
+* **filters:** examination dates and cities filters only includes accessible data ([880f9e0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/880f9e02c3ff20faaaedad69ab4961a9e0cbc602))
+* **filters:** hide referents filter to referents ([289f704](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/289f704fcc3eefcfed97f60419ee179647927662))
+* **filters:** referents can not filter based on referents ([7448195](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7448195ee3d465afbefb8f9bc107a03fcd54b3c4))
+* **permissions:** stats export is wrong for referents ([f5c0f1b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f5c0f1baddd7487d93139f62e58bbf01a28d0d23)), closes [#110](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/110)
+* remove dead link ([d2d06d4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d2d06d40cde40aa63d238489c342ebb65334459e))
+* Sauvegarde du champs Mode d'orientation dans l'édition d'un bénéficiaire ([11708d6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/11708d6e48fadd10d7e5bf803f252a2000aa6b71))
+* schema imports errors ([ce65ad3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ce65ad3ad5f9b5944c239d1ca5a8d7dbbb5204b9))
+* **stat:** first follow up stat does not take into account the referent status ([6ce621a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6ce621acf3a3a211e99b277aa93cfb23c9f72a8c))
+* stats permissions ([b91b9a7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b91b9a764ddb96bb151e2b14248b95fc61111f94)), closes [#110](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/110)
+
 ### [1.5.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.5.1...v1.5.2) (2023-07-27)
 
 

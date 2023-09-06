@@ -29,7 +29,10 @@ export const getBeneficiariesHandler = async ({
     structureId,
     archived: null,
     referents: referentsCondition,
-    ...prepareBeneficiaryFilters(input.filters)
+    ...prepareBeneficiaryFilters(
+      input.filters,
+      canOnlyListItsBeneficiaries(user)
+    )
   }
 
   const [beneficiaries, count] = await Promise.all([

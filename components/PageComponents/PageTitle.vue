@@ -2,7 +2,7 @@
   <div class="pagetitle__container fr-mb-3w">
     <div
       v-if="icon"
-      class="pagetitle__icon"
+      class="pagetitle__icon fr-mr-2w"
     >
       <span
         :class="[icon]"
@@ -11,7 +11,10 @@
     </div>
     <div class="pagetitle__titles">
       <div class="pagetitle__title">{{ title }}</div>
-      <div class="pagetitle__subtitle">
+      <div
+        v-if="hasSubtitle"
+        class="pagetitle__subtitle fr-mt-1w"
+      >
         <slot></slot>
       </div>
     </div>
@@ -23,6 +26,10 @@
     title: string
     icon?: string
   }>()
+
+  const slots = useSlots()
+
+  const hasSubtitle = computed(() => slots.default)
 </script>
 
 <style lang="scss">

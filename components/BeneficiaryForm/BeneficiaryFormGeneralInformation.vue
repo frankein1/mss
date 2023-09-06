@@ -166,7 +166,8 @@
     beneficiaryTitleOptions,
     beneficiaryAccommodationModeOptions,
     OrganisationAccommodationModes,
-    ThirdPartyAccommodationMode
+    ThirdPartyAccommodationModes,
+    HostedAccommodationMode
   } from '~/client/options/beneficiary'
   import { nationalityOptions } from '~/client/options/nationality'
   import type {
@@ -193,7 +194,9 @@
     'general.accommodationMode'
   )
 
-  const isHosted = computed(() => accommodationMode.value)
+  const isHosted = computed(() =>
+    HostedAccommodationMode.includes(accommodationMode.value)
+  )
 
   const isDeceased = computed(() => props.status === BeneficiaryStatus.Deceased)
 
@@ -204,7 +207,7 @@
     if (OrganisationAccommodationModes.includes(accommodationMode.value)) {
       return 'Dénomination de la structure'
     }
-    if (ThirdPartyAccommodationMode.includes(accommodationMode.value)) {
+    if (ThirdPartyAccommodationModes.includes(accommodationMode.value)) {
       return 'Nom et prénom du tiers'
     }
     return ''

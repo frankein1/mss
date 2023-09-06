@@ -5,9 +5,7 @@
       :title="title"
       icon="fr-icon-user-add-line"
     >
-      <div>
-        Les champs avec <span class="color-red">*</span> sont obligatoires
-      </div>
+      <RequiredFields />
     </PageTitle>
     <BeneficiaryCreationForm
       v-if="agents?.length"

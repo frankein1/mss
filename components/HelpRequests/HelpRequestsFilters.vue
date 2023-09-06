@@ -26,7 +26,10 @@
   import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
-  import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
+  import {
+    canViewAnyHelpRequestDetails,
+    canOnlyListItsBeneficiaries
+  } from '~/server/security/rules'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
@@ -48,21 +51,18 @@
     pending: agentOptionsPending,
     error: agentOptionsError
   } = await trpcClient.config.getAgents.useQuery(undefined, {
-    transform: agents => toOptions(agents, 'id', 'name')
+    transform: agents => toOptions(agents, 'id', 'name'),
+    queryKey: 'config.getAgents.options'
   })
 
-  // FIXME: For now, trpc-nuxt does not allow to define query key, and their defined key is not based on the transform option
   const {
     data: followupTypeOptions,
     pending: followupTypeOptionsPending,
     error: followupTypeOptionsError
-  } = await useAsyncData(
-    'config.getStructureFollowupTypes.options',
-    () => trpcClient.config.getStructureFollowupTypes.query(),
-    {
-      transform: followUpTypes => toOptions(followUpTypes, 'id', 'name')
-    }
-  )
+  } = await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
+    transform: followUpTypes => toOptions(followUpTypes, 'id', 'name'),
+    queryKey: 'config.getStructureFollowupTypes.options'
+  })
 
   const {
     data: examinationDateOptions,
@@ -174,15 +174,17 @@
       )
     }
 
-    filters.push({
-      name: 'referents',
-      label: 'Référent',
-      options: agentOptions.value,
-      type: FilterType.SelectMultiple,
+    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+      filters.push({
+        name: 'referents',
+        label: 'Référent',
+        options: agentOptions.value,
+        type: FilterType.SelectMultiple,
 
-      matomoEventCategory: EventCategory.HelpRequestFilter,
-      matomoEventAction: HelpRequestFilterEventAction.Referent
-    })
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.Referent
+      })
+    }
 
     if (isMinistryAgent.value) {
       filters.push({

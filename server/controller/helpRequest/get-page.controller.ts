@@ -6,10 +6,8 @@ import type {
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
-import {
-  prepareHelpRequestFilters,
-  prepareGetHelpRequestsPageSelect
-} from '~/utils/helpRequest'
+import { prepareGetHelpRequestsPageSelect } from '~/utils/helpRequest'
+import { prepareHelpRequestFilters } from '~/utils/filters'
 import { SortOrder } from '~/types/table'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 
@@ -39,7 +37,10 @@ export const getHelpRequestsHandler = async ({
       archived: null,
       referents
     },
-    ...prepareHelpRequestFilters(input.filters)
+    ...prepareHelpRequestFilters(
+      input.filters,
+      canOnlyListItsBeneficiaries(user)
+    )
   }
 
   const orderBy: GetHelpRequestsOrderBy = input.orderBy

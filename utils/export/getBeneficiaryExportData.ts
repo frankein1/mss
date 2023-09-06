@@ -3,15 +3,12 @@ import {
   beneficiaryAccommodationModeLabels,
   beneficiaryAccommodationZoneLabels,
   beneficiaryGenderLabels,
-  beneficiaryGirLabels,
   beneficiaryMobilityLabels,
-  beneficiaryOrientationTypeLabels,
-  beneficiaryProtectionMeasureLabels,
   beneficiarySocioProfessionalCategoryLabels,
   beneficiaryStatusLabels,
-  beneficiaryTitleLabels,
   incomeSourceLabels,
-  pensionOrganisationLabels
+  pensionOrganisationLabels,
+  relativeRelationshipLabels
 } from '~/client/options/beneficiary'
 import { familySituationLabels } from '~/client/options/familySituation'
 import {
@@ -26,12 +23,24 @@ import { formatDate } from '~/utils/formatDate'
 import { getBeneficiaryRelativeDisplayName } from '~/utils/beneficiary/getBeneficiaryRelativeDisplayName'
 import { readableFileNumber } from '~/utils/readableFileNumber'
 import { getUserDisplayName } from '~/utils/user'
+import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
+
+function getRelativeExportData(
+  relative: BeneficiaryRelativeWithLinkedBeneficiary
+) {
+  const displayName = getBeneficiaryRelativeDisplayName(relative)
+  if (relative.relationship) {
+    return `${displayName} (${
+      relativeRelationshipLabels[relative.relationship]
+    })`
+  }
+  return displayName
+}
 
 export function getBeneficiaryExportData(
   beneficiary: inferAsyncReturnType<typeof getBeneficiaryAccessibleData>
 ) {
   return {
-    id: beneficiary.beneficiary.id,
     referents: beneficiary.beneficiary.referents
       .map(referent => getUserDisplayName(referent))
       .join(', '),
@@ -40,14 +49,10 @@ export function getBeneficiaryExportData(
     ),
     fileNumber: readableFileNumber(beneficiary.beneficiary.id),
     status: beneficiaryStatusLabels[beneficiary.beneficiary.status],
-    title: beneficiary.beneficiary.title
-      ? beneficiaryTitleLabels[beneficiary.beneficiary.title]
-      : '',
     usualName: beneficiary.beneficiary.usualName || '',
     birthName: beneficiary.beneficiary.birthName || '',
     firstName: beneficiary.beneficiary.firstName || '',
     birthDate: formatDate(beneficiary.beneficiary.birthDate, 'DD-MM-YYYY'),
-    birthPlace: beneficiary.beneficiary.birthPlace || '',
     deathDate: formatDate(beneficiary.beneficiary.deathDate, 'DD-MM-YYYY'),
     gender: beneficiary.beneficiary.gender
       ? beneficiaryGenderLabels[beneficiary.beneficiary.gender]
@@ -69,7 +74,6 @@ export function getBeneficiaryExportData(
     zipcode: beneficiary.beneficiary.zipcode || '',
     city: beneficiary.beneficiary.city || '',
     region: beneficiary.beneficiary.region || '',
-    noPhone: getBooleanOrEmpty(beneficiary.beneficiary.noPhone),
     phone1: beneficiary.beneficiary.phone1 || '',
     phone2: beneficiary.beneficiary.phone2 || '',
     email: beneficiary.beneficiary.email || '',
@@ -94,14 +98,6 @@ export function getBeneficiaryExportData(
     ministereStructure: beneficiary.beneficiary.ministereStructure
       ? ministereStructureLabels[beneficiary.beneficiary.ministereStructure]
       : '',
-    gir: beneficiary.beneficiary.gir
-      ? beneficiaryGirLabels[beneficiary.beneficiary.gir]
-      : '',
-    doctor: beneficiary.beneficiary.doctor || '',
-    healthAdditionalInformation:
-      beneficiary.beneficiary.healthAdditionalInformation || '',
-    socialSecurityNumber: beneficiary.beneficiary.socialSecurityNumber || '',
-    insurance: beneficiary.beneficiary.insurance || '',
     socioProfessionalCategory: beneficiary.beneficiary.socioProfessionalCategory
       ? beneficiarySocioProfessionalCategoryLabels[
           beneficiary.beneficiary.socioProfessionalCategory
@@ -146,21 +142,6 @@ export function getBeneficiaryExportData(
     cafNumber: beneficiary.beneficiary.cafNumber || '',
     bank: beneficiary.beneficiary.bank || '',
     funeralContract: beneficiary.beneficiary.funeralContract || '',
-    protectionMeasure: beneficiary.beneficiary.protectionMeasure
-      ? beneficiaryProtectionMeasureLabels[
-          beneficiary.beneficiary.protectionMeasure
-        ]
-      : '',
-    representative: beneficiary.beneficiary.representative || '',
-    prescribingStructure: beneficiary.beneficiary.prescribingStructure || '',
-    orientationType: beneficiary.beneficiary.orientationType
-      ? beneficiaryOrientationTypeLabels[
-          beneficiary.beneficiary.orientationType
-        ]
-      : '',
-    orientationStructure: beneficiary.beneficiary.orientationStructure || '',
-    serviceProviders: beneficiary.beneficiary.serviceProviders || '',
-    involvedPartners: beneficiary.beneficiary.involvedPartners || '',
     additionalInformation: beneficiary.beneficiary.additionalInformation || '',
     numeroPegase: beneficiary.beneficiary.numeroPegase || '',
     accommodationZone: beneficiary.beneficiary.accommodationZone
@@ -170,13 +151,9 @@ export function getBeneficiaryExportData(
       : '',
     updated: formatDate(beneficiary.beneficiary.updated, 'DD-MM-YYYY HH:mm'),
     entourages:
-      beneficiary.entourages
-        ?.map(relative => getBeneficiaryRelativeDisplayName(relative))
-        .join(', ') || '',
+      beneficiary.entourages?.map(getRelativeExportData).join(', ') || '',
     taxHouseholds:
-      beneficiary.taxHouseholds
-        ?.map(relative => getBeneficiaryRelativeDisplayName(relative))
-        .join(', ') || '',
+      beneficiary.taxHouseholds?.map(getRelativeExportData).join(', ') || '',
     documents: beneficiary.beneficiary.documents
       .map(document => document.name)
       .join(', '),

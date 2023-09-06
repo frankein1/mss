@@ -6,6 +6,7 @@ import {
   getFollowupCountQuery,
   getHelpRequestCountQuery
 } from '~/server/query/stats'
+import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 
 export const getHistoryCountsHandler = async ({
   input,
@@ -16,12 +17,21 @@ export const getHistoryCountsHandler = async ({
 }) => {
   const helpRequests = await getHelpRequestCountQuery(user, input)
   const followups = await getFollowupCountQuery(user, input)
+
+  const referents = canOnlyListItsBeneficiaries(user)
+    ? { some: { id: user.id } }
+    : undefined
+
   const firstFollowups = await prismaClient.followup.count({
     where: {
       structureId: user.structureId,
       firstFollowup: true,
-      ...prepareFollowupStatFilters(input)
+      ...prepareFollowupStatFilters(input),
+      beneficiary: {
+        referents
+      }
     }
   })
+
   return { helpRequests, followups, firstFollowups }
 }

@@ -23,7 +23,7 @@
       class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line add-beneficiary-btn"
       target="_self"
     >
-      Ajouter un·e bénéficaire
+      Ajouter un·e bénéficiaire
     </NuxtLink>
   </div>
 </template>
