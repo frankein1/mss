@@ -12,3 +12,8 @@
 .fr-icon-timer-line::after {
   mask-image: url('@/assets/icons/timer-line.svg');
 }
+
+.fr-icon-history-line::before,
+.fr-icon-history-line::after {
+  mask-image: url('@/assets/icons/history-line.svg');
+}
