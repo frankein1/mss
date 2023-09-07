@@ -22,7 +22,7 @@
       <p v-else>
         Commencez à
         <NuxtLink
-          :to="RoutePath.AppBeneficiariesAdd"
+          :to="RoutePath.AppBeneficiariesAdd()"
           target="_self"
           >créer des fiches de bénéficiaires</NuxtLink
         >

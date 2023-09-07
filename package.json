@@ -18,8 +18,8 @@
     "release": "standard-version"
   },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.377.0",
-    "@aws-sdk/s3-request-presigner": "^3.377.0",
+    "@aws-sdk/client-s3": "^3.405.0",
+    "@aws-sdk/s3-request-presigner": "^3.405.0",
     "@gouvfr/dsfr": "~1.9.3",
     "@gouvminint/vue-dsfr": "^4.2.0",
     "@pinia/nuxt": "^0.4.11",
@@ -36,7 +36,7 @@
     "jsonwebtoken": "^9.0.2",
     "mitt": "^3.0.1",
     "node-fetch-native": "^1.4.0",
-    "nodemailer": "^6.9.4",
+    "nodemailer": "^6.9.5",
     "openid-client": "^5.4.3",
     "pinia": "^2.1.6",
     "postcss-html": "^1.5.0",
@@ -70,7 +70,7 @@
     "ts-node": "^10.9.1",
     "typescript": "~5.0.4",
     "vitest": "^0.33.0",
-    "vue-tsc": "^1.8.8"
+    "vue-tsc": "^1.8.10"
   },
   "engines": {
     "pnpm": ">=8.6.2 <9.0.0"
