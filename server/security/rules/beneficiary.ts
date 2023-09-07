@@ -69,7 +69,12 @@ export const canSetBeneficiaryNir = canViewBeneficiaryNir
 export const canSaveBeneficiaryWithCompleteInfo = (
   grantee: SecurityRuleGrantee
 ): boolean =>
-  hasAllowedRole(grantee, ['StructureManager', 'SocialWorker', 'Instructor'])
+  hasAllowedRole(grantee, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'Referent'
+  ])
 
 export const canEditBeneficiaryReferents = (
   grantee: SecurityRuleGrantee,
