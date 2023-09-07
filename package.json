@@ -20,8 +20,8 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.405.0",
     "@aws-sdk/s3-request-presigner": "^3.405.0",
-    "@gouvfr/dsfr": "~1.9.3",
-    "@gouvminint/vue-dsfr": "^4.2.0",
+    "@gouvfr/dsfr": "~1.10.1",
+    "@gouvminint/vue-dsfr": "^4.6.0",
     "@pinia/nuxt": "^0.4.11",
     "@prisma/client": "^5.2.0",
     "@sentry/vue": "^7.68.0",
