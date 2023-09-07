@@ -33,11 +33,11 @@ dependencies:
     specifier: ^10.38.1
     version: 10.38.1
   '@vee-validate/nuxt':
-    specifier: ^4.10.8
-    version: 4.10.8(vue@3.3.4)
+    specifier: ^4.11.3
+    version: 4.11.3(vue@3.3.4)
   '@vee-validate/zod':
-    specifier: ^4.10.8
-    version: 4.10.8(vue@3.3.4)
+    specifier: ^4.11.3
+    version: 4.11.3(vue@3.3.4)
   '@vitest/coverage-v8':
     specifier: ^0.33.0
     version: 0.33.0(vitest@0.33.0)
@@ -81,8 +81,8 @@ dependencies:
     specifier: ^9.0.0
     version: 9.0.0
   vee-validate:
-    specifier: ^4.10.8
-    version: 4.10.8(vue@3.3.4)
+    specifier: ^4.11.3
+    version: 4.11.3(vue@3.3.4)
   vue-matomo:
     specifier: ^4.2.0
     version: 4.2.0
@@ -1747,7 +1747,7 @@ packages:
       pkg-types: 1.0.3
       postcss-import-resolver: 2.0.0
       std-env: 3.3.3
-      ufo: 1.1.2
+      ufo: 1.3.0
       unimport: 3.0.14(rollup@3.26.1)
       untyped: 1.3.2
     transitivePeerDependencies:
@@ -1765,7 +1765,7 @@ packages:
       pkg-types: 1.0.3
       postcss-import-resolver: 2.0.0
       std-env: 3.3.3
-      ufo: 1.1.2
+      ufo: 1.3.0
       unimport: 3.0.14(rollup@3.26.1)
       untyped: 1.3.2
     transitivePeerDependencies:
@@ -1839,7 +1839,7 @@ packages:
       rollup-plugin-visualizer: 5.9.2(rollup@3.26.1)
       std-env: 3.3.3
       strip-literal: 1.0.1
-      ufo: 1.1.2
+      ufo: 1.3.0
       unplugin: 1.3.2
       vite: 4.3.9(@types/node@20.5.9)(sass@1.64.1)
       vite-node: 0.33.0(@types/node@20.5.9)(sass@1.64.1)
@@ -2852,24 +2852,24 @@ packages:
       vue: 3.3.4
     dev: true
 
-  /@vee-validate/nuxt@4.10.8(vue@3.3.4):
-    resolution: {integrity: sha512-7BoZLZiyjAB0DIwz3X5Ne/1v6PzB+72HQ2xnMMnfl8A1DwE8tEmzHPtDbfYMNzoUI2cTxkLIOnGF1QdBtAw+TA==}
+  /@vee-validate/nuxt@4.11.3(vue@3.3.4):
+    resolution: {integrity: sha512-PmrWyLsSLc9swXyY9HSy/0HpcFnLk5R4t6v5aPq7YZAeJwh76MS5qz1U3katAnJxSCTe2HjC1cJksTAOYFdVhA==}
     dependencies:
       '@nuxt/kit': 3.6.5
       local-pkg: 0.4.3
-      vee-validate: 4.10.8(vue@3.3.4)
+      vee-validate: 4.11.3(vue@3.3.4)
     transitivePeerDependencies:
       - rollup
       - supports-color
       - vue
     dev: false
 
-  /@vee-validate/zod@4.10.8(vue@3.3.4):
-    resolution: {integrity: sha512-En1zBMbPQWt9G8XbfYg8eENg6DVoxL7uNRikVgYefuyHuPCjApgHewXynBpij70mOTxC0x+bNTHvgFWsZ/jfMA==}
+  /@vee-validate/zod@4.11.3(vue@3.3.4):
+    resolution: {integrity: sha512-i6aBNbI3BtwcQfNaNWHEdggCO6v30nYF9lvhuIxLrbek4WocktX6Cs7Vw5RLS44nGJNumw3nhgVsoDVqLoMgnA==}
     dependencies:
-      type-fest: 4.0.0
-      vee-validate: 4.10.8(vue@3.3.4)
-      zod: 3.21.4
+      type-fest: 4.3.1
+      vee-validate: 4.11.3(vue@3.3.4)
+      zod: 3.22.2
     transitivePeerDependencies:
       - vue
     dev: false
@@ -4288,6 +4288,7 @@ packages:
 
   /destr@2.0.0:
     resolution: {integrity: sha512-FJ9RDpf3GicEBvzI3jxc2XhHzbqD8p4ANw/1kPsFBfTvP1b7Gn/Lg1vO7R9J4IVgoMbyUmFrFGZafJ1hPZpvlg==}
+    dev: true
 
   /destr@2.0.1:
     resolution: {integrity: sha512-M1Ob1zPSIvlARiJUkKqvAZ3VAqQY6Jcuth/pBKQ2b1dX/Qx0OnJ8Vux6J2H5PTMQeRzWrrbTu70VxBfv/OPDJA==}
@@ -4834,7 +4835,7 @@ packages:
       ignore: 5.2.4
       minimatch: 3.1.2
       resolve: 1.22.2
-      semver: 6.3.0
+      semver: 6.3.1
     dev: true
 
   /eslint-plugin-promise@6.1.1(eslint@8.48.0):
@@ -5565,7 +5566,7 @@ packages:
       destr: 2.0.0
       iron-webcrypto: 0.7.1
       radix3: 1.0.1
-      ufo: 1.1.2
+      ufo: 1.3.0
       uncrypto: 0.1.3
     dev: true
 
@@ -6674,7 +6675,7 @@ packages:
       acorn: 8.10.0
       pathe: 1.1.1
       pkg-types: 1.0.3
-      ufo: 1.1.2
+      ufo: 1.3.0
 
   /modify-values@1.0.1:
     resolution: {integrity: sha512-xV2bxeN6F7oYjZWTe/YPAy6MN2M+sL4u/Rlm2AHCIVGfo2p1yGmBHQ6vHehl4bRTZBdHu3TSkWdYgkwpYzAGSw==}
@@ -6782,7 +6783,7 @@ packages:
       serve-static: 1.15.0
       source-map-support: 0.5.21
       std-env: 3.3.3
-      ufo: 1.1.2
+      ufo: 1.3.0
       uncrypto: 0.1.3
       unenv: 1.5.1
       unimport: 3.0.14(rollup@3.26.1)
@@ -7102,7 +7103,7 @@ packages:
     dependencies:
       destr: 2.0.0
       node-fetch-native: 1.4.0
-      ufo: 1.1.2
+      ufo: 1.3.0
     dev: true
 
   /ofetch@1.3.3:
@@ -7907,7 +7908,7 @@ packages:
     resolution: {integrity: sha512-lNeOl38Ws0eNxpO3+wD1I9rkHGQyj1NU1jlzv4go2CtEnEQEUfqnIvZG7W+bC/aXdJ27n5x/yUjb6RoT9tko+Q==}
     dependencies:
       defu: 6.1.2
-      destr: 2.0.0
+      destr: 2.0.1
       flat: 5.0.2
 
   /react-is@18.2.0:
@@ -8989,8 +8990,8 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /type-fest@4.0.0:
-    resolution: {integrity: sha512-d/oYtUnPM9zar2fqqGLYPzgcY0qUlYK0evgNVti93xpzfjGkMgZHu9Lvgrkn0rqGXTgsFRxFamzjGoD9Uo+dgw==}
+  /type-fest@4.3.1:
+    resolution: {integrity: sha512-pphNW/msgOUSkJbH58x8sqpq8uQj6b0ZKGxEsLKMUnGorRcDjrUaLS+39+/ub41JNTwrrMyJcUB8+YZs3mbwqw==}
     engines: {node: '>=16'}
     dev: false
 
@@ -9043,6 +9044,7 @@ packages:
 
   /ufo@1.1.2:
     resolution: {integrity: sha512-TrY6DsjTQQgyS3E3dBaOXf0TpPD8u9FVrVYmKVegJuFw51n/YB9XPt+U6ydzFG5ZIN7+DIjPbNmXoBj9esYhgQ==}
+    dev: true
 
   /ufo@1.3.0:
     resolution: {integrity: sha512-bRn3CsoojyNStCZe0BG0Mt4Nr/4KF+rhFlnNXybgqt5pXHNFRlqinSoQaTrGyzE4X8aHplSb+TorH+COin9Yxw==}
@@ -9295,13 +9297,13 @@ packages:
       spdx-expression-parse: 3.0.1
     dev: true
 
-  /vee-validate@4.10.8(vue@3.3.4):
-    resolution: {integrity: sha512-4VWziid3tdlIMGWr0D24YG/e+Q+M6TMK2DQg8dMvufgNyHFIpKxkMKwWoSMuQS0Pi0wKJEo5F5Kok8pXlei4vA==}
+  /vee-validate@4.11.3(vue@3.3.4):
+    resolution: {integrity: sha512-YhWORdZRE1GL6vXKj3r9f+Y8fJH5JMwMUJ4DFS44+WcTtiNXggyE3pyJPlZBqS9AgYGZ47EOv4UczkLxHqufiw==}
     peerDependencies:
       vue: ^3.3.4
     dependencies:
       '@vue/devtools-api': 6.5.0
-      type-fest: 4.0.0
+      type-fest: 4.3.1
       vue: 3.3.4
     dev: false
 
@@ -9558,7 +9560,7 @@ packages:
   /vue-bundle-renderer@1.0.3:
     resolution: {integrity: sha512-EfjX+5TTUl70bki9hPuVp+54JiZOvFIfoWBcfXsSwLzKEiDYyHNi5iX8srnqLIv3YRnvxgbntdcG1WPq0MvffQ==}
     dependencies:
-      ufo: 1.1.2
+      ufo: 1.3.0
     dev: true
 
   /vue-demi@0.12.5(vue@3.3.4):
@@ -9877,4 +9879,8 @@ packages:
 
   /zod@3.21.4:
     resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
+    dev: false
+
+  /zod@3.22.2:
+    resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
     dev: false
