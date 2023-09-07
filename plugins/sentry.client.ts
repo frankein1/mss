@@ -1,5 +1,5 @@
-import { defineNuxtPlugin, useRuntimeConfig } from '#app'
 import * as Sentry from '@sentry/vue'
+import { defineNuxtPlugin, useRuntimeConfig } from '#app'
 
 export default defineNuxtPlugin(nuxtApp => {
   const { public: publicConfig } = useRuntimeConfig()
