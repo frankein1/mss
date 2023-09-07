@@ -12,11 +12,11 @@ dependencies:
     specifier: ^3.405.0
     version: 3.405.0
   '@gouvfr/dsfr':
-    specifier: ~1.9.3
-    version: 1.9.3
+    specifier: ~1.10.1
+    version: 1.10.1
   '@gouvminint/vue-dsfr':
-    specifier: ^4.2.0
-    version: 4.2.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.4)(vue@3.3.4)
+    specifier: ^4.6.0
+    version: 4.6.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.4)(vue@3.3.4)
   '@pinia/nuxt':
     specifier: ^0.4.11
     version: 0.4.11(typescript@5.0.4)(vue@3.3.4)
@@ -1674,20 +1674,20 @@ packages:
       lodash.uniq: 4.5.0
     dev: false
 
-  /@gouvfr/dsfr@1.9.3:
-    resolution: {integrity: sha512-toPM1nvzSxPAwpLhnIgf7a/TJV0WOUa6sDqYummvMhZ9PBolFPGuD+3r8e3vg0bR5BkYxOt9hFErOPDU1tU4sQ==}
-    engines: {node: '>=14.18.0'}
+  /@gouvfr/dsfr@1.10.1:
+    resolution: {integrity: sha512-epBjsV9zmaOev+Sv2rrV9jgKfcs0U+gOVirthfG7EymeKUVX0eLQit+ra9yrDzLgk4mm7ZkWfy/6FekOuNgj1w==}
+    engines: {node: '>=18.16.1'}
     dev: false
 
-  /@gouvminint/vue-dsfr@4.2.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.4)(vue@3.3.4):
-    resolution: {integrity: sha512-Go/l2E8LWo0zFNO+0XdirB1p35f6rbl70Ky2bzAoFtJdnoyGUfbeTfeTdEHK94VjqvlW91uKOuwPNEf0LbHemg==}
+  /@gouvminint/vue-dsfr@4.6.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.4)(vue@3.3.4):
+    resolution: {integrity: sha512-WoCo6WSex1HWYkcysX27Y2bR505a3lrUQTKEuff5hgHbGBTueRonFoeH3uOQFiQNccyOVGQVTH6Z+w+6mHf31w==}
     engines: {node: '>=18.x.x', npm: '>=8.x.x'}
     peerDependencies:
       oh-vue-icons: 1.0.0-rc3
       vue: ^3.3.4
-      vue-router: ^4.2.2
+      vue-router: ^4.2.4
     dependencies:
-      '@gouvfr/dsfr': 1.9.3
+      '@gouvfr/dsfr': 1.10.1
       focus-trap: 7.5.2
       focus-trap-vue: 4.0.2(focus-trap@7.5.2)(vue@3.3.4)
       oh-vue-icons: 1.0.0-rc3(vue@3.3.4)

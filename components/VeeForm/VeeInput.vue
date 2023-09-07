@@ -47,7 +47,7 @@
       v-if="error"
       :id="errorId"
       class="fr-messages-group"
-      aria-live="assertive"
+      aria-live="polite"
     >
       <p class="fr-message fr-message--error">
         {{ error }}

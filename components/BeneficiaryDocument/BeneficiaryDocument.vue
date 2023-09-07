@@ -1,7 +1,7 @@
 <template>
   <div
     :id="`document-${document.key}`"
-    class="fr-card fr-card--sm force-focus-visible"
+    class="fr-card fr-card--sm fr-card-download force-focus-visible"
     tabindex="0"
   >
     <div class="fr-card__body">
@@ -79,7 +79,7 @@
           </li>
           <li>
             <button
-              class="fr-download__link"
+              class="fr-link fr-link--download"
               target="_blank"
               :title="'Télécharger ' + document.name"
               @click="onDownload"
@@ -227,6 +227,10 @@
   }
 
   .fr-links-group {
+    --ul-type: none;
+    --ul-start: 0;
+    --li-bottom: 0;
+
     display: flex;
     justify-content: space-between;
   }
@@ -244,9 +248,9 @@
     mask-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMTIgM2M1LjM5MiAwIDkuODc4IDMuODggMTAuODE5IDktLjk0IDUuMTItNS40MjcgOS0xMC44MTkgOS01LjM5MiAwLTkuODc4LTMuODgtMTAuODE5LTlDMi4xMjEgNi44OCA2LjYwOCAzIDEyIDNabTAgMTZjNC4yIDAgNy44NDItMi45MDUgOC43NzctN2E5LjAwNSA5LjAwNSAwIDAgMC0xNy41NTQgMEE5LjAwNSA5LjAwNSAwIDAgMCAxMiAxOVptMC0yLjVhNC41IDQuNSAwIDEgMSAwLTkgNC41IDQuNSAwIDAgMSAwIDlabTAtMmEyLjUgMi41IDAgMSAwIDAtNSAyLjUgMi41IDAgMCAwIDAgNVoiLz48L3N2Zz4=');
   }
 
-  // Force displaying the download icon as the link is not within a fr-download container
-  .fr-download__link::after {
-    mask-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0Ij48cGF0aCBkPSJNMyAxOWgxOHYySDN2LTJabTEwLTUuODI4TDE5LjA3MSA3LjFsMS40MTQgMS40MTRMMTIgMTcgMy41MTUgOC41MTUgNC45MjkgNy4xIDExIDEzLjE3VjJoMnYxMS4xNzJaIi8+PC9zdmc+');
+  .fr-link--download::after {
+    margin-bottom: 0;
+    vertical-align: calc((0.75em - var(--icon-size)) * 0.5);
   }
 
   .fr-links-group .fr-link {
