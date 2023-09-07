@@ -42,8 +42,8 @@ dependencies:
     specifier: ^0.33.0
     version: 0.33.0(vitest@0.33.0)
   chart.js:
-    specifier: ^4.3.1
-    version: 4.3.1
+    specifier: ^4.4.0
+    version: 4.4.0
   dayjs:
     specifier: ^1.11.9
     version: 1.11.9
@@ -3662,8 +3662,8 @@ packages:
     engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
     dev: true
 
-  /chart.js@4.3.1:
-    resolution: {integrity: sha512-QHuISG3hTJ0ftq0I0f5jqH9mNVO9bqG8P+zvMOVslgKajQVvFEX7QAhYNJ+QEmw+uYTwo8XpTimaB82oeTWjxw==}
+  /chart.js@4.4.0:
+    resolution: {integrity: sha512-vQEj6d+z0dcsKLlQvbKIMYFHd3t8W/7L2vfJIbYcfyPcRx92CsHqECpueN8qVGNlKyDcr5wBrYAYKnfu/9Q1hQ==}
     engines: {pnpm: '>=7'}
     dependencies:
       '@kurkle/color': 0.3.2
