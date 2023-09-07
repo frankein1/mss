@@ -26,6 +26,9 @@ export const getStructureController = async ({
           role: true,
           aidantConnectAuthorisation: true,
           status: true
+        },
+        orderBy: {
+          created: 'desc'
         }
       }
     }

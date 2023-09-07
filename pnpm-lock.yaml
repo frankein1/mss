@@ -12,8 +12,8 @@ dependencies:
     specifier: ^3.405.0
     version: 3.405.0
   '@gouvfr/dsfr':
-    specifier: ~1.9.3
-    version: 1.9.3
+    specifier: ~1.10.1
+    version: 1.10.1
   '@gouvminint/vue-dsfr':
     specifier: ^4.6.0
     version: 4.6.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.4)(vue@3.3.4)
@@ -1677,11 +1677,6 @@ packages:
   /@gouvfr/dsfr@1.10.1:
     resolution: {integrity: sha512-epBjsV9zmaOev+Sv2rrV9jgKfcs0U+gOVirthfG7EymeKUVX0eLQit+ra9yrDzLgk4mm7ZkWfy/6FekOuNgj1w==}
     engines: {node: '>=18.16.1'}
-    dev: false
-
-  /@gouvfr/dsfr@1.9.3:
-    resolution: {integrity: sha512-toPM1nvzSxPAwpLhnIgf7a/TJV0WOUa6sDqYummvMhZ9PBolFPGuD+3r8e3vg0bR5BkYxOt9hFErOPDU1tU4sQ==}
-    engines: {node: '>=14.18.0'}
     dev: false
 
   /@gouvminint/vue-dsfr@4.6.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.4)(vue@3.3.4):
