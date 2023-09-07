@@ -1,4 +1,4 @@
 export {
-  FollowupWithRelations,
+  type FollowupWithRelations,
   getFollowupWithRelations
 } from './getFollowupWithRelations'

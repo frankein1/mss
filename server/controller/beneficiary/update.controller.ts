@@ -16,7 +16,7 @@ import {
   getUserStructureType
 } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { UpdateBeneficiaryInput } from 'server/schema'
+import { UpdateBeneficiaryInput } from '~/server/schema'
 
 export const updateBeneficiaryHandler = async ({
   input,
