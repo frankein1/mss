@@ -1,6 +1,6 @@
-import type { GetBeneficiaryHistoryOutput } from '~/server/routers'
+import type { HistoryItem } from '~/server/routers'
 
-export type HistoryItem = GetBeneficiaryHistoryOutput[0]
-export type HistoryItemComments = HistoryItem['comments']
-export type HistoryItemComment = HistoryItemComments[0]
+export type { HistoryItem } from '~/server/routers'
+export type HistoryItemComments = Exclude<HistoryItem['comments'], undefined>
+export type HistoryItemComment = HistoryItemComments[number]
 export type HistoryItemDocuments = HistoryItem['documents']

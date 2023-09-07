@@ -105,14 +105,6 @@ async function getFollowups(
     return []
   }
 
-  const commentsInclude = canListCommentsToFollowup(user, beneficiary)
-    ? {
-        include: {
-          createdBy: { select: createdBySelect }
-        }
-      }
-    : undefined
-
   const followups = await prismaClient.followup.findMany({
     where: {
       beneficiaryId: beneficiary.id,
@@ -120,12 +112,23 @@ async function getFollowups(
     },
     include: {
       ...historyItemInclude(user.id),
-      comments: commentsInclude,
+      comments: {
+        include: {
+          createdBy: { select: createdBySelect }
+        }
+      },
       types: true
     },
     orderBy: { date: 'desc' }
   })
-  return followups.map(f => ({ ...f, isFollowup: true as const }))
+
+  return followups.map(f => ({
+    ...f,
+    isFollowup: true as const,
+    comments: canListCommentsToFollowup(user, beneficiary)
+      ? f.comments
+      : undefined
+  }))
 }
 
 async function getHelpRequests(
@@ -137,14 +140,6 @@ async function getHelpRequests(
     return []
   }
 
-  const commentsInclude = canListCommentsToHelpRequest(user, beneficiary)
-    ? {
-        include: {
-          createdBy: { select: createdBySelect }
-        }
-      }
-    : undefined
-
   const helpRequests = await prismaClient.helpRequest.findMany({
     where: {
       beneficiaryId: beneficiary.id,
@@ -152,7 +147,11 @@ async function getHelpRequests(
     },
     include: {
       ...historyItemInclude(user.id),
-      comments: commentsInclude,
+      comments: {
+        include: {
+          createdBy: { select: createdBySelect }
+        }
+      },
       type: true,
       instructorOrganization: {
         select: {
@@ -162,13 +161,20 @@ async function getHelpRequests(
     },
     orderBy: { openingDate: 'desc' }
   })
-  return helpRequests.map(h => ({ ...h, isFollowup: false as const }))
+
+  return helpRequests.map(h => ({
+    ...h,
+    isFollowup: false as const,
+    comments: canListCommentsToHelpRequest(user, beneficiary)
+      ? h.comments
+      : undefined
+  }))
 }
 
 type HistoryFollowup = Prisma.PromiseReturnType<typeof getFollowups>[0]
 type HistoryHelpRequest = Prisma.PromiseReturnType<typeof getHelpRequests>[0]
 
-type HistoryItem = HistoryFollowup | HistoryHelpRequest
+export type HistoryItem = HistoryFollowup | HistoryHelpRequest
 
 function getHistoryItemDate(h: HistoryItem) {
   return h.isFollowup ? h.date : h.openingDate
@@ -214,7 +220,3 @@ export const getBeneficiaryHistoryHandler = async ({
 
   return [...followups, ...helpRequests].sort(sortHistoryItem)
 }
-
-export type GetBeneficiaryHistoryOutput = Prisma.PromiseReturnType<
-  typeof getBeneficiaryHistoryHandler
->
