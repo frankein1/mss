@@ -60,35 +60,34 @@
 
   const user = authStore.getAuthUser
 
-  const beneficiary = computed(() => {
-    return {
-      structureId: user.structureId,
-      referents: values.referents || [],
-      aidantConnectAuthorized: values.aidantConnectAuthorized,
-      // General Info
-      general: {
-        status: values.status,
-        firstName: values.firstName,
-        usualName: values.usualName,
-        birthName: values.birthName,
-        birthDate: values.birthDate,
-        numeroPegase: values.numeroPegase,
-        noPhone: false,
-        phone1: values.phone1,
-        email: values.email
-      },
-      taxHousehold: {},
-      entourage: {},
-      external: {},
-      occupation: {
-        mainIncomeSource: [],
-        pensionOrganisations: [],
-        majorChildrenMainIncomeSource: [],
-        partnerMainIncomeSource: []
-      },
-      health: {}
-    } as unknown as SaveBeneficiaryInput
-  })
+  const beneficiary = computed<SaveBeneficiaryInput>(() => ({
+    structureId: user.structureId,
+    referents: values.referents || [],
+    aidantConnectAuthorized: values.aidantConnectAuthorized,
+    // General Info
+    general: {
+      status: values.status,
+      firstName: values.firstName,
+      usualName: values.usualName,
+      birthName: values.birthName,
+      birthDate: values.birthDate,
+      numeroPegase: values.numeroPegase,
+      noPhone: false,
+      phone1: values.phone1,
+      email: values.email,
+      caregiver: false
+    },
+    taxHousehold: {},
+    entourage: {},
+    external: {},
+    occupation: {
+      mainIncomeSource: [],
+      pensionOrganisations: [],
+      majorChildrenMainIncomeSource: [],
+      partnerMainIncomeSource: []
+    },
+    health: {}
+  }))
 
   const canSetRelatives = computed(() =>
     canSaveBeneficiaryWithCompleteInfo(user)
