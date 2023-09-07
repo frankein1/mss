@@ -1,4 +1,4 @@
 export {
-  HelpRequestWithRelations,
+  type HelpRequestWithRelations,
   getHelpRequestWithRelations
 } from './getHelpRequestWithRelations'

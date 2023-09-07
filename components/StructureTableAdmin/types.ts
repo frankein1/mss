@@ -1,3 +1,3 @@
-import type { AdminStructuresOutput } from 'server/routers'
+import type { AdminStructuresOutput } from '~/server/routers'
 
 export type Structures = AdminStructuresOutput['structures']
