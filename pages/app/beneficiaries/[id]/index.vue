@@ -55,7 +55,7 @@
           :alert-type="AlertType.Error"
           message="La fiche bénéficiaire n'a pas pu être chargée."
         />
-        <BeneficiaryDetails
+        <BeneficiaryInfo
           v-else
           :beneficiary="beneficiary"
           :entourages="entourages"

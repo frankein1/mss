@@ -117,10 +117,10 @@ export const getBeneficiaryFollowupTypesHandler = async ({
     false
   )
 
-  return {
-    legallyRequired: beneficiaryLegallyRequiredFollowupTypes,
-    legallyNotRequired: beneficiaryLegallyNotRequiredFollowupTypes
-  }
+  return [
+    ...beneficiaryLegallyRequiredFollowupTypes,
+    ...beneficiaryLegallyNotRequiredFollowupTypes
+  ]
 }
 
 export type GetBeneficiaryFollowupTypesOutput = Prisma.PromiseReturnType<

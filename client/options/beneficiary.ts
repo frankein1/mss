@@ -14,6 +14,7 @@ import {
   RelativeRelationship,
   BeneficiaryPensionOrganisation
 } from '@prisma/client'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 import { labelsToOptions } from '~/utils/options'
 
 export const pensionOrganisationLabels: {
@@ -70,6 +71,8 @@ export const beneficiaryGenderLabels: { [key in Gender]: string } = {
   [Gender.Other]: 'Autre'
 }
 
+export const BeneficiaryGenderKeys = buildKeys(beneficiaryGenderLabels)
+
 export const beneficiaryGenderOptions = labelsToOptions(beneficiaryGenderLabels)
 
 export const beneficiaryFamilySituationLabels: {
@@ -87,6 +90,10 @@ export const beneficiaryFamilySituationLabels: {
   [BeneficiaryFamilySituation.Widow]: 'Veuf·ve',
   [BeneficiaryFamilySituation.Other]: 'Autre'
 }
+
+export const BeneficiaryFamilySituationKeys = buildKeys(
+  beneficiaryFamilySituationLabels
+)
 
 export const beneficiaryFamilySituationOptions = labelsToOptions(
   beneficiaryFamilySituationLabels
@@ -107,6 +114,8 @@ export const beneficiaryMobilityLabels: {
   [BeneficiaryMobility.BikeOrEquivalent]: 'Vélo ou trottinette électrique',
   [BeneficiaryMobility.OtherPermit]: 'Autres permis (poids lourds, bus)'
 }
+
+export const BeneficiaryMobilityKeys = buildKeys(beneficiaryMobilityLabels)
 
 export const beneficiaryMobilityOptions = labelsToOptions(
   beneficiaryMobilityLabels
@@ -236,6 +245,10 @@ export const beneficiaryAccommodationZoneLabels: {
   OutsideEurope: 'Hors Europe'
 }
 
+export const BeneficiaryAccommodationZoneKeys = buildKeys(
+  beneficiaryAccommodationZoneLabels
+)
+
 export const beneficiaryAccommodationZoneOptions = labelsToOptions(
   beneficiaryAccommodationZoneLabels
 )
@@ -256,6 +269,10 @@ export const beneficiaryAccommodationModeLabels: {
   [BeneficiaryAccommodationMode.None]: 'Sans hébergement',
   [BeneficiaryAccommodationMode.Other]: 'Autre type de logement (hôtel...)'
 }
+
+export const BeneficiaryAccommodationModeKeys = buildKeys(
+  beneficiaryAccommodationModeLabels
+)
 
 export const beneficiaryAccommodationModeOptions = labelsToOptions(
   beneficiaryAccommodationModeLabels

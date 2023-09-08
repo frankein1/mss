@@ -182,3 +182,35 @@ select:focus:not(:focus-visible) {
 .followup-types-data {
   max-width: 25rem;
 }
+
+// =============== TYPOGRAPHIE ========================
+
+.text-bold {
+  font-weight: 700;
+}
+
+.divider {
+  border-top: 1px solid #bbb;
+}
+
+// ====================================================
+
+// =============== FORM ========================
+
+.field-label {
+  color: var(--light-text-mention-grey, #666);
+}
+
+.field-value {
+  color: var(--light-text-title-grey, #161616);
+}
+
+// =============================================
+
+.bg-color-grey-light {
+  background-color: #eee;
+}
+
+.br-16 {
+  border-radius: 16px;
+}
