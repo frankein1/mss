@@ -1,5 +1,19 @@
 import type { GetBeneficiaryOutput } from '~/server/routers'
 
+export function hasCoordinatesInformations(beneficiary: GetBeneficiaryOutput) {
+  return (
+    beneficiary.phone1 ||
+    beneficiary.phone2 ||
+    beneficiary.noPhone ||
+    beneficiary.email ||
+    beneficiary.street ||
+    beneficiary.streetNumber ||
+    beneficiary.zipcode ||
+    beneficiary.city ||
+    beneficiary.addressComplement
+  )
+}
+
 export function hasIdentityInformations(beneficiary: GetBeneficiaryOutput) {
   return (
     beneficiary.title ||
