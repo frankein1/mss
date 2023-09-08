@@ -1,9 +1,7 @@
 import { User } from '@prisma/client'
 import { FieldLabels } from '~/types/fieldLabels'
 
-type UserFieldLabels = Omit<User, 'password'>
-
-export const userFieldLabels: FieldLabels<UserFieldLabels> = {
+export const userFieldLabels: FieldLabels<User> = {
   id: 'Identifiant',
   lastName: 'Nom',
   firstName: 'Prénom',
