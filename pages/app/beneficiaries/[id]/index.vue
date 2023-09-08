@@ -136,10 +136,7 @@
 
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
-  const followupTypes = computed(
-    () =>
-      followupTypesData.value || { legallyRequired: [], legallyNotRequired: [] }
-  )
+  const followupTypes = computed(() => followupTypesData.value || [])
 
   const authStore = useAuthStore()
   const canDelete = computed(() => {
