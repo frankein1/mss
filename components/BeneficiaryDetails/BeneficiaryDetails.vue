@@ -3,6 +3,13 @@
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <BeneficiaryDetailsDefault :beneficiary="beneficiary" />
+        <BeneficiaryDetailsFollowupTypes
+          v-if="
+            followupTypes.legallyRequired.length ||
+            followupTypes.legallyNotRequired.length
+          "
+          :followup-types="followupTypes"
+        />
         <!-- <BeneficiaryDetailsGeneral :beneficiary="beneficiary" />
         <BeneficiaryDetailsHealth :beneficiary="beneficiary" />
         <BeneficiaryDetailsOccupationIncome :beneficiary="beneficiary" />
@@ -19,9 +26,6 @@
         />
         <BeneficiaryDetailsOtherInformation :beneficiary="beneficiary" /> -->
       </div>
-      <!-- <div class="fr-col-12 fr-col-lg-4 beneficiary-details-col">
-        <BeneficiaryDetailsFollowupTypes :followup-types="followupTypes" />
-      </div> -->
     </div>
   </div>
 </template>
