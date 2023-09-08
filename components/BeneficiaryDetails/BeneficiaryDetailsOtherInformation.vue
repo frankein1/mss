@@ -37,10 +37,6 @@
         <span class="information-label">Partenaires intervenants :</span>
         {{ beneficiary.involvedPartners }}
       </li>
-      <li v-if="beneficiary.additionalInformation">
-        <span class="information-label"> Informations complémentaires : </span>
-        {{ beneficiary.additionalInformation }}
-      </li>
     </ul>
   </section>
 </template>
@@ -64,7 +60,6 @@
       props.beneficiary.orientationType ||
       props.beneficiary.orientationStructure ||
       props.beneficiary.serviceProviders ||
-      props.beneficiary.involvedPartners ||
-      props.beneficiary.additionalInformation
+      props.beneficiary.involvedPartners
   )
 </script>

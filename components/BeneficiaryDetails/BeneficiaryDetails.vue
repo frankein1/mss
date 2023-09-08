@@ -10,8 +10,13 @@
           "
           :followup-types="followupTypes"
         />
-        <!-- <BeneficiaryDetailsGeneral :beneficiary="beneficiary" />
-        <BeneficiaryDetailsHealth :beneficiary="beneficiary" />
+        <!-- TODO: "Informations générales" title and accordion feature -->
+        <BeneficiaryDetailsGeneral
+          v-if="hasGeneralInformationsSection"
+          :beneficiary="beneficiary"
+        />
+        <!-- TODO: continue adding informations components -->
+        <!-- <BeneficiaryDetailsHealth :beneficiary="beneficiary" />
         <BeneficiaryDetailsOccupationIncome :beneficiary="beneficiary" />
         <BeneficiaryDetailsRelatives
           v-if="houseHoldSection"
@@ -36,13 +41,18 @@
     GetBeneficiaryFollowupTypesOutput
   } from '~/server/routers'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
+  import { hasGeneralInformations } from '~/utils/beneficiary'
 
-  defineProps<{
+  const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
     taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
     entourages: BeneficiaryRelativeWithLinkedBeneficiary[]
     followupTypes: GetBeneficiaryFollowupTypesOutput
   }>()
+
+  const hasGeneralInformationsSection = computed(() =>
+    hasGeneralInformations(props.beneficiary)
+  )
 
   // const houseHoldSection = computed(
   //   () =>
