@@ -17,3 +17,8 @@
 .fr-icon-history-line::after {
   mask-image: url('@/assets/icons/history-line.svg');
 }
+
+.fr-icon-zzz-line::before,
+.fr-icon-zzz-line::after {
+  mask-image: url('@/assets/icons/zzz-line.svg');
+}

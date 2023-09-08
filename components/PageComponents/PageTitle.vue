@@ -1,5 +1,8 @@
 <template>
-  <div class="pagetitle__container fr-mb-3w">
+  <div
+    class="pagetitle__container"
+    :class="{ 'fr-mb-3w': !noMargin }"
+  >
     <div
       v-if="icon"
       class="pagetitle__icon fr-mr-2w"
@@ -10,7 +13,7 @@
       ></span>
     </div>
     <div class="pagetitle__titles">
-      <div class="pagetitle__title">{{ title }}</div>
+      <h1 class="pagetitle__title fr-mb-0">{{ title }}</h1>
       <div
         v-if="hasSubtitle"
         class="pagetitle__subtitle fr-mt-1w"
@@ -22,10 +25,14 @@
 </template>
 
 <script setup lang="ts">
-  defineProps<{
-    title: string
-    icon?: string
-  }>()
+  withDefaults(
+    defineProps<{
+      title: string
+      noMargin?: boolean
+      icon?: string
+    }>(),
+    { noMargin: false, icon: '' }
+  )
 
   const slots = useSlots()
 
@@ -59,8 +66,6 @@
 
   .pagetitle__title {
     color: #00007d;
-    font-size: xx-large;
-    font-weight: bold;
   }
 
   .pagetitle__subtitle {
