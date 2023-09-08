@@ -15,7 +15,10 @@
     <hr class="fr-col-12 fr-mt-5v" />
     <h2 class="fr-h6">Coordonnées du bénéficiaire</h2>
     <ul class="fr-grid-row fr-grid-row--gutters information-list">
-      <li class="fr-col-6">
+      <li
+        v-if="beneficiary.phone1 || beneficiary.phone2 || beneficiary.noPhone"
+        class="fr-col-6"
+      >
         <span class="information-label">Numéro de téléphone</span>
         {{ getBeneficiaryDisplayPhone(beneficiary) }}
       </li>
