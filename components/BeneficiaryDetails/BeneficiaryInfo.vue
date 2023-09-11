@@ -18,8 +18,12 @@
     <div class="section fr-p-4w fr-m-1w">
       <BeneficiaryInfoEntourages :entourages="entourages" />
     </div>
-    <div class="section fr-p-4w fr-m-1w">Santé</div>
-    <div class="section fr-p-4w fr-m-1w">Activité/Revenu</div>
+    <div class="section fr-p-4w fr-m-1w">
+      <BeneficiaryInfoHealth :beneficiary="beneficiary" />
+    </div>
+    <div class="section fr-p-4w fr-m-1w">
+      <BeneficiaryInfoOccupationIncome :beneficiary="beneficiary" />
+    </div>
     <div class="section fr-p-4w fr-m-1w">Structures extérieures</div>
   </div>
 </template>

@@ -132,6 +132,8 @@ export const beneficiaryGirLabels: {
   [BeneficiaryGir.Level6]: 'Niveau 6'
 }
 
+export const BeneficiaryGirKeys = buildKeys(beneficiaryGirLabels)
+
 export const beneficiaryGirOptions = labelsToOptions(beneficiaryGirLabels)
 
 export const beneficiarySocioProfessionalCategoryLabels: {
@@ -147,6 +149,9 @@ export const beneficiarySocioProfessionalCategoryLabels: {
     'Sans activité (non inscrit à Pôle Emploi)',
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
 }
+
+export const BeneficiarySocioProfessionalCategoryKeys =
+  buildKeys(beneficiaryGirLabels)
 
 export const beneficiarySocioProfessionalCategoryOptions = labelsToOptions(
   beneficiarySocioProfessionalCategoryLabels
