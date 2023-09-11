@@ -27,7 +27,7 @@
       </div>
     </div>
 
-    <hr class="divider" />
+    <hr class="fr-col-12 fr-mt-5v" />
 
     <div class="fr-grid-row">
       <div class="fr-col-12 fr-pb-1w">
@@ -47,47 +47,47 @@
           :value="beneficiary.accommodationAdditionalInformation"
         />
       </div>
+      <div class="fr-col-6">
+        <BeneficiaryInfoLabel
+          label="Adresse"
+          :value="formatAddress(beneficiary)"
+        />
+      </div>
+      <div class="fr-col-6">
+        <BeneficiaryInfoLabel
+          label="Complément d'adresse"
+          :value="beneficiary.addressComplement"
+        />
+      </div>
     </div>
-    <div class="fr-col-6">
-      <BeneficiaryInfoLabel
-        label="Adresse"
-        :value="formatAddress(beneficiary)"
-      />
-    </div>
-    <div class="fr-col-6">
-      <BeneficiaryInfoLabel
-        label="Complément d'adresse"
-        :value="beneficiary.addressComplement"
-      />
-    </div>
-  </div>
 
-  <div
-    v-if="beneficiary.mobility"
-    class="fr-grid-row"
-  >
-    <hr class="divider" />
-    <div class="fr-col-12 fr-pb-1w">
-      <div class="text-bold">Mobilité</div>
+    <div
+      v-if="beneficiary.mobility"
+      class="fr-grid-row"
+    >
+      <hr class="fr-col-12 fr-mt-5v" />
+      <div class="fr-col-12 fr-pb-1w">
+        <div class="text-bold">Mobilité</div>
+      </div>
+      <div class="fr-col-12">
+        <BeneficiaryInfoLabel
+          label="Permis"
+          :value="BeneficiaryMobilityKeys.value(beneficiary.mobility)"
+        />
+      </div>
     </div>
-    <div class="fr-col-12">
-      <BeneficiaryInfoLabel
-        label="Permis"
-        :value="BeneficiaryMobilityKeys.value(beneficiary.mobility)"
-      />
-    </div>
-  </div>
 
-  <div
-    v-if="beneficiary.additionalInformation"
-    class="fr-grid-row"
-  >
-    <hr class="divider" />
-    <div class="fr-col-12 fr-pb-1w">
-      <div class="text-bold">Informations complémentaires</div>
-    </div>
-    <div class="fr-col-12">
-      <div class="field-value">{{ beneficiary.additionalInformation }}</div>
+    <div
+      v-if="beneficiary.additionalInformation"
+      class="fr-grid-row"
+    >
+      <hr class="fr-col-12 fr-mt-5v" />
+      <div class="fr-col-12 fr-pb-1w">
+        <div class="text-bold">Informations complémentaires</div>
+      </div>
+      <div class="fr-col-12">
+        <div class="field-value">{{ beneficiary.additionalInformation }}</div>
+      </div>
     </div>
   </div>
 </template>

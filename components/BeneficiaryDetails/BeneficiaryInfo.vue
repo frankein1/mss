@@ -1,30 +1,32 @@
 <template>
   <div class="fr-container">
-    <div class="section fr-p-4w fr-m-1w">
+    <BeneficiaryInfoSection title="">
       <BeneficiaryInfoHeader :beneficiary="beneficiary" />
-    </div>
-    <div class="section fr-p-4w fr-m-1w">
+    </BeneficiaryInfoSection>
+    <BeneficiaryInfoSection title="">
       <BeneficiaryInfoFollowupTypes :followup-types="followupTypes" />
-    </div>
-    <div class="section fr-p-4w fr-m-1w">
+    </BeneficiaryInfoSection>
+    <BeneficiaryInfoSection title="Informations générales">
       <BeneficiaryInfoGeneral :beneficiary="beneficiary" />
-    </div>
-    <div class="section fr-p-4w fr-m-1w">
+    </BeneficiaryInfoSection>
+    <BeneficiaryInfoSection title="Foyer fiscal">
       <BeneficiaryInfoTaxHouseholds
         :beneficiary="beneficiary"
         :tax-households="taxHouseholds"
       />
-    </div>
-    <div class="section fr-p-4w fr-m-1w">
+    </BeneficiaryInfoSection>
+    <BeneficiaryInfoSection title="Entourage">
       <BeneficiaryInfoEntourages :entourages="entourages" />
-    </div>
-    <div class="section fr-p-4w fr-m-1w">
+    </BeneficiaryInfoSection>
+    <BeneficiaryInfoSection title="Santé">
       <BeneficiaryInfoHealth :beneficiary="beneficiary" />
-    </div>
-    <div class="section fr-p-4w fr-m-1w">
+    </BeneficiaryInfoSection>
+    <BeneficiaryInfoSection title="Activité/Revenu">
       <BeneficiaryInfoOccupationIncome :beneficiary="beneficiary" />
-    </div>
-    <div class="section fr-p-4w fr-m-1w">Structures extérieures</div>
+    </BeneficiaryInfoSection>
+    <BeneficiaryInfoSection title="Structures extérieures">
+      <BeneficiaryInfoOtherInformation :beneficiary="beneficiary" />
+    </BeneficiaryInfoSection>
   </div>
 </template>
 
@@ -42,11 +44,3 @@
     followupTypes: GetBeneficiaryFollowupTypesOutput
   }>()
 </script>
-
-<style scoped>
-  .section {
-    border-radius: 8px;
-    border: 1px solid #ddd;
-    background: white;
-  }
-</style>

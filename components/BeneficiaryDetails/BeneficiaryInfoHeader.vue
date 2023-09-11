@@ -13,7 +13,7 @@
         </div>
       </div>
     </div>
-    <hr class="divider" />
+    <hr class="fr-col-12 fr-mt-5v" />
 
     <div class="fr-grid-row">
       <div class="fr-col-12">

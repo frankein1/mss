@@ -194,6 +194,10 @@ export const beneficiaryProtectionMeasureLabels: {
   [BeneficiaryProtectionMeasure.Tutelle]: 'Tutelle'
 }
 
+export const BeneficiaryProtectionMeasureKeys = buildKeys(
+  beneficiaryProtectionMeasureLabels
+)
+
 export const beneficiaryProtectionMeasureOptions = labelsToOptions(
   beneficiaryProtectionMeasureLabels
 )
@@ -209,6 +213,10 @@ export const beneficiaryOrientationTypeLabels: {
   [BeneficiaryOrientationType.SuiviCabinet]: 'Suivi cabinet',
   [BeneficiaryOrientationType.Autre]: 'Autre'
 }
+
+export const BeneficiaryOrientationTypeKeys = buildKeys(
+  beneficiaryOrientationTypeLabels
+)
 
 export const beneficiaryOrientationTypeOptions = labelsToOptions(
   beneficiaryOrientationTypeLabels

@@ -28,7 +28,7 @@
         :key="taxHousehold.id"
         class="fr-col-12"
       >
-        <hr class="divider" />
+        <hr class="fr-col-12 fr-mt-5v" />
         <BeneficiaryInfoRelative :relative="taxHousehold" />
       </div>
     </div>
