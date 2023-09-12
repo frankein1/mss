@@ -1,40 +1,43 @@
 <template>
-  <div
-    v-if="hasHealthSection"
-    class="fr-container"
+  <BeneficiaryInfoSection
+    v-if="hasHealthInfo"
+    title="Santé"
+    :beneficiary-id="beneficiary.id"
   >
-    <div class="fr-grid-row">
-      <BeneficiaryInfoLabel
-        label="GIR"
-        :value="BeneficiaryGirKeys.value(beneficiary.gir)"
-        class="fr-col-6"
-      />
-      <BeneficiaryInfoLabel
-        label="Médecin traitant"
-        :value="beneficiary.doctor"
-        class="fr-col-6"
-      />
+    <div class="fr-container">
+      <div class="fr-grid-row">
+        <BeneficiaryInfoLabel
+          label="GIR"
+          :value="BeneficiaryGirKeys.value(beneficiary.gir)"
+          class="fr-col-6"
+        />
+        <BeneficiaryInfoLabel
+          label="Médecin traitant"
+          :value="beneficiary.doctor"
+          class="fr-col-6"
+        />
+      </div>
+      <div class="fr-grid-row">
+        <BeneficiaryInfoLabel
+          label="N de sécurité sociale"
+          :value="beneficiary.socialSecurityNumber"
+          class="fr-col-6"
+        />
+        <BeneficiaryInfoLabel
+          label="Mutuelle"
+          :value="beneficiary.insurance"
+          class="fr-col-6"
+        />
+      </div>
+      <div class="fr-grid-row">
+        <BeneficiaryInfoLabel
+          label="Informations Complémentaires"
+          :value="beneficiary.healthAdditionalInformation"
+          class="fr-col-12"
+        />
+      </div>
     </div>
-    <div class="fr-grid-row">
-      <BeneficiaryInfoLabel
-        label="N de sécurité sociale"
-        :value="beneficiary.socialSecurityNumber"
-        class="fr-col-6"
-      />
-      <BeneficiaryInfoLabel
-        label="Mutuelle"
-        :value="beneficiary.insurance"
-        class="fr-col-6"
-      />
-    </div>
-    <div class="fr-grid-row">
-      <BeneficiaryInfoLabel
-        label="Informations Complémentaires"
-        :value="beneficiary.healthAdditionalInformation"
-        class="fr-col-12"
-      />
-    </div>
-  </div>
+  </BeneficiaryInfoSection>
 </template>
 
 <script lang="ts" setup>
@@ -49,7 +52,7 @@
 
   const authStore = useAuthStore()
 
-  const hasHealthSection = computed(() => {
+  const hasHealthInfo = computed(() => {
     const beneficiary = props.beneficiary
     return (
       beneficiary.gir ||

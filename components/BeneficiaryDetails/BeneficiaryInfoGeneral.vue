@@ -1,116 +1,124 @@
 <template>
-  <div class="fr-container">
-    <div v-if="hasIdentityInformations(beneficiary)">
-      <div class="fr-grid-row">
-        <div class="fr-col-12 fr-pb-1w text-bold">Identité du bénéficiaire</div>
-      </div>
-      <div class="fr-grid-row">
-        <div class="fr-col-6 fr-pb-2w">
-          <div class="field-value">
-            {{ formatBeneficiaryName(beneficiary) }}
-          </div>
-          <div class="field-value">
-            {{ formatBeneficiaryBirthInfo(beneficiary) }}
+  <BeneficiaryInfoSection
+    v-if="hasGeneralInfo"
+    title="Informations générales"
+    :beneficiary-id="beneficiary.id"
+  >
+    <div class="fr-container">
+      <div v-if="hasIdentityInformations(beneficiary)">
+        <div class="fr-grid-row">
+          <div class="fr-col-12 fr-pb-1w text-bold">
+            Identité du bénéficiaire
           </div>
         </div>
-        <BeneficiaryInfoLabel
-          label="Genre"
-          :value="BeneficiaryGenderKeys.value(beneficiary.gender)"
-          class="fr-col-6"
-        />
+        <div class="fr-grid-row">
+          <div class="fr-col-6 fr-pb-2w">
+            <div class="field-value">
+              {{ formatBeneficiaryName(beneficiary) }}
+            </div>
+            <div class="field-value">
+              {{ formatBeneficiaryBirthInfo(beneficiary) }}
+            </div>
+          </div>
+          <BeneficiaryInfoLabel
+            label="Genre"
+            :value="BeneficiaryGenderKeys.value(beneficiary.gender)"
+            class="fr-col-6"
+          />
+        </div>
+        <div class="fr-grid-row">
+          <BeneficiaryInfoLabel
+            label="Nom de naissance"
+            :value="beneficiary.birthName"
+            class="fr-col-6"
+          />
+          <BeneficiaryInfoLabel
+            label="Nationalité"
+            :value="NationalityKeys.value(beneficiary.nationality)"
+            class="fr-col-6"
+          />
+        </div>
+        <div
+          v-if="isMinistryAgent"
+          class="fr-grid-row"
+        >
+          <BeneficiaryInfoLabel
+            label="Numéro Pegase"
+            :value="beneficiary.numeroPegase"
+            class="fr-col-12"
+          />
+        </div>
       </div>
-      <div class="fr-grid-row">
-        <BeneficiaryInfoLabel
-          label="Nom de naissance"
-          :value="beneficiary.birthName"
-          class="fr-col-6"
-        />
-        <BeneficiaryInfoLabel
-          label="Nationalité"
-          :value="NationalityKeys.value(beneficiary.nationality)"
-          class="fr-col-6"
-        />
+
+      <div v-if="hasCoordinatesInformations(beneficiary)">
+        <hr class="fr-col-12 fr-mt-5v" />
+
+        <div class="fr-grid-row">
+          <div class="fr-col-12 fr-pb-1w text-bold">Adresse/Hébergement</div>
+        </div>
+
+        <div class="fr-grid-row">
+          <BeneficiaryInfoLabel
+            label="Mode d'hébergement"
+            :value="
+              BeneficiaryAccommodationModeKeys.value(
+                beneficiary.accommodationMode
+              )
+            "
+            class="fr-col-12"
+          />
+          <BeneficiaryInfoLabel
+            label="Précision d'hébergement"
+            :value="beneficiary.accommodationAdditionalInformation"
+            class="fr-col-12"
+          />
+        </div>
+
+        <div class="fr-grid-row">
+          <BeneficiaryInfoLabel
+            label="Adresse"
+            :value="formatAddress(beneficiary)"
+            class="fr-col-6"
+          />
+          <BeneficiaryInfoLabel
+            label="Complément d'adresse"
+            :value="beneficiary.addressComplement"
+            class="fr-col-6"
+          />
+        </div>
       </div>
+
       <div
-        v-if="isMinistryAgent"
+        v-if="beneficiary.mobility"
         class="fr-grid-row"
       >
-        <BeneficiaryInfoLabel
-          label="Numéro Pegase"
-          :value="beneficiary.numeroPegase"
-          class="fr-col-12"
-        />
-      </div>
-    </div>
+        <hr class="fr-col-12 fr-mt-5v" />
 
-    <div v-if="hasCoordinatesInformations(beneficiary)">
-      <hr class="fr-col-12 fr-mt-5v" />
+        <div class="fr-col-12 fr-pb-1w">
+          <div class="text-bold">Mobilité</div>
+        </div>
 
-      <div class="fr-grid-row">
-        <div class="fr-col-12 fr-pb-1w text-bold">Adresse/Hébergement</div>
-      </div>
-
-      <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Mode d'hébergement"
-          :value="
-            BeneficiaryAccommodationModeKeys.value(
-              beneficiary.accommodationMode
-            )
-          "
-          class="fr-col-12"
-        />
-        <BeneficiaryInfoLabel
-          label="Précision d'hébergement"
-          :value="beneficiary.accommodationAdditionalInformation"
+          label="Permis"
+          :value="BeneficiaryMobilityKeys.value(beneficiary.mobility)"
           class="fr-col-12"
         />
       </div>
 
-      <div class="fr-grid-row">
-        <BeneficiaryInfoLabel
-          label="Adresse"
-          :value="formatAddress(beneficiary)"
-          class="fr-col-6"
-        />
-        <BeneficiaryInfoLabel
-          label="Complément d'adresse"
-          :value="beneficiary.addressComplement"
-          class="fr-col-6"
-        />
+      <div
+        v-if="beneficiary.additionalInformation"
+        class="fr-grid-row"
+      >
+        <hr class="fr-col-12 fr-mt-5v" />
+        <div class="fr-col-12 fr-pb-1w text-bold">
+          Informations complémentaires
+        </div>
+        <div class="field-value fr-col-12">
+          {{ beneficiary.additionalInformation }}
+        </div>
       </div>
     </div>
-
-    <div
-      v-if="beneficiary.mobility"
-      class="fr-grid-row"
-    >
-      <hr class="fr-col-12 fr-mt-5v" />
-
-      <div class="fr-col-12 fr-pb-1w">
-        <div class="text-bold">Mobilité</div>
-      </div>
-
-      <BeneficiaryInfoLabel
-        label="Permis"
-        :value="BeneficiaryMobilityKeys.value(beneficiary.mobility)"
-        class="fr-col-12"
-      />
-    </div>
-
-    <div
-      v-if="beneficiary.additionalInformation"
-      class="fr-grid-row"
-    >
-      <hr class="fr-col-12 fr-mt-5v" />
-      <div class="fr-col-12 fr-pb-1w text-bold">
-        Informations complémentaires
-      </div>
-      <div class="field-value fr-col-12">
-        {{ beneficiary.additionalInformation }}
-      </div>
-    </div>
-  </div>
+  </BeneficiaryInfoSection>
 </template>
 
 <script lang="ts" setup>
@@ -129,9 +137,17 @@
     hasCoordinatesInformations
   } from '~/utils/beneficiary'
 
-  defineProps<{
+  const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
   }>()
 
   const isMinistryAgent = useMinistryAgent()
+
+  const hasGeneralInfo = computed(
+    () =>
+      hasIdentityInformations(props.beneficiary) ||
+      hasAddressInformations(props.beneficiary) ||
+      hasMobilityInformations(props.beneficiary) ||
+      hasAdditionalInformations(props.beneficiary)
+  )
 </script>
