@@ -4,32 +4,35 @@
     class="fr-container"
   >
     <div class="fr-grid-row">
-      <div class="fr-col-6">
-        <BeneficiaryInfoLabel
-          label="GIR"
-          :value="BeneficiaryGirKeys.value(beneficiary.gir)"
-        />
-        <BeneficiaryInfoLabel
-          label="N de sécurité sociale"
-          :value="beneficiary.socialSecurityNumber"
-        />
-      </div>
-      <div class="fr-col-6">
-        <BeneficiaryInfoLabel
-          label="Médecin traitant"
-          :value="beneficiary.doctor"
-        />
-        <BeneficiaryInfoLabel
-          label="Mutuelle"
-          :value="beneficiary.insurance"
-        />
-      </div>
-      <div class="fr-col-12">
-        <BeneficiaryInfoLabel
-          label="Informations Complémentaires"
-          :value="beneficiary.healthAdditionalInformation"
-        />
-      </div>
+      <BeneficiaryInfoLabel
+        label="GIR"
+        :value="BeneficiaryGirKeys.value(beneficiary.gir)"
+        class="fr-col-6"
+      />
+      <BeneficiaryInfoLabel
+        label="Médecin traitant"
+        :value="beneficiary.doctor"
+        class="fr-col-6"
+      />
+    </div>
+    <div class="fr-grid-row">
+      <BeneficiaryInfoLabel
+        label="N de sécurité sociale"
+        :value="beneficiary.socialSecurityNumber"
+        class="fr-col-6"
+      />
+      <BeneficiaryInfoLabel
+        label="Mutuelle"
+        :value="beneficiary.insurance"
+        class="fr-col-6"
+      />
+    </div>
+    <div class="fr-grid-row">
+      <BeneficiaryInfoLabel
+        label="Informations Complémentaires"
+        :value="beneficiary.healthAdditionalInformation"
+        class="fr-col-12"
+      />
     </div>
   </div>
 </template>

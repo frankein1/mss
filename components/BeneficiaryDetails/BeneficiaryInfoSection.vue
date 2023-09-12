@@ -19,13 +19,31 @@
       class="fr-py-2w"
     >
       <slot />
+      <div
+        v-if="beneficiaryId"
+        class="button__container"
+      >
+        <div class="fr-pr-12w">
+          <NuxtLink
+            :to="`${RoutePath.AppBeneficiaryEdit(beneficiaryId)}`"
+            class="fr-btn fr-btn--secondary"
+            title="Modifier"
+            target="_self"
+          >
+            Modifier
+          </NuxtLink>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { RoutePath } from '~/utils/routing'
+
   defineProps<{
-    title: string
+    title?: string
+    beneficiaryId?: string
   }>()
 
   const openState = ref(true)
@@ -51,8 +69,6 @@
   .accordeon__btn {
     width: 100%;
     text-align: left;
-    cursor: pointer;
-    transition: 0.4s;
     color: var(--light-text-title-blue-france, #000091);
     border-bottom: 1px solid var(--light-border-default-grey, #ddd);
     background: var(--light-background-default-grey, #fff);
@@ -71,5 +87,10 @@
     font-style: normal;
     font-weight: 700;
     line-height: 32px;
+  }
+
+  .button__container {
+    display: flex;
+    justify-content: flex-end;
   }
 </style>

@@ -3,37 +3,45 @@
     <div class="fr-col-12 text-bold fr-pb-1w">
       {{ name }}
     </div>
-    <div class="fr-col-6">
+  </div>
+  <div class="fr-grid-row">
+    <BeneficiaryInfoLabel
+      label="Statut"
+      :value="relative.relationship"
+      class="fr-col-6"
+    />
+    <BeneficiaryInfoLabel
+      label="Date de naissance"
+      :value="formatDate(relative.linkedBeneficiary?.birthDate)"
+      class="fr-col-6"
+    />
+  </div>
+  <div class="fr-grid-row">
+    <BeneficiaryInfoLabel
+      label="Email"
+      :value="email"
+      class="fr-col-6"
+    />
+    <BeneficiaryInfoLabel
+      label="Téléphone"
+      :value="phone"
+      class="fr-col-6"
+    />
+  </div>
+  <div class="fr-grid-row">
+    <div
+      v-if="relative.caregiver"
+      class="field-value fr-icon-success-line fr-pb-2w fr-col-12"
+    >
+      Aidant familial
+    </div>
+  </div>
+  <div class="fr-grid-row">
+    <div class="fr-col-12">
       <BeneficiaryInfoLabel
-        label="Statut"
-        :value="relative.relationship"
+        label="Informations complémentaires"
+        :value="relative.additionalInformation"
       />
-      <BeneficiaryInfoLabel
-        label="Email"
-        :value="email"
-      />
-      <div
-        v-if="relative.caregiver"
-        class="field-value fr-icon-success-line fr-pb-2w"
-      >
-        Aidant familial
-      </div>
-      <div class="fr-col-6">
-        <BeneficiaryInfoLabel
-          label="Date de naissance"
-          :value="formatDate(relative.linkedBeneficiary?.birthDate)"
-        />
-        <BeneficiaryInfoLabel
-          label="Téléphone"
-          :value="phone"
-        />
-      </div>
-      <div class="fr-col-12">
-        <BeneficiaryInfoLabel
-          label="Informations complémentaires"
-          :value="relative.additionalInformation"
-        />
-      </div>
     </div>
   </div>
 </template>

@@ -4,50 +4,56 @@
     class="fr-container"
   >
     <div class="fr-grid-row">
-      <div class="fr-col-6">
-        <BeneficiaryInfoLabel
-          label="Mesure de protection"
-          :value="
-            BeneficiaryProtectionMeasureKeys.value(
-              beneficiary.protectionMeasure
-            )
-          "
-        />
-        <BeneficiaryInfoLabel
-          label="Organisme prescripteur"
-          :value="beneficiary.prescribingStructure"
-        />
-        <BeneficiaryInfoLabel
-          label="Organisme d'orientation"
-          :value="beneficiary.orientationStructure"
-        />
-        <BeneficiaryInfoLabel
-          label="Partenaires intervenants"
-          :value="beneficiary.involvedPartners"
-        />
-      </div>
-      <div class="fr-col-6">
-        <BeneficiaryInfoLabel
-          label="Nom, prénom, coordonées du mandataire"
-          :value="beneficiary.representative"
-        />
-        <BeneficiaryInfoLabel
-          label="Mode d'orientation"
-          :value="
-            BeneficiaryOrientationTypeKeys.value(beneficiary.orientationType)
-          "
-        />
-        <BeneficiaryInfoLabel
-          label="Prestataires"
-          :value="beneficiary.serviceProviders"
-        />
-      </div>
-      <div class="fr-col-6">
-        <BeneficiaryInfoLabel
-          label=" Informations complémentaires"
-          :value="beneficiary.additionalInformation"
-        />
-      </div>
+      <BeneficiaryInfoLabel
+        label="Mesure de protection"
+        :value="
+          BeneficiaryProtectionMeasureKeys.value(beneficiary.protectionMeasure)
+        "
+        class="fr-col-6"
+      />
+      <BeneficiaryInfoLabel
+        label="Nom, prénom, coordonées du mandataire"
+        :value="beneficiary.representative"
+        class="fr-col-6"
+      />
+    </div>
+    <div class="fr-grid-row">
+      <BeneficiaryInfoLabel
+        label="Organisme prescripteur"
+        :value="beneficiary.prescribingStructure"
+        class="fr-col-6"
+      />
+      <BeneficiaryInfoLabel
+        label="Mode d'orientation"
+        :value="
+          BeneficiaryOrientationTypeKeys.value(beneficiary.orientationType)
+        "
+        class="fr-col-6"
+      />
+    </div>
+    <div class="fr-grid-row">
+      <BeneficiaryInfoLabel
+        label="Organisme d'orientation"
+        :value="beneficiary.orientationStructure"
+        class="fr-col-6"
+      />
+      <BeneficiaryInfoLabel
+        label="Prestataires"
+        :value="beneficiary.serviceProviders"
+        class="fr-col-6"
+      />
+    </div>
+    <div class="fr-grid-row">
+      <BeneficiaryInfoLabel
+        label="Partenaires intervenants"
+        :value="beneficiary.involvedPartners"
+        class="fr-col-6"
+      />
+      <BeneficiaryInfoLabel
+        label=" Informations complémentaires"
+        :value="beneficiary.additionalInformation"
+        class="fr-col-6"
+      />
     </div>
   </div>
 </template>

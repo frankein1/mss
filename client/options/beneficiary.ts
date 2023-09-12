@@ -150,8 +150,9 @@ export const beneficiarySocioProfessionalCategoryLabels: {
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
 }
 
-export const BeneficiarySocioProfessionalCategoryKeys =
-  buildKeys(beneficiaryGirLabels)
+export const BeneficiarySocioProfessionalCategoryKeys = buildKeys(
+  beneficiarySocioProfessionalCategoryLabels
+)
 
 export const beneficiarySocioProfessionalCategoryOptions = labelsToOptions(
   beneficiarySocioProfessionalCategoryLabels
