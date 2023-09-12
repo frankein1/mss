@@ -14,7 +14,7 @@ export const getBeneficiaryMinimalInfoHandler = async ({
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await prismaClient.beneficiary.findUnique({
-    where: { id },
+    where: { id, structureId: user.structureId },
     select: {
       id: true,
       firstName: true,
