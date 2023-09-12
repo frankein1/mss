@@ -46,6 +46,7 @@ export default defineNuxtConfig({
     '@gouvfr/dsfr/dist/component/table/table.min.css',
     '@gouvfr/dsfr/dist/component/tag/tag.min.css',
     '@gouvfr/dsfr/dist/component/toggle/toggle.min.css',
+    '@gouvfr/dsfr/dist/component/radio/radio.min.css',
 
     // DSFR ICONS
     '@gouvfr/dsfr/dist/utility/icons/icons-buildings/icons-buildings.min.css',
