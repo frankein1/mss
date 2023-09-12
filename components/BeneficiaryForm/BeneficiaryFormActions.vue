@@ -20,8 +20,10 @@
       </li>
       <li>
         <button
-          class="fr-btn"
+          class="fr-btn submit-btn"
           type="submit"
+          :submitting="isSubmitting"
+          :disabled="isSubmitting"
         >
           Enregistrer et quitter
         </button>
@@ -34,6 +36,7 @@
   withDefaults(
     defineProps<{
       saved?: boolean
+      isSubmitting: boolean
     }>(),
     { saved: false }
   )

@@ -65,7 +65,7 @@
   }
 
   .pagetitle__title {
-    color: #00007d;
+    color: var(--blue-france-sun-113-625);
   }
 
   .pagetitle__subtitle {
