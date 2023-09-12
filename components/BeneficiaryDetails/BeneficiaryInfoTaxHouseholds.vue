@@ -1,5 +1,5 @@
 <template>
-  <<BeneficiaryInfoSection
+  <BeneficiaryInfoSection
     v-if="hasTaxHouseholdsInfo"
     title="Foyer fiscal"
     :beneficiary-id="beneficiary.id"
