@@ -61,7 +61,7 @@
           await trpcClient.beneficiaryDraft.create.mutate(beneficiary)
 
         navigateTo({
-          path: RoutePath.AppBeneficiariesSave(),
+          path: RoutePath.AppBeneficiariesSaveInfo(),
           query: {
             draftId: id
           }
