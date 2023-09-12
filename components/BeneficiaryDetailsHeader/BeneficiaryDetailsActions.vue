@@ -22,7 +22,7 @@
     </li>
     <li>
       <NuxtLink
-        :to="`${RoutePath.AppBeneficiaryEdit(beneficiaryId)}`"
+        :to="`${RoutePath.AppBeneficiaryEditInfo(beneficiaryId)}`"
         class="fr-btn fr-btn--icon-left fr-icon-edit-line edit-btn"
         target="_self"
       >

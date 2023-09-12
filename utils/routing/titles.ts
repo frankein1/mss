@@ -37,6 +37,7 @@ export const RouteTitle = {
       : '',
   [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${getBeneficiaryDisplayName(beneficiary)}` : '',
+  [Route.AppBeneficiaryEditInfo]: () => 'Informations bénéficiaire',
   [Route.AppBeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
