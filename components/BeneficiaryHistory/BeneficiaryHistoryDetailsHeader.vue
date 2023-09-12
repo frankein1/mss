@@ -46,7 +46,7 @@
         </li>
       </ul>
     </div>
-    <hr class="divider" />
+    <hr class="fr-col-12 fr-mt-5v" />
     <ul class="fr-badges-group follow-up-types-badges">
       <li
         v-for="followUpType in followUpTypes"

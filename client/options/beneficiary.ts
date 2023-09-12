@@ -14,6 +14,7 @@ import {
   RelativeRelationship,
   BeneficiaryPensionOrganisation
 } from '@prisma/client'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 import { labelsToOptions } from '~/utils/options'
 
 export const pensionOrganisationLabels: {
@@ -70,6 +71,8 @@ export const beneficiaryGenderLabels: { [key in Gender]: string } = {
   [Gender.Other]: 'Autre'
 }
 
+export const BeneficiaryGenderKeys = buildKeys(beneficiaryGenderLabels)
+
 export const beneficiaryGenderOptions = labelsToOptions(beneficiaryGenderLabels)
 
 export const beneficiaryFamilySituationLabels: {
@@ -87,6 +90,10 @@ export const beneficiaryFamilySituationLabels: {
   [BeneficiaryFamilySituation.Widow]: 'Veuf·ve',
   [BeneficiaryFamilySituation.Other]: 'Autre'
 }
+
+export const BeneficiaryFamilySituationKeys = buildKeys(
+  beneficiaryFamilySituationLabels
+)
 
 export const beneficiaryFamilySituationOptions = labelsToOptions(
   beneficiaryFamilySituationLabels
@@ -108,6 +115,8 @@ export const beneficiaryMobilityLabels: {
   [BeneficiaryMobility.OtherPermit]: 'Autres permis (poids lourds, bus)'
 }
 
+export const BeneficiaryMobilityKeys = buildKeys(beneficiaryMobilityLabels)
+
 export const beneficiaryMobilityOptions = labelsToOptions(
   beneficiaryMobilityLabels
 )
@@ -122,6 +131,8 @@ export const beneficiaryGirLabels: {
   [BeneficiaryGir.Level5]: 'Niveau 5',
   [BeneficiaryGir.Level6]: 'Niveau 6'
 }
+
+export const BeneficiaryGirKeys = buildKeys(beneficiaryGirLabels)
 
 export const beneficiaryGirOptions = labelsToOptions(beneficiaryGirLabels)
 
@@ -138,6 +149,10 @@ export const beneficiarySocioProfessionalCategoryLabels: {
     'Sans activité (non inscrit à Pôle Emploi)',
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
 }
+
+export const BeneficiarySocioProfessionalCategoryKeys = buildKeys(
+  beneficiarySocioProfessionalCategoryLabels
+)
 
 export const beneficiarySocioProfessionalCategoryOptions = labelsToOptions(
   beneficiarySocioProfessionalCategoryLabels
@@ -180,6 +195,10 @@ export const beneficiaryProtectionMeasureLabels: {
   [BeneficiaryProtectionMeasure.Tutelle]: 'Tutelle'
 }
 
+export const BeneficiaryProtectionMeasureKeys = buildKeys(
+  beneficiaryProtectionMeasureLabels
+)
+
 export const beneficiaryProtectionMeasureOptions = labelsToOptions(
   beneficiaryProtectionMeasureLabels
 )
@@ -195,6 +214,10 @@ export const beneficiaryOrientationTypeLabels: {
   [BeneficiaryOrientationType.SuiviCabinet]: 'Suivi cabinet',
   [BeneficiaryOrientationType.Autre]: 'Autre'
 }
+
+export const BeneficiaryOrientationTypeKeys = buildKeys(
+  beneficiaryOrientationTypeLabels
+)
 
 export const beneficiaryOrientationTypeOptions = labelsToOptions(
   beneficiaryOrientationTypeLabels
@@ -214,6 +237,11 @@ export const taxHouseHoldRelationshipLabels = {
   [RelativeRelationship.EnfantMajeur]: 'Enfant majeur',
   [RelativeRelationship.EnfantMineur]: 'Enfant mineur'
 }
+
+export const RelativeRelationshipKeys = buildKeys({
+  ...taxHouseHoldRelationshipLabels,
+  ...entourageRelationshipLabels
+})
 
 export const relativeRelationshipLabels = {
   ...taxHouseHoldRelationshipLabels,
@@ -236,6 +264,10 @@ export const beneficiaryAccommodationZoneLabels: {
   OutsideEurope: 'Hors Europe'
 }
 
+export const BeneficiaryAccommodationZoneKeys = buildKeys(
+  beneficiaryAccommodationZoneLabels
+)
+
 export const beneficiaryAccommodationZoneOptions = labelsToOptions(
   beneficiaryAccommodationZoneLabels
 )
@@ -256,6 +288,10 @@ export const beneficiaryAccommodationModeLabels: {
   [BeneficiaryAccommodationMode.None]: 'Sans hébergement',
   [BeneficiaryAccommodationMode.Other]: 'Autre type de logement (hôtel...)'
 }
+
+export const BeneficiaryAccommodationModeKeys = buildKeys(
+  beneficiaryAccommodationModeLabels
+)
 
 export const beneficiaryAccommodationModeOptions = labelsToOptions(
   beneficiaryAccommodationModeLabels

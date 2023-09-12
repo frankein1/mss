@@ -55,7 +55,7 @@
           :alert-type="AlertType.Error"
           message="La fiche bénéficiaire n'a pas pu être chargée."
         />
-        <BeneficiaryDetails
+        <BeneficiaryInfo
           v-else
           :beneficiary="beneficiary"
           :entourages="entourages"
@@ -136,10 +136,7 @@
 
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
-  const followupTypes = computed(
-    () =>
-      followupTypesData.value || { legallyRequired: [], legallyNotRequired: [] }
-  )
+  const followupTypes = computed(() => followupTypesData.value || [])
 
   const authStore = useAuthStore()
   const canDelete = computed(() => {

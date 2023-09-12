@@ -1,4 +1,5 @@
 import { Nationality } from '@prisma/client'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 import { labelsToOptions } from '~/utils/options'
 
 export const Nationalities = {
@@ -202,3 +203,5 @@ export const Nationalities = {
   [Nationality.ZWE]: 'Zimbabwéenne (Zimbabwe)'
 }
 export const nationalityOptions = labelsToOptions(Nationalities)
+
+export const NationalityKeys = buildKeys(Nationalities)

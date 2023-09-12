@@ -4,6 +4,7 @@ import {
   BeneficiaryMinistereCategorie,
   BeneficiaryMinistereDepartementServiceAc
 } from '@prisma/client'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 import { labelsToOptions } from '~/utils/options'
 
 const currentMinisterLabels = {
@@ -195,6 +196,10 @@ const ministereDepartmentServiceAcLabels: {
   [BeneficiaryMinistereDepartementServiceAc.Sgmcas]: 'SGMCAS'
 }
 
+export const MinistereDepartmentServiceAcKeys = buildKeys(
+  ministereDepartmentServiceAcLabels
+)
+
 const ministereDepartmentServiceAcOptions = labelsToOptions(
   ministereDepartmentServiceAcLabels
 )
@@ -217,6 +222,8 @@ const ministereStructureLabels: {
   [BeneficiaryMinistereStructure.Other]: 'Autre'
 }
 
+export const MinistereStructureKeys = buildKeys(ministereStructureLabels)
+
 const ministereStructureOptions = labelsToOptions(ministereStructureLabels)
 
 const ministereCategorieLabels: {
@@ -228,6 +235,8 @@ const ministereCategorieLabels: {
   [BeneficiaryMinistereCategorie.CadreDroitPrive]: 'Cadre droit privé',
   [BeneficiaryMinistereCategorie.NonCadreDroitPrive]: 'Non cadre droit privé'
 }
+
+export const MinistereCategorieKeys = buildKeys(ministereCategorieLabels)
 
 const ministereCategorieOptions = labelsToOptions(ministereCategorieLabels)
 
