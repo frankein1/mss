@@ -1,6 +1,6 @@
 <template>
   <div class="fr-grid-row">
-    <div class="fr-col-12 text-bold fr-pb-1w">
+    <div class="fr-col-12 fr-text--bold fr-pb-1w">
       {{ name }}
     </div>
   </div>

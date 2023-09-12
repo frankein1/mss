@@ -7,7 +7,7 @@
     <div class="fr-container">
       <div class="fr-grid-row">
         <div class="fr-col-12 fr-pb-1w">
-          <div class="text-bold">Situation familiale</div>
+          <div class="fr-text--bold">Situation familiale</div>
         </div>
         <div class="fr-col-12 fr-pb-1w">
           <div class="field-label">

@@ -19,7 +19,7 @@
 
       <div class="fr-grid-row">
         <div class="fr-col-12">
-          <div class="fr-pb-2w text-bold">Coordonnées du bénéficiaire</div>
+          <div class="fr-pb-2w fr-text--bold">Coordonnées du bénéficiaire</div>
         </div>
       </div>
       <div class="fr-grid-row">

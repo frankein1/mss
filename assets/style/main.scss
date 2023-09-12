@@ -183,26 +183,14 @@ select:focus:not(:focus-visible) {
   max-width: 25rem;
 }
 
-// =============== TYPOGRAPHIE ========================
-
-.text-bold {
-  font-weight: 700;
-}
-
-.divider {
-  border-top: 1px solid #bbb;
-}
-
-// ====================================================
-
 // =============== FORM ========================
 
 .field-label {
-  color: var(--light-text-mention-grey, #666);
+  color: var(--text-mention-grey);
 }
 
 .field-value {
-  color: var(--light-text-title-grey, #161616);
+  color: var(--text-label-grey);
 }
 
 // =============================================

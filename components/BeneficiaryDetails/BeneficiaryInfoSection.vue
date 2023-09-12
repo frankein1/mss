@@ -8,7 +8,7 @@
         class="accordeon__btn"
         @click="toggle"
       >
-        <div class="accordeon__heading fr-pb-2w">
+        <div class="accordeon__heading fr-h4">
           <div>{{ title }}</div>
           <div :class="arrowClass"></div>
         </div>
@@ -69,9 +69,9 @@
   .accordeon__btn {
     width: 100%;
     text-align: left;
-    color: var(--light-text-title-blue-france, #000091);
-    border-bottom: 1px solid var(--light-border-default-grey, #ddd);
-    background: var(--light-background-default-grey, #fff);
+    color: var(--text-title-blue-france);
+    border-bottom: 1px solid  var(--border-default-grey)
+    background: var(--background-default-grey);
 
     &:hover {
       background: white;
@@ -82,11 +82,7 @@
     display: flex;
     justify-content: space-between;
 
-    font-family: Marianne;
-    font-size: 24px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 32px;
+    color: var(--text-title-blue-france);
   }
 
   .button__container {

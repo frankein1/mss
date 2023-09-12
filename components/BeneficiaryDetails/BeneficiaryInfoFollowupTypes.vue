@@ -1,6 +1,6 @@
 <template>
   <div class="fr-container">
-    <div class="fr-col-12 fr-pb-2w text-bold">Accompagnements</div>
+    <div class="fr-col-12 fr-pb-2w fr-text--bold">Accompagnements</div>
     <div class="fr-grid-row">
       <div
         v-for="type in followupTypes"
