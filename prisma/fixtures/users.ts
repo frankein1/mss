@@ -41,5 +41,12 @@ export const fixturesUsers = [
     role: 'StructureManager',
     status: 'Active',
     structureId: fixtureStructure.id
+  },
+  {
+    firstName: 'Admin',
+    lastName: 'MSS',
+    email: 'admin@mss.gouv.fr',
+    role: 'Administrator',
+    status: 'Active'
   }
 ] satisfies Prisma.UserCreateManyInput[]
