@@ -183,22 +183,21 @@ select:focus:not(:focus-visible) {
   max-width: 25rem;
 }
 
-// =============== FORM ========================
-
-.field-label {
-  color: var(--text-mention-grey);
-}
-
-.field-value {
-  color: var(--text-label-grey);
-}
-
-// =============================================
-
 .bg-color-grey-light {
-  background-color: #eee;
+  background-color: var(--background-contrast-grey);
 }
 
 .br-16 {
   border-radius: 16px;
+}
+
+.feature-section {
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-default-grey);
+  background-color: var(--background-default-grey);
+  padding: 2.5rem;
+}
+
+.title-blue {
+  color: var(--blue-france-sun-113-625);
 }
