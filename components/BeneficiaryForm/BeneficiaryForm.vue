@@ -174,7 +174,7 @@
       (disabledOptions: string[], agent: BeneficiaryReferent) => {
         const disabledAgent = agent.status !== UserStatus.Active
         const agentIsBeneficiaryReferent = (
-          props.beneficiary?.referents || []
+          props.beneficiary.referents || []
         ).includes(agent.id)
         return disabledAgent && !agentIsBeneficiaryReferent
           ? [...disabledOptions, agent.id]
