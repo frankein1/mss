@@ -24,6 +24,7 @@
           type="submit"
           :submitting="isSubmitting"
           :disabled="isSubmitting"
+          @click="emit('save')"
         >
           Enregistrer et quitter
         </button>
@@ -42,6 +43,7 @@
   )
 
   const emit = defineEmits<{
+    save: []
     cancel: []
   }>()
 </script>
