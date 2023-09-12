@@ -15,7 +15,7 @@ export const createBeneficiaryDraftHandler = async ({
     data: {
       structureId: user.structureId,
       createdById: user.id,
-      general: JSON.stringify(input)
+      general: input
     }
   })
 
