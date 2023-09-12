@@ -121,3 +121,4 @@ export type {
 
 export { addCommentSchema } from './comment.schema'
 export type { AddCommentInput } from './comment.schema'
+export * from './beneficiaryDraft'
