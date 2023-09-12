@@ -1,5 +1,6 @@
 import { ProtectedAppContext, notfoundError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
+import { canViewBeneficiaryDraft } from '~/server/security/rules'
 
 export const getBeneficiaryDraftHandler = async ({
   input: { id },
@@ -9,14 +10,10 @@ export const getBeneficiaryDraftHandler = async ({
   ctx: ProtectedAppContext
 }) => {
   const beneficiaryDraft = await prismaClient.beneficiaryDraft.findUnique({
-    where: {
-      id,
-      createdById: user.id,
-      structureId: user.structureId
-    }
+    where: { id }
   })
 
-  if (!beneficiaryDraft) {
+  if (!beneficiaryDraft || !canViewBeneficiaryDraft(user, beneficiaryDraft)) {
     throw notfoundError()
   }
 
