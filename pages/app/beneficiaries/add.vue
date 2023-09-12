@@ -7,8 +7,18 @@
     >
       <RequiredFields />
     </PageTitle>
+    <AtomAlert
+      v-if="error"
+      class="fr-mb-2w"
+      :alert-type="AlertType.Error"
+      message="La liste des référents n'a pas pu être chargée."
+    />
+    <AtomLoader
+      v-else-if="pending"
+      class="fr-mx-auto"
+    />
     <BeneficiaryCreationForm
-      v-if="agents?.length"
+      v-else-if="agents?.length"
       :agents="agents"
       :is-submitting="isSubmitting"
       @save-beneficiary="onCreateBeneficiary"
@@ -20,16 +30,22 @@
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { CreateBeneficiaryInput } from '~/server/schema'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { AlertType } from '~/utils/constants/alert'
 
   const title = RouteTitle.AppBeneficiariesAdd()
 
   useHead({ title })
 
   const trpcClient = useTrpcClient()
+  const snackbar = useSnackbar()
 
   const { matomo } = useMatomo()
 
-  const { data: agents } = await trpcClient.config.getAgents.useQuery()
+  const {
+    data: agents,
+    pending,
+    error
+  } = await trpcClient.config.getAgents.useQuery()
 
   const isSubmitting = ref(false)
 
@@ -38,23 +54,39 @@
     complete: boolean
   ) {
     isSubmitting.value = true
+
     if (complete) {
-      navigateTo({
-        path: RoutePath.AppBeneficiariesSave(),
-        query: {
-          initialValues: JSON.stringify(beneficiary)
-        }
-      })
+      try {
+        const { id } =
+          await trpcClient.beneficiaryDraft.create.mutate(beneficiary)
+
+        navigateTo({
+          path: RoutePath.AppBeneficiariesSave(),
+          query: {
+            draftId: id
+          }
+        })
+      } catch {
+        snackbar.error(
+          'La création du brouillon de la fiche bénéficiaire a échoué.'
+        )
+      } finally {
+        isSubmitting.value = false
+      }
     } else {
-      // TODO: handle error
-      const { id } = await trpcClient.beneficiary.create.mutate(beneficiary)
-      matomo.trackEvent(
-        EventCategory.CreateBeneficiary,
-        CreateBeneficiaryEventAction.SavePartialForm
-      )
-      navigateTo(RoutePath.AppBeneficiary(id))
+      try {
+        const { id } = await trpcClient.beneficiary.create.mutate(beneficiary)
+        matomo.trackEvent(
+          EventCategory.CreateBeneficiary,
+          CreateBeneficiaryEventAction.SavePartialForm
+        )
+        navigateTo(RoutePath.AppBeneficiary(id))
+      } catch {
+        snackbar.error('La création de la fiche bénéficiaire a échoué.')
+      } finally {
+        isSubmitting.value = false
+      }
     }
-    isSubmitting.value = false
   }
 </script>
 
