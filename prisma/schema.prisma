@@ -1161,12 +1161,12 @@ model BeneficiaryDraft {
   createdById String? @map("created_by_id") @db.Uuid
   createdBy   User?   @relation(name: "created_beneficiaries_draft", fields: [createdById], references: [id])
 
-  general               String?
-  taxHousehold          String?
-  relatives             String?
-  health                String?
-  occupationIncome      String?
-  externalOrganisations String?
+  general               Json?
+  taxHousehold          Json?
+  relatives             Json?
+  health                Json?
+  occupationIncome      Json?
+  externalOrganisations Json?
 
   @@map("beneficiary_draft")
 }
