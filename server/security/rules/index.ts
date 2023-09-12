@@ -87,6 +87,13 @@ export {
   canExportStats
 } from './export'
 
+export {
+  canViewBeneficiaryDraft,
+  canUpdateBeneficiaryDraft,
+  canSaveToBeneficiaryBeneficiaryDraft,
+  canDeleteBeneficiaryDraft
+} from './beneficiaryDraft'
+
 // A rule is a synchronous function taking
 // -- grantee (the authenticated user)
 // -- target (aggregate info or scope of the action)
