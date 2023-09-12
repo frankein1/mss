@@ -18,53 +18,67 @@
     <BeneficiaryFormActions
       class="fr-col-12"
       :is-submitting="isSubmitting"
+      @save="saveAndLeave = true"
+      @cancel="onCancel"
     />
   </form>
 </template>
 
 <script setup lang="ts" generic="T extends ZodSchema">
   import { ZodSchema, z } from 'zod'
-  import { Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { Breadcrumb, RoutePath } from '~/utils/routing'
 
   type SubmitType = z.infer<T>
 
+  const route = useRoute()
+
   const props = withDefaults(
     defineProps<{
-      beneficiary?: SubmitType
+      beneficiary?: SubmitType | null
       schema: T
       isSubmitting: boolean
+      isEditting?: boolean
+      title: string
     }>(),
-    { beneficiary: undefined }
+    { beneficiary: undefined, isEditing: false }
   )
 
   const emit = defineEmits<{
-    save: SubmitType
+    save: [beneficiary: SubmitType, saveAndLeave: boolean]
   }>()
 
+  const saveAndLeave = ref(false)
+
   const breadcrumbLinks = computed(() =>
-    props.beneficiary
-      ? Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
+    props.isEditting
+      ? Breadcrumb.AppBeneficiaryEdit(props.beneficiary || null)
       : Breadcrumb.AppBeneficiariesAdd()
   )
 
-  const title = computed(() =>
-    props.beneficiary
-      ? RouteTitle.AppBeneficiaryEdit(props.beneficiary)
-      : RouteTitle.AppBeneficiariesAdd()
-  )
-
-  useHead({ title })
+  useHead({ title: props.title })
 
   const { handleSubmit } = useForm<SubmitType>({
-    validationSchema: toTypedSchema(props.schema)
-    // TODO:
-    // initialValues: {
-    // }
+    validationSchema: toTypedSchema(props.schema),
+    initialValues: props.beneficiary
   })
 
   const onSubmit = handleSubmit(values => {
-    emit('save', values)
+    emit('save', values, saveAndLeave.value)
   })
+
+  async function onCancel() {
+    const draftId = route.query.draftId as string | null
+
+    if (draftId) {
+      try {
+        await useTrpcClient().beneficiaryDraft.delete.mutate({ id: draftId })
+      } catch {
+        navigateTo(RoutePath.AppBeneficiariesAdd())
+      }
+    }
+
+    navigateTo(RoutePath.AppBeneficiariesAdd())
+  }
 </script>
 
 <style lang="scss" scoped>
