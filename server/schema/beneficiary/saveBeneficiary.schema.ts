@@ -33,6 +33,7 @@ import {
   emailOrEmpty
 } from '~/utils/zod'
 
+// TODO: To delete !
 export const saveBeneficiarySchema = z.object({
   referents: z
     .array(z.string().uuid(), {
@@ -149,3 +150,47 @@ export const saveBeneficiarySchema = z.object({
 })
 
 export type SaveBeneficiaryInput = z.infer<typeof saveBeneficiarySchema>
+
+export const saveBeneficiaryGeneralInformationSchema = z.object({
+  referents: z
+    .array(z.string().uuid(), {
+      required_error: 'Veuillez renseigner au moins un agent référent'
+    })
+    .min(1, 'Veuillez renseigner au moins un agent référent'),
+  aidantConnectAuthorized: z.boolean().default(false),
+  status: requiredNativeEnum(BeneficiaryStatus),
+  title: withEmptyValueOptionalNativeEnum(BeneficiaryTitle),
+  firstName: beneficiaryFirstNameSchema,
+  usualName: beneficiaryLastNameSchema,
+  birthName: beneficiaryLastNameSchema,
+  birthDate: z.coerce.date(errorMessages).nullish(),
+  birthPlace: z.string().nullish(),
+  deathDate: z.coerce.date(errorMessages).nullish(),
+  gender: withEmptyValueOptionalNativeEnum(Gender),
+  nationality: withEmptyValueOptionalNativeEnum(Nationality),
+  numeroPegase: z.string().nullish(),
+  accommodationMode: withEmptyValueOptionalNativeEnum(
+    BeneficiaryAccommodationMode
+  ),
+  accommodationName: z.string().nullish(),
+  accommodationAdditionalInformation: z.string().nullish(),
+  zipcode: stringOrEmpty(z.string().min(5, validZipcode)),
+  city: z.string().nullish(),
+  region: z.string().nullish(),
+  accommodationZone: withEmptyValueOptionalNativeEnum(
+    BeneficiaryAccommodationZone
+  ),
+  streetNumber: z.string().nullish(),
+  street: z.string().nullish(),
+  addressComplement: z.string().nullish(),
+  noPhone: z.boolean().default(false),
+  phone1: z.string().nullish(),
+  phone2: z.string().nullish(),
+  email: emailOrEmpty(),
+  caregiver: z.boolean().default(false),
+  mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility)
+})
+
+export type SaveBeneficiaryGeneralInformationInput = z.infer<
+  typeof saveBeneficiaryGeneralInformationSchema
+>
