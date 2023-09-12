@@ -22,6 +22,7 @@
           type="radio"
           :value="optionValue"
           :name="name"
+          :checked="optionValue === value"
           @change="onChange"
         />
         <label
@@ -50,7 +51,7 @@
   // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
   const { name } = toRefs(props)
 
-  const { handleChange } = useField(name, undefined, {
+  const { handleChange, value } = useField(name, undefined, {
     type: 'radio'
   })
 
