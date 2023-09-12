@@ -62,7 +62,7 @@
 <style scoped>
   .section {
     border-radius: 8px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--border-default-grey);
     background: white;
   }
 
@@ -70,7 +70,7 @@
     width: 100%;
     text-align: left;
     color: var(--text-title-blue-france);
-    border-bottom: 1px solid  var(--border-default-grey)
+    border-bottom: 1px solid var(--border-default-grey);
     background: var(--background-default-grey);
 
     &:hover {
@@ -81,7 +81,6 @@
   .accordeon__heading {
     display: flex;
     justify-content: space-between;
-
     color: var(--text-title-blue-france);
   }
 
