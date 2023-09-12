@@ -1,5 +1,5 @@
 <template>
-  <div class="beneficiary-section fr-p-4w fr-pl-2w fr-mt-1w">
+  <div class="feature-section fr-m-1w">
     <div
       v-if="title"
       class="fr-container"
@@ -25,7 +25,7 @@
       >
         <div class="fr-pr-12w">
           <NuxtLink
-            :to="`${RoutePath.AppBeneficiaryEdit(beneficiaryId)}`"
+            :to="`${RoutePath.AppBeneficiaryEditInfo(beneficiaryId)}`"
             class="fr-btn fr-btn--secondary"
             title="Modifier"
             target="_self"
