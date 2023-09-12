@@ -238,6 +238,11 @@ export const taxHouseHoldRelationshipLabels = {
   [RelativeRelationship.EnfantMineur]: 'Enfant mineur'
 }
 
+export const RelativeRelationshipKeys = buildKeys({
+  ...taxHouseHoldRelationshipLabels,
+  ...entourageRelationshipLabels
+})
+
 export const relativeRelationshipLabels = {
   ...taxHouseHoldRelationshipLabels,
   ...entourageRelationshipLabels

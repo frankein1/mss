@@ -7,7 +7,7 @@
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       label="Statut"
-      :value="relative.relationship"
+      :value="RelativeRelationshipKeys.value(relative.relationship)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
@@ -48,6 +48,7 @@
 
 <script setup lang="ts">
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
+  import { RelativeRelationshipKeys } from '~/client/options/beneficiary'
 
   const props = defineProps<{
     relative: BeneficiaryRelativeWithLinkedBeneficiary
