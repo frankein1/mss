@@ -142,7 +142,7 @@
     return {
       ...beneficiaryDraft,
       general: beneficiaryDraft.general
-        ? (JSON.parse(beneficiaryDraft.general) as CreateBeneficiaryInput)
+        ? (beneficiaryDraft.general as CreateBeneficiaryInput)
         : null
     }
   }
