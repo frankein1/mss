@@ -10,6 +10,7 @@ import {
   canOnlyListItsUploadedDocuments
 } from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/security'
+import { GetDocumentsInput } from '~/server/schema'
 
 function getPermissionConditions(user: ProtectedAppContextUser) {
   if (canOnlyListItsUploadedDocuments(user)) {
@@ -23,9 +24,9 @@ function getPermissionConditions(user: ProtectedAppContextUser) {
 
 export const getBeneficiaryDocumentsHandler = async ({
   ctx: { user },
-  input: { beneficiaryId }
+  input: { beneficiaryId, filters }
 }: {
-  input: { beneficiaryId: string }
+  input: GetDocumentsInput
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(beneficiaryId)
@@ -40,6 +41,7 @@ export const getBeneficiaryDocumentsHandler = async ({
 
   const permissionConditions = getPermissionConditions(user)
 
+  // TODO: prepareBeneficiaryDocumentFilters function
   return await prismaClient.document.findMany({
     where: {
       beneficiaryId,

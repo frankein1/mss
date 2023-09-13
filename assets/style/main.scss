@@ -115,6 +115,12 @@ body,
   }
 }
 
+.beneficiary-section {
+  border-radius: 8px;
+  border: 1px solid var(--border-default-grey);
+  background: white;
+}
+
 @keyframes rotation {
   0% {
     transform: rotate(0deg);
