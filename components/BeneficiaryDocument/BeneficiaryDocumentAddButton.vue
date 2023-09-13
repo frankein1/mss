@@ -1,6 +1,6 @@
 <template>
   <button
-    class="fr-btn open-modal-btn"
+    class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line open-modal-btn"
     data-fr-opened="false"
     aria-controls="global-modal"
     type="button"
