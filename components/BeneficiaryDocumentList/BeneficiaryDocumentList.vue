@@ -1,6 +1,13 @@
 <template>
-  <div class="documents_container">
-    <div
+  <div class="fr-container">
+    <div class="beneficiary-section fr-p-3w">
+      <BeneficiaryDocumentAddButton
+        :beneficiary-id="beneficiary.id"
+        @refresh-documents="refresh"
+      />
+      <BeneficiaryDocumentFilters @filter="filters = $event" />
+    </div>
+    <!-- <div
       v-if="documents?.length"
       class="documents_content"
     >
@@ -28,29 +35,30 @@
         :beneficiary="beneficiary"
         @refresh-documents="refresh"
       />
-    </div>
-    <div class="documents_actions">
-      <BeneficiaryDocumentAddButton
-        :beneficiary-id="beneficiary.id"
-        @refresh-documents="refresh"
-      />
-    </div>
+    </div> -->
   </div>
 </template>
 <script setup lang="ts">
-  import { DocumentType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
   import { GetBeneficiaryOutput } from '~/server/routers'
+  import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
 
   const route = useRoute()
 
   const props = defineProps<{ beneficiary: GetBeneficiaryOutput }>()
 
+  const filters = ref<BeneficiaryDocumentFilterInput>({})
+
+  const queryInput = computed(() => ({
+    beneficiaryId: props.beneficiary.id,
+    filters: filters.value
+  }))
+
   const { data: documents, refresh } =
-    await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery({
-      beneficiaryId: props.beneficiary.id
-    })
+    await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery(
+      queryInput
+    )
 
   onMounted(async () => {
     const tab = route.hash.slice(1)
@@ -63,30 +71,26 @@
     }
   })
 
-  function getDocumentsByType(type: DocumentType) {
-    return (
-      documents.value?.filter(doc => {
-        return doc.type === type
-      }) || []
-    )
-  }
+  // function getDocumentsByType(type: DocumentType) {
+  //   return (
+  //     documents.value?.filter(doc => {
+  //       return doc.type === type
+  //     }) || []
+  //   )
+  // }
 
-  const cerfas = computed(() => getDocumentsByType(DocumentType.Cerfa))
-  const courriers = computed(() =>
-    getDocumentsByType(DocumentType.HistoriqueCourrier)
-  )
-  const justificatifs = computed(() =>
-    getDocumentsByType(DocumentType.Justificatifs)
-  )
-  const rapports = computed(() => getDocumentsByType(DocumentType.Rapports))
+  // const cerfas = computed(() => getDocumentsByType(DocumentType.Cerfa))
+  // const courriers = computed(() =>
+  //   getDocumentsByType(DocumentType.HistoriqueCourrier)
+  // )
+  // const justificatifs = computed(() =>
+  //   getDocumentsByType(DocumentType.Justificatifs)
+  // )
+  // const rapports = computed(() => getDocumentsByType(DocumentType.Rapports))
 </script>
 
-<style>
-  .documents_container {
-    display: flex;
-  }
-
+<!-- <style>
   .documents_content {
     flex: 0 0 80%;
   }
-</style>
+</style> -->

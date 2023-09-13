@@ -71,7 +71,8 @@ export {
   followupFilterSchema,
   helpRequestFilterSchema,
   beneficiaryHistoryFilterSchema,
-  userAdminFilterSchema
+  userAdminFilterSchema,
+  beneficiaryDocumentFilterSchema
 } from './filter.schema'
 export type {
   StatFilterInput,
@@ -79,7 +80,8 @@ export type {
   FollowupFilterInput,
   HelpRequestFilterInput,
   BeneficiaryHistoryFilterInput,
-  UserAdminFilterInput
+  UserAdminFilterInput,
+  BeneficiaryDocumentFilterInput
 } from './filter.schema'
 
 export {
