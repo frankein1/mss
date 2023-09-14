@@ -22,7 +22,7 @@
         }}
       </td>
       <td class="address-data">
-        {{ beneficiary.streetNumber }} {{ beneficiary.street }}
+        {{ beneficiary.street }}
       </td>
       <td>{{ beneficiary.city }}</td>
       <td>{{ beneficiary.phone1 }}</td>
