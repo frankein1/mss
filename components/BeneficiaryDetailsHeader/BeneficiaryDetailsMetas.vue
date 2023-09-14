@@ -1,10 +1,8 @@
 <template>
   <p class="fr-my-0">
     <template v-if="beneficiary.birthDate">
-      {{ bornLabel }} le {{ formatDate(beneficiary.birthDate) }} · Dossier N°{{
-        fileNumber
-      }}
-    </template>
+      {{ bornLabel }} le {{ formatDate(beneficiary.birthDate) }} · </template
+    >Dossier N°{{ fileNumber }}
   </p>
 </template>
 
