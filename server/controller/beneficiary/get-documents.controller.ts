@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import {
   ProtectedAppContext,
   ProtectedAppContextUser,
@@ -10,7 +11,10 @@ import {
   canOnlyListItsUploadedDocuments
 } from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/security'
-import { GetDocumentsInput } from '~/server/schema'
+import {
+  GetDocumentsInput,
+  BeneficiaryDocumentFilterInput
+} from '~/server/schema'
 
 function getPermissionConditions(user: ProtectedAppContextUser) {
   if (canOnlyListItsUploadedDocuments(user)) {
@@ -20,6 +24,22 @@ function getPermissionConditions(user: ProtectedAppContextUser) {
   return {
     OR: [{ confidential: false }, { confidential: true, createdById: user.id }]
   }
+}
+
+function prepareBeneficiaryDocumentsFilters(
+  filters: BeneficiaryDocumentFilterInput
+) {
+  const formattedFilters: Prisma.DocumentWhereInput = {}
+
+  if (filters.tags) {
+    formattedFilters.tags = { hasSome: filters.tags }
+  }
+
+  if (filters.type) {
+    formattedFilters.type = filters.type
+  }
+
+  return formattedFilters
 }
 
 export const getBeneficiaryDocumentsHandler = async ({
@@ -41,11 +61,11 @@ export const getBeneficiaryDocumentsHandler = async ({
 
   const permissionConditions = getPermissionConditions(user)
 
-  // TODO: prepareBeneficiaryDocumentFilters function
   return await prismaClient.document.findMany({
     where: {
       beneficiaryId,
-      ...permissionConditions
+      ...permissionConditions,
+      ...prepareBeneficiaryDocumentsFilters(filters)
     },
     include: {
       _count: {
