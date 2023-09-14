@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="fr-grid-row fr-grid-row--center fr-grid-row--gutters feature-section fr-mb-3w"
-  >
-    <h3 class="fr-h4 fr-col-12 fr-mb-0">Identifité du bénéficiaire</h3>
+  <BeneficiaryFormSection section-title="Identité du bénéficiaire">
     <div class="fr-col-12">
       <VeeRadioButtons
         class="fr-mb-0"
@@ -81,7 +78,7 @@
         name="caregiver"
       />
     </div>
-  </div>
+  </BeneficiaryFormSection>
 </template>
 
 <script setup lang="ts">

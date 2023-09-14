@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="fr-grid-row fr-grid-row--center fr-grid-row--bottom fr-grid-row--gutters feature-section fr-mb-3w"
-  >
-    <h3 class="fr-h4 fr-col-12 fr-mb-0">Coordonnées</h3>
+  <BeneficiaryFormSection section-title="Coordonnées">
     <div
       v-if="!noPhone"
       class="fr-col-12 fr-col-lg-6"
@@ -49,7 +46,7 @@
         type="email"
       />
     </div>
-  </div>
+  </BeneficiaryFormSection>
 </template>
 
 <script setup lang="ts">
