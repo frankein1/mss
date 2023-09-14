@@ -122,7 +122,7 @@
     try {
       const { id } = await trpcClient.beneficiaryDraft.saveToBeneficiary.mutate(
         {
-          draftId: beneficiaryDraft.value?.id,
+          id: beneficiaryDraft.value?.id,
           general: beneficiary
         }
       )
