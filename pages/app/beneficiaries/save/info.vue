@@ -16,7 +16,7 @@
       v-else-if="pending"
       class="fr-mx-auto"
     />
-    <BeneficiaryFormGeneralInformation2
+    <BeneficiaryFormGeneralInformation
       v-else-if="beneficiary && agents?.length"
       :beneficiary="beneficiary"
       :agents="agents"
