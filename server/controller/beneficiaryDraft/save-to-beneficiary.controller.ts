@@ -20,7 +20,7 @@ export const saveToBeneficiaryHandler = async ({
   input: SaveToBeneficiaryInput
   ctx: ProtectedAppContext
 }) => {
-  const { draftId } = input
+  const { id: draftId } = input
   const beneficiaryDraft = draftId
     ? await prismaClient.beneficiaryDraft.findUnique({
         where: { id: draftId }
