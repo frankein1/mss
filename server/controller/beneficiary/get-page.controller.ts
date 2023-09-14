@@ -73,7 +73,6 @@ function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
       birthName: true,
       firstName: true,
       birthDate: true,
-      streetNumber: true,
       street: true,
       zipcode: true,
       city: true,

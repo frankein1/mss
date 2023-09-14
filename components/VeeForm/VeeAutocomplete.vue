@@ -13,6 +13,12 @@
         class="color-red"
         >*</span
       >
+      <span
+        v-if="hint"
+        class="fr-hint-text"
+      >
+        {{ hint }}
+      </span>
     </label>
     <input
       :id="id"
@@ -92,10 +98,12 @@
       searchFn: (search: string) => Promise<Options>
       required?: boolean
       value?: string
+      hint?: string
     }>(),
     {
       required: false,
-      value: undefined
+      value: undefined,
+      hint: ''
     }
   )
   const {
