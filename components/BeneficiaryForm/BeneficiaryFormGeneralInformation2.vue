@@ -11,6 +11,8 @@
     <BeneficiaryFormIdentity />
     <BeneficiaryFormContactDetails />
     <BeneficiaryFormAddress />
+    <BeneficiaryFormMobility />
+    <BeneficiaryFormAdditionalInformation />
   </div>
 </template>
 
