@@ -7,6 +7,22 @@
       />
       <BeneficiaryDocumentFilters @filter="filters = $event" />
     </div>
+    <div class="beneficiary-section fr-p-3w fr-mt-2w">
+      <AtomAlert
+        v-if="error"
+        class="fr-mx-5v"
+        :alert-type="AlertType.Error"
+        message="La liste des documents n'a pas pu être chargée."
+      />
+      <AtomLoader
+        v-else-if="pending"
+        class="fr-mx-auto"
+      />
+      <BeneficiaryDocumentTable
+        v-else
+        :documents="documents"
+      />
+    </div>
     <!-- <div
       v-if="documents?.length"
       class="documents_content"
@@ -43,6 +59,7 @@
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
   import { GetBeneficiaryOutput } from '~/server/routers'
   import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
+  import { AlertType } from '~/utils/constants/alert'
 
   const route = useRoute()
 
@@ -55,10 +72,16 @@
     filters: filters.value
   }))
 
-  const { data: documents, refresh } =
-    await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery(
-      queryInput
-    )
+  const {
+    data: documentsRequest,
+    error,
+    pending,
+    refresh
+  } = await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery(
+    queryInput
+  )
+
+  const documents = computed(() => documentsRequest.value || [])
 
   onMounted(async () => {
     const tab = route.hash.slice(1)
