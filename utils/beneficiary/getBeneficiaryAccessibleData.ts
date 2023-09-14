@@ -68,8 +68,8 @@ function getBeneficiaryGeneralInformation(
     accommodationAdditionalInformation:
       beneficiary.accommodationAdditionalInformation,
     street: beneficiary.street,
-    streetNumber: beneficiary.streetNumber,
     addressComplement: beneficiary.addressComplement,
+    postOfficeBox: beneficiary.postOfficeBox,
     zipcode: beneficiary.zipcode,
     city: beneficiary.city,
     region: beneficiary.region,

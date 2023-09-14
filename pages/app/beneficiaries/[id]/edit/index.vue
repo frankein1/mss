@@ -127,7 +127,6 @@
         region: b.region,
         addressComplement: b.addressComplement,
         accommodationZone: b.accommodationZone,
-        streetNumber: b.streetNumber,
         street: b.street,
         noPhone: b.noPhone,
         phone1: b.phone1,

@@ -80,7 +80,6 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'accommodationName',
     'accommodationAdditionalInformation',
     'street',
-    'streetNumber',
     'addressComplement',
     'zipcode',
     'city',

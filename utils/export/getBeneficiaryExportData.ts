@@ -69,7 +69,6 @@ export function getBeneficiaryExportData(
     accommodationAdditionalInformation:
       beneficiary.beneficiary.accommodationAdditionalInformation || '',
     street: beneficiary.beneficiary.street || '',
-    streetNumber: beneficiary.beneficiary.streetNumber || '',
     addressComplement: beneficiary.beneficiary.addressComplement || '',
     zipcode: beneficiary.beneficiary.zipcode || '',
     city: beneficiary.beneficiary.city || '',

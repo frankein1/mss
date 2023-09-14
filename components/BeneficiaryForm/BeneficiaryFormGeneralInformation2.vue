@@ -10,6 +10,7 @@
     </h2>
     <BeneficiaryFormIdentity />
     <BeneficiaryFormContactDetails />
+    <BeneficiaryFormAddress />
   </div>
 </template>
 
