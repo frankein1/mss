@@ -5,7 +5,6 @@ import {
   canEditBeneficiaryExternalOrganisations,
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryReferents,
   canEditBeneficiaryRelatives,
   canSetBeneficiaryNir
 } from '~/server/security/rules'
@@ -31,54 +30,20 @@ export const updateBeneficiaryHandler = async ({
     throw forbiddenError()
   }
 
-  const { referents: previousReferents, relatives: previousRelatives } =
-    await getBeneficiaryWithRelations(input.id)
+  const { relatives: previousRelatives } = await getBeneficiaryWithRelations(
+    input.id
+  )
 
-  const previousIds = previousReferents.map(({ id }) => id)
-
-  const {
-    id,
-    structureId,
-    referents: updateIds,
-    aidantConnectAuthorized,
-    general,
-    health,
-    external,
-    occupation,
-    taxHousehold,
-    entourage,
-    additionalInformation
-  } = input
+  const { id, health, external, occupation, taxHousehold, entourage } = input
 
   let data = {}
-  data = { ...general, aidantConnectAuthorized, additionalInformation }
 
   if (
-    canEditBeneficiaryReferents(user, {
-      structureId,
-      referents: previousReferents
+    canEditBeneficiaryHealthInfo(user, {
+      ...input,
+      referents: beneficiary.referents
     })
   ) {
-    const newIds =
-      updateIds.filter(updateId => !previousIds.includes(updateId)) || []
-    const trashIds = previousIds.filter(id => !updateIds.includes(id)) || []
-
-    const createIds = newIds.map(id => ({
-      id
-    }))
-    const deleteIds = trashIds.map(id => ({
-      id
-    }))
-
-    data = {
-      ...data,
-      referents: {
-        connect: createIds,
-        disconnect: deleteIds
-      }
-    }
-  }
-  if (canEditBeneficiaryHealthInfo(user, input)) {
     const { socialSecurityNumber, ...otherHealthInfo } = health
     data = { ...data, ...otherHealthInfo }
 
@@ -89,18 +54,38 @@ export const updateBeneficiaryHandler = async ({
     }
   }
 
-  if (canEditBeneficiaryExternalOrganisations(user, input)) {
+  if (
+    canEditBeneficiaryExternalOrganisations(user, {
+      ...input,
+      referents: beneficiary.referents
+    })
+  ) {
     data = { ...data, ...external }
   }
-  if (canEditBeneficiaryOccupationIncome(user, input)) {
+  if (
+    canEditBeneficiaryOccupationIncome(user, {
+      ...input,
+      referents: beneficiary.referents
+    })
+  ) {
     data = { ...data, ...occupation }
   }
-  if (canEditBeneficiaryRelatives(user, input)) {
+  if (
+    canEditBeneficiaryRelatives(user, {
+      ...input,
+      referents: beneficiary.referents
+    })
+  ) {
     const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
     data = { ...data, ...taxHouseholdDatas }
   }
 
-  if (canEditBeneficiaryRelatives(user, input)) {
+  if (
+    canEditBeneficiaryRelatives(user, {
+      ...input,
+      referents: beneficiary.referents
+    })
+  ) {
     const entourages =
       entourage.entourages?.map(e => ({ hosted: false, ...e })) || []
     const taxHouseholds =
