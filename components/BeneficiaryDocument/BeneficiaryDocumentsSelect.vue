@@ -47,7 +47,8 @@
   } = await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery<
     Document[]
   >({
-    beneficiaryId: props.beneficiaryId
+    beneficiaryId: props.beneficiaryId,
+    filters: {}
   })
 
   const documentOptions = computed(
