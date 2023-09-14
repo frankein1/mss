@@ -2,9 +2,10 @@
   <div
     class="fr-grid-row fr-grid-row--center fr-grid-row--gutters feature-section fr-mb-3w"
   >
-    <h3 class="fr-h4">Identifité du bénéficiaire</h3>
+    <h3 class="fr-h4 fr-col-12 fr-mb-0">Identifité du bénéficiaire</h3>
     <div class="fr-col-12">
       <VeeRadioButtons
+        class="fr-mb-0"
         name="title"
         :label="beneficiaryFieldLabels.title"
         :options="beneficiaryTitleOptions"
@@ -28,22 +29,24 @@
         :label="beneficiaryFieldLabels.firstName"
       />
     </div>
-    <div class="fr-col-12 fr-col-md-4">
+    <div class="fr-col-12 fr-col-lg-4">
       <VeeInput
         name="birthDate"
         :label="beneficiaryFieldLabels.birthDate"
         type="date"
       />
     </div>
-    <div class="fr-col-12 fr-col-md-8">
+    <div class="fr-col-12 fr-col-lg-8">
       <VeeInput
         name="birthPlace"
         :label="beneficiaryFieldLabels.birthPlace"
       />
     </div>
-    <div class="fr-col-12">
+    <div
+      v-if="isDeceased"
+      class="fr-col-12"
+    >
       <VeeInput
-        v-if="isDeceased"
         name="deathDate"
         :label="beneficiaryFieldLabels.deathDate"
         type="date"
@@ -63,9 +66,11 @@
         :options="withEmptyValue(nationalityOptions)"
       />
     </div>
-    <div class="fr-col-12">
+    <div
+      v-if="isMinistryAgent"
+      class="fr-col-12"
+    >
       <VeeInput
-        v-if="isMinistryAgent"
         name="numeroPegase"
         :label="beneficiaryFieldLabels.numeroPegase"
       />
