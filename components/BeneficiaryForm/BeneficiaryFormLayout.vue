@@ -9,7 +9,10 @@
     />
     <main class="beneficiaryformlayout__main fr-col-9 fr-container">
       <DsfrBreadcrumb :links="breadcrumbLinks" />
-      <PageTitle :title="title">
+      <PageTitle
+        :title="title"
+        :icon="titleIcon"
+      >
         <RequiredFields />
       </PageTitle>
 
@@ -39,8 +42,9 @@
       isSubmitting: boolean
       isEditting?: boolean
       title: string
+      titleIcon?: string
     }>(),
-    { beneficiary: undefined, isEditing: false }
+    { beneficiary: undefined, isEditing: false, titleIcon: undefined }
   )
 
   const emit = defineEmits<{
