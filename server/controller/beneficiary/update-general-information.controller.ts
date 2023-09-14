@@ -29,10 +29,23 @@ export const updateBeneficiaryGeneralInformationHandler = async ({
 
   const previousIds = previousReferents.map(({ id }) => id)
 
-  const { id, structureId, referents: updateIds, ...general } = input
+  const {
+    id,
+    structureId,
+    referents: updateIds,
+    noPhone,
+    phone1,
+    phone2,
+    ...general
+  } = input
 
   let data = {}
-  data = { ...general }
+  data = {
+    ...general,
+    noPhone,
+    phone1: noPhone ? null : phone1,
+    phone2: noPhone ? null : phone2
+  }
 
   if (
     canEditBeneficiaryReferents(user, {
