@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="fr-grid-row fr-grid-row--center fr-grid-row--gutters feature-section fr-mb-3w"
-  >
+  <BeneficiaryFormSection>
     <div class="fr-col-6">
       <VeeSelect
         name="status"
@@ -27,7 +25,7 @@
         name="aidantConnectAuthorized"
       />
     </div>
-  </div>
+  </BeneficiaryFormSection>
 </template>
 
 <script setup lang="ts">

@@ -1,8 +1,5 @@
 <template>
-  <div
-    class="fr-grid-row fr-grid-row--center fr-grid-row--bottom fr-grid-row--gutters feature-section fr-mb-3w"
-  >
-    <h3 class="fr-h4 fr-col-12 fr-mb-0">Adresse/Hébergement</h3>
+  <BeneficiaryFormSection section-title="Adresse/Hébergement">
     <div class="fr-col-12">
       <VeeSelect
         name="accommodationMode"
@@ -79,7 +76,7 @@
         :options="withEmptyValue(beneficiaryAccommodationZoneOptions)"
       />
     </div>
-  </div>
+  </BeneficiaryFormSection>
 </template>
 
 <script setup lang="ts">
