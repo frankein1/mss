@@ -18,33 +18,11 @@
     />
     <hr />
 
-    <AtomTabsV2
-      tab-list-name="Détails de la fiche bénéficiaire"
-      :tab-titles="[
-        {
-          tabId: BeneficiaryTab.Details,
-          panelId: panelId(BeneficiaryTab.Details),
-          title: 'Informations',
-          icon: 'fr-icon-information-fill'
-        },
-        {
-          tabId: BeneficiaryTab.Documents,
-          panelId: panelId(BeneficiaryTab.Documents),
-          title: 'Documents',
-          icon: 'fr-icon-folder-2-line'
-        },
-        {
-          tabId: BeneficiaryTab.History,
-          panelId: panelId(BeneficiaryTab.History),
-          title: 'Historique',
-          icon: 'fr-icon-history-line'
-        }
-      ]"
-    >
-      <AtomTabV2
-        :tab-id="BeneficiaryTab.Details"
-        :panel-id="panelId(BeneficiaryTab.Details)"
-        selected
+    <BeneficiaryTabs>
+      <Tab
+        :id="BeneficiaryTab.Details"
+        name="Informations"
+        prefix="<span class='fr-icon-information-fill fr-icon--sm fr-pr-1w'></span> "
       >
         <AtomLoader
           v-if="pending"
@@ -62,10 +40,12 @@
           :tax-households="taxHouseholds"
           :followup-types="followupTypes"
         />
-      </AtomTabV2>
-      <AtomTabV2
-        :tab-id="BeneficiaryTab.Documents"
-        :panel-id="panelId(BeneficiaryTab.Documents)"
+        >
+      </Tab>
+      <Tab
+        :id="BeneficiaryTab.Documents"
+        name="Documents"
+        prefix="<span class='fr-icon-folder-2-line fr-icon--sm fr-pr-1w'></span> "
       >
         <AtomLoader
           v-if="pending"
@@ -80,18 +60,20 @@
           v-else
           :beneficiary="beneficiary"
         />
-      </AtomTabV2>
-      <AtomTabV2
-        :tab-id="BeneficiaryTab.History"
-        :panel-id="panelId(BeneficiaryTab.History)"
+      </Tab>
+      <Tab
+        :id="BeneficiaryTab.History"
+        name="Historique"
+        prefix="<span class='fr-icon-history-line fr-icon--sm fr-pr-1w'></span> "
       >
         <BeneficiaryHistory :beneficiary-id="beneficiaryId" />
-      </AtomTabV2>
-    </AtomTabsV2>
+      </Tab>
+    </BeneficiaryTabs>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
+  import { Tab } from 'vue3-tabs-component'
   import { canDeleteBeneficiary } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -164,10 +146,6 @@
   function onBeneficiaryDeleted() {
     navigateTo(backLink.value)
     useSnackbar().success('Le bénéficiaire a été supprimé.')
-  }
-
-  function panelId(tab: BeneficiaryTab) {
-    return `${tab}-panel`
   }
 </script>
 

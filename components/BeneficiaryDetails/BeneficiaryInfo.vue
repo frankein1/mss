@@ -1,30 +1,28 @@
 <template>
-  <div class="fr-container">
-    <BeneficiaryInfoSection title="">
-      <BeneficiaryInfoHeader :beneficiary="beneficiary" />
-    </BeneficiaryInfoSection>
-    <BeneficiaryInfoSection title="">
-      <BeneficiaryInfoFollowupTypes :followup-types="followupTypes" />
-    </BeneficiaryInfoSection>
+  <BeneficiaryInfoSection title="">
+    <BeneficiaryInfoHeader :beneficiary="beneficiary" />
+  </BeneficiaryInfoSection>
+  <BeneficiaryInfoSection title="">
+    <BeneficiaryInfoFollowupTypes :followup-types="followupTypes" />
+  </BeneficiaryInfoSection>
 
-    <BeneficiaryInfoGeneral :beneficiary="beneficiary" />
+  <BeneficiaryInfoGeneral :beneficiary="beneficiary" />
 
-    <BeneficiaryInfoTaxHouseholds
-      :beneficiary="beneficiary"
-      :tax-households="taxHouseholds"
-    />
+  <BeneficiaryInfoTaxHouseholds
+    :beneficiary="beneficiary"
+    :tax-households="taxHouseholds"
+  />
 
-    <BeneficiaryInfoEntourages
-      :beneficiary="beneficiary"
-      :entourages="entourages"
-    />
+  <BeneficiaryInfoEntourages
+    :beneficiary="beneficiary"
+    :entourages="entourages"
+  />
 
-    <BeneficiaryInfoHealth :beneficiary="beneficiary" />
+  <BeneficiaryInfoHealth :beneficiary="beneficiary" />
 
-    <BeneficiaryInfoOccupationIncome :beneficiary="beneficiary" />
+  <BeneficiaryInfoOccupationIncome :beneficiary="beneficiary" />
 
-    <BeneficiaryInfoOtherInformation :beneficiary="beneficiary" />
-  </div>
+  <BeneficiaryInfoOtherInformation :beneficiary="beneficiary" />
 </template>
 
 <script lang="ts" setup>

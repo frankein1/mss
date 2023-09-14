@@ -1,5 +1,5 @@
 <template>
-  <div class="section fr-p-4w fr-m-1w">
+  <div class="section fr-p-4w fr-pl-2w fr-mt-1w">
     <div
       v-if="title"
       class="fr-container"
