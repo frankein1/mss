@@ -187,7 +187,8 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   phone2: z.string().nullish(),
   email: emailOrEmpty(),
   caregiver: z.boolean().default(false),
-  mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility)
+  mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility),
+  additionalInformation: z.string().nullish()
 })
 
 export type SaveBeneficiaryGeneralInformationInput = z.infer<
