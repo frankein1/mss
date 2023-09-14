@@ -9,6 +9,7 @@
       Informations générales
     </h2>
     <BeneficiaryFormIdentity />
+    <BeneficiaryFormContactDetails />
   </div>
 </template>
 
