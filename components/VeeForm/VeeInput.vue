@@ -110,22 +110,25 @@
 
   const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
 
-  const placeholder = computed(() => {
-    if (props.placeholder) {
-      return props.placeholder
-    }
-    if (props.type === 'tel') {
-      return '00 00 00 00 00'
-    }
-    if (props.type === 'social-security-number') {
-      return '0 00 00 00 000 000 00'
-    }
-    return undefined
-  })
-
   const type = computed(() =>
     props.type === 'social-security-number' ? 'text' : props.type
   )
+
+  const hint = computed(() => {
+    if (props.type === 'tel') {
+      const hintBase = 'Format attendu : 01 22 33 44 55'
+      return props.hint ? `${hintBase}. ${props.hint}` : hintBase
+    }
+    if (props.type === 'social-security-number') {
+      const hintBase =
+        'Format attendu : 0 00 00 00 000 000 00. La clé du n° de sécurité sociale est optionnelle.'
+      return props.hint ? `${hintBase}. ${props.hint}` : hintBase
+    }
+    if (props.hint) {
+      return props.hint
+    }
+    return undefined
+  })
 
   function formatValue(value: string | Date | number) {
     if (!value) {
