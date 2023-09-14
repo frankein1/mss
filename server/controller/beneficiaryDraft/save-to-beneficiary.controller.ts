@@ -82,6 +82,8 @@ function prepareData(
     structureId: user.structureId,
     fileNumber,
     ...general,
+    phone1: general.noPhone ? null : general.phone1,
+    phone2: general.noPhone ? null : general.phone2,
     referents: {
       connect: general.referents.map(referent => ({ id: referent }))
     },
