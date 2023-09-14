@@ -66,7 +66,6 @@ export const saveBeneficiarySchema = z.object({
     accommodationZone: withEmptyValueOptionalNativeEnum(
       BeneficiaryAccommodationZone
     ),
-    streetNumber: z.string().nullish(),
     street: z.string().nullish(),
     addressComplement: z.string().nullish(),
     noPhone: z.boolean().default(false),
@@ -180,9 +179,9 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   accommodationZone: withEmptyValueOptionalNativeEnum(
     BeneficiaryAccommodationZone
   ),
-  streetNumber: z.string().nullish(),
   street: z.string().nullish(),
   addressComplement: z.string().nullish(),
+  postOfficeBox: z.string().nullish(),
   noPhone: z.boolean().default(false),
   phone1: z.string().nullish(),
   phone2: z.string().nullish(),

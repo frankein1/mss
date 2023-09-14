@@ -8,7 +8,6 @@ export function hasCoordinatesInformations(
     | 'noPhone'
     | 'email'
     | 'street'
-    | 'streetNumber'
     | 'zipcode'
     | 'city'
     | 'addressComplement'
@@ -20,7 +19,6 @@ export function hasCoordinatesInformations(
     beneficiary.noPhone ||
     beneficiary.email ||
     beneficiary.street ||
-    beneficiary.streetNumber ||
     beneficiary.zipcode ||
     beneficiary.city ||
     beneficiary.addressComplement

@@ -7,7 +7,6 @@ export function hasAddressInformations(
     | 'accommodationAdditionalInformation'
     | 'accommodationZone'
     | 'street'
-    | 'streetNumber'
     | 'zipcode'
     | 'city'
     | 'addressComplement'
@@ -19,7 +18,6 @@ export function hasAddressInformations(
     beneficiary.accommodationAdditionalInformation ||
     beneficiary.accommodationZone ||
     beneficiary.street ||
-    beneficiary.streetNumber ||
     beneficiary.zipcode ||
     beneficiary.city ||
     beneficiary.addressComplement ||

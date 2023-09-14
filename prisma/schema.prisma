@@ -1204,8 +1204,8 @@ model Beneficiary {
   accommodationName                  String?                       @map("accommodation_name")
   accommodationAdditionalInformation String?                       @map("accommodation_additional_information")
   street                             String?
-  streetNumber                       String?                       @map("street_number")
   addressComplement                  String?                       @map("address_complement")
+  postOfficeBox                      String?                       @map("post_office_box")
   zipcode                            String?
   city                               String?
   region                             String?
