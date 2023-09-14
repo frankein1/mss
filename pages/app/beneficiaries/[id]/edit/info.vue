@@ -4,6 +4,7 @@
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     :title="RouteTitle.AppBeneficiaryEditInfo()"
+    title-icon="fr-icon-user-line"
     is-editting
     @save="onSaveBeneficiary"
   >
