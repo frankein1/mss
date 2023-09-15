@@ -1,7 +1,23 @@
 <template>
   <tr>
     <td>{{ documentTypeLabels[document.type] }}</td>
-    <td>{{ document.name }}</td>
+    <td>
+      <div class="name-container">
+        {{ document.name }}
+        <span
+          v-if="document.confidential"
+          class="fr-badge fr-badge--warning fr-ml-1w"
+          >CONFIDENTIEL</span
+        >
+        <span
+          v-if="hasUnreadNotifications"
+          class="fr-badge fr-badge--new fr-badge--no-icon fr-ml-1w"
+        >
+          <span class="fr-icon-notification-3-fill fr-icon--sm fr-mr-1v"></span>
+          NOUVEAU
+        </span>
+      </div>
+    </td>
     <td>{{ formatDate(document.created) }}</td>
     <td>
       <span
@@ -26,7 +42,19 @@
     documentTagLabels
   } from '~/client/options/document'
 
-  defineProps<{
+  const props = defineProps<{
     document: DocumentItem
   }>()
+
+  const hasUnreadNotifications = computed(
+    () => !!props.document._count.Notification
+  )
 </script>
+
+<style scoped>
+  .name-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+</style>
