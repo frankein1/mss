@@ -44,7 +44,7 @@ function prepareBeneficiaryDocumentsFilters(
 
 export const getBeneficiaryDocumentsHandler = async ({
   ctx: { user },
-  input: { beneficiaryId, filters }
+  input: { beneficiaryId, filters, orderBy }
 }: {
   input: GetDocumentsInput
   ctx: ProtectedAppContext
@@ -67,6 +67,7 @@ export const getBeneficiaryDocumentsHandler = async ({
       ...permissionConditions,
       ...prepareBeneficiaryDocumentsFilters(filters)
     },
+    orderBy,
     include: {
       _count: {
         select: {

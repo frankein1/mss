@@ -48,7 +48,8 @@
     Document[]
   >({
     beneficiaryId: props.beneficiaryId,
-    filters: {}
+    filters: {},
+    orderBy: []
   })
 
   const documentOptions = computed(

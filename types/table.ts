@@ -8,6 +8,11 @@ export type BeneficiarySort = {
   firstName?: SortOrder
 }
 
+export type BeneficiaryDocumentSort = {
+  name?: SortOrder
+  created?: SortOrder
+}
+
 export type FollowupSort = {
   dueDate?: SortOrder
   date?: SortOrder
@@ -42,3 +47,4 @@ export type TableSort =
   | HelpRequestSort
   | StructureAdminSort
   | UserAdminSort
+  | BeneficiaryDocumentSort
