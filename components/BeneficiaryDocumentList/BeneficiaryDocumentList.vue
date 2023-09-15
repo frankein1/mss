@@ -20,7 +20,9 @@
       />
       <BeneficiaryDocumentTable
         v-else
+        v-model:sort="orderBy"
         :documents="documents"
+        :pending="pending"
       />
     </div>
     <!-- <div
@@ -59,6 +61,7 @@
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
   import { GetBeneficiaryOutput } from '~/server/routers'
   import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
+  import { BeneficiaryDocumentSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
 
   const route = useRoute()
@@ -66,10 +69,12 @@
   const props = defineProps<{ beneficiary: GetBeneficiaryOutput }>()
 
   const filters = ref<BeneficiaryDocumentFilterInput>({})
+  const orderBy = ref<BeneficiaryDocumentSort[]>([{ created: SortOrder.Desc }])
 
   const queryInput = computed(() => ({
     beneficiaryId: props.beneficiary.id,
-    filters: filters.value
+    filters: filters.value,
+    orderBy: orderBy.value
   }))
 
   const {
@@ -93,27 +98,4 @@
       focusAndScrollTo(`#document-${item}`)
     }
   })
-
-  // function getDocumentsByType(type: DocumentType) {
-  //   return (
-  //     documents.value?.filter(doc => {
-  //       return doc.type === type
-  //     }) || []
-  //   )
-  // }
-
-  // const cerfas = computed(() => getDocumentsByType(DocumentType.Cerfa))
-  // const courriers = computed(() =>
-  //   getDocumentsByType(DocumentType.HistoriqueCourrier)
-  // )
-  // const justificatifs = computed(() =>
-  //   getDocumentsByType(DocumentType.Justificatifs)
-  // )
-  // const rapports = computed(() => getDocumentsByType(DocumentType.Rapports))
 </script>
-
-<!-- <style>
-  .documents_content {
-    flex: 0 0 80%;
-  }
-</style> -->
