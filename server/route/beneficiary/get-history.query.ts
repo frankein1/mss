@@ -210,7 +210,6 @@ const handler = async ({
     getFollowups(user, beneficiary, filters),
     getHelpRequests(user, beneficiary, filters)
   ])
-
   return [...followups, ...helpRequests].sort(sortHistoryItem)
 }
 
