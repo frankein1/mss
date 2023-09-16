@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { z } from 'zod'
-import { paginatedSchema } from '../helpers.schema'
+import { optionalPaginatedSchema } from '../helpers.schema'
 import { beneficiaryDocumentFilterSchema } from '~/server/schema'
 
 export const getDocumentsSchema = z
@@ -14,6 +14,6 @@ export const getDocumentsSchema = z
       })
     )
   })
-  .merge(paginatedSchema)
+  .merge(optionalPaginatedSchema)
 
 export type GetDocumentsInput = z.infer<typeof getDocumentsSchema>

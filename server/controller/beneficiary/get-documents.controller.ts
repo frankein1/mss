@@ -60,10 +60,13 @@ export const getBeneficiaryDocumentsHandler = async ({
     throw forbiddenError()
   }
 
-  const { take, skip } = takeAndSkipFromPagination({
-    perPage,
-    page
-  })
+  const { take, skip } =
+    page && perPage
+      ? takeAndSkipFromPagination({
+          perPage,
+          page
+        })
+      : { take: undefined, skip: undefined }
 
   const permissionConditions = getPermissionConditions(user)
 
@@ -99,7 +102,7 @@ export const getBeneficiaryDocumentsHandler = async ({
       }
     })
   ])
-  const totalPages = getTotalPages({ count, perPage })
+  const totalPages = page && perPage ? getTotalPages({ count, perPage }) : 1
 
   return {
     documents,

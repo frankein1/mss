@@ -18,7 +18,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { Document } from '@prisma/client'
   import { ref } from 'vue'
   import VeeSearchableSelect from '../VeeForm/VeeSearchableSelect.vue'
 
@@ -40,17 +39,17 @@
   )
 
   const {
-    data: documents,
+    data: documentsRequest,
     pending,
     error,
     refresh
-  } = await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery<
-    Document[]
-  >({
+  } = await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery({
     beneficiaryId: props.beneficiaryId,
     filters: {},
     orderBy: []
   })
+
+  const documents = computed(() => documentsRequest.value?.documents || [])
 
   const documentOptions = computed(
     () => new Map(documents.value?.map(d => [d.key, d.name]))
