@@ -31,35 +31,6 @@
         @refresh-documents="onRefresh"
       />
     </div>
-    <!-- <div
-      v-if="documents?.length"
-      class="documents_content"
-    >
-      <BeneficiaryDocumentType
-        :document-type="DocumentType.Cerfa"
-        :documents="cerfas"
-        :beneficiary="beneficiary"
-        @refresh-documents="refresh"
-      />
-      <BeneficiaryDocumentType
-        :document-type="DocumentType.Rapports"
-        :documents="rapports"
-        :beneficiary="beneficiary"
-        @refresh-documents="refresh"
-      />
-      <BeneficiaryDocumentType
-        :document-type="DocumentType.Justificatifs"
-        :documents="justificatifs"
-        :beneficiary="beneficiary"
-        @refresh-documents="refresh"
-      />
-      <BeneficiaryDocumentType
-        :document-type="DocumentType.HistoriqueCourrier"
-        :documents="courriers"
-        :beneficiary="beneficiary"
-        @refresh-documents="refresh"
-      />
-    </div> -->
   </div>
 </template>
 <script setup lang="ts">
