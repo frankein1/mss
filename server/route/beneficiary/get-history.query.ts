@@ -20,7 +20,9 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   canListCommentsToFollowup,
-  canListCommentsToHelpRequest
+  canListCommentsToHelpRequest,
+  canListBeneficiaryHelpRequests,
+  canListBeneficiaryFollowups
 } from '~/server/security/rules'
 import {
   AllowSecurityCheck,
@@ -192,7 +194,7 @@ async function getHistoryTotalCount(
     helpRequestsCount = await HelpRequestRepo.count(user, {
       where: {
         beneficiaryId: beneficiary.id,
-        ...prepareHelpRequestFilters({}, canOnlyListItsBeneficiaries(user))
+        ...prepareHelpRequestFilters({})
       }
     })
   }
@@ -201,7 +203,7 @@ async function getHistoryTotalCount(
     followupsCount = await FollowupRepo.count(user, {
       where: {
         beneficiaryId: beneficiary.id,
-        ...prepareFollowupFilters({}, canOnlyListItsBeneficiaries(user))
+        ...prepareFollowupFilters({})
       }
     })
   }
