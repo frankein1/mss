@@ -2,10 +2,7 @@ export * from './get-details.controller'
 export * from './get-page.controller'
 export * from './save.controller'
 export * from './export.controller'
-export {
-  getBeneficiaryDocumentsHandler,
-  getBeneficiaryDocumentsTotalHandler
-} from './get-documents.controller'
+export { getBeneficiaryDocumentsHandler } from './get-documents.controller'
 export { createBeneficiaryHandler } from './create.controller'
 export { updateBeneficiaryHandler } from './update.controller'
 export { searchBeneficiaryHandler } from './search.controller'

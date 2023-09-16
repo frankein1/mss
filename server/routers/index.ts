@@ -48,7 +48,7 @@ export type GetExaminationDatesConfigOutput =
   RouterOutput['config']['getExaminationDates']
 
 export type GetBeneficiaryDocumentsOutput =
-  RouterOutput['beneficiary']['getBeneficiaryDocuments']
+  RouterOutput['beneficiary']['getBeneficiaryDocuments']['documents']
 export type GetBeneficiaryDocumentOutput = GetBeneficiaryDocumentsOutput[0]
 
 export * from '~/server/routers/beneficiary'

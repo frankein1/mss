@@ -15,6 +15,7 @@ import {
   GetDocumentsInput,
   BeneficiaryDocumentFilterInput
 } from '~/server/schema'
+import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 
 function getPermissionConditions(user: ProtectedAppContextUser) {
   if (canOnlyListItsUploadedDocuments(user)) {
@@ -42,39 +43,9 @@ function prepareBeneficiaryDocumentsFilters(
   return formattedFilters
 }
 
-export const getBeneficiaryDocumentsTotalHandler = async ({
-  ctx: { user },
-  input: { id }
-}: {
-  input: { id: string }
-  ctx: ProtectedAppContext
-}) => {
-  const beneficiary = await getBeneficiarySecurityTarget(id)
-
-  if (!beneficiary) {
-    throw invalidError()
-  }
-
-  if (!canListDocuments(user, beneficiary)) {
-    throw forbiddenError()
-  }
-
-  const permissionConditions = getPermissionConditions(user)
-
-  return await prismaClient.document.findMany({
-    where: {
-      beneficiaryId: id,
-      ...permissionConditions
-    },
-    include: {
-      _count: true
-    }
-  })
-}
-
 export const getBeneficiaryDocumentsHandler = async ({
   ctx: { user },
-  input: { beneficiaryId, filters, orderBy }
+  input: { beneficiaryId, filters, orderBy, perPage, page }
 }: {
   input: GetDocumentsInput
   ctx: ProtectedAppContext
@@ -89,23 +60,51 @@ export const getBeneficiaryDocumentsHandler = async ({
     throw forbiddenError()
   }
 
+  const { take, skip } = takeAndSkipFromPagination({
+    perPage,
+    page
+  })
+
   const permissionConditions = getPermissionConditions(user)
 
-  return await prismaClient.document.findMany({
-    where: {
-      beneficiaryId,
-      ...permissionConditions,
-      ...prepareBeneficiaryDocumentsFilters(filters)
-    },
-    orderBy,
-    include: {
-      _count: {
-        select: {
-          Notification: {
-            where: { read: false, recipientId: user.id }
+  const where: Prisma.DocumentWhereInput = {
+    beneficiaryId,
+    ...permissionConditions,
+    ...prepareBeneficiaryDocumentsFilters(filters)
+  }
+
+  const [documents, count, totalCount] = await Promise.all([
+    prismaClient.document.findMany({
+      where,
+      orderBy,
+      take,
+      skip,
+      include: {
+        _count: {
+          select: {
+            Notification: {
+              where: { read: false, recipientId: user.id }
+            }
           }
         }
       }
-    }
-  })
+    }),
+    prismaClient.document.count({
+      where
+    }),
+    prismaClient.document.count({
+      where: {
+        beneficiaryId,
+        ...permissionConditions
+      }
+    })
+  ])
+  const totalPages = getTotalPages({ count, perPage })
+
+  return {
+    documents,
+    count,
+    totalPages,
+    totalCount
+  }
 }
