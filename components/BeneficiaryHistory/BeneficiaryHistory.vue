@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="feature-section history-header-section fr-p-3w">
-      <p v-if="historyTotal">
-        {{ historyTotal }} élément(s) disponibles dans l'historique des
+      <p v-if="history?.length">
+        {{ history.length }} élément(s) disponibles dans l'historique des
         accompagnements du bénéficiaire
       </p>
       <BeneficiaryHistoryFilters
@@ -62,17 +62,13 @@
   }))
 
   const {
-    data: historyRequest,
+    data: history,
     pending,
     error,
     refresh
   } = await useTrpcClient().beneficiary.getBeneficiaryHistory.useQuery(
     queryInput
   )
-
-  const history = computed(() => historyRequest.value?.history || [])
-
-  const historyTotal = computed(() => historyRequest.value?.totalCount || 0)
 
   onMounted(async () => {
     const tab = route.hash.slice(1)
