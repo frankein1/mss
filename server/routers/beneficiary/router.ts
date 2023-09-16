@@ -14,6 +14,7 @@ import {
   getBeneficiariesHandler,
   getBeneficiaryDetailsHandler,
   getBeneficiaryDocumentsHandler,
+  getBeneficiaryDocumentsTotalHandler,
   updateBeneficiaryHandler,
   searchBeneficiaryHandler,
   getBeneficiaryMinimalInfoHandler,
@@ -55,6 +56,9 @@ export const beneficiaryRouter = router({
   getBeneficiaryDocuments: protectedProcedure
     .input(getDocumentsSchema)
     .query(getBeneficiaryDocumentsHandler),
+  getBeneficiaryDocumentsTotal: protectedProcedure
+    .input(idSchema)
+    .query(getBeneficiaryDocumentsTotalHandler),
   getBeneficiaryHistory: protectedProcedure
     .input(getHistorySchema)
     .query(getBeneficiaryHistoryHandler),

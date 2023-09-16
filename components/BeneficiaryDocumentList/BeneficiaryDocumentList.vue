@@ -8,6 +8,10 @@
       <BeneficiaryDocumentFilters @filter="filters = $event" />
     </div>
     <div class="beneficiary-section fr-p-3w fr-mt-2w">
+      <p v-if="documentsTotal">
+        {{ documentsTotal.length }} document(s) disponibles dans l'historique du
+        bénéficiaire
+      </p>
       <AtomAlert
         v-if="error"
         class="fr-mx-5v"
@@ -65,6 +69,7 @@
   import { AlertType } from '~/utils/constants/alert'
 
   const route = useRoute()
+  const trpcClient = useTrpcClient()
 
   const props = defineProps<{ beneficiary: GetBeneficiaryOutput }>()
 
@@ -77,14 +82,17 @@
     orderBy: orderBy.value
   }))
 
+  const { data: documentsTotal } =
+    await trpcClient.beneficiary.getBeneficiaryDocumentsTotal.useQuery({
+      id: props.beneficiary.id
+    })
+
   const {
     data: documentsRequest,
     error,
     pending,
     refresh
-  } = await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery(
-    queryInput
-  )
+  } = await trpcClient.beneficiary.getBeneficiaryDocuments.useQuery(queryInput)
 
   const documents = computed(() => documentsRequest.value || [])
 

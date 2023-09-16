@@ -42,6 +42,36 @@ function prepareBeneficiaryDocumentsFilters(
   return formattedFilters
 }
 
+export const getBeneficiaryDocumentsTotalHandler = async ({
+  ctx: { user },
+  input: { id }
+}: {
+  input: { id: string }
+  ctx: ProtectedAppContext
+}) => {
+  const beneficiary = await getBeneficiarySecurityTarget(id)
+
+  if (!beneficiary) {
+    throw invalidError()
+  }
+
+  if (!canListDocuments(user, beneficiary)) {
+    throw forbiddenError()
+  }
+
+  const permissionConditions = getPermissionConditions(user)
+
+  return await prismaClient.document.findMany({
+    where: {
+      beneficiaryId: id,
+      ...permissionConditions
+    },
+    include: {
+      _count: true
+    }
+  })
+}
+
 export const getBeneficiaryDocumentsHandler = async ({
   ctx: { user },
   input: { beneficiaryId, filters, orderBy }
