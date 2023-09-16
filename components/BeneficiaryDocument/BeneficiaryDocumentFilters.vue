@@ -3,6 +3,7 @@
     <AtomFilters
       :filters="beneficiaryDocumentFilters"
       always-expanded
+      no-reset
       @filter="onFilter"
     />
   </div>

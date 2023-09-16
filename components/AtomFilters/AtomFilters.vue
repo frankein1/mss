@@ -54,9 +54,10 @@
         </li>
       </ul>
       <ul
+        v-if="!noReset || !expanded"
         class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg"
       >
-        <li>
+        <li v-if="!noReset">
           <button
             v-show="hasFilters"
             class="fr-btn fr-icon-filter-line"
@@ -100,6 +101,7 @@
       filters: FilterProp[]
       fullWidthFilters?: boolean
       alwaysExpanded?: boolean
+      noReset?: boolean
       initialSelectedValues?: {
         [filterName: string]: string | string[] | Date | null
       }
@@ -107,6 +109,7 @@
     {
       fullWidthFilters: false,
       alwaysExpanded: false,
+      noReset: false,
       initialSelectedValues: () => ({})
     }
   )
