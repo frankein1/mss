@@ -1,11 +1,11 @@
 <template>
   <div class="fr-container">
-    <div class="beneficiary-section fr-p-3w">
+    <div class="beneficiary-section documents-header-section fr-p-3w">
+      <BeneficiaryDocumentFilters @filter="filters = $event" />
       <BeneficiaryDocumentAddButton
         :beneficiary-id="beneficiary.id"
         @refresh-documents="refresh"
       />
-      <BeneficiaryDocumentFilters @filter="filters = $event" />
     </div>
     <div class="beneficiary-section fr-p-3w fr-mt-2w">
       <p v-if="documentsTotal">
@@ -93,3 +93,15 @@
     }
   })
 </script>
+
+<style scoped>
+  .documents-header-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .documents-header-section div:first-child {
+    flex-grow: 1;
+  }
+</style>

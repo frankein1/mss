@@ -2,6 +2,7 @@
   <div>
     <AtomFilters
       :filters="beneficiaryDocumentFilters"
+      always-expanded
       @filter="onFilter"
     />
   </div>
