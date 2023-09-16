@@ -30,6 +30,7 @@
               />
             </th>
             <th scope="col">Thèmes</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -37,6 +38,8 @@
             v-for="document in documents"
             :key="document.key"
             :document="document"
+            :beneficiary="beneficiary"
+            @refresh-documents="emit('refreshDocuments')"
           />
         </tbody>
       </table>
@@ -45,16 +48,21 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryDocumentsOutput } from '~/server/routers'
+  import {
+    GetBeneficiaryDocumentsOutput,
+    GetBeneficiaryOutput
+  } from '~/server/routers'
   import type { BeneficiaryDocumentSort } from '~/types/table'
 
   const props = defineProps<{
     documents: GetBeneficiaryDocumentsOutput
+    beneficiary: GetBeneficiaryOutput
     pending: boolean
     sort: BeneficiaryDocumentSort[]
   }>()
 
   const emit = defineEmits<{
+    'refreshDocuments': []
     'update:sort': [sort: BeneficiaryDocumentSort[]]
   }>()
 

@@ -3,7 +3,7 @@
     <div class="beneficiary-section fr-p-3w">
       <BeneficiaryDocumentAddButton
         :beneficiary-id="beneficiary.id"
-        @refresh-documents="refresh"
+        @refresh-documents="onRefresh"
       />
       <BeneficiaryDocumentFilters @filter="filters = $event" />
     </div>
@@ -27,6 +27,8 @@
         v-model:sort="orderBy"
         :documents="documents"
         :pending="pending"
+        :beneficiary="beneficiary"
+        @refresh-documents="onRefresh"
       />
     </div>
     <!-- <div
@@ -82,7 +84,7 @@
     orderBy: orderBy.value
   }))
 
-  const { data: documentsTotal } =
+  const { data: documentsTotal, refresh: refreshDocumentsTotal } =
     await trpcClient.beneficiary.getBeneficiaryDocumentsTotal.useQuery({
       id: props.beneficiary.id
     })
@@ -91,7 +93,7 @@
     data: documentsRequest,
     error,
     pending,
-    refresh
+    refresh: refreshDocumentsRequest
   } = await trpcClient.beneficiary.getBeneficiaryDocuments.useQuery(queryInput)
 
   const documents = computed(() => documentsRequest.value || [])
@@ -106,4 +108,9 @@
       focusAndScrollTo(`#document-${item}`)
     }
   })
+
+  function onRefresh() {
+    refreshDocumentsRequest()
+    refreshDocumentsTotal()
+  }
 </script>
