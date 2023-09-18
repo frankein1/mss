@@ -41,15 +41,20 @@ function loadFixturesUsers() {
 function loadFixturesBeneficiaries() {
   console.log('👥 Beneficiaries...')
 
-  return prismaClient.beneficiary.createMany({
-    data: fixturesBeneficiaries,
-    skipDuplicates: true
+  // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
+  return fixturesBeneficiaries.map(({ id, ...data }) => {
+    return prismaClient.beneficiary.upsert({
+      create: { id, ...data },
+      where: { id },
+      update: {}
+    })
   })
 }
 
 function loadFixturesFollowups() {
   console.log('🤝 Followups...')
 
+  // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
   return fixturesFollowups.map(({ id, ...data }) => {
     return prismaClient.followup.upsert({
       create: { id, ...data },
@@ -73,7 +78,7 @@ function loadFixtures() {
     loadFixtureStructure(),
     loadFixturesFollowupTypes(),
     loadFixturesUsers(),
-    loadFixturesBeneficiaries(),
+    ...loadFixturesBeneficiaries(),
     ...loadFixturesFollowups(),
     loadFixturesHelpRequests()
   ]
