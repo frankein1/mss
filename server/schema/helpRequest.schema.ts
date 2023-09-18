@@ -12,13 +12,15 @@ import {
   errorMessages,
   kindOfBooleanSchema,
   withEmptyValueOptionalNativeEnum,
-  requiredNativeEnum
+  requiredNativeEnum,
+  numeroPegaseContraint,
+  wordConstraint
 } from '~/utils/zod'
 
 const createHelpRequestSchema = z.object({
   beneficiaryId: z.string().uuid(),
   openingDate: z.coerce.date(errorMessages),
-  numeroPegase: z.string().nullish(),
+  numeroPegase: numeroPegaseContraint.nullish(),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   typeId: z.string(errorMessages).uuid(),
   documents: z.array(z.string(), errorMessages).default([]),
@@ -33,12 +35,12 @@ const createHelpRequestSchema = z.object({
   reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
   paymentDate: z.coerce.date(errorMessages).nullish(),
   handlingDate: z.coerce.date(errorMessages).nullish(),
-  refusalReason: z.string().nullish(),
-  prescribingOrganizationId: z.string().nullish(),
-  instructorOrganizationId: z.string().nullish(),
+  refusalReason: wordConstraint().nullish(),
+  prescribingOrganizationId: z.string().uuid().nullish(),
+  instructorOrganizationId: z.string().uuid().nullish(),
   dispatchDate: z.coerce.date(errorMessages).nullish(),
-  synthesis: z.string().nullish(),
-  privateSynthesis: z.string().nullish(),
+  synthesis: wordConstraint(3000).nullish(),
+  privateSynthesis: wordConstraint(3000).nullish(),
   dueDate: z.coerce.date(errorMessages).nullish(),
   fullFile: z.boolean().default(false)
 })

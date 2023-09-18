@@ -1,7 +1,8 @@
 import { z } from 'zod'
+import { wordConstraint } from '~/utils/zod'
 
 const addCommentSchema = z.object({
-  content: z.string(),
+  content: wordConstraint(3000),
   beneficiaryId: z.string().uuid(),
   isFollowup: z.boolean(),
   historyId: z.string().uuid()

@@ -1,9 +1,10 @@
 import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 import { userAdminFilterSchema } from '~/server/schema'
+import { wordConstraint } from '~/utils/zod'
 
 export const adminGetUsersSchema = z.object({
-  search: z.string().nullish(),
+  search: wordConstraint().nullish(),
   filters: userAdminFilterSchema,
   orderBy: z.array(
     z.object({

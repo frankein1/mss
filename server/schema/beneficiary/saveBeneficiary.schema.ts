@@ -30,7 +30,14 @@ import {
   stringOrEmpty,
   withEmptyValueOptionalNativeEnum,
   validZipcode,
-  emailOrEmpty
+  emailOrEmpty,
+  socialSecurityNumberConstraint,
+  unemploymentNumberConstraint,
+  cafNumberConstraint,
+  wordConstraint,
+  phoneConstraint,
+  siretConstraint,
+  numeroPegaseContraint
 } from '~/utils/zod'
 
 export const saveBeneficiarySchema = z.object({
@@ -46,31 +53,31 @@ export const saveBeneficiarySchema = z.object({
     status: requiredNativeEnum(BeneficiaryStatus),
     title: withEmptyValueOptionalNativeEnum(BeneficiaryTitle),
     firstName: beneficiaryFirstNameSchema,
-    usualName: beneficiaryLastNameSchema,
+    usualName: beneficiaryLastNameSchema.nullish(),
     birthName: beneficiaryLastNameSchema,
     birthDate: z.coerce.date(errorMessages).nullish(),
-    birthPlace: z.string().nullish(),
+    birthPlace: wordConstraint().nullish(),
     deathDate: z.coerce.date(errorMessages).nullish(),
     gender: withEmptyValueOptionalNativeEnum(Gender),
     nationality: withEmptyValueOptionalNativeEnum(Nationality),
-    numeroPegase: z.string().nullish(),
+    numeroPegase: numeroPegaseContraint.nullish(),
     accommodationMode: withEmptyValueOptionalNativeEnum(
       BeneficiaryAccommodationMode
     ),
-    accommodationName: z.string().nullish(),
-    accommodationAdditionalInformation: z.string().nullish(),
+    accommodationName: wordConstraint().nullish(),
+    accommodationAdditionalInformation: wordConstraint(200).nullish(),
     zipcode: stringOrEmpty(z.string().min(5, validZipcode)),
-    city: z.string().nullish(),
-    region: z.string().nullish(),
+    city: wordConstraint().nullish(),
+    region: wordConstraint().nullish(),
     accommodationZone: withEmptyValueOptionalNativeEnum(
       BeneficiaryAccommodationZone
     ),
-    streetNumber: z.string().nullish(),
-    street: z.string().nullish(),
-    addressComplement: z.string().nullish(),
+    streetNumber: wordConstraint(10).nullish(),
+    street: wordConstraint().nullish(),
+    addressComplement: wordConstraint(200).nullish(),
     noPhone: z.boolean().default(false),
-    phone1: z.string().nullish(),
-    phone2: z.string().nullish(),
+    phone1: phoneConstraint.nullish(),
+    phone2: phoneConstraint.nullish(),
     email: emailOrEmpty(),
     caregiver: z.boolean().default(false),
     mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility)
@@ -88,24 +95,18 @@ export const saveBeneficiarySchema = z.object({
   }),
   health: z.object({
     gir: withEmptyValueOptionalNativeEnum(BeneficiaryGir),
-    doctor: z.string().nullish(),
-    healthAdditionalInformation: z.string().nullish(),
-    socialSecurityNumber: z
-      .string()
-      .regex(
-        /^([12] \d{2} (0[1-9]|1[0-2]) (2[AB]|\d{2}) \d{3} \d{3})( \d{2})?$|^$/,
-        'Veuillez entrer un numéro de sécurité sociale valide'
-      )
-      .nullish(),
-    insurance: z.string().nullish()
+    doctor: wordConstraint().nullish(),
+    healthAdditionalInformation: wordConstraint(200).nullish(),
+    socialSecurityNumber: socialSecurityNumberConstraint.nullish(),
+    insurance: wordConstraint().nullish()
   }),
   occupation: z.object({
     socioProfessionalCategory: withEmptyValueOptionalNativeEnum(
       BeneficiarySocioProfessionalCategory
     ),
-    occupation: z.string().nullish(),
-    employer: z.string().nullish(),
-    employerSiret: z.string().nullish(),
+    occupation: wordConstraint().nullish(),
+    employer: wordConstraint().nullish(),
+    employerSiret: siretConstraint.nullish(),
     mainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
     mainIncomeAmount: z.coerce.number().nullish(),
     partnerMainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
@@ -114,14 +115,14 @@ export const saveBeneficiarySchema = z.object({
       z.nativeEnum(IncomeSource, errorMessages)
     ),
     majorChildrenMainIncomeAmount: z.coerce.number().nullish(),
-    unemploymentNumber: z.string().nullish(),
+    unemploymentNumber: unemploymentNumberConstraint.nullish(),
     pensionOrganisations: z.array(
       z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)
     ),
-    otherPensionOrganisations: z.string().nullish(),
-    cafNumber: z.string().nullish(),
-    bank: z.string().nullish(),
-    funeralContract: z.string().nullish(),
+    otherPensionOrganisations: wordConstraint().nullish(),
+    cafNumber: cafNumberConstraint.nullish(),
+    bank: wordConstraint().nullish(),
+    funeralContract: wordConstraint().nullish(),
     ministereCategorie: withEmptyValueOptionalNativeEnum(
       BeneficiaryMinistereCategorie
     ),
@@ -136,16 +137,16 @@ export const saveBeneficiarySchema = z.object({
     protectionMeasure: withEmptyValueOptionalNativeEnum(
       BeneficiaryProtectionMeasure
     ),
-    representative: z.string().nullish(),
-    prescribingStructure: z.string().nullish(),
+    representative: wordConstraint().nullish(),
+    prescribingStructure: wordConstraint().nullish(),
     orientationType: withEmptyValueOptionalNativeEnum(
       BeneficiaryOrientationType
     ),
-    orientationStructure: z.string().nullish(),
-    serviceProviders: z.string().nullish(),
-    involvedPartners: z.string().nullish()
+    orientationStructure: wordConstraint().nullish(),
+    serviceProviders: wordConstraint().nullish(),
+    involvedPartners: wordConstraint().nullish()
   }),
-  additionalInformation: z.string().nullish()
+  additionalInformation: wordConstraint(200).nullish()
 })
 
 export type SaveBeneficiaryInput = z.infer<typeof saveBeneficiarySchema>
