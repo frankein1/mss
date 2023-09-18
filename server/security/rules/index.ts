@@ -30,7 +30,8 @@ export {
   canEditBeneficiaryReferents,
   canViewBeneficiaryNir,
   canSetBeneficiaryNir,
-  canSaveBeneficiaryWithCompleteInfo
+  canSaveBeneficiaryWithCompleteInfo,
+  canSaveToBeneficiaryBeneficiaryDraft
 } from './beneficiary'
 
 export {
@@ -87,12 +88,7 @@ export {
   canExportStats
 } from './export'
 
-export {
-  canViewBeneficiaryDraft,
-  canUpdateBeneficiaryDraft,
-  canSaveToBeneficiaryBeneficiaryDraft,
-  canDeleteBeneficiaryDraft
-} from './beneficiaryDraft'
+export { canViewDraft, canUpdateDraft, canDeleteDraft } from './draft'
 
 // A rule is a synchronous function taking
 // -- grantee (the authenticated user)

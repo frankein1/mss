@@ -2,9 +2,15 @@ import { StructureType } from '@prisma/client'
 import type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
-  SecurityTargetWithReferents
+  SecurityTargetWithReferents,
+  SecurityTargetWithCreator
 } from './types'
-import { isInSameStructureAs, isReferentFor, hasAllowedRole } from './helpers'
+import {
+  isInSameStructureAs,
+  isReferentFor,
+  hasAllowedRole,
+  isCreator
+} from './helpers'
 
 export const canOnlyListItsBeneficiaries = (
   grantee: SecurityRuleGrantee
@@ -90,3 +96,8 @@ export const canDeleteBeneficiary = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure
 ): boolean => isInSameStructureAs(grantee, beneficiary, ['StructureManager'])
+
+export const canSaveToBeneficiaryBeneficiaryDraft = (
+  grantee: SecurityRuleGrantee,
+  beneficiaryDraft: SecurityTargetWithCreator
+): boolean => isCreator(grantee, beneficiaryDraft)

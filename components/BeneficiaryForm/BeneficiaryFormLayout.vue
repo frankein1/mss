@@ -75,7 +75,7 @@
 
     if (draftId) {
       try {
-        await useTrpcClient().beneficiaryDraft.delete.mutate({ id: draftId })
+        await useTrpcClient().draft.delete.mutate({ id: draftId })
       } catch {
         navigateTo(RoutePath.AppBeneficiariesAdd())
       }

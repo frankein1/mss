@@ -78,7 +78,7 @@ model User {
   instructorOrganization    InstructorOrganization[]
   CGUHistory                CGUHistory[]
   userActivities            UserActivity[]
-  createdBeneficiariesDraft BeneficiaryDraft[]       @relation(name: "created_beneficiaries_draft")
+  createdDrafts Draft[]       @relation(name: "created_drafts")
 
   @@map("user")
 }
@@ -116,7 +116,7 @@ model Structure {
   instructorOrganization InstructorOrganization[]
   userActivities         UserActivity[]
   lastActivity           DateTime?                @map("last_activity")
-  beneficiaryDrafts      BeneficiaryDraft[]
+  drafts      Draft[]
 
   @@map("structure")
 }
@@ -1152,23 +1152,18 @@ enum BeneficiaryMinistereDepartementServiceAc {
   Sgmcas
 }
 
-model BeneficiaryDraft {
+model Draft {
   id String @id @default(uuid()) @db.Uuid
 
   structure   Structure @relation(fields: [structureId], references: [id])
   structureId String    @map("structure_id") @db.Uuid
 
   createdById String? @map("created_by_id") @db.Uuid
-  createdBy   User?   @relation(name: "created_beneficiaries_draft", fields: [createdById], references: [id])
+  createdBy   User?   @relation(name: "created_drafts", fields: [createdById], references: [id])
 
-  general               Json?
-  taxHousehold          Json?
-  relatives             Json?
-  health                Json?
-  occupationIncome      Json?
-  externalOrganisations Json?
+  content               Json?
 
-  @@map("beneficiary_draft")
+  @@map("draft")
 }
 
 model Beneficiary {
@@ -1445,7 +1440,7 @@ enum UserActivityObject {
   Document
   Notification
   User
-  BeneficiaryDraft
+  Draft
 }
 
 model UserActivity {
