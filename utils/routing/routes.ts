@@ -124,7 +124,8 @@ export const RoutePath = {
   [Route.AppBeneficiaries]: () => BeneficiariesRoute,
   [Route.AppBeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
   [Route.AppBeneficiariesSave]: () => `${BeneficiariesRoute}/save`,
-  [Route.AppBeneficiariesSaveInfo]: () => `${BeneficiariesRoute}/save/info`,
+  [Route.AppBeneficiariesSaveInfo]: (draftId: string) =>
+    `${BeneficiariesRoute}/save/${draftId}/info`,
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,

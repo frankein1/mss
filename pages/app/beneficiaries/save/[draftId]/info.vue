@@ -52,14 +52,20 @@
     error: agentsError
   } = await trpcClient.config.getAgents.useQuery()
 
-  const { data: beneficiaryDraft, pending: beneficiaryDraftPending } =
-    await useAsyncData(loadBeneficiaryDraft)
+  const {
+    data: beneficiaryDraft,
+    pending: beneficiaryDraftPending,
+    error: beneficiaryDraftError
+  } = await useAsyncData(loadBeneficiaryDraft)
 
   const pending = computed(
     () => agentsPending.value || beneficiaryDraftPending.value
   )
 
   const fetchError = computed(() => {
+    if (beneficiaryDraftError.value) {
+      return "Le brouillon de la fiche bénéficiaire n'a pas pu être chargé."
+    }
     if (agentsError.value) {
       return "La liste des référents n'a pas pu être chargée."
     }
@@ -86,14 +92,10 @@
   }))
 
   async function loadBeneficiaryDraft() {
-    const draftId = route.query.draftId as string | null
-
-    if (!draftId) {
-      return undefined
-    }
+    const draftId = route.params.draftId as string
 
     const beneficiaryDraft = await trpcClient.beneficiaryDraft.get.query({
-      id: route.query.draftId as string
+      id: draftId
     })
 
     return {
