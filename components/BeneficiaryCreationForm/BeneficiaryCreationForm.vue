@@ -34,6 +34,7 @@
           name="phone1"
           :label="beneficiaryFieldLabels.phone1"
           type="tel"
+          no-hint
         />
         <VeeInput
           name="email"

@@ -79,6 +79,7 @@
       pattern?: string
       step?: string
       min?: number
+      noHint?: boolean
     }>(),
     {
       type: 'text',
@@ -90,7 +91,8 @@
       required: false,
       pattern: undefined,
       step: undefined,
-      min: undefined
+      min: undefined,
+      noHint: false
     }
   )
 
@@ -115,6 +117,9 @@
   )
 
   const hint = computed(() => {
+    if (!props.noHint) {
+      return undefined
+    }
     if (props.type === 'tel') {
       const hintBase = 'Format attendu : 01 22 33 44 55'
       return props.hint ? `${hintBase}. ${props.hint}` : hintBase
