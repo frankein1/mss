@@ -1,5 +1,6 @@
 import { H3Event } from 'h3'
 import { signJwt, verifyJwt } from '../lib/jwt'
+import { cookieOptions } from '~/utils/cookie'
 
 export default defineEventHandler(event => {
   const cookies = parseCookies(event)
@@ -39,12 +40,12 @@ export default defineEventHandler(event => {
       jwtKey
     )
 
-    setCookie(event, sessionCookieKey, newSessionToken, {
-      httpOnly: true,
-      path: '/',
-      secure: process.env.NODE_ENV === 'production',
-      expires: new Date(Date.now() + newExpiresIn * 1000)
-    })
+    setCookie(
+      event,
+      sessionCookieKey,
+      newSessionToken,
+      cookieOptions({ expiresIn: newExpiresIn })
+    )
   }
 })
 

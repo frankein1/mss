@@ -3,6 +3,7 @@ import { signJwt } from '~/server/lib/jwt'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { JwtUser } from '~/types/user'
+import { cookieOptions } from '~/utils/cookie'
 
 export default defineEventHandler(async event => {
   const { token } = await readBody(event)
@@ -64,12 +65,7 @@ export default defineEventHandler(async event => {
 
   const sessionCookieKey = config.public.sessionCookieKey
 
-  setCookie(event, sessionCookieKey, sessionToken, {
-    httpOnly: true,
-    path: '/',
-    secure: process.env.NODE_ENV === 'production',
-    expires: new Date(Date.now() + expiresIn * 1000)
-  })
+  setCookie(event, sessionCookieKey, sessionToken, cookieOptions({ expiresIn }))
 
   await prismaClient.user.update({
     where: {
