@@ -23,7 +23,7 @@
     filter: [filters: BeneficiaryDocumentFilterInput]
   }>()
 
-  const beneficiaryDocumentFilters = computed<FilterProp[]>(() => [
+  const beneficiaryDocumentFilters: FilterProp[] = [
     {
       name: 'type',
       label: 'Type de document',
@@ -36,7 +36,7 @@
       options: withEmptyValue(documentTagOptions),
       type: FilterType.SelectOne
     }
-  ])
+  ]
 
   function onFilter(filters: BeneficiaryDocumentFilterInput) {
     emit('filter', filters)

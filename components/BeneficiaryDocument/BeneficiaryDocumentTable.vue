@@ -48,14 +48,11 @@
 </template>
 
 <script setup lang="ts">
-  import {
-    GetBeneficiaryDocumentsOutput,
-    GetBeneficiaryOutput
-  } from '~/server/routers'
+  import { Documents, GetBeneficiaryOutput } from '~/server/routers'
   import type { BeneficiaryDocumentSort } from '~/types/table'
 
   const props = defineProps<{
-    documents: GetBeneficiaryDocumentsOutput
+    documents: Documents
     beneficiary: GetBeneficiaryOutput
     pending: boolean
     sort: BeneficiaryDocumentSort[]

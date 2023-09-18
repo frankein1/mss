@@ -73,7 +73,7 @@ export const getBeneficiaryDocumentsHandler = async ({
   const where: Prisma.DocumentWhereInput = {
     beneficiaryId,
     ...permissionConditions,
-    ...prepareBeneficiaryDocumentsFilters(filters)
+    ...prepareBeneficiaryDocumentsFilters(filters || {})
   }
 
   const [documents, count, totalCount] = await Promise.all([
@@ -111,3 +111,9 @@ export const getBeneficiaryDocumentsHandler = async ({
     totalCount
   }
 }
+
+export type GetBeneficiaryDocumentsOutput = Prisma.PromiseReturnType<
+  typeof getBeneficiaryDocumentsHandler
+>
+export type Documents = GetBeneficiaryDocumentsOutput['documents']
+export type DocumentItem = Documents[0]

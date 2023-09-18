@@ -44,9 +44,7 @@
     error,
     refresh
   } = await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery({
-    beneficiaryId: props.beneficiaryId,
-    filters: {},
-    orderBy: []
+    beneficiaryId: props.beneficiaryId
   })
 
   const documents = computed(() => documentsRequest.value?.documents || [])

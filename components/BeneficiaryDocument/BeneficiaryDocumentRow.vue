@@ -32,50 +32,57 @@
       >
     </td>
     <td>
-      <button
-        class="fr-btn fr-btn--tertiary-no-outline fr-icon-eye-line"
-        :title="'Nouvel onglet - Voir ' + document.name"
-        @click="onView"
-      >
-        Voir
-      </button>
-      <a
-        ref="downloadLink"
-        target="_blank"
-        :download="document.name"
-        hidden
-      />
-      <button
-        class="fr-btn fr-btn--tertiary-no-outline fr-icon-download-line"
-        :title="'Télécharger ' + document.name"
-        @click="onDownload"
-      >
-        Télécharger
-      </button>
-      <button
-        v-if="canEdit"
-        class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
-        data-fr-opened="false"
-        aria-controls="global-modal"
-        @click="onEdit"
-      >
-        Modifier le document
-      </button>
-      <button
-        v-if="canDelete"
-        class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-line"
-        @click="onDelete"
-      >
-        Supprimer le document
-      </button>
+      <ul class="fr-btns-group fr-btns-group--inline">
+        <li>
+          <button
+            class="fr-btn fr-btn--tertiary-no-outline fr-icon-eye-line"
+            :title="'Nouvel onglet - Voir ' + document.name"
+            @click="onView"
+          >
+            Voir
+          </button>
+        </li>
+        <li>
+          <a
+            ref="downloadLink"
+            target="_blank"
+            :download="document.name"
+            hidden
+          />
+          <button
+            class="fr-btn fr-btn--tertiary-no-outline fr-icon-download-line"
+            :title="'Télécharger ' + document.name"
+            @click="onDownload"
+          >
+            Télécharger
+          </button>
+        </li>
+        <li v-if="canEdit">
+          <button
+            class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
+            data-fr-opened="false"
+            aria-controls="global-modal"
+            @click="onEdit"
+          >
+            Modifier le document
+          </button>
+        </li>
+        <li v-if="canDelete">
+          <button
+            class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-line"
+            @click="onDelete"
+          >
+            Supprimer le document
+          </button>
+        </li>
+      </ul>
     </td>
   </tr>
 </template>
 
 <script lang="ts" setup>
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
-  import { DocumentItem } from './types'
-  import { GetBeneficiaryOutput } from '~/server/routers'
+  import { GetBeneficiaryOutput, DocumentItem } from '~/server/routers'
   import { canEditDocument, canDeleteDocument } from '~/server/security/rules'
   import { EditDocumentInput } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
@@ -115,28 +122,24 @@
     () => !!props.document._count.Notification
   )
 
-  const onView = async () => {
-    if (process.client) {
-      matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
-      const { url } = await useTrpcClient().documents.createViewUrl.mutate({
-        key: props.document.key
-      })
-      window.open(url, '_blank')?.focus()
-    }
+  async function onView() {
+    matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
+    const { url } = await useTrpcClient().documents.createViewUrl.mutate({
+      key: props.document.key
+    })
+    window.open(url, '_blank')?.focus()
   }
 
-  const onDownload = async () => {
-    if (process.client) {
-      matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
-      const { url } = await useTrpcClient().documents.createViewUrl.mutate({
-        key: props.document.key
-      })
-      const link = downloadLink.value
-      if (link) {
-        link.href = url
-        link.type = props.document.type
-        link.click()
-      }
+  async function onDownload() {
+    matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
+    const { url } = await useTrpcClient().documents.createViewUrl.mutate({
+      key: props.document.key
+    })
+    const link = downloadLink.value
+    if (link) {
+      link.href = url
+      link.type = props.document.type
+      link.click()
     }
   }
 
@@ -174,5 +177,9 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+  }
+
+  .fr-btns-group .fr-btn {
+    margin-bottom: 0;
   }
 </style>

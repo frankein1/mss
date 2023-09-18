@@ -2,5 +2,8 @@ export type {
   GetBeneficiaryFollowupTypesOutput,
   GetBeneficiariesOutput,
   GetBeneficiaryOutput,
-  HistoryItem
+  HistoryItem,
+  GetBeneficiaryDocumentsOutput,
+  Documents,
+  DocumentItem
 } from '~/server/controller/beneficiary'

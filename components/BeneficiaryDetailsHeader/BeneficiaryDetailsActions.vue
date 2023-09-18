@@ -1,5 +1,5 @@
 <template>
-  <ul class="fr-btns-group fr-btns-group--inline-md">
+  <ul class="fr-btns-group fr-btns-group--inline">
     <li v-if="canDelete">
       <button
         class="fr-btn fr-btn--secondary fr-icon-delete-line btn-delete-action"

@@ -6,13 +6,15 @@ import { beneficiaryDocumentFilterSchema } from '~/server/schema'
 export const getDocumentsSchema = z
   .object({
     beneficiaryId: z.string(),
-    filters: beneficiaryDocumentFilterSchema,
-    orderBy: z.array(
-      z.object({
-        name: z.nativeEnum(Prisma.SortOrder).optional(),
-        created: z.nativeEnum(Prisma.SortOrder).optional()
-      })
-    )
+    filters: beneficiaryDocumentFilterSchema.optional(),
+    orderBy: z
+      .array(
+        z.object({
+          name: z.nativeEnum(Prisma.SortOrder).optional(),
+          created: z.nativeEnum(Prisma.SortOrder).optional()
+        })
+      )
+      .optional()
   })
   .merge(optionalPaginatedSchema)
 
