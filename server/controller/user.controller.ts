@@ -16,6 +16,7 @@ import {
   canListUsers
 } from '~/server/security/rules'
 import { getEmailContent } from '~/utils/user/getEmailContent'
+import { cookieOptions } from '~/utils/cookie'
 
 export const updateUserHandler = async ({
   ctx: { user },
@@ -155,12 +156,8 @@ export const acceptCGUHandler = async ({
   event.context.auth = { newUser }
 
   const { sessionToken, expiresIn } = signJwt(newUser, jwtKey)
-  setCookie(event, sessionCookieKey, sessionToken, {
-    httpOnly: true,
-    path: '/',
-    secure: process.env.NODE_ENV === 'production',
-    expires: new Date(Date.now() + expiresIn * 1000)
-  })
+
+  setCookie(event, sessionCookieKey, sessionToken, cookieOptions({ expiresIn }))
 
   return newUser
 }
