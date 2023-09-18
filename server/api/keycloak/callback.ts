@@ -35,7 +35,7 @@ export default defineEventHandler(async event => {
   const { idToken } = inclusionConnectToken
   const { email, sub } = parseInclusionConnectJwt(idToken)
 
-  const user = await getUser(email)
+  const user = await getUser(email.toLowerCase())
 
   const { appUrl } = config.public
 
