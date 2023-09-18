@@ -68,7 +68,12 @@ export default defineNuxtConfig({
   ],
 
   // Modules: https://v3.nuxtjs.org/api/configuration/nuxt.config#modules
-  modules: ['@pinia/nuxt', '@vee-validate/nuxt', 'nuxt-scheduler'],
+  modules: [
+    '@pinia/nuxt',
+    '@vee-validate/nuxt',
+    'nuxt-scheduler',
+    'nuxt-security'
+  ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
@@ -150,5 +155,12 @@ export default defineNuxtConfig({
   sourcemap: {
     client: true,
     server: true
+  },
+  routeRules: {
+    '/api/s3/create': {
+      security: {
+        xssValidator: false
+      }
+    }
   }
 })
