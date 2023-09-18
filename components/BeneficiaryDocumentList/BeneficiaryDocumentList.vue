@@ -1,42 +1,41 @@
 <template>
-  <div class="documents_container">
-    <div
-      v-if="documents?.length"
-      class="documents_content"
-    >
-      <BeneficiaryDocumentType
-        :document-type="DocumentType.Cerfa"
-        :documents="cerfas"
-        :beneficiary="beneficiary"
-        @refresh-documents="refresh"
-      />
-      <BeneficiaryDocumentType
-        :document-type="DocumentType.Rapports"
-        :documents="rapports"
-        :beneficiary="beneficiary"
-        @refresh-documents="refresh"
-      />
-      <BeneficiaryDocumentType
-        :document-type="DocumentType.Justificatifs"
-        :documents="justificatifs"
-        :beneficiary="beneficiary"
-        @refresh-documents="refresh"
-      />
-      <BeneficiaryDocumentType
-        :document-type="DocumentType.HistoriqueCourrier"
-        :documents="courriers"
-        :beneficiary="beneficiary"
-        @refresh-documents="refresh"
-      />
-    </div>
-    <div class="documents_actions">
-      <BeneficiaryDocumentAddButton
-        :beneficiary-id="beneficiary.id"
-        @refresh-documents="refresh"
-      />
-    </div>
+  <div
+    v-if="documents?.length"
+    class="documents_content"
+  >
+    <BeneficiaryDocumentType
+      :document-type="DocumentType.Cerfa"
+      :documents="cerfas"
+      :beneficiary="beneficiary"
+      @refresh-documents="refresh"
+    />
+    <BeneficiaryDocumentType
+      :document-type="DocumentType.Rapports"
+      :documents="rapports"
+      :beneficiary="beneficiary"
+      @refresh-documents="refresh"
+    />
+    <BeneficiaryDocumentType
+      :document-type="DocumentType.Justificatifs"
+      :documents="justificatifs"
+      :beneficiary="beneficiary"
+      @refresh-documents="refresh"
+    />
+    <BeneficiaryDocumentType
+      :document-type="DocumentType.HistoriqueCourrier"
+      :documents="courriers"
+      :beneficiary="beneficiary"
+      @refresh-documents="refresh"
+    />
+  </div>
+  <div class="documents_actions">
+    <BeneficiaryDocumentAddButton
+      :beneficiary-id="beneficiary.id"
+      @refresh-documents="refresh"
+    />
   </div>
 </template>
+
 <script setup lang="ts">
   import { DocumentType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'

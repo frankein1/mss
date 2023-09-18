@@ -4,8 +4,11 @@
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <AtomTabs>
-          <Tab name="Bénéficiaires">
+        <AtomTabs tab-list-name="Statistiques de la structure">
+          <AtomTab
+            tab-id="Beneficiaires"
+            title="Bénéficiaires"
+          >
             <AtomAlert
               v-if="fetchError"
               :alert-type="AlertType.Error"
@@ -21,8 +24,11 @@
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
-          </Tab>
-          <Tab name="Accompagnements">
+          </AtomTab>
+          <AtomTab
+            tab-id="Accompagnements"
+            title="Accompagnements"
+          >
             <AtomAlert
               v-if="fetchError"
               :alert-type="AlertType.Error"
@@ -38,7 +44,7 @@
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
-          </Tab>
+          </AtomTab>
         </AtomTabs>
       </div>
     </div>
@@ -46,7 +52,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { Tab } from 'vue3-tabs-component'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'

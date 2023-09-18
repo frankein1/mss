@@ -1,73 +1,133 @@
 <template>
-  <Tabs
-    wrapper-class="main-container fr-tabs fr-transition-none"
-    nav-class="fr-tabs__list"
-    nav-item-link-class="fr-tabs__tab"
-    panels-wrapper-class="fr-tabs__panel"
-    ><slot></slot>
-  </Tabs>
+  <div
+    ref="$el"
+    class="fr-tabs fr-transition-none"
+  >
+    <ul
+      class="fr-tabs__list"
+      role="tablist"
+      :aria-label="tabListName"
+    >
+      <li
+        v-for="(tab, index) in tabs"
+        :key="tab.tabId"
+        role="presentation"
+      >
+        <a
+          :id="tab.tabId"
+          class="fr-tabs__tab"
+          :class="[tab.icon ? `fr-tabs__tab--icon-left ${tab.icon}` : '']"
+          :tabindex="index === initiallySelectedIndex ? 0 : -1"
+          role="tab"
+          :aria-selected="index === initiallySelectedIndex"
+          :aria-controls="panelId(tab.tabId)"
+          :href="tabHref(tab.tabId)"
+        >
+          {{ tab.title }}
+        </a>
+      </li>
+    </ul>
+    <slot></slot>
+  </div>
 </template>
 
 <script setup lang="ts">
-  import { Tabs } from 'vue3-tabs-component'
+  import { remToPx } from '~/utils/remToPx'
+  import { panelId } from '~/utils/tab'
+
+  defineProps<{
+    tabListName: string
+  }>()
+
+  const route = useRoute()
+
+  // DSFR handles by itself the update of the selected tab. This ref allows to reinitialise the selected tab
+  const initiallySelectedIndex = ref(0)
+  const tabsPanelMinHeight = ref('30rem')
+  const $el = ref<HTMLDivElement | null>(null)
+
+  const slots = useSlots()
+
+  const tabs = computed(() => {
+    if (!slots.default) {
+      return []
+    }
+
+    return slots
+      .default()
+      .filter(({ props }) => !!props && 'tab-id' in props && 'title' in props)
+      .map(({ props }) => ({
+        tabId: props?.['tab-id'],
+        title: props?.title,
+        icon: props?.icon
+      }))
+  })
+
+  onMounted(() => {
+    // Enable navigating between tabs
+    window.addEventListener('hashchange', () => {
+      onSelectTab(window.location.hash.slice(1))
+    })
+
+    if (route.hash) {
+      onSelectTab(route.hash.slice(1))
+    }
+
+    setTabsPanelMinHeight()
+  })
+
+  function setTabsPanelMinHeight() {
+    // This hack prevents a disturbing scroll on panel change due to the changing tab height
+    if ($el.value) {
+      const tabPanels = Array.from(
+        $el.value.querySelectorAll<HTMLDivElement>('.fr-tabs__panel')
+      )
+      const panelMaxHeight = tabPanels.reduce((maxHeight, panel) => {
+        const panelHeight = panel.offsetHeight
+        return panelHeight > maxHeight ? panelHeight : maxHeight
+      }, remToPx(30))
+      tabsPanelMinHeight.value = `${panelMaxHeight}px`
+    }
+  }
+
+  function onSelectTab(tabId: string) {
+    const tabIndex = tabs.value.findIndex(tab => tab.tabId === tabId)
+
+    if (tabIndex === -1) {
+      return
+    }
+
+    initiallySelectedIndex.value = tabIndex
+  }
+
+  function tabHref(tabId: string) {
+    return `#${tabId}`
+  }
 </script>
 
 <style lang="scss" scoped>
-  @use '~/assets/style/variables' as *;
-
-  $tabs-list-height: 4.5rem;
-  $tabs-list-border-bottom-size: 1px;
-  $tab-border-bottom-size: 3px;
-
   .fr-tabs {
-    margin-top: 0;
-    padding-top: 0;
+    --tabs-panel-min-height: v-bind('tabsPanelMinHeight');
 
-    &::before {
-      box-shadow: none;
-    }
+    box-shadow: none;
   }
 
-  :deep(.fr-tabs__panel) {
-    padding: 1.5rem;
+  .fr-tabs::before {
+    box-shadow: inset 0 1px 0 0 var(--border-default-grey);
   }
 
-  :deep(.fr-tabs__list) {
-    margin: 0;
-    min-height: $tabs-list-height;
-    padding: 0;
-    border-bottom: $tabs-list-border-bottom-size solid
-      var(--border-default-grey);
+  .fr-tabs__tab {
+    box-shadow: none;
+    background-image: none;
+    border-bottom: 1px solid var(--border-default-grey);
+    border-radius: 0.5rem 0.5rem 0 0;
   }
 
-  :deep(.fr-tabs__tab) {
-    font-size: 1.125rem;
-    padding: 1.5rem 2rem;
-    margin: 0;
-    border-bottom: $tab-border-bottom-size solid
-      var(--border-active-blue-france);
+  .fr-tabs__tab[aria-selected='true'] {
+    --text-active-blue-france: var(--primary);
 
-    &[aria-selected='true'] {
-      background-size: 0;
-    }
-
-    &:not([aria-selected='true']) {
-      --background-action-low-blue-france: #fff;
-      --hover: var(--background-default-grey-hover);
-      --active: var(--background-default-grey-active);
-
-      background-size: 0;
-      color: var(--text-disabled-grey);
-      border-bottom-color: transparent;
-    }
-
-    &::after {
-      content: none;
-    }
-  }
-
-  // Fix an empty tab blinking and allow to focus element between tabs
-  :deep(.fr-tabs__panel:not(.fr-tabs__panel--selected)) {
-    visibility: initial;
+    background-image: none;
+    border: 1px solid var(--border-default-grey);
+    border-bottom: 3px solid var(--primary);
   }
 </style>
