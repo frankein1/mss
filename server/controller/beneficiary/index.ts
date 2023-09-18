@@ -12,3 +12,4 @@ export { isBeneficiaryReferentHandler } from './is-beneficiary-referent.controll
 export { getBeneficiarySecurityTargetHandler } from './get-security-target.controller'
 export * from './get-followup-types.controller'
 export * from './update-general-information.controller'
+export * from './save-draft.controller'

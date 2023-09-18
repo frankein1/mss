@@ -11,18 +11,18 @@ export const createBeneficiaryDraftHandler = async ({
   input: CreateBeneficiaryInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiaryDraft = await prismaClient.beneficiaryDraft.create({
+  const beneficiaryDraft = await prismaClient.draft.create({
     data: {
       structureId: user.structureId,
       createdById: user.id,
-      general: input
+      content: { general: input }
     }
   })
 
   await addUserActivity({
     userId: user.id,
     activity: UserActivityType.CREATE,
-    object: 'BeneficiaryDraft',
+    object: 'Draft',
     objectId: beneficiaryDraft.id
   })
 

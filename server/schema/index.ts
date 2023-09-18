@@ -82,8 +82,6 @@ export type {
   BeneficiaryDocumentFilterInput
 } from './filter.schema'
 
-export * from './beneficiary'
-
 export {
   createOrUpdateEntourageSchema,
   createOrUpdateTaxHouseholdSchema
@@ -121,4 +119,5 @@ export type {
 
 export { addCommentSchema } from './comment.schema'
 export type { AddCommentInput } from './comment.schema'
+export * from './beneficiary'
 export * from './beneficiaryDraft'

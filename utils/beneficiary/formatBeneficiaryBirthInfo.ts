@@ -3,7 +3,7 @@ import { Beneficiary } from '@prisma/client'
 export function formatBeneficiaryBirthInfo(
   info: Pick<Beneficiary, 'birthDate' | 'birthPlace'>
 ) {
-  if (!info.birthDate && info.birthPlace) {
+  if (!info.birthDate && !info.birthPlace) {
     return ''
   }
   const res = ['Né(e)']

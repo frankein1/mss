@@ -28,7 +28,6 @@
 <script lang="ts" setup>
   import { UserStatus } from '@prisma/client'
   import {
-    CreateBeneficiaryInput,
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
@@ -36,6 +35,7 @@
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, RouteTitle } from '~/utils/routing'
+  import type { BeneficiaryDraft } from '~/types/beneficiary'
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -94,14 +94,14 @@
   async function loadBeneficiaryDraft() {
     const draftId = route.params.draftId as string
 
-    const beneficiaryDraft = await trpcClient.beneficiaryDraft.get.query({
+    const beneficiaryDraft = (await trpcClient.draft.get.query({
       id: draftId
-    })
+    })) as BeneficiaryDraft
 
     return {
       ...beneficiaryDraft,
-      general: beneficiaryDraft.general
-        ? (beneficiaryDraft.general as CreateBeneficiaryInput)
+      general: beneficiaryDraft.content?.general
+        ? beneficiaryDraft.content.general
         : null
     }
   }
@@ -123,12 +123,10 @@
     isSubmitting.value = true
 
     try {
-      const { id } = await trpcClient.beneficiaryDraft.saveToBeneficiary.mutate(
-        {
-          id: beneficiaryDraft.value?.id,
-          general: beneficiary
-        }
-      )
+      const { id } = await trpcClient.beneficiary.saveDraft.mutate({
+        id: beneficiaryDraft.value?.id,
+        general: beneficiary
+      })
 
       matomo.trackEvent(
         EventCategory.CreateBeneficiary,

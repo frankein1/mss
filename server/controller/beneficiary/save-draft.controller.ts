@@ -1,4 +1,4 @@
-import { UserActivityType, BeneficiaryDraft } from '@prisma/client'
+import { UserActivityType } from '@prisma/client'
 import {
   ProtectedAppContext,
   ProtectedAppContextUser,
@@ -7,28 +7,29 @@ import {
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
-  SaveToBeneficiaryInput,
+  SaveDraftInput,
   SaveBeneficiaryGeneralInformationInput
 } from '~/server/schema'
 import { canSaveToBeneficiaryBeneficiaryDraft } from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
+import { BeneficiaryDraft } from '~/types/beneficiary'
 
-export const saveToBeneficiaryHandler = async ({
+export const saveDraftHandler = async ({
   input,
   ctx: { user }
 }: {
-  input: SaveToBeneficiaryInput
+  input: SaveDraftInput
   ctx: ProtectedAppContext
 }) => {
   const { id: draftId } = input
   const beneficiaryDraft = draftId
-    ? await prismaClient.beneficiaryDraft.findUnique({
+    ? await prismaClient.draft.findUnique({
         where: { id: draftId }
       })
     : undefined
 
   if (
-    beneficiaryDraft &&
+    !beneficiaryDraft ||
     !canSaveToBeneficiaryBeneficiaryDraft(user, beneficiaryDraft)
   ) {
     throw forbiddenError()
@@ -50,7 +51,7 @@ export const saveToBeneficiaryHandler = async ({
     })
 
     if (beneficiaryDraft) {
-      await tx.beneficiaryDraft.delete({
+      await tx.draft.delete({
         where: {
           id: draftId
         }
@@ -63,10 +64,10 @@ export const saveToBeneficiaryHandler = async ({
 
 function prepareData(
   user: ProtectedAppContextUser,
-  input: SaveToBeneficiaryInput,
-  beneficiaryDraft?: BeneficiaryDraft | null
+  input: SaveDraftInput,
+  beneficiaryDraft: BeneficiaryDraft
 ) {
-  const general = (beneficiaryDraft?.general || input.general) as
+  const general = (input.general || beneficiaryDraft.content?.general) as
     | SaveBeneficiaryGeneralInformationInput
     | undefined
 
