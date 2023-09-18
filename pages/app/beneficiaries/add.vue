@@ -60,12 +60,7 @@
         const { id } =
           await trpcClient.beneficiaryDraft.create.mutate(beneficiary)
 
-        navigateTo({
-          path: RoutePath.AppBeneficiariesSaveInfo(),
-          query: {
-            draftId: id
-          }
-        })
+        navigateTo(RoutePath.AppBeneficiariesSaveInfo(id))
       } catch {
         snackbar.error(
           'La création du brouillon de la fiche bénéficiaire a échoué.'
