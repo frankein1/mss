@@ -33,7 +33,7 @@ function prepareBeneficiaryDocumentsFilters(
   const formattedFilters: Prisma.DocumentWhereInput = {}
 
   if (filters.tags) {
-    formattedFilters.tags = { hasSome: filters.tags }
+    formattedFilters.tags = { hasSome: [filters.tags] }
   }
 
   if (filters.type) {
