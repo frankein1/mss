@@ -6,12 +6,13 @@ import {
   validEmailMessage,
   requiredNativeEnum,
   requiredErrorMessage,
-  stringOrEmpty
+  stringOrEmpty,
+  wordConstraint
 } from '~/utils/zod'
 
 const adminCreateUserBaseSchema = z.object({
-  firstName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
-  lastName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
+  firstName: wordConstraint().min(2, minStringLengthMessage(2)),
+  lastName: wordConstraint().min(2, minStringLengthMessage(2)),
   email: z.string(errorMessages).email(validEmailMessage),
   role: requiredNativeEnum(UserRole),
   status: requiredNativeEnum(UserStatus),

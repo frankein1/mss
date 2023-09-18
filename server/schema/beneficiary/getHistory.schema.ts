@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { beneficiaryHistoryFilterSchema } from '../filter.schema'
 
 export const getHistorySchema = z.object({
-  beneficiaryId: z.string(),
+  beneficiaryId: z.string().uuid(),
   filters: beneficiaryHistoryFilterSchema
 })
 

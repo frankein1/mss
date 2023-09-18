@@ -1,5 +1,5 @@
-import { z } from 'zod'
+import { wordConstraint } from '~/utils/zod'
 
-const beneficiaryLastNameSchema = z.string().toUpperCase().nullish()
+const beneficiaryLastNameSchema = wordConstraint().toUpperCase()
 
 export { beneficiaryLastNameSchema }

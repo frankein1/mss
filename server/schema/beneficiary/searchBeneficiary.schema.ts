@@ -1,7 +1,8 @@
 import { z } from 'zod'
+import { wordConstraint } from '~/utils/zod'
 
 export const searchBeneficiarySchema = z.object({
-  query: z.string(),
+  query: wordConstraint(),
   excludedIds: z.array(z.string().uuid()).optional()
 })
 
