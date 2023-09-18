@@ -19,9 +19,9 @@
         @export="exportStats"
       />
     </div>
-    <div class="fr-tabs">
+    <div class="fr-tabs fr-transition-none">
       <ul
-        class="fr-tabs__list"
+        class="fr-tabs__list statshistory__tabs-list"
         :class="{ 'followups-tab-active': isFollowupsTabActive }"
         role="tablist"
         aria-label="Accompagnements"
@@ -115,7 +115,7 @@
       </div>
       <div
         id="followups-panel"
-        class="fr-tabs__panel fr-tabs__panel--selected fr-px-0"
+        class="fr-tabs__panel fr-px-0"
         role="tabpanel"
         aria-labelledby="followups-tab"
         tabindex="0"
@@ -285,19 +285,29 @@
 
   .fr-tabs {
     box-shadow: none;
+
+    &::before {
+      box-shadow: none;
+    }
   }
 
-  .fr-tabs__list {
+  .fr-tabs__list.statshistory__tabs-list {
     column-gap: 0.5rem;
     border-bottom: 3px solid var(--primary);
+    padding-bottom: 0;
 
     &.followups-tab-active {
       border-bottom: 3px solid var(--color-followup);
     }
   }
 
+  .fr-tabs__panel {
+    min-height: 0;
+  }
+
   #help-requests-tab,
   #followups-tab {
+    background-image: none;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
