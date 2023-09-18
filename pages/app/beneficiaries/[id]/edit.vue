@@ -254,7 +254,7 @@
       navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
     } catch {
       snackbar.error(
-        'La mise à jour de la synthèse a échoué.',
+        'La mise à jour de la fiche bénéficiaire a échoué.',
         () => formContainer.value?.querySelector('input')?.focus()
       )
     } finally {
