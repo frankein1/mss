@@ -11,8 +11,6 @@ export const keySchema = z.object({
 export { paginatedSchema } from './helpers.schema'
 export type { PaginatedInput } from './helpers.schema'
 
-export * from './beneficiary'
-
 export {
   addFollowupSchema,
   editFollowupSchema,
@@ -71,7 +69,8 @@ export {
   followupFilterSchema,
   helpRequestFilterSchema,
   beneficiaryHistoryFilterSchema,
-  userAdminFilterSchema
+  userAdminFilterSchema,
+  beneficiaryDocumentFilterSchema
 } from './filter.schema'
 export type {
   StatFilterInput,
@@ -79,8 +78,11 @@ export type {
   FollowupFilterInput,
   HelpRequestFilterInput,
   BeneficiaryHistoryFilterInput,
-  UserAdminFilterInput
+  UserAdminFilterInput,
+  BeneficiaryDocumentFilterInput
 } from './filter.schema'
+
+export * from './beneficiary'
 
 export {
   createOrUpdateEntourageSchema,

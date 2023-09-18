@@ -3,8 +3,11 @@
     <form
       :id="FILTERS_ID"
       ref="form"
-      class="filters fr-collapse"
-      :class="{ 'full-width-filters': fullWidthFilters }"
+      class="filters"
+      :class="{
+        'full-width-filters': fullWidthFilters,
+        'fr-collapse': !alwaysExpanded
+      }"
     >
       <template
         v-for="filter in filters"
@@ -51,9 +54,10 @@
         </li>
       </ul>
       <ul
+        v-if="!noReset || !expanded"
         class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg"
       >
-        <li>
+        <li v-if="!noReset">
           <button
             v-show="hasFilters"
             class="fr-btn fr-icon-filter-line"
@@ -63,7 +67,7 @@
             Réinitialiser
           </button>
         </li>
-        <li>
+        <li v-if="!alwaysExpanded">
           <button
             class="fr-btn fr-btn--secondary fr-icon-filter-line"
             aria-expanded="false"
@@ -96,11 +100,18 @@
     defineProps<{
       filters: FilterProp[]
       fullWidthFilters?: boolean
+      alwaysExpanded?: boolean
+      noReset?: boolean
       initialSelectedValues?: {
         [filterName: string]: string | string[] | Date | null
       }
     }>(),
-    { fullWidthFilters: false, initialSelectedValues: () => ({}) }
+    {
+      fullWidthFilters: false,
+      alwaysExpanded: false,
+      noReset: false,
+      initialSelectedValues: () => ({})
+    }
   )
 
   const initialSelectedFilters = computed<SelectedFilters>(() =>
@@ -127,7 +138,7 @@
 
   const FILTERS_ID = getRandomId('filters-')
   const form = ref<HTMLFormElement | null>(null)
-  const expanded = ref<boolean>(false)
+  const expanded = ref<boolean>(props.alwaysExpanded)
   const selectedFilters = ref<SelectedFilters>(initialSelectedFilters.value)
   // This timeout is used to defer the emission of filters and thus prevent to many API calls or specific race conditions
   const timeout = ref<NodeJS.Timeout | null>(null)

@@ -1,5 +1,5 @@
 <template>
-  <div class="section fr-p-4w fr-pl-2w fr-mt-1w">
+  <div class="beneficiary-section fr-p-4w fr-pl-2w fr-mt-1w">
     <div
       v-if="title"
       class="fr-container"
@@ -60,12 +60,6 @@
 </script>
 
 <style scoped>
-  .section {
-    border-radius: 8px;
-    border: 1px solid var(--border-default-grey);
-    background: white;
-  }
-
   .accordeon__btn {
     width: 100%;
     text-align: left;
