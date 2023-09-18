@@ -75,10 +75,10 @@ model User {
 
   prescribingOrganizations PrescribingOrganization[]
 
-  instructorOrganization    InstructorOrganization[]
-  CGUHistory                CGUHistory[]
-  userActivities            UserActivity[]
-  createdDrafts Draft[]       @relation(name: "created_drafts")
+  instructorOrganization InstructorOrganization[]
+  CGUHistory             CGUHistory[]
+  userActivities         UserActivity[]
+  createdDrafts          Draft[]                  @relation(name: "created_drafts")
 
   @@map("user")
 }
@@ -116,7 +116,7 @@ model Structure {
   instructorOrganization InstructorOrganization[]
   userActivities         UserActivity[]
   lastActivity           DateTime?                @map("last_activity")
-  drafts      Draft[]
+  drafts                 Draft[]
 
   @@map("structure")
 }
@@ -1161,7 +1161,7 @@ model Draft {
   createdById String? @map("created_by_id") @db.Uuid
   createdBy   User?   @relation(name: "created_drafts", fields: [createdById], references: [id])
 
-  content               Json?
+  content Json?
 
   @@map("draft")
 }
