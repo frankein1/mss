@@ -18,11 +18,12 @@
     />
     <hr />
 
-    <BeneficiaryTabs>
-      <Tab
-        :id="BeneficiaryTab.Details"
-        name="Informations"
-        prefix="<span class='fr-icon-information-fill fr-icon--sm fr-pr-1w'></span> "
+    <AtomTabs tab-list-name="Détails de la fiche bénéficiaire">
+      <AtomTab
+        :tab-id="BeneficiaryTab.Details"
+        title="Informations"
+        icon="fr-icon-information-fill"
+        selected
       >
         <AtomLoader
           v-if="pending"
@@ -40,12 +41,11 @@
           :tax-households="taxHouseholds"
           :followup-types="followupTypes"
         />
-        >
-      </Tab>
-      <Tab
-        :id="BeneficiaryTab.Documents"
-        name="Documents"
-        prefix="<span class='fr-icon-folder-2-line fr-icon--sm fr-pr-1w'></span> "
+      </AtomTab>
+      <AtomTab
+        :tab-id="BeneficiaryTab.Documents"
+        title="Documents"
+        icon="fr-icon-folder-2-line"
       >
         <AtomLoader
           v-if="pending"
@@ -60,20 +60,19 @@
           v-else
           :beneficiary="beneficiary"
         />
-      </Tab>
-      <Tab
-        :id="BeneficiaryTab.History"
-        name="Historique"
-        prefix="<span class='fr-icon-history-line fr-icon--sm fr-pr-1w'></span> "
+      </AtomTab>
+      <AtomTab
+        :tab-id="BeneficiaryTab.History"
+        title="Historique"
+        icon="fr-icon-history-line"
       >
         <BeneficiaryHistory :beneficiary-id="beneficiaryId" />
-      </Tab>
-    </BeneficiaryTabs>
+      </AtomTab>
+    </AtomTabs>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
-  import { Tab } from 'vue3-tabs-component'
   import { canDeleteBeneficiary } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'

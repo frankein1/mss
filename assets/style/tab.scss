@@ -4,14 +4,8 @@ $tabs-list-height: 4.5rem;
 $tabs-list-border-bottom-size: 1px;
 $tab-border-bottom-size: 3px;
 
-.fr-tabs__panel {
-  /*
-   * The wrapping tab group is set to overflow hidden to allow the transition between tabs.
-   * This causes menus of dropdowns to be cropped at the bottom of the tab panel if there is not enough height.
-   * A solution would be to set the tab group to overflow-x hidden and to overflow-y visible but W3C specs leads to a weird result : the visible value is turn into auto.
-   * This is a hack to allow all menus of dropdowns within tabs to be visible.
-   */
-  min-height: 30rem;
+:root {
+  --tabs-panel-min-height: 30rem;
 }
 
 // Fix an empty tab blinking and allow to focus element between tabs

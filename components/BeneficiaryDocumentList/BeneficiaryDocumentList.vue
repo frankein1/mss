@@ -1,45 +1,44 @@
 <template>
-  <div class="fr-container">
-    <div class="beneficiary-section documents-header-section fr-p-3w">
-      <BeneficiaryDocumentFilters @filter="filters = $event" />
-      <BeneficiaryDocumentAddButton
-        :beneficiary-id="beneficiary.id"
-        @refresh-documents="refresh"
-      />
-    </div>
-    <div class="beneficiary-section fr-p-3w fr-mt-2w">
-      <p v-if="documentsTotal">
-        {{ documentsTotal }} document(s) disponibles dans l'historique du
-        bénéficiaire
-      </p>
-      <AtomAlert
-        v-if="error"
-        class="fr-mx-5v"
-        :alert-type="AlertType.Error"
-        message="La liste des documents n'a pas pu être chargée."
-      />
-      <AtomLoader
-        v-else-if="pending"
-        class="fr-mx-auto"
-      />
-      <BeneficiaryDocumentTable
-        v-else
-        v-model:sort="orderBy"
-        :documents="documents"
-        :pending="pending"
-        :beneficiary="beneficiary"
-        @refresh-documents="refresh"
-      />
-      <AtomPagination
-        v-show="!pending"
-        class="fr-mt-4w fr-px-5v"
-        :page="page"
-        :total-pages="totalPages"
-        @change-page="updatePagination($event)"
-      />
-    </div>
+  <div class="beneficiary-section documents-header-section fr-p-3w">
+    <BeneficiaryDocumentFilters @filter="filters = $event" />
+    <BeneficiaryDocumentAddButton
+      :beneficiary-id="beneficiary.id"
+      @refresh-documents="refresh"
+    />
+  </div>
+  <div class="beneficiary-section fr-p-3w fr-mt-2w">
+    <p v-if="documentsTotal">
+      {{ documentsTotal }} document(s) disponibles dans l'historique du
+      bénéficiaire
+    </p>
+    <AtomAlert
+      v-if="error"
+      class="fr-mx-5v"
+      :alert-type="AlertType.Error"
+      message="La liste des documents n'a pas pu être chargée."
+    />
+    <AtomLoader
+      v-else-if="pending"
+      class="fr-mx-auto"
+    />
+    <BeneficiaryDocumentTable
+      v-else
+      v-model:sort="orderBy"
+      :documents="documents"
+      :pending="pending"
+      :beneficiary="beneficiary"
+      @refresh-documents="refresh"
+    />
+    <AtomPagination
+      v-show="!pending"
+      class="fr-mt-4w fr-px-5v"
+      :page="page"
+      :total-pages="totalPages"
+      @change-page="updatePagination($event)"
+    />
   </div>
 </template>
+
 <script setup lang="ts">
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
