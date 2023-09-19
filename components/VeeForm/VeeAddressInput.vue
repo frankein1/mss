@@ -5,6 +5,7 @@
     :search-fn="searchAddressesFn"
     :value="selectedValue"
     :required="required"
+    :hint="hint"
     @result-selected="onSelectAddress"
   />
 </template>
@@ -24,8 +25,9 @@
       label: string
       required?: boolean
       zipCode?: string | null
+      hint?: string
     }>(),
-    { required: false, zipCode: '' }
+    { required: false, zipCode: '', hint: '' }
   )
 
   const emit = defineEmits<{

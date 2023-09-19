@@ -78,6 +78,7 @@ model User {
   instructorOrganization InstructorOrganization[]
   CGUHistory             CGUHistory[]
   userActivities         UserActivity[]
+  createdDrafts          Draft[]                  @relation(name: "created_drafts")
 
   @@map("user")
 }
@@ -115,6 +116,7 @@ model Structure {
   instructorOrganization InstructorOrganization[]
   userActivities         UserActivity[]
   lastActivity           DateTime?                @map("last_activity")
+  drafts                 Draft[]
 
   @@map("structure")
 }
@@ -1150,6 +1152,20 @@ enum BeneficiaryMinistereDepartementServiceAc {
   Sgmcas
 }
 
+model Draft {
+  id String @id @default(uuid()) @db.Uuid
+
+  structure   Structure @relation(fields: [structureId], references: [id])
+  structureId String    @map("structure_id") @db.Uuid
+
+  createdById String? @map("created_by_id") @db.Uuid
+  createdBy   User?   @relation(name: "created_drafts", fields: [createdById], references: [id])
+
+  content Json?
+
+  @@map("draft")
+}
+
 model Beneficiary {
   id String @id @default(uuid()) @db.Uuid
 
@@ -1183,8 +1199,8 @@ model Beneficiary {
   accommodationName                  String?                       @map("accommodation_name")
   accommodationAdditionalInformation String?                       @map("accommodation_additional_information")
   street                             String?
-  streetNumber                       String?                       @map("street_number")
   addressComplement                  String?                       @map("address_complement")
+  postOfficeBox                      String?                       @map("post_office_box")
   zipcode                            String?
   city                               String?
   region                             String?
@@ -1424,6 +1440,7 @@ enum UserActivityObject {
   Document
   Notification
   User
+  Draft
 }
 
 model UserActivity {

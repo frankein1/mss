@@ -30,9 +30,11 @@ export enum Route {
   AppBeneficiaries = 'AppBeneficiaries',
   AppBeneficiariesAdd = 'AppBeneficiariesAdd',
   AppBeneficiariesSave = 'AppBeneficiariesSave',
+  AppBeneficiariesSaveInfo = 'AppBeneficiariesSaveInfo',
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
+  AppBeneficiaryEditInfo = 'AppBeneficiaryEditInfo',
   AppBeneficiaryFollowupAdd = 'AppBeneficiaryFollowupAdd',
   AppBeneficiaryFollowupEdit = 'AppBeneficiaryFollowupEdit',
   AppBeneficiaryHelpRequestAdd = 'AppBeneficiaryHelpRequestAdd',
@@ -122,12 +124,17 @@ export const RoutePath = {
   [Route.AppBeneficiaries]: () => BeneficiariesRoute,
   [Route.AppBeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
   [Route.AppBeneficiariesSave]: () => `${BeneficiariesRoute}/save`,
+  [Route.AppBeneficiariesSaveInfo]: (draftId: string) =>
+    `${BeneficiariesRoute}/save/${draftId}/info`,
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
 
   [Route.AppBeneficiaryEdit]: (beneficiaryId: string) => {
     return `${BeneficiaryRoute(beneficiaryId)}/edit`
+  },
+  [Route.AppBeneficiaryEditInfo]: (beneficiaryId: string) => {
+    return `${BeneficiaryRoute(beneficiaryId)}/edit/info`
   },
 
   [Route.AppBeneficiaryFollowupAdd]: (beneficiaryId: string) =>

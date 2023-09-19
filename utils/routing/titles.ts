@@ -27,6 +27,7 @@ export const RouteTitle = {
   [Route.AppAccount]: () => 'Mon compte',
   [Route.AppStructureEdit]: () => 'Modifier ma structure',
   [Route.AppBeneficiaries]: () => 'Bénéficiaires',
+  [Route.AppBeneficiariesSaveInfo]: () => 'Informations bénéficiaire',
   [Route.AppBeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
   [Route.AppBeneficiary]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? getBeneficiaryDisplayName(beneficiary) : '',
@@ -36,6 +37,7 @@ export const RouteTitle = {
       : '',
   [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${getBeneficiaryDisplayName(beneficiary)}` : '',
+  [Route.AppBeneficiaryEditInfo]: () => 'Informations bénéficiaire',
   [Route.AppBeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Entretien avec ${getBeneficiaryDisplayName(beneficiary)}`

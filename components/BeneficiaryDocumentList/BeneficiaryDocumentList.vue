@@ -1,12 +1,12 @@
 <template>
-  <div class="beneficiary-section documents-header-section fr-p-3w">
+  <div class="feature-section documents-header-section">
     <BeneficiaryDocumentFilters @filter="filters = $event" />
     <BeneficiaryDocumentAddButton
       :beneficiary-id="beneficiary.id"
       @refresh-documents="refresh"
     />
   </div>
-  <div class="beneficiary-section fr-p-3w fr-mt-2w">
+  <div class="feature-section fr-mt-2w">
     <p v-if="documentsTotal">
       {{ documentsTotal }} document(s) disponibles dans l'historique du
       bénéficiaire

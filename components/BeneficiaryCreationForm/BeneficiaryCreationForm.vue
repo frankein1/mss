@@ -1,34 +1,12 @@
 <template>
-  <form @submit="onSubmit">
-    <div
-      class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-p-2w fr-mt-2w fr-mb-2w bg-color-white"
-    >
-      <div class="fr-col-6">
-        <VeeSelect
-          name="status"
-          :label="beneficiaryFieldLabels.status"
-          :options="beneficiaryStatusOptions"
-          required
-        />
-        <VeeToggle
-          :label="beneficiaryFieldLabels.aidantConnectAuthorized"
-          name="aidantConnectAuthorized"
-        />
-      </div>
-      <div class="fr-col-6">
-        <VeeMultiSelect
-          name="referents"
-          label="Agent(s) référent(s)"
-          :options="referentOptions"
-          required
-          dropdown
-          :disabled-options="disabledReferentOptions"
-        />
-      </div>
-    </div>
+  <form
+    class="fr-p-3v"
+    @submit="onSubmit"
+  >
+    <BeneficiaryFormFileInformation :agents="agents" />
 
     <div
-      class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-p-2w fr-mt-2w fr-mb-2w bg-color-white"
+      class="fr-grid-row fr-grid-row--center fr-grid-row--gutters feature-section fr-mb-7v"
     >
       <div class="fr-col-6">
         <div class="formgroup__title fr-pb-2w">Identité du bénéficiaire</div>
@@ -56,6 +34,7 @@
           name="phone1"
           :label="beneficiaryFieldLabels.phone1"
           type="tel"
+          no-hint
         />
         <VeeInput
           name="email"
@@ -70,9 +49,8 @@
       </div>
     </div>
 
-    <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-mb-2w">
+    <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-mb-5w">
       <AtomAlert
-        class="fr-mt-2w fr-mb-2w"
         message="Souhaitez-vous ajouter plus d'informations sur ce bénéficiaire ?"
         :alert-type="AlertType.Info"
       >
@@ -112,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryStatus, UserStatus } from '@prisma/client'
+  import { BeneficiaryStatus } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import { BeneficiaryReferent } from '~/types/beneficiary'
@@ -122,12 +100,10 @@
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
-  import { toOptions } from '~/utils/options'
 
   const isMinistryAgent = useMinistryAgent()
 
-  const props = defineProps<{
+  defineProps<{
     isSubmitting: boolean
     agents: BeneficiaryReferent[]
   }>()
@@ -148,16 +124,6 @@
   const onSubmit = handleSubmit(values => {
     emit('saveBeneficiary', values, complete.value)
   })
-
-  const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
-
-  const disabledReferentOptions = computed(() =>
-    props.agents
-      .filter(
-        (agent: BeneficiaryReferent) => agent.status !== UserStatus.Active
-      )
-      .map((agent: BeneficiaryReferent) => agent.id)
-  )
 </script>
 
 <style scoped>
