@@ -4,7 +4,12 @@ import {
   documentFileMaxSize,
   documentFileAllowedTypes
 } from '~/client/options/document'
-import { errorMessages, requiredNativeEnum } from '~/utils/zod'
+import {
+  errorMessages,
+  requiredNativeEnum,
+  stringConstraint,
+  maxStringLengthMessage
+} from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
 
 const documentSizeValidationErrorMessage = `La taille du document doit être inférieure à ${formatByteSize(
@@ -21,7 +26,7 @@ export const documentSizeValidation = z
   .max(documentFileMaxSize, documentSizeValidationErrorMessage)
 
 export const uploadBrowserDocumentSchema = z.object({
-  beneficiaryId: z.string(errorMessages),
+  beneficiaryId: z.string(errorMessages).uuid(),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
@@ -29,7 +34,7 @@ export const uploadBrowserDocumentSchema = z.object({
 })
 
 export const addDocumentSchema = z.object({
-  beneficiaryId: z.string(errorMessages),
+  beneficiaryId: z.string(errorMessages).uuid(),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
@@ -46,17 +51,17 @@ export const deleteDocumentSchema = z.object({
 
 export const editDocumentSchema = z.object({
   key: z.string(),
-  name: z.string(),
-  beneficiaryId: z.string(errorMessages),
+  name: stringConstraint.max(150, maxStringLengthMessage(150)),
+  beneficiaryId: z.string(errorMessages).uuid(),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false)
 })
 
 export const createUploadUrlSchema = z.object({
-  name: z.string(),
-  mimeType: z.string(),
-  beneficiaryId: z.string()
+  name: stringConstraint.max(150, maxStringLengthMessage(150)),
+  mimeType: stringConstraint.max(50, maxStringLengthMessage(50)),
+  beneficiaryId: z.string().uuid()
 })
 
 export const createViewUrlSchema = z.object({ key: z.string() })

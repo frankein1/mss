@@ -1,15 +1,14 @@
 import { z } from 'zod'
 import { DefaultFollowupType } from '@prisma/client'
-import { minStringLengthMessage } from '~/utils/zod'
+import {
+  minStringLengthMessage,
+  maxStringLengthMessage,
+  stringConstraint
+} from '~/utils/zod'
 
 const createFollowupTypeSchema = z.object({
-  name: z
-    .string({
-      invalid_type_error:
-        "Veuillez renseigner le nom du type d'accompagnement.",
-      required_error: "Veuillez renseigner le nom du type d'accompagnement."
-    })
-    .trim()
+  name: stringConstraint
+    .max(100, maxStringLengthMessage(100))
     .min(2, minStringLengthMessage(2)),
   legallyRequired: z.boolean(),
   default: z.nativeEnum(DefaultFollowupType).nullish(),

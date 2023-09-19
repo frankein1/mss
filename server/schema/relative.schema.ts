@@ -1,17 +1,27 @@
 import { z } from 'zod'
 import { RelativeRelationship } from '@prisma/client'
-import { withEmptyValueOptionalNativeEnum } from '~/utils/zod'
+import { beneficiaryLastNameSchema } from './beneficiary/beneficiaryLastName.schema'
+import { beneficiaryFirstNameSchema } from './beneficiary/beneficiaryFirstName.schema'
+import {
+  withEmptyValueOptionalNativeEnum,
+  phoneConstraint,
+  stringConstraint,
+  emailOrEmpty,
+  maxStringLengthMessage
+} from '~/utils/zod'
 
 export const createOrUpdateEntourageSchema = z.object({
   id: z.string().uuid().nonempty(),
-  lastName: z.string().nullish(),
-  firstName: z.string().nullish(),
+  lastName: beneficiaryLastNameSchema.nullish(),
+  firstName: beneficiaryFirstNameSchema.nullish(),
   relationship: withEmptyValueOptionalNativeEnum(RelativeRelationship),
-  city: z.string().nullish(),
-  email: z.string().nullish(),
-  phone: z.string().nullish(),
+  city: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+  email: emailOrEmpty(),
+  phone: phoneConstraint.nullish(),
   caregiver: z.boolean().default(false),
-  additionalInformation: z.string().nullish()
+  additionalInformation: stringConstraint
+    .max(200, maxStringLengthMessage(200))
+    .nullish()
 })
 
 export type CreateOrUpdateEntourageInput = z.infer<
@@ -23,9 +33,9 @@ export const createOrUpdateTaxHouseholdSchema =
     linkedBeneficiary: z
       .object({
         id: z.string().uuid().nonempty(),
-        usualName: z.string().nullable(),
-        firstName: z.string().nullable(),
-        birthName: z.string().nullable()
+        usualName: beneficiaryLastNameSchema.nullable(),
+        firstName: beneficiaryFirstNameSchema.nullable(),
+        birthName: beneficiaryLastNameSchema.nullable()
       })
       .nullish()
   })

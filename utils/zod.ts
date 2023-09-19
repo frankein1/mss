@@ -14,6 +14,9 @@ export const errorMessages = {
 export const minStringLengthMessage = (length: number) =>
   `Veuillez renseigner au minimum ${length} caractère${length > 1 ? 's' : ''}.`
 
+export const maxStringLengthMessage = (length: number) =>
+  `Veuillez renseigner au maximum ${length} caractères}.`
+
 export const validEmailMessage = 'Veuillez renseigner un email valide.'
 
 export const validZipcode = 'Veuillez renseigner un code postal valide.'
@@ -48,4 +51,38 @@ export const stringOrEmpty = (schema: z.ZodString) =>
   schema.nullish().or(z.literal(''))
 
 export const emailOrEmpty = () =>
-  stringOrEmpty(z.string().email('Email non valide'))
+  stringOrEmpty(z.string().email(validEmailMessage))
+
+export const stringConstraint = z.string().trim()
+
+export const phoneConstraint = stringConstraint.regex(
+  /^(\+33 |0)[1-9]( \d\d){4}$/,
+  'le format doit être de la forme 00 00 00 00 00'
+)
+
+export const socialSecurityNumberConstraint = z
+  .string()
+  .regex(
+    /^([12] \d{2} (0[1-9]|1[0-2]) (2[AB]|\d{2}) \d{3} \d{3})( \d{2})?$|^$/,
+    'Veuillez entrer un numéro de sécurité sociale valide'
+  )
+
+export const siretConstraint = stringConstraint
+  .min(14)
+  .max(30, maxStringLengthMessage(30))
+
+export const unemploymentNumberConstraint = stringConstraint
+  .min(7)
+  .max(50, maxStringLengthMessage(50))
+
+export const cafNumberConstraint = stringConstraint.max(
+  8,
+  maxStringLengthMessage(8)
+)
+
+export const numeroPegaseContraint = z
+  .string()
+  .regex(
+    /^A-(\d){2}-(\d){6}$/,
+    'Le numéro Pegase doit être de la forme A-00-000000'
+  )

@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { z } from 'zod'
+import { stringConstraint, maxStringLengthMessage } from '~/utils/zod'
 
 export const adminGetStructuresSchema = z.object({
   orderBy: z.array(
@@ -12,7 +13,7 @@ export const adminGetStructuresSchema = z.object({
       lastActivity: z.nativeEnum(Prisma.SortOrder).optional()
     })
   ),
-  search: z.string().nullish()
+  search: stringConstraint.max(50, maxStringLengthMessage(50)).nullish()
 })
 
 export type AdminGetStructuresInput = z.infer<typeof adminGetStructuresSchema>

@@ -1,8 +1,12 @@
-import { z } from 'zod'
+import {
+  stringConstraint,
+  maxStringLengthMessage,
+  minStringLengthMessage
+} from '~/utils/zod'
 
-const beneficiaryFirstNameSchema = z
-  .string()
-  .nullish()
+const beneficiaryFirstNameSchema = stringConstraint
+  .min(2, minStringLengthMessage(2))
+  .max(50, maxStringLengthMessage(50))
   .transform(v => {
     if (!v) {
       return v

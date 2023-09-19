@@ -12,7 +12,10 @@ import { followupFilterSchema } from './filter.schema'
 import {
   errorMessages,
   requiredNativeEnum,
-  withEmptyValueOptionalNativeEnum
+  withEmptyValueOptionalNativeEnum,
+  stringConstraint,
+  numeroPegaseContraint,
+  maxStringLengthMessage
 } from '~/utils/zod'
 
 const addFollowupSchema = z.object({
@@ -27,18 +30,24 @@ const addFollowupSchema = z.object({
   medium: requiredNativeEnum(FollowupMedium),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   date: z.coerce.date(errorMessages),
-  synthesis: z.string().nullish(),
-  privateSynthesis: z.string().nullish(),
+  synthesis: stringConstraint.max(6000, maxStringLengthMessage(6000)).nullish(),
+  privateSynthesis: stringConstraint
+    .max(1000, maxStringLengthMessage(1000))
+    .nullish(),
   status: requiredNativeEnum(FollowupStatus),
   helpRequested: z.boolean().default(false),
-  place: z.string().nullish(),
+  place: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   redirected: z.boolean().default(false),
-  structureName: z.string().nullish(),
+  structureName: stringConstraint
+    .max(100, maxStringLengthMessage(100))
+    .nullish(),
   dueDate: z.coerce.date(errorMessages).nullish(),
-  thirdPersonName: z.string().nullish(),
+  thirdPersonName: stringConstraint
+    .max(100, maxStringLengthMessage(100))
+    .nullish(),
   firstFollowup: z.boolean().default(false),
-  numeroPegase: z.string().nullish(),
-  prescribingOrganizationId: z.string().nullish(),
+  numeroPegase: numeroPegaseContraint.nullish(),
+  prescribingOrganizationId: z.string().uuid().nullish(),
   classified: z.boolean().default(false),
   forwardedToJustice: z.boolean().default(false),
   [FollowupIntervention.DeetsSiao]: z.boolean().default(false),

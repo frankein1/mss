@@ -1,7 +1,8 @@
 import { z } from 'zod'
+import { stringConstraint, maxStringLengthMessage } from '~/utils/zod'
 
 export const searchBeneficiarySchema = z.object({
-  query: z.string(),
+  query: stringConstraint.max(50, maxStringLengthMessage(50)),
   excludedIds: z.array(z.string().uuid()).optional()
 })
 

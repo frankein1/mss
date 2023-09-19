@@ -3,13 +3,19 @@ import { NonAdminUserRole } from '~/types/user'
 import {
   errorMessages,
   minStringLengthMessage,
+  maxStringLengthMessage,
   validEmailMessage,
-  requiredNativeEnum
+  requiredNativeEnum,
+  stringConstraint
 } from '~/utils/zod'
 
 const createUserSchema = z.object({
-  firstName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
-  lastName: z.string(errorMessages).min(2, minStringLengthMessage(2)),
+  firstName: stringConstraint
+    .max(20, maxStringLengthMessage(20))
+    .min(2, minStringLengthMessage(2)),
+  lastName: stringConstraint
+    .max(30, maxStringLengthMessage(30))
+    .min(2, minStringLengthMessage(2)),
   email: z.string(errorMessages).email(validEmailMessage),
   role: requiredNativeEnum(NonAdminUserRole)
 })

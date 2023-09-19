@@ -10,7 +10,11 @@ import {
   DocumentType
 } from '@prisma/client'
 import { AgeGroup } from '~/client/options/ageGroup'
-import { kindOfBooleanSchema } from '~/utils/zod'
+import {
+  kindOfBooleanSchema,
+  stringConstraint,
+  maxStringLengthMessage
+} from '~/utils/zod'
 import { TypeSuivi } from '~/types/history'
 
 const statFilterSchema = z.object({
@@ -25,15 +29,19 @@ const statFilterSchema = z.object({
       return dayjs(v).hour(23).minute(59).second(59).toDate()
     }),
   followupTypes: z.array(z.string().uuid()).nullish(),
-  cities: z.array(z.string()).nullish(),
-  referent: z.string().nullish()
+  cities: z
+    .array(stringConstraint.max(50, maxStringLengthMessage(50)))
+    .nullish(),
+  referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish()
 })
 
 type StatFilterInput = z.infer<typeof statFilterSchema>
 
 const beneficiaryFilterSchema = z.object({
   followupTypes: z.array(z.string().uuid()).nullish(),
-  cities: z.array(z.string()).nullish(),
+  cities: z
+    .array(stringConstraint.max(50, maxStringLengthMessage(50)))
+    .nullish(),
   referents: z.array(z.string().uuid()).nullish(),
   status: z.nativeEnum(BeneficiaryStatus).nullish(),
   ageGroup: z.nativeEnum(AgeGroup).nullish()
@@ -43,7 +51,7 @@ type BeneficiaryFilterInput = z.infer<typeof beneficiaryFilterSchema>
 
 const beneficiaryDocumentFilterSchema = z.object({
   type: z.nativeEnum(DocumentType).nullish(),
-  tags: z.string().nullish()
+  tags: stringConstraint.max(100, maxStringLengthMessage(100)).nullish()
 })
 
 type BeneficiaryDocumentFilterInput = z.infer<

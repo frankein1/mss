@@ -31,7 +31,6 @@
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
-  import { useAuthStore } from '~/store/auth'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, RouteTitle } from '~/utils/routing'
@@ -42,7 +41,6 @@
 
   const isSubmitting = ref(false)
 
-  const authStore = useAuthStore()
   const route = useRoute()
   const snackbar = useSnackbar()
 
@@ -72,10 +70,7 @@
     return ''
   })
 
-  const user = computed(() => authStore.getAuthUser)
-
   const beneficiary = computed<SaveBeneficiaryGeneralInformationInput>(() => ({
-    structureId: user.value.structureId,
     referents: beneficiaryDraft.value?.general?.referents || [],
     aidantConnectAuthorized:
       beneficiaryDraft.value?.general?.aidantConnectAuthorized || false,
