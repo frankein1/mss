@@ -1,11 +1,18 @@
-import { wordConstraint } from '~/utils/zod'
+import {
+  stringConstraint,
+  maxStringLengthMessage,
+  minStringLengthMessage
+} from '~/utils/zod'
 
-const beneficiaryFirstNameSchema = wordConstraint().transform(v => {
-  if (!v) {
-    return v
-  }
-  const [firstLetter, ...rest] = v
-  return `${firstLetter.toUpperCase()}${rest.join('')}`
-})
+const beneficiaryFirstNameSchema = stringConstraint
+  .min(2, minStringLengthMessage(2))
+  .max(50, maxStringLengthMessage(50))
+  .transform(v => {
+    if (!v) {
+      return v
+    }
+    const [firstLetter, ...rest] = v
+    return `${firstLetter.toUpperCase()}${rest.join('')}`
+  })
 
 export { beneficiaryFirstNameSchema }

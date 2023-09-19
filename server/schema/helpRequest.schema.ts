@@ -14,7 +14,8 @@ import {
   withEmptyValueOptionalNativeEnum,
   requiredNativeEnum,
   numeroPegaseContraint,
-  wordConstraint
+  stringConstraint,
+  maxStringLengthMessage
 } from '~/utils/zod'
 
 const createHelpRequestSchema = z.object({
@@ -35,12 +36,16 @@ const createHelpRequestSchema = z.object({
   reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
   paymentDate: z.coerce.date(errorMessages).nullish(),
   handlingDate: z.coerce.date(errorMessages).nullish(),
-  refusalReason: wordConstraint().nullish(),
+  refusalReason: stringConstraint
+    .max(100, maxStringLengthMessage(100))
+    .nullish(),
   prescribingOrganizationId: z.string().uuid().nullish(),
   instructorOrganizationId: z.string().uuid().nullish(),
   dispatchDate: z.coerce.date(errorMessages).nullish(),
-  synthesis: wordConstraint(3000).nullish(),
-  privateSynthesis: wordConstraint(3000).nullish(),
+  synthesis: stringConstraint.max(6000, maxStringLengthMessage(6000)).nullish(),
+  privateSynthesis: stringConstraint
+    .max(1000, maxStringLengthMessage(1000))
+    .nullish(),
   dueDate: z.coerce.date(errorMessages).nullish(),
   fullFile: z.boolean().default(false)
 })

@@ -5,8 +5,9 @@ import { beneficiaryFirstNameSchema } from './beneficiary/beneficiaryFirstName.s
 import {
   withEmptyValueOptionalNativeEnum,
   phoneConstraint,
-  wordConstraint,
-  emailOrEmpty
+  stringConstraint,
+  emailOrEmpty,
+  maxStringLengthMessage
 } from '~/utils/zod'
 
 export const createOrUpdateEntourageSchema = z.object({
@@ -14,11 +15,13 @@ export const createOrUpdateEntourageSchema = z.object({
   lastName: beneficiaryLastNameSchema.nullish(),
   firstName: beneficiaryFirstNameSchema.nullish(),
   relationship: withEmptyValueOptionalNativeEnum(RelativeRelationship),
-  city: wordConstraint().nullish(),
+  city: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   email: emailOrEmpty(),
   phone: phoneConstraint.nullish(),
   caregiver: z.boolean().default(false),
-  additionalInformation: wordConstraint().nullish()
+  additionalInformation: stringConstraint
+    .max(200, maxStringLengthMessage(200))
+    .nullish()
 })
 
 export type CreateOrUpdateEntourageInput = z.infer<

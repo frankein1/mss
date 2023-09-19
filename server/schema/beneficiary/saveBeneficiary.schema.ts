@@ -34,10 +34,11 @@ import {
   socialSecurityNumberConstraint,
   unemploymentNumberConstraint,
   cafNumberConstraint,
-  wordConstraint,
+  stringConstraint,
   phoneConstraint,
   siretConstraint,
-  numeroPegaseContraint
+  numeroPegaseContraint,
+  maxStringLengthMessage
 } from '~/utils/zod'
 
 // TODO: To delete !
@@ -57,7 +58,7 @@ export const saveBeneficiarySchema = z.object({
     usualName: beneficiaryLastNameSchema.nullish(),
     birthName: beneficiaryLastNameSchema,
     birthDate: z.coerce.date(errorMessages).nullish(),
-    birthPlace: wordConstraint().nullish(),
+    birthPlace: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
     deathDate: z.coerce.date(errorMessages).nullish(),
     gender: withEmptyValueOptionalNativeEnum(Gender),
     nationality: withEmptyValueOptionalNativeEnum(Nationality),
@@ -65,17 +66,25 @@ export const saveBeneficiarySchema = z.object({
     accommodationMode: withEmptyValueOptionalNativeEnum(
       BeneficiaryAccommodationMode
     ),
-    accommodationName: wordConstraint().nullish(),
-    accommodationAdditionalInformation: wordConstraint(200).nullish(),
+    accommodationName: stringConstraint
+      .max(50, maxStringLengthMessage(50))
+      .nullish(),
+    accommodationAdditionalInformation: stringConstraint
+      .max(200, maxStringLengthMessage(200))
+      .nullish(),
     zipcode: stringOrEmpty(z.string().min(5, validZipcode)),
-    city: wordConstraint().nullish(),
-    region: wordConstraint().nullish(),
+    city: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+    region: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
     accommodationZone: withEmptyValueOptionalNativeEnum(
       BeneficiaryAccommodationZone
     ),
-    streetNumber: wordConstraint(10).nullish(),
-    street: wordConstraint().nullish(),
-    addressComplement: wordConstraint(200).nullish(),
+    streetNumber: stringConstraint
+      .max(10, maxStringLengthMessage(10))
+      .nullish(),
+    street: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+    addressComplement: stringConstraint
+      .max(100, maxStringLengthMessage(100))
+      .nullish(),
     noPhone: z.boolean().default(false),
     phone1: phoneConstraint.nullish(),
     phone2: phoneConstraint.nullish(),
@@ -96,17 +105,19 @@ export const saveBeneficiarySchema = z.object({
   }),
   health: z.object({
     gir: withEmptyValueOptionalNativeEnum(BeneficiaryGir),
-    doctor: wordConstraint().nullish(),
-    healthAdditionalInformation: wordConstraint(200).nullish(),
+    doctor: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+    healthAdditionalInformation: stringConstraint
+      .max(200, maxStringLengthMessage(200))
+      .nullish(),
     socialSecurityNumber: socialSecurityNumberConstraint.nullish(),
-    insurance: wordConstraint().nullish()
+    insurance: stringConstraint.max(100, maxStringLengthMessage(100)).nullish()
   }),
   occupation: z.object({
     socioProfessionalCategory: withEmptyValueOptionalNativeEnum(
       BeneficiarySocioProfessionalCategory
     ),
-    occupation: wordConstraint().nullish(),
-    employer: wordConstraint().nullish(),
+    occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+    employer: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
     employerSiret: siretConstraint.nullish(),
     mainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
     mainIncomeAmount: z.coerce.number().nullish(),
@@ -120,10 +131,14 @@ export const saveBeneficiarySchema = z.object({
     pensionOrganisations: z.array(
       z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)
     ),
-    otherPensionOrganisations: wordConstraint().nullish(),
+    otherPensionOrganisations: stringConstraint
+      .max(200, maxStringLengthMessage(200))
+      .nullish(),
     cafNumber: cafNumberConstraint.nullish(),
-    bank: wordConstraint().nullish(),
-    funeralContract: wordConstraint().nullish(),
+    bank: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+    funeralContract: stringConstraint
+      .max(50, maxStringLengthMessage(50))
+      .nullish(),
     ministereCategorie: withEmptyValueOptionalNativeEnum(
       BeneficiaryMinistereCategorie
     ),
@@ -138,16 +153,28 @@ export const saveBeneficiarySchema = z.object({
     protectionMeasure: withEmptyValueOptionalNativeEnum(
       BeneficiaryProtectionMeasure
     ),
-    representative: wordConstraint().nullish(),
-    prescribingStructure: wordConstraint().nullish(),
+    representative: stringConstraint
+      .max(100, maxStringLengthMessage(100))
+      .nullish(),
+    prescribingStructure: stringConstraint
+      .max(100, maxStringLengthMessage(100))
+      .nullish(),
     orientationType: withEmptyValueOptionalNativeEnum(
       BeneficiaryOrientationType
     ),
-    orientationStructure: wordConstraint().nullish(),
-    serviceProviders: wordConstraint().nullish(),
-    involvedPartners: wordConstraint().nullish()
+    orientationStructure: stringConstraint
+      .max(100, maxStringLengthMessage(100))
+      .nullish(),
+    serviceProviders: stringConstraint
+      .max(100, maxStringLengthMessage(100))
+      .nullish(),
+    involvedPartners: stringConstraint
+      .max(200, maxStringLengthMessage(200))
+      .nullish()
   }),
-  additionalInformation: wordConstraint(200).nullish()
+  additionalInformation: stringConstraint
+    .max(1500, maxStringLengthMessage(1500))
+    .nullish()
 })
 
 export type SaveBeneficiaryInput = z.infer<typeof saveBeneficiarySchema>

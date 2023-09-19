@@ -13,8 +13,9 @@ import {
   errorMessages,
   requiredNativeEnum,
   withEmptyValueOptionalNativeEnum,
-  wordConstraint,
-  numeroPegaseContraint
+  stringConstraint,
+  numeroPegaseContraint,
+  maxStringLengthMessage
 } from '~/utils/zod'
 
 const addFollowupSchema = z.object({
@@ -29,15 +30,21 @@ const addFollowupSchema = z.object({
   medium: requiredNativeEnum(FollowupMedium),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   date: z.coerce.date(errorMessages),
-  synthesis: wordConstraint().nullish(),
-  privateSynthesis: wordConstraint().nullish(),
+  synthesis: stringConstraint.max(6000, maxStringLengthMessage(6000)).nullish(),
+  privateSynthesis: stringConstraint
+    .max(1000, maxStringLengthMessage(1000))
+    .nullish(),
   status: requiredNativeEnum(FollowupStatus),
   helpRequested: z.boolean().default(false),
-  place: wordConstraint().nullish(),
+  place: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   redirected: z.boolean().default(false),
-  structureName: wordConstraint().nullish(),
+  structureName: stringConstraint
+    .max(100, maxStringLengthMessage(100))
+    .nullish(),
   dueDate: z.coerce.date(errorMessages).nullish(),
-  thirdPersonName: wordConstraint().nullish(),
+  thirdPersonName: stringConstraint
+    .max(100, maxStringLengthMessage(100))
+    .nullish(),
   firstFollowup: z.boolean().default(false),
   numeroPegase: numeroPegaseContraint.nullish(),
   prescribingOrganizationId: z.string().uuid().nullish(),

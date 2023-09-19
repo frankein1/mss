@@ -3,8 +3,9 @@ import { z } from 'zod'
 import { editStructureSchema } from './editStructure.schema'
 import {
   requiredNativeEnum,
-  wordConstraint,
-  siretConstraint
+  stringConstraint,
+  siretConstraint,
+  maxStringLengthMessage
 } from '~/utils/zod'
 
 export const adminEditStructureSchemaBase = editStructureSchema
@@ -13,8 +14,10 @@ export const adminEditStructureSchemaBase = editStructureSchema
   })
   .extend({
     type: requiredNativeEnum(StructureType),
-    inhabitantsNumber: wordConstraint().nullish(),
-    inseeCode: wordConstraint().nullish(),
+    inhabitantsNumber: stringConstraint
+      .max(50, maxStringLengthMessage(50))
+      .nullish(),
+    inseeCode: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
     siret: siretConstraint.nullish()
   })
 

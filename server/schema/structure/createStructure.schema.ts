@@ -3,19 +3,28 @@ import { z } from 'zod'
 import {
   errorMessages,
   minStringLengthMessage,
+  maxStringLengthMessage,
   validZipcode,
   validEmailMessage,
   requiredNativeEnum,
-  wordConstraint,
+  stringConstraint,
   phoneConstraint
 } from '~/utils/zod'
 
 export const createStructureSchema = z.object({
   type: requiredNativeEnum(StructureType),
-  name: wordConstraint().min(2, minStringLengthMessage(2)),
-  zipcode: wordConstraint().min(5, validZipcode),
-  city: wordConstraint().min(2, minStringLengthMessage(2)),
-  address: wordConstraint().min(2, minStringLengthMessage(2)),
+  name: stringConstraint
+    .max(50, maxStringLengthMessage(50))
+    .min(2, minStringLengthMessage(2)),
+  zipcode: stringConstraint
+    .max(10, maxStringLengthMessage(10))
+    .min(5, validZipcode),
+  city: stringConstraint
+    .max(50, maxStringLengthMessage(50))
+    .min(2, minStringLengthMessage(2)),
+  address: stringConstraint
+    .max(100, maxStringLengthMessage(100))
+    .min(2, minStringLengthMessage(2)),
   phone: phoneConstraint,
   email: z.string(errorMessages).email(validEmailMessage),
   followupTypes: z

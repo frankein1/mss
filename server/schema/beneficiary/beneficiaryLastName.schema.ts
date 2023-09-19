@@ -1,5 +1,12 @@
-import { wordConstraint } from '~/utils/zod'
+import {
+  stringConstraint,
+  minStringLengthMessage,
+  maxStringLengthMessage
+} from '~/utils/zod'
 
-const beneficiaryLastNameSchema = wordConstraint().toUpperCase()
+const beneficiaryLastNameSchema = stringConstraint
+  .min(2, minStringLengthMessage(2))
+  .max(50, maxStringLengthMessage(50))
+  .toUpperCase()
 
 export { beneficiaryLastNameSchema }

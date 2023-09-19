@@ -4,7 +4,12 @@ import {
   documentFileMaxSize,
   documentFileAllowedTypes
 } from '~/client/options/document'
-import { errorMessages, requiredNativeEnum, wordConstraint } from '~/utils/zod'
+import {
+  errorMessages,
+  requiredNativeEnum,
+  stringConstraint,
+  maxStringLengthMessage
+} from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
 
 const documentSizeValidationErrorMessage = `La taille du document doit être inférieure à ${formatByteSize(
@@ -46,7 +51,7 @@ export const deleteDocumentSchema = z.object({
 
 export const editDocumentSchema = z.object({
   key: z.string(),
-  name: wordConstraint(),
+  name: stringConstraint.max(150, maxStringLengthMessage(150)),
   beneficiaryId: z.string(errorMessages).uuid(),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
@@ -54,8 +59,8 @@ export const editDocumentSchema = z.object({
 })
 
 export const createUploadUrlSchema = z.object({
-  name: wordConstraint(),
-  mimeType: wordConstraint(),
+  name: stringConstraint.max(150, maxStringLengthMessage(150)),
+  mimeType: stringConstraint.max(50, maxStringLengthMessage(50)),
   beneficiaryId: z.string().uuid()
 })
 
