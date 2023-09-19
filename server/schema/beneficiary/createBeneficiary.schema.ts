@@ -18,9 +18,9 @@ export const createBeneficiarySchema = z.object({
     })
     .min(1, 'Veuillez renseigner au moins un agent référent'),
   aidantConnectAuthorized: z.boolean().default(false),
-  usualName: beneficiaryLastNameSchema,
-  birthName: beneficiaryLastNameSchema,
-  firstName: beneficiaryFirstNameSchema,
+  usualName: beneficiaryLastNameSchema.nullish(),
+  birthName: beneficiaryLastNameSchema.nullish(),
+  firstName: beneficiaryFirstNameSchema.nullish(),
   birthDate: z.coerce.date(errorMessages).nullish(),
   phone1: phoneConstraint.nullish(),
   email: emailOrEmpty(),
