@@ -21,6 +21,7 @@
     <BeneficiaryFormActions
       class="fr-col-12"
       :is-submitting="isSubmitting"
+      :saved="saved"
       @save="saveAndLeave = true"
       @cancel="onCancel"
     />
@@ -43,8 +44,14 @@
       isEditting?: boolean
       title: string
       titleIcon?: string
+      saved?: boolean
     }>(),
-    { beneficiary: undefined, isEditing: false, titleIcon: undefined }
+    {
+      beneficiary: undefined,
+      isEditing: false,
+      titleIcon: undefined,
+      saved: false
+    }
   )
 
   const emit = defineEmits<{
