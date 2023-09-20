@@ -8,6 +8,7 @@ import {
   getHistorySchema,
   exportBeneficiariesSchema,
   updateBeneficiaryGeneralInformationSchema,
+  updateBeneficiaryTaxHouseholdSchema,
   saveDraftSchema
 } from '~/server/schema'
 import {
@@ -25,6 +26,7 @@ import {
   getBeneficiaryFollowupTypesHandler,
   exportBeneficiariesHandler,
   updateBeneficiaryGeneralInformationHandler,
+  updateBeneficiaryTaxHouseholdHandler,
   saveDraftHandler
 } from '~/server/trpc/controller/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
@@ -42,6 +44,9 @@ export const beneficiaryRouter = router({
   updateGeneralInformation: protectedProcedure
     .input(updateBeneficiaryGeneralInformationSchema)
     .mutation(updateBeneficiaryGeneralInformationHandler),
+  updateTaxHousehold: protectedProcedure
+    .input(updateBeneficiaryTaxHouseholdSchema)
+    .mutation(updateBeneficiaryTaxHouseholdHandler),
   isBeneficiaryReferent: protectedProcedure
     .input(idSchema)
     .query(isBeneficiaryReferentHandler),

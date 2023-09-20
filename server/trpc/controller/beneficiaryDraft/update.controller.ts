@@ -4,9 +4,10 @@ import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UpdateBeneficiaryDraftInput } from '~/server/schema'
 import { canUpdateDraft } from '~/server/security/rules'
+import type { BeneficiaryDraft } from '~/types/beneficiary'
 
 export const updateBeneficiaryDraftHandler = async ({
-  input: { id: draftId, general },
+  input: { id: draftId, general, taxHousehold },
   ctx: { user }
 }: {
   input: UpdateBeneficiaryDraftInput
@@ -24,7 +25,11 @@ export const updateBeneficiaryDraftHandler = async ({
     where: { id: draftId },
     data: {
       content: {
-        general: { ...beneficiaryDraft.content.general, ...general }
+        general: { ...beneficiaryDraft.content.general, ...general },
+        taxHousehold: {
+          ...beneficiaryDraft.content.taxHousehold,
+          ...taxHousehold
+        }
         // TODO: add other sections
       }
     }
