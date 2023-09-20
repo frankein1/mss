@@ -231,3 +231,14 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
 export type SaveBeneficiaryGeneralInformationInput = z.infer<
   typeof saveBeneficiaryGeneralInformationSchema
 >
+
+export const saveBeneficiaryTaxHouseholdSchema = z.object({
+  familySituation: withEmptyValueOptionalNativeEnum(BeneficiaryFamilySituation),
+  minorChildren: z.coerce.number().gte(0).nullish(),
+  majorChildren: z.coerce.number().gte(0).nullish(),
+  taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema).nullish()
+})
+
+export type SaveBeneficiaryTaxHouseholdInput = z.infer<
+  typeof saveBeneficiaryTaxHouseholdSchema
+>

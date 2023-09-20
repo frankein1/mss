@@ -11,7 +11,6 @@
         v-if="canSetRelatives"
         label="Foyer fiscal"
       >
-        <BeneficiaryFormFamilySituation />
         <BeneficiaryFormTaxHouseholds
           :current-beneficiary-id="currentBeneficiaryId"
         />
@@ -34,8 +33,8 @@
         label="Activité/Revenu"
       >
         <BeneficiaryFormOccupationIncome
-          :family-situation="values.taxHousehold.familySituation"
-          :major-children="values.taxHousehold.majorChildren"
+          :family-situation="undefined"
+          :major-children="undefined"
           :pension-organisations="values.occupation.pensionOrganisations"
         />
       </AccordionFieldset>
@@ -101,10 +100,6 @@
       // Occupation
       occupation: {
         ...props.beneficiary.occupation
-      },
-      // Relatives
-      taxHousehold: {
-        ...props.beneficiary.taxHousehold
       },
       entourage: {
         ...props.beneficiary.entourage

@@ -28,6 +28,7 @@ export const RouteTitle = {
   [Route.AppStructureEdit]: () => 'Modifier ma structure',
   [Route.AppBeneficiaries]: () => 'Bénéficiaires',
   [Route.AppBeneficiariesSaveInfo]: () => 'Informations bénéficiaire',
+  [Route.AppBeneficiariesSaveTaxHousehold]: () => 'Foyer fiscal',
   [Route.AppBeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
   [Route.AppBeneficiary]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? getBeneficiaryDisplayName(beneficiary) : '',
@@ -38,6 +39,7 @@ export const RouteTitle = {
   [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${getBeneficiaryDisplayName(beneficiary)}` : '',
   [Route.AppBeneficiaryEditInfo]: () => 'Informations bénéficiaire',
+  [Route.AppBeneficiaryEditTaxHousehold]: () => 'Foyer fiscal',
   [Route.AppBeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
