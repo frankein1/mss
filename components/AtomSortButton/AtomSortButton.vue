@@ -1,11 +1,19 @@
 <template>
   <button
-    class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
-    :class="{ enabled: innerSort != undefined }"
+    class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline btn-order"
     :title="title"
     @click="onToggle"
   >
-    {{ label }}
+    <span
+      class="fr-icon-arrow-up-s-line"
+      :class="{ 'arrow-enabled': isAscending && innerSort != undefined }"
+      aria-hidden="true"
+    ></span>
+    <span
+      class="fr-icon-arrow-down-s-line"
+      :class="{ 'arrow-enabled': !isAscending && innerSort != undefined }"
+      aria-hidden="true"
+    ></span>
   </button>
 </template>
 
@@ -26,15 +34,9 @@
 
   const innerSort = ref<SortOrder | undefined>(props.sort)
 
-  const label = computed(() => {
-    const isAscending =
-      innerSort.value === undefined || innerSort.value === SortOrder.Asc
-
-    if (props.numeric) {
-      return isAscending ? '1..9' : '9..1'
-    }
-    return isAscending ? 'A..Z' : 'Z..A'
-  })
+  const isAscending = computed(
+    () => innerSort.value === undefined || innerSort.value === SortOrder.Asc
+  )
 
   const title = computed(() => {
     const toDescending = innerSort.value === SortOrder.Asc
@@ -67,8 +69,21 @@
   }
 </script>
 
-<style scoped>
-  .fr-btn:not(.enabled) {
+<style lang="scss" scoped>
+  .btn-order {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     color: var(--text-disabled-grey);
+    line-height: 0;
+
+    span::before {
+      --icon-size: 1rem;
+    }
+  }
+
+  .arrow-enabled::before {
+    background-color: var(--blue-france-sun-113-625);
   }
 </style>
