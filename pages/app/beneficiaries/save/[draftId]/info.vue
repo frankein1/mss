@@ -75,9 +75,9 @@
     aidantConnectAuthorized:
       beneficiaryDraft.value?.general?.aidantConnectAuthorized || false,
     status: beneficiaryDraft.value?.general?.status || UserStatus.Active,
-    firstName: beneficiaryDraft.value?.general?.firstName,
+    firstName: beneficiaryDraft.value?.general?.firstName || '',
     usualName: beneficiaryDraft.value?.general?.usualName,
-    birthName: beneficiaryDraft.value?.general?.birthName,
+    birthName: beneficiaryDraft.value?.general?.birthName || '',
     birthDate: beneficiaryDraft.value?.general?.birthDate,
     numeroPegase: beneficiaryDraft.value?.general?.numeroPegase,
     noPhone: false,
@@ -95,9 +95,7 @@
 
     return {
       ...beneficiaryDraft,
-      general: beneficiaryDraft.content?.general
-        ? beneficiaryDraft.content.general
-        : null
+      general: beneficiaryDraft.content?.general || null
     }
   }
 
@@ -115,11 +113,16 @@
   async function saveBeneficairy(
     beneficiary: SaveBeneficiaryGeneralInformationInput
   ) {
+    if (!beneficiaryDraft.value) {
+      snackbar.error('La création de la fiche bénéficiaire a échoué.')
+      return
+    }
+
     isSubmitting.value = true
 
     try {
       const { id } = await trpcClient.beneficiary.saveDraft.mutate({
-        id: beneficiaryDraft.value?.id,
+        id: beneficiaryDraft.value.id,
         general: beneficiary
       })
 
@@ -139,17 +142,18 @@
   async function saveBeneficiaryDraft(
     beneficiary: SaveBeneficiaryGeneralInformationInput
   ) {
+    if (!beneficiaryDraft.value) {
+      snackbar.error("L'enregistrement du brouillon a échoué.")
+      return
+    }
+
     isSubmitting.value = true
 
     try {
-      if (beneficiaryDraft.value) {
         await trpcClient.beneficiaryDraft.update.mutate({
           id: beneficiaryDraft.value.id,
           general: beneficiary
         })
-      } else {
-        await trpcClient.beneficiaryDraft.create.mutate(beneficiary)
-      }
 
       // TODO: Navigation post submit
       // navigateTo(RoutePath.AppBeneficiary(id))

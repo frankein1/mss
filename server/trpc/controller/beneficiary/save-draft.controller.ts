@@ -89,7 +89,7 @@ function prepareData(
       connect: general.referents.map(referent => ({ id: referent }))
     },
     createdById: user.id
-  } as any
+  } as Prisma.BeneficiaryUncheckedCreateInput
 
   return data
 }
