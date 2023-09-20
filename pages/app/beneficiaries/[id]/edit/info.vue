@@ -6,6 +6,7 @@
     :title="RouteTitle.AppBeneficiaryEditInfo()"
     title-icon="fr-icon-user-line"
     is-editting
+    :next-page="nextPage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -49,6 +50,11 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
 
+  const nextPage = {
+    title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
+    path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId)
+  }
+
   const {
     data: agents,
     pending: agentsPending,
@@ -91,12 +97,12 @@
       aidantConnectAuthorized: b.aidantConnectAuthorized,
       status: b.status,
       title: b.title,
-      firstName: b.firstName || '',
+      firstName: b.firstName,
       usualName: b.usualName,
-      birthName: b.birthName || '',
-      birthDate: b.birthDate,
+      birthName: b.birthName,
+      birthDate: b.birthDate ? new Date(b.birthDate) : undefined,
       birthPlace: b.birthPlace,
-      deathDate: b.deathDate,
+      deathDate: b.deathDate ? new Date(b.deathDate) : undefined,
       gender: b.gender,
       nationality: b.nationality,
       numeroPegase: b.numeroPegase,
@@ -126,7 +132,8 @@
   )
 
   async function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryGeneralInformationInput
+    beneficiary: SaveBeneficiaryGeneralInformationInput,
+    target: string | undefined
   ) {
     if (!data.value) {
       return
@@ -141,7 +148,7 @@
         ...beneficiary
       })
 
-      navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+      navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
     } catch {
       useSnackbar().error('La mise à jour de la synthèse a échoué.')
     } finally {
