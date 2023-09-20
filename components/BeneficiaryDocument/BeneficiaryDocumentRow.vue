@@ -23,7 +23,7 @@
       <span
         v-if="document.tags.length"
         class="fr-tag"
-        >{{ documentTagLabels[document.tags[0] as DocumentTag] }}</span
+        >{{ Object.keys(documentTagLabels).includes(document.tags[0]) ?  documentTagLabels[document.tags[0] as DocumentTag] : document.tags[0] }}</span
       >
       <span
         v-if="document.tags.length > 1"
