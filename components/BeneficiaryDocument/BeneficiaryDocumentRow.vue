@@ -62,6 +62,7 @@
             class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
             data-fr-opened="false"
             aria-controls="global-modal"
+            title="Modifier"
             @click="onEdit"
           >
             Modifier le document
@@ -70,6 +71,7 @@
         <li v-if="canDelete">
           <button
             class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-line"
+            title="Supprimer"
             @click="onDelete"
           >
             Supprimer le document
