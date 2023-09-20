@@ -25,11 +25,8 @@ export const updateBeneficiaryDraftHandler = async ({
     where: { id: draftId },
     data: {
       content: {
-        general: { ...beneficiaryDraft.content.general, ...general },
-        taxHousehold: {
-          ...beneficiaryDraft.content.taxHousehold,
-          ...taxHousehold
-        }
+        general: general || beneficiaryDraft.content.general,
+        taxHousehold: taxHousehold || beneficiaryDraft.content.taxHousehold
         // TODO: add other sections
       }
     }

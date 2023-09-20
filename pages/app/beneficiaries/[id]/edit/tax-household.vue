@@ -5,6 +5,7 @@
     :beneficiary="beneficiary"
     :title="RouteTitle.AppBeneficiaryEditTaxHousehold()"
     is-editting
+    :previous-page="previousPage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -46,6 +47,11 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
 
+  const previousPage = {
+    title: RouteTitle.AppBeneficiaryEditInfo(),
+    path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId)
+  }
+
   const { data, pending, error } =
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
@@ -67,7 +73,8 @@
   })
 
   async function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryTaxHouseholdInput
+    beneficiary: SaveBeneficiaryTaxHouseholdInput,
+    target: string | undefined
   ) {
     if (!data.value) {
       return
@@ -82,7 +89,7 @@
         ...beneficiary
       })
 
-      navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+      navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
     } catch {
       useSnackbar().error('La mise à jour de la synthèse a échoué.')
     } finally {
