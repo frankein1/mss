@@ -91,6 +91,9 @@ const BeneficiaryRoute = (
   return base
 }
 
+const BeneficiaryEditRoute = (beneficiaryId: string) =>
+  `${BeneficiaryRoute(beneficiaryId)}/edit`
+
 const BeneficiaryFollowupsRoute = (beneficiaryId: string) =>
   `${BeneficiaryRoute(beneficiaryId)}/followups`
 
@@ -138,12 +141,12 @@ export const RoutePath = {
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
 
-  [Route.AppBeneficiaryEdit]: (beneficiaryId: string) => {
-    return `${BeneficiaryRoute(beneficiaryId)}/edit`
-  },
-  [Route.AppBeneficiaryEditInfo]: (beneficiaryId: string) => {
-    return `${BeneficiaryRoute(beneficiaryId)}/edit/info`
-  },
+  [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
+    BeneficiaryEditRoute(beneficiaryId),
+  [Route.AppBeneficiaryEditInfo]: (beneficiaryId: string) =>
+    `${BeneficiaryEditRoute(beneficiaryId)}/edit`,
+  [Route.AppBeneficiaryEditTaxHousehold]: (beneficiaryId: string) =>
+    `${BeneficiaryEditRoute(beneficiaryId)}/tax-household`,
 
   [Route.AppBeneficiaryFollowupAdd]: (beneficiaryId: string) =>
     `${BeneficiaryFollowupsRoute(beneficiaryId)}/add`,

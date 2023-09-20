@@ -4,7 +4,7 @@
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     :title="RouteTitle.AppBeneficiariesSaveTaxHousehold()"
-    saved
+    :previous-page="previousPage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -46,7 +46,13 @@
   const isSubmitting = ref(false)
 
   const route = useRoute()
+  const draftId = route.params.draftId as string
   const snackbar = useSnackbar()
+
+  const previousPage = {
+    title: RouteTitle.AppBeneficiariesSaveInfo(),
+    path: RoutePath.AppBeneficiariesSaveInfo(draftId)
+  }
 
   const {
     data: beneficiaryDraft,
@@ -54,16 +60,24 @@
     error
   } = await useAsyncData(loadBeneficiaryDraft)
 
-  const beneficiary = computed<SaveBeneficiaryTaxHouseholdInput>(() => ({
-    familySituation: beneficiaryDraft.value?.taxHousehold?.familySituation,
-    majorChildren: beneficiaryDraft.value?.taxHousehold?.majorChildren,
-    minorChildren: beneficiaryDraft.value?.taxHousehold?.minorChildren,
-    taxHouseholds: beneficiaryDraft.value?.taxHousehold?.taxHouseholds
-  }))
+  const beneficiary = computed<SaveBeneficiaryTaxHouseholdInput | undefined>(
+    () => {
+      if (!beneficiaryDraft.value) {
+        return undefined
+      }
+
+      const { taxHousehold } = beneficiaryDraft.value
+
+      return {
+        familySituation: taxHousehold?.familySituation,
+        majorChildren: taxHousehold?.majorChildren,
+        minorChildren: taxHousehold?.minorChildren,
+        taxHouseholds: taxHousehold?.taxHouseholds
+      }
+    }
+  )
 
   async function loadBeneficiaryDraft() {
-    const draftId = route.params.draftId as string
-
     const beneficiaryDraft = (await trpcClient.draft.get.query({
       id: draftId
     })) as BeneficiaryDraft
@@ -76,12 +90,12 @@
 
   async function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryTaxHouseholdInput,
-    saveAndLeave: boolean
+    target: string | undefined
   ) {
-    if (saveAndLeave) {
-      await saveBeneficairy(beneficiary)
+    if (target) {
+      await saveBeneficiaryDraft(beneficiary, target)
     } else {
-      await saveBeneficiaryDraft(beneficiary)
+      await saveBeneficairy(beneficiary)
     }
   }
 
@@ -115,7 +129,8 @@
   }
 
   async function saveBeneficiaryDraft(
-    beneficiary: SaveBeneficiaryTaxHouseholdInput
+    beneficiary: SaveBeneficiaryTaxHouseholdInput,
+    target: string
   ) {
     if (!beneficiaryDraft.value) {
       snackbar.error("L'enregistrement du brouillon a échoué.")
@@ -130,8 +145,7 @@
         taxHousehold: beneficiary
       })
 
-      // TODO: Navigation post submit
-      // navigateTo(RoutePath.AppBeneficiary(id))
+      navigateTo(target)
     } catch {
       snackbar.error("L'enregistrement du brouillon a échoué.")
     } finally {

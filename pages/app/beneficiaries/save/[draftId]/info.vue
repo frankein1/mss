@@ -5,6 +5,7 @@
     :beneficiary="beneficiary"
     :title="RouteTitle.AppBeneficiariesSaveInfo()"
     title-icon="fr-icon-user-line"
+    :next-page="nextPage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -26,7 +27,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { UserStatus } from '@prisma/client'
   import {
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
@@ -43,6 +43,12 @@
 
   const route = useRoute()
   const snackbar = useSnackbar()
+  const draftId = route.params.draftId as string
+
+  const nextPage = {
+    title: RouteTitle.AppBeneficiariesSaveTaxHousehold(),
+    path: RoutePath.AppBeneficiariesSaveTaxHousehold(draftId)
+  }
 
   const {
     data: agents,
@@ -70,25 +76,23 @@
     return ''
   })
 
-  const beneficiary = computed<SaveBeneficiaryGeneralInformationInput>(() => ({
-    referents: beneficiaryDraft.value?.general?.referents || [],
-    aidantConnectAuthorized:
-      beneficiaryDraft.value?.general?.aidantConnectAuthorized || false,
-    status: beneficiaryDraft.value?.general?.status || UserStatus.Active,
-    firstName: beneficiaryDraft.value?.general?.firstName || '',
-    usualName: beneficiaryDraft.value?.general?.usualName,
-    birthName: beneficiaryDraft.value?.general?.birthName || '',
-    birthDate: beneficiaryDraft.value?.general?.birthDate,
-    numeroPegase: beneficiaryDraft.value?.general?.numeroPegase,
-    noPhone: false,
-    phone1: beneficiaryDraft.value?.general?.phone1,
-    email: beneficiaryDraft.value?.general?.email,
-    caregiver: false
-  }))
+  const beneficiary = computed<
+    SaveBeneficiaryGeneralInformationInput | undefined
+  >(() => {
+    if (!beneficiaryDraft.value?.general) {
+      return undefined
+    }
+
+    const b = beneficiaryDraft.value?.general
+
+    return {
+      ...b,
+      birthDate: b.birthDate ? new Date(b.birthDate) : undefined,
+      deathDate: b.deathDate ? new Date(b.deathDate) : undefined
+    }
+  })
 
   async function loadBeneficiaryDraft() {
-    const draftId = route.params.draftId as string
-
     const beneficiaryDraft = (await trpcClient.draft.get.query({
       id: draftId
     })) as BeneficiaryDraft
@@ -101,12 +105,12 @@
 
   async function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryGeneralInformationInput,
-    saveAndLeave: boolean
+    target: string | undefined
   ) {
-    if (saveAndLeave) {
-      await saveBeneficairy(beneficiary)
+    if (target) {
+      await saveBeneficiaryDraft(beneficiary, target)
     } else {
-      await saveBeneficiaryDraft(beneficiary)
+      await saveBeneficairy(beneficiary)
     }
   }
 
@@ -140,7 +144,8 @@
   }
 
   async function saveBeneficiaryDraft(
-    beneficiary: SaveBeneficiaryGeneralInformationInput
+    beneficiary: SaveBeneficiaryGeneralInformationInput,
+    target: string
   ) {
     if (!beneficiaryDraft.value) {
       snackbar.error("L'enregistrement du brouillon a échoué.")
@@ -155,9 +160,7 @@
         general: beneficiary
       })
 
-      navigateTo(
-        RoutePath.AppBeneficiariesSaveTaxHousehold(beneficiaryDraft.value.id)
-      )
+      navigateTo(target)
     } catch {
       snackbar.error("L'enregistrement du brouillon a échoué.")
     } finally {
