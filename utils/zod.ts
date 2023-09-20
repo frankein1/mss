@@ -15,7 +15,7 @@ export const minStringLengthMessage = (length: number) =>
   `Veuillez renseigner au minimum ${length} caractère${length > 1 ? 's' : ''}.`
 
 export const maxStringLengthMessage = (length: number) =>
-  `Veuillez renseigner au maximum ${length} caractères}.`
+  `Veuillez renseigner au maximum ${length} caractères.`
 
 export const validEmailMessage = 'Veuillez renseigner un email valide.'
 

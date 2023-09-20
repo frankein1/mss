@@ -9,7 +9,7 @@ import type {
   Draft
 } from '@prisma/client'
 import type { BeneficiaryRelativeWithLinkedBeneficiary } from './relative'
-import { CreateBeneficiaryInput } from '~/server/schema'
+import { SaveBeneficiaryGeneralInformationInput } from '~/server/schema'
 
 export type BeneficiaryReferent = {
   id: string
@@ -39,5 +39,7 @@ export type BeneficiaryNames = Pick<
 >
 
 export type BeneficiaryDraft = Draft & {
-  content?: { general?: CreateBeneficiaryInput } | null
+  content?: {
+    general?: SaveBeneficiaryGeneralInformationInput
+  } | null
 }

@@ -12,18 +12,21 @@ export const updateBeneficiaryDraftHandler = async ({
   input: UpdateBeneficiaryDraftInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiaryDraft = await prismaClient.draft.findUnique({
+  const beneficiaryDraft = (await prismaClient.draft.findUnique({
     where: { id: draftId }
-  })
+  })) as BeneficiaryDraft | null
 
-  if (!beneficiaryDraft || !canUpdateDraft(user, beneficiaryDraft)) {
+  if (!beneficiaryDraft?.content || !canUpdateDraft(user, beneficiaryDraft)) {
     throw forbiddenError()
   }
 
   const updatedBeneficiaryDraft = await prismaClient.draft.update({
     where: { id: draftId },
     data: {
-      content: { general }
+      content: {
+        general: { ...beneficiaryDraft.content.general, ...general }
+        // TODO: add other sections
+      }
     }
   })
 

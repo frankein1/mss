@@ -188,36 +188,44 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   aidantConnectAuthorized: z.boolean().default(false),
   status: requiredNativeEnum(BeneficiaryStatus),
   title: withEmptyValueOptionalNativeEnum(BeneficiaryTitle),
-  firstName: beneficiaryFirstNameSchema.nullish(),
+  firstName: beneficiaryFirstNameSchema,
   usualName: beneficiaryLastNameSchema.nullish(),
-  birthName: beneficiaryLastNameSchema.nullish(),
+  birthName: beneficiaryLastNameSchema,
   birthDate: z.coerce.date(errorMessages).nullish(),
-  birthPlace: z.string().nullish(),
+  birthPlace: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
   deathDate: z.coerce.date(errorMessages).nullish(),
   gender: withEmptyValueOptionalNativeEnum(Gender),
   nationality: withEmptyValueOptionalNativeEnum(Nationality),
-  numeroPegase: z.string().nullish(),
+  numeroPegase: numeroPegaseContraint.nullish(),
   accommodationMode: withEmptyValueOptionalNativeEnum(
     BeneficiaryAccommodationMode
   ),
-  accommodationName: z.string().nullish(),
-  accommodationAdditionalInformation: z.string().nullish(),
+  accommodationName: stringConstraint
+    .max(50, maxStringLengthMessage(50))
+    .nullish(),
+  accommodationAdditionalInformation: stringConstraint
+    .max(200, maxStringLengthMessage(200))
+    .nullish(),
   zipcode: stringOrEmpty(z.string().min(5, validZipcode)),
-  city: z.string().nullish(),
-  region: z.string().nullish(),
+  city: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+  region: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   accommodationZone: withEmptyValueOptionalNativeEnum(
     BeneficiaryAccommodationZone
   ),
-  street: z.string().nullish(),
-  addressComplement: z.string().nullish(),
-  postOfficeBox: z.string().nullish(),
+  street: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+  addressComplement: stringConstraint
+    .max(100, maxStringLengthMessage(100))
+    .nullish(),
+  postOfficeBox: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   noPhone: z.boolean().default(false),
-  phone1: z.string().nullish(),
-  phone2: z.string().nullish(),
+  phone1: phoneConstraint.nullish(),
+  phone2: phoneConstraint.nullish(),
   email: emailOrEmpty(),
   caregiver: z.boolean().default(false),
   mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility),
-  additionalInformation: z.string().nullish()
+  additionalInformation: stringConstraint
+    .max(1500, maxStringLengthMessage(1500))
+    .nullish()
 })
 
 export type SaveBeneficiaryGeneralInformationInput = z.infer<
