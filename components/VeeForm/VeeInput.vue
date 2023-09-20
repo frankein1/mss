@@ -117,7 +117,7 @@
   )
 
   const hint = computed(() => {
-    if (!props.noHint) {
+    if (props.noHint) {
       return undefined
     }
     if (props.type === 'tel') {
