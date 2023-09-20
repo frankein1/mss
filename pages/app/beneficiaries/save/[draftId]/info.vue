@@ -150,13 +150,14 @@
     isSubmitting.value = true
 
     try {
-        await trpcClient.beneficiaryDraft.update.mutate({
-          id: beneficiaryDraft.value.id,
-          general: beneficiary
-        })
+      await trpcClient.beneficiaryDraft.update.mutate({
+        id: beneficiaryDraft.value.id,
+        general: beneficiary
+      })
 
-      // TODO: Navigation post submit
-      // navigateTo(RoutePath.AppBeneficiary(id))
+      navigateTo(
+        RoutePath.AppBeneficiariesSaveTaxHousehold(beneficiaryDraft.value.id)
+      )
     } catch {
       snackbar.error("L'enregistrement du brouillon a échoué.")
     } finally {

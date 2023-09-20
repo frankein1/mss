@@ -1,7 +1,8 @@
 import { z } from 'zod'
 import {
   saveBeneficiarySchema,
-  saveBeneficiaryGeneralInformationSchema
+  saveBeneficiaryGeneralInformationSchema,
+  saveBeneficiaryTaxHouseholdSchema
 } from './saveBeneficiary.schema'
 
 function fromSaveSchemaToUpdateSchema<T extends z.ZodRawShape>(
@@ -24,4 +25,12 @@ export const updateBeneficiaryGeneralInformationSchema =
 
 export type UpdateBeneficiaryGeneralInformationInput = z.infer<
   typeof updateBeneficiaryGeneralInformationSchema
+>
+
+export const updateBeneficiaryTaxHouseholdSchema = fromSaveSchemaToUpdateSchema(
+  saveBeneficiaryTaxHouseholdSchema
+)
+
+export type UpdateBeneficiaryTaxHouseholdInput = z.infer<
+  typeof updateBeneficiaryTaxHouseholdSchema
 >

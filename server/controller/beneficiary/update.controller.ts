@@ -34,7 +34,7 @@ export const updateBeneficiaryHandler = async ({
     input.id
   )
 
-  const { id, health, external, occupation, taxHousehold, entourage } = input
+  const { id, health, external, occupation, entourage } = input
 
   let data = {}
 
@@ -70,15 +70,6 @@ export const updateBeneficiaryHandler = async ({
   ) {
     data = { ...data, ...occupation }
   }
-  if (
-    canEditBeneficiaryRelatives(user, {
-      ...input,
-      referents: beneficiary.referents
-    })
-  ) {
-    const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
-    data = { ...data, ...taxHouseholdDatas }
-  }
 
   if (
     canEditBeneficiaryRelatives(user, {
@@ -88,17 +79,18 @@ export const updateBeneficiaryHandler = async ({
   ) {
     const entourages =
       entourage.entourages?.map(e => ({ hosted: false, ...e })) || []
-    const taxHouseholds =
-      taxHousehold.taxHouseholds?.map(e => {
-        const { linkedBeneficiary, ...data } = e
-        return {
-          hosted: true,
-          linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null,
-          ...data
-        }
-      }) || []
+    // const taxHouseholds =
+    //   taxHousehold.taxHouseholds?.map(e => {
+    //     const { linkedBeneficiary, ...data } = e
+    //     return {
+    //       hosted: true,
+    //       linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null,
+    //       ...data
+    //     }
+    //   }) || []
 
-    const newRelatives = [...entourages, ...taxHouseholds]
+    // const newRelatives = [...entourages, ...taxHouseholds]
+    const newRelatives = [...entourages]
 
     const createRelatives =
       newRelatives.filter(
