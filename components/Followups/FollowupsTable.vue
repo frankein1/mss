@@ -20,16 +20,16 @@
               {{ followupFieldLabels.status }}
             </th>
             <th scope="col">
-              {{ followupFieldLabels.date }}
               <AtomSortButton
+                :column="followupFieldLabels.date"
                 :sort="dateSort"
                 numeric
                 @update:sort="onSort({ date: $event })"
               />
             </th>
             <th scope="col">
-              {{ followupFieldLabels.beneficiaryId }}
               <AtomSortButton
+                :column="followupFieldLabels.beneficiaryId"
                 @update:sort="
                   onSort({
                     beneficiary: {
@@ -41,8 +41,8 @@
             </th>
             <th scope="col">Objet de l'entretien</th>
             <th scope="col">
-              {{ followupFieldLabels.dueDate }}
               <AtomSortButton
+                :column="followupFieldLabels.dueDate"
                 numeric
                 @update:sort="onSort({ dueDate: $event })"
               />

@@ -15,15 +15,15 @@
           <tr>
             <th scope="col">Type</th>
             <th scope="col">
-              Nom
               <AtomSortButton
+                column="Nom"
                 :sort="nameSort"
                 @update:sort="onSort({ name: $event })"
               />
             </th>
             <th scope="col">
-              Date ajout
               <AtomSortButton
+                column="Date ajout"
                 :sort="dateSort"
                 numeric
                 @update:sort="onSort({ created: $event })"
