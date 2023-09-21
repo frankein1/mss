@@ -19,8 +19,8 @@
             <th scope="col">Rôle</th>
             <th scope="col">Email</th>
             <th scope="col">
-              Dernière connexion
               <AtomSortButton
+                column="Dernière connexion"
                 numeric
                 @update:sort="onSort({ lastAccess: $event })"
               />

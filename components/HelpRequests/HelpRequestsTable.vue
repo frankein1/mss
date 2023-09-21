@@ -24,22 +24,22 @@
               v-if="canViewAnyHelpRequestDetails"
               scope="col"
             >
-              {{ helpRequestFieldLabels.dueDate }}
               <AtomSortButton
+                :column="helpRequestFieldLabels.dueDate"
                 numeric
                 @update:sort="onSort({ dueDate: $event })"
               />
             </th>
             <th scope="col">
-              {{ helpRequestFieldLabels.beneficiaryId }}
               <AtomSortButton
+                :column="helpRequestFieldLabels.beneficiaryId"
                 @update:sort="onSort({ beneficiary: { usualName: $event } })"
               />
             </th>
             <template v-if="canViewAnyHelpRequestDetails">
               <th scope="col">
-                {{ helpRequestFieldLabels.instructorOrganizationId }}
                 <AtomSortButton
+                  :column="helpRequestFieldLabels.instructorOrganizationId"
                   @update:sort="
                     onSort({ instructorOrganization: { name: $event } })
                   "
