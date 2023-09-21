@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="feature-section documents-header-section fr-p-3w">
+    <div class="feature-section history-header-section fr-p-3w">
       <p v-if="historyTotal">
         {{ historyTotal }} élément(s) disponibles dans l'historique des
         accompagnements du bénéficiaire
@@ -92,6 +92,10 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
+
+  .history-header-section {
+    margin-bottom: 2rem;
+  }
 
   .history-list {
     @include dsfr.disable-list-style;
