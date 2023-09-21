@@ -1,5 +1,8 @@
 <template>
-  <div class="beneficiary-history-details-accordion__title">
+  <div
+    class="beneficiary-history-details-accordion__title"
+    :class="{ expanded: expanded }"
+  >
     <div class="meta">
       <h2 class="date">
         {{ formatDate(date) }}
@@ -47,16 +50,17 @@
       </ul>
     </div>
     <hr class="fr-col-12 fr-mt-5v" />
-    <ul class="fr-badges-group follow-up-types-badges">
+    <ul class="fr-tags-group follow-up-types-tags">
       <li
         v-for="followUpType in followUpTypes"
         :key="followUpType.id"
       >
-        <p class="fr-badge">{{ followUpType.name }}</p>
+        <p class="fr-tag">{{ followUpType.name }}</p>
       </li>
     </ul>
     <button
       class="fr-btn collapse-btn fr-btn--tertiary"
+      :class="{ expanded: expanded }"
       aria-expanded="false"
       :aria-controls="accordionId"
       :title="collapseBtnLabel"
@@ -152,13 +156,16 @@
     display: grid;
     padding: 1rem;
     column-gap: 0.5rem;
-    border-radius: 0.5rem 0.5rem 0 0;
+    border-radius: 0.5rem;
     grid-template-areas:
       'meta accordion-btn'
       'divider accordion-btn'
-      'follow-up-types-badges accordion-btn';
-    color: #fff;
+      'follow-up-types-tags accordion-btn';
     grid-template-columns: auto max-content;
+
+    &.expanded {
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
   }
 
   .meta {
@@ -176,7 +183,6 @@
     --title-spacing: 0;
 
     grid-area: date;
-    color: #fff;
   }
 
   .agent-name {
@@ -212,13 +218,12 @@
     grid-area: divider;
   }
 
-  .follow-up-types-badges {
-    grid-area: follow-up-types-badges;
-    margin-bottom: -0.5rem;
+  .follow-up-types-tags {
+    grid-area: follow-up-types-tags;
+    margin-bottom: -0.8rem;
   }
 
   .collapse-btn {
-    color: #fff;
     grid-area: accordion-btn;
     box-shadow: none;
     align-self: center;
@@ -244,6 +249,10 @@
       outline-style: inherit;
       outline-color: inherit;
       outline-width: 2px;
+      border-radius: 0.5rem;
+    }
+
+    &.expanded::before {
       border-radius: 0.5rem 0.5rem 0 0;
     }
   }
