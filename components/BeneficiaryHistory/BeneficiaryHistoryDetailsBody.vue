@@ -3,6 +3,11 @@
     :id="accordionId"
     class="fr-collapse beneficiary-history-details-body"
   >
+    <hr
+      v-if="canViewHistoryDetails || canListComments"
+      class="fr-mb-1v"
+    />
+
     <template v-if="canViewHistoryDetails">
       <BeneficiaryFollowupDetailsBodyMetas
         v-if="history.isFollowup"
@@ -177,7 +182,7 @@
     border-radius: 0 0 0.5rem 0.5rem;
 
     &.fr-collapse--expanded {
-      padding: 2rem 1.5rem 1rem;
+      padding: 0.5rem 1.5rem 1rem;
     }
   }
 
