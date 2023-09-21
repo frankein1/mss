@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="beneficiary-section documents-header-section fr-p-3w">
+    <div class="feature-section documents-header-section fr-p-3w">
       <p v-if="historyTotal">
         {{ historyTotal }} élément(s) disponibles dans l'historique des
         accompagnements du bénéficiaire
