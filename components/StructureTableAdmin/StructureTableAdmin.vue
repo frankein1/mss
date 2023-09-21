@@ -19,8 +19,8 @@
             <th scope="col">Code postal</th>
             <th scope="col">Ville</th>
             <th scope="col">
-              Bénéficiaires
               <AtomSortButton
+                column="Bénéficiaires"
                 :sort="beneficiariesSort"
                 numeric
                 @update:sort="onSort({ beneficiaries: { _count: $event } })"
@@ -30,8 +30,8 @@
             <th scope="col">Entretiens</th>
             <th scope="col">Utilisateurs</th>
             <th scope="col">
-              Dernière activité
               <AtomSortButton
+                column="Dernière activité"
                 numeric
                 @update:sort="onSort({ lastActivity: $event })"
               />
