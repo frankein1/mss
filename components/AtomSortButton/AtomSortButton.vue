@@ -1,20 +1,23 @@
 <template>
-  <button
-    class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline btn-order"
-    :title="title"
-    @click="onToggle"
-  >
-    <span
-      class="fr-icon-arrow-up-s-line"
-      :class="{ 'arrow-enabled': isAscending && innerSort != undefined }"
-      aria-hidden="true"
-    ></span>
-    <span
-      class="fr-icon-arrow-down-s-line"
-      :class="{ 'arrow-enabled': !isAscending && innerSort != undefined }"
-      aria-hidden="true"
-    ></span>
-  </button>
+  <div class="btn-container">
+    <span>{{ column }}</span>
+    <button
+      class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline btn-order"
+      :title="title"
+      @click="onToggle"
+    >
+      <span
+        class="fr-icon-arrow-up-s-line"
+        :class="{ 'arrow-enabled': isAscending && innerSort != undefined }"
+        aria-hidden="true"
+      ></span>
+      <span
+        class="fr-icon-arrow-down-s-line"
+        :class="{ 'arrow-enabled': !isAscending && innerSort != undefined }"
+        aria-hidden="true"
+      ></span>
+    </button>
+  </div>
 </template>
 
 <script lang="ts" setup>
@@ -22,6 +25,7 @@
 
   const props = withDefaults(
     defineProps<{
+      column: string
       sort?: SortOrder
       numeric?: boolean
     }>(),
@@ -70,13 +74,21 @@
 </script>
 
 <style lang="scss" scoped>
+  .btn-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
   .btn-order {
     display: inline-flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     color: var(--text-disabled-grey);
-    line-height: 0;
+    line-height: 1;
+    padding: 0.25rem;
 
     span::before {
       --icon-size: 1rem;
