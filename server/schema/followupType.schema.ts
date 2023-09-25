@@ -3,13 +3,16 @@ import { DefaultFollowupType } from '@prisma/client'
 import {
   minStringLengthMessage,
   maxStringLengthMessage,
-  stringConstraint
+  stringConstraint,
+  stringOrEmpty
 } from '~/utils/zod'
 
 const createFollowupTypeSchema = z.object({
-  name: stringConstraint
-    .max(100, maxStringLengthMessage(100))
-    .min(2, minStringLengthMessage(2)),
+  name: stringOrEmpty(
+    stringConstraint
+      .max(100, maxStringLengthMessage(100))
+      .min(2, minStringLengthMessage(2))
+  ),
   legallyRequired: z.boolean(),
   default: z.nativeEnum(DefaultFollowupType).nullish(),
   ownedByStructureId: z.string().uuid()

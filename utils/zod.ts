@@ -57,7 +57,7 @@ export const stringConstraint = z.string().trim()
 
 export const phoneConstraint = stringConstraint.regex(
   /^(\+33 |0)[1-9]( \d\d){4}$/,
-  'le format doit être de la forme 00 00 00 00 00'
+  'Le format doit être de la forme 00 00 00 00 00'
 )
 
 export const socialSecurityNumberConstraint = z

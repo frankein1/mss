@@ -22,7 +22,7 @@ import {
   createOrUpdateEntourageSchema,
   createOrUpdateTaxHouseholdSchema
 } from '../relative.schema'
-import { beneficiaryFirstNameSchema } from './beneficiaryFirstName.schema'
+import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
 import {
   errorMessages,
@@ -54,9 +54,9 @@ export const saveBeneficiarySchema = z.object({
   general: z.object({
     status: requiredNativeEnum(BeneficiaryStatus),
     title: withEmptyValueOptionalNativeEnum(BeneficiaryTitle),
-    firstName: beneficiaryFirstNameSchema,
-    usualName: beneficiaryLastNameSchema.nullish(),
-    birthName: beneficiaryLastNameSchema,
+    firstName: beneficiaryFirstNameOrEmptySchema,
+    usualName: stringOrEmpty(beneficiaryLastNameSchema),
+    birthName: stringOrEmpty(beneficiaryLastNameSchema),
     birthDate: z.coerce.date(errorMessages).nullish(),
     birthPlace: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
     deathDate: z.coerce.date(errorMessages).nullish(),
@@ -86,8 +86,8 @@ export const saveBeneficiarySchema = z.object({
       .max(100, maxStringLengthMessage(100))
       .nullish(),
     noPhone: z.boolean().default(false),
-    phone1: phoneConstraint.nullish(),
-    phone2: phoneConstraint.nullish(),
+    phone1: stringOrEmpty(phoneConstraint),
+    phone2: stringOrEmpty(phoneConstraint),
     email: emailOrEmpty(),
     caregiver: z.boolean().default(false),
     mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility)
@@ -109,7 +109,7 @@ export const saveBeneficiarySchema = z.object({
     healthAdditionalInformation: stringConstraint
       .max(200, maxStringLengthMessage(200))
       .nullish(),
-    socialSecurityNumber: socialSecurityNumberConstraint.nullish(),
+    socialSecurityNumber: stringOrEmpty(socialSecurityNumberConstraint),
     insurance: stringConstraint.max(100, maxStringLengthMessage(100)).nullish()
   }),
   occupation: z.object({
@@ -118,7 +118,7 @@ export const saveBeneficiarySchema = z.object({
     ),
     occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
     employer: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
-    employerSiret: siretConstraint.nullish(),
+    employerSiret: stringOrEmpty(siretConstraint),
     mainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
     mainIncomeAmount: z.coerce.number().nullish(),
     partnerMainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
@@ -188,9 +188,9 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   aidantConnectAuthorized: z.boolean().default(false),
   status: requiredNativeEnum(BeneficiaryStatus),
   title: withEmptyValueOptionalNativeEnum(BeneficiaryTitle),
-  firstName: beneficiaryFirstNameSchema.nullish(),
-  usualName: beneficiaryLastNameSchema.nullish(),
-  birthName: beneficiaryLastNameSchema.nullish(),
+  firstName: beneficiaryFirstNameOrEmptySchema,
+  usualName: stringOrEmpty(beneficiaryLastNameSchema),
+  birthName: stringOrEmpty(beneficiaryLastNameSchema),
   birthDate: z.coerce.date(errorMessages).nullish(),
   birthPlace: z.string().nullish(),
   deathDate: z.coerce.date(errorMessages).nullish(),
@@ -212,8 +212,8 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   addressComplement: z.string().nullish(),
   postOfficeBox: z.string().nullish(),
   noPhone: z.boolean().default(false),
-  phone1: z.string().nullish(),
-  phone2: z.string().nullish(),
+  phone1: stringOrEmpty(phoneConstraint),
+  phone2: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
   caregiver: z.boolean().default(false),
   mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility),
