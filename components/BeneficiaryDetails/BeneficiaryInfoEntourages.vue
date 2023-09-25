@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryOutput } from '~/server/routers'
+  import { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
 
   const props = defineProps<{
@@ -33,3 +33,4 @@
 
   const hasEntourages = props.entourages?.length > 0
 </script>
+~/server/trpc/routers

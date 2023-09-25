@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import {
     BeneficiaryOrientationTypeKeys,
     BeneficiaryProtectionMeasureKeys
@@ -86,3 +86,4 @@
       props.beneficiary.additionalInformation
   )
 </script>
+~/server/trpc/routers

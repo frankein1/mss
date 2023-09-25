@@ -44,7 +44,7 @@
 <script setup lang="ts">
   import { BeneficiaryFamilySituationKeys } from '~/client/options/beneficiary'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
@@ -59,3 +59,4 @@
       props.beneficiary.majorChildren
   )
 </script>
+~/server/trpc/routers

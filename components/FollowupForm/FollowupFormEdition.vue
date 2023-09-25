@@ -26,7 +26,7 @@
     editFollowupSchema
   } from '~/server/schema/followup.schema'
   import { useAuthStore } from '~/store/auth'
-  import { GetFollowupDetailsOutput } from '~/server/routers'
+  import { GetFollowupDetailsOutput } from '~/server/trpc/routers'
 
   const authStore = useAuthStore()
 
@@ -97,3 +97,4 @@
     emit('saveFollowup', values)
   })
 </script>
+~/server/trpc/routers

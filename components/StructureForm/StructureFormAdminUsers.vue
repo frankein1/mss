@@ -97,7 +97,7 @@
   import { UserStatus } from '@prisma/client'
   import { userFieldLabels } from '~/client/labels'
   import { NonAdminUserRoleLabels } from '~/client/options/user'
-  import { AdminStructureOutput } from '~/server/routers'
+  import { AdminStructureOutput } from '~/server/trpc/routers'
   import { RoutePath } from '~/utils/routing'
   import type { NonAdminUserRole } from '~/types/user'
 
@@ -105,3 +105,4 @@
     structure: AdminStructureOutput
   }>()
 </script>
+~/server/trpc/routers

@@ -31,7 +31,7 @@
   import { canEditHelpRequestPrivateSynthesis } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { pastStatusesFromStatus } from '~/utils/helpRequest'
-  import { GetHelpRequestDetailsOutput } from '~/server/routers'
+  import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
 
   const authStore = useAuthStore()
 
@@ -84,3 +84,4 @@
     emit('saveHelpRequest', values)
   })
 </script>
+~/server/trpc/routers

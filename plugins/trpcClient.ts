@@ -1,6 +1,6 @@
 import { httpBatchLink, createTRPCNuxtClient } from 'trpc-nuxt/client'
 import superjson from 'superjson'
-import type { AppRouter } from '~/server/routers'
+import type { AppRouter } from '~/server/trpc/routers'
 
 export default defineNuxtPlugin(() => {
   const config = useRuntimeConfig()
