@@ -144,7 +144,7 @@ export const RoutePath = {
   [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
     BeneficiaryEditRoute(beneficiaryId),
   [Route.AppBeneficiaryEditInfo]: (beneficiaryId: string) =>
-    `${BeneficiaryEditRoute(beneficiaryId)}/edit`,
+    `${BeneficiaryEditRoute(beneficiaryId)}/info`,
   [Route.AppBeneficiaryEditTaxHousehold]: (beneficiaryId: string) =>
     `${BeneficiaryEditRoute(beneficiaryId)}/tax-household`,
 
