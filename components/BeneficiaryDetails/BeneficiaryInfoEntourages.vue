@@ -2,7 +2,7 @@
   <BeneficiaryInfoSection
     v-if="hasEntourages"
     title="Entourage"
-    :beneficiary-id="beneficiary.id"
+    :edit-link="editLink"
   >
     <div class="fr-container">
       <div class="fr-grid-row">
@@ -25,11 +25,16 @@
 <script setup lang="ts">
   import { GetBeneficiaryOutput } from '~/server/routers'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
+  import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
     entourages: BeneficiaryRelativeWithLinkedBeneficiary[]
   }>()
 
-  const hasEntourages = props.entourages?.length > 0
+  const hasEntourages = computed(() => props.entourages.length > 0)
+
+  const editLink = computed(
+    () => RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id) // TODO: Update path
+  )
 </script>

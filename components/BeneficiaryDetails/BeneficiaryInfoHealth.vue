@@ -2,7 +2,7 @@
   <BeneficiaryInfoSection
     v-if="hasHealthInfo"
     title="Santé"
-    :beneficiary-id="beneficiary.id"
+    :edit-link="editLink"
   >
     <div class="fr-container">
       <div class="fr-grid-row">
@@ -45,6 +45,7 @@
   import { useAuthStore } from '~/store/auth'
   import { canViewBeneficiaryNir } from '~/server/security/rules'
   import { BeneficiaryGirKeys } from '~/client/options/beneficiary'
+  import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
@@ -65,5 +66,9 @@
 
   const hasNirAccess = computed(() =>
     canViewBeneficiaryNir(authStore.userStructureType)
+  )
+
+  const editLink = computed(
+    () => RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id) // TODO: Update path
   )
 </script>

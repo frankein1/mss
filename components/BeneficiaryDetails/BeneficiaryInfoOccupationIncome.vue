@@ -2,7 +2,7 @@
   <BeneficiaryInfoSection
     v-if="hasOccupationIncomeSection"
     title="Activité/Revenu"
-    :beneficiary-id="beneficiary.id"
+    :edit-link="editLink"
   >
     <div class="fr-container">
       <div class="fr-grid-row">
@@ -143,12 +143,17 @@
     MinistereDepartmentServiceAcKeys
   } from '~/client/options/ministry'
   import type { GetBeneficiaryOutput } from '~/server/routers'
+  import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
   }>()
 
   const isMinistryAgent = useMinistryAgent()
+
+  const editLink = computed(
+    () => RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id) // TODO: Update path
+  )
 
   const hasOccupationIncomeSection = computed(
     () =>

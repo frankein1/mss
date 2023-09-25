@@ -2,7 +2,7 @@
   <BeneficiaryInfoSection
     v-if="hasGeneralInfo"
     title="Informations générales"
-    :beneficiary-id="beneficiary.id"
+    :edit-link="editLink"
   >
     <div class="fr-container">
       <div v-if="hasIdentityInformations(beneficiary)">
@@ -138,6 +138,7 @@
     hasIdentityInformations,
     hasCoordinatesInformations
   } from '~/utils/beneficiary'
+  import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
@@ -151,5 +152,9 @@
       hasAddressInformations(props.beneficiary) ||
       hasMobilityInformations(props.beneficiary) ||
       hasAdditionalInformations(props.beneficiary)
+  )
+
+  const editLink = computed(() =>
+    RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id)
   )
 </script>
