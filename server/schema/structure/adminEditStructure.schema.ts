@@ -5,7 +5,8 @@ import {
   requiredNativeEnum,
   stringConstraint,
   siretConstraint,
-  maxStringLengthMessage
+  maxStringLengthMessage,
+  stringOrEmpty
 } from '~/utils/zod'
 
 export const adminEditStructureSchemaBase = editStructureSchema
@@ -18,7 +19,7 @@ export const adminEditStructureSchemaBase = editStructureSchema
       .max(50, maxStringLengthMessage(50))
       .nullish(),
     inseeCode: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
-    siret: siretConstraint.nullish()
+    siret: stringOrEmpty(siretConstraint)
   })
 
 export const adminEditStructureSchema = adminEditStructureSchemaBase

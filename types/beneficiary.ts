@@ -33,9 +33,8 @@ export type BeneficiarySearchResult = Pick<
   'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
 >
 
-export type BeneficiaryNames = Pick<
-  Beneficiary,
-  'firstName' | 'usualName' | 'birthName'
+export type BeneficiaryNames = Partial<
+  Pick<Beneficiary, 'firstName' | 'usualName' | 'birthName'>
 >
 
 export type BeneficiaryDraft = Draft & {
