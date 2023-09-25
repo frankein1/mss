@@ -50,7 +50,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import { getUserDisplayName } from '~/utils/user'
   import {
     formatAddress,
@@ -71,3 +71,4 @@
     return props.beneficiary.phone1 || props.beneficiary.phone2
   })
 </script>
+~/server/trpc/routers

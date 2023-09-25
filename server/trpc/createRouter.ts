@@ -1,6 +1,8 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import type { User } from '@prisma/client'
+import { shield } from 'trpc-shield'
+import { adminPermissions } from './routers/admin/permissions'
 import { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
 import { canViewStats } from '~/server/security/rules'
@@ -113,7 +115,13 @@ export const statsProcedure = protectedProcedure.use(statsMiddleware)
 /**
  * Admin procedure
  */
+
+export const adminPermissionsMiddleware = t.middleware(
+  shield<AppContext>(adminPermissions)
+)
+
 export const adminProcedure = t.procedure
   .use(isAuthenticated)
   .use(isActive)
   .use(isAdmin)
+  .use(adminPermissionsMiddleware)

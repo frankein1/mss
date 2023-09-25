@@ -23,7 +23,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { GetBeneficiaryOutput } from '~/server/routers'
+  import { GetBeneficiaryOutput } from '~/server/trpc/routers'
 
   defineProps<{
     title: string
@@ -63,3 +63,4 @@
     grid-area: actions;
   }
 </style>
+~/server/trpc/routers

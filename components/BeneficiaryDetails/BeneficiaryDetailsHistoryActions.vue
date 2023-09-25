@@ -42,7 +42,7 @@
   import { RoutePath } from '~/utils/routing'
   import { canCreateHelpRequest as canCreateHelpRequestRule } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
-  import { GetBeneficiaryOutput } from '~/server/routers'
+  import { GetBeneficiaryOutput } from '~/server/trpc/routers'
 
   const authStore = useAuthStore()
 
@@ -97,3 +97,4 @@
     }
   }
 </style>
+~/server/trpc/routers

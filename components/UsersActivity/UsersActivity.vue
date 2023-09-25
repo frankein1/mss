@@ -30,7 +30,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiariesUsersActivityOutput } from '~/server/routers'
+  import { GetBeneficiariesUsersActivityOutput } from '~/server/trpc/routers'
   import { RoutePath } from '~/utils/routing'
   import { EventCategory, UserActivityEventAction } from '~/types/matomo'
 
@@ -138,3 +138,4 @@
     }
   }
 </style>
+~/server/trpc/routers

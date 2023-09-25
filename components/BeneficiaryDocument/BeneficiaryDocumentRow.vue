@@ -82,7 +82,7 @@
 
 <script lang="ts" setup>
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
-  import { GetBeneficiaryOutput, DocumentItem } from '~/server/routers'
+  import { GetBeneficiaryOutput, DocumentItem } from '~/server/trpc/routers'
   import { canEditDocument, canDeleteDocument } from '~/server/security/rules'
   import { EditDocumentInput } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
@@ -183,3 +183,4 @@
     margin-bottom: 0;
   }
 </style>
+~/server/trpc/routers

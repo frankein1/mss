@@ -29,7 +29,7 @@
   import type {
     GetBeneficiaryOutput,
     GetBeneficiaryFollowupTypesOutput
-  } from '~/server/routers'
+  } from '~/server/trpc/routers'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
 
   defineProps<{
@@ -39,3 +39,4 @@
     followupTypes: GetBeneficiaryFollowupTypesOutput
   }>()
 </script>
+~/server/trpc/routers
