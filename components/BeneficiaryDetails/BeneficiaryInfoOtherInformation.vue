@@ -2,7 +2,7 @@
   <BeneficiaryInfoSection
     v-if="hasOtherInformationSection"
     title="Structures extérieures"
-    :beneficiary-id="beneficiary.id"
+    :edit-link="editLink"
   >
     <div class="fr-container">
       <div class="fr-grid-row">
@@ -69,10 +69,15 @@
     BeneficiaryOrientationTypeKeys,
     BeneficiaryProtectionMeasureKeys
   } from '~/client/options/beneficiary'
+  import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
   }>()
+
+  const editLink = computed(
+    () => RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id) // TODO: Update path
+  )
 
   const hasOtherInformationSection = computed(
     () =>
