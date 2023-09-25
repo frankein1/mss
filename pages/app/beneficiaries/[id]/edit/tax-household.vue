@@ -25,6 +25,10 @@
       class="fr-p-3v"
     >
       <BeneficiaryFormFamilySituation />
+      <BeneficiaryFormAddRelative
+        name="taxHousholds"
+        add-button-label="Ajouter un membre du foyer"
+      />
     </div>
   </BeneficiaryFormLayout>
 </template>
