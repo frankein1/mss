@@ -100,7 +100,7 @@ export const Breadcrumb = {
     ...BeneficiaryBreadcrumb(beneficiary),
     {
       text: RouteTitle.AppBeneficiaryEdit(beneficiary),
-      to: RoutePath.AppBeneficiaryEdit(beneficiary?.id || '')
+      to: RoutePath.AppBeneficiaryEditInfo(beneficiary?.id || '')
     }
   ],
 

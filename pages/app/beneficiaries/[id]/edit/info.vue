@@ -93,6 +93,7 @@
     const b = data.value.beneficiary
 
     return {
+      id: b.id,
       referents: b.referents.map(referent => referent.id),
       aidantConnectAuthorized: b.aidantConnectAuthorized,
       status: b.status,
@@ -121,7 +122,7 @@
       phone2: b.phone2,
       email: b.email,
       mobility: b.mobility
-    } as SaveBeneficiaryGeneralInformationInput
+    } as SaveBeneficiaryGeneralInformationInput & { id: string }
   })
 
   const canSetReferents = computed(() =>

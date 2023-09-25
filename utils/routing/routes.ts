@@ -79,7 +79,8 @@ const BeneficiaryRoute = (
     return ''
   }
   const base = `${BeneficiariesRoute}/${beneficiaryId}`
-  if (options) {
+  const hasDefinedOptions = options && Object.values(options).every(o => !!o)
+  if (hasDefinedOptions) {
     const { tab, ...params } = options
     const tabHash = tab ? `#${tab}` : ''
     if (Object.keys(params).length) {
