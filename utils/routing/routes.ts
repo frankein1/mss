@@ -101,6 +101,14 @@ const BeneficiaryFollowupsRoute = (beneficiaryId: string) =>
 const BeneficiaryHelpRequestsRoute = (beneficiaryId: string) =>
   `${BeneficiaryRoute(beneficiaryId)}/help-requests`
 
+const savedRoute = (route: string, saved: boolean) => {
+  if (!saved) {
+    return route
+  }
+  const urlParams = new URLSearchParams({ saved: '' })
+  return `${route}?${urlParams}`
+}
+
 export const RoutePath = {
   [Route.Index]: () => '/',
   [Route.Register]: () => '/register',
@@ -144,10 +152,19 @@ export const RoutePath = {
 
   [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
     BeneficiaryEditRoute(beneficiaryId),
-  [Route.AppBeneficiaryEditInfo]: (beneficiaryId: string) =>
-    `${BeneficiaryEditRoute(beneficiaryId)}/info`,
-  [Route.AppBeneficiaryEditTaxHousehold]: (beneficiaryId: string) =>
-    `${BeneficiaryEditRoute(beneficiaryId)}/tax-household`,
+  [Route.AppBeneficiaryEditInfo]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(`${BeneficiaryEditRoute(beneficiaryId)}/info`, !!options?.saved),
+  [Route.AppBeneficiaryEditTaxHousehold]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(
+      `${BeneficiaryEditRoute(beneficiaryId)}/tax-household`,
+      !!options?.saved
+    ),
 
   [Route.AppBeneficiaryFollowupAdd]: (beneficiaryId: string) =>
     `${BeneficiaryFollowupsRoute(beneficiaryId)}/add`,

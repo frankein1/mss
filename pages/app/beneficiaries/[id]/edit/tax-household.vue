@@ -6,6 +6,7 @@
     :title="RouteTitle.AppBeneficiaryEditTaxHousehold()"
     is-editting
     :previous-page="previousPage"
+    :saved="saved"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -46,10 +47,11 @@
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
+  const saved = route.query.saved !== undefined
 
   const previousPage = {
     title: RouteTitle.AppBeneficiaryEditInfo(),
-    path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId)
+    path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, { saved: true })
   }
 
   const { data, pending, error } =

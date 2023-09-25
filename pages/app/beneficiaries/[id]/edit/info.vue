@@ -7,6 +7,7 @@
     title-icon="fr-icon-user-line"
     is-editting
     :next-page="nextPage"
+    :saved="saved"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -49,10 +50,13 @@
   const authStore = useAuthStore()
   const route = useRoute()
   const beneficiaryId = route.params.id as string
+  const saved = route.query.saved !== undefined
 
   const nextPage = {
     title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
-    path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId)
+    path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId, {
+      saved: true
+    })
   }
 
   const {

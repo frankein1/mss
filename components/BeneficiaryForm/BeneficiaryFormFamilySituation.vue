@@ -7,7 +7,7 @@
         :options="withEmptyValue(beneficiaryFamilySituationOptions)"
       />
     </div>
-    <div class="fr-col-12 fr-col-lg6">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         name="minorChildren"
         :label="beneficiaryFieldLabels.minorChildren"
@@ -15,7 +15,7 @@
         :min="0"
       />
     </div>
-    <div class="fr-col-12 fr-col-lg6">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         name="majorChildren"
         :label="beneficiaryFieldLabels.majorChildren"
