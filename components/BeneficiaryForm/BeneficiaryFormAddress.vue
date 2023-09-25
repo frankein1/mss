@@ -22,6 +22,21 @@
         :label="beneficiaryFieldLabels.accommodationAdditionalInformation"
       />
     </div>
+    <div class="fr-col-12 fr-col-md-3">
+      <VeeInput
+        name="zipcode"
+        :label="beneficiaryFieldLabels.zipcode"
+        @change-value="setZipcodeValue($event)"
+      />
+    </div>
+    <div class="fr-col-12 fr-col-md-9">
+      <VeeCityInput
+        name="city"
+        :label="beneficiaryFieldLabels.city"
+        :zip-code="zipcode"
+        @city-selected="onCitySelected"
+      />
+    </div>
     <div class="fr-col-12">
       <VeeAddressInput
         name="street"
@@ -42,21 +57,6 @@
       <VeeInput
         name="postOfficeBox"
         :label="beneficiaryFieldLabels.postOfficeBox"
-      />
-    </div>
-    <div class="fr-col-12 fr-col-md-3">
-      <VeeInput
-        name="zipcode"
-        :label="beneficiaryFieldLabels.zipcode"
-        @change-value="setZipcodeValue($event)"
-      />
-    </div>
-    <div class="fr-col-12 fr-col-md-9">
-      <VeeCityInput
-        name="city"
-        :label="beneficiaryFieldLabels.city"
-        :zip-code="zipcode"
-        @city-selected="onCitySelected"
       />
     </div>
     <div class="fr-col-12">
