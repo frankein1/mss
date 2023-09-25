@@ -29,6 +29,7 @@ export const updateBeneficiaryTaxHouseholdHandler = async ({
   const {
     id,
     structureId: _,
+    taxHouseholds: __,
     ...taxHouseholdDatas
     // TODO: Add tax households relatives
   } = input

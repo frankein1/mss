@@ -68,6 +68,7 @@
       familySituation: b.familySituation,
       majorChildren: b.majorChildren,
       minorChildren: b.minorChildren,
+      caregiver: b.caregiver,
       taxHouseholds: data.value.taxHouseholds
     } as SaveBeneficiaryTaxHouseholdInput
   })

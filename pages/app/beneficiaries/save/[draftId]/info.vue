@@ -83,7 +83,7 @@
       return undefined
     }
 
-    const b = beneficiaryDraft.value?.general
+    const b = beneficiaryDraft.value.general
 
     return {
       ...b,

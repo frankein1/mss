@@ -221,7 +221,6 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
-  caregiver: z.boolean().default(false),
   mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility),
   additionalInformation: stringConstraint
     .max(1500, maxStringLengthMessage(1500))
@@ -236,6 +235,7 @@ export const saveBeneficiaryTaxHouseholdSchema = z.object({
   familySituation: withEmptyValueOptionalNativeEnum(BeneficiaryFamilySituation),
   minorChildren: z.coerce.number().gte(0).nullish(),
   majorChildren: z.coerce.number().gte(0).nullish(),
+  caregiver: z.boolean().default(false),
   taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema).nullish()
 })
 

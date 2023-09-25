@@ -120,7 +120,6 @@
       phone1: b.phone1,
       phone2: b.phone2,
       email: b.email,
-      caregiver: b.caregiver,
       mobility: b.mobility
     } as SaveBeneficiaryGeneralInformationInput
   })
