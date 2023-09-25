@@ -7,7 +7,7 @@
         :options="withEmptyValue(beneficiaryFamilySituationOptions)"
       />
     </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg6">
       <VeeInput
         name="minorChildren"
         :label="beneficiaryFieldLabels.minorChildren"
@@ -15,12 +15,18 @@
         :min="0"
       />
     </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg6">
       <VeeInput
         name="majorChildren"
         :label="beneficiaryFieldLabels.majorChildren"
         type="number"
         :min="0"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeCheckbox
+        label="Ce bénéficiaire est aidant familial"
+        name="caregiver"
       />
     </div>
   </BeneficiaryFormSection>
