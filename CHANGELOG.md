@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.6.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.6.0...v1.6.1) (2023-09-26)
+
+
+### Bug Fixes
+
+* Impossible de saisir un montant de ressource avec des centimes et de saisir 0 enfant mineur/majeur ([9b68ce5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9b68ce5b91c5288600f79e30a5ff4bd3cb05c95a)), closes [#145](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/145)
+
 ## [1.6.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.5.2...v1.6.0) (2023-09-04)
 
 

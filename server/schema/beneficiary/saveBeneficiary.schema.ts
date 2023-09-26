@@ -38,7 +38,9 @@ import {
   phoneConstraint,
   siretConstraint,
   numeroPegaseContraint,
-  maxStringLengthMessage
+  maxStringLengthMessage,
+  amountNumber,
+  validIntNumber
 } from '~/utils/zod'
 
 // TODO: To delete !
@@ -96,8 +98,16 @@ export const saveBeneficiarySchema = z.object({
     familySituation: withEmptyValueOptionalNativeEnum(
       BeneficiaryFamilySituation
     ),
-    minorChildren: z.coerce.number().gte(0).nullish(),
-    majorChildren: z.coerce.number().gte(0).nullish(),
+    minorChildren: z.coerce
+      .number()
+      .int(validIntNumber)
+      .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+      .nullish(),
+    majorChildren: z.coerce
+      .number()
+      .int(validIntNumber)
+      .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+      .nullish(),
     taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema).nullish()
   }),
   entourage: z.object({
@@ -120,13 +130,13 @@ export const saveBeneficiarySchema = z.object({
     employer: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
     employerSiret: stringOrEmpty(siretConstraint),
     mainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
-    mainIncomeAmount: z.coerce.number().nullish(),
+    mainIncomeAmount: amountNumber.nullish(),
     partnerMainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
-    partnerMainIncomeAmount: z.coerce.number().nullish(),
+    partnerMainIncomeAmount: amountNumber.nullish(),
     majorChildrenMainIncomeSource: z.array(
       z.nativeEnum(IncomeSource, errorMessages)
     ),
-    majorChildrenMainIncomeAmount: z.coerce.number().nullish(),
+    majorChildrenMainIncomeAmount: amountNumber.nullish(),
     unemploymentNumber: unemploymentNumberConstraint.nullish(),
     pensionOrganisations: z.array(
       z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)
@@ -233,8 +243,16 @@ export type SaveBeneficiaryGeneralInformationInput = z.infer<
 
 export const saveBeneficiaryTaxHouseholdSchema = z.object({
   familySituation: withEmptyValueOptionalNativeEnum(BeneficiaryFamilySituation),
-  minorChildren: z.coerce.number().gte(0).nullish(),
-  majorChildren: z.coerce.number().gte(0).nullish(),
+  minorChildren: z.coerce
+    .number()
+    .int(validIntNumber)
+    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+    .nullish(),
+  majorChildren: z.coerce
+    .number()
+    .int(validIntNumber)
+    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+    .nullish(),
   caregiver: z.boolean().default(false),
   taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema).nullish()
 })

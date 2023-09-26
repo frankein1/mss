@@ -23,7 +23,7 @@
         :name="name"
         placeholder="0.00"
         type="text"
-        pattern="[0-9]\d*(\.\d+)?"
+        pattern="[0-9]\d*((\.|,)\d+)?"
         :aria-describedby="ariaDescribedby"
         :aria-labelledby="labelledBy"
         :readonly="readonly"
@@ -92,7 +92,8 @@
       '6',
       '7',
       '8',
-      '9'
+      '9',
+      ','
     ]
     if (!ALLOWED_KEYS.includes((e as KeyboardEvent).key)) {
       e.preventDefault()

@@ -12,7 +12,6 @@
         name="minorChildren"
         :label="beneficiaryFieldLabels.minorChildren"
         type="number"
-        :min="0"
       />
     </div>
     <div class="fr-col-12 fr-col-lg-6">
@@ -20,7 +19,6 @@
         name="majorChildren"
         :label="beneficiaryFieldLabels.majorChildren"
         type="number"
-        :min="0"
       />
     </div>
     <div class="fr-col-12">

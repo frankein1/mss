@@ -51,6 +51,7 @@
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { prismaDecimalToNumber } from '~/utils/prismaDecimalToNumber'
 
   definePageMeta({
     middleware: 'is-beneficiary-referent'
@@ -160,11 +161,15 @@
         employer: b.employer,
         employerSiret: b.employerSiret,
         mainIncomeSource: b.mainIncomeSource || [],
-        mainIncomeAmount: b.mainIncomeAmount,
+        mainIncomeAmount: prismaDecimalToNumber(b.mainIncomeAmount),
         partnerMainIncomeSource: b.partnerMainIncomeSource || [],
-        partnerMainIncomeAmount: b.partnerMainIncomeAmount,
+        partnerMainIncomeAmount: prismaDecimalToNumber(
+          b.partnerMainIncomeAmount
+        ),
         majorChildrenMainIncomeSource: b.majorChildrenMainIncomeSource || [],
-        majorChildrenMainIncomeAmount: b.majorChildrenMainIncomeAmount,
+        majorChildrenMainIncomeAmount: prismaDecimalToNumber(
+          b.majorChildrenMainIncomeAmount
+        ),
         unemploymentNumber: b.unemploymentNumber,
         pensionOrganisations: b.pensionOrganisations || [],
         otherPensionOrganisations: b.otherPensionOrganisations,
