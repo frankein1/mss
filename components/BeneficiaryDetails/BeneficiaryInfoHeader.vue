@@ -68,6 +68,9 @@
   )
 
   const phoneLabel = computed(() => {
+    if (props.beneficiary.noPhone) {
+      return "N'a pas de téléphone"
+    }
     return props.beneficiary.phone1 || props.beneficiary.phone2
   })
 </script>
