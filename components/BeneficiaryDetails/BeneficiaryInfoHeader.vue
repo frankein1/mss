@@ -7,7 +7,10 @@
           :value="referentNames"
         />
       </div>
-      <div class="fr-col-6">
+      <div
+        v-if="beneficiary.aidantConnectAuthorized"
+        class="fr-col-6"
+      >
         <div class="fr-icon-success-line field-value">
           Mandat Aidant Connect
         </div>
