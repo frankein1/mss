@@ -106,17 +106,23 @@
       hint: ''
     }
   )
+
+  // use `toRef` to create reactive references to `name` prop which is passed to `useField`
+  // this is important because vee-validte needs to know if the field name changes
+  // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
+  const name = toRef(() => props.name)
+
   const {
     errorMessage: error,
     value: modelValue,
     setValue
-  } = useField<string | null>(props.name)
+  } = useField<string | null>(name)
 
   const emit = defineEmits<{
     resultSelected: [value: string]
   }>()
 
-  const { id, errorId } = useFormFieldId(props.name)
+  const { id, errorId } = useFormFieldId(name)
   const listboxId = `autocomplete-${id}-listbox`
 
   const results = ref<Options>(new Map<string, string>())
@@ -157,7 +163,9 @@
     () => !!(isFocused.value && (results.value.size || timeout.value))
   )
 
-  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
+  const ariaDescribedby = computed(() =>
+    error.value ? errorId.value : undefined
+  )
 
   watch(
     () => props.value,
