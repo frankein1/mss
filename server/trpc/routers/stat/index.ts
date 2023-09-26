@@ -1,0 +1,1 @@
+export { statRouter } from './router'

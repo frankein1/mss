@@ -29,87 +29,91 @@ import {
   exportFollowupStatsHandler
 } from '~/server/trpc/controller/stat'
 import { statFilterSchema } from '~/server/schema'
-import { statsProcedure, router } from '~/server/trpc'
+import { protectedProcedure, router } from '~/server/trpc'
 
 export const statRouter = router({
-  getAccommodationZoneStats: statsProcedure
+  getAccommodationZoneStats: protectedProcedure
     .input(statFilterSchema)
     .query(getAccommodationZoneStatsHandler),
-  getAccommodationModeStats: statsProcedure
+  getAccommodationModeStats: protectedProcedure
     .input(statFilterSchema)
     .query(getAccommodationModeStatsHandler),
-  getAgeStats: statsProcedure.input(statFilterSchema).query(getAgeStatsHandler),
-  getBeneficiaryCount: statsProcedure
+  getAgeStats: protectedProcedure
+    .input(statFilterSchema)
+    .query(getAgeStatsHandler),
+  getBeneficiaryCount: protectedProcedure
     .input(statFilterSchema)
     .query(getBeneficiaryCountHandler),
-  getCSPStats: statsProcedure.input(statFilterSchema).query(getCSPStatsHandler),
-  getFamilyStats: statsProcedure
+  getCSPStats: protectedProcedure
+    .input(statFilterSchema)
+    .query(getCSPStatsHandler),
+  getFamilyStats: protectedProcedure
     .input(statFilterSchema)
     .query(getFamilyStatsHandler),
-  getFinancialHelpRequestsStats: statsProcedure
+  getFinancialHelpRequestsStats: protectedProcedure
     .input(statFilterSchema)
     .query(getFinancialHelpRequestsStats),
-  getFollowupActionsEntreprisesStats: statsProcedure
+  getFollowupActionsEntreprisesStats: protectedProcedure
     .input(statFilterSchema)
     .query(getFollowupActionsEntreprisesStatsHandler),
-  getFollowupMediumStats: statsProcedure
+  getFollowupMediumStats: protectedProcedure
     .input(statFilterSchema)
     .query(getFollowupMediumStatsHandler),
-  getFollowupMinistreStats: statsProcedure
+  getFollowupMinistreStats: protectedProcedure
     .input(statFilterSchema)
     .query(getFollowupMinistreStatsHandler),
-  getFollowupPrescribingOrganizationStats: statsProcedure
+  getFollowupPrescribingOrganizationStats: protectedProcedure
     .input(statFilterSchema)
     .query(getFollowupPrescribingOrganizationStatsHandler),
-  getFollowupStatusStats: statsProcedure
+  getFollowupStatusStats: protectedProcedure
     .input(statFilterSchema)
     .query(getFollowupStatusStatsHandler),
-  getGenderStats: statsProcedure
+  getGenderStats: protectedProcedure
     .input(statFilterSchema)
     .query(getGenderStatsHandler),
-  getHelpRequestMinistreStats: statsProcedure
+  getHelpRequestMinistreStats: protectedProcedure
     .input(statFilterSchema)
     .query(getHelpRequestMinistreStatsHandler),
-  getHelpRequestPrescribingOrganizationStats: statsProcedure
+  getHelpRequestPrescribingOrganizationStats: protectedProcedure
     .input(statFilterSchema)
     .query(getHelpRequestPrescribingOrganizationStatsHandler),
-  getHelpRequestStatusStats: statsProcedure
+  getHelpRequestStatusStats: protectedProcedure
     .input(statFilterSchema)
     .query(getHelpRequestStatusStatsHandler),
-  getHistoryCounts: statsProcedure
+  getHistoryCounts: protectedProcedure
     .input(statFilterSchema)
     .query(getHistoryCountsHandler),
-  getMobilityStats: statsProcedure
+  getMobilityStats: protectedProcedure
     .input(statFilterSchema)
     .query(getMobilityStatsHandler),
-  getRegionStats: statsProcedure
+  getRegionStats: protectedProcedure
     .input(statFilterSchema)
     .query(getRegionStatsHandler),
-  getFollowupFollowupTypeStats: statsProcedure
+  getFollowupFollowupTypeStats: protectedProcedure
     .input(statFilterSchema)
     .query(getFollowupFollowupTypesStatsHandler),
-  getHelpRequestFollowupTypeStats: statsProcedure
+  getHelpRequestFollowupTypeStats: protectedProcedure
     .input(statFilterSchema)
     .query(getHelpRequestFollowupTypesStatsHandler),
-  getMinistereStructure: statsProcedure
+  getMinistereStructure: protectedProcedure
     .input(statFilterSchema)
     .query(getMinistereStructureStatsHandler),
-  getMinistereCategorie: statsProcedure
+  getMinistereCategorie: protectedProcedure
     .input(statFilterSchema)
     .query(getMinistereCategorieStatsHandler),
-  getMinistereDepartementServiceAc: statsProcedure
+  getMinistereDepartementServiceAc: protectedProcedure
     .input(statFilterSchema)
     .query(getMinistereDepartementServiceAcStatsHandler),
-  getInstructorOrganizationStats: statsProcedure
+  getInstructorOrganizationStats: protectedProcedure
     .input(statFilterSchema)
     .query(getInstructorOrganizationStatsHandler),
-  exportBeneficiaryStats: statsProcedure
+  exportBeneficiaryStats: protectedProcedure
     .input(statFilterSchema)
     .query(exportBeneficiaryStatsHandler),
-  exportHelpRequestStats: statsProcedure
+  exportHelpRequestStats: protectedProcedure
     .input(statFilterSchema)
     .query(exportHelpRequestStatsHandler),
-  exportFollowupStats: statsProcedure
+  exportFollowupStats: protectedProcedure
     .input(statFilterSchema)
     .query(exportFollowupStatsHandler)
 })
