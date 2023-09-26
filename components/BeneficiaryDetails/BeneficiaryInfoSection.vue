@@ -1,83 +1,81 @@
 <template>
-  <div class="feature-section fr-pl-2w fr-mt-1w">
+  <div
+    class="feature-section fr-mt-1w"
+    :class="{ 'fr-accordion': title }"
+  >
     <div
       v-if="title"
-      class="fr-container"
+      class="fr-accordion__title"
     >
       <button
-        class="accordeon__btn"
-        @click="toggle"
+        class="fr-accordion__btn fr-h4"
+        aria-expanded="true"
+        :aria-controls="infoSectionId"
       >
-        <div class="accordeon__heading fr-h4">
-          <div>{{ title }}</div>
-          <div :class="arrowClass"></div>
-        </div>
+        {{ title }}
       </button>
     </div>
     <div
-      v-if="openState"
-      class="fr-py-2w"
+      :id="title ? infoSectionId : undefined"
+      :class="{ 'fr-collapse': title }"
     >
-      <slot></slot>
-      <div
-        v-if="editLink"
-        class="button__container"
-      >
-        <div class="fr-pr-12w">
-          <NuxtLink
-            :to="`${editLink}`"
-            class="fr-btn fr-btn--secondary"
-            title="Modifier"
-            target="_self"
-          >
-            Modifier
-          </NuxtLink>
-        </div>
+      <div>
+        <slot></slot>
+        <ul
+          v-if="editLink"
+          class="fr-btns-group fr-btns-group--inline fr-btns-group--right"
+        >
+          <li>
+            <NuxtLink
+              :to="`${editLink}`"
+              class="fr-btn fr-btn--secondary"
+              title="Modifier"
+              target="_self"
+            >
+              Modifier
+            </NuxtLink>
+          </li>
+        </ul>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+  import { getRandomId } from '~/utils/random'
+
   defineProps<{
     title?: string
     editLink?: string
   }>()
 
-  const openState = ref(true)
-
-  const toggle = () => {
-    openState.value = !openState.value
-  }
-
-  const arrowClass = computed(() => {
-    return openState.value
-      ? 'fr-icon-arrow-down-s-line'
-      : 'fr-icon-arrow-up-s-line'
-  })
+  const infoSectionId = computed(() => getRandomId('beneficiary-info-section-'))
 </script>
 
-<style scoped>
-  .accordeon__btn {
-    width: 100%;
-    text-align: left;
-    color: var(--text-title-blue-france);
-    border-bottom: 1px solid var(--border-default-grey);
-    background: var(--background-default-grey);
+<style scoped lang="scss">
+  .fr-accordion.feature-section {
+    padding: 0;
+  }
 
-    &:hover {
-      background: white;
+  .fr-accordion__btn {
+    color: var(--text-title-blue-france);
+    padding: 1.5rem 2rem;
+
+    &::after {
+      --icon-size: 1.5rem;
+    }
+
+    &[aria-expanded='true'] {
+      background-color: initial;
+      border-bottom: 1px solid var(--border-default-grey);
     }
   }
 
-  .accordeon__heading {
-    display: flex;
-    justify-content: space-between;
-    color: var(--text-title-blue-france);
+  .fr-accordion .fr-collapse > * {
+    padding: 1rem;
   }
 
-  .button__container {
-    display: flex;
-    justify-content: flex-end;
+  .fr-btns-group.fr-btns-group--inline .fr-btn {
+    margin-bottom: 0;
   }
 </style>
