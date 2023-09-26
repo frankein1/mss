@@ -30,7 +30,9 @@ import {
   stringOrEmpty,
   withEmptyValueOptionalNativeEnum,
   validZipcode,
-  emailOrEmpty
+  emailOrEmpty,
+  amountNumber,
+  validIntNumber
 } from '~/utils/zod'
 
 export const saveBeneficiarySchema = z.object({
@@ -79,8 +81,16 @@ export const saveBeneficiarySchema = z.object({
     familySituation: withEmptyValueOptionalNativeEnum(
       BeneficiaryFamilySituation
     ),
-    minorChildren: z.coerce.number().gte(0).nullish(),
-    majorChildren: z.coerce.number().gte(0).nullish(),
+    minorChildren: z.coerce
+      .number()
+      .int(validIntNumber)
+      .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+      .nullish(),
+    majorChildren: z.coerce
+      .number()
+      .int(validIntNumber)
+      .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+      .nullish(),
     taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema).nullish()
   }),
   entourage: z.object({
@@ -107,13 +117,13 @@ export const saveBeneficiarySchema = z.object({
     employer: z.string().nullish(),
     employerSiret: z.string().nullish(),
     mainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
-    mainIncomeAmount: z.coerce.number().nullish(),
+    mainIncomeAmount: amountNumber.nullish(),
     partnerMainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
-    partnerMainIncomeAmount: z.coerce.number().nullish(),
+    partnerMainIncomeAmount: amountNumber.nullish(),
     majorChildrenMainIncomeSource: z.array(
       z.nativeEnum(IncomeSource, errorMessages)
     ),
-    majorChildrenMainIncomeAmount: z.coerce.number().nullish(),
+    majorChildrenMainIncomeAmount: amountNumber.nullish(),
     unemploymentNumber: z.string().nullish(),
     pensionOrganisations: z.array(
       z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)

@@ -16,7 +16,6 @@
           name="taxHousehold.minorChildren"
           label="Nombre d'enfant(s) mineur(s)"
           type="number"
-          :min="0"
         />
       </div>
       <div class="fr-fieldset__element">
@@ -24,7 +23,6 @@
           name="taxHousehold.majorChildren"
           label="Nombre d'enfant(s) majeur(s)"
           type="number"
-          :min="0"
         />
       </div>
     </div>
