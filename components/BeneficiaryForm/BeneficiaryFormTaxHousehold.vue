@@ -103,7 +103,7 @@
 
   const props = defineProps<{
     index: number
-    currentBeneficiaryId: string | null
+    currentBeneficiaryId?: string
   }>()
 
   const emit = defineEmits<{

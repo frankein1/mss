@@ -22,10 +22,7 @@
       class="fr-p-3v"
     >
       <BeneficiaryFormFamilySituation />
-      <BeneficiaryFormAddRelative
-        name="taxHousholds"
-        add-button-label="Ajouter un membre du foyer"
-      />
+      <BeneficiaryFormTaxHouseholds />
     </div>
   </BeneficiaryFormLayout>
 </template>
@@ -64,17 +61,17 @@
     error
   } = await useAsyncData(loadBeneficiaryDraft)
 
-  const beneficiary = computed<
-    SaveBeneficiaryTaxHouseholdInput | undefined | null
-  >(() => {
+  const beneficiary = computed<SaveBeneficiaryTaxHouseholdInput | undefined>(
+    () => {
     if (!beneficiaryDraft.value) {
       return undefined
     }
 
     const { taxHousehold } = beneficiaryDraft.value
 
-    return taxHousehold
-  })
+      return taxHousehold || ({} as SaveBeneficiaryTaxHouseholdInput)
+    }
+  )
 
   async function loadBeneficiaryDraft() {
     const beneficiaryDraft = (await trpcClient.draft.get.query({
