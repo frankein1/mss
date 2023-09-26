@@ -2,7 +2,10 @@
   <BeneficiaryInfoSection title="">
     <BeneficiaryInfoHeader :beneficiary="beneficiary" />
   </BeneficiaryInfoSection>
-  <BeneficiaryInfoSection title="">
+  <BeneficiaryInfoSection
+    v-if="followupTypes.length"
+    title=""
+  >
     <BeneficiaryInfoFollowupTypes :followup-types="followupTypes" />
   </BeneficiaryInfoSection>
 
