@@ -6,6 +6,8 @@
     :title="RouteTitle.AppBeneficiaryEditInfo()"
     title-icon="fr-icon-user-line"
     is-editting
+    :next-page="nextPage"
+    :saved="saved"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -48,6 +50,14 @@
   const authStore = useAuthStore()
   const route = useRoute()
   const beneficiaryId = route.params.id as string
+  const saved = route.query.saved !== undefined
+
+  const nextPage = {
+    title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
+    path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId, {
+      saved: true
+    })
+  }
 
   const {
     data: agents,
@@ -87,16 +97,17 @@
     const b = data.value.beneficiary
 
     return {
+      id: b.id,
       referents: b.referents.map(referent => referent.id),
       aidantConnectAuthorized: b.aidantConnectAuthorized,
       status: b.status,
       title: b.title,
-      firstName: b.firstName || '',
+      firstName: b.firstName,
       usualName: b.usualName,
-      birthName: b.birthName || '',
-      birthDate: b.birthDate,
+      birthName: b.birthName,
+      birthDate: b.birthDate ? new Date(b.birthDate) : undefined,
       birthPlace: b.birthPlace,
-      deathDate: b.deathDate,
+      deathDate: b.deathDate ? new Date(b.deathDate) : undefined,
       gender: b.gender,
       nationality: b.nationality,
       numeroPegase: b.numeroPegase,
@@ -114,9 +125,8 @@
       phone1: b.phone1,
       phone2: b.phone2,
       email: b.email,
-      caregiver: b.caregiver,
       mobility: b.mobility
-    } as SaveBeneficiaryGeneralInformationInput
+    } as SaveBeneficiaryGeneralInformationInput & { id: string }
   })
 
   const canSetReferents = computed(() =>
@@ -126,7 +136,8 @@
   )
 
   async function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryGeneralInformationInput
+    beneficiary: SaveBeneficiaryGeneralInformationInput,
+    target: string | undefined
   ) {
     if (!data.value) {
       return
@@ -141,7 +152,7 @@
         ...beneficiary
       })
 
-      navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+      navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
     } catch {
       useSnackbar().error('La mise à jour de la synthèse a échoué.')
     } finally {

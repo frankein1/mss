@@ -192,34 +192,53 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   usualName: stringOrEmpty(beneficiaryLastNameSchema),
   birthName: stringOrEmpty(beneficiaryLastNameSchema),
   birthDate: z.coerce.date(errorMessages).nullish(),
-  birthPlace: z.string().nullish(),
+  birthPlace: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
   deathDate: z.coerce.date(errorMessages).nullish(),
   gender: withEmptyValueOptionalNativeEnum(Gender),
   nationality: withEmptyValueOptionalNativeEnum(Nationality),
-  numeroPegase: z.string().nullish(),
+  numeroPegase: numeroPegaseContraint.nullish(),
   accommodationMode: withEmptyValueOptionalNativeEnum(
     BeneficiaryAccommodationMode
   ),
-  accommodationName: z.string().nullish(),
-  accommodationAdditionalInformation: z.string().nullish(),
+  accommodationName: stringConstraint
+    .max(50, maxStringLengthMessage(50))
+    .nullish(),
+  accommodationAdditionalInformation: stringConstraint
+    .max(200, maxStringLengthMessage(200))
+    .nullish(),
   zipcode: stringOrEmpty(z.string().min(5, validZipcode)),
-  city: z.string().nullish(),
-  region: z.string().nullish(),
+  city: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+  region: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   accommodationZone: withEmptyValueOptionalNativeEnum(
     BeneficiaryAccommodationZone
   ),
-  street: z.string().nullish(),
-  addressComplement: z.string().nullish(),
-  postOfficeBox: z.string().nullish(),
+  street: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+  addressComplement: stringConstraint
+    .max(100, maxStringLengthMessage(100))
+    .nullish(),
+  postOfficeBox: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   noPhone: z.boolean().default(false),
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
-  caregiver: z.boolean().default(false),
   mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility),
-  additionalInformation: z.string().nullish()
+  additionalInformation: stringConstraint
+    .max(1500, maxStringLengthMessage(1500))
+    .nullish()
 })
 
 export type SaveBeneficiaryGeneralInformationInput = z.infer<
   typeof saveBeneficiaryGeneralInformationSchema
+>
+
+export const saveBeneficiaryTaxHouseholdSchema = z.object({
+  familySituation: withEmptyValueOptionalNativeEnum(BeneficiaryFamilySituation),
+  minorChildren: z.coerce.number().gte(0).nullish(),
+  majorChildren: z.coerce.number().gte(0).nullish(),
+  caregiver: z.boolean().default(false),
+  taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema).nullish()
+})
+
+export type SaveBeneficiaryTaxHouseholdInput = z.infer<
+  typeof saveBeneficiaryTaxHouseholdSchema
 >

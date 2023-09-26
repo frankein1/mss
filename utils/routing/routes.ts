@@ -31,10 +31,12 @@ export enum Route {
   AppBeneficiariesAdd = 'AppBeneficiariesAdd',
   AppBeneficiariesSave = 'AppBeneficiariesSave',
   AppBeneficiariesSaveInfo = 'AppBeneficiariesSaveInfo',
+  AppBeneficiariesSaveTaxHousehold = 'AppBeneficiariesSaveTaxHousehold',
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
   AppBeneficiaryEditInfo = 'AppBeneficiaryEditInfo',
+  AppBeneficiaryEditTaxHousehold = 'AppBeneficiaryEditTaxHousehold',
   AppBeneficiaryFollowupAdd = 'AppBeneficiaryFollowupAdd',
   AppBeneficiaryFollowupEdit = 'AppBeneficiaryFollowupEdit',
   AppBeneficiaryHelpRequestAdd = 'AppBeneficiaryHelpRequestAdd',
@@ -61,6 +63,9 @@ const ErrorRoute = '/error'
 
 const BeneficiariesRoute = `${AppRoute}/beneficiaries`
 
+const BeneficiarySaveRoute = (draftId: string) =>
+  `${BeneficiariesRoute}/save/${draftId}`
+
 const BeneficiaryRoute = (
   beneficiaryId: string | undefined,
   options?: {
@@ -74,7 +79,8 @@ const BeneficiaryRoute = (
     return ''
   }
   const base = `${BeneficiariesRoute}/${beneficiaryId}`
-  if (options) {
+  const hasDefinedOptions = options && Object.values(options).every(o => !!o)
+  if (hasDefinedOptions) {
     const { tab, ...params } = options
     const tabHash = tab ? `#${tab}` : ''
     if (Object.keys(params).length) {
@@ -86,11 +92,22 @@ const BeneficiaryRoute = (
   return base
 }
 
+const BeneficiaryEditRoute = (beneficiaryId: string) =>
+  `${BeneficiaryRoute(beneficiaryId)}/edit`
+
 const BeneficiaryFollowupsRoute = (beneficiaryId: string) =>
   `${BeneficiaryRoute(beneficiaryId)}/followups`
 
 const BeneficiaryHelpRequestsRoute = (beneficiaryId: string) =>
   `${BeneficiaryRoute(beneficiaryId)}/help-requests`
+
+const savedRoute = (route: string, saved: boolean) => {
+  if (!saved) {
+    return route
+  }
+  const urlParams = new URLSearchParams({ saved: '' })
+  return `${route}?${urlParams}`
+}
 
 export const RoutePath = {
   [Route.Index]: () => '/',
@@ -123,19 +140,31 @@ export const RoutePath = {
   [Route.AppStructureEdit]: () => `${AppRoute}/structure/edit`,
   [Route.AppBeneficiaries]: () => BeneficiariesRoute,
   [Route.AppBeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
-  [Route.AppBeneficiariesSave]: () => `${BeneficiariesRoute}/save`,
+  [Route.AppBeneficiariesSave]: (draftId: string) =>
+    `${BeneficiarySaveRoute(draftId)}`,
   [Route.AppBeneficiariesSaveInfo]: (draftId: string) =>
-    `${BeneficiariesRoute}/save/${draftId}/info`,
+    `${BeneficiarySaveRoute(draftId)}/info`,
+  [Route.AppBeneficiariesSaveTaxHousehold]: (draftId: string) =>
+    `${BeneficiarySaveRoute(draftId)}/tax-household`,
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
 
-  [Route.AppBeneficiaryEdit]: (beneficiaryId: string) => {
-    return `${BeneficiaryRoute(beneficiaryId)}/edit`
-  },
-  [Route.AppBeneficiaryEditInfo]: (beneficiaryId: string) => {
-    return `${BeneficiaryRoute(beneficiaryId)}/edit/info`
-  },
+  [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
+    BeneficiaryEditRoute(beneficiaryId),
+  [Route.AppBeneficiaryEditInfo]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(`${BeneficiaryEditRoute(beneficiaryId)}/info`, !!options?.saved),
+  [Route.AppBeneficiaryEditTaxHousehold]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(
+      `${BeneficiaryEditRoute(beneficiaryId)}/tax-household`,
+      !!options?.saved
+    ),
 
   [Route.AppBeneficiaryFollowupAdd]: (beneficiaryId: string) =>
     `${BeneficiaryFollowupsRoute(beneficiaryId)}/add`,

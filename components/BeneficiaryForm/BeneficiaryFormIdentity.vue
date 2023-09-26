@@ -72,12 +72,6 @@
         :label="beneficiaryFieldLabels.numeroPegase"
       />
     </div>
-    <div class="fr-col-12">
-      <VeeCheckbox
-        :label="beneficiaryFieldLabels.caregiver"
-        name="caregiver"
-      />
-    </div>
   </BeneficiaryFormSection>
 </template>
 

@@ -17,11 +17,17 @@
       </PageTitle>
 
       <slot></slot>
+      <BeneficiaryFormNavArrows
+        :previous-page="previousPage"
+        :next-page="nextPage"
+        @save="saveTarget = $event"
+      />
     </main>
     <BeneficiaryFormActions
       class="fr-col-12"
       :is-submitting="isSubmitting"
-      @save="saveAndLeave = true"
+      :saved="saved"
+      @save="saveTarget = undefined"
       @cancel="onCancel"
     />
   </form>
@@ -43,15 +49,25 @@
       isEditting?: boolean
       title: string
       titleIcon?: string
+      saved?: boolean
+      previousPage?: { title: string; path: string }
+      nextPage?: { title: string; path: string }
     }>(),
-    { beneficiary: undefined, isEditing: false, titleIcon: undefined }
+    {
+      beneficiary: undefined,
+      isEditing: false,
+      titleIcon: undefined,
+      saved: false,
+      previousPage: undefined,
+      nextPage: undefined
+    }
   )
 
   const emit = defineEmits<{
-    save: [beneficiary: SubmitType, saveAndLeave: boolean]
+    save: [beneficiary: SubmitType, target: string | undefined]
   }>()
 
-  const saveAndLeave = ref(false)
+  const saveTarget = ref<string | undefined>(undefined)
 
   const breadcrumbLinks = computed(() =>
     props.isEditting
@@ -67,7 +83,7 @@
   })
 
   const onSubmit = handleSubmit(values => {
-    emit('save', values, saveAndLeave.value)
+    emit('save', values, saveTarget.value)
   })
 
   async function onCancel() {

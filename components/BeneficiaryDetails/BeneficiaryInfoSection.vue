@@ -18,14 +18,14 @@
       v-if="openState"
       class="fr-py-2w"
     >
-      <slot />
+      <slot></slot>
       <div
-        v-if="beneficiaryId"
+        v-if="editLink"
         class="button__container"
       >
         <div class="fr-pr-12w">
           <NuxtLink
-            :to="`${RoutePath.AppBeneficiaryEditInfo(beneficiaryId)}`"
+            :to="`${editLink}`"
             class="fr-btn fr-btn--secondary"
             title="Modifier"
             target="_self"
@@ -39,11 +39,9 @@
 </template>
 
 <script setup lang="ts">
-  import { RoutePath } from '~/utils/routing'
-
   defineProps<{
     title?: string
-    beneficiaryId?: string
+    editLink?: string
   }>()
 
   const openState = ref(true)

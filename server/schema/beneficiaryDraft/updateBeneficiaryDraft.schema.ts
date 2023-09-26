@@ -1,9 +1,13 @@
 import { z } from 'zod'
-import { saveBeneficiaryGeneralInformationSchema } from '../beneficiary'
+import {
+  saveBeneficiaryGeneralInformationSchema,
+  saveBeneficiaryTaxHouseholdSchema
+} from '../beneficiary'
 
 export const updateBeneficiaryDraftSchema = z.object({
   id: z.string().uuid(),
-  general: saveBeneficiaryGeneralInformationSchema.optional()
+  general: saveBeneficiaryGeneralInformationSchema.optional(),
+  taxHousehold: saveBeneficiaryTaxHouseholdSchema.optional()
   // TODO: Add other sections
 })
 

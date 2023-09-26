@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
       saved?: boolean
       isSubmitting: boolean
@@ -46,6 +46,16 @@
     save: []
     cancel: []
   }>()
+
+  const saved = ref(props.saved)
+
+  onMounted(() => {
+    setTimeout(() => {
+      if (saved.value) {
+        saved.value = false
+      }
+    }, 5000)
+  })
 </script>
 
 <style lang="scss" scoped>

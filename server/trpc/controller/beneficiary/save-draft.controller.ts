@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType, Prisma } from '@prisma/client'
 import {
   ProtectedAppContext,
   ProtectedAppContextUser,
@@ -8,9 +8,13 @@ import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   SaveDraftInput,
-  SaveBeneficiaryGeneralInformationInput
+  SaveBeneficiaryGeneralInformationInput,
+  SaveBeneficiaryTaxHouseholdInput
 } from '~/server/schema'
-import { canSaveToBeneficiaryBeneficiaryDraft } from '~/server/security/rules'
+import {
+  canSaveToBeneficiaryBeneficiaryDraft,
+  canEditBeneficiaryRelatives
+} from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 
@@ -67,9 +71,7 @@ function prepareData(
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {
-  const general = (input.general || beneficiaryDraft.content?.general) as
-    | SaveBeneficiaryGeneralInformationInput
-    | undefined
+  const { general, taxHousehold } = getDataFromSources(input, beneficiaryDraft)
 
   if (!general) {
     throw new Error(
@@ -79,7 +81,7 @@ function prepareData(
 
   const fileNumber = generateFileNumber()
 
-  const data = {
+  let data = {
     structureId: user.structureId,
     fileNumber,
     ...general,
@@ -89,7 +91,35 @@ function prepareData(
       connect: general.referents.map(referent => ({ id: referent }))
     },
     createdById: user.id
-  } as any
+  } as Prisma.BeneficiaryUncheckedCreateInput
+
+  if (
+    taxHousehold &&
+    canEditBeneficiaryRelatives(user, {
+      structureId: user.structureId,
+      referents: general.referents
+    })
+  ) {
+    const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
+    data = { ...data, ...taxHouseholdDatas }
+  }
+
+  // TODO: Handle taxHousehold relatives
 
   return data
+}
+
+function getDataFromSources(
+  input: SaveDraftInput,
+  beneficiaryDraft: BeneficiaryDraft
+) {
+  const general = (input.general || beneficiaryDraft.content?.general) as
+    | SaveBeneficiaryGeneralInformationInput
+    | undefined
+  const taxHousehold = (input.taxHousehold ||
+    beneficiaryDraft.content?.taxHousehold) as
+    | SaveBeneficiaryTaxHouseholdInput
+    | undefined
+
+  return { general, taxHousehold }
 }
