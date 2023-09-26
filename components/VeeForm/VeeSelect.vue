@@ -86,15 +86,18 @@
     changeValue: [value: string]
   }>()
 
-  const {
-    errorMessage: error,
-    value,
-    handleChange
-  } = useField<string>(props.name)
+  // use `toRef` to create reactive references to `name` prop which is passed to `useField`
+  // this is important because vee-validte needs to know if the field name changes
+  // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
+  const name = toRef(() => props.name)
 
-  const { id, errorId } = useFormFieldId(props.name)
+  const { errorMessage: error, value, handleChange } = useField<string>(name)
 
-  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
+  const { id, errorId } = useFormFieldId(name)
+
+  const ariaDescribedby = computed(() =>
+    error.value ? errorId.value : undefined
+  )
 
   function onChange(event: Event) {
     emit('changeValue', (event.target as HTMLSelectElement).value)

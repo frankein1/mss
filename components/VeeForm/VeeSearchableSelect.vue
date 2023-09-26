@@ -175,11 +175,13 @@
     errorMessage: error
   } = useField<string[] | string>(name, undefined)
 
-  const { id, errorId } = useFormFieldId(props.name)
+  const { id, errorId } = useFormFieldId(name)
 
-  const listboxId = `searchable-select-${id}-listbox`
-  const displayInputId = `searchable-select-${id}-display-input`
-  const labelId = `searchable-select-${id}-label`
+  const listboxId = computed(() => `searchable-select-${id.value}-listbox`)
+  const displayInputId = computed(
+    () => `searchable-select-${id.value}-display-input`
+  )
+  const labelId = computed(() => `searchable-select-${id.value}-label`)
 
   const existingOptions = ref<Map<string, string>>(props.options)
   const filteredOptions = ref<Map<string, string>>(existingOptions.value)
@@ -204,7 +206,7 @@
   )
 
   const ariaDescribedby = computed<string | undefined>(() =>
-    error.value ? errorId : undefined
+    error.value ? errorId.value : undefined
   )
 
   /**

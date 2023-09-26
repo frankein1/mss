@@ -49,15 +49,15 @@
   // we are using toRefs to create reactive references to `name` and `value` props
   // this is important because vee-validate needs to know if any of these props change
   // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
-  const { name } = toRefs(props)
+  const name = toRef(() => props.name)
 
   const { handleChange, value } = useField(name, undefined, {
     type: 'radio'
   })
 
-  const { id } = useFormFieldId(props.name)
+  const { id } = useFormFieldId(name)
 
-  const legendId = `${id}-legend`
+  const legendId = computed(() => `${id.value}-legend`)
 
   function optionId(optionValue: string) {
     return `${id}-${optionValue}`
