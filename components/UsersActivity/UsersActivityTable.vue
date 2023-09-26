@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiariesUsersActivityOutput } from '~/server/routers'
+  import { GetBeneficiariesUsersActivityOutput } from '~/server/trpc/routers'
   import { formatDate } from '~/utils/formatDate'
   import { RoutePath } from '~/utils/routing'
   import { getUserDisplayName } from '~/utils/user'
@@ -91,3 +91,4 @@
     margin: 0 auto;
   }
 </style>
+~/server/trpc/routers

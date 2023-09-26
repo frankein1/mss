@@ -142,7 +142,7 @@
     MinistereCategorieKeys,
     MinistereDepartmentServiceAcKeys
   } from '~/client/options/ministry'
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
@@ -204,3 +204,4 @@
     return (arr || []).map(o => options[o] || o).join(', ')
   }
 </script>
+~/server/trpc/routers

@@ -78,7 +78,7 @@
   import { toTypedSchema } from '@vee-validate/zod'
   import { userFieldLabels } from '~/client/labels'
   import { userRoleOptions, userStatusOptions } from '~/client/options/user'
-  import { AdminUserOutput } from '~/server/routers'
+  import { AdminUserOutput } from '~/server/trpc/routers'
   import {
     AdminEditUserInput,
     AdminCreateUserInput,
@@ -134,3 +134,4 @@
     emit('updateUser', user)
   })
 </script>
+~/server/trpc/routers

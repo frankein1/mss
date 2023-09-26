@@ -14,9 +14,10 @@
 </template>
 
 <script setup lang="ts">
-  import type { GetBeneficiaryFollowupTypesOutput } from '~/server/routers'
+  import type { GetBeneficiaryFollowupTypesOutput } from '~/server/trpc/routers'
 
   defineProps<{
     followupTypes: GetBeneficiaryFollowupTypesOutput
   }>()
 </script>
+~/server/trpc/routers

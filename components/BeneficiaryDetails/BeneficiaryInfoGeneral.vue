@@ -124,7 +124,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import {
     BeneficiaryAccommodationModeKeys,
     BeneficiaryGenderKeys,
@@ -153,3 +153,4 @@
       hasAdditionalInformations(props.beneficiary)
   )
 </script>
+~/server/trpc/routers

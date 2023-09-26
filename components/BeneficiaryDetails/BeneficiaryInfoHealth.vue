@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import { useAuthStore } from '~/store/auth'
   import { canViewBeneficiaryNir } from '~/server/security/rules'
   import { BeneficiaryGirKeys } from '~/client/options/beneficiary'
@@ -67,3 +67,4 @@
     canViewBeneficiaryNir(authStore.userStructureType)
   )
 </script>
+~/server/trpc/routers

@@ -43,7 +43,7 @@
   import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
   import { canSetDocumentAsConfidential as canSetDocumentAsConfidentialRule } from '~/server/security/rules'
-  import { GetBeneficiaryOutput } from '~/server/routers'
+  import { GetBeneficiaryOutput } from '~/server/trpc/routers'
 
   const props = defineProps<{
     document: Doc
@@ -82,3 +82,4 @@
     emit('updateDocument', values)
   })
 </script>
+~/server/trpc/routers
