@@ -10,11 +10,11 @@
           <div class="fr-text--bold">Situation familiale</div>
         </div>
         <div class="fr-col-12 fr-pb-1w">
-          <div class="field-label">
-            {{
+          <BeneficiaryInfoLabel
+            :value="
               BeneficiaryFamilySituationKeys.value(beneficiary.familySituation)
-            }}
-          </div>
+            "
+          />
         </div>
         <div class="fr-col-6">
           <BeneficiaryInfoLabel

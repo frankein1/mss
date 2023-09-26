@@ -53,11 +53,6 @@
           :value="beneficiary.involvedPartners"
           class="fr-col-6"
         />
-        <BeneficiaryInfoLabel
-          label=" Informations complémentaires"
-          :value="beneficiary.additionalInformation"
-          class="fr-col-6"
-        />
       </div>
     </div>
   </BeneficiaryInfoSection>
@@ -87,8 +82,7 @@
       props.beneficiary.orientationType ||
       props.beneficiary.orientationStructure ||
       props.beneficiary.serviceProviders ||
-      props.beneficiary.involvedPartners ||
-      props.beneficiary.additionalInformation
+      props.beneficiary.involvedPartners
   )
 </script>
 ~/server/trpc/routers
