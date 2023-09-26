@@ -6,7 +6,7 @@
       </div>
       <div class="fr-col-12 fr-col-md-10 main-column">
         <PageTopBar />
-        <slot />
+        <slot></slot>
       </div>
     </div>
     <AtomSnackbar />
