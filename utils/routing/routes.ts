@@ -105,8 +105,7 @@ const savedRoute = (route: string, saved: boolean) => {
   if (!saved) {
     return route
   }
-  const urlParams = new URLSearchParams({ saved: '' })
-  return `${route}?${urlParams}`
+  return `${route}?saved`
 }
 
 export const RoutePath = {

@@ -1,120 +1,119 @@
 <template>
-  <fieldset
-    ref="$el"
-    class="fr-fieldset fr-container--fluid relative-fieldset"
-  >
-    <legend class="fr-fieldset__legend--regular fr-fieldset__legend">
-      <h3 class="fr-h5">
-        {{ `Membre du foyer ${index + 1}` }}
-      </h3>
-    </legend>
-    <div class="fr-grid-row fr-grid-row--gutters form-grid">
-      <div
-        v-if="linkedBeneficiary"
-        class="fr-fieldset__element"
+  <BeneficiaryFormSection :section-title="`Membre du foyer ${index + 1}`">
+    <template #titleAction>
+      <button
+        class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-delete-line"
+        type="button"
+        @click="emit('removeTaxHousehold')"
       >
-        <div class="fr-input--group">
-          <label
-            class="fr-label"
-            :for="'beneficiary_file_number' + index"
+        Supprimer ce membre du foyer
+      </button>
+    </template>
+
+    <div
+      v-if="linkedBeneficiary"
+      class="fr-col-12"
+    >
+      <div class="fr-input--group">
+        <label
+          class="fr-label"
+          :for="'beneficiary_file_number' + index"
+        >
+          Fiche bénéficiaire liée
+        </label>
+        <div class="fr-input-wrap">
+          <button
+            class="fr-tag force-focus-visible fr-tag--dismiss"
+            aria-label="Retirer la fiche bénéficiaire liée"
+            type="button"
+            @click="onUnselectLinkedBeneficiary"
           >
-            Fiche bénéficiaire liée
-          </label>
-          <div class="fr-input-wrap">
-            <span class="fr-tag force-focus-visible">
-              {{ getBeneficiaryLabel }}
-            </span>
-          </div>
+            {{ getBeneficiaryLabel }}
+          </button>
         </div>
-      </div>
-      <template v-if="!linkedBeneficiary">
-        <div class="fr-fieldset__element">
-          <VeeAutocomplete
-            label="Nom"
-            :name="`taxHousehold.taxHouseholds[${index}].lastName`"
-            :search-fn="searchBeneficiariesFromLastname"
-            @result-selected="onSelectBeneficiary"
-          />
-        </div>
-        <div class="fr-fieldset__element">
-          <VeeAutocomplete
-            :name="`taxHousehold.taxHouseholds[${index}].firstName`"
-            label="Prénom"
-            :search-fn="searchBeneficiariesFromFirstname"
-            @result-selected="onSelectBeneficiary"
-          />
-        </div>
-      </template>
-      <div class="fr-fieldset__element">
-        <VeeSelect
-          :name="`taxHousehold.taxHouseholds[${index}].relationship`"
-          label="Statut"
-          :options="withEmptyValue(taxHouseHoldRelationshipOptions)"
-        />
-      </div>
-      <template v-if="!linkedBeneficiary">
-        <div class="fr-fieldset__element">
-          <VeeInput
-            :name="`taxHousehold.taxHouseholds[${index}].email`"
-            label="Email"
-            type="email"
-          />
-        </div>
-        <div class="fr-fieldset__element">
-          <VeeInput
-            :name="`taxHousehold.taxHouseholds[${index}].phone`"
-            label="Téléphone"
-            type="tel"
-          />
-        </div>
-      </template>
-      <div class="fr-fieldset__element">
-        <VeeCheckbox
-          :name="`taxHousehold.taxHouseholds[${index}].caregiver`"
-          label="Aidant familial"
-        />
-      </div>
-      <div class="fr-fieldset__element">
-        <VeeInput
-          class="fr-col-12"
-          :name="`taxHousehold.taxHouseholds[${index}].additionalInformation`"
-          label="Informations complémentaires"
-        />
       </div>
     </div>
-
-    <button
-      class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-delete-line fr-mt-2w delete-relative-btn"
-      type="button"
-      @click="emit('removeTaxHousehold')"
-    >
-      Supprimer ce membre du foyer
-    </button>
-  </fieldset>
+    <template v-else>
+      <div class="fr-col-12">
+        <VeeAutocomplete
+          label="Nom"
+          :name="`taxHouseholds[${index}].lastName`"
+          :search-fn="searchBeneficiariesFromLastname"
+          @result-selected="onSelectBeneficiary"
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeAutocomplete
+          :name="`taxHouseholds[${index}].firstName`"
+          label="Prénom"
+          :search-fn="searchBeneficiariesFromFirstname"
+          @result-selected="onSelectBeneficiary"
+        />
+      </div>
+    </template>
+    <div class="fr-col-12">
+      <VeeSelect
+        :name="`taxHouseholds[${index}].relationship`"
+        label="Statut"
+        :options="withEmptyValue(taxHouseHoldRelationshipOptions)"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeCheckbox
+        :name="`taxHouseholds[${index}].caregiver`"
+        label="Aidant familial"
+      />
+    </div>
+    <template v-if="!linkedBeneficiary">
+      <div class="fr-col-12">
+        <VeeInput
+          :name="`taxHouseholds[${index}].email`"
+          label="Email"
+          type="email"
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeInput
+          :name="`taxHouseholds[${index}].phone`"
+          label="Téléphone"
+          type="tel"
+        />
+      </div>
+    </template>
+    <div class="fr-col-12">
+      <VeeTextarea
+        :name="`taxHouseholds[${index}].additionalInformation`"
+        label="Informations complémentaires"
+        hint
+      >
+        <template #hint>
+          Il est fortement recommandé de ne stocker que les informations utiles
+          au suivi du bénéficiaire et d'éviter le recueil d'informations
+          sensibles (données de santé, mots de passe, etc).
+        </template>
+      </VeeTextarea>
+    </div>
+  </BeneficiaryFormSection>
 </template>
 
 <script lang="ts" setup>
-  import { FieldEntry } from 'vee-validate'
   import { taxHouseHoldRelationshipOptions } from '~/client/options/beneficiary'
   import { CreateOrUpdateTaxHouseholdInput } from '~/server/schema'
   import { BeneficiarySearchResult } from '~/types/beneficiary'
 
   const props = defineProps<{
-    taxHousehold: FieldEntry<CreateOrUpdateTaxHouseholdInput>
     index: number
     currentBeneficiaryId: string | null
   }>()
 
   const emit = defineEmits<{
     removeTaxHousehold: []
-    selectBeneficiary: [
-      data: { index: number; beneficiary: BeneficiarySearchResult | null }
-    ]
+    selectBeneficiary: [data: BeneficiarySearchResult | null]
   }>()
 
-  const linkedBeneficiary = computed(() => {
-    return props.taxHousehold.value.linkedBeneficiary
-  })
+  const { value: linkedBeneficiary } = useField<
+    CreateOrUpdateTaxHouseholdInput['linkedBeneficiary']
+  >(`taxHouseholds[${props.index}].linkedBeneficiary`)
 
   /**
    * The beneficiaries search is done based on firstname, birth_name and
@@ -178,22 +177,10 @@
     if (!selectedBeneficiary) {
       return
     }
-    emit('selectBeneficiary', {
-      index: props.index,
-      beneficiary: selectedBeneficiary
-    })
+    emit('selectBeneficiary', selectedBeneficiary)
+  }
+
+  function onUnselectLinkedBeneficiary() {
+    emit('selectBeneficiary', null)
   }
 </script>
-
-<style scoped>
-  .relative-fieldset {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .delete-relative-btn {
-    box-shadow: inset 0 0 0 1px var(--border-plain-error);
-    color: var(--border-plain-error);
-  }
-</style>

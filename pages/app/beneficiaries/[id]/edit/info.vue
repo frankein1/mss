@@ -96,6 +96,7 @@
 
     const b = data.value.beneficiary
 
+    // Id is required for building the breadcrumb in the layout
     return {
       id: b.id,
       referents: b.referents.map(referent => referent.id),
