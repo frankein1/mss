@@ -1,5 +1,4 @@
 import { UserActivityType } from '@prisma/client'
-import { getBeneficiaryWithRelations } from '~/server/query/beneficiaires'
 import {
   canEditBeneficiary,
   canEditBeneficiaryReferents
@@ -9,6 +8,7 @@ import { prismaClient } from '~/server/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
+import { prepareRelationConnections } from '~/utils/relations'
 
 export const updateBeneficiaryGeneralInformationHandler = async ({
   input,
@@ -23,16 +23,14 @@ export const updateBeneficiaryGeneralInformationHandler = async ({
     throw forbiddenError()
   }
 
-  const { referents: previousReferents } = await getBeneficiaryWithRelations(
-    input.id
-  )
+  const { referents: previousReferents } = beneficiary
 
-  const previousIds = previousReferents.map(({ id }) => id)
+  const previousReferentIds = previousReferents.map(({ id }) => id)
 
   const {
     id,
     structureId,
-    referents: updateIds,
+    referents: updateReferentIds,
     noPhone,
     phone1,
     phone2,
@@ -53,23 +51,14 @@ export const updateBeneficiaryGeneralInformationHandler = async ({
       referents: previousReferents
     })
   ) {
-    const newIds =
-      updateIds.filter(updateId => !previousIds.includes(updateId)) || []
-    const trashIds = previousIds.filter(id => !updateIds.includes(id)) || []
-
-    const createIds = newIds.map(id => ({
-      id
-    }))
-    const deleteIds = trashIds.map(id => ({
-      id
-    }))
+    const referentConnections = prepareRelationConnections(
+      updateReferentIds,
+      previousReferentIds
+    )
 
     data = {
       ...data,
-      referents: {
-        connect: createIds,
-        disconnect: deleteIds
-      }
+      referents: referentConnections
     }
   }
 
