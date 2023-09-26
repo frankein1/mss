@@ -154,11 +154,11 @@
     errorMessage: error
   } = useField<string[]>(name, undefined)
 
-  const { id, errorId } = useFormFieldId(props.name)
+  const { id, errorId } = useFormFieldId(name)
 
-  const listboxId = `multi-select-${id}-listbox`
-  const displayInputId = `multi-select-${id}-fake-select`
-  const labelId = `multi-select-${id}-label`
+  const listboxId = computed(() => `multi-select-${id.value}-listbox`)
+  const displayInputId = computed(() => `multi-select-${id.value}-fake-select`)
+  const labelId = computed(() => `multi-select-${id.value}-label`)
 
   const selectedValues = ref<string[]>(
     (value.value || []).filter(v => props.options.has(v))
@@ -168,7 +168,9 @@
   const combobox = ref<HTMLDivElement | null>(null)
   const optionRefs = initOptionRefs()
 
-  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
+  const ariaDescribedby = computed(() =>
+    error.value ? errorId.value : undefined
+  )
 
   /**
    * The value stored in the hidden input
