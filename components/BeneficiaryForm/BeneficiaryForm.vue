@@ -63,7 +63,6 @@
   import { BeneficiaryRelative } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  import BeneficiaryFormTaxHouseholds from './BeneficiaryFormTaxHouseholds.vue'
   import { BeneficiaryReferent } from '~/types/beneficiary'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
   import { SaveBeneficiaryInput, saveBeneficiarySchema } from '~/server/schema'
