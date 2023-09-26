@@ -3,14 +3,19 @@
     v-if="displayedValue"
     class="fr-pb-2w"
   >
-    <div class="field-label">{{ label }} :</div>
+    <div
+      v-if="label"
+      class="field-label"
+    >
+      {{ label }} :
+    </div>
     <div class="field-value">{{ displayedValue }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
   const props = defineProps<{
-    label: string
+    label?: string
     defaultValue?: string | undefined
     value: string | number | null | undefined
   }>()

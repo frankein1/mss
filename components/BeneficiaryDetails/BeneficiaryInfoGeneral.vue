@@ -101,7 +101,6 @@
         </div>
 
         <BeneficiaryInfoLabel
-          label="Permis"
           :value="BeneficiaryMobilityKeys.value(beneficiary.mobility)"
           class="fr-col-12"
         />
