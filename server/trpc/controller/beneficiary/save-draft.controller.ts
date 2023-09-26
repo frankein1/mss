@@ -13,8 +13,7 @@ import {
 } from '~/server/schema'
 import {
   canSaveToBeneficiaryBeneficiaryDraft,
-  canEditBeneficiaryRelatives,
-  canSaveBeneficiaryWithCompleteInfo
+  canEditBeneficiaryRelatives
 } from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
@@ -94,34 +93,30 @@ function prepareData(
     createdById: user.id
   } as Prisma.BeneficiaryUncheckedCreateInput
 
-  if (canSaveBeneficiaryWithCompleteInfo(user)) {
-    if (
-      taxHousehold &&
-      canEditBeneficiaryRelatives(user, {
-        structureId: user.structureId,
-        referents: general.referents
-      })
-    ) {
-      const { taxHouseholds, ...taxHouseholdDatas } = taxHousehold
+  if (
+    taxHousehold &&
+    canEditBeneficiaryRelatives(user, {
+      structureId: user.structureId,
+      referents: general.referents
+    })
+  ) {
+    const { taxHouseholds, ...taxHouseholdDatas } = taxHousehold
 
-      const newRelatives =
-        taxHouseholds?.map(e => {
-          const { linkedBeneficiary, ...data } = e
-          return {
-            hosted: true,
-            linkedBeneficiaryId: linkedBeneficiary
-              ? linkedBeneficiary.id
-              : null,
-            ...data
-          }
-        }) || []
-
-      data = {
-        ...data,
-        ...taxHouseholdDatas,
-        relatives: {
-          create: newRelatives
+    const newRelatives =
+      taxHouseholds?.map(e => {
+        const { linkedBeneficiary, ...data } = e
+        return {
+          hosted: true,
+          linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null,
+          ...data
         }
+      }) || []
+
+    data = {
+      ...data,
+      ...taxHouseholdDatas,
+      relatives: {
+        create: newRelatives
       }
     }
   }

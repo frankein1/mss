@@ -63,11 +63,11 @@
 
   const beneficiary = computed<SaveBeneficiaryTaxHouseholdInput | undefined>(
     () => {
-    if (!beneficiaryDraft.value) {
-      return undefined
-    }
+      if (!beneficiaryDraft.value) {
+        return undefined
+      }
 
-    const { taxHousehold } = beneficiaryDraft.value
+      const { taxHousehold } = beneficiaryDraft.value
 
       return taxHousehold || ({} as SaveBeneficiaryTaxHouseholdInput)
     }
