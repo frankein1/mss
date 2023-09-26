@@ -60,7 +60,7 @@
   const legendId = computed(() => `${id.value}-legend`)
 
   function optionId(optionValue: string) {
-    return `${id}-${optionValue}`
+    return `${id.value}-${optionValue}`
   }
 
   function onChange(event: Event) {

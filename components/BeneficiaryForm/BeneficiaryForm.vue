@@ -9,14 +9,6 @@
     >
       <AccordionFieldset
         v-if="canSetRelatives"
-        label="Foyer fiscal"
-      >
-        <BeneficiaryFormTaxHouseholds
-          :current-beneficiary-id="currentBeneficiaryId"
-        />
-      </AccordionFieldset>
-      <AccordionFieldset
-        v-if="canSetRelatives"
         label="Entourage"
       >
         <BeneficiaryFormEntourages />

@@ -123,7 +123,7 @@
   }>()
 
   const { id, errorId } = useFormFieldId(name)
-  const listboxId = `autocomplete-${id}-listbox`
+  const listboxId = computed(() => `autocomplete-${id.value}-listbox`)
 
   const results = ref<Options>(new Map<string, string>())
   const timeout = ref<NodeJS.Timeout | null>(null)
