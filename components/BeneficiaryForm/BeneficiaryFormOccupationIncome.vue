@@ -25,7 +25,7 @@
         label-class="fr-text--regular"
         dropdown
       />
-      <VeeInput
+      <VeeCurrencyInput
         name="occupation.mainIncomeAmount"
         label="Montant des ressources"
       />
@@ -41,7 +41,7 @@
         label-class="fr-text--regular"
         dropdown
       />
-      <VeeInput
+      <VeeCurrencyInput
         name="occupation.partnerMainIncomeAmount"
         label="Montant des ressources du conjoint"
       />
@@ -58,7 +58,7 @@
         label-class="fr-text--regular"
         dropdown
       />
-      <VeeInput
+      <VeeCurrencyInput
         name="occupation.majorChildrenMainIncomeAmount"
         label="Montant des ressources des enfants majeurs"
       />
