@@ -77,7 +77,7 @@
       majorChildren: b.majorChildren,
       minorChildren: b.minorChildren,
       caregiver: b.caregiver,
-      taxHouseholds: taxHouseholds ? [...taxHouseholds] : undefined
+      taxHouseholds
     } as SaveBeneficiaryTaxHouseholdInput & BeneficiaryNames & { id: string }
   })
 
