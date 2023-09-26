@@ -12,7 +12,8 @@ import {
   errorMessages,
   kindOfBooleanSchema,
   withEmptyValueOptionalNativeEnum,
-  requiredNativeEnum
+  requiredNativeEnum,
+  amountNumber
 } from '~/utils/zod'
 
 const createHelpRequestSchema = z.object({
@@ -25,10 +26,10 @@ const createHelpRequestSchema = z.object({
   financialSupport: kindOfBooleanSchema(),
   externalStructure: kindOfBooleanSchema(),
   status: requiredNativeEnum(HelpRequestStatus),
-  askedAmount: z.coerce.number().min(0).nullish(),
+  askedAmount: amountNumber.nullish(),
   examinationDate: z.coerce.date(errorMessages).nullish(),
   decisionDate: z.coerce.date(errorMessages).nullish(),
-  allocatedAmount: z.coerce.number().min(0).nullish(),
+  allocatedAmount: amountNumber.nullish(),
   paymentMethod: withEmptyValueOptionalNativeEnum(PaymentMethod),
   reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
   paymentDate: z.coerce.date(errorMessages).nullish(),
@@ -72,7 +73,7 @@ const quickEditHelpRequestStatusSchema = z.object({
 
 const quickEditHelpRequestAllocatedAmountSchema = z.object({
   id: z.string().uuid(),
-  allocatedAmount: z.coerce.number().nullable()
+  allocatedAmount: amountNumber.nullable()
 })
 
 const quickEditHelpRequestPaymentMethodSchema = z.object({

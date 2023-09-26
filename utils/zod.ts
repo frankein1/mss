@@ -18,7 +18,17 @@ export const validEmailMessage = 'Veuillez renseigner un email valide.'
 
 export const validZipcode = 'Veuillez renseigner un code postal valide.'
 
+export const validNumber =
+  'Veuillez saisir un nombre valide. Format attendu : 123, 123,45 ou 123.45.'
+
 export const validIntNumber = 'Veuillez entrer un nombre entier.'
+
+export const amountNumber = z.preprocess(
+  v => (typeof v === 'string' ? v.replace(',', '.') : v),
+  z.coerce
+    .number({ invalid_type_error: validNumber })
+    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+)
 
 export const enumErrorMap: z.ZodErrorMap = issue => {
   switch (issue.code) {

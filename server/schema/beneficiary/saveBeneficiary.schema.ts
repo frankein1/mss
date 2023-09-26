@@ -31,6 +31,7 @@ import {
   withEmptyValueOptionalNativeEnum,
   validZipcode,
   emailOrEmpty,
+  amountNumber,
   validIntNumber
 } from '~/utils/zod'
 
@@ -116,13 +117,13 @@ export const saveBeneficiarySchema = z.object({
     employer: z.string().nullish(),
     employerSiret: z.string().nullish(),
     mainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
-    mainIncomeAmount: z.coerce.number().nullish(),
+    mainIncomeAmount: amountNumber.nullish(),
     partnerMainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
-    partnerMainIncomeAmount: z.coerce.number().nullish(),
+    partnerMainIncomeAmount: amountNumber.nullish(),
     majorChildrenMainIncomeSource: z.array(
       z.nativeEnum(IncomeSource, errorMessages)
     ),
-    majorChildrenMainIncomeAmount: z.coerce.number().nullish(),
+    majorChildrenMainIncomeAmount: amountNumber.nullish(),
     unemploymentNumber: z.string().nullish(),
     pensionOrganisations: z.array(
       z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)
