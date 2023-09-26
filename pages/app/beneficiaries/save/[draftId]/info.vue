@@ -35,6 +35,8 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, RouteTitle } from '~/utils/routing'
   import type { BeneficiaryDraft } from '~/types/beneficiary'
+  import { useAuthStore } from '~/store/auth'
+  import { canEditBeneficiaryRelatives } from '~/server/security/rules'
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -44,11 +46,7 @@
   const route = useRoute()
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
-
-  const nextPage = {
-    title: RouteTitle.AppBeneficiariesSaveTaxHousehold(),
-    path: RoutePath.AppBeneficiariesSaveTaxHousehold(draftId)
-  }
+  const authStore = useAuthStore()
 
   const {
     data: agents,
@@ -74,6 +72,24 @@
       return "La liste des référents n'a pas pu être chargée."
     }
     return ''
+  })
+
+  const user = computed(() => authStore.getAuthUser)
+
+  const nextPage = computed(() => {
+    if (
+      canEditBeneficiaryRelatives(user.value, {
+        referents: [user.value.id],
+        structureId: user.value.structureId
+      })
+    ) {
+      return {
+        title: RouteTitle.AppBeneficiariesSaveTaxHousehold(),
+        path: RoutePath.AppBeneficiariesSaveTaxHousehold(draftId)
+      }
+    }
+
+    return undefined
   })
 
   const beneficiary = computed<

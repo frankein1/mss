@@ -30,7 +30,6 @@ export {
   canEditBeneficiaryReferents,
   canViewBeneficiaryNir,
   canSetBeneficiaryNir,
-  canSaveBeneficiaryWithCompleteInfo,
   canSaveToBeneficiaryBeneficiaryDraft
 } from './beneficiary'
 
