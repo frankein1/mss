@@ -70,7 +70,7 @@ export const appPermissionsMiddleware = t.middleware(
         stat: statPermissions.query
       },
       mutation: {
-        mutation: statPermissions.mutation
+        stat: statPermissions.mutation
       }
     },
     { fallbackRule: allow }
