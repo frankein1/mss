@@ -18,6 +18,8 @@ export const validEmailMessage = 'Veuillez renseigner un email valide.'
 
 export const validZipcode = 'Veuillez renseigner un code postal valide.'
 
+export const validIntNumber = 'Veuillez entrer un nombre entier.'
+
 export const enumErrorMap: z.ZodErrorMap = issue => {
   switch (issue.code) {
     case 'invalid_enum_value':

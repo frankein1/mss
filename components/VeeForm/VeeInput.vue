@@ -72,9 +72,6 @@
       noLabel?: boolean
       labelledBy?: string
       required?: boolean
-      pattern?: string
-      step?: string
-      min?: number
     }>(),
     {
       type: 'text',
@@ -83,10 +80,7 @@
       placeholder: undefined,
       noLabel: false,
       labelledBy: undefined,
-      required: false,
-      pattern: undefined,
-      step: undefined,
-      min: undefined
+      required: false
     }
   )
 
@@ -128,7 +122,7 @@
 
   function formatValue(value: string | Date | number) {
     if (!value) {
-      return ''
+      return value
     }
     if (props.type === 'date' && value instanceof Date) {
       return formatDate(value as Date, 'YYYY-MM-DD')

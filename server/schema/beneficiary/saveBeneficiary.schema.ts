@@ -30,7 +30,8 @@ import {
   stringOrEmpty,
   withEmptyValueOptionalNativeEnum,
   validZipcode,
-  emailOrEmpty
+  emailOrEmpty,
+  validIntNumber
 } from '~/utils/zod'
 
 export const saveBeneficiarySchema = z.object({
@@ -79,8 +80,16 @@ export const saveBeneficiarySchema = z.object({
     familySituation: withEmptyValueOptionalNativeEnum(
       BeneficiaryFamilySituation
     ),
-    minorChildren: z.coerce.number().gte(0).nullish(),
-    majorChildren: z.coerce.number().gte(0).nullish(),
+    minorChildren: z.coerce
+      .number()
+      .int(validIntNumber)
+      .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+      .nullish(),
+    majorChildren: z.coerce
+      .number()
+      .int(validIntNumber)
+      .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+      .nullish(),
     taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema).nullish()
   }),
   entourage: z.object({
