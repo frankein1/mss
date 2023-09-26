@@ -3,14 +3,14 @@ import { Beneficiary } from '@prisma/client'
 export function hasCoordinatesInformations(
   beneficiary: Pick<
     Beneficiary,
-    'email' | 'street' | 'zipcode' | 'city' | 'addressComplement'
+    'street' | 'zipcode' | 'city' | 'accommodationMode' | 'region'
   >
 ) {
   return (
-    beneficiary.email ||
     beneficiary.street ||
     beneficiary.zipcode ||
     beneficiary.city ||
-    beneficiary.addressComplement
+    beneficiary.region ||
+    beneficiary.accommodationMode
   )
 }
