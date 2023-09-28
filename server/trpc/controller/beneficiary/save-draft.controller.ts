@@ -11,13 +11,15 @@ import {
   SaveBeneficiaryGeneralInformationInput,
   SaveBeneficiaryTaxHouseholdInput,
   SaveBeneficiaryEntourageInput,
-  SaveBeneficiaryHealthInput
+  SaveBeneficiaryHealthInput,
+  SaveBeneficiaryOccupationInput
 } from '~/server/schema'
 import {
   canSaveToBeneficiaryBeneficiaryDraft,
   canEditBeneficiaryRelatives,
   canEditBeneficiaryHealthInfo,
-  canSetBeneficiaryNir
+  canSetBeneficiaryNir,
+  canEditBeneficiaryOccupationIncome
 } from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
@@ -76,10 +78,8 @@ async function prepareData(
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {
-  const { general, taxHousehold, entourage, health } = getDataFromSources(
-    input,
-    beneficiaryDraft
-  )
+  const { general, taxHousehold, entourage, health, occupation } =
+    getDataFromSources(input, beneficiaryDraft)
 
   if (!general) {
     throw new Error(
@@ -153,6 +153,10 @@ async function prepareData(
     }
   }
 
+  if (canEditBeneficiaryOccupationIncome(user, securityTarget)) {
+    data = { ...data, ...occupation }
+  }
+
   return data
 }
 
@@ -173,6 +177,10 @@ function getDataFromSources(
   const health = (input.health || beneficiaryDraft.content?.health) as
     | SaveBeneficiaryHealthInput
     | undefined
+  const occupation = (input.occupation ||
+    beneficiaryDraft.content?.occupation) as
+    | SaveBeneficiaryOccupationInput
+    | undefined
 
-  return { general, taxHousehold, entourage, health }
+  return { general, taxHousehold, entourage, health, occupation }
 }

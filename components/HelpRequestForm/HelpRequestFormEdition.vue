@@ -31,7 +31,7 @@
   import { useAuthStore } from '~/store/auth'
   import { pastStatusesFromStatus } from '~/utils/helpRequest'
   import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
-  import { prismaDecimalToNumber } from '~/utils/prismaDecimalToNumber'
+  import { prismaDecimalToNumber } from '~/utils/prisma'
 
   const authStore = useAuthStore()
 

@@ -13,7 +13,8 @@ import {
   SaveBeneficiaryGeneralInformationInput,
   SaveBeneficiaryTaxHouseholdInput,
   SaveBeneficiaryEntourageInput,
-  SaveBeneficiaryHealthInput
+  SaveBeneficiaryHealthInput,
+  SaveBeneficiaryOccupationInput
 } from '~/server/schema'
 
 export type BeneficiaryReferent = {
@@ -48,5 +49,6 @@ export type BeneficiaryDraft = Draft & {
     taxHousehold?: SaveBeneficiaryTaxHouseholdInput
     entourage?: SaveBeneficiaryEntourageInput
     health?: SaveBeneficiaryHealthInput
+    occupation?: SaveBeneficiaryOccupationInput
   } | null
 }

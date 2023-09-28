@@ -31,6 +31,7 @@ export const RouteTitle = {
   [Route.AppBeneficiariesSaveTaxHousehold]: () => 'Foyer fiscal',
   [Route.AppBeneficiariesSaveEntourage]: () => 'Entourage',
   [Route.AppBeneficiariesSaveHealth]: () => 'Santé',
+  [Route.AppBeneficiariesSaveOccupation]: () => 'Activité/Revenu',
   [Route.AppBeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
   [Route.AppBeneficiary]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? getBeneficiaryDisplayName(beneficiary) : '',
@@ -44,6 +45,7 @@ export const RouteTitle = {
   [Route.AppBeneficiaryEditTaxHousehold]: () => 'Foyer fiscal',
   [Route.AppBeneficiaryEditEntourage]: () => 'Entourage',
   [Route.AppBeneficiaryEditHealth]: () => 'Santé',
+  [Route.AppBeneficiaryEditOccupation]: () => 'Activité/Revenu',
   [Route.AppBeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Entretien avec ${getBeneficiaryDisplayName(beneficiary)}`

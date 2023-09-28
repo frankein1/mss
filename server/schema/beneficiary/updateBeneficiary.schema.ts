@@ -4,7 +4,8 @@ import {
   saveBeneficiaryGeneralInformationSchema,
   saveBeneficiaryTaxHouseholdSchema,
   saveBeneficiaryEntourageSchema,
-  saveBeneficiaryHealthSchema
+  saveBeneficiaryHealthSchema,
+  saveBeneficiaryOccupationSchema
 } from './saveBeneficiary.schema'
 
 export const updateBeneficiarySchema = saveBeneficiarySchema.extend({
@@ -50,4 +51,13 @@ export const updateBeneficiaryHealthSchema = saveBeneficiaryHealthSchema.extend(
 
 export type UpdateBeneficiaryHealthInput = z.infer<
   typeof updateBeneficiaryHealthSchema
+>
+
+export const updateBeneficiaryOccupationSchema =
+  saveBeneficiaryOccupationSchema.extend({
+    id: z.string().uuid()
+  })
+
+export type UpdateBeneficiaryOccupationInput = z.infer<
+  typeof updateBeneficiaryOccupationSchema
 >

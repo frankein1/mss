@@ -86,7 +86,7 @@
 
     return {
       ...beneficiaryDraft,
-      taxHousehold: beneficiaryDraft.content?.taxHousehold || null
+      taxHousehold: beneficiaryDraft.content?.taxHousehold
     }
   }
 

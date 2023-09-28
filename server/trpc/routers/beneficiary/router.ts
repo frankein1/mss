@@ -11,6 +11,7 @@ import {
   updateBeneficiaryTaxHouseholdSchema,
   updateBeneficiaryEntourageSchema,
   updateBeneficiaryHealthSchema,
+  updateBeneficiaryOccupationSchema,
   saveDraftSchema
 } from '~/server/schema'
 import {
@@ -31,6 +32,7 @@ import {
   updateBeneficiaryTaxHouseholdHandler,
   updateBeneficiaryEntourageHandler,
   updateBeneficiaryHealthHandler,
+  updateBeneficiaryOccupationIncomeHandler,
   saveDraftHandler
 } from '~/server/trpc/controller/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
@@ -57,6 +59,9 @@ export const beneficiaryRouter = router({
   updateHealth: protectedProcedure
     .input(updateBeneficiaryHealthSchema)
     .mutation(updateBeneficiaryHealthHandler),
+  updateOccupationIncome: protectedProcedure
+    .input(updateBeneficiaryOccupationSchema)
+    .mutation(updateBeneficiaryOccupationIncomeHandler),
   isBeneficiaryReferent: protectedProcedure
     .input(idSchema)
     .query(isBeneficiaryReferentHandler),
