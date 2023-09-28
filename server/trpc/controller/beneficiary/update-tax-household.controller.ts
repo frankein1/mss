@@ -7,7 +7,7 @@ import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UpdateBeneficiaryTaxHouseholdInput } from '~/server/schema'
-import { prepareRelationUpdates } from '~/utils/relations'
+import { prepareRelationUpdates } from '~/utils/prisma'
 
 function getBeneficiarySecurityTargetWithTaxHousehold(id: string) {
   return prismaClient.beneficiary.findUnique({

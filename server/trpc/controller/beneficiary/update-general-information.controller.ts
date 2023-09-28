@@ -8,7 +8,7 @@ import { prismaClient } from '~/server/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
-import { prepareRelationConnections } from '~/utils/relations'
+import { prepareRelationConnections } from '~/utils/prisma'
 
 export const updateBeneficiaryGeneralInformationHandler = async ({
   input,
