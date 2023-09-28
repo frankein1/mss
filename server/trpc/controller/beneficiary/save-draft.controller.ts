@@ -9,7 +9,8 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   SaveDraftInput,
   SaveBeneficiaryGeneralInformationInput,
-  SaveBeneficiaryTaxHouseholdInput
+  SaveBeneficiaryTaxHouseholdInput,
+  SaveBeneficiaryEntourageInput
 } from '~/server/schema'
 import {
   canSaveToBeneficiaryBeneficiaryDraft,
@@ -71,7 +72,10 @@ function prepareData(
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {
-  const { general, taxHousehold } = getDataFromSources(input, beneficiaryDraft)
+  const { general, taxHousehold, entourage } = getDataFromSources(
+    input,
+    beneficiaryDraft
+  )
 
   if (!general) {
     throw new Error(
@@ -94,27 +98,37 @@ function prepareData(
   } as Prisma.BeneficiaryUncheckedCreateInput
 
   if (
-    taxHousehold &&
+    (taxHousehold || entourage) &&
     canEditBeneficiaryRelatives(user, {
       structureId: user.structureId,
       referents: general.referents
     })
   ) {
-    const { taxHouseholds, ...taxHouseholdDatas } = taxHousehold
+    if (taxHousehold) {
+      const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
 
-    const newRelatives =
-      taxHouseholds?.map(e => {
-        const { linkedBeneficiary, ...data } = e
+      data = {
+        ...data,
+        ...taxHouseholdDatas
+      }
+    }
+
+    const taxHouseholds =
+      taxHousehold?.taxHouseholds?.map(e => {
         return {
+          ...e,
           hosted: true,
-          linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null,
-          ...data
+          linkedBeneficiaryId: e.linkedBeneficiary
+            ? e.linkedBeneficiary.id
+            : null
         }
       }) || []
+    const entourages =
+      entourage?.entourages?.map(e => ({ ...e, hosted: false })) || []
+    const newRelatives = [...taxHouseholds, ...entourages]
 
     data = {
       ...data,
-      ...taxHouseholdDatas,
       relatives: {
         create: newRelatives
       }
@@ -135,6 +149,9 @@ function getDataFromSources(
     beneficiaryDraft.content?.taxHousehold) as
     | SaveBeneficiaryTaxHouseholdInput
     | undefined
+  const entourage = (input.entourage || beneficiaryDraft.content?.entourage) as
+    | SaveBeneficiaryEntourageInput
+    | undefined
 
-  return { general, taxHousehold }
+  return { general, taxHousehold, entourage }
 }

@@ -5,6 +5,7 @@
     :beneficiary="beneficiary"
     :title="RouteTitle.AppBeneficiariesSaveTaxHousehold()"
     :previous-page="previousPage"
+    :next-page="nextPage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -55,6 +56,11 @@
     path: RoutePath.AppBeneficiariesSaveInfo(draftId)
   }
 
+  const nextPage = {
+    title: RouteTitle.AppBeneficiariesSaveEntourage(),
+    path: RoutePath.AppBeneficiariesSaveEntourage(draftId)
+  }
+
   const {
     data: beneficiaryDraft,
     pending,
@@ -91,11 +97,11 @@
     if (target) {
       await saveBeneficiaryDraft(beneficiary, target)
     } else {
-      await saveBeneficairy(beneficiary)
+      await saveBeneficiary(beneficiary)
     }
   }
 
-  async function saveBeneficairy(
+  async function saveBeneficiary(
     beneficiary: SaveBeneficiaryTaxHouseholdInput
   ) {
     if (!beneficiaryDraft.value) {

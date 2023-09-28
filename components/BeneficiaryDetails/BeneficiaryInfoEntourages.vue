@@ -34,8 +34,8 @@
 
   const hasEntourages = computed(() => props.entourages.length > 0)
 
-  const editLink = computed(
-    () => RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id) // TODO: Update path
+  const editLink = computed(() =>
+    RoutePath.AppBeneficiaryEditEntourage(props.beneficiary.id)
   )
 </script>
 ~/server/trpc/routers

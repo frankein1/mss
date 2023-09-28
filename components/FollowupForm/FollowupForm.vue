@@ -107,7 +107,6 @@
         name="privateSynthesis"
         :label="followupFieldLabels.privateSynthesis"
         label-icon="fr-icon-lock-line"
-        hint
       >
         <template #hint>
           Le compte rendu privé est uniquement visible et modifiable par l'agent
