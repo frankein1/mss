@@ -1,9 +1,9 @@
 import { User, UserRole } from '@prisma/client'
 
-export type SecurityRuleGrantee = Pick<User, 'id' | 'role' | 'status'>
+export type SecurityRuleGrantee = Pick<User, 'id' | 'role' | 'structureId'>
 
 export type SecurityTargetWithStructure = {
-  structureId: string
+  structureId: string | null
 }
 
 export type SecurityTargetWithReferents =
