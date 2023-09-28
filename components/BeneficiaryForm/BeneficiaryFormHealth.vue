@@ -1,33 +1,45 @@
 <template>
-  <div class="fr-container--fluid">
-    <div class="fr-grid-row fr-grid-row--gutters form-grid">
+  <BeneficiaryFormSection>
+    <div class="fr-col-12">
       <VeeSelect
-        name="health.gir"
+        name="gir"
         label="GIR"
-        :options="beneficiaryGirOptions"
+        :options="withEmptyValue(beneficiaryGirOptions)"
       />
+    </div>
+    <div class="fr-col-12">
       <VeeInput
-        class="fr-col-offset-lg-4--right"
-        name="health.doctor"
+        name="doctor"
         label="Médecin traitant"
       />
-      <VeeInput
-        class="fr-col-12"
-        name="health.healthAdditionalInformation"
-        label="Informations complémentaires"
-      />
+    </div>
+    <div class="fr-col-12">
       <VeeInput
         v-if="hasNirAccess"
-        name="health.socialSecurityNumber"
+        name="socialSecurityNumber"
         label="N° Sécurité Sociale"
         type="social-security-number"
       />
+    </div>
+    <div class="fr-col-12">
       <VeeInput
-        name="health.insurance"
+        name="insurance"
         label="Mutuelle"
       />
     </div>
-  </div>
+    <div class="fr-col-12">
+      <VeeTextarea
+        name="healthAdditionalInformation"
+        label="Informations complémentaires"
+      >
+        <template #hint>
+          Il est fortement recommandé de ne stocker que les informations utiles
+          au suivi du bénéficiaire et d'éviter le recueil d'informations
+          sensibles (données de santé, mots de passe, etc).
+        </template>
+      </VeeTextarea>
+    </div>
+  </BeneficiaryFormSection>
 </template>
 
 <script lang="ts" setup>

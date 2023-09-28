@@ -53,6 +53,10 @@
 
   const authStore = useAuthStore()
 
+  const hasNirAccess = computed(() =>
+    canViewBeneficiaryNir(authStore.userStructureType)
+  )
+
   const hasHealthInfo = computed(() => {
     const beneficiary = props.beneficiary
     return (
@@ -64,12 +68,8 @@
     )
   })
 
-  const hasNirAccess = computed(() =>
-    canViewBeneficiaryNir(authStore.userStructureType)
-  )
-
-  const editLink = computed(
-    () => RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id) // TODO: Update path
+  const editLink = computed(() =>
+    RoutePath.AppBeneficiaryEditHealth(props.beneficiary.id)
   )
 </script>
 ~/server/trpc/routers
