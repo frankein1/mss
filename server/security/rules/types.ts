@@ -1,9 +1,9 @@
 import { User, UserRole } from '@prisma/client'
 
-export type SecurityRuleGrantee = Pick<User, 'id' | 'role' | 'structureId'>
+export type SecurityRuleGrantee = Pick<User, 'id' | 'role' | 'status'>
 
 export type SecurityTargetWithStructure = {
-  structureId: string | null
+  structureId: string
 }
 
 export type SecurityTargetWithReferents =
@@ -26,3 +26,17 @@ export type SecurityTargetWithCreator =
       createdById: string | null
     }
   | { createdBy: { id: string } | null }
+
+export type SecurityRule<
+  Grantee extends SecurityRuleGrantee = SecurityRuleGrantee,
+  Input = unknown
+> = (grantee: Grantee, input: Input) => boolean | Promise<Boolean>
+
+export const AllowSecurityCheck = <
+  Grantee extends SecurityRuleGrantee = SecurityRuleGrantee
+>(
+  _grantee: Grantee,
+  _input: any
+) => {
+  return true
+}
