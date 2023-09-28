@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div>
+  <div class="feature-section">
     <AtomAlert
       v-if="error"
       class="fr-mx-4w"
