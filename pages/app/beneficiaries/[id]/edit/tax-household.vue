@@ -15,7 +15,6 @@
       :alert-type="AlertType.Error"
       message="Les informations du bénéficiaires n'ont pas pu être chargées."
     />
-
     <AtomLoader
       v-else-if="pending"
       class="fr-mx-auto"
@@ -25,6 +24,7 @@
       class="fr-p-3v"
     >
       <BeneficiaryFormFamilySituation />
+      <BeneficiaryFormTaxHouseholds :current-beneficiary-id="beneficiaryId" />
     </div>
   </BeneficiaryFormLayout>
 </template>
@@ -36,6 +36,7 @@
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, RouteTitle } from '~/utils/routing'
+  import type { BeneficiaryNames } from '~/types/beneficiary'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-set-relatives']
@@ -64,15 +65,20 @@
       return null
     }
 
-    const b = data.value.beneficiary
+    const { beneficiary: b, taxHouseholds } = data.value
 
+    // Names and id are required for building the breadcrumb in the layout
     return {
+      id: b.id,
+      firstName: b.firstName,
+      usualName: b.usualName,
+      birthName: b.birthName,
       familySituation: b.familySituation,
       majorChildren: b.majorChildren,
       minorChildren: b.minorChildren,
       caregiver: b.caregiver,
-      taxHouseholds: data.value.taxHouseholds
-    } as SaveBeneficiaryTaxHouseholdInput
+      taxHouseholds
+    } as SaveBeneficiaryTaxHouseholdInput & BeneficiaryNames & { id: string }
   })
 
   async function onSaveBeneficiary(

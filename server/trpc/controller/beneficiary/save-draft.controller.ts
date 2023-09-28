@@ -100,11 +100,26 @@ function prepareData(
       referents: general.referents
     })
   ) {
-    const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
-    data = { ...data, ...taxHouseholdDatas }
-  }
+    const { taxHouseholds, ...taxHouseholdDatas } = taxHousehold
 
-  // TODO: Handle taxHousehold relatives
+    const newRelatives =
+      taxHouseholds?.map(e => {
+        const { linkedBeneficiary, ...data } = e
+        return {
+          hosted: true,
+          linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null,
+          ...data
+        }
+      }) || []
+
+    data = {
+      ...data,
+      ...taxHouseholdDatas,
+      relatives: {
+        create: newRelatives
+      }
+    }
+  }
 
   return data
 }

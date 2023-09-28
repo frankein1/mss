@@ -34,7 +34,10 @@
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
-  import { canEditBeneficiaryReferents } from '~/server/security/rules'
+  import {
+    canEditBeneficiaryReferents,
+    canEditBeneficiaryRelatives
+  } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, RouteTitle } from '~/utils/routing'
@@ -51,13 +54,6 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const saved = route.query.saved !== undefined
-
-  const nextPage = {
-    title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
-    path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId, {
-      saved: true
-    })
-  }
 
   const {
     data: agents,
@@ -89,6 +85,22 @@
 
   const user = computed(() => authStore.getAuthUser)
 
+  const nextPage = computed(() => {
+    if (
+      data.value &&
+      canEditBeneficiaryRelatives(user.value, data.value.beneficiary)
+    ) {
+      return {
+        title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
+        path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId, {
+          saved: true
+        })
+      }
+    }
+
+    return undefined
+  })
+
   const beneficiary = computed(() => {
     if (!data.value) {
       return null
@@ -96,6 +108,7 @@
 
     const b = data.value.beneficiary
 
+    // Id is required for building the breadcrumb in the layout
     return {
       id: b.id,
       referents: b.referents.map(referent => referent.id),

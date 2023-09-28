@@ -22,6 +22,7 @@
       class="fr-p-3v"
     >
       <BeneficiaryFormFamilySituation />
+      <BeneficiaryFormTaxHouseholds />
     </div>
   </BeneficiaryFormLayout>
 </template>
@@ -60,17 +61,17 @@
     error
   } = await useAsyncData(loadBeneficiaryDraft)
 
-  const beneficiary = computed<
-    SaveBeneficiaryTaxHouseholdInput | undefined | null
-  >(() => {
-    if (!beneficiaryDraft.value) {
-      return undefined
+  const beneficiary = computed<SaveBeneficiaryTaxHouseholdInput | undefined>(
+    () => {
+      if (!beneficiaryDraft.value) {
+        return undefined
+      }
+
+      const { taxHousehold } = beneficiaryDraft.value
+
+      return taxHousehold || ({} as SaveBeneficiaryTaxHouseholdInput)
     }
-
-    const { taxHousehold } = beneficiaryDraft.value
-
-    return taxHousehold
-  })
+  )
 
   async function loadBeneficiaryDraft() {
     const beneficiaryDraft = (await trpcClient.draft.get.query({

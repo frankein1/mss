@@ -3,7 +3,7 @@
     <div class="fr-grid-row">
       <div class="fr-col-12">
         <PageTopBar />
-        <slot />
+        <slot></slot>
       </div>
     </div>
     <AtomSnackbar />

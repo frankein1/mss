@@ -2,12 +2,16 @@
   <div
     class="fr-grid-row fr-grid-row--center fr-grid-row--bottom fr-grid-row--gutters feature-section fr-mb-3w"
   >
-    <h3
+    <div
       v-if="sectionTitle"
-      class="fr-h4 fr-col-12 fr-mb-0"
+      class="fr-col-12"
+      :class="{ 'beneficiaryformsection__title-action': hasTitleAction }"
     >
-      {{ sectionTitle }}
-    </h3>
+      <h3 class="fr-h4 fr-mb-0">
+        {{ sectionTitle }}
+      </h3>
+      <slot name="titleAction"></slot>
+    </div>
     <slot></slot>
   </div>
 </template>
@@ -19,4 +23,16 @@
     }>(),
     { sectionTitle: undefined }
   )
+
+  const slots = useSlots()
+
+  const hasTitleAction = computed(() => slots.titleAction)
 </script>
+
+<style lang="scss">
+  .beneficiaryformsection__title-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+</style>

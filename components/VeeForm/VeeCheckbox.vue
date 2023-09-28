@@ -58,7 +58,7 @@
   // we are using toRefs to create reactive references to `name` and `value` props
   // this is important because vee-validate needs to know if any of these props change
   // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
-  const { name } = toRefs(props)
+  const name = toRef(() => props.name)
 
   const {
     handleChange,
@@ -70,9 +70,11 @@
     uncheckedValue: false
   })
 
-  const { id, errorId } = useFormFieldId(props.name)
+  const { id, errorId } = useFormFieldId(name)
 
-  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
+  const ariaDescribedby = computed(() =>
+    error.value ? errorId.value : undefined
+  )
 </script>
 
 <style scoped>
