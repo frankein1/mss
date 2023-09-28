@@ -125,7 +125,7 @@
 
     return {
       ...beneficiaryDraft,
-      general: beneficiaryDraft.content?.general || null
+      general: beneficiaryDraft.content?.general
     }
   }
 

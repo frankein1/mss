@@ -51,7 +51,7 @@
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
-  import { prismaDecimalToNumber } from '~/utils/prismaDecimalToNumber'
+  import { prismaDecimalToNumber } from '~/utils/prisma'
 
   definePageMeta({
     middleware: 'is-beneficiary-referent'

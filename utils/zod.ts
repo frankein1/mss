@@ -80,11 +80,11 @@ export const socialSecurityNumberConstraint = z
   )
 
 export const siretConstraint = stringConstraint
-  .min(14)
+  .min(14, minStringLengthMessage(14))
   .max(30, maxStringLengthMessage(30))
 
 export const unemploymentNumberConstraint = stringConstraint
-  .min(7)
+  .min(7, minStringLengthMessage(7))
   .max(50, maxStringLengthMessage(50))
 
 export const cafNumberConstraint = stringConstraint.max(
