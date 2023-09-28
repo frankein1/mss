@@ -35,7 +35,8 @@
   } from '~/server/schema'
   import {
     canEditBeneficiaryReferents,
-    canEditBeneficiaryRelatives
+    canEditBeneficiaryRelatives,
+    canEditBeneficiaryHealthInfo
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~/utils/constants/alert'
@@ -85,13 +86,23 @@
   const user = computed(() => authStore.getAuthUser)
 
   const nextPage = computed(() => {
-    if (
-      data.value &&
-      canEditBeneficiaryRelatives(user.value, data.value.beneficiary)
-    ) {
+    if (!data.value) {
+      return undefined
+    }
+
+    if (canEditBeneficiaryRelatives(user.value, data.value.beneficiary)) {
       return {
         title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
         path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId, {
+          saved: true
+        })
+      }
+    }
+
+    if (canEditBeneficiaryHealthInfo(user.value, data.value.beneficiary)) {
+      return {
+        title: RouteTitle.AppBeneficiaryEditHealth(),
+        path: RoutePath.AppBeneficiaryEditHealth(beneficiaryId, {
           saved: true
         })
       }

@@ -6,6 +6,7 @@
     :title="RouteTitle.AppBeneficiaryEditEntourage()"
     is-editting
     :previous-page="previousPage"
+    :next-page="nextPage"
     :saved="saved"
     @save="onSaveBeneficiary"
   >
@@ -36,6 +37,8 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, RouteTitle } from '~/utils/routing'
   import type { BeneficiaryNames } from '~/types/beneficiary'
+  import { useAuthStore } from '~/store/auth'
+  import { canEditBeneficiaryHealthInfo } from '~/server/security/rules'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-set-relatives']
@@ -48,6 +51,7 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const saved = route.query.saved !== undefined
+  const authStore = useAuthStore()
 
   const previousPage = {
     title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
@@ -55,12 +59,30 @@
       saved: true
     })
   }
-  // TODO: Add next page
 
   const { data, pending, error } =
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
+
+  const user = computed(() => authStore.getAuthUser)
+
+  const nextPage = computed(() => {
+    if (!data.value) {
+      return undefined
+    }
+
+    if (canEditBeneficiaryHealthInfo(user.value, data.value.beneficiary)) {
+      return {
+        title: RouteTitle.AppBeneficiaryEditHealth(),
+        path: RoutePath.AppBeneficiaryEditHealth(beneficiaryId, {
+          saved: true
+        })
+      }
+    }
+
+    return undefined
+  })
 
   const beneficiary = computed(() => {
     if (!data.value) {
@@ -92,7 +114,6 @@
     try {
       await trpcClient.beneficiary.updateEntourage.mutate({
         id: beneficiaryId,
-        structureId: data.value.beneficiary.structureId,
         ...beneficiary
       })
 
