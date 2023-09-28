@@ -4,7 +4,6 @@
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     :title="RouteTitle.AppBeneficiaryEditTaxHousehold()"
-    is-editting
     :previous-page="previousPage"
     :saved="saved"
     @save="onSaveBeneficiary"

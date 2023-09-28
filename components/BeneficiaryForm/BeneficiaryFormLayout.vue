@@ -40,13 +40,13 @@
   type SubmitType = z.infer<T>
 
   const route = useRoute()
+  const draftId = route.query.draftId as string | null
 
   const props = withDefaults(
     defineProps<{
       beneficiary?: SubmitType | null
       schema: T
       isSubmitting: boolean
-      isEditting?: boolean
       title: string
       titleIcon?: string
       saved?: boolean
@@ -55,7 +55,6 @@
     }>(),
     {
       beneficiary: undefined,
-      isEditing: false,
       titleIcon: undefined,
       saved: false,
       previousPage: undefined,
@@ -70,9 +69,9 @@
   const saveTarget = ref<string | undefined>(undefined)
 
   const breadcrumbLinks = computed(() =>
-    props.isEditting
-      ? Breadcrumb.AppBeneficiaryEdit(props.beneficiary || null)
-      : Breadcrumb.AppBeneficiariesAdd()
+    draftId
+      ? Breadcrumb.AppBeneficiariesAdd()
+      : Breadcrumb.AppBeneficiaryEdit(props.beneficiary || null)
   )
 
   useHead({ title: props.title })
@@ -87,17 +86,20 @@
   })
 
   async function onCancel() {
-    const draftId = route.query.draftId as string | null
+    const redirectRoute =
+      !draftId && props.beneficiary
+        ? RoutePath.AppBeneficiary(props.beneficiary.id)
+        : RoutePath.AppBeneficiariesAdd()
 
     if (draftId) {
       try {
         await useTrpcClient().draft.delete.mutate({ id: draftId })
       } catch {
-        navigateTo(RoutePath.AppBeneficiariesAdd())
+        navigateTo(redirectRoute)
       }
     }
 
-    navigateTo(RoutePath.AppBeneficiariesAdd())
+    navigateTo(redirectRoute)
   }
 </script>
 
