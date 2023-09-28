@@ -84,7 +84,6 @@
       <VeeTextarea
         :name="`taxHouseholds[${index}].additionalInformation`"
         label="Informations complémentaires"
-        hint
       >
         <template #hint>
           Il est fortement recommandé de ne stocker que les informations utiles

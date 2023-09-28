@@ -32,11 +32,13 @@ export enum Route {
   AppBeneficiariesSave = 'AppBeneficiariesSave',
   AppBeneficiariesSaveInfo = 'AppBeneficiariesSaveInfo',
   AppBeneficiariesSaveTaxHousehold = 'AppBeneficiariesSaveTaxHousehold',
+  AppBeneficiariesSaveEntourage = 'AppBeneficiariesSaveEntourage',
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
   AppBeneficiaryEditInfo = 'AppBeneficiaryEditInfo',
   AppBeneficiaryEditTaxHousehold = 'AppBeneficiaryEditTaxHousehold',
+  AppBeneficiaryEditEntourage = 'AppBeneficiaryEditEntourage',
   AppBeneficiaryFollowupAdd = 'AppBeneficiaryFollowupAdd',
   AppBeneficiaryFollowupEdit = 'AppBeneficiaryFollowupEdit',
   AppBeneficiaryHelpRequestAdd = 'AppBeneficiaryHelpRequestAdd',
@@ -145,6 +147,8 @@ export const RoutePath = {
     `${BeneficiarySaveRoute(draftId)}/info`,
   [Route.AppBeneficiariesSaveTaxHousehold]: (draftId: string) =>
     `${BeneficiarySaveRoute(draftId)}/tax-household`,
+  [Route.AppBeneficiariesSaveEntourage]: (draftId: string) =>
+    `${BeneficiarySaveRoute(draftId)}/entourage`,
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
@@ -162,6 +166,14 @@ export const RoutePath = {
   ) =>
     savedRoute(
       `${BeneficiaryEditRoute(beneficiaryId)}/tax-household`,
+      !!options?.saved
+    ),
+  [Route.AppBeneficiaryEditEntourage]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(
+      `${BeneficiaryEditRoute(beneficiaryId)}/entourage`,
       !!options?.saved
     ),
 

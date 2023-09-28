@@ -11,7 +11,8 @@ import type {
 import type { BeneficiaryRelativeWithLinkedBeneficiary } from './relative'
 import {
   SaveBeneficiaryGeneralInformationInput,
-  SaveBeneficiaryTaxHouseholdInput
+  SaveBeneficiaryTaxHouseholdInput,
+  SaveBeneficiaryEntourageInput
 } from '~/server/schema'
 
 export type BeneficiaryReferent = {
@@ -44,5 +45,6 @@ export type BeneficiaryDraft = Draft & {
   content?: {
     general?: SaveBeneficiaryGeneralInformationInput
     taxHousehold?: SaveBeneficiaryTaxHouseholdInput
+    entourage?: SaveBeneficiaryEntourageInput
   } | null
 }

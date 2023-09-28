@@ -15,7 +15,7 @@
         >*</span
       >
       <span
-        v-if="hint"
+        v-if="hasHint"
         class="fr-hint-text"
         ><slot name="hint"></slot
       ></span>
@@ -50,10 +50,9 @@
       label: string
       required?: boolean
       readonly?: boolean
-      hint?: boolean
       labelIcon?: string
     }>(),
-    { hint: false, required: false, labelIcon: '', readonly: false }
+    { required: false, labelIcon: '', readonly: false }
   )
 
   // use `toRef` to create reactive references to `name` prop which is passed to `useField`
@@ -62,6 +61,10 @@
   const name = toRef(() => props.name)
 
   const { errorMessage: error, value, handleChange } = useField<string>(name)
+
+  const slots = useSlots()
+
+  const hasHint = computed(() => slots.hint)
 </script>
 
 <style scoped>

@@ -13,4 +13,5 @@ export { getBeneficiarySecurityTargetHandler } from './get-security-target.contr
 export * from './get-followup-types.controller'
 export * from './update-general-information.controller'
 export * from './update-tax-household.controller'
+export * from './update-entourage.controller'
 export * from './save-draft.controller'

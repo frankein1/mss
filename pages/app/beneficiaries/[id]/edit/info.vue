@@ -167,7 +167,7 @@
 
       navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
     } catch {
-      useSnackbar().error('La mise à jour de la synthèse a échoué.')
+      useSnackbar().error('La mise à jour de la fiche bénéficiaire a échoué.')
     } finally {
       isSubmitting.value = false
     }

@@ -126,11 +126,11 @@
     if (target) {
       await saveBeneficiaryDraft(beneficiary, target)
     } else {
-      await saveBeneficairy(beneficiary)
+      await saveBeneficiary(beneficiary)
     }
   }
 
-  async function saveBeneficairy(
+  async function saveBeneficiary(
     beneficiary: SaveBeneficiaryGeneralInformationInput
   ) {
     if (!beneficiaryDraft.value) {

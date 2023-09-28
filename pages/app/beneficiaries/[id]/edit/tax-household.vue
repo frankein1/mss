@@ -6,6 +6,7 @@
     :title="RouteTitle.AppBeneficiaryEditTaxHousehold()"
     is-editting
     :previous-page="previousPage"
+    :next-page="nextPage"
     :saved="saved"
     @save="onSaveBeneficiary"
   >
@@ -55,6 +56,11 @@
     path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, { saved: true })
   }
 
+  const nextPage = {
+    title: RouteTitle.AppBeneficiaryEditEntourage(),
+    path: RoutePath.AppBeneficiaryEditEntourage(beneficiaryId, { saved: true })
+  }
+
   const { data, pending, error } =
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
@@ -100,7 +106,7 @@
 
       navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
     } catch {
-      useSnackbar().error('La mise à jour de la synthèse a échoué.')
+      useSnackbar().error('La mise à jour de la fiche bénéficiaire a échoué.')
     } finally {
       isSubmitting.value = false
     }

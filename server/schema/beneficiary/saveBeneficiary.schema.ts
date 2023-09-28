@@ -260,3 +260,11 @@ export const saveBeneficiaryTaxHouseholdSchema = z.object({
 export type SaveBeneficiaryTaxHouseholdInput = z.infer<
   typeof saveBeneficiaryTaxHouseholdSchema
 >
+
+export const saveBeneficiaryEntourageSchema = z.object({
+  entourages: z.array(createOrUpdateEntourageSchema).nullish()
+})
+
+export type SaveBeneficiaryEntourageInput = z.infer<
+  typeof saveBeneficiaryEntourageSchema
+>
