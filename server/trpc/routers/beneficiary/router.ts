@@ -1,4 +1,4 @@
-import { protectedProcedure, router } from '~/server/trpc/createRouter'
+import { protectedProcedure, router } from '~/server/trpc'
 import {
   idSchema,
   searchBeneficiarySchema,
