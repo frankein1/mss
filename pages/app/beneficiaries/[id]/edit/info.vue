@@ -5,7 +5,6 @@
     :beneficiary="beneficiary"
     :title="RouteTitle.AppBeneficiaryEditInfo()"
     title-icon="fr-icon-user-line"
-    is-editting
     :next-page="nextPage"
     :saved="saved"
     @save="onSaveBeneficiary"
