@@ -9,11 +9,12 @@ import { prepareGetFollowupsPageSelect } from '~/utils/followup'
 
 export const getFollowupsHandler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: GetFollowupsInput
   ctx: ProtectedAppContext
 }) => {
+  const { user, structureId } = ctx
   const { take, skip } = takeAndSkipFromPagination({
     perPage: input.perPage,
     page: input.page
@@ -24,7 +25,7 @@ export const getFollowupsHandler = async ({
     : undefined
 
   const where: Prisma.FollowupWhereInput = {
-    structureId: user.structureId,
+    structureId,
     beneficiary: {
       archived: null,
       referents

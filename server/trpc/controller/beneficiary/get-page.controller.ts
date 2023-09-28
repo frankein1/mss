@@ -9,13 +9,11 @@ import { prepareBeneficiaryFilters } from '~/utils/filters'
 
 export const getBeneficiariesHandler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structureId }
 }: {
   input: GetBeneficiariesInput
   ctx: ProtectedAppContext
 }) => {
-  const { structureId } = user
-
   const { take, skip } = takeAndSkipFromPagination({
     perPage: input.perPage,
     page: input.page

@@ -20,7 +20,13 @@ export const createContext = async (event: H3Event) => {
   } = config
   const { user: userData } = verifyJwt(sessionToken, jwtKey)
   const user = await prismaClient.user.findUnique({
-    where: { id: userData.id }
+    where: { id: userData.id },
+    select: {
+      id: true,
+      role: true,
+      status: true,
+      structureId: true
+    }
   })
 
   return { event, user }

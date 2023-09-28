@@ -9,6 +9,7 @@ export type RequestHandlerContext<
   Grantee extends SecurityRuleGrantee = SecurityRuleGrantee
 > = {
   user: Grantee
+  structureId: string
   event: H3Event
 }
 

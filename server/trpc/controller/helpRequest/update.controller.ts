@@ -1,9 +1,5 @@
 import { Prisma, StructureType, UserActivityType } from '@prisma/client'
-import {
-  ProtectedAppContext,
-  ProtectedAppContextUser,
-  forbiddenError
-} from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import {
@@ -22,16 +18,17 @@ import {
 export async function prepareHelpRequestData({
   input,
   transaction,
-  user,
+  ctx,
   target
 }: {
   input: EditHelpRequestInput
   transaction: Prisma.TransactionClient
-  user: ProtectedAppContextUser
+  ctx: ProtectedAppContext
   target: NonNullable<HelpRequestWithRelations>
 }): Promise<Prisma.HelpRequestUncheckedUpdateInput> {
+  const { user, structureId } = ctx
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: user.structureId },
+    where: { id: structureId },
     select: {
       type: true
     }
@@ -71,13 +68,13 @@ export async function prepareHelpRequestData({
 async function updateTransaction(
   transaction: Prisma.TransactionClient,
   input: EditHelpRequestInput,
-  user: ProtectedAppContextUser,
+  ctx: ProtectedAppContext,
   target: NonNullable<HelpRequestWithRelations>
 ) {
   const data = await prepareHelpRequestData({
     input,
     transaction,
-    user,
+    ctx,
     target
   })
   const helpRequest = await transaction.helpRequest.update({
@@ -94,7 +91,7 @@ async function updateTransaction(
   })
 
   await addUserActivity({
-    userId: user.id,
+    userId: ctx.user.id,
     activity: UserActivityType.UPDATE,
     object: 'HelpRequest',
     objectId: helpRequest.id
@@ -105,18 +102,18 @@ async function updateTransaction(
 
 export const updateHelpRequestHandler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: EditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
   const target = await getHelpRequestWithRelations(input.id)
 
-  if (!target || !canEditHelpRequest(user, target)) {
+  if (!target || !canEditHelpRequest(ctx.user, target)) {
     throw forbiddenError()
   }
 
   return prismaClient.$transaction(transaction =>
-    updateTransaction(transaction, input, user, target)
+    updateTransaction(transaction, input, ctx, target)
   )
 }

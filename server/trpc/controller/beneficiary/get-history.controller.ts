@@ -1,4 +1,4 @@
-import type { Prisma, User } from '@prisma/client'
+import type { Prisma } from '@prisma/client'
 import { HelpRequestStatus, FollowupStatus } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import type {
@@ -24,6 +24,7 @@ import {
   canListBeneficiaryHelpRequests,
   canOnlyListItsBeneficiaries
 } from '~/server/security/rules'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput
@@ -97,7 +98,7 @@ const historyItemInclude = (userId: string) => ({
 })
 
 async function getFollowups(
-  user: User,
+  user: SecurityRuleGrantee,
   beneficiary: NonNullable<BeneficiarySecurityTarget>,
   filters: FollowupFilterInput
 ) {
@@ -132,7 +133,7 @@ async function getFollowups(
 }
 
 async function getHelpRequests(
-  user: User,
+  user: SecurityRuleGrantee,
   beneficiary: NonNullable<BeneficiarySecurityTarget>,
   filters: HelpRequestFilterInput
 ) {

@@ -1,7 +1,8 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
-import type { User } from '@prisma/client'
 import { allow, deny, shield } from 'trpc-shield'
+import { H3Event } from 'h3'
+import { SecurityRuleGrantee } from '../security/rules/types'
 import { adminPermissions } from './routers/admin/permissions'
 import { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
@@ -47,14 +48,16 @@ const structureMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
   return next({
     ctx: {
       // infers the user as part of structure
-      user: ctx.user as User & { structureId: string }
+      user: ctx.user
     }
   })
 })
 
 // FIXME: There is no way to infer the context type of protectedProcedure
-export type ProtectedAppContext = AppContext & {
-  user: User & { structureId: string }
+export type ProtectedAppContext = {
+  event: H3Event
+  user: SecurityRuleGrantee
+  structureId: string
 }
 
 export type ProtectedAppContextUser = ProtectedAppContext['user']

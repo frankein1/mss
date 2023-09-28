@@ -17,7 +17,7 @@ type GetHelpRequestsOrderBy = Array<
 
 export const getHelpRequestsHandler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structureId }
 }: {
   input: GetHelpRequestsInput
   ctx: ProtectedAppContext
@@ -32,7 +32,7 @@ export const getHelpRequestsHandler = async ({
     : undefined
 
   const where: Prisma.HelpRequestWhereInput = {
-    structureId: user.structureId,
+    structureId,
     beneficiary: {
       archived: null,
       referents

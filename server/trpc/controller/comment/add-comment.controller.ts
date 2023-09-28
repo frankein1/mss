@@ -1,9 +1,4 @@
-import {
-  NotificationType,
-  Prisma,
-  User,
-  UserActivityType
-} from '@prisma/client'
+import { NotificationType, Prisma, UserActivityType } from '@prisma/client'
 import { AddCommentInput } from '~/server/schema'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import {
@@ -19,6 +14,7 @@ import {
 } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 export const addCommentHandler = async ({
   ctx: { user },
@@ -52,7 +48,7 @@ export const addCommentHandler = async ({
 
 function addCommentToFollowup(
   input: AddCommentInput,
-  user: User,
+  user: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ) {
   if (!canAddCommentToFollowup(user, beneficiary)) {
@@ -75,7 +71,7 @@ function addCommentToFollowup(
 
 function addCommentToHelpRequest(
   input: AddCommentInput,
-  user: User,
+  user: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ) {
   if (!canAddCommentToHelpRequest(user, beneficiary)) {

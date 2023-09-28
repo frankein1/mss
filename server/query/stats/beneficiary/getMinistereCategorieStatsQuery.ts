@@ -1,11 +1,11 @@
 import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
-import { ProtectedAppContextUser } from '~/server/trpc'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { prepareBeneficiaryStatFilters } from '~/utils/filters'
 
 export async function getMinistereCategorieStatsQuery(
-  user: ProtectedAppContextUser,
+  user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
   const referents = canOnlyListItsBeneficiaries(user)
@@ -15,7 +15,7 @@ export async function getMinistereCategorieStatsQuery(
   return await prismaClient.beneficiary.groupBy({
     by: ['ministereCategorie'],
     where: {
-      structureId: user.structureId,
+      structureId: user.structureId || '',
       ...prepareBeneficiaryStatFilters(input),
       referents
     },

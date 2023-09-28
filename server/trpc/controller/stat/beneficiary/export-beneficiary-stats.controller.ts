@@ -38,7 +38,7 @@ import {
 
 export const exportBeneficiaryStatsHandler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structureId }
 }: {
   input: StatFilterInput
   ctx: ProtectedAppContext
@@ -158,7 +158,7 @@ export const exportBeneficiaryStatsHandler = async ({
   })
 
   const userStructure = await prismaClient.structure.findUnique({
-    where: { id: user.structureId }
+    where: { id: structureId }
   })
 
   if (userStructure?.type === StructureType.Ministere) {

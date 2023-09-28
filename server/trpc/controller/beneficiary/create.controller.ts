@@ -7,7 +7,7 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 export const createBeneficiaryHandler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structureId }
 }: {
   input: CreateBeneficiaryInput
   ctx: ProtectedAppContext
@@ -18,7 +18,7 @@ export const createBeneficiaryHandler = async ({
 
   const beneficiary = await prismaClient.beneficiary.create({
     data: {
-      structureId: user.structureId,
+      structureId,
       fileNumber,
       referents: {
         connect: referents.map(referent => ({ id: referent }))
