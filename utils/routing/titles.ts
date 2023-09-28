@@ -32,6 +32,8 @@ export const RouteTitle = {
   [Route.AppBeneficiariesSaveEntourage]: () => 'Entourage',
   [Route.AppBeneficiariesSaveHealth]: () => 'Santé',
   [Route.AppBeneficiariesSaveOccupation]: () => 'Activité/Revenu',
+  [Route.AppBeneficiariesSaveExternalOrganisations]: () =>
+    'Structures extérieures',
   [Route.AppBeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
   [Route.AppBeneficiary]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? getBeneficiaryDisplayName(beneficiary) : '',
@@ -46,6 +48,8 @@ export const RouteTitle = {
   [Route.AppBeneficiaryEditEntourage]: () => 'Entourage',
   [Route.AppBeneficiaryEditHealth]: () => 'Santé',
   [Route.AppBeneficiaryEditOccupation]: () => 'Activité/Revenu',
+  [Route.AppBeneficiaryEditExternalOrganisations]: () =>
+    'Structures extérieures',
   [Route.AppBeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Entretien avec ${getBeneficiaryDisplayName(beneficiary)}`

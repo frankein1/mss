@@ -8,14 +8,16 @@ import {
   SaveBeneficiaryTaxHouseholdInput,
   SaveBeneficiaryEntourageInput,
   SaveBeneficiaryHealthInput,
-  SaveBeneficiaryOccupationInput
+  SaveBeneficiaryOccupationInput,
+  SaveBeneficiaryExternalOrganisationsInput
 } from '~/server/schema'
 import {
   canSaveToBeneficiaryBeneficiaryDraft,
   canEditBeneficiaryRelatives,
   canEditBeneficiaryHealthInfo,
   canSetBeneficiaryNir,
-  canEditBeneficiaryOccupationIncome
+  canEditBeneficiaryOccupationIncome,
+  canEditBeneficiaryExternalOrganisations
 } from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
@@ -73,8 +75,14 @@ function prepareData(
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {
-  const { general, taxHousehold, entourage, health, occupation } =
-    getDataFromSources(input, beneficiaryDraft)
+  const {
+    general,
+    taxHousehold,
+    entourage,
+    health,
+    occupation,
+    externalOrganisations
+  } = getDataFromSources(input, beneficiaryDraft)
 
   if (!general) {
     throw new Error(
@@ -150,6 +158,10 @@ function prepareData(
     data = { ...data, ...occupation }
   }
 
+  if (canEditBeneficiaryExternalOrganisations(user, securityTarget)) {
+    data = { ...data, ...externalOrganisations }
+  }
+
   return data
 }
 
@@ -174,6 +186,17 @@ function getDataFromSources(
     beneficiaryDraft.content?.occupation) as
     | SaveBeneficiaryOccupationInput
     | undefined
+  const externalOrganisations = (input.externalOrganisations ||
+    beneficiaryDraft.content?.externalOrganisations) as
+    | SaveBeneficiaryExternalOrganisationsInput
+    | undefined
 
-  return { general, taxHousehold, entourage, health, occupation }
+  return {
+    general,
+    taxHousehold,
+    entourage,
+    health,
+    occupation,
+    externalOrganisations
+  }
 }

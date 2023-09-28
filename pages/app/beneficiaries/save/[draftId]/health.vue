@@ -43,6 +43,10 @@
     canEditBeneficiaryOccupationIncome
   } from '~/server/security/rules'
 
+  definePageMeta({
+    middleware: ['can-set-health']
+  })
+
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
 

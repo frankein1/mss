@@ -4,7 +4,6 @@ import {
   idSchema,
   searchBeneficiarySchema,
   createBeneficiarySchema,
-  updateBeneficiarySchema,
   getBeneficiariesSchema,
   getDocumentsSchema,
   getHistorySchema,
@@ -14,6 +13,7 @@ import {
   updateBeneficiaryEntourageSchema,
   updateBeneficiaryHealthSchema,
   updateBeneficiaryOccupationSchema,
+  updateBeneficiaryExternalOrganisationsSchema,
   saveDraftSchema
 } from '~/server/schema'
 import {
@@ -21,7 +21,6 @@ import {
   getBeneficiariesHandler,
   getBeneficiaryDetailsHandler,
   getBeneficiaryDocumentsHandler,
-  updateBeneficiaryHandler,
   searchBeneficiaryHandler,
   getBeneficiaryMinimalInfoHandler,
   getBeneficiarySecurityTargetHandler,
@@ -35,6 +34,7 @@ import {
   updateBeneficiaryEntourageHandler,
   updateBeneficiaryHealthHandler,
   updateBeneficiaryOccupationIncomeHandler,
+  updateBeneficiaryExternalOrganisationsHandler,
   saveDraftHandler
 } from '~/server/trpc/controller/beneficiary'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
@@ -53,12 +53,6 @@ const create = createMutation({
   inputValidation: createBeneficiarySchema,
   securityCheck: AllowSecurityCheck,
   handler: createBeneficiaryHandler
-})
-const update = createMutation({
-  path: 'update',
-  inputValidation: updateBeneficiarySchema,
-  securityCheck: AllowSecurityCheck,
-  handler: updateBeneficiaryHandler
 })
 const updateGeneralInformation = createMutation({
   path: 'updateGeneralInformation',
@@ -92,6 +86,13 @@ const updateOccupationIncome = createMutation({
   inputValidation: updateBeneficiaryOccupationSchema,
   securityCheck: AllowSecurityCheck,
   handler: updateBeneficiaryOccupationIncomeHandler
+})
+
+const updateExternalOrganisations = createMutation({
+  path: 'updateExternalOrganisations',
+  inputValidation: updateBeneficiaryExternalOrganisationsSchema,
+  securityCheck: AllowSecurityCheck,
+  handler: updateBeneficiaryExternalOrganisationsHandler
 })
 
 const deleteMutation = createMutation({
@@ -203,9 +204,6 @@ export const beneficiaryRouter = router({
   updateGeneralInformation: protectedProcedure
     .input(updateGeneralInformation.inputValidation)
     .mutation(updateGeneralInformation.execute),
-  update: protectedProcedure
-    .input(update.inputValidation)
-    .mutation(update.execute),
   updateTaxHousehold: protectedProcedure
     .input(updateTaxHousehold.inputValidation)
     .mutation(updateTaxHousehold.execute),
@@ -218,6 +216,9 @@ export const beneficiaryRouter = router({
   updateOccupationIncome: protectedProcedure
     .input(updateOccupationIncome.inputValidation)
     .mutation(updateOccupationIncome.execute),
+  updateExternalOrganisations: protectedProcedure
+    .input(updateExternalOrganisations.inputValidation)
+    .mutation(updateExternalOrganisations.execute),
   create: protectedProcedure
     .input(create.inputValidation)
     .mutation(create.execute),
