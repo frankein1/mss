@@ -45,7 +45,7 @@ export const updateBeneficiaryTaxHouseholdHandler = async ({
     throw forbiddenError()
   }
 
-  const { id, structureId: _, taxHouseholds, ...taxHouseholdDatas } = input
+  const { id, taxHouseholds, ...taxHouseholdDatas } = input
 
   let data = {}
   data = { ...data, ...taxHouseholdDatas }

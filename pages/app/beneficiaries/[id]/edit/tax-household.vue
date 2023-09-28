@@ -99,7 +99,6 @@
     try {
       await trpcClient.beneficiary.updateTaxHousehold.mutate({
         id: beneficiaryId,
-        structureId: data.value.beneficiary.structureId,
         ...beneficiary
       })
 

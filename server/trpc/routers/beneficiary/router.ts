@@ -12,6 +12,7 @@ import {
   updateBeneficiaryGeneralInformationSchema,
   updateBeneficiaryTaxHouseholdSchema,
   updateBeneficiaryEntourageSchema,
+  updateBeneficiaryHealthSchema,
   saveDraftSchema
 } from '~/server/schema'
 import {
@@ -30,8 +31,9 @@ import {
   exportBeneficiariesHandler,
   updateBeneficiaryGeneralInformationHandler,
   updateBeneficiaryTaxHouseholdHandler,
-  saveDraftHandler,
-  updateBeneficiaryEntourageHandler
+  updateBeneficiaryEntourageHandler,
+  updateBeneficiaryHealthHandler,
+  saveDraftHandler
 } from '~/server/trpc/controller/beneficiary'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
@@ -42,12 +44,6 @@ const saveDraft = createMutation({
   inputValidation: saveDraftSchema,
   securityCheck: AllowSecurityCheck,
   handler: saveDraftHandler
-})
-const updateBeneficiaryEntourage = createMutation({
-  path: 'updateBeneficiaryEntourage',
-  inputValidation: updateBeneficiaryEntourageSchema,
-  securityCheck: AllowSecurityCheck,
-  handler: updateBeneficiaryEntourageHandler
 })
 
 const create = createMutation({
@@ -75,18 +71,25 @@ const updateTaxHousehold = createMutation({
   handler: updateBeneficiaryTaxHouseholdHandler
 })
 
-const deleteMutation = createMutation({
-  path: 'delete',
-  inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
-  handler: deleteBeneficiaryHandler
-})
-
 const updateEntourage = createMutation({
   path: 'updateEntourage',
   inputValidation: updateBeneficiaryEntourageSchema,
   securityCheck: AllowSecurityCheck,
   handler: updateBeneficiaryEntourageHandler
+})
+
+const updateHealth = createMutation({
+  path: 'updateHealth',
+  inputValidation: updateBeneficiaryHealthSchema,
+  securityCheck: AllowSecurityCheck,
+  handler: updateBeneficiaryHealthHandler
+})
+
+const deleteMutation = createMutation({
+  path: 'delete',
+  inputValidation: idSchema,
+  securityCheck: AllowSecurityCheck,
+  handler: deleteBeneficiaryHandler
 })
 
 // QUERY
@@ -197,16 +200,16 @@ export const beneficiaryRouter = router({
   updateTaxHousehold: protectedProcedure
     .input(updateTaxHousehold.inputValidation)
     .mutation(updateTaxHousehold.execute),
+  updateEntourage: protectedProcedure
+    .input(updateEntourage.inputValidation)
+    .mutation(updateEntourage.execute),
+  updateHealth: protectedProcedure
+    .input(updateHealth.inputValidation)
+    .mutation(updateHealth.execute),
   create: protectedProcedure
     .input(create.inputValidation)
     .mutation(create.execute),
-  updateBeneficiaryEntourage: protectedProcedure
-    .input(updateBeneficiaryEntourage.inputValidation)
-    .mutation(updateBeneficiaryEntourage.execute),
   saveDraft: protectedProcedure
     .input(saveDraft.inputValidation)
-    .mutation(saveDraft.execute),
-  updateEntourage: protectedProcedure
-    .input(updateEntourage.inputValidation)
-    .mutation(updateEntourage.execute)
+    .mutation(saveDraft.execute)
 })
