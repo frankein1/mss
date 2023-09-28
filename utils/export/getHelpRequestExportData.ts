@@ -57,6 +57,5 @@ export function getHelpRequestExportData(
     createdById: helpRequest.createdBy
       ? getUserDisplayName(helpRequest.createdBy)
       : ''
-    // TODO: export comments, depending on structures' feedbacks
   }
 }

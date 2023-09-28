@@ -1,19 +1,12 @@
 import { z } from 'zod'
 import {
-  saveBeneficiarySchema,
   saveBeneficiaryGeneralInformationSchema,
   saveBeneficiaryTaxHouseholdSchema,
   saveBeneficiaryEntourageSchema,
   saveBeneficiaryHealthSchema,
-  saveBeneficiaryOccupationSchema
+  saveBeneficiaryOccupationSchema,
+  saveBeneficiaryExternalOrganisationsSchema
 } from './saveBeneficiary.schema'
-
-export const updateBeneficiarySchema = saveBeneficiarySchema.extend({
-  id: z.string().uuid(),
-  structureId: z.string().uuid()
-})
-
-export type UpdateBeneficiaryInput = z.infer<typeof updateBeneficiarySchema>
 
 export const updateBeneficiaryGeneralInformationSchema =
   saveBeneficiaryGeneralInformationSchema.extend({
@@ -60,4 +53,13 @@ export const updateBeneficiaryOccupationSchema =
 
 export type UpdateBeneficiaryOccupationInput = z.infer<
   typeof updateBeneficiaryOccupationSchema
+>
+
+export const updateBeneficiaryExternalOrganisationsSchema =
+  saveBeneficiaryExternalOrganisationsSchema.extend({
+    id: z.string().uuid()
+  })
+
+export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
+  typeof updateBeneficiaryExternalOrganisationsSchema
 >

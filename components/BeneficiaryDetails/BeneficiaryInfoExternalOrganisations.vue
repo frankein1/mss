@@ -70,8 +70,8 @@
     beneficiary: GetBeneficiaryOutput
   }>()
 
-  const editLink = computed(
-    () => RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id) // TODO: Update path
+  const editLink = computed(() =>
+    RoutePath.AppBeneficiaryEditExternalOrganisations(props.beneficiary.id)
   )
 
   const hasOtherInformationSection = computed(

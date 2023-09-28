@@ -6,6 +6,7 @@
     :title="RouteTitle.AppBeneficiariesSaveOccupation()"
     title-icon="fr-icon-user-line"
     :previous-page="previousPage"
+    :next-page="nextPage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -40,7 +41,15 @@
   import { RoutePath, RouteTitle } from '~/utils/routing'
   import type { BeneficiaryDraft } from '~/types/beneficiary'
   import { useAuthStore } from '~/store/auth'
-  import { canEditBeneficiaryHealthInfo } from '~/server/security/rules'
+  import {
+    canEditBeneficiaryHealthInfo,
+    canEditBeneficiaryRelatives,
+    canEditBeneficiaryExternalOrganisations
+  } from '~/server/security/rules'
+
+  definePageMeta({
+    middleware: ['can-set-occupation']
+  })
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -73,12 +82,34 @@
       }
     }
 
+    if (canEditBeneficiaryRelatives(user.value, securityTarget)) {
+      return {
+        title: RouteTitle.AppBeneficiariesSaveEntourage(),
+        path: RoutePath.AppBeneficiariesSaveEntourage(draftId)
+      }
+    }
+
     return {
       title: RouteTitle.AppBeneficiariesSaveInfo(),
       path: RoutePath.AppBeneficiariesSaveInfo(draftId)
     }
   })
-  // TODO: Add next page
+
+  const nextPage = computed(() => {
+    const securityTarget = {
+      referents: [user.value.id],
+      structureId: user.value.structureId
+    }
+
+    if (canEditBeneficiaryExternalOrganisations(user.value, securityTarget)) {
+      return {
+        title: RouteTitle.AppBeneficiariesSaveExternalOrganisations(),
+        path: RoutePath.AppBeneficiariesSaveExternalOrganisations(draftId)
+      }
+    }
+
+    return undefined
+  })
 
   const familySituation = computed(
     () => beneficiaryDraft.value?.taxHousehold?.familySituation

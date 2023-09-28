@@ -7,7 +7,15 @@ import { canUpdateDraft } from '~/server/security/rules'
 import type { BeneficiaryDraft } from '~/types/beneficiary'
 
 export const updateBeneficiaryDraftHandler = async ({
-  input: { id: draftId, general, taxHousehold, entourage, health, occupation },
+  input: {
+    id: draftId,
+    general,
+    taxHousehold,
+    entourage,
+    health,
+    occupation,
+    externalOrganisations
+  },
   ctx: { user }
 }: {
   input: UpdateBeneficiaryDraftInput
@@ -29,8 +37,10 @@ export const updateBeneficiaryDraftHandler = async ({
         taxHousehold: taxHousehold || beneficiaryDraft.content.taxHousehold,
         entourage: entourage || beneficiaryDraft.content.entourage,
         health: health || beneficiaryDraft.content.health,
-        occupation: occupation || beneficiaryDraft.content.occupation
-        // TODO: add other sections
+        occupation: occupation || beneficiaryDraft.content.occupation,
+        externalOrganisations:
+          externalOrganisations ||
+          beneficiaryDraft.content.externalOrganisations
       }
     }
   })

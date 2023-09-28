@@ -2,7 +2,6 @@ import {
   idSchema,
   searchBeneficiarySchema,
   createBeneficiarySchema,
-  updateBeneficiarySchema,
   getBeneficiariesSchema,
   getDocumentsSchema,
   getHistorySchema,
@@ -12,6 +11,7 @@ import {
   updateBeneficiaryEntourageSchema,
   updateBeneficiaryHealthSchema,
   updateBeneficiaryOccupationSchema,
+  updateBeneficiaryExternalOrganisationsSchema,
   saveDraftSchema
 } from '~/server/schema'
 import {
@@ -19,7 +19,6 @@ import {
   getBeneficiariesHandler,
   getBeneficiaryDetailsHandler,
   getBeneficiaryDocumentsHandler,
-  updateBeneficiaryHandler,
   searchBeneficiaryHandler,
   getBeneficiaryMinimalInfoHandler,
   getBeneficiarySecurityTargetHandler,
@@ -33,6 +32,7 @@ import {
   updateBeneficiaryEntourageHandler,
   updateBeneficiaryHealthHandler,
   updateBeneficiaryOccupationIncomeHandler,
+  updateBeneficiaryExternalOrganisationsHandler,
   saveDraftHandler
 } from '~/server/trpc/controller/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
@@ -44,9 +44,6 @@ export const beneficiaryRouter = router({
   create: protectedProcedure
     .input(createBeneficiarySchema)
     .mutation(createBeneficiaryHandler),
-  update: protectedProcedure
-    .input(updateBeneficiarySchema)
-    .mutation(updateBeneficiaryHandler),
   updateGeneralInformation: protectedProcedure
     .input(updateBeneficiaryGeneralInformationSchema)
     .mutation(updateBeneficiaryGeneralInformationHandler),
@@ -62,6 +59,9 @@ export const beneficiaryRouter = router({
   updateOccupationIncome: protectedProcedure
     .input(updateBeneficiaryOccupationSchema)
     .mutation(updateBeneficiaryOccupationIncomeHandler),
+  updateExternalOrganisations: protectedProcedure
+    .input(updateBeneficiaryExternalOrganisationsSchema)
+    .mutation(updateBeneficiaryExternalOrganisationsHandler),
   isBeneficiaryReferent: protectedProcedure
     .input(idSchema)
     .query(isBeneficiaryReferentHandler),
