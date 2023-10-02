@@ -35,6 +35,7 @@ export enum Route {
   AppBeneficiariesSaveEntourage = 'AppBeneficiariesSaveEntourage',
   AppBeneficiariesSaveHealth = 'AppBeneficiariesSaveHealth',
   AppBeneficiariesSaveOccupation = 'AppBeneficiariesSaveOccupation',
+  AppBeneficiariesSaveExternalOrganisations = 'AppBeneficiariesSaveExternalOrganisations',
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
@@ -43,6 +44,7 @@ export enum Route {
   AppBeneficiaryEditEntourage = 'AppBeneficiaryEditEntourage',
   AppBeneficiaryEditHealth = 'AppBeneficiaryEditHealth',
   AppBeneficiaryEditOccupation = 'AppBeneficiaryEditOccupation',
+  AppBeneficiaryEditExternalOrganisations = 'AppBeneficiaryEditExternalOrganisations',
   AppBeneficiaryFollowupAdd = 'AppBeneficiaryFollowupAdd',
   AppBeneficiaryFollowupEdit = 'AppBeneficiaryFollowupEdit',
   AppBeneficiaryHelpRequestAdd = 'AppBeneficiaryHelpRequestAdd',
@@ -157,6 +159,8 @@ export const RoutePath = {
     `${BeneficiarySaveRoute(draftId)}/health`,
   [Route.AppBeneficiariesSaveOccupation]: (draftId: string) =>
     `${BeneficiarySaveRoute(draftId)}/occupation`,
+  [Route.AppBeneficiariesSaveExternalOrganisations]: (draftId: string) =>
+    `${BeneficiarySaveRoute(draftId)}/external-organisations`,
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
@@ -198,6 +202,14 @@ export const RoutePath = {
   ) =>
     savedRoute(
       `${BeneficiaryEditRoute(beneficiaryId)}/occupation`,
+      !!options?.saved
+    ),
+  [Route.AppBeneficiaryEditExternalOrganisations]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(
+      `${BeneficiaryEditRoute(beneficiaryId)}/external-organisations`,
       !!options?.saved
     ),
 

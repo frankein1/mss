@@ -4,7 +4,8 @@ import {
   saveBeneficiaryTaxHouseholdSchema,
   saveBeneficiaryEntourageSchema,
   saveBeneficiaryHealthSchema,
-  saveBeneficiaryOccupationSchema
+  saveBeneficiaryOccupationSchema,
+  saveBeneficiaryExternalOrganisationsSchema
 } from '../beneficiary'
 
 export const updateBeneficiaryDraftSchema = z.object({
@@ -13,8 +14,8 @@ export const updateBeneficiaryDraftSchema = z.object({
   taxHousehold: saveBeneficiaryTaxHouseholdSchema.optional(),
   entourage: saveBeneficiaryEntourageSchema.optional(),
   health: saveBeneficiaryHealthSchema.optional(),
-  occupation: saveBeneficiaryOccupationSchema.optional()
-  // TODO: Add other sections
+  occupation: saveBeneficiaryOccupationSchema.optional(),
+  externalOrganisations: saveBeneficiaryExternalOrganisationsSchema.optional()
 })
 
 export type UpdateBeneficiaryDraftInput = z.infer<

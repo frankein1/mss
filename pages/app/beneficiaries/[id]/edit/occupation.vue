@@ -6,6 +6,7 @@
     :title="RouteTitle.AppBeneficiaryEditOccupation()"
     is-editting
     :previous-page="previousPage"
+    :next-page="nextPage"
     :saved="saved"
     @save="onSaveBeneficiary"
   >
@@ -40,7 +41,11 @@
   import { RoutePath, RouteTitle } from '~/utils/routing'
   import type { BeneficiaryNames } from '~/types/beneficiary'
   import { useAuthStore } from '~/store/auth'
-  import { canEditBeneficiaryHealthInfo } from '~/server/security/rules'
+  import {
+    canEditBeneficiaryHealthInfo,
+    canEditBeneficiaryExternalOrganisations,
+    canEditBeneficiaryRelatives
+  } from '~/server/security/rules'
   import { prismaDecimalToNumber } from '~/utils/prisma'
 
   definePageMeta({
@@ -77,12 +82,42 @@
       }
     }
 
+    if (canEditBeneficiaryRelatives(user.value, data.value.beneficiary)) {
+      return {
+        title: RouteTitle.AppBeneficiaryEditEntourage(),
+        path: RoutePath.AppBeneficiaryEditEntourage(beneficiaryId, {
+          saved: true
+        })
+      }
+    }
+
     return {
       title: RouteTitle.AppBeneficiaryEditInfo(),
       path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, { saved: true })
     }
   })
-  // TODO: Add next page
+
+  const nextPage = computed(() => {
+    if (!data.value) {
+      return undefined
+    }
+
+    if (
+      canEditBeneficiaryExternalOrganisations(
+        user.value,
+        data.value.beneficiary
+      )
+    ) {
+      return {
+        title: RouteTitle.AppBeneficiaryEditExternalOrganisations(),
+        path: RoutePath.AppBeneficiaryEditExternalOrganisations(beneficiaryId, {
+          saved: true
+        })
+      }
+    }
+
+    return undefined
+  })
 
   const familySituation = computed(
     () => data.value?.beneficiary.familySituation

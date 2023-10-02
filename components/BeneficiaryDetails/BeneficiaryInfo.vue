@@ -25,7 +25,7 @@
 
   <BeneficiaryInfoOccupationIncome :beneficiary="beneficiary" />
 
-  <BeneficiaryInfoOtherInformation :beneficiary="beneficiary" />
+  <BeneficiaryInfoExternalOrganisations :beneficiary="beneficiary" />
 </template>
 
 <script lang="ts" setup>
