@@ -37,7 +37,6 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   region: 'Région',
   street: 'Adresse',
   addressComplement: "Complément d'adresse",
-  postOfficeBox: 'Lieu-dit, commune déléguée ou boîte postale',
   noPhone: "N'a pas de téléphone",
   phone1: 'Numéro de téléphone',
   phone2: 'Numéro de téléphone',

@@ -80,7 +80,6 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   addressComplement: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
-  postOfficeBox: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   noPhone: z.boolean().default(false),
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),

@@ -50,13 +50,7 @@
       <VeeInput
         name="addressComplement"
         :label="beneficiaryFieldLabels.addressComplement"
-        hint="Bâtiment, immeuble, escalier et numéro d'appartement"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeInput
-        name="postOfficeBox"
-        :label="beneficiaryFieldLabels.postOfficeBox"
+        hint="Bâtiment, escalier, numéro d'appartement, lieu-dit, etc."
       />
     </div>
     <div class="fr-col-12">
