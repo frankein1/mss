@@ -48,7 +48,8 @@ const structureMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
   return next({
     ctx: {
       // infers the user as part of structure
-      user: ctx.user
+      user: ctx.user,
+      structureId: ctx.user.structureId
     }
   })
 })
