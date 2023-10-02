@@ -109,11 +109,30 @@ const BeneficiaryFollowupsRoute = (beneficiaryId: string) =>
 const BeneficiaryHelpRequestsRoute = (beneficiaryId: string) =>
   `${BeneficiaryRoute(beneficiaryId)}/help-requests`
 
-const savedRoute = (route: string, saved: boolean) => {
-  if (!saved) {
+type BeneficiaryEditRouteOptions = {
+  saved?: boolean
+  originTab?: BeneficiaryTab
+}
+
+const beneficiaryEditRoute = (
+  route: string,
+  options: BeneficiaryEditRouteOptions | undefined
+) => {
+  if (!options) {
     return route
   }
-  return `${route}?saved`
+
+  const params = new URLSearchParams()
+
+  if (options.saved) {
+    params.append('saved', 'true')
+  }
+
+  if (options.originTab) {
+    params.append('originTab', options.originTab)
+  }
+
+  return params.size ? `${route}?${params}` : route
 }
 
 export const RoutePath = {
@@ -169,48 +188,51 @@ export const RoutePath = {
     BeneficiaryEditRoute(beneficiaryId),
   [Route.AppBeneficiaryEditInfo]: (
     beneficiaryId: string,
-    options?: { saved?: boolean }
+    options?: BeneficiaryEditRouteOptions
   ) =>
-    savedRoute(`${BeneficiaryEditRoute(beneficiaryId)}/info`, !!options?.saved),
+    beneficiaryEditRoute(
+      `${BeneficiaryEditRoute(beneficiaryId)}/info`,
+      options
+    ),
   [Route.AppBeneficiaryEditTaxHousehold]: (
     beneficiaryId: string,
-    options?: { saved?: boolean }
+    options?: BeneficiaryEditRouteOptions
   ) =>
-    savedRoute(
+    beneficiaryEditRoute(
       `${BeneficiaryEditRoute(beneficiaryId)}/tax-household`,
-      !!options?.saved
+      options
     ),
   [Route.AppBeneficiaryEditEntourage]: (
     beneficiaryId: string,
-    options?: { saved?: boolean }
+    options?: BeneficiaryEditRouteOptions
   ) =>
-    savedRoute(
+    beneficiaryEditRoute(
       `${BeneficiaryEditRoute(beneficiaryId)}/entourage`,
-      !!options?.saved
+      options
     ),
   [Route.AppBeneficiaryEditHealth]: (
     beneficiaryId: string,
-    options?: { saved?: boolean }
+    options?: BeneficiaryEditRouteOptions
   ) =>
-    savedRoute(
+    beneficiaryEditRoute(
       `${BeneficiaryEditRoute(beneficiaryId)}/health`,
-      !!options?.saved
+      options
     ),
   [Route.AppBeneficiaryEditOccupation]: (
     beneficiaryId: string,
-    options?: { saved?: boolean }
+    options?: BeneficiaryEditRouteOptions
   ) =>
-    savedRoute(
+    beneficiaryEditRoute(
       `${BeneficiaryEditRoute(beneficiaryId)}/occupation`,
-      !!options?.saved
+      options
     ),
   [Route.AppBeneficiaryEditExternalOrganisations]: (
     beneficiaryId: string,
-    options?: { saved?: boolean }
+    options?: BeneficiaryEditRouteOptions
   ) =>
-    savedRoute(
+    beneficiaryEditRoute(
       `${BeneficiaryEditRoute(beneficiaryId)}/external-organisations`,
-      !!options?.saved
+      options
     ),
 
   [Route.AppBeneficiaryFollowupAdd]: (beneficiaryId: string) =>

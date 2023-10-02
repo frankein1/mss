@@ -37,6 +37,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, RouteTitle } from '~/utils/routing'
   import type { BeneficiaryNames } from '~/types/beneficiary'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-set-relatives']
@@ -49,15 +50,24 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const saved = route.query.saved !== undefined
+  const originTab = route.query.originTab
+    ? (route.query.originTab as BeneficiaryTab)
+    : undefined
 
   const previousPage = {
     title: RouteTitle.AppBeneficiaryEditInfo(),
-    path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, { saved: true })
+    path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, {
+      saved: true,
+      originTab
+    })
   }
 
   const nextPage = {
     title: RouteTitle.AppBeneficiaryEditEntourage(),
-    path: RoutePath.AppBeneficiaryEditEntourage(beneficiaryId, { saved: true })
+    path: RoutePath.AppBeneficiaryEditEntourage(beneficiaryId, {
+      saved: true,
+      originTab
+    })
   }
 
   const { data, pending, error } =

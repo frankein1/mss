@@ -39,6 +39,7 @@
   import type { BeneficiaryNames } from '~/types/beneficiary'
   import { useAuthStore } from '~/store/auth'
   import { canEditBeneficiaryHealthInfo } from '~/server/security/rules'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-set-relatives']
@@ -51,12 +52,17 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const saved = route.query.saved !== undefined
+  const originTab = route.query.originTab
+    ? (route.query.originTab as BeneficiaryTab)
+    : undefined
+
   const authStore = useAuthStore()
 
   const previousPage = {
     title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
     path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId, {
-      saved: true
+      saved: true,
+      originTab
     })
   }
 
@@ -76,7 +82,8 @@
       return {
         title: RouteTitle.AppBeneficiaryEditHealth(),
         path: RoutePath.AppBeneficiaryEditHealth(beneficiaryId, {
-          saved: true
+          saved: true,
+          originTab
         })
       }
     }

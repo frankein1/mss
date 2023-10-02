@@ -22,7 +22,7 @@
     </li>
     <li>
       <NuxtLink
-        :to="`${RoutePath.AppBeneficiaryEditInfo(beneficiaryId)}`"
+        :to="`${editRoute}`"
         class="fr-btn fr-btn--icon-left fr-icon-edit-line edit-btn"
         target="_self"
       >
@@ -35,6 +35,9 @@
 <script setup lang="ts">
   import { RoutePath } from '~/utils/routing'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+
+  const route = useRoute()
 
   const props = defineProps<{
     beneficiaryId: string
@@ -42,6 +45,18 @@
   }>()
 
   const emit = defineEmits<{ deleted: [] }>()
+
+  const currentTab = computed(() => {
+    const hash = route.hash.replace('#', '')
+    return hash ? (hash as BeneficiaryTab) : undefined
+  })
+
+  const editRoute = computed(() =>
+    RoutePath.AppBeneficiaryEditInfo(
+      props.beneficiaryId,
+      currentTab.value ? { originTab: currentTab.value } : undefined
+    )
+  )
 
   function onDelete() {
     useModal().open(
