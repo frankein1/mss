@@ -43,13 +43,13 @@ const userMiddleware = t.middleware(({ ctx, next }) => {
 })
 
 const structureMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
-  if (ctx.user.role !== 'Administrator' && !ctx.user.structure?.id) {
+  if (ctx.user.role === 'Administrator' || !ctx.user.structure?.id) {
     throw forbiddenError('User is not part of any structure')
   }
   return next({
     ctx: {
       // infers the user as part of structure
-      user: ctx.user,
+      user: { ...ctx.user, structureId: ctx.user.structure.id },
       structure: ctx.user.structure
     }
   })
