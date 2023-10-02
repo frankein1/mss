@@ -121,19 +121,21 @@
     if (props.noHint) {
       return undefined
     }
+    let typeHint = ''
     if (props.type === 'tel') {
-      const hintBase = 'Format attendu : 01 22 33 44 55'
-      return props.hint ? `${hintBase}. ${props.hint}` : hintBase
+      typeHint = 'Format attendu : 01 22 33 44 55'
     }
     if (props.type === 'social-security-number') {
-      const hintBase =
+      typeHint =
         'Format attendu : 0 00 00 00 000 000 00. La clé du n° de sécurité sociale est optionnelle.'
-      return props.hint ? `${hintBase}. ${props.hint}` : hintBase
+    }
+    if (props.type === 'email') {
+      typeHint = 'Fromat attendu : nom@domaine.fr'
     }
     if (props.hint) {
-      return props.hint
+      return typeHint ? `${typeHint}. ${props.hint}` : props.hint
     }
-    return undefined
+    return typeHint || undefined
   })
 
   function formatValue(value: string | Date | number) {

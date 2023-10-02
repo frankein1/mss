@@ -21,7 +21,7 @@
     />
     <BeneficiaryInfoLabel
       label="Date de naissance"
-      :value="formatDate(relative.linkedBeneficiary?.birthDate)"
+      :value="formatDate(birthDate)"
       class="fr-col-6"
     />
   </div>
@@ -84,5 +84,12 @@
     return relative.linkedBeneficiary
       ? relative.linkedBeneficiary.phone1
       : relative.phone
+  })
+
+  const birthDate = computed(() => {
+    const relative = props.relative
+    return relative.linkedBeneficiary
+      ? relative.linkedBeneficiary.birthDate
+      : relative.birthDate
   })
 </script>
