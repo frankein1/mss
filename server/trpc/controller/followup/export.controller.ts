@@ -17,7 +17,7 @@ import { FOLLOWUP_EXPORTED_FIELDS } from '~/utils/constants/export'
 
 export const exportFollowupsHandler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structureId }
 }: {
   input: ExportFollowupsInput
   ctx: ProtectedAppContext
@@ -36,7 +36,7 @@ export const exportFollowupsHandler = async ({
     : undefined
 
   const where: Prisma.FollowupWhereInput = {
-    structureId: user.structureId,
+    structureId,
     beneficiary: {
       archived: null,
       referents

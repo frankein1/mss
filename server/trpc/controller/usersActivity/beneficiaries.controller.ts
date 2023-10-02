@@ -1,5 +1,5 @@
 import { Prisma, UserActivityType } from '@prisma/client'
-import { ProtectedAppContext, ProtectedAppContextUser } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import type { PaginatedInput } from '~/server/schema'
@@ -119,31 +119,33 @@ where
 }
 
 function getBeneficiariesUsersActivity(
-  user: ProtectedAppContextUser,
+  ctx: ProtectedAppContext,
   take: number,
   skip: number
 ) {
+  const { user, structureId } = ctx
   if (canOnlyListItsBeneficiaries(user)) {
     return getOnlyItsBeneficiariesUsersActivity(
       user.id,
-      user.structureId,
+      structureId,
       take,
       skip
     )
   }
-  return getAnyBeneficiariesUsersActivity(user.structureId, take, skip)
+  return getAnyBeneficiariesUsersActivity(structureId, take, skip)
 }
 
-function getBeneficiariesUsersActivityCount(user: ProtectedAppContextUser) {
+function getBeneficiariesUsersActivityCount(ctx: ProtectedAppContext) {
+  const { user, structureId } = ctx
   if (canOnlyListItsBeneficiaries(user)) {
-    return getOnlyItsBeneficiariesUsersActivityCount(user.id, user.structureId)
+    return getOnlyItsBeneficiariesUsersActivityCount(user.id, structureId)
   }
-  return getAnyBeneficiariesUsersActivityCount(user.structureId)
+  return getAnyBeneficiariesUsersActivityCount(structureId)
 }
 
 export const getBeneficiariesUsersActivityHandler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: PaginatedInput
   ctx: ProtectedAppContext
@@ -151,8 +153,8 @@ export const getBeneficiariesUsersActivityHandler = async ({
   const { take, skip } = takeAndSkipFromPagination(input)
 
   const [activity, count] = await Promise.all([
-    getBeneficiariesUsersActivity(user, take, skip),
-    getBeneficiariesUsersActivityCount(user)
+    getBeneficiariesUsersActivity(ctx, take, skip),
+    getBeneficiariesUsersActivityCount(ctx)
   ])
 
   return { activity, count }

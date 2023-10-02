@@ -61,8 +61,8 @@ export const exportHelpRequestStatsHandler = async ({
     rows: followupTypesRows
   })
 
-  const userStructure = await prismaClient.structure.findUnique({
-    where: { id: user.structureId }
+  const userStructure = await prismaClient.structure.findUniqueOrThrow({
+    where: { id: user.structureId || '' }
   })
 
   if (userStructure?.type === StructureType.Ministere) {

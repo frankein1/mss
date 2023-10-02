@@ -1,9 +1,5 @@
 import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
-import {
-  ProtectedAppContext,
-  ProtectedAppContextUser,
-  forbiddenError
-} from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import {
@@ -26,16 +22,17 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 export async function prepareFollowupData({
   input,
   transaction,
-  user,
+  ctx,
   target
 }: {
   input: EditFollowupInput
   transaction: Prisma.TransactionClient
-  user: ProtectedAppContextUser
+  ctx: ProtectedAppContext
   target: FollowupTarget
 }): Promise<Prisma.FollowupUncheckedUpdateInput> {
+  const { structureId, user } = ctx
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: user.structureId },
+    where: { id: structureId },
     select: {
       type: true
     }
@@ -86,13 +83,13 @@ export async function prepareFollowupData({
 async function updateTransaction(
   transaction: Prisma.TransactionClient,
   input: EditFollowupInput,
-  user: ProtectedAppContextUser,
+  ctx: ProtectedAppContext,
   target: Exclude<FollowupWithRelations, null>
 ) {
   const data = await prepareFollowupData({
     input,
     transaction,
-    user,
+    ctx,
     target
   })
 
@@ -111,7 +108,7 @@ async function updateTransaction(
 
   await addUserActivity({
     transaction,
-    userId: user.id,
+    userId: ctx.user.id,
     activity: UserActivityType.UPDATE,
     object: 'Followup',
     objectId: input.id
@@ -121,18 +118,18 @@ async function updateTransaction(
 
 export const updateFollowupHandler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: EditFollowupInput
   ctx: ProtectedAppContext
 }) => {
   const target = await getFollowupWithRelations(input.id)
 
-  if (!target || !canEditFollowup(user, target)) {
+  if (!target || !canEditFollowup(ctx.user, target)) {
     throw forbiddenError()
   }
 
   return prismaClient.$transaction(transaction =>
-    updateTransaction(transaction, input, user, target)
+    updateTransaction(transaction, input, ctx, target)
   )
 }

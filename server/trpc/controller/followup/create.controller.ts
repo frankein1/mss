@@ -1,7 +1,6 @@
 import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
 import {
   ProtectedAppContext,
-  ProtectedAppContextUser,
   invalidError,
   forbiddenError
 } from '~/server/trpc'
@@ -20,14 +19,14 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 export async function prepareFollowupData({
   input,
   transaction,
-  user
+  ctx: { user, structureId }
 }: {
   input: AddFollowupInput
   transaction: Prisma.TransactionClient
-  user: ProtectedAppContextUser
+  ctx: ProtectedAppContext
 }): Promise<Prisma.FollowupUncheckedCreateInput> {
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: user.structureId },
+    where: { id: structureId },
     select: {
       type: true
     }
@@ -60,7 +59,7 @@ export async function prepareFollowupData({
 
   return {
     ...data,
-    structureId: user.structureId,
+    structureId,
     types: prepareFollowupTypesMutations(input.types),
     documents: prepareDocumentsMutations(input.documents),
     createdById: user.id,
@@ -77,9 +76,9 @@ export async function prepareFollowupData({
 async function createTransaction(
   transaction: Prisma.TransactionClient,
   input: AddFollowupInput,
-  user: ProtectedAppContextUser
+  ctx: ProtectedAppContext
 ) {
-  const data = await prepareFollowupData({ input, transaction, user })
+  const data = await prepareFollowupData({ input, transaction, ctx })
 
   const fu = await transaction.followup.create({
     data,
@@ -95,7 +94,7 @@ async function createTransaction(
 
   await addUserActivity({
     transaction,
-    userId: user.id,
+    userId: ctx.user.id,
     activity: UserActivityType.CREATE,
     object: 'Followup',
     objectId: fu.id
@@ -105,7 +104,7 @@ async function createTransaction(
 
 export const addFollowupHandler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: AddFollowupInput
   ctx: ProtectedAppContext
@@ -116,11 +115,11 @@ export const addFollowupHandler = async ({
     throw invalidError('Beneficiary not found')
   }
 
-  if (!canCreateFollowup(user, beneficiary)) {
+  if (!canCreateFollowup(ctx.user, beneficiary)) {
     throw forbiddenError()
   }
 
   return prismaClient.$transaction(transaction =>
-    createTransaction(transaction, input, user)
+    createTransaction(transaction, input, ctx)
   )
 }

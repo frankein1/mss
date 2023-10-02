@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client'
 import { newOptionToLabel, NEW_OPTION_PREFIX } from '~/utils/options'
 import { canCreatePrescribingOrganization } from '~/server/security/rules'
-import type { ProtectedAppContextUser } from '~/server/trpc'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 export async function preparePrescribingOrganization(
   transaction: Prisma.TransactionClient,
-  user: ProtectedAppContextUser,
+  user: SecurityRuleGrantee,
   prescribingOrganizationId: string | null | undefined
 ) {
   if (
@@ -15,7 +15,7 @@ export async function preparePrescribingOrganization(
     const { id } = await transaction.prescribingOrganization.create({
       data: {
         name: newOptionToLabel(prescribingOrganizationId),
-        structureId: user.structureId,
+        structureId: user.structureId || '',
         createdById: user.id
       }
     })

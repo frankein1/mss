@@ -10,13 +10,11 @@ const tokenToSearchCondition = (token: string) => ({
 
 export const searchBeneficiaryHandler = async ({
   input: { query, excludedIds },
-  ctx: { user }
+  ctx: { user, structureId }
 }: {
   input: SearchBeneficiaryInput
   ctx: ProtectedAppContext
 }) => {
-  const { structureId } = user
-
   // TODO unit test
   const tokens = query.trim().replace(/%/g, '').split(/\s+/g)
 

@@ -1,7 +1,6 @@
 import { Prisma, StructureType, UserActivityType } from '@prisma/client'
 import {
   ProtectedAppContext,
-  ProtectedAppContextUser,
   invalidError,
   forbiddenError
 } from '~/server/trpc'
@@ -17,14 +16,14 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 export async function prepareHelpRequestData({
   input,
   transaction,
-  user
+  ctx
 }: {
   input: CreateHelpRequestInput
   transaction: Prisma.TransactionClient
-  user: ProtectedAppContextUser
+  ctx: ProtectedAppContext
 }): Promise<Prisma.HelpRequestUncheckedCreateInput> {
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: user.structureId },
+    where: { id: ctx.structureId },
     select: {
       type: true
     }
@@ -34,6 +33,8 @@ export async function prepareHelpRequestData({
     type === StructureType.Ministere
       ? { numeroPegase: input.numeroPegase, ministre: input.ministre }
       : {}
+
+  const { user } = ctx
 
   const prescribingOrganizationId = await preparePrescribingOrganization(
     transaction,
@@ -49,7 +50,7 @@ export async function prepareHelpRequestData({
 
   return {
     ...input,
-    structureId: user.structureId,
+    structureId: ctx.structureId,
     documents: prepareDocumentsMutations(input.documents),
     financialSupport: input.financialSupport === 'true',
     externalStructure: input.externalStructure === 'true',
@@ -63,9 +64,9 @@ export async function prepareHelpRequestData({
 const createTransaction = async (
   transaction: Prisma.TransactionClient,
   input: CreateHelpRequestInput,
-  user: ProtectedAppContextUser
+  ctx: ProtectedAppContext
 ) => {
-  const data = await prepareHelpRequestData({ input, transaction, user })
+  const data = await prepareHelpRequestData({ input, transaction, ctx })
 
   const helpRequest = await transaction.helpRequest.create({
     data,
@@ -81,7 +82,7 @@ const createTransaction = async (
 
   await addUserActivity({
     transaction,
-    userId: user.id,
+    userId: ctx.user.id,
     activity: UserActivityType.CREATE,
     object: 'HelpRequest',
     objectId: helpRequest.id
@@ -92,7 +93,7 @@ const createTransaction = async (
 
 export const addHelpRequestHandler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: CreateHelpRequestInput
   ctx: ProtectedAppContext
@@ -103,11 +104,11 @@ export const addHelpRequestHandler = async ({
     throw invalidError('Beneficiary not found')
   }
 
-  if (!canCreateHelpRequest(user, target)) {
+  if (!canCreateHelpRequest(ctx.user, target)) {
     throw forbiddenError()
   }
 
   return prismaClient.$transaction(transaction => {
-    return createTransaction(transaction, input, user)
+    return createTransaction(transaction, input, ctx)
   })
 }

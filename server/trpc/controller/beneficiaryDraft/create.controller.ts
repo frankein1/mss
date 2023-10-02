@@ -6,14 +6,14 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 export const createBeneficiaryDraftHandler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structureId }
 }: {
   input: CreateBeneficiaryInput
   ctx: ProtectedAppContext
 }) => {
   const beneficiaryDraft = await prismaClient.draft.create({
     data: {
-      structureId: user.structureId,
+      structureId,
       createdById: user.id,
       content: { general: input }
     }

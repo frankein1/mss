@@ -5,14 +5,12 @@ import { canEditItsOwnStructure } from '~/server/security/rules'
 import { editFollowupTypes } from '~/utils/structure'
 
 export const editCurrentUserStructureHandler = async ({
-  ctx: { user },
+  ctx: { user, structureId },
   input
 }: {
   ctx: ProtectedAppContext
   input: EditCurrentUserStructureInput
 }) => {
-  const { structureId } = user
-
   if (!canEditItsOwnStructure(user)) {
     throw forbiddenError()
   }

@@ -1,12 +1,12 @@
-import type { User } from '@prisma/client'
 import { HelpRequestWithRelations } from '~/server/query/helpRequests'
 import {
   canViewHelpRequestDetails,
   canViewHelpRequestPrivateSynthesis
 } from '~/server/security/rules'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 export function getHelpRequestAccessibleData(
-  user: User,
+  user: SecurityRuleGrantee,
   helpRequest: NonNullable<HelpRequestWithRelations>
 ) {
   const meta = getHelpRequestMeta(helpRequest)
@@ -41,7 +41,7 @@ function getHelpRequestMeta(
 }
 
 function getHelpRequestDetails(
-  user: User,
+  user: SecurityRuleGrantee,
   helpRequest: NonNullable<HelpRequestWithRelations>
 ) {
   if (!canViewHelpRequestDetails(user, helpRequest.beneficiary)) {
@@ -74,7 +74,7 @@ function getHelpRequestDetails(
 }
 
 function getHelpRequestPrivateSynthesis(
-  user: User,
+  user: SecurityRuleGrantee,
   helpRequest: NonNullable<HelpRequestWithRelations>
 ) {
   if (!canViewHelpRequestPrivateSynthesis(user, helpRequest)) {
