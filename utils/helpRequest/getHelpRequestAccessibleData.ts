@@ -1,4 +1,3 @@
-import type { User } from '@prisma/client'
 import { HelpRequestWithRelations } from '~/server/query/helpRequests'
 import {
   canViewHelpRequestDetails,

@@ -156,57 +156,57 @@ const getBeneficiaryFollowupTypes = createQuery({
 export const beneficiaryRouter = router({
   isBeneficiaryReferent: protectedProcedure
     .input(isBeneficiaryReferent.inputValidation)
-    .query(isBeneficiaryReferent.handler),
+    .query(isBeneficiaryReferent.execute),
   getBeneficiaryMinimalInfo: protectedProcedure
     .input(getBeneficiaryMinimalInfo.inputValidation)
-    .query(getBeneficiaryMinimalInfo.handler),
+    .query(getBeneficiaryMinimalInfo.execute),
   getBeneficiaryDetails: protectedProcedure
     .input(getBeneficiaryDetails.inputValidation)
-    .query(getBeneficiaryDetails.handler),
+    .query(getBeneficiaryDetails.execute),
   getBeneficiarySecurityTarget: protectedProcedure
     .input(getBeneficiarySecurityTarget.inputValidation)
-    .query(getBeneficiarySecurityTarget.handler),
+    .query(getBeneficiarySecurityTarget.execute),
   getBeneficiaryHistory: protectedProcedure
     .input(getBeneficiaryHistory.inputValidation)
-    .query(getBeneficiaryHistory.handler),
+    .query(getBeneficiaryHistory.execute),
   getBeneficiaries: protectedProcedure
     .input(getBeneficiaries.inputValidation)
-    .query(getBeneficiaries.handler),
+    .query(getBeneficiaries.execute),
   exportBeneficiaries: protectedProcedure
     .input(exportBeneficiaries.inputValidation)
-    .query(exportBeneficiaries.handler),
+    .query(exportBeneficiaries.execute),
   search: protectedProcedure
     .input(search.inputValidation)
-    .query(search.handler),
+    .query(search.execute),
   getBeneficiaryFollowupTypes: protectedProcedure
     .input(getBeneficiaryFollowupTypes.inputValidation)
-    .query(getBeneficiaryFollowupTypes.handler),
+    .query(getBeneficiaryFollowupTypes.execute),
   getBeneficiaryDocuments: protectedProcedure
     .input(getBeneficiaryDocuments.inputValidation)
-    .query(getBeneficiaryDocuments.handler),
+    .query(getBeneficiaryDocuments.execute),
 
   delete: protectedProcedure
     .input(deleteMutation.inputValidation)
-    .mutation(deleteMutation.handler),
+    .mutation(deleteMutation.execute),
   updateGeneralInformation: protectedProcedure
     .input(updateGeneralInformation.inputValidation)
-    .mutation(updateGeneralInformation.handler),
+    .mutation(updateGeneralInformation.execute),
   update: protectedProcedure
     .input(update.inputValidation)
-    .mutation(update.handler),
+    .mutation(update.execute),
   updateTaxHousehold: protectedProcedure
     .input(updateTaxHousehold.inputValidation)
-    .mutation(updateTaxHousehold.handler),
+    .mutation(updateTaxHousehold.execute),
   create: protectedProcedure
     .input(create.inputValidation)
-    .mutation(create.handler),
+    .mutation(create.execute),
   updateBeneficiaryEntourage: protectedProcedure
     .input(updateBeneficiaryEntourage.inputValidation)
-    .mutation(updateBeneficiaryEntourage.handler),
+    .mutation(updateBeneficiaryEntourage.execute),
   saveDraft: protectedProcedure
     .input(saveDraft.inputValidation)
-    .mutation(saveDraft.handler),
+    .mutation(saveDraft.execute),
   updateEntourage: protectedProcedure
     .input(updateEntourage.inputValidation)
-    .mutation(updateEntourage.handler)
+    .mutation(updateEntourage.execute)
 })
