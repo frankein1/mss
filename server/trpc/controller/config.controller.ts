@@ -29,7 +29,7 @@ export const getAgentsHandler = async ({
 }
 
 export const getBeneficiariesCitiesHandler = async ({
-  ctx: { user, structureId }
+  ctx: { user, structure }
 }: {
   ctx: ProtectedAppContext
 }) => {
@@ -41,7 +41,7 @@ export const getBeneficiariesCitiesHandler = async ({
     by: ['city'],
     where: {
       city: { not: null },
-      structureId,
+      structureId: structure.id,
       referents: referentsCondition
     },
     orderBy: [{ city: 'asc' }]
@@ -69,7 +69,7 @@ function prepareExaminationDatesBeneficiaryCondition(
 
 export const getExaminationDatesHandler = async ({
   input,
-  ctx: { user, structureId }
+  ctx: { user, structure }
 }: {
   input: { id: string } | undefined
   ctx: ProtectedAppContext
@@ -87,7 +87,7 @@ export const getExaminationDatesHandler = async ({
     by: ['examinationDate'],
     where: {
       examinationDate: { not: null },
-      structureId,
+      structureId: structure.id,
       beneficiary: beneficiaryCondition
     },
     orderBy: [{ examinationDate: 'desc' }]
@@ -110,26 +110,26 @@ export const getInstructorOrganizationHandler = async ({
 }
 
 export const getPrescribingOrganizationsHandler = async ({
-  ctx: { structureId }
+  ctx: { structure }
 }: {
   ctx: ProtectedAppContext
 }) => {
   return await prismaClient.prescribingOrganization.findMany({
     where: {
-      structureId
+      structureId: structure.id
     },
     orderBy: [{ name: 'asc' }]
   })
 }
 
 export const getStructureFollowupTypesHandler = async ({
-  ctx: { structureId }
+  ctx: { structure }
 }: {
   ctx: ProtectedAppContext
 }) => {
   return await prismaClient.followupType.findMany({
     where: {
-      ownedByStructureId: structureId
+      ownedByStructureId: structure.id
     },
     orderBy: [{ name: 'asc' }]
   })

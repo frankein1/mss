@@ -17,7 +17,7 @@ import { HELP_REQUEST_EXPORTED_FIELDS } from '~/utils/constants/export'
 
 export const exportHelpRequestsHandler = async ({
   input,
-  ctx: { user, structureId }
+  ctx: { user, structure }
 }: {
   input: ExportHelpRequestsInput
   ctx: ProtectedAppContext
@@ -36,7 +36,7 @@ export const exportHelpRequestsHandler = async ({
     : undefined
 
   const where: Prisma.HelpRequestWhereInput = {
-    structureId,
+    structureId: structure.id,
     beneficiary: {
       archived: null,
       referents

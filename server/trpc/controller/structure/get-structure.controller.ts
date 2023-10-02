@@ -2,12 +2,12 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 
 export const getCurrentUserStructureHandler = async ({
-  ctx: { structureId }
+  ctx: { structure }
 }: {
   ctx: ProtectedAppContext
 }) => {
   return await prismaClient.structure.findUnique({
-    where: { id: structureId },
+    where: { id: structure.id },
     include: {
       followupTypes: {
         include: {

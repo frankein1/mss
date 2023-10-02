@@ -1,9 +1,5 @@
 import { UserActivityType, Prisma } from '@prisma/client'
-import {
-  ProtectedAppContext,
-  ProtectedAppContextUser,
-  forbiddenError
-} from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
@@ -21,11 +17,10 @@ import {
 } from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
-import { getUserStructureType } from '~/server/security'
 
 export const saveDraftHandler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: SaveDraftInput
   ctx: ProtectedAppContext
@@ -39,12 +34,12 @@ export const saveDraftHandler = async ({
 
   if (
     !beneficiaryDraft ||
-    !canSaveToBeneficiaryBeneficiaryDraft(user, beneficiaryDraft)
+    !canSaveToBeneficiaryBeneficiaryDraft(ctx.user, beneficiaryDraft)
   ) {
     throw forbiddenError()
   }
 
-  const data = await prepareData(user, input, beneficiaryDraft)
+  const data = prepareData(ctx, input, beneficiaryDraft)
 
   return await prismaClient.$transaction(async tx => {
     const { id } = await tx.beneficiary.create({
@@ -52,7 +47,7 @@ export const saveDraftHandler = async ({
     })
 
     await addUserActivity({
-      userId: user.id,
+      userId: ctx.user.id,
       activity: UserActivityType.CREATE,
       object: 'Beneficiary',
       objectId: id,
@@ -71,8 +66,8 @@ export const saveDraftHandler = async ({
   })
 }
 
-async function prepareData(
-  user: ProtectedAppContextUser,
+function prepareData(
+  { user, structure }: ProtectedAppContext,
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {
@@ -146,9 +141,7 @@ async function prepareData(
 
     data = { ...data, ...otherHealthData }
 
-    const userStructureType = await getUserStructureType(user)
-
-    if (canSetBeneficiaryNir(userStructureType)) {
+    if (canSetBeneficiaryNir(structure.type)) {
       data = { ...data, socialSecurityNumber }
     }
   }

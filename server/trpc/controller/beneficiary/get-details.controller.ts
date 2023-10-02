@@ -6,19 +6,19 @@ import { getBeneficiaryAccessibleData } from '~/utils/beneficiary/getBeneficiary
 
 export const getBeneficiaryDetailsHandler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiaryWithRelations(input.id)
 
-  if (!canViewBeneficiary(user, beneficiary)) {
+  if (!canViewBeneficiary(ctx.user, beneficiary)) {
     throw forbiddenError()
   }
 
-  const beneficiaryAccessibleData = await getBeneficiaryAccessibleData(
-    user,
+  const beneficiaryAccessibleData = getBeneficiaryAccessibleData(
+    ctx,
     beneficiary
   )
 

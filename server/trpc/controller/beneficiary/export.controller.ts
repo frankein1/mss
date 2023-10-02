@@ -18,12 +18,12 @@ import { prepareBeneficiaryFilters } from '~/utils/filters'
 
 export const exportBeneficiariesHandler = async ({
   input,
-  ctx: { user, structureId }
+  ctx
 }: {
   input: ExportBeneficiariesInput
   ctx: ProtectedAppContext
 }) => {
-  if (!canExportBeneficiaries(user)) {
+  if (!canExportBeneficiaries(ctx.user)) {
     throw forbiddenError()
   }
 
@@ -32,17 +32,17 @@ export const exportBeneficiariesHandler = async ({
     header: beneficiaryFieldLabels[key]
   }))
 
-  const referentsCondition = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
+  const referentsCondition = canOnlyListItsBeneficiaries(ctx.user)
+    ? { some: { id: ctx.user.id } }
     : undefined
 
   const where: Prisma.BeneficiaryWhereInput = {
-    structureId,
+    structureId: ctx.structure.id,
     archived: null,
     referents: referentsCondition,
     ...prepareBeneficiaryFilters(
       input.filters,
-      canOnlyListItsBeneficiaries(user)
+      canOnlyListItsBeneficiaries(ctx.user)
     )
   }
 
@@ -55,14 +55,16 @@ export const exportBeneficiariesHandler = async ({
   const rows: RowType[] = []
 
   for (const beneficiary of dataRequest) {
-    if (canViewBeneficiary(user, beneficiary)) {
-      const withPermissionsBeneficiary = await getBeneficiaryAccessibleData(
-        user,
+    if (canViewBeneficiary(ctx.user, beneficiary)) {
+      const withPermissionsBeneficiary = getBeneficiaryAccessibleData(
+        ctx,
         beneficiary
       )
       rows.push(getBeneficiaryExportData(withPermissionsBeneficiary))
     }
   }
 
-  return await createExport(user.id, [{ name: 'Bénéficiaires', columns, rows }])
+  return await createExport(ctx.user.id, [
+    { name: 'Bénéficiaires', columns, rows }
+  ])
 }

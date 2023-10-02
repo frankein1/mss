@@ -8,13 +8,13 @@ import { canViewBeneficiary } from '~/server/security/rules'
 
 export const getBeneficiaryMinimalInfoHandler = async ({
   input: { id },
-  ctx: { user, structureId }
+  ctx: { user, structure }
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await prismaClient.beneficiary.findUnique({
-    where: { id, structureId },
+    where: { id, structureId: structure.id },
     select: {
       id: true,
       firstName: true,

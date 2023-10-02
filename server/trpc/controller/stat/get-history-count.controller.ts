@@ -10,7 +10,7 @@ import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 
 export const getHistoryCountsHandler = async ({
   input,
-  ctx: { user, structureId }
+  ctx: { user, structure }
 }: {
   input: StatFilterInput
   ctx: ProtectedAppContext
@@ -24,7 +24,7 @@ export const getHistoryCountsHandler = async ({
 
   const firstFollowups = await prismaClient.followup.count({
     where: {
-      structureId,
+      structureId: structure.id,
       firstFollowup: true,
       ...prepareFollowupStatFilters(input),
       beneficiary: {

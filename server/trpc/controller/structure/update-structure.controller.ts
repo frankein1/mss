@@ -5,7 +5,7 @@ import { canEditItsOwnStructure } from '~/server/security/rules'
 import { editFollowupTypes } from '~/utils/structure'
 
 export const editCurrentUserStructureHandler = async ({
-  ctx: { user, structureId },
+  ctx: { user, structure: userStructure },
   input
 }: {
   ctx: ProtectedAppContext
@@ -22,13 +22,13 @@ export const editCurrentUserStructureHandler = async ({
   } = input
 
   await editFollowupTypes(
-    structureId,
+    userStructure.id,
     legallyRequiredFollowupTypes,
     legallyNotRequiredFollowupTypes
   )
 
   const updatedStructure = await prismaClient.structure.update({
-    where: { id: structureId },
+    where: { id: userStructure.id },
     data: structure,
     include: {
       followupTypes: {

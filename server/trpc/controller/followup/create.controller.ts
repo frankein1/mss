@@ -19,14 +19,14 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 export async function prepareFollowupData({
   input,
   transaction,
-  ctx: { user, structureId }
+  ctx: { user, structure }
 }: {
   input: AddFollowupInput
   transaction: Prisma.TransactionClient
   ctx: ProtectedAppContext
 }): Promise<Prisma.FollowupUncheckedCreateInput> {
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structureId },
+    where: { id: structure.id },
     select: {
       type: true
     }
@@ -59,7 +59,7 @@ export async function prepareFollowupData({
 
   return {
     ...data,
-    structureId,
+    structureId: structure.id,
     types: prepareFollowupTypesMutations(input.types),
     documents: prepareDocumentsMutations(input.documents),
     createdById: user.id,

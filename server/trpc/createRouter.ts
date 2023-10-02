@@ -2,6 +2,7 @@ import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { allow, deny, shield } from 'trpc-shield'
 import { H3Event } from 'h3'
+import { StructureType } from '@prisma/client'
 import { SecurityRuleGrantee } from '../security/rules/types'
 import { adminPermissions } from './routers/admin/permissions'
 import { AppContext } from './createContext'
@@ -42,14 +43,14 @@ const userMiddleware = t.middleware(({ ctx, next }) => {
 })
 
 const structureMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
-  if (ctx.user.role !== 'Administrator' && !ctx.user.structureId) {
+  if (ctx.user.role !== 'Administrator' && !ctx.user.structure?.id) {
     throw forbiddenError('User is not part of any structure')
   }
   return next({
     ctx: {
       // infers the user as part of structure
       user: ctx.user,
-      structureId: ctx.user.structureId
+      structure: ctx.user.structure
     }
   })
 })
@@ -58,7 +59,7 @@ const structureMiddleware = userMiddleware.unstable_pipe(({ ctx, next }) => {
 export type ProtectedAppContext = {
   event: H3Event
   user: SecurityRuleGrantee
-  structureId: string
+  structure: { id: string; type: StructureType }
 }
 
 export type ProtectedAppContextUser = ProtectedAppContext['user']

@@ -23,7 +23,7 @@ export async function prepareHelpRequestData({
   ctx: ProtectedAppContext
 }): Promise<Prisma.HelpRequestUncheckedCreateInput> {
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: ctx.structureId },
+    where: { id: ctx.structure.id },
     select: {
       type: true
     }
@@ -50,7 +50,7 @@ export async function prepareHelpRequestData({
 
   return {
     ...input,
-    structureId: ctx.structureId,
+    structureId: ctx.structure.id,
     documents: prepareDocumentsMutations(input.documents),
     financialSupport: input.financialSupport === 'true',
     externalStructure: input.externalStructure === 'true',

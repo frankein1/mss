@@ -14,7 +14,7 @@ export const getFollowupsHandler = async ({
   input: GetFollowupsInput
   ctx: ProtectedAppContext
 }) => {
-  const { user, structureId } = ctx
+  const { user, structure } = ctx
   const { take, skip } = takeAndSkipFromPagination({
     perPage: input.perPage,
     page: input.page
@@ -25,7 +25,7 @@ export const getFollowupsHandler = async ({
     : undefined
 
   const where: Prisma.FollowupWhereInput = {
-    structureId,
+    structureId: structure.id,
     beneficiary: {
       archived: null,
       referents

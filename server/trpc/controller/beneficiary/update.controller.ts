@@ -10,16 +10,13 @@ import {
 } from '~/server/security/rules'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import {
-  getBeneficiarySecurityTarget,
-  getUserStructureType
-} from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UpdateBeneficiaryInput } from '~/server/schema'
 
 export const updateBeneficiaryHandler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structure }
 }: {
   input: UpdateBeneficiaryInput
   ctx: ProtectedAppContext
@@ -47,9 +44,7 @@ export const updateBeneficiaryHandler = async ({
     const { socialSecurityNumber, ...otherHealthInfo } = health
     data = { ...data, ...otherHealthInfo }
 
-    const userStructureType = await getUserStructureType(user)
-
-    if (canSetBeneficiaryNir(userStructureType)) {
+    if (canSetBeneficiaryNir(structure.type)) {
       data = { ...data, socialSecurityNumber }
     }
   }

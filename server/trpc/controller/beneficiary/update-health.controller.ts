@@ -6,24 +6,18 @@ import {
 } from '~/server/security/rules'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import {
-  getBeneficiarySecurityTarget,
-  getUserStructureType
-} from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UpdateBeneficiaryHealthInput } from '~/server/schema'
 
 export const updateBeneficiaryHealthHandler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structure }
 }: {
   input: UpdateBeneficiaryHealthInput
   ctx: ProtectedAppContext
 }) => {
-  const [beneficiary, userStructureType] = await Promise.all([
-    getBeneficiarySecurityTarget(input.id),
-    getUserStructureType(user)
-  ])
+  const beneficiary = await getBeneficiarySecurityTarget(input.id)
 
   if (
     !beneficiary ||
@@ -38,7 +32,7 @@ export const updateBeneficiaryHealthHandler = async ({
   let data = {}
   data = { ...data, ...health }
 
-  if (canSetBeneficiaryNir(userStructureType)) {
+  if (canSetBeneficiaryNir(structure.type)) {
     data = { ...data, socialSecurityNumber }
   }
 

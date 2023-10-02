@@ -30,9 +30,9 @@ export async function prepareFollowupData({
   ctx: ProtectedAppContext
   target: FollowupTarget
 }): Promise<Prisma.FollowupUncheckedUpdateInput> {
-  const { structureId, user } = ctx
+  const { structure, user } = ctx
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structureId },
+    where: { id: structure.id },
     select: {
       type: true
     }

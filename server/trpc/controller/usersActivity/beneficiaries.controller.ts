@@ -123,24 +123,24 @@ function getBeneficiariesUsersActivity(
   take: number,
   skip: number
 ) {
-  const { user, structureId } = ctx
+  const { user, structure } = ctx
   if (canOnlyListItsBeneficiaries(user)) {
     return getOnlyItsBeneficiariesUsersActivity(
       user.id,
-      structureId,
+      structure.id,
       take,
       skip
     )
   }
-  return getAnyBeneficiariesUsersActivity(structureId, take, skip)
+  return getAnyBeneficiariesUsersActivity(structure.id, take, skip)
 }
 
 function getBeneficiariesUsersActivityCount(ctx: ProtectedAppContext) {
-  const { user, structureId } = ctx
+  const { user, structure } = ctx
   if (canOnlyListItsBeneficiaries(user)) {
-    return getOnlyItsBeneficiariesUsersActivityCount(user.id, structureId)
+    return getOnlyItsBeneficiariesUsersActivityCount(user.id, structure.id)
   }
-  return getAnyBeneficiariesUsersActivityCount(structureId)
+  return getAnyBeneficiariesUsersActivityCount(structure.id)
 }
 
 export const getBeneficiariesUsersActivityHandler = async ({

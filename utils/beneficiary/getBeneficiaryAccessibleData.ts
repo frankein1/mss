@@ -1,4 +1,4 @@
-import { ProtectedAppContextUser } from '~/server/trpc'
+import { ProtectedAppContextUser, ProtectedAppContext } from '~/server/trpc'
 import {
   canListBeneficiaryRelatives,
   canViewBeneficiaryHealthInfo,
@@ -8,7 +8,6 @@ import {
   canViewDocument
 } from '~/server/security/rules'
 import type { BeneficiaryWithRelations } from '~/types/beneficiary'
-import { getUserStructureType } from '~/server/security'
 import { getBeneficiaryFollowUpTypes } from '~/utils/beneficiary'
 
 function getBeneficiaryMeta(
@@ -105,21 +104,19 @@ function getBeneficiaryRelatives(
   }
 }
 
-async function getBeneficiaryHealth(
-  user: ProtectedAppContextUser,
+function getBeneficiaryHealth(
+  { user, structure }: ProtectedAppContext,
   beneficiary: BeneficiaryWithRelations
 ) {
   if (!canViewBeneficiaryHealthInfo(user, beneficiary)) {
     return {}
   }
 
-  const userStructureType = await getUserStructureType(user)
-
   return {
     gir: beneficiary.gir,
     doctor: beneficiary.doctor,
     healthAdditionalInformation: beneficiary.healthAdditionalInformation,
-    socialSecurityNumber: canViewBeneficiaryNir(userStructureType)
+    socialSecurityNumber: canViewBeneficiaryNir(structure.type)
       ? beneficiary.socialSecurityNumber
       : undefined,
     insurance: beneficiary.insurance
@@ -175,11 +172,11 @@ function getBeneficiaryExternalOrganisations(
   }
 }
 
-export async function getBeneficiaryAccessibleData(
-  user: ProtectedAppContextUser,
+export function getBeneficiaryAccessibleData(
+  ctx: ProtectedAppContext,
   beneficiary: BeneficiaryWithRelations
 ) {
-  const meta = getBeneficiaryMeta(user, beneficiary)
+  const meta = getBeneficiaryMeta(ctx.user, beneficiary)
   const generalInformation = getBeneficiaryGeneralInformation(beneficiary)
   const {
     taxHouseholds,
@@ -187,14 +184,14 @@ export async function getBeneficiaryAccessibleData(
     familySituation,
     majorChildren,
     minorChildren
-  } = getBeneficiaryRelatives(user, beneficiary)
-  const health = await getBeneficiaryHealth(user, beneficiary)
-  const occupationIncome = getBeneficiaryOccupationIncome(user, beneficiary)
+  } = getBeneficiaryRelatives(ctx.user, beneficiary)
+  const health = getBeneficiaryHealth(ctx, beneficiary)
+  const occupationIncome = getBeneficiaryOccupationIncome(ctx.user, beneficiary)
   const externalOrganisations = getBeneficiaryExternalOrganisations(
-    user,
+    ctx.user,
     beneficiary
   )
-  const history = getBeneficiaryHistory(user, beneficiary)
+  const history = getBeneficiaryHistory(ctx.user, beneficiary)
 
   return {
     beneficiary: {
