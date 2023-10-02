@@ -47,6 +47,7 @@
     canEditBeneficiaryRelatives
   } from '~/server/security/rules'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-set-occupation']
@@ -60,6 +61,9 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const saved = route.query.saved !== undefined
+  const originTab = route.query.originTab
+    ? (route.query.originTab as BeneficiaryTab)
+    : undefined
 
   const { data, pending, error } =
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
@@ -77,7 +81,8 @@
       return {
         title: RouteTitle.AppBeneficiaryEditHealth(),
         path: RoutePath.AppBeneficiaryEditHealth(beneficiaryId, {
-          saved: true
+          saved: true,
+          originTab
         })
       }
     }
@@ -86,14 +91,18 @@
       return {
         title: RouteTitle.AppBeneficiaryEditEntourage(),
         path: RoutePath.AppBeneficiaryEditEntourage(beneficiaryId, {
-          saved: true
+          saved: true,
+          originTab
         })
       }
     }
 
     return {
       title: RouteTitle.AppBeneficiaryEditInfo(),
-      path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, { saved: true })
+      path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, {
+        saved: true,
+        originTab
+      })
     }
   })
 
@@ -111,7 +120,8 @@
       return {
         title: RouteTitle.AppBeneficiaryEditExternalOrganisations(),
         path: RoutePath.AppBeneficiaryEditExternalOrganisations(beneficiaryId, {
-          saved: true
+          saved: true,
+          originTab
         })
       }
     }
@@ -134,6 +144,9 @@
     // Names and id are required for building the breadcrumb in the layout
     return {
       id: b.id,
+      firstName: b.firstName,
+      usualName: b.usualName,
+      birthName: b.birthName,
       socioProfessionalCategory: b.socioProfessionalCategory,
       occupation: b.occupation,
       employer: b.employer,
