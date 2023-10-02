@@ -141,7 +141,6 @@
       city: b.city,
       region: b.region,
       addressComplement: b.addressComplement,
-      postOfficeBox: b.postOfficeBox,
       accommodationZone: b.accommodationZone,
       street: b.street,
       noPhone: b.noPhone,
