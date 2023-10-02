@@ -9,7 +9,7 @@ import { prepareBeneficiaryFilters } from '~/utils/filters'
 
 export const getBeneficiariesHandler = async ({
   input,
-  ctx: { user, structureId }
+  ctx: { user, structure }
 }: {
   input: GetBeneficiariesInput
   ctx: ProtectedAppContext
@@ -24,7 +24,7 @@ export const getBeneficiariesHandler = async ({
     : undefined
 
   const where: Prisma.BeneficiaryWhereInput = {
-    structureId,
+    structureId: structure.id,
     archived: null,
     referents: referentsCondition,
     ...prepareBeneficiaryFilters(

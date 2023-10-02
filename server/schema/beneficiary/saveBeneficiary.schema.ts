@@ -268,3 +268,17 @@ export const saveBeneficiaryEntourageSchema = z.object({
 export type SaveBeneficiaryEntourageInput = z.infer<
   typeof saveBeneficiaryEntourageSchema
 >
+
+export const saveBeneficiaryHealthSchema = z.object({
+  gir: withEmptyValueOptionalNativeEnum(BeneficiaryGir),
+  doctor: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+  healthAdditionalInformation: stringConstraint
+    .max(200, maxStringLengthMessage(200))
+    .nullish(),
+  socialSecurityNumber: stringOrEmpty(socialSecurityNumberConstraint),
+  insurance: stringConstraint.max(100, maxStringLengthMessage(100)).nullish()
+})
+
+export type SaveBeneficiaryHealthInput = z.infer<
+  typeof saveBeneficiaryHealthSchema
+>

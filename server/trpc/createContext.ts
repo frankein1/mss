@@ -25,7 +25,9 @@ export const createContext = async (event: H3Event) => {
       id: true,
       role: true,
       status: true,
-      structureId: true
+      structure: {
+        select: { id: true, type: true }
+      }
     }
   })
 

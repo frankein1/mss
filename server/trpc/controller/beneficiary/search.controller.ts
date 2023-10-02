@@ -10,7 +10,7 @@ const tokenToSearchCondition = (token: string) => ({
 
 export const searchBeneficiaryHandler = async ({
   input: { query, excludedIds },
-  ctx: { user, structureId }
+  ctx: { user, structure }
 }: {
   input: SearchBeneficiaryInput
   ctx: ProtectedAppContext
@@ -34,7 +34,7 @@ export const searchBeneficiaryHandler = async ({
     archived: null,
     AND: searchConditions,
     id: { notIn: excludedIds },
-    structureId,
+    structureId: structure.id,
     referents: referentsCondition
   }
 

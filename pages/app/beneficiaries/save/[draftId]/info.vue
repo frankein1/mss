@@ -36,7 +36,10 @@
   import { RoutePath, RouteTitle } from '~/utils/routing'
   import type { BeneficiaryDraft } from '~/types/beneficiary'
   import { useAuthStore } from '~/store/auth'
-  import { canEditBeneficiaryRelatives } from '~/server/security/rules'
+  import {
+    canEditBeneficiaryRelatives,
+    canEditBeneficiaryHealthInfo
+  } from '~/server/security/rules'
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -77,15 +80,22 @@
   const user = computed(() => authStore.getAuthUser)
 
   const nextPage = computed(() => {
-    if (
-      canEditBeneficiaryRelatives(user.value, {
-        referents: [user.value.id],
-        structureId: user.value.structureId
-      })
-    ) {
+    const securityTarget = {
+      referents: [user.value.id],
+      structureId: user.value.structureId
+    }
+
+    if (canEditBeneficiaryRelatives(user.value, securityTarget)) {
       return {
         title: RouteTitle.AppBeneficiariesSaveTaxHousehold(),
         path: RoutePath.AppBeneficiariesSaveTaxHousehold(draftId)
+      }
+    }
+
+    if (canEditBeneficiaryHealthInfo(user.value, securityTarget)) {
+      return {
+        title: RouteTitle.AppBeneficiariesSaveHealth(),
+        path: RoutePath.AppBeneficiariesSaveHealth(draftId)
       }
     }
 

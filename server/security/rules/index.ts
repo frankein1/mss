@@ -5,7 +5,11 @@ import type {
 } from './types'
 import { hasAllowedRole } from './helpers'
 
-export type { SecurityTargetWithStructure, SecurityTargetWithReferents }
+export type {
+  SecurityRuleGrantee,
+  SecurityTargetWithStructure,
+  SecurityTargetWithReferents
+}
 
 export {
   canCreateUser,

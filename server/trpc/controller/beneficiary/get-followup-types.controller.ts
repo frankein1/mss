@@ -95,7 +95,7 @@ async function getFollowupTypes(
 
 export const getBeneficiaryFollowupTypesHandler = async ({
   input: { id: beneficiaryId },
-  ctx: { user, structureId }
+  ctx: { user, structure }
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
@@ -108,12 +108,12 @@ export const getBeneficiaryFollowupTypesHandler = async ({
 
   const beneficiaryLegallyRequiredFollowupTypes = await getFollowupTypes(
     beneficiaryId,
-    structureId,
+    structure.id,
     true
   )
   const beneficiaryLegallyNotRequiredFollowupTypes = await getFollowupTypes(
     beneficiaryId,
-    structureId,
+    structure.id,
     false
   )
 

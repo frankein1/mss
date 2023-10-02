@@ -7,7 +7,6 @@ import {
   beneficiarySocioProfessionalCategoryLabels
 } from '~/client/options/beneficiary'
 import { familySituationLabels } from '~/client/options/familySituation'
-import { prismaClient } from '~/server/prisma'
 import {
   getBeneficiaryCountQuery,
   getGenderStatsQuery,
@@ -38,7 +37,7 @@ import {
 
 export const exportBeneficiaryStatsHandler = async ({
   input,
-  ctx: { user, structureId }
+  ctx: { user, structure }
 }: {
   input: StatFilterInput
   ctx: ProtectedAppContext
@@ -157,11 +156,7 @@ export const exportBeneficiaryStatsHandler = async ({
     rows: CSPRows
   })
 
-  const userStructure = await prismaClient.structure.findUnique({
-    where: { id: structureId }
-  })
-
-  if (userStructure?.type === StructureType.Ministere) {
+  if (structure.type === StructureType.Ministere) {
     const ministereStructureData = await getMinistereStructureStatsQuery(
       user,
       input

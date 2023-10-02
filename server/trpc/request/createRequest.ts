@@ -1,5 +1,6 @@
 import { H3Event } from 'h3'
 import { ZodType, z } from 'zod'
+import { StructureType } from '@prisma/client'
 import {
   SecurityRule,
   SecurityRuleGrantee
@@ -7,7 +8,7 @@ import {
 
 export type RequestHandlerContext<Grantee> = {
   user: Grantee
-  structureId: string
+  structure: { id: string; type: StructureType }
   event: H3Event
 }
 

@@ -26,9 +26,9 @@ export async function prepareHelpRequestData({
   ctx: ProtectedAppContext
   target: NonNullable<HelpRequestWithRelations>
 }): Promise<Prisma.HelpRequestUncheckedUpdateInput> {
-  const { user, structureId } = ctx
+  const { user, structure } = ctx
   const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structureId },
+    where: { id: structure.id },
     select: {
       type: true
     }

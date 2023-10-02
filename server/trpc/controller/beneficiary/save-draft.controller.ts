@@ -1,27 +1,26 @@
 import { UserActivityType, Prisma } from '@prisma/client'
-import {
-  ProtectedAppContext,
-  ProtectedAppContextUser,
-  forbiddenError
-} from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   SaveDraftInput,
   SaveBeneficiaryGeneralInformationInput,
   SaveBeneficiaryTaxHouseholdInput,
-  SaveBeneficiaryEntourageInput
+  SaveBeneficiaryEntourageInput,
+  SaveBeneficiaryHealthInput
 } from '~/server/schema'
 import {
   canSaveToBeneficiaryBeneficiaryDraft,
-  canEditBeneficiaryRelatives
+  canEditBeneficiaryRelatives,
+  canEditBeneficiaryHealthInfo,
+  canSetBeneficiaryNir
 } from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 
 export const saveDraftHandler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: SaveDraftInput
   ctx: ProtectedAppContext
@@ -35,12 +34,12 @@ export const saveDraftHandler = async ({
 
   if (
     !beneficiaryDraft ||
-    !canSaveToBeneficiaryBeneficiaryDraft(user, beneficiaryDraft)
+    !canSaveToBeneficiaryBeneficiaryDraft(ctx.user, beneficiaryDraft)
   ) {
     throw forbiddenError()
   }
 
-  const data = prepareData(user, input, beneficiaryDraft)
+  const data = prepareData(ctx, input, beneficiaryDraft)
 
   return await prismaClient.$transaction(async tx => {
     const { id } = await tx.beneficiary.create({
@@ -48,7 +47,7 @@ export const saveDraftHandler = async ({
     })
 
     await addUserActivity({
-      userId: user.id,
+      userId: ctx.user.id,
       activity: UserActivityType.CREATE,
       object: 'Beneficiary',
       objectId: id,
@@ -68,11 +67,11 @@ export const saveDraftHandler = async ({
 }
 
 function prepareData(
-  user: ProtectedAppContextUser,
+  { user, structure }: ProtectedAppContext,
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {
-  const { general, taxHousehold, entourage } = getDataFromSources(
+  const { general, taxHousehold, entourage, health } = getDataFromSources(
     input,
     beneficiaryDraft
   )
@@ -97,12 +96,14 @@ function prepareData(
     createdById: user.id
   } as Prisma.BeneficiaryUncheckedCreateInput
 
+  const securityTarget = {
+    structureId: user.structureId,
+    referents: general.referents
+  }
+
   if (
     (taxHousehold || entourage) &&
-    canEditBeneficiaryRelatives(user, {
-      structureId: user.structureId,
-      referents: general.referents
-    })
+    canEditBeneficiaryRelatives(user, securityTarget)
   ) {
     if (taxHousehold) {
       const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
@@ -135,6 +136,16 @@ function prepareData(
     }
   }
 
+  if (health && canEditBeneficiaryHealthInfo(user, securityTarget)) {
+    const { socialSecurityNumber, ...otherHealthData } = health
+
+    data = { ...data, ...otherHealthData }
+
+    if (canSetBeneficiaryNir(structure.type)) {
+      data = { ...data, socialSecurityNumber }
+    }
+  }
+
   return data
 }
 
@@ -152,6 +163,9 @@ function getDataFromSources(
   const entourage = (input.entourage || beneficiaryDraft.content?.entourage) as
     | SaveBeneficiaryEntourageInput
     | undefined
+  const health = (input.health || beneficiaryDraft.content?.health) as
+    | SaveBeneficiaryHealthInput
+    | undefined
 
-  return { general, taxHousehold, entourage }
+  return { general, taxHousehold, entourage, health }
 }

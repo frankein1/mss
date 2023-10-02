@@ -1,8 +1,12 @@
 import { prismaClient } from '~/server/prisma'
-import { AppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
 
-export const getUserController = async ({ ctx }: { ctx: AppContext }) => {
+export const getUserController = async ({
+  ctx
+}: {
+  ctx: ProtectedAppContext
+}) => {
   const { user: ctxUser } = ctx
 
   if (!ctxUser) {

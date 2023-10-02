@@ -3,43 +3,51 @@ import {
   saveBeneficiarySchema,
   saveBeneficiaryGeneralInformationSchema,
   saveBeneficiaryTaxHouseholdSchema,
-  saveBeneficiaryEntourageSchema
+  saveBeneficiaryEntourageSchema,
+  saveBeneficiaryHealthSchema
 } from './saveBeneficiary.schema'
 
-function fromSaveSchemaToUpdateSchema<T extends z.ZodRawShape>(
-  schema: z.ZodObject<T>
-) {
-  return schema.extend({
-    id: z.string().uuid(),
-    structureId: z.string().uuid()
-  })
-}
-
-export const updateBeneficiarySchema = fromSaveSchemaToUpdateSchema(
-  saveBeneficiarySchema
-)
+export const updateBeneficiarySchema = saveBeneficiarySchema.extend({
+  id: z.string().uuid(),
+  structureId: z.string().uuid()
+})
 
 export type UpdateBeneficiaryInput = z.infer<typeof updateBeneficiarySchema>
 
 export const updateBeneficiaryGeneralInformationSchema =
-  fromSaveSchemaToUpdateSchema(saveBeneficiaryGeneralInformationSchema)
+  saveBeneficiaryGeneralInformationSchema.extend({
+    id: z.string().uuid(),
+    structureId: z.string().uuid()
+  })
 
 export type UpdateBeneficiaryGeneralInformationInput = z.infer<
   typeof updateBeneficiaryGeneralInformationSchema
 >
 
-export const updateBeneficiaryTaxHouseholdSchema = fromSaveSchemaToUpdateSchema(
-  saveBeneficiaryTaxHouseholdSchema
-)
+export const updateBeneficiaryTaxHouseholdSchema =
+  saveBeneficiaryTaxHouseholdSchema.extend({
+    id: z.string().uuid()
+  })
 
 export type UpdateBeneficiaryTaxHouseholdInput = z.infer<
   typeof updateBeneficiaryTaxHouseholdSchema
 >
 
-export const updateBeneficiaryEntourageSchema = fromSaveSchemaToUpdateSchema(
-  saveBeneficiaryEntourageSchema
-)
+export const updateBeneficiaryEntourageSchema =
+  saveBeneficiaryEntourageSchema.extend({
+    id: z.string().uuid()
+  })
 
 export type UpdateBeneficiaryEntourageInput = z.infer<
   typeof updateBeneficiaryEntourageSchema
+>
+
+export const updateBeneficiaryHealthSchema = saveBeneficiaryHealthSchema.extend(
+  {
+    id: z.string().uuid()
+  }
+)
+
+export type UpdateBeneficiaryHealthInput = z.infer<
+  typeof updateBeneficiaryHealthSchema
 >
