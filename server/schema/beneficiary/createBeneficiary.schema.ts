@@ -25,7 +25,7 @@ export const createBeneficiarySchema = z.object({
   birthDate: z.coerce.date(errorMessages).nullish(),
   phone1: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
-  numeroPegase: numeroPegaseContraint.nullish()
+  numeroPegase: stringOrEmpty(numeroPegaseContraint)
 })
 
 export type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>

@@ -60,7 +60,7 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   deathDate: z.coerce.date(errorMessages).nullish(),
   gender: withEmptyValueOptionalNativeEnum(Gender),
   nationality: withEmptyValueOptionalNativeEnum(Nationality),
-  numeroPegase: numeroPegaseContraint.nullish(),
+  numeroPegase: stringOrEmpty(numeroPegaseContraint),
   accommodationMode: withEmptyValueOptionalNativeEnum(
     BeneficiaryAccommodationMode
   ),
