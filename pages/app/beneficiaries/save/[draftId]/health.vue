@@ -6,6 +6,7 @@
     :title="RouteTitle.AppBeneficiariesSaveHealth()"
     title-icon="fr-icon-user-line"
     :previous-page="previousPage"
+    :next-page="nextPage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -37,7 +38,10 @@
   import { RoutePath, RouteTitle } from '~/utils/routing'
   import type { BeneficiaryDraft } from '~/types/beneficiary'
   import { useAuthStore } from '~/store/auth'
-  import { canEditBeneficiaryRelatives } from '~/server/security/rules'
+  import {
+    canEditBeneficiaryRelatives,
+    canEditBeneficiaryOccupationIncome
+  } from '~/server/security/rules'
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -75,7 +79,22 @@
       path: RoutePath.AppBeneficiariesSaveInfo(draftId)
     }
   })
-  // TODO: Add next page
+
+  const nextPage = computed(() => {
+    const securityTarget = {
+      referents: [user.value.id],
+      structureId: user.value.structureId
+    }
+
+    if (canEditBeneficiaryOccupationIncome(user.value, securityTarget)) {
+      return {
+        title: RouteTitle.AppBeneficiariesSaveOccupation(),
+        path: RoutePath.AppBeneficiariesSaveOccupation(draftId)
+      }
+    }
+
+    return undefined
+  })
 
   const beneficiary = computed<SaveBeneficiaryHealthInput | undefined>(() => {
     if (!beneficiaryDraft.value) {
@@ -92,7 +111,7 @@
 
     return {
       ...beneficiaryDraft,
-      health: beneficiaryDraft.content?.health || null
+      health: beneficiaryDraft.content?.health
     }
   }
 

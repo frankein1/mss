@@ -151,8 +151,8 @@
 
   const isMinistryAgent = useMinistryAgent()
 
-  const editLink = computed(
-    () => RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id) // TODO: Update path
+  const editLink = computed(() =>
+    RoutePath.AppBeneficiaryEditOccupation(props.beneficiary.id)
   )
 
   const hasOccupationIncomeSection = computed(

@@ -101,7 +101,7 @@
 
     return {
       ...beneficiaryDraft,
-      entourage: beneficiaryDraft.content?.entourage || null
+      entourage: beneficiaryDraft.content?.entourage
     }
   }
 

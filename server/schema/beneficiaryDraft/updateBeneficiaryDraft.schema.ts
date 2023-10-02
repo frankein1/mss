@@ -3,7 +3,8 @@ import {
   saveBeneficiaryGeneralInformationSchema,
   saveBeneficiaryTaxHouseholdSchema,
   saveBeneficiaryEntourageSchema,
-  saveBeneficiaryHealthSchema
+  saveBeneficiaryHealthSchema,
+  saveBeneficiaryOccupationSchema
 } from '../beneficiary'
 
 export const updateBeneficiaryDraftSchema = z.object({
@@ -11,7 +12,8 @@ export const updateBeneficiaryDraftSchema = z.object({
   general: saveBeneficiaryGeneralInformationSchema.optional(),
   taxHousehold: saveBeneficiaryTaxHouseholdSchema.optional(),
   entourage: saveBeneficiaryEntourageSchema.optional(),
-  health: saveBeneficiaryHealthSchema.optional()
+  health: saveBeneficiaryHealthSchema.optional(),
+  occupation: saveBeneficiaryOccupationSchema.optional()
   // TODO: Add other sections
 })
 

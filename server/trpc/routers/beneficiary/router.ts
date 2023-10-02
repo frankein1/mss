@@ -13,6 +13,7 @@ import {
   updateBeneficiaryTaxHouseholdSchema,
   updateBeneficiaryEntourageSchema,
   updateBeneficiaryHealthSchema,
+  updateBeneficiaryOccupationSchema,
   saveDraftSchema
 } from '~/server/schema'
 import {
@@ -33,6 +34,7 @@ import {
   updateBeneficiaryTaxHouseholdHandler,
   updateBeneficiaryEntourageHandler,
   updateBeneficiaryHealthHandler,
+  updateBeneficiaryOccupationIncomeHandler,
   saveDraftHandler
 } from '~/server/trpc/controller/beneficiary'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
@@ -83,6 +85,13 @@ const updateHealth = createMutation({
   inputValidation: updateBeneficiaryHealthSchema,
   securityCheck: AllowSecurityCheck,
   handler: updateBeneficiaryHealthHandler
+})
+
+const updateOccupationIncome = createMutation({
+  path: 'updateOccupationIncome',
+  inputValidation: updateBeneficiaryOccupationSchema,
+  securityCheck: AllowSecurityCheck,
+  handler: updateBeneficiaryOccupationIncomeHandler
 })
 
 const deleteMutation = createMutation({
@@ -206,6 +215,9 @@ export const beneficiaryRouter = router({
   updateHealth: protectedProcedure
     .input(updateHealth.inputValidation)
     .mutation(updateHealth.execute),
+  updateOccupationIncome: protectedProcedure
+    .input(updateOccupationIncome.inputValidation)
+    .mutation(updateOccupationIncome.execute),
   create: protectedProcedure
     .input(create.inputValidation)
     .mutation(create.execute),

@@ -6,6 +6,7 @@
     :title="RouteTitle.AppBeneficiaryEditHealth()"
     is-editting
     :previous-page="previousPage"
+    :next-page="nextPage"
     :saved="saved"
     @save="onSaveBeneficiary"
   >
@@ -37,7 +38,10 @@
   import { RoutePath, RouteTitle } from '~/utils/routing'
   import type { BeneficiaryNames } from '~/types/beneficiary'
   import { useAuthStore } from '~/store/auth'
-  import { canEditBeneficiaryRelatives } from '~/server/security/rules'
+  import {
+    canEditBeneficiaryRelatives,
+    canEditBeneficiaryOccupationIncome
+  } from '~/server/security/rules'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-set-health']
@@ -78,7 +82,25 @@
       path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, { saved: true })
     }
   })
-  // TODO: Add next page
+
+  const nextPage = computed(() => {
+    if (!data.value) {
+      return undefined
+    }
+
+    if (
+      canEditBeneficiaryOccupationIncome(user.value, data.value.beneficiary)
+    ) {
+      return {
+        title: RouteTitle.AppBeneficiaryEditOccupation(),
+        path: RoutePath.AppBeneficiaryEditOccupation(beneficiaryId, {
+          saved: true
+        })
+      }
+    }
+
+    return undefined
+  })
 
   const beneficiary = computed(() => {
     if (!data.value) {

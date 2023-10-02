@@ -282,3 +282,45 @@ export const saveBeneficiaryHealthSchema = z.object({
 export type SaveBeneficiaryHealthInput = z.infer<
   typeof saveBeneficiaryHealthSchema
 >
+
+export const saveBeneficiaryOccupationSchema = z.object({
+  socioProfessionalCategory: withEmptyValueOptionalNativeEnum(
+    BeneficiarySocioProfessionalCategory
+  ),
+  occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+  employer: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+  employerSiret: stringOrEmpty(siretConstraint),
+  mainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
+  mainIncomeAmount: amountNumber.nullish(),
+  partnerMainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
+  partnerMainIncomeAmount: amountNumber.nullish(),
+  majorChildrenMainIncomeSource: z.array(
+    z.nativeEnum(IncomeSource, errorMessages)
+  ),
+  majorChildrenMainIncomeAmount: amountNumber.nullish(),
+  unemploymentNumber: unemploymentNumberConstraint.nullish(),
+  pensionOrganisations: z.array(
+    z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)
+  ),
+  otherPensionOrganisations: stringConstraint
+    .max(200, maxStringLengthMessage(200))
+    .nullish(),
+  cafNumber: cafNumberConstraint.nullish(),
+  bank: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+  funeralContract: stringConstraint
+    .max(50, maxStringLengthMessage(50))
+    .nullish(),
+  ministereCategorie: withEmptyValueOptionalNativeEnum(
+    BeneficiaryMinistereCategorie
+  ),
+  ministereDepartementServiceAc: withEmptyValueOptionalNativeEnum(
+    BeneficiaryMinistereDepartementServiceAc
+  ),
+  ministereStructure: withEmptyValueOptionalNativeEnum(
+    BeneficiaryMinistereStructure
+  )
+})
+
+export type SaveBeneficiaryOccupationInput = z.infer<
+  typeof saveBeneficiaryOccupationSchema
+>
