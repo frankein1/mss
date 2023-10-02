@@ -1312,6 +1312,8 @@ model BeneficiaryRelative {
 
   additionalInformation String? @map("additional_information")
 
+  birthDate DateTime? @map("birth_date") @db.Date
+
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 

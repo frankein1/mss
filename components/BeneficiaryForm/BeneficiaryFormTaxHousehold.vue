@@ -19,7 +19,7 @@
           class="fr-label"
           :for="'beneficiary_file_number' + index"
         >
-          Fiche bénéficiaire liée
+          {{ relativeFieldLabels.linkedBeneficiaryId }}
         </label>
         <div class="fr-input-wrap">
           <button
@@ -34,56 +34,61 @@
       </div>
     </div>
     <template v-else>
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeAutocomplete
-          label="Nom"
+          :label="relativeFieldLabels.lastName"
           :name="`taxHouseholds[${index}].lastName`"
           :search-fn="searchBeneficiariesFromLastname"
           @result-selected="onSelectBeneficiary"
         />
       </div>
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeAutocomplete
           :name="`taxHouseholds[${index}].firstName`"
-          label="Prénom"
+          :label="relativeFieldLabels.firstName"
           :search-fn="searchBeneficiariesFromFirstname"
           @result-selected="onSelectBeneficiary"
         />
       </div>
-    </template>
-    <div class="fr-col-12">
-      <VeeSelect
-        :name="`taxHouseholds[${index}].relationship`"
-        label="Statut"
-        :options="withEmptyValue(taxHouseHoldRelationshipOptions)"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeCheckbox
-        :name="`taxHouseholds[${index}].caregiver`"
-        label="Aidant familial"
-      />
-    </div>
-    <template v-if="!linkedBeneficiary">
-      <div class="fr-col-12">
-        <VeeInput
-          :name="`taxHouseholds[${index}].email`"
-          label="Email"
-          type="email"
-        />
-      </div>
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           :name="`taxHouseholds[${index}].phone`"
-          label="Téléphone"
+          :label="relativeFieldLabels.phone"
           type="tel"
         />
       </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <VeeInput
+          :name="`taxHouseholds[${index}].email`"
+          :label="relativeFieldLabels.email"
+          type="email"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+        <VeeInput
+          :name="`taxHouseholds[${index}].birthDate`"
+          :label="relativeFieldLabels.birthDate"
+          type="date"
+        />
+      </div>
     </template>
+    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+      <VeeSelect
+        :name="`taxHouseholds[${index}].relationship`"
+        :label="relativeFieldLabels.relationship"
+        :options="withEmptyValue(taxHouseHoldRelationshipOptions)"
+      />
+    </div>
+    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+      <VeeCheckbox
+        :name="`taxHouseholds[${index}].caregiver`"
+        :label="relativeFieldLabels.caregiver"
+      />
+    </div>
     <div class="fr-col-12">
       <VeeTextarea
         :name="`taxHouseholds[${index}].additionalInformation`"
-        label="Informations complémentaires"
+        :label="relativeFieldLabels.additionalInformation"
       >
         <template #hint>
           Il est fortement recommandé de ne stocker que les informations utiles
@@ -99,6 +104,7 @@
   import { taxHouseHoldRelationshipOptions } from '~/client/options/beneficiary'
   import { CreateOrUpdateTaxHouseholdInput } from '~/server/schema'
   import { BeneficiarySearchResult } from '~/types/beneficiary'
+  import { relativeFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     index: number

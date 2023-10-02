@@ -8,7 +8,8 @@ import {
   stringConstraint,
   emailOrEmpty,
   maxStringLengthMessage,
-  stringOrEmpty
+  stringOrEmpty,
+  errorMessages
 } from '~/utils/zod'
 
 export const createOrUpdateEntourageSchema = z.object({
@@ -29,8 +30,8 @@ export type CreateOrUpdateEntourageInput = z.infer<
   typeof createOrUpdateEntourageSchema
 >
 
-export const createOrUpdateTaxHouseholdSchema =
-  createOrUpdateEntourageSchema.extend({
+export const createOrUpdateTaxHouseholdSchema = createOrUpdateEntourageSchema
+  .extend({
     linkedBeneficiary: z
       .object({
         id: z.string().uuid().nonempty(),
@@ -38,8 +39,10 @@ export const createOrUpdateTaxHouseholdSchema =
         firstName: beneficiaryFirstNameOrEmptySchema,
         birthName: stringOrEmpty(beneficiaryLastNameSchema)
       })
-      .nullish()
+      .nullish(),
+    birthDate: z.coerce.date(errorMessages).nullish()
   })
+  .omit({ city: true })
 
 export type CreateOrUpdateTaxHouseholdInput = z.infer<
   typeof createOrUpdateTaxHouseholdSchema

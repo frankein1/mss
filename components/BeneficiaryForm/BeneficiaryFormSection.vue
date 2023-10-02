@@ -7,7 +7,7 @@
       class="fr-col-12"
       :class="{ 'beneficiaryformsection__title-action': hasTitleAction }"
     >
-      <h3 class="fr-h4 fr-mb-0">
+      <h3 class="fr-h4 beneficiaryformsection__title-headline">
         {{ sectionTitle }}
       </h3>
       <slot name="titleAction"></slot>
@@ -29,10 +29,27 @@
   const hasTitleAction = computed(() => slots.titleAction)
 </script>
 
-<style lang="scss">
-  .beneficiaryformsection__title-action {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+<style lang="scss" scoped>
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
+  .beneficiaryformsection__title-headline {
+    margin-bottom: 0;
+  }
+
+  .beneficiaryformsection__title-action
+    .beneficiaryformsection__title-headline {
+    margin-bottom: 0.5rem;
+  }
+
+  @include dsfr-media-query.respond-from('lg') {
+    .beneficiaryformsection__title-action {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+      .beneficiaryformsection__title-headline {
+        margin-bottom: 0;
+      }
+    }
   }
 </style>
