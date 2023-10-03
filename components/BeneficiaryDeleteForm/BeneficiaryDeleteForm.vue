@@ -48,19 +48,20 @@
 
   const isSubmitting = ref(false)
 
-  async function deleteItem() {
-    isSubmitting.value = true
-    try {
-      await useTrpcClient().beneficiary.delete.mutate({
-        id: props.beneficiaryId
-      })
-
-      emit('deleted')
-      modal.close()
-    } catch {
-      useSnackbar().error('La suppression a échoué.')
-    } finally {
-      isSubmitting.value = false
-    }
+  function deleteItem() {
+    useTrpcMutation({
+      mutation: () =>
+        useTrpcClient().beneficiary.delete.mutate({
+          id: props.beneficiaryId
+        }),
+      isSubmitting,
+      onSuccess: () => {
+        emit('deleted')
+        modal.close()
+      },
+      onFailure: () => {
+        useSnackbar().error('La suppression a échoué.')
+      }
+    })
   }
 </script>
