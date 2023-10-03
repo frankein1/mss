@@ -3,11 +3,10 @@
     :schema="saveBeneficiaryEntourageSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiaryEditEntourage()"
-    is-editting
     :previous-page="previousPage"
     :next-page="nextPage"
     :saved="saved"
+    :current="Route.AppBeneficiaryEditEntourage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -35,7 +34,7 @@
     SaveBeneficiaryEntourageInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
   import type { BeneficiaryNames } from '~/types/beneficiary'
   import { useAuthStore } from '~/store/auth'
   import { canEditBeneficiaryHealthInfo } from '~/server/security/rules'

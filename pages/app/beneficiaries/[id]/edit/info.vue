@@ -3,10 +3,10 @@
     :schema="saveBeneficiaryGeneralInformationSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiaryEditInfo()"
     title-icon="fr-icon-user-line"
     :next-page="nextPage"
     :saved="saved"
+    :current="Route.AppBeneficiaryEditInfo"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -41,7 +41,7 @@
   import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~/utils/constants/alert'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
 
   definePageMeta({
     middleware: 'is-beneficiary-referent'
