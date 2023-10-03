@@ -3,10 +3,10 @@
     :schema="saveBeneficiaryTaxHouseholdSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiaryEditTaxHousehold()"
     :previous-page="previousPage"
     :next-page="nextPage"
     :saved="saved"
+    :current="Route.AppBeneficiaryEditTaxHousehold"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -35,7 +35,7 @@
     SaveBeneficiaryTaxHouseholdInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
   import type { BeneficiaryNames } from '~/types/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 

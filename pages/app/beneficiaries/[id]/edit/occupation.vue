@@ -3,11 +3,10 @@
     :schema="saveBeneficiaryOccupationSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiaryEditOccupation()"
-    is-editting
     :previous-page="previousPage"
     :next-page="nextPage"
     :saved="saved"
+    :current="Route.AppBeneficiaryEditOccupation"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -38,7 +37,7 @@
     SaveBeneficiaryOccupationInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
   import type { BeneficiaryNames } from '~/types/beneficiary'
   import { useAuthStore } from '~/store/auth'
   import {

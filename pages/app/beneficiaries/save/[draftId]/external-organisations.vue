@@ -3,9 +3,8 @@
     :schema="saveBeneficiaryExternalOrganisationsSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiariesSaveExternalOrganisations()"
-    title-icon="fr-icon-user-line"
     :previous-page="previousPage"
+    :current="Route.AppBeneficiariesSaveExternalOrganisations"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -34,7 +33,7 @@
   } from '~/server/schema'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
   import type { BeneficiaryDraft } from '~/types/beneficiary'
   import { useAuthStore } from '~/store/auth'
   import {

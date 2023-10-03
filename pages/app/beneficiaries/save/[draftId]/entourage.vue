@@ -3,9 +3,9 @@
     :schema="saveBeneficiaryEntourageSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiariesSaveEntourage()"
     :previous-page="previousPage"
     :next-page="nextPage"
+    :current="Route.AppBeneficiariesSaveEntourage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -36,7 +36,7 @@
   import { BeneficiaryDraft } from '~/types/beneficiary'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
   import { canEditBeneficiaryHealthInfo } from '~/server/security/rules'
 
   definePageMeta({
