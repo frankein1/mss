@@ -59,26 +59,23 @@
     error: structureError
   } = trpcClient.structure.getCurrentUserStructure.useQuery()
 
-  async function onUpdateStructure(
-    updatedStructure: EditCurrentUserStructureInput
-  ) {
-    isSubmitting.value = true
-    try {
-      const res =
-        await trpcClient.structure.editCurrentUserStructure.mutate(
-          updatedStructure
+  function onUpdateStructure(updatedStructure: EditCurrentUserStructureInput) {
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.structure.editCurrentUserStructure.mutate(updatedStructure),
+      isSubmitting,
+      onSuccess: res => {
+        structure.value = res
+        snackbar.success(
+          'Les informations de votre structure ont été mises à jour.'
         )
-
-      structure.value = res
-      snackbar.success(
-        'Les informations de votre structure ont été mises à jour.'
-      )
-    } catch {
-      snackbar.error(
-        'La mise à jour de votre structure a échoué.',
-        () => formContainer.value?.querySelector('select')?.focus()
-      )
-    }
-    isSubmitting.value = false
+      },
+      onFailure: () => {
+        snackbar.error(
+          'La mise à jour de votre structure a échoué.',
+          () => formContainer.value?.querySelector('select')?.focus()
+        )
+      }
+    })
   }
 </script>
