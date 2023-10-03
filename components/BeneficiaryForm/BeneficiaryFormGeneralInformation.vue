@@ -8,11 +8,11 @@
     <h2 class="title-blue fr-grid-row fr-grid-row--gutters fr-mb-3w">
       Informations générales
     </h2>
-    <BeneficiaryFormIdentity />
-    <BeneficiaryFormContactDetails />
-    <BeneficiaryFormAddress />
-    <BeneficiaryFormMobility />
-    <BeneficiaryFormAdditionalInformation />
+    <BeneficiaryFormIdentity id="identity" />
+    <BeneficiaryFormContactDetails id="contact-details" />
+    <BeneficiaryFormAddress id="address" />
+    <BeneficiaryFormMobility id="mobility" />
+    <BeneficiaryFormAdditionalInformation id="additional-information" />
   </div>
 </template>
 
