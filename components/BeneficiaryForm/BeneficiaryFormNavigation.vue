@@ -104,6 +104,7 @@
 </template>
 
 <script setup lang="ts">
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     RoutePath,
     Route,
@@ -130,10 +131,12 @@
     Route.AppBeneficiariesSaveExternalOrganisations
   ]
 
-  // TODO: Add originTab
   const route = useRoute()
   const beneficiaryId = route.params.id as string | undefined
   const draftId = route.params.draftId as string | undefined
+  const originTab = route.query.originTab
+    ? (route.query.originTab as BeneficiaryTab)
+    : undefined
 
   defineProps<{
     current: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
@@ -165,7 +168,10 @@
     if (beneficiaryId) {
       emit(
         'save',
-        (path as AppBeneficiaryEditRoutePath)(beneficiaryId, { saved: true })
+        (path as AppBeneficiaryEditRoutePath)(beneficiaryId, {
+          saved: true,
+          originTab
+        })
       )
     }
     if (draftId) {
