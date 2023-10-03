@@ -54,13 +54,16 @@
     validationSchema: toTypedSchema(acceptCGUSchema)
   })
 
-  const onSubmit = handleSubmit(async () => {
-    try {
-      const user = await trpcClient.user.acceptCGU.mutate({})
-      auth.login(user)
-      return navigateTo(RoutePath.AppOverview())
-    } catch {
-      snackbar.error("L'acceptation des CGU a échoué.")
-    }
+  const onSubmit = handleSubmit(() => {
+    useTrpcMutation({
+      mutation: () => trpcClient.user.acceptCGU.mutate({}),
+      onSuccess: user => {
+        auth.login(user)
+        navigateTo(RoutePath.AppOverview())
+      },
+      onFailure: () => {
+        snackbar.error("L'acceptation des CGU a échoué.")
+      }
+    })
   })
 </script>

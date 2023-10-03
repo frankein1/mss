@@ -93,21 +93,23 @@
     return ''
   })
 
-  async function onAddFollowup(followup: AddFollowupInput) {
-    isSubmitting.value = true
-    try {
-      await trpcClient.followup.add.mutate(followup)
-      navigateTo(
-        RoutePath.AppBeneficiary(beneficiaryId, {
-          tab: BeneficiaryTab.History
-        })
-      )
-    } catch {
-      snackbar.error(
-        "La création de la synthèse d'entretien a échoué.",
-        () => formContainer.value?.querySelector('input')?.focus()
-      )
-    }
-    isSubmitting.value = false
+  function onAddFollowup(followup: AddFollowupInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.followup.add.mutate(followup),
+      isSubmitting,
+      onSuccess: () => {
+        navigateTo(
+          RoutePath.AppBeneficiary(beneficiaryId, {
+            tab: BeneficiaryTab.History
+          })
+        )
+      },
+      onFailure: () => {
+        snackbar.error(
+          "La création de la synthèse d'entretien a échoué.",
+          () => formContainer.value?.querySelector('input')?.focus()
+        )
+      }
+    })
   }
 </script>

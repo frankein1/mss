@@ -49,38 +49,38 @@
 
   const isSubmitting = ref(false)
 
-  async function onCreateBeneficiary(
+  function onCreateBeneficiary(
     beneficiary: CreateBeneficiaryInput,
     complete: boolean
   ) {
-    isSubmitting.value = true
-
     if (complete) {
-      try {
-        const { id } =
-          await trpcClient.beneficiaryDraft.create.mutate(beneficiary)
-
-        navigateTo(RoutePath.AppBeneficiariesSaveInfo(id))
-      } catch {
-        snackbar.error(
-          'La création du brouillon de la fiche bénéficiaire a échoué.'
-        )
-      } finally {
-        isSubmitting.value = false
-      }
+      useTrpcMutation({
+        mutation: () => trpcClient.beneficiaryDraft.create.mutate(beneficiary),
+        isSubmitting,
+        onSuccess: ({ id }) => {
+          navigateTo(RoutePath.AppBeneficiariesSaveInfo(id))
+        },
+        onFailure: () => {
+          snackbar.error(
+            'La création du brouillon de la fiche bénéficiaire a échoué.'
+          )
+        }
+      })
     } else {
-      try {
-        const { id } = await trpcClient.beneficiary.create.mutate(beneficiary)
-        matomo.trackEvent(
-          EventCategory.CreateBeneficiary,
-          CreateBeneficiaryEventAction.SavePartialForm
-        )
-        navigateTo(RoutePath.AppBeneficiary(id))
-      } catch {
-        snackbar.error('La création de la fiche bénéficiaire a échoué.')
-      } finally {
-        isSubmitting.value = false
-      }
+      useTrpcMutation({
+        mutation: () => trpcClient.beneficiary.create.mutate(beneficiary),
+        isSubmitting,
+        onSuccess: ({ id }) => {
+          matomo.trackEvent(
+            EventCategory.CreateBeneficiary,
+            CreateBeneficiaryEventAction.SavePartialForm
+          )
+          navigateTo(RoutePath.AppBeneficiary(id))
+        },
+        onFailure: () => {
+          snackbar.error('La création de la fiche bénéficiaire a échoué.')
+        }
+      })
     }
   }
 </script>

@@ -110,19 +110,23 @@
     return ''
   })
 
-  async function onAddHelpRequest(helpRequest: CreateHelpRequestInput) {
-    isSubmitting.value = true
-    try {
-      await trpcClient.helpRequest.add.mutate(helpRequest)
-      navigateTo(
-        RoutePath.AppBeneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
-      )
-    } catch {
-      snackbar.error(
-        "La création de l'instruction de demande d'aide a échoué.",
-        () => formContainer.value?.querySelector('input')?.focus()
-      )
-    }
-    isSubmitting.value = false
+  function onAddHelpRequest(helpRequest: CreateHelpRequestInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.helpRequest.add.mutate(helpRequest),
+      isSubmitting,
+      onSuccess: () => {
+        navigateTo(
+          RoutePath.AppBeneficiary(beneficiaryId, {
+            tab: BeneficiaryTab.History
+          })
+        )
+      },
+      onFailure: () => {
+        snackbar.error(
+          "La création de l'instruction de demande d'aide a échoué.",
+          () => formContainer.value?.querySelector('input')?.focus()
+        )
+      }
+    })
   }
 </script>

@@ -50,21 +50,22 @@
     id: userId
   })
 
-  async function onUpdateUser(updatedUser: AdminEditUserInput) {
-    isSubmitting.value = true
-    try {
-      const res = await trpcClient.admin.editUser.mutate(updatedUser)
-
-      user.value = res
-      snackbar.success(
-        "Les informations de l'utilisateur ont été mises à jour."
-      )
-    } catch {
-      snackbar.error(
-        "La mise à jour de l'utilisateur a échoué.",
-        () => formContainer.value?.querySelector('select')?.focus()
-      )
-    }
-    isSubmitting.value = false
+  function onUpdateUser(updatedUser: AdminEditUserInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.admin.editUser.mutate(updatedUser),
+      isSubmitting,
+      onSuccess: res => {
+        user.value = res
+        snackbar.success(
+          "Les informations de l'utilisateur ont été mises à jour."
+        )
+      },
+      onFailure: () => {
+        snackbar.error(
+          "La mise à jour de l'utilisateur a échoué.",
+          () => formContainer.value?.querySelector('select')?.focus()
+        )
+      }
+    })
   }
 </script>

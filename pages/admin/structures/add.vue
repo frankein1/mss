@@ -26,19 +26,20 @@
   const isSubmitting = ref(false)
   const formContainer = ref<HTMLFormElement | null>(null)
 
-  async function onAddStructure(structure: AdminCreateStructureInput) {
-    isSubmitting.value = true
-    try {
-      await trpcClient.admin.createStructure.mutate(structure)
-
-      navigateTo(RoutePath.AdminStructures())
-      snackbar.success('La structure a été ajoutée.')
-    } catch {
-      snackbar.error(
-        "L'ajout de la structure a échoué.",
-        () => formContainer.value?.querySelector('select')?.focus()
-      )
-    }
-    isSubmitting.value = false
+  function onAddStructure(structure: AdminCreateStructureInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.admin.createStructure.mutate(structure),
+      isSubmitting,
+      onSuccess: () => {
+        snackbar.success('La structure a été ajoutée.')
+        navigateTo(RoutePath.AdminStructures())
+      },
+      onFailure: () => {
+        snackbar.error(
+          "L'ajout de la structure a échoué.",
+          () => formContainer.value?.querySelector('select')?.focus()
+        )
+      }
+    })
   }
 </script>
