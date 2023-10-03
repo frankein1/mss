@@ -6,6 +6,8 @@
   >
     <BeneficiaryFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
+      :current="current"
+      @save="saveTarget = $event"
     />
     <main class="beneficiaryformlayout__main fr-col-9 fr-container">
       <DsfrBreadcrumb :links="breadcrumbLinks" />
@@ -36,7 +38,13 @@
 <script setup lang="ts" generic="T extends ZodSchema">
   import { ZodSchema, z } from 'zod'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { Breadcrumb, RoutePath } from '~/utils/routing'
+  import {
+    Breadcrumb,
+    RoutePath,
+    AppBeneficiaryEditRoute,
+    RouteTitle,
+    AppBeneficiariesSaveRoute
+  } from '~/utils/routing'
 
   type SubmitType = z.infer<T>
 
@@ -48,11 +56,11 @@
       beneficiary?: SubmitType | null
       schema: T
       isSubmitting: boolean
-      title: string
       titleIcon?: string
       saved?: boolean
       previousPage?: { title: string; path: string }
       nextPage?: { title: string; path: string }
+      current: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
     }>(),
     {
       beneficiary: undefined,
@@ -75,7 +83,9 @@
       : Breadcrumb.AppBeneficiaryEdit(props.beneficiary || null)
   )
 
-  useHead({ title: props.title })
+  const title = computed(() => RouteTitle[props.current]())
+
+  useHead({ title: title.value })
 
   const { handleSubmit } = useForm<SubmitType>({
     validationSchema: toTypedSchema(props.schema),

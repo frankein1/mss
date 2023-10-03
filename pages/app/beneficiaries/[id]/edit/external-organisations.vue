@@ -3,10 +3,9 @@
     :schema="saveBeneficiaryExternalOrganisationsSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiaryEditExternalOrganisations()"
-    is-editting
     :previous-page="previousPage"
     :saved="saved"
+    :current="Route.AppBeneficiaryEditExternalOrganisations"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -34,7 +33,7 @@
     SaveBeneficiaryExternalOrganisationsInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
   import type { BeneficiaryNames } from '~/types/beneficiary'
   import { useAuthStore } from '~/store/auth'
   import {
