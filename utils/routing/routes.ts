@@ -63,6 +63,22 @@ export enum Route {
   AdminUser = 'AdminUser'
 }
 
+export type AppBeneficiariesSaveRoute =
+  | (typeof Route)['AppBeneficiariesSaveInfo']
+  | (typeof Route)['AppBeneficiariesSaveTaxHousehold']
+  | (typeof Route)['AppBeneficiariesSaveEntourage']
+  | (typeof Route)['AppBeneficiariesSaveHealth']
+  | (typeof Route)['AppBeneficiariesSaveOccupation']
+  | (typeof Route)['AppBeneficiariesSaveExternalOrganisations']
+
+export type AppBeneficiaryEditRoute =
+  | (typeof Route)['AppBeneficiaryEditInfo']
+  | (typeof Route)['AppBeneficiaryEditTaxHousehold']
+  | (typeof Route)['AppBeneficiaryEditEntourage']
+  | (typeof Route)['AppBeneficiaryEditHealth']
+  | (typeof Route)['AppBeneficiaryEditOccupation']
+  | (typeof Route)['AppBeneficiaryEditExternalOrganisations']
+
 const AppRoute = '/app'
 const AdminRoute = '/admin'
 const ApiKeycloak = '/api/keycloak'
