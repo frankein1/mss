@@ -50,19 +50,22 @@
     id: structureId
   })
 
-  async function onUpdateStructure(updatedStructure: AdminEditStructureInput) {
-    isSubmitting.value = true
-    try {
-      const res = await trpcClient.admin.editStructure.mutate(updatedStructure)
-
-      structure.value = res
-      snackbar.success('Les informations de la structure ont été mises à jour.')
-    } catch {
-      snackbar.error(
-        'La mise à jour de la structure a échoué.',
-        () => formContainer.value?.querySelector('select')?.focus()
-      )
-    }
-    isSubmitting.value = false
+  function onUpdateStructure(updatedStructure: AdminEditStructureInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.admin.editStructure.mutate(updatedStructure),
+      isSubmitting,
+      onSuccess: res => {
+        structure.value = res
+        snackbar.success(
+          'Les informations de la structure ont été mises à jour.'
+        )
+      },
+      onFailure: () => {
+        snackbar.error(
+          'La mise à jour de la structure a échoué.',
+          () => formContainer.value?.querySelector('select')?.focus()
+        )
+      }
+    })
   }
 </script>

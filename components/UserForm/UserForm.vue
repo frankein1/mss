@@ -63,24 +63,23 @@
     validationSchema: toTypedSchema(createUserSchema)
   })
 
-  const onInviteUser = handleSubmit(async user => {
-    isSubmitting.value = true
-
-    try {
-      const res = await useTrpcClient().user.add.mutate(user)
-
-      onSuccess(getUserCreationMessage(res.email), 10000)
-      form.value?.reset()
-      emit('usersRefresh')
-    } catch (err) {
-      if (err instanceof TRPCClientError && err.data.code === 'CONFLICT') {
-        onError('Cet email est déjà associé à un utilisateur.')
-      } else {
-        onError("La création de l'utilisateur a échoué.")
+  const onInviteUser = handleSubmit(user => {
+    useTrpcMutation({
+      mutation: () => useTrpcClient().user.add.mutate(user),
+      isSubmitting,
+      onSuccess: ({ email }) => {
+        onSuccess(getUserCreationMessage(email), 10000)
+        form.value?.reset()
+        emit('usersRefresh')
+      },
+      onFailure: err => {
+        if (err instanceof TRPCClientError && err.data.code === 'CONFLICT') {
+          onError('Cet email est déjà associé à un utilisateur.')
+        } else {
+          onError("La création de l'utilisateur a échoué.")
+        }
       }
-    } finally {
-      isSubmitting.value = false
-    }
+    })
   })
 
   function onSuccess(message: string, duration: number) {

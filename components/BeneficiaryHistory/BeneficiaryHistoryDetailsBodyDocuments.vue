@@ -24,12 +24,20 @@
     documents: HistoryItemDocuments
   }>()
 
-  const onView = async (key: string) => {
+  const onView = (key: string) => {
     if (process.client) {
-      const { url } = await useTrpcClient().documents.createViewUrl.mutate({
-        key
+      useTrpcMutation({
+        mutation: () =>
+          useTrpcClient().documents.createViewUrl.mutate({
+            key
+          }),
+        onSuccess: ({ url }) => {
+          window.open(url, '_blank')?.focus()
+        },
+        onFailure: () => {
+          useSnackbar().error('Le chargement du document a échoué.')
+        }
       })
-      window.open(url, '_blank')?.focus()
     }
   }
 </script>

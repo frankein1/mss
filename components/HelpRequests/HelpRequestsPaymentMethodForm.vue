@@ -41,19 +41,21 @@
     }
   })
 
-  const onUpdatePaymentMethod = handleSubmit(async helpRequest => {
-    try {
-      const updatedHelpRequest =
-        await useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest)
-
-      snackbar.success(
-        "Le mode de paiment de l'instruction de demande d'aide a été modifié."
-      )
-      emit('updated', updatedHelpRequest)
-    } catch {
-      snackbar.error(
-        "La modification du mode de paiment de l'instruction de demande d'aide a échoué."
-      )
-    }
+  const onUpdatePaymentMethod = handleSubmit( helpRequest => {
+    useTrpcMutation({
+      mutation: () =>
+        useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
+      onSuccess: updatedHelpRequest => {
+        snackbar.success(
+          "Le mode de paiment de l'instruction de demande d'aide a été modifié."
+        )
+        emit('updated', updatedHelpRequest)
+      },
+      onFailure: () => {
+        snackbar.error(
+          "La modification du mode de paiment de l'instruction de demande d'aide a échoué."
+        )
+      }
+    })
   })
 </script>

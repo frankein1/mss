@@ -97,14 +97,21 @@
         : RoutePath.AppBeneficiariesAdd()
 
     if (draftId) {
-      try {
-        await useTrpcClient().beneficiaryDraft.delete.mutate({ id: draftId })
-      } catch {
-        navigateTo(redirectRoute)
-      }
+      await useTrpcMutation({
+        mutation: () =>
+          useTrpcClient().beneficiaryDraft.delete.mutate({
+            id: draftId
+          }),
+        onSuccess: () => {
+          navigateTo(redirectRoute)
+        },
+        onFailure: () => {
+          navigateTo(redirectRoute)
+        }
+      })
+    } else {
+      navigateTo(redirectRoute)
     }
-
-    navigateTo(redirectRoute)
   }
 </script>
 

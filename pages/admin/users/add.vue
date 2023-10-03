@@ -28,20 +28,21 @@
   const isSubmitting = ref(false)
   const formContainer = ref<HTMLFormElement | null>(null)
 
-  async function onAddUser(user: AdminCreateUserInput) {
-    isSubmitting.value = true
-    try {
-      const res = await trpcClient.admin.createUser.mutate(user)
-
-      navigateTo(RoutePath.AdminUsers())
-      snackbar.success(getUserCreationMessage(res.email))
-    } catch (err) {
-      if (err instanceof TRPCClientError && err.data.code === 'CONFLICT') {
-        snackbar.error('Cet email est déjà associé à un utilisateur.')
-      } else {
-        snackbar.error("La création de l'utilisateur a échoué.")
+  function onAddUser(user: AdminCreateUserInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.admin.createUser.mutate(user),
+      isSubmitting,
+      onSuccess: ({ email }) => {
+        snackbar.success(getUserCreationMessage(email))
+        navigateTo(RoutePath.AdminUsers())
+      },
+      onFailure: err => {
+        if (err instanceof TRPCClientError && err.data.code === 'CONFLICT') {
+          snackbar.error('Cet email est déjà associé à un utilisateur.')
+        } else {
+          snackbar.error("La création de l'utilisateur a échoué.")
+        }
       }
-    }
-    isSubmitting.value = false
+    })
   }
 </script>

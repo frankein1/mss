@@ -116,55 +116,59 @@
     }
   }
 
-  async function saveBeneficiary(beneficiary: SaveBeneficiaryEntourageInput) {
-    if (!beneficiaryDraft.value) {
+  function saveBeneficiary(beneficiary: SaveBeneficiaryEntourageInput) {
+    const beneficiaryDraftId = beneficiaryDraft.value?.id
+
+    if (!beneficiaryDraftId) {
       snackbar.error('La création de la fiche bénéficiaire a échoué.')
       return
     }
 
-    isSubmitting.value = true
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.beneficiary.saveDraft.mutate({
+          id: beneficiaryDraftId,
+          entourage: beneficiary
+        }),
+      isSubmitting,
+      onSuccess: ({ id }) => {
+        matomo.trackEvent(
+          EventCategory.CreateBeneficiary,
+          CreateBeneficiaryEventAction.SaveCompleteForm
+        )
 
-    try {
-      const { id } = await trpcClient.beneficiary.saveDraft.mutate({
-        id: beneficiaryDraft.value.id,
-        entourage: beneficiary
-      })
-
-      matomo.trackEvent(
-        EventCategory.CreateBeneficiary,
-        CreateBeneficiaryEventAction.SaveCompleteForm
-      )
-
-      navigateTo(RoutePath.AppBeneficiary(id))
-    } catch {
-      snackbar.error('La création de la fiche bénéficiaire a échoué.')
-    } finally {
-      isSubmitting.value = false
-    }
+        navigateTo(RoutePath.AppBeneficiary(id))
+      },
+      onFailure: () => {
+        snackbar.error('La création de la fiche bénéficiaire a échoué.')
+      }
+    })
   }
 
-  async function saveBeneficiaryDraft(
+  function saveBeneficiaryDraft(
     beneficiary: SaveBeneficiaryEntourageInput,
     target: string
   ) {
-    if (!beneficiaryDraft.value) {
+    const beneficiaryDraftId = beneficiaryDraft.value?.id
+
+    if (!beneficiaryDraftId) {
       snackbar.error("L'enregistrement du brouillon a échoué.")
       return
     }
 
-    isSubmitting.value = true
-
-    try {
-      await trpcClient.beneficiaryDraft.update.mutate({
-        id: beneficiaryDraft.value.id,
-        entourage: beneficiary
-      })
-
-      navigateTo(target)
-    } catch {
-      snackbar.error("L'enregistrement du brouillon a échoué.")
-    } finally {
-      isSubmitting.value = false
-    }
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.beneficiaryDraft.update.mutate({
+          id: beneficiaryDraftId,
+          entourage: beneficiary
+        }),
+      isSubmitting,
+      onSuccess: () => {
+        navigateTo(target)
+      },
+      onFailure: () => {
+        snackbar.error("L'enregistrement du brouillon a échoué.")
+      }
+    })
   }
 </script>

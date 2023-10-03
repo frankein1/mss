@@ -35,23 +35,25 @@
     }
   })
 
-  const onUpdateAidantConnectAuthorisation = handleSubmit(async user => {
-    try {
-      await trpcClient.user.update.mutate(user)
-
-      if (user.aidantConnectAuthorisation) {
-        snackbar.success(
-          `L'habilitation Aidant Connect a été ajoutée à l'utilisateur ${props.user.email}.`
-        )
-      } else {
-        snackbar.success(
-          `L'habilitation Aidant Connect a été retirée de l'utilisateur ${props.user.email}.`
+  const onUpdateAidantConnectAuthorisation = handleSubmit(user => {
+    useTrpcMutation({
+      mutation: () => trpcClient.user.update.mutate(user),
+      onSuccess: () => {
+        if (user.aidantConnectAuthorisation) {
+          snackbar.success(
+            `L'habilitation Aidant Connect a été ajoutée à l'utilisateur ${props.user.email}.`
+          )
+        } else {
+          snackbar.success(
+            `L'habilitation Aidant Connect a été retirée de l'utilisateur ${props.user.email}.`
+          )
+        }
+      },
+      onFailure: () => {
+        snackbar.error(
+          "La modification de l'habilitation Aidant Connect a échoué."
         )
       }
-    } catch {
-      snackbar.error(
-        "La modification de l'habilitation Aidant Connect a échoué."
-      )
-    }
+    })
   })
 </script>

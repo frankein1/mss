@@ -33,17 +33,19 @@
     }
   })
 
-  const onUpdateStatus = handleSubmit(async user => {
-    try {
-      await trpcClient.user.update.mutate(user)
-
-      if (user.status) {
-        snackbar.success(`L'utilisateur ${props.user.email} a été activé`)
-      } else {
-        snackbar.success(`L'utilisateur ${props.user.email} a été désactivé`)
+  const onUpdateStatus = handleSubmit(user => {
+    useTrpcMutation({
+      mutation: () => trpcClient.user.update.mutate(user),
+      onSuccess: ({ email }) => {
+        if (user.status) {
+          snackbar.success(`L'utilisateur ${email} a été activé`)
+        } else {
+          snackbar.success(`L'utilisateur ${email} a été désactivé`)
+        }
+      },
+      onFailure: () => {
+        snackbar.error('La modification du statut a échoué.')
       }
-    } catch {
-      snackbar.error('La modification du statut a échoué.')
-    }
+    })
   })
 </script>

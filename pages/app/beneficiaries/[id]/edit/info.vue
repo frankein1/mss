@@ -163,7 +163,7 @@
       : false
   )
 
-  async function onSaveBeneficiary(
+  function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryGeneralInformationInput,
     target: string | undefined
   ) {
@@ -171,20 +171,22 @@
       return
     }
 
-    isSubmitting.value = true
+    const structureId = data.value.beneficiary.structureId
 
-    try {
-      await trpcClient.beneficiary.updateGeneralInformation.mutate({
-        id: beneficiaryId,
-        structureId: data.value.beneficiary.structureId,
-        ...beneficiary
-      })
-
-      navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
-    } catch {
-      useSnackbar().error('La mise à jour de la fiche bénéficiaire a échoué.')
-    } finally {
-      isSubmitting.value = false
-    }
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.beneficiary.updateGeneralInformation.mutate({
+          id: beneficiaryId,
+          structureId,
+          ...beneficiary
+        }),
+      isSubmitting,
+      onSuccess: () => {
+        navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
+      },
+      onFailure: () => {
+        useSnackbar().error('La mise à jour de la fiche bénéficiaire a échoué.')
+      }
+    })
   }
 </script>

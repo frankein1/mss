@@ -118,6 +118,8 @@
   const authStore = useAuthStore()
   const modal = useModal()
   const { matomo } = useMatomo()
+  const snackbar = useSnackbar()
+  const trpcClient = useTrpcClient()
 
   const props = defineProps<{
     document: DocumentItem
@@ -144,25 +146,41 @@
     () => !!props.document._count.Notification
   )
 
-  async function onView() {
+  function onView() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
-    const { url } = await useTrpcClient().documents.createViewUrl.mutate({
-      key: props.document.key
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.documents.createViewUrl.mutate({
+          key: props.document.key
+        }),
+      onSuccess: ({ url }) => {
+        window.open(url, '_blank')?.focus()
+      },
+      onFailure: () => {
+        snackbar.error('Le chargement du document a échoué.')
+      }
     })
-    window.open(url, '_blank')?.focus()
   }
 
-  async function onDownload() {
+  function onDownload() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
-    const { url } = await useTrpcClient().documents.createViewUrl.mutate({
-      key: props.document.key
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.documents.createViewUrl.mutate({
+          key: props.document.key
+        }),
+      onSuccess: ({ url }) => {
+        const link = downloadLink.value
+        if (link) {
+          link.href = url
+          link.type = props.document.type
+          link.click()
+        }
+      },
+      onFailure: () => {
+        snackbar.error('Le chargement du document a échoué.')
+      }
     })
-    const link = downloadLink.value
-    if (link) {
-      link.href = url
-      link.type = props.document.type
-      link.click()
-    }
   }
 
   function onEdit() {
@@ -177,20 +195,36 @@
     )
   }
 
-  async function onUpdateDocument(values: EditDocumentInput) {
-    await useTrpcClient().documents.edit.mutate(values)
-    emit('refreshDocuments')
-    modal.close()
+  function onUpdateDocument(values: EditDocumentInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.documents.edit.mutate(values),
+      onSuccess: () => {
+        emit('refreshDocuments')
+        modal.close()
+      },
+      onFailure: () => {
+        snackbar.error('La modification du document a échoué.')
+      }
+    })
   }
 
-  async function onDelete() {
+  function onDelete() {
     if (!window.confirm('Êtes-vous sûr de vouloir supprimer ce document ?')) {
       return
     }
-    await useTrpcClient().documents.delete.mutate({
-      documentKey: props.document.key
+
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.documents.delete.mutate({
+          documentKey: props.document.key
+        }),
+      onSuccess: () => {
+        emit('refreshDocuments')
+      },
+      onFailure: () => {
+        snackbar.error('La suppression du document a échoué.')
+      }
     })
-    emit('refreshDocuments')
   }
 </script>
 

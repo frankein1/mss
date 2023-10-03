@@ -37,15 +37,17 @@
     }
   })
 
-  const onUpdateStatus = handleSubmit(async followup => {
-    try {
-      await useTrpcClient().followup.quickUpdate.mutate(followup)
-
-      snackbar.success("Le statut de la synthèse d'entretien a été modifié.")
-    } catch {
-      snackbar.error(
-        "La modification du statut de la synthèse d'entretien a échoué."
-      )
-    }
+  const onUpdateStatus = handleSubmit(followup => {
+    useTrpcMutation({
+      mutation: () => useTrpcClient().followup.quickUpdate.mutate(followup),
+      onSuccess: () => {
+        snackbar.success("Le statut de la synthèse d'entretien a été modifié.")
+      },
+      onFailure: () => {
+        snackbar.error(
+          "La modification du statut de la synthèse d'entretien a échoué."
+        )
+      }
+    })
   })
 </script>

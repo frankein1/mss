@@ -99,21 +99,23 @@
     return ''
   })
 
-  async function onUpdateFollowup(followup: EditFollowupInput) {
-    isSubmitting.value = true
-    try {
-      await trpcClient.followup.update.mutate(followup)
-      navigateTo(
-        RoutePath.AppBeneficiary(followup.beneficiaryId, {
-          tab: BeneficiaryTab.History
-        })
-      )
-    } catch {
-      snackbar.error(
-        'La mise à jour de la synthèse a échoué.',
-        () => formContainer.value?.querySelector('input')?.focus()
-      )
-    }
-    isSubmitting.value = false
+  function onUpdateFollowup(followup: EditFollowupInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.followup.update.mutate(followup),
+      isSubmitting,
+      onSuccess: () => {
+        navigateTo(
+          RoutePath.AppBeneficiary(followup.beneficiaryId, {
+            tab: BeneficiaryTab.History
+          })
+        )
+      },
+      onFailure: () => {
+        snackbar.error(
+          'La mise à jour de la synthèse a échoué.',
+          () => formContainer.value?.querySelector('input')?.focus()
+        )
+      }
+    })
   }
 </script>
