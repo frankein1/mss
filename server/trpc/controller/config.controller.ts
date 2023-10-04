@@ -1,9 +1,10 @@
-import { ProtectedAppContext, ProtectedAppContextUser } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getUserDisplayName } from '~/utils/user'
 import {
   canViewAnyHelpRequestDetails,
-  canOnlyListItsBeneficiaries
+  canOnlyListItsBeneficiaries,
+  SecurityRuleGrantee
 } from '~/server/security/rules'
 
 export const getAgentsHandler = async ({
@@ -56,7 +57,7 @@ function hasDefinedExaminationDate(h: {
 
 function prepareExaminationDatesBeneficiaryCondition(
   beneficiaryId: string | undefined,
-  user: ProtectedAppContextUser
+  user: SecurityRuleGrantee
 ) {
   if (beneficiaryId) {
     return { id: beneficiaryId }

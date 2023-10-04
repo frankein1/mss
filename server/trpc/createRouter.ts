@@ -59,8 +59,6 @@ export type ProtectedAppContext = {
   structure: { id: string; type: StructureType }
 }
 
-export type ProtectedAppContextUser = ProtectedAppContext['user']
-
 /**
  * App procedure
  * */
@@ -74,3 +72,8 @@ export const protectedProcedure = t.procedure
  */
 
 export const adminProcedure = t.procedure.use(userMiddleware)
+
+export type AdminContext = {
+  event: H3Event
+  user: SecurityRuleGrantee
+}
