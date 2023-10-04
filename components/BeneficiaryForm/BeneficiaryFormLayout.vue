@@ -35,12 +35,13 @@
 
 <script setup lang="ts" generic="T extends ZodSchema">
   import { ZodSchema, z } from 'zod'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Breadcrumb, RoutePath } from '~/utils/routing'
 
   type SubmitType = z.infer<T>
 
   const route = useRoute()
-  const draftId = route.query.draftId as string | null
+  const draftId = route.params.draftId as string | null
 
   const props = withDefaults(
     defineProps<{
@@ -86,9 +87,13 @@
   })
 
   async function onCancel() {
+    const originTab = route.query.originTab
+      ? (route.query.originTab as BeneficiaryTab)
+      : undefined
+
     const redirectRoute =
       !draftId && props.beneficiary
-        ? RoutePath.AppBeneficiary(props.beneficiary.id)
+        ? RoutePath.AppBeneficiary(props.beneficiary.id, { tab: originTab })
         : RoutePath.AppBeneficiariesAdd()
 
     if (draftId) {

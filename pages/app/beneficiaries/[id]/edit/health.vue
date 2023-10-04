@@ -42,6 +42,7 @@
     canEditBeneficiaryRelatives,
     canEditBeneficiaryOccupationIncome
   } from '~/server/security/rules'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-set-health']
@@ -55,6 +56,9 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
   const saved = route.query.saved !== undefined
+  const originTab = route.query.originTab
+    ? (route.query.originTab as BeneficiaryTab)
+    : undefined
 
   const { data, pending, error } =
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
@@ -72,14 +76,18 @@
       return {
         title: RouteTitle.AppBeneficiaryEditEntourage(),
         path: RoutePath.AppBeneficiaryEditEntourage(beneficiaryId, {
-          saved: true
+          saved: true,
+          originTab
         })
       }
     }
 
     return {
       title: RouteTitle.AppBeneficiaryEditInfo(),
-      path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, { saved: true })
+      path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, {
+        saved: true,
+        originTab
+      })
     }
   })
 
@@ -94,7 +102,8 @@
       return {
         title: RouteTitle.AppBeneficiaryEditOccupation(),
         path: RoutePath.AppBeneficiaryEditOccupation(beneficiaryId, {
-          saved: true
+          saved: true,
+          originTab
         })
       }
     }
