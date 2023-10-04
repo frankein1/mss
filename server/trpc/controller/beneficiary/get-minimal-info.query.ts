@@ -1,3 +1,4 @@
+import { createQuery } from '../../request/createRequest'
 import {
   ProtectedAppContext,
   forbiddenError,
@@ -6,10 +7,11 @@ import {
 import { prismaClient } from '~/server/prisma'
 import { canViewBeneficiary } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { idSchema } from '~/server/schema'
 
-export const getBeneficiaryMinimalInfoSecurityCheck = AllowSecurityCheck
+const securityCheck = AllowSecurityCheck
 
-export const getBeneficiaryMinimalInfoHandler = async ({
+const handler = async ({
   input: { id },
   ctx: { user, structure }
 }: {
@@ -44,3 +46,10 @@ export const getBeneficiaryMinimalInfoHandler = async ({
 
   return beneficiaryMinimalInfo
 }
+
+export const getBeneficiaryMinimalInfoQuery = createQuery({
+  path: 'getBeneficiaryMinimalInfo',
+  inputValidation: idSchema,
+  securityCheck,
+  handler
+})

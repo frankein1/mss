@@ -1,6 +1,10 @@
+import { createQuery } from '../../request/createRequest'
 import { ProtectedAppContext } from '~/server/trpc'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
-import { SearchBeneficiaryInput } from '~/server/schema'
+import {
+  SearchBeneficiaryInput,
+  searchBeneficiarySchema
+} from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
@@ -9,9 +13,9 @@ const tokenToSearchCondition = (token: string) => ({
   mode: 'insensitive'
 })
 
-export const searchBeneficiarySecurityCheck = AllowSecurityCheck
+const securityCheck = AllowSecurityCheck
 
-export const searchBeneficiaryHandler = async ({
+const handler = async ({
   input: { query, excludedIds },
   ctx: { user, structure }
 }: {
@@ -58,3 +62,10 @@ export const searchBeneficiaryHandler = async ({
 
   return beneficiaries
 }
+
+export const searchBeneficiaryQuery = createQuery({
+  path: 'search',
+  inputValidation: searchBeneficiarySchema,
+  securityCheck,
+  handler
+})

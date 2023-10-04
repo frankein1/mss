@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client'
+import { createQuery } from '../../request/createRequest'
 import {
   ProtectedAppContext,
   ProtectedAppContextUser,
@@ -13,7 +14,8 @@ import {
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import {
   GetDocumentsInput,
-  BeneficiaryDocumentFilterInput
+  BeneficiaryDocumentFilterInput,
+  getDocumentsSchema
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 
@@ -43,7 +45,7 @@ function prepareBeneficiaryDocumentsFilters(
   return formattedFilters
 }
 
-export const getBeneficiaryDocumentsSecurityCheck = async (
+const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: GetDocumentsInput
 ) => {
@@ -56,7 +58,7 @@ export const getBeneficiaryDocumentsSecurityCheck = async (
   return canListDocuments(grantee, beneficiary)
 }
 
-export const getBeneficiaryDocumentsHandler = async ({
+const handler = async ({
   ctx: { user },
   input: { beneficiaryId, filters, orderBy, perPage, page }
 }: {
@@ -116,7 +118,14 @@ export const getBeneficiaryDocumentsHandler = async ({
 }
 
 export type GetBeneficiaryDocumentsOutput = Prisma.PromiseReturnType<
-  typeof getBeneficiaryDocumentsHandler
+  typeof handler
 >
 export type Documents = GetBeneficiaryDocumentsOutput['documents']
 export type DocumentItem = Documents[0]
+
+export const getBeneficiaryDocumentsQuery = createQuery({
+  path: 'getBeneficiaryDocuments',
+  inputValidation: getDocumentsSchema,
+  securityCheck,
+  handler
+})

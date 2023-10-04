@@ -1,4 +1,5 @@
 import { UserActivityType } from '@prisma/client'
+import { createMutation } from '../../request/createRequest'
 import {
   SecurityRuleGrantee,
   canEditBeneficiary,
@@ -7,7 +8,10 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { UpdateBeneficiaryTaxHouseholdInput } from '~/server/schema'
+import {
+  UpdateBeneficiaryTaxHouseholdInput,
+  updateBeneficiaryTaxHouseholdSchema
+} from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 
@@ -25,7 +29,7 @@ function getBeneficiaryWithTaxHousehold(id: string) {
   })
 }
 
-export const updateBeneficiaryTaxHouseholdSecurityCheck = async (
+const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryTaxHouseholdInput
 ) => {
@@ -37,7 +41,7 @@ export const updateBeneficiaryTaxHouseholdSecurityCheck = async (
   )
 }
 
-export const updateBeneficiaryTaxHouseholdHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -92,3 +96,10 @@ export const updateBeneficiaryTaxHouseholdHandler = async ({
 
   return updatedBeneficiary
 }
+
+export const updateTaxHouseholdMutation = createMutation({
+  path: 'updateTaxHousehold',
+  inputValidation: updateBeneficiaryTaxHouseholdSchema,
+  securityCheck,
+  handler
+})

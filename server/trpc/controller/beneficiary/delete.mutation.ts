@@ -1,4 +1,5 @@
 import { UserActivityType } from '@prisma/client'
+import { createMutation } from '../../request/createRequest'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import {
@@ -7,18 +8,15 @@ import {
 } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { IdInput } from '~/server/schema'
+import { IdInput, idSchema } from '~/server/schema'
 
-export const deleteBeneficiarySecurityCheck = async (
-  grantee: SecurityRuleGrantee,
-  input: IdInput
-) => {
+const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.id)
 
   return canDeleteBeneficiary(grantee, beneficiary)
 }
 
-export const deleteBeneficiaryHandler = async ({
+const handler = async ({
   input: { id },
   ctx: { user }
 }: {
@@ -70,3 +68,10 @@ async function updateBeneficiaryRelatives(linkedBeneficiaryId: string) {
     })
   }
 }
+
+export const deleteBeneficiaryMutation = createMutation({
+  path: 'delete',
+  inputValidation: idSchema,
+  securityCheck,
+  handler
+})

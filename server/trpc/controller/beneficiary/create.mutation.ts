@@ -1,14 +1,18 @@
 import { UserActivityType } from '@prisma/client'
-import { CreateBeneficiaryInput } from '~/server/schema'
+import { createMutation } from '../../request/createRequest'
+import {
+  CreateBeneficiaryInput,
+  createBeneficiarySchema
+} from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const createBeneficiarySecurityCheck = AllowSecurityCheck
+const securityCheck = AllowSecurityCheck
 
-export const createBeneficiaryHandler = async ({
+const handler = async ({
   input,
   ctx: { user, structure }
 }: {
@@ -40,3 +44,10 @@ export const createBeneficiaryHandler = async ({
 
   return { id: beneficiary.id }
 }
+
+export const createBeneficiaryMutation = createMutation({
+  path: 'create',
+  inputValidation: createBeneficiarySchema,
+  securityCheck,
+  handler
+})

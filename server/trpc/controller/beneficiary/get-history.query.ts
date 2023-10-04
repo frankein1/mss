@@ -1,11 +1,13 @@
 import type { Prisma } from '@prisma/client'
 import { HelpRequestStatus, FollowupStatus } from '@prisma/client'
+import { createQuery } from '../../request/createRequest'
 import { prismaClient } from '~/server/prisma'
-import type {
+import {
   GetHistoryInput,
   BeneficiaryHistoryFilterInput,
   FollowupFilterInput,
-  HelpRequestFilterInput
+  HelpRequestFilterInput,
+  getHistorySchema
 } from '~/server/schema'
 import { TypeSuivi } from '~/types/history'
 import {
@@ -190,9 +192,9 @@ function sortHistoryItem(a: HistoryItem, b: HistoryItem) {
   return dateA >= dateB ? -1 : 1
 }
 
-export const getBeneficiaryHistorySecurityCheck = AllowSecurityCheck
+const securityCheck = AllowSecurityCheck
 
-export const getBeneficiaryHistoryHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -222,3 +224,10 @@ export const getBeneficiaryHistoryHandler = async ({
 
   return [...followups, ...helpRequests].sort(sortHistoryItem)
 }
+
+export const getBeneficiaryHistoryQuery = createQuery({
+  path: 'getBeneficiaryHistory',
+  inputValidation: getHistorySchema,
+  securityCheck,
+  handler
+})

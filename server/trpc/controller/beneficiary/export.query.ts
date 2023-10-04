@@ -1,7 +1,11 @@
 import { Prisma } from '@prisma/client'
+import { createQuery } from '../../request/createRequest'
 import { beneficiaryFieldLabels } from '~/client/labels'
 import { prismaClient } from '~/server/prisma'
-import { ExportBeneficiariesInput } from '~/server/schema'
+import {
+  ExportBeneficiariesInput,
+  exportBeneficiariesSchema
+} from '~/server/schema'
 import {
   canOnlyListItsBeneficiaries,
   canViewBeneficiary,
@@ -17,14 +21,14 @@ import { createExport } from '~/utils/export/createExport'
 import { getBeneficiaryExportData } from '~/utils/export/getBeneficiaryExportData'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
 
-export const exportBeneficiariesSecurityCheck = (
+const securityCheck = (
   grantee: SecurityRuleGrantee,
   _input: ExportBeneficiariesInput
 ) => {
   return canExportBeneficiaries(grantee)
 }
 
-export const exportBeneficiariesHandler = async ({
+const handler = async ({
   input,
   ctx
 }: {
@@ -72,3 +76,10 @@ export const exportBeneficiariesHandler = async ({
     { name: 'Bénéficiaires', columns, rows }
   ])
 }
+
+export const exportBeneficiariesQuery = createQuery({
+  path: 'exportBeneficiaries',
+  inputValidation: exportBeneficiariesSchema,
+  securityCheck,
+  handler
+})

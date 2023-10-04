@@ -1,4 +1,5 @@
 import { UserActivityType } from '@prisma/client'
+import { createMutation } from '../../request/createRequest'
 import {
   SecurityRuleGrantee,
   canEditBeneficiary,
@@ -8,10 +9,13 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
+import {
+  UpdateBeneficiaryGeneralInformationInput,
+  updateBeneficiaryGeneralInformationSchema
+} from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
 
-export const updateBeneficiaryGeneralInformationSecurityCheck = async (
+const securityCheck = async (
   user: SecurityRuleGrantee,
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
@@ -19,7 +23,7 @@ export const updateBeneficiaryGeneralInformationSecurityCheck = async (
   return canEditBeneficiary(user, beneficiary)
 }
 
-export const updateBeneficiaryGeneralInformationHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -81,3 +85,10 @@ export const updateBeneficiaryGeneralInformationHandler = async ({
 
   return updatedBeneficiary
 }
+
+export const updateGeneralInformationMutation = createMutation({
+  path: 'updateGeneralInformation',
+  inputValidation: updateBeneficiaryGeneralInformationSchema,
+  securityCheck,
+  handler
+})

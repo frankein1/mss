@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client'
-import { GetBeneficiariesInput } from '~/server/schema'
+import { createQuery } from '../../request/createRequest'
+import { GetBeneficiariesInput, getBeneficiariesSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
@@ -8,9 +9,9 @@ import { getBeneficiaryFollowUpTypes } from '~/utils'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getBeneficiariesSecurityCheck = AllowSecurityCheck
+const securityCheck = AllowSecurityCheck
 
-export const getBeneficiariesHandler = async ({
+const handler = async ({
   input,
   ctx: { user, structure }
 }: {
@@ -56,9 +57,7 @@ export const getBeneficiariesHandler = async ({
   }
 }
 
-export type GetBeneficiariesOutput = Prisma.PromiseReturnType<
-  typeof getBeneficiariesHandler
->
+export type GetBeneficiariesOutput = Prisma.PromiseReturnType<typeof handler>
 
 function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
   where: Prisma.BeneficiaryWhereInput,
@@ -132,3 +131,10 @@ function prepareBeneficiariesWithFollowupTypes(
     ...beneficiary
   }))
 }
+
+export const getBeneficiariesQuery = createQuery({
+  path: 'getBeneficiaries',
+  inputValidation: getBeneficiariesSchema,
+  securityCheck,
+  handler
+})

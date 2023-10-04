@@ -1,11 +1,13 @@
+import { createQuery } from '../../request/createRequest'
 import { ProtectedAppContext, notfoundError } from '~/server/trpc'
 import { isReferentFor } from '~/server/security/rules/helpers'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { idSchema } from '~/server/schema'
 
-export const isBeneficiaryReferentSecurityCheck = AllowSecurityCheck
+const securityCheck = AllowSecurityCheck
 
-export const isBeneficiaryReferentHandler = async ({
+const handler = async ({
   input: { id },
   ctx: { user }
 }: {
@@ -20,3 +22,10 @@ export const isBeneficiaryReferentHandler = async ({
 
   return isReferentFor(user, beneficiary)
 }
+
+export const isBeneficiaryReferentQuery = createQuery({
+  path: 'isBeneficiaryReferent',
+  inputValidation: idSchema,
+  securityCheck,
+  handler
+})

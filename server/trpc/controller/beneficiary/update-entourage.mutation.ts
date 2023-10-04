@@ -1,4 +1,5 @@
 import { UserActivityType } from '@prisma/client'
+import { createMutation } from '../../request/createRequest'
 import {
   SecurityRuleGrantee,
   canEditBeneficiary,
@@ -9,7 +10,8 @@ import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryDraftInput,
-  UpdateBeneficiaryEntourageInput
+  UpdateBeneficiaryEntourageInput,
+  updateBeneficiaryEntourageSchema
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
@@ -30,7 +32,7 @@ function getBeneficiarySecurityTargetWithEntourage(id: string) {
   })
 }
 
-export const updateBeneficiaryEntourageSecurityCheck = async (
+const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryDraftInput
 ) => {
@@ -42,7 +44,7 @@ export const updateBeneficiaryEntourageSecurityCheck = async (
   )
 }
 
-export const updateBeneficiaryEntourageHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -94,3 +96,10 @@ export const updateBeneficiaryEntourageHandler = async ({
 
   return updatedBeneficiary
 }
+
+export const updateEntourageMutation = createMutation({
+  path: 'updateEntourage',
+  inputValidation: updateBeneficiaryEntourageSchema,
+  securityCheck,
+  handler
+})

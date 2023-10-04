@@ -1,4 +1,5 @@
 import { UserActivityType, Prisma } from '@prisma/client'
+import { createMutation } from '../../request/createRequest'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
@@ -9,7 +10,8 @@ import {
   SaveBeneficiaryEntourageInput,
   SaveBeneficiaryHealthInput,
   SaveBeneficiaryOccupationInput,
-  SaveBeneficiaryExternalOrganisationsInput
+  SaveBeneficiaryExternalOrganisationsInput,
+  saveDraftSchema
 } from '~/server/schema'
 import {
   canSaveToBeneficiaryBeneficiaryDraft,
@@ -23,7 +25,7 @@ import {
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 
-export const saveDraftSecurityCheck = async (
+const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: SaveDraftInput
 ) => {
@@ -41,7 +43,7 @@ export const saveDraftSecurityCheck = async (
   return canSaveToBeneficiaryBeneficiaryDraft(grantee, beneficiaryDraft)
 }
 
-export const saveDraftHandler = async ({
+const handler = async ({
   input,
   ctx
 }: {
@@ -210,3 +212,10 @@ function getDataFromSources(
     externalOrganisations
   }
 }
+
+export const saveDraftMutation = createMutation({
+  path: 'saveDraft',
+  inputValidation: saveDraftSchema,
+  securityCheck,
+  handler
+})

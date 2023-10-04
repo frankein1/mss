@@ -1,4 +1,5 @@
 import type { Prisma } from '@prisma/client'
+import { createQuery } from '../../request/createRequest'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   SecurityRuleGrantee,
@@ -8,7 +9,7 @@ import { getBeneficiarySecurityTarget } from '~/server/security'
 import { prismaClient } from '~/server/prisma'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 import type { FollowupTypeIdAndName } from '~/types/followupType'
-import { IdInput } from '~/server/schema'
+import { IdInput, idSchema } from '~/server/schema'
 
 async function getFollowupFollowupTypes(
   beneficiaryId: string,
@@ -97,15 +98,12 @@ async function getFollowupTypes(
   return beneficiaryFollowupTypes.sort(sortFollowupTypesByName)
 }
 
-export const getBeneficiaryFollowupTypesSecurityCheck = async (
-  grantee: SecurityRuleGrantee,
-  input: IdInput
-) => {
+const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.id)
   return canViewBeneficiary(grantee, beneficiary)
 }
 
-export const getBeneficiaryFollowupTypesHandler = async ({
+const handler = async ({
   input: { id: beneficiaryId },
   ctx: { structure }
 }: {
@@ -130,5 +128,12 @@ export const getBeneficiaryFollowupTypesHandler = async ({
 }
 
 export type GetBeneficiaryFollowupTypesOutput = Prisma.PromiseReturnType<
-  typeof getBeneficiaryFollowupTypesHandler
+  typeof handler
 >
+
+export const getBeneficiaryFollowupTypesQuery = createQuery({
+  path: 'getBeneficiaryFollowupTypes',
+  inputValidation: idSchema,
+  securityCheck,
+  handler
+})
