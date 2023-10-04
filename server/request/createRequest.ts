@@ -73,7 +73,7 @@ export const createRequest = <
   if (!options.handler && !options.adminHandler) {
     throw new Error('either function handler or adminHandler must be defined')
   }
-  const execute = ({
+  const execute = async ({
     ctx,
     input
   }: {
@@ -86,7 +86,8 @@ export const createRequest = <
     if (!options.handler) {
       throw forbiddenError('Use handler function to handler the request')
     }
-    if (!options.securityCheck(ctx.user, input)) {
+    const canAccess = await options.securityCheck(ctx.user, input)
+    if (!canAccess) {
       throw forbiddenError(
         `${
           ctx.user.id
@@ -99,7 +100,7 @@ export const createRequest = <
     return options.handler({ ctx, input })
   }
 
-  const executeAsAdmin = ({
+  const executeAsAdmin = async ({
     ctx,
     input
   }: {
@@ -109,7 +110,8 @@ export const createRequest = <
     if (!options.adminHandler) {
       throw forbiddenError('Use adminHandler function to handle the request')
     }
-    if (!options.securityCheck(ctx.user, input)) {
+    const canAccess = await options.securityCheck(ctx.user, input)
+    if (!canAccess) {
       throw forbiddenError(
         `${
           ctx.user.id
