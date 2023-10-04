@@ -1,6 +1,7 @@
 import { H3Event } from 'h3'
 import { ZodType, z } from 'zod'
 import { StructureType } from '@prisma/client'
+import { forbiddenError } from '../trpcErrors'
 import {
   SecurityRule,
   SecurityRuleGrantee
@@ -62,6 +63,14 @@ export const createRequest = <
     ctx: RequestHandlerContext<Grantee>
     input: Validation
   }) => {
+    if (!options.securityCheck(ctx.user, input)) {
+      throw forbiddenError(
+        `${ctx.user.id} is not allowed to access ${
+          options.path
+        } with params ${JSON.stringify(input || {})}`
+      )
+    }
+
     return options.handler({ ctx, input })
   }
   return {

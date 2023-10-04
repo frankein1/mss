@@ -1,13 +1,10 @@
 import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
-import { allow, deny, shield } from 'trpc-shield'
 import { H3Event } from 'h3'
 import { StructureType } from '@prisma/client'
 import { SecurityRuleGrantee } from '../security/rules/types'
-import { adminPermissions } from './routers/admin/permissions'
 import { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
-import { statPermissions } from './routers/stat/permissions'
 
 const t = initTRPC.context<AppContext>().create({
   transformer: superjson
@@ -68,33 +65,12 @@ export type ProtectedAppContextUser = ProtectedAppContext['user']
  * App procedure
  * */
 
-export const appPermissionsMiddleware = t.middleware(
-  shield<ProtectedAppContext>(
-    {
-      query: {
-        stat: statPermissions.query
-      },
-      mutation: {
-        stat: statPermissions.mutation
-      }
-    },
-    { fallbackRule: allow }
-  )
-)
-
 export const protectedProcedure = t.procedure
   .use(userMiddleware)
   .use(structureMiddleware)
-  .use(appPermissionsMiddleware)
 
 /**
  * Admin procedure
  */
 
-export const adminPermissionsMiddleware = t.middleware(
-  shield<AppContext>(adminPermissions, { fallbackRule: deny })
-)
-
-export const adminProcedure = t.procedure
-  .use(userMiddleware)
-  .use(adminPermissionsMiddleware)
+export const adminProcedure = t.procedure.use(userMiddleware)
