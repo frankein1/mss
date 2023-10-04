@@ -1,12 +1,11 @@
 import { Prisma } from '@prisma/client'
+import { createQuery } from '../createRequest'
 import { prismaClient } from '~/server/prisma'
 import { notfoundError } from '~/server/trpc'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { idSchema } from '~/server/schema'
 
-export const getStructureController = async ({
-  input: { id }
-}: {
-  input: { id: string }
-}) => {
+const adminHandler = async ({ input: { id } }: { input: { id: string } }) => {
   const structure = await prismaClient.structure.findUnique({
     where: { id },
     include: {
@@ -39,6 +38,10 @@ export const getStructureController = async ({
   throw notfoundError()
 }
 
-export type AdminStructureOutput = Prisma.PromiseReturnType<
-  typeof getStructureController
->
+export type AdminStructureOutput = Prisma.PromiseReturnType<typeof adminHandler>
+
+export const getStructureQuery = createQuery({
+  inputValidation: idSchema,
+  securityCheck: AllowSecurityCheck,
+  adminHandler
+})

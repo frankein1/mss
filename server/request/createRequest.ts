@@ -7,6 +7,19 @@ import {
   SecurityRuleGrantee
 } from '~/server/security/rules/types'
 
+export type AdminRequestHandlerContext<Grantee> = {
+  user: Grantee
+  event: H3Event
+}
+
+export type AdminRequestHandler<Grantee, Input, RequestResult> = ({
+  ctx,
+  input
+}: {
+  ctx: AdminRequestHandlerContext<Grantee>
+  input: Input
+}) => Promise<RequestResult>
+
 export type RequestHandlerContext<Grantee> = {
   user: Grantee
   structure: { id: string; type: StructureType }
@@ -29,7 +42,8 @@ export type CreateRequestOptions<
 > = {
   inputValidation: Validation
   securityCheck: SecurityRule<Grantee, Input>
-  handler: RequestHandler<Grantee, Input, RequestResult>
+  handler?: RequestHandler<Grantee, Input, RequestResult>
+  adminHandler?: AdminRequestHandler<Grantee, Input, RequestResult>
 }
 
 export type RequestServer<
@@ -45,6 +59,7 @@ export type RequestServer<
 > & {
   mutation: boolean
   execute: RequestHandler<Grantee, Input, RequestResult>
+  executeAsAdmin: AdminRequestHandler<Grantee, Input, RequestResult>
 }
 
 export const createRequest = <
@@ -55,6 +70,9 @@ export const createRequest = <
   options: CreateRequestOptions<Validation, Grantee, RequestResult>,
   mutation: boolean
 ): RequestServer<Validation, Grantee, RequestResult> => {
+  if (!options.handler && !options.adminHandler) {
+    throw new Error('either function handler or adminHandler must be defined')
+  }
   const execute = ({
     ctx,
     input
@@ -62,6 +80,12 @@ export const createRequest = <
     ctx: RequestHandlerContext<Grantee>
     input: Validation
   }) => {
+    if (!ctx.structure) {
+      throw forbiddenError('No structure found is the trpc context')
+    }
+    if (!options.handler) {
+      throw forbiddenError('Use handler function to handler the request')
+    }
     if (!options.securityCheck(ctx.user, input)) {
       throw forbiddenError(
         `${
@@ -74,10 +98,35 @@ export const createRequest = <
 
     return options.handler({ ctx, input })
   }
+
+  const executeAsAdmin = ({
+    ctx,
+    input
+  }: {
+    ctx: AdminRequestHandlerContext<Grantee>
+    input: Validation
+  }) => {
+    if (!options.adminHandler) {
+      throw forbiddenError('Use adminHandler function to handle the request')
+    }
+    if (!options.securityCheck(ctx.user, input)) {
+      throw forbiddenError(
+        `${
+          ctx.user.id
+        } is not allowed to access route with params ${JSON.stringify(
+          input || {}
+        )}`
+      )
+    }
+
+    return options.adminHandler({ ctx, input })
+  }
+
   return {
     ...options,
     mutation,
-    execute
+    execute,
+    executeAsAdmin
   }
 }
 

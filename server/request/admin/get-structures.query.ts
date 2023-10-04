@@ -1,12 +1,13 @@
 import { Prisma } from '@prisma/client'
+import { createQuery } from '../createRequest'
 import { prismaClient } from '~/server/prisma'
-import { AdminGetStructuresInput } from '~/server/schema'
+import {
+  AdminGetStructuresInput,
+  adminGetStructuresSchema
+} from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getStructuresController = async ({
-  input
-}: {
-  input: AdminGetStructuresInput
-}) => {
+const adminHandler = async ({ input }: { input: AdminGetStructuresInput }) => {
   let where = {}
   if (input.search) {
     where = {
@@ -61,5 +62,11 @@ export const getStructuresController = async ({
 }
 
 export type AdminStructuresOutput = Prisma.PromiseReturnType<
-  typeof getStructuresController
+  typeof adminHandler
 >
+
+export const getStructuresQuery = createQuery({
+  inputValidation: adminGetStructuresSchema,
+  securityCheck: AllowSecurityCheck,
+  adminHandler
+})

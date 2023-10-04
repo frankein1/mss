@@ -1,12 +1,13 @@
 import { prismaClient } from '~/server/prisma'
-import { AdminEditStructureInput } from '~/server/schema'
+import { createMutation } from '~/server/request'
+import {
+  AdminEditStructureInput,
+  adminEditStructureSchema
+} from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { editFollowupTypes } from '~/utils/structure'
 
-export const editStructureController = async ({
-  input
-}: {
-  input: AdminEditStructureInput
-}) => {
+const adminHandler = async ({ input }: { input: AdminEditStructureInput }) => {
   const {
     legallyRequiredFollowupTypes,
     legallyNotRequiredFollowupTypes,
@@ -47,3 +48,9 @@ export const editStructureController = async ({
 
   return updatedStructure
 }
+
+export const editStructureMutation = createMutation({
+  inputValidation: adminEditStructureSchema,
+  securityCheck: AllowSecurityCheck,
+  adminHandler
+})

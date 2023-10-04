@@ -34,7 +34,7 @@ const userMiddleware = t.middleware(({ ctx, next }) => {
   return next({
     ctx: {
       // infers the user as non-nullable
-      user: ctx.user
+      user: { ...ctx.user, structureId: ctx.user.structure?.id || null }
     }
   })
 })

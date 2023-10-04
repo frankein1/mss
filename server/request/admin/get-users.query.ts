@@ -1,12 +1,14 @@
 import { Prisma } from '@prisma/client'
+import { createQuery } from '../createRequest'
 import { prismaClient } from '~/server/prisma'
-import { AdminGetUsersInput, UserAdminFilterInput } from '~/server/schema'
+import {
+  AdminGetUsersInput,
+  UserAdminFilterInput,
+  adminGetUsersSchema
+} from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getUsersController = async ({
-  input
-}: {
-  input: AdminGetUsersInput
-}) => {
+const adminHandler = async ({ input }: { input: AdminGetUsersInput }) => {
   let where = prepareUserFilters(input.filters)
   if (input.search) {
     where = {
@@ -45,9 +47,7 @@ export const getUsersController = async ({
   return { users }
 }
 
-export type AdminUsersOutput = Prisma.PromiseReturnType<
-  typeof getUsersController
->
+export type AdminUsersOutput = Prisma.PromiseReturnType<typeof adminHandler>
 
 function prepareUserFilters(filters: UserAdminFilterInput) {
   const formattedFilters: Prisma.UserWhereInput = {}
@@ -58,3 +58,9 @@ function prepareUserFilters(filters: UserAdminFilterInput) {
 
   return formattedFilters
 }
+
+export const getUsersQuery = createQuery({
+  inputValidation: adminGetUsersSchema,
+  securityCheck: AllowSecurityCheck,
+  adminHandler
+})
