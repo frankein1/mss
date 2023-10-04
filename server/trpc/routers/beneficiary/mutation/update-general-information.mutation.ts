@@ -1,5 +1,5 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '../../request/createRequest'
+import { createMutation } from '~/server/trpc/request'
 import {
   SecurityRuleGrantee,
   canEditBeneficiary,

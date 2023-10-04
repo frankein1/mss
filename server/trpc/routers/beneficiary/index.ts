@@ -6,4 +6,4 @@ export type {
   GetBeneficiaryDocumentsOutput,
   Documents,
   DocumentItem
-} from '~/server/trpc/controller/beneficiary'
+} from './query'

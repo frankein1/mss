@@ -1,4 +1,4 @@
-import { createQuery } from '../../request/createRequest'
+import { createQuery } from '../../../request/createRequest'
 import { ProtectedAppContext, notfoundError } from '~/server/trpc'
 import { isReferentFor } from '~/server/security/rules/helpers'
 import { getBeneficiarySecurityTarget } from '~/server/security'

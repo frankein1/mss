@@ -1,4 +1,4 @@
-import { createQuery } from '../../request/createRequest'
+import { createQuery } from '~/server/trpc/request'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   SecurityRuleGrantee,

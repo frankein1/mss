@@ -1,4 +1,4 @@
-import { createQuery } from '../../request/createRequest'
+import { createQuery } from '~/server/trpc/request'
 import {
   ProtectedAppContext,
   forbiddenError,

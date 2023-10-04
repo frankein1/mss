@@ -1,5 +1,5 @@
 import { UserActivityType, Prisma } from '@prisma/client'
-import { createMutation } from '../../request/createRequest'
+import { createMutation } from '../../../request/createRequest'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'

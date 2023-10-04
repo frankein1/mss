@@ -2,7 +2,7 @@ import {
   FollowupTypesFromFollowups,
   FollowupTypesFromHelpRequests,
   BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests
-} from '~/server/trpc/controller/beneficiary'
+} from '~/server/trpc/routers/beneficiary/query'
 import { FollowupTypeIdAndName } from '~/types/followupType'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 

@@ -1,7 +1,3 @@
-import { protectedProcedure, router } from '../..'
-import { isBeneficiaryReferentQuery } from '../../controller/beneficiary/is-beneficiary-referent.query'
-import { getBeneficiaryMinimalInfoQuery } from '../../controller/beneficiary/get-minimal-info.query'
-import { getBeneficiarySecurityTargetQuery } from '../../controller/beneficiary/get-security-target.query'
 import {
   deleteBeneficiaryMutation,
   createBeneficiaryMutation,
@@ -11,6 +7,10 @@ import {
   updateOccupationIncomeMutation,
   updateExternalOrganisationsMutation,
   saveDraftMutation,
+  updateTaxHouseholdMutation
+} from './mutation'
+import {
+  isBeneficiaryReferentQuery,
   getBeneficiaryDetailsQuery,
   getBeneficiaryHistoryQuery,
   getBeneficiariesQuery,
@@ -18,8 +18,10 @@ import {
   getBeneficiaryDocumentsQuery,
   searchBeneficiaryQuery,
   getBeneficiaryFollowupTypesQuery,
-  updateTaxHouseholdMutation
-} from '~/server/trpc/controller/beneficiary'
+  getBeneficiaryMinimalInfoQuery,
+  getBeneficiarySecurityTargetQuery
+} from './query'
+import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryRouter = router({
   isBeneficiaryReferent: protectedProcedure
