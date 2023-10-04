@@ -2,11 +2,11 @@ import { Prisma } from '@prisma/client'
 import {
   ProtectedAppContext,
   ProtectedAppContextUser,
-  invalidError,
-  forbiddenError
+  invalidError
 } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import {
+  SecurityRuleGrantee,
   canListDocuments,
   canOnlyListItsUploadedDocuments
 } from '~/server/security/rules'
@@ -43,6 +43,19 @@ function prepareBeneficiaryDocumentsFilters(
   return formattedFilters
 }
 
+export const getBeneficiaryDocumentsSecurityCheck = async (
+  grantee: SecurityRuleGrantee,
+  input: GetDocumentsInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+
+  if (!beneficiary) {
+    throw invalidError()
+  }
+
+  return canListDocuments(grantee, beneficiary)
+}
+
 export const getBeneficiaryDocumentsHandler = async ({
   ctx: { user },
   input: { beneficiaryId, filters, orderBy, perPage, page }
@@ -50,16 +63,6 @@ export const getBeneficiaryDocumentsHandler = async ({
   input: GetDocumentsInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(beneficiaryId)
-
-  if (!beneficiary) {
-    throw invalidError()
-  }
-
-  if (!canListDocuments(user, beneficiary)) {
-    throw forbiddenError()
-  }
-
   const { take, skip } =
     page && perPage
       ? takeAndSkipFromPagination({

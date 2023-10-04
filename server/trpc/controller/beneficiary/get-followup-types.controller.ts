@@ -1,10 +1,14 @@
 import type { Prisma } from '@prisma/client'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
-import { canViewBeneficiary } from '~/server/security/rules'
+import { ProtectedAppContext } from '~/server/trpc'
+import {
+  SecurityRuleGrantee,
+  canViewBeneficiary
+} from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { prismaClient } from '~/server/prisma'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 import type { FollowupTypeIdAndName } from '~/types/followupType'
+import { IdInput } from '~/server/schema'
 
 async function getFollowupFollowupTypes(
   beneficiaryId: string,
@@ -93,19 +97,21 @@ async function getFollowupTypes(
   return beneficiaryFollowupTypes.sort(sortFollowupTypesByName)
 }
 
+export const getBeneficiaryFollowupTypesSecurityCheck = async (
+  grantee: SecurityRuleGrantee,
+  input: IdInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  return canViewBeneficiary(grantee, beneficiary)
+}
+
 export const getBeneficiaryFollowupTypesHandler = async ({
   input: { id: beneficiaryId },
-  ctx: { user, structure }
+  ctx: { structure }
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(beneficiaryId)
-
-  if (!beneficiary || !canViewBeneficiary(user, beneficiary)) {
-    throw forbiddenError()
-  }
-
   const beneficiaryLegallyRequiredFollowupTypes = await getFollowupTypes(
     beneficiaryId,
     structure.id,

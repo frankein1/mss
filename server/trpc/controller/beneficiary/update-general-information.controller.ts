@@ -1,14 +1,23 @@
 import { UserActivityType } from '@prisma/client'
 import {
+  SecurityRuleGrantee,
   canEditBeneficiary,
   canEditBeneficiaryReferents
 } from '~/server/security/rules'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UpdateBeneficiaryGeneralInformationInput } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
+
+export const updateBeneficiaryGeneralInformationSecurityCheck = async (
+  user: SecurityRuleGrantee,
+  input: UpdateBeneficiaryGeneralInformationInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  return canEditBeneficiary(user, beneficiary)
+}
 
 export const updateBeneficiaryGeneralInformationHandler = async ({
   input,
@@ -18,10 +27,6 @@ export const updateBeneficiaryGeneralInformationHandler = async ({
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.id)
-
-  if (!beneficiary || !canEditBeneficiary(user, beneficiary)) {
-    throw forbiddenError()
-  }
 
   const { referents: previousReferents } = beneficiary
 

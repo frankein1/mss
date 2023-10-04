@@ -12,7 +12,7 @@ export const beneficiarySecurityTargetInclude = {
 } as const
 
 export function getBeneficiarySecurityTarget(id: string) {
-  return prismaClient.beneficiary.findUnique({
+  return prismaClient.beneficiary.findUniqueOrThrow({
     where: { id },
     select: {
       id: true,

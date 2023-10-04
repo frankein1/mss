@@ -1,27 +1,28 @@
+import { ProtectedAppContext } from '~/server/trpc'
 import {
-  ProtectedAppContext,
-  forbiddenError,
-  notfoundError
-} from '~/server/trpc'
-import { canViewBeneficiary } from '~/server/security/rules'
+  SecurityRuleGrantee,
+  canViewBeneficiary
+} from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/security'
+import { IdInput } from '~/server/schema'
+
+export const getBeneficiarySecurityTargetSecurityCheck = async (
+  grantee: SecurityRuleGrantee,
+  input: IdInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+
+  return canViewBeneficiary(grantee, beneficiary)
+}
 
 export const getBeneficiarySecurityTargetHandler = async ({
   input: { id },
-  ctx: { user }
+  ctx: _ctx
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(id)
-
-  if (!beneficiary) {
-    throw notfoundError()
-  }
-
-  if (!canViewBeneficiary(user, beneficiary)) {
-    throw forbiddenError()
-  }
 
   return beneficiary
 }

@@ -1,5 +1,11 @@
 import { createMutation, createQuery } from '../../request/createRequest'
 import { protectedProcedure, router } from '../..'
+import { createBeneficiarySecurityCheck } from '../../controller/beneficiary/create.controller'
+import { deleteBeneficiarySecurityCheck } from '../../controller/beneficiary/delete.controller'
+import { searchBeneficiarySecurityCheck } from '../../controller/beneficiary/search.controller'
+import { isBeneficiaryReferentSecurityCheck } from '../../controller/beneficiary/is-beneficiary-referent.controller'
+import { getBeneficiaryMinimalInfoSecurityCheck } from '../../controller/beneficiary/get-minimal-info.controller'
+import { getBeneficiarySecurityTargetSecurityCheck } from '../../controller/beneficiary/get-security-target.controller'
 import {
   idSchema,
   searchBeneficiarySchema,
@@ -35,70 +41,82 @@ import {
   updateBeneficiaryHealthHandler,
   updateBeneficiaryOccupationIncomeHandler,
   updateBeneficiaryExternalOrganisationsHandler,
-  saveDraftHandler
+  saveDraftHandler,
+  saveDraftSecurityCheck,
+  updateBeneficiaryTaxHouseholdSecurityCheck,
+  updateBeneficiaryGeneralInformationSecurityCheck,
+  updateBeneficiaryEntourageSecurityCheck,
+  updateBeneficiaryHealthSecurityCheck,
+  updateBeneficiaryOccupationIncomeSecurityCheck,
+  updateBeneficiaryExternalOrganisationsSecurityCheck,
+  getBeneficiaryDetailsSecurityCheck,
+  getBeneficiaryDocumentsSecurityCheck,
+  getBeneficiaryHistorySecurityCheck,
+  getBeneficiariesSecurityCheck,
+  exportBeneficiariesSecurityCheck,
+  getBeneficiaryFollowupTypesSecurityCheck
 } from '~/server/trpc/controller/beneficiary'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 // MUTATION
 
 const saveDraft = createMutation({
   path: 'saveDraft',
   inputValidation: saveDraftSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: saveDraftSecurityCheck,
   handler: saveDraftHandler
 })
 
 const create = createMutation({
   path: 'create',
   inputValidation: createBeneficiarySchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: createBeneficiarySecurityCheck,
   handler: createBeneficiaryHandler
 })
 const updateGeneralInformation = createMutation({
   path: 'updateGeneralInformation',
   inputValidation: updateBeneficiaryGeneralInformationSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: updateBeneficiaryGeneralInformationSecurityCheck,
   handler: updateBeneficiaryGeneralInformationHandler
 })
 const updateTaxHousehold = createMutation({
   path: 'updateTaxHousehold',
   inputValidation: updateBeneficiaryTaxHouseholdSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: updateBeneficiaryTaxHouseholdSecurityCheck,
   handler: updateBeneficiaryTaxHouseholdHandler
 })
 
 const updateEntourage = createMutation({
   path: 'updateEntourage',
   inputValidation: updateBeneficiaryEntourageSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: updateBeneficiaryEntourageSecurityCheck,
   handler: updateBeneficiaryEntourageHandler
 })
 
 const updateHealth = createMutation({
   path: 'updateHealth',
   inputValidation: updateBeneficiaryHealthSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: updateBeneficiaryHealthSecurityCheck,
   handler: updateBeneficiaryHealthHandler
 })
 
 const updateOccupationIncome = createMutation({
   path: 'updateOccupationIncome',
   inputValidation: updateBeneficiaryOccupationSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: updateBeneficiaryOccupationIncomeSecurityCheck,
   handler: updateBeneficiaryOccupationIncomeHandler
 })
 
 const updateExternalOrganisations = createMutation({
   path: 'updateExternalOrganisations',
   inputValidation: updateBeneficiaryExternalOrganisationsSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: updateBeneficiaryExternalOrganisationsSecurityCheck,
   handler: updateBeneficiaryExternalOrganisationsHandler
 })
 
 const deleteMutation = createMutation({
   path: 'delete',
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: deleteBeneficiarySecurityCheck,
   handler: deleteBeneficiaryHandler
 })
 
@@ -106,63 +124,63 @@ const deleteMutation = createMutation({
 const search = createQuery({
   path: 'search',
   inputValidation: searchBeneficiarySchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: searchBeneficiarySecurityCheck,
   handler: searchBeneficiaryHandler
 })
 
 const isBeneficiaryReferent = createQuery({
   path: 'isBeneficiaryReferent',
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: isBeneficiaryReferentSecurityCheck,
   handler: isBeneficiaryReferentHandler
 })
 const getBeneficiaryMinimalInfo = createQuery({
   path: 'getBeneficiaryMinimalInfo',
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: getBeneficiaryMinimalInfoSecurityCheck,
   handler: getBeneficiaryMinimalInfoHandler
 })
 const getBeneficiaryDetails = createQuery({
   path: 'getBeneficiaryDetails',
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: getBeneficiaryDetailsSecurityCheck,
   handler: getBeneficiaryDetailsHandler
 })
 const getBeneficiarySecurityTarget = createQuery({
   path: 'getBeneficiarySecurityTarget',
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: getBeneficiarySecurityTargetSecurityCheck,
   handler: getBeneficiarySecurityTargetHandler
 })
 const getBeneficiaryDocuments = createQuery({
   path: 'getBeneficiaryDocuments',
   inputValidation: getDocumentsSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: getBeneficiaryDocumentsSecurityCheck,
   handler: getBeneficiaryDocumentsHandler
 })
 const getBeneficiaryHistory = createQuery({
   path: 'getBeneficiaryHistory',
   inputValidation: getHistorySchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: getBeneficiaryHistorySecurityCheck,
   handler: getBeneficiaryHistoryHandler
 })
 const getBeneficiaries = createQuery({
   path: 'getBeneficiaries',
   inputValidation: getBeneficiariesSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: getBeneficiariesSecurityCheck,
   handler: getBeneficiariesHandler
 })
 const exportBeneficiaries = createQuery({
   path: 'exportBeneficiaries',
   inputValidation: exportBeneficiariesSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: exportBeneficiariesSecurityCheck,
   handler: exportBeneficiariesHandler
 })
 
 const getBeneficiaryFollowupTypes = createQuery({
   path: 'getBeneficiaryFollowupTypes',
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck: getBeneficiaryFollowupTypesSecurityCheck,
   handler: getBeneficiaryFollowupTypesHandler
 })
 

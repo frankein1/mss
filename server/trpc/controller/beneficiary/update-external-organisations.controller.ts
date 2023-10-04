@@ -1,13 +1,25 @@
 import { UserActivityType } from '@prisma/client'
 import {
+  SecurityRuleGrantee,
   canEditBeneficiary,
   canEditBeneficiaryExternalOrganisations
 } from '~/server/security/rules'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UpdateBeneficiaryExternalOrganisationsInput } from '~/server/schema'
+
+export const updateBeneficiaryExternalOrganisationsSecurityCheck = async (
+  grantee: SecurityRuleGrantee,
+  input: UpdateBeneficiaryExternalOrganisationsInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  return (
+    canEditBeneficiary(grantee, beneficiary) &&
+    canEditBeneficiaryExternalOrganisations(grantee, beneficiary)
+  )
+}
 
 export const updateBeneficiaryExternalOrganisationsHandler = async ({
   input,
@@ -17,14 +29,6 @@ export const updateBeneficiaryExternalOrganisationsHandler = async ({
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.id)
-
-  if (
-    !beneficiary ||
-    !canEditBeneficiary(user, beneficiary) ||
-    !canEditBeneficiaryExternalOrganisations(user, beneficiary)
-  ) {
-    throw forbiddenError()
-  }
 
   const { id, ...externalOrganisations } = input
 

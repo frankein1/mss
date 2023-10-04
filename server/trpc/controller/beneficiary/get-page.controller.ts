@@ -6,6 +6,9 @@ import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { getBeneficiaryFollowUpTypes } from '~/utils'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
+
+export const getBeneficiariesSecurityCheck = AllowSecurityCheck
 
 export const getBeneficiariesHandler = async ({
   input,

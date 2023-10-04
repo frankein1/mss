@@ -16,7 +16,7 @@ import {
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
 } from '~/server/security'
-import { notfoundError, ProtectedAppContext } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import {
   canListBeneficiaryFollowups,
   canListCommentsToFollowup,
@@ -24,7 +24,10 @@ import {
   canListBeneficiaryHelpRequests,
   canOnlyListItsBeneficiaries
 } from '~/server/security/rules'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import {
+  AllowSecurityCheck,
+  SecurityRuleGrantee
+} from '~/server/security/rules/types'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput
@@ -187,6 +190,8 @@ function sortHistoryItem(a: HistoryItem, b: HistoryItem) {
   return dateA >= dateB ? -1 : 1
 }
 
+export const getBeneficiaryHistorySecurityCheck = AllowSecurityCheck
+
 export const getBeneficiaryHistoryHandler = async ({
   input,
   ctx: { user }
@@ -197,10 +202,6 @@ export const getBeneficiaryHistoryHandler = async ({
   const { beneficiaryId, filters } = input
 
   const beneficiary = await getBeneficiarySecurityTarget(beneficiaryId)
-
-  if (!beneficiary) {
-    throw notfoundError()
-  }
 
   if (filtersAppliesToFollowups(filters)) {
     return getFollowups(user, beneficiary, filters)

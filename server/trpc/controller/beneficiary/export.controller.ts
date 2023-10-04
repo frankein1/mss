@@ -5,9 +5,10 @@ import { ExportBeneficiariesInput } from '~/server/schema'
 import {
   canOnlyListItsBeneficiaries,
   canViewBeneficiary,
-  canExportBeneficiaries
+  canExportBeneficiaries,
+  SecurityRuleGrantee
 } from '~/server/security/rules'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { getBeneficiaryAccessibleData } from '~/utils/beneficiary/getBeneficiaryAccessibleData'
 import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'
@@ -16,6 +17,13 @@ import { createExport } from '~/utils/export/createExport'
 import { getBeneficiaryExportData } from '~/utils/export/getBeneficiaryExportData'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
 
+export const exportBeneficiariesSecurityCheck = (
+  grantee: SecurityRuleGrantee,
+  _input: ExportBeneficiariesInput
+) => {
+  return canExportBeneficiaries(grantee)
+}
+
 export const exportBeneficiariesHandler = async ({
   input,
   ctx
@@ -23,10 +31,6 @@ export const exportBeneficiariesHandler = async ({
   input: ExportBeneficiariesInput
   ctx: ProtectedAppContext
 }) => {
-  if (!canExportBeneficiaries(ctx.user)) {
-    throw forbiddenError()
-  }
-
   const columns = BENEFICIARY_EXPORTED_FIELDS.map(key => ({
     key,
     header: beneficiaryFieldLabels[key]

@@ -4,6 +4,8 @@ export const idSchema = z.object({
   id: z.string()
 })
 
+export type IdInput = z.infer<typeof idSchema>
+
 export const keySchema = z.object({
   key: z.string()
 })

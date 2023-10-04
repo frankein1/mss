@@ -1,13 +1,22 @@
 import { UserActivityType } from '@prisma/client'
-import {
-  ProtectedAppContext,
-  forbiddenError,
-  invalidError
-} from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/security'
-import { canDeleteBeneficiary } from '~/server/security/rules'
+import {
+  SecurityRuleGrantee,
+  canDeleteBeneficiary
+} from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import { IdInput } from '~/server/schema'
+
+export const deleteBeneficiarySecurityCheck = async (
+  grantee: SecurityRuleGrantee,
+  input: IdInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+
+  return canDeleteBeneficiary(grantee, beneficiary)
+}
 
 export const deleteBeneficiaryHandler = async ({
   input: { id },
@@ -17,14 +26,6 @@ export const deleteBeneficiaryHandler = async ({
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(id)
-
-  if (!beneficiary) {
-    throw invalidError('Beneficiary not found')
-  }
-
-  if (!canDeleteBeneficiary(user, beneficiary)) {
-    throw forbiddenError()
-  }
 
   await updateBeneficiaryRelatives(id)
 

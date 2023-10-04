@@ -1,5 +1,5 @@
 import { UserActivityType, Prisma } from '@prisma/client'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
@@ -17,10 +17,29 @@ import {
   canEditBeneficiaryHealthInfo,
   canSetBeneficiaryNir,
   canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryExternalOrganisations
+  canEditBeneficiaryExternalOrganisations,
+  SecurityRuleGrantee
 } from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
+
+export const saveDraftSecurityCheck = async (
+  grantee: SecurityRuleGrantee,
+  input: SaveDraftInput
+) => {
+  const { id: draftId } = input
+  if (!draftId) {
+    return false
+  }
+  const beneficiaryDraft = await prismaClient.draft.findUnique({
+    where: { id: draftId }
+  })
+  if (!beneficiaryDraft) {
+    return false
+  }
+
+  return canSaveToBeneficiaryBeneficiaryDraft(grantee, beneficiaryDraft)
+}
 
 export const saveDraftHandler = async ({
   input,
@@ -30,18 +49,9 @@ export const saveDraftHandler = async ({
   ctx: ProtectedAppContext
 }) => {
   const { id: draftId } = input
-  const beneficiaryDraft = draftId
-    ? await prismaClient.draft.findUnique({
-        where: { id: draftId }
-      })
-    : undefined
-
-  if (
-    !beneficiaryDraft ||
-    !canSaveToBeneficiaryBeneficiaryDraft(ctx.user, beneficiaryDraft)
-  ) {
-    throw forbiddenError()
-  }
+  const beneficiaryDraft = await prismaClient.draft.findUniqueOrThrow({
+    where: { id: draftId }
+  })
 
   const data = prepareData(ctx, input, beneficiaryDraft)
 

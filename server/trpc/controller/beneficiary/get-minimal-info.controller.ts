@@ -5,6 +5,9 @@ import {
 } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { canViewBeneficiary } from '~/server/security/rules'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
+
+export const getBeneficiaryMinimalInfoSecurityCheck = AllowSecurityCheck
 
 export const getBeneficiaryMinimalInfoHandler = async ({
   input: { id },

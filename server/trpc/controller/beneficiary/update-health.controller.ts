@@ -1,14 +1,27 @@
 import { UserActivityType } from '@prisma/client'
 import {
+  SecurityRuleGrantee,
   canEditBeneficiary,
   canEditBeneficiaryHealthInfo,
   canSetBeneficiaryNir
 } from '~/server/security/rules'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UpdateBeneficiaryHealthInput } from '~/server/schema'
+
+export const updateBeneficiaryHealthSecurityCheck = async (
+  grantee: SecurityRuleGrantee,
+  input: UpdateBeneficiaryHealthInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+
+  return (
+    canEditBeneficiary(grantee, beneficiary) &&
+    canEditBeneficiaryHealthInfo(grantee, beneficiary)
+  )
+}
 
 export const updateBeneficiaryHealthHandler = async ({
   input,
@@ -18,14 +31,6 @@ export const updateBeneficiaryHealthHandler = async ({
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.id)
-
-  if (
-    !beneficiary ||
-    !canEditBeneficiary(user, beneficiary) ||
-    !canEditBeneficiaryHealthInfo(user, beneficiary)
-  ) {
-    throw forbiddenError()
-  }
 
   const { id, socialSecurityNumber, ...health } = input
 

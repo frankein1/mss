@@ -1,13 +1,26 @@
 import { UserActivityType } from '@prisma/client'
 import {
+  SecurityRuleGrantee,
   canEditBeneficiary,
   canEditBeneficiaryOccupationIncome
 } from '~/server/security/rules'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UpdateBeneficiaryOccupationInput } from '~/server/schema'
+
+export const updateBeneficiaryOccupationIncomeSecurityCheck = async (
+  grantee: SecurityRuleGrantee,
+  input: UpdateBeneficiaryOccupationInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+
+  return (
+    canEditBeneficiary(grantee, beneficiary) &&
+    canEditBeneficiaryOccupationIncome(grantee, beneficiary)
+  )
+}
 
 export const updateBeneficiaryOccupationIncomeHandler = async ({
   input,
@@ -17,14 +30,6 @@ export const updateBeneficiaryOccupationIncomeHandler = async ({
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.id)
-
-  if (
-    !beneficiary ||
-    !canEditBeneficiary(user, beneficiary) ||
-    !canEditBeneficiaryOccupationIncome(user, beneficiary)
-  ) {
-    throw forbiddenError()
-  }
 
   const { id, ...occupation } = input
 
