@@ -1,18 +1,14 @@
 import {
-  createBeneficiarySchema,
-  updateBeneficiaryDraftSchema
-} from '~/server/schema'
-import {
-  createBeneficiaryDraftHandler,
-  updateBeneficiaryDraftHandler
-} from '~/server/trpc/controller/beneficiaryDraft'
+  createBeneficiaryDraftMutation,
+  updateBeneficiaryDraftMutation
+} from '~/server/request/beneficiaryDraft'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryDraftRouter = router({
   create: protectedProcedure
-    .input(createBeneficiarySchema)
-    .mutation(createBeneficiaryDraftHandler),
+    .input(createBeneficiaryDraftMutation.inputValidation)
+    .mutation(createBeneficiaryDraftMutation.execute),
   update: protectedProcedure
-    .input(updateBeneficiaryDraftSchema)
-    .mutation(updateBeneficiaryDraftHandler)
+    .input(updateBeneficiaryDraftMutation.inputValidation)
+    .mutation(updateBeneficiaryDraftMutation.execute)
 })

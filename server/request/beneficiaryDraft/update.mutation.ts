@@ -1,12 +1,16 @@
 import { UserActivityType } from '@prisma/client'
+import { createMutation } from '~/server/request'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { UpdateBeneficiaryDraftInput } from '~/server/schema'
-import { canUpdateDraft } from '~/server/security/rules'
+import {
+  UpdateBeneficiaryDraftInput,
+  updateBeneficiaryDraftSchema
+} from '~/server/schema'
+import { SecurityRuleGrantee, canUpdateDraft } from '~/server/security/rules'
 import type { BeneficiaryDraft } from '~/types/beneficiary'
 
-export const updateBeneficiaryDraftHandler = async ({
+export const handler = async ({
   input: {
     id: draftId,
     general,
@@ -21,11 +25,11 @@ export const updateBeneficiaryDraftHandler = async ({
   input: UpdateBeneficiaryDraftInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiaryDraft = (await prismaClient.draft.findUnique({
+  const beneficiaryDraft = (await prismaClient.draft.findUniqueOrThrow({
     where: { id: draftId }
-  })) as BeneficiaryDraft | null
+  })) as BeneficiaryDraft
 
-  if (!beneficiaryDraft?.content || !canUpdateDraft(user, beneficiaryDraft)) {
+  if (!beneficiaryDraft.content) {
     throw forbiddenError()
   }
 
@@ -54,3 +58,19 @@ export const updateBeneficiaryDraftHandler = async ({
 
   return updatedBeneficiaryDraft
 }
+
+const securityCheck = async (
+  grantee: SecurityRuleGrantee,
+  input: UpdateBeneficiaryDraftInput
+) => {
+  const beneficiaryDraft = await prismaClient.draft.findUniqueOrThrow({
+    where: { id: input.id }
+  })
+  return canUpdateDraft(grantee, beneficiaryDraft)
+}
+
+export const updateBeneficiaryDraftMutation = createMutation({
+  inputValidation: updateBeneficiaryDraftSchema,
+  securityCheck,
+  handler
+})
