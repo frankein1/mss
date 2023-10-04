@@ -64,7 +64,6 @@ const handler = async ({
 }
 
 export const searchBeneficiaryQuery = createQuery({
-  path: 'search',
   inputValidation: searchBeneficiarySchema,
   securityCheck,
   handler

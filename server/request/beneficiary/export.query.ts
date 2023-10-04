@@ -78,7 +78,6 @@ const handler = async ({
 }
 
 export const exportBeneficiariesQuery = createQuery({
-  path: 'exportBeneficiaries',
   inputValidation: exportBeneficiariesSchema,
   securityCheck,
   handler

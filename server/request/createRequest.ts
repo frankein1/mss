@@ -27,7 +27,6 @@ export type CreateRequestOptions<
   RequestResult = any,
   Input = z.infer<Validation>
 > = {
-  path: string
   inputValidation: Validation
   securityCheck: SecurityRule<Grantee, Input>
   handler: RequestHandler<Grantee, Input, RequestResult>
@@ -65,9 +64,11 @@ export const createRequest = <
   }) => {
     if (!options.securityCheck(ctx.user, input)) {
       throw forbiddenError(
-        `${ctx.user.id} is not allowed to access ${
-          options.path
-        } with params ${JSON.stringify(input || {})}`
+        `${
+          ctx.user.id
+        } is not allowed to access route with params ${JSON.stringify(
+          input || {}
+        )}`
       )
     }
 

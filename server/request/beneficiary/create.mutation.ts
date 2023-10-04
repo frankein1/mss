@@ -46,7 +46,6 @@ const handler = async ({
 }
 
 export const createBeneficiaryMutation = createMutation({
-  path: 'create',
   inputValidation: createBeneficiarySchema,
   securityCheck,
   handler

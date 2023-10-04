@@ -98,7 +98,6 @@ const handler = async ({
 }
 
 export const updateEntourageMutation = createMutation({
-  path: 'updateEntourage',
   inputValidation: updateBeneficiaryEntourageSchema,
   securityCheck,
   handler

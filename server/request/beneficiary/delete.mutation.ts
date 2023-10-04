@@ -70,7 +70,6 @@ async function updateBeneficiaryRelatives(linkedBeneficiaryId: string) {
 }
 
 export const deleteBeneficiaryMutation = createMutation({
-  path: 'delete',
   inputValidation: idSchema,
   securityCheck,
   handler

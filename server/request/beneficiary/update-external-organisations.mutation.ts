@@ -52,7 +52,6 @@ const handler = async ({
 }
 
 export const updateExternalOrganisationsMutation = createMutation({
-  path: 'updateExternalOrganisations',
   inputValidation: updateBeneficiaryExternalOrganisationsSchema,
   securityCheck,
   handler

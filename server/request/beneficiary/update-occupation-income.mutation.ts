@@ -53,7 +53,6 @@ const handler = async ({
 }
 
 export const updateOccupationIncomeMutation = createMutation({
-  path: 'updateOccupationIncome',
   inputValidation: updateBeneficiaryOccupationSchema,
   securityCheck,
   handler

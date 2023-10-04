@@ -48,7 +48,6 @@ const handler = async ({
 }
 
 export const getBeneficiaryMinimalInfoQuery = createQuery({
-  path: 'getBeneficiaryMinimalInfo',
   inputValidation: idSchema,
   securityCheck,
   handler

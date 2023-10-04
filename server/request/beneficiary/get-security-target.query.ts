@@ -26,7 +26,6 @@ const handler = async ({
 }
 
 export const getBeneficiarySecurityTargetQuery = createQuery({
-  path: 'getBeneficiarySecurityTarget',
   inputValidation: idSchema,
   securityCheck,
   handler

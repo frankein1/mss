@@ -38,7 +38,6 @@ export type GetBeneficiaryOutput = Prisma.PromiseReturnType<
 >['beneficiary']
 
 export const getBeneficiaryDetailsQuery = createQuery({
-  path: 'getBeneficiaryDetails',
   inputValidation: idSchema,
   securityCheck,
   handler

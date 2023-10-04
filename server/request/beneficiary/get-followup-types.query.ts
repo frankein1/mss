@@ -132,7 +132,6 @@ export type GetBeneficiaryFollowupTypesOutput = Prisma.PromiseReturnType<
 >
 
 export const getBeneficiaryFollowupTypesQuery = createQuery({
-  path: 'getBeneficiaryFollowupTypes',
   inputValidation: idSchema,
   securityCheck,
   handler

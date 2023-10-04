@@ -1,10 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/request'
-import {
-  ProtectedAppContext,
-  ProtectedAppContextUser,
-  invalidError
-} from '~/server/trpc'
+import { ProtectedAppContext, invalidError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import {
   SecurityRuleGrantee,
@@ -19,7 +15,7 @@ import {
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 
-function getPermissionConditions(user: ProtectedAppContextUser) {
+function getPermissionConditions(user: SecurityRuleGrantee) {
   if (canOnlyListItsUploadedDocuments(user)) {
     return { createdById: user.id }
   }
@@ -124,7 +120,6 @@ export type Documents = GetBeneficiaryDocumentsOutput['documents']
 export type DocumentItem = Documents[0]
 
 export const getBeneficiaryDocumentsQuery = createQuery({
-  path: 'getBeneficiaryDocuments',
   inputValidation: getDocumentsSchema,
   securityCheck,
   handler

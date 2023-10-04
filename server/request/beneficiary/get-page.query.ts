@@ -133,7 +133,6 @@ function prepareBeneficiariesWithFollowupTypes(
 }
 
 export const getBeneficiariesQuery = createQuery({
-  path: 'getBeneficiaries',
   inputValidation: getBeneficiariesSchema,
   securityCheck,
   handler

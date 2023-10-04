@@ -226,7 +226,6 @@ const handler = async ({
 }
 
 export const getBeneficiaryHistoryQuery = createQuery({
-  path: 'getBeneficiaryHistory',
   inputValidation: getHistorySchema,
   securityCheck,
   handler

@@ -87,7 +87,6 @@ const handler = async ({
 }
 
 export const updateGeneralInformationMutation = createMutation({
-  path: 'updateGeneralInformation',
   inputValidation: updateBeneficiaryGeneralInformationSchema,
   securityCheck,
   handler

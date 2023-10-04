@@ -214,7 +214,6 @@ function getDataFromSources(
 }
 
 export const saveDraftMutation = createMutation({
-  path: 'saveDraft',
   inputValidation: saveDraftSchema,
   securityCheck,
   handler

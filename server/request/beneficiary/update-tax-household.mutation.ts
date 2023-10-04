@@ -98,7 +98,6 @@ const handler = async ({
 }
 
 export const updateTaxHouseholdMutation = createMutation({
-  path: 'updateTaxHousehold',
   inputValidation: updateBeneficiaryTaxHouseholdSchema,
   securityCheck,
   handler

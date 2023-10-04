@@ -24,7 +24,6 @@ const handler = async ({
 }
 
 export const isBeneficiaryReferentQuery = createQuery({
-  path: 'isBeneficiaryReferent',
   inputValidation: idSchema,
   securityCheck,
   handler
