@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { createQuery } from '~/server/trpc/request'
+import { createQuery } from '~/server/request'
 import { GetBeneficiariesInput, getBeneficiariesSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'

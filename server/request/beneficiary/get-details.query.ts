@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { createQuery } from '~/server/trpc/request'
+import { createQuery } from '~/server/request'
 import { getBeneficiaryWithRelations } from '~/server/query/beneficiaires'
 import { ProtectedAppContext } from '~/server/trpc'
 import {

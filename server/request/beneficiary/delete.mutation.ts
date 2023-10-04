@@ -8,7 +8,7 @@ import {
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
-import { createMutation } from '~/server/trpc/request/createRequest'
+import { createMutation } from '~/server/request/createRequest'
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.id)

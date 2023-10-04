@@ -1,5 +1,5 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/trpc/request'
+import { createMutation } from '~/server/request'
 import {
   CreateBeneficiaryInput,
   createBeneficiarySchema

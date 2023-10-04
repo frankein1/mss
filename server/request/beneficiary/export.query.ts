@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { createQuery } from '../../../request/createRequest'
+import { createQuery } from '~/server/request'
 import { beneficiaryFieldLabels } from '~/client/labels'
 import { prismaClient } from '~/server/prisma'
 import {

@@ -1,7 +1,7 @@
 import { H3Event } from 'h3'
 import { ZodType, z } from 'zod'
 import { StructureType } from '@prisma/client'
-import { forbiddenError } from '../trpcErrors'
+import { forbiddenError } from '../trpc/trpcErrors'
 import {
   SecurityRule,
   SecurityRuleGrantee

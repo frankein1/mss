@@ -1,53 +1,45 @@
 import { UserActivityType } from '@prisma/client'
-import { createMutation } from '~/server/trpc/request'
+import { createMutation } from '~/server/request'
 import {
   SecurityRuleGrantee,
   canEditBeneficiary,
-  canEditBeneficiaryHealthInfo,
-  canSetBeneficiaryNir
+  canEditBeneficiaryOccupationIncome
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
-  UpdateBeneficiaryHealthInput,
-  updateBeneficiaryHealthSchema
+  UpdateBeneficiaryOccupationInput,
+  updateBeneficiaryOccupationSchema
 } from '~/server/schema'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
-  input: UpdateBeneficiaryHealthInput
+  input: UpdateBeneficiaryOccupationInput
 ) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.id)
 
   return (
     canEditBeneficiary(grantee, beneficiary) &&
-    canEditBeneficiaryHealthInfo(grantee, beneficiary)
+    canEditBeneficiaryOccupationIncome(grantee, beneficiary)
   )
 }
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx: { user }
 }: {
-  input: UpdateBeneficiaryHealthInput
+  input: UpdateBeneficiaryOccupationInput
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.id)
 
-  const { id, socialSecurityNumber, ...health } = input
-
-  let data = {}
-  data = { ...data, ...health }
-
-  if (canSetBeneficiaryNir(structure.type)) {
-    data = { ...data, socialSecurityNumber }
-  }
+  const { id, ...occupation } = input
 
   const updatedBeneficiary = await prismaClient.beneficiary.update({
     where: { id },
-    data
+    data: occupation
   })
 
   await addUserActivity({
@@ -60,9 +52,9 @@ const handler = async ({
   return updatedBeneficiary
 }
 
-export const updateHealthMutation = createMutation({
-  path: 'updateHealth',
-  inputValidation: updateBeneficiaryHealthSchema,
+export const updateOccupationIncomeMutation = createMutation({
+  path: 'updateOccupationIncome',
+  inputValidation: updateBeneficiaryOccupationSchema,
   securityCheck,
   handler
 })

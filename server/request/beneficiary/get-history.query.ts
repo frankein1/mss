@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import { HelpRequestStatus, FollowupStatus } from '@prisma/client'
-import { createQuery } from '~/server/trpc/request'
+import { createQuery } from '~/server/request'
 import { prismaClient } from '~/server/prisma'
 import {
   GetHistoryInput,

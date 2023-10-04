@@ -1,15 +1,4 @@
 import {
-  deleteBeneficiaryMutation,
-  createBeneficiaryMutation,
-  updateGeneralInformationMutation,
-  updateEntourageMutation,
-  updateHealthMutation,
-  updateOccupationIncomeMutation,
-  updateExternalOrganisationsMutation,
-  saveDraftMutation,
-  updateTaxHouseholdMutation
-} from './mutation'
-import {
   isBeneficiaryReferentQuery,
   getBeneficiaryDetailsQuery,
   getBeneficiaryHistoryQuery,
@@ -19,8 +8,17 @@ import {
   searchBeneficiaryQuery,
   getBeneficiaryFollowupTypesQuery,
   getBeneficiaryMinimalInfoQuery,
-  getBeneficiarySecurityTargetQuery
-} from './query'
+  getBeneficiarySecurityTargetQuery,
+  deleteBeneficiaryMutation,
+  createBeneficiaryMutation,
+  updateGeneralInformationMutation,
+  updateEntourageMutation,
+  updateHealthMutation,
+  updateOccupationIncomeMutation,
+  updateExternalOrganisationsMutation,
+  saveDraftMutation,
+  updateTaxHouseholdMutation
+} from '~/server/request/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryRouter = router({
