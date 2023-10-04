@@ -1,8 +1,10 @@
 import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
-import { ProtectedAppContextUser } from '~/server/trpc'
+import {
+  SecurityRuleGrantee,
+  canOnlyListItsBeneficiaries
+} from '~/server/security/rules'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
 function getFinancialHelpRequestCount(
@@ -106,7 +108,7 @@ async function getFinancialHelpRequestAmountByType(
 }
 
 export async function getHelpRequestFinancialStatsQuery(
-  user: ProtectedAppContextUser,
+  user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
   const referents = canOnlyListItsBeneficiaries(user)

@@ -4,9 +4,13 @@ export const idSchema = z.object({
   id: z.string()
 })
 
+export type IdInput = z.infer<typeof idSchema>
+
 export const keySchema = z.object({
   key: z.string()
 })
+
+export const emptySchema = z.object({})
 
 export { paginatedSchema } from './helpers.schema'
 export type { PaginatedInput } from './helpers.schema'

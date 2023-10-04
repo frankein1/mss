@@ -3,4 +3,4 @@ export type {
   AdminStructureOutput,
   AdminUserOutput,
   AdminUsersOutput
-} from '~/server/trpc/controller/admin'
+} from '~/server/request/admin'

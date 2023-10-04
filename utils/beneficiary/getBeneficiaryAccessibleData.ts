@@ -1,17 +1,18 @@
-import { ProtectedAppContextUser, ProtectedAppContext } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import {
   canListBeneficiaryRelatives,
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,
   canViewBeneficiaryExternalOrganisations,
   canViewBeneficiaryNir,
-  canViewDocument
+  canViewDocument,
+  SecurityRuleGrantee
 } from '~/server/security/rules'
 import type { BeneficiaryWithRelations } from '~/types/beneficiary'
 import { getBeneficiaryFollowUpTypes } from '~/utils/beneficiary'
 
 function getBeneficiaryMeta(
-  user: ProtectedAppContextUser,
+  user: SecurityRuleGrantee,
   beneficiary: BeneficiaryWithRelations
 ) {
   return {
@@ -34,7 +35,7 @@ function getBeneficiaryMeta(
 }
 
 function getBeneficiaryHistory(
-  user: ProtectedAppContextUser,
+  user: SecurityRuleGrantee,
   beneficiary: BeneficiaryWithRelations
 ) {
   return {
@@ -81,7 +82,7 @@ function getBeneficiaryGeneralInformation(
 }
 
 function getBeneficiaryRelatives(
-  user: ProtectedAppContextUser,
+  user: SecurityRuleGrantee,
   beneficiary: BeneficiaryWithRelations
 ) {
   if (!canListBeneficiaryRelatives(user, beneficiary)) {
@@ -123,7 +124,7 @@ function getBeneficiaryHealth(
 }
 
 function getBeneficiaryOccupationIncome(
-  user: ProtectedAppContextUser,
+  user: SecurityRuleGrantee,
   beneficiary: BeneficiaryWithRelations
 ) {
   if (!canViewBeneficiaryOccupationIncome(user, beneficiary)) {
@@ -153,7 +154,7 @@ function getBeneficiaryOccupationIncome(
 }
 
 function getBeneficiaryExternalOrganisations(
-  user: ProtectedAppContextUser,
+  user: SecurityRuleGrantee,
   beneficiary: BeneficiaryWithRelations
 ) {
   if (!canViewBeneficiaryExternalOrganisations(user, beneficiary)) {

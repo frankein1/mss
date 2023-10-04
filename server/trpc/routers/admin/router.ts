@@ -1,43 +1,43 @@
 import { adminProcedure, router } from '~/server/trpc'
+
 import {
-  adminCreateStructureSchema,
-  adminCreateUserSchema,
-  adminEditStructureSchema,
-  adminEditUserSchema,
-  adminGetStructuresSchema,
-  adminGetUsersSchema,
-  idSchema
-} from '~/server/schema'
-import {
-  createStructureController,
-  createUserController,
-  editStructureController,
-  getStructuresController,
-  getStructureController,
-  getUsersController,
-  getUserController,
-  getOverviewController,
-  editUserController
-} from '~/server/trpc/controller/admin'
+  createStructureMutation,
+  createUserMutation,
+  editStructureMutation,
+  getStructuresQuery,
+  getStructureQuery,
+  getUsersQuery,
+  getUserQuery,
+  getOverviewQuery,
+  editUserMutation
+} from '~/server/request/admin'
 
 export const adminRouter = router({
   createStructure: adminProcedure
-    .input(adminCreateStructureSchema)
-    .mutation(createStructureController),
+    .input(createStructureMutation.inputValidation)
+    .mutation(createStructureMutation.executeAsAdmin),
   getStructures: adminProcedure
-    .input(adminGetStructuresSchema)
-    .query(getStructuresController),
-  getStructure: adminProcedure.input(idSchema).query(getStructureController),
+    .input(getStructuresQuery.inputValidation)
+    .query(getStructuresQuery.executeAsAdmin),
+  getStructure: adminProcedure
+    .input(getStructureQuery.inputValidation)
+    .query(getStructureQuery.executeAsAdmin),
   editStructure: adminProcedure
-    .input(adminEditStructureSchema)
-    .mutation(editStructureController),
+    .input(editStructureMutation.inputValidation)
+    .mutation(editStructureMutation.executeAsAdmin),
   createUser: adminProcedure
-    .input(adminCreateUserSchema)
-    .mutation(createUserController),
-  getUsers: adminProcedure.input(adminGetUsersSchema).query(getUsersController),
-  getUser: adminProcedure.input(idSchema).query(getUserController),
+    .input(createUserMutation.inputValidation)
+    .mutation(createUserMutation.executeAsAdmin),
+  getUsers: adminProcedure
+    .input(getUsersQuery.inputValidation)
+    .query(getUsersQuery.executeAsAdmin),
+  getUser: adminProcedure
+    .input(getUserQuery.inputValidation)
+    .query(getUserQuery.executeAsAdmin),
   editUser: adminProcedure
-    .input(adminEditUserSchema)
-    .mutation(editUserController),
-  getOverview: adminProcedure.query(getOverviewController)
+    .input(editUserMutation.inputValidation)
+    .mutation(editUserMutation.executeAsAdmin),
+  getOverview: adminProcedure
+    .input(getOverviewQuery.inputValidation)
+    .query(getOverviewQuery.executeAsAdmin)
 })
