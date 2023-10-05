@@ -1,7 +1,9 @@
 import { UserActivityType } from '@prisma/client'
-import { EditDocumentInput } from '~/server/schema'
+import { createMutation } from '~/server/request'
+import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import {
+  SecurityRuleGrantee,
   canEditDocument,
   canSetDocumentAsConfidential
 } from '~/server/security/rules'
@@ -14,7 +16,7 @@ import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 function getDocumentSecurityTarget(key: string) {
-  return prismaClient.document.findUnique({
+  return prismaClient.document.findUniqueOrThrow({
     where: { key },
     select: {
       createdById: true,
@@ -23,7 +25,16 @@ function getDocumentSecurityTarget(key: string) {
   })
 }
 
-export const editDocumentHandler = async ({
+const securityCheck = async (
+  user: SecurityRuleGrantee,
+  input: EditDocumentInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const document = await getDocumentSecurityTarget(input.key)
+  return canEditDocument(user, beneficiary, document)
+}
+
+const handler = async ({
   ctx: { user },
   input
 }: {
@@ -39,14 +50,6 @@ export const editDocumentHandler = async ({
   }
 
   const document = await getDocumentSecurityTarget(key)
-
-  if (!document) {
-    throw invalidError()
-  }
-
-  if (!canEditDocument(user, beneficiary, document)) {
-    throw forbiddenError()
-  }
 
   if (
     data.confidential !== document.confidential &&
@@ -70,3 +73,9 @@ export const editDocumentHandler = async ({
 
   return { document: updatedDocument }
 }
+
+export const editDocumentMutation = createMutation({
+  inputValidation: editDocumentSchema,
+  securityCheck,
+  handler
+})

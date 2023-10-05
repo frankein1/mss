@@ -1,13 +1,15 @@
 import { Prisma } from '@prisma/client'
+import { createQuery } from '../createRequest'
 import { followupFieldLabels } from '~/client/labels'
 import { prismaClient } from '~/server/prisma'
-import { ExportFollowupsInput } from '~/server/schema'
+import { ExportFollowupsInput, exportFollowupsSchema } from '~/server/schema'
 import {
   canOnlyListItsBeneficiaries,
   canViewFollowup,
-  canExportHistory
+  canExportHistory,
+  SecurityRuleGrantee
 } from '~/server/security/rules'
-import { forbiddenError, ProtectedAppContext } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareFollowupFilters } from '~/utils/filters'
@@ -15,17 +17,13 @@ import { getFollowupAccessibleData } from '~/utils/followup'
 import { getFollowupExportData } from '~/utils/export/getFollowupExportData'
 import { FOLLOWUP_EXPORTED_FIELDS } from '~/utils/constants/export'
 
-export const exportFollowupsHandler = async ({
+const handler = async ({
   input,
   ctx: { user, structure }
 }: {
   input: ExportFollowupsInput
   ctx: ProtectedAppContext
 }) => {
-  if (!canExportHistory(user)) {
-    throw forbiddenError()
-  }
-
   const columns = FOLLOWUP_EXPORTED_FIELDS.map(key => ({
     key,
     header: followupFieldLabels[key]
@@ -70,3 +68,16 @@ export const exportFollowupsHandler = async ({
 
   return await createExport(user.id, [{ name: 'Entretiens', columns, rows }])
 }
+
+const securityCheck = (
+  user: SecurityRuleGrantee,
+  _input: ExportFollowupsInput
+) => {
+  return canExportHistory(user)
+}
+
+export const exportFollowupsQuery = createQuery({
+  inputValidation: exportFollowupsSchema,
+  securityCheck,
+  handler
+})

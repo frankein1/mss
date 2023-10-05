@@ -1,7 +1,0 @@
-export * from './get-page.controller'
-export { getFollowupDetailsHandler } from './get-details.controller'
-export { exportFollowupsHandler } from './export.controller'
-export { updateFollowupHandler } from './update.controller'
-export { quickUpdateFollowupHandler } from './quick-update.controller'
-export { addFollowupHandler } from './create.controller'
-export { deleteFollowupHandler } from './delete.controller'

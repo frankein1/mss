@@ -1,36 +1,27 @@
 import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
-import type { EditFollowupInput } from '~/server/schema'
+import { createMutation } from '../createRequest'
+import { ProtectedAppContext } from '~/server/trpc'
+import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
+import { SecurityRuleGrantee, canCreateFollowup } from '~/server/security/rules'
 import {
-  canEditFollowup,
-  canEditFollowupPrivateSynthesis
-} from '~/server/security/rules'
-import {
-  FollowupTarget,
   prepareMinistryData,
   prepareFollowupTypesMutations
 } from '~/utils/followup'
+import { getBeneficiarySecurityTarget } from '~/server/security'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
-import {
-  FollowupWithRelations,
-  getFollowupWithRelations
-} from '~/server/query/followups'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
-export async function prepareFollowupData({
+async function prepareFollowupData({
   input,
   transaction,
-  ctx,
-  target
+  ctx: { user, structure }
 }: {
-  input: EditFollowupInput
+  input: AddFollowupInput
   transaction: Prisma.TransactionClient
   ctx: ProtectedAppContext
-  target: FollowupTarget
-}): Promise<Prisma.FollowupUncheckedUpdateInput> {
-  const { structure, user } = ctx
+}): Promise<Prisma.FollowupUncheckedCreateInput> {
   const { type } = await transaction.structure.findUniqueOrThrow({
     where: { id: structure.id },
     select: {
@@ -65,36 +56,28 @@ export async function prepareFollowupData({
 
   return {
     ...data,
-    types: prepareFollowupTypesMutations(input.types, target.types),
-    documents: prepareDocumentsMutations(input.documents, target.documents),
+    structureId: structure.id,
+    types: prepareFollowupTypesMutations(input.types),
+    documents: prepareDocumentsMutations(input.documents),
+    createdById: user.id,
     place:
       input.medium === FollowupMedium.ExternalAppointment ? input.place : null,
     thirdPersonName:
       input.medium === FollowupMedium.ThirdParty ? input.thirdPersonName : null,
-    privateSynthesis: canEditFollowupPrivateSynthesis(user, target)
-      ? input.privateSynthesis
-      : undefined,
     structureName: input.redirected ? input.structureName : null,
     prescribingOrganizationId,
     ...ministryData
   }
 }
 
-async function updateTransaction(
+async function createTransaction(
   transaction: Prisma.TransactionClient,
-  input: EditFollowupInput,
-  ctx: ProtectedAppContext,
-  target: Exclude<FollowupWithRelations, null>
+  input: AddFollowupInput,
+  ctx: ProtectedAppContext
 ) {
-  const data = await prepareFollowupData({
-    input,
-    transaction,
-    ctx,
-    target
-  })
+  const data = await prepareFollowupData({ input, transaction, ctx })
 
-  const fu = await transaction.followup.update({
-    where: { id: input.id },
+  const fu = await transaction.followup.create({
     data,
     include: {
       beneficiary: {
@@ -109,27 +92,35 @@ async function updateTransaction(
   await addUserActivity({
     transaction,
     userId: ctx.user.id,
-    activity: UserActivityType.UPDATE,
+    activity: UserActivityType.CREATE,
     object: 'Followup',
-    objectId: input.id
+    objectId: fu.id
   })
   return fu
 }
 
-export const updateFollowupHandler = async ({
+const handler = ({
   input,
   ctx
 }: {
-  input: EditFollowupInput
+  input: AddFollowupInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await getFollowupWithRelations(input.id)
-
-  if (!target || !canEditFollowup(ctx.user, target)) {
-    throw forbiddenError()
-  }
-
   return prismaClient.$transaction(transaction =>
-    updateTransaction(transaction, input, ctx, target)
+    createTransaction(transaction, input, ctx)
   )
 }
+
+const securityCheck = async (
+  user: SecurityRuleGrantee,
+  input: AddFollowupInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  return canCreateFollowup(user, beneficiary)
+}
+
+export const createFollowupMutation = createMutation({
+  inputValidation: addFollowupSchema,
+  securityCheck,
+  handler
+})

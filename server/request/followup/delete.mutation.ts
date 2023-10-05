@@ -1,15 +1,13 @@
 import { UserActivityType } from '@prisma/client'
-import {
-  ProtectedAppContext,
-  forbiddenError,
-  invalidError
-} from '~/server/trpc'
-import { canDeleteFollowup } from '~/server/security/rules'
+import { createMutation } from '../createRequest'
+import { ProtectedAppContext } from '~/server/trpc'
+import { SecurityRuleGrantee, canDeleteFollowup } from '~/server/security/rules'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import { IdInput, idSchema } from '~/server/schema'
 
 function getFollowup(id: string) {
-  return prismaClient.followup.findUnique({
+  return prismaClient.followup.findUniqueOrThrow({
     where: { id },
     include: {
       beneficiary: {
@@ -21,23 +19,13 @@ function getFollowup(id: string) {
   })
 }
 
-export const deleteFollowupHandler = async ({
+const handler = async ({
   input: { id },
   ctx: { user }
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const followup = await getFollowup(id)
-
-  if (!followup) {
-    throw invalidError('Followup not found')
-  }
-
-  if (!canDeleteFollowup(user, followup)) {
-    throw forbiddenError()
-  }
-
   await prismaClient.followup.delete({ where: { id } })
 
   await addUserActivity({
@@ -47,3 +35,15 @@ export const deleteFollowupHandler = async ({
     objectId: id
   })
 }
+
+const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
+  const followup = await getFollowup(input.id)
+
+  return canDeleteFollowup(user, followup)
+}
+
+export const deleteFollowupMutation = createMutation({
+  inputValidation: idSchema,
+  securityCheck,
+  handler
+})

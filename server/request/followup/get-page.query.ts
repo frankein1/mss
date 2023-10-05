@@ -1,13 +1,15 @@
 import type { Prisma } from '@prisma/client'
-import type { GetFollowupsInput } from '~/server/schema'
+import { createQuery } from '../createRequest'
+import { GetFollowupsInput, getFollowupsSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { prepareFollowupFilters } from '~/utils/filters'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { prepareGetFollowupsPageSelect } from '~/utils/followup'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getFollowupsHandler = async ({
+const handler = async ({
   input,
   ctx
 }: {
@@ -53,7 +55,13 @@ export const getFollowupsHandler = async ({
 }
 
 export type GetFollowupsOutput = Prisma.PromiseReturnType<
-  typeof getFollowupsHandler
+  typeof handler
 >['followups']
 
 export type FollowupItem = GetFollowupsOutput[0]
+
+export const getFollowupsQuery = createQuery({
+  inputValidation: getFollowupsSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

@@ -1,4 +1,4 @@
 export type {
   GetFollowupsOutput,
   FollowupItem
-} from '~/server/trpc/controller/followup'
+} from '~/server/request/followup'

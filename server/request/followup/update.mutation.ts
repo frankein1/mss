@@ -1,30 +1,39 @@
 import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
-import {
-  ProtectedAppContext,
-  invalidError,
-  forbiddenError
-} from '~/server/trpc'
-import type { AddFollowupInput } from '~/server/schema'
+import { createMutation } from '../createRequest'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { canCreateFollowup } from '~/server/security/rules'
 import {
+  SecurityRuleGrantee,
+  canEditFollowup,
+  canEditFollowupPrivateSynthesis
+} from '~/server/security/rules'
+import {
+  FollowupTarget,
   prepareMinistryData,
   prepareFollowupTypesMutations
 } from '~/utils/followup'
-import { getBeneficiarySecurityTarget } from '~/server/security'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import {
+  FollowupWithRelations,
+  getFollowupWithRelations
+} from '~/server/query/followups'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import { getHelpRequestsecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
 
-export async function prepareFollowupData({
+async function prepareFollowupData({
   input,
   transaction,
-  ctx: { user, structure }
+  ctx,
+  target
 }: {
-  input: AddFollowupInput
+  input: EditFollowupInput
   transaction: Prisma.TransactionClient
   ctx: ProtectedAppContext
-}): Promise<Prisma.FollowupUncheckedCreateInput> {
+  target: FollowupTarget
+}): Promise<Prisma.FollowupUncheckedUpdateInput> {
+  const { structure, user } = ctx
   const { type } = await transaction.structure.findUniqueOrThrow({
     where: { id: structure.id },
     select: {
@@ -59,28 +68,36 @@ export async function prepareFollowupData({
 
   return {
     ...data,
-    structureId: structure.id,
-    types: prepareFollowupTypesMutations(input.types),
-    documents: prepareDocumentsMutations(input.documents),
-    createdById: user.id,
+    types: prepareFollowupTypesMutations(input.types, target.types),
+    documents: prepareDocumentsMutations(input.documents, target.documents),
     place:
       input.medium === FollowupMedium.ExternalAppointment ? input.place : null,
     thirdPersonName:
       input.medium === FollowupMedium.ThirdParty ? input.thirdPersonName : null,
+    privateSynthesis: canEditFollowupPrivateSynthesis(user, target)
+      ? input.privateSynthesis
+      : undefined,
     structureName: input.redirected ? input.structureName : null,
     prescribingOrganizationId,
     ...ministryData
   }
 }
 
-async function createTransaction(
+async function updateTransaction(
   transaction: Prisma.TransactionClient,
-  input: AddFollowupInput,
-  ctx: ProtectedAppContext
+  input: EditFollowupInput,
+  ctx: ProtectedAppContext,
+  target: Exclude<FollowupWithRelations, null>
 ) {
-  const data = await prepareFollowupData({ input, transaction, ctx })
+  const data = await prepareFollowupData({
+    input,
+    transaction,
+    ctx,
+    target
+  })
 
-  const fu = await transaction.followup.create({
+  const fu = await transaction.followup.update({
+    where: { id: input.id },
     data,
     include: {
       beneficiary: {
@@ -95,31 +112,41 @@ async function createTransaction(
   await addUserActivity({
     transaction,
     userId: ctx.user.id,
-    activity: UserActivityType.CREATE,
+    activity: UserActivityType.UPDATE,
     object: 'Followup',
-    objectId: fu.id
+    objectId: input.id
   })
   return fu
 }
 
-export const addFollowupHandler = async ({
+const handler = async ({
   input,
   ctx
 }: {
-  input: AddFollowupInput
+  input: EditFollowupInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const target = await getFollowupWithRelations(input.id)
 
-  if (!beneficiary) {
-    throw invalidError('Beneficiary not found')
-  }
-
-  if (!canCreateFollowup(ctx.user, beneficiary)) {
+  if (!target || !canEditFollowup(ctx.user, target)) {
     throw forbiddenError()
   }
 
   return prismaClient.$transaction(transaction =>
-    createTransaction(transaction, input, ctx)
+    updateTransaction(transaction, input, ctx, target)
   )
 }
+
+const securityCheck = async (
+  user: SecurityRuleGrantee,
+  input: EditFollowupInput
+) => {
+  const target = await getHelpRequestsecurityTarget(input.id)
+  return canEditFollowup(user, target)
+}
+
+export const updateFollowupMutation = createMutation({
+  handler,
+  inputValidation: editFollowupSchema,
+  securityCheck
+})
