@@ -1,5 +1,6 @@
 import { NotificationType, Prisma, UserActivityType } from '@prisma/client'
-import { AddCommentInput } from '~/server/schema'
+import { createMutation } from '~/server/request'
+import { AddCommentInput, addCommentSchema } from '~/server/schema'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import {
   SecurityTargetWithReferents,
@@ -14,9 +15,12 @@ import {
 } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import {
+  AllowSecurityCheck,
+  SecurityRuleGrantee
+} from '~/server/security/rules/types'
 
-export const addCommentHandler = async ({
+const handler = async ({
   ctx: { user },
   input
 }: {
@@ -161,3 +165,9 @@ async function addNewCommentNotification(
     }
   })
 }
+
+export const addCommentMutation = createMutation({
+  inputValidation: addCommentSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

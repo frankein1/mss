@@ -1,7 +1,8 @@
 import { router, protectedProcedure } from '~/server/trpc'
-import { addCommentSchema } from '~/server/schema'
-import { addCommentHandler } from '~/server/trpc/controller/comment'
+import { addCommentMutation } from '~/server/request/comment'
 
 export const commentRouter = router({
-  add: protectedProcedure.input(addCommentSchema).mutation(addCommentHandler)
+  add: protectedProcedure
+    .input(addCommentMutation.inputValidation)
+    .mutation(addCommentMutation.execute)
 })
