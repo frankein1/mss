@@ -1,12 +1,11 @@
+import { createQuery } from '../createRequest'
 import { prismaClient } from '~/server/prisma'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
+import { emptySchema } from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getUserController = async ({
-  ctx
-}: {
-  ctx: ProtectedAppContext
-}) => {
+const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
   const { user: ctxUser } = ctx
 
   if (!ctxUser) {
@@ -59,3 +58,9 @@ export const getUserController = async ({
 
   return jwtUser
 }
+
+export const getUserQuery = createQuery({
+  inputValidation: emptySchema,
+  handler,
+  securityCheck: AllowSecurityCheck
+})

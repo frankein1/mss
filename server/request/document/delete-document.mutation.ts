@@ -1,17 +1,26 @@
 import { UserActivityType } from '@prisma/client'
-import { DeleteDocumentInput } from '~/server/schema'
-import {
-  ProtectedAppContext,
-  forbiddenError,
-  invalidError
-} from '~/server/trpc'
+import { createMutation } from '~/server/request'
+import { DeleteDocumentInput, deleteDocumentSchema } from '~/server/schema'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { beneficiarySecurityTargetInclude } from '~/server/security'
-import { canDeleteDocument } from '~/server/security/rules'
+import { SecurityRuleGrantee, canDeleteDocument } from '~/server/security/rules'
 import { deleteUploadedFile } from '~/server/lib/s3'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
-export const deleteDocumentHandler = async ({
+const securityCheck = async (
+  user: SecurityRuleGrantee,
+  input: DeleteDocumentInput
+) => {
+  const document = await prismaClient.document.findUniqueOrThrow({
+    where: { key: input.documentKey },
+    include: { beneficiary: beneficiarySecurityTargetInclude }
+  })
+
+  return canDeleteDocument(user, document.beneficiary)
+}
+
+const handler = async ({
   ctx: { user },
   input
 }: {
@@ -20,18 +29,10 @@ export const deleteDocumentHandler = async ({
 }) => {
   const { documentKey } = input
 
-  const document = await prismaClient.document.findUnique({
+  const document = await prismaClient.document.findUniqueOrThrow({
     where: { key: documentKey },
     include: { beneficiary: beneficiarySecurityTargetInclude }
   })
-
-  if (!document) {
-    throw invalidError()
-  }
-
-  if (!canDeleteDocument(user, document.beneficiary)) {
-    throw forbiddenError()
-  }
 
   await deleteUploadedFile({ key: document.filenameDisk }).catch(error => {
     throw error
@@ -48,3 +49,9 @@ export const deleteDocumentHandler = async ({
     objectId: documentKey
   })
 }
+
+export const deleteDocumentMutation = createMutation({
+  inputValidation: deleteDocumentSchema,
+  handler,
+  securityCheck
+})

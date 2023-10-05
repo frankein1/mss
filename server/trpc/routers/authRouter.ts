@@ -1,6 +1,8 @@
 import { protectedProcedure, router } from '..'
-import { getUserController } from '~/server/trpc/controller/auth'
+import { getUserQuery } from '~/server/request/admin'
 
 export const authRouter = router({
-  getUser: protectedProcedure.query(getUserController)
+  getUser: protectedProcedure
+    .input(getUserQuery.inputValidation)
+    .query(getUserQuery.execute)
 })

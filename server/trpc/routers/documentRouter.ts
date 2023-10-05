@@ -1,23 +1,18 @@
-import {
-  createViewUrlHandler,
-  deleteDocumentHandler,
-  editDocumentHandler
-} from '../controller/document'
-import {
-  editDocumentSchema,
-  createViewUrlSchema,
-  deleteDocumentSchema
-} from '../../schema/document.schema'
 import { protectedProcedure, router } from '..'
+import {
+  createViewUrlMutation,
+  deleteDocumentMutation,
+  editDocumentMutation
+} from '~/server/request/document'
 
 export const documentRouter = router({
   edit: protectedProcedure
-    .input(editDocumentSchema)
-    .mutation(editDocumentHandler),
+    .input(editDocumentMutation.inputValidation)
+    .mutation(editDocumentMutation.execute),
   createViewUrl: protectedProcedure
-    .input(createViewUrlSchema)
-    .mutation(createViewUrlHandler),
+    .input(createViewUrlMutation.inputValidation)
+    .mutation(createViewUrlMutation.execute),
   delete: protectedProcedure
-    .input(deleteDocumentSchema)
-    .mutation(deleteDocumentHandler)
+    .input(deleteDocumentMutation.inputValidation)
+    .mutation(deleteDocumentMutation.execute)
 })
