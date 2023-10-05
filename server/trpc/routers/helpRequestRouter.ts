@@ -1,40 +1,35 @@
 import {
-  addHelpRequestHandler,
-  getHelpRequestsHandler,
-  getHelpRequestDetailsHandler,
-  quickUpdateHelpRequestHandler,
-  updateHelpRequestHandler,
-  deleteHelpRequestHandler,
-  exportHelpRequestsHandler
-} from '~/server/trpc/controller/helpRequest'
-import {
-  createHelpRequestSchema,
-  getHelpRequestsSchema,
-  quickEditHelpRequestSchema,
-  editHelpRequestSchema,
-  idSchema,
-  exportHelpRequestsSchema
-} from '~/server/schema'
+  createHelpRequestMutation,
+  deleteHelpRequestMutation,
+  exportHelpRequestQuery,
+  getHelpRequestDetailsQuery,
+  getHelpRequestsQuery,
+  quickUpdateHelpRequestMutation,
+  updateHelpRequestMutation
+} from '~/server/request/helpRequest'
+
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const helpRequestRouter = router({
   add: protectedProcedure
-    .input(createHelpRequestSchema)
-    .mutation(addHelpRequestHandler),
+    .input(createHelpRequestMutation.inputValidation)
+    .mutation(createHelpRequestMutation.execute),
   getHelpRequests: protectedProcedure
-    .input(getHelpRequestsSchema)
-    .query(getHelpRequestsHandler),
+    .input(getHelpRequestsQuery.inputValidation)
+    .query(getHelpRequestsQuery.execute),
   exportHelpRequests: protectedProcedure
-    .input(exportHelpRequestsSchema)
-    .query(exportHelpRequestsHandler),
+    .input(exportHelpRequestQuery.inputValidation)
+    .query(exportHelpRequestQuery.execute),
   getHelpRequestDetails: protectedProcedure
-    .input(idSchema)
-    .query(getHelpRequestDetailsHandler),
+    .input(getHelpRequestDetailsQuery.inputValidation)
+    .query(getHelpRequestDetailsQuery.execute),
   quickUpdate: protectedProcedure
-    .input(quickEditHelpRequestSchema)
-    .mutation(quickUpdateHelpRequestHandler),
+    .input(quickUpdateHelpRequestMutation.inputValidation)
+    .mutation(quickUpdateHelpRequestMutation.execute),
   update: protectedProcedure
-    .input(editHelpRequestSchema)
-    .mutation(updateHelpRequestHandler),
-  delete: protectedProcedure.input(idSchema).mutation(deleteHelpRequestHandler)
+    .input(updateHelpRequestMutation.inputValidation)
+    .mutation(updateHelpRequestMutation.execute),
+  delete: protectedProcedure
+    .input(deleteHelpRequestMutation.inputValidation)
+    .mutation(deleteHelpRequestMutation.execute)
 })

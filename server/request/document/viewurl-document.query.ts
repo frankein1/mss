@@ -1,0 +1,57 @@
+import { UserActivityType } from '@prisma/client'
+import { createMutation } from '~/server/request'
+import { CreateViewUrlInput, createViewUrlSchema } from '~/server/schema'
+import { ProtectedAppContext } from '~/server/trpc'
+import { prismaClient } from '~/server/prisma'
+import { beneficiarySecurityTargetInclude } from '~/server/security'
+import { SecurityRuleGrantee, canViewDocument } from '~/server/security/rules'
+import { createSignedGetUrl } from '~/server/lib/s3'
+import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+
+const securityCheck = async (
+  user: SecurityRuleGrantee,
+  input: CreateViewUrlInput
+) => {
+  const { key } = input
+  const document = await prismaClient.document.findUniqueOrThrow({
+    where: { key },
+    include: { beneficiary: beneficiarySecurityTargetInclude }
+  })
+
+  return canViewDocument(user, document.beneficiary, document)
+}
+
+const handler = async ({
+  ctx: { user },
+  input
+}: {
+  ctx: ProtectedAppContext
+  input: CreateViewUrlInput
+}) => {
+  const { key } = input
+  const document = await prismaClient.document.findUniqueOrThrow({
+    where: { key }
+  })
+
+  const { s3 } = useRuntimeConfig()
+
+  const { url } = await createSignedGetUrl({
+    key: document.filenameDisk,
+    bucket: s3.bucket
+  })
+
+  await addUserActivity({
+    userId: user.id,
+    activity: UserActivityType.VIEW,
+    object: 'Document',
+    objectId: key
+  })
+
+  return { url }
+}
+
+export const createViewUrlMutation = createMutation({
+  inputValidation: createViewUrlSchema,
+  securityCheck,
+  handler
+})

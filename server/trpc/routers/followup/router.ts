@@ -1,38 +1,35 @@
 import {
-  addFollowupHandler,
-  exportFollowupsHandler,
-  getFollowupsHandler,
-  getFollowupDetailsHandler,
-  quickUpdateFollowupHandler,
-  updateFollowupHandler,
-  deleteFollowupHandler
-} from '~/server/trpc/controller/followup'
-import {
-  addFollowupSchema,
-  getFollowupsSchema,
-  idSchema,
-  editFollowupSchema,
-  quickEditFollowupSchema,
-  exportFollowupsSchema
-} from '~/server/schema'
+  getFollowupDetailsQuery,
+  deleteFollowupMutation,
+  createFollowupMutation,
+  getFollowupsQuery,
+  exportFollowupsQuery,
+  quickUpdateFollowupMutation,
+  updateFollowupMutation
+} from '~/server/request/followup'
+
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const followupRouter = router({
-  add: protectedProcedure.input(addFollowupSchema).mutation(addFollowupHandler),
+  add: protectedProcedure
+    .input(createFollowupMutation.inputValidation)
+    .mutation(createFollowupMutation.execute),
   getFollowups: protectedProcedure
-    .input(getFollowupsSchema)
-    .query(getFollowupsHandler),
+    .input(getFollowupsQuery.inputValidation)
+    .query(getFollowupsQuery.execute),
   exportFollowups: protectedProcedure
-    .input(exportFollowupsSchema)
-    .query(exportFollowupsHandler),
+    .input(exportFollowupsQuery.inputValidation)
+    .query(exportFollowupsQuery.execute),
   quickUpdate: protectedProcedure
-    .input(quickEditFollowupSchema)
-    .mutation(quickUpdateFollowupHandler),
+    .input(quickUpdateFollowupMutation.inputValidation)
+    .mutation(quickUpdateFollowupMutation.execute),
   update: protectedProcedure
-    .input(editFollowupSchema)
-    .mutation(updateFollowupHandler),
+    .input(updateFollowupMutation.inputValidation)
+    .mutation(updateFollowupMutation.execute),
   getFollowupDetails: protectedProcedure
-    .input(idSchema)
-    .query(getFollowupDetailsHandler),
-  delete: protectedProcedure.input(idSchema).mutation(deleteFollowupHandler)
+    .input(getFollowupDetailsQuery.inputValidation)
+    .query(getFollowupDetailsQuery.execute),
+  delete: protectedProcedure
+    .input(deleteFollowupMutation.inputValidation)
+    .mutation(deleteFollowupMutation.execute)
 })

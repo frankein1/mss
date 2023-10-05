@@ -98,7 +98,7 @@
 
     if (draftId) {
       try {
-        await useTrpcClient().draft.delete.mutate({ id: draftId })
+        await useTrpcClient().beneficiaryDraft.delete.mutate({ id: draftId })
       } catch {
         navigateTo(redirectRoute)
       }

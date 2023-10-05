@@ -1,0 +1,7 @@
+export * from './create.mutation'
+export * from './delete.mutation'
+export * from './export.query'
+export * from './get-details.query'
+export * from './get-page.query'
+export * from './quick-update.mutation'
+export * from './update.mutation'

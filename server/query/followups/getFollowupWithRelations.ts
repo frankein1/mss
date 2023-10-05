@@ -2,7 +2,7 @@ import type { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 
 export function getFollowupWithRelations(id: string) {
-  return prismaClient.followup.findUnique({
+  return prismaClient.followup.findUniqueOrThrow({
     where: { id },
     include: {
       beneficiary: {

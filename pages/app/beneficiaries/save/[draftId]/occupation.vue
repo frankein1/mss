@@ -137,7 +137,7 @@
   )
 
   async function loadBeneficiaryDraft() {
-    const beneficiaryDraft = (await trpcClient.draft.get.query({
+    const beneficiaryDraft = (await trpcClient.beneficiaryDraft.get.query({
       id: draftId
     })) as BeneficiaryDraft
 
