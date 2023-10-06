@@ -63,7 +63,7 @@
     data: agents,
     pending: agentsPending,
     error: agentsError
-  } = await trpcClient.config.getAgents.useQuery()
+  } = await trpcClient.config.getAgents.useQuery({})
 
   const {
     data,

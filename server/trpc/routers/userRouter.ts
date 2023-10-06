@@ -1,15 +1,22 @@
-import {
-  updateUserHandler,
-  addUserHandler,
-  getUsersHandler,
-  acceptCGUHandler
-} from '~/server/trpc/controller/user.controller'
 import { protectedProcedure, router } from '~/server/trpc'
-import { editUserSchema, createUserSchema } from '~/server/schema'
+import {
+  acceptCGUMutation,
+  addUserMutation,
+  updateUserMutation,
+  getUsersQuery
+} from '~/server/request/user'
 
 export const userRouter = router({
-  update: protectedProcedure.input(editUserSchema).mutation(updateUserHandler),
-  add: protectedProcedure.input(createUserSchema).mutation(addUserHandler),
-  getUsers: protectedProcedure.query(getUsersHandler),
-  acceptCGU: protectedProcedure.mutation(acceptCGUHandler)
+  update: protectedProcedure
+    .input(updateUserMutation.inputValidation)
+    .mutation(updateUserMutation.execute),
+  add: protectedProcedure
+    .input(addUserMutation.inputValidation)
+    .mutation(addUserMutation.execute),
+  getUsers: protectedProcedure
+    .input(getUsersQuery.inputValidation)
+    .query(getUsersQuery.execute),
+  acceptCGU: protectedProcedure
+    .input(acceptCGUMutation.inputValidation)
+    .mutation(acceptCGUMutation.execute)
 })

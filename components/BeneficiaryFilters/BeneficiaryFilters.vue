@@ -48,30 +48,39 @@
     data: followupTypeOptions,
     pending: followupTypeOptionsPending,
     error: followupTypeOptionsError
-  } = await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
-    transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
-    queryKey: 'config.getStructureFollowupTypes.options'
-  })
+  } = await trpcClient.config.getStructureFollowupTypes.useQuery(
+    {},
+    {
+      transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
+      queryKey: 'config.getStructureFollowupTypes.options'
+    }
+  )
 
   const {
     data: agentOptions,
     pending: agentOptionsPending,
     error: agentOptionsError
-  } = await trpcClient.config.getAgents.useQuery(undefined, {
-    transform: agents => toOptions(agents, 'id', 'name'),
-    queryKey: 'config.getAgents.options'
-  })
+  } = await trpcClient.config.getAgents.useQuery(
+    {},
+    {
+      transform: agents => toOptions(agents, 'id', 'name'),
+      queryKey: 'config.getAgents.options'
+    }
+  )
 
   const {
     data: citiesOptions,
     pending: citieOptionsPending,
     error: citieOptionsError
-  } = await trpcClient.config.getBeneficiariesCities.useQuery(undefined, {
-    transform: cities => {
-      const definedCities = cities.filter(hasDefinedCity)
-      return toOptions(definedCities, 'city', 'city')
+  } = await trpcClient.config.getBeneficiariesCities.useQuery(
+    {},
+    {
+      transform: cities => {
+        const definedCities = cities.filter(hasDefinedCity)
+        return toOptions(definedCities, 'city', 'city')
+      }
     }
-  })
+  )
 
   const pending = computed(
     () =>

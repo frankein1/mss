@@ -27,7 +27,7 @@ import {
   exportBeneficiaryStatsHandler,
   exportHelpRequestStatsHandler,
   exportFollowupStatsHandler
-} from '~/server/trpc/controller/stat'
+} from '~/server/request/stat'
 import { statFilterSchema } from '~/server/schema'
 import { protectedProcedure, router } from '~/server/trpc'
 

@@ -45,7 +45,7 @@
     data: agents,
     pending,
     error
-  } = await trpcClient.config.getAgents.useQuery()
+  } = await trpcClient.config.getAgents.useQuery({})
 
   const isSubmitting = ref(false)
 

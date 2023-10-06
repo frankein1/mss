@@ -31,4 +31,4 @@ export {
   getFollowupFollowupTypesStatsHandler,
   exportFollowupStatsHandler
 } from './followup'
-export { getHistoryCountsHandler } from './get-history-count.controller'
+export { getHistoryCountsHandler } from './get-history-count.query'

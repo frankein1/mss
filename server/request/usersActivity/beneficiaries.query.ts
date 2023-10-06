@@ -1,9 +1,11 @@
 import { Prisma, UserActivityType } from '@prisma/client'
+import { createQuery } from '../createRequest'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
-import type { PaginatedInput } from '~/server/schema'
+import { PaginatedInput, paginatedSchema } from '~/server/schema'
 import { takeAndSkipFromPagination } from '~/utils/table'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 function getAnyBeneficiariesUsersActivity(
   structureId: string,
@@ -143,7 +145,7 @@ function getBeneficiariesUsersActivityCount(ctx: ProtectedAppContext) {
   return getAnyBeneficiariesUsersActivityCount(structure.id)
 }
 
-export const getBeneficiariesUsersActivityHandler = async ({
+const handler = async ({
   input,
   ctx
 }: {
@@ -161,5 +163,11 @@ export const getBeneficiariesUsersActivityHandler = async ({
 }
 
 export type GetBeneficiariesUsersActivityOutput = Prisma.PromiseReturnType<
-  typeof getBeneficiariesUsersActivityHandler
+  typeof handler
 >
+
+export const getBeneficiariesUsersActivityQuery = createQuery({
+  inputValidation: paginatedSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})
