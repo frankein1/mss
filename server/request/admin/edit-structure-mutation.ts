@@ -49,7 +49,7 @@ const adminHandler = async ({ input }: { input: AdminEditStructureInput }) => {
   return updatedStructure
 }
 
-export const editStructureMutation = createMutation({
+export const editAdminStructureMutation = createMutation({
   inputValidation: adminEditStructureSchema,
   securityCheck: AllowSecurityCheck,
   adminHandler

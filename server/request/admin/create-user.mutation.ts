@@ -31,7 +31,7 @@ const adminHandler = async ({ input }: { input: AdminCreateUserInput }) => {
   return createdUser
 }
 
-export const createUserMutation = createMutation({
+export const createAdminUserMutation = createMutation({
   inputValidation: adminCreateUserSchema,
   securityCheck: AllowSecurityCheck,
   adminHandler

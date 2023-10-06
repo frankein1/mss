@@ -59,7 +59,7 @@ function prepareUserFilters(filters: UserAdminFilterInput) {
   return formattedFilters
 }
 
-export const getUsersQuery = createQuery({
+export const getAdminUsersQuery = createQuery({
   inputValidation: adminGetUsersSchema,
   securityCheck: AllowSecurityCheck,
   adminHandler

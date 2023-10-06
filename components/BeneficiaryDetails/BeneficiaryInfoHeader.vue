@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import type { GetBeneficiaryOutput } from '~/server/request'
   import { getUserDisplayName } from '~/utils/user'
   import {
     formatAddress,

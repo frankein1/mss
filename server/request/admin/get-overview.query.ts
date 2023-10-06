@@ -13,7 +13,7 @@ const adminHandler = async () => {
 
 export type AdminOverviewOutput = Prisma.PromiseReturnType<typeof adminHandler>
 
-export const getOverviewQuery = createQuery({
+export const getAdminOverviewQuery = createQuery({
   inputValidation: emptySchema,
   securityCheck: AllowSecurityCheck,
   adminHandler

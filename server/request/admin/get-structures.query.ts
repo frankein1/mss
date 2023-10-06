@@ -65,7 +65,7 @@ export type AdminStructuresOutput = Prisma.PromiseReturnType<
   typeof adminHandler
 >
 
-export const getStructuresQuery = createQuery({
+export const getAdminStructuresQuery = createQuery({
   inputValidation: adminGetStructuresSchema,
   securityCheck: AllowSecurityCheck,
   adminHandler

@@ -17,7 +17,7 @@ const adminHandler = async ({ input: { id } }: { input: { id: string } }) => {
 
 export type AdminUserOutput = Prisma.PromiseReturnType<typeof adminHandler>
 
-export const getUserQuery = createQuery({
+export const getAdminUserQuery = createQuery({
   inputValidation: idSchema,
   securityCheck: AllowSecurityCheck,
   adminHandler
