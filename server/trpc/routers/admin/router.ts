@@ -10,7 +10,7 @@ import {
   getAdminUserQuery,
   getAdminOverviewQuery,
   editAdminUserMutation
-} from '~/server/request/admin'
+} from '~/server/route/admin'
 
 export const adminRouter = router({
   createStructure: adminProcedure

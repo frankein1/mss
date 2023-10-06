@@ -1,5 +1,5 @@
 import { protectedProcedure, router } from '..'
-import { getUserQuery } from '~/server/request/auth'
+import { getUserQuery } from '~/server/route/auth'
 
 export const authRouter = router({
   getUser: protectedProcedure

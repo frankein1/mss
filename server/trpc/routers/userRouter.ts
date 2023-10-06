@@ -4,7 +4,7 @@ import {
   addUserMutation,
   updateUserMutation,
   getUsersQuery
-} from '~/server/request/user'
+} from '~/server/route/user'
 
 export const userRouter = router({
   update: protectedProcedure

@@ -1,4 +1,4 @@
-import { getBeneficiariesUsersActivityQuery } from '~/server/request/usersActivity'
+import { getBeneficiariesUsersActivityQuery } from '~/server/route/usersActivity'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const usersActivityRouter = router({

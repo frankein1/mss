@@ -1,0 +1,45 @@
+import { UserStatus } from '@prisma/client'
+import { createMutation } from '~/server/route'
+import { ProtectedAppContext } from '~/server/trpc'
+import { UserEditionInput, editUserSchema } from '~/server/schema'
+import {
+  SecurityRuleGrantee,
+  canEditUser,
+  canEditUserRole
+} from '~/server/security'
+import { prismaClient } from '~/server/prisma'
+
+const handler = async ({
+  ctx: _ctx,
+  input: { id, ...rest }
+}: {
+  ctx: ProtectedAppContext
+  input: UserEditionInput
+}) => {
+  if ('status' in rest) {
+    return await prismaClient.user.update({
+      where: { id },
+      data: { status: rest.status ? UserStatus.Active : UserStatus.Disabled }
+    })
+  }
+  return await prismaClient.user.update({ where: { id }, data: rest })
+}
+
+const securityCheck = async (
+  user: SecurityRuleGrantee,
+  input: UserEditionInput
+) => {
+  const target = await prismaClient.user.findUniqueOrThrow({
+    where: { id: input.id }
+  })
+  if ('role' in input) {
+    return canEditUserRole(user, target, input) && canEditUser(user, target)
+  }
+  return canEditUser(user, target)
+}
+
+export const updateUserMutation = createMutation({
+  handler,
+  inputValidation: editUserSchema,
+  securityCheck
+})

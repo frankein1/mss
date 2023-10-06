@@ -1,4 +1,1 @@
-export type {
-  GetFollowupsOutput,
-  FollowupItem
-} from '~/server/request/followup'
+export type { GetFollowupsOutput, FollowupItem } from '~/server/route/followup'

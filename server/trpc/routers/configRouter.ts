@@ -7,7 +7,7 @@ import {
   getInstructorOrganizationQuery,
   getPrescribingOrganizationsQuery,
   getStructureFollowupTypesQuery
-} from '~/server/request/config'
+} from '~/server/route/config'
 
 export const configRouter = router({
   getAgents: protectedProcedure

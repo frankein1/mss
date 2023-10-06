@@ -27,7 +27,7 @@ import {
   getMinistereStructureStatsQ,
   getMobilityStatsQ,
   getRegionStatsQ
-} from '~/server/request/stat'
+} from '~/server/route/stat'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const statRouter = router({

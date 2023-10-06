@@ -18,7 +18,7 @@ import {
   updateExternalOrganisationsMutation,
   saveDraftMutation,
   updateTaxHouseholdMutation
-} from '~/server/request/beneficiary'
+} from '~/server/route/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryRouter = router({

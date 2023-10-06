@@ -2,7 +2,7 @@ import { protectedProcedure, router } from '~/server/trpc'
 import {
   getNotificationQuery,
   updateNotificationMutation
-} from '~/server/request/notification'
+} from '~/server/route/notification'
 
 export const notificationRouter = router({
   get: protectedProcedure

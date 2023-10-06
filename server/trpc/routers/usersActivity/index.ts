@@ -1,1 +1,1 @@
-export type { GetBeneficiariesUsersActivityOutput } from '~/server/request/usersActivity'
+export type { GetBeneficiariesUsersActivityOutput } from '~/server/route/usersActivity'

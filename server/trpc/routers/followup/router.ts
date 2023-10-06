@@ -6,7 +6,7 @@ import {
   exportFollowupsQuery,
   quickUpdateFollowupMutation,
   updateFollowupMutation
-} from '~/server/request/followup'
+} from '~/server/route/followup'
 
 import { protectedProcedure, router } from '~/server/trpc'
 

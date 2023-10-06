@@ -3,7 +3,7 @@ import {
   createViewUrlMutation,
   deleteDocumentMutation,
   editDocumentMutation
-} from '~/server/request/document'
+} from '~/server/route/document'
 
 export const documentRouter = router({
   edit: protectedProcedure

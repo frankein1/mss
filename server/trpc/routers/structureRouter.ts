@@ -2,7 +2,7 @@ import { protectedProcedure, router } from '~/server/trpc'
 import {
   editCurrentUserStructureMutation,
   getCurrentUserStructureQuery
-} from '~/server/request/structure'
+} from '~/server/route/structure'
 
 export const structureRouter = router({
   getCurrentUserStructure: protectedProcedure

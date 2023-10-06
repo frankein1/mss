@@ -3,7 +3,7 @@ import {
   deleteBeneficiaryDraftMutation,
   getBeneficiaryDraftQuery,
   updateBeneficiaryDraftMutation
-} from '~/server/request/beneficiaryDraft'
+} from '~/server/route/beneficiaryDraft'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryDraftRouter = router({

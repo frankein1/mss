@@ -6,7 +6,7 @@ import {
   getHelpRequestsQuery,
   quickUpdateHelpRequestMutation,
   updateHelpRequestMutation
-} from '~/server/request/helpRequest'
+} from '~/server/route/helpRequest'
 
 import { protectedProcedure, router } from '~/server/trpc'
 
