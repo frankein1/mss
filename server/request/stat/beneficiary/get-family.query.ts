@@ -1,8 +1,10 @@
+import { createQuery } from '~/server/request'
 import { ProtectedAppContext } from '~/server/trpc'
-import { StatFilterInput } from '~/server/schema'
+import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { getFamilyStatsQuery } from '~/server/query/stats'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getFamilyStatsHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -11,3 +13,9 @@ export const getFamilyStatsHandler = async ({
 }) => {
   return await getFamilyStatsQuery(user, input)
 }
+
+export const getFamilyStatsQ = createQuery({
+  inputValidation: statFilterSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

@@ -1,8 +1,10 @@
+import { createQuery } from '~/server/request'
 import { ProtectedAppContext } from '~/server/trpc'
-import { StatFilterInput } from '~/server/schema'
+import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { getBeneficiaryCountQuery } from '~/server/query/stats'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getBeneficiaryCountHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -11,3 +13,9 @@ export const getBeneficiaryCountHandler = async ({
 }) => {
   return await getBeneficiaryCountQuery(user, input)
 }
+
+export const getBeneficiaryCountQ = createQuery({
+  inputValidation: statFilterSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

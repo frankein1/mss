@@ -1,4 +1,5 @@
 import { StructureType } from '@prisma/client'
+import { createQuery } from '~/server/request'
 import {
   beneficiaryAccommodationModeLabels,
   beneficiaryAccommodationZoneLabels,
@@ -21,7 +22,7 @@ import {
   getMinistereDepartementServiceAcStatsQuery,
   getMinistereCategorieStatsQuery
 } from '~/server/query/stats'
-import { StatFilterInput } from '~/server/schema'
+import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { ageGroupLabels } from '~/client/options/ageGroup'
@@ -34,8 +35,9 @@ import {
   ministereDepartmentServiceAcLabels,
   ministereStructureLabels
 } from '~/client/options/ministry'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const exportBeneficiaryStatsHandler = async ({
+const handler = async ({
   input,
   ctx: { user, structure }
 }: {
@@ -215,3 +217,9 @@ export const exportBeneficiaryStatsHandler = async ({
 
   return await createExport(user.id, exportData)
 }
+
+export const exportBeneficiaryStatsQuery = createQuery({
+  inputValidation: statFilterSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

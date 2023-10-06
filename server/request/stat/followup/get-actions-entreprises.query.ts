@@ -1,8 +1,10 @@
-import { getFollowupActionsEntreprisesStatsQuery } from '~/server/query/stats'
+import { createQuery } from '~/server/request'
 import { ProtectedAppContext } from '~/server/trpc'
-import { StatFilterInput } from '~/server/schema'
+import { StatFilterInput, statFilterSchema } from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { getFollowupActionsEntreprisesStatsQuery } from '~/server/query/stats'
 
-export const getFollowupActionsEntreprisesStatsHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -11,3 +13,9 @@ export const getFollowupActionsEntreprisesStatsHandler = async ({
 }) => {
   return await getFollowupActionsEntreprisesStatsQuery(user, input)
 }
+
+export const getFollowupActionsEntreprisesStatsQ = createQuery({
+  inputValidation: statFilterSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

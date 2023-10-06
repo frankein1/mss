@@ -1,8 +1,10 @@
+import { createQuery } from '~/server/request'
 import { ProtectedAppContext } from '~/server/trpc'
-import { StatFilterInput } from '~/server/schema'
+import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { getMinistereStructureStatsQuery } from '~/server/query/stats'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getMinistereStructureStatsHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -11,3 +13,9 @@ export const getMinistereStructureStatsHandler = async ({
 }) => {
   return await getMinistereStructureStatsQuery(user, input)
 }
+
+export const getMinistereStructureStatsQ = createQuery({
+  inputValidation: statFilterSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

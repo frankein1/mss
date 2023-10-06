@@ -1,4 +1,5 @@
 import { StructureType } from '@prisma/client'
+import { createQuery } from '~/server/request'
 import { helpRequestStatusLabels } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
 import { RowType } from '~/types/export'
@@ -12,14 +13,15 @@ import {
   getHelpRequestPrescribingOrganizationStatsQuery,
   getHelpRequestStatusStatsQuery
 } from '~/server/query/stats'
-import { StatFilterInput } from '~/server/schema'
+import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
 import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
 import { getRowsFromData } from '~/utils/export/getRowsFromData'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const exportHelpRequestStatsHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -174,3 +176,9 @@ export const exportHelpRequestStatsHandler = async ({
 
   return await createExport(user.id, exportData)
 }
+
+export const exportHelpRequestStatsQuery = createQuery({
+  inputValidation: statFilterSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

@@ -1,8 +1,10 @@
+import { createQuery } from '~/server/request'
 import { ProtectedAppContext } from '~/server/trpc'
-import { StatFilterInput } from '~/server/schema'
+import { StatFilterInput, statFilterSchema } from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { getAccommodationModeStatsQuery } from '~/server/query/stats'
 
-export const getAccommodationModeStatsHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -11,3 +13,9 @@ export const getAccommodationModeStatsHandler = async ({
 }) => {
   return await getAccommodationModeStatsQuery(user, input)
 }
+
+export const getAccommodationModeStatsQ = createQuery({
+  inputValidation: statFilterSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

@@ -1,4 +1,5 @@
 import { StructureType } from '@prisma/client'
+import { createQuery } from '~/server/request'
 import {
   followupMediumLabels,
   followupStatusLabels
@@ -15,14 +16,15 @@ import {
   getFollowupPrescribingOrganizationStatsQuery,
   getFollowupStatusStatsQuery
 } from '~/server/query/stats'
-import { StatFilterInput } from '~/server/schema'
+import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
 import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
 import { getRowsFromData } from '~/utils/export/getRowsFromData'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const exportFollowupStatsHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -165,3 +167,9 @@ export const exportFollowupStatsHandler = async ({
 
   return await createExport(user.id, exportData)
 }
+
+export const exportFollowupStatsQuery = createQuery({
+  inputValidation: statFilterSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

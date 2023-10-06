@@ -1,14 +1,16 @@
+import { createQuery } from '../createRequest'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import { StatFilterInput } from '~/server/schema'
+import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { prepareFollowupStatFilters } from '~/utils/filters'
 import {
   getFollowupCountQuery,
   getHelpRequestCountQuery
 } from '~/server/query/stats'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getHistoryCountsHandler = async ({
+const handler = async ({
   input,
   ctx: { user, structure }
 }: {
@@ -35,3 +37,9 @@ export const getHistoryCountsHandler = async ({
 
   return { helpRequests, followups, firstFollowups }
 }
+
+export const getHistoryCountsQuery = createQuery({
+  inputValidation: statFilterSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})

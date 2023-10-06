@@ -1,8 +1,10 @@
+import { createQuery } from '~/server/request'
 import { ProtectedAppContext } from '~/server/trpc'
-import { StatFilterInput } from '~/server/schema'
+import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { getHelpRequestFollowupTypesStatsQuery } from '~/server/query/stats'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getHelpRequestFollowupTypesStatsHandler = async ({
+const handler = async ({
   input,
   ctx: { user }
 }: {
@@ -11,3 +13,9 @@ export const getHelpRequestFollowupTypesStatsHandler = async ({
 }) => {
   return await getHelpRequestFollowupTypesStatsQuery(user, input)
 }
+
+export const getHelpRequestFollowupTypesStatsQ = createQuery({
+  inputValidation: statFilterSchema,
+  securityCheck: AllowSecurityCheck,
+  handler
+})
