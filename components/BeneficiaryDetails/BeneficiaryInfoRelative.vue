@@ -15,24 +15,24 @@
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
-      label="Statut"
+      :label="relativeFieldLabels.relationship"
       :value="RelativeRelationshipKeys.value(relative.relationship)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
-      label="Date de naissance"
+      :label="relativeFieldLabels.birthDate"
       :value="formatDate(birthDate)"
       class="fr-col-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
-      label="Email"
+      :label="relativeFieldLabels.email"
       :value="email"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
-      label="Téléphone"
+      :label="relativeFieldLabels.phone"
       :value="phone"
       class="fr-col-6"
     />
@@ -42,13 +42,13 @@
       v-if="relative.caregiver"
       class="field-value fr-icon-success-line fr-pb-2w fr-col-12"
     >
-      Aidant familial
+      {{ relativeFieldLabels.caregiver }}
     </div>
   </div>
   <div class="fr-grid-row">
     <div class="fr-col-12">
       <BeneficiaryInfoLabel
-        label="Informations complémentaires"
+        :label="relativeFieldLabels.additionalInformation"
         :value="relative.additionalInformation"
       />
     </div>
@@ -59,6 +59,7 @@
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
   import { RelativeRelationshipKeys } from '~/client/options/beneficiary'
   import { RoutePath } from '~/utils/routing'
+  import { relativeFieldLabels } from '~/client/labels/relative.labels'
 
   const props = defineProps<{
     relative: BeneficiaryRelativeWithLinkedBeneficiary

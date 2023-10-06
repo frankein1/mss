@@ -18,13 +18,13 @@
         </div>
         <div class="fr-col-6">
           <BeneficiaryInfoLabel
-            label="Nombre d'enfant(s) mineur(s)"
+            :label="beneficiaryFieldLabels.minorChildren"
             :value="beneficiary.minorChildren || '0'"
           />
         </div>
         <div class="fr-col-6">
           <BeneficiaryInfoLabel
-            label="Nombre d'enfant(s) majeur(s)"
+            :label="beneficiaryFieldLabels.majorChildren"
             :value="beneficiary.majorChildren || '0'"
           />
         </div>
@@ -46,6 +46,7 @@
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
   import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import { RoutePath } from '~/utils/routing'
+  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput

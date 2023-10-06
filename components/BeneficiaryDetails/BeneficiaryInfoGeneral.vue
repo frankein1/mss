@@ -21,19 +21,19 @@
             </div>
           </div>
           <BeneficiaryInfoLabel
-            label="Genre"
+            :label="beneficiaryFieldLabels.gender"
             :value="BeneficiaryGenderKeys.value(beneficiary.gender)"
             class="fr-col-6"
           />
         </div>
         <div class="fr-grid-row">
           <BeneficiaryInfoLabel
-            label="Nom de naissance"
+            :label="beneficiaryFieldLabels.birthName"
             :value="beneficiary.birthName"
             class="fr-col-6"
           />
           <BeneficiaryInfoLabel
-            label="Nationalité"
+            :label="beneficiaryFieldLabels.nationality"
             :value="NationalityKeys.value(beneficiary.nationality)"
             class="fr-col-6"
           />
@@ -43,7 +43,7 @@
           class="fr-grid-row"
         >
           <BeneficiaryInfoLabel
-            label="Numéro Pegase"
+            :label="beneficiaryFieldLabels.numeroPegase"
             :value="beneficiary.numeroPegase"
             class="fr-col-12"
           />
@@ -61,7 +61,7 @@
 
         <div class="fr-grid-row">
           <BeneficiaryInfoLabel
-            label="Mode d'hébergement"
+            :label="beneficiaryFieldLabels.accommodationMode"
             :value="
               BeneficiaryAccommodationModeKeys.value(
                 beneficiary.accommodationMode
@@ -70,7 +70,7 @@
             class="fr-col-12"
           />
           <BeneficiaryInfoLabel
-            label="Précision d'hébergement"
+            :label="beneficiaryFieldLabels.accommodationAdditionalInformation"
             :value="beneficiary.accommodationAdditionalInformation"
             class="fr-col-12"
           />
@@ -78,12 +78,12 @@
 
         <div class="fr-grid-row">
           <BeneficiaryInfoLabel
-            label="Adresse"
+            :label="beneficiaryFieldLabels.street"
             :value="formatAddress(beneficiary)"
             class="fr-col-6"
           />
           <BeneficiaryInfoLabel
-            label="Complément d'adresse"
+            :label="beneficiaryFieldLabels.addressComplement"
             :value="beneficiary.addressComplement"
             class="fr-col-6"
           />
@@ -138,6 +138,7 @@
     hasCoordinatesInformations
   } from '~/utils/beneficiary'
   import { RoutePath } from '~/utils/routing'
+  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput

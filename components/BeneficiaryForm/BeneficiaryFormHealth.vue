@@ -3,34 +3,34 @@
     <div class="fr-col-12">
       <VeeSelect
         name="gir"
-        label="GIR"
+        :label="beneficiaryFieldLabels.gir"
         :options="withEmptyValue(beneficiaryGirOptions)"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="doctor"
-        label="Médecin traitant"
+        :label="beneficiaryFieldLabels.doctor"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         v-if="hasNirAccess"
         name="socialSecurityNumber"
-        label="N° Sécurité Sociale"
+        :label="beneficiaryFieldLabels.socialSecurityNumber"
         type="social-security-number"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="insurance"
-        label="Mutuelle"
+        :label="beneficiaryFieldLabels.insurance"
       />
     </div>
     <div class="fr-col-12">
       <VeeTextarea
         name="healthAdditionalInformation"
-        label="Informations complémentaires"
+        :label="beneficiaryFieldLabels.healthAdditionalInformation"
       >
         <template #hint>
           Il est fortement recommandé de ne stocker que les informations utiles
@@ -46,6 +46,7 @@
   import { beneficiaryGirOptions } from '~/client/options/beneficiary'
   import { useAuthStore } from '~/store/auth'
   import { canSetBeneficiaryNir } from '~/server/security/rules'
+  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const authStore = useAuthStore()
 

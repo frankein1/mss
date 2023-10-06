@@ -7,31 +7,31 @@
     <div class="fr-container">
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="GIR"
+          :label="beneficiaryFieldLabels.gir"
           :value="BeneficiaryGirKeys.value(beneficiary.gir)"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Médecin traitant"
+          :label="beneficiaryFieldLabels.doctor"
           :value="beneficiary.doctor"
           class="fr-col-6"
         />
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="N de sécurité sociale"
+          :label="beneficiaryFieldLabels.socialSecurityNumber"
           :value="beneficiary.socialSecurityNumber"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Mutuelle"
+          :label="beneficiaryFieldLabels.insurance"
           :value="beneficiary.insurance"
           class="fr-col-6"
         />
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Informations Complémentaires"
+          :label="beneficiaryFieldLabels.healthAdditionalInformation"
           :value="beneficiary.healthAdditionalInformation"
           class="fr-col-12"
         />
@@ -46,6 +46,7 @@
   import { canViewBeneficiaryNir } from '~/server/security/rules'
   import { BeneficiaryGirKeys } from '~/client/options/beneficiary'
   import { RoutePath } from '~/utils/routing'
+  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput

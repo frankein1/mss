@@ -3,46 +3,46 @@
     <div class="fr-col-12">
       <VeeSelect
         name="protectionMeasure"
-        label="Mesures de protection"
+        :label="beneficiaryFieldLabels.protectionMeasure"
         :options="withEmptyValue(beneficiaryProtectionMeasureOptions)"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="representative"
-        label="Nom, prénom, coordonnées du mandataire"
+        :label="beneficiaryFieldLabels.representative"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="prescribingStructure"
-        label="Organisme prescripteur"
+        :label="beneficiaryFieldLabels.prescribingStructure"
       />
     </div>
     <div class="fr-col-12">
       <VeeSelect
         name="orientationType"
-        label="Mode d'orientation"
+        :label="beneficiaryFieldLabels.orientationType"
         :options="withEmptyValue(beneficiaryOrientationTypeOptions)"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="orientationStructure"
-        label="Organisme d'orientation"
+        :label="beneficiaryFieldLabels.orientationStructure"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="serviceProviders"
-        label="Prestataires"
+        :label="beneficiaryFieldLabels.serviceProviders"
         placeholder="Repas à domicile, aide à domicile..."
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="involvedPartners"
-        label="Partenaires intervenants"
+        :label="beneficiaryFieldLabels.involvedPartners"
       />
     </div>
   </BeneficiaryFormSection>
@@ -53,4 +53,5 @@
     beneficiaryOrientationTypeOptions,
     beneficiaryProtectionMeasureOptions
   } from '~/client/options/beneficiary'
+  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 </script>
