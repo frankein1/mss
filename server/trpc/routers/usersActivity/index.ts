@@ -1,1 +1,1 @@
-export type { GetBeneficiariesUsersActivityOutput } from '~/server/trpc/controller/usersActivity'
+export type { GetBeneficiariesUsersActivityOutput } from '~/server/route/usersActivity'

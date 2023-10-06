@@ -1,15 +1,14 @@
-import {
-  getCurrentUserStructureHandler,
-  editCurrentUserStructureHandler
-} from '~/server/trpc/controller/structure'
 import { protectedProcedure, router } from '~/server/trpc'
-import { editCurrentUserStructureSchema } from '~/server/schema'
+import {
+  editCurrentUserStructureMutation,
+  getCurrentUserStructureQuery
+} from '~/server/route/structure'
 
 export const structureRouter = router({
-  getCurrentUserStructure: protectedProcedure.query(
-    getCurrentUserStructureHandler
-  ),
+  getCurrentUserStructure: protectedProcedure
+    .input(getCurrentUserStructureQuery.inputValidation)
+    .query(getCurrentUserStructureQuery.execute),
   editCurrentUserStructure: protectedProcedure
-    .input(editCurrentUserStructureSchema)
-    .mutation(editCurrentUserStructureHandler)
+    .input(editCurrentUserStructureMutation.inputValidation)
+    .mutation(editCurrentUserStructureMutation.execute)
 })

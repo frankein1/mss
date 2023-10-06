@@ -1,7 +1,0 @@
-export { getHelpRequestsHandler } from './get-page.controller'
-export { addHelpRequestHandler } from './create.controller'
-export { quickUpdateHelpRequestHandler } from './quick-update.controller'
-export { getHelpRequestDetailsHandler } from './get-details.controller'
-export { updateHelpRequestHandler } from './update.controller'
-export { deleteHelpRequestHandler } from './delete.controller'
-export { exportHelpRequestsHandler } from './export.controller'

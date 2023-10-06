@@ -56,7 +56,7 @@
 
   const onSubmit = handleSubmit(async () => {
     try {
-      const user = await trpcClient.user.acceptCGU.mutate()
+      const user = await trpcClient.user.acceptCGU.mutate({})
       auth.login(user)
       return navigateTo(RoutePath.AppOverview())
     } catch {

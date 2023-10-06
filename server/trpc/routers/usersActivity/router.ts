@@ -1,9 +1,8 @@
-import { getBeneficiariesUsersActivityHandler } from '~/server/trpc/controller/usersActivity'
+import { getBeneficiariesUsersActivityQuery } from '~/server/route/usersActivity'
 import { protectedProcedure, router } from '~/server/trpc'
-import { paginatedSchema } from '~/server/schema'
 
 export const usersActivityRouter = router({
   beneficiaries: protectedProcedure
-    .input(paginatedSchema)
-    .query(getBeneficiariesUsersActivityHandler)
+    .input(getBeneficiariesUsersActivityQuery.inputValidation)
+    .query(getBeneficiariesUsersActivityQuery.execute)
 })

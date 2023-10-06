@@ -6,4 +6,4 @@ export type {
   GetBeneficiaryDocumentsOutput,
   Documents,
   DocumentItem
-} from '~/server/request/beneficiary'
+} from '~/server/route/beneficiary'

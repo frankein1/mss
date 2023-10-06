@@ -1,34 +1,35 @@
-import {
-  getAgentsHandler,
-  getBeneficiariesCitiesHandler,
-  getExaminationDatesHandler,
-  getInstructorOrganizationHandler,
-  getPrescribingOrganizationsHandler,
-  getStructureFollowupTypesHandler
-} from '../controller/config.controller'
 import { protectedProcedure, router } from '~/server/trpc'
-import { idSchema } from '~/server/schema'
 import { getInclusionConnectClient } from '~/server/lib'
+import {
+  getAgentsQuery,
+  getBeneficiariesCitiesQuery,
+  getExaminationDatesQuery,
+  getInstructorOrganizationQuery,
+  getPrescribingOrganizationsQuery,
+  getStructureFollowupTypesQuery
+} from '~/server/route/config'
 
 export const configRouter = router({
-  getAgents: protectedProcedure.query(getAgentsHandler),
-  getBeneficiariesCities: protectedProcedure.query(
-    getBeneficiariesCitiesHandler
-  ),
+  getAgents: protectedProcedure
+    .input(getAgentsQuery.inputValidation)
+    .query(getAgentsQuery.execute),
+  getBeneficiariesCities: protectedProcedure
+    .input(getBeneficiariesCitiesQuery.inputValidation)
+    .query(getBeneficiariesCitiesQuery.execute),
   getExaminationDates: protectedProcedure
-    .input(idSchema.optional())
-    .query(getExaminationDatesHandler),
-  getStructureFollowupTypes: protectedProcedure.query(
-    getStructureFollowupTypesHandler
-  ),
+    .input(getExaminationDatesQuery.inputValidation)
+    .query(getExaminationDatesQuery.execute),
+  getStructureFollowupTypes: protectedProcedure
+    .input(getStructureFollowupTypesQuery.inputValidation)
+    .query(getStructureFollowupTypesQuery.execute),
   getInclusionConnectEditPasswordUrl: protectedProcedure.query(() => {
     const client = getInclusionConnectClient()
     return client.getEditPasswordUrl()
   }),
-  getPrescribingOrganizations: protectedProcedure.query(
-    getPrescribingOrganizationsHandler
-  ),
-  getInstructorOrganization: protectedProcedure.query(
-    getInstructorOrganizationHandler
-  )
+  getPrescribingOrganizations: protectedProcedure
+    .input(getPrescribingOrganizationsQuery.inputValidation)
+    .query(getPrescribingOrganizationsQuery.execute),
+  getInstructorOrganization: protectedProcedure
+    .input(getInstructorOrganizationQuery.inputValidation)
+    .query(getInstructorOrganizationQuery.execute)
 })

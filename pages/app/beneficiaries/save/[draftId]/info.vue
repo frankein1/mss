@@ -55,7 +55,7 @@
     data: agents,
     pending: agentsPending,
     error: agentsError
-  } = await trpcClient.config.getAgents.useQuery()
+  } = await trpcClient.config.getAgents.useQuery({})
 
   const {
     data: beneficiaryDraft,
@@ -119,7 +119,7 @@
   })
 
   async function loadBeneficiaryDraft() {
-    const beneficiaryDraft = (await trpcClient.draft.get.query({
+    const beneficiaryDraft = (await trpcClient.beneficiaryDraft.get.query({
       id: draftId
     })) as BeneficiaryDraft
 

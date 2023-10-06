@@ -1,43 +1,43 @@
 import { adminProcedure, router } from '~/server/trpc'
 
 import {
-  createStructureMutation,
-  createUserMutation,
-  editStructureMutation,
-  getStructuresQuery,
-  getStructureQuery,
-  getUsersQuery,
-  getUserQuery,
-  getOverviewQuery,
-  editUserMutation
-} from '~/server/request/admin'
+  createAdminStructureMutation,
+  createAdminUserMutation,
+  editAdminStructureMutation,
+  getAdminStructuresQuery,
+  getAdminStructureQuery,
+  getAdminUsersQuery,
+  getAdminUserQuery,
+  getAdminOverviewQuery,
+  editAdminUserMutation
+} from '~/server/route/admin'
 
 export const adminRouter = router({
   createStructure: adminProcedure
-    .input(createStructureMutation.inputValidation)
-    .mutation(createStructureMutation.executeAsAdmin),
+    .input(createAdminStructureMutation.inputValidation)
+    .mutation(createAdminStructureMutation.executeAsAdmin),
   getStructures: adminProcedure
-    .input(getStructuresQuery.inputValidation)
-    .query(getStructuresQuery.executeAsAdmin),
+    .input(getAdminStructuresQuery.inputValidation)
+    .query(getAdminStructuresQuery.executeAsAdmin),
   getStructure: adminProcedure
-    .input(getStructureQuery.inputValidation)
-    .query(getStructureQuery.executeAsAdmin),
+    .input(getAdminStructureQuery.inputValidation)
+    .query(getAdminStructureQuery.executeAsAdmin),
   editStructure: adminProcedure
-    .input(editStructureMutation.inputValidation)
-    .mutation(editStructureMutation.executeAsAdmin),
+    .input(editAdminStructureMutation.inputValidation)
+    .mutation(editAdminStructureMutation.executeAsAdmin),
   createUser: adminProcedure
-    .input(createUserMutation.inputValidation)
-    .mutation(createUserMutation.executeAsAdmin),
+    .input(createAdminUserMutation.inputValidation)
+    .mutation(createAdminUserMutation.executeAsAdmin),
   getUsers: adminProcedure
-    .input(getUsersQuery.inputValidation)
-    .query(getUsersQuery.executeAsAdmin),
+    .input(getAdminUsersQuery.inputValidation)
+    .query(getAdminUsersQuery.executeAsAdmin),
   getUser: adminProcedure
-    .input(getUserQuery.inputValidation)
-    .query(getUserQuery.executeAsAdmin),
+    .input(getAdminUserQuery.inputValidation)
+    .query(getAdminUserQuery.executeAsAdmin),
   editUser: adminProcedure
-    .input(editUserMutation.inputValidation)
-    .mutation(editUserMutation.executeAsAdmin),
+    .input(editAdminUserMutation.inputValidation)
+    .mutation(editAdminUserMutation.executeAsAdmin),
   getOverview: adminProcedure
-    .input(getOverviewQuery.inputValidation)
-    .query(getOverviewQuery.executeAsAdmin)
+    .input(getAdminOverviewQuery.inputValidation)
+    .query(getAdminOverviewQuery.executeAsAdmin)
 })

@@ -1,7 +1,0 @@
-export { getFollowupActionsEntreprisesStatsHandler } from './get-actions-entreprises.controller'
-export { getFollowupMediumStatsHandler } from './get-medium.controller'
-export { getFollowupMinistreStatsHandler } from './get-ministre.controller'
-export { getFollowupPrescribingOrganizationStatsHandler } from './get-prescribing-organization.controller'
-export { getFollowupStatusStatsHandler } from './get-status.controller'
-export { getFollowupFollowupTypesStatsHandler } from './get-followup-types.controller'
-export { exportFollowupStatsHandler } from './export-followup-stats.controller'

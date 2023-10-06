@@ -3,4 +3,4 @@ export type {
   AdminStructureOutput,
   AdminUserOutput,
   AdminUsersOutput
-} from '~/server/request/admin'
+} from '~/server/route/admin'

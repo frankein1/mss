@@ -47,7 +47,7 @@
     pending: usersPending,
     refresh: usersRefresh,
     error: usersError
-  } = await trpcClient.user.getUsers.useQuery()
+  } = await trpcClient.user.getUsers.useQuery({})
 
   const canCreateUser = computed(() => canCreateUserRule(authStore.getAuthUser))
 </script>
