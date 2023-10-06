@@ -10,38 +10,27 @@
       </button>
     </template>
 
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         :label="relativeFieldLabels.lastName"
         :name="`entourages[${index}].lastName`"
       />
     </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         :label="relativeFieldLabels.firstName"
         :name="`entourages[${index}].firstName`"
       />
     </div>
-    <div class="fr-col-12">
-      <VeeSelect
-        :name="`entourages[${index}].relationship`"
-        :label="relativeFieldLabels.relationship"
-        :options="withEmptyValue(entourageRelationshipOptions)"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeCheckbox
-        :name="`entourages[${index}].caregiver`"
-        :label="relativeFieldLabels.caregiver"
-      />
-    </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
-        :name="`entourages[${index}].city`"
-        :label="relativeFieldLabels.city"
+        :name="`entourages[${index}].phone`"
+        :label="relativeFieldLabels.phone"
+        type="tel"
       />
     </div>
-    <div class="fr-col-12">
+
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         :name="`entourages[${index}].email`"
         :label="relativeFieldLabels.email"
@@ -50,9 +39,21 @@
     </div>
     <div class="fr-col-12">
       <VeeInput
-        :name="`entourages[${index}].phone`"
-        :label="relativeFieldLabels.phone"
-        type="tel"
+        :name="`entourages[${index}].city`"
+        :label="relativeFieldLabels.city"
+      />
+    </div>
+    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+      <VeeSelect
+        :name="`entourages[${index}].relationship`"
+        :label="relativeFieldLabels.relationship"
+        :options="withEmptyValue(entourageRelationshipOptions)"
+      />
+    </div>
+    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+      <VeeCheckbox
+        :name="`entourages[${index}].caregiver`"
+        :label="relativeFieldLabels.caregiver"
       />
     </div>
     <div class="fr-col-12">
