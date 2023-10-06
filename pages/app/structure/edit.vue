@@ -57,7 +57,7 @@
     data: structure,
     pending: structurePending,
     error: structureError
-  } = trpcClient.structure.getCurrentUserStructure.useQuery()
+  } = trpcClient.structure.getCurrentUserStructure.useQuery({})
 
   async function onUpdateStructure(
     updatedStructure: EditCurrentUserStructureInput

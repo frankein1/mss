@@ -1,20 +1,23 @@
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { createMutation } from '../createRequest'
+import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import type { EditCurrentUserStructureInput } from '~/server/schema'
-import { canEditItsOwnStructure } from '~/server/security/rules'
+import {
+  EditCurrentUserStructureInput,
+  editCurrentUserStructureSchema
+} from '~/server/schema'
+import {
+  SecurityRuleGrantee,
+  canEditItsOwnStructure
+} from '~/server/security/rules'
 import { editFollowupTypes } from '~/utils/structure'
 
-export const editCurrentUserStructureHandler = async ({
-  ctx: { user, structure: userStructure },
+const handler = async ({
+  ctx: { structure: userStructure },
   input
 }: {
   ctx: ProtectedAppContext
   input: EditCurrentUserStructureInput
 }) => {
-  if (!canEditItsOwnStructure(user)) {
-    throw forbiddenError()
-  }
-
   const {
     legallyRequiredFollowupTypes,
     legallyNotRequiredFollowupTypes,
@@ -43,3 +46,16 @@ export const editCurrentUserStructureHandler = async ({
 
   return updatedStructure
 }
+
+const securityCheck = (
+  user: SecurityRuleGrantee,
+  _input: EditCurrentUserStructureInput
+) => {
+  return canEditItsOwnStructure(user)
+}
+
+export const editCurrentUserStructureMutation = createMutation({
+  handler,
+  inputValidation: editCurrentUserStructureSchema,
+  securityCheck
+})

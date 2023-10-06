@@ -1,10 +1,15 @@
 import { UserActivityType } from '@prisma/client'
-import { UpdateNotificationInput } from '~/server/schema'
+import { createMutation } from '../createRequest'
+import {
+  UpdateNotificationInput,
+  updateNotificationSchema
+} from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const updateNotificationHandler = async ({
+const handler = async ({
   ctx: { user },
   input: { id, read }
 }: {
@@ -22,3 +27,9 @@ export const updateNotificationHandler = async ({
     objectId: id
   })
 }
+
+export const updateNotificationMutation = createMutation({
+  handler,
+  inputValidation: updateNotificationSchema,
+  securityCheck: AllowSecurityCheck
+})

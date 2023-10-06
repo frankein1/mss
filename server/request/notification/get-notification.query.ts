@@ -1,9 +1,11 @@
 import { NotificationType, Prisma } from '@prisma/client'
-import { GetNotificationInput } from '~/server/schema'
+import { createQuery } from '../createRequest'
+import { GetNotificationInput, getNotificationSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getNotificationHandler = async ({
+const handler = async ({
   ctx: { user },
   input: { onlyUnread, type }
 }: {
@@ -41,6 +43,10 @@ export const getNotificationHandler = async ({
   })
 }
 
-export type GetNotificationOutput = Prisma.PromiseReturnType<
-  typeof getNotificationHandler
->
+export type GetNotificationOutput = Prisma.PromiseReturnType<typeof handler>
+
+export const getNotificationQuery = createQuery({
+  handler,
+  inputValidation: getNotificationSchema,
+  securityCheck: AllowSecurityCheck
+})

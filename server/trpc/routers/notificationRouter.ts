@@ -1,18 +1,14 @@
-import {
-  updateNotificationHandler,
-  getNotificationHandler
-} from '~/server/trpc/controller/notification'
 import { protectedProcedure, router } from '~/server/trpc'
 import {
-  updateNotificationSchema,
-  getNotificationSchema
-} from '~/server/schema'
+  getNotificationQuery,
+  updateNotificationMutation
+} from '~/server/request/notification'
 
 export const notificationRouter = router({
   get: protectedProcedure
-    .input(getNotificationSchema)
-    .query(getNotificationHandler),
+    .input(getNotificationQuery.inputValidation)
+    .query(getNotificationQuery.execute),
   update: protectedProcedure
-    .input(updateNotificationSchema)
-    .mutation(updateNotificationHandler)
+    .input(updateNotificationMutation.inputValidation)
+    .mutation(updateNotificationMutation.execute)
 })

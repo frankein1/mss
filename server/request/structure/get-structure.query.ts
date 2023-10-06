@@ -1,7 +1,10 @@
+import { createQuery } from '../createRequest'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
+import { emptySchema } from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-export const getCurrentUserStructureHandler = async ({
+const handler = async ({
   ctx: { structure }
 }: {
   ctx: ProtectedAppContext
@@ -22,3 +25,9 @@ export const getCurrentUserStructureHandler = async ({
     }
   })
 }
+
+export const getCurrentUserStructureQuery = createQuery({
+  handler,
+  inputValidation: emptySchema,
+  securityCheck: AllowSecurityCheck
+})
