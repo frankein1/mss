@@ -3,7 +3,7 @@
     <div class="fr-col-12">
       <VeeTextarea
         name="additionalInformation"
-        label="Informations complémentaires"
+        :label="beneficiaryFieldLabels.additionalInformation"
       >
         <template #hint>
           Il est fortement recommandé de ne stocker que les informations utiles
@@ -14,3 +14,7 @@
     </div>
   </BeneficiaryFormSection>
 </template>
+
+<script setup lang="ts">
+  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
+</script>

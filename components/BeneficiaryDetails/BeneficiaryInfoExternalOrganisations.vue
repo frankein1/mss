@@ -7,7 +7,7 @@
     <div class="fr-container">
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Mesure de protection"
+          :label="beneficiaryFieldLabels.protectionMeasure"
           :value="
             BeneficiaryProtectionMeasureKeys.value(
               beneficiary.protectionMeasure
@@ -16,19 +16,19 @@
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Nom, prénom, coordonées du mandataire"
+          :label="beneficiaryFieldLabels.representative"
           :value="beneficiary.representative"
           class="fr-col-6"
         />
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Organisme prescripteur"
+          :label="beneficiaryFieldLabels.prescribingStructure"
           :value="beneficiary.prescribingStructure"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Mode d'orientation"
+          :label="beneficiaryFieldLabels.orientationType"
           :value="
             BeneficiaryOrientationTypeKeys.value(beneficiary.orientationType)
           "
@@ -37,19 +37,19 @@
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Organisme d'orientation"
+          :label="beneficiaryFieldLabels.orientationStructure"
           :value="beneficiary.orientationStructure"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Prestataires"
+          :label="beneficiaryFieldLabels.serviceProviders"
           :value="beneficiary.serviceProviders"
           class="fr-col-6"
         />
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Partenaires intervenants"
+          :label="beneficiaryFieldLabels.involvedPartners"
           :value="beneficiary.involvedPartners"
           class="fr-col-6"
         />
@@ -65,6 +65,7 @@
     BeneficiaryProtectionMeasureKeys
   } from '~/client/options/beneficiary'
   import { RoutePath } from '~/utils/routing'
+  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput

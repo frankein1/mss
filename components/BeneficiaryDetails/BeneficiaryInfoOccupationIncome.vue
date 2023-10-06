@@ -7,7 +7,7 @@
     <div class="fr-container">
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Catégorie socio-professionnelle"
+          :label="beneficiaryFieldLabels.socioProfessionalCategory"
           :value="
             BeneficiarySocioProfessionalCategoryKeys.value(
               beneficiary.socioProfessionalCategory
@@ -16,74 +16,74 @@
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Profession(s)"
+          :label="beneficiaryFieldLabels.occupation"
           :value="beneficiary.occupation"
           class="fr-col-6"
         />
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Employeur"
+          :label="beneficiaryFieldLabels.employer"
           :value="beneficiary.employer"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="SIRET de l'employeur"
+          :label="beneficiaryFieldLabels.employerSiret"
           :value="beneficiary.employerSiret"
           class="fr-col-6"
         />
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Nature des ressources"
+          :label="beneficiaryFieldLabels.mainIncomeSource"
           :value="mainIncomeSource"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Montant des ressources"
+          :label="beneficiaryFieldLabels.mainIncomeAmount"
           :value="euros(beneficiary.mainIncomeAmount)"
           class="fr-col-6"
         />
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="N° Pôle Emploi"
+          :label="beneficiaryFieldLabels.unemploymentNumber"
           :value="beneficiary.unemploymentNumber"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="N° CAF"
+          :label="beneficiaryFieldLabels.cafNumber"
           :value="beneficiary.cafNumber"
           class="fr-col-6"
         />
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Organisme de retraite"
+          :label="beneficiaryFieldLabels.pensionOrganisations"
           :value="pensionOrganisations"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Banque"
+          :label="beneficiaryFieldLabels.bank"
           :value="beneficiary.bank"
           class="fr-col-6"
         />
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Contrat obsèque"
+          :label="beneficiaryFieldLabels.funeralContract"
           :value="beneficiary.funeralContract"
           class="fr-col-12"
         />
       </div>
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Nature des ressources du conjoint"
+          :label="beneficiaryFieldLabels.partnerMainIncomeSource"
           :value="partnerMainIncomeSource"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Montant des ressources du conjoint"
+          :label="beneficiaryFieldLabels.partnerMainIncomeAmount"
           :value="euros(beneficiary.partnerMainIncomeAmount)"
           class="fr-col-6"
         />
@@ -91,12 +91,12 @@
 
       <div class="fr-grid-row">
         <BeneficiaryInfoLabel
-          label="Nature des ressources des enfants majeurs"
+          :label="beneficiaryFieldLabels.majorChildrenMainIncomeSource"
           :value="majorChildrenMainIncomeType"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Montant des ressources des enfants majeurs"
+          :label="beneficiaryFieldLabels.majorChildrenMainIncomeAmount"
           :value="euros(beneficiary.majorChildrenMainIncomeAmount)"
           class="fr-col-6"
         />
@@ -107,17 +107,17 @@
         class="fr-grid-row"
       >
         <BeneficiaryInfoLabel
-          label="Catégorie"
+          :label="beneficiaryFieldLabels.ministereCategorie"
           :value="MinistereCategorieKeys.value(beneficiary.ministereCategorie)"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Structure de rattachement"
+          :label="beneficiaryFieldLabels.ministereStructure"
           :value="MinistereStructureKeys.value(beneficiary.ministereStructure)"
           class="fr-col-6"
         />
         <BeneficiaryInfoLabel
-          label="Département ou service de l'Administration Centrale"
+          :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
           :value="
             MinistereDepartmentServiceAcKeys.value(
               beneficiary.ministereDepartementServiceAc
@@ -144,6 +144,7 @@
   } from '~/client/options/ministry'
   import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import { RoutePath } from '~/utils/routing'
+  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput

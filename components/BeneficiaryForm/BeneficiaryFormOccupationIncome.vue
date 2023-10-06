@@ -3,32 +3,32 @@
     <div class="fr-col-12">
       <VeeSelect
         name="socioProfessionalCategory"
-        label="Catégorie socio-professionnelle"
+        :label="beneficiaryFieldLabels.socioProfessionalCategory"
         :options="withEmptyValue(beneficiarySocioProfessionalCategoryOptions)"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="occupation"
-        label="Profession(s)"
+        :label="beneficiaryFieldLabels.occupation"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="employer"
-        label="Employeur"
+        :label="beneficiaryFieldLabels.employer"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="employerSiret"
-        label="SIRET de l'employeur"
+        :label="beneficiaryFieldLabels.employerSiret"
       />
     </div>
     <div class="fr-col-12">
       <VeeMultiSelect
         name="mainIncomeSource"
-        label="Natures des ressources"
+        :label="beneficiaryFieldLabels.mainIncomeSource"
         :options="incomeSourceOptions"
         label-class="fr-text--regular"
         dropdown
@@ -37,14 +37,14 @@
     <div class="fr-col-12">
       <VeeCurrencyInput
         name="mainIncomeAmount"
-        label="Montant des ressources"
+        :label="beneficiaryFieldLabels.mainIncomeAmount"
       />
     </div>
     <template v-if="hasPartner">
       <div class="fr-col-12">
         <VeeMultiSelect
           name="partnerMainIncomeSource"
-          label="Natures des ressources du conjoint"
+          :label="beneficiaryFieldLabels.partnerMainIncomeSource"
           :options="incomeSourceOptions"
           label-class="fr-text--regular"
           dropdown
@@ -53,7 +53,7 @@
       <div class="fr-col-12">
         <VeeCurrencyInput
           name="partnerMainIncomeAmount"
-          label="Montant des ressources du conjoint"
+          :label="beneficiaryFieldLabels.partnerMainIncomeAmount"
         />
       </div>
     </template>
@@ -61,7 +61,7 @@
       <div class="fr-col-12">
         <VeeMultiSelect
           name="majorChildrenMainIncomeSource"
-          label="Natures des ressources des enfants majeurs"
+          :label="beneficiaryFieldLabels.majorChildrenMainIncomeSource"
           :options="incomeSourceOptions"
           label-class="fr-text--regular"
           dropdown
@@ -70,20 +70,20 @@
       <div class="fr-col-12">
         <VeeCurrencyInput
           name="majorChildrenMainIncomeAmount"
-          label="Montant des ressources des enfants majeurs"
+          :label="beneficiaryFieldLabels.majorChildrenMainIncomeAmount"
         />
       </div>
     </template>
     <div class="fr-col-12">
       <VeeInput
         name="unemploymentNumber"
-        label="N° Pôle Emploi"
+        :label="beneficiaryFieldLabels.unemploymentNumber"
       />
     </div>
     <div class="fr-col-12">
       <VeeMultiSelect
         name="pensionOrganisations"
-        label="Organismes de retraite"
+        :label="beneficiaryFieldLabels.pensionOrganisations"
         :options="pensionOrganisationOptions"
         label-class="fr-text--regular"
         dropdown
@@ -95,53 +95,46 @@
     >
       <VeeInput
         name="otherPensionOrganisations"
-        label="Autre(s) organisme(s) de retraite"
+        :label="beneficiaryFieldLabels.otherPensionOrganisations"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="cafNumber"
-        label="N° CAF"
+        :label="beneficiaryFieldLabels.cafNumber"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="bank"
-        label="Banque"
+        :label="beneficiaryFieldLabels.bank"
       />
     </div>
     <div class="fr-col-12">
       <VeeInput
         name="funeralContract"
-        label="Contrat obsèques"
+        :label="beneficiaryFieldLabels.funeralContract"
       />
     </div>
     <template v-if="isMinistryAgent">
       <div class="fr-col-12">
         <VeeSelect
           name="ministereCategorie"
-          label="Catégorie"
+          :label="beneficiaryFieldLabels.ministereCategorie"
           :options="withEmptyValue(ministereCategorieOptions)"
         />
       </div>
       <div class="fr-col-12">
         <VeeSearchableSelect
           name="ministereDepartementServiceAc"
-          label="Département ou service de l'Administration Centrale"
-          :options="withEmptyValue(ministereDepartmentServiceAcOptions)"
-        />
-      </div>
-      <div class="fr-col-12">
-        <VeeSelect
-          name="ministereDepartementServiceAc"
-          label="Département ou service de l'Administration Centrale"
+          :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
           :options="withEmptyValue(ministereDepartmentServiceAcOptions)"
         />
       </div>
       <div class="fr-col-12">
         <VeeSelect
           name="ministereStructure"
-          label="Structure de rattachement"
+          :label="beneficiaryFieldLabels.ministereStructure"
           :options="withEmptyValue(ministereStructureOptions)"
         />
       </div>
@@ -164,6 +157,7 @@
     ministereStructureOptions,
     ministereCategorieOptions
   } from '~/client/options/ministry'
+  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{
     familySituation: BeneficiaryFamilySituation | null | undefined
