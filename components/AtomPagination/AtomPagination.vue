@@ -39,7 +39,7 @@
           :key="`page-number-${pageNumber}`"
         >
           <button
-            class="fr-pagination__link"
+            class="fr-pagination__link page-number"
             :class="{ 'fr-hidden fr-unhidden-lg': pageNumber > 1 }"
             :aria-current="pageNumber === page ? 'page' : undefined"
             :title="`Page ${pageNumber}`"
@@ -53,7 +53,7 @@
         </li>
         <li v-if="totalPages > 6 && page > 3 && page <= totalPages - 3">
           <button
-            class="fr-pagination__link fr-hidden fr-unhidden-lg"
+            class="fr-pagination__link page-number fr-hidden fr-unhidden-lg"
             aria-current="true"
             :title="`Page ${page}`"
           >
@@ -68,7 +68,7 @@
           :key="`page-offset-${pageOffset}`"
         >
           <button
-            class="fr-pagination__link"
+            class="fr-pagination__link page-number"
             :class="{
               'fr-hidden fr-unhidden-lg':
                 totalPages - 3 + pageOffset < totalPages
@@ -143,12 +143,20 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .fr-pagination__list {
     justify-content: center;
   }
 
   .fr-grid-row {
     justify-content: space-between;
+  }
+
+  .page-number {
+    border-radius: 0.5rem;
+
+    &[aria-current] {
+      background-color: var(--primary);
+    }
   }
 </style>
