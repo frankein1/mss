@@ -8,8 +8,8 @@
   </div>
   <div class="feature-section fr-mt-2w">
     <p v-if="documentsTotal">
-      {{ documentsTotal }} document(s) disponibles dans l'historique du
-      bénéficiaire
+      {{ documents.length }} document(s) affiché(s) sur
+      {{ documentsTotal }} disponible(s) dans l'historique du bénéficiaire
     </p>
     <AtomAlert
       v-if="error"
