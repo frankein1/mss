@@ -172,32 +172,6 @@ async function getHelpRequests(
   }))
 }
 
-async function getHistoryTotalCount(
-  user: User,
-  beneficiary: NonNullable<BeneficiarySecurityTarget>
-) {
-  let followupsCount = 0
-  let helpRequestsCount = 0
-
-  if (canListBeneficiaryFollowups(user, beneficiary)) {
-    followupsCount = await prismaClient.followup.count({
-      where: {
-        beneficiaryId: beneficiary.id
-      }
-    })
-  }
-
-  if (canListBeneficiaryHelpRequests(user, beneficiary)) {
-    helpRequestsCount = await prismaClient.helpRequest.count({
-      where: {
-        beneficiaryId: beneficiary.id
-      }
-    })
-  }
-
-  return followupsCount + helpRequestsCount
-}
-
 type HistoryFollowup = Prisma.PromiseReturnType<typeof getFollowups>[0]
 type HistoryHelpRequest = Prisma.PromiseReturnType<typeof getHelpRequests>[0]
 
@@ -211,16 +185,6 @@ function sortHistoryItem(a: HistoryItem, b: HistoryItem) {
   const dateA = getHistoryItemDate(a)
   const dateB = getHistoryItemDate(b)
   return dateA >= dateB ? -1 : 1
-}
-
-function getHistoryResponse(
-  history: (HistoryFollowup | HistoryHelpRequest)[],
-  totalCount: number
-) {
-  return {
-    history,
-    totalCount
-  }
 }
 
 export const getBeneficiaryHistoryHandler = async ({
@@ -238,28 +202,21 @@ export const getBeneficiaryHistoryHandler = async ({
     throw notfoundError()
   }
 
-  const historyTotalCount = await getHistoryTotalCount(user, beneficiary)
-
   if (filtersAppliesToFollowups(filters)) {
-    const history = await getFollowups(user, beneficiary, filters)
-    return getHistoryResponse(history, historyTotalCount)
+    return getFollowups(user, beneficiary, filters)
   }
 
   if (filtersAppliesToHelpRequests(filters)) {
-    const history = await getHelpRequests(user, beneficiary, filters)
-    return getHistoryResponse(history, historyTotalCount)
+    return getHelpRequests(user, beneficiary, filters)
   }
 
   if (!filtersAppliesToFollowupsAndHelpRequests(filters)) {
-    return getHistoryResponse([], historyTotalCount)
+    return []
   }
 
   const [followups, helpRequests] = await Promise.all([
     getFollowups(user, beneficiary, filters),
     getHelpRequests(user, beneficiary, filters)
   ])
-  return getHistoryResponse(
-    [...followups, ...helpRequests].sort(sortHistoryItem),
-    historyTotalCount
-  )
+  return [...followups, ...helpRequests].sort(sortHistoryItem)
 }
