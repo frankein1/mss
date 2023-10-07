@@ -2,8 +2,16 @@
   <tr>
     <td>{{ documentTypeLabels[document.type] }}</td>
     <td>
-      <div class="name-container">
-        {{ document.name }}
+      <div class="name-column">
+        <span
+          class="name-container"
+          :class="{
+            'name-container-2-badges':
+              document.confidential && hasUnreadNotifications
+          }"
+          :title="document.name"
+          >{{ document.name }}</span
+        >
         <span
           v-if="document.confidential"
           class="fr-badge fr-badge--warning fr-ml-1w"
@@ -179,10 +187,21 @@
 </script>
 
 <style scoped>
-  .name-container {
+  .name-column {
     display: flex;
     align-items: center;
     justify-content: flex-start;
+  }
+
+  .name-container {
+    max-width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &.name-container-2-badges {
+      max-width: 60px;
+    }
   }
 
   .fr-btns-group .fr-btn {
