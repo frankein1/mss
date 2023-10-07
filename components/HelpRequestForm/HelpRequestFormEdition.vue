@@ -19,8 +19,7 @@
   import {
     FollowupType,
     InstructorOrganization,
-    PrescribingOrganization,
-    Prisma
+    PrescribingOrganization
   } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
@@ -31,7 +30,8 @@
   import { canEditHelpRequestPrivateSynthesis } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { pastStatusesFromStatus } from '~/utils/helpRequest'
-  import { GetHelpRequestDetailsOutput } from '~/server/routers'
+  import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
+  import { prismaDecimalToNumber } from '~/utils/prisma'
 
   const authStore = useAuthStore()
 
@@ -70,12 +70,8 @@
       documents: initialDocumentIds.value,
       financialSupport: props.helpRequest.financialSupport ? 'true' : 'false',
       externalStructure: props.helpRequest.externalStructure ? 'true' : 'false',
-      askedAmount: props.helpRequest.askedAmount
-        ? new Prisma.Decimal(props.helpRequest.askedAmount).toNumber()
-        : undefined,
-      allocatedAmount: props.helpRequest.allocatedAmount
-        ? new Prisma.Decimal(props.helpRequest.allocatedAmount).toNumber()
-        : undefined,
+      askedAmount: prismaDecimalToNumber(props.helpRequest.askedAmount),
+      allocatedAmount: prismaDecimalToNumber(props.helpRequest.allocatedAmount),
       fullFile: props.helpRequest.fullFile || false
     }
   })
@@ -84,3 +80,4 @@
     emit('saveHelpRequest', values)
   })
 </script>
+~/server/trpc/routers

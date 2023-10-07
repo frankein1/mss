@@ -45,7 +45,7 @@
     DefaultLegallyRequiredFollowupTypeWithSupportsCount,
     StructureWithFollowupTypesWithSupportsCount
   } from './types'
-  import { AdminStructureOutput } from '~/server/routers'
+  import { AdminStructureOutput } from '~/server/trpc/routers'
   import type {
     AdminEditStructureInput,
     EditCurrentUserStructureInput
@@ -148,3 +148,4 @@
     return f.default === null
   }
 </script>
+~/server/trpc/routers

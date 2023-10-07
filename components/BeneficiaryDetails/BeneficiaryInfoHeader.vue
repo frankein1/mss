@@ -7,7 +7,10 @@
           :value="referentNames"
         />
       </div>
-      <div class="fr-col-6">
+      <div
+        v-if="beneficiary.aidantConnectAuthorized"
+        class="fr-col-6"
+      >
         <div class="fr-icon-success-line field-value">
           Mandat Aidant Connect
         </div>
@@ -50,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import { getUserDisplayName } from '~/utils/user'
   import {
     formatAddress,
@@ -68,6 +71,10 @@
   )
 
   const phoneLabel = computed(() => {
+    if (props.beneficiary.noPhone) {
+      return "N'a pas de téléphone"
+    }
     return props.beneficiary.phone1 || props.beneficiary.phone2
   })
 </script>
+~/server/trpc/routers

@@ -1,13 +1,21 @@
+import { z } from 'zod'
 import {
   stringConstraint,
   maxStringLengthMessage,
-  minStringLengthMessage
+  minStringLengthMessage,
+  stringOrEmpty
 } from '~/utils/zod'
 
-const beneficiaryFirstNameSchema = stringConstraint
+const beneficiaryFirstNameBaseSchema = stringConstraint
   .min(2, minStringLengthMessage(2))
   .max(50, maxStringLengthMessage(50))
-  .transform(v => {
+
+const beneficiaryFirstNameSchemaTransform = (
+  schema:
+    | z.ZodString
+    | z.ZodUnion<[z.ZodOptional<z.ZodNullable<z.ZodString>>, z.ZodLiteral<''>]>
+) =>
+  schema.transform(v => {
     if (!v) {
       return v
     }
@@ -15,4 +23,12 @@ const beneficiaryFirstNameSchema = stringConstraint
     return `${firstLetter.toUpperCase()}${rest.join('')}`
   })
 
-export { beneficiaryFirstNameSchema }
+const beneficiaryFirstNameSchema = beneficiaryFirstNameSchemaTransform(
+  beneficiaryFirstNameBaseSchema
+)
+
+const beneficiaryFirstNameOrEmptySchema = beneficiaryFirstNameSchemaTransform(
+  stringOrEmpty(beneficiaryFirstNameBaseSchema)
+)
+
+export { beneficiaryFirstNameSchema, beneficiaryFirstNameOrEmptySchema }

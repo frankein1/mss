@@ -1,7 +1,16 @@
 <template>
   <div class="fr-grid-row">
     <div class="fr-col-12 fr-text--bold fr-pb-1w">
-      {{ name }}
+      <NuxtLink
+        v-if="relative.linkedBeneficiary"
+        class="fr-link fr-icon-links-line fr-link--icon-left"
+        :to="RoutePath.AppBeneficiary(relative.linkedBeneficiary.id)"
+        target="_self"
+        >{{ name }}</NuxtLink
+      >
+      <template v-else>
+        {{ name }}
+      </template>
     </div>
   </div>
   <div class="fr-grid-row">
@@ -12,7 +21,7 @@
     />
     <BeneficiaryInfoLabel
       label="Date de naissance"
-      :value="formatDate(relative.linkedBeneficiary?.birthDate)"
+      :value="formatDate(birthDate)"
       class="fr-col-6"
     />
   </div>
@@ -49,6 +58,7 @@
 <script setup lang="ts">
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
   import { RelativeRelationshipKeys } from '~/client/options/beneficiary'
+  import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     relative: BeneficiaryRelativeWithLinkedBeneficiary
@@ -74,5 +84,12 @@
     return relative.linkedBeneficiary
       ? relative.linkedBeneficiary.phone1
       : relative.phone
+  })
+
+  const birthDate = computed(() => {
+    const relative = props.relative
+    return relative.linkedBeneficiary
+      ? relative.linkedBeneficiary.birthDate
+      : relative.birthDate
   })
 </script>

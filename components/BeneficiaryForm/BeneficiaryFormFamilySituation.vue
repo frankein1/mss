@@ -1,45 +1,36 @@
 <template>
-  <fieldset class="fr-fieldset fr-container--fluid relatives-fieldset">
-    <legend class="fr-fieldset__legend--regular fr-fieldset__legend">
-      <h3 class="fr-h5">Situation du foyer fiscal</h3>
-    </legend>
-    <div class="fr-grid-row fr-grid-row--gutters form-grid">
-      <div class="fr-fieldset__element">
-        <VeeSelect
-          name="taxHousehold.familySituation"
-          label="Situation familiale"
-          :options="withEmptyValue(beneficiaryFamilySituationOptions)"
-        />
-      </div>
-      <div class="fr-fieldset__element">
-        <VeeInput
-          name="taxHousehold.minorChildren"
-          label="Nombre d'enfant(s) mineur(s)"
-          type="number"
-          :min="0"
-        />
-      </div>
-      <div class="fr-fieldset__element">
-        <VeeInput
-          name="taxHousehold.majorChildren"
-          label="Nombre d'enfant(s) majeur(s)"
-          type="number"
-          :min="0"
-        />
-      </div>
+  <BeneficiaryFormSection section-title="Situation familiale">
+    <div class="fr-col-12">
+      <VeeSelect
+        name="familySituation"
+        :label="beneficiaryFieldLabels.familySituation"
+        :options="withEmptyValue(beneficiaryFamilySituationOptions)"
+      />
     </div>
-  </fieldset>
-  <hr class="fr-mt-5w fr-mb-2w" />
+    <div class="fr-col-12 fr-col-lg-6">
+      <VeeInput
+        name="minorChildren"
+        :label="beneficiaryFieldLabels.minorChildren"
+        type="number"
+      />
+    </div>
+    <div class="fr-col-12 fr-col-lg-6">
+      <VeeInput
+        name="majorChildren"
+        :label="beneficiaryFieldLabels.majorChildren"
+        type="number"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeCheckbox
+        label="Ce bénéficiaire est aidant familial"
+        name="caregiver"
+      />
+    </div>
+  </BeneficiaryFormSection>
 </template>
 
 <script setup lang="ts">
+  import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryFamilySituationOptions } from '~/client/options/beneficiary'
 </script>
-
-<style scoped>
-  .relatives-fieldset {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-</style>

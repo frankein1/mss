@@ -1,13 +1,14 @@
 import { BeneficiaryStatus } from '@prisma/client'
 import { z } from 'zod'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
-import { beneficiaryFirstNameSchema } from './beneficiaryFirstName.schema'
+import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
 import {
   emailOrEmpty,
   errorMessages,
   phoneConstraint,
   requiredNativeEnum,
-  numeroPegaseContraint
+  numeroPegaseContraint,
+  stringOrEmpty
 } from '~/utils/zod'
 
 export const createBeneficiarySchema = z.object({
@@ -18,13 +19,13 @@ export const createBeneficiarySchema = z.object({
     })
     .min(1, 'Veuillez renseigner au moins un agent référent'),
   aidantConnectAuthorized: z.boolean().default(false),
-  usualName: beneficiaryLastNameSchema.nullish(),
-  birthName: beneficiaryLastNameSchema.nullish(),
-  firstName: beneficiaryFirstNameSchema.nullish(),
+  usualName: stringOrEmpty(beneficiaryLastNameSchema),
+  birthName: stringOrEmpty(beneficiaryLastNameSchema),
+  firstName: beneficiaryFirstNameOrEmptySchema,
   birthDate: z.coerce.date(errorMessages).nullish(),
-  phone1: phoneConstraint.nullish(),
+  phone1: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
-  numeroPegase: numeroPegaseContraint.nullish()
+  numeroPegase: stringOrEmpty(numeroPegaseContraint)
 })
 
 export type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>

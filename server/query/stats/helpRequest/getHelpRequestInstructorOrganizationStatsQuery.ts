@@ -3,12 +3,12 @@ import { STATS_NULL_LABEL } from '~/client/options/stat'
 import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
-import { ProtectedAppContextUser } from '~/server/trpc'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
 export async function getHelpRequestInstructorOrganizationStatsQuery(
-  user: ProtectedAppContextUser,
+  user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
   const referents = canOnlyListItsBeneficiaries(user)
@@ -30,7 +30,7 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
 
   const helpRequests = await prismaClient.helpRequest.findMany({
     where: {
-      structureId: user.structureId,
+      structureId: user.structureId || '',
       ...preparedFilters,
       beneficiary: beneficiaryFilters
     },

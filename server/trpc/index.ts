@@ -2,7 +2,6 @@ export { forbiddenError, invalidError, notfoundError } from './trpcErrors'
 export {
   publicProcedure,
   protectedProcedure,
-  statsProcedure,
   adminProcedure,
   router,
   type ProtectedAppContext,

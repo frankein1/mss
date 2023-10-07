@@ -17,11 +17,17 @@
       </PageTitle>
 
       <slot></slot>
+      <BeneficiaryFormNavArrows
+        :previous-page="previousPage"
+        :next-page="nextPage"
+        @save="saveTarget = $event"
+      />
     </main>
     <BeneficiaryFormActions
       class="fr-col-12"
       :is-submitting="isSubmitting"
-      @save="saveAndLeave = true"
+      :saved="saved"
+      @save="saveTarget = undefined"
       @cancel="onCancel"
     />
   </form>
@@ -34,29 +40,38 @@
   type SubmitType = z.infer<T>
 
   const route = useRoute()
+  const draftId = route.query.draftId as string | null
 
   const props = withDefaults(
     defineProps<{
       beneficiary?: SubmitType | null
       schema: T
       isSubmitting: boolean
-      isEditting?: boolean
       title: string
       titleIcon?: string
+      saved?: boolean
+      previousPage?: { title: string; path: string }
+      nextPage?: { title: string; path: string }
     }>(),
-    { beneficiary: undefined, isEditing: false, titleIcon: undefined }
+    {
+      beneficiary: undefined,
+      titleIcon: undefined,
+      saved: false,
+      previousPage: undefined,
+      nextPage: undefined
+    }
   )
 
   const emit = defineEmits<{
-    save: [beneficiary: SubmitType, saveAndLeave: boolean]
+    save: [beneficiary: SubmitType, target: string | undefined]
   }>()
 
-  const saveAndLeave = ref(false)
+  const saveTarget = ref<string | undefined>(undefined)
 
   const breadcrumbLinks = computed(() =>
-    props.isEditting
-      ? Breadcrumb.AppBeneficiaryEdit(props.beneficiary || null)
-      : Breadcrumb.AppBeneficiariesAdd()
+    draftId
+      ? Breadcrumb.AppBeneficiariesAdd()
+      : Breadcrumb.AppBeneficiaryEdit(props.beneficiary || null)
   )
 
   useHead({ title: props.title })
@@ -67,21 +82,24 @@
   })
 
   const onSubmit = handleSubmit(values => {
-    emit('save', values, saveAndLeave.value)
+    emit('save', values, saveTarget.value)
   })
 
   async function onCancel() {
-    const draftId = route.query.draftId as string | null
+    const redirectRoute =
+      !draftId && props.beneficiary
+        ? RoutePath.AppBeneficiary(props.beneficiary.id)
+        : RoutePath.AppBeneficiariesAdd()
 
     if (draftId) {
       try {
         await useTrpcClient().draft.delete.mutate({ id: draftId })
       } catch {
-        navigateTo(RoutePath.AppBeneficiariesAdd())
+        navigateTo(redirectRoute)
       }
     }
 
-    navigateTo(RoutePath.AppBeneficiariesAdd())
+    navigateTo(redirectRoute)
   }
 </script>
 

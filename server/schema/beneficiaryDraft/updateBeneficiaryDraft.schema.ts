@@ -1,10 +1,21 @@
 import { z } from 'zod'
-import { saveBeneficiaryGeneralInformationSchema } from '../beneficiary'
+import {
+  saveBeneficiaryGeneralInformationSchema,
+  saveBeneficiaryTaxHouseholdSchema,
+  saveBeneficiaryEntourageSchema,
+  saveBeneficiaryHealthSchema,
+  saveBeneficiaryOccupationSchema,
+  saveBeneficiaryExternalOrganisationsSchema
+} from '../beneficiary'
 
 export const updateBeneficiaryDraftSchema = z.object({
   id: z.string().uuid(),
-  general: saveBeneficiaryGeneralInformationSchema.optional()
-  // TODO: Add other sections
+  general: saveBeneficiaryGeneralInformationSchema.optional(),
+  taxHousehold: saveBeneficiaryTaxHouseholdSchema.optional(),
+  entourage: saveBeneficiaryEntourageSchema.optional(),
+  health: saveBeneficiaryHealthSchema.optional(),
+  occupation: saveBeneficiaryOccupationSchema.optional(),
+  externalOrganisations: saveBeneficiaryExternalOrganisationsSchema.optional()
 })
 
 export type UpdateBeneficiaryDraftInput = z.infer<

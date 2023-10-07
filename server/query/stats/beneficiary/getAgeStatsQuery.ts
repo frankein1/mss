@@ -4,11 +4,11 @@ import { AgeGroup } from '~/client/options/ageGroup'
 import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
-import { ProtectedAppContextUser } from '~/server/trpc'
 import { AgeGroupsFilter } from '~/types/stat'
 import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { prepareBeneficiaryStatFilters } from '~/utils/filters'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 enum NullAgeGroup {
   null = STATS_NULL_KEY
@@ -17,7 +17,7 @@ enum NullAgeGroup {
 type AgeGroupOrNull = AgeGroup | NullAgeGroup
 
 export async function getAgeStatsQuery(
-  user: ProtectedAppContextUser,
+  user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
   const referents = canOnlyListItsBeneficiaries(user)
@@ -27,7 +27,7 @@ export async function getAgeStatsQuery(
   const ageCounts = await prismaClient.beneficiary.groupBy({
     by: ['birthDate'],
     where: {
-      structureId: user.structureId,
+      structureId: user.structureId || '',
       ...prepareBeneficiaryStatFilters(input),
       referents
     },

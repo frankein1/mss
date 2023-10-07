@@ -5,7 +5,11 @@ import type {
 } from './types'
 import { hasAllowedRole } from './helpers'
 
-export type { SecurityTargetWithStructure, SecurityTargetWithReferents }
+export type {
+  SecurityRuleGrantee,
+  SecurityTargetWithStructure,
+  SecurityTargetWithReferents
+}
 
 export {
   canCreateUser,
@@ -30,7 +34,6 @@ export {
   canEditBeneficiaryReferents,
   canViewBeneficiaryNir,
   canSetBeneficiaryNir,
-  canSaveBeneficiaryWithCompleteInfo,
   canSaveToBeneficiaryBeneficiaryDraft
 } from './beneficiary'
 

@@ -1,6 +1,6 @@
 {
   "name": "monsuivisocial-v2",
-  "version": "1.6.0",
+  "version": "1.6.1",
   "scripts": {
     "dev": "nuxt dev",
     "dev:db:start": "docker compose -f docker-compose.dev.yml up -d",
@@ -43,6 +43,7 @@
     "postcss-html": "^1.5.0",
     "superjson": "^1.13.1",
     "trpc-nuxt": "^0.10.12",
+    "trpc-shield": "^0.4.3",
     "uuid": "^9.0.0",
     "vee-validate": "^4.11.3",
     "vue-matomo": "^4.2.0",

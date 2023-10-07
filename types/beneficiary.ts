@@ -9,7 +9,14 @@ import type {
   Draft
 } from '@prisma/client'
 import type { BeneficiaryRelativeWithLinkedBeneficiary } from './relative'
-import { CreateBeneficiaryInput } from '~/server/schema'
+import {
+  SaveBeneficiaryGeneralInformationInput,
+  SaveBeneficiaryTaxHouseholdInput,
+  SaveBeneficiaryEntourageInput,
+  SaveBeneficiaryHealthInput,
+  SaveBeneficiaryOccupationInput,
+  SaveBeneficiaryExternalOrganisationsInput
+} from '~/server/schema'
 
 export type BeneficiaryReferent = {
   id: string
@@ -33,11 +40,17 @@ export type BeneficiarySearchResult = Pick<
   'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
 >
 
-export type BeneficiaryNames = Pick<
-  Beneficiary,
-  'firstName' | 'usualName' | 'birthName'
+export type BeneficiaryNames = Partial<
+  Pick<Beneficiary, 'firstName' | 'usualName' | 'birthName'>
 >
 
 export type BeneficiaryDraft = Draft & {
-  content?: { general?: CreateBeneficiaryInput } | null
+  content?: {
+    general?: SaveBeneficiaryGeneralInformationInput
+    taxHousehold?: SaveBeneficiaryTaxHouseholdInput
+    entourage?: SaveBeneficiaryEntourageInput
+    health?: SaveBeneficiaryHealthInput
+    occupation?: SaveBeneficiaryOccupationInput
+    externalOrganisations?: SaveBeneficiaryExternalOrganisationsInput
+  } | null
 }

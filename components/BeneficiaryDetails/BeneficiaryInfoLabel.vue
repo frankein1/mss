@@ -1,24 +1,24 @@
 <template>
   <div
-    v-if="value"
+    v-if="displayedValue"
     class="fr-pb-2w"
   >
-    <div class="field-label">{{ label }} :</div>
-    <div class="field-value">{{ value }}</div>
-  </div>
-  <div
-    v-else-if="defaultValue"
-    class="fr-pb-2w"
-  >
-    <div class="field-label">{{ label }} :</div>
-    <div class="field-value">{{ defaultValue }}</div>
+    <div
+      v-if="label"
+      class="field-label"
+    >
+      {{ label }} :
+    </div>
+    <div class="field-value">{{ displayedValue }}</div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  defineProps<{
-    label: string
+  const props = defineProps<{
+    label?: string
     defaultValue?: string | undefined
     value: string | number | null | undefined
   }>()
+
+  const displayedValue = computed(() => props.value || props.defaultValue)
 </script>

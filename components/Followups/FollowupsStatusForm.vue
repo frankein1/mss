@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-  import { FollowupItem } from '~/server/routers'
+  import { FollowupItem } from '~/server/trpc/routers'
   import { followupStatusOptions } from '~/client/options/followup'
   import {
     QuickEditFollowupInput,
@@ -49,3 +49,4 @@
     }
   })
 </script>
+~/server/trpc/routers

@@ -134,10 +134,10 @@ export async function getHelpRequestFinancialStatsQuery(
     financialHelpRequestTotalAmount,
     financialHelpRequestAmountByType
   ] = await Promise.all([
-    getFinancialHelpRequestCount(user.structureId, filters),
-    getInternalFinancialHelpRequestCount(user.structureId, filters),
-    getFinancialHelpRequestTotalAmount(user.structureId, filters),
-    getFinancialHelpRequestAmountByType(user.structureId, filters)
+    getFinancialHelpRequestCount(user.structureId || '', filters),
+    getInternalFinancialHelpRequestCount(user.structureId || '', filters),
+    getFinancialHelpRequestTotalAmount(user.structureId || '', filters),
+    getFinancialHelpRequestAmountByType(user.structureId || '', filters)
   ])
 
   const requestsCounts = {

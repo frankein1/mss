@@ -15,11 +15,23 @@ export const minStringLengthMessage = (length: number) =>
   `Veuillez renseigner au minimum ${length} caractère${length > 1 ? 's' : ''}.`
 
 export const maxStringLengthMessage = (length: number) =>
-  `Veuillez renseigner au maximum ${length} caractères}.`
+  `Veuillez renseigner au maximum ${length} caractères.`
 
 export const validEmailMessage = 'Veuillez renseigner un email valide.'
 
 export const validZipcode = 'Veuillez renseigner un code postal valide.'
+
+export const validNumber =
+  'Veuillez saisir un nombre valide. Format attendu : 123, 123,45 ou 123.45.'
+
+export const validIntNumber = 'Veuillez entrer un nombre entier.'
+
+export const amountNumber = z.preprocess(
+  v => (typeof v === 'string' ? v.replace(',', '.') : v),
+  z.coerce
+    .number({ invalid_type_error: validNumber })
+    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+)
 
 export const enumErrorMap: z.ZodErrorMap = issue => {
   switch (issue.code) {
@@ -57,7 +69,7 @@ export const stringConstraint = z.string().trim()
 
 export const phoneConstraint = stringConstraint.regex(
   /^(\+33 |0)[1-9]( \d\d){4}$/,
-  'le format doit être de la forme 00 00 00 00 00'
+  'Le format doit être de la forme 01 22 33 44 55'
 )
 
 export const socialSecurityNumberConstraint = z
@@ -68,11 +80,11 @@ export const socialSecurityNumberConstraint = z
   )
 
 export const siretConstraint = stringConstraint
-  .min(14)
+  .min(14, minStringLengthMessage(14))
   .max(30, maxStringLengthMessage(30))
 
 export const unemploymentNumberConstraint = stringConstraint
-  .min(7)
+  .min(7, minStringLengthMessage(7))
   .max(50, maxStringLengthMessage(50))
 
 export const cafNumberConstraint = stringConstraint.max(

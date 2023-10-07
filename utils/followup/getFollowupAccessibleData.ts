@@ -1,9 +1,9 @@
-import type { User } from '@prisma/client'
 import {
   canViewFollowupDetails,
   canViewFollowupPrivateSynthesis
 } from '~/server/security/rules'
 import { FollowupWithRelations } from '~/server/query/followups'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 function getFollowupMeta(followup: NonNullable<FollowupWithRelations>) {
   return {
@@ -24,7 +24,7 @@ function getFollowupMeta(followup: NonNullable<FollowupWithRelations>) {
 }
 
 function getFollowupDetails(
-  user: User,
+  user: SecurityRuleGrantee,
   followup: NonNullable<FollowupWithRelations>
 ) {
   if (!canViewFollowupDetails(user, followup)) {
@@ -52,7 +52,7 @@ function getFollowupDetails(
 }
 
 function getFollowupPrivateSynthesis(
-  user: User,
+  user: SecurityRuleGrantee,
   followup: NonNullable<FollowupWithRelations>
 ) {
   if (!canViewFollowupPrivateSynthesis(user, followup)) {
@@ -65,7 +65,7 @@ function getFollowupPrivateSynthesis(
 }
 
 export function getFollowupAccessibleData(
-  user: User,
+  user: SecurityRuleGrantee,
   followup: NonNullable<FollowupWithRelations>
 ) {
   const meta = getFollowupMeta(followup)

@@ -76,9 +76,6 @@
       noLabel?: boolean
       labelledBy?: string
       required?: boolean
-      pattern?: string
-      step?: string
-      min?: number
       noHint?: boolean
     }>(),
     {
@@ -89,9 +86,6 @@
       noLabel: false,
       labelledBy: undefined,
       required: false,
-      pattern: undefined,
-      step: undefined,
-      min: undefined,
       noHint: false
     }
   )
@@ -100,44 +94,53 @@
     changeValue: [value: string]
   }>()
 
+  // use `toRef` to create reactive references to `name` prop which is passed to `useField`
+  // this is important because vee-validte needs to know if the field name changes
+  // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
+  const name = toRef(() => props.name)
+
   const {
     errorMessage: error,
     value: refValue,
     handleChange
-  } = useField<string | number | Date>(props.name)
+  } = useField<string | number | Date>(name)
 
-  const { id, errorId } = useFormFieldId(props.name)
+  const { id, errorId } = useFormFieldId(name)
 
   const bindedValue = computed(() => formatValue(refValue?.value))
 
-  const ariaDescribedby = computed(() => (error.value ? errorId : undefined))
+  const ariaDescribedby = computed(() =>
+    error.value ? errorId.value : undefined
+  )
 
   const type = computed(() =>
     props.type === 'social-security-number' ? 'text' : props.type
   )
 
   const hint = computed(() => {
-    if (!props.noHint) {
+    if (props.noHint) {
       return undefined
     }
+    let typeHint = ''
     if (props.type === 'tel') {
-      const hintBase = 'Format attendu : 01 22 33 44 55'
-      return props.hint ? `${hintBase}. ${props.hint}` : hintBase
+      typeHint = 'Format attendu : 01 22 33 44 55'
     }
     if (props.type === 'social-security-number') {
-      const hintBase =
+      typeHint =
         'Format attendu : 0 00 00 00 000 000 00. La clé du n° de sécurité sociale est optionnelle.'
-      return props.hint ? `${hintBase}. ${props.hint}` : hintBase
+    }
+    if (props.type === 'email') {
+      typeHint = 'Fromat attendu : nom@domaine.fr'
     }
     if (props.hint) {
-      return props.hint
+      return typeHint ? `${typeHint}. ${props.hint}` : props.hint
     }
-    return undefined
+    return typeHint || undefined
   })
 
   function formatValue(value: string | Date | number) {
     if (!value) {
-      return ''
+      return value
     }
     if (props.type === 'date' && value instanceof Date) {
       return formatDate(value as Date, 'YYYY-MM-DD')
