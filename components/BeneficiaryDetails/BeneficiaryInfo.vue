@@ -2,7 +2,10 @@
   <BeneficiaryInfoSection title="">
     <BeneficiaryInfoHeader :beneficiary="beneficiary" />
   </BeneficiaryInfoSection>
-  <BeneficiaryInfoSection title="">
+  <BeneficiaryInfoSection
+    v-if="followupTypes.length"
+    title=""
+  >
     <BeneficiaryInfoFollowupTypes :followup-types="followupTypes" />
   </BeneficiaryInfoSection>
 
@@ -22,14 +25,14 @@
 
   <BeneficiaryInfoOccupationIncome :beneficiary="beneficiary" />
 
-  <BeneficiaryInfoOtherInformation :beneficiary="beneficiary" />
+  <BeneficiaryInfoExternalOrganisations :beneficiary="beneficiary" />
 </template>
 
 <script lang="ts" setup>
   import type {
     GetBeneficiaryOutput,
     GetBeneficiaryFollowupTypesOutput
-  } from '~/server/routers'
+  } from '~/server/trpc/routers'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
 
   defineProps<{
@@ -39,3 +42,4 @@
     followupTypes: GetBeneficiaryFollowupTypesOutput
   }>()
 </script>
+~/server/trpc/routers

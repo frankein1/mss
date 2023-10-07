@@ -22,28 +22,6 @@
         :label="beneficiaryFieldLabels.accommodationAdditionalInformation"
       />
     </div>
-    <div class="fr-col-12">
-      <VeeAddressInput
-        name="street"
-        :label="beneficiaryFieldLabels.street"
-        :zip-code="zipcode"
-        hint="Numéro et voie"
-        @address-selected="onAddressSelected"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeInput
-        name="addressComplement"
-        :label="beneficiaryFieldLabels.addressComplement"
-        hint="Bâtiment, immeuble, escalier et numéro d'appartement"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeInput
-        name="postOfficeBox"
-        :label="beneficiaryFieldLabels.postOfficeBox"
-      />
-    </div>
     <div class="fr-col-12 fr-col-md-3">
       <VeeInput
         name="zipcode"
@@ -57,6 +35,22 @@
         :label="beneficiaryFieldLabels.city"
         :zip-code="zipcode"
         @city-selected="onCitySelected"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeAddressInput
+        name="street"
+        :label="beneficiaryFieldLabels.street"
+        :zip-code="zipcode"
+        hint="Numéro et voie"
+        @address-selected="onAddressSelected"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeInput
+        name="addressComplement"
+        :label="beneficiaryFieldLabels.addressComplement"
+        hint="Bâtiment, escalier, numéro d'appartement, lieu-dit, etc."
       />
     </div>
     <div class="fr-col-12">

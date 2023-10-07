@@ -15,5 +15,5 @@ export function formatBeneficiaryBirthInfo(
     res.push('à')
     res.push(info.birthPlace)
   }
-  return res.filter(Boolean).join(' ')
+  return res.join(' ')
 }

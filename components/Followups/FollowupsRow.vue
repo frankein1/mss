@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupItem } from '~/server/routers'
+  import { FollowupItem } from '~/server/trpc/routers'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { followupStatusOptions } from '~/client/options/followup'
@@ -90,3 +90,4 @@
     canEditFollowup(user.value, props.followup)
   )
 </script>
+~/server/trpc/routers

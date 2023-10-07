@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Documents, GetBeneficiaryOutput } from '~/server/routers'
+  import { Documents, GetBeneficiaryOutput } from '~/server/trpc/routers'
   import type { BeneficiaryDocumentSort } from '~/types/table'
 
   const props = defineProps<{
@@ -72,3 +72,4 @@
   const dateSort = computed(() => props.sort?.find(s => s.created)?.created)
   const nameSort = computed(() => props.sort?.find(s => s.name)?.name)
 </script>
+~/server/trpc/routers

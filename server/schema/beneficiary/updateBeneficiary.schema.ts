@@ -1,27 +1,65 @@
 import { z } from 'zod'
 import {
-  saveBeneficiarySchema,
-  saveBeneficiaryGeneralInformationSchema
+  saveBeneficiaryGeneralInformationSchema,
+  saveBeneficiaryTaxHouseholdSchema,
+  saveBeneficiaryEntourageSchema,
+  saveBeneficiaryHealthSchema,
+  saveBeneficiaryOccupationSchema,
+  saveBeneficiaryExternalOrganisationsSchema
 } from './saveBeneficiary.schema'
 
-function fromSaveSchemaToUpdateSchema<T extends z.ZodRawShape>(
-  schema: z.ZodObject<T>
-) {
-  return schema.extend({
+export const updateBeneficiaryGeneralInformationSchema =
+  saveBeneficiaryGeneralInformationSchema.extend({
     id: z.string().uuid(),
     structureId: z.string().uuid()
   })
-}
-
-export const updateBeneficiarySchema = fromSaveSchemaToUpdateSchema(
-  saveBeneficiarySchema
-)
-
-export type UpdateBeneficiaryInput = z.infer<typeof updateBeneficiarySchema>
-
-export const updateBeneficiaryGeneralInformationSchema =
-  fromSaveSchemaToUpdateSchema(saveBeneficiaryGeneralInformationSchema)
 
 export type UpdateBeneficiaryGeneralInformationInput = z.infer<
   typeof updateBeneficiaryGeneralInformationSchema
+>
+
+export const updateBeneficiaryTaxHouseholdSchema =
+  saveBeneficiaryTaxHouseholdSchema.extend({
+    id: z.string().uuid()
+  })
+
+export type UpdateBeneficiaryTaxHouseholdInput = z.infer<
+  typeof updateBeneficiaryTaxHouseholdSchema
+>
+
+export const updateBeneficiaryEntourageSchema =
+  saveBeneficiaryEntourageSchema.extend({
+    id: z.string().uuid()
+  })
+
+export type UpdateBeneficiaryEntourageInput = z.infer<
+  typeof updateBeneficiaryEntourageSchema
+>
+
+export const updateBeneficiaryHealthSchema = saveBeneficiaryHealthSchema.extend(
+  {
+    id: z.string().uuid()
+  }
+)
+
+export type UpdateBeneficiaryHealthInput = z.infer<
+  typeof updateBeneficiaryHealthSchema
+>
+
+export const updateBeneficiaryOccupationSchema =
+  saveBeneficiaryOccupationSchema.extend({
+    id: z.string().uuid()
+  })
+
+export type UpdateBeneficiaryOccupationInput = z.infer<
+  typeof updateBeneficiaryOccupationSchema
+>
+
+export const updateBeneficiaryExternalOrganisationsSchema =
+  saveBeneficiaryExternalOrganisationsSchema.extend({
+    id: z.string().uuid()
+  })
+
+export type UpdateBeneficiaryExternalOrganisationsInput = z.infer<
+  typeof updateBeneficiaryExternalOrganisationsSchema
 >

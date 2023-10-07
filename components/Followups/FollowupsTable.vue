@@ -64,7 +64,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { GetFollowupsOutput } from '~/server/routers'
+  import { GetFollowupsOutput } from '~/server/trpc/routers'
   import { FollowupSort } from '~/types/table'
   import { followupFieldLabels } from '~/client/labels'
 
@@ -86,3 +86,4 @@
 
   const dateSort = computed(() => props.sort?.find(s => s.date)?.date)
 </script>
+~/server/trpc/routers

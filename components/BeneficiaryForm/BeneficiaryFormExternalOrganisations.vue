@@ -1,39 +1,51 @@
 <template>
-  <div class="fr-container--fluid">
-    <div class="fr-grid-row fr-grid-row--gutters form-grid">
+  <BeneficiaryFormSection>
+    <div class="fr-col-12">
       <VeeSelect
-        name="external.protectionMeasure"
+        name="protectionMeasure"
         label="Mesures de protection"
         :options="withEmptyValue(beneficiaryProtectionMeasureOptions)"
       />
+    </div>
+    <div class="fr-col-12">
       <VeeInput
-        name="external.representative"
+        name="representative"
         label="Nom, prénom, coordonnées du mandataire"
       />
+    </div>
+    <div class="fr-col-12">
       <VeeInput
-        name="external.prescribingStructure"
+        name="prescribingStructure"
         label="Organisme prescripteur"
       />
+    </div>
+    <div class="fr-col-12">
       <VeeSelect
-        name="external.orientationType"
+        name="orientationType"
         label="Mode d'orientation"
         :options="withEmptyValue(beneficiaryOrientationTypeOptions)"
       />
+    </div>
+    <div class="fr-col-12">
       <VeeInput
-        name="external.orientationStructure"
+        name="orientationStructure"
         label="Organisme d'orientation"
       />
+    </div>
+    <div class="fr-col-12">
       <VeeInput
-        name="external.serviceProviders"
+        name="serviceProviders"
         label="Prestataires"
         placeholder="Repas à domicile, aide à domicile..."
       />
+    </div>
+    <div class="fr-col-12">
       <VeeInput
-        name="external.involvedPartners"
+        name="involvedPartners"
         label="Partenaires intervenants"
       />
     </div>
-  </div>
+  </BeneficiaryFormSection>
 </template>
 
 <script setup lang="ts">

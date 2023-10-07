@@ -63,6 +63,8 @@ export const beneficiaryTitleLabels: { [key in BeneficiaryTitle]: string } = {
   [BeneficiaryTitle.Mister]: 'M.'
 }
 
+export const BeneficiaryTitleKeys = buildKeys(beneficiaryTitleLabels)
+
 export const beneficiaryTitleOptions = labelsToOptions(beneficiaryTitleLabels)
 
 export const beneficiaryGenderLabels: { [key in Gender]: string } = {

@@ -5,7 +5,8 @@
     :beneficiary="beneficiary"
     :title="RouteTitle.AppBeneficiaryEditInfo()"
     title-icon="fr-icon-user-line"
-    is-editting
+    :next-page="nextPage"
+    :saved="saved"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -32,7 +33,11 @@
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
-  import { canEditBeneficiaryReferents } from '~/server/security/rules'
+  import {
+    canEditBeneficiaryReferents,
+    canEditBeneficiaryRelatives,
+    canEditBeneficiaryHealthInfo
+  } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, RouteTitle } from '~/utils/routing'
@@ -48,6 +53,7 @@
   const authStore = useAuthStore()
   const route = useRoute()
   const beneficiaryId = route.params.id as string
+  const saved = route.query.saved !== undefined
 
   const {
     data: agents,
@@ -79,6 +85,32 @@
 
   const user = computed(() => authStore.getAuthUser)
 
+  const nextPage = computed(() => {
+    if (!data.value) {
+      return undefined
+    }
+
+    if (canEditBeneficiaryRelatives(user.value, data.value.beneficiary)) {
+      return {
+        title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
+        path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId, {
+          saved: true
+        })
+      }
+    }
+
+    if (canEditBeneficiaryHealthInfo(user.value, data.value.beneficiary)) {
+      return {
+        title: RouteTitle.AppBeneficiaryEditHealth(),
+        path: RoutePath.AppBeneficiaryEditHealth(beneficiaryId, {
+          saved: true
+        })
+      }
+    }
+
+    return undefined
+  })
+
   const beneficiary = computed(() => {
     if (!data.value) {
       return null
@@ -86,17 +118,19 @@
 
     const b = data.value.beneficiary
 
+    // Id is required for building the breadcrumb in the layout
     return {
+      id: b.id,
       referents: b.referents.map(referent => referent.id),
       aidantConnectAuthorized: b.aidantConnectAuthorized,
       status: b.status,
       title: b.title,
-      firstName: b.firstName || '',
+      firstName: b.firstName,
       usualName: b.usualName,
-      birthName: b.birthName || '',
-      birthDate: b.birthDate,
+      birthName: b.birthName,
+      birthDate: b.birthDate ? new Date(b.birthDate) : undefined,
       birthPlace: b.birthPlace,
-      deathDate: b.deathDate,
+      deathDate: b.deathDate ? new Date(b.deathDate) : undefined,
       gender: b.gender,
       nationality: b.nationality,
       numeroPegase: b.numeroPegase,
@@ -107,16 +141,14 @@
       city: b.city,
       region: b.region,
       addressComplement: b.addressComplement,
-      postOfficeBox: b.postOfficeBox,
       accommodationZone: b.accommodationZone,
       street: b.street,
       noPhone: b.noPhone,
       phone1: b.phone1,
       phone2: b.phone2,
       email: b.email,
-      caregiver: b.caregiver,
       mobility: b.mobility
-    } as SaveBeneficiaryGeneralInformationInput
+    } as SaveBeneficiaryGeneralInformationInput & { id: string }
   })
 
   const canSetReferents = computed(() =>
@@ -126,7 +158,8 @@
   )
 
   async function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryGeneralInformationInput
+    beneficiary: SaveBeneficiaryGeneralInformationInput,
+    target: string | undefined
   ) {
     if (!data.value) {
       return
@@ -141,9 +174,9 @@
         ...beneficiary
       })
 
-      navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+      navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
     } catch {
-      useSnackbar().error('La mise à jour de la synthèse a échoué.')
+      useSnackbar().error('La mise à jour de la fiche bénéficiaire a échoué.')
     } finally {
       isSubmitting.value = false
     }

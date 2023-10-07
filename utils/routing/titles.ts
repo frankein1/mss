@@ -28,6 +28,12 @@ export const RouteTitle = {
   [Route.AppStructureEdit]: () => 'Modifier ma structure',
   [Route.AppBeneficiaries]: () => 'Bénéficiaires',
   [Route.AppBeneficiariesSaveInfo]: () => 'Informations bénéficiaire',
+  [Route.AppBeneficiariesSaveTaxHousehold]: () => 'Foyer fiscal',
+  [Route.AppBeneficiariesSaveEntourage]: () => 'Entourage',
+  [Route.AppBeneficiariesSaveHealth]: () => 'Santé',
+  [Route.AppBeneficiariesSaveOccupation]: () => 'Activité/Revenu',
+  [Route.AppBeneficiariesSaveExternalOrganisations]: () =>
+    'Structures extérieures',
   [Route.AppBeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
   [Route.AppBeneficiary]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? getBeneficiaryDisplayName(beneficiary) : '',
@@ -38,6 +44,12 @@ export const RouteTitle = {
   [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${getBeneficiaryDisplayName(beneficiary)}` : '',
   [Route.AppBeneficiaryEditInfo]: () => 'Informations bénéficiaire',
+  [Route.AppBeneficiaryEditTaxHousehold]: () => 'Foyer fiscal',
+  [Route.AppBeneficiaryEditEntourage]: () => 'Entourage',
+  [Route.AppBeneficiaryEditHealth]: () => 'Santé',
+  [Route.AppBeneficiaryEditOccupation]: () => 'Activité/Revenu',
+  [Route.AppBeneficiaryEditExternalOrganisations]: () =>
+    'Structures extérieures',
   [Route.AppBeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
       ? `Entretien avec ${getBeneficiaryDisplayName(beneficiary)}`

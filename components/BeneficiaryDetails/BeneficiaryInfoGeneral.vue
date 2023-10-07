@@ -2,7 +2,7 @@
   <BeneficiaryInfoSection
     v-if="hasGeneralInfo"
     title="Informations générales"
-    :beneficiary-id="beneficiary.id"
+    :edit-link="editLink"
   >
     <div class="fr-container">
       <div v-if="hasIdentityInformations(beneficiary)">
@@ -101,7 +101,6 @@
         </div>
 
         <BeneficiaryInfoLabel
-          label="Permis"
           :value="BeneficiaryMobilityKeys.value(beneficiary.mobility)"
           class="fr-col-12"
         />
@@ -124,7 +123,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import {
     BeneficiaryAccommodationModeKeys,
     BeneficiaryGenderKeys,
@@ -138,6 +137,7 @@
     hasIdentityInformations,
     hasCoordinatesInformations
   } from '~/utils/beneficiary'
+  import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
@@ -152,4 +152,9 @@
       hasMobilityInformations(props.beneficiary) ||
       hasAdditionalInformations(props.beneficiary)
   )
+
+  const editLink = computed(() =>
+    RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id)
+  )
 </script>
+~/server/trpc/routers

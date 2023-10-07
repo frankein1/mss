@@ -37,7 +37,6 @@ export function getFollowupExportData(
     numeroPegase: followup.numeroPegase || '',
     place: followup.place || '',
     prescribingOrganizationId: followup.prescribingOrganization?.name || '',
-    // TODO: export comments, depending on structures' feedbacks
     signalements: followup.signalements
       ? followup.signalements
           .map(signalement => followupSignalementLabels[signalement])

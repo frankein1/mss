@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="feature-section">
     <AtomAlert
       v-if="error"
       class="fr-mx-4w"

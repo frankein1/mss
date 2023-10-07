@@ -1,7 +1,7 @@
-import type { User } from '@prisma/client'
 import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
-export function prepareGetHelpRequestsPageSelect(user: User) {
+export function prepareGetHelpRequestsPageSelect(user: SecurityRuleGrantee) {
   return {
     id: true,
     status: true,

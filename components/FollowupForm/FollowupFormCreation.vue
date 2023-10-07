@@ -39,7 +39,8 @@
     initialValues: {
       beneficiaryId: props.beneficiaryId,
       date: new Date(),
-      status: FollowupStatus.Done
+      status: FollowupStatus.Done,
+      redirected: false
     }
   })
 

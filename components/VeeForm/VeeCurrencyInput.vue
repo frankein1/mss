@@ -23,7 +23,7 @@
         :name="name"
         placeholder="0.00"
         type="text"
-        pattern="[0-9]\d*(\.\d+)?"
+        pattern="[0-9]\d*((\.|,)\d+)?"
         :aria-describedby="ariaDescribedby"
         :aria-labelledby="labelledBy"
         :readonly="readonly"
@@ -56,11 +56,12 @@
     { noLabel: false, labelledBy: undefined, readonly: false }
   )
 
-  const {
-    errorMessage: error,
-    value,
-    handleChange
-  } = useField<number>(props.name)
+  // use `toRef` to create reactive references to `name` prop which is passed to `useField`
+  // this is important because vee-validte needs to know if the field name changes
+  // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
+  const name = toRef(() => props.name)
+
+  const { errorMessage: error, value, handleChange } = useField<number>(name)
 
   const errorId = computed(() => `${props.name}-error-desc-error`)
   const ariaDescribedby = computed(() =>
@@ -92,7 +93,8 @@
       '6',
       '7',
       '8',
-      '9'
+      '9',
+      ','
     ]
     if (!ALLOWED_KEYS.includes((e as KeyboardEvent).key)) {
       e.preventDefault()

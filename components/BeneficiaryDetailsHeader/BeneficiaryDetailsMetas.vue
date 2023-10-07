@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
   import { Gender } from '@prisma/client'
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import { readableFileNumber } from '~/utils/readableFileNumber'
 
   const props = withDefaults(
@@ -24,3 +24,4 @@
 
   const fileNumber = computed(() => readableFileNumber(props.beneficiary.id))
 </script>
+~/server/trpc/routers

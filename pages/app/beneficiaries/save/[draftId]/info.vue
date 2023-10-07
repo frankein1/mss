@@ -5,6 +5,7 @@
     :beneficiary="beneficiary"
     :title="RouteTitle.AppBeneficiariesSaveInfo()"
     title-icon="fr-icon-user-line"
+    :next-page="nextPage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -26,7 +27,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { UserStatus } from '@prisma/client'
   import {
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
@@ -35,6 +35,11 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, RouteTitle } from '~/utils/routing'
   import type { BeneficiaryDraft } from '~/types/beneficiary'
+  import { useAuthStore } from '~/store/auth'
+  import {
+    canEditBeneficiaryRelatives,
+    canEditBeneficiaryHealthInfo
+  } from '~/server/security/rules'
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -43,6 +48,8 @@
 
   const route = useRoute()
   const snackbar = useSnackbar()
+  const draftId = route.params.draftId as string
+  const authStore = useAuthStore()
 
   const {
     data: agents,
@@ -70,25 +77,48 @@
     return ''
   })
 
-  const beneficiary = computed<SaveBeneficiaryGeneralInformationInput>(() => ({
-    referents: beneficiaryDraft.value?.general?.referents || [],
-    aidantConnectAuthorized:
-      beneficiaryDraft.value?.general?.aidantConnectAuthorized || false,
-    status: beneficiaryDraft.value?.general?.status || UserStatus.Active,
-    firstName: beneficiaryDraft.value?.general?.firstName,
-    usualName: beneficiaryDraft.value?.general?.usualName,
-    birthName: beneficiaryDraft.value?.general?.birthName,
-    birthDate: beneficiaryDraft.value?.general?.birthDate,
-    numeroPegase: beneficiaryDraft.value?.general?.numeroPegase,
-    noPhone: false,
-    phone1: beneficiaryDraft.value?.general?.phone1,
-    email: beneficiaryDraft.value?.general?.email,
-    caregiver: false
-  }))
+  const user = computed(() => authStore.getAuthUser)
+
+  const nextPage = computed(() => {
+    const securityTarget = {
+      referents: [user.value.id],
+      structureId: user.value.structureId
+    }
+
+    if (canEditBeneficiaryRelatives(user.value, securityTarget)) {
+      return {
+        title: RouteTitle.AppBeneficiariesSaveTaxHousehold(),
+        path: RoutePath.AppBeneficiariesSaveTaxHousehold(draftId)
+      }
+    }
+
+    if (canEditBeneficiaryHealthInfo(user.value, securityTarget)) {
+      return {
+        title: RouteTitle.AppBeneficiariesSaveHealth(),
+        path: RoutePath.AppBeneficiariesSaveHealth(draftId)
+      }
+    }
+
+    return undefined
+  })
+
+  const beneficiary = computed<
+    SaveBeneficiaryGeneralInformationInput | undefined
+  >(() => {
+    if (!beneficiaryDraft.value?.general) {
+      return undefined
+    }
+
+    const b = beneficiaryDraft.value.general
+
+    return {
+      ...b,
+      birthDate: b.birthDate ? new Date(b.birthDate) : undefined,
+      deathDate: b.deathDate ? new Date(b.deathDate) : undefined
+    }
+  })
 
   async function loadBeneficiaryDraft() {
-    const draftId = route.params.draftId as string
-
     const beneficiaryDraft = (await trpcClient.draft.get.query({
       id: draftId
     })) as BeneficiaryDraft
@@ -96,30 +126,33 @@
     return {
       ...beneficiaryDraft,
       general: beneficiaryDraft.content?.general
-        ? beneficiaryDraft.content.general
-        : null
     }
   }
 
   async function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryGeneralInformationInput,
-    saveAndLeave: boolean
+    target: string | undefined
   ) {
-    if (saveAndLeave) {
-      await saveBeneficairy(beneficiary)
+    if (target) {
+      await saveBeneficiaryDraft(beneficiary, target)
     } else {
-      await saveBeneficiaryDraft(beneficiary)
+      await saveBeneficiary(beneficiary)
     }
   }
 
-  async function saveBeneficairy(
+  async function saveBeneficiary(
     beneficiary: SaveBeneficiaryGeneralInformationInput
   ) {
+    if (!beneficiaryDraft.value) {
+      snackbar.error('La création de la fiche bénéficiaire a échoué.')
+      return
+    }
+
     isSubmitting.value = true
 
     try {
       const { id } = await trpcClient.beneficiary.saveDraft.mutate({
-        id: beneficiaryDraft.value?.id,
+        id: beneficiaryDraft.value.id,
         general: beneficiary
       })
 
@@ -137,22 +170,23 @@
   }
 
   async function saveBeneficiaryDraft(
-    beneficiary: SaveBeneficiaryGeneralInformationInput
+    beneficiary: SaveBeneficiaryGeneralInformationInput,
+    target: string
   ) {
+    if (!beneficiaryDraft.value) {
+      snackbar.error("L'enregistrement du brouillon a échoué.")
+      return
+    }
+
     isSubmitting.value = true
 
     try {
-      if (beneficiaryDraft.value) {
-        await trpcClient.beneficiaryDraft.update.mutate({
-          id: beneficiaryDraft.value.id,
-          general: beneficiary
-        })
-      } else {
-        await trpcClient.beneficiaryDraft.create.mutate(beneficiary)
-      }
+      await trpcClient.beneficiaryDraft.update.mutate({
+        id: beneficiaryDraft.value.id,
+        general: beneficiary
+      })
 
-      // TODO: Navigation post submit
-      // navigateTo(RoutePath.AppBeneficiary(id))
+      navigateTo(target)
     } catch {
       snackbar.error("L'enregistrement du brouillon a échoué.")
     } finally {

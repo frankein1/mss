@@ -2,7 +2,7 @@
   <BeneficiaryInfoSection
     v-if="hasTaxHouseholdsInfo"
     title="Foyer fiscal"
-    :beneficiary-id="beneficiary.id"
+    :edit-link="editLink"
   >
     <div class="fr-container">
       <div class="fr-grid-row">
@@ -10,11 +10,11 @@
           <div class="fr-text--bold">Situation familiale</div>
         </div>
         <div class="fr-col-12 fr-pb-1w">
-          <div class="field-label">
-            {{
+          <BeneficiaryInfoLabel
+            :value="
               BeneficiaryFamilySituationKeys.value(beneficiary.familySituation)
-            }}
-          </div>
+            "
+          />
         </div>
         <div class="fr-col-6">
           <BeneficiaryInfoLabel
@@ -44,12 +44,17 @@
 <script setup lang="ts">
   import { BeneficiaryFamilySituationKeys } from '~/client/options/beneficiary'
   import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
-  import type { GetBeneficiaryOutput } from '~/server/routers'
+  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
     taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
   }>()
+
+  const editLink = computed(() =>
+    RoutePath.AppBeneficiaryEditTaxHousehold(props.beneficiary.id)
+  )
 
   const hasTaxHouseholdsInfo = computed(
     () =>
@@ -59,3 +64,4 @@
       props.beneficiary.majorChildren
   )
 </script>
+~/server/trpc/routers

@@ -31,10 +31,20 @@ export enum Route {
   AppBeneficiariesAdd = 'AppBeneficiariesAdd',
   AppBeneficiariesSave = 'AppBeneficiariesSave',
   AppBeneficiariesSaveInfo = 'AppBeneficiariesSaveInfo',
+  AppBeneficiariesSaveTaxHousehold = 'AppBeneficiariesSaveTaxHousehold',
+  AppBeneficiariesSaveEntourage = 'AppBeneficiariesSaveEntourage',
+  AppBeneficiariesSaveHealth = 'AppBeneficiariesSaveHealth',
+  AppBeneficiariesSaveOccupation = 'AppBeneficiariesSaveOccupation',
+  AppBeneficiariesSaveExternalOrganisations = 'AppBeneficiariesSaveExternalOrganisations',
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
   AppBeneficiaryEditInfo = 'AppBeneficiaryEditInfo',
+  AppBeneficiaryEditTaxHousehold = 'AppBeneficiaryEditTaxHousehold',
+  AppBeneficiaryEditEntourage = 'AppBeneficiaryEditEntourage',
+  AppBeneficiaryEditHealth = 'AppBeneficiaryEditHealth',
+  AppBeneficiaryEditOccupation = 'AppBeneficiaryEditOccupation',
+  AppBeneficiaryEditExternalOrganisations = 'AppBeneficiaryEditExternalOrganisations',
   AppBeneficiaryFollowupAdd = 'AppBeneficiaryFollowupAdd',
   AppBeneficiaryFollowupEdit = 'AppBeneficiaryFollowupEdit',
   AppBeneficiaryHelpRequestAdd = 'AppBeneficiaryHelpRequestAdd',
@@ -61,6 +71,9 @@ const ErrorRoute = '/error'
 
 const BeneficiariesRoute = `${AppRoute}/beneficiaries`
 
+const BeneficiarySaveRoute = (draftId: string) =>
+  `${BeneficiariesRoute}/save/${draftId}`
+
 const BeneficiaryRoute = (
   beneficiaryId: string | undefined,
   options?: {
@@ -74,7 +87,8 @@ const BeneficiaryRoute = (
     return ''
   }
   const base = `${BeneficiariesRoute}/${beneficiaryId}`
-  if (options) {
+  const hasDefinedOptions = options && Object.values(options).every(o => !!o)
+  if (hasDefinedOptions) {
     const { tab, ...params } = options
     const tabHash = tab ? `#${tab}` : ''
     if (Object.keys(params).length) {
@@ -86,11 +100,21 @@ const BeneficiaryRoute = (
   return base
 }
 
+const BeneficiaryEditRoute = (beneficiaryId: string) =>
+  `${BeneficiaryRoute(beneficiaryId)}/edit`
+
 const BeneficiaryFollowupsRoute = (beneficiaryId: string) =>
   `${BeneficiaryRoute(beneficiaryId)}/followups`
 
 const BeneficiaryHelpRequestsRoute = (beneficiaryId: string) =>
   `${BeneficiaryRoute(beneficiaryId)}/help-requests`
+
+const savedRoute = (route: string, saved: boolean) => {
+  if (!saved) {
+    return route
+  }
+  return `${route}?saved`
+}
 
 export const RoutePath = {
   [Route.Index]: () => '/',
@@ -123,19 +147,71 @@ export const RoutePath = {
   [Route.AppStructureEdit]: () => `${AppRoute}/structure/edit`,
   [Route.AppBeneficiaries]: () => BeneficiariesRoute,
   [Route.AppBeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
-  [Route.AppBeneficiariesSave]: () => `${BeneficiariesRoute}/save`,
+  [Route.AppBeneficiariesSave]: (draftId: string) =>
+    `${BeneficiarySaveRoute(draftId)}`,
   [Route.AppBeneficiariesSaveInfo]: (draftId: string) =>
-    `${BeneficiariesRoute}/save/${draftId}/info`,
+    `${BeneficiarySaveRoute(draftId)}/info`,
+  [Route.AppBeneficiariesSaveTaxHousehold]: (draftId: string) =>
+    `${BeneficiarySaveRoute(draftId)}/tax-household`,
+  [Route.AppBeneficiariesSaveEntourage]: (draftId: string) =>
+    `${BeneficiarySaveRoute(draftId)}/entourage`,
+  [Route.AppBeneficiariesSaveHealth]: (draftId: string) =>
+    `${BeneficiarySaveRoute(draftId)}/health`,
+  [Route.AppBeneficiariesSaveOccupation]: (draftId: string) =>
+    `${BeneficiarySaveRoute(draftId)}/occupation`,
+  [Route.AppBeneficiariesSaveExternalOrganisations]: (draftId: string) =>
+    `${BeneficiarySaveRoute(draftId)}/external-organisations`,
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
 
-  [Route.AppBeneficiaryEdit]: (beneficiaryId: string) => {
-    return `${BeneficiaryRoute(beneficiaryId)}/edit`
-  },
-  [Route.AppBeneficiaryEditInfo]: (beneficiaryId: string) => {
-    return `${BeneficiaryRoute(beneficiaryId)}/edit/info`
-  },
+  [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
+    BeneficiaryEditRoute(beneficiaryId),
+  [Route.AppBeneficiaryEditInfo]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(`${BeneficiaryEditRoute(beneficiaryId)}/info`, !!options?.saved),
+  [Route.AppBeneficiaryEditTaxHousehold]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(
+      `${BeneficiaryEditRoute(beneficiaryId)}/tax-household`,
+      !!options?.saved
+    ),
+  [Route.AppBeneficiaryEditEntourage]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(
+      `${BeneficiaryEditRoute(beneficiaryId)}/entourage`,
+      !!options?.saved
+    ),
+  [Route.AppBeneficiaryEditHealth]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(
+      `${BeneficiaryEditRoute(beneficiaryId)}/health`,
+      !!options?.saved
+    ),
+  [Route.AppBeneficiaryEditOccupation]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(
+      `${BeneficiaryEditRoute(beneficiaryId)}/occupation`,
+      !!options?.saved
+    ),
+  [Route.AppBeneficiaryEditExternalOrganisations]: (
+    beneficiaryId: string,
+    options?: { saved?: boolean }
+  ) =>
+    savedRoute(
+      `${BeneficiaryEditRoute(beneficiaryId)}/external-organisations`,
+      !!options?.saved
+    ),
 
   [Route.AppBeneficiaryFollowupAdd]: (beneficiaryId: string) =>
     `${BeneficiaryFollowupsRoute(beneficiaryId)}/add`,
