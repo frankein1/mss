@@ -27,13 +27,13 @@
     {
       name: 'type',
       label: 'Type de document',
-      options: withEmptyValue(documentTypeOptions),
+      options: withEmptyValue(documentTypeOptions, 'Tous'),
       type: FilterType.SelectOne
     },
     {
       name: 'tags',
       label: 'Thème du document',
-      options: withEmptyValue(documentTagOptions),
+      options: withEmptyValue(documentTagOptions, 'Tous'),
       type: FilterType.SelectOne
     }
   ]
