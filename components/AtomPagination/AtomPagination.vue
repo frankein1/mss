@@ -1,6 +1,15 @@
 <template>
-  <div class="fr-grid-row fr-grid-row--middle">
-    <form class="fr-col-2">
+  <div
+    class="fr-grid-row fr-grid-row--middle"
+    :class="{
+      'pagination-container-no-limit': noLimitSelection,
+      'pagination-container': !noLimitSelection
+    }"
+  >
+    <form
+      v-if="!noLimitSelection"
+      class="fr-col-2"
+    >
       <VeeSelect
         label="Résultats par page"
         name="resultsPerPage"
@@ -113,10 +122,14 @@
     REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
 
-  defineProps<{
-    page: number
-    totalPages: number
-  }>()
+  withDefaults(
+    defineProps<{
+      page: number
+      totalPages: number
+      noLimitSelection?: boolean
+    }>(),
+    { noLimitSelection: false }
+  )
 
   const emit = defineEmits<{
     changePage: [data: { pageNumber: number; limitValue: number }]
@@ -148,8 +161,12 @@
     justify-content: center;
   }
 
-  .fr-grid-row {
+  .pagination-container {
     justify-content: space-between;
+  }
+
+  .pagination-container-no-limit {
+    justify-content: center;
   }
 
   .page-number {

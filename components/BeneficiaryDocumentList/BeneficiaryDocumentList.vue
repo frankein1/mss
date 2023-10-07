@@ -34,6 +34,7 @@
       class="fr-mt-4w fr-px-5v"
       :page="page"
       :total-pages="totalPages"
+      no-limit-selection
       @change-page="updatePagination($event)"
     />
   </div>
