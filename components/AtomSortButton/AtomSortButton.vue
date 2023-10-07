@@ -77,7 +77,7 @@
   .btn-container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 0.5rem;
   }
 
