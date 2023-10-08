@@ -61,6 +61,7 @@
 </template>
 
 <script setup lang="ts">
+  import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     RoutePath,
@@ -69,24 +70,14 @@
     AppBeneficiaryEditRoute,
     AppBeneficiariesSaveRoute
   } from '~/utils/routing'
-
-  const appBeneficiaryEditRoutes: AppBeneficiaryEditRoute[] = [
-    Route.AppBeneficiaryEditInfo,
-    Route.AppBeneficiaryEditTaxHousehold,
-    Route.AppBeneficiaryEditEntourage,
-    Route.AppBeneficiaryEditHealth,
-    Route.AppBeneficiaryEditOccupation,
-    Route.AppBeneficiaryEditExternalOrganisations
-  ]
-
-  const appBeneficiariesSaveRoutes: AppBeneficiariesSaveRoute[] = [
-    Route.AppBeneficiariesSaveInfo,
-    Route.AppBeneficiariesSaveTaxHousehold,
-    Route.AppBeneficiariesSaveEntourage,
-    Route.AppBeneficiariesSaveHealth,
-    Route.AppBeneficiariesSaveOccupation,
-    Route.AppBeneficiariesSaveExternalOrganisations
-  ]
+  import {
+    canEditBeneficiaryRelatives as canEditBeneficiaryRelativesRule,
+    canEditBeneficiaryHealthInfo as canEditBeneficiaryHealthInfoRule,
+    canEditBeneficiaryOccupationIncome as canEditBeneficiaryOccupationIncomeRule,
+    canEditBeneficiaryExternalOrganisations as canEditBeneficiaryExternalOrganisationsRule,
+    SecurityTargetWithReferents,
+    SecurityTargetWithStructure
+  } from '~/server/security/rules'
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string | undefined
@@ -95,21 +86,111 @@
     ? (route.query.originTab as BeneficiaryTab)
     : undefined
 
+  const authStore = useAuthStore()
+
   const props = defineProps<{
     current: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
+    beneficiary: SecurityTargetWithReferents & SecurityTargetWithStructure
   }>()
 
   const emit = defineEmits<{
     save: [target: string]
   }>()
 
-  const menus = computed(() => {
-    const routes =
-      beneficiaryId && !draftId
-        ? appBeneficiaryEditRoutes
-        : appBeneficiariesSaveRoutes
+  const currentHash = computed(() => {
+    if (
+      props.current !== Route.AppBeneficiaryEditInfo &&
+      props.current !== Route.AppBeneficiariesSaveInfo
+    ) {
+      return undefined
+    }
 
-    return routes.map(route => {
+    return route.hash ? route.hash.replace('#', '') : undefined
+  })
+
+  const user = computed(() => authStore.getAuthUser)
+
+  const canEditBeneficiaryRelatives = computed(() => {
+    return canEditBeneficiaryRelativesRule(user.value, props.beneficiary)
+  })
+
+  const canEditBeneficiaryHealthInfo = computed(() => {
+    return canEditBeneficiaryHealthInfoRule(user.value, props.beneficiary)
+  })
+
+  const canEditBeneficiaryOccupationIncome = computed(() => {
+    return canEditBeneficiaryOccupationIncomeRule(user.value, props.beneficiary)
+  })
+
+  const canEditBeneficiaryExternalOrganisations = computed(() => {
+    return canEditBeneficiaryExternalOrganisationsRule(
+      user.value,
+      props.beneficiary
+    )
+  })
+
+  const appBeneficiaryEditRoutes = computed<AppBeneficiaryEditRoute[]>(() => {
+    const editRoutes: AppBeneficiaryEditRoute[] = [Route.AppBeneficiaryEditInfo]
+
+    if (canEditBeneficiaryRelatives.value) {
+      editRoutes.push(
+        Route.AppBeneficiaryEditTaxHousehold,
+        Route.AppBeneficiaryEditEntourage
+      )
+    }
+
+    if (canEditBeneficiaryHealthInfo.value) {
+      editRoutes.push(Route.AppBeneficiaryEditHealth)
+    }
+
+    if (canEditBeneficiaryOccupationIncome.value) {
+      editRoutes.push(Route.AppBeneficiaryEditOccupation)
+    }
+
+    if (canEditBeneficiaryExternalOrganisations.value) {
+      editRoutes.push(Route.AppBeneficiaryEditExternalOrganisations)
+    }
+
+    return editRoutes
+  })
+
+  const appBeneficiariesSaveRoutes = computed<AppBeneficiariesSaveRoute[]>(
+    () => {
+      const saveRoutes: AppBeneficiariesSaveRoute[] = [
+        Route.AppBeneficiariesSaveInfo
+      ]
+
+      if (canEditBeneficiaryRelatives.value) {
+        saveRoutes.push(
+          Route.AppBeneficiariesSaveTaxHousehold,
+          Route.AppBeneficiariesSaveEntourage
+        )
+      }
+
+      if (canEditBeneficiaryHealthInfo.value) {
+        saveRoutes.push(Route.AppBeneficiariesSaveHealth)
+      }
+
+      if (canEditBeneficiaryOccupationIncome.value) {
+        saveRoutes.push(Route.AppBeneficiariesSaveOccupation)
+      }
+
+      if (canEditBeneficiaryExternalOrganisations.value) {
+        saveRoutes.push(Route.AppBeneficiariesSaveExternalOrganisations)
+      }
+
+      return saveRoutes
+    }
+  )
+
+  const routes = computed(() =>
+    beneficiaryId && !draftId
+      ? appBeneficiaryEditRoutes.value
+      : appBeneficiariesSaveRoutes.value
+  )
+
+  const menus = computed(() => {
+    return routes.value.map(route => {
       const path =
         beneficiaryId && !draftId
           ? RoutePath[route as AppBeneficiaryEditRoute](beneficiaryId, {
@@ -144,17 +225,6 @@
 
       return { ...menu, targets: undefined }
     })
-  })
-
-  const currentHash = computed(() => {
-    if (
-      props.current !== Route.AppBeneficiaryEditInfo &&
-      props.current !== Route.AppBeneficiariesSaveInfo
-    ) {
-      return undefined
-    }
-
-    return route.hash ? route.hash.replace('#', '') : undefined
   })
 </script>
 
