@@ -7,6 +7,7 @@
     :next-page="nextPage"
     :saved="saved"
     :current="Route.AppBeneficiaryEditInfo"
+    :security-target="securityTarget"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -72,6 +73,8 @@
   } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
     id: beneficiaryId
   })
+
+  const securityTarget = useBeneficiaryFormSecurityTarget(data)
 
   const pending = computed(
     () => agentsPending.value || beneficiaryPending.value
