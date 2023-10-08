@@ -6,6 +6,7 @@
     title-icon="fr-icon-user-line"
     :next-page="nextPage"
     :current="Route.AppBeneficiariesSaveInfo"
+    :security-target="securityTarget"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -50,6 +51,7 @@
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
   const authStore = useAuthStore()
+  const securityTarget = useBeneficiaryFormSecurityTarget()
 
   const {
     data: agents,

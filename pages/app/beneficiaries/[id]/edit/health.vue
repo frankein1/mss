@@ -7,6 +7,7 @@
     :next-page="nextPage"
     :saved="saved"
     :current="Route.AppBeneficiaryEditHealth"
+    :security-target="securityTarget"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -63,6 +64,8 @@
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
+
+  const securityTarget = useBeneficiaryFormSecurityTarget(data)
 
   const user = computed(() => authStore.getAuthUser)
 

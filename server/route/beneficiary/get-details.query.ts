@@ -33,9 +33,10 @@ const handler = async ({
   return beneficiaryAccessibleData
 }
 
-export type GetBeneficiaryOutput = Prisma.PromiseReturnType<
+export type GetBeneficiaryDetailsOutput = Prisma.PromiseReturnType<
   typeof handler
->['beneficiary']
+>
+export type GetBeneficiaryOutput = GetBeneficiaryDetailsOutput['beneficiary']
 
 export const getBeneficiaryDetailsQuery = createQuery({
   inputValidation: idSchema,

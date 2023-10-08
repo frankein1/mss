@@ -6,6 +6,7 @@
     :previous-page="previousPage"
     :next-page="nextPage"
     :current="Route.AppBeneficiariesSaveOccupation"
+    :security-target="securityTarget"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -59,6 +60,7 @@
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
   const authStore = useAuthStore()
+  const securityTarget = useBeneficiaryFormSecurityTarget()
 
   const {
     data: beneficiaryDraft,

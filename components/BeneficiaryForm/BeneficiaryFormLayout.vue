@@ -7,6 +7,7 @@
     <BeneficiaryFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
       :current="current"
+      :beneficiary="securityTarget"
       @save="saveTarget = $event"
     />
     <main class="beneficiaryformlayout__main fr-col-9 fr-container">
@@ -37,6 +38,10 @@
 
 <script setup lang="ts" generic="T extends ZodSchema">
   import { ZodSchema, z } from 'zod'
+  import {
+    SecurityTargetWithReferents,
+    SecurityTargetWithStructure
+  } from '~/server/security'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     Breadcrumb,
@@ -61,6 +66,7 @@
       previousPage?: { title: string; path: string }
       nextPage?: { title: string; path: string }
       current: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
+      securityTarget: SecurityTargetWithReferents & SecurityTargetWithStructure
     }>(),
     {
       beneficiary: undefined,
