@@ -5,6 +5,7 @@
     :beneficiary="beneficiary"
     :previous-page="previousPage"
     :current="Route.AppBeneficiariesSaveExternalOrganisations"
+    :security-target="securityTarget"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -55,6 +56,7 @@
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
   const authStore = useAuthStore()
+  const securityTarget = useBeneficiaryFormSecurityTarget()
 
   const {
     data: beneficiaryDraft,

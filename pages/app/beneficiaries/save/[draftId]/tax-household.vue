@@ -6,6 +6,7 @@
     :previous-page="previousPage"
     :next-page="nextPage"
     :current="Route.AppBeneficiariesSaveTaxHousehold"
+    :security-target="securityTarget"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -50,6 +51,7 @@
   const route = useRoute()
   const draftId = route.params.draftId as string
   const snackbar = useSnackbar()
+  const securityTarget = useBeneficiaryFormSecurityTarget()
 
   const previousPage = {
     title: RouteTitle.AppBeneficiariesSaveInfo(),

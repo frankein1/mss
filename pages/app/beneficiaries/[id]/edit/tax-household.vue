@@ -7,6 +7,7 @@
     :next-page="nextPage"
     :saved="saved"
     :current="Route.AppBeneficiaryEditTaxHousehold"
+    :security-target="securityTarget"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -74,6 +75,8 @@
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
+
+  const securityTarget = useBeneficiaryFormSecurityTarget(data)
 
   const beneficiary = computed(() => {
     if (!data.value) {

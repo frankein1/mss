@@ -2,6 +2,7 @@ export type {
   GetBeneficiaryFollowupTypesOutput,
   GetBeneficiariesOutput,
   GetBeneficiaryOutput,
+  GetBeneficiaryDetailsOutput,
   HistoryItem,
   GetBeneficiaryDocumentsOutput,
   Documents,
