@@ -1,13 +1,9 @@
 <template>
-  <BeneficiaryFormLayout
+  <BeneficiaryEditFormLayout
     :schema="saveBeneficiaryEntourageSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :previous-page="previousPage"
-    :next-page="nextPage"
-    :saved="saved"
     :current="Route.AppBeneficiaryEditEntourage"
-    :security-target="securityTarget"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -26,7 +22,7 @@
     >
       <BeneficiaryFormEntourages />
     </div>
-  </BeneficiaryFormLayout>
+  </BeneficiaryEditFormLayout>
 </template>
 
 <script lang="ts" setup>
@@ -35,11 +31,8 @@
     SaveBeneficiaryEntourageInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
-  import type { BeneficiaryNames } from '~/types/beneficiary'
-  import { useAuthStore } from '~/store/auth'
-  import { canEditBeneficiaryHealthInfo } from '~/server/security/rules'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { RoutePath, Route } from '~/utils/routing'
+  import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-set-relatives']
@@ -51,47 +44,11 @@
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
-  const saved = route.query.saved !== undefined
-  const originTab = route.query.originTab
-    ? (route.query.originTab as BeneficiaryTab)
-    : undefined
-
-  const authStore = useAuthStore()
-
-  const previousPage = {
-    title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
-    path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId, {
-      saved: true,
-      originTab
-    })
-  }
 
   const { data, pending, error } =
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
-
-  const securityTarget = useBeneficiaryFormSecurityTarget(data)
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const nextPage = computed(() => {
-    if (!data.value) {
-      return undefined
-    }
-
-    if (canEditBeneficiaryHealthInfo(user.value, data.value.beneficiary)) {
-      return {
-        title: RouteTitle.AppBeneficiaryEditHealth(),
-        path: RoutePath.AppBeneficiaryEditHealth(beneficiaryId, {
-          saved: true,
-          originTab
-        })
-      }
-    }
-
-    return undefined
-  })
 
   const beneficiary = computed(() => {
     if (!data.value) {
@@ -103,11 +60,13 @@
     // Names and id are required for building the breadcrumb in the layout
     return {
       id: b.id,
+      structureId: b.structureId,
+      referents: b.referents,
       firstName: b.firstName,
       usualName: b.usualName,
       birthName: b.birthName,
       entourages
-    } as SaveBeneficiaryEntourageInput & BeneficiaryNames & { id: string }
+    } as SaveBeneficiaryEntourageInput & MinimalBeneficiaryForFormLayout
   })
 
   async function onSaveBeneficiary(

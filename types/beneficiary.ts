@@ -17,6 +17,10 @@ import {
   SaveBeneficiaryOccupationInput,
   SaveBeneficiaryExternalOrganisationsInput
 } from '~/server/schema'
+import {
+  SecurityTargetWithReferents,
+  SecurityTargetWithStructure
+} from '~/server/security'
 
 export type BeneficiaryReferent = {
   id: string
@@ -54,3 +58,7 @@ export type BeneficiaryDraft = Draft & {
     externalOrganisations?: SaveBeneficiaryExternalOrganisationsInput
   } | null
 }
+
+export type MinimalBeneficiaryForFormLayout = BeneficiaryNames &
+  SecurityTargetWithReferents &
+  SecurityTargetWithStructure & { id: string }
