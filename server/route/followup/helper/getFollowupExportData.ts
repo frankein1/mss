@@ -9,7 +9,7 @@ import {
   followupStatusLabels
 } from '~/client/options/followup'
 import { ministerLabels } from '~/client/options/ministry'
-import { getFollowupAccessibleData } from '~/utils/followup/getFollowupAccessibleData'
+import { getFollowupAccessibleData } from '~/server/route/followup/helper/getFollowupAccessibleData'
 
 export function getFollowupExportData(
   followup: ReturnType<typeof getFollowupAccessibleData>

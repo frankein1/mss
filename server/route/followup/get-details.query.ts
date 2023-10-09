@@ -1,9 +1,9 @@
+import { getFollowupAccessibleData } from './helper/getFollowupAccessibleData'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { canViewFollowup } from '~/server/security/rules'
 import { getFollowupWithRelations } from '~/server/query/followups'
-import { getFollowupAccessibleData } from '~/utils/followup'
 import { IdInput, idSchema } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 

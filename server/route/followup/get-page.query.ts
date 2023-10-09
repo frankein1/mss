@@ -1,12 +1,12 @@
 import type { Prisma } from '@prisma/client'
 import { createQuery } from '../createRoute'
+import { prepareGetFollowupsPageSelect } from './helper/prepareGetFollowupsPageSelect'
 import { GetFollowupsInput, getFollowupsSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { prepareFollowupFilters } from '~/utils/filters'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
-import { prepareGetFollowupsPageSelect } from '~/utils/followup'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
