@@ -18,24 +18,20 @@
             <th scope="col">Type</th>
             <th scope="col">Code postal</th>
             <th scope="col">Ville</th>
-            <th scope="col">
-              Bénéficiaires
-              <AtomSortButton
-                :sort="beneficiariesSort"
-                numeric
-                @update:sort="onSort({ beneficiaries: { _count: $event } })"
-              />
-            </th>
+            <TableSortableHeader
+              label="Bénéficiaires"
+              :sort="beneficiariesSort"
+              numeric
+              @update:sort="onSort({ beneficiaries: { _count: $event } })"
+            />
             <th scope="col">Demandes d'aide</th>
             <th scope="col">Entretiens</th>
             <th scope="col">Utilisateurs</th>
-            <th scope="col">
-              Dernière activité
-              <AtomSortButton
-                numeric
-                @update:sort="onSort({ lastActivity: $event })"
-              />
-            </th>
+            <TableSortableHeader
+              label="Dernière activité"
+              numeric
+              @update:sort="onSort({ lastActivity: $event })"
+            />
           </tr>
         </thead>
         <tbody>

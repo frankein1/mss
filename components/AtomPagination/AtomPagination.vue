@@ -1,6 +1,12 @@
 <template>
-  <div class="fr-grid-row fr-grid-row--middle">
-    <form class="fr-col-2">
+  <div
+    class="fr-grid-row fr-grid-row--middle"
+    :class="{ 'no-limit': noLimitSelection }"
+  >
+    <form
+      v-if="!noLimitSelection"
+      class="fr-col-2"
+    >
       <VeeSelect
         label="Résultats par page"
         name="resultsPerPage"
@@ -39,7 +45,7 @@
           :key="`page-number-${pageNumber}`"
         >
           <button
-            class="fr-pagination__link"
+            class="fr-pagination__link page-number"
             :class="{ 'fr-hidden fr-unhidden-lg': pageNumber > 1 }"
             :aria-current="pageNumber === page ? 'page' : undefined"
             :title="`Page ${pageNumber}`"
@@ -53,7 +59,7 @@
         </li>
         <li v-if="totalPages > 6 && page > 3 && page <= totalPages - 3">
           <button
-            class="fr-pagination__link fr-hidden fr-unhidden-lg"
+            class="fr-pagination__link page-number fr-hidden fr-unhidden-lg"
             aria-current="true"
             :title="`Page ${page}`"
           >
@@ -68,7 +74,7 @@
           :key="`page-offset-${pageOffset}`"
         >
           <button
-            class="fr-pagination__link"
+            class="fr-pagination__link page-number"
             :class="{
               'fr-hidden fr-unhidden-lg':
                 totalPages - 3 + pageOffset < totalPages
@@ -113,10 +119,14 @@
     REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
 
-  defineProps<{
-    page: number
-    totalPages: number
-  }>()
+  withDefaults(
+    defineProps<{
+      page: number
+      totalPages: number
+      noLimitSelection?: boolean
+    }>(),
+    { noLimitSelection: false }
+  )
 
   const emit = defineEmits<{
     changePage: [data: { pageNumber: number; limitValue: number }]
@@ -143,12 +153,24 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .fr-pagination__list {
     justify-content: center;
   }
 
-  .fr-grid-row {
+  .fr-grid-row.fr-grid-row--middle {
     justify-content: space-between;
+
+    &.no-limit {
+      justify-content: center;
+    }
+  }
+
+  .page-number {
+    border-radius: 0.5rem;
+
+    &[aria-current] {
+      background-color: var(--primary);
+    }
   }
 </style>

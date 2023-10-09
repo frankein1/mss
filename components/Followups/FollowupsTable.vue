@@ -19,34 +19,28 @@
             >
               {{ followupFieldLabels.status }}
             </th>
-            <th scope="col">
-              {{ followupFieldLabels.date }}
-              <AtomSortButton
-                :sort="dateSort"
-                numeric
-                @update:sort="onSort({ date: $event })"
-              />
-            </th>
-            <th scope="col">
-              {{ followupFieldLabels.beneficiaryId }}
-              <AtomSortButton
-                @update:sort="
-                  onSort({
-                    beneficiary: {
-                      usualName: $event
-                    }
-                  })
-                "
-              />
-            </th>
+            <TableSortableHeader
+              :label="followupFieldLabels.date"
+              :sort="dateSort"
+              numeric
+              @update:sort="onSort({ date: $event })"
+            />
+            <TableSortableHeader
+              :label="followupFieldLabels.beneficiaryId"
+              @update:sort="
+                onSort({
+                  beneficiary: {
+                    usualName: $event
+                  }
+                })
+              "
+            />
             <th scope="col">Objet de l'entretien</th>
-            <th scope="col">
-              {{ followupFieldLabels.dueDate }}
-              <AtomSortButton
-                numeric
-                @update:sort="onSort({ dueDate: $event })"
-              />
-            </th>
+            <TableSortableHeader
+              :label="followupFieldLabels.dueDate"
+              numeric
+              @update:sort="onSort({ dueDate: $event })"
+            />
             <th scope="col">Agent</th>
             <th scope="col">N° de dossier</th>
           </tr>

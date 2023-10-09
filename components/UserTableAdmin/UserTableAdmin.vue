@@ -18,13 +18,11 @@
             <th scope="col">Structure</th>
             <th scope="col">Rôle</th>
             <th scope="col">Email</th>
-            <th scope="col">
-              Dernière connexion
-              <AtomSortButton
-                numeric
-                @update:sort="onSort({ lastAccess: $event })"
-              />
-            </th>
+            <TableSortableHeader
+              label="Dernière connexion"
+              numeric
+              @update:sort="onSort({ lastAccess: $event })"
+            />
           </tr>
         </thead>
         <tbody>
