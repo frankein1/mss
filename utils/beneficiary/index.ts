@@ -1,7 +1,6 @@
 export * from './calculateAge'
 export * from './formatBeneficiaryDisplayName'
 export * from './formatBeneficiaryDisplayPhone'
-export * from '../../server/route/beneficiary/helper/getBeneficiaryFollowUpTypes'
 export * from './formatBeneficiarySearchDisplayName'
 export * from './formatAddress'
 export * from './formatBeneficiaryBirthInfo'

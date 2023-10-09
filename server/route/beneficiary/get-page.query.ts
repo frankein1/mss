@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client'
+import { getBeneficiaryFollowUpTypes } from './helper/getBeneficiaryFollowUpTypes'
 import { createQuery } from '~/server/route'
 import { GetBeneficiariesInput, getBeneficiariesSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
-import { getBeneficiaryFollowUpTypes } from '~/utils'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
