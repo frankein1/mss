@@ -15,7 +15,7 @@
   import { useAuthStore } from '~/store/auth'
   import { JwtUser } from '~/types/user'
   import { RouteTitle } from '~/utils/routing'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
 
   useHead({
     title: RouteTitle.AuthValidateToken()
@@ -55,7 +55,7 @@
   }
 
   const name = computed(() => {
-    return user.value ? getUserDisplayName(user.value) : ''
+    return user.value ? formatUserDisplayName(user.value) : ''
   })
 </script>
 

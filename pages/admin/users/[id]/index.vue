@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle :title="user ? getUserDisplayName(user) : '-'" />
+    <PageTitle :title="user ? formatUserDisplayName(user) : '-'" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -32,7 +32,7 @@
 <script setup lang="ts">
   import { AdminEditUserInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
 
   const route = useRoute()
   const userId = route.params.id as string

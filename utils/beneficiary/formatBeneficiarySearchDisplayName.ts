@@ -1,10 +1,10 @@
-import { getBeneficiaryDisplayName } from './getBeneficiaryDisplayName'
+import { formatBeneficiaryDisplayName } from './formatBeneficiaryDisplayName'
 import { BeneficiarySearchResult } from '~/types/beneficiary'
 
-export function getBeneficiarySearchDisplayName(
+export function formatBeneficiarySearchDisplayName(
   beneficiary: BeneficiarySearchResult
 ): string {
-  const name = getBeneficiaryDisplayName(beneficiary)
+  const name = formatBeneficiaryDisplayName(beneficiary)
   const birthDate = beneficiary.birthDate
     ? formatDate(beneficiary.birthDate)
     : ''

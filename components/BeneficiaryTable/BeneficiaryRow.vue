@@ -37,7 +37,7 @@
 <script lang="ts" setup>
   import type { BeneficiaryItem } from './types'
   import { formatDate } from '~/utils/formatDate'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
   import { calculateAge } from '~/utils/beneficiary'
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { beneficiaryStatusLabels } from '~/client/options/beneficiary'
@@ -54,7 +54,7 @@
 
   const referents = computed(() =>
     props.beneficiary.referents
-      .map(referent => getUserDisplayName(referent))
+      .map(referent => formatUserDisplayName(referent))
       .join(', ')
   )
 

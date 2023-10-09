@@ -36,7 +36,7 @@
           <td>
             {{
               userActivity.user
-                ? getUserDisplayName(userActivity.user)
+                ? formatUserDisplayName(userActivity.user)
                 : '(inconnu)'
             }}
           </td>
@@ -60,7 +60,7 @@
   import { GetBeneficiariesUsersActivityOutput } from '~/server/trpc/routers'
   import { formatDate } from '~/utils/formatDate'
   import { RoutePath } from '~/utils/routing'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
   import { userActivityTypeLabels } from '~/client/options/userActivity'
 
   withDefaults(

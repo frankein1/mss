@@ -30,7 +30,7 @@
         </template>
       </td>
       <td>
-        {{ getBeneficiaryDisplayName(helpRequest.beneficiary) }}
+        {{ formatBeneficiaryDisplayName(helpRequest.beneficiary) }}
       </td>
       <template v-if="canViewHelpRequestDetails">
         <td>{{ instructorOrganization }}</td>
@@ -85,7 +85,7 @@
       </template>
       <td>
         <template v-if="helpRequest.createdBy">
-          {{ getUserDisplayName(helpRequest.createdBy) }}
+          {{ formatUserDisplayName(helpRequest.createdBy) }}
         </template>
       </td>
       <td>{{ readableFileNumber(helpRequest.beneficiary.id) }}</td>
@@ -102,14 +102,14 @@
   import { helpRequestStatusClasses } from '~/client/classes/helpRequest'
   import { euros } from '~/utils/euros'
   import { readableFileNumber } from '~/utils/readableFileNumber'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
   import {
     canViewHelpRequestDetails as canViewHelpRequestDetailsRule,
     canEditHelpRequest
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
-  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
+  import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()
