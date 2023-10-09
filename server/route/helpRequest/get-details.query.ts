@@ -1,10 +1,10 @@
+import { getHelpRequestAccessibleData } from './helper'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   SecurityRuleGrantee,
   canViewHelpRequest
 } from '~/server/security/rules'
-import { getHelpRequestAccessibleData } from '~/utils/helpRequest'
 import { getHelpRequestWithRelations } from '~/server/query/helpRequests'
 import { IdInput, idSchema } from '~/server/schema'
 import { getHelpRequestsecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
