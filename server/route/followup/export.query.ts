@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '../createRoute'
+import { getFollowupAccessibleData } from './helper/getFollowupAccessibleData'
 import { followupFieldLabels } from '~/client/labels'
 import { prismaClient } from '~/server/prisma'
 import { ExportFollowupsInput, exportFollowupsSchema } from '~/server/schema'
@@ -13,8 +14,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareFollowupFilters } from '~/utils/filters'
-import { getFollowupAccessibleData } from '~/utils/followup'
-import { getFollowupExportData } from '~/utils/export/getFollowupExportData'
+import { getFollowupExportData } from '~/server/route/followup/helper/getFollowupExportData'
 import { FOLLOWUP_EXPORTED_FIELDS } from '~/utils/constants/export'
 
 const handler = async ({

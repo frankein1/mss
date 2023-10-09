@@ -1,4 +1,5 @@
 import { inferAsyncReturnType } from '@trpc/server'
+import { getBeneficiaryRelativeDisplayName } from './getBeneficiaryRelativeDisplayName'
 import {
   beneficiaryAccommodationModeLabels,
   beneficiaryAccommodationZoneLabels,
@@ -20,7 +21,6 @@ import { Nationalities } from '~/client/options/nationality'
 import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
-import { getBeneficiaryRelativeDisplayName } from '~/utils/beneficiary/getBeneficiaryRelativeDisplayName'
 import { readableFileNumber } from '~/utils/readableFileNumber'
 import { formatUserDisplayName } from '~/utils/user'
 import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
