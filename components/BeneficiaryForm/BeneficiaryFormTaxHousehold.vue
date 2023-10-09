@@ -72,14 +72,14 @@
         />
       </div>
     </template>
-    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+    <div class="fr-col-12">
       <VeeSelect
         :name="`taxHouseholds[${index}].relationship`"
         :label="relativeFieldLabels.relationship"
         :options="withEmptyValue(taxHouseHoldRelationshipOptions)"
       />
     </div>
-    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+    <div class="fr-col-12">
       <VeeCheckbox
         :name="`taxHouseholds[${index}].caregiver`"
         :label="relativeFieldLabels.caregiver"

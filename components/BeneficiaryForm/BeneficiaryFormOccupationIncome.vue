@@ -13,19 +13,19 @@
         :label="beneficiaryFieldLabels.occupation"
       />
     </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         name="employer"
         :label="beneficiaryFieldLabels.employer"
       />
     </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         name="employerSiret"
         :label="beneficiaryFieldLabels.employerSiret"
       />
     </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeMultiSelect
         name="mainIncomeSource"
         :label="beneficiaryFieldLabels.mainIncomeSource"
@@ -34,14 +34,14 @@
         dropdown
       />
     </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeCurrencyInput
         name="mainIncomeAmount"
         :label="beneficiaryFieldLabels.mainIncomeAmount"
       />
     </div>
     <template v-if="hasPartner">
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeMultiSelect
           name="partnerMainIncomeSource"
           :label="beneficiaryFieldLabels.partnerMainIncomeSource"
@@ -50,7 +50,7 @@
           dropdown
         />
       </div>
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeCurrencyInput
           name="partnerMainIncomeAmount"
           :label="beneficiaryFieldLabels.partnerMainIncomeAmount"
@@ -58,7 +58,7 @@
       </div>
     </template>
     <template v-if="hasMajorChildren">
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeMultiSelect
           name="majorChildrenMainIncomeSource"
           :label="beneficiaryFieldLabels.majorChildrenMainIncomeSource"
@@ -67,7 +67,7 @@
           dropdown
         />
       </div>
-      <div class="fr-col-12">
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeCurrencyInput
           name="majorChildrenMainIncomeAmount"
           :label="beneficiaryFieldLabels.majorChildrenMainIncomeAmount"
