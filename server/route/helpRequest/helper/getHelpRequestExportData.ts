@@ -8,7 +8,7 @@ import {
   paymentMethodLabels
 } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
-import { getHelpRequestAccessibleData } from '~/utils/helpRequest/getHelpRequestAccessibleData'
+import { getHelpRequestAccessibleData } from '~/server/route/helpRequest/helper/getHelpRequestAccessibleData'
 
 function getExternalStructure(externalStructure: boolean | null | undefined) {
   if (externalStructure === true) {

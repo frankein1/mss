@@ -1,4 +1,5 @@
 import { UserActivityType } from '@prisma/client'
+import { prepareGetHelpRequestsPageSelect } from './helper'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -10,7 +11,6 @@ import {
   SecurityRuleGrantee,
   canEditHelpRequest
 } from '~/server/security/rules'
-import { prepareGetHelpRequestsPageSelect } from '~/utils/helpRequest'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 const securityCheck = async (
