@@ -20,12 +20,14 @@
             v-for="menu in menus"
             :key="menu.route"
             class="fr-sidemenu__item"
-            :class="{ 'fr-sidemenu__item--active': menu.route === current }"
+            :class="{
+              'fr-sidemenu__item--active': menu.route === currentRoute
+            }"
           >
             <button
               class="fr-sidemenu__btn"
-              :aria-current="menu.route === current ? true : undefined"
-              :type="menu.route === current ? 'button' : 'submit'"
+              :aria-current="menu.route === currentRoute ? true : undefined"
+              :type="menu.route === currentRoute ? 'button' : 'submit'"
               @click="emit('save', menu.path)"
             >
               {{ RouteTitle[menu.route]() }}
@@ -61,36 +63,22 @@
 </template>
 
 <script setup lang="ts">
-  import { useAuthStore } from '~/store/auth'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
-    RoutePath,
     Route,
     RouteTitle,
     AppBeneficiaryEditRoute,
     AppBeneficiariesSaveRoute
   } from '~/utils/routing'
-  import {
-    canEditBeneficiaryRelatives as canEditBeneficiaryRelativesRule,
-    canEditBeneficiaryHealthInfo as canEditBeneficiaryHealthInfoRule,
-    canEditBeneficiaryOccupationIncome as canEditBeneficiaryOccupationIncomeRule,
-    canEditBeneficiaryExternalOrganisations as canEditBeneficiaryExternalOrganisationsRule,
-    SecurityTargetWithReferents,
-    SecurityTargetWithStructure
-  } from '~/server/security/rules'
 
   const route = useRoute()
-  const beneficiaryId = route.params.id as string | undefined
-  const draftId = route.params.draftId as string | undefined
-  const originTab = route.query.originTab
-    ? (route.query.originTab as BeneficiaryTab)
-    : undefined
-
-  const authStore = useAuthStore()
 
   const props = defineProps<{
-    current: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
-    beneficiary: SecurityTargetWithReferents & SecurityTargetWithStructure
+    menus: Array<{
+      route: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
+      path: string
+      targets?: { hash: string; title: string }[]
+    }>
+    currentRoute: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
   }>()
 
   const emit = defineEmits<{
@@ -99,132 +87,13 @@
 
   const currentHash = computed(() => {
     if (
-      props.current !== Route.AppBeneficiaryEditInfo &&
-      props.current !== Route.AppBeneficiariesSaveInfo
+      props.currentRoute !== Route.AppBeneficiaryEditInfo &&
+      props.currentRoute !== Route.AppBeneficiariesSaveInfo
     ) {
       return undefined
     }
 
     return route.hash ? route.hash.replace('#', '') : undefined
-  })
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const canEditBeneficiaryRelatives = computed(() => {
-    return canEditBeneficiaryRelativesRule(user.value, props.beneficiary)
-  })
-
-  const canEditBeneficiaryHealthInfo = computed(() => {
-    return canEditBeneficiaryHealthInfoRule(user.value, props.beneficiary)
-  })
-
-  const canEditBeneficiaryOccupationIncome = computed(() => {
-    return canEditBeneficiaryOccupationIncomeRule(user.value, props.beneficiary)
-  })
-
-  const canEditBeneficiaryExternalOrganisations = computed(() => {
-    return canEditBeneficiaryExternalOrganisationsRule(
-      user.value,
-      props.beneficiary
-    )
-  })
-
-  const appBeneficiaryEditRoutes = computed<AppBeneficiaryEditRoute[]>(() => {
-    const editRoutes: AppBeneficiaryEditRoute[] = [Route.AppBeneficiaryEditInfo]
-
-    if (canEditBeneficiaryRelatives.value) {
-      editRoutes.push(
-        Route.AppBeneficiaryEditTaxHousehold,
-        Route.AppBeneficiaryEditEntourage
-      )
-    }
-
-    if (canEditBeneficiaryHealthInfo.value) {
-      editRoutes.push(Route.AppBeneficiaryEditHealth)
-    }
-
-    if (canEditBeneficiaryOccupationIncome.value) {
-      editRoutes.push(Route.AppBeneficiaryEditOccupation)
-    }
-
-    if (canEditBeneficiaryExternalOrganisations.value) {
-      editRoutes.push(Route.AppBeneficiaryEditExternalOrganisations)
-    }
-
-    return editRoutes
-  })
-
-  const appBeneficiariesSaveRoutes = computed<AppBeneficiariesSaveRoute[]>(
-    () => {
-      const saveRoutes: AppBeneficiariesSaveRoute[] = [
-        Route.AppBeneficiariesSaveInfo
-      ]
-
-      if (canEditBeneficiaryRelatives.value) {
-        saveRoutes.push(
-          Route.AppBeneficiariesSaveTaxHousehold,
-          Route.AppBeneficiariesSaveEntourage
-        )
-      }
-
-      if (canEditBeneficiaryHealthInfo.value) {
-        saveRoutes.push(Route.AppBeneficiariesSaveHealth)
-      }
-
-      if (canEditBeneficiaryOccupationIncome.value) {
-        saveRoutes.push(Route.AppBeneficiariesSaveOccupation)
-      }
-
-      if (canEditBeneficiaryExternalOrganisations.value) {
-        saveRoutes.push(Route.AppBeneficiariesSaveExternalOrganisations)
-      }
-
-      return saveRoutes
-    }
-  )
-
-  const routes = computed(() =>
-    beneficiaryId && !draftId
-      ? appBeneficiaryEditRoutes.value
-      : appBeneficiariesSaveRoutes.value
-  )
-
-  const menus = computed(() => {
-    return routes.value.map(route => {
-      const path =
-        beneficiaryId && !draftId
-          ? RoutePath[route as AppBeneficiaryEditRoute](beneficiaryId, {
-              saved: true,
-              originTab
-            })
-          : RoutePath[route as AppBeneficiariesSaveRoute](draftId as string)
-
-      const menu = {
-        route: route as AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute,
-        path
-      }
-
-      if (
-        route === Route.AppBeneficiaryEditInfo ||
-        route === Route.AppBeneficiariesSaveInfo
-      ) {
-        return {
-          ...menu,
-          targets: [
-            { hash: 'identity', title: 'Identité du bénéficiaire' },
-            { hash: 'contact-details', title: 'Coordonées' },
-            { hash: 'address', title: 'Adresse/Hébergement' },
-            { hash: 'mobility', title: 'Mobilité' },
-            {
-              hash: 'additional-information',
-              title: 'Informations complémentaires'
-            }
-          ]
-        }
-      }
-
-      return { ...menu, targets: undefined }
-    })
   })
 </script>
 
