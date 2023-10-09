@@ -1,13 +1,16 @@
 <template>
   <form
+    v-if="beneficiary"
     ref="form"
     class="fr-grid-row"
     @submit="onSubmit"
   >
-    <BeneficiaryFormNavigation
+    <BeneficiaryEditFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
-      :current="current"
-      :beneficiary="securityTarget"
+      :current-route="current"
+      :security-target="beneficiary"
+      :beneficiary-id="beneficiary.id"
+      :origin-tab="originTab"
       @save="saveTarget = $event"
     />
     <main class="beneficiaryformlayout__main fr-col-9 fr-container">
@@ -20,9 +23,11 @@
       </PageTitle>
 
       <slot></slot>
-      <BeneficiaryFormNavArrows
-        :previous-page="previousPage"
-        :next-page="nextPage"
+      <BeneficiaryEditFormNavArrows
+        :security-target="beneficiary"
+        :current-route="current"
+        :beneficiary-id="beneficiary.id"
+        :origin-tab="originTab"
         @save="saveTarget = $event"
       />
     </main>
@@ -38,42 +43,33 @@
 
 <script setup lang="ts" generic="T extends ZodSchema">
   import { ZodSchema, z } from 'zod'
-  import {
-    SecurityTargetWithReferents,
-    SecurityTargetWithStructure
-  } from '~/server/security'
+  import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     Breadcrumb,
     RoutePath,
     AppBeneficiaryEditRoute,
-    RouteTitle,
-    AppBeneficiariesSaveRoute
+    RouteTitle
   } from '~/utils/routing'
 
   type SubmitType = z.infer<T>
 
   const route = useRoute()
-  const draftId = route.params.draftId as string | null
+  const originTab = route.query.originTab
+    ? (route.query.originTab as BeneficiaryTab)
+    : undefined
+  const saved = route.query.saved !== undefined
 
   const props = withDefaults(
     defineProps<{
-      beneficiary?: SubmitType | null
+      beneficiary: MinimalBeneficiaryForFormLayout | null
       schema: T
       isSubmitting: boolean
       titleIcon?: string
-      saved?: boolean
-      previousPage?: { title: string; path: string }
-      nextPage?: { title: string; path: string }
-      current: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
-      securityTarget: SecurityTargetWithReferents & SecurityTargetWithStructure
+      current: AppBeneficiaryEditRoute
     }>(),
     {
-      beneficiary: undefined,
-      titleIcon: undefined,
-      saved: false,
-      previousPage: undefined,
-      nextPage: undefined
+      titleIcon: undefined
     }
   )
 
@@ -84,9 +80,7 @@
   const saveTarget = ref<string | undefined>(undefined)
 
   const breadcrumbLinks = computed(() =>
-    draftId
-      ? Breadcrumb.AppBeneficiariesAdd()
-      : Breadcrumb.AppBeneficiaryEdit(props.beneficiary || null)
+    Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
   )
 
   const title = computed(() => RouteTitle[props.current]())
@@ -95,32 +89,21 @@
 
   const { handleSubmit } = useForm<SubmitType>({
     validationSchema: toTypedSchema(props.schema),
-    initialValues: props.beneficiary
+    initialValues: props.beneficiary as SubmitType
   })
 
   const onSubmit = handleSubmit(values => {
     emit('save', values, saveTarget.value)
   })
 
-  async function onCancel() {
-    const originTab = route.query.originTab
-      ? (route.query.originTab as BeneficiaryTab)
-      : undefined
-
-    const redirectRoute =
-      !draftId && props.beneficiary
-        ? RoutePath.AppBeneficiary(props.beneficiary.id, { tab: originTab })
-        : RoutePath.AppBeneficiariesAdd()
-
-    if (draftId) {
-      try {
-        await useTrpcClient().beneficiaryDraft.delete.mutate({ id: draftId })
-      } catch {
-        navigateTo(redirectRoute)
-      }
+  function onCancel() {
+    if (!props.beneficiary) {
+      navigateTo(RoutePath.AppBeneficiaries())
+    } else {
+      navigateTo(
+        RoutePath.AppBeneficiary(props.beneficiary.id, { tab: originTab })
+      )
     }
-
-    navigateTo(redirectRoute)
   }
 </script>
 
@@ -132,9 +115,5 @@
   .beneficiaryformlayout__main {
     height: calc(100vh - #{$navbar-height} - #{$actions-bar-height});
     overflow: scroll;
-  }
-
-  .beneficiaryformlayout__navigation {
-    border-right: 1px solid var(--border-default-grey);
   }
 </style>

@@ -1,12 +1,11 @@
 <template>
-  <BeneficiaryFormLayout
+  <BeneficiariesSaveFormLayout
     :schema="saveBeneficiaryGeneralInformationSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     title-icon="fr-icon-user-line"
-    :next-page="nextPage"
-    :current="Route.AppBeneficiariesSaveInfo"
-    :security-target="securityTarget"
+    :current-route="Route.AppBeneficiariesSaveInfo"
+    :draft-id="draftId"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -24,7 +23,7 @@
       :beneficiary="beneficiary"
       :agents="agents"
     />
-  </BeneficiaryFormLayout>
+  </BeneficiariesSaveFormLayout>
 </template>
 
 <script lang="ts" setup>
@@ -34,13 +33,8 @@
   } from '~/server/schema'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
+  import { RoutePath, Route } from '~/utils/routing'
   import type { BeneficiaryDraft } from '~/types/beneficiary'
-  import { useAuthStore } from '~/store/auth'
-  import {
-    canEditBeneficiaryRelatives,
-    canEditBeneficiaryHealthInfo
-  } from '~/server/security/rules'
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -50,8 +44,6 @@
   const route = useRoute()
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
-  const authStore = useAuthStore()
-  const securityTarget = useBeneficiaryFormSecurityTarget()
 
   const {
     data: agents,
@@ -77,31 +69,6 @@
       return "La liste des référents n'a pas pu être chargée."
     }
     return ''
-  })
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const nextPage = computed(() => {
-    const securityTarget = {
-      referents: [user.value.id],
-      structureId: user.value.structureId
-    }
-
-    if (canEditBeneficiaryRelatives(user.value, securityTarget)) {
-      return {
-        title: RouteTitle.AppBeneficiariesSaveTaxHousehold(),
-        path: RoutePath.AppBeneficiariesSaveTaxHousehold(draftId)
-      }
-    }
-
-    if (canEditBeneficiaryHealthInfo(user.value, securityTarget)) {
-      return {
-        title: RouteTitle.AppBeneficiariesSaveHealth(),
-        path: RoutePath.AppBeneficiariesSaveHealth(draftId)
-      }
-    }
-
-    return undefined
   })
 
   const beneficiary = computed<

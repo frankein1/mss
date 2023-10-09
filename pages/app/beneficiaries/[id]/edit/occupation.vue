@@ -1,13 +1,9 @@
 <template>
-  <BeneficiaryFormLayout
+  <BeneficiaryEditFormLayout
     :schema="saveBeneficiaryOccupationSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :previous-page="previousPage"
-    :next-page="nextPage"
-    :saved="saved"
     :current="Route.AppBeneficiaryEditOccupation"
-    :security-target="securityTarget"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -29,7 +25,7 @@
         :major-children="majorChildren"
       />
     </div>
-  </BeneficiaryFormLayout>
+  </BeneficiaryEditFormLayout>
 </template>
 
 <script lang="ts" setup>
@@ -38,98 +34,26 @@
     SaveBeneficiaryOccupationInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
-  import type { BeneficiaryNames } from '~/types/beneficiary'
-  import { useAuthStore } from '~/store/auth'
-  import {
-    canEditBeneficiaryHealthInfo,
-    canEditBeneficiaryExternalOrganisations,
-    canEditBeneficiaryRelatives
-  } from '~/server/security/rules'
+  import { RoutePath, Route } from '~/utils/routing'
+  import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   definePageMeta({
-    middleware: ['is-beneficiary-referent', 'can-set-occupation']
+    middleware: ['is-beneficiary-referent', 'can-set-occupation'],
+    name: Route.AppBeneficiaryEditOccupation
   })
 
   const trpcClient = useTrpcClient()
-  const authStore = useAuthStore()
 
   const isSubmitting = ref(false)
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
-  const saved = route.query.saved !== undefined
-  const originTab = route.query.originTab
-    ? (route.query.originTab as BeneficiaryTab)
-    : undefined
 
   const { data, pending, error } =
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
-
-  const securityTarget = useBeneficiaryFormSecurityTarget(data)
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const previousPage = computed(() => {
-    if (!data.value) {
-      return undefined
-    }
-
-    if (canEditBeneficiaryHealthInfo(user.value, data.value.beneficiary)) {
-      return {
-        title: RouteTitle.AppBeneficiaryEditHealth(),
-        path: RoutePath.AppBeneficiaryEditHealth(beneficiaryId, {
-          saved: true,
-          originTab
-        })
-      }
-    }
-
-    if (canEditBeneficiaryRelatives(user.value, data.value.beneficiary)) {
-      return {
-        title: RouteTitle.AppBeneficiaryEditEntourage(),
-        path: RoutePath.AppBeneficiaryEditEntourage(beneficiaryId, {
-          saved: true,
-          originTab
-        })
-      }
-    }
-
-    return {
-      title: RouteTitle.AppBeneficiaryEditInfo(),
-      path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, {
-        saved: true,
-        originTab
-      })
-    }
-  })
-
-  const nextPage = computed(() => {
-    if (!data.value) {
-      return undefined
-    }
-
-    if (
-      canEditBeneficiaryExternalOrganisations(
-        user.value,
-        data.value.beneficiary
-      )
-    ) {
-      return {
-        title: RouteTitle.AppBeneficiaryEditExternalOrganisations(),
-        path: RoutePath.AppBeneficiaryEditExternalOrganisations(beneficiaryId, {
-          saved: true,
-          originTab
-        })
-      }
-    }
-
-    return undefined
-  })
 
   const familySituation = computed(
     () => data.value?.beneficiary.familySituation
@@ -146,6 +70,8 @@
     // Names and id are required for building the breadcrumb in the layout
     return {
       id: b.id,
+      structureId: b.structureId,
+      referents: b.referents,
       firstName: b.firstName,
       usualName: b.usualName,
       birthName: b.birthName,
@@ -170,7 +96,7 @@
       ministereCategorie: b.ministereCategorie,
       ministereDepartementServiceAc: b.ministereDepartementServiceAc,
       ministereStructure: b.ministereStructure
-    } as SaveBeneficiaryOccupationInput & BeneficiaryNames & { id: string }
+    } as SaveBeneficiaryOccupationInput & MinimalBeneficiaryForFormLayout
   })
 
   async function onSaveBeneficiary(
