@@ -1,12 +1,10 @@
 <template>
-  <BeneficiaryFormLayout
+  <BeneficiariesSaveFormLayout
     :schema="saveBeneficiaryTaxHouseholdSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :previous-page="previousPage"
-    :next-page="nextPage"
-    :current="Route.AppBeneficiariesSaveTaxHousehold"
-    :security-target="securityTarget"
+    :current-route="Route.AppBeneficiariesSaveTaxHousehold"
+    :draft-id="draftId"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -26,7 +24,7 @@
       <BeneficiaryFormFamilySituation />
       <BeneficiaryFormTaxHouseholds />
     </div>
-  </BeneficiaryFormLayout>
+  </BeneficiariesSaveFormLayout>
 </template>
 
 <script lang="ts" setup>
@@ -37,7 +35,7 @@
   import { BeneficiaryDraft } from '~/types/beneficiary'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
+  import { RoutePath, Route } from '~/utils/routing'
 
   definePageMeta({
     middleware: 'can-set-relatives'
@@ -51,17 +49,6 @@
   const route = useRoute()
   const draftId = route.params.draftId as string
   const snackbar = useSnackbar()
-  const securityTarget = useBeneficiaryFormSecurityTarget()
-
-  const previousPage = {
-    title: RouteTitle.AppBeneficiariesSaveInfo(),
-    path: RoutePath.AppBeneficiariesSaveInfo(draftId)
-  }
-
-  const nextPage = {
-    title: RouteTitle.AppBeneficiariesSaveEntourage(),
-    path: RoutePath.AppBeneficiariesSaveEntourage(draftId)
-  }
 
   const {
     data: beneficiaryDraft,

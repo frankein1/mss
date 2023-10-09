@@ -1,13 +1,9 @@
 <template>
-  <BeneficiaryFormLayout
+  <BeneficiaryEditFormLayout
     :schema="saveBeneficiaryTaxHouseholdSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :previous-page="previousPage"
-    :next-page="nextPage"
-    :saved="saved"
     :current="Route.AppBeneficiaryEditTaxHousehold"
-    :security-target="securityTarget"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -27,7 +23,7 @@
       <BeneficiaryFormFamilySituation />
       <BeneficiaryFormTaxHouseholds :current-beneficiary-id="beneficiaryId" />
     </div>
-  </BeneficiaryFormLayout>
+  </BeneficiaryEditFormLayout>
 </template>
 
 <script lang="ts" setup>
@@ -35,10 +31,9 @@
     saveBeneficiaryTaxHouseholdSchema,
     SaveBeneficiaryTaxHouseholdInput
   } from '~/server/schema'
+  import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle, Route } from '~/utils/routing'
-  import type { BeneficiaryNames } from '~/types/beneficiary'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { RoutePath, Route } from '~/utils/routing'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-set-relatives']
@@ -50,33 +45,11 @@
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
-  const saved = route.query.saved !== undefined
-  const originTab = route.query.originTab
-    ? (route.query.originTab as BeneficiaryTab)
-    : undefined
-
-  const previousPage = {
-    title: RouteTitle.AppBeneficiaryEditInfo(),
-    path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, {
-      saved: true,
-      originTab
-    })
-  }
-
-  const nextPage = {
-    title: RouteTitle.AppBeneficiaryEditEntourage(),
-    path: RoutePath.AppBeneficiaryEditEntourage(beneficiaryId, {
-      saved: true,
-      originTab
-    })
-  }
 
   const { data, pending, error } =
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
-
-  const securityTarget = useBeneficiaryFormSecurityTarget(data)
 
   const beneficiary = computed(() => {
     if (!data.value) {
@@ -88,6 +61,8 @@
     // Names and id are required for building the breadcrumb in the layout
     return {
       id: b.id,
+      structureId: b.structureId,
+      referents: b.referents,
       firstName: b.firstName,
       usualName: b.usualName,
       birthName: b.birthName,
@@ -96,7 +71,7 @@
       minorChildren: b.minorChildren,
       caregiver: b.caregiver,
       taxHouseholds
-    } as SaveBeneficiaryTaxHouseholdInput & BeneficiaryNames & { id: string }
+    } as SaveBeneficiaryTaxHouseholdInput & MinimalBeneficiaryForFormLayout
   })
 
   async function onSaveBeneficiary(
