@@ -20,7 +20,7 @@
   import { canEditItsOwnStructure, canListUsers } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
 
   const authStore = useAuthStore()
 
@@ -28,7 +28,7 @@
     authStore.isAuthenticated ? authStore.getAuthUser : null
   )
   const userName = computed(() =>
-    user.value ? getUserDisplayName(user.value) : ''
+    user.value ? formatUserDisplayName(user.value) : ''
   )
 
   const menus = computed(() => {

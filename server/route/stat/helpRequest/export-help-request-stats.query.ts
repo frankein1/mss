@@ -1,4 +1,5 @@
 import { StructureType } from '@prisma/client'
+import { getRowsFromData } from '../helper/getRowsFromData'
 import { createQuery } from '~/server/route'
 import { helpRequestStatusLabels } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
@@ -18,7 +19,6 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
 import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
-import { getRowsFromData } from '~/utils/export/getRowsFromData'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({

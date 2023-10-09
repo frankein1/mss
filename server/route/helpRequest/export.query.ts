@@ -1,4 +1,8 @@
 import { Prisma } from '@prisma/client'
+import {
+  getHelpRequestAccessibleData,
+  getHelpRequestExportData
+} from './helper'
 import { createQuery } from '~/server/route'
 import { helpRequestFieldLabels } from '~/client/labels'
 import { prismaClient } from '~/server/prisma'
@@ -15,9 +19,7 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
-import { getHelpRequestAccessibleData } from '~/utils/helpRequest'
 import { prepareHelpRequestFilters } from '~/utils/filters'
-import { getHelpRequestExportData } from '~/utils/export/getHelpRequestExportData'
 import { HELP_REQUEST_EXPORTED_FIELDS } from '~/utils/constants/export'
 
 const handler = async ({

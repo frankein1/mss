@@ -8,7 +8,7 @@
         v-if="history.createdBy"
         class="agent-name"
       >
-        {{ getUserDisplayName(history.createdBy) }}
+        {{ formatUserDisplayName(history.createdBy) }}
       </div>
       <div
         class="additional-meta"
@@ -74,7 +74,7 @@
   import { followupStatusClasses } from '~/client/classes/followup'
   import { helpRequestStatusClasses } from '~/client/classes/helpRequest'
   import { formatDate } from '~/utils/formatDate'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
 
   const { helpRequestStatusLabels } = useHelpRequestStatus()
 
