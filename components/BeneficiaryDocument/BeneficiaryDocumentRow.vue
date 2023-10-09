@@ -6,6 +6,8 @@
         <span
           class="name-container"
           :class="{
+            'name-container-1-badge':
+              document.confidential || hasUnreadNotifications,
             'name-container-2-badges':
               document.confidential && hasUnreadNotifications
           }"
@@ -186,7 +188,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .name-column {
     display: flex;
     align-items: center;
@@ -194,10 +196,13 @@
   }
 
   .name-container {
-    max-width: 180px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    &.name-container-1-badge {
+      max-width: 180px;
+    }
 
     &.name-container-2-badges {
       max-width: 60px;
