@@ -14,21 +14,17 @@
         <thead>
           <tr>
             <th scope="col">Type</th>
-            <th scope="col">
-              <AtomSortButton
-                column="Nom"
-                :sort="nameSort"
-                @update:sort="onSort({ name: $event })"
-              />
-            </th>
-            <th scope="col">
-              <AtomSortButton
-                column="Date ajout"
-                :sort="dateSort"
-                numeric
-                @update:sort="onSort({ created: $event })"
-              />
-            </th>
+            <TableSortableHeader
+              label="Nom"
+              :sort="nameSort"
+              @update:sort="onSort({ name: $event })"
+            />
+            <TableSortableHeader
+              label="Date ajout"
+              :sort="dateSort"
+              numeric
+              @update:sort="onSort({ created: $event })"
+            />
             <th scope="col">Thèmes</th>
             <th scope="col">Actions</th>
           </tr>
