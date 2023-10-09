@@ -3,7 +3,7 @@
     :schema="saveBeneficiaryTaxHouseholdSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :current="Route.AppBeneficiaryEditTaxHousehold"
+    :current-route="Route.AppBeneficiaryEditTaxHousehold"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
