@@ -46,8 +46,8 @@
         <li>
           <button
             class="fr-btn fr-btn--tertiary-no-outline fr-icon-eye-line"
-            title="Nouvel onglet - Voir"
-            :aria-label="`Nouvel onglet - Voir ${document.name}`"
+            title="Voir dans une nouvelle fenêtre"
+            :aria-label="`Voir ${document.name} - Ouvre une nouvelle fenêtre`"
             @click="onView"
           >
             Voir

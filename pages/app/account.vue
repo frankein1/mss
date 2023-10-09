@@ -14,7 +14,7 @@
                 class="fr-link"
                 :to="data"
                 target="_blank"
-                title="Nouvel onglet - Modifier mon mot de passe InclusionConnect"
+                title="Modifier mon mot de passe InclusionConnect - Ouvre une nouvelle fenêtre"
               >
                 Modifier mon mot de passe
               </NuxtLink>

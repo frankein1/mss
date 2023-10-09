@@ -8,7 +8,7 @@
       <button
         class="fr-link"
         target="_blank"
-        :title="'Nouvel onglet - Voir ' + document.name"
+        :title="`Voir ${document.name} - Ouvre une nouvelle fenêtre`"
         @click="onView(document.key)"
       >
         {{ document.name }}</button
