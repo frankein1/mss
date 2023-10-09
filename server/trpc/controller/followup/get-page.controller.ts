@@ -1,11 +1,21 @@
 import type { Prisma } from '@prisma/client'
+<<<<<<< Updated upstream:server/trpc/controller/followup/get-page.controller.ts
 import type { GetFollowupsInput } from '~/server/schema'
+=======
+import { createQuery } from '../createRoute'
+import { prepareGetFollowupsPageSelect } from './helper'
+import { GetFollowupsInput, getFollowupsSchema } from '~/server/schema'
+>>>>>>> Stashed changes:server/route/followup/get-page.query.ts
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
 import { prepareFollowupFilters } from '~/utils/filters'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+<<<<<<< Updated upstream:server/trpc/controller/followup/get-page.controller.ts
 import { prepareGetFollowupsPageSelect } from '~/utils/followup'
+=======
+import { AllowSecurityCheck } from '~/server/security/rules/types'
+>>>>>>> Stashed changes:server/route/followup/get-page.query.ts
 
 export const getFollowupsHandler = async ({
   input,

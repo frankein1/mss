@@ -1,4 +1,5 @@
 import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
+<<<<<<< Updated upstream:server/trpc/controller/followup/create.controller.ts
 import {
   ProtectedAppContext,
   invalidError,
@@ -11,6 +12,15 @@ import {
   prepareMinistryData,
   prepareFollowupTypesMutations
 } from '~/utils/followup'
+=======
+import { prepareFollowupTypesMutations, prepareMinistryData } from './helper'
+import { createMutation } from '~/server/route'
+import { ProtectedAppContext } from '~/server/trpc'
+import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
+import { prismaClient } from '~/server/prisma'
+import { SecurityRuleGrantee, canCreateFollowup } from '~/server/security/rules'
+
+>>>>>>> Stashed changes:server/route/followup/create.mutation.ts
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'

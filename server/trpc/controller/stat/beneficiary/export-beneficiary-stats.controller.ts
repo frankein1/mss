@@ -26,7 +26,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { ageGroupLabels } from '~/client/options/ageGroup'
 import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
-import { getRowsFromData } from '~/utils/export/getRowsFromData'
+import { getRowsFromData } from '~/server/route/stat/helper/getRowsFromData'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import { STATS_NULL_LABEL } from '~/client/options/stat'
 import {

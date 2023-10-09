@@ -1,4 +1,13 @@
 import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
+<<<<<<< Updated upstream:server/trpc/controller/followup/update.controller.ts
+=======
+import {
+  FollowupTarget,
+  prepareFollowupTypesMutations,
+  prepareMinistryData
+} from './helper'
+import { createMutation } from '~/server/route'
+>>>>>>> Stashed changes:server/route/followup/update.mutation.ts
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { EditFollowupInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
@@ -6,11 +15,7 @@ import {
   canEditFollowup,
   canEditFollowupPrivateSynthesis
 } from '~/server/security/rules'
-import {
-  FollowupTarget,
-  prepareMinistryData,
-  prepareFollowupTypesMutations
-} from '~/utils/followup'
+
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import {

@@ -1,5 +1,5 @@
 import { getUserDisplayName } from '~/utils/user'
-import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
+import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
@@ -8,7 +8,7 @@ import {
   paymentMethodLabels
 } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
-import { getHelpRequestAccessibleData } from '~/utils/helpRequest/getHelpRequestAccessibleData'
+import { getHelpRequestAccessibleData } from '~/server/route/helpRequest/helper/getHelpRequestAccessibleData'
 
 function getExternalStructure(externalStructure: boolean | null | undefined) {
   if (externalStructure === true) {
@@ -24,7 +24,7 @@ export function getHelpRequestExportData(
   helpRequest: ReturnType<typeof getHelpRequestAccessibleData>
 ) {
   return {
-    beneficiaryId: getBeneficiaryDisplayName(helpRequest.beneficiary),
+    beneficiaryId: formatBeneficiaryDisplayName(helpRequest.beneficiary),
     prescribingOrganizationId: helpRequest.prescribingOrganization?.name || '',
     externalStructure: getExternalStructure(helpRequest.externalStructure),
     instructorOrganizationId: helpRequest.instructorOrganization?.name || '',

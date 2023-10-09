@@ -1,4 +1,9 @@
 import type { Prisma } from '@prisma/client'
+<<<<<<< Updated upstream:server/trpc/controller/helpRequest/get-page.controller.ts
+=======
+import { prepareGetHelpRequestsPageSelect } from './helper'
+import { createQuery } from '~/server/route'
+>>>>>>> Stashed changes:server/route/helpRequest/get-page.query.ts
 import { ProtectedAppContext } from '~/server/trpc'
 import type {
   GetHelpRequestsInput,
@@ -6,7 +11,6 @@ import type {
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
-import { prepareGetHelpRequestsPageSelect } from '~/utils/helpRequest'
 import { prepareHelpRequestFilters } from '~/utils/filters'
 import { SortOrder } from '~/types/table'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'

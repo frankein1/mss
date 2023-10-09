@@ -30,7 +30,7 @@
         </template>
       </td>
       <td>
-        {{ getBeneficiaryDisplayName(helpRequest.beneficiary) }}
+        {{ formatBeneficiaryDisplayName(helpRequest.beneficiary) }}
       </td>
       <template v-if="canViewHelpRequestDetails">
         <td>{{ instructorOrganization }}</td>
@@ -109,7 +109,7 @@
     canEditHelpRequest
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
-  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
+  import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()

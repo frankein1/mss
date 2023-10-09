@@ -24,7 +24,7 @@
       </td>
       <td>{{ formatDate(followup.date) }}</td>
       <td>
-        {{ getBeneficiaryDisplayName(followup.beneficiary) }}
+        {{ formatBeneficiaryDisplayName(followup.beneficiary) }}
       </td>
       <td class="followup-types-data">{{ followUpTypes }}</td>
       <td>
@@ -58,7 +58,7 @@
     canEditFollowup
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
-  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
+  import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()

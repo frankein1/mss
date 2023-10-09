@@ -1,4 +1,9 @@
 import { Prisma } from '@prisma/client'
+<<<<<<< Updated upstream:server/trpc/controller/followup/export.controller.ts
+=======
+import { createQuery } from '../createRoute'
+import { getFollowupAccessibleData } from './helper'
+>>>>>>> Stashed changes:server/route/followup/export.query.ts
 import { followupFieldLabels } from '~/client/labels'
 import { prismaClient } from '~/server/prisma'
 import { ExportFollowupsInput } from '~/server/schema'
@@ -11,8 +16,7 @@ import { forbiddenError, ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareFollowupFilters } from '~/utils/filters'
-import { getFollowupAccessibleData } from '~/utils/followup'
-import { getFollowupExportData } from '~/utils/export/getFollowupExportData'
+import { getFollowupExportData } from '~/server/route/followup/helper/getFollowupExportData'
 import { FOLLOWUP_EXPORTED_FIELDS } from '~/utils/constants/export'
 
 export const exportFollowupsHandler = async ({

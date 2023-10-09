@@ -1,5 +1,5 @@
 import { Route } from './routes'
-import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
+import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { BeneficiaryNames } from '~/types/beneficiary'
 
 export const RouteTitle = {
@@ -36,13 +36,13 @@ export const RouteTitle = {
     'Structures extérieures',
   [Route.AppBeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
   [Route.AppBeneficiary]: (beneficiary: BeneficiaryNames | null) =>
-    beneficiary ? getBeneficiaryDisplayName(beneficiary) : '',
+    beneficiary ? formatBeneficiaryDisplayName(beneficiary) : '',
   [Route.AppBeneficiaryPrint]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
-      ? `Imprimer la fiche de ${getBeneficiaryDisplayName(beneficiary)}`
+      ? `Imprimer la fiche de ${formatBeneficiaryDisplayName(beneficiary)}`
       : '',
   [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
-    beneficiary ? `Modifier ${getBeneficiaryDisplayName(beneficiary)}` : '',
+    beneficiary ? `Modifier ${formatBeneficiaryDisplayName(beneficiary)}` : '',
   [Route.AppBeneficiaryEditInfo]: () => 'Informations bénéficiaire',
   [Route.AppBeneficiaryEditTaxHousehold]: () => 'Foyer fiscal',
   [Route.AppBeneficiaryEditEntourage]: () => 'Entourage',
@@ -52,17 +52,17 @@ export const RouteTitle = {
     'Structures extérieures',
   [Route.AppBeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
-      ? `Entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
+      ? `Entretien avec ${formatBeneficiaryDisplayName(beneficiary)}`
       : 'Entretien avec un·e bénéficiaire',
   [Route.AppBeneficiaryFollowupEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary
-      ? `Modifier l'entretien avec ${getBeneficiaryDisplayName(beneficiary)}`
+      ? `Modifier l'entretien avec ${formatBeneficiaryDisplayName(beneficiary)}`
       : "Modifier l'entretien avec un·e bénéficiaire",
   [Route.AppBeneficiaryHelpRequestAdd]: (
     beneficiary: BeneficiaryNames | null
   ) =>
     beneficiary
-      ? `Instruction d'une demande d'aide pour ${getBeneficiaryDisplayName(
+      ? `Instruction d'une demande d'aide pour ${formatBeneficiaryDisplayName(
           beneficiary
         )}`
       : "Instruction d'une demande d'aide",
@@ -70,7 +70,7 @@ export const RouteTitle = {
     beneficiary: BeneficiaryNames | null
   ) =>
     beneficiary
-      ? `Modifier l'instruction de ${getBeneficiaryDisplayName(beneficiary)}`
+      ? `Modifier l'instruction de ${formatBeneficiaryDisplayName(beneficiary)}`
       : "Modifier l'instruction d'un·e bénéficiaire",
 
   [Route.AppHistory]: () => 'Accompagnements',

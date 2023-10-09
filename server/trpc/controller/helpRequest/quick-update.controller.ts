@@ -1,9 +1,24 @@
 import { UserActivityType } from '@prisma/client'
+<<<<<<< Updated upstream:server/trpc/controller/helpRequest/quick-update.controller.ts
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import type { QuickEditHelpRequestInput } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { canEditHelpRequest } from '~/server/security/rules'
 import { prepareGetHelpRequestsPageSelect } from '~/utils/helpRequest'
+=======
+import { prepareGetHelpRequestsPageSelect } from './helper'
+import { createMutation } from '~/server/route'
+import { ProtectedAppContext } from '~/server/trpc'
+import {
+  QuickEditHelpRequestInput,
+  quickEditHelpRequestSchema
+} from '~/server/schema'
+import { prismaClient } from '~/server/prisma'
+import {
+  SecurityRuleGrantee,
+  canEditHelpRequest
+} from '~/server/security/rules'
+>>>>>>> Stashed changes:server/route/helpRequest/quick-update.mutation.ts
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 export const quickUpdateHelpRequestHandler = async ({

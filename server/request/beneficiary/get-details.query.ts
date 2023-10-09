@@ -6,7 +6,7 @@ import {
   SecurityRuleGrantee,
   canViewBeneficiary
 } from '~/server/security/rules'
-import { getBeneficiaryAccessibleData } from '~/utils/beneficiary/getBeneficiaryAccessibleData'
+import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
 import { IdInput, idSchema } from '~/server/schema'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 

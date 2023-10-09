@@ -1,4 +1,9 @@
 import { Prisma } from '@prisma/client'
+<<<<<<< Updated upstream:server/trpc/controller/helpRequest/export.controller.ts
+=======
+import { getHelpRequestAccessibleData } from './helper'
+import { createQuery } from '~/server/route'
+>>>>>>> Stashed changes:server/route/helpRequest/export.query.ts
 import { helpRequestFieldLabels } from '~/client/labels'
 import { prismaClient } from '~/server/prisma'
 import { ExportHelpRequestsInput } from '~/server/schema'
@@ -10,9 +15,8 @@ import {
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
-import { getHelpRequestAccessibleData } from '~/utils/helpRequest'
 import { prepareHelpRequestFilters } from '~/utils/filters'
-import { getHelpRequestExportData } from '~/utils/export/getHelpRequestExportData'
+import { getHelpRequestExportData } from '~/server/route/helpRequest/helper/getHelpRequestExportData'
 import { HELP_REQUEST_EXPORTED_FIELDS } from '~/utils/constants/export'
 
 export const exportHelpRequestsHandler = async ({

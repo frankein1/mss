@@ -1,4 +1,4 @@
-import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
+import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { getUserDisplayName } from '~/utils/user'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
@@ -9,7 +9,7 @@ import {
   followupStatusLabels
 } from '~/client/options/followup'
 import { ministerLabels } from '~/client/options/ministry'
-import { getFollowupAccessibleData } from '~/utils/followup/getFollowupAccessibleData'
+import { getFollowupAccessibleData } from '~/server/route/followup/helper/getFollowupAccessibleData'
 
 export function getFollowupExportData(
   followup: ReturnType<typeof getFollowupAccessibleData>
@@ -20,7 +20,7 @@ export function getFollowupExportData(
     status: followupStatusLabels[followup.status],
     redirected: getBooleanOrEmpty(followup.redirected),
     types: followup.types.map(type => type.name).join(', '),
-    beneficiaryId: getBeneficiaryDisplayName(followup.beneficiary),
+    beneficiaryId: formatBeneficiaryDisplayName(followup.beneficiary),
     medium: followup.medium ? followupMediumLabels[followup.medium] : '',
     classified: getBooleanOrEmpty(followup.classified),
     documents:
