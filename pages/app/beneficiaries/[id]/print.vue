@@ -19,7 +19,7 @@
       class="fr-mx-auto"
     />
     <template v-else-if="beneficiary">
-      <h1>{{ getBeneficiaryDisplayName(beneficiary) }}</h1>
+      <h1>{{ formatBeneficiaryDisplayName(beneficiary) }}</h1>
       <BeneficiaryDetailsTitle :beneficiary="beneficiary" />
       <BeneficiaryDetailsGeneral :beneficiary="beneficiary" />
       <BeneficiaryDetailsHealth :beneficiary="beneficiary" />

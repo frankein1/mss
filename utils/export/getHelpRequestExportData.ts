@@ -1,5 +1,5 @@
-import { getUserDisplayName } from '~/utils/user'
-import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
+import { formatUserDisplayName } from '~/utils/user'
+import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
@@ -24,7 +24,7 @@ export function getHelpRequestExportData(
   helpRequest: ReturnType<typeof getHelpRequestAccessibleData>
 ) {
   return {
-    beneficiaryId: getBeneficiaryDisplayName(helpRequest.beneficiary),
+    beneficiaryId: formatBeneficiaryDisplayName(helpRequest.beneficiary),
     prescribingOrganizationId: helpRequest.prescribingOrganization?.name || '',
     externalStructure: getExternalStructure(helpRequest.externalStructure),
     instructorOrganizationId: helpRequest.instructorOrganization?.name || '',
@@ -55,7 +55,7 @@ export function getHelpRequestExportData(
     ministre: helpRequest.ministre ? ministerLabels[helpRequest.ministre] : '',
     numeroPegase: helpRequest.numeroPegase || '',
     createdById: helpRequest.createdBy
-      ? getUserDisplayName(helpRequest.createdBy)
+      ? formatUserDisplayName(helpRequest.createdBy)
       : ''
   }
 }

@@ -1,6 +1,6 @@
 import { Beneficiary } from '@prisma/client'
 
-export function getBeneficiaryDisplayPhone(
+export function formatBeneficiaryDisplayPhone(
   beneficiary: Pick<Beneficiary, 'phone1' | 'phone2'>
 ) {
   return beneficiary.phone2

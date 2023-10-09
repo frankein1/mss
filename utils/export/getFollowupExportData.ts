@@ -1,5 +1,5 @@
-import { getBeneficiaryDisplayName } from '~/utils/beneficiary/getBeneficiaryDisplayName'
-import { getUserDisplayName } from '~/utils/user'
+import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
+import { formatUserDisplayName } from '~/utils/user'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
@@ -20,7 +20,7 @@ export function getFollowupExportData(
     status: followupStatusLabels[followup.status],
     redirected: getBooleanOrEmpty(followup.redirected),
     types: followup.types.map(type => type.name).join(', '),
-    beneficiaryId: getBeneficiaryDisplayName(followup.beneficiary),
+    beneficiaryId: formatBeneficiaryDisplayName(followup.beneficiary),
     medium: followup.medium ? followupMediumLabels[followup.medium] : '',
     classified: getBooleanOrEmpty(followup.classified),
     documents:
@@ -47,7 +47,7 @@ export function getFollowupExportData(
     thirdPersonName: followup.thirdPersonName || '',
     updated: formatDate(followup.updated, 'DD-MM-YYYY HH:mm'),
     createdById: followup.createdBy
-      ? getUserDisplayName(followup.createdBy)
+      ? formatUserDisplayName(followup.createdBy)
       : ''
   }
 }

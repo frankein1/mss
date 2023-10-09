@@ -38,7 +38,7 @@
               class="clickable-row"
               @click="navigate"
             >
-              <td>{{ getUserDisplayName(user) }}</td>
+              <td>{{ formatUserDisplayName(user) }}</td>
               <td>{{ user.structure?.name || '-' }}</td>
               <td>{{ UserRoleLabels[user.role] }}</td>
               <td>{{ user.email }}</td>
@@ -55,7 +55,7 @@
   import { Users } from './types'
   import { UserRoleLabels } from '~/client/options/user'
   import type { UserAdminSort } from '~/types/table'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{

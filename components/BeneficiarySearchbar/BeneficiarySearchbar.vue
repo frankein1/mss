@@ -14,7 +14,7 @@
           target="_self"
           class="fr-btn fr-btn--tertiary-no-outline result"
         >
-          {{ getBeneficiarySearchDisplayName(beneficiary) }}
+          {{ formatBeneficiarySearchDisplayName(beneficiary) }}
         </NuxtLink>
       </template>
     </BeneficiarySearchbarInput>
