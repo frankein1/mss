@@ -1,10 +1,7 @@
 <template>
   <div
     class="fr-grid-row fr-grid-row--middle"
-    :class="{
-      'pagination-container-no-limit': noLimitSelection,
-      'pagination-container': !noLimitSelection
-    }"
+    :class="{ 'no-limit': noLimitSelection }"
   >
     <form
       v-if="!noLimitSelection"
@@ -161,12 +158,12 @@
     justify-content: center;
   }
 
-  .pagination-container {
+  .fr-grid-row.fr-grid-row--middle {
     justify-content: space-between;
-  }
 
-  .pagination-container-no-limit {
-    justify-content: center;
+    &.no-limit {
+      justify-content: center;
+    }
   }
 
   .page-number {
