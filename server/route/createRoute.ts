@@ -46,13 +46,16 @@ export type CreateRouteOptions<
   adminHandler?: AdminRouteHandler<Grantee, Input, RouteResult>
 }
 
-export type RequestServer<
+export type RouteServer<
   Validation extends ZodType,
   Grantee extends SecurityRuleGrantee = SecurityRuleGrantee,
   RouteResult = any,
   Input = z.infer<Validation>
 > = Readonly<
-  Omit<CreateRouteOptions<Validation, Grantee, RouteResult, Input>, 'handler'>
+  Omit<
+    CreateRouteOptions<Validation, Grantee, RouteResult, Input>,
+    'handler' | 'adminHandler'
+  >
 > & {
   mutation: boolean
   execute: RouteHandler<Grantee, Input, RouteResult>
@@ -66,10 +69,13 @@ export const createRoute = <
 >(
   options: CreateRouteOptions<Validation, Grantee, RouteResult>,
   mutation: boolean
-): RequestServer<Validation, Grantee, RouteResult> => {
+): RouteServer<Validation, Grantee, RouteResult> => {
   if (!options.handler && !options.adminHandler) {
     throw new Error('either function handler or adminHandler must be defined')
   }
+
+  const { handler, adminHandler, inputValidation, securityCheck } = options
+
   const execute = async ({
     ctx,
     input
@@ -80,10 +86,10 @@ export const createRoute = <
     if (!ctx.structure) {
       throw forbiddenError('No structure found is the trpc context')
     }
-    if (!options.handler) {
+    if (!handler) {
       throw forbiddenError('Use handler function to handler the request')
     }
-    const canAccess = await options.securityCheck(ctx.user, input)
+    const canAccess = await securityCheck(ctx.user, input)
     if (!canAccess) {
       throw forbiddenError(
         `${
@@ -94,7 +100,7 @@ export const createRoute = <
       )
     }
 
-    return options.handler({ ctx, input })
+    return handler({ ctx, input })
   }
 
   const executeAsAdmin = async ({
@@ -104,10 +110,10 @@ export const createRoute = <
     ctx: AdminRouteHandlerContext<Grantee>
     input: Validation
   }) => {
-    if (!options.adminHandler) {
+    if (!adminHandler) {
       throw forbiddenError('Use adminHandler function to handle the request')
     }
-    const canAccess = await options.securityCheck(ctx.user, input)
+    const canAccess = await securityCheck(ctx.user, input)
     if (!canAccess) {
       throw forbiddenError(
         `${
@@ -118,11 +124,12 @@ export const createRoute = <
       )
     }
 
-    return options.adminHandler({ ctx, input })
+    return adminHandler({ ctx, input })
   }
 
   return {
-    ...options,
+    inputValidation,
+    securityCheck,
     mutation,
     execute,
     executeAsAdmin
