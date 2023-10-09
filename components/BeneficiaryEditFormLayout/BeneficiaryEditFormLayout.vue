@@ -7,7 +7,7 @@
   >
     <BeneficiaryEditFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
-      :current-route="current"
+      :current-route="currentRoute"
       :security-target="beneficiary"
       :beneficiary-id="beneficiary.id"
       :origin-tab="originTab"
@@ -25,7 +25,7 @@
       <slot></slot>
       <BeneficiaryEditFormNavArrows
         :security-target="beneficiary"
-        :current-route="current"
+        :current-route="currentRoute"
         :beneficiary-id="beneficiary.id"
         :origin-tab="originTab"
         @save="saveTarget = $event"
@@ -66,7 +66,7 @@
       schema: T
       isSubmitting: boolean
       titleIcon?: string
-      current: AppBeneficiaryEditRoute
+      currentRoute: AppBeneficiaryEditRoute
     }>(),
     {
       titleIcon: undefined
@@ -83,7 +83,7 @@
     Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
   )
 
-  const title = computed(() => RouteTitle[props.current]())
+  const title = computed(() => RouteTitle[props.currentRoute]())
 
   useHead({ title: title.value })
 

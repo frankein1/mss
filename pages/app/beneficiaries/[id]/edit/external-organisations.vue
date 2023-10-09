@@ -3,7 +3,7 @@
     :schema="saveBeneficiaryExternalOrganisationsSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :current="Route.AppBeneficiaryEditExternalOrganisations"
+    :current-route="Route.AppBeneficiaryEditExternalOrganisations"
     @save="onSaveBeneficiary"
   >
     <AtomAlert

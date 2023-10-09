@@ -3,7 +3,7 @@
     :schema="saveBeneficiaryHealthSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :current="Route.AppBeneficiaryEditHealth"
+    :current-route="Route.AppBeneficiaryEditHealth"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
