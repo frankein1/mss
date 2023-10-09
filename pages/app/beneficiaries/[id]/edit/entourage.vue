@@ -3,7 +3,7 @@
     :schema="saveBeneficiaryEntourageSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :current="Route.AppBeneficiaryEditEntourage"
+    :current-route="Route.AppBeneficiaryEditEntourage"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
