@@ -140,7 +140,7 @@
     if (!linkedBeneficiary.value) {
       return ''
     }
-    return getBeneficiaryDisplayName(linkedBeneficiary.value)
+    return formatBeneficiaryDisplayName(linkedBeneficiary.value)
   })
 
   async function searchBeneficiariesFromLastname(search: string) {
@@ -170,7 +170,7 @@
   ) {
     const entries: [string, string][] = beneficiaries.map(beneficiary => [
       beneficiary.id,
-      `${getBeneficiarySearchDisplayName(beneficiary)}`
+      `${formatBeneficiarySearchDisplayName(beneficiary)}`
     ])
     return new Map<string, string>(entries)
   }

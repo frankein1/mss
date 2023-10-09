@@ -1,7 +1,7 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import { getUserDisplayName } from '~/utils/user'
+import { formatUserDisplayName } from '~/utils/user'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
@@ -17,7 +17,7 @@ const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
     .then(agents =>
       agents.map(user => ({
         id: user.id,
-        name: getUserDisplayName(user),
+        name: formatUserDisplayName(user),
         status: user.status
       }))
     )
