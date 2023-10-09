@@ -1,4 +1,9 @@
 import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
+import {
+  FollowupTarget,
+  prepareFollowupTypesMutations,
+  prepareMinistryData
+} from './helper/prepareFollowupData'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
@@ -8,11 +13,7 @@ import {
   canEditFollowup,
   canEditFollowupPrivateSynthesis
 } from '~/server/security/rules'
-import {
-  FollowupTarget,
-  prepareMinistryData,
-  prepareFollowupTypesMutations
-} from '~/utils/followup'
+
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import {

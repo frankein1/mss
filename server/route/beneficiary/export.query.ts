@@ -18,7 +18,7 @@ import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/
 import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
-import { getBeneficiaryExportData } from '~/utils/export/getBeneficiaryExportData'
+import { getBeneficiaryExportData } from '~/server/route/beneficiary/helper/getBeneficiaryExportData'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
 
 const securityCheck = (

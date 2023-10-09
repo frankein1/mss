@@ -1,4 +1,5 @@
 import { UserActivityType } from '@prisma/client'
+import { prepareGetFollowupsPageSelect } from './helper/prepareGetFollowupsPageSelect'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -7,7 +8,6 @@ import {
 } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee, canEditFollowup } from '~/server/security/rules'
-import { prepareGetFollowupsPageSelect } from '~/utils/followup'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 const handler = async ({
