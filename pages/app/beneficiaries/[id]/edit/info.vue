@@ -4,7 +4,7 @@
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     title-icon="fr-icon-user-line"
-    :current="Route.AppBeneficiaryEditInfo"
+    :current-route="Route.AppBeneficiaryEditInfo"
     @save="onSaveBeneficiary"
   >
     <AtomAlert

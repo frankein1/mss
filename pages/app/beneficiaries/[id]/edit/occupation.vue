@@ -3,7 +3,7 @@
     :schema="saveBeneficiaryOccupationSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :current="Route.AppBeneficiaryEditOccupation"
+    :current-route="Route.AppBeneficiaryEditOccupation"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
