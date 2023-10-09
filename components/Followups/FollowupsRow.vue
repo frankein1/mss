@@ -90,4 +90,3 @@
     canEditFollowup(user.value, props.followup)
   )
 </script>
-~/server/trpc/routers

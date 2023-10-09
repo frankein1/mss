@@ -24,4 +24,3 @@
 
   const fileNumber = computed(() => readableFileNumber(props.beneficiary.id))
 </script>
-~/server/trpc/routers

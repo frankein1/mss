@@ -86,4 +86,3 @@
       props.beneficiary.involvedPartners
   )
 </script>
-~/server/trpc/routers

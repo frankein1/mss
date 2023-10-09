@@ -42,4 +42,3 @@
     followupTypes: GetBeneficiaryFollowupTypesOutput
   }>()
 </script>
-~/server/trpc/routers

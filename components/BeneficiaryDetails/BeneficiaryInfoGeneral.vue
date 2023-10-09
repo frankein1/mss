@@ -158,4 +158,3 @@
     RoutePath.AppBeneficiaryEditInfo(props.beneficiary.id)
   )
 </script>
-~/server/trpc/routers

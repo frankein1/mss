@@ -68,4 +68,3 @@
   const dateSort = computed(() => props.sort?.find(s => s.created)?.created)
   const nameSort = computed(() => props.sort?.find(s => s.name)?.name)
 </script>
-~/server/trpc/routers

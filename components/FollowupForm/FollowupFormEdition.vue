@@ -97,4 +97,3 @@
     emit('saveFollowup', values)
   })
 </script>
-~/server/trpc/routers

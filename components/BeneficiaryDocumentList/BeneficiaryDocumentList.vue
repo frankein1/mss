@@ -105,4 +105,3 @@
     flex-grow: 1;
   }
 </style>
-~/server/trpc/routers

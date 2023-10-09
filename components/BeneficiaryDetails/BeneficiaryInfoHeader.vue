@@ -77,4 +77,3 @@
     return props.beneficiary.phone1 || props.beneficiary.phone2
   })
 </script>
-~/server/trpc/routers ~/server/route
