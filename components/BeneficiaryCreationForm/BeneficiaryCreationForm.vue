@@ -3,48 +3,65 @@
     class="fr-p-3v"
     @submit="onSubmit"
   >
-    <BeneficiaryFormFileInformation :agents="agents" />
+    <BeneficiaryFormFileInformation
+      :agents="agents"
+      no-aidant-connect-authorized
+    />
 
     <div
       class="fr-grid-row fr-grid-row--center fr-grid-row--gutters feature-section fr-mb-7v"
     >
-      <div class="fr-col-6">
-        <div class="formgroup__title fr-pb-2w">Identité du bénéficiaire</div>
+      <h3 class="fr-col-12 fr-text--md formgroup__title fr-mb-0">
+        Identité du bénéficiaire
+      </h3>
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           name="usualName"
           :label="beneficiaryFieldLabels.usualName"
         />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           name="birthName"
           :label="beneficiaryFieldLabels.birthName"
         />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           name="firstName"
           :label="beneficiaryFieldLabels.firstName"
         />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           name="birthDate"
           :label="beneficiaryFieldLabels.birthDate"
           type="date"
         />
       </div>
-      <div class="fr-col-6">
-        <div class="formgroup__title fr-pb-2w">Coordonnées</div>
+      <h3 class="fr-col-12 fr-text--md formgroup__title fr-mb-0 fr-mt-1w">
+        Coordonnées
+      </h3>
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           name="phone1"
           :label="beneficiaryFieldLabels.phone1"
           type="tel"
-          no-hint
         />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           name="email"
           :label="beneficiaryFieldLabels.email"
           type="email"
         />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           v-if="isMinistryAgent"
           name="numeroPegase"
           :label="beneficiaryFieldLabels.numeroPegase"
+          hint="Format attendu : A-00-000000"
         />
       </div>
     </div>
