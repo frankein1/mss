@@ -21,6 +21,7 @@
         v-if="isMinistryAgent"
         name="numeroPegase"
         :label="followupFieldLabels.numeroPegase"
+        hint="Format attendu : A-00-000000"
       />
 
       <VeeSelect
