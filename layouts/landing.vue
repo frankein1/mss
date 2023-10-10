@@ -4,7 +4,7 @@
     :class="route.name + '-style'"
   >
     <TheLandingHeader />
-    <slot class="landing-main-container fr-my-8w" />
+    <slot />
     <TheLandingFooter />
     <AtomSnackbar />
   </div>
@@ -18,17 +18,11 @@
   @use '~/assets/style/variables' as *;
 
   .index-style {
-    --home-oval: url('~/assets/img/home-oval.svg');
-
-    background-image: var(--home-oval);
-    background-image: var(--home-oval), $home-gradient;
+    background-image: url('~/assets/img/home-oval.svg');
   }
 
   .register-style {
-    --register-oval: url('~/assets/img/register-oval.svg');
-
-    background-image: var(--register-oval);
-    background-image: var(--register-oval), $home-gradient;
+    background-image: url('~/assets/img/register-oval.svg');
   }
 
   .page-container {
@@ -38,9 +32,5 @@
     background-repeat: no-repeat;
     background-position: top right;
     background-size: 50%, 100%;
-  }
-
-  .landing-main-container {
-    flex: 1 1 auto;
   }
 </style>
