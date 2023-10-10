@@ -21,7 +21,7 @@ import {
   getFollowupWithRelations
 } from '~/server/query/followups'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { getHelpRequestsecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
+import { getHelpRequestSecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
 
 async function prepareFollowupData({
   input,
@@ -142,7 +142,7 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditFollowupInput
 ) => {
-  const target = await getHelpRequestsecurityTarget(input.id)
+  const target = await getHelpRequestSecurityTarget(input.id)
   return canEditFollowup(user, target)
 }
 

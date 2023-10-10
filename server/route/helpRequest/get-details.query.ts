@@ -7,7 +7,7 @@ import {
 } from '~/server/security/rules'
 import { getHelpRequestWithRelations } from '~/server/query/helpRequests'
 import { IdInput, idSchema } from '~/server/schema'
-import { getHelpRequestsecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
+import { getHelpRequestSecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
 
 const handler = async ({
   input: { id },
@@ -24,7 +24,7 @@ const handler = async ({
 }
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const helpRequest = await getHelpRequestsecurityTarget(input.id)
+  const helpRequest = await getHelpRequestSecurityTarget(input.id)
   return canViewHelpRequest(user, helpRequest.beneficiary)
 }
 

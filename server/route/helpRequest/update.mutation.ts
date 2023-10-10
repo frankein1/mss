@@ -16,7 +16,7 @@ import {
   HelpRequestWithRelations,
   getHelpRequestWithRelations
 } from '~/server/query/helpRequests'
-import { getHelpRequestsecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
+import { getHelpRequestSecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
 
 async function prepareHelpRequestData({
   input,
@@ -125,7 +125,7 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditHelpRequestInput
 ) => {
-  const target = await getHelpRequestsecurityTarget(input.id)
+  const target = await getHelpRequestSecurityTarget(input.id)
   return canEditHelpRequest(user, target)
 }
 
