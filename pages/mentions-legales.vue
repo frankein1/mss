@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-container">
+  <div class="landing-main-container fr-container fr-my-8w">
     <h1>{{ RouteTitle.MentionsLegales() }}</h1>
     <h2>Éditeur de la Plateforme</h2>
     <p>

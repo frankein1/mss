@@ -1,5 +1,5 @@
 <template>
-  <main class="fr-container fr-my-8w">
+  <main class="landing-main-container fr-container fr-my-8w">
     <div class="fr-grid-row fr-my-5w">
       <div class="fr-col fr-col-lg-8 fr-col-offset-lg-2 logout__col">
         <h1 class="fr-text--regular">{{ RouteTitle.AuthLogout() }}</h1>
