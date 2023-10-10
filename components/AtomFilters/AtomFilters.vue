@@ -92,7 +92,7 @@
     SelectedFilter
   } from '~/types/filter'
   import { getRandomId } from '~/utils/random'
-  import { INPUT_DEFER_TIME } from '~/utils/constants'
+  import { INPUT_DEFER_DURATION } from '~/utils/constants'
 
   const { matomo } = useMatomo()
 
@@ -140,8 +140,6 @@
   const form = ref<HTMLFormElement | null>(null)
   const expanded = ref<boolean>(props.alwaysExpanded)
   const selectedFilters = ref<SelectedFilters>(initialSelectedFilters.value)
-  // This timeout is used to defer the emission of filters and thus prevent to many API calls or specific race conditions
-  const timeout = ref<NodeJS.Timeout | null>(null)
 
   useForm({
     initialValues: props.initialSelectedValues
@@ -164,26 +162,22 @@
       : (initialSelectedValue as string | string[])
   }
 
-  function onChangeFilter(value: string | string[], filter: FilterProp) {
-    if (!value || !value.length) {
-      delete selectedFilters.value[filter.name]
-    } else {
-      addFilter(filter, value)
-    }
+  const onChangeFilter = useDefer(
+    INPUT_DEFER_DURATION,
+    (value: string | string[], filter: FilterProp) => {
+      if (!value || !value.length) {
+        delete selectedFilters.value[filter.name]
+      } else {
+        addFilter(filter, value)
+      }
 
-    if (timeout.value) {
-      clearTimeout(timeout.value)
-      timeout.value = null
-    }
-
-    timeout.value = setTimeout(() => {
       emit('filter', selectedFiltersToDataObject(selectedFilters.value))
-    }, INPUT_DEFER_TIME)
 
-    if (filter.matomoEventCategory && filter.matomoEventAction) {
-      matomo.trackEvent(filter.matomoEventCategory, filter.matomoEventAction)
+      if (filter.matomoEventCategory && filter.matomoEventAction) {
+        matomo.trackEvent(filter.matomoEventCategory, filter.matomoEventAction)
+      }
     }
-  }
+  )
 
   function addFilter(filter: FilterProp, value: string | string[]) {
     selectedFilters.value = {

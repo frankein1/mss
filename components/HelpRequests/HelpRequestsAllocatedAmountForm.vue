@@ -20,7 +20,7 @@
     quickEditHelpRequestAllocatedAmountSchema
   } from '~/server/schema'
   import { helpRequestFieldLabels } from '~/client/labels'
-  import { INPUT_DEFER_TIME } from '~/utils/constants'
+  import { INPUT_DEFER_DURATION } from '~/utils/constants'
 
   const snackbar = useSnackbar()
 
@@ -42,15 +42,8 @@
     }
   })
 
-  const timeout = ref<NodeJS.Timeout | null>(null)
-
-  const onUpdateAllocatedAmount = handleSubmit(helpRequest => {
-    if (timeout.value) {
-      clearTimeout(timeout.value)
-      timeout.value = null
-    }
-
-    timeout.value = setTimeout(async () => {
+  const onUpdateAllocatedAmount = handleSubmit(
+    useDefer(INPUT_DEFER_DURATION, async helpRequest => {
       try {
         const updateHelpRequest =
           await useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest)
@@ -64,6 +57,6 @@
           "La modification du montant alloué de l'instruction de demande d'aide a échoué."
         )
       }
-    }, INPUT_DEFER_TIME)
-  })
+    })
+  )
 </script>
