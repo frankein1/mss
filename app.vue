@@ -57,13 +57,13 @@
     }
   })
 
+  const matomoScriptSrc = `${publicConfig.matomo.host}/${MATOMO_SCRIPT_FILENAME}`
+
   onMounted(() => {
     if (window.Matomo) {
       loadTracker()
       return
     }
-
-    const matomoScriptSrc = `${publicConfig.matomo.host}/${MATOMO_SCRIPT_FILENAME}`
 
     const matomoScript = document.querySelector<HTMLScriptElement>(
       `script[src='${matomoScriptSrc}']`
@@ -74,6 +74,18 @@
     }
 
     matomoScript.addEventListener('load', injectMatomo)
+  })
+
+  onUnmounted(() => {
+    const matomoScript = document.querySelector<HTMLScriptElement>(
+      `script[src='${matomoScriptSrc}']`
+    )
+
+    if (!matomoScript) {
+      return
+    }
+
+    matomoScript.removeEventListener('load', injectMatomo)
   })
 
   function injectMatomo() {

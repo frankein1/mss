@@ -250,7 +250,7 @@
     listenFormReset()
   })
 
-  onBeforeUnmount(() => {
+  onUnmounted(() => {
     unlistenFormReset()
   })
 
