@@ -13,8 +13,3 @@ $shadow-dark:
   0 8px 16px -16px rgb(0 0 0 / 32%);
 $over-z-index: 600;
 $above-z-index: 500;
-$home-gradient: linear-gradient(
-  180deg,
-  var(--background-default-grey) 50%,
-  $primary 300%
-);
