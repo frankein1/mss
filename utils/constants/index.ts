@@ -13,4 +13,4 @@ export const REQUEST_LIMIT_OPTIONS = new Map([
 ])
 export const REQUEST_LIMIT_DEFAULT = 20
 
-export const INPUT_DEFER_TIME = 400
+export const INPUT_DEFER_DURATION = 400
