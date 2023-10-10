@@ -116,7 +116,10 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: AddFollowupInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(
+    user,
+    input.beneficiaryId
+  )
   return canCreateFollowup(user, beneficiary)
 }
 

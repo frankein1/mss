@@ -18,7 +18,7 @@ const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryExternalOrganisationsInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
   return (
     canEditBeneficiary(grantee, beneficiary) &&
     canEditBeneficiaryExternalOrganisations(grantee, beneficiary)

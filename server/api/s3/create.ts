@@ -34,7 +34,10 @@ export default defineEventHandler(async event => {
 
   const input = addDocumentSchema.parse(data)
 
-  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(
+    user,
+    input.beneficiaryId
+  )
 
   if (!beneficiary) {
     throw invalidError('No beneficiary')

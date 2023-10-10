@@ -8,19 +8,19 @@ import { getBeneficiarySecurityTarget } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
 
   return canViewBeneficiary(grantee, beneficiary)
 }
 
 const handler = async ({
   input: { id },
-  ctx: _ctx
+  ctx
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(id)
+  const beneficiary = await getBeneficiarySecurityTarget(ctx.user, id)
 
   return beneficiary
 }

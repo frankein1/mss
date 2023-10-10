@@ -99,7 +99,7 @@ async function getFollowupTypes(
 }
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
   return canViewBeneficiary(grantee, beneficiary)
 }
 
