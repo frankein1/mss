@@ -8,9 +8,15 @@
       class="beneficiaryformlayout__navigation fr-col-3"
       :current-route="currentRoute"
       :draft-id="draftId"
+      :beneficiary-form-layout-main-container="
+        beneficiaryFormLayoutMainContainer
+      "
       @save="saveTarget = $event"
     />
-    <main class="beneficiaryformlayout__main fr-col-9 fr-container">
+    <main
+      ref="beneficiaryFormLayoutMainContainer"
+      class="beneficiaryformlayout__main fr-col-9 fr-container"
+    >
       <DsfrBreadcrumb :links="breadcrumbLinks" />
       <PageTitle
         :title="title"
@@ -66,6 +72,7 @@
   }>()
 
   const saveTarget = ref<string | undefined>(undefined)
+  const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
 
   const breadcrumbLinks = computed(() => Breadcrumb.AppBeneficiariesAdd())
 

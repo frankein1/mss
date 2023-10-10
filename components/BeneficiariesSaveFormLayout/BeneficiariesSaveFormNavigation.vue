@@ -2,6 +2,7 @@
   <BeneficiaryFormNavigation
     :current-route="currentRoute"
     :menus="menus"
+    :beneficiary-form-layout-main-container="beneficiaryFormLayoutMainContainer"
     @save="emit('save', $event)"
   />
 </template>
@@ -21,6 +22,7 @@
   const props = defineProps<{
     currentRoute: AppBeneficiariesSaveRoute
     draftId: string
+    beneficiaryFormLayoutMainContainer: HTMLElement | null
   }>()
 
   const emit = defineEmits<{

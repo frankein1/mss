@@ -2,6 +2,7 @@
   <BeneficiaryFormNavigation
     :current-route="currentRoute"
     :menus="menus"
+    :beneficiary-form-layout-main-container="beneficiaryFormLayoutMainContainer"
     @save="emit('save', $event)"
   />
 </template>
@@ -26,6 +27,7 @@
     beneficiaryId: string
     originTab: BeneficiaryTab | undefined
     securityTarget: SecurityTargetWithReferents & SecurityTargetWithStructure
+    beneficiaryFormLayoutMainContainer: HTMLElement | null
   }>()
 
   const emit = defineEmits<{

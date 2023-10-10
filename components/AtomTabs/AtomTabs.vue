@@ -65,16 +65,21 @@
 
   onMounted(() => {
     // Enable navigating between tabs
-    window.addEventListener('hashchange', () => {
-      onSelectTab(window.location.hash.slice(1))
-    })
+    window.addEventListener('hashchange', onHashChange)
 
+    onHashChange()
+    setTabsPanelMinHeight()
+  })
+
+  onUnmounted(() => {
+    window.removeEventListener('hashchange', onHashChange)
+  })
+
+  function onHashChange() {
     if (route.hash) {
       onSelectTab(route.hash.slice(1))
     }
-
-    setTabsPanelMinHeight()
-  })
+  }
 
   function setTabsPanelMinHeight() {
     // This hack prevents a disturbing scroll on panel change due to the changing tab height
