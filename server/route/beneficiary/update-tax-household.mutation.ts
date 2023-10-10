@@ -6,7 +6,6 @@ import {
   canEditBeneficiaryReferents
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryTaxHouseholdInput,
@@ -14,9 +13,10 @@ import {
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
+import { BeneficiaryRepo } from '~/server/query'
 
-function getBeneficiaryWithTaxHousehold(id: string) {
-  return prismaClient.beneficiary.findUniqueOrThrow({
+function getBeneficiaryWithTaxHousehold(user: SecurityRuleGrantee, id: string) {
+  return BeneficiaryRepo.findUniqueOrThrow(user, {
     where: { id },
     select: {
       id: true,
@@ -48,7 +48,7 @@ const handler = async ({
   input: UpdateBeneficiaryTaxHouseholdInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiaryWithTaxHousehold(input.id)
+  const beneficiary = await getBeneficiaryWithTaxHousehold(user, input.id)
 
   const { id, taxHouseholds, ...taxHouseholdDatas } = input
 
@@ -82,7 +82,7 @@ const handler = async ({
     relatives: taxHouseholdRelationUpdates
   }
 
-  const updatedBeneficiary = await prismaClient.beneficiary.update({
+  const updatedBeneficiary = await BeneficiaryRepo.update(user, {
     where: { id },
     data
   })
