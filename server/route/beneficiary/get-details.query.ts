@@ -23,7 +23,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiaryWithRelations(input.id)
+  const beneficiary = await getBeneficiaryWithRelations(ctx.user, input.id)
 
   const beneficiaryAccessibleData = getBeneficiaryAccessibleData(
     ctx,

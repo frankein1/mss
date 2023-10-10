@@ -6,13 +6,13 @@ import {
   canEditBeneficiaryExternalOrganisations
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryExternalOrganisationsInput,
   updateBeneficiaryExternalOrganisationsSchema
 } from '~/server/schema'
+import { BeneficiaryRepo } from '~/server/query'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
@@ -32,11 +32,9 @@ const handler = async ({
   input: UpdateBeneficiaryExternalOrganisationsInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
-
   const { id, ...externalOrganisations } = input
 
-  const updatedBeneficiary = await prismaClient.beneficiary.update({
+  const updatedBeneficiary = await BeneficiaryRepo.update(user, {
     where: { id },
     data: externalOrganisations
   })
@@ -45,7 +43,7 @@ const handler = async ({
     userId: user.id,
     activity: UserActivityType.UPDATE,
     object: 'Beneficiary',
-    objectId: beneficiary.id
+    objectId: id
   })
 
   return updatedBeneficiary

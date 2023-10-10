@@ -5,6 +5,7 @@ import type {
   SecurityRule
 } from './types'
 import { hasAllowedRole } from './helpers'
+export { hasAllowedRole }
 
 export type {
   SecurityRuleGrantee,
