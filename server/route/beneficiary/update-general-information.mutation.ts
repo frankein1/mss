@@ -19,7 +19,7 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
   return canEditBeneficiary(user, beneficiary)
 }
 
@@ -30,7 +30,7 @@ const handler = async ({
   input: UpdateBeneficiaryGeneralInformationInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
 
   const { referents: previousReferents } = beneficiary
 

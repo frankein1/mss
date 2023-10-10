@@ -14,7 +14,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(id)
+  const beneficiary = await getBeneficiarySecurityTarget(user, id)
 
   if (!beneficiary) {
     throw notfoundError()

@@ -27,7 +27,10 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: AddCommentInput
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(
+    user,
+    input.beneficiaryId
+  )
 
   if (!beneficiary) {
     throw invalidError('Beneficiary not found')

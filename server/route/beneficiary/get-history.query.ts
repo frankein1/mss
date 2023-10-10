@@ -203,7 +203,7 @@ const handler = async ({
 }) => {
   const { beneficiaryId, filters } = input
 
-  const beneficiary = await getBeneficiarySecurityTarget(beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
 
   if (filtersAppliesToFollowups(filters)) {
     return getFollowups(user, beneficiary, filters)

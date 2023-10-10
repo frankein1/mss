@@ -29,7 +29,10 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditDocumentInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(
+    user,
+    input.beneficiaryId
+  )
   const document = await getDocumentSecurityTarget(input.key)
   return canEditDocument(user, beneficiary, document)
 }
@@ -43,7 +46,7 @@ const handler = async ({
 }) => {
   const { key, beneficiaryId, ...data } = input
 
-  const beneficiary = await getBeneficiarySecurityTarget(beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
 
   if (!beneficiary) {
     throw invalidError()

@@ -110,7 +110,10 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: CreateHelpRequestInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(
+    user,
+    input.beneficiaryId
+  )
   return canCreateHelpRequest(user, beneficiary)
 }
 

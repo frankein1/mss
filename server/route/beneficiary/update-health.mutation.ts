@@ -19,7 +19,7 @@ const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryHealthInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
 
   return (
     canEditBeneficiary(grantee, beneficiary) &&
@@ -34,7 +34,7 @@ const handler = async ({
   input: UpdateBeneficiaryHealthInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
 
   const { id, socialSecurityNumber, ...health } = input
 
