@@ -328,7 +328,7 @@
     setDisplayedValueToSelected()
   })
 
-  onBeforeUnmount(() => {
+  onUnmounted(() => {
     unlistenFormReset()
   })
 
