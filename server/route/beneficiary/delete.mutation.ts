@@ -9,6 +9,7 @@ import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
+import { BeneficiaryRepo } from '~/server/query'
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
   const beneficiary = await getBeneficiarySecurityTarget(input.id)
@@ -27,7 +28,7 @@ const handler = async ({
 
   await updateBeneficiaryRelatives(id)
 
-  await prismaClient.beneficiary.delete({ where: { id } })
+  await BeneficiaryRepo.deleteEntity(user, { where: { id } })
 
   await addUserActivity({
     userId: user.id,

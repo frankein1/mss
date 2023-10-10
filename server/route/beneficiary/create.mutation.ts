@@ -5,10 +5,10 @@ import {
   createBeneficiarySchema
 } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { BeneficiaryRepo } from '~/server/query'
 
 const securityCheck = AllowSecurityCheck
 
@@ -23,7 +23,7 @@ const handler = async ({
 
   const fileNumber = generateFileNumber()
 
-  const beneficiary = await prismaClient.beneficiary.create({
+  const beneficiary = await BeneficiaryRepo.create(user, {
     data: {
       structureId: structure.id,
       fileNumber,
