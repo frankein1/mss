@@ -1,5 +1,6 @@
 import type { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { BeneficiaryRepo } from '../query'
+import { SecurityRuleGrantee } from './rules'
 
 export const beneficiarySecurityTargetSelect = {
   id: true,
@@ -11,8 +12,11 @@ export const beneficiarySecurityTargetInclude = {
   select: beneficiarySecurityTargetSelect
 } as const
 
-export function getBeneficiarySecurityTarget(id: string) {
-  return prismaClient.beneficiary.findUniqueOrThrow({
+export function getBeneficiarySecurityTarget(
+  user: SecurityRuleGrantee,
+  id: string
+) {
+  return BeneficiaryRepo.findUniqueOrThrow(user, {
     where: { id },
     select: {
       id: true,

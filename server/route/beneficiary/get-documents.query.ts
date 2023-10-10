@@ -45,7 +45,10 @@ const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: GetDocumentsInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(
+    grantee,
+    input.beneficiaryId
+  )
 
   if (!beneficiary) {
     throw invalidError()

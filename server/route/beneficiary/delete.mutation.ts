@@ -12,7 +12,7 @@ import { createMutation } from '~/server/route/createRoute'
 import { BeneficiaryRepo } from '~/server/query'
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
 
   return canDeleteBeneficiary(grantee, beneficiary)
 }
@@ -24,7 +24,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(id)
+  const beneficiary = await getBeneficiarySecurityTarget(user, id)
 
   await updateBeneficiaryRelatives(id)
 
