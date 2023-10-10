@@ -38,6 +38,12 @@
       <span
         v-if="document.tags.length > 1"
         class="fr-tag fr-ml-1w"
+        :title="
+          document.tags
+            .slice(1)
+            .map(t => documentTagLabels[t as DocumentTag])
+            .join(', ')
+        "
         >+{{ document.tags.length - 1 }}</span
       >
     </td>
