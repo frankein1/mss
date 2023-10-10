@@ -225,38 +225,38 @@ export const beneficiaryOrientationTypeOptions = labelsToOptions(
   beneficiaryOrientationTypeLabels
 )
 
-export const entourageRelationshipLabels = {
+const commonRelationshipLabels = {
+  [RelativeRelationship.Conjoint]: 'Conjoint·e',
+  [RelativeRelationship.EnfantMajeur]: 'Enfant majeur',
+  [RelativeRelationship.EnfantMineur]: 'Enfant mineur',
   [RelativeRelationship.Sibling]: 'Fratrie',
   [RelativeRelationship.Grandparent]: 'Grand-parent',
   [RelativeRelationship.Parent]: 'Parent',
   [RelativeRelationship.Tiers]: 'Tiers',
-  [RelativeRelationship.Neighbour]: 'Voisin·e',
   [RelativeRelationship.AutreMemberDeLaFamille]: 'Autre membre de la famille'
 }
 
-export const taxHouseHoldRelationshipLabels = {
-  [RelativeRelationship.Conjoint]: 'Conjoint·e',
-  [RelativeRelationship.EnfantMajeur]: 'Enfant majeur',
-  [RelativeRelationship.EnfantMineur]: 'Enfant mineur'
+const entourageRelationshipLabels = {
+  [RelativeRelationship.Neighbour]: 'Voisin·e',
+  [RelativeRelationship.EntourageProfessionnel]: 'Entourage professionnel',
+  [RelativeRelationship.Ami]: 'Ami·e'
 }
-
-export const RelativeRelationshipKeys = buildKeys({
-  ...taxHouseHoldRelationshipLabels,
-  ...entourageRelationshipLabels
-})
 
 export const relativeRelationshipLabels = {
-  ...taxHouseHoldRelationshipLabels,
+  ...commonRelationshipLabels,
   ...entourageRelationshipLabels
 }
 
+export const RelativeRelationshipKeys = buildKeys(relativeRelationshipLabels)
+
 export const taxHouseHoldRelationshipOptions = labelsToOptions(
-  taxHouseHoldRelationshipLabels
+  commonRelationshipLabels
 )
 
-export const entourageRelationshipOptions = labelsToOptions(
-  entourageRelationshipLabels
-)
+export const entourageRelationshipOptions = labelsToOptions({
+  ...commonRelationshipLabels,
+  ...entourageRelationshipLabels
+})
 
 export const beneficiaryAccommodationZoneLabels: {
   [key in BeneficiaryAccommodationZone]: string
