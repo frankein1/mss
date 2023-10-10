@@ -11,9 +11,15 @@
       :security-target="beneficiary"
       :beneficiary-id="beneficiary.id"
       :origin-tab="originTab"
+      :beneficiary-form-layout-main-container="
+        beneficiaryFormLayoutMainContainer
+      "
       @save="saveTarget = $event"
     />
-    <main class="beneficiaryformlayout__main fr-col-9 fr-container">
+    <main
+      ref="beneficiaryFormLayoutMainContainer"
+      class="beneficiaryformlayout__main fr-col-9 fr-container"
+    >
       <DsfrBreadcrumb :links="breadcrumbLinks" />
       <PageTitle
         :title="title"
@@ -78,6 +84,7 @@
   }>()
 
   const saveTarget = ref<string | undefined>(undefined)
+  const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
 
   const breadcrumbLinks = computed(() =>
     Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
@@ -115,5 +122,9 @@
   .beneficiaryformlayout__main {
     height: calc(100vh - #{$navbar-height} - #{$actions-bar-height});
     overflow: scroll;
+  }
+
+  .beneficiaryformlayout__navigation {
+    border-right: 1px solid var(--border-default-grey);
   }
 </style>
