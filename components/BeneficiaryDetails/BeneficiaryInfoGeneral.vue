@@ -46,6 +46,7 @@
             :label="beneficiaryFieldLabels.numeroPegase"
             :value="beneficiary.numeroPegase"
             class="fr-col-12"
+            hint="Format attendu : A-00-000000"
           />
         </div>
       </div>
