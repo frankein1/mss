@@ -7,13 +7,13 @@ import {
   canSetBeneficiaryNir
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryHealthInput,
   updateBeneficiaryHealthSchema
 } from '~/server/schema'
+import { BeneficiaryRepo } from '~/server/query'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
@@ -45,7 +45,7 @@ const handler = async ({
     data = { ...data, socialSecurityNumber }
   }
 
-  const updatedBeneficiary = await prismaClient.beneficiary.update({
+  const updatedBeneficiary = await BeneficiaryRepo.update(user, {
     where: { id },
     data
   })

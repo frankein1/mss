@@ -14,6 +14,7 @@ import {
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/security'
+import { BeneficiaryRepo } from '~/server/query'
 
 function getBeneficiaryWithTaxHousehold(id: string) {
   return prismaClient.beneficiary.findUniqueOrThrow({
@@ -82,7 +83,7 @@ const handler = async ({
     relatives: taxHouseholdRelationUpdates
   }
 
-  const updatedBeneficiary = await prismaClient.beneficiary.update({
+  const updatedBeneficiary = await BeneficiaryRepo.update(user, {
     where: { id },
     data
   })
