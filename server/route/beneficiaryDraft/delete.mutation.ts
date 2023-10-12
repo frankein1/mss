@@ -1,13 +1,13 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { SecurityRuleGrantee, canDeleteDraft } from '~/server/security/rules'
 import { IdInput, idSchema } from '~/server/schema'
+import { DraftRepo } from '~/server/repository'
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const draft = await prismaClient.draft.findUniqueOrThrow({
+  const draft = await DraftRepo.findUniqueOrThrow(user, {
     where: {
       id: input.id
     }
@@ -23,7 +23,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  await prismaClient.draft.delete({
+  await DraftRepo.deleteEntity(user, {
     where: { id: input.id }
   })
 
