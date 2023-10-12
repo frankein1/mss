@@ -1,13 +1,20 @@
 import { TRPCError } from '@trpc/server'
 import { createMutation } from '~/server/route'
 import { sendEmail } from '~/server/lib/email'
-import { prismaClient } from '~/server/prisma'
 import { AdminCreateUserInput, adminCreateUserSchema } from '~/server/schema'
 import { getEmailContent } from '~/utils/user/getEmailContent'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { UserRepo } from '~/server/repository'
+import { AdminContext } from '~/server/trpc/createRouter'
 
-const adminHandler = async ({ input }: { input: AdminCreateUserInput }) => {
-  const existingUser = await prismaClient.user.findUnique({
+const adminHandler = async ({
+  ctx,
+  input
+}: {
+  ctx: AdminContext
+  input: AdminCreateUserInput
+}) => {
+  const existingUser = await UserRepo.findUnique(ctx.user, {
     where: { email: input.email }
   })
 
@@ -18,7 +25,7 @@ const adminHandler = async ({ input }: { input: AdminCreateUserInput }) => {
     })
   }
 
-  const createdUser = await prismaClient.user.create({
+  const createdUser = await UserRepo.create(ctx.user, {
     data: input
   })
 

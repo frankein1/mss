@@ -1,12 +1,19 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { prismaClient } from '~/server/prisma'
 import { notfoundError } from '~/server/trpc'
 import { idSchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { UserRepo } from '~/server/repository'
+import { AdminContext } from '~/server/trpc/createRouter'
 
-const adminHandler = async ({ input: { id } }: { input: { id: string } }) => {
-  const user = await prismaClient.user.findUnique({
+const adminHandler = async ({
+  ctx,
+  input: { id }
+}: {
+  ctx: AdminContext
+  input: { id: string }
+}) => {
+  const user = await UserRepo.findUniqueOrThrow(ctx.user, {
     where: { id }
   })
   if (user) {

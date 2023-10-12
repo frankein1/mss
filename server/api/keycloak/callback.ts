@@ -1,6 +1,5 @@
 import { v4 } from 'uuid'
 import { User } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
 import { parseInclusionConnectJwt } from '~/server/lib'
 import {
   getInclusionConnectClient,
@@ -8,6 +7,8 @@ import {
   InclusionConnectToken
 } from '~/server/lib/inclusion-connect.client'
 import { RoutePath } from '~/utils/routing'
+import { UserRepo } from '~/server/repository'
+import { prismaClient } from '~/server/prisma'
 
 const config = useRuntimeConfig()
 const { auth } = config
@@ -53,7 +54,7 @@ export default defineEventHandler(async event => {
 
   const userAccessToken = v4()
 
-  await prismaClient.user.update({
+  await UserRepo.systemUpdate({
     where: { id: user.id },
     data: {
       accessToken: userAccessToken,
@@ -133,7 +134,7 @@ async function upsertAccount({
 
 async function getUser(email: string) {
   try {
-    return await prismaClient.user.findUniqueOrThrow({
+    return await UserRepo.systemFindUniqueOrThrow({
       where: { email },
       include: {
         structure: true,

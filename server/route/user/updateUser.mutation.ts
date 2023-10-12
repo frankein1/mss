@@ -7,29 +7,29 @@ import {
   canEditUser,
   canEditUserRole
 } from '~/server/security'
-import { prismaClient } from '~/server/prisma'
+import { UserRepo } from '~/server/repository'
 
 const handler = async ({
-  ctx: _ctx,
+  ctx: { user },
   input: { id, ...rest }
 }: {
   ctx: ProtectedAppContext
   input: UserEditionInput
 }) => {
   if ('status' in rest) {
-    return await prismaClient.user.update({
+    return await UserRepo.update(user, {
       where: { id },
       data: { status: rest.status ? UserStatus.Active : UserStatus.Disabled }
     })
   }
-  return await prismaClient.user.update({ where: { id }, data: rest })
+  return await UserRepo.update(user, { where: { id }, data: rest })
 }
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: UserEditionInput
 ) => {
-  const target = await prismaClient.user.findUniqueOrThrow({
+  const target = await UserRepo.findUniqueOrThrow(user, {
     where: { id: input.id }
   })
   if ('role' in input) {

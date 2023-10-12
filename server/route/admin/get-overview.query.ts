@@ -1,13 +1,12 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { prismaClient } from '~/server/prisma'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { emptySchema } from '~/server/schema'
-import { StructureRepo } from '~/server/repository'
+import { StructureRepo, UserRepo } from '~/server/repository'
 import { AdminContext } from '~/server/trpc/createRouter'
 
 const adminHandler = async ({ ctx: { user } }: { ctx: AdminContext }) => {
-  const users = await prismaClient.user.count()
+  const users = await UserRepo.count(user)
   const structures = await StructureRepo.count(user)
 
   return { users, structures }
