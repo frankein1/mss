@@ -4,7 +4,6 @@ import { createQuery } from '~/server/route'
 import { helpRequestStatusLabels } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
 import { RowType } from '~/types/export'
-import { prismaClient } from '~/server/prisma'
 import {
   getHelpRequestCountQuery,
   getHelpRequestFinancialStatsQuery,
@@ -20,6 +19,7 @@ import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
 import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { StructureRepo } from '~/server/repository'
 
 const handler = async ({
   input,
@@ -63,7 +63,7 @@ const handler = async ({
     rows: followupTypesRows
   })
 
-  const userStructure = await prismaClient.structure.findUniqueOrThrow({
+  const userStructure = await StructureRepo.findUniqueOrThrow(user, {
     where: { id: user.structureId || '' }
   })
 
