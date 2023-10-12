@@ -5,9 +5,9 @@ import {
   createBeneficiarySchema
 } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { DraftRepo } from '~/server/repository'
 
 const handler = async ({
   input,
@@ -16,7 +16,7 @@ const handler = async ({
   input: CreateBeneficiaryInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiaryDraft = await prismaClient.draft.create({
+  const beneficiaryDraft = await DraftRepo.create(user, {
     data: {
       structureId: structure.id,
       createdById: user.id,

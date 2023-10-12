@@ -1,7 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryDraftInput,
@@ -9,12 +8,13 @@ import {
 } from '~/server/schema'
 import { SecurityRuleGrantee, canUpdateDraft } from '~/server/security/rules'
 import type { BeneficiaryDraft } from '~/types/beneficiary'
+import { DraftRepo } from '~/server/repository'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryDraftInput
 ) => {
-  const beneficiaryDraft = (await prismaClient.draft.findUniqueOrThrow({
+  const beneficiaryDraft = (await DraftRepo.findUniqueOrThrow(grantee, {
     where: { id: input.id }
   })) as BeneficiaryDraft
 
@@ -36,7 +36,7 @@ const handler = async ({
   input: UpdateBeneficiaryDraftInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiaryDraft = (await prismaClient.draft.findUniqueOrThrow({
+  const beneficiaryDraft = (await DraftRepo.findUniqueOrThrow(user, {
     where: { id: draftId }
   })) as BeneficiaryDraft
 
@@ -44,7 +44,7 @@ const handler = async ({
     throw forbiddenError()
   }
 
-  const updatedBeneficiaryDraft = await prismaClient.draft.update({
+  const updatedBeneficiaryDraft = await DraftRepo.update(user, {
     where: { id: draftId },
     data: {
       content: {
