@@ -1,7 +1,7 @@
 import { inferAsyncReturnType } from '@trpc/server'
 import { H3Event, parseCookies } from 'h3'
 import { verifyJwt } from '../lib/jwt'
-import { prismaClient } from '@/server/prisma'
+import { UserRepo } from '~/server/repository'
 
 export const createContext = async (event: H3Event) => {
   const config = useRuntimeConfig()
@@ -19,7 +19,7 @@ export const createContext = async (event: H3Event) => {
     auth: { jwtKey }
   } = config
   const { user: userData } = verifyJwt(sessionToken, jwtKey)
-  const user = await prismaClient.user.findUnique({
+  const user = await UserRepo.systemFindUniqueOrThrow({
     where: { id: userData.id },
     select: {
       id: true,

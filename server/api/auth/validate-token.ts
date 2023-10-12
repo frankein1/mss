@@ -1,7 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { signJwt } from '~/server/lib/jwt'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import { UserRepo } from '~/server/repository'
 import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
 
@@ -14,7 +14,7 @@ export default defineEventHandler(async event => {
     }
   }
 
-  const user = await prismaClient.user.findFirst({
+  const user = await UserRepo.systemFindFirst({
     where: {
       accessToken: token,
       accessTokenValidity: {
@@ -67,7 +67,7 @@ export default defineEventHandler(async event => {
 
   setCookie(event, sessionCookieKey, sessionToken, cookieOptions({ expiresIn }))
 
-  await prismaClient.user.update({
+  await UserRepo.systemUpdate({
     where: {
       id: user.id
     },
