@@ -2,8 +2,8 @@ import { NotificationType, Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { GetNotificationInput, getNotificationSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { NotificationRepo } from '~/server/repository'
 
 const handler = async ({
   ctx: { user },
@@ -27,7 +27,7 @@ const handler = async ({
     where.type = type
   }
 
-  const notifications = await prismaClient.notification.findMany({
+  const notifications = await NotificationRepo.findMany(user, {
     where,
     include: {
       beneficiary: true
