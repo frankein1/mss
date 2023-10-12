@@ -1,9 +1,11 @@
 import { getFollowupAccessibleData } from './helper/getFollowupAccessibleData'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { canViewFollowup } from '~/server/security/rules'
-import { getFollowupWithRelations } from '~/server/query/followups'
+import {
+  FollowupRepo,
+  getFollowupWithRelations
+} from '~/server/query/followups'
 import { IdInput, idSchema } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
@@ -14,7 +16,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const followup = await getFollowupWithRelations(id)
+  const followup = await getFollowupWithRelations(user, id)
 
   const data = getFollowupAccessibleData(user, followup)
 
@@ -22,7 +24,7 @@ const handler = async ({
 }
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const followup = await prismaClient.followup.findUniqueOrThrow({
+  const followup = await FollowupRepo.findUniqueOrThrow(user, {
     where: { id: input.id },
     include: {
       beneficiary: {

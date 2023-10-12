@@ -1,4 +1,4 @@
-import { createQuery } from '../createRoute'
+import { createQuery } from '~/server/route'
 import { prismaClient } from '~/server/prisma'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'

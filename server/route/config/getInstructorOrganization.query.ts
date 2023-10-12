@@ -1,4 +1,4 @@
-import { createQuery } from '../createRoute'
+import { createQuery } from '~/server/route'
 import { prismaClient } from '~/server/prisma'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'

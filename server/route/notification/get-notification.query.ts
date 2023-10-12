@@ -1,5 +1,5 @@
 import { NotificationType, Prisma } from '@prisma/client'
-import { createQuery } from '../createRoute'
+import { createQuery } from '~/server/route'
 import { GetNotificationInput, getNotificationSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'

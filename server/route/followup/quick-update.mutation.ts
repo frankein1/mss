@@ -6,9 +6,9 @@ import {
   QuickEditFollowupInput,
   quickEditFollowupSchema
 } from '~/server/schema'
-import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee, canEditFollowup } from '~/server/security/rules'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import { FollowupRepo } from '~/server/query'
 
 const handler = async ({
   input: { id, ...rest },
@@ -19,7 +19,7 @@ const handler = async ({
 }) => {
   const select = prepareGetFollowupsPageSelect(user)
 
-  const fu = await prismaClient.followup.update({
+  const fu = await FollowupRepo.update(user, {
     where: { id },
     data: rest,
     select
@@ -39,7 +39,7 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: QuickEditFollowupInput
 ) => {
-  const target = await prismaClient.followup.findUniqueOrThrow({
+  const target = await FollowupRepo.findUniqueOrThrow(user, {
     where: { id: input.id },
     include: {
       beneficiary: {

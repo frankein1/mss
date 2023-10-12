@@ -1,8 +1,7 @@
 import { Prisma } from '@prisma/client'
-import { createQuery } from '../createRoute'
 import { getFollowupAccessibleData } from './helper/getFollowupAccessibleData'
+import { createQuery } from '~/server/route'
 import { followupFieldLabels } from '~/client/labels'
-import { prismaClient } from '~/server/prisma'
 import { ExportFollowupsInput, exportFollowupsSchema } from '~/server/schema'
 import {
   canOnlyListItsBeneficiaries,
@@ -16,6 +15,7 @@ import { createExport } from '~/utils/export/createExport'
 import { prepareFollowupFilters } from '~/utils/filters'
 import { getFollowupExportData } from '~/server/route/followup/helper/getFollowupExportData'
 import { FOLLOWUP_EXPORTED_FIELDS } from '~/utils/constants/export'
+import { FollowupRepo } from '~/server/query'
 
 const handler = async ({
   input,
@@ -42,7 +42,7 @@ const handler = async ({
     ...prepareFollowupFilters(input.filters, canOnlyListItsBeneficiaries(user))
   }
 
-  const dataRequest = await prismaClient.followup.findMany({
+  const dataRequest = await FollowupRepo.findMany(user, {
     where,
     orderBy: input.orderBy,
     include: {
