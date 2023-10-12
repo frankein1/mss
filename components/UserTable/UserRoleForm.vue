@@ -35,15 +35,15 @@
     }
   })
 
-  const onUpdateRole = handleSubmit(async user => {
-    try {
-      await trpcClient.user.update.mutate(user)
-
-      snackbar.success(
-        `Le rôle de l'utilisateur ${props.user.email} a été modifié.`
-      )
-    } catch {
-      snackbar.error('La modification du rôle a échoué.')
-    }
+  const onUpdateRole = handleSubmit(user => {
+    useTrpcMutation({
+      mutation: () => trpcClient.user.update.mutate(user),
+      onSuccess: ({ email }) => {
+        snackbar.success(`Le rôle de l'utilisateur ${email} a été modifié.`)
+      },
+      onFailure: () => {
+        snackbar.error('La modification du rôle a échoué.')
+      }
+    })
   })
 </script>

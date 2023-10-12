@@ -76,7 +76,7 @@
       MinimalBeneficiaryForFormLayout
   })
 
-  async function onSaveBeneficiary(
+  function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryExternalOrganisationsInput,
     target: string | undefined
   ) {
@@ -84,19 +84,19 @@
       return
     }
 
-    isSubmitting.value = true
-
-    try {
-      await trpcClient.beneficiary.updateExternalOrganisations.mutate({
-        id: beneficiaryId,
-        ...beneficiary
-      })
-
-      navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
-    } catch {
-      useSnackbar().error('La mise à jour de la fiche bénéficaire a échoué.')
-    } finally {
-      isSubmitting.value = false
-    }
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.beneficiary.updateExternalOrganisations.mutate({
+          id: beneficiaryId,
+          ...beneficiary
+        }),
+      isSubmitting,
+      onSuccess: () => {
+        navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
+      },
+      onFailure: () => {
+        useSnackbar().error('La mise à jour de la fiche bénéficaire a échoué.')
+      }
+    })
   }
 </script>

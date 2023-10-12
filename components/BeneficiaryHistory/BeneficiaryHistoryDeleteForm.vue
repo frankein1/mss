@@ -43,6 +43,7 @@
   import { AlertType } from '~/utils/constants/alert'
 
   const modal = useModal()
+  const trpcClient = useTrpcClient()
 
   const props = defineProps<{
     historyItemId: string
@@ -53,25 +54,26 @@
 
   const isSubmitting = ref(false)
 
-  async function deleteItem() {
-    isSubmitting.value = true
-    try {
-      if (props.isFollowup) {
-        await useTrpcClient().followup.delete.mutate({
+  function deleteItem() {
+    useTrpcMutation({
+      mutation: () => {
+        if (props.isFollowup) {
+          return trpcClient.followup.delete.mutate({
+            id: props.historyItemId
+          })
+        }
+        return trpcClient.helpRequest.delete.mutate({
           id: props.historyItemId
         })
-      } else {
-        await useTrpcClient().helpRequest.delete.mutate({
-          id: props.historyItemId
-        })
+      },
+      isSubmitting,
+      onSuccess: () => {
+        emit('deleted')
+        modal.close()
+      },
+      onFailure: () => {
+        useSnackbar().error('La suppression a échoué.')
       }
-
-      emit('deleted')
-      modal.close()
-    } catch {
-      useSnackbar().error('La suppression a échoué.')
-    } finally {
-      isSubmitting.value = false
-    }
+    })
   }
 </script>

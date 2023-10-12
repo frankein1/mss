@@ -89,15 +89,19 @@
     emit('save', values, saveTarget.value)
   })
 
-  async function onCancel() {
-    try {
-      await useTrpcClient().beneficiaryDraft.delete.mutate({
-        id: props.draftId
-      })
-      navigateTo(RoutePath.AppBeneficiariesAdd())
-    } catch {
-      navigateTo(RoutePath.AppBeneficiariesAdd())
-    }
+  function onCancel() {
+    useTrpcMutation({
+      mutation: () =>
+        useTrpcClient().beneficiaryDraft.delete.mutate({
+          id: props.draftId
+        }),
+      onSuccess: () => {
+        navigateTo(RoutePath.AppBeneficiariesAdd())
+      },
+      onFailure: () => {
+        navigateTo(RoutePath.AppBeneficiariesAdd())
+      }
+    })
   }
 </script>
 

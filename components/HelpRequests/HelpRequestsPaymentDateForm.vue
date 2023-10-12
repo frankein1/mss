@@ -39,19 +39,21 @@
     }
   })
 
-  const onUpdatePaymentDate = handleSubmit(async helpRequest => {
-    try {
-      const updatedHelpRequest =
-        await useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest)
-
-      snackbar.success(
-        "La date de paiement de l'instruction de demande d'aide a été modifié."
-      )
-      emit('updated', updatedHelpRequest)
-    } catch {
-      snackbar.error(
-        "La modification de la date de paiement de l'instruction de demande d'aide a échoué."
-      )
-    }
+  const onUpdatePaymentDate = handleSubmit(helpRequest => {
+    useTrpcMutation({
+      mutation: () =>
+        useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
+      onSuccess: updatedHelpRequest => {
+        snackbar.success(
+          "La date de paiement de l'instruction de demande d'aide a été modifié."
+        )
+        emit('updated', updatedHelpRequest)
+      },
+      onFailure: () => {
+        snackbar.error(
+          "La modification de la date de paiement de l'instruction de demande d'aide a échoué."
+        )
+      }
+    })
   })
 </script>

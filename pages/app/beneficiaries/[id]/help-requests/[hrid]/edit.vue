@@ -118,19 +118,23 @@
     return ''
   })
 
-  async function onUpdateHelpRequest(helpRequest: EditHelpRequestInput) {
-    isSubmitting.value = true
-    try {
-      await trpcClient.helpRequest.update.mutate(helpRequest)
-      return navigateTo(
-        RoutePath.AppBeneficiary(beneficiaryId, { tab: BeneficiaryTab.History })
-      )
-    } catch {
-      snackbar.error(
-        "La mise à jour de l'instruction a échoué.",
-        () => formContainer.value?.querySelector('input')?.focus()
-      )
-    }
-    isSubmitting.value = false
+  function onUpdateHelpRequest(helpRequest: EditHelpRequestInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.helpRequest.update.mutate(helpRequest),
+      isSubmitting,
+      onSuccess: () => {
+        navigateTo(
+          RoutePath.AppBeneficiary(beneficiaryId, {
+            tab: BeneficiaryTab.History
+          })
+        )
+      },
+      onFailure: () => {
+        snackbar.error(
+          "La mise à jour de l'instruction a échoué.",
+          () => formContainer.value?.querySelector('input')?.focus()
+        )
+      }
+    })
   }
 </script>

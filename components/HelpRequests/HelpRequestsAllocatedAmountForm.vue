@@ -43,20 +43,22 @@
   })
 
   const onUpdateAllocatedAmount = handleSubmit(
-    useDefer(INPUT_DEFER_DURATION, async helpRequest => {
-      try {
-        const updateHelpRequest =
-          await useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest)
-
-        snackbar.success(
-          "Le montant alloué de l'instruction de demande d'aide a été modifié."
-        )
-        emit('updated', updateHelpRequest)
-      } catch {
-        snackbar.error(
-          "La modification du montant alloué de l'instruction de demande d'aide a échoué."
-        )
-      }
+    useDefer(INPUT_DEFER_DURATION, helpRequest => {
+      useTrpcMutation({
+        mutation: () =>
+          useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
+        onSuccess: updatedHelpRequest => {
+          snackbar.success(
+            "Le montant alloué de l'instruction de demande d'aide a été modifié."
+          )
+          emit('updated', updatedHelpRequest)
+        },
+        onFailure: () => {
+          snackbar.error(
+            "La modification du montant alloué de l'instruction de demande d'aide a échoué."
+          )
+        }
+      })
     })
   )
 </script>

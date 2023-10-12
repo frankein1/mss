@@ -83,12 +83,22 @@
     })
   )
 
-  async function onToggleRead() {
-    await useTrpcClient().notification.update.mutate({
-      id: props.notification.id,
-      read: !isRead.value
+  function onToggleRead() {
+    useTrpcMutation({
+      mutation: () =>
+        useTrpcClient().notification.update.mutate({
+          id: props.notification.id,
+          read: !isRead.value
+        }),
+      onSuccess: () => {
+        emit('toggleReadState')
+      },
+      onFailure: () => {
+        useSnackbar().error(
+          "L'état de la notification n'a pas pu être mis à jour."
+        )
+      }
     })
-    emit('toggleReadState')
   }
 </script>
 
