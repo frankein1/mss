@@ -23,6 +23,7 @@ const adminHandler = async ({
   } = input
 
   await editFollowupTypes(
+    user,
     structureId,
     legallyRequiredFollowupTypes,
     legallyNotRequiredFollowupTypes

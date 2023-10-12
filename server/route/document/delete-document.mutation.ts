@@ -2,17 +2,17 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { DeleteDocumentInput, deleteDocumentSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { beneficiarySecurityTargetInclude } from '~/server/query'
 import { SecurityRuleGrantee, canDeleteDocument } from '~/server/security/rules'
 import { deleteUploadedFile } from '~/server/lib/s3'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import { DocumentRepo } from '~/server/repository'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: DeleteDocumentInput
 ) => {
-  const document = await prismaClient.document.findUniqueOrThrow({
+  const document = await DocumentRepo.findUniqueOrThrow(user, {
     where: { key: input.documentKey },
     include: { beneficiary: beneficiarySecurityTargetInclude }
   })
@@ -29,7 +29,7 @@ const handler = async ({
 }) => {
   const { documentKey } = input
 
-  const document = await prismaClient.document.findUniqueOrThrow({
+  const document = await DocumentRepo.findUniqueOrThrow(user, {
     where: { key: documentKey },
     include: { beneficiary: beneficiarySecurityTargetInclude }
   })
@@ -38,7 +38,7 @@ const handler = async ({
     throw error
   })
 
-  await prismaClient.document.delete({
+  await DocumentRepo.deleteEntity(user, {
     where: { key: documentKey }
   })
 

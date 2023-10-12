@@ -1,15 +1,15 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { emptySchema } from '~/server/schema'
+import { FollowupTypeRepo } from '~/server/repository/FollowupTypeRepository'
 
 const handler = async ({
-  ctx: { structure }
+  ctx: { structure, user }
 }: {
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.followupType.findMany({
+  return await FollowupTypeRepo.findMany(user, {
     where: {
       ownedByStructureId: structure.id
     },
