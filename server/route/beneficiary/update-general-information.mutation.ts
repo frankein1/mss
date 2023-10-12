@@ -6,14 +6,14 @@ import {
   canEditBeneficiaryReferents
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryGeneralInformationInput,
   updateBeneficiaryGeneralInformationSchema
 } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
-import { BeneficiaryRepo } from '~/server/query'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,

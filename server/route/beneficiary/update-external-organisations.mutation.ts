@@ -6,13 +6,13 @@ import {
   canEditBeneficiaryExternalOrganisations
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryExternalOrganisationsInput,
   updateBeneficiaryExternalOrganisationsSchema
 } from '~/server/schema'
-import { BeneficiaryRepo } from '~/server/query'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,

@@ -1,6 +1,6 @@
 import type { Prisma } from '@prisma/client'
-import { BeneficiaryRepo } from '../query'
-import { SecurityRuleGrantee } from './rules'
+import { SecurityRuleGrantee } from '../../security/rules'
+import { BeneficiaryRepo } from '~/server/repository'
 
 export const beneficiarySecurityTargetSelect = {
   id: true,

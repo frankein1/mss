@@ -13,8 +13,8 @@ import {
   updateBeneficiaryEntourageSchema
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
-import { getBeneficiarySecurityTarget } from '~/server/security'
-import { BeneficiaryRepo } from '~/server/query'
+import { getBeneficiarySecurityTarget } from '~/server/query'
+import { BeneficiaryRepo } from '~/server/repository'
 
 function getBeneficiarySecurityTargetWithEntourage(
   user: SecurityRuleGrantee,

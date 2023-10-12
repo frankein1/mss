@@ -1,6 +1,6 @@
 import { NotificationType, HelpRequest, Followup } from '@prisma/client'
 import dayjs from 'dayjs'
-import { FollowupRepo, HelpRequestRepo } from '../query'
+import { FollowupRepo, HelpRequestRepo } from '~/server/repository'
 import { useScheduler } from '#scheduler'
 import { prismaClient } from '~/server/prisma'
 
