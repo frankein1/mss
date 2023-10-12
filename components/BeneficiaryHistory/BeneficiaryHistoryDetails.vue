@@ -46,10 +46,7 @@
 </script>
 
 <style lang="scss" scoped>
-  @use '~/assets/style/variables' as *;
-
   .beneficiary-history-details-accordion {
-    box-shadow: $shadow-dark;
     border-radius: 0.5rem;
 
     &:not(.expanded) {
