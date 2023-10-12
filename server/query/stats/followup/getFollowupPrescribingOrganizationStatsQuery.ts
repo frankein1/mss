@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { FollowupRepo } from '~/server/query'
 import { StatFilterInput } from '~/server/schema'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
@@ -27,7 +27,7 @@ export async function getFollowupPrescribingOrganizationStatsQuery(
           referents
         }
 
-  const followups = await prismaClient.followup.findMany({
+  const followups = await FollowupRepo.findMany(user, {
     where: {
       structureId: user.structureId || '',
       ...preparedFilters,

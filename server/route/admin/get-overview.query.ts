@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { createQuery } from '../createRoute'
+import { createQuery } from '~/server/route'
 import { prismaClient } from '~/server/prisma'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { emptySchema } from '~/server/schema'

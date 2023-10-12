@@ -1,8 +1,8 @@
-import { createQuery } from '../createRoute'
 import {
   hasDefinedExaminationDate,
   prepareExaminationDatesBeneficiaryCondition
 } from './helper'
+import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import {

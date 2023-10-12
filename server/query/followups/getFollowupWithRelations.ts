@@ -1,8 +1,12 @@
 import type { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { FollowupRepo } from '~/server/query'
+import { SecurityRuleGrantee } from '~/server/security'
 
-export function getFollowupWithRelations(id: string) {
-  return prismaClient.followup.findUniqueOrThrow({
+export function getFollowupWithRelations(
+  user: SecurityRuleGrantee,
+  id: string
+) {
+  return FollowupRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
       beneficiary: {

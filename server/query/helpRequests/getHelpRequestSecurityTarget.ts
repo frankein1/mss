@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 
 export function getHelpRequestsecurityTarget(id: string) {
-  return prismaClient.followup.findUniqueOrThrow({
+  return prismaClient.helpRequest.findUniqueOrThrow({
     where: { id },
     include: {
       beneficiary: {

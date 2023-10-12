@@ -2,12 +2,12 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleGrantee, canDeleteFollowup } from '~/server/security/rules'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
+import { FollowupRepo } from '~/server/query'
 
-function getFollowup(id: string) {
-  return prismaClient.followup.findUniqueOrThrow({
+function getFollowup(user: SecurityRuleGrantee, id: string) {
+  return FollowupRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
       beneficiary: {
@@ -26,7 +26,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  await prismaClient.followup.delete({ where: { id } })
+  await FollowupRepo.deleteEntity(user, { where: { id } })
 
   await addUserActivity({
     userId: user.id,
@@ -37,7 +37,7 @@ const handler = async ({
 }
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const followup = await getFollowup(input.id)
+  const followup = await getFollowup(user, input.id)
 
   return canDeleteFollowup(user, followup)
 }

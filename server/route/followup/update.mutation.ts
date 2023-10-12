@@ -18,10 +18,10 @@ import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import {
   FollowupWithRelations,
+  getFollowupSecurityTarget,
   getFollowupWithRelations
 } from '~/server/query/followups'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { getHelpRequestsecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
 
 async function prepareFollowupData({
   input,
@@ -127,7 +127,7 @@ const handler = async ({
   input: EditFollowupInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await getFollowupWithRelations(input.id)
+  const target = await getFollowupWithRelations(ctx.user, input.id)
 
   if (!target || !canEditFollowup(ctx.user, target)) {
     throw forbiddenError()
@@ -142,7 +142,7 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditFollowupInput
 ) => {
-  const target = await getHelpRequestsecurityTarget(input.id)
+  const target = await getFollowupSecurityTarget(user, input.id)
   return canEditFollowup(user, target)
 }
 
