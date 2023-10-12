@@ -1,8 +1,11 @@
 import { NotificationType, HelpRequest, Followup } from '@prisma/client'
 import dayjs from 'dayjs'
-import { FollowupRepo, HelpRequestRepo } from '~/server/repository'
+import {
+  FollowupRepo,
+  HelpRequestRepo,
+  NotificationRepo
+} from '~/server/repository'
 import { useScheduler } from '#scheduler'
-import { prismaClient } from '~/server/prisma'
 
 export default defineNitroPlugin(() => {
   startScheduler()
@@ -27,7 +30,7 @@ async function createDueFollowupNotifications(
       type
     }))
 
-  await prismaClient.notification.createMany({
+  await NotificationRepo.systemCreateMany({
     data: dueFollowupNotifications
   })
 }
@@ -71,7 +74,7 @@ async function createDueHelpRequestNotifications(
       type
     }))
 
-  await prismaClient.notification.createMany({
+  await NotificationRepo.systemCreateMany({
     data: dueHelpRequestNotifications
   })
 }
@@ -118,7 +121,7 @@ async function createEndOfSupportHelpRequestNotifications() {
       type: NotificationType.EndOfSupport
     }))
 
-  await prismaClient.notification.createMany({
+  await NotificationRepo.systemCreateMany({
     data: endOfSupportHelpRequestNotifications
   })
 }
