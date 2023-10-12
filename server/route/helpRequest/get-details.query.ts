@@ -16,7 +16,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const helpRequest = await getHelpRequestWithRelations(id)
+  const helpRequest = await getHelpRequestWithRelations(user, id)
 
   const data = getHelpRequestAccessibleData(user, helpRequest)
 
@@ -24,7 +24,7 @@ const handler = async ({
 }
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const helpRequest = await getHelpRequestsecurityTarget(input.id)
+  const helpRequest = await getHelpRequestsecurityTarget(user, input.id)
   return canViewHelpRequest(user, helpRequest.beneficiary)
 }
 

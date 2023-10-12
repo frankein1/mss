@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { HelpRequestRepo } from '~/server/query'
 import { StatFilterInput } from '~/server/schema'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
@@ -26,7 +26,7 @@ export async function getHelpRequestCountQuery(
           referents
         }
 
-  return await prismaClient.helpRequest.count({
+  return await HelpRequestRepo.count(user, {
     where: {
       structureId: user.structureId || '',
       ...preparedFilters,

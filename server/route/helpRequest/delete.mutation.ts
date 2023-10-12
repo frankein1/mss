@@ -5,12 +5,12 @@ import {
   SecurityRuleGrantee,
   canDeleteHelpRequest
 } from '~/server/security/rules'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
+import { HelpRequestRepo } from '~/server/query'
 
-function getHelpRequest(id: string) {
-  return prismaClient.helpRequest.findUniqueOrThrow({
+function getHelpRequest(user: SecurityRuleGrantee, id: string) {
+  return HelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
       beneficiary: {
@@ -29,7 +29,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  await prismaClient.helpRequest.delete({ where: { id } })
+  await HelpRequestRepo.deleteEntity(user, { where: { id } })
 
   await addUserActivity({
     userId: user.id,
@@ -40,7 +40,7 @@ const handler = async ({
 }
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const helpRequest = await getHelpRequest(input.id)
+  const helpRequest = await getHelpRequest(user, input.id)
   return canDeleteHelpRequest(user, helpRequest)
 }
 

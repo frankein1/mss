@@ -6,11 +6,10 @@ import {
   canViewBeneficiary
 } from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/security'
-import { prismaClient } from '~/server/prisma'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 import type { FollowupTypeIdAndName } from '~/types/followupType'
 import { IdInput, idSchema } from '~/server/schema'
-import { FollowupRepo } from '~/server/query'
+import { FollowupRepo, HelpRequestRepo } from '~/server/query'
 
 async function getFollowupFollowupTypes(
   user: SecurityRuleGrantee,
@@ -51,11 +50,12 @@ async function getFollowupFollowupTypes(
 }
 
 async function getHelpRequestFollowupTypes(
+  user: SecurityRuleGrantee,
   beneficiaryId: string,
   structureId: string,
   legallyRequired: boolean
 ) {
-  const helpRequestWithFollowupTypes = await prismaClient.helpRequest.findMany({
+  const helpRequestWithFollowupTypes = await HelpRequestRepo.findMany(user, {
     where: {
       beneficiaryId,
       structureId,
@@ -85,7 +85,12 @@ async function getFollowupTypes(
 ) {
   const [followupFollowupTypes, helpRequestFollowupTypes] = await Promise.all([
     getFollowupFollowupTypes(user, beneficiaryId, structureId, legallyRequired),
-    getHelpRequestFollowupTypes(beneficiaryId, structureId, legallyRequired)
+    getHelpRequestFollowupTypes(
+      user,
+      beneficiaryId,
+      structureId,
+      legallyRequired
+    )
   ])
 
   const beneficiaryFollowupTypes = [...followupFollowupTypes]

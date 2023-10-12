@@ -5,7 +5,6 @@ import {
 } from './helper'
 import { createQuery } from '~/server/route'
 import { helpRequestFieldLabels } from '~/client/labels'
-import { prismaClient } from '~/server/prisma'
 import {
   ExportHelpRequestsInput,
   exportHelpRequestsSchema
@@ -21,6 +20,7 @@ import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareHelpRequestFilters } from '~/utils/filters'
 import { HELP_REQUEST_EXPORTED_FIELDS } from '~/utils/constants/export'
+import { HelpRequestRepo } from '~/server/query'
 
 const handler = async ({
   input,
@@ -50,7 +50,7 @@ const handler = async ({
     )
   }
 
-  const dataRequest = await prismaClient.helpRequest.findMany({
+  const dataRequest = await HelpRequestRepo.findMany(user, {
     where,
     include: {
       beneficiary: {

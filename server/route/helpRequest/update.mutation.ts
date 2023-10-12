@@ -15,7 +15,7 @@ import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   HelpRequestWithRelations,
   getHelpRequestWithRelations
-} from '~/server/query/helpRequests'
+} from '~/server/query'
 import { getHelpRequestsecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
 
 async function prepareHelpRequestData({
@@ -110,7 +110,7 @@ const handler = async ({
   input: EditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await getHelpRequestWithRelations(input.id)
+  const target = await getHelpRequestWithRelations(ctx.user, input.id)
 
   if (!target || !canEditHelpRequest(ctx.user, target)) {
     throw forbiddenError()
@@ -125,7 +125,7 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditHelpRequestInput
 ) => {
-  const target = await getHelpRequestsecurityTarget(input.id)
+  const target = await getHelpRequestsecurityTarget(user, input.id)
   return canEditHelpRequest(user, target)
 }
 
