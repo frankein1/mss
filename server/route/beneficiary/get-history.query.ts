@@ -1,7 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import { HelpRequestStatus, FollowupStatus } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { prismaClient } from '~/server/prisma'
 import {
   GetHistoryInput,
   BeneficiaryHistoryFilterInput,
@@ -30,7 +29,7 @@ import {
   AllowSecurityCheck,
   SecurityRuleGrantee
 } from '~/server/security/rules/types'
-import { FollowupRepo } from '~/server/query'
+import { FollowupRepo, HelpRequestRepo } from '~/server/query'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput
@@ -147,7 +146,7 @@ async function getHelpRequests(
     return []
   }
 
-  const helpRequests = await prismaClient.helpRequest.findMany({
+  const helpRequests = await HelpRequestRepo.findMany(user, {
     where: {
       beneficiaryId: beneficiary.id,
       ...prepareHelpRequestFilters(filters, canOnlyListItsBeneficiaries(user))

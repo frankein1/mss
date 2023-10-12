@@ -1,4 +1,3 @@
-export {
-  type HelpRequestWithRelations,
-  getHelpRequestWithRelations
-} from './getHelpRequestWithRelations'
+export * from './getHelpRequestWithRelations'
+export * from './getHelpRequestSecurityTarget'
+export * from './HelpRequestRepository'

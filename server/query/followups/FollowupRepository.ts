@@ -26,7 +26,10 @@ function create(_user: SecurityRuleGrantee, params: Prisma.FollowupCreateArgs) {
   return prismaClient.followup.create(params)
 }
 
-function update(_user: SecurityRuleGrantee, params: Prisma.FollowupUpdateArgs) {
+function update<T extends Prisma.FollowupUpdateArgs>(
+  _user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.FollowupUpdateArgs>
+) {
   return prismaClient.followup.update(params)
 }
 
