@@ -25,6 +25,7 @@ const handler = async ({
   } = input
 
   await editFollowupTypes(
+    user,
     userStructure.id,
     legallyRequiredFollowupTypes,
     legallyNotRequiredFollowupTypes

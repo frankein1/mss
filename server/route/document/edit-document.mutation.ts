@@ -1,7 +1,10 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  getDocumentSecurityTarget
+} from '~/server/query'
 import {
   SecurityRuleGrantee,
   canEditDocument,
@@ -12,18 +15,8 @@ import {
   forbiddenError,
   invalidError
 } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-
-function getDocumentSecurityTarget(key: string) {
-  return prismaClient.document.findUniqueOrThrow({
-    where: { key },
-    select: {
-      createdById: true,
-      confidential: true
-    }
-  })
-}
+import { DocumentRepo } from '~/server/repository'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
@@ -33,7 +26,7 @@ const securityCheck = async (
     user,
     input.beneficiaryId
   )
-  const document = await getDocumentSecurityTarget(input.key)
+  const document = await getDocumentSecurityTarget(user, input.key)
   return canEditDocument(user, beneficiary, document)
 }
 
@@ -52,7 +45,7 @@ const handler = async ({
     throw invalidError()
   }
 
-  const document = await getDocumentSecurityTarget(key)
+  const document = await getDocumentSecurityTarget(user, key)
 
   if (
     data.confidential !== document.confidential &&
@@ -61,7 +54,7 @@ const handler = async ({
     throw forbiddenError()
   }
 
-  const updatedDocument = await prismaClient.document.update({
+  const updatedDocument = await DocumentRepo.update(user, {
     where: { key },
     data,
     include: { beneficiary: { select: { id: true, structureId: true } } }

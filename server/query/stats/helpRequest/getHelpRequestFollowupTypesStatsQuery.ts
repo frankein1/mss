@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { FollowupTypeRepo } from '~/server/repository'
 import { StatFilterInput } from '~/server/schema'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
@@ -26,7 +26,7 @@ export async function getHelpRequestFollowupTypesStatsQuery(
           referents
         }
 
-  return await prismaClient.followupType.findMany({
+  return await FollowupTypeRepo.findMany(user, {
     select: {
       id: true,
       name: true,
