@@ -1,12 +1,10 @@
 <template>
-  <BeneficiaryFormLayout
+  <BeneficiariesSaveFormLayout
     :schema="saveBeneficiaryOccupationSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiariesSaveOccupation()"
-    title-icon="fr-icon-user-line"
-    :previous-page="previousPage"
-    :next-page="nextPage"
+    :current-route="Route.AppBeneficiariesSaveOccupation"
+    :draft-id="draftId"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -28,7 +26,7 @@
         :major-children="majorChildren"
       />
     </div>
-  </BeneficiaryFormLayout>
+  </BeneficiariesSaveFormLayout>
 </template>
 
 <script lang="ts" setup>
@@ -38,14 +36,8 @@
   } from '~/server/schema'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, Route } from '~/utils/routing'
   import type { BeneficiaryDraft } from '~/types/beneficiary'
-  import { useAuthStore } from '~/store/auth'
-  import {
-    canEditBeneficiaryHealthInfo,
-    canEditBeneficiaryRelatives,
-    canEditBeneficiaryExternalOrganisations
-  } from '~/server/security/rules'
 
   definePageMeta({
     middleware: ['can-set-occupation']
@@ -59,57 +51,12 @@
   const route = useRoute()
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
-  const authStore = useAuthStore()
 
   const {
     data: beneficiaryDraft,
     pending,
     error
   } = await useAsyncData(loadBeneficiaryDraft)
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const previousPage = computed(() => {
-    const securityTarget = {
-      referents: [user.value.id],
-      structureId: user.value.structureId
-    }
-
-    if (canEditBeneficiaryHealthInfo(user.value, securityTarget)) {
-      return {
-        title: RouteTitle.AppBeneficiariesSaveHealth(),
-        path: RoutePath.AppBeneficiariesSaveHealth(draftId)
-      }
-    }
-
-    if (canEditBeneficiaryRelatives(user.value, securityTarget)) {
-      return {
-        title: RouteTitle.AppBeneficiariesSaveEntourage(),
-        path: RoutePath.AppBeneficiariesSaveEntourage(draftId)
-      }
-    }
-
-    return {
-      title: RouteTitle.AppBeneficiariesSaveInfo(),
-      path: RoutePath.AppBeneficiariesSaveInfo(draftId)
-    }
-  })
-
-  const nextPage = computed(() => {
-    const securityTarget = {
-      referents: [user.value.id],
-      structureId: user.value.structureId
-    }
-
-    if (canEditBeneficiaryExternalOrganisations(user.value, securityTarget)) {
-      return {
-        title: RouteTitle.AppBeneficiariesSaveExternalOrganisations(),
-        path: RoutePath.AppBeneficiariesSaveExternalOrganisations(draftId)
-      }
-    }
-
-    return undefined
-  })
 
   const familySituation = computed(
     () => beneficiaryDraft.value?.taxHousehold?.familySituation

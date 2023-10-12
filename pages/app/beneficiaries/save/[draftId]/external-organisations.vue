@@ -1,11 +1,10 @@
 <template>
-  <BeneficiaryFormLayout
+  <BeneficiariesSaveFormLayout
     :schema="saveBeneficiaryExternalOrganisationsSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiariesSaveExternalOrganisations()"
-    title-icon="fr-icon-user-line"
-    :previous-page="previousPage"
+    :current-route="Route.AppBeneficiariesSaveExternalOrganisations"
+    :draft-id="draftId"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -24,7 +23,7 @@
     >
       <BeneficiaryFormExternalOrganisations />
     </div>
-  </BeneficiaryFormLayout>
+  </BeneficiariesSaveFormLayout>
 </template>
 
 <script lang="ts" setup>
@@ -34,14 +33,8 @@
   } from '~/server/schema'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, Route } from '~/utils/routing'
   import type { BeneficiaryDraft } from '~/types/beneficiary'
-  import { useAuthStore } from '~/store/auth'
-  import {
-    canEditBeneficiaryHealthInfo,
-    canEditBeneficiaryRelatives,
-    canEditBeneficiaryOccupationIncome
-  } from '~/server/security/rules'
 
   definePageMeta({
     middleware: ['can-set-external-organisations']
@@ -55,48 +48,12 @@
   const route = useRoute()
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
-  const authStore = useAuthStore()
 
   const {
     data: beneficiaryDraft,
     pending,
     error
   } = await useAsyncData(loadBeneficiaryDraft)
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const previousPage = computed(() => {
-    const securityTarget = {
-      referents: [user.value.id],
-      structureId: user.value.structureId
-    }
-
-    if (canEditBeneficiaryOccupationIncome(user.value, securityTarget)) {
-      return {
-        title: RouteTitle.AppBeneficiariesSaveOccupation(),
-        path: RoutePath.AppBeneficiariesSaveOccupation(draftId)
-      }
-    }
-
-    if (canEditBeneficiaryHealthInfo(user.value, securityTarget)) {
-      return {
-        title: RouteTitle.AppBeneficiariesSaveHealth(),
-        path: RoutePath.AppBeneficiariesSaveHealth(draftId)
-      }
-    }
-
-    if (canEditBeneficiaryRelatives(user.value, securityTarget)) {
-      return {
-        title: RouteTitle.AppBeneficiariesSaveEntourage(),
-        path: RoutePath.AppBeneficiariesSaveEntourage(draftId)
-      }
-    }
-
-    return {
-      title: RouteTitle.AppBeneficiariesSaveInfo(),
-      path: RoutePath.AppBeneficiariesSaveInfo(draftId)
-    }
-  })
 
   const beneficiary = computed<
     SaveBeneficiaryExternalOrganisationsInput | undefined

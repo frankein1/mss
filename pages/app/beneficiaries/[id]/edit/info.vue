@@ -1,12 +1,10 @@
 <template>
-  <BeneficiaryFormLayout
+  <BeneficiaryEditFormLayout
     :schema="saveBeneficiaryGeneralInformationSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiaryEditInfo()"
     title-icon="fr-icon-user-line"
-    :next-page="nextPage"
-    :saved="saved"
+    :current-route="Route.AppBeneficiaryEditInfo"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -25,7 +23,7 @@
       :agents="agents"
       :can-set-referents="canSetReferents"
     />
-  </BeneficiaryFormLayout>
+  </BeneficiaryEditFormLayout>
 </template>
 
 <script lang="ts" setup>
@@ -33,15 +31,11 @@
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
-  import {
-    canEditBeneficiaryReferents,
-    canEditBeneficiaryRelatives,
-    canEditBeneficiaryHealthInfo
-  } from '~/server/security/rules'
+  import { canEditBeneficiaryReferents } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
+  import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, Route } from '~/utils/routing'
 
   definePageMeta({
     middleware: 'is-beneficiary-referent'
@@ -54,10 +48,6 @@
   const authStore = useAuthStore()
   const route = useRoute()
   const beneficiaryId = route.params.id as string
-  const saved = route.query.saved !== undefined
-  const originTab = route.query.originTab
-    ? (route.query.originTab as BeneficiaryTab)
-    : undefined
 
   const {
     data: agents,
@@ -89,34 +79,6 @@
 
   const user = computed(() => authStore.getAuthUser)
 
-  const nextPage = computed(() => {
-    if (!data.value) {
-      return undefined
-    }
-
-    if (canEditBeneficiaryRelatives(user.value, data.value.beneficiary)) {
-      return {
-        title: RouteTitle.AppBeneficiaryEditTaxHousehold(),
-        path: RoutePath.AppBeneficiaryEditTaxHousehold(beneficiaryId, {
-          saved: true,
-          originTab
-        })
-      }
-    }
-
-    if (canEditBeneficiaryHealthInfo(user.value, data.value.beneficiary)) {
-      return {
-        title: RouteTitle.AppBeneficiaryEditHealth(),
-        path: RoutePath.AppBeneficiaryEditHealth(beneficiaryId, {
-          saved: true,
-          originTab
-        })
-      }
-    }
-
-    return undefined
-  })
-
   const beneficiary = computed(() => {
     if (!data.value) {
       return null
@@ -127,6 +89,7 @@
     // Id is required for building the breadcrumb in the layout
     return {
       id: b.id,
+      structureId: b.structureId,
       referents: b.referents.map(referent => referent.id),
       aidantConnectAuthorized: b.aidantConnectAuthorized,
       status: b.status,
@@ -154,7 +117,8 @@
       phone2: b.phone2,
       email: b.email,
       mobility: b.mobility
-    } as SaveBeneficiaryGeneralInformationInput & { id: string }
+    } as SaveBeneficiaryGeneralInformationInput &
+      MinimalBeneficiaryForFormLayout
   })
 
   const canSetReferents = computed(() =>

@@ -1,11 +1,10 @@
 <template>
-  <BeneficiaryFormLayout
+  <BeneficiariesSaveFormLayout
     :schema="saveBeneficiaryEntourageSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiariesSaveEntourage()"
-    :previous-page="previousPage"
-    :next-page="nextPage"
+    :current-route="Route.AppBeneficiariesSaveEntourage"
+    :draft-id="draftId"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -24,7 +23,7 @@
     >
       <BeneficiaryFormEntourages />
     </div>
-  </BeneficiaryFormLayout>
+  </BeneficiariesSaveFormLayout>
 </template>
 
 <script lang="ts" setup>
@@ -32,12 +31,10 @@
     saveBeneficiaryEntourageSchema,
     SaveBeneficiaryEntourageInput
   } from '~/server/schema'
-  import { useAuthStore } from '~/store/auth'
   import { BeneficiaryDraft } from '~/types/beneficiary'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
-  import { canEditBeneficiaryHealthInfo } from '~/server/security/rules'
+  import { RoutePath, Route } from '~/utils/routing'
 
   definePageMeta({
     middleware: 'can-set-relatives'
@@ -51,36 +48,12 @@
   const route = useRoute()
   const draftId = route.params.draftId as string
   const snackbar = useSnackbar()
-  const authStore = useAuthStore()
-
-  const previousPage = {
-    title: RouteTitle.AppBeneficiariesSaveTaxHousehold(),
-    path: RoutePath.AppBeneficiariesSaveTaxHousehold(draftId)
-  }
 
   const {
     data: beneficiaryDraft,
     pending,
     error
   } = await useAsyncData(loadBeneficiaryDraft)
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const nextPage = computed(() => {
-    const securityTarget = {
-      referents: [user.value.id],
-      structureId: user.value.structureId
-    }
-
-    if (canEditBeneficiaryHealthInfo(user.value, securityTarget)) {
-      return {
-        title: RouteTitle.AppBeneficiariesSaveHealth(),
-        path: RoutePath.AppBeneficiariesSaveHealth(draftId)
-      }
-    }
-
-    return undefined
-  })
 
   const beneficiary = computed<SaveBeneficiaryEntourageInput | undefined>(
     () => {

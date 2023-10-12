@@ -1,12 +1,9 @@
 <template>
-  <BeneficiaryFormLayout
+  <BeneficiaryEditFormLayout
     :schema="saveBeneficiaryExternalOrganisationsSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
-    :title="RouteTitle.AppBeneficiaryEditExternalOrganisations()"
-    is-editting
-    :previous-page="previousPage"
-    :saved="saved"
+    :current-route="Route.AppBeneficiaryEditExternalOrganisations"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -25,7 +22,7 @@
     >
       <BeneficiaryFormExternalOrganisations />
     </div>
-  </BeneficiaryFormLayout>
+  </BeneficiaryEditFormLayout>
 </template>
 
 <script lang="ts" setup>
@@ -34,84 +31,24 @@
     SaveBeneficiaryExternalOrganisationsInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
-  import type { BeneficiaryNames } from '~/types/beneficiary'
-  import { useAuthStore } from '~/store/auth'
-  import {
-    canEditBeneficiaryRelatives,
-    canEditBeneficiaryOccupationIncome,
-    canEditBeneficiaryHealthInfo
-  } from '~/server/security/rules'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { RoutePath, Route } from '~/utils/routing'
+  import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-set-external-organisations']
   })
 
   const trpcClient = useTrpcClient()
-  const authStore = useAuthStore()
 
   const isSubmitting = ref(false)
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
-  const saved = route.query.saved !== undefined
-  const originTab = route.query.originTab
-    ? (route.query.originTab as BeneficiaryTab)
-    : undefined
 
   const { data, pending, error } =
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const previousPage = computed(() => {
-    if (!data.value) {
-      return undefined
-    }
-
-    if (
-      canEditBeneficiaryOccupationIncome(user.value, data.value.beneficiary)
-    ) {
-      return {
-        title: RouteTitle.AppBeneficiaryEditOccupation(),
-        path: RoutePath.AppBeneficiaryEditOccupation(beneficiaryId, {
-          saved: true,
-          originTab
-        })
-      }
-    }
-
-    if (canEditBeneficiaryHealthInfo(user.value, data.value.beneficiary)) {
-      return {
-        title: RouteTitle.AppBeneficiaryEditHealth(),
-        path: RoutePath.AppBeneficiaryEditHealth(beneficiaryId, {
-          saved: true,
-          originTab
-        })
-      }
-    }
-
-    if (canEditBeneficiaryRelatives(user.value, data.value.beneficiary)) {
-      return {
-        title: RouteTitle.AppBeneficiaryEditEntourage(),
-        path: RoutePath.AppBeneficiaryEditEntourage(beneficiaryId, {
-          saved: true,
-          originTab
-        })
-      }
-    }
-
-    return {
-      title: RouteTitle.AppBeneficiaryEditInfo(),
-      path: RoutePath.AppBeneficiaryEditInfo(beneficiaryId, {
-        saved: true,
-        originTab
-      })
-    }
-  })
 
   const beneficiary = computed(() => {
     if (!data.value) {
@@ -123,6 +60,8 @@
     // Names and id are required for building the breadcrumb in the layout
     return {
       id: b.id,
+      structureId: b.structureId,
+      referents: b.referents,
       firstName: b.firstName,
       usualName: b.usualName,
       birthName: b.birthName,
@@ -134,7 +73,7 @@
       serviceProviders: b.serviceProviders,
       involvedPartners: b.involvedPartners
     } as SaveBeneficiaryExternalOrganisationsInput &
-      BeneficiaryNames & { id: string }
+      MinimalBeneficiaryForFormLayout
   })
 
   async function onSaveBeneficiary(
