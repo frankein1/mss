@@ -1,4 +1,5 @@
 export * from './BeneficiaryRepository'
+export * from './BeneficiaryRelativeRepository'
 export * from './FollowupRepository'
 export * from './FollowupTypeRepository'
 export * from './HelpRequestRepository'

@@ -5,11 +5,10 @@ import {
   SecurityRuleGrantee,
   canDeleteBeneficiary
 } from '~/server/security/rules'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
-import { BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRelativeRepo, BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
@@ -26,7 +25,7 @@ const handler = async ({
 }) => {
   const beneficiary = await getBeneficiarySecurityTarget(user, id)
 
-  await updateBeneficiaryRelatives(id)
+  await updateBeneficiaryRelatives(user, id)
 
   await BeneficiaryRepo.deleteEntity(user, { where: { id } })
 
@@ -38,8 +37,11 @@ const handler = async ({
   })
 }
 
-async function updateBeneficiaryRelatives(linkedBeneficiaryId: string) {
-  const relatives = await prismaClient.beneficiaryRelative.findMany({
+async function updateBeneficiaryRelatives(
+  user: SecurityRuleGrantee,
+  linkedBeneficiaryId: string
+) {
+  const relatives = await BeneficiaryRelativeRepo.findMany(user, {
     where: {
       linkedBeneficiaryId
     },
@@ -54,7 +56,7 @@ async function updateBeneficiaryRelatives(linkedBeneficiaryId: string) {
 
   for (const relative of relatives) {
     const { linkedBeneficiary: lb } = relative
-    await prismaClient.beneficiaryRelative.update({
+    await BeneficiaryRelativeRepo.update(user, {
       data: {
         linkedBeneficiaryId: null,
         email: lb?.email || null,
