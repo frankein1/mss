@@ -1,2 +1,2 @@
-export { getBeneficiaryWithRelations } from './getBeneficiaryWithRelations'
-export * from './BeneficiaryRepository'
+export * from './getBeneficiaryWithRelations'
+export * from './getBeneficiarySecurityTarget'

@@ -4,7 +4,7 @@ import {
   SecurityRuleGrantee,
   canViewBeneficiary
 } from '~/server/security/rules'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import { IdInput, idSchema } from '~/server/schema'
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {

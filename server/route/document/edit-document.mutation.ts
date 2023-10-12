@@ -1,7 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   SecurityRuleGrantee,
   canEditDocument,

@@ -21,7 +21,7 @@ import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
-import { BeneficiaryRepo } from '~/server/query'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = (
   grantee: SecurityRuleGrantee,

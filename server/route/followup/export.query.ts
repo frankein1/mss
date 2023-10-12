@@ -15,7 +15,7 @@ import { createExport } from '~/utils/export/createExport'
 import { prepareFollowupFilters } from '~/utils/filters'
 import { getFollowupExportData } from '~/server/route/followup/helper/getFollowupExportData'
 import { FOLLOWUP_EXPORTED_FIELDS } from '~/utils/constants/export'
-import { FollowupRepo } from '~/server/query'
+import { FollowupRepo } from '~/server/repository'
 
 const handler = async ({
   input,

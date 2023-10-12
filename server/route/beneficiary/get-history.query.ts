@@ -16,7 +16,7 @@ import {
 import {
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
-} from '~/server/security'
+} from '~/server/query'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   canListBeneficiaryFollowups,
@@ -29,7 +29,7 @@ import {
   AllowSecurityCheck,
   SecurityRuleGrantee
 } from '~/server/security/rules/types'
-import { FollowupRepo, HelpRequestRepo } from '~/server/query'
+import { FollowupRepo, HelpRequestRepo } from '~/server/repository'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput

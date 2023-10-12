@@ -10,7 +10,7 @@ import {
   AllowSecurityCheck,
   SecurityRuleGrantee
 } from '~/server/security/rules/types'
-import { BeneficiaryRepo } from '~/server/query'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = AllowSecurityCheck
 
