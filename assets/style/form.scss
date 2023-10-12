@@ -35,12 +35,10 @@
     color: var(--text-disabled-grey);
     box-shadow: inset 0 -2px 0 0 var(--border-disabled-grey);
     pointer-events: none;
+  }
 
-    &[type='date'] {
-      --data-uri-svg: url("data:image/svg+xml;charset=utf8,<svg xmlns='http://www.w3.org/2000/svg' x='0px' y='0px' viewBox='0 0 24 24'><path fill='%23929292' d='M17 3h4c.55 0 1 .45 1 1v16c0 .55-.45 1-1 1H3c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h4V1h2v2h6V1h2v2zm-2 2H9v2H7V5H4v4h16V5h-3v2h-2V5zm5 6H4v8h16v-8z'/></svg>");
-
-      background-image: var(--data-uri-svg);
-    }
+  &.fr-icon-calendar-line::before {
+    color: var(--text-disabled-grey);
   }
 }
 
