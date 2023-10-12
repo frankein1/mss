@@ -12,6 +12,7 @@ import {
 import { canAddDocument, canViewDocument } from '~/server/security/rules'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
+import { DocumentRepo } from '~/server/repository'
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth
@@ -91,7 +92,7 @@ async function addDocument(
   user: JwtUser
 ) {
   const { type, beneficiaryId, confidential, tags, file } = input
-  const document = await prismaClient.document.create({
+  const document = await DocumentRepo.create(user, {
     data: {
       key: v4(),
       name: file.name,
