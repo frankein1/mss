@@ -64,7 +64,7 @@
     $globalEventEmitter.on('closeModal', close)
   })
 
-  onBeforeUnmount(() => {
+  onUnmounted(() => {
     modal.value?.removeEventListener('dsfr.conceal', onClose)
   })
 

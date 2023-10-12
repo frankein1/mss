@@ -39,7 +39,7 @@
                   :key="target.hash"
                   class="fr-sidemenu__item"
                   :class="{
-                    'fr-sidemenu__item--active': target.hash === currentHash
+                    'fr-sidemenu__item--active': target.hash === activeHash
                   }"
                 >
                   <a
@@ -47,7 +47,7 @@
                     :href="`${menu.path}#${target.hash}`"
                     target="_self"
                     :aria-current="
-                      target.hash === currentHash ? true : undefined
+                      target.hash === activeHash ? true : undefined
                     "
                   >
                     {{ target.title }}
@@ -64,13 +64,13 @@
 
 <script setup lang="ts">
   import {
-    Route,
     RouteTitle,
     AppBeneficiaryEditRoute,
     AppBeneficiariesSaveRoute
   } from '~/utils/routing'
 
   const route = useRoute()
+  const SCROLL_DEFER_DURATION = 400
 
   const props = defineProps<{
     menus: Array<{
@@ -79,22 +79,101 @@
       targets?: { hash: string; title: string }[]
     }>
     currentRoute: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
+    beneficiaryFormLayoutMainContainer: HTMLElement | null
   }>()
 
   const emit = defineEmits<{
     save: [target: string]
   }>()
 
-  const currentHash = computed(() => {
-    if (
-      props.currentRoute !== Route.AppBeneficiaryEditInfo &&
-      props.currentRoute !== Route.AppBeneficiariesSaveInfo
-    ) {
-      return undefined
+  const activeHash = ref<string | undefined>(undefined)
+
+  const currentRouteHasSubSections = computed(() => {
+    const menu = props.menus.find(({ route }) => route === props.currentRoute)
+
+    return !!menu?.targets?.length
+  })
+
+  const formSections = computed(() => {
+    if (!props.beneficiaryFormLayoutMainContainer) {
+      return []
     }
 
-    return route.hash ? route.hash.replace('#', '') : undefined
+    return Array.from(
+      props.beneficiaryFormLayoutMainContainer.querySelectorAll(
+        '.feature-section'
+      )
+    ).filter(e => !!e.id)
   })
+
+  // Use watch instead of onMounted as `beneficiaryFormLayoutMainContainer` is initially null
+  watch(
+    () => props.beneficiaryFormLayoutMainContainer,
+    (mainContainer, previousMainContainer) => {
+      if (!currentRouteHasSubSections.value) {
+        return
+      }
+
+      if (!previousMainContainer && mainContainer) {
+        mainContainer.addEventListener('scroll', onMainContainerScroll)
+      }
+    }
+  )
+
+  onMounted(() => {
+    onHashChange()
+
+    if (currentRouteHasSubSections.value) {
+      window.addEventListener('hashchange', onHashChange)
+    }
+  })
+
+  onUnmounted(() => {
+    if (currentRouteHasSubSections.value) {
+      window.removeEventListener('hashchange', onHashChange)
+
+      if (props.beneficiaryFormLayoutMainContainer) {
+        props.beneficiaryFormLayoutMainContainer.removeEventListener(
+          'scroll',
+          onMainContainerScroll
+        )
+      }
+    }
+  })
+
+  function onHashChange() {
+    if (route.hash) {
+      activeHash.value = route.hash.slice(1)
+    }
+  }
+
+  const onMainContainerScroll = useDefer(SCROLL_DEFER_DURATION, () => {
+    const mainContainer = props.beneficiaryFormLayoutMainContainer
+    if (!mainContainer) {
+      return
+    }
+
+    const visible = formSections.value.find(section =>
+      formSectionIsVisible(section, mainContainer)
+    )
+    activeHash.value = visible?.id
+  })
+
+  function formSectionIsVisible(
+    formSection: Element,
+    mainContainer: HTMLElement
+  ) {
+    const mainContainerRect = mainContainer.getBoundingClientRect()
+    const mainContainerRectVerticalMiddle =
+      mainContainerRect.top +
+      (mainContainerRect.bottom - mainContainerRect.top) / 2
+    const sectionRect = formSection.getBoundingClientRect()
+
+    return (
+      sectionRect.top < mainContainerRectVerticalMiddle &&
+      sectionRect.bottom > mainContainerRectVerticalMiddle
+    )
+  }
 </script>
 
 <style scoped lang="scss">
