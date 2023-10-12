@@ -40,7 +40,8 @@
         :aria-labelledby="labelledBy"
         :readonly="readonly"
         :value="bindedValue"
-        @input="onChange"
+        @input="onInput"
+        @change="onChange"
       />
     </div>
     <div
@@ -175,6 +176,13 @@
     }
 
     return value
+  }
+
+  // Allow to remove the displayed error while the user is typing
+  function onInput(event: Event) {
+    if (error.value) {
+      handleChange(event)
+    }
   }
 
   function onChange(event: Event) {
