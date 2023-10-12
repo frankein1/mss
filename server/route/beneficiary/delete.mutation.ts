@@ -1,6 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { ProtectedAppContext } from '~/server/trpc'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   SecurityRuleGrantee,
   canDeleteBeneficiary
@@ -9,7 +9,7 @@ import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
-import { BeneficiaryRepo } from '~/server/query'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)

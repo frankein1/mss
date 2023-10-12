@@ -7,13 +7,13 @@ import {
   canSetBeneficiaryNir
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryHealthInput,
   updateBeneficiaryHealthSchema
 } from '~/server/schema'
-import { BeneficiaryRepo } from '~/server/query'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,

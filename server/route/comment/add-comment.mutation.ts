@@ -1,7 +1,7 @@
 import { NotificationType, Prisma, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { AddCommentInput, addCommentSchema } from '~/server/schema'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,

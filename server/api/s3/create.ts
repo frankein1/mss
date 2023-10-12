@@ -8,7 +8,7 @@ import { forbiddenError, invalidError } from '~/server/trpc'
 import {
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
-} from '~/server/security'
+} from '~/server/query'
 import { canAddDocument, canViewDocument } from '~/server/security/rules'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'

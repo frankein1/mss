@@ -1,7 +1,7 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext, notfoundError } from '~/server/trpc'
 import { isReferentFor } from '~/server/security/rules/helpers'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { idSchema } from '~/server/schema'
 

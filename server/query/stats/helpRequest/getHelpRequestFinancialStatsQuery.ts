@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { HelpRequestRepo } from '~/server/query'
+import { HelpRequestRepo } from '~/server/repository'
 import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
 import {

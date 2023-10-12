@@ -6,7 +6,7 @@ import {
   searchBeneficiarySchema
 } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { BeneficiaryRepo } from '~/server/query'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const tokenToSearchCondition = (token: string) => ({
   contains: token,

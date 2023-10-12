@@ -9,7 +9,7 @@ import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee, canCreateFollowup } from '~/server/security/rules'
 
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'

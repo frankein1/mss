@@ -4,7 +4,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleGrantee, canDeleteFollowup } from '~/server/security/rules'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
-import { FollowupRepo } from '~/server/query'
+import { FollowupRepo } from '~/server/repository'
 
 function getFollowup(user: SecurityRuleGrantee, id: string) {
   return FollowupRepo.findUniqueOrThrow(user, {

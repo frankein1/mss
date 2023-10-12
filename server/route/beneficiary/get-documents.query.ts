@@ -7,7 +7,7 @@ import {
   canListDocuments,
   canOnlyListItsUploadedDocuments
 } from '~/server/security/rules'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   GetDocumentsInput,
   BeneficiaryDocumentFilterInput,

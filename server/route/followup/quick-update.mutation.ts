@@ -8,7 +8,7 @@ import {
 } from '~/server/schema'
 import { SecurityRuleGrantee, canEditFollowup } from '~/server/security/rules'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { FollowupRepo } from '~/server/query'
+import { FollowupRepo } from '~/server/repository'
 
 const handler = async ({
   input: { id, ...rest },

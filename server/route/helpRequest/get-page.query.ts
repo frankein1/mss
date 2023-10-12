@@ -12,7 +12,7 @@ import { prepareHelpRequestFilters } from '~/utils/filters'
 import { SortOrder } from '~/types/table'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { HelpRequestRepo } from '~/server/query'
+import { HelpRequestRepo } from '~/server/repository'
 
 type GetHelpRequestsOrderBy = Array<
   GetHelpRequestsInputOrderBy[0] & { externalStructure?: SortOrder.Desc }

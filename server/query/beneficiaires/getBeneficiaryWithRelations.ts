@@ -1,4 +1,4 @@
-import { BeneficiaryRepo } from './BeneficiaryRepository'
+import { BeneficiaryRepo } from '../../repository/BeneficiaryRepository'
 import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'
 import { SecurityRuleGrantee } from '~/server/security'
 

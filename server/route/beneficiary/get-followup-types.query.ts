@@ -5,11 +5,11 @@ import {
   SecurityRuleGrantee,
   canViewBeneficiary
 } from '~/server/security/rules'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 import type { FollowupTypeIdAndName } from '~/types/followupType'
 import { IdInput, idSchema } from '~/server/schema'
-import { FollowupRepo, HelpRequestRepo } from '~/server/query'
+import { FollowupRepo, HelpRequestRepo } from '~/server/repository'
 
 async function getFollowupFollowupTypes(
   user: SecurityRuleGrantee,
