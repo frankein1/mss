@@ -1,15 +1,15 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { StructureRepo } from '~/server/repository'
 
 const handler = async ({
-  ctx: { structure }
+  ctx: { structure, user }
 }: {
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.structure.findUnique({
+  return await StructureRepo.findUniqueOrThrow(user, {
     where: { id: structure.id },
     include: {
       followupTypes: {
