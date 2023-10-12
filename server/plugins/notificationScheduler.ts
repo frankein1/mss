@@ -1,6 +1,6 @@
 import { NotificationType, HelpRequest, Followup } from '@prisma/client'
 import dayjs from 'dayjs'
-import { FollowupRepo } from '../query'
+import { FollowupRepo, HelpRequestRepo } from '../query'
 import { useScheduler } from '#scheduler'
 import { prismaClient } from '~/server/prisma'
 
@@ -77,7 +77,7 @@ async function createDueHelpRequestNotifications(
 }
 
 async function createDueInAMonthHelpRequestNotifications() {
-  const dueHelpRequests = await prismaClient.helpRequest.findMany({
+  const dueHelpRequests = await HelpRequestRepo.systemFindMany({
     where: {
       dueDate: dayjs().add(1, 'month').toDate()
     }
@@ -90,7 +90,7 @@ async function createDueInAMonthHelpRequestNotifications() {
 }
 
 async function createDueTodayHelpRequestNotifications() {
-  const dueHelpRequests = await prismaClient.helpRequest.findMany({
+  const dueHelpRequests = await HelpRequestRepo.systemFindMany({
     where: {
       dueDate: new Date()
     }
@@ -103,7 +103,7 @@ async function createDueTodayHelpRequestNotifications() {
 }
 
 async function createEndOfSupportHelpRequestNotifications() {
-  const endOfSupportHelpRequests = await prismaClient.helpRequest.findMany({
+  const endOfSupportHelpRequests = await HelpRequestRepo.systemFindMany({
     where: {
       handlingDate: new Date()
     }

@@ -1,8 +1,12 @@
 import { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { HelpRequestRepo } from '~/server/query'
+import { SecurityRuleGrantee } from '~/server/security'
 
-export function getHelpRequestWithRelations(id: string) {
-  return prismaClient.helpRequest.findUniqueOrThrow({
+export function getHelpRequestWithRelations(
+  user: SecurityRuleGrantee,
+  id: string
+) {
+  return HelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
       beneficiary: {

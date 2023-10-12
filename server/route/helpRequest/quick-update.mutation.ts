@@ -6,18 +6,17 @@ import {
   QuickEditHelpRequestInput,
   quickEditHelpRequestSchema
 } from '~/server/schema'
-import { prismaClient } from '~/server/prisma'
 import {
   SecurityRuleGrantee,
   canEditHelpRequest
 } from '~/server/security/rules'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+import { HelpRequestRepo, addUserActivity } from '~/server/query'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: QuickEditHelpRequestInput
 ) => {
-  const target = await prismaClient.helpRequest.findUniqueOrThrow({
+  const target = await HelpRequestRepo.findUniqueOrThrow(user, {
     where: { id: input.id },
     include: {
       beneficiary: {
@@ -39,7 +38,7 @@ const handler = async ({
 }) => {
   const select = prepareGetHelpRequestsPageSelect(user)
 
-  const helpRequest = await prismaClient.helpRequest.update({
+  const helpRequest = await HelpRequestRepo.update(user, {
     where: { id },
     data: rest,
     select

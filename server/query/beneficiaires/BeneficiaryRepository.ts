@@ -23,9 +23,9 @@ function create(
   return prismaClient.beneficiary.create(params)
 }
 
-function update(
+function update<T extends Prisma.BeneficiaryUpdateArgs>(
   _user: SecurityRuleGrantee,
-  params: Prisma.BeneficiaryUpdateArgs
+  params: Prisma.SelectSubset<T, Prisma.BeneficiaryUpdateArgs>
 ) {
   return prismaClient.beneficiary.update(params)
 }
