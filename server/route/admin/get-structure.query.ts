@@ -1,12 +1,19 @@
 import { Prisma } from '@prisma/client'
-import { createQuery } from '../createRoute'
-import { prismaClient } from '~/server/prisma'
+import { createQuery } from '~/server/route'
 import { notfoundError } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { idSchema } from '~/server/schema'
+import { StructureRepo } from '~/server/repository'
+import { AdminContext } from '~/server/trpc/createRouter'
 
-const adminHandler = async ({ input: { id } }: { input: { id: string } }) => {
-  const structure = await prismaClient.structure.findUnique({
+const adminHandler = async ({
+  ctx: { user },
+  input: { id }
+}: {
+  ctx: AdminContext
+  input: { id: string }
+}) => {
+  const structure = await StructureRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
       followupTypes: {

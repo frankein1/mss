@@ -1,14 +1,15 @@
-import { prismaClient } from '~/server/prisma'
-import { notfoundError } from '~/server/trpc'
+import { BeneficiaryRepo } from '../../repository/BeneficiaryRepository'
 import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'
+import { SecurityRuleGrantee } from '~/server/security'
 
-export async function getBeneficiaryWithRelations(id: string) {
-  const beneficiary = await prismaClient.beneficiary.findUnique({
-    where: { id },
+export async function getBeneficiaryWithRelations(
+  user: SecurityRuleGrantee,
+  id: string
+) {
+  return await BeneficiaryRepo.findUniqueOrThrow(user, {
+    where: {
+      id
+    },
     include: BENEFICIARY_RELATIONS_INCLUDE
   })
-  if (!beneficiary) {
-    throw notfoundError()
-  }
-  return beneficiary
 }

@@ -8,11 +8,11 @@ import {
   getHelpRequestsSchema
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
-import { prismaClient } from '~/server/prisma'
 import { prepareHelpRequestFilters } from '~/utils/filters'
 import { SortOrder } from '~/types/table'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { HelpRequestRepo } from '~/server/repository'
 
 type GetHelpRequestsOrderBy = Array<
   GetHelpRequestsInputOrderBy[0] & { externalStructure?: SortOrder.Desc }
@@ -55,14 +55,14 @@ const handler = async ({
   const select = prepareGetHelpRequestsPageSelect(user)
 
   const [helpRequests, count] = await Promise.all([
-    prismaClient.helpRequest.findMany({
+    HelpRequestRepo.findMany(user, {
       where,
       select,
       take,
       skip,
       orderBy: input.orderBy
     }),
-    prismaClient.helpRequest.count({
+    HelpRequestRepo.count(user, {
       where
     })
   ])

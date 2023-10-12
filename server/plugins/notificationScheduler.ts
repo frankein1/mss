@@ -1,7 +1,11 @@
 import { NotificationType, HelpRequest, Followup } from '@prisma/client'
 import dayjs from 'dayjs'
+import {
+  FollowupRepo,
+  HelpRequestRepo,
+  NotificationRepo
+} from '~/server/repository'
 import { useScheduler } from '#scheduler'
-import { prismaClient } from '~/server/prisma'
 
 export default defineNitroPlugin(() => {
   startScheduler()
@@ -26,13 +30,13 @@ async function createDueFollowupNotifications(
       type
     }))
 
-  await prismaClient.notification.createMany({
+  await NotificationRepo.systemCreateMany({
     data: dueFollowupNotifications
   })
 }
 
 async function createDueInAMonthFollowupNotifications() {
-  const dueFollowups = await prismaClient.followup.findMany({
+  const dueFollowups = await FollowupRepo.systemFindMany({
     where: {
       dueDate: dayjs().add(1, 'month').toDate()
     }
@@ -45,7 +49,7 @@ async function createDueInAMonthFollowupNotifications() {
 }
 
 async function createDueTodayFollowupNotifications() {
-  const dueFollowups = await prismaClient.followup.findMany({
+  const dueFollowups = await FollowupRepo.systemFindMany({
     where: {
       dueDate: new Date()
     }
@@ -70,13 +74,13 @@ async function createDueHelpRequestNotifications(
       type
     }))
 
-  await prismaClient.notification.createMany({
+  await NotificationRepo.systemCreateMany({
     data: dueHelpRequestNotifications
   })
 }
 
 async function createDueInAMonthHelpRequestNotifications() {
-  const dueHelpRequests = await prismaClient.helpRequest.findMany({
+  const dueHelpRequests = await HelpRequestRepo.systemFindMany({
     where: {
       dueDate: dayjs().add(1, 'month').toDate()
     }
@@ -89,7 +93,7 @@ async function createDueInAMonthHelpRequestNotifications() {
 }
 
 async function createDueTodayHelpRequestNotifications() {
-  const dueHelpRequests = await prismaClient.helpRequest.findMany({
+  const dueHelpRequests = await HelpRequestRepo.systemFindMany({
     where: {
       dueDate: new Date()
     }
@@ -102,7 +106,7 @@ async function createDueTodayHelpRequestNotifications() {
 }
 
 async function createEndOfSupportHelpRequestNotifications() {
-  const endOfSupportHelpRequests = await prismaClient.helpRequest.findMany({
+  const endOfSupportHelpRequests = await HelpRequestRepo.systemFindMany({
     where: {
       handlingDate: new Date()
     }
@@ -117,7 +121,7 @@ async function createEndOfSupportHelpRequestNotifications() {
       type: NotificationType.EndOfSupport
     }))
 
-  await prismaClient.notification.createMany({
+  await NotificationRepo.systemCreateMany({
     data: endOfSupportHelpRequestNotifications
   })
 }

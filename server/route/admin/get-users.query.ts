@@ -1,14 +1,21 @@
 import { Prisma } from '@prisma/client'
-import { createQuery } from '../createRoute'
-import { prismaClient } from '~/server/prisma'
+import { createQuery } from '~/server/route'
 import {
   AdminGetUsersInput,
   UserAdminFilterInput,
   adminGetUsersSchema
 } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { UserRepo } from '~/server/repository'
+import { AdminContext } from '~/server/trpc/createRouter'
 
-const adminHandler = async ({ input }: { input: AdminGetUsersInput }) => {
+const adminHandler = async ({
+  ctx: { user },
+  input
+}: {
+  ctx: AdminContext
+  input: AdminGetUsersInput
+}) => {
   let where = prepareUserFilters(input.filters)
   if (input.search) {
     where = {
@@ -29,7 +36,7 @@ const adminHandler = async ({ input }: { input: AdminGetUsersInput }) => {
       ]
     }
   }
-  const users = await prismaClient.user.findMany({
+  const users = await UserRepo.findMany(user, {
     where,
     select: {
       id: true,

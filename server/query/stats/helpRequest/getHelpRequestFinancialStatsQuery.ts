@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client'
+import { HelpRequestRepo } from '~/server/repository'
 import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
 import {
@@ -6,12 +7,14 @@ import {
   canOnlyListItsBeneficiaries
 } from '~/server/security/rules'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
+import { FollowupTypeRepo } from '~/server/repository/FollowupTypeRepository'
 
 function getFinancialHelpRequestCount(
+  user: SecurityRuleGrantee,
   structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
-  return prismaClient.helpRequest.count({
+  return HelpRequestRepo.count(user, {
     where: {
       structureId,
       financialSupport: true,
@@ -21,10 +24,11 @@ function getFinancialHelpRequestCount(
 }
 
 function getInternalFinancialHelpRequestCount(
+  user: SecurityRuleGrantee,
   structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
-  return prismaClient.helpRequest.count({
+  return HelpRequestRepo.count(user, {
     where: {
       structureId,
       financialSupport: true,
@@ -35,12 +39,13 @@ function getInternalFinancialHelpRequestCount(
 }
 
 async function getFinancialHelpRequestTotalAmount(
+  user: SecurityRuleGrantee,
   structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
   const {
     _sum: { allocatedAmount: financialHelpRequestTotalAmount }
-  } = await prismaClient.helpRequest.aggregate({
+  } = await HelpRequestRepo.aggregate(user, {
     where: {
       structureId,
       financialSupport: true,
@@ -57,6 +62,7 @@ async function getFinancialHelpRequestTotalAmount(
 }
 
 async function getFinancialHelpRequestAmountByType(
+  user: SecurityRuleGrantee,
   structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
@@ -76,7 +82,7 @@ async function getFinancialHelpRequestAmountByType(
   })
 
   // Raw query to join followup types with allocated amount can not be used due to the conditional filters
-  const followupTypes = await prismaClient.followupType.findMany({
+  const followupTypes = await FollowupTypeRepo.findMany(user, {
     where: {
       id: {
         in: helpRequestAmountByTypeId.map(({ typeId }) => typeId)
@@ -136,10 +142,10 @@ export async function getHelpRequestFinancialStatsQuery(
     financialHelpRequestTotalAmount,
     financialHelpRequestAmountByType
   ] = await Promise.all([
-    getFinancialHelpRequestCount(user.structureId || '', filters),
-    getInternalFinancialHelpRequestCount(user.structureId || '', filters),
-    getFinancialHelpRequestTotalAmount(user.structureId || '', filters),
-    getFinancialHelpRequestAmountByType(user.structureId || '', filters)
+    getFinancialHelpRequestCount(user, user.structureId || '', filters),
+    getInternalFinancialHelpRequestCount(user, user.structureId || '', filters),
+    getFinancialHelpRequestTotalAmount(user, user.structureId || '', filters),
+    getFinancialHelpRequestAmountByType(user, user.structureId || '', filters)
   ])
 
   const requestsCounts = {

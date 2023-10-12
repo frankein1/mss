@@ -1,17 +1,17 @@
 import { UserActivityType } from '@prisma/client'
 import { ProtectedAppContext } from '~/server/trpc'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   SecurityRuleGrantee,
   canDeleteBeneficiary
 } from '~/server/security/rules'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
+import { BeneficiaryRelativeRepo, BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
 
   return canDeleteBeneficiary(grantee, beneficiary)
 }
@@ -23,11 +23,11 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(id)
+  const beneficiary = await getBeneficiarySecurityTarget(user, id)
 
-  await updateBeneficiaryRelatives(id)
+  await updateBeneficiaryRelatives(user, id)
 
-  await prismaClient.beneficiary.delete({ where: { id } })
+  await BeneficiaryRepo.deleteEntity(user, { where: { id } })
 
   await addUserActivity({
     userId: user.id,
@@ -37,8 +37,11 @@ const handler = async ({
   })
 }
 
-async function updateBeneficiaryRelatives(linkedBeneficiaryId: string) {
-  const relatives = await prismaClient.beneficiaryRelative.findMany({
+async function updateBeneficiaryRelatives(
+  user: SecurityRuleGrantee,
+  linkedBeneficiaryId: string
+) {
+  const relatives = await BeneficiaryRelativeRepo.findMany(user, {
     where: {
       linkedBeneficiaryId
     },
@@ -53,7 +56,7 @@ async function updateBeneficiaryRelatives(linkedBeneficiaryId: string) {
 
   for (const relative of relatives) {
     const { linkedBeneficiary: lb } = relative
-    await prismaClient.beneficiaryRelative.update({
+    await BeneficiaryRelativeRepo.update(user, {
       data: {
         linkedBeneficiaryId: null,
         email: lb?.email || null,

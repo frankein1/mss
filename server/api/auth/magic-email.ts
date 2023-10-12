@@ -1,14 +1,14 @@
 import { User, UserRole } from '@prisma/client'
 import { v4 } from 'uuid'
 import { sendEmail } from '~/server/lib/email'
-import { prismaClient } from '~/server/prisma'
+import { UserRepo } from '~/server/repository'
 import { forbiddenError } from '~/server/trpc'
 import { RoutePath } from '~/utils/routing'
 
 export default defineEventHandler(async event => {
   const { email: input } = await readBody(event)
 
-  const user = await prismaClient.user.findUnique({
+  const user = await UserRepo.systemFindUniqueOrThrow({
     where: {
       email: input
     }
@@ -22,7 +22,7 @@ export default defineEventHandler(async event => {
 
   const accessToken = v4()
 
-  await prismaClient.user.update({
+  await UserRepo.systemUpdate({
     where: { id: user.id },
     data: {
       accessToken,

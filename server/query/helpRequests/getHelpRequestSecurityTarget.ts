@@ -1,8 +1,12 @@
 import { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { HelpRequestRepo } from '~/server/repository'
+import { SecurityRuleGrantee } from '~/server/security'
 
-export function getHelpRequestSecurityTarget(id: string) {
-  return prismaClient.helpRequest.findUniqueOrThrow({
+export function getHelpRequestsecurityTarget(
+  user: SecurityRuleGrantee,
+  id: string
+) {
+  return HelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
       beneficiary: {
@@ -15,5 +19,5 @@ export function getHelpRequestSecurityTarget(id: string) {
 }
 
 export type HelpRequestSecurityTarget = Prisma.PromiseReturnType<
-  typeof getHelpRequestSecurityTarget
+  typeof getHelpRequestsecurityTarget
 >

@@ -14,9 +14,9 @@ import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutat
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   HelpRequestWithRelations,
-  getHelpRequestWithRelations
-} from '~/server/query/helpRequests'
-import { getHelpRequestSecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
+  getHelpRequestWithRelations,
+  getHelpRequestsecurityTarget
+} from '~/server/query'
 
 async function prepareHelpRequestData({
   input,
@@ -110,7 +110,7 @@ const handler = async ({
   input: EditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await getHelpRequestWithRelations(input.id)
+  const target = await getHelpRequestWithRelations(ctx.user, input.id)
 
   if (!target || !canEditHelpRequest(ctx.user, target)) {
     throw forbiddenError()
@@ -125,7 +125,7 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditHelpRequestInput
 ) => {
-  const target = await getHelpRequestSecurityTarget(input.id)
+  const target = await getHelpRequestsecurityTarget(user, input.id)
   return canEditHelpRequest(user, target)
 }
 

@@ -1,7 +1,10 @@
 import { Prisma } from '@prisma/client'
+import {
+  getBeneficiaryAccessibleData,
+  getBeneficiaryExportData
+} from './helper'
 import { createQuery } from '~/server/route'
 import { beneficiaryFieldLabels } from '~/client/labels'
-import { prismaClient } from '~/server/prisma'
 import {
   ExportBeneficiariesInput,
   exportBeneficiariesSchema
@@ -14,12 +17,11 @@ import {
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
-import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
 import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
-import { getBeneficiaryExportData } from '~/server/route/beneficiary/helper/getBeneficiaryExportData'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = (
   grantee: SecurityRuleGrantee,
@@ -54,7 +56,7 @@ const handler = async ({
     )
   }
 
-  const dataRequest = await prismaClient.beneficiary.findMany({
+  const dataRequest = await BeneficiaryRepo.findMany(ctx.user, {
     where,
     orderBy: input.orderBy,
     include: BENEFICIARY_RELATIONS_INCLUDE

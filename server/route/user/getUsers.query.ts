@@ -1,15 +1,15 @@
-import { createQuery } from '../createRoute'
+import { createQuery } from '~/server/route'
 import { SecurityRuleGrantee, canListUsers } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { emptySchema } from '~/server/schema'
+import { UserRepo } from '~/server/repository'
 
 const securityCheck = (user: SecurityRuleGrantee) => {
   return canListUsers(user)
 }
 
 const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
-  return await prismaClient.user.findMany({
+  return await UserRepo.findMany(user, {
     where: { structureId: user.structureId },
     orderBy: { role: 'asc' }
   })

@@ -2,16 +2,20 @@ import { defineEventHandler, readMultipartFormData } from 'h3'
 import { Document, NotificationType } from '@prisma/client'
 import { v4 } from 'uuid'
 import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
-import { prismaClient } from '~/server/prisma'
 import { uploadFile } from '~/server/lib/s3'
 import { forbiddenError, invalidError } from '~/server/trpc'
 import {
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
-} from '~/server/security'
-import { canAddDocument, canViewDocument } from '~/server/security/rules'
+} from '~/server/query'
+import {
+  SecurityRuleGrantee,
+  canAddDocument,
+  canViewDocument
+} from '~/server/security/rules'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
+import { DocumentRepo, NotificationRepo } from '~/server/repository'
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth
@@ -34,7 +38,10 @@ export default defineEventHandler(async event => {
 
   const input = addDocumentSchema.parse(data)
 
-  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(
+    user,
+    input.beneficiaryId
+  )
 
   if (!beneficiary) {
     throw invalidError('No beneficiary')
@@ -53,12 +60,13 @@ export default defineEventHandler(async event => {
   const key = await uploadFile(file)
 
   const document = await addDocument(key, input, user)
-  await addNotification(document, beneficiary)
+  await addNotification(user, document, beneficiary)
 
   return send(event, document.key)
 })
 
 async function addNotification(
+  user: SecurityRuleGrantee,
   document: Document,
   beneficiary: NonNullable<BeneficiarySecurityTarget>
 ) {
@@ -79,7 +87,7 @@ async function addNotification(
       })
     }
   }
-  await prismaClient.notification.createMany({ data: notifications })
+  await NotificationRepo.createMany(user, { data: notifications })
 }
 
 async function addDocument(
@@ -88,7 +96,7 @@ async function addDocument(
   user: JwtUser
 ) {
   const { type, beneficiaryId, confidential, tags, file } = input
-  const document = await prismaClient.document.create({
+  const document = await DocumentRepo.create(user, {
     data: {
       key: v4(),
       name: file.name,

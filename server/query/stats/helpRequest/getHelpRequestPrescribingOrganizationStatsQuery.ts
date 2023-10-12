@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { HelpRequestRepo } from '~/server/repository'
 import { StatFilterInput } from '~/server/schema'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
@@ -27,7 +27,7 @@ export async function getHelpRequestPrescribingOrganizationStatsQuery(
           referents
         }
 
-  const helpRequests = await prismaClient.helpRequest.findMany({
+  const helpRequests = await HelpRequestRepo.findMany(user, {
     where: {
       structureId: user.structureId || '',
       ...preparedFilters,

@@ -1,7 +1,7 @@
 import { NotificationType, Prisma, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { AddCommentInput, addCommentSchema } from '~/server/schema'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,
@@ -27,7 +27,10 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: AddCommentInput
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(
+    user,
+    input.beneficiaryId
+  )
 
   if (!beneficiary) {
     throw invalidError('Beneficiary not found')

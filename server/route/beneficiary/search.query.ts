@@ -5,8 +5,8 @@ import {
   SearchBeneficiaryInput,
   searchBeneficiarySchema
 } from '~/server/schema'
-import { prismaClient } from '~/server/prisma'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const tokenToSearchCondition = (token: string) => ({
   contains: token,
@@ -47,7 +47,7 @@ const handler = async ({
 
   // TODO benchmark this and stress tes, then create indexes for case-insensitive filtering.
   // TODO check pg_trgm https://www.postgresql.org/docs/12/pgtrgm.html#id-1.11.7.40.7 for indexing
-  const beneficiaries = await prismaClient.beneficiary.findMany({
+  const beneficiaries = await BeneficiaryRepo.findMany(user, {
     where,
     orderBy: [{ usualName: 'asc' }, { birthName: 'asc' }],
     select: {

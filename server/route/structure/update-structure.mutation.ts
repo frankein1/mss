@@ -1,6 +1,5 @@
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import {
   EditCurrentUserStructureInput,
   editCurrentUserStructureSchema
@@ -10,9 +9,10 @@ import {
   canEditItsOwnStructure
 } from '~/server/security/rules'
 import { editFollowupTypes } from '~/utils/structure'
+import { StructureRepo } from '~/server/repository'
 
 const handler = async ({
-  ctx: { structure: userStructure },
+  ctx: { structure: userStructure, user },
   input
 }: {
   ctx: ProtectedAppContext
@@ -25,12 +25,13 @@ const handler = async ({
   } = input
 
   await editFollowupTypes(
+    user,
     userStructure.id,
     legallyRequiredFollowupTypes,
     legallyNotRequiredFollowupTypes
   )
 
-  const updatedStructure = await prismaClient.structure.update({
+  const updatedStructure = await StructureRepo.update(user, {
     where: { id: userStructure.id },
     data: structure,
     include: {

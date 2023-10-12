@@ -6,7 +6,6 @@ import {
   canEditBeneficiaryReferents
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryDraftInput,
@@ -14,10 +13,14 @@ import {
   updateBeneficiaryEntourageSchema
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
+import { BeneficiaryRepo } from '~/server/repository'
 
-function getBeneficiarySecurityTargetWithEntourage(id: string) {
-  return prismaClient.beneficiary.findUniqueOrThrow({
+function getBeneficiarySecurityTargetWithEntourage(
+  user: SecurityRuleGrantee,
+  id: string
+) {
+  return BeneficiaryRepo.findUniqueOrThrow(user, {
     where: { id },
     select: {
       id: true,
@@ -36,7 +39,7 @@ const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryDraftInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
 
   return (
     canEditBeneficiary(grantee, beneficiary) &&
@@ -51,7 +54,10 @@ const handler = async ({
   input: UpdateBeneficiaryEntourageInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTargetWithEntourage(input.id)
+  const beneficiary = await getBeneficiarySecurityTargetWithEntourage(
+    user,
+    input.id
+  )
 
   const { id, entourages } = input
 
@@ -82,7 +88,7 @@ const handler = async ({
     relatives: entouragesRelationUpdates
   }
 
-  const updatedBeneficiary = await prismaClient.beneficiary.update({
+  const updatedBeneficiary = await BeneficiaryRepo.update(user, {
     where: { id },
     data
   })

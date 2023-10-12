@@ -5,9 +5,11 @@ import {
   SecurityRuleGrantee,
   canViewHelpRequest
 } from '~/server/security/rules'
-import { getHelpRequestWithRelations } from '~/server/query/helpRequests'
+import {
+  getHelpRequestWithRelations,
+  getHelpRequestsecurityTarget
+} from '~/server/query/helpRequests'
 import { IdInput, idSchema } from '~/server/schema'
-import { getHelpRequestSecurityTarget } from '~/server/query/helpRequests/getHelpRequestSecurityTarget'
 
 const handler = async ({
   input: { id },
@@ -16,7 +18,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const helpRequest = await getHelpRequestWithRelations(id)
+  const helpRequest = await getHelpRequestWithRelations(user, id)
 
   const data = getHelpRequestAccessibleData(user, helpRequest)
 
@@ -24,7 +26,7 @@ const handler = async ({
 }
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const helpRequest = await getHelpRequestSecurityTarget(input.id)
+  const helpRequest = await getHelpRequestsecurityTarget(user, input.id)
   return canViewHelpRequest(user, helpRequest.beneficiary)
 }
 

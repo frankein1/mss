@@ -1,7 +1,6 @@
 import type { Prisma } from '@prisma/client'
 import { HelpRequestStatus, FollowupStatus } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { prismaClient } from '~/server/prisma'
 import {
   GetHistoryInput,
   BeneficiaryHistoryFilterInput,
@@ -17,7 +16,7 @@ import {
 import {
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
-} from '~/server/security'
+} from '~/server/query'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   canListBeneficiaryFollowups,
@@ -30,6 +29,7 @@ import {
   AllowSecurityCheck,
   SecurityRuleGrantee
 } from '~/server/security/rules/types'
+import { FollowupRepo, HelpRequestRepo } from '~/server/repository'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput
@@ -111,7 +111,7 @@ async function getFollowups(
     return []
   }
 
-  const followups = await prismaClient.followup.findMany({
+  const followups = await FollowupRepo.findMany(user, {
     where: {
       beneficiaryId: beneficiary.id,
       ...prepareFollowupFilters(filters, canOnlyListItsBeneficiaries(user))
@@ -146,7 +146,7 @@ async function getHelpRequests(
     return []
   }
 
-  const helpRequests = await prismaClient.helpRequest.findMany({
+  const helpRequests = await HelpRequestRepo.findMany(user, {
     where: {
       beneficiaryId: beneficiary.id,
       ...prepareHelpRequestFilters(filters, canOnlyListItsBeneficiaries(user))
@@ -203,7 +203,7 @@ const handler = async ({
 }) => {
   const { beneficiaryId, filters } = input
 
-  const beneficiary = await getBeneficiarySecurityTarget(beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
 
   if (filtersAppliesToFollowups(filters)) {
     return getFollowups(user, beneficiary, filters)

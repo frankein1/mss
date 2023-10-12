@@ -6,20 +6,20 @@ import {
   canEditBeneficiaryReferents
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryGeneralInformationInput,
   updateBeneficiaryGeneralInformationSchema
 } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
   return canEditBeneficiary(user, beneficiary)
 }
 
@@ -30,7 +30,7 @@ const handler = async ({
   input: UpdateBeneficiaryGeneralInformationInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.id)
+  const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
 
   const { referents: previousReferents } = beneficiary
 
@@ -71,7 +71,7 @@ const handler = async ({
     }
   }
 
-  const updatedBeneficiary = await prismaClient.beneficiary.update({
+  const updatedBeneficiary = await BeneficiaryRepo.update(user, {
     where: { id },
     data
   })

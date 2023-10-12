@@ -4,11 +4,11 @@ import {
   forbiddenError,
   invalidError
 } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { signJwt, verifyJwt } from '~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { UserRepo } from '~/server/repository'
 
 const handler = async ({
   ctx: { user, event }
@@ -20,7 +20,7 @@ const handler = async ({
     auth: { jwtKey }
   } = useRuntimeConfig()
 
-  const updatedUser = await prismaClient.user.update({
+  const updatedUser = await UserRepo.update(user, {
     where: { id: user.id },
     data: {
       CGUHistory: {

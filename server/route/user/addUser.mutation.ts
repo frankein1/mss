@@ -1,11 +1,11 @@
 import { TRPCError } from '@trpc/server'
 import { createMutation } from '~/server/route'
-import { prismaClient } from '~/server/prisma'
 import { UserCreationInput, createUserSchema } from '~/server/schema'
 import { SecurityRuleGrantee, canCreateUser } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { sendEmail } from '~/server/lib/email'
 import { getEmailContent } from '~/utils/user/getEmailContent'
+import { UserRepo } from '~/server/repository'
 
 const securityCheck = (
   user: SecurityRuleGrantee,
@@ -21,7 +21,7 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: UserCreationInput
 }) => {
-  const existingUser = await prismaClient.user.findUnique({
+  const existingUser = await UserRepo.findUniqueOrThrow(user, {
     where: { email: input.email }
   })
 
@@ -32,7 +32,7 @@ const handler = async ({
     })
   }
 
-  const createdUser = await prismaClient.user.create({
+  const createdUser = await UserRepo.create(user, {
     data: {
       structureId: user.structureId,
       ...input

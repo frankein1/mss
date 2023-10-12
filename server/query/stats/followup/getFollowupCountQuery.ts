@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import { FollowupRepo } from '~/server/repository'
 import { StatFilterInput } from '~/server/schema'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
@@ -26,7 +26,7 @@ export async function getFollowupCountQuery(
           referents
         }
 
-  return await prismaClient.followup.count({
+  return await FollowupRepo.count(user, {
     where: {
       structureId: user.structureId || '',
       ...preparedFilters,

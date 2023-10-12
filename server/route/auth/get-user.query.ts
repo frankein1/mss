@@ -1,9 +1,9 @@
-import { createQuery } from '../createRoute'
-import { prismaClient } from '~/server/prisma'
+import { createQuery } from '~/server/route'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { UserRepo } from '~/server/repository'
 
 const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
   const { user: ctxUser } = ctx
@@ -12,7 +12,7 @@ const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
     throw forbiddenError()
   }
 
-  const user = await prismaClient.user.findUnique({
+  const user = await UserRepo.findUniqueOrThrow(ctx.user, {
     where: {
       id: ctxUser.id
     },

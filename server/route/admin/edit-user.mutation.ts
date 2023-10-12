@@ -1,12 +1,19 @@
-import { prismaClient } from '~/server/prisma'
+import { UserRepo } from '~/server/repository'
 import { createMutation } from '~/server/route'
 import { AdminEditUserInput, adminEditUserSchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AdminContext } from '~/server/trpc/createRouter'
 
-const adminHandler = async ({ input }: { input: AdminEditUserInput }) => {
+const adminHandler = async ({
+  ctx,
+  input
+}: {
+  ctx: AdminContext
+  input: AdminEditUserInput
+}) => {
   const { id, ...user } = input
 
-  const updatedUser = await prismaClient.user.update({
+  const updatedUser = await UserRepo.update(ctx.user, {
     where: { id },
     data: user
   })

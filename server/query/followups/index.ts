@@ -1,4 +1,2 @@
-export {
-  type FollowupWithRelations,
-  getFollowupWithRelations
-} from './getFollowupWithRelations'
+export * from './getFollowupWithRelations'
+export * from './getFollowupSecurityTarget'

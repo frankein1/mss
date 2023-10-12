@@ -4,10 +4,13 @@ import { createQuery } from '~/server/route'
 import { GetBeneficiariesInput, getBeneficiariesSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
-import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import {
+  AllowSecurityCheck,
+  SecurityRuleGrantee
+} from '~/server/security/rules/types'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = AllowSecurityCheck
 
@@ -39,12 +42,13 @@ const handler = async ({
 
   const [beneficiaries, count] = await Promise.all([
     getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
+      user,
       where,
       take,
       skip,
       input.orderBy
     ),
-    prismaClient.beneficiary.count({
+    BeneficiaryRepo.count(user, {
       where
     })
   ])
@@ -60,12 +64,13 @@ const handler = async ({
 export type GetBeneficiariesOutput = Prisma.PromiseReturnType<typeof handler>
 
 function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
+  user: SecurityRuleGrantee,
   where: Prisma.BeneficiaryWhereInput,
   take: number,
   skip: number,
   orderBy: Prisma.Enumerable<Prisma.BeneficiaryOrderByWithRelationAndSearchRelevanceInput>
 ) {
-  return prismaClient.beneficiary.findMany({
+  return BeneficiaryRepo.findMany(user, {
     where,
     select: {
       id: true,

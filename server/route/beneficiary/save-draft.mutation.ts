@@ -24,6 +24,7 @@ import {
 } from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
+import { DraftRepo } from '~/server/repository'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
@@ -33,7 +34,7 @@ const securityCheck = async (
   if (!draftId) {
     return false
   }
-  const beneficiaryDraft = await prismaClient.draft.findUnique({
+  const beneficiaryDraft = await DraftRepo.findUniqueOrThrow(grantee, {
     where: { id: draftId }
   })
   if (!beneficiaryDraft) {
@@ -51,7 +52,7 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const { id: draftId } = input
-  const beneficiaryDraft = await prismaClient.draft.findUniqueOrThrow({
+  const beneficiaryDraft = await DraftRepo.findUniqueOrThrow(ctx.user, {
     where: { id: draftId }
   })
 

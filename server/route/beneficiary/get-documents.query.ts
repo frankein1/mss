@@ -1,19 +1,19 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext, invalidError } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import {
   SecurityRuleGrantee,
   canListDocuments,
   canOnlyListItsUploadedDocuments
 } from '~/server/security/rules'
-import { getBeneficiarySecurityTarget } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   GetDocumentsInput,
   BeneficiaryDocumentFilterInput,
   getDocumentsSchema
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
+import { DocumentRepo } from '~/server/repository'
 
 function getPermissionConditions(user: SecurityRuleGrantee) {
   if (canOnlyListItsUploadedDocuments(user)) {
@@ -45,7 +45,10 @@ const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: GetDocumentsInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(input.beneficiaryId)
+  const beneficiary = await getBeneficiarySecurityTarget(
+    grantee,
+    input.beneficiaryId
+  )
 
   if (!beneficiary) {
     throw invalidError()
@@ -78,7 +81,7 @@ const handler = async ({
   }
 
   const [documents, count, totalCount] = await Promise.all([
-    prismaClient.document.findMany({
+    DocumentRepo.findMany(user, {
       where,
       orderBy,
       take,
@@ -93,10 +96,10 @@ const handler = async ({
         }
       }
     }),
-    prismaClient.document.count({
+    DocumentRepo.count(user, {
       where
     }),
-    prismaClient.document.count({
+    DocumentRepo.count(user, {
       where: {
         beneficiaryId,
         ...permissionConditions

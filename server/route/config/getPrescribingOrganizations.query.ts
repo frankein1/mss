@@ -1,15 +1,15 @@
-import { createQuery } from '../createRoute'
-import { prismaClient } from '~/server/prisma'
+import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { emptySchema } from '~/server/schema'
+import { PrescribingOrganizationRepo } from '~/server/repository/PrescribingOrganizationRepository'
 
 export const handler = async ({
-  ctx: { structure }
+  ctx: { structure, user }
 }: {
   ctx: ProtectedAppContext
 }) => {
-  return await prismaClient.prescribingOrganization.findMany({
+  return await PrescribingOrganizationRepo.findMany(user, {
     where: {
       structureId: structure.id
     },

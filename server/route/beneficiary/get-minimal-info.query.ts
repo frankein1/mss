@@ -1,13 +1,9 @@
 import { createQuery } from '~/server/route'
-import {
-  ProtectedAppContext,
-  forbiddenError,
-  notfoundError
-} from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { canViewBeneficiary } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { idSchema } from '~/server/schema'
+import { BeneficiaryRepo } from '~/server/repository'
 
 const securityCheck = AllowSecurityCheck
 
@@ -18,7 +14,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await prismaClient.beneficiary.findUnique({
+  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(user, {
     where: { id, structureId: structure.id },
     select: {
       id: true,
@@ -29,10 +25,6 @@ const handler = async ({
       structureId: true
     }
   })
-
-  if (!beneficiary) {
-    throw notfoundError()
-  }
 
   const {
     referents: _,

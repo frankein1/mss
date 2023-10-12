@@ -1,9 +1,16 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext, notfoundError } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
+import { ProtectedAppContext } from '~/server/trpc'
 import { canViewDraft } from '~/server/security/rules'
-import { idSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { IdInput, idSchema } from '~/server/schema'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { DraftRepo } from '~/server/repository'
+
+const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
+  const draft = await DraftRepo.findUniqueOrThrow(user, {
+    where: { id: input.id }
+  })
+  return canViewDraft(user, draft)
+}
 
 const handler = async ({
   input: { id },
@@ -12,19 +19,15 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const draft = await prismaClient.draft.findUnique({
+  const draft = await DraftRepo.findUniqueOrThrow(user, {
     where: { id }
   })
-
-  if (!draft || !canViewDraft(user, draft)) {
-    throw notfoundError()
-  }
 
   return draft
 }
 
 export const getBeneficiaryDraftQuery = createQuery({
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler
 })

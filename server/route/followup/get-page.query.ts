@@ -1,13 +1,13 @@
 import type { Prisma } from '@prisma/client'
-import { createQuery } from '../createRoute'
 import { prepareGetFollowupsPageSelect } from './helper/prepareGetFollowupsPageSelect'
+import { createQuery } from '~/server/route'
 import { GetFollowupsInput, getFollowupsSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
-import { prismaClient } from '~/server/prisma'
 import { prepareFollowupFilters } from '~/utils/filters'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { FollowupRepo } from '~/server/repository'
 
 const handler = async ({
   input,
@@ -38,14 +38,14 @@ const handler = async ({
   const select = prepareGetFollowupsPageSelect(user)
 
   const [followups, count] = await Promise.all([
-    prismaClient.followup.findMany({
+    FollowupRepo.findMany(user, {
       where,
       select,
       take,
       skip,
       orderBy: input.orderBy
     }),
-    prismaClient.followup.count({
+    FollowupRepo.count(user, {
       where
     })
   ])
