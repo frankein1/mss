@@ -1,5 +1,5 @@
 import { Prisma, UserActivityType } from '@prisma/client'
-import { createQuery } from '../createRoute'
+import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'

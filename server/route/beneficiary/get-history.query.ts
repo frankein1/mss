@@ -30,6 +30,7 @@ import {
   AllowSecurityCheck,
   SecurityRuleGrantee
 } from '~/server/security/rules/types'
+import { FollowupRepo } from '~/server/query'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput
@@ -111,7 +112,7 @@ async function getFollowups(
     return []
   }
 
-  const followups = await prismaClient.followup.findMany({
+  const followups = await FollowupRepo.findMany(user, {
     where: {
       beneficiaryId: beneficiary.id,
       ...prepareFollowupFilters(filters, canOnlyListItsBeneficiaries(user))

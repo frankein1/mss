@@ -1,6 +1,5 @@
-import { createQuery } from '../createRoute'
+import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { prepareFollowupStatFilters } from '~/utils/filters'
 import {
@@ -9,6 +8,7 @@ import {
 } from '~/server/query/stats'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { FollowupRepo } from '~/server/query'
 
 const handler = async ({
   input,
@@ -24,7 +24,7 @@ const handler = async ({
     ? { some: { id: user.id } }
     : undefined
 
-  const firstFollowups = await prismaClient.followup.count({
+  const firstFollowups = await FollowupRepo.count(user, {
     where: {
       structureId: structure.id,
       firstFollowup: true,
