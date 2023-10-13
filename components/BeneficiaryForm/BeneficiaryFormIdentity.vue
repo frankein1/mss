@@ -70,6 +70,7 @@
       <VeeInput
         name="numeroPegase"
         :label="beneficiaryFieldLabels.numeroPegase"
+        hint="Format attendu : A-00-000000"
       />
     </div>
   </BeneficiaryFormSection>

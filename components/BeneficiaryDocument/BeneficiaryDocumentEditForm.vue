@@ -82,4 +82,3 @@
     emit('updateDocument', values)
   })
 </script>
-~/server/trpc/routers

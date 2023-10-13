@@ -1,5 +1,5 @@
 <template>
-  <main class="fr-container fr-my-8w">
+  <main class="landing-main-container fr-container fr-my-8w">
     <div class="fr-grid-row fr-my-5w">
       <div class="fr-col fr-col-lg-8 fr-col-offset-lg-2 text-center">
         <h1 class="fr-text--regular">
@@ -15,7 +15,7 @@
   import { useAuthStore } from '~/store/auth'
   import { JwtUser } from '~/types/user'
   import { RouteTitle } from '~/utils/routing'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
 
   useHead({
     title: RouteTitle.AuthValidateToken()
@@ -55,7 +55,7 @@
   }
 
   const name = computed(() => {
-    return user.value ? getUserDisplayName(user.value) : ''
+    return user.value ? formatUserDisplayName(user.value) : ''
   })
 </script>
 

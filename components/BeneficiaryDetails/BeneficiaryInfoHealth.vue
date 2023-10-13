@@ -73,4 +73,3 @@
     RoutePath.AppBeneficiaryEditHealth(props.beneficiary.id)
   )
 </script>
-~/server/trpc/routers

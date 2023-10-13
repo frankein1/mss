@@ -1288,6 +1288,10 @@ enum RelativeRelationship {
   Tiers
   //Autre membre de la famille
   AutreMemberDeLaFamille
+  //Entourage professionnel
+  EntourageProfessionnel
+  //Ami
+  Ami
 }
 
 model BeneficiaryRelative {

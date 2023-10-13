@@ -1,4 +1,5 @@
 import type { Prisma } from '@prisma/client'
+import { prepareGetHelpRequestsPageSelect } from './helper'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -8,7 +9,6 @@ import {
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prismaClient } from '~/server/prisma'
-import { prepareGetHelpRequestsPageSelect } from '~/utils/helpRequest'
 import { prepareHelpRequestFilters } from '~/utils/filters'
 import { SortOrder } from '~/types/table'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'

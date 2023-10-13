@@ -54,7 +54,7 @@
 
 <script lang="ts" setup>
   import type { GetBeneficiaryOutput } from '~/server/route'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
   import {
     formatAddress,
     hasCoordinatesInformations
@@ -66,7 +66,7 @@
 
   const referentNames = computed(() =>
     props.beneficiary.referents
-      .map(referent => getUserDisplayName(referent))
+      .map(referent => formatUserDisplayName(referent))
       .join(', ')
   )
 
@@ -77,4 +77,3 @@
     return props.beneficiary.phone1 || props.beneficiary.phone2
   })
 </script>
-~/server/trpc/routers ~/server/route

@@ -80,4 +80,3 @@
     emit('saveHelpRequest', values)
   })
 </script>
-~/server/trpc/routers

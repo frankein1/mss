@@ -7,9 +7,10 @@ export const REQUEST_LIMIT_OPTIONS = new Map([
   ['5', '5'],
   ['10', '10'],
   ['15', '15'],
+  ['20', '20'],
   ['30', '30'],
   ['60', '60']
 ])
-export const REQUEST_LIMIT_DEFAULT = 15
+export const REQUEST_LIMIT_DEFAULT = 20
 
 export const INPUT_DEFER_TIME = 400

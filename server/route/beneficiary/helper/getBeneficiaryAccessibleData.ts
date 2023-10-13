@@ -1,3 +1,4 @@
+import { getBeneficiaryFollowUpTypes } from './getBeneficiaryFollowUpTypes'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   canListBeneficiaryRelatives,
@@ -9,7 +10,6 @@ import {
   SecurityRuleGrantee
 } from '~/server/security/rules'
 import type { BeneficiaryWithRelations } from '~/types/beneficiary'
-import { getBeneficiaryFollowUpTypes } from '~/utils/beneficiary'
 
 function getBeneficiaryMeta(
   user: SecurityRuleGrantee,

@@ -1,8 +1,8 @@
 import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 
-export function getHelpRequestsecurityTarget(id: string) {
-  return prismaClient.followup.findUniqueOrThrow({
+export function getHelpRequestSecurityTarget(id: string) {
+  return prismaClient.helpRequest.findUniqueOrThrow({
     where: { id },
     include: {
       beneficiary: {
@@ -15,5 +15,5 @@ export function getHelpRequestsecurityTarget(id: string) {
 }
 
 export type HelpRequestSecurityTarget = Prisma.PromiseReturnType<
-  typeof getHelpRequestsecurityTarget
+  typeof getHelpRequestSecurityTarget
 >

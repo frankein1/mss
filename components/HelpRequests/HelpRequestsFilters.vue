@@ -74,16 +74,7 @@
     data: examinationDateOptions,
     pending: examinationDateOptionsPending,
     error: examinationDateOptionsError
-  } = await trpcClient.config.getExaminationDates.useQuery(undefined, {
-    transform: examinationDates => {
-      return new Map(
-        examinationDates.map(({ examinationDate }) => [
-          examinationDate.toString(),
-          formatDate(examinationDate)
-        ])
-      )
-    }
-  })
+  } = await useAsyncData(loadExaminationDates)
 
   const pending = computed(
     () =>
@@ -135,21 +126,22 @@
         matomoEventAction: HelpRequestFilterEventAction.FollowupType
       }
     ]
-    if (examinationDateOptions.value.size) {
-      filters.push({
-        name: 'examinationDate',
-        label: helpRequestFieldLabels.examinationDate,
-        options: withEmptyValue(
-          examinationDateOptions.value,
-          'Toutes les commissions'
-        ),
-        type: FilterType.SelectOne,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
-      })
-    }
 
     if (canViewAnyHelpRequestDetails(authStore.getAuthUser)) {
+      if (examinationDateOptions.value.size) {
+        filters.push({
+          name: 'examinationDate',
+          label: helpRequestFieldLabels.examinationDate,
+          options: withEmptyValue(
+            examinationDateOptions.value,
+            'Toutes les commissions'
+          ),
+          type: FilterType.SelectOne,
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
+        })
+      }
+
       filters.push(
         {
           name: 'handlingDate',
@@ -205,6 +197,21 @@
 
     return filters
   })
+
+  async function loadExaminationDates() {
+    if (!canViewAnyHelpRequestDetails(authStore.getAuthUser)) {
+      return new Map()
+    }
+
+    const examinationDates = await trpcClient.config.getExaminationDates.query()
+
+    return new Map(
+      examinationDates.map(({ examinationDate }) => [
+        examinationDate.toString(),
+        formatDate(examinationDate)
+      ])
+    )
+  }
 
   function onFilter(filters: HelpRequestFilterInput) {
     filtersStore.helpRequest = filters

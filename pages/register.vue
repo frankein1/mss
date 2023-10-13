@@ -1,5 +1,5 @@
 <template>
-  <main class="fr-container fr-my-8w">
+  <main class="landing-main-container fr-container fr-my-8w">
     <div class="fr-grid-row fr-my-5w">
       <div class="fr-col fr-col-lg-8 fr-col-offset-lg-2">
         <h1 class="register-title">
@@ -20,7 +20,7 @@
           to="https://framaforms.org/inscription-au-webinaire-mensuel-de-demonstration-1685106308"
           target="_blank"
           class="fr-btn"
-          title="Nouvel onglet - Inscription au webinaire"
+          title="Inscription au webinaire - Ouvre une nouvelle fenêtre"
           >S'inscrire au webinaire</NuxtLink
         >
       </div>
@@ -35,7 +35,7 @@
           to="https://framaforms.org/mon-suivi-socialconfiguration-de-votre-espace-de-travail-1675077455"
           target="_blank"
           class="fr-btn"
-          title="Nouvel onglet - Remplir le formulaire"
+          title="Remplir le formulaire - Ouvre une nouvelle fenêtre"
           >Remplir le formulaire</NuxtLink
         >
       </div>

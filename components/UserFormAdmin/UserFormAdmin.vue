@@ -134,4 +134,3 @@
     emit('updateUser', user)
   })
 </script>
-~/server/trpc/routers

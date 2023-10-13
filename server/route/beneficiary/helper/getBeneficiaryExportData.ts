@@ -1,4 +1,5 @@
 import { inferAsyncReturnType } from '@trpc/server'
+import { getBeneficiaryRelativeDisplayName } from './getBeneficiaryRelativeDisplayName'
 import {
   beneficiaryAccommodationModeLabels,
   beneficiaryAccommodationZoneLabels,
@@ -17,12 +18,11 @@ import {
   ministereStructureLabels
 } from '~/client/options/ministry'
 import { Nationalities } from '~/client/options/nationality'
-import { getBeneficiaryAccessibleData } from '~/utils/beneficiary/getBeneficiaryAccessibleData'
+import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
-import { getBeneficiaryRelativeDisplayName } from '~/utils/beneficiary/getBeneficiaryRelativeDisplayName'
 import { readableFileNumber } from '~/utils/readableFileNumber'
-import { getUserDisplayName } from '~/utils/user'
+import { formatUserDisplayName } from '~/utils/user'
 import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
 
 function getRelativeExportData(
@@ -42,7 +42,7 @@ export function getBeneficiaryExportData(
 ) {
   return {
     referents: beneficiary.beneficiary.referents
-      .map(referent => getUserDisplayName(referent))
+      .map(referent => formatUserDisplayName(referent))
       .join(', '),
     aidantConnectAuthorized: getBooleanOrEmpty(
       beneficiary.beneficiary.aidantConnectAuthorized

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="landing-main-container fr-container fr-my-8w">
     <form
       v-if="!token"
       class="login-form"

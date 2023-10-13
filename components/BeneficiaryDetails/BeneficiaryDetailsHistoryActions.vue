@@ -28,7 +28,7 @@
         <NuxtLink
           to="https://www.mesdroitssociaux.gouv.fr/dd1pnds-ria/#destination/simu-foyer"
           class="fr-link"
-          title="Nouvel onglet - Accéder à l'outil de simulation de droits sociaux mesdroitssociaux.gouv.fr"
+          title="Accéder à l'outil de simulation de droits sociaux mesdroitssociaux.gouv.fr - Ouvre une nouvelle fenêtre"
           target="_blank"
         >
           Simulation de droits sociaux
@@ -97,4 +97,3 @@
     }
   }
 </style>
-~/server/trpc/routers

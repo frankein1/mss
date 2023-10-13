@@ -18,7 +18,7 @@
 <script setup lang="ts">
   import { HistoryItemComment } from './types'
   import { formatDate } from '~/utils/formatDate'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
 
   const props = defineProps<{
     comment: HistoryItemComment
@@ -26,7 +26,9 @@
 
   const createdDate = computed(() => formatDate(props.comment.created))
 
-  const authorName = computed(() => getUserDisplayName(props.comment.createdBy))
+  const authorName = computed(() =>
+    formatUserDisplayName(props.comment.createdBy)
+  )
 </script>
 
 <style lang="scss">

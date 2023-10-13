@@ -43,14 +43,14 @@
         :label="relativeFieldLabels.city"
       />
     </div>
-    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+    <div class="fr-col-12">
       <VeeSelect
         :name="`entourages[${index}].relationship`"
         :label="relativeFieldLabels.relationship"
         :options="withEmptyValue(entourageRelationshipOptions)"
       />
     </div>
-    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+    <div class="fr-col-12">
       <VeeCheckbox
         :name="`entourages[${index}].caregiver`"
         :label="relativeFieldLabels.caregiver"

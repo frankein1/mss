@@ -7,5 +7,6 @@ export enum DocumentTag {
   Impot = 'Impot',
   Justice = 'Justice',
   Retraite = 'Retraite',
-  PrestationsSociales = 'PrestationsSociales'
+  PrestationsSociales = 'PrestationsSociales',
+  Identite = 'Identite'
 }

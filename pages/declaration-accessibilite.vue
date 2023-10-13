@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-container">
+  <div class="landing-main-container fr-container fr-my-8w">
     <h1>{{ RouteTitle.DeclarationAccessibilite() }}</h1>
     <p>Établie le <span>17 mai 2022</span>.</p>
     <p>

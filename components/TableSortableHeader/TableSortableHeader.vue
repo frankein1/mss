@@ -1,12 +1,25 @@
 <template>
-  <button
-    class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline"
-    :class="{ enabled: innerSort != undefined }"
-    :title="title"
-    @click="onToggle"
-  >
-    {{ label }}
-  </button>
+  <th scope="col">
+    <div class="header-container">
+      {{ label }}
+      <button
+        class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline btn-order"
+        :title="title"
+        @click="onToggle"
+      >
+        <span
+          class="fr-icon-arrow-up-s-line"
+          :class="{ 'arrow-enabled': isAscending && innerSort != undefined }"
+          aria-hidden="true"
+        ></span>
+        <span
+          class="fr-icon-arrow-down-s-line"
+          :class="{ 'arrow-enabled': !isAscending && innerSort != undefined }"
+          aria-hidden="true"
+        ></span>
+      </button>
+    </div>
+  </th>
 </template>
 
 <script lang="ts" setup>
@@ -14,6 +27,7 @@
 
   const props = withDefaults(
     defineProps<{
+      label: string
       sort?: SortOrder
       numeric?: boolean
     }>(),
@@ -26,15 +40,9 @@
 
   const innerSort = ref<SortOrder | undefined>(props.sort)
 
-  const label = computed(() => {
-    const isAscending =
-      innerSort.value === undefined || innerSort.value === SortOrder.Asc
-
-    if (props.numeric) {
-      return isAscending ? '1..9' : '9..1'
-    }
-    return isAscending ? 'A..Z' : 'Z..A'
-  })
+  const isAscending = computed(
+    () => innerSort.value === undefined || innerSort.value === SortOrder.Asc
+  )
 
   const title = computed(() => {
     const toDescending = innerSort.value === SortOrder.Asc
@@ -67,8 +75,25 @@
   }
 </script>
 
-<style scoped>
-  .fr-btn:not(.enabled) {
+<style lang="scss" scoped>
+  .header-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .btn-order {
+    flex-direction: column;
     color: var(--text-disabled-grey);
+    line-height: 1;
+    padding: 0.25rem;
+
+    span::before {
+      --icon-size: 1rem;
+    }
+  }
+
+  .arrow-enabled::before {
+    background-color: var(--blue-france-sun-113-625);
   }
 </style>

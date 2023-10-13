@@ -105,4 +105,3 @@
     structure: AdminStructureOutput
   }>()
 </script>
-~/server/trpc/routers

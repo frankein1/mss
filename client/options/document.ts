@@ -39,7 +39,8 @@ export const documentTagLabels: { [scope in DocumentTag]: string } = {
   MaintienADomicile: 'Maintien à domicile',
   PrestationsSociales: 'Prestations sociales',
   Retraite: 'Retraite',
-  SanteHandicap: 'Santé-Handicap'
+  SanteHandicap: 'Santé-Handicap',
+  Identite: 'Identité'
 }
 
 export const documentTagOptions = labelsToOptions(documentTagLabels)

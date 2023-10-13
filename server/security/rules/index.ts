@@ -1,14 +1,16 @@
 import type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
-  SecurityTargetWithReferents
+  SecurityTargetWithReferents,
+  SecurityRule
 } from './types'
 import { hasAllowedRole } from './helpers'
 
 export type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
-  SecurityTargetWithReferents
+  SecurityTargetWithReferents,
+  SecurityRule
 }
 
 export {

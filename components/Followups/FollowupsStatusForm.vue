@@ -49,4 +49,3 @@
     }
   })
 </script>
-~/server/trpc/routers

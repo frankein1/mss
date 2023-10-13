@@ -3,7 +3,8 @@ import { useAuthStore } from '~/store/auth'
 import {
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,
-  SecurityRuleGrantee
+  SecurityRuleGrantee,
+  SecurityRule
 } from '~/server/security/rules'
 
 function getBeneficiaryFormFallbackRoute(
@@ -30,10 +31,10 @@ export async function beneficiaryFormSectionMiddleware(
   beneficiaryId: string | undefined,
   toPath: string,
   fromPath: string,
-  securityRule: (
-    grantee: SecurityRuleGrantee,
-    beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-  ) => boolean
+  securityRule: SecurityRule<
+    SecurityRuleGrantee,
+    SecurityTargetWithStructure & SecurityTargetWithReferents
+  >
 ) {
   const { getAuthUser: user } = useAuthStore()
 

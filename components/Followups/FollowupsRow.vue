@@ -24,7 +24,7 @@
       </td>
       <td>{{ formatDate(followup.date) }}</td>
       <td>
-        {{ getBeneficiaryDisplayName(followup.beneficiary) }}
+        {{ formatBeneficiaryDisplayName(followup.beneficiary) }}
       </td>
       <td class="followup-types-data">{{ followUpTypes }}</td>
       <td>
@@ -36,7 +36,7 @@
       </td>
       <td>
         <template v-if="followup.createdBy">
-          {{ getUserDisplayName(followup.createdBy) }}
+          {{ formatUserDisplayName(followup.createdBy) }}
         </template>
       </td>
       <td>{{ readableFileNumber(followup.beneficiary.id) }}</td>
@@ -51,14 +51,14 @@
   import { followupStatusOptions } from '~/client/options/followup'
   import { followupStatusClasses } from '~/client/classes/followup'
   import { readableFileNumber } from '~/utils/readableFileNumber'
-  import { getUserDisplayName } from '~/utils/user'
+  import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
   import {
     canViewFollowupDetails as canViewFollowupDetailsRule,
     canEditFollowup
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
-  import { getBeneficiaryDisplayName } from '~/utils/beneficiary'
+  import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
 
   const authStore = useAuthStore()
@@ -90,4 +90,3 @@
     canEditFollowup(user.value, props.followup)
   )
 </script>
-~/server/trpc/routers

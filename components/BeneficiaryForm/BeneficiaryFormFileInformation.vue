@@ -19,7 +19,10 @@
         :disabled-options="disabledReferentOptions"
       />
     </div>
-    <div class="fr-col-12">
+    <div
+      v-if="!noAidantConnectAuthorized"
+      class="fr-col-12"
+    >
       <VeeToggle
         :label="beneficiaryFieldLabels.aidantConnectAuthorized"
         name="aidantConnectAuthorized"
@@ -40,8 +43,13 @@
       agents: BeneficiaryReferent[]
       beneficiary?: SaveBeneficiaryGeneralInformationInput
       canSetReferents?: boolean
+      noAidantConnectAuthorized?: boolean
     }>(),
-    { canSetReferents: true, beneficiary: undefined }
+    {
+      canSetReferents: true,
+      beneficiary: undefined,
+      noAidantConnectAuthorized: false
+    }
   )
 
   const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))

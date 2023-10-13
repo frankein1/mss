@@ -27,8 +27,8 @@
         to="~/assets/video/presentation.webm"
         target="_blank"
       >
-        Nouvel onglet - Vidéo de présentation des fonctionnalités de Mon Suivi
-        Social
+        Vidéo de présentation des fonctionnalités de Mon Suivi Social - Ouvre
+        une nouvelle fenêtre
       </NuxtLink>
     </figcaption>
     <div class="fr-sr-only">

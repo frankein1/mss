@@ -1,7 +1,7 @@
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import type { BeneficiaryNames } from '~/types/beneficiary'
 
-export function getBeneficiaryDisplayName(
+export function formatBeneficiaryDisplayName(
   beneficiary: BeneficiaryNames
 ): string {
   let lastname = ''

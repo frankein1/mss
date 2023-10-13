@@ -63,4 +63,3 @@
     grid-area: actions;
   }
 </style>
-~/server/trpc/routers

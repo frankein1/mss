@@ -65,4 +65,3 @@
       props.beneficiary.majorChildren
   )
 </script>
-~/server/trpc/routers

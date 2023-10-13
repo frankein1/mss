@@ -19,7 +19,7 @@
     formatDate(notification.created)
   }}</span>
   <span class="notificationitem__beneficiary">{{
-    getBeneficiaryDisplayName(beneficiary)
+    formatBeneficiaryDisplayName(beneficiary)
   }}</span>
   <button
     ref="toggleReadButton"

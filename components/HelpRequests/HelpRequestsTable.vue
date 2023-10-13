@@ -20,31 +20,23 @@
               {{ helpRequestFieldLabels.status }}
             </th>
             <th scope="col">Objet de la demande</th>
-            <th
+            <TableSortableHeader
               v-if="canViewAnyHelpRequestDetails"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.dueDate }}
-              <AtomSortButton
-                numeric
-                @update:sort="onSort({ dueDate: $event })"
-              />
-            </th>
-            <th scope="col">
-              {{ helpRequestFieldLabels.beneficiaryId }}
-              <AtomSortButton
-                @update:sort="onSort({ beneficiary: { usualName: $event } })"
-              />
-            </th>
+              :label="helpRequestFieldLabels.dueDate"
+              numeric
+              @update:sort="onSort({ dueDate: $event })"
+            />
+            <TableSortableHeader
+              :label="helpRequestFieldLabels.beneficiaryId"
+              @update:sort="onSort({ beneficiary: { usualName: $event } })"
+            />
             <template v-if="canViewAnyHelpRequestDetails">
-              <th scope="col">
-                {{ helpRequestFieldLabels.instructorOrganizationId }}
-                <AtomSortButton
-                  @update:sort="
-                    onSort({ instructorOrganization: { name: $event } })
-                  "
-                />
-              </th>
+              <TableSortableHeader
+                :label="helpRequestFieldLabels.instructorOrganizationId"
+                @update:sort="
+                  onSort({ instructorOrganization: { name: $event } })
+                "
+              />
               <th scope="col">{{ helpRequestFieldLabels.examinationDate }}</th>
               <th scope="col">{{ helpRequestFieldLabels.askedAmount }}</th>
               <th

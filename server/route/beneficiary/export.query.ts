@@ -14,11 +14,11 @@ import {
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
-import { getBeneficiaryAccessibleData } from '~/utils/beneficiary/getBeneficiaryAccessibleData'
+import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
 import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
-import { getBeneficiaryExportData } from '~/utils/export/getBeneficiaryExportData'
+import { getBeneficiaryExportData } from '~/server/route/beneficiary/helper/getBeneficiaryExportData'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
 
 const securityCheck = (

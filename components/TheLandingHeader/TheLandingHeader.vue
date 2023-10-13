@@ -53,11 +53,11 @@
               <ul class="fr-btns-group">
                 <li>
                   <NuxtLink
-                    class="fr-btn register-btn fr-icon-add-circle-line"
+                    class="fr-btn register-btn fr-icon-add-line"
                     :to="RoutePath.Register()"
                     target="_self"
                   >
-                    Enregistrer sa structure
+                    Créer un espace
                   </NuxtLink>
                 </li>
                 <li>
@@ -119,7 +119,8 @@
     --hover-tint: var(--primary-hover);
     --active-tint: var(--primary-active);
 
-    color: var(--text-inverted-blue-france);
+    color: var(--text-inverted-grey);
+    box-shadow: inset 0 0 0 1px var(--text-inverted-grey);
 
     &:not(:hover) {
       background-color: var(--primary);

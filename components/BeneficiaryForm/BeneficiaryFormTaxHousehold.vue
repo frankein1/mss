@@ -72,14 +72,14 @@
         />
       </div>
     </template>
-    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+    <div class="fr-col-12">
       <VeeSelect
         :name="`taxHouseholds[${index}].relationship`"
         :label="relativeFieldLabels.relationship"
         :options="withEmptyValue(taxHouseHoldRelationshipOptions)"
       />
     </div>
-    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+    <div class="fr-col-12">
       <VeeCheckbox
         :name="`taxHouseholds[${index}].caregiver`"
         :label="relativeFieldLabels.caregiver"
@@ -140,7 +140,7 @@
     if (!linkedBeneficiary.value) {
       return ''
     }
-    return getBeneficiaryDisplayName(linkedBeneficiary.value)
+    return formatBeneficiaryDisplayName(linkedBeneficiary.value)
   })
 
   async function searchBeneficiariesFromLastname(search: string) {
@@ -170,7 +170,7 @@
   ) {
     const entries: [string, string][] = beneficiaries.map(beneficiary => [
       beneficiary.id,
-      `${getBeneficiarySearchDisplayName(beneficiary)}`
+      `${formatBeneficiarySearchDisplayName(beneficiary)}`
     ])
     return new Map<string, string>(entries)
   }

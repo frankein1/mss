@@ -1,5 +1,5 @@
 <template>
-  <main class="fr-container">
+  <main class="landing-main-container fr-container fr-my-8w">
     <h1 class="login-title fr-h2 fr-mb-5w">{{ RouteTitle.AuthLogin() }}</h1>
 
     <div class="inclusion-connect-section">

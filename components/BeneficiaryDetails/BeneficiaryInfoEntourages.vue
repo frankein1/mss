@@ -38,4 +38,3 @@
     RoutePath.AppBeneficiaryEditEntourage(props.beneficiary.id)
   )
 </script>
-~/server/trpc/routers

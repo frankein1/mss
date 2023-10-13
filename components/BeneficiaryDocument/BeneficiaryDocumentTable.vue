@@ -14,21 +14,17 @@
         <thead>
           <tr>
             <th scope="col">Type</th>
-            <th scope="col">
-              Nom
-              <AtomSortButton
-                :sort="nameSort"
-                @update:sort="onSort({ name: $event })"
-              />
-            </th>
-            <th scope="col">
-              Date ajout
-              <AtomSortButton
-                :sort="dateSort"
-                numeric
-                @update:sort="onSort({ created: $event })"
-              />
-            </th>
+            <TableSortableHeader
+              label="Nom"
+              :sort="nameSort"
+              @update:sort="onSort({ name: $event })"
+            />
+            <TableSortableHeader
+              label="Date ajout"
+              :sort="dateSort"
+              numeric
+              @update:sort="onSort({ created: $event })"
+            />
             <th scope="col">Thèmes</th>
             <th scope="col">Actions</th>
           </tr>
@@ -72,4 +68,3 @@
   const dateSort = computed(() => props.sort?.find(s => s.created)?.created)
   const nameSort = computed(() => props.sort?.find(s => s.name)?.name)
 </script>
-~/server/trpc/routers
