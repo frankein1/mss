@@ -4,16 +4,25 @@
     :class="{ expanded: expanded }"
   >
     <div class="meta">
-      <h2 class="date">
-        {{ formatDate(date) }}
+      <small>{{ historyTypeTitle }}</small>
+      <h2>
+        <template v-if="history.createdBy">
+          {{ formatUserDisplayName(history.createdBy) }}
+          <span> · </span>
+        </template>
+        <span>le {{ formatDate(date) }}</span>
       </h2>
-      <div
-        v-if="history.createdBy"
-        class="agent-name"
-      >
-        {{ formatUserDisplayName(history.createdBy) }}
-      </div>
-      <div
+      <ul class="fr-tags-group follow-up-types-tags">
+        <li
+          v-for="followUpType in followUpTypes"
+          :key="followUpType.id"
+        >
+          <p class="fr-tag">{{ followUpType.name }}</p>
+        </li>
+      </ul>
+    </div>
+    <div class="badges">
+      <!-- <div
         class="additional-meta"
         :class="{
           'fr-icon-success-fill': history.isFollowup
@@ -27,7 +36,7 @@
         <template v-else-if="history.isFollowup && history.firstFollowup">
           1<sup>er</sup> entretien
         </template>
-      </div>
+      </div> -->
       <ul class="fr-badges-group status-badges">
         <li>
           <p
@@ -49,25 +58,16 @@
         </li>
       </ul>
     </div>
-    <hr class="fr-col-12 fr-mt-5v" />
-    <ul class="fr-tags-group follow-up-types-tags">
-      <li
-        v-for="followUpType in followUpTypes"
-        :key="followUpType.id"
-      >
-        <p class="fr-tag">{{ followUpType.name }}</p>
-      </li>
-    </ul>
     <button
       class="fr-btn collapse-btn fr-btn--tertiary"
       :class="{ expanded: expanded }"
       aria-expanded="false"
       :aria-controls="accordionId"
-      :title="collapseBtnLabel"
+      :title="collapseBtnTitle"
       @click="emit('toggleExpand')"
     >
+      {{ collapseBtnLabel }}
       <span :class="[collapseBtnIcon]"></span>
-      <span>{{ collapseBtnLabel }}</span>
     </button>
   </div>
 </template>
@@ -133,18 +133,26 @@
     return [props.history.type]
   })
 
+  const historyTypeTitle = computed(() =>
+    props.history.isFollowup ? "Synthèse d'entretien" : "Demande d'aide"
+  )
+
   const historyTypeLabel = computed(() =>
     props.history.isFollowup
       ? "la synthèse d'entretien"
       : "l'instruction de demande d'aide"
   )
 
-  const collapseBtnLabel = computed(
+  const collapseBtnTitle = computed(
     () => `Voir les détails de ${historyTypeLabel.value}`
   )
 
+  const collapseBtnLabel = computed(() =>
+    props.expanded ? 'Voir moins' : 'Voir plus'
+  )
+
   const collapseBtnIcon = computed(() =>
-    props.expanded ? 'fr-icon-subtract-line' : 'fr-icon-add-line'
+    props.expanded ? 'fr-icon-arrow-up-s-line' : 'fr-icon-arrow-down-s-line'
   )
 </script>
 
@@ -158,9 +166,8 @@
     column-gap: 0.5rem;
     border-radius: 0.5rem;
     grid-template-areas:
-      'meta accordion-btn'
-      'divider accordion-btn'
-      'follow-up-types-tags accordion-btn';
+      'meta badges'
+      'meta accordion-btn';
     grid-template-columns: auto max-content;
 
     &.expanded {
@@ -169,12 +176,10 @@
   }
 
   .meta {
-    grid-area: meta;
-    display: grid;
-    column-gap: 1rem;
-    grid-template-areas: 'agent-name date additional-meta status-badges';
-    grid-template-columns: max-content max-content max-content auto;
-    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
   }
 
   .date {
