@@ -60,6 +60,7 @@
 
   type SubmitType = z.infer<T>
 
+  const router = useRouter()
   const route = useRoute()
   const originTab = route.query.originTab
     ? (route.query.originTab as BeneficiaryTab)
@@ -93,6 +94,16 @@
   const title = computed(() => RouteTitle[props.currentRoute]())
 
   useHead({ title: title.value })
+
+  onMounted(() => {
+    /**
+     * Removes the saved query param to prevent reloading the page when
+     * changing sub section from side navigation (as saved query parem would be
+     * missing from the targetted path). It also allows to prevent showing the
+     * page as saved again when reloading it.
+     */
+    router.replace({ path: route.path, hash: route.hash })
+  })
 
   const { handleSubmit } = useForm<SubmitType>({
     validationSchema: toTypedSchema(props.schema),

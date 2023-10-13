@@ -86,7 +86,7 @@
   const menus = computed(() => {
     return navigationRoutes.value.map(route => {
       const path = RoutePath[route](props.beneficiaryId, {
-        saved: route !== props.currentRoute, // FIXME: It causes page reload when navigating between targets
+        saved: route !== props.currentRoute,
         originTab: props.originTab
       })
 
