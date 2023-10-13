@@ -51,7 +51,7 @@
         </div>
       </div>
 
-      <div v-if="hasCoordinatesInformations(beneficiary)">
+      <div v-if="hasAddressInformations(beneficiary)">
         <hr class="fr-col-12 fr-mt-5v" />
 
         <div class="fr-grid-row">
@@ -73,6 +73,11 @@
           <BeneficiaryInfoLabel
             :label="beneficiaryFieldLabels.accommodationAdditionalInformation"
             :value="beneficiary.accommodationAdditionalInformation"
+            class="fr-col-12"
+          />
+          <BeneficiaryInfoLabel
+            :label="beneficiaryFieldLabels.accommodationZone"
+            :value="beneficiary.accommodationZone"
             class="fr-col-12"
           />
         </div>
@@ -135,8 +140,7 @@
     formatAddress,
     formatBeneficiaryBirthInfo,
     formatBeneficiaryName,
-    hasIdentityInformations,
-    hasCoordinatesInformations
+    hasIdentityInformations
   } from '~/utils/beneficiary'
   import { RoutePath } from '~/utils/routing'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
