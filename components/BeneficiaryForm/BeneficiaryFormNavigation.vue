@@ -53,7 +53,6 @@
                   >
                     {{ target.title }}
                   </a>
-                  <!-- FIXME: The button submit does not redirect to the anchor -->
                   <button
                     v-else
                     class="fr-sidemenu__link"
@@ -137,9 +136,8 @@
   )
 
   onMounted(() => {
-    onHashChange()
-
     if (currentRouteHasSubSections.value) {
+      onHashChange()
       window.addEventListener('hashchange', onHashChange)
     }
   })
@@ -161,6 +159,11 @@
     if (route.hash) {
       activeHash.value = route.hash.slice(1)
       hashJustChanged.value = true
+
+      const firstSubSectionField = document.querySelector<
+        HTMLInputElement | HTMLSelectElement
+      >(`${route.hash} input, ${route.hash} select`)
+      firstSubSectionField?.focus()
     }
   }
 
