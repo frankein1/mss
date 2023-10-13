@@ -88,6 +88,12 @@
 
   const activeHash = ref<string | undefined>(undefined)
 
+  /**
+   * Used to prevent native scroll from browser on hash focus to update the active hash right after the hash change event has triggered
+   * See https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/127#note_1600789293
+   */
+  const hashJustChanged = ref<boolean>(false)
+
   const currentRouteHasSubSections = computed(() => {
     const menu = props.menus.find(({ route }) => route === props.currentRoute)
 
@@ -144,10 +150,16 @@
   function onHashChange() {
     if (route.hash) {
       activeHash.value = route.hash.slice(1)
+      hashJustChanged.value = true
     }
   }
 
   const onMainContainerScroll = useDefer(SCROLL_DEFER_DURATION, () => {
+    if (hashJustChanged.value) {
+      hashJustChanged.value = false
+      return
+    }
+
     const mainContainer = props.beneficiaryFormLayoutMainContainer
     if (!mainContainer) {
       return
