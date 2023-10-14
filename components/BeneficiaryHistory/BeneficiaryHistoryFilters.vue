@@ -14,6 +14,8 @@
       v-else-if="filters"
       :filters="filters"
       :initial-selected-values="filtersStore.beneficiaryHistory || {}"
+      :results-label="resultsLabel"
+      no-margin
       @filter="onFilter"
     />
   </div>
@@ -52,6 +54,7 @@
 
   const props = defineProps<{
     beneficiaryId: string
+    resultsLabel: string
   }>()
 
   const emit = defineEmits<{
