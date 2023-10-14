@@ -1,12 +1,8 @@
 <template>
   <div>
     <div class="feature-section history-header-section fr-p-3w">
-      <p v-if="historyTotal">
-        {{ history.length }} élément(s) affiché(s) sur
-        {{ historyTotal }} disponible(s) dans l'historique des accompagnements
-        du bénéficiaire
-      </p>
       <BeneficiaryHistoryFilters
+        :results-label="`${history.length} élément(s) affiché(s) sur ${historyTotal} disponible(s) dans l'historique des accompagnements du bénéficiaire`"
         :beneficiary-id="beneficiaryId"
         @filter="filters = $event"
       />
