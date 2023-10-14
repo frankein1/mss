@@ -39,20 +39,26 @@
         />
       </template>
     </form>
-    <div class="filter-summary">
-      <ul
-        v-show="!expanded"
-        class="fr-tags-group"
-      >
-        <li
-          v-for="({ filterLabel, valueLabel }, name) in selectedFilters"
-          :key="name"
+    <div
+      class="filter-summary"
+      :class="{ 'filter-summary__no-margin': noMargin }"
+    >
+      <div class="filter-left-section">
+        <p v-if="resultsLabel">{{ resultsLabel }}</p>
+        <ul
+          v-show="!expanded && Object.keys(selectedFilters).length"
+          class="fr-tags-group"
         >
-          <p class="fr-tag fr-icon-filter-line fr-tag--icon-left">
-            {{ filterLabel }} : {{ valueLabel }}
-          </p>
-        </li>
-      </ul>
+          <li
+            v-for="({ filterLabel, valueLabel }, name) in selectedFilters"
+            :key="name"
+          >
+            <p class="fr-tag fr-icon-filter-line fr-tag--icon-left">
+              {{ filterLabel }} : {{ valueLabel }}
+            </p>
+          </li>
+        </ul>
+      </div>
       <ul
         v-if="!noReset || !expanded"
         class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg"
@@ -105,12 +111,15 @@
       initialSelectedValues?: {
         [filterName: string]: string | string[] | Date | null
       }
+      resultsLabel?: string
+      noMargin?: boolean
     }>(),
     {
       fullWidthFilters: false,
       alwaysExpanded: false,
       noReset: false,
-      initialSelectedValues: () => ({})
+      initialSelectedValues: () => ({}),
+      resultsLabel: undefined
     }
   )
 
@@ -302,6 +311,42 @@
 
     .fr-btns-group {
       margin-left: auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      align-items: center;
+    }
+  }
+
+  .filter-summary__no-margin {
+    .fr-btns-group {
+      gap: 1rem;
+
+      button {
+        margin: 0;
+      }
+    }
+
+    .filter-left-section {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 1rem;
+
+      p {
+        margin: 0;
+      }
+
+      ul {
+        gap: 1rem;
+      }
+
+      li {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
     }
   }
 </style>
