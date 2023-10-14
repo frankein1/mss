@@ -22,3 +22,13 @@
 .fr-icon-zzz-line::after {
   mask-image: url('@/assets/icons/zzz-line.svg');
 }
+
+.fr-icon-help-request-fill::before,
+.fr-icon-help-request-fill::after {
+  mask-image: url('@/assets/icons/help-request.svg');
+}
+
+.fr-icon-followup-fill::before,
+.fr-icon-followup-fill::after {
+  mask-image: url('@/assets/icons/followup.svg');
+}

@@ -3,14 +3,17 @@
     class="beneficiary-history-details-accordion__title"
     :class="{ expanded: expanded }"
   >
-    <div class="meta">
+    <div class="history-details__icon">
+      <span :class="historyTypeIcon"></span>
+    </div>
+    <div class="history-details__meta">
       <small>{{ historyTypeTitle }}</small>
-      <h2>
+      <h2 class="history-details__title">
         <template v-if="history.createdBy">
           {{ formatUserDisplayName(history.createdBy) }}
           <span> · </span>
         </template>
-        <span>le {{ formatDate(date) }}</span>
+        <span class="history-details__date">le {{ formatDate(date) }}</span>
       </h2>
       <ul class="fr-tags-group follow-up-types-tags">
         <li
@@ -21,7 +24,7 @@
         </li>
       </ul>
     </div>
-    <div class="badges">
+    <div class="history-details__status">
       <!-- <div
         class="additional-meta"
         :class="{
@@ -57,18 +60,18 @@
           </p>
         </li>
       </ul>
+      <button
+        class="fr-btn collapse-btn fr-btn--tertiary"
+        :class="{ expanded: expanded }"
+        aria-expanded="false"
+        :aria-controls="accordionId"
+        :title="collapseBtnTitle"
+        @click="emit('toggleExpand')"
+      >
+        {{ collapseBtnLabel }}
+        <span :class="[collapseBtnIcon]"></span>
+      </button>
     </div>
-    <button
-      class="fr-btn collapse-btn fr-btn--tertiary"
-      :class="{ expanded: expanded }"
-      aria-expanded="false"
-      :aria-controls="accordionId"
-      :title="collapseBtnTitle"
-      @click="emit('toggleExpand')"
-    >
-      {{ collapseBtnLabel }}
-      <span :class="[collapseBtnIcon]"></span>
-    </button>
   </div>
 </template>
 
@@ -133,6 +136,12 @@
     return [props.history.type]
   })
 
+  const historyTypeIcon = computed(() =>
+    props.history.isFollowup
+      ? 'fr-icon-followup-fill'
+      : 'fr-icon-help-request-fill'
+  )
+
   const historyTypeTitle = computed(() =>
     props.history.isFollowup ? "Synthèse d'entretien" : "Demande d'aide"
   )
@@ -159,80 +168,83 @@
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
 
+  .history-details__icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    span {
+      padding: 1rem;
+      border-radius: 100%;
+    }
+  }
+
+  .fr-icon-followup-fill {
+    color: var(--color-followup);
+    background-color: var(--color-followup-light);
+  }
+
+  .fr-icon-help-request-fill {
+    color: var(--color-help-request);
+    background-color: var(--color-help-request-light);
+  }
+
+  .history-details__meta {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.6rem;
+
+    small {
+      margin-bottom: -0.5rem;
+    }
+  }
+
   .beneficiary-history-details-accordion__title {
     position: relative;
-    display: grid;
-    padding: 1rem;
-    column-gap: 0.5rem;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 1.5rem;
+    column-gap: 1.5rem;
     border-radius: 0.5rem;
-    grid-template-areas:
-      'meta badges'
-      'meta accordion-btn';
-    grid-template-columns: auto max-content;
 
     &.expanded {
       border-radius: 0.5rem 0.5rem 0 0;
     }
   }
 
-  .meta {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-  }
-
-  .date {
-    @include dsfr.text-style(md);
+  .history-details__title {
+    @include dsfr.text-style(lg);
 
     --title-spacing: 0;
-
-    grid-area: date;
   }
 
-  .agent-name {
-    grid-area: agent-name;
-    font-weight: 700;
-
-    /**
-     * The resulted design is quite ugly but it seems browsers leaves the
-     * container to the max width once text is wrapped instead of shrinking it
-     * to the last text character.
-     * See https://stackoverflow.com/a/12377883/7916042
-     */
-    max-width: 10rem;
+  .history-details__date {
+    font-weight: 400;
   }
 
-  .additional-meta {
-    grid-area: additional-meta;
-
-    &::before {
-      margin-right: 0.25rem;
-    }
+  .history-details__status {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
   }
 
   .status-badges {
-    grid-area: status-badges;
-    justify-self: end;
-    justify-content: end;
-  }
-
-  .divider {
-    --text-spacing: 0 0 0.5rem;
-
-    grid-area: divider;
+    justify-content: flex-end;
   }
 
   .follow-up-types-tags {
-    grid-area: follow-up-types-tags;
     margin-bottom: -0.8rem;
   }
 
   .collapse-btn {
-    grid-area: accordion-btn;
     box-shadow: none;
-    align-self: center;
     outline-width: 0;
+    text-wrap: nowrap;
 
     span:nth-child(2) {
       display: none;
