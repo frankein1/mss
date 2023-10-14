@@ -59,13 +59,17 @@
   }))
 
   const {
-    data: history,
+    data: historyRequest,
     pending,
     error,
     refresh
   } = await useTrpcClient().beneficiary.getBeneficiaryHistory.useQuery(
     queryInput
   )
+
+  const history = computed(() => historyRequest.value?.history || [])
+
+  const historyTotal = computed(() => historyRequest.value?.totalCount || 0)
 
   onMounted(async () => {
     const tab = route.hash.slice(1)
