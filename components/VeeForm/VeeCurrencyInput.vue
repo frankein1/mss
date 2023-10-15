@@ -28,7 +28,8 @@
         :aria-labelledby="labelledBy"
         :readonly="readonly"
         @keypress="onKeypress"
-        @input="handleChange"
+        @input="onInput"
+        @change="handleChange"
       />
     </div>
     <div
@@ -98,6 +99,13 @@
     ]
     if (!ALLOWED_KEYS.includes((e as KeyboardEvent).key)) {
       e.preventDefault()
+    }
+  }
+
+  // Allow to remove the displayed error while the user is typing
+  function onInput(e: Event) {
+    if (error.value) {
+      handleChange(e)
     }
   }
 </script>

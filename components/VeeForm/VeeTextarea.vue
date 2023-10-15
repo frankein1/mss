@@ -27,7 +27,8 @@
       :value="value"
       :class="{ 'fr-input--error': error }"
       :name="name"
-      @input="handleChange"
+      @input="onInput"
+      @change="handleChange"
     ></textarea>
     <div
       v-if="error"
@@ -65,6 +66,13 @@
   const slots = useSlots()
 
   const hasHint = computed(() => slots.hint)
+
+  // Allow to remove the displayed error while the user is typing
+  function onInput(event: Event) {
+    if (error.value) {
+      handleChange(event)
+    }
+  }
 </script>
 
 <style scoped>
