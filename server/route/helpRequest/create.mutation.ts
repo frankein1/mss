@@ -10,11 +10,13 @@ import {
   SecurityRuleGrantee,
   canCreateHelpRequest
 } from '~/server/security/rules'
-import { getBeneficiarySecurityTarget } from '~/server/query'
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
-import { prepareInstructorOrganization } from '~/utils/instructorOrganization'
+import {
+  getBeneficiarySecurityTarget,
+  addUserActivity,
+  createPrescribingOrganizationIfNecesserary,
+  createInstructorOrganizationIfNecessary
+} from '~/server/query'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 async function prepareHelpRequestData({
   input,
@@ -39,17 +41,19 @@ async function prepareHelpRequestData({
 
   const { user } = ctx
 
-  const prescribingOrganizationId = await preparePrescribingOrganization(
-    transaction,
-    user,
-    input.prescribingOrganizationId
-  )
+  const prescribingOrganizationId =
+    await createPrescribingOrganizationIfNecesserary(
+      transaction,
+      user,
+      input.prescribingOrganizationId
+    )
 
-  const instructorOrganizationId = await prepareInstructorOrganization(
-    transaction,
-    user,
-    input.instructorOrganizationId
-  )
+  const instructorOrganizationId =
+    await createInstructorOrganizationIfNecessary(
+      transaction,
+      user,
+      input.instructorOrganizationId
+    )
 
   return {
     ...input,

@@ -8,14 +8,14 @@ import {
   canEditHelpRequest,
   canEditHelpRequestPrivateSynthesis
 } from '~/server/security/rules'
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
-import { prepareInstructorOrganization } from '~/utils/instructorOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   HelpRequestWithRelations,
   getHelpRequestWithRelations,
-  getHelpRequestsecurityTarget
+  getHelpRequestsecurityTarget,
+  createPrescribingOrganizationIfNecesserary,
+  createInstructorOrganizationIfNecessary,
+  addUserActivity
 } from '~/server/query'
 
 async function prepareHelpRequestData({
@@ -42,17 +42,19 @@ async function prepareHelpRequestData({
       ? { numeroPegase: input.numeroPegase, ministre: input.ministre }
       : {}
 
-  const prescribingOrganizationId = await preparePrescribingOrganization(
-    transaction,
-    user,
-    input.prescribingOrganizationId
-  )
+  const prescribingOrganizationId =
+    await createPrescribingOrganizationIfNecesserary(
+      transaction,
+      user,
+      input.prescribingOrganizationId
+    )
 
-  const instructorOrganizationId = await prepareInstructorOrganization(
-    transaction,
-    user,
-    input.instructorOrganizationId
-  )
+  const instructorOrganizationId =
+    await createInstructorOrganizationIfNecessary(
+      transaction,
+      user,
+      input.instructorOrganizationId
+    )
 
   return {
     ...input,

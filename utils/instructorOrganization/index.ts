@@ -1,1 +1,0 @@
-export { prepareInstructorOrganization } from './prepareInstructorOrganization'

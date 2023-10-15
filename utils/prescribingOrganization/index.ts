@@ -1,1 +1,0 @@
-export { preparePrescribingOrganization } from './preparePrescribingOrganization'
