@@ -24,7 +24,7 @@
   import {
     CreateHelpRequestInput,
     createHelpRequestSchema
-  } from '~/server/schema/helpRequest.schema'
+  } from '~/server/schema'
 
   const props = defineProps<{
     isSubmitting: boolean

@@ -18,10 +18,7 @@
   } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  import {
-    AddFollowupInput,
-    addFollowupSchema
-  } from '~/server/schema/followup.schema'
+  import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 
   const props = defineProps<{
     isSubmitting: boolean

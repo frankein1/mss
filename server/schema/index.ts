@@ -4,31 +4,8 @@ export * from './followup'
 export * from './user'
 export * from './structure'
 export * from './auth'
+export * from './helpRequest'
 export * from './helpers.schema'
-
-export {
-  createHelpRequestSchema,
-  quickEditHelpRequestSchema,
-  getHelpRequestsSchema,
-  quickEditHelpRequestStatusSchema,
-  quickEditHelpRequestAllocatedAmountSchema,
-  quickEditHelpRequestPaymentMethodSchema,
-  quickEditHelpRequestPaymentDateSchema,
-  editHelpRequestSchema,
-  exportHelpRequestsSchema
-} from './helpRequest.schema'
-export type {
-  CreateHelpRequestInput,
-  QuickEditHelpRequestInput,
-  GetHelpRequestsInput,
-  QuickEditHelpRequestStatusInput,
-  QuickEditHelpRequestAllocatedAmountInput,
-  QuickEditHelpRequestPaymentMethodInput,
-  QuickEditHelpRequestPaymentDateInput,
-  EditHelpRequestInput,
-  GetHelpRequestsInputOrderBy,
-  ExportHelpRequestsInput
-} from './helpRequest.schema'
 
 export {
   createFollowupTypeSchema,

@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { EditHelpRequestInput } from '~/server/schema/helpRequest.schema'
+  import { EditHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'

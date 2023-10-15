@@ -23,10 +23,7 @@
   } from '@prisma/client'
   import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  import {
-    EditHelpRequestInput,
-    editHelpRequestSchema
-  } from '~/server/schema/helpRequest.schema'
+  import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
   import { canEditHelpRequestPrivateSynthesis } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { pastStatusesFromStatus } from '~/utils/helpRequest'
