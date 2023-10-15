@@ -14,14 +14,14 @@ import {
   canEditFollowupPrivateSynthesis
 } from '~/server/security/rules'
 
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import {
   FollowupWithRelations,
   getFollowupSecurityTarget,
-  getFollowupWithRelations
-} from '~/server/query/followups'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
+  getFollowupWithRelations,
+  addUserActivity,
+  createPrescribingOrganizationIfNecesserary
+} from '~/server/query'
 
 async function prepareFollowupData({
   input,
@@ -35,12 +35,7 @@ async function prepareFollowupData({
   target: FollowupTarget
 }): Promise<Prisma.FollowupUncheckedUpdateInput> {
   const { structure, user } = ctx
-  const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structure.id },
-    select: {
-      type: true
-    }
-  })
+  const { type } = structure
 
   const {
     ActionLogement,
@@ -61,11 +56,12 @@ async function prepareFollowupData({
     data
   )
 
-  const prescribingOrganizationId = await preparePrescribingOrganization(
-    transaction,
-    user,
-    input.prescribingOrganizationId
-  )
+  const prescribingOrganizationId =
+    await createPrescribingOrganizationIfNecesserary(
+      transaction,
+      user,
+      input.prescribingOrganizationId
+    )
 
   return {
     ...data,

@@ -43,7 +43,7 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
-  import { CreateHelpRequestInput } from '~/server/schema/helpRequest.schema'
+  import { CreateHelpRequestInput } from '~/server/schema'
 
   definePageMeta({
     middleware: ['is-beneficiary-referent', 'can-add-help-request']
