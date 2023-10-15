@@ -28,7 +28,7 @@
               class="fr-sidemenu__btn"
               :aria-current="menu.route === currentRoute ? true : undefined"
               :type="menu.route === currentRoute ? 'button' : 'submit'"
-              @click="emit('save', menu.path)"
+              @click="menu.route !== currentRoute && emit('save', menu.path)"
             >
               {{ RouteTitle[menu.route]() }}
             </button>
@@ -43,6 +43,7 @@
                   }"
                 >
                   <a
+                    v-if="menu.route === currentRoute"
                     class="fr-sidemenu__link"
                     :href="`${menu.path}#${target.hash}`"
                     target="_self"
@@ -52,6 +53,14 @@
                   >
                     {{ target.title }}
                   </a>
+                  <button
+                    v-else
+                    class="fr-sidemenu__link"
+                    type="submit"
+                    @click="emit('save', `${menu.path}#${target.hash}`)"
+                  >
+                    {{ target.title }}
+                  </button>
                 </li>
               </ul>
             </div>
@@ -127,9 +136,8 @@
   )
 
   onMounted(() => {
-    onHashChange()
-
     if (currentRouteHasSubSections.value) {
+      onHashChange()
       window.addEventListener('hashchange', onHashChange)
     }
   })
@@ -151,6 +159,11 @@
     if (route.hash) {
       activeHash.value = route.hash.slice(1)
       hashJustChanged.value = true
+
+      const firstSubSectionField = document.querySelector<
+        HTMLInputElement | HTMLSelectElement
+      >(`${route.hash} input, ${route.hash} select`)
+      firstSubSectionField?.focus()
     }
   }
 

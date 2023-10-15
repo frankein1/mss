@@ -86,7 +86,7 @@
   const menus = computed(() => {
     return navigationRoutes.value.map(route => {
       const path = RoutePath[route](props.beneficiaryId, {
-        saved: true,
+        saved: route !== props.currentRoute,
         originTab: props.originTab
       })
 
