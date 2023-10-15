@@ -1,18 +1,33 @@
 import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
-import { SecurityRuleGrantee } from '~/server/security'
+import { SecurityRuleGrantee, hasAllowedRole } from '~/server/security'
+
+const userConstraints = (user: SecurityRuleGrantee) => {
+  const where = {}
+  if (!hasAllowedRole(user, ['Administrator'])) {
+    Object.assign(where, { structureId: user.structureId })
+  }
+  if (hasAllowedRole(user, ['Referent'])) {
+    Object.assign(where, { referents: { some: { id: user.id } } })
+  }
+  return where
+}
 
 function findMany<T extends Prisma.BeneficiaryFindManyArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryFindManyArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.beneficiary.findMany(params)
 }
 
 function findUniqueOrThrow<T extends Prisma.BeneficiaryFindUniqueOrThrowArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryFindUniqueOrThrowArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.beneficiary.findUniqueOrThrow(params)
 }
 
@@ -24,22 +39,25 @@ function create(
 }
 
 function update<T extends Prisma.BeneficiaryUpdateArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryUpdateArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.beneficiary.update(params)
 }
 
 function deleteEntity(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.BeneficiaryDeleteArgs
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.beneficiary.delete(params)
 }
-function count(
-  _user: SecurityRuleGrantee,
-  params: Prisma.BeneficiaryCountArgs
-) {
+function count(user: SecurityRuleGrantee, params: Prisma.BeneficiaryCountArgs) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.beneficiary.count(params)
 }
 

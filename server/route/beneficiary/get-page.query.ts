@@ -16,7 +16,7 @@ const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx: { user }
 }: {
   input: GetBeneficiariesInput
   ctx: ProtectedAppContext
@@ -26,14 +26,8 @@ const handler = async ({
     page: input.page
   })
 
-  const referentsCondition = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
   const where: Prisma.BeneficiaryWhereInput = {
-    structureId: structure.id,
     archived: null,
-    referents: referentsCondition,
     ...prepareBeneficiaryFilters(
       input.filters,
       canOnlyListItsBeneficiaries(user)
