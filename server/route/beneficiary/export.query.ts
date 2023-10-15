@@ -42,14 +42,8 @@ const handler = async ({
     header: beneficiaryFieldLabels[key]
   }))
 
-  const referentsCondition = canOnlyListItsBeneficiaries(ctx.user)
-    ? { some: { id: ctx.user.id } }
-    : undefined
-
   const where: Prisma.BeneficiaryWhereInput = {
-    structureId: ctx.structure.id,
     archived: null,
-    referents: referentsCondition,
     ...prepareBeneficiaryFilters(
       input.filters,
       canOnlyListItsBeneficiaries(ctx.user)
