@@ -30,12 +30,7 @@ async function prepareHelpRequestData({
   target: NonNullable<HelpRequestWithRelations>
 }): Promise<Prisma.HelpRequestUncheckedUpdateInput> {
   const { user, structure } = ctx
-  const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structure.id },
-    select: {
-      type: true
-    }
-  })
+  const { type } = structure
 
   const ministryData =
     type === StructureType.Ministere

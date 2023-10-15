@@ -35,12 +35,7 @@ async function prepareFollowupData({
   target: FollowupTarget
 }): Promise<Prisma.FollowupUncheckedUpdateInput> {
   const { structure, user } = ctx
-  const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structure.id },
-    select: {
-      type: true
-    }
-  })
+  const { type } = structure
 
   const {
     ActionLogement,

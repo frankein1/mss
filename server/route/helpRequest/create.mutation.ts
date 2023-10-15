@@ -27,12 +27,8 @@ async function prepareHelpRequestData({
   transaction: Prisma.TransactionClient
   ctx: ProtectedAppContext
 }): Promise<Prisma.HelpRequestUncheckedCreateInput> {
-  const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: ctx.structure.id },
-    select: {
-      type: true
-    }
-  })
+  const { structure } = ctx
+  const { type } = structure
 
   const ministryData =
     type === StructureType.Ministere
