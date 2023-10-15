@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { amountNumber } from '~/utils/zod'
 
 export const quickEditHelpRequestAllocatedAmountSchema = z.object({
   id: z.string().uuid(),
