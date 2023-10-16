@@ -11,6 +11,7 @@
     :past-statuses="pastStatuses"
     is-editing
     :can-edit-private-synthesis="canEditPrivateSynthesis"
+    :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
 </template>
@@ -73,7 +74,10 @@
     }
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('saveHelpRequest', values)
-  })
+  const { caughtErrors, onSubmit } = useCatchFormErrors<EditHelpRequestInput>(
+    handleSubmit,
+    values => {
+      emit('saveHelpRequest', values)
+    }
+  )
 </script>

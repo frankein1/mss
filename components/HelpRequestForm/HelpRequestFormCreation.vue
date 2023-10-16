@@ -8,6 +8,7 @@
     :status="values.status"
     :external-structure="values.externalStructure"
     :financial-support="values.financialSupport"
+    :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
 </template>
@@ -47,7 +48,10 @@
     }
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('saveHelpRequest', values)
-  })
+  const { caughtErrors, onSubmit } = useCatchFormErrors<CreateHelpRequestInput>(
+    handleSubmit,
+    values => {
+      emit('saveHelpRequest', values)
+    }
+  )
 </script>
