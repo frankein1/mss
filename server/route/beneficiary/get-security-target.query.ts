@@ -1,17 +1,8 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  SecurityRuleGrantee,
-  canViewBeneficiary
-} from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { IdInput, idSchema } from '~/server/schema'
-
-const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
-  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
-
-  return canViewBeneficiary(grantee, beneficiary)
-}
+import { idSchema } from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
   input: { id },
@@ -27,6 +18,6 @@ const handler = async ({
 
 export const getBeneficiarySecurityTargetQuery = createQuery({
   inputValidation: idSchema,
-  securityCheck,
+  securityCheck: AllowSecurityCheck,
   handler
 })

@@ -1,11 +1,8 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
-import { canViewBeneficiary } from '~/server/security/rules'
+import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { idSchema } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/repository'
-
-const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input: { id },
@@ -32,15 +29,11 @@ const handler = async ({
     ...beneficiaryMinimalInfo
   } = beneficiary
 
-  if (!canViewBeneficiary(user, beneficiary)) {
-    throw forbiddenError()
-  }
-
   return beneficiaryMinimalInfo
 }
 
 export const getBeneficiaryMinimalInfoQuery = createQuery({
   inputValidation: idSchema,
-  securityCheck,
+  securityCheck: AllowSecurityCheck,
   handler
 })

@@ -10,7 +10,6 @@ import {
   exportBeneficiariesSchema
 } from '~/server/schema'
 import {
-  canViewBeneficiary,
   canExportBeneficiaries,
   SecurityRuleGrantee
 } from '~/server/security/rules'
@@ -55,13 +54,11 @@ const handler = async ({
   const rows: RowType[] = []
 
   for (const beneficiary of dataRequest) {
-    if (canViewBeneficiary(ctx.user, beneficiary)) {
-      const withPermissionsBeneficiary = getBeneficiaryAccessibleData(
-        ctx,
-        beneficiary
-      )
-      rows.push(getBeneficiaryExportData(withPermissionsBeneficiary))
-    }
+    const withPermissionsBeneficiary = getBeneficiaryAccessibleData(
+      ctx,
+      beneficiary
+    )
+    rows.push(getBeneficiaryExportData(withPermissionsBeneficiary))
   }
 
   return await createExport(ctx.user.id, [

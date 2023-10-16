@@ -2,19 +2,9 @@ import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { getBeneficiaryWithRelations } from '~/server/query/beneficiaires'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  SecurityRuleGrantee,
-  canViewBeneficiary
-} from '~/server/security/rules'
 import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
-import { IdInput, idSchema } from '~/server/schema'
-import { getBeneficiarySecurityTarget } from '~/server/query'
-
-const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
-  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
-
-  return canViewBeneficiary(grantee, beneficiary)
-}
+import { idSchema } from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
   input,
@@ -39,6 +29,6 @@ export type GetBeneficiaryOutput = Prisma.PromiseReturnType<
 
 export const getBeneficiaryDetailsQuery = createQuery({
   inputValidation: idSchema,
-  securityCheck,
+  securityCheck: AllowSecurityCheck,
   handler
 })
