@@ -1,15 +1,11 @@
 import { DocumentType } from '@prisma/client'
 import { z } from 'zod'
+import { stringConstraint, requiredNativeEnum } from './helpers.schema'
 import {
   documentFileMaxSize,
   documentFileAllowedTypes
 } from '~/client/options/document'
-import {
-  errorMessages,
-  requiredNativeEnum,
-  stringConstraint,
-  maxStringLengthMessage
-} from '~/utils/zod'
+import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
 
 const documentSizeValidationErrorMessage = `La taille du document doit être inférieure à ${formatByteSize(
@@ -30,7 +26,7 @@ export const uploadBrowserDocumentSchema = z.object({
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
-  file: z.instanceof(File)
+  file: z.instanceof(File, { message: 'Veuillez sélectionner un fichier.' })
 })
 
 export const addDocumentSchema = z.object({

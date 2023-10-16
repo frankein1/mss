@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { stringConstraint, maxStringLengthMessage } from '~/utils/zod'
+import { stringConstraint } from './helpers.schema'
+import { maxStringLengthMessage } from '~/utils/zod'
 
 const addCommentSchema = z.object({
   content: stringConstraint.max(3000, maxStringLengthMessage(3000)),

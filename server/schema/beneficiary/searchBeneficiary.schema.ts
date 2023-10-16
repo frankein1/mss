@@ -1,5 +1,6 @@
 import { z } from 'zod'
-import { stringConstraint, maxStringLengthMessage } from '~/utils/zod'
+import { stringConstraint } from '../helpers.schema'
+import { maxStringLengthMessage } from '~/utils/zod'
 
 export const searchBeneficiarySchema = z.object({
   query: stringConstraint.max(50, maxStringLengthMessage(50)),
