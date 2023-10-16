@@ -1,14 +1,16 @@
 import { DefaultFollowupType, StructureType } from '@prisma/client'
 import { z } from 'zod'
 import {
+  requiredNativeEnum,
+  stringConstraint,
+  phoneConstraint
+} from '../helpers.schema'
+import {
   errorMessages,
   minStringLengthMessage,
   maxStringLengthMessage,
   validZipcode,
-  validEmailMessage,
-  requiredNativeEnum,
-  stringConstraint,
-  phoneConstraint
+  validEmailMessage
 } from '~/utils/zod'
 
 export const createStructureSchema = z.object({

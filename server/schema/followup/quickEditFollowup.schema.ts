@@ -1,6 +1,6 @@
 import { FollowupStatus } from '@prisma/client'
 import { z } from 'zod'
-import { requiredNativeEnum } from '~/utils/zod'
+import { requiredNativeEnum } from '../helpers.schema'
 
 export const quickEditFollowupSchema = z.object({
   id: z.string().uuid(),

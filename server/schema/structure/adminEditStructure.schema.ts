@@ -1,13 +1,13 @@
 import { DefaultFollowupType, StructureType } from '@prisma/client'
 import { z } from 'zod'
-import { editStructureSchema } from './editStructure.schema'
 import {
   requiredNativeEnum,
   stringConstraint,
   siretConstraint,
-  maxStringLengthMessage,
   stringOrEmpty
-} from '~/utils/zod'
+} from '../helpers.schema'
+import { editStructureSchema } from './editStructure.schema'
+import { maxStringLengthMessage } from '~/utils/zod'
 
 export const adminEditStructureSchemaBase = editStructureSchema
   .omit({
