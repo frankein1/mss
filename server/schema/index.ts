@@ -1,3 +1,18 @@
+import { z } from 'zod'
+
+const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
+  switch (issue.code) {
+    case 'invalid_date':
+      return { message: 'Veuillez saisir une date valide : JJ/MM/AAAA.' }
+    case 'invalid_enum_value':
+      return { message: 'Veuillez sélectionner une valeur.' }
+    default:
+      return { message: ctx.defaultError }
+  }
+}
+
+z.setErrorMap(customErrorMap)
+
 export * from './beneficiary'
 export * from './beneficiaryDraft'
 export * from './followup'

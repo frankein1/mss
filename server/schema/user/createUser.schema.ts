@@ -1,12 +1,11 @@
 import { z } from 'zod'
+import { requiredNativeEnum, stringConstraint } from '../helpers.schema'
 import { NonAdminUserRole } from '~/types/user'
 import {
   errorMessages,
   minStringLengthMessage,
   maxStringLengthMessage,
-  validEmailMessage,
-  requiredNativeEnum,
-  stringConstraint
+  validEmailMessage
 } from '~/utils/zod'
 
 const createUserSchema = z.object({
