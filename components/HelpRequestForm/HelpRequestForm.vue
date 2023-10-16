@@ -4,208 +4,246 @@
     class="fr-container--fluid"
     @submit.prevent="emit('submit', $event)"
   >
-    <div class="fr-grid-row fr-grid-row--gutters form-grid">
-      <VeeInput
-        class="fr-col-12 fr-col-lg-6"
-        name="openingDate"
-        :label="helpRequestFieldLabels.openingDate"
-        type="date"
-        required
-      />
+    <div class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom">
+      <div class="fr-col-12 fr-col-lg-6">
+        <VeeInput
+          name="openingDate"
+          :label="helpRequestFieldLabels.openingDate"
+          type="date"
+          required
+        />
+      </div>
 
-      <VeeInput
-        v-if="isMinistryAgent"
-        name="numeroPegase"
-        :label="helpRequestFieldLabels.numeroPegase"
-        hint="Format attendu : A-00-000000"
-      />
+      <template v-if="isMinistryAgent">
+        <div>
+          <VeeInput
+            name="numeroPegase"
+            :label="helpRequestFieldLabels.numeroPegase"
+            hint="Format attendu : A-00-000000"
+          />
+        </div>
 
-      <VeeSelect
-        v-if="isMinistryAgent"
-        name="ministre"
-        :label="helpRequestFieldLabels.ministre"
-        :options="withEmptyValue(ministerOptions)"
-      />
+        <VeeSelect
+          name="ministre"
+          :label="helpRequestFieldLabels.ministre"
+          :options="withEmptyValue(ministerOptions)"
+        />
+      </template>
 
-      <VeeSearchableSelect
-        class="fr-col-12 fr-col-lg-6"
-        :label="helpRequestFieldLabels.typeId"
-        name="typeId"
-        :options="followUpTypeOptions"
-        required
-        hint
-      >
-        <template #hint>
-          <span class="fr-icon-information-line fr-fi--sm">
-            <NuxtLink
-              v-if="canEditStructure"
-              :to="RoutePath.AppStructureEdit()"
-              target="_self"
-            >
-              Personnaliser les objets des demandes de ma structure.
-            </NuxtLink>
-            <template v-else>
-              Les responsables de votre structure peuvent personnaliser ces
-              objets des demandes.
-            </template>
-          </span>
-        </template>
-      </VeeSearchableSelect>
+      <div class="fr-col-12 fr-col-lg-6">
+        <VeeSearchableSelect
+          :label="helpRequestFieldLabels.typeId"
+          name="typeId"
+          :options="followUpTypeOptions"
+          required
+          hint
+        >
+          <template #hint>
+            <span class="fr-icon-information-line fr-fi--sm">
+              <NuxtLink
+                v-if="canEditStructure"
+                :to="RoutePath.AppStructureEdit()"
+                target="_self"
+              >
+                Personnaliser les objets des demandes de ma structure.
+              </NuxtLink>
+              <template v-else>
+                Les responsables de votre structure peuvent personnaliser ces
+                objets des demandes.
+              </template>
+            </span>
+          </template>
+        </VeeSearchableSelect>
+      </div>
 
-      <VeeSearchableSelect
-        :label="helpRequestFieldLabels.prescribingOrganizationId"
-        name="prescribingOrganizationId"
-        :options="withEmptyValue(prescribingOrganizationOptions)"
-        :can-create-new-option="canCreatePrescribingOrganization"
-      />
+      <div>
+        <VeeSearchableSelect
+          :label="helpRequestFieldLabels.prescribingOrganizationId"
+          name="prescribingOrganizationId"
+          :options="withEmptyValue(prescribingOrganizationOptions)"
+          :can-create-new-option="canCreatePrescribingOrganization"
+        />
+      </div>
 
-      <VeeSelect
-        name="status"
-        :label="helpRequestFieldLabels.status"
-        :options="helpRequestStatusOptions"
-        :disabled-options="pastStatuses"
-      />
+      <div>
+        <VeeSelect
+          name="status"
+          :label="helpRequestFieldLabels.status"
+          :options="helpRequestStatusOptions"
+          :disabled-options="pastStatuses"
+        />
+      </div>
 
-      <VeeCheckbox
-        name="fullFile"
-        :label="helpRequestFieldLabels.fullFile"
-      />
+      <div>
+        <VeeCheckbox
+          name="fullFile"
+          :label="helpRequestFieldLabels.fullFile"
+        />
+      </div>
 
-      <VeeSelect
+      <div
         class="fr-col-12 fr-col-lg-6"
         :class="{ 'fr-col-offset-lg-6--right': !isFinancialSupport }"
-        label="S'agit-il d'une aide financière ?"
-        name="financialSupport"
-        :options="withEmptyValue(financialSupportOptions)"
-        required
-        :disabled="isEditing"
-      />
+      >
+        <VeeSelect
+          label="S'agit-il d'une aide financière ?"
+          name="financialSupport"
+          :options="withEmptyValue(financialSupportOptions)"
+          required
+          :disabled="isEditing"
+        />
+      </div>
 
-      <VeeSelect
-        v-if="isFinancialSupport"
-        name="reason"
-        :label="helpRequestFieldLabels.reason"
-        :options="withEmptyValue(helpRequestReasonOptions)"
-        :disabled="isEditingAndIsLocked"
-      />
+      <div v-if="isFinancialSupport">
+        <VeeSelect
+          name="reason"
+          :label="helpRequestFieldLabels.reason"
+          :options="withEmptyValue(helpRequestReasonOptions)"
+          :disabled="isEditingAndIsLocked"
+        />
+      </div>
 
-      <VeeSelect
+      <div
         class="fr-col-12 fr-col-lg-6"
         :class="{
           'fr-col-offset-lg-6--right': !isExternalSupport
         }"
-        label="L'instruction de la demande est réalisée..."
-        name="externalStructure"
-        :options="withEmptyValue(externalOrganisationOptions)"
-        required
-        :disabled="isEditing"
-      />
+      >
+        <VeeSelect
+          label="L'instruction de la demande est réalisée..."
+          name="externalStructure"
+          :options="withEmptyValue(externalOrganisationOptions)"
+          required
+          :disabled="isEditing"
+        />
+      </div>
 
-      <VeeSearchableSelect
-        v-if="isExternalSupport"
-        :label="helpRequestFieldLabels.instructorOrganizationId"
-        name="instructorOrganizationId"
-        :options="instructorOrganizationOptions"
-        :readonly="isEditingAndIsLocked"
-        :can-create-new-option="canCreateInstructorOrganization"
-      />
+      <div v-if="isExternalSupport">
+        <VeeSearchableSelect
+          :label="helpRequestFieldLabels.instructorOrganizationId"
+          name="instructorOrganizationId"
+          :options="instructorOrganizationOptions"
+          :readonly="isEditingAndIsLocked"
+          :can-create-new-option="canCreateInstructorOrganization"
+        />
+      </div>
 
       <template v-if="externalStructure && financialSupport">
-        <VeeCurrencyInput
-          v-if="isFinancialSupport"
-          name="askedAmount"
-          :label="helpRequestFieldLabels.askedAmount"
-          :readonly="isEditingAndIsLocked"
-        />
+        <div v-if="isFinancialSupport">
+          <VeeCurrencyInput
+            name="askedAmount"
+            :label="helpRequestFieldLabels.askedAmount"
+            :readonly="isEditingAndIsLocked"
+          />
+        </div>
 
         <template v-if="afterInvestigationOngoing">
-          <VeeInput
-            v-if="isExternalSupport"
-            name="dispatchDate"
-            :label="helpRequestFieldLabels.dispatchDate"
-            type="date"
-            :readonly="isEditingAndIsLocked"
-          />
+          <div v-if="isExternalSupport">
+            <VeeInput
+              name="dispatchDate"
+              :label="helpRequestFieldLabels.dispatchDate"
+              type="date"
+              :readonly="isEditingAndIsLocked"
+            />
+          </div>
 
-          <VeeInput
-            v-if="!isExternalSupport"
-            name="examinationDate"
-            :label="helpRequestFieldLabels.examinationDate"
-            type="date"
-            :readonly="isEditingAndIsLocked"
-          />
+          <div v-if="!isExternalSupport">
+            <VeeInput
+              name="examinationDate"
+              :label="helpRequestFieldLabels.examinationDate"
+              type="date"
+              :readonly="isEditingAndIsLocked"
+            />
+          </div>
         </template>
 
-        <VeeInput
-          v-if="isAnswered"
-          name="decisionDate"
-          :label="helpRequestFieldLabels.decisionDate"
-          type="date"
-        />
+        <div v-if="isAnswered">
+          <VeeInput
+            name="decisionDate"
+            :label="helpRequestFieldLabels.decisionDate"
+            type="date"
+          />
+        </div>
 
         <template v-if="status === HelpRequestStatus.Accepted">
           <template v-if="isFinancialSupport">
-            <VeeCurrencyInput
-              name="allocatedAmount"
-              :label="helpRequestFieldLabels.allocatedAmount"
-            />
+            <div>
+              <VeeCurrencyInput
+                name="allocatedAmount"
+                :label="helpRequestFieldLabels.allocatedAmount"
+              />
+            </div>
 
             <template v-if="!isExternalSupport">
-              <VeeSelect
-                name="paymentMethod"
-                :label="helpRequestFieldLabels.paymentMethod"
-                :options="withEmptyValue(paymentMethodOptions)"
-              />
+              <div>
+                <VeeSelect
+                  name="paymentMethod"
+                  :label="helpRequestFieldLabels.paymentMethod"
+                  :options="withEmptyValue(paymentMethodOptions)"
+                />
+              </div>
 
-              <VeeInput
-                name="paymentDate"
-                :label="helpRequestFieldLabels.paymentDate"
-                type="date"
-              />
+              <div>
+                <VeeInput
+                  name="paymentDate"
+                  :label="helpRequestFieldLabels.paymentDate"
+                  type="date"
+                />
+              </div>
             </template>
           </template>
 
-          <VeeInput
-            name="handlingDate"
-            :label="helpRequestFieldLabels.handlingDate"
-            type="date"
-          />
+          <div>
+            <VeeInput
+              name="handlingDate"
+              :label="helpRequestFieldLabels.handlingDate"
+              type="date"
+            />
+          </div>
         </template>
 
-        <VeeInput
-          v-if="status === HelpRequestStatus.Refused"
-          name="refusalReason"
-          :label="helpRequestFieldLabels.refusalReason"
-        />
+        <div v-if="status === HelpRequestStatus.Refused">
+          <VeeInput
+            name="refusalReason"
+            :label="helpRequestFieldLabels.refusalReason"
+          />
+        </div>
       </template>
 
-      <VeeInput
-        name="dueDate"
-        :label="helpRequestFieldLabels.dueDate"
-        type="date"
-        :readonly="isDropped"
-      />
+      <div>
+        <VeeInput
+          name="dueDate"
+          :label="helpRequestFieldLabels.dueDate"
+          type="date"
+          :readonly="isDropped"
+        />
+      </div>
 
-      <VeeTextarea
-        class="fr-col-12 large-textarea"
-        name="synthesis"
-        :label="helpRequestFieldLabels.synthesis"
-      />
+      <div class="fr-col-12">
+        <VeeTextarea
+          class="large-textarea"
+          name="synthesis"
+          :label="helpRequestFieldLabels.synthesis"
+        />
+      </div>
 
-      <VeeTextarea
+      <div
         v-if="canEditPrivateSynthesis"
         class="fr-col-12 fr-mb-6v"
-        name="privateSynthesis"
-        :label="helpRequestFieldLabels.privateSynthesis"
-        label-icon="fr-icon-lock-line"
       >
-        <template #hint>
-          Le compte rendu privé est uniquement visible et modifiable par l'agent
-          qui crée l'instruction de demande d'aide.<br />{{
-            SENSITIVE_DATA_HINT
-          }}
-        </template>
-      </VeeTextarea>
+        <VeeTextarea
+          name="privateSynthesis"
+          :label="helpRequestFieldLabels.privateSynthesis"
+          label-icon="fr-icon-lock-line"
+        >
+          <template #hint>
+            Le compte rendu privé est uniquement visible et modifiable par
+            l'agent qui crée l'instruction de demande d'aide.<br />{{
+              SENSITIVE_DATA_HINT
+            }}
+          </template>
+        </VeeTextarea>
+      </div>
     </div>
 
     <BeneficiaryDocumentsSelect
