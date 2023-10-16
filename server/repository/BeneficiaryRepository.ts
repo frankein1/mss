@@ -31,6 +31,12 @@ function findUniqueOrThrow<T extends Prisma.BeneficiaryFindUniqueOrThrowArgs>(
   return prismaClient.beneficiary.findUniqueOrThrow(params)
 }
 
+function count(user: SecurityRuleGrantee, params: Prisma.BeneficiaryCountArgs) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
+  return prismaClient.beneficiary.count(params)
+}
+
 function create(
   _user: SecurityRuleGrantee,
   params: Prisma.BeneficiaryCreateArgs
@@ -39,26 +45,17 @@ function create(
 }
 
 function update<T extends Prisma.BeneficiaryUpdateArgs>(
-  user: SecurityRuleGrantee,
+  _user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryUpdateArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.beneficiary.update(params)
 }
 
 function deleteEntity(
-  user: SecurityRuleGrantee,
+  _user: SecurityRuleGrantee,
   params: Prisma.BeneficiaryDeleteArgs
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.beneficiary.delete(params)
-}
-function count(user: SecurityRuleGrantee, params: Prisma.BeneficiaryCountArgs) {
-  const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
-  return prismaClient.beneficiary.count(params)
 }
 
 export const BeneficiaryRepo = {
