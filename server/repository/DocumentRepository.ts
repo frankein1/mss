@@ -1,19 +1,42 @@
 import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
-import { SecurityRuleGrantee } from '~/server/security'
+import {
+  SecurityRuleGrantee,
+  canOnlyListItsUploadedDocuments
+} from '~/server/security'
+
+function userConstraints(user: SecurityRuleGrantee) {
+  if (canOnlyListItsUploadedDocuments(user)) {
+    return { createdById: user.id }
+  }
+
+  return {
+    OR: [{ confidential: false }, { confidential: true, createdById: user.id }]
+  }
+}
 
 function findMany<T extends Prisma.DocumentFindManyArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.DocumentFindManyArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.document.findMany(params)
 }
 
 function findUniqueOrThrow<T extends Prisma.DocumentFindUniqueOrThrowArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.DocumentFindUniqueOrThrowArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.document.findUniqueOrThrow(params)
+}
+
+function count(user: SecurityRuleGrantee, params: Prisma.DocumentCountArgs) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
+  return prismaClient.document.count(params)
 }
 
 function create(_user: SecurityRuleGrantee, params: Prisma.DocumentCreateArgs) {
@@ -21,21 +44,21 @@ function create(_user: SecurityRuleGrantee, params: Prisma.DocumentCreateArgs) {
 }
 
 function update<T extends Prisma.DocumentUpdateArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.DocumentUpdateArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.document.update(params)
 }
 
 function deleteEntity(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.DocumentDeleteArgs
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.document.delete(params)
-}
-
-function count(_user: SecurityRuleGrantee, params: Prisma.DocumentCountArgs) {
-  return prismaClient.document.count(params)
 }
 
 export const DocumentRepo = {
