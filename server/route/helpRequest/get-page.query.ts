@@ -10,7 +10,6 @@ import {
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prepareHelpRequestFilters } from '~/utils/filters'
 import { SortOrder } from '~/types/table'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { HelpRequestRepo } from '~/server/repository'
 
@@ -20,7 +19,7 @@ type GetHelpRequestsOrderBy = Array<
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx: { user }
 }: {
   input: GetHelpRequestsInput
   ctx: ProtectedAppContext
@@ -30,16 +29,7 @@ const handler = async ({
     page: input.page
   })
 
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
   const where: Prisma.HelpRequestWhereInput = {
-    structureId: structure.id,
-    beneficiary: {
-      archived: null,
-      referents
-    },
     ...prepareHelpRequestFilters(input.filters)
   }
 

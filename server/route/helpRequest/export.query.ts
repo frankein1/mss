@@ -10,7 +10,6 @@ import {
   exportHelpRequestsSchema
 } from '~/server/schema'
 import {
-  canOnlyListItsBeneficiaries,
   canViewHelpRequest,
   canExportHistory,
   SecurityRuleGrantee
@@ -24,7 +23,7 @@ import { HelpRequestRepo } from '~/server/repository'
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx: { user }
 }: {
   input: ExportHelpRequestsInput
   ctx: ProtectedAppContext
@@ -34,16 +33,7 @@ const handler = async ({
     header: helpRequestFieldLabels[key]
   }))
 
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
   const where: Prisma.HelpRequestWhereInput = {
-    structureId: structure.id,
-    beneficiary: {
-      archived: null,
-      referents
-    },
     ...prepareHelpRequestFilters(input.filters)
   }
 

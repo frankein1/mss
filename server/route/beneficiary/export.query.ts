@@ -10,7 +10,6 @@ import {
   exportBeneficiariesSchema
 } from '~/server/schema'
 import {
-  canOnlyListItsBeneficiaries,
   canViewBeneficiary,
   canExportBeneficiaries,
   SecurityRuleGrantee
@@ -44,10 +43,7 @@ const handler = async ({
 
   const where: Prisma.BeneficiaryWhereInput = {
     archived: null,
-    ...prepareBeneficiaryFilters(
-      input.filters,
-      canOnlyListItsBeneficiaries(ctx.user)
-    )
+    ...prepareBeneficiaryFilters(input.filters)
   }
 
   const dataRequest = await BeneficiaryRepo.findMany(ctx.user, {
