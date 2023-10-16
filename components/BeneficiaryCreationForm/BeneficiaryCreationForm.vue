@@ -1,7 +1,8 @@
 <template>
   <form
+    novalidate
     class="fr-p-3v"
-    @submit="onSubmit"
+    @submit.prevent="onSubmit"
   >
     <BeneficiaryFormFileInformation
       :agents="agents"

@@ -3,6 +3,7 @@
     <form
       :id="FILTERS_ID"
       ref="form"
+      novalidate
       class="filters"
       :class="{
         'full-width-filters': fullWidthFilters,

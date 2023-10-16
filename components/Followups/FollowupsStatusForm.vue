@@ -1,5 +1,6 @@
 <template>
   <form
+    novalidate
     @change="onUpdateStatus"
     @submit.prevent
   >

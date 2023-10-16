@@ -1,7 +1,8 @@
 <template>
   <form
+    novalidate
     class="fr-container--fluid"
-    @submit="onUpdateStructure"
+    @submit.prevent="onUpdateStructure"
   >
     <StructureFormAdmin />
 

@@ -1,8 +1,9 @@
 <template>
   <form
     ref="form"
+    novalidate
     class="fr-grid-row"
-    @submit="onSubmit"
+    @submit.prevent="onSubmit"
   >
     <BeneficiariesSaveFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
