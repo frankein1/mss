@@ -1,5 +1,10 @@
 <template>
+  <FormErrors
+    v-if="errors.length > 1"
+    :errors="errors"
+  />
   <form
+    ref="form"
     class="fr-container--fluid"
     @submit="emit('submit', $event)"
   >
@@ -277,6 +282,7 @@
     InstructorOrganization,
     PrescribingOrganization
   } from '@prisma/client'
+  import type { FormErrors } from 'vee-validate'
   import {
     externalOrganisationOptions,
     financialSupportOptions,
@@ -294,6 +300,8 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { RoutePath } from '~/utils/routing'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
+  import { CreateHelpRequestInput } from '~/server/schema'
+  import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
 
   const authStore = useAuthStore()
   const isMinistryAgent = useMinistryAgent()
@@ -312,8 +320,17 @@
       pastStatuses?: HelpRequestStatus[]
       isEditing?: boolean
       canEditPrivateSynthesis?: boolean
+      caughtErrors: FormErrors<CreateHelpRequestInput>
     }>(),
     { pastStatuses: undefined, isEditing: false, canEditPrivateSynthesis: true }
+  )
+
+  const form = ref<HTMLFormElement | null>(null)
+
+  const { errors } = useDisplayFormErrors(
+    form,
+    toRef(() => props.caughtErrors),
+    helpRequestFieldLabels
   )
 
   const emit = defineEmits<{
