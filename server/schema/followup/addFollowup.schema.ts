@@ -13,7 +13,8 @@ import {
   withEmptyValueOptionalNativeEnum,
   stringConstraint,
   numeroPegaseContraint,
-  maxStringLengthMessage
+  maxStringLengthMessage,
+  dateSchema
 } from '~/utils/zod'
 
 export const addFollowupSchema = z.object({
@@ -27,7 +28,7 @@ export const addFollowupSchema = z.object({
   documents: z.array(z.string(), errorMessages).default([]),
   medium: requiredNativeEnum(FollowupMedium),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
-  date: z.coerce.date(errorMessages),
+  date: dateSchema,
   synthesis: stringConstraint.max(6000, maxStringLengthMessage(6000)).nullish(),
   privateSynthesis: stringConstraint
     .max(1000, maxStringLengthMessage(1000))
@@ -39,7 +40,7 @@ export const addFollowupSchema = z.object({
   structureName: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
-  dueDate: z.coerce.date(errorMessages).nullish(),
+  dueDate: dateSchema.nullish(),
   thirdPersonName: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
