@@ -1,16 +1,8 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { canViewDraft } from '~/server/security/rules'
-import { IdInput, idSchema } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { idSchema } from '~/server/schema'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { DraftRepo } from '~/server/repository'
-
-const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const draft = await DraftRepo.findUniqueOrThrow(user, {
-    where: { id: input.id }
-  })
-  return canViewDraft(user, draft)
-}
 
 const handler = async ({
   input: { id },
@@ -28,6 +20,6 @@ const handler = async ({
 
 export const getBeneficiaryDraftQuery = createQuery({
   inputValidation: idSchema,
-  securityCheck,
+  securityCheck: AllowSecurityCheck,
   handler
 })
