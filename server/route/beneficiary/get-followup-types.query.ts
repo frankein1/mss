@@ -14,13 +14,11 @@ import { FollowupRepo, HelpRequestRepo } from '~/server/repository'
 async function getFollowupFollowupTypes(
   user: SecurityRuleGrantee,
   beneficiaryId: string,
-  structureId: string,
   legallyRequired: boolean
 ) {
   const followupWithFollowupTypes = await FollowupRepo.findMany(user, {
     where: {
       beneficiaryId,
-      structureId,
       types: { some: { legallyRequired } }
     },
     select: {
@@ -52,13 +50,11 @@ async function getFollowupFollowupTypes(
 async function getHelpRequestFollowupTypes(
   user: SecurityRuleGrantee,
   beneficiaryId: string,
-  structureId: string,
   legallyRequired: boolean
 ) {
   const helpRequestWithFollowupTypes = await HelpRequestRepo.findMany(user, {
     where: {
       beneficiaryId,
-      structureId,
       type: { legallyRequired }
     },
     select: {
@@ -80,17 +76,11 @@ async function getHelpRequestFollowupTypes(
 async function getFollowupTypes(
   user: SecurityRuleGrantee,
   beneficiaryId: string,
-  structureId: string,
   legallyRequired: boolean
 ) {
   const [followupFollowupTypes, helpRequestFollowupTypes] = await Promise.all([
-    getFollowupFollowupTypes(user, beneficiaryId, structureId, legallyRequired),
-    getHelpRequestFollowupTypes(
-      user,
-      beneficiaryId,
-      structureId,
-      legallyRequired
-    )
+    getFollowupFollowupTypes(user, beneficiaryId, legallyRequired),
+    getHelpRequestFollowupTypes(user, beneficiaryId, legallyRequired)
   ])
 
   const beneficiaryFollowupTypes = [...followupFollowupTypes]
@@ -113,7 +103,7 @@ const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
 
 const handler = async ({
   input: { id: beneficiaryId },
-  ctx: { user, structure }
+  ctx: { user }
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
@@ -121,13 +111,11 @@ const handler = async ({
   const beneficiaryLegallyRequiredFollowupTypes = await getFollowupTypes(
     user,
     beneficiaryId,
-    structure.id,
     true
   )
   const beneficiaryLegallyNotRequiredFollowupTypes = await getFollowupTypes(
     user,
     beneficiaryId,
-    structure.id,
     false
   )
 

@@ -2,6 +2,8 @@ import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
+// structureId: user.structureId || '',
+
 function systemFindMany<T extends Prisma.HelpRequestFindManyArgs>(
   params: Prisma.SelectSubset<T, Prisma.HelpRequestFindManyArgs>
 ) {

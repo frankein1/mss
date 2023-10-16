@@ -44,10 +44,7 @@ const handler = async ({
       archived: null,
       referents
     },
-    ...prepareHelpRequestFilters(
-      input.filters,
-      canOnlyListItsBeneficiaries(user)
-    )
+    ...prepareHelpRequestFilters(input.filters)
   }
 
   const dataRequest = await HelpRequestRepo.findMany(user, {

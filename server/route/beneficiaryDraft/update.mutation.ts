@@ -6,20 +6,9 @@ import {
   UpdateBeneficiaryDraftInput,
   updateBeneficiaryDraftSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canUpdateDraft } from '~/server/security/rules'
 import type { BeneficiaryDraft } from '~/types/beneficiary'
 import { DraftRepo } from '~/server/repository'
-
-const securityCheck = async (
-  grantee: SecurityRuleGrantee,
-  input: UpdateBeneficiaryDraftInput
-) => {
-  const beneficiaryDraft = (await DraftRepo.findUniqueOrThrow(grantee, {
-    where: { id: input.id }
-  })) as BeneficiaryDraft
-
-  return canUpdateDraft(grantee, beneficiaryDraft)
-}
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
   input: {
@@ -73,5 +62,5 @@ const handler = async ({
 export const updateBeneficiaryDraftMutation = createMutation({
   inputValidation: updateBeneficiaryDraftSchema,
   handler,
-  securityCheck
+  securityCheck: AllowSecurityCheck
 })

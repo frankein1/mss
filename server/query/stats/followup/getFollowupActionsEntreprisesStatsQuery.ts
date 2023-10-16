@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { FollowupRepo } from '~/server/repository'
 import { StatFilterInput } from '~/server/schema'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { prepareFollowupStatFilters } from '~/utils/filters'
 
@@ -9,26 +8,18 @@ export async function getFollowupActionsEntreprisesStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
   const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
     prepareFollowupStatFilters(input)
 
   const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
     preparedBeneficiaryFilters
       ? {
-          ...preparedBeneficiaryFilters,
-          referents
+          ...preparedBeneficiaryFilters
         }
-      : {
-          referents
-        }
+      : {}
 
   const followups = await FollowupRepo.findMany(user, {
     where: {
-      structureId: user.structureId || '',
       OR: [{ redirected: true }, { helpRequested: true }],
       ...preparedFilters,
       beneficiary: beneficiaryFilters

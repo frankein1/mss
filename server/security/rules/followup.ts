@@ -22,17 +22,6 @@ export const canCreateFollowup = (
     'ReceptionAgent'
   ]) || isReferentFor(grantee, beneficiary)
 
-export const canListBeneficiaryFollowups = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
 export const canViewFollowup = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents

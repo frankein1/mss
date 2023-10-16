@@ -40,10 +40,7 @@ const handler = async ({
       archived: null,
       referents
     },
-    ...prepareHelpRequestFilters(
-      input.filters,
-      canOnlyListItsBeneficiaries(user)
-    )
+    ...prepareHelpRequestFilters(input.filters)
   }
 
   const orderBy: GetHelpRequestsOrderBy = input.orderBy
