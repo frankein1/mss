@@ -4,11 +4,11 @@ import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
 import {
   emailOrEmpty,
-  errorMessages,
   phoneConstraint,
   requiredNativeEnum,
   numeroPegaseContraint,
-  stringOrEmpty
+  stringOrEmpty,
+  dateSchema
 } from '~/utils/zod'
 
 export const createBeneficiarySchema = z.object({
@@ -21,7 +21,7 @@ export const createBeneficiarySchema = z.object({
   usualName: stringOrEmpty(beneficiaryLastNameSchema),
   birthName: stringOrEmpty(beneficiaryLastNameSchema),
   firstName: beneficiaryFirstNameOrEmptySchema,
-  birthDate: z.coerce.date(errorMessages).nullish(),
+  birthDate: dateSchema.nullish(),
   phone1: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
   numeroPegase: stringOrEmpty(numeroPegaseContraint)

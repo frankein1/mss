@@ -13,12 +13,13 @@ import {
   requiredNativeEnum,
   amountNumber,
   stringConstraint,
-  maxStringLengthMessage
+  maxStringLengthMessage,
+  dateSchema
 } from '~/utils/zod'
 
 export const createHelpRequestSchema = z.object({
   beneficiaryId: z.string().uuid(),
-  openingDate: z.coerce.date(errorMessages),
+  openingDate: dateSchema,
   numeroPegase: numeroPegaseContraint.nullish(),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   typeId: z.string(errorMessages).uuid(),
@@ -27,24 +28,24 @@ export const createHelpRequestSchema = z.object({
   externalStructure: kindOfBooleanSchema(),
   status: requiredNativeEnum(HelpRequestStatus),
   askedAmount: amountNumber.nullish(),
-  examinationDate: z.coerce.date(errorMessages).nullish(),
-  decisionDate: z.coerce.date(errorMessages).nullish(),
+  examinationDate: dateSchema.nullish(),
+  decisionDate: dateSchema.nullish(),
   allocatedAmount: amountNumber.nullish(),
   paymentMethod: withEmptyValueOptionalNativeEnum(PaymentMethod),
   reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
-  paymentDate: z.coerce.date(errorMessages).nullish(),
-  handlingDate: z.coerce.date(errorMessages).nullish(),
+  paymentDate: dateSchema.nullish(),
+  handlingDate: dateSchema.nullish(),
   refusalReason: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
   prescribingOrganizationId: z.string().nullish(),
   instructorOrganizationId: z.string().nullish(),
-  dispatchDate: z.coerce.date(errorMessages).nullish(),
+  dispatchDate: dateSchema.nullish(),
   synthesis: stringConstraint.max(6000, maxStringLengthMessage(6000)).nullish(),
   privateSynthesis: stringConstraint
     .max(1000, maxStringLengthMessage(1000))
     .nullish(),
-  dueDate: z.coerce.date(errorMessages).nullish(),
+  dueDate: dateSchema.nullish(),
   fullFile: z.boolean().default(false)
 })
 

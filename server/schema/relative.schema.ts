@@ -9,7 +9,7 @@ import {
   emailOrEmpty,
   maxStringLengthMessage,
   stringOrEmpty,
-  errorMessages
+  dateSchema
 } from '~/utils/zod'
 
 export const createOrUpdateEntourageSchema = z.object({
@@ -40,7 +40,7 @@ export const createOrUpdateTaxHouseholdSchema = createOrUpdateEntourageSchema
         birthName: stringOrEmpty(beneficiaryLastNameSchema)
       })
       .nullish(),
-    birthDate: z.coerce.date(errorMessages).nullish()
+    birthDate: dateSchema.nullish()
   })
   .omit({ city: true })
 
