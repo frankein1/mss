@@ -84,7 +84,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { useForm } from 'vee-validate'
   import dayjs from 'dayjs'
   import { FilterType } from '~/utils/constants/filters'
   import type {

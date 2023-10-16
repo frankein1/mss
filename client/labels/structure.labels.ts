@@ -1,5 +1,8 @@
 import { FieldLabels } from '~/types/fieldLabels'
-import type { EditCurrentUserStructureInput } from '~/server/schema'
+import type {
+  EditCurrentUserStructureInput,
+  AdminCreateStructureInput
+} from '~/server/schema'
 
 export const structureFieldLabels: FieldLabels<EditCurrentUserStructureInput> =
   {
@@ -12,3 +15,13 @@ export const structureFieldLabels: FieldLabels<EditCurrentUserStructureInput> =
     legallyRequiredFollowupTypes: 'Aides légales',
     legallyNotRequiredFollowupTypes: 'Aides facultatives'
   }
+
+export const adminStructureFieldLabels: FieldLabels<
+  Required<AdminCreateStructureInput>
+> = {
+  ...structureFieldLabels,
+  type: 'Type',
+  inhabitantsNumber: "Nombre d'habitants",
+  inseeCode: 'Code INSEE',
+  siret: 'SIRET'
+}

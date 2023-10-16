@@ -1,21 +1,26 @@
 <template>
+  <FormErrors
+    v-if="errors.length > 1"
+    :errors="errors"
+  />
   <form
+    ref="form"
     novalidate
     @submit.prevent="onSubmit"
   >
     <VeeInput
-      label="Nom du document"
+      :label="documentFieldLabels.name"
       name="name"
       required
     />
     <VeeSelect
-      label="Type de fichier"
+      :label="documentFieldLabels.type"
       name="type"
       :options="documentTypeOptions"
       required
     />
     <VeeSearchableSelect
-      label="Thèmes"
+      :label="documentFieldLabels.tags"
       name="tags"
       :options="documentTagOptions"
       multiple
@@ -23,7 +28,7 @@
     <VeeCheckbox
       v-if="canSetDocumentAsConfidential"
       class="fr-mb-2w"
-      label="Confidentiel"
+      :label="documentFieldLabels.confidential"
       name="confidential"
     />
     <button
@@ -47,6 +52,7 @@
   import { useAuthStore } from '~/store/auth'
   import { canSetDocumentAsConfidential as canSetDocumentAsConfidentialRule } from '~/server/security/rules'
   import { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import { documentFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     document: Doc
@@ -60,6 +66,7 @@
   const authStore = useAuthStore()
 
   const isSubmitting = ref(false)
+  const form = ref<HTMLFormElement | null>(null)
 
   const canSetDocumentAsConfidential = computed(() => {
     return canSetDocumentAsConfidentialRule(
@@ -81,7 +88,16 @@
     }
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('updateDocument', values)
-  })
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      emit('updateDocument', values)
+    }
+  )
+
+  const { errors } = useDisplayFormErrors(
+    form,
+    caughtErrors,
+    documentFieldLabels
+  )
 </script>
