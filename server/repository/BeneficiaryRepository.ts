@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee, hasAllowedRole } from '~/server/security'
 
-const tableConstraints = (user: SecurityRuleGrantee) => {
+const viewConstraints = (user: SecurityRuleGrantee) => {
   const where = {}
   if (hasAllowedRole(user, ['Administrator'])) {
     return where
@@ -17,12 +17,14 @@ const tableConstraints = (user: SecurityRuleGrantee) => {
   return where
 }
 
+// VIEW
+
 function findMany<T extends Prisma.BeneficiaryFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryFindManyArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, tableConstraints(user))
+  params.where = Object.assign(where || {}, viewConstraints(user))
   return prismaClient.beneficiary.findMany(params)
 }
 
@@ -31,15 +33,17 @@ function findUniqueOrThrow<T extends Prisma.BeneficiaryFindUniqueOrThrowArgs>(
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryFindUniqueOrThrowArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, tableConstraints(user))
+  params.where = Object.assign(where || {}, viewConstraints(user))
   return prismaClient.beneficiary.findUniqueOrThrow(params)
 }
 
 function count(user: SecurityRuleGrantee, params: Prisma.BeneficiaryCountArgs) {
   const { where } = params
-  params.where = Object.assign(where || {}, tableConstraints(user))
+  params.where = Object.assign(where || {}, viewConstraints(user))
   return prismaClient.beneficiary.count(params)
 }
+
+// CREATE / UPDATE / DELETE
 
 function create(
   _user: SecurityRuleGrantee,
@@ -49,20 +53,16 @@ function create(
 }
 
 function update<T extends Prisma.BeneficiaryUpdateArgs>(
-  user: SecurityRuleGrantee,
+  _user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryUpdateArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.beneficiary.update(params)
 }
 
 function deleteEntity(
-  user: SecurityRuleGrantee,
+  _user: SecurityRuleGrantee,
   params: Prisma.BeneficiaryDeleteArgs
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.beneficiary.delete(params)
 }
 

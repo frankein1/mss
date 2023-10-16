@@ -2,7 +2,6 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   SecurityRuleGrantee,
-  canEditBeneficiary,
   canEditBeneficiaryReferents
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'

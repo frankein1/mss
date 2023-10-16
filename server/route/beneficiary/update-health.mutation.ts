@@ -2,7 +2,6 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   SecurityRuleGrantee,
-  canEditBeneficiary,
   canEditBeneficiaryHealthInfo,
   canSetBeneficiaryNir
 } from '~/server/security/rules'

@@ -1,4 +1,3 @@
-export * from './canEditBeneficiary'
 export * from './canEditBeneficiaryExternalOrganisations'
 export * from './canEditBeneficiaryHealthInfo'
 export * from './canEditBeneficiaryReferents'

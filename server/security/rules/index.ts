@@ -28,7 +28,6 @@ export {
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,
   canViewBeneficiaryExternalOrganisations,
-  canEditBeneficiary,
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
   canEditBeneficiaryExternalOrganisations,

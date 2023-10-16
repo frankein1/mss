@@ -3,8 +3,7 @@ import {
   canEditBeneficiaryRelatives,
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryExternalOrganisations,
-  canEditBeneficiary
+  canEditBeneficiaryExternalOrganisations
 } from '~/server/security/rules'
 import {
   SecurityRuleGrantee,
@@ -13,7 +12,7 @@ import {
 } from '~/server/security'
 
 const beneficiaryEditRouteAccessPermissions = {
-  [Route.AppBeneficiaryEditInfo]: canEditBeneficiary,
+  [Route.AppBeneficiaryEditInfo]: null,
   [Route.AppBeneficiaryEditTaxHousehold]: canEditBeneficiaryRelatives,
   [Route.AppBeneficiaryEditEntourage]: canEditBeneficiaryRelatives,
   [Route.AppBeneficiaryEditHealth]: canEditBeneficiaryHealthInfo,
@@ -67,7 +66,7 @@ function getBeneficiaryEditRoutePrevious(
 
   const accessRule = beneficiaryEditRouteAccessPermissions[previous]
 
-  if (accessRule(user, beneficiary)) {
+  if (!accessRule || accessRule(user, beneficiary)) {
     return previous
   }
 
@@ -87,7 +86,7 @@ function getBeneficiaryEditRouteNext(
 
   const accessRule = beneficiaryEditRouteAccessPermissions[next]
 
-  if (accessRule(user, beneficiary)) {
+  if (!accessRule || accessRule(user, beneficiary)) {
     return next
   }
 
