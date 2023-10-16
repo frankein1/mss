@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { z } from 'zod'
-import { userAdminFilterSchema } from '~/server/schema'
+import { userAdminFilterSchema } from '../filter.schema'
 import { stringConstraint, maxStringLengthMessage } from '~/utils/zod'
 
 export const adminGetUsersSchema = z.object({
