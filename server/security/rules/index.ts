@@ -60,7 +60,6 @@ export {
   canDeleteFollowup,
   canEditFollowup,
   canEditFollowupPrivateSynthesis,
-  canListBeneficiaryFollowups,
   canViewFollowup,
   canViewFollowupPrivateSynthesis,
   canViewFollowupDetails,
@@ -93,8 +92,6 @@ export {
   canExportHistory,
   canExportStats
 } from './export'
-
-export { canViewDraft, canUpdateDraft, canDeleteDraft } from './draft'
 
 // A rule is a synchronous function taking
 // -- grantee (the authenticated user)

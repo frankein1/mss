@@ -4,9 +4,13 @@ import { SecurityRuleGrantee, hasAllowedRole } from '~/server/security'
 
 const userConstraints = (user: SecurityRuleGrantee) => {
   const where = {}
-  if (!hasAllowedRole(user, ['Administrator'])) {
-    Object.assign(where, { structureId: user.structureId })
+  if (hasAllowedRole(user, ['Administrator'])) {
+    return where
   }
+  // SAME STRUCTURE
+  Object.assign(where, { structureId: user.structureId })
+
+  // REFERENT CASE
   if (hasAllowedRole(user, ['Referent'])) {
     Object.assign(where, { referents: { some: { id: user.id } } })
   }

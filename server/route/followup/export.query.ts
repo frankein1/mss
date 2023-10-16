@@ -4,7 +4,6 @@ import { createQuery } from '~/server/route'
 import { followupFieldLabels } from '~/client/labels'
 import { ExportFollowupsInput, exportFollowupsSchema } from '~/server/schema'
 import {
-  canOnlyListItsBeneficiaries,
   canViewFollowup,
   canExportHistory,
   SecurityRuleGrantee
@@ -19,7 +18,7 @@ import { FollowupRepo } from '~/server/repository'
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx: { user }
 }: {
   input: ExportFollowupsInput
   ctx: ProtectedAppContext
@@ -29,17 +28,8 @@ const handler = async ({
     header: followupFieldLabels[key]
   }))
 
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
   const where: Prisma.FollowupWhereInput = {
-    structureId: structure.id,
-    beneficiary: {
-      archived: null,
-      referents
-    },
-    ...prepareFollowupFilters(input.filters, canOnlyListItsBeneficiaries(user))
+    ...prepareFollowupFilters(input.filters)
   }
 
   const dataRequest = await FollowupRepo.findMany(user, {
