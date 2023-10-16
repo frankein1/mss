@@ -1,6 +1,6 @@
 import { HelpRequestStatus } from '@prisma/client'
 import { z } from 'zod'
-import { requiredNativeEnum } from '~/utils/zod'
+import { requiredNativeEnum } from '../helpers.schema'
 
 export const quickEditHelpRequestStatusSchema = z.object({
   id: z.string().uuid(),

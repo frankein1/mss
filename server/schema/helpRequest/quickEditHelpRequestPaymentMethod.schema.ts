@@ -1,6 +1,6 @@
 import { PaymentMethod } from '@prisma/client'
 import { z } from 'zod'
-import { withEmptyValueOptionalNativeEnum } from '~/utils/zod'
+import { withEmptyValueOptionalNativeEnum } from '../helpers.schema'
 
 export const quickEditHelpRequestPaymentMethodSchema = z.object({
   id: z.string().uuid(),
