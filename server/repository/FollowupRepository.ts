@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee, hasAllowedRole } from '~/server/security'
 
-const userConstraints = (user: SecurityRuleGrantee) => {
+const tableConstraints = (user: SecurityRuleGrantee) => {
   const where = {}
   if (hasAllowedRole(user, ['Administrator'])) {
     return {}
@@ -30,7 +30,7 @@ function findMany<T extends Prisma.FollowupFindManyArgs>(
   params: Prisma.SelectSubset<T, Prisma.FollowupFindManyArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.followup.findMany(params)
 }
 
@@ -39,13 +39,13 @@ function findUniqueOrThrow<T extends Prisma.FollowupFindUniqueOrThrowArgs>(
   params: Prisma.SelectSubset<T, Prisma.FollowupFindUniqueOrThrowArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.followup.findUniqueOrThrow(params)
 }
 
 function count(user: SecurityRuleGrantee, params: Prisma.FollowupCountArgs) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.followup.count(params)
 }
 
@@ -58,7 +58,7 @@ function update<T extends Prisma.FollowupUpdateArgs>(
   params: Prisma.SelectSubset<T, Prisma.FollowupUpdateArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.followup.update(params)
 }
 
@@ -67,7 +67,7 @@ function deleteEntity(
   params: Prisma.FollowupDeleteArgs
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.followup.delete(params)
 }
 

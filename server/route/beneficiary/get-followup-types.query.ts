@@ -1,32 +1,26 @@
 import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  SecurityRuleGrantee,
-  canViewBeneficiary
-} from '~/server/security/rules'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import { SecurityRuleGrantee } from '~/server/security/rules'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 import type { FollowupTypeIdAndName } from '~/types/followupType'
-import { IdInput, idSchema } from '~/server/schema'
+import { idSchema } from '~/server/schema'
 import { FollowupRepo, HelpRequestRepo } from '~/server/repository'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 async function getFollowupFollowupTypes(
   user: SecurityRuleGrantee,
-  beneficiaryId: string,
-  legallyRequired: boolean
+  beneficiaryId: string
 ) {
   const followupWithFollowupTypes = await FollowupRepo.findMany(user, {
     where: {
-      beneficiaryId,
-      types: { some: { legallyRequired } }
+      beneficiaryId
     },
     select: {
       types: {
         select: { id: true, name: true },
         distinct: ['id'],
-        orderBy: { name: 'asc' },
-        where: { legallyRequired }
+        orderBy: { name: 'asc' }
       }
     }
   })
@@ -49,13 +43,11 @@ async function getFollowupFollowupTypes(
 
 async function getHelpRequestFollowupTypes(
   user: SecurityRuleGrantee,
-  beneficiaryId: string,
-  legallyRequired: boolean
+  beneficiaryId: string
 ) {
   const helpRequestWithFollowupTypes = await HelpRequestRepo.findMany(user, {
     where: {
-      beneficiaryId,
-      type: { legallyRequired }
+      beneficiaryId
     },
     select: {
       type: { select: { id: true, name: true } }
@@ -73,14 +65,16 @@ async function getHelpRequestFollowupTypes(
   }, [] as FollowupTypeIdAndName[])
 }
 
-async function getFollowupTypes(
-  user: SecurityRuleGrantee,
-  beneficiaryId: string,
-  legallyRequired: boolean
-) {
+const handler = async ({
+  input: { id: beneficiaryId },
+  ctx: { user }
+}: {
+  input: { id: string }
+  ctx: ProtectedAppContext
+}) => {
   const [followupFollowupTypes, helpRequestFollowupTypes] = await Promise.all([
-    getFollowupFollowupTypes(user, beneficiaryId, legallyRequired),
-    getHelpRequestFollowupTypes(user, beneficiaryId, legallyRequired)
+    getFollowupFollowupTypes(user, beneficiaryId),
+    getHelpRequestFollowupTypes(user, beneficiaryId)
   ])
 
   const beneficiaryFollowupTypes = [...followupFollowupTypes]
@@ -96,41 +90,12 @@ async function getFollowupTypes(
   return beneficiaryFollowupTypes.sort(sortFollowupTypesByName)
 }
 
-const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
-  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
-  return canViewBeneficiary(grantee, beneficiary)
-}
-
-const handler = async ({
-  input: { id: beneficiaryId },
-  ctx: { user }
-}: {
-  input: { id: string }
-  ctx: ProtectedAppContext
-}) => {
-  const beneficiaryLegallyRequiredFollowupTypes = await getFollowupTypes(
-    user,
-    beneficiaryId,
-    true
-  )
-  const beneficiaryLegallyNotRequiredFollowupTypes = await getFollowupTypes(
-    user,
-    beneficiaryId,
-    false
-  )
-
-  return [
-    ...beneficiaryLegallyRequiredFollowupTypes,
-    ...beneficiaryLegallyNotRequiredFollowupTypes
-  ]
-}
-
 export type GetBeneficiaryFollowupTypesOutput = Prisma.PromiseReturnType<
   typeof handler
 >
 
 export const getBeneficiaryFollowupTypesQuery = createQuery({
   inputValidation: idSchema,
-  securityCheck,
+  securityCheck: AllowSecurityCheck,
   handler
 })

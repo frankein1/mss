@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee, hasAllowedRole } from '~/server/security'
 
-const userConstraints = (user: SecurityRuleGrantee) => {
+const tableConstraints = (user: SecurityRuleGrantee) => {
   const where = {}
   if (hasAllowedRole(user, ['Administrator'])) {
     return where
@@ -22,7 +22,7 @@ function findMany<T extends Prisma.BeneficiaryFindManyArgs>(
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryFindManyArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.beneficiary.findMany(params)
 }
 
@@ -31,13 +31,13 @@ function findUniqueOrThrow<T extends Prisma.BeneficiaryFindUniqueOrThrowArgs>(
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryFindUniqueOrThrowArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.beneficiary.findUniqueOrThrow(params)
 }
 
 function count(user: SecurityRuleGrantee, params: Prisma.BeneficiaryCountArgs) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.beneficiary.count(params)
 }
 
@@ -53,7 +53,7 @@ function update<T extends Prisma.BeneficiaryUpdateArgs>(
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryUpdateArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.beneficiary.update(params)
 }
 
@@ -62,7 +62,7 @@ function deleteEntity(
   params: Prisma.BeneficiaryDeleteArgs
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.beneficiary.delete(params)
 }
 

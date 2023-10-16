@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee, hasAllowedRole } from '~/server/security'
 
-const userConstraints = (user: SecurityRuleGrantee) => {
+const tableConstraints = (user: SecurityRuleGrantee) => {
   const where = {}
   if (hasAllowedRole(user, ['Administrator'])) {
     return {}
@@ -30,7 +30,7 @@ function findMany<T extends Prisma.HelpRequestFindManyArgs>(
   params: Prisma.SelectSubset<T, Prisma.HelpRequestFindManyArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.helpRequest.findMany(params)
 }
 
@@ -39,13 +39,13 @@ function findUniqueOrThrow<T extends Prisma.HelpRequestFindUniqueOrThrowArgs>(
   params: Prisma.SelectSubset<T, Prisma.HelpRequestFindUniqueOrThrowArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.helpRequest.findUniqueOrThrow(params)
 }
 
 function count(user: SecurityRuleGrantee, params: Prisma.HelpRequestCountArgs) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.helpRequest.count(params)
 }
 
@@ -54,7 +54,7 @@ function aggregate<T extends Prisma.HelpRequestAggregateArgs>(
   params: Prisma.Subset<T, Prisma.HelpRequestAggregateArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.helpRequest.aggregate(params)
 }
 
@@ -70,7 +70,7 @@ function update<T extends Prisma.HelpRequestUpdateArgs>(
   params: Prisma.SelectSubset<T, Prisma.HelpRequestUpdateArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.helpRequest.update(params)
 }
 
@@ -79,7 +79,7 @@ function deleteEntity(
   params: Prisma.HelpRequestDeleteArgs
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.helpRequest.delete(params)
 }
 

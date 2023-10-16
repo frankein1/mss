@@ -5,7 +5,7 @@ import {
   canOnlyListItsUploadedDocuments
 } from '~/server/security'
 
-function userConstraints(user: SecurityRuleGrantee) {
+function tableConstraints(user: SecurityRuleGrantee) {
   if (canOnlyListItsUploadedDocuments(user)) {
     return { createdById: user.id }
   }
@@ -20,7 +20,7 @@ function findMany<T extends Prisma.DocumentFindManyArgs>(
   params: Prisma.SelectSubset<T, Prisma.DocumentFindManyArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.document.findMany(params)
 }
 
@@ -29,13 +29,13 @@ function findUniqueOrThrow<T extends Prisma.DocumentFindUniqueOrThrowArgs>(
   params: Prisma.SelectSubset<T, Prisma.DocumentFindUniqueOrThrowArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.document.findUniqueOrThrow(params)
 }
 
 function count(user: SecurityRuleGrantee, params: Prisma.DocumentCountArgs) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.document.count(params)
 }
 
@@ -48,7 +48,7 @@ function update<T extends Prisma.DocumentUpdateArgs>(
   params: Prisma.SelectSubset<T, Prisma.DocumentUpdateArgs>
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.document.update(params)
 }
 
@@ -57,7 +57,7 @@ function deleteEntity(
   params: Prisma.DocumentDeleteArgs
 ) {
   const { where } = params
-  params.where = Object.assign(where || {}, userConstraints(user))
+  params.where = Object.assign(where || {}, tableConstraints(user))
   return prismaClient.document.delete(params)
 }
 

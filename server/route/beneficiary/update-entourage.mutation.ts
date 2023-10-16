@@ -41,10 +41,7 @@ const securityCheck = async (
 ) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
 
-  return (
-    canEditBeneficiary(grantee, beneficiary) &&
-    canEditBeneficiaryReferents(grantee, beneficiary)
-  )
+  return canEditBeneficiaryReferents(grantee, beneficiary)
 }
 
 const handler = async ({
