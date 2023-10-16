@@ -4,7 +4,6 @@ import { createQuery } from '~/server/route'
 import { GetBeneficiariesInput, getBeneficiariesSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
 import {
   AllowSecurityCheck,
@@ -27,11 +26,7 @@ const handler = async ({
   })
 
   const where: Prisma.BeneficiaryWhereInput = {
-    archived: null,
-    ...prepareBeneficiaryFilters(
-      input.filters,
-      canOnlyListItsBeneficiaries(user)
-    )
+    ...prepareBeneficiaryFilters(input.filters)
   }
 
   const [beneficiaries, count] = await Promise.all([
