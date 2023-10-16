@@ -1,7 +1,8 @@
 <template>
   <form
     class="fr-container--fluid"
-    @submit="onSubmit"
+    novalidate
+    @submit.prevent="onSubmit"
   >
     <VeeCheckbox
       class="fr-mt-2w"

@@ -2,8 +2,9 @@
   <form
     v-if="beneficiary"
     ref="form"
+    novalidate
     class="fr-grid-row"
-    @submit="onSubmit"
+    @submit.prevent="onSubmit"
   >
     <BeneficiaryEditFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"

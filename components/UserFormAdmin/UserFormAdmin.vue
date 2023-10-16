@@ -1,7 +1,8 @@
 <template>
   <form
+    novalidate
     class="fr-container--fluid"
-    @submit="onUpdateUser"
+    @submit.prevent="onUpdateUser"
   >
     <div class="fr-grid-row fr-grid-row--gutters form-grid">
       <div class="fr-col-6">

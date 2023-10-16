@@ -1,6 +1,7 @@
 <template>
   <form
     ref="form"
+    novalidate
     @submit.prevent="onSubmit"
   >
     <VeeSelect

@@ -1,8 +1,9 @@
 <template>
   <form
     ref="form"
+    novalidate
     class="fr-container--fluid"
-    @submit="onInviteUser"
+    @submit.prevent="onInviteUser"
   >
     <div class="fr-grid-row fr-grid-row--gutters form-grid">
       <VeeInput

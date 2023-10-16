@@ -1,7 +1,8 @@
 <template>
   <form
+    novalidate
     class="fr-container--fluid"
-    @submit="emit('submit', $event)"
+    @submit.prevent="emit('submit', $event)"
   >
     <div class="fr-grid-row fr-grid-row--gutters form-grid">
       <VeeCheckbox

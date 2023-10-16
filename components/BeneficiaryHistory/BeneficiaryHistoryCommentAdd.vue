@@ -6,8 +6,9 @@
     />
     <form
       ref="form"
+      novalidate
       class="new-comment-form"
-      @submit="onAddComment"
+      @submit.prevent="onAddComment"
     >
       <VeeTextarea
         label="Nouveau commentaire"
