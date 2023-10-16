@@ -45,16 +45,20 @@ function create(
 }
 
 function update<T extends Prisma.BeneficiaryUpdateArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryUpdateArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.beneficiary.update(params)
 }
 
 function deleteEntity(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.BeneficiaryDeleteArgs
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, userConstraints(user))
   return prismaClient.beneficiary.delete(params)
 }
 
