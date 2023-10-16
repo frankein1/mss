@@ -96,5 +96,17 @@ export const numeroPegaseContraint = z
   .string()
   .regex(
     /^A-(\d){2}-(\d){6}$/,
-    'Le numéro Pegase doit être de la forme A-00-000000'
+    'Le numéro Pegase doit être de la forme A-00-000000.'
   )
+
+export const dateSchema = z.coerce.date({
+  errorMap: issue => {
+    switch (issue.code) {
+      case 'invalid_date':
+      case 'invalid_type':
+        return { message: 'Veuillez saisir une date valide : JJ/MM/AAAA.' }
+      default:
+        return { message: errorMessages.invalid_type_error }
+    }
+  }
+})

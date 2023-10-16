@@ -13,21 +13,19 @@ import { AgeGroup } from '~/client/options/ageGroup'
 import {
   kindOfBooleanSchema,
   stringConstraint,
-  maxStringLengthMessage
+  maxStringLengthMessage,
+  dateSchema
 } from '~/utils/zod'
 import { TypeSuivi } from '~/types/history'
 
 const statFilterSchema = z.object({
-  fromDate: z.coerce.date().nullish(),
-  toDate: z.coerce
-    .date()
-    .nullish()
-    .transform(v => {
-      if (v === undefined || v === null) {
-        return v
-      }
-      return dayjs(v).hour(23).minute(59).second(59).toDate()
-    }),
+  fromDate: dateSchema.nullish(),
+  toDate: dateSchema.nullish().transform(v => {
+    if (v === undefined || v === null) {
+      return v
+    }
+    return dayjs(v).hour(23).minute(59).second(59).toDate()
+  }),
   followupTypes: z.array(z.string().uuid()).nullish(),
   cities: z
     .array(stringConstraint.max(50, maxStringLengthMessage(50)))
@@ -72,7 +70,7 @@ const helpRequestFilterSchema = z.object({
   status: z.nativeEnum(HelpRequestStatus).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
   referents: z.array(z.string().uuid()).nullish(),
-  examinationDate: z.coerce.date().nullish(),
+  examinationDate: dateSchema.nullish(),
   handlingDate: kindOfBooleanSchema().nullish(),
   externalStructure: kindOfBooleanSchema().nullish(),
   ministre: z.array(z.nativeEnum(Minister)).nullish()
@@ -85,7 +83,7 @@ const beneficiaryHistoryFilterSchema = z.object({
   typeSuivi: z.nativeEnum(TypeSuivi).nullish(),
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
-  examinationDate: z.coerce.date().nullish(),
+  examinationDate: dateSchema.nullish(),
   handlingDate: kindOfBooleanSchema().nullish(),
   externalStructure: kindOfBooleanSchema().nullish(),
   referents: z.array(z.string().uuid()).nullish()

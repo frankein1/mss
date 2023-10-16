@@ -40,7 +40,8 @@ import {
   numeroPegaseContraint,
   maxStringLengthMessage,
   amountNumber,
-  validIntNumber
+  validIntNumber,
+  dateSchema
 } from '~/utils/zod'
 
 export const saveBeneficiaryGeneralInformationSchema = z.object({
@@ -55,9 +56,9 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   firstName: beneficiaryFirstNameOrEmptySchema,
   usualName: stringOrEmpty(beneficiaryLastNameSchema),
   birthName: stringOrEmpty(beneficiaryLastNameSchema),
-  birthDate: z.coerce.date(errorMessages).nullish(),
+  birthDate: dateSchema.nullish(),
   birthPlace: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
-  deathDate: z.coerce.date(errorMessages).nullish(),
+  deathDate: dateSchema.nullish(),
   gender: withEmptyValueOptionalNativeEnum(Gender),
   nationality: withEmptyValueOptionalNativeEnum(Nationality),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
