@@ -1,5 +1,10 @@
 <template>
+  <FormErrors
+    v-if="errors.length > 1"
+    :errors="errors"
+  />
   <form
+    ref="form"
     novalidate
     class="fr-container--fluid"
     @submit.prevent="emit('submit', $event)"
@@ -287,6 +292,7 @@
     PrescribingOrganization,
     FollowupMedium
   } from '@prisma/client'
+  import type { FormErrors } from 'vee-validate'
   import { ministerOptions } from '~/client/options/ministry'
   import {
     followupStatusOptions,
@@ -303,6 +309,7 @@
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'
+  import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
 
   const authStore = useAuthStore()
   const isMinistryAgent = useMinistryAgent()
@@ -316,6 +323,7 @@
       medium: FollowupMedium
       isRedirected: boolean
       canSetPrivateSynthesis?: boolean
+      caughtErrors: FormErrors<AddFollowupInput | EditFollowupInput>
     }>(),
     { canSetPrivateSynthesis: true }
   )
@@ -323,6 +331,14 @@
   const emit = defineEmits<{
     submit: [payload: Event]
   }>()
+
+  const form = ref<HTMLFormElement | null>(null)
+
+  const { errors } = useDisplayFormErrors(
+    form,
+    toRef(() => props.caughtErrors),
+    followupFieldLabels
+  )
 
   const followupTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')

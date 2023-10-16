@@ -4,7 +4,8 @@ import {
   minStringLengthMessage,
   validNumber,
   validEmailMessage,
-  requiredErrorMessage
+  requiredErrorMessage,
+  errorMessages
 } from '~/utils/zod'
 
 export const paginatedSchema = z.object({
@@ -38,7 +39,7 @@ export const numeroPegaseContraint = z
     'Le numéro Pégase doit être de la forme A-00-000000.'
   )
 
-export const stringConstraint = z.string().trim()
+export const stringConstraint = z.string(errorMessages).trim()
 
 export const cafNumberConstraint = stringConstraint.max(
   8,
@@ -62,7 +63,7 @@ export const socialSecurityNumberConstraint = z
 
 export const phoneConstraint = stringConstraint.regex(
   /^(\+33 |0)[1-9]( \d\d){4}$/,
-  'Le format doit être de la forme 01 22 33 44 55.'
+  'Veuillez renseigner un numéro de téléphone valide.'
 )
 
 export const stringOrEmpty = (schema: z.ZodString) =>

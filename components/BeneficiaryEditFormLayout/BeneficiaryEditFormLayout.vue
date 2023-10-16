@@ -29,6 +29,11 @@
         <RequiredFields />
       </PageTitle>
 
+      <FormErrors
+        v-if="errors.length > 1"
+        :errors="errors"
+      />
+
       <slot></slot>
       <BeneficiaryEditFormNavArrows
         :security-target="beneficiary"
@@ -58,6 +63,7 @@
     AppBeneficiaryEditRoute,
     RouteTitle
   } from '~/utils/routing'
+  import { beneficiaryFieldLabels } from '~/client/labels'
 
   type SubmitType = z.infer<T>
 
@@ -87,6 +93,7 @@
 
   const saveTarget = ref<string | undefined>(undefined)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
+  const form = ref<HTMLFormElement | null>(null)
 
   const breadcrumbLinks = computed(() =>
     Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
@@ -111,9 +118,18 @@
     initialValues: props.beneficiary as SubmitType
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('save', values, saveTarget.value)
-  })
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      emit('save', values, saveTarget.value)
+    }
+  )
+
+  const { errors } = useDisplayFormErrors(
+    form,
+    caughtErrors,
+    beneficiaryFieldLabels
+  )
 
   function onCancel() {
     if (!props.beneficiary) {

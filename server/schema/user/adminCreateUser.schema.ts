@@ -26,12 +26,12 @@ const adminCreateUserBaseSchema = z.object({
   aidantConnectAuthorisation: z.coerce.boolean().nullish(),
   structureId: stringOrEmpty(
     z.string(errorMessages).uuid({ message: requiredErrorMessage })
-  ).transform(v => (v === '' ? undefined : v))
+  )
 })
 
 const adminCreateUserSchema = adminCreateUserBaseSchema.refine(
   ({ role, structureId }) => role === 'Administrator' || structureId,
-  v => ({ message: `Blabla: ${requiredErrorMessage}: ${v}` })
+  { message: requiredErrorMessage, path: ['structureId'] }
 )
 
 type AdminCreateUserInput = z.infer<typeof adminCreateUserSchema>
