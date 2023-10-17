@@ -9,13 +9,13 @@ const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input: { id },
-  ctx: { user, structure }
+  ctx: { user }
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
   const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(user, {
-    where: { id, structureId: structure.id },
+    where: { id },
     select: {
       id: true,
       firstName: true,
