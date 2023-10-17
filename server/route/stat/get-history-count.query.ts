@@ -6,13 +6,12 @@ import {
   getFollowupCountQuery,
   getHelpRequestCountQuery
 } from '~/server/query/stats'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { FollowupRepo } from '~/server/database'
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx: { user }
 }: {
   input: StatFilterInput
   ctx: ProtectedAppContext
@@ -20,18 +19,10 @@ const handler = async ({
   const helpRequests = await getHelpRequestCountQuery(user, input)
   const followups = await getFollowupCountQuery(user, input)
 
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
   const firstFollowups = await FollowupRepo.count(user, {
     where: {
-      structureId: structure.id,
       firstFollowup: true,
-      ...prepareFollowupStatFilters(input),
-      beneficiary: {
-        referents
-      }
+      ...prepareFollowupStatFilters(input)
     }
   })
 

@@ -6,10 +6,7 @@ import type { FollowupFilterInput } from '~/server/schema'
  * @param filters The inferred type of the filters zod schema for followups
  * @returns The prisma where input for followups
  */
-export function prepareFollowupFilters(
-  filters: FollowupFilterInput,
-  canOnlyListItsBeneficiaries: boolean
-) {
+export function prepareFollowupFilters(filters: FollowupFilterInput) {
   const formattedFilters: Prisma.FollowupWhereInput = {}
 
   if (filters.status) {
@@ -24,7 +21,7 @@ export function prepareFollowupFilters(
     formattedFilters.types = { some: { id: { in: filters.followupTypes } } }
   }
 
-  if (filters.referents && !canOnlyListItsBeneficiaries) {
+  if (filters.referents) {
     formattedFilters.beneficiary = {
       referents: { some: { id: { in: filters.referents } } }
     }

@@ -14,13 +14,11 @@ import { FollowupRepo, HelpRequestRepo } from '~/server/database'
 async function getFollowupFollowupTypes(
   user: SecurityRuleGrantee,
   beneficiaryId: string,
-  structureId: string,
   legallyRequired: boolean
 ) {
   const followupWithFollowupTypes = await FollowupRepo.findMany(user, {
     where: {
       beneficiaryId,
-      structureId,
       types: { some: { legallyRequired } }
     },
     select: {

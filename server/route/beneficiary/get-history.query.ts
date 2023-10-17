@@ -19,7 +19,6 @@ import {
 } from '~/server/query'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
-  canListBeneficiaryFollowups,
   canListCommentsToFollowup,
   canListCommentsToHelpRequest,
   canListBeneficiaryHelpRequests,
@@ -107,14 +106,10 @@ async function getFollowups(
   beneficiary: NonNullable<BeneficiarySecurityTarget>,
   filters: FollowupFilterInput
 ) {
-  if (!canListBeneficiaryFollowups(user, beneficiary)) {
-    return []
-  }
-
   const followups = await FollowupRepo.findMany(user, {
     where: {
       beneficiaryId: beneficiary.id,
-      ...prepareFollowupFilters(filters, canOnlyListItsBeneficiaries(user))
+      ...prepareFollowupFilters(filters)
     },
     include: {
       ...historyItemInclude(user.id),
