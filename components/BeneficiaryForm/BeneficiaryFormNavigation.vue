@@ -78,7 +78,6 @@
     AppBeneficiariesSaveRoute
   } from '~/utils/routing'
 
-  const route = useRoute()
   const SCROLL_DEFER_DURATION = 400
 
   const props = defineProps<{
@@ -98,7 +97,9 @@
   const activeHash = ref<string | undefined>(undefined)
 
   /**
-   * Used to prevent native scroll from browser on hash focus to update the active hash right after the hash change event has triggered
+   * Used to prevent native scroll from browser on hash focus to update the
+   * active hash right after the hash change event has triggered
+   * It seems to only occur on Firefox browsers
    * See https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/127#note_1600789293
    */
   const hashJustChanged = ref<boolean>(false)
@@ -156,13 +157,19 @@
   })
 
   function onHashChange() {
-    if (route.hash) {
-      activeHash.value = route.hash.slice(1)
+    /**
+     * Use window.location.hash instead of route.hash as route.hash is weirdly
+     * not up to date when the hashchange event is called, on Chrome browsers
+     * only
+     */
+    const hash = window.location.hash
+    if (hash) {
+      activeHash.value = hash.slice(1)
       hashJustChanged.value = true
 
       const firstSubSectionField = document.querySelector<
-        HTMLInputElement | HTMLSelectElement
-      >(`${route.hash} input, ${route.hash} select`)
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >(`${hash} input, ${hash} select,  ${hash} textarea`)
       firstSubSectionField?.focus()
     }
   }

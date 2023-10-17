@@ -47,7 +47,7 @@
   const emit = defineEmits<{ deleted: [] }>()
 
   const currentTab = computed(() => {
-    const hash = route.hash.replace('#', '')
+    const hash = route.hash.slice(1)
     return hash ? (hash as BeneficiaryTab) : undefined
   })
 
