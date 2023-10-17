@@ -1,7 +1,8 @@
 import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 import { userAdminFilterSchema } from '../filter.schema'
-import { stringConstraint, maxStringLengthMessage } from '~/utils/zod'
+import { stringConstraint } from '../helpers.schema'
+import { maxStringLengthMessage } from '~/utils/zod'
 
 export const adminGetUsersSchema = z.object({
   search: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),

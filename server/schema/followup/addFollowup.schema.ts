@@ -8,13 +8,12 @@ import {
 import { z } from 'zod'
 
 import {
-  errorMessages,
   requiredNativeEnum,
   withEmptyValueOptionalNativeEnum,
   stringConstraint,
-  numeroPegaseContraint,
-  maxStringLengthMessage
-} from '~/utils/zod'
+  numeroPegaseContraint
+} from '../helpers.schema'
+import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
 
 export const addFollowupSchema = z.object({
   beneficiaryId: z.string().uuid(),
@@ -39,7 +38,7 @@ export const addFollowupSchema = z.object({
   structureName: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
-  dueDate: z.coerce.date(errorMessages).nullish(),
+  dueDate: z.coerce.date().nullish(),
   thirdPersonName: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),

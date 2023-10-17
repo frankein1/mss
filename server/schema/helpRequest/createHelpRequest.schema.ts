@@ -6,15 +6,14 @@ import {
 } from '@prisma/client'
 import { z } from 'zod'
 import {
-  errorMessages,
   numeroPegaseContraint,
   withEmptyValueOptionalNativeEnum,
   kindOfBooleanSchema,
   requiredNativeEnum,
   amountNumber,
-  stringConstraint,
-  maxStringLengthMessage
-} from '~/utils/zod'
+  stringConstraint
+} from '../helpers.schema'
+import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
 
 export const createHelpRequestSchema = z.object({
   beneficiaryId: z.string().uuid(),
@@ -27,24 +26,24 @@ export const createHelpRequestSchema = z.object({
   externalStructure: kindOfBooleanSchema(),
   status: requiredNativeEnum(HelpRequestStatus),
   askedAmount: amountNumber.nullish(),
-  examinationDate: z.coerce.date(errorMessages).nullish(),
-  decisionDate: z.coerce.date(errorMessages).nullish(),
+  examinationDate: z.coerce.date().nullish(),
+  decisionDate: z.coerce.date().nullish(),
   allocatedAmount: amountNumber.nullish(),
   paymentMethod: withEmptyValueOptionalNativeEnum(PaymentMethod),
   reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
-  paymentDate: z.coerce.date(errorMessages).nullish(),
-  handlingDate: z.coerce.date(errorMessages).nullish(),
+  paymentDate: z.coerce.date().nullish(),
+  handlingDate: z.coerce.date().nullish(),
   refusalReason: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
   prescribingOrganizationId: z.string().nullish(),
   instructorOrganizationId: z.string().nullish(),
-  dispatchDate: z.coerce.date(errorMessages).nullish(),
+  dispatchDate: z.coerce.date().nullish(),
   synthesis: stringConstraint.max(6000, maxStringLengthMessage(6000)).nullish(),
   privateSynthesis: stringConstraint
     .max(1000, maxStringLengthMessage(1000))
     .nullish(),
-  dueDate: z.coerce.date(errorMessages).nullish(),
+  dueDate: z.coerce.date().nullish(),
   fullFile: z.boolean().default(false)
 })
 

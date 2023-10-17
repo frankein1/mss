@@ -1,10 +1,6 @@
 import { z } from 'zod'
-import {
-  stringConstraint,
-  maxStringLengthMessage,
-  minStringLengthMessage,
-  stringOrEmpty
-} from '~/utils/zod'
+import { stringConstraint, stringOrEmpty } from '../helpers.schema'
+import { maxStringLengthMessage, minStringLengthMessage } from '~/utils/zod'
 
 const beneficiaryFirstNameBaseSchema = stringConstraint
   .min(2, minStringLengthMessage(2))
