@@ -7,7 +7,10 @@ import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { prepareBeneficiaryStatFilters } from '~/utils/filters'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { BeneficiaryRepo } from '~/server/repository'
+import {
+  BeneficiaryRepo,
+  getConstraintsOnBeneficiary
+} from '~/server/repository'
 
 enum NullAgeGroup {
   null = STATS_NULL_KEY
@@ -20,7 +23,7 @@ export async function getAgeStatsQuery(
   input: StatFilterInput
 ) {
   // HACK: right solution is to abstract groupBy in repo
-  const constraints = BeneficiaryRepo.viewConstraints(user)
+  const constraints = getConstraintsOnBeneficiary(user)
 
   const ageCounts = await BeneficiaryRepo.groupBy({
     by: ['birthDate'],
