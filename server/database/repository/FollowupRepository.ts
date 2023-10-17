@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnFollowup } from './constraints'
+import { getConstraintOnFollowup } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 

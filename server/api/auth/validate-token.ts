@@ -1,7 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { signJwt } from '~/server/lib/jwt'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
 

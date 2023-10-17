@@ -7,7 +7,7 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { DraftRepo } from '~/server/repository'
+import { DraftRepo } from '~/server/database'
 
 const handler = async ({
   input,

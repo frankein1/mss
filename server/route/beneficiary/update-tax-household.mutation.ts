@@ -13,7 +13,7 @@ import {
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRepo } from '~/server/database'
 
 function getBeneficiaryWithTaxHousehold(user: SecurityRuleGrantee, id: string) {
   return BeneficiaryRepo.findUniqueOrThrow(user, {

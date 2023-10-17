@@ -2,7 +2,7 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { emptySchema } from '~/server/schema'
-import { PrescribingOrganizationRepo } from '~/server/repository/PrescribingOrganizationRepository'
+import { PrescribingOrganizationRepo } from '~/server/database/PrescribingOrganizationRepository'
 
 export const handler = async ({
   ctx: { structure, user }

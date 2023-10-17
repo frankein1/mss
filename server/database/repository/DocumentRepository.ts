@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnDocument } from './constraints'
+import { getConstraintOnDocument } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 

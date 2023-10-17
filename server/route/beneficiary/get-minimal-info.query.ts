@@ -3,7 +3,7 @@ import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { canViewBeneficiary } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { idSchema } from '~/server/schema'
-import { BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRepo } from '~/server/database'
 
 const securityCheck = AllowSecurityCheck
 

@@ -1,4 +1,4 @@
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 import { createMutation } from '~/server/route'
 import { AdminEditUserInput, adminEditUserSchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'

@@ -12,7 +12,7 @@ import {
   UpdateBeneficiaryExternalOrganisationsInput,
   updateBeneficiaryExternalOrganisationsSchema
 } from '~/server/schema'
-import { BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRepo } from '~/server/database'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
