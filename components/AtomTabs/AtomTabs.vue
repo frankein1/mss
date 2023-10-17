@@ -39,8 +39,6 @@
     tabListName: string
   }>()
 
-  const route = useRoute()
-
   // DSFR handles by itself the update of the selected tab. This ref allows to reinitialise the selected tab
   const initiallySelectedIndex = ref(0)
   const tabsPanelMinHeight = ref('30rem')
@@ -76,8 +74,14 @@
   })
 
   function onHashChange() {
-    if (route.hash) {
-      onSelectTab(route.hash.slice(1))
+    /**
+     * Use window.location.hash instead of route.hash as route.hash is weirdly
+     * not up to date when the hashchange event is called, on Chrome browsers
+     * only
+     */
+    const hash = window.location.hash
+    if (hash) {
+      onSelectTab(hash.slice(1))
     }
   }
 
