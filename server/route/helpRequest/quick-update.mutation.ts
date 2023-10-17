@@ -37,12 +37,10 @@ const handler = async ({
   input: QuickEditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const select = prepareGetHelpRequestsPageSelect(user)
-
   const helpRequest = await HelpRequestRepo.update(user, {
     where: { id },
     data: rest,
-    select
+    select: prepareGetHelpRequestsPageSelect(user)
   })
 
   await addUserActivity({

@@ -1,6 +1,9 @@
 import { Prisma } from '@prisma/client'
+import { getConstraintOnHelpRequest } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
+
+// SYSTEM
 
 function systemFindMany<T extends Prisma.HelpRequestFindManyArgs>(
   params: Prisma.SelectSubset<T, Prisma.HelpRequestFindManyArgs>
@@ -8,19 +11,42 @@ function systemFindMany<T extends Prisma.HelpRequestFindManyArgs>(
   return prismaClient.helpRequest.findMany(params)
 }
 
+// VIEW
+
 function findMany<T extends Prisma.HelpRequestFindManyArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.HelpRequestFindManyArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnHelpRequest(user))
   return prismaClient.helpRequest.findMany(params)
 }
 
 function findUniqueOrThrow<T extends Prisma.HelpRequestFindUniqueOrThrowArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.HelpRequestFindUniqueOrThrowArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnHelpRequest(user))
   return prismaClient.helpRequest.findUniqueOrThrow(params)
 }
+
+function count(user: SecurityRuleGrantee, params: Prisma.HelpRequestCountArgs) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnHelpRequest(user))
+  return prismaClient.helpRequest.count(params)
+}
+
+function aggregate<T extends Prisma.HelpRequestAggregateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.Subset<T, Prisma.HelpRequestAggregateArgs>
+) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnHelpRequest(user))
+  return prismaClient.helpRequest.aggregate(params)
+}
+
+// CREATE / UPDATE / DELETE
 
 function create(
   _user: SecurityRuleGrantee,
@@ -41,19 +67,6 @@ function deleteEntity(
   params: Prisma.HelpRequestDeleteArgs
 ) {
   return prismaClient.helpRequest.delete(params)
-}
-function count(
-  _user: SecurityRuleGrantee,
-  params: Prisma.HelpRequestCountArgs
-) {
-  return prismaClient.helpRequest.count(params)
-}
-
-function aggregate<T extends Prisma.HelpRequestAggregateArgs>(
-  _user: SecurityRuleGrantee,
-  params: Prisma.Subset<T, Prisma.HelpRequestAggregateArgs>
-) {
-  return prismaClient.helpRequest.aggregate(params)
 }
 
 export const HelpRequestRepo = {

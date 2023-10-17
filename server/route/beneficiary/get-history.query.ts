@@ -20,9 +20,7 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   canListCommentsToFollowup,
-  canListCommentsToHelpRequest,
-  canListBeneficiaryHelpRequests,
-  canOnlyListItsBeneficiaries
+  canListCommentsToHelpRequest
 } from '~/server/security/rules'
 import {
   AllowSecurityCheck,
@@ -137,14 +135,10 @@ async function getHelpRequests(
   beneficiary: NonNullable<BeneficiarySecurityTarget>,
   filters: HelpRequestFilterInput
 ) {
-  if (!canListBeneficiaryHelpRequests(user, beneficiary)) {
-    return []
-  }
-
   const helpRequests = await HelpRequestRepo.findMany(user, {
     where: {
       beneficiaryId: beneficiary.id,
-      ...prepareHelpRequestFilters(filters, canOnlyListItsBeneficiaries(user))
+      ...prepareHelpRequestFilters(filters)
     },
     include: {
       ...historyItemInclude(user.id),

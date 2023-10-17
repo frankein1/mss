@@ -10,12 +10,10 @@ import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
 function getFinancialHelpRequestCount(
   user: SecurityRuleGrantee,
-  structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
   return HelpRequestRepo.count(user, {
     where: {
-      structureId,
       financialSupport: true,
       ...filters
     }
@@ -24,12 +22,10 @@ function getFinancialHelpRequestCount(
 
 function getInternalFinancialHelpRequestCount(
   user: SecurityRuleGrantee,
-  structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
   return HelpRequestRepo.count(user, {
     where: {
-      structureId,
       financialSupport: true,
       externalStructure: false,
       ...filters
@@ -39,14 +35,12 @@ function getInternalFinancialHelpRequestCount(
 
 async function getFinancialHelpRequestTotalAmount(
   user: SecurityRuleGrantee,
-  structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
   const {
     _sum: { allocatedAmount: financialHelpRequestTotalAmount }
   } = await HelpRequestRepo.aggregate(user, {
     where: {
-      structureId,
       financialSupport: true,
       status: 'Accepted',
       allocatedAmount: { gt: 0 },
@@ -62,14 +56,12 @@ async function getFinancialHelpRequestTotalAmount(
 
 async function getFinancialHelpRequestAmountByType(
   user: SecurityRuleGrantee,
-  structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
   // Prisma does not allow selecting type.id and type.name on a groupBy
   const helpRequestAmountByTypeId = await prismaClient.helpRequest.groupBy({
     by: ['typeId'],
     where: {
-      structureId,
       financialSupport: true,
       status: 'Accepted',
       allocatedAmount: { gt: 0 },
@@ -141,10 +133,10 @@ export async function getHelpRequestFinancialStatsQuery(
     financialHelpRequestTotalAmount,
     financialHelpRequestAmountByType
   ] = await Promise.all([
-    getFinancialHelpRequestCount(user, user.structureId || '', filters),
-    getInternalFinancialHelpRequestCount(user, user.structureId || '', filters),
-    getFinancialHelpRequestTotalAmount(user, user.structureId || '', filters),
-    getFinancialHelpRequestAmountByType(user, user.structureId || '', filters)
+    getFinancialHelpRequestCount(user, filters),
+    getInternalFinancialHelpRequestCount(user, filters),
+    getFinancialHelpRequestTotalAmount(user, filters),
+    getFinancialHelpRequestAmountByType(user, filters)
   ])
 
   const requestsCounts = {

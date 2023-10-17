@@ -2,7 +2,6 @@ import { Prisma } from '@prisma/client'
 import { HelpRequestRepo } from '~/server/database'
 import { STATS_NULL_LABEL } from '~/client/options/stat'
 import { StatFilterInput } from '~/server/schema'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
@@ -11,26 +10,18 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
   const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
     prepareHelpRequestStatFilters(input)
 
   const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
     preparedBeneficiaryFilters
       ? {
-          ...preparedBeneficiaryFilters,
-          referents
+          ...preparedBeneficiaryFilters
         }
-      : {
-          referents
-        }
+      : {}
 
   const helpRequests = await HelpRequestRepo.findMany(user, {
     where: {
-      structureId: user.structureId || '',
       ...preparedFilters,
       beneficiary: beneficiaryFilters
     },
