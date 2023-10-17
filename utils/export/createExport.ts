@@ -1,6 +1,5 @@
 import { readFileSync, unlinkSync } from 'fs'
 // FIXME: ExcelJS type error (Cf. https://github.com/exceljs/exceljs/issues/960)
-// eslint-disable-next-line import/default
 import ExcelPkg, { Column, Workbook } from 'exceljs'
 import { EXPORT_DEFAULT_FONT } from '~/utils/constants/export'
 import { RowType, WorksheetType } from '~/types/export'
