@@ -92,7 +92,9 @@
     notificationType.value = filter.type
   }
 
-  watch(notificationType, notificationsRefresh)
+  watch(notificationType, () => {
+    notificationsRefresh()
+  })
 
   function onToggleReadState() {
     notificationsRefresh()
