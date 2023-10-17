@@ -1,7 +1,7 @@
 import { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin, isReferent } from '~/server/security/rules/helpers'
 
-export const getConstraintsOnBeneficiary = (user: SecurityRuleGrantee) => {
+export const getConstraintOnBeneficiary = (user: SecurityRuleGrantee) => {
   const where = {}
   if (isAdmin(user)) {
     return where
