@@ -7,7 +7,7 @@ import {
 } from '~/server/security/rules'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
-import { HelpRequestRepo } from '~/server/repository'
+import { HelpRequestRepo } from '~/server/database'
 
 function getHelpRequest(user: SecurityRuleGrantee, id: string) {
   return HelpRequestRepo.findUniqueOrThrow(user, {

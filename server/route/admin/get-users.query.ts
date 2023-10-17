@@ -6,7 +6,7 @@ import {
   adminGetUsersSchema
 } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc/createRouter'
 
 const adminHandler = async ({

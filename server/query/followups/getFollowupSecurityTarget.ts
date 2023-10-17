@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { FollowupRepo } from '~/server/repository'
+import { FollowupRepo } from '~/server/database'
 import { SecurityRuleGrantee } from '~/server/security'
 
 export function getFollowupSecurityTarget(

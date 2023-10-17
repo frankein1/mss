@@ -9,7 +9,7 @@ import { getBeneficiarySecurityTarget } from '~/server/query'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 import type { FollowupTypeIdAndName } from '~/types/followupType'
 import { IdInput, idSchema } from '~/server/schema'
-import { FollowupRepo, HelpRequestRepo } from '~/server/repository'
+import { FollowupRepo, HelpRequestRepo } from '~/server/database'
 
 async function getFollowupFollowupTypes(
   user: SecurityRuleGrantee,

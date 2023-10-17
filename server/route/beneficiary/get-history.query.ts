@@ -29,7 +29,7 @@ import {
   AllowSecurityCheck,
   SecurityRuleGrantee
 } from '~/server/security/rules/types'
-import { FollowupRepo, HelpRequestRepo } from '~/server/repository'
+import { FollowupRepo, HelpRequestRepo } from '~/server/database'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput

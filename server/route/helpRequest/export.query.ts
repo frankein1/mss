@@ -20,7 +20,7 @@ import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareHelpRequestFilters } from '~/utils/filters'
 import { HELP_REQUEST_EXPORTED_FIELDS } from '~/utils/constants/export'
-import { HelpRequestRepo } from '~/server/repository'
+import { HelpRequestRepo } from '~/server/database'
 
 const handler = async ({
   input,

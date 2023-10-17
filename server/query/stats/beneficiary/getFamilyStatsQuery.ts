@@ -1,7 +1,4 @@
-import {
-  BeneficiaryRepo,
-  getConstraintOnBeneficiary
-} from '~/server/repository'
+import { BeneficiaryRepo, getConstraintOnBeneficiary } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { prepareBeneficiaryStatFilters } from '~/utils/filters'

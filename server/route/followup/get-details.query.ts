@@ -5,7 +5,7 @@ import { canViewFollowup } from '~/server/security/rules'
 import { getFollowupWithRelations } from '~/server/query'
 import { IdInput, idSchema } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { FollowupRepo } from '~/server/repository'
+import { FollowupRepo } from '~/server/database'
 
 const handler = async ({
   input: { id },

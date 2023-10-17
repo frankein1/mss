@@ -24,7 +24,7 @@ import {
 } from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
-import { DraftRepo } from '~/server/repository'
+import { DraftRepo } from '~/server/database'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,

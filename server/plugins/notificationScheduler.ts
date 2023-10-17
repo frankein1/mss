@@ -4,7 +4,7 @@ import {
   FollowupRepo,
   HelpRequestRepo,
   NotificationRepo
-} from '~/server/repository'
+} from '~/server/database'
 import { useScheduler } from '#scheduler'
 
 export default defineNitroPlugin(() => {

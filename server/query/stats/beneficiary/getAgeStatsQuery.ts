@@ -7,10 +7,7 @@ import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { prepareBeneficiaryStatFilters } from '~/utils/filters'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import {
-  BeneficiaryRepo,
-  getConstraintOnBeneficiary
-} from '~/server/repository'
+import { BeneficiaryRepo, getConstraintOnBeneficiary } from '~/server/database'
 
 enum NullAgeGroup {
   null = STATS_NULL_KEY

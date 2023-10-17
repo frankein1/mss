@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { HelpRequestRepo } from '~/server/repository'
+import { HelpRequestRepo } from '~/server/database'
 import { STATS_NULL_LABEL } from '~/client/options/stat'
 import { StatFilterInput } from '~/server/schema'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'

@@ -16,7 +16,7 @@ import {
   invalidError
 } from '~/server/trpc'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { DocumentRepo } from '~/server/repository'
+import { DocumentRepo } from '~/server/database'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,

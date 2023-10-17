@@ -7,7 +7,7 @@ import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prepareFollowupFilters } from '~/utils/filters'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { FollowupRepo } from '~/server/repository'
+import { FollowupRepo } from '~/server/database'
 
 const handler = async ({
   input,
