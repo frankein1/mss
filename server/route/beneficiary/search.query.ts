@@ -1,6 +1,5 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import {
   SearchBeneficiaryInput,
   searchBeneficiarySchema
@@ -17,7 +16,7 @@ const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input: { query, excludedIds },
-  ctx: { user, structure }
+  ctx: { user }
 }: {
   input: SearchBeneficiaryInput
   ctx: ProtectedAppContext
@@ -33,16 +32,9 @@ const handler = async ({
     }))
   }))
 
-  const referentsCondition = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
   const where = {
-    archived: null,
     AND: searchConditions,
-    id: { notIn: excludedIds },
-    structureId: structure.id,
-    referents: referentsCondition
+    id: { notIn: excludedIds }
   }
 
   // TODO benchmark this and stress tes, then create indexes for case-insensitive filtering.

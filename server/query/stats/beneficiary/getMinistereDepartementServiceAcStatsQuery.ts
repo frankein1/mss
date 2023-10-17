@@ -1,6 +1,5 @@
-import { prismaClient } from '~/server/prisma'
+import { BeneficiaryRepo } from '~/server/repository'
 import { StatFilterInput } from '~/server/schema'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { prepareBeneficiaryStatFilters } from '~/utils/filters'
 
@@ -8,16 +7,14 @@ export async function getMinistereDepartementServiceAcStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
+  // HACK: right solution is to abstract groupBy in repo
+  const constraints = BeneficiaryRepo.viewConstraints(user)
 
-  return await prismaClient.beneficiary.groupBy({
+  return await BeneficiaryRepo.groupBy({
     by: ['ministereDepartementServiceAc'],
     where: {
-      structureId: user.structureId || '',
       ...prepareBeneficiaryStatFilters(input),
-      referents
+      ...constraints
     },
     _count: true,
     orderBy: { _count: { ministereDepartementServiceAc: 'desc' } }
