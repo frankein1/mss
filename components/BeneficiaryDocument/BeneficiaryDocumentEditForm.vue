@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="onSubmit">
+  <form
+    novalidate
+    @submit.prevent="onSubmit"
+  >
     <VeeInput
       label="Nom du document"
       name="name"

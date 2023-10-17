@@ -1,5 +1,6 @@
 <template>
   <form
+    novalidate
     @change="onUpdatePaymentMethod"
     @submit.prevent
   >

@@ -1,5 +1,8 @@
 <template>
-  <form @submit.prevent="deleteItem">
+  <form
+    novalidate
+    @submit.prevent="deleteItem"
+  >
     <AtomAlert
       class="fr-mb-2w"
       :alert-type="AlertType.Warning"

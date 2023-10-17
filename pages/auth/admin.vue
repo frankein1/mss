@@ -2,8 +2,9 @@
   <div class="landing-main-container fr-container fr-my-8w">
     <form
       v-if="!token"
+      novalidate
       class="login-form"
-      @submit="onSubmit"
+      @submit.prevent="onSubmit"
     >
       <VeeInput
         name="email"
