@@ -15,8 +15,8 @@ dependencies:
     specifier: ~1.10.1
     version: 1.10.1
   '@gouvminint/vue-dsfr':
-    specifier: ^4.6.0
-    version: 4.6.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.5)(vue@3.3.4)
+    specifier: ^5.0.0
+    version: 5.0.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.5)(vue@3.3.4)
   '@pinia/nuxt':
     specifier: ^0.4.11
     version: 0.4.11(typescript@5.2.2)(vue@3.3.4)
@@ -1837,8 +1837,8 @@ packages:
     engines: {node: '>=18.16.1'}
     dev: false
 
-  /@gouvminint/vue-dsfr@4.6.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.5)(vue@3.3.4):
-    resolution: {integrity: sha512-WoCo6WSex1HWYkcysX27Y2bR505a3lrUQTKEuff5hgHbGBTueRonFoeH3uOQFiQNccyOVGQVTH6Z+w+6mHf31w==}
+  /@gouvminint/vue-dsfr@5.0.0(oh-vue-icons@1.0.0-rc3)(vue-router@4.2.5)(vue@3.3.4):
+    resolution: {integrity: sha512-HGBfk5DMD7iDWeb0RqSvKHM/PKLGja9HDvome2VSdufWpS2rnTYbLvuYMa/IchCd1IjFW3QGawASvQ2oVpF9Sw==}
     engines: {node: '>=18.x.x', npm: '>=8.x.x'}
     peerDependencies:
       oh-vue-icons: 1.0.0-rc3
