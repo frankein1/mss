@@ -41,7 +41,7 @@
     "openid-client": "^5.6.1",
     "pinia": "^2.1.7",
     "postcss-html": "^1.5.0",
-    "superjson": "^1.13.1",
+    "superjson": "^2.0.0",
     "trpc-nuxt": "^0.10.12",
     "uuid": "^9.0.1",
     "vee-validate": "^4.11.8",
