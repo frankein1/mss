@@ -97,13 +97,15 @@
   useHead({ title: title.value })
 
   onMounted(() => {
+    const { saved: _, ...query } = route.query
+
     /**
      * Removes the saved query param to prevent reloading the page when
-     * changing sub section from side navigation (as saved query parem would be
+     * changing sub section from side navigation (as saved query param would be
      * missing from the targetted path). It also allows to prevent showing the
      * page as saved again when reloading it.
      */
-    router.replace({ path: route.path, hash: route.hash })
+    router.replace({ path: route.path, query, hash: route.hash })
   })
 
   const { handleSubmit } = useForm<SubmitType>({
