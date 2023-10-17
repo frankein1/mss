@@ -1,4 +1,4 @@
-import { StructureRepo } from '~/server/repository'
+import { StructureRepo } from '~/server/database'
 import { createMutation } from '~/server/route'
 import {
   AdminEditStructureInput,

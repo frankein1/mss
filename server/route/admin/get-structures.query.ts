@@ -5,7 +5,7 @@ import {
   adminGetStructuresSchema
 } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { StructureRepo } from '~/server/repository'
+import { StructureRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc/createRouter'
 
 const adminHandler = async ({

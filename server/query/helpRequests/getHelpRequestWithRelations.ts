@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { HelpRequestRepo } from '~/server/repository'
+import { HelpRequestRepo } from '~/server/database'
 import { SecurityRuleGrantee } from '~/server/security'
 
 export function getHelpRequestWithRelations(

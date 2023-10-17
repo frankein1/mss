@@ -7,7 +7,7 @@ import {
   canEditUser,
   canEditUserRole
 } from '~/server/security'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 
 const handler = async ({
   ctx: { user },

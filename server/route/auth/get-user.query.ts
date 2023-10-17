@@ -3,7 +3,7 @@ import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 
 const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
   const { user: ctxUser } = ctx

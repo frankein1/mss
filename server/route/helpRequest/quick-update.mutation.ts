@@ -11,7 +11,7 @@ import {
   canEditHelpRequest
 } from '~/server/security/rules'
 import { addUserActivity } from '~/server/query'
-import { HelpRequestRepo } from '~/server/repository'
+import { HelpRequestRepo } from '~/server/database'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,

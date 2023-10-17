@@ -5,7 +5,7 @@ import { SecurityRuleGrantee, canCreateUser } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { sendEmail } from '~/server/lib/email'
 import { getEmailContent } from '~/utils/user/getEmailContent'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 
 const securityCheck = (
   user: SecurityRuleGrantee,

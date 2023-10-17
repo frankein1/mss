@@ -1,20 +1,35 @@
 import { Prisma } from '@prisma/client'
+import { getConstraintOnDocument } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
+// VIEW
+
 function findMany<T extends Prisma.DocumentFindManyArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.DocumentFindManyArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnDocument(user))
   return prismaClient.document.findMany(params)
 }
 
 function findUniqueOrThrow<T extends Prisma.DocumentFindUniqueOrThrowArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.DocumentFindUniqueOrThrowArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnDocument(user))
   return prismaClient.document.findUniqueOrThrow(params)
 }
+
+function count(user: SecurityRuleGrantee, params: Prisma.DocumentCountArgs) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnDocument(user))
+  return prismaClient.document.count(params)
+}
+
+// CREATE / UPDATE / DELETE
 
 function create(_user: SecurityRuleGrantee, params: Prisma.DocumentCreateArgs) {
   return prismaClient.document.create(params)
@@ -32,10 +47,6 @@ function deleteEntity(
   params: Prisma.DocumentDeleteArgs
 ) {
   return prismaClient.document.delete(params)
-}
-
-function count(_user: SecurityRuleGrantee, params: Prisma.DocumentCountArgs) {
-  return prismaClient.document.count(params)
 }
 
 export const DocumentRepo = {

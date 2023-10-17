@@ -1,26 +1,36 @@
 import { Prisma } from '@prisma/client'
+import { getConstraintOnFollowup } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
+// SYSTEM
 function systemFindMany<T extends Prisma.FollowupFindManyArgs>(
   params: Prisma.SelectSubset<T, Prisma.FollowupFindManyArgs>
 ) {
   return prismaClient.followup.findMany(params)
 }
 
+// VIEW
+
 function findMany<T extends Prisma.FollowupFindManyArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupFindManyArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnFollowup(user))
   return prismaClient.followup.findMany(params)
 }
 
 function findUniqueOrThrow<T extends Prisma.FollowupFindUniqueOrThrowArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupFindUniqueOrThrowArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnFollowup(user))
   return prismaClient.followup.findUniqueOrThrow(params)
 }
+
+// CREATE / UPDATE / DELETE
 
 function create(_user: SecurityRuleGrantee, params: Prisma.FollowupCreateArgs) {
   return prismaClient.followup.create(params)

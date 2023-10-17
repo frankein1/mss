@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { FollowupTypeRepo } from '~/server/repository/FollowupTypeRepository'
+import { FollowupTypeRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'

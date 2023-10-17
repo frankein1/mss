@@ -1,14 +1,13 @@
 import dayjs from 'dayjs'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import { AgeGroup } from '~/client/options/ageGroup'
-import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { AgeGroupsFilter } from '~/types/stat'
 import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { prepareBeneficiaryStatFilters } from '~/utils/filters'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { BeneficiaryRepo, getConstraintOnBeneficiary } from '~/server/database'
 
 enum NullAgeGroup {
   null = STATS_NULL_KEY
@@ -20,16 +19,14 @@ export async function getAgeStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
+  // HACK: right solution is to abstract groupBy in repo
+  const constraints = getConstraintOnBeneficiary(user)
 
-  const ageCounts = await prismaClient.beneficiary.groupBy({
+  const ageCounts = await BeneficiaryRepo.groupBy({
     by: ['birthDate'],
     where: {
-      structureId: user.structureId || '',
       ...prepareBeneficiaryStatFilters(input),
-      referents
+      ...constraints
     },
     _count: true,
     orderBy: { _count: { birthDate: 'desc' } }
