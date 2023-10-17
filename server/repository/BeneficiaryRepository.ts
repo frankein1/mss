@@ -1,20 +1,10 @@
 import { Prisma } from '@prisma/client'
-import { isAdmin, isReferent } from '../security/rules/helpers'
+import { getConstraintsOnBeneficiary } from './helper/getConstraintOnBeneficiary'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
-const viewConstraints = (user: SecurityRuleGrantee) => {
-  const where = {}
-  if (isAdmin(user)) {
-    return where
-  }
-  Object.assign(where, { structureId: user.structureId, archived: null })
-
-  if (isReferent(user)) {
-    Object.assign(where, { referents: { some: { id: user.id } } })
-  }
-  return where
-}
+const viewConstraints = (user: SecurityRuleGrantee) =>
+  getConstraintsOnBeneficiary(user)
 
 // READ
 
@@ -72,6 +62,5 @@ export const BeneficiaryRepo = {
   groupBy: prismaClient.beneficiary.groupBy,
   create,
   deleteEntity,
-  update,
-  viewConstraints
+  update
 }
