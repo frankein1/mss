@@ -7,7 +7,7 @@ import {
   InclusionConnectToken
 } from '~/server/lib/inclusion-connect.client'
 import { RoutePath } from '~/utils/routing'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 
 const config = useRuntimeConfig()

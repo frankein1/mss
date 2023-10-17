@@ -2,7 +2,7 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { emptySchema } from '~/server/schema'
-import { FollowupTypeRepo } from '~/server/repository/FollowupTypeRepository'
+import { FollowupTypeRepo } from '~/server/database'
 
 const handler = async ({
   ctx: { structure, user }

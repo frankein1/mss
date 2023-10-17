@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnBeneficiary } from './constraints/getConstraintOnBeneficiary'
+import { getConstraintOnBeneficiary } from '../constraints/getConstraintOnBeneficiary'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 

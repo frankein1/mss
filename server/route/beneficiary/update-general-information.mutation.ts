@@ -13,7 +13,7 @@ import {
   updateBeneficiaryGeneralInformationSchema
 } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
-import { BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRepo } from '~/server/database'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,

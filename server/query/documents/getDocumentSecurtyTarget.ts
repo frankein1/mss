@@ -1,4 +1,4 @@
-import { DocumentRepo } from '~/server/repository'
+import { DocumentRepo } from '~/server/database'
 import { SecurityRuleGrantee } from '~/server/security'
 
 export function getDocumentSecurityTarget(

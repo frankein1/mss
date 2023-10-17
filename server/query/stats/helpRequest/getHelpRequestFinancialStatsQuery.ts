@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { HelpRequestRepo } from '~/server/repository'
+import { HelpRequestRepo, FollowupTypeRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { StatFilterInput } from '~/server/schema'
 import {
@@ -7,7 +7,6 @@ import {
   canOnlyListItsBeneficiaries
 } from '~/server/security/rules'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
-import { FollowupTypeRepo } from '~/server/repository/FollowupTypeRepository'
 
 function getFinancialHelpRequestCount(
   user: SecurityRuleGrantee,

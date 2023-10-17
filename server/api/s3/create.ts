@@ -15,7 +15,7 @@ import {
 } from '~/server/security/rules'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
-import { DocumentRepo, NotificationRepo } from '~/server/repository'
+import { DocumentRepo, NotificationRepo } from '~/server/database'
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth

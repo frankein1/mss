@@ -8,7 +8,7 @@ import {
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
-import { BeneficiaryRelativeRepo, BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRelativeRepo, BeneficiaryRepo } from '~/server/database'
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)

@@ -5,7 +5,7 @@ import {
   defaultLegallyNotRequiredFollowupTypeLabels,
   defaultLegallyNotRequiredFollowupTypeOptions
 } from '~/client/options/followupType'
-import { FollowupTypeRepo } from '~/server/repository/FollowupTypeRepository'
+import { FollowupTypeRepo } from '~/server/database'
 import { CreateFollowupTypeInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security'
 import type { FollowupTypeWithSupportsCount } from '~/types/followupType'

@@ -8,7 +8,7 @@ import {
 } from '~/server/schema'
 import { SecurityRuleGrantee, canUpdateDraft } from '~/server/security/rules'
 import type { BeneficiaryDraft } from '~/types/beneficiary'
-import { DraftRepo } from '~/server/repository'
+import { DraftRepo } from '~/server/database'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,

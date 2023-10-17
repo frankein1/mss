@@ -1,7 +1,7 @@
 import { inferAsyncReturnType } from '@trpc/server'
 import { H3Event, parseCookies } from 'h3'
 import { verifyJwt } from '../lib/jwt'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 
 export const createContext = async (event: H3Event) => {
   const config = useRuntimeConfig()

@@ -9,7 +9,7 @@ import {
   getDocumentsSchema
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
-import { DocumentRepo } from '~/server/repository'
+import { DocumentRepo } from '~/server/database'
 
 function prepareBeneficiaryDocumentsFilters(
   filters: BeneficiaryDocumentFilterInput

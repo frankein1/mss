@@ -9,7 +9,7 @@ import {
   canEditItsOwnStructure
 } from '~/server/security/rules'
 import { editFollowupTypes } from '~/utils/structure'
-import { StructureRepo } from '~/server/repository'
+import { StructureRepo } from '~/server/database'
 
 const handler = async ({
   ctx: { structure: userStructure, user },

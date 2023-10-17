@@ -2,12 +2,23 @@ import { Prisma } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
+// VIEW
+
 function findMany<T extends Prisma.FollowupTypeFindManyArgs>(
   _user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupTypeFindManyArgs>
 ) {
   return prismaClient.followupType.findMany(params)
 }
+
+function count(
+  _user: SecurityRuleGrantee,
+  params: Prisma.FollowupTypeCountArgs
+) {
+  return prismaClient.followupType.count(params)
+}
+
+// CREATE / UPDATE / DELETE
 
 function findUniqueOrThrow<T extends Prisma.FollowupTypeFindUniqueOrThrowArgs>(
   _user: SecurityRuleGrantee,
@@ -35,12 +46,6 @@ function deleteMany(
   params: Prisma.FollowupTypeDeleteManyArgs
 ) {
   return prismaClient.followupType.deleteMany(params)
-}
-function count(
-  _user: SecurityRuleGrantee,
-  params: Prisma.FollowupTypeCountArgs
-) {
-  return prismaClient.followupType.count(params)
 }
 
 export const FollowupTypeRepo = {
