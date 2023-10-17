@@ -1,10 +1,10 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintsOnBeneficiary } from './helper/getConstraintOnBeneficiary'
+import { getConstraintOnBeneficiary } from './constraints/getConstraintOnBeneficiary'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
 const viewConstraints = (user: SecurityRuleGrantee) =>
-  getConstraintsOnBeneficiary(user)
+  getConstraintOnBeneficiary(user)
 
 // READ
 

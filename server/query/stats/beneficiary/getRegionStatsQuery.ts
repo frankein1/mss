@@ -1,6 +1,6 @@
 import {
   BeneficiaryRepo,
-  getConstraintsOnBeneficiary
+  getConstraintOnBeneficiary
 } from '~/server/repository'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
@@ -11,7 +11,7 @@ export async function getRegionStatsQuery(
   input: StatFilterInput
 ) {
   // HACK: right solution is to abstract groupBy in repo
-  const constraints = getConstraintsOnBeneficiary(user)
+  const constraints = getConstraintOnBeneficiary(user)
 
   return await BeneficiaryRepo.groupBy({
     by: ['region'],

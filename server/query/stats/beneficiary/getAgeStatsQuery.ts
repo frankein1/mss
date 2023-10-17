@@ -9,7 +9,7 @@ import { prepareBeneficiaryStatFilters } from '~/utils/filters'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import {
   BeneficiaryRepo,
-  getConstraintsOnBeneficiary
+  getConstraintOnBeneficiary
 } from '~/server/repository'
 
 enum NullAgeGroup {
@@ -23,7 +23,7 @@ export async function getAgeStatsQuery(
   input: StatFilterInput
 ) {
   // HACK: right solution is to abstract groupBy in repo
-  const constraints = getConstraintsOnBeneficiary(user)
+  const constraints = getConstraintOnBeneficiary(user)
 
   const ageCounts = await BeneficiaryRepo.groupBy({
     by: ['birthDate'],
