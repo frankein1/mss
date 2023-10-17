@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/default
 import pkg, { JwtPayload } from 'jsonwebtoken'
 import { JwtUser } from '~/types/user'
 

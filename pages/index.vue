@@ -275,8 +275,7 @@
   }
 
   .list-section {
-    column-gap: 5rem;
-    row-gap: 2rem;
+    gap: 2rem 5rem;
   }
 
   .list-section div:nth-child(2) {
