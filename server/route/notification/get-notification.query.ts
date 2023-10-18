@@ -13,12 +13,9 @@ const handler = async ({
   input: GetNotificationInput
 }) => {
   const where: {
-    recipientId: string
     read?: boolean
     type?: NotificationType
-  } = {
-    recipientId: user.id
-  }
+  } = {}
 
   if (onlyUnread) {
     where.read = false

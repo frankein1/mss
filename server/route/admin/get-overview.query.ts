@@ -6,8 +6,8 @@ import { StructureRepo, UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc/createRouter'
 
 const adminHandler = async ({ ctx: { user } }: { ctx: AdminContext }) => {
-  const users = await UserRepo.count(user)
-  const structures = await StructureRepo.count(user)
+  const users = await UserRepo.count(user, {})
+  const structures = await StructureRepo.count(user, {})
 
   return { users, structures }
 }

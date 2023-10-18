@@ -1,23 +1,14 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnFollowup } from '../constraints'
+import { FollowupConstraints } from '../constraints'
+import { appendConstraints } from './helper/appendConstraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
-
-// SYSTEM
-function systemFindMany<T extends Prisma.FollowupFindManyArgs>(
-  params: Prisma.SelectSubset<T, Prisma.FollowupFindManyArgs>
-) {
-  return prismaClient.followup.findMany(params)
-}
-
-// VIEW
 
 function findMany<T extends Prisma.FollowupFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupFindManyArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnFollowup(user))
+  appendConstraints(user, params, FollowupConstraints)
   return prismaClient.followup.findMany(params)
 }
 
@@ -25,40 +16,24 @@ function findUniqueOrThrow<T extends Prisma.FollowupFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupFindUniqueOrThrowArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnFollowup(user))
+  appendConstraints(user, params, FollowupConstraints)
   return prismaClient.followup.findUniqueOrThrow(params)
 }
 
-// CREATE / UPDATE / DELETE
-
-function create(_user: SecurityRuleGrantee, params: Prisma.FollowupCreateArgs) {
-  return prismaClient.followup.create(params)
-}
-
-function update<T extends Prisma.FollowupUpdateArgs>(
-  _user: SecurityRuleGrantee,
-  params: Prisma.SelectSubset<T, Prisma.FollowupUpdateArgs>
-) {
-  return prismaClient.followup.update(params)
-}
-
-function deleteEntity(
-  _user: SecurityRuleGrantee,
-  params: Prisma.FollowupDeleteArgs
-) {
-  return prismaClient.followup.delete(params)
-}
-function count(_user: SecurityRuleGrantee, params: Prisma.FollowupCountArgs) {
+function count(user: SecurityRuleGrantee, params: Prisma.FollowupCountArgs) {
+  appendConstraints(user, params, FollowupConstraints)
   return prismaClient.followup.count(params)
 }
 
 export const FollowupRepo = {
-  systemFindMany,
   findMany,
   findUniqueOrThrow,
-  create,
-  deleteEntity,
   count,
-  update
+  prisma: {
+    groupBy: prismaClient.followup.groupBy,
+    findMany: prismaClient.followup.findMany,
+    create: prismaClient.followup.create,
+    update: prismaClient.followup.update,
+    delete: prismaClient.followup.delete
+  }
 }

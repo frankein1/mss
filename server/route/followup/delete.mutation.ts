@@ -26,7 +26,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  await FollowupRepo.deleteEntity(user, { where: { id } })
+  await FollowupRepo.prisma.delete({ where: { id } })
 
   await addUserActivity({
     userId: user.id,

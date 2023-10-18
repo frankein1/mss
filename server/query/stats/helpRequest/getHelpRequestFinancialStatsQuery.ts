@@ -1,21 +1,19 @@
 import { Prisma } from '@prisma/client'
-import { HelpRequestRepo, FollowupTypeRepo } from '~/server/database'
-import { prismaClient } from '~/server/prisma'
-import { StatFilterInput } from '~/server/schema'
 import {
-  SecurityRuleGrantee,
-  canOnlyListItsBeneficiaries
-} from '~/server/security/rules'
+  HelpRequestRepo,
+  FollowupTypeRepo,
+  HelpRequestConstraints
+} from '~/server/database'
+import { StatFilterInput } from '~/server/schema'
+import { SecurityRuleGrantee } from '~/server/security/rules'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
 function getFinancialHelpRequestCount(
   user: SecurityRuleGrantee,
-  structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
   return HelpRequestRepo.count(user, {
     where: {
-      structureId,
       financialSupport: true,
       ...filters
     }
@@ -24,12 +22,10 @@ function getFinancialHelpRequestCount(
 
 function getInternalFinancialHelpRequestCount(
   user: SecurityRuleGrantee,
-  structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
   return HelpRequestRepo.count(user, {
     where: {
-      structureId,
       financialSupport: true,
       externalStructure: false,
       ...filters
@@ -39,14 +35,12 @@ function getInternalFinancialHelpRequestCount(
 
 async function getFinancialHelpRequestTotalAmount(
   user: SecurityRuleGrantee,
-  structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
   const {
     _sum: { allocatedAmount: financialHelpRequestTotalAmount }
   } = await HelpRequestRepo.aggregate(user, {
     where: {
-      structureId,
       financialSupport: true,
       status: 'Accepted',
       allocatedAmount: { gt: 0 },
@@ -62,14 +56,12 @@ async function getFinancialHelpRequestTotalAmount(
 
 async function getFinancialHelpRequestAmountByType(
   user: SecurityRuleGrantee,
-  structureId: string,
   filters: Prisma.HelpRequestWhereInput
 ) {
   // Prisma does not allow selecting type.id and type.name on a groupBy
-  const helpRequestAmountByTypeId = await prismaClient.helpRequest.groupBy({
+  const helpRequestAmountByTypeId = await HelpRequestRepo.prisma.groupBy({
     by: ['typeId'],
     where: {
-      structureId,
       financialSupport: true,
       status: 'Accepted',
       allocatedAmount: { gt: 0 },
@@ -116,24 +108,8 @@ export async function getHelpRequestFinancialStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
-  const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareHelpRequestStatFilters(input)
-
-  const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
-    preparedBeneficiaryFilters
-      ? {
-          ...preparedBeneficiaryFilters,
-          referents
-        }
-      : {
-          referents
-        }
-
-  const filters = { ...preparedFilters, beneficiary: beneficiaryFilters }
+  const filters = prepareHelpRequestStatFilters(input)
+  Object.assign(filters, HelpRequestConstraints.get(user))
 
   const [
     financialHelpRequestCount,
@@ -141,10 +117,10 @@ export async function getHelpRequestFinancialStatsQuery(
     financialHelpRequestTotalAmount,
     financialHelpRequestAmountByType
   ] = await Promise.all([
-    getFinancialHelpRequestCount(user, user.structureId || '', filters),
-    getInternalFinancialHelpRequestCount(user, user.structureId || '', filters),
-    getFinancialHelpRequestTotalAmount(user, user.structureId || '', filters),
-    getFinancialHelpRequestAmountByType(user, user.structureId || '', filters)
+    getFinancialHelpRequestCount(user, filters),
+    getInternalFinancialHelpRequestCount(user, filters),
+    getFinancialHelpRequestTotalAmount(user, filters),
+    getFinancialHelpRequestAmountByType(user, filters)
   ])
 
   const requestsCounts = {

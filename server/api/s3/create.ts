@@ -87,7 +87,7 @@ async function addNotification(
       })
     }
   }
-  await NotificationRepo.createMany(user, { data: notifications })
+  await NotificationRepo.prisma.createMany({ data: notifications })
 }
 
 async function addDocument(
@@ -96,7 +96,7 @@ async function addDocument(
   user: JwtUser
 ) {
   const { type, beneficiaryId, confidential, tags, file } = input
-  const document = await DocumentRepo.create(user, {
+  const document = await DocumentRepo.prisma.create({
     data: {
       key: v4(),
       name: file.name,

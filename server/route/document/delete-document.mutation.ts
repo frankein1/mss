@@ -38,7 +38,7 @@ const handler = async ({
     throw error
   })
 
-  await DocumentRepo.deleteEntity(user, {
+  await DocumentRepo.prisma.delete({
     where: { key: documentKey }
   })
 

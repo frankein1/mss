@@ -29,7 +29,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  await HelpRequestRepo.deleteEntity(user, { where: { id } })
+  await HelpRequestRepo.prisma.delete({ where: { id } })
 
   await addUserActivity({
     userId: user.id,

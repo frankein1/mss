@@ -44,7 +44,7 @@ const handler = async ({
     throw forbiddenError()
   }
 
-  const updatedBeneficiaryDraft = await DraftRepo.update(user, {
+  const updatedBeneficiaryDraft = await DraftRepo.prisma.update({
     where: { id: draftId },
     data: {
       content: {

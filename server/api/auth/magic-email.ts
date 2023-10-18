@@ -8,7 +8,7 @@ import { RoutePath } from '~/utils/routing'
 export default defineEventHandler(async event => {
   const { email: input } = await readBody(event)
 
-  const user = await UserRepo.systemFindUniqueOrThrow({
+  const user = await UserRepo.prisma.findUniqueOrThrow({
     where: {
       email: input
     }
@@ -22,7 +22,7 @@ export default defineEventHandler(async event => {
 
   const accessToken = v4()
 
-  await UserRepo.systemUpdate({
+  await UserRepo.prisma.update({
     where: { id: user.id },
     data: {
       accessToken,

@@ -5,7 +5,7 @@ import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { AdminContext } from '~/server/trpc/createRouter'
 
 const adminHandler = async ({
-  ctx,
+  ctx: _ctx,
   input
 }: {
   ctx: AdminContext
@@ -13,7 +13,7 @@ const adminHandler = async ({
 }) => {
   const { id, ...user } = input
 
-  const updatedUser = await UserRepo.update(ctx.user, {
+  const updatedUser = await UserRepo.prisma.update({
     where: { id },
     data: user
   })

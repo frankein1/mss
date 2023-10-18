@@ -54,7 +54,7 @@ export default defineEventHandler(async event => {
 
   const userAccessToken = v4()
 
-  await UserRepo.systemUpdate({
+  await UserRepo.prisma.update({
     where: { id: user.id },
     data: {
       accessToken: userAccessToken,
@@ -134,7 +134,7 @@ async function upsertAccount({
 
 async function getUser(email: string) {
   try {
-    return await UserRepo.systemFindUniqueOrThrow({
+    return await UserRepo.prisma.findUniqueOrThrow({
       where: { email },
       include: {
         structure: true,

@@ -37,12 +37,10 @@ const handler = async ({
   input: QuickEditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const select = prepareGetHelpRequestsPageSelect(user)
-
-  const helpRequest = await HelpRequestRepo.update(user, {
+  const helpRequest = await HelpRequestRepo.prisma.update({
     where: { id },
     data: rest,
-    select
+    select: prepareGetHelpRequestsPageSelect(user)
   })
 
   await addUserActivity({

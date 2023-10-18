@@ -1,7 +1,7 @@
 import { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin, isReferent } from '~/server/security/rules/helpers'
 
-export const getConstraintOnBeneficiary = (user: SecurityRuleGrantee) => {
+const get = (user: SecurityRuleGrantee) => {
   const where = {}
   if (isAdmin(user)) {
     return where
@@ -12,4 +12,8 @@ export const getConstraintOnBeneficiary = (user: SecurityRuleGrantee) => {
     Object.assign(where, { referents: { some: { id: user.id } } })
   }
   return where
+}
+
+export const BeneficiaryConstraints = {
+  get
 }

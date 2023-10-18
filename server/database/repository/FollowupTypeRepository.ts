@@ -1,58 +1,44 @@
 import { Prisma } from '@prisma/client'
+import { FollowupTypeConstraints } from '../constraints'
+import { appendConstraints } from './helper/appendConstraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
 // VIEW
 
 function findMany<T extends Prisma.FollowupTypeFindManyArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupTypeFindManyArgs>
 ) {
+  appendConstraints(user, params, FollowupTypeConstraints)
   return prismaClient.followupType.findMany(params)
 }
 
 function count(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.FollowupTypeCountArgs
 ) {
+  appendConstraints(user, params, FollowupTypeConstraints)
   return prismaClient.followupType.count(params)
 }
 
-// CREATE / UPDATE / DELETE
-
 function findUniqueOrThrow<T extends Prisma.FollowupTypeFindUniqueOrThrowArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupTypeFindUniqueOrThrowArgs>
 ) {
+  appendConstraints(user, params, FollowupTypeConstraints)
   return prismaClient.followupType.findUniqueOrThrow(params)
-}
-
-function createMany(
-  _user: SecurityRuleGrantee,
-  params: Prisma.FollowupTypeCreateManyArgs
-) {
-  return prismaClient.followupType.createMany(params)
-}
-
-function update<T extends Prisma.FollowupTypeUpdateArgs>(
-  _user: SecurityRuleGrantee,
-  params: Prisma.SelectSubset<T, Prisma.FollowupTypeUpdateArgs>
-) {
-  return prismaClient.followupType.update(params)
-}
-
-function deleteMany(
-  _user: SecurityRuleGrantee,
-  params: Prisma.FollowupTypeDeleteManyArgs
-) {
-  return prismaClient.followupType.deleteMany(params)
 }
 
 export const FollowupTypeRepo = {
   findMany,
   findUniqueOrThrow,
-  createMany,
-  deleteMany,
   count,
-  update
+  prisma: {
+    create: prismaClient.followupType.create,
+    createMany: prismaClient.followupType.createMany,
+    update: prismaClient.followupType.update,
+    delete: prismaClient.followupType.delete,
+    deleteMany: prismaClient.followupType.deleteMany
+  }
 }

@@ -31,7 +31,7 @@ const handler = async ({
     legallyNotRequiredFollowupTypes
   )
 
-  const updatedStructure = await StructureRepo.update(user, {
+  const updatedStructure = await StructureRepo.prisma.update({
     where: { id: userStructure.id },
     data: structure,
     include: {

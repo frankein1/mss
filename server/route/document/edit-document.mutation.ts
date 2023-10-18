@@ -54,7 +54,7 @@ const handler = async ({
     throw forbiddenError()
   }
 
-  const updatedDocument = await DocumentRepo.update(user, {
+  const updatedDocument = await DocumentRepo.prisma.update({
     where: { key },
     data,
     include: { beneficiary: { select: { id: true, structureId: true } } }

@@ -19,7 +19,7 @@ const handler = async ({
 }) => {
   const select = prepareGetFollowupsPageSelect(user)
 
-  const fu = await FollowupRepo.update(user, {
+  const fu = await FollowupRepo.prisma.update({
     where: { id },
     data: rest,
     select

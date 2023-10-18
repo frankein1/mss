@@ -19,11 +19,8 @@ import {
 } from '~/server/query'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
-  canListBeneficiaryFollowups,
   canListCommentsToFollowup,
-  canListCommentsToHelpRequest,
-  canListBeneficiaryHelpRequests,
-  canOnlyListItsBeneficiaries
+  canListCommentsToHelpRequest
 } from '~/server/security/rules'
 import {
   AllowSecurityCheck,
@@ -107,14 +104,10 @@ async function getFollowups(
   beneficiary: NonNullable<BeneficiarySecurityTarget>,
   filters: FollowupFilterInput
 ) {
-  if (!canListBeneficiaryFollowups(user, beneficiary)) {
-    return []
-  }
-
   const followups = await FollowupRepo.findMany(user, {
     where: {
       beneficiaryId: beneficiary.id,
-      ...prepareFollowupFilters(filters, canOnlyListItsBeneficiaries(user))
+      ...prepareFollowupFilters(filters)
     },
     include: {
       ...historyItemInclude(user.id),
@@ -142,14 +135,10 @@ async function getHelpRequests(
   beneficiary: NonNullable<BeneficiarySecurityTarget>,
   filters: HelpRequestFilterInput
 ) {
-  if (!canListBeneficiaryHelpRequests(user, beneficiary)) {
-    return []
-  }
-
   const helpRequests = await HelpRequestRepo.findMany(user, {
     where: {
       beneficiaryId: beneficiary.id,
-      ...prepareHelpRequestFilters(filters, canOnlyListItsBeneficiaries(user))
+      ...prepareHelpRequestFilters(filters)
     },
     include: {
       ...historyItemInclude(user.id),

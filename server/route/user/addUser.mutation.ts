@@ -32,7 +32,7 @@ const handler = async ({
     })
   }
 
-  const createdUser = await UserRepo.create(user, {
+  const createdUser = await UserRepo.prisma.create({
     data: {
       structureId: user.structureId,
       ...input

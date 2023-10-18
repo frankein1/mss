@@ -25,7 +25,7 @@ const adminHandler = async ({
     })
   }
 
-  const createdUser = await UserRepo.create(ctx.user, {
+  const createdUser = await UserRepo.prisma.create({
     data: input
   })
 

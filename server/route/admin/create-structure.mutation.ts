@@ -8,13 +8,13 @@ import { AdminContext } from '~/server/trpc/createRouter'
 import { StructureRepo } from '~/server/database'
 
 const adminHandler = async ({
-  ctx: { user },
+  ctx: { user: _user },
   input
 }: {
   ctx: AdminContext
   input: AdminCreateStructureInput
 }) => {
-  const createdStructure = await StructureRepo.create(user, {
+  const createdStructure = await StructureRepo.prisma.create({
     data: input,
     include: {
       followupTypes: {

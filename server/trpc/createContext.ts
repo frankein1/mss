@@ -19,7 +19,7 @@ export const createContext = async (event: H3Event) => {
     auth: { jwtKey }
   } = config
   const { user: userData } = verifyJwt(sessionToken, jwtKey)
-  const user = await UserRepo.systemFindUniqueOrThrow({
+  const user = await UserRepo.prisma.findUniqueOrThrow({
     where: { id: userData.id },
     select: {
       id: true,

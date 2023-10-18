@@ -23,7 +23,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  await DraftRepo.deleteEntity(user, {
+  await DraftRepo.prisma.delete({
     where: { id: input.id }
   })
 

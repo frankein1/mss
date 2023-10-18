@@ -27,7 +27,7 @@ const handler = async ({
 
   await updateBeneficiaryRelatives(user, id)
 
-  await BeneficiaryRepo.deleteEntity(user, { where: { id } })
+  await BeneficiaryRepo.prisma.delete({ where: { id } })
 
   await addUserActivity({
     userId: user.id,
@@ -56,7 +56,7 @@ async function updateBeneficiaryRelatives(
 
   for (const relative of relatives) {
     const { linkedBeneficiary: lb } = relative
-    await BeneficiaryRelativeRepo.update(user, {
+    await BeneficiaryRelativeRepo.prisma.update({
       data: {
         linkedBeneficiaryId: null,
         email: lb?.email || null,

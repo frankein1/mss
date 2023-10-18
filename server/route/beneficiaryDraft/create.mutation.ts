@@ -16,7 +16,7 @@ const handler = async ({
   input: CreateBeneficiaryInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiaryDraft = await DraftRepo.create(user, {
+  const beneficiaryDraft = await DraftRepo.prisma.create({
     data: {
       structureId: structure.id,
       createdById: user.id,

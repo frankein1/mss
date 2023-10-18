@@ -16,7 +16,7 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: UpdateNotificationInput
 }) => {
-  await NotificationRepo.updateMany(user, {
+  await NotificationRepo.prisma.updateMany({
     where: { id, recipientId: user.id },
     data: { read }
   })

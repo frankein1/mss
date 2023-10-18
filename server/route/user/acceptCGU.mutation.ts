@@ -20,7 +20,7 @@ const handler = async ({
     auth: { jwtKey }
   } = useRuntimeConfig()
 
-  const updatedUser = await UserRepo.update(user, {
+  const updatedUser = await UserRepo.prisma.update({
     where: { id: user.id },
     data: {
       CGUHistory: {

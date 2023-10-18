@@ -23,7 +23,7 @@ const handler = async ({
 
   const fileNumber = generateFileNumber()
 
-  const beneficiary = await BeneficiaryRepo.create(user, {
+  const beneficiary = await BeneficiaryRepo.prisma.create({
     data: {
       structureId: structure.id,
       fileNumber,

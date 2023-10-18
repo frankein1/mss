@@ -14,7 +14,7 @@ export default defineEventHandler(async event => {
     }
   }
 
-  const user = await UserRepo.systemFindFirst({
+  const user = await UserRepo.prisma.findFirst({
     where: {
       accessToken: token,
       accessTokenValidity: {
@@ -67,7 +67,7 @@ export default defineEventHandler(async event => {
 
   setCookie(event, sessionCookieKey, sessionToken, cookieOptions({ expiresIn }))
 
-  await UserRepo.systemUpdate({
+  await UserRepo.prisma.update({
     where: {
       id: user.id
     },

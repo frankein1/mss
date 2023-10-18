@@ -6,9 +6,6 @@ import { InstructorOrganizationRepo } from '~/server/database'
 
 const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
   return await InstructorOrganizationRepo.findMany(user, {
-    where: {
-      structureId: user.structureId
-    },
     orderBy: [{ name: 'asc' }]
   })
 }

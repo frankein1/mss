@@ -53,7 +53,7 @@ export default defineEventHandler(async event => {
 })
 
 async function findUser(email: string) {
-  return await UserRepo.systemFindUniqueOrThrow({ where: { email } })
+  return await UserRepo.prisma.findUniqueOrThrow({ where: { email } })
 }
 
 async function updateAccount(account: Account) {
