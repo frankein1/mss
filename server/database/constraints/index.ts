@@ -1,4 +1,5 @@
 export * from './getConstraintOnBeneficiary'
+export * from './getConstraintOnBeneficiaryRelative'
 export * from './getConstraintOnDocument'
 export * from './getConstraintOnFollowup'
 export * from './getConstraintOnHelpRequest'
