@@ -1,20 +1,33 @@
 import { Prisma } from '@prisma/client'
+import { getConstraintOnStructure } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
+// VIEW
+
 function findMany<T extends Prisma.StructureFindManyArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.StructureFindManyArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnStructure(user))
   return prismaClient.structure.findMany(params)
 }
 
 function findUniqueOrThrow<T extends Prisma.StructureFindUniqueOrThrowArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.StructureFindUniqueOrThrowArgs>
 ) {
+  const { where } = params
+  params.where = Object.assign(where || {}, getConstraintOnStructure(user))
   return prismaClient.structure.findUniqueOrThrow(params)
 }
+
+function count(_user: SecurityRuleGrantee, params?: Prisma.StructureCountArgs) {
+  return prismaClient.structure.count(params)
+}
+
+// CREATE / UPDATE / DELETE
 
 function create(
   _user: SecurityRuleGrantee,
@@ -35,9 +48,6 @@ function deleteEntity(
   params: Prisma.StructureDeleteArgs
 ) {
   return prismaClient.structure.delete(params)
-}
-function count(_user: SecurityRuleGrantee, params?: Prisma.StructureCountArgs) {
-  return prismaClient.structure.count(params)
 }
 
 export const StructureRepo = {
