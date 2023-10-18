@@ -75,6 +75,7 @@ export const HelpRequestRepo = {
   findMany,
   findUniqueOrThrow,
   create,
+  groupBy: prismaClient.helpRequest.groupBy,
   deleteEntity,
   count,
   update

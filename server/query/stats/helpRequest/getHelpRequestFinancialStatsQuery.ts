@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client'
-import { HelpRequestRepo, FollowupTypeRepo } from '~/server/database'
-import { prismaClient } from '~/server/prisma'
-import { StatFilterInput } from '~/server/schema'
 import {
-  SecurityRuleGrantee,
-  canOnlyListItsBeneficiaries
-} from '~/server/security/rules'
+  HelpRequestRepo,
+  FollowupTypeRepo,
+  appendConstraintOnHelpRequest
+} from '~/server/database'
+import { StatFilterInput } from '~/server/schema'
+import { SecurityRuleGrantee } from '~/server/security/rules'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
 function getFinancialHelpRequestCount(
@@ -59,7 +59,7 @@ async function getFinancialHelpRequestAmountByType(
   filters: Prisma.HelpRequestWhereInput
 ) {
   // Prisma does not allow selecting type.id and type.name on a groupBy
-  const helpRequestAmountByTypeId = await prismaClient.helpRequest.groupBy({
+  const helpRequestAmountByTypeId = await HelpRequestRepo.groupBy({
     by: ['typeId'],
     where: {
       financialSupport: true,
@@ -108,24 +108,8 @@ export async function getHelpRequestFinancialStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
-  const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareHelpRequestStatFilters(input)
-
-  const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
-    preparedBeneficiaryFilters
-      ? {
-          ...preparedBeneficiaryFilters,
-          referents
-        }
-      : {
-          referents
-        }
-
-  const filters = { ...preparedFilters, beneficiary: beneficiaryFilters }
+  const filters = prepareHelpRequestStatFilters(input)
+  appendConstraintOnHelpRequest(user, filters)
 
   const [
     financialHelpRequestCount,

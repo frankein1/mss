@@ -1,7 +1,8 @@
-import { Prisma } from '@prisma/client'
-import { prismaClient } from '~/server/prisma'
+import {
+  HelpRequestRepo,
+  appendConstraintOnHelpRequest
+} from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
@@ -9,30 +10,12 @@ export async function getHelpRequestStatusStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
+  const where = prepareHelpRequestStatFilters(input)
+  appendConstraintOnHelpRequest(user, where)
 
-  const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareHelpRequestStatFilters(input)
-
-  const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
-    preparedBeneficiaryFilters
-      ? {
-          ...preparedBeneficiaryFilters,
-          referents
-        }
-      : {
-          referents
-        }
-
-  return await prismaClient.helpRequest.groupBy({
+  return await HelpRequestRepo.groupBy({
     by: ['status'],
-    where: {
-      structureId: user.structureId || '',
-      ...preparedFilters,
-      beneficiary: beneficiaryFilters
-    },
+    where,
     _count: true,
     orderBy: { _count: { status: 'desc' } }
   })

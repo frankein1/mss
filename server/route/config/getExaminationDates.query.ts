@@ -1,35 +1,38 @@
-import {
-  hasDefinedExaminationDate,
-  prepareExaminationDatesBeneficiaryCondition
-} from './helper'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import {
   SecurityRuleGrantee,
   canViewAnyHelpRequestDetails
 } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
+import {
+  HelpRequestRepo,
+  appendConstraintOnHelpRequest
+} from '~/server/database'
+
+function hasDefinedExaminationDate(h: {
+  examinationDate: Date | null
+}): h is { examinationDate: Date } {
+  return h.examinationDate !== null
+}
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx: { user }
 }: {
   input: { id: string } | undefined
   ctx: ProtectedAppContext
 }) => {
-  const beneficiaryCondition = prepareExaminationDatesBeneficiaryCondition(
-    input?.id,
-    user
-  )
+  const where = {
+    examinationDate: { not: null },
+    beneficiary: input?.id ? { id: input?.id } : {}
+  }
 
-  const examinationDates = await prismaClient.helpRequest.groupBy({
+  appendConstraintOnHelpRequest(user, where)
+
+  const examinationDates = await HelpRequestRepo.groupBy({
     by: ['examinationDate'],
-    where: {
-      examinationDate: { not: null },
-      structureId: structure.id,
-      beneficiary: beneficiaryCondition
-    },
+    where,
     orderBy: [{ examinationDate: 'desc' }]
   })
 
