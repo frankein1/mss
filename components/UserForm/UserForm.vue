@@ -1,4 +1,8 @@
 <template>
+  <FormErrors
+    v-if="errors.length > 1"
+    :errors="errors"
+  />
   <form
     ref="form"
     novalidate
@@ -43,7 +47,6 @@
 
 <script lang="ts" setup>
   import { TRPCClientError } from '@trpc/client'
-  import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import { withEmptyValue } from '~/utils/options'
   import { nonAdminUserRoleOptions } from '~/client/options/user'
@@ -64,24 +67,29 @@
     validationSchema: toTypedSchema(createUserSchema)
   })
 
-  const onInviteUser = handleSubmit(user => {
-    useTrpcMutation({
-      mutation: () => useTrpcClient().user.add.mutate(user),
-      isSubmitting,
-      onSuccess: ({ email }) => {
-        onSuccess(getUserCreationMessage(email), 10000)
-        form.value?.reset()
-        emit('usersRefresh')
-      },
-      onFailure: err => {
-        if (err instanceof TRPCClientError && err.data.code === 'CONFLICT') {
-          onError('Cet email est déjà associé à un utilisateur.')
-        } else {
-          onError("La création de l'utilisateur a échoué.")
+  const { onSubmit: onInviteUser, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    user => {
+      useTrpcMutation({
+        mutation: () => useTrpcClient().user.add.mutate(user),
+        isSubmitting,
+        onSuccess: ({ email }) => {
+          onSuccess(getUserCreationMessage(email), 10000)
+          form.value?.reset()
+          emit('usersRefresh')
+        },
+        onFailure: err => {
+          if (err instanceof TRPCClientError && err.data.code === 'CONFLICT') {
+            onError('Cet email est déjà associé à un utilisateur.')
+          } else {
+            onError("La création de l'utilisateur a échoué.")
+          }
         }
-      }
-    })
-  })
+      })
+    }
+  )
+
+  const { errors } = useDisplayFormErrors(form, caughtErrors, userFieldLabels)
 
   function onSuccess(message: string, duration: number) {
     snackbar.success(

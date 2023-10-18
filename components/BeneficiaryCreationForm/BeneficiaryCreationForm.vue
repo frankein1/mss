@@ -1,5 +1,10 @@
 <template>
+  <FormErrors
+    v-if="errors.length > 1"
+    :errors="errors"
+  />
   <form
+    ref="form"
     novalidate
     class="fr-p-3v"
     @submit.prevent="onSubmit"
@@ -9,9 +14,7 @@
       no-aidant-connect-authorized
     />
 
-    <div
-      class="fr-grid-row fr-grid-row--center fr-grid-row--gutters feature-section fr-mb-7v"
-    >
+    <div class="fr-grid-row fr-grid-row--gutters feature-section fr-mb-7v">
       <h3 class="fr-col-12 fr-text--md formgroup__title fr-mb-0">
         Identité du bénéficiaire
       </h3>
@@ -109,7 +112,6 @@
 
 <script setup lang="ts">
   import { BeneficiaryStatus } from '@prisma/client'
-  import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import { BeneficiaryReferent } from '~/types/beneficiary'
   import {
@@ -131,6 +133,7 @@
   }>()
 
   const complete = ref<boolean>(false)
+  const form = ref<HTMLFormElement | null>(null)
 
   const { handleSubmit } = useForm<CreateBeneficiaryInput>({
     validationSchema: toTypedSchema(createBeneficiarySchema),
@@ -139,9 +142,18 @@
     }
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('saveBeneficiary', values, complete.value)
-  })
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      emit('saveBeneficiary', values, complete.value)
+    }
+  )
+
+  const { errors } = useDisplayFormErrors(
+    form,
+    caughtErrors,
+    beneficiaryFieldLabels
+  )
 </script>
 
 <style scoped>

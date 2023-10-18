@@ -7,7 +7,8 @@ const adminEditUserSchema = adminCreateUserBaseSchema
     id: z.string().uuid()
   })
   .refine(({ role, structureId }) => role === 'Administrator' || structureId, {
-    message: requiredErrorMessage
+    message: requiredErrorMessage,
+    path: ['structureId']
   })
 
 type AdminEditUserInput = z.infer<typeof adminEditUserSchema>

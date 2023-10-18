@@ -5,7 +5,11 @@ import {
   documentFileMaxSize,
   documentFileAllowedTypes
 } from '~/client/options/document'
-import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
+import {
+  errorMessages,
+  maxStringLengthMessage,
+  minStringLengthMessage
+} from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
 
 const documentSizeValidationErrorMessage = `La taille du document doit être inférieure à ${formatByteSize(
@@ -47,7 +51,9 @@ export const deleteDocumentSchema = z.object({
 
 export const editDocumentSchema = z.object({
   key: z.string(),
-  name: stringConstraint.max(150, maxStringLengthMessage(150)),
+  name: stringConstraint
+    .min(2, minStringLengthMessage(2))
+    .max(150, maxStringLengthMessage(150)),
   beneficiaryId: z.string(errorMessages).uuid(),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
