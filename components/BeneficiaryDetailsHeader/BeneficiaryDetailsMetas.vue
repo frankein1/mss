@@ -1,5 +1,5 @@
 <template>
-  <p class="fr-my-0">
+  <p class="beneficiarydetails__metas">
     <template v-if="beneficiary.birthDate">
       {{ bornLabel }} le {{ formatDate(beneficiary.birthDate) }} · </template
     >Dossier N°{{ fileNumber }}
@@ -24,3 +24,11 @@
 
   const fileNumber = computed(() => readableFileNumber(props.beneficiary.id))
 </script>
+
+<style scoped>
+  @media not print {
+    .beneficiarydetails__metas {
+      margin-bottom: 0;
+    }
+  }
+</style>

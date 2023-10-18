@@ -1,6 +1,6 @@
 <template>
   <p
-    class="fr-badge fr-my-0"
+    class="fr-badge"
     :class="[badgeClass]"
   >
     {{ label }}
@@ -21,9 +21,21 @@
   const label = computed(() => beneficiaryStatusDetailedLabels[props.status])
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .inactive-status-badge {
     color: var(--text-label-purple-glycine);
     background-color: var(--background-contrast-purple-glycine);
+  }
+
+  @media print {
+    .fr-badge {
+      --text-spacing: 0 0 1.5rem;
+
+      padding: 0;
+
+      &::before {
+        content: none;
+      }
+    }
   }
 </style>
