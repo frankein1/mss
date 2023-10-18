@@ -5,19 +5,7 @@
     :edit-link="editLink"
   >
     <div class="fr-container">
-      <div class="fr-grid-row">
-        <div
-          v-for="(entourage, index) in entourages"
-          :key="entourage.id"
-          class="fr-col-12"
-        >
-          <hr
-            v-if="index > 0"
-            class="fr-col-12 fr-mt-5v"
-          />
-          <BeneficiaryInfoRelative :relative="entourage" />
-        </div>
-      </div>
+      <BeneficiaryInfoEntouragesContent :entourages="entourages" />
     </div>
   </BeneficiaryInfoSection>
 </template>

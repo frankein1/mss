@@ -20,23 +20,22 @@
     />
     <template v-else-if="beneficiary">
       <h1>{{ formatBeneficiaryDisplayName(beneficiary) }}</h1>
-      <BeneficiaryDetailsTitle :beneficiary="beneficiary" />
-      <BeneficiaryDetailsGeneral :beneficiary="beneficiary" />
-      <BeneficiaryDetailsHealth :beneficiary="beneficiary" />
-      <BeneficiaryDetailsOccupationIncome :beneficiary="beneficiary" />
-      <BeneficiaryDetailsRelatives
-        v-if="houseHoldSection"
+      <BeneficiaryDetailsMetas :beneficiary="beneficiary" />
+      <BeneficiaryDetailsStatus :status="beneficiary.status" />
+      <BeneficiaryInfoHeader :beneficiary="beneficiary" />
+      <template v-if="followupTypes.length">
+        <p class="fr-text--bold">Accompagnements</p>
+        <p>{{ followupTypes }}</p>
+      </template>
+      <BeneficiaryInfoGeneralContent :beneficiary="beneficiary" />
+      <BeneficiaryInfoTaxHouseholdsContent
         :beneficiary="beneficiary"
-        :relatives="taxHouseholds"
-        household
+        :tax-households="taxHouseholds"
       />
-      <BeneficiaryDetailsRelatives
-        v-if="entourages.length"
-        :beneficiary="beneficiary"
-        :relatives="entourages"
-      />
-      <!-- TODO: Follow-up types -->
-      <BeneficiaryDetailsOtherInformation :beneficiary="beneficiary" />
+      <BeneficiaryInfoEntouragesContent :entourages="entourages" />
+      <BeneficiaryInfoHealthContent :beneficiary="beneficiary" />
+      <BeneficiaryInfoOccupationIncomeContent :beneficiary="beneficiary" />
+      <BeneficiaryInfoExternalOrganisationsContent :beneficiary="beneficiary" />
     </template>
   </div>
 </template>
@@ -50,13 +49,32 @@
   })
 
   const route = useRoute()
+  const trpcClient = useTrpcClient()
 
   const beneficiaryId = route.params.id as string
 
-  const { data, pending, error } =
-    await useTrpcClient().beneficiary.getBeneficiaryDetails.useQuery({
-      id: beneficiaryId
-    })
+  const {
+    data,
+    pending: beneficiaryPending,
+    error: beneficiaryError
+  } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
+    id: beneficiaryId
+  })
+
+  const {
+    data: followupTypesData,
+    pending: followupTypesPending,
+    error: followupTypesError
+  } = await trpcClient.beneficiary.getBeneficiaryFollowupTypes.useQuery({
+    id: beneficiaryId
+  })
+
+  const pending = computed(
+    () => beneficiaryPending.value || followupTypesPending.value
+  )
+  const error = computed(
+    () => beneficiaryError.value || followupTypesError.value
+  )
 
   const beneficiary = computed(() => data.value?.beneficiary || null)
 
@@ -66,13 +84,8 @@
 
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
-
-  const houseHoldSection = computed(
-    () =>
-      taxHouseholds.value.length ||
-      beneficiary.value?.familySituation ||
-      beneficiary.value?.minorChildren ||
-      beneficiary.value?.majorChildren
+  const followupTypes = computed(() =>
+    (followupTypesData.value || []).map(t => t.name).join(', ')
   )
 
   onMounted(() => {
@@ -81,14 +94,6 @@
 </script>
 
 <style lang="scss" scoped>
-  :deep(.beneficiary-details-section) {
-    --title-spacing: 0 0 0.75rem;
-
-    &:not(:last-child) {
-      margin-bottom: 2rem;
-    }
-  }
-
   @media print {
     :deep(.fr-icon-success-line::before) {
       content: '✅';
@@ -96,6 +101,11 @@
 
     :deep(.fr-icon-close-circle-line::before) {
       content: '❌';
+    }
+
+    :deep(.fr-container) {
+      max-width: none;
+      padding: 0;
     }
   }
 </style>

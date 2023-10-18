@@ -18,7 +18,7 @@
     </div>
 
     <div v-if="hasCoordinatesInformations(beneficiary)">
-      <hr class="fr-col-12 fr-mt-5v" />
+      <hr class="fr-col-12 fr-mt-5v no-print" />
 
       <div class="fr-grid-row">
         <div class="fr-col-12">

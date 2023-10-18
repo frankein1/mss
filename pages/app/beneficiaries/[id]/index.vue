@@ -147,17 +147,3 @@
     useSnackbar().success('Le bénéficiaire a été supprimé.')
   }
 </script>
-
-<style lang="scss" scoped>
-  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
-
-  @include dsfr-media-query.respond-from('lg') {
-    .beneficiary-details-col:nth-of-type(2) {
-      border-left: 1px solid rgb(151 151 151 / 30%);
-    }
-  }
-
-  :deep(.beneficiary-details-section):not(:last-child) {
-    margin-bottom: 1.5rem;
-  }
-</style>
