@@ -1,4 +1,4 @@
-import { FollowupRepo, appendConstraintOnFollowup } from '~/server/database'
+import { FollowupRepo, FollowupConstraints } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { prepareFollowupStatFilters } from '~/utils/filters'
@@ -8,7 +8,7 @@ export async function getFollowupMediumStatsQuery(
   input: StatFilterInput
 ) {
   const where = prepareFollowupStatFilters(input)
-  appendConstraintOnFollowup(user, where)
+  FollowupConstraints.append(user, where)
 
   return await FollowupRepo.groupBy({
     by: ['medium'],

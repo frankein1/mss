@@ -5,10 +5,7 @@ import {
   canViewAnyHelpRequestDetails
 } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
-import {
-  HelpRequestRepo,
-  appendConstraintOnHelpRequest
-} from '~/server/database'
+import { HelpRequestRepo, HelpRequestConstraints } from '~/server/database'
 
 function hasDefinedExaminationDate(h: {
   examinationDate: Date | null
@@ -28,7 +25,7 @@ const handler = async ({
     beneficiary: input?.id ? { id: input?.id } : {}
   }
 
-  appendConstraintOnHelpRequest(user, where)
+  HelpRequestConstraints.append(user, where)
 
   const examinationDates = await HelpRequestRepo.groupBy({
     by: ['examinationDate'],

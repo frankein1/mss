@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnStructure } from '../constraints'
+import { StructureConstraints } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
@@ -9,8 +9,7 @@ function findMany<T extends Prisma.StructureFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.StructureFindManyArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnStructure(user))
+  StructureConstraints.append(user, params)
   return prismaClient.structure.findMany(params)
 }
 
@@ -18,8 +17,7 @@ function findUniqueOrThrow<T extends Prisma.StructureFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.StructureFindUniqueOrThrowArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnStructure(user))
+  StructureConstraints.append(user, params)
   return prismaClient.structure.findUniqueOrThrow(params)
 }
 

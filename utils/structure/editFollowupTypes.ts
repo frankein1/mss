@@ -17,7 +17,6 @@ export async function editFollowupTypes(
   legallyNotRequiredFollowupTypes: (DefaultFollowupType | string)[]
 ) {
   const currentFollowupTypes = await FollowupTypeRepo.findMany(user, {
-    where: { ownedByStructureId: structureId },
     include: {
       _count: {
         select: { followups: true, helpRequests: true }

@@ -1,9 +1,7 @@
 import { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin } from '~/server/security/rules/helpers'
 
-export const getConstraintOnInstructorOrganization = (
-  user: SecurityRuleGrantee
-) => {
+const get = (user: SecurityRuleGrantee) => {
   const where = {}
   if (isAdmin(user)) {
     return where
@@ -13,4 +11,13 @@ export const getConstraintOnInstructorOrganization = (
   })
 
   return where
+}
+
+const append = <T extends {}>(user: SecurityRuleGrantee, where: T) => {
+  return Object.assign(where, get(user))
+}
+
+export const InstructorOrganizationConstraints = {
+  get,
+  append
 }

@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnNotification } from '../constraints'
+import { NotificationConstraints } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
@@ -21,8 +21,7 @@ function findMany<T extends Prisma.NotificationFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.NotificationFindManyArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnNotification(user))
+  NotificationConstraints.append(user, params)
   return prismaClient.notification.findMany(params)
 }
 

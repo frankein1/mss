@@ -1,20 +1,23 @@
 import { Prisma } from '@prisma/client'
+import { FollowupTypeConstraints } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
 // VIEW
 
 function findMany<T extends Prisma.FollowupTypeFindManyArgs>(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupTypeFindManyArgs>
 ) {
+  FollowupTypeConstraints.append(user, params)
   return prismaClient.followupType.findMany(params)
 }
 
 function count(
-  _user: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   params: Prisma.FollowupTypeCountArgs
 ) {
+  FollowupTypeConstraints.append(user, params)
   return prismaClient.followupType.count(params)
 }
 

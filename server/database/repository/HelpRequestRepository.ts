@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnHelpRequest } from '../constraints'
+import { HelpRequestConstraints } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
@@ -17,8 +17,7 @@ function findMany<T extends Prisma.HelpRequestFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.HelpRequestFindManyArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnHelpRequest(user))
+  HelpRequestConstraints.append(user, params)
   return prismaClient.helpRequest.findMany(params)
 }
 
@@ -26,14 +25,12 @@ function findUniqueOrThrow<T extends Prisma.HelpRequestFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.HelpRequestFindUniqueOrThrowArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnHelpRequest(user))
+  HelpRequestConstraints.append(user, params)
   return prismaClient.helpRequest.findUniqueOrThrow(params)
 }
 
 function count(user: SecurityRuleGrantee, params: Prisma.HelpRequestCountArgs) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnHelpRequest(user))
+  HelpRequestConstraints.append(user, params)
   return prismaClient.helpRequest.count(params)
 }
 
@@ -41,8 +38,7 @@ function aggregate<T extends Prisma.HelpRequestAggregateArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.Subset<T, Prisma.HelpRequestAggregateArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnHelpRequest(user))
+  HelpRequestConstraints.append(user, params)
   return prismaClient.helpRequest.aggregate(params)
 }
 

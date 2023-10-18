@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import {
   HelpRequestRepo,
   FollowupTypeRepo,
-  appendConstraintOnHelpRequest
+  HelpRequestConstraints
 } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules'
@@ -109,7 +109,7 @@ export async function getHelpRequestFinancialStatsQuery(
   input: StatFilterInput
 ) {
   const filters = prepareHelpRequestStatFilters(input)
-  appendConstraintOnHelpRequest(user, filters)
+  HelpRequestConstraints.append(user, filters)
 
   const [
     financialHelpRequestCount,

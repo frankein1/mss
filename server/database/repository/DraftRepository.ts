@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnDraft } from '../constraints/getConstraintOnDraft'
+import { DraftConstraints } from '../constraints/DraftConstraint'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
@@ -9,8 +9,7 @@ function findUniqueOrThrow<T extends Prisma.DraftFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.DraftFindUniqueOrThrowArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnDraft(user))
+  DraftConstraints.append(user, params)
   return prismaClient.draft.findUniqueOrThrow(params)
 }
 

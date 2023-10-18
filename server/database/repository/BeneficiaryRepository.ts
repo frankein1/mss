@@ -1,10 +1,7 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnBeneficiary } from '../constraints/getConstraintOnBeneficiary'
+import { BeneficiaryConstraints } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
-
-const viewConstraints = (user: SecurityRuleGrantee) =>
-  getConstraintOnBeneficiary(user)
 
 // READ
 
@@ -12,8 +9,7 @@ function findMany<T extends Prisma.BeneficiaryFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryFindManyArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, viewConstraints(user))
+  BeneficiaryConstraints.append(user, params)
   return prismaClient.beneficiary.findMany(params)
 }
 
@@ -21,14 +17,12 @@ function findUniqueOrThrow<T extends Prisma.BeneficiaryFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryFindUniqueOrThrowArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, viewConstraints(user))
+  BeneficiaryConstraints.append(user, params)
   return prismaClient.beneficiary.findUniqueOrThrow(params)
 }
 
 function count(user: SecurityRuleGrantee, params: Prisma.BeneficiaryCountArgs) {
-  const { where } = params
-  params.where = Object.assign(where || {}, viewConstraints(user))
+  BeneficiaryConstraints.append(user, params)
   return prismaClient.beneficiary.count(params)
 }
 

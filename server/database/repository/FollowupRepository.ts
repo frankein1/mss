@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { appendConstraintOnFollowup } from '../constraints'
+import { FollowupConstraints } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
@@ -16,7 +16,7 @@ function findMany<T extends Prisma.FollowupFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupFindManyArgs>
 ) {
-  appendConstraintOnFollowup(user, params)
+  FollowupConstraints.append(user, params)
   return prismaClient.followup.findMany(params)
 }
 
@@ -24,7 +24,7 @@ function findUniqueOrThrow<T extends Prisma.FollowupFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupFindUniqueOrThrowArgs>
 ) {
-  appendConstraintOnFollowup(user, params)
+  FollowupConstraints.append(user, params)
   return prismaClient.followup.findUniqueOrThrow(params)
 }
 

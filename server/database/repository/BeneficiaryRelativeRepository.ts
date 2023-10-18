@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnBeneficiaryRelative } from '../constraints'
+import { BeneficiaryRelativeConstraints } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
@@ -7,11 +7,7 @@ function findMany<T extends Prisma.BeneficiaryRelativeFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryRelativeFindManyArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(
-    where || {},
-    getConstraintOnBeneficiaryRelative(user)
-  )
+  BeneficiaryRelativeConstraints.append(user, params)
   return prismaClient.beneficiaryRelative.findMany(params)
 }
 
