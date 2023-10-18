@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getConstraintOnFollowup } from '../constraints'
+import { appendConstraintOnFollowup } from '../constraints'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee } from '~/server/security'
 
@@ -16,8 +16,7 @@ function findMany<T extends Prisma.FollowupFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupFindManyArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnFollowup(user))
+  appendConstraintOnFollowup(user, params)
   return prismaClient.followup.findMany(params)
 }
 
@@ -25,8 +24,7 @@ function findUniqueOrThrow<T extends Prisma.FollowupFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupFindUniqueOrThrowArgs>
 ) {
-  const { where } = params
-  params.where = Object.assign(where || {}, getConstraintOnFollowup(user))
+  appendConstraintOnFollowup(user, params)
   return prismaClient.followup.findUniqueOrThrow(params)
 }
 
@@ -60,5 +58,6 @@ export const FollowupRepo = {
   create,
   deleteEntity,
   count,
-  update
+  update,
+  groupBy: prismaClient.followup.groupBy
 }

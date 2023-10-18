@@ -14,3 +14,10 @@ export const getConstraintOnFollowup = (user: SecurityRuleGrantee) => {
 
   return where
 }
+
+export const appendConstraintOnFollowup = <T extends {}>(
+  user: SecurityRuleGrantee,
+  where: T
+) => {
+  return Object.assign(where, getConstraintOnFollowup(user))
+}

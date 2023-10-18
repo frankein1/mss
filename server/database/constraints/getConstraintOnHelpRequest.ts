@@ -15,6 +15,9 @@ export const getConstraintOnHelpRequest = (user: SecurityRuleGrantee) => {
   return where
 }
 
-export const appendConstraintOnHelpRequest = <T extends {}> (user: SecurityRuleGrantee, where: T) => {
-  return Object.assign(where, getConstraintOnHelpRequest(user)),
+export const appendConstraintOnHelpRequest = <T extends {}>(
+  user: SecurityRuleGrantee,
+  where: T
+) => {
+  return Object.assign(where, getConstraintOnHelpRequest(user))
 }
