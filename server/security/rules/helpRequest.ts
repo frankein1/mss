@@ -10,6 +10,7 @@ import {
   isReferentFor,
   hasAllowedRole
 } from './helpers'
+import { canViewBeneficiary } from './beneficiary'
 
 export const canCreateHelpRequest = (
   grantee: SecurityRuleGrantee,
@@ -24,13 +25,7 @@ export const canCreateHelpRequest = (
 export const canListBeneficiaryHelpRequests = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+): boolean => canViewBeneficiary(grantee, beneficiary)
 
 export const canViewHelpRequestDetails = (
   grantee: SecurityRuleGrantee,
@@ -55,13 +50,7 @@ export const canViewAnyHelpRequestDetails = (
 export const canViewHelpRequest = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+): boolean => canViewBeneficiary(grantee, beneficiary)
 
 export const canViewHelpRequestPrivateSynthesis = (
   grantee: SecurityRuleGrantee,

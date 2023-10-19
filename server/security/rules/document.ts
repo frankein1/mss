@@ -10,28 +10,17 @@ import {
   isReferentFor,
   isCreator
 } from './helpers'
+import { canViewBeneficiary } from './beneficiary'
 
 export const canAddDocument = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+): boolean => canViewBeneficiary(grantee, beneficiary)
 
 export const canListDocuments = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+): boolean => canViewBeneficiary(grantee, beneficiary)
 
 export const canOnlyListItsUploadedDocuments = (
   grantee: SecurityRuleGrantee
