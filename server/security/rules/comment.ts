@@ -5,46 +5,26 @@ import type {
 } from './types'
 import { isInSameStructureAs, isReferentFor } from './helpers'
 
-export const canAddCommentToFollowup = (
+const canDoOnComment = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+) => {
+  return (
+    isInSameStructureAs(grantee, beneficiary, [
+      'StructureManager',
+      'SocialWorker',
+      'Instructor',
+      'ReceptionAgent'
+    ]) || isReferentFor(grantee, beneficiary)
+  )
+}
 
-export const canListCommentsToFollowup = (
+export const canAddComment = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+): boolean => canDoOnComment(grantee, beneficiary)
 
-export const canAddCommentToHelpRequest = (
+export const canListComments = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
-export const canListCommentsToHelpRequest = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+): boolean => canDoOnComment(grantee, beneficiary)

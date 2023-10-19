@@ -18,10 +18,7 @@ import {
   BeneficiarySecurityTarget
 } from '~/server/query'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  canListCommentsToFollowup,
-  canListCommentsToHelpRequest
-} from '~/server/security/rules'
+import { canListComments } from '~/server/security/rules'
 import {
   AllowSecurityCheck,
   SecurityRuleGrantee
@@ -124,9 +121,7 @@ async function getFollowups(
   return followups.map(f => ({
     ...f,
     isFollowup: true as const,
-    comments: canListCommentsToFollowup(user, beneficiary)
-      ? f.comments
-      : undefined
+    comments: canListComments(user, beneficiary) ? f.comments : undefined
   }))
 }
 
@@ -160,9 +155,7 @@ async function getHelpRequests(
   return helpRequests.map(h => ({
     ...h,
     isFollowup: false as const,
-    comments: canListCommentsToHelpRequest(user, beneficiary)
-      ? h.comments
-      : undefined
+    comments: canListComments(user, beneficiary) ? h.comments : undefined
   }))
 }
 
