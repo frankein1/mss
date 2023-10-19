@@ -4,45 +4,23 @@ import type {
   SecurityTargetWithReferents,
   SecurityTargetWithCreator
 } from './types'
-import {
-  isInSameStructureAs,
-  isReferentFor,
-  isCreator,
-  hasAllowedRole
-} from './helpers'
+import { isInSameStructureAs, isCreator, hasAllowedRole } from './helpers'
+import { canViewBeneficiary } from './beneficiary'
 
 export const canCreateFollowup = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+): boolean => canViewBeneficiary(grantee, beneficiary)
 
 export const canListBeneficiaryFollowups = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+): boolean => canViewBeneficiary(grantee, beneficiary)
 
 export const canViewFollowup = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
+): boolean => canViewBeneficiary(grantee, beneficiary)
 
 export const canViewFollowupDetails = (
   grantee: SecurityRuleGrantee,
