@@ -20,11 +20,12 @@
   --color-followup: var(--green-archipel-sun-391-moon-716);
   --color-followup-hover: var(--green-archipel-sun-391-moon-716-hover);
   --color-followup-active: var(--green-archipel-sun-391-moon-716);
-  --color-help-request-light: var(--primary-light);
-  --color-help-request-light-hover: var(--primary-light-hover);
-  --color-help-request: var(--primary);
-  --color-help-request-hover: var(--primary-hover);
-  --color-help-request-active: var(--primary-active);
+  --color-help-request-light: #{$help-request-light};
+  --color-help-request-light-hover: #{$help-request-light-hover};
+  --color-help-request: var(--purple-glycine-main-494);
+  /* FIXME: forced to use CSS variable, --purple-glycine-main-494-hover not working */
+  --color-help-request-hover: #{$help-request-hover};
+  --color-help-request-active: var(--purple-glycine-main-494);
   --color-mes-droits-sociaux: var(--blue-cumulus-sun-368-moon-732);
   --color-mes-droits-sociaux-hover: var(--blue-cumulus-sun-368-moon-732);
   --color-mes-droits-sociaux-active: var(--blue-cumulus-sun-368-moon-732);
