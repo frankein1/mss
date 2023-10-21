@@ -56,19 +56,6 @@
         border-style: solid;
         border-width: 1px;
       }
-
-      &.expanded {
-        .beneficiary-history-details-accordion__title {
-          border-width: 3px 3px 0;
-        }
-
-        .beneficiary-history-details-body {
-          background-color: #fff;
-          border-color: var(--color-followup);
-          border-style: solid;
-          border-width: 0 3px 3px;
-        }
-      }
     }
 
     &.help-request-details {
