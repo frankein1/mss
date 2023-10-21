@@ -9,26 +9,21 @@ import { getBeneficiarySecurityTarget } from '~/server/query'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 import type { FollowupTypeIdAndName } from '~/types/followupType'
 import { IdInput, idSchema } from '~/server/schema'
-import { FollowupRepo, HelpRequestRepo } from '~/server/repository'
+import { FollowupRepo, HelpRequestRepo } from '~/server/database'
 
 async function getFollowupFollowupTypes(
   user: SecurityRuleGrantee,
-  beneficiaryId: string,
-  structureId: string,
-  legallyRequired: boolean
+  beneficiaryId: string
 ) {
   const followupWithFollowupTypes = await FollowupRepo.findMany(user, {
     where: {
-      beneficiaryId,
-      structureId,
-      types: { some: { legallyRequired } }
+      beneficiaryId
     },
     select: {
       types: {
         select: { id: true, name: true },
         distinct: ['id'],
-        orderBy: { name: 'asc' },
-        where: { legallyRequired }
+        orderBy: { name: 'asc' }
       }
     }
   })
@@ -51,15 +46,11 @@ async function getFollowupFollowupTypes(
 
 async function getHelpRequestFollowupTypes(
   user: SecurityRuleGrantee,
-  beneficiaryId: string,
-  structureId: string,
-  legallyRequired: boolean
+  beneficiaryId: string
 ) {
   const helpRequestWithFollowupTypes = await HelpRequestRepo.findMany(user, {
     where: {
-      beneficiaryId,
-      structureId,
-      type: { legallyRequired }
+      beneficiaryId
     },
     select: {
       type: { select: { id: true, name: true } }
@@ -79,18 +70,11 @@ async function getHelpRequestFollowupTypes(
 
 async function getFollowupTypes(
   user: SecurityRuleGrantee,
-  beneficiaryId: string,
-  structureId: string,
-  legallyRequired: boolean
+  beneficiaryId: string
 ) {
   const [followupFollowupTypes, helpRequestFollowupTypes] = await Promise.all([
-    getFollowupFollowupTypes(user, beneficiaryId, structureId, legallyRequired),
-    getHelpRequestFollowupTypes(
-      user,
-      beneficiaryId,
-      structureId,
-      legallyRequired
-    )
+    getFollowupFollowupTypes(user, beneficiaryId),
+    getHelpRequestFollowupTypes(user, beneficiaryId)
   ])
 
   const beneficiaryFollowupTypes = [...followupFollowupTypes]
@@ -113,28 +97,12 @@ const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
 
 const handler = async ({
   input: { id: beneficiaryId },
-  ctx: { user, structure }
+  ctx: { user }
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiaryLegallyRequiredFollowupTypes = await getFollowupTypes(
-    user,
-    beneficiaryId,
-    structure.id,
-    true
-  )
-  const beneficiaryLegallyNotRequiredFollowupTypes = await getFollowupTypes(
-    user,
-    beneficiaryId,
-    structure.id,
-    false
-  )
-
-  return [
-    ...beneficiaryLegallyRequiredFollowupTypes,
-    ...beneficiaryLegallyNotRequiredFollowupTypes
-  ]
+  return await getFollowupTypes(user, beneficiaryId)
 }
 
 export type GetBeneficiaryFollowupTypesOutput = Prisma.PromiseReturnType<

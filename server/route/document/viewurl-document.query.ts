@@ -6,7 +6,7 @@ import { beneficiarySecurityTargetInclude } from '~/server/query'
 import { SecurityRuleGrantee, canViewDocument } from '~/server/security/rules'
 import { createSignedGetUrl } from '~/server/lib/s3'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { DocumentRepo } from '~/server/repository'
+import { DocumentRepo } from '~/server/database'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,

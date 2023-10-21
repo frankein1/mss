@@ -1,7 +1,13 @@
 <template>
+  <FormErrors
+    v-if="errors.length > 1"
+    :errors="errors"
+  />
   <form
+    ref="form"
+    novalidate
     class="fr-container--fluid"
-    @submit="onUpdateUser"
+    @submit.prevent="onUpdateUser"
   >
     <div class="fr-grid-row fr-grid-row--gutters form-grid">
       <div class="fr-col-6">
@@ -74,7 +80,6 @@
 
 <script lang="ts" setup>
   import { UserStatus, UserRole } from '@prisma/client'
-  import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import { userFieldLabels } from '~/client/labels'
   import { userRoleOptions, userStatusOptions } from '~/client/options/user'
@@ -99,6 +104,8 @@
   const emit = defineEmits<{
     updateUser: [user: AdminEditUserInput | AdminCreateUserInput]
   }>()
+
+  const form = ref<HTMLFormElement | null>(null)
 
   const { data: structures } = await trpcClient.admin.getStructures.useQuery({
     orderBy: []
@@ -130,7 +137,12 @@
 
   const isAdmin = computed(() => values.role === UserRole.Administrator)
 
-  const onUpdateUser = handleSubmit(user => {
-    emit('updateUser', user)
-  })
+  const { onSubmit: onUpdateUser, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    user => {
+      emit('updateUser', user)
+    }
+  )
+
+  const { errors } = useDisplayFormErrors(form, caughtErrors, userFieldLabels)
 </script>

@@ -92,7 +92,9 @@
     notificationType.value = filter.type
   }
 
-  watch(notificationType, notificationsRefresh)
+  watch(notificationType, () => {
+    notificationsRefresh()
+  })
 
   function onToggleReadState() {
     notificationsRefresh()
@@ -136,8 +138,7 @@
 
     border-radius: 0.25rem;
     display: grid;
-    row-gap: 0.25rem;
-    column-gap: 2rem;
+    gap: 0.25rem 2rem;
     grid-template-areas: 'type-icon beneficiary read' 'date type read';
     grid-template-columns: min-content auto min-content;
     padding: 0.5rem;

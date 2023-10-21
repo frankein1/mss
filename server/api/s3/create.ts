@@ -15,7 +15,7 @@ import {
 } from '~/server/security/rules'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
-import { DocumentRepo, NotificationRepo } from '~/server/repository'
+import { DocumentRepo, NotificationRepo } from '~/server/database'
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth
@@ -87,7 +87,7 @@ async function addNotification(
       })
     }
   }
-  await NotificationRepo.createMany(user, { data: notifications })
+  await NotificationRepo.prisma.createMany({ data: notifications })
 }
 
 async function addDocument(
@@ -96,7 +96,7 @@ async function addDocument(
   user: JwtUser
 ) {
   const { type, beneficiaryId, confidential, tags, file } = input
-  const document = await DocumentRepo.create(user, {
+  const document = await DocumentRepo.prisma.create({
     data: {
       key: v4(),
       name: file.name,

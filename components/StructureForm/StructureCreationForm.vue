@@ -1,7 +1,13 @@
 <template>
+  <FormErrors
+    v-if="errors.length > 1"
+    :errors="errors"
+  />
   <form
+    ref="form"
+    novalidate
     class="fr-container--fluid"
-    @submit="onUpdateStructure"
+    @submit.prevent="onUpdateStructure"
   >
     <StructureFormAdmin />
 
@@ -21,6 +27,7 @@
 <script lang="ts" setup>
   import type { AdminCreateStructureInput } from '~/server/schema'
   import { adminCreateStructureSchema } from '~/server/schema'
+  import { adminStructureFieldLabels } from '~/client/labels'
 
   defineProps<{
     isSubmitting: boolean
@@ -30,11 +37,22 @@
     addStructure: [structure: AdminCreateStructureInput]
   }>()
 
+  const form = ref<HTMLFormElement | null>(null)
+
   const { handleSubmit, setFieldValue } = useForm<AdminCreateStructureInput>({
     validationSchema: toTypedSchema(adminCreateStructureSchema)
   })
 
-  const onUpdateStructure = handleSubmit(structure => {
-    emit('addStructure', structure)
-  })
+  const { onSubmit: onUpdateStructure, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    structure => {
+      emit('addStructure', structure)
+    }
+  )
+
+  const { errors } = useDisplayFormErrors(
+    form,
+    caughtErrors,
+    adminStructureFieldLabels
+  )
 </script>

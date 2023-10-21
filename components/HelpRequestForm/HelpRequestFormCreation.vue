@@ -8,6 +8,7 @@
     :status="values.status"
     :external-structure="values.externalStructure"
     :financial-support="values.financialSupport"
+    :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
 </template>
@@ -19,12 +20,11 @@
     InstructorOrganization,
     PrescribingOrganization
   } from '@prisma/client'
-  import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
     CreateHelpRequestInput,
     createHelpRequestSchema
-  } from '~/server/schema/helpRequest.schema'
+  } from '~/server/schema'
 
   const props = defineProps<{
     isSubmitting: boolean
@@ -47,7 +47,10 @@
     }
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('saveHelpRequest', values)
-  })
+  const { caughtErrors, onSubmit } = useCatchFormErrors<CreateHelpRequestInput>(
+    handleSubmit,
+    values => {
+      emit('saveHelpRequest', values)
+    }
+  )
 </script>

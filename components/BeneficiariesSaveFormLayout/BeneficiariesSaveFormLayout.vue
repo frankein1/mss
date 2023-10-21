@@ -1,8 +1,9 @@
 <template>
   <form
     ref="form"
+    novalidate
     class="fr-grid-row"
-    @submit="onSubmit"
+    @submit.prevent="onSubmit"
   >
     <BeneficiariesSaveFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
@@ -24,6 +25,11 @@
       >
         <RequiredFields />
       </PageTitle>
+
+      <FormErrors
+        v-if="errors.length > 1"
+        :errors="errors"
+      />
 
       <slot></slot>
       <BeneficiariesSaveFormNavArrows
@@ -49,6 +55,7 @@
     RouteTitle,
     AppBeneficiariesSaveRoute
   } from '~/utils/routing'
+  import { beneficiaryFieldLabels } from '~/client/labels'
 
   type SubmitType = z.infer<T>
 
@@ -73,6 +80,7 @@
 
   const saveTarget = ref<string | undefined>(undefined)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
+  const form = ref<HTMLFormElement | null>(null)
 
   const breadcrumbLinks = computed(() => Breadcrumb.AppBeneficiariesAdd())
 
@@ -85,9 +93,18 @@
     initialValues: props.beneficiary as SubmitType
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('save', values, saveTarget.value)
-  })
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      emit('save', values, saveTarget.value)
+    }
+  )
+
+  const { errors } = useDisplayFormErrors(
+    form,
+    caughtErrors,
+    beneficiaryFieldLabels
+  )
 
   function onCancel() {
     useTrpcMutation({

@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 import { optionalPaginatedSchema } from '../helpers.schema'
-import { beneficiaryDocumentFilterSchema } from '~/server/schema'
+import { beneficiaryDocumentFilterSchema } from '../filter.schema'
 
 export const getDocumentsSchema = z
   .object({

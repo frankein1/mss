@@ -1,7 +1,14 @@
-export const documentFieldLabels = {
-  beneficiaryId: 'Bénéficiaire',
+import type { Document } from '@prisma/client'
+import type { FieldLabels } from '~/types/fieldLabels'
+
+type DocumentFieldLabels = Pick<
+  Document,
+  'type' | 'confidential' | 'tags' | 'name'
+>
+
+export const documentFieldLabels: FieldLabels<DocumentFieldLabels> = {
   type: 'Type de document',
   confidential: 'Confidentiel',
   tags: 'Thèmes',
-  file: 'Document'
+  name: 'Nom du fichier'
 }

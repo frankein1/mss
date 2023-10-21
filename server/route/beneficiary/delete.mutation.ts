@@ -8,7 +8,7 @@ import {
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
-import { BeneficiaryRelativeRepo, BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRelativeRepo, BeneficiaryRepo } from '~/server/database'
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
@@ -27,7 +27,7 @@ const handler = async ({
 
   await updateBeneficiaryRelatives(user, id)
 
-  await BeneficiaryRepo.deleteEntity(user, { where: { id } })
+  await BeneficiaryRepo.prisma.delete({ where: { id } })
 
   await addUserActivity({
     userId: user.id,
@@ -56,7 +56,7 @@ async function updateBeneficiaryRelatives(
 
   for (const relative of relatives) {
     const { linkedBeneficiary: lb } = relative
-    await BeneficiaryRelativeRepo.update(user, {
+    await BeneficiaryRelativeRepo.prisma.update({
       data: {
         linkedBeneficiaryId: null,
         email: lb?.email || null,

@@ -4,7 +4,7 @@ import { sendEmail } from '~/server/lib/email'
 import { AdminCreateUserInput, adminCreateUserSchema } from '~/server/schema'
 import { getEmailContent } from '~/utils/user/getEmailContent'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc/createRouter'
 
 const adminHandler = async ({
@@ -25,7 +25,7 @@ const adminHandler = async ({
     })
   }
 
-  const createdUser = await UserRepo.create(ctx.user, {
+  const createdUser = await UserRepo.prisma.create({
     data: input
   })
 

@@ -1,4 +1,4 @@
-import { StructureRepo } from '~/server/repository'
+import { StructureRepo } from '~/server/database'
 import { createMutation } from '~/server/route'
 import {
   AdminEditStructureInput,
@@ -29,7 +29,7 @@ const adminHandler = async ({
     legallyNotRequiredFollowupTypes
   )
 
-  const updatedStructure = await StructureRepo.update(user, {
+  const updatedStructure = await StructureRepo.prisma.update({
     where: { id: structureId },
     data: structure,
     include: {

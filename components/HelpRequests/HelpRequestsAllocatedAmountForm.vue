@@ -1,5 +1,6 @@
 <template>
   <form
+    novalidate
     @input="onUpdateAllocatedAmount"
     @submit.prevent
   >

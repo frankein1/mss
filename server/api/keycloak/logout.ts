@@ -2,7 +2,7 @@ import { Account, UserActivityType } from '@prisma/client'
 import { getInclusionConnectClient } from '~/server/lib'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 import { parseJwt } from '~/utils/parseJwt'
 
 export default defineEventHandler(async event => {
@@ -53,7 +53,7 @@ export default defineEventHandler(async event => {
 })
 
 async function findUser(email: string) {
-  return await UserRepo.systemFindUniqueOrThrow({ where: { email } })
+  return await UserRepo.prisma.findUniqueOrThrow({ where: { email } })
 }
 
 async function updateAccount(account: Account) {

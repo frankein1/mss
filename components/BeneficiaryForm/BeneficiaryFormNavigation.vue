@@ -28,7 +28,7 @@
               class="fr-sidemenu__btn"
               :aria-current="menu.route === currentRoute ? true : undefined"
               :type="menu.route === currentRoute ? 'button' : 'submit'"
-              @click="emit('save', menu.path)"
+              @click="menu.route !== currentRoute && emit('save', menu.path)"
             >
               {{ RouteTitle[menu.route]() }}
             </button>
@@ -43,6 +43,7 @@
                   }"
                 >
                   <a
+                    v-if="menu.route === currentRoute"
                     class="fr-sidemenu__link"
                     :href="`${menu.path}#${target.hash}`"
                     target="_self"
@@ -52,6 +53,14 @@
                   >
                     {{ target.title }}
                   </a>
+                  <button
+                    v-else
+                    class="fr-sidemenu__link"
+                    type="submit"
+                    @click="emit('save', `${menu.path}#${target.hash}`)"
+                  >
+                    {{ target.title }}
+                  </button>
                 </li>
               </ul>
             </div>
@@ -69,7 +78,6 @@
     AppBeneficiariesSaveRoute
   } from '~/utils/routing'
 
-  const route = useRoute()
   const SCROLL_DEFER_DURATION = 400
 
   const props = defineProps<{
@@ -89,7 +97,9 @@
   const activeHash = ref<string | undefined>(undefined)
 
   /**
-   * Used to prevent native scroll from browser on hash focus to update the active hash right after the hash change event has triggered
+   * Used to prevent native scroll from browser on hash focus to update the
+   * active hash right after the hash change event has triggered
+   * It seems to only occur on Firefox browsers
    * See https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/127#note_1600789293
    */
   const hashJustChanged = ref<boolean>(false)
@@ -127,9 +137,8 @@
   )
 
   onMounted(() => {
-    onHashChange()
-
     if (currentRouteHasSubSections.value) {
+      onHashChange()
       window.addEventListener('hashchange', onHashChange)
     }
   })
@@ -148,9 +157,20 @@
   })
 
   function onHashChange() {
-    if (route.hash) {
-      activeHash.value = route.hash.slice(1)
+    /**
+     * Use window.location.hash instead of route.hash as route.hash is weirdly
+     * not up to date when the hashchange event is called, on Chrome browsers
+     * only
+     */
+    const hash = window.location.hash
+    if (hash) {
+      activeHash.value = hash.slice(1)
       hashJustChanged.value = true
+
+      const firstSubSectionField = document.querySelector<
+        HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+      >(`${hash} input, ${hash} select,  ${hash} textarea`)
+      firstSubSectionField?.focus()
     }
   }
 

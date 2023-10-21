@@ -1,14 +1,14 @@
 import { DocumentType } from '@prisma/client'
 import { z } from 'zod'
+import { stringConstraint, requiredNativeEnum } from './helpers.schema'
 import {
   documentFileMaxSize,
   documentFileAllowedTypes
 } from '~/client/options/document'
 import {
   errorMessages,
-  requiredNativeEnum,
-  stringConstraint,
-  maxStringLengthMessage
+  maxStringLengthMessage,
+  minStringLengthMessage
 } from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
 
@@ -30,7 +30,7 @@ export const uploadBrowserDocumentSchema = z.object({
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
-  file: z.instanceof(File)
+  file: z.instanceof(File, { message: 'Veuillez sélectionner un fichier.' })
 })
 
 export const addDocumentSchema = z.object({
@@ -51,7 +51,9 @@ export const deleteDocumentSchema = z.object({
 
 export const editDocumentSchema = z.object({
   key: z.string(),
-  name: stringConstraint.max(150, maxStringLengthMessage(150)),
+  name: stringConstraint
+    .min(2, minStringLengthMessage(2))
+    .max(150, maxStringLengthMessage(150)),
   beneficiaryId: z.string(errorMessages).uuid(),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),

@@ -7,6 +7,7 @@
     :medium="values.medium"
     :is-redirected="values.redirected"
     :can-set-private-synthesis="canSetPrivateSynthesis"
+    :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
 </template>
@@ -18,13 +19,9 @@
     FollowupIntervention,
     FollowupSignalement
   } from '@prisma/client'
-  import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import { canEditFollowupPrivateSynthesis } from '~/server/security/rules'
-  import {
-    EditFollowupInput,
-    editFollowupSchema
-  } from '~/server/schema/followup.schema'
+  import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
   import { GetFollowupDetailsOutput } from '~/server/trpc/routers'
 
@@ -93,7 +90,10 @@
     }
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('saveFollowup', values)
-  })
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      emit('saveFollowup', values)
+    }
+  )
 </script>

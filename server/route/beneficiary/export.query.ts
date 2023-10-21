@@ -10,7 +10,6 @@ import {
   exportBeneficiariesSchema
 } from '~/server/schema'
 import {
-  canOnlyListItsBeneficiaries,
   canViewBeneficiary,
   canExportBeneficiaries,
   SecurityRuleGrantee
@@ -21,7 +20,7 @@ import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
-import { BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRepo } from '~/server/database'
 
 const securityCheck = (
   grantee: SecurityRuleGrantee,
@@ -42,18 +41,8 @@ const handler = async ({
     header: beneficiaryFieldLabels[key]
   }))
 
-  const referentsCondition = canOnlyListItsBeneficiaries(ctx.user)
-    ? { some: { id: ctx.user.id } }
-    : undefined
-
   const where: Prisma.BeneficiaryWhereInput = {
-    structureId: ctx.structure.id,
-    archived: null,
-    referents: referentsCondition,
-    ...prepareBeneficiaryFilters(
-      input.filters,
-      canOnlyListItsBeneficiaries(ctx.user)
-    )
+    ...prepareBeneficiaryFilters(input.filters)
   }
 
   const dataRequest = await BeneficiaryRepo.findMany(ctx.user, {

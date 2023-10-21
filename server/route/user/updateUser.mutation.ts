@@ -7,22 +7,22 @@ import {
   canEditUser,
   canEditUserRole
 } from '~/server/security'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 
 const handler = async ({
-  ctx: { user },
+  ctx: { user: _user },
   input: { id, ...rest }
 }: {
   ctx: ProtectedAppContext
   input: UserEditionInput
 }) => {
   if ('status' in rest) {
-    return await UserRepo.update(user, {
+    return await UserRepo.prisma.update({
       where: { id },
       data: { status: rest.status ? UserStatus.Active : UserStatus.Disabled }
     })
   }
-  return await UserRepo.update(user, { where: { id }, data: rest })
+  return await UserRepo.prisma.update({ where: { id }, data: rest })
 }
 
 const securityCheck = async (

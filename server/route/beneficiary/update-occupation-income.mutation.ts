@@ -12,7 +12,7 @@ import {
   UpdateBeneficiaryOccupationInput,
   updateBeneficiaryOccupationSchema
 } from '~/server/schema'
-import { BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRepo } from '~/server/database'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
@@ -35,7 +35,7 @@ const handler = async ({
 }) => {
   const { id, ...occupation } = input
 
-  const updatedBeneficiary = await BeneficiaryRepo.update(user, {
+  const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id },
     data: occupation
   })

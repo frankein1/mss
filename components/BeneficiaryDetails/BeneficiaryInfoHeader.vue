@@ -18,7 +18,7 @@
     </div>
 
     <div v-if="hasCoordinatesInformations(beneficiary)">
-      <hr class="fr-col-12 fr-mt-5v" />
+      <hr class="fr-col-12 fr-mt-5v no-print" />
 
       <div class="fr-grid-row">
         <div class="fr-col-12">
@@ -29,7 +29,6 @@
         <div class="fr-col-6">
           <BeneficiaryInfoLabel
             label="Numéro de téléphone"
-            default-value="Pas de téléphone"
             :value="phoneLabel"
           />
           <BeneficiaryInfoLabel
@@ -74,6 +73,13 @@
     if (props.beneficiary.noPhone) {
       return "N'a pas de téléphone"
     }
-    return props.beneficiary.phone1 || props.beneficiary.phone2
+    if (props.beneficiary.phone1) {
+      const phones = [props.beneficiary.phone1]
+      if (props.beneficiary.phone2) {
+        phones.push(props.beneficiary.phone2)
+      }
+      return phones.join(', ')
+    }
+    return undefined
   })
 </script>

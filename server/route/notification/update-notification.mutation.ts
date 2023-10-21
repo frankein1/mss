@@ -7,7 +7,7 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { NotificationRepo } from '~/server/repository'
+import { NotificationRepo } from '~/server/database'
 
 const handler = async ({
   ctx: { user },
@@ -16,7 +16,7 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: UpdateNotificationInput
 }) => {
-  await NotificationRepo.updateMany(user, {
+  await NotificationRepo.prisma.updateMany({
     where: { id, recipientId: user.id },
     data: { read }
   })

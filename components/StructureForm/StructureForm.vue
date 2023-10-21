@@ -1,7 +1,13 @@
 <template>
+  <FormErrors
+    v-if="errors.length > 1"
+    :errors="errors"
+  />
   <form
+    ref="form"
+    novalidate
     class="fr-container--fluid"
-    @submit="onUpdateStructure"
+    @submit.prevent="onUpdateStructure"
   >
     <StructureFormAdmin v-if="adminView" />
 
@@ -55,6 +61,7 @@
     adminEditStructureSchema
   } from '~/server/schema'
   import { FollowupTypeWithSupportsCount } from '~/types/followupType'
+  import { structureFieldLabels } from '~/client/labels'
 
   const props = withDefaults(
     defineProps<{
@@ -74,6 +81,8 @@
       structure: EditCurrentUserStructureInput & AdminEditStructureInput
     ]
   }>()
+
+  const form = ref<HTMLFormElement | null>(null)
 
   const defaultLegallyRequiredSelectedFollowupTypes = computed(() =>
     props.structure.followupTypes.filter(isDefaultLegallyRequired)
@@ -126,9 +135,18 @@
     }
   })
 
-  const onUpdateStructure = handleSubmit(structure => {
-    emit('updateStructure', structure)
-  })
+  const { onSubmit: onUpdateStructure, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    structure => {
+      emit('updateStructure', structure)
+    }
+  )
+
+  const { errors } = useDisplayFormErrors(
+    form,
+    caughtErrors,
+    structureFieldLabels
+  )
 
   function isDefaultLegallyRequired(
     f: FollowupTypeWithSupportsCount

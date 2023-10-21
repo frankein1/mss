@@ -1,23 +1,28 @@
 <template>
+  <FormErrors
+    v-if="errors.length > 1"
+    :errors="errors"
+  />
   <form
     ref="form"
+    novalidate
     @submit.prevent="onSubmit"
   >
     <VeeSelect
-      label="Type de fichier"
+      :label="documentFieldLabels.type"
       name="type"
       :options="withEmptyValue(documentTypeOptions)"
       required
     />
     <VeeSearchableSelect
-      label="Thèmes"
+      :label="documentFieldLabels.tags"
       name="tags"
       :options="documentTagOptions"
       multiple
     />
     <VeeCheckbox
       class="fr-mb-2w"
-      label="Confidentiel"
+      :label="documentFieldLabels.confidential"
       name="confidential"
     />
 
@@ -39,7 +44,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
     UploadBrowserDocumentInput,
@@ -49,6 +53,7 @@
     documentTypeOptions,
     documentTagOptions
   } from '~/client/options/document'
+  import { documentFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     beneficiaryId: string
@@ -71,27 +76,36 @@
     }
   })
 
-  const onSubmit = handleSubmit(async values => {
-    isSubmitting.value = true
-    const { file, ...data } = values
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    async values => {
+      isSubmitting.value = true
+      const { file, ...data } = values
 
-    const input = JSON.stringify({
-      ...data,
-      file: {
-        size: file.size,
-        mimeType: file.type,
-        name: file.name
-      }
-    })
+      const input = JSON.stringify({
+        ...data,
+        file: {
+          size: file.size,
+          mimeType: file.type,
+          name: file.name
+        }
+      })
 
-    const formData = new FormData()
-    formData.append('file', file)
-    formData.append('input', input)
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('input', input)
 
-    const key = await $fetch<string>('/api/s3/create', {
-      method: 'POST',
-      body: formData
-    })
-    emit('newDocument', key)
-  })
+      const key = await $fetch<string>('/api/s3/create', {
+        method: 'POST',
+        body: formData
+      })
+      emit('newDocument', key)
+    }
+  )
+
+  const { errors } = useDisplayFormErrors(
+    form,
+    caughtErrors,
+    documentFieldLabels
+  )
 </script>

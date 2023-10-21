@@ -5,7 +5,7 @@ import { SecurityRuleGrantee, canCreateUser } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { sendEmail } from '~/server/lib/email'
 import { getEmailContent } from '~/utils/user/getEmailContent'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 
 const securityCheck = (
   user: SecurityRuleGrantee,
@@ -32,7 +32,7 @@ const handler = async ({
     })
   }
 
-  const createdUser = await UserRepo.create(user, {
+  const createdUser = await UserRepo.prisma.create({
     data: {
       structureId: user.structureId,
       ...input

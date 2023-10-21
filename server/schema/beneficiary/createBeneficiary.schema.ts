@@ -1,15 +1,14 @@
 import { BeneficiaryStatus } from '@prisma/client'
 import { z } from 'zod'
-import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
-import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
 import {
   emailOrEmpty,
-  errorMessages,
   phoneConstraint,
   requiredNativeEnum,
   numeroPegaseContraint,
   stringOrEmpty
-} from '~/utils/zod'
+} from '../helpers.schema'
+import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
+import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
 
 export const createBeneficiarySchema = z.object({
   status: requiredNativeEnum(BeneficiaryStatus),
@@ -21,7 +20,7 @@ export const createBeneficiarySchema = z.object({
   usualName: stringOrEmpty(beneficiaryLastNameSchema),
   birthName: stringOrEmpty(beneficiaryLastNameSchema),
   firstName: beneficiaryFirstNameOrEmptySchema,
-  birthDate: z.coerce.date(errorMessages).nullish(),
+  birthDate: z.coerce.date().nullish(),
   phone1: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
   numeroPegase: stringOrEmpty(numeroPegaseContraint)

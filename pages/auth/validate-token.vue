@@ -4,7 +4,7 @@
       <div class="fr-col fr-col-lg-8 fr-col-offset-lg-2 text-center">
         <h1 class="fr-text--regular">
           <span v-if="pending">{{ RouteTitle.AuthValidateToken() }}...</span>
-          <span v-else-if="user">Bonjour {{ name }}!</span>
+          <span v-else-if="user">Bonjour {{ name }} !</span>
           <span v-else-if="errorMessage">{{ errorMessage }}</span>
         </h1>
       </div>
@@ -44,6 +44,7 @@
       method: 'POST',
       body: JSON.stringify({ token })
     })
+    pending.value = false
     if (res.error) {
       errorMessage.value = res.error
     }

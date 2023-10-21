@@ -9,12 +9,9 @@ import {
   UserRole,
   DocumentType
 } from '@prisma/client'
+import { kindOfBooleanSchema, stringConstraint } from './helpers.schema'
 import { AgeGroup } from '~/client/options/ageGroup'
-import {
-  kindOfBooleanSchema,
-  stringConstraint,
-  maxStringLengthMessage
-} from '~/utils/zod'
+import { maxStringLengthMessage } from '~/utils/zod'
 import { TypeSuivi } from '~/types/history'
 
 const statFilterSchema = z.object({

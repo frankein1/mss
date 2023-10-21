@@ -22,14 +22,10 @@ import {
   createOrUpdateEntourageSchema,
   createOrUpdateTaxHouseholdSchema
 } from '../relative.schema'
-import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
-import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
 import {
-  errorMessages,
   requiredNativeEnum,
   stringOrEmpty,
   withEmptyValueOptionalNativeEnum,
-  validZipcode,
   emailOrEmpty,
   socialSecurityNumberConstraint,
   unemploymentNumberConstraint,
@@ -38,8 +34,14 @@ import {
   phoneConstraint,
   siretConstraint,
   numeroPegaseContraint,
+  amountNumber
+} from '../helpers.schema'
+import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
+import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
+import {
+  errorMessages,
+  validZipcode,
   maxStringLengthMessage,
-  amountNumber,
   validIntNumber
 } from '~/utils/zod'
 
@@ -55,9 +57,9 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   firstName: beneficiaryFirstNameOrEmptySchema,
   usualName: stringOrEmpty(beneficiaryLastNameSchema),
   birthName: stringOrEmpty(beneficiaryLastNameSchema),
-  birthDate: z.coerce.date(errorMessages).nullish(),
+  birthDate: z.coerce.date().nullish(),
   birthPlace: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
-  deathDate: z.coerce.date(errorMessages).nullish(),
+  deathDate: z.coerce.date().nullish(),
   gender: withEmptyValueOptionalNativeEnum(Gender),
   nationality: withEmptyValueOptionalNativeEnum(Nationality),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),

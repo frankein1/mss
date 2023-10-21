@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client'
 import { z } from 'zod'
-import { stringConstraint, maxStringLengthMessage } from '~/utils/zod'
+import { stringConstraint } from '../helpers.schema'
+import { maxStringLengthMessage } from '~/utils/zod'
 
 export const adminGetStructuresSchema = z.object({
   orderBy: z.array(

@@ -1,10 +1,7 @@
 import { z } from 'zod'
 import { DefaultFollowupType } from '@prisma/client'
-import {
-  minStringLengthMessage,
-  maxStringLengthMessage,
-  stringConstraint
-} from '~/utils/zod'
+import { stringConstraint } from './helpers.schema'
+import { minStringLengthMessage, maxStringLengthMessage } from '~/utils/zod'
 
 const createFollowupTypeSchema = z.object({
   name: stringConstraint

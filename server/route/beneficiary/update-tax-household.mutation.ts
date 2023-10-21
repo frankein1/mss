@@ -13,7 +13,7 @@ import {
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRepo } from '~/server/database'
 
 function getBeneficiaryWithTaxHousehold(user: SecurityRuleGrantee, id: string) {
   return BeneficiaryRepo.findUniqueOrThrow(user, {
@@ -82,7 +82,7 @@ const handler = async ({
     relatives: taxHouseholdRelationUpdates
   }
 
-  const updatedBeneficiary = await BeneficiaryRepo.update(user, {
+  const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id },
     data
   })

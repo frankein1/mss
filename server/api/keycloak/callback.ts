@@ -7,7 +7,7 @@ import {
   InclusionConnectToken
 } from '~/server/lib/inclusion-connect.client'
 import { RoutePath } from '~/utils/routing'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 
 const config = useRuntimeConfig()
@@ -54,7 +54,7 @@ export default defineEventHandler(async event => {
 
   const userAccessToken = v4()
 
-  await UserRepo.systemUpdate({
+  await UserRepo.prisma.update({
     where: { id: user.id },
     data: {
       accessToken: userAccessToken,
@@ -134,7 +134,7 @@ async function upsertAccount({
 
 async function getUser(email: string) {
   try {
-    return await UserRepo.systemFindUniqueOrThrow({
+    return await UserRepo.prisma.findUniqueOrThrow({
       where: { email },
       include: {
         structure: true,

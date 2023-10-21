@@ -12,25 +12,25 @@
     <div class="fr-fieldset__element">
       <VeeInput
         name="inhabitantsNumber"
-        label="Nombre d'habitants"
+        :label="adminStructureFieldLabels.inhabitantsNumber"
       />
     </div>
     <div class="fr-fieldset__element">
       <VeeInput
         name="inseeCode"
-        label="Code INSEE"
+        :label="adminStructureFieldLabels.inseeCode"
       />
     </div>
     <div class="fr-fieldset__element">
       <VeeInput
         name="siret"
-        label="SIRET"
+        :label="adminStructureFieldLabels.siret"
       />
     </div>
     <div class="fr-fieldset__element">
       <VeeSelect
         name="type"
-        label="Type"
+        :label="adminStructureFieldLabels.type"
         :options="withEmptyValue(structureTypeOptions)"
         required
       />
@@ -40,4 +40,5 @@
 
 <script lang="ts" setup>
   import { structureTypeOptions } from '~/client/options/structure'
+  import { adminStructureFieldLabels } from '~/client/labels'
 </script>

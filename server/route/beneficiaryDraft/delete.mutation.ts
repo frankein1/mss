@@ -4,7 +4,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { SecurityRuleGrantee, canDeleteDraft } from '~/server/security/rules'
 import { IdInput, idSchema } from '~/server/schema'
-import { DraftRepo } from '~/server/repository'
+import { DraftRepo } from '~/server/database'
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
   const draft = await DraftRepo.findUniqueOrThrow(user, {
@@ -23,7 +23,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  await DraftRepo.deleteEntity(user, {
+  await DraftRepo.prisma.delete({
     where: { id: input.id }
   })
 

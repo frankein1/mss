@@ -3,7 +3,7 @@ import { createQuery } from '~/server/route'
 import { GetNotificationInput, getNotificationSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { NotificationRepo } from '~/server/repository'
+import { NotificationRepo } from '~/server/database'
 
 const handler = async ({
   ctx: { user },
@@ -13,12 +13,9 @@ const handler = async ({
   input: GetNotificationInput
 }) => {
   const where: {
-    recipientId: string
     read?: boolean
     type?: NotificationType
-  } = {
-    recipientId: user.id
-  }
+  } = {}
 
   if (onlyUnread) {
     where.read = false

@@ -11,6 +11,7 @@
     :past-statuses="pastStatuses"
     is-editing
     :can-edit-private-synthesis="canEditPrivateSynthesis"
+    :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
 </template>
@@ -21,12 +22,8 @@
     InstructorOrganization,
     PrescribingOrganization
   } from '@prisma/client'
-  import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  import {
-    EditHelpRequestInput,
-    editHelpRequestSchema
-  } from '~/server/schema/helpRequest.schema'
+  import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
   import { canEditHelpRequestPrivateSynthesis } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { pastStatusesFromStatus } from '~/utils/helpRequest'
@@ -76,7 +73,10 @@
     }
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('saveHelpRequest', values)
-  })
+  const { caughtErrors, onSubmit } = useCatchFormErrors<EditHelpRequestInput>(
+    handleSubmit,
+    values => {
+      emit('saveHelpRequest', values)
+    }
+  )
 </script>

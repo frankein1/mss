@@ -1,7 +1,8 @@
 <template>
   <form
     class="fr-container--fluid"
-    @submit="onSubmit"
+    novalidate
+    @submit.prevent="onSubmit"
   >
     <VeeCheckbox
       class="fr-mt-2w"
@@ -40,7 +41,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
   import { AcceptCGUInput, acceptCGUSchema } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'

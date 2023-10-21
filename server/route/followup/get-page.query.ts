@@ -5,9 +5,8 @@ import { GetFollowupsInput, getFollowupsSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prepareFollowupFilters } from '~/utils/filters'
-import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { FollowupRepo } from '~/server/repository'
+import { FollowupRepo } from '~/server/database'
 
 const handler = async ({
   input,
@@ -16,31 +15,18 @@ const handler = async ({
   input: GetFollowupsInput
   ctx: ProtectedAppContext
 }) => {
-  const { user, structure } = ctx
+  const { user } = ctx
   const { take, skip } = takeAndSkipFromPagination({
     perPage: input.perPage,
     page: input.page
   })
 
-  const referents = canOnlyListItsBeneficiaries(user)
-    ? { some: { id: user.id } }
-    : undefined
-
-  const where: Prisma.FollowupWhereInput = {
-    structureId: structure.id,
-    beneficiary: {
-      archived: null,
-      referents
-    },
-    ...prepareFollowupFilters(input.filters, canOnlyListItsBeneficiaries(user))
-  }
-
-  const select = prepareGetFollowupsPageSelect(user)
+  const where = prepareFollowupFilters(input.filters)
 
   const [followups, count] = await Promise.all([
     FollowupRepo.findMany(user, {
       where,
-      select,
+      select: prepareGetFollowupsPageSelect(user),
       take,
       skip,
       orderBy: input.orderBy

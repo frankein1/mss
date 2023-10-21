@@ -22,7 +22,7 @@ import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
 import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { StructureRepo } from '~/server/repository'
+import { StructureRepo } from '~/server/database'
 
 const handler = async ({
   input,

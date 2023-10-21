@@ -8,7 +8,7 @@ import { signJwt, verifyJwt } from '~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { UserRepo } from '~/server/repository'
+import { UserRepo } from '~/server/database'
 
 const handler = async ({
   ctx: { user, event }
@@ -20,7 +20,7 @@ const handler = async ({
     auth: { jwtKey }
   } = useRuntimeConfig()
 
-  const updatedUser = await UserRepo.update(user, {
+  const updatedUser = await UserRepo.prisma.update({
     where: { id: user.id },
     data: {
       CGUHistory: {

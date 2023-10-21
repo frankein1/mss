@@ -1,5 +1,6 @@
 <template>
   <form
+    novalidate
     @change="onUpdatePaymentMethod"
     @submit.prevent
   >
@@ -41,7 +42,7 @@
     }
   })
 
-  const onUpdatePaymentMethod = handleSubmit( helpRequest => {
+  const onUpdatePaymentMethod = handleSubmit(helpRequest => {
     useTrpcMutation({
       mutation: () =>
         useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),

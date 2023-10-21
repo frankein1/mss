@@ -5,7 +5,7 @@ import {
   defaultLegallyNotRequiredFollowupTypeLabels,
   defaultLegallyNotRequiredFollowupTypeOptions
 } from '~/client/options/followupType'
-import { FollowupTypeRepo } from '~/server/repository/FollowupTypeRepository'
+import { FollowupTypeRepo } from '~/server/database'
 import { CreateFollowupTypeInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security'
 import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
@@ -17,7 +17,6 @@ export async function editFollowupTypes(
   legallyNotRequiredFollowupTypes: (DefaultFollowupType | string)[]
 ) {
   const currentFollowupTypes = await FollowupTypeRepo.findMany(user, {
-    where: { ownedByStructureId: structureId },
     include: {
       _count: {
         select: { followups: true, helpRequests: true }
@@ -32,11 +31,11 @@ export async function editFollowupTypes(
   )
 
   if (toCreate.length) {
-    await FollowupTypeRepo.createMany(user, { data: toCreate })
+    await FollowupTypeRepo.prisma.createMany({ data: toCreate })
   }
 
   if (toDelete.length) {
-    await FollowupTypeRepo.deleteMany(user, {
+    await FollowupTypeRepo.prisma.deleteMany({
       where: {
         id: {
           in: toDelete

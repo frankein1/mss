@@ -4,7 +4,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleGrantee, canDeleteFollowup } from '~/server/security/rules'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
-import { FollowupRepo } from '~/server/repository'
+import { FollowupRepo } from '~/server/database'
 
 function getFollowup(user: SecurityRuleGrantee, id: string) {
   return FollowupRepo.findUniqueOrThrow(user, {
@@ -26,7 +26,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  await FollowupRepo.deleteEntity(user, { where: { id } })
+  await FollowupRepo.prisma.delete({ where: { id } })
 
   await addUserActivity({
     userId: user.id,

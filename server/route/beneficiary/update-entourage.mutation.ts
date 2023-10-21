@@ -14,7 +14,7 @@ import {
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { BeneficiaryRepo } from '~/server/repository'
+import { BeneficiaryRepo } from '~/server/database'
 
 function getBeneficiarySecurityTargetWithEntourage(
   user: SecurityRuleGrantee,
@@ -88,7 +88,7 @@ const handler = async ({
     relatives: entouragesRelationUpdates
   }
 
-  const updatedBeneficiary = await BeneficiaryRepo.update(user, {
+  const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id },
     data
   })

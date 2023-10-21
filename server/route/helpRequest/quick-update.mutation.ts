@@ -11,7 +11,7 @@ import {
   canEditHelpRequest
 } from '~/server/security/rules'
 import { addUserActivity } from '~/server/query'
-import { HelpRequestRepo } from '~/server/repository'
+import { HelpRequestRepo } from '~/server/database'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
@@ -37,12 +37,10 @@ const handler = async ({
   input: QuickEditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const select = prepareGetHelpRequestsPageSelect(user)
-
-  const helpRequest = await HelpRequestRepo.update(user, {
+  const helpRequest = await HelpRequestRepo.prisma.update({
     where: { id },
     data: rest,
-    select
+    select: prepareGetHelpRequestsPageSelect(user)
   })
 
   await addUserActivity({

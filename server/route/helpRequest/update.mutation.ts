@@ -8,14 +8,14 @@ import {
   canEditHelpRequest,
   canEditHelpRequestPrivateSynthesis
 } from '~/server/security/rules'
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
-import { prepareInstructorOrganization } from '~/utils/instructorOrganization'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   HelpRequestWithRelations,
   getHelpRequestWithRelations,
-  getHelpRequestsecurityTarget
+  getHelpRequestsecurityTarget,
+  createPrescribingOrganizationIfNecesserary,
+  createInstructorOrganizationIfNecessary,
+  addUserActivity
 } from '~/server/query'
 
 async function prepareHelpRequestData({
@@ -30,29 +30,26 @@ async function prepareHelpRequestData({
   target: NonNullable<HelpRequestWithRelations>
 }): Promise<Prisma.HelpRequestUncheckedUpdateInput> {
   const { user, structure } = ctx
-  const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structure.id },
-    select: {
-      type: true
-    }
-  })
+  const { type } = structure
 
   const ministryData =
     type === StructureType.Ministere
       ? { numeroPegase: input.numeroPegase, ministre: input.ministre }
       : {}
 
-  const prescribingOrganizationId = await preparePrescribingOrganization(
-    transaction,
-    user,
-    input.prescribingOrganizationId
-  )
+  const prescribingOrganizationId =
+    await createPrescribingOrganizationIfNecesserary(
+      transaction,
+      user,
+      input.prescribingOrganizationId
+    )
 
-  const instructorOrganizationId = await prepareInstructorOrganization(
-    transaction,
-    user,
-    input.instructorOrganizationId
-  )
+  const instructorOrganizationId =
+    await createInstructorOrganizationIfNecessary(
+      transaction,
+      user,
+      input.instructorOrganizationId
+    )
 
   return {
     ...input,

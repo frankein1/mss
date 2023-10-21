@@ -103,34 +103,36 @@
 </script>
 
 <style>
-  .ribbon::after {
-    position: fixed;
-    width: 100px;
-    height: 25px;
-    top: 10px;
-    left: -30px;
-    text-align: center;
-    font-size: 13px;
-    font-family: sans-serif;
-    text-transform: uppercase;
-    font-weight: bold;
-    color: #fff;
-    line-height: 27px;
-    transform: rotate(-45deg);
-  }
+  @media not print {
+    .ribbon::after {
+      position: fixed;
+      width: 100px;
+      height: 25px;
+      top: 10px;
+      left: -30px;
+      text-align: center;
+      font-size: 13px;
+      font-family: sans-serif;
+      text-transform: uppercase;
+      font-weight: bold;
+      color: #fff;
+      line-height: 27px;
+      transform: rotate(-45deg);
+    }
 
-  .ribbon-local::after {
-    content: 'LOCAL';
-    background: #30bb76;
-  }
+    .ribbon-local::after {
+      content: 'LOCAL';
+      background: #30bb76;
+    }
 
-  .ribbon-demo::after {
-    content: 'DEMO';
-    background: #ee8e4a;
-  }
+    .ribbon-demo::after {
+      content: 'DEMO';
+      background: #ee8e4a;
+    }
 
-  .ribbon-development::after {
-    content: 'DEV';
-    background: #d12b23;
+    .ribbon-development::after {
+      content: 'DEV';
+      background: #d12b23;
+    }
   }
 </style>

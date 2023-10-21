@@ -8,7 +8,7 @@ import {
 } from '~/server/schema'
 import { SecurityRuleGrantee, canEditFollowup } from '~/server/security/rules'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { FollowupRepo } from '~/server/repository'
+import { FollowupRepo } from '~/server/database'
 
 const handler = async ({
   input: { id, ...rest },
@@ -19,7 +19,7 @@ const handler = async ({
 }) => {
   const select = prepareGetFollowupsPageSelect(user)
 
-  const fu = await FollowupRepo.update(user, {
+  const fu = await FollowupRepo.prisma.update({
     where: { id },
     data: rest,
     select

@@ -1,58 +1,26 @@
 import { z } from 'zod'
 
-export const idSchema = z.object({
-  id: z.string()
-})
+const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
+  switch (issue.code) {
+    case 'invalid_date':
+      return { message: 'Veuillez saisir une date valide : JJ/MM/AAAA.' }
+    case 'invalid_enum_value':
+      return { message: 'Veuillez sélectionner une option proposée.' }
+    default:
+      return { message: ctx.defaultError }
+  }
+}
 
-export type IdInput = z.infer<typeof idSchema>
+z.setErrorMap(customErrorMap)
 
-export const keySchema = z.object({
-  key: z.string()
-})
-
-export const emptySchema = z.object({})
-
-export { paginatedSchema } from './helpers.schema'
-export type { PaginatedInput } from './helpers.schema'
-
-export {
-  addFollowupSchema,
-  editFollowupSchema,
-  exportFollowupsSchema,
-  getFollowupsSchema,
-  quickEditFollowupSchema
-} from './followup.schema'
-export type {
-  AddFollowupInput,
-  EditFollowupInput,
-  ExportFollowupsInput,
-  GetFollowupsInput,
-  QuickEditFollowupInput
-} from './followup.schema'
-
-export {
-  createHelpRequestSchema,
-  quickEditHelpRequestSchema,
-  getHelpRequestsSchema,
-  quickEditHelpRequestStatusSchema,
-  quickEditHelpRequestAllocatedAmountSchema,
-  quickEditHelpRequestPaymentMethodSchema,
-  quickEditHelpRequestPaymentDateSchema,
-  editHelpRequestSchema,
-  exportHelpRequestsSchema
-} from './helpRequest.schema'
-export type {
-  CreateHelpRequestInput,
-  QuickEditHelpRequestInput,
-  GetHelpRequestsInput,
-  QuickEditHelpRequestStatusInput,
-  QuickEditHelpRequestAllocatedAmountInput,
-  QuickEditHelpRequestPaymentMethodInput,
-  QuickEditHelpRequestPaymentDateInput,
-  EditHelpRequestInput,
-  GetHelpRequestsInputOrderBy,
-  ExportHelpRequestsInput
-} from './helpRequest.schema'
+export * from './beneficiary'
+export * from './beneficiaryDraft'
+export * from './followup'
+export * from './user'
+export * from './structure'
+export * from './auth'
+export * from './helpRequest'
+export * from './helpers.schema'
 
 export {
   createFollowupTypeSchema,
@@ -62,10 +30,6 @@ export type {
   CreateFollowupTypeInput,
   CreateCustomFollowupTypeInput
 } from './followupType.schema'
-
-export * from './user'
-export * from './structure'
-export * from './auth'
 
 export {
   statFilterSchema,
@@ -123,5 +87,3 @@ export type {
 
 export { addCommentSchema } from './comment.schema'
 export type { AddCommentInput } from './comment.schema'
-export * from './beneficiary'
-export * from './beneficiaryDraft'

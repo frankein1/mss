@@ -9,10 +9,12 @@ import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee, canCreateFollowup } from '~/server/security/rules'
 
-import { getBeneficiarySecurityTarget } from '~/server/query'
-import { preparePrescribingOrganization } from '~/utils/prescribingOrganization'
+import {
+  addUserActivity,
+  createPrescribingOrganizationIfNecesserary,
+  getBeneficiarySecurityTarget
+} from '~/server/query'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 
 async function prepareFollowupData({
   input,
@@ -23,13 +25,7 @@ async function prepareFollowupData({
   transaction: Prisma.TransactionClient
   ctx: ProtectedAppContext
 }): Promise<Prisma.FollowupUncheckedCreateInput> {
-  const { type } = await transaction.structure.findUniqueOrThrow({
-    where: { id: structure.id },
-    select: {
-      type: true
-    }
-  })
-
+  const { type } = structure
   const {
     ActionLogement,
     Bailleur,
@@ -49,11 +45,12 @@ async function prepareFollowupData({
     data
   )
 
-  const prescribingOrganizationId = await preparePrescribingOrganization(
-    transaction,
-    user,
-    input.prescribingOrganizationId
-  )
+  const prescribingOrganizationId =
+    await createPrescribingOrganizationIfNecesserary(
+      transaction,
+      user,
+      input.prescribingOrganizationId
+    )
 
   return {
     ...data,

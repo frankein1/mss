@@ -1,11 +1,7 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext, invalidError } from '~/server/trpc'
-import {
-  SecurityRuleGrantee,
-  canListDocuments,
-  canOnlyListItsUploadedDocuments
-} from '~/server/security/rules'
+import { SecurityRuleGrantee, canListDocuments } from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   GetDocumentsInput,
@@ -13,17 +9,7 @@ import {
   getDocumentsSchema
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
-import { DocumentRepo } from '~/server/repository'
-
-function getPermissionConditions(user: SecurityRuleGrantee) {
-  if (canOnlyListItsUploadedDocuments(user)) {
-    return { createdById: user.id }
-  }
-
-  return {
-    OR: [{ confidential: false }, { confidential: true, createdById: user.id }]
-  }
-}
+import { DocumentRepo } from '~/server/database'
 
 function prepareBeneficiaryDocumentsFilters(
   filters: BeneficiaryDocumentFilterInput
@@ -72,11 +58,8 @@ const handler = async ({
         })
       : { take: undefined, skip: undefined }
 
-  const permissionConditions = getPermissionConditions(user)
-
   const where: Prisma.DocumentWhereInput = {
     beneficiaryId,
-    ...permissionConditions,
     ...prepareBeneficiaryDocumentsFilters(filters || {})
   }
 
@@ -101,8 +84,7 @@ const handler = async ({
     }),
     DocumentRepo.count(user, {
       where: {
-        beneficiaryId,
-        ...permissionConditions
+        beneficiaryId
       }
     })
   ])

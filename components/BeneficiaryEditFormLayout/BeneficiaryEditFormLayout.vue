@@ -2,8 +2,9 @@
   <form
     v-if="beneficiary"
     ref="form"
+    novalidate
     class="fr-grid-row"
-    @submit="onSubmit"
+    @submit.prevent="onSubmit"
   >
     <BeneficiaryEditFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
@@ -27,6 +28,11 @@
       >
         <RequiredFields />
       </PageTitle>
+
+      <FormErrors
+        v-if="errors.length > 1"
+        :errors="errors"
+      />
 
       <slot></slot>
       <BeneficiaryEditFormNavArrows
@@ -57,9 +63,11 @@
     AppBeneficiaryEditRoute,
     RouteTitle
   } from '~/utils/routing'
+  import { beneficiaryFieldLabels } from '~/client/labels'
 
   type SubmitType = z.infer<T>
 
+  const router = useRouter()
   const route = useRoute()
   const originTab = route.query.originTab
     ? (route.query.originTab as BeneficiaryTab)
@@ -85,6 +93,7 @@
 
   const saveTarget = ref<string | undefined>(undefined)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
+  const form = ref<HTMLFormElement | null>(null)
 
   const breadcrumbLinks = computed(() =>
     Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
@@ -94,14 +103,35 @@
 
   useHead({ title: title.value })
 
+  onMounted(() => {
+    const { saved: _, ...query } = route.query
+
+    /**
+     * Removes the saved query param to prevent reloading the page when
+     * changing sub section from side navigation (as saved query param would be
+     * missing from the targetted path). It also allows to prevent showing the
+     * page as saved again when reloading it.
+     */
+    router.replace({ path: route.path, query, hash: route.hash })
+  })
+
   const { handleSubmit } = useForm<SubmitType>({
     validationSchema: toTypedSchema(props.schema),
     initialValues: props.beneficiary as SubmitType
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('save', values, saveTarget.value)
-  })
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      emit('save', values, saveTarget.value)
+    }
+  )
+
+  const { errors } = useDisplayFormErrors(
+    form,
+    caughtErrors,
+    beneficiaryFieldLabels
+  )
 
   function onCancel() {
     if (!props.beneficiary) {

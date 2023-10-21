@@ -6,6 +6,7 @@
     :beneficiary-id="beneficiaryId"
     :medium="values.medium"
     :is-redirected="values.redirected"
+    :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
 </template>
@@ -16,12 +17,8 @@
     PrescribingOrganization,
     FollowupStatus
   } from '@prisma/client'
-  import { useForm } from 'vee-validate'
   import { toTypedSchema } from '@vee-validate/zod'
-  import {
-    AddFollowupInput,
-    addFollowupSchema
-  } from '~/server/schema/followup.schema'
+  import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 
   const props = defineProps<{
     isSubmitting: boolean
@@ -44,7 +41,10 @@
     }
   })
 
-  const onSubmit = handleSubmit(values => {
-    emit('saveFollowup', values)
-  })
+  const { onSubmit, caughtErrors } = useCatchFormErrors(
+    handleSubmit,
+    values => {
+      emit('saveFollowup', values)
+    }
+  )
 </script>
