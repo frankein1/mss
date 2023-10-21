@@ -56,8 +56,19 @@
         border-style: solid;
         border-width: 1px;
       }
+    }
 
-      &.expanded {
+    &.help-request-details {
+      .beneficiary-history-details-accordion__title {
+        background-color: #fff;
+        border-color: var(--color-help-request);
+        border-style: solid;
+        border-width: 1px;
+      }
+    }
+
+    &.expanded {
+      &.followup-details {
         .beneficiary-history-details-accordion__title {
           border-width: 3px 3px 0;
         }
@@ -69,17 +80,8 @@
           border-width: 0 3px 3px;
         }
       }
-    }
 
-    &.help-request-details {
-      .beneficiary-history-details-accordion__title {
-        background-color: #fff;
-        border-color: var(--color-help-request);
-        border-style: solid;
-        border-width: 1px;
-      }
-
-      &.expanded {
+      &.help-request-details {
         .beneficiary-history-details-accordion__title {
           border-width: 3px 3px 0;
         }
