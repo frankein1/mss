@@ -190,6 +190,8 @@
     @include dsfr.text-style(md);
 
     margin-bottom: 0.5rem;
+    color: var(--text-mention-grey);
+    font-weight: 400;
 
     &::before {
       margin-right: 0.25rem;
@@ -198,6 +200,7 @@
 
   .synthesis-content {
     white-space: pre-line;
+    font-weight: 500;
   }
 
   .btn-delete {
@@ -208,7 +211,11 @@
 
 <style>
   .beneficiary-history-details-body .information-label {
-    color: var(--text-title-grey);
-    font-weight: 700;
+    color: var(--text-mention-grey);
+    font-weight: 400;
+  }
+
+  .beneficiary-history-details-body li {
+    font-weight: 500;
   }
 </style>
