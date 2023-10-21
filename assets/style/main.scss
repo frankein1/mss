@@ -23,6 +23,7 @@
   --color-help-request-light: #{$help-request-light};
   --color-help-request-light-hover: #{$help-request-light-hover};
   --color-help-request: var(--purple-glycine-main-494);
+  
   /* FIXME: forced to use CSS variable, --purple-glycine-main-494-hover not working */
   --color-help-request-hover: #{$help-request-hover};
   --color-help-request-active: var(--purple-glycine-main-494);
