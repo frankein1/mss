@@ -39,6 +39,7 @@
 
     color: var(--text-mention-grey);
     margin-bottom: 0.25rem;
+    font-weight: 400;
   }
 
   .comment-body {
