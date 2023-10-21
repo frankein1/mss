@@ -22,6 +22,12 @@
       {{ followup.prescribingOrganization.name }}
     </li>
     <li
+      v-if="followup.firstFollowup"
+      class="fr-icon-success-line"
+    >
+      1<sup>er</sup> entretien
+    </li>
+    <li
       v-if="followup.helpRequested"
       class="fr-icon-success-line"
     >
