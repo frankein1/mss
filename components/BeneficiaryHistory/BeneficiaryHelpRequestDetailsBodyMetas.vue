@@ -30,6 +30,12 @@
       <span class="information-label">Montant demandé :</span>
       {{ euros(helpRequest.askedAmount) }}
     </li>
+    <li
+      v-if="helpRequest.fullFile"
+      class="fr-icon-success-line"
+    >
+      Dossier complet
+    </li>
     <li v-if="helpRequest.dispatchDate">
       <span class="information-label">Date d'envoi du dossier :</span>
       {{ formatDate(helpRequest.dispatchDate) }}

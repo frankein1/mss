@@ -25,21 +25,6 @@
       </ul>
     </div>
     <div class="history-details__status">
-      <!-- <div
-        class="additional-meta"
-        :class="{
-          'fr-icon-success-fill': history.isFollowup
-            ? history.firstFollowup
-            : history.fullFile
-        }"
-      >
-        <template v-if="!history.isFollowup && history.fullFile"
-          >Dossier complet</template
-        >
-        <template v-else-if="history.isFollowup && history.firstFollowup">
-          1<sup>er</sup> entretien
-        </template>
-      </div> -->
       <ul class="fr-badges-group status-badges">
         <li>
           <p
