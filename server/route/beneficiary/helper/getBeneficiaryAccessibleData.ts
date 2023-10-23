@@ -1,15 +1,8 @@
 import { getBeneficiaryFollowUpTypes } from './getBeneficiaryFollowUpTypes'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  canListBeneficiaryRelatives,
-  canViewBeneficiaryHealthInfo,
-  canViewBeneficiaryOccupationIncome,
-  canViewBeneficiaryExternalOrganisations,
-  canViewBeneficiaryNir,
-  canViewDocument,
-  SecurityRuleGrantee
-} from '~/server/security/rules'
+import { canViewDocument, SecurityRuleGrantee } from '~/server/security/rules'
 import type { BeneficiaryWithRelations } from '~/types/beneficiary'
+import { BeneficiaryRules } from '~/server/security'
 
 function getBeneficiaryMeta(
   user: SecurityRuleGrantee,
@@ -85,7 +78,7 @@ function getBeneficiaryRelatives(
   user: SecurityRuleGrantee,
   beneficiary: BeneficiaryWithRelations
 ) {
-  if (!canListBeneficiaryRelatives(user, beneficiary)) {
+  if (!BeneficiaryRules.select.referents(user, beneficiary)) {
     return {}
   }
 
@@ -108,7 +101,7 @@ function getBeneficiaryHealth(
   { user, structure }: ProtectedAppContext,
   beneficiary: BeneficiaryWithRelations
 ) {
-  if (!canViewBeneficiaryHealthInfo(user, beneficiary)) {
+  if (!BeneficiaryRules.select.healthInfo(user, beneficiary)) {
     return {}
   }
 
@@ -116,7 +109,7 @@ function getBeneficiaryHealth(
     gir: beneficiary.gir,
     doctor: beneficiary.doctor,
     healthAdditionalInformation: beneficiary.healthAdditionalInformation,
-    socialSecurityNumber: canViewBeneficiaryNir(structure.type)
+    socialSecurityNumber: BeneficiaryRules.select.healthInfoNir(structure.type)
       ? beneficiary.socialSecurityNumber
       : undefined,
     insurance: beneficiary.insurance
@@ -127,7 +120,7 @@ function getBeneficiaryOccupationIncome(
   user: SecurityRuleGrantee,
   beneficiary: BeneficiaryWithRelations
 ) {
-  if (!canViewBeneficiaryOccupationIncome(user, beneficiary)) {
+  if (!BeneficiaryRules.select.occupationIncome(user, beneficiary)) {
     return {}
   }
   return {
@@ -157,7 +150,7 @@ function getBeneficiaryExternalOrganisations(
   user: SecurityRuleGrantee,
   beneficiary: BeneficiaryWithRelations
 ) {
-  if (!canViewBeneficiaryExternalOrganisations(user, beneficiary)) {
+  if (!BeneficiaryRules.select.externalOrganisations(user, beneficiary)) {
     return {}
   }
   return {

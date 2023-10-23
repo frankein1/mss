@@ -5,22 +5,22 @@ import type {
   SecurityTargetWithCreator
 } from './types'
 import { isInSameStructureAs, isCreator, hasAllowedRole } from './helpers'
-import { canViewBeneficiary } from './beneficiary'
+import { BeneficiaryRules } from '~/server/security'
 
 export const canCreateFollowup = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => canViewBeneficiary(grantee, beneficiary)
+): boolean => BeneficiaryRules.select.general(grantee, beneficiary)
 
 export const canListBeneficiaryFollowups = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => canViewBeneficiary(grantee, beneficiary)
+): boolean => BeneficiaryRules.select.general(grantee, beneficiary)
 
 export const canViewFollowup = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => canViewBeneficiary(grantee, beneficiary)
+): boolean => BeneficiaryRules.select.general(grantee, beneficiary)
 
 export const canViewFollowupDetails = (
   grantee: SecurityRuleGrantee,

@@ -10,7 +10,6 @@ import {
   exportBeneficiariesSchema
 } from '~/server/schema'
 import {
-  canViewBeneficiary,
   canExportBeneficiaries,
   SecurityRuleGrantee
 } from '~/server/security/rules'
@@ -21,6 +20,7 @@ import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
 import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRules } from '~/server/security'
 
 const securityCheck = (
   grantee: SecurityRuleGrantee,
@@ -54,7 +54,7 @@ const handler = async ({
   const rows: RowType[] = []
 
   for (const beneficiary of dataRequest) {
-    if (canViewBeneficiary(ctx.user, beneficiary)) {
+    if (BeneficiaryRules.select.general(ctx.user, beneficiary)) {
       const withPermissionsBeneficiary = getBeneficiaryAccessibleData(
         ctx,
         beneficiary

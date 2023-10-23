@@ -10,17 +10,17 @@ import {
   isReferentFor,
   isCreator
 } from './helpers'
-import { canViewBeneficiary } from './beneficiary'
+import { BeneficiaryRules } from '~/server/security'
 
 export const canAddDocument = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => canViewBeneficiary(grantee, beneficiary)
+): boolean => BeneficiaryRules.select.general(grantee, beneficiary)
 
 export const canListDocuments = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => canViewBeneficiary(grantee, beneficiary)
+): boolean => BeneficiaryRules.select.general(grantee, beneficiary)
 
 export const canOnlyListItsUploadedDocuments = (
   grantee: SecurityRuleGrantee

@@ -13,7 +13,7 @@
 <script lang="ts" setup>
   import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import { useAuthStore } from '~/store/auth'
-  import { canViewBeneficiaryNir } from '~/server/security/rules'
+  import { BeneficiaryRules } from '~/server/security'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
@@ -23,7 +23,7 @@
   const authStore = useAuthStore()
 
   const hasNirAccess = computed(() =>
-    canViewBeneficiaryNir(authStore.userStructureType)
+    BeneficiaryRules.select.healthInfoNir(authStore.userStructureType)
   )
 
   const hasHealthInfo = computed(() => {

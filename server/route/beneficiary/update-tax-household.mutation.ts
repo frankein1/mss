@@ -1,10 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import {
-  SecurityRuleGrantee,
-  canEditBeneficiary,
-  canEditBeneficiaryReferents
-} from '~/server/security/rules'
+import { SecurityRuleGrantee } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
@@ -14,6 +10,7 @@ import {
 import { prepareRelationUpdates } from '~/utils/prisma'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRules } from '~/server/security'
 
 function getBeneficiaryWithTaxHousehold(user: SecurityRuleGrantee, id: string) {
   return BeneficiaryRepo.findUniqueOrThrow(user, {
@@ -34,11 +31,7 @@ const securityCheck = async (
   input: UpdateBeneficiaryTaxHouseholdInput
 ) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
-
-  return (
-    canEditBeneficiary(grantee, beneficiary) &&
-    canEditBeneficiaryReferents(grantee, beneficiary)
-  )
+  return BeneficiaryRules.update.referents(grantee, beneficiary)
 }
 
 const handler = async ({

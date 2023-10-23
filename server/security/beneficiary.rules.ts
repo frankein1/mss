@@ -37,20 +37,25 @@ const canDelete = (
   beneficiary: SecurityTargetWithStructure
 ): boolean => isInSameStructureAs(grantee, beneficiary, ['StructureManager'])
 
-export const BeneficiaryRights = {
-  read: {
+export const BeneficiaryRules = {
+  insert: true,
+  select: {
     general: canReadWriteGeneral,
     externalOrganisations: canReadWriteOther,
     healthInfo: canReadWriteOther,
     healthInfoNir: canReadWriteNIR,
-    occupationIncome: canReadWriteOther
+    occupationIncome: canReadWriteOther,
+    relatives: canReadWriteOther,
+    referents: canReadWriteOther
   },
   update: {
     general: canReadWriteGeneral,
     externalOrganisations: canReadWriteOther,
     healthInfo: canReadWriteOther,
     healthInfoNir: canReadWriteNIR,
-    occupationIncome: canReadWriteOther
+    occupationIncome: canReadWriteOther,
+    relatives: canReadWriteOther,
+    referents: canReadWriteOther
   },
   delete: canDelete
 }

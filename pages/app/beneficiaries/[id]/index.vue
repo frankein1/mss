@@ -73,11 +73,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { canDeleteBeneficiary } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
+  import { BeneficiaryRules } from '~/server/security'
 
   definePageMeta({
     middleware: 'is-beneficiary-referent'
@@ -122,7 +122,7 @@
   const authStore = useAuthStore()
   const canDelete = computed(() => {
     return beneficiary.value
-      ? canDeleteBeneficiary(authStore.getAuthUser, beneficiary.value)
+      ? BeneficiaryRules.delete(authStore.getAuthUser, beneficiary.value)
       : false
   })
 

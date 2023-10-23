@@ -28,7 +28,7 @@
   import { HelpRequestFilterInput } from '~/server/schema'
   import {
     canViewAnyHelpRequestDetails,
-    canOnlyListItsBeneficiaries
+    isReferent
   } from '~/server/security/rules'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
@@ -172,7 +172,7 @@
       )
     }
 
-    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+    if (!isReferent(authStore.getAuthUser)) {
       filters.push({
         name: 'referents',
         label: 'Référent',

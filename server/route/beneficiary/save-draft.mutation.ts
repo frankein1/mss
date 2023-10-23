@@ -13,36 +13,13 @@ import {
   SaveBeneficiaryExternalOrganisationsInput,
   saveDraftSchema
 } from '~/server/schema'
-import {
-  canSaveToBeneficiaryBeneficiaryDraft,
-  canEditBeneficiaryRelatives,
-  canEditBeneficiaryHealthInfo,
-  canSetBeneficiaryNir,
-  canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryExternalOrganisations,
-  SecurityRuleGrantee
-} from '~/server/security/rules'
+import { BeneficiaryRules } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { DraftRepo } from '~/server/database'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
-const securityCheck = async (
-  grantee: SecurityRuleGrantee,
-  input: SaveDraftInput
-) => {
-  const { id: draftId } = input
-  if (!draftId) {
-    return false
-  }
-  const beneficiaryDraft = await DraftRepo.findUniqueOrThrow(grantee, {
-    where: { id: draftId }
-  })
-  if (!beneficiaryDraft) {
-    return false
-  }
-
-  return canSaveToBeneficiaryBeneficiaryDraft(grantee, beneficiaryDraft)
-}
+const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input,
@@ -124,7 +101,7 @@ function prepareData(
 
   if (
     (taxHousehold || entourage) &&
-    canEditBeneficiaryRelatives(user, securityTarget)
+    BeneficiaryRules.update.relatives(user, securityTarget)
   ) {
     if (taxHousehold) {
       const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
@@ -157,21 +134,21 @@ function prepareData(
     }
   }
 
-  if (health && canEditBeneficiaryHealthInfo(user, securityTarget)) {
+  if (health && BeneficiaryRules.update.healthInfo(user, securityTarget)) {
     const { socialSecurityNumber, ...otherHealthData } = health
 
     data = { ...data, ...otherHealthData }
 
-    if (canSetBeneficiaryNir(structure.type)) {
+    if (BeneficiaryRules.update.healthInfoNir(structure.type)) {
       data = { ...data, socialSecurityNumber }
     }
   }
 
-  if (canEditBeneficiaryOccupationIncome(user, securityTarget)) {
+  if (BeneficiaryRules.update.occupationIncome(user, securityTarget)) {
     data = { ...data, ...occupation }
   }
 
-  if (canEditBeneficiaryExternalOrganisations(user, securityTarget)) {
+  if (BeneficiaryRules.update.externalOrganisations(user, securityTarget)) {
     data = { ...data, ...externalOrganisations }
   }
 

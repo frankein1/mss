@@ -1,10 +1,7 @@
 import type { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  SecurityRuleGrantee,
-  canViewBeneficiary
-} from '~/server/security/rules'
+import { BeneficiaryRules, SecurityRuleGrantee } from '~/server/security'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 import type { FollowupTypeIdAndName } from '~/types/followupType'
@@ -92,7 +89,7 @@ async function getFollowupTypes(
 
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
-  return canViewBeneficiary(grantee, beneficiary)
+  return BeneficiaryRules.select.general(grantee, beneficiary)
 }
 
 const handler = async ({

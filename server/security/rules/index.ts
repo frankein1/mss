@@ -1,18 +1,7 @@
-import type {
-  SecurityRuleGrantee,
-  SecurityTargetWithStructure,
-  SecurityTargetWithReferents,
-  SecurityRule
-} from './types'
 import { hasAllowedRole } from './helpers'
-export { hasAllowedRole }
-
-export type {
-  SecurityRuleGrantee,
-  SecurityTargetWithStructure,
-  SecurityTargetWithReferents,
-  SecurityRule
-}
+import { SecurityRuleGrantee } from './types'
+export * from './helpers'
+export * from './types'
 
 export {
   canCreateUser,
@@ -22,28 +11,6 @@ export {
 } from './user'
 
 export { canEditItsOwnStructure } from './structure'
-
-export {
-  canOnlyListItsBeneficiaries,
-  canViewBeneficiary,
-  canViewBeneficiaryHealthInfo,
-  canViewBeneficiaryOccupationIncome,
-  canViewBeneficiaryExternalOrganisations,
-  canEditBeneficiary,
-  canEditBeneficiaryHealthInfo,
-  canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryExternalOrganisations,
-  canDeleteBeneficiary,
-  canEditBeneficiaryReferents,
-  canViewBeneficiaryNir,
-  canSetBeneficiaryNir,
-  canSaveToBeneficiaryBeneficiaryDraft
-} from './beneficiary'
-
-export {
-  canListBeneficiaryRelatives,
-  canEditBeneficiaryRelatives
-} from './relative'
 
 export {
   canAddDocument,

@@ -12,13 +12,10 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { RoutePath, Route, AppBeneficiaryEditRoute } from '~/utils/routing'
   import {
-    canEditBeneficiaryRelatives as canEditBeneficiaryRelativesRule,
-    canEditBeneficiaryHealthInfo as canEditBeneficiaryHealthInfoRule,
-    canEditBeneficiaryOccupationIncome as canEditBeneficiaryOccupationIncomeRule,
-    canEditBeneficiaryExternalOrganisations as canEditBeneficiaryExternalOrganisationsRule,
+    BeneficiaryRules,
     SecurityTargetWithReferents,
     SecurityTargetWithStructure
-  } from '~/server/security/rules'
+  } from '~/server/security'
 
   const authStore = useAuthStore()
 
@@ -37,22 +34,22 @@
   const user = computed(() => authStore.getAuthUser)
 
   const canEditBeneficiaryRelatives = computed(() => {
-    return canEditBeneficiaryRelativesRule(user.value, props.securityTarget)
+    return BeneficiaryRules.update.relatives(user.value, props.securityTarget)
   })
 
   const canEditBeneficiaryHealthInfo = computed(() => {
-    return canEditBeneficiaryHealthInfoRule(user.value, props.securityTarget)
+    return BeneficiaryRules.update.healthInfo(user.value, props.securityTarget)
   })
 
   const canEditBeneficiaryOccupationIncome = computed(() => {
-    return canEditBeneficiaryOccupationIncomeRule(
+    return BeneficiaryRules.update.occupationIncome(
       user.value,
       props.securityTarget
     )
   })
 
   const canEditBeneficiaryExternalOrganisations = computed(() => {
-    return canEditBeneficiaryExternalOrganisationsRule(
+    return BeneficiaryRules.update.externalOrganisations(
       user.value,
       props.securityTarget
     )

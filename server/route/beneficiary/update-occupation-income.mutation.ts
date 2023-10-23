@@ -1,10 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import {
-  SecurityRuleGrantee,
-  canEditBeneficiary,
-  canEditBeneficiaryOccupationIncome
-} from '~/server/security/rules'
+import { SecurityRuleGrantee } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
@@ -13,17 +9,14 @@ import {
   updateBeneficiaryOccupationSchema
 } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRules } from '~/server/security'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryOccupationInput
 ) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
-
-  return (
-    canEditBeneficiary(grantee, beneficiary) &&
-    canEditBeneficiaryOccupationIncome(grantee, beneficiary)
-  )
+  return BeneficiaryRules.update.occupationIncome(grantee, beneficiary)
 }
 
 const handler = async ({

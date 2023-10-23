@@ -1,10 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import {
-  SecurityRuleGrantee,
-  canEditBeneficiary,
-  canEditBeneficiaryReferents
-} from '~/server/security/rules'
+import { SecurityRuleGrantee } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
@@ -14,13 +10,14 @@ import {
 } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
 import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRules } from '~/server/security'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
   const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
-  return canEditBeneficiary(user, beneficiary)
+  return BeneficiaryRules.update.general(user, beneficiary)
 }
 
 const handler = async ({
@@ -55,7 +52,7 @@ const handler = async ({
   }
 
   if (
-    canEditBeneficiaryReferents(user, {
+    BeneficiaryRules.update.referents(user, {
       structureId,
       referents: previousReferents
     })
