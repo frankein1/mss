@@ -3,8 +3,8 @@ import { createMutation } from '~/server/route'
 import { UserCreationInput, createUserSchema } from '~/server/schema'
 import { SecurityRuleGrantee, canCreateUser } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import { sendEmail } from '~/server/lib/email'
-import { getEmailContent } from '~/utils/user/getEmailContent'
+// import { sendEmail } from '~/server/lib/email'
+// import { getEmailContent } from '~/utils/user/getEmailContent'
 import { UserRepo } from '~/server/repository'
 
 const securityCheck = (
@@ -39,11 +39,11 @@ const handler = async ({
     }
   })
 
-  sendEmail({
-    to: createdUser.email,
-    subject: 'Mon Suivi Social | Ouverture de votre compte',
-    html: getEmailContent(createdUser)
-  })
+  // sendEmail({
+  //   to: createdUser.email,
+  //   subject: 'Mon Suivi Social | Ouverture de votre compte',
+  //   html: getEmailContent(createdUser)
+  // })
 
   return createdUser
 }
