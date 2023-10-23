@@ -35,7 +35,7 @@
   import { typeSuiviOptions } from '~/client/options/history'
   import {
     canViewAnyHelpRequestDetails,
-    canOnlyListItsBeneficiaries
+    isReferent
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
@@ -203,7 +203,7 @@
       )
     }
 
-    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+    if (!isReferent(authStore.getAuthUser)) {
       filters.push({
         name: 'referents',
         label: 'Référent',

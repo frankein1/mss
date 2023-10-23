@@ -3,14 +3,14 @@ import type {
   SecurityTargetWithStructure,
   SecurityTargetWithReferents
 } from './types'
-import { BeneficiaryRights } from '~/server/security'
+import { BeneficiaryRules } from '~/server/security'
 
 export const canAddComment = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => BeneficiaryRights.read.general(grantee, beneficiary)
+): boolean => BeneficiaryRules.select.general(grantee, beneficiary)
 
 export const canListComments = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => BeneficiaryRights.read.general(grantee, beneficiary)
+): boolean => BeneficiaryRules.select.general(grantee, beneficiary)

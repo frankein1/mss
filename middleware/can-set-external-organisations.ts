@@ -1,4 +1,4 @@
-import { canEditBeneficiaryExternalOrganisations } from '~/server/security/rules'
+import { BeneficiaryRules } from '~/server/security'
 import { beneficiaryFormSectionMiddleware } from '~/utils/routing'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
@@ -8,6 +8,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     beneficiaryId,
     to.path,
     from.path,
-    canEditBeneficiaryExternalOrganisations
+    BeneficiaryRules.update.externalOrganisations
   )
 })

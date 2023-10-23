@@ -1,5 +1,5 @@
+import { BeneficiaryRules } from '~/server/security'
 import { beneficiaryFormSectionMiddleware } from '~/utils/routing'
-import { canEditBeneficiaryRelatives } from '~/server/security/rules'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const beneficiaryId = to.params.id as string | undefined
@@ -8,6 +8,6 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     beneficiaryId,
     to.path,
     from.path,
-    canEditBeneficiaryRelatives
+    BeneficiaryRules.update.relatives
   )
 })

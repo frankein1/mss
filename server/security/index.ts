@@ -1,2 +1,2 @@
 export * from './rules'
-export * from './beneficiary.rights'
+export * from './beneficiary.rules'

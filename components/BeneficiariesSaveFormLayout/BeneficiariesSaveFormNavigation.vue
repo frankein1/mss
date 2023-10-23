@@ -8,14 +8,9 @@
 </template>
 
 <script setup lang="ts">
+  import { BeneficiaryRules } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath, Route, AppBeneficiariesSaveRoute } from '~/utils/routing'
-  import {
-    canEditBeneficiaryRelatives as canEditBeneficiaryRelativesRule,
-    canEditBeneficiaryHealthInfo as canEditBeneficiaryHealthInfoRule,
-    canEditBeneficiaryOccupationIncome as canEditBeneficiaryOccupationIncomeRule,
-    canEditBeneficiaryExternalOrganisations as canEditBeneficiaryExternalOrganisationsRule
-  } from '~/server/security/rules'
 
   const authStore = useAuthStore()
 
@@ -37,22 +32,22 @@
   }))
 
   const canEditBeneficiaryRelatives = computed(() => {
-    return canEditBeneficiaryRelativesRule(user.value, securityTarget.value)
+    return BeneficiaryRules.update.relatives(user.value, securityTarget.value)
   })
 
   const canEditBeneficiaryHealthInfo = computed(() => {
-    return canEditBeneficiaryHealthInfoRule(user.value, securityTarget.value)
+    return BeneficiaryRules.update.healthInfo(user.value, securityTarget.value)
   })
 
   const canEditBeneficiaryOccupationIncome = computed(() => {
-    return canEditBeneficiaryOccupationIncomeRule(
+    return BeneficiaryRules.update.occupationIncome(
       user.value,
       securityTarget.value
     )
   })
 
   const canEditBeneficiaryExternalOrganisations = computed(() => {
-    return canEditBeneficiaryExternalOrganisationsRule(
+    return BeneficiaryRules.update.externalOrganisations(
       user.value,
       securityTarget.value
     )

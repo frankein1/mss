@@ -1,3 +1,4 @@
+import { BeneficiaryRules } from '../beneficiary.rules'
 import type {
   SecurityRuleGrantee,
   SecurityTargetWithReferents,
@@ -10,7 +11,6 @@ import {
   isReferentFor,
   hasAllowedRole
 } from './helpers'
-import { canViewBeneficiary } from './beneficiary'
 
 export const canCreateHelpRequest = (
   grantee: SecurityRuleGrantee,
@@ -25,7 +25,7 @@ export const canCreateHelpRequest = (
 export const canListBeneficiaryHelpRequests = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => canViewBeneficiary(grantee, beneficiary)
+): boolean => BeneficiaryRules.select.general(grantee, beneficiary)
 
 export const canViewHelpRequestDetails = (
   grantee: SecurityRuleGrantee,
@@ -50,7 +50,7 @@ export const canViewAnyHelpRequestDetails = (
 export const canViewHelpRequest = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => canViewBeneficiary(grantee, beneficiary)
+): boolean => BeneficiaryRules.select.general(grantee, beneficiary)
 
 export const canViewHelpRequestPrivateSynthesis = (
   grantee: SecurityRuleGrantee,

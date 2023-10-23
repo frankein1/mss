@@ -31,7 +31,7 @@
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
-  import { canEditBeneficiaryReferents } from '~/server/security/rules'
+  import { BeneficiaryRules } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
@@ -123,7 +123,7 @@
 
   const canSetReferents = computed(() =>
     data.value?.beneficiary
-      ? canEditBeneficiaryReferents(user.value, data.value.beneficiary)
+      ? BeneficiaryRules.update.referents(user.value, data.value.beneficiary)
       : false
   )
 

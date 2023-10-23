@@ -1,11 +1,14 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
-import { canViewBeneficiary } from '~/server/security/rules'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { idSchema } from '~/server/schema'
+import { ProtectedAppContext } from '~/server/trpc'
+import { IdInput, idSchema } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRules, SecurityRuleGrantee } from '~/server/security'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 
-const securityCheck = AllowSecurityCheck
+const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
+  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
+  return BeneficiaryRules.select.general(grantee, beneficiary)
+}
 
 const handler = async ({
   input: { id },
@@ -31,10 +34,6 @@ const handler = async ({
     structureId: __,
     ...beneficiaryMinimalInfo
   } = beneficiary
-
-  if (!canViewBeneficiary(user, beneficiary)) {
-    throw forbiddenError()
-  }
 
   return beneficiaryMinimalInfo
 }

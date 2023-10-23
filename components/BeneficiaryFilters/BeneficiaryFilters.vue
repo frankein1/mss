@@ -31,8 +31,8 @@
   import type { FilterProp } from '~/types/filter'
   import { EventCategory, BeneficiaryFilterEventAction } from '~/types/matomo'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
+  import { isReferent } from '~/server/security'
 
   const trpcClient = useTrpcClient()
   const authStore = useAuthStore()
@@ -122,7 +122,7 @@
       }
     ]
 
-    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+    if (!isReferent(authStore.getAuthUser)) {
       filters.push({
         name: 'referents',
         label: 'Référent',

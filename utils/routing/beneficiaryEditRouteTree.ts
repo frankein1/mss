@@ -1,25 +1,20 @@
 import { Route, AppBeneficiaryEditRoute } from './routes'
 import {
-  canEditBeneficiaryRelatives,
-  canEditBeneficiaryHealthInfo,
-  canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryExternalOrganisations,
-  canEditBeneficiary
-} from '~/server/security/rules'
-import {
+  BeneficiaryRules,
   SecurityRuleGrantee,
   SecurityTargetWithReferents,
   SecurityTargetWithStructure
 } from '~/server/security'
 
 const beneficiaryEditRouteAccessPermissions = {
-  [Route.AppBeneficiaryEditInfo]: canEditBeneficiary,
-  [Route.AppBeneficiaryEditTaxHousehold]: canEditBeneficiaryRelatives,
-  [Route.AppBeneficiaryEditEntourage]: canEditBeneficiaryRelatives,
-  [Route.AppBeneficiaryEditHealth]: canEditBeneficiaryHealthInfo,
-  [Route.AppBeneficiaryEditOccupation]: canEditBeneficiaryOccupationIncome,
+  [Route.AppBeneficiaryEditInfo]: BeneficiaryRules.update.general,
+  [Route.AppBeneficiaryEditTaxHousehold]: BeneficiaryRules.update.relatives,
+  [Route.AppBeneficiaryEditEntourage]: BeneficiaryRules.update.relatives,
+  [Route.AppBeneficiaryEditHealth]: BeneficiaryRules.update.healthInfo,
+  [Route.AppBeneficiaryEditOccupation]:
+    BeneficiaryRules.update.occupationIncome,
   [Route.AppBeneficiaryEditExternalOrganisations]:
-    canEditBeneficiaryExternalOrganisations
+    BeneficiaryRules.update.externalOrganisations
 }
 
 const beneficiaryEditRouteTree: {
