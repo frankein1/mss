@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.7.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.7.1...v1.7.2) (2023-10-23)
+
+
+### Bug Fixes
+
+* Affichage d'un bandeau informant du problème d'envoi d'email ([22a088c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/22a088ca0c9f892fca0f914b687e16d134e58ce6))
+
 ### [1.7.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.7.0...v1.7.1) (2023-10-23)
 
 
