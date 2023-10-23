@@ -21,7 +21,7 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: UserCreationInput
 }) => {
-  const existingUser = await UserRepo.findUniqueOrThrow(user, {
+  const existingUser = await UserRepo.findUnique(user, {
     where: { email: input.email }
   })
 
