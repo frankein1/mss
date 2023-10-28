@@ -17,26 +17,28 @@
       :alert-type="AlertType.Error"
       message="La liste des documents n'a pas pu être chargée."
     />
-    <AtomLoader
-      v-else-if="pending"
-      class="fr-mx-auto"
-    />
-    <BeneficiaryDocumentTable
-      v-else
-      v-model:sort="orderBy"
-      :documents="documents"
-      :pending="pending"
-      :beneficiary="beneficiary"
-      @refresh-documents="refresh"
-    />
-    <AtomPagination
-      v-show="!pending"
-      class="fr-mt-4w fr-px-5v"
-      :page="page"
-      :total-pages="totalPages"
-      no-limit-selection
-      @change-page="updatePagination($event)"
-    />
+    <template v-else>
+      <AtomLoader
+        v-show="pending"
+        class="fr-mx-auto"
+      />
+      <BeneficiaryDocumentTable
+        v-show="!pending"
+        v-model:sort="orderBy"
+        :documents="documents"
+        :pending="pending"
+        :beneficiary="beneficiary"
+        @refresh-documents="refresh"
+      />
+      <AtomPagination
+        v-show="!pending"
+        class="fr-mt-4w fr-px-5v"
+        :page="page"
+        :total-pages="totalPages"
+        no-limit-selection
+        @change-page="updatePagination($event)"
+      />
+    </template>
   </div>
 </template>
 
