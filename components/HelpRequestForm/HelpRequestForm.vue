@@ -379,6 +379,7 @@
   const isDropped = computed(
     () =>
       props.status === HelpRequestStatus.ClosedByBeneficiary ||
+      props.status === HelpRequestStatus.ClosedByAgent ||
       props.status === HelpRequestStatus.Dismissed
   )
 
