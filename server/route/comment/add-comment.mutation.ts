@@ -19,6 +19,7 @@ import {
   AllowSecurityCheck,
   SecurityRuleGrantee
 } from '~/server/security/rules/types'
+import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 
 const handler = async ({
   ctx: { user },
@@ -71,7 +72,7 @@ function addCommentToFollowup(
         createdById: user.id,
         followupId: input.historyId
       },
-      include: addCommentInclude
+      include: COMMENT_RELATIONS_INCLUDE
     })
   })
 }
@@ -94,7 +95,7 @@ function addCommentToHelpRequest(
         createdById: user.id,
         helpRequestId: input.historyId
       },
-      include: addCommentInclude
+      include: COMMENT_RELATIONS_INCLUDE
     })
   })
 }
@@ -144,12 +145,6 @@ async function addNewCommentNotificationForHelpRequest(
       input.beneficiaryId,
       { helpRequestId: input.historyId }
     )
-  }
-}
-
-const addCommentInclude = {
-  createdBy: {
-    select: { firstName: true, lastName: true, email: true }
   }
 }
 
