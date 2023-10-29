@@ -17,7 +17,10 @@ const handler = async ({
 
   return await prismaClient.comment.update({
     where: { id: commentId },
-    data: { content },
+    data: {
+      content,
+      updatedById: user.id
+    },
     include: COMMENT_RELATIONS_INCLUDE
   })
 }
