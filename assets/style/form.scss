@@ -53,3 +53,8 @@
 .field-value {
   color: var(--text-label-grey);
 }
+
+.comment-form {
+  width: 100%;
+  margin-right: 4px; /* Allow to display right ouline of the comment textarea */
+}
