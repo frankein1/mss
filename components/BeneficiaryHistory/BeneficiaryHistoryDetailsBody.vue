@@ -69,6 +69,7 @@
       :comments="comments"
       :history="history"
       @comment-added="onCommentAdded"
+      @comment-edited="onCommentEdited"
     />
   </div>
 </template>
@@ -151,6 +152,12 @@
 
   function onCommentAdded(comment: HistoryItemComment) {
     comments.value.push(comment)
+  }
+
+  function onCommentEdited(editedComment: HistoryItemComment) {
+    comments.value = comments.value.map(comment =>
+      comment.id === editedComment.id ? editedComment : comment
+    )
   }
 
   function onDelete() {

@@ -1,14 +1,30 @@
 <template>
   <div>
-    <h4 class="comment-meta">
-      Ajouté le {{ createdDate }} par {{ authorName }}
-    </h4>
+    <div class="comment-meta">
+      <h4>Ajouté le {{ createdDate }} par {{ authorName }}</h4>
+      <button
+        v-if="!isEditing"
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--sm fr-icon-pencil-line"
+        @click="isEditing = true"
+      >
+        Modifier
+      </button>
+    </div>
     <div class="comment-body">
       <BeneficiaryHistoryCommentUserInitials
         class="fr-mr-1v"
         :user="comment.createdBy"
       />
-      <div class="comment-content">
+      <BeneficiaryHistoryCommentEdit
+        v-if="isEditing"
+        :comment="comment"
+        @cancel="isEditing = false"
+        @comment-edited="emit('commentEdited', $event)"
+      />
+      <div
+        v-else
+        class="comment-content"
+      >
         {{ comment.content }}
       </div>
     </div>
@@ -24,6 +40,12 @@
     comment: HistoryItemComment
   }>()
 
+  const emit = defineEmits<{
+    commentEdited: [comment: HistoryItemComment]
+  }>()
+
+  const isEditing = ref(false)
+
   const createdDate = computed(() => formatDate(props.comment.created))
 
   const authorName = computed(() =>
@@ -35,11 +57,23 @@
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
 
   .comment-meta {
-    @include dsfr.text-style(sm);
+    h4,
+    button {
+      @include dsfr.text-style(sm);
 
-    color: var(--text-mention-grey);
-    margin-bottom: 0.25rem;
-    font-weight: 400;
+      color: var(--text-mention-grey);
+      margin-bottom: 0.25rem;
+      font-weight: 400;
+    }
+
+    button {
+      box-shadow: none;
+    }
+
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
   }
 
   .comment-body {

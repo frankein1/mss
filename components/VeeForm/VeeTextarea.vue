@@ -4,6 +4,7 @@
     :class="{ 'fr-input-group--error': error }"
   >
     <label
+      v-if="!noLabel"
       class="fr-label"
       :class="[labelIcon]"
       :for="name"
@@ -52,8 +53,9 @@
       required?: boolean
       readonly?: boolean
       labelIcon?: string
+      noLabel?: boolean
     }>(),
-    { required: false, labelIcon: '', readonly: false }
+    { required: false, labelIcon: '', readonly: false, noLabel: false }
   )
 
   // use `toRef` to create reactive references to `name` prop which is passed to `useField`
