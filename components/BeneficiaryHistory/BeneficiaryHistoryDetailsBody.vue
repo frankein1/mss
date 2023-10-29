@@ -34,11 +34,11 @@
       </template>
 
       <ul
-        class="fr-btns-group fr-btns-group--sm fr-btns-group--inline fr-btns-group--right"
+        class="fr-btns-group fr-btns-group--sm fr-btns-group--icon-left fr-btns-group--inline fr-btns-group--right"
       >
         <li v-if="canDelete">
           <button
-            class="fr-btn fr-btn--secondary btn-delete"
+            class="fr-btn fr-btn--secondary btn-delete fr-icon-delete-line"
             data-fr-opened="false"
             aria-controls="global-modal"
             type="button"
@@ -50,7 +50,7 @@
         <li v-if="canEdit">
           <NuxtLink
             :to="editLink"
-            class="fr-btn fr-btn--secondary"
+            class="fr-btn fr-btn--secondary fr-icon-edit-line"
             target="_self"
           >
             Modifier
