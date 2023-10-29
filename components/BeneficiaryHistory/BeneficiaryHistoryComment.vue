@@ -1,7 +1,11 @@
 <template>
   <div>
     <div class="comment-meta">
-      <h4>Ajouté le {{ createdDate }} par {{ authorName }}</h4>
+      <h4>
+        <template v-if="comment.updatedBy">Modifié</template
+        ><template v-else>Ajouté</template> le {{ commentDate }} par
+        {{ authorName }}
+      </h4>
       <button
         v-if="!isEditing"
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--sm fr-icon-pencil-line"
@@ -46,10 +50,14 @@
 
   const isEditing = ref(false)
 
-  const createdDate = computed(() => formatDate(props.comment.created))
+  const commentDate = computed(() =>
+    formatDate(
+      props.comment.updatedBy ? props.comment.updated : props.comment.created
+    )
+  )
 
   const authorName = computed(() =>
-    formatUserDisplayName(props.comment.createdBy)
+    formatUserDisplayName(props.comment.updatedBy ?? props.comment.createdBy)
   )
 </script>
 
