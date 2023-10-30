@@ -1,30 +1,30 @@
 <template>
-  <div class="beneficiary-history-details-accordion__title">
-    <div class="meta">
-      <h2 class="date">
-        {{ formatDate(date) }}
-      </h2>
-      <div
-        v-if="history.createdBy"
-        class="agent-name"
-      >
-        {{ formatUserDisplayName(history.createdBy) }}
-      </div>
-      <div
-        class="additional-meta"
-        :class="{
-          'fr-icon-success-fill': history.isFollowup
-            ? history.firstFollowup
-            : history.fullFile
-        }"
-      >
-        <template v-if="!history.isFollowup && history.fullFile"
-          >Dossier complet</template
-        >
-        <template v-else-if="history.isFollowup && history.firstFollowup">
-          1<sup>er</sup> entretien
+  <div
+    class="beneficiary-history-details-accordion__title"
+    :class="{ expanded: expanded }"
+  >
+    <div class="history-details__icon">
+      <span :class="historyTypeIcon"></span>
+    </div>
+    <div class="history-details__meta">
+      <small>{{ historyTypeTitle }}</small>
+      <h2 class="history-details__title">
+        <template v-if="history.createdBy">
+          {{ formatUserDisplayName(history.createdBy) }}
+          <span> · </span>
         </template>
-      </div>
+        <span class="history-details__date">le {{ formatDate(date) }}</span>
+      </h2>
+      <ul class="fr-tags-group follow-up-types-tags">
+        <li
+          v-for="followUpType in followUpTypes"
+          :key="followUpType.id"
+        >
+          <p class="fr-tag">{{ followUpType.name }}</p>
+        </li>
+      </ul>
+    </div>
+    <div class="history-details__status">
       <ul class="fr-badges-group status-badges">
         <li>
           <p
@@ -45,26 +45,18 @@
           </p>
         </li>
       </ul>
-    </div>
-    <hr class="fr-col-12 fr-mt-5v" />
-    <ul class="fr-badges-group follow-up-types-badges">
-      <li
-        v-for="followUpType in followUpTypes"
-        :key="followUpType.id"
+      <button
+        class="fr-btn collapse-btn fr-btn--tertiary"
+        :class="{ expanded: expanded }"
+        aria-expanded="false"
+        :aria-controls="accordionId"
+        :title="collapseBtnTitle"
+        @click="emit('toggleExpand')"
       >
-        <p class="fr-badge">{{ followUpType.name }}</p>
-      </li>
-    </ul>
-    <button
-      class="fr-btn collapse-btn fr-btn--tertiary"
-      aria-expanded="false"
-      :aria-controls="accordionId"
-      :title="collapseBtnLabel"
-      @click="emit('toggleExpand')"
-    >
-      <span :class="[collapseBtnIcon]"></span>
-      <span>{{ collapseBtnLabel }}</span>
-    </button>
+        {{ collapseBtnLabel }}
+        <span :class="[collapseBtnIcon]"></span>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -129,100 +121,115 @@
     return [props.history.type]
   })
 
+  const historyTypeIcon = computed(() =>
+    props.history.isFollowup
+      ? 'fr-icon-followup-fill'
+      : 'fr-icon-help-request-fill'
+  )
+
+  const historyTypeTitle = computed(() =>
+    props.history.isFollowup ? "Synthèse d'entretien" : "Demande d'aide"
+  )
+
   const historyTypeLabel = computed(() =>
     props.history.isFollowup
       ? "la synthèse d'entretien"
       : "l'instruction de demande d'aide"
   )
 
-  const collapseBtnLabel = computed(
+  const collapseBtnTitle = computed(
     () => `Voir les détails de ${historyTypeLabel.value}`
   )
 
+  const collapseBtnLabel = computed(() =>
+    props.expanded ? 'Voir moins' : 'Voir plus'
+  )
+
   const collapseBtnIcon = computed(() =>
-    props.expanded ? 'fr-icon-subtract-line' : 'fr-icon-add-line'
+    props.expanded ? 'fr-icon-arrow-up-s-line' : 'fr-icon-arrow-down-s-line'
   )
 </script>
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
 
-  .beneficiary-history-details-accordion__title {
-    position: relative;
-    display: grid;
-    padding: 1rem;
-    column-gap: 0.5rem;
-    border-radius: 0.5rem 0.5rem 0 0;
-    grid-template-areas:
-      'meta accordion-btn'
-      'divider accordion-btn'
-      'follow-up-types-badges accordion-btn';
-    color: #fff;
-    grid-template-columns: auto max-content;
-  }
-
-  .meta {
-    grid-area: meta;
-    display: grid;
-    column-gap: 1rem;
-    grid-template-areas: 'agent-name date additional-meta status-badges';
-    grid-template-columns: max-content max-content max-content auto;
+  .history-details__icon {
+    display: flex;
+    justify-content: center;
     align-items: center;
-  }
 
-  .date {
-    @include dsfr.text-style(md);
-
-    --title-spacing: 0;
-
-    grid-area: date;
-    color: #fff;
-  }
-
-  .agent-name {
-    grid-area: agent-name;
-    font-weight: 700;
-
-    /**
-     * The resulted design is quite ugly but it seems browsers leaves the
-     * container to the max width once text is wrapped instead of shrinking it
-     * to the last text character.
-     * See https://stackoverflow.com/a/12377883/7916042
-     */
-    max-width: 10rem;
-  }
-
-  .additional-meta {
-    grid-area: additional-meta;
-
-    &::before {
-      margin-right: 0.25rem;
+    span {
+      padding: 1rem;
+      border-radius: 100%;
     }
   }
 
+  .fr-icon-followup-fill {
+    color: var(--color-followup);
+    background-color: var(--color-followup-light);
+  }
+
+  .fr-icon-help-request-fill {
+    color: var(--color-help-request);
+    background-color: var(--color-help-request-light);
+  }
+
+  .history-details__meta {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap: 0.6rem;
+
+    small {
+      margin-bottom: -0.5rem;
+    }
+  }
+
+  .beneficiary-history-details-accordion__title {
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    padding: 1.5rem;
+    column-gap: 1.5rem;
+    border-radius: 0.5rem;
+
+    &.expanded {
+      border-radius: 0.5rem 0.5rem 0 0;
+    }
+  }
+
+  .history-details__title {
+    @include dsfr.text-style(lg);
+
+    --title-spacing: 0;
+  }
+
+  .history-details__date {
+    font-weight: 400;
+  }
+
+  .history-details__status {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
   .status-badges {
-    grid-area: status-badges;
-    justify-self: end;
-    justify-content: end;
+    justify-content: flex-end;
   }
 
-  .divider {
-    --text-spacing: 0 0 0.5rem;
-
-    grid-area: divider;
-  }
-
-  .follow-up-types-badges {
-    grid-area: follow-up-types-badges;
-    margin-bottom: -0.5rem;
+  .follow-up-types-tags {
+    margin-bottom: -0.8rem;
   }
 
   .collapse-btn {
-    color: #fff;
-    grid-area: accordion-btn;
     box-shadow: none;
-    align-self: center;
     outline-width: 0;
+    text-wrap: nowrap;
 
     span:nth-child(2) {
       display: none;
@@ -244,6 +251,10 @@
       outline-style: inherit;
       outline-color: inherit;
       outline-width: 2px;
+      border-radius: 0.5rem;
+    }
+
+    &.expanded::before {
       border-radius: 0.5rem 0.5rem 0 0;
     }
   }

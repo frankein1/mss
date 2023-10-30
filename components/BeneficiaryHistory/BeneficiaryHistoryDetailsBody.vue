@@ -3,6 +3,11 @@
     :id="accordionId"
     class="fr-collapse beneficiary-history-details-body"
   >
+    <hr
+      v-if="canViewHistoryDetails || canListComments"
+      class="fr-mb-1v"
+    />
+
     <template v-if="canViewHistoryDetails">
       <BeneficiaryFollowupDetailsBodyMetas
         v-if="history.isFollowup"
@@ -29,11 +34,11 @@
       </template>
 
       <ul
-        class="fr-btns-group fr-btns-group--sm fr-btns-group--inline fr-btns-group--right"
+        class="fr-btns-group fr-btns-group--sm fr-btns-group--icon-left fr-btns-group--inline fr-btns-group--right"
       >
         <li v-if="canDelete">
           <button
-            class="fr-btn fr-btn--secondary btn-delete"
+            class="fr-btn fr-btn--secondary btn-delete fr-icon-delete-line"
             data-fr-opened="false"
             aria-controls="global-modal"
             type="button"
@@ -45,7 +50,7 @@
         <li v-if="canEdit">
           <NuxtLink
             :to="editLink"
-            class="fr-btn fr-btn--secondary"
+            class="fr-btn fr-btn--secondary fr-icon-edit-line"
             target="_self"
           >
             Modifier
@@ -177,7 +182,7 @@
     border-radius: 0 0 0.5rem 0.5rem;
 
     &.fr-collapse--expanded {
-      padding: 2rem 1.5rem 1rem;
+      padding: 0.5rem 1.5rem 1rem;
     }
   }
 
@@ -185,6 +190,8 @@
     @include dsfr.text-style(md);
 
     margin-bottom: 0.5rem;
+    color: var(--text-mention-grey);
+    font-weight: 400;
 
     &::before {
       margin-right: 0.25rem;
@@ -193,6 +200,7 @@
 
   .synthesis-content {
     white-space: pre-line;
+    font-weight: 500;
   }
 
   .btn-delete {
@@ -203,7 +211,11 @@
 
 <style>
   .beneficiary-history-details-body .information-label {
-    color: var(--text-title-grey);
-    font-weight: 700;
+    color: var(--text-mention-grey);
+    font-weight: 400;
+  }
+
+  .beneficiary-history-details-body li {
+    font-weight: 500;
   }
 </style>

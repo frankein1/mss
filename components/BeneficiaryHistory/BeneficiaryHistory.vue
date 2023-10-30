@@ -1,10 +1,12 @@
 <template>
   <div>
-    <BeneficiaryHistoryFilters
-      :beneficiary-id="beneficiaryId"
-      @filter="filters = $event"
-    />
-    <hr />
+    <div class="feature-section history-header-section fr-p-3w">
+      <BeneficiaryHistoryFilters
+        :results-label="`${history.length} élément(s) affiché(s) sur ${historyTotal} disponible(s) dans l'historique des accompagnements du bénéficiaire`"
+        :beneficiary-id="beneficiaryId"
+        @filter="filters = $event"
+      />
+    </div>
     <AtomLoader
       v-if="pending"
       class="fr-mx-auto"
@@ -23,10 +25,6 @@
         <p v-else>Aucun résultat ne correspond aux filtres sélectionnés.</p>
       </template>
       <template v-else>
-        <p class="fr-mb-2w fr-hint-text">
-          {{ history.length }} élément(s) de l'historique du bénéficiaire
-          affiché(s)
-        </p>
         <ul class="history-list">
           <BeneficiaryHistoryDetails
             v-for="historyItem in history"
@@ -61,13 +59,17 @@
   }))
 
   const {
-    data: history,
+    data: historyRequest,
     pending,
     error,
     refresh
   } = await useTrpcClient().beneficiary.getBeneficiaryHistory.useQuery(
     queryInput
   )
+
+  const history = computed(() => historyRequest.value?.history || [])
+
+  const historyTotal = computed(() => historyRequest.value?.totalCount || 0)
 
   onMounted(async () => {
     const tab = route.hash.slice(1)
@@ -87,6 +89,10 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
+
+  .history-header-section {
+    margin-bottom: 2rem;
+  }
 
   .history-list {
     @include dsfr.disable-list-style;

@@ -20,7 +20,9 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   canListCommentsToFollowup,
-  canListCommentsToHelpRequest
+  canListCommentsToHelpRequest,
+  canListBeneficiaryHelpRequests,
+  canListBeneficiaryFollowups
 } from '~/server/security/rules'
 import {
   AllowSecurityCheck,
@@ -181,6 +183,44 @@ function sortHistoryItem(a: HistoryItem, b: HistoryItem) {
   return dateA >= dateB ? -1 : 1
 }
 
+async function getHistoryTotalCount(
+  user: SecurityRuleGrantee,
+  beneficiary: NonNullable<BeneficiarySecurityTarget>
+) {
+  let helpRequestsCount = 0
+  let followupsCount = 0
+
+  if (canListBeneficiaryHelpRequests(user, beneficiary)) {
+    helpRequestsCount = await HelpRequestRepo.count(user, {
+      where: {
+        beneficiaryId: beneficiary.id,
+        ...prepareHelpRequestFilters({})
+      }
+    })
+  }
+
+  if (canListBeneficiaryFollowups(user, beneficiary)) {
+    followupsCount = await FollowupRepo.count(user, {
+      where: {
+        beneficiaryId: beneficiary.id,
+        ...prepareFollowupFilters({})
+      }
+    })
+  }
+
+  return helpRequestsCount + followupsCount
+}
+
+function getHistoryResponse(
+  history: (HistoryFollowup | HistoryHelpRequest)[],
+  totalCount: number
+) {
+  return {
+    history,
+    totalCount
+  }
+}
+
 const securityCheck = AllowSecurityCheck
 
 const handler = async ({
@@ -194,24 +234,28 @@ const handler = async ({
 
   const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
 
+  const totalCount = await getHistoryTotalCount(user, beneficiary)
+
   if (filtersAppliesToFollowups(filters)) {
-    return getFollowups(user, beneficiary, filters)
+    const history = await getFollowups(user, beneficiary, filters)
+    return getHistoryResponse(history, totalCount)
   }
 
   if (filtersAppliesToHelpRequests(filters)) {
-    return getHelpRequests(user, beneficiary, filters)
+    const history = await getHelpRequests(user, beneficiary, filters)
+    return getHistoryResponse(history, totalCount)
   }
 
   if (!filtersAppliesToFollowupsAndHelpRequests(filters)) {
-    return []
+    return getHistoryResponse([], totalCount)
   }
 
   const [followups, helpRequests] = await Promise.all([
     getFollowups(user, beneficiary, filters),
     getHelpRequests(user, beneficiary, filters)
   ])
-
-  return [...followups, ...helpRequests].sort(sortHistoryItem)
+  const history = [...followups, ...helpRequests].sort(sortHistoryItem)
+  return getHistoryResponse(history, totalCount)
 }
 
 export const getBeneficiaryHistoryQuery = createQuery({
