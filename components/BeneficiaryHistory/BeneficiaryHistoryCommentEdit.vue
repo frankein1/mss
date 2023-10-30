@@ -11,7 +11,7 @@
       no-label
     />
     <ul
-      class="fr-btns-group fr-btns-group--sm fr-btns-group--inline fr-btns-group--left"
+      class="fr-btns-group fr-btns-group--sm fr-btns-group--inline fr-btns-group--left fr-btns-group--icon-left"
     >
       <li>
         <button
@@ -33,14 +33,28 @@
           Annuler
         </button>
       </li>
+      <li>
+        <button
+          type="button"
+          class="fr-btn fr-btn--secondary fr-icon-delete-fill btn-delete"
+          :disabled="isSubmitting"
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          @click="deleteConfirm"
+        >
+          Supprimer
+        </button>
+      </li>
     </ul>
   </form>
 </template>
 
 <script setup lang="ts">
+  import BeneficiaryHistoryCommentDeleteConfirm from './BeneficiaryHistoryCommentDeleteConfirm.vue'
   import { HistoryItemComment } from './types'
   import { EditCommentInput, editCommentSchema } from '~/server/schema'
 
+  const modal = useModal()
   const snackbar = useSnackbar()
   const form = ref<HTMLFormElement | null>(null)
 
@@ -50,6 +64,7 @@
 
   const emit = defineEmits<{
     commentEdited: [comment: HistoryItemComment]
+    commentDeleted: [comment: HistoryItemComment]
     cancel: []
   }>()
 
@@ -84,4 +99,26 @@
       }
     })
   })
+
+  function deleteConfirm() {
+    modal.open(
+      'Confirmer la suppression du commentaire',
+      BeneficiaryHistoryCommentDeleteConfirm,
+      {},
+      { delete: onDeleteComment }
+    )
+  }
+
+  function onDeleteComment() {
+    // TODO: trpc request to delete comment
+    // TODO: delete comment from client-side history
+    emit('commentDeleted', props.comment)
+    useSnackbar().success('Le commentaire a été supprimé.')
+  }
 </script>
+
+<style scoped>
+  .btn-delete {
+    box-shadow: none;
+  }
+</style>
