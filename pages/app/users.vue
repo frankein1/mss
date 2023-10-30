@@ -4,22 +4,6 @@
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <div class="fr-alert fr-alert--error">
-          <h3 class="fr-alert__title">
-            Envoi des emails aux nouveaux utilisateurs
-          </h3>
-          <p>
-            Notre service d'envoi d'emails est temporairement indisponible.
-            Ainsi, lors de l'ajout d'un utilisateur, assurez-vous de lui
-            communiquer le fait que son compte a bien été créé. Le problème sera
-            résolu dans les prochains jours, veuillez nous excuser pour la gêne
-            occasionnée
-          </p>
-        </div>
-      </div>
-    </div>
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12">
         <main class="main-container fr-p-5w">
           <UserTable
             :users="users"
