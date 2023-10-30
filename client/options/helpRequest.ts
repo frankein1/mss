@@ -13,6 +13,7 @@ export const helpRequestStatusLabels: { [key in HelpRequestStatus]: string } = {
   [HelpRequestStatus.Refused]: 'Refusé',
   [HelpRequestStatus.Adjourned]: 'Ajourné',
   [HelpRequestStatus.ClosedByBeneficiary]: 'Clôturé par le bénéficiaire',
+  [HelpRequestStatus.ClosedByAgent]: "Clôturé par l'agent",
   [HelpRequestStatus.Dismissed]: 'Classé sans suite'
 }
 

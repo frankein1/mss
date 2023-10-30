@@ -7,5 +7,6 @@ export const helpRequestStatusColors: { [key in HelpRequestStatus]: string } = {
   [HelpRequestStatus.Refused]: '#FF732C',
   [HelpRequestStatus.Adjourned]: '#6f45f7',
   [HelpRequestStatus.ClosedByBeneficiary]: '#f95c5e',
+  [HelpRequestStatus.ClosedByAgent]: '#c9191e',
   [HelpRequestStatus.Dismissed]: '#CE70CC'
 }

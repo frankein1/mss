@@ -324,6 +324,7 @@ enum HelpRequestStatus {
   Refused
   Adjourned
   ClosedByBeneficiary
+  ClosedByAgent
   Dismissed
 }
 

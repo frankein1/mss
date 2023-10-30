@@ -10,6 +10,7 @@ export const helpRequestStatusClasses: {
   [HelpRequestStatus.WaitingAdditionalInformation]:
     'fr-badge--info fr-badge--icon-left fr-icon-time-line',
   [HelpRequestStatus.ClosedByBeneficiary]: 'fr-badge--error ',
+  [HelpRequestStatus.ClosedByAgent]: 'fr-badge--error ',
   [HelpRequestStatus.Dismissed]: 'fr-badge--error',
   [HelpRequestStatus.Adjourned]:
     'fr-badge--orange-terre-battue fr-badge--icon-left fr-icon-error-line'
