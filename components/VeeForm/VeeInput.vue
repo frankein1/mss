@@ -103,7 +103,8 @@
   const {
     errorMessage: error,
     value: refValue,
-    handleChange
+    handleChange,
+    setValue
   } = useField<string | number | Date>(name)
 
   const { id, errorId } = useFormFieldId(name)
@@ -186,7 +187,9 @@
   }
 
   function onChange(event: Event) {
-    emit('changeValue', (event.target as HTMLInputElement).value)
+    const value = (event.target as HTMLInputElement).value
+    emit('changeValue', value)
     handleChange(event)
+    setValue(formatValue(value))
   }
 </script>
