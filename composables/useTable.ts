@@ -1,3 +1,4 @@
+import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
 import type { TableSort } from '~/types/table'
 
 export function useTable<S extends TableSort>(
@@ -16,7 +17,10 @@ export function useTable<S extends TableSort>(
       const tableContainerValue = tableContainer.value
       // Scroll the table container to top after reloading
       if (tableContainerValue && !p) {
-        nextTick(() => (tableContainerValue.scrollTop = 0))
+        nextTick(() => {
+          focusAndScrollTo(tableContainerValue)
+          tableContainerValue.scrollTop = 0
+        })
       }
     },
     { deep: true }
