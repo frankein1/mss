@@ -293,7 +293,7 @@
 
   .fr-tabs__list.statshistory__tabs-list {
     column-gap: 0.5rem;
-    border-bottom: 3px solid var(--primary);
+    border-bottom: 3px solid var(--color-help-request);
     padding-bottom: 0;
 
     &.followups-tab-active {
