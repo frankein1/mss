@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.8.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.7.2...v1.8.0) (2023-10-30)
+
+
+### Features
+
+* Ajout du type de structure EFS ([c1eca2e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c1eca2e801a93fb2d740d022ab4cdc1e606a9cf3))
+* Une commune n'a pas accès au NIR ([2d01169](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2d011693339819f970f06bede0f8c8cbe6b8c9d9))
+
 ### [1.7.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.7.1...v1.7.2) (2023-10-23)
 
 
