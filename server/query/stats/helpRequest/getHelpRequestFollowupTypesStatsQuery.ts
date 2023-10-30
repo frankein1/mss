@@ -1,6 +1,6 @@
 import { FollowupTypeRepo, HelpRequestConstraints } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { SecurityRuleGrantee } from '~/server/security'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
 export async function getHelpRequestFollowupTypesStatsQuery(

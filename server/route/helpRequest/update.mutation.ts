@@ -7,7 +7,7 @@ import {
   SecurityRuleGrantee,
   canEditHelpRequest,
   canEditHelpRequestPrivateSynthesis
-} from '~/server/security/rules'
+} from '~/server/security'
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import {
   HelpRequestWithRelations,

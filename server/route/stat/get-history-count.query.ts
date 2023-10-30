@@ -6,7 +6,7 @@ import {
   getFollowupCountQuery,
   getHelpRequestCountQuery
 } from '~/server/query/stats'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { FollowupRepo } from '~/server/database'
 
 const handler = async ({

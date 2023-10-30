@@ -5,10 +5,7 @@ import { GetBeneficiariesInput, getBeneficiariesSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
-import {
-  AllowSecurityCheck,
-  SecurityRuleGrantee
-} from '~/server/security/rules/types'
+import { AllowSecurityCheck, SecurityRuleGrantee } from '~/server/security'
 import { BeneficiaryRepo } from '~/server/database'
 
 const securityCheck = AllowSecurityCheck

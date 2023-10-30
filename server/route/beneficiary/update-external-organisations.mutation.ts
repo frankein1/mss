@@ -1,6 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { SecurityRuleGrantee } from '~/server/security/rules'
+import { SecurityRuleGrantee, BeneficiaryRules } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
@@ -9,7 +9,6 @@ import {
   updateBeneficiaryExternalOrganisationsSchema
 } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
-import { BeneficiaryRules } from '~/server/security'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,

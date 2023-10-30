@@ -5,7 +5,7 @@ import {
   UserAdminFilterInput,
   adminGetUsersSchema
 } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc/createRouter'
 

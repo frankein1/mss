@@ -7,7 +7,7 @@ import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import { SecurityRuleGrantee, canCreateFollowup } from '~/server/security/rules'
+import { SecurityRuleGrantee, canCreateFollowup } from '~/server/security'
 
 import {
   addUserActivity,

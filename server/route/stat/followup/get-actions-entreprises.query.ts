@@ -1,7 +1,7 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { getFollowupActionsEntreprisesStatsQuery } from '~/server/query/stats'
 
 const handler = async ({

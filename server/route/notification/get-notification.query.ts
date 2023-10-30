@@ -2,7 +2,7 @@ import { NotificationType, Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { GetNotificationInput, getNotificationSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { NotificationRepo } from '~/server/database'
 
 const handler = async ({

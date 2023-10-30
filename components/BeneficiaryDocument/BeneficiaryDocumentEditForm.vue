@@ -50,7 +50,7 @@
   } from '~/client/options/document'
   import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
-  import { canSetDocumentAsConfidential as canSetDocumentAsConfidentialRule } from '~/server/security/rules'
+  import { canSetDocumentAsConfidential as canSetDocumentAsConfidentialRule } from '~/server/security'
   import { GetBeneficiaryOutput } from '~/server/trpc/routers'
   import { documentFieldLabels } from '~/client/labels'
 

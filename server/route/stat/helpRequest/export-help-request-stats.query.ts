@@ -18,7 +18,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { getPercentage } from '~/utils/stats'
 import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { StructureRepo } from '~/server/database'
 
 const handler = async ({

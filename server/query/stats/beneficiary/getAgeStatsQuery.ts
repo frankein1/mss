@@ -6,7 +6,7 @@ import { AgeGroupsFilter } from '~/types/stat'
 import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 import { prepareBeneficiaryStatFilters } from '~/utils/filters'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { SecurityRuleGrantee } from '~/server/security'
 import { BeneficiaryRepo, BeneficiaryConstraints } from '~/server/database'
 
 enum NullAgeGroup {

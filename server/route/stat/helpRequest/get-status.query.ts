@@ -2,7 +2,7 @@ import { createQuery } from '~/server/route'
 import { getHelpRequestStatusStatsQuery } from '~/server/query/stats'
 import { ProtectedAppContext } from '~/server/trpc'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 
 const handler = async ({
   input,

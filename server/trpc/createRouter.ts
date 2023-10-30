@@ -2,9 +2,9 @@ import { initTRPC, TRPCError } from '@trpc/server'
 import superjson from 'superjson'
 import { H3Event } from 'h3'
 import { StructureType } from '@prisma/client'
-import { SecurityRuleGrantee } from '../security/rules/types'
 import { AppContext } from './createContext'
 import { forbiddenError } from './trpcErrors'
+import { SecurityRuleGrantee } from '~/server/security'
 
 const t = initTRPC.context<AppContext>().create({
   transformer: superjson

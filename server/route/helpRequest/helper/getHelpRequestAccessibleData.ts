@@ -1,9 +1,9 @@
 import { HelpRequestWithRelations } from '~/server/query/helpRequests'
 import {
   canViewHelpRequestDetails,
-  canViewHelpRequestPrivateSynthesis
-} from '~/server/security/rules'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+  canViewHelpRequestPrivateSynthesis,
+  SecurityRuleGrantee
+} from '~/server/security'
 
 export function getHelpRequestAccessibleData(
   user: SecurityRuleGrantee,

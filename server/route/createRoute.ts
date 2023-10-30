@@ -2,10 +2,7 @@ import { H3Event } from 'h3'
 import { ZodType, z } from 'zod'
 import { StructureType } from '@prisma/client'
 import { forbiddenError } from '../trpc/trpcErrors'
-import {
-  SecurityRule,
-  SecurityRuleGrantee
-} from '~/server/security/rules/types'
+import { SecurityRule, SecurityRuleGrantee } from '~/server/security'
 
 export type AdminRouteHandlerContext<Grantee> = {
   user: Grantee

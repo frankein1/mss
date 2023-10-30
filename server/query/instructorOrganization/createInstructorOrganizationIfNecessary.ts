@@ -1,7 +1,9 @@
 import { Prisma } from '@prisma/client'
 import { newOptionToLabel, NEW_OPTION_PREFIX } from '~/utils/options'
-import { canCreateInstructorOrganization } from '~/server/security/rules'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import {
+  canCreateInstructorOrganization,
+  SecurityRuleGrantee
+} from '~/server/security'
 
 export async function createInstructorOrganizationIfNecessary(
   transaction: Prisma.TransactionClient,

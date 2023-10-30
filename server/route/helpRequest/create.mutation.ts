@@ -6,10 +6,7 @@ import {
   createHelpRequestSchema
 } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
-import {
-  SecurityRuleGrantee,
-  canCreateHelpRequest
-} from '~/server/security/rules'
+import { SecurityRuleGrantee, canCreateHelpRequest } from '~/server/security'
 import {
   getBeneficiarySecurityTarget,
   addUserActivity,

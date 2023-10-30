@@ -1,5 +1,5 @@
 import { useAuthStore } from '~/store/auth'
-import { canCreateHelpRequest } from '~/server/security/rules'
+import { canCreateHelpRequest } from '~/server/security'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {
   const { getAuthUser: user } = useAuthStore()

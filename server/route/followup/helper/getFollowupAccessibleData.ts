@@ -1,9 +1,9 @@
 import {
   canViewFollowupDetails,
-  canViewFollowupPrivateSynthesis
-} from '~/server/security/rules'
+  canViewFollowupPrivateSynthesis,
+  SecurityRuleGrantee
+} from '~/server/security'
 import { FollowupWithRelations } from '~/server/query/followups'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 function getFollowupMeta(followup: NonNullable<FollowupWithRelations>) {
   return {

@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { notfoundError } from '~/server/trpc'
 import { idSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc/createRouter'
 

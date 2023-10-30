@@ -305,7 +305,7 @@
   import {
     canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
     canEditItsOwnStructure
-  } from '~/server/security/rules'
+  } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'

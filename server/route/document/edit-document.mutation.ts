@@ -9,7 +9,7 @@ import {
   SecurityRuleGrantee,
   canEditDocument,
   canSetDocumentAsConfidential
-} from '~/server/security/rules'
+} from '~/server/security'
 import {
   ProtectedAppContext,
   forbiddenError,

@@ -11,8 +11,9 @@ import {
 } from '~/server/schema'
 import {
   canExportBeneficiaries,
-  SecurityRuleGrantee
-} from '~/server/security/rules'
+  SecurityRuleGrantee,
+  BeneficiaryRules
+} from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'
@@ -20,7 +21,6 @@ import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
 import { BeneficiaryRepo } from '~/server/database'
-import { BeneficiaryRules } from '~/server/security'
 
 const securityCheck = (
   grantee: SecurityRuleGrantee,

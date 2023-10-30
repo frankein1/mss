@@ -30,7 +30,7 @@
 
 <script lang="ts" setup>
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
-  import { canCreateUser as canCreateUserRule } from '~/server/security/rules'
+  import { canCreateUser as canCreateUserRule } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
 
   const title = RouteTitle.AppUsers()

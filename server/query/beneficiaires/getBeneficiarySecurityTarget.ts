@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { SecurityRuleGrantee } from '../../security/rules'
+import { SecurityRuleGrantee } from '~/server/security'
 import { BeneficiaryRepo } from '~/server/database'
 
 export const beneficiarySecurityTargetSelect = {

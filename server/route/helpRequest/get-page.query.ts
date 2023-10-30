@@ -10,7 +10,7 @@ import {
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prepareHelpRequestFilters } from '~/utils/filters'
 import { SortOrder } from '~/types/table'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { HelpRequestRepo } from '~/server/database'
 
 type GetHelpRequestsOrderBy = Array<

@@ -5,7 +5,7 @@ import { GetFollowupsInput, getFollowupsSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prepareFollowupFilters } from '~/utils/filters'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { FollowupRepo } from '~/server/database'
 
 const handler = async ({

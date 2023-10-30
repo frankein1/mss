@@ -7,7 +7,7 @@ import {
 import { signJwt, verifyJwt } from '~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 import { emptySchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { UserRepo } from '~/server/database'
 
 const handler = async ({

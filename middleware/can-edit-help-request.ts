@@ -1,4 +1,4 @@
-import { canEditHelpRequest } from '~/server/security/rules'
+import { canEditHelpRequest } from '~/server/security'
 import { useAuthStore } from '~/store/auth'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {

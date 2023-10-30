@@ -18,7 +18,7 @@
 <script setup lang="ts">
   import { HistoryItem, HistoryItemComment, HistoryItemComments } from './types'
   import { useAuthStore } from '~/store/auth'
-  import { canAddComment } from '~/server/security/rules'
+  import { canAddComment } from '~/server/security'
 
   const authStore = useAuthStore()
 

@@ -5,7 +5,7 @@ import {
   SecurityTargetWithStructure,
   SecurityRuleGrantee,
   SecurityRule
-} from '~/server/security/rules'
+} from '~/server/security'
 
 function getBeneficiaryFormFallbackRoute(
   toPath: string,

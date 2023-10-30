@@ -35,7 +35,7 @@ import {
   ministereDepartmentServiceAcLabels,
   ministereStructureLabels
 } from '~/client/options/ministry'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 
 const handler = async ({
   input,

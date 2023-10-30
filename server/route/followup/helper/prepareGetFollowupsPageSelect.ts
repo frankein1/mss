@@ -1,8 +1,7 @@
 import { Prisma } from '@prisma/client'
-import { canViewAnyFollowupDetails } from '~/server/security/rules'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { SecurityRuleGrantee } from '~/server/security'
 
-export function prepareGetFollowupsPageSelect(user: SecurityRuleGrantee) {
+export function prepareGetFollowupsPageSelect(_user: SecurityRuleGrantee) {
   return {
     id: true,
     status: true,
@@ -11,7 +10,8 @@ export function prepareGetFollowupsPageSelect(user: SecurityRuleGrantee) {
       select: { id: true, name: true },
       orderBy: { name: Prisma.SortOrder.asc }
     },
-    dueDate: canViewAnyFollowupDetails(user),
+    // dueDate: canViewAnyFollowupDetails(user),
+    dueDate: true,
     beneficiary: {
       select: {
         id: true,

@@ -1,10 +1,9 @@
 import { getFollowupAccessibleData } from './helper/getFollowupAccessibleData'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { canViewFollowup } from '~/server/security/rules'
+import { canViewFollowup, SecurityRuleGrantee } from '~/server/security'
 import { getFollowupWithRelations } from '~/server/query'
 import { IdInput, idSchema } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { FollowupRepo } from '~/server/database'
 
 const handler = async ({

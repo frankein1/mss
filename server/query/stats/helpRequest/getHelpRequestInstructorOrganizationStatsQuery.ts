@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { HelpRequestRepo } from '~/server/database'
 import { STATS_NULL_LABEL } from '~/client/options/stat'
 import { StatFilterInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { SecurityRuleGrantee } from '~/server/security'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
 

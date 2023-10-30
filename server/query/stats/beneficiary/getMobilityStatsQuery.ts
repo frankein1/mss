@@ -1,6 +1,6 @@
 import { BeneficiaryRepo, BeneficiaryConstraints } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { SecurityRuleGrantee } from '~/server/security'
 import { prepareBeneficiaryStatFilters } from '~/utils/filters'
 
 export async function getMobilityStatsQuery(

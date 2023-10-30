@@ -6,7 +6,7 @@ import {
   QuickEditFollowupInput,
   quickEditFollowupSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canEditFollowup } from '~/server/security/rules'
+import { SecurityRuleGrantee, canEditFollowup } from '~/server/security'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { FollowupRepo } from '~/server/database'
 

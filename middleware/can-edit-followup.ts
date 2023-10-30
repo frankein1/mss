@@ -1,4 +1,4 @@
-import { canEditFollowup } from '~/server/security/rules'
+import { canEditFollowup } from '~/server/security'
 import { useAuthStore } from '~/store/auth'
 
 export default defineNuxtRouteMiddleware(async (to, from) => {

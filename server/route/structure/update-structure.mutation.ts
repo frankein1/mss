@@ -4,10 +4,7 @@ import {
   EditCurrentUserStructureInput,
   editCurrentUserStructureSchema
 } from '~/server/schema'
-import {
-  SecurityRuleGrantee,
-  canEditItsOwnStructure
-} from '~/server/security/rules'
+import { SecurityRuleGrantee, canEditItsOwnStructure } from '~/server/security'
 import { editFollowupTypes } from '~/utils/structure'
 import { StructureRepo } from '~/server/database'
 

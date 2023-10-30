@@ -7,7 +7,7 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { BeneficiaryRepo } from '~/server/database'
 
 const securityCheck = AllowSecurityCheck

@@ -8,14 +8,10 @@ import {
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
 } from '~/server/query'
-import {
-  SecurityRuleGrantee,
-  canAddDocument,
-  canViewDocument
-} from '~/server/security/rules'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
+import { SecurityRuleGrantee } from '~/server/security'
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth

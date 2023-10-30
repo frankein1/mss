@@ -1,6 +1,5 @@
 import { BeneficiaryConstraints } from './BeneficiaryConstraints'
-import { SecurityRuleGrantee } from '~/server/security'
-import { isAdmin } from '~/server/security/rules/helpers'
+import { SecurityRuleGrantee, isAdmin } from '~/server/security'
 
 const get = (user: SecurityRuleGrantee) => {
   const where = {}

@@ -1,6 +1,6 @@
 import { FollowupConstraints, FollowupTypeRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { SecurityRuleGrantee } from '~/server/security'
 import { prepareFollowupStatFilters } from '~/utils/filters'
 
 export async function getFollowupFollowupTypesStatsQuery(

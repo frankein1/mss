@@ -33,10 +33,7 @@
     followupStatusOptions
   } from '~/client/options/followup'
   import { typeSuiviOptions } from '~/client/options/history'
-  import {
-    canViewAnyHelpRequestDetails,
-    isReferent
-  } from '~/server/security/rules'
+  import { canViewAnyHelpRequestDetails, isReferent } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
   import {

@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
   import { RoutePath } from '~/utils/routing'
-  import { canCreateHelpRequest as canCreateHelpRequestRule } from '~/server/security/rules'
+  import { canCreateHelpRequest as canCreateHelpRequestRule } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { GetBeneficiaryOutput } from '~/server/trpc/routers'
 

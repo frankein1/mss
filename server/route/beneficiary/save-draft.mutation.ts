@@ -13,11 +13,11 @@ import {
   SaveBeneficiaryExternalOrganisationsInput,
   saveDraftSchema
 } from '~/server/schema'
-import { BeneficiaryRules } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { DraftRepo } from '~/server/database'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security/types'
+import { getBeneficiaryPermissionRules } from '~/server/security/getPermissionRules'
 
 const securityCheck = AllowSecurityCheck
 
@@ -99,10 +99,11 @@ function prepareData(
     referents: general.referents
   }
 
-  if (
-    (taxHousehold || entourage) &&
-    BeneficiaryRules.update.relatives(user, securityTarget)
-  ) {
+  const permissionRules = getBeneficiaryPermissionRules(user.role)
+
+  const isDetailUpdatable = permissionRules.update.detail(user, securityTarget)
+
+  if (taxHousehold || (entourage && isDetailUpdatable)) {
     if (taxHousehold) {
       const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
 
@@ -134,21 +135,21 @@ function prepareData(
     }
   }
 
-  if (health && BeneficiaryRules.update.healthInfo(user, securityTarget)) {
+  if (health && isDetailUpdatable) {
     const { socialSecurityNumber, ...otherHealthData } = health
 
     data = { ...data, ...otherHealthData }
 
-    if (BeneficiaryRules.update.healthInfoNir(structure.type)) {
+    if (beneficiaryPermissionRules.update.nir(structure.type)) {
       data = { ...data, socialSecurityNumber }
     }
   }
 
-  if (BeneficiaryRules.update.occupationIncome(user, securityTarget)) {
+  if (isDetailUpdatable) {
     data = { ...data, ...occupation }
   }
 
-  if (BeneficiaryRules.update.externalOrganisations(user, securityTarget)) {
+  if (isDetailUpdatable) {
     data = { ...data, ...externalOrganisations }
   }
 

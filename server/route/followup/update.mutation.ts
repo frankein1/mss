@@ -12,7 +12,7 @@ import {
   SecurityRuleGrantee,
   canEditFollowup,
   canEditFollowupPrivateSynthesis
-} from '~/server/security/rules'
+} from '~/server/security'
 
 import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
 import {

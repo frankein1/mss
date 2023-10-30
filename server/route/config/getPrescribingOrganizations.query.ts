@@ -1,6 +1,6 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { emptySchema } from '~/server/schema'
 import { PrescribingOrganizationRepo } from '~/server/database'
 

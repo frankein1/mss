@@ -18,11 +18,11 @@ import {
   BeneficiarySecurityTarget
 } from '~/server/query'
 import { ProtectedAppContext } from '~/server/trpc'
-import { canListComments } from '~/server/security/rules'
 import {
+  canListComments,
   AllowSecurityCheck,
   SecurityRuleGrantee
-} from '~/server/security/rules/types'
+} from '~/server/security'
 import { FollowupRepo, HelpRequestRepo } from '~/server/database'
 
 function filtersAppliesToFollowups(

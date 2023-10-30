@@ -111,7 +111,7 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { Options } from '~/utils/options'
   import { StatFilterInput } from '~/server/schema'
-  import { canExportStats } from '~/server/security/rules'
+  import { canExportStats } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
   import { getExportUrl } from '~/utils/export/getExportUrl'

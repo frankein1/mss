@@ -2,11 +2,10 @@ import { NotificationType, Prisma, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { AddCommentInput, addCommentSchema } from '~/server/schema'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { canAddComment } from '~/server/security/rules'
+import { canAddComment, SecurityRuleGrantee } from '~/server/security'
 import { ProtectedAppContext, invalidError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 const handler = async ({
   ctx: { user },

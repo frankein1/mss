@@ -2,7 +2,7 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { formatUserDisplayName } from '~/utils/user'
 import { emptySchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { UserRepo } from '~/server/database'
 
 const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {

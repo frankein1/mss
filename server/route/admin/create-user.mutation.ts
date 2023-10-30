@@ -3,7 +3,7 @@ import { createMutation } from '~/server/route'
 import { sendEmail } from '~/server/lib/email'
 import { AdminCreateUserInput, adminCreateUserSchema } from '~/server/schema'
 import { getEmailContent } from '~/utils/user/getEmailContent'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { AllowSecurityCheck } from '~/server/security'
 import { UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc/createRouter'
 

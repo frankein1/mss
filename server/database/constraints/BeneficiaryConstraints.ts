@@ -1,5 +1,4 @@
-import { SecurityRuleGrantee } from '~/server/security'
-import { isAdmin, isReferent } from '~/server/security/rules/helpers'
+import { SecurityRuleGrantee, isAdmin, isReferent } from '~/server/security'
 
 const get = (user: SecurityRuleGrantee) => {
   const where = {}
