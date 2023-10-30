@@ -89,6 +89,7 @@ enum StructureType {
   Commune
   Association
   Ministere
+  EFS
 }
 
 model Structure {
