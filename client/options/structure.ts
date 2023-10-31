@@ -7,7 +7,7 @@ export const StructureTypeLabels: { [key in StructureType]: string } = {
   [StructureType.Association]: 'Association',
   [StructureType.Commune]: 'Commune',
   [StructureType.Ministere]: 'Ministère',
-  [StructureType.EFS]: 'Etablissement France Service'
+  [StructureType.EFS]: 'Etablissement France Services'
 }
 
 export const structureTypeOptions = labelsToOptions(StructureTypeLabels)
