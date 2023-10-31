@@ -74,14 +74,11 @@ export class InclusionConnectClient {
       code
     })
 
-    const response = await fetch(
-      `${this.issuer}/protocol/openid-connect/token`,
-      {
-        method: 'post',
-        body: params,
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-      }
-    )
+    const response = await fetch(`${this.issuer}/auth/token/`, {
+      method: 'post',
+      body: params,
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+    })
 
     const responseJson = await response.json()
 
@@ -129,7 +126,7 @@ export class InclusionConnectClient {
       // code_challenge: codeChallenge,
       // code_challenge_method: 'S256'
     })
-    return `${this.issuer}/protocol/openid-connect/auth?${params}`
+    return `${this.issuer}/auth/authorize/?${params}`
   }
 
   public getLogoutUrl(idToken: string, inactive: boolean) {
@@ -139,7 +136,7 @@ export class InclusionConnectClient {
         ? `${this.postLogoutRedirectUri}?inactive`
         : this.postLogoutRedirectUri
     })
-    return `${this.issuer}/protocol/openid-connect/logout?${params}`
+    return `${this.issuer}/auth/logout/?${params}`
   }
 
   public getPostLogoutRedirectUri() {
@@ -147,7 +144,7 @@ export class InclusionConnectClient {
   }
 
   public getRegistrationUrl() {
-    const inclusionConnectRegistration = `${this.issuer}/protocol/openid-connect/registrations`
+    const inclusionConnectRegistration = `${this.issuer}/auth/register/`
 
     const params = new URLSearchParams({
       client_id: this.clientId,
@@ -160,7 +157,7 @@ export class InclusionConnectClient {
   }
 
   public getEditPasswordUrl() {
-    const inclusionConnectAccountUrlBase = `${this.issuer}/account`
+    const inclusionConnectAccountUrlBase = `${this.issuer}/accounts/my-account/`
 
     const params = new URLSearchParams({
       referrer: this.clientId,
