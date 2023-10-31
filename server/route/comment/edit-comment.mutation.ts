@@ -1,9 +1,14 @@
 import { prismaClient } from '~/server/prisma'
 import { createMutation } from '~/server/route'
 import { EditCommentInput, editCommentSchema } from '~/server/schema'
-import { ProtectedAppContext } from '~/server/trpc'
+import {
+  ProtectedAppContext,
+  forbiddenError,
+  notfoundError
+} from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
+import { canEditComment } from '~/server/security/rules/comment'
 
 const handler = async ({
   ctx: { user },
@@ -12,8 +17,17 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: EditCommentInput
 }) => {
-  // TODO: security checks
-  // TODO: compare to add-comment-mutation if other actions are necessary
+  const comment = await prismaClient.comment.findUnique({
+    where: { id: commentId }
+  })
+
+  if (!comment) {
+    throw notfoundError()
+  }
+
+  if (!canEditComment(user, comment)) {
+    throw forbiddenError()
+  }
 
   return await prismaClient.comment.update({
     where: { id: commentId },
