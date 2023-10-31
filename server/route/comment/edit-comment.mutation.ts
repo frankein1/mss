@@ -33,7 +33,7 @@ const handler = async ({
     where: { id: commentId },
     data: {
       content,
-      updatedById: user.id
+      updated: new Date()
     },
     include: COMMENT_RELATIONS_INCLUDE
   })
