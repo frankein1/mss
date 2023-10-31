@@ -1,5 +1,9 @@
 import { router, protectedProcedure } from '~/server/trpc'
-import { addCommentMutation, editCommentMutation } from '~/server/route/comment'
+import {
+  addCommentMutation,
+  deleteCommentMutation,
+  editCommentMutation
+} from '~/server/route/comment'
 
 export const commentRouter = router({
   add: protectedProcedure
@@ -7,5 +11,8 @@ export const commentRouter = router({
     .mutation(addCommentMutation.execute),
   edit: protectedProcedure
     .input(editCommentMutation.inputValidation)
-    .mutation(editCommentMutation.execute)
+    .mutation(editCommentMutation.execute),
+  delete: protectedProcedure
+    .input(deleteCommentMutation.inputValidation)
+    .mutation(deleteCommentMutation.execute)
 })

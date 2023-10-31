@@ -24,6 +24,7 @@
         :comment="comment"
         @cancel="isEditing = false"
         @comment-edited="emit('commentEdited', $event)"
+        @comment-deleted="emit('commentDeleted', $event)"
       />
       <div
         v-else
@@ -46,6 +47,7 @@
 
   const emit = defineEmits<{
     commentEdited: [comment: HistoryItemComment]
+    commentDeleted: [comment: HistoryItemComment]
   }>()
 
   const isEditing = ref(false)

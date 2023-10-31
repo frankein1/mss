@@ -54,6 +54,7 @@
   import { HistoryItemComment } from './types'
   import { EditCommentInput, editCommentSchema } from '~/server/schema'
 
+  const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
   const form = ref<HTMLFormElement | null>(null)
@@ -80,7 +81,7 @@
 
   const onEditComment = handleSubmit(values => {
     useTrpcMutation({
-      mutation: () => useTrpcClient().comment.edit.mutate(values),
+      mutation: () => trpcClient.comment.edit.mutate(values),
       isSubmitting,
       onSuccess: comment => {
         snackbar.success(
@@ -110,10 +111,18 @@
   }
 
   function onDeleteComment() {
-    // TODO: trpc request to delete comment
-    // TODO: delete comment from client-side history
-    emit('commentDeleted', props.comment)
-    useSnackbar().success('Le commentaire a été supprimé.')
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.comment.delete.mutate({ id: props.comment.id }),
+      isSubmitting,
+      onSuccess: comment => {
+        emit('commentDeleted', comment)
+        snackbar.success('Le commentaire a été supprimé.')
+      },
+      onFailure: () => {
+        snackbar.error('La suppression a échoué.')
+      }
+    })
   }
 </script>
 
