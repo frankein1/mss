@@ -52,7 +52,6 @@ model User {
 
   accounts        Account[]
   createdComments Comment[] @relation(name: "created_by")
-  updatedComments Comment[] @relation(name: "updated_by")
 
   aidantConnectAuthorisation Boolean?  @default(false) @map("aidant_connect_authorisation")
   lastAccess                 DateTime? @map("last_access")
@@ -1333,9 +1332,7 @@ model Comment {
   createdBy   User      @relation(name: "created_by", fields: [createdById], references: [id])
   createdById String    @map("created_by_id") @db.Uuid
 
-  updated     DateTime? @updatedAt
-  updatedBy   User?     @relation(name: "updated_by", fields: [updatedById], references: [id])
-  updatedById String?   @map("updated_by_id") @db.Uuid
+  updated DateTime?
 
   content String
 

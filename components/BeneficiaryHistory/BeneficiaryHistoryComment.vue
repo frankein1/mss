@@ -2,12 +2,12 @@
   <div>
     <div class="comment-meta">
       <h4>
-        <template v-if="comment.updatedBy">Modifié</template
+        <template v-if="comment.updated">Modifié</template
         ><template v-else>Ajouté</template> le {{ commentDate }} par
         {{ authorName }}
       </h4>
       <button
-        v-if="!isEditing"
+        v-if="!isEditing && canEditComment"
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--sm fr-icon-pencil-line"
         @click="isEditing = true"
       >
@@ -38,8 +38,12 @@
 
 <script setup lang="ts">
   import { HistoryItemComment } from './types'
+  import { canEditComment as canEditCommentRule } from '~/server/security/rules/comment'
+  import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
+
+  const authStore = useAuthStore()
 
   const props = defineProps<{
     comment: HistoryItemComment
@@ -52,14 +56,18 @@
 
   const isEditing = ref(false)
 
+  const user = computed(() => authStore.getAuthUser)
+
+  const canEditComment = computed(() =>
+    canEditCommentRule(user.value, props.comment)
+  )
+
   const commentDate = computed(() =>
-    formatDate(
-      props.comment.updatedBy ? props.comment.updated : props.comment.created
-    )
+    formatDate(props.comment.updated ?? props.comment.created)
   )
 
   const authorName = computed(() =>
-    formatUserDisplayName(props.comment.updatedBy ?? props.comment.createdBy)
+    formatUserDisplayName(props.comment.createdBy)
   )
 </script>
 
