@@ -1,9 +1,10 @@
 import type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
-  SecurityTargetWithReferents
+  SecurityTargetWithReferents,
+  SecurityTargetWithCreator
 } from './types'
-import { isInSameStructureAs, isReferentFor } from './helpers'
+import { isCreator, isInSameStructureAs, isReferentFor } from './helpers'
 
 export const canAddCommentToFollowup = (
   grantee: SecurityRuleGrantee,
@@ -48,3 +49,8 @@ export const canListCommentsToHelpRequest = (
     'Instructor',
     'ReceptionAgent'
   ]) || isReferentFor(grantee, beneficiary)
+
+export const canEditComment = (
+  grantee: SecurityRuleGrantee,
+  comment: SecurityTargetWithCreator
+) => isCreator(grantee, comment)
