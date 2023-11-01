@@ -11,7 +11,7 @@
             le suivi des bénéficiaires des structures d'accompagnement social.
           </p>
           <ul
-            class="fr-btns-group fr-btns-group--inline fr-btns-group--icon-left"
+            class="landing-actions fr-btns-group fr-btns-group--inline fr-btns-group--icon-left"
           >
             <li>
               <NuxtLink
@@ -229,6 +229,18 @@
   @include dsfr-media-query.respond-from('lg') {
     .landing-subtitle {
       text-align: initial;
+    }
+  }
+
+  .landing-actions a {
+    font-size: 0.8rem !important;
+    padding: 0.25rem 0.75rem !important;
+    margin: 0 0.25rem 0.75rem !important;
+
+    @include dsfr-media-query.respond-from('lg') {
+      font-size: 1rem !important;
+      padding: 0.5rem 1rem !important;
+      margin: 0 0.5rem 1rem !important;
     }
   }
 
