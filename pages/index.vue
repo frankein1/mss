@@ -165,7 +165,7 @@
       </section>
     </main>
     <section class="contact-section">
-      <div class="fr-container fr-py-5w">
+      <div class="fr-container">
         <h2>Nous contacter</h2>
         <p>
           Vous souhaitez en savoir plus sur Mon Suivi Social ? Envoyez-nous un
@@ -288,6 +288,14 @@
 
   .list-section {
     gap: 2rem 5rem;
+  }
+
+  .contact-section div {
+    padding-block: 2.5rem 10rem;
+
+    @include dsfr-media-query.respond-from('xl') {
+      padding-block: 2.5rem 2.5rem;
+    }
   }
 
   .list-section div:nth-child(2) {
