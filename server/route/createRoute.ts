@@ -55,6 +55,7 @@ export type CreateRouteOptions<
   inputValidation: Validation
   securityCheck: SecurityRule<Grantee, Input>
   auditLog?: {
+    key: string
     target: UserActivityObject
     targetId: TargetIdFinder<Grantee, Input, RouteResult>
     action: UserActivityType
@@ -119,14 +120,16 @@ export const createRoute = <
 
     const routeResult = await handler({ ctx, input })
 
-    if (mutation && options.auditLog) {
+    if (options.auditLog) {
       const { user } = ctx
-      const { target, targetId, action } = options.auditLog
+      const { key, target, targetId, action } = options.auditLog
       await addUserActivity({
-        userId: user.id,
+        key,
+        user,
         activity: action,
         object: target,
-        objectId: targetId({ ctx, input, routeResult })
+        objectId: targetId({ ctx, input, routeResult }),
+        content: mutation ? input : null
       })
     }
 

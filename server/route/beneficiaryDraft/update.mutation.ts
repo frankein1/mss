@@ -67,6 +67,7 @@ export const updateBeneficiaryDraftMutation = createMutation({
   handler,
   securityCheck,
   auditLog: {
+    key: 'beneficiaryDraft.update',
     target: 'Draft',
     targetId: ({ input }) => {
       return input.id

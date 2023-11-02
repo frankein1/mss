@@ -67,6 +67,7 @@ export const editDocumentMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'document.update',
     target: 'Document',
     targetId: ({ input }) => {
       return input.key

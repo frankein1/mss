@@ -40,6 +40,7 @@ export const deleteHelpRequestMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'helpRequest.delete',
     target: 'HelpRequest',
     targetId: ({ input }) => {
       return input.id

@@ -113,6 +113,7 @@ export const createHelpRequestMutation = createMutation({
   inputValidation: createHelpRequestSchema,
   securityCheck,
   auditLog: {
+    key: 'helpRequest.create',
     target: 'HelpRequest',
     targetId: ({ routeResult }) => {
       return routeResult.helpRequest.id

@@ -123,6 +123,7 @@ export const updateHelpRequestMutation = createMutation({
   inputValidation: editHelpRequestSchema,
   handler,
   auditLog: {
+    key: 'helpRequest.update',
     target: 'HelpRequest',
     targetId: ({ input }) => {
       return input.id

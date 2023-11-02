@@ -50,6 +50,7 @@ export const quickUpdateHelpRequestMutation = createMutation({
   inputValidation: quickEditHelpRequestSchema,
   handler,
   auditLog: {
+    key: 'helpRequest.quickUpdate',
     target: 'HelpRequest',
     targetId: ({ input }) => {
       return input.id

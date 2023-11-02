@@ -139,6 +139,7 @@ export const updateFollowupMutation = createMutation({
   inputValidation: editFollowupSchema,
   securityCheck,
   auditLog: {
+    key: 'followup.update',
     target: 'Followup',
     targetId: ({ input }) => {
       return input.id

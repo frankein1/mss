@@ -210,6 +210,7 @@ export const saveDraftMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'beneficiary.saveDraft',
     target: 'Beneficiary',
     targetId: ({ input }) => {
       return input.id

@@ -42,6 +42,7 @@ export const createBeneficiaryMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'beneficiary.create',
     target: 'Beneficiary',
     targetId: ({ ctx }) => {
       return ctx.user.id

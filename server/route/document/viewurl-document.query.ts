@@ -47,6 +47,7 @@ export const createViewUrlMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'document.getViewUrl',
     target: 'Document',
     targetId: ({ input }) => {
       return input.key

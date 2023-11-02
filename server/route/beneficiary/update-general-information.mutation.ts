@@ -83,6 +83,7 @@ export const updateGeneralInformationMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'beneficiary.updateGeneralInformation',
     target: 'Beneficiary',
     targetId: ({ input }) => {
       return input.id

@@ -117,6 +117,7 @@ export const createFollowupMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'followup.create',
     target: 'Followup',
     targetId: ({ routeResult }) => {
       return routeResult.id

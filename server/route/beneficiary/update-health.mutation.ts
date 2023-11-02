@@ -55,6 +55,7 @@ export const updateHealthMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'beneficiary.updateHealth',
     target: 'Beneficiary',
     targetId: ({ input }) => {
       return input.id

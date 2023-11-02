@@ -45,6 +45,7 @@ export const updateExternalOrganisationsMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'beneficiary.updateExternalOrganisations',
     target: 'Beneficiary',
     targetId: ({ input }) => {
       return input.id

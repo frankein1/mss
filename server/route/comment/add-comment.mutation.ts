@@ -166,6 +166,7 @@ export const addCommentMutation = createMutation({
   securityCheck: AllowSecurityCheck,
   handler,
   auditLog: {
+    key: 'comment.add',
     target: 'Comment',
     targetId: ({ routeResult }) => {
       return routeResult.id

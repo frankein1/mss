@@ -26,6 +26,7 @@ export const updateNotificationMutation = createMutation({
   inputValidation: updateNotificationSchema,
   securityCheck: AllowSecurityCheck,
   auditLog: {
+    key: 'notification.update',
     target: 'Notification',
     targetId: ({ input }) => {
       return input.id

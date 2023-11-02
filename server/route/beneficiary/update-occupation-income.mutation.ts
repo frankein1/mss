@@ -46,6 +46,7 @@ export const updateOccupationIncomeMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'beneficiary.updateOccupationIncome',
     target: 'Beneficiary',
     targetId: ({ input }) => {
       return input.id

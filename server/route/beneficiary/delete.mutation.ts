@@ -67,6 +67,7 @@ export const deleteBeneficiaryMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'beneficiary.delete',
     target: 'Beneficiary',
     targetId: ({ input }) => {
       return input.id

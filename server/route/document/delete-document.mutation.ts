@@ -47,6 +47,7 @@ export const deleteDocumentMutation = createMutation({
   handler,
   securityCheck,
   auditLog: {
+    key: 'document.delete',
     target: 'Document',
     targetId: ({ input }) => {
       return input.documentKey

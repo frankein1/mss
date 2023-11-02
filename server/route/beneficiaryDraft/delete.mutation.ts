@@ -31,6 +31,7 @@ export const deleteBeneficiaryDraftMutation = createMutation({
   handler,
   inputValidation: idSchema,
   auditLog: {
+    key: 'beneficiaryDraft.delete',
     target: 'Draft',
     targetId: ({ input }) => {
       return input.id

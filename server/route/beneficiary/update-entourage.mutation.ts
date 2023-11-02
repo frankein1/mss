@@ -100,6 +100,7 @@ export const updateEntourageMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'beneficiary.updateEntourage',
     target: 'Beneficiary',
     targetId: ({ input }) => {
       return input.id

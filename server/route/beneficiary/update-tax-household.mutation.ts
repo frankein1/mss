@@ -94,6 +94,7 @@ export const updateTaxHouseholdMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'beneficiary.updateTaxHousehold',
     target: 'Beneficiary',
     targetId: ({ input }) => {
       return input.id

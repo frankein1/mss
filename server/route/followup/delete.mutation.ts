@@ -38,6 +38,7 @@ export const deleteFollowupMutation = createMutation({
   securityCheck,
   handler,
   auditLog: {
+    key: 'followup.delete',
     target: 'Followup',
     targetId: ({ input }) => {
       return input.id

@@ -31,6 +31,7 @@ export const createBeneficiaryDraftMutation = createMutation({
   handler,
   securityCheck: AllowSecurityCheck,
   auditLog: {
+    key: 'beneficiaryDraft.create',
     target: 'Draft',
     targetId: ({ routeResult }) => {
       return routeResult.id

@@ -49,6 +49,7 @@ export const quickUpdateFollowupMutation = createMutation({
   inputValidation: quickEditFollowupSchema,
   securityCheck,
   auditLog: {
+    key: 'followup.quickUpdate',
     target: 'Followup',
     targetId: ({ input }) => {
       return input.id
