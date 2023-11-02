@@ -12,7 +12,6 @@ import {
 } from '~/server/security/rules'
 import {
   getBeneficiarySecurityTarget,
-  addUserActivity,
   createPrescribingOrganizationIfNecesserary,
   createInstructorOrganizationIfNecessary
 } from '~/server/query'
@@ -83,14 +82,6 @@ const createTransaction = async (
     }
   })
 
-  await addUserActivity({
-    transaction,
-    userId: ctx.user.id,
-    activity: UserActivityType.CREATE,
-    object: 'HelpRequest',
-    objectId: helpRequest.id
-  })
-
   return { helpRequest }
 }
 
@@ -120,5 +111,13 @@ const securityCheck = async (
 export const createHelpRequestMutation = createMutation({
   handler,
   inputValidation: createHelpRequestSchema,
-  securityCheck
+  securityCheck,
+  auditLog: {
+    key: 'helpRequest.create',
+    target: 'HelpRequest',
+    targetId: ({ routeResult }) => {
+      return routeResult.helpRequest.id
+    },
+    action: UserActivityType.CREATE
+  }
 })

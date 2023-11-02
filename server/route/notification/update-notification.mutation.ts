@@ -5,7 +5,6 @@ import {
   updateNotificationSchema
 } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { NotificationRepo } from '~/server/database'
 
@@ -20,16 +19,18 @@ const handler = async ({
     where: { id, recipientId: user.id },
     data: { read }
   })
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'Notification',
-    objectId: id
-  })
 }
 
 export const updateNotificationMutation = createMutation({
   handler,
   inputValidation: updateNotificationSchema,
-  securityCheck: AllowSecurityCheck
+  securityCheck: AllowSecurityCheck,
+  auditLog: {
+    key: 'notification.update',
+    target: 'Notification',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

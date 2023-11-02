@@ -19,7 +19,6 @@ import {
   FollowupWithRelations,
   getFollowupSecurityTarget,
   getFollowupWithRelations,
-  addUserActivity,
   createPrescribingOrganizationIfNecesserary
 } from '~/server/query'
 
@@ -106,13 +105,6 @@ async function updateTransaction(
     }
   })
 
-  await addUserActivity({
-    transaction,
-    userId: ctx.user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'Followup',
-    objectId: input.id
-  })
   return fu
 }
 
@@ -145,5 +137,13 @@ const securityCheck = async (
 export const updateFollowupMutation = createMutation({
   handler,
   inputValidation: editFollowupSchema,
-  securityCheck
+  securityCheck,
+  auditLog: {
+    key: 'followup.update',
+    target: 'Followup',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

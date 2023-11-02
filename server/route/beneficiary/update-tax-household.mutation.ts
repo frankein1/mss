@@ -6,7 +6,6 @@ import {
   canEditBeneficiaryReferents
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryTaxHouseholdInput,
   updateBeneficiaryTaxHouseholdSchema
@@ -87,18 +86,19 @@ const handler = async ({
     data
   })
 
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'Beneficiary',
-    objectId: beneficiary.id
-  })
-
   return updatedBeneficiary
 }
 
 export const updateTaxHouseholdMutation = createMutation({
   inputValidation: updateBeneficiaryTaxHouseholdSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    key: 'beneficiary.updateTaxHousehold',
+    target: 'Beneficiary',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

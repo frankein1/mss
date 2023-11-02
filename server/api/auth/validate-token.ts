@@ -79,7 +79,8 @@ export default defineEventHandler(async event => {
   })
 
   await addUserActivity({
-    userId: user.id,
+    key: 'auth.validateToken',
+    user,
     activity: UserActivityType.LOGIN,
     object: 'User',
     objectId: user.id

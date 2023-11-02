@@ -1,11 +1,13 @@
 import { H3Event } from 'h3'
 import { ZodType, z } from 'zod'
-import { StructureType } from '@prisma/client'
-import { forbiddenError } from '../trpc/trpcErrors'
 import {
-  SecurityRule,
-  SecurityRuleGrantee
-} from '~/server/security/rules/types'
+  StructureType,
+  UserActivityObject,
+  UserActivityType
+} from '@prisma/client'
+import { forbiddenError } from '~/server/trpc'
+import { addUserActivity } from '~/server/query'
+import { SecurityRule, SecurityRuleGrantee } from '~/server/security'
 
 export type AdminRouteHandlerContext<Grantee> = {
   user: Grantee
@@ -34,6 +36,16 @@ export type RouteHandler<Grantee, Input, RouteResult> = ({
   input: Input
 }) => Promise<RouteResult>
 
+export type TargetIdFinder<Grantee, Input, RouteResult> = ({
+  ctx,
+  input,
+  routeResult
+}: {
+  ctx: RouteHandlerContext<Grantee>
+  input: Input
+  routeResult: RouteResult
+}) => string
+
 export type CreateRouteOptions<
   Validation extends ZodType,
   Grantee extends SecurityRuleGrantee = SecurityRuleGrantee,
@@ -42,6 +54,12 @@ export type CreateRouteOptions<
 > = {
   inputValidation: Validation
   securityCheck: SecurityRule<Grantee, Input>
+  auditLog?: {
+    key: string
+    target: UserActivityObject
+    targetId: TargetIdFinder<Grantee, Input, RouteResult>
+    action: UserActivityType
+  }
   handler?: RouteHandler<Grantee, Input, RouteResult>
   adminHandler?: AdminRouteHandler<Grantee, Input, RouteResult>
 }
@@ -100,7 +118,22 @@ export const createRoute = <
       )
     }
 
-    return handler({ ctx, input })
+    const routeResult = await handler({ ctx, input })
+
+    if (options.auditLog) {
+      const { user } = ctx
+      const { key, target, targetId, action } = options.auditLog
+      await addUserActivity({
+        key,
+        user,
+        activity: action,
+        object: target,
+        objectId: targetId({ ctx, input, routeResult }),
+        content: mutation ? input : null
+      })
+    }
+
+    return routeResult
   }
 
   const executeAsAdmin = async ({

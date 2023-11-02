@@ -7,7 +7,6 @@ import {
   quickEditFollowupSchema
 } from '~/server/schema'
 import { SecurityRuleGrantee, canEditFollowup } from '~/server/security/rules'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { FollowupRepo } from '~/server/database'
 
 const handler = async ({
@@ -23,13 +22,6 @@ const handler = async ({
     where: { id },
     data: rest,
     select
-  })
-
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'Followup',
-    objectId: id
   })
 
   return fu
@@ -55,5 +47,13 @@ const securityCheck = async (
 export const quickUpdateFollowupMutation = createMutation({
   handler,
   inputValidation: quickEditFollowupSchema,
-  securityCheck
+  securityCheck,
+  auditLog: {
+    key: 'followup.quickUpdate',
+    target: 'Followup',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

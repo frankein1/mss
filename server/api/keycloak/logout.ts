@@ -30,7 +30,8 @@ export default defineEventHandler(async event => {
   }
 
   await addUserActivity({
-    userId: user.id,
+    key: 'auth.logout',
+    user,
     activity: UserActivityType.LOGOUT,
     object: 'User',
     objectId: user.id

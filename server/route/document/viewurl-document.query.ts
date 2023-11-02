@@ -5,7 +5,6 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { beneficiarySecurityTargetInclude } from '~/server/query'
 import { SecurityRuleGrantee, canViewDocument } from '~/server/security/rules'
 import { createSignedGetUrl } from '~/server/lib/s3'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { DocumentRepo } from '~/server/database'
 
 const securityCheck = async (
@@ -40,18 +39,19 @@ const handler = async ({
     bucket: s3.bucket
   })
 
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.VIEW,
-    object: 'Document',
-    objectId: key
-  })
-
   return { url }
 }
 
 export const createViewUrlMutation = createMutation({
   inputValidation: createViewUrlSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    key: 'document.getViewUrl',
+    target: 'Document',
+    targetId: ({ input }) => {
+      return input.key
+    },
+    action: UserActivityType.VIEW
+  }
 })

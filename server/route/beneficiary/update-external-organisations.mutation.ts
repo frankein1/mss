@@ -7,7 +7,6 @@ import {
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryExternalOrganisationsInput,
   updateBeneficiaryExternalOrganisationsSchema
@@ -26,8 +25,7 @@ const securityCheck = async (
 }
 
 const handler = async ({
-  input,
-  ctx: { user }
+  input
 }: {
   input: UpdateBeneficiaryExternalOrganisationsInput
   ctx: ProtectedAppContext
@@ -39,18 +37,19 @@ const handler = async ({
     data: externalOrganisations
   })
 
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'Beneficiary',
-    objectId: id
-  })
-
   return updatedBeneficiary
 }
 
 export const updateExternalOrganisationsMutation = createMutation({
   inputValidation: updateBeneficiaryExternalOrganisationsSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    key: 'beneficiary.updateExternalOrganisations',
+    target: 'Beneficiary',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })
