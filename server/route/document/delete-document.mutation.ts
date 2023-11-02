@@ -5,7 +5,6 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { beneficiarySecurityTargetInclude } from '~/server/query'
 import { SecurityRuleGrantee, canDeleteDocument } from '~/server/security/rules'
 import { deleteUploadedFile } from '~/server/lib/s3'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { DocumentRepo } from '~/server/database'
 
 const securityCheck = async (
@@ -41,17 +40,17 @@ const handler = async ({
   await DocumentRepo.prisma.delete({
     where: { key: documentKey }
   })
-
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.DELETE,
-    object: 'Document',
-    objectId: documentKey
-  })
 }
 
 export const deleteDocumentMutation = createMutation({
   inputValidation: deleteDocumentSchema,
   handler,
-  securityCheck
+  securityCheck,
+  auditLog: {
+    target: 'Document',
+    targetId: ({ input }) => {
+      return input.documentKey
+    },
+    action: UserActivityType.DELETE
+  }
 })

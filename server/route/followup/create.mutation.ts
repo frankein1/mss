@@ -10,7 +10,6 @@ import { prismaClient } from '~/server/prisma'
 import { SecurityRuleGrantee, canCreateFollowup } from '~/server/security/rules'
 
 import {
-  addUserActivity,
   createPrescribingOrganizationIfNecesserary,
   getBeneficiarySecurityTarget
 } from '~/server/query'
@@ -87,13 +86,6 @@ async function createTransaction(
     }
   })
 
-  await addUserActivity({
-    transaction,
-    userId: ctx.user.id,
-    activity: UserActivityType.CREATE,
-    object: 'Followup',
-    objectId: fu.id
-  })
   return fu
 }
 
@@ -123,5 +115,12 @@ const securityCheck = async (
 export const createFollowupMutation = createMutation({
   inputValidation: addFollowupSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    target: 'Followup',
+    targetId: ({ routeResult }) => {
+      return routeResult.id
+    },
+    action: UserActivityType.CREATE
+  }
 })

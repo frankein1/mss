@@ -14,8 +14,7 @@ import {
   getHelpRequestWithRelations,
   getHelpRequestsecurityTarget,
   createPrescribingOrganizationIfNecesserary,
-  createInstructorOrganizationIfNecessary,
-  addUserActivity
+  createInstructorOrganizationIfNecessary
 } from '~/server/query'
 
 async function prepareHelpRequestData({
@@ -90,13 +89,6 @@ async function updateTransaction(
     }
   })
 
-  await addUserActivity({
-    userId: ctx.user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'HelpRequest',
-    objectId: helpRequest.id
-  })
-
   return { helpRequest }
 }
 
@@ -129,5 +121,12 @@ const securityCheck = async (
 export const updateHelpRequestMutation = createMutation({
   securityCheck,
   inputValidation: editHelpRequestSchema,
-  handler
+  handler,
+  auditLog: {
+    target: 'HelpRequest',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

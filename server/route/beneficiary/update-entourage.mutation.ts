@@ -6,7 +6,6 @@ import {
   canEditBeneficiaryReferents
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryDraftInput,
   UpdateBeneficiaryEntourageInput,
@@ -93,18 +92,18 @@ const handler = async ({
     data
   })
 
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'Beneficiary',
-    objectId: beneficiary.id
-  })
-
   return updatedBeneficiary
 }
 
 export const updateEntourageMutation = createMutation({
   inputValidation: updateBeneficiaryEntourageSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    target: 'Beneficiary',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

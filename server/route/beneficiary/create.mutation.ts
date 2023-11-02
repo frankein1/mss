@@ -6,7 +6,6 @@ import {
 } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { generateFileNumber } from '~/utils/generateFileNumber'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryRepo } from '~/server/database'
 
@@ -35,18 +34,18 @@ const handler = async ({
     }
   })
 
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.CREATE,
-    object: 'Beneficiary',
-    objectId: beneficiary.id
-  })
-
   return { id: beneficiary.id }
 }
 
 export const createBeneficiaryMutation = createMutation({
   inputValidation: createBeneficiarySchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    target: 'Beneficiary',
+    targetId: ({ ctx }) => {
+      return ctx.user.id
+    },
+    action: UserActivityType.CREATE
+  }
 })

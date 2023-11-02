@@ -1,7 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryDraftInput,
   updateBeneficiaryDraftSchema
@@ -60,18 +59,18 @@ const handler = async ({
     }
   })
 
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'Draft',
-    objectId: beneficiaryDraft.id
-  })
-
   return updatedBeneficiaryDraft
 }
 
 export const updateBeneficiaryDraftMutation = createMutation({
   inputValidation: updateBeneficiaryDraftSchema,
   handler,
-  securityCheck
+  securityCheck,
+  auditLog: {
+    target: 'Draft',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

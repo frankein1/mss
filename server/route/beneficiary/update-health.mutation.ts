@@ -8,7 +8,6 @@ import {
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryHealthInput,
   updateBeneficiaryHealthSchema
@@ -29,13 +28,11 @@ const securityCheck = async (
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx: { structure }
 }: {
   input: UpdateBeneficiaryHealthInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
-
   const { id, socialSecurityNumber, ...health } = input
 
   let data = {}
@@ -50,18 +47,18 @@ const handler = async ({
     data
   })
 
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'Beneficiary',
-    objectId: beneficiary.id
-  })
-
   return updatedBeneficiary
 }
 
 export const updateHealthMutation = createMutation({
   inputValidation: updateBeneficiaryHealthSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    target: 'Beneficiary',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

@@ -10,7 +10,6 @@ import {
   SecurityRuleGrantee,
   canEditHelpRequest
 } from '~/server/security/rules'
-import { addUserActivity } from '~/server/query'
 import { HelpRequestRepo } from '~/server/database'
 
 const securityCheck = async (
@@ -43,18 +42,18 @@ const handler = async ({
     select: prepareGetHelpRequestsPageSelect(user)
   })
 
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'HelpRequest',
-    objectId: helpRequest.id
-  })
-
   return helpRequest
 }
 
 export const quickUpdateHelpRequestMutation = createMutation({
   securityCheck,
   inputValidation: quickEditHelpRequestSchema,
-  handler
+  handler,
+  auditLog: {
+    target: 'HelpRequest',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

@@ -5,7 +5,6 @@ import {
   SecurityRuleGrantee,
   canDeleteBeneficiary
 } from '~/server/security/rules'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { IdInput, idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
 import { BeneficiaryRelativeRepo, BeneficiaryRepo } from '~/server/database'
@@ -23,18 +22,9 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(user, id)
-
   await updateBeneficiaryRelatives(user, id)
 
   await BeneficiaryRepo.prisma.delete({ where: { id } })
-
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.DELETE,
-    object: 'Beneficiary',
-    objectId: beneficiary.id
-  })
 }
 
 async function updateBeneficiaryRelatives(
@@ -75,5 +65,12 @@ async function updateBeneficiaryRelatives(
 export const deleteBeneficiaryMutation = createMutation({
   inputValidation: idSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    target: 'Beneficiary',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.DELETE
+  }
 })

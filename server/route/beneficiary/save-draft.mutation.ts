@@ -2,7 +2,6 @@ import { UserActivityType, Prisma } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   SaveDraftInput,
   SaveBeneficiaryGeneralInformationInput,
@@ -61,14 +60,6 @@ const handler = async ({
   return await prismaClient.$transaction(async tx => {
     const { id } = await tx.beneficiary.create({
       data
-    })
-
-    await addUserActivity({
-      userId: ctx.user.id,
-      activity: UserActivityType.CREATE,
-      object: 'Beneficiary',
-      objectId: id,
-      transaction: tx
     })
 
     if (beneficiaryDraft) {
@@ -217,5 +208,12 @@ function getDataFromSources(
 export const saveDraftMutation = createMutation({
   inputValidation: saveDraftSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    target: 'Beneficiary',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.CREATE
+  }
 })

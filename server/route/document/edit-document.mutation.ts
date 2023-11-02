@@ -15,7 +15,6 @@ import {
   forbiddenError,
   invalidError
 } from '~/server/trpc'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { DocumentRepo } from '~/server/database'
 
 const securityCheck = async (
@@ -60,18 +59,18 @@ const handler = async ({
     include: { beneficiary: { select: { id: true, structureId: true } } }
   })
 
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'Document',
-    objectId: key
-  })
-
   return { document: updatedDocument }
 }
 
 export const editDocumentMutation = createMutation({
   inputValidation: editDocumentSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    target: 'Document',
+    targetId: ({ input }) => {
+      return input.key
+    },
+    action: UserActivityType.UPDATE
+  }
 })

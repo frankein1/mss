@@ -14,7 +14,6 @@ import {
   invalidError
 } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   AllowSecurityCheck,
   SecurityRuleGrantee
@@ -42,13 +41,6 @@ const handler = async ({
   } else {
     comment = await addCommentToHelpRequest(input, user, beneficiary)
   }
-
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.CREATE,
-    object: 'Comment',
-    objectId: comment.id
-  })
 
   return comment
 }
@@ -172,5 +164,12 @@ async function addNewCommentNotification(
 export const addCommentMutation = createMutation({
   inputValidation: addCommentSchema,
   securityCheck: AllowSecurityCheck,
-  handler
+  handler,
+  auditLog: {
+    target: 'Comment',
+    targetId: ({ routeResult }) => {
+      return routeResult.id
+    },
+    action: UserActivityType.CREATE
+  }
 })

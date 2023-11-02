@@ -7,7 +7,6 @@ import {
 } from '~/server/security/rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import {
   UpdateBeneficiaryOccupationInput,
   updateBeneficiaryOccupationSchema
@@ -27,8 +26,7 @@ const securityCheck = async (
 }
 
 const handler = async ({
-  input,
-  ctx: { user }
+  input
 }: {
   input: UpdateBeneficiaryOccupationInput
   ctx: ProtectedAppContext
@@ -40,18 +38,18 @@ const handler = async ({
     data: occupation
   })
 
-  await addUserActivity({
-    userId: user.id,
-    activity: UserActivityType.UPDATE,
-    object: 'Beneficiary',
-    objectId: id
-  })
-
   return updatedBeneficiary
 }
 
 export const updateOccupationIncomeMutation = createMutation({
   inputValidation: updateBeneficiaryOccupationSchema,
   securityCheck,
-  handler
+  handler,
+  auditLog: {
+    target: 'Beneficiary',
+    targetId: ({ input }) => {
+      return input.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })
