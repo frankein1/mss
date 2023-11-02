@@ -5,6 +5,15 @@
     class="fr-grid-row"
     @submit.prevent="onSubmit"
   >
+    <button
+      ref="cancelBtn"
+      data-fr-opened="false"
+      aria-controls="global-modal"
+      type="button"
+      hidden
+    >
+      Quitter
+    </button>
     <BeneficiariesSaveFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
       :current-route="currentRoute"
@@ -106,6 +115,9 @@
     beneficiaryFieldLabels
   )
 
+  const cancelBtn = ref<HTMLButtonElement | null>(null)
+  const leaveConfirmation = useLeaveConfirmation(cancelBtn)
+
   function onCancel() {
     useTrpcMutation({
       mutation: () =>
@@ -120,6 +132,8 @@
       }
     })
   }
+
+  onBeforeRouteLeave((_, __, next) => leaveConfirmation.confirmation(next))
 </script>
 
 <style lang="scss" scoped>
