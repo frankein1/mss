@@ -1,6 +1,7 @@
 <template>
   <BeneficiaryInfoSection
     v-if="hasHealthInfo"
+    id="health"
     title="Santé"
     :edit-link="editLink"
   >

@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!isHidden"
     class="feature-section fr-mt-1w"
     :class="{ 'fr-accordion': title }"
   >
@@ -43,13 +44,28 @@
 
 <script setup lang="ts">
   import { getRandomId } from '~/utils/random'
+  import {
+    BeneficiaryBlock,
+    isHiddenBeneficiaryBlock
+  } from '~/client/permission'
+  import { useAuthStore } from '~/store/auth'
 
-  defineProps<{
+  const props = defineProps<{
+    id: BeneficiaryBlock
     title?: string
     editLink?: string
   }>()
 
   const infoSectionId = computed(() => getRandomId('beneficiary-info-section-'))
+
+  const authStore = useAuthStore()
+  const { structureType } = authStore.getAuthUser
+
+  const isHidden = computed(() => {
+    return structureType
+      ? isHiddenBeneficiaryBlock(structureType, props.id)
+      : false
+  })
 </script>
 
 <style scoped lang="scss">

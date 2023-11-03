@@ -1,6 +1,7 @@
 <template>
   <BeneficiaryInfoSection
     v-if="hasOccupationIncomeSection"
+    id="occupationIncome"
     title="Activité/Revenu"
     :edit-link="editLink"
   >

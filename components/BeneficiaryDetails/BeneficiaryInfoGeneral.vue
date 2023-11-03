@@ -1,6 +1,7 @@
 <template>
   <BeneficiaryInfoSection
     v-if="hasGeneralInfo"
+    id="general"
     title="Informations générales"
     :edit-link="editLink"
   >
