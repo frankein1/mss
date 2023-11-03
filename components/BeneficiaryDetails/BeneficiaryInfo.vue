@@ -1,9 +1,13 @@
 <template>
-  <BeneficiaryInfoSection title="">
+  <BeneficiaryInfoSection
+    id="header"
+    title=""
+  >
     <BeneficiaryInfoHeader :beneficiary="beneficiary" />
   </BeneficiaryInfoSection>
   <BeneficiaryInfoSection
     v-if="followupTypes.length"
+    id="followupTypes"
     title=""
   >
     <BeneficiaryInfoFollowupTypes :followup-types="followupTypes" />

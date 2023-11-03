@@ -36,10 +36,6 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
 
-  definePageMeta({
-    middleware: 'can-set-relatives'
-  })
-
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
 

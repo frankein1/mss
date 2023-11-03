@@ -1,5 +1,4 @@
 import {
-  isBeneficiaryReferentQuery,
   getBeneficiaryDetailsQuery,
   getBeneficiaryHistoryQuery,
   getBeneficiariesQuery,
@@ -8,7 +7,6 @@ import {
   searchBeneficiaryQuery,
   getBeneficiaryFollowupTypesQuery,
   getBeneficiaryMinimalInfoQuery,
-  getBeneficiarySecurityTargetQuery,
   deleteBeneficiaryMutation,
   createBeneficiaryMutation,
   updateGeneralInformationMutation,
@@ -22,18 +20,12 @@ import {
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryRouter = router({
-  isBeneficiaryReferent: protectedProcedure
-    .input(isBeneficiaryReferentQuery.inputValidation)
-    .query(isBeneficiaryReferentQuery.execute),
   getBeneficiaryMinimalInfo: protectedProcedure
     .input(getBeneficiaryMinimalInfoQuery.inputValidation)
     .query(getBeneficiaryMinimalInfoQuery.execute),
   getBeneficiaryDetails: protectedProcedure
     .input(getBeneficiaryDetailsQuery.inputValidation)
     .query(getBeneficiaryDetailsQuery.execute),
-  getBeneficiarySecurityTarget: protectedProcedure
-    .input(getBeneficiarySecurityTargetQuery.inputValidation)
-    .query(getBeneficiarySecurityTargetQuery.execute),
   getBeneficiaryHistory: protectedProcedure
     .input(getBeneficiaryHistoryQuery.inputValidation)
     .query(getBeneficiaryHistoryQuery.execute),

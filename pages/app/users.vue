@@ -37,8 +37,6 @@
 
   useHead({ title })
 
-  definePageMeta({ middleware: 'can-list-users' })
-
   const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
 

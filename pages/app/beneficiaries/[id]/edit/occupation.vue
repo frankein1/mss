@@ -39,7 +39,6 @@
   import { prismaDecimalToNumber } from '~/utils/prisma'
 
   definePageMeta({
-    middleware: ['is-beneficiary-referent', 'can-set-occupation'],
     name: Route.AppBeneficiaryEditOccupation
   })
 

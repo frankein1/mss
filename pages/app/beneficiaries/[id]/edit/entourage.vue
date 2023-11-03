@@ -34,10 +34,6 @@
   import { RoutePath, Route } from '~/utils/routing'
   import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
 
-  definePageMeta({
-    middleware: ['is-beneficiary-referent', 'can-set-relatives']
-  })
-
   const trpcClient = useTrpcClient()
 
   const isSubmitting = ref(false)

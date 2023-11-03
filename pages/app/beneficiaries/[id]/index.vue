@@ -79,10 +79,6 @@
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
 
-  definePageMeta({
-    middleware: 'is-beneficiary-referent'
-  })
-
   const route = useRoute()
   const trpcClient = useTrpcClient()
   const beneficiaryId = route.params.id as string

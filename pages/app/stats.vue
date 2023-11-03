@@ -61,8 +61,6 @@
 
   useHead({ title })
 
-  definePageMeta({ middleware: 'can-access-stats' })
-
   const trpcClient = useTrpcClient()
 
   const { data: followupTypesOptions, error: followupTypesOptionsError } =
