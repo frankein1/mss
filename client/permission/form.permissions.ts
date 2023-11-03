@@ -1,6 +1,8 @@
 import { StructureType } from '@prisma/client'
 
 export type BeneficiaryBlock =
+  | 'header'
+  | 'followupTypes'
   | 'general'
   | 'health'
   | 'taxHouseholds'

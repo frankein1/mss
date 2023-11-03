@@ -1,5 +1,4 @@
 import {
-  isBeneficiaryReferentQuery,
   getBeneficiaryDetailsQuery,
   getBeneficiaryHistoryQuery,
   getBeneficiariesQuery,
@@ -22,9 +21,6 @@ import {
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryRouter = router({
-  isBeneficiaryReferent: protectedProcedure
-    .input(isBeneficiaryReferentQuery.inputValidation)
-    .query(isBeneficiaryReferentQuery.execute),
   getBeneficiaryMinimalInfo: protectedProcedure
     .input(getBeneficiaryMinimalInfoQuery.inputValidation)
     .query(getBeneficiaryMinimalInfoQuery.execute),

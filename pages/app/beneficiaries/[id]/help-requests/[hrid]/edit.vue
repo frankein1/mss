@@ -46,10 +46,6 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
-  definePageMeta({
-    middleware: ['can-edit-help-request', 'is-beneficiary-referent']
-  })
-
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
   const route = useRoute()

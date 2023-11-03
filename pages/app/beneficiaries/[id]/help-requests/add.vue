@@ -45,10 +45,6 @@
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema'
 
-  definePageMeta({
-    middleware: ['is-beneficiary-referent', 'can-add-help-request']
-  })
-
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
   const route = useRoute()

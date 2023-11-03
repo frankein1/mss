@@ -45,8 +45,6 @@
 
   useHead({ title })
 
-  definePageMeta({ middleware: 'can-edit-structure' })
-
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 

@@ -35,10 +35,6 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
 
-  definePageMeta({
-    middleware: ['is-beneficiary-referent', 'can-set-relatives']
-  })
-
   const trpcClient = useTrpcClient()
 
   const isSubmitting = ref(false)

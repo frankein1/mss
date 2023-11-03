@@ -38,10 +38,6 @@
   import { Breadcrumb, RoutePath, RouteTitle } from '~/utils/routing'
   import { EditFollowupInput } from '~/server/schema'
 
-  definePageMeta({
-    middleware: ['can-edit-followup', 'is-beneficiary-referent']
-  })
-
   const route = useRoute()
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
