@@ -61,20 +61,8 @@
     id: beneficiaryId
   })
 
-  const {
-    data: followupTypesData,
-    pending: followupTypesPending,
-    error: followupTypesError
-  } = await trpcClient.beneficiary.getBeneficiaryFollowupTypes.useQuery({
-    id: beneficiaryId
-  })
-
-  const pending = computed(
-    () => beneficiaryPending.value || followupTypesPending.value
-  )
-  const error = computed(
-    () => beneficiaryError.value || followupTypesError.value
-  )
+  const pending = computed(() => beneficiaryPending.value)
+  const error = computed(() => beneficiaryError.value)
 
   const beneficiary = computed(() => data.value?.beneficiary || null)
 
@@ -85,7 +73,7 @@
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
   const followupTypes = computed(() =>
-    (followupTypesData.value || []).map(t => t.name).join(', ')
+    (data.value?.followupTypes || []).map(t => t.name).join(', ')
   )
 
   onMounted(() => {

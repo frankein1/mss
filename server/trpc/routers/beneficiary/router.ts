@@ -5,7 +5,6 @@ import {
   exportBeneficiariesQuery,
   getBeneficiaryDocumentsQuery,
   searchBeneficiaryQuery,
-  getBeneficiaryFollowupTypesQuery,
   getBeneficiaryMinimalInfoQuery,
   deleteBeneficiaryMutation,
   createBeneficiaryMutation,
@@ -38,9 +37,6 @@ export const beneficiaryRouter = router({
   search: protectedProcedure
     .input(searchBeneficiaryQuery.inputValidation)
     .query(searchBeneficiaryQuery.execute),
-  getBeneficiaryFollowupTypes: protectedProcedure
-    .input(getBeneficiaryFollowupTypesQuery.inputValidation)
-    .query(getBeneficiaryFollowupTypesQuery.execute),
   getBeneficiaryDocuments: protectedProcedure
     .input(getBeneficiaryDocumentsQuery.inputValidation)
     .query(getBeneficiaryDocumentsQuery.execute),

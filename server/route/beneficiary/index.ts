@@ -1,7 +1,6 @@
 export * from './export.query'
 export * from './get-details.query'
 export * from './get-documents.query'
-export * from './get-followup-types.query'
 export * from './get-history.query'
 export * from './get-minimal-info.query'
 export * from './get-page.query'
