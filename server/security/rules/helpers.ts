@@ -53,6 +53,12 @@ export const isReferentFor = (
   target: SecurityTargetWithReferents & SecurityTargetWithStructure
 ) =>
   isInSameStructureAs(grantee, target, ['Referent']) &&
+  isPartOfReferents(grantee, target)
+
+export const isPartOfReferents = (
+  grantee: SecurityRuleGrantee,
+  target: SecurityTargetWithReferents & SecurityTargetWithStructure
+) =>
   target.referents.some(r =>
     typeof r === 'string' ? r === grantee.id : r.id === grantee.id
   )
