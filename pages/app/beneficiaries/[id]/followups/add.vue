@@ -40,10 +40,6 @@
   import { AddFollowupInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
-  definePageMeta({
-    middleware: 'is-beneficiary-referent'
-  })
-
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
   const route = useRoute()

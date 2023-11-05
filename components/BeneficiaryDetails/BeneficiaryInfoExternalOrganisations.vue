@@ -1,6 +1,7 @@
 <template>
   <BeneficiaryInfoSection
     v-if="hasOtherInformationSection"
+    id="externalOrganisations"
     title="Structures extérieures"
     :edit-link="editLink"
   >

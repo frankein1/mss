@@ -45,12 +45,12 @@
 <script lang="ts" setup>
   import { beneficiaryGirOptions } from '~/client/options/beneficiary'
   import { useAuthStore } from '~/store/auth'
-  import { canSetBeneficiaryNir } from '~/server/security/rules'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
+  import { hasAccessBeneficiaryField } from '~/security/permission'
 
   const authStore = useAuthStore()
 
   const hasNirAccess = computed(() =>
-    canSetBeneficiaryNir(authStore.userStructureType)
+    hasAccessBeneficiaryField(authStore.userStructureType, 'nir')
   )
 </script>

@@ -36,10 +36,6 @@
   import { RoutePath, Route } from '~/utils/routing'
   import type { BeneficiaryDraft } from '~/types/beneficiary'
 
-  definePageMeta({
-    middleware: ['can-set-health']
-  })
-
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
 

@@ -8,7 +8,7 @@ import {
   isReferentFor
 } from '~/server/security/rules/helpers'
 
-export const canViewBeneficiary = (
+export const canViewBeneficiaryGeneral = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>

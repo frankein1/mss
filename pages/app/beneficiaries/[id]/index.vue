@@ -79,10 +79,6 @@
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
 
-  definePageMeta({
-    middleware: 'is-beneficiary-referent'
-  })
-
   const route = useRoute()
   const trpcClient = useTrpcClient()
   const beneficiaryId = route.params.id as string
@@ -101,23 +97,14 @@
     id: beneficiaryId
   })
 
-  const {
-    data: followupTypesData,
-    pending: followupTypesPending,
-    error: followupTypesError
-  } = await trpcClient.beneficiary.getBeneficiaryFollowupTypes.useQuery({
-    id: beneficiaryId
-  })
-
   const beneficiary = computed(() => data.value?.beneficiary)
-
   const title = RouteTitle.AppBeneficiary(beneficiary.value || null)
 
   useHead({ title })
 
   const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
   const entourages = computed(() => data.value?.entourages || [])
-  const followupTypes = computed(() => followupTypesData.value || [])
+  const followupTypes = computed(() => data.value?.followupTypes || [])
 
   const authStore = useAuthStore()
   const canDelete = computed(() => {
@@ -134,13 +121,9 @@
     return RoutePath.AppBeneficiaries()
   })
 
-  const pending = computed(
-    () => beneficiaryPending.value || followupTypesPending.value
-  )
+  const pending = computed(() => beneficiaryPending.value)
 
-  const error = computed(
-    () => beneficiaryError.value || followupTypesError.value
-  )
+  const error = computed(() => beneficiaryError.value)
 
   function onBeneficiaryDeleted() {
     navigateTo(backLink.value)

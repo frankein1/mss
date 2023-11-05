@@ -16,7 +16,6 @@ import {
   canSaveToBeneficiaryBeneficiaryDraft,
   canEditBeneficiaryRelatives,
   canEditBeneficiaryHealthInfo,
-  canSetBeneficiaryNir,
   canEditBeneficiaryOccupationIncome,
   canEditBeneficiaryExternalOrganisations,
   SecurityRuleGrantee
@@ -24,6 +23,7 @@ import {
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { DraftRepo } from '~/server/database'
+import { hasAccessBeneficiaryField } from '~/security/permission'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
@@ -153,7 +153,7 @@ function prepareData(
 
     data = { ...data, ...otherHealthData }
 
-    if (canSetBeneficiaryNir(structure.type)) {
+    if (hasAccessBeneficiaryField(structure.type, 'nir')) {
       data = { ...data, socialSecurityNumber }
     }
   }

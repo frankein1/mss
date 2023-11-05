@@ -1,6 +1,7 @@
 <template>
   <BeneficiaryInfoSection
     v-if="hasTaxHouseholdsInfo"
+    id="taxHouseholds"
     title="Foyer fiscal"
     :edit-link="editLink"
   >

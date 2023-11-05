@@ -1,6 +1,7 @@
 <template>
   <BeneficiaryInfoSection
     v-if="hasEntourages"
+    id="entourages"
     title="Entourage"
     :edit-link="editLink"
   >

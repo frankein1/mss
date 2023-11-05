@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="hasAccess"
     class="feature-section fr-mt-1w"
     :class="{ 'fr-accordion': title }"
   >
@@ -43,13 +44,28 @@
 
 <script setup lang="ts">
   import { getRandomId } from '~/utils/random'
+  import {
+    BeneficiaryBlock,
+    hasAcessBeneficiaryBlock
+  } from '~/security/permission'
+  import { useAuthStore } from '~/store/auth'
 
-  defineProps<{
+  const props = defineProps<{
+    id: BeneficiaryBlock
     title?: string
     editLink?: string
   }>()
 
   const infoSectionId = computed(() => getRandomId('beneficiary-info-section-'))
+
+  const authStore = useAuthStore()
+  const { structureType } = authStore.getAuthUser
+
+  const hasAccess = computed(() => {
+    return structureType
+      ? hasAcessBeneficiaryBlock(structureType, props.id)
+      : false
+  })
 </script>
 
 <style scoped lang="scss">
