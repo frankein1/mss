@@ -85,5 +85,5 @@ export type {
   UploadBrowserDocumentInput
 } from './document.schema'
 
-export { addCommentSchema } from './comment.schema'
-export type { AddCommentInput } from './comment.schema'
+export { addCommentSchema, editCommentSchema } from './comment.schema'
+export type { AddCommentInput, EditCommentInput } from './comment.schema'

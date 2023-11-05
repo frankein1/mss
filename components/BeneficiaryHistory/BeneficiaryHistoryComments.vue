@@ -5,6 +5,8 @@
       :key="comment.id"
       class="fr-mb-1w"
       :comment="comment"
+      @comment-edited="emit('commentEdited', $event)"
+      @comment-deleted="emit('commentDeleted', $event)"
     />
     <BeneficiaryHistoryCommentAdd
       v-if="canAddComments"
@@ -32,6 +34,8 @@
 
   const emit = defineEmits<{
     commentAdded: [comment: HistoryItemComment]
+    commentEdited: [comment: HistoryItemComment]
+    commentDeleted: [comment: HistoryItemComment]
   }>()
 
   const canAddCommentsRule = computed(() =>

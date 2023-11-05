@@ -29,6 +29,7 @@ import {
   SecurityRuleGrantee
 } from '~/server/security/rules/types'
 import { FollowupRepo, HelpRequestRepo } from '~/server/database'
+import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 
 function filtersAppliesToFollowups(
   filters: BeneficiaryHistoryFilterInput
@@ -114,9 +115,8 @@ async function getFollowups(
     include: {
       ...historyItemInclude(user.id),
       comments: {
-        include: {
-          createdBy: { select: createdBySelect }
-        }
+        orderBy: { created: 'asc' },
+        include: COMMENT_RELATIONS_INCLUDE
       },
       types: true
     },
@@ -145,9 +145,8 @@ async function getHelpRequests(
     include: {
       ...historyItemInclude(user.id),
       comments: {
-        include: {
-          createdBy: { select: createdBySelect }
-        }
+        orderBy: { created: 'asc' },
+        include: COMMENT_RELATIONS_INCLUDE
       },
       type: true,
       instructorOrganization: {

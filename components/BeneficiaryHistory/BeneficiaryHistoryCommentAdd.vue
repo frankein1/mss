@@ -7,7 +7,7 @@
     <form
       ref="form"
       novalidate
-      class="new-comment-form"
+      class="comment-form"
       @submit.prevent="onAddComment"
     >
       <VeeTextarea
@@ -93,10 +93,5 @@
 <style>
   .comment-form-section {
     display: flex;
-  }
-
-  .new-comment-form {
-    width: 100%;
-    margin-right: 4px; /* Allow to display right ouline of the comment textarea */
   }
 </style>

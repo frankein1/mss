@@ -50,8 +50,8 @@ model User {
   role      UserRole
   status    UserStatus @default(value: Active)
 
-  accounts Account[]
-  comment  Comment[]
+  accounts        Account[]
+  createdComments Comment[] @relation(name: "created_by")
 
   aidantConnectAuthorisation Boolean?  @default(false) @map("aidant_connect_authorisation")
   lastAccess                 DateTime? @map("last_access")
@@ -1329,8 +1329,10 @@ model Comment {
   id String @id @default(uuid()) @db.Uuid
 
   created     DateTime? @default(now())
-  createdBy   User      @relation(fields: [createdById], references: [id])
+  createdBy   User      @relation(name: "created_by", fields: [createdById], references: [id])
   createdById String    @map("created_by_id") @db.Uuid
+
+  updated DateTime?
 
   content String
 

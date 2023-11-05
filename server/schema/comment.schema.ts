@@ -11,5 +11,12 @@ const addCommentSchema = z.object({
 
 type AddCommentInput = z.infer<typeof addCommentSchema>
 
-export { addCommentSchema }
-export type { AddCommentInput }
+const editCommentSchema = z.object({
+  content: stringConstraint.max(3000, maxStringLengthMessage(3000)),
+  commentId: z.string().uuid()
+})
+
+type EditCommentInput = z.infer<typeof editCommentSchema>
+
+export { addCommentSchema, editCommentSchema }
+export type { AddCommentInput, EditCommentInput }
