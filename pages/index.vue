@@ -11,7 +11,7 @@
             le suivi des bénéficiaires des structures d'accompagnement social.
           </p>
           <ul
-            class="fr-btns-group fr-btns-group--inline fr-btns-group--icon-left"
+            class="landing-actions fr-btns-group fr-btns-group--inline fr-btns-group--icon-left"
           >
             <li>
               <NuxtLink
@@ -165,7 +165,7 @@
       </section>
     </main>
     <section class="contact-section">
-      <div class="fr-container fr-py-5w">
+      <div class="fr-container">
         <h2>Nous contacter</h2>
         <p>
           Vous souhaitez en savoir plus sur Mon Suivi Social ? Envoyez-nous un
@@ -232,6 +232,18 @@
     }
   }
 
+  .landing-actions a {
+    font-size: 0.8rem !important;
+    padding: 0.25rem 0.75rem !important;
+    margin: 0 0.25rem 0.75rem !important;
+
+    @include dsfr-media-query.respond-from('lg') {
+      font-size: 1rem !important;
+      padding: 0.5rem 1rem !important;
+      margin: 0 0.5rem 1rem !important;
+    }
+  }
+
   .feature,
   .list-section {
     text-align: center;
@@ -276,6 +288,14 @@
 
   .list-section {
     gap: 2rem 5rem;
+  }
+
+  .contact-section div {
+    padding-block: 2.5rem 10rem;
+
+    @include dsfr-media-query.respond-from('xl') {
+      padding-block: 2.5rem 2.5rem;
+    }
   }
 
   .list-section div:nth-child(2) {

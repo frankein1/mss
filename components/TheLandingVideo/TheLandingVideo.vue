@@ -103,3 +103,15 @@
     }
   } = useRuntimeConfig()
 </script>
+
+<style lang="scss" scoped>
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
+  .fr-content-media {
+    margin: 0.5rem 0 !important;
+
+    @include dsfr-media-query.respond-from('md') {
+      margin: 2.5rem 0 !important;
+    }
+  }
+</style>
