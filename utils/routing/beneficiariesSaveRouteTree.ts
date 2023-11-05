@@ -4,16 +4,14 @@ import {
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
   canEditBeneficiaryExternalOrganisations,
-  canEditBeneficiary
-} from '~/server/security/rules'
-import {
+  canEditBeneficiaryGeneral,
   SecurityRuleGrantee,
   SecurityTargetWithReferents,
   SecurityTargetWithStructure
 } from '~/server/security'
 
 const beneficiariesSaveRouteAccessPermissions = {
-  [Route.AppBeneficiariesSaveInfo]: canEditBeneficiary,
+  [Route.AppBeneficiariesSaveInfo]: canEditBeneficiaryGeneral,
   [Route.AppBeneficiariesSaveTaxHousehold]: canEditBeneficiaryRelatives,
   [Route.AppBeneficiariesSaveEntourage]: canEditBeneficiaryRelatives,
   [Route.AppBeneficiariesSaveHealth]: canEditBeneficiaryHealthInfo,

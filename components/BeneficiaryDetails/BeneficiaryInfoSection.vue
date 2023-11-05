@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="!isHidden"
+    v-if="hasAccess"
     class="feature-section fr-mt-1w"
     :class="{ 'fr-accordion': title }"
   >
@@ -46,8 +46,8 @@
   import { getRandomId } from '~/utils/random'
   import {
     BeneficiaryBlock,
-    isHiddenBeneficiaryBlock
-  } from '~/client/permission'
+    hasAcessBeneficiaryBlock
+  } from '~/security/permission'
   import { useAuthStore } from '~/store/auth'
 
   const props = defineProps<{
@@ -61,9 +61,9 @@
   const authStore = useAuthStore()
   const { structureType } = authStore.getAuthUser
 
-  const isHidden = computed(() => {
+  const hasAccess = computed(() => {
     return structureType
-      ? isHiddenBeneficiaryBlock(structureType, props.id)
+      ? hasAcessBeneficiaryBlock(structureType, props.id)
       : false
   })
 </script>

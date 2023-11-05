@@ -5,11 +5,11 @@ import {
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,
   canViewBeneficiaryExternalOrganisations,
-  canViewBeneficiaryNir,
   canViewDocument,
   SecurityRuleGrantee
 } from '~/server/security/rules'
 import type { BeneficiaryWithRelations } from '~/types/beneficiary'
+import { hasAccessBeneficiaryField } from '~/security/permission'
 
 function getBeneficiaryMeta(
   user: SecurityRuleGrantee,
@@ -116,7 +116,7 @@ function getBeneficiaryHealth(
     gir: beneficiary.gir,
     doctor: beneficiary.doctor,
     healthAdditionalInformation: beneficiary.healthAdditionalInformation,
-    socialSecurityNumber: canViewBeneficiaryNir(structure.type)
+    socialSecurityNumber: hasAccessBeneficiaryField(structure.type, 'nir')
       ? beneficiary.socialSecurityNumber
       : undefined,
     insurance: beneficiary.insurance

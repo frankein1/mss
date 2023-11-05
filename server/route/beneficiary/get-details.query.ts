@@ -4,7 +4,7 @@ import { getBeneficiaryWithRelations } from '~/server/query/beneficiaires'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   SecurityRuleGrantee,
-  canViewBeneficiary
+  canViewBeneficiaryGeneral
 } from '~/server/security/rules'
 import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
 import { IdInput, idSchema } from '~/server/schema'
@@ -95,7 +95,7 @@ async function getFollowupTypes(
 const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
 
-  return canViewBeneficiary(grantee, beneficiary)
+  return canViewBeneficiaryGeneral(grantee, beneficiary)
 }
 
 const handler = async ({

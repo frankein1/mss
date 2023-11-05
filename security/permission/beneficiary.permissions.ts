@@ -49,20 +49,23 @@ const beneficiaryFormPermissions: {
   }
 }
 
-export function isHiddenBeneficiaryBlock(
+export function hasAcessBeneficiaryBlock(
   structureType: StructureType,
   blockKey: BeneficiaryBlock
 ) {
-  return beneficiaryFormPermissions[structureType].hiddenBlocks.includes(
+  return !beneficiaryFormPermissions[structureType].hiddenBlocks.includes(
     blockKey
   )
 }
 
-export function isHiddenBeneficiaryField(
-  structureType: StructureType,
+export function hasAccessBeneficiaryField(
+  structureType: StructureType | undefined,
   fieldKey: BeneficiaryHiddableFields
 ) {
-  return beneficiaryFormPermissions[structureType].hiddenFields.includes(
+  if (!structureType) {
+    return false
+  }
+  return !beneficiaryFormPermissions[structureType].hiddenFields.includes(
     fieldKey
   )
 }
