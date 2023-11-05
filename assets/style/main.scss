@@ -211,7 +211,7 @@ select:focus:not(:focus-visible) {
 .landing-main-container {
   flex: 1 1 auto;
   padding-inline: 0.5rem;
-  
+
   @include dsfr-media-query.respond-from('lg') {
     padding-inline: 1rem;
   }

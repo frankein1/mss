@@ -1,35 +1,31 @@
-import { prismaClient } from '~/server/prisma'
+import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { EditCommentInput, editCommentSchema } from '~/server/schema'
-import {
-  ProtectedAppContext,
-  forbiddenError,
-  notfoundError
-} from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { ProtectedAppContext } from '~/server/trpc'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { canEditComment } from '~/server/security/rules/comment'
+import { CommentRepo } from '~/server/database'
+
+const securityCheck = async (
+  user: SecurityRuleGrantee,
+  input: EditCommentInput
+) => {
+  const { commentId: id } = input
+  const comment = await CommentRepo.findUniqueOrThrow(user, {
+    where: { id }
+  })
+  return canEditComment(user, comment)
+}
 
 const handler = async ({
-  ctx: { user },
+  ctx: _ctx,
   input: { commentId, content }
 }: {
   ctx: ProtectedAppContext
   input: EditCommentInput
 }) => {
-  const comment = await prismaClient.comment.findUnique({
-    where: { id: commentId }
-  })
-
-  if (!comment) {
-    throw notfoundError()
-  }
-
-  if (!canEditComment(user, comment)) {
-    throw forbiddenError()
-  }
-
-  return await prismaClient.comment.update({
+  return await CommentRepo.prisma.update({
     where: { id: commentId },
     data: {
       content,
@@ -41,6 +37,14 @@ const handler = async ({
 
 export const editCommentMutation = createMutation({
   inputValidation: editCommentSchema,
-  securityCheck: AllowSecurityCheck,
-  handler
+  securityCheck,
+  handler,
+  auditLog: {
+    key: 'comment.edit',
+    target: 'Comment',
+    targetId: ({ routeResult }) => {
+      return routeResult.id
+    },
+    action: UserActivityType.UPDATE
+  }
 })

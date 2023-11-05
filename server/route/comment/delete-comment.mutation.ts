@@ -1,33 +1,28 @@
-import { prismaClient } from '~/server/prisma'
+import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { idSchema } from '~/server/schema'
-import {
-  ProtectedAppContext,
-  forbiddenError,
-  notfoundError
-} from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
+import { IdInput, idSchema } from '~/server/schema'
+import { ProtectedAppContext } from '~/server/trpc'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { canEditComment } from '~/server/security/rules/comment'
+import { CommentRepo } from '~/server/database'
+import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
+
+const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
+  const { id } = input
+  const comment = await CommentRepo.findUniqueOrThrow(user, {
+    where: { id }
+  })
+  return canEditComment(user, comment)
+}
 
 const handler = async ({
-  ctx: { user },
+  ctx: _ctx,
   input: { id }
 }: {
   ctx: ProtectedAppContext
   input: { id: string }
 }) => {
-  const comment = await prismaClient.comment.findUnique({ where: { id } })
-
-  if (!comment) {
-    throw notfoundError()
-  }
-
-  if (!canEditComment(user, comment)) {
-    throw forbiddenError()
-  }
-
-  return await prismaClient.comment.delete({
+  return await CommentRepo.prisma.delete({
     where: { id },
     include: COMMENT_RELATIONS_INCLUDE
   })
@@ -35,6 +30,14 @@ const handler = async ({
 
 export const deleteCommentMutation = createMutation({
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
-  handler
+  securityCheck,
+  handler,
+  auditLog: {
+    key: 'comment.delete',
+    target: 'Comment',
+    targetId: ({ routeResult }) => {
+      return routeResult.id
+    },
+    action: UserActivityType.DELETE
+  }
 })

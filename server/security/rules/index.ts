@@ -65,12 +65,7 @@ export {
   canViewAnyFollowupDetails
 } from './followup'
 
-export {
-  canAddCommentToFollowup,
-  canListCommentsToFollowup,
-  canAddCommentToHelpRequest,
-  canListCommentsToHelpRequest
-} from './comment'
+export { canAddComment, canListComments } from './comment'
 
 export {
   canViewHelpRequestDetails,

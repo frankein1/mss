@@ -2,23 +2,21 @@ import { NotificationType, Prisma, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { AddCommentInput, addCommentSchema } from '~/server/schema'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import {
-  SecurityTargetWithReferents,
-  SecurityTargetWithStructure,
-  canAddCommentToFollowup,
-  canAddCommentToHelpRequest
-} from '~/server/security/rules'
-import {
-  ProtectedAppContext,
-  forbiddenError,
-  invalidError
-} from '~/server/trpc'
+import { canAddComment, SecurityRuleGrantee } from '~/server/security'
+import { ProtectedAppContext, invalidError } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import {
-  AllowSecurityCheck,
-  SecurityRuleGrantee
-} from '~/server/security/rules/types'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
+
+const securityCheck = async (
+  user: SecurityRuleGrantee,
+  input: AddCommentInput
+) => {
+  const beneficiary = await getBeneficiarySecurityTarget(
+    user,
+    input.beneficiaryId
+  )
+  return canAddComment(user, beneficiary)
+}
 
 const handler = async ({
   ctx: { user },
@@ -38,9 +36,9 @@ const handler = async ({
 
   let comment
   if (input.isFollowup) {
-    comment = await addCommentToFollowup(input, user, beneficiary)
+    comment = await addCommentToFollowup(input, user)
   } else {
-    comment = await addCommentToHelpRequest(input, user, beneficiary)
+    comment = await addCommentToHelpRequest(input, user)
   }
 
   return comment
@@ -48,13 +46,8 @@ const handler = async ({
 
 function addCommentToFollowup(
   input: AddCommentInput,
-  user: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+  user: SecurityRuleGrantee
 ) {
-  if (!canAddCommentToFollowup(user, beneficiary)) {
-    throw forbiddenError()
-  }
-
   return prismaClient.$transaction(async transaction => {
     await addNewCommentNotificationForFollowup(transaction, input, user.id)
 
@@ -71,13 +64,8 @@ function addCommentToFollowup(
 
 function addCommentToHelpRequest(
   input: AddCommentInput,
-  user: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+  user: SecurityRuleGrantee
 ) {
-  if (!canAddCommentToHelpRequest(user, beneficiary)) {
-    throw forbiddenError()
-  }
-
   return prismaClient.$transaction(async transaction => {
     await addNewCommentNotificationForHelpRequest(transaction, input, user.id)
 
@@ -158,7 +146,7 @@ async function addNewCommentNotification(
 
 export const addCommentMutation = createMutation({
   inputValidation: addCommentSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler,
   auditLog: {
     key: 'comment.add',

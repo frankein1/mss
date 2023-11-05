@@ -20,10 +20,7 @@
 <script setup lang="ts">
   import { HistoryItem, HistoryItemComment, HistoryItemComments } from './types'
   import { useAuthStore } from '~/store/auth'
-  import {
-    canAddCommentToFollowup,
-    canAddCommentToHelpRequest
-  } from '~/server/security/rules'
+  import { canAddComment as canAddCommentsRule } from '~/server/security'
 
   const authStore = useAuthStore()
 
@@ -38,13 +35,7 @@
     commentDeleted: [comment: HistoryItemComment]
   }>()
 
-  const canAddCommentsRule = computed(() =>
-    props.history.isFollowup
-      ? canAddCommentToFollowup
-      : canAddCommentToHelpRequest
-  )
-
   const canAddComments = computed(() =>
-    canAddCommentsRule.value(authStore.getAuthUser, props.history.beneficiary)
+    canAddCommentsRule(authStore.getAuthUser, props.history.beneficiary)
   )
 </script>

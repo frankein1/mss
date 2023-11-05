@@ -87,8 +87,7 @@
     canViewHelpRequestDetails,
     canViewFollowupDetails,
     canViewFollowupPrivateSynthesis,
-    canListCommentsToFollowup,
-    canListCommentsToHelpRequest,
+    canListComments as canListCommentsRule,
     canViewHelpRequestPrivateSynthesis
   } from '~/server/security/rules'
   import { useAuthStore } from '~/store/auth'
@@ -141,14 +140,8 @@
       : canViewHelpRequestPrivateSynthesis(user.value, props.history)
   )
 
-  const canListCommentsRule = computed(() =>
-    props.history.isFollowup
-      ? canListCommentsToFollowup
-      : canListCommentsToHelpRequest
-  )
-
   const canListComments = computed(() =>
-    canListCommentsRule.value(user.value, props.history.beneficiary)
+    canListCommentsRule(user.value, props.history.beneficiary)
   )
 
   function onCommentAdded(comment: HistoryItemComment) {
