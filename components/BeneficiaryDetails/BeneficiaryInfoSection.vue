@@ -46,7 +46,7 @@
   import { getRandomId } from '~/utils/random'
   import {
     BeneficiaryBlock,
-    hasAcessBeneficiaryBlock
+    hasAccessBeneficiaryBlock
   } from '~/security/permission'
   import { useAuthStore } from '~/store/auth'
 
@@ -63,7 +63,7 @@
 
   const hasAccess = computed(() => {
     return structureType
-      ? hasAcessBeneficiaryBlock(structureType, props.id)
+      ? hasAccessBeneficiaryBlock(structureType, props.id)
       : false
   })
 </script>

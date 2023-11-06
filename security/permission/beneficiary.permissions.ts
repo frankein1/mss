@@ -49,7 +49,7 @@ const beneficiaryFormPermissions: {
   }
 }
 
-export function hasAcessBeneficiaryBlock(
+export function hasAccessBeneficiaryBlock(
   structureType: StructureType,
   blockKey: BeneficiaryBlock
 ) {
