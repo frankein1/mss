@@ -10,7 +10,6 @@
       <li>
         <button
           class="fr-btn fr-btn--secondary"
-          title="Annuler"
           type="button"
           @click="onCancel"
         >
@@ -20,7 +19,6 @@
       <li>
         <button
           class="fr-btn"
-          title="Quitter sans enregistrer"
           type="submit"
         >
           Quitter sans enregistrer
