@@ -285,7 +285,8 @@
         combobox,
         optionValues,
         optionRefs,
-        computed(() => props.disabled || props.readonly)
+        computed(() => props.disabled || props.readonly),
+        toRef(() => props.disabledOptions)
       )
     }
     return {
