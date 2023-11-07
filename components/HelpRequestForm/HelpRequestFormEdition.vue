@@ -24,7 +24,7 @@
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
-  import { canEditHelpRequestPrivateSynthesis } from '~/server/security/rules'
+  import { canEditHelpRequestPrivateSynthesis } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { pastStatusesFromStatus } from '~/utils/helpRequest'
   import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'

@@ -107,7 +107,7 @@
   import {
     canViewHelpRequestDetails as canViewHelpRequestDetailsRule,
     canEditHelpRequest
-  } from '~/server/security/rules'
+  } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'

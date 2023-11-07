@@ -1,10 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  SecurityRuleGrantee,
-  canDeleteHelpRequest
-} from '~/server/security/rules'
+import { SecurityRuleGrantee, canDeleteHelpRequest } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { HelpRequestRepo } from '~/server/database'
 

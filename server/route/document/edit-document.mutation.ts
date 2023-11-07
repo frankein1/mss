@@ -9,11 +9,8 @@ import {
   SecurityRuleGrantee,
   canEditDocument,
   canSetDocumentAsConfidential
-} from '~/server/security/rules'
-import {
-  ProtectedAppContext,
-  forbiddenError,
-} from '~/server/trpc'
+} from '~/server/security'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { DocumentRepo } from '~/server/database'
 
 const securityCheck = async (

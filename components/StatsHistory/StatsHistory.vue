@@ -181,7 +181,7 @@
 <script lang="ts" setup>
   import { AlertType } from '~~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
-  import { canExportStats } from '~/server/security/rules'
+  import { canExportStats } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { Options } from '~/utils/options'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'

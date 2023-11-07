@@ -7,7 +7,7 @@ import {
   canViewFollowup,
   canExportHistory,
   SecurityRuleGrantee
-} from '~/server/security/rules'
+} from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { createExport } from '~/utils/export/createExport'

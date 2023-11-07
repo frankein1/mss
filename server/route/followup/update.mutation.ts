@@ -13,15 +13,13 @@ import {
   canCreatePrescribingOrganization,
   canEditFollowup,
   canEditFollowupPrivateSynthesis
-} from '~/server/security/rules'
+} from '~/server/security'
 
-import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
-import { getFollowupSecurityTarget } from '~/server/query'
+import { getFollowupSecurityTarget, getStructureByUser } from '~/server/query'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
-import { getStructureByUser } from '~/server/query/structure'
-import { connect } from '~/utils/prisma'
+import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 
 const handler = async ({
   input,

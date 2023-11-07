@@ -1,4 +1,4 @@
-import { canViewAnyHelpRequestDetails } from '~/server/security/rules'
+import { canViewAnyHelpRequestDetails } from '~/server/security'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 export function prepareGetHelpRequestsPageSelect(user: SecurityRuleGrantee) {

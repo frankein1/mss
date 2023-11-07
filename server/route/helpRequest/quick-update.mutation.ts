@@ -6,10 +6,7 @@ import {
   QuickEditHelpRequestInput,
   quickEditHelpRequestSchema
 } from '~/server/schema'
-import {
-  SecurityRuleGrantee,
-  canEditHelpRequest
-} from '~/server/security/rules'
+import { SecurityRuleGrantee, canEditHelpRequest } from '~/server/security'
 import { HelpRequestRepo } from '~/server/database'
 
 const securityCheck = async (

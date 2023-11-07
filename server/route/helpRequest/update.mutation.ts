@@ -8,16 +8,16 @@ import {
   canCreatePrescribingOrganization,
   canEditHelpRequest,
   canEditHelpRequestPrivateSynthesis
-} from '~/server/security/rules'
-import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
+} from '~/server/security'
+import { prepareDocumentsMutations } from '~/utils/prisma'
 import {
   getHelpRequestWithRelations,
-  getHelpRequestsecurityTarget
+  getHelpRequestsecurityTarget,
+  getStructureByUser
 } from '~/server/query'
 import { HelpRequestRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { connect } from '~/utils/prisma'
-import { getStructureByUser } from '~/server/query/structure'
 
 const handler = async ({
   input,

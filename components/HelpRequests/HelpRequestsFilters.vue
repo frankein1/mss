@@ -29,7 +29,7 @@
   import {
     canViewAnyHelpRequestDetails,
     canOnlyListItsBeneficiaries
-  } from '~/server/security/rules'
+  } from '~/server/security'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'

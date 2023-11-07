@@ -18,7 +18,7 @@ import {
   canEditBeneficiaryOccupationIncome,
   canEditBeneficiaryExternalOrganisations,
   SecurityRuleGrantee
-} from '~/server/security/rules'
+} from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { BeneficiaryRepo, DraftRepo } from '~/server/database'

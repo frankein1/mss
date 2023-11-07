@@ -20,7 +20,7 @@
     FollowupSignalement
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { canEditFollowupPrivateSynthesis } from '~/server/security/rules'
+  import { canEditFollowupPrivateSynthesis } from '~/server/security'
   import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
   import { GetFollowupDetailsOutput } from '~/server/trpc/routers'

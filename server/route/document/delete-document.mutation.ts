@@ -3,7 +3,7 @@ import { createMutation } from '~/server/route'
 import { DeleteDocumentInput, deleteDocumentSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { beneficiarySecurityTargetInclude } from '~/server/query'
-import { SecurityRuleGrantee, canDeleteDocument } from '~/server/security/rules'
+import { SecurityRuleGrantee, canDeleteDocument } from '~/server/security'
 import { deleteUploadedFile } from '~/server/lib/s3'
 import { DocumentRepo } from '~/server/database'
 

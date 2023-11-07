@@ -80,7 +80,7 @@
   import type { HelpRequests, HelpRequestItem } from './types'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { HelpRequestSort } from '~/types/table'
-  import { canViewAnyHelpRequestDetails as canViewAnyHelpRequestDetailsRule } from '~/server/security/rules'
+  import { canViewAnyHelpRequestDetails as canViewAnyHelpRequestDetailsRule } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
 
   const authStore = useAuthStore()

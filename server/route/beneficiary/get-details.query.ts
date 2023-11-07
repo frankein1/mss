@@ -5,7 +5,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import {
   SecurityRuleGrantee,
   canViewBeneficiaryGeneral
-} from '~/server/security/rules'
+} from '~/server/security'
 import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
 import { IdInput, idSchema } from '~/server/schema'
 import { getBeneficiarySecurityTarget } from '~/server/query'

@@ -105,7 +105,7 @@
 <script lang="ts" setup>
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
   import { GetBeneficiaryOutput, DocumentItem } from '~/server/trpc/routers'
-  import { canEditDocument, canDeleteDocument } from '~/server/security/rules'
+  import { canEditDocument, canDeleteDocument } from '~/server/security'
   import { EditDocumentInput } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
   import { DocumentTag } from '~/types/document'

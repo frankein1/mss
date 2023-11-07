@@ -5,7 +5,7 @@ import {
   UpdateBeneficiaryDraftInput,
   updateBeneficiaryDraftSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canUpdateDraft } from '~/server/security/rules'
+import { SecurityRuleGrantee, canUpdateDraft } from '~/server/security'
 import type { BeneficiaryDraft } from '~/types/beneficiary'
 import { DraftRepo } from '~/server/database'
 

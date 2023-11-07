@@ -12,7 +12,7 @@ import {
   SecurityRuleGrantee,
   canAddDocument,
   canViewDocument
-} from '~/server/security/rules'
+} from '~/server/security'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
 import { DocumentRepo, NotificationRepo } from '~/server/database'

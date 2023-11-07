@@ -31,7 +31,7 @@
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
-  import { canEditBeneficiaryReferents } from '~/server/security/rules'
+  import { canEditBeneficiaryReferents } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'

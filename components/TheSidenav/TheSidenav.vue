@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-  import { canViewStats } from '~/server/security/rules'
+  import { canViewStats } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
 

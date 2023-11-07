@@ -12,14 +12,16 @@ import {
   SecurityRuleGrantee,
   canCreateFollowup,
   canCreatePrescribingOrganization
-} from '~/server/security/rules'
+} from '~/server/security'
 
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  getStructureByUser
+} from '~/server/query'
 import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
-import { getStructureByUser } from '~/server/query/structure'
 import { connect } from '~/utils/prisma'
 
 const handler = async ({
