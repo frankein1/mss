@@ -1,5 +1,6 @@
 <template>
   <FollowupForm
+    :permissions="permissions"
     :is-submitting="isSubmitting"
     :followup-types="followupTypes"
     :prescribing-organizations="prescribingOrganizations"
@@ -18,6 +19,7 @@
     FollowupStatus
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
+  import { FollowupPermissions } from '~/server/route'
   import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 
   const props = defineProps<{
@@ -25,6 +27,7 @@
     followupTypes: Array<FollowupType>
     prescribingOrganizations: Array<PrescribingOrganization>
     beneficiaryId: string
+    permissions: FollowupPermissions
   }>()
 
   const emit = defineEmits<{

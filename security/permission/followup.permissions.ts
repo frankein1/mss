@@ -12,6 +12,8 @@ export type FollowupHiddableFields =
   | 'ChefCabinet'
   | 'Prefet'
   | 'OrganismeMenace'
+  | 'signalements'
+  | 'interventions'
 
 type StructureTypePermissions = {
   hiddenFields: FollowupHiddableFields[]
@@ -28,10 +30,12 @@ const hiddenFields: FollowupHiddableFields[] = [
   'SecoursMedecinTraitant',
   'ChefCabinet',
   'Prefet',
-  'OrganismeMenace'
+  'OrganismeMenace',
+  'signalements',
+  'interventions'
 ]
 
-const followupFormPermissions: {
+const permissions: {
   [key in StructureType]: StructureTypePermissions
 } = {
   [StructureType.Association]: {
@@ -61,7 +65,7 @@ export function hasAccessFollowupField(
   if (!structureType) {
     return false
   }
-  return !followupFormPermissions[structureType].hiddenFields.includes(fieldKey)
+  return !permissions[structureType].hiddenFields.includes(fieldKey)
 }
 
 export function hasAccessfollowupFields(

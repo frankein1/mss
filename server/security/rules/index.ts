@@ -4,8 +4,9 @@ import type {
   SecurityTargetWithReferents,
   SecurityRule
 } from './types'
+import { AllowSecurityCheck } from './types'
 import { hasAllowedRole } from './helpers'
-export { hasAllowedRole }
+export { hasAllowedRole, AllowSecurityCheck }
 
 export type {
   SecurityRuleGrantee,

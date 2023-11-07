@@ -21,7 +21,8 @@
             class="fr-mx-auto"
           />
           <FollowupFormCreation
-            v-else-if="followupTypes && prescribingOrganizations"
+            v-else-if="followupTypes && prescribingOrganizations && permissions"
+            :permissions="permissions"
             :is-submitting="isSubmitting"
             :followup-types="followupTypes"
             :beneficiary-id="beneficiaryId"
@@ -54,6 +55,9 @@
       id: beneficiaryId
     })
 
+  const { data: permissions, error: permissionsError } =
+    await trpcClient.permissions.getFollowupPermissions.useQuery()
+
   const title = computed(() =>
     RouteTitle.AppBeneficiaryFollowupAdd(beneficiary.value || null)
   )
@@ -85,6 +89,9 @@
     }
     if (prescribingOrganizationsError.value) {
       return "La liste des organismes prescripteurs de votre structure n'a pas pu être chargée."
+    }
+    if (permissionsError.value) {
+      return "Les permissions n'ont pas pu être chargées."
     }
     return ''
   })

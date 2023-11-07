@@ -26,7 +26,7 @@
         />
       </div>
 
-      <div v-if="isMinistryAgent">
+      <div v-if="permissions.fields.numeroPegase">
         <VeeInput
           name="numeroPegase"
           :label="followupFieldLabels.numeroPegase"
@@ -43,7 +43,7 @@
         />
       </div>
 
-      <div v-if="isMinistryAgent">
+      <div v-if="permissions.fields.ministre">
         <VeeSelect
           name="ministre"
           :label="followupFieldLabels.ministre"
@@ -80,7 +80,7 @@
           <template #hint>
             <span class="fr-icon-information-line fr-fi--sm">
               <NuxtLink
-                v-if="canEditStructure"
+                v-if="permissions.actions.editStructure"
                 :to="RoutePath.AppStructureEdit()"
                 target="_self"
               >
@@ -100,7 +100,9 @@
           :label="followupFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
           :options="withEmptyValue(prescribingOrganizationOptions)"
-          :can-create-new-option="canCreatePrescribingOrganization"
+          :can-create-new-option="
+            permissions.actions.createPrescribingOrganization
+          "
         />
       </div>
 
@@ -130,7 +132,7 @@
       </div>
 
       <div
-        v-if="canSetPrivateSynthesis"
+        v-if="permissions.fields.privateSynthesis"
         class="fr-col-12"
       >
         <VeeTextarea
@@ -194,7 +196,7 @@
             />
           </div>
 
-          <template v-if="isMinistryAgent">
+          <template v-if="permissions.fields.classified">
             <div class="fr-fieldset__element fr-fieldset__element--inline">
               <VeeCheckbox
                 name="classified"
@@ -202,14 +204,20 @@
               />
             </div>
 
-            <div class="fr-fieldset__element fr-fieldset__element--inline">
+            <div
+              v-if="permissions.fields.forwardedToJustice"
+              class="fr-fieldset__element fr-fieldset__element--inline"
+            >
               <VeeCheckbox
                 name="forwardedToJustice"
                 :label="followupFieldLabels.forwardedToJustice"
               />
             </div>
 
-            <div class="fr-fieldset__element fr-mb-0">
+            <div
+              v-if="permissions.fields.interventions"
+              class="fr-fieldset__element fr-mb-0"
+            >
               <fieldset
                 class="fr-fieldset fr-mb-0"
                 aria-labelledby="followup-interventions-legend"
@@ -233,7 +241,10 @@
               </fieldset>
             </div>
 
-            <div class="fr-fieldset__element fr-mb-0">
+            <div
+              v-if="permissions.fields.signalements"
+              class="fr-fieldset__element fr-mb-0"
+            >
               <fieldset
                 class="fr-fieldset fr-mb-0"
                 aria-labelledby="followup-signalements-legend"
@@ -302,31 +313,21 @@
   } from '~/client/options/followup'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
-  import {
-    canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
-    canEditItsOwnStructure
-  } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
+  import { FollowupPermissions } from '~/server/route'
 
-  const authStore = useAuthStore()
-  const isMinistryAgent = useMinistryAgent()
-
-  const props = withDefaults(
-    defineProps<{
-      isSubmitting: boolean
-      followupTypes: Array<FollowupType>
-      prescribingOrganizations: Array<PrescribingOrganization>
-      beneficiaryId: string
-      medium: FollowupMedium
-      isRedirected: boolean
-      canSetPrivateSynthesis?: boolean
-      caughtErrors: FormErrors<AddFollowupInput | EditFollowupInput>
-    }>(),
-    { canSetPrivateSynthesis: true }
-  )
+  const props = defineProps<{
+    isSubmitting: boolean
+    followupTypes: Array<FollowupType>
+    prescribingOrganizations: Array<PrescribingOrganization>
+    beneficiaryId: string
+    medium: FollowupMedium
+    isRedirected: boolean
+    caughtErrors: FormErrors<AddFollowupInput | EditFollowupInput>
+    permissions: FollowupPermissions
+  }>()
 
   const emit = defineEmits<{
     submit: [payload: Event]
@@ -352,12 +353,4 @@
       }))
     return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
   })
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const canEditStructure = computed(() => canEditItsOwnStructure(user.value))
-
-  const canCreatePrescribingOrganization = computed(() =>
-    canCreatePrescribingOrganizationRule(user.value)
-  )
 </script>
