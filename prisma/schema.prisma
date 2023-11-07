@@ -276,8 +276,8 @@ model Followup {
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
-  createdById String? @map("created_by_id") @db.Uuid
-  createdBy   User?   @relation(name: "created_followups", fields: [createdById], references: [id])
+  createdById String @map("created_by_id") @db.Uuid
+  createdBy   User   @relation(name: "created_followups", fields: [createdById], references: [id])
 
   prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
   prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
@@ -357,8 +357,8 @@ model HelpRequest {
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
-  createdById String? @map("created_by_id") @db.Uuid
-  createdBy   User?   @relation(name: "created_help_requests", fields: [createdById], references: [id])
+  createdById String @map("created_by_id") @db.Uuid
+  createdBy   User   @relation(name: "created_help_requests", fields: [createdById], references: [id])
 
   prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
   prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
@@ -1342,6 +1342,8 @@ model Comment {
   followup   Followup? @relation(fields: [followupId], references: [id])
   followupId String?   @map("followup_id") @db.Uuid
 
+  notification Notification[]
+
   @@map("comment")
 }
 
@@ -1411,6 +1413,9 @@ model Notification {
 
   document   Document? @relation(fields: [documentId], references: [key])
   documentId String?   @map("document_id")
+
+  comment   Comment? @relation(fields: [commentId], references: [id])
+  commentId String?   @map("comment_id") @db.Uuid
 
   read Boolean? @default(false)
 
