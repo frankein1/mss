@@ -1,5 +1,5 @@
 <template>
-  <BeneficiaryFormLeave :id="draftId" />
+  <BeneficiaryFormLeave />
   <form
     ref="form"
     novalidate
@@ -82,6 +82,7 @@
   const saveTarget = ref<string | undefined>(undefined)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
+  const isNavigatingWithFormActions = ref(false)
 
   const breadcrumbLinks = computed(() => Breadcrumb.AppBeneficiariesAdd())
 
@@ -98,6 +99,7 @@
     handleSubmit,
     values => {
       emit('save', values, saveTarget.value)
+      isNavigatingWithFormActions.value = true
     }
   )
 
@@ -107,18 +109,26 @@
     beneficiaryFieldLabels
   )
 
-  function onCancel() {
+  function deleteDraft(onDone?: () => void) {
     useTrpcMutation({
       mutation: () =>
         useTrpcClient().beneficiaryDraft.delete.mutate({
           id: props.draftId
         }),
-      onSuccess: () => {
-        navigateTo(RoutePath.AppBeneficiariesAdd())
-      },
-      onFailure: () => {
-        navigateTo(RoutePath.AppBeneficiariesAdd())
-      }
+      onSuccess: onDone,
+      onFailure: onDone
+    })
+  }
+
+  useLeaveBeneficiaryFormConfirmation(isNavigatingWithFormActions, {
+    onLeave: () => deleteDraft()
+  })
+
+  function onCancel() {
+    isNavigatingWithFormActions.value = true
+
+    deleteDraft(() => {
+      navigateTo(RoutePath.AppBeneficiariesAdd())
     })
   }
 </script>
