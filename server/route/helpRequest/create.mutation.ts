@@ -5,10 +5,7 @@ import {
   CreateHelpRequestInput,
   createHelpRequestSchema
 } from '~/server/schema'
-import {
-  SecurityRuleGrantee,
-  canCreateHelpRequest
-} from '~/server/security/rules'
+import { SecurityRuleGrantee, canCreateHelpRequest } from '~/server/security'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import { HelpRequestRepo } from '~/server/database'

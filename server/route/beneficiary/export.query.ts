@@ -9,10 +9,7 @@ import {
   ExportBeneficiariesInput,
   exportBeneficiariesSchema
 } from '~/server/schema'
-import {
-  canExportBeneficiaries,
-  SecurityRuleGrantee
-} from '~/server/security/rules'
+import { canExportBeneficiaries, SecurityRuleGrantee } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { BENEFICIARY_RELATIONS_INCLUDE } from '~/utils/constants/beneficiary'

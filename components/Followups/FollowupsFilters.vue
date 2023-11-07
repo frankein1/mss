@@ -33,7 +33,7 @@
   import { followupFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options/ministry'
   import { EventCategory, FollowupFilterEventAction } from '~/types/matomo'
-  import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+  import { canOnlyListItsBeneficiaries } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
 
   const trpcClient = useTrpcClient()

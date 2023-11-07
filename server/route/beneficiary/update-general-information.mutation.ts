@@ -4,7 +4,7 @@ import {
   SecurityRuleGrantee,
   canViewBeneficiaryGeneral,
   canEditBeneficiaryReferents
-} from '~/server/security/rules'
+} from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import {

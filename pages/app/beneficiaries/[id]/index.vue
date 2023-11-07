@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { canDeleteBeneficiary } from '~/server/security/rules'
+  import { canDeleteBeneficiary } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'

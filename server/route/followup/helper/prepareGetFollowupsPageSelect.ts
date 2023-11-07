@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { canViewAnyFollowupDetails } from '~/server/security/rules'
+import { canViewAnyFollowupDetails } from '~/server/security'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 export function prepareGetFollowupsPageSelect(user: SecurityRuleGrantee) {

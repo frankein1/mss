@@ -3,7 +3,7 @@ import { createMutation } from '~/server/route'
 import {
   SecurityRuleGrantee,
   canEditBeneficiaryHealthInfo
-} from '~/server/security/rules'
+} from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import {

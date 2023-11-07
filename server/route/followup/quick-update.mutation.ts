@@ -6,7 +6,7 @@ import {
   QuickEditFollowupInput,
   quickEditFollowupSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canEditFollowup } from '~/server/security/rules'
+import { SecurityRuleGrantee, canEditFollowup } from '~/server/security'
 import { FollowupRepo } from '~/server/database'
 
 const handler = async ({

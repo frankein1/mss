@@ -89,7 +89,7 @@
     canViewFollowupPrivateSynthesis,
     canListComments as canListCommentsRule,
     canViewHelpRequestPrivateSynthesis
-  } from '~/server/security/rules'
+  } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
 
   const authStore = useAuthStore()

@@ -1,6 +1,6 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { canViewDraft } from '~/server/security/rules'
+import { canViewDraft } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { DraftRepo } from '~/server/database'

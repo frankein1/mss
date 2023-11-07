@@ -18,7 +18,7 @@
     canEditBeneficiaryExternalOrganisations as canEditBeneficiaryExternalOrganisationsRule,
     SecurityTargetWithReferents,
     SecurityTargetWithStructure
-  } from '~/server/security/rules'
+  } from '~/server/security'
 
   const authStore = useAuthStore()
 

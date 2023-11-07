@@ -31,7 +31,7 @@
   import type { FilterProp } from '~/types/filter'
   import { EventCategory, BeneficiaryFilterEventAction } from '~/types/matomo'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { canOnlyListItsBeneficiaries } from '~/server/security/rules'
+  import { canOnlyListItsBeneficiaries } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
 
   const trpcClient = useTrpcClient()

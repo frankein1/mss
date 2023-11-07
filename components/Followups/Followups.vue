@@ -50,7 +50,7 @@
     REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
   import type { FollowupFilterInput } from '~/server/schema'
-  import { canExportHistory } from '~/server/security/rules'
+  import { canExportHistory } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { useFiltersStore } from '~/store/filters'
   import { FollowupSort, SortOrder } from '~/types/table'

@@ -1,7 +1,7 @@
 import {
   canViewFollowupDetails,
   canViewFollowupPrivateSynthesis
-} from '~/server/security/rules'
+} from '~/server/security'
 import { FollowupWithRelations } from '~/server/query/followups'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 

@@ -295,7 +295,7 @@
     canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
     canEditItsOwnStructure,
     canCreateInstructorOrganization as canCreateInstructorOrganizationRule
-  } from '~/server/security/rules'
+  } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { toOptions, withEmptyValue } from '~/utils/options'

@@ -2,7 +2,7 @@ import { HelpRequestWithRelations } from '~/server/query/helpRequests'
 import {
   canViewHelpRequestDetails,
   canViewHelpRequestPrivateSynthesis
-} from '~/server/security/rules'
+} from '~/server/security'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 
 export function getHelpRequestAccessibleData(

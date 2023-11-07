@@ -1,7 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { SecurityRuleGrantee, canDeleteFollowup } from '~/server/security/rules'
+import { SecurityRuleGrantee, canDeleteFollowup } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { FollowupRepo } from '~/server/database'
 
