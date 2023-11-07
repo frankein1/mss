@@ -10,8 +10,10 @@ import {
   canCreateHelpRequest
 } from '~/server/security/rules'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import { HelpRequestRepo } from '~/server/database'
+import { connect } from '~/utils/prisma'
+import { isNewOption, newOptionToLabel } from '~/utils/options'
 
 const handler = async ({
   input,
@@ -43,11 +45,7 @@ const handler = async ({
         }
       }
     } else {
-      instructorOrganization = {
-        connect: {
-          id: instructorOrganizationId
-        }
-      }
+      instructorOrganization = connect(instructorOrganizationId)
     }
   }
 
@@ -62,40 +60,20 @@ const handler = async ({
         }
       }
     } else {
-      prescribingOrganization = {
-        connect: {
-          id: prescribingOrganizationId
-        }
-      }
+      prescribingOrganization = connect(prescribingOrganizationId)
     }
   }
 
   const helpRequest = await HelpRequestRepo.prisma.create({
     data: {
-      createdBy: {
-        connect: {
-          id: user.id
-        }
-      },
-      beneficiary: {
-        connect: {
-          id: beneficiaryId
-        }
-      },
-      type: {
-        connect: {
-          id: typeId
-        }
-      },
-      structure: {
-        connect: {
-          id: structure.id
-        }
-      },
+      createdBy: connect(user.id),
+      beneficiary: connect(beneficiaryId),
+      type: connect(typeId),
+      structure: connect(structure.id),
       ...otherData,
       financialSupport: financialSupport === 'true',
       externalStructure: externalStructure === 'true',
-      documents: prepareDocumentsMutations(input.documents, []),
+      documents: prepareDocumentsMutations(input.documents),
       instructorOrganization,
       prescribingOrganization
     },

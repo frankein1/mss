@@ -13,7 +13,6 @@ import {
 import {
   ProtectedAppContext,
   forbiddenError,
-  invalidError
 } from '~/server/trpc'
 import { DocumentRepo } from '~/server/database'
 
@@ -39,10 +38,6 @@ const handler = async ({
   const { key, beneficiaryId, ...data } = input
 
   const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
-
-  if (!beneficiary) {
-    throw invalidError()
-  }
 
   const document = await getDocumentSecurityTarget(user, key)
 

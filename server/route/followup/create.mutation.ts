@@ -15,11 +15,12 @@ import {
 } from '~/server/security/rules'
 
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import { FollowupRepo } from '~/server/database'
-import { isNewOption } from '~/utils/options'
+import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { getStructureByUser } from '~/server/query/structure'
+import { connect } from '~/utils/prisma'
 
 const handler = async ({
   input,
@@ -61,21 +62,22 @@ const handler = async ({
   } = input
 
   const signalementFields = {
-    ActionLogement,
-    Bailleur,
-    DeetsSiao,
-    Prefecture,
-    SecoursMedecinTraitant
+    ChefCabinet,
+    OrganismeMenace,
+    Prefet
   }
   const signalements = Object.entries(signalementFields)
     .filter(([_key, value]) => value != null)
     .map(([key, _value]) => key as FollowupSignalement)
 
   const interventionFields = {
-    ChefCabinet,
-    OrganismeMenace,
-    Prefet
+    ActionLogement,
+    Bailleur,
+    DeetsSiao,
+    Prefecture,
+    SecoursMedecinTraitant
   }
+
   const interventions = Object.entries(interventionFields)
     .filter(([_key, value]) => value != null)
     .map(([key, _value]) => key as FollowupIntervention)
@@ -91,31 +93,15 @@ const handler = async ({
         }
       }
     } else {
-      prescribingOrganization = {
-        connect: {
-          id: prescribingOrganizationId
-        }
-      }
+      prescribingOrganization = connect(prescribingOrganizationId)
     }
   }
 
   const fu = await FollowupRepo.prisma.create({
     data: {
-      structure: {
-        connect: {
-          id: structure.id
-        }
-      },
-      beneficiary: {
-        connect: {
-          id: beneficiaryId
-        }
-      },
-      createdBy: {
-        connect: {
-          id: user.id
-        }
-      },
+      structure: connect(structure.id),
+      beneficiary: connect(beneficiaryId),
+      createdBy: connect(user.id),
       signalements,
       interventions,
       prescribingOrganization,
