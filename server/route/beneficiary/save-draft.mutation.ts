@@ -1,7 +1,6 @@
 import { UserActivityType, Prisma } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { prismaClient } from '~/server/prisma'
 import {
   SaveDraftInput,
   SaveBeneficiaryGeneralInformationInput,
@@ -22,7 +21,7 @@ import {
 } from '~/server/security/rules'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
-import { DraftRepo } from '~/server/database'
+import { BeneficiaryRepo, DraftRepo } from '~/server/database'
 import { hasAccessBeneficiaryField } from '~/security/permission'
 
 const securityCheck = async (
@@ -56,22 +55,19 @@ const handler = async ({
   })
 
   const data = prepareData(ctx, input, beneficiaryDraft)
-
-  return await prismaClient.$transaction(async tx => {
-    const { id } = await tx.beneficiary.create({
-      data
-    })
-
-    if (beneficiaryDraft) {
-      await tx.draft.delete({
-        where: {
-          id: draftId
-        }
-      })
-    }
-
-    return { id }
+  const { id } = await BeneficiaryRepo.prisma.create({
+    data
   })
+
+  if (beneficiaryDraft) {
+    await DraftRepo.prisma.delete({
+      where: {
+        id: draftId
+      }
+    })
+  }
+
+  return { id }
 }
 
 function prepareData(
