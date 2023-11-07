@@ -344,10 +344,11 @@
   }
 
   function onSelectActiveOption() {
-    if (!activeOptionValue.value) {
-      return
-    }
-    if (selectedValues.value.includes(activeOptionValue.value)) {
+    if (
+      !activeOptionValue.value ||
+      selectedValues.value.includes(activeOptionValue.value) ||
+      props.disabledOptions.includes(activeOptionValue.value)
+    ) {
       return
     }
     selectedValues.value.push(activeOptionValue.value)
