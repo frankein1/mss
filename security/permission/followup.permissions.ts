@@ -12,6 +12,8 @@ export type FollowupHiddableFields =
   | 'ChefCabinet'
   | 'Prefet'
   | 'OrganismeMenace'
+  | 'signalements'
+  | 'interventions'
 
 type StructureTypePermissions = {
   hiddenFields: FollowupHiddableFields[]
@@ -28,7 +30,9 @@ const hiddenFields: FollowupHiddableFields[] = [
   'SecoursMedecinTraitant',
   'ChefCabinet',
   'Prefet',
-  'OrganismeMenace'
+  'OrganismeMenace',
+  'signalements',
+  'interventions'
 ]
 
 const followupFormPermissions: {

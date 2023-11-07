@@ -1,12 +1,12 @@
 <template>
   <FollowupForm
+    :permissions="permissions"
     :is-submitting="isSubmitting"
     :followup-types="followupTypes"
     :prescribing-organizations="prescribingOrganizations"
     :beneficiary-id="followup.beneficiaryId"
     :medium="values.medium"
     :is-redirected="values.redirected"
-    :can-set-private-synthesis="canSetPrivateSynthesis"
     :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
@@ -20,18 +20,16 @@
     FollowupSignalement
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { canEditFollowupPrivateSynthesis } from '~/server/security'
   import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
-  import { useAuthStore } from '~/store/auth'
   import { GetFollowupDetailsOutput } from '~/server/trpc/routers'
-
-  const authStore = useAuthStore()
+  import { FollowupFormPermission } from '~/server/route'
 
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: Array<FollowupType>
     prescribingOrganizations: Array<PrescribingOrganization>
     followup: GetFollowupDetailsOutput
+    permissions: FollowupFormPermission
   }>()
 
   const emit = defineEmits<{
@@ -62,12 +60,6 @@
         props.followup.signalements?.includes(key)
       ])
     )
-  )
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const canSetPrivateSynthesis = computed(() =>
-    canEditFollowupPrivateSynthesis(user.value, props.followup)
   )
 
   const initialDocumentIds = computed(
