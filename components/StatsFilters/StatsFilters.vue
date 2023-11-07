@@ -18,7 +18,7 @@
   import type { Options } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import { canViewStatsByReferent } from '~/server/security/rules'
+  import { canViewStatsByReferent } from '~/server/security'
 
   const isMinistryAgent = useMinistryAgent()
   const authStore = useAuthStore()

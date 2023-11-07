@@ -7,7 +7,7 @@ import {
   canViewBeneficiaryExternalOrganisations,
   canViewDocument,
   SecurityRuleGrantee
-} from '~/server/security/rules'
+} from '~/server/security'
 import type { BeneficiaryWithRelations } from '~/types/beneficiary'
 import { hasAccessBeneficiaryField } from '~/security/permission'
 

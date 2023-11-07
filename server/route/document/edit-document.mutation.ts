@@ -9,12 +9,8 @@ import {
   SecurityRuleGrantee,
   canEditDocument,
   canSetDocumentAsConfidential
-} from '~/server/security/rules'
-import {
-  ProtectedAppContext,
-  forbiddenError,
-  invalidError
-} from '~/server/trpc'
+} from '~/server/security'
+import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { DocumentRepo } from '~/server/database'
 
 const securityCheck = async (
@@ -39,10 +35,6 @@ const handler = async ({
   const { key, beneficiaryId, ...data } = input
 
   const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
-
-  if (!beneficiary) {
-    throw invalidError()
-  }
 
   const document = await getDocumentSecurityTarget(user, key)
 

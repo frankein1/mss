@@ -1,42 +1,55 @@
-import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
 import {
-  FollowupTarget,
-  prepareFollowupTypesMutations,
-  prepareMinistryData
-} from './helper/prepareFollowupData'
+  FollowupMedium,
+  UserActivityType,
+  FollowupSignalement,
+  FollowupIntervention
+} from '@prisma/client'
+import { prepareFollowupTypesMutations } from './helper/prepareFollowupData'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
-import { prismaClient } from '~/server/prisma'
 import {
   SecurityRuleGrantee,
+  canCreatePrescribingOrganization,
   canEditFollowup,
   canEditFollowupPrivateSynthesis
-} from '~/server/security/rules'
+} from '~/server/security'
 
-import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
-import {
-  FollowupWithRelations,
-  getFollowupSecurityTarget,
-  getFollowupWithRelations,
-  createPrescribingOrganizationIfNecesserary
-} from '~/server/query'
+import { getFollowupSecurityTarget, getStructureByUser } from '~/server/query'
+import { hasAccessfollowupFields } from '~/security/permission'
+import { FollowupRepo } from '~/server/database'
+import { isNewOption, newOptionToLabel } from '~/utils/options'
+import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 
-async function prepareFollowupData({
+const handler = async ({
   input,
-  transaction,
-  ctx,
-  target
+  ctx
 }: {
   input: EditFollowupInput
-  transaction: Prisma.TransactionClient
   ctx: ProtectedAppContext
-  target: FollowupTarget
-}): Promise<Prisma.FollowupUncheckedUpdateInput> {
-  const { structure, user } = ctx
-  const { type } = structure
-
+}) => {
+  const { user } = ctx
   const {
+    id,
+    types,
+    documents,
+    medium,
+    place,
+    redirected,
+    structureName,
+    thirdPersonName,
+    prescribingOrganizationId,
+    ministre,
+    date,
+    synthesis,
+    privateSynthesis,
+    status,
+    helpRequested,
+    dueDate,
+    firstFollowup,
+    numeroPegase,
+    classified,
+    forwardedToJustice,
     ActionLogement,
     Bailleur,
     DeetsSiao,
@@ -44,57 +57,73 @@ async function prepareFollowupData({
     SecoursMedecinTraitant,
     ChefCabinet,
     OrganismeMenace,
-    Prefet,
-    ...data
+    Prefet
   } = input
 
-  const ministryData = prepareMinistryData(
-    type,
-    { ActionLogement, Bailleur, DeetsSiao, Prefecture, SecoursMedecinTraitant },
-    { ChefCabinet, OrganismeMenace, Prefet },
-    data
-  )
-
-  const prescribingOrganizationId =
-    await createPrescribingOrganizationIfNecesserary(
-      transaction,
-      user,
-      input.prescribingOrganizationId
-    )
-
-  return {
-    ...data,
-    types: prepareFollowupTypesMutations(input.types, target.types),
-    documents: prepareDocumentsMutations(input.documents, target.documents),
-    place:
-      input.medium === FollowupMedium.ExternalAppointment ? input.place : null,
-    thirdPersonName:
-      input.medium === FollowupMedium.ThirdParty ? input.thirdPersonName : null,
-    privateSynthesis: canEditFollowupPrivateSynthesis(user, target)
-      ? input.privateSynthesis
-      : undefined,
-    structureName: input.redirected ? input.structureName : null,
-    prescribingOrganizationId,
-    ...ministryData
+  const interventionFields = {
+    ActionLogement,
+    Bailleur,
+    DeetsSiao,
+    Prefecture,
+    SecoursMedecinTraitant
   }
-}
 
-async function updateTransaction(
-  transaction: Prisma.TransactionClient,
-  input: EditFollowupInput,
-  ctx: ProtectedAppContext,
-  target: Exclude<FollowupWithRelations, null>
-) {
-  const data = await prepareFollowupData({
-    input,
-    transaction,
-    ctx,
-    target
-  })
+  const interventions = Object.entries(interventionFields)
+    .filter(([_key, value]) => value != null)
+    .map(([key, _value]) => key as FollowupIntervention)
 
-  const fu = await transaction.followup.update({
-    where: { id: input.id },
-    data,
+  const signalementFields = {
+    ChefCabinet,
+    OrganismeMenace,
+    Prefet
+  }
+
+  const signalements = Object.entries(signalementFields)
+    .filter(([_key, value]) => value != null)
+    .map(([key, _value]) => key as FollowupSignalement)
+
+  let prescribingOrganization
+  if (prescribingOrganizationId) {
+    if (isNewOption(prescribingOrganizationId)) {
+      prescribingOrganization = {
+        create: {
+          name: newOptionToLabel(prescribingOrganizationId || ''),
+          structureId: user.structureId || '',
+          createdById: user.id
+        }
+      }
+    } else {
+      prescribingOrganization = connect(prescribingOrganizationId)
+    }
+  }
+
+  const fu = await FollowupRepo.prisma.update({
+    where: {
+      id
+    },
+    data: {
+      signalements,
+      interventions,
+      prescribingOrganization,
+      types: prepareFollowupTypesMutations(types),
+      documents: prepareDocumentsMutations(documents),
+      structureName: redirected ? structureName : null,
+      medium,
+      place: medium === FollowupMedium.ExternalAppointment ? place : null,
+      thirdPersonName:
+        medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
+      ministre,
+      date,
+      synthesis,
+      privateSynthesis,
+      status,
+      helpRequested,
+      dueDate,
+      firstFollowup,
+      numeroPegase,
+      classified,
+      forwardedToJustice
+    },
     include: {
       beneficiary: {
         select: {
@@ -108,30 +137,36 @@ async function updateTransaction(
   return fu
 }
 
-const handler = async ({
-  input,
-  ctx
-}: {
-  input: EditFollowupInput
-  ctx: ProtectedAppContext
-}) => {
-  const target = await getFollowupWithRelations(ctx.user, input.id)
-
-  if (!target || !canEditFollowup(ctx.user, target)) {
-    throw forbiddenError()
-  }
-
-  return prismaClient.$transaction(transaction =>
-    updateTransaction(transaction, input, ctx, target)
-  )
-}
-
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditFollowupInput
 ) => {
   const target = await getFollowupSecurityTarget(user, input.id)
-  return canEditFollowup(user, target)
+  // CAN EDIT FU
+  if (!canEditFollowup(user, target)) {
+    return false
+  }
+  if (
+    isNewOption(input.prescribingOrganizationId) &&
+    !canCreatePrescribingOrganization(user)
+  ) {
+    return false
+  }
+  // CAN ACCESS ALL UPDATED FIELDS
+  const { type } = await getStructureByUser(user)
+  if (!hasAccessfollowupFields(type, Object.keys(input))) {
+    return false
+  }
+
+  // CAN EDIT PRIVATE SYNTHESIS
+  if (
+    input.privateSynthesis &&
+    !canEditFollowupPrivateSynthesis(user, target)
+  ) {
+    return false
+  }
+
+  return true
 }
 
 export const updateFollowupMutation = createMutation({

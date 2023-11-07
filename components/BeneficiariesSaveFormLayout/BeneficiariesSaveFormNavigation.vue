@@ -15,7 +15,7 @@
     canEditBeneficiaryHealthInfo as canEditBeneficiaryHealthInfoRule,
     canEditBeneficiaryOccupationIncome as canEditBeneficiaryOccupationIncomeRule,
     canEditBeneficiaryExternalOrganisations as canEditBeneficiaryExternalOrganisationsRule
-  } from '~/server/security/rules'
+  } from '~/server/security'
 
   const authStore = useAuthStore()
 

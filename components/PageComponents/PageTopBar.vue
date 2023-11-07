@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { canEditItsOwnStructure, canListUsers } from '~/server/security/rules'
+  import { canEditItsOwnStructure, canListUsers } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
   import { formatUserDisplayName } from '~/utils/user'

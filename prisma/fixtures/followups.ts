@@ -8,6 +8,7 @@ import {
 export const fixturesFollowups = [
   {
     id: 'e20b26f8-52fd-4620-8959-4cbb4623fb05',
+    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[0].id,
@@ -22,6 +23,7 @@ export const fixturesFollowups = [
   },
   {
     id: '8f8a083f-f04f-4977-9e07-8b88135c7210',
+    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[0].id,
@@ -33,6 +35,7 @@ export const fixturesFollowups = [
   },
   {
     id: '07e809c3-4b6e-4152-bde3-357c501c981f',
+    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[2].id,
@@ -48,6 +51,7 @@ export const fixturesFollowups = [
   },
   {
     id: 'b811a9d7-ada7-42ca-b809-926caaebaf52',
+    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[1].id,
@@ -60,6 +64,7 @@ export const fixturesFollowups = [
   },
   {
     id: 'b15eba7c-d00d-4de6-a227-75361066c322',
+    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
     status: 'InProgress',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[2].id,
@@ -75,6 +80,7 @@ export const fixturesFollowups = [
   },
   {
     id: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
+    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
     status: 'InProgress',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[3].id,

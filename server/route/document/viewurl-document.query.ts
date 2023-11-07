@@ -3,7 +3,7 @@ import { createMutation } from '~/server/route'
 import { CreateViewUrlInput, createViewUrlSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { beneficiarySecurityTargetInclude } from '~/server/query'
-import { SecurityRuleGrantee, canViewDocument } from '~/server/security/rules'
+import { SecurityRuleGrantee, canViewDocument } from '~/server/security'
 import { createSignedGetUrl } from '~/server/lib/s3'
 import { DocumentRepo } from '~/server/database'
 

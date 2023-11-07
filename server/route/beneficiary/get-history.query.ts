@@ -22,7 +22,7 @@ import {
   canListComments,
   canListBeneficiaryHelpRequests,
   canListBeneficiaryFollowups
-} from '~/server/security/rules'
+} from '~/server/security'
 import {
   AllowSecurityCheck,
   SecurityRuleGrantee

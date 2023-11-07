@@ -5,7 +5,7 @@ import {
   HelpRequestConstraints
 } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules'
+import { SecurityRuleGrantee } from '~/server/security'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
 function getFinancialHelpRequestCount(

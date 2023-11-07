@@ -65,7 +65,7 @@
   } from '~/utils/constants'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { canExportBeneficiaries } from '~/server/security/rules'
+  import { canExportBeneficiaries } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { BeneficiarySort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'

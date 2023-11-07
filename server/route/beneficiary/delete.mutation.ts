@@ -1,10 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import {
-  SecurityRuleGrantee,
-  canDeleteBeneficiary
-} from '~/server/security/rules'
+import { SecurityRuleGrantee, canDeleteBeneficiary } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { createMutation } from '~/server/route/createRoute'
 import { BeneficiaryRelativeRepo, BeneficiaryRepo } from '~/server/database'

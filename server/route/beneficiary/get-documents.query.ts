@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext, invalidError } from '~/server/trpc'
-import { SecurityRuleGrantee, canListDocuments } from '~/server/security/rules'
+import { SecurityRuleGrantee, canListDocuments } from '~/server/security'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   GetDocumentsInput,
