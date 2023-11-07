@@ -18,11 +18,10 @@ import {
   getBeneficiarySecurityTarget,
   getStructureByUser
 } from '~/server/query'
-import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
-import { connect } from '~/utils/prisma'
+import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 
 const handler = async ({
   input,
