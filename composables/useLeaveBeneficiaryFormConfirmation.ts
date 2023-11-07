@@ -1,8 +1,7 @@
-import { NavigationGuardNext } from 'vue-router'
 import BeneficiaryLeaveForm from '~/components/BeneficiaryLeaveForm/BeneficiaryLeaveForm.vue'
 
-export function useLeaveConfirmation() {
-  function confirmation(next: NavigationGuardNext) {
+export function useLeaveBeneficiaryFormConfirmation() {
+  onBeforeRouteLeave((_, __, next) => {
     useModal().open({
       title: 'Attention les informations seront perdues',
       contentComponent: BeneficiaryLeaveForm,
@@ -12,7 +11,5 @@ export function useLeaveConfirmation() {
       },
       triggerOpen: true
     })
-  }
-
-  return { confirmation }
+  })
 }

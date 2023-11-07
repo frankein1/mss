@@ -1,4 +1,5 @@
 <template>
+  <BeneficiaryFormLeave />
   <form
     ref="form"
     novalidate
@@ -106,8 +107,6 @@
     beneficiaryFieldLabels
   )
 
-  const leaveConfirmation = useLeaveConfirmation()
-
   function onCancel() {
     useTrpcMutation({
       mutation: () =>
@@ -122,8 +121,6 @@
       }
     })
   }
-
-  onBeforeRouteLeave((_, __, next) => leaveConfirmation.confirmation(next))
 </script>
 
 <style lang="scss" scoped>
