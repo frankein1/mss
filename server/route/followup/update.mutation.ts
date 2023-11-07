@@ -5,7 +5,7 @@ import {
   prepareMinistryData
 } from './helper/prepareFollowupData'
 import { createMutation } from '~/server/route'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
 import { prismaClient } from '~/server/prisma'
 import {
@@ -116,11 +116,6 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const target = await getFollowupWithRelations(ctx.user, input.id)
-
-  if (!target || !canEditFollowup(ctx.user, target)) {
-    throw forbiddenError()
-  }
-
   return prismaClient.$transaction(transaction =>
     updateTransaction(transaction, input, ctx, target)
   )
