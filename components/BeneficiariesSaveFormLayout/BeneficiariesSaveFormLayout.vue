@@ -1,5 +1,5 @@
 <template>
-  <BeneficiaryFormLeave />
+  <BeneficiaryFormLeave :id="draftId" />
   <form
     ref="form"
     novalidate
