@@ -14,5 +14,9 @@
 </template>
 
 <script setup lang="ts">
-  useLeaveBeneficiaryFormConfirmation()
+  const props = defineProps<{
+    id: string
+  }>()
+
+  useLeaveBeneficiaryFormConfirmation(props.id)
 </script>

@@ -1,5 +1,4 @@
 <template>
-  <BeneficiaryFormLeave />
   <form
     v-if="beneficiary"
     ref="form"
@@ -7,6 +6,7 @@
     class="fr-grid-row"
     @submit.prevent="onSubmit"
   >
+    <BeneficiaryFormLeave :id="beneficiary.id" />
     <BeneficiaryEditFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
       :current-route="currentRoute"
