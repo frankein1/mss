@@ -185,14 +185,17 @@
 
   function onEdit() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.Edit)
-    modal.open(
-      'Modifier le document',
-      BeneficiaryDocumentEditForm,
-      { document: props.document, beneficiary: props.beneficiary },
-      {
+    modal.open({
+      title: 'Modifier le document',
+      contentComponent: BeneficiaryDocumentEditForm,
+      contentComponentProps: {
+        document: props.document,
+        beneficiary: props.beneficiary
+      },
+      contentComponentEvents: {
         updateDocument: onUpdateDocument
       }
-    )
+    })
   }
 
   function onUpdateDocument(values: EditDocumentInput) {

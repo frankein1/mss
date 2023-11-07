@@ -1,21 +1,10 @@
-import { ComponentEmit, ComponentProps } from '~/types/vue'
-import type { ModalComponent } from '~/types/modal'
+import type { ModalComponent, OpenModalEvent } from '~/types/modal'
 
 export function useModal() {
   const { $globalEventEmitter } = useNuxtApp()
 
-  function openModal<M extends ModalComponent>(
-    title: string,
-    contentComponent: M,
-    contentComponentProps: ComponentProps<M>,
-    contentComponentEvents: ComponentEmit<M>
-  ) {
-    $globalEventEmitter.emit('openModal', {
-      title,
-      contentComponent,
-      contentComponentProps,
-      contentComponentEvents
-    })
+  function openModal<M extends ModalComponent>(options: OpenModalEvent<M>) {
+    $globalEventEmitter.emit('openModal', options)
   }
 
   function closeModal() {

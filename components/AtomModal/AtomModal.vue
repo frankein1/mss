@@ -58,6 +58,10 @@
   const contentComponentEvents: Ref<ComponentEmit<M> | undefined> =
     ref(undefined)
 
+  const dsfrModal = computed(() =>
+    modal.value ? window.dsfr(modal.value) : undefined
+  )
+
   onMounted(() => {
     modal.value?.addEventListener('dsfr.conceal', onClose)
     $globalEventEmitter.on('openModal', onOpen)
@@ -72,12 +76,17 @@
     title: _title,
     contentComponent: _contentComponent,
     contentComponentProps: _contentComponentProps,
-    contentComponentEvents: _contentComponentEvents
+    contentComponentEvents: _contentComponentEvents,
+    triggerOpen
   }: OpenModalEvent<M>) {
     title.value = _title
     contentComponent.value = _contentComponent
     contentComponentProps.value = _contentComponentProps
     contentComponentEvents.value = _contentComponentEvents
+
+    if (triggerOpen && modal.value) {
+      dsfrModal.value.modal.disclose()
+    }
   }
 
   function onClose() {
@@ -91,6 +100,6 @@
     if (!modal.value) {
       return
     }
-    window.dsfr(modal.value).modal.conceal()
+    dsfrModal.value.modal.conceal()
   }
 </script>
