@@ -15,12 +15,13 @@ import {
   canEditFollowupPrivateSynthesis
 } from '~/server/security/rules'
 
-import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import { getFollowupSecurityTarget } from '~/server/query'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { FollowupRepo } from '~/server/database'
-import { isNewOption } from '~/utils/options'
+import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { getStructureByUser } from '~/server/query/structure'
+import { connect } from '~/utils/prisma'
 
 const handler = async ({
   input,
@@ -61,25 +62,27 @@ const handler = async ({
     Prefet
   } = input
 
-  const signalementFields = {
+  const interventionFields = {
     ActionLogement,
     Bailleur,
     DeetsSiao,
     Prefecture,
     SecoursMedecinTraitant
   }
-  const signalements = Object.entries(signalementFields)
-    .filter(([_key, value]) => value != null)
-    .map(([key, _value]) => key as FollowupSignalement)
 
-  const interventionFields = {
+  const interventions = Object.entries(interventionFields)
+    .filter(([_key, value]) => value != null)
+    .map(([key, _value]) => key as FollowupIntervention)
+
+  const signalementFields = {
     ChefCabinet,
     OrganismeMenace,
     Prefet
   }
-  const interventions = Object.entries(interventionFields)
+
+  const signalements = Object.entries(signalementFields)
     .filter(([_key, value]) => value != null)
-    .map(([key, _value]) => key as FollowupIntervention)
+    .map(([key, _value]) => key as FollowupSignalement)
 
   let prescribingOrganization
   if (prescribingOrganizationId) {
@@ -92,11 +95,7 @@ const handler = async ({
         }
       }
     } else {
-      prescribingOrganization = {
-        connect: {
-          id: prescribingOrganizationId
-        }
-      }
+      prescribingOrganization = connect(prescribingOrganizationId)
     }
   }
 

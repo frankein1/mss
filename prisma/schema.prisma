@@ -1415,7 +1415,7 @@ model Notification {
   documentId String?   @map("document_id")
 
   comment   Comment? @relation(fields: [commentId], references: [id])
-  commentId String?   @map("comment_id") @db.Uuid
+  commentId String?  @map("comment_id") @db.Uuid
 
   read Boolean? @default(false)
 
