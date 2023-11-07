@@ -1,4 +1,5 @@
 <template>
+  <BeneficiaryFormLeave />
   <form
     v-if="beneficiary"
     ref="form"
@@ -6,7 +7,6 @@
     class="fr-grid-row"
     @submit.prevent="onSubmit"
   >
-    <BeneficiaryFormLeave :id="beneficiary.id" />
     <BeneficiaryEditFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
       :current-route="currentRoute"
@@ -95,6 +95,7 @@
   const saveTarget = ref<string | undefined>(undefined)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
+  const isNavigatingWithFormActions = ref(false)
 
   const breadcrumbLinks = computed(() =>
     Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
@@ -103,6 +104,8 @@
   const title = computed(() => RouteTitle[props.currentRoute]())
 
   useHead({ title: title.value })
+
+  useLeaveBeneficiaryFormConfirmation(isNavigatingWithFormActions)
 
   onMounted(() => {
     const { saved: _, ...query } = route.query
@@ -125,6 +128,7 @@
     handleSubmit,
     values => {
       emit('save', values, saveTarget.value)
+      isNavigatingWithFormActions.value = true
     }
   )
 
@@ -135,6 +139,8 @@
   )
 
   function onCancel() {
+    isNavigatingWithFormActions.value = true
+
     if (!props.beneficiary) {
       navigateTo(RoutePath.AppBeneficiaries())
     } else {

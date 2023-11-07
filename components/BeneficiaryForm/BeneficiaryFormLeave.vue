@@ -5,18 +5,9 @@
     It could be turned into a composable only once fixed.
   -->
   <button
-    ref="cancelBtn"
     data-fr-opened="false"
     aria-controls="global-modal"
     type="button"
     hidden
   ></button>
 </template>
-
-<script setup lang="ts">
-  const props = defineProps<{
-    id: string
-  }>()
-
-  useLeaveBeneficiaryFormConfirmation(props.id)
-</script>
