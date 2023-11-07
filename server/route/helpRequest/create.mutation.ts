@@ -7,9 +7,8 @@ import {
 } from '~/server/schema'
 import { SecurityRuleGrantee, canCreateHelpRequest } from '~/server/security'
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import { HelpRequestRepo } from '~/server/database'
-import { connect } from '~/utils/prisma'
+import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 
 const handler = async ({

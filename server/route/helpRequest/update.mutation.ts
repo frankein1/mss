@@ -9,7 +9,6 @@ import {
   canEditHelpRequest,
   canEditHelpRequestPrivateSynthesis
 } from '~/server/security'
-import { prepareDocumentsMutations } from '~/utils/prisma'
 import {
   getHelpRequestWithRelations,
   getHelpRequestsecurityTarget,
@@ -17,7 +16,7 @@ import {
 } from '~/server/query'
 import { HelpRequestRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
-import { connect } from '~/utils/prisma'
+import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 
 const handler = async ({
   input,
