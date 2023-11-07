@@ -4,7 +4,8 @@ export function useExpandMenu(
   expandableElement: Ref<HTMLElement | null>,
   optionValues: ComputedRef<string[]>,
   optionRefs: { [key: string]: Ref<HTMLElement | null> },
-  disabled?: Ref<boolean>
+  disabled?: Ref<boolean>,
+  disabledOptions?: Ref<string[]>
 ) {
   /**
    * Indicates whether the listbox is expanded or not
@@ -51,7 +52,95 @@ export function useExpandMenu(
       listbox.value.clientHeight < listbox.value.scrollHeight
   )
 
-  watch(optionValues, () => changeActiveIndex(0), { deep: true })
+  const firstIndex = computed(() => {
+    let firstIndex = 0
+
+    if (!disabledOptions) {
+      return firstIndex
+    }
+
+    let firstIsDisabled = true
+
+    while (firstIsDisabled && firstIndex < optionValues.value.length) {
+      firstIsDisabled = disabledOptions.value.includes(
+        optionValues.value[firstIndex]
+      )
+
+      if (firstIsDisabled) {
+        firstIndex++
+      }
+    }
+
+    return firstIndex
+  })
+
+  const lastIndex = computed(() => {
+    let lastIndex = optionValues.value.length - 1
+
+    if (!disabledOptions) {
+      return lastIndex
+    }
+
+    let lastIsDisabled = true
+
+    while (lastIsDisabled && lastIndex >= 0) {
+      lastIsDisabled = disabledOptions.value.includes(
+        optionValues.value[lastIndex]
+      )
+
+      if (lastIsDisabled) {
+        lastIndex--
+      }
+    }
+
+    return lastIndex
+  })
+
+  const nextIndex = computed(() => {
+    let nextIndex = activeIndex.value + 1
+
+    if (!disabledOptions) {
+      return nextIndex
+    }
+
+    let nextIsDisabled = true
+
+    while (nextIsDisabled && nextIndex < optionValues.value.length) {
+      nextIsDisabled = disabledOptions.value.includes(
+        optionValues.value[nextIndex]
+      )
+
+      if (nextIsDisabled) {
+        nextIndex++
+      }
+    }
+
+    return nextIndex
+  })
+
+  const prevIndex = computed(() => {
+    let prevIndex = activeIndex.value - 1
+
+    if (!disabledOptions) {
+      return prevIndex
+    }
+
+    let prevIsDisabled = true
+
+    while (prevIsDisabled && prevIndex >= 0) {
+      prevIsDisabled = disabledOptions.value.includes(
+        optionValues.value[prevIndex]
+      )
+
+      if (prevIsDisabled) {
+        prevIndex--
+      }
+    }
+
+    return prevIndex
+  })
+
+  watch(optionValues, () => changeActiveIndex(firstIndex.value), { deep: true })
 
   watch(expanded, _expanded => {
     // As Vue2 removes attribute when set to a falsy value, it can not directly binded in the template
@@ -92,13 +181,13 @@ export function useExpandMenu(
     // Keyboard interactions on the expanded listbox
     switch (e.key) {
       case 'ArrowDown':
-        return changeActiveIndex(activeIndex.value + 1)
+        return changeActiveIndex(nextIndex.value)
       case 'ArrowUp':
-        return changeActiveIndex(activeIndex.value - 1)
+        return changeActiveIndex(prevIndex.value)
       case 'End':
-        return changeActiveIndex(optionValues.value.length - 1)
+        return changeActiveIndex(lastIndex.value)
       case 'Home':
-        return changeActiveIndex(0)
+        return changeActiveIndex(firstIndex.value)
       case 'Escape':
         onUpdateMenuState(false)
         e.stopPropagation()
