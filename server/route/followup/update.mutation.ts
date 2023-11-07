@@ -15,12 +15,13 @@ import {
   canEditFollowupPrivateSynthesis
 } from '~/server/security/rules'
 
-import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import { getFollowupSecurityTarget } from '~/server/query'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption } from '~/utils/options'
 import { getStructureByUser } from '~/server/query/structure'
+import { connect } from '~/utils/prisma'
 
 const handler = async ({
   input,
@@ -92,11 +93,7 @@ const handler = async ({
         }
       }
     } else {
-      prescribingOrganization = {
-        connect: {
-          id: prescribingOrganizationId
-        }
-      }
+      prescribingOrganization = connect(prescribingOrganizationId)
     }
   }
 

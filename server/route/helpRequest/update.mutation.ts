@@ -9,7 +9,7 @@ import {
   canEditHelpRequest,
   canEditHelpRequestPrivateSynthesis
 } from '~/server/security/rules'
-import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import {
   getHelpRequestWithRelations,
   getHelpRequestsecurityTarget

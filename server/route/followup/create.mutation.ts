@@ -15,11 +15,12 @@ import {
 } from '~/server/security/rules'
 
 import { getBeneficiarySecurityTarget } from '~/server/query'
-import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { getStructureByUser } from '~/server/query/structure'
+import { connect } from '~/utils/prisma'
 
 const handler = async ({
   input,
@@ -91,31 +92,15 @@ const handler = async ({
         }
       }
     } else {
-      prescribingOrganization = {
-        connect: {
-          id: prescribingOrganizationId
-        }
-      }
+      prescribingOrganization = connect(prescribingOrganizationId)
     }
   }
 
   const fu = await FollowupRepo.prisma.create({
     data: {
-      structure: {
-        connect: {
-          id: structure.id
-        }
-      },
-      beneficiary: {
-        connect: {
-          id: beneficiaryId
-        }
-      },
-      createdBy: {
-        connect: {
-          id: user.id
-        }
-      },
+      structure: connect(structure.id),
+      beneficiary: connect(beneficiaryId),
+      createdBy: connect(user.id),
       signalements,
       interventions,
       prescribingOrganization,
