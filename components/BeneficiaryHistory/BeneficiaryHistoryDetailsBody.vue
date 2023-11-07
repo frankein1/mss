@@ -161,17 +161,17 @@
   }
 
   function onDelete() {
-    useModal().open(
-      props.history.isFollowup
+    useModal().open({
+      title: props.history.isFollowup
         ? "Supprimer la synthèse d'entretien"
         : "Supprimer l'instruction de demande d'aide",
-      BeneficiaryHistoryDeleteForm,
-      {
+      contentComponent: BeneficiaryHistoryDeleteForm,
+      contentComponentProps: {
         historyItemId: props.history.id,
         isFollowup: props.history.isFollowup
       },
-      { deleted: onHistoryItemDeleted }
-    )
+      contentComponentEvents: { deleted: onHistoryItemDeleted }
+    })
   }
 
   function onHistoryItemDeleted() {

@@ -72,12 +72,17 @@
     title: _title,
     contentComponent: _contentComponent,
     contentComponentProps: _contentComponentProps,
-    contentComponentEvents: _contentComponentEvents
+    contentComponentEvents: _contentComponentEvents,
+    triggerOpen
   }: OpenModalEvent<M>) {
     title.value = _title
     contentComponent.value = _contentComponent
     contentComponentProps.value = _contentComponentProps
     contentComponentEvents.value = _contentComponentEvents
+
+    if (triggerOpen && modal.value) {
+      window.dsfr(modal.value).modal.disclose()
+    }
   }
 
   function onClose() {

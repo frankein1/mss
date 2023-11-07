@@ -102,12 +102,11 @@
   })
 
   function deleteConfirm() {
-    modal.open(
-      'Confirmer la suppression du commentaire',
-      BeneficiaryHistoryCommentDeleteConfirm,
-      {},
-      { delete: onDeleteComment }
-    )
+    modal.open({
+      title: 'Confirmer la suppression du commentaire',
+      contentComponent: BeneficiaryHistoryCommentDeleteConfirm,
+      contentComponentEvents: { delete: onDeleteComment }
+    })
   }
 
   function onDeleteComment() {
