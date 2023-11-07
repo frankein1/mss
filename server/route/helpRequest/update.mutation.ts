@@ -9,13 +9,15 @@ import {
   canEditHelpRequest,
   canEditHelpRequestPrivateSynthesis
 } from '~/server/security/rules'
-import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { prepareDocumentsMutations } from '~/utils/prisma/prepareDocumentMutations'
 import {
   getHelpRequestWithRelations,
   getHelpRequestsecurityTarget
 } from '~/server/query'
-import { HelpRequestRepo, StructureRepo } from '~/server/database'
-import { isNewOption } from '~/utils/options'
+import { HelpRequestRepo } from '~/server/database'
+import { isNewOption, newOptionToLabel } from '~/utils/options'
+import { connect } from '~/utils/prisma'
+import { getStructureByUser } from '~/server/query/structure'
 
 const handler = async ({
   input,
@@ -51,11 +53,7 @@ const handler = async ({
         }
       }
     } else {
-      instructorOrganization = {
-        connect: {
-          id: instructorOrganizationId
-        }
-      }
+      instructorOrganization = connect(instructorOrganizationId)
     }
   }
 
@@ -70,22 +68,14 @@ const handler = async ({
         }
       }
     } else {
-      prescribingOrganization = {
-        connect: {
-          id: prescribingOrganizationId
-        }
-      }
+      prescribingOrganization = connect(prescribingOrganizationId)
     }
   }
 
   const helpRequest = await HelpRequestRepo.prisma.update({
     where: { id },
     data: {
-      type: {
-        connect: {
-          id: typeId
-        }
-      },
+      type: connect(typeId),
       financialSupport: financialSupport === 'true',
       externalStructure: externalStructure === 'true',
       documents: prepareDocumentsMutations(documents, target.documents),
@@ -137,14 +127,7 @@ const securityCheck = async (
     return false
   }
 
-  const { type } = await StructureRepo.findUniqueOrThrow(user, {
-    where: {
-      id: user.structureId || ''
-    },
-    select: {
-      type: true
-    }
-  })
+  const { type } = await getStructureByUser(user)
   if (
     (input.numeroPegase || input.ministre) &&
     type !== StructureType.Ministere
