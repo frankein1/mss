@@ -1,4 +1,5 @@
 <template>
+  <BeneficiaryFormLeave />
   <form
     v-if="beneficiary"
     ref="form"
