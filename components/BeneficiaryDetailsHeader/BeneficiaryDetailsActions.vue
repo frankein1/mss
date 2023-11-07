@@ -59,12 +59,12 @@
   )
 
   function onDelete() {
-    useModal().open(
-      'Supprimer la fiche bénéficiaire',
-      BeneficiaryDeleteForm,
-      { beneficiaryId: props.beneficiaryId },
-      { deleted: () => emit('deleted') }
-    )
+    useModal().open({
+      title: 'Supprimer la fiche bénéficiaire',
+      contentComponent: BeneficiaryDeleteForm,
+      contentComponentProps: { beneficiaryId: props.beneficiaryId },
+      contentComponentEvents: { deleted: () => emit('deleted') }
+    })
   }
 </script>
 
