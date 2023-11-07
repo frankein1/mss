@@ -1,31 +1,55 @@
-import { Prisma, FollowupMedium, UserActivityType } from '@prisma/client'
 import {
-  prepareFollowupTypesMutations,
-  prepareMinistryData
-} from './helper/prepareFollowupData'
+  FollowupIntervention,
+  FollowupMedium,
+  FollowupSignalement,
+  UserActivityType
+} from '@prisma/client'
+import { prepareFollowupTypesMutations } from './helper/prepareFollowupData'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
-import { prismaClient } from '~/server/prisma'
-import { SecurityRuleGrantee, canCreateFollowup } from '~/server/security/rules'
-
 import {
-  createPrescribingOrganizationIfNecesserary,
-  getBeneficiarySecurityTarget
-} from '~/server/query'
-import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+  SecurityRuleGrantee,
+  canCreateFollowup,
+  canCreatePrescribingOrganization
+} from '~/server/security/rules'
 
-async function prepareFollowupData({
+import { getBeneficiarySecurityTarget } from '~/server/query'
+import { prepareDocumentsMutations } from '~/utils/document/prepareDocumentMutations'
+import { FollowupRepo } from '~/server/database'
+import { isNewOption } from '~/utils/options'
+import { hasAccessfollowupFields } from '~/security/permission'
+import { getStructureByUser } from '~/server/query/structure'
+
+const handler = async ({
   input,
-  transaction,
-  ctx: { user, structure }
+  ctx
 }: {
   input: AddFollowupInput
-  transaction: Prisma.TransactionClient
   ctx: ProtectedAppContext
-}): Promise<Prisma.FollowupUncheckedCreateInput> {
-  const { type } = structure
+}) => {
+  const { structure, user } = ctx
   const {
+    beneficiaryId,
+    types,
+    documents,
+    medium,
+    place,
+    redirected,
+    structureName,
+    thirdPersonName,
+    prescribingOrganizationId,
+    ministre,
+    date,
+    synthesis,
+    privateSynthesis,
+    status,
+    helpRequested,
+    dueDate,
+    firstFollowup,
+    numeroPegase,
+    classified,
+    forwardedToJustice,
     ActionLogement,
     Bailleur,
     DeetsSiao,
@@ -33,49 +57,87 @@ async function prepareFollowupData({
     SecoursMedecinTraitant,
     ChefCabinet,
     OrganismeMenace,
-    Prefet,
-    ...data
+    Prefet
   } = input
 
-  const ministryData = prepareMinistryData(
-    type,
-    { ActionLogement, Bailleur, DeetsSiao, Prefecture, SecoursMedecinTraitant },
-    { ChefCabinet, OrganismeMenace, Prefet },
-    data
-  )
-
-  const prescribingOrganizationId =
-    await createPrescribingOrganizationIfNecesserary(
-      transaction,
-      user,
-      input.prescribingOrganizationId
-    )
-
-  return {
-    ...data,
-    structureId: structure.id,
-    types: prepareFollowupTypesMutations(input.types),
-    documents: prepareDocumentsMutations(input.documents),
-    createdById: user.id,
-    place:
-      input.medium === FollowupMedium.ExternalAppointment ? input.place : null,
-    thirdPersonName:
-      input.medium === FollowupMedium.ThirdParty ? input.thirdPersonName : null,
-    structureName: input.redirected ? input.structureName : null,
-    prescribingOrganizationId,
-    ...ministryData
+  const signalementFields = {
+    ActionLogement,
+    Bailleur,
+    DeetsSiao,
+    Prefecture,
+    SecoursMedecinTraitant
   }
-}
+  const signalements = Object.entries(signalementFields)
+    .filter(([_key, value]) => value != null)
+    .map(([key, _value]) => key as FollowupSignalement)
 
-async function createTransaction(
-  transaction: Prisma.TransactionClient,
-  input: AddFollowupInput,
-  ctx: ProtectedAppContext
-) {
-  const data = await prepareFollowupData({ input, transaction, ctx })
+  const interventionFields = {
+    ChefCabinet,
+    OrganismeMenace,
+    Prefet
+  }
+  const interventions = Object.entries(interventionFields)
+    .filter(([_key, value]) => value != null)
+    .map(([key, _value]) => key as FollowupIntervention)
 
-  const fu = await transaction.followup.create({
-    data,
+  let prescribingOrganization
+  if (prescribingOrganizationId) {
+    if (isNewOption(prescribingOrganizationId)) {
+      prescribingOrganization = {
+        create: {
+          name: newOptionToLabel(prescribingOrganizationId || ''),
+          structureId: user.structureId || '',
+          createdById: user.id
+        }
+      }
+    } else {
+      prescribingOrganization = {
+        connect: {
+          id: prescribingOrganizationId
+        }
+      }
+    }
+  }
+
+  const fu = await FollowupRepo.prisma.create({
+    data: {
+      structure: {
+        connect: {
+          id: structure.id
+        }
+      },
+      beneficiary: {
+        connect: {
+          id: beneficiaryId
+        }
+      },
+      createdBy: {
+        connect: {
+          id: user.id
+        }
+      },
+      signalements,
+      interventions,
+      prescribingOrganization,
+      types: prepareFollowupTypesMutations(types),
+      documents: prepareDocumentsMutations(documents),
+      structureName: redirected ? structureName : null,
+      medium,
+      place: medium === FollowupMedium.ExternalAppointment ? place : null,
+      thirdPersonName:
+        medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
+      ministre,
+      date,
+      synthesis,
+      privateSynthesis,
+      status,
+      helpRequested,
+      dueDate,
+      firstFollowup,
+      numeroPegase,
+      classified,
+      forwardedToJustice
+    },
     include: {
       beneficiary: {
         select: {
@@ -89,18 +151,6 @@ async function createTransaction(
   return fu
 }
 
-const handler = ({
-  input,
-  ctx
-}: {
-  input: AddFollowupInput
-  ctx: ProtectedAppContext
-}) => {
-  return prismaClient.$transaction(transaction =>
-    createTransaction(transaction, input, ctx)
-  )
-}
-
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: AddFollowupInput
@@ -109,7 +159,21 @@ const securityCheck = async (
     user,
     input.beneficiaryId
   )
-  return canCreateFollowup(user, beneficiary)
+  if (!canCreateFollowup(user, beneficiary)) {
+    return false
+  }
+  if (
+    isNewOption(input.prescribingOrganizationId) &&
+    !canCreatePrescribingOrganization(user)
+  ) {
+    return false
+  }
+  const { type } = await getStructureByUser(user)
+
+  if (!hasAccessfollowupFields(type, Object.keys(input))) {
+    return false
+  }
+  return true
 }
 
 export const createFollowupMutation = createMutation({

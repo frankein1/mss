@@ -6,6 +6,10 @@ export type Options = Map<string, string>
 export const labelsToOptions = (object: Record<string, string>): Options =>
   new Map(Object.entries(object))
 
+export const isNewOption = (value?: string | null) => {
+  return value ? value.startsWith(NEW_OPTION_PREFIX) : false
+}
+
 export const arrayToOptions = <T extends string>(
   values: readonly T[] | T[]
 ): Options => new Map(values.map(value => [value, value]))
