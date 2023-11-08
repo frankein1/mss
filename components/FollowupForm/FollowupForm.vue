@@ -80,7 +80,7 @@
           <template #hint>
             <span class="fr-icon-information-line fr-fi--sm">
               <NuxtLink
-                v-if="canEditStructure"
+                v-if="allowEditStructure"
                 :to="RoutePath.AppStructureEdit()"
                 target="_self"
               >
@@ -304,7 +304,7 @@
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import {
     canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
-    canEditItsOwnStructure
+    canEditStructure
   } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
@@ -355,7 +355,7 @@
 
   const user = computed(() => authStore.getAuthUser)
 
-  const canEditStructure = computed(() => canEditItsOwnStructure(user.value))
+  const allowEditStructure = computed(() => canEditStructure(user.value))
 
   const canCreatePrescribingOrganization = computed(() =>
     canCreatePrescribingOrganizationRule(user.value)
