@@ -8,7 +8,9 @@
     :status="values.status"
     :external-structure="values.externalStructure"
     :financial-support="values.financialSupport"
+    :permissions="permissions"
     :caught-errors="caughtErrors"
+    
     @submit="onSubmit"
   />
 </template>
@@ -21,6 +23,7 @@
     PrescribingOrganization
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
+import { HelpRequestPermissions } from '~/server/route';
   import {
     CreateHelpRequestInput,
     createHelpRequestSchema
@@ -32,6 +35,7 @@
     prescribingOrganizations: PrescribingOrganization[]
     instructorOrganizations: InstructorOrganization[]
     beneficiaryId: string
+    permissions: HelpRequestPermissions
   }>()
 
   const emit = defineEmits<{

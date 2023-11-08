@@ -21,6 +21,7 @@ export * from './structure'
 export * from './auth'
 export * from './helpRequest'
 export * from './helpers.schema'
+export * from './permissions.schema'
 
 export {
   createFollowupTypeSchema,

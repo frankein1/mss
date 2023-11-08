@@ -56,7 +56,9 @@
     })
 
   const { data: permissions, error: permissionsError } =
-    await trpcClient.permissions.getFollowupPermissions.useQuery()
+    await trpcClient.permissions.getFollowupPermissions.useQuery({
+      beneficiaryId
+    })
 
   const title = computed(() =>
     RouteTitle.AppBeneficiaryFollowupAdd(beneficiary.value || null)

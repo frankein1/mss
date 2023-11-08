@@ -17,7 +17,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { canEditItsOwnStructure, canListUsers } from '~/server/security'
+  import { structureRule } from '~/server/route/permissions/rules'
+  import { canListUsers } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
   import { formatUserDisplayName } from '~/utils/user'
@@ -47,7 +48,7 @@
       })
     }
 
-    if (user.value && canEditItsOwnStructure(user.value)) {
+    if (user.value && structureRule.canEdit(user.value)) {
       menus.push({
         label: 'Structure',
         to: RoutePath.AppStructureEdit(),

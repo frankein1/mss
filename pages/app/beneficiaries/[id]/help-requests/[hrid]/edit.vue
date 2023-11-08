@@ -25,8 +25,10 @@
               helpRequest &&
               followupTypes &&
               prescribingOrganizations &&
-              instructorOrganizations
+              instructorOrganizations &&
+              permissions
             "
+            :permissions="permissions"
             :is-submitting="isSubmitting"
             :followup-types="followupTypes"
             :help-request="helpRequest"
@@ -63,6 +65,12 @@
   } = await trpcClient.helpRequest.getHelpRequestDetails.useQuery({
     id: helpRequestId
   })
+
+  const { data: permissions, error: permissionsError } =
+    await trpcClient.permissions.getHelpRequestPermissions.useQuery({
+      beneficiaryId,
+      targetId: helpRequestId
+    })
 
   const beneficiary = computed(() => helpRequest.value?.beneficiary || null)
 
@@ -110,6 +118,9 @@
     }
     if (instructorOrganizationsError.value) {
       return "La liste des organismes instructeurs de votre structure n'a pas pu être chargée."
+    }
+    if (permissionsError.value) {
+      return "Les permissions n'ont pas pu être chargées."
     }
     return ''
   })

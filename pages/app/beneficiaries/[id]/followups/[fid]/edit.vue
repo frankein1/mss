@@ -51,6 +51,7 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
+  const beneficiaryId = route.params.id as string
   const followupId = route.params.fid as string
 
   const {
@@ -62,7 +63,10 @@
   })
 
   const { data: permissions, error: permissionsError } =
-    await trpcClient.permissions.getFollowupPermissions.useQuery({ id: followupId })
+    await trpcClient.permissions.getFollowupPermissions.useQuery({
+      beneficiaryId,
+      targetId: followupId
+    })
 
   const beneficiary = computed(() => followup.value?.beneficiary || null)
 

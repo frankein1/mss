@@ -10,7 +10,7 @@
     :financial-support="values.financialSupport"
     :past-statuses="pastStatuses"
     is-editing
-    :can-edit-private-synthesis="canEditPrivateSynthesis"
+    :permissions="permissions"
     :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
@@ -24,20 +24,18 @@
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
-  import { canEditHelpRequestPrivateSynthesis } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
+  import { HelpRequestPermissions } from '~/server/route'
   import { pastStatusesFromStatus } from '~/utils/helpRequest'
   import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-
-  const authStore = useAuthStore()
 
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: FollowupType[]
     prescribingOrganizations: PrescribingOrganization[]
     instructorOrganizations: InstructorOrganization[]
-    helpRequest: GetHelpRequestDetailsOutput
+    helpRequest: GetHelpRequestDetailsOutput,
+    permissions: HelpRequestPermissions
   }>()
 
   const emit = defineEmits<{
@@ -50,10 +48,6 @@
     }
     return pastStatusesFromStatus(props.helpRequest.status)
   })
-
-  const canEditPrivateSynthesis = computed(() =>
-    canEditHelpRequestPrivateSynthesis(authStore.getAuthUser, props.helpRequest)
-  )
 
   const initialDocumentIds = computed(
     () => props.helpRequest.documents?.map(d => d.key) || []

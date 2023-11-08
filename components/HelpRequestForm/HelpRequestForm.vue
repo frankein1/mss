@@ -19,7 +19,7 @@
         />
       </div>
 
-      <template v-if="isMinistryAgent">
+      <template v-if="permissions.fields.numeroPegase">
         <div>
           <VeeInput
             name="numeroPegase"
@@ -46,7 +46,7 @@
           <template #hint>
             <span class="fr-icon-information-line fr-fi--sm">
               <NuxtLink
-                v-if="canEditStructure"
+                v-if="permissions.actions.editStructure"
                 :to="RoutePath.AppStructureEdit()"
                 target="_self"
               >
@@ -66,7 +66,7 @@
           :label="helpRequestFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
           :options="withEmptyValue(prescribingOrganizationOptions)"
-          :can-create-new-option="canCreatePrescribingOrganization"
+          :can-create-new-option="permissions.actions.createPrescribingOrga"
         />
       </div>
 
@@ -129,7 +129,7 @@
           name="instructorOrganizationId"
           :options="instructorOrganizationOptions"
           :readonly="isEditingAndIsLocked"
-          :can-create-new-option="canCreateInstructorOrganization"
+          :can-create-new-option="permissions.actions.createInstructorOrga"
         />
       </div>
 
@@ -233,7 +233,7 @@
       </div>
 
       <div
-        v-if="canEditPrivateSynthesis"
+        v-if="permissions.fields.privateSynthesis"
         class="fr-col-12 fr-mb-6v"
       >
         <VeeTextarea
@@ -291,21 +291,14 @@
     paymentMethodOptions
   } from '~/client/options/helpRequest'
   import { ministerOptions } from '~/client/options/ministry'
-  import {
-    canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
-    canEditItsOwnStructure,
-    canCreateInstructorOrganization as canCreateInstructorOrganizationRule
-  } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { RoutePath } from '~/utils/routing'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
   import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
+  import { HelpRequestPermissions } from '~/server/route'
 
-  const authStore = useAuthStore()
-  const isMinistryAgent = useMinistryAgent()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const props = withDefaults(
@@ -320,8 +313,8 @@
       financialSupport: 'true' | 'false' | undefined
       pastStatuses?: HelpRequestStatus[]
       isEditing?: boolean
-      canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>
+      permissions: HelpRequestPermissions
     }>(),
     { pastStatuses: undefined, isEditing: false, canEditPrivateSynthesis: true }
   )
@@ -337,8 +330,6 @@
   const emit = defineEmits<{
     submit: [payload: Event]
   }>()
-
-  const user = computed(() => authStore.getAuthUser)
 
   const followUpTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')
@@ -385,15 +376,5 @@
 
   const isEditingAndIsLocked = computed(
     () => props.isEditing && (isAnswered.value || isDropped.value)
-  )
-
-  const canEditStructure = computed(() => canEditItsOwnStructure(user.value))
-
-  const canCreatePrescribingOrganization = computed(() =>
-    canCreatePrescribingOrganizationRule(user.value)
-  )
-
-  const canCreateInstructorOrganization = computed(() =>
-    canCreateInstructorOrganizationRule(user.value)
   )
 </script>

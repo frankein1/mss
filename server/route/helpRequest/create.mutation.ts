@@ -5,11 +5,11 @@ import {
   CreateHelpRequestInput,
   createHelpRequestSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canCreateHelpRequest } from '~/server/security'
-import { getBeneficiarySecurityTarget } from '~/server/query'
 import { HelpRequestRepo } from '~/server/database'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
+import { appRouter } from '~/server/trpc/routers'
+import { SecurityRuleGrantee } from '~/server/security'
 
 const handler = async ({
   input,
@@ -90,11 +90,42 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: CreateHelpRequestInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(
-    user,
-    input.beneficiaryId
-  )
-  return canCreateHelpRequest(user, beneficiary)
+  const caller = appRouter.createCaller({})
+  const permissions = await caller.permissions.getHelpRequestPermissions({
+    beneficiaryId: input.beneficiaryId
+  })
+
+  const {
+    actions: { create, createPrescribingOrga, createInstructorOrga },
+    fields: { privateSynthesis, numeroPegase, ministre }
+  } = permissions
+
+  if (!create) {
+    return false
+  }
+
+  const { prescribingOrganizationId, instructorOrganizationId } = input
+
+  if (isNewOption(prescribingOrganizationId) && !createPrescribingOrga) {
+    return false
+  }
+  if (isNewOption(instructorOrganizationId) && !createInstructorOrga) {
+    return false
+  }
+
+  if (input.privateSynthesis && !privateSynthesis) {
+    return false
+  }
+
+  if (input.numeroPegase && !numeroPegase) {
+    return false
+  }
+
+  if (input.ministre && !ministre) {
+    return false
+  }
+
+  return true
 }
 
 export const createHelpRequestMutation = createMutation({

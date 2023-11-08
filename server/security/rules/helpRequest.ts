@@ -11,15 +11,6 @@ import {
   hasAllowedRole
 } from './helpers'
 
-export const canCreateHelpRequest = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) || isReferentFor(grantee, beneficiary)
 
 export const canListBeneficiaryHelpRequests = (
   grantee: SecurityRuleGrantee,
@@ -73,37 +64,4 @@ export const canViewHelpRequestPrivateSynthesis = (
     'Instructor',
     'ReceptionAgent'
   ]) && isCreator(grantee, helpRequest)
-
-export const canEditHelpRequest = (
-  grantee: SecurityRuleGrantee,
-  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, helpRequest, ['StructureManager']) ||
-  (isInSameStructureAs(grantee, helpRequest, [
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ]) &&
-    isCreator(grantee, helpRequest))
-
-export const canEditHelpRequestPrivateSynthesis = (
-  grantee: SecurityRuleGrantee,
-  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, helpRequest, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ]) && isCreator(grantee, helpRequest)
-
-export const canDeleteHelpRequest = (
-  grantee: SecurityRuleGrantee,
-  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, helpRequest, [
-    'StructureManager',
-    'SocialWorker'
-  ]) ||
-  (isInSameStructureAs(grantee, helpRequest, ['Instructor']) &&
-    isCreator(grantee, helpRequest))
+  

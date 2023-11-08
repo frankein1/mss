@@ -8,18 +8,14 @@ import { prepareFollowupTypesMutations } from './helper/prepareFollowupData'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
-import {
-  SecurityRuleGrantee,
-  canCreatePrescribingOrganization,
-  canEditFollowup,
-  canEditFollowupPrivateSynthesis
-} from '~/server/security'
+import { SecurityRuleGrantee } from '~/server/security'
 
-import { getFollowupSecurityTarget, getStructureByUser } from '~/server/query'
+import { getStructureByUser } from '~/server/query'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import { appRouter } from '~/server/trpc/routers'
 
 const handler = async ({
   input,
@@ -141,15 +137,19 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditFollowupInput
 ) => {
-  const target = await getFollowupSecurityTarget(user, input.id)
-  // CAN EDIT FU
-  if (!canEditFollowup(user, target)) {
+  const caller = appRouter.createCaller({})
+  const permissions = await caller.permissions.getFollowupPermissions({
+    beneficiaryId: input.beneficiaryId,
+    targetId: input.id
+  })
+
+  const { actions, fields } = permissions
+  const { edit, createPrescribingOrga } = actions
+
+  if (!edit) {
     return false
   }
-  if (
-    isNewOption(input.prescribingOrganizationId) &&
-    !canCreatePrescribingOrganization(user)
-  ) {
+  if (isNewOption(input.prescribingOrganizationId) && !createPrescribingOrga) {
     return false
   }
   // CAN ACCESS ALL UPDATED FIELDS
@@ -159,10 +159,7 @@ const securityCheck = async (
   }
 
   // CAN EDIT PRIVATE SYNTHESIS
-  if (
-    input.privateSynthesis &&
-    !canEditFollowupPrivateSynthesis(user, target)
-  ) {
+  if (input.privateSynthesis && !fields.privateSynthesis) {
     return false
   }
 

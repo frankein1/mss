@@ -8,20 +8,14 @@ import { prepareFollowupTypesMutations } from './helper/prepareFollowupData'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
-import {
-  SecurityRuleGrantee,
-  canCreateFollowup,
-  canCreatePrescribingOrganization
-} from '~/server/security'
+import { SecurityRuleGrantee } from '~/server/security'
 
-import {
-  getBeneficiarySecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getStructureByUser } from '~/server/query'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import { appRouter } from '~/server/trpc/routers'
 
 const handler = async ({
   input,
@@ -142,16 +136,17 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: AddFollowupInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(
-    user,
-    input.beneficiaryId
-  )
-  if (!canCreateFollowup(user, beneficiary)) {
+  const caller = appRouter.createCaller({})
+  const permissions = await caller.permissions.getFollowupPermissions({
+    beneficiaryId: input.beneficiaryId
+  })
+
+  if (!permissions.actions.create) {
     return false
   }
   if (
     isNewOption(input.prescribingOrganizationId) &&
-    !canCreatePrescribingOrganization(user)
+    !permissions.actions.createPrescribingOrga
   ) {
     return false
   }

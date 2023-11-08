@@ -22,8 +22,6 @@ export {
   canListUsers
 } from './user'
 
-export { canEditItsOwnStructure } from './structure'
-
 export {
   canOnlyListItsBeneficiaries,
   canViewBeneficiaryGeneral,
@@ -55,10 +53,6 @@ export {
 } from './document'
 
 export {
-  canCreateFollowup,
-  canDeleteFollowup,
-  canEditFollowup,
-  canEditFollowupPrivateSynthesis,
   canListBeneficiaryFollowups,
   canViewFollowup,
   canViewFollowupPrivateSynthesis,
@@ -70,10 +64,6 @@ export { canAddComment, canListComments } from './comment'
 
 export {
   canViewHelpRequestDetails,
-  canCreateHelpRequest,
-  canDeleteHelpRequest,
-  canEditHelpRequest,
-  canEditHelpRequestPrivateSynthesis,
   canListBeneficiaryHelpRequests,
   canViewHelpRequest,
   canViewHelpRequestPrivateSynthesis,
@@ -89,27 +79,3 @@ export {
 } from './export'
 
 export { canViewDraft, canUpdateDraft, canDeleteDraft } from './draft'
-
-// A rule is a synchronous function taking
-// -- grantee (the authenticated user)
-// -- target (aggregate info or scope of the action)
-// -- params (specifics about the action)
-export const canCreatePrescribingOrganization = (
-  grantee: SecurityRuleGrantee
-): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
-
-export const canCreateInstructorOrganization = (
-  grantee: SecurityRuleGrantee
-): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])

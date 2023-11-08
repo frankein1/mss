@@ -1,10 +1,11 @@
+import { structureRule } from '../permissions/rules'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   EditCurrentUserStructureInput,
   editCurrentUserStructureSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canEditItsOwnStructure } from '~/server/security'
+import { SecurityRuleGrantee } from '~/server/security'
 import { editFollowupTypes } from '~/utils/structure'
 import { StructureRepo } from '~/server/database'
 
@@ -49,7 +50,7 @@ const securityCheck = (
   user: SecurityRuleGrantee,
   _input: EditCurrentUserStructureInput
 ) => {
-  return canEditItsOwnStructure(user)
+  return structureRule.canEdit(user)
 }
 
 export const editCurrentUserStructureMutation = createMutation({

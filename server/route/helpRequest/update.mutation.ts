@@ -1,22 +1,13 @@
-import { StructureType, UserActivityType } from '@prisma/client'
+import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
-import {
-  SecurityRuleGrantee,
-  canCreateInstructorOrganization,
-  canCreatePrescribingOrganization,
-  canEditHelpRequest,
-  canEditHelpRequestPrivateSynthesis
-} from '~/server/security'
-import {
-  getHelpRequestWithRelations,
-  getHelpRequestsecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getHelpRequestWithRelations } from '~/server/query'
 import { HelpRequestRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import { appRouter } from '~/server/trpc/routers'
+import { SecurityRuleGrantee } from '~/server/security'
 
 const handler = async ({
   input,
@@ -99,38 +90,39 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditHelpRequestInput
 ) => {
-  const target = await getHelpRequestsecurityTarget(user, input.id)
-  if (!canEditHelpRequest(user, target)) {
+  const caller = appRouter.createCaller({})
+  const permissions = await caller.permissions.getHelpRequestPermissions({
+    beneficiaryId: input.beneficiaryId,
+    targetId: input.id
+  })
+
+  const {
+    actions: { edit, createPrescribingOrga, createInstructorOrga },
+    fields: { privateSynthesis, numeroPegase, ministre }
+  } = permissions
+
+  if (!edit) {
     return false
   }
 
   const { prescribingOrganizationId, instructorOrganizationId } = input
 
-  if (
-    isNewOption(prescribingOrganizationId) &&
-    !canCreatePrescribingOrganization(user)
-  ) {
+  if (isNewOption(prescribingOrganizationId) && !createPrescribingOrga) {
     return false
   }
-  if (
-    isNewOption(instructorOrganizationId) &&
-    !canCreateInstructorOrganization(user)
-  ) {
+  if (isNewOption(instructorOrganizationId) && !createInstructorOrga) {
     return false
   }
 
-  if (
-    input.privateSynthesis &&
-    !canEditHelpRequestPrivateSynthesis(user, target)
-  ) {
+  if (input.privateSynthesis && !privateSynthesis) {
     return false
   }
 
-  const { type } = await getStructureByUser(user)
-  if (
-    (input.numeroPegase || input.ministre) &&
-    type !== StructureType.Ministere
-  ) {
+  if (input.numeroPegase && !numeroPegase) {
+    return false
+  }
+
+  if (input.ministre && !ministre) {
     return false
   }
 

@@ -31,5 +31,5 @@ export const followupRouter = router({
     .query(getFollowupDetailsQuery.execute),
   delete: protectedProcedure
     .input(deleteFollowupMutation.inputValidation)
-    .mutation(deleteFollowupMutation.execute),
+    .mutation(deleteFollowupMutation.execute)
 })

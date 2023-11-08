@@ -1,19 +1,21 @@
+import { followupRule, prescribingOrgaRule, structureRule } from './rules'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  AllowSecurityCheck,
-  canCreatePrescribingOrganization,
-  canEditFollowupPrivateSynthesis,
-  canEditItsOwnStructure
-} from '~/server/security'
+import { AllowSecurityCheck } from '~/server/security'
 import { createQuery } from '~/server/route'
-import { IdInput, idSchema } from '~/server/schema'
+import { GetPermissionsInput, getPermissionsSchema } from '~/server/schema'
 import { hasAccessFollowupField } from '~/security/permission'
-import { getFollowupSecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  getFollowupSecurityTarget
+} from '~/server/query'
 
 export type FollowupPermissions = {
   actions: {
+    create: boolean
+    edit: boolean
+    delete: boolean
     editStructure: boolean
-    createPrescribingOrganization: boolean
+    createPrescribingOrga: boolean
   }
   fields: {
     numeroPegase: boolean
@@ -31,19 +33,27 @@ const handler = async ({
   input
 }: {
   ctx: ProtectedAppContext
-  input: IdInput | undefined
+  input: GetPermissionsInput
 }) => {
   const { user, structure } = ctx
   const { type } = structure
 
-  const followup = input
-    ? await getFollowupSecurityTarget(user, input.id)
+  const followup = input.targetId
+    ? await getFollowupSecurityTarget(user, input.targetId)
     : null
+
+  const beneficiary = await getBeneficiarySecurityTarget(
+    user,
+    input.beneficiaryId
+  )
 
   const permissions: FollowupPermissions = {
     actions: {
-      editStructure: canEditItsOwnStructure(user),
-      createPrescribingOrganization: canCreatePrescribingOrganization(user)
+      create: followupRule.canCreate(user, beneficiary),
+      edit: followup ? followupRule.canEdit(user, followup) : false,
+      delete: followup ? followupRule.canDelete(user, followup) : false,
+      editStructure: structureRule.canEdit(user),
+      createPrescribingOrga: prescribingOrgaRule.canCreate(user)
     },
     fields: {
       numeroPegase: hasAccessFollowupField(type, 'numeroPegase'),
@@ -53,7 +63,7 @@ const handler = async ({
       interventions: hasAccessFollowupField(type, 'interventions'),
       signalements: hasAccessFollowupField(type, 'signalements'),
       privateSynthesis: followup
-        ? canEditFollowupPrivateSynthesis(user, followup)
+        ? followupRule.canEditPrivateSynthesis(user, followup)
         : true
     }
   }
@@ -62,7 +72,7 @@ const handler = async ({
 }
 
 export const getFollowupPermissions = createQuery({
-  inputValidation: idSchema.optional(),
+  inputValidation: getPermissionsSchema,
   securityCheck: AllowSecurityCheck,
   handler
 })

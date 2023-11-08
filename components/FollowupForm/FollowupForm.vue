@@ -100,9 +100,7 @@
           :label="followupFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
           :options="withEmptyValue(prescribingOrganizationOptions)"
-          :can-create-new-option="
-            permissions.actions.createPrescribingOrganization
-          "
+          :can-create-new-option="permissions.actions.createPrescribingOrga"
         />
       </div>
 

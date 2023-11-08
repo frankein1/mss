@@ -24,8 +24,10 @@
             v-else-if="
               followupTypes &&
               prescribingOrganizations &&
-              instructorOrganizations
+              instructorOrganizations &&
+              permissions
             "
+            :permissions="permissions"
             :is-submitting="isSubmitting"
             :followup-types="followupTypes"
             :beneficiary-id="beneficiaryId"
@@ -57,6 +59,11 @@
   const { data: beneficiary, error: beneficiaryError } =
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
       id: beneficiaryId
+    })
+
+  const { data: permissions, error: permissionsError } =
+    await trpcClient.permissions.getHelpRequestPermissions.useQuery({
+      beneficiaryId
     })
 
   const title = computed(() =>
@@ -102,6 +109,9 @@
     }
     if (instructorOrganizationsError.value) {
       return "La liste des organismes instructeurs de votre structure n'a pas pu être chargée."
+    }
+    if (permissionsError.value) {
+      return "Les permissions n'ont pas pu être chargées."
     }
     return ''
   })

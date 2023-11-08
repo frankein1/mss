@@ -5,4 +5,3 @@ export * from './get-details.query'
 export * from './quick-update.mutation'
 export * from './update.mutation'
 export * from './export.query'
-
