@@ -5,7 +5,7 @@
       :beneficiary="beneficiary"
       :can-set-referents="canSetReferents"
     />
-    <h2 class="title-blue fr-grid-row fr-grid-row--gutters fr-mb-3w">
+    <h2 class="title-blue fr-grid-row fr-grid-row--gutters fr-mb-6v fr-mt-3w">
       Informations générales
     </h2>
     <BeneficiaryFormIdentity id="identity" />
