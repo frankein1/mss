@@ -60,9 +60,11 @@
           type="email"
         />
       </div>
-      <div class="fr-col-12 fr-col-lg-6">
+      <div
+        v-if="isMinistryAgent"
+        class="fr-col-12 fr-col-lg-6"
+      >
         <VeeInput
-          v-if="isMinistryAgent"
           name="numeroPegase"
           :label="beneficiaryFieldLabels.numeroPegase"
           hint="Format attendu : A-00-000000"
