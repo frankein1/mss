@@ -46,15 +46,15 @@
       :placeholder="placeholder"
       @keydown="onInputKeyDown"
     />
-    <!-- FIXME: As input is hidden, it can not be focused on submission failure -->
     <input
       :id="id"
       ref="hiddenInput"
+      class="sr-only"
       :name="name"
-      hidden
       :value="currentValue"
       :disabled="disabled"
       :readonly="readonly"
+      tabindex="-1"
     />
     <ul
       v-show="!dropdown || expanded"
@@ -394,11 +394,7 @@
     margin-bottom: 0.5rem;
   }
 
-  .fr-form-group {
-    margin-bottom: 1.5rem;
-  }
-
-  .fr-select:not(:disabled, :read-only) {
+  .fr-select:not(:disabled) {
     cursor: pointer;
   }
 
