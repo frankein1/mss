@@ -5,8 +5,9 @@ import { GetFollowupsInput, getFollowupsSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prepareFollowupFilters } from '~/utils/filters'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { FollowupRepo } from '~/server/database'
+import { hasAllowedRole } from '~/server/security'
 
 const handler = async ({
   input,
@@ -46,8 +47,20 @@ export type GetFollowupsOutput = Prisma.PromiseReturnType<
 
 export type FollowupItem = GetFollowupsOutput[0]
 
+const securityCheck = (
+  grantee: SecurityRuleGrantee,
+  _input: GetFollowupsInput
+) => {
+  return hasAllowedRole(grantee, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'Referent'
+  ])
+}
+
 export const getFollowupsQuery = createQuery({
   inputValidation: getFollowupsSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler
 })

@@ -19,11 +19,6 @@ import {
 } from '~/server/query'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
-  canListComments,
-  canListBeneficiaryHelpRequests,
-  canListBeneficiaryFollowups
-} from '~/server/security'
-import {
   AllowSecurityCheck,
   SecurityRuleGrantee
 } from '~/server/security/rules/types'

@@ -1,32 +1,13 @@
 import { followupRule, prescribingOrgaRule, structureRule } from './rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security'
-import { createQuery } from '~/server/route'
+import { FollowupPermissions, createQuery } from '~/server/route'
 import { GetPermissionsInput, getPermissionsSchema } from '~/server/schema'
 import { hasAccessFollowupField } from '~/security/permission'
 import {
   getBeneficiarySecurityTarget,
   getFollowupSecurityTarget
 } from '~/server/query'
-
-export type FollowupPermissions = {
-  actions: {
-    create: boolean
-    edit: boolean
-    delete: boolean
-    editStructure: boolean
-    createPrescribingOrga: boolean
-  }
-  fields: {
-    numeroPegase: boolean
-    ministre: boolean
-    classified: boolean
-    forwardedToJustice: boolean
-    interventions: boolean
-    signalements: boolean
-    privateSynthesis: boolean
-  }
-}
 
 const handler = async ({
   ctx,

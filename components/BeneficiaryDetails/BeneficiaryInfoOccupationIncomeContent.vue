@@ -96,10 +96,7 @@
     />
   </div>
 
-  <div
-    v-if="isMinistryAgent"
-    class="fr-grid-row"
-  >
+  <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereCategorie"
       :value="MinistereCategorieKeys.value(beneficiary.ministereCategorie)"
@@ -140,8 +137,6 @@
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
   }>()
-
-  const isMinistryAgent = useMinistryAgent()
 
   const mainIncomeSource = computed(() =>
     arrayToString(props.beneficiary.mainIncomeSource || [], incomeSourceLabels)

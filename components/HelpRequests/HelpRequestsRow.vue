@@ -10,7 +10,7 @@
     >
       <td>
         <HelpRequestsStatusForm
-          v-if="canQuickEditHelpRequest"
+          v-if="permissions.edit"
           :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
@@ -24,7 +24,7 @@
         </span>
       </td>
       <td>{{ helpRequest.type.name }}</td>
-      <td v-if="canViewHelpRequestDetails">
+      <td v-if="permissions.viewDetails">
         <template v-if="helpRequest.dueDate">
           {{ formatDate(helpRequest.dueDate) }}
         </template>
@@ -32,7 +32,7 @@
       <td>
         {{ formatBeneficiaryDisplayName(helpRequest.beneficiary) }}
       </td>
-      <template v-if="canViewHelpRequestDetails">
+      <template v-if="permissions.viewDetails">
         <td>{{ instructorOrganization }}</td>
         <td>
           <template v-if="helpRequest.examinationDate">
@@ -44,7 +44,7 @@
             {{ euros(helpRequest.askedAmount) }}
           </template>
         </td>
-        <td v-if="canViewHelpRequestDetails">
+        <td v-if="permissions.viewDetails">
           <HelpRequestsAllocatedAmountForm
             v-if="canEditAllocatedAmount"
             :help-request="helpRequest"
@@ -55,7 +55,7 @@
             {{ euros(helpRequest.allocatedAmount) }}
           </template>
         </td>
-        <td v-if="canViewHelpRequestDetails">
+        <td v-if="permissions.viewDetails">
           <HelpRequestsPaymentMethodForm
             v-if="canEditPaymentMethod"
             :help-request="helpRequest"
@@ -66,7 +66,7 @@
             {{ paymentMethodOptions.get(helpRequest.paymentMethod) }}
           </template>
         </td>
-        <td v-if="canViewHelpRequestDetails">
+        <td v-if="permissions.viewDetails">
           <HelpRequestsPaymentDateForm
             v-if="canEditPaymentDate"
             :help-request="helpRequest"
@@ -77,7 +77,7 @@
             {{ formatDate(helpRequest.paymentDate) }}
           </template>
         </td>
-        <td v-if="canViewHelpRequestDetails">
+        <td v-if="permissions.viewDetails">
           <template v-if="helpRequest.handlingDate">{{
             formatDate(helpRequest.handlingDate)
           }}</template>
@@ -104,26 +104,20 @@
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
-  import {
-    canViewHelpRequestDetails as canViewHelpRequestDetailsRule,
-    canEditHelpRequest
-  } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
+  import { HelpRequestItemPermissions } from '~/server/route'
 
-  const authStore = useAuthStore()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const props = defineProps<{
     helpRequest: HelpRequestItem
+    permissions: HelpRequestItemPermissions
   }>()
 
   const emit = defineEmits<{
     updated: [helpRequest: HelpRequestItem]
   }>()
-
-  const user = computed(() => authStore.getAuthUser)
 
   const helpRequestPath = computed(() =>
     RoutePath.AppBeneficiary(props.helpRequest.beneficiary.id, {
@@ -140,14 +134,6 @@
       : 'Interne'
   )
 
-  const canViewHelpRequestDetails = computed(() =>
-    canViewHelpRequestDetailsRule(user.value, props.helpRequest.beneficiary)
-  )
-
-  const canQuickEditHelpRequest = computed(() =>
-    canEditHelpRequest(user.value, props.helpRequest)
-  )
-
   const isAcceptedHelpRequest = computed(
     () => props.helpRequest.status === HelpRequestStatus.Accepted
   )
@@ -158,21 +144,21 @@
 
   const canEditAllocatedAmount = computed(
     () =>
-      canQuickEditHelpRequest.value &&
+      props.permissions.edit &&
       isAcceptedHelpRequest.value &&
       isFinancialSupport.value
   )
 
   const canEditPaymentMethod = computed(
     () =>
-      canQuickEditHelpRequest.value &&
+      props.permissions.edit &&
       isAcceptedHelpRequest.value &&
       !isExternalSupport.value
   )
 
   const canEditPaymentDate = computed(
     () =>
-      canQuickEditHelpRequest.value &&
+      props.permissions &&
       isAcceptedHelpRequest.value &&
       !isExternalSupport.value
   )

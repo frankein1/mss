@@ -1,8 +1,7 @@
 import { SecurityRuleGrantee } from '~/server/security'
-import { isCreator, isInSameStructureAs, isReferentFor } from '~/server/security/rules/helpers'
+import { isCreator, isInSameStructureAs } from '~/server/security/rules/helpers'
 import {
   SecurityTargetWithCreator,
-  SecurityTargetWithReferents,
   SecurityTargetWithStructure
 } from '~/server/security/rules/types'
 
@@ -16,16 +15,6 @@ const canDelete = (
   ]) ||
   (isInSameStructureAs(grantee, helpRequest, ['Instructor']) &&
     isCreator(grantee, helpRequest))
-
-const canCreate = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) || isReferentFor(grantee, beneficiary)
 
 const canEdit = (
   grantee: SecurityRuleGrantee,
@@ -51,9 +40,20 @@ const canEditPrivateSynthesis = (
     'ReceptionAgent'
   ]) && isCreator(grantee, history)
 
+export const canViewPrivateSynthesis = (
+  grantee: SecurityRuleGrantee,
+  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
+): boolean =>
+  isInSameStructureAs(grantee, helpRequest, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) && isCreator(grantee, helpRequest)
+
 export const helpRequestRule = {
   canEdit,
-  canCreate,
   canDelete,
-  canEditPrivateSynthesis
+  canEditPrivateSynthesis,
+  canViewPrivateSynthesis
 }

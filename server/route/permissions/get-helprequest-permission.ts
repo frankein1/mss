@@ -6,32 +6,13 @@ import {
 } from './rules'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security'
-import { createQuery } from '~/server/route'
 import {
-  GetPermissionsInput,
-  getPermissionsSchema
-} from '~/server/schema'
+  HelpRequestPermissions,
+  createQuery
+} from '~/server/route'
+import { GetPermissionsInput, getPermissionsSchema } from '~/server/schema'
 import { hasAccessHelpRequestField } from '~/security/permission'
-import {
-  getBeneficiarySecurityTarget,
-  getHelpRequestsecurityTarget
-} from '~/server/query'
-
-export type HelpRequestPermissions = {
-  actions: {
-    create: boolean
-    edit: boolean
-    delete: boolean,
-    editStructure: boolean
-    createPrescribingOrga: boolean
-    createInstructorOrga: boolean
-  }
-  fields: {
-    numeroPegase: boolean
-    ministre: boolean
-    privateSynthesis: boolean
-  }
-}
+import { getHelpRequestsecurityTarget } from '~/server/query'
 
 const handler = async ({
   ctx,
@@ -47,16 +28,12 @@ const handler = async ({
     ? await getHelpRequestsecurityTarget(user, input.targetId)
     : null
 
-  const beneficiary = await getBeneficiarySecurityTarget(
-    user,
-    input.beneficiaryId
-  )
-
   const permissions: HelpRequestPermissions = {
     actions: {
-      create: helpRequestRule.canCreate(user, beneficiary),
       edit: helpRequest ? helpRequestRule.canEdit(user, helpRequest) : false,
-      delete: helpRequest ? helpRequestRule.canDelete(user, helpRequest) : false,
+      delete: helpRequest
+        ? helpRequestRule.canDelete(user, helpRequest)
+        : false,
       editStructure: structureRule.canEdit(user),
       createPrescribingOrga: prescribingOrgaRule.canCreate(user),
       createInstructorOrga: instructorOrgaRule.canCreate(user)

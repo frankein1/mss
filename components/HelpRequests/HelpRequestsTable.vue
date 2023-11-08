@@ -21,7 +21,7 @@
             </th>
             <th scope="col">Objet de la demande</th>
             <TableSortableHeader
-              v-if="canViewAnyHelpRequestDetails"
+              v-if="permissions.helpRequests.allColumns"
               :label="helpRequestFieldLabels.dueDate"
               numeric
               @update:sort="onSort({ dueDate: $event })"
@@ -30,7 +30,7 @@
               :label="helpRequestFieldLabels.beneficiaryId"
               @update:sort="onSort({ beneficiary: { usualName: $event } })"
             />
-            <template v-if="canViewAnyHelpRequestDetails">
+            <template v-if="permissions.helpRequests.allColumns">
               <TableSortableHeader
                 :label="helpRequestFieldLabels.instructorOrganizationId"
                 @update:sort="
@@ -79,16 +79,14 @@
 <script setup lang="ts">
   import type { HelpRequests, HelpRequestItem } from './types'
   import { helpRequestFieldLabels } from '~/client/labels'
+  import { UserPermissions } from '~/server/route'
   import type { HelpRequestSort } from '~/types/table'
-  import { canViewAnyHelpRequestDetails as canViewAnyHelpRequestDetailsRule } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
-
-  const authStore = useAuthStore()
 
   const props = defineProps<{
     helpRequests: HelpRequests
     sort: HelpRequestSort[]
     pending: boolean
+    permissions: UserPermissions
   }>()
 
   const emit = defineEmits<{
@@ -100,11 +98,5 @@
     toRef(() => props.sort),
     toRef(() => props.pending),
     emit
-  )
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const canViewAnyHelpRequestDetails = computed(() =>
-    canViewAnyHelpRequestDetailsRule(user.value)
   )
 </script>

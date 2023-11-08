@@ -62,13 +62,6 @@ export {
 
 export { canAddComment, canListComments } from './comment'
 
-export {
-  canViewHelpRequestDetails,
-  canListBeneficiaryHelpRequests,
-  canViewHelpRequest,
-  canViewHelpRequestPrivateSynthesis,
-  canViewAnyHelpRequestDetails
-} from './helpRequest'
 
 export { canViewStats, canViewStatsByReferent } from './stats'
 
