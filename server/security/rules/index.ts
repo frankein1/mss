@@ -85,8 +85,6 @@ export {
   canExportStats
 } from './export'
 
-export { canViewDraft, canUpdateDraft, canDeleteDraft } from './draft'
-
 // A rule is a synchronous function taking
 // -- grantee (the authenticated user)
 // -- target (aggregate info or scope of the action)
