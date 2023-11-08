@@ -1,3 +1,3 @@
-export * from "./canAddComment"
-export * from "./canEditComment"
-export * from "./canListComments"
+export * from './canAddComment'
+export * from './canEditComment'
+export * from './canListComments'

@@ -49,7 +49,6 @@ export {
   canDeleteDocument,
   canEditDocument,
   canListDocuments,
-  canOnlyListItsUploadedDocuments,
   canViewDocument,
   canSetDocumentAsConfidential
 } from './document'
