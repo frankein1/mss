@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     '@gouvfr/dsfr/dist/component/badge/badge.min.css',
     '@gouvfr/dsfr/dist/component/breadcrumb/breadcrumb.min.css',
     '@gouvfr/dsfr/dist/component/button/button.min.css',
+    '@gouvfr/dsfr/dist/component/callout/callout.min.css',
     '@gouvfr/dsfr/dist/component/card/card.min.css',
     '@gouvfr/dsfr/dist/component/checkbox/checkbox.min.css',
     '@gouvfr/dsfr/dist/component/content/content.min.css',
@@ -39,6 +40,7 @@ export default defineNuxtConfig({
     '@gouvfr/dsfr/dist/component/navigation/navigation.min.css',
     '@gouvfr/dsfr/dist/component/pagination/pagination.min.css',
     '@gouvfr/dsfr/dist/component/quote/quote.min.css',
+    '@gouvfr/dsfr/dist/component/radio/radio.min.css',
     '@gouvfr/dsfr/dist/component/search/search.min.css',
     '@gouvfr/dsfr/dist/component/select/select.min.css',
     '@gouvfr/dsfr/dist/component/sidemenu/sidemenu.min.css',
@@ -46,7 +48,6 @@ export default defineNuxtConfig({
     '@gouvfr/dsfr/dist/component/table/table.min.css',
     '@gouvfr/dsfr/dist/component/tag/tag.min.css',
     '@gouvfr/dsfr/dist/component/toggle/toggle.min.css',
-    '@gouvfr/dsfr/dist/component/radio/radio.min.css',
 
     // DSFR ICONS
     '@gouvfr/dsfr/dist/utility/icons/icons-buildings/icons-buildings.min.css',
