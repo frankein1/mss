@@ -7,7 +7,7 @@ import {
   stringOrEmpty
 } from '../helpers.schema'
 import { editStructureSchema } from './editStructure.schema'
-import { maxStringLengthMessage } from '~/utils/zod'
+import { maxStringLengthMessage, requiredErrorMessage } from '~/utils/zod'
 
 export const adminEditStructureSchemaBase = editStructureSchema
   .omit({
@@ -37,9 +37,7 @@ export const adminEditStructureSchema = adminEditStructureSchemaBase
     val =>
       val.legallyRequiredFollowupTypes.length &&
       val.legallyNotRequiredFollowupTypes.length,
-    {
-      message: "Veuillez sélectionner au moins un type d'accompagnement."
-    }
+    { message: requiredErrorMessage }
   )
 
 export type AdminEditStructureInput = z.infer<typeof adminEditStructureSchema>

@@ -42,15 +42,16 @@ import {
   errorMessages,
   validZipcode,
   maxStringLengthMessage,
-  validIntNumber
+  validIntNumber,
+  requiredErrorMessage
 } from '~/utils/zod'
 
 export const saveBeneficiaryGeneralInformationSchema = z.object({
   referents: z
     .array(z.string().uuid(), {
-      required_error: 'Veuillez renseigner au moins un agent référent'
+      required_error: requiredErrorMessage
     })
-    .min(1, 'Veuillez renseigner au moins un agent référent'),
+    .min(1, requiredErrorMessage),
   aidantConnectAuthorized: z.boolean().default(false),
   status: requiredNativeEnum(BeneficiaryStatus),
   title: withEmptyValueOptionalNativeEnum(BeneficiaryTitle),

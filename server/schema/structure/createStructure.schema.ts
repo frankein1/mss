@@ -10,7 +10,8 @@ import {
   minStringLengthMessage,
   maxStringLengthMessage,
   validZipcode,
-  validEmailMessage
+  validEmailMessage,
+  requiredErrorMessage
 } from '~/utils/zod'
 
 export const createStructureSchema = z.object({
@@ -37,5 +38,5 @@ export const createStructureSchema = z.object({
         z.string()
       ])
     )
-    .min(1, "Veuillez sélectionner au moins un type d'accompagnement.")
+    .min(1, requiredErrorMessage)
 })

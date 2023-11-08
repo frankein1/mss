@@ -13,16 +13,20 @@ import {
   stringConstraint,
   numeroPegaseContraint
 } from '../helpers.schema'
-import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
+import {
+  errorMessages,
+  maxStringLengthMessage,
+  requiredErrorMessage
+} from '~/utils/zod'
 
 export const addFollowupSchema = z.object({
   beneficiaryId: z.string().uuid(),
   types: z
     .array(z.string().uuid(), {
       ...errorMessages,
-      required_error: "Veuillez renseigner au moins un type d'accompagnement"
+      required_error: requiredErrorMessage
     })
-    .min(1, "Veuillez renseigner au moins un type d'accompagnement"),
+    .min(1, requiredErrorMessage),
   documents: z.array(z.string(), errorMessages).default([]),
   medium: requiredNativeEnum(FollowupMedium),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
