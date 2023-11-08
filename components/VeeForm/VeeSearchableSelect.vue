@@ -50,9 +50,10 @@
       :id="id"
       ref="hiddenInput"
       :name="name"
-      hidden
       :value="currentValue"
       :readonly="readonly"
+      class="sr-only"
+      tabindex="-1"
     />
 
     <ul
