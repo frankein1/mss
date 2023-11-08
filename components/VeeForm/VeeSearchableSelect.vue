@@ -45,7 +45,6 @@
       @keydown="onInputKeyDown"
       @blur="onInputBlur"
     />
-    <!-- FIXME: As input is hidden, it can not be focused on submission failure -->
     <input
       :id="id"
       ref="hiddenInput"
