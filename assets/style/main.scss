@@ -217,6 +217,10 @@ select:focus:not(:focus-visible) {
   }
 }
 
+/**
+ * Accessibility helper class
+ * It hides the element from the user but keeps it active so it can be focused or interpreted by accessibility tools
+ */
 .sr-only {
   border: 0 !important;
   clip: rect(1px, 1px, 1px, 1px) !important;
