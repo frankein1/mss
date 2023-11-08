@@ -25,24 +25,7 @@ export {
 
 export { canEditItsOwnStructure } from './structure'
 
-export {
-  canViewBeneficiaryGeneral,
-  canViewBeneficiaryHealthInfo,
-  canViewBeneficiaryOccupationIncome,
-  canViewBeneficiaryExternalOrganisations,
-  canEditBeneficiaryGeneral,
-  canEditBeneficiaryHealthInfo,
-  canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryExternalOrganisations,
-  canDeleteBeneficiary,
-  canEditBeneficiaryReferents,
-  canSaveToBeneficiaryBeneficiaryDraft
-} from './beneficiary'
-
-export {
-  canListBeneficiaryRelatives,
-  canEditBeneficiaryRelatives
-} from './relative'
+export * from './beneficiary'
 
 export {
   canAddDocument,
