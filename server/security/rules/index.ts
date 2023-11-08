@@ -7,6 +7,8 @@ import type {
 import { hasAllowedRole, isReferent } from './helpers'
 export { hasAllowedRole, isReferent }
 
+export * from './comment'
+
 export type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
@@ -63,8 +65,6 @@ export {
   canViewFollowupDetails,
   canViewAnyFollowupDetails
 } from './followup'
-
-export { canAddComment, canListComments } from './comment'
 
 export {
   canViewHelpRequestDetails,
