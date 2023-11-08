@@ -26,10 +26,7 @@
   import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
-  import {
-    canViewAnyHelpRequestDetails,
-    canOnlyListItsBeneficiaries
-  } from '~/server/security'
+  import { canViewAnyHelpRequestDetails, isReferent } from '~/server/security'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
@@ -172,7 +169,7 @@
       )
     }
 
-    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+    if (!isReferent(authStore.getAuthUser)) {
       filters.push({
         name: 'referents',
         label: 'Référent',

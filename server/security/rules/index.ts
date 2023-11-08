@@ -4,8 +4,8 @@ import type {
   SecurityTargetWithReferents,
   SecurityRule
 } from './types'
-import { hasAllowedRole } from './helpers'
-export { hasAllowedRole }
+import { hasAllowedRole, isReferent } from './helpers'
+export { hasAllowedRole, isReferent }
 
 export type {
   SecurityRuleGrantee,
@@ -24,7 +24,6 @@ export {
 export { canEditItsOwnStructure } from './structure'
 
 export {
-  canOnlyListItsBeneficiaries,
   canViewBeneficiaryGeneral,
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome,

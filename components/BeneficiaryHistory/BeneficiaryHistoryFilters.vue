@@ -33,10 +33,7 @@
     followupStatusOptions
   } from '~/client/options/followup'
   import { typeSuiviOptions } from '~/client/options/history'
-  import {
-    canViewAnyHelpRequestDetails,
-    canOnlyListItsBeneficiaries
-  } from '~/server/security'
+  import { canViewAnyHelpRequestDetails, isReferent } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
   import {
@@ -203,7 +200,7 @@
       )
     }
 
-    if (!canOnlyListItsBeneficiaries(authStore.getAuthUser)) {
+    if (!isReferent(authStore.getAuthUser)) {
       filters.push({
         name: 'referents',
         label: 'Référent',
