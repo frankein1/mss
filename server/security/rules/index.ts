@@ -23,9 +23,8 @@ export {
   canListUsers
 } from './user'
 
-export { canEditItsOwnStructure } from './structure'
-
 export * from './beneficiary'
+export * from './structure'
 
 export {
   canAddDocument,

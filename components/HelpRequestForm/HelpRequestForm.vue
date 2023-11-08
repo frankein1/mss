@@ -46,7 +46,7 @@
           <template #hint>
             <span class="fr-icon-information-line fr-fi--sm">
               <NuxtLink
-                v-if="canEditStructure"
+                v-if="allowEditStructure"
                 :to="RoutePath.AppStructureEdit()"
                 target="_self"
               >
@@ -293,7 +293,7 @@
   import { ministerOptions } from '~/client/options/ministry'
   import {
     canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
-    canEditItsOwnStructure,
+    canEditStructure,
     canCreateInstructorOrganization as canCreateInstructorOrganizationRule
   } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
@@ -387,7 +387,7 @@
     () => props.isEditing && (isAnswered.value || isDropped.value)
   )
 
-  const canEditStructure = computed(() => canEditItsOwnStructure(user.value))
+  const allowEditStructure = computed(() => canEditStructure(user.value))
 
   const canCreatePrescribingOrganization = computed(() =>
     canCreatePrescribingOrganizationRule(user.value)
