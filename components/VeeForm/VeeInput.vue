@@ -132,7 +132,7 @@
         'Format attendu : 0 00 00 00 000 000 00. La clé du n° de sécurité sociale est optionnelle.'
     }
     if (props.type === 'email') {
-      typeHint = 'Fromat attendu : nom@domaine.fr'
+      typeHint = 'Format attendu : nom@domaine.fr'
     }
     if (props.hint) {
       return typeHint ? `${typeHint}. ${props.hint}` : props.hint
