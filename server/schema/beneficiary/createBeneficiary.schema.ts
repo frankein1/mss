@@ -9,14 +9,15 @@ import {
 } from '../helpers.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
+import { requiredErrorMessage } from '~/utils/zod'
 
 export const createBeneficiarySchema = z.object({
   status: requiredNativeEnum(BeneficiaryStatus),
   referents: z
     .array(z.string().uuid(), {
-      required_error: 'Veuillez renseigner au moins un agent référent'
+      required_error: requiredErrorMessage
     })
-    .min(1, 'Veuillez renseigner au moins un agent référent'),
+    .min(1, requiredErrorMessage),
   usualName: stringOrEmpty(beneficiaryLastNameSchema),
   birthName: stringOrEmpty(beneficiaryLastNameSchema),
   firstName: beneficiaryFirstNameOrEmptySchema,

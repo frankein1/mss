@@ -8,7 +8,8 @@ import {
 import {
   errorMessages,
   maxStringLengthMessage,
-  minStringLengthMessage
+  minStringLengthMessage,
+  requiredErrorMessage
 } from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
 
@@ -30,7 +31,7 @@ export const uploadBrowserDocumentSchema = z.object({
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
-  file: z.instanceof(File, { message: 'Veuillez sélectionner un fichier.' })
+  file: z.instanceof(File, { message: requiredErrorMessage })
 })
 
 export const addDocumentSchema = z.object({
