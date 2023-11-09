@@ -89,6 +89,7 @@
     &[aria-expanded='true'] {
       background-color: initial;
       border-bottom: 1px solid var(--border-default-grey);
+      border-radius: 0.5rem 0.5rem 0 0;
     }
   }
 
