@@ -69,6 +69,10 @@
 </script>
 
 <style scoped lang="scss">
+  .fr-accordion::before {
+    box-shadow: none;
+  }
+
   .fr-accordion.feature-section {
     padding: 0;
   }
@@ -76,6 +80,7 @@
   .fr-accordion__btn {
     color: var(--text-title-blue-france);
     padding: 1.5rem 2rem;
+    border-radius: 0.5rem;
 
     &::after {
       --icon-size: 1.5rem;
