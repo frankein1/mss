@@ -16,7 +16,7 @@
     <ul class="fr-btns-group fr-btns-group--inline-md fr-mt-3w">
       <li>
         <button
-          class="fr-btn"
+          class="fr-btn fr-btn--secondary"
           title="Annuler"
           type="button"
           @click="modal.close"
