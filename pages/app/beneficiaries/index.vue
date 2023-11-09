@@ -90,7 +90,7 @@
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
   const isDownloading = ref(false)
 
-  const { updatePagination } = usePagination(page, perPage)
+  const { updatePagination } = usePagination(page, perPage, filters)
 
   const queryInput = computed(() => ({
     page: page.value,

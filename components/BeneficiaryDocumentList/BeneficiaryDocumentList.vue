@@ -61,7 +61,7 @@
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
 
-  const { updatePagination } = usePagination(page, perPage)
+  const { updatePagination } = usePagination(page, perPage, filters)
 
   const queryInput = computed(() => ({
     beneficiaryId: props.beneficiary.id,
