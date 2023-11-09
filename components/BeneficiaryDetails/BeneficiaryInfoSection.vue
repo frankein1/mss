@@ -97,6 +97,11 @@
     padding: 1rem;
   }
 
+  .fr-accordion .fr-collapse--expanded {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
+  }
+
   .fr-btns-group.fr-btns-group--inline .fr-btn {
     margin-bottom: 0;
   }
