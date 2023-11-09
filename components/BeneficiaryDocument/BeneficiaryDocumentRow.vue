@@ -169,10 +169,10 @@
         trpcClient.documents.createViewUrl.mutate({
           key: props.document.key
         }),
-      onSuccess: ({ url }) => {
+      onSuccess: ({ downloadUrl }) => {
         const link = downloadLink.value
         if (link) {
-          link.href = url
+          link.href = downloadUrl
           link.type = props.document.type
           link.click()
         }
