@@ -5,7 +5,7 @@
       <div
         v-for="type in followupTypes"
         :key="type.id"
-        class="bg-color-grey-light fr-p-1w fr-mr-1w fr-mb-1w fr-text--sm br-16"
+        class="bg-color-grey-light fr-py-1v fr-px-3v fr-mr-1w fr-mb-1w fr-text--sm br-16"
       >
         {{ type.name }}
       </div>
