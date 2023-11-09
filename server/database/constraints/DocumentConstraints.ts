@@ -10,13 +10,6 @@ const get = (user: SecurityRuleGrantee) => {
 
   if (isReceptionAgent(user)) {
     Object.assign(where, { createdById: user.id })
-  } else {
-    Object.assign(where, {
-      OR: [
-        { confidential: false },
-        { confidential: true, createdById: user.id }
-      ]
-    })
   }
   // append constraints on beneficiary relation
   Object.assign(where, {
