@@ -8,7 +8,6 @@
   </div>
   <div class="feature-section fr-mt-2w">
     <p v-if="documentsTotal">
-      {{ documents.length }} document(s) affiché(s) sur
       {{ documentsTotal }} disponible(s) dans l'historique du bénéficiaire
     </p>
     <AtomAlert
@@ -82,7 +81,7 @@
 
   const totalPages = computed(() => documentsRequest.value?.totalPages || 0)
 
-  const documentsTotal = computed(() => documentsRequest.value?.totalCount || 0)
+  const documentsTotal = computed(() => documentsRequest.value?.count || 0)
 
   onMounted(async () => {
     const tab = route.hash.slice(1)
