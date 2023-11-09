@@ -4,7 +4,7 @@ import { CreateViewUrlInput, createViewUrlSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { beneficiarySecurityTargetInclude } from '~/server/query'
 import { SecurityRuleGrantee, canViewDocument } from '~/server/security'
-import { createSignedGetUrl } from '~/server/lib/s3'
+import { createSignedGetUrl, createContentUrl } from '~/server/lib/s3'
 import { DocumentRepo } from '~/server/database'
 
 const securityCheck = async (
@@ -39,7 +39,15 @@ const handler = async ({
     bucket: s3.bucket
   })
 
-  return { url }
+  const { url: downloadUrl } = await createContentUrl({
+    key: document.filenameDisk,
+    bucket: s3.bucket
+  })
+
+  return {
+    url,
+    downloadUrl
+  }
 }
 
 export const createViewUrlMutation = createMutation({
