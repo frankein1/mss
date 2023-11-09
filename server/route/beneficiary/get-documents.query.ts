@@ -63,7 +63,7 @@ const handler = async ({
     ...prepareBeneficiaryDocumentsFilters(filters || {})
   }
 
-  const [documents, count, totalCount] = await Promise.all([
+  const [documents, count] = await Promise.all([
     DocumentRepo.findMany(user, {
       where,
       orderBy,
@@ -81,11 +81,6 @@ const handler = async ({
     }),
     DocumentRepo.count(user, {
       where
-    }),
-    DocumentRepo.count(user, {
-      where: {
-        beneficiaryId
-      }
     })
   ])
   const totalPages = page && perPage ? getTotalPages({ count, perPage }) : 1
@@ -93,8 +88,7 @@ const handler = async ({
   return {
     documents,
     count,
-    totalPages,
-    totalCount
+    totalPages
   }
 }
 
