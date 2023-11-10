@@ -1,8 +1,8 @@
 <template>
   <div class="fr-grid-row">
     <div
-      v-for="(entourage, index) in entourages"
-      :key="entourage.id"
+      v-for="(entourage, index) in entourages || []"
+      :key="entourage?.id"
       class="fr-col-12"
     >
       <hr
@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
+  import { GetBeneficiaryRelative } from '~/server/route'
 
   defineProps<{
-    entourages: BeneficiaryRelativeWithLinkedBeneficiary[]
+    entourages: GetBeneficiaryRelative[]
   }>()
 </script>

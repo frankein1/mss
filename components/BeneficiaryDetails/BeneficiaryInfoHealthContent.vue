@@ -2,42 +2,42 @@
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.gir"
-      :value="BeneficiaryGirKeys.value(beneficiary.gir)"
+      :value="BeneficiaryGirKeys.value(health.gir)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.doctor"
-      :value="beneficiary.doctor"
+      :value="health.doctor"
       class="fr-col-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.socialSecurityNumber"
-      :value="beneficiary.socialSecurityNumber"
+      :value="health.socialSecurityNumber"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.insurance"
-      :value="beneficiary.insurance"
+      :value="health.insurance"
       class="fr-col-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.healthAdditionalInformation"
-      :value="beneficiary.healthAdditionalInformation"
+      :value="health.healthAdditionalInformation"
       class="fr-col-12"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import { GetBeneficiaryHealth } from '~/server/route'
   import { BeneficiaryGirKeys } from '~/client/options/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   defineProps<{
-    beneficiary: GetBeneficiaryOutput
+    health: GetBeneficiaryHealth
   }>()
 </script>

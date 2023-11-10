@@ -22,7 +22,6 @@ import {
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { BeneficiaryRepo, DraftRepo } from '~/server/database'
-import { hasAccessBeneficiaryField } from '~/security/permission'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
@@ -71,7 +70,7 @@ const handler = async ({
 }
 
 function prepareData(
-  { user, structure }: ProtectedAppContext,
+  { user }: ProtectedAppContext,
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {
@@ -145,13 +144,7 @@ function prepareData(
   }
 
   if (health && canEditBeneficiaryHealthInfo(user, securityTarget)) {
-    const { socialSecurityNumber, ...otherHealthData } = health
-
-    data = { ...data, ...otherHealthData }
-
-    if (hasAccessBeneficiaryField(structure.type, 'nir')) {
-      data = { ...data, socialSecurityNumber }
-    }
+    data = { ...data, ...health }
   }
 
   if (canEditBeneficiaryOccupationIncome(user, securityTarget)) {

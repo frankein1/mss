@@ -1,28 +1,29 @@
 <template>
   <p class="beneficiarydetails__metas">
-    <template v-if="beneficiary.birthDate">
-      {{ bornLabel }} le {{ formatDate(beneficiary.birthDate) }} · </template
+    <template v-if="general.birthDate">
+      {{ bornLabel }} le {{ formatDate(general.birthDate) }} · </template
     >Dossier N°{{ fileNumber }}
   </p>
 </template>
 
 <script lang="ts" setup>
   import { Gender } from '@prisma/client'
-  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import { GetBeneficiaryGeneral } from '~/server/route'
   import { readableFileNumber } from '~/utils/readableFileNumber'
 
   const props = withDefaults(
     defineProps<{
-      beneficiary: GetBeneficiaryOutput
+      beneficiaryId: string
+      general: GetBeneficiaryGeneral
     }>(),
     {}
   )
 
   const bornLabel = computed(() =>
-    props.beneficiary.gender === Gender.Female ? 'Née' : 'Né'
+    props.general.gender === Gender.Female ? 'Née' : 'Né'
   )
 
-  const fileNumber = computed(() => readableFileNumber(props.beneficiary.id))
+  const fileNumber = computed(() => readableFileNumber(props.beneficiaryId))
 </script>
 
 <style scoped>

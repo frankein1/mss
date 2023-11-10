@@ -60,23 +60,25 @@
       return null
     }
 
-    const { beneficiary: b } = data.value
+    const {
+      beneficiary: { id, meta, general, externalOrganisations }
+    } = data.value
 
     // Names and id are required for building the breadcrumb in the layout
     return {
-      id: b.id,
-      structureId: b.structureId,
-      referents: b.referents,
-      firstName: b.firstName,
-      usualName: b.usualName,
-      birthName: b.birthName,
-      protectionMeasure: b.protectionMeasure,
-      representative: b.representative,
-      prescribingStructure: b.prescribingStructure,
-      orientationType: b.orientationType,
-      orientationStructure: b.orientationStructure,
-      serviceProviders: b.serviceProviders,
-      involvedPartners: b.involvedPartners
+      id,
+      structureId: meta.structureId,
+      referents: meta.referents,
+      firstName: general.firstName,
+      usualName: general.usualName,
+      birthName: general.birthName,
+      protectionMeasure: externalOrganisations?.protectionMeasure,
+      representative: externalOrganisations?.representative,
+      prescribingStructure: externalOrganisations?.prescribingStructure,
+      orientationType: externalOrganisations?.orientationType,
+      orientationStructure: externalOrganisations?.orientationStructure,
+      serviceProviders: externalOrganisations?.serviceProviders,
+      involvedPartners: externalOrganisations?.involvedPartners
     } as SaveBeneficiaryExternalOrganisationsInput &
       MinimalBeneficiaryForFormLayout
   })
