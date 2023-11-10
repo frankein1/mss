@@ -60,9 +60,11 @@
           type="email"
         />
       </div>
-      <div class="fr-col-12 fr-col-lg-6">
+      <div
+        v-if="isMinistryAgent"
+        class="fr-col-12 fr-col-lg-6"
+      >
         <VeeInput
-          v-if="isMinistryAgent"
           name="numeroPegase"
           :label="beneficiaryFieldLabels.numeroPegase"
           hint="Format attendu : A-00-000000"
@@ -71,31 +73,27 @@
     </div>
 
     <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-mb-5w">
-      <AtomAlert
-        message="Souhaitez-vous ajouter plus d'informations sur ce bénéficiaire ?"
-        :alert-type="AlertType.Info"
+      <AtomCallout
+        class="complete-callout"
+        title="Souhaitez-vous ajouter plus d'informations sur ce bénéficiaire ?"
+        :button="{
+          label: 'Compléter',
+          className: 'fr-btn--secondary',
+          icon: 'fr-icon-edit-line',
+          onClick: () => {
+            complete = true
+          }
+        }"
       >
-        <template #detailedMessage
-          ><p>
-            Renseignez des informations complémentaires concernant le
-            bénéficiaire dès maintenant.<br />Vous pourrez également les
-            compléter plus tard via sa fiche bénéficiaire.
-          </p></template
-        >
-        <template #action>
-          <ul class="fr-btns-group fr-btns-group--icon-left">
-            <li>
-              <button
-                :class="`fr-btn fr-btn--secondary fr-icon-edit-line`"
-                type="submit"
-                @click="complete = true"
-              >
-                Compléter
-              </button>
-            </li>
-          </ul>
-        </template>
-      </AtomAlert>
+        <p>
+          Renseignez des informations complémentaires concernant le bénéficiaire
+          dès maintenant.
+        </p>
+        <p>
+          Vous pourrez également les compléter plus tard via sa fiche
+          bénéficiaire.
+        </p>
+      </AtomCallout>
     </div>
 
     <button
@@ -118,7 +116,6 @@
     CreateBeneficiaryInput,
     createBeneficiarySchema
   } from '~/server/schema'
-  import { AlertType } from '~/utils/constants/alert'
   import { beneficiaryFieldLabels } from '~/client/labels'
 
   const isMinistryAgent = useMinistryAgent()
@@ -163,5 +160,9 @@
 
   .fr-btns-group {
     align-items: center;
+  }
+
+  .complete-callout {
+    width: 100%;
   }
 </style>

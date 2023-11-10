@@ -5,25 +5,20 @@
     :class="[alertClass]"
     role="alert"
   >
-    <div class="info-container">
-      <div>
-        <p
-          class="fr-alert__title"
-          v-html="text"
-        ></p>
-        <slot name="detailedMessage"></slot>
-      </div>
-      <slot name="action"></slot>
-    </div>
-    <button
-      v-if="closeable"
-      ref="closeBtn"
-      class="fr-btn--close fr-btn force-focus-visible"
-      @click="emit('close')"
-    >
-      Masquer le message
-    </button>
+    <p
+      class="fr-alert__title"
+      v-html="text"
+    ></p>
+    <slot name="detailedMessage"></slot>
   </div>
+  <button
+    v-if="closeable"
+    ref="closeBtn"
+    class="fr-btn--close fr-btn force-focus-visible"
+    @click="emit('close')"
+  >
+    Masquer le message
+  </button>
 </template>
 
 <script setup lang="ts">
@@ -73,15 +68,5 @@
 
   .fr-alert {
     background-color: #fff;
-  }
-
-  .info-container {
-    display: flex;
-    gap: 0.5rem;
-    flex-direction: column;
-
-    @include dsfr-media-query.respond-from('lg') {
-      flex-direction: row;
-    }
   }
 </style>
