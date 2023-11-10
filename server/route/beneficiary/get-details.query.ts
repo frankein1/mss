@@ -1,10 +1,12 @@
-import type { Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { getBeneficiaryWithRelations } from '~/server/query/beneficiaires'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
+  BeneficiaryEditPermission,
   SecurityRuleGrantee,
-  canViewBeneficiaryGeneral
+  canViewBeneficiaryGeneral,
+  getBeneficiaryEditPermissions
 } from '~/server/security'
 import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
 import { IdInput, idSchema } from '~/server/schema'
@@ -105,14 +107,22 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const { user } = ctx
+  const { user, structure } = ctx
+
+  const target = await getBeneficiarySecurityTarget(user, input.id)
+
+  const permissions: BeneficiaryEditPermission = getBeneficiaryEditPermissions({
+    user,
+    target,
+    structure
+  })
   const beneficiary = await getBeneficiaryWithRelations(user, input.id)
 
   const beneficiaryData = getBeneficiaryAccessibleData(ctx, beneficiary)
 
   const followupTypes = await getFollowupTypes(user, input.id)
 
-  return { ...beneficiaryData, followupTypes }
+  return { ...beneficiaryData, followupTypes, permissions }
 }
 
 export type GetBeneficiaryOutput = Prisma.PromiseReturnType<

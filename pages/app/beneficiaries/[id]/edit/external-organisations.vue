@@ -1,5 +1,7 @@
 <template>
   <BeneficiaryEditFormLayout
+    v-if="permissions"
+    :permissions="permissions"
     :schema="saveBeneficiaryExternalOrganisationsSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
@@ -45,6 +47,13 @@
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
+
+  const permissions = computed(() => {
+    if (!data.value) {
+      return null
+    }
+    return data.value.permissions
+  })
 
   const beneficiary = computed(() => {
     if (!data.value) {
