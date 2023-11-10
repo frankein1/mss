@@ -9,6 +9,7 @@
   >
     <BeneficiaryEditFormNavigation
       class="beneficiaryformlayout__navigation fr-col-3"
+      :permissions="permissions"
       :current-route="currentRoute"
       :security-target="beneficiary"
       :beneficiary-id="beneficiary.id"
@@ -65,6 +66,7 @@
     RouteTitle
   } from '~/utils/routing'
   import { beneficiaryFieldLabels } from '~/client/labels'
+  import { BeneficiaryEditPermission } from '~/server/security'
 
   type SubmitType = z.infer<T>
 
@@ -78,6 +80,7 @@
   const props = withDefaults(
     defineProps<{
       beneficiary: MinimalBeneficiaryForFormLayout | null
+      permissions: BeneficiaryEditPermission
       schema: T
       isSubmitting: boolean
       titleIcon?: string

@@ -19,7 +19,8 @@
       class="fr-mx-auto"
     />
     <BeneficiaryFormGeneralInformation
-      v-else-if="beneficiary && agents?.length"
+      v-else-if="beneficiary && permissions && agents?.length"
+      :permissions="permissions"
       :beneficiary="beneficiary"
       :agents="agents"
     />
@@ -34,7 +35,6 @@
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
-  import type { BeneficiaryDraft } from '~/types/beneficiary'
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -52,17 +52,19 @@
   } = await trpcClient.config.getAgents.useQuery({})
 
   const {
-    data: beneficiaryDraft,
-    pending: beneficiaryDraftPending,
-    error: beneficiaryDraftError
-  } = await useAsyncData(loadBeneficiaryDraft)
-
-  const pending = computed(
-    () => agentsPending.value || beneficiaryDraftPending.value
+    data,
+    pending: draftPending,
+    error: draftError
+  } = await useAsyncData(() =>
+    trpcClient.beneficiaryDraft.get.query({
+      id: draftId
+    })
   )
 
+  const pending = computed(() => agentsPending.value || draftPending.value)
+
   const fetchError = computed(() => {
-    if (beneficiaryDraftError.value) {
+    if (draftError.value) {
       return "Le brouillon de la fiche bénéficiaire n'a pas pu être chargé."
     }
     if (agentsError.value) {
@@ -71,14 +73,16 @@
     return ''
   })
 
-  const beneficiary = computed<
-    SaveBeneficiaryGeneralInformationInput | undefined
-  >(() => {
-    if (!beneficiaryDraft.value?.general) {
+  const permissions = computed(() => {
+    return data.value?.permissions
+  })
+
+  const beneficiary = computed(() => {
+    if (!data.value?.draft.general) {
       return undefined
     }
 
-    const b = beneficiaryDraft.value.general
+    const b = data.value?.draft.general
 
     return {
       ...b,
@@ -87,23 +91,12 @@
     }
   })
 
-  async function loadBeneficiaryDraft() {
-    const beneficiaryDraft = (await trpcClient.beneficiaryDraft.get.query({
-      id: draftId
-    })) as BeneficiaryDraft
-
-    return {
-      ...beneficiaryDraft,
-      general: beneficiaryDraft.content?.general
-    }
-  }
-
   async function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryGeneralInformationInput,
     target: string | undefined
   ) {
     if (target) {
-      await saveBeneficiaryDraft(beneficiary, target)
+      await saveDraft(beneficiary, target)
     } else {
       await saveBeneficiary(beneficiary)
     }
@@ -112,9 +105,9 @@
   function saveBeneficiary(
     beneficiary: SaveBeneficiaryGeneralInformationInput
   ) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const draftId = data.value?.draft.id
 
-    if (!beneficiaryDraftId) {
+    if (!draftId) {
       snackbar.error('La création de la fiche bénéficiaire a échoué.')
       return
     }
@@ -122,7 +115,7 @@
     useTrpcMutation({
       mutation: () =>
         trpcClient.beneficiary.saveDraft.mutate({
-          id: beneficiaryDraftId,
+          id: draftId,
           general: beneficiary
         }),
       isSubmitting,
@@ -140,13 +133,13 @@
     })
   }
 
-  function saveBeneficiaryDraft(
+  function saveDraft(
     beneficiary: SaveBeneficiaryGeneralInformationInput,
     target: string
   ) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const draftId = data.value?.draft.id
 
-    if (!beneficiaryDraftId) {
+    if (!draftId) {
       snackbar.error("L'enregistrement du brouillon a échoué.")
       return
     }
@@ -154,7 +147,7 @@
     useTrpcMutation({
       mutation: () =>
         trpcClient.beneficiaryDraft.update.mutate({
-          id: beneficiaryDraftId,
+          id: draftId,
           general: beneficiary
         }),
       isSubmitting,

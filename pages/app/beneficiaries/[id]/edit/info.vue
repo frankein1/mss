@@ -1,6 +1,8 @@
 <template>
   <BeneficiaryEditFormLayout
+    v-if="permissions"
     :schema="saveBeneficiaryGeneralInformationSchema"
+    :permissions="permissions"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     title-icon="fr-icon-user-line"
@@ -18,7 +20,8 @@
       class="fr-mx-auto"
     />
     <BeneficiaryFormGeneralInformation
-      v-else-if="beneficiary && agents?.length"
+      v-else-if="beneficiary && permissions && agents?.length"
+      :permissions="permissions"
       :beneficiary="beneficiary"
       :agents="agents"
       :can-set-referents="canSetReferents"
@@ -62,6 +65,8 @@
   const pending = computed(
     () => agentsPending.value || beneficiaryPending.value
   )
+
+  const permissions = computed(() => data.value?.permissions)
 
   const fetchError = computed(() => {
     if (beneficiaryError.value) {

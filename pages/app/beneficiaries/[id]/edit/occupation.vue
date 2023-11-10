@@ -1,6 +1,8 @@
 <template>
   <BeneficiaryEditFormLayout
+    v-if="permissions"
     :schema="saveBeneficiaryOccupationSchema"
+    :permissions="permissions"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     :current-route="Route.AppBeneficiaryEditOccupation"
@@ -21,6 +23,8 @@
       class="fr-p-3v"
     >
       <BeneficiaryFormOccupationIncome
+        v-if="permissions"
+        :permissions="permissions"
         :family-situation="familySituation"
         :major-children="majorChildren"
       />
@@ -53,6 +57,13 @@
     await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
       id: beneficiaryId
     })
+
+  const permissions = computed(() => {
+    if (!data.value) {
+      return null
+    }
+    return data.value.permissions
+  })
 
   const familySituation = computed(
     () => data.value?.beneficiary.familySituation

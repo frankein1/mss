@@ -8,25 +8,15 @@
 </template>
 
 <script setup lang="ts">
-  import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { RoutePath, Route, AppBeneficiaryEditRoute } from '~/utils/routing'
-  import {
-    canEditBeneficiaryRelatives as canEditBeneficiaryRelativesRule,
-    canEditBeneficiaryHealthInfo as canEditBeneficiaryHealthInfoRule,
-    canEditBeneficiaryOccupationIncome as canEditBeneficiaryOccupationIncomeRule,
-    canEditBeneficiaryExternalOrganisations as canEditBeneficiaryExternalOrganisationsRule,
-    SecurityTargetWithReferents,
-    SecurityTargetWithStructure
-  } from '~/server/security'
-
-  const authStore = useAuthStore()
+  import { BeneficiaryEditPermission } from '~/server/security'
 
   const props = defineProps<{
     currentRoute: AppBeneficiaryEditRoute
-    beneficiaryId: string
     originTab: BeneficiaryTab | undefined
-    securityTarget: SecurityTargetWithReferents & SecurityTargetWithStructure
+    beneficiaryId: string
+    permissions: BeneficiaryEditPermission
     beneficiaryFormLayoutMainContainer: HTMLElement | null
   }>()
 
@@ -34,49 +24,28 @@
     save: [target: string]
   }>()
 
-  const user = computed(() => authStore.getAuthUser)
-
-  const canEditBeneficiaryRelatives = computed(() => {
-    return canEditBeneficiaryRelativesRule(user.value, props.securityTarget)
-  })
-
-  const canEditBeneficiaryHealthInfo = computed(() => {
-    return canEditBeneficiaryHealthInfoRule(user.value, props.securityTarget)
-  })
-
-  const canEditBeneficiaryOccupationIncome = computed(() => {
-    return canEditBeneficiaryOccupationIncomeRule(
-      user.value,
-      props.securityTarget
-    )
-  })
-
-  const canEditBeneficiaryExternalOrganisations = computed(() => {
-    return canEditBeneficiaryExternalOrganisationsRule(
-      user.value,
-      props.securityTarget
-    )
-  })
-
   const navigationRoutes = computed<AppBeneficiaryEditRoute[]>(() => {
     const editRoutes: AppBeneficiaryEditRoute[] = [Route.AppBeneficiaryEditInfo]
 
-    if (canEditBeneficiaryRelatives.value) {
+    if (props.permissions.edit.relatives) {
       editRoutes.push(
         Route.AppBeneficiaryEditTaxHousehold,
         Route.AppBeneficiaryEditEntourage
       )
     }
 
-    if (canEditBeneficiaryHealthInfo.value) {
+    // if (canEditBeneficiaryHealthInfo.value) {
+    if (props.permissions.edit.health) {
       editRoutes.push(Route.AppBeneficiaryEditHealth)
     }
 
-    if (canEditBeneficiaryOccupationIncome.value) {
+    // if (canEditBeneficiaryOccupationIncome.value) {
+    if (props.permissions.edit.occupationIncome) {
       editRoutes.push(Route.AppBeneficiaryEditOccupation)
     }
 
-    if (canEditBeneficiaryExternalOrganisations.value) {
+    // if (canEditBeneficiaryExternalOrganisations.value) {
+    if (props.permissions.edit.externalOrganisations) {
       editRoutes.push(Route.AppBeneficiaryEditExternalOrganisations)
     }
 

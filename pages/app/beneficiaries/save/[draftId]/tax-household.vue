@@ -32,7 +32,6 @@
     saveBeneficiaryTaxHouseholdSchema,
     SaveBeneficiaryTaxHouseholdInput
   } from '~/server/schema'
-  import { BeneficiaryDraft } from '~/types/beneficiary'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
@@ -46,34 +45,21 @@
   const draftId = route.params.draftId as string
   const snackbar = useSnackbar()
 
-  const {
-    data: beneficiaryDraft,
-    pending,
-    error
-  } = await useAsyncData(loadBeneficiaryDraft)
-
-  const beneficiary = computed<SaveBeneficiaryTaxHouseholdInput | undefined>(
-    () => {
-      if (!beneficiaryDraft.value) {
-        return undefined
-      }
-
-      const { taxHousehold } = beneficiaryDraft.value
-
-      return taxHousehold || ({} as SaveBeneficiaryTaxHouseholdInput)
-    }
+  const { data, pending, error } = await useAsyncData(() =>
+    trpcClient.beneficiaryDraft.get.query({
+      id: draftId
+    })
   )
 
-  async function loadBeneficiaryDraft() {
-    const beneficiaryDraft = (await trpcClient.beneficiaryDraft.get.query({
-      id: draftId
-    })) as BeneficiaryDraft
-
-    return {
-      ...beneficiaryDraft,
-      taxHousehold: beneficiaryDraft.content?.taxHousehold
+  const beneficiary = computed(() => {
+    if (!data.value) {
+      return undefined
     }
-  }
+
+    const { taxHousehold } = data.value.draft
+
+    return taxHousehold || ({} as SaveBeneficiaryTaxHouseholdInput)
+  })
 
   async function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryTaxHouseholdInput,
@@ -87,7 +73,7 @@
   }
 
   function saveBeneficiary(beneficiary: SaveBeneficiaryTaxHouseholdInput) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const beneficiaryDraftId = data.value?.draft.id
 
     if (!beneficiaryDraftId) {
       snackbar.error('La création de la fiche bénéficiaire a échoué.')
@@ -119,7 +105,7 @@
     beneficiary: SaveBeneficiaryTaxHouseholdInput,
     target: string
   ) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const beneficiaryDraftId = data.value?.draft.id
 
     if (!beneficiaryDraftId) {
       snackbar.error("L'enregistrement du brouillon a échoué.")
