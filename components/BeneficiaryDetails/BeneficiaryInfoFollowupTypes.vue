@@ -1,15 +1,16 @@
 <template>
   <div class="fr-container">
     <div class="fr-col-12 fr-pb-2w fr-text--bold">Accompagnements</div>
-    <div class="fr-grid-row">
-      <div
+    <ul class="fr-tags-group">
+      <li
         v-for="type in followupTypes"
         :key="type.id"
-        class="bg-color-grey-light fr-p-1w fr-mr-1w fr-mb-1w fr-text--sm br-16"
       >
-        {{ type.name }}
-      </div>
-    </div>
+        <p class="fr-tag">
+          {{ type.name }}
+        </p>
+      </li>
+    </ul>
   </div>
 </template>
 

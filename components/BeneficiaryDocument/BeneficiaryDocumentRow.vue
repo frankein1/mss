@@ -49,32 +49,34 @@
     </td>
     <td>
       <ul class="fr-btns-group fr-btns-group--inline">
-        <li>
-          <button
-            class="fr-btn fr-btn--tertiary-no-outline fr-icon-eye-line"
-            title="Voir dans une nouvelle fenêtre"
-            :aria-label="`Voir ${document.name} - Ouvre une nouvelle fenêtre`"
-            @click="onView"
-          >
-            Voir
-          </button>
-        </li>
-        <li>
-          <a
-            ref="downloadLink"
-            target="_blank"
-            :download="document.name"
-            hidden
-          />
-          <button
-            class="fr-btn fr-btn--tertiary-no-outline fr-icon-download-line"
-            title="Télécharger"
-            :aria-label="`Télécharger ${document.name}`"
-            @click="onDownload"
-          >
-            Télécharger
-          </button>
-        </li>
+        <template v-if="canView">
+          <li>
+            <button
+              class="fr-btn fr-btn--tertiary-no-outline fr-icon-eye-line"
+              title="Voir dans une nouvelle fenêtre"
+              :aria-label="`Voir ${document.name} - Ouvre une nouvelle fenêtre`"
+              @click="onView"
+            >
+              Voir
+            </button>
+          </li>
+          <li>
+            <a
+              ref="downloadLink"
+              target="_blank"
+              :download="document.name"
+              hidden
+            />
+            <button
+              class="fr-btn fr-btn--tertiary-no-outline fr-icon-download-line"
+              title="Télécharger"
+              :aria-label="`Télécharger ${document.name}`"
+              @click="onDownload"
+            >
+              Télécharger
+            </button>
+          </li>
+        </template>
         <li v-if="canEdit">
           <button
             class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
@@ -105,7 +107,11 @@
 <script lang="ts" setup>
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
   import { GetBeneficiaryOutput, DocumentItem } from '~/server/trpc/routers'
-  import { canEditDocument, canDeleteDocument } from '~/server/security'
+  import {
+    canEditDocument,
+    canDeleteDocument,
+    canViewDocument
+  } from '~/server/security'
   import { EditDocumentInput } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
   import { DocumentTag } from '~/types/document'
@@ -133,6 +139,10 @@
   const downloadLink = ref<HTMLLinkElement | null>(null)
 
   const user = computed(() => authStore.getAuthUser)
+
+  const canView = computed(() =>
+    canViewDocument(user.value, props.beneficiary, props.document)
+  )
 
   const canEdit = computed(() =>
     canEditDocument(user.value, props.beneficiary, props.document)
@@ -169,10 +179,10 @@
         trpcClient.documents.createViewUrl.mutate({
           key: props.document.key
         }),
-      onSuccess: ({ url }) => {
+      onSuccess: ({ downloadUrl }) => {
         const link = downloadLink.value
         if (link) {
-          link.href = url
+          link.href = downloadUrl
           link.type = props.document.type
           link.click()
         }

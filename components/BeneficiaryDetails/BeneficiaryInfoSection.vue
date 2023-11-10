@@ -69,6 +69,10 @@
 </script>
 
 <style scoped lang="scss">
+  .fr-accordion::before {
+    content: none;
+  }
+
   .fr-accordion.feature-section {
     padding: 0;
   }
@@ -76,6 +80,7 @@
   .fr-accordion__btn {
     color: var(--text-title-blue-france);
     padding: 1.5rem 2rem;
+    border-radius: 0.5rem;
 
     &::after {
       --icon-size: 1.5rem;
@@ -84,11 +89,17 @@
     &[aria-expanded='true'] {
       background-color: initial;
       border-bottom: 1px solid var(--border-default-grey);
+      border-radius: 0.5rem 0.5rem 0 0;
     }
   }
 
   .fr-accordion .fr-collapse > * {
     padding: 1rem;
+  }
+
+  .fr-accordion .fr-collapse--expanded {
+    padding-bottom: 1rem;
+    padding-top: 1rem;
   }
 
   .fr-btns-group.fr-btns-group--inline .fr-btn {
