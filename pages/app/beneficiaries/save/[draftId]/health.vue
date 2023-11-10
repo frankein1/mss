@@ -21,7 +21,10 @@
       v-else-if="beneficiary"
       class="fr-p-3v"
     >
-      <BeneficiaryFormHealth />
+      <BeneficiaryFormHealth
+        v-if="permissions"
+        :permissions="permissions"
+      />
     </div>
   </BeneficiariesSaveFormLayout>
 </template>
@@ -34,7 +37,6 @@
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
-  import type { BeneficiaryDraft } from '~/types/beneficiary'
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -45,30 +47,23 @@
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
 
-  const {
-    data: beneficiaryDraft,
-    pending,
-    error
-  } = await useAsyncData(loadBeneficiaryDraft)
+  const { data, pending, error } = await useAsyncData(() =>
+    trpcClient.beneficiaryDraft.get.query({
+      id: draftId
+    })
+  )
 
-  const beneficiary = computed<SaveBeneficiaryHealthInput | undefined>(() => {
-    if (!beneficiaryDraft.value) {
+  const permissions = computed(() => {
+    return data.value?.permissions
+  })
+
+  const beneficiary = computed(() => {
+    if (!data.value) {
       return undefined
     }
 
-    return beneficiaryDraft.value.health || ({} as SaveBeneficiaryHealthInput)
+    return data.value.draft.health || ({} as SaveBeneficiaryHealthInput)
   })
-
-  async function loadBeneficiaryDraft() {
-    const beneficiaryDraft = (await trpcClient.beneficiaryDraft.get.query({
-      id: draftId
-    })) as BeneficiaryDraft
-
-    return {
-      ...beneficiaryDraft,
-      health: beneficiaryDraft.content?.health
-    }
-  }
 
   async function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryHealthInput,
@@ -82,7 +77,7 @@
   }
 
   function saveBeneficiary(beneficiary: SaveBeneficiaryHealthInput) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const beneficiaryDraftId = data.value?.draft.id
 
     if (!beneficiaryDraftId) {
       snackbar.error('La création de la fiche bénéficiaire a échoué.')
@@ -114,7 +109,7 @@
     beneficiary: SaveBeneficiaryHealthInput,
     target: string
   ) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const beneficiaryDraftId = data.value?.draft.id
 
     if (!beneficiaryDraftId) {
       snackbar.error("L'enregistrement du brouillon a échoué.")

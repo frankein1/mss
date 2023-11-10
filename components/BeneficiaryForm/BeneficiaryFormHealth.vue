@@ -15,7 +15,7 @@
     </div>
     <div class="fr-col-12">
       <VeeInput
-        v-if="hasNirAccess"
+        v-if="permissions.set.nir"
         name="socialSecurityNumber"
         :label="beneficiaryFieldLabels.socialSecurityNumber"
         type="social-security-number"
@@ -44,13 +44,10 @@
 
 <script lang="ts" setup>
   import { beneficiaryGirOptions } from '~/client/options/beneficiary'
-  import { useAuthStore } from '~/store/auth'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
-  import { hasAccessBeneficiaryField } from '~/security/permission'
+  import { BeneficiaryEditPermission } from '~/server/security'
 
-  const authStore = useAuthStore()
-
-  const hasNirAccess = computed(() =>
-    hasAccessBeneficiaryField(authStore.userStructureType, 'nir')
-  )
+  defineProps<{
+    permissions: BeneficiaryEditPermission
+  }>()
 </script>
