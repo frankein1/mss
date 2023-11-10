@@ -11,6 +11,7 @@
   >
     <BeneficiaryFormFileInformation
       :agents="agents"
+      :permissions="permissions"
       no-aidant-connect-authorized
     />
 
@@ -61,7 +62,7 @@
         />
       </div>
       <div
-        v-if="isMinistryAgent"
+        v-if="permissions.setNumeroPegase"
         class="fr-col-12 fr-col-lg-6"
       >
         <VeeInput
@@ -117,11 +118,11 @@
     createBeneficiarySchema
   } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
-
-  const isMinistryAgent = useMinistryAgent()
+  import { BeneficiaryEditPermission } from '~/server/security'
 
   defineProps<{
     isSubmitting: boolean
+    permissions: BeneficiaryEditPermission
     agents: BeneficiaryReferent[]
   }>()
 

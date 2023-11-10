@@ -4,6 +4,7 @@ import { beneficiaryRouter } from './beneficiary/router'
 import { configRouter } from './configRouter'
 import { followupRouter } from './followup/router'
 import { statRouter } from './stat'
+import { permissionsRouter } from './permissions'
 import { userRouter } from './userRouter'
 import { structureRouter } from './structureRouter'
 import { helpRequestRouter } from './helpRequestRouter'
@@ -30,7 +31,8 @@ export const appRouter = router({
   documents: documentRouter,
   comment: commentRouter,
   usersActivity: usersActivityRouter,
-  beneficiaryDraft: beneficiaryDraftRouter
+  beneficiaryDraft: beneficiaryDraftRouter,
+  permissions: permissionsRouter
 })
 // export type definition of API
 export type AppRouter = typeof appRouter

@@ -64,7 +64,7 @@
       />
     </div>
     <div
-      v-if="isMinistryAgent"
+      v-if="permissions.setNumeroPegase"
       class="fr-col-12"
     >
       <VeeInput
@@ -84,8 +84,11 @@
     beneficiaryTitleOptions
   } from '~/client/options/beneficiary'
   import { nationalityOptions } from '~/client/options/nationality'
+  import { BeneficiaryEditPermission } from '~/server/security'
 
-  const isMinistryAgent = useMinistryAgent()
+  defineProps<{
+    permissions: BeneficiaryEditPermission
+  }>()
 
   const { value: status } = useField<BeneficiaryStatus>('status')
 

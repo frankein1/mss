@@ -61,7 +61,7 @@
       />
     </div>
     <div
-      v-if="isMinistryAgent"
+      v-if="permissions.setAccomodationZone"
       class="fr-col-12"
     >
       <VeeSelect
@@ -88,8 +88,11 @@
     beneficiaryAccommodationModeOptions,
     beneficiaryAccommodationZoneOptions
   } from '~/client/options/beneficiary'
+  import { BeneficiaryEditPermission } from '~/server/security'
 
-  const isMinistryAgent = useMinistryAgent()
+  defineProps<{
+    permissions: BeneficiaryEditPermission
+  }>()
 
   const { value: accommodationMode } =
     useField<BeneficiaryAccommodationMode>('accommodationMode')

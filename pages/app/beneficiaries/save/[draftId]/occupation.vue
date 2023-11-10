@@ -18,10 +18,11 @@
       class="fr-mx-auto"
     />
     <div
-      v-else-if="beneficiary"
+      v-else-if="beneficiary && permissions"
       class="fr-p-3v"
     >
       <BeneficiaryFormOccupationIncome
+        :permissions="permissions"
         :family-situation="familySituation"
         :major-children="majorChildren"
       />
@@ -37,7 +38,6 @@
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
-  import type { BeneficiaryDraft } from '~/types/beneficiary'
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -48,48 +48,35 @@
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
 
-  const {
-    data: beneficiaryDraft,
-    pending,
-    error
-  } = await useAsyncData(loadBeneficiaryDraft)
+  const { data, pending, error } = await useAsyncData(() =>
+    trpcClient.beneficiaryDraft.get.query({
+      id: draftId
+    })
+  )
 
+  const permissions = computed(() => data.value?.permissions)
   const familySituation = computed(
-    () => beneficiaryDraft.value?.taxHousehold?.familySituation
+    () => data.value?.draft.taxHousehold?.familySituation
   )
   const majorChildren = computed(
-    () => beneficiaryDraft.value?.taxHousehold?.majorChildren
+    () => data.value?.draft.taxHousehold?.majorChildren
   )
 
-  const beneficiary = computed<SaveBeneficiaryOccupationInput | undefined>(
-    () => {
-      if (!beneficiaryDraft.value) {
-        return undefined
-      }
-
-      return (
-        beneficiaryDraft.value.occupation ||
-        ({
-          mainIncomeSource: [],
-          partnerMainIncomeSource: [],
-          majorChildrenMainIncomeSource: [],
-          pensionOrganisations: []
-        } as SaveBeneficiaryOccupationInput)
-      )
+  const beneficiary = computed(() => {
+    if (!data.value) {
+      return undefined
     }
-  )
 
-  async function loadBeneficiaryDraft() {
-    const beneficiaryDraft = (await trpcClient.beneficiaryDraft.get.query({
-      id: draftId
-    })) as BeneficiaryDraft
-
-    return {
-      ...beneficiaryDraft,
-      taxHousehold: beneficiaryDraft.content?.taxHousehold,
-      occupation: beneficiaryDraft.content?.occupation
-    }
-  }
+    return (
+      data.value.draft.occupation ||
+      ({
+        mainIncomeSource: [],
+        partnerMainIncomeSource: [],
+        majorChildrenMainIncomeSource: [],
+        pensionOrganisations: []
+      } as SaveBeneficiaryOccupationInput)
+    )
+  })
 
   async function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryOccupationInput,
@@ -103,7 +90,7 @@
   }
 
   function saveBeneficiary(beneficiary: SaveBeneficiaryOccupationInput) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const beneficiaryDraftId = data.value?.draft.id
 
     if (!beneficiaryDraftId) {
       snackbar.error('La création de la fiche bénéficiaire a échoué.')
@@ -135,7 +122,7 @@
     beneficiary: SaveBeneficiaryOccupationInput,
     target: string
   ) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const beneficiaryDraftId = data.value?.draft.id
 
     if (!beneficiaryDraftId) {
       snackbar.error("L'enregistrement du brouillon a échoué.")
