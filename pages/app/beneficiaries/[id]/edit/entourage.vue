@@ -60,16 +60,18 @@
       return null
     }
 
-    const { beneficiary: b, entourages } = data.value
+    const {
+      beneficiary: { id, meta, general, entourages }
+    } = data.value
 
     // Names and id are required for building the breadcrumb in the layout
     return {
-      id: b.id,
-      structureId: b.structureId,
-      referents: b.referents,
-      firstName: b.firstName,
-      usualName: b.usualName,
-      birthName: b.birthName,
+      id,
+      structureId: meta.structureId,
+      referents: meta.referents,
+      firstName: general.firstName,
+      usualName: general.usualName,
+      birthName: general.birthName,
       entourages
     } as SaveBeneficiaryEntourageInput & MinimalBeneficiaryForFormLayout
   })

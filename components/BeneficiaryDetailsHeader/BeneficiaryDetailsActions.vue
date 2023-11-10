@@ -1,6 +1,6 @@
 <template>
   <ul class="fr-btns-group fr-btns-group--inline">
-    <li v-if="canDelete">
+    <li v-if="permissions.delete.beneficiary">
       <button
         class="fr-btn fr-btn--secondary fr-icon-delete-line btn-delete-action"
         data-fr-opened="false"
@@ -36,12 +36,13 @@
   import { RoutePath } from '~/utils/routing'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { BeneficiaryEditPermission } from '~/server/security'
 
   const route = useRoute()
 
   const props = defineProps<{
     beneficiaryId: string
-    canDelete: boolean
+    permissions: BeneficiaryEditPermission
   }>()
 
   const emit = defineEmits<{ deleted: [] }>()

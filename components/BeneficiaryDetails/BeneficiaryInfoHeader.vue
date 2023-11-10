@@ -8,7 +8,7 @@
         />
       </div>
       <div
-        v-if="beneficiary.aidantConnectAuthorized"
+        v-if="beneficiary.meta.aidantConnectAuthorized"
         class="fr-col-6"
       >
         <div class="fr-icon-success-line field-value">
@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div v-if="hasCoordinatesInformations(beneficiary)">
+    <div v-if="hasCoordinatesInformations(beneficiary.general)">
       <hr class="fr-col-12 fr-mt-5v no-print" />
 
       <div class="fr-grid-row">
@@ -33,17 +33,17 @@
           />
           <BeneficiaryInfoLabel
             label="Adresse"
-            :value="formatAddress(beneficiary)"
+            :value="formatAddress(beneficiary.general)"
           />
         </div>
         <div class="fr-col-6">
           <BeneficiaryInfoLabel
             label="Email"
-            :value="beneficiary.email"
+            :value="beneficiary.general.email"
           />
           <BeneficiaryInfoLabel
             label="Complément d'adresse"
-            :value="beneficiary.addressComplement"
+            :value="beneficiary.general.addressComplement"
           />
         </div>
       </div>
@@ -64,19 +64,19 @@
   }>()
 
   const referentNames = computed(() =>
-    props.beneficiary.referents
+    props.beneficiary.meta.referents
       .map(referent => formatUserDisplayName(referent))
       .join(', ')
   )
 
   const phoneLabel = computed(() => {
-    if (props.beneficiary.noPhone) {
+    if (props.beneficiary.general.noPhone) {
       return "N'a pas de téléphone"
     }
-    if (props.beneficiary.phone1) {
-      const phones = [props.beneficiary.phone1]
-      if (props.beneficiary.phone2) {
-        phones.push(props.beneficiary.phone2)
+    if (props.beneficiary.general.phone1) {
+      const phones = [props.beneficiary.general.phone1]
+      if (props.beneficiary.general.phone2) {
+        phones.push(props.beneficiary.general.phone2)
       }
       return phones.join(', ')
     }
