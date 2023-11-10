@@ -70,7 +70,7 @@
 
 <style scoped lang="scss">
   .fr-accordion::before {
-    box-shadow: none;
+    content: none;
   }
 
   .fr-accordion.feature-section {
