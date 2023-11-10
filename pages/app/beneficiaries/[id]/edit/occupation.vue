@@ -66,46 +66,56 @@
   })
 
   const familySituation = computed(
-    () => data.value?.beneficiary.familySituation
+    () => data.value?.beneficiary.taxHouseholds?.familySituation
   )
-  const majorChildren = computed(() => data.value?.beneficiary.majorChildren)
+  const majorChildren = computed(
+    () => data.value?.beneficiary.taxHouseholds?.majorChildren
+  )
 
   const beneficiary = computed(() => {
     if (!data.value) {
       return null
     }
 
-    const { beneficiary: b } = data.value
+    const {
+      beneficiary: { id, meta, general, occupationIncome }
+    } = data.value
 
     // Names and id are required for building the breadcrumb in the layout
     return {
-      id: b.id,
-      structureId: b.structureId,
-      referents: b.referents,
-      firstName: b.firstName,
-      usualName: b.usualName,
-      birthName: b.birthName,
-      socioProfessionalCategory: b.socioProfessionalCategory,
-      occupation: b.occupation,
-      employer: b.employer,
-      employerSiret: b.employerSiret,
-      mainIncomeSource: b.mainIncomeSource || [],
-      mainIncomeAmount: prismaDecimalToNumber(b.mainIncomeAmount),
-      partnerMainIncomeSource: b.partnerMainIncomeSource || [],
-      partnerMainIncomeAmount: prismaDecimalToNumber(b.partnerMainIncomeAmount),
-      majorChildrenMainIncomeSource: b.majorChildrenMainIncomeSource || [],
-      majorChildrenMainIncomeAmount: prismaDecimalToNumber(
-        b.majorChildrenMainIncomeAmount
+      id,
+      structureId: meta.structureId,
+      referents: meta.referents,
+      firstName: general.firstName,
+      usualName: general.usualName,
+      birthName: general.birthName,
+      socioProfessionalCategory: occupationIncome?.socioProfessionalCategory,
+      occupation: occupationIncome?.occupation,
+      employer: occupationIncome?.employer,
+      employerSiret: occupationIncome?.employerSiret,
+      mainIncomeSource: occupationIncome?.mainIncomeSource || [],
+      mainIncomeAmount: prismaDecimalToNumber(
+        occupationIncome?.mainIncomeAmount
       ),
-      unemploymentNumber: b.unemploymentNumber,
-      pensionOrganisations: b.pensionOrganisations || [],
-      otherPensionOrganisations: b.otherPensionOrganisations,
-      cafNumber: b.cafNumber,
-      bank: b.bank,
-      funeralContract: b.funeralContract,
-      ministereCategorie: b.ministereCategorie,
-      ministereDepartementServiceAc: b.ministereDepartementServiceAc,
-      ministereStructure: b.ministereStructure
+      partnerMainIncomeSource: occupationIncome?.partnerMainIncomeSource || [],
+      partnerMainIncomeAmount: prismaDecimalToNumber(
+        occupationIncome?.partnerMainIncomeAmount
+      ),
+      majorChildrenMainIncomeSource:
+        occupationIncome?.majorChildrenMainIncomeSource || [],
+      majorChildrenMainIncomeAmount: prismaDecimalToNumber(
+        occupationIncome?.majorChildrenMainIncomeAmount
+      ),
+      unemploymentNumber: occupationIncome?.unemploymentNumber,
+      pensionOrganisations: occupationIncome?.pensionOrganisations || [],
+      otherPensionOrganisations: occupationIncome?.otherPensionOrganisations,
+      cafNumber: occupationIncome?.cafNumber,
+      bank: occupationIncome?.bank,
+      funeralContract: occupationIncome?.funeralContract,
+      ministereCategorie: occupationIncome?.ministereCategorie,
+      ministereDepartementServiceAc:
+        occupationIncome?.ministereDepartementServiceAc,
+      ministereStructure: occupationIncome?.ministereStructure
     } as SaveBeneficiaryOccupationInput & MinimalBeneficiaryForFormLayout
   })
 
@@ -119,7 +129,7 @@
 
     useTrpcMutation({
       mutation: () =>
-        trpcClient.beneficiary.updateOccupationIncome.mutate({
+        trpcClient.beneficiary.updateOccupationIncome?.mutate({
           id: beneficiaryId,
           ...beneficiary
         }),

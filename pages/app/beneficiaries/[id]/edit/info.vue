@@ -24,7 +24,6 @@
       :permissions="permissions"
       :beneficiary="beneficiary"
       :agents="agents"
-      :can-set-referents="canSetReferents"
     />
   </BeneficiaryEditFormLayout>
 </template>
@@ -34,8 +33,6 @@
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
-  import { canEditBeneficiaryReferents } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
@@ -44,7 +41,6 @@
 
   const isSubmitting = ref(false)
 
-  const authStore = useAuthStore()
   const route = useRoute()
   const beneficiaryId = route.params.id as string
 
@@ -78,55 +74,50 @@
     return ''
   })
 
-  const user = computed(() => authStore.getAuthUser)
-
   const beneficiary = computed(() => {
     if (!data.value) {
       return null
     }
 
-    const b = data.value.beneficiary
+    const {
+      beneficiary: { id, meta, general }
+    } = data.value
 
     // Id is required for building the breadcrumb in the layout
     return {
-      id: b.id,
-      structureId: b.structureId,
-      referents: b.referents.map(referent => referent.id),
-      aidantConnectAuthorized: b.aidantConnectAuthorized,
-      status: b.status,
-      title: b.title,
-      firstName: b.firstName,
-      usualName: b.usualName,
-      birthName: b.birthName,
-      birthDate: b.birthDate ? new Date(b.birthDate) : undefined,
-      birthPlace: b.birthPlace,
-      deathDate: b.deathDate ? new Date(b.deathDate) : undefined,
-      gender: b.gender,
-      nationality: b.nationality,
-      numeroPegase: b.numeroPegase,
-      accommodationMode: b.accommodationMode,
-      accommodationName: b.accommodationName,
-      accommodationAdditionalInformation: b.accommodationAdditionalInformation,
-      zipcode: b.zipcode,
-      city: b.city,
-      region: b.region,
-      addressComplement: b.addressComplement,
-      accommodationZone: b.accommodationZone,
-      street: b.street,
-      noPhone: b.noPhone,
-      phone1: b.phone1,
-      phone2: b.phone2,
-      email: b.email,
-      mobility: b.mobility
+      id,
+      structureId: meta.structureId,
+      referents: meta.referents.map(referent => referent.id),
+      aidantConnectAuthorized: meta.aidantConnectAuthorized,
+      status: meta.status,
+      title: general.title,
+      firstName: general.firstName,
+      usualName: general.usualName,
+      birthName: general.birthName,
+      birthDate: general.birthDate ? new Date(general.birthDate) : undefined,
+      birthPlace: general.birthPlace,
+      deathDate: general.deathDate ? new Date(general.deathDate) : undefined,
+      gender: general.gender,
+      nationality: general.nationality,
+      numeroPegase: general.numeroPegase,
+      accommodationMode: general.accommodationMode,
+      accommodationName: general.accommodationName,
+      accommodationAdditionalInformation:
+        general.accommodationAdditionalInformation,
+      zipcode: general.zipcode,
+      city: general.city,
+      region: general.region,
+      addressComplement: general.addressComplement,
+      accommodationZone: general.accommodationZone,
+      street: general.street,
+      noPhone: general.noPhone,
+      phone1: general.phone1,
+      phone2: general.phone2,
+      email: general.email,
+      mobility: general.mobility
     } as SaveBeneficiaryGeneralInformationInput &
       MinimalBeneficiaryForFormLayout
   })
-
-  const canSetReferents = computed(() =>
-    data.value?.beneficiary
-      ? canEditBeneficiaryReferents(user.value, data.value.beneficiary)
-      : false
-  )
 
   function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryGeneralInformationInput,
@@ -136,7 +127,7 @@
       return
     }
 
-    const structureId = data.value.beneficiary.structureId
+    const structureId = data.value.beneficiary.meta.structureId
 
     useTrpcMutation({
       mutation: () =>

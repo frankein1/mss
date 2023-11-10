@@ -1,2 +1,3 @@
-export * from './getBeneficiaryWithRelations'
 export * from './getBeneficiarySecurityTarget'
+export * from './getBeneficiaryFollowUpTypes'
+export * from './getBeneficiaryDetails'

@@ -1,6 +1,5 @@
-import { Prisma } from '@prisma/client'
+import { Beneficiary, BeneficiaryRelative, User } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { getBeneficiaryWithRelations } from '~/server/query/beneficiaires'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   BeneficiaryEditPermission,
@@ -8,12 +7,153 @@ import {
   canViewBeneficiaryGeneral,
   getBeneficiaryEditPermissions
 } from '~/server/security'
-import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
 import { IdInput, idSchema } from '~/server/schema'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiaryDetails,
+  getBeneficiarySecurityTarget
+} from '~/server/query'
 import { FollowupRepo, HelpRequestRepo } from '~/server/database'
 import { FollowupTypeIdAndName } from '~/types/followupType'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
+
+export type GetBeneficiaryHealth = Pick<
+  Beneficiary,
+  | 'gir'
+  | 'doctor'
+  | 'healthAdditionalInformation'
+  | 'insurance'
+  | 'socialSecurityNumber'
+>
+
+export type GetBeneficiaryMeta = Pick<
+  Beneficiary,
+  | 'fileNumber'
+  | 'structureId'
+  | 'additionalInformation'
+  | 'createdById'
+  | 'created'
+  | 'updated'
+  | 'status'
+  | 'archivedById'
+  | 'aidantConnectAuthorized'
+> & {
+  referents: Pick<
+    User,
+    'id' | 'firstName' | 'lastName' | 'email' | 'role' | 'status'
+  >[]
+}
+
+export type GetBeneficiaryGeneral = Pick<
+  Beneficiary,
+  | 'title'
+  | 'usualName'
+  | 'birthName'
+  | 'firstName'
+  | 'birthDate'
+  | 'birthPlace'
+  | 'deathDate'
+  | 'gender'
+  | 'nationality'
+  | 'numeroPegase'
+  | 'accommodationMode'
+  | 'accommodationName'
+  | 'accommodationZone'
+  | 'accommodationAdditionalInformation'
+  | 'street'
+  | 'addressComplement'
+  | 'zipcode'
+  | 'city'
+  | 'region'
+  | 'noPhone'
+  | 'phone1'
+  | 'phone2'
+  | 'email'
+  | 'caregiver'
+  | 'mobility'
+  | 'additionalInformation'
+>
+
+export type GetBeneficiaryExternalOrganisations = Pick<
+  Beneficiary,
+  | 'protectionMeasure'
+  | 'representative'
+  | 'prescribingStructure'
+  | 'orientationType'
+  | 'orientationStructure'
+  | 'serviceProviders'
+  | 'involvedPartners'
+  | 'additionalInformation'
+>
+
+export type GetBeneficiaryOccupationIncome = Pick<
+  Beneficiary,
+  | 'socioProfessionalCategory'
+  | 'occupation'
+  | 'employer'
+  | 'employerSiret'
+  | 'mainIncomeSource'
+  | 'mainIncomeAmount'
+  | 'partnerMainIncomeSource'
+  | 'partnerMainIncomeAmount'
+  | 'majorChildrenMainIncomeSource'
+  | 'majorChildrenMainIncomeAmount'
+  | 'unemploymentNumber'
+  | 'pensionOrganisations'
+  | 'otherPensionOrganisations'
+  | 'cafNumber'
+  | 'bank'
+  | 'funeralContract'
+  | 'ministereCategorie'
+  | 'ministereDepartementServiceAc'
+  | 'ministereStructure'
+>
+
+export type GetBeneficiaryRelative = Pick<
+  BeneficiaryRelative,
+  | 'id'
+  | 'lastName'
+  | 'firstName'
+  | 'relationship'
+  | 'city'
+  | 'email'
+  | 'phone'
+  | 'hosted'
+  | 'caregiver'
+  | 'beneficiaryId'
+  | 'additionalInformation'
+  | 'birthDate'
+> & {
+  linkedBeneficiary: Pick<
+    Beneficiary,
+    | 'firstName'
+    | 'email'
+    | 'title'
+    | 'usualName'
+    | 'phone1'
+    | 'birthDate'
+    | 'id'
+  > | null
+}
+
+export type GetBeneficiaryTaxHousehold = Pick<
+  Beneficiary,
+  'familySituation' | 'minorChildren' | 'majorChildren'
+> & {
+  taxHouseholds?: GetBeneficiaryRelative[]
+}
+
+export type GetBeneficiaryOutput = {
+  id: string
+  meta: GetBeneficiaryMeta
+  general: GetBeneficiaryGeneral
+  health: GetBeneficiaryHealth | undefined
+  externalOrganisations: GetBeneficiaryExternalOrganisations | undefined
+  occupationIncome: GetBeneficiaryOccupationIncome | undefined
+  entourages: GetBeneficiaryRelative[] | undefined
+  taxHouseholds: GetBeneficiaryTaxHousehold | undefined
+}
+
+export type GetBeneficiaryFollowupTypes = FollowupTypeIdAndName[]
 
 async function getFollowupFollowupTypes(
   user: SecurityRuleGrantee,
@@ -116,22 +256,16 @@ const handler = async ({
     target,
     structure
   })
-  const beneficiary = await getBeneficiaryWithRelations(user, input.id)
-
-  const beneficiaryData = getBeneficiaryAccessibleData(ctx, beneficiary)
+  const beneficiary: GetBeneficiaryOutput = await getBeneficiaryDetails({
+    user,
+    structure,
+    id: input.id
+  })
 
   const followupTypes = await getFollowupTypes(user, input.id)
 
-  return { ...beneficiaryData, followupTypes, permissions }
+  return { beneficiary, followupTypes, permissions }
 }
-
-export type GetBeneficiaryOutput = Prisma.PromiseReturnType<
-  typeof handler
->['beneficiary']
-
-export type GetBeneficiaryFollowupTypesOutput = Prisma.PromiseReturnType<
-  typeof handler
->['followupTypes']
 
 export const getBeneficiaryDetailsQuery = createQuery({
   inputValidation: idSchema,

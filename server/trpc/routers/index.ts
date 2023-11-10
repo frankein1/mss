@@ -51,7 +51,6 @@ export type GetHelpRequestDetailsOutput =
 export type GetExaminationDatesConfigOutput =
   RouterOutput['config']['getExaminationDates']
 
-export * from '~/server/trpc/routers/beneficiary'
 export * from '~/server/trpc/routers/usersActivity'
 export * from '~/server/trpc/routers/admin'
 export * from '~/server/trpc/routers/followup'

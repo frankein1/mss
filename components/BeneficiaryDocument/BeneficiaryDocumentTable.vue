@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Documents, GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import { Documents, GetBeneficiaryOutput } from '~/server/route'
   import type { BeneficiaryDocumentSort } from '~/types/table'
 
   const props = defineProps<{

@@ -3,11 +3,17 @@ import {
   SecurityRuleGrantee,
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,
+  canCreateHelpRequest,
+  canDeleteBeneficiary,
   canEditBeneficiaryExternalOrganisations,
   canEditBeneficiaryHealthInfo,
   canEditBeneficiaryOccupationIncome,
   canEditBeneficiaryReferents,
-  canEditBeneficiaryRelatives
+  canEditBeneficiaryRelatives,
+  canListBeneficiaryRelatives,
+  canViewBeneficiaryExternalOrganisations,
+  canViewBeneficiaryHealthInfo,
+  canViewBeneficiaryOccupationIncome
 } from '../rules'
 import { hasAccessBeneficiaryField } from '~/security/permission'
 
@@ -27,6 +33,19 @@ export type BeneficiaryEditPermission = {
     ministereDepartementServiceAc: boolean
     ministereStructure: boolean
   }
+  view: {
+    relatives: boolean
+    health: boolean
+    occupationIncome: boolean
+    externalOrganisations: boolean
+    nir: boolean
+  }
+  create: {
+    helpRequest: boolean
+  }
+  delete: {
+    beneficiary: boolean
+  }
 }
 
 export const getBeneficiaryEditPermissions = ({
@@ -38,27 +57,98 @@ export const getBeneficiaryEditPermissions = ({
   target?: SecurityTargetWithStructure & SecurityTargetWithReferents
   structure: { type: StructureType }
 }) => {
+  let permissions: BeneficiaryEditPermission
+  if (!target) {
+    permissions = getCreatePermissions({ structure })
+  } else {
+    permissions = getEditPermissions({ user, target, structure })
+  }
+
+  return permissions
+}
+
+function getCreatePermissions({
+  structure
+}: {
+  structure: { type: StructureType }
+}) {
   const isMinistryAgent = structure.type === StructureType.Ministere
-  const permissions: BeneficiaryEditPermission = {
+  return {
     edit: {
-      relatives: target ? canEditBeneficiaryRelatives(user, target) : true,
-      health: target ? canEditBeneficiaryHealthInfo(user, target) : true,
-      occupationIncome: target
-        ? canEditBeneficiaryOccupationIncome(user, target)
-        : true,
-      externalOrganisations: target
-        ? canEditBeneficiaryExternalOrganisations(user, target)
-        : true
+      relatives: true,
+      health: true,
+      occupationIncome: true,
+      externalOrganisations: true
     },
     set: {
       accomodationZone: isMinistryAgent,
-      referents: target ? canEditBeneficiaryReferents(user, target) : true,
+      referents: true,
       nir: hasAccessBeneficiaryField(structure.type, 'nir'),
       numeroPegase: isMinistryAgent,
       ministereCategorie: isMinistryAgent,
       ministereDepartementServiceAc: isMinistryAgent,
       ministereStructure: isMinistryAgent
+    },
+    view: {
+      relatives: false,
+      health: false,
+      occupationIncome: false,
+      externalOrganisations: false,
+      nir: false
+    },
+    create: {
+      helpRequest: false
+    },
+    delete: {
+      beneficiary: false
     }
   }
-  return permissions
+}
+
+function getEditPermissions({
+  user,
+  target,
+  structure
+}: {
+  user: SecurityRuleGrantee
+  target: SecurityTargetWithStructure & SecurityTargetWithReferents
+  structure: { type: StructureType }
+}) {
+  const isMinistryAgent = structure.type === StructureType.Ministere
+  return {
+    edit: {
+      relatives: canEditBeneficiaryRelatives(user, target),
+      health: canEditBeneficiaryHealthInfo(user, target),
+      occupationIncome: canEditBeneficiaryOccupationIncome(user, target),
+      externalOrganisations: canEditBeneficiaryExternalOrganisations(
+        user,
+        target
+      )
+    },
+    set: {
+      accomodationZone: isMinistryAgent,
+      referents: canEditBeneficiaryReferents(user, target),
+      nir: hasAccessBeneficiaryField(structure.type, 'nir'),
+      numeroPegase: isMinistryAgent,
+      ministereCategorie: isMinistryAgent,
+      ministereDepartementServiceAc: isMinistryAgent,
+      ministereStructure: isMinistryAgent
+    },
+    view: {
+      relatives: canListBeneficiaryRelatives(user, target),
+      health: canViewBeneficiaryHealthInfo(user, target),
+      occupationIncome: canViewBeneficiaryOccupationIncome(user, target),
+      externalOrganisations: canViewBeneficiaryExternalOrganisations(
+        user,
+        target
+      ),
+      nir: hasAccessBeneficiaryField(structure.type, 'nir')
+    },
+    create: {
+      helpRequest: canCreateHelpRequest(user, target)
+    },
+    delete: {
+      beneficiary: canDeleteBeneficiary(user, target)
+    }
+  }
 }

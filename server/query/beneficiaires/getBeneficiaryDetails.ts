@@ -1,22 +1,135 @@
+import { Prisma, StructureType } from '@prisma/client'
 import { getBeneficiaryFollowUpTypes } from './getBeneficiaryFollowUpTypes'
-import { ProtectedAppContext } from '~/server/trpc'
+import { BeneficiaryRepo } from '~/server/database'
 import {
-  canListBeneficiaryRelatives,
-  canViewBeneficiaryHealthInfo,
-  canViewBeneficiaryOccupationIncome,
-  canViewBeneficiaryExternalOrganisations,
+  SecurityRuleGrantee,
   canViewDocument,
-  SecurityRuleGrantee
+  getBeneficiaryEditPermissions
 } from '~/server/security'
-import type { BeneficiaryWithRelations } from '~/types/beneficiary'
-import { hasAccessBeneficiaryField } from '~/security/permission'
 
-function getBeneficiaryMeta(
-  user: SecurityRuleGrantee,
-  beneficiary: BeneficiaryWithRelations
-) {
+export async function getBeneficiaryDetails({
+  user,
+  structure,
+  id
+}: {
+  user: SecurityRuleGrantee
+  structure: { type: StructureType }
+  id: string
+}) {
+  const beneficiary = await findBeneficiary(user, id)
+  const { view } = getBeneficiaryEditPermissions({
+    user,
+    target: beneficiary,
+    structure
+  })
+
+  const meta = getMeta(beneficiary)
+  const general = getGeneral(beneficiary)
+
+  const {
+    taxHouseholds,
+    entourages,
+    familySituation,
+    majorChildren,
+    minorChildren
+  } = getRelatives(beneficiary)
+
+  const externalOrganisations = view.externalOrganisations
+    ? getExternalOrganisations(beneficiary)
+    : undefined
+  const health = view.health ? getHealth(beneficiary) : undefined
+  const occupationIncome = view.occupationIncome
+    ? getOccupationIncome(beneficiary)
+    : undefined
+
+  const documents = beneficiary.documents.filter(document =>
+    canViewDocument(user, beneficiary, document)
+  )
+  const history = getHistory(beneficiary)
+
   return {
     id: beneficiary.id,
+    meta,
+    general,
+    externalOrganisations,
+    health,
+    occupationIncome,
+    documents,
+    taxHouseholds: view.relatives
+      ? {
+          familySituation,
+          majorChildren,
+          minorChildren,
+          taxHouseholds
+        }
+      : undefined,
+    entourages: view.relatives ? entourages : undefined,
+    history
+  }
+}
+
+type FindBeneficiaryOutput = Prisma.PromiseReturnType<typeof findBeneficiary>
+
+async function findBeneficiary(user: SecurityRuleGrantee, id: string) {
+  return await BeneficiaryRepo.findUniqueOrThrow(user, {
+    where: {
+      id
+    },
+    include: {
+      referents: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          role: true,
+          status: true
+        }
+      },
+      relatives: {
+        select: {
+          id: true,
+          lastName: true,
+          firstName: true,
+          relationship: true,
+          city: true,
+          email: true,
+          phone: true,
+          hosted: true,
+          caregiver: true,
+          beneficiaryId: true,
+          additionalInformation: true,
+          birthDate: true,
+          linkedBeneficiary: {
+            select: {
+              id: true,
+              firstName: true,
+              email: true,
+              title: true,
+              usualName: true,
+              phone1: true,
+              birthDate: true
+            }
+          }
+        }
+      },
+      documents: true,
+      followups: {
+        include: {
+          types: true
+        }
+      },
+      helpRequests: {
+        include: {
+          type: true
+        }
+      }
+    }
+  })
+}
+
+function getMeta(beneficiary: FindBeneficiaryOutput) {
+  return {
     fileNumber: beneficiary.fileNumber,
     status: beneficiary.status,
     referents: beneficiary.referents,
@@ -27,17 +140,11 @@ function getBeneficiaryMeta(
     updated: beneficiary.updated,
     archivedById: beneficiary.archivedById,
     archived: beneficiary.archived,
-    aidantConnectAuthorized: beneficiary.aidantConnectAuthorized,
-    documents: beneficiary.documents.filter(document =>
-      canViewDocument(user, beneficiary, document)
-    )
+    aidantConnectAuthorized: beneficiary.aidantConnectAuthorized
   }
 }
 
-function getBeneficiaryHistory(
-  user: SecurityRuleGrantee,
-  beneficiary: BeneficiaryWithRelations
-) {
+function getHistory(beneficiary: FindBeneficiaryOutput) {
   return {
     historyTotal:
       beneficiary.helpRequests.length + beneficiary.followups.length,
@@ -48,9 +155,7 @@ function getBeneficiaryHistory(
   }
 }
 
-function getBeneficiaryGeneralInformation(
-  beneficiary: BeneficiaryWithRelations
-) {
+function getGeneral(beneficiary: FindBeneficiaryOutput) {
   return {
     title: beneficiary.title,
     usualName: beneficiary.usualName,
@@ -77,18 +182,12 @@ function getBeneficiaryGeneralInformation(
     phone2: beneficiary.phone2,
     email: beneficiary.email,
     caregiver: beneficiary.caregiver,
-    mobility: beneficiary.mobility
+    mobility: beneficiary.mobility,
+    additionalInformation: beneficiary.additionalInformation
   }
 }
 
-function getBeneficiaryRelatives(
-  user: SecurityRuleGrantee,
-  beneficiary: BeneficiaryWithRelations
-) {
-  if (!canListBeneficiaryRelatives(user, beneficiary)) {
-    return {}
-  }
-
+function getRelatives(beneficiary: FindBeneficiaryOutput) {
   const { relatives, familySituation, minorChildren, majorChildren } =
     beneficiary
 
@@ -104,32 +203,17 @@ function getBeneficiaryRelatives(
   }
 }
 
-function getBeneficiaryHealth(
-  { user, structure }: ProtectedAppContext,
-  beneficiary: BeneficiaryWithRelations
-) {
-  if (!canViewBeneficiaryHealthInfo(user, beneficiary)) {
-    return {}
-  }
-
+function getHealth(beneficiary: FindBeneficiaryOutput) {
   return {
     gir: beneficiary.gir,
     doctor: beneficiary.doctor,
     healthAdditionalInformation: beneficiary.healthAdditionalInformation,
-    socialSecurityNumber: hasAccessBeneficiaryField(structure.type, 'nir')
-      ? beneficiary.socialSecurityNumber
-      : undefined,
+    socialSecurityNumber: beneficiary.socialSecurityNumber,
     insurance: beneficiary.insurance
   }
 }
 
-function getBeneficiaryOccupationIncome(
-  user: SecurityRuleGrantee,
-  beneficiary: BeneficiaryWithRelations
-) {
-  if (!canViewBeneficiaryOccupationIncome(user, beneficiary)) {
-    return {}
-  }
+function getOccupationIncome(beneficiary: FindBeneficiaryOutput) {
   return {
     socioProfessionalCategory: beneficiary.socioProfessionalCategory,
     occupation: beneficiary.occupation,
@@ -153,13 +237,7 @@ function getBeneficiaryOccupationIncome(
   }
 }
 
-function getBeneficiaryExternalOrganisations(
-  user: SecurityRuleGrantee,
-  beneficiary: BeneficiaryWithRelations
-) {
-  if (!canViewBeneficiaryExternalOrganisations(user, beneficiary)) {
-    return {}
-  }
+function getExternalOrganisations(beneficiary: FindBeneficiaryOutput) {
   return {
     protectionMeasure: beneficiary.protectionMeasure,
     representative: beneficiary.representative,
@@ -169,43 +247,5 @@ function getBeneficiaryExternalOrganisations(
     serviceProviders: beneficiary.serviceProviders,
     involvedPartners: beneficiary.involvedPartners,
     additionalInformation: beneficiary.additionalInformation
-  }
-}
-
-export function getBeneficiaryAccessibleData(
-  ctx: ProtectedAppContext,
-  beneficiary: BeneficiaryWithRelations
-) {
-  const meta = getBeneficiaryMeta(ctx.user, beneficiary)
-  const generalInformation = getBeneficiaryGeneralInformation(beneficiary)
-  const {
-    taxHouseholds,
-    entourages,
-    familySituation,
-    majorChildren,
-    minorChildren
-  } = getBeneficiaryRelatives(ctx.user, beneficiary)
-  const health = getBeneficiaryHealth(ctx, beneficiary)
-  const occupationIncome = getBeneficiaryOccupationIncome(ctx.user, beneficiary)
-  const externalOrganisations = getBeneficiaryExternalOrganisations(
-    ctx.user,
-    beneficiary
-  )
-  const history = getBeneficiaryHistory(ctx.user, beneficiary)
-
-  return {
-    beneficiary: {
-      ...meta,
-      ...generalInformation,
-      ...health,
-      ...occupationIncome,
-      ...externalOrganisations,
-      ...history,
-      familySituation,
-      majorChildren,
-      minorChildren
-    },
-    taxHouseholds,
-    entourages
   }
 }

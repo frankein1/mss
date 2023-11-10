@@ -1,5 +1,6 @@
 import { inferAsyncReturnType } from '@trpc/server'
 import { getBeneficiaryRelativeDisplayName } from './getBeneficiaryRelativeDisplayName'
+import { getBeneficiaryAccessibleData } from './getBeneficiaryAccessibleData'
 import {
   beneficiaryAccommodationModeLabels,
   beneficiaryAccommodationZoneLabels,
@@ -18,7 +19,6 @@ import {
   ministereStructureLabels
 } from '~/client/options/ministry'
 import { Nationalities } from '~/client/options/nationality'
-import { getBeneficiaryAccessibleData } from '~/server/route/beneficiary/helper/getBeneficiaryAccessibleData'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import { readableFileNumber } from '~/utils/readableFileNumber'
