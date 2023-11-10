@@ -1,6 +1,7 @@
 import { DefaultFollowupType } from '@prisma/client'
 import { z } from 'zod'
 import { editStructureSchema } from './editStructure.schema'
+import { requiredErrorMessage } from '~/utils/zod'
 
 export const editCurrentUserStructureSchema = editStructureSchema
   .omit({
@@ -21,9 +22,7 @@ export const editCurrentUserStructureSchema = editStructureSchema
     val =>
       val.legallyRequiredFollowupTypes.length &&
       val.legallyNotRequiredFollowupTypes.length,
-    {
-      message: "Veuillez sélectionner au moins un type d'accompagnement."
-    }
+    { message: requiredErrorMessage }
   )
 
 export type EditCurrentUserStructureInput = z.infer<

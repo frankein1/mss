@@ -45,14 +45,14 @@
       @keydown="onInputKeyDown"
       @blur="onInputBlur"
     />
-    <!-- FIXME: As input is hidden, it can not be focused on submission failure -->
     <input
       :id="id"
       ref="hiddenInput"
       :name="name"
-      hidden
       :value="currentValue"
       :readonly="readonly"
+      class="sr-only"
+      tabindex="-1"
     />
 
     <ul
