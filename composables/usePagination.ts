@@ -1,4 +1,14 @@
-export function usePagination(page: Ref<number>, perPage: Ref<number>) {
+export function usePagination(
+  page: Ref<number>,
+  perPage: Ref<number>,
+  filters?: Ref<Record<string, string | string[] | Date | null>>
+) {
+  if (filters) {
+    watch(filters, () => {
+      page.value = 1
+    })
+  }
+
   function updatePagination({
     pageNumber,
     limitValue
