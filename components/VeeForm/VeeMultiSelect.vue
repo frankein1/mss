@@ -76,7 +76,10 @@
         :key="optionValue"
         role="option"
         :aria-selected="selectedValues.includes(optionValue)"
-        @click="onToggleOption(optionValue, index)"
+        @click="
+          !disabledOptions.includes(optionValue) &&
+            onToggleOption(optionValue, index)
+        "
         @mousedown="onOptionMouseDown"
       >
         <button
@@ -282,7 +285,8 @@
         combobox,
         optionValues,
         optionRefs,
-        computed(() => props.disabled || props.readonly)
+        computed(() => props.disabled || props.readonly),
+        toRef(() => props.disabledOptions)
       )
     }
     return {
@@ -340,10 +344,11 @@
   }
 
   function onSelectActiveOption() {
-    if (!activeOptionValue.value) {
-      return
-    }
-    if (selectedValues.value.includes(activeOptionValue.value)) {
+    if (
+      !activeOptionValue.value ||
+      selectedValues.value.includes(activeOptionValue.value) ||
+      props.disabledOptions.includes(activeOptionValue.value)
+    ) {
       return
     }
     selectedValues.value.push(activeOptionValue.value)
