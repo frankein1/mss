@@ -5,6 +5,7 @@ import type { EventCategory, EventAction } from '~/types/matomo'
 type FilterPropBase = {
   name: string
   label: string
+  placeholder?: string
   matomoEventCategory?: EventCategory
   matomoEventAction?: EventAction
 }
@@ -25,10 +26,15 @@ export type DateFilterProp = FilterPropBase & {
   type: FilterType.Date
 }
 
+export type SearchFilterProp = FilterPropBase & {
+  type: FilterType.Search
+}
+
 export type FilterProp =
   | DateFilterProp
   | SelectOneFilterProp
   | SelectMultipleFilterProp
+  | SearchFilterProp
 
 export type SelectedFilter = {
   filterLabel: string
