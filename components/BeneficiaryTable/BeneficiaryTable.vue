@@ -22,17 +22,14 @@
               :label="beneficiaryFieldLabels.firstName"
               @update:sort="onSort({ firstName: $event })"
             />
-            <th scope="col">Âge</th>
-            <th scope="col">
-              {{ beneficiaryFieldLabels.birthDate }}
-            </th>
-            <th scope="col">Adresse postale</th>
-            <th scope="col">{{ beneficiaryFieldLabels.city }}</th>
+            <TableSortableHeader
+              label="Naissance"
+              @update:sort="onSort({ birthDate: $event })"
+            />
+            <th scope="col">Naissance</th>
             <th scope="col">Téléphone</th>
+            <th scope="col">Adresse</th>
             <th scope="col">{{ beneficiaryFieldLabels.types }}</th>
-            <th scope="col">Référents</th>
-            <th scope="col">{{ beneficiaryFieldLabels.status }}</th>
-            <th scope="col">N° Dossier</th>
           </tr>
         </thead>
         <tbody>
