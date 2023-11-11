@@ -5,7 +5,10 @@
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
-        <main class="main-container fr-py-3w">
+        <div class="feature-section">
+          <BeneficiaryFilters @filter="filters = $event" />
+        </div>
+        <main class="feature-section fr-py-3w fr-mt-2w">
           <AtomAlert
             v-if="error"
             class="fr-mx-5v"
@@ -13,13 +16,8 @@
             message="La liste des bénéficiaires n'a pas pu être chargée."
           />
           <template v-else>
-            <BeneficiaryFilters
-              class="fr-px-5v"
-              @filter="filters = $event"
-            />
-            <hr />
-            <div class="fr-mb-2w fr-mx-5v results-container">
-              <p class="fr-hint-text results-count">
+            <div class="fr-mb-2w results-container">
+              <p class="results-count">
                 {{ beneficiariesCount }} bénéficiaire(s)
               </p>
               <ExportDataButton
@@ -139,10 +137,3 @@
     }
   }
 </script>
-
-<style lang="scss" scoped>
-  .table-container {
-    // 21.5rem seems to come up out of the box. It corresponds to the total height of elements existing above the table
-    max-height: calc(100vh - 21.5rem);
-  }
-</style>
