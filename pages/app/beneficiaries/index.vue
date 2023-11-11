@@ -46,11 +46,11 @@
               @change-page="updatePagination($event)"
             />
 
-            <UsersActivity
+            <!-- <UsersActivity
               class="fr-mt-4w fr-px-5v"
               collection="beneficiaries"
               :route-with-params="RoutePath.AppBeneficiary"
-            />
+            /> -->
           </template>
         </main>
       </div>
@@ -71,7 +71,7 @@
   import { BeneficiarySort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
-  import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { Route, Breadcrumb, RouteTitle } from '~/utils/routing'
 
   const title = RouteTitle.AppBeneficiaries()
 
