@@ -19,23 +19,39 @@
       class="fr-mx-auto"
     />
     <template v-else-if="beneficiary">
-      <h1>{{ formatBeneficiaryDisplayName(beneficiary) }}</h1>
-      <BeneficiaryDetailsMetas :beneficiary="beneficiary" />
-      <BeneficiaryDetailsStatus :status="beneficiary.status" />
+      <h1>{{ formatBeneficiaryDisplayName(beneficiary.general) }}</h1>
+      <BeneficiaryDetailsMetas
+        :beneficiary-id="beneficiary.id"
+        :general="beneficiary.general"
+      />
+      <BeneficiaryDetailsStatus :status="beneficiary.meta.status" />
       <BeneficiaryInfoHeader :beneficiary="beneficiary" />
       <template v-if="followupTypes.length">
         <p class="fr-text--bold">Accompagnements</p>
         <p>{{ followupTypes }}</p>
       </template>
-      <BeneficiaryInfoGeneralContent :beneficiary="beneficiary" />
+      <BeneficiaryInfoGeneralContent :general="beneficiary.general" />
       <BeneficiaryInfoTaxHouseholdsContent
-        :beneficiary="beneficiary"
-        :tax-households="taxHouseholds"
+        v-if="beneficiary.taxHouseholds"
+        :beneficiary-id="beneficiaryId"
+        :tax-households="beneficiary.taxHouseholds"
       />
-      <BeneficiaryInfoEntouragesContent :entourages="entourages" />
-      <BeneficiaryInfoHealthContent :beneficiary="beneficiary" />
-      <BeneficiaryInfoOccupationIncomeContent :beneficiary="beneficiary" />
-      <BeneficiaryInfoExternalOrganisationsContent :beneficiary="beneficiary" />
+      <BeneficiaryInfoEntouragesContent
+        v-if="beneficiary.entourages"
+        :entourages="beneficiary.entourages"
+      />
+      <BeneficiaryInfoHealthContent
+        v-if="beneficiary.health"
+        :health="beneficiary.health"
+      />
+      <BeneficiaryInfoOccupationIncomeContent
+        v-if="beneficiary.occupationIncome"
+        :occupation-income="beneficiary.occupationIncome"
+      />
+      <BeneficiaryInfoExternalOrganisationsContent
+        v-if="beneficiary.externalOrganisations"
+        :external-organisations="beneficiary.externalOrganisations"
+      />
     </template>
   </div>
 </template>
@@ -67,11 +83,9 @@
   const beneficiary = computed(() => data.value?.beneficiary || null)
 
   useHead({
-    title: RouteTitle.AppBeneficiaryPrint(beneficiary.value)
+    title: RouteTitle.AppBeneficiaryPrint(beneficiary.value?.general || null)
   })
 
-  const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
-  const entourages = computed(() => data.value?.entourages || [])
   const followupTypes = computed(() =>
     (data.value?.followupTypes || []).map(t => t.name).join(', ')
   )
