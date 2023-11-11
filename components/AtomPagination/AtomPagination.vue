@@ -119,9 +119,10 @@
     REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
 
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
       page: number
+      perPage: number
       totalPages: number
       noLimitSelection?: boolean
     }>(),
@@ -132,23 +133,20 @@
     changePage: [data: { pageNumber: number; limitValue: number }]
   }>()
 
-  const limit = ref(REQUEST_LIMIT_DEFAULT)
-
   useForm<{ resultsPerPage: string }>({
     initialValues: {
-      resultsPerPage: String(limit.value)
+      resultsPerPage: String(props.perPage)
     }
   })
 
   function changeLimit(limitValue: string) {
-    limit.value = Number(limitValue)
-    emit('changePage', { pageNumber: 1, limitValue: limit.value })
+    emit('changePage', { pageNumber: 1, limitValue: Number(limitValue) })
   }
 
   function onChangePage(pageNumber: number) {
     emit('changePage', {
       pageNumber,
-      limitValue: limit.value
+      limitValue: props.perPage
     })
   }
 </script>
