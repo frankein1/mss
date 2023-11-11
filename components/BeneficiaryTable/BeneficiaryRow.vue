@@ -9,29 +9,38 @@
       class="clickable-row"
       @click="navigate"
     >
-      <td>{{ lastName }}</td>
-      <td>{{ nameOrEmpty(beneficiary.firstName) }}</td>
+      <td>{{ formatTableValue(lastName) }}</td>
+      <td>{{ formatTableValue(nameOrEmpty(beneficiary.firstName)) }}</td>
       <td>
         {{
-          beneficiary.birthDate ? formatDate(beneficiary.birthDate) : undefined
+          formatTableValue(
+            beneficiary.birthDate
+              ? formatDate(beneficiary.birthDate)
+              : undefined
+          )
         }}
       </td>
-      <td>{{ beneficiary.phone1 }}</td>
+      <td>{{ formatTableValue(beneficiary.phone1) }}</td>
       <td class="address-data">
-        {{ beneficiary.street }}
-        <br v-if="beneficiary.street" />
-        {{ addressCodeAndCity }}
+        <template v-if="beneficiary.street || addressCodeAndCity">
+          {{ beneficiary.street }}
+          <br v-if="beneficiary.street" />
+          {{ addressCodeAndCity }}
+        </template>
+        <template v-else>{{ EMPTY_TABLE_CELL }}</template>
       </td>
-      <td class="followup-types-data">{{ followUpTypes }}</td>
+      <td class="followup-types-data">{{ formatTableValue(followUpTypes) }}</td>
     </tr>
   </NuxtLink>
 </template>
 
 <script lang="ts" setup>
   import type { BeneficiaryItem } from './types'
+  import { EMPTY_TABLE_CELL } from '~/utils/constants'
   import { formatDate } from '~/utils/formatDate'
   import { nameOrEmpty } from '~/utils/nameOrEmpty'
   import { RoutePath } from '~/utils/routing'
+  import { formatTableValue } from '~/utils/table'
 
   const props = defineProps<{
     beneficiary: BeneficiaryItem
