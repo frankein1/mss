@@ -21,6 +21,13 @@
           type="date"
           @change-value="onChangeFilter($event, filter)"
         />
+        <VeeSearchInput
+          v-else-if="filter.type === FilterType.Search"
+          :name="filter.name"
+          :label="filter.label"
+          :placeholder="filter.placeholder"
+          @change-value="onChangeFilter($event, filter)"
+        />
         <VeeMultiSelect
           v-else-if="filter.type === FilterType.SelectMultiple"
           class="multi-select-filters"
@@ -227,7 +234,7 @@
     filter: FilterProp,
     value: string | string[]
   ): string {
-    if (filter.type === FilterType.Date) {
+    if (filter.type === FilterType.Date || filter.type === FilterType.Search) {
       return ''
     }
     const selectedOptions = getSelectedOptions(
