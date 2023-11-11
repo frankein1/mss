@@ -26,7 +26,6 @@
               label="Naissance"
               @update:sort="onSort({ birthDate: $event })"
             />
-            <th scope="col">Naissance</th>
             <th scope="col">Téléphone</th>
             <th scope="col">Adresse</th>
             <th scope="col">{{ beneficiaryFieldLabels.types }}</th>
