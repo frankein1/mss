@@ -8,10 +8,7 @@ import {
   getBeneficiaryEditPermissions
 } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
-import {
-  getBeneficiaryDetails,
-  getBeneficiarySecurityTarget
-} from '~/server/query'
+import { findBeneficiary, getBeneficiarySecurityTarget } from '~/server/query'
 import { FollowupRepo, HelpRequestRepo } from '~/server/database'
 import { FollowupTypeIdAndName } from '~/types/followupType'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
@@ -256,7 +253,7 @@ const handler = async ({
     target,
     structure
   })
-  const beneficiary: GetBeneficiaryOutput = await getBeneficiaryDetails({
+  const beneficiary: GetBeneficiaryOutput = await findBeneficiary({
     user,
     structure,
     id: input.id
