@@ -7,16 +7,77 @@ import {
   getBeneficiaryEditPermissions
 } from '~/server/security'
 
-export async function getBeneficiaryDetails({
+const columnsSelection = {
+  referents: {
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      email: true,
+      role: true,
+      status: true
+    }
+  },
+  relatives: {
+    select: {
+      id: true,
+      lastName: true,
+      firstName: true,
+      relationship: true,
+      city: true,
+      email: true,
+      phone: true,
+      hosted: true,
+      caregiver: true,
+      beneficiaryId: true,
+      additionalInformation: true,
+      birthDate: true,
+      linkedBeneficiary: {
+        select: {
+          id: true,
+          firstName: true,
+          email: true,
+          title: true,
+          usualName: true,
+          phone1: true,
+          birthDate: true
+        }
+      }
+    }
+  },
+  documents: true,
+  followups: {
+    include: {
+      types: true
+    }
+  },
+  helpRequests: {
+    include: {
+      type: true
+    }
+  }
+}
+
+type FindOutput = Prisma.PromiseReturnType<typeof find>
+
+async function find(user: SecurityRuleGrantee, id: string) {
+  return await BeneficiaryRepo.findUniqueOrThrow(user, {
+    where: {
+      id
+    },
+    include: columnsSelection
+  })
+}
+
+const filter = ({
   user,
   structure,
-  id
+  beneficiary
 }: {
   user: SecurityRuleGrantee
   structure: { type: StructureType }
-  id: string
-}) {
-  const beneficiary = await findBeneficiary(user, id)
+  beneficiary: FindOutput
+}) => {
   const { view } = getBeneficiaryEditPermissions({
     user,
     target: beneficiary,
@@ -68,67 +129,44 @@ export async function getBeneficiaryDetails({
   }
 }
 
-type FindBeneficiaryOutput = Prisma.PromiseReturnType<typeof findBeneficiary>
-
-async function findBeneficiary(user: SecurityRuleGrantee, id: string) {
-  return await BeneficiaryRepo.findUniqueOrThrow(user, {
-    where: {
-      id
-    },
-    include: {
-      referents: {
-        select: {
-          id: true,
-          firstName: true,
-          lastName: true,
-          email: true,
-          role: true,
-          status: true
-        }
-      },
-      relatives: {
-        select: {
-          id: true,
-          lastName: true,
-          firstName: true,
-          relationship: true,
-          city: true,
-          email: true,
-          phone: true,
-          hosted: true,
-          caregiver: true,
-          beneficiaryId: true,
-          additionalInformation: true,
-          birthDate: true,
-          linkedBeneficiary: {
-            select: {
-              id: true,
-              firstName: true,
-              email: true,
-              title: true,
-              usualName: true,
-              phone1: true,
-              birthDate: true
-            }
-          }
-        }
-      },
-      documents: true,
-      followups: {
-        include: {
-          types: true
-        }
-      },
-      helpRequests: {
-        include: {
-          type: true
-        }
-      }
-    }
-  })
+export async function findBeneficiaries({
+  user,
+  structure,
+  where,
+  orderBy
+}: {
+  user: SecurityRuleGrantee
+  structure: { type: StructureType }
+  where: Prisma.BeneficiaryWhereInput
+  orderBy:
+    | Prisma.BeneficiaryOrderByWithRelationAndSearchRelevanceInput
+    | Prisma.BeneficiaryOrderByWithRelationAndSearchRelevanceInput[]
+}) {
+  const beneficiaries =
+    (await BeneficiaryRepo.findMany(user, {
+      include: columnsSelection,
+      where,
+      orderBy
+    })) || []
+  return beneficiaries.map(beneficiary =>
+    filter({ user, beneficiary, structure })
+  )
 }
 
-function getMeta(beneficiary: FindBeneficiaryOutput) {
+export async function findBeneficiary({
+  user,
+  structure,
+  id
+}: {
+  user: SecurityRuleGrantee
+  structure: { type: StructureType }
+  id: string
+}) {
+  const beneficiary = await find(user, id)
+  return filter({ user, beneficiary, structure })
+}
+
+function getMeta(beneficiary: FindOutput) {
   return {
     fileNumber: beneficiary.fileNumber,
     status: beneficiary.status,
@@ -144,7 +182,7 @@ function getMeta(beneficiary: FindBeneficiaryOutput) {
   }
 }
 
-function getHistory(beneficiary: FindBeneficiaryOutput) {
+function getHistory(beneficiary: FindOutput) {
   return {
     historyTotal:
       beneficiary.helpRequests.length + beneficiary.followups.length,
@@ -155,7 +193,7 @@ function getHistory(beneficiary: FindBeneficiaryOutput) {
   }
 }
 
-function getGeneral(beneficiary: FindBeneficiaryOutput) {
+function getGeneral(beneficiary: FindOutput) {
   return {
     title: beneficiary.title,
     usualName: beneficiary.usualName,
@@ -187,7 +225,7 @@ function getGeneral(beneficiary: FindBeneficiaryOutput) {
   }
 }
 
-function getRelatives(beneficiary: FindBeneficiaryOutput) {
+function getRelatives(beneficiary: FindOutput) {
   const { relatives, familySituation, minorChildren, majorChildren } =
     beneficiary
 
@@ -203,7 +241,7 @@ function getRelatives(beneficiary: FindBeneficiaryOutput) {
   }
 }
 
-function getHealth(beneficiary: FindBeneficiaryOutput) {
+function getHealth(beneficiary: FindOutput) {
   return {
     gir: beneficiary.gir,
     doctor: beneficiary.doctor,
@@ -213,7 +251,7 @@ function getHealth(beneficiary: FindBeneficiaryOutput) {
   }
 }
 
-function getOccupationIncome(beneficiary: FindBeneficiaryOutput) {
+function getOccupationIncome(beneficiary: FindOutput) {
   return {
     socioProfessionalCategory: beneficiary.socioProfessionalCategory,
     occupation: beneficiary.occupation,
@@ -237,7 +275,7 @@ function getOccupationIncome(beneficiary: FindBeneficiaryOutput) {
   }
 }
 
-function getExternalOrganisations(beneficiary: FindBeneficiaryOutput) {
+function getExternalOrganisations(beneficiary: FindOutput) {
   return {
     protectionMeasure: beneficiary.protectionMeasure,
     representative: beneficiary.representative,
