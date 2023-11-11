@@ -113,6 +113,13 @@
 
     const filters: FilterProp[] = [
       {
+        name: 'search',
+        label: 'Recherche',
+        type: FilterType.Search,
+        placeholder: 'Rechercher un·e bénéficiaire'
+        // TODO: add Matomo event?
+      },
+      {
         name: 'followupTypes',
         label: "Type d'accompagnement",
         options: followupTypeOptions.value,
