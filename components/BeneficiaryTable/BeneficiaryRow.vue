@@ -12,24 +12,17 @@
       <td>{{ lastName }}</td>
       <td>{{ nameOrEmpty(beneficiary.firstName) }}</td>
       <td>
-        <template v-if="beneficiary.birthDate">
-          {{ calculateAge(beneficiary.birthDate) }} ans
-        </template>
-      </td>
-      <td>
         {{
           beneficiary.birthDate ? formatDate(beneficiary.birthDate) : undefined
         }}
       </td>
+      <td>{{ beneficiary.phone1 }}</td>
       <td class="address-data">
         {{ beneficiary.street }}
+        <br v-if="beneficiary.street" />
+        {{ addressCodeAndCity }}
       </td>
-      <td>{{ beneficiary.city }}</td>
-      <td>{{ beneficiary.phone1 }}</td>
       <td class="followup-types-data">{{ followUpTypes }}</td>
-      <td>{{ referents }}</td>
-      <td>{{ beneficiaryStatusLabels[beneficiary.status] }}</td>
-      <td>{{ readableFileNumber(beneficiary.id) }}</td>
     </tr>
   </NuxtLink>
 </template>
@@ -37,10 +30,6 @@
 <script lang="ts" setup>
   import type { BeneficiaryItem } from './types'
   import { formatDate } from '~/utils/formatDate'
-  import { formatUserDisplayName } from '~/utils/user'
-  import { calculateAge } from '~/utils/beneficiary'
-  import { readableFileNumber } from '~/utils/readableFileNumber'
-  import { beneficiaryStatusLabels } from '~/client/options/beneficiary'
   import { nameOrEmpty } from '~/utils/nameOrEmpty'
   import { RoutePath } from '~/utils/routing'
 
@@ -48,14 +37,14 @@
     beneficiary: BeneficiaryItem
   }>()
 
-  const followUpTypes = computed(() =>
-    props.beneficiary.followupTypes.map(({ name }) => name).join(', ')
+  const addressCodeAndCity = computed(
+    () =>
+      (props.beneficiary.zipcode ? props.beneficiary.zipcode + ' ' : '') +
+      (props.beneficiary.city ? props.beneficiary.city : '')
   )
 
-  const referents = computed(() =>
-    props.beneficiary.referents
-      .map(referent => formatUserDisplayName(referent))
-      .join(', ')
+  const followUpTypes = computed(() =>
+    props.beneficiary.followupTypes.map(({ name }) => name).join(', ')
   )
 
   const lastName = computed(() => {
