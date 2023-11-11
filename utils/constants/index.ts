@@ -12,5 +12,6 @@ export const REQUEST_LIMIT_OPTIONS = new Map([
   ['60', '60']
 ])
 export const REQUEST_LIMIT_DEFAULT = 20
+export const BENEFICIARIES_REQUEST_LIMIT_DEFAULT = 60
 
 export const INPUT_DEFER_DURATION = 400

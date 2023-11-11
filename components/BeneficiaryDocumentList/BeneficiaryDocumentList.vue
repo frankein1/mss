@@ -31,6 +31,7 @@
         v-show="!pending"
         class="fr-mt-4w fr-px-5v"
         :page="page"
+        :per-page="perPage"
         :total-pages="totalPages"
         no-limit-selection
         @change-page="updatePagination($event)"

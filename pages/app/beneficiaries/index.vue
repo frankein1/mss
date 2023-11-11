@@ -41,6 +41,7 @@
               v-show="!pending"
               class="fr-mt-4w fr-px-5v"
               :page="page"
+              :per-page="perPage"
               :total-pages="totalPages"
               @change-page="updatePagination($event)"
             />
@@ -60,8 +61,8 @@
 <script lang="ts" setup>
   import { useFiltersStore } from '~/store/filters'
   import {
-    REQUEST_LIMIT_DEFAULT,
-    FAILED_DOWNLOAD_ERROR_MESSAGE
+    FAILED_DOWNLOAD_ERROR_MESSAGE,
+    BENEFICIARIES_REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
@@ -87,7 +88,7 @@
   const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
   const orderBy = ref<BeneficiarySort[]>([{ usualName: SortOrder.Asc }])
   const page = ref(1)
-  const perPage = ref(REQUEST_LIMIT_DEFAULT)
+  const perPage = ref(BENEFICIARIES_REQUEST_LIMIT_DEFAULT)
   const isDownloading = ref(false)
 
   const { updatePagination } = usePagination(page, perPage, filters)
