@@ -4,7 +4,7 @@ import { IdInput, idSchema } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { DraftRepo } from '~/server/database'
 import { isCreator } from '~/server/security/rules/helpers'
-import { getBeneficiaryEditPermissions } from '~/server/security'
+import { getBeneficiaryPermissions } from '~/server/security'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
@@ -26,7 +26,7 @@ const handler = async ({
     where: { id }
   })) as BeneficiaryDraft
 
-  const permissions = getBeneficiaryEditPermissions({
+  const permissions = getBeneficiaryPermissions({
     user,
     structure
   })

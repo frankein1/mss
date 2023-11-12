@@ -159,12 +159,12 @@
     ministereCategorieOptions
   } from '~/client/options/ministry'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   const props = defineProps<{
     familySituation: BeneficiaryFamilySituation | null | undefined
     majorChildren: number | null | undefined
-    permissions: BeneficiaryEditPermission
+    permissions: BeneficiaryPermissions
   }>()
 
   const { value: pensionOrganisations } = useField<

@@ -17,7 +17,7 @@ import {
 } from '../rules'
 import { hasAccessBeneficiaryField } from '~/security/permission'
 
-export type BeneficiaryEditPermission = {
+export type BeneficiaryPermissions = {
   edit: {
     relatives: boolean
     health: boolean
@@ -48,7 +48,7 @@ export type BeneficiaryEditPermission = {
   }
 }
 
-export const getBeneficiaryEditPermissions = ({
+export const getBeneficiaryPermissions = ({
   user,
   target,
   structure
@@ -57,7 +57,7 @@ export const getBeneficiaryEditPermissions = ({
   target?: SecurityTargetWithStructure & SecurityTargetWithReferents
   structure: { type: StructureType }
 }) => {
-  let permissions: BeneficiaryEditPermission
+  let permissions: BeneficiaryPermissions
   if (!target) {
     permissions = getCreatePermissions({ structure })
   } else {

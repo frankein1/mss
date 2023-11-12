@@ -40,11 +40,11 @@
 
 <script setup lang="ts">
   import { RoutePath } from '~/utils/routing'
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   defineProps<{
     beneficiaryId: string
-    permissions: BeneficiaryEditPermission
+    permissions: BeneficiaryPermissions
   }>()
 </script>
 

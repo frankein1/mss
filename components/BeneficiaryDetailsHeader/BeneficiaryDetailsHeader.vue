@@ -24,13 +24,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
 
   defineProps<{
     title: string
     beneficiary: GetBeneficiaryOutput
-    permissions: BeneficiaryEditPermission
+    permissions: BeneficiaryPermissions
   }>()
 
   const emit = defineEmits<{ deleted: [] }>()

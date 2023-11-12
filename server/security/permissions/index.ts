@@ -1,1 +1,1 @@
-export * from './getBeneficiaryEditPermissions'
+export * from './getBeneficiaryPermissions'

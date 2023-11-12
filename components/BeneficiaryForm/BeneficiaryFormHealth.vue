@@ -45,9 +45,9 @@
 <script lang="ts" setup>
   import { beneficiaryGirOptions } from '~/client/options/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   defineProps<{
-    permissions: BeneficiaryEditPermission
+    permissions: BeneficiaryPermissions
   }>()
 </script>

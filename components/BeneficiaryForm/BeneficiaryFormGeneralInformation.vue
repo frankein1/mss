@@ -25,13 +25,13 @@
 <script setup lang="ts">
   import { SaveBeneficiaryGeneralInformationInput } from '~/server/schema'
   import { BeneficiaryReferent } from '~/types/beneficiary'
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   withDefaults(
     defineProps<{
       beneficiary?: SaveBeneficiaryGeneralInformationInput
       agents: BeneficiaryReferent[]
-      permissions: BeneficiaryEditPermission
+      permissions: BeneficiaryPermissions
     }>(),
     { beneficiary: undefined }
   )

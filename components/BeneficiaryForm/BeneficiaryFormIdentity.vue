@@ -84,10 +84,10 @@
     beneficiaryTitleOptions
   } from '~/client/options/beneficiary'
   import { nationalityOptions } from '~/client/options/nationality'
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   defineProps<{
-    permissions: BeneficiaryEditPermission
+    permissions: BeneficiaryPermissions
   }>()
 
   const { value: status } = useField<BeneficiaryStatus>('status')
