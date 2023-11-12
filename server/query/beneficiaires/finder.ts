@@ -2,6 +2,7 @@ import { Prisma, StructureType } from '@prisma/client'
 import { getBeneficiaryFollowUpTypes } from './getBeneficiaryFollowUpTypes'
 import { BeneficiaryRepo } from '~/server/database'
 import {
+  BeneficiaryPermissions,
   SecurityRuleGrantee,
   canViewDocument,
   getBeneficiaryPermissions
@@ -65,6 +66,13 @@ const columnsSelection = {
   }
 }
 
+const isEmpty = (object: any) => {
+  if (!object) {
+    return object
+  }
+  return Object.values(object).every(x => x === null || x === '')
+}
+
 type FindOutput = Prisma.PromiseReturnType<typeof find>
 
 async function find(user: SecurityRuleGrantee, id: string) {
@@ -85,29 +93,28 @@ const filter = ({
   structure: { type: StructureType }
   beneficiary: FindOutput
 }) => {
-  const { view } = getBeneficiaryPermissions({
+  const permissions = getBeneficiaryPermissions({
     user,
     target: beneficiary,
     structure
   })
 
   const meta = getMeta(beneficiary)
-  const general = getGeneral(beneficiary)
+  const general = getGeneral(beneficiary, permissions)
 
-  const {
-    taxHouseholds,
-    entourages,
-    familySituation,
-    majorChildren,
-    minorChildren
-  } = getRelatives(beneficiary)
+  const { view } = permissions
 
   const externalOrganisations = view.externalOrganisations
     ? getExternalOrganisations(beneficiary)
     : undefined
-  const health = view.health ? getHealth(beneficiary) : undefined
+  const health = view.health ? getHealth(beneficiary, permissions) : undefined
   const occupationIncome = view.occupationIncome
-    ? getOccupationIncome(beneficiary)
+    ? getOccupationIncome(beneficiary, permissions)
+    : undefined
+
+  const entourages = view.relatives ? getEntourages(beneficiary) : undefined
+  const taxHouseholds = view.relatives
+    ? getTaxHouseholds(beneficiary)
     : undefined
 
   const documents = beneficiary.documents.filter(document =>
@@ -119,19 +126,14 @@ const filter = ({
     id: beneficiary.id,
     meta,
     general,
-    externalOrganisations,
-    health,
-    occupationIncome,
-    documents,
-    taxHouseholds: view.relatives
-      ? {
-          familySituation,
-          majorChildren,
-          minorChildren,
-          taxHouseholds
-        }
+    externalOrganisations: !isEmpty(externalOrganisations)
+      ? externalOrganisations
       : undefined,
-    entourages: view.relatives ? entourages : undefined,
+    health: !isEmpty(health) ? health : undefined,
+    occupationIncome: !isEmpty(occupationIncome) ? occupationIncome : undefined,
+    documents,
+    taxHouseholds: !isEmpty(taxHouseholds) ? taxHouseholds : undefined,
+    entourages: !isEmpty(entourages) ? entourages : undefined,
     history
   }
 }
@@ -200,8 +202,12 @@ function getHistory(beneficiary: FindOutput) {
   }
 }
 
-function getGeneral(beneficiary: FindOutput) {
-  return {
+function getGeneral(
+  beneficiary: FindOutput,
+  permissions: BeneficiaryPermissions
+) {
+  const { get } = permissions
+  const general = {
     title: beneficiary.title,
     usualName: beneficiary.usualName,
     birthName: beneficiary.birthName,
@@ -211,10 +217,12 @@ function getGeneral(beneficiary: FindOutput) {
     deathDate: beneficiary.deathDate,
     gender: beneficiary.gender,
     nationality: beneficiary.nationality,
-    numeroPegase: beneficiary.numeroPegase,
+    numeroPegase: get.numeroPegase ? beneficiary.numeroPegase : null,
     accommodationMode: beneficiary.accommodationMode,
     accommodationName: beneficiary.accommodationName,
-    accommodationZone: beneficiary.accommodationZone,
+    accommodationZone: get.accomodationZone
+      ? beneficiary.accommodationZone
+      : null,
     accommodationAdditionalInformation:
       beneficiary.accommodationAdditionalInformation,
     street: beneficiary.street,
@@ -230,35 +238,48 @@ function getGeneral(beneficiary: FindOutput) {
     mobility: beneficiary.mobility,
     additionalInformation: beneficiary.additionalInformation
   }
+
+  return general
 }
 
-function getRelatives(beneficiary: FindOutput) {
+function getEntourages(beneficiary: FindOutput) {
+  const { relatives } = beneficiary
+  return (relatives || []).filter(relative => !relative.hosted)
+}
+
+function getTaxHouseholds(beneficiary: FindOutput) {
   const { relatives, familySituation, minorChildren, majorChildren } =
     beneficiary
 
   const taxHouseholds = (relatives || []).filter(relative => relative.hosted)
-  const entourages = (relatives || []).filter(relative => !relative.hosted)
 
   return {
     taxHouseholds,
-    entourages,
     familySituation,
     minorChildren,
     majorChildren
   }
 }
 
-function getHealth(beneficiary: FindOutput) {
+function getHealth(
+  beneficiary: FindOutput,
+  permissions: BeneficiaryPermissions
+) {
+  const { get } = permissions
   return {
     gir: beneficiary.gir,
     doctor: beneficiary.doctor,
     healthAdditionalInformation: beneficiary.healthAdditionalInformation,
-    socialSecurityNumber: beneficiary.socialSecurityNumber,
+    socialSecurityNumber: get.nir ? beneficiary.socialSecurityNumber : null,
     insurance: beneficiary.insurance
   }
 }
 
-function getOccupationIncome(beneficiary: FindOutput) {
+function getOccupationIncome(
+  beneficiary: FindOutput,
+  permissions: BeneficiaryPermissions
+) {
+  const { get } = permissions
   return {
     socioProfessionalCategory: beneficiary.socioProfessionalCategory,
     occupation: beneficiary.occupation,
@@ -276,9 +297,15 @@ function getOccupationIncome(beneficiary: FindOutput) {
     cafNumber: beneficiary.cafNumber,
     bank: beneficiary.bank,
     funeralContract: beneficiary.funeralContract,
-    ministereCategorie: beneficiary.ministereCategorie,
-    ministereDepartementServiceAc: beneficiary.ministereDepartementServiceAc,
-    ministereStructure: beneficiary.ministereStructure
+    ministereCategorie: get.ministereCategorie
+      ? beneficiary.ministereCategorie
+      : null,
+    ministereDepartementServiceAc: get.ministereDepartementServiceAc
+      ? beneficiary.ministereDepartementServiceAc
+      : null,
+    ministereStructure: get.ministereStructure
+      ? beneficiary.ministereStructure
+      : null
   }
 }
 

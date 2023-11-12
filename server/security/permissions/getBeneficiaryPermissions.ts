@@ -15,7 +15,6 @@ import {
   canViewBeneficiaryHealthInfo,
   canViewBeneficiaryOccupationIncome
 } from '../rules'
-import { hasAccessBeneficiaryField } from '~/security/permission'
 
 export type BeneficiaryPermissions = {
   edit: {
@@ -23,6 +22,20 @@ export type BeneficiaryPermissions = {
     health: boolean
     occupationIncome: boolean
     externalOrganisations: boolean
+  }
+  view: {
+    relatives: boolean
+    health: boolean
+    occupationIncome: boolean
+    externalOrganisations: boolean
+  }
+  get: {
+    accomodationZone: boolean
+    nir: boolean
+    numeroPegase: boolean
+    ministereCategorie: boolean
+    ministereDepartementServiceAc: boolean
+    ministereStructure: boolean
   }
   set: {
     accomodationZone: boolean
@@ -33,13 +46,7 @@ export type BeneficiaryPermissions = {
     ministereDepartementServiceAc: boolean
     ministereStructure: boolean
   }
-  view: {
-    relatives: boolean
-    health: boolean
-    occupationIncome: boolean
-    externalOrganisations: boolean
-    nir: boolean
-  }
+
   create: {
     helpRequest: boolean
   }
@@ -80,22 +87,30 @@ function getCreatePermissions({
       occupationIncome: true,
       externalOrganisations: true
     },
-    set: {
+    view: {
+      relatives: false,
+      health: false,
+      occupationIncome: false,
+      externalOrganisations: false
+    },
+    get: {
       accomodationZone: isMinistryAgent,
-      referents: true,
-      nir: hasAccessBeneficiaryField(structure.type, 'nir'),
+      nir: hasAccessNir(structure.type),
       numeroPegase: isMinistryAgent,
       ministereCategorie: isMinistryAgent,
       ministereDepartementServiceAc: isMinistryAgent,
       ministereStructure: isMinistryAgent
     },
-    view: {
-      relatives: false,
-      health: false,
-      occupationIncome: false,
-      externalOrganisations: false,
-      nir: false
+    set: {
+      accomodationZone: isMinistryAgent,
+      referents: true,
+      nir: hasAccessNir(structure.type),
+      numeroPegase: isMinistryAgent,
+      ministereCategorie: isMinistryAgent,
+      ministereDepartementServiceAc: isMinistryAgent,
+      ministereStructure: isMinistryAgent
     },
+
     create: {
       helpRequest: false
     },
@@ -125,10 +140,18 @@ function getEditPermissions({
         target
       )
     },
+    get: {
+      accomodationZone: isMinistryAgent,
+      nir: hasAccessNir(structure.type),
+      numeroPegase: isMinistryAgent,
+      ministereCategorie: isMinistryAgent,
+      ministereDepartementServiceAc: isMinistryAgent,
+      ministereStructure: isMinistryAgent
+    },
     set: {
       accomodationZone: isMinistryAgent,
       referents: canEditBeneficiaryReferents(user, target),
-      nir: hasAccessBeneficiaryField(structure.type, 'nir'),
+      nir: hasAccessNir(structure.type),
       numeroPegase: isMinistryAgent,
       ministereCategorie: isMinistryAgent,
       ministereDepartementServiceAc: isMinistryAgent,
@@ -141,8 +164,7 @@ function getEditPermissions({
       externalOrganisations: canViewBeneficiaryExternalOrganisations(
         user,
         target
-      ),
-      nir: hasAccessBeneficiaryField(structure.type, 'nir')
+      )
     },
     create: {
       helpRequest: canCreateHelpRequest(user, target)
@@ -151,4 +173,8 @@ function getEditPermissions({
       beneficiary: canDeleteBeneficiary(user, target)
     }
   }
+}
+
+function hasAccessNir(type: StructureType) {
+  return type === StructureType.Ccas || type === StructureType.Cias
 }
