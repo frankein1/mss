@@ -4,26 +4,26 @@
       :label="beneficiaryFieldLabels.socioProfessionalCategory"
       :value="
         BeneficiarySocioProfessionalCategoryKeys.value(
-          beneficiary.socioProfessionalCategory
+          occupationIncome.socioProfessionalCategory
         )
       "
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.occupation"
-      :value="beneficiary.occupation"
+      :value="occupationIncome.occupation"
       class="fr-col-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.employer"
-      :value="beneficiary.employer"
+      :value="occupationIncome.employer"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.employerSiret"
-      :value="beneficiary.employerSiret"
+      :value="occupationIncome.employerSiret"
       class="fr-col-6"
     />
   </div>
@@ -35,19 +35,19 @@
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.mainIncomeAmount"
-      :value="euros(beneficiary.mainIncomeAmount)"
+      :value="euros(occupationIncome.mainIncomeAmount)"
       class="fr-col-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.unemploymentNumber"
-      :value="beneficiary.unemploymentNumber"
+      :value="occupationIncome.unemploymentNumber"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.cafNumber"
-      :value="beneficiary.cafNumber"
+      :value="occupationIncome.cafNumber"
       class="fr-col-6"
     />
   </div>
@@ -59,14 +59,14 @@
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.bank"
-      :value="beneficiary.bank"
+      :value="occupationIncome.bank"
       class="fr-col-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.funeralContract"
-      :value="beneficiary.funeralContract"
+      :value="occupationIncome.funeralContract"
       class="fr-col-12"
     />
   </div>
@@ -78,7 +78,7 @@
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.partnerMainIncomeAmount"
-      :value="euros(beneficiary.partnerMainIncomeAmount)"
+      :value="euros(occupationIncome.partnerMainIncomeAmount)"
       class="fr-col-6"
     />
   </div>
@@ -91,30 +91,27 @@
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.majorChildrenMainIncomeAmount"
-      :value="euros(beneficiary.majorChildrenMainIncomeAmount)"
+      :value="euros(occupationIncome.majorChildrenMainIncomeAmount)"
       class="fr-col-6"
     />
   </div>
 
-  <div
-    v-if="isMinistryAgent"
-    class="fr-grid-row"
-  >
+  <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereCategorie"
-      :value="MinistereCategorieKeys.value(beneficiary.ministereCategorie)"
+      :value="MinistereCategorieKeys.value(occupationIncome.ministereCategorie)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereStructure"
-      :value="MinistereStructureKeys.value(beneficiary.ministereStructure)"
+      :value="MinistereStructureKeys.value(occupationIncome.ministereStructure)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
       :value="
         MinistereDepartmentServiceAcKeys.value(
-          beneficiary.ministereDepartementServiceAc
+          occupationIncome.ministereDepartementServiceAc
         )
       "
       class="fr-col-6"
@@ -134,36 +131,37 @@
     MinistereCategorieKeys,
     MinistereDepartmentServiceAcKeys
   } from '~/client/options/ministry'
-  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{
-    beneficiary: GetBeneficiaryOutput
+    occupationIncome: GetBeneficiaryOccupationIncome
   }>()
 
-  const isMinistryAgent = useMinistryAgent()
-
   const mainIncomeSource = computed(() =>
-    arrayToString(props.beneficiary.mainIncomeSource || [], incomeSourceLabels)
+    arrayToString(
+      props.occupationIncome.mainIncomeSource || [],
+      incomeSourceLabels
+    )
   )
 
   const partnerMainIncomeSource = computed(() =>
     arrayToString(
-      props.beneficiary.partnerMainIncomeSource || [],
+      props.occupationIncome.partnerMainIncomeSource || [],
       incomeSourceLabels
     )
   )
 
   const majorChildrenMainIncomeType = computed(() =>
     arrayToString(
-      props.beneficiary.majorChildrenMainIncomeSource || [],
+      props.occupationIncome.majorChildrenMainIncomeSource || [],
       incomeSourceLabels
     )
   )
 
   const pensionOrganisations = computed(() =>
     arrayToString(
-      props.beneficiary.pensionOrganisations?.filter(
+      props.occupationIncome.pensionOrganisations?.filter(
         f => f !== BeneficiaryPensionOrganisation.Other
       ) || [],
       pensionOrganisationLabels

@@ -1,13 +1,12 @@
 <template>
   <BeneficiaryInfoSection
-    v-if="hasTaxHouseholdsInfo"
-    id="taxHouseholds"
+    v-if="taxHouseholds && taxHouseholds.taxHouseholds?.length"
     title="Foyer fiscal"
     :edit-link="editLink"
   >
     <div class="fr-container">
       <BeneficiaryInfoTaxHouseholdsContent
-        :beneficiary="beneficiary"
+        :beneficiary-id="beneficiaryId"
         :tax-households="taxHouseholds"
       />
     </div>
@@ -15,24 +14,15 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
-  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import type { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
-    beneficiary: GetBeneficiaryOutput
-    taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
+    beneficiaryId: string
+    taxHouseholds?: GetBeneficiaryTaxHousehold
   }>()
 
   const editLink = computed(() =>
-    RoutePath.AppBeneficiaryEditTaxHousehold(props.beneficiary.id)
-  )
-
-  const hasTaxHouseholdsInfo = computed(
-    () =>
-      props.taxHouseholds?.length > 0 ||
-      props.beneficiary.familySituation ||
-      props.beneficiary.minorChildren ||
-      props.beneficiary.majorChildren
+    RoutePath.AppBeneficiaryEditTaxHousehold(props.beneficiaryId)
   )
 </script>

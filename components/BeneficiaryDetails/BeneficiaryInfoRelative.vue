@@ -56,13 +56,13 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
+  import { GetBeneficiaryRelative } from '~/types/beneficiary'
   import { RelativeRelationshipKeys } from '~/client/options/beneficiary'
   import { RoutePath } from '~/utils/routing'
   import { relativeFieldLabels } from '~/client/labels/relative.labels'
 
   const props = defineProps<{
-    relative: BeneficiaryRelativeWithLinkedBeneficiary
+    relative: GetBeneficiaryRelative
   }>()
 
   const name = computed(() => {

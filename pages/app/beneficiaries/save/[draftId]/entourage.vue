@@ -31,7 +31,6 @@
     saveBeneficiaryEntourageSchema,
     SaveBeneficiaryEntourageInput
   } from '~/server/schema'
-  import { BeneficiaryDraft } from '~/types/beneficiary'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
@@ -46,33 +45,24 @@
   const snackbar = useSnackbar()
 
   const {
-    data: beneficiaryDraft,
+    data: draft,
     pending,
     error
-  } = await useAsyncData(loadBeneficiaryDraft)
-
-  const beneficiary = computed<SaveBeneficiaryEntourageInput | undefined>(
-    () => {
-      if (!beneficiaryDraft.value) {
-        return undefined
-      }
-
-      const { entourage } = beneficiaryDraft.value
-
-      return entourage || ({} as SaveBeneficiaryEntourageInput)
-    }
+  } = await useAsyncData(() =>
+    trpcClient.beneficiaryDraft.get.query({
+      id: draftId
+    })
   )
 
-  async function loadBeneficiaryDraft() {
-    const beneficiaryDraft = (await trpcClient.beneficiaryDraft.get.query({
-      id: draftId
-    })) as BeneficiaryDraft
-
-    return {
-      ...beneficiaryDraft,
-      entourage: beneficiaryDraft.content?.entourage
+  const beneficiary = computed(() => {
+    if (!draft.value) {
+      return undefined
     }
-  }
+
+    const { entourage } = draft.value.draft
+
+    return entourage || ({} as SaveBeneficiaryEntourageInput)
+  })
 
   async function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryEntourageInput,
@@ -86,7 +76,7 @@
   }
 
   function saveBeneficiary(beneficiary: SaveBeneficiaryEntourageInput) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const beneficiaryDraftId = draft.value?.draft.id
 
     if (!beneficiaryDraftId) {
       snackbar.error('La création de la fiche bénéficiaire a échoué.')
@@ -118,7 +108,7 @@
     beneficiary: SaveBeneficiaryEntourageInput,
     target: string
   ) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const beneficiaryDraftId = draft.value?.draft.id
 
     if (!beneficiaryDraftId) {
       snackbar.error("L'enregistrement du brouillon a échoué.")

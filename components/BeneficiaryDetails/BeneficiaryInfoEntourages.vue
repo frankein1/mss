@@ -1,6 +1,6 @@
 <template>
   <BeneficiaryInfoSection
-    v-if="hasEntourages"
+    v-if="entourages && entourages.length"
     id="entourages"
     title="Entourage"
     :edit-link="editLink"
@@ -12,18 +12,15 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryOutput } from '~/server/trpc/routers'
-  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
+  import { GetBeneficiaryRelative } from '~/types/beneficiary'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
-    beneficiary: GetBeneficiaryOutput
-    entourages: BeneficiaryRelativeWithLinkedBeneficiary[]
+    beneficiaryId: string
+    entourages?: GetBeneficiaryRelative[]
   }>()
 
-  const hasEntourages = computed(() => props.entourages.length > 0)
-
   const editLink = computed(() =>
-    RoutePath.AppBeneficiaryEditEntourage(props.beneficiary.id)
+    RoutePath.AppBeneficiaryEditEntourage(props.beneficiaryId)
   )
 </script>

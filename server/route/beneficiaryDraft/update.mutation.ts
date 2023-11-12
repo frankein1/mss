@@ -5,9 +5,10 @@ import {
   UpdateBeneficiaryDraftInput,
   updateBeneficiaryDraftSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canUpdateDraft } from '~/server/security'
+import { SecurityRuleGrantee } from '~/server/security'
 import type { BeneficiaryDraft } from '~/types/beneficiary'
 import { DraftRepo } from '~/server/database'
+import { isCreator } from '~/server/security/rules/helpers'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
@@ -17,7 +18,7 @@ const securityCheck = async (
     where: { id: input.id }
   })) as BeneficiaryDraft
 
-  return canUpdateDraft(grantee, beneficiaryDraft)
+  return isCreator(grantee, beneficiaryDraft)
 }
 
 const handler = async ({

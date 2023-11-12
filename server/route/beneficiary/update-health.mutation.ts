@@ -11,7 +11,6 @@ import {
   updateBeneficiaryHealthSchema
 } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
-import { hasAccessBeneficiaryField } from '~/security/permission'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
@@ -23,19 +22,15 @@ const securityCheck = async (
 
 const handler = async ({
   input,
-  ctx: { structure }
+  ctx: _ctx
 }: {
   input: UpdateBeneficiaryHealthInput
   ctx: ProtectedAppContext
 }) => {
-  const { id, socialSecurityNumber, ...health } = input
+  const { id, ...health } = input
 
   let data = {}
   data = { ...data, ...health }
-
-  if (hasAccessBeneficiaryField(structure.type, 'nir')) {
-    data = { ...data, socialSecurityNumber }
-  }
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id },

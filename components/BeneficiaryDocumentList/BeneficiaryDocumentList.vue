@@ -44,7 +44,7 @@
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
-  import { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
   import { BeneficiaryDocumentSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'

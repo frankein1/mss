@@ -106,7 +106,8 @@
 
 <script lang="ts" setup>
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
-  import { GetBeneficiaryOutput, DocumentItem } from '~/server/trpc/routers'
+  import { DocumentItem } from '~/server/route'
+  import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import {
     canEditDocument,
     canDeleteDocument,
@@ -141,15 +142,15 @@
   const user = computed(() => authStore.getAuthUser)
 
   const canView = computed(() =>
-    canViewDocument(user.value, props.beneficiary, props.document)
+    canViewDocument(user.value, props.beneficiary.meta, props.document)
   )
 
   const canEdit = computed(() =>
-    canEditDocument(user.value, props.beneficiary, props.document)
+    canEditDocument(user.value, props.beneficiary.meta, props.document)
   )
 
   const canDelete = computed(() =>
-    canDeleteDocument(user.value, props.beneficiary)
+    canDeleteDocument(user.value, props.beneficiary.meta)
   )
 
   const hasUnreadNotifications = computed(

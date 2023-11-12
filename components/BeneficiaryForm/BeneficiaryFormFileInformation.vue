@@ -15,14 +15,11 @@
         :options="referentOptions"
         required
         dropdown
-        :readonly="!canSetReferents"
+        :readonly="!permissions.set.referents"
         :disabled-options="disabledReferentOptions"
       />
     </div>
-    <div
-      v-if="!noAidantConnectAuthorized"
-      class="fr-col-12"
-    >
+    <div class="fr-col-12">
       <VeeToggle
         :label="beneficiaryFieldLabels.aidantConnectAuthorized"
         name="aidantConnectAuthorized"
@@ -37,18 +34,16 @@
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
   import { SaveBeneficiaryGeneralInformationInput } from '~/server/schema'
   import { BeneficiaryReferent } from '~/types/beneficiary'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   const props = withDefaults(
     defineProps<{
       agents: BeneficiaryReferent[]
       beneficiary?: SaveBeneficiaryGeneralInformationInput
-      canSetReferents?: boolean
-      noAidantConnectAuthorized?: boolean
+      permissions: BeneficiaryPermissions
     }>(),
     {
-      canSetReferents: true,
-      beneficiary: undefined,
-      noAidantConnectAuthorized: false
+      beneficiary: undefined
     }
   )
 
