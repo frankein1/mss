@@ -2,10 +2,10 @@ import { Prisma, UserActivityType } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { prismaClient } from '~/server/prisma'
-import { canOnlyListItsBeneficiaries } from '~/server/security'
 import { PaginatedInput, paginatedSchema } from '~/server/schema'
 import { takeAndSkipFromPagination } from '~/utils/table'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { isReferent } from '~/server/security/rules/helpers'
 
 function getAnyBeneficiariesUsersActivity(
   structureId: string,
@@ -126,7 +126,7 @@ function getBeneficiariesUsersActivity(
   skip: number
 ) {
   const { user, structure } = ctx
-  if (canOnlyListItsBeneficiaries(user)) {
+  if (isReferent(user)) {
     return getOnlyItsBeneficiariesUsersActivity(
       user.id,
       structure.id,
@@ -139,7 +139,7 @@ function getBeneficiariesUsersActivity(
 
 function getBeneficiariesUsersActivityCount(ctx: ProtectedAppContext) {
   const { user, structure } = ctx
-  if (canOnlyListItsBeneficiaries(user)) {
+  if (isReferent(user)) {
     return getOnlyItsBeneficiariesUsersActivityCount(user.id, structure.id)
   }
   return getAnyBeneficiariesUsersActivityCount(structure.id)

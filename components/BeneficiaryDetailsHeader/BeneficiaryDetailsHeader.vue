@@ -7,28 +7,30 @@
     />
     <BeneficiaryDetailsMetas
       class="metas"
-      :beneficiary="beneficiary"
+      :beneficiary-id="beneficiary.id"
+      :general="beneficiary.general"
     />
     <BeneficiaryDetailsStatus
-      :status="beneficiary.status"
+      :status="beneficiary.meta.status"
       class="status"
     />
     <BeneficiaryDetailsActions
       class="actions"
       :beneficiary-id="beneficiary.id"
-      :can-delete="canDelete"
+      :permissions="permissions"
       @deleted="emit('deleted')"
     />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import { BeneficiaryPermissions } from '~/server/security'
+  import { GetBeneficiaryOutput } from '~/types/beneficiary'
 
   defineProps<{
     title: string
     beneficiary: GetBeneficiaryOutput
-    canDelete: boolean
+    permissions: BeneficiaryPermissions
   }>()
 
   const emit = defineEmits<{ deleted: [] }>()

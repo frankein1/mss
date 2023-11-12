@@ -6,24 +6,24 @@
     <div class="fr-col-12 fr-pb-1w">
       <BeneficiaryInfoLabel
         :value="
-          BeneficiaryFamilySituationKeys.value(beneficiary.familySituation)
+          BeneficiaryFamilySituationKeys.value(taxHouseholds.familySituation)
         "
       />
     </div>
     <div class="fr-col-6">
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.minorChildren"
-        :value="beneficiary.minorChildren || '0'"
+        :value="taxHouseholds.minorChildren || '0'"
       />
     </div>
     <div class="fr-col-6">
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.majorChildren"
-        :value="beneficiary.majorChildren || '0'"
+        :value="taxHouseholds.majorChildren || '0'"
       />
     </div>
     <div
-      v-for="taxHousehold in taxHouseholds"
+      v-for="taxHousehold in taxHouseholds.taxHouseholds"
       :key="taxHousehold.id"
       class="fr-col-12"
     >
@@ -35,12 +35,10 @@
 
 <script setup lang="ts">
   import { BeneficiaryFamilySituationKeys } from '~/client/options/beneficiary'
-  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
-  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import type { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   defineProps<{
-    beneficiary: GetBeneficiaryOutput
-    taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
+    taxHouseholds: GetBeneficiaryTaxHousehold
   }>()
 </script>

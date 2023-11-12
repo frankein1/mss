@@ -13,36 +13,46 @@
     <BeneficiaryInfoFollowupTypes :followup-types="followupTypes" />
   </BeneficiaryInfoSection>
 
-  <BeneficiaryInfoGeneral :beneficiary="beneficiary" />
+  <BeneficiaryInfoGeneral
+    :beneficiary-id="beneficiary.id"
+    :general="beneficiary.general"
+  />
 
   <BeneficiaryInfoTaxHouseholds
-    :beneficiary="beneficiary"
-    :tax-households="taxHouseholds"
+    :beneficiary-id="beneficiary.id"
+    :tax-households="beneficiary.taxHouseholds"
   />
 
   <BeneficiaryInfoEntourages
-    :beneficiary="beneficiary"
-    :entourages="entourages"
+    :beneficiary-id="beneficiary.id"
+    :entourages="beneficiary.entourages"
   />
 
-  <BeneficiaryInfoHealth :beneficiary="beneficiary" />
+  <BeneficiaryInfoHealth
+    :beneficiary-id="beneficiary.id"
+    :health="beneficiary.health"
+    :permissions="permissions"
+  />
 
-  <BeneficiaryInfoOccupationIncome :beneficiary="beneficiary" />
+  <BeneficiaryInfoOccupationIncome
+    :beneficiary-id="beneficiary.id"
+    :occupation-income="beneficiary.occupationIncome"
+  />
 
-  <BeneficiaryInfoExternalOrganisations :beneficiary="beneficiary" />
+  <BeneficiaryInfoExternalOrganisations
+    :beneficiary-id="beneficiary.id"
+    :external-organisations="beneficiary.externalOrganisations"
+  />
 </template>
 
 <script lang="ts" setup>
-  import type {
-    GetBeneficiaryOutput,
-    GetBeneficiaryFollowupTypesOutput
-  } from '~/server/trpc/routers'
-  import { BeneficiaryRelativeWithLinkedBeneficiary } from '~/types/relative'
+  import { BeneficiaryPermissions } from '~/server/security'
+  import { GetBeneficiaryOutput } from '~/types/beneficiary'
+  import { FollowupTypeIdAndName } from '~/types/followupType'
 
   defineProps<{
     beneficiary: GetBeneficiaryOutput
-    taxHouseholds: BeneficiaryRelativeWithLinkedBeneficiary[]
-    entourages: BeneficiaryRelativeWithLinkedBeneficiary[]
-    followupTypes: GetBeneficiaryFollowupTypesOutput
+    followupTypes: FollowupTypeIdAndName[]
+    permissions: BeneficiaryPermissions
   }>()
 </script>

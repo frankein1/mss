@@ -4,7 +4,7 @@
     class="fr-collapse beneficiary-history-details-body"
   >
     <hr
-      v-if="canViewHistoryDetails || canListComments"
+      v-if="canViewHistoryDetails"
       class="fr-mb-1v"
     />
 
@@ -59,13 +59,13 @@
       </ul>
 
       <hr
-        v-if="canListComments"
+        v-if="comments.length > 0"
         class="fr-pb-3v"
       />
     </template>
 
     <BeneficiaryHistoryComments
-      v-if="canListComments"
+      v-if="comments.length > 0"
       :comments="comments"
       :history="history"
       @comment-added="onCommentAdded"
@@ -87,7 +87,6 @@
     canViewHelpRequestDetails,
     canViewFollowupDetails,
     canViewFollowupPrivateSynthesis,
-    canListComments as canListCommentsRule,
     canViewHelpRequestPrivateSynthesis
   } from '~/server/security'
   import { useAuthStore } from '~/store/auth'
@@ -138,10 +137,6 @@
     props.history.isFollowup
       ? canViewFollowupPrivateSynthesis(user.value, props.history)
       : canViewHelpRequestPrivateSynthesis(user.value, props.history)
-  )
-
-  const canListComments = computed(() =>
-    canListCommentsRule(user.value, props.history.beneficiary)
   )
 
   function onCommentAdded(comment: HistoryItemComment) {

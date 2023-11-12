@@ -116,29 +116,30 @@
         :label="beneficiaryFieldLabels.funeralContract"
       />
     </div>
-    <template v-if="isMinistryAgent">
-      <div class="fr-col-12">
-        <VeeSelect
-          name="ministereCategorie"
-          :label="beneficiaryFieldLabels.ministereCategorie"
-          :options="withEmptyValue(ministereCategorieOptions)"
-        />
-      </div>
-      <div class="fr-col-12">
-        <VeeSearchableSelect
-          name="ministereDepartementServiceAc"
-          :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
-          :options="withEmptyValue(ministereDepartmentServiceAcOptions)"
-        />
-      </div>
-      <div class="fr-col-12">
-        <VeeSelect
-          name="ministereStructure"
-          :label="beneficiaryFieldLabels.ministereStructure"
-          :options="withEmptyValue(ministereStructureOptions)"
-        />
-      </div>
-    </template>
+    <div class="fr-col-12">
+      <VeeSelect
+        v-if="permissions.set.ministereCategorie"
+        name="ministereCategorie"
+        :label="beneficiaryFieldLabels.ministereCategorie"
+        :options="withEmptyValue(ministereCategorieOptions)"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeSearchableSelect
+        v-if="permissions.set.ministereDepartementServiceAc"
+        name="ministereDepartementServiceAc"
+        :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
+        :options="withEmptyValue(ministereDepartmentServiceAcOptions)"
+      />
+    </div>
+    <div class="fr-col-12">
+      <VeeSelect
+        v-if="permissions.set.ministereStructure"
+        name="ministereStructure"
+        :label="beneficiaryFieldLabels.ministereStructure"
+        :options="withEmptyValue(ministereStructureOptions)"
+      />
+    </div>
   </BeneficiaryFormSection>
 </template>
 
@@ -158,17 +159,17 @@
     ministereCategorieOptions
   } from '~/client/options/ministry'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   const props = defineProps<{
     familySituation: BeneficiaryFamilySituation | null | undefined
     majorChildren: number | null | undefined
+    permissions: BeneficiaryPermissions
   }>()
 
   const { value: pensionOrganisations } = useField<
     BeneficiaryPensionOrganisation[]
   >('pensionOrganisations')
-
-  const isMinistryAgent = useMinistryAgent()
 
   const hasPartner = computed(() => {
     const familySituation = props.familySituation

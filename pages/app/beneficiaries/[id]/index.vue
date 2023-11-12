@@ -5,15 +5,18 @@
     />
 
     <BeneficiaryDetailsHeader
+      v-if="permissions"
       :beneficiary="beneficiary"
       :title="title"
-      :can-delete="canDelete"
+      :permissions="permissions"
       @deleted="onBeneficiaryDeleted"
     />
 
     <hr />
     <BeneficiaryDetailsHistoryActions
-      :beneficiary="beneficiary"
+      v-if="permissions"
+      :beneficiary-id="beneficiary.id"
+      :permissions="permissions"
       class="fr-pb-3w"
     />
     <hr />
@@ -35,10 +38,9 @@
           message="La fiche bénéficiaire n'a pas pu être chargée."
         />
         <BeneficiaryInfo
-          v-else
+          v-if="permissions"
           :beneficiary="beneficiary"
-          :entourages="entourages"
-          :tax-households="taxHouseholds"
+          :permissions="permissions"
           :followup-types="followupTypes"
         />
       </AtomTab>
@@ -73,8 +75,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { canDeleteBeneficiary } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
@@ -98,20 +98,14 @@
   })
 
   const beneficiary = computed(() => data.value?.beneficiary)
-  const title = RouteTitle.AppBeneficiary(beneficiary.value || null)
+  const permissions = computed(() => data.value?.permissions)
+  const title = RouteTitle.AppBeneficiary(beneficiary.value?.general || null)
 
   useHead({ title })
 
-  const taxHouseholds = computed(() => data.value?.taxHouseholds || [])
-  const entourages = computed(() => data.value?.entourages || [])
-  const followupTypes = computed(() => data.value?.followupTypes || [])
-
-  const authStore = useAuthStore()
-  const canDelete = computed(() => {
-    return beneficiary.value
-      ? canDeleteBeneficiary(authStore.getAuthUser, beneficiary.value)
-      : false
-  })
+  const followupTypes = computed(
+    () => data.value?.beneficiary.history.types || []
+  )
 
   const backLink = computed(() => {
     if (originPage) {

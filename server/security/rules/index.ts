@@ -4,8 +4,10 @@ import type {
   SecurityTargetWithReferents,
   SecurityRule
 } from './types'
-import { hasAllowedRole } from './helpers'
-export { hasAllowedRole }
+import { hasAllowedRole, isReferent } from './helpers'
+export { hasAllowedRole, isReferent }
+
+export * from './comment'
 
 export type {
   SecurityRuleGrantee,
@@ -21,34 +23,14 @@ export {
   canListUsers
 } from './user'
 
-export { canEditItsOwnStructure } from './structure'
-
-export {
-  canOnlyListItsBeneficiaries,
-  canViewBeneficiaryGeneral,
-  canViewBeneficiaryHealthInfo,
-  canViewBeneficiaryOccupationIncome,
-  canViewBeneficiaryExternalOrganisations,
-  canEditBeneficiaryGeneral,
-  canEditBeneficiaryHealthInfo,
-  canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryExternalOrganisations,
-  canDeleteBeneficiary,
-  canEditBeneficiaryReferents,
-  canSaveToBeneficiaryBeneficiaryDraft
-} from './beneficiary'
-
-export {
-  canListBeneficiaryRelatives,
-  canEditBeneficiaryRelatives
-} from './relative'
+export * from './beneficiary'
+export * from './structure'
 
 export {
   canAddDocument,
   canDeleteDocument,
   canEditDocument,
   canListDocuments,
-  canOnlyListItsUploadedDocuments,
   canViewDocument,
   canSetDocumentAsConfidential
 } from './document'
@@ -64,8 +46,6 @@ export {
   canViewFollowupDetails,
   canViewAnyFollowupDetails
 } from './followup'
-
-export { canAddComment, canListComments } from './comment'
 
 export {
   canViewHelpRequestDetails,
@@ -86,8 +66,6 @@ export {
   canExportHistory,
   canExportStats
 } from './export'
-
-export { canViewDraft, canUpdateDraft, canDeleteDraft } from './draft'
 
 // A rule is a synchronous function taking
 // -- grantee (the authenticated user)

@@ -1,5 +1,5 @@
 <template>
-  <div v-if="hasIdentityInformations(beneficiary)">
+  <div v-if="hasIdentityInformations(general)">
     <div class="fr-grid-row">
       <div class="fr-col-12 fr-pb-1w fr-text--bold">
         Identité du bénéficiaire
@@ -8,44 +8,41 @@
     <div class="fr-grid-row">
       <div class="fr-col-6 fr-pb-2w">
         <div class="field-value">
-          {{ formatBeneficiaryName(beneficiary) }}
+          {{ formatBeneficiaryName(general) }}
         </div>
         <div class="field-value">
-          {{ formatBeneficiaryBirthInfo(beneficiary) }}
+          {{ formatBeneficiaryBirthInfo(general) }}
         </div>
       </div>
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.gender"
-        :value="BeneficiaryGenderKeys.value(beneficiary.gender)"
+        :value="BeneficiaryGenderKeys.value(general.gender)"
         class="fr-col-6"
       />
     </div>
     <div class="fr-grid-row">
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.birthName"
-        :value="beneficiary.birthName"
+        :value="general.birthName"
         class="fr-col-6"
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.nationality"
-        :value="NationalityKeys.value(beneficiary.nationality)"
+        :value="NationalityKeys.value(general.nationality)"
         class="fr-col-6"
       />
     </div>
-    <div
-      v-if="isMinistryAgent"
-      class="fr-grid-row"
-    >
+    <div class="fr-grid-row">
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.numeroPegase"
-        :value="beneficiary.numeroPegase"
+        :value="general.numeroPegase"
         class="fr-col-12"
         hint="Format attendu : A-00-000000"
       />
     </div>
   </div>
 
-  <div v-if="hasAddressInformations(beneficiary)">
+  <div v-if="hasAddressInformations(general)">
     <hr class="fr-col-12 fr-mt-5v" />
 
     <div class="fr-grid-row">
@@ -56,18 +53,18 @@
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.accommodationMode"
         :value="
-          BeneficiaryAccommodationModeKeys.value(beneficiary.accommodationMode)
+          BeneficiaryAccommodationModeKeys.value(general.accommodationMode)
         "
         class="fr-col-12"
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.accommodationAdditionalInformation"
-        :value="beneficiary.accommodationAdditionalInformation"
+        :value="general.accommodationAdditionalInformation"
         class="fr-col-12"
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.accommodationZone"
-        :value="beneficiary.accommodationZone"
+        :value="general.accommodationZone"
         class="fr-col-12"
       />
     </div>
@@ -75,19 +72,19 @@
     <div class="fr-grid-row">
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.street"
-        :value="formatAddress(beneficiary)"
+        :value="formatAddress(general)"
         class="fr-col-6"
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.addressComplement"
-        :value="beneficiary.addressComplement"
+        :value="general.addressComplement"
         class="fr-col-6"
       />
     </div>
   </div>
 
   <div
-    v-if="beneficiary.mobility"
+    v-if="general.mobility"
     class="fr-grid-row"
   >
     <hr class="fr-col-12 fr-mt-5v" />
@@ -97,13 +94,13 @@
     </div>
 
     <BeneficiaryInfoLabel
-      :value="BeneficiaryMobilityKeys.value(beneficiary.mobility)"
+      :value="BeneficiaryMobilityKeys.value(general.mobility)"
       class="fr-col-12"
     />
   </div>
 
   <div
-    v-if="beneficiary.additionalInformation"
+    v-if="general.additionalInformation"
     class="fr-grid-row"
   >
     <hr class="fr-col-12 fr-mt-5v" />
@@ -111,13 +108,13 @@
       Informations complémentaires
     </div>
     <div class="field-value fr-col-12">
-      {{ beneficiary.additionalInformation }}
+      {{ general.additionalInformation }}
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryOutput } from '~/server/trpc/routers'
+  import type { GetBeneficiaryGeneral } from '~/types/beneficiary'
   import {
     BeneficiaryAccommodationModeKeys,
     BeneficiaryGenderKeys,
@@ -133,8 +130,6 @@
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   defineProps<{
-    beneficiary: GetBeneficiaryOutput
+    general: GetBeneficiaryGeneral
   }>()
-
-  const isMinistryAgent = useMinistryAgent()
 </script>

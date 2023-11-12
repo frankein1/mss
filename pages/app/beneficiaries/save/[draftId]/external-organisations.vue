@@ -34,7 +34,6 @@
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
-  import type { BeneficiaryDraft } from '~/types/beneficiary'
 
   const trpcClient = useTrpcClient()
   const { matomo } = useMatomo()
@@ -45,35 +44,22 @@
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
 
-  const {
-    data: beneficiaryDraft,
-    pending,
-    error
-  } = await useAsyncData(loadBeneficiaryDraft)
+  const { data, pending, error } = await useAsyncData(() =>
+    trpcClient.beneficiaryDraft.get.query({
+      id: draftId
+    })
+  )
 
-  const beneficiary = computed<
-    SaveBeneficiaryExternalOrganisationsInput | undefined
-  >(() => {
-    if (!beneficiaryDraft.value) {
+  const beneficiary = computed(() => {
+    if (!data.value) {
       return undefined
     }
 
     return (
-      beneficiaryDraft.value.externalOrganisations ||
+      data.value.draft.externalOrganisations ||
       ({} as SaveBeneficiaryExternalOrganisationsInput)
     )
   })
-
-  async function loadBeneficiaryDraft() {
-    const beneficiaryDraft = (await trpcClient.beneficiaryDraft.get.query({
-      id: draftId
-    })) as BeneficiaryDraft
-
-    return {
-      ...beneficiaryDraft,
-      externalOrganisations: beneficiaryDraft.content?.externalOrganisations
-    }
-  }
 
   async function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryExternalOrganisationsInput,
@@ -89,7 +75,7 @@
   function saveBeneficiary(
     beneficiary: SaveBeneficiaryExternalOrganisationsInput
   ) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const beneficiaryDraftId = data.value?.draft.id
     if (!beneficiaryDraftId) {
       snackbar.error('La création de la fiche bénéficiaire a échoué.')
       return
@@ -120,7 +106,7 @@
     beneficiary: SaveBeneficiaryExternalOrganisationsInput,
     target: string
   ) {
-    const beneficiaryDraftId = beneficiaryDraft.value?.id
+    const beneficiaryDraftId = data.value?.draft.id
     if (!beneficiaryDraftId) {
       snackbar.error("L'enregistrement du brouillon a échoué.")
       return

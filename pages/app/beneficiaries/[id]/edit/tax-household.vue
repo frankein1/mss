@@ -1,6 +1,8 @@
 <template>
   <BeneficiaryEditFormLayout
+    v-if="permissions"
     :schema="saveBeneficiaryTaxHouseholdSchema"
+    :permissions="permissions"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     :current-route="Route.AppBeneficiaryEditTaxHousehold"
@@ -47,26 +49,30 @@
       id: beneficiaryId
     })
 
+  const permissions = computed(() => data.value?.permissions)
+
   const beneficiary = computed(() => {
     if (!data.value) {
       return null
     }
 
-    const { beneficiary: b, taxHouseholds } = data.value
+    const {
+      beneficiary: { id, meta, general, taxHouseholds }
+    } = data.value
 
     // Names and id are required for building the breadcrumb in the layout
     return {
-      id: b.id,
-      structureId: b.structureId,
-      referents: b.referents,
-      firstName: b.firstName,
-      usualName: b.usualName,
-      birthName: b.birthName,
-      familySituation: b.familySituation,
-      majorChildren: b.majorChildren,
-      minorChildren: b.minorChildren,
-      caregiver: b.caregiver,
-      taxHouseholds
+      id,
+      structureId: meta.structureId,
+      referents: meta.referents,
+      firstName: general.firstName,
+      usualName: general.usualName,
+      birthName: general.birthName,
+      familySituation: taxHouseholds?.familySituation,
+      majorChildren: taxHouseholds?.majorChildren,
+      minorChildren: taxHouseholds?.minorChildren,
+      caregiver: general.caregiver,
+      taxHouseholds: taxHouseholds?.taxHouseholds
     } as SaveBeneficiaryTaxHouseholdInput & MinimalBeneficiaryForFormLayout
   })
 
