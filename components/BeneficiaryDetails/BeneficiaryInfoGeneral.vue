@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { GetBeneficiaryGeneral } from '~/server/route'
+  import { GetBeneficiaryGeneral } from '~/types/beneficiary'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{

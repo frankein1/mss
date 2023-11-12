@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { GetBeneficiaryTaxHousehold } from '~/server/route'
+  import type { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{

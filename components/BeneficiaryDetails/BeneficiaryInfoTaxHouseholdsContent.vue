@@ -35,7 +35,7 @@
 
 <script setup lang="ts">
   import { BeneficiaryFamilySituationKeys } from '~/client/options/beneficiary'
-  import type { GetBeneficiaryTaxHousehold } from '~/server/route'
+  import type { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   defineProps<{

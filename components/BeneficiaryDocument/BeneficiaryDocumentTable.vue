@@ -44,7 +44,8 @@
 </template>
 
 <script setup lang="ts">
-  import { Documents, GetBeneficiaryOutput } from '~/server/route'
+  import { Documents } from '~/server/route'
+  import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import type { BeneficiaryDocumentSort } from '~/types/table'
 
   const props = defineProps<{

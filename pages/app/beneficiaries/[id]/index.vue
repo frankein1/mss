@@ -103,7 +103,9 @@
 
   useHead({ title })
 
-  const followupTypes = computed(() => data.value?.followupTypes || [])
+  const followupTypes = computed(
+    () => data.value?.beneficiary.history.types || []
+  )
 
   const backLink = computed(() => {
     if (originPage) {

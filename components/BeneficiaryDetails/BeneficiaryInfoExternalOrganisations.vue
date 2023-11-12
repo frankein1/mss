@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryExternalOrganisations } from '~/server/route'
+  import { GetBeneficiaryExternalOrganisations } from '~/types/beneficiary'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{

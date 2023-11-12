@@ -114,7 +114,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryGeneral } from '~/server/route'
+  import type { GetBeneficiaryGeneral } from '~/types/beneficiary'
   import {
     BeneficiaryAccommodationModeKeys,
     BeneficiaryGenderKeys,

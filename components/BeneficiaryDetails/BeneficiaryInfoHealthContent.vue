@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { GetBeneficiaryHealth } from '~/server/route'
+  import { GetBeneficiaryHealth } from '~/types/beneficiary'
   import { BeneficiaryGirKeys } from '~/client/options/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 

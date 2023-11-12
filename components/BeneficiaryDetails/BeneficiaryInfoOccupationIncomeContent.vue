@@ -131,7 +131,7 @@
     MinistereCategorieKeys,
     MinistereDepartmentServiceAcKeys
   } from '~/client/options/ministry'
-  import type { GetBeneficiaryOccupationIncome } from '~/server/route'
+  import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{

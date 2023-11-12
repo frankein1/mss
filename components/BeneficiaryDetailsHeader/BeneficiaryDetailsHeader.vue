@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
   import { BeneficiaryEditPermission } from '~/server/security'
-  import { GetBeneficiaryOutput } from '~/server/route'
+  import { GetBeneficiaryOutput } from '~/types/beneficiary'
 
   defineProps<{
     title: string

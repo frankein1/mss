@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-  import type { GetBeneficiaryFollowupTypes } from '~/server/route'
+  import type { FollowupTypeIdAndName } from '~/types/followupType'
 
   defineProps<{
-    followupTypes: GetBeneficiaryFollowupTypes
+    followupTypes: FollowupTypeIdAndName[]
   }>()
 </script>

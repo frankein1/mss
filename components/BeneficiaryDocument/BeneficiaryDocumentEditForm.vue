@@ -51,7 +51,7 @@
   import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
   import { useAuthStore } from '~/store/auth'
   import { canSetDocumentAsConfidential as canSetDocumentAsConfidentialRule } from '~/server/security'
-  import { GetBeneficiaryOutput } from '~/server/route'
+  import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import { documentFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
