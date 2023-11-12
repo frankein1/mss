@@ -1,9 +1,5 @@
 import { Prisma } from '@prisma/client'
-import {
-  GetBeneficiaryOutput,
-  GetBeneficiaryRelative,
-  createQuery
-} from '~/server/route'
+import { createQuery } from '~/server/route'
 import { beneficiaryFieldLabels } from '~/client/labels'
 import {
   ExportBeneficiariesInput,
@@ -36,6 +32,10 @@ import {
   ministereDepartmentServiceAcLabels,
   ministereStructureLabels
 } from '~/client/options/ministry'
+import {
+  GetBeneficiaryOutput,
+  GetBeneficiaryRelative
+} from '~/types/beneficiary'
 
 const securityCheck = (
   grantee: SecurityRuleGrantee,
@@ -85,7 +85,8 @@ export const exportBeneficiariesQuery = createQuery({
 })
 
 function formatData(beneficiary: GetBeneficiaryOutput) {
-  const { meta, general, occupationIncome, taxHouseholds } = beneficiary
+  const { meta, general, occupationIncome, taxHouseholds, documents, history } =
+    beneficiary
   return {
     referents: meta.referents
       .map(referent => formatUserDisplayName(referent))
@@ -186,12 +187,10 @@ function formatData(beneficiary: GetBeneficiaryOutput) {
     updated: formatDate(meta.updated, 'DD-MM-YYYY HH:mm'),
     entourages: beneficiary.entourages?.map(formatRelative).join(', ') || '',
     taxHouseholds:
-      taxHouseholds?.(taxHouseholds || [])
-        .map(formatRelative)
-        .join(', ') || '',
-    documents: meta.documents.map(document => document.name).join(', '),
-    historyTotal: historyTotal.toString(),
-    types: beneficiary.types.map(({ name }) => name).join(', ')
+      (taxHouseholds?.taxHouseholds || []).map(formatRelative).join(', ') || '',
+    documents: documents.map(document => document.name).join(', '),
+    historyTotal: history.historyTotal.toString(),
+    types: history.types.map(({ name }) => name).join(', ')
   }
 }
 

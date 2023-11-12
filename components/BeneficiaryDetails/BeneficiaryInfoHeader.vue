@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryOutput } from '~/server/route'
+  import type { GetBeneficiaryOutput } from '~/types/beneficiary'
   import { formatUserDisplayName } from '~/utils/user'
   import {
     formatAddress,

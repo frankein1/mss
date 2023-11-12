@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
   import { BeneficiaryEditPermission } from '~/server/security'
-  import { GetBeneficiaryHealth } from '~/server/route'
+  import { GetBeneficiaryHealth } from '~/types/beneficiary'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{

@@ -56,7 +56,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryRelative } from '~/server/route'
+  import { GetBeneficiaryRelative } from '~/types/beneficiary'
   import { RelativeRelationshipKeys } from '~/client/options/beneficiary'
   import { RoutePath } from '~/utils/routing'
   import { relativeFieldLabels } from '~/client/labels/relative.labels'

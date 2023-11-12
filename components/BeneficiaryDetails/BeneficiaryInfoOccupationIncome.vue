@@ -14,7 +14,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { GetBeneficiaryOccupationIncome } from '~/server/route'
+  import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{

@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryRelative } from '~/server/route'
+  import { GetBeneficiaryRelative } from '~/types/beneficiary'
 
   defineProps<{
     entourages: GetBeneficiaryRelative[]
