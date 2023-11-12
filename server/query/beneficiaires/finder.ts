@@ -4,7 +4,7 @@ import { BeneficiaryRepo } from '~/server/database'
 import {
   SecurityRuleGrantee,
   canViewDocument,
-  getBeneficiaryEditPermissions
+  getBeneficiaryPermissions
 } from '~/server/security'
 
 const columnsSelection = {
@@ -85,7 +85,7 @@ const filter = ({
   structure: { type: StructureType }
   beneficiary: FindOutput
 }) => {
-  const { view } = getBeneficiaryEditPermissions({
+  const { view } = getBeneficiaryPermissions({
     user,
     target: beneficiary,
     structure

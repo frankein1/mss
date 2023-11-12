@@ -66,7 +66,7 @@
     RouteTitle
   } from '~/utils/routing'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   type SubmitType = z.infer<T>
 
@@ -80,7 +80,7 @@
   const props = withDefaults(
     defineProps<{
       beneficiary: MinimalBeneficiaryForFormLayout | null
-      permissions: BeneficiaryEditPermission
+      permissions: BeneficiaryPermissions
       schema: T
       isSubmitting: boolean
       titleIcon?: string

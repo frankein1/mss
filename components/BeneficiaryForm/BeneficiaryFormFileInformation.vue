@@ -34,13 +34,13 @@
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
   import { SaveBeneficiaryGeneralInformationInput } from '~/server/schema'
   import { BeneficiaryReferent } from '~/types/beneficiary'
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   const props = withDefaults(
     defineProps<{
       agents: BeneficiaryReferent[]
       beneficiary?: SaveBeneficiaryGeneralInformationInput
-      permissions: BeneficiaryEditPermission
+      permissions: BeneficiaryPermissions
     }>(),
     {
       beneficiary: undefined

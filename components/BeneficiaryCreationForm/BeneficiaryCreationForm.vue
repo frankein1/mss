@@ -118,11 +118,11 @@
     createBeneficiarySchema
   } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   defineProps<{
     isSubmitting: boolean
-    permissions: BeneficiaryEditPermission
+    permissions: BeneficiaryPermissions
     agents: BeneficiaryReferent[]
   }>()
 

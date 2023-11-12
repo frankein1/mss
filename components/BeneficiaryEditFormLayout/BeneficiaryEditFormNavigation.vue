@@ -10,13 +10,13 @@
 <script setup lang="ts">
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { RoutePath, Route, AppBeneficiaryEditRoute } from '~/utils/routing'
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   const props = defineProps<{
     currentRoute: AppBeneficiaryEditRoute
     originTab: BeneficiaryTab | undefined
     beneficiaryId: string
-    permissions: BeneficiaryEditPermission
+    permissions: BeneficiaryPermissions
     beneficiaryFormLayoutMainContainer: HTMLElement | null
   }>()
 

@@ -88,10 +88,10 @@
     beneficiaryAccommodationModeOptions,
     beneficiaryAccommodationZoneOptions
   } from '~/client/options/beneficiary'
-  import { BeneficiaryEditPermission } from '~/server/security'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   defineProps<{
-    permissions: BeneficiaryEditPermission
+    permissions: BeneficiaryPermissions
   }>()
 
   const { value: accommodationMode } =
