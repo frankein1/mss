@@ -45,7 +45,14 @@ const columnsSelection = {
       }
     }
   },
-  documents: true,
+  documents: {
+    select: {
+      key: true,
+      name: true,
+      createdById: true,
+      confidential: true
+    }
+  },
   followups: {
     include: {
       types: true

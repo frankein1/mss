@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
   import { Gender } from '@prisma/client'
-  import { GetBeneficiaryGeneral } from '~/server/route'
+  import { GetBeneficiaryGeneral } from '~/types/beneficiary'
   import { readableFileNumber } from '~/utils/readableFileNumber'
 
   const props = withDefaults(

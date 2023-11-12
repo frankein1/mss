@@ -87,7 +87,7 @@
   })
 
   const followupTypes = computed(() =>
-    (data.value?.followupTypes || []).map(t => t.name).join(', ')
+    (data.value?.beneficiary.history.types || []).map(t => t.name).join(', ')
   )
 
   onMounted(() => {

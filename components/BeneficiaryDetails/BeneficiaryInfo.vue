@@ -47,14 +47,12 @@
 
 <script lang="ts" setup>
   import { BeneficiaryEditPermission } from '~/server/security'
-  import type {
-    GetBeneficiaryOutput,
-    GetBeneficiaryFollowupTypes
-  } from '~/server/route'
+  import { GetBeneficiaryOutput } from '~/types/beneficiary'
+  import { FollowupTypeIdAndName } from '~/types/followupType'
 
   defineProps<{
     beneficiary: GetBeneficiaryOutput
-    followupTypes: GetBeneficiaryFollowupTypes
+    followupTypes: FollowupTypeIdAndName[]
     permissions: BeneficiaryEditPermission
   }>()
 </script>

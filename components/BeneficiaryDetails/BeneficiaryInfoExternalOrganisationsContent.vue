@@ -53,7 +53,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { GetBeneficiaryExternalOrganisations } from '~/server/route'
+  import type { GetBeneficiaryExternalOrganisations } from '~/types/beneficiary'
   import {
     BeneficiaryOrientationTypeKeys,
     BeneficiaryProtectionMeasureKeys

@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaryRelative } from '~/server/route'
+  import { GetBeneficiaryRelative } from '~/types/beneficiary'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{

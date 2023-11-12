@@ -106,7 +106,8 @@
 
 <script lang="ts" setup>
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
-  import { GetBeneficiaryOutput, DocumentItem } from '~/server/route'
+  import { DocumentItem } from '~/server/route'
+  import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import {
     canEditDocument,
     canDeleteDocument,
