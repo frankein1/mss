@@ -4,7 +4,6 @@ import { BeneficiaryRepo } from '~/server/database'
 import {
   BeneficiaryPermissions,
   SecurityRuleGrantee,
-  canViewDocument,
   getBeneficiaryPermissions
 } from '~/server/security'
 
@@ -44,14 +43,6 @@ const columnsSelection = {
           birthDate: true
         }
       }
-    }
-  },
-  documents: {
-    select: {
-      key: true,
-      name: true,
-      createdById: true,
-      confidential: true
     }
   },
   followups: {
@@ -117,9 +108,6 @@ const filter = ({
     ? getTaxHouseholds(beneficiary)
     : undefined
 
-  const documents = beneficiary.documents.filter(document =>
-    canViewDocument(user, beneficiary, document)
-  )
   const history = getHistory(beneficiary)
 
   return {
@@ -131,7 +119,6 @@ const filter = ({
       : undefined,
     health: !isEmpty(health) ? health : undefined,
     occupationIncome: !isEmpty(occupationIncome) ? occupationIncome : undefined,
-    documents,
     taxHouseholds: !isEmpty(taxHouseholds) ? taxHouseholds : undefined,
     entourages: !isEmpty(entourages) ? entourages : undefined,
     history

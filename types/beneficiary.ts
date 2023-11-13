@@ -1,7 +1,6 @@
 import type {
   Beneficiary,
   BeneficiaryRelative,
-  Document,
   Draft,
   User,
   UserStatus
@@ -185,7 +184,6 @@ export type GetBeneficiaryOutput = {
   occupationIncome: GetBeneficiaryOccupationIncome | undefined
   entourages: GetBeneficiaryRelative[] | undefined
   taxHouseholds: GetBeneficiaryTaxHousehold | undefined
-  documents: Pick<Document, 'key' | 'name' | 'confidential' | 'createdById'>[]
   history: {
     historyTotal: number
     types: FollowupTypeIdAndName[]

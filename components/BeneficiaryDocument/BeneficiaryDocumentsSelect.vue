@@ -38,19 +38,15 @@
     }
   )
 
-  const {
-    data: documentsRequest,
-    pending,
-    error,
-    refresh
-  } = await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery({
-    beneficiaryId: props.beneficiaryId
-  })
+  const { data, pending, error, refresh } =
+    await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery({
+      beneficiaryId: props.beneficiaryId
+    })
 
-  const documents = computed(() => documentsRequest.value?.documents || [])
+  const documents = computed(() => data.value?.documents || [])
 
   const documentOptions = computed(
-    () => new Map(documents.value?.map(d => [d.key, d.name]))
+    () => new Map(documents.value?.map(d => [d.document.key, d.document.name]))
   )
 
   function onNewDocument(key: string) {
