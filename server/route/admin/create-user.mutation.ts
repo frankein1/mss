@@ -32,7 +32,7 @@ const adminHandler = async ({
   sendEmail({
     to: createdUser.email,
     subject: 'Mon Suivi Social | Ouverture de votre compte',
-    html: getEmailContent(createdUser)
+    ...getEmailContent(createdUser)
   })
 
   return createdUser

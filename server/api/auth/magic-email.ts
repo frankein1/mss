@@ -33,16 +33,25 @@ export default defineEventHandler(async event => {
   await sendEmail({
     to: user.email,
     subject: 'Mon Suivi Social | Espace Administrateur',
-    html: getEmailContent(user, accessToken)
+    ...getEmailContent(user, accessToken)
   })
   return { success: true }
 })
 
 function getEmailContent(user: User, accessToken: string) {
   const config = useRuntimeConfig()
-  return `Bonjour ${user.firstName} ${user.lastName},
+  const text = `Bonjour ${user.firstName} ${user.lastName},
+
+Veuillez cliquer sur le lien ci-dessous pour accéder à votre espace Administrateur :
+
+${config.public.appUrl}${RoutePath.AuthValidateToken()}?token=${accessToken}
+
+L'équipe de Mon Suivi Social
+`
+
+  const html = `Bonjour ${user.firstName} ${user.lastName},
 </br></br>
-Veuillez cliquer sur le lien ci-dessous pour accéder à votre espace Administrateur:
+Veuillez cliquer sur le lien ci-dessous pour accéder à votre espace Administrateur :
 </br></br>
 <a href="${
     config.public.appUrl
@@ -50,4 +59,6 @@ Veuillez cliquer sur le lien ci-dessous pour accéder à votre espace Administra
   </br></br>
 L'équipe de Mon Suivi Social
 `
+
+  return { text, html }
 }
