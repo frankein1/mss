@@ -23,7 +23,6 @@
       class="fr-p-3v"
     >
       <BeneficiaryFormOccupationIncome
-        v-if="permissions"
         :permissions="permissions"
         :family-situation="familySituation"
         :major-children="majorChildren"
@@ -129,7 +128,7 @@
 
     useTrpcMutation({
       mutation: () =>
-        trpcClient.beneficiary.updateOccupationIncome?.mutate({
+        trpcClient.beneficiary.updateOccupationIncome.mutate({
           id: beneficiaryId,
           ...beneficiary
         }),

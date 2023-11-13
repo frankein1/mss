@@ -1,7 +1,5 @@
 <template>
   <BeneficiaryInfoSection
-    v-if="occupationIncome"
-    id="occupationIncome"
     title="Activité/Revenu"
     :edit-link="editLink"
   >
@@ -19,7 +17,7 @@
 
   const props = defineProps<{
     beneficiaryId: string
-    occupationIncome?: GetBeneficiaryOccupationIncome
+    occupationIncome: GetBeneficiaryOccupationIncome
   }>()
 
   const editLink = computed(() =>

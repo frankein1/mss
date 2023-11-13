@@ -34,17 +34,14 @@
       )
     }
 
-    // if (canEditBeneficiaryHealthInfo.value) {
     if (props.permissions.edit.health) {
       editRoutes.push(Route.AppBeneficiaryEditHealth)
     }
 
-    // if (canEditBeneficiaryOccupationIncome.value) {
     if (props.permissions.edit.occupationIncome) {
       editRoutes.push(Route.AppBeneficiaryEditOccupation)
     }
 
-    // if (canEditBeneficiaryExternalOrganisations.value) {
     if (props.permissions.edit.externalOrganisations) {
       editRoutes.push(Route.AppBeneficiaryEditExternalOrganisations)
     }

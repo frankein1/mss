@@ -4,7 +4,6 @@ import {
   SecurityRuleGrantee,
   canEditBeneficiaryHealthInfo
 } from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   UpdateBeneficiaryHealthInput,
@@ -20,13 +19,7 @@ const securityCheck = async (
   return canEditBeneficiaryHealthInfo(grantee, beneficiary)
 }
 
-const handler = async ({
-  input,
-  ctx: _ctx
-}: {
-  input: UpdateBeneficiaryHealthInput
-  ctx: ProtectedAppContext
-}) => {
+const handler = async ({ input }: { input: UpdateBeneficiaryHealthInput }) => {
   const { id, ...health } = input
 
   let data = {}
