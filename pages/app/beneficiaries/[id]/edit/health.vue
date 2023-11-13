@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryEditFormLayout
-    v-if="permissions"
     :permissions="permissions"
     :schema="saveBeneficiaryHealthSchema"
     :is-submitting="isSubmitting"
@@ -19,7 +18,7 @@
       class="fr-mx-auto"
     />
     <div
-      v-else-if="beneficiary"
+      v-else-if="beneficiary && permissions"
       class="fr-p-3v"
     >
       <BeneficiaryFormHealth :permissions="permissions" />
@@ -48,12 +47,7 @@
       id: beneficiaryId
     })
 
-  const permissions = computed(() => {
-    if (!data.value) {
-      return null
-    }
-    return data.value.permissions
-  })
+  const permissions = computed(() => data.value?.permissions)
 
   const beneficiary = computed(() => {
     if (!data.value) {
@@ -72,11 +66,7 @@
       firstName: general.firstName,
       usualName: general.usualName,
       birthName: general.birthName,
-      gir: health?.gir,
-      doctor: health?.doctor,
-      healthAdditionalInformation: health?.healthAdditionalInformation,
-      socialSecurityNumber: health?.socialSecurityNumber,
-      insurance: health?.insurance
+      ...health
     } as SaveBeneficiaryHealthInput & MinimalBeneficiaryForFormLayout
   })
 

@@ -1,7 +1,5 @@
 <template>
   <BeneficiaryInfoSection
-    v-if="entourages && entourages.length"
-    id="entourages"
     title="Entourage"
     :edit-link="editLink"
   >
@@ -17,7 +15,7 @@
 
   const props = defineProps<{
     beneficiaryId: string
-    entourages?: GetBeneficiaryRelative[]
+    entourages: GetBeneficiaryRelative[]
   }>()
 
   const editLink = computed(() =>

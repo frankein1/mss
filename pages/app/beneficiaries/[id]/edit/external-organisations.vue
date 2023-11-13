@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryEditFormLayout
-    v-if="permissions"
     :permissions="permissions"
     :schema="saveBeneficiaryExternalOrganisationsSchema"
     :is-submitting="isSubmitting"
@@ -48,12 +47,7 @@
       id: beneficiaryId
     })
 
-  const permissions = computed(() => {
-    if (!data.value) {
-      return null
-    }
-    return data.value.permissions
-  })
+  const permissions = computed(() => data.value?.permissions)
 
   const beneficiary = computed(() => {
     if (!data.value) {
@@ -72,13 +66,7 @@
       firstName: general.firstName,
       usualName: general.usualName,
       birthName: general.birthName,
-      protectionMeasure: externalOrganisations?.protectionMeasure,
-      representative: externalOrganisations?.representative,
-      prescribingStructure: externalOrganisations?.prescribingStructure,
-      orientationType: externalOrganisations?.orientationType,
-      orientationStructure: externalOrganisations?.orientationStructure,
-      serviceProviders: externalOrganisations?.serviceProviders,
-      involvedPartners: externalOrganisations?.involvedPartners
+      ...externalOrganisations
     } as SaveBeneficiaryExternalOrganisationsInput &
       MinimalBeneficiaryForFormLayout
   })

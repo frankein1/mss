@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext, invalidError } from '~/server/trpc'
+import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleGrantee, canListDocuments } from '~/server/security'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
@@ -35,10 +35,6 @@ const securityCheck = async (
     grantee,
     input.beneficiaryId
   )
-
-  if (!beneficiary) {
-    throw invalidError()
-  }
 
   return canListDocuments(grantee, beneficiary)
 }

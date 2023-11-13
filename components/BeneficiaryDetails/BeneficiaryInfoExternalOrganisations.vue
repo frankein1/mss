@@ -1,7 +1,5 @@
 <template>
   <BeneficiaryInfoSection
-    v-if="externalOrganisations"
-    id="externalOrganisations"
     title="Structures extérieures"
     :edit-link="editLink"
   >
@@ -19,7 +17,7 @@
 
   const props = defineProps<{
     beneficiaryId: string
-    externalOrganisations?: GetBeneficiaryExternalOrganisations
+    externalOrganisations: GetBeneficiaryExternalOrganisations
   }>()
 
   const editLink = computed(() =>

@@ -1,15 +1,13 @@
-import {
-  FollowupTypesFromFollowups,
-  FollowupTypesFromHelpRequests,
-  BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests
-} from '~/server/route/beneficiary'
+import { BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests } from '~/server/route/beneficiary'
 import { FollowupTypeIdAndName } from '~/types/followupType'
 import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 
 type FollowupTypeSet = { [id: string]: FollowupTypeIdAndName }
 
 function getUniqueFollowUpTypesTuplesFromFollowups(
-  followups: FollowupTypesFromFollowups
+  followups: {
+    types: FollowupTypeIdAndName[]
+  }[]
 ) {
   return followups.reduce((uniques, followup) => {
     if (!followup.types.length) {
@@ -26,7 +24,7 @@ function getUniqueFollowUpTypesTuplesFromFollowups(
 }
 
 function getUniqueFollowUpTypesFromFollowup(
-  followUpTypesArr: FollowupTypesFromFollowups[0]['types']
+  followUpTypesArr: FollowupTypeIdAndName[]
 ) {
   return followUpTypesArr.reduce(
     (uniques, f) => ({
@@ -38,7 +36,9 @@ function getUniqueFollowUpTypesFromFollowup(
 }
 
 function getUniqueFollowUpTypesTuplesFromHelpRequests(
-  helpRequests: FollowupTypesFromHelpRequests
+  helpRequests: {
+    type: FollowupTypeIdAndName
+  }[]
 ) {
   return helpRequests.reduce((uniques, helpRequest) => {
     if (!helpRequest.type) {

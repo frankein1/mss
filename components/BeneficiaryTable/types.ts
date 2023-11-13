@@ -1,4 +1,9 @@
-import type { GetBeneficiariesOutput } from '~/server/route'
+import type { inferRouterOutputs } from '@trpc/server'
+import { AppRouter } from '~/server/trpc/routers'
 
-export type Beneficiaries = GetBeneficiariesOutput['beneficiaries']
-export type BeneficiaryItem = Beneficiaries[0]
+type RouterOutput = inferRouterOutputs<AppRouter>
+
+type GetBeneficiariesOutput = RouterOutput['beneficiary']['getBeneficiaries']
+
+export type GetBeneficiaries = GetBeneficiariesOutput['beneficiaries']
+export type BeneficiaryItem = GetBeneficiaries[0]

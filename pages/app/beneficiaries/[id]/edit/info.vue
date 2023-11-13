@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryEditFormLayout
-    v-if="permissions"
     :schema="saveBeneficiaryGeneralInformationSchema"
     :permissions="permissions"
     :is-submitting="isSubmitting"
@@ -90,31 +89,9 @@
       referents: meta.referents.map(referent => referent.id),
       aidantConnectAuthorized: meta.aidantConnectAuthorized,
       status: meta.status,
-      title: general.title,
-      firstName: general.firstName,
-      usualName: general.usualName,
-      birthName: general.birthName,
+      ...general,
       birthDate: general.birthDate ? new Date(general.birthDate) : undefined,
-      birthPlace: general.birthPlace,
-      deathDate: general.deathDate ? new Date(general.deathDate) : undefined,
-      gender: general.gender,
-      nationality: general.nationality,
-      numeroPegase: general.numeroPegase,
-      accommodationMode: general.accommodationMode,
-      accommodationName: general.accommodationName,
-      accommodationAdditionalInformation:
-        general.accommodationAdditionalInformation,
-      zipcode: general.zipcode,
-      city: general.city,
-      region: general.region,
-      addressComplement: general.addressComplement,
-      accommodationZone: general.accommodationZone,
-      street: general.street,
-      noPhone: general.noPhone,
-      phone1: general.phone1,
-      phone2: general.phone2,
-      email: general.email,
-      mobility: general.mobility
+      deathDate: general.deathDate ? new Date(general.deathDate) : undefined
     } as SaveBeneficiaryGeneralInformationInput &
       MinimalBeneficiaryForFormLayout
   })

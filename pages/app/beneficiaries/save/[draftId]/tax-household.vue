@@ -45,11 +45,9 @@
   const draftId = route.params.draftId as string
   const snackbar = useSnackbar()
 
-  const { data, pending, error } = await useAsyncData(() =>
-    trpcClient.beneficiaryDraft.get.query({
-      id: draftId
-    })
-  )
+  const { data, pending, error } = trpcClient.beneficiaryDraft.get.useQuery({
+    id: draftId
+  })
 
   const beneficiary = computed(() => {
     if (!data.value) {
