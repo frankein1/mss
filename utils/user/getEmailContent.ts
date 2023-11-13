@@ -11,7 +11,21 @@ export function getEmailContent(user: User) {
   const client = getInclusionConnectClient()
   const registrationUrl = client.getRegistrationUrl()
 
-  const content = `Bonjour,
+  const text = `Bonjour,
+
+Votre responsable de structure ou l'équipe de Mon Suivi Social vous a ouvert des accès à l'application Mon Suivi Social.
+
+Pour s'authentifier, Mon Suivi Social utilise l'outil Inclusion Connect.
+
+Afin d'accéder à l'application, veuillez créer un compte InclusionConnect en utilisant ${user.email} comme adresse e-mail.
+
+Créer son compte Inclusion Connect : ${registrationUrl}
+
+En cas de difficulté, contactez-nous à ${from}.
+
+L'équipe de Mon Suivi Social`
+
+  const html = `Bonjour,
 </br></br></br>
   Votre responsable de structure ou l'équipe de Mon Suivi Social vous a ouvert des accès à l'application Mon Suivi Social.
 </br></br>
@@ -25,5 +39,5 @@ En cas de difficulté, contactez-nous à ${from}.
 </br></br></br>
 L'équipe de Mon Suivi Social`
 
-  return content
+  return { text, html }
 }
