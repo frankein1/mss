@@ -49,7 +49,7 @@
     </td>
     <td>
       <ul class="fr-btns-group fr-btns-group--inline">
-        <template v-if="canView">
+        <template v-if="permissions.view">
           <li>
             <button
               class="fr-btn fr-btn--tertiary-no-outline fr-icon-eye-line"
@@ -77,7 +77,7 @@
             </button>
           </li>
         </template>
-        <li v-if="canEdit">
+        <li v-if="permissions.edit">
           <button
             class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
             data-fr-opened="false"
@@ -89,7 +89,7 @@
             Modifier
           </button>
         </li>
-        <li v-if="canDelete">
+        <li v-if="permissions.delete">
           <button
             class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-line"
             title="Supprimer"
@@ -106,31 +106,24 @@
 
 <script lang="ts" setup>
   import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
-  import { DocumentItem } from '~/server/route'
-  import { GetBeneficiaryOutput } from '~/types/beneficiary'
-  import {
-    canEditDocument,
-    canDeleteDocument,
-    canViewDocument
-  } from '~/server/security'
+  import { GetDocument } from './types'
   import { EditDocumentInput } from '~/server/schema'
-  import { useAuthStore } from '~/store/auth'
   import { DocumentTag } from '~/types/document'
   import { DocumentEventAction, EventCategory } from '~/types/matomo'
   import {
     documentTypeLabels,
     documentTagLabels
   } from '~/client/options/document'
+  import { DocumentPermissions } from '~/server/security'
 
-  const authStore = useAuthStore()
   const modal = useModal()
   const { matomo } = useMatomo()
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
 
   const props = defineProps<{
-    document: DocumentItem
-    beneficiary: GetBeneficiaryOutput
+    document: GetDocument
+    permissions: DocumentPermissions
   }>()
 
   const emit = defineEmits<{
@@ -138,20 +131,6 @@
   }>()
 
   const downloadLink = ref<HTMLLinkElement | null>(null)
-
-  const user = computed(() => authStore.getAuthUser)
-
-  const canView = computed(() =>
-    canViewDocument(user.value, props.beneficiary.meta, props.document)
-  )
-
-  const canEdit = computed(() =>
-    canEditDocument(user.value, props.beneficiary.meta, props.document)
-  )
-
-  const canDelete = computed(() =>
-    canDeleteDocument(user.value, props.beneficiary.meta)
-  )
 
   const hasUnreadNotifications = computed(
     () => !!props.document._count.Notification
@@ -201,7 +180,7 @@
       contentComponent: BeneficiaryDocumentEditForm,
       contentComponentProps: {
         document: props.document,
-        beneficiary: props.beneficiary
+        permissions: props.permissions
       },
       contentComponentEvents: {
         updateDocument: onUpdateDocument

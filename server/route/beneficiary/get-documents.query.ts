@@ -1,7 +1,11 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { SecurityRuleGrantee, canListDocuments } from '~/server/security'
+import {
+  SecurityRuleGrantee,
+  canListDocuments,
+  getDocumentPermissions
+} from '~/server/security'
 import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   GetDocumentsInput,
@@ -40,12 +44,14 @@ const securityCheck = async (
 }
 
 const handler = async ({
-  ctx: { user },
+  ctx,
   input: { beneficiaryId, filters, orderBy, perPage, page }
 }: {
   input: GetDocumentsInput
   ctx: ProtectedAppContext
 }) => {
+  const { user, structure } = ctx
+
   const { take, skip } =
     page && perPage
       ? takeAndSkipFromPagination({
@@ -81,18 +87,24 @@ const handler = async ({
   ])
   const totalPages = page && perPage ? getTotalPages({ count, perPage }) : 1
 
+  const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
+
+  const documentsWithPermissions = documents.map(document => ({
+    document,
+    permissions: getDocumentPermissions({
+      user,
+      structure,
+      beneficiary,
+      document
+    })
+  }))
+
   return {
-    documents,
+    documents: documentsWithPermissions,
     count,
     totalPages
   }
 }
-
-export type GetBeneficiaryDocumentsOutput = Prisma.PromiseReturnType<
-  typeof handler
->
-export type Documents = GetBeneficiaryDocumentsOutput['documents']
-export type DocumentItem = Documents[0]
 
 export const getBeneficiaryDocumentsQuery = createQuery({
   inputValidation: getDocumentsSchema,
