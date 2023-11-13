@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryInfoSection
-    v-if="health"
     title="Santé"
     :edit-link="editLink"
   >
@@ -11,14 +10,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryPermissions } from '~/server/security'
   import { GetBeneficiaryHealth } from '~/types/beneficiary'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     beneficiaryId: string
-    health?: GetBeneficiaryHealth
-    permissions: BeneficiaryPermissions
+    health: GetBeneficiaryHealth
   }>()
 
   const editLink = computed(() =>
