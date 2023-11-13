@@ -26,7 +26,7 @@
       multiple
     />
     <VeeCheckbox
-      v-if="canSetDocumentAsConfidential"
+      v-if="permissions.set.confidential"
       class="fr-mb-2w"
       :label="documentFieldLabels.confidential"
       name="confidential"
@@ -43,38 +43,26 @@
 </template>
 
 <script setup lang="ts">
-  import { Document as Doc } from '@prisma/client'
+  import { GetDocument } from './types'
   import {
     documentTagOptions,
     documentTypeOptions
   } from '~/client/options/document'
   import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
-  import { useAuthStore } from '~/store/auth'
-  import { canSetDocumentAsConfidential as canSetDocumentAsConfidentialRule } from '~/server/security'
-  import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import { documentFieldLabels } from '~/client/labels'
+  import { DocumentPermissions } from '~/server/security'
 
   const props = defineProps<{
-    document: Doc
-    beneficiary: GetBeneficiaryOutput
+    document: GetDocument
+    permissions: DocumentPermissions
   }>()
 
   const emit = defineEmits<{
     updateDocument: [values: EditDocumentInput]
   }>()
 
-  const authStore = useAuthStore()
-
   const isSubmitting = ref(false)
   const form = ref<HTMLFormElement | null>(null)
-
-  const canSetDocumentAsConfidential = computed(() => {
-    return canSetDocumentAsConfidentialRule(
-      authStore.getAuthUser,
-      props.beneficiary.meta,
-      props.document
-    )
-  })
 
   const { handleSubmit } = useForm<EditDocumentInput>({
     validationSchema: toTypedSchema(editDocumentSchema),

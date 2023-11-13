@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Document, Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { beneficiaryFieldLabels } from '~/client/labels'
 import {
@@ -36,6 +36,7 @@ import {
   GetBeneficiaryOutput,
   GetBeneficiaryRelative
 } from '~/types/beneficiary'
+import { DocumentRepo } from '~/server/database'
 
 const securityCheck = (
   grantee: SecurityRuleGrantee,
@@ -70,7 +71,11 @@ const handler = async ({
   const rows: RowType[] = []
 
   for (const beneficiary of dataRequest) {
-    rows.push(formatData(beneficiary))
+    const documents = await DocumentRepo.findMany(ctx.user, {
+      where: { beneficiaryId: beneficiary.id }
+    })
+
+    rows.push(formatData(beneficiary, documents))
   }
 
   return await createExport(ctx.user.id, [
@@ -84,8 +89,8 @@ export const exportBeneficiariesQuery = createQuery({
   handler
 })
 
-function formatData(beneficiary: GetBeneficiaryOutput) {
-  const { meta, general, occupationIncome, taxHouseholds, documents, history } =
+function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
+  const { meta, general, occupationIncome, taxHouseholds, history } =
     beneficiary
   return {
     referents: meta.referents

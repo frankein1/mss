@@ -2,7 +2,7 @@
   <div class="feature-section documents-header-section">
     <BeneficiaryDocumentFilters @filter="filters = $event" />
     <BeneficiaryDocumentAddButton
-      :beneficiary-id="beneficiary.id"
+      :beneficiary-id="beneficiaryId"
       @refresh-documents="refresh"
     />
   </div>
@@ -24,7 +24,6 @@
         v-model:sort="orderBy"
         :documents="documents"
         :pending="pending"
-        :beneficiary="beneficiary"
         @refresh-documents="refresh"
       />
       <AtomPagination
@@ -44,7 +43,6 @@
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
-  import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
   import { BeneficiaryDocumentSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
@@ -52,7 +50,7 @@
   const route = useRoute()
   const trpcClient = useTrpcClient()
 
-  const props = defineProps<{ beneficiary: GetBeneficiaryOutput }>()
+  const props = defineProps<{ beneficiaryId: string }>()
 
   const filters = ref<BeneficiaryDocumentFilterInput>({})
   const orderBy = ref<BeneficiaryDocumentSort[]>([{ created: SortOrder.Desc }])
@@ -62,25 +60,21 @@
   const { updatePagination } = usePagination(page, perPage, filters)
 
   const queryInput = computed(() => ({
-    beneficiaryId: props.beneficiary.id,
+    beneficiaryId: props.beneficiaryId,
     filters: filters.value,
     orderBy: orderBy.value,
     page: page.value,
     perPage: perPage.value
   }))
 
-  const {
-    data: documentsRequest,
-    error,
-    pending,
-    refresh
-  } = await trpcClient.beneficiary.getBeneficiaryDocuments.useQuery(queryInput)
+  const { data, error, pending, refresh } =
+    await trpcClient.beneficiary.getBeneficiaryDocuments.useQuery(queryInput)
 
-  const documents = computed(() => documentsRequest.value?.documents || [])
+  const documents = computed(() => data.value?.documents || [])
 
-  const totalPages = computed(() => documentsRequest.value?.totalPages || 0)
+  const totalPages = computed(() => data.value?.totalPages || 0)
 
-  const documentsCount = computed(() => documentsRequest.value?.count || 0)
+  const documentsCount = computed(() => data.value?.count || 0)
 
   onMounted(async () => {
     const tab = route.hash.slice(1)
