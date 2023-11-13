@@ -2,9 +2,13 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   SecurityRuleGrantee,
-  canEditBeneficiaryHealthInfo
+  canEditBeneficiaryHealthInfo,
+  getBeneficiaryPermissions
 } from '~/server/security'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  getStructureByUser
+} from '~/server/query'
 import {
   UpdateBeneficiaryHealthInput,
   updateBeneficiaryHealthSchema
@@ -16,18 +20,26 @@ const securityCheck = async (
   input: UpdateBeneficiaryHealthInput
 ) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
+  const structure = await getStructureByUser(grantee)
+  const { set } = getBeneficiaryPermissions({
+    user: grantee,
+    target: beneficiary,
+    structure
+  })
+
+  if (!set.nir && input.socialSecurityNumber) {
+    return false
+  }
+
   return canEditBeneficiaryHealthInfo(grantee, beneficiary)
 }
 
 const handler = async ({ input }: { input: UpdateBeneficiaryHealthInput }) => {
   const { id, ...health } = input
 
-  let data = {}
-  data = { ...data, ...health }
-
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id },
-    data
+    data: health
   })
 
   return updatedBeneficiary

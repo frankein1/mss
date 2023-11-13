@@ -30,7 +30,7 @@ export type BeneficiaryPermissions = {
     externalOrganisations: boolean
   }
   get: {
-    accomodationZone: boolean
+    accommodationZone: boolean
     nir: boolean
     numeroPegase: boolean
     ministereCategorie: boolean
@@ -38,7 +38,7 @@ export type BeneficiaryPermissions = {
     ministereStructure: boolean
   }
   set: {
-    accomodationZone: boolean
+    accommodationZone: boolean
     referents: boolean
     nir: boolean
     numeroPegase: boolean
@@ -94,7 +94,7 @@ function getCreatePermissions({
       externalOrganisations: false
     },
     get: {
-      accomodationZone: isMinistryAgent,
+      accommodationZone: isMinistryAgent,
       nir: hasAccessNir(structure.type),
       numeroPegase: isMinistryAgent,
       ministereCategorie: isMinistryAgent,
@@ -102,7 +102,7 @@ function getCreatePermissions({
       ministereStructure: isMinistryAgent
     },
     set: {
-      accomodationZone: isMinistryAgent,
+      accommodationZone: isMinistryAgent,
       referents: true,
       nir: hasAccessNir(structure.type),
       numeroPegase: isMinistryAgent,
@@ -141,7 +141,7 @@ function getEditPermissions({
       )
     },
     get: {
-      accomodationZone: isMinistryAgent,
+      accommodationZone: isMinistryAgent,
       nir: hasAccessNir(structure.type),
       numeroPegase: isMinistryAgent,
       ministereCategorie: isMinistryAgent,
@@ -149,7 +149,7 @@ function getEditPermissions({
       ministereStructure: isMinistryAgent
     },
     set: {
-      accomodationZone: isMinistryAgent,
+      accommodationZone: isMinistryAgent,
       referents: canEditBeneficiaryReferents(user, target),
       nir: hasAccessNir(structure.type),
       numeroPegase: isMinistryAgent,

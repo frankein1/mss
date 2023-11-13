@@ -3,10 +3,14 @@ import { createMutation } from '~/server/route'
 import {
   SecurityRuleGrantee,
   canViewBeneficiaryGeneral,
-  canEditBeneficiaryReferents
+  canEditBeneficiaryReferents,
+  getBeneficiaryPermissions
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  getStructureByUser
+} from '~/server/query'
 import {
   UpdateBeneficiaryGeneralInformationInput,
   updateBeneficiaryGeneralInformationSchema
@@ -19,6 +23,18 @@ const securityCheck = async (
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
   const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
+  const structure = await getStructureByUser(user)
+  const { set } = getBeneficiaryPermissions({
+    user,
+    target: beneficiary,
+    structure
+  })
+  if (!set.numeroPegase && input.numeroPegase) {
+    return false
+  }
+  if (!set.accommodationZone && input.accommodationZone) {
+    return false
+  }
   return canViewBeneficiaryGeneral(user, beneficiary)
 }
 
