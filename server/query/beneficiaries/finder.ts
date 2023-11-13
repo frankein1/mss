@@ -90,7 +90,6 @@ const filter = ({
     structure
   })
 
-  const meta = getMeta(beneficiary)
   const general = getGeneral(beneficiary, permissions)
 
   const { view } = permissions
@@ -112,7 +111,17 @@ const filter = ({
 
   return {
     id: beneficiary.id,
-    meta,
+    fileNumber: beneficiary.fileNumber,
+    status: beneficiary.status,
+    referents: beneficiary.referents,
+    structureId: beneficiary.structureId,
+    additionalInformation: beneficiary.additionalInformation,
+    createdById: beneficiary.createdById,
+    created: beneficiary.created,
+    updated: beneficiary.updated,
+    archivedById: beneficiary.archivedById,
+    archived: beneficiary.archived,
+    aidantConnectAuthorized: beneficiary.aidantConnectAuthorized,
     general,
     externalOrganisations: !isEmpty(externalOrganisations)
       ? externalOrganisations
@@ -160,22 +169,6 @@ export async function findBeneficiary({
 }) {
   const beneficiary = await find(user, id)
   return filter({ user, beneficiary, structure })
-}
-
-function getMeta(beneficiary: FindOutput) {
-  return {
-    fileNumber: beneficiary.fileNumber,
-    status: beneficiary.status,
-    referents: beneficiary.referents,
-    structureId: beneficiary.structureId,
-    additionalInformation: beneficiary.additionalInformation,
-    createdById: beneficiary.createdById,
-    created: beneficiary.created,
-    updated: beneficiary.updated,
-    archivedById: beneficiary.archivedById,
-    archived: beneficiary.archived,
-    aidantConnectAuthorized: beneficiary.aidantConnectAuthorized
-  }
 }
 
 function getHistory(beneficiary: FindOutput) {

@@ -58,24 +58,6 @@ export type GetBeneficiaryHealth = Pick<
   | 'socialSecurityNumber'
 >
 
-export type GetBeneficiaryMeta = Pick<
-  Beneficiary,
-  | 'fileNumber'
-  | 'structureId'
-  | 'additionalInformation'
-  | 'createdById'
-  | 'created'
-  | 'updated'
-  | 'status'
-  | 'archivedById'
-  | 'aidantConnectAuthorized'
-> & {
-  referents: Pick<
-    User,
-    'id' | 'firstName' | 'lastName' | 'email' | 'role' | 'status'
-  >[]
-}
-
 export type GetBeneficiaryGeneral = Pick<
   Beneficiary,
   | 'title'
@@ -174,9 +156,24 @@ export type GetBeneficiaryTaxHousehold = Pick<
   taxHouseholds?: GetBeneficiaryRelative[]
 }
 
-export type GetBeneficiaryOutput = {
-  id: string
-  meta: GetBeneficiaryMeta
+export type GetBeneficiaryOutput = Pick<
+  Beneficiary,
+  | 'id'
+  | 'fileNumber'
+  | 'structureId'
+  | 'additionalInformation'
+  | 'createdById'
+  | 'created'
+  | 'updated'
+  | 'status'
+  | 'archivedById'
+  | 'aidantConnectAuthorized'
+> & {
+  referents: Pick<
+    User,
+    'id' | 'firstName' | 'lastName' | 'email' | 'role' | 'status'
+  >[]
+} & {
   general: GetBeneficiaryGeneral
   health: GetBeneficiaryHealth | undefined
   externalOrganisations: GetBeneficiaryExternalOrganisations | undefined
