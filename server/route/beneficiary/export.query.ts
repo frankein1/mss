@@ -85,15 +85,17 @@ export const exportBeneficiariesQuery = createQuery({
 })
 
 function formatData(beneficiary: GetBeneficiaryOutput) {
-  const { meta, general, occupationIncome, taxHouseholds, documents, history } =
+  const { general, occupationIncome, taxHouseholds, documents, history } =
     beneficiary
   return {
-    referents: meta.referents
+    referents: beneficiary.referents
       .map(referent => formatUserDisplayName(referent))
       .join(', '),
-    aidantConnectAuthorized: getBooleanOrEmpty(meta.aidantConnectAuthorized),
+    aidantConnectAuthorized: getBooleanOrEmpty(
+      beneficiary.aidantConnectAuthorized
+    ),
     fileNumber: readableFileNumber(beneficiary.id),
-    status: beneficiaryStatusLabels[meta.status],
+    status: beneficiaryStatusLabels[beneficiary.status],
     usualName: general.usualName || '',
     birthName: general.birthName || '',
     firstName: general.firstName || '',
@@ -184,7 +186,7 @@ function formatData(beneficiary: GetBeneficiaryOutput) {
     accommodationZone: general.accommodationZone
       ? beneficiaryAccommodationZoneLabels[general.accommodationZone]
       : '',
-    updated: formatDate(meta.updated, 'DD-MM-YYYY HH:mm'),
+    updated: formatDate(beneficiary.updated, 'DD-MM-YYYY HH:mm'),
     entourages: beneficiary.entourages?.map(formatRelative).join(', ') || '',
     taxHouseholds:
       (taxHouseholds?.taxHouseholds || []).map(formatRelative).join(', ') || '',

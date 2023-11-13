@@ -71,7 +71,7 @@
   const canSetDocumentAsConfidential = computed(() => {
     return canSetDocumentAsConfidentialRule(
       authStore.getAuthUser,
-      props.beneficiary.meta,
+      props.beneficiary,
       props.document
     )
   })

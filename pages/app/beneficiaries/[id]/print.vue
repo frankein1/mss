@@ -24,7 +24,7 @@
         :beneficiary-id="beneficiary.id"
         :general="beneficiary.general"
       />
-      <BeneficiaryDetailsStatus :status="beneficiary.meta.status" />
+      <BeneficiaryDetailsStatus :status="beneficiary.status" />
       <BeneficiaryInfoHeader :beneficiary="beneficiary" />
       <template v-if="followupTypes.length">
         <p class="fr-text--bold">Accompagnements</p>

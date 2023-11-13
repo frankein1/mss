@@ -142,15 +142,15 @@
   const user = computed(() => authStore.getAuthUser)
 
   const canView = computed(() =>
-    canViewDocument(user.value, props.beneficiary.meta, props.document)
+    canViewDocument(user.value, props.beneficiary, props.document)
   )
 
   const canEdit = computed(() =>
-    canEditDocument(user.value, props.beneficiary.meta, props.document)
+    canEditDocument(user.value, props.beneficiary, props.document)
   )
 
   const canDelete = computed(() =>
-    canDeleteDocument(user.value, props.beneficiary.meta)
+    canDeleteDocument(user.value, props.beneficiary)
   )
 
   const hasUnreadNotifications = computed(
