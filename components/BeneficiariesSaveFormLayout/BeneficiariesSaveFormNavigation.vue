@@ -8,20 +8,13 @@
 </template>
 
 <script setup lang="ts">
-  import { useAuthStore } from '~/store/auth'
+  import { BeneficiaryPermissions } from '~/server/security'
   import { RoutePath, Route, AppBeneficiariesSaveRoute } from '~/utils/routing'
-  import {
-    canEditBeneficiaryRelatives as canEditBeneficiaryRelativesRule,
-    canEditBeneficiaryHealthInfo as canEditBeneficiaryHealthInfoRule,
-    canEditBeneficiaryOccupationIncome as canEditBeneficiaryOccupationIncomeRule,
-    canEditBeneficiaryExternalOrganisations as canEditBeneficiaryExternalOrganisationsRule
-  } from '~/server/security'
-
-  const authStore = useAuthStore()
 
   const props = defineProps<{
     currentRoute: AppBeneficiariesSaveRoute
     draftId: string
+    permissions?: BeneficiaryPermissions
     beneficiaryFormLayoutMainContainer: HTMLElement | null
   }>()
 
@@ -29,56 +22,28 @@
     save: [target: string]
   }>()
 
-  const user = computed(() => authStore.getAuthUser)
-
-  const securityTarget = computed(() => ({
-    referents: [user.value.id],
-    structureId: user.value.structureId
-  }))
-
-  const canEditBeneficiaryRelatives = computed(() => {
-    return canEditBeneficiaryRelativesRule(user.value, securityTarget.value)
-  })
-
-  const canEditBeneficiaryHealthInfo = computed(() => {
-    return canEditBeneficiaryHealthInfoRule(user.value, securityTarget.value)
-  })
-
-  const canEditBeneficiaryOccupationIncome = computed(() => {
-    return canEditBeneficiaryOccupationIncomeRule(
-      user.value,
-      securityTarget.value
-    )
-  })
-
-  const canEditBeneficiaryExternalOrganisations = computed(() => {
-    return canEditBeneficiaryExternalOrganisationsRule(
-      user.value,
-      securityTarget.value
-    )
-  })
-
   const navigationRoutes = computed<AppBeneficiariesSaveRoute[]>(() => {
+    const { permissions } = props
     const saveRoutes: AppBeneficiariesSaveRoute[] = [
       Route.AppBeneficiariesSaveInfo
     ]
 
-    if (canEditBeneficiaryRelatives.value) {
+    if (permissions?.edit.relatives) {
       saveRoutes.push(
         Route.AppBeneficiariesSaveTaxHousehold,
         Route.AppBeneficiariesSaveEntourage
       )
     }
 
-    if (canEditBeneficiaryHealthInfo.value) {
+    if (permissions?.edit.health) {
       saveRoutes.push(Route.AppBeneficiariesSaveHealth)
     }
 
-    if (canEditBeneficiaryOccupationIncome.value) {
+    if (permissions?.edit.occupationIncome) {
       saveRoutes.push(Route.AppBeneficiariesSaveOccupation)
     }
 
-    if (canEditBeneficiaryExternalOrganisations.value) {
+    if (permissions?.edit.externalOrganisations) {
       saveRoutes.push(Route.AppBeneficiariesSaveExternalOrganisations)
     }
 

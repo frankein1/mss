@@ -1,6 +1,7 @@
 <template>
   <BeneficiariesSaveFormLayout
     :schema="saveBeneficiaryGeneralInformationSchema"
+    :permissions="permissions"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     title-icon="fr-icon-user-line"
@@ -59,6 +60,8 @@
     id: draftId
   })
 
+  const permissions = computed(() => data.value?.permissions)
+
   const pending = computed(() => agentsPending.value || draftPending.value)
 
   const fetchError = computed(() => {
@@ -69,10 +72,6 @@
       return "La liste des référents n'a pas pu être chargée."
     }
     return ''
-  })
-
-  const permissions = computed(() => {
-    return data.value?.permissions
   })
 
   const beneficiary = computed(() => {
