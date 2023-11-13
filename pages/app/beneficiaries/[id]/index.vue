@@ -60,7 +60,7 @@
         />
         <BeneficiaryDocumentList
           v-else
-          :beneficiary="beneficiary"
+          :beneficiary-id="beneficiary.id"
         />
       </AtomTab>
       <AtomTab

@@ -31,10 +31,10 @@
         </thead>
         <tbody>
           <BeneficiaryDocumentRow
-            v-for="document in documents"
-            :key="document.key"
-            :document="document"
-            :beneficiary="beneficiary"
+            v-for="item in documents"
+            :key="item.document.key"
+            :document="item.document"
+            :permissions="item.permissions"
             @refresh-documents="emit('refreshDocuments')"
           />
         </tbody>
@@ -44,13 +44,11 @@
 </template>
 
 <script setup lang="ts">
-  import { Documents } from '~/server/route'
-  import { GetBeneficiaryOutput } from '~/types/beneficiary'
+  import { GetDocuments } from './types'
   import type { BeneficiaryDocumentSort } from '~/types/table'
 
   const props = defineProps<{
-    documents: Documents
-    beneficiary: GetBeneficiaryOutput
+    documents: GetDocuments
     pending: boolean
     sort: BeneficiaryDocumentSort[]
   }>()
