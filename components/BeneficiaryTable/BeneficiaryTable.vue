@@ -44,12 +44,12 @@
 </template>
 
 <script setup lang="ts">
-  import { Beneficiaries } from './types'
+  import { GetBeneficiaries } from './types'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import type { BeneficiarySort } from '~/types/table'
 
   const props = defineProps<{
-    beneficiaries: Beneficiaries
+    beneficiaries: GetBeneficiaries
     pending: boolean
     sort: BeneficiarySort[]
   }>()

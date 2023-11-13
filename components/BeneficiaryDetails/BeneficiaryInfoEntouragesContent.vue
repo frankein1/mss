@@ -1,7 +1,7 @@
 <template>
   <div class="fr-grid-row">
     <div
-      v-for="(entourage, index) in entourages || []"
+      v-for="(entourage, index) in entourages"
       :key="entourage?.id"
       class="fr-col-12"
     >

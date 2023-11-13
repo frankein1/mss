@@ -55,11 +55,9 @@
     data,
     pending: draftPending,
     error: draftError
-  } = await useAsyncData(() =>
-    trpcClient.beneficiaryDraft.get.query({
-      id: draftId
-    })
-  )
+  } = trpcClient.beneficiaryDraft.get.useQuery({
+    id: draftId
+  })
 
   const pending = computed(() => agentsPending.value || draftPending.value)
 

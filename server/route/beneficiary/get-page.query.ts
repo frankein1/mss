@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getBeneficiaryFollowUpTypes } from '../../query/beneficiaires/getBeneficiaryFollowUpTypes'
+import { getBeneficiaryFollowUpTypes } from '~/server/query'
 import { createQuery } from '~/server/route'
 import { GetBeneficiariesInput, getBeneficiariesSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -49,8 +49,6 @@ const handler = async ({
     totalPages
   }
 }
-
-export type GetBeneficiariesOutput = Prisma.PromiseReturnType<typeof handler>
 
 function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
   user: SecurityRuleGrantee,
@@ -108,11 +106,6 @@ export type BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests =
 
 export type BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests =
   BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests[0]
-
-export type FollowupTypesFromFollowups =
-  BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests['followups']
-export type FollowupTypesFromHelpRequests =
-  BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests['helpRequests']
 
 function prepareBeneficiariesWithFollowupTypes(
   beneficiaries: BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests

@@ -44,22 +44,16 @@
   const draftId = route.params.draftId as string
   const snackbar = useSnackbar()
 
-  const {
-    data: draft,
-    pending,
-    error
-  } = await useAsyncData(() =>
-    trpcClient.beneficiaryDraft.get.query({
-      id: draftId
-    })
-  )
+  const { data, pending, error } = trpcClient.beneficiaryDraft.get.useQuery({
+    id: draftId
+  })
 
   const beneficiary = computed(() => {
-    if (!draft.value) {
+    if (!data.value) {
       return undefined
     }
 
-    const { entourage } = draft.value.draft
+    const { entourage } = data.value.draft
 
     return entourage || ({} as SaveBeneficiaryEntourageInput)
   })
@@ -76,7 +70,7 @@
   }
 
   function saveBeneficiary(beneficiary: SaveBeneficiaryEntourageInput) {
-    const beneficiaryDraftId = draft.value?.draft.id
+    const beneficiaryDraftId = data.value?.draft.id
 
     if (!beneficiaryDraftId) {
       snackbar.error('La création de la fiche bénéficiaire a échoué.')
@@ -108,7 +102,7 @@
     beneficiary: SaveBeneficiaryEntourageInput,
     target: string
   ) {
-    const beneficiaryDraftId = draft.value?.draft.id
+    const beneficiaryDraftId = data.value?.draft.id
 
     if (!beneficiaryDraftId) {
       snackbar.error("L'enregistrement du brouillon a échoué.")

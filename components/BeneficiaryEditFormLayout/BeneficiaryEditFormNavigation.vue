@@ -16,7 +16,7 @@
     currentRoute: AppBeneficiaryEditRoute
     originTab: BeneficiaryTab | undefined
     beneficiaryId: string
-    permissions: BeneficiaryPermissions
+    permissions: BeneficiaryPermissions | undefined
     beneficiaryFormLayoutMainContainer: HTMLElement | null
   }>()
 
@@ -27,25 +27,22 @@
   const navigationRoutes = computed<AppBeneficiaryEditRoute[]>(() => {
     const editRoutes: AppBeneficiaryEditRoute[] = [Route.AppBeneficiaryEditInfo]
 
-    if (props.permissions.edit.relatives) {
+    if (props.permissions?.edit.relatives) {
       editRoutes.push(
         Route.AppBeneficiaryEditTaxHousehold,
         Route.AppBeneficiaryEditEntourage
       )
     }
 
-    // if (canEditBeneficiaryHealthInfo.value) {
-    if (props.permissions.edit.health) {
+    if (props.permissions?.edit.health) {
       editRoutes.push(Route.AppBeneficiaryEditHealth)
     }
 
-    // if (canEditBeneficiaryOccupationIncome.value) {
-    if (props.permissions.edit.occupationIncome) {
+    if (props.permissions?.edit.occupationIncome) {
       editRoutes.push(Route.AppBeneficiaryEditOccupation)
     }
 
-    // if (canEditBeneficiaryExternalOrganisations.value) {
-    if (props.permissions.edit.externalOrganisations) {
+    if (props.permissions?.edit.externalOrganisations) {
       editRoutes.push(Route.AppBeneficiaryEditExternalOrganisations)
     }
 

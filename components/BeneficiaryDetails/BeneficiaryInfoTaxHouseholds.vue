@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryInfoSection
-    v-if="taxHouseholds && taxHouseholds.taxHouseholds?.length"
     title="Foyer fiscal"
     :edit-link="editLink"
   >
@@ -19,7 +18,7 @@
 
   const props = defineProps<{
     beneficiaryId: string
-    taxHouseholds?: GetBeneficiaryTaxHousehold
+    taxHouseholds: GetBeneficiaryTaxHousehold
   }>()
 
   const editLink = computed(() =>

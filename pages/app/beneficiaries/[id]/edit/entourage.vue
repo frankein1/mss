@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryEditFormLayout
-    v-if="permissions"
     :schema="saveBeneficiaryEntourageSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
@@ -48,12 +47,7 @@
       id: beneficiaryId
     })
 
-  const permissions = computed(() => {
-    if (!data.value) {
-      return null
-    }
-    return data.value.permissions
-  })
+  const permissions = computed(() => data.value?.permissions)
 
   const beneficiary = computed(() => {
     if (!data.value) {
