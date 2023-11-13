@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryEditFormLayout
-    v-if="permissions"
     :schema="saveBeneficiaryOccupationSchema"
     :permissions="permissions"
     :is-submitting="isSubmitting"
@@ -19,7 +18,7 @@
       class="fr-mx-auto"
     />
     <div
-      v-else-if="beneficiary"
+      v-else-if="beneficiary && permissions"
       class="fr-p-3v"
     >
       <BeneficiaryFormOccupationIncome
@@ -57,12 +56,7 @@
       id: beneficiaryId
     })
 
-  const permissions = computed(() => {
-    if (!data.value) {
-      return null
-    }
-    return data.value.permissions
-  })
+  const permissions = computed(() => data.value?.permissions)
 
   const familySituation = computed(
     () => data.value?.beneficiary.taxHouseholds?.familySituation
@@ -88,10 +82,7 @@
       firstName: general.firstName,
       usualName: general.usualName,
       birthName: general.birthName,
-      socioProfessionalCategory: occupationIncome?.socioProfessionalCategory,
-      occupation: occupationIncome?.occupation,
-      employer: occupationIncome?.employer,
-      employerSiret: occupationIncome?.employerSiret,
+      ...occupationIncome,
       mainIncomeSource: occupationIncome?.mainIncomeSource || [],
       mainIncomeAmount: prismaDecimalToNumber(
         occupationIncome?.mainIncomeAmount
@@ -105,16 +96,7 @@
       majorChildrenMainIncomeAmount: prismaDecimalToNumber(
         occupationIncome?.majorChildrenMainIncomeAmount
       ),
-      unemploymentNumber: occupationIncome?.unemploymentNumber,
-      pensionOrganisations: occupationIncome?.pensionOrganisations || [],
-      otherPensionOrganisations: occupationIncome?.otherPensionOrganisations,
-      cafNumber: occupationIncome?.cafNumber,
-      bank: occupationIncome?.bank,
-      funeralContract: occupationIncome?.funeralContract,
-      ministereCategorie: occupationIncome?.ministereCategorie,
-      ministereDepartementServiceAc:
-        occupationIncome?.ministereDepartementServiceAc,
-      ministereStructure: occupationIncome?.ministereStructure
+      pensionOrganisations: occupationIncome?.pensionOrganisations || []
     } as SaveBeneficiaryOccupationInput & MinimalBeneficiaryForFormLayout
   })
 

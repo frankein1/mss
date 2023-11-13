@@ -80,7 +80,7 @@
   const props = withDefaults(
     defineProps<{
       beneficiary: MinimalBeneficiaryForFormLayout | null
-      permissions: BeneficiaryPermissions
+      permissions: BeneficiaryPermissions | undefined
       schema: T
       isSubmitting: boolean
       titleIcon?: string
