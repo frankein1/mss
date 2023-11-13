@@ -58,3 +58,17 @@
   width: 100%;
   margin-right: 4px; /* Allow to display right ouline of the comment textarea */
 }
+
+// Hide DSFR calendar icon on date input on Firefox as the browser already embed one
+@-moz-document url-prefix() {
+  .fr-input-group .fr-input-wrap.fr-icon-calendar-line {
+    &::after,
+    &::before {
+      content: none;
+    }
+
+    .fr-input[type='date'] {
+      padding-right: 1rem;
+    }
+  }
+}
