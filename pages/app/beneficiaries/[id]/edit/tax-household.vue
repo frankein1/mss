@@ -67,7 +67,6 @@
       firstName: general.firstName,
       usualName: general.usualName,
       birthName: general.birthName,
-      caregiver: general.caregiver,
       ...taxHouseholds
     } as SaveBeneficiaryTaxHouseholdInput & MinimalBeneficiaryForFormLayout
   })

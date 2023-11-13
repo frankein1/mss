@@ -101,7 +101,6 @@ export type GetBeneficiaryGeneral = Pick<
   | 'phone1'
   | 'phone2'
   | 'email'
-  | 'caregiver'
   | 'mobility'
   | 'additionalInformation'
 >
@@ -170,7 +169,7 @@ export type GetBeneficiaryRelative = Pick<
 
 export type GetBeneficiaryTaxHousehold = Pick<
   Beneficiary,
-  'familySituation' | 'minorChildren' | 'majorChildren'
+  'familySituation' | 'minorChildren' | 'majorChildren' | 'caregiver'
 > & {
   taxHouseholds?: GetBeneficiaryRelative[]
 }
