@@ -55,14 +55,20 @@
     }
 
     const {
-      beneficiary: { id, meta, general, externalOrganisations }
+      beneficiary: {
+        id,
+        structureId,
+        referents,
+        general,
+        externalOrganisations
+      }
     } = data.value
 
     // Names and id are required for building the breadcrumb in the layout
     return {
       id,
-      structureId: meta.structureId,
-      referents: meta.referents,
+      structureId,
+      referents,
       firstName: general.firstName,
       usualName: general.usualName,
       birthName: general.birthName,

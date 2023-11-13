@@ -79,16 +79,23 @@
     }
 
     const {
-      beneficiary: { id, meta, general }
+      beneficiary: {
+        id,
+        structureId,
+        referents,
+        aidantConnectAuthorized,
+        status,
+        general
+      }
     } = data.value
 
     // Id is required for building the breadcrumb in the layout
     return {
       id,
-      structureId: meta.structureId,
-      referents: meta.referents.map(referent => referent.id),
-      aidantConnectAuthorized: meta.aidantConnectAuthorized,
-      status: meta.status,
+      structureId,
+      referents: referents.map(referent => referent.id),
+      aidantConnectAuthorized,
+      status,
       ...general,
       birthDate: general.birthDate ? new Date(general.birthDate) : undefined,
       deathDate: general.deathDate ? new Date(general.deathDate) : undefined
@@ -104,7 +111,7 @@
       return
     }
 
-    const structureId = data.value.beneficiary.meta.structureId
+    const { structureId } = data.value.beneficiary
 
     useTrpcMutation({
       mutation: () =>
