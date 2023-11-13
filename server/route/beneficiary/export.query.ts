@@ -118,7 +118,7 @@ function formatData(beneficiary: GetBeneficiaryOutput) {
     familySituation: taxHouseholds?.familySituation
       ? familySituationLabels[taxHouseholds.familySituation]
       : '',
-    caregiver: getBooleanOrEmpty(general.caregiver),
+    caregiver: getBooleanOrEmpty(taxHouseholds?.caregiver),
     minorChildren: taxHouseholds?.minorChildren?.toString() || '',
     majorChildren: taxHouseholds?.majorChildren?.toString() || '',
     mobility: general.mobility

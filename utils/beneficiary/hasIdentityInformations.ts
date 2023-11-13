@@ -12,7 +12,6 @@ export function hasIdentityInformations(
     | 'birthName'
     | 'deathDate'
     | 'numeroPegase'
-    | 'caregiver'
     | 'nationality'
   >
 ) {
@@ -26,7 +25,6 @@ export function hasIdentityInformations(
     beneficiary.birthName ||
     beneficiary.nationality ||
     beneficiary.deathDate ||
-    beneficiary.numeroPegase ||
-    beneficiary.caregiver
+    beneficiary.numeroPegase
   )
 }

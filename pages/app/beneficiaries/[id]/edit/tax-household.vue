@@ -71,7 +71,7 @@
       familySituation: taxHouseholds?.familySituation,
       majorChildren: taxHouseholds?.majorChildren,
       minorChildren: taxHouseholds?.minorChildren,
-      caregiver: general.caregiver,
+      caregiver: taxHouseholds?.caregiver,
       taxHouseholds: taxHouseholds?.taxHouseholds
     } as SaveBeneficiaryTaxHouseholdInput & MinimalBeneficiaryForFormLayout
   })

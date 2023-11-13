@@ -234,7 +234,6 @@ function getGeneral(
     phone1: beneficiary.phone1,
     phone2: beneficiary.phone2,
     email: beneficiary.email,
-    caregiver: beneficiary.caregiver,
     mobility: beneficiary.mobility,
     additionalInformation: beneficiary.additionalInformation
   }
@@ -248,8 +247,13 @@ function getEntourages(beneficiary: FindOutput) {
 }
 
 function getTaxHouseholds(beneficiary: FindOutput) {
-  const { relatives, familySituation, minorChildren, majorChildren } =
-    beneficiary
+  const {
+    relatives,
+    familySituation,
+    minorChildren,
+    majorChildren,
+    caregiver
+  } = beneficiary
 
   const taxHouseholds = (relatives || []).filter(relative => relative.hosted)
 
@@ -257,7 +261,8 @@ function getTaxHouseholds(beneficiary: FindOutput) {
     taxHouseholds,
     familySituation,
     minorChildren,
-    majorChildren
+    majorChildren,
+    caregiver
   }
 }
 
