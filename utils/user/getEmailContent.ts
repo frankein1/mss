@@ -27,7 +27,7 @@ L'équipe de Mon Suivi Social`
 
   const html = `Bonjour,
 </br></br></br>
-  Votre responsable de structure ou l'équipe de Mon Suivi Social vous a ouvert des accès à l'application Mon Suivi Social.
+Votre responsable de structure ou l'équipe de Mon Suivi Social vous a ouvert des accès à l'application Mon Suivi Social.
 </br></br>
 Pour s'authentifier, Mon Suivi Social utilise l'outil Inclusion Connect.
 </br></br>
