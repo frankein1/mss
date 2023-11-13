@@ -207,7 +207,7 @@ function getGeneral(
     numeroPegase: get.numeroPegase ? beneficiary.numeroPegase : null,
     accommodationMode: beneficiary.accommodationMode,
     accommodationName: beneficiary.accommodationName,
-    accommodationZone: get.accomodationZone
+    accommodationZone: get.accommodationZone
       ? beneficiary.accommodationZone
       : null,
     accommodationAdditionalInformation:

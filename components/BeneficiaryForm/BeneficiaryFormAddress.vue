@@ -61,7 +61,7 @@
       />
     </div>
     <div
-      v-if="permissions.set.accomodationZone"
+      v-if="permissions.set.accommodationZone"
       class="fr-col-12"
     >
       <VeeSelect
