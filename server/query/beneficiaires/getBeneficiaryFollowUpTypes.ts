@@ -37,7 +37,7 @@ function getUniqueFollowUpTypesFromFollowup(
 
 function getUniqueFollowUpTypesTuplesFromHelpRequests(
   helpRequests: {
-    type: FollowupTypeIdAndName
+    type: FollowupTypeIdAndName 
   }[]
 ) {
   return helpRequests.reduce((uniques, helpRequest) => {
