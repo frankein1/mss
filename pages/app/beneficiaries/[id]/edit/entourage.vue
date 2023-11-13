@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryEditFormLayout
-    v-if="permissions"
     :schema="saveBeneficiaryEntourageSchema"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"

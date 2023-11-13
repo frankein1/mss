@@ -109,11 +109,6 @@ export type BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests =
 export type BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests =
   BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests[0]
 
-export type FollowupTypesFromFollowups =
-  BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests['followups']
-export type FollowupTypesFromHelpRequests =
-  BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests['helpRequests']
-
 function prepareBeneficiariesWithFollowupTypes(
   beneficiaries: BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests
 ) {

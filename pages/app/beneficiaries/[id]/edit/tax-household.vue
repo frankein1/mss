@@ -1,6 +1,5 @@
 <template>
   <BeneficiaryEditFormLayout
-    v-if="permissions"
     :schema="saveBeneficiaryTaxHouseholdSchema"
     :permissions="permissions"
     :is-submitting="isSubmitting"
@@ -68,11 +67,8 @@
       firstName: general.firstName,
       usualName: general.usualName,
       birthName: general.birthName,
-      familySituation: taxHouseholds?.familySituation,
-      majorChildren: taxHouseholds?.majorChildren,
-      minorChildren: taxHouseholds?.minorChildren,
       caregiver: general.caregiver,
-      taxHouseholds: taxHouseholds?.taxHouseholds
+      ...taxHouseholds
     } as SaveBeneficiaryTaxHouseholdInput & MinimalBeneficiaryForFormLayout
   })
 
