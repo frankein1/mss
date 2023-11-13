@@ -61,8 +61,11 @@
       body: input,
       onResponse({ response }) {
         if (response._data.success) {
-          snackbar.success('Vous avez reçu un mail!')
+          snackbar.success('Vous avez reçu un mail !')
         }
+      },
+      onResponseError() {
+        snackbar.error("Le compte administrateur n'as pas été retrouvé.")
       }
     })
   })
