@@ -10,15 +10,15 @@
       v-html="text"
     ></p>
     <slot name="detailedMessage"></slot>
+    <button
+      v-if="closeable"
+      ref="closeBtn"
+      class="fr-btn--close fr-btn force-focus-visible"
+      @click="emit('close')"
+    >
+      Masquer le message
+    </button>
   </div>
-  <button
-    v-if="closeable"
-    ref="closeBtn"
-    class="fr-btn--close fr-btn force-focus-visible"
-    @click="emit('close')"
-  >
-    Masquer le message
-  </button>
 </template>
 
 <script setup lang="ts">
