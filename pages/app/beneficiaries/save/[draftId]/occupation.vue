@@ -1,6 +1,7 @@
 <template>
   <BeneficiariesSaveFormLayout
     :schema="saveBeneficiaryOccupationSchema"
+    :permissions="permissions"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     :current-route="Route.AppBeneficiariesSaveOccupation"
@@ -53,6 +54,7 @@
   })
 
   const permissions = computed(() => data.value?.permissions)
+
   const familySituation = computed(
     () => data.value?.draft.taxHousehold?.familySituation
   )

@@ -10,6 +10,7 @@
       class="beneficiaryformlayout__navigation fr-col-3"
       :current-route="currentRoute"
       :draft-id="draftId"
+      :permissions="permissions"
       :beneficiary-form-layout-main-container="
         beneficiaryFormLayoutMainContainer
       "
@@ -57,23 +58,19 @@
     AppBeneficiariesSaveRoute
   } from '~/utils/routing'
   import { beneficiaryFieldLabels } from '~/client/labels'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   type SubmitType = z.infer<T>
 
-  const props = withDefaults(
-    defineProps<{
-      beneficiary?: SubmitType | null
-      schema: T
-      isSubmitting: boolean
-      titleIcon?: string
-      currentRoute: AppBeneficiariesSaveRoute
-      draftId: string
-    }>(),
-    {
-      beneficiary: undefined,
-      titleIcon: undefined
-    }
-  )
+  const props = defineProps<{
+    beneficiary?: SubmitType | null
+    permissions?: BeneficiaryPermissions
+    schema: T
+    isSubmitting: boolean
+    titleIcon?: string
+    currentRoute: AppBeneficiariesSaveRoute
+    draftId: string
+  }>()
 
   const emit = defineEmits<{
     save: [beneficiary: SubmitType, target: string | undefined]

@@ -1,6 +1,7 @@
 <template>
   <BeneficiariesSaveFormLayout
     :schema="saveBeneficiaryHealthSchema"
+    :permissions="permissions"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     :current-route="Route.AppBeneficiariesSaveHealth"
@@ -51,9 +52,7 @@
     id: draftId
   })
 
-  const permissions = computed(() => {
-    return data.value?.permissions
-  })
+  const permissions = computed(() => data.value?.permissions)
 
   const beneficiary = computed(() => {
     if (!data.value) {

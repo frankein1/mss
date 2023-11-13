@@ -1,6 +1,7 @@
 <template>
   <BeneficiariesSaveFormLayout
     :schema="saveBeneficiaryExternalOrganisationsSchema"
+    :permissions="permissions"
     :is-submitting="isSubmitting"
     :beneficiary="beneficiary"
     :current-route="Route.AppBeneficiariesSaveExternalOrganisations"
@@ -47,6 +48,8 @@
   const { data, pending, error } = trpcClient.beneficiaryDraft.get.useQuery({
     id: draftId
   })
+
+  const permissions = computed(() => data.value?.permissions)
 
   const beneficiary = computed(() => {
     if (!data.value) {
