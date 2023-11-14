@@ -25,12 +25,6 @@ export const useAuthStore = defineStore({
     isReferent(): boolean {
       return this.user?.role === UserRole.Referent
     },
-    getAuthUser(): JwtUser {
-      if (!this.user) {
-        throw new Error('No auth user in store!')
-      }
-      return this.user
-    },
     userId(): string {
       return this.user?.id || ''
     },

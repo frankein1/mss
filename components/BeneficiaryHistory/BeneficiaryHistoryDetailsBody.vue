@@ -88,9 +88,6 @@
     canViewFollowupPrivateSynthesis,
     canViewHelpRequestPrivateSynthesis
   } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
-
-  const authStore = useAuthStore()
 
   const props = defineProps<{
     history: HistoryItem
@@ -103,7 +100,7 @@
 
   const comments = ref(props.history.comments || [])
 
-  const user = computed(() => authStore.getAuthUser)
+  const user = useAuthUser()
 
   const editLink = computed(() => {
     const routeWithParams = props.history.isFollowup

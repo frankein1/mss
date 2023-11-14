@@ -18,7 +18,7 @@
           {{ followupsCount }} synthèse(s) d'entretien
         </p>
         <ExportDataButton
-          v-if="canExportHistory(authStore.getAuthUser)"
+          v-if="canExportHistory(user)"
           :is-downloading="isDownloading"
           @export="exportFollowups"
         />
@@ -52,7 +52,6 @@
   } from '~/utils/constants'
   import type { FollowupFilterInput } from '~/server/schema'
   import { canExportHistory } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { useFiltersStore } from '~/store/filters'
   import { FollowupSort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
@@ -60,7 +59,7 @@
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
-  const authStore = useAuthStore()
+  const user = useAuthUser()
 
   const filters = ref<FollowupFilterInput>(filtersStore.followup || {})
   const orderBy = ref<FollowupSort[]>([{ date: SortOrder.Desc }])
