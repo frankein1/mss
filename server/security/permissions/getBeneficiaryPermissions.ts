@@ -104,7 +104,8 @@ function getCreatePermissions({
     set: {
       accommodationZone: isMinistryAgent,
       referents: true,
-      nir: hasAccessNir(structure.type),
+      // nir: hasAccessNir(structure.type),
+      nir: false,
       numeroPegase: isMinistryAgent,
       ministereCategorie: isMinistryAgent,
       ministereDepartementServiceAc: isMinistryAgent,
@@ -151,7 +152,8 @@ function getEditPermissions({
     set: {
       accommodationZone: isMinistryAgent,
       referents: canEditBeneficiaryReferents(user, target),
-      nir: hasAccessNir(structure.type),
+      // nir: hasAccessNir(structure.type),
+      nir: false,
       numeroPegase: isMinistryAgent,
       ministereCategorie: isMinistryAgent,
       ministereDepartementServiceAc: isMinistryAgent,
