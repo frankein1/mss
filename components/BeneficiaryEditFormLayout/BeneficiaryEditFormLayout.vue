@@ -65,8 +65,9 @@
     AppBeneficiaryEditRoute,
     RouteTitle
   } from '~/utils/routing'
-  import { beneficiaryFieldLabels } from '~/client/labels'
+  import { beneficiaryFieldLabels, relativeFieldLabels } from '~/client/labels'
   import { BeneficiaryPermissions } from '~/server/security'
+  import type { FieldLabels } from '~/types/fieldLabels'
 
   type SubmitType = z.infer<T>
 
@@ -135,11 +136,10 @@
     }
   )
 
-  const { errors } = useDisplayFormErrors(
-    form,
-    caughtErrors,
-    beneficiaryFieldLabels
-  )
+  const { errors } = useDisplayFormErrors(form, caughtErrors, {
+    ...beneficiaryFieldLabels,
+    ...relativeFieldLabels
+  } as FieldLabels<Partial<T>>)
 
   function onCancel() {
     isNavigatingWithFormActions.value = true
