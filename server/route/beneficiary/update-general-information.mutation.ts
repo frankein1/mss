@@ -4,13 +4,11 @@ import {
   SecurityRuleGrantee,
   canViewBeneficiaryGeneral,
   canEditBeneficiaryReferents,
-  getBeneficiaryPermissions
+  getBeneficiaryPermissions,
+  BeneficiaryPermissions
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  getBeneficiarySecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   UpdateBeneficiaryGeneralInformationInput,
   updateBeneficiaryGeneralInformationSchema
@@ -23,72 +21,43 @@ const securityCheck = async (
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
   const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
-  const structure = await getStructureByUser(user)
-  const { set } = getBeneficiaryPermissions({
-    user,
-    target: beneficiary,
-    structure
-  })
-  if (!set.numeroPegase && input.numeroPegase) {
-    return false
-  }
-  if (!set.accommodationZone && input.accommodationZone) {
-    return false
-  }
   return canViewBeneficiaryGeneral(user, beneficiary)
 }
 
 const handler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structure }
 }: {
   input: UpdateBeneficiaryGeneralInformationInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
+  const { id, referents } = input
+  const target = await getBeneficiarySecurityTarget(user, input.id)
 
-  const { referents: previousReferents } = beneficiary
+  const permissions = getBeneficiaryPermissions({ user, structure, target })
+  const data = filterInput({ input, permissions })
 
-  const previousReferentIds = previousReferents.map(({ id }) => id)
-
-  const {
-    id,
-    structureId,
-    referents: updateReferentIds,
-    noPhone,
-    phone1,
-    phone2,
-    ...general
-  } = input
-
-  let data = {}
-  data = {
-    ...general,
-    noPhone,
-    phone1: noPhone ? null : phone1,
-    phone2: noPhone ? null : phone2
+  if (!data.noPhone) {
+    data.phone1 = null
+    data.phone2 = null
   }
 
-  if (
-    canEditBeneficiaryReferents(user, {
-      structureId,
-      referents: previousReferents
-    })
-  ) {
-    const referentConnections = prepareRelationConnections(
-      updateReferentIds,
+  let referentConnections
+  if (canEditBeneficiaryReferents(user, target)) {
+    const { referents: previousReferents } = target
+    const previousReferentIds = previousReferents.map(({ id }) => id)
+    referentConnections = prepareRelationConnections(
+      referents,
       previousReferentIds
     )
-
-    data = {
-      ...data,
-      referents: referentConnections
-    }
   }
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id },
-    data
+    data: {
+      ...data,
+      referents: referentConnections
+    }
   })
 
   return updatedBeneficiary
@@ -107,3 +76,21 @@ export const updateGeneralInformationMutation = createMutation({
     action: UserActivityType.UPDATE
   }
 })
+
+function filterInput({
+  input,
+  permissions
+}: {
+  input: UpdateBeneficiaryGeneralInformationInput
+  permissions: BeneficiaryPermissions
+}) {
+  const { set } = permissions
+  const { id: _id, referents: _referents, ...data } = input
+  if (!set.numeroPegase) {
+    delete data.numeroPegase
+  }
+  if (!set.accommodationZone) {
+    delete data.accommodationZone
+  }
+  return data
+}
