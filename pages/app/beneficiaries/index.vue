@@ -21,7 +21,7 @@
                 {{ beneficiariesCount }} bénéficiaire(s)
               </p>
               <ExportDataButton
-                v-if="canExportBeneficiaries(authStore.getAuthUser)"
+                v-if="canExportBeneficiaries(user)"
                 :is-downloading="isDownloading"
                 @export="exportBeneficiaries"
               />
@@ -65,7 +65,6 @@
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { canExportBeneficiaries } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { BeneficiarySort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
@@ -81,7 +80,7 @@
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
-  const authStore = useAuthStore()
+  const user = useAuthUser()
 
   const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
   const orderBy = ref<BeneficiarySort[]>([{ usualName: SortOrder.Asc }])

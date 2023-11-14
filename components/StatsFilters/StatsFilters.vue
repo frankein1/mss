@@ -13,7 +13,6 @@
 </template>
 
 <script setup lang="ts">
-  import { useAuthStore } from '~/store/auth'
   import { FilterType } from '~/utils/constants/filters'
   import type { Options } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
@@ -21,7 +20,7 @@
   import { canViewStatsByReferent } from '~/server/security'
 
   const isMinistryAgent = useMinistryAgent()
-  const authStore = useAuthStore()
+  const user = useAuthUser()
 
   const props = defineProps<{
     followupTypeOptions: Options
@@ -62,10 +61,7 @@
         type: FilterType.SelectMultiple
       })
     }
-    if (
-      canViewStatsByReferent(authStore.getAuthUser) &&
-      isMinistryAgent.value
-    ) {
+    if (canViewStatsByReferent(user.value) && isMinistryAgent.value) {
       filters.push({
         name: 'referent',
         label: 'Référent',
