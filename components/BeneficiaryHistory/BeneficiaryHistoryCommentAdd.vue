@@ -40,10 +40,8 @@
 <script setup lang="ts">
   import { HistoryItem, HistoryItemComment } from './types'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
-  import { useAuthStore } from '~/store/auth'
   import { AddCommentInput, addCommentSchema } from '~/server/schema'
 
-  const authStore = useAuthStore()
   const snackbar = useSnackbar()
   const form = ref<HTMLFormElement | null>(null)
 
@@ -66,7 +64,7 @@
     }
   })
 
-  const currentUser = computed(() => authStore.getAuthUser)
+  const currentUser = useAuthUser()
 
   const onAddComment = handleSubmit(values => {
     useTrpcMutation({
