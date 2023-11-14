@@ -3,9 +3,17 @@ import {
   SecurityTargetWithReferents,
   SecurityTargetWithStructure
 } from '~/server/security/rules/types'
-import { isPartOfReferents } from '~/server/security/rules/helpers'
+import {
+  isInSameStructureAs,
+  isReferentFor
+} from '~/server/security/rules/helpers'
 
 export const canViewBeneficiaryHealthInfo = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => isPartOfReferents(grantee, beneficiary)
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) || isReferentFor(grantee, beneficiary)
