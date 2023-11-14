@@ -109,8 +109,6 @@
 
   useHead({ title: title.value })
 
-  useLeaveBeneficiaryFormConfirmation(isNavigatingWithFormActions)
-
   onMounted(() => {
     const { saved: _, ...query } = route.query
 
@@ -123,9 +121,15 @@
     router.replace({ path: route.path, query, hash: route.hash })
   })
 
-  const { handleSubmit } = useForm<SubmitType>({
+  const { handleSubmit, meta } = useForm<SubmitType>({
     validationSchema: toTypedSchema(props.schema),
     initialValues: props.beneficiary as SubmitType
+  })
+
+  const isFormDirty = computed(() => meta.value.dirty)
+
+  useLeaveBeneficiaryFormConfirmation(isNavigatingWithFormActions, {
+    isFormDirty
   })
 
   const { onSubmit, caughtErrors } = useCatchFormErrors(

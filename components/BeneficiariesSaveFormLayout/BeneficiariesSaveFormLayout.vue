@@ -106,25 +106,18 @@
     ...relativeFieldLabels
   } as FieldLabels<Partial<T>>)
 
-  function deleteDraft(onDone?: () => void) {
-    useTrpcMutation({
-      mutation: () =>
-        useTrpcClient().beneficiaryDraft.delete.mutate({
-          id: props.draftId
-        }),
-      onSuccess: onDone,
-      onFailure: onDone
-    })
-  }
-
   useLeaveBeneficiaryFormConfirmation(isNavigatingWithFormActions, {
-    onLeave: () => deleteDraft()
+    onLeave: () =>
+      useTrpcMutation({
+        mutation: () =>
+          useTrpcClient().beneficiaryDraft.delete.mutate({
+            id: props.draftId
+          })
+      })
   })
 
   function onCancel() {
-    deleteDraft(() => {
-      navigateTo(RoutePath.AppBeneficiariesAdd())
-    })
+    navigateTo(RoutePath.AppBeneficiariesAdd())
   }
 </script>
 

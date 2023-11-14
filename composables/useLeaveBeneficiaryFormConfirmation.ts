@@ -2,10 +2,13 @@ import BeneficiaryLeaveForm from '~/components/BeneficiaryLeaveForm/BeneficiaryL
 
 export function useLeaveBeneficiaryFormConfirmation(
   isNavigatingWithFormActions: Ref<boolean>,
-  options?: { onLeave?: () => void }
+  options?: { onLeave?: () => void; isFormDirty?: Ref<boolean> }
 ) {
   onBeforeRouteLeave((_, __, next) => {
-    if (isNavigatingWithFormActions.value) {
+    if (
+      isNavigatingWithFormActions.value ||
+      (options?.isFormDirty && !options.isFormDirty.value)
+    ) {
       return next()
     }
 
