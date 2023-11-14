@@ -1,45 +1,47 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
+  BeneficiaryPermissions,
   SecurityRuleGrantee,
   canEditBeneficiaryHealthInfo,
   getBeneficiaryPermissions
 } from '~/server/security'
-import {
-  getBeneficiarySecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   UpdateBeneficiaryHealthInput,
   updateBeneficiaryHealthSchema
 } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
+import { ProtectedAppContext } from '~/server/trpc'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryHealthInput
 ) => {
   const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
-  const structure = await getStructureByUser(grantee)
-  const { set } = getBeneficiaryPermissions({
-    user: grantee,
-    target: beneficiary,
-    structure
-  })
-
-  if (!set.nir && input.socialSecurityNumber) {
-    return false
-  }
 
   return canEditBeneficiaryHealthInfo(grantee, beneficiary)
 }
 
-const handler = async ({ input }: { input: UpdateBeneficiaryHealthInput }) => {
-  const { id, ...health } = input
+const handler = async ({
+  input,
+  ctx: { user, structure }
+}: {
+  input: UpdateBeneficiaryHealthInput
+  ctx: ProtectedAppContext
+}) => {
+  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const permissions = getBeneficiaryPermissions({
+    user,
+    target,
+    structure
+  })
+
+  const data = filterInput({ input, permissions })
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
-    where: { id },
-    data: health
+    where: { id: input.id },
+    data
   })
 
   return updatedBeneficiary
@@ -58,3 +60,18 @@ export const updateHealthMutation = createMutation({
     action: UserActivityType.UPDATE
   }
 })
+
+function filterInput({
+  input,
+  permissions
+}: {
+  input: UpdateBeneficiaryHealthInput
+  permissions: BeneficiaryPermissions
+}) {
+  const { set } = permissions
+  const { id: _id, ...health } = input
+  if (!set.nir) {
+    delete health.socialSecurityNumber
+  }
+  return health
+}
