@@ -108,11 +108,9 @@
     canViewHelpRequestDetails as canViewHelpRequestDetailsRule,
     canEditHelpRequest
   } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
 
-  const authStore = useAuthStore()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const props = defineProps<{
@@ -123,7 +121,7 @@
     updated: [helpRequest: HelpRequestItem]
   }>()
 
-  const user = computed(() => authStore.getAuthUser)
+  const user = useAuthUser()
 
   const helpRequestPath = computed(() =>
     RoutePath.AppBeneficiary(props.helpRequest.beneficiary.id, {

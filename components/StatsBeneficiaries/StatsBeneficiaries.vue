@@ -13,7 +13,7 @@
         {{ beneficiaryCountLabel }}
       </h2>
       <ExportDataButton
-        v-if="canExportStats(authStore.getAuthUser)"
+        v-if="canExportStats(user)"
         :is-downloading="isDownloading"
         stats
         @export="exportStats"
@@ -112,14 +112,13 @@
   import { Options } from '~/utils/options'
   import { StatFilterInput } from '~/server/schema'
   import { canExportStats } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const trpcClient = useTrpcClient()
   const isMinistryAgent = useMinistryAgent()
-  const authStore = useAuthStore()
+  const user = useAuthUser()
 
   withDefaults(
     defineProps<{

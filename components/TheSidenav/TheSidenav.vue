@@ -88,11 +88,10 @@
 
 <script setup>
   import { canViewStats } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
 
   const homePage = useHomePage()
-  const authStore = useAuthStore()
+  const user = useAuthUser()
 
   const menuItems = computed(() => {
     const items = []
@@ -128,7 +127,7 @@
         label: 'Accompagnements',
         icon: 'fr-icon-inbox-archive-line'
       })
-      if (authStore.isAuthenticated && canViewStats(authStore.getAuthUser)) {
+      if (authStore.isAuthenticated && canViewStats(user.value)) {
         items.push({
           to: RoutePath.AppStats(),
           label: 'Statistiques',

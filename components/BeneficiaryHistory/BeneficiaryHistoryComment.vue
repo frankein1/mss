@@ -39,11 +39,8 @@
 <script setup lang="ts">
   import { HistoryItemComment } from './types'
   import { canEditComment as canEditCommentRule } from '~/server/security/rules/comment'
-  import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
-
-  const authStore = useAuthStore()
 
   const props = defineProps<{
     comment: HistoryItemComment
@@ -56,7 +53,7 @@
 
   const isEditing = ref(false)
 
-  const user = computed(() => authStore.getAuthUser)
+  const user = useAuthUser()
 
   const canEditComment = computed(() =>
     canEditCommentRule(user.value, props.comment)
