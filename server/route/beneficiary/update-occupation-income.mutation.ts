@@ -1,15 +1,13 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
+  BeneficiaryPermissions,
   SecurityRuleGrantee,
   canEditBeneficiaryOccupationIncome,
   getBeneficiaryPermissions
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  getBeneficiarySecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   UpdateBeneficiaryOccupationInput,
   updateBeneficiaryOccupationSchema
@@ -21,38 +19,22 @@ const securityCheck = async (
   input: UpdateBeneficiaryOccupationInput
 ) => {
   const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
-  const structure = await getStructureByUser(user)
-  const { set } = getBeneficiaryPermissions({
-    user,
-    target: beneficiary,
-    structure
-  })
-  if (!set.ministereCategorie && input.ministereCategorie) {
-    return false
-  }
-  if (
-    !set.ministereDepartementServiceAc &&
-    input.ministereDepartementServiceAc
-  ) {
-    return false
-  }
-  if (!set.ministereStructure && input.ministereStructure) {
-    return false
-  }
   return canEditBeneficiaryOccupationIncome(user, beneficiary)
 }
 
 const handler = async ({
-  input
+  input,
+  ctx: { user, structure }
 }: {
   input: UpdateBeneficiaryOccupationInput
   ctx: ProtectedAppContext
 }) => {
-  const { id, ...occupation } = input
-
+  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const permissions = getBeneficiaryPermissions({ user, structure, target })
+  const data = filterInput({ input, permissions })
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
-    where: { id },
-    data: occupation
+    where: { id: input.id },
+    data
   })
 
   return updatedBeneficiary
@@ -71,3 +53,24 @@ export const updateOccupationIncomeMutation = createMutation({
     action: UserActivityType.UPDATE
   }
 })
+
+function filterInput({
+  input,
+  permissions
+}: {
+  input: UpdateBeneficiaryOccupationInput
+  permissions: BeneficiaryPermissions
+}) {
+  const { set } = permissions
+  const { id: _id, ...data } = input
+  if (!set.ministereCategorie) {
+    delete data.ministereCategorie
+  }
+  if (!set.ministereDepartementServiceAc) {
+    delete data.ministereDepartementServiceAc
+  }
+  if (!set.ministereStructure) {
+    delete data.ministereStructure
+  }
+  return data
+}
