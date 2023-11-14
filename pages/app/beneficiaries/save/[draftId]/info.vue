@@ -56,7 +56,7 @@
     data,
     pending: draftPending,
     error: draftError
-  } = trpcClient.beneficiaryDraft.get.useQuery({
+  } = await trpcClient.beneficiaryDraft.get.useQuery({
     id: draftId
   })
 
@@ -79,23 +79,23 @@
       return undefined
     }
 
-    const b = data.value?.draft.general
+    const { general } = data.value.draft
 
     return {
-      ...b,
-      birthDate: b.birthDate ? new Date(b.birthDate) : undefined,
-      deathDate: b.deathDate ? new Date(b.deathDate) : undefined
+      ...general,
+      birthDate: general.birthDate ? new Date(general.birthDate) : undefined,
+      deathDate: general.deathDate ? new Date(general.deathDate) : undefined
     }
   })
 
-  async function onSaveBeneficiary(
+  function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryGeneralInformationInput,
     target: string | undefined
   ) {
     if (target) {
-      await saveDraft(beneficiary, target)
+      saveDraft(beneficiary, target)
     } else {
-      await saveBeneficiary(beneficiary)
+      saveBeneficiary(beneficiary)
     }
   }
 
