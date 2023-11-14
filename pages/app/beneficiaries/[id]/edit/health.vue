@@ -21,25 +21,27 @@
       v-else-if="beneficiary && permissions"
       class="fr-p-3v"
     >
-      <div
-        class="fr-grid-row fr-grid-row--gutters fr-px-6w fr-py-2w fr-mb-3w health-info"
-      >
-        <div class="health-info__title fr-icon-info-fill fr-text--md fr-mb-0">
-          Attention aux données de santé
+      <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-pb-3w">
+        <div class="fr-notice fr-notice--info">
+          <div class="fr-container">
+            <div class="fr-notice__body">
+              <p class="fr-notice__title">Attention aux données de santé</p>
+              <p class="notice__content">
+                Vous ne pouvez manipuler des données de santé des bénéficiaires
+                que si votre structure est habilité à le faire au titre de
+                l'article 9 du RGPD (pour plus d'information voir
+                <a
+                  target="_blank"
+                  href="/notice/20231103_donnees_sante_monsuivisocial.pdf"
+                  >la notice d'information</a
+                >
+                ou référez-vous à votre responsable de structure). Nous vous
+                encourageons également à ne mentionner que les données qui sont
+                strictement nécessaires au suivi des bénéficiaires.
+              </p>
+            </div>
+          </div>
         </div>
-        <p class="fr-pl-3w">
-          Vous ne pouvez manipuler des données de santé des bénéficiaires que si
-          votre structure est habilité à le faire au titre de l'article 9 du
-          RGPD (pour plus d'information voir
-          <a
-            target="_blank"
-            href="/notice/20231103_donnees_sante_monsuivisocial.pdf"
-            >la notice d'information</a
-          >
-          ou référez-vous à votre responsable de structure). Nous vous
-          encourageons également à ne mentionner que les données qui sont
-          strictement nécessaires au suivi des bénéficiaires.
-        </p>
       </div>
       <BeneficiaryFormHealth :permissions="permissions" />
     </div>
@@ -116,23 +118,8 @@
 </script>
 
 <style lang="scss" scoped>
-  .health-info {
-    background-color: var(--primary-light);
-
-    p {
-      color: var(--light-text-default-grey, #3a3a3a);
-      font-size: 14px;
-      font-style: normal;
-      font-weight: 400;
-      line-height: 24px;
-    }
-  }
-
-  .health-info__title {
-    color: var(--light-text-default-info, #0063cb);
-  }
-
-  .health-info__icon {
-    color: #0063cb;
+  .notice__content {
+    color: var(--light-text-default-grey, #3a3a3a);
+    font-weight: 400;
   }
 </style>
