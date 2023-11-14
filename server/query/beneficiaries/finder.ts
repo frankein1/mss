@@ -61,7 +61,9 @@ const isEmpty = (object: any) => {
   if (!object) {
     return object
   }
-  return Object.values(object).every(x => x === null || x === '')
+  return Object.values(object).every(
+    x => x === null || x === '' || (Array.isArray(x) && x.length === 0)
+  )
 }
 
 type FindOutput = Prisma.PromiseReturnType<typeof find>
