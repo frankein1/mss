@@ -18,18 +18,12 @@
 
 <script lang="ts" setup>
   import { canEditStructure, canListUsers } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
   import { formatUserDisplayName } from '~/utils/user'
 
-  const authStore = useAuthStore()
+  const user = useAuthUser()
 
-  const user = computed(() =>
-    authStore.isAuthenticated ? authStore.getAuthUser : null
-  )
-  const userName = computed(() =>
-    user.value ? formatUserDisplayName(user.value) : ''
-  )
+  const userName = computed(() => formatUserDisplayName(user.value))
 
   const menus = computed(() => {
     const menus = []

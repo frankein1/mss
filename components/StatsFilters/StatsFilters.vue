@@ -13,14 +13,13 @@
 </template>
 
 <script setup lang="ts">
-  import { useAuthStore } from '~/store/auth'
   import { FilterType } from '~/utils/constants/filters'
   import type { Options } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { canViewStatsByReferent } from '~/server/security'
 
-  const authStore = useAuthStore()
+  const user = useAuthUser()
 
   const props = defineProps<{
     followupTypeOptions: Options
@@ -61,7 +60,7 @@
         type: FilterType.SelectMultiple
       })
     }
-    if (canViewStatsByReferent(authStore.getAuthUser)) {
+    if (canViewStatsByReferent(user.value)) {
       filters.push({
         name: 'referent',
         label: 'Référent',

@@ -25,12 +25,11 @@
   import { toTypedSchema } from '@vee-validate/zod'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
   import { canEditHelpRequestPrivateSynthesis } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { pastStatusesFromStatus } from '~/utils/helpRequest'
   import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
   import { prismaDecimalToNumber } from '~/utils/prisma'
 
-  const authStore = useAuthStore()
+  const user = useAuthUser()
 
   const props = defineProps<{
     isSubmitting: boolean
@@ -52,7 +51,7 @@
   })
 
   const canEditPrivateSynthesis = computed(() =>
-    canEditHelpRequestPrivateSynthesis(authStore.getAuthUser, props.helpRequest)
+    canEditHelpRequestPrivateSynthesis(user.value, props.helpRequest)
   )
 
   const initialDocumentIds = computed(
