@@ -1,5 +1,4 @@
 import { Prisma, StructureType } from '@prisma/client'
-import { getBeneficiaryFollowUpTypes } from './getBeneficiaryFollowUpTypes'
 import { BeneficiaryRepo } from '~/server/database'
 import {
   BeneficiaryPermissions,
@@ -45,15 +44,14 @@ const columnsSelection = {
       }
     }
   },
-  followups: {
-    include: {
-      types: true
+  followupTypes: {
+    select: {
+      typeId: true,
+      name: true
     }
   },
-  helpRequests: {
-    include: {
-      type: true
-    }
+  _count: {
+    select: { helpRequests: true, followups: true }
   }
 }
 
@@ -71,7 +69,9 @@ async function find(user: SecurityRuleGrantee, id: string) {
     where: {
       id
     },
-    include: columnsSelection
+    include: {
+      ...columnsSelection
+    }
   })
 }
 
@@ -153,6 +153,7 @@ export async function findBeneficiaries({
       where,
       orderBy
     })) || []
+
   return beneficiaries.map(beneficiary =>
     filter({ user, beneficiary, structure })
   )
@@ -174,11 +175,11 @@ export async function findBeneficiary({
 function getHistory(beneficiary: FindOutput) {
   return {
     historyTotal:
-      beneficiary.helpRequests.length + beneficiary.followups.length,
-    types: getBeneficiaryFollowUpTypes({
-      followups: beneficiary.followups,
-      helpRequests: beneficiary.helpRequests
-    })
+      beneficiary._count.followups + beneficiary._count.helpRequests,
+    types: beneficiary.followupTypes.map(ft => ({
+      id: ft.typeId,
+      name: ft.name
+    }))
   }
 }
 
