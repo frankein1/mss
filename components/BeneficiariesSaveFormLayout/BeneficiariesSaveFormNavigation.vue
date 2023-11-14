@@ -64,7 +64,7 @@
           ...menu,
           targets: [
             { hash: 'identity', title: 'Identité du bénéficiaire' },
-            { hash: 'contact-details', title: 'Coordonées' },
+            { hash: 'contact-details', title: 'Coordonnées' },
             { hash: 'address', title: 'Adresse/Hébergement' },
             { hash: 'mobility', title: 'Mobilité' },
             {
