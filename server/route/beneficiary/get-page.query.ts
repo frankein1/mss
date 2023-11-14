@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client'
-import { getBeneficiaryFollowUpTypes } from '~/server/query'
 import { createQuery } from '~/server/route'
 import { GetBeneficiariesInput, getBeneficiariesSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -30,13 +29,7 @@ const handler = async ({
   }
 
   const [beneficiaries, count] = await Promise.all([
-    getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
-      user,
-      where,
-      take,
-      skip,
-      input.orderBy
-    ),
+    getBeneficiaries(user, where, take, skip, input.orderBy),
     BeneficiaryRepo.count(user, {
       where
     })
@@ -44,13 +37,13 @@ const handler = async ({
   const totalPages = getTotalPages({ count, perPage: input.perPage })
 
   return {
-    beneficiaries: prepareBeneficiariesWithFollowupTypes(beneficiaries),
+    beneficiaries,
     count,
     totalPages
   }
 }
 
-function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
+function getBeneficiaries(
   user: SecurityRuleGrantee,
   where: Prisma.BeneficiaryWhereInput,
   take: number,
@@ -80,14 +73,14 @@ function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
           email: true
         }
       },
-      followups: {
+      followupTypes: {
         select: {
-          types: { select: { id: true, name: true }, distinct: ['id'] }
+          typeId: true,
+          name: true
+        },
+        orderBy: {
+          name: 'asc'
         }
-      },
-      helpRequests: {
-        select: { type: { select: { id: true, name: true } } },
-        distinct: ['typeId']
       },
       _count: {
         select: { followups: true, helpRequests: true, referents: true }
@@ -97,26 +90,6 @@ function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
     skip,
     orderBy
   })
-}
-
-export type BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests =
-  Prisma.PromiseReturnType<
-    typeof getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests
-  >
-
-export type BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests =
-  BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests[0]
-
-function prepareBeneficiariesWithFollowupTypes(
-  beneficiaries: BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests
-) {
-  return beneficiaries.map(({ followups, helpRequests, ...beneficiary }) => ({
-    followupTypes: getBeneficiaryFollowUpTypes({
-      followups,
-      helpRequests
-    }),
-    ...beneficiary
-  }))
 }
 
 export const getBeneficiariesQuery = createQuery({
