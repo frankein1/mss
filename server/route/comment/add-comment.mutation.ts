@@ -44,12 +44,14 @@ const handler = async ({
     data: {
       content: input.content,
       createdById: user.id,
-      followupId: input.historyId,
+      followupId: input.isFollowup ? input.historyId : undefined,
+      helpRequestId: !input.isFollowup ? input.historyId : undefined,
       notification: {
         create: {
           recipientId: createdById,
           beneficiaryId: input.beneficiaryId,
-          followupId: input.historyId,
+          followupId: input.isFollowup ? input.historyId : undefined,
+          helpRequestId: input.isFollowup ? input.historyId : undefined,
           type: NotificationType.NewComment
         }
       }
