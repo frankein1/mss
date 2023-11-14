@@ -49,9 +49,10 @@
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
 
-  const { data, pending, error } = trpcClient.beneficiaryDraft.get.useQuery({
-    id: draftId
-  })
+  const { data, pending, error } =
+    await trpcClient.beneficiaryDraft.get.useQuery({
+      id: draftId
+    })
 
   const permissions = computed(() => data.value?.permissions)
 
