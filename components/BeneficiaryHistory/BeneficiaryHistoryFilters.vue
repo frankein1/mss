@@ -32,7 +32,6 @@
   } from '~/client/options/followup'
   import { typeSuiviOptions } from '~/client/options/history'
   import { canViewAnyHelpRequestDetails, isReferent } from '~/server/security'
-  import { useAuthStore } from '~/store/auth'
   import { formatDate } from '~/utils/formatDate'
   import {
     EventCategory,
@@ -42,7 +41,7 @@
   } from '~/types/matomo'
   import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
 
-  const authStore = useAuthStore()
+  const user = useAuthUser()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
@@ -155,7 +154,7 @@
       }
     ]
 
-    if (canViewAnyHelpRequestDetails(authStore.getAuthUser)) {
+    if (canViewAnyHelpRequestDetails(user.value)) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -198,7 +197,7 @@
       )
     }
 
-    if (!isReferent(authStore.getAuthUser)) {
+    if (!isReferent(user.value)) {
       filters.push({
         name: 'referents',
         label: 'Référent',
@@ -213,7 +212,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!canViewAnyHelpRequestDetails(authStore.getAuthUser)) {
+    if (!canViewAnyHelpRequestDetails(user.value)) {
       return new Map()
     }
 
