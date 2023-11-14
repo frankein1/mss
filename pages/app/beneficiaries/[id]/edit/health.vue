@@ -21,7 +21,9 @@
       v-else-if="beneficiary && permissions"
       class="fr-p-3v"
     >
-      <div class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-pb-3w">
+      <div
+        class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-pb-3w"
+      >
         <div class="fr-notice fr-notice--info">
           <div class="fr-container">
             <div class="fr-notice__body">
