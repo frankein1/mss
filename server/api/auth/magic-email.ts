@@ -50,13 +50,13 @@ L'équipe de Mon Suivi Social
 `
 
   const html = `Bonjour ${user.firstName} ${user.lastName},
-</br></br>
+<br/><br/>
 Veuillez cliquer sur le lien ci-dessous pour accéder à votre espace Administrateur :
-</br></br>
+<br/><br/>
 <a href="${
     config.public.appUrl
   }${RoutePath.AuthValidateToken()}?token=${accessToken}">Accéder à mon Mon Suivi Social</a>
-  </br></br>
+  <br/><br/>
 L'équipe de Mon Suivi Social
 `
 

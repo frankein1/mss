@@ -26,17 +26,17 @@ En cas de difficulté, contactez-nous à ${from}.
 L'équipe de Mon Suivi Social`
 
   const html = `Bonjour,
-</br></br></br>
+<br/><br/><br/>
 Votre responsable de structure ou l'équipe de Mon Suivi Social vous a ouvert des accès à l'application Mon Suivi Social.
-</br></br>
+<br/><br/>
 Pour s'authentifier, Mon Suivi Social utilise l'outil Inclusion Connect.
-</br></br>
+<br/><br/>
 Afin d'accéder à l'application, veuillez créer un compte InclusionConnect en utilisant <b>${user.email}</b> comme adresse e-mail.
-</br></br>
+<br/><br/>
 <a href=${registrationUrl}>Créer son compte Inclusion Connect</a>
-</br></br>
+<br/><br/>
 En cas de difficulté, contactez-nous à ${from}.
-</br></br></br>
+<br/><br/><br/>
 L'équipe de Mon Suivi Social`
 
   return { text, html }
