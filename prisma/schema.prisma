@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextSearch", "views"]
   binaryTargets   = ["native", "debian-openssl-1.1.x"]
 }
 
@@ -1181,7 +1181,8 @@ model Beneficiary {
   archivedById String?   @map("archived_by_id") @db.Uuid
   archived     DateTime?
 
-  referents User[] @relation(name: "beneficiary_referents")
+  referents     User[]                     @relation(name: "beneficiary_referents")
+  followupTypes BeneficiaryFollowupTypes[]
 
   aidantConnectAuthorized Boolean @default(false) @map("aidant_connect_authorized")
 
@@ -1475,4 +1476,16 @@ model UserActivity {
   structure Structure? @relation(fields: [structureId], references: [id], onDelete: Cascade)
 
   @@map("user_activity")
+}
+
+view BeneficiaryFollowupTypes {
+  id String @id
+
+  beneficiaryId String      @map("beneficiary_id") @db.Uuid
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
+
+  typeId String @map("type_id") @db.Uuid
+  name   String
+
+  @@map("view_beneficiary_types")
 }
