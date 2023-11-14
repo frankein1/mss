@@ -58,24 +58,6 @@ export type GetBeneficiaryHealth = Pick<
   | 'socialSecurityNumber'
 >
 
-export type GetBeneficiaryMeta = Pick<
-  Beneficiary,
-  | 'fileNumber'
-  | 'structureId'
-  | 'additionalInformation'
-  | 'createdById'
-  | 'created'
-  | 'updated'
-  | 'status'
-  | 'archivedById'
-  | 'aidantConnectAuthorized'
-> & {
-  referents: Pick<
-    User,
-    'id' | 'firstName' | 'lastName' | 'email' | 'role' | 'status'
-  >[]
-}
-
 export type GetBeneficiaryGeneral = Pick<
   Beneficiary,
   | 'title'
@@ -101,7 +83,6 @@ export type GetBeneficiaryGeneral = Pick<
   | 'phone1'
   | 'phone2'
   | 'email'
-  | 'caregiver'
   | 'mobility'
   | 'additionalInformation'
 >
@@ -170,14 +151,29 @@ export type GetBeneficiaryRelative = Pick<
 
 export type GetBeneficiaryTaxHousehold = Pick<
   Beneficiary,
-  'familySituation' | 'minorChildren' | 'majorChildren'
+  'familySituation' | 'minorChildren' | 'majorChildren' | 'caregiver'
 > & {
   taxHouseholds?: GetBeneficiaryRelative[]
 }
 
-export type GetBeneficiaryOutput = {
-  id: string
-  meta: GetBeneficiaryMeta
+export type GetBeneficiaryOutput = Pick<
+  Beneficiary,
+  | 'id'
+  | 'fileNumber'
+  | 'structureId'
+  | 'additionalInformation'
+  | 'createdById'
+  | 'created'
+  | 'updated'
+  | 'status'
+  | 'archivedById'
+  | 'aidantConnectAuthorized'
+> & {
+  referents: Pick<
+    User,
+    'id' | 'firstName' | 'lastName' | 'email' | 'role' | 'status'
+  >[]
+} & {
   general: GetBeneficiaryGeneral
   health: GetBeneficiaryHealth | undefined
   externalOrganisations: GetBeneficiaryExternalOrganisations | undefined

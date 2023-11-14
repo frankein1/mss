@@ -8,7 +8,7 @@
         />
       </div>
       <div
-        v-if="beneficiary.meta.aidantConnectAuthorized"
+        v-if="beneficiary.aidantConnectAuthorized"
         class="fr-col-6"
       >
         <div class="fr-icon-success-line field-value">
@@ -64,7 +64,7 @@
   }>()
 
   const referentNames = computed(() =>
-    props.beneficiary.meta.referents
+    props.beneficiary.referents
       .map(referent => formatUserDisplayName(referent))
       .join(', ')
   )

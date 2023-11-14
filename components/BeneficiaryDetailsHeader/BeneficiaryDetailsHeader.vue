@@ -11,7 +11,7 @@
       :general="beneficiary.general"
     />
     <BeneficiaryDetailsStatus
-      :status="beneficiary.meta.status"
+      :status="beneficiary.status"
       class="status"
     />
     <BeneficiaryDetailsActions
