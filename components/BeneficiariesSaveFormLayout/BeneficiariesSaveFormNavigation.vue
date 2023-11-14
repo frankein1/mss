@@ -23,27 +23,26 @@
   }>()
 
   const navigationRoutes = computed<AppBeneficiariesSaveRoute[]>(() => {
-    const { permissions } = props
     const saveRoutes: AppBeneficiariesSaveRoute[] = [
       Route.AppBeneficiariesSaveInfo
     ]
 
-    if (permissions?.edit.relatives) {
+    if (props.permissions?.edit.relatives) {
       saveRoutes.push(
         Route.AppBeneficiariesSaveTaxHousehold,
         Route.AppBeneficiariesSaveEntourage
       )
     }
 
-    if (permissions?.edit.health) {
+    if (props.permissions?.edit.health) {
       saveRoutes.push(Route.AppBeneficiariesSaveHealth)
     }
 
-    if (permissions?.edit.occupationIncome) {
+    if (props.permissions?.edit.occupationIncome) {
       saveRoutes.push(Route.AppBeneficiariesSaveOccupation)
     }
 
-    if (permissions?.edit.externalOrganisations) {
+    if (props.permissions?.edit.externalOrganisations) {
       saveRoutes.push(Route.AppBeneficiariesSaveExternalOrganisations)
     }
 
