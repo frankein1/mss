@@ -11,7 +11,6 @@ import { RowType } from '~/types/export'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
-import { findBeneficiaries } from '~/server/query'
 import { formatUserDisplayName } from '~/utils/user'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import {
@@ -37,6 +36,7 @@ import {
   GetBeneficiaryRelative
 } from '~/types/beneficiary'
 import { DocumentRepo } from '~/server/database'
+import { findBeneficiaries } from '~/server/query'
 
 const securityCheck = (
   grantee: SecurityRuleGrantee,
