@@ -142,8 +142,6 @@
   } as FieldLabels<Partial<T>>)
 
   function onCancel() {
-    isNavigatingWithFormActions.value = true
-
     if (!props.beneficiary) {
       navigateTo(RoutePath.AppBeneficiaries())
     } else {
