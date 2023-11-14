@@ -8,7 +8,7 @@ function isDefinedError(
 }
 
 function focusErroredField(form: HTMLFormElement, fieldName: string) {
-  const erroredField = form.querySelector<HTMLElement>(`[name=${fieldName}]`)
+  const erroredField = form.querySelector<HTMLElement>(`[name="${fieldName}"]`)
   if (erroredField) {
     erroredField.focus()
   }
