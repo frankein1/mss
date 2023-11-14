@@ -1,4 +1,4 @@
-export * from './beneficiaires'
+export * from './beneficiaries'
 export * from './documents'
 export * from './followups'
 export * from './helpRequests'
