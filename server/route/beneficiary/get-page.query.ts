@@ -29,28 +29,29 @@ const handler = async ({
     ...prepareBeneficiaryFilters(input.filters)
   }
 
-  const [beneficiaries, count] = await Promise.all([
-    getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
-      user,
-      where,
-      take,
-      skip,
-      input.orderBy
-    ),
+  const [items, count] = await Promise.all([
+    getBeneficiaries(user, where, take, skip, input.orderBy),
     BeneficiaryRepo.count(user, {
       where
     })
   ])
   const totalPages = getTotalPages({ count, perPage: input.perPage })
 
+  const beneficiaries = []
+
+  for (const beneficiary of items) {
+    const followupTypes = await getBeneficiaryFollowUpTypes(beneficiary.id)
+    beneficiaries.push({ followupTypes, ...beneficiary })
+  }
+
   return {
-    beneficiaries: prepareBeneficiariesWithFollowupTypes(beneficiaries),
+    beneficiaries,
     count,
     totalPages
   }
 }
 
-function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
+function getBeneficiaries(
   user: SecurityRuleGrantee,
   where: Prisma.BeneficiaryWhereInput,
   take: number,
@@ -80,15 +81,6 @@ function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
           email: true
         }
       },
-      followups: {
-        select: {
-          types: { select: { id: true, name: true }, distinct: ['id'] }
-        }
-      },
-      helpRequests: {
-        select: { type: { select: { id: true, name: true } } },
-        distinct: ['typeId']
-      },
       _count: {
         select: { followups: true, helpRequests: true, referents: true }
       }
@@ -97,26 +89,6 @@ function getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests(
     skip,
     orderBy
   })
-}
-
-export type BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests =
-  Prisma.PromiseReturnType<
-    typeof getBeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests
-  >
-
-export type BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests =
-  BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests[0]
-
-function prepareBeneficiariesWithFollowupTypes(
-  beneficiaries: BeneficiariesWithFollowupTypesFromFollowupsAndHelpRequests
-) {
-  return beneficiaries.map(({ followups, helpRequests, ...beneficiary }) => ({
-    followupTypes: getBeneficiaryFollowUpTypes({
-      followups,
-      helpRequests
-    }),
-    ...beneficiary
-  }))
 }
 
 export const getBeneficiariesQuery = createQuery({

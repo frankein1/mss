@@ -11,7 +11,7 @@ import { RowType } from '~/types/export'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
 import { createExport } from '~/utils/export/createExport'
 import { prepareBeneficiaryFilters } from '~/utils/filters'
-import { findBeneficiaries } from '~/server/query'
+import { findBeneficiaries, getBeneficiaryFollowUpTypes } from '~/server/query'
 import { formatUserDisplayName } from '~/utils/user'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import {
@@ -37,6 +37,7 @@ import {
   GetBeneficiaryRelative
 } from '~/types/beneficiary'
 import { DocumentRepo } from '~/server/database'
+import { FollowupTypeIdAndName } from '~/types/followupType'
 
 const securityCheck = (
   grantee: SecurityRuleGrantee,
@@ -75,7 +76,9 @@ const handler = async ({
       where: { beneficiaryId: beneficiary.id }
     })
 
-    rows.push(formatData(beneficiary, documents))
+    const types = await getBeneficiaryFollowUpTypes(beneficiary.id)
+
+    rows.push(formatData(beneficiary, documents, types))
   }
 
   return await createExport(ctx.user.id, [
@@ -89,7 +92,11 @@ export const exportBeneficiariesQuery = createQuery({
   handler
 })
 
-function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
+function formatData(
+  beneficiary: GetBeneficiaryOutput,
+  documents: Document[],
+  types: FollowupTypeIdAndName[]
+) {
   const { general, occupationIncome, taxHouseholds, history } = beneficiary
   return {
     referents: beneficiary.referents
@@ -196,7 +203,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
       (taxHouseholds?.taxHouseholds || []).map(formatRelative).join(', ') || '',
     documents: documents.map(document => document.name).join(', '),
     historyTotal: history.historyTotal.toString(),
-    types: history.types.map(({ name }) => name).join(', ')
+    types: types.map(({ name }) => name).join(', ')
   }
 }
 

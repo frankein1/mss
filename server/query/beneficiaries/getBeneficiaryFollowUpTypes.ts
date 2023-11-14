@@ -1,67 +1,22 @@
-import { BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests } from '~/server/route/beneficiary'
 import { FollowupTypeIdAndName } from '~/types/followupType'
-import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
+import { prismaClient } from '~/server/prisma'
 
-type FollowupTypeSet = { [id: string]: FollowupTypeIdAndName }
-
-function getUniqueFollowUpTypesTuplesFromFollowups(
-  followups: {
-    types: FollowupTypeIdAndName[]
-  }[]
-) {
-  return followups.reduce((uniques, followup) => {
-    if (!followup.types.length) {
-      return uniques
+export async function getBeneficiaryFollowUpTypes(
+  beneficiaryId: string
+): Promise<FollowupTypeIdAndName[]> {
+  const types = await prismaClient.viewBeneficiaryTypes.findMany({
+    where: {
+      beneficiaryId
+    },
+    orderBy: [
+      {
+        name: 'desc'
+      }
+    ],
+    select: {
+      typeId: true,
+      name: true
     }
-    const followupUniqueFollowUpTypes = getUniqueFollowUpTypesFromFollowup(
-      followup.types
-    )
-    return {
-      ...uniques,
-      ...followupUniqueFollowUpTypes
-    }
-  }, {} as FollowupTypeSet)
-}
-
-function getUniqueFollowUpTypesFromFollowup(
-  followUpTypesArr: FollowupTypeIdAndName[]
-) {
-  return followUpTypesArr.reduce(
-    (uniques, f) => ({
-      ...uniques,
-      [f.id]: f
-    }),
-    {} as FollowupTypeSet
-  )
-}
-
-function getUniqueFollowUpTypesTuplesFromHelpRequests(
-  helpRequests: {
-    type: FollowupTypeIdAndName
-  }[]
-) {
-  return helpRequests.reduce((uniques, helpRequest) => {
-    if (!helpRequest.type) {
-      return uniques
-    }
-    return {
-      ...uniques,
-      [helpRequest.type.id]: helpRequest.type
-    }
-  }, {} as FollowupTypeSet)
-}
-
-export function getBeneficiaryFollowUpTypes({
-  followups,
-  helpRequests
-}: Pick<
-  BeneficiaryWithFollowupTypesFromFollowupsAndHelpRequests,
-  'followups' | 'helpRequests'
->): FollowupTypeIdAndName[] {
-  const uniqueFollowUpTypesTuples = {
-    ...getUniqueFollowUpTypesTuplesFromFollowups(followups),
-    ...getUniqueFollowUpTypesTuplesFromHelpRequests(helpRequests)
-  }
-  const followUpTypes = Object.values(uniqueFollowUpTypesTuples)
-  return followUpTypes.sort(sortFollowupTypesByName)
+  })
+  return (types || []).map(type => ({ id: type.typeId, name: type.name }))
 }

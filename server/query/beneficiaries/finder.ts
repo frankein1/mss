@@ -6,6 +6,7 @@ import {
   SecurityRuleGrantee,
   getBeneficiaryPermissions
 } from '~/server/security'
+import { FollowupTypeIdAndName } from '~/types/followupType'
 
 const columnsSelection = {
   referents: {
@@ -78,11 +79,13 @@ async function find(user: SecurityRuleGrantee, id: string) {
 const filter = ({
   user,
   structure,
-  beneficiary
+  beneficiary,
+  followupTypes
 }: {
   user: SecurityRuleGrantee
   structure: { type: StructureType }
   beneficiary: FindOutput
+  followupTypes: FollowupTypeIdAndName[]
 }) => {
   const permissions = getBeneficiaryPermissions({
     user,
@@ -107,7 +110,7 @@ const filter = ({
     ? getTaxHouseholds(beneficiary)
     : undefined
 
-  const history = getHistory(beneficiary)
+  const history = getHistory(beneficiary, followupTypes)
 
   return {
     id: beneficiary.id,
@@ -153,9 +156,13 @@ export async function findBeneficiaries({
       where,
       orderBy
     })) || []
-  return beneficiaries.map(beneficiary =>
-    filter({ user, beneficiary, structure })
-  )
+
+  const res = []
+  for (const beneficiary of beneficiaries) {
+    const followupTypes = await getBeneficiaryFollowUpTypes(beneficiary.id)
+    res.push(filter({ user, beneficiary, structure, followupTypes }))
+  }
+  return res
 }
 
 export async function findBeneficiary({
@@ -168,17 +175,18 @@ export async function findBeneficiary({
   id: string
 }) {
   const beneficiary = await find(user, id)
-  return filter({ user, beneficiary, structure })
+  const followupTypes = await getBeneficiaryFollowUpTypes(id)
+  return filter({ user, beneficiary, structure, followupTypes })
 }
 
-function getHistory(beneficiary: FindOutput) {
+function getHistory(
+  beneficiary: FindOutput,
+  followupTypes: FollowupTypeIdAndName[]
+) {
   return {
     historyTotal:
       beneficiary.helpRequests.length + beneficiary.followups.length,
-    types: getBeneficiaryFollowUpTypes({
-      followups: beneficiary.followups,
-      helpRequests: beneficiary.helpRequests
-    })
+    types: followupTypes
   }
 }
 

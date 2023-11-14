@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+  previewFeatures = ["fullTextSearch", "views"]
   binaryTargets   = ["native", "debian-openssl-1.1.x"]
 }
 
@@ -1475,4 +1475,13 @@ model UserActivity {
   structure Structure? @relation(fields: [structureId], references: [id], onDelete: Cascade)
 
   @@map("user_activity")
+}
+
+view ViewBeneficiaryTypes {
+  beneficiaryId String @map("beneficiary_id") @db.Uuid
+  typeId        String @map("type_id") @db.Uuid
+  name          String
+
+  @@unique([beneficiaryId, typeId])
+  @@map("view_beneficiary_types")
 }
