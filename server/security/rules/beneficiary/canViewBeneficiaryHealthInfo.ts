@@ -5,7 +5,7 @@ import {
 } from '~/server/security/rules/types'
 import {
   isInSameStructureAs,
-  isReferentFor
+  isPartOfReferents
 } from '~/server/security/rules/helpers'
 
 export const canViewBeneficiaryHealthInfo = (
@@ -15,5 +15,6 @@ export const canViewBeneficiaryHealthInfo = (
   isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker',
-    'Instructor'
-  ]) || isReferentFor(grantee, beneficiary)
+    'Instructor',
+    'Referent'
+  ]) && isPartOfReferents(grantee, beneficiary)
