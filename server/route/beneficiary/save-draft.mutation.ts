@@ -13,11 +13,8 @@ import {
 } from '~/server/schema'
 import {
   canSaveToBeneficiaryBeneficiaryDraft,
-  canEditBeneficiaryRelatives,
-  canEditBeneficiaryHealthInfo,
-  canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryExternalOrganisations,
-  SecurityRuleGrantee
+  SecurityRuleGrantee,
+  getBeneficiaryPermissions
 } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
@@ -70,7 +67,7 @@ const handler = async ({
 }
 
 function prepareData(
-  { user }: ProtectedAppContext,
+  { user, structure }: ProtectedAppContext,
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {
@@ -103,15 +100,9 @@ function prepareData(
     createdById: user.id
   } as Prisma.BeneficiaryUncheckedCreateInput
 
-  const securityTarget = {
-    structureId: user.structureId,
-    referents: general.referents
-  }
+  const permissions = getBeneficiaryPermissions({ user, structure })
 
-  if (
-    (taxHousehold || entourage) &&
-    canEditBeneficiaryRelatives(user, securityTarget)
-  ) {
+  if ((taxHousehold || entourage) && permissions.edit.relatives) {
     if (taxHousehold) {
       const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
 
@@ -143,15 +134,15 @@ function prepareData(
     }
   }
 
-  if (health && canEditBeneficiaryHealthInfo(user, securityTarget)) {
+  if (health && permissions.edit.health) {
     data = { ...data, ...health }
   }
 
-  if (canEditBeneficiaryOccupationIncome(user, securityTarget)) {
+  if (permissions.edit.occupationIncome) {
     data = { ...data, ...occupation }
   }
 
-  if (canEditBeneficiaryExternalOrganisations(user, securityTarget)) {
+  if (permissions.edit.externalOrganisations) {
     data = { ...data, ...externalOrganisations }
   }
 

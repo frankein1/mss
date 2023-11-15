@@ -1,3 +1,4 @@
+import { StructureType } from '@prisma/client'
 import {
   SecurityRuleGrantee,
   SecurityTargetWithReferents,
@@ -10,10 +11,17 @@ import {
 
 export const canViewBeneficiaryOccupationIncome = (
   grantee: SecurityRuleGrantee,
+  structureType: StructureType,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) || isReferentFor(grantee, beneficiary)
+): boolean => {
+  if (structureType === StructureType.EFS) {
+    return false
+  }
+  return (
+    isInSameStructureAs(grantee, beneficiary, [
+      'StructureManager',
+      'SocialWorker',
+      'Instructor'
+    ]) || isReferentFor(grantee, beneficiary)
+  )
+}

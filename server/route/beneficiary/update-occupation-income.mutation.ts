@@ -3,11 +3,13 @@ import { createMutation } from '~/server/route'
 import {
   BeneficiaryPermissions,
   SecurityRuleGrantee,
-  canEditBeneficiaryOccupationIncome,
   getBeneficiaryPermissions
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  getStructureByUser
+} from '~/server/query'
 import {
   UpdateBeneficiaryOccupationInput,
   updateBeneficiaryOccupationSchema
@@ -18,8 +20,14 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: UpdateBeneficiaryOccupationInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(user, input.id)
-  return canEditBeneficiaryOccupationIncome(user, beneficiary)
+  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const structure = await getStructureByUser(user)
+  const permissions = getBeneficiaryPermissions({
+    user,
+    structure,
+    target
+  })
+  return permissions.edit.occupationIncome
 }
 
 const handler = async ({

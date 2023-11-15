@@ -3,10 +3,12 @@ import { createMutation } from '~/server/route'
 import {
   BeneficiaryPermissions,
   SecurityRuleGrantee,
-  canEditBeneficiaryHealthInfo,
   getBeneficiaryPermissions
 } from '~/server/security'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  getStructureByUser
+} from '~/server/query'
 import {
   UpdateBeneficiaryHealthInput,
   updateBeneficiaryHealthSchema
@@ -15,12 +17,17 @@ import { BeneficiaryRepo } from '~/server/database'
 import { ProtectedAppContext } from '~/server/trpc'
 
 const securityCheck = async (
-  grantee: SecurityRuleGrantee,
+  user: SecurityRuleGrantee,
   input: UpdateBeneficiaryHealthInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
-
-  return canEditBeneficiaryHealthInfo(grantee, beneficiary)
+  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const structure = await getStructureByUser(user)
+  const permissions = getBeneficiaryPermissions({
+    user,
+    structure,
+    target
+  })
+  return permissions.edit.health
 }
 
 const handler = async ({

@@ -36,6 +36,7 @@
       <slot></slot>
       <BeneficiariesSaveFormNavArrows
         :current-route="currentRoute"
+        :permissions="permissions"
         :draft-id="draftId"
         @save="saveTarget = $event"
       />

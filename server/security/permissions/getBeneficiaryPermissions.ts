@@ -5,25 +5,24 @@ import {
   SecurityTargetWithStructure,
   canCreateHelpRequest,
   canDeleteBeneficiary,
-  canEditBeneficiaryExternalOrganisations,
-  canEditBeneficiaryHealthInfo,
-  canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryReferents,
-  canEditBeneficiaryRelatives,
-  canListBeneficiaryRelatives,
+  canViewBeneficiaryRelatives,
   canViewBeneficiaryExternalOrganisations,
   canViewBeneficiaryHealthInfo,
-  canViewBeneficiaryOccupationIncome
+  canViewBeneficiaryOccupationIncome,
+  canEditBeneficiaryReferents,
+  canViewBeneficiaryGeneral
 } from '../rules'
 
 export type BeneficiaryPermissions = {
   edit: {
+    general: boolean
     relatives: boolean
     health: boolean
     occupationIncome: boolean
     externalOrganisations: boolean
   }
   view: {
+    general: boolean
     relatives: boolean
     health: boolean
     occupationIncome: boolean
@@ -80,14 +79,17 @@ function getCreatePermissions({
   structure: { type: StructureType }
 }) {
   const isMinistryAgent = structure.type === StructureType.Ministere
+  const isEFS = structure.type === StructureType.EFS
   return {
     edit: {
-      relatives: true,
-      health: true,
-      occupationIncome: true,
+      general: true,
+      relatives: !isEFS,
+      health: !isEFS,
+      occupationIncome: !isEFS,
       externalOrganisations: true
     },
     view: {
+      general: false,
       relatives: false,
       health: false,
       occupationIncome: false,
@@ -130,15 +132,31 @@ function getEditPermissions({
   structure: { type: StructureType }
 }) {
   const isMinistryAgent = structure.type === StructureType.Ministere
+  const viewOrEditRelatives = canViewBeneficiaryRelatives(
+    user,
+    structure.type,
+    target
+  )
+  const viewOrEditHealth = canViewBeneficiaryHealthInfo(
+    user,
+    structure.type,
+    target
+  )
+  const viewOrEditOccupationIncome = canViewBeneficiaryOccupationIncome(
+    user,
+    structure.type,
+    target
+  )
+  const viewOrEditExternalOrganisations =
+    canViewBeneficiaryExternalOrganisations(user, target)
+  const viewOrEditGeneral = canViewBeneficiaryGeneral(user, target)
   return {
     edit: {
-      relatives: canEditBeneficiaryRelatives(user, target),
-      health: canEditBeneficiaryHealthInfo(user, target),
-      occupationIncome: canEditBeneficiaryOccupationIncome(user, target),
-      externalOrganisations: canEditBeneficiaryExternalOrganisations(
-        user,
-        target
-      )
+      general: viewOrEditGeneral,
+      relatives: viewOrEditRelatives,
+      health: viewOrEditHealth,
+      occupationIncome: viewOrEditOccupationIncome,
+      externalOrganisations: viewOrEditExternalOrganisations
     },
     get: {
       accommodationZone: isMinistryAgent,
@@ -158,13 +176,11 @@ function getEditPermissions({
       ministereStructure: isMinistryAgent
     },
     view: {
-      relatives: canListBeneficiaryRelatives(user, target),
-      health: canViewBeneficiaryHealthInfo(user, target),
-      occupationIncome: canViewBeneficiaryOccupationIncome(user, target),
-      externalOrganisations: canViewBeneficiaryExternalOrganisations(
-        user,
-        target
-      )
+      general: viewOrEditGeneral,
+      relatives: viewOrEditRelatives,
+      health: viewOrEditHealth,
+      occupationIncome: viewOrEditOccupationIncome,
+      externalOrganisations: viewOrEditExternalOrganisations
     },
     create: {
       helpRequest: canCreateHelpRequest(user, target)

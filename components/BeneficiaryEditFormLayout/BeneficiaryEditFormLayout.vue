@@ -38,7 +38,6 @@
 
       <slot></slot>
       <BeneficiaryEditFormNavArrows
-        :security-target="beneficiary"
         :current-route="currentRoute"
         :beneficiary-id="beneficiary.id"
         :origin-tab="originTab"
