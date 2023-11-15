@@ -6,5 +6,3 @@ export {
   RoutePath
 } from './routes'
 export { Breadcrumb } from './breadcrumbs'
-export { getBeneficiariesSaveRouteNavArrows } from './beneficiariesSaveRouteTree'
-export { getBeneficiaryEditRouteNavArrows } from './beneficiaryEditRouteTree'

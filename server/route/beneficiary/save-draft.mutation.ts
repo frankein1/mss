@@ -11,35 +11,11 @@ import {
   SaveBeneficiaryExternalOrganisationsInput,
   saveDraftSchema
 } from '~/server/schema'
-import {
-  canSaveToBeneficiaryBeneficiaryDraft,
-  canEditBeneficiaryRelatives,
-  canEditBeneficiaryHealthInfo,
-  canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryExternalOrganisations,
-  SecurityRuleGrantee
-} from '~/server/security'
+import { getBeneficiaryPermissions } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { BeneficiaryRepo, DraftRepo } from '~/server/database'
-
-const securityCheck = async (
-  grantee: SecurityRuleGrantee,
-  input: SaveDraftInput
-) => {
-  const { id: draftId } = input
-  if (!draftId) {
-    return false
-  }
-  const beneficiaryDraft = await DraftRepo.findUniqueOrThrow(grantee, {
-    where: { id: draftId }
-  })
-  if (!beneficiaryDraft) {
-    return false
-  }
-
-  return canSaveToBeneficiaryBeneficiaryDraft(grantee, beneficiaryDraft)
-}
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
   input,
@@ -70,7 +46,7 @@ const handler = async ({
 }
 
 function prepareData(
-  { user }: ProtectedAppContext,
+  { user, structure }: ProtectedAppContext,
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {
@@ -103,15 +79,9 @@ function prepareData(
     createdById: user.id
   } as Prisma.BeneficiaryUncheckedCreateInput
 
-  const securityTarget = {
-    structureId: user.structureId,
-    referents: general.referents
-  }
+  const permissions = getBeneficiaryPermissions({ user, structure })
 
-  if (
-    (taxHousehold || entourage) &&
-    canEditBeneficiaryRelatives(user, securityTarget)
-  ) {
+  if ((taxHousehold || entourage) && permissions.edit.relatives) {
     if (taxHousehold) {
       const { taxHouseholds: _, ...taxHouseholdDatas } = taxHousehold
 
@@ -143,15 +113,15 @@ function prepareData(
     }
   }
 
-  if (health && canEditBeneficiaryHealthInfo(user, securityTarget)) {
+  if (health && permissions.edit.health) {
     data = { ...data, ...health }
   }
 
-  if (canEditBeneficiaryOccupationIncome(user, securityTarget)) {
+  if (permissions.edit.occupationIncome) {
     data = { ...data, ...occupation }
   }
 
-  if (canEditBeneficiaryExternalOrganisations(user, securityTarget)) {
+  if (permissions.edit.externalOrganisations) {
     data = { ...data, ...externalOrganisations }
   }
 
@@ -196,7 +166,7 @@ function getDataFromSources(
 
 export const saveDraftMutation = createMutation({
   inputValidation: saveDraftSchema,
-  securityCheck,
+  securityCheck: AllowSecurityCheck,
   handler,
   auditLog: {
     key: 'beneficiary.saveDraft',

@@ -2,7 +2,7 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   SecurityRuleGrantee,
-  canEditBeneficiaryReferents
+  getBeneficiaryPermissions
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -10,7 +10,10 @@ import {
   updateBeneficiaryTaxHouseholdSchema
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  getStructureByUser
+} from '~/server/query'
 import { BeneficiaryRepo } from '~/server/database'
 
 function getBeneficiaryWithTaxHousehold(user: SecurityRuleGrantee, id: string) {
@@ -31,9 +34,14 @@ const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryTaxHouseholdInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
-
-  return canEditBeneficiaryReferents(grantee, beneficiary)
+  const target = await getBeneficiarySecurityTarget(grantee, input.id)
+  const structure = await getStructureByUser(grantee)
+  const permissions = getBeneficiaryPermissions({
+    user: grantee,
+    structure,
+    target
+  })
+  return permissions.edit.relatives
 }
 
 const handler = async ({

@@ -1,17 +1,21 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
-  canViewBeneficiaryGeneral,
+  getBeneficiaryPermissions,
   SecurityRuleGrantee
 } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  getStructureByUser
+} from '~/server/query'
 
-const securityCheck = async (grantee: SecurityRuleGrantee, input: IdInput) => {
-  const beneficiary = await getBeneficiarySecurityTarget(grantee, input.id)
-
-  return canViewBeneficiaryGeneral(grantee, beneficiary)
+const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
+  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const structure = await getStructureByUser(user)
+  const permissions = getBeneficiaryPermissions({ user, target, structure })
+  return permissions.view.general
 }
 
 const handler = async ({
