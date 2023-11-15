@@ -22,6 +22,7 @@
       class="fr-p-3v"
     >
       <div
+        v-if="displayInfo"
         class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-pb-3w"
       >
         <div class="fr-notice fr-notice--info">
@@ -30,7 +31,7 @@
               <p class="fr-notice__title">Attention aux données de santé</p>
               <p class="notice__content">
                 Vous ne pouvez manipuler des données de santé des bénéficiaires
-                que si votre structure est habilité à le faire au titre de
+                que si votre structure est habilitée à le faire au titre de
                 l'article 9 du RGPD (pour plus d'information voir
                 <a
                   target="_blank"
@@ -51,6 +52,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { StructureType } from '@prisma/client'
   import {
     saveBeneficiaryHealthSchema,
     SaveBeneficiaryHealthInput
@@ -58,10 +60,20 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
   import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
+  import { useAuthStore } from '~/store/auth'
 
   const trpcClient = useTrpcClient()
 
   const isSubmitting = ref(false)
+
+  const authStore = useAuthStore()
+  const displayInfo = computed(() => {
+    const structureType = authStore.userStructureType
+    return (
+      structureType !== StructureType.Ccas &&
+      structureType !== StructureType.Cias
+    )
+  })
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
