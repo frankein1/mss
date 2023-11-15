@@ -51,7 +51,7 @@ const handler = async ({
           recipientId: createdById,
           beneficiaryId: input.beneficiaryId,
           followupId: input.isFollowup ? input.historyId : undefined,
-          helpRequestId: input.isFollowup ? input.historyId : undefined,
+          helpRequestId: !input.isFollowup ? input.historyId : undefined,
           type: NotificationType.NewComment
         }
       }
