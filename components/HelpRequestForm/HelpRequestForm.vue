@@ -296,6 +296,7 @@
     canEditStructure,
     canCreateInstructorOrganization as canCreateInstructorOrganizationRule
   } from '~/server/security'
+  import { useAuthStore } from '~/store/auth'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { RoutePath } from '~/utils/routing'
@@ -303,6 +304,7 @@
   import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
   import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
 
+  const authStore = useAuthStore()
   const isMinistryAgent = useMinistryAgent()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
@@ -336,7 +338,7 @@
     submit: [payload: Event]
   }>()
 
-  const user = useAuthUser()
+  const user = computed(() => authStore.getAuthUser)
 
   const followUpTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')

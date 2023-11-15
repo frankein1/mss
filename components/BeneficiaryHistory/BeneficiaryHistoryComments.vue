@@ -19,9 +19,10 @@
 
 <script setup lang="ts">
   import { HistoryItem, HistoryItemComment, HistoryItemComments } from './types'
+  import { useAuthStore } from '~/store/auth'
   import { canAddComment as canAddCommentsRule } from '~/server/security'
 
-  const user = useAuthUser()
+  const authStore = useAuthStore()
 
   const props = defineProps<{
     comments: HistoryItemComments
@@ -35,6 +36,6 @@
   }>()
 
   const canAddComments = computed(() =>
-    canAddCommentsRule(user.value, props.history.beneficiary)
+    canAddCommentsRule(authStore.getAuthUser, props.history.beneficiary)
   )
 </script>

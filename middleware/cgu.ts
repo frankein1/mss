@@ -4,7 +4,7 @@ import { RoutePath } from '~/utils/routing'
 
 export default defineNuxtRouteMiddleware(to => {
   const authStore = useAuthStore()
-  const user = authStore.user
+  const user = authStore.isAuthenticated ? authStore.getAuthUser : null
   if (!user) {
     return navigateTo({
       path: RoutePath.AuthLogin(),

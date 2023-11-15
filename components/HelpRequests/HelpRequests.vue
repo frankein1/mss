@@ -17,7 +17,7 @@
           {{ helpRequestsCount }} instruction(s) de demande d'aide
         </p>
         <ExportDataButton
-          v-if="canExportHistory(user)"
+          v-if="canExportHistory(authStore.getAuthUser)"
           :is-downloading="isDownloading"
           @export="exportHelpRequests"
         />
@@ -50,6 +50,7 @@
   import { HelpRequestSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
   import { canExportHistory } from '~/server/security'
+  import { useAuthStore } from '~/store/auth'
   import { useFiltersStore } from '~/store/filters'
   import {
     REQUEST_LIMIT_DEFAULT,
@@ -60,7 +61,7 @@
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
-  const user = useAuthUser()
+  const authStore = useAuthStore()
 
   const filters = ref<HelpRequestFilterInput>(filtersStore.helpRequest || {})
   const orderBy = ref<HelpRequestSort[]>([{ openingDate: SortOrder.Desc }])

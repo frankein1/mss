@@ -23,6 +23,7 @@
   import { formatDate } from '~/utils/formatDate'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
+  import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
   import { canViewAnyHelpRequestDetails, isReferent } from '~/server/security'
@@ -32,7 +33,7 @@
   import { ministerOptions } from '~/client/options/ministry'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
-  const user = useAuthUser()
+  const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
   const isMinistryAgent = useMinistryAgent()
@@ -123,7 +124,7 @@
       }
     ]
 
-    if (canViewAnyHelpRequestDetails(user.value)) {
+    if (canViewAnyHelpRequestDetails(authStore.getAuthUser)) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -168,7 +169,7 @@
       )
     }
 
-    if (!isReferent(user.value)) {
+    if (!isReferent(authStore.getAuthUser)) {
       filters.push({
         name: 'referents',
         label: 'Référent',
@@ -195,7 +196,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!canViewAnyHelpRequestDetails(user.value)) {
+    if (!canViewAnyHelpRequestDetails(authStore.getAuthUser)) {
       return new Map()
     }
 

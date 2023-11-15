@@ -11,6 +11,7 @@
     SecurityTargetWithReferents,
     SecurityTargetWithStructure
   } from '~/server/security'
+  import { useAuthStore } from '~/store/auth'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     AppBeneficiaryEditRoute,
@@ -18,6 +19,8 @@
     RouteTitle,
     RoutePath
   } from '~/utils/routing'
+
+  const authStore = useAuthStore()
 
   const props = defineProps<{
     currentRoute: AppBeneficiaryEditRoute
@@ -30,7 +33,7 @@
     save: [target: string]
   }>()
 
-  const user = useAuthUser()
+  const user = computed(() => authStore.getAuthUser)
 
   const navArrows = computed(() =>
     getBeneficiaryEditRouteNavArrows(
