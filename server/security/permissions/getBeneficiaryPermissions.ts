@@ -3,27 +3,24 @@ import {
   SecurityRuleGrantee,
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,
-  canCreateHelpRequest,
-  canDeleteBeneficiary,
-  canEditBeneficiaryExternalOrganisations,
-  canEditBeneficiaryHealthInfo,
-  canEditBeneficiaryOccupationIncome,
-  canEditBeneficiaryReferents,
-  canEditBeneficiaryRelatives,
-  canListBeneficiaryRelatives,
-  canViewBeneficiaryExternalOrganisations,
-  canViewBeneficiaryHealthInfo,
-  canViewBeneficiaryOccupationIncome
+  canCreateHelpRequest
 } from '../rules'
+import {
+  isInSameStructureAs,
+  isPartOfReferents,
+  isReferentFor
+} from '../rules/helpers'
 
 export type BeneficiaryPermissions = {
   edit: {
+    general: boolean
     relatives: boolean
     health: boolean
     occupationIncome: boolean
     externalOrganisations: boolean
   }
   view: {
+    general: boolean
     relatives: boolean
     health: boolean
     occupationIncome: boolean
@@ -80,14 +77,17 @@ function getCreatePermissions({
   structure: { type: StructureType }
 }) {
   const isMinistryAgent = structure.type === StructureType.Ministere
+  const isEFS = structure.type === StructureType.EFS
   return {
     edit: {
-      relatives: true,
-      health: true,
-      occupationIncome: true,
+      general: true,
+      relatives: !isEFS,
+      health: !isEFS,
+      occupationIncome: !isEFS,
       externalOrganisations: true
     },
     view: {
+      general: false,
       relatives: false,
       health: false,
       occupationIncome: false,
@@ -130,15 +130,22 @@ function getEditPermissions({
   structure: { type: StructureType }
 }) {
   const isMinistryAgent = structure.type === StructureType.Ministere
+  const viewOrEditRelatives = accessRelatives(user, structure.type, target)
+  const viewOrEditHealth = accessHealth(user, structure.type, target)
+  const viewOrEditOccupationIncome = accessOccupationIncome(
+    user,
+    structure.type,
+    target
+  )
+  const viewOrEditExtOrganisations = accessExtOrganisations(user, target)
+  const viewOrEditGeneral = accessGeneral(user, target)
   return {
     edit: {
-      relatives: canEditBeneficiaryRelatives(user, target),
-      health: canEditBeneficiaryHealthInfo(user, target),
-      occupationIncome: canEditBeneficiaryOccupationIncome(user, target),
-      externalOrganisations: canEditBeneficiaryExternalOrganisations(
-        user,
-        target
-      )
+      general: viewOrEditGeneral,
+      relatives: viewOrEditRelatives,
+      health: viewOrEditHealth,
+      occupationIncome: viewOrEditOccupationIncome,
+      externalOrganisations: viewOrEditExtOrganisations
     },
     get: {
       accommodationZone: isMinistryAgent,
@@ -150,7 +157,7 @@ function getEditPermissions({
     },
     set: {
       accommodationZone: isMinistryAgent,
-      referents: canEditBeneficiaryReferents(user, target),
+      referents: setReferents(user, target),
       nir: hasAccessNir(structure.type),
       numeroPegase: isMinistryAgent,
       ministereCategorie: isMinistryAgent,
@@ -158,19 +165,17 @@ function getEditPermissions({
       ministereStructure: isMinistryAgent
     },
     view: {
-      relatives: canListBeneficiaryRelatives(user, target),
-      health: canViewBeneficiaryHealthInfo(user, target),
-      occupationIncome: canViewBeneficiaryOccupationIncome(user, target),
-      externalOrganisations: canViewBeneficiaryExternalOrganisations(
-        user,
-        target
-      )
+      general: viewOrEditGeneral,
+      relatives: viewOrEditRelatives,
+      health: viewOrEditHealth,
+      occupationIncome: viewOrEditOccupationIncome,
+      externalOrganisations: viewOrEditExtOrganisations
     },
     create: {
       helpRequest: canCreateHelpRequest(user, target)
     },
     delete: {
-      beneficiary: canDeleteBeneficiary(user, target)
+      beneficiary: isDeletable(user, target)
     }
   }
 }
@@ -178,3 +183,94 @@ function getEditPermissions({
 function hasAccessNir(type: StructureType) {
   return type === StructureType.Ccas || type === StructureType.Cias
 }
+
+function accessGeneral(
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+) {
+  return (
+    isInSameStructureAs(grantee, beneficiary, [
+      'StructureManager',
+      'SocialWorker',
+      'Instructor',
+      'ReceptionAgent'
+    ]) || isReferentFor(grantee, beneficiary)
+  )
+}
+
+function accessOccupationIncome(
+  grantee: SecurityRuleGrantee,
+  structureType: StructureType,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean {
+  if (structureType === StructureType.EFS) {
+    return false
+  }
+  return (
+    isInSameStructureAs(grantee, beneficiary, [
+      'StructureManager',
+      'SocialWorker',
+      'Instructor'
+    ]) || isReferentFor(grantee, beneficiary)
+  )
+}
+
+function accessHealth(
+  grantee: SecurityRuleGrantee,
+  structureType: StructureType,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean {
+  if (structureType === StructureType.EFS) {
+    return false
+  }
+  return (
+    isInSameStructureAs(grantee, beneficiary, [
+      'StructureManager',
+      'SocialWorker',
+      'Instructor',
+      'Referent'
+    ]) && isPartOfReferents(grantee, beneficiary)
+  )
+}
+
+const accessRelatives = (
+  grantee: SecurityRuleGrantee,
+  structureType: StructureType,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean => {
+  if (structureType === StructureType.EFS) {
+    return false
+  }
+  return (
+    isInSameStructureAs(grantee, beneficiary, [
+      'StructureManager',
+      'SocialWorker',
+      'Instructor'
+    ]) || isReferentFor(grantee, beneficiary)
+  )
+}
+
+const accessExtOrganisations = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) || isReferentFor(grantee, beneficiary)
+
+const setReferents = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
+  ]) || isReferentFor(grantee, beneficiary)
+
+const isDeletable = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure
+): boolean => isInSameStructureAs(grantee, beneficiary, ['StructureManager'])

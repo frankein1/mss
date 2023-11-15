@@ -23,7 +23,6 @@ export {
   canListUsers
 } from './user'
 
-export * from './beneficiary'
 export * from './structure'
 
 export {
