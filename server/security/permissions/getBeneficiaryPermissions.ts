@@ -5,11 +5,7 @@ import {
   SecurityTargetWithStructure,
   canCreateHelpRequest
 } from '../rules'
-import {
-  isInSameStructureAs,
-  isPartOfReferents,
-  isReferentFor
-} from '../rules/helpers'
+import { isInSameStructureAs, isReferentFor } from '../rules/helpers'
 
 export type BeneficiaryPermissions = {
   edit: {
@@ -227,9 +223,8 @@ function accessHealth(
     isInSameStructureAs(grantee, beneficiary, [
       'StructureManager',
       'SocialWorker',
-      'Instructor',
-      'Referent'
-    ]) && isPartOfReferents(grantee, beneficiary)
+      'Instructor'
+    ]) || isReferentFor(grantee, beneficiary)
   )
 }
 
