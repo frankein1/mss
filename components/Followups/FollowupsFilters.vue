@@ -33,12 +33,13 @@
   import { followupFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options/ministry'
   import { EventCategory, FollowupFilterEventAction } from '~/types/matomo'
+  import { useAuthStore } from '~/store/auth'
   import { isReferent } from '~/server/security'
 
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
   const isMinistryAgent = useMinistryAgent()
-  const user = useAuthUser()
+  const authStore = useAuthStore()
 
   const emit = defineEmits<{
     filter: [filters: FollowupFilterInput]
@@ -114,7 +115,7 @@
       }
     ]
 
-    if (!isReferent(user.value)) {
+    if (!isReferent(authStore.getAuthUser)) {
       filters.push({
         name: 'referents',
         label: 'Référent',

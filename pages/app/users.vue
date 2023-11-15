@@ -31,12 +31,13 @@
 <script lang="ts" setup>
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
   import { canCreateUser as canCreateUserRule } from '~/server/security'
+  import { useAuthStore } from '~/store/auth'
 
   const title = RouteTitle.AppUsers()
 
   useHead({ title })
 
-  const user = useAuthUser()
+  const authStore = useAuthStore()
   const trpcClient = useTrpcClient()
 
   const {
@@ -46,5 +47,5 @@
     error: usersError
   } = await trpcClient.user.getUsers.useQuery({})
 
-  const canCreateUser = computed(() => canCreateUserRule(user.value))
+  const canCreateUser = computed(() => canCreateUserRule(authStore.getAuthUser))
 </script>

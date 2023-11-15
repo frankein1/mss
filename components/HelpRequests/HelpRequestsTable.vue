@@ -81,6 +81,9 @@
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { HelpRequestSort } from '~/types/table'
   import { canViewAnyHelpRequestDetails as canViewAnyHelpRequestDetailsRule } from '~/server/security'
+  import { useAuthStore } from '~/store/auth'
+
+  const authStore = useAuthStore()
 
   const props = defineProps<{
     helpRequests: HelpRequests
@@ -99,7 +102,7 @@
     emit
   )
 
-  const user = useAuthUser()
+  const user = computed(() => authStore.getAuthUser)
 
   const canViewAnyHelpRequestDetails = computed(() =>
     canViewAnyHelpRequestDetailsRule(user.value)

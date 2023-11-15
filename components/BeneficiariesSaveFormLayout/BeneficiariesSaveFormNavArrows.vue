@@ -7,12 +7,15 @@
 </template>
 
 <script setup lang="ts">
+  import { useAuthStore } from '~/store/auth'
   import {
     AppBeneficiariesSaveRoute,
     RoutePath,
     RouteTitle,
     getBeneficiariesSaveRouteNavArrows
   } from '~/utils/routing'
+
+  const authStore = useAuthStore()
 
   const props = defineProps<{
     currentRoute: AppBeneficiariesSaveRoute
@@ -23,7 +26,7 @@
     save: [target: string]
   }>()
 
-  const user = useAuthUser()
+  const user = computed(() => authStore.getAuthUser)
 
   const navArrows = computed(() =>
     getBeneficiariesSaveRouteNavArrows(props.currentRoute, user.value, {

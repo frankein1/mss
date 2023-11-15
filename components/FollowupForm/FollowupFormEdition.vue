@@ -22,7 +22,10 @@
   import { toTypedSchema } from '@vee-validate/zod'
   import { canEditFollowupPrivateSynthesis } from '~/server/security'
   import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
+  import { useAuthStore } from '~/store/auth'
   import { GetFollowupDetailsOutput } from '~/server/trpc/routers'
+
+  const authStore = useAuthStore()
 
   const props = defineProps<{
     isSubmitting: boolean
@@ -61,7 +64,7 @@
     )
   )
 
-  const user = useAuthUser()
+  const user = computed(() => authStore.getAuthUser)
 
   const canSetPrivateSynthesis = computed(() =>
     canEditFollowupPrivateSynthesis(user.value, props.followup)

@@ -306,10 +306,12 @@
     canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
     canEditStructure
   } from '~/server/security'
+  import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
 
+  const authStore = useAuthStore()
   const isMinistryAgent = useMinistryAgent()
 
   const props = withDefaults(
@@ -351,7 +353,7 @@
     return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
   })
 
-  const user = useAuthUser()
+  const user = computed(() => authStore.getAuthUser)
 
   const allowEditStructure = computed(() => canEditStructure(user.value))
 

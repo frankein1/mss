@@ -57,14 +57,17 @@
     canViewFollowupDetails as canViewFollowupDetailsRule,
     canEditFollowup
   } from '~/server/security'
+  import { useAuthStore } from '~/store/auth'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
+
+  const authStore = useAuthStore()
 
   const props = defineProps<{
     followup: FollowupItem
   }>()
 
-  const user = useAuthUser()
+  const user = computed(() => authStore.getAuthUser)
 
   const followupPath = computed(() =>
     RoutePath.AppBeneficiary(props.followup.beneficiary.id, {

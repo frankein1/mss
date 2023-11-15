@@ -13,7 +13,7 @@
         {{ historyCountLabel }}
       </h2>
       <ExportDataButton
-        v-if="canExportStats(user)"
+        v-if="canExportStats(authStore.getAuthUser)"
         :is-downloading="isDownloading"
         stats
         @export="exportStats"
@@ -182,6 +182,7 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
   import { canExportStats } from '~/server/security'
+  import { useAuthStore } from '~/store/auth'
   import { Options } from '~/utils/options'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
   import { getExportUrl } from '~/utils/export/getExportUrl'
@@ -190,7 +191,7 @@
   const trpcClient = useTrpcClient()
 
   const isMinistryAgent = useMinistryAgent()
-  const user = useAuthUser()
+  const authStore = useAuthStore()
 
   withDefaults(
     defineProps<{
