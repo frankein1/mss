@@ -65,7 +65,6 @@
     </template>
 
     <BeneficiaryHistoryComments
-      v-if="comments.length > 0"
       :comments="comments"
       :history="history"
       @comment-added="onCommentAdded"
