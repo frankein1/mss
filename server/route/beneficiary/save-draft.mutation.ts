@@ -11,32 +11,11 @@ import {
   SaveBeneficiaryExternalOrganisationsInput,
   saveDraftSchema
 } from '~/server/schema'
-import {
-  canSaveToBeneficiaryBeneficiaryDraft,
-  SecurityRuleGrantee,
-  getBeneficiaryPermissions
-} from '~/server/security'
+import { getBeneficiaryPermissions } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { BeneficiaryRepo, DraftRepo } from '~/server/database'
-
-const securityCheck = async (
-  grantee: SecurityRuleGrantee,
-  input: SaveDraftInput
-) => {
-  const { id: draftId } = input
-  if (!draftId) {
-    return false
-  }
-  const beneficiaryDraft = await DraftRepo.findUniqueOrThrow(grantee, {
-    where: { id: draftId }
-  })
-  if (!beneficiaryDraft) {
-    return false
-  }
-
-  return canSaveToBeneficiaryBeneficiaryDraft(grantee, beneficiaryDraft)
-}
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
   input,
@@ -187,7 +166,7 @@ function getDataFromSources(
 
 export const saveDraftMutation = createMutation({
   inputValidation: saveDraftSchema,
-  securityCheck,
+  securityCheck: AllowSecurityCheck,
   handler,
   auditLog: {
     key: 'beneficiary.saveDraft',

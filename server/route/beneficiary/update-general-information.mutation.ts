@@ -2,7 +2,6 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   SecurityRuleGrantee,
-  canEditBeneficiaryReferents,
   getBeneficiaryPermissions,
   BeneficiaryPermissions
 } from '~/server/security'
@@ -51,7 +50,7 @@ const handler = async ({
   }
 
   let referentConnections
-  if (canEditBeneficiaryReferents(user, target)) {
+  if (permissions.set.referents) {
     const { referents: previousReferents } = target
     const previousReferentIds = previousReferents.map(({ id }) => id)
     referentConnections = prepareRelationConnections(
