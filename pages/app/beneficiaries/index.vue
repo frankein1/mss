@@ -1,8 +1,20 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaries()" />
-    <PageTitle :title="title" />
-    <BeneficiarySearchbar />
+    <div class="beneficiaries-header">
+      <PageTitle
+        class="title"
+        no-margin
+        :title="title"
+      />
+      <NuxtLink
+        :to="RoutePath.AppBeneficiariesAdd()"
+        class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line action"
+        target="_self"
+      >
+        Créer un·e bénéficiaire
+      </NuxtLink>
+    </div>
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
         <div class="feature-section">
@@ -69,7 +81,7 @@
   import { BeneficiarySort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
-  import { Route, Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
 
   const title = RouteTitle.AppBeneficiaries()
 
@@ -137,3 +149,21 @@
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  .beneficiaries-header {
+    display: grid;
+    gap: 0.5rem 0.5rem;
+    grid-template-areas: 'title action';
+    grid-template-columns: auto max-content;
+    align-items: center;
+  }
+
+  .title {
+    grid-area: title;
+  }
+
+  .action {
+    grid-area: action;
+  }
+</style>
