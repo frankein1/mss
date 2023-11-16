@@ -29,7 +29,12 @@
         </template>
         <template v-else>{{ EMPTY_TABLE_CELL }}</template>
       </td>
-      <td class="followup-types-data">{{ formatTableValue(followUpTypes) }}</td>
+      <td
+        class="followup-types-data"
+        :title="formatTableValue(followUpTypes)"
+      >
+        <span>{{ formatTableValue(followUpTypes) }}</span>
+      </td>
     </tr>
   </NuxtLink>
 </template>
@@ -68,7 +73,16 @@
 </script>
 
 <style lang="scss" scoped>
-  .address-data {
+  .address-data,
+  .followup-types-data {
     max-width: 15rem;
+  }
+
+  .followup-types-data span {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* number of lines to show */
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
   }
 </style>
