@@ -1,51 +1,38 @@
 <template>
-  <div class="filters-container">
+  <div>
     <form
-      :id="FILTERS_ID"
       ref="form"
       novalidate
-      class="filters"
-      :class="{
-        'full-width-filters': fullWidthFilters,
-        'fr-collapse': !alwaysExpanded
-      }"
     >
-      <template
-        v-for="filter in filters"
-        :key="filter.name"
+      <div
+        v-if="expandedByDefaultFilters.length"
+        class="filters"
+        :class="{
+          'full-width-filters': fullWidthFilters
+        }"
       >
-        <VeeInput
-          v-if="filter.type === FilterType.Date"
-          :name="filter.name"
-          :label="filter.label"
-          type="date"
-          @change-value="onChangeFilter($event, filter)"
+        <AtomFilter
+          v-for="filter in expandedByDefaultFilters"
+          :key="filter.name"
+          :filter="filter"
+          @change-filter="onChangeFilter($event, filter)"
         />
-        <VeeSearchInput
-          v-else-if="filter.type === FilterType.Search"
-          :name="filter.name"
-          :label="filter.label"
-          :placeholder="filter.placeholder"
-          @change-value="onChangeFilter($event, filter)"
+      </div>
+      <div
+        v-if="collapsedByDefaultFilters.length"
+        :id="COLLAPSED_FILTERS_ID"
+        class="fr-collapse filters"
+        :class="{
+          'full-width-filters': fullWidthFilters
+        }"
+      >
+        <AtomFilter
+          v-for="filter in collapsedByDefaultFilters"
+          :key="filter.name"
+          :filter="filter"
+          @change-filter="onChangeFilter($event, filter)"
         />
-        <VeeMultiSelect
-          v-else-if="filter.type === FilterType.SelectMultiple"
-          class="multi-select-filters"
-          :name="filter.name"
-          :label="filter.label"
-          :options="filter.options"
-          :placeholder="filter.label"
-          dropdown
-          @change-value="onChangeFilter($event, filter)"
-        />
-        <VeeSelect
-          v-else
-          :name="filter.name"
-          :label="filter.label"
-          :options="filter.options"
-          @change-value="onChangeFilter($event, filter)"
-        />
-      </template>
+      </div>
     </form>
     <div
       class="filter-summary"
@@ -68,7 +55,7 @@
         </ul>
       </div>
       <ul
-        v-if="!noReset || !expanded"
+        v-if="!noReset || collapsedByDefaultFilters.length"
         class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg"
       >
         <li v-if="!noReset">
@@ -81,11 +68,11 @@
             Réinitialiser
           </button>
         </li>
-        <li v-if="!alwaysExpanded">
+        <li v-if="collapsedByDefaultFilters.length">
           <button
             class="fr-btn fr-btn--secondary fr-icon-filter-line"
             aria-expanded="false"
-            :aria-controls="FILTERS_ID"
+            :aria-controls="COLLAPSED_FILTERS_ID"
             @click="expanded = !expanded"
           >
             {{ expandBtnLabel }}
@@ -113,7 +100,6 @@
     defineProps<{
       filters: FilterProp[]
       fullWidthFilters?: boolean
-      alwaysExpanded?: boolean
       noReset?: boolean
       initialSelectedValues?: {
         [filterName: string]: string | string[] | Date | null
@@ -123,11 +109,18 @@
     }>(),
     {
       fullWidthFilters: false,
-      alwaysExpanded: false,
       noReset: false,
       initialSelectedValues: () => ({}),
       resultsLabel: undefined
     }
+  )
+
+  const collapsedByDefaultFilters = computed(() =>
+    props.filters.filter(filter => !filter.alwaysExpanded)
+  )
+
+  const expandedByDefaultFilters = computed(() =>
+    props.filters.filter(filter => filter.alwaysExpanded)
   )
 
   const initialSelectedFilters = computed<SelectedFilters>(() =>
@@ -152,9 +145,9 @@
     filter: [filter: { [key: string]: string | string[] }]
   }>()
 
-  const FILTERS_ID = getRandomId('filters-')
+  const COLLAPSED_FILTERS_ID = getRandomId('filters-')
   const form = ref<HTMLFormElement | null>(null)
-  const expanded = ref<boolean>(props.alwaysExpanded)
+  const expanded = ref<boolean>(false)
   const selectedFilters = ref<SelectedFilters>(initialSelectedFilters.value)
 
   useForm({
