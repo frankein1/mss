@@ -5,7 +5,7 @@
   >
     <form
       v-if="!noLimitSelection"
-      class="fr-col-2"
+      class="fr-col-12 fr-col-sm-2"
     >
       <VeeSelect
         label="Résultats par page"
@@ -152,12 +152,21 @@
 </script>
 
 <style lang="scss" scoped>
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
   .fr-pagination__list {
     justify-content: center;
   }
 
   .fr-grid-row.fr-grid-row--middle {
     justify-content: space-between;
+    gap: 1rem;
+
+    @include dsfr-media-query.respond-from('sm') {
+      & {
+        gap: 0;
+      }
+    }
 
     &.no-limit {
       justify-content: center;

@@ -151,12 +151,20 @@
 </script>
 
 <style lang="scss" scoped>
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
   .beneficiaries-header {
     display: grid;
     gap: 0.5rem 0.5rem;
-    grid-template-areas: 'title action';
+    grid-template-areas: 'title' 'action';
     grid-template-columns: auto max-content;
     align-items: center;
+  }
+
+  @include dsfr-media-query.respond-from('md') {
+    .beneficiaries-header {
+      grid-template-areas: 'title action';
+    }
   }
 
   .title {
