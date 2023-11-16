@@ -61,7 +61,7 @@
         <li v-if="!noReset">
           <button
             v-show="hasFilters"
-            class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-close-line"
+            class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-close-circle-line"
             type="button"
             @click.prevent="onReset"
           >
