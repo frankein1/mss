@@ -1,9 +1,15 @@
 import { Prisma } from '@prisma/client'
 import { BeneficiaryFilterInput } from '~/server/schema'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
+import { prepareBeneficiarySearchConditions } from '~/utils/filters'
 
 export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
+
+  if (filters.search) {
+    const searchConditions = prepareBeneficiarySearchConditions(filters.search)
+    formattedFilters.AND = searchConditions.AND
+  }
 
   if (filters.followupTypes) {
     const typesListFilter: Prisma.FollowupTypeWhereInput = {

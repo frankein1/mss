@@ -6,11 +6,7 @@ import {
 } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryRepo } from '~/server/database'
-
-const tokenToSearchCondition = (token: string) => ({
-  contains: token,
-  mode: 'insensitive'
-})
+import { prepareBeneficiarySearchConditions } from '~/utils/filters'
 
 const securityCheck = AllowSecurityCheck
 
@@ -22,18 +18,10 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   // TODO unit test
-  const tokens = query.trim().replace(/%/g, '').split(/\s+/g)
-
-  const fields = ['firstName', 'birthName', 'usualName', 'fileNumber'] as const
-
-  const searchConditions = tokens.map(token => ({
-    OR: fields.map(field => ({
-      [field]: tokenToSearchCondition(token)
-    }))
-  }))
+  const searchConditions = prepareBeneficiarySearchConditions(query)
 
   const where = {
-    AND: searchConditions,
+    ...searchConditions,
     id: { notIn: excludedIds }
   }
 
