@@ -1,12 +1,9 @@
 <template>
-  <div>
-    <AtomFilters
-      :filters="beneficiaryDocumentFilters"
-      always-expanded
-      no-reset
-      @filter="onFilter"
-    />
-  </div>
+  <AtomFilters
+    :filters="beneficiaryDocumentFilters"
+    no-reset
+    @filter="onFilter"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -28,13 +25,15 @@
       name: 'type',
       label: 'Type de document',
       options: withEmptyValue(documentTypeOptions, 'Tous'),
-      type: FilterType.SelectOne
+      type: FilterType.SelectOne,
+      alwaysExpanded: true
     },
     {
       name: 'tags',
       label: 'Thème du document',
       options: withEmptyValue(documentTagOptions, 'Tous'),
-      type: FilterType.SelectOne
+      type: FilterType.SelectOne,
+      alwaysExpanded: true
     }
   ]
 

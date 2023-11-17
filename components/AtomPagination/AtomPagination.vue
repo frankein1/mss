@@ -5,7 +5,7 @@
   >
     <form
       v-if="!noLimitSelection"
-      class="fr-col-2"
+      class="fr-col-12 fr-col-sm-2"
     >
       <VeeSelect
         label="Résultats par page"
@@ -119,9 +119,10 @@
     REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
 
-  withDefaults(
+  const props = withDefaults(
     defineProps<{
       page: number
+      perPage: number
       totalPages: number
       noLimitSelection?: boolean
     }>(),
@@ -132,34 +133,40 @@
     changePage: [data: { pageNumber: number; limitValue: number }]
   }>()
 
-  const limit = ref(REQUEST_LIMIT_DEFAULT)
-
   useForm<{ resultsPerPage: string }>({
     initialValues: {
-      resultsPerPage: String(limit.value)
+      resultsPerPage: String(props.perPage)
     }
   })
 
   function changeLimit(limitValue: string) {
-    limit.value = Number(limitValue)
-    emit('changePage', { pageNumber: 1, limitValue: limit.value })
+    emit('changePage', { pageNumber: 1, limitValue: Number(limitValue) })
   }
 
   function onChangePage(pageNumber: number) {
     emit('changePage', {
       pageNumber,
-      limitValue: limit.value
+      limitValue: props.perPage
     })
   }
 </script>
 
 <style lang="scss" scoped>
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
   .fr-pagination__list {
     justify-content: center;
   }
 
   .fr-grid-row.fr-grid-row--middle {
     justify-content: space-between;
+    gap: 1rem;
+
+    @include dsfr-media-query.respond-from('sm') {
+      & {
+        gap: 0;
+      }
+    }
 
     &.no-limit {
       justify-content: center;

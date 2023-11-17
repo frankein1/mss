@@ -6,3 +6,4 @@ export {
 export { prepareFollowupFilters } from './prepareFollowupFilters'
 export { prepareBeneficiaryFilters } from './prepareBeneficiaryFilters'
 export { prepareHelpRequestFilters } from './prepareHelpRequestFilters'
+export { prepareBeneficiarySearchConditions } from './prepareBeneficiarySearchConditions'

@@ -1,11 +1,26 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaries()" />
-    <PageTitle :title="title" />
-    <BeneficiarySearchbar />
+    <div class="beneficiaries-header">
+      <PageTitle
+        class="title"
+        no-margin
+        :title="title"
+      />
+      <NuxtLink
+        :to="RoutePath.AppBeneficiariesAdd()"
+        class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line action"
+        target="_self"
+      >
+        Créer un·e bénéficiaire
+      </NuxtLink>
+    </div>
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
       <div class="fr-col-12">
-        <main class="main-container fr-py-3w">
+        <div class="feature-section">
+          <BeneficiaryFilters @filter="filters = $event" />
+        </div>
+        <main class="feature-section fr-py-3w fr-mt-2w">
           <AtomAlert
             v-if="error"
             class="fr-mx-5v"
@@ -13,13 +28,8 @@
             message="La liste des bénéficiaires n'a pas pu être chargée."
           />
           <template v-else>
-            <BeneficiaryFilters
-              class="fr-px-5v"
-              @filter="filters = $event"
-            />
-            <hr />
-            <div class="fr-mb-2w fr-mx-5v results-container">
-              <p class="fr-hint-text results-count">
+            <div class="fr-mb-2w results-container">
+              <p class="results-count">
                 {{ beneficiariesCount }} bénéficiaire(s)
               </p>
               <ExportDataButton
@@ -41,14 +51,9 @@
               v-show="!pending"
               class="fr-mt-4w fr-px-5v"
               :page="page"
+              :per-page="perPage"
               :total-pages="totalPages"
               @change-page="updatePagination($event)"
-            />
-
-            <UsersActivity
-              class="fr-mt-4w fr-px-5v"
-              collection="beneficiaries"
-              :route-with-params="RoutePath.AppBeneficiary"
             />
           </template>
         </main>
@@ -60,8 +65,8 @@
 <script lang="ts" setup>
   import { useFiltersStore } from '~/store/filters'
   import {
-    REQUEST_LIMIT_DEFAULT,
-    FAILED_DOWNLOAD_ERROR_MESSAGE
+    FAILED_DOWNLOAD_ERROR_MESSAGE,
+    BENEFICIARIES_REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
@@ -87,7 +92,7 @@
   const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
   const orderBy = ref<BeneficiarySort[]>([{ usualName: SortOrder.Asc }])
   const page = ref(1)
-  const perPage = ref(REQUEST_LIMIT_DEFAULT)
+  const perPage = ref(BENEFICIARIES_REQUEST_LIMIT_DEFAULT)
   const isDownloading = ref(false)
 
   const { updatePagination } = usePagination(page, perPage, filters)
@@ -140,8 +145,27 @@
 </script>
 
 <style lang="scss" scoped>
-  .table-container {
-    // 21.5rem seems to come up out of the box. It corresponds to the total height of elements existing above the table
-    max-height: calc(100vh - 21.5rem);
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
+  .beneficiaries-header {
+    display: grid;
+    gap: 0.5rem 0.5rem;
+    grid-template-areas: 'title' 'action';
+    grid-template-columns: auto max-content;
+    align-items: center;
+  }
+
+  @include dsfr-media-query.respond-from('md') {
+    .beneficiaries-header {
+      grid-template-areas: 'title action';
+    }
+  }
+
+  .title {
+    grid-area: title;
+  }
+
+  .action {
+    grid-area: action;
   }
 </style>

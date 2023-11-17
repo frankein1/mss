@@ -1,91 +1,87 @@
 <template>
-  <div class="filters-container">
-    <form
-      :id="FILTERS_ID"
-      ref="form"
-      novalidate
+  <form
+    ref="form"
+    novalidate
+  >
+    <div
+      v-if="expandedByDefaultFilters.length"
       class="filters"
       :class="{
-        'full-width-filters': fullWidthFilters,
-        'fr-collapse': !alwaysExpanded
+        'full-width-filters': fullWidthFilters
       }"
     >
-      <template
-        v-for="filter in filters"
+      <AtomFilter
+        v-for="filter in expandedByDefaultFilters"
         :key="filter.name"
-      >
-        <VeeInput
-          v-if="filter.type === FilterType.Date"
-          :name="filter.name"
-          :label="filter.label"
-          type="date"
-          @change-value="onChangeFilter($event, filter)"
-        />
-        <VeeMultiSelect
-          v-else-if="filter.type === FilterType.SelectMultiple"
-          class="multi-select-filters"
-          :name="filter.name"
-          :label="filter.label"
-          :options="filter.options"
-          :placeholder="filter.label"
-          dropdown
-          @change-value="onChangeFilter($event, filter)"
-        />
-        <VeeSelect
-          v-else
-          :name="filter.name"
-          :label="filter.label"
-          :options="filter.options"
-          @change-value="onChangeFilter($event, filter)"
-        />
-      </template>
-    </form>
+        :filter="filter"
+        @change-filter="onChangeFilter($event, filter)"
+      />
+    </div>
     <div
-      class="filter-summary"
-      :class="{ 'filter-summary__no-margin': noMargin }"
+      v-if="collapsedByDefaultFilters.length"
+      :id="COLLAPSED_FILTERS_ID"
+      class="fr-collapse filters"
+      :class="{
+        'full-width-filters': fullWidthFilters
+      }"
     >
-      <div class="filter-left-section">
-        <p v-if="resultsLabel">{{ resultsLabel }}</p>
-        <ul
-          v-show="!expanded && Object.keys(selectedFilters).length"
-          class="fr-tags-group"
-        >
-          <li
-            v-for="({ filterLabel, valueLabel }, name) in selectedFilters"
-            :key="name"
-          >
-            <p class="fr-tag fr-icon-filter-line fr-tag--icon-left">
-              {{ filterLabel }} : {{ valueLabel }}
-            </p>
-          </li>
-        </ul>
-      </div>
+      <AtomFilter
+        v-for="filter in collapsedByDefaultFilters"
+        :key="filter.name"
+        :filter="filter"
+        @change-filter="onChangeFilter($event, filter)"
+      />
+    </div>
+  </form>
+  <div
+    class="filter-summary"
+    :class="{ 'filter-summary__no-margin': noMargin }"
+  >
+    <div class="filter-left-section">
+      <p v-if="resultsLabel">{{ resultsLabel }}</p>
       <ul
-        v-if="!noReset || !expanded"
-        class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg"
+        v-show="!expanded && Object.keys(selectedFilters).length"
+        class="fr-tags-group"
       >
-        <li v-if="!noReset">
-          <button
-            v-show="hasFilters"
-            class="fr-btn fr-icon-filter-line"
-            type="button"
-            @click.prevent="onReset"
-          >
-            Réinitialiser
-          </button>
-        </li>
-        <li v-if="!alwaysExpanded">
-          <button
-            class="fr-btn fr-btn--secondary fr-icon-filter-line"
-            aria-expanded="false"
-            :aria-controls="FILTERS_ID"
-            @click="expanded = !expanded"
-          >
-            {{ expandBtnLabel }}
-          </button>
+        <li
+          v-for="({ filterLabel, valueLabel }, name) in selectedFilters"
+          :key="name"
+        >
+          <p class="fr-tag fr-icon-filter-line fr-tag--icon-left">
+            {{ filterLabel }} : {{ valueLabel }}
+          </p>
         </li>
       </ul>
     </div>
+    <ul
+      v-if="!noReset || collapsedByDefaultFilters.length"
+      class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg"
+    >
+      <li v-if="!noReset">
+        <button
+          v-show="hasFilters"
+          class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-close-circle-line"
+          type="button"
+          @click.prevent="onReset"
+        >
+          Réinitialiser
+        </button>
+      </li>
+      <li v-if="collapsedByDefaultFilters.length">
+        <button
+          class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-right"
+          :class="{
+            'fr-icon-arrow-down-s-line': !expanded,
+            'fr-icon-arrow-up-s-line': expanded
+          }"
+          aria-expanded="false"
+          :aria-controls="COLLAPSED_FILTERS_ID"
+          @click="expanded = !expanded"
+        >
+          {{ expandBtnLabel }}
+        </button>
+      </li>
+    </ul>
   </div>
 </template>
 
@@ -106,7 +102,6 @@
     defineProps<{
       filters: FilterProp[]
       fullWidthFilters?: boolean
-      alwaysExpanded?: boolean
       noReset?: boolean
       initialSelectedValues?: {
         [filterName: string]: string | string[] | Date | null
@@ -116,11 +111,18 @@
     }>(),
     {
       fullWidthFilters: false,
-      alwaysExpanded: false,
       noReset: false,
       initialSelectedValues: () => ({}),
       resultsLabel: undefined
     }
+  )
+
+  const collapsedByDefaultFilters = computed(() =>
+    props.filters.filter(filter => !filter.alwaysExpanded)
+  )
+
+  const expandedByDefaultFilters = computed(() =>
+    props.filters.filter(filter => filter.alwaysExpanded)
   )
 
   const initialSelectedFilters = computed<SelectedFilters>(() =>
@@ -145,9 +147,9 @@
     filter: [filter: { [key: string]: string | string[] }]
   }>()
 
-  const FILTERS_ID = getRandomId('filters-')
+  const COLLAPSED_FILTERS_ID = getRandomId('filters-')
   const form = ref<HTMLFormElement | null>(null)
-  const expanded = ref<boolean>(props.alwaysExpanded)
+  const expanded = ref<boolean>(false)
   const selectedFilters = ref<SelectedFilters>(initialSelectedFilters.value)
 
   useForm({
@@ -155,7 +157,7 @@
   })
 
   const expandBtnLabel = computed(() =>
-    expanded.value ? 'Masquer les filtres' : 'Afficher les filtres'
+    expanded.value ? 'Voir moins de filtres' : 'Voir tous les filtres'
   )
 
   const hasFilters = computed<boolean>(
@@ -227,7 +229,7 @@
     filter: FilterProp,
     value: string | string[]
   ): string {
-    if (filter.type === FilterType.Date) {
+    if (filter.type === FilterType.Date || filter.type === FilterType.Search) {
       return ''
     }
     const selectedOptions = getSelectedOptions(

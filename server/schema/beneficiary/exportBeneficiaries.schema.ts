@@ -6,7 +6,8 @@ export const exportBeneficiariesSchema = z.object({
   orderBy: z.array(
     z.object({
       firstName: z.nativeEnum(Prisma.SortOrder).optional(),
-      usualName: z.nativeEnum(Prisma.SortOrder).optional()
+      usualName: z.nativeEnum(Prisma.SortOrder).optional(),
+      birthDate: z.nativeEnum(Prisma.SortOrder).optional()
     })
   ),
   filters: beneficiaryFilterSchema

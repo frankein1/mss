@@ -1,10 +1,8 @@
 <template>
-  <div>
-    <AtomFilters
-      :filters="usersFilters"
-      @filter="emit('filter', $event)"
-    />
-  </div>
+  <AtomFilters
+    :filters="usersFilters"
+    @filter="emit('filter', $event)"
+  />
 </template>
 
 <script setup lang="ts">

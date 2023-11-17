@@ -1,5 +1,6 @@
 export enum FilterType {
   Date = 'date',
   SelectOne = 'selectOne',
-  SelectMultiple = 'selectMultiple'
+  SelectMultiple = 'selectMultiple',
+  Search = 'search'
 }

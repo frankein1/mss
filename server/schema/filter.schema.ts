@@ -35,10 +35,8 @@ const statFilterSchema = z.object({
 type StatFilterInput = z.infer<typeof statFilterSchema>
 
 const beneficiaryFilterSchema = z.object({
+  search: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
-  cities: z
-    .array(stringConstraint.max(50, maxStringLengthMessage(50)))
-    .nullish(),
   referents: z.array(z.string().uuid()).nullish(),
   status: z.nativeEnum(BeneficiaryStatus).nullish(),
   ageGroup: z.nativeEnum(AgeGroup).nullish()

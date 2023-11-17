@@ -1,22 +1,20 @@
 <template>
-  <div>
-    <AtomAlert
-      v-if="fetchError"
-      class="fr-mb-2w"
-      :alert-type="AlertType.Error"
-      :message="fetchError"
-    />
-    <AtomLoader
-      v-else-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomFilters
-      v-else-if="beneficiaryFilters"
-      :filters="beneficiaryFilters"
-      :initial-selected-values="INITIAL_VALUES"
-      @filter="onFilter"
-    />
-  </div>
+  <AtomAlert
+    v-if="fetchError"
+    class="fr-mb-2w"
+    :alert-type="AlertType.Error"
+    :message="fetchError"
+  />
+  <AtomLoader
+    v-else-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomFilters
+    v-else-if="beneficiaryFilters"
+    :filters="beneficiaryFilters"
+    :initial-selected-values="INITIAL_VALUES"
+    @filter="onFilter"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -26,11 +24,9 @@
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
   import { ageGroupOptions } from '~/client/options/ageGroup'
   import { toOptions, withEmptyValue } from '~/utils/options'
-  import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { EventCategory, BeneficiaryFilterEventAction } from '~/types/matomo'
-  import { beneficiaryFieldLabels } from '~/client/labels'
   import { useAuthStore } from '~/store/auth'
   import { isReferent } from '~/server/security'
 
@@ -68,25 +64,8 @@
     }
   )
 
-  const {
-    data: citiesOptions,
-    pending: citieOptionsPending,
-    error: citieOptionsError
-  } = await trpcClient.config.getBeneficiariesCities.useQuery(
-    {},
-    {
-      transform: cities => {
-        const definedCities = cities.filter(hasDefinedCity)
-        return toOptions(definedCities, 'city', 'city')
-      }
-    }
-  )
-
   const pending = computed(
-    () =>
-      followupTypeOptionsPending.value ||
-      agentOptionsPending.value ||
-      citieOptionsPending.value
+    () => followupTypeOptionsPending.value || agentOptionsPending.value
   )
 
   const fetchError = computed(() => {
@@ -96,27 +75,28 @@
     if (agentOptionsError.value) {
       return "La liste des agents n'a pas pu être chargée."
     }
-    if (citieOptionsError.value) {
-      return "La liste des villes n'a pas pu être chargée."
-    }
     return ''
   })
 
   const beneficiaryFilters = computed(() => {
-    if (
-      !followupTypeOptions.value ||
-      !agentOptions.value ||
-      !citiesOptions.value
-    ) {
+    if (!followupTypeOptions.value || !agentOptions.value) {
       return null
     }
 
     const filters: FilterProp[] = [
       {
+        name: 'search',
+        label: 'Recherche',
+        type: FilterType.Search,
+        placeholder: 'Rechercher un·e bénéficiaire',
+        alwaysExpanded: true
+      },
+      {
         name: 'followupTypes',
         label: "Type d'accompagnement",
         options: followupTypeOptions.value,
         type: FilterType.SelectMultiple,
+        alwaysExpanded: true,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.FollowupType
       }
@@ -128,19 +108,9 @@
         label: 'Référent',
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
+        alwaysExpanded: true,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.Referent
-      })
-    }
-
-    if (citiesOptions.value.size) {
-      filters.push({
-        name: 'cities',
-        label: beneficiaryFieldLabels.city,
-        options: citiesOptions.value,
-        type: FilterType.SelectMultiple,
-        matomoEventCategory: EventCategory.BeneficiaryFilter,
-        matomoEventAction: BeneficiaryFilterEventAction.City
       })
     }
 
