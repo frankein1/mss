@@ -50,13 +50,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryPermissions } from '~/server/security'
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import { FollowupTypeIdAndName } from '~/types/followupType'
 
   defineProps<{
     beneficiary: GetBeneficiaryOutput
     followupTypes: FollowupTypeIdAndName[]
-    permissions: BeneficiaryPermissions
   }>()
 </script>

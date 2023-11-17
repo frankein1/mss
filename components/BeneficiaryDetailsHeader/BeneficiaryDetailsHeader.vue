@@ -30,7 +30,7 @@
   defineProps<{
     title: string
     beneficiary: GetBeneficiaryOutput
-    permissions: BeneficiaryPermissions
+    permissions: BeneficiaryPermissions | undefined
   }>()
 
   const emit = defineEmits<{ deleted: [] }>()

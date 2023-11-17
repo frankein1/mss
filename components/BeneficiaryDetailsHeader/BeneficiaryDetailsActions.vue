@@ -1,6 +1,6 @@
 <template>
   <ul class="fr-btns-group fr-btns-group--inline">
-    <li v-if="permissions.delete.beneficiary">
+    <li v-if="permissions?.delete.beneficiary">
       <button
         class="fr-btn fr-btn--secondary fr-icon-delete-line btn-delete-action"
         data-fr-opened="false"
@@ -42,7 +42,7 @@
 
   const props = defineProps<{
     beneficiaryId: string
-    permissions: BeneficiaryPermissions
+    permissions: BeneficiaryPermissions | undefined
   }>()
 
   const emit = defineEmits<{ deleted: [] }>()
