@@ -5,7 +5,6 @@
     />
 
     <BeneficiaryDetailsHeader
-      v-if="permissions"
       :beneficiary="beneficiary"
       :title="title"
       :permissions="permissions"
@@ -14,7 +13,6 @@
 
     <hr />
     <BeneficiaryDetailsHistoryActions
-      v-if="permissions"
       :beneficiary-id="beneficiary.id"
       :permissions="permissions"
       class="fr-pb-3w"
@@ -38,9 +36,7 @@
           message="La fiche bénéficiaire n'a pas pu être chargée."
         />
         <BeneficiaryInfo
-          v-if="permissions"
           :beneficiary="beneficiary"
-          :permissions="permissions"
           :followup-types="followupTypes"
         />
       </AtomTab>
@@ -97,7 +93,7 @@
     id: beneficiaryId
   })
 
-  const beneficiary = computed(() => data.value?.beneficiary)
+  const beneficiary = computed(() => data.value?.beneficiary || null)
   const permissions = computed(() => data.value?.permissions)
   const title = RouteTitle.AppBeneficiary(beneficiary.value?.general || null)
 

@@ -14,7 +14,7 @@
           Synthèse d'entretien
         </NuxtLink>
       </li>
-      <li v-if="permissions.create.helpRequest">
+      <li v-if="permissions?.create.helpRequest">
         <NuxtLink
           :to="`${RoutePath.AppBeneficiaryHelpRequestAdd(beneficiaryId)}`"
           class="fr-btn fr-icon-file-add-line help-request-btn"
@@ -44,7 +44,7 @@
 
   defineProps<{
     beneficiaryId: string
-    permissions: BeneficiaryPermissions
+    permissions: BeneficiaryPermissions | undefined
   }>()
 </script>
 
