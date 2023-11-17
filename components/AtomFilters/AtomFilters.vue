@@ -1,89 +1,87 @@
 <template>
-  <div>
-    <form
-      ref="form"
-      novalidate
-    >
-      <div
-        v-if="expandedByDefaultFilters.length"
-        class="filters"
-        :class="{
-          'full-width-filters': fullWidthFilters
-        }"
-      >
-        <AtomFilter
-          v-for="filter in expandedByDefaultFilters"
-          :key="filter.name"
-          :filter="filter"
-          @change-filter="onChangeFilter($event, filter)"
-        />
-      </div>
-      <div
-        v-if="collapsedByDefaultFilters.length"
-        :id="COLLAPSED_FILTERS_ID"
-        class="fr-collapse filters"
-        :class="{
-          'full-width-filters': fullWidthFilters
-        }"
-      >
-        <AtomFilter
-          v-for="filter in collapsedByDefaultFilters"
-          :key="filter.name"
-          :filter="filter"
-          @change-filter="onChangeFilter($event, filter)"
-        />
-      </div>
-    </form>
+  <form
+    ref="form"
+    novalidate
+  >
     <div
-      class="filter-summary"
-      :class="{ 'filter-summary__no-margin': noMargin }"
+      v-if="expandedByDefaultFilters.length"
+      class="filters"
+      :class="{
+        'full-width-filters': fullWidthFilters
+      }"
     >
-      <div class="filter-left-section">
-        <p v-if="resultsLabel">{{ resultsLabel }}</p>
-        <ul
-          v-show="!expanded && Object.keys(selectedFilters).length"
-          class="fr-tags-group"
-        >
-          <li
-            v-for="({ filterLabel, valueLabel }, name) in selectedFilters"
-            :key="name"
-          >
-            <p class="fr-tag fr-icon-filter-line fr-tag--icon-left">
-              {{ filterLabel }} : {{ valueLabel }}
-            </p>
-          </li>
-        </ul>
-      </div>
+      <AtomFilter
+        v-for="filter in expandedByDefaultFilters"
+        :key="filter.name"
+        :filter="filter"
+        @change-filter="onChangeFilter($event, filter)"
+      />
+    </div>
+    <div
+      v-if="collapsedByDefaultFilters.length"
+      :id="COLLAPSED_FILTERS_ID"
+      class="fr-collapse filters"
+      :class="{
+        'full-width-filters': fullWidthFilters
+      }"
+    >
+      <AtomFilter
+        v-for="filter in collapsedByDefaultFilters"
+        :key="filter.name"
+        :filter="filter"
+        @change-filter="onChangeFilter($event, filter)"
+      />
+    </div>
+  </form>
+  <div
+    class="filter-summary"
+    :class="{ 'filter-summary__no-margin': noMargin }"
+  >
+    <div class="filter-left-section">
+      <p v-if="resultsLabel">{{ resultsLabel }}</p>
       <ul
-        v-if="!noReset || collapsedByDefaultFilters.length"
-        class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg"
+        v-show="!expanded && Object.keys(selectedFilters).length"
+        class="fr-tags-group"
       >
-        <li v-if="!noReset">
-          <button
-            v-show="hasFilters"
-            class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-close-circle-line"
-            type="button"
-            @click.prevent="onReset"
-          >
-            Réinitialiser
-          </button>
-        </li>
-        <li v-if="collapsedByDefaultFilters.length">
-          <button
-            class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-right"
-            :class="{
-              'fr-icon-arrow-down-s-line': !expanded,
-              'fr-icon-arrow-up-s-line': expanded
-            }"
-            aria-expanded="false"
-            :aria-controls="COLLAPSED_FILTERS_ID"
-            @click="expanded = !expanded"
-          >
-            {{ expandBtnLabel }}
-          </button>
+        <li
+          v-for="({ filterLabel, valueLabel }, name) in selectedFilters"
+          :key="name"
+        >
+          <p class="fr-tag fr-icon-filter-line fr-tag--icon-left">
+            {{ filterLabel }} : {{ valueLabel }}
+          </p>
         </li>
       </ul>
     </div>
+    <ul
+      v-if="!noReset || collapsedByDefaultFilters.length"
+      class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg"
+    >
+      <li v-if="!noReset">
+        <button
+          v-show="hasFilters"
+          class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-close-circle-line"
+          type="button"
+          @click.prevent="onReset"
+        >
+          Réinitialiser
+        </button>
+      </li>
+      <li v-if="collapsedByDefaultFilters.length">
+        <button
+          class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-right"
+          :class="{
+            'fr-icon-arrow-down-s-line': !expanded,
+            'fr-icon-arrow-up-s-line': expanded
+          }"
+          aria-expanded="false"
+          :aria-controls="COLLAPSED_FILTERS_ID"
+          @click="expanded = !expanded"
+        >
+          {{ expandBtnLabel }}
+        </button>
+      </li>
+    </ul>
   </div>
 </template>
 

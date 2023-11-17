@@ -51,10 +51,10 @@
     beneficiary: BeneficiaryItem
   }>()
 
-  const addressCodeAndCity = computed(
-    () =>
-      (props.beneficiary.zipcode ? props.beneficiary.zipcode + ' ' : '') +
-      (props.beneficiary.city ? props.beneficiary.city : '')
+  const addressCodeAndCity = computed(() =>
+    [props.beneficiary.zipcode, props.beneficiary.city]
+      .filter(v => !!v)
+      .join(' ')
   )
 
   const followUpTypes = computed(() =>
@@ -78,7 +78,7 @@
     max-width: 15rem;
   }
 
-  .followup-types-data span {
+  .followup-types-data > * {
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* number of lines to show */

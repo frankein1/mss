@@ -1,22 +1,20 @@
 <template>
-  <div>
-    <AtomAlert
-      v-if="fetchError"
-      class="fr-mb-2w"
-      :alert-type="AlertType.Error"
-      :message="fetchError"
-    />
-    <AtomLoader
-      v-else-if="pending"
-      class="fr-mx-auto fr-mb-2w"
-    />
-    <AtomFilters
-      v-else-if="filters"
-      :filters="filters"
-      :initial-selected-values="filtersStore.helpRequest || {}"
-      @filter="onFilter"
-    />
-  </div>
+  <AtomAlert
+    v-if="fetchError"
+    class="fr-mb-2w"
+    :alert-type="AlertType.Error"
+    :message="fetchError"
+  />
+  <AtomLoader
+    v-else-if="pending"
+    class="fr-mx-auto fr-mb-2w"
+  />
+  <AtomFilters
+    v-else-if="filters"
+    :filters="filters"
+    :initial-selected-values="filtersStore.helpRequest || {}"
+    @filter="onFilter"
+  />
 </template>
 
 <script lang="ts" setup>

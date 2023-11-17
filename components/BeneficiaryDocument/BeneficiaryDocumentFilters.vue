@@ -1,11 +1,9 @@
 <template>
-  <div>
-    <AtomFilters
-      :filters="beneficiaryDocumentFilters"
-      no-reset
-      @filter="onFilter"
-    />
-  </div>
+  <AtomFilters
+    :filters="beneficiaryDocumentFilters"
+    no-reset
+    @filter="onFilter"
+  />
 </template>
 
 <script lang="ts" setup>

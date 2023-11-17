@@ -20,7 +20,6 @@
       :placeholder="placeholder"
       type="text"
       :aria-describedby="ariaDescribedby"
-      :value="bindedValue"
       @input="onInput"
       @change="onChange"
     />
@@ -64,16 +63,11 @@
   // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
   const name = toRef(() => props.name)
 
-  const {
-    errorMessage: error,
-    value: refValue,
-    handleChange,
-    setValue
-  } = useField<string | number | Date>(name)
+  const { errorMessage: error, handleChange } = useField<
+    string | number | Date
+  >(name)
 
   const { id, errorId } = useFormFieldId(name)
-
-  const bindedValue = computed(() => refValue?.value)
 
   const ariaDescribedby = computed(() =>
     error.value ? errorId.value : undefined
@@ -90,6 +84,5 @@
     const value = (event.target as HTMLInputElement).value
     emit('changeValue', value)
     handleChange(event)
-    setValue(value)
   }
 </script>

@@ -1,22 +1,20 @@
 <template>
-  <div>
-    <AtomAlert
-      v-if="fetchError"
-      class="fr-mb-2w"
-      :alert-type="AlertType.Error"
-      :message="fetchError"
-    />
-    <AtomLoader
-      v-else-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomFilters
-      v-else-if="beneficiaryFilters"
-      :filters="beneficiaryFilters"
-      :initial-selected-values="INITIAL_VALUES"
-      @filter="onFilter"
-    />
-  </div>
+  <AtomAlert
+    v-if="fetchError"
+    class="fr-mb-2w"
+    :alert-type="AlertType.Error"
+    :message="fetchError"
+  />
+  <AtomLoader
+    v-else-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomFilters
+    v-else-if="beneficiaryFilters"
+    :filters="beneficiaryFilters"
+    :initial-selected-values="INITIAL_VALUES"
+    @filter="onFilter"
+  />
 </template>
 
 <script lang="ts" setup>
@@ -92,7 +90,6 @@
         type: FilterType.Search,
         placeholder: 'Rechercher un·e bénéficiaire',
         alwaysExpanded: true
-        // TODO: add Matomo event?
       },
       {
         name: 'followupTypes',
