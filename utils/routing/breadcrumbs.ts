@@ -1,7 +1,27 @@
 import { Route, RoutePath, RouteTitle } from './'
 import type { BeneficiaryNames } from '~/types/beneficiary'
 
-type BeneficiaryNamesWithId = BeneficiaryNames & { id: string }
+type FlatBeneficiaryNamesWithId = { id: string } & BeneficiaryNames
+
+type GeneralBeneficiaryNamesWithId = { id: string; general: BeneficiaryNames }
+
+type BeneficiaryNamesWithId =
+  | FlatBeneficiaryNamesWithId
+  | GeneralBeneficiaryNamesWithId
+
+const beneficiaryNamesWithIdToBeneficiaryNames = (
+  beneficiary: BeneficiaryNamesWithId | null
+) => {
+  if (!beneficiary) {
+    return null
+  }
+
+  if ('general' in beneficiary) {
+    return beneficiary.general
+  }
+
+  return beneficiary
+}
 
 const OverviewBreadcrumb = () => [
   {
@@ -35,7 +55,9 @@ const BeneficiaryBreadcrumb = (
     | undefined
 ) => {
   const beneficiaryBreadcrumbSegment = {
-    text: RouteTitle.AppBeneficiary(beneficiary),
+    text: RouteTitle.AppBeneficiary(
+      beneficiaryNamesWithIdToBeneficiaryNames(beneficiary)
+    ),
     to: RoutePath.AppBeneficiary(beneficiary?.id, { originPage })
   }
 
@@ -99,7 +121,9 @@ export const Breadcrumb = {
   [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNamesWithId | null) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
-      text: RouteTitle.AppBeneficiaryEdit(beneficiary),
+      text: RouteTitle.AppBeneficiaryEdit(
+        beneficiaryNamesWithIdToBeneficiaryNames(beneficiary)
+      ),
       to: RoutePath.AppBeneficiaryEditInfo(beneficiary?.id || '')
     }
   ],
@@ -108,7 +132,9 @@ export const Breadcrumb = {
   [Route.AppBeneficiaryPrint]: (beneficiary: BeneficiaryNamesWithId | null) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
-      text: RouteTitle.AppBeneficiaryPrint(beneficiary),
+      text: RouteTitle.AppBeneficiaryPrint(
+        beneficiaryNamesWithIdToBeneficiaryNames(beneficiary)
+      ),
       to: RoutePath.AppBeneficiaryPrint(beneficiary?.id || '')
     }
   ],
@@ -119,14 +145,16 @@ export const Breadcrumb = {
   ) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
-      text: RouteTitle.AppBeneficiaryFollowupAdd(beneficiary),
+      text: RouteTitle.AppBeneficiaryFollowupAdd(
+        beneficiaryNamesWithIdToBeneficiaryNames(beneficiary)
+      ),
       to: RoutePath.AppBeneficiaryFollowupAdd(beneficiary?.id || '')
     }
   ],
 
   // FIXME: BeneficiaryFollowupEdit depends on the access to Beneficiary
   [Route.AppBeneficiaryFollowupEdit]: (
-    followup: { id: string; beneficiary: BeneficiaryNamesWithId } | null
+    followup: { id: string; beneficiary: FlatBeneficiaryNamesWithId } | null
   ) => [
     ...BeneficiaryBreadcrumb(followup?.beneficiary || null),
     {
@@ -146,14 +174,16 @@ export const Breadcrumb = {
   ) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
-      text: RouteTitle.AppBeneficiaryHelpRequestAdd(beneficiary),
+      text: RouteTitle.AppBeneficiaryHelpRequestAdd(
+        beneficiaryNamesWithIdToBeneficiaryNames(beneficiary)
+      ),
       to: RoutePath.AppBeneficiaryHelpRequestAdd(beneficiary?.id || '')
     }
   ],
 
   // FIXME: BeneficiaryHelpRequestEdit depends on the access to Beneficiary
   [Route.AppBeneficiaryHelpRequestEdit]: (
-    helpRequest: { id: string; beneficiary: BeneficiaryNamesWithId } | null
+    helpRequest: { id: string; beneficiary: FlatBeneficiaryNamesWithId } | null
   ) => [
     ...BeneficiaryBreadcrumb(helpRequest?.beneficiary || null),
     {
