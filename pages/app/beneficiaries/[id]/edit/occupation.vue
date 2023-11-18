@@ -96,6 +96,7 @@
       majorChildrenMainIncomeAmount: prismaDecimalToNumber(
         occupationIncome?.majorChildrenMainIncomeAmount
       ),
+      incomes: occupationIncome?.incomes || [],
       pensionOrganisations: occupationIncome?.pensionOrganisations || []
     } as SaveBeneficiaryOccupationInput & MinimalBeneficiaryForFormLayout
   })
