@@ -74,6 +74,7 @@
         mainIncomeSource: [],
         partnerMainIncomeSource: [],
         majorChildrenMainIncomeSource: [],
+        incomes: [],
         pensionOrganisations: []
       } as SaveBeneficiaryOccupationInput)
     )

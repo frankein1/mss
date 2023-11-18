@@ -59,6 +59,9 @@ export type {
   CreateOrUpdateTaxHouseholdInput
 } from './relative.schema'
 
+export { createOrUpdateIncomeSchema } from './income.schema'
+export type { CreateOrUpdateIncomeInput } from './income.schema'
+
 export {
   updateNotificationSchema,
   getNotificationSchema

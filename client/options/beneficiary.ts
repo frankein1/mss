@@ -225,7 +225,7 @@ export const beneficiaryOrientationTypeOptions = labelsToOptions(
   beneficiaryOrientationTypeLabels
 )
 
-const commonRelationshipLabels = {
+export const commonRelationshipLabels = {
   [RelativeRelationship.Conjoint]: 'Conjoint·e',
   [RelativeRelationship.EnfantMajeur]: 'Enfant majeur',
   [RelativeRelationship.EnfantMineur]: 'Enfant mineur',

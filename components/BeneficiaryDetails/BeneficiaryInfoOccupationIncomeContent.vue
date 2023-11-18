@@ -96,6 +96,29 @@
     />
   </div>
 
+  <div
+    v-for="income in incomes"
+    :key="income.id"
+    class="fr-grid-row"
+  >
+    <!-- FIXME: type error -->
+    <BeneficiaryInfoLabel
+      :label="`${beneficiaryFieldLabels.incomeSource} ${
+        incomesRelativesLabels[income.hostedRelative]
+      }`"
+      :value="arrayToString(income.incomeSource || [], incomeSourceLabels)"
+      class="fr-col-6"
+    />
+    <!-- FIXME: type error -->
+    <BeneficiaryInfoLabel
+      :label="`${beneficiaryFieldLabels.incomeAmount} ${
+        incomesRelativesLabels[income.hostedRelative]
+      }`"
+      :value="euros(income.incomeAmount)"
+      class="fr-col-6"
+    />
+  </div>
+
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereCategorie"
@@ -132,7 +155,10 @@
     MinistereDepartmentServiceAcKeys
   } from '~/client/options/ministry'
   import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
-  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
+  import {
+    beneficiaryFieldLabels,
+    incomesRelativesLabels
+  } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{
     occupationIncome: GetBeneficiaryOccupationIncome
@@ -167,6 +193,8 @@
       pensionOrganisationLabels
     )
   )
+
+  const incomes = computed(() => props.occupationIncome.incomes)
 
   function arrayToString(arr: string[], options: Record<string, string>) {
     return (arr || []).map(o => options[o] || o).join(', ')
