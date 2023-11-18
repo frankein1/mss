@@ -20,7 +20,6 @@
   import type { FilterProp } from '~/types/filter'
   import { canViewStatsByReferent } from '~/server/security'
 
-  const isMinistryAgent = useMinistryAgent()
   const authStore = useAuthStore()
 
   const props = defineProps<{
@@ -62,10 +61,7 @@
         type: FilterType.SelectMultiple
       })
     }
-    if (
-      canViewStatsByReferent(authStore.getAuthUser) &&
-      isMinistryAgent.value
-    ) {
+    if (canViewStatsByReferent(authStore.getAuthUser)) {
       filters.push({
         name: 'referent',
         label: 'Référent',
