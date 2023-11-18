@@ -74,6 +74,32 @@
         />
       </div>
     </template>
+    <template
+      v-for="(income, idx) in incomes"
+      :key="income.key"
+    >
+      <div class="fr-col-12 fr-col-lg-6">
+        <!-- FIXME: type error -->
+        <VeeMultiSelect
+          :name="`incomes[${idx}].incomeSource`"
+          :label="`${beneficiaryFieldLabels.incomeSource} ${
+            incomesRelativesLabels[income.value.hostedRelative]
+          }`"
+          :options="incomeSourceOptions"
+          label-class="fr-text--regular"
+          dropdown
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <!-- FIXME: type error -->
+        <VeeCurrencyInput
+          :name="`incomes[${idx}].incomeAmount`"
+          :label="`${beneficiaryFieldLabels.incomeAmount} ${
+            incomesRelativesLabels[income.value.hostedRelative]
+          }`"
+        />
+      </div>
+    </template>
     <div class="fr-col-12">
       <VeeInput
         name="unemploymentNumber"
@@ -158,14 +184,21 @@
     ministereStructureOptions,
     ministereCategorieOptions
   } from '~/client/options/ministry'
-  import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
+  import {
+    beneficiaryFieldLabels,
+    incomesRelativesLabels
+  } from '~/client/labels/beneficiary.labels'
   import { BeneficiaryPermissions } from '~/server/security'
+  import { CreateOrUpdateIncomeInput } from '~/server/schema'
 
   const props = defineProps<{
     familySituation: BeneficiaryFamilySituation | null | undefined
     majorChildren: number | null | undefined
     permissions: BeneficiaryPermissions
   }>()
+
+  const { fields: incomes } =
+    useFieldArray<CreateOrUpdateIncomeInput>('incomes')
 
   const { value: pensionOrganisations } = useField<
     BeneficiaryPensionOrganisation[]

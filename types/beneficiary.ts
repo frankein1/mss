@@ -2,6 +2,7 @@ import type {
   Beneficiary,
   BeneficiaryRelative,
   Draft,
+  Income,
   User,
   UserStatus
 } from '@prisma/client'
@@ -120,7 +121,12 @@ export type GetBeneficiaryOccupationIncome = Pick<
   | 'ministereCategorie'
   | 'ministereDepartementServiceAc'
   | 'ministereStructure'
->
+> & {
+  incomes: Pick<
+    Income,
+    'id' | 'hostedRelative' | 'incomeSource' | 'incomeAmount'
+  >[]
+}
 
 export type GetBeneficiaryRelative = Pick<
   BeneficiaryRelative,

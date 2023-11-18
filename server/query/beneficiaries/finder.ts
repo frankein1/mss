@@ -44,6 +44,14 @@ const columnsSelection = {
       }
     }
   },
+  incomes: {
+    select: {
+      id: true,
+      hostedRelative: true,
+      incomeSource: true,
+      incomeAmount: true
+    }
+  },
   followupTypes: {
     select: {
       typeId: true,
@@ -277,6 +285,7 @@ function getOccupationIncome(
     partnerMainIncomeAmount: beneficiary.partnerMainIncomeAmount,
     majorChildrenMainIncomeSource: beneficiary.majorChildrenMainIncomeSource,
     majorChildrenMainIncomeAmount: beneficiary.majorChildrenMainIncomeAmount,
+    incomes: beneficiary.incomes,
     unemploymentNumber: beneficiary.unemploymentNumber,
     pensionOrganisations: beneficiary.pensionOrganisations,
     otherPensionOrganisations: beneficiary.otherPensionOrganisations,

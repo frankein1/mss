@@ -18,6 +18,7 @@ import {
   Nationality
 } from '@prisma/client'
 import { z } from 'zod'
+import { createOrUpdateIncomeSchema } from '../income.schema'
 import {
   createOrUpdateEntourageSchema,
   createOrUpdateTaxHouseholdSchema
@@ -154,6 +155,7 @@ export const saveBeneficiaryOccupationSchema = z.object({
     z.nativeEnum(IncomeSource, errorMessages)
   ),
   majorChildrenMainIncomeAmount: amountNumber.nullish(),
+  incomes: z.array(createOrUpdateIncomeSchema).nullish(),
   unemploymentNumber: unemploymentNumberConstraint.nullish(),
   pensionOrganisations: z.array(
     z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)

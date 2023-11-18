@@ -1,4 +1,5 @@
 import type { Beneficiary } from '@prisma/client'
+import { commonRelationshipLabels } from '~/client/options/beneficiary'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type BeneficiaryFieldLabels = Omit<
@@ -9,6 +10,8 @@ type BeneficiaryFieldLabels = Omit<
     taxHouseholds: string
     historyTotal: string
     types: string
+    incomeSource: string
+    incomeAmount: string
   },
   'createdById' | 'archivedById' | 'archived' | 'created'
 >
@@ -74,6 +77,8 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   partnerMainIncomeAmount: 'Montant des ressources du conjoint',
   majorChildrenMainIncomeSource: 'Nature des ressources des enfants majeurs',
   majorChildrenMainIncomeAmount: 'Montant des ressources des enfants majeurs',
+  incomeSource: 'Nature des ressources',
+  incomeAmount: 'Montant des ressources',
   deathDate: 'Date de décès',
   ministereCategorie: 'Catégorie',
   ministereDepartementServiceAc:
@@ -89,4 +94,17 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   types: "Types d'accompagnement"
 }
 
-export { beneficiaryFieldLabels }
+const incomesRelativesLabels: Omit<
+  Record<keyof typeof commonRelationshipLabels, string>,
+  'EnfantMineur'
+> = {
+  AutreMemberDeLaFamille: 'des autres membres de la famille',
+  Conjoint: 'du conjoint·e',
+  EnfantMajeur: 'des enfants majeurs',
+  Grandparent: 'des grand-parents',
+  Parent: 'des parents',
+  Sibling: 'de la fratrie',
+  Tiers: 'des tiers'
+}
+
+export { beneficiaryFieldLabels, incomesRelativesLabels }

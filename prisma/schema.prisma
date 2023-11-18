@@ -1172,6 +1172,15 @@ model Draft {
   @@map("draft")
 }
 
+model Income {
+  id             String                @id @default(uuid()) @db.Uuid
+  hostedRelative RelativeRelationship?
+  incomeSource   IncomeSource[]
+  incomeAmount   Decimal?
+  Beneficiary    Beneficiary?          @relation(fields: [beneficiaryId], references: [id])
+  beneficiaryId  String?               @db.Uuid
+}
+
 model Beneficiary {
   id String @id @default(uuid()) @db.Uuid
 
@@ -1236,12 +1245,14 @@ model Beneficiary {
   occupation                    String?
   employer                      String?
   employerSiret                 String?                               @map("employer_siret")
+  // TODO: replace different incomes fields by a unique relation to Income?
   mainIncomeSource              IncomeSource[]                        @map("main_income_source")
   mainIncomeAmount              Decimal?                              @map("main_income_amount")
   partnerMainIncomeSource       IncomeSource[]                        @map("partner_main_income_source")
   partnerMainIncomeAmount       Decimal?                              @map("partner_main_income_amount")
   majorChildrenMainIncomeSource IncomeSource[]                        @map("major_children_main_income_source")
   majorChildrenMainIncomeAmount Decimal?                              @map("major_children_main_income_amount")
+  incomes                       Income[]
   unemploymentNumber            String?                               @map("unemployment_number")
   pensionOrganisations          BeneficiaryPensionOrganisation[]      @map("pension_organisations")
   otherPensionOrganisations     String?                               @map("other_pension_organisations")
