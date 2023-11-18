@@ -15,6 +15,17 @@ import {
   updateBeneficiaryOccupationSchema
 } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
+import { prepareRelationUpdates } from '~/utils/prisma'
+
+function getBeneficiaryWithIncomes(user: SecurityRuleGrantee, id: string) {
+  return BeneficiaryRepo.findUniqueOrThrow(user, {
+    where: { id },
+    select: {
+      id: true,
+      incomes: true
+    }
+  })
+}
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
@@ -40,9 +51,23 @@ const handler = async ({
   const target = await getBeneficiarySecurityTarget(user, input.id)
   const permissions = getBeneficiaryPermissions({ user, structure, target })
   const data = filterInput({ input, permissions })
+
+  const beneficiary = await getBeneficiaryWithIncomes(user, input.id)
+  const previousIncomes = beneficiary.incomes.map(income => ({
+    ...income,
+    incomeAmount: income.incomeAmount?.toNumber()
+  }))
+  const incomesRelationUpdates = prepareRelationUpdates(
+    input.incomes || [],
+    previousIncomes
+  )
+
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id: input.id },
-    data
+    data: {
+      ...data,
+      incomes: incomesRelationUpdates
+    }
   })
 
   return updatedBeneficiary
