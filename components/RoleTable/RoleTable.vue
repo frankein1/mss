@@ -78,10 +78,10 @@
           <tr>
             <td>Suppression d'une fiche bénéficiaire</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
             <td></td>
             <td></td>
-            <td></td>
-            <td></td>
+            <td>* si il est référent</td>
           </tr>
           <tr>
             <td>
