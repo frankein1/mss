@@ -17,7 +17,7 @@
         />
         <h2 class="fr-h3">01. Participez au prochain webinaire</h2>
         <NuxtLink
-          to="https://app.livestorm.co/mon-suivi-social-1/webinaire-de-presentation-mon-suivi-social?s=97300ed9-f9b5-4ad4-b929-53bc961d24d4&type=detailed"
+          to="https://app.livestorm.co/mon-suivi-social-1/webinaire-de-presentation-mon-suivi-social?type=detailed"
           target="_blank"
           class="fr-btn"
           title="Inscription au webinaire - Ouvre une nouvelle fenêtre"
@@ -31,13 +31,6 @@
           alt=""
         />
         <h2 class="fr-h3">02. Renseignez vos informations</h2>
-        <NuxtLink
-          to="https://framaforms.org/mon-suivi-socialconfiguration-de-votre-espace-de-travail-1675077455"
-          target="_blank"
-          class="fr-btn"
-          title="Remplir le formulaire - Ouvre une nouvelle fenêtre"
-          >Remplir le formulaire</NuxtLink
-        >
       </div>
       <div class="fr-col-12 fr-col-md-6 fr-col-lg-3">
         <img
