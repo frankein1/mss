@@ -5,18 +5,24 @@ import { UserRepo } from '~/server/database'
 import { forbiddenError } from '~/server/trpc'
 import { RoutePath } from '~/utils/routing'
 
+async function getUser(email: string) {
+  try {
+    return await UserRepo.prisma.findUniqueOrThrow({
+      where: { email }
+    })
+  } catch (err) {
+    // FIXME: Remove log once error is identified
+    console.error('[MagicEmail] User not found...', { email })
+    throw err
+  }
+}
+
 export default defineEventHandler(async event => {
   const { email: input } = await readBody(event)
 
-  const user = await UserRepo.prisma.findUniqueOrThrow({
-    where: {
-      email: input
-    }
-  })
-  if (!user) {
-    throw forbiddenError()
-  }
-  if (user.role !== UserRole.Administrator) {
+  const user = await getUser(input)
+
+  if (!user || user.role !== UserRole.Administrator) {
     throw forbiddenError()
   }
 

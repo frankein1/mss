@@ -17,7 +17,13 @@ function findUniqueOrThrow<T extends Prisma.UserFindUniqueOrThrowArgs>(
   params: Prisma.SelectSubset<T, Prisma.UserFindUniqueOrThrowArgs>
 ) {
   appendConstraints(user, params, UserConstraints)
-  return prismaClient.user.findUniqueOrThrow(params)
+  try {
+    return prismaClient.user.findUniqueOrThrow(params)
+  } catch (err) {
+    // FIXME: Remove log once error is identified
+    console.error('[UserRepository] User not found...', { params })
+    throw err
+  }
 }
 
 function findUnique<T extends Prisma.UserFindUniqueOrThrowArgs>(

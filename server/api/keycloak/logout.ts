@@ -54,7 +54,13 @@ export default defineEventHandler(async event => {
 })
 
 async function findUser(email: string) {
-  return await UserRepo.prisma.findUniqueOrThrow({ where: { email } })
+  try {
+    return await UserRepo.prisma.findUniqueOrThrow({ where: { email } })
+  } catch (err) {
+    // FIXME: Remove log once error is identified
+    console.error('[Keycloak Logout] User not found...', { email })
+    throw err
+  }
 }
 
 async function updateAccount(account: Account) {
