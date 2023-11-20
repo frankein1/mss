@@ -4,7 +4,7 @@ import { UserCreationInput, createUserSchema } from '~/server/schema'
 import { SecurityRuleGrantee, canCreateUser } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { sendEmail } from '~/server/lib/email'
-import { getEmailContent } from '~/utils/user/getEmailContent'
+import { getCreationEmailContent } from '~/utils/user/emailContents'
 import { UserRepo } from '~/server/database'
 
 const securityCheck = (
@@ -41,8 +41,8 @@ const handler = async ({
 
   sendEmail({
     to: createdUser.email,
-    subject: 'Mon Suivi Social | Ouverture de votre compte',
-    ...getEmailContent(createdUser)
+    subject: 'Mon Suivi Social - Ouverture de votre compte',
+    ...getCreationEmailContent(createdUser)
   })
 
   return createdUser

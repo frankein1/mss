@@ -38,7 +38,8 @@ export const UserRepo = {
     update: prismaClient.user.update,
     findUniqueOrThrow: prismaClient.user.findUniqueOrThrow,
     findFirst: prismaClient.user.findFirst,
-    create: prismaClient.user.create
+    create: prismaClient.user.create,
+    findMany: prismaClient.user.findMany
   },
   findMany,
   findUniqueOrThrow,
