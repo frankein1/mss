@@ -267,5 +267,9 @@ const setReferents = (
 
 const isDeletable = (
   grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure
-): boolean => isInSameStructureAs(grantee, beneficiary, ['StructureManager'])
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker'
+  ]) || isReferentFor(grantee, beneficiary)
