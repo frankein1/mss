@@ -32,7 +32,7 @@ export default defineEventHandler(async event => {
 
   await sendEmail({
     to: user.email,
-    subject: 'Mon Suivi Social | Espace Administrateur',
+    subject: 'Mon Suivi Social - Espace Administrateur',
     ...getEmailContent(user, accessToken)
   })
   return { success: true }

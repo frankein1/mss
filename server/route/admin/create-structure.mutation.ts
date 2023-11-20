@@ -31,7 +31,7 @@ const adminHandler = async ({
 
   sendEmail({
     to: input.email,
-    subject: 'Mon Suivi Social | Votre espace a été créé',
+    subject: 'Mon Suivi Social - Votre espace a été créé',
     ...getEmailContent()
   })
 
