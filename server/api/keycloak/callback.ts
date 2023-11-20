@@ -145,7 +145,10 @@ async function getUser(email: string) {
         }
       }
     })
-  } catch {
+  } catch (err) {
+    // FIXME: Remove log once error is identified
+    console.error('[Keycloak Callback] User not found...', { email })
+    console.error(err)
     return null
   }
 }
