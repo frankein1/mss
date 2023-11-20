@@ -1,3 +1,5 @@
+import { Prisma } from '@prisma/client'
+import { TRPCError } from '@trpc/server'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -7,6 +9,7 @@ import {
 import { SecurityRuleGrantee, canEditStructure } from '~/server/security'
 import { editFollowupTypes } from '~/utils/structure'
 import { StructureRepo, FollowupTypeRepo } from '~/server/database'
+import { PrismaErrorCode } from '~/utils/constants/prisma'
 
 const handler = async ({
   ctx: { structure: userStructure, user },
@@ -29,12 +32,24 @@ const handler = async ({
     }
   })
 
-  await editFollowupTypes(
-    userStructure.id,
-    currentFollowupTypes,
-    legallyRequiredFollowupTypes,
-    legallyNotRequiredFollowupTypes
-  )
+  try {
+    await editFollowupTypes(
+      userStructure.id,
+      currentFollowupTypes,
+      legallyRequiredFollowupTypes,
+      legallyNotRequiredFollowupTypes
+    )
+  } catch (err) {
+    if (
+      err instanceof Prisma.PrismaClientKnownRequestError &&
+      err.code === PrismaErrorCode.UniqueConstraintFailed
+    ) {
+      throw new TRPCError({
+        code: 'CONFLICT',
+        message: "Un type d'accompagnement avec le même nom existe déjà."
+      })
+    }
+  }
 
   const updatedStructure = await StructureRepo.prisma.update({
     where: { id: userStructure.id },

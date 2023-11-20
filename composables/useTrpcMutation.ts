@@ -8,7 +8,7 @@ export async function useTrpcMutation<T>({
   mutation: () => Promise<T>
   isSubmitting?: Ref<boolean>
   onSuccess?: (res: T) => void
-  onFailure?: (err: unknown) => void
+  onFailure?: (err: Error) => void
   onFinally?: () => void
 }) {
   if (isSubmitting) {
@@ -23,7 +23,7 @@ export async function useTrpcMutation<T>({
     }
   } catch (err) {
     if (onFailure) {
-      onFailure(err)
+      onFailure(err as Error)
     }
   } finally {
     if (isSubmitting) {

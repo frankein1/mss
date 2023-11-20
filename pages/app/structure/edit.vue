@@ -37,9 +37,11 @@
 </template>
 
 <script lang="ts" setup>
+  import { TRPCClientError } from '@trpc/client'
   import { EditCurrentUserStructureInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RouteTitle, Breadcrumb } from '~/utils/routing'
+  import { AppRouterTRPCClientError } from '~/server/trpc/routers'
 
   const title = RouteTitle.AppStructureEdit()
 
@@ -68,9 +70,18 @@
           'Les informations de votre structure ont été mises à jour.'
         )
       },
-      onFailure: () => {
+      onFailure: err => {
+        let errorMessage = 'La mise à jour de votre structure a échoué.'
+
+        if (
+          err instanceof TRPCClientError &&
+          (err as AppRouterTRPCClientError).data?.code === 'CONFLICT'
+        ) {
+          errorMessage = `${errorMessage} ${err.message}`
+        }
+
         snackbar.error(
-          'La mise à jour de votre structure a échoué.',
+          errorMessage,
           () => formContainer.value?.querySelector('select')?.focus()
         )
       }
