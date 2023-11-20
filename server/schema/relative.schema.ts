@@ -12,7 +12,7 @@ import {
 import { maxStringLengthMessage } from '~/utils/zod'
 
 export const createOrUpdateEntourageSchema = z.object({
-  id: z.string().uuid().nonempty(),
+  id: z.string().uuid(),
   lastName: stringOrEmpty(beneficiaryLastNameSchema),
   firstName: beneficiaryFirstNameOrEmptySchema,
   relationship: withEmptyValueOptionalNativeEnum(RelativeRelationship),
@@ -33,7 +33,7 @@ export const createOrUpdateTaxHouseholdSchema = createOrUpdateEntourageSchema
   .extend({
     linkedBeneficiary: z
       .object({
-        id: z.string().uuid().nonempty(),
+        id: z.string().uuid(),
         usualName: stringOrEmpty(beneficiaryLastNameSchema),
         firstName: beneficiaryFirstNameOrEmptySchema,
         birthName: stringOrEmpty(beneficiaryLastNameSchema)
