@@ -61,7 +61,7 @@
     "eslint-config-prettier": "^9.0.0",
     "nuxt": "^3.8.2",
     "nuxt-scheduler": "^0.0.16",
-    "prettier": "3.0.3",
+    "prettier": "3.1.0",
     "prettier-plugin-prisma": "^5.0.0",
     "prisma": "^5.4.2",
     "sass": "^1.69.5",

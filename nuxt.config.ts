@@ -16,6 +16,14 @@ const prismaIndexBrowser = path.normalize(
 )
 
 export default defineNuxtConfig({
+  // https://nuxt.com/blog/v3-8
+  typescript: {
+    tsConfig: {
+      compilerOptions: {
+        verbatimModuleSyntax: false
+      }
+    }
+  },
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     // DSFR STYLES
