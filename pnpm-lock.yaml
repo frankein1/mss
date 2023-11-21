@@ -81,7 +81,7 @@ dependencies:
     specifier: ^1.5.0
     version: 1.5.0
   superjson:
-    specifier: ^2.0.0
+    specifier: ^2.2.1
     version: 2.2.1
   trpc-nuxt:
     specifier: ^0.10.12
