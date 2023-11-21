@@ -1,5 +1,6 @@
 import { DocumentType } from '@prisma/client'
 import { z } from 'zod'
+import { File } from 'node-fetch-native'
 import { stringConstraint, requiredNativeEnum } from './helpers.schema'
 import {
   documentFileMaxSize,
