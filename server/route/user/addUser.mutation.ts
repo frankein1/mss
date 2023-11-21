@@ -4,7 +4,7 @@ import { UserCreationInput, createUserSchema } from '~/server/schema'
 import { SecurityRuleGrantee, canCreateUser } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { sendEmail } from '~/server/lib/email'
-import { getCreationEmailContent } from '~/utils/user/emailContents'
+import { getCreationEmailContent } from '~/server/email'
 import { UserRepo } from '~/server/database'
 import { cleanEmail } from '~/utils/user'
 
