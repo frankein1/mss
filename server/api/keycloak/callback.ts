@@ -133,22 +133,15 @@ async function upsertAccount({
 }
 
 async function getUser(email: string) {
-  try {
-    return await UserRepo.prisma.findUniqueOrThrow({
-      where: { email },
-      include: {
-        structure: true,
-        CGUHistory: {
-          orderBy: {
-            date: 'desc'
-          }
+  return await UserRepo.prisma.findUnique({
+    where: { email },
+    include: {
+      structure: true,
+      CGUHistory: {
+        orderBy: {
+          date: 'desc'
         }
       }
-    })
-  } catch (err) {
-    // FIXME: Remove log once error is identified
-    console.error('[Keycloak Callback] User not found...', { email })
-    console.error(err)
-    return null
-  }
+    }
+  })
 }
