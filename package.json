@@ -55,7 +55,7 @@
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/node": "^20.8.6",
-    "@types/nodemailer": "^6.4.11",
+    "@types/nodemailer": "^6.4.14",
     "@types/uuid": "^9.0.5",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
