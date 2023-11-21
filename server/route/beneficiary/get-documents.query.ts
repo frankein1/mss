@@ -74,7 +74,7 @@ const handler = async ({
       include: {
         _count: {
           select: {
-            Notification: {
+            notifications: {
               where: { read: false, recipientId: user.id }
             }
           }

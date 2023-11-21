@@ -144,12 +144,12 @@ model Document {
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
-  created      DateTime?      @default(now())
-  createdBy    User           @relation(fields: [createdById], references: [id])
-  createdById  String         @map("created_by_id") @db.Uuid
-  followups    Followup[]     @relation("document_to_followup")
-  helpRequests HelpRequest[]  @relation("document_to_help_request")
-  Notification Notification[]
+  created       DateTime?      @default(now())
+  createdBy     User           @relation(fields: [createdById], references: [id])
+  createdById   String         @map("created_by_id") @db.Uuid
+  followups     Followup[]     @relation("document_to_followup")
+  helpRequests  HelpRequest[]  @relation("document_to_help_request")
+  notifications Notification[]
 
   @@map("document")
 }
@@ -310,9 +310,9 @@ model Followup {
 
   comments Comment[]
 
-  created      DateTime?      @default(now())
-  updated      DateTime?      @updatedAt
-  Notification Notification[]
+  created              DateTime?            @default(now())
+  updated              DateTime?            @updatedAt
+  notifications        Notification[]
 
   @@map("followup")
 }
@@ -404,9 +404,9 @@ model HelpRequest {
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  ministre     Minister?
-  numeroPegase String?        @map("numero_pegase")
-  Notification Notification[]
+  ministre             Minister?
+  numeroPegase         String?              @map("numero_pegase")
+  notifications        Notification[]
 
   @@map("help_request")
 }
@@ -1265,9 +1265,9 @@ model Beneficiary {
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  relatives       BeneficiaryRelative[] @relation("ownerBeneficiary")
-  linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
-  Notification    Notification[]
+  relatives            BeneficiaryRelative[] @relation("ownerBeneficiary")
+  linkedRelatives      BeneficiaryRelative[] @relation("linkedBeneficiary")
+  notifications        Notification[]
 
   @@map("beneficiary")
 }
@@ -1380,9 +1380,9 @@ model InstructorOrganization {
 
   name String
 
-  structure   Structure?    @relation(fields: [structureId], references: [id])
-  structureId String?       @map("structure_id") @db.Uuid
-  HelpRequest HelpRequest[]
+  structure            Structure?           @relation(fields: [structureId], references: [id])
+  structureId          String?              @map("structure_id") @db.Uuid
+  helpRequests         HelpRequest[]
 
   @@map("instructor_organization")
 }
