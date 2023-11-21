@@ -6,6 +6,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { sendEmail } from '~/server/lib/email'
 import { getCreationEmailContent } from '~/utils/user/emailContents'
 import { UserRepo } from '~/server/database'
+import { cleanEmail } from '~/utils/user'
 
 const securityCheck = (
   user: SecurityRuleGrantee,
@@ -21,8 +22,10 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: UserCreationInput
 }) => {
+  const { email, ...data } = input
+  const userEmail = cleanEmail(email)
   const existingUser = await UserRepo.findUnique(user, {
-    where: { email: input.email }
+    where: { email: userEmail }
   })
 
   if (existingUser) {
@@ -35,7 +38,8 @@ const handler = async ({
   const createdUser = await UserRepo.prisma.create({
     data: {
       structureId: user.structureId,
-      ...input
+      email: userEmail,
+      ...data
     }
   })
 
