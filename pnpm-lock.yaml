@@ -128,8 +128,8 @@ devDependencies:
     specifier: ^3.8.2
     version: 3.8.2(@types/node@20.9.3)(eslint@8.54.0)(sass@1.69.5)(stylelint@15.11.0)(typescript@5.3.2)(vite@4.5.0)(vue-tsc@1.8.22)
   nuxt-scheduler:
-    specifier: ^0.0.16
-    version: 0.0.16
+    specifier: ^0.1.9
+    version: 0.1.9
   prettier:
     specifier: 3.1.0
     version: 3.1.0
@@ -7996,8 +7996,8 @@ packages:
       - supports-color
     dev: false
 
-  /nuxt-scheduler@0.0.16:
-    resolution: {integrity: sha512-uZH+7IrNqEVogh9in3eftoIi/2WnKglehpsuEGXikZ/+dMSq31p9unyl8BSs4D63Ddzpx6ovFhQFDscPrucbbA==}
+  /nuxt-scheduler@0.1.9:
+    resolution: {integrity: sha512-2WOEBhhVCpDvt0SpxZGMGhtsMVT6PLRI0yRgVFvWLw6mu6NqAPfof6HW9kP7ENOEJ2p5DXIk6CajVBl6LN0Htg==}
     dependencies:
       '@nuxt/kit': 3.8.2
       defu: 6.1.3
