@@ -6,6 +6,7 @@ import { getCreationEmailContent } from '~/utils/user/emailContents'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc/createRouter'
+import { cleanEmail } from '~/utils/user'
 
 const adminHandler = async ({
   ctx,
@@ -15,7 +16,7 @@ const adminHandler = async ({
   input: AdminCreateUserInput
 }) => {
   const { email, ...data } = input
-  const userEmail = email.trim().toLocaleLowerCase()
+  const userEmail = cleanEmail(email)
   const existingUser = await UserRepo.findUnique(ctx.user, {
     where: { email: userEmail }
   })

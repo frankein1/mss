@@ -6,6 +6,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { sendEmail } from '~/server/lib/email'
 import { getCreationEmailContent } from '~/utils/user/emailContents'
 import { UserRepo } from '~/server/database'
+import { cleanEmail } from '~/utils/user'
 
 const securityCheck = (
   user: SecurityRuleGrantee,
@@ -22,7 +23,7 @@ const handler = async ({
   input: UserCreationInput
 }) => {
   const { email, ...data } = input
-  const userEmail = email.trim().toLocaleLowerCase()
+  const userEmail = cleanEmail(email)
   const existingUser = await UserRepo.findUnique(user, {
     where: { email: userEmail }
   })

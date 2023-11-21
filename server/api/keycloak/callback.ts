@@ -9,6 +9,7 @@ import {
 import { RoutePath } from '~/utils/routing'
 import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
+import { cleanEmail } from '~/utils/user/cleanEmail'
 
 const config = useRuntimeConfig()
 const { auth } = config
@@ -134,7 +135,7 @@ async function upsertAccount({
 
 async function getUser(email: string) {
   return await UserRepo.prisma.findUnique({
-    where: { email: email.trim().toLocaleLowerCase() },
+    where: { email: cleanEmail(email) },
     include: {
       structure: true,
       CGUHistory: {
