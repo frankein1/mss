@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.10.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.9.0...v1.10.0) (2023-11-21)
+
+
+### Features
+
+* **beneficiaire:** Permet aux utilisateurs avec le rôle Travailleur social ou Référent de supprimer une fiche bénéficaire à laquelle ils ont accès ([dee2b51](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/dee2b513ae2184153bc8d1c4bea9368e152398a1)), closes [#211](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/211)
+* **beneficiaires:** Reprend le design de la page qui liste les bénéficiaires de la structure ([ee856c5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ee856c512b0826cb00200465fab29ccfe326f7b1)), closes [#92](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/92)
+* **statistiques:** Ajoute un filtre par référents dans les statistiques ([4d7c5d1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4d7c5d18e4c42c8843cef1aed282cc8905ba8290)), closes [#213](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/213)
+* **utilisateur:** Envoie aux utilisateurs créés il y a une semaine un mail d'invitation à l'atelier "Premiers pas" ([45a02bf](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/45a02bf548494a8db1a08551c45d29f4f9948421)), closes [#212](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/212)
+
+
+### Bug Fixes
+
+* **beneficiarie:** L'identité du bénéficiaire n'est pas affichée dans le fil d'Ariane ([e3628b2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e3628b26e943d027862675d02e9c695755fbf0c8)), closes [#214](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/214)
+* Création d'un bénéficiaire avec un membre du foyer lié ([0ea892d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0ea892d51adaf52bcf110d455f5ef98d7eeb9c7b))
+
 ## [1.9.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.7.0...v1.9.0) (2023-11-15)
 
 
