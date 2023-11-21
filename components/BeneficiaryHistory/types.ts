@@ -3,11 +3,7 @@ import { RouterOutput } from '~/server/trpc/routers'
 
 type GetHistoryOutput = RouterOutput['beneficiary']['getBeneficiaryHistories']
 export type HistoryItem = GetHistoryOutput['histories'][0]
-export type FollowupHistoryItem = HistoryItem & {
-  isFollowup: true
-  medium: FollowupMedium
-}
-export type HelpRequestHistoryItem = HistoryItem & { isFollowup: false }
+export type FollowupHistoryItem = HistoryItem & { medium: FollowupMedium }
 
 export type HistoryItemComments = Exclude<HistoryItem['comments'], undefined>
 export type HistoryItemComment = HistoryItemComments[number]
