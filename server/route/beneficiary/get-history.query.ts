@@ -1,69 +1,24 @@
-import type { Prisma } from '@prisma/client'
-import { HelpRequestStatus, FollowupStatus } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import {
-  GetHistoryInput,
-  BeneficiaryHistoryFilterInput,
-  FollowupFilterInput,
-  HelpRequestFilterInput,
-  getHistorySchema
-} from '~/server/schema'
+import { GetHistoryInput, getHistorySchema } from '~/server/schema'
 import { TypeSuivi } from '~/types/history'
-import {
-  prepareFollowupFilters,
-  prepareHelpRequestFilters
-} from '~/utils/filters'
-import {
-  getBeneficiarySecurityTarget,
-  BeneficiarySecurityTarget
-} from '~/server/query'
+import { getBeneficiarySecurityTarget } from '~/server/query'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  canListComments,
-  canListBeneficiaryHelpRequests,
-  canListBeneficiaryFollowups
-} from '~/server/security'
-import {
-  AllowSecurityCheck,
-  SecurityRuleGrantee
-} from '~/server/security/rules/types'
-import { FollowupRepo, HelpRequestRepo } from '~/server/database'
+import { getBeneficiaryHistoryPermissions } from '~/server/security'
+import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
+import { BeneficiaryHistoryRepo } from '~/server/database'
 
-function filtersAppliesToFollowups(
-  filters: BeneficiaryHistoryFilterInput
-): filters is FollowupFilterInput {
-  return !!(
-    (filters.typeSuivi && filters.typeSuivi === TypeSuivi.Followup) ||
-    filters.medium ||
-    (filters.status && filters.status in FollowupStatus)
-  )
+const securityCheck = async (
+  user: SecurityRuleGrantee,
+  input: GetHistoryInput
+) => {
+  const target = await getBeneficiarySecurityTarget(user, input.beneficiaryId)
+  const permissions = getBeneficiaryHistoryPermissions({ user, target })
+  return permissions.view
 }
 
-function filtersAppliesToHelpRequests(
-  filters: BeneficiaryHistoryFilterInput
-): filters is HelpRequestFilterInput {
-  return !!(
-    (filters.typeSuivi && filters.typeSuivi === TypeSuivi.HelpRequest) ||
-    filters.examinationDate ||
-    filters.externalStructure ||
-    filters.handlingDate ||
-    (filters.status && filters.status in HelpRequestStatus)
-  )
-}
-
-function filtersAppliesToFollowupsAndHelpRequests(
-  filters: BeneficiaryHistoryFilterInput
-): filters is FollowupFilterInput & HelpRequestFilterInput {
-  return (
-    !filters.examinationDate &&
-    !filters.externalStructure &&
-    !filters.handlingDate &&
-    !filters.medium &&
-    !filters.status &&
-    !filters.typeSuivi
-  )
-}
+type HistoryFilters = GetHistoryInput['filters']
 
 const createdBySelect = {
   firstName: true,
@@ -71,151 +26,146 @@ const createdBySelect = {
   email: true
 }
 
-const historyItemInclude = (userId: string) => ({
-  _count: {
-    select: {
-      Notification: {
-        where: { read: false, recipientId: userId }
+function prepareHistoryFilters(filters: HistoryFilters, beneficiaryId: string) {
+  const formattedFilters: Prisma.BeneficiaryHistoryWhereInput = {}
+
+  if (filters.referents) {
+    formattedFilters.beneficiary = {
+      id: beneficiaryId,
+      referents: {
+        some: { id: { in: filters.referents } }
       }
     }
-  },
-  createdBy: {
-    select: createdBySelect
-  },
-  beneficiary: {
-    select: {
-      structureId: true,
-      referents: true
-    }
-  },
-  prescribingOrganization: {
-    select: {
-      name: true
-    }
-  },
-  documents: {
-    select: {
-      key: true,
-      name: true
-    }
+  } else {
+    formattedFilters.beneficiary = { id: beneficiaryId }
   }
-})
 
-async function getFollowups(
-  user: SecurityRuleGrantee,
-  beneficiary: NonNullable<BeneficiarySecurityTarget>,
-  filters: FollowupFilterInput
-) {
-  const followups = await FollowupRepo.findMany(user, {
-    where: {
-      beneficiaryId: beneficiary.id,
-      ...prepareFollowupFilters(filters)
-    },
-    include: {
-      ...historyItemInclude(user.id),
-      comments: {
-        orderBy: { created: 'asc' },
-        include: COMMENT_RELATIONS_INCLUDE
-      },
-      types: true
-    },
-    orderBy: { date: 'desc' }
-  })
+  if (filters.status) {
+    formattedFilters.status = filters.status
+  }
 
-  return followups.map(f => ({
-    ...f,
-    isFollowup: true as const,
-    comments: canListComments(user, beneficiary) ? f.comments : undefined
-  }))
+  if (filters.medium) {
+    formattedFilters.medium = { in: filters.medium }
+  }
+
+  if (filters.examinationDate) {
+    formattedFilters.examinationDate = filters.examinationDate
+  }
+
+  if (filters.externalStructure !== undefined) {
+    formattedFilters.externalStructure = filters.externalStructure === 'true'
+  }
+
+  if (filters.handlingDate !== undefined) {
+    formattedFilters.handlingDate =
+      filters.handlingDate === 'true' ? { not: null } : null
+  }
+
+  if (filters.followupTypes) {
+    formattedFilters.typeIds = { hasSome: filters.followupTypes }
+  }
+
+  if (filters.typeSuivi) {
+    formattedFilters.isFollowup = filters.typeSuivi === TypeSuivi.Followup
+  }
+
+  return formattedFilters
 }
 
-async function getHelpRequests(
+function getHistories(
+  filters: HistoryFilters,
   user: SecurityRuleGrantee,
-  beneficiary: NonNullable<BeneficiarySecurityTarget>,
-  filters: HelpRequestFilterInput
+  beneficiaryId: string
 ) {
-  const helpRequests = await HelpRequestRepo.findMany(user, {
-    where: {
-      beneficiaryId: beneficiary.id,
-      ...prepareHelpRequestFilters(filters)
-    },
+  return BeneficiaryHistoryRepo.findMany(user, {
+    where: prepareHistoryFilters(filters, beneficiaryId),
     include: {
-      ...historyItemInclude(user.id),
-      comments: {
-        orderBy: { created: 'asc' },
-        include: COMMENT_RELATIONS_INCLUDE
+      createdBy: {
+        select: createdBySelect
       },
-      type: true,
+      beneficiary: {
+        select: {
+          structureId: true,
+          referents: true
+        }
+      },
+      prescribingOrganization: {
+        select: {
+          name: true
+        }
+      },
       instructorOrganization: {
         select: {
           name: true
         }
+      },
+      followup: {
+        include: {
+          documents: {
+            select: {
+              key: true,
+              name: true
+            }
+          },
+          comments: {
+            orderBy: { created: 'asc' },
+            include: COMMENT_RELATIONS_INCLUDE
+          },
+          _count: {
+            select: {
+              notifications: {
+                where: { read: false, recipientId: user.id }
+              }
+            }
+          },
+          types: true
+        }
+      },
+      helpRequest: {
+        include: {
+          documents: {
+            select: {
+              key: true,
+              name: true
+            }
+          },
+          comments: {
+            orderBy: { created: 'asc' },
+            include: COMMENT_RELATIONS_INCLUDE
+          },
+          _count: {
+            select: {
+              notifications: {
+                where: { read: false, recipientId: user.id }
+              }
+            }
+          },
+          type: true
+        }
       }
     },
-    orderBy: { openingDate: 'desc' }
+    orderBy: { date: 'desc' }
   })
-
-  return helpRequests.map(h => ({
-    ...h,
-    isFollowup: false as const,
-    comments: canListComments(user, beneficiary) ? h.comments : undefined
-  }))
 }
 
-type HistoryFollowup = Prisma.PromiseReturnType<typeof getFollowups>[0]
-type HistoryHelpRequest = Prisma.PromiseReturnType<typeof getHelpRequests>[0]
+type Histories = Prisma.PromiseReturnType<typeof getHistories>
 
-export type HistoryItem = HistoryFollowup | HistoryHelpRequest
+function flattenHistories(histories: Histories) {
+  return histories.map(history => {
+    const { followup, helpRequest, ...data } = history
 
-function getHistoryItemDate(h: HistoryItem) {
-  return h.isFollowup ? h.date : h.openingDate
+    return {
+      ...data,
+      documents: followup?.documents || helpRequest?.documents,
+      comments: followup?.comments || helpRequest?.comments,
+      hasUnreadNotifications: !!(
+        followup?._count.notifications || helpRequest?._count.notifications
+      ),
+      followUpTypes:
+        followup?.types || (helpRequest ? [helpRequest.type] : undefined)
+    }
+  })
 }
-
-function sortHistoryItem(a: HistoryItem, b: HistoryItem) {
-  const dateA = getHistoryItemDate(a)
-  const dateB = getHistoryItemDate(b)
-  return dateA >= dateB ? -1 : 1
-}
-
-async function getHistoryTotalCount(
-  user: SecurityRuleGrantee,
-  beneficiary: NonNullable<BeneficiarySecurityTarget>
-) {
-  let helpRequestsCount = 0
-  let followupsCount = 0
-
-  if (canListBeneficiaryHelpRequests(user, beneficiary)) {
-    helpRequestsCount = await HelpRequestRepo.count(user, {
-      where: {
-        beneficiaryId: beneficiary.id,
-        ...prepareHelpRequestFilters({})
-      }
-    })
-  }
-
-  if (canListBeneficiaryFollowups(user, beneficiary)) {
-    followupsCount = await FollowupRepo.count(user, {
-      where: {
-        beneficiaryId: beneficiary.id,
-        ...prepareFollowupFilters({})
-      }
-    })
-  }
-
-  return helpRequestsCount + followupsCount
-}
-
-function getHistoryResponse(
-  history: (HistoryFollowup | HistoryHelpRequest)[],
-  totalCount: number
-) {
-  return {
-    history,
-    totalCount
-  }
-}
-
-const securityCheck = AllowSecurityCheck
 
 const handler = async ({
   input,
@@ -226,33 +176,22 @@ const handler = async ({
 }) => {
   const { beneficiaryId, filters } = input
 
-  const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
-
-  const totalCount = await getHistoryTotalCount(user, beneficiary)
-
-  if (filtersAppliesToFollowups(filters)) {
-    const history = await getFollowups(user, beneficiary, filters)
-    return getHistoryResponse(history, totalCount)
-  }
-
-  if (filtersAppliesToHelpRequests(filters)) {
-    const history = await getHelpRequests(user, beneficiary, filters)
-    return getHistoryResponse(history, totalCount)
-  }
-
-  if (!filtersAppliesToFollowupsAndHelpRequests(filters)) {
-    return getHistoryResponse([], totalCount)
-  }
-
-  const [followups, helpRequests] = await Promise.all([
-    getFollowups(user, beneficiary, filters),
-    getHelpRequests(user, beneficiary, filters)
+  const [totalCount, histories] = await Promise.all([
+    BeneficiaryHistoryRepo.count(user, {
+      where: {
+        beneficiaryId
+      }
+    }),
+    getHistories(filters, user, beneficiaryId)
   ])
-  const history = [...followups, ...helpRequests].sort(sortHistoryItem)
-  return getHistoryResponse(history, totalCount)
+
+  return {
+    histories: flattenHistories(histories),
+    totalCount
+  }
 }
 
-export const getBeneficiaryHistoryQuery = createQuery({
+export const getBeneficiaryHistoriesQuery = createQuery({
   inputValidation: getHistorySchema,
   securityCheck,
   handler

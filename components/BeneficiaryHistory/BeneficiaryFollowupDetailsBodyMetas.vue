@@ -1,8 +1,6 @@
 <template>
   <ul class="body-metas information-list">
-    <li v-if="followup.isFollowup">
-      <span class="information-label">Type :</span> {{ medium }}
-    </li>
+    <li><span class="information-label">Type :</span> {{ medium }}</li>
     <template v-if="isMinistryAgent">
       <li v-if="followup.numeroPegase">
         <span class="information-label">Numéro Pégase :</span>
@@ -60,7 +58,7 @@
 
 <script setup lang="ts">
   import { FollowupMedium } from '@prisma/client'
-  import { HistoryItem } from './types'
+  import { FollowupHistoryItem } from './types'
   import {
     followupInterventionLabels,
     followupMediumLabels,
@@ -72,7 +70,7 @@
   const isMinistryAgent = useMinistryAgent()
 
   const props = defineProps<{
-    followup: HistoryItem & { isFollowup: true }
+    followup: FollowupHistoryItem
   }>()
 
   const medium = computed(() => {

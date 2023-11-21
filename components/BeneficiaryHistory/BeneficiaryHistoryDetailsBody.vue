@@ -11,7 +11,7 @@
     <template v-if="canViewHistoryDetails">
       <BeneficiaryFollowupDetailsBodyMetas
         v-if="history.isFollowup"
-        :followup="history"
+        :followup="history as FollowupHistoryItem"
       />
       <BeneficiaryHelpRequestDetailsBodyMetas
         v-else
@@ -75,7 +75,11 @@
 </template>
 
 <script setup lang="ts">
-  import type { HistoryItem, HistoryItemComment } from './types'
+  import type {
+    HistoryItem,
+    HistoryItemComment,
+    FollowupHistoryItem
+  } from './types'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import { RoutePath } from '~/utils/routing'
   import {

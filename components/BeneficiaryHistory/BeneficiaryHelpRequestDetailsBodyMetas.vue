@@ -79,7 +79,7 @@
   const isMinistryAgent = useMinistryAgent()
 
   const props = defineProps<{
-    helpRequest: HistoryItem & { isFollowup: false }
+    helpRequest: HistoryItem
   }>()
 
   const instructorOrganization = computed(() => {
