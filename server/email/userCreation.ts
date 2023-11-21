@@ -1,7 +1,7 @@
 import { User } from '@prisma/client'
 import { getInclusionConnectClient } from '~/server/lib'
 
-export function getCreationEmailContent(user: User) {
+export function getUserCreationEmailContent(user: User) {
   const {
     public: {
       email: { from }
