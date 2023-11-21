@@ -152,7 +152,7 @@ devDependencies:
     specifier: ^1.5.0
     version: 1.5.0(postcss-html@1.5.0)(stylelint@15.11.0)
   stylelint-config-standard-scss:
-    specifier: ^11.0.0
+    specifier: ^11.1.0
     version: 11.1.0(postcss@8.4.31)(stylelint@15.11.0)
   ts-node:
     specifier: ^10.9.1
