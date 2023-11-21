@@ -14,8 +14,10 @@ const adminHandler = async ({
   ctx: AdminContext
   input: AdminCreateUserInput
 }) => {
+  const { email, ...data } = input
+  const userEmail = email.trim().toLocaleLowerCase()
   const existingUser = await UserRepo.findUnique(ctx.user, {
-    where: { email: input.email }
+    where: { email: userEmail }
   })
 
   if (existingUser) {
@@ -26,7 +28,10 @@ const adminHandler = async ({
   }
 
   const createdUser = await UserRepo.prisma.create({
-    data: input
+    data: {
+      email: userEmail,
+      ...data
+    }
   })
 
   sendEmail({

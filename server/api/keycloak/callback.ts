@@ -134,7 +134,7 @@ async function upsertAccount({
 
 async function getUser(email: string) {
   return await UserRepo.prisma.findUnique({
-    where: { email },
+    where: { email: email.trim().toLocaleLowerCase() },
     include: {
       structure: true,
       CGUHistory: {

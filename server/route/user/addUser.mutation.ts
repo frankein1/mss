@@ -21,8 +21,10 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: UserCreationInput
 }) => {
+  const { email, ...data } = input
+  const userEmail = email.trim().toLocaleLowerCase()
   const existingUser = await UserRepo.findUnique(user, {
-    where: { email: input.email }
+    where: { email: userEmail }
   })
 
   if (existingUser) {
@@ -35,7 +37,8 @@ const handler = async ({
   const createdUser = await UserRepo.prisma.create({
     data: {
       structureId: user.structureId,
-      ...input
+      email: userEmail,
+      ...data
     }
   })
 
