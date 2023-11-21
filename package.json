@@ -37,7 +37,7 @@
     "json-diff": "^1.0.6",
     "jsonwebtoken": "^9.0.2",
     "mitt": "^3.0.1",
-    "node-fetch-native": "^1.4.0",
+    "node-fetch-native": "^1.4.1",
     "nodemailer": "^6.9.6",
     "nuxt-security": "^0.14.4",
     "openid-client": "^5.6.1",
