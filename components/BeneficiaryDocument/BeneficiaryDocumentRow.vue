@@ -133,7 +133,7 @@
   const downloadLink = ref<HTMLLinkElement | null>(null)
 
   const hasUnreadNotifications = computed(
-    () => !!props.document._count.Notification
+    () => !!props.document._count.notifications
   )
 
   function onView() {

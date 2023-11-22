@@ -1,7 +1,4 @@
-import type { inferRouterOutputs } from '@trpc/server'
-import { AppRouter } from '~/server/trpc/routers'
-
-type RouterOutput = inferRouterOutputs<AppRouter>
+import { RouterOutput } from '~/server/trpc/routers'
 
 type GetBeneficiariesOutput = RouterOutput['beneficiary']['getBeneficiaries']
 
