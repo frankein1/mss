@@ -44,7 +44,7 @@ const handler = async ({
   const permissions = getBeneficiaryPermissions({ user, structure, target })
   const data = filterInput({ input, permissions })
 
-  if (!data.noPhone) {
+  if (data.noPhone) {
     data.phone1 = null
     data.phone2 = null
   }

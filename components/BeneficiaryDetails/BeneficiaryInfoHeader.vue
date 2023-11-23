@@ -17,7 +17,7 @@
       </div>
     </div>
 
-    <div v-if="hasCoordinatesInformations(beneficiary.general)">
+    <template v-if="hasCoordinatesInformations(beneficiary.general)">
       <hr class="fr-col-12 fr-mt-5v no-print" />
 
       <div class="fr-grid-row">
@@ -26,7 +26,10 @@
         </div>
       </div>
       <div class="fr-grid-row">
-        <div class="fr-col-6">
+        <div
+          v-if="hasPhoneOrAddress(beneficiary.general)"
+          class="fr-col-6"
+        >
           <BeneficiaryInfoLabel
             label="Numéro de téléphone"
             :value="phoneLabel"
@@ -36,7 +39,10 @@
             :value="formatAddress(beneficiary.general)"
           />
         </div>
-        <div class="fr-col-6">
+        <div
+          v-if="hasEmailOrAddressComplement(beneficiary.general)"
+          class="fr-col-6"
+        >
           <BeneficiaryInfoLabel
             label="Email"
             :value="beneficiary.general.email"
@@ -47,7 +53,7 @@
           />
         </div>
       </div>
-    </div>
+    </template>
   </div>
 </template>
 
@@ -56,7 +62,9 @@
   import { formatUserDisplayName } from '~/utils/user'
   import {
     formatAddress,
-    hasCoordinatesInformations
+    hasCoordinatesInformations,
+    hasPhoneOrAddress,
+    hasEmailOrAddressComplement
   } from '~/utils/beneficiary'
 
   const props = defineProps<{
