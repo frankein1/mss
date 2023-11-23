@@ -19,6 +19,7 @@ import {
   SecurityTargetWithReferents,
   SecurityTargetWithStructure
 } from '~/server/security'
+import { commonRelationshipLabels } from '~/client/options/beneficiary'
 
 export type BeneficiaryReferent = {
   id: string
@@ -191,3 +192,8 @@ export type GetBeneficiaryOutput = Pick<
     types: FollowupTypeIdAndName[]
   }
 }
+
+export type BeneficiaryHouseholdOccupationRelationship = Exclude<
+  keyof typeof commonRelationshipLabels,
+  'EnfantMineur'
+>
