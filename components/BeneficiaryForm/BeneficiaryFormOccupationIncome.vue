@@ -176,7 +176,8 @@
 <script lang="ts" setup>
   import {
     BeneficiaryFamilySituation,
-    BeneficiaryPensionOrganisation
+    BeneficiaryPensionOrganisation,
+    RelativeRelationship
   } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryOptions,
@@ -200,6 +201,7 @@
     familySituation: BeneficiaryFamilySituation | null | undefined
     majorChildren: number | null | undefined
     permissions: BeneficiaryPermissions
+    taxHouseholdsRelationships: BeneficiaryHouseholdOccupationRelationship[]
   }>()
 
   const { fields: incomes } =
@@ -209,20 +211,22 @@
     BeneficiaryPensionOrganisation[]
   >('pensionOrganisations')
 
-  const hasPartner = computed(() => {
-    const familySituation = props.familySituation
-    if (!familySituation) {
-      return false
-    }
-    return (
-      familySituation === BeneficiaryFamilySituation.Married ||
-      familySituation === BeneficiaryFamilySituation.CivilUnion ||
-      familySituation === BeneficiaryFamilySituation.Cohabitation ||
-      familySituation === BeneficiaryFamilySituation.CoupleWithChildren
-    )
-  })
+  const hasPartner = computed(
+    () =>
+      props.familySituation === BeneficiaryFamilySituation.Married ||
+      props.familySituation === BeneficiaryFamilySituation.CivilUnion ||
+      props.familySituation === BeneficiaryFamilySituation.Cohabitation ||
+      props.familySituation === BeneficiaryFamilySituation.CoupleWithChildren ||
+      props.taxHouseholdsRelationships.includes(RelativeRelationship.Conjoint)
+  )
 
-  const hasMajorChildren = computed(() => (props.majorChildren || 0) > 0)
+  const hasMajorChildren = computed(
+    () =>
+      (props.majorChildren || 0) > 0 ||
+      props.taxHouseholdsRelationships.includes(
+        RelativeRelationship.EnfantMajeur
+      )
+  )
 
   const hasOtherPensionOrganisations = computed(() =>
     (pensionOrganisations.value || []).includes(
