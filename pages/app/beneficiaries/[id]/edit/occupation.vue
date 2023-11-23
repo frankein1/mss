@@ -25,6 +25,7 @@
         :permissions="permissions"
         :family-situation="familySituation"
         :major-children="majorChildren"
+        :tax-households-relationships="taxHouseholdsRelationships"
       />
     </div>
   </BeneficiaryEditFormLayout>
@@ -37,7 +38,10 @@
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
-  import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
+  import type {
+    MinimalBeneficiaryForFormLayout,
+    BeneficiaryHouseholdOccupationRelationship
+  } from '~/types/beneficiary'
   import { prismaDecimalToNumber } from '~/utils/prisma'
 
   definePageMeta({
@@ -63,6 +67,17 @@
   )
   const majorChildren = computed(
     () => data.value?.beneficiary.taxHouseholds?.majorChildren
+  )
+
+  const taxHouseholdsRelationships = computed(
+    () =>
+      Array.from(
+        new Set(
+          data.value?.beneficiary.taxHouseholds?.taxHouseholds
+            .map(relative => relative.relationship)
+            .filter(relationship => !!relationship)
+        )
+      ) as BeneficiaryHouseholdOccupationRelationship[]
   )
 
   const beneficiary = computed(() => {

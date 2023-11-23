@@ -26,6 +26,7 @@
         :permissions="permissions"
         :family-situation="familySituation"
         :major-children="majorChildren"
+        :tax-households-relationships="taxHouseholdsRelationships"
       />
     </div>
   </BeneficiariesSaveFormLayout>
@@ -37,6 +38,7 @@
     SaveBeneficiaryOccupationInput
   } from '~/server/schema'
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
+  import { BeneficiaryHouseholdOccupationRelationship } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
 
@@ -61,6 +63,17 @@
   )
   const majorChildren = computed(
     () => data.value?.draft.taxHousehold?.majorChildren
+  )
+
+  const taxHouseholdsRelationships = computed(
+    () =>
+      Array.from(
+        new Set(
+          data.value?.draft.taxHousehold?.taxHouseholds
+            ?.map(relative => relative.relationship)
+            .filter(relationship => !!relationship)
+        )
+      ) as BeneficiaryHouseholdOccupationRelationship[]
   )
 
   const beneficiary = computed(() => {
