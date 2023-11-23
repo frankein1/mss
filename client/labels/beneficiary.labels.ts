@@ -1,5 +1,5 @@
 import type { Beneficiary } from '@prisma/client'
-import { commonRelationshipLabels } from '~/client/options/beneficiary'
+import { BeneficiaryHouseholdOccupationRelationship } from '~/types/beneficiary'
 import type { FieldLabels } from '~/types/fieldLabels'
 
 type BeneficiaryFieldLabels = Omit<
@@ -94,9 +94,9 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   types: "Types d'accompagnement"
 }
 
-const incomesRelativesLabels: Omit<
-  Record<keyof typeof commonRelationshipLabels, string>,
-  'EnfantMineur'
+const incomesRelativesLabels: Record<
+  BeneficiaryHouseholdOccupationRelationship,
+  string
 > = {
   AutreMemberDeLaFamille: 'des autres membres de la famille',
   Conjoint: 'du conjoint·e',
