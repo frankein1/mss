@@ -68,7 +68,7 @@ const handler = async ({
     Prefet
   }
   const signalements = Object.entries(signalementFields)
-    .filter(([_key, value]) => value != null)
+    .filter(([_key, value]) => !!value)
     .map(([key, _value]) => key as FollowupSignalement)
 
   const interventionFields = {
@@ -80,7 +80,7 @@ const handler = async ({
   }
 
   const interventions = Object.entries(interventionFields)
-    .filter(([_key, value]) => value != null)
+    .filter(([_key, value]) => !!value)
     .map(([key, _value]) => key as FollowupIntervention)
 
   let prescribingOrganization
