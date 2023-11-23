@@ -15,7 +15,7 @@ export const fixturesUsers = [
     id: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
     firstName: 'Jeanne',
     lastName: 'Référente',
-    email: 'jeanne.référente@example.com',
+    email: 'jeanne.referente@example.com',
     role: 'Referent',
     status: 'Active',
     structureId: fixtureStructure.id
