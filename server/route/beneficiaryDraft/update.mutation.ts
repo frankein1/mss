@@ -9,6 +9,8 @@ import { SecurityRuleGrantee } from '~/server/security'
 import type { BeneficiaryDraft } from '~/types/beneficiary'
 import { DraftRepo } from '~/server/database'
 import { isCreator } from '~/server/security/rules/helpers'
+import { updateBeneficiaryIncomesRelations } from '~/utils/beneficiary/updateBeneficiaryIncomesRelations'
+import { prepareDraftData } from '~/utils'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
@@ -22,43 +24,30 @@ const securityCheck = async (
 }
 
 const handler = async ({
-  input: {
-    id: draftId,
-    general,
-    taxHousehold,
-    entourage,
-    health,
-    occupation,
-    externalOrganisations
-  },
+  input,
   ctx: { user }
 }: {
   input: UpdateBeneficiaryDraftInput
   ctx: ProtectedAppContext
 }) => {
   const beneficiaryDraft = (await DraftRepo.findUniqueOrThrow(user, {
-    where: { id: draftId }
+    where: { id: input.id }
   })) as BeneficiaryDraft
 
   if (!beneficiaryDraft?.content) {
     throw forbiddenError()
   }
 
+  const draftContent = prepareDraftData(input, beneficiaryDraft)
+
   const updatedBeneficiaryDraft = await DraftRepo.prisma.update({
-    where: { id: draftId },
+    where: { id: input.id },
     data: {
-      content: {
-        general: general || beneficiaryDraft.content.general,
-        taxHousehold: taxHousehold || beneficiaryDraft.content.taxHousehold,
-        entourage: entourage || beneficiaryDraft.content.entourage,
-        health: health || beneficiaryDraft.content.health,
-        occupation: occupation || beneficiaryDraft.content.occupation,
-        externalOrganisations:
-          externalOrganisations ||
-          beneficiaryDraft.content.externalOrganisations
-      }
+      content: draftContent
     }
   })
+
+  await updateBeneficiaryIncomesRelations(user, input.id, draftContent)
 
   return updatedBeneficiaryDraft
 }
