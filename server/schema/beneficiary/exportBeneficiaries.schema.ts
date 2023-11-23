@@ -7,7 +7,12 @@ export const exportBeneficiariesSchema = z.object({
     z.object({
       firstName: z.nativeEnum(Prisma.SortOrder).optional(),
       usualName: z.nativeEnum(Prisma.SortOrder).optional(),
-      birthDate: z.nativeEnum(Prisma.SortOrder).optional()
+      birthDate: z
+        .object({
+          sort: z.nativeEnum(Prisma.SortOrder),
+          nulls: z.literal('last')
+        })
+        .optional()
     })
   ),
   filters: beneficiaryFilterSchema
