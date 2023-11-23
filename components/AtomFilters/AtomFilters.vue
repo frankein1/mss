@@ -338,6 +338,11 @@
       flex-wrap: nowrap;
       flex: 1 0 auto;
       justify-content: flex-end;
+
+      &:not(.fr-btns-group--sm, .fr-btns-group--lg).fr-btns-group--icon-left
+        .fr-btn[class*=' fr-icon-'] {
+        margin-bottom: 0;
+      }
     }
   }
 
