@@ -101,7 +101,9 @@
       }
     ]
 
-    if (!isReferent(user.value)) {
+    const hasReferentsFilters = !isReferent(user.value)
+
+    if (hasReferentsFilters) {
       filters.push({
         name: 'referents',
         label: 'Référent',
@@ -119,6 +121,7 @@
         label: 'Statut',
         options: withEmptyValue(beneficiaryStatusOptions, 'Tous les statuts'),
         type: FilterType.SelectOne,
+        alwaysExpanded: !hasReferentsFilters,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.Status
       },
