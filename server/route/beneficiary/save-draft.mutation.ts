@@ -16,6 +16,8 @@ import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { BeneficiaryRepo, DraftRepo } from '~/server/database'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { prepareRelationUpdates } from '~/utils/prisma'
+import { getBeneficiaryWithIncomes } from '~/server/query'
 
 const handler = async ({
   input,
@@ -29,7 +31,7 @@ const handler = async ({
     where: { id: draftId }
   })
 
-  const data = prepareData(ctx, input, beneficiaryDraft)
+  const data = await prepareData(ctx, input, beneficiaryDraft)
   const { id } = await BeneficiaryRepo.prisma.create({
     data
   })
@@ -45,7 +47,7 @@ const handler = async ({
   return { id }
 }
 
-function prepareData(
+async function prepareData(
   { user, structure }: ProtectedAppContext,
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
@@ -116,7 +118,17 @@ function prepareData(
   }
 
   if (permissions.edit.occupationIncome) {
-    data = { ...data, ...occupation }
+    const beneficiary = await getBeneficiaryWithIncomes(user, input.id)
+    const previousIncomes = beneficiary.incomes.map(income => ({
+      ...income,
+      incomeAmount: income.incomeAmount?.toNumber()
+    }))
+    const incomesRelationUpdates = prepareRelationUpdates(
+      occupation?.incomes || [],
+      previousIncomes
+    )
+
+    data = { ...data, ...occupation, incomes: incomesRelationUpdates }
   }
 
   if (permissions.edit.externalOrganisations) {
