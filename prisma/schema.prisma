@@ -141,7 +141,7 @@ model Document {
   tags             String[]
   confidential     Boolean
 
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
   created      DateTime?      @default(now())
@@ -1403,7 +1403,7 @@ model Notification {
   recipient   User   @relation(fields: [recipientId], references: [id])
   recipientId String @map("recipient_id") @db.Uuid
 
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id])
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
   helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id])
