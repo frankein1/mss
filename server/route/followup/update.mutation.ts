@@ -69,7 +69,7 @@ const handler = async ({
   }
 
   const interventions = Object.entries(interventionFields)
-    .filter(([_key, value]) => value != null)
+    .filter(([_key, value]) => !!value)
     .map(([key, _value]) => key as FollowupIntervention)
 
   const signalementFields = {
@@ -79,7 +79,7 @@ const handler = async ({
   }
 
   const signalements = Object.entries(signalementFields)
-    .filter(([_key, value]) => value != null)
+    .filter(([_key, value]) => !!value)
     .map(([key, _value]) => key as FollowupSignalement)
 
   let prescribingOrganization
@@ -107,6 +107,7 @@ const handler = async ({
       prescribingOrganization,
       types: prepareFollowupTypesMutations(types),
       documents: prepareDocumentsMutations(documents),
+      redirected,
       structureName: redirected ? structureName : null,
       medium,
       place: medium === FollowupMedium.ExternalAppointment ? place : null,
