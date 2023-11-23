@@ -99,7 +99,7 @@ const incomesRelativesLabels: Record<
   string
 > = {
   AutreMemberDeLaFamille: 'des autres membres de la famille',
-  Conjoint: 'du conjoint·e',
+  Conjoint: 'du conjoint',
   EnfantMajeur: 'des enfants majeurs',
   Grandparent: 'des grand-parents',
   Parent: 'des parents',
