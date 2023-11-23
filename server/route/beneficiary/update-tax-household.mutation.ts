@@ -9,6 +9,7 @@ import {
   UpdateBeneficiaryTaxHouseholdInput,
   updateBeneficiaryTaxHouseholdSchema
 } from '~/server/schema'
+import { updateBeneficiaryIncomesRelations } from '~/utils/beneficiary/updateBeneficiaryIncomesRelations'
 import { prepareRelationUpdates } from '~/utils/prisma'
 import {
   getBeneficiarySecurityTarget,
@@ -89,6 +90,8 @@ const handler = async ({
     where: { id },
     data
   })
+
+  await updateBeneficiaryIncomesRelations(user, id)
 
   return updatedBeneficiary
 }

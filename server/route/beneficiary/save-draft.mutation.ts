@@ -1,23 +1,13 @@
 import { UserActivityType, Prisma } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  SaveDraftInput,
-  SaveBeneficiaryGeneralInformationInput,
-  SaveBeneficiaryTaxHouseholdInput,
-  SaveBeneficiaryEntourageInput,
-  SaveBeneficiaryHealthInput,
-  SaveBeneficiaryOccupationInput,
-  SaveBeneficiaryExternalOrganisationsInput,
-  saveDraftSchema
-} from '~/server/schema'
+import { SaveDraftInput, saveDraftSchema } from '~/server/schema'
 import { getBeneficiaryPermissions } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { BeneficiaryRepo, DraftRepo } from '~/server/database'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { prepareRelationUpdates } from '~/utils/prisma'
-import { getBeneficiaryWithIncomes } from '~/server/query'
+import { prepareDraftData } from '~/utils'
 
 const handler = async ({
   input,
@@ -31,7 +21,7 @@ const handler = async ({
     where: { id: draftId }
   })
 
-  const data = await prepareData(ctx, input, beneficiaryDraft)
+  const data = prepareData(ctx, input, beneficiaryDraft)
   const { id } = await BeneficiaryRepo.prisma.create({
     data
   })
@@ -47,7 +37,7 @@ const handler = async ({
   return { id }
 }
 
-async function prepareData(
+function prepareData(
   { user, structure }: ProtectedAppContext,
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
@@ -59,7 +49,7 @@ async function prepareData(
     health,
     occupation,
     externalOrganisations
-  } = getDataFromSources(input, beneficiaryDraft)
+  } = prepareDraftData(input, beneficiaryDraft)
 
   if (!general) {
     throw new Error(
@@ -120,17 +110,11 @@ async function prepareData(
   }
 
   if (permissions.edit.occupationIncome) {
-    const beneficiary = await getBeneficiaryWithIncomes(user, input.id)
-    const previousIncomes = beneficiary.incomes.map(income => ({
-      ...income,
-      incomeAmount: income.incomeAmount?.toNumber()
-    }))
-    const incomesRelationUpdates = prepareRelationUpdates(
-      occupation?.incomes || [],
-      previousIncomes
-    )
-
-    data = { ...data, ...occupation, incomes: incomesRelationUpdates }
+    data = {
+      ...data,
+      ...occupation,
+      incomes: { create: occupation?.incomes ?? {} }
+    }
   }
 
   if (permissions.edit.externalOrganisations) {
@@ -138,42 +122,6 @@ async function prepareData(
   }
 
   return data
-}
-
-function getDataFromSources(
-  input: SaveDraftInput,
-  beneficiaryDraft: BeneficiaryDraft
-) {
-  const general = (input.general || beneficiaryDraft.content?.general) as
-    | SaveBeneficiaryGeneralInformationInput
-    | undefined
-  const taxHousehold = (input.taxHousehold ||
-    beneficiaryDraft.content?.taxHousehold) as
-    | SaveBeneficiaryTaxHouseholdInput
-    | undefined
-  const entourage = (input.entourage || beneficiaryDraft.content?.entourage) as
-    | SaveBeneficiaryEntourageInput
-    | undefined
-  const health = (input.health || beneficiaryDraft.content?.health) as
-    | SaveBeneficiaryHealthInput
-    | undefined
-  const occupation = (input.occupation ||
-    beneficiaryDraft.content?.occupation) as
-    | SaveBeneficiaryOccupationInput
-    | undefined
-  const externalOrganisations = (input.externalOrganisations ||
-    beneficiaryDraft.content?.externalOrganisations) as
-    | SaveBeneficiaryExternalOrganisationsInput
-    | undefined
-
-  return {
-    general,
-    taxHousehold,
-    entourage,
-    health,
-    occupation,
-    externalOrganisations
-  }
 }
 
 export const saveDraftMutation = createMutation({
