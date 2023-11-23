@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.10.0...v1.10.1) (2023-11-23)
+
+
+### Bug Fixes
+
+* **beneficiaire:** Affiche toujours 3 filtres par défaut ([be17a99](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/be17a99c6e6e0f6b77a35100328e8a67290c1b46)), closes [#92](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/92)
+* **beneficiaire:** Lors de la modification du numéro de téléphone du bénéficiaire, l'information était effacée ([43a542e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/43a542e0fddd3fb4f4417e64617502fb88875113)), closes [#226](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/226)
+* **beneficiaire:** Quand le tri par date de naissance est appliqué, les fiches sans dates de naissance sont toujours triées en dernier ([2c467fe](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2c467fe0ee0ddfce6bc9f5b7b5d825bd966c6c19)), closes [#92](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/92)
+* closes [#227](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/227) ([4b1c034](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4b1c034d9d059718d92d1c41faee9c6cbccf10a3))
+* closes [#227](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/227) ([3c7d7bb](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3c7d7bbc162f9228062441bd7d2782db947f5e14))
+* closes [#228](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/228) ([af18045](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/af180459ddf2d9f2062e2a3dc68917df393bce33))
+* Déplace la génération du contenu des emails coté serveur ([fec1b3b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fec1b3b5bc04733107aea56fc9d0562f09ba8a93))
+* Gestion d'un utilisateur connu de IC et pas de MSS ([e23fe3a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e23fe3a773ce73bec0f052dce382efc3461261e8))
+* Supprime les espaces et mets en mininuscule l'email de l'utilisateur ([b424503](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b424503ed15e684f6f209479edddd61d7ef1af02))
+
 ## [1.10.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.9.0...v1.10.0) (2023-11-21)
 
 
