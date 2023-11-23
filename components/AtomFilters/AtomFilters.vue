@@ -40,11 +40,13 @@
     <div class="filter-left-section">
       <p v-if="resultsLabel">{{ resultsLabel }}</p>
       <ul
-        v-show="!expanded && Object.keys(selectedFilters).length"
+        v-show="!expanded && hasCollapsedSelectedFilters"
         class="fr-tags-group"
       >
         <li
-          v-for="({ filterLabel, valueLabel }, name) in selectedFilters"
+          v-for="(
+            { filterLabel, valueLabel }, name
+          ) in collapsedSelectedFilters"
           :key="name"
         >
           <p class="fr-tag fr-icon-filter-line fr-tag--icon-left">
@@ -162,6 +164,25 @@
 
   const hasFilters = computed<boolean>(
     () => !!Object.keys(selectedFilters.value).length
+  )
+
+  const collapsedSelectedFilters = computed<SelectedFilters>(() =>
+    Object.entries(selectedFilters.value).reduce(
+      (collapsedSelectedFilters, [name, value]) => {
+        const isCollapsed = collapsedByDefaultFilters.value.some(
+          collapsed => collapsed.name === name
+        )
+
+        return isCollapsed
+          ? { ...collapsedSelectedFilters, [name]: value }
+          : collapsedSelectedFilters
+      },
+      {} as SelectedFilters
+    )
+  )
+
+  const hasCollapsedSelectedFilters = computed(
+    () => !!Object.keys(collapsedSelectedFilters.value).length
   )
 
   function getFilterInitialValue(
@@ -314,9 +335,14 @@
     .fr-btns-group {
       margin-left: auto;
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      flex: 1 0 auto;
       justify-content: flex-end;
-      align-items: center;
+
+      &:not(.fr-btns-group--sm, .fr-btns-group--lg).fr-btns-group--icon-left
+        .fr-btn[class*=' fr-icon-'] {
+        margin-bottom: 0;
+      }
     }
   }
 

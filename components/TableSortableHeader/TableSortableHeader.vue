@@ -35,7 +35,7 @@
   )
 
   const emit = defineEmits<{
-    'update:sort': [sort: SortOrder | undefined]
+    'update:sort': [sort: SortOrder]
   }>()
 
   const innerSort = ref<SortOrder | undefined>(props.sort)

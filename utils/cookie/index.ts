@@ -1,4 +1,4 @@
-type CooieOptions = {
+type CookieOptions = {
   httpOnly: boolean
   secure: boolean
   expires: Date
@@ -9,7 +9,7 @@ export const cookieOptions = ({
   expiresIn
 }: {
   expiresIn: number
-}): CooieOptions => {
+}): CookieOptions => {
   return {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
