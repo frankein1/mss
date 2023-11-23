@@ -6,7 +6,7 @@ export enum SortOrder {
 export type BeneficiarySort = {
   usualName?: SortOrder
   firstName?: SortOrder
-  birthDate?: SortOrder
+  birthDate?: { sort: SortOrder; nulls: 'last' }
 }
 
 export type BeneficiaryDocumentSort = {

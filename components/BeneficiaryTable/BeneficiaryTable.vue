@@ -24,7 +24,9 @@
             />
             <TableSortableHeader
               label="Naissance"
-              @update:sort="onSort({ birthDate: $event })"
+              @update:sort="
+                onSort({ birthDate: { sort: $event, nulls: 'last' } })
+              "
             />
             <th scope="col">Téléphone</th>
             <th scope="col">Adresse</th>
