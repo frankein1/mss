@@ -101,18 +101,20 @@
     :key="income.id"
     class="fr-grid-row"
   >
-    <!-- FIXME: type error -->
     <BeneficiaryInfoLabel
       :label="`${beneficiaryFieldLabels.incomeSource} ${
-        incomesRelativesLabels[income.hostedRelative]
+        incomesRelativesLabels[
+          income.hostedRelative as BeneficiaryHouseholdOccupationRelationship
+        ]
       }`"
       :value="arrayToString(income.incomeSource || [], incomeSourceLabels)"
       class="fr-col-6"
     />
-    <!-- FIXME: type error -->
     <BeneficiaryInfoLabel
       :label="`${beneficiaryFieldLabels.incomeAmount} ${
-        incomesRelativesLabels[income.hostedRelative]
+        incomesRelativesLabels[
+          income.hostedRelative as BeneficiaryHouseholdOccupationRelationship
+        ]
       }`"
       :value="euros(income.incomeAmount)"
       class="fr-col-6"
@@ -159,6 +161,7 @@
     beneficiaryFieldLabels,
     incomesRelativesLabels
   } from '~/client/labels/beneficiary.labels'
+  import { BeneficiaryHouseholdOccupationRelationship } from '~/types/beneficiary'
 
   const props = defineProps<{
     occupationIncome: GetBeneficiaryOccupationIncome

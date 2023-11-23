@@ -79,11 +79,13 @@
       :key="income.key"
     >
       <div class="fr-col-12 fr-col-lg-6">
-        <!-- FIXME: type error -->
         <VeeMultiSelect
           :name="`incomes[${idx}].incomeSource`"
           :label="`${beneficiaryFieldLabels.incomeSource} ${
-            incomesRelativesLabels[income.value.hostedRelative]
+            incomesRelativesLabels[
+              income.value
+                .hostedRelative as BeneficiaryHouseholdOccupationRelationship
+            ]
           }`"
           :options="incomeSourceOptions"
           label-class="fr-text--regular"
@@ -91,11 +93,13 @@
         />
       </div>
       <div class="fr-col-12 fr-col-lg-6">
-        <!-- FIXME: type error -->
         <VeeCurrencyInput
           :name="`incomes[${idx}].incomeAmount`"
           :label="`${beneficiaryFieldLabels.incomeAmount} ${
-            incomesRelativesLabels[income.value.hostedRelative]
+            incomesRelativesLabels[
+              income.value
+                .hostedRelative as BeneficiaryHouseholdOccupationRelationship
+            ]
           }`"
         />
       </div>
@@ -190,6 +194,7 @@
   } from '~/client/labels/beneficiary.labels'
   import { BeneficiaryPermissions } from '~/server/security'
   import { CreateOrUpdateIncomeInput } from '~/server/schema'
+  import { BeneficiaryHouseholdOccupationRelationship } from '~/types/beneficiary'
 
   const props = defineProps<{
     familySituation: BeneficiaryFamilySituation | null | undefined
