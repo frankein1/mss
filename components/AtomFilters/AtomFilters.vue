@@ -335,9 +335,9 @@
     .fr-btns-group {
       margin-left: auto;
       display: flex;
-      flex-wrap: wrap;
+      flex-wrap: nowrap;
+      flex: 1 0 auto;
       justify-content: flex-end;
-      align-items: center;
     }
   }
 
