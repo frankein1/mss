@@ -8,6 +8,7 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   getBeneficiarySecurityTarget,
+  getBeneficiaryWithIncomes,
   getStructureByUser
 } from '~/server/query'
 import {
@@ -16,16 +17,6 @@ import {
 } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
 import { prepareRelationUpdates } from '~/utils/prisma'
-
-function getBeneficiaryWithIncomes(user: SecurityRuleGrantee, id: string) {
-  return BeneficiaryRepo.findUniqueOrThrow(user, {
-    where: { id },
-    select: {
-      id: true,
-      incomes: true
-    }
-  })
-}
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
