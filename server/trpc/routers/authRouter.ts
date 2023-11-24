@@ -1,8 +1,7 @@
-import { protectedProcedure, router } from '..'
-import { getUserQuery } from '~/server/route/auth'
+import { authProcedure, router } from '..'
+import { getUserHandler } from '~/server/route/auth'
+import { emptySchema } from '~/server/schema'
 
 export const authRouter = router({
-  getUser: protectedProcedure
-    .input(getUserQuery.inputValidation)
-    .query(getUserQuery.execute)
+  getUser: authProcedure.input(emptySchema).query(getUserHandler)
 })

@@ -1,10 +1,9 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { notfoundError } from '~/server/trpc'
+import { notfoundError, AdminContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { idSchema } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
-import { AdminContext } from '~/server/trpc/createRouter'
 
 const adminHandler = async ({
   ctx: { user },

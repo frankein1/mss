@@ -2,7 +2,7 @@ import { UserRepo } from '~/server/database'
 import { createMutation } from '~/server/route'
 import { AdminEditUserInput, adminEditUserSchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { AdminContext } from '~/server/trpc/createRouter'
+import { AdminContext } from '~/server/trpc'
 
 const adminHandler = async ({
   ctx: _ctx,
