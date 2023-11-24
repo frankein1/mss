@@ -5,7 +5,7 @@ import {
   adminEditStructureSchema
 } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { AdminContext } from '~/server/trpc/createRouter'
+import { AdminContext } from '~/server/trpc'
 import { editFollowupTypes } from '~/utils/structure'
 
 const adminHandler = async ({

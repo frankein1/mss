@@ -7,7 +7,7 @@ export async function useLogUserFromCookie() {
   const token = useCookie(sessionCookieKey)
 
   if (!authStore.isAuthenticated && token.value) {
-    const user = await useTrpcClient().auth.getUser.query({})
+    const user = await useTrpcClient().auth.getUser.query()
 
     if (user) {
       authStore.login(user)
