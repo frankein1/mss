@@ -1,18 +1,13 @@
-import { createQuery } from '~/server/route'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { AuthContext, forbiddenError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
-import { emptySchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { UserRepo } from '~/server/database'
 
-const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
-  const { user: ctxUser } = ctx
-
-  if (!ctxUser) {
-    throw forbiddenError()
-  }
-
-  const user = await UserRepo.findUniqueOrThrow(ctx.user, {
+export const getUserHandler = async ({
+  ctx: { user: ctxUser }
+}: {
+  ctx: AuthContext
+}) => {
+  const user = await UserRepo.findUniqueOrThrow(ctxUser, {
     where: {
       id: ctxUser.id
     },
@@ -58,9 +53,3 @@ const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
 
   return jwtUser
 }
-
-export const getUserQuery = createQuery({
-  inputValidation: emptySchema,
-  handler,
-  securityCheck: AllowSecurityCheck
-})

@@ -4,7 +4,7 @@ import {
   adminCreateStructureSchema
 } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { AdminContext } from '~/server/trpc/createRouter'
+import { AdminContext } from '~/server/trpc'
 import { StructureRepo } from '~/server/database'
 import { sendEmail } from '~/server/lib/email'
 import { getStructureCreationEmailContent } from '~/server/email'
