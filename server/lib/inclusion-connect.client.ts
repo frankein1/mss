@@ -74,40 +74,49 @@ export class InclusionConnectClient {
       code
     })
 
-    const response = await fetch(`${this.issuer}/auth/token/`, {
-      method: 'post',
-      body: params,
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
-    })
+    try {
+      const response = await fetch(`${this.issuer}/auth/token/`, {
+        method: 'post',
+        body: params,
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
+      })
 
-    const responseJson = await response.json()
+      const responseJson = await response.json()
 
-    if (responseJson.error) {
-      return {
-        error: {
-          error: responseJson.error,
-          description: responseJson.error_description
+      if (responseJson.error) {
+        return {
+          error: {
+            error: responseJson.error,
+            description: responseJson.error_description
+          }
         }
       }
-    }
 
-    const {
-      access_token: accessToken,
-      expires_in: expiresIn,
-      token_type: tokenType,
-      scope,
-      refresh_token: refreshToken,
-      id_token: idToken
-    } = responseJson
+      const {
+        access_token: accessToken,
+        expires_in: expiresIn,
+        token_type: tokenType,
+        scope,
+        refresh_token: refreshToken,
+        id_token: idToken
+      } = responseJson
 
-    return {
-      data: {
-        accessToken,
-        expiresIn,
-        refreshToken,
-        tokenType,
-        idToken,
-        scope
+      return {
+        data: {
+          accessToken,
+          expiresIn,
+          refreshToken,
+          tokenType,
+          idToken,
+          scope
+        }
+      }
+    } catch {
+      return {
+        error: {
+          error: "Le chargement du jeton d'authentification a échoué",
+          description: "Le chargement du jeton d'authentification a échoué"
+        }
       }
     }
   }
