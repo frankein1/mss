@@ -6,7 +6,7 @@
         <input
           class="fr-input"
           placeholder="nom, email"
-          @input="onSearch"
+          @change="onSearch"
         />
       </div>
       <NuxtLink
