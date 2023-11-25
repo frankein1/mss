@@ -32,7 +32,13 @@
           >
             <td>{{ email.to }}</td>
             <td>{{ email.subject }}</td>
-            <td>{{ EmailStatusLabels[email.status] }}</td>
+            <td>
+              <span
+                class="fr-badge"
+                :class="[emailStatusBadgeClasses[email.status]]"
+                >{{ EmailStatusLabels[email.status] }}</span
+              >
+            </td>
             <td>{{ formatDate(email.sentDate, 'DD/MM/YYYY HH:mm') }}</td>
             <td>{{ email.retryNumber }}</td>
             <td>
@@ -63,6 +69,7 @@
   import { Emails } from './types'
   import { EmailStatusLabels } from '~/client/options/email'
   import type { EmailAdminSort } from '~/types/table'
+  import { emailStatusBadgeClasses } from '~/client/classes/email'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
