@@ -50,7 +50,8 @@ async function sendEmails() {
     try {
       await sendEmail({ to, from, subject, text, html })
       data.status = EmailStatus.Sent
-    } catch (error) {
+    } catch (err) {
+      console.error(err)
       data.status = EmailStatus.Error
     } finally {
       await EmailRepo.prisma.update({
