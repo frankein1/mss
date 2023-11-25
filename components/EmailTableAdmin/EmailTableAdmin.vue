@@ -32,7 +32,7 @@
             <td>{{ email.to }}</td>
             <td>{{ email.subject }}</td>
             <td>{{ EmailStatusLabels[email.status] }}</td>
-            <td>{{ formatDate(email.sentDate) }}</td>
+            <td>{{ formatDate(email.sentDate, 'DD/MM/YYYY HH:mm') }}</td>
             <td>{{ email.retryNumber }}</td>
           </tr>
         </tbody>
