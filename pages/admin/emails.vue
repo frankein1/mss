@@ -22,14 +22,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-  import { EmailAdminSort } from '~/types/table'
+  import { EmailAdminSort, SortOrder } from '~/types/table'
   import type { EmailAdminFilterInput } from '~/server/schema'
 
   const trpcClient = useTrpcClient()
 
   const search = ref<string>()
   const filters = ref<EmailAdminFilterInput>({})
-  const orderBy = ref<EmailAdminSort[]>([])
+  const orderBy = ref<EmailAdminSort[]>([{ sentDate: SortOrder.Desc }])
 
   const queryInput = computed(() => ({
     search: search.value,
