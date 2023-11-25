@@ -18,6 +18,7 @@
             <th scope="col">Objet</th>
             <th scope="col">Statut</th>
             <TableSortableHeader
+              :sort="sentDateSort"
               label="Date d'envoi"
               @update:sort="onSort({ sentDate: $event })"
             />
@@ -89,6 +90,10 @@
     toRef(() => props.sort),
     toRef(() => props.pending),
     emit
+  )
+
+  const sentDateSort = computed(
+    () => props.sort?.find(s => s.sentDate)?.sentDate
   )
 
   function onSend(id: string) {
