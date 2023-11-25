@@ -7,7 +7,8 @@ import {
   FollowupMedium,
   Minister,
   UserRole,
-  DocumentType
+  DocumentType,
+  EmailStatus
 } from '@prisma/client'
 import { kindOfBooleanSchema, stringConstraint } from './helpers.schema'
 import { AgeGroup } from '~/client/options/ageGroup'
@@ -96,6 +97,12 @@ const userAdminFilterSchema = z.object({
 
 type UserAdminFilterInput = z.infer<typeof userAdminFilterSchema>
 
+const emailAdminFilterSchema = z.object({
+  status: z.nativeEnum(EmailStatus).nullish()
+})
+
+type EmailAdminFilterInput = z.infer<typeof emailAdminFilterSchema>
+
 export {
   statFilterSchema,
   beneficiaryFilterSchema,
@@ -103,7 +110,8 @@ export {
   helpRequestFilterSchema,
   beneficiaryHistoryFilterSchema,
   userAdminFilterSchema,
-  beneficiaryDocumentFilterSchema
+  beneficiaryDocumentFilterSchema,
+  emailAdminFilterSchema
 }
 
 export type {
@@ -113,5 +121,6 @@ export type {
   HelpRequestFilterInput,
   BeneficiaryHistoryFilterInput,
   UserAdminFilterInput,
-  BeneficiaryDocumentFilterInput
+  BeneficiaryDocumentFilterInput,
+  EmailAdminFilterInput
 }
