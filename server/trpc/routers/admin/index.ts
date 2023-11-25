@@ -2,5 +2,6 @@ export type {
   AdminStructuresOutput,
   AdminStructureOutput,
   AdminUserOutput,
-  AdminUsersOutput
+  AdminUsersOutput,
+  AdminEmailsOutput
 } from '~/server/route/admin'

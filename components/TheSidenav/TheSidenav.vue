@@ -113,6 +113,11 @@
         label: 'Utilisateurs',
         icon: 'fr-icon-user-line'
       })
+      items.push({
+        to: RoutePath.AdminEmails(),
+        label: 'Emails',
+        icon: 'fr-icon-mail-line'
+      })
     } else {
       items.push({
         to: RoutePath.AppOverview(),

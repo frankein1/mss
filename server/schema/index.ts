@@ -21,6 +21,7 @@ export * from './structure'
 export * from './auth'
 export * from './helpRequest'
 export * from './helpers.schema'
+export * from './email'
 
 export {
   createFollowupTypeSchema,
@@ -38,7 +39,8 @@ export {
   helpRequestFilterSchema,
   beneficiaryHistoryFilterSchema,
   userAdminFilterSchema,
-  beneficiaryDocumentFilterSchema
+  beneficiaryDocumentFilterSchema,
+  emailAdminFilterSchema
 } from './filter.schema'
 export type {
   StatFilterInput,
@@ -47,7 +49,8 @@ export type {
   HelpRequestFilterInput,
   BeneficiaryHistoryFilterInput,
   UserAdminFilterInput,
-  BeneficiaryDocumentFilterInput
+  BeneficiaryDocumentFilterInput,
+  EmailAdminFilterInput
 } from './filter.schema'
 
 export {
