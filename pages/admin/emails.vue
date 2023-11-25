@@ -5,7 +5,7 @@
       <input
         class="fr-input"
         placeholder="email"
-        @input="onSearch"
+        @change="onSearch"
       />
     </div>
     <EmailFiltersAdmin
