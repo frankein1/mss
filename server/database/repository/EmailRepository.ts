@@ -5,6 +5,7 @@ export const EmailRepo = {
     create: prismaClient.email.create,
     findMany: prismaClient.email.findMany,
     update: prismaClient.email.update,
-    updateMany: prismaClient.email.updateMany
+    updateMany: prismaClient.email.updateMany,
+    count: prismaClient.email.count
   }
 }
