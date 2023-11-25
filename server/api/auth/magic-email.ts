@@ -1,6 +1,6 @@
 import { User, UserRole } from '@prisma/client'
 import { v4 } from 'uuid'
-import { sendEmail } from '~/server/lib/email'
+import { createEmail } from '~/server/lib/email'
 import { UserRepo } from '~/server/database'
 import { forbiddenError } from '~/server/trpc'
 import { RoutePath } from '~/utils/routing'
@@ -36,7 +36,7 @@ export default defineEventHandler(async event => {
     }
   })
 
-  await sendEmail({
+  await createEmail({
     to: user.email,
     subject: 'Mon Suivi Social - Espace Administrateur',
     ...getEmailContent(user, accessToken)

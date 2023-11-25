@@ -17,3 +17,6 @@ export const BENEFICIARIES_REQUEST_LIMIT_DEFAULT = 60
 export const INPUT_DEFER_DURATION = 400
 
 export const EMPTY_TABLE_CELL = '-'
+
+export const MAX_EMAIL_RETRY = 3
+export const EMAIL_RETRY_DELAY = 1000 * 60 * 60 // in milliseconds
