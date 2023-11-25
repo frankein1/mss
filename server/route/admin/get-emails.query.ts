@@ -15,8 +15,20 @@ const adminHandler = async ({
   ctx: AdminContext
   input: AdminGetEmailsInput
 }) => {
+  let where = prepareEmailFilters(input.filters)
+
+  if (input.search) {
+    where = {
+      ...where,
+      to: {
+        contains: input.search,
+        mode: 'insensitive'
+      }
+    }
+  }
+
   const emails = await EmailRepo.prisma.findMany({
-    where: prepareEmailFilters(input.filters),
+    where,
     select: {
       id: true,
       to: true,
