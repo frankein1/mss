@@ -8,6 +8,7 @@ import {
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { EmailRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc'
+import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 
 const adminHandler = async ({
   input
@@ -15,6 +16,11 @@ const adminHandler = async ({
   ctx: AdminContext
   input: AdminGetEmailsInput
 }) => {
+  const { take, skip } = takeAndSkipFromPagination({
+    perPage: input.perPage,
+    page: input.page
+  })
+
   let where = prepareEmailFilters(input.filters)
 
   if (input.search) {
@@ -27,20 +33,29 @@ const adminHandler = async ({
     }
   }
 
-  const emails = await EmailRepo.prisma.findMany({
-    where,
-    select: {
-      id: true,
-      to: true,
-      subject: true,
-      status: true,
-      sentDate: true,
-      retryNumber: true
-    },
-    orderBy: input.orderBy
-  })
+  const [emails, count] = await Promise.all([
+    EmailRepo.prisma.findMany({
+      where,
+      select: {
+        id: true,
+        to: true,
+        subject: true,
+        status: true,
+        sentDate: true,
+        retryNumber: true
+      },
+      orderBy: input.orderBy,
+      take,
+      skip
+    }),
+    EmailRepo.prisma.count({
+      where
+    })
+  ])
 
-  return { emails }
+  const totalPages = getTotalPages({ count, perPage: input.perPage })
+
+  return { emails, totalPages }
 }
 
 export type AdminEmailsOutput = Prisma.PromiseReturnType<typeof adminHandler>
