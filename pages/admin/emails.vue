@@ -17,6 +17,7 @@
       v-model:sort="orderBy"
       :emails="emails"
       :pending="pending"
+      @refresh-emails="refresh"
     />
   </div>
 </template>
@@ -36,7 +37,7 @@
     orderBy: orderBy.value
   }))
 
-  const { data, pending } =
+  const { data, pending, refresh } =
     await trpcClient.admin.getEmails.useQuery(queryInput)
 
   const emails = computed(() => data.value?.emails || [])

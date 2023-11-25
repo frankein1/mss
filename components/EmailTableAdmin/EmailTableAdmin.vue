@@ -22,6 +22,7 @@
               @update:sort="onSort({ sentDate: $event })"
             />
             <th scope="col">Nombre d'essais</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -34,6 +35,22 @@
             <td>{{ EmailStatusLabels[email.status] }}</td>
             <td>{{ formatDate(email.sentDate, 'DD/MM/YYYY HH:mm') }}</td>
             <td>{{ email.retryNumber }}</td>
+            <td>
+              <ul class="fr-btns-group fr-btns-group--icon-left">
+                <li>
+                  <button
+                    class="fr-btn fr-btn--secondary fr-icon-send-plane-line"
+                    :disabled="
+                      email.status === EmailStatus.Sending ||
+                      email.status === EmailStatus.ToSend
+                    "
+                    @click="onSend(email.id)"
+                  >
+                    Renvoyer
+                  </button>
+                </li>
+              </ul>
+            </td>
           </tr>
         </tbody>
       </table>
@@ -42,9 +59,13 @@
 </template>
 
 <script setup lang="ts">
+  import { EmailStatus } from '@prisma/client'
   import { Emails } from './types'
   import { EmailStatusLabels } from '~/client/options/email'
   import type { EmailAdminSort } from '~/types/table'
+
+  const snackbar = useSnackbar()
+  const trpcClient = useTrpcClient()
 
   const props = defineProps<{
     emails: Emails
@@ -54,6 +75,7 @@
 
   const emit = defineEmits<{
     'update:sort': [sort: EmailAdminSort[]]
+    'refreshEmails': []
   }>()
 
   const { onSort, tableContainer } = useTable<EmailAdminSort>(
@@ -61,4 +83,20 @@
     toRef(() => props.pending),
     emit
   )
+
+  function onSend(id: string) {
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.admin.sendEmail.mutate({
+          id
+        }),
+      onSuccess: () => {
+        snackbar.success('Email en cours de renvoi.')
+        emit('refreshEmails')
+      },
+      onFailure: () => {
+        snackbar.error("Le renvoi de l'email a échoué.")
+      }
+    })
+  }
 </script>

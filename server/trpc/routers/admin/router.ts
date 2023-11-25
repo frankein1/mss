@@ -10,7 +10,8 @@ import {
   getAdminUserQuery,
   getAdminOverviewQuery,
   editAdminUserMutation,
-  getAdminEmailsQuery
+  getAdminEmailsQuery,
+  adminSendEmailQuery
 } from '~/server/route/admin'
 
 export const adminRouter = router({
@@ -41,6 +42,9 @@ export const adminRouter = router({
   getEmails: adminProcedure
     .input(getAdminEmailsQuery.inputValidation)
     .query(getAdminEmailsQuery.executeAsAdmin),
+  sendEmail: adminProcedure
+    .input(adminSendEmailQuery.inputValidation)
+    .mutation(adminSendEmailQuery.executeAsAdmin),
   getOverview: adminProcedure
     .input(getAdminOverviewQuery.inputValidation)
     .query(getAdminOverviewQuery.executeAsAdmin)
