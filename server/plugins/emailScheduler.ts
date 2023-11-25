@@ -1,5 +1,5 @@
 import dayjs from 'dayjs'
-import { EmailStatus } from '@prisma/client'
+import { EmailStatus, Prisma } from '@prisma/client'
 import { useScheduler } from '#scheduler'
 import { EmailRepo } from '~/server/database'
 import { EMAIL_RETRY_DELAY, MAX_EMAIL_RETRY } from '~/utils/constants'
@@ -42,16 +42,22 @@ async function sendEmails() {
   })
 
   emails.forEach(async ({ id, to, from, subject, text, html }) => {
-    // TODO: handle errors (with Error status)
-    await sendEmail({ to, from, subject, text, html })
-    await EmailRepo.prisma.update({
-      where: { id },
-      data: {
-        retryNumber: { increment: 1 },
-        sentDate: new Date(),
-        status: EmailStatus.Sent
-      }
-    })
+    const data: Prisma.EmailUpdateInput = {
+      retryNumber: { increment: 1 },
+      sentDate: new Date()
+    }
+    // TODO: handle bounced emails
+    try {
+      await sendEmail({ to, from, subject, text, html })
+      data.status = EmailStatus.Sent
+    } catch (error) {
+      data.status = EmailStatus.Error
+    } finally {
+      await EmailRepo.prisma.update({
+        where: { id },
+        data
+      })
+    }
   })
 }
 
