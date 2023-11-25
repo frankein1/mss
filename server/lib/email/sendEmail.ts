@@ -1,23 +1,20 @@
 import { createTransport } from 'nodemailer'
-import { EmailRepo } from '~/server/database'
 
 export const sendEmail = async ({
   to,
+  from,
   subject,
   text,
   html
 }: {
   to: string
+  from: string
   subject: string
   text: string
   html: string
 }) => {
-  const {
-    email,
-    public: {
-      email: { from }
-    }
-  } = useRuntimeConfig()
+  const { email } = useRuntimeConfig()
+
   const transporter = createTransport({
     host: email.smtpHost,
     port: email.smtpPort,
@@ -34,15 +31,5 @@ export const sendEmail = async ({
     subject,
     text,
     html
-  })
-
-  await EmailRepo.prisma.create({
-    data: {
-      from,
-      to,
-      subject,
-      text,
-      html
-    }
   })
 }

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { UserRepo } from '~/server/database'
 import { useScheduler } from '#scheduler'
-import { sendEmail } from '~/server/lib/email'
+import { createEmail } from '~/server/lib/email'
 import { getWelcomeWorkshopEmailContent } from '~/server/email'
 
 export default defineNitroPlugin(() => {
@@ -20,7 +20,7 @@ async function sendWelcomeWorkshopEmail() {
   })
 
   usersCreatedLastWeek.forEach(user => {
-    sendEmail({
+    createEmail({
       to: user.email,
       subject: 'Mon Suivi Social - Vos premiers pas ✨',
       ...getWelcomeWorkshopEmailContent()
