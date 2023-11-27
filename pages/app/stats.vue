@@ -64,35 +64,26 @@
   const trpcClient = useTrpcClient()
 
   const { data: followupTypesOptions, error: followupTypesOptionsError } =
-    await trpcClient.config.getStructureFollowupTypes.useQuery(
-      {},
-      {
-        transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
-        queryKey: 'config.getStructureFollowupTypes.options'
-      }
-    )
+    await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
+      transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
+      queryKey: 'config.getStructureFollowupTypes.options'
+    })
 
   const {
     data: beneficiariesCitiesOptions,
     error: beneficiariesCitiesOptionsError
-  } = await trpcClient.config.getBeneficiariesCities.useQuery(
-    {},
-    {
-      transform: beneficiariesCities => {
-        const definedCities = beneficiariesCities.filter(hasDefinedCity)
-        return toOptions(definedCities, 'city', 'city')
-      }
+  } = await trpcClient.config.getBeneficiariesCities.useQuery(undefined, {
+    transform: beneficiariesCities => {
+      const definedCities = beneficiariesCities.filter(hasDefinedCity)
+      return toOptions(definedCities, 'city', 'city')
     }
-  )
+  })
 
   const { data: agentsOptions, error: agentsOptionsError } =
-    await trpcClient.config.getAgents.useQuery(
-      {},
-      {
-        transform: agents => withEmptyValue(toOptions(agents, 'id', 'name')),
-        queryKey: 'config.getAgents.options'
-      }
-    )
+    await trpcClient.config.getAgents.useQuery(undefined, {
+      transform: agents => withEmptyValue(toOptions(agents, 'id', 'name')),
+      queryKey: 'config.getAgents.options'
+    })
 
   const fetchError = computed(() => {
     if (followupTypesOptionsError.value) {

@@ -43,25 +43,19 @@
     data: followupTypeOptions,
     pending: followupTypeOptionsPending,
     error: followupTypeOptionsError
-  } = await trpcClient.config.getStructureFollowupTypes.useQuery(
-    {},
-    {
-      transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
-      queryKey: 'config.getStructureFollowupTypes.options'
-    }
-  )
+  } = await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
+    transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
+    queryKey: 'config.getStructureFollowupTypes.options'
+  })
 
   const {
     data: agentOptions,
     pending: agentOptionsPending,
     error: agentOptionsError
-  } = await trpcClient.config.getAgents.useQuery(
-    {},
-    {
-      transform: agents => toOptions(agents, 'id', 'name'),
-      queryKey: 'config.getAgents.options'
-    }
-  )
+  } = await trpcClient.config.getAgents.useQuery(undefined, {
+    transform: agents => toOptions(agents, 'id', 'name'),
+    queryKey: 'config.getAgents.options'
+  })
 
   const pending = computed(
     () => followupTypeOptionsPending.value || agentOptionsPending.value
