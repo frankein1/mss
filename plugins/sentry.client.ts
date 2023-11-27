@@ -3,6 +3,11 @@ import { defineNuxtPlugin, useRuntimeConfig } from '#app'
 
 export default defineNuxtPlugin(nuxtApp => {
   const { public: publicConfig } = useRuntimeConfig()
+
+  if (publicConfig.mssEnvironment !== 'production') {
+    return
+  }
+
   const router = useRouter()
 
   Sentry.init({

@@ -1,13 +1,14 @@
 import VueMatomo from 'vue-matomo'
 
 export default defineNuxtPlugin(() => {
-  const nuxtApp = useNuxtApp()
-  const router = useRouter()
   const { public: publicConfig } = useRuntimeConfig()
 
   if (publicConfig.mssEnvironment !== 'production') {
     return
   }
+
+  const nuxtApp = useNuxtApp()
+  const router = useRouter()
 
   nuxtApp.vueApp.use(VueMatomo, {
     host: publicConfig.matomo.host,
