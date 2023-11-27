@@ -7,23 +7,14 @@ import {
 } from '~/client/options/followupType'
 import { FollowupTypeRepo } from '~/server/database'
 import { CreateFollowupTypeInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security'
 import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
 export async function editFollowupTypes(
-  user: SecurityRuleGrantee,
   structureId: string,
+  currentFollowupTypes: FollowupTypeWithSupportsCount[],
   legallyRequiredFollowupTypes: DefaultFollowupType[],
   legallyNotRequiredFollowupTypes: (DefaultFollowupType | string)[]
 ) {
-  const currentFollowupTypes = await FollowupTypeRepo.findMany(user, {
-    include: {
-      _count: {
-        select: { followups: true, helpRequests: true }
-      }
-    }
-  })
-
   const { toCreate, toDelete } = getFollowupTypeMutations(
     structureId,
     currentFollowupTypes,
