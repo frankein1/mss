@@ -37,5 +37,5 @@
     name: Route.AdminOverview
   })
 
-  const data = await useTrpcClient().admin.getOverview.query({})
+  const data = await useTrpcClient().admin.getOverview.query()
 </script>

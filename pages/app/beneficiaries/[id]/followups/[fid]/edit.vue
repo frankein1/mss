@@ -67,13 +67,13 @@
     data: followupTypes,
     pending: followupTypesPending,
     error: followupTypesError
-  } = await trpcClient.config.getStructureFollowupTypes.useQuery({})
+  } = await trpcClient.config.getStructureFollowupTypes.useQuery()
 
   const {
     data: prescribingOrganizations,
     pending: prescribingOrganizationsPending,
     error: prescribingOrganizationsError
-  } = await trpcClient.config.getPrescribingOrganizations.useQuery({})
+  } = await trpcClient.config.getPrescribingOrganizations.useQuery()
 
   const pending = computed(
     () =>

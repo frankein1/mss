@@ -30,7 +30,7 @@ export const keySchema = z.object({
   key: z.string()
 })
 
-export const emptySchema = z.object({})
+export const emptySchema = z.undefined()
 
 export const numeroPegaseContraint = z
   .string()

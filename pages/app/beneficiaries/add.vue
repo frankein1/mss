@@ -46,15 +46,13 @@
     data: agents,
     pending,
     error
-  } = await trpcClient.config.getAgents.useQuery({})
+  } = await trpcClient.config.getAgents.useQuery()
 
   const {
     data: permissions,
     pending: permissionsPending,
     error: permissionsError
-  } = await trpcClient.permissions.getBeneficiaryCreationPermissions.useQuery(
-    {}
-  )
+  } = await trpcClient.permissions.getBeneficiaryCreationPermissions.useQuery()
 
   const isSubmitting = ref(false)
 
