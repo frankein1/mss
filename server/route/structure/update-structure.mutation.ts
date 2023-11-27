@@ -6,7 +6,7 @@ import {
 } from '~/server/schema'
 import { SecurityRuleGrantee, canEditStructure } from '~/server/security'
 import { editFollowupTypes } from '~/utils/structure'
-import { StructureRepo } from '~/server/database'
+import { StructureRepo, FollowupTypeRepo } from '~/server/database'
 
 const handler = async ({
   ctx: { structure: userStructure, user },
@@ -21,9 +21,17 @@ const handler = async ({
     ...structure
   } = input
 
+  const currentFollowupTypes = await FollowupTypeRepo.findMany(user, {
+    include: {
+      _count: {
+        select: { followups: true, helpRequests: true }
+      }
+    }
+  })
+
   await editFollowupTypes(
-    user,
     userStructure.id,
+    currentFollowupTypes,
     legallyRequiredFollowupTypes,
     legallyNotRequiredFollowupTypes
   )

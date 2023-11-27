@@ -1,20 +1,13 @@
-import { StructureRepo } from '~/server/database'
+import { StructureRepo, FollowupTypeRepo } from '~/server/database'
 import { createMutation } from '~/server/route'
 import {
   AdminEditStructureInput,
   adminEditStructureSchema
 } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { AdminContext } from '~/server/trpc'
 import { editFollowupTypes } from '~/utils/structure'
 
-const adminHandler = async ({
-  ctx: { user },
-  input
-}: {
-  ctx: AdminContext
-  input: AdminEditStructureInput
-}) => {
+const adminHandler = async ({ input }: { input: AdminEditStructureInput }) => {
   const {
     legallyRequiredFollowupTypes,
     legallyNotRequiredFollowupTypes,
@@ -22,9 +15,20 @@ const adminHandler = async ({
     ...structure
   } = input
 
+  const currentFollowupTypes = await FollowupTypeRepo.prisma.findMany({
+    where: {
+      ownedByStructureId: structureId
+    },
+    include: {
+      _count: {
+        select: { followups: true, helpRequests: true }
+      }
+    }
+  })
+
   await editFollowupTypes(
-    user,
     structureId,
+    currentFollowupTypes,
     legallyRequiredFollowupTypes,
     legallyNotRequiredFollowupTypes
   )

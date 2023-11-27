@@ -1,6 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { notfoundError, AdminContext } from '~/server/trpc'
+import { AdminContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { idSchema } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
@@ -12,7 +12,7 @@ const adminHandler = async ({
   ctx: AdminContext
   input: { id: string }
 }) => {
-  const structure = await StructureRepo.findUniqueOrThrow(user, {
+  return await StructureRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
       followupTypes: {
@@ -38,10 +38,6 @@ const adminHandler = async ({
       }
     }
   })
-  if (structure) {
-    return structure
-  }
-  throw notfoundError()
 }
 
 export type AdminStructureOutput = Prisma.PromiseReturnType<typeof adminHandler>
