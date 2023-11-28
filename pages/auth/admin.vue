@@ -14,6 +14,7 @@
       <button
         class="fr-btn submit-btn"
         type="submit"
+        :is-submitting="isSubmitting"
       >
         Sign-in
       </button>
@@ -34,6 +35,8 @@
   })
   const route = useRoute()
   const { token } = route.query
+
+  const isSubmitting = ref(false)
 
   onMounted(async () => {
     if (token) {
@@ -56,6 +59,7 @@
   })
 
   const onSubmit = handleSubmit(async input => {
+    isSubmitting.value = true
     await useFetch('/api/auth/magic-email', {
       method: 'POST',
       body: input,
@@ -68,6 +72,7 @@
         snackbar.error("Le compte administrateur n'as pas été retrouvé.")
       }
     })
+    isSubmitting.value = false
   })
 </script>
 
