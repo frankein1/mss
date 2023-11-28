@@ -2,21 +2,19 @@ import { createTransport } from 'nodemailer'
 
 export const sendEmail = async ({
   to,
+  from,
   subject,
   text,
   html
 }: {
   to: string
+  from: string
   subject: string
   text: string
-  html?: string
+  html: string
 }) => {
-  const {
-    email,
-    public: {
-      email: { from }
-    }
-  } = useRuntimeConfig()
+  const { email } = useRuntimeConfig()
+
   const transporter = createTransport({
     host: email.smtpHost,
     port: email.smtpPort,

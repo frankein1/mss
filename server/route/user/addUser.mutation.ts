@@ -3,7 +3,7 @@ import { createMutation } from '~/server/route'
 import { UserCreationInput, createUserSchema } from '~/server/schema'
 import { SecurityRuleGrantee, canCreateUser } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import { sendEmail } from '~/server/lib/email'
+import { createEmail } from '~/server/query'
 import { getUserCreationEmailContent } from '~/server/email'
 import { UserRepo } from '~/server/database'
 import { cleanEmail } from '~/utils/user'
@@ -43,7 +43,7 @@ const handler = async ({
     }
   })
 
-  sendEmail({
+  createEmail({
     to: createdUser.email,
     subject: 'Mon Suivi Social - Ouverture de votre compte',
     ...getUserCreationEmailContent(createdUser)

@@ -1560,3 +1560,25 @@ view BeneficiaryHistory {
 
   @@map("view_beneficiary_history")
 }
+
+enum EmailStatus {
+  ToSend
+  Sending
+  Sent
+  Error
+}
+
+model Email {
+  id          String      @id @default(uuid()) @db.Uuid
+  from        String
+  to          String
+  subject     String
+  text        String
+  html        String
+  error       String?
+  status      EmailStatus @default(ToSend)
+  sentDate    DateTime?
+  retryNumber Int         @default(0)
+
+  @@map("email")
+}

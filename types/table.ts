@@ -42,6 +42,10 @@ export type UserAdminSort = {
   lastAccess?: SortOrder
 }
 
+export type EmailAdminSort = {
+  sentDate?: SortOrder
+}
+
 export type TableSort =
   | BeneficiarySort
   | FollowupSort
@@ -49,3 +53,4 @@ export type TableSort =
   | StructureAdminSort
   | UserAdminSort
   | BeneficiaryDocumentSort
+  | EmailAdminSort

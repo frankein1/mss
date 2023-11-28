@@ -1,6 +1,6 @@
 import { TRPCError } from '@trpc/server'
 import { createMutation } from '~/server/route'
-import { sendEmail } from '~/server/lib/email'
+import { createEmail } from '~/server/query'
 import { AdminCreateUserInput, adminCreateUserSchema } from '~/server/schema'
 import { getUserCreationEmailContent } from '~/server/email'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
@@ -35,7 +35,7 @@ const adminHandler = async ({
     }
   })
 
-  sendEmail({
+  createEmail({
     to: createdUser.email,
     subject: 'Mon Suivi Social - Ouverture de votre compte',
     ...getUserCreationEmailContent(createdUser)

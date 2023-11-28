@@ -60,7 +60,8 @@ export enum Route {
   AdminStructure = 'AdminStructure',
   AdminUsers = 'AdminUsers',
   AdminUsersAdd = 'AdminUsersAdd',
-  AdminUser = 'AdminUser'
+  AdminUser = 'AdminUser',
+  AdminEmails = 'AdminEmails'
 }
 
 export type AppBeneficiariesSaveRoute =
@@ -274,5 +275,6 @@ export const RoutePath = {
     `${AdminRoute}/structures/${structureId}`,
   [Route.AdminUsers]: () => `${AdminRoute}/users`,
   [Route.AdminUsersAdd]: () => `${AdminRoute}/users/add`,
-  [Route.AdminUser]: (userId: string) => `${AdminRoute}/users/${userId}`
+  [Route.AdminUser]: (userId: string) => `${AdminRoute}/users/${userId}`,
+  [Route.AdminEmails]: () => `${AdminRoute}/emails`
 }

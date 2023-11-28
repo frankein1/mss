@@ -6,7 +6,7 @@ import {
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { AdminContext } from '~/server/trpc'
 import { StructureRepo } from '~/server/database'
-import { sendEmail } from '~/server/lib/email'
+import { createEmail } from '~/server/query'
 import { getStructureCreationEmailContent } from '~/server/email'
 
 const adminHandler = async ({
@@ -29,7 +29,7 @@ const adminHandler = async ({
     }
   })
 
-  sendEmail({
+  createEmail({
     to: input.email,
     subject: 'Mon Suivi Social - Votre espace a été créé',
     ...getStructureCreationEmailContent()
