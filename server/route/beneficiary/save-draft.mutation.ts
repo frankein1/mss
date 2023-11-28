@@ -33,7 +33,11 @@ const handler = async ({
 
   const data = prepareData(ctx, input, beneficiaryDraft)
 
-  const { id } = await BeneficiaryService.create({ data }, beneficiaryDraft?.id)
+  const { id } = await BeneficiaryService.create({
+    user: ctx.user,
+    params: { data },
+    draftId: beneficiaryDraft?.id
+  })
 
   return { id }
 }
