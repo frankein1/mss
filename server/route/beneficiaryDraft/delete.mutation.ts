@@ -17,12 +17,13 @@ const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
 }
 
 const handler = async ({
-  input
+  input,
+  ctx: { user }
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  await DraftRepo.prisma.delete({
+  await DraftRepo.delete(user, {
     where: { id: input.id }
   })
 }
