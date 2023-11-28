@@ -29,7 +29,7 @@ const adminHandler = async ({
   return { email }
 }
 
-export const adminSendEmailQuery = createQuery({
+export const sendEmailQuery = createQuery({
   inputValidation: adminSendEmailSchema,
   securityCheck: AllowSecurityCheck,
   adminHandler
