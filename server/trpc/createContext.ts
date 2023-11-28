@@ -34,10 +34,8 @@ export const createContext = async (event: H3Event) => {
     })
 
     return { event, user }
-  } catch (err) {
-    // FIXME: Remove log once error is identified
-    console.error('[tRPC CreateContext] User not found...', { id: userData.id })
-    throw err
+  } catch {
+    return { event, user: null }
   }
 }
 
