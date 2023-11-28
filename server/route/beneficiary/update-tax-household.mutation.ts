@@ -10,11 +10,9 @@ import {
   updateBeneficiaryTaxHouseholdSchema
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
-import {
-  getBeneficiarySecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getStructureByUser } from '~/server/query'
 import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryService } from '~/server/services'
 
 function getBeneficiaryWithTaxHousehold(user: SecurityRuleGrantee, id: string) {
   return BeneficiaryRepo.findUniqueOrThrow(user, {
@@ -34,7 +32,10 @@ const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryTaxHouseholdInput
 ) => {
-  const target = await getBeneficiarySecurityTarget(grantee, input.id)
+  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
+    grantee,
+    input.id
+  )
   const structure = await getStructureByUser(grantee)
   const permissions = getBeneficiaryPermissions({
     user: grantee,
