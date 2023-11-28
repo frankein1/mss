@@ -27,9 +27,9 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'dueDate',
   'forwardedToJustice',
   'helpRequested',
-  'interventions',
+  // 'interventions',
   'place',
-  'signalements',
+  // 'signalements',
   'thirdPersonName',
   'updated',
   'createdById'

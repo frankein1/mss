@@ -209,7 +209,7 @@
               />
             </div>
 
-            <div class="fr-fieldset__element fr-mb-0">
+            <!-- <div class="fr-fieldset__element fr-mb-0">
               <fieldset
                 class="fr-fieldset fr-mb-0"
                 aria-labelledby="followup-interventions-legend"
@@ -232,18 +232,18 @@
                 </div>
               </fieldset>
             </div>
-
-            <div class="fr-fieldset__element fr-mb-0">
+          -->
+            <!-- <div class="fr-fieldset__element fr-mb-0">
               <fieldset
                 class="fr-fieldset fr-mb-0"
                 aria-labelledby="followup-signalements-legend"
               >
-                <legend
+                 <legend
                   id="followup-signalements-legend"
                   class="fr-fieldset__legend"
                 >
                   {{ followupFieldLabels.signalements }}
-                </legend>
+                </legend> 
                 <div
                   v-for="[value, label] in followupSignalementOptions"
                   :key="value"
@@ -255,7 +255,7 @@
                   />
                 </div>
               </fieldset>
-            </div>
+            </div> -->
           </template>
         </fieldset>
       </div>
@@ -296,9 +296,9 @@
   import { ministerOptions } from '~/client/options/ministry'
   import {
     followupStatusOptions,
-    followupMediumOptions,
-    followupInterventionOptions,
-    followupSignalementOptions
+    followupMediumOptions
+    // followupInterventionOptions,
+    // followupSignalementOptions
   } from '~/client/options/followup'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'

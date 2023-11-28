@@ -1,9 +1,9 @@
 import {
   FollowupMedium,
   FollowupStatus,
-  Minister,
-  FollowupIntervention,
-  FollowupSignalement
+  Minister
+  // FollowupIntervention,
+  // FollowupSignalement
 } from '@prisma/client'
 import { z } from 'zod'
 
@@ -50,15 +50,15 @@ export const addFollowupSchema = z.object({
   numeroPegase: numeroPegaseContraint.nullish(),
   prescribingOrganizationId: z.string().nullish(),
   classified: z.boolean().default(false),
-  forwardedToJustice: z.boolean().default(false),
-  [FollowupIntervention.DeetsSiao]: z.boolean().default(false),
-  [FollowupIntervention.Prefecture]: z.boolean().default(false),
-  [FollowupIntervention.Bailleur]: z.boolean().default(false),
-  [FollowupIntervention.ActionLogement]: z.boolean().default(false),
-  [FollowupIntervention.SecoursMedecinTraitant]: z.boolean().default(false),
-  [FollowupSignalement.ChefCabinet]: z.boolean().default(false),
-  [FollowupSignalement.Prefet]: z.boolean().default(false),
-  [FollowupSignalement.OrganismeMenace]: z.boolean().default(false)
+  forwardedToJustice: z.boolean().default(false)
+  // [FollowupIntervention.DeetsSiao]: z.boolean().default(false),
+  // [FollowupIntervention.Prefecture]: z.boolean().default(false),
+  // [FollowupIntervention.Bailleur]: z.boolean().default(false),
+  // [FollowupIntervention.ActionLogement]: z.boolean().default(false),
+  // [FollowupIntervention.SecoursMedecinTraitant]: z.boolean().default(false),
+  // [FollowupSignalement.ChefCabinet]: z.boolean().default(false),
+  // [FollowupSignalement.Prefet]: z.boolean().default(false),
+  // [FollowupSignalement.OrganismeMenace]: z.boolean().default(false)
 })
 
 export type AddFollowupInput = z.infer<typeof addFollowupSchema>

@@ -1,7 +1,7 @@
 import {
-  FollowupIntervention,
+  // FollowupIntervention,
   FollowupMedium,
-  FollowupSignalement,
+  // FollowupSignalement,
   UserActivityType
 } from '@prisma/client'
 import { prepareFollowupTypesMutations } from './helper/prepareFollowupData'
@@ -51,37 +51,37 @@ const handler = async ({
     firstFollowup,
     numeroPegase,
     classified,
-    forwardedToJustice,
-    ActionLogement,
-    Bailleur,
-    DeetsSiao,
-    Prefecture,
-    SecoursMedecinTraitant,
-    ChefCabinet,
-    OrganismeMenace,
-    Prefet
+    forwardedToJustice
+    // ActionLogement,
+    // Bailleur,
+    // DeetsSiao,
+    // Prefecture,
+    // SecoursMedecinTraitant,
+    // ChefCabinet,
+    // OrganismeMenace,
+    // Prefet
   } = input
 
-  const signalementFields = {
-    ChefCabinet,
-    OrganismeMenace,
-    Prefet
-  }
-  const signalements = Object.entries(signalementFields)
-    .filter(([_key, value]) => !!value)
-    .map(([key, _value]) => key as FollowupSignalement)
+  // const signalementFields = {
+  //   ChefCabinet,
+  //   OrganismeMenace,
+  //   Prefet
+  // }
+  // const signalements = Object.entries(signalementFields)
+  //   .filter(([_key, value]) => !!value)
+  //   .map(([key, _value]) => key as FollowupSignalement)
 
-  const interventionFields = {
-    ActionLogement,
-    Bailleur,
-    DeetsSiao,
-    Prefecture,
-    SecoursMedecinTraitant
-  }
+  // const interventionFields = {
+  //   ActionLogement,
+  //   Bailleur,
+  //   DeetsSiao,
+  //   Prefecture,
+  //   SecoursMedecinTraitant
+  // }
 
-  const interventions = Object.entries(interventionFields)
-    .filter(([_key, value]) => !!value)
-    .map(([key, _value]) => key as FollowupIntervention)
+  // const interventions = Object.entries(interventionFields)
+  //   .filter(([_key, value]) => !!value)
+  //   .map(([key, _value]) => key as FollowupIntervention)
 
   let prescribingOrganization
   if (prescribingOrganizationId) {
@@ -103,8 +103,8 @@ const handler = async ({
       structure: connect(structure.id),
       beneficiary: connect(beneficiaryId),
       createdBy: connect(user.id),
-      signalements,
-      interventions,
+      // signalements,
+      // interventions,
       prescribingOrganization,
       types: prepareFollowupTypesMutations(types),
       documents: prepareDocumentsMutations(documents),
