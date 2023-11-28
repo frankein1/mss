@@ -1,10 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
-import {
-  getBeneficiarySecurityTarget,
-  getDocumentSecurityTarget
-} from '~/server/query'
+import { getDocumentSecurityTarget } from '~/server/query'
 import {
   SecurityRuleGrantee,
   canEditDocument,
@@ -12,12 +9,13 @@ import {
 } from '~/server/security'
 import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
 import { DocumentRepo } from '~/server/database'
+import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditDocumentInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     user,
     input.beneficiaryId
   )
@@ -34,7 +32,10 @@ const handler = async ({
 }) => {
   const { key, beneficiaryId, ...data } = input
 
-  const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+    user,
+    beneficiaryId
+  )
 
   const document = await getDocumentSecurityTarget(user, key)
 
