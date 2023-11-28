@@ -6,13 +6,11 @@ import {
   createHelpRequestSchema
 } from '~/server/schema'
 import { SecurityRuleGrantee, canCreateHelpRequest } from '~/server/security'
-import {
-  getBeneficiarySecurityTarget,
-  markFollowupTypeAsUsed
-} from '~/server/query'
+import { markFollowupTypeAsUsed } from '~/server/query'
 import { HelpRequestRepo } from '~/server/database'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
+import { BeneficiaryService } from '~/server/services'
 
 const handler = async ({
   input,
@@ -95,7 +93,7 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: CreateHelpRequestInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     user,
     input.beneficiaryId
   )
