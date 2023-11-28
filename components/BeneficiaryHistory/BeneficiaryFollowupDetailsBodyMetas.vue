@@ -44,14 +44,14 @@
       >
         Transmis à la justice
       </li>
-      <li v-if="interventions">
+      <!-- <li v-if="interventions">
         <span class="information-label">Interventions :</span>
         {{ interventions }}
       </li>
       <li v-if="signalements">
         <span class="information-label">Signalements :</span>
         {{ signalements }}
-      </li>
+      </li> -->
     </template>
   </ul>
 </template>
@@ -60,9 +60,9 @@
   import { FollowupMedium } from '@prisma/client'
   import { FollowupHistoryItem } from './types'
   import {
-    followupInterventionLabels,
-    followupMediumLabels,
-    followupSignalementLabels
+    // followupInterventionLabels,
+    followupMediumLabels
+    // followupSignalementLabels
   } from '~/client/options/followup'
   import { formatDate } from '~/utils/formatDate'
   import { ministerLabels } from '~/client/options/ministry'
@@ -88,17 +88,17 @@
     }`
   })
 
-  const interventions = computed(() =>
-    props.followup.interventions
-      .map(i => followupInterventionLabels[i])
-      .join(', ')
-  )
+  // const interventions = computed(() =>
+  //   props.followup.interventions
+  //     .map(i => followupInterventionLabels[i])
+  //     .join(', ')
+  // )
 
-  const signalements = computed(() =>
-    props.followup.signalements
-      .map(s => followupSignalementLabels[s])
-      .join(', ')
-  )
+  // const signalements = computed(() =>
+  //   props.followup.signalements
+  //     .map(s => followupSignalementLabels[s])
+  //     .join(', ')
+  // )
 </script>
 
 <style scoped>

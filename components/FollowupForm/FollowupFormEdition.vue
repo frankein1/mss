@@ -15,9 +15,9 @@
 <script lang="ts" setup>
   import {
     FollowupType,
-    PrescribingOrganization,
-    FollowupIntervention,
-    FollowupSignalement
+    PrescribingOrganization
+    // FollowupIntervention,
+    // FollowupSignalement
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { canEditFollowupPrivateSynthesis } from '~/server/security'
@@ -39,27 +39,27 @@
     () => props.followup.types.map(f => f.id) || []
   )
 
-  const initialInterventions = computed<{
-    [k in FollowupIntervention]?: boolean
-  }>(() =>
-    Object.fromEntries(
-      Object.values(FollowupIntervention).map(key => [
-        key,
-        props.followup.interventions?.includes(key)
-      ])
-    )
-  )
+  // const initialInterventions = computed<{
+  //   [k in FollowupIntervention]?: boolean
+  // }>(() =>
+  //   Object.fromEntries(
+  //     Object.values(FollowupIntervention).map(key => [
+  //       key,
+  //       props.followup.interventions?.includes(key)
+  //     ])
+  //   )
+  // )
 
-  const initialSignalements = computed<{
-    [k in FollowupSignalement]?: boolean
-  }>(() =>
-    Object.fromEntries(
-      Object.values(FollowupSignalement).map(key => [
-        key,
-        props.followup.signalements?.includes(key)
-      ])
-    )
-  )
+  // const initialSignalements = computed<{
+  //   [k in FollowupSignalement]?: boolean
+  // }>(() =>
+  //   Object.fromEntries(
+  //     Object.values(FollowupSignalement).map(key => [
+  //       key,
+  //       props.followup.signalements?.includes(key)
+  //     ])
+  //   )
+  // )
 
   const user = useAuthUser()
 
@@ -81,9 +81,9 @@
       redirected: props.followup.redirected || false,
       firstFollowup: props.followup.firstFollowup || false,
       classified: props.followup.classified || false,
-      forwardedToJustice: props.followup.forwardedToJustice || false,
-      ...initialInterventions.value,
-      ...initialSignalements.value
+      forwardedToJustice: props.followup.forwardedToJustice || false
+      // ...initialInterventions.value,
+      // ...initialSignalements.value
     }
   })
 

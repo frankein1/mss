@@ -1,8 +1,8 @@
 import {
   FollowupMedium,
-  UserActivityType,
-  FollowupSignalement,
-  FollowupIntervention
+  UserActivityType
+  // FollowupSignalement,
+  // FollowupIntervention
 } from '@prisma/client'
 import { prepareFollowupTypesMutations } from './helper/prepareFollowupData'
 import { createMutation } from '~/server/route'
@@ -49,38 +49,38 @@ const handler = async ({
     firstFollowup,
     numeroPegase,
     classified,
-    forwardedToJustice,
-    ActionLogement,
-    Bailleur,
-    DeetsSiao,
-    Prefecture,
-    SecoursMedecinTraitant,
-    ChefCabinet,
-    OrganismeMenace,
-    Prefet
+    forwardedToJustice
+    // ActionLogement,
+    // Bailleur,
+    // DeetsSiao,
+    // Prefecture,
+    // SecoursMedecinTraitant,
+    // ChefCabinet,
+    // OrganismeMenace,
+    // Prefet
   } = input
 
-  const interventionFields = {
-    ActionLogement,
-    Bailleur,
-    DeetsSiao,
-    Prefecture,
-    SecoursMedecinTraitant
-  }
+  // const interventionFields = {
+  //   ActionLogement,
+  //   Bailleur,
+  //   DeetsSiao,
+  //   Prefecture,
+  //   SecoursMedecinTraitant
+  // }
 
-  const interventions = Object.entries(interventionFields)
-    .filter(([_key, value]) => !!value)
-    .map(([key, _value]) => key as FollowupIntervention)
+  // const interventions = Object.entries(interventionFields)
+  //   .filter(([_key, value]) => !!value)
+  //   .map(([key, _value]) => key as FollowupIntervention)
 
-  const signalementFields = {
-    ChefCabinet,
-    OrganismeMenace,
-    Prefet
-  }
+  // const signalementFields = {
+  //   ChefCabinet,
+  //   OrganismeMenace,
+  //   Prefet
+  // }
 
-  const signalements = Object.entries(signalementFields)
-    .filter(([_key, value]) => !!value)
-    .map(([key, _value]) => key as FollowupSignalement)
+  // const signalements = Object.entries(signalementFields)
+  //   .filter(([_key, value]) => !!value)
+  //   .map(([key, _value]) => key as FollowupSignalement)
 
   let prescribingOrganization
   if (prescribingOrganizationId) {
@@ -102,8 +102,8 @@ const handler = async ({
       id
     },
     data: {
-      signalements,
-      interventions,
+      // signalements,
+      // interventions,
       prescribingOrganization,
       types: prepareFollowupTypesMutations(types),
       documents: prepareDocumentsMutations(documents),

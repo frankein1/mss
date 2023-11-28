@@ -1,36 +1,36 @@
 import {
-  FollowupIntervention,
+  // FollowupIntervention,
   FollowupMedium,
-  FollowupSignalement,
+  // FollowupSignalement,
   FollowupStatus
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
-export const followupInterventionLabels: {
-  [key in FollowupIntervention]: string
-} = {
-  [FollowupIntervention.ActionLogement]: 'Action Logement',
-  [FollowupIntervention.Bailleur]: 'Bailleurs',
-  [FollowupIntervention.DeetsSiao]: 'DEETS-SIAO',
-  [FollowupIntervention.Prefecture]: 'Préfecture',
-  [FollowupIntervention.SecoursMedecinTraitant]: 'Secours/Médecin traitant'
-}
+// export const followupInterventionLabels: {
+//   [key in FollowupIntervention]: string
+// } = {
+//   [FollowupIntervention.ActionLogement]: 'Action Logement',
+//   [FollowupIntervention.Bailleur]: 'Bailleurs',
+//   [FollowupIntervention.DeetsSiao]: 'DEETS-SIAO',
+//   [FollowupIntervention.Prefecture]: 'Préfecture',
+//   [FollowupIntervention.SecoursMedecinTraitant]: 'Secours/Médecin traitant'
+// }
 
-export const followupInterventionOptions = labelsToOptions(
-  followupInterventionLabels
-)
+// export const followupInterventionOptions = labelsToOptions(
+//   followupInterventionLabels
+// )
 
-export const followupSignalementLabels: {
-  [key in FollowupSignalement]: string
-} = {
-  [FollowupSignalement.ChefCabinet]: 'Chef de cabinet',
-  [FollowupSignalement.OrganismeMenace]: 'Organisme menacé',
-  [FollowupSignalement.Prefet]: 'Préfet'
-}
+// export const followupSignalementLabels: {
+//   [key in FollowupSignalement]: string
+// } = {
+//   [FollowupSignalement.ChefCabinet]: 'Chef de cabinet',
+//   [FollowupSignalement.OrganismeMenace]: 'Organisme menacé',
+//   [FollowupSignalement.Prefet]: 'Préfet'
+// }
 
-export const followupSignalementOptions = labelsToOptions(
-  followupSignalementLabels
-)
+// export const followupSignalementOptions = labelsToOptions(
+//   followupSignalementLabels
+// )
 
 export const followupMediumLabels: { [key in FollowupMedium]: string } = {
   [FollowupMedium.UnplannedInPerson]: 'Accueil physique spontané',

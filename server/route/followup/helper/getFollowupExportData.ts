@@ -3,9 +3,9 @@ import { formatUserDisplayName } from '~/utils/user'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
-  followupInterventionLabels,
+  // followupInterventionLabels,
   followupMediumLabels,
-  followupSignalementLabels,
+  // followupSignalementLabels,
   followupStatusLabels
 } from '~/client/options/followup'
 import { ministerLabels } from '~/client/options/ministry'
@@ -28,20 +28,20 @@ export function getFollowupExportData(
     dueDate: formatDate(followup.dueDate, 'DD-MM-YYYY'),
     forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
     helpRequested: getBooleanOrEmpty(followup.helpRequested),
-    interventions: followup.interventions
-      ? followup.interventions
-          .map(intervention => followupInterventionLabels[intervention])
-          .join(', ')
-      : '',
+    // interventions: followup.interventions
+    //   ? followup.interventions
+    //       .map(intervention => followupInterventionLabels[intervention])
+    //       .join(', ')
+    //   : '',
     ministre: followup.ministre ? ministerLabels[followup.ministre] : '',
     numeroPegase: followup.numeroPegase || '',
     place: followup.place || '',
     prescribingOrganizationId: followup.prescribingOrganization?.name || '',
-    signalements: followup.signalements
-      ? followup.signalements
-          .map(signalement => followupSignalementLabels[signalement])
-          .join(', ')
-      : '',
+    // signalements: followup.signalements
+    //   ? followup.signalements
+    //       .map(signalement => followupSignalementLabels[signalement])
+    //       .join(', ')
+    //   : '',
     structureName: followup.structureName || '',
     synthesis: followup.synthesis || '',
     thirdPersonName: followup.thirdPersonName || '',
