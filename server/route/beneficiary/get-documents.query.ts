@@ -6,7 +6,6 @@ import {
   canListDocuments,
   getDocumentPermissions
 } from '~/server/security'
-import { getBeneficiarySecurityTarget } from '~/server/query'
 import {
   GetDocumentsInput,
   BeneficiaryDocumentFilterInput,
@@ -14,6 +13,7 @@ import {
 } from '~/server/schema'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { DocumentRepo } from '~/server/database'
+import { BeneficiaryService } from '~/server/services'
 
 function prepareBeneficiaryDocumentsFilters(
   filters: BeneficiaryDocumentFilterInput
@@ -35,7 +35,7 @@ const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: GetDocumentsInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     grantee,
     input.beneficiaryId
   )
@@ -87,7 +87,10 @@ const handler = async ({
   ])
   const totalPages = page && perPage ? getTotalPages({ count, perPage }) : 1
 
-  const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+    user,
+    beneficiaryId
+  )
 
   const documentsWithPermissions = documents.map(document => ({
     document,
