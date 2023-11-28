@@ -7,8 +7,8 @@ import {
 import { ProtectedAppContext } from '~/server/trpc'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { BeneficiaryRepo } from '~/server/database'
 import { prepareDateFields } from '~/utils/prisma'
+import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = AllowSecurityCheck
 
@@ -23,15 +23,18 @@ const handler = async ({
 
   const fileNumber = generateFileNumber()
 
-  const beneficiary = await BeneficiaryRepo.prisma.create({
-    data: {
-      structureId: structure.id,
-      fileNumber,
-      referents: {
-        connect: referents.map(referent => ({ id: referent }))
-      },
-      createdById: user.id,
-      ...prepareDateFields(data, ['birthDate'])
+  const beneficiary = await BeneficiaryService.create({
+    user,
+    params: {
+      data: {
+        structureId: structure.id,
+        fileNumber,
+        referents: {
+          connect: referents.map(referent => ({ id: referent }))
+        },
+        createdById: user.id,
+        ...prepareDateFields(data, ['birthDate'])
+      }
     }
   })
 
