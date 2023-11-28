@@ -38,7 +38,7 @@ const handler = async ({
     target,
     structure
   })
-  const beneficiary = await findBeneficiary({
+  const beneficiary = await BeneficiaryService.findBeneficiary({
     user,
     structure,
     id: input.id
