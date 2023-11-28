@@ -1,6 +1,6 @@
 import { User, UserRole } from '@prisma/client'
 import { v4 } from 'uuid'
-import { createEmail } from '~/server/lib/email'
+import { createEmail } from '~/server/query'
 import { UserRepo } from '~/server/database'
 import { forbiddenError } from '~/server/trpc'
 import { RoutePath } from '~/utils/routing'

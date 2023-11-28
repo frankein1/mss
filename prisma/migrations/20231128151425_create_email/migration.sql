@@ -2,7 +2,7 @@
 CREATE TYPE "EmailStatus" AS ENUM ('ToSend', 'Sending', 'Sent', 'Error');
 
 -- CreateTable
-CREATE TABLE "Email" (
+CREATE TABLE "email" (
     "id" UUID NOT NULL,
     "from" TEXT NOT NULL,
     "to" TEXT NOT NULL,
@@ -13,5 +13,5 @@ CREATE TABLE "Email" (
     "sentDate" TIMESTAMP(3),
     "retryNumber" INTEGER NOT NULL DEFAULT 0,
 
-    CONSTRAINT "Email_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "email_pkey" PRIMARY KEY ("id")
 );
