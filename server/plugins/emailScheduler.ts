@@ -4,6 +4,7 @@ import { useScheduler } from '#scheduler'
 import { EmailRepo } from '~/server/database'
 import { sendEmail } from '~/server/lib/email'
 
+const SCHEDULER_IN_SECONDS = 10
 const MAX_EMAIL_RETRY = 3
 const EMAIL_RETRY_DELAY = 1000 * 60 * 60 // in milliseconds
 
@@ -30,7 +31,7 @@ async function sendEmails() {
 function startScheduler() {
   const scheduler = useScheduler()
 
-  scheduler.run(sendEmails).everySeconds(5)
+  scheduler.run(sendEmails).everySeconds(SCHEDULER_IN_SECONDS)
 }
 
 function findSendingEmails() {
