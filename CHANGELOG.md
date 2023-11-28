@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.10.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.10.1...v1.10.2) (2023-11-28)
+
+
+### Bug Fixes
+
+* **admin:** Corrige l'envoi de l'invitation à l'atelier premiers pas aux utilisateurs créés 7 jours plus tôt ([ecdca56](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ecdca5612071cbf33a4386fde0c702307709ab52))
+* **admin:** Impossible de mettre à jour les types d'accompagnement des structures ([afdaef6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/afdaef6e93907a946a6d319ad7a60aeead18b214)), closes [#229](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/229)
+* **admin:** La récupération de l'admin authentifié depuis les cookies génère une erreur ([1dff780](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1dff7806c6a4c532a7f6b3a7289b923169cae6e1)), closes [#229](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/229)
+* **structure:** Corrige l'affichage d'erreur lorsqu'aucun type d'accompagnement n'est sélectionné lors de la modification de la structure ([8605bf3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8605bf357aa4f7f3edc1c1dd34e4ca738a294c1b)), closes [#229](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/229)
+
 ### [1.10.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.10.0...v1.10.1) (2023-11-23)
 
 
