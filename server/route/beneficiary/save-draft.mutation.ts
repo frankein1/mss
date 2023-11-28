@@ -106,7 +106,9 @@ function prepareData(
     data = {
       ...data,
       relatives: {
-        create: newRelatives
+        createMany: {
+          data: newRelatives
+        }
       }
     }
   }

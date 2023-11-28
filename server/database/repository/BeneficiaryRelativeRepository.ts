@@ -9,13 +9,13 @@ function findMany<T extends Prisma.BeneficiaryRelativeFindManyArgs>(
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryRelativeFindManyArgs>
 ) {
   appendConstraints(user, params, BeneficiaryRelativeConstraints)
-
   return prismaClient.beneficiaryRelative.findMany(params)
 }
 
 export const BeneficiaryRelativeRepo = {
   findMany,
   prisma: {
+    createMany: prismaClient.beneficiaryRelative.createMany,
     update: prismaClient.beneficiaryRelative.update
   }
 }
