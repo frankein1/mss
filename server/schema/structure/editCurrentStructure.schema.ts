@@ -1,7 +1,6 @@
-import { DefaultFollowupType } from '@prisma/client'
 import { z } from 'zod'
+import { DefaultFollowupType } from '@prisma/client'
 import { editStructureSchema } from './editStructure.schema'
-import { requiredErrorMessage } from '~/utils/zod'
 
 export const editCurrentUserStructureSchema = editStructureSchema
   .omit({
@@ -20,9 +19,21 @@ export const editCurrentUserStructureSchema = editStructureSchema
   })
   .refine(
     val =>
-      val.legallyRequiredFollowupTypes.length &&
+      val.legallyRequiredFollowupTypes.length ||
       val.legallyNotRequiredFollowupTypes.length,
-    { message: requiredErrorMessage }
+    {
+      message: 'Veuillez sélectionner au moins une aide légale ou facultative.',
+      path: ['legallyRequiredFollowupTypes']
+    }
+  )
+  .refine(
+    val =>
+      val.legallyRequiredFollowupTypes.length ||
+      val.legallyNotRequiredFollowupTypes.length,
+    {
+      message: 'Veuillez sélectionner au moins une aide légale ou facultative.',
+      path: ['legallyNotRequiredFollowupTypes']
+    }
   )
 
 export type EditCurrentUserStructureInput = z.infer<

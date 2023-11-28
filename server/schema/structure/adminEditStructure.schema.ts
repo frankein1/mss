@@ -1,4 +1,4 @@
-import { DefaultFollowupType, StructureType } from '@prisma/client'
+import { StructureType, DefaultFollowupType } from '@prisma/client'
 import { z } from 'zod'
 import {
   requiredNativeEnum,
@@ -7,7 +7,7 @@ import {
   stringOrEmpty
 } from '../helpers.schema'
 import { editStructureSchema } from './editStructure.schema'
-import { maxStringLengthMessage, requiredErrorMessage } from '~/utils/zod'
+import { maxStringLengthMessage } from '~/utils/zod'
 
 export const adminEditStructureSchemaBase = editStructureSchema
   .omit({
@@ -35,9 +35,21 @@ export const adminEditStructureSchema = adminEditStructureSchemaBase
   })
   .refine(
     val =>
-      val.legallyRequiredFollowupTypes.length &&
+      val.legallyRequiredFollowupTypes.length ||
       val.legallyNotRequiredFollowupTypes.length,
-    { message: requiredErrorMessage }
+    {
+      message: 'Veuillez sélectionner au moins une aide légale ou facultative.',
+      path: ['legallyRequiredFollowupTypes']
+    }
+  )
+  .refine(
+    val =>
+      val.legallyRequiredFollowupTypes.length ||
+      val.legallyNotRequiredFollowupTypes.length,
+    {
+      message: 'Veuillez sélectionner au moins une aide légale ou facultative.',
+      path: ['legallyNotRequiredFollowupTypes']
+    }
   )
 
 export type AdminEditStructureInput = z.infer<typeof adminEditStructureSchema>
