@@ -62,14 +62,14 @@
     return entourage || ({} as SaveBeneficiaryEntourageInput)
   })
 
-  async function onSaveBeneficiary(
+  function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryEntourageInput,
     target: string | undefined
   ) {
     if (target) {
-      await saveBeneficiaryDraft(beneficiary, target)
+      saveBeneficiaryDraft(beneficiary, target)
     } else {
-      await saveBeneficiary(beneficiary)
+      saveBeneficiary(beneficiary)
     }
   }
 

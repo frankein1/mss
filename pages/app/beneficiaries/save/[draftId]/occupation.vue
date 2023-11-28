@@ -79,14 +79,14 @@
     )
   })
 
-  async function onSaveBeneficiary(
+  function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryOccupationInput,
     target: string | undefined
   ) {
     if (target) {
-      await saveBeneficiaryDraft(beneficiary, target)
+      saveBeneficiaryDraft(beneficiary, target)
     } else {
-      await saveBeneficiary(beneficiary)
+      saveBeneficiary(beneficiary)
     }
   }
 

@@ -63,14 +63,14 @@
     return data.value.draft.health || ({} as SaveBeneficiaryHealthInput)
   })
 
-  async function onSaveBeneficiary(
+  function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryHealthInput,
     target: string | undefined
   ) {
     if (target) {
-      await saveBeneficiaryDraft(beneficiary, target)
+      saveBeneficiaryDraft(beneficiary, target)
     } else {
-      await saveBeneficiary(beneficiary)
+      saveBeneficiary(beneficiary)
     }
   }
 

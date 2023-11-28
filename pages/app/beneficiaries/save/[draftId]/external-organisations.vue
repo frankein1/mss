@@ -63,14 +63,14 @@
     )
   })
 
-  async function onSaveBeneficiary(
+  function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryExternalOrganisationsInput,
     target: string | undefined
   ) {
     if (target) {
-      await saveBeneficiaryDraft(beneficiary, target)
+      saveBeneficiaryDraft(beneficiary, target)
     } else {
-      await saveBeneficiary(beneficiary)
+      saveBeneficiary(beneficiary)
     }
   }
 
