@@ -36,11 +36,11 @@ import {
   GetBeneficiaryRelative
 } from '~/types/beneficiary'
 import { DocumentRepo } from '~/server/database'
-import { findBeneficiaries } from '~/server/query'
 import { readableFileNumber } from '~/utils/readableFileNumber'
 import { formatDate } from '~/utils/formatDate'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
+import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = (
   grantee: SecurityRuleGrantee,
@@ -65,7 +65,7 @@ const handler = async ({
     ...prepareBeneficiaryFilters(input.filters)
   }
 
-  const dataRequest = await findBeneficiaries({
+  const dataRequest = await BeneficiaryService.findBeneficiaries({
     user: ctx.user,
     structure: ctx.structure,
     where,
