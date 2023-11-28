@@ -5,22 +5,23 @@ import {
   SecurityRuleGrantee,
   getBeneficiaryPermissions
 } from '~/server/security'
-import {
-  getBeneficiarySecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getStructureByUser } from '~/server/query'
 import {
   UpdateBeneficiaryHealthInput,
   updateBeneficiaryHealthSchema
 } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
 import { ProtectedAppContext } from '~/server/trpc'
+import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: UpdateBeneficiaryHealthInput
 ) => {
-  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
+    user,
+    input.id
+  )
   const structure = await getStructureByUser(user)
   const permissions = getBeneficiaryPermissions({
     user,
@@ -37,7 +38,10 @@ const handler = async ({
   input: UpdateBeneficiaryHealthInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
+    user,
+    input.id
+  )
   const permissions = getBeneficiaryPermissions({
     user,
     target,

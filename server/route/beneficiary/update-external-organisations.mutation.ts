@@ -5,21 +5,22 @@ import {
   getBeneficiaryPermissions
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  getBeneficiarySecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getStructureByUser } from '~/server/query'
 import {
   UpdateBeneficiaryExternalOrganisationsInput,
   updateBeneficiaryExternalOrganisationsSchema
 } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
   grantee: SecurityRuleGrantee,
   input: UpdateBeneficiaryExternalOrganisationsInput
 ) => {
-  const target = await getBeneficiarySecurityTarget(grantee, input.id)
+  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
+    grantee,
+    input.id
+  )
   const structure = await getStructureByUser(grantee)
   const permissions = getBeneficiaryPermissions({
     user: grantee,
