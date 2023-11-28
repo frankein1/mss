@@ -5,6 +5,7 @@ import {
   SecurityRuleGrantee,
   getBeneficiaryPermissions
 } from '~/server/security'
+import { isObjectEmpty } from '~/utils/isObjectEmpty'
 
 const columnsSelection = {
   referents: {
@@ -53,15 +54,6 @@ const columnsSelection = {
   _count: {
     select: { helpRequests: true, followups: true }
   }
-}
-
-const isEmpty = (object: any) => {
-  if (!object) {
-    return object
-  }
-  return Object.values(object).every(
-    x => x === null || x === '' || (Array.isArray(x) && x.length === 0)
-  )
 }
 
 type FindOutput = Prisma.PromiseReturnType<typeof find>
@@ -123,13 +115,15 @@ const filter = ({
     archived: beneficiary.archived,
     aidantConnectAuthorized: beneficiary.aidantConnectAuthorized,
     general,
-    externalOrganisations: !isEmpty(externalOrganisations)
+    externalOrganisations: !isObjectEmpty(externalOrganisations)
       ? externalOrganisations
       : undefined,
-    health: !isEmpty(health) ? health : undefined,
-    occupationIncome: !isEmpty(occupationIncome) ? occupationIncome : undefined,
-    taxHouseholds: !isEmpty(taxHouseholds) ? taxHouseholds : undefined,
-    entourages: !isEmpty(entourages) ? entourages : undefined,
+    health: !isObjectEmpty(health) ? health : undefined,
+    occupationIncome: !isObjectEmpty(occupationIncome)
+      ? occupationIncome
+      : undefined,
+    taxHouseholds: !isObjectEmpty(taxHouseholds) ? taxHouseholds : undefined,
+    entourages: !isObjectEmpty(entourages) ? entourages : undefined,
     history
   }
 }
