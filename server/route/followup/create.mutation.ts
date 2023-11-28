@@ -14,14 +14,12 @@ import {
   canCreatePrescribingOrganization
 } from '~/server/security'
 
-import {
-  getBeneficiarySecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getStructureByUser } from '~/server/query'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import { BeneficiaryService } from '~/server/services'
 
 const handler = async ({
   input,
@@ -143,7 +141,7 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: AddFollowupInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     user,
     input.beneficiaryId
   )
