@@ -1575,6 +1575,7 @@ model Email {
   subject     String
   text        String
   html        String
+  error       String?
   status      EmailStatus @default(ToSend)
   sentDate    DateTime?
   retryNumber Int         @default(0)

@@ -1,16 +1,40 @@
 import dayjs from 'dayjs'
-import { EmailStatus, Prisma } from '@prisma/client'
+import { EmailStatus } from '@prisma/client'
 import { useScheduler } from '#scheduler'
 import { EmailRepo } from '~/server/database'
-import { EMAIL_RETRY_DELAY, MAX_EMAIL_RETRY } from '~/utils/constants'
 import { sendEmail } from '~/server/lib/email'
+
+const MAX_EMAIL_RETRY = 3
+const EMAIL_RETRY_DELAY = 1000 * 60 * 60 // in milliseconds
 
 export default defineNitroPlugin(() => {
   startScheduler()
 })
 
 async function sendEmails() {
-  const emails = await EmailRepo.prisma.findMany({
+  const emails = await findSendingEmails()
+  await markAsSending(emails.map(email => email.id) || [])
+
+  for (const email of emails) {
+    const { id, to, from, subject, text, html } = email
+
+    try {
+      await sendEmail({ to, from, subject, text, html })
+      await markAsSent(id)
+    } catch (err) {
+      await markInError(id, JSON.stringify(err))
+    }
+  }
+}
+
+function startScheduler() {
+  const scheduler = useScheduler()
+
+  scheduler.run(sendEmails).everySeconds(5)
+}
+
+function findSendingEmails() {
+  return EmailRepo.prisma.findMany({
     where: {
       OR: [
         {
@@ -28,42 +52,44 @@ async function sendEmails() {
       ]
     }
   })
+}
 
-  // Update status to Sending
-  await EmailRepo.prisma.updateMany({
+function markAsSending(ids: string[]) {
+  return EmailRepo.prisma.updateMany({
     where: {
       id: {
-        in: emails.map(email => email.id)
+        in: ids
       }
     },
     data: {
-      status: EmailStatus.Sending
-    }
-  })
-
-  emails.forEach(async ({ id, to, from, subject, text, html }) => {
-    const data: Prisma.EmailUpdateInput = {
-      retryNumber: { increment: 1 },
-      sentDate: new Date()
-    }
-    // TODO: handle bounced emails
-    try {
-      await sendEmail({ to, from, subject, text, html })
-      data.status = EmailStatus.Sent
-    } catch (err) {
-      console.error(err)
-      data.status = EmailStatus.Error
-    } finally {
-      await EmailRepo.prisma.update({
-        where: { id },
-        data
-      })
+      status: EmailStatus.Sending,
+      error: null
     }
   })
 }
-
-function startScheduler() {
-  const scheduler = useScheduler()
-
-  scheduler.run(sendEmails).everySeconds(5)
+function markInError(id: string, error: string) {
+  return EmailRepo.prisma.update({
+    where: {
+      id
+    },
+    data: {
+      status: EmailStatus.Error,
+      error,
+      retryNumber: { increment: 1 },
+      sentDate: new Date()
+    }
+  })
+}
+function markAsSent(id: string) {
+  return EmailRepo.prisma.update({
+    where: {
+      id
+    },
+    data: {
+      status: EmailStatus.Sent,
+      error: null,
+      retryNumber: { increment: 1 },
+      sentDate: new Date()
+    }
+  })
 }
