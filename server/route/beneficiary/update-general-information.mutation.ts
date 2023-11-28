@@ -6,22 +6,23 @@ import {
   BeneficiaryPermissions
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  getBeneficiarySecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getStructureByUser } from '~/server/query'
 import {
   UpdateBeneficiaryGeneralInformationInput,
   updateBeneficiaryGeneralInformationSchema
 } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
 import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
-  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
+    user,
+    input.id
+  )
   const structure = await getStructureByUser(user)
   const permissions = getBeneficiaryPermissions({
     user,
@@ -39,7 +40,10 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const { id, referents } = input
-  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
+    user,
+    input.id
+  )
 
   const permissions = getBeneficiaryPermissions({ user, structure, target })
   const data = filterInput({ input, permissions })

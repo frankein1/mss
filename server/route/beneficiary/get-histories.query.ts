@@ -2,18 +2,21 @@ import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { GetHistoryInput, getHistorySchema } from '~/server/schema'
 import { TypeSuivi } from '~/types/history'
-import { getBeneficiarySecurityTarget } from '~/server/query'
 import { ProtectedAppContext } from '~/server/trpc'
 import { getBeneficiaryHistoryPermissions } from '~/server/security'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { BeneficiaryHistoryRepo } from '~/server/database'
+import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: GetHistoryInput
 ) => {
-  const target = await getBeneficiarySecurityTarget(user, input.beneficiaryId)
+  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
+    user,
+    input.beneficiaryId
+  )
   const permissions = getBeneficiaryHistoryPermissions({ user, target })
   return permissions.view
 }
