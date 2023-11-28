@@ -108,6 +108,7 @@ const handler = async ({
       prescribingOrganization,
       types: prepareFollowupTypesMutations(types),
       documents: prepareDocumentsMutations(documents),
+      redirected,
       structureName: redirected ? structureName : null,
       medium,
       place: medium === FollowupMedium.ExternalAppointment ? place : null,
