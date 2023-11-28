@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { UserRepo } from '~/server/database'
 import { useScheduler } from '#scheduler'
-import { createEmail } from '~/server/lib/email'
+import { createEmail } from '~/server/query'
 import { getWelcomeWorkshopEmailContent } from '~/server/email'
 
 export default defineNitroPlugin(() => {

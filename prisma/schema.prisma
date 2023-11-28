@@ -1578,4 +1578,6 @@ model Email {
   status      EmailStatus @default(ToSend)
   sentDate    DateTime?
   retryNumber Int         @default(0)
+
+  @@map("email")
 }

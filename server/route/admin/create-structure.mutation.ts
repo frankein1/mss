@@ -6,7 +6,7 @@ import {
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { AdminContext } from '~/server/trpc'
 import { StructureRepo } from '~/server/database'
-import { createEmail } from '~/server/lib/email'
+import { createEmail } from '~/server/query'
 import { getStructureCreationEmailContent } from '~/server/email'
 
 const adminHandler = async ({
