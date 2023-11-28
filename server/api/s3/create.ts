@@ -4,14 +4,14 @@ import { v4 } from 'uuid'
 import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { uploadFile } from '~/server/lib/s3'
 import { forbiddenError, invalidError } from '~/server/trpc'
-import {
-  getBeneficiarySecurityTarget,
-  BeneficiarySecurityTarget
-} from '~/server/query'
 import { canAddDocument, canViewDocument } from '~/server/security'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
+import {
+  BeneficiaryService,
+  BeneficiarySecurityTarget
+} from '~/server/services'
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth
@@ -34,7 +34,7 @@ export default defineEventHandler(async event => {
 
   const input = addDocumentSchema.parse(data)
 
-  const beneficiary = await getBeneficiarySecurityTarget(
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     user,
     input.beneficiaryId
   )
