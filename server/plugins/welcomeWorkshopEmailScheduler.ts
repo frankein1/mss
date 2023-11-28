@@ -11,7 +11,10 @@ export default defineNitroPlugin(() => {
 async function sendWelcomeWorkshopEmail() {
   const usersCreatedLastWeek = await UserRepo.prisma.findMany({
     where: {
-      created: dayjs().subtract(7, 'day').toDate()
+      created: {
+        gte: dayjs().subtract(7, 'day').toDate(),
+        lte: dayjs().subtract(6, 'day').toDate()
+      }
     },
     select: { email: true }
   })
