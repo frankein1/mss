@@ -15,5 +15,6 @@ const get = (user: SecurityRuleGrantee) => {
 }
 
 export const DraftConstraints = {
-  get
+  get,
+  delete: get
 }
