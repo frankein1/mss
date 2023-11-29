@@ -92,6 +92,17 @@ export default defineNuxtConfig({
     build: {
       sourcemap: true
     },
+    // https://github.com/nuxt/nuxt/issues/24196
+    optimizeDeps: {
+      include: [
+        '@prisma/client',
+        'vee-validate',
+        '@vee-validate/zod',
+        'zod',
+        'vue-scrollto',
+        'node-fetch-native'
+      ]
+    },
     css: {
       preprocessorOptions: {
         scss: {
