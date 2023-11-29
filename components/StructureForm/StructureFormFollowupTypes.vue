@@ -55,8 +55,7 @@
 <script lang="ts" setup>
   import type {
     DefaultLegallyRequiredFollowupTypeWithSupportsCount,
-    DefaultLegallyNotRequiredFollowupTypeWithSupportsCount,
-    CustomFollowupTypeWithSupportsCount
+    DefaultLegallyNotRequiredFollowupTypeWithSupportsCount
   } from './types'
   import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
   import {
@@ -72,7 +71,6 @@
       structureFollowupTypes: FollowupTypeWithSupportsCount[]
       defaultLegallyRequiredSelectedFollowupTypes: DefaultLegallyRequiredFollowupTypeWithSupportsCount[]
       defaultLegallyNotRequiredSelectedFollowupTypes: DefaultLegallyNotRequiredFollowupTypeWithSupportsCount[]
-      customFollowupTypes: CustomFollowupTypeWithSupportsCount[]
       adminView?: boolean
     }>(),
     {
@@ -88,7 +86,6 @@
       ...Array.from(defaultLegallyNotRequiredFollowupTypeOptions).map(
         ([id, name]) => ({ id, name })
       ),
-      ...props.customFollowupTypes,
       ...createdFollowupTypes.value.map(name => ({ id: name, name }))
     ]
 
@@ -101,10 +98,9 @@
     )
   })
 
-  const legallyNotRequiredSelectedFollowupTypes = computed(() => [
-    ...props.defaultLegallyNotRequiredSelectedFollowupTypes,
-    ...props.customFollowupTypes
-  ])
+  const legallyNotRequiredSelectedFollowupTypes = computed(
+    () => props.defaultLegallyNotRequiredSelectedFollowupTypes
+  )
 
   const initialLegallyRequiredSelectedAlreadyUsed = computed(() =>
     props.defaultLegallyRequiredSelectedFollowupTypes
