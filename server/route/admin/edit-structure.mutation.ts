@@ -5,7 +5,7 @@ import {
   adminEditStructureSchema
 } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { editFollowupTypes } from '~/utils/structure'
+import { editFollowupTypes } from '~/server/query/structure'
 
 const adminHandler = async ({ input }: { input: AdminEditStructureInput }) => {
   const {
@@ -18,11 +18,6 @@ const adminHandler = async ({ input }: { input: AdminEditStructureInput }) => {
   const currentFollowupTypes = await FollowupTypeRepo.prisma.findMany({
     where: {
       ownedByStructureId: structureId
-    },
-    include: {
-      _count: {
-        select: { followups: true, helpRequests: true }
-      }
     }
   })
 
@@ -36,25 +31,8 @@ const adminHandler = async ({ input }: { input: AdminEditStructureInput }) => {
   const updatedStructure = await StructureRepo.prisma.update({
     where: { id: structureId },
     data: structure,
-    include: {
-      followupTypes: {
-        include: {
-          _count: {
-            select: { followups: true, helpRequests: true }
-          }
-        }
-      },
-      users: {
-        select: {
-          id: true,
-          lastName: true,
-          firstName: true,
-          email: true,
-          role: true,
-          aidantConnectAuthorisation: true,
-          status: true
-        }
-      }
+    select: {
+      id: true
     }
   })
 

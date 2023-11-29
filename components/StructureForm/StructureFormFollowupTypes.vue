@@ -14,7 +14,7 @@
       <VeeMultiSelect
         name="legallyRequiredFollowupTypes"
         :label="structureFieldLabels.legallyRequiredFollowupTypes"
-        :options="requiredTypeOptions"
+        :options="defaultLegallyRequiredFollowupTypeOptions"
         label-class="fr-h6"
         :disabled-options="disableRequiredTypeOptions"
         hint="Vous ne pouvez pas désélectionner un type d'accompagnement qui a déjà été associé à une synthèse d'entretien ou une instruction de demande d'aide."
@@ -56,7 +56,11 @@
   import { TypeWithState } from './types'
   import { toOptions } from '~/utils/options'
   import { structureFieldLabels } from '~/client/labels'
-  import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
+  import { sortFollowupTypesByName } from '~/utils/followupType'
+  import {
+    defaultLegallyRequiredFollowupTypeOptions,
+    defaultLegallyNotRequiredFollowupTypeOptions
+  } from '~/client/options/followupType'
 
   const props = withDefaults(
     defineProps<{
@@ -73,12 +77,15 @@
   const createdFollowupTypes = ref<string[]>([])
 
   const optionalTypeOptions = computed(() => {
-    const optionalTypes = props.optionalTypes.map(({ type: { id, name } }) => ({
-      id,
-      name
-    }))
+    const defaultOptionalTypes = Array.from(
+      defaultLegallyNotRequiredFollowupTypeOptions
+    ).map(([id, name]) => ({ id, name }))
+    const customTypes = props.optionalTypes
+      .filter(({ type }) => !type.default)
+      .map(({ type }) => ({ id: type.id, name: type.name }))
     const types = [
-      ...optionalTypes,
+      ...defaultOptionalTypes,
+      ...customTypes,
       ...createdFollowupTypes.value.map(name => ({ id: name, name }))
     ]
     return toOptions(types.sort(sortFollowupTypesByName), 'id', 'name')
@@ -87,21 +94,13 @@
   const disableOptionalTypeOptions = computed(() => {
     return props.optionalTypes
       .filter(({ used }) => used)
-      .map(({ type }) => type.id)
+      .map(({ type }) => type.default || type.id)
   })
 
   const disableRequiredTypeOptions = computed(() => {
     return props.requiredTypes
       .filter(({ used }) => used)
-      .map(({ type }) => type.id)
-  })
-
-  const requiredTypeOptions = computed(() => {
-    const requiredTypes = props.requiredTypes.map(({ type: { id, name } }) => ({
-      id,
-      name
-    }))
-    return toOptions(requiredTypes.sort(sortFollowupTypesByName), 'id', 'name')
+      .map(({ type }) => type.default || type.id)
   })
 
   function onCreateFollowupType(name: string) {

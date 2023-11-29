@@ -5,7 +5,7 @@ import {
   editCurrentUserStructureSchema
 } from '~/server/schema'
 import { SecurityRuleGrantee, canEditStructure } from '~/server/security'
-import { editFollowupTypes } from '~/utils/structure'
+import { editFollowupTypes } from '~/server/query/structure'
 import { StructureRepo, FollowupTypeRepo } from '~/server/database'
 
 const handler = async ({
@@ -21,13 +21,7 @@ const handler = async ({
     ...structure
   } = input
 
-  const currentFollowupTypes = await FollowupTypeRepo.findMany(user, {
-    include: {
-      _count: {
-        select: { followups: true, helpRequests: true }
-      }
-    }
-  })
+  const currentFollowupTypes = await FollowupTypeRepo.findMany(user, {})
 
   await editFollowupTypes(
     userStructure.id,
@@ -39,14 +33,8 @@ const handler = async ({
   const updatedStructure = await StructureRepo.prisma.update({
     where: { id: userStructure.id },
     data: structure,
-    include: {
-      followupTypes: {
-        include: {
-          _count: {
-            select: { followups: true, helpRequests: true }
-          }
-        }
-      }
+    select: {
+      id: true
     }
   })
 

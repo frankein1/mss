@@ -74,11 +74,15 @@
   }>()
 
   const requiredTypeIds = computed(() =>
-    props.requiredTypes.map(({ type: { default: defaultKey } }) => defaultKey)
+    props.requiredTypes.map(
+      ({ type: { id, default: defaultKey } }) => defaultKey || id
+    )
   )
 
   const optionalTypeIds = computed(() =>
-    props.optionalTypes.map(({ type: { default: defaultKey } }) => defaultKey)
+    props.optionalTypes.map(
+      ({ type: { id, default: defaultKey } }) => defaultKey || id
+    )
   )
 
   const form = ref<HTMLFormElement | null>(null)
