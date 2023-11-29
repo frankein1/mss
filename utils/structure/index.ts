@@ -1,1 +1,0 @@
-export { editFollowupTypes } from './editFollowupTypes'

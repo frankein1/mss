@@ -218,7 +218,7 @@ model FollowupType {
   createdBy   User?     @relation(fields: [createdById], references: [id])
   createdById String?   @map("created_by_id") @db.Uuid
 
-  followups    Followup[]    @relation("followup_to_followup_type")
+  followups    Followup[]    @relation("followup_to_followup_type", onDelete: "")
   helpRequests HelpRequest[]
 
   ownedByStructure   Structure @relation(fields: [ownedByStructureId], references: [id])

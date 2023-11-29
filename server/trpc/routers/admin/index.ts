@@ -1,6 +1,5 @@
 export type {
   AdminStructuresOutput,
-  AdminStructureOutput,
   AdminUserOutput,
   AdminUsersOutput,
   AdminEmailsOutput
