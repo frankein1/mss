@@ -17,19 +17,15 @@
     />
 
     <StructureFormFollowupTypes
-      :structure-followup-types="structure.followupTypes"
-      :default-legally-required-selected-followup-types="
-        defaultLegallyRequiredSelectedFollowupTypes
-      "
-      :default-legally-not-required-selected-followup-types="
-        defaultLegallyNotRequiredSelectedFollowupTypes
-      "
+      :required-types="requiredTypes"
+      :optional-types="optionalTypes"
       :admin-view="adminView"
     />
 
     <StructureFormAdminUsers
-      v-if="adminView"
-      :structure="structure as AdminStructureOutput"
+      v-if="adminView && users"
+      structure-id="structure.id"
+      :users="users"
     />
 
     <button
@@ -44,12 +40,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type {
-    DefaultLegallyNotRequiredFollowupTypeWithSupportsCount,
-    DefaultLegallyRequiredFollowupTypeWithSupportsCount,
-    StructureWithFollowupTypesWithSupportsCount
-  } from './types'
-  import { AdminStructureOutput } from '~/server/trpc/routers'
+  import { StructureFormType, UserStructureType, TypeWithState } from './types'
   import type {
     AdminEditStructureInput,
     EditCurrentUserStructureInput
@@ -58,19 +49,21 @@
     editCurrentUserStructureSchema,
     adminEditStructureSchema
   } from '~/server/schema'
-  import { FollowupTypeWithSupportsCount } from '~/types/followupType'
   import { structureFieldLabels } from '~/client/labels'
+  import { DefaultFollowupType } from '~/server/prisma/prismaClient'
 
   const props = withDefaults(
     defineProps<{
-      structure:
-        | StructureWithFollowupTypesWithSupportsCount
-        | AdminStructureOutput
+      structure: StructureFormType
+      optionalTypes: TypeWithState[]
+      requiredTypes: TypeWithState[]
+      users?: UserStructureType[]
       isSubmitting: boolean
       adminView?: boolean
     }>(),
     {
-      adminView: false
+      adminView: false,
+      users: undefined
     }
   )
 
@@ -80,27 +73,15 @@
     ]
   }>()
 
+  const requiredTypeIds = computed(() =>
+    props.requiredTypes.map(({ type: { default: defaultKey } }) => defaultKey)
+  )
+
+  const optionalTypeIds = computed(() =>
+    props.optionalTypes.map(({ type: { default: defaultKey } }) => defaultKey)
+  )
+
   const form = ref<HTMLFormElement | null>(null)
-
-  const defaultLegallyRequiredSelectedFollowupTypes = computed(() =>
-    props.structure.followupTypes.filter(isDefaultLegallyRequired)
-  )
-
-  const defaultLegallyNotRequiredSelectedFollowupTypes = computed(() =>
-    props.structure.followupTypes.filter(isDefaultLegallyNotRequired)
-  )
-
-  const initialLegallyRequiredSelectedIds = computed(() =>
-    defaultLegallyRequiredSelectedFollowupTypes.value.map(
-      ({ default: defaultKey }) => defaultKey
-    )
-  )
-
-  const initialLegallyNotRequiredSelectedIds = computed(() =>
-    defaultLegallyNotRequiredSelectedFollowupTypes.value.map(
-      ({ default: defaultKey }) => defaultKey
-    )
-  )
 
   const { handleSubmit, setFieldValue } = useForm<
     EditCurrentUserStructureInput & AdminEditStructureInput
@@ -122,9 +103,10 @@
       address: props.structure.address,
       phone: props.structure.phone,
       email: props.structure.email,
-      legallyRequiredFollowupTypes: initialLegallyRequiredSelectedIds.value,
+      legallyRequiredFollowupTypes:
+        requiredTypeIds.value as DefaultFollowupType[],
       legallyNotRequiredFollowupTypes:
-        initialLegallyNotRequiredSelectedIds.value
+        optionalTypeIds.value as DefaultFollowupType[]
     }
   })
 
@@ -140,16 +122,4 @@
     caughtErrors,
     structureFieldLabels
   )
-
-  function isDefaultLegallyRequired(
-    f: FollowupTypeWithSupportsCount
-  ): f is DefaultLegallyRequiredFollowupTypeWithSupportsCount {
-    return !!f.legallyRequired
-  }
-
-  function isDefaultLegallyNotRequired(
-    f: FollowupTypeWithSupportsCount
-  ): f is DefaultLegallyNotRequiredFollowupTypeWithSupportsCount {
-    return !f.legallyRequired
-  }
 </script>
