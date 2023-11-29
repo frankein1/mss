@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle :title="structure?.name || '-'" />
+    <PageTitle :title="data?.structure?.name || '-'" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
         <main
@@ -18,8 +18,11 @@
             class="fr-mx-auto"
           />
           <StructureForm
-            v-else-if="structure"
-            :structure="structure"
+            v-else-if="data"
+            :structure="data.structure"
+            :users="data.users"
+            :optional-types="data.optionalTypes"
+            :required-types="data.requiredTypes"
             :is-submitting="isSubmitting"
             :admin-view="true"
             @update-structure="onUpdateStructure"
@@ -42,20 +45,17 @@
   const isSubmitting = ref(false)
   const formContainer = ref<HTMLFormElement | null>(null)
 
-  const {
-    data: structure,
-    pending,
-    error
-  } = await trpcClient.admin.getStructure.useQuery({
-    id: structureId
-  })
+  const { data, pending, error } = await trpcClient.admin.getStructure.useQuery(
+    {
+      id: structureId
+    }
+  )
 
   function onUpdateStructure(updatedStructure: AdminEditStructureInput) {
     useTrpcMutation({
       mutation: () => trpcClient.admin.editStructure.mutate(updatedStructure),
       isSubmitting,
-      onSuccess: res => {
-        structure.value = res
+      onSuccess: () => {
         snackbar.success(
           'Les informations de la structure ont été mises à jour.'
         )

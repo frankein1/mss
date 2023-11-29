@@ -61,7 +61,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { Structure } from '@prisma/client'
+  import type { StructureFormType } from './types'
   import type {
     CitySelected,
     AddressSelected
@@ -71,7 +71,7 @@
 
   const props = withDefaults(
     defineProps<{
-      structure?: Structure | null
+      structure?: StructureFormType | null
       setFieldValue: (
         field: keyof AdminCreateStructureInput,
         value: AdminCreateStructureInput[keyof AdminCreateStructureInput]
