@@ -24,7 +24,6 @@
       :default-legally-not-required-selected-followup-types="
         defaultLegallyNotRequiredSelectedFollowupTypes
       "
-      :custom-followup-types="customFollowupTypes"
       :admin-view="adminView"
     />
 
@@ -46,7 +45,6 @@
 
 <script lang="ts" setup>
   import type {
-    CustomFollowupTypeWithSupportsCount,
     DefaultLegallyNotRequiredFollowupTypeWithSupportsCount,
     DefaultLegallyRequiredFollowupTypeWithSupportsCount,
     StructureWithFollowupTypesWithSupportsCount
@@ -92,22 +90,17 @@
     props.structure.followupTypes.filter(isDefaultLegallyNotRequired)
   )
 
-  const customFollowupTypes = computed(() =>
-    props.structure.followupTypes.filter(isCustom)
-  )
-
   const initialLegallyRequiredSelectedIds = computed(() =>
     defaultLegallyRequiredSelectedFollowupTypes.value.map(
       ({ default: defaultKey }) => defaultKey
     )
   )
 
-  const initialLegallyNotRequiredSelectedIds = computed(() => [
-    ...defaultLegallyNotRequiredSelectedFollowupTypes.value.map(
+  const initialLegallyNotRequiredSelectedIds = computed(() =>
+    defaultLegallyNotRequiredSelectedFollowupTypes.value.map(
       ({ default: defaultKey }) => defaultKey
-    ),
-    ...customFollowupTypes.value.map(({ id }) => id)
-  ])
+    )
+  )
 
   const { handleSubmit, setFieldValue } = useForm<
     EditCurrentUserStructureInput & AdminEditStructureInput
@@ -151,18 +144,12 @@
   function isDefaultLegallyRequired(
     f: FollowupTypeWithSupportsCount
   ): f is DefaultLegallyRequiredFollowupTypeWithSupportsCount {
-    return !!(f.default && f.legallyRequired)
+    return !!f.legallyRequired
   }
 
   function isDefaultLegallyNotRequired(
     f: FollowupTypeWithSupportsCount
   ): f is DefaultLegallyNotRequiredFollowupTypeWithSupportsCount {
-    return !!(f.default && !f.legallyRequired)
-  }
-
-  function isCustom(
-    f: FollowupTypeWithSupportsCount
-  ): f is CustomFollowupTypeWithSupportsCount {
-    return f.default === null
+    return !f.legallyRequired
   }
 </script>
