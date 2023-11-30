@@ -46,6 +46,8 @@
       class="fr-fieldset__element"
     >
       <StructureFormAddFollowupTypeForm
+        :structure-id="structureId"
+        :admin-view="adminView || false"
         @create-followup-type="onCreateFollowupType"
       />
     </div>
@@ -64,6 +66,7 @@
 
   const props = withDefaults(
     defineProps<{
+      structureId: string
       requiredTypes: FollowupType[]
       optionalTypes: FollowupType[]
       adminView?: boolean

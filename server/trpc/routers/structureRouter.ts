@@ -3,6 +3,7 @@ import {
   editCurrentUserStructureMutation,
   getCurrentUserStructureQuery
 } from '~/server/route/structure'
+import { getStructureFollowupTypeQuery } from '~/server/route/structure/get-followup-type.query'
 
 export const structureRouter = router({
   getCurrentUserStructure: protectedProcedure
@@ -10,5 +11,8 @@ export const structureRouter = router({
     .query(getCurrentUserStructureQuery.execute),
   editCurrentUserStructure: protectedProcedure
     .input(editCurrentUserStructureMutation.inputValidation)
-    .mutation(editCurrentUserStructureMutation.execute)
+    .mutation(editCurrentUserStructureMutation.execute),
+  getFollowupType: protectedProcedure
+    .input(getStructureFollowupTypeQuery.inputValidation)
+    .query(getStructureFollowupTypeQuery.execute)
 })

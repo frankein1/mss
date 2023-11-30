@@ -17,6 +17,7 @@
     />
 
     <StructureFormFollowupTypes
+      :structure-id="structure.id"
       :required-types="requiredTypes"
       :optional-types="optionalTypes"
       :admin-view="adminView"
