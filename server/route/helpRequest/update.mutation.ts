@@ -12,7 +12,8 @@ import {
 import {
   getHelpRequestWithRelations,
   getHelpRequestsecurityTarget,
-  getStructureByUser
+  getStructureByUser,
+  markFollowupTypeAsUsed
 } from '~/server/query'
 import { HelpRequestRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
@@ -91,6 +92,8 @@ const handler = async ({
       }
     }
   })
+
+  await markFollowupTypeAsUsed([typeId])
 
   return { helpRequest }
 }

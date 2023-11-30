@@ -40,7 +40,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { StructureFormType, UserStructureType, TypeWithState } from './types'
+  import { FollowupType } from '@prisma/client'
+  import { StructureFormType, UserStructureType } from './types'
   import type {
     AdminEditStructureInput,
     EditCurrentUserStructureInput
@@ -55,8 +56,8 @@
   const props = withDefaults(
     defineProps<{
       structure: StructureFormType
-      optionalTypes: TypeWithState[]
-      requiredTypes: TypeWithState[]
+      optionalTypes: FollowupType[]
+      requiredTypes: FollowupType[]
       users?: UserStructureType[]
       isSubmitting: boolean
       adminView?: boolean
@@ -74,15 +75,11 @@
   }>()
 
   const requiredTypeIds = computed(() =>
-    props.requiredTypes.map(
-      ({ type: { id, default: defaultKey } }) => defaultKey || id
-    )
+    props.requiredTypes.map(({ id, default: defaultKey }) => defaultKey || id)
   )
 
   const optionalTypeIds = computed(() =>
-    props.optionalTypes.map(
-      ({ type: { id, default: defaultKey } }) => defaultKey || id
-    )
+    props.optionalTypes.map(({ id, default: defaultKey }) => defaultKey || id)
   )
 
   const form = ref<HTMLFormElement | null>(null)
