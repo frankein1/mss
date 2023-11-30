@@ -1,4 +1,4 @@
-import { FollowupType, Structure, User } from '@prisma/client'
+import { Structure, User } from '@prisma/client'
 
 export type StructureFormType = Pick<
   Structure,
@@ -25,8 +25,3 @@ export type UserStructureType = Pick<
   | 'role'
   | 'status'
 >
-
-export type TypeWithState = {
-  used: boolean
-  type: Pick<FollowupType, 'id' | 'name' | 'default' | 'legallyRequired'>
-}

@@ -18,11 +18,6 @@ const handler = async ({
       where: { id },
       include: {
         followupTypes: {
-          include: {
-            _count: {
-              select: { followups: true, helpRequests: true }
-            }
-          },
           orderBy: {
             name: 'asc'
           }
@@ -30,18 +25,8 @@ const handler = async ({
       }
     }
   )
-  const optionalTypes = followupTypes
-    .filter(type => !type.legallyRequired)
-    .map(({ _count, ...type }) => ({
-      used: _count.followups > 0 || _count.helpRequests > 0,
-      type
-    }))
-  const requiredTypes = followupTypes
-    .filter(type => type.legallyRequired)
-    .map(({ _count, ...type }) => ({
-      used: _count.followups > 0 || _count.helpRequests > 0,
-      type
-    }))
+  const optionalTypes = followupTypes.filter(type => !type.legallyRequired)
+  const requiredTypes = followupTypes.filter(type => type.legallyRequired)
   return { structure, optionalTypes, requiredTypes }
 }
 

@@ -53,7 +53,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { TypeWithState } from './types'
+  import { FollowupType } from '@prisma/client'
   import { toOptions } from '~/utils/options'
   import { structureFieldLabels } from '~/client/labels'
   import { sortFollowupTypesByName } from '~/utils/followupType'
@@ -64,8 +64,8 @@
 
   const props = withDefaults(
     defineProps<{
-      requiredTypes: TypeWithState[]
-      optionalTypes: TypeWithState[]
+      requiredTypes: FollowupType[]
+      optionalTypes: FollowupType[]
       adminView?: boolean
     }>(),
     {
@@ -81,8 +81,8 @@
       defaultLegallyNotRequiredFollowupTypeOptions
     ).map(([id, name]) => ({ id, name }))
     const customTypes = props.optionalTypes
-      .filter(({ type }) => !type.default)
-      .map(({ type }) => ({ id: type.id, name: type.name }))
+      .filter(type => !type.default)
+      .map(type => ({ id: type.id, name: type.name }))
     const types = [
       ...defaultOptionalTypes,
       ...customTypes,
@@ -94,13 +94,13 @@
   const disableOptionalTypeOptions = computed(() => {
     return props.optionalTypes
       .filter(({ used }) => used)
-      .map(({ type }) => type.default || type.id)
+      .map(({ default: key, id }) => key || id)
   })
 
   const disableRequiredTypeOptions = computed(() => {
     return props.requiredTypes
       .filter(({ used }) => used)
-      .map(({ type }) => type.default || type.id)
+      .map(({ default: key, id }) => key || id)
   })
 
   function onCreateFollowupType(name: string) {

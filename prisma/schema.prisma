@@ -213,6 +213,7 @@ model FollowupType {
   legallyRequired Boolean              @map("legally_required")
   default         DefaultFollowupType?
   legacyId        String?              @map("legacy_id") @db.Uuid // FIXME: What is the purpose of this ?
+  used            Boolean              @default(false)
 
   created     DateTime? @default(now())
   createdBy   User?     @relation(fields: [createdById], references: [id])

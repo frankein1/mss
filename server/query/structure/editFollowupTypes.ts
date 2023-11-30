@@ -156,6 +156,10 @@ function getFollowupTypesToDelete(
   updatedFollowupTypes: string[]
 ) {
   return currentFollowupTypes.reduce((toDelete, current) => {
+    if (current.used) {
+      return toDelete
+    }
+
     if (current.default) {
       if (updatedFollowupTypes.includes(current.default)) {
         return toDelete

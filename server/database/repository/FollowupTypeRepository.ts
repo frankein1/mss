@@ -38,6 +38,7 @@ export const FollowupTypeRepo = {
     create: prismaClient.followupType.create,
     createMany: prismaClient.followupType.createMany,
     update: prismaClient.followupType.update,
+    updateMany: prismaClient.followupType.updateMany,
     delete: prismaClient.followupType.delete,
     deleteMany: prismaClient.followupType.deleteMany,
     findMany: prismaClient.followupType.findMany

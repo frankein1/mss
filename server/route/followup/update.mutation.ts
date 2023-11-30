@@ -15,7 +15,11 @@ import {
   canEditFollowupPrivateSynthesis
 } from '~/server/security'
 
-import { getFollowupSecurityTarget, getStructureByUser } from '~/server/query'
+import {
+  getFollowupSecurityTarget,
+  getStructureByUser,
+  markFollowupTypeAsUsed
+} from '~/server/query'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
@@ -134,6 +138,8 @@ const handler = async ({
       }
     }
   })
+
+  await markFollowupTypeAsUsed(types)
 
   return fu
 }
