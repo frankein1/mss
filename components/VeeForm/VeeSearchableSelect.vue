@@ -51,7 +51,7 @@
       :name="name"
       :value="currentValue"
       :readonly="readonly"
-      class="sr-only"
+      class="fr-sr-only"
       tabindex="-1"
     />
 

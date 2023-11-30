@@ -216,20 +216,3 @@ select:focus:not(:focus-visible) {
     padding-inline: 1rem;
   }
 }
-
-/**
- * Accessibility helper class
- * It hides the element from the user but keeps it active so it can be focused or interpreted by accessibility tools
- */
-.sr-only {
-  border: 0 !important;
-  clip: rect(1px, 1px, 1px, 1px) !important;
-  clip-path: inset(50%) !important;
-  height: 1px !important;
-  overflow: hidden !important;
-  margin: -1px !important;
-  padding: 0 !important;
-  position: absolute !important;
-  width: 1px !important;
-  white-space: nowrap !important;
-}

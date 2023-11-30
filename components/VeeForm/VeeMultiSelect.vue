@@ -49,7 +49,7 @@
     <input
       :id="id"
       ref="hiddenInput"
-      class="sr-only"
+      class="fr-sr-only"
       :name="name"
       :value="currentValue"
       :disabled="disabled"
