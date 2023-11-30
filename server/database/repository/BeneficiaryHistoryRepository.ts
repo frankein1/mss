@@ -10,7 +10,7 @@ function findMany<T extends Prisma.BeneficiaryHistoryFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryHistoryFindManyArgs>
 ) {
-  appendConstraints(user, params, BeneficiaryHistoryConstraints)
+  appendConstraints(user, params, BeneficiaryHistoryConstraints.get)
   return prismaClient.beneficiaryHistory.findMany(params)
 }
 
@@ -18,7 +18,7 @@ function count(
   user: SecurityRuleGrantee,
   params: Prisma.BeneficiaryHistoryCountArgs
 ) {
-  appendConstraints(user, params, BeneficiaryHistoryConstraints)
+  appendConstraints(user, params, BeneficiaryHistoryConstraints.get)
   return prismaClient.beneficiaryHistory.count(params)
 }
 
