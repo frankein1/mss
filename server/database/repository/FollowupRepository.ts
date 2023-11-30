@@ -8,7 +8,7 @@ function findMany<T extends Prisma.FollowupFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupFindManyArgs>
 ) {
-  appendConstraints(user, params, FollowupConstraints)
+  appendConstraints(user, params, FollowupConstraints.get)
   return prismaClient.followup.findMany(params)
 }
 
@@ -16,12 +16,12 @@ function findUniqueOrThrow<T extends Prisma.FollowupFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.FollowupFindUniqueOrThrowArgs>
 ) {
-  appendConstraints(user, params, FollowupConstraints)
+  appendConstraints(user, params, FollowupConstraints.get)
   return prismaClient.followup.findUniqueOrThrow(params)
 }
 
 function count(user: SecurityRuleGrantee, params: Prisma.FollowupCountArgs) {
-  appendConstraints(user, params, FollowupConstraints)
+  appendConstraints(user, params, FollowupConstraints.get)
   return prismaClient.followup.count(params)
 }
 

@@ -10,7 +10,7 @@ function findMany<T extends Prisma.HelpRequestFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.HelpRequestFindManyArgs>
 ) {
-  appendConstraints(user, params, HelpRequestConstraints)
+  appendConstraints(user, params, HelpRequestConstraints.get)
   return prismaClient.helpRequest.findMany(params)
 }
 
@@ -18,12 +18,12 @@ function findUniqueOrThrow<T extends Prisma.HelpRequestFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.HelpRequestFindUniqueOrThrowArgs>
 ) {
-  appendConstraints(user, params, HelpRequestConstraints)
+  appendConstraints(user, params, HelpRequestConstraints.get)
   return prismaClient.helpRequest.findUniqueOrThrow(params)
 }
 
 function count(user: SecurityRuleGrantee, params: Prisma.HelpRequestCountArgs) {
-  appendConstraints(user, params, HelpRequestConstraints)
+  appendConstraints(user, params, HelpRequestConstraints.get)
   return prismaClient.helpRequest.count(params)
 }
 
@@ -31,7 +31,7 @@ function aggregate<T extends Prisma.HelpRequestAggregateArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.Subset<T, Prisma.HelpRequestAggregateArgs>
 ) {
-  appendConstraints(user, params, HelpRequestConstraints)
+  appendConstraints(user, params, HelpRequestConstraints.get)
   return prismaClient.helpRequest.aggregate(params)
 }
 
