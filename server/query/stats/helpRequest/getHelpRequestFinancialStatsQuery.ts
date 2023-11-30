@@ -7,6 +7,7 @@ import {
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
+import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 
 function getFinancialHelpRequestCount(
   user: SecurityRuleGrantee,
@@ -108,8 +109,8 @@ export async function getHelpRequestFinancialStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const filters = prepareHelpRequestStatFilters(input)
-  Object.assign(filters, HelpRequestConstraints.get(user))
+  const filters = { where: prepareHelpRequestStatFilters(input) }
+  appendConstraints(user, filters, HelpRequestConstraints.get)
 
   const [
     financialHelpRequestCount,
@@ -117,10 +118,10 @@ export async function getHelpRequestFinancialStatsQuery(
     financialHelpRequestTotalAmount,
     financialHelpRequestAmountByType
   ] = await Promise.all([
-    getFinancialHelpRequestCount(user, filters),
-    getInternalFinancialHelpRequestCount(user, filters),
-    getFinancialHelpRequestTotalAmount(user, filters),
-    getFinancialHelpRequestAmountByType(user, filters)
+    getFinancialHelpRequestCount(user, filters.where),
+    getInternalFinancialHelpRequestCount(user, filters.where),
+    getFinancialHelpRequestTotalAmount(user, filters.where),
+    getFinancialHelpRequestAmountByType(user, filters.where)
   ])
 
   const requestsCounts = {

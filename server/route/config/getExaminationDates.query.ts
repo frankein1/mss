@@ -6,6 +6,7 @@ import {
 } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { HelpRequestRepo, HelpRequestConstraints } from '~/server/database'
+import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 
 function hasDefinedExaminationDate(h: {
   examinationDate: Date | null
@@ -21,15 +22,17 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const where = {
-    examinationDate: { not: null },
-    beneficiary: input?.id ? { id: input?.id } : {}
+    where: {
+      examinationDate: { not: null },
+      beneficiary: input?.id ? { id: input?.id } : {}
+    }
   }
 
-  Object.assign(where, HelpRequestConstraints.get(user))
+  appendConstraints(user, where, HelpRequestConstraints.get)
 
   const examinationDates = await HelpRequestRepo.prisma.groupBy({
     by: ['examinationDate'],
-    where,
+    ...where,
     orderBy: [{ examinationDate: 'desc' }]
   })
 

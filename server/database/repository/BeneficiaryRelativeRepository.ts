@@ -8,7 +8,7 @@ function findMany<T extends Prisma.BeneficiaryRelativeFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.BeneficiaryRelativeFindManyArgs>
 ) {
-  appendConstraints(user, params, BeneficiaryRelativeConstraints)
+  appendConstraints(user, params, BeneficiaryRelativeConstraints.get)
   return prismaClient.beneficiaryRelative.findMany(params)
 }
 
