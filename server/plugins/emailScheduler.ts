@@ -13,7 +13,7 @@ export default defineNitroPlugin(() => {
 })
 
 async function sendEmails() {
-  const emails = await findSendingEmails()
+  const emails = await findEmailsToSend()
   await markAsSending(emails.map(email => email.id) || [])
 
   for (const email of emails) {
@@ -34,7 +34,7 @@ function startScheduler() {
   scheduler.run(sendEmails).everySeconds(SCHEDULER_IN_SECONDS)
 }
 
-function findSendingEmails() {
+function findEmailsToSend() {
   return EmailRepo.prisma.findMany({
     where: {
       OR: [
