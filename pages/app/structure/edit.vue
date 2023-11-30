@@ -53,7 +53,7 @@
   const isSubmitting = ref(false)
   const formContainer = ref<HTMLFormElement | null>(null)
 
-  const { data, pending, error } =
+  const { data, pending, error, refresh } =
     await trpcClient.structure.getCurrentUserStructure.useQuery()
 
   function onUpdateStructure(updatedStructure: EditCurrentUserStructureInput) {
@@ -62,6 +62,7 @@
         trpcClient.structure.editCurrentUserStructure.mutate(updatedStructure),
       isSubmitting,
       onSuccess: () => {
+        refresh()
         snackbar.success(
           'Les informations de votre structure ont été mises à jour.'
         )
