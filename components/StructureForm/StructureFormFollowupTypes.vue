@@ -16,7 +16,7 @@
         :label="structureFieldLabels.legallyRequiredFollowupTypes"
         :options="defaultLegallyRequiredFollowupTypeOptions"
         label-class="fr-h6"
-        :disabled-options="initialSelectedIdsAlreadyUsed"
+        :disabled-options="disableRequiredTypeOptions"
         hint="Vous ne pouvez pas désélectionner un type d'accompagnement qui a déjà été associé à une synthèse d'entretien ou une instruction de demande d'aide."
       />
     </div>
@@ -25,9 +25,9 @@
         class="fr-mb-1w"
         name="legallyNotRequiredFollowupTypes"
         :label="structureFieldLabels.legallyNotRequiredFollowupTypes"
-        :options="legallyNotRequiredFollowupTypeOptions"
+        :options="optionalTypeOptions"
         label-class="fr-h6"
-        :disabled-options="initialSelectedIdsAlreadyUsed"
+        :disabled-options="disableOptionalTypeOptions"
         hint="Vous ne pouvez pas désélectionner un type d'accompagnement qui a déjà été associé à une synthèse d'entretien ou une instruction de demande d'aide."
       />
     </div>
@@ -53,26 +53,19 @@
 </template>
 
 <script lang="ts" setup>
-  import type {
-    DefaultLegallyRequiredFollowupTypeWithSupportsCount,
-    DefaultLegallyNotRequiredFollowupTypeWithSupportsCount,
-    CustomFollowupTypeWithSupportsCount
-  } from './types'
-  import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
+  import { FollowupType } from '@prisma/client'
+  import { toOptions } from '~/utils/options'
+  import { structureFieldLabels } from '~/client/labels'
+  import { sortFollowupTypesByName } from '~/utils/followupType'
   import {
     defaultLegallyRequiredFollowupTypeOptions,
     defaultLegallyNotRequiredFollowupTypeOptions
   } from '~/client/options/followupType'
-  import { toOptions } from '~/utils/options'
-  import { structureFieldLabels } from '~/client/labels'
-  import { sortFollowupTypesByName } from '~/utils/followupType/sortFollowupTypesByName'
 
   const props = withDefaults(
     defineProps<{
-      structureFollowupTypes: FollowupTypeWithSupportsCount[]
-      defaultLegallyRequiredSelectedFollowupTypes: DefaultLegallyRequiredFollowupTypeWithSupportsCount[]
-      defaultLegallyNotRequiredSelectedFollowupTypes: DefaultLegallyNotRequiredFollowupTypeWithSupportsCount[]
-      customFollowupTypes: CustomFollowupTypeWithSupportsCount[]
+      requiredTypes: FollowupType[]
+      optionalTypes: FollowupType[]
       adminView?: boolean
     }>(),
     {
@@ -83,60 +76,35 @@
   const isAdding = ref(false)
   const createdFollowupTypes = ref<string[]>([])
 
-  const legallyNotRequiredFollowupTypeOptions = computed(() => {
-    const legallyNotRequiredFollowupTypes = [
-      ...Array.from(defaultLegallyNotRequiredFollowupTypeOptions).map(
-        ([id, name]) => ({ id, name })
-      ),
-      ...props.customFollowupTypes,
+  const optionalTypeOptions = computed(() => {
+    const defaultOptionalTypes = Array.from(
+      defaultLegallyNotRequiredFollowupTypeOptions
+    ).map(([id, name]) => ({ id, name }))
+    const customTypes = props.optionalTypes
+      .filter(type => !type.default)
+      .map(type => ({ id: type.id, name: type.name }))
+    const types = [
+      ...defaultOptionalTypes,
+      ...customTypes,
       ...createdFollowupTypes.value.map(name => ({ id: name, name }))
     ]
-
-    return new Map<string, string>(
-      toOptions(
-        legallyNotRequiredFollowupTypes.sort(sortFollowupTypesByName),
-        'id',
-        'name'
-      )
-    )
+    return toOptions(types.sort(sortFollowupTypesByName), 'id', 'name')
   })
 
-  const legallyNotRequiredSelectedFollowupTypes = computed(() => [
-    ...props.defaultLegallyNotRequiredSelectedFollowupTypes,
-    ...props.customFollowupTypes
-  ])
+  const disableOptionalTypeOptions = computed(() => {
+    return props.optionalTypes
+      .filter(({ used }) => used)
+      .map(({ default: key, id }) => key || id)
+  })
 
-  const initialLegallyRequiredSelectedAlreadyUsed = computed(() =>
-    props.defaultLegallyRequiredSelectedFollowupTypes
-      .filter(isAlreadyUsed)
-      .map(({ default: defaultKey }) => defaultKey)
-  )
-
-  const initialLegallyNotRequiredSelectedAlreadyUsed = computed(() =>
-    legallyNotRequiredSelectedFollowupTypes.value
-      .filter(isAlreadyUsed)
-      .map(({ id, default: defaultKey }) => defaultKey || id)
-  )
-
-  const initialSelectedIdsAlreadyUsed = computed(() => [
-    ...initialLegallyRequiredSelectedAlreadyUsed.value,
-    ...initialLegallyNotRequiredSelectedAlreadyUsed.value
-  ])
-
-  watch(
-    () => props.structureFollowupTypes,
-    () => {
-      createdFollowupTypes.value = []
-    },
-    { deep: true }
-  )
+  const disableRequiredTypeOptions = computed(() => {
+    return props.requiredTypes
+      .filter(({ used }) => used)
+      .map(({ default: key, id }) => key || id)
+  })
 
   function onCreateFollowupType(name: string) {
     createdFollowupTypes.value.push(name)
     isAdding.value = false
-  }
-
-  function isAlreadyUsed(f: FollowupTypeWithSupportsCount) {
-    return !!(f._count.followups || f._count.helpRequests)
   }
 </script>

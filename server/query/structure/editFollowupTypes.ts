@@ -7,11 +7,10 @@ import {
 } from '~/client/options/followupType'
 import { FollowupTypeRepo } from '~/server/database'
 import { CreateFollowupTypeInput } from '~/server/schema'
-import type { FollowupTypeWithSupportsCount } from '~/types/followupType'
 
 export async function editFollowupTypes(
   structureId: string,
-  currentFollowupTypes: FollowupTypeWithSupportsCount[],
+  currentFollowupTypes: FollowupType[],
   legallyRequiredFollowupTypes: DefaultFollowupType[],
   legallyNotRequiredFollowupTypes: (DefaultFollowupType | string)[]
 ) {
@@ -39,7 +38,7 @@ export async function editFollowupTypes(
 // TODO: Test++
 function getFollowupTypeMutations(
   structureId: string,
-  currentFollowupTypes: FollowupTypeWithSupportsCount[],
+  currentFollowupTypes: FollowupType[],
   updatedFollowupTypes: string[]
 ) {
   return {
@@ -153,12 +152,11 @@ function getFollowupTypeName(
 }
 
 function getFollowupTypesToDelete(
-  currentFollowupTypes: FollowupTypeWithSupportsCount[],
+  currentFollowupTypes: FollowupType[],
   updatedFollowupTypes: string[]
 ) {
   return currentFollowupTypes.reduce((toDelete, current) => {
-    // Prevent deleting followup types already used fos supports
-    if (current._count.followups || current._count.helpRequests) {
+    if (current.used) {
       return toDelete
     }
 

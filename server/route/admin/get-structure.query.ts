@@ -1,4 +1,3 @@
-import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { AdminContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
@@ -12,35 +11,35 @@ const adminHandler = async ({
   ctx: AdminContext
   input: { id: string }
 }) => {
-  return await StructureRepo.findUniqueOrThrow(user, {
-    where: { id },
-    include: {
-      followupTypes: {
-        include: {
-          _count: {
-            select: { followups: true, helpRequests: true }
+  const { followupTypes, users, ...structure } =
+    await StructureRepo.findUniqueOrThrow(user, {
+      where: { id },
+      include: {
+        followupTypes: {
+          orderBy: {
+            name: 'asc'
+          }
+        },
+        users: {
+          select: {
+            id: true,
+            lastName: true,
+            firstName: true,
+            email: true,
+            role: true,
+            aidantConnectAuthorisation: true,
+            status: true
+          },
+          orderBy: {
+            created: 'desc'
           }
         }
-      },
-      users: {
-        select: {
-          id: true,
-          lastName: true,
-          firstName: true,
-          email: true,
-          role: true,
-          aidantConnectAuthorisation: true,
-          status: true
-        },
-        orderBy: {
-          created: 'desc'
-        }
       }
-    }
-  })
+    })
+  const optionalTypes = followupTypes.filter(type => !type.legallyRequired)
+  const requiredTypes = followupTypes.filter(type => type.legallyRequired)
+  return { structure, users, optionalTypes, requiredTypes }
 }
-
-export type AdminStructureOutput = Prisma.PromiseReturnType<typeof adminHandler>
 
 export const getAdminStructureQuery = createQuery({
   inputValidation: idSchema,

@@ -16,7 +16,8 @@ import {
 
 import {
   getBeneficiarySecurityTarget,
-  getStructureByUser
+  getStructureByUser,
+  markFollowupTypeAsUsed
 } from '~/server/query'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
@@ -135,6 +136,8 @@ const handler = async ({
       }
     }
   })
+
+  await markFollowupTypeAsUsed(types)
 
   return fu
 }

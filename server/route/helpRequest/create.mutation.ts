@@ -6,7 +6,10 @@ import {
   createHelpRequestSchema
 } from '~/server/schema'
 import { SecurityRuleGrantee, canCreateHelpRequest } from '~/server/security'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  markFollowupTypeAsUsed
+} from '~/server/query'
 import { HelpRequestRepo } from '~/server/database'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
@@ -82,6 +85,8 @@ const handler = async ({
       }
     }
   })
+
+  await markFollowupTypeAsUsed([typeId])
 
   return { helpRequest }
 }

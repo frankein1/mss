@@ -35,7 +35,7 @@
         </thead>
         <tbody>
           <NuxtLink
-            v-for="user in structure.users"
+            v-for="user in users"
             :key="user.id"
             v-slot="{ navigate }"
             custom
@@ -83,7 +83,7 @@
     <NuxtLink
       :to="{
         path: RoutePath.AdminUsersAdd(),
-        query: { structureId: structure.id }
+        query: { structureId }
       }"
       class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-user-add-line"
       target="_self"
@@ -95,13 +95,14 @@
 
 <script lang="ts" setup>
   import { UserStatus } from '@prisma/client'
+  import type { UserStructureType } from './types'
   import { userFieldLabels } from '~/client/labels'
   import { NonAdminUserRoleLabels } from '~/client/options/user'
-  import { AdminStructureOutput } from '~/server/trpc/routers'
   import { RoutePath } from '~/utils/routing'
   import type { NonAdminUserRole } from '~/types/user'
 
   defineProps<{
-    structure: AdminStructureOutput
+    structureId: string
+    users: UserStructureType[]
   }>()
 </script>
