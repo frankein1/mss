@@ -55,7 +55,7 @@
   const onCreateFollowupType = handleSubmit(async ({ name }) => {
     const exists = await followupTypeExists(name)
     if (exists) {
-      setErrors({ name: 'Ce type de suivi existe déjà!' })
+      setErrors({ name: 'Cette aide existe déjà!' })
     } else {
       emit('createFollowupType', name)
       form.value?.reset()
