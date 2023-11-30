@@ -40,9 +40,9 @@ vi.mock('~/server/database', () => {
       }
     },
     BeneficiaryRelativeRepo: {
+      update: vi.fn(),
       prisma: {
-        createMany: vi.fn(),
-        update: vi.fn()
+        createMany: vi.fn()
       }
     }
   }
@@ -432,7 +432,7 @@ describe('BeneficiaryService.updateTaxHousehold', () => {
         }
       ]
     })
-    expect(BeneficiaryRelativeRepo.prisma.update).toHaveBeenCalledWith({
+    expect(BeneficiaryRelativeRepo.update).toHaveBeenCalledWith({
       where: { id: 'relative-4' },
       data: {
         linkedBeneficiaryId: null,

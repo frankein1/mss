@@ -53,7 +53,7 @@ async function updateBeneficiaryRelatives(
 
   for (const relative of relatives) {
     const { linkedBeneficiary: lb } = relative
-    await BeneficiaryRelativeRepo.prisma.update({
+    await BeneficiaryRelativeRepo.update(user, {
       data: {
         linkedBeneficiaryId: null,
         email: lb?.email || null,

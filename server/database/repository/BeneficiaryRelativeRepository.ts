@@ -12,10 +12,18 @@ function findMany<T extends Prisma.BeneficiaryRelativeFindManyArgs>(
   return prismaClient.beneficiaryRelative.findMany(params)
 }
 
+function update<T extends Prisma.BeneficiaryRelativeUpdateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.BeneficiaryRelativeUpdateArgs>
+) {
+  appendConstraints(user, params, BeneficiaryRelativeConstraints.update)
+  return prismaClient.beneficiaryRelative.update(params)
+}
+
 export const BeneficiaryRelativeRepo = {
   findMany,
+  update,
   prisma: {
-    createMany: prismaClient.beneficiaryRelative.createMany,
-    update: prismaClient.beneficiaryRelative.update // FIXME: It should have constraints, isn't it ?
+    createMany: prismaClient.beneficiaryRelative.createMany
   }
 }
