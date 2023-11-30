@@ -16,6 +16,6 @@ export const BeneficiaryRelativeRepo = {
   findMany,
   prisma: {
     createMany: prismaClient.beneficiaryRelative.createMany,
-    update: prismaClient.beneficiaryRelative.update
+    update: prismaClient.beneficiaryRelative.update // FIXME: It should have constraints, isn't it ?
   }
 }
