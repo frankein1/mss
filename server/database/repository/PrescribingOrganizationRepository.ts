@@ -8,7 +8,7 @@ function findMany<T extends Prisma.PrescribingOrganizationFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.PrescribingOrganizationFindManyArgs>
 ) {
-  appendConstraints(user, params, PrescribingOrganizationConstraints)
+  appendConstraints(user, params, PrescribingOrganizationConstraints.get)
   return prismaClient.prescribingOrganization.findMany(params)
 }
 
