@@ -41,7 +41,7 @@
 
 <script lang="ts" setup>
   import { FollowupType } from '@prisma/client'
-  import { StructureFormType, UserStructureType } from './types'
+  import { StructureFormType, UsersStructureType } from './types'
   import type {
     AdminEditStructureInput,
     EditCurrentUserStructureInput
@@ -58,7 +58,7 @@
       structure: StructureFormType
       optionalTypes: FollowupType[]
       requiredTypes: FollowupType[]
-      users?: UserStructureType[]
+      users?: UsersStructureType
       isSubmitting: boolean
       adminView?: boolean
     }>(),

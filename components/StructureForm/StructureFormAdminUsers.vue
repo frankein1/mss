@@ -95,7 +95,7 @@
 
 <script lang="ts" setup>
   import { UserStatus } from '@prisma/client'
-  import type { UserStructureType } from './types'
+  import type { UsersStructureType } from './types'
   import { userFieldLabels } from '~/client/labels'
   import { NonAdminUserRoleLabels } from '~/client/options/user'
   import { RoutePath } from '~/utils/routing'
@@ -103,6 +103,6 @@
 
   defineProps<{
     structureId: string
-    users: UserStructureType[]
+    users: UsersStructureType
   }>()
 </script>

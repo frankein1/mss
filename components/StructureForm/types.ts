@@ -1,27 +1,5 @@
-import { Structure, User } from '@prisma/client'
+import { RouterOutput } from '~/server/trpc/routers'
 
-export type StructureFormType = Pick<
-  Structure,
-  | 'id'
-  | 'city'
-  | 'zipcode'
-  | 'type'
-  | 'inhabitantsNumber'
-  | 'inseeCode'
-  | 'siret'
-  | 'name'
-  | 'address'
-  | 'phone'
-  | 'email'
->
-
-export type UserStructureType = Pick<
-  User,
-  | 'id'
-  | 'lastName'
-  | 'firstName'
-  | 'email'
-  | 'aidantConnectAuthorisation'
-  | 'role'
-  | 'status'
->
+export type StructureFormType =
+  RouterOutput['structure']['getCurrentUserStructure']['structure']
+export type UsersStructureType = RouterOutput['admin']['getStructure']['users']
