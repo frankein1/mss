@@ -2,13 +2,14 @@ import { FollowupTypeRepo, HelpRequestConstraints } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { prepareHelpRequestStatFilters } from '~/utils/filters'
+import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 
 export async function getHelpRequestFollowupTypesStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const helpRequestWhere = prepareHelpRequestStatFilters(input)
-  Object.assign(helpRequestWhere, HelpRequestConstraints.get(user))
+  const helpRequestWhere = { where: prepareHelpRequestStatFilters(input) }
+  appendConstraints(user, helpRequestWhere, HelpRequestConstraints.get)
 
   return await FollowupTypeRepo.findMany(user, {
     select: {
@@ -16,9 +17,7 @@ export async function getHelpRequestFollowupTypesStatsQuery(
       name: true,
       _count: {
         select: {
-          helpRequests: {
-            where: helpRequestWhere
-          }
+          helpRequests: helpRequestWhere
         }
       }
     },
