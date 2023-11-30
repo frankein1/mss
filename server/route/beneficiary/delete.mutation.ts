@@ -49,8 +49,6 @@ async function updateBeneficiaryRelatives(
     return
   }
 
-  // TODO: Remove opposite linkedBeneficiary ?
-
   for (const relative of relatives) {
     const { linkedBeneficiary: lb } = relative
     await BeneficiaryRelativeRepo.update(user, {
