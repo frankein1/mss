@@ -10,7 +10,7 @@ function findMany<T extends Prisma.NotificationFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.NotificationFindManyArgs>
 ) {
-  appendConstraints(user, params, NotificationConstraints)
+  appendConstraints(user, params, NotificationConstraints.get)
   return prismaClient.notification.findMany(params)
 }
 

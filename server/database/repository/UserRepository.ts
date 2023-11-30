@@ -8,7 +8,7 @@ function findMany<T extends Prisma.UserFindManyArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.UserFindManyArgs>
 ) {
-  appendConstraints(user, params, UserConstraints)
+  appendConstraints(user, params, UserConstraints.get)
   return prismaClient.user.findMany(params)
 }
 
@@ -16,7 +16,7 @@ function findUniqueOrThrow<T extends Prisma.UserFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.UserFindUniqueOrThrowArgs>
 ) {
-  appendConstraints(user, params, UserConstraints)
+  appendConstraints(user, params, UserConstraints.get)
   try {
     return prismaClient.user.findUniqueOrThrow(params)
   } catch (err) {
@@ -30,12 +30,12 @@ function findUnique<T extends Prisma.UserFindUniqueOrThrowArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.UserFindUniqueOrThrowArgs>
 ) {
-  appendConstraints(user, params, UserConstraints)
+  appendConstraints(user, params, UserConstraints.get)
   return prismaClient.user.findUnique(params)
 }
 
 function count(user: SecurityRuleGrantee, params: Prisma.UserCountArgs) {
-  appendConstraints(user, params, UserConstraints)
+  appendConstraints(user, params, UserConstraints.get)
   return prismaClient.user.count(params)
 }
 
