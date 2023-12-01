@@ -17,7 +17,7 @@
         :options="defaultLegallyRequiredFollowupTypeOptions"
         label-class="fr-h6"
         :disabled-options="disableRequiredTypeOptions"
-        hint="Vous ne pouvez pas désélectionner un type d'accompagnement qui a déjà été associé à une synthèse d'entretien ou une instruction de demande d'aide."
+        hint="Vous ne pouvez pas désélectionner un type d'accompagnement qui a déjà été associé à une synthèse d'entretien ou une instruction de dossier."
       />
     </div>
     <div class="fr-fieldset__element">
@@ -28,7 +28,7 @@
         :options="optionalTypeOptions"
         label-class="fr-h6"
         :disabled-options="disableOptionalTypeOptions"
-        hint="Vous ne pouvez pas désélectionner un type d'accompagnement qui a déjà été associé à une synthèse d'entretien ou une instruction de demande d'aide."
+        hint="Vous ne pouvez pas désélectionner un type d'accompagnement qui a déjà été associé à une synthèse d'entretien ou une instruction de dossier."
       />
     </div>
 

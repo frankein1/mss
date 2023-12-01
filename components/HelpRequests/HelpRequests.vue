@@ -4,7 +4,7 @@
       v-if="error"
       class="fr-mx-4w"
       :alert-type="AlertType.Error"
-      message="La liste des instructions de demande d'aide n'a pas pu être chargée."
+      message="La liste des instructions de dossier n'a pas pu être chargée."
     />
     <template v-else>
       <HelpRequestsFilters
@@ -14,7 +14,7 @@
       <hr />
       <div class="fr-mb-2w fr-mx-5v results-container">
         <p class="fr-hint-text results-count">
-          {{ helpRequestsCount }} instruction(s) de demande d'aide
+          {{ helpRequestsCount }} instruction(s) de dossier
         </p>
         <ExportDataButton
           v-if="canExportHistory(user)"
@@ -116,7 +116,7 @@
       }
       const downloadLink = document.createElement('a')
       downloadLink.href = getExportUrl(exportedHelpRequests.data)
-      downloadLink.download = getExportFilename('demandes_daide')
+      downloadLink.download = getExportFilename('instructions_dosser')
       downloadLink.click()
       downloadLink.remove()
     } catch {

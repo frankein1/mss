@@ -100,7 +100,7 @@
 
   const fetchError = computed(() => {
     if (helpRequestError.value) {
-      return "L'instruction de demande n'a pas pu être chargée."
+      return "L'instruction de dossier n'a pas pu être chargée."
     }
     if (followupTypesError.value) {
       return "La liste des types d'accompagnement de votre structure n'a pas pu être chargée."

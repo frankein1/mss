@@ -10,11 +10,7 @@
     />
     <p>
       Souhaitez-vous confirmer la suppression de
-      {{
-        isFollowup
-          ? "la synthèse d'entretien"
-          : "l'instruction de demande d'aide"
-      }}
+      {{ isFollowup ? "la synthèse d'entretien" : "l'instruction de dossier" }}
       ou annuler ?
     </p>
     <ul class="fr-btns-group fr-btns-group--inline-md fr-mt-3w">

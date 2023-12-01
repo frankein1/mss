@@ -65,7 +65,7 @@
         <AtomAlert
           v-if="error"
           :alert-type="AlertType.Error"
-          message="Le nombre total de demandes d'aide n'a pas pu être chargé."
+          message="Le nombre total d'instructions de dossier n'a pas pu être chargé."
         />
         <AtomLoader
           v-if="pending"
@@ -235,7 +235,9 @@
   const helpRequestCountLabel = computed(
     () =>
       `${helpRequestCount.value} ${
-        helpRequestCount.value > 1 ? "Demandes d'aide" : "Demande d'aide"
+        helpRequestCount.value > 1
+          ? 'Instructions de dossier'
+          : 'Instruction de dossier'
       }`
   )
 
@@ -267,7 +269,9 @@
       const downloadLink = document.createElement('a')
       downloadLink.href = getExportUrl(exportedFile.data)
       downloadLink.download = getExportFilename(
-        isFollowupsTabActive.value ? 'stats_entretiens' : 'stats_demandes_daide'
+        isFollowupsTabActive.value
+          ? 'stats_entretiens'
+          : 'stats_instructions_dossier'
       )
       downloadLink.click()
       downloadLink.remove()

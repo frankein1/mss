@@ -24,7 +24,7 @@
               numeric
               @update:sort="onSort({ beneficiaries: { _count: $event } })"
             />
-            <th scope="col">Demandes d'aide</th>
+            <th scope="col">Instructions de dossier</th>
             <th scope="col">Entretiens</th>
             <th scope="col">Utilisateurs</th>
             <TableSortableHeader

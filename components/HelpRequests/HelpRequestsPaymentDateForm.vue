@@ -46,13 +46,13 @@
         useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
       onSuccess: updatedHelpRequest => {
         snackbar.success(
-          "La date de paiement de l'instruction de demande d'aide a été modifié."
+          "La date de paiement de l'instruction de dossier a été modifié."
         )
         emit('updated', updatedHelpRequest)
       },
       onFailure: () => {
         snackbar.error(
-          "La modification de la date de paiement de l'instruction de demande d'aide a échoué."
+          "La modification de la date de paiement de l'instruction de dossier a échoué."
         )
       }
     })

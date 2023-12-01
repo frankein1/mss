@@ -19,7 +19,7 @@
             >
               {{ helpRequestFieldLabels.status }}
             </th>
-            <th scope="col">Objet de la demande</th>
+            <th scope="col">Objet d'accompgnement</th>
             <TableSortableHeader
               v-if="canViewAnyHelpRequestDetails"
               :label="helpRequestFieldLabels.dueDate"
