@@ -50,11 +50,11 @@
                 :to="RoutePath.AppStructureEdit()"
                 target="_self"
               >
-                Personnaliser les objets des demandes de ma structure.
+                Personnaliser les objets des instructions de ma structure.
               </NuxtLink>
               <template v-else>
                 Les responsables de votre structure peuvent personnaliser ces
-                objets des demandes.
+                objets d'instruction.
               </template>
             </span>
           </template>
@@ -115,7 +115,7 @@
         }"
       >
         <VeeSelect
-          label="L'instruction de la demande est réalisée..."
+          label="L'instruction du dossier est réalisée..."
           name="externalStructure"
           :options="withEmptyValue(externalOrganisationOptions)"
           required
@@ -243,9 +243,7 @@
         >
           <template #hint>
             Le compte rendu privé est uniquement visible et modifiable par
-            l'agent qui crée l'instruction de demande d'aide.<br />{{
-              SENSITIVE_DATA_HINT
-            }}
+            l'agent qui instruit le dossier.<br />{{ SENSITIVE_DATA_HINT }}
           </template>
         </VeeTextarea>
       </div>
@@ -256,7 +254,7 @@
       :beneficiary-id="beneficiaryId"
       name="documents"
       :label="helpRequestFieldLabels.documents"
-      snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez l'instruction de demande d'aide pour conserver le lien entre les deux."
+      snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez l'instruction de dossier pour conserver le lien entre les deux."
     />
 
     <ul

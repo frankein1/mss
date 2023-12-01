@@ -11,14 +11,14 @@
     />
     <template v-else-if="prescribingOrganizationStats">
       <h2 class="fr-h5">Organismes prescripteurs</h2>
-      <p>Pourcentage calculé sur le nombre total de demandes d'aide</p>
+      <p>Pourcentage calculé sur le nombre total d'instructions de dossier</p>
       <StatsList
         v-if="prescribingOrganizationStats.length"
         :total-count="totalCount"
         :stats="prescribingOrganizationStats"
       />
       <p v-else>
-        Commencez à créer des instructions de demande d'aides dans les fiches de
+        Commencez à créer des instructions de dossier dans les fiches de
         bénéficiaires pour voir apparaître les statistiques de la répartition
         des organismes prescripteurs.
       </p>

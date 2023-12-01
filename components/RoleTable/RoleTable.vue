@@ -191,7 +191,7 @@
             <td>* si il est référent</td>
           </tr>
           <tr>
-            <td>Création d'une demande d'aide</td>
+            <td>Instruction d'un dossier</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
@@ -199,7 +199,7 @@
             <td>* si il est référent</td>
           </tr>
           <tr>
-            <td>Aperçu de la demande d'aide</td>
+            <td>Aperçu de l'instruction de dossier</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
@@ -207,7 +207,7 @@
             <td>* si il est référent</td>
           </tr>
           <tr>
-            <td>Voir le détail de la demande d'aide</td>
+            <td>Voir le détail de l'instruction de dossier</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* si créée par lui</td>
@@ -215,7 +215,7 @@
             <td>* si il est référent</td>
           </tr>
           <tr>
-            <td>Modifier la demande d'aide</td>
+            <td>Modifier l'instruction de dossier</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* si créée par lui</td>
             <td>* si créée par lui</td>
@@ -223,7 +223,7 @@
             <td>* si créée par lui</td>
           </tr>
           <tr>
-            <td>Ajouter un commentaire à la demande d'aide</td>
+            <td>Ajouter un commentaire à l'instruction de dossier</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
@@ -231,7 +231,7 @@
             <td>* si il est référent</td>
           </tr>
           <tr>
-            <td>Voir les commentaires de la demande d'aide</td>
+            <td>Voir les commentaires de l'instruction de dossier</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
@@ -239,7 +239,7 @@
             <td>* si il est référent</td>
           </tr>
           <tr>
-            <td>Supprimer la demande d'aide</td>
+            <td>Supprimer l'instruction de dossier</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* si créée par lui</td>
             <td>* si créée par lui</td>

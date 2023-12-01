@@ -18,7 +18,7 @@
         :total-count="totalCount"
       />
       <p v-else>
-        Commencez à créer des instructions de demande d'aide dans les fiches de
+        Commencez à créer des instructions de dossier dans les fiches de
         bénéficiaires pour voir apparaître les statistiques de la répartition
         des statuts.
       </p>
