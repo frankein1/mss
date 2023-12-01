@@ -30,21 +30,68 @@
   import type { CreateCustomFollowupTypeInput } from '~/server/schema'
   import { createCustomFollowupTypeSchema } from '~/server/schema'
   import { followupTypeFieldLabels } from '~/client/labels'
+  import {
+    defaultLegallyNotRequiredFollowupTypeLabels,
+    defaultLegallyRequiredFollowupTypeLabels
+  } from '~/client/options/followupType'
+
+  const props = defineProps<{
+    structureId: string
+    adminView: boolean
+  }>()
 
   const emit = defineEmits<{
     createFollowupType: [followupTypeName: string]
   }>()
 
+  const trpcClient = useTrpcClient()
+
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit } = useForm<CreateCustomFollowupTypeInput>({
+  const { handleSubmit, setErrors } = useForm<CreateCustomFollowupTypeInput>({
     validationSchema: toTypedSchema(createCustomFollowupTypeSchema)
   })
 
-  const onCreateFollowupType = handleSubmit(({ name }) => {
-    emit('createFollowupType', name)
-    form.value?.reset()
+  const onCreateFollowupType = handleSubmit(async ({ name }) => {
+    const exists = await followupTypeExists(name)
+    if (exists) {
+      setErrors({ name: 'Cette aide existe déjà !' })
+    } else {
+      emit('createFollowupType', name)
+      form.value?.reset()
+    }
   })
+
+  async function followupTypeExists(name: string) {
+    const cleanName = name.toLocaleLowerCase()
+
+    const requiredTypeNames = Object.values(
+      defaultLegallyRequiredFollowupTypeLabels
+    ).map(name => name.toLocaleLowerCase())
+
+    if (requiredTypeNames.includes(cleanName)) {
+      return true
+    }
+
+    const optionalTypeNames = Object.values(
+      defaultLegallyNotRequiredFollowupTypeLabels
+    ).map(name => name.toLocaleLowerCase())
+    if (optionalTypeNames.includes(cleanName)) {
+      return true
+    }
+
+    if (props.adminView) {
+      return !!(await trpcClient.admin.getFollowupType.query({
+        structureId: props.structureId,
+        name
+      }))
+    }
+
+    return !!(await trpcClient.structure.getFollowupType.query({
+      structureId: props.structureId,
+      name
+    }))
+  }
 </script>
 
 <style scoped>
