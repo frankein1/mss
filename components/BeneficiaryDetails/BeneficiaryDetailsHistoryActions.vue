@@ -18,10 +18,10 @@
         <NuxtLink
           :to="`${RoutePath.AppBeneficiaryHelpRequestAdd(beneficiaryId)}`"
           class="fr-btn fr-icon-file-add-line help-request-btn"
-          title="Ajouter une instruction de demande d'aide"
+          title="Instruire un dossier"
           target="_self"
         >
-          Demande d'aide
+          Instruction de dossier
         </NuxtLink>
       </li>
       <li class="mesdroitssociaux-btn-container">

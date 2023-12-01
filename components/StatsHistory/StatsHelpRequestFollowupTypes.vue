@@ -7,20 +7,20 @@
     <AtomAlert
       v-else-if="error"
       :alert-type="AlertType.Error"
-      :message="`Les statistiques de la répartion des objets des demandes d'aide n'ont pas pu être chargées.`"
+      :message="`Les statistiques de la répartion des objets d'accompagnement n'ont pas pu être chargées.`"
     />
     <template v-else-if="followupTypesStats">
-      <h2 class="fr-h5">Objets des demandes d'aide</h2>
-      <p>Pourcentage calculé sur le nombre total de demandes d'aide</p>
+      <h2 class="fr-h5">Objets d'accompagnement'</h2>
+      <p>Pourcentage calculé sur le nombre total d'instruction de dossier</p>
       <StatsList
         v-if="followupTypesStats.length"
         :total-count="totalCount"
         :stats="followupTypesStats"
       />
       <p v-else>
-        Commencez à créer des demandes d'aide dans les fiches de bénéficiaires
-        pour voir apparaître les statistiques de la répartition des objets des
-        demandes d'aide.
+        Commencez à créer des instructions de dossier dans les fiches de
+        bénéficiaires pour voir apparaître les statistiques de la répartition
+        des objets d'accompagnement.
       </p>
     </template>
   </div>

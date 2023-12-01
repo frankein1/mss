@@ -159,7 +159,7 @@
     useModal().open({
       title: props.history.isFollowup
         ? "Supprimer la synthèse d'entretien"
-        : "Supprimer l'instruction de demande d'aide",
+        : "Supprimer l'instruction de dossier",
       contentComponent: BeneficiaryHistoryDeleteForm,
       contentComponentProps: {
         historyItemId: props.history.id,

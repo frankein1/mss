@@ -29,7 +29,7 @@
       v-if="followup.helpRequested"
       class="fr-icon-success-line"
     >
-      Instruction de demande
+      Instruction de dossier
     </li>
     <template v-if="isMinistryAgent">
       <li

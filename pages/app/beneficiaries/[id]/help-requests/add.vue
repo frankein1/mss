@@ -119,7 +119,7 @@
       },
       onFailure: () => {
         snackbar.error(
-          "La création de l'instruction de demande d'aide a échoué.",
+          "La création de l'instruction de dossier a échoué.",
           () => formContainer.value?.querySelector('input')?.focus()
         )
       }

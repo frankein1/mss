@@ -124,7 +124,7 @@
       },
       {
         name: 'typeSuivi',
-        label: 'Type de suivi',
+        label: "Type d'accompagnement",
         options: withEmptyValue(typeSuiviOptions, 'Tous les suivis'),
         type: FilterType.SelectOne,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
@@ -140,7 +140,7 @@
       },
       {
         name: 'followupTypes',
-        label: "Type d'accompagnement",
+        label: "Objet de l'accompagnement",
         options: followupTypeOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,

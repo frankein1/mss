@@ -50,13 +50,13 @@
           useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
         onSuccess: updatedHelpRequest => {
           snackbar.success(
-            "Le montant alloué de l'instruction de demande d'aide a été modifié."
+            "Le montant alloué de l'instruction de dossier a été modifié."
           )
           emit('updated', updatedHelpRequest)
         },
         onFailure: () => {
           snackbar.error(
-            "La modification du montant alloué de l'instruction de demande d'aide a échoué."
+            "La modification du montant alloué de l'instruction de dossier a échoué."
           )
         }
       })

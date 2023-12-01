@@ -14,7 +14,7 @@
           </AtomTab>
           <AtomTab
             :tab-id="HistoryTab.HelpRequests"
-            title="Demandes d'aide"
+            title="Instructions de dossier"
           >
             <HelpRequests />
           </AtomTab>

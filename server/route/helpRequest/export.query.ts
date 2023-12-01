@@ -63,7 +63,7 @@ const handler = async ({
   }, [])
 
   return await createExport(user.id, [
-    { name: "Demandes d'aide", columns, rows }
+    { name: 'Instructions de dossier', columns, rows }
   ])
 }
 

@@ -126,7 +126,7 @@ export async function getHelpRequestFinancialStatsQuery(
   const requestsCounts = {
     total: {
       key: 'total',
-      label: 'Nombre de demandes',
+      label: "Nombre d'instructions",
       count: financialHelpRequestCount || 0
     },
     internal: {

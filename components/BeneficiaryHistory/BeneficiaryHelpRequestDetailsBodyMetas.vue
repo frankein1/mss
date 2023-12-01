@@ -34,7 +34,7 @@
       v-if="helpRequest.fullFile"
       class="fr-icon-success-line"
     >
-      Dossier complet
+      Ce dossier est complet
     </li>
     <li v-if="helpRequest.dispatchDate">
       <span class="information-label">Date d'envoi du dossier :</span>
