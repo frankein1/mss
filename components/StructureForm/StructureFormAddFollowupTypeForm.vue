@@ -55,7 +55,7 @@
   const onCreateFollowupType = handleSubmit(async ({ name }) => {
     const exists = await followupTypeExists(name)
     if (exists) {
-      setErrors({ name: 'Cette aide existe déjà!' })
+      setErrors({ name: 'Cette aide existe déjà !' })
     } else {
       emit('createFollowupType', name)
       form.value?.reset()
@@ -65,7 +65,6 @@
   async function followupTypeExists(name: string) {
     const cleanName = name.toLocaleLowerCase()
 
-    let data
     const requiredTypeNames = Object.values(
       defaultLegallyRequiredFollowupTypeLabels
     ).map(name => name.toLocaleLowerCase())
@@ -82,17 +81,16 @@
     }
 
     if (props.adminView) {
-      data = await trpcClient.admin.getFollowupType.query({
+      return !!(await trpcClient.admin.getFollowupType.query({
         structureId: props.structureId,
         name
-      })
-    } else {
-      data = await trpcClient.structure.getFollowupType.query({
-        structureId: props.structureId,
-        name
-      })
+      }))
     }
-    return !!data
+
+    return !!(await trpcClient.structure.getFollowupType.query({
+      structureId: props.structureId,
+      name
+    }))
   }
 </script>
 
