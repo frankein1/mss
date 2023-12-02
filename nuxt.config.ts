@@ -178,6 +178,11 @@ export default defineNuxtConfig({
     client: true,
     server: true
   },
+  security: {
+    headers: {
+      crossOriginEmbedderPolicy: 'unsafe-none'
+    }
+  },
   routeRules: {
     '/api/s3/create': {
       security: {
