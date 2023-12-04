@@ -86,7 +86,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   entourages: 'Entourage',
   taxHouseholds: 'Foyer fiscal',
   historyTotal: 'Nombre de suivis',
-  types: "Types d'accompagnement"
+  types: "Objets d'accompagnement"
 }
 
 export { beneficiaryFieldLabels }

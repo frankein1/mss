@@ -9,7 +9,7 @@ type FollowupFieldLabels = Omit<
 export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
   id: 'Identifiant',
   beneficiaryId: 'Bénéficiaire',
-  types: "Objet(s) de l'entretien",
+  types: "Objet(s) de l'accompagnement",
   medium: "Type d'entretien",
   documents: 'Document(s)',
   status: 'Statut',

@@ -91,7 +91,7 @@
       return "La liste des agents n'a pas pu être chargée."
     }
     if (followupTypeOptionsError.value) {
-      return "La liste des types d'accompagnement n'a pas pu être chargée."
+      return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
     if (examinationDateOptionsError.value) {
       return "La liste des dates de passage en commission n'a pas pu être chargée."

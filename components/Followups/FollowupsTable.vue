@@ -35,7 +35,7 @@
                 })
               "
             />
-            <th scope="col">Objet de l'entretien</th>
+            <th scope="col">Objet de l'accompagnement</th>
             <TableSortableHeader
               :label="followupFieldLabels.dueDate"
               numeric

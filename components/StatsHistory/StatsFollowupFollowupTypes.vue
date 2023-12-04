@@ -7,10 +7,10 @@
     <AtomAlert
       v-else-if="error"
       :alert-type="AlertType.Error"
-      :message="`Les statistiques de la répartion des objets des entretiens n'ont pas pu être chargées.`"
+      :message="`Les statistiques de la répartion des objets d'accompagnement' n'ont pas pu être chargées.`"
     />
     <template v-else-if="followupTypesStats">
-      <h2 class="fr-h5">Objets des entretiens</h2>
+      <h2 class="fr-h5">Objets d'accompagnement</h2>
       <p>Pourcentage calculé sur le nombre total de synthèses d'entretien</p>
       <StatsList
         v-if="followupTypesStats.length"
@@ -20,7 +20,7 @@
       <p v-else>
         Commencez à créer des synthèses d'entretien dans les fiches de
         bénéficiaires pour voir apparaître les statistiques de la répartition
-        des objets des entretiens.
+        des objets d'accompagnement.
       </p>
     </template>
   </div>
