@@ -87,7 +87,7 @@
 
   const fetchError = computed(() => {
     if (followupTypesOptionsError.value) {
-      return "La liste des types d'accompagnement n'a pas pu être chargée."
+      return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
     if (beneficiariesCitiesOptionsError.value) {
       return "La liste des villes n'a pas pu être chargée."
