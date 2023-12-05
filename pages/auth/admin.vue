@@ -23,8 +23,7 @@
 </template>
 <script setup lang="ts">
   import { AdminLoginInput, adminLoginSchema } from '~/server/schema'
-  import { useAuthStore } from '~/store/auth'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { RouteTitle } from '~/utils/routing'
 
   useHead({
     title: RouteTitle.AuthAdmin()
@@ -37,20 +36,6 @@
   const { token } = route.query
 
   const isSubmitting = ref(false)
-
-  onMounted(async () => {
-    if (token) {
-      const res = await fetch('/api/admin/login', {
-        method: 'POST',
-        body: JSON.stringify(`{ token: ${token} }`)
-      })
-      const user = await res.json()
-      if (user) {
-        useAuthStore().login(user)
-        navigateTo(RoutePath.AdminStructures())
-      }
-    }
-  })
 
   const snackbar = useSnackbar()
 
