@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.11.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.10.2...v1.11.0) (2023-12-05)
+
+
+### Features
+
+* Cache les champs signalisations et interventions des suivis ([6a06fb4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6a06fb442b708be1f03c81783b78523254a72c1b)), closes [#234](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/234)
+* Mise à jour de nuxt-security ([eca6ca9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/eca6ca9b9f141a0af0c61da0d347a9163257be7c))
+* Mise à jour des versions mineurs des paquets ([534edf4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/534edf40c8b047aa301eec752df0ddfaf23e4564))
+
+
+### Bug Fixes
+
+* **admin:** Affiche un état de chargement lors de l'authentification à l'espace d'administration ([b8da168](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b8da16830a7d1a7b4f5a517a6adee21f0ee30578))
+* **admin:** Corrige l'envoi de l'invitation à l'atelier premiers pas aux utilisateurs créés 7 jours plus tôt ([6937b4e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6937b4e0725abf37de2dde959ec019e15c7b400f))
+* **admin:** Impossible de mettre à jour les types d'accompagnement des structures ([55dbe61](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/55dbe61ab8c6ebee78ca6f556bf471935e9519cf)), closes [#229](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/229)
+* **admin:** La récupération de l'admin authentifié depuis les cookies génère une erreur ([4db97c1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4db97c108d6e834410db06840428458cc82306aa)), closes [#229](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/229)
+* **auth:** L'application ne gère pas le cas où le jeton d'authentification n'a pas pu être récupéré auprès d'InclusionConnect ([46227d9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/46227d914727c886610a48d69c8b4127e102b0d7)), closes [#230](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/230)
+* **beneficiaire:** Affiche toujours 3 filtres par défaut ([ec4297e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ec4297eeaf9f4c4d905c4215e1b18bfbd67a51f4)), closes [#92](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/92)
+* **beneficiaire:** Lors de la modification du numéro de téléphone du bénéficiaire, l'information était effacée ([6276e27](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6276e2762520b13f0a87f7501f9ebc1945b0c48a)), closes [#226](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/226)
+* **beneficiaire:** Quand le tri par date de naissance est appliqué, les fiches sans dates de naissance sont toujours triées en dernier ([1b29222](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1b29222b928c1ad1cb69d847e966ac52a436fd30)), closes [#92](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/92)
+* closes [#227](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/227) ([23dd319](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/23dd3190354312f60767a648f259fdd2c3e45e42))
+* closes [#227](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/227) ([94556ae](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/94556ae512a32acca2d10c940ad84d83d0360f2e))
+* closes [#228](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/228) ([039ec23](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/039ec238a5ffecd87d87687469e705afe5082dff))
+* Déplace la génération du contenu des emails coté serveur ([d504e45](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d504e45c3d71399f411eb11c5652632a2be84cea))
+* Do not throw an error during trpc context creation if the user is not found ([d62d705](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d62d705efed40aa86e96284816159c71f040aa4a))
+* **export:** closes [#233](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/233) ([711d84d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/711d84d5c36da6ce626a065bbf5c2b1a03617709))
+* Gestion d'un utilisateur connu de IC et pas de MSS ([8bfd380](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8bfd380e8517db633c26fd00235e8506cf6cbc4e))
+* Gestion de la contrainte unique lors de la création d'un type de suivi ([62aba47](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/62aba474da20c502781f06c80b1bd4bf97170256))
+* issue[#252](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/252) ([17cc65f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/17cc65fa6d39e74c43babe9a0e39dac1fbf02f12))
+* **matomo:** set cross-origin-embedder-policy to unsafe ([e9af7b2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e9af7b2423846ff12ea03c258b1f13b1b85a1845))
+* **nuxt:** ptimizing dependencies configuration ([a2fe16a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a2fe16a75387aec7eb0675c6697486b24f0f0d93))
+* Sauvegarde de Réorienté après l'entretien ([204c08a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/204c08a9c56e7ce38baee120313245cab114344e))
+* **structure:** Corrige l'affichage d'erreur lorsqu'aucun type d'accompagnement n'est sélectionné lors de la modification de la structure ([0feb692](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0feb692cd7899dddf921244b231fdbe5bc74b20d)), closes [#229](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/229)
+* Supprime les espaces et mets en mininuscule l'email de l'utilisateur ([f8e7a30](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f8e7a305c439003102ef396a4fd36c98779af5fc))
+
 ### [1.10.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.10.1...v1.10.2) (2023-11-28)
 
 
