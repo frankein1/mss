@@ -3,7 +3,7 @@ import VueMatomo from 'vue-matomo'
 export default defineNuxtPlugin(() => {
   const { public: publicConfig } = useRuntimeConfig()
 
-  if (publicConfig.mssEnvironment !== 'production') {
+  if (!publicConfig.matomo.host || !publicConfig.matomo.siteId) {
     return
   }
 
