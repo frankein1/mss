@@ -4,7 +4,7 @@ import { JwtUser } from '~/types/user'
 // eslint-disable-next-line import/no-named-as-default-member
 const { sign, verify } = pkg
 
-const expiresIn = 30 * 60
+const expiresIn = 60 * 60
 
 export function verifyJwt(token: string, jwtKey: string): JwtPayload {
   return verify(token, jwtKey) as JwtPayload
