@@ -13,6 +13,11 @@ export const useAuthStore = defineStore('auth', {
     },
     logout() {
       this.user = null
+    },
+    refreshToken() {
+      setTimeout(() => {
+        console.log('toto')
+      }, 1000)
     }
   },
 
