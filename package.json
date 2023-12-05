@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
+    "@pinia-plugin-persistedstate/nuxt": "^1.2.0",
     "@types/jsonwebtoken": "^9.0.5",
     "@types/lodash.merge": "^4.6.9",
     "@types/node": "^20.8.6",
