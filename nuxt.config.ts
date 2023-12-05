@@ -81,6 +81,7 @@ export default defineNuxtConfig({
   // Modules: https://v3.nuxtjs.org/api/configuration/nuxt.config#modules
   modules: [
     '@pinia/nuxt',
+    '@pinia-plugin-persistedstate/nuxt',
     '@vee-validate/nuxt',
     'nuxt-scheduler',
     'nuxt-security'
