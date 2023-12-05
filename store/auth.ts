@@ -2,11 +2,11 @@ import { StructureType, UserRole, UserStatus } from '@prisma/client'
 import { defineStore } from 'pinia'
 import { JwtUser } from '~/types/user'
 
-export const useAuthStore = defineStore({
-  id: 'auth',
-
+export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null as JwtUser | null
+    user: null as JwtUser | null,
+    accessToken: null,
+    refreshToken: null
   }),
 
   actions: {
@@ -15,6 +15,8 @@ export const useAuthStore = defineStore({
     },
     logout() {
       this.user = null
+      this.accessToken = null
+      this.refreshToken = null
     }
   },
 
@@ -37,5 +39,6 @@ export const useAuthStore = defineStore({
     isActive(): boolean {
       return this.user?.status === UserStatus.Active
     }
-  }
+  },
+  persist: true
 })
