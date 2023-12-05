@@ -1,3 +1,4 @@
+import merge from 'lodash.merge'
 import { SecurityRuleGrantee } from '../../../security'
 
 export const appendConstraints = <T extends { where?: any }>(
@@ -8,5 +9,5 @@ export const appendConstraints = <T extends { where?: any }>(
   }
 ) => {
   params.where = params.where || {}
-  Object.assign(params.where, constraints.get(user))
+  merge(params.where, constraints.get(user))
 }

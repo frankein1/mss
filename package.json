@@ -36,6 +36,7 @@
     "exceljs": "^4.3.0",
     "json-diff": "^1.0.6",
     "jsonwebtoken": "^9.0.2",
+    "lodash.merge": "^4.6.2",
     "mitt": "^3.0.1",
     "node-fetch-native": "^1.4.1",
     "nodemailer": "^6.9.7",
@@ -54,6 +55,7 @@
   "devDependencies": {
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@types/jsonwebtoken": "^9.0.5",
+    "@types/lodash.merge": "^4.6.9",
     "@types/node": "^20.8.6",
     "@types/nodemailer": "^6.4.14",
     "@types/uuid": "^9.0.7",
