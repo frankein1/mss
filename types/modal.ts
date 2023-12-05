@@ -21,6 +21,6 @@ export type OpenModalEvent<M extends ModalComponent> = {
   title: string
   contentComponent: M
   contentComponentProps?: ComponentProps<M>
-  contentComponentEvents?: ComponentEmit<M>
+  contentComponentEvents: ComponentEmit<M>
   triggerOpen?: boolean
 }

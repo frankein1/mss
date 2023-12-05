@@ -2,6 +2,7 @@ export const NEW_OPTION_ID = 'new-option'
 export const NEW_OPTION_PREFIX = `${NEW_OPTION_ID}-`
 
 export type Options = Map<string, string>
+export type RichOptions = Map<string, { label: string; picto: string }>
 
 export const labelsToOptions = (object: Record<string, string>): Options =>
   new Map(Object.entries(object))

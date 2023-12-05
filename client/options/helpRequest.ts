@@ -1,7 +1,8 @@
 import {
   HelpRequestReason,
   HelpRequestStatus,
-  PaymentMethod
+  PaymentMethod,
+  HelpRequestSubject
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
@@ -52,3 +53,27 @@ export const helpRequestReasonLabels: { [key in HelpRequestReason]: string } = {
 }
 
 export const helpRequestReasonOptions = labelsToOptions(helpRequestReasonLabels)
+
+export const helpRequestSubjectOptions = new Map<
+  HelpRequestSubject,
+  { label: string; picto: string }
+>([
+  [
+    HelpRequestSubject.Housing,
+    {
+      label: 'Une demande de logement',
+      picto: '~/assets/pictograms/building.svg'
+    }
+  ],
+  [
+    HelpRequestSubject.Financial,
+    {
+      label: 'Une aide financière',
+      picto: '~/assets/pictograms/tax-stamp.svg'
+    }
+  ],
+  [
+    HelpRequestSubject.Other,
+    { label: 'Autre', picto: '~/assets/pictograms/document.svg' }
+  ]
+])
