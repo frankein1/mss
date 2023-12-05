@@ -4,9 +4,7 @@ import { JwtUser } from '~/types/user'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null as JwtUser | null,
-    accessToken: null,
-    refreshToken: null
+    user: null as JwtUser | null
   }),
 
   actions: {
@@ -15,8 +13,6 @@ export const useAuthStore = defineStore('auth', {
     },
     logout() {
       this.user = null
-      this.accessToken = null
-      this.refreshToken = null
     }
   },
 
