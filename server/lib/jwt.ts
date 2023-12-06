@@ -4,13 +4,11 @@ import { JwtUser } from '~/types/user'
 // eslint-disable-next-line import/no-named-as-default-member
 const { sign, verify } = pkg
 
-const expiresIn = 60 * 60
-
 export function verifyJwt(token: string, jwtKey: string): JwtPayload {
   return verify(token, jwtKey) as JwtPayload
 }
 
-export function signJwt(user: JwtUser, jwtKey: string) {
+export function signJwt(user: JwtUser, jwtKey: string, expiresIn: number) {
   const sessionToken = sign(
     {
       user: {
@@ -31,5 +29,5 @@ export function signJwt(user: JwtUser, jwtKey: string) {
       expiresIn
     }
   )
-  return { sessionToken, expiresIn }
+  return sessionToken
 }

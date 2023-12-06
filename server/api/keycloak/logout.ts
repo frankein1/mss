@@ -11,9 +11,9 @@ export default defineEventHandler(async event => {
 
   const client = getInclusionConnectClient()
 
-  const sessionCookieKey = config.public.sessionCookieKey
+  const { cookieKey } = config.public.auth
 
-  const sessionToken = getCookie(event, sessionCookieKey)
+  const sessionToken = getCookie(event, cookieKey)
 
   if (!sessionToken) {
     return { success: true, url: null }
@@ -23,7 +23,7 @@ export default defineEventHandler(async event => {
   const { email } = jwtUser
   const user = await findUser(email)
 
-  deleteCookie(event, sessionCookieKey)
+  deleteCookie(event, cookieKey)
 
   if (!user) {
     return { success: true, url: null }

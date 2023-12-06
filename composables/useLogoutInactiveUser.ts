@@ -1,6 +1,9 @@
 import { onMounted, onUnmounted } from 'vue'
 import { RoutePath } from '~/utils/routing'
 
+type Interval = ReturnType<typeof setInterval>
+type Timeout = ReturnType<typeof setTimeout>
+
 export function useLogoutInactiveUser() {
   const {
     public: { inactiveUserTimeThreshold }
@@ -8,32 +11,42 @@ export function useLogoutInactiveUser() {
 
   const INACTIVE_USER_TIME_THRESHOLD = inactiveUserTimeThreshold * 60 * 1000
 
-  let userActivityTimeout = startTimeout()
+  const counter = ref(INACTIVE_USER_TIME_THRESHOLD)
 
-  function resetUserActivityTimeout() {
-    clearTimeout(userActivityTimeout)
-    userActivityTimeout = startTimeout()
+  let interval: Interval
+  let timeout: Timeout
+
+  function stop() {
+    if (interval) {
+      clearInterval(interval)
+    }
+    if (timeout) {
+      clearTimeout(timeout)
+    }
   }
 
   function startTimeout() {
-    return setTimeout(() => {
-      inactiveUserAction()
+    stop()
+    counter.value = INACTIVE_USER_TIME_THRESHOLD
+    interval = setInterval(() => {
+      counter.value = counter.value - 1000
+    }, 1000)
+    timeout = setTimeout(() => {
+      logout()
     }, INACTIVE_USER_TIME_THRESHOLD)
   }
 
-  function inactiveUserAction() {
+  function logout() {
     if (process.client) {
       navigateTo(RoutePath.AuthLogout() + '?inactive=true')
     }
   }
 
-  onMounted(() =>
-    window.addEventListener('mousemove', resetUserActivityTimeout)
-  )
+  onMounted(() => window.addEventListener('mousemove', startTimeout))
   onUnmounted(() => {
-    window.removeEventListener('mousemove', resetUserActivityTimeout)
-    clearTimeout(userActivityTimeout)
+    window.removeEventListener('mousemove', startTimeout)
+    stop()
   })
 
-  return { userActivityTimeout }
+  return { counter }
 }

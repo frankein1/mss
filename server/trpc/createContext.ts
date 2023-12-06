@@ -7,9 +7,9 @@ export const createContext = async (event: H3Event) => {
   const config = useRuntimeConfig()
 
   const cookies = parseCookies(event)
-  const sessionCookieKey = config.public.sessionCookieKey
+  const { cookieKey } = config.public.auth
 
-  const sessionToken = cookies[sessionCookieKey]
+  const sessionToken = cookies[cookieKey]
 
   if (!sessionToken) {
     return { event }

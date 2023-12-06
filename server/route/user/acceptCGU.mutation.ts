@@ -16,7 +16,10 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const {
-    public: { cguVersion, sessionCookieKey },
+    public: {
+      cguVersion,
+      auth: { cookieKey, tokenValidationDuration }
+    },
     auth: { jwtKey }
   } = useRuntimeConfig()
 
@@ -43,7 +46,7 @@ const handler = async ({
     throw invalidError()
   }
 
-  const previousSessionToken = cookies[sessionCookieKey]
+  const previousSessionToken = cookies[cookieKey]
   if (!previousSessionToken) {
     throw invalidError()
   }
@@ -52,7 +55,7 @@ const handler = async ({
   try {
     payload = verifyJwt(previousSessionToken, jwtKey)
   } catch (err) {
-    deleteCookie(event, sessionCookieKey)
+    deleteCookie(event, cookieKey)
     throw forbiddenError()
   }
 
@@ -65,9 +68,14 @@ const handler = async ({
 
   event.context.auth = { newUser }
 
-  const { sessionToken, expiresIn } = signJwt(newUser, jwtKey)
+  const sessionToken = signJwt(newUser, jwtKey, tokenValidationDuration)
 
-  setCookie(event, sessionCookieKey, sessionToken, cookieOptions({ expiresIn }))
+  setCookie(
+    event,
+    cookieKey,
+    sessionToken,
+    cookieOptions({ expiresIn: tokenValidationDuration })
+  )
 
   return newUser
 }
