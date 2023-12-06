@@ -7,7 +7,7 @@
     <AtomAlert
       v-else-if="error"
       :alert-type="AlertType.Error"
-      :message="`Les statistiques de la répartion des objets d'accompagnement' n'ont pas pu être chargées.`"
+      :message="`Les statistiques de la répartion des objets d'accompagnement n'ont pas pu être chargées.`"
     />
     <template v-else-if="followupTypesStats">
       <h2 class="fr-h5">Objets d'accompagnement</h2>
