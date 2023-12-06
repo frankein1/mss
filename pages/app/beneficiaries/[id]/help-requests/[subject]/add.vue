@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestAdd(beneficiary)"
+      :links="Breadcrumb.AppBeneficiaryHelpRequestAdd(beneficiary, subject)"
     />
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
@@ -40,6 +40,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { HelpRequestSubject } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
@@ -53,6 +54,7 @@
   const formContainer = ref<HTMLElement | null>(null)
 
   const beneficiaryId = route.params.id as string
+  const subject = route.params.subject as HelpRequestSubject
 
   const { data: beneficiary, error: beneficiaryError } =
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({

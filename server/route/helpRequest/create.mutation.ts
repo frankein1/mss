@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { UserActivityType, HelpRequestSubject } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -74,7 +74,11 @@ const handler = async ({
       externalStructure: externalStructure === 'true',
       documents: prepareDocumentsMutations(input.documents),
       instructorOrganization,
-      prescribingOrganization
+      prescribingOrganization,
+      subject:
+        financialSupport === 'true'
+          ? HelpRequestSubject.Financial
+          : HelpRequestSubject.Other // FIXME: Replace with proper subject
     },
     include: {
       beneficiary: {
