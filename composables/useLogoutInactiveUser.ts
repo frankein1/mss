@@ -13,15 +13,17 @@ export function useLogoutInactiveUser() {
 
   const counter = ref(INACTIVE_USER_TIME_THRESHOLD)
 
-  let interval: Interval
-  let timeout: Timeout
+  let interval: Interval | null
+  let timeout: Timeout | null
 
   function stop() {
     if (interval) {
       clearInterval(interval)
+      interval = null
     }
     if (timeout) {
       clearTimeout(timeout)
+      timeout = null
     }
   }
 

@@ -2,8 +2,6 @@ import { StructureType, UserRole, UserStatus } from '@prisma/client'
 import { defineStore } from 'pinia'
 import { JwtUser } from '~/types/user'
 
-const REFRESH_TOKEN_DELAY = 1000 * 60 * 20
-
 type Timer = ReturnType<typeof setTimeout>
 
 export const useAuthStore = defineStore('auth', {

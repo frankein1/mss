@@ -2,8 +2,8 @@ import { useAuthStore } from '~/store/auth'
 import { RoutePath } from '~/utils/routing'
 
 export default defineNuxtRouteMiddleware(to => {
-  const pinia = useNuxtApp().$pinia
-  const authStore = useAuthStore(pinia)
+  const { $pinia } = useNuxtApp()
+  const authStore = useAuthStore($pinia)
 
   const isAuthenticated = authStore.isAuthenticated
   const isAdminRoute = to.fullPath.startsWith(RoutePath.Admin())
