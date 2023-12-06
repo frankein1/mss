@@ -25,7 +25,7 @@
 <script setup lang="ts">
   const props = defineProps<{ path: string }>()
 
-  // Nuxt/Vite to not handle dynamic assets path. Cheers to danielroe for this workaround - https://github.com/nuxt/nuxt/issues/14766#issuecomment-1397365205
+  // Nuxt/Vite do not handle dynamic assets path. Cheers to danielroe for this workaround - https://github.com/nuxt/nuxt/issues/14766#issuecomment-1397365205
   const glob: Record<string, { default: string }> = import.meta.glob(
     '~/assets/pictograms/*.svg',
     { eager: true }
