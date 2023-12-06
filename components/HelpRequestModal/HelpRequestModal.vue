@@ -53,7 +53,7 @@
     validationSchema: toTypedSchema(
       z.object({
         subject: z.nativeEnum(HelpRequestSubject, {
-          required_error: "Veuillez sélectionner un type d'accompagnement"
+          required_error: "Veuillez sélectionner un type d'accompagnement."
         })
       })
     )
