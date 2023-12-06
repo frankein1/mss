@@ -1343,10 +1343,10 @@ model Comment {
 
   content String
 
-  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id])
+  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id], onDelete: Cascade)
   helpRequestId String?      @map("help_request_id") @db.Uuid
 
-  followup   Followup? @relation(fields: [followupId], references: [id])
+  followup   Followup? @relation(fields: [followupId], references: [id], onDelete: Cascade)
   followupId String?   @map("followup_id") @db.Uuid
 
   notification Notification[]
@@ -1408,22 +1408,22 @@ model Notification {
 
   created DateTime? @default(now())
 
-  recipient   User   @relation(fields: [recipientId], references: [id])
+  recipient   User   @relation(fields: [recipientId], references: [id], onDelete: Cascade)
   recipientId String @map("recipient_id") @db.Uuid
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
-  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id])
+  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id], onDelete: Cascade)
   helpRequestId String?      @map("help_request_id") @db.Uuid
 
-  followup   Followup? @relation(fields: [followupId], references: [id])
+  followup   Followup? @relation(fields: [followupId], references: [id], onDelete: Cascade)
   followupId String?   @map("followup_id") @db.Uuid
 
-  document   Document? @relation(fields: [documentId], references: [key])
+  document   Document? @relation(fields: [documentId], references: [key], onDelete: Cascade)
   documentId String?   @map("document_id")
 
-  comment   Comment? @relation(fields: [commentId], references: [id])
+  comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?  @map("comment_id") @db.Uuid
 
   read Boolean? @default(false)
