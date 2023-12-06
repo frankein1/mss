@@ -2,22 +2,36 @@ import { StructureType, UserRole, UserStatus } from '@prisma/client'
 import { defineStore } from 'pinia'
 import { JwtUser } from '~/types/user'
 
+const REFRESH_TOKEN_DELAY = 1000 * 60 * 20
+
+type Timer = ReturnType<typeof setTimeout>
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null as JwtUser | null
+    user: null as JwtUser | null,
+    timer: null as Timer | null
   }),
 
   actions: {
     login(user: JwtUser) {
       this.user = user
+      this.refreshToken()
     },
     logout() {
       this.user = null
     },
     refreshToken() {
-      setTimeout(() => {
-        console.log('toto')
-      }, 1000)
+      if (this.timer) {
+        clearTimeout(this.timer)
+      }
+      this.timer = setTimeout(async () => {
+        const res = await fetch('/api/auth/refresh-token', {
+          method: 'POST'
+        })
+        if (res.ok) {
+          this.refreshToken()
+        }
+      }, REFRESH_TOKEN_DELAY)
     }
   },
 
