@@ -9,9 +9,9 @@ export default defineEventHandler(event => {
   }
   const config = useRuntimeConfig()
 
-  const sessionCookieKey = config.public.sessionCookieKey
+  const { cookieKey, tokenValidationDuration } = config.public.auth
 
-  const sessionToken = cookies[sessionCookieKey]
+  const sessionToken = cookies[cookieKey]
 
   if (!sessionToken) {
     return sendNoContent(event, 401)
@@ -25,22 +25,19 @@ export default defineEventHandler(event => {
   try {
     payload = verifyJwt(sessionToken, jwtKey)
   } catch (err) {
-    deleteCookie(event, sessionCookieKey)
+    deleteCookie(event, cookieKey)
     return redirectLogOut(event)
   }
 
   const { user } = payload
 
-  const { sessionToken: newSessionToken, expiresIn: newExpiresIn } = signJwt(
-    user,
-    jwtKey
-  )
+  const newSessionToken = signJwt(user, jwtKey, tokenValidationDuration)
 
   setCookie(
     event,
-    sessionCookieKey,
+    cookieKey,
     newSessionToken,
-    cookieOptions({ expiresIn: newExpiresIn })
+    cookieOptions({ expiresIn: tokenValidationDuration })
   )
 })
 

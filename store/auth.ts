@@ -15,12 +15,22 @@ export const useAuthStore = defineStore('auth', {
   actions: {
     login(user: JwtUser) {
       this.user = user
-      this.refreshToken()
+      this.startRefreshToken()
     },
     logout() {
       this.user = null
     },
-    refreshToken() {
+    stopRefreshToken() {
+      if (this.timer) {
+        clearTimeout(this.timer)
+      }
+    },
+    startRefreshToken() {
+      const {
+        public: {
+          auth: { tokenValidationDuration }
+        }
+      } = useRuntimeConfig()
       if (this.timer) {
         clearTimeout(this.timer)
       }
@@ -29,9 +39,9 @@ export const useAuthStore = defineStore('auth', {
           method: 'POST'
         })
         if (res.ok) {
-          this.refreshToken()
+          this.startRefreshToken()
         }
-      }, REFRESH_TOKEN_DELAY)
+      }, tokenValidationDuration / 2)
     }
   },
 

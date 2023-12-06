@@ -61,11 +61,17 @@ export default defineEventHandler(async event => {
     structureType: structure?.type || null
   }
 
-  const { sessionToken, expiresIn } = signJwt(jwtUser, config.auth.jwtKey)
+  const { jwtKey } = config.auth
+  const { cookieKey, tokenValidationDuration } = config.public.auth
 
-  const sessionCookieKey = config.public.sessionCookieKey
+  const sessionToken = signJwt(jwtUser, jwtKey, tokenValidationDuration)
 
-  setCookie(event, sessionCookieKey, sessionToken, cookieOptions({ expiresIn }))
+  setCookie(
+    event,
+    cookieKey,
+    sessionToken,
+    cookieOptions({ expiresIn: tokenValidationDuration })
+  )
 
   await UserRepo.prisma.update({
     where: {
