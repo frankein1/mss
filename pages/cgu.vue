@@ -13,6 +13,4 @@
     middleware: 'auth',
     layout: 'landing'
   })
-
-  useLogoutInactiveUser()
 </script>

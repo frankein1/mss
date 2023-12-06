@@ -18,8 +18,6 @@
     ]
   })
 
-  useLogoutInactiveUser()
-
   onMounted(() => {
     if (route.path === RoutePath.App()) {
       navigateTo(RoutePath.AppOverview())

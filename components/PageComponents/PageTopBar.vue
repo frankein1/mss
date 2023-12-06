@@ -13,6 +13,7 @@
       class="topbar__menu"
       dropdown-btn-class="fr-btn--tertiary-no-outline"
     />
+    <DisconnectHandler />
   </div>
 </template>
 
