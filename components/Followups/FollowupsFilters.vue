@@ -69,7 +69,7 @@
       return "La liste des agents n'a pas pu être chargée."
     }
     if (followupTypeOptionsError.value) {
-      return "La liste des types d'accompagnement n'a pas pu être chargée."
+      return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
     return ''
   })
@@ -98,7 +98,7 @@
       },
       {
         name: 'followupTypes',
-        label: "Objet de l'entretien",
+        label: "Objet de l'accompagnement",
         options: followupTypeOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,

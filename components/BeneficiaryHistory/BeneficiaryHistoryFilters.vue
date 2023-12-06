@@ -91,7 +91,7 @@
       return "La liste des agents n'a pas pu être chargée."
     }
     if (followupTypeOptionsError.value) {
-      return "La liste des types d'accompagnement n'a pas pu être chargée."
+      return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
     if (examinationDateOptionsError.value) {
       return "La liste des dates de passage en commission n'a pas pu être chargée."
@@ -124,7 +124,7 @@
       },
       {
         name: 'typeSuivi',
-        label: 'Type de suivi',
+        label: "Type d'accompagnement",
         options: withEmptyValue(typeSuiviOptions, 'Tous les suivis'),
         type: FilterType.SelectOne,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
@@ -140,7 +140,7 @@
       },
       {
         name: 'followupTypes',
-        label: "Type d'accompagnement",
+        label: "Objet de l'accompagnement",
         options: followupTypeOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,

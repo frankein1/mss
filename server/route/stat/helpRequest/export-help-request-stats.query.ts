@@ -55,10 +55,10 @@ const handler = async ({
     }, {}),
     [],
     [],
-    [`${helpRequestCount} demandes d'aide instruites`]
+    [`${helpRequestCount} dossiers instruits`]
   ]
   exportData.push({
-    name: "Objets des demandes d'aide",
+    name: "Objet d'accompagnement",
     columns: followupTypesColumns,
     rows: followupTypesRows
   })

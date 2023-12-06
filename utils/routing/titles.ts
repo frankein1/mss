@@ -62,16 +62,18 @@ export const RouteTitle = {
     beneficiary: BeneficiaryNames | null
   ) =>
     beneficiary
-      ? `Instruction d'une demande d'aide pour ${formatBeneficiaryDisplayName(
+      ? `Instruction d'un dossier pour ${formatBeneficiaryDisplayName(
           beneficiary
         )}`
-      : "Instruction d'une demande d'aide",
+      : "Instruction d'un dossier",
   [Route.AppBeneficiaryHelpRequestEdit]: (
     beneficiary: BeneficiaryNames | null
   ) =>
     beneficiary
-      ? `Modifier l'instruction de ${formatBeneficiaryDisplayName(beneficiary)}`
-      : "Modifier l'instruction d'un·e bénéficiaire",
+      ? `Modifier l'instruction de dossier ${formatBeneficiaryDisplayName(
+          beneficiary
+        )}`
+      : "Modifier l'instruction de dossier d'un·e bénéficiaire",
 
   [Route.AppHistory]: () => 'Accompagnements',
 

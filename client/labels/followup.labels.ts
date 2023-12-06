@@ -9,7 +9,7 @@ type FollowupFieldLabels = Omit<
 export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
   id: 'Identifiant',
   beneficiaryId: 'Bénéficiaire',
-  types: "Objet(s) de l'entretien",
+  types: "Objet(s) de l'accompagnement",
   medium: "Type d'entretien",
   documents: 'Document(s)',
   status: 'Statut',
@@ -21,7 +21,7 @@ export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
   synthesis: 'Compte rendu',
   privateSynthesis: 'Compte rendu privé',
   redirected: "Réorienté après l'entretien",
-  helpRequested: "Instruction de demande d'aide",
+  helpRequested: 'Instruction de dossier',
   classified: 'Classé',
   firstFollowup: '1er entretien',
   forwardedToJustice: 'Transmis à la justice',

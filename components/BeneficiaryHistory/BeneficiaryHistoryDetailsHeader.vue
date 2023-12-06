@@ -122,13 +122,13 @@
   )
 
   const historyTypeTitle = computed(() =>
-    props.history.isFollowup ? "Synthèse d'entretien" : "Demande d'aide"
+    props.history.isFollowup ? "Synthèse d'entretien" : 'Instruction de dossier'
   )
 
   const historyTypeLabel = computed(() =>
     props.history.isFollowup
       ? "la synthèse d'entretien"
-      : "l'instruction de demande d'aide"
+      : "l'instruction de dossier"
   )
 
   const collapseBtnTitle = computed(

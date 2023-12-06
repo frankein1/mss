@@ -95,7 +95,7 @@
       return "Les informations du bénéficiaire n'ont pas pu être chargées."
     }
     if (followupTypesError.value) {
-      return "La liste des types d'accompagnement de votre structure n'a pas pu être chargée."
+      return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
     }
     if (prescribingOrganizationsError.value) {
       return "La liste des organismes prescripteurs de votre structure n'a pas pu être chargée."
@@ -119,7 +119,7 @@
       },
       onFailure: () => {
         snackbar.error(
-          "La création de l'instruction de demande d'aide a échoué.",
+          "La création de l'instruction de dossier a échoué.",
           () => formContainer.value?.querySelector('input')?.focus()
         )
       }

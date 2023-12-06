@@ -11,14 +11,14 @@
     />
     <template v-else-if="ministreStats">
       <h2 class="fr-h5">Ministres</h2>
-      <p>Pourcentage calculé sur le nombre total de demandes d'aide</p>
+      <p>Pourcentage calculé sur le nombre total d'instructions de dossier</p>
       <StatsList
         v-if="ministreStats.length"
         :total-count="totalCount"
         :stats="ministreStats"
       />
       <p v-else>
-        Commencez à créer des instructions de demande d'aides dans les fiches de
+        Commencez à créer des instructions de dossier dans les fiches de
         bénéficiaires pour voir apparaître les statistiques de la répartition
         des ministres.
       </p>

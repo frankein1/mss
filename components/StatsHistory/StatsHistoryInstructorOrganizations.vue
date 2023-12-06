@@ -12,8 +12,7 @@
     <template v-else-if="instructorOrganizationStats">
       <h2 class="fr-h5">Organismes instructeurs</h2>
       <p>
-        Pourcentage calculé sur le nombre total de demandes instruites en
-        externe
+        Pourcentage calculé sur le nombre total de dossier instruits en externe
       </p>
       <StatsList
         v-if="instructorOrganizationStats.length"
@@ -21,7 +20,7 @@
         :stats="instructorOrganizationStats"
       />
       <p v-else>
-        Commencez à créer des instructions de demande d'aides dans les fiches de
+        Commencez à créer des instructions de dossier dans les fiches de
         bénéficiaires pour voir apparaître les statistiques de la répartition
         des organismes instructeurs.
       </p>
