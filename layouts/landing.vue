@@ -1,7 +1,7 @@
 <template>
   <div
     class="page-container"
-    :class="route.name + '-style'"
+    :class="route.name ? [route.name + '-style'] : []"
   >
     <TheLandingHeader />
     <slot />

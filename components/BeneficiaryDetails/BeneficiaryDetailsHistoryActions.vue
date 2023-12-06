@@ -6,7 +6,7 @@
     >
       <li>
         <NuxtLink
-          :to="`${RoutePath.AppBeneficiaryFollowupAdd(beneficiaryId)}`"
+          :to="RoutePath.AppBeneficiaryFollowupAdd(beneficiaryId)"
           class="fr-btn fr-icon-file-add-line followup-btn"
           title="Ajouter une synthèse d'entretien"
           target="_self"
