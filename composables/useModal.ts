@@ -1,7 +1,12 @@
 import type { ModalComponent, OpenModalEvent } from '~/types/modal'
 
 export function useModal() {
+  const isOpen = useState<Boolean>('isModalOpen', () => false)
   const { $globalEventEmitter } = useNuxtApp()
+
+  function setIsOpen(value: boolean) {
+    isOpen.value = value
+  }
 
   function openModal<M extends ModalComponent>(options: OpenModalEvent<M>) {
     $globalEventEmitter.emit('openModal', options)
@@ -12,6 +17,8 @@ export function useModal() {
   }
 
   return {
+    setIsOpen,
+    isOpen,
     open: openModal,
     close: closeModal
   }
