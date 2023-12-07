@@ -5,7 +5,7 @@
       :to="itemLink"
       target="_self"
     >
-      {{ notificationTypeLabels[notification.type] }}
+      {{ itemTitle }}
     </NuxtLink>
   </h3>
   <span
@@ -33,14 +33,16 @@
 </template>
 
 <script setup lang="ts">
-  import { Beneficiary, Notification, NotificationType } from '@prisma/client'
+  import { Beneficiary, NotificationType } from '@prisma/client'
   import { BeneficiaryTab } from '~~/utils/constants/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
   import { notificationTypeClasses } from '~/client/classes/notification'
   import { notificationTypeLabels } from '~/client/options/notification'
+  import { formatUserDisplayName } from '~/utils/user'
+  import { GetNotificationOutput } from '~/server/route'
 
   const props = defineProps<{
-    notification: Notification
+    notification: GetNotificationOutput[number]['notification']
     beneficiary: Beneficiary
   }>()
 
@@ -83,6 +85,27 @@
       originPage: Route.AppOverview
     })
   )
+
+  const itemTitle = computed(() => {
+    if (
+      props.notification.type === NotificationType.NewHistoryElement &&
+      (props.notification.helpRequest?.createdBy ||
+        props.notification.followup?.createdBy)
+    ) {
+      return `Une ${
+        props.notification.helpRequestId
+          ? "demande d'aide"
+          : "synthèse d'entretien"
+      } a été ajoutée par ${
+        props.notification.helpRequest?.createdBy
+          ? formatUserDisplayName(props.notification.helpRequest?.createdBy)
+          : props.notification.followup?.createdBy
+            ? formatUserDisplayName(props.notification.followup?.createdBy)
+            : ''
+      }`
+    }
+    return notificationTypeLabels[props.notification.type]
+  })
 
   function onToggleRead() {
     useTrpcMutation({
