@@ -216,3 +216,11 @@ select:focus:not(:focus-visible) {
     padding-inline: 1rem;
   }
 }
+
+.color-purple-glycine {
+  color: var(--text-label-purple-glycine) !important;
+}
+
+.bg-purple-glycine {
+  background-color: var(--background-contrast-purple-glycine) !important;
+}
