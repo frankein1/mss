@@ -1,9 +1,4 @@
-import {
-  HelpRequestReason,
-  HelpRequestStatus,
-  Minister,
-  PaymentMethod
-} from '@prisma/client'
+import { HelpRequestStatus, Minister, PaymentMethod } from '@prisma/client'
 import { z } from 'zod'
 import {
   numeroPegaseContraint,
@@ -30,7 +25,6 @@ export const createHelpRequestSchema = z.object({
   decisionDate: z.coerce.date().nullish(),
   allocatedAmount: amountNumber.nullish(),
   paymentMethod: withEmptyValueOptionalNativeEnum(PaymentMethod),
-  reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
   paymentDate: z.coerce.date().nullish(),
   handlingDate: z.coerce.date().nullish(),
   refusalReason: stringConstraint

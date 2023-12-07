@@ -3,7 +3,7 @@ import type { FieldLabels } from '~/types/fieldLabels'
 
 type HelpRequestFieldLabels = Omit<
   HelpRequest,
-  'structureId' | 'created' | 'subject'
+  'structureId' | 'created' | 'subject' | 'reason'
 > & {
   documents: string
 }
@@ -25,7 +25,6 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   typeId: "Objet de l'accompagnement",
   prescribingOrganizationId: 'Organisme prescripteur',
   fullFile: 'Ce dossier est complet',
-  reason: 'Motif',
   instructorOrganizationId: 'Organisme instructeur',
   dispatchDate: "Date d'envoi du dossier",
   decisionDate: 'Date de la décision',
