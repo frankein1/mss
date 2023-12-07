@@ -1,11 +1,12 @@
 <template>
   <div
     class="pagetitle__container"
-    :class="{ 'fr-mb-3w': !noMargin }"
+    :class="{ 'fr-mb-4w': !noMargin }"
   >
     <div
       v-if="icon"
-      class="pagetitle__icon fr-mr-2w"
+      class="pagetitle__icon fr-mr-4w"
+      :class="[iconColorClass, iconBackgroundClass]"
     >
       <span
         :class="[icon]"
@@ -30,8 +31,10 @@
       title: string
       noMargin?: boolean
       icon?: string
+      iconColorClass?: string
+      iconBackgroundClass?: string
     }>(),
-    { noMargin: false, icon: '' }
+    { noMargin: false, icon: '', iconColorClass: '', iconBackgroundClass: '' }
   )
 
   const slots = useSlots()
@@ -42,6 +45,7 @@
 <style lang="scss">
   .pagetitle__container {
     display: flex;
+    align-items: center;
   }
 
   .pagetitle__icon {
@@ -51,7 +55,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1.5rem;
+    padding: 1.75rem;
+    height: fit-content;
+    width: fit-content;
 
     span::before {
       --icon-size: 2rem;
