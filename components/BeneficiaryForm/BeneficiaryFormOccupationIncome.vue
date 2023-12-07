@@ -193,27 +193,33 @@
 
   const hasPartner = computed(() => {
     const familySituation = props.familySituation
-    if (!familySituation) {
-      return false
-    }
     return (
       familySituation === BeneficiaryFamilySituation.Married ||
       familySituation === BeneficiaryFamilySituation.CivilUnion ||
       familySituation === BeneficiaryFamilySituation.Cohabitation ||
-      familySituation === BeneficiaryFamilySituation.CoupleWithChildren
+      familySituation === BeneficiaryFamilySituation.CoupleWithChildren ||
+      props.taxHouseholdMembers.filter(
+        member => member.relationship === RelativeRelationship.Conjoint
+      ).length > 0
     )
   })
 
-  const hasMajorChildren = computed(() => (props.majorChildren || 0) > 0)
+  const hasMajorChildren = computed(
+    () =>
+      (props.majorChildren || 0) > 0 ||
+      props.taxHouseholdMembers.filter(
+        member => member.relationship === RelativeRelationship.EnfantMajeur
+      ).length > 0
+  )
 
   const hasOtherMembers = computed(
     () =>
-      (props.taxHouseholdMembers.filter(
+      props.taxHouseholdMembers.filter(
         member =>
           member.relationship !== RelativeRelationship.Conjoint &&
           member.relationship !== RelativeRelationship.EnfantMajeur &&
           member.relationship !== RelativeRelationship.EnfantMineur
-      ).length ?? 0) >= 1
+      ).length > 0
   )
 
   const hasOtherPensionOrganisations = computed(() =>
