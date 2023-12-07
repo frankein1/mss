@@ -1,3 +1,4 @@
+import { HelpRequestSubject } from '@prisma/client'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
 
@@ -258,8 +259,13 @@ export const RoutePath = {
     beneficiaryId: string,
     followupId: string
   ) => `${BeneficiaryFollowupsRoute(beneficiaryId)}/${followupId}/edit`,
-  [Route.AppBeneficiaryHelpRequestAdd]: (beneficiaryId: string) =>
-    `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/add`,
+  [Route.AppBeneficiaryHelpRequestAdd]: (
+    beneficiaryId: string,
+    subject: HelpRequestSubject
+  ) =>
+    `${BeneficiaryHelpRequestsRoute(
+      beneficiaryId
+    )}/${subject.toLocaleLowerCase()}/add`,
   [Route.AppBeneficiaryHelpRequestEdit]: (
     beneficiaryId: string,
     helpRequestId: string

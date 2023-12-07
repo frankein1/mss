@@ -2,8 +2,9 @@
   <fieldset
     :id="id"
     class="fr-fieldset"
+    :class="{ 'fr-fieldset--error': error }"
     role="group"
-    :aria-labelledby="legendId"
+    :aria-labelledby="ariaLabelledBy"
   >
     <legend
       :id="legendId"
@@ -14,9 +15,15 @@
     <div
       v-for="[optionValue, optionLabel] in options"
       :key="optionValue"
-      class="fr-fieldset__element fr-fieldset__element--inline"
+      class="fr-fieldset__element"
+      :class="{
+        'fr-fieldset__element--inline': typeof optionLabel === 'string'
+      }"
     >
-      <div class="fr-radio-group">
+      <div
+        class="fr-radio-group"
+        :class="{ 'fr-radio-rich': typeof optionLabel !== 'string' }"
+      >
         <input
           :id="optionId(optionValue)"
           type="radio"
@@ -29,21 +36,37 @@
           class="fr-label"
           :for="optionId(optionValue)"
         >
-          {{ optionLabel }}
+          {{
+            typeof optionLabel === 'string' ? optionLabel : optionLabel.label
+          }}
         </label>
+        <div
+          v-if="typeof optionLabel !== 'string'"
+          class="fr-radio-rich__img"
+        >
+          <AtomPictogram :path="optionLabel.picto" />
+        </div>
       </div>
+    </div>
+    <div
+      v-if="error"
+      :id="errorId"
+      class="fr-messages-group"
+      aria-live="polite"
+    >
+      <p class="fr-message fr-message--error">{{ error }}</p>
     </div>
   </fieldset>
 </template>
 
 <script setup lang="ts">
   import { useField } from 'vee-validate'
-  import type { Options } from '~/utils/options'
+  import type { Options, RichOptions } from '~/utils/options'
 
   const props = defineProps<{
     name: string
     label: string
-    options: Options
+    options: Options | RichOptions
   }>()
 
   // we are using toRefs to create reactive references to `name` and `value` props
@@ -51,13 +74,21 @@
   // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
   const name = toRef(() => props.name)
 
-  const { handleChange, value } = useField(name, undefined, {
+  const {
+    handleChange,
+    value,
+    errorMessage: error
+  } = useField(name, undefined, {
     type: 'radio'
   })
 
-  const { id } = useFormFieldId(name)
+  const { id, errorId } = useFormFieldId(name)
 
   const legendId = computed(() => `${id.value}-legend`)
+
+  const ariaLabelledBy = computed(() =>
+    error.value ? `${legendId.value} ${errorId.value}` : legendId.value
+  )
 
   function optionId(optionValue: string) {
     return `${id.value}-${optionValue}`

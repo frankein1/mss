@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, HelpRequestSubject } from '@prisma/client'
 import {
   fixtureStructure,
   fixturesBeneficiaries,
@@ -15,7 +15,8 @@ export const fixturesHelpRequests = [
     beneficiaryId: fixturesBeneficiaries[0].id,
     externalStructure: false,
     financialSupport: false,
-    openingDate: new Date('2022-10-26')
+    openingDate: new Date('2022-10-26'),
+    subject: HelpRequestSubject.Other
   },
   {
     id: '4aad5e90-7a9e-4aeb-90f1-1c986664f47f',
@@ -26,6 +27,7 @@ export const fixturesHelpRequests = [
     beneficiaryId: fixturesBeneficiaries[2].id,
     externalStructure: false,
     financialSupport: false,
-    openingDate: new Date('2022-10-27')
+    openingDate: new Date('2022-10-27'),
+    subject: HelpRequestSubject.Other
   }
 ] satisfies Prisma.HelpRequestCreateManyInput[]

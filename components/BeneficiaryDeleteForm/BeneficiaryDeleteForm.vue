@@ -17,7 +17,6 @@
       <li>
         <button
           class="fr-btn fr-btn--secondary"
-          title="Annuler"
           type="button"
           @click="modal.close"
         >
@@ -27,7 +26,6 @@
       <li>
         <button
           class="fr-btn btn-delete-action"
-          title="Supprimer"
           type="submit"
           :submitting="isSubmitting"
         >

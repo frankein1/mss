@@ -352,6 +352,15 @@ enum HelpRequestReason {
   Other
 }
 
+enum HelpRequestSubject {
+  // Demande de logement
+  Housing
+  // Aide financière
+  Financial
+  // Autre
+  Other
+}
+
 model HelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
@@ -412,6 +421,8 @@ model HelpRequest {
   numeroPegase         String?              @map("numero_pegase")
   notifications        Notification[]
   beneficiaryHistories BeneficiaryHistory[]
+
+  subject HelpRequestSubject
 
   @@map("help_request")
 }

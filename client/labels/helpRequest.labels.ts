@@ -1,7 +1,10 @@
 import type { HelpRequest } from '@prisma/client'
 import type { FieldLabels } from '~/types/fieldLabels'
 
-type HelpRequestFieldLabels = Omit<HelpRequest, 'structureId' | 'created'> & {
+type HelpRequestFieldLabels = Omit<
+  HelpRequest,
+  'structureId' | 'created' | 'subject'
+> & {
   documents: string
 }
 
