@@ -277,6 +277,8 @@ function getOccupationIncome(
     partnerMainIncomeAmount: beneficiary.partnerMainIncomeAmount,
     majorChildrenMainIncomeSource: beneficiary.majorChildrenMainIncomeSource,
     majorChildrenMainIncomeAmount: beneficiary.majorChildrenMainIncomeAmount,
+    otherMembersMainIncomeSource: beneficiary.otherMembersMainIncomeSource,
+    otherMembersMainIncomeAmount: beneficiary.otherMembersMainIncomeAmount,
     unemploymentNumber: beneficiary.unemploymentNumber,
     pensionOrganisations: beneficiary.pensionOrganisations,
     otherPensionOrganisations: beneficiary.otherPensionOrganisations,

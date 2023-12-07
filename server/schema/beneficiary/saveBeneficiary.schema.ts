@@ -154,6 +154,10 @@ export const saveBeneficiaryOccupationSchema = z.object({
     z.nativeEnum(IncomeSource, errorMessages)
   ),
   majorChildrenMainIncomeAmount: amountNumber.nullish(),
+  otherMembersMainIncomeSource: z.array(
+    z.nativeEnum(IncomeSource, errorMessages)
+  ),
+  otherMembersMainIncomeAmount: amountNumber.nullish(),
   unemploymentNumber: unemploymentNumberConstraint.nullish(),
   pensionOrganisations: z.array(
     z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)
