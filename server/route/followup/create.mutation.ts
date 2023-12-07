@@ -23,6 +23,7 @@ import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import { getHistoryNewElementNotificationData } from '~/utils/notification'
 
 const handler = async ({
   input,
@@ -125,7 +126,11 @@ const handler = async ({
       firstFollowup,
       numeroPegase,
       classified,
-      forwardedToJustice
+      forwardedToJustice,
+      notifications: await getHistoryNewElementNotificationData(
+        user,
+        beneficiaryId
+      )
     },
     include: {
       beneficiary: {
