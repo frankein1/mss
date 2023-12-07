@@ -1,5 +1,4 @@
 import {
-  HelpRequestReason,
   HelpRequestStatus,
   PaymentMethod,
   HelpRequestSubject
@@ -44,15 +43,6 @@ export const paymentMethodLabels: { [key in PaymentMethod]: string } = {
 }
 
 export const paymentMethodOptions = labelsToOptions(paymentMethodLabels)
-
-export const helpRequestReasonLabels: { [key in HelpRequestReason]: string } = {
-  [HelpRequestReason.Food]: 'Alimentation',
-  [HelpRequestReason.Energy]: 'Énergie',
-  [HelpRequestReason.Housing]: 'Logement',
-  [HelpRequestReason.Other]: 'Autre'
-}
-
-export const helpRequestReasonOptions = labelsToOptions(helpRequestReasonLabels)
 
 export const helpRequestSubjectOptions = new Map<
   HelpRequestSubject,
