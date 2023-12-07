@@ -74,7 +74,7 @@
         />
       </div>
     </template>
-    <template v-if="otherMembers">
+    <template v-if="hasOtherMembers">
       <div class="fr-col-12 fr-col-lg-6">
         <VeeMultiSelect
           name="otherMembersMainIncomeSource"
@@ -163,7 +163,9 @@
 <script lang="ts" setup>
   import {
     BeneficiaryFamilySituation,
-    BeneficiaryPensionOrganisation
+    BeneficiaryPensionOrganisation,
+    BeneficiaryRelative,
+    RelativeRelationship
   } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryOptions,
@@ -181,7 +183,7 @@
   const props = defineProps<{
     familySituation: BeneficiaryFamilySituation | null | undefined
     majorChildren: number | null | undefined
-    otherMembers: boolean
+    taxHouseholdMembers: Pick<BeneficiaryRelative, 'relationship'>[]
     permissions: BeneficiaryPermissions
   }>()
 
@@ -203,6 +205,16 @@
   })
 
   const hasMajorChildren = computed(() => (props.majorChildren || 0) > 0)
+
+  const hasOtherMembers = computed(
+    () =>
+      (props.taxHouseholdMembers.filter(
+        member =>
+          member.relationship !== RelativeRelationship.Conjoint &&
+          member.relationship !== RelativeRelationship.EnfantMajeur &&
+          member.relationship !== RelativeRelationship.EnfantMineur
+      ).length ?? 0) >= 1
+  )
 
   const hasOtherPensionOrganisations = computed(() =>
     (pensionOrganisations.value || []).includes(
