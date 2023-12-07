@@ -15,7 +15,8 @@
     FollowupType,
     HelpRequestStatus,
     InstructorOrganization,
-    PrescribingOrganization
+    PrescribingOrganization,
+    HelpRequestSubject
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
@@ -29,6 +30,7 @@
     prescribingOrganizations: PrescribingOrganization[]
     instructorOrganizations: InstructorOrganization[]
     beneficiaryId: string
+    subject: HelpRequestSubject
   }>()
 
   const emit = defineEmits<{
@@ -40,7 +42,8 @@
     initialValues: {
       beneficiaryId: props.beneficiaryId,
       openingDate: new Date(),
-      status: HelpRequestStatus.WaitingAdditionalInformation
+      status: HelpRequestStatus.WaitingAdditionalInformation,
+      subject: props.subject
     }
   })
 
