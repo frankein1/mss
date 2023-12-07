@@ -35,6 +35,5 @@
 
 .fr-icon-followup-line::before,
 .fr-icon-followup-line::after {
-  /* TODO: replace by line icon */
-  mask-image: url('@/assets/icons/followup-fill.svg');
+  mask-image: url('@/assets/icons/followup-line.svg');
 }
