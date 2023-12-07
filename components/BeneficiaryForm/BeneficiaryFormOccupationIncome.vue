@@ -179,7 +179,8 @@
     return (
       familySituation === BeneficiaryFamilySituation.Married ||
       familySituation === BeneficiaryFamilySituation.CivilUnion ||
-      familySituation === BeneficiaryFamilySituation.Cohabitation
+      familySituation === BeneficiaryFamilySituation.Cohabitation ||
+      familySituation === BeneficiaryFamilySituation.CoupleWithChildren
     )
   })
 
