@@ -67,7 +67,6 @@ function getHelpRequestDetails(
     paymentMethod: helpRequest.paymentMethod,
     prescribingOrganizationId: helpRequest.prescribingOrganizationId,
     prescribingOrganization: helpRequest.prescribingOrganization,
-    reason: helpRequest.reason,
     refusalReason: helpRequest.refusalReason,
     synthesis: helpRequest.synthesis
   }
