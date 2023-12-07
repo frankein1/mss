@@ -14,11 +14,13 @@
   type Interval = ReturnType<typeof setInterval>
 
   const {
-    public: { inactiveUserTimeThreshold }
+    public: {
+      disconnect: { alertThreshold, threshold }
+    }
   } = useRuntimeConfig()
   const modal = useModal()
 
-  const timeThreshold = minutesToMillis(inactiveUserTimeThreshold)
+  const timeThreshold = minutesToMillis(threshold)
 
   const counter = ref(timeThreshold)
   const isOpen = ref(false)
@@ -30,7 +32,7 @@
   watch(counter, counter => {
     if (counter < 0) {
       logout()
-    } else if (!isOpen.value && counter < minutesToMillis(5)) {
+    } else if (!isOpen.value && counter < minutesToMillis(alertThreshold)) {
       disconnectBtn.value?.click()
     }
   })
@@ -43,6 +45,7 @@
   }
 
   function startCountdown() {
+    counter.value = timeThreshold
     clearCountdown()
     interval = setInterval(() => {
       counter.value = counter.value - 1000
@@ -84,11 +87,14 @@
   }
 
   function addListener() {
-    counter.value = timeThreshold
     window.addEventListener('mousemove', startCountdown)
   }
 
-  onMounted(() => addListener())
+  onNuxtReady(() => {
+    startCountdown()
+    addListener()
+  })
+
   onUnmounted(() => {
     removeListener()
     stop()

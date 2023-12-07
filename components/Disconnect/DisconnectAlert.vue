@@ -5,7 +5,7 @@
     message=""
     detailed-message=""
   />
-  <p>Vous allez être déconnecté.e dans 5 minutes</p>
+  <p>{{ `Vous allez être déconnecté.e dans ${alertThreshold} minutes` }}</p>
   <ul class="fr-btns-group fr-btns-group--inline-md fr-mt-3w">
     <li>
       <button
@@ -34,6 +34,11 @@
   import { AlertType } from '~/utils/constants/alert'
 
   const modal = useModal()
+  const {
+    public: {
+      disconnect: { alertThreshold }
+    }
+  } = useRuntimeConfig()
 
   const emit = defineEmits<{ disconnect: []; keepConnect: [] }>()
 

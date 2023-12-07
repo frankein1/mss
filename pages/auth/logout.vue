@@ -7,8 +7,10 @@
           v-if="inactive"
           class="fr-px-9w"
         >
-          Suite à 30 minutes d'inactivité sur votre espace Mon Suivi Social,
-          vous avez été déconnecté de votre espace automatiquement.
+          {{
+            `Suite à ${threshold} minutes d'inactivité sur votre espace Mon Suivi Social,
+          vous avez été déconnecté de votre espace automatiquement.`
+          }}
         </div>
       </div>
     </div>
@@ -28,6 +30,12 @@
   })
 
   const route = useRoute()
+
+  const {
+    public: {
+      disconnect: { threshold }
+    }
+  } = useRuntimeConfig()
 
   const inactive = route.query.inactive
 
