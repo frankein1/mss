@@ -1,9 +1,5 @@
 <template>
   <ul class="body-metas information-list">
-    <li v-if="helpRequest.reason">
-      <span class="information-label">Motif :</span>
-      {{ helpRequestReasonLabels[helpRequest.reason] }}
-    </li>
     <template v-if="isMinistryAgent">
       <li v-if="helpRequest.numeroPegase">
         <span class="information-label">Numéro Pégase :</span>
@@ -68,10 +64,7 @@
 <script setup lang="ts">
   import { HelpRequestStatus } from '@prisma/client'
   import { HistoryItem } from './types'
-  import {
-    helpRequestReasonLabels,
-    paymentMethodLabels
-  } from '~/client/options/helpRequest'
+  import { paymentMethodLabels } from '~/client/options/helpRequest'
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'
   import { ministerLabels } from '~/client/options/ministry'
