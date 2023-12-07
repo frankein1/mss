@@ -99,15 +99,6 @@
         />
       </div>
 
-      <div v-if="isFinancialSupport">
-        <VeeSelect
-          name="reason"
-          :label="helpRequestFieldLabels.reason"
-          :options="withEmptyValue(helpRequestReasonOptions)"
-          :disabled="isEditingAndIsLocked"
-        />
-      </div>
-
       <div
         class="fr-col-12 fr-col-lg-6"
         :class="{
@@ -285,7 +276,6 @@
   import {
     externalOrganisationOptions,
     financialSupportOptions,
-    helpRequestReasonOptions,
     paymentMethodOptions
   } from '~/client/options/helpRequest'
   import { ministerOptions } from '~/client/options/ministry'
