@@ -65,6 +65,7 @@
 
   function keepConnect() {
     isOpen.value = false
+    counter.value = timeThreshold
     if (counter.value < 0) {
       logout()
     } else {
