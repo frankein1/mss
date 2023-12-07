@@ -3,7 +3,6 @@ import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBenefici
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
-  helpRequestReasonLabels,
   helpRequestStatusLabels,
   paymentMethodLabels
 } from '~/client/options/helpRequest'
@@ -48,9 +47,6 @@ export function getHelpRequestExportData(
     synthesis: helpRequest.synthesis || '',
     dueDate: formatDate(helpRequest.dueDate, 'DD-MM-YYYY'),
     fullFile: getBooleanOrEmpty(helpRequest.fullFile),
-    reason: helpRequest.reason
-      ? helpRequestReasonLabels[helpRequest.reason]
-      : '',
     updated: formatDate(helpRequest.updated, 'DD-MM-YYYY HH:mm'),
     ministre: helpRequest.ministre ? ministerLabels[helpRequest.ministre] : '',
     numeroPegase: helpRequest.numeroPegase || '',

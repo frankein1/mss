@@ -58,7 +58,6 @@ export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)
     'refusalReason',
     'dueDate',
     'fullFile',
-    'reason',
     'updated',
     'ministre',
     'numeroPegase',
