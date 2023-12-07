@@ -11,7 +11,7 @@ export const RouteTitle = {
   // AUTH
   [Route.AuthAdmin]: () => "Se connecter à l'espace d'administration",
   [Route.AuthLogin]: () => 'Se connecter à ma structure',
-  [Route.AuthLogout]: () => 'Vous êtes déconnecté·e·s',
+  [Route.AuthLogout]: () => 'Vous avez été déconnecté·e',
   [Route.AuthValidateToken]: () => 'Jeton en cours de vérification',
 
   // ERROR
