@@ -1,4 +1,4 @@
-import { UserActivityType, HelpRequestSubject } from '@prisma/client'
+import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -29,7 +29,6 @@ const handler = async ({
     typeId,
     prescribingOrganizationId,
     instructorOrganizationId,
-    financialSupport,
     externalStructure,
     ...otherData
   } = input
@@ -76,15 +75,10 @@ const handler = async ({
       type: connect(typeId),
       structure: connect(structure.id),
       ...otherData,
-      financialSupport: financialSupport === 'true',
       externalStructure: externalStructure === 'true',
       documents: prepareDocumentsMutations(input.documents),
       instructorOrganization,
       prescribingOrganization,
-      subject:
-        financialSupport === 'true'
-          ? HelpRequestSubject.Financial
-          : HelpRequestSubject.Other, // FIXME: Replace with proper subject
       notifications: prepareNewHistoryElementNotification(beneficiary, user)
     },
     include: {
