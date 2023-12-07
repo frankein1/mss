@@ -101,7 +101,8 @@ export default defineNuxtConfig({
         '@vee-validate/zod',
         'zod',
         'vue-scrollto',
-        'node-fetch-native'
+        'node-fetch-native',
+        'uuid'
       ]
     },
     css: {
