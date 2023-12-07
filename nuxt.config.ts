@@ -151,9 +151,11 @@ export default defineNuxtConfig({
         cookieKey: 'MSS_SESSION_TOKEN',
         tokenValidationDuration: 30 * 60 * 1000
       },
-      inactiveUserTimeThreshold: parseInt(
-        process.env.INACTIVE_USER_TIME_THRESHOLD || '30'
-      ),
+      disconnect: {
+        threshold: parseInt(process.env.DISCONNECT_THRESHOLD || '30'),
+        alertThreshold: parseInt(process.env.DISCONNECT_ALERT_THRESHOLD || '5')
+      },
+
       matomo: {
         host: process.env.MATOMO_HOST,
         siteId: parseInt(process.env.MATOMO_SITE_ID || '1')

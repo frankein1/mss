@@ -50,7 +50,7 @@ export default defineEventHandler(async event => {
   await updateAccount(account)
 
   const url = client.getLogoutUrl(account.idToken || '', !!inactive)
-  return { success: false, url }
+  return { success: true, url }
 })
 
 async function findUser(email: string) {
