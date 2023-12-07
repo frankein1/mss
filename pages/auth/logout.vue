@@ -1,16 +1,19 @@
 <template>
   <main class="landing-main-container fr-container fr-my-8w">
-    <div class="fr-grid-row fr-my-5w">
-      <div class="fr-col fr-col-lg-8 fr-col-offset-lg-2 logout__col">
-        <h1 class="fr-text--regular">{{ RouteTitle.AuthLogout() }}</h1>
-        <div
-          v-if="inactive"
-          class="fr-px-9w"
-        >
-          Suite à 30 minutes d'inactivité sur votre espace Mon Suivi Social,
-          vous avez été déconnecté de votre espace automatiquement.
-        </div>
+    <h1 class="logout-title fr-h2 fr-mb-2w">{{ RouteTitle.AuthLogout() }}</h1>
+    <div
+      v-if="inactive"
+      class="fr-grid-row fr-grid-row--gutters logout-inactive"
+    >
+      <div class="fr-col-6">
+        {{
+          `Suite à ${threshold} minutes d'inactivité sur votre espace Mon Suivi Social,
+          vous avez été déconnecté de votre espace automatiquement.`
+        }}
       </div>
+    </div>
+    <div class="fr-pt-6w">
+      <InclusionConnectButton />
     </div>
   </main>
 </template>
@@ -28,6 +31,12 @@
   })
 
   const route = useRoute()
+
+  const {
+    public: {
+      disconnect: { threshold }
+    }
+  } = useRuntimeConfig()
 
   const inactive = route.query.inactive
 
@@ -49,7 +58,15 @@
 </script>
 
 <style lang="scss" scoped>
-  .logout__col {
+  @use '~/assets/style/variables' as *;
+
+  .logout-inactive {
     text-align: center;
+    justify-content: center;
+  }
+
+  .logout-title {
+    text-align: center;
+    color: $primary;
   }
 </style>

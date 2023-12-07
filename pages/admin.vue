@@ -15,8 +15,6 @@
     middleware: 'auth'
   })
 
-  useLogoutInactiveUser()
-
   onMounted(() => {
     if (route.path === RoutePath.Admin()) {
       navigateTo(RoutePath.AdminStructures())

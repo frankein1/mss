@@ -49,6 +49,7 @@
   import type { ModalComponent, OpenModalEvent } from '~/types/modal'
 
   const { $globalEventEmitter } = useNuxtApp()
+  const { setIsOpen } = useModal()
 
   const modal = ref<HTMLDialogElement | null>(null)
   const title = ref('')
@@ -87,6 +88,7 @@
     if (triggerOpen && modal.value) {
       dsfrModal.value.modal.disclose()
     }
+    setIsOpen(true)
   }
 
   function onClose() {
@@ -94,9 +96,11 @@
     contentComponent.value = null
     contentComponentProps.value = undefined
     contentComponentEvents.value = undefined
+    setIsOpen(false)
   }
 
   function close() {
+    setIsOpen(false)
     if (!modal.value) {
       return
     }
