@@ -6,7 +6,7 @@
     type="button"
     @click="onAdd"
   >
-    Ajouter un document
+    {{ label }}
   </button>
 </template>
 
@@ -15,9 +15,13 @@
 
   const modal = useModal()
 
-  const props = defineProps<{
-    beneficiaryId: string
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      beneficiaryId: string
+      label?: string
+    }>(),
+    { label: 'Ajouter un document' }
+  )
 
   const emit = defineEmits<{
     refreshDocuments: []
