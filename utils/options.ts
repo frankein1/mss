@@ -4,8 +4,26 @@ export const NEW_OPTION_PREFIX = `${NEW_OPTION_ID}-`
 export type Options = Map<string, string>
 export type RichOptions = Map<string, { label: string; picto: string }>
 
-export const labelsToOptions = (object: Record<string, string>): Options =>
-  new Map(Object.entries(object))
+export function labelsToOptions(labels: Record<string, string>): Options
+export function labelsToOptions(
+  labels: Record<string, string>,
+  pictos: Record<string, string>
+): RichOptions
+export function labelsToOptions(
+  labels: Record<string, string>,
+  pictos?: Record<string, string>
+): Options | RichOptions {
+  if (!pictos) {
+    return new Map(Object.entries(labels))
+  }
+  const labelsWithPictos = Object.fromEntries(
+    Object.entries(labels).map(([value, label]) => [
+      value,
+      { label, picto: pictos[value] }
+    ])
+  )
+  return new Map(Object.entries(labelsWithPictos))
+}
 
 export const isNewOption = (value?: string | null) => {
   return value ? value.startsWith(NEW_OPTION_PREFIX) : false

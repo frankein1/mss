@@ -88,19 +88,6 @@
 
       <div
         class="fr-col-12 fr-col-lg-6"
-        :class="{ 'fr-col-offset-lg-6--right': !isFinancialSupport }"
-      >
-        <VeeSelect
-          label="S'agit-il d'une aide financière ?"
-          name="financialSupport"
-          :options="withEmptyValue(financialSupportOptions)"
-          required
-          :disabled="isEditing"
-        />
-      </div>
-
-      <div
-        class="fr-col-12 fr-col-lg-6"
         :class="{
           'fr-col-offset-lg-6--right': !isExternalSupport
         }"
@@ -124,7 +111,7 @@
         />
       </div>
 
-      <template v-if="externalStructure && financialSupport">
+      <template v-if="externalStructure">
         <div v-if="isFinancialSupport">
           <VeeCurrencyInput
             name="askedAmount"
@@ -270,12 +257,12 @@
     FollowupType,
     HelpRequestStatus,
     InstructorOrganization,
-    PrescribingOrganization
+    PrescribingOrganization,
+    HelpRequestSubject
   } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
   import {
     externalOrganisationOptions,
-    financialSupportOptions,
     paymentMethodOptions
   } from '~/client/options/helpRequest'
   import { ministerOptions } from '~/client/options/ministry'
@@ -301,9 +288,6 @@
       prescribingOrganizations: PrescribingOrganization[]
       instructorOrganizations: InstructorOrganization[]
       beneficiaryId: string
-      status: HelpRequestStatus
-      externalStructure: 'true' | 'false' | undefined
-      financialSupport: 'true' | 'false' | undefined
       pastStatuses?: HelpRequestStatus[]
       isEditing?: boolean
       canEditPrivateSynthesis?: boolean
@@ -325,6 +309,12 @@
   }>()
 
   const { user } = useAuth()
+
+  const { value: status } = useField<HelpRequestStatus>('status')
+  const { value: externalStructure } = useField<'true' | 'false' | undefined>(
+    'externalStructure'
+  )
+  const { value: subject } = useField<HelpRequestSubject>('subject')
 
   const followUpTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')
@@ -348,25 +338,27 @@
     return toOptions(instructorOrganizationsWithStringId, 'id', 'name')
   })
 
-  const isFinancialSupport = computed(() => props.financialSupport === 'true')
+  const isFinancialSupport = computed(
+    () => subject.value === HelpRequestSubject.Financial
+  )
 
-  const isExternalSupport = computed(() => props.externalStructure === 'true')
+  const isExternalSupport = computed(() => externalStructure.value === 'true')
 
   const afterInvestigationOngoing = computed(
-    () => props.status !== HelpRequestStatus.WaitingAdditionalInformation
+    () => status.value !== HelpRequestStatus.WaitingAdditionalInformation
   )
 
   const isAnswered = computed(
     () =>
-      props.status === HelpRequestStatus.Accepted ||
-      props.status === HelpRequestStatus.Refused
+      status.value === HelpRequestStatus.Accepted ||
+      status.value === HelpRequestStatus.Refused
   )
 
   const isDropped = computed(
     () =>
-      props.status === HelpRequestStatus.ClosedByBeneficiary ||
-      props.status === HelpRequestStatus.ClosedByAgent ||
-      props.status === HelpRequestStatus.Dismissed
+      status.value === HelpRequestStatus.ClosedByBeneficiary ||
+      status.value === HelpRequestStatus.ClosedByAgent ||
+      status.value === HelpRequestStatus.Dismissed
   )
 
   const isEditingAndIsLocked = computed(

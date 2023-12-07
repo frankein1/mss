@@ -1,4 +1,9 @@
-import { HelpRequestStatus, Minister, PaymentMethod } from '@prisma/client'
+import {
+  HelpRequestStatus,
+  Minister,
+  PaymentMethod,
+  HelpRequestSubject
+} from '@prisma/client'
 import { z } from 'zod'
 import {
   numeroPegaseContraint,
@@ -18,7 +23,6 @@ export const createHelpRequestSchema = z.object({
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   typeId: z.string(errorMessages).uuid(),
   documents: z.array(z.string(), errorMessages).default([]),
-  financialSupport: kindOfBooleanSchema(),
   externalStructure: kindOfBooleanSchema(),
   status: requiredNativeEnum(HelpRequestStatus),
   askedAmount: amountNumber.nullish(),
@@ -39,7 +43,8 @@ export const createHelpRequestSchema = z.object({
     .max(1000, maxStringLengthMessage(1000))
     .nullish(),
   dueDate: dateOrEmpty,
-  fullFile: z.boolean().default(false)
+  fullFile: z.boolean().default(false),
+  subject: requiredNativeEnum(HelpRequestSubject)
 })
 
 export type CreateHelpRequestInput = z.infer<typeof createHelpRequestSchema>
