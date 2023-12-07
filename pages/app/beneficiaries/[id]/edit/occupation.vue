@@ -25,14 +25,13 @@
         :permissions="permissions"
         :family-situation="familySituation"
         :major-children="majorChildren"
-        :other-members="otherMembers"
+        :tax-household-members="taxHouseholdMembers"
       />
     </div>
   </BeneficiaryEditFormLayout>
 </template>
 
 <script lang="ts" setup>
-  import { RelativeRelationship } from '@prisma/client'
   import {
     saveBeneficiaryOccupationSchema,
     SaveBeneficiaryOccupationInput
@@ -67,14 +66,8 @@
     () => data.value?.beneficiary.taxHouseholds?.majorChildren
   )
 
-  const otherMembers = computed(
-    () =>
-      (data.value?.beneficiary.taxHouseholds?.taxHouseholds.filter(
-        member =>
-          member.relationship !== RelativeRelationship.Conjoint &&
-          member.relationship !== RelativeRelationship.EnfantMajeur &&
-          member.relationship !== RelativeRelationship.EnfantMineur
-      ).length ?? 0) >= 1
+  const taxHouseholdMembers = computed(
+    () => data.value?.beneficiary.taxHouseholds?.taxHouseholds || []
   )
 
   const beneficiary = computed(() => {
