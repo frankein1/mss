@@ -77,6 +77,7 @@
     removeListener()
     modal.open({
       title: '',
+      hideCloseButton: true,
       contentComponent: DisconnectAlert,
       contentComponentEvents: { disconnect, keepConnect }
     })
