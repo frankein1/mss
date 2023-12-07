@@ -74,6 +74,23 @@
         />
       </div>
     </template>
+    <template v-if="otherMembers">
+      <div class="fr-col-12 fr-col-lg-6">
+        <VeeMultiSelect
+          name="otherMembersMainIncomeSource"
+          :label="beneficiaryFieldLabels.otherMembersMainIncomeSource"
+          :options="incomeSourceOptions"
+          label-class="fr-text--regular"
+          dropdown
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <VeeCurrencyInput
+          name="otherMembersMainIncomeAmount"
+          :label="beneficiaryFieldLabels.otherMembersMainIncomeAmount"
+        />
+      </div>
+    </template>
     <div class="fr-col-12">
       <VeeInput
         name="unemploymentNumber"
@@ -164,6 +181,7 @@
   const props = defineProps<{
     familySituation: BeneficiaryFamilySituation | null | undefined
     majorChildren: number | null | undefined
+    otherMembers: boolean
     permissions: BeneficiaryPermissions
   }>()
 

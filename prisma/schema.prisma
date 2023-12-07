@@ -1243,6 +1243,8 @@ model Beneficiary {
   partnerMainIncomeAmount       Decimal?                              @map("partner_main_income_amount")
   majorChildrenMainIncomeSource IncomeSource[]                        @map("major_children_main_income_source")
   majorChildrenMainIncomeAmount Decimal?                              @map("major_children_main_income_amount")
+  otherMembersMainIncomeSource  IncomeSource[]                        @map("other_members_main_income_source")
+  otherMembersMainIncomeAmount  Decimal?                              @map("other_members_main_income_amount")
   unemploymentNumber            String?                               @map("unemployment_number")
   pensionOrganisations          BeneficiaryPensionOrganisation[]      @map("pension_organisations")
   otherPensionOrganisations     String?                               @map("other_pension_organisations")
