@@ -10,7 +10,10 @@
       <div class="fr-grid-row fr-grid-row--center">
         <div class="fr-col-12 fr-col-md-8 fr-col-lg-6">
           <div class="fr-modal__body">
-            <div class="fr-modal__header">
+            <div
+              v-if="!hideCloseButton"
+              class="fr-modal__header"
+            >
               <button
                 class="fr-btn--close fr-btn"
                 aria-controls="global-modal"
@@ -52,6 +55,7 @@
 
   const modal = ref<HTMLDialogElement | null>(null)
   const title = ref('')
+  const hideCloseButton = ref(false)
   const contentComponent: Ref<M | null> = shallowRef(null)
   const contentComponentProps: Ref<ComponentProps<M> | undefined> =
     ref(undefined)
@@ -74,12 +78,14 @@
 
   function onOpen({
     title: _title,
+    hideCloseButton: _hideCloseButton,
     contentComponent: _contentComponent,
     contentComponentProps: _contentComponentProps,
     contentComponentEvents: _contentComponentEvents,
     triggerOpen
   }: OpenModalEvent<M>) {
     title.value = _title
+    hideCloseButton.value = !!_hideCloseButton
     contentComponent.value = _contentComponent
     contentComponentProps.value = _contentComponentProps
     contentComponentEvents.value = _contentComponentEvents
