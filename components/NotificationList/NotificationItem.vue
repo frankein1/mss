@@ -64,6 +64,7 @@
       case NotificationType.DueDateOneMonth:
       case NotificationType.EndOfSupport:
       case NotificationType.NewComment:
+      case NotificationType.NewHistoryElement:
         return BeneficiaryTab.History
       default:
         return BeneficiaryTab.Details

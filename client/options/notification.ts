@@ -6,7 +6,8 @@ export const notificationTypeLabels: { [key in NotificationType]: string } = {
   [NotificationType.DueDateOneMonth]: 'Échéance - Dans un mois',
   [NotificationType.EndOfSupport]: 'Fin de prise en charge',
   [NotificationType.NewComment]: 'Nouveau commentaire',
-  [NotificationType.NewDocument]: 'Nouveau document'
+  [NotificationType.NewDocument]: 'Nouveau document',
+  [NotificationType.NewHistoryElement]: 'Nouveau suivi'
 }
 
 export const notificationTypeOptions = labelsToOptions(notificationTypeLabels)
