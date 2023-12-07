@@ -4,7 +4,8 @@ import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
   helpRequestStatusLabels,
-  paymentMethodLabels
+  paymentMethodLabels,
+  helpRequestSubjectLabels
 } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
 import { getHelpRequestAccessibleData } from '~/server/route/helpRequest/helper/getHelpRequestAccessibleData'
@@ -24,6 +25,7 @@ export function getHelpRequestExportData(
 ) {
   return {
     beneficiaryId: formatBeneficiaryDisplayName(helpRequest.beneficiary),
+    subject: helpRequestSubjectLabels[helpRequest.subject],
     prescribingOrganizationId: helpRequest.prescribingOrganization?.name || '',
     externalStructure: getExternalStructure(helpRequest.externalStructure),
     instructorOrganizationId: helpRequest.instructorOrganization?.name || '',
@@ -31,7 +33,6 @@ export function getHelpRequestExportData(
     typeId: helpRequest.type.name,
     documents:
       helpRequest.documents?.map(document => document.name).join(', ') || '',
-    financialSupport: getBooleanOrEmpty(helpRequest.financialSupport),
     status: helpRequestStatusLabels[helpRequest.status],
     askedAmount: helpRequest.askedAmount?.toString() || '',
     examinationDate: formatDate(helpRequest.examinationDate, 'DD-MM-YYYY'),
