@@ -3,6 +3,7 @@
     ref="disconnectBtn"
     data-fr-opened="false"
     aria-controls="global-modal"
+    class="disconnect-alert"
     @click="openDisconnectAlert"
   ></button>
 </template>
@@ -23,17 +24,25 @@
   const timeThreshold = minutesToMillis(threshold)
 
   const counter = ref(timeThreshold)
-  const isOpen = ref(false)
 
   const disconnectBtn = ref<HTMLButtonElement>()
 
   let interval: Interval | null
 
-  watch(counter, counter => {
+  const stopWatchingCounter = watch(counter, counter => {
     if (counter < 0) {
       logout()
-    } else if (!isOpen.value && counter < minutesToMillis(alertThreshold)) {
+    } else if (
+      !modal.isOpen.value &&
+      counter < minutesToMillis(alertThreshold)
+    ) {
       disconnectBtn.value?.click()
+    }
+  })
+
+  const stopWatchingIsOpen = watch(modal.isOpen, value => {
+    if (!value) {
+      resetCountDown()
     }
   })
 
@@ -46,10 +55,15 @@
 
   function startCountdown() {
     counter.value = timeThreshold
-    clearCountdown()
     interval = setInterval(() => {
       counter.value = counter.value - 1000
     }, 1000)
+  }
+
+  function resetCountDown() {
+    if (!modal.isOpen.value) {
+      counter.value = timeThreshold
+    }
   }
 
   function logout() {
@@ -59,46 +73,39 @@
   }
 
   function disconnect() {
-    isOpen.value = false
     logout()
   }
 
   function keepConnect() {
-    isOpen.value = false
     counter.value = timeThreshold
     if (counter.value < 0) {
       logout()
-    } else {
-      addListener()
     }
   }
 
   function openDisconnectAlert() {
-    isOpen.value = true
-    removeListener()
     modal.open({
-      title: '',
-      hideCloseButton: true,
+      title: `Vous allez être déconnecté.e dans ${alertThreshold} minutes`,
       contentComponent: DisconnectAlert,
       contentComponentEvents: { disconnect, keepConnect }
     })
   }
 
-  function removeListener() {
-    window.removeEventListener('mousemove', startCountdown)
-  }
-
-  function addListener() {
-    window.addEventListener('mousemove', startCountdown)
-  }
-
-  onNuxtReady(() => {
+  onMounted(() => {
     startCountdown()
-    addListener()
+    window.addEventListener('mousemove', resetCountDown)
   })
 
   onUnmounted(() => {
-    removeListener()
-    stop()
+    window.addEventListener('mousemove', resetCountDown)
+    clearCountdown()
+    stopWatchingCounter()
+    stopWatchingIsOpen()
   })
 </script>
+
+<style lang="scss" scoped>
+  .disconnect-alert {
+    display: none;
+  }
+</style>

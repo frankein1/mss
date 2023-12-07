@@ -19,7 +19,6 @@ export type ModalComponent =
 
 export type OpenModalEvent<M extends ModalComponent> = {
   title: string
-  hideCloseButton?: boolean
   contentComponent: M
   contentComponentProps?: ComponentProps<M>
   contentComponentEvents: ComponentEmit<M>
