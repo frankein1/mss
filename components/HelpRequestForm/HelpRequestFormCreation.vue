@@ -5,9 +5,6 @@
     :prescribing-organizations="prescribingOrganizations"
     :instructor-organizations="instructorOrganizations"
     :beneficiary-id="beneficiaryId"
-    :status="values.status"
-    :external-structure="values.externalStructure"
-    :financial-support="values.financialSupport"
     :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
@@ -38,7 +35,7 @@
     saveHelpRequest: [helpRequest: CreateHelpRequestInput]
   }>()
 
-  const { handleSubmit, values } = useForm<CreateHelpRequestInput>({
+  const { handleSubmit } = useForm<CreateHelpRequestInput>({
     validationSchema: toTypedSchema(createHelpRequestSchema),
     initialValues: {
       beneficiaryId: props.beneficiaryId,
