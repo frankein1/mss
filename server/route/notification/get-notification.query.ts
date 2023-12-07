@@ -27,7 +27,13 @@ const handler = async ({
   const notifications = await NotificationRepo.findMany(user, {
     where,
     include: {
-      beneficiary: true
+      beneficiary: true,
+      helpRequest: {
+        select: { createdBy: { select: { lastName: true, firstName: true } } }
+      },
+      followup: {
+        select: { createdBy: { select: { lastName: true, firstName: true } } }
+      }
     },
     orderBy: {
       created: 'desc'
