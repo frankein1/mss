@@ -166,7 +166,11 @@ export default defineNuxtConfig({
         from: process.env.EMAIL_FROM || ''
       },
       sentry: {
-        dsn: process.env.SENTRY_DSN
+        dsn: process.env.SENTRY_DSN,
+        debug: !!process.env.SENTRY_DEBUG,
+        tracesSampleRate: parseFloat(
+          process.env.SENTRY_TRACE_SAMPLE_RATE || '1.0'
+        )
       }
     }
   },

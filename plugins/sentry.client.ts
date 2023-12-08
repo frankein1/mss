@@ -4,16 +4,16 @@ import { defineNuxtPlugin, useRuntimeConfig } from '#app'
 export default defineNuxtPlugin(nuxtApp => {
   const { public: publicConfig } = useRuntimeConfig()
 
-  if (publicConfig.mssEnvironment !== 'production') {
+  if (!publicConfig.sentry.dsn) {
     return
   }
 
   const router = useRouter()
 
   Sentry.init({
-    enabled: publicConfig.mssEnvironment === 'production',
+    enabled: !!publicConfig.sentry.dsn,
     app: nuxtApp.vueApp,
-    debug: publicConfig.mssEnvironment !== 'production',
+    debug: publicConfig.sentry.debug,
     dsn: publicConfig.sentry.dsn,
     integrations: [
       new Sentry.BrowserTracing({
@@ -25,7 +25,7 @@ export default defineNuxtPlugin(nuxtApp => {
     // Set tracesSampleRate to 1.0 to capture 100%
     // of transactions for performance monitoring.
     // We recommend adjusting this value in production
-    tracesSampleRate: publicConfig.mssEnvironment === 'production' ? 0.2 : 1.0,
+    tracesSampleRate: publicConfig.sentry.tracesSampleRate,
 
     // Capture Replay for 10% of all sessions,
     // plus for 100% of sessions with an error
