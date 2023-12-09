@@ -1,24 +1,16 @@
-import { NotificationType } from '@prisma/client'
-import { BeneficiaryRepo } from '~/server/database'
+import { Beneficiary, NotificationType } from '@prisma/client'
 import { SecurityRuleGrantee } from '~/server/security'
 
-export async function prepareNewHistoryElementNotification(
-  user: SecurityRuleGrantee,
-  beneficiaryId: string
+export function prepareNewHistoryElementNotification(
+  beneficiary: Beneficiary & { referents: { id: string }[] },
+  user: SecurityRuleGrantee
 ) {
-  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(user, {
-    where: { id: beneficiaryId },
-    select: {
-      referents: true
-    }
-  })
-
   return {
     createMany: {
       data: beneficiary.referents
         .filter(referent => referent.id !== user.id)
         .map(referent => ({
-          beneficiaryId,
+          beneficiaryId: beneficiary.id,
           recipientId: referent.id,
           type: NotificationType.NewHistoryElement
         }))

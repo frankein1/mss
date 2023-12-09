@@ -19,7 +19,7 @@ import {
   getStructureByUser,
   markFollowupTypeAsUsed
 } from '~/server/query'
-import { FollowupRepo } from '~/server/database'
+import { BeneficiaryRepo, FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
@@ -100,6 +100,11 @@ const handler = async ({
     }
   }
 
+  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(user, {
+    where: { id: beneficiaryId },
+    include: { referents: true }
+  })
+
   const fu = await FollowupRepo.prisma.create({
     data: {
       structure: connect(structure.id),
@@ -127,10 +132,7 @@ const handler = async ({
       numeroPegase,
       classified,
       forwardedToJustice,
-      notifications: await prepareNewHistoryElementNotification(
-        user,
-        beneficiaryId
-      )
+      notifications: prepareNewHistoryElementNotification(beneficiary, user)
     },
     include: {
       beneficiary: {
