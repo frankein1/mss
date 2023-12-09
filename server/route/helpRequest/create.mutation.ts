@@ -13,7 +13,7 @@ import {
 import { HelpRequestRepo } from '~/server/database'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
-import { getHistoryNewElementNotificationData } from '~/utils/notification'
+import { prepareNewHistoryElementNotification } from '~/utils/notification'
 
 const handler = async ({
   input,
@@ -80,7 +80,7 @@ const handler = async ({
         financialSupport === 'true'
           ? HelpRequestSubject.Financial
           : HelpRequestSubject.Other, // FIXME: Replace with proper subject
-      notifications: await getHistoryNewElementNotificationData(
+      notifications: await prepareNewHistoryElementNotification(
         user,
         beneficiaryId
       )

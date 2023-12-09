@@ -1,1 +1,1 @@
-export * from './getHistoryNewElementNotificationData'
+export * from './prepareNewHistoryElementNotification'
