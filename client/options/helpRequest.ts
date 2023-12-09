@@ -2,7 +2,8 @@ import {
   HelpRequestReason,
   HelpRequestStatus,
   PaymentMethod,
-  HelpRequestSubject
+  HelpRequestSubject,
+  HelpRequestRefusalReason
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
@@ -53,6 +54,23 @@ export const helpRequestReasonLabels: { [key in HelpRequestReason]: string } = {
 }
 
 export const helpRequestReasonOptions = labelsToOptions(helpRequestReasonLabels)
+
+export const helpRequestRefusalReasonLabels: {
+  [key in HelpRequestRefusalReason]: string
+} = {
+  [HelpRequestRefusalReason.ResourcesOutOfScale]: 'Ressources hors barème',
+  [HelpRequestRefusalReason.ShortDeadline]: 'Délai trop court',
+  [HelpRequestRefusalReason.IncompleteFile]: 'Dossier incomplet',
+  [HelpRequestRefusalReason.IrregularSituation]: 'En situation irrégulière',
+  [HelpRequestRefusalReason.InadequateFamilyComposition]:
+    'Composition familiale inadaptée au type de logement',
+  [HelpRequestRefusalReason.ExpiredRequest]: 'Demande expirée',
+  [HelpRequestRefusalReason.Other]: 'Autre'
+}
+
+export const helpRequestRefusalReasonOptions = labelsToOptions(
+  helpRequestRefusalReasonLabels
+)
 
 export const helpRequestSubjectOptions = new Map<
   HelpRequestSubject,
