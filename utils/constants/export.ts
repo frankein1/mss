@@ -55,7 +55,7 @@ export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)
     'paymentDate',
     'documents',
     'handlingDate',
-    'refusalReason',
+    'definedRefusalReason',
     'dueDate',
     'fullFile',
     'reason',
