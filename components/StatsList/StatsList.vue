@@ -8,7 +8,11 @@
         v-for="{ key, label, count, color } in displayedStats"
         :key="key"
         class="stats-entry"
-        :class="{ 'with-bar': statsBar, 'with-percentage': statsPercentage }"
+        :class="{
+          'with-bar': statsBar,
+          'with-percentage': statsPercentage,
+          'with-color-dot': statsColorDot
+        }"
       >
         <span>{{ label }}</span>
         <span
@@ -24,6 +28,11 @@
         >
           {{ getPercentage(count, totalCount) }}%
         </span>
+        <span
+          v-if="statsColorDot"
+          class="color-dot"
+          :style="{ backgroundColor: color }"
+        ></span>
         <div
           v-if="statsBar"
           class="stats-bar"
@@ -61,6 +70,7 @@
       stats: StatsListPropType
       statsBar?: boolean
       statsPercentage?: boolean
+      statsColorDot?: boolean
       totalCount?: number
       unit?: string
       toFixed?: number
@@ -68,6 +78,7 @@
     {
       statsBar: false,
       statsPercentage: true,
+      statsColorDot: false,
       totalCount: 0,
       unit: '',
       toFixed: undefined
@@ -100,6 +111,7 @@
     --li-bottom: 0.75rem;
 
     display: grid;
+    align-items: center;
     column-gap: 0.5rem;
     grid-template-columns: auto max-content;
     grid-template-areas: 'label count';
@@ -117,9 +129,18 @@
       grid-area: percentage;
     }
 
+    > :nth-child(4) {
+      grid-area: color-dot;
+    }
+
     &.with-percentage {
       grid-template-columns: auto max-content max-content;
       grid-template-areas: 'label count percentage';
+    }
+
+    &.with-percentage.with-color-dot {
+      grid-template-columns: auto max-content max-content max-content;
+      grid-template-areas: 'label count percentage color-dot';
     }
 
     &.with-bar {
@@ -145,5 +166,11 @@
       height: 100%;
       border-radius: $bar-border-radius;
     }
+  }
+
+  .color-dot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 100%;
   }
 </style>
