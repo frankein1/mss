@@ -74,6 +74,23 @@
         />
       </div>
     </template>
+    <template v-if="hasOtherMembers">
+      <div class="fr-col-12 fr-col-lg-6">
+        <VeeMultiSelect
+          name="otherMembersMainIncomeSource"
+          :label="beneficiaryFieldLabels.otherMembersMainIncomeSource"
+          :options="incomeSourceOptions"
+          label-class="fr-text--regular"
+          dropdown
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <VeeCurrencyInput
+          name="otherMembersMainIncomeAmount"
+          :label="beneficiaryFieldLabels.otherMembersMainIncomeAmount"
+        />
+      </div>
+    </template>
     <div class="fr-col-12">
       <VeeInput
         name="unemploymentNumber"
@@ -146,7 +163,9 @@
 <script lang="ts" setup>
   import {
     BeneficiaryFamilySituation,
-    BeneficiaryPensionOrganisation
+    BeneficiaryPensionOrganisation,
+    BeneficiaryRelative,
+    RelativeRelationship
   } from '@prisma/client'
   import {
     beneficiarySocioProfessionalCategoryOptions,
@@ -164,6 +183,7 @@
   const props = defineProps<{
     familySituation: BeneficiaryFamilySituation | null | undefined
     majorChildren: number | null | undefined
+    taxHouseholdMembers: Pick<BeneficiaryRelative, 'relationship'>[]
     permissions: BeneficiaryPermissions
   }>()
 
@@ -173,17 +193,34 @@
 
   const hasPartner = computed(() => {
     const familySituation = props.familySituation
-    if (!familySituation) {
-      return false
-    }
     return (
       familySituation === BeneficiaryFamilySituation.Married ||
       familySituation === BeneficiaryFamilySituation.CivilUnion ||
-      familySituation === BeneficiaryFamilySituation.Cohabitation
+      familySituation === BeneficiaryFamilySituation.Cohabitation ||
+      familySituation === BeneficiaryFamilySituation.CoupleWithChildren ||
+      props.taxHouseholdMembers.filter(
+        member => member.relationship === RelativeRelationship.Conjoint
+      ).length > 0
     )
   })
 
-  const hasMajorChildren = computed(() => (props.majorChildren || 0) > 0)
+  const hasMajorChildren = computed(
+    () =>
+      (props.majorChildren || 0) > 0 ||
+      props.taxHouseholdMembers.filter(
+        member => member.relationship === RelativeRelationship.EnfantMajeur
+      ).length > 0
+  )
+
+  const hasOtherMembers = computed(
+    () =>
+      props.taxHouseholdMembers.filter(
+        member =>
+          member.relationship !== RelativeRelationship.Conjoint &&
+          member.relationship !== RelativeRelationship.EnfantMajeur &&
+          member.relationship !== RelativeRelationship.EnfantMineur
+      ).length > 0
+  )
 
   const hasOtherPensionOrganisations = computed(() =>
     (pensionOrganisations.value || []).includes(

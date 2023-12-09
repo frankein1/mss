@@ -111,6 +111,8 @@ export type GetBeneficiaryOccupationIncome = Pick<
   | 'partnerMainIncomeAmount'
   | 'majorChildrenMainIncomeSource'
   | 'majorChildrenMainIncomeAmount'
+  | 'otherMembersMainIncomeSource'
+  | 'otherMembersMainIncomeAmount'
   | 'unemploymentNumber'
   | 'pensionOrganisations'
   | 'otherPensionOrganisations'

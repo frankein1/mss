@@ -74,6 +74,10 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   partnerMainIncomeAmount: 'Montant des ressources du conjoint',
   majorChildrenMainIncomeSource: 'Nature des ressources des enfants majeurs',
   majorChildrenMainIncomeAmount: 'Montant des ressources des enfants majeurs',
+  otherMembersMainIncomeSource:
+    'Nature des ressources des autres membres du foyer',
+  otherMembersMainIncomeAmount:
+    'Montant des ressources des autres membres du foyer',
   deathDate: 'Date de décès',
   ministereCategorie: 'Catégorie',
   ministereDepartementServiceAc:

@@ -98,6 +98,19 @@
 
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
+      :label="beneficiaryFieldLabels.otherMembersMainIncomeSource"
+      :value="otherMembersMainIncomeType"
+      class="fr-col-6"
+    />
+    <BeneficiaryInfoLabel
+      :label="beneficiaryFieldLabels.otherMembersMainIncomeAmount"
+      :value="euros(occupationIncome.otherMembersMainIncomeAmount)"
+      class="fr-col-6"
+    />
+  </div>
+
+  <div class="fr-grid-row">
+    <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereCategorie"
       :value="MinistereCategorieKeys.value(occupationIncome.ministereCategorie)"
       class="fr-col-6"
@@ -155,6 +168,13 @@
   const majorChildrenMainIncomeType = computed(() =>
     arrayToString(
       props.occupationIncome.majorChildrenMainIncomeSource || [],
+      incomeSourceLabels
+    )
+  )
+
+  const otherMembersMainIncomeType = computed(() =>
+    arrayToString(
+      props.occupationIncome.otherMembersMainIncomeSource || [],
       incomeSourceLabels
     )
   )

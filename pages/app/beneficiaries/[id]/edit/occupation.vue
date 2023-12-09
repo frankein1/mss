@@ -25,6 +25,7 @@
         :permissions="permissions"
         :family-situation="familySituation"
         :major-children="majorChildren"
+        :tax-household-members="taxHouseholdMembers"
       />
     </div>
   </BeneficiaryEditFormLayout>
@@ -65,6 +66,10 @@
     () => data.value?.beneficiary.taxHouseholds?.majorChildren
   )
 
+  const taxHouseholdMembers = computed(
+    () => data.value?.beneficiary.taxHouseholds?.taxHouseholds || []
+  )
+
   const beneficiary = computed(() => {
     if (!data.value) {
       return null
@@ -95,6 +100,11 @@
         occupationIncome?.majorChildrenMainIncomeSource || [],
       majorChildrenMainIncomeAmount: prismaDecimalToNumber(
         occupationIncome?.majorChildrenMainIncomeAmount
+      ),
+      otherMembersMainIncomeSource:
+        occupationIncome?.otherMembersMainIncomeSource || [],
+      otherMembersMainIncomeAmount: prismaDecimalToNumber(
+        occupationIncome?.otherMembersMainIncomeAmount
       ),
       pensionOrganisations: occupationIncome?.pensionOrganisations || []
     } as SaveBeneficiaryOccupationInput & MinimalBeneficiaryForFormLayout
