@@ -208,9 +208,10 @@
         </template>
 
         <div v-if="status === HelpRequestStatus.Refused">
-          <VeeInput
-            name="refusalReason"
-            :label="helpRequestFieldLabels.refusalReason"
+          <VeeSelect
+            name="definedRefusalReason"
+            :label="helpRequestFieldLabels.definedRefusalReason"
+            :options="withEmptyValue(helpRequestRefusalReasonOptions)"
           />
         </div>
       </template>
@@ -286,7 +287,8 @@
     externalOrganisationOptions,
     financialSupportOptions,
     helpRequestReasonOptions,
-    paymentMethodOptions
+    paymentMethodOptions,
+    helpRequestRefusalReasonOptions
   } from '~/client/options/helpRequest'
   import { ministerOptions } from '~/client/options/ministry'
   import {

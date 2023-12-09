@@ -8,7 +8,9 @@ type HelpRequestFieldLabels = Omit<
   documents: string
 }
 
-export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
+export const helpRequestFieldLabels: FieldLabels<
+  Omit<HelpRequestFieldLabels, 'refusalReason'>
+> = {
   id: 'Identifiant',
   status: 'Statut',
   dueDate: "Date d'échéance",
@@ -29,7 +31,7 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   instructorOrganizationId: 'Organisme instructeur',
   dispatchDate: "Date d'envoi du dossier",
   decisionDate: 'Date de la décision',
-  refusalReason: 'Motif du refus',
+  definedRefusalReason: 'Motif du refus',
   synthesis: 'Compte rendu',
   privateSynthesis: 'Compte rendu privé',
   documents: 'Documents',
