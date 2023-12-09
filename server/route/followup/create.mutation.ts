@@ -17,13 +17,13 @@ import {
 import {
   getBeneficiarySecurityTarget,
   getStructureByUser,
-  markFollowupTypeAsUsed
+  markFollowupTypeAsUsed,
+  createNewHistoryElementNotification
 } from '~/server/query'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
-import { getHistoryNewElementNotificationData } from '~/utils/notification'
 
 const handler = async ({
   input,
@@ -127,7 +127,7 @@ const handler = async ({
       numeroPegase,
       classified,
       forwardedToJustice,
-      notifications: await getHistoryNewElementNotificationData(
+      notifications: await createNewHistoryElementNotification(
         user,
         beneficiaryId
       )

@@ -2,7 +2,7 @@ import { NotificationType } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
 import { SecurityRuleGrantee } from '~/server/security'
 
-export async function getHistoryNewElementNotificationData(
+export async function createNewHistoryElementNotification(
   user: SecurityRuleGrantee,
   beneficiaryId: string
 ) {
