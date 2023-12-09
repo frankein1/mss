@@ -87,22 +87,17 @@
   )
 
   const itemTitle = computed(() => {
-    if (
-      props.notification.type === NotificationType.NewHistoryElement &&
-      (props.notification.helpRequest?.createdBy ||
-        props.notification.followup?.createdBy)
-    ) {
-      return `Une ${
-        props.notification.helpRequestId
-          ? "demande d'aide"
-          : "synthèse d'entretien"
-      } a été ajoutée par ${
-        props.notification.helpRequest?.createdBy
-          ? formatUserDisplayName(props.notification.helpRequest?.createdBy)
-          : props.notification.followup?.createdBy
-            ? formatUserDisplayName(props.notification.followup?.createdBy)
-            : ''
-      }`
+    if (props.notification.type === NotificationType.NewHistoryElement) {
+      if (props.notification.helpRequest?.createdBy) {
+        return `Une instruction de dossier a été ajoutée par ${formatUserDisplayName(
+          props.notification.helpRequest.createdBy
+        )}`
+      }
+      if (props.notification.followup?.createdBy) {
+        return `Une synthèse d'entretien a été ajoutée par ${formatUserDisplayName(
+          props.notification.followup.createdBy
+        )}`
+      }
     }
     return notificationTypeLabels[props.notification.type]
   })
