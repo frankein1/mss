@@ -34,15 +34,15 @@
 
 <script setup lang="ts">
   import { Beneficiary, NotificationType } from '@prisma/client'
+  import { NotificationItem } from './types'
   import { BeneficiaryTab } from '~~/utils/constants/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
   import { notificationTypeClasses } from '~/client/classes/notification'
   import { notificationTypeLabels } from '~/client/options/notification'
   import { formatUserDisplayName } from '~/utils/user'
-  import { GetNotificationOutput } from '~/server/route'
 
   const props = defineProps<{
-    notification: GetNotificationOutput[number]['notification']
+    notification: NotificationItem
     beneficiary: Beneficiary
   }>()
 
