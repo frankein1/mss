@@ -24,7 +24,7 @@
         </span>
         <span
           v-if="statsPercentage"
-          :style="{ color: color }"
+          :style="{ color: !statsColorDot ? color : undefined }"
         >
           {{ getPercentage(count, totalCount) }}%
         </span>
