@@ -38,6 +38,8 @@
     inactive: boolean
   }>()
 
+  const store = useAuthStore()
+
   const {
     public: {
       disconnect: { threshold }
@@ -49,25 +51,20 @@
     success: boolean
   }>(RoutePath.ApiLogout(), {
     method: 'POST',
-    body: { inactive: !!props.inactive }
-  })
-
-  const stopWatching = watch(data, data => {
-    console.log({ data })
-    if (!data) {
-      return
+    body: { inactive: !!props.inactive },
+    onResponse({ response }) {
+      const { _data: data } = response
+      if (!data) {
+        return
+      }
+      const { success, url } = data
+      if (success) {
+        store.logout()
+      }
+      if (url) {
+        window.location.href = url
+      }
     }
-    const { success, url } = data
-    if (success) {
-      useAuthStore().logout()
-    }
-    if (url) {
-      window.location.href = url
-    }
-  })
-
-  onUnmounted(() => {
-    stopWatching()
   })
 </script>
 
