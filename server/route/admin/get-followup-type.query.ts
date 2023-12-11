@@ -1,14 +1,14 @@
 import { createQuery } from '~/server/route'
-import { ProtectedAppContext } from '~/server/trpc'
+import { AdminContext } from '~/server/trpc'
 import { GetFollowupTypeInput, getFollowupTypeSchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { FollowupTypeRepo } from '~/server/database'
 
-const handler = async ({
+const adminHandler = async ({
   ctx: { user },
   input
 }: {
-  ctx: ProtectedAppContext
+  ctx: AdminContext
   input: GetFollowupTypeInput
 }) => {
   const types = await FollowupTypeRepo.findMany(user, {
@@ -21,7 +21,7 @@ const handler = async ({
 }
 
 export const getAdminFollowupTypeQuery = createQuery({
-  handler,
+  adminHandler,
   inputValidation: getFollowupTypeSchema,
   securityCheck: AllowSecurityCheck
 })
