@@ -2,6 +2,7 @@
   <div class="feature-section documents-header-section">
     <BeneficiaryDocumentFilters @filter="filters = $event" />
     <BeneficiaryDocumentAddButton
+      class="fr-ml-2w"
       :beneficiary-id="beneficiaryId"
       @refresh-documents="refresh"
     />
@@ -88,14 +89,18 @@
   })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
   .documents-header-section {
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
 
-  .documents-header-section div:first-child {
-    flex-grow: 1;
+    > :deep(*:first-child) {
+      flex-grow: 1;
+    }
+
+    > :deep(*:last-child) {
+      flex-shrink: 0;
+    }
   }
 </style>
