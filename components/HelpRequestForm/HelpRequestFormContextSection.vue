@@ -10,7 +10,6 @@
     />
   </div>
 
-  <!-- FIXME: Template Ministre -->
   <template v-if="isMinistryAgent">
     <div>
       <VeeInput
