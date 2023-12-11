@@ -8,11 +8,7 @@ import {
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
 } from '~/server/query'
-import {
-  SecurityRuleGrantee,
-  canAddDocument,
-  canViewDocument
-} from '~/server/security'
+import { canAddDocument, canViewDocument } from '~/server/security'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
@@ -60,13 +56,12 @@ export default defineEventHandler(async event => {
   const key = await uploadFile(file)
 
   const document = await addDocument(key, input, user)
-  await addNotification(user, document, beneficiary)
+  await addNotification(document, beneficiary)
 
   return send(event, document.key)
 })
 
 async function addNotification(
-  user: SecurityRuleGrantee,
   document: Document,
   beneficiary: NonNullable<BeneficiarySecurityTarget>
 ) {
