@@ -95,7 +95,7 @@ function prepareData(
     const taxHouseholds =
       taxHousehold?.taxHouseholds?.map(({ linkedBeneficiary, ...e }) => {
         return {
-          ...e,
+          ...prepareDateFields(e, ['birthDate']),
           hosted: true,
           linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null
         }

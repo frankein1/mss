@@ -9,7 +9,7 @@ import {
   UpdateBeneficiaryTaxHouseholdInput,
   updateBeneficiaryTaxHouseholdSchema
 } from '~/server/schema'
-import { prepareRelationUpdates } from '~/utils/prisma'
+import { prepareRelationUpdates, prepareDateFields } from '~/utils/prisma'
 import {
   getBeneficiarySecurityTarget,
   getStructureByUser
@@ -71,7 +71,7 @@ const handler = async ({
         return {
           hosted: true,
           linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null,
-          ...data
+          ...prepareDateFields(data, ['birthDate'])
         }
       }) || []
 
