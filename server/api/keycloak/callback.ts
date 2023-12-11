@@ -20,10 +20,10 @@ export default defineEventHandler(async event => {
   const { code, redirectUrl } = getQuery(event)
 
   if (!code) {
-    throw sendError(
-      event,
-      new Error('[IC] no code returned from InclusionConnect')
-    )
+    throw createError({
+      statusCode: 400,
+      message: '[IC] no code returned from InclusionConnect'
+    })
   }
 
   const client = getInclusionConnectClient()
