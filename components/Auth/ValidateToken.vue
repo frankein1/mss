@@ -29,23 +29,19 @@
     '/api/auth/validate-token',
     {
       method: 'POST',
-      body: JSON.stringify({ token })
+      body: JSON.stringify({ token }),
+      onResponse({ response }) {
+        const { _data: data } = response
+        if (data) {
+          store.login(data.user)
+          navigateTo(redirectUrl)
+        }
+      }
     }
   )
 
-  const stopWatching = watch(data, data => {
-    if (data) {
-      store.login(data.user)
-      navigateTo(redirectUrl)
-    }
-  })
-
   const name = computed(() => {
     return data.value ? formatUserDisplayName(data.value.user) : ''
-  })
-
-  onUnmounted(() => {
-    stopWatching()
   })
 </script>
 
