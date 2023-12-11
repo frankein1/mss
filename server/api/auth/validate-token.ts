@@ -9,9 +9,10 @@ export default defineEventHandler(async event => {
   const { token } = await readBody(event)
 
   if (!token) {
-    return {
-      error: 'Aucun jeton fourni. Merci de vous authentifier à nouveau.'
-    }
+    throw createError({
+      statusCode: 400,
+      message: 'Aucun jeton fourni. Merci de vous authentifier à nouveau.'
+    })
   }
 
   const user = await UserRepo.prisma.findFirst({
@@ -28,10 +29,11 @@ export default defineEventHandler(async event => {
   })
 
   if (!user) {
-    return {
-      error:
+    throw createError({
+      statusCode: 400,
+      message:
         "Votre jeton n'est plus valide. Merci de vous authentifier à nouveau."
-    }
+    })
   }
 
   const config = useRuntimeConfig()
