@@ -1,7 +1,7 @@
 <template>
   <main class="landing-main-container fr-container fr-my-8w">
     <client-only>
-      <validate-token />
+      <ValidateToken />
       <template #fallback>
         <div class="fr-grid-row fr-my-5w">
           <div class="fr-col fr-col-lg-8 fr-col-offset-lg-2 text-center">
