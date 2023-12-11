@@ -102,7 +102,8 @@ export default defineNuxtConfig({
         'zod',
         'vue-scrollto',
         'node-fetch-native',
-        'uuid'
+        'uuid',
+        '@trpc/client'
       ]
     },
     css: {
