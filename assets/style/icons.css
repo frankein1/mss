@@ -30,5 +30,10 @@
 
 .fr-icon-followup-fill::before,
 .fr-icon-followup-fill::after {
-  mask-image: url('@/assets/icons/followup.svg');
+  mask-image: url('@/assets/icons/followup-fill.svg');
+}
+
+.fr-icon-followup-line::before,
+.fr-icon-followup-line::after {
+  mask-image: url('@/assets/icons/followup-line.svg');
 }

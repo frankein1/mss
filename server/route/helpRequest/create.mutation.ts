@@ -10,9 +10,10 @@ import {
   getBeneficiarySecurityTarget,
   markFollowupTypeAsUsed
 } from '~/server/query'
-import { HelpRequestRepo } from '~/server/database'
+import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
+import { prepareNewHistoryElementNotification } from '~/utils/notification'
 
 const handler = async ({
   input,
@@ -63,6 +64,11 @@ const handler = async ({
     }
   }
 
+  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(user, {
+    where: { id: beneficiaryId },
+    include: { referents: true }
+  })
+
   const helpRequest = await HelpRequestRepo.prisma.create({
     data: {
       createdBy: connect(user.id),
@@ -78,7 +84,8 @@ const handler = async ({
       subject:
         financialSupport === 'true'
           ? HelpRequestSubject.Financial
-          : HelpRequestSubject.Other // FIXME: Replace with proper subject
+          : HelpRequestSubject.Other, // FIXME: Replace with proper subject
+      notifications: prepareNewHistoryElementNotification(beneficiary, user)
     },
     include: {
       beneficiary: {
