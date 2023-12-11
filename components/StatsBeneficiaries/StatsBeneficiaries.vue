@@ -48,6 +48,12 @@
         />
       </div>
       <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
+        <StatsBeneficiariesCities
+          :beneficiary-count="beneficiaryCount"
+          :filters="filters"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
         <StatsBeneficiariesRegions
           :beneficiary-count="beneficiaryCount"
           :filters="filters"

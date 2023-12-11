@@ -14,6 +14,7 @@ import {
   getGenderStatsQuery,
   getAgeStatsQuery,
   getFamilyStatsQuery,
+  getCityStatsQuery,
   getRegionStatsQuery,
   getAccommodationZoneStatsQuery,
   getAccommodationModeStatsQuery,
@@ -77,6 +78,18 @@ const handler = async ({
     name: 'Types de situations familiales',
     columns: familyColumns,
     rows: familyRows
+  })
+
+  const cityData = await getCityStatsQuery(user, input)
+  const cityColumns = cityData.map(({ city }) => ({
+    key: city || STATS_NULL_KEY,
+    header: city || STATS_NULL_LABEL
+  }))
+  const cityRows = getRowsFromData(cityData, 'city', beneficiaryCount)
+  exportData.push({
+    name: 'Villes',
+    columns: cityColumns,
+    rows: cityRows
   })
 
   const regionData = await getRegionStatsQuery(user, input)
