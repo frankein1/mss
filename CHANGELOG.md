@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.11.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.11.0...v1.11.1) (2023-12-11)
+
+
+### Bug Fixes
+
+* **admin:** Impossible de créer un type d'accompagnement facultatif sur une structure ([58c68c9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/58c68c9de1e42273e4953d18c5de4834e19ca2bd)), closes [#266](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/266)
+* **auth:** Renvoie correctement une erreur lorsque le retour de l'authentication d'InclusionConnect ne présente pas les paramètres attendus ([79d42b7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/79d42b723a173b973a7eb33b777e5ef98d6fe982)), closes [#262](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/262) [#265](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/265)
+* **auth:** Reprise de la validatation du token pour éviter un freeze de la page ([65799f7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/65799f7a26ab12091357e1355054de13834af8e9))
+* **documents:** Améliore la mise en page des filtres ([94c11cb](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/94c11cb05c6c53137f077adeb270bbe6ef888948)), closes [#261](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/261)
+
 ## [1.11.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.10.2...v1.11.0) (2023-12-05)
 
 
