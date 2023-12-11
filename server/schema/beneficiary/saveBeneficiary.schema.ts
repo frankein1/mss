@@ -34,7 +34,8 @@ import {
   phoneConstraint,
   siretConstraint,
   numeroPegaseContraint,
-  amountNumber
+  amountNumber,
+  dateOrEmpty
 } from '../helpers.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
@@ -58,9 +59,9 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   firstName: beneficiaryFirstNameOrEmptySchema,
   usualName: stringOrEmpty(beneficiaryLastNameSchema),
   birthName: stringOrEmpty(beneficiaryLastNameSchema),
-  birthDate: z.coerce.date().nullish(),
+  birthDate: dateOrEmpty,
   birthPlace: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
-  deathDate: z.coerce.date().nullish(),
+  deathDate: dateOrEmpty,
   gender: withEmptyValueOptionalNativeEnum(Gender),
   nationality: withEmptyValueOptionalNativeEnum(Nationality),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),

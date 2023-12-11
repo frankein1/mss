@@ -16,6 +16,7 @@ import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { BeneficiaryRepo, DraftRepo } from '~/server/database'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { prepareDateFields } from '~/utils/prisma'
 
 const handler = async ({
   input,
@@ -70,7 +71,7 @@ function prepareData(
   let data = {
     structureId: user.structureId,
     fileNumber,
-    ...general,
+    ...prepareDateFields(general, ['birthDate', 'deathDate']),
     phone1: general.noPhone ? null : general.phone1,
     phone2: general.noPhone ? null : general.phone2,
     referents: {
