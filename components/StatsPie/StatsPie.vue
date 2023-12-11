@@ -6,6 +6,7 @@
     <StatsList
       :total-count="totalCount"
       :stats="stats"
+      :stats-color-dot="true"
     />
   </div>
 </template>
