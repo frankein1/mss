@@ -22,7 +22,11 @@ import {
 import { BeneficiaryRepo, FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
-import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import {
+  connect,
+  prepareDocumentsMutations,
+  prepareDateFields
+} from '~/utils/prisma'
 import { prepareNewHistoryElementNotification } from '~/utils/notification'
 
 const handler = async ({
@@ -62,7 +66,7 @@ const handler = async ({
     // ChefCabinet,
     // OrganismeMenace,
     // Prefet
-  } = input
+  } = prepareDateFields(input, ['dueDate'])
 
   // const signalementFields = {
   //   ChefCabinet,

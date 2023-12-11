@@ -3,15 +3,15 @@ type KeyOfType<T, V> = keyof {
 }
 
 type DateKeys<T> = KeyOfType<T, Date | '' | null | undefined>
-type TWithSanitizedDates<T> = Omit<T, DateKeys<T>> & {
-  [k in DateKeys<T>]: Date | null | undefined
+type TWithSanitizedDates<T, K extends DateKeys<T>> = Omit<T, K> & {
+  [k in K]: Date | null | undefined
 }
 
 // FIXME: Crazy type problem here... If someone is interested in improving it one day
-export function prepareDateFields<T>(
+export function prepareDateFields<T, K extends DateKeys<T>>(
   input: T,
-  dateKeys: Array<DateKeys<T>>
-): TWithSanitizedDates<T> {
+  dateKeys: Array<K>
+): TWithSanitizedDates<T, K> {
   let sanitizedInput = { ...input }
   dateKeys.forEach(dateKey => {
     if (sanitizedInput[dateKey] === '') {
@@ -22,5 +22,5 @@ export function prepareDateFields<T>(
     }
   })
 
-  return sanitizedInput as TWithSanitizedDates<T>
+  return sanitizedInput as TWithSanitizedDates<T, K>
 }

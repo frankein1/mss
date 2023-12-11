@@ -23,7 +23,11 @@ import {
 import { hasAccessfollowupFields } from '~/security/permission'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
-import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import {
+  connect,
+  prepareDocumentsMutations,
+  prepareDateFields
+} from '~/utils/prisma'
 
 const handler = async ({
   input,
@@ -62,7 +66,7 @@ const handler = async ({
     // ChefCabinet,
     // OrganismeMenace,
     // Prefet
-  } = input
+  } = prepareDateFields(input, ['dueDate'])
 
   // const interventionFields = {
   //   ActionLogement,
