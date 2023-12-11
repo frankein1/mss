@@ -34,6 +34,7 @@
     </div>
   </form>
   <div
+    v-if="collapsedByDefaultFilters.length"
     class="filter-summary"
     :class="{ 'filter-summary__no-margin': noMargin }"
   >
@@ -301,20 +302,44 @@
   /* To have filters on 2 columns when screen is wide enough */
   @include dsfr-media-query.respond-from('md') {
     .filters:not(.full-width-filters) {
-      grid-template-columns: calc(50% - 1rem) calc(50% - 1rem);
+      grid-template-columns: repeat(2, 1fr);
 
+      // For collapsable filters
       &::before {
         grid-column: 2;
+      }
+
+      > *:first-child:last-child {
+        grid-column: span 2;
       }
     }
   }
 
   @include dsfr-media-query.respond-from('lg') {
     .filters:not(.full-width-filters) {
-      grid-template-columns: calc(33% - 1rem) calc(33% - 1rem) calc(33% - 1rem);
+      grid-template-columns: repeat(6, 1fr);
 
+      // For collapsable filters
       &::before {
-        grid-column: 3;
+        grid-column: 6;
+      }
+
+      > * {
+        grid-column: span 2;
+      }
+
+      > *:first-child {
+        &:last-child {
+          grid-column: span 6;
+        }
+
+        &:nth-last-child(2) {
+          grid-column: span 3;
+        }
+      }
+
+      > *:last-child:nth-child(2) {
+        grid-column: span 3;
       }
     }
   }
