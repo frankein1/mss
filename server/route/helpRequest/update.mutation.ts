@@ -17,7 +17,11 @@ import {
 } from '~/server/query'
 import { HelpRequestRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
-import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import {
+  connect,
+  prepareDocumentsMutations,
+  prepareDateFields
+} from '~/utils/prisma'
 
 const handler = async ({
   input,
@@ -40,7 +44,14 @@ const handler = async ({
     financialSupport,
     externalStructure,
     ...otherData
-  } = input
+  } = prepareDateFields(input, [
+    'decisionDate',
+    'dispatchDate',
+    'dueDate',
+    'examinationDate',
+    'handlingDate',
+    'paymentDate'
+  ])
 
   let instructorOrganization
   if (instructorOrganizationId) {

@@ -7,7 +7,6 @@ import {
   quickUpdateHelpRequestMutation,
   updateHelpRequestMutation
 } from '~/server/route/helpRequest'
-
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const helpRequestRouter = router({

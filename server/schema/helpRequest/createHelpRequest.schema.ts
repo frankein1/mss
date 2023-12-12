@@ -11,7 +11,8 @@ import {
   kindOfBooleanSchema,
   requiredNativeEnum,
   amountNumber,
-  stringConstraint
+  stringConstraint,
+  dateOrEmpty
 } from '../helpers.schema'
 import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
 
@@ -26,24 +27,24 @@ export const createHelpRequestSchema = z.object({
   externalStructure: kindOfBooleanSchema(),
   status: requiredNativeEnum(HelpRequestStatus),
   askedAmount: amountNumber.nullish(),
-  examinationDate: z.coerce.date().nullish(),
-  decisionDate: z.coerce.date().nullish(),
+  examinationDate: dateOrEmpty,
+  decisionDate: dateOrEmpty,
   allocatedAmount: amountNumber.nullish(),
   paymentMethod: withEmptyValueOptionalNativeEnum(PaymentMethod),
   reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
-  paymentDate: z.coerce.date().nullish(),
-  handlingDate: z.coerce.date().nullish(),
+  paymentDate: dateOrEmpty,
+  handlingDate: dateOrEmpty,
   refusalReason: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
   prescribingOrganizationId: z.string().nullish(),
   instructorOrganizationId: z.string().nullish(),
-  dispatchDate: z.coerce.date().nullish(),
+  dispatchDate: dateOrEmpty,
   synthesis: stringConstraint.max(6000, maxStringLengthMessage(6000)).nullish(),
   privateSynthesis: stringConstraint
     .max(1000, maxStringLengthMessage(1000))
     .nullish(),
-  dueDate: z.coerce.date().nullish(),
+  dueDate: dateOrEmpty,
   fullFile: z.boolean().default(false)
 })
 

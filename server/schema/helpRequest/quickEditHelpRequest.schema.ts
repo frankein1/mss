@@ -4,11 +4,12 @@ import { quickEditHelpRequestAllocatedAmountSchema } from './quickEditHelpReques
 import { quickEditHelpRequestPaymentMethodSchema } from './quickEditHelpRequestPaymentMethod.schema'
 import { quickEditHelpRequestPaymentDateSchema } from './quickEditHelpRequestPaymentDate.schema'
 
+// .strict() is required as payment method may be too permissive
 export const quickEditHelpRequestSchema = z.union([
-  quickEditHelpRequestStatusSchema,
-  quickEditHelpRequestAllocatedAmountSchema,
-  quickEditHelpRequestPaymentMethodSchema,
-  quickEditHelpRequestPaymentDateSchema
+  quickEditHelpRequestStatusSchema.strict(),
+  quickEditHelpRequestAllocatedAmountSchema.strict(),
+  quickEditHelpRequestPaymentMethodSchema.strict(),
+  quickEditHelpRequestPaymentDateSchema.strict()
 ])
 
 export type QuickEditHelpRequestInput = z.infer<
