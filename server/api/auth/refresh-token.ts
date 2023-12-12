@@ -30,5 +30,5 @@ export default defineEventHandler(event => {
 })
 
 function redirectLogOut(event: H3Event) {
-  return sendRedirect(event, 'api/keycloak/logout')
+  return sendRedirect(event, '/api/keycloak/logout')
 }
