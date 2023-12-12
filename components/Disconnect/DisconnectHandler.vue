@@ -56,6 +56,7 @@
   function startCountdown() {
     counter.value = timeThreshold
     interval = setInterval(() => {
+      console.log({ counter: counter.value, timeThreshold, alertThreshold })
       counter.value = counter.value - 1000
     }, 1000)
   }
