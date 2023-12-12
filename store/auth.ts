@@ -36,10 +36,8 @@ export const useAuthStore = defineStore('auth', {
       }
       this.timer = setTimeout(
         async () => {
-          const res = await fetch('/api/auth/refresh-token', {
-            method: 'POST'
-          })
-          if (res.ok) {
+          const user = await $fetch<JwtUser>('/api/auth/refresh-token')
+          if (user) {
             this.startRefreshToken()
           }
         },
@@ -67,6 +65,5 @@ export const useAuthStore = defineStore('auth', {
     isActive(): boolean {
       return this.user?.status === UserStatus.Active
     }
-  },
-  persist: true
+  }
 })

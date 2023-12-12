@@ -1,35 +1,21 @@
 import { H3Event } from 'h3'
-import { signJwt, verifyJwt } from '~/server/lib/jwt'
+import { signJwt } from '~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 
 export default defineEventHandler(event => {
-  const cookies = parseCookies(event)
-  if (!cookies) {
-    return sendNoContent(event, 401)
-  }
-  const config = useRuntimeConfig()
+  const user = event.context.auth?.user as JwtUser
 
+  const config = useRuntimeConfig()
   const { cookieKey, tokenValidationInMinutes } = config.public.auth
 
-  const sessionToken = cookies[cookieKey]
-
-  if (!sessionToken) {
-    return sendNoContent(event, 401)
-  }
-
-  const {
-    auth: { jwtKey }
-  } = config
-
-  let payload
-  try {
-    payload = verifyJwt(sessionToken, jwtKey)
-  } catch (err) {
+  if (!user) {
     deleteCookie(event, cookieKey)
     return redirectLogOut(event)
   }
 
-  const { user } = payload
+  const {
+    auth: { jwtKey }
+  } = configs
 
   const newSessionToken = signJwt(user, jwtKey, tokenValidationInMinutes)
 
@@ -39,6 +25,7 @@ export default defineEventHandler(event => {
     newSessionToken,
     cookieOptions({ expiresInMinutes: tokenValidationInMinutes })
   )
+  return user
 })
 
 function redirectLogOut(event: H3Event) {

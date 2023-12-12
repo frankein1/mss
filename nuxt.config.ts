@@ -81,7 +81,6 @@ export default defineNuxtConfig({
   // Modules: https://v3.nuxtjs.org/api/configuration/nuxt.config#modules
   modules: [
     '@pinia/nuxt',
-    '@pinia-plugin-persistedstate/nuxt',
     '@vee-validate/nuxt',
     'nuxt-scheduler',
     'nuxt-security'
@@ -151,7 +150,7 @@ export default defineNuxtConfig({
       appUrl: process.env.APP_URL,
       auth: {
         cookieKey: 'MSS_SESSION_TOKEN',
-        tokenValidationInMinutes: 30
+        tokenValidationInMinutes: 2
       },
       disconnect: {
         threshold: parseInt(process.env.DISCONNECT_THRESHOLD || '30'),
