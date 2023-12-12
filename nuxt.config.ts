@@ -151,7 +151,7 @@ export default defineNuxtConfig({
       appUrl: process.env.APP_URL,
       auth: {
         cookieKey: 'MSS_SESSION_TOKEN',
-        tokenValidationDuration: 30 * 60 * 1000
+        tokenValidationDuration: 30 * 60
       },
       disconnect: {
         threshold: parseInt(process.env.DISCONNECT_THRESHOLD || '30'),
