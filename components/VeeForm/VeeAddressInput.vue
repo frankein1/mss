@@ -72,7 +72,8 @@
       return
     }
     selectedValue.value = address.name
-    const region = address.context.split(',')[2].trim()
+    const addressParts = address.context.split(',')
+    const region = addressParts.length > 2 ? addressParts[2].trim() : ''
     emit('addressSelected', {
       zipCode: address.postcode,
       city: address.city,
