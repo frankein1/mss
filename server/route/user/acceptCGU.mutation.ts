@@ -18,7 +18,7 @@ const handler = async ({
   const {
     public: {
       cguVersion,
-      auth: { cookieKey, tokenValidationDuration }
+      auth: { cookieKey, tokenValidationInMinutes }
     },
     auth: { jwtKey }
   } = useRuntimeConfig()
@@ -68,13 +68,13 @@ const handler = async ({
 
   event.context.auth = { newUser }
 
-  const sessionToken = signJwt(newUser, jwtKey, tokenValidationDuration)
+  const sessionToken = signJwt(newUser, jwtKey, tokenValidationInMinutes)
 
   setCookie(
     event,
     cookieKey,
     sessionToken,
-    cookieOptions({ expiresIn: tokenValidationDuration })
+    cookieOptions({ expiresInMinutes: tokenValidationInMinutes })
   )
 
   return newUser

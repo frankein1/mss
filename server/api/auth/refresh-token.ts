@@ -9,7 +9,7 @@ export default defineEventHandler(event => {
   }
   const config = useRuntimeConfig()
 
-  const { cookieKey, tokenValidationDuration } = config.public.auth
+  const { cookieKey, tokenValidationInMinutes } = config.public.auth
 
   const sessionToken = cookies[cookieKey]
 
@@ -31,13 +31,13 @@ export default defineEventHandler(event => {
 
   const { user } = payload
 
-  const newSessionToken = signJwt(user, jwtKey, tokenValidationDuration)
+  const newSessionToken = signJwt(user, jwtKey, tokenValidationInMinutes)
 
   setCookie(
     event,
     cookieKey,
     newSessionToken,
-    cookieOptions({ expiresIn: tokenValidationDuration })
+    cookieOptions({ expiresInMinutes: tokenValidationInMinutes })
   )
 })
 

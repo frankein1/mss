@@ -1,5 +1,6 @@
 import pkg, { JwtPayload } from 'jsonwebtoken'
 import { JwtUser } from '~/types/user'
+import { minutesToSeconds } from '~/utils/time'
 
 // eslint-disable-next-line import/no-named-as-default-member
 const { sign, verify } = pkg
@@ -8,7 +9,11 @@ export function verifyJwt(token: string, jwtKey: string): JwtPayload {
   return verify(token, jwtKey) as JwtPayload
 }
 
-export function signJwt(user: JwtUser, jwtKey: string, expiresIn: number) {
+export function signJwt(
+  user: JwtUser,
+  jwtKey: string,
+  expiresInMinutes: number
+) {
   const sessionToken = sign(
     {
       user: {
@@ -26,7 +31,7 @@ export function signJwt(user: JwtUser, jwtKey: string, expiresIn: number) {
     jwtKey,
     {
       algorithm: 'HS256',
-      expiresIn
+      expiresIn: minutesToSeconds(expiresInMinutes)
     }
   )
   return sessionToken
