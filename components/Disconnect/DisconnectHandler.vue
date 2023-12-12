@@ -54,7 +54,6 @@
   }
 
   function startCountdown() {
-    console.log('[DisconnectHandler] startCountdown')
     counter.value = timeThreshold
     interval = setInterval(() => {
       console.log({ counter: counter.value, timeThreshold, alertThreshold })
@@ -94,21 +93,16 @@
   }
 
   onMounted(async () => {
-    console.log('[DisconnectHandler] mounted')
     await nextTick()
-    if (process.client) {
-      startCountdown()
-      window.addEventListener('mousemove', resetCountDown)
-    }
+    startCountdown()
+    window.addEventListener('mousemove', resetCountDown)
   })
 
   onUnmounted(() => {
-    if (process.client) {
-      window.addEventListener('mousemove', resetCountDown)
-      clearCountdown()
-      stopWatchingCounter()
-      stopWatchingIsOpen()
-    }
+    window.addEventListener('mousemove', resetCountDown)
+    clearCountdown()
+    stopWatchingCounter()
+    stopWatchingIsOpen()
   })
 </script>
 
