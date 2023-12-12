@@ -1,5 +1,6 @@
 import { H3Event } from 'h3'
 import { signJwt } from '~/server/lib/jwt'
+import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
 
 export default defineEventHandler(event => {
@@ -15,7 +16,7 @@ export default defineEventHandler(event => {
 
   const {
     auth: { jwtKey }
-  } = configs
+  } = config
 
   const newSessionToken = signJwt(user, jwtKey, tokenValidationInMinutes)
 

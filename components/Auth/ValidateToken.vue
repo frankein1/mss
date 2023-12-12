@@ -17,6 +17,11 @@
 
   const route = useRoute()
   const store = useAuthStore()
+  const {
+    public: {
+      auth: { tokenValidationInMinutes }
+    }
+  } = useRuntimeConfig()
   const token = route.query.token as string
   const redirectUrl =
     (route.query.redirectUrl as string | undefined) || useHomePage()
@@ -33,7 +38,7 @@
       onResponse({ response }) {
         const { _data: data } = response
         if (data) {
-          store.login(data.user)
+          store.init(data.user, tokenValidationInMinutes)
           navigateTo(redirectUrl)
         }
       }

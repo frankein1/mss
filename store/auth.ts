@@ -12,25 +12,22 @@ export const useAuthStore = defineStore('auth', {
   }),
 
   actions: {
+    init(user: JwtUser, tokenValidationInMinutes: number) {
+      this.login(user)
+      this.startRefreshToken(tokenValidationInMinutes)
+    },
     login(user: JwtUser) {
       this.user = user
-      this.startRefreshToken()
     },
     logout() {
       this.user = null
-      this.stopRefreshToken()
     },
     stopRefreshToken() {
       if (this.timer) {
         clearTimeout(this.timer)
       }
     },
-    startRefreshToken() {
-      const {
-        public: {
-          auth: { tokenValidationInMinutes }
-        }
-      } = useRuntimeConfig()
+    startRefreshToken(tokenValidationInMinutes: number) {
       if (this.timer) {
         clearTimeout(this.timer)
       }
@@ -38,7 +35,7 @@ export const useAuthStore = defineStore('auth', {
         async () => {
           const user = await $fetch<JwtUser>('/api/auth/refresh-token')
           if (user) {
-            this.startRefreshToken()
+            this.startRefreshToken(tokenValidationInMinutes)
           }
         },
         minutesToMillis(tokenValidationInMinutes) / 2
