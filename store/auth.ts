@@ -3,12 +3,10 @@ import { defineStore } from 'pinia'
 import { JwtUser } from '~/types/user'
 import { minutesToMillis } from '~/utils/time'
 
-type Timer = ReturnType<typeof setTimeout>
-
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null as JwtUser | null,
-    timer: null as Timer | null
+    timer: null as NodeJS.Timeout | null
   }),
 
   actions: {
