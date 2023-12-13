@@ -1,11 +1,9 @@
 import { useAuthStore } from '~/store/auth'
 import { RoutePath } from '~/utils/routing'
 
-export default defineNuxtRouteMiddleware(async to => {
+export default defineNuxtRouteMiddleware(to => {
   const { $pinia } = useNuxtApp()
   const authStore = useAuthStore($pinia)
-
-  await useUserFromCookie()
 
   const isAuthenticated = authStore.isAuthenticated
   const isAdminRoute = to.fullPath.startsWith(RoutePath.Admin())
@@ -16,6 +14,7 @@ export default defineNuxtRouteMiddleware(async to => {
       query: { redirectUrl: to.fullPath }
     })
   }
+
   if (!authStore.isActive) {
     return navigateTo(RoutePath.ErrorDisabledAccount())
   }

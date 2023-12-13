@@ -13,13 +13,11 @@ import { adminRouter } from './admin/router'
 import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
 import { usersActivityRouter } from './usersActivity/router'
-import { authRouter } from './authRouter'
 import { beneficiaryDraftRouter } from './beneficiaryDraft/router'
 import { router } from '~/server/trpc'
 
 export const appRouter = router({
   admin: adminRouter,
-  auth: authRouter,
   beneficiary: beneficiaryRouter,
   notification: notificationRouter,
   config: configRouter,

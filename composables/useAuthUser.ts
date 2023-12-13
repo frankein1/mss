@@ -1,6 +1,5 @@
 import { useAuthStore } from '~/store/auth'
 import { JwtUser } from '~/types/user'
-import { RoutePath } from '~/utils/routing'
 
 export function useAuthUser(): ComputedRef<JwtUser> {
   const authStore = useAuthStore()
@@ -9,10 +8,7 @@ export function useAuthUser(): ComputedRef<JwtUser> {
     const user = authStore.user
 
     if (!user) {
-      navigateTo(RoutePath.AuthLogout())
-
-      // Return a dumb but valid user
-      return {} as JwtUser
+      throw createError('No User found in the store')
     }
     return user
   })

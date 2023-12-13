@@ -13,7 +13,7 @@ export const cookieOptions = ({
   expiresInMinutes: number
 }): CookieOptions => {
   return {
-    httpOnly: true,
+    httpOnly: false,
     secure: process.env.NODE_ENV === 'production',
     expires: new Date(Date.now() + minutesToMillis(expiresInMinutes)),
     sameSite: 'strict'

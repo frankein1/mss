@@ -46,11 +46,6 @@
   import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
 
-  const {
-    public: {
-      auth: { tokenValidationInMinutes }
-    }
-  } = useRuntimeConfig()
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
   const auth = useAuthStore()
@@ -63,7 +58,7 @@
     useTrpcMutation({
       mutation: () => trpcClient.user.acceptCGU.mutate(),
       onSuccess: user => {
-        auth.init(user, tokenValidationInMinutes)
+        auth.login(user)
         navigateTo(RoutePath.AppOverview())
       },
       onFailure: () => {

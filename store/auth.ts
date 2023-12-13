@@ -1,43 +1,18 @@
 import { StructureType, UserRole, UserStatus } from '@prisma/client'
 import { defineStore } from 'pinia'
 import { JwtUser } from '~/types/user'
-import { minutesToMillis } from '~/utils/time'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    user: null as JwtUser | null,
-    timer: null as NodeJS.Timeout | null
+    user: null as JwtUser | null
   }),
 
   actions: {
-    init(user: JwtUser, tokenValidationInMinutes: number) {
-      this.login(user)
-      this.startRefreshToken(tokenValidationInMinutes)
-    },
     login(user: JwtUser) {
       this.user = user
     },
     logout() {
       this.user = null
-    },
-    stopRefreshToken() {
-      if (this.timer) {
-        clearTimeout(this.timer)
-      }
-    },
-    startRefreshToken(tokenValidationInMinutes: number) {
-      if (this.timer) {
-        clearTimeout(this.timer)
-      }
-      this.timer = setTimeout(
-        async () => {
-          const user = await $fetch<JwtUser>('/api/auth/refresh-token')
-          if (user) {
-            this.startRefreshToken(tokenValidationInMinutes)
-          }
-        },
-        minutesToMillis(tokenValidationInMinutes) / 2
-      )
     }
   },
 
