@@ -36,7 +36,7 @@
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
   const isMinistryAgent = useMinistryAgent()
-  const user = useAuthUser()
+  const user = useAuth()
 
   const emit = defineEmits<{
     filter: [filters: FollowupFilterInput]

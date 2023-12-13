@@ -61,7 +61,7 @@
   //   )
   // )
 
-  const user = useAuthUser()
+  const user = useAuth()
 
   const canSetPrivateSynthesis = computed(() =>
     canEditFollowupPrivateSynthesis(user.value, props.followup)

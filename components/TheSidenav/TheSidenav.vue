@@ -92,7 +92,7 @@
   import { useAuthStore } from '~/store/auth'
 
   const homePage = useHomePage()
-  const user = useAuthUser()
+  const user = useAuth()
   const authStore = useAuthStore()
 
   const menuItems = computed(() => {

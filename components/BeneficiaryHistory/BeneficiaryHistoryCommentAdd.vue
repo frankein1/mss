@@ -64,7 +64,7 @@
     }
   })
 
-  const currentUser = useAuthUser()
+  const currentUser = useAuth()
 
   const onAddComment = handleSubmit(values => {
     useTrpcMutation({
