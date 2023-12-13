@@ -53,7 +53,7 @@
 
   const isEditing = ref(false)
 
-  const user = useAuthUser()
+  const { user } = useAuth()
 
   const canEditComment = computed(() =>
     canEditCommentRule(user.value, props.comment)
