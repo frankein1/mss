@@ -14,7 +14,7 @@ import {
   UpdateBeneficiaryGeneralInformationInput,
   updateBeneficiaryGeneralInformationSchema
 } from '~/server/schema'
-import { prepareRelationConnections } from '~/utils/prisma'
+import { prepareRelationConnections, prepareDateFields } from '~/utils/prisma'
 import { BeneficiaryRepo } from '~/server/database'
 
 const securityCheck = async (
@@ -42,7 +42,8 @@ const handler = async ({
   const target = await getBeneficiarySecurityTarget(user, input.id)
 
   const permissions = getBeneficiaryPermissions({ user, structure, target })
-  const data = filterInput({ input, permissions })
+  const filteredData = filterInput({ input, permissions })
+  const data = prepareDateFields(filteredData, ['birthDate', 'deathDate'])
 
   if (data.noPhone) {
     data.phone1 = null

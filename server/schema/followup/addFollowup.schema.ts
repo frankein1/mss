@@ -6,12 +6,12 @@ import {
   // FollowupSignalement
 } from '@prisma/client'
 import { z } from 'zod'
-
 import {
   requiredNativeEnum,
   withEmptyValueOptionalNativeEnum,
   stringConstraint,
-  numeroPegaseContraint
+  numeroPegaseContraint,
+  dateOrEmpty
 } from '../helpers.schema'
 import {
   errorMessages,
@@ -42,7 +42,7 @@ export const addFollowupSchema = z.object({
   structureName: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),
-  dueDate: z.coerce.date().nullish(),
+  dueDate: dateOrEmpty,
   thirdPersonName: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .nullish(),

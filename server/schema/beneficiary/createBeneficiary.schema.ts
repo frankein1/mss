@@ -5,7 +5,8 @@ import {
   phoneConstraint,
   requiredNativeEnum,
   numeroPegaseContraint,
-  stringOrEmpty
+  stringOrEmpty,
+  dateOrEmpty
 } from '../helpers.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
@@ -21,7 +22,7 @@ export const createBeneficiarySchema = z.object({
   usualName: stringOrEmpty(beneficiaryLastNameSchema),
   birthName: stringOrEmpty(beneficiaryLastNameSchema),
   firstName: beneficiaryFirstNameOrEmptySchema,
-  birthDate: z.coerce.date().nullish(),
+  birthDate: dateOrEmpty,
   phone1: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
   numeroPegase: stringOrEmpty(numeroPegaseContraint)

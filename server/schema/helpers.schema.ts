@@ -92,3 +92,5 @@ export const amountNumber = z.preprocess(
     .number({ invalid_type_error: validNumber })
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
 )
+
+export const dateOrEmpty = z.coerce.date().nullish().or(z.literal(''))

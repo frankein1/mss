@@ -8,6 +8,7 @@ import {
 } from '~/server/schema'
 import { SecurityRuleGrantee, canEditHelpRequest } from '~/server/security'
 import { HelpRequestRepo } from '~/server/database'
+import { prepareDateFields } from '~/utils/prisma'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
@@ -33,9 +34,12 @@ const handler = async ({
   input: QuickEditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
+  const data =
+    'paymentDate' in rest ? prepareDateFields(rest, ['paymentDate']) : rest
+
   const helpRequest = await HelpRequestRepo.prisma.update({
     where: { id },
-    data: rest,
+    data,
     select: prepareGetHelpRequestsPageSelect(user)
   })
 

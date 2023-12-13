@@ -7,7 +7,8 @@ import {
   phoneConstraint,
   stringConstraint,
   emailOrEmpty,
-  stringOrEmpty
+  stringOrEmpty,
+  dateOrEmpty
 } from './helpers.schema'
 import { maxStringLengthMessage } from '~/utils/zod'
 
@@ -39,7 +40,7 @@ export const createOrUpdateTaxHouseholdSchema = createOrUpdateEntourageSchema
         birthName: stringOrEmpty(beneficiaryLastNameSchema)
       })
       .nullish(),
-    birthDate: z.coerce.date().nullish()
+    birthDate: dateOrEmpty
   })
   .omit({ city: true })
 

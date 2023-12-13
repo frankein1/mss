@@ -11,7 +11,11 @@ import {
   markFollowupTypeAsUsed
 } from '~/server/query'
 import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
-import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import {
+  connect,
+  prepareDocumentsMutations,
+  prepareDateFields
+} from '~/utils/prisma'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { prepareNewHistoryElementNotification } from '~/utils/notification'
 
@@ -32,7 +36,14 @@ const handler = async ({
     financialSupport,
     externalStructure,
     ...otherData
-  } = input
+  } = prepareDateFields(input, [
+    'decisionDate',
+    'dispatchDate',
+    'dueDate',
+    'examinationDate',
+    'handlingDate',
+    'paymentDate'
+  ])
 
   let instructorOrganization
   if (instructorOrganizationId) {

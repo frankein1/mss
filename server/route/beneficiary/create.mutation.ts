@@ -8,6 +8,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryRepo } from '~/server/database'
+import { prepareDateFields } from '~/utils/prisma'
 
 const securityCheck = AllowSecurityCheck
 
@@ -30,7 +31,7 @@ const handler = async ({
         connect: referents.map(referent => ({ id: referent }))
       },
       createdById: user.id,
-      ...data
+      ...prepareDateFields(data, ['birthDate'])
     }
   })
 

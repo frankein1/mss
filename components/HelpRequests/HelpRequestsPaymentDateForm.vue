@@ -1,7 +1,6 @@
 <template>
   <form
     novalidate
-    @change="onUpdatePaymentDate"
     @submit.prevent
   >
     <VeeInput
@@ -32,12 +31,18 @@
     updated: [helpRequest: HelpRequestItem]
   }>()
 
-  const { handleSubmit } = useForm<QuickEditHelpRequestPaymentDateInput>({
-    validationSchema: toTypedSchema(quickEditHelpRequestPaymentDateSchema),
-    initialValues: {
-      id: props.helpRequest.id,
-      paymentDate: props.helpRequest.paymentDate
-    }
+  const { handleSubmit, values } =
+    useForm<QuickEditHelpRequestPaymentDateInput>({
+      validationSchema: toTypedSchema(quickEditHelpRequestPaymentDateSchema),
+      initialValues: {
+        id: props.helpRequest.id,
+        paymentDate: props.helpRequest.paymentDate
+      }
+    })
+
+  // Date input behave differently as they only change values on blur so the submission is only done once the values change
+  watch(values, () => {
+    onUpdatePaymentDate()
   })
 
   const onUpdatePaymentDate = handleSubmit(helpRequest => {
