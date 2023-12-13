@@ -2,10 +2,16 @@ import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { GetHistoryInput, getHistorySchema } from '~/server/schema'
 import { TypeSuivi } from '~/types/history'
-import { getBeneficiarySecurityTarget } from '~/server/query'
+import {
+  getBeneficiarySecurityTarget,
+  BeneficiarySecurityTarget
+} from '~/server/query'
 import { ProtectedAppContext } from '~/server/trpc'
-import { getBeneficiaryHistoryPermissions } from '~/server/security'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import {
+  getBeneficiaryHistoryPermissions,
+  getDocumentPermissions,
+  SecurityRuleGrantee
+} from '~/server/security'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { BeneficiaryHistoryRepo } from '~/server/database'
 
@@ -104,7 +110,9 @@ function getHistories(
           documents: {
             select: {
               key: true,
-              name: true
+              name: true,
+              createdById: true,
+              confidential: true
             }
           },
           comments: {
@@ -126,7 +134,9 @@ function getHistories(
           documents: {
             select: {
               key: true,
-              name: true
+              name: true,
+              createdById: true,
+              confidential: true
             }
           },
           comments: {
@@ -150,13 +160,29 @@ function getHistories(
 
 type Histories = Prisma.PromiseReturnType<typeof getHistories>
 
-function flattenHistories(histories: Histories) {
+function flattenHistories(
+  histories: Histories,
+  { user, structure }: ProtectedAppContext,
+  beneficiary: BeneficiarySecurityTarget
+) {
   return histories.map(history => {
     const { followup, helpRequest, ...data } = history
 
+    const documents = followup?.documents || helpRequest?.documents
+
+    const documentsWithPermissions = documents?.map(document => ({
+      document,
+      permissions: getDocumentPermissions({
+        user,
+        structure,
+        beneficiary,
+        document
+      })
+    }))
+
     return {
       ...data,
-      documents: followup?.documents || helpRequest?.documents,
+      documents: documentsWithPermissions,
       comments: followup?.comments || helpRequest?.comments,
       hasUnreadNotifications: !!(
         followup?._count.notifications || helpRequest?._count.notifications
@@ -169,24 +195,25 @@ function flattenHistories(histories: Histories) {
 
 const handler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: GetHistoryInput
   ctx: ProtectedAppContext
 }) => {
   const { beneficiaryId, filters } = input
 
-  const [totalCount, histories] = await Promise.all([
-    BeneficiaryHistoryRepo.count(user, {
+  const [totalCount, histories, beneficiary] = await Promise.all([
+    BeneficiaryHistoryRepo.count(ctx.user, {
       where: {
         beneficiaryId
       }
     }),
-    getHistories(filters, user, beneficiaryId)
+    getHistories(filters, ctx.user, beneficiaryId),
+    getBeneficiarySecurityTarget(ctx.user, input.beneficiaryId)
   ])
 
   return {
-    histories: flattenHistories(histories),
+    histories: flattenHistories(histories, ctx, beneficiary),
     totalCount
   }
 }

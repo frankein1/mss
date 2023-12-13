@@ -1,17 +1,19 @@
 <template>
   <p>
-    <span class="information-label">Documents :</span>
+    <span class="information-label">Documents : </span>
     <span
-      v-for="(document, index) in documents"
+      v-for="({ document, permissions }, index) in documents"
       :key="document.key"
     >
       <button
+        v-if="permissions.view"
         class="fr-link"
         target="_blank"
         :title="`Voir ${document.name} - Ouvre une nouvelle fenêtre`"
         @click="onView(document.key)"
       >
         {{ document.name }}</button
+      ><template v-else>{{ document.name }} (confidentiel)</template
       ><template v-if="index != documents.length - 1">, </template>
     </span>
   </p>
