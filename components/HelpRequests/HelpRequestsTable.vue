@@ -99,7 +99,7 @@
     emit
   )
 
-  const user = useAuthUser()
+  const { user } = useAuth()
 
   const canViewAnyHelpRequestDetails = computed(() =>
     canViewAnyHelpRequestDetailsRule(user.value)

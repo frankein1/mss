@@ -92,7 +92,7 @@
   }
 </script>
 
-<style>
+<style scoped>
   .page-container {
     padding-left: 10em;
     padding-right: 10em;

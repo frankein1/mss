@@ -29,7 +29,7 @@
   import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
   import { prismaDecimalToNumber } from '~/utils/prisma'
 
-  const user = useAuthUser()
+  const { user } = useAuth()
 
   const props = defineProps<{
     isSubmitting: boolean

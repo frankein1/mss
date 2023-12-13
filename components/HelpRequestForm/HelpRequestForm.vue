@@ -334,7 +334,7 @@
     submit: [payload: Event]
   }>()
 
-  const user = useAuthUser()
+  const { user } = useAuth()
 
   const followUpTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')

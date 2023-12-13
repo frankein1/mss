@@ -1,3 +1,5 @@
+import { minutesToMillis } from '../time'
+
 type CookieOptions = {
   httpOnly: boolean
   secure: boolean
@@ -6,14 +8,14 @@ type CookieOptions = {
 }
 
 export const cookieOptions = ({
-  expiresIn
+  expiresInMinutes
 }: {
-  expiresIn: number
+  expiresInMinutes: number
 }): CookieOptions => {
   return {
-    httpOnly: true,
+    httpOnly: false,
     secure: process.env.NODE_ENV === 'production',
-    expires: new Date(Date.now() + expiresIn * 1000),
+    expires: new Date(Date.now() + minutesToMillis(expiresInMinutes)),
     sameSite: 'strict'
   }
 }

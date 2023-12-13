@@ -14,6 +14,7 @@ export default defineNuxtRouteMiddleware(to => {
       query: { redirectUrl: to.fullPath }
     })
   }
+
   if (!authStore.isActive) {
     return navigateTo(RoutePath.ErrorDisabledAccount())
   }

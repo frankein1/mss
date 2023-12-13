@@ -351,7 +351,7 @@
     return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
   })
 
-  const user = useAuthUser()
+  const { user } = useAuth()
 
   const allowEditStructure = computed(() => canEditStructure(user.value))
 

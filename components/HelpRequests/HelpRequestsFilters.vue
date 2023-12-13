@@ -30,7 +30,7 @@
   import { ministerOptions } from '~/client/options/ministry'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
-  const user = useAuthUser()
+  const { user } = useAuth()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
   const isMinistryAgent = useMinistryAgent()
