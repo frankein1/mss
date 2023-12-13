@@ -36,7 +36,7 @@
 
   useHead({ title })
 
-  const user = useAuthUser()
+  const { user } = useAuth()
   const trpcClient = useTrpcClient()
 
   const {

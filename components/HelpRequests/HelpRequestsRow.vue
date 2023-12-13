@@ -121,7 +121,7 @@
     updated: [helpRequest: HelpRequestItem]
   }>()
 
-  const user = useAuthUser()
+  const { user } = useAuth()
 
   const helpRequestPath = computed(() =>
     RoutePath.AppBeneficiary(props.helpRequest.beneficiary.id, {

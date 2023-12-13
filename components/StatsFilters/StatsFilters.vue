@@ -19,7 +19,7 @@
   import type { FilterProp } from '~/types/filter'
   import { canViewStatsByReferent } from '~/server/security'
 
-  const user = useAuthUser()
+  const { user } = useAuth()
 
   const props = defineProps<{
     followupTypeOptions: Options
