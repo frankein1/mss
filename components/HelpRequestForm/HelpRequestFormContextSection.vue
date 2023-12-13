@@ -125,7 +125,7 @@
   import { externalOrganisationOptions } from '~/client/options/helpRequest'
 
   const isMinistryAgent = useMinistryAgent()
-  const user = useAuthUser()
+  const { user } = useAuth()
 
   const props = defineProps<{
     followupTypes: FollowupType[]
