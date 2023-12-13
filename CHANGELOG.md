@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.12.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.11.1...v1.12.0) (2023-12-13)
+
+
+### Features
+
+* **beneficiaire:** Affiche des champs relatifs aux ressources des autres membres du foyer en fonction de l'ajout de membres au foyer fiscal de la fiche ([302745f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/302745ffd5f67f5b2c35abc2b0d13fa24e1983da)), closes [#241](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/241)
+* Être notifié quand un.e collègue ajoute un suivi à un bénéficiaire dont je suis référent ([faafb10](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/faafb1045ed803c00e51d0a71de3246ca2fe882a)), closes [#239](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/239)
+* Gestion de message d'alerte avant déconnection ([66a729d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/66a729d7056156c821dcdcc6ab0209b7f4c830fb))
+* Gestion du rafraichissement du jeton de sécurité ([40257e4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/40257e49c5f238edc8aea07e4781185c1a5da372))
+* **instruction:** Ajoute une modale pour sélectionner le type d'instructions de dossier que l'on veut créer ([52c5d90](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/52c5d901b07c511f580ac43327ee2910765ece4a)), closes [#243](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/243) [#247](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/247)
+* **instruction:** Renomme instruction de demande d'aide en instruction de dossier partout dans l'application ([0e41e16](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0e41e168f6976fdae711f08a3fb7da7f65f5148b)), closes [#237](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/237)
+* Marque le cookie en http-only ([1b70e0e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1b70e0e994f509144fa1de583fcf0f8890edf980))
+* Mise à jour de nuxt-security ([11a138c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/11a138ccc519c10ac6436643f77635ad89327842))
+* statistics contrast ([da65e55](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/da65e550ef63d8b209a1d492a29415f2dff47a5e)), closes [#251](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/251)
+* **stats:** Afficher la répartition des bénéficiaires par villes ([7976819](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7976819bb806571e19d7c9f59733c4318fc953ad)), closes [#240](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/240)
+
+
+### Bug Fixes
+
+* **auth:** Renvoie correctement une erreur lorsque le retour de l'authentication d'InclusionConnect ne présente pas les paramètres attendus ([4a2d97b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4a2d97b7a6921b7241f3c8033afc17adef981d91)), closes [#262](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/262) [#265](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/265)
+* **auth:** Reprise de la validatation du token pour éviter un freeze de la page ([624969e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/624969e3fd2d6a95182859143c47f2c5ac7fee9c))
+* **beneficiaire:** Corrige un bug qui rendait cliquable le lien vers un document confidentiel auquel l’utilisateur n’a pas accès depuis un élément de l’historique du bénéficiaire. ([504ad5f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/504ad5fdd2bdbda55fcfdc7673e0e241d48cd36e)), closes [#272](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/272)
+* Correctifs mineurs ([c21b5ca](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c21b5ca9ffb6af291b8e91a8a8ce9b4eb2f6913e))
+* Correction et amélioration des vérifications de validité du jeton ([06d2a98](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/06d2a987b44b8330ff6582286c4a19b63c90c132))
+* Corrige un bug qui empêche de retirer une date déjà saisie ([2b9d6bb](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2b9d6bb99a7f54737392518325c65002c1a0aef4)), closes [#270](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/270)
+* Corrige un bug qui empêche de sélectionner une adresse dans un DROM dans les formuaires ([b6a44e8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b6a44e8c27e4311e71b2fd3eca9a8eaff0e896bf)), closes [#275](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/275)
+* Désactive la modale de choix de type d'instruction de dossier ([3aee473](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3aee4731f941fd2afef1f663082de06343e4d738))
+* **document:** ajout d'un documnt closes [#263](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/263) ([baba8d4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/baba8d404449a6a323225ee554f58ff8ef3b6807))
+* **matomo:** enable matomo on dev environment ([0f48434](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0f484340cc008a016e2c3ec916566f4d989bc294))
+* Modification de la durée de validation du jeton de sécurité ([dc9a04c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/dc9a04c0ff8331e63d0298cfb784bd57388af183))
+
 ### [1.11.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.11.0...v1.11.1) (2023-12-11)
 
 
