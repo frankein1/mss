@@ -15,15 +15,19 @@
         </NuxtLink>
       </li>
       <li v-if="permissions?.create.helpRequest">
-        <button
+        <NuxtLink
+          :to="
+            RoutePath.AppBeneficiaryHelpRequestAdd(
+              beneficiaryId,
+              HelpRequestSubject.Other
+            )
+          "
           class="fr-btn fr-icon-file-add-line help-request-btn"
           title="Instruire un dossier"
-          data-fr-opened="false"
-          aria-controls="global-modal"
-          @click="onAddHelpRequest"
+          target="_self"
         >
           Instruction de dossier
-        </button>
+        </NuxtLink>
       </li>
       <li class="mesdroitssociaux-btn-container">
         <NuxtLink
@@ -40,22 +44,14 @@
 </template>
 
 <script setup lang="ts">
+  import { HelpRequestSubject } from '@prisma/client'
   import { RoutePath } from '~/utils/routing'
   import { BeneficiaryPermissions } from '~/server/security'
-  import HelpRequestModal from '~/components/HelpRequestModal/HelpRequestModal.vue'
 
-  const props = defineProps<{
+  defineProps<{
     beneficiaryId: string
     permissions: BeneficiaryPermissions | undefined
   }>()
-
-  function onAddHelpRequest() {
-    useModal().open({
-      title: 'Nouvelle instruction de dossier',
-      contentComponent: HelpRequestModal,
-      contentComponentProps: { beneficiaryId: props.beneficiaryId }
-    })
-  }
 </script>
 
 <style scoped lang="scss">
