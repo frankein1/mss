@@ -2,7 +2,8 @@ import type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
   SecurityTargetWithReferents,
-  SecurityRule
+  SecurityRule,
+  SecurityTargetWithCreator
 } from './types'
 import { hasAllowedRole, isReferent } from './helpers'
 export { hasAllowedRole, isReferent }
@@ -13,7 +14,8 @@ export type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
   SecurityTargetWithReferents,
-  SecurityRule
+  SecurityRule,
+  SecurityTargetWithCreator
 }
 
 export * from './health'
@@ -47,18 +49,6 @@ export {
   canViewFollowupDetails,
   canViewAnyFollowupDetails
 } from './followup'
-
-export {
-  canViewHelpRequestDetails,
-  canCreateHelpRequest,
-  canDeleteHelpRequest,
-  canEditHelpRequest,
-  canEditHelpRequestPrivateSynthesis,
-  canListBeneficiaryHelpRequests,
-  canViewHelpRequest,
-  canViewHelpRequestPrivateSynthesis,
-  canViewAnyHelpRequestDetails
-} from './helpRequest'
 
 export { canViewStats, canViewStatsByReferent } from './stats'
 

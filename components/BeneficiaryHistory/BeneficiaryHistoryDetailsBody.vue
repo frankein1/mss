@@ -84,13 +84,9 @@
   import { RoutePath } from '~/utils/routing'
   import {
     canEditFollowup,
-    canEditHelpRequest,
     canDeleteFollowup,
-    canDeleteHelpRequest,
-    canViewHelpRequestDetails,
     canViewFollowupDetails,
-    canViewFollowupPrivateSynthesis,
-    canViewHelpRequestPrivateSynthesis
+    canViewFollowupPrivateSynthesis
   } from '~/server/security'
 
   const props = defineProps<{
@@ -101,6 +97,11 @@
   const emit = defineEmits<{
     deleted: []
   }>()
+
+  const { data: helpRequestPermissions } =
+    await useTrpcClient().permissions.getHelpRequestEditionPermissions.useQuery(
+      props.history.isFollowup ? undefined : { id: props.history.id }
+    )
 
   const comments = ref(props.history.comments || [])
 
@@ -113,32 +114,28 @@
     return routeWithParams(props.history.beneficiaryId, props.history.id)
   })
 
-  const canEditRule = computed(() =>
-    props.history.isFollowup ? canEditFollowup : canEditHelpRequest
-  )
-
   const canEdit = computed(() =>
-    canWithTarget(canEditRule.value, props.history)
-  )
-
-  const canDeleteRule = computed(() =>
-    props.history.isFollowup ? canDeleteFollowup : canDeleteHelpRequest
+    props.history.isFollowup
+      ? canWithTarget(canEditFollowup, props.history)
+      : helpRequestPermissions.value?.edit
   )
 
   const canDelete = computed(() =>
-    canWithTarget(canDeleteRule.value, props.history)
+    props.history.isFollowup
+      ? canWithTarget(canDeleteFollowup, props.history)
+      : helpRequestPermissions.value?.delete
   )
 
   const canViewHistoryDetails = computed(() =>
     props.history.isFollowup
       ? canWithTarget(canViewFollowupDetails, props.history)
-      : canWithTarget(canViewHelpRequestDetails, props.history.beneficiary)
+      : helpRequestPermissions.value?.get.details
   )
 
   const canViewPrivateSynthesis = computed(() =>
     props.history.isFollowup
       ? canWithTarget(canViewFollowupPrivateSynthesis, props.history)
-      : canWithTarget(canViewHelpRequestPrivateSynthesis, props.history)
+      : helpRequestPermissions.value?.get.privateSynthesis
   )
 
   function onCommentAdded(comment: HistoryItemComment) {

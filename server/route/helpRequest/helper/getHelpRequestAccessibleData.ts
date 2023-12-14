@@ -1,17 +1,16 @@
 import { HelpRequestWithRelations } from '~/server/query/helpRequests'
-import {
-  canViewHelpRequestDetails,
-  canViewHelpRequestPrivateSynthesis
-} from '~/server/security'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { HelpRequestPermissions } from '~/server/security'
 
 export function getHelpRequestAccessibleData(
-  user: SecurityRuleGrantee,
+  permissions: HelpRequestPermissions,
   helpRequest: NonNullable<HelpRequestWithRelations>
 ) {
   const meta = getHelpRequestMeta(helpRequest)
-  const details = getHelpRequestDetails(user, helpRequest)
-  const privateSynthesis = getHelpRequestPrivateSynthesis(user, helpRequest)
+  const details = getHelpRequestDetails(permissions, helpRequest)
+  const privateSynthesis = getHelpRequestPrivateSynthesis(
+    permissions,
+    helpRequest
+  )
 
   return {
     ...meta,
@@ -42,10 +41,10 @@ function getHelpRequestMeta(
 }
 
 function getHelpRequestDetails(
-  user: SecurityRuleGrantee,
+  permissions: HelpRequestPermissions,
   helpRequest: NonNullable<HelpRequestWithRelations>
 ) {
-  if (!canViewHelpRequestDetails(user, helpRequest.beneficiary)) {
+  if (!permissions.get.details) {
     return {}
   }
 
@@ -61,8 +60,10 @@ function getHelpRequestDetails(
     handlingDate: helpRequest.handlingDate,
     instructorOrganizationId: helpRequest.instructorOrganizationId,
     instructorOrganization: helpRequest.instructorOrganization,
-    ministre: helpRequest.ministre,
-    numeroPegase: helpRequest.numeroPegase,
+    ministre: permissions.get.ministre ? helpRequest.ministre : undefined,
+    numeroPegase: permissions.get.numeroPegase
+      ? helpRequest.numeroPegase
+      : undefined,
     paymentDate: helpRequest.paymentDate,
     paymentMethod: helpRequest.paymentMethod,
     prescribingOrganizationId: helpRequest.prescribingOrganizationId,
@@ -75,10 +76,10 @@ function getHelpRequestDetails(
 }
 
 function getHelpRequestPrivateSynthesis(
-  user: SecurityRuleGrantee,
+  permissions: HelpRequestPermissions,
   helpRequest: NonNullable<HelpRequestWithRelations>
 ) {
-  if (!canViewHelpRequestPrivateSynthesis(user, helpRequest)) {
+  if (!permissions.get.privateSynthesis) {
     return {}
   }
 
