@@ -1,6 +1,6 @@
 <template>
   <div
-    class="beneficiary-history-details-accordion__title"
+    class="beneficiary-history-details-collapse__title"
     :class="{ expanded: expanded }"
   >
     <div class="history-details__icon">
@@ -51,7 +51,7 @@
         class="fr-btn collapse-btn fr-btn--tertiary"
         :class="{ expanded: expanded }"
         aria-expanded="false"
-        :aria-controls="accordionId"
+        :aria-controls="collapseId"
         :title="collapseBtnTitle"
         @click="emit('toggleExpand')"
       >
@@ -76,7 +76,7 @@
   const props = withDefaults(
     defineProps<{
       history: HistoryItem
-      accordionId: string
+      collapseId: string
       expanded?: boolean
       hasUnreadNotifications?: boolean
     }>(),
@@ -181,7 +181,7 @@
     }
   }
 
-  .beneficiary-history-details-accordion__title {
+  .beneficiary-history-details-collapse__title {
     position: relative;
     display: flex;
     justify-content: flex-start;
