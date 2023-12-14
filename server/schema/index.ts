@@ -64,11 +64,11 @@ export type {
 
 export {
   updateNotificationSchema,
-  getNotificationSchema
+  getNotificationsSchema
 } from './notification.schema'
 export type {
   UpdateNotificationInput,
-  GetNotificationInput
+  GetNotificationsInput
 } from './notification.schema'
 
 export {

@@ -12,13 +12,13 @@ export { updateNotificationSchema }
 
 export type { UpdateNotificationInput }
 
-const getNotificationSchema = z.object({
+const getNotificationsSchema = z.object({
   onlyUnread: z.boolean(),
   type: z.nativeEnum(NotificationType).nullish()
 })
 
-type GetNotificationInput = z.infer<typeof getNotificationSchema>
+type GetNotificationsInput = z.infer<typeof getNotificationsSchema>
 
-export { getNotificationSchema }
+export { getNotificationsSchema }
 
-export type { GetNotificationInput }
+export type { GetNotificationsInput }
