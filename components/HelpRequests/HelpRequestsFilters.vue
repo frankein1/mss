@@ -23,7 +23,7 @@
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
-  import { canViewAnyHelpRequestDetails, isReferent } from '~/server/security'
+  import { isReferent, HelpRequestPermissions } from '~/server/security'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
@@ -35,6 +35,8 @@
   const filtersStore = useFiltersStore()
   const isMinistryAgent = useMinistryAgent()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
+
+  const props = defineProps<{ permissions: HelpRequestPermissions | null }>()
 
   const emit = defineEmits<{
     filter: [filters: HelpRequestFilterInput]
@@ -115,7 +117,7 @@
       }
     ]
 
-    if (canViewAnyHelpRequestDetails(user.value)) {
+    if (props.permissions?.get.anyExaminationDate) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -187,7 +189,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!canViewAnyHelpRequestDetails(user.value)) {
+    if (!props.permissions?.get.anyExaminationDate) {
       return new Map()
     }
 

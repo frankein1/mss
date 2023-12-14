@@ -9,6 +9,7 @@
     <template v-else>
       <HelpRequestsFilters
         class="fr-px-5v"
+        :permissions="permissions"
         @filter="filters = $event"
       />
       <hr />
@@ -30,6 +31,7 @@
         v-model:sort="orderBy"
         :help-requests="helpRequests"
         :pending="pending"
+        :permissions="permissions"
         @help-request-updated="onHelpRequestUpdated"
       />
       <AtomPagination
@@ -82,6 +84,9 @@
     pending,
     error
   } = await trpcClient.helpRequest.getHelpRequests.useQuery(queryInput)
+
+  const { data: permissions } =
+    await trpcClient.permissions.getHelpRequestEditionPermissions.useQuery()
 
   const helpRequestsCount = computed(
     () => helpRequestsRequest.value?.count || 0

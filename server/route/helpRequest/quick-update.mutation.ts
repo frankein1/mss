@@ -6,15 +6,20 @@ import {
   QuickEditHelpRequestInput,
   quickEditHelpRequestSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canEditHelpRequest } from '~/server/security'
+import {
+  SecurityRuleGrantee,
+  getHelpRequestPermissions
+} from '~/server/security'
 import { HelpRequestRepo } from '~/server/database'
 import { prepareDateFields } from '~/utils/prisma'
+import { getStructureByUser } from '~/server/query'
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: QuickEditHelpRequestInput
 ) => {
-  const target = await HelpRequestRepo.findUniqueOrThrow(user, {
+  const [target, structure] = await Promise.all([
+    HelpRequestRepo.findUniqueOrThrow(user, {
     where: { id: input.id },
     include: {
       beneficiary: {
@@ -23,13 +28,16 @@ const securityCheck = async (
         }
       }
     }
-  })
-  return canEditHelpRequest(user, target)
+    }),
+    getStructureByUser(user)
+  ])
+  const permissions = getHelpRequestPermissions({ user, structure, target })
+  return permissions.edit
 }
 
 const handler = async ({
   input: { id, ...rest },
-  ctx: { user }
+  ctx: { user, structure }
 }: {
   input: QuickEditHelpRequestInput
   ctx: ProtectedAppContext
@@ -37,10 +45,12 @@ const handler = async ({
   const data =
     'paymentDate' in rest ? prepareDateFields(rest, ['paymentDate']) : rest
 
+  const permissions = getHelpRequestPermissions({ user, structure })
+
   const helpRequest = await HelpRequestRepo.prisma.update({
     where: { id },
     data,
-    select: prepareGetHelpRequestsPageSelect(user)
+    select: prepareGetHelpRequestsPageSelect(permissions)
   })
 
   return helpRequest

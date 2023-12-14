@@ -9,9 +9,9 @@ import {
   exportHelpRequestsSchema
 } from '~/server/schema'
 import {
-  canViewHelpRequest,
   canExportHistory,
-  SecurityRuleGrantee
+  SecurityRuleGrantee,
+  getHelpRequestPermissions
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
@@ -22,7 +22,7 @@ import { HelpRequestRepo } from '~/server/database'
 
 const handler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structure }
 }: {
   input: ExportHelpRequestsInput
   ctx: ProtectedAppContext
@@ -52,9 +52,15 @@ const handler = async ({
   })
 
   const rows = dataRequest.reduce((helpRequests: RowType[], helpRequest) => {
-    if (canViewHelpRequest(user, helpRequest.beneficiary)) {
+    const permissions = getHelpRequestPermissions({
+      user,
+      structure,
+      target: helpRequest
+    })
+
+    if (permissions.view) {
       const withPermissionsHelpRequest = getHelpRequestAccessibleData(
-        user,
+        permissions,
         helpRequest
       )
       helpRequests.push(getHelpRequestExportData(withPermissionsHelpRequest))
