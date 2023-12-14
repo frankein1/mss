@@ -11,7 +11,7 @@
   </div>
 
   <template v-if="isMinistryAgent">
-    <div>
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         name="numeroPegase"
         :label="helpRequestFieldLabels.numeroPegase"
@@ -19,11 +19,14 @@
       />
     </div>
 
-    <VeeSelect
-      name="ministre"
-      :label="helpRequestFieldLabels.ministre"
-      :options="withEmptyValue(ministerOptions)"
-    />
+    <div class="fr-col-12 fr-col-lg-6">
+      <VeeSelect
+        name="ministre"
+        :label="helpRequestFieldLabels.ministre"
+        :options="withEmptyValue(ministerOptions)"
+        required
+      />
+    </div>
   </template>
 
   <div class="fr-col-12">
