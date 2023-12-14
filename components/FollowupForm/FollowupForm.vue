@@ -48,6 +48,7 @@
           name="ministre"
           :label="followupFieldLabels.ministre"
           :options="withEmptyValue(ministerOptions)"
+          required
         />
       </div>
 

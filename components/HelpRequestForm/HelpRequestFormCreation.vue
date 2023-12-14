@@ -24,6 +24,8 @@
     createHelpRequestSchema
   } from '~/server/schema'
 
+  const isMinistryAgent = useMinistryAgent()
+
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: FollowupType[]
@@ -40,6 +42,7 @@
   const { handleSubmit } = useForm<CreateHelpRequestInput>({
     validationSchema: toTypedSchema(createHelpRequestSchema),
     initialValues: {
+      isMinistry: isMinistryAgent.value,
       beneficiaryId: props.beneficiaryId,
       openingDate: new Date(),
       status: HelpRequestStatus.WaitingAdditionalInformation,

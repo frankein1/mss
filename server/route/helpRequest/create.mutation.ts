@@ -34,6 +34,7 @@ const handler = async ({
     prescribingOrganizationId,
     instructorOrganizationId,
     externalStructure,
+    isMinistry: _isMinistry,
     ...otherData
   } = prepareDateFields(input, [
     'decisionDate',
