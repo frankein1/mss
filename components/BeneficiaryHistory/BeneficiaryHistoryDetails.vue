@@ -1,6 +1,7 @@
 <template>
   <li
     :id="`history-${historyId}`"
+    ref="$el"
     class="beneficiary-history-details-accordion force-focus-visible"
     :class="[typeClass, expanded ? 'expanded' : '']"
     tabindex="0"
@@ -31,6 +32,9 @@
     deleted: []
   }>()
 
+  const $el = ref<HTMLLIElement | null>(null)
+  const collapseContainer = ref<HTMLDivElement | null>(null)
+
   const expanded = ref(false)
 
   const historyId = computed(() => props.history.id)
@@ -43,6 +47,25 @@
   const hasUnreadNotifications = computed(
     () => !!props.history.hasUnreadNotifications
   )
+
+  onMounted(() => {
+    collapseContainer.value =
+      $el.value?.querySelector<HTMLDivElement>(`#${accordionId.value}`) || null
+
+    if (collapseContainer.value) {
+      collapseContainer.value.addEventListener('dsfr.conceal', onDsfrConceal)
+    }
+  })
+
+  onUnmounted(() => {
+    if (collapseContainer.value) {
+      collapseContainer.value.removeEventListener('dsfr.conceal', onDsfrConceal)
+    }
+  })
+
+  function onDsfrConceal() {
+    expanded.value = false
+  }
 </script>
 
 <style lang="scss" scoped>
