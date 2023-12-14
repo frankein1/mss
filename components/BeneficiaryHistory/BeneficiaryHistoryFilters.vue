@@ -12,7 +12,6 @@
   <AtomFilters
     v-else-if="filters"
     :filters="filters"
-    :initial-selected-values="filtersStore.beneficiaryHistory || {}"
     :results-label="resultsLabel"
     no-margin
     @filter="onFilter"
@@ -23,7 +22,6 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~~/utils/constants/alert'
-  import { useFiltersStore } from '~/store/filters'
   import type { BeneficiaryHistoryFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import {
@@ -43,7 +41,6 @@
 
   const { user } = useAuth()
   const trpcClient = useTrpcClient()
-  const filtersStore = useFiltersStore()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const props = defineProps<{
@@ -223,7 +220,6 @@
   }
 
   function onFilter(filters: BeneficiaryHistoryFilterInput) {
-    filtersStore.beneficiaryHistory = filters
     emit('filter', filters)
   }
 </script>

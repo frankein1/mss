@@ -2,8 +2,7 @@ import { defineStore } from 'pinia'
 import type {
   BeneficiaryFilterInput,
   FollowupFilterInput,
-  HelpRequestFilterInput,
-  BeneficiaryHistoryFilterInput
+  HelpRequestFilterInput
 } from '~/server/schema'
 
 export const useFiltersStore = defineStore({
@@ -12,7 +11,6 @@ export const useFiltersStore = defineStore({
   state: () => ({
     followup: null as FollowupFilterInput | null,
     helpRequest: null as HelpRequestFilterInput | null,
-    beneficiaryHistory: null as BeneficiaryHistoryFilterInput | null,
     beneficiary: null as BeneficiaryFilterInput | null
   })
 })

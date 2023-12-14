@@ -39,19 +39,17 @@
 </template>
 
 <script setup lang="ts">
-  import { useFiltersStore } from '~/store/filters'
   import { AlertType } from '~~/utils/constants/alert'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
 
-  const filtersStore = useFiltersStore()
   const route = useRoute()
 
   const props = defineProps<{
     beneficiaryId: string
   }>()
 
-  const filters = ref(filtersStore.beneficiaryHistory || {})
+  const filters = ref({})
 
   const queryInput = computed(() => ({
     beneficiaryId: props.beneficiaryId,
