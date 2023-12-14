@@ -61,13 +61,14 @@ model User {
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  structure             Structure?     @relation(fields: [structureId], references: [id])
-  structureId           String?        @map("structure_id") @db.Uuid
-  createdFollowups      Followup[]     @relation(name: "created_followups")
-  createdHelpRequests   HelpRequest[]  @relation(name: "created_help_requests")
-  createdDocuments      Document[]
-  createdFollowupTypes  FollowupType[]
-  receivedNotifications Notification[]
+  structure                  Structure?     @relation(fields: [structureId], references: [id])
+  structureId                String?        @map("structure_id") @db.Uuid
+  createdFollowups           Followup[]     @relation(name: "created_followups")
+  createdHelpRequests        HelpRequest[]  @relation(name: "created_help_requests")
+  createdDocuments           Document[]
+  createdFollowupTypes       FollowupType[]
+  receivedNotifications      Notification[] @relation(name: "received_notifications")
+  itemCreatedByNotifications Notification[] @relation(name: "item_created_by_notifications")
 
   createdBeneficiaries  Beneficiary[] @relation(name: "created_beneficiaries")
   archivedBeneficiaries Beneficiary[] @relation(name: "archived_beneficiaries")
@@ -1433,7 +1434,7 @@ model Notification {
 
   created DateTime? @default(now())
 
-  recipient   User   @relation(fields: [recipientId], references: [id], onDelete: Cascade)
+  recipient   User   @relation("received_notifications", fields: [recipientId], references: [id], onDelete: Cascade)
   recipientId String @map("recipient_id") @db.Uuid
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
@@ -1444,6 +1445,9 @@ model Notification {
 
   followup   Followup? @relation(fields: [followupId], references: [id], onDelete: Cascade)
   followupId String?   @map("followup_id") @db.Uuid
+
+  itemCreatedBy   User?   @relation("item_created_by_notifications", fields: [itemCreatedById], references: [id])
+  itemCreatedById String? @map("item_created_by_id") @db.Uuid
 
   document   Document? @relation(fields: [documentId], references: [key], onDelete: Cascade)
   documentId String?   @map("document_id")

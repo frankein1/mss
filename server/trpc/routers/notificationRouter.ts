@@ -1,13 +1,13 @@
 import { protectedProcedure, router } from '~/server/trpc'
 import {
-  getNotificationQuery,
+  getNotificationsQuery,
   updateNotificationMutation
 } from '~/server/route/notification'
 
 export const notificationRouter = router({
   get: protectedProcedure
-    .input(getNotificationQuery.inputValidation)
-    .query(getNotificationQuery.execute),
+    .input(getNotificationsQuery.inputValidation)
+    .query(getNotificationsQuery.execute),
   update: protectedProcedure
     .input(updateNotificationMutation.inputValidation)
     .mutation(updateNotificationMutation.execute)
