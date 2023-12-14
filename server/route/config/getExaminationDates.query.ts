@@ -2,10 +2,11 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   SecurityRuleGrantee,
-  canViewAnyHelpRequestDetails
+  getHelpRequestPermissions
 } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { HelpRequestRepo, HelpRequestConstraints } from '~/server/database'
+import { getStructureByUser } from '~/server/query'
 
 function hasDefinedExaminationDate(h: {
   examinationDate: Date | null
@@ -36,11 +37,13 @@ const handler = async ({
   return examinationDates.filter(hasDefinedExaminationDate)
 }
 
-const securityCheck = (
+const securityCheck = async (
   user: SecurityRuleGrantee,
   _input: IdInput | undefined
 ) => {
-  return canViewAnyHelpRequestDetails(user)
+  const structure = await getStructureByUser(user)
+  const permissions = getHelpRequestPermissions({ user, structure })
+  return permissions.get.anyExaminationDate
 }
 
 export const getExaminationDatesQuery = createQuery({

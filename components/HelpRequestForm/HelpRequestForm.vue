@@ -17,8 +17,6 @@
         :prescribing-organizations="prescribingOrganizations"
         :instructor-organizations="instructorOrganizations"
         :is-external-support="isExternalSupport"
-        :is-editing="isEditing"
-        :is-editing-and-is-locked="isEditingAndIsLocked"
         :has-set-external-structure="hasSetExternalStructure"
       />
 
@@ -26,9 +24,7 @@
 
       <HelpRequestFormInfoSection
         :status="status"
-        :past-statuses="pastStatuses"
         :has-set-external-structure="hasSetExternalStructure"
-        :is-editing-and-is-locked="isEditingAndIsLocked"
         :is-external-support="isExternalSupport"
       />
 
@@ -86,12 +82,10 @@
       prescribingOrganizations: PrescribingOrganization[]
       instructorOrganizations: InstructorOrganization[]
       beneficiaryId: string
-      pastStatuses?: HelpRequestStatus[]
-      isEditing?: boolean
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>
     }>(),
-    { pastStatuses: undefined, isEditing: false, canEditPrivateSynthesis: true }
+    { canEditPrivateSynthesis: true }
   )
 
   const form = ref<HTMLFormElement | null>(null)
@@ -116,20 +110,6 @@
   )
 
   const isExternalSupport = computed(() => externalStructure.value === 'true')
-
-  const isEditingAndIsLocked = computed(
-    () =>
-      props.isEditing &&
-      (
-        [
-          HelpRequestStatus.Accepted,
-          HelpRequestStatus.Refused,
-          HelpRequestStatus.ClosedByBeneficiary,
-          HelpRequestStatus.ClosedByAgent,
-          HelpRequestStatus.Dismissed
-        ] as HelpRequestStatus[]
-      ).includes(status.value)
-  )
 </script>
 
 <style scoped lang="scss">

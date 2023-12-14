@@ -6,12 +6,11 @@ import {
   SecurityRuleGrantee,
   canCreateInstructorOrganization,
   canCreatePrescribingOrganization,
-  canEditHelpRequest,
-  canEditHelpRequestPrivateSynthesis
+  getHelpRequestPermissions
 } from '~/server/security'
 import {
   getHelpRequestWithRelations,
-  getHelpRequestsecurityTarget,
+  getHelpRequestSecurityTarget,
   getStructureByUser,
   markFollowupTypeAsUsed
 } from '~/server/query'
@@ -112,8 +111,12 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: EditHelpRequestInput
 ) => {
-  const target = await getHelpRequestsecurityTarget(user, input.id)
-  if (!canEditHelpRequest(user, target)) {
+  const [target, structure] = await Promise.all([
+    getHelpRequestSecurityTarget(user, input.id),
+    getStructureByUser(user)
+  ])
+  const permissions = getHelpRequestPermissions({ user, target, structure })
+  if (!permissions.edit) {
     return false
   }
 
@@ -132,10 +135,7 @@ const securityCheck = async (
     return false
   }
 
-  if (
-    input.privateSynthesis &&
-    !canEditHelpRequestPrivateSynthesis(user, target)
-  ) {
+  if (input.privateSynthesis && permissions.set.privateSynthesis) {
     return false
   }
 
