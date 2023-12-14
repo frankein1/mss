@@ -2,8 +2,7 @@
   <div
     class="fr-input-group"
     :class="{
-      'fr-input-group--error': error,
-      'fr-input-group--disabled': readonly
+      'fr-input-group--error': error
     }"
   >
     <label
@@ -26,7 +25,6 @@
         pattern="[0-9]\d*((\.|,)\d+)?"
         :aria-describedby="ariaDescribedby"
         :aria-labelledby="labelledBy"
-        :readonly="readonly"
         @keypress="onKeypress"
         @input="onInput"
         @change="handleChange"
@@ -52,9 +50,8 @@
       noLabel?: boolean
       labelledBy?: string
       name: string
-      readonly?: boolean
     }>(),
-    { noLabel: false, labelledBy: undefined, readonly: false }
+    { noLabel: false, labelledBy: undefined }
   )
 
   // use `toRef` to create reactive references to `name` prop which is passed to `useField`

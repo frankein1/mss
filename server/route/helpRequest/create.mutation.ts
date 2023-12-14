@@ -5,10 +5,14 @@ import {
   CreateHelpRequestInput,
   createHelpRequestSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canCreateHelpRequest } from '~/server/security'
+import {
+  SecurityRuleGrantee,
+  getBeneficiaryPermissions
+} from '~/server/security'
 import {
   getBeneficiarySecurityTarget,
-  markFollowupTypeAsUsed
+  markFollowupTypeAsUsed,
+  getStructureByUser
 } from '~/server/query'
 import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
 import {
@@ -112,11 +116,12 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: CreateHelpRequestInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(
-    user,
-    input.beneficiaryId
-  )
-  return canCreateHelpRequest(user, beneficiary)
+  const [target, structure] = await Promise.all([
+    getBeneficiarySecurityTarget(user, input.beneficiaryId),
+    getStructureByUser(user)
+  ])
+  const permissions = getBeneficiaryPermissions({ user, structure, target })
+  return permissions.create.helpRequest
 }
 
 export const createHelpRequestMutation = createMutation({

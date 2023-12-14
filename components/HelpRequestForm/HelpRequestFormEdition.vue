@@ -5,9 +5,7 @@
     :prescribing-organizations="prescribingOrganizations"
     :instructor-organizations="instructorOrganizations"
     :beneficiary-id="helpRequest.beneficiaryId"
-    :past-statuses="pastStatuses"
-    is-editing
-    :can-edit-private-synthesis="canEditPrivateSynthesis"
+    :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
@@ -21,12 +19,8 @@
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
-  import { canEditHelpRequestPrivateSynthesis } from '~/server/security'
-  import { pastStatusesFromStatus } from '~/utils/helpRequest'
   import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-
-  const { user } = useAuth()
 
   const props = defineProps<{
     isSubmitting: boolean
@@ -40,16 +34,8 @@
     saveHelpRequest: [helpRequest: EditHelpRequestInput]
   }>()
 
-  const pastStatuses = computed(() => {
-    if (!props.helpRequest) {
-      return []
-    }
-    return pastStatusesFromStatus(props.helpRequest.status)
-  })
-
-  const canEditPrivateSynthesis = computed(() =>
-    canEditHelpRequestPrivateSynthesis(user.value, props.helpRequest)
-  )
+  const { data: permissions } =
+    await useTrpcClient().permissions.getHelpRequestEditionPermissions.useQuery()
 
   const initialDocumentIds = computed(
     () => props.helpRequest.documents?.map(d => d.key) || []

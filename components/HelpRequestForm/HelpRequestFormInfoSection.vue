@@ -8,7 +8,6 @@
       name="status"
       :label="helpRequestFieldLabels.status"
       :options="helpRequestStatusOptions"
-      :disabled-options="pastStatuses"
       required
     />
   </div>
@@ -55,7 +54,6 @@
       name="dueDate"
       :label="helpRequestFieldLabels.dueDate"
       type="date"
-      :readonly="isDropped"
       hint="Notification le jour de l'échéance et à J-30."
     />
   </div>
@@ -66,7 +64,6 @@
       <VeeCurrencyInput
         name="askedAmount"
         :label="helpRequestFieldLabels.askedAmount"
-        :readonly="isEditingAndIsLocked"
       />
     </div>
 
@@ -110,9 +107,7 @@
 
   const props = defineProps<{
     status: HelpRequestStatus
-    pastStatuses: HelpRequestStatus[] | undefined
     hasSetExternalStructure: boolean
-    isEditingAndIsLocked: boolean
     isExternalSupport: boolean
   }>()
 
@@ -122,13 +117,6 @@
     () =>
       props.status === HelpRequestStatus.Accepted ||
       props.status === HelpRequestStatus.Refused
-  )
-
-  const isDropped = computed(
-    () =>
-      props.status === HelpRequestStatus.ClosedByBeneficiary ||
-      props.status === HelpRequestStatus.ClosedByAgent ||
-      props.status === HelpRequestStatus.Dismissed
   )
 
   const isFinancialSupport = computed(
