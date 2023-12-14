@@ -73,7 +73,6 @@
       name="externalStructure"
       :options="withEmptyValue(externalOrganisationOptions)"
       required
-      :disabled="isEditing"
     />
   </div>
 
@@ -85,7 +84,6 @@
       :label="helpRequestFieldLabels.instructorOrganizationId"
       name="instructorOrganizationId"
       :options="instructorOrganizationOptions"
-      :readonly="isEditingAndIsLocked"
       :can-create-new-option="canCreateInstructorOrganization"
     />
   </div>
@@ -99,14 +97,12 @@
       name="dispatchDate"
       :label="helpRequestFieldLabels.dispatchDate"
       type="date"
-      :readonly="isEditingAndIsLocked"
     />
     <VeeInput
       v-else
       name="examinationDate"
       :label="helpRequestFieldLabels.examinationDate"
       type="date"
-      :readonly="isEditingAndIsLocked"
     />
   </div>
 </template>
@@ -135,8 +131,6 @@
     prescribingOrganizations: PrescribingOrganization[]
     instructorOrganizations: InstructorOrganization[]
     isExternalSupport: boolean
-    isEditing: boolean
-    isEditingAndIsLocked: boolean
     hasSetExternalStructure: boolean
   }>()
 

@@ -23,7 +23,7 @@
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
-  import { canViewAnyHelpRequestDetails } from '~/server/security'
+  import { HelpRequestPermissions } from '~/server/security'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options/ministry'
@@ -35,7 +35,8 @@
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
-  const { can } = useSecurityRule()
+
+  const props = defineProps<{ permissions: HelpRequestPermissions | null }>()
 
   const emit = defineEmits<{
     filter: [filters: HelpRequestFilterInput]
@@ -116,7 +117,7 @@
       }
     ]
 
-    if (can(canViewAnyHelpRequestDetails)) {
+    if (props.permissions?.get.anyExaminationDate) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -188,7 +189,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!can(canViewAnyHelpRequestDetails)) {
+    if (!props.permissions?.get.anyExaminationDate) {
       return new Map()
     }
 

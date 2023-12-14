@@ -2,8 +2,7 @@ import { StructureType } from '@prisma/client'
 import {
   SecurityRuleGrantee,
   SecurityTargetWithReferents,
-  SecurityTargetWithStructure,
-  canCreateHelpRequest
+  SecurityTargetWithStructure
 } from '../rules'
 import { isInSameStructureAs, isReferentFor } from '../rules/helpers'
 
@@ -168,7 +167,7 @@ function getEditPermissions({
       externalOrganisations: viewOrEditExtOrganisations
     },
     create: {
-      helpRequest: canCreateHelpRequest(user, target)
+      helpRequest: isHelpRequestCreatable(user, target)
     },
     delete: {
       beneficiary: isDeletable(user, target)
@@ -272,4 +271,14 @@ const isDeletable = (
   isInSameStructureAs(grantee, beneficiary, [
     'StructureManager',
     'SocialWorker'
+  ]) || isReferentFor(grantee, beneficiary)
+
+const isHelpRequestCreatable = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor'
   ]) || isReferentFor(grantee, beneficiary)
