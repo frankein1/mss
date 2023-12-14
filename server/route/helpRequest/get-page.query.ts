@@ -11,6 +11,7 @@ import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 import { prepareHelpRequestFilters } from '~/utils/filters'
 import { SortOrder } from '~/types/table'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
+import { getHelpRequestPermissions } from '~/server/security'
 import { HelpRequestRepo } from '~/server/database'
 
 type GetHelpRequestsOrderBy = Array<
@@ -19,7 +20,7 @@ type GetHelpRequestsOrderBy = Array<
 
 const handler = async ({
   input,
-  ctx: { user }
+  ctx: { user, structure }
 }: {
   input: GetHelpRequestsInput
   ctx: ProtectedAppContext
@@ -39,10 +40,12 @@ const handler = async ({
     orderBy.unshift({ externalStructure: SortOrder.Desc })
   }
 
+  const permissions = getHelpRequestPermissions({ user, structure })
+
   const [helpRequests, count] = await Promise.all([
     HelpRequestRepo.findMany(user, {
       where,
-      select: prepareGetHelpRequestsPageSelect(user),
+      select: prepareGetHelpRequestsPageSelect(permissions),
       take,
       skip,
       orderBy: input.orderBy
