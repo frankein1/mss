@@ -16,7 +16,6 @@ export default defineNuxtPlugin(() => {
     router, // Enables automatically registering page views on the router
     enableLinkTracking: true,
     trackInitialView: true,
-    disableCookies: true,
-    crossOrigin: 'anonymous'
+    disableCookies: true
   })
 })
