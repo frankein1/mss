@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { HelpRequestSubject } from '@prisma/client'
+  import { HelpRequestSubject, HelpRequestStatus } from '@prisma/client'
   import { HelpRequestItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -142,14 +142,23 @@
   const isExternalSupport = computed(() => props.helpRequest.externalStructure)
 
   const canEditAllocatedAmount = computed(
-    () => permissions.value?.edit && isFinancialSupport.value
+    () =>
+      permissions.value?.edit &&
+      isFinancialSupport.value &&
+      props.helpRequest.status === HelpRequestStatus.Accepted
   )
 
   const canEditPaymentMethod = computed(
-    () => permissions.value?.edit && !isExternalSupport.value
+    () =>
+      permissions.value?.edit &&
+      isFinancialSupport.value &&
+      !isExternalSupport.value
   )
 
   const canEditPaymentDate = computed(
-    () => permissions.value?.edit && !isExternalSupport.value
+    () =>
+      permissions.value?.edit &&
+      isFinancialSupport.value &&
+      !isExternalSupport.value
   )
 </script>

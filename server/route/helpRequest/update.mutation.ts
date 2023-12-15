@@ -1,4 +1,5 @@
 import { StructureType, UserActivityType } from '@prisma/client'
+import { prepareHelpRequestUpdateData } from './helper'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
@@ -15,12 +16,7 @@ import {
   markFollowupTypeAsUsed
 } from '~/server/query'
 import { HelpRequestRepo } from '~/server/database'
-import { isNewOption, newOptionToLabel } from '~/utils/options'
-import {
-  connect,
-  prepareDocumentsMutations,
-  prepareDateFields
-} from '~/utils/prisma'
+import { isNewOption } from '~/utils/options'
 
 const handler = async ({
   input,
@@ -33,65 +29,11 @@ const handler = async ({
 
   const target = await getHelpRequestWithRelations(user, input.id)
 
-  const {
-    id,
-    beneficiaryId: _beneficiaryId,
-    typeId,
-    documents,
-    prescribingOrganizationId,
-    instructorOrganizationId,
-    externalStructure,
-    isMinistry: _isMinistry,
-    ...otherData
-  } = prepareDateFields(input, [
-    'decisionDate',
-    'dispatchDate',
-    'dueDate',
-    'examinationDate',
-    'handlingDate',
-    'paymentDate'
-  ])
-
-  let instructorOrganization
-  if (instructorOrganizationId) {
-    if (isNewOption(instructorOrganizationId)) {
-      instructorOrganization = {
-        create: {
-          name: newOptionToLabel(instructorOrganizationId),
-          structureId: user.structureId,
-          createdById: user.id
-        }
-      }
-    } else {
-      instructorOrganization = connect(instructorOrganizationId)
-    }
-  }
-
-  let prescribingOrganization
-  if (prescribingOrganizationId) {
-    if (isNewOption(prescribingOrganizationId)) {
-      prescribingOrganization = {
-        create: {
-          name: newOptionToLabel(prescribingOrganizationId || ''),
-          structureId: user.structureId || '',
-          createdById: user.id
-        }
-      }
-    } else {
-      prescribingOrganization = connect(prescribingOrganizationId)
-    }
-  }
+  const data = prepareHelpRequestUpdateData(input, ctx, target)
 
   const helpRequest = await HelpRequestRepo.prisma.update({
-    where: { id },
-    data: {
-      type: connect(typeId),
-      externalStructure: externalStructure === 'true',
-      documents: prepareDocumentsMutations(documents, target.documents),
-      instructorOrganization,
-      prescribingOrganization,
-      ...otherData
-    },
+    where: { id: input.id },
+    data,
     include: {
       beneficiary: {
         select: {
@@ -102,7 +44,7 @@ const handler = async ({
     }
   })
 
-  await markFollowupTypeAsUsed([typeId])
+  await markFollowupTypeAsUsed([input.typeId])
 
   return { helpRequest }
 }
