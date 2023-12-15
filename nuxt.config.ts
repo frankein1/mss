@@ -194,7 +194,8 @@ export default defineNuxtConfig({
   security: {
     removeLoggers: false,
     headers: {
-      contentSecurityPolicy: false
+      contentSecurityPolicy: false,
+      crossOriginEmbedderPolicy: false
     }
   },
   routeRules: {
