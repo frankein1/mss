@@ -2,7 +2,7 @@ import { Beneficiary, NotificationType } from '@prisma/client'
 import { SecurityRuleGrantee } from '~/server/security'
 
 export function prepareNewHistoryElementNotification(
-  beneficiary: Beneficiary & { referents: { id: string }[] },
+  beneficiary: Pick<Beneficiary, 'id'> & { referents: { id: string }[] },
   user: SecurityRuleGrantee
 ) {
   return {
