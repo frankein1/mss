@@ -1,4 +1,5 @@
 import { UserActivityType } from '@prisma/client'
+import { prepareHelpRequestCreateData } from './helper'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -11,14 +12,7 @@ import {
 } from '~/server/security'
 import { markFollowupTypeAsUsed, getStructureByUser } from '~/server/query'
 import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
-import {
-  connect,
-  prepareDocumentsMutations,
-  prepareDateFields
-} from '~/utils/prisma'
-import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { BeneficiaryService } from '~/server/services'
-import { prepareNewHistoryElementNotification } from '~/utils/notification'
 
 const handler = async ({
   input,
@@ -27,73 +21,19 @@ const handler = async ({
   input: CreateHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const { user, structure } = ctx
-
-  const {
-    beneficiaryId,
-    typeId,
-    prescribingOrganizationId,
-    instructorOrganizationId,
-    externalStructure,
-    isMinistry: _isMinistry,
-    ...otherData
-  } = prepareDateFields(input, [
-    'decisionDate',
-    'dispatchDate',
-    'dueDate',
-    'examinationDate',
-    'handlingDate',
-    'paymentDate'
-  ])
-
-  let instructorOrganization
-  if (instructorOrganizationId) {
-    if (isNewOption(instructorOrganizationId)) {
-      instructorOrganization = {
-        create: {
-          name: newOptionToLabel(instructorOrganizationId),
-          structureId: user.structureId,
-          createdById: user.id
-        }
-      }
-    } else {
-      instructorOrganization = connect(instructorOrganizationId)
-    }
-  }
-
-  let prescribingOrganization
-  if (prescribingOrganizationId) {
-    if (isNewOption(prescribingOrganizationId)) {
-      prescribingOrganization = {
-        create: {
-          name: newOptionToLabel(prescribingOrganizationId || ''),
-          structureId: user.structureId || '',
-          createdById: user.id
-        }
-      }
-    } else {
-      prescribingOrganization = connect(prescribingOrganizationId)
-    }
-  }
+  const { user } = ctx
 
   const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(user, {
-    where: { id: beneficiaryId },
-    include: { referents: true }
+    where: { id: input.beneficiaryId },
+    select: { id: true, referents: true }
   })
 
+  // FIXME: La création bug ou alors la page de modification ne charge pas bien
+
+  const data = prepareHelpRequestCreateData(input, ctx, beneficiary)
+
   const helpRequest = await HelpRequestRepo.prisma.create({
-    data: {
-      createdBy: connect(user.id),
-      beneficiary: connect(beneficiaryId),
-      type: connect(typeId),
-      structure: connect(structure.id),
-      ...otherData,
-      externalStructure: externalStructure === 'true',
-      documents: prepareDocumentsMutations(input.documents),
-      instructorOrganization,
-      prescribingOrganization,
-      notifications: prepareNewHistoryElementNotification(beneficiary, user)
-    },
+    data,
     include: {
       beneficiary: {
         select: {
@@ -104,7 +44,7 @@ const handler = async ({
     }
   })
 
-  await markFollowupTypeAsUsed([typeId])
+  await markFollowupTypeAsUsed([input.typeId])
 
   return { helpRequest }
 }
