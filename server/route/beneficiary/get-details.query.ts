@@ -6,14 +6,14 @@ import {
   getBeneficiaryPermissions
 } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
-import {
-  findBeneficiary,
-  getBeneficiarySecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getStructureByUser } from '~/server/query'
+import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
+    user,
+    input.id
+  )
   const structure = await getStructureByUser(user)
   const permissions = getBeneficiaryPermissions({ user, target, structure })
   return permissions.view.general
@@ -28,14 +28,17 @@ const handler = async ({
 }) => {
   const { user, structure } = ctx
 
-  const target = await getBeneficiarySecurityTarget(user, input.id)
+  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
+    user,
+    input.id
+  )
 
   const permissions: BeneficiaryPermissions = getBeneficiaryPermissions({
     user,
     target,
     structure
   })
-  const beneficiary = await findBeneficiary({
+  const beneficiary = await BeneficiaryService.findBeneficiary({
     user,
     structure,
     id: input.id

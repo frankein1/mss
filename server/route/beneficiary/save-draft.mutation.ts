@@ -14,9 +14,10 @@ import {
 import { getBeneficiaryPermissions } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
-import { BeneficiaryRepo, DraftRepo } from '~/server/database'
+import { DraftRepo } from '~/server/database'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { prepareDateFields } from '~/utils/prisma'
+import { BeneficiaryService } from '~/server/services'
 
 const handler = async ({
   input,
@@ -31,17 +32,12 @@ const handler = async ({
   })
 
   const data = prepareData(ctx, input, beneficiaryDraft)
-  const { id } = await BeneficiaryRepo.prisma.create({
-    data
-  })
 
-  if (beneficiaryDraft) {
-    await DraftRepo.prisma.delete({
-      where: {
-        id: draftId
-      }
-    })
-  }
+  const { id } = await BeneficiaryService.create({
+    user: ctx.user,
+    params: { data },
+    draftId: beneficiaryDraft?.id
+  })
 
   return { id }
 }

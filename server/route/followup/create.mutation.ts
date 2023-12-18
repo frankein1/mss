@@ -13,13 +13,8 @@ import {
   canCreateFollowup,
   canCreatePrescribingOrganization
 } from '~/server/security'
-
-import {
-  getBeneficiarySecurityTarget,
-  getStructureByUser,
-  markFollowupTypeAsUsed
-} from '~/server/query'
-import { BeneficiaryRepo, FollowupRepo } from '~/server/database'
+import { getStructureByUser, markFollowupTypeAsUsed } from '~/server/query'
+import { FollowupRepo, BeneficiaryRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { hasAccessfollowupFields } from '~/security/permission'
 import {
@@ -27,6 +22,7 @@ import {
   prepareDocumentsMutations,
   prepareDateFields
 } from '~/utils/prisma'
+import { BeneficiaryService } from '~/server/services'
 import { prepareNewHistoryElementNotification } from '~/utils/notification'
 
 const handler = async ({
@@ -157,7 +153,7 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: AddFollowupInput
 ) => {
-  const beneficiary = await getBeneficiarySecurityTarget(
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     user,
     input.beneficiaryId
   )
