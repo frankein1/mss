@@ -1,6 +1,7 @@
 // https://github.com/prisma/prisma/issues/12504#issuecomment-1372635653
 import { createRequire } from 'module'
 import path from 'path'
+import pkg from './package.json'
 
 const require = createRequire(import.meta.url)
 
@@ -146,6 +147,7 @@ export default defineNuxtConfig({
       smtpUser: process.env.EMAIL_SMTP_USER || ''
     },
     public: {
+      clientVersion: pkg.version,
       cguVersion: '1.0',
       appUrl: process.env.APP_URL,
       auth: {

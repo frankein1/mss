@@ -89,6 +89,15 @@
               >Mentions légales</NuxtLink
             >
           </li>
+          <li class="fr-footer__bottom-item">
+            <NuxtLink
+              class="fr-footer__bottom-link"
+              :to="sourceCode"
+              target="_blank"
+            >
+              Version {{ clientVersion }}
+            </NuxtLink>
+          </li>
           <!-- TODO: Set compulsory footer links -->
           <!-- <li class="fr-footer__bottom-item">
                     <NuxtLink class="fr-footer__bottom-link" to="#">Données personnelles</NuxtLink>
@@ -116,6 +125,14 @@
 
 <script setup>
   import { RoutePath } from '~/utils/routing'
+  const {
+    public: { clientVersion }
+  } = useRuntimeConfig()
+
+  const sourceCode = computed(
+    () =>
+      `https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/tree/v${clientVersion}?ref_type=tags`
+  )
 </script>
 
 <style scoped>
