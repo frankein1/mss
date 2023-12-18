@@ -1,6 +1,6 @@
 <template>
   <div
-    :id="accordionId"
+    :id="collapseId"
     class="fr-collapse beneficiary-history-details-body"
   >
     <hr
@@ -95,7 +95,7 @@
 
   const props = defineProps<{
     history: HistoryItem
-    accordionId: string
+    collapseId: string
   }>()
 
   const emit = defineEmits<{
