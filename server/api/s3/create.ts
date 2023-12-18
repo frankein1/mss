@@ -78,7 +78,8 @@ async function addNotification(
         recipientId: referent.id,
         beneficiaryId: beneficiary.id,
         documentId: document.key,
-        type: NotificationType.NewDocument
+        type: NotificationType.NewDocument,
+        itemCreatedById: document.createdById
       })
     }
   }

@@ -1,6 +1,6 @@
-import { NotificationType, Prisma } from '@prisma/client'
+import { NotificationType } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { GetNotificationInput, getNotificationSchema } from '~/server/schema'
+import { GetNotificationsInput, getNotificationsSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { NotificationRepo } from '~/server/database'
@@ -10,7 +10,7 @@ const handler = async ({
   input: { onlyUnread, type }
 }: {
   ctx: ProtectedAppContext
-  input: GetNotificationInput
+  input: GetNotificationsInput
 }) => {
   const where: {
     read?: boolean
@@ -27,12 +27,19 @@ const handler = async ({
   const notifications = await NotificationRepo.findMany(user, {
     where,
     include: {
-      beneficiary: true,
-      helpRequest: {
-        select: { createdBy: { select: { lastName: true, firstName: true } } }
+      beneficiary: {
+        select: {
+          id: true,
+          firstName: true,
+          usualName: true,
+          birthName: true
+        }
       },
-      followup: {
-        select: { createdBy: { select: { lastName: true, firstName: true } } }
+      itemCreatedBy: {
+        select: {
+          firstName: true,
+          lastName: true
+        }
       }
     },
     orderBy: {
@@ -46,10 +53,8 @@ const handler = async ({
   })
 }
 
-export type GetNotificationOutput = Prisma.PromiseReturnType<typeof handler>
-
-export const getNotificationQuery = createQuery({
+export const getNotificationsQuery = createQuery({
   handler,
-  inputValidation: getNotificationSchema,
+  inputValidation: getNotificationsSchema,
   securityCheck: AllowSecurityCheck
 })

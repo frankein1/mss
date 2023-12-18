@@ -43,7 +43,10 @@
 
   const props = defineProps<{
     notification: NotificationItem
-    beneficiary: Beneficiary
+    beneficiary: Pick<
+      Beneficiary,
+      'id' | 'firstName' | 'usualName' | 'birthName'
+    >
   }>()
 
   const emit = defineEmits<{
@@ -88,16 +91,14 @@
 
   const itemTitle = computed(() => {
     if (props.notification.type === NotificationType.NewHistoryElement) {
-      if (props.notification.helpRequest?.createdBy) {
-        return `Une instruction de dossier a été ajoutée par ${formatUserDisplayName(
-          props.notification.helpRequest.createdBy
-        )}`
-      }
-      if (props.notification.followup?.createdBy) {
-        return `Une synthèse d'entretien a été ajoutée par ${formatUserDisplayName(
-          props.notification.followup.createdBy
-        )}`
-      }
+      const itemCreatedByLabel = props.notification.itemCreatedBy
+        ? ` par ${formatUserDisplayName(props.notification.itemCreatedBy)}`
+        : ''
+      const itemLabel = props.notification.helpRequestId
+        ? 'Une instruction de dossier'
+        : "Une synthèse d'entretien"
+
+      return `${itemLabel} a été ajoutée${itemCreatedByLabel}`
     }
     return notificationTypeLabels[props.notification.type]
   })

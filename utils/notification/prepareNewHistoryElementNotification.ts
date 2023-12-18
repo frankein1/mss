@@ -12,7 +12,8 @@ export function prepareNewHistoryElementNotification(
         .map(referent => ({
           beneficiaryId: beneficiary.id,
           recipientId: referent.id,
-          type: NotificationType.NewHistoryElement
+          type: NotificationType.NewHistoryElement,
+          itemCreatedById: user.id
         }))
     }
   }
