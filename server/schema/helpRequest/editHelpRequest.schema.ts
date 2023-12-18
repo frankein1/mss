@@ -1,8 +1,14 @@
 import { z } from 'zod'
-import { createHelpRequestSchema } from './createHelpRequest.schema'
+import { createHelpRequestSchemaBase } from './createHelpRequest.schema'
+import { requiredErrorMessage } from '~/utils/zod'
 
-export const editHelpRequestSchema = createHelpRequestSchema.extend({
-  id: z.string().uuid()
-})
+export const editHelpRequestSchema = createHelpRequestSchemaBase
+  .extend({
+    id: z.string().uuid()
+  })
+  .refine(val => !val.isMinistry || val.ministre, {
+    message: requiredErrorMessage,
+    path: ['ministre']
+  })
 
 export type EditHelpRequestInput = z.infer<typeof editHelpRequestSchema>

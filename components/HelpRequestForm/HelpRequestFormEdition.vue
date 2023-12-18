@@ -5,9 +5,6 @@
     :prescribing-organizations="prescribingOrganizations"
     :instructor-organizations="instructorOrganizations"
     :beneficiary-id="helpRequest.beneficiaryId"
-    :status="values.status"
-    :external-structure="values.externalStructure"
-    :financial-support="values.financialSupport"
     :past-statuses="pastStatuses"
     is-editing
     :can-edit-private-synthesis="canEditPrivateSynthesis"
@@ -58,13 +55,12 @@
     () => props.helpRequest.documents?.map(d => d.key) || []
   )
 
-  const { handleSubmit, values } = useForm<EditHelpRequestInput>({
+  const { handleSubmit } = useForm<EditHelpRequestInput>({
     validationSchema: toTypedSchema(editHelpRequestSchema),
     initialValues: {
       ...props.helpRequest,
       openingDate: props.helpRequest.openingDate,
       documents: initialDocumentIds.value,
-      financialSupport: props.helpRequest.financialSupport ? 'true' : 'false',
       externalStructure: props.helpRequest.externalStructure ? 'true' : 'false',
       askedAmount: prismaDecimalToNumber(props.helpRequest.askedAmount),
       allocatedAmount: prismaDecimalToNumber(props.helpRequest.allocatedAmount),
