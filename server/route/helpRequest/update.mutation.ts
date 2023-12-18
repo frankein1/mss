@@ -41,8 +41,8 @@ const handler = async ({
     documents,
     prescribingOrganizationId,
     instructorOrganizationId,
-    financialSupport,
     externalStructure,
+    isMinistry: _isMinistry,
     ...otherData
   } = prepareDateFields(input, [
     'decisionDate',
@@ -87,7 +87,6 @@ const handler = async ({
     where: { id },
     data: {
       type: connect(typeId),
-      financialSupport: financialSupport === 'true',
       externalStructure: externalStructure === 'true',
       documents: prepareDocumentsMutations(documents, target.documents),
       instructorOrganization,

@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { HelpRequestStatus } from '@prisma/client'
+  import { HelpRequestStatus, HelpRequestSubject } from '@prisma/client'
   import { HelpRequestItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -149,7 +149,9 @@
     () => props.helpRequest.status === HelpRequestStatus.Accepted
   )
 
-  const isFinancialSupport = computed(() => props.helpRequest.financialSupport)
+  const isFinancialSupport = computed(
+    () => props.helpRequest.subject === HelpRequestSubject.Financial
+  )
 
   const isExternalSupport = computed(() => props.helpRequest.externalStructure)
 

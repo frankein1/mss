@@ -11,7 +11,7 @@ export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
   beneficiaryId: 'Bénéficiaire',
   types: "Objet(s) de l'accompagnement",
   medium: "Type d'entretien",
-  documents: 'Document(s)',
+  documents: 'Documents',
   status: 'Statut',
   date: 'Date de saisie',
   dueDate: "Date d'échéance",

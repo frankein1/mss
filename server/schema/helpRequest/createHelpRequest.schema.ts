@@ -1,8 +1,8 @@
 import {
-  HelpRequestReason,
   HelpRequestStatus,
   Minister,
-  PaymentMethod
+  PaymentMethod,
+  HelpRequestSubject
 } from '@prisma/client'
 import { z } from 'zod'
 import {
@@ -14,16 +14,20 @@ import {
   stringConstraint,
   dateOrEmpty
 } from '../helpers.schema'
-import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
+import {
+  errorMessages,
+  maxStringLengthMessage,
+  requiredErrorMessage
+} from '~/utils/zod'
 
-export const createHelpRequestSchema = z.object({
+export const createHelpRequestSchemaBase = z.object({
+  isMinistry: z.boolean(),
   beneficiaryId: z.string().uuid(),
   openingDate: z.coerce.date(errorMessages),
   numeroPegase: numeroPegaseContraint.nullish(),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   typeId: z.string(errorMessages).uuid(),
   documents: z.array(z.string(), errorMessages).default([]),
-  financialSupport: kindOfBooleanSchema(),
   externalStructure: kindOfBooleanSchema(),
   status: requiredNativeEnum(HelpRequestStatus),
   askedAmount: amountNumber.nullish(),
@@ -31,7 +35,6 @@ export const createHelpRequestSchema = z.object({
   decisionDate: dateOrEmpty,
   allocatedAmount: amountNumber.nullish(),
   paymentMethod: withEmptyValueOptionalNativeEnum(PaymentMethod),
-  reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
   paymentDate: dateOrEmpty,
   handlingDate: dateOrEmpty,
   refusalReason: stringConstraint
@@ -45,7 +48,16 @@ export const createHelpRequestSchema = z.object({
     .max(1000, maxStringLengthMessage(1000))
     .nullish(),
   dueDate: dateOrEmpty,
-  fullFile: z.boolean().default(false)
+  fullFile: z.boolean().default(false),
+  subject: requiredNativeEnum(HelpRequestSubject)
 })
+
+export const createHelpRequestSchema = createHelpRequestSchemaBase.refine(
+  val => !val.isMinistry || val.ministre,
+  {
+    message: requiredErrorMessage,
+    path: ['ministre']
+  }
+)
 
 export type CreateHelpRequestInput = z.infer<typeof createHelpRequestSchema>
