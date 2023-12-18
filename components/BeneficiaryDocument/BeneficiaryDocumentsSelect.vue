@@ -1,20 +1,19 @@
 <template>
-  <div class="beneficiary-documents-select">
-    <VeeSearchableSelect
-      v-if="!pending && !error"
-      ref="selectDocInput"
-      class="beneficiary-documents-search"
-      :name="name"
-      :label="label"
-      :options="documentOptions"
-      multiple
-    />
-
-    <BeneficiaryDocumentAddButton
-      :beneficiary-id="beneficiaryId"
-      @new-document="onNewDocument"
-    />
-  </div>
+  <BeneficiaryDocumentAddButton
+    class="fr-mb-3w"
+    :beneficiary-id="beneficiaryId"
+    label="Ajouter un nouveau document"
+    @new-document="onNewDocument"
+  />
+  <VeeSearchableSelect
+    v-if="!pending && !error"
+    ref="selectDocInput"
+    class="beneficiary-documents-search"
+    :name="name"
+    label="Sélectionner un ou plusieurs fichiers depuis l’espace bénéficiaire"
+    :options="documentOptions"
+    multiple
+  />
 </template>
 
 <script lang="ts" setup>
@@ -28,7 +27,6 @@
   const props = withDefaults(
     defineProps<{
       beneficiaryId: string
-      label: string
       name: string
       snackbarSuccessMessage?: string
     }>(),
@@ -58,12 +56,6 @@
 </script>
 
 <style scoped>
-  .beneficiary-documents-select {
-    display: flex;
-    align-items: flex-end;
-    width: 100%;
-  }
-
   .beneficiary-documents-search {
     margin-bottom: 0;
     margin-right: 2rem;
