@@ -4,33 +4,29 @@
       :links="Breadcrumb.AppBeneficiaryFollowupAdd(beneficiary)"
     />
     <PageTitle :title="title" />
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12">
-        <main
-          ref="formContainer"
-          class="main-container fr-p-5w"
-        >
-          <AtomAlert
-            v-if="fetchError"
-            :alert-type="AlertType.Error"
-            :message="fetchError"
-          />
+    <main
+      ref="formContainer"
+      class="feature-section"
+    >
+      <AtomAlert
+        v-if="fetchError"
+        :alert-type="AlertType.Error"
+        :message="fetchError"
+      />
 
-          <AtomLoader
-            v-if="pending"
-            class="fr-mx-auto"
-          />
-          <FollowupFormCreation
-            v-else-if="followupTypes && prescribingOrganizations"
-            :is-submitting="isSubmitting"
-            :followup-types="followupTypes"
-            :beneficiary-id="beneficiaryId"
-            :prescribing-organizations="prescribingOrganizations"
-            @save-followup="onAddFollowup"
-          />
-        </main>
-      </div>
-    </div>
+      <AtomLoader
+        v-if="pending"
+        class="fr-mx-auto"
+      />
+      <FollowupFormCreation
+        v-else-if="followupTypes && prescribingOrganizations"
+        :is-submitting="isSubmitting"
+        :followup-types="followupTypes"
+        :beneficiary-id="beneficiaryId"
+        :prescribing-organizations="prescribingOrganizations"
+        @save-followup="onAddFollowup"
+      />
+    </main>
   </PageContainer>
 </template>
 

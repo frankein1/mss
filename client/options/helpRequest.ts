@@ -1,5 +1,4 @@
 import {
-  HelpRequestReason,
   HelpRequestStatus,
   PaymentMethod,
   HelpRequestSubject
@@ -25,11 +24,6 @@ export const ministryHelpRequestStatusLabels: {
   [HelpRequestStatus.Accepted]: 'Traité'
 }
 
-export const financialSupportOptions = new Map([
-  ['true', 'Oui'],
-  ['false', 'Non']
-])
-
 export const externalOrganisationOptions = new Map([
   ['false', 'En interne'],
   ['true', 'Par une organisation extérieure']
@@ -45,35 +39,20 @@ export const paymentMethodLabels: { [key in PaymentMethod]: string } = {
 
 export const paymentMethodOptions = labelsToOptions(paymentMethodLabels)
 
-export const helpRequestReasonLabels: { [key in HelpRequestReason]: string } = {
-  [HelpRequestReason.Food]: 'Alimentation',
-  [HelpRequestReason.Energy]: 'Énergie',
-  [HelpRequestReason.Housing]: 'Logement',
-  [HelpRequestReason.Other]: 'Autre'
+export const helpRequestSubjectLabels: { [key in HelpRequestSubject]: string } =
+  {
+    [HelpRequestSubject.Housing]: 'Une demande de logement',
+    [HelpRequestSubject.Financial]: 'Une aide financière',
+    [HelpRequestSubject.Other]: 'Autre'
+  }
+
+const helpRequestSubjectPictos: { [key in HelpRequestSubject]: string } = {
+  [HelpRequestSubject.Housing]: '~/assets/pictograms/building.svg',
+  [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
+  [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
 }
 
-export const helpRequestReasonOptions = labelsToOptions(helpRequestReasonLabels)
-
-export const helpRequestSubjectOptions = new Map<
-  HelpRequestSubject,
-  { label: string; picto: string }
->([
-  [
-    HelpRequestSubject.Housing,
-    {
-      label: 'Une demande de logement',
-      picto: '~/assets/pictograms/building.svg'
-    }
-  ],
-  [
-    HelpRequestSubject.Financial,
-    {
-      label: 'Une aide financière',
-      picto: '~/assets/pictograms/tax-stamp.svg'
-    }
-  ],
-  [
-    HelpRequestSubject.Other,
-    { label: 'Autre', picto: '~/assets/pictograms/document.svg' }
-  ]
-])
+export const helpRequestSubjectOptions = labelsToOptions(
+  helpRequestSubjectLabels,
+  helpRequestSubjectPictos
+)

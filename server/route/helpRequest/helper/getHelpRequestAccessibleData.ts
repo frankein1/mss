@@ -33,6 +33,7 @@ function getHelpRequestMeta(
     openingDate: helpRequest.openingDate,
     fullFile: helpRequest.fullFile,
     status: helpRequest.status,
+    subject: helpRequest.subject,
     typeId: helpRequest.typeId,
     type: helpRequest.type,
     beneficiary: helpRequest.beneficiary,
@@ -57,7 +58,6 @@ function getHelpRequestDetails(
     dueDate: helpRequest.dueDate,
     examinationDate: helpRequest.examinationDate,
     externalStructure: helpRequest.externalStructure,
-    financialSupport: helpRequest.financialSupport,
     handlingDate: helpRequest.handlingDate,
     instructorOrganizationId: helpRequest.instructorOrganizationId,
     instructorOrganization: helpRequest.instructorOrganization,
@@ -67,9 +67,9 @@ function getHelpRequestDetails(
     paymentMethod: helpRequest.paymentMethod,
     prescribingOrganizationId: helpRequest.prescribingOrganizationId,
     prescribingOrganization: helpRequest.prescribingOrganization,
-    reason: helpRequest.reason,
     refusalReason: helpRequest.refusalReason,
-    synthesis: helpRequest.synthesis
+    synthesis: helpRequest.synthesis,
+    subject: helpRequest.subject
   }
 }
 
