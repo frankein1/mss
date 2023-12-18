@@ -48,6 +48,7 @@
           name="ministre"
           :label="followupFieldLabels.ministre"
           :options="withEmptyValue(ministerOptions)"
+          required
         />
       </div>
 
@@ -78,19 +79,18 @@
           multiple
         >
           <template #hint>
-            <span class="fr-icon-information-line fr-fi--sm">
-              <NuxtLink
-                v-if="allowEditStructure"
-                :to="RoutePath.AppStructureEdit()"
-                target="_self"
-              >
-                Personnaliser les objets des entretiens de ma structure.
-              </NuxtLink>
-              <template v-else>
-                Les responsables de votre structure peuvent personnaliser ces
-                objets des entretiens.
-              </template>
-            </span>
+            <NuxtLink
+              v-if="allowEditStructure"
+              :to="RoutePath.AppStructureEdit()"
+              target="_self"
+              class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+            >
+              Je personnalise les objets d’accompagnement de ma structure
+            </NuxtLink>
+            <template v-else>
+              Les responsables de votre structure peuvent personnaliser les
+              objets d'accompagnement.
+            </template>
           </template>
         </VeeSearchableSelect>
       </div>
@@ -243,7 +243,7 @@
                   class="fr-fieldset__legend"
                 >
                   {{ followupFieldLabels.signalements }}
-                </legend> 
+                </legend>
                 <div
                   v-for="[value, label] in followupSignalementOptions"
                   :key="value"
@@ -261,13 +261,13 @@
       </div>
     </div>
 
-    <BeneficiaryDocumentsSelect
-      class="fr-mb-4w"
-      :beneficiary-id="beneficiaryId"
-      name="documents"
-      :label="followupFieldLabels.documents"
-      snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez la synthèse d'entretien pour conserver le lien entre les deux."
-    />
+    <div class="fr-mb-4w">
+      <BeneficiaryDocumentsSelect
+        :beneficiary-id="beneficiaryId"
+        name="documents"
+        snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez la synthèse d'entretien pour conserver le lien entre les deux."
+      />
+    </div>
 
     <ul
       class="fr-btns-group fr-btns-group--inline fr-btns-group--lg fr-btns-group--right"
