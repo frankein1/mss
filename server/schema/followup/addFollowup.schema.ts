@@ -20,7 +20,8 @@ import {
   requiredErrorMessage
 } from '~/utils/zod'
 
-export const addFollowupSchema = z.object({
+export const addFollowupSchemaBase = z.object({
+  isMinistry: z.boolean(),
   beneficiaryId: z.string().uuid(),
   types: z
     .array(z.string().uuid(), {
@@ -59,5 +60,13 @@ export const addFollowupSchema = z.object({
   // [FollowupSignalement.Prefet]: z.boolean().default(false),
   // [FollowupSignalement.OrganismeMenace]: z.boolean().default(false)
 })
+
+export const addFollowupSchema = addFollowupSchemaBase.refine(
+  val => !val.isMinistry || val.ministre,
+  {
+    message: requiredErrorMessage,
+    path: ['ministre']
+  }
+)
 
 export type AddFollowupInput = z.infer<typeof addFollowupSchema>

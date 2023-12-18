@@ -14,7 +14,6 @@ export const fixturesHelpRequests = [
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[0].id,
     externalStructure: false,
-    financialSupport: false,
     openingDate: new Date('2022-10-26'),
     subject: HelpRequestSubject.Other
   },
@@ -26,7 +25,6 @@ export const fixturesHelpRequests = [
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[2].id,
     externalStructure: false,
-    financialSupport: false,
     openingDate: new Date('2022-10-27'),
     subject: HelpRequestSubject.Other
   }
