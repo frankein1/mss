@@ -27,7 +27,8 @@ async function createDueFollowupNotifications(
       recipientId: createdById,
       beneficiaryId,
       followupId: id,
-      type
+      type,
+      itemCreatedById: createdById
     }))
 
   await NotificationRepo.prisma.createMany({
@@ -71,7 +72,8 @@ async function createDueHelpRequestNotifications(
       recipientId: createdById,
       beneficiaryId,
       helpRequestId: id,
-      type
+      type,
+      itemCreatedById: createdById
     }))
 
   await NotificationRepo.prisma.createMany({
@@ -118,7 +120,8 @@ async function createEndOfSupportHelpRequestNotifications() {
       recipientId: createdById,
       beneficiaryId,
       helpRequestId: id,
-      type: NotificationType.EndOfSupport
+      type: NotificationType.EndOfSupport,
+      itemCreatedById: createdById
     }))
 
   await NotificationRepo.prisma.createMany({
