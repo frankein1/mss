@@ -44,9 +44,11 @@ export function getHelpRequestExportData(
       : '',
     paymentDate: formatDate(helpRequest.paymentDate, 'DD-MM-YYYY'),
     handlingDate: formatDate(helpRequest.handlingDate, 'DD-MM-YYYY'),
-    definedRefusalReason: helpRequest.definedRefusalReason
-      ? helpRequestRefusalReasonLabels[helpRequest.definedRefusalReason]
-      : helpRequest.refusalReason || '',
+    refusalReason:
+      helpRequest.refusalReasonOther ||
+      (helpRequest.refusalReason
+        ? helpRequestRefusalReasonLabels[helpRequest.refusalReason]
+        : ''),
     dispatchDate: formatDate(helpRequest.dispatchDate, 'DD-MM-YYYY'),
     synthesis: helpRequest.synthesis || '',
     dueDate: formatDate(helpRequest.dueDate, 'DD-MM-YYYY'),

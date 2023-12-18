@@ -209,8 +209,8 @@
 
         <div v-if="status === HelpRequestStatus.Refused">
           <VeeSelect
-            name="definedRefusalReason"
-            :label="helpRequestFieldLabels.definedRefusalReason"
+            name="refusalReason"
+            :label="helpRequestFieldLabels.refusalReason"
             :options="withEmptyValue(helpRequestRefusalReasonOptions)"
           />
         </div>

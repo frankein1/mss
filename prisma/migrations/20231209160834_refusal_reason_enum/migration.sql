@@ -1,8 +1,12 @@
 -- CreateEnum
 CREATE TYPE "HelpRequestRefusalReason" AS ENUM ('ResourcesOutOfScale', 'ShortDeadline', 'IncompleteFile', 'IrregularSituation', 'InadequateFamilyComposition', 'ExpiredRequest', 'Other');
 
+ALTER TABLE "help_request" RENAME "refusal_reason" TO  "refusal_reason_other";
+
 -- AlterTable
-ALTER TABLE "help_request" ADD COLUMN     "defined_refusal_reason" "HelpRequestRefusalReason";
+ALTER TABLE "help_request" ADD COLUMN     "refusal_reason" "HelpRequestRefusalReason";
+
+UPDATE "help_request" set "refusal_reason" = 'Other' where "refusal_reason_other" IS NOT NULL;
 
 -- Update Beneficiary History View
 DROP VIEW IF EXISTS view_beneficiary_history;
@@ -46,7 +50,7 @@ CREATE VIEW view_beneficiary_history AS (
     null as "asked_amount",
     null as "decision_date",
     null as "refusal_reason",
-    null as "defined_refusal_reason",
+    null as "refusal_reason_other",
     null as "dispatch_date",
     null as "full_file",
     null as "allocated_amount",
@@ -89,7 +93,7 @@ CREATE VIEW view_beneficiary_history AS (
     asked_amount,
     decision_date,
     refusal_reason,
-    defined_refusal_reason,
+    refusal_reason_other,
     dispatch_date,
     full_file,
     allocated_amount,

@@ -69,7 +69,7 @@ function getHelpRequestDetails(
     prescribingOrganization: helpRequest.prescribingOrganization,
     reason: helpRequest.reason,
     refusalReason: helpRequest.refusalReason,
-    definedRefusalReason: helpRequest.definedRefusalReason,
+    refusalReasonOther: helpRequest.refusalReasonOther,
     synthesis: helpRequest.synthesis
   }
 }

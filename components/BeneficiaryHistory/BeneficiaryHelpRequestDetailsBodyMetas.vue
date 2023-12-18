@@ -116,11 +116,13 @@
     return allocatedAmount
   })
 
-  const refusalReason = computed(() =>
-    props.helpRequest.definedRefusalReason
-      ? helpRequestRefusalReasonLabels[props.helpRequest.definedRefusalReason]
-      : props.helpRequest.refusalReason
-  )
+  const refusalReason = computed(() => {
+    const { refusalReason, refusalReasonOther } = props.helpRequest
+    return (
+      refusalReasonOther ||
+      (refusalReason ? helpRequestRefusalReasonLabels[refusalReason] : '')
+    )
+  })
 
   const hasRefusalReason = computed(
     () =>
