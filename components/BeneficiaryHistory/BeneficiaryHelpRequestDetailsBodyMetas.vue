@@ -60,7 +60,7 @@
     </template>
     <li v-if="hasRefusalReason">
       <span class="information-label">Motif du refus :</span>
-      {{ helpRequest.refusalReason }}
+      {{ refusalReason }}
     </li>
   </ul>
 </template>
@@ -70,6 +70,7 @@
   import { HistoryItem } from './types'
   import {
     helpRequestReasonLabels,
+    helpRequestRefusalReasonLabels,
     paymentMethodLabels
   } from '~/client/options/helpRequest'
   import { euros } from '~/utils/euros'
@@ -115,10 +116,18 @@
     return allocatedAmount
   })
 
+  const refusalReason = computed(() => {
+    const { refusalReason, refusalReasonOther } = props.helpRequest
+    return (
+      refusalReasonOther ||
+      (refusalReason ? helpRequestRefusalReasonLabels[refusalReason] : '')
+    )
+  })
+
   const hasRefusalReason = computed(
     () =>
       props.helpRequest.status === HelpRequestStatus.Refused &&
-      props.helpRequest.refusalReason
+      refusalReason.value
   )
 </script>
 

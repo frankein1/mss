@@ -4,6 +4,7 @@ import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
   helpRequestReasonLabels,
+  helpRequestRefusalReasonLabels,
   helpRequestStatusLabels,
   paymentMethodLabels
 } from '~/client/options/helpRequest'
@@ -43,7 +44,11 @@ export function getHelpRequestExportData(
       : '',
     paymentDate: formatDate(helpRequest.paymentDate, 'DD-MM-YYYY'),
     handlingDate: formatDate(helpRequest.handlingDate, 'DD-MM-YYYY'),
-    refusalReason: helpRequest.refusalReason || '',
+    refusalReason:
+      helpRequest.refusalReasonOther ||
+      (helpRequest.refusalReason
+        ? helpRequestRefusalReasonLabels[helpRequest.refusalReason]
+        : ''),
     dispatchDate: formatDate(helpRequest.dispatchDate, 'DD-MM-YYYY'),
     synthesis: helpRequest.synthesis || '',
     dueDate: formatDate(helpRequest.dueDate, 'DD-MM-YYYY'),
