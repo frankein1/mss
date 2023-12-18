@@ -80,6 +80,15 @@
               Accessibilité: non conforme
             </NuxtLink>
           </li>
+          <li class="fr-footer__bottom-item">
+            <NuxtLink
+              class="fr-footer__bottom-link"
+              :to="sourceCode"
+              target="_blank"
+            >
+              Version {{ version }}
+            </NuxtLink>
+          </li>
         </ul>
       </div>
     </div>
@@ -94,6 +103,8 @@
   const homePage = useHomePage()
   const { user } = useAuth()
   const authStore = useAuthStore()
+
+  const { version, sourceCode } = useClientVersion()
 
   const menuItems = computed(() => {
     const items = []

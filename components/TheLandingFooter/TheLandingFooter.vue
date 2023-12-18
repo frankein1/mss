@@ -95,7 +95,7 @@
               :to="sourceCode"
               target="_blank"
             >
-              Version {{ clientVersion }}
+              Version {{ version }}
             </NuxtLink>
           </li>
           <!-- TODO: Set compulsory footer links -->
@@ -125,14 +125,8 @@
 
 <script setup>
   import { RoutePath } from '~/utils/routing'
-  const {
-    public: { clientVersion }
-  } = useRuntimeConfig()
 
-  const sourceCode = computed(
-    () =>
-      `https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/tree/v${clientVersion}?ref_type=tags`
-  )
+  const { version, sourceCode } = useClientVersion()
 </script>
 
 <style scoped>
