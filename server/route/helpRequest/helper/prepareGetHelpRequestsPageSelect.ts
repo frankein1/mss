@@ -14,7 +14,7 @@ export function prepareGetHelpRequestsPageSelect(user: SecurityRuleGrantee) {
     paymentMethod: canViewAnyHelpRequestDetails(user),
     paymentDate: canViewAnyHelpRequestDetails(user),
     handlingDate: canViewAnyHelpRequestDetails(user),
-    financialSupport: true,
+    subject: true,
     createdById: true,
     beneficiary: {
       select: {

@@ -1,8 +1,14 @@
 import { z } from 'zod'
-import { addFollowupSchema } from './addFollowup.schema'
+import { addFollowupSchemaBase } from './addFollowup.schema'
+import { requiredErrorMessage } from '~/utils/zod'
 
-export const editFollowupSchema = addFollowupSchema.extend({
-  id: z.string().uuid()
-})
+export const editFollowupSchema = addFollowupSchemaBase
+  .extend({
+    id: z.string().uuid()
+  })
+  .refine(val => !val.isMinistry || val.ministre, {
+    message: requiredErrorMessage,
+    path: ['ministre']
+  })
 
 export type EditFollowupInput = z.infer<typeof editFollowupSchema>
