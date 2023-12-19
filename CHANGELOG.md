@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.13.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.12.0...v1.13.0) (2023-12-19)
+
+
+### Features
+
+* Affiche la version du client dans le footer ([2a10399](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2a10399de213bfd92c6f6e2636eb792c6af30b45))
+* Affiche la version du client dans menu droitr ([8f88640](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8f886400270480ba3cca2812853e0239814a7e16))
+* **logging:** Ajout d'un middleware pour logger les adresse IP ([0ed7df1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0ed7df18110c6157908472ef01c46fe3487314b4))
+* **securite:** Augmente à 300 le nombre limite de requetes avant 429 ([a55664e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a55664e508d09c1caec39aa4d4bd02cdd607afab))
+
 ## [1.12.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.11.1...v1.12.0) (2023-12-13)
 
 
