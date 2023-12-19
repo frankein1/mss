@@ -197,7 +197,8 @@ export default defineNuxtConfig({
     removeLoggers: false,
     headers: {
       crossOriginEmbedderPolicy: 'unsafe-none'
-    }
+    },
+    rateLimiter: { tokensPerInterval: 300, interval: 300000 }
   },
   routeRules: {
     '/api/s3/create': {
