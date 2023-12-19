@@ -52,6 +52,9 @@ deploy:production:
       --set "jobs.hooks.preUpgrade[0].image.tag=${CI_APPLICATION_TAG}"
 
 .vigigloo:docker:kaniko:build:
+  variables:
+    DOCKER_BUILD_ARG_COMMIT_SHA: $CI_COMMIT_SHA
+    DOCKER_BUILD_ARG_COMMIT_REF_NAME: $CI_COMMIT_REF_NAME
   parallel:
     matrix:
       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
