@@ -198,7 +198,8 @@ export default defineNuxtConfig({
     headers: {
       contentSecurityPolicy: false,
       crossOriginEmbedderPolicy: false
-    }
+    },
+    rateLimiter: { tokensPerInterval: 300, interval: 300000 }
   },
   routeRules: {
     '/api/s3/create': {
