@@ -2,7 +2,7 @@
   "name": "monsuivisocial-v2",
   "version": "1.13.0",
   "scripts": {
-    "dev": "COMMIT_SHA=`git rev-parse HEAD` nuxt dev",
+    "dev": "nuxt dev",
     "dev:db:start": "docker compose -f docker-compose.dev.yml up -d",
     "build": "nuxt build",
     "start": "nuxt preview",
