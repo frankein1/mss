@@ -1,18 +1,18 @@
 export function useClientVersion() {
   const {
-    public: { clientVersion, mssEnvironment }
+    public: {
+      version: { commitRefName, commitSha, commitTag }
+    }
   } = useRuntimeConfig()
 
   const repo =
-    'https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/tree'
+    'https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2'
 
-  let sourceCode = `${repo}/v${clientVersion}?ref_type=tags`
-  let version = clientVersion
+  const commitUrl = `${repo}/-/commit/${commitSha}`
+  const branchUrl = `${repo}/-/tree/${commitRefName}`
 
-  if (mssEnvironment === 'development') {
-    sourceCode = `${repo}/main?ref_type=heads`
-    version = 'main'
-  }
+  const sourceCode = commitTag ? branchUrl : commitUrl
+  const version = commitTag || commitSha.substring(0, 8)
 
   return { sourceCode, version }
 }
