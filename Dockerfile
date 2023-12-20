@@ -9,6 +9,7 @@ RUN pnpm run build
 FROM gcr.io/distroless/nodejs20-debian11
 ARG COMMIT_SHA=none
 ARG COMMIT_REF_NAME=none
+ARG COMMIT_TAG=none
 WORKDIR /app
 COPY --from=build /app/.output /app/
 
@@ -17,5 +18,6 @@ ENV HOST=0.0.0.0
 ENV PORT=3000
 ENV COMMIT_SHA=${COMMIT_SHA}
 ENV COMMIT_REF_NAME=${COMMIT_REF_NAME}
+ENV COMMIT_TAG=${COMMIT_TAG}
 
 CMD ["server/index.mjs"]
