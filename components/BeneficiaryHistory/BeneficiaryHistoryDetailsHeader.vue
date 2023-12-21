@@ -48,6 +48,7 @@
         </li>
       </ul>
       <button
+        ref="collapseBtn"
         class="fr-btn collapse-btn fr-btn--tertiary"
         :class="{ expanded: expanded }"
         aria-expanded="false"
@@ -71,6 +72,8 @@
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
 
+  const route = useRoute()
+
   const { helpRequestStatusLabels } = useHelpRequestStatus()
 
   const props = withDefaults(
@@ -86,6 +89,8 @@
   const emit = defineEmits<{
     toggleExpand: []
   }>()
+
+  const collapseBtn = ref<HTMLButtonElement | null>(null)
 
   const statusLabel = computed(() => {
     if (props.history.isFollowup) {
@@ -142,6 +147,15 @@
   const collapseBtnIcon = computed(() =>
     props.expanded ? 'fr-icon-arrow-up-s-line' : 'fr-icon-arrow-down-s-line'
   )
+
+  onMounted(() => {
+    // Expand item if selected in URL
+    const { item } = route.query
+    if (item === props.history.id && collapseBtn.value) {
+      collapseBtn.value.click()
+      collapseBtn.value.ariaExpanded = 'true'
+    }
+  })
 </script>
 
 <style lang="scss" scoped>
