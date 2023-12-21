@@ -18,6 +18,7 @@
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { canViewStatsByReferent } from '~/server/security'
+  import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
 
   const { user } = useAuth()
 
@@ -68,6 +69,12 @@
         type: FilterType.SelectOne
       })
     }
+    filters.push({
+      name: 'beneficiaryStatus',
+      label: 'Statut du bénéficiaire',
+      options: withEmptyValue(beneficiaryStatusOptions),
+      type: FilterType.SelectOne
+    })
     return filters
   })
 </script>
