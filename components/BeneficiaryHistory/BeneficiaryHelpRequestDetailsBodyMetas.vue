@@ -56,7 +56,7 @@
     </template>
     <li v-if="hasRefusalReason">
       <span class="information-label">Motif du refus :</span>
-      {{ helpRequest.refusalReason }}
+      {{ refusalReason }}
     </li>
   </ul>
 </template>
@@ -64,7 +64,10 @@
 <script setup lang="ts">
   import { HelpRequestStatus } from '@prisma/client'
   import { HistoryItem } from './types'
-  import { paymentMethodLabels } from '~/client/options/helpRequest'
+  import {
+    helpRequestRefusalReasonLabels,
+    paymentMethodLabels
+  } from '~/client/options/helpRequest'
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'
   import { ministerLabels } from '~/client/options/ministry'
@@ -108,10 +111,18 @@
     return allocatedAmount
   })
 
+  const refusalReason = computed(() => {
+    const { refusalReason, refusalReasonOther } = props.helpRequest
+    return (
+      refusalReasonOther ||
+      (refusalReason ? helpRequestRefusalReasonLabels[refusalReason] : '')
+    )
+  })
+
   const hasRefusalReason = computed(
     () =>
       props.helpRequest.status === HelpRequestStatus.Refused &&
-      props.helpRequest.refusalReason
+      refusalReason.value
   )
 </script>
 
