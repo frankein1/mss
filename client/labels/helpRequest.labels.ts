@@ -30,7 +30,6 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   dispatchDate: "Date d'envoi du dossier",
   decisionDate: 'Date de la décision',
   refusalReason: 'Motif du refus',
-  refusalReasonOther: 'Autre motif du refus',
   synthesis: 'Compte rendu',
   privateSynthesis: 'Compte rendu privé',
   documents: 'Documents',

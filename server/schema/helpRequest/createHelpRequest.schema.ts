@@ -1,6 +1,5 @@
 import {
   HelpRequestReason,
-  HelpRequestRefusalReason,
   HelpRequestStatus,
   Minister,
   PaymentMethod
@@ -35,7 +34,9 @@ export const createHelpRequestSchema = z.object({
   reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
   paymentDate: dateOrEmpty,
   handlingDate: dateOrEmpty,
-  refusalReason: withEmptyValueOptionalNativeEnum(HelpRequestRefusalReason),
+  refusalReason: stringConstraint
+    .max(100, maxStringLengthMessage(100))
+    .nullish(),
   prescribingOrganizationId: z.string().nullish(),
   instructorOrganizationId: z.string().nullish(),
   dispatchDate: dateOrEmpty,
