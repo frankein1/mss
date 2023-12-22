@@ -362,6 +362,16 @@ enum HelpRequestSubject {
   Other
 }
 
+enum HelpRequestRefusalReason {
+  ResourcesOutOfScale
+  ShortDeadline
+  IncompleteFile
+  IrregularSituation
+  InadequateFamilyComposition
+  ExpiredRequest
+  Other
+}
+
 model HelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
@@ -398,11 +408,12 @@ model HelpRequest {
 
   allocatedAmount Decimal? @map("allocated_amount")
 
-  paymentMethod PaymentMethod? @map("payment_method")
-  paymentDate   DateTime?      @map("payment_date") @db.Date
-  handlingDate  DateTime?      @map("handling_date") @db.Date
-  refusalReason String?        @map("refusal_reason")
-  dispatchDate  DateTime?      @map("dispatch_date") @db.Date
+  paymentMethod      PaymentMethod?            @map("payment_method")
+  paymentDate        DateTime?                 @map("payment_date") @db.Date
+  handlingDate       DateTime?                 @map("handling_date") @db.Date
+  refusalReason      HelpRequestRefusalReason? @map("refusal_reason")
+  refusalReasonOther String?                   @map("refusal_reason_other")
+  dispatchDate       DateTime?                 @map("dispatch_date") @db.Date
 
   synthesis String?
 
@@ -1561,18 +1572,19 @@ view BeneficiaryHistory {
   helpRequestId String?      @map("help_request_id") @db.Uuid
   helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id])
 
-  externalStructure Boolean?           @map("external_structure")
-  examinationDate   DateTime?          @map("examination_date") @db.Date
-  handlingDate      DateTime?          @map("handling_date") @db.Date
-  reason            HelpRequestReason?
-  askedAmount       Decimal?           @map("asked_amount")
-  decisionDate      DateTime?          @map("decision_date") @db.Date
-  refusalReason     String?            @map("refusal_reason")
-  dispatchDate      DateTime?          @map("dispatch_date") @db.Date
-  fullFile          Boolean?           @map("full_file")
-  allocatedAmount   Decimal?           @map("allocated_amount")
-  paymentMethod     PaymentMethod?     @map("payment_method")
-  paymentDate       DateTime?          @map("payment_date") @db.Date
+  externalStructure  Boolean?                  @map("external_structure")
+  examinationDate    DateTime?                 @map("examination_date") @db.Date
+  handlingDate       DateTime?                 @map("handling_date") @db.Date
+  reason             HelpRequestReason?
+  askedAmount        Decimal?                  @map("asked_amount")
+  decisionDate       DateTime?                 @map("decision_date") @db.Date
+  refusalReason      HelpRequestRefusalReason? @map("refusal_reason")
+  refusalReasonOther String?                   @map("refusal_reason_other")
+  dispatchDate       DateTime?                 @map("dispatch_date") @db.Date
+  fullFile           Boolean?                  @map("full_file")
+  allocatedAmount    Decimal?                  @map("allocated_amount")
+  paymentMethod      PaymentMethod?            @map("payment_method")
+  paymentDate        DateTime?                 @map("payment_date") @db.Date
 
   instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
   instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
