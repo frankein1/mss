@@ -205,9 +205,9 @@ export default defineNuxtConfig({
           "'self'",
           'https://api-adresse.data.gouv.fr',
           'https://geo.api.gouv.fr',
-          process.env.NUXT_PUBLIC_MATOMO_HOST ||
+          import.meta.env.NUXT_PUBLIC_MATOMO_HOST ||
             'https://toujours.pas.de.matomo',
-          process.env.NUXT_PUBLIC_SENTRY_HOST ||
+          import.meta.env.NUXT_PUBLIC_SENTRY_HOST ||
             'https://toujours.pas.de.sentry'
         ]
       },
