@@ -15,19 +15,6 @@ const prismaIndexBrowser = path.normalize(
   path.relative(process.cwd(), prismaClient)
 )
 
-const connectSrcCSP = ["'self'"]
-
-const matomoHost =
-  process.env.NUXT_PUBLIC_MATOMO_HOST || process.env.MATOMO_HOST
-
-if (matomoHost) {
-  connectSrcCSP.push(matomoHost)
-}
-
-if (process.env.SENTRY_HOST) {
-  connectSrcCSP.push(process.env.SENTRY_HOST)
-}
-
 export default defineNuxtConfig({
   // https://nuxt.com/blog/v3-8
   typescript: {
@@ -213,7 +200,10 @@ export default defineNuxtConfig({
     removeLoggers: false,
     headers: {
       contentSecurityPolicy: {
-        'connect-src': connectSrcCSP
+        // FIXME: Missing sentry
+        'connect-src': process.env.MATOMO_HOST
+          ? ["'self'", process.env.MATOMO_HOST]
+          : ["'self'"]
       },
       crossOriginEmbedderPolicy: false
     },
