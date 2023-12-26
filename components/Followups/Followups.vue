@@ -52,16 +52,15 @@
   } from '~/utils/constants'
   import type { FollowupFilterInput } from '~/server/schema'
   import { canExportHistory } from '~/server/security'
-  import { useFiltersStore } from '~/store/filters'
   import { FollowupSort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
 
-  const filtersStore = useFiltersStore()
+  const filtersState = useFilters()
   const trpcClient = useTrpcClient()
   const { can } = useSecurityRule()
 
-  const filters = ref<FollowupFilterInput>(filtersStore.followup || {})
+  const filters = ref<FollowupFilterInput>(filtersState.followup.value || {})
   const orderBy = ref<FollowupSort[]>([{ date: SortOrder.Desc }])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)

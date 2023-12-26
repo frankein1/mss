@@ -63,7 +63,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { useFiltersStore } from '~/store/filters'
   import {
     FAILED_DOWNLOAD_ERROR_MESSAGE,
     BENEFICIARIES_REQUEST_LIMIT_DEFAULT
@@ -85,10 +84,12 @@
   })
 
   const { can } = useSecurityRule()
-  const filtersStore = useFiltersStore()
+  const filtersState = useFilters()
   const trpcClient = useTrpcClient()
 
-  const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
+  const filters = ref<BeneficiaryFilterInput>(
+    filtersState.beneficiary.value || {}
+  )
   const orderBy = ref<BeneficiarySort[]>([{ usualName: SortOrder.Asc }])
   const page = ref(1)
   const perPage = ref(BENEFICIARIES_REQUEST_LIMIT_DEFAULT)

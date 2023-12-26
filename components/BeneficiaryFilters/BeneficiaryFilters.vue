@@ -20,7 +20,6 @@
 <script lang="ts" setup>
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~~/utils/constants/alert'
-  import { useFiltersStore } from '~/store/filters'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
   import { ageGroupOptions } from '~/client/options/ageGroup'
   import { toOptions, withEmptyValue } from '~/utils/options'
@@ -35,8 +34,8 @@
     filter: [filters: BeneficiaryFilterInput]
   }>()
 
-  const filtersStore = useFiltersStore()
-  const INITIAL_VALUES = filtersStore.beneficiary || {}
+  const filtersState = useFilters()
+  const INITIAL_VALUES = filtersState.beneficiary.value || {}
 
   const {
     data: followupTypeOptions,
@@ -130,7 +129,7 @@
   })
 
   function onFilter(filters: BeneficiaryFilterInput) {
-    filtersStore.beneficiary = filters
+    filtersState.beneficiary.value = filters
     emit('filter', filters)
   }
 </script>

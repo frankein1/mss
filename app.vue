@@ -26,12 +26,10 @@
 </template>
 
 <script setup lang="ts">
-  import { useMatomoStore } from '~/store/matomo'
-
   const MATOMO_SCRIPT_FILENAME = 'matomo.js'
 
   const { public: publicConfig } = useRuntimeConfig()
-  const matomoStore = useMatomoStore()
+  const matomo = useMatomo()
 
   useHead({
     htmlAttrs: {
@@ -98,7 +96,7 @@
 
   function loadTracker() {
     const tracker = window.Matomo?.getAsyncTracker()
-    matomoStore.loadTracker(tracker)
+    matomo.loadTracker(tracker)
   }
 </script>
 

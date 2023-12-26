@@ -12,7 +12,7 @@
   <AtomFilters
     v-else-if="filters"
     :filters="filters"
-    :initial-selected-values="filtersStore.helpRequest || {}"
+    :initial-selected-values="filtersState.helpRequest.value || {}"
     @filter="onFilter"
   />
 </template>
@@ -24,7 +24,6 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
   import { canViewAnyHelpRequestDetails } from '~/server/security'
-  import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options/ministry'
@@ -34,7 +33,7 @@
   const isMinistryAgent = authState.isMinistryAgent()
   const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
-  const filtersStore = useFiltersStore()
+  const filtersState = useFilters()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
   const { can } = useSecurityRule()
 
@@ -204,7 +203,7 @@
   }
 
   function onFilter(filters: HelpRequestFilterInput) {
-    filtersStore.helpRequest = filters
+    filtersState.helpRequest.value = filters
     emit('filter', filters)
   }
 </script>

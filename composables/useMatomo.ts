@@ -1,16 +1,14 @@
 import type { MatomoApi } from '~/types/matomo'
-import { useMatomoStore } from '~/store/matomo'
 
 export function useMatomo() {
-  const matomoStore = useMatomoStore()
+  const matomo = useState<MatomoApi | null>('matomo')
 
-  const storeTracker = matomoStore.tracker
-
-  if (storeTracker) {
-    return { matomo: storeTracker }
+  function loadTracker(tracker: MatomoApi) {
+    matomo.value = tracker
   }
 
   return {
+    loadTracker,
     matomo: {
       trackEvent: () => {
         // eslint-disable-next-line no-console
