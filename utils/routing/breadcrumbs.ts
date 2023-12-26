@@ -1,5 +1,6 @@
 import { HelpRequestSubject } from '@prisma/client'
-import { Route, RoutePath, RouteTitle } from './'
+import { Route, RoutePath } from './routes'
+import { RouteTitle } from './titles'
 import type { BeneficiaryNames } from '~/types/beneficiary'
 
 type FlatBeneficiaryNamesWithId = { id: string } & BeneficiaryNames
