@@ -77,6 +77,7 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   zipcode: stringOrEmpty(z.string().min(5, validZipcode)),
   city: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   region: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+  department: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   accommodationZone: withEmptyValueOptionalNativeEnum(
     BeneficiaryAccommodationZone
   ),

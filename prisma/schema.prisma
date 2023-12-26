@@ -1222,6 +1222,7 @@ model Beneficiary {
   addressComplement                  String?                       @map("address_complement")
   zipcode                            String?
   city                               String?
+  department                         String?
   region                             String?
   noPhone                            Boolean                       @default(false) @map("no_phone")
   phone1                             String?
