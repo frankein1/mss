@@ -18,15 +18,22 @@ export type AddressSelected = {
   zipCode: string
   city: string
   region: string
+  departement: string
 }
 
 export type GeoApiGouvFrCommune = {
   nom: string
   codesPostaux: string[]
   codeRegion: string
+  codeDepartement: string
 }
 
 export type GeoApiGouvFrRegion = {
+  nom: string
+  code: string
+}
+
+export type GeoApiGouvFrDepartment = {
   nom: string
   code: string
 }
@@ -41,10 +48,12 @@ export type CityResult = {
   nom: string
   codePostal: string
   codeRegion: string
+  codeDepartement: string
 }
 
 export type CitySelected = {
   zipCode: string
   city: string
   codeRegion: string
+  codeDepartement: string
 }

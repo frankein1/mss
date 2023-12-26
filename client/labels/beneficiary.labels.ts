@@ -35,6 +35,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   city: 'Ville',
   zipcode: 'Code postal',
   region: 'Région',
+  department: 'Département',
   street: 'Adresse',
   addressComplement: "Complément d'adresse",
   noPhone: "N'a pas de téléphone",
