@@ -54,6 +54,13 @@
       />
     </div>
     <div class="fr-col-12">
+      <VeeDepartmentInput
+        name="department"
+        :label="beneficiaryFieldLabels.department"
+        @department-selected="setDepartmentValue($event)"
+      />
+    </div>
+    <div class="fr-col-12">
       <VeeRegionInput
         name="region"
         :label="beneficiaryFieldLabels.region"
@@ -78,7 +85,8 @@
   import {
     AddressSelected,
     CitySelected,
-    GeoApiGouvFrRegion
+    GeoApiGouvFrRegion,
+    GeoApiGouvFrDepartment
   } from '../VeeForm/types'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
@@ -99,6 +107,7 @@
   const { setValue: setZipcodeValue, value: zipcode } =
     useField<string>('zipcode')
   const { setValue: setCityValue } = useField<string>('city')
+  const { setValue: setDepartmentValue } = useField<string>('department')
   const { setValue: setRegionvalue } = useField<string>('region')
 
   const isHosted = computed(() =>
@@ -135,6 +144,14 @@
     if ('region' in selection && selection.region) {
       setRegionvalue(selection.region)
     }
+    if ('codeDepartement' in selection && selection.codeDepartement) {
+      setDepartmentValue(
+        await codeDepartementToDepartmentName(selection.codeDepartement)
+      )
+    }
+    if ('departement' in selection && selection.departement) {
+      setDepartmentValue(selection.departement)
+    }
     setZipcodeValue(selection.zipCode)
     setCityValue(selection.city)
   }
@@ -142,6 +159,14 @@
   async function codeRegionToRegionName(codeRegion: string) {
     const { nom } = await $fetch<GeoApiGouvFrRegion>(
       `https://geo.api.gouv.fr/regions/${codeRegion}`
+    )
+
+    return nom
+  }
+
+  async function codeDepartementToDepartmentName(codeDepartement: string) {
+    const { nom } = await $fetch<GeoApiGouvFrDepartment>(
+      `https://geo.api.gouv.fr/departements/${codeDepartement}`
     )
 
     return nom
