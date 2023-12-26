@@ -84,6 +84,7 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'zipcode',
     'city',
     'region',
+    'department',
     'accommodationZone',
     'phone1',
     'phone2',
