@@ -60,10 +60,10 @@
      * The BAN API always returns the full list of zip codes associated to the city, even if a zip code is provided in the request.
      * Here, we get rid of other associated zip codes.
      */
-    res.forEach(({ nom, codesPostaux, codeRegion }) => {
+    res.forEach(({ nom, codesPostaux, codeRegion, codeDepartement }) => {
       codesPostaux.forEach(codePostal => {
         if (!props.zipCode || props.zipCode === codePostal) {
-          cities.value.push({ nom, codePostal, codeRegion })
+          cities.value.push({ nom, codePostal, codeRegion, codeDepartement })
         }
       })
     })
@@ -86,7 +86,8 @@
     emit('citySelected', {
       zipCode: city.codePostal,
       city: city.nom,
-      codeRegion: city.codeRegion
+      codeRegion: city.codeRegion,
+      codeDepartement: city.codeDepartement
     })
   }
 </script>
