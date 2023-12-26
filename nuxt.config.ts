@@ -17,8 +17,11 @@ const prismaIndexBrowser = path.normalize(
 
 const connectSrcCSP = ["'self'"]
 
-if (process.env.MATOMO_HOST) {
-  connectSrcCSP.push(process.env.MATOMO_HOST)
+const matomoHost =
+  process.env.NUXT_PUBLIC_MATOMO_HOST || process.env.MATOMO_HOST
+
+if (matomoHost) {
+  connectSrcCSP.push(matomoHost)
 }
 
 if (process.env.SENTRY_HOST) {
