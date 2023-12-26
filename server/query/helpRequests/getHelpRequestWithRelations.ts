@@ -8,8 +8,7 @@ export function getHelpRequestWithRelations(
 ) {
   return HelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
-    select: {
-      subject: true,
+    include: {
       beneficiary: {
         include: {
           referents: true

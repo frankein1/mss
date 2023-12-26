@@ -11,14 +11,17 @@ import {
   prepareDocumentsMutations
 } from '~/utils/prisma'
 import { ProtectedAppContext } from '~/server/trpc'
-import { getHelpRequestPermissions } from '~/server/security'
+import {
+  getHelpRequestPermissions,
+  SecurityRuleGrantee
+} from '~/server/security'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { prepareNewHistoryElementNotification } from '~/utils/notification'
 import { HelpRequestWithRelations } from '~/server/query'
 
 function prepareInstructorOrganization(
   instructorOrganizationId: string | null | undefined,
-  user: ProtectedAppContext['user']
+  user: SecurityRuleGrantee
 ) {
   if (!instructorOrganizationId) {
     return undefined
@@ -37,7 +40,7 @@ function prepareInstructorOrganization(
 
 function preparePrescribingOrganization(
   prescribingOrganizationId: string | null | undefined,
-  user: ProtectedAppContext['user']
+  user: SecurityRuleGrantee
 ) {
   if (!prescribingOrganizationId) {
     return undefined
