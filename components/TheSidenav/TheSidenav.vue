@@ -60,7 +60,7 @@
               </a>
             </li>
           </NuxtLink>
-          <li v-if="!authState.isAdmin">
+          <li v-if="!authState.isAdmin()">
             <NuxtLink
               class="fr-btn btn-primary-on-primary fr-mt-3w fr-mx-1w fr-icon-user-add-line fr-btn--icon-left"
               target="_self"
