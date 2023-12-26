@@ -28,8 +28,6 @@ const handler = async ({
     select: { id: true, referents: true }
   })
 
-  // FIXME: La création bug ou alors la page de modification ne charge pas bien
-
   const data = prepareHelpRequestCreateData(input, ctx, beneficiary)
 
   const helpRequest = await HelpRequestRepo.prisma.create({

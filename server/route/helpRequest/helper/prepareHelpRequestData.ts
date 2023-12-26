@@ -58,17 +58,19 @@ function preparePrescribingOrganization(
 }
 
 function prepareHelpRequestData(
-  input: CreateHelpRequestInput | Omit<EditHelpRequestInput, 'id'>,
+  input: Omit<
+    | CreateHelpRequestInput
+    | Omit<EditHelpRequestInput, 'id' | 'beneficiaryId' | 'subject'>,
+    'isMinistry' | 'documents'
+  >,
   { user, structure }: ProtectedAppContext,
   subject: HelpRequestSubject
 ) {
   const {
-    beneficiaryId: _beneficiaryId,
     typeId,
     prescribingOrganizationId,
     instructorOrganizationId,
     externalStructure,
-    isMinistry: _isMinistry,
     ministre,
     numeroPegase,
     dispatchDate,
@@ -77,8 +79,6 @@ function prepareHelpRequestData(
     status,
     handlingDate,
     refusalReason,
-    subject: _subject,
-    documents: _documents,
     askedAmount,
     allocatedAmount,
     paymentMethod,
@@ -98,6 +98,9 @@ function prepareHelpRequestData(
     user
   )
   const isExternalStructure = externalStructure === 'true'
+  const isFinancial = subject === HelpRequestSubject.Financial
+  const isAccepted = status === HelpRequestStatus.Accepted
+  const isRefused = status === HelpRequestStatus.Refused
 
   let data: Omit<
     Prisma.HelpRequestCreateInput,
@@ -120,64 +123,66 @@ function prepareHelpRequestData(
     data = { ...data, numeroPegase }
   }
 
-  if (isExternalStructure) {
-    const instructorOrganization = prepareInstructorOrganization(
-      instructorOrganizationId,
-      user
-    )
-    data = { ...data, instructorOrganization, dispatchDate }
-
-    if (status === HelpRequestStatus.Accepted) {
-      data = { ...data, decisionDate, handlingDate }
-    } else if (status === HelpRequestStatus.Refused) {
-      data = { ...data, decisionDate, refusalReason }
-    }
-  } else if (externalStructure !== undefined) {
-    data = { ...data, examinationDate }
-  }
-
-  if (
-    subject === HelpRequestSubject.Financial &&
-    externalStructure !== undefined
-  ) {
-    data = { ...data, askedAmount }
-
-    if (status === HelpRequestStatus.Accepted) {
-      data = { ...data, allocatedAmount }
-    }
-    if (!isExternalStructure) {
-      data = { ...data, paymentMethod, paymentDate }
-    }
+  // It is required to enforce setting undefined when conditional field is not available to allow overriding in edit mode
+  data = {
+    ...data,
+    decisionDate: isAccepted || isRefused ? decisionDate : null,
+    handlingDate: isAccepted ? handlingDate : null,
+    refusalReason: isRefused ? refusalReason : null,
+    instructorOrganization: isExternalStructure
+      ? prepareInstructorOrganization(instructorOrganizationId, user)
+      : { disconnect: true },
+    dispatchDate: isExternalStructure ? dispatchDate : null,
+    examinationDate: !isExternalStructure ? examinationDate : null,
+    askedAmount: isFinancial ? askedAmount : null,
+    allocatedAmount: isFinancial && isAccepted ? allocatedAmount : null,
+    paymentMethod:
+      isFinancial && isAccepted && !isExternalStructure ? paymentMethod : null,
+    paymentDate:
+      isFinancial && isAccepted && !isExternalStructure ? paymentDate : null
   }
 
   return data
 }
 
 export function prepareHelpRequestCreateData(
-  input: CreateHelpRequestInput,
+  {
+    isMinistry: _isMinistry, // This field is ignored as only used for schema validation
+    beneficiaryId,
+    subject,
+    documents,
+    ...input
+  }: CreateHelpRequestInput,
   ctx: ProtectedAppContext,
   beneficiary: Pick<Beneficiary, 'id'> & { referents: { id: string }[] }
 ): Prisma.HelpRequestCreateInput {
-  const data = prepareHelpRequestData(input, ctx, input.subject)
+  const data = prepareHelpRequestData(input, ctx, subject)
   return {
     ...data,
     createdBy: connect(ctx.user.id),
-    beneficiary: connect(input.beneficiaryId),
+    beneficiary: connect(beneficiaryId),
     structure: connect(ctx.structure.id),
-    subject: input.subject,
+    subject,
     notifications: prepareNewHistoryElementNotification(beneficiary, ctx.user),
-    documents: prepareDocumentsMutations(input.documents)
+    documents: prepareDocumentsMutations(documents)
   }
 }
 
 export function prepareHelpRequestUpdateData(
-  { id: _id, ...input }: EditHelpRequestInput,
+  {
+    documents,
+    // Following fields are ignored in edition
+    id: _id,
+    isMinistry: _isMinistry,
+    beneficiaryId: _beneficiaryId,
+    ...input
+  }: EditHelpRequestInput,
   ctx: ProtectedAppContext,
   target: HelpRequestWithRelations
 ): Prisma.HelpRequestUpdateInput {
   const data = prepareHelpRequestData(input, ctx, target.subject)
   return {
     ...data,
-    documents: prepareDocumentsMutations(input.documents, target.documents)
+    documents: prepareDocumentsMutations(documents, target.documents)
   }
 }
