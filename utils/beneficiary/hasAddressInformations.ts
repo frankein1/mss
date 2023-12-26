@@ -10,6 +10,7 @@ export function hasAddressInformations(
     | 'zipcode'
     | 'city'
     | 'region'
+    | 'department'
   >
 ) {
   return (
@@ -19,6 +20,7 @@ export function hasAddressInformations(
     beneficiary.street ||
     beneficiary.zipcode ||
     beneficiary.city ||
-    beneficiary.region
+    beneficiary.region ||
+    beneficiary.department
   )
 }
