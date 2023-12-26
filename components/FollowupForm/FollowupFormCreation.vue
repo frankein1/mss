@@ -36,7 +36,7 @@
   const { handleSubmit, values } = useForm<AddFollowupInput>({
     validationSchema: toTypedSchema(addFollowupSchema),
     initialValues: {
-      isMinistry: isMinistryAgent(),
+      isMinistry: isMinistryAgent,
       beneficiaryId: props.beneficiaryId,
       date: new Date(),
       status: FollowupStatus.Done,
