@@ -88,12 +88,14 @@ const handler = async ({
   const target = await getHelpRequestWithRelations(user, input.id)
 
   const data = prepareData(target, input)
+  const permissions = getHelpRequestPermissions({ user, structure })
 
   if (!data) {
-    return
+    return HelpRequestRepo.findUniqueOrThrow(user, {
+      where: { id: input.id },
+      select: prepareGetHelpRequestsPageSelect(permissions)
+    })
   }
-
-  const permissions = getHelpRequestPermissions({ user, structure })
 
   const helpRequest = await HelpRequestRepo.prisma.update({
     where: { id: input.id },
