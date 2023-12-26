@@ -22,6 +22,8 @@
   import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
   import { prismaDecimalToNumber } from '~/utils/prisma'
 
+  const isMinistryAgent = useAuthState().isMinistryAgent()
+
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: FollowupType[]
@@ -45,6 +47,7 @@
     validationSchema: toTypedSchema(editHelpRequestSchema),
     initialValues: {
       ...props.helpRequest,
+      isMinistry: isMinistryAgent,
       openingDate: props.helpRequest.openingDate,
       documents: initialDocumentIds.value,
       externalStructure: props.helpRequest.externalStructure ? 'true' : 'false',

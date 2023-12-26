@@ -152,6 +152,7 @@
     () =>
       permissions.value?.edit &&
       isFinancialSupport.value &&
+      props.helpRequest.status === HelpRequestStatus.Accepted &&
       !isExternalSupport.value
   )
 
@@ -159,6 +160,7 @@
     () =>
       permissions.value?.edit &&
       isFinancialSupport.value &&
+      props.helpRequest.status === HelpRequestStatus.Accepted &&
       !isExternalSupport.value
   )
 </script>
