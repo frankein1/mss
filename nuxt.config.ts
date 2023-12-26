@@ -201,9 +201,10 @@ export default defineNuxtConfig({
     headers: {
       contentSecurityPolicy: {
         // FIXME: Missing sentry
-        'connect-src': process.env.MATOMO_HOST
-          ? ["'self'", process.env.MATOMO_HOST]
-          : ["'self'"]
+        'connect-src': [
+          "'self'",
+          process.env.MATOMO_HOST || 'https://toujours.pas.de.matomo'
+        ]
       },
       crossOriginEmbedderPolicy: false
     },
