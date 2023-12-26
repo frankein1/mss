@@ -12,7 +12,7 @@
   <AtomFilters
     v-else-if="filters"
     :filters="filters"
-    :initial-selected-values="filtersStore.helpRequest || {}"
+    :initial-selected-values="filtersState.helpRequest.value || {}"
     @filter="onFilter"
   />
 </template>
@@ -23,18 +23,19 @@
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
-  import { canViewAnyHelpRequestDetails, isReferent } from '~/server/security'
-  import { useFiltersStore } from '~/store/filters'
+  import { canViewAnyHelpRequestDetails } from '~/server/security'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options/ministry'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
-  const { user } = useAuth()
+  const authState = useAuthState()
+  const isMinistryAgent = authState.isMinistryAgent()
+  const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
-  const filtersStore = useFiltersStore()
-  const isMinistryAgent = useMinistryAgent()
+  const filtersState = useFilters()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { can } = useSecurityRule()
 
   const emit = defineEmits<{
     filter: [filters: HelpRequestFilterInput]
@@ -115,7 +116,7 @@
       }
     ]
 
-    if (canViewAnyHelpRequestDetails(user.value)) {
+    if (can(canViewAnyHelpRequestDetails)) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -160,7 +161,7 @@
       )
     }
 
-    if (!isReferent(user.value)) {
+    if (!isReferent) {
       filters.push({
         name: 'referents',
         label: 'Référent',
@@ -172,7 +173,7 @@
       })
     }
 
-    if (isMinistryAgent.value) {
+    if (isMinistryAgent) {
       filters.push({
         name: 'ministre',
         label: helpRequestFieldLabels.ministre,
@@ -187,7 +188,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!canViewAnyHelpRequestDetails(user.value)) {
+    if (!can(canViewAnyHelpRequestDetails)) {
       return new Map()
     }
 
@@ -202,7 +203,7 @@
   }
 
   function onFilter(filters: HelpRequestFilterInput) {
-    filtersStore.helpRequest = filters
+    filtersState.helpRequest.value = filters
     emit('filter', filters)
   }
 </script>

@@ -8,7 +8,7 @@
       Aide
     </NuxtLink>
     <AtomDropdown
-      :label="userName"
+      :label="getUserName()"
       :menus="menus"
       class="topbar__menu"
       dropdown-btn-class="fr-btn--tertiary-no-outline"
@@ -22,11 +22,10 @@
 <script lang="ts" setup>
   import { canEditStructure, canListUsers } from '~/server/security'
   import { RoutePath } from '~/utils/routing'
-  import { formatUserDisplayName } from '~/utils/user'
 
-  const { user } = useAuth()
+  const { isAuthenticated, getUserName } = useAuthState()
 
-  const userName = computed(() => formatUserDisplayName(user.value))
+  const { can } = useSecurityRule()
 
   const menus = computed(() => {
     const menus = []
@@ -36,22 +35,21 @@
       to: RoutePath.AppAccount(),
       icon: 'fr-icon-user-line'
     })
-    if (user.value && canListUsers(user.value)) {
+    if (can(canListUsers)) {
       menus.push({
         label: 'Utilisateurs',
         to: RoutePath.AppUsers(),
         icon: 'fr-icon-team-line'
       })
     }
-
-    if (user.value && canEditStructure(user.value)) {
+    if (can(canEditStructure)) {
       menus.push({
         label: 'Structure',
         to: RoutePath.AppStructureEdit(),
         icon: 'fr-icon-home-4-line'
       })
     }
-    if (user) {
+    if (isAuthenticated()) {
       menus.push({
         label: 'Déconnexion',
         to: RoutePath.AuthLogout(),

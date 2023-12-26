@@ -1,6 +1,7 @@
 <template>
   <div class="comment-form-section">
     <BeneficiaryHistoryCommentUserInitials
+      v-if="currentUser"
       class="fr-mr-3v"
       :user="currentUser"
     />
@@ -64,7 +65,7 @@
     }
   })
 
-  const { user: currentUser } = useAuth()
+  const { user: currentUser } = useAuthState()
 
   const onAddComment = handleSubmit(values => {
     useTrpcMutation({

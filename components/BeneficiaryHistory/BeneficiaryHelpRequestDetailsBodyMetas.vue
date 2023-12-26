@@ -76,7 +76,7 @@
   import { formatDate } from '~/utils/formatDate'
   import { ministerLabels } from '~/client/options/ministry'
 
-  const isMinistryAgent = useMinistryAgent()
+  const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = defineProps<{
     helpRequest: HistoryItem

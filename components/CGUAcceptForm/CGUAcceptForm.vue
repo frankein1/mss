@@ -43,12 +43,11 @@
 <script lang="ts" setup>
   import { toTypedSchema } from '@vee-validate/zod'
   import { AcceptCGUInput, acceptCGUSchema } from '~/server/schema'
-  import { useAuthStore } from '~/store/auth'
   import { RoutePath } from '~/utils/routing'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
-  const auth = useAuthStore()
+  const auth = useAuth()
 
   const { handleSubmit } = useForm<AcceptCGUInput>({
     validationSchema: toTypedSchema(acceptCGUSchema)

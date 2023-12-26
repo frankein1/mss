@@ -104,7 +104,7 @@
 
   const comments = ref(props.history.comments || [])
 
-  const { user } = useAuth()
+  const { canWithTarget } = useSecurityRule()
 
   const editLink = computed(() => {
     const routeWithParams = props.history.isFollowup
@@ -117,26 +117,28 @@
     props.history.isFollowup ? canEditFollowup : canEditHelpRequest
   )
 
-  const canEdit = computed(() => canEditRule.value(user.value, props.history))
+  const canEdit = computed(() =>
+    canWithTarget(canEditRule.value, props.history)
+  )
 
   const canDeleteRule = computed(() =>
     props.history.isFollowup ? canDeleteFollowup : canDeleteHelpRequest
   )
 
   const canDelete = computed(() =>
-    canDeleteRule.value(user.value, props.history)
+    canWithTarget(canDeleteRule.value, props.history)
   )
 
   const canViewHistoryDetails = computed(() =>
     props.history.isFollowup
-      ? canViewFollowupDetails(user.value, props.history)
-      : canViewHelpRequestDetails(user.value, props.history.beneficiary)
+      ? canWithTarget(canViewFollowupDetails, props.history)
+      : canWithTarget(canViewHelpRequestDetails, props.history.beneficiary)
   )
 
   const canViewPrivateSynthesis = computed(() =>
     props.history.isFollowup
-      ? canViewFollowupPrivateSynthesis(user.value, props.history)
-      : canViewHelpRequestPrivateSynthesis(user.value, props.history)
+      ? canWithTarget(canViewFollowupPrivateSynthesis, props.history)
+      : canWithTarget(canViewHelpRequestPrivateSynthesis, props.history)
   )
 
   function onCommentAdded(comment: HistoryItemComment) {

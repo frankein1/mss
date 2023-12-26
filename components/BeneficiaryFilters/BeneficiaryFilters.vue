@@ -20,24 +20,22 @@
 <script lang="ts" setup>
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~~/utils/constants/alert'
-  import { useFiltersStore } from '~/store/filters'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
   import { ageGroupOptions } from '~/client/options/ageGroup'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { EventCategory, BeneficiaryFilterEventAction } from '~/types/matomo'
-  import { isReferent } from '~/server/security'
 
   const trpcClient = useTrpcClient()
-  const { user } = useAuth()
+  const hasReferentsFilters = !useAuthState().isReferent()
 
   const emit = defineEmits<{
     filter: [filters: BeneficiaryFilterInput]
   }>()
 
-  const filtersStore = useFiltersStore()
-  const INITIAL_VALUES = filtersStore.beneficiary || {}
+  const filtersState = useFilters()
+  const INITIAL_VALUES = filtersState.beneficiary.value || {}
 
   const {
     data: followupTypeOptions,
@@ -95,8 +93,6 @@
       }
     ]
 
-    const hasReferentsFilters = !isReferent(user.value)
-
     if (hasReferentsFilters) {
       filters.push({
         name: 'referents',
@@ -133,7 +129,7 @@
   })
 
   function onFilter(filters: BeneficiaryFilterInput) {
-    filtersStore.beneficiary = filters
+    filtersState.beneficiary.value = filters
     emit('filter', filters)
   }
 </script>

@@ -12,7 +12,7 @@
   <AtomFilters
     v-else-if="filters"
     :filters="filters"
-    :initial-selected-values="filtersStore.followup || {}"
+    :initial-selected-values="filtersState.followup.value || {}"
     @filter="onFilter"
   />
 </template>
@@ -26,17 +26,15 @@
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~~/utils/constants/alert'
   import type { FollowupFilterInput } from '~/server/schema'
-  import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
   import { followupFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options/ministry'
   import { EventCategory, FollowupFilterEventAction } from '~/types/matomo'
-  import { isReferent } from '~/server/security'
 
   const trpcClient = useTrpcClient()
-  const filtersStore = useFiltersStore()
-  const isMinistryAgent = useMinistryAgent()
-  const { user } = useAuth()
+  const filtersState = useFilters()
+  const isMinistryAgent = useAuthState().isMinistryAgent()
+  const isReferent = useAuthState().isReferent()
 
   const emit = defineEmits<{
     filter: [filters: FollowupFilterInput]
@@ -106,7 +104,7 @@
       }
     ]
 
-    if (!isReferent(user.value)) {
+    if (!isReferent) {
       filters.push({
         name: 'referents',
         label: 'Référent',
@@ -117,7 +115,7 @@
       })
     }
 
-    if (isMinistryAgent.value) {
+    if (isMinistryAgent) {
       filters.push({
         name: 'ministre',
         label: followupFieldLabels.ministre,
@@ -132,7 +130,7 @@
   })
 
   function onFilter(filters: FollowupFilterInput) {
-    filtersStore.followup = filters
+    filtersState.followup.value = filters
     emit('filter', filters)
   }
 </script>

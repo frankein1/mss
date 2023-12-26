@@ -64,7 +64,7 @@
     followup: FollowupItem
   }>()
 
-  const { user } = useAuth()
+  const { canWithTarget } = useSecurityRule()
 
   const followupPath = computed(() =>
     RoutePath.AppBeneficiary(props.followup.beneficiary.id, {
@@ -80,10 +80,10 @@
   )
 
   const canViewFollowupDetails = computed(() =>
-    canViewFollowupDetailsRule(user.value, props.followup)
+    canWithTarget(canViewFollowupDetailsRule, props.followup)
   )
 
   const canQuickEditFollowup = computed(() =>
-    canEditFollowup(user.value, props.followup)
+    canWithTarget(canEditFollowup, props.followup)
   )
 </script>

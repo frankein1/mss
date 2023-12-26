@@ -1,28 +1,26 @@
-import { useAuthStore } from '~/store/auth'
+import { useAuthState } from './useAuthState'
 import { JwtUser } from '~/types/user'
 
 export function useAuth() {
-  const authStore = useAuthStore()
+  const state = useAuthState()
 
-  const refreshToken = () => {
+  function login(user: JwtUser) {
+    state.user.value = user
+  }
+  function logout() {
+    state.user.value = null
+  }
+
+  function refreshToken() {
     return $fetch<JwtUser>('/api/auth/refresh-token')
   }
 
-  const getSession = async () => {
-    const user = await $fetch<JwtUser>('/api/auth/get-session')
-    if (user) {
-      authStore.login(user)
+  async function getSession() {
+    const sessionUser = await $fetch<JwtUser>('/api/auth/get-session')
+    if (sessionUser) {
+      state.user.value = sessionUser
     }
   }
 
-  const user = computed<JwtUser>(() => {
-    const user = authStore.user
-
-    if (!user) {
-      throw createError('No User found in the store')
-    }
-    return user
-  })
-
-  return { refreshToken, getSession, user }
+  return { login, logout, refreshToken, getSession }
 }

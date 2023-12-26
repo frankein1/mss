@@ -10,13 +10,12 @@
   </div>
 </template>
 <script setup lang="ts">
-  import { useAuthStore } from '~/store/auth'
   import { JwtUser } from '~/types/user'
   import { RouteTitle } from '~/utils/routing'
   import { formatUserDisplayName } from '~/utils/user'
 
   const route = useRoute()
-  const store = useAuthStore()
+  const auth = useAuth()
   const token = route.query.token as string
   const redirectUrl =
     (route.query.redirectUrl as string | undefined) || useHomePage()
@@ -33,7 +32,7 @@
       onResponse({ response }) {
         const { _data: data } = response
         if (data) {
-          store.login(data.user)
+          auth.login(data.user)
           navigateTo(redirectUrl)
         }
       }

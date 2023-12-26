@@ -310,7 +310,7 @@
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
 
-  const isMinistryAgent = useMinistryAgent()
+  const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = withDefaults(
     defineProps<{
@@ -325,6 +325,8 @@
     }>(),
     { canSetPrivateSynthesis: true }
   )
+
+  const { can } = useSecurityRule()
 
   const emit = defineEmits<{
     submit: [payload: Event]
@@ -351,11 +353,9 @@
     return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
   })
 
-  const { user } = useAuth()
-
-  const allowEditStructure = computed(() => canEditStructure(user.value))
+  const allowEditStructure = computed(() => can(canEditStructure))
 
   const canCreatePrescribingOrganization = computed(() =>
-    canCreatePrescribingOrganizationRule(user.value)
+    can(canCreatePrescribingOrganizationRule)
   )
 </script>

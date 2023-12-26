@@ -5,12 +5,10 @@ import {
 import { labelsToOptions } from '~/utils/options'
 
 export function useHelpRequestStatus() {
-  const isMinistryAgent = useMinistryAgent()
+  const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const statusLabels = computed(() =>
-    isMinistryAgent.value
-      ? ministryHelpRequestStatusLabels
-      : helpRequestStatusLabels
+    isMinistryAgent ? ministryHelpRequestStatusLabels : helpRequestStatusLabels
   )
   const statusOptions = computed(() => labelsToOptions(statusLabels.value))
 

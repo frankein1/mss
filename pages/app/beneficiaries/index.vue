@@ -33,7 +33,7 @@
                 {{ beneficiariesCount }} bénéficiaire(s)
               </p>
               <ExportDataButton
-                v-if="canExportBeneficiaries(user)"
+                v-if="can(canExportBeneficiaries)"
                 :is-downloading="isDownloading"
                 @export="exportBeneficiaries"
               />
@@ -63,7 +63,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { useFiltersStore } from '~/store/filters'
   import {
     FAILED_DOWNLOAD_ERROR_MESSAGE,
     BENEFICIARIES_REQUEST_LIMIT_DEFAULT
@@ -84,11 +83,13 @@
     name: Route.AppBeneficiaries
   })
 
-  const filtersStore = useFiltersStore()
+  const { can } = useSecurityRule()
+  const filtersState = useFilters()
   const trpcClient = useTrpcClient()
-  const { user } = useAuth()
 
-  const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
+  const filters = ref<BeneficiaryFilterInput>(
+    filtersState.beneficiary.value || {}
+  )
   const orderBy = ref<BeneficiarySort[]>([{ usualName: SortOrder.Asc }])
   const page = ref(1)
   const perPage = ref(BENEFICIARIES_REQUEST_LIMIT_DEFAULT)
