@@ -21,7 +21,7 @@
   import { HistoryItem, HistoryItemComment, HistoryItemComments } from './types'
   import { canAddComment as canAddCommentsRule } from '~/server/security'
 
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const props = defineProps<{
     comments: HistoryItemComments

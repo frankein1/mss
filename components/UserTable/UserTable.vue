@@ -81,11 +81,11 @@
   import { User } from '@prisma/client'
   import { TRPCClientErrorBase } from '@trpc/client'
   import { DefaultErrorShape } from '@trpc/server'
-  import { useAuthStore } from '~/store/auth'
   import { AlertType } from '~/utils/constants/alert'
   import { NonAdminUserRoleLabels } from '~/client/options/user'
   import { userFieldLabels } from '~/client/labels'
   import type { NonAdminUserRole } from '~/types/user'
+  import { useAuthState } from '~/composables/useAuthState'
 
   defineProps<{
     users: User[] | null
@@ -93,9 +93,9 @@
     error: TRPCClientErrorBase<DefaultErrorShape> | null
   }>()
 
-  const authStore = useAuthStore()
+  const authState = useAuthState()
 
   const authUserId = computed(() => {
-    return authStore.userId
+    return authState.user.value.id
   })
 </script>

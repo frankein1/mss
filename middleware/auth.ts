@@ -1,26 +1,23 @@
-import { useAuthStore } from '~/store/auth'
 import { RoutePath } from '~/utils/routing'
 
 export default defineNuxtRouteMiddleware(to => {
-  const { $pinia } = useNuxtApp()
-  const authStore = useAuthStore($pinia)
+  const authState = useAuthState()
 
-  const isAuthenticated = authStore.isAuthenticated
   const isAdminRoute = to.fullPath.startsWith(RoutePath.Admin())
 
-  if (!isAuthenticated) {
+  if (!authState.isAuthenticated()) {
     return navigateTo({
       path: isAdminRoute ? RoutePath.AuthAdmin() : RoutePath.AuthLogin(),
       query: { redirectUrl: to.fullPath }
     })
   }
 
-  if (!authStore.isActive) {
+  if (!authState.isActive()) {
     return navigateTo(RoutePath.ErrorDisabledAccount())
   }
   if (
-    (isAdminRoute && !authStore.isAdmin) ||
-    (!isAdminRoute && authStore.isAdmin)
+    (isAdminRoute && !authState.isAdmin()) ||
+    (!isAdminRoute && authState.isAdmin())
   ) {
     return navigateTo(useHomePage())
   }

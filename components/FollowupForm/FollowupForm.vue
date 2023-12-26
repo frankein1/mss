@@ -310,7 +310,7 @@
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
 
-  const isMinistryAgent = useMinistryAgent()
+  const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = withDefaults(
     defineProps<{
@@ -351,7 +351,7 @@
     return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
   })
 
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const allowEditStructure = computed(() => canEditStructure(user.value))
 

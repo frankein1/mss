@@ -59,7 +59,7 @@
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const filters = ref<FollowupFilterInput>(filtersStore.followup || {})
   const orderBy = ref<FollowupSort[]>([{ date: SortOrder.Desc }])

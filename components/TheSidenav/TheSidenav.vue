@@ -60,7 +60,7 @@
               </a>
             </li>
           </NuxtLink>
-          <li v-if="!authStore.isAdmin">
+          <li v-if="!authState.isAdmin">
             <NuxtLink
               class="fr-btn btn-primary-on-primary fr-mt-3w fr-mx-1w fr-icon-user-add-line fr-btn--icon-left"
               target="_self"
@@ -98,17 +98,15 @@
 <script setup>
   import { canViewStats } from '~/server/security'
   import { RoutePath } from '~/utils/routing'
-  import { useAuthStore } from '~/store/auth'
 
   const homePage = useHomePage()
-  const { user } = useAuth()
-  const authStore = useAuthStore()
+  const authState = useAuthState()
 
   const { version, sourceCode } = useClientVersion()
 
   const menuItems = computed(() => {
     const items = []
-    if (authStore.isAdmin) {
+    if (authState.isAdmin) {
       items.push({
         to: RoutePath.AdminOverview(),
         label: 'Tableau de bord',
@@ -145,7 +143,7 @@
         label: 'Accompagnements',
         icon: 'fr-icon-inbox-archive-line'
       })
-      if (authStore.isAuthenticated && canViewStats(user.value)) {
+      if (authState.isAuthenticated && canViewStats(authState.user.value)) {
         items.push({
           to: RoutePath.AppStats(),
           label: 'Statistiques',

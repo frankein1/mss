@@ -60,15 +60,15 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
   import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
-  import { useAuthStore } from '~/store/auth'
+  import { useAuthState } from '~/composables/useAuthState'
 
   const trpcClient = useTrpcClient()
 
   const isSubmitting = ref(false)
 
-  const authStore = useAuthStore()
+  const authState = useAuthState()
   const displayInfo = computed(() => {
-    const structureType = authStore.userStructureType
+    const structureType = authState.user.value.structureType
     return (
       structureType !== StructureType.Ccas &&
       structureType !== StructureType.Cias

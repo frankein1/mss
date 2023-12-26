@@ -39,7 +39,7 @@
   } from '~/types/matomo'
   import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
 
-  const { user } = useAuth()
+  const { user } = useAuthState()
   const trpcClient = useTrpcClient()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 

@@ -104,7 +104,7 @@
 
   const comments = ref(props.history.comments || [])
 
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const editLink = computed(() => {
     const routeWithParams = props.history.isFollowup

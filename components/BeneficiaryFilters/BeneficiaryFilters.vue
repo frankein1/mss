@@ -30,7 +30,7 @@
   import { isReferent } from '~/server/security'
 
   const trpcClient = useTrpcClient()
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const emit = defineEmits<{
     filter: [filters: BeneficiaryFilterInput]

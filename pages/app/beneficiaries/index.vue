@@ -86,7 +86,7 @@
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
   const orderBy = ref<BeneficiarySort[]>([{ usualName: SortOrder.Asc }])

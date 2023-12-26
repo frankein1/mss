@@ -35,8 +35,8 @@
 
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
-  const isMinistryAgent = useMinistryAgent()
-  const { user } = useAuth()
+  const isMinistryAgent = useAuthState().isMinistryAgent()
+  const { user } = useAuthState()
 
   const emit = defineEmits<{
     filter: [filters: FollowupFilterInput]
@@ -117,7 +117,7 @@
       })
     }
 
-    if (isMinistryAgent.value) {
+    if (isMinistryAgent) {
       filters.push({
         name: 'ministre',
         label: followupFieldLabels.ministre,

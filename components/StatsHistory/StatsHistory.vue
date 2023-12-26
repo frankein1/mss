@@ -189,8 +189,10 @@
 
   const trpcClient = useTrpcClient()
 
-  const isMinistryAgent = useMinistryAgent()
-  const { user } = useAuth()
+  const authState = useAuthState()
+
+  const user = authState.user
+  const isMinistryAgent = authState.isMinistryAgent()
 
   withDefaults(
     defineProps<{

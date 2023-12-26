@@ -64,7 +64,7 @@
     followup: FollowupItem
   }>()
 
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const followupPath = computed(() =>
     RoutePath.AppBeneficiary(props.followup.beneficiary.id, {

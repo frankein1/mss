@@ -24,7 +24,7 @@
   import { RoutePath } from '~/utils/routing'
   import { formatUserDisplayName } from '~/utils/user'
 
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const userName = computed(() => formatUserDisplayName(user.value))
 

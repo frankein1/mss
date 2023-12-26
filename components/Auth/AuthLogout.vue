@@ -31,14 +31,13 @@
 </template>
 
 <script setup lang="ts">
-  import { useAuthStore } from '~/store/auth'
   import { RoutePath, RouteTitle } from '~/utils/routing'
 
   const props = defineProps<{
     inactive: boolean
   }>()
 
-  const store = useAuthStore()
+  const auth = useAuth()
 
   const {
     public: {
@@ -59,7 +58,7 @@
       }
       const { success, url } = data
       if (success) {
-        store.logout()
+        auth.logout()
       }
       if (url) {
         window.location.href = url

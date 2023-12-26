@@ -30,10 +30,11 @@
   import { ministerOptions } from '~/client/options/ministry'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
-  const { user } = useAuth()
+  const authState = useAuthState()
+  const user = authState.user
+  const isMinistryAgent = authState.isMinistryAgent()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
-  const isMinistryAgent = useMinistryAgent()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const emit = defineEmits<{
@@ -172,7 +173,7 @@
       })
     }
 
-    if (isMinistryAgent.value) {
+    if (isMinistryAgent) {
       filters.push({
         name: 'ministre',
         label: helpRequestFieldLabels.ministre,

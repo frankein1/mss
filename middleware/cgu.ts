@@ -1,12 +1,8 @@
-import { UserRole } from '@prisma/client'
-import { useAuthStore } from '~/store/auth'
 import { RoutePath } from '~/utils/routing'
 
 export default defineNuxtRouteMiddleware(to => {
-  const { $pinia } = useNuxtApp()
-  const authStore = useAuthStore($pinia)
-  const user = authStore.user
-  if (!user) {
+  const authState = useAuthState()
+  if (!authState.isAuthenticated()) {
     return navigateTo({
       path: RoutePath.AuthLogin(),
       query: { redirectUrl: to.fullPath }
@@ -15,8 +11,8 @@ export default defineNuxtRouteMiddleware(to => {
   const {
     public: { cguVersion }
   } = useRuntimeConfig()
-  if (user.CGUHistoryVersion !== cguVersion) {
-    if (user.role === UserRole.StructureManager) {
+  if (!authState.hasAcceptedCgu(cguVersion)) {
+    if (authState.isStructureManager()) {
       return navigateTo(RoutePath.CGUManager())
     }
     return navigateTo(RoutePath.CGUUser())

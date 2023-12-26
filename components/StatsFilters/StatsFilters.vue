@@ -20,7 +20,7 @@
   import { canViewStatsByReferent } from '~/server/security'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
 
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const props = defineProps<{
     followupTypeOptions: Options

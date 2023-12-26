@@ -60,7 +60,7 @@
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const filters = ref<HelpRequestFilterInput>(filtersStore.helpRequest || {})
   const orderBy = ref<HelpRequestSort[]>([{ openingDate: SortOrder.Desc }])

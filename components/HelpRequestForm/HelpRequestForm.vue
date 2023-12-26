@@ -301,7 +301,7 @@
   import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
   import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
 
-  const isMinistryAgent = useMinistryAgent()
+  const isMinistryAgent = useAuthState().isMinistryAgent()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const props = withDefaults(
@@ -334,7 +334,7 @@
     submit: [payload: Event]
   }>()
 
-  const { user } = useAuth()
+  const { user } = useAuthState()
 
   const followUpTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')
