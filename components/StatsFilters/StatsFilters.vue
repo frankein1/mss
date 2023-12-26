@@ -20,7 +20,7 @@
   import { canViewStatsByReferent } from '~/server/security'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
 
-  const { user } = useAuthState()
+  const { can } = useSecurityRule()
 
   const props = defineProps<{
     followupTypeOptions: Options
@@ -61,7 +61,7 @@
         type: FilterType.SelectMultiple
       })
     }
-    if (canViewStatsByReferent(user.value)) {
+    if (can(canViewStatsByReferent)) {
       filters.push({
         name: 'referent',
         label: 'Référent',

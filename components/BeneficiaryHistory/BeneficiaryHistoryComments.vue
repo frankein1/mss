@@ -21,8 +21,6 @@
   import { HistoryItem, HistoryItemComment, HistoryItemComments } from './types'
   import { canAddComment as canAddCommentsRule } from '~/server/security'
 
-  const { user } = useAuthState()
-
   const props = defineProps<{
     comments: HistoryItemComments
     history: HistoryItem
@@ -35,6 +33,9 @@
   }>()
 
   const canAddComments = computed(() =>
-    canAddCommentsRule(user.value, props.history.beneficiary)
+    useSecurityRule().canWithTarget(
+      canAddCommentsRule,
+      props.history.beneficiary
+    )
   )
 </script>

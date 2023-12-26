@@ -13,7 +13,7 @@
         {{ beneficiaryCountLabel }}
       </h2>
       <ExportDataButton
-        v-if="canExportStats(user)"
+        v-if="can(canExportStats)"
         :is-downloading="isDownloading"
         stats
         @export="exportStats"
@@ -123,7 +123,8 @@
   import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const trpcClient = useTrpcClient()
-  const { user, isMinistryAgent } = useAuthState()
+  const { isMinistryAgent } = useAuthState()
+  const { can } = useSecurityRule()
 
   withDefaults(
     defineProps<{

@@ -53,10 +53,8 @@
 
   const isEditing = ref(false)
 
-  const { user } = useAuthState()
-
   const canEditComment = computed(() =>
-    canEditCommentRule(user.value, props.comment)
+    useSecurityRule().canWithTarget(canEditCommentRule, props.comment)
   )
 
   const commentDate = computed(() =>

@@ -95,7 +95,5 @@
 
   const authState = useAuthState()
 
-  const authUserId = computed(() => {
-    return authState.user.value.id
-  })
+  const authUserId = authState.getUserId()
 </script>

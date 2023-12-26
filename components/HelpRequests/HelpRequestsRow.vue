@@ -111,17 +111,16 @@
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
 
-  const { helpRequestStatusOptions } = useHelpRequestStatus()
-
   const props = defineProps<{
     helpRequest: HelpRequestItem
   }>()
 
+  const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { canWithTarget } = useSecurityRule()
+
   const emit = defineEmits<{
     updated: [helpRequest: HelpRequestItem]
   }>()
-
-  const { user } = useAuthState()
 
   const helpRequestPath = computed(() =>
     RoutePath.AppBeneficiary(props.helpRequest.beneficiary.id, {
@@ -139,11 +138,11 @@
   )
 
   const canViewHelpRequestDetails = computed(() =>
-    canViewHelpRequestDetailsRule(user.value, props.helpRequest.beneficiary)
+    canWithTarget(canViewHelpRequestDetailsRule, props.helpRequest.beneficiary)
   )
 
   const canQuickEditHelpRequest = computed(() =>
-    canEditHelpRequest(user.value, props.helpRequest)
+    canWithTarget(canEditHelpRequest, props.helpRequest)
   )
 
   const isAcceptedHelpRequest = computed(

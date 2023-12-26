@@ -35,6 +35,8 @@
     saveFollowup: [followup: EditFollowupInput]
   }>()
 
+  const { canWithTarget } = useSecurityRule()
+
   const initialFollowUpTypeIds = computed(
     () => props.followup.types.map(f => f.id) || []
   )
@@ -61,10 +63,8 @@
   //   )
   // )
 
-  const { user } = useAuthState()
-
   const canSetPrivateSynthesis = computed(() =>
-    canEditFollowupPrivateSynthesis(user.value, props.followup)
+    canWithTarget(canEditFollowupPrivateSynthesis, props.followup)
   )
 
   const initialDocumentIds = computed(

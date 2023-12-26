@@ -106,7 +106,7 @@
 
   const menuItems = computed(() => {
     const items = []
-    if (authState.isAdmin) {
+    if (authState.isAdmin()) {
       items.push({
         to: RoutePath.AdminOverview(),
         label: 'Tableau de bord',
@@ -143,7 +143,7 @@
         label: 'Accompagnements',
         icon: 'fr-icon-inbox-archive-line'
       })
-      if (authState.isAuthenticated && canViewStats(authState.user.value)) {
+      if (useSecurityRule().can(canViewStats)) {
         items.push({
           to: RoutePath.AppStats(),
           label: 'Statistiques',

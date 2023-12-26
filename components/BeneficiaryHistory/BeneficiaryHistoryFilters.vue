@@ -29,7 +29,7 @@
     followupStatusOptions
   } from '~/client/options/followup'
   import { typeSuiviOptions } from '~/client/options/history'
-  import { canViewAnyHelpRequestDetails, isReferent } from '~/server/security'
+  import { canViewAnyHelpRequestDetails } from '~/server/security'
   import { formatDate } from '~/utils/formatDate'
   import {
     EventCategory,
@@ -39,14 +39,17 @@
   } from '~/types/matomo'
   import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
 
-  const { user } = useAuthState()
-  const trpcClient = useTrpcClient()
-  const { helpRequestStatusOptions } = useHelpRequestStatus()
-
   const props = defineProps<{
     beneficiaryId: string
     resultsLabel: string
   }>()
+
+  const authState = useAuthState()
+  const isReferent = authState.isReferent()
+  const trpcClient = useTrpcClient()
+  const { helpRequestStatusOptions } = useHelpRequestStatus()
+
+  const { can } = useSecurityRule()
 
   const emit = defineEmits<{
     filter: [filters: BeneficiaryHistoryFilterInput]
@@ -145,7 +148,7 @@
       }
     ]
 
-    if (canViewAnyHelpRequestDetails(user.value)) {
+    if (can(canViewAnyHelpRequestDetails)) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -188,7 +191,7 @@
       )
     }
 
-    if (!isReferent(user.value)) {
+    if (!isReferent) {
       filters.push({
         name: 'referents',
         label: 'Référent',
@@ -203,7 +206,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!canViewAnyHelpRequestDetails(user.value)) {
+    if (!can(canViewAnyHelpRequestDetails)) {
       return new Map()
     }
 

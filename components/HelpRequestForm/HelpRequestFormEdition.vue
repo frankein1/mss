@@ -29,8 +29,6 @@
   import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
   import { prismaDecimalToNumber } from '~/utils/prisma'
 
-  const { user } = useAuthState()
-
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: FollowupType[]
@@ -38,6 +36,8 @@
     instructorOrganizations: InstructorOrganization[]
     helpRequest: GetHelpRequestDetailsOutput
   }>()
+
+  const { canWithTarget } = useSecurityRule()
 
   const emit = defineEmits<{
     saveHelpRequest: [helpRequest: EditHelpRequestInput]
@@ -51,7 +51,7 @@
   })
 
   const canEditPrivateSynthesis = computed(() =>
-    canEditHelpRequestPrivateSynthesis(user.value, props.helpRequest)
+    canWithTarget(canEditHelpRequestPrivateSynthesis, props.helpRequest)
   )
 
   const initialDocumentIds = computed(

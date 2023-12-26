@@ -13,7 +13,7 @@
         {{ historyCountLabel }}
       </h2>
       <ExportDataButton
-        v-if="canExportStats(user)"
+        v-if="can(canExportStats)"
         :is-downloading="isDownloading"
         stats
         @export="exportStats"
@@ -190,8 +190,8 @@
   const trpcClient = useTrpcClient()
 
   const authState = useAuthState()
+  const { can } = useSecurityRule()
 
-  const user = authState.user
   const isMinistryAgent = authState.isMinistryAgent()
 
   withDefaults(

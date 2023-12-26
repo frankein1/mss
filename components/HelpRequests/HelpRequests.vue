@@ -17,7 +17,7 @@
           {{ helpRequestsCount }} instruction(s) de dossier
         </p>
         <ExportDataButton
-          v-if="canExportHistory(user)"
+          v-if="can(canExportHistory)"
           :is-downloading="isDownloading"
           @export="exportHelpRequests"
         />
@@ -60,7 +60,7 @@
 
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
-  const { user } = useAuthState()
+  const { can } = useSecurityRule()
 
   const filters = ref<HelpRequestFilterInput>(filtersStore.helpRequest || {})
   const orderBy = ref<HelpRequestSort[]>([{ openingDate: SortOrder.Desc }])

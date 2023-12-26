@@ -1,6 +1,7 @@
 <template>
   <div class="comment-form-section">
     <BeneficiaryHistoryCommentUserInitials
+      v-if="currentUser"
       class="fr-mr-3v"
       :user="currentUser"
     />

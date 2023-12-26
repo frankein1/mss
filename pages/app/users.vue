@@ -36,7 +36,7 @@
 
   useHead({ title })
 
-  const { user } = useAuthState()
+  const { can } = useSecurityRule()
   const trpcClient = useTrpcClient()
 
   const {
@@ -46,5 +46,5 @@
     error: usersError
   } = await trpcClient.user.getUsers.useQuery()
 
-  const canCreateUser = computed(() => canCreateUserRule(user.value))
+  const canCreateUser = can(canCreateUserRule)
 </script>

@@ -33,7 +33,7 @@
                 {{ beneficiariesCount }} bénéficiaire(s)
               </p>
               <ExportDataButton
-                v-if="canExportBeneficiaries(user)"
+                v-if="can(canExportBeneficiaries)"
                 :is-downloading="isDownloading"
                 @export="exportBeneficiaries"
               />
@@ -84,9 +84,9 @@
     name: Route.AppBeneficiaries
   })
 
+  const { can } = useSecurityRule()
   const filtersStore = useFiltersStore()
   const trpcClient = useTrpcClient()
-  const { user } = useAuthState()
 
   const filters = ref<BeneficiaryFilterInput>(filtersStore.beneficiary || {})
   const orderBy = ref<BeneficiarySort[]>([{ usualName: SortOrder.Asc }])

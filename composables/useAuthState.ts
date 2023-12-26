@@ -1,26 +1,49 @@
 import { StructureType, UserRole, UserStatus } from '@prisma/client'
 import { JwtUser } from '~/types/user'
+import { formatUserDisplayName } from '~/utils/user'
 
 export function useAuthState() {
-  const user = useState<JwtUser>('auth:state')
+  const user = useState<JwtUser | undefined | null>(
+    'auth:state',
+    () => undefined
+  )
+
+  const role = computed(() => {
+    return user.value ? user.value.role : null
+  })
+
+  const status = computed(() => {
+    return user.value ? user.value.status : null
+  })
+
+  function getUserName() {
+    return user.value ? formatUserDisplayName(user.value) : ''
+  }
+
+  function getUserId() {
+    return user.value ? user.value.id : undefined
+  }
 
   function isAuthenticated() {
-    return !!user
+    return !!user.value
   }
   function isReferent(): boolean {
-    return user.value.role === UserRole.Referent
+    return role.value === UserRole.Referent
   }
   function isAdmin(): boolean {
-    return user.value.role === UserRole.Administrator
+    return role.value === UserRole.Administrator
   }
   function isStructureManager(): boolean {
-    return user.value.role === UserRole.StructureManager
+    return role.value === UserRole.StructureManager
   }
   function isActive() {
-    return user.value.status === UserStatus.Active
+    return status.value === UserStatus.Active
   }
 
   function isMinistryAgent() {
+    if (!user.value) {
+      return false
+    }
     return user.value.structureType === StructureType.Ministere
   }
 
@@ -39,6 +62,8 @@ export function useAuthState() {
     isActive,
     isMinistryAgent,
     isStructureManager,
+    getUserName,
+    getUserId,
     hasAcceptedCgu
   }
 }

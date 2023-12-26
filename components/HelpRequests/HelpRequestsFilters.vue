@@ -23,7 +23,7 @@
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
-  import { canViewAnyHelpRequestDetails, isReferent } from '~/server/security'
+  import { canViewAnyHelpRequestDetails } from '~/server/security'
   import { useFiltersStore } from '~/store/filters'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
@@ -31,11 +31,12 @@
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
   const authState = useAuthState()
-  const user = authState.user
   const isMinistryAgent = authState.isMinistryAgent()
+  const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
   const filtersStore = useFiltersStore()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { can } = useSecurityRule()
 
   const emit = defineEmits<{
     filter: [filters: HelpRequestFilterInput]
@@ -116,7 +117,7 @@
       }
     ]
 
-    if (canViewAnyHelpRequestDetails(user.value)) {
+    if (can(canViewAnyHelpRequestDetails)) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -161,7 +162,7 @@
       )
     }
 
-    if (!isReferent(user.value)) {
+    if (!isReferent) {
       filters.push({
         name: 'referents',
         label: 'Référent',
@@ -188,7 +189,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!canViewAnyHelpRequestDetails(user.value)) {
+    if (!can(canViewAnyHelpRequestDetails)) {
       return new Map()
     }
 

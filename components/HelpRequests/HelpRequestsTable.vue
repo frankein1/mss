@@ -88,6 +88,8 @@
     pending: boolean
   }>()
 
+  const { can } = useSecurityRule()
+
   const emit = defineEmits<{
     'update:sort': [sort: HelpRequestSort[]]
     'helpRequestUpdated': [helpRequest: HelpRequestItem]
@@ -99,9 +101,7 @@
     emit
   )
 
-  const { user } = useAuthState()
-
   const canViewAnyHelpRequestDetails = computed(() =>
-    canViewAnyHelpRequestDetailsRule(user.value)
+    can(canViewAnyHelpRequestDetailsRule)
   )
 </script>

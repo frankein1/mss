@@ -52,7 +52,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { StructureType } from '@prisma/client'
   import {
     saveBeneficiaryHealthSchema,
     SaveBeneficiaryHealthInput
@@ -60,20 +59,14 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
   import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
-  import { useAuthState } from '~/composables/useAuthState'
+  import { canViewHealthInfo } from '~/server/security'
 
   const trpcClient = useTrpcClient()
 
   const isSubmitting = ref(false)
 
-  const authState = useAuthState()
-  const displayInfo = computed(() => {
-    const structureType = authState.user.value.structureType
-    return (
-      structureType !== StructureType.Ccas &&
-      structureType !== StructureType.Cias
-    )
-  })
+  const { canWithStructureType } = useSecurityRule()
+  const displayInfo = canWithStructureType(canViewHealthInfo)
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string

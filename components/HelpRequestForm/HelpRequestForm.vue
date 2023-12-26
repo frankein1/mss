@@ -322,6 +322,8 @@
     { pastStatuses: undefined, isEditing: false, canEditPrivateSynthesis: true }
   )
 
+  const { can } = useSecurityRule()
+
   const form = ref<HTMLFormElement | null>(null)
 
   const { errors } = useDisplayFormErrors(
@@ -333,8 +335,6 @@
   const emit = defineEmits<{
     submit: [payload: Event]
   }>()
-
-  const { user } = useAuthState()
 
   const followUpTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')
@@ -383,13 +383,13 @@
     () => props.isEditing && (isAnswered.value || isDropped.value)
   )
 
-  const allowEditStructure = computed(() => canEditStructure(user.value))
+  const allowEditStructure = computed(() => can(canEditStructure))
 
   const canCreatePrescribingOrganization = computed(() =>
-    canCreatePrescribingOrganizationRule(user.value)
+    can(canCreatePrescribingOrganizationRule)
   )
 
   const canCreateInstructorOrganization = computed(() =>
-    canCreateInstructorOrganizationRule(user.value)
+    can(canCreateInstructorOrganizationRule)
   )
 </script>

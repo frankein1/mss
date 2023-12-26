@@ -16,6 +16,8 @@ export type {
   SecurityRule
 }
 
+export * from './health'
+
 export {
   canCreateUser,
   canEditUser,

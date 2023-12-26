@@ -326,6 +326,8 @@
     { canSetPrivateSynthesis: true }
   )
 
+  const { can } = useSecurityRule()
+
   const emit = defineEmits<{
     submit: [payload: Event]
   }>()
@@ -351,11 +353,9 @@
     return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
   })
 
-  const { user } = useAuthState()
-
-  const allowEditStructure = computed(() => canEditStructure(user.value))
+  const allowEditStructure = computed(() => can(canEditStructure))
 
   const canCreatePrescribingOrganization = computed(() =>
-    canCreatePrescribingOrganizationRule(user.value)
+    can(canCreatePrescribingOrganizationRule)
   )
 </script>

@@ -8,7 +8,7 @@ export function useAuth() {
     state.user.value = user
   }
   function logout() {
-    // state.user.value = null
+    state.user.value = null
   }
 
   function refreshToken() {
