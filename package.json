@@ -22,7 +22,6 @@
     "@aws-sdk/s3-request-presigner": "^3.429.0",
     "@gouvfr/dsfr": "~1.10.2",
     "@gouvminint/vue-dsfr": "^5.0.0",
-    "@pinia/nuxt": "^0.5.1",
     "@prisma/client": "^5.4.2",
     "@sentry/vue": "^7.74.1",
     "@trpc/client": "^10.40.0",
