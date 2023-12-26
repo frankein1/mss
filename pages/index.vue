@@ -187,6 +187,10 @@
   definePageMeta({
     layout: 'landing'
   })
+
+  onMounted(() => {
+    console.log(process.env)
+  })
 </script>
 
 <style lang="scss" scoped>

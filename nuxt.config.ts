@@ -203,7 +203,12 @@ export default defineNuxtConfig({
         // FIXME: Missing sentry
         'connect-src': [
           "'self'",
-          process.env.MATOMO_HOST || 'https://toujours.pas.de.matomo'
+          'https://api-adresse.data.gouv.fr',
+          'https://geo.api.gouv.fr',
+          process.env.NUXT_PUBLIC_MATOMO_HOST ||
+            'https://toujours.pas.de.matomo',
+          process.env.NUXT_PUBLIC_SENTRY_HOST ||
+            'https://toujours.pas.de.sentry'
         ]
       },
       crossOriginEmbedderPolicy: false
