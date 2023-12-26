@@ -15,6 +15,16 @@ const prismaIndexBrowser = path.normalize(
   path.relative(process.cwd(), prismaClient)
 )
 
+const connectSrcCSP = ["'self'"]
+
+if (process.env.MATOMO_HOST) {
+  connectSrcCSP.push(process.env.MATOMO_HOST)
+}
+
+if (process.env.SENTRY_HOST) {
+  connectSrcCSP.push(process.env.SENTRY_HOST)
+}
+
 export default defineNuxtConfig({
   // https://nuxt.com/blog/v3-8
   typescript: {
@@ -199,7 +209,9 @@ export default defineNuxtConfig({
   security: {
     removeLoggers: false,
     headers: {
-      contentSecurityPolicy: false,
+      contentSecurityPolicy: {
+        'connect-src': connectSrcCSP
+      },
       crossOriginEmbedderPolicy: false
     },
     rateLimiter: { tokensPerInterval: 300, interval: 300000 }
