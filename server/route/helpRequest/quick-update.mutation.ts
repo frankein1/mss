@@ -43,13 +43,13 @@ function prepareData(
       status !== HelpRequestStatus.Accepted &&
       status !== HelpRequestStatus.Refused
     ) {
-      _data = { ..._data, decisionDate: undefined }
+      _data = { ..._data, decisionDate: null }
     }
     if (status !== HelpRequestStatus.Accepted) {
-      _data = { ..._data, handlingDate: undefined, allocatedAmount: undefined }
+      _data = { ..._data, handlingDate: null, allocatedAmount: null }
     }
     if (status !== HelpRequestStatus.Refused) {
-      _data = { ..._data, refusalReason: undefined }
+      _data = { ..._data, refusalReason: null }
     }
     return _data
   }
