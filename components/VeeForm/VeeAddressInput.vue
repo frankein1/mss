@@ -74,10 +74,12 @@
     selectedValue.value = address.name
     const addressParts = address.context.split(',')
     const region = addressParts.length > 2 ? addressParts[2].trim() : ''
+    const departement = addressParts.length > 1 ? addressParts[1].trim() : ''
     emit('addressSelected', {
       zipCode: address.postcode,
       city: address.city,
-      region
+      region,
+      departement
     })
   }
 </script>
