@@ -30,7 +30,8 @@ const statFilterSchema = z.object({
   cities: z
     .array(stringConstraint.max(50, maxStringLengthMessage(50)))
     .nullish(),
-  referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish()
+  referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+  beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish()
 })
 
 type StatFilterInput = z.infer<typeof statFilterSchema>

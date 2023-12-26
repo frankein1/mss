@@ -42,6 +42,10 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
     formattedFilters.referents = { some: { id: { equals: filters.referent } } }
   }
 
+  if (filters.beneficiaryStatus) {
+    formattedFilters.status = filters.beneficiaryStatus
+  }
+
   return formattedFilters
 }
 
@@ -64,6 +68,14 @@ export function prepareHelpRequestStatFilters(filters: StatFilterInput) {
     formattedFilters.createdBy = { id: filters.referent }
   }
 
+  if (filters.beneficiaryStatus) {
+    if (formattedFilters.beneficiary) {
+      formattedFilters.beneficiary.status = filters.beneficiaryStatus
+    } else {
+      formattedFilters.beneficiary = { status: filters.beneficiaryStatus }
+    }
+  }
+
   return formattedFilters
 }
 
@@ -84,6 +96,14 @@ export function prepareFollowupStatFilters(filters: StatFilterInput) {
 
   if (filters.referent) {
     formattedFilters.createdBy = { id: filters.referent }
+  }
+
+  if (filters.beneficiaryStatus) {
+    if (formattedFilters.beneficiary) {
+      formattedFilters.beneficiary.status = filters.beneficiaryStatus
+    } else {
+      formattedFilters.beneficiary = { status: filters.beneficiaryStatus }
+    }
   }
 
   return formattedFilters
