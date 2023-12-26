@@ -1,5 +1,6 @@
 export default defineEventHandler(event => {
   const request = getRequestURL(event)
+  const headers = getRequestHeaders(event)
 
   // eslint-disable-next-line no-console
   console.log({
@@ -9,8 +10,8 @@ export default defineEventHandler(event => {
     method: event.method,
     path: request.pathname,
     queryParams: request.searchParams,
-    userAgent: '',
+    userAgent: headers['user-agent'],
     statutReponse: '',
-    dureeTraitement: ''
+    executionTime: ''
   })
 })
