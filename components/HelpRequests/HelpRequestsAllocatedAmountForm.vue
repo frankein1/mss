@@ -1,7 +1,7 @@
 <template>
   <form
     novalidate
-    @input="onUpdateAllocatedAmount"
+    @change="onUpdateAllocatedAmount"
     @submit.prevent
   >
     <VeeCurrencyInput
