@@ -122,6 +122,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
     zipcode: general.zipcode || '',
     city: general.city || '',
     region: general.region || '',
+    department: general.department || '',
     phone1: general.phone1 || '',
     phone2: general.phone2 || '',
     email: general.email || '',
