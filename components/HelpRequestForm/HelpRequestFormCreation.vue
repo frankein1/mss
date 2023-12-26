@@ -42,7 +42,7 @@
   const { handleSubmit } = useForm<CreateHelpRequestInput>({
     validationSchema: toTypedSchema(createHelpRequestSchema),
     initialValues: {
-      isMinistry: isMinistryAgent(),
+      isMinistry: isMinistryAgent,
       beneficiaryId: props.beneficiaryId,
       openingDate: new Date(),
       status: HelpRequestStatus.WaitingAdditionalInformation,
