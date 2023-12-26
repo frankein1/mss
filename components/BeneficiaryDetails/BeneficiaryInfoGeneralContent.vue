@@ -80,6 +80,11 @@
         :value="general.addressComplement"
         class="fr-col-6"
       />
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.department"
+        :value="general.department"
+        class="fr-col-6"
+      />
     </div>
   </div>
 
