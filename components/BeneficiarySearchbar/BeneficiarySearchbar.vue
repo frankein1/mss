@@ -22,6 +22,7 @@
       :to="RoutePath.AppBeneficiariesAdd()"
       class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line add-beneficiary-btn"
       target="_self"
+      @click="onAccessBeneficiaryAdd"
     >
       Ajouter un·e bénéficiaire
     </NuxtLink>
@@ -30,6 +31,10 @@
 
 <script setup lang="ts">
   import { Route, RoutePath } from '~/utils/routing'
+  import {
+    AccessBeneficiaryAddEventAction,
+    EventCategory
+  } from '~/types/matomo'
 
   const route = useRoute()
   const routeName = route.name as
@@ -42,6 +47,14 @@
       query
     })
     return beneficiaries
+  }
+
+  function onAccessBeneficiaryAdd() {
+    const { matomo } = useMatomo()
+    matomo.trackEvent(
+      EventCategory.AccessBeneficiaryAdd,
+      AccessBeneficiaryAddEventAction.FromOverview
+    )
   }
 </script>
 
