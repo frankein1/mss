@@ -17,10 +17,8 @@ import {
 
 import {
   getFollowupSecurityTarget,
-  getStructureByUser,
   markFollowupTypeAsUsed
 } from '~/server/query'
-import { hasAccessfollowupFields } from '~/security/permission'
 import { FollowupRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import {
@@ -161,11 +159,6 @@ const securityCheck = async (
     isNewOption(input.prescribingOrganizationId) &&
     !canCreatePrescribingOrganization(user)
   ) {
-    return false
-  }
-  // CAN ACCESS ALL UPDATED FIELDS
-  const { type } = await getStructureByUser(user)
-  if (!hasAccessfollowupFields(type, Object.keys(input))) {
     return false
   }
 
