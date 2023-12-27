@@ -8,7 +8,8 @@ import {
   stringConstraint,
   emailOrEmpty,
   stringOrEmpty,
-  dateOrEmpty
+  dateOrEmpty,
+  openText
 } from './helpers.schema'
 import { maxStringLengthMessage } from '~/utils/zod'
 
@@ -21,9 +22,7 @@ export const createOrUpdateEntourageSchema = z.object({
   email: emailOrEmpty(),
   phone: stringOrEmpty(phoneConstraint),
   caregiver: z.boolean().default(false),
-  additionalInformation: stringConstraint
-    .max(200, maxStringLengthMessage(200))
-    .nullish()
+  additionalInformation: openText(200).nullish()
 })
 
 export type CreateOrUpdateEntourageInput = z.infer<

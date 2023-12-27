@@ -1,9 +1,8 @@
 import { z } from 'zod'
-import { stringConstraint } from './helpers.schema'
-import { maxStringLengthMessage } from '~/utils/zod'
+import { openText } from './helpers.schema'
 
 const addCommentSchema = z.object({
-  content: stringConstraint.max(3000, maxStringLengthMessage(3000)),
+  content: openText(3000),
   beneficiaryId: z.string().uuid(),
   isFollowup: z.boolean(),
   historyId: z.string().uuid()
@@ -12,7 +11,7 @@ const addCommentSchema = z.object({
 type AddCommentInput = z.infer<typeof addCommentSchema>
 
 const editCommentSchema = z.object({
-  content: stringConstraint.max(3000, maxStringLengthMessage(3000)),
+  content: openText(3000),
   commentId: z.string().uuid()
 })
 

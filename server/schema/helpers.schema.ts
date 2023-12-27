@@ -21,7 +21,7 @@ export const optionalPaginatedSchema = z.object({
 export type PaginatedInput = z.infer<typeof paginatedSchema>
 
 export const idSchema = z.object({
-  id: z.string()
+  id: z.string().uuid()
 })
 
 export type IdInput = z.infer<typeof idSchema>
@@ -94,3 +94,11 @@ export const amountNumber = z.preprocess(
 )
 
 export const dateOrEmpty = z.coerce.date().nullish().or(z.literal(''))
+
+export const openText = (maxLength: number) =>
+  stringConstraint
+    .max(maxLength, maxStringLengthMessage(maxLength))
+    .refine(
+      v => !v.includes('<') && !v.includes('>'),
+      'Les caractères spéciaux < et > ne sont pas acceptés.'
+    )
