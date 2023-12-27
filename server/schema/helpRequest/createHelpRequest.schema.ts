@@ -11,10 +11,10 @@ import {
   kindOfBooleanSchema,
   requiredNativeEnum,
   amountNumber,
-  stringConstraint,
-  dateOrEmpty
+  dateOrEmpty,
+  openText
 } from '../helpers.schema'
-import { errorMessages, maxStringLengthMessage } from '~/utils/zod'
+import { errorMessages } from '~/utils/zod'
 
 export const createHelpRequestSchema = z.object({
   beneficiaryId: z.string().uuid(),
@@ -34,16 +34,12 @@ export const createHelpRequestSchema = z.object({
   reason: withEmptyValueOptionalNativeEnum(HelpRequestReason),
   paymentDate: dateOrEmpty,
   handlingDate: dateOrEmpty,
-  refusalReason: stringConstraint
-    .max(100, maxStringLengthMessage(100))
-    .nullish(),
+  refusalReason: openText(100).nullish(),
   prescribingOrganizationId: z.string().nullish(),
   instructorOrganizationId: z.string().nullish(),
   dispatchDate: dateOrEmpty,
-  synthesis: stringConstraint.max(6000, maxStringLengthMessage(6000)).nullish(),
-  privateSynthesis: stringConstraint
-    .max(1000, maxStringLengthMessage(1000))
-    .nullish(),
+  synthesis: openText(6000).nullish(),
+  privateSynthesis: openText(1000).nullish(),
   dueDate: dateOrEmpty,
   fullFile: z.boolean().default(false)
 })
