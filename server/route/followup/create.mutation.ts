@@ -13,10 +13,9 @@ import {
   canCreateFollowup,
   canCreatePrescribingOrganization
 } from '~/server/security'
-import { getStructureByUser, markFollowupTypeAsUsed } from '~/server/query'
+import { markFollowupTypeAsUsed } from '~/server/query'
 import { FollowupRepo, BeneficiaryRepo } from '~/server/database'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
-import { hasAccessfollowupFields } from '~/security/permission'
 import {
   connect,
   prepareDocumentsMutations,
@@ -164,11 +163,6 @@ const securityCheck = async (
     isNewOption(input.prescribingOrganizationId) &&
     !canCreatePrescribingOrganization(user)
   ) {
-    return false
-  }
-  const { type } = await getStructureByUser(user)
-
-  if (!hasAccessfollowupFields(type, Object.keys(input))) {
     return false
   }
   return true
