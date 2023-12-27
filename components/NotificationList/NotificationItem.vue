@@ -3,9 +3,8 @@
     <NuxtLink
       class="fr-link"
       :to="itemLink"
+      >{{ itemTitle }}</NuxtLink
     >
-      {{ itemTitle }}
-    </NuxtLink>
   </h3>
   <span
     :class="[

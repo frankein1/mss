@@ -16,9 +16,8 @@
                 target="_blank"
                 title="Modifier mon mot de passe InclusionConnect - nouvelle fenêtre"
                 rel="noopener external"
+                >Modifier mon mot de passe</NuxtLink
               >
-                Modifier mon mot de passe
-              </NuxtLink>
             </li>
           </ul>
         </main>

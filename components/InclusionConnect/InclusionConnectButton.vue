@@ -18,9 +18,8 @@
       target="_blank"
       rel="noopener external"
       title="Qu'est-ce qu'Inclusion Connect ? - nouvelle fenêtre"
+      >En savoir plus</NuxtLink
     >
-      En savoir plus
-    </NuxtLink>
   </div>
 
   <div class="fr-grid-row fr-grid-row--center fr-mt-6w">
