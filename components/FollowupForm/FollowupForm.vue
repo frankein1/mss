@@ -82,7 +82,6 @@
               <NuxtLink
                 v-if="allowEditStructure"
                 :to="RoutePath.AppStructureEdit()"
-                target="_self"
               >
                 Personnaliser les objets des entretiens de ma structure.
               </NuxtLink>
@@ -243,7 +242,7 @@
                   class="fr-fieldset__legend"
                 >
                   {{ followupFieldLabels.signalements }}
-                </legend> 
+                </legend>
                 <div
                   v-for="[value, label] in followupSignalementOptions"
                   :key="value"

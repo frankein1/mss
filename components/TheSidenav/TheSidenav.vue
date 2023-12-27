@@ -20,7 +20,6 @@
         <div class="fr-sidemenu__title">
           <NuxtLink
             :to="homePage"
-            target="_self"
             title="Retour au tableau de bord"
           >
             <img
@@ -48,7 +47,6 @@
                 :href="href"
                 class="fr-sidemenu__link"
                 :aria-current="isActive ? 'page' : undefined"
-                target="_self"
                 @click="navigate"
               >
                 <span
@@ -63,7 +61,6 @@
           <li v-if="!authState.isAdmin()">
             <NuxtLink
               class="fr-btn btn-primary-on-primary fr-mt-3w fr-mx-1w fr-icon-user-add-line fr-btn--icon-left"
-              target="_self"
               :to="RoutePath.AppBeneficiariesAdd()"
             >
               Créer un·e bénéficiaire
@@ -75,7 +72,6 @@
             <NuxtLink
               class="fr-footer__bottom-link"
               :to="RoutePath.DeclarationAccessibilite()"
-              target="_self"
             >
               Accessibilité: non conforme
             </NuxtLink>

@@ -9,7 +9,6 @@
           :to="RoutePath.AppBeneficiaryFollowupAdd(beneficiaryId)"
           class="fr-btn fr-icon-file-add-line followup-btn"
           title="Ajouter une synthèse d'entretien"
-          target="_self"
         >
           Synthèse d'entretien
         </NuxtLink>
@@ -24,7 +23,6 @@
           "
           class="fr-btn fr-icon-file-add-line help-request-btn"
           title="Instruire un dossier"
-          target="_self"
         >
           Instruction de dossier
         </NuxtLink>

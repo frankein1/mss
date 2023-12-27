@@ -18,7 +18,6 @@
         <NuxtLink
           class="fr-btn"
           to="/"
-          target="_self"
         >
           Page d'accueil
         </NuxtLink>
