@@ -85,6 +85,7 @@
             v-for="helpRequest in helpRequests"
             :key="helpRequest.id"
             :help-request="helpRequest"
+            :general-permissions="permissions"
             @updated="emit('helpRequestUpdated', $event)"
           />
         </tbody>

@@ -10,7 +10,7 @@
     >
       <td>
         <HelpRequestsStatusForm
-          v-if="permissions?.edit"
+          v-if="props.helpRequest.permissions"
           :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
@@ -24,7 +24,7 @@
         </span>
       </td>
       <td>{{ helpRequest.type.name }}</td>
-      <td v-if="permissions?.get.anyDueDate">
+      <td v-if="generalPermissions?.get.anyDueDate">
         <template v-if="helpRequest.dueDate">
           {{ formatDate(helpRequest.dueDate) }}
         </template>
@@ -32,20 +32,20 @@
       <td>
         {{ formatBeneficiaryDisplayName(helpRequest.beneficiary) }}
       </td>
-      <td v-if="permissions?.get.anyInstructorOrganization">
+      <td v-if="generalPermissions?.get.anyInstructorOrganization">
         {{ instructorOrganization }}
       </td>
-      <td v-if="permissions?.get.anyExaminationDate">
+      <td v-if="generalPermissions?.get.anyExaminationDate">
         <template v-if="helpRequest.examinationDate">
           {{ formatDate(helpRequest.examinationDate) }}
         </template>
       </td>
-      <td v-if="permissions?.get.anyAskedAmount">
+      <td v-if="generalPermissions?.get.anyAskedAmount">
         <template v-if="helpRequest.askedAmount">
           {{ euros(helpRequest.askedAmount) }}
         </template>
       </td>
-      <td v-if="permissions?.get.anyAllocatedAmount">
+      <td v-if="generalPermissions?.get.anyAllocatedAmount">
         <HelpRequestsAllocatedAmountForm
           v-if="canEditAllocatedAmount"
           :help-request="helpRequest"
@@ -56,7 +56,7 @@
           {{ euros(helpRequest.allocatedAmount) }}
         </template>
       </td>
-      <td v-if="permissions?.get.anyPaymentMethod">
+      <td v-if="generalPermissions?.get.anyPaymentMethod">
         <HelpRequestsPaymentMethodForm
           v-if="canEditPaymentMethod"
           :help-request="helpRequest"
@@ -67,7 +67,7 @@
           {{ paymentMethodOptions.get(helpRequest.paymentMethod) }}
         </template>
       </td>
-      <td v-if="permissions?.get.anyPaymentDate">
+      <td v-if="generalPermissions?.get.anyPaymentDate">
         <HelpRequestsPaymentDateForm
           v-if="canEditPaymentDate"
           :help-request="helpRequest"
@@ -78,7 +78,7 @@
           {{ formatDate(helpRequest.paymentDate) }}
         </template>
       </td>
-      <td v-if="permissions?.get.anyHandlingDate">
+      <td v-if="generalPermissions?.get.anyHandlingDate">
         <template v-if="helpRequest.handlingDate">{{
           formatDate(helpRequest.handlingDate)
         }}</template>
@@ -106,9 +106,11 @@
   import { formatDate } from '~/utils/formatDate'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
+  import { HelpRequestPermissions } from '~/server/security'
 
   const props = defineProps<{
     helpRequest: HelpRequestItem
+    generalPermissions: HelpRequestPermissions | null
   }>()
 
   const { helpRequestStatusOptions } = useHelpRequestStatus()
@@ -116,9 +118,6 @@
   const emit = defineEmits<{
     updated: [helpRequest: HelpRequestItem]
   }>()
-
-  const { data: permissions } =
-    await useTrpcClient().permissions.getHelpRequestPermissions.useQuery()
 
   const helpRequestPath = computed(() =>
     RoutePath.AppBeneficiary(props.helpRequest.beneficiary.id, {
@@ -143,14 +142,14 @@
 
   const canEditAllocatedAmount = computed(
     () =>
-      permissions.value?.edit &&
+      props.helpRequest.permissions.edit &&
       isFinancialSupport.value &&
       props.helpRequest.status === HelpRequestStatus.Accepted
   )
 
   const canEditPaymentMethod = computed(
     () =>
-      permissions.value?.edit &&
+      props.helpRequest.permissions.edit &&
       isFinancialSupport.value &&
       props.helpRequest.status === HelpRequestStatus.Accepted &&
       !isExternalSupport.value
@@ -158,7 +157,7 @@
 
   const canEditPaymentDate = computed(
     () =>
-      permissions.value?.edit &&
+      props.helpRequest.permissions.edit &&
       isFinancialSupport.value &&
       props.helpRequest.status === HelpRequestStatus.Accepted &&
       !isExternalSupport.value

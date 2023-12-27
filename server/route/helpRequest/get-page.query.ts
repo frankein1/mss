@@ -55,8 +55,16 @@ const handler = async ({
     })
   ])
   const totalPages = getTotalPages({ count, perPage: input.perPage })
+  const helpRequestsWithPermissions = helpRequests.map(hr => ({
+    ...hr,
+    permissions: getHelpRequestPermissions({ user, structure, target: hr })
+  }))
 
-  return { helpRequests, count, totalPages }
+  return {
+    helpRequests: helpRequestsWithPermissions,
+    count,
+    totalPages
+  }
 }
 
 export const getHelpRequestsQuery = createQuery({
