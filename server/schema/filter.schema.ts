@@ -70,8 +70,8 @@ const helpRequestFilterSchema = z.object({
   followupTypes: z.array(z.string().uuid()).nullish(),
   referents: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
-  handlingDate: kindOfBooleanSchema().nullish(),
-  externalStructure: kindOfBooleanSchema().nullish(),
+  handlingDate: kindOfBooleanSchema(),
+  externalStructure: kindOfBooleanSchema(),
   ministre: z.array(z.nativeEnum(Minister)).nullish()
 })
 
@@ -83,8 +83,8 @@ const beneficiaryHistoryFilterSchema = z.object({
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
-  handlingDate: kindOfBooleanSchema().nullish(),
-  externalStructure: kindOfBooleanSchema().nullish(),
+  handlingDate: kindOfBooleanSchema(),
+  externalStructure: kindOfBooleanSchema(),
   referents: z.array(z.string().uuid()).nullish()
 })
 

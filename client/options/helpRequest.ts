@@ -47,30 +47,67 @@ export const helpRequestSubjectLabels: { [key in HelpRequestSubject]: string } =
     [HelpRequestSubject.Other]: 'Autre'
   }
 
-const helpRequestSubjectPictos: { [key in HelpRequestSubject]: string } = {
-  [HelpRequestSubject.Housing]: '~/assets/pictograms/building.svg',
-  [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
-  [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
-}
+export const helpRequestSubjectPictos: { [key in HelpRequestSubject]: string } =
+  {
+    [HelpRequestSubject.Housing]: '~/assets/pictograms/building.svg',
+    [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
+    [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
+  }
 
 export const helpRequestSubjectOptions = labelsToOptions(
   helpRequestSubjectLabels,
   helpRequestSubjectPictos
 )
 
-export const helpRequestRefusalReasonLabels: {
-  [key in HelpRequestRefusalReason]: string
-} = {
+const baseRefusalReasonLabels = {
   [HelpRequestRefusalReason.ResourcesOutOfScale]: 'Ressources hors barème',
   [HelpRequestRefusalReason.ShortDeadline]: 'Délai trop court',
   [HelpRequestRefusalReason.IncompleteFile]: 'Dossier incomplet',
-  [HelpRequestRefusalReason.IrregularSituation]: 'En situation irrégulière',
+  [HelpRequestRefusalReason.IrregularSituation]: 'En situation irrégulière'
+}
+
+const otherOrFinancialHelpRequestRefusalReasonLabels = {
+  ...baseRefusalReasonLabels,
+  [HelpRequestRefusalReason.MissedAppointment]: 'Absence au rendez-vous',
+  [HelpRequestRefusalReason.AlreadyExistingHelpRequest]:
+    "Instruction déjà en cours auprès d'un autre organisme",
+  [HelpRequestRefusalReason.Reoriented]:
+    "Réorientation auprès d'un autre organisme",
+  [HelpRequestRefusalReason.Debt]: 'Endettement',
+  [HelpRequestRefusalReason.Other]: 'Autre'
+}
+
+const housingHelpRequestRefusalReasonLabels = {
+  ...baseRefusalReasonLabels,
   [HelpRequestRefusalReason.InadequateFamilyComposition]:
     'Composition familiale inadaptée au type de logement',
   [HelpRequestRefusalReason.ExpiredRequest]: 'Demande expirée',
   [HelpRequestRefusalReason.Other]: 'Autre'
 }
 
-export const helpRequestRefusalReasonOptions = labelsToOptions(
-  helpRequestRefusalReasonLabels
+export const helpRequestRefusalReasonLabels: {
+  [key in HelpRequestRefusalReason]: string
+} = {
+  ...otherOrFinancialHelpRequestRefusalReasonLabels,
+  ...housingHelpRequestRefusalReasonLabels
+}
+
+const otherOrFinancialHelpRequestRefusalReasonOptions = labelsToOptions(
+  otherOrFinancialHelpRequestRefusalReasonLabels
 )
+
+const housingHelpRequestRefusalReasonOptions = labelsToOptions(
+  housingHelpRequestRefusalReasonLabels
+)
+
+export const helpRequestRefusalReasonOptions = (subject: HelpRequestSubject) =>
+  subject === HelpRequestSubject.Housing
+    ? housingHelpRequestRefusalReasonOptions
+    : otherOrFinancialHelpRequestRefusalReasonOptions
+
+export const isRefundableLabels = {
+  false: 'Non remboursable',
+  true: 'Remboursable'
+}
+
+export const isRefundableOptions = labelsToOptions(isRefundableLabels)

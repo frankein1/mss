@@ -36,5 +36,6 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   externalStructure: 'Demande réalisée',
   updated: 'Dernière mise à jour',
   createdById: 'Agent',
-  subject: "Type d'instruction de dossier"
+  subject: "Type d'instruction de dossier",
+  isRefundable: 'Cette aide est...'
 }

@@ -25,7 +25,7 @@ export const createHelpRequestSchemaBase = z.object({
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   typeId: z.string(errorMessages).uuid(),
   documents: z.array(z.string(), errorMessages).default([]),
-  externalStructure: kindOfBooleanSchema(),
+  externalStructure: kindOfBooleanSchema(true),
   status: requiredNativeEnum(HelpRequestStatus),
   askedAmount: amountNumber.nullish(),
   examinationDate: dateOrEmpty,
@@ -42,7 +42,8 @@ export const createHelpRequestSchemaBase = z.object({
   privateSynthesis: openText(1000).nullish(),
   dueDate: dateOrEmpty,
   fullFile: z.boolean().default(false),
-  subject: requiredNativeEnum(HelpRequestSubject)
+  subject: requiredNativeEnum(HelpRequestSubject),
+  isRefundable: kindOfBooleanSchema()
 })
 
 export const createHelpRequestSchema = createHelpRequestSchemaBase.refine(

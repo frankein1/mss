@@ -8,6 +8,8 @@
       icon="fr-icon-questionnaire-fill"
       icon-color-class="color-purple-glycine"
       icon-background-class="bg-purple-glycine"
+      :subtitle="subtitle"
+      :subtitle-picto-path="subtitlePictoPath"
     >
       <RequiredFields />
     </PageTitle>
@@ -48,6 +50,7 @@
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema'
   import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
+  import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -60,6 +63,11 @@
   const subject = toFirstLetterUpperCase(
     route.params.subject as string
   ) as HelpRequestSubject
+  const isFinancial = subject === HelpRequestSubject.Financial
+  const subtitle = isFinancial ? 'Aide financière' : undefined
+  const subtitlePictoPath = isFinancial
+    ? helpRequestSubjectPictos[subject]
+    : undefined
 
   const { data: beneficiary, error: beneficiaryError } =
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
