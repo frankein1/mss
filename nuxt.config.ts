@@ -15,6 +15,16 @@ const prismaIndexBrowser = path.normalize(
   path.relative(process.cwd(), prismaClient)
 )
 
+const connectSrcCsp = [
+  "'self'",
+  'https://api-adresse.data.gouv.fr',
+  'https://geo.api.gouv.fr',
+  // FIXME: Use runtime config once it is allowed by nuxt-security - See https://github.com/Baroshem/nuxt-security/pull/233
+  'https://matomo.dev.incubateur.anct.gouv.fr',
+  'https://matomo.incubateur.anct.gouv.fr',
+  'https://sentry.incubateur.net'
+]
+
 export default defineNuxtConfig({
   // https://nuxt.com/blog/v3-8
   typescript: {
@@ -194,17 +204,10 @@ export default defineNuxtConfig({
   security: {
     removeLoggers: false,
     headers: {
-      contentSecurityPolicy: {
-        // FIXME: Use runtime config once it is allowed by nuxt-security - See https://github.com/Baroshem/nuxt-security/pull/233
-        'connect-src': [
-          "'self'",
-          'https://api-adresse.data.gouv.fr',
-          'https://geo.api.gouv.fr',
-          'https://matomo.dev.incubateur.anct.gouv.fr',
-          'https://matomo.incubateur.anct.gouv.fr',
-          'https://sentry.incubateur.net'
-        ]
-      },
+      contentSecurityPolicy:
+        process.env.NODE_ENV === 'production'
+          ? { 'connect-src': connectSrcCsp }
+          : false,
       crossOriginEmbedderPolicy: false
     },
     rateLimiter: { tokensPerInterval: 300, interval: 300000 }
