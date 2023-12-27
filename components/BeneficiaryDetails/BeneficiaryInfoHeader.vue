@@ -18,7 +18,7 @@
     </div>
 
     <template v-if="hasCoordinatesInformations(beneficiary.general)">
-      <hr class="fr-col-12 fr-mt-5v no-print" />
+      <hr class="fr-col-12 fr-mt-5v fr-no-print" />
 
       <div class="fr-grid-row">
         <div class="fr-col-12">

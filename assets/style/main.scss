@@ -164,12 +164,6 @@ select:focus:not(:focus-visible) {
   outline-style: solid !important;
 }
 
-@media print {
-  .no-print {
-    display: none !important;
-  }
-}
-
 .landing-subtitle {
   @include dsfr.title-style(h5);
 
