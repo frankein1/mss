@@ -26,9 +26,10 @@
       <NuxtLink
         to="~/assets/video/presentation.webm"
         target="_blank"
+        rel="noopener external"
+        title="Vidéo de présentation des fonctionnalités de Mon Suivi Social - nouvelle fenêtre"
       >
-        Vidéo de présentation des fonctionnalités de Mon Suivi Social - Ouvre
-        une nouvelle fenêtre
+        Vidéo de présentation des fonctionnalités de Mon Suivi Social
       </NuxtLink>
     </figcaption>
     <div class="fr-sr-only">

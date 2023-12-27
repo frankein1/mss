@@ -4,6 +4,8 @@
       class="fr-link topbar__help"
       to="https://mon-suivi-social.gitbook.io/mon-suivi-social/"
       target="_blank"
+      rel="noopener external"
+      titre="Aide - nouvelle fenêtre"
     >
       Aide
     </NuxtLink>

@@ -8,8 +8,7 @@
       <button
         v-if="permissions.view"
         class="fr-link"
-        target="_blank"
-        :title="`Voir ${document.name} - Ouvre une nouvelle fenêtre`"
+        :title="`Voir ${document.name} - nouvelle fenêtre`"
         @click="onView(document.key)"
       >
         {{ document.name }}</button

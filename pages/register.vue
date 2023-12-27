@@ -20,7 +20,8 @@
           to="https://app.livestorm.co/mon-suivi-social-1/webinaire-de-presentation-mon-suivi-social?type=detailed"
           target="_blank"
           class="fr-btn"
-          title="Inscription au webinaire - Ouvre une nouvelle fenêtre"
+          title="Inscription au webinaire - nouvelle fenêtre"
+          rel="noopener external"
           >S'inscrire au webinaire</NuxtLink
         >
       </div>
