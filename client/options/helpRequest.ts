@@ -47,11 +47,12 @@ export const helpRequestSubjectLabels: { [key in HelpRequestSubject]: string } =
     [HelpRequestSubject.Other]: 'Autre'
   }
 
-const helpRequestSubjectPictos: { [key in HelpRequestSubject]: string } = {
-  [HelpRequestSubject.Housing]: '~/assets/pictograms/building.svg',
-  [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
-  [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
-}
+export const helpRequestSubjectPictos: { [key in HelpRequestSubject]: string } =
+  {
+    [HelpRequestSubject.Housing]: '~/assets/pictograms/building.svg',
+    [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
+    [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
+  }
 
 export const helpRequestSubjectOptions = labelsToOptions(
   helpRequestSubjectLabels,
