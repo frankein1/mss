@@ -91,10 +91,19 @@ const handler = async ({
   const permissions = getHelpRequestPermissions({ user, structure })
 
   if (!data) {
-    return HelpRequestRepo.findUniqueOrThrow(user, {
+    const helpRequest = await HelpRequestRepo.findUniqueOrThrow(user, {
       where: { id: input.id },
       select: prepareGetHelpRequestsPageSelect(permissions)
     })
+
+    return {
+      ...helpRequest,
+      permissions: getHelpRequestPermissions({
+        user,
+        structure,
+        target: helpRequest
+      })
+    }
   }
 
   const helpRequest = await HelpRequestRepo.prisma.update({
@@ -103,7 +112,14 @@ const handler = async ({
     select: prepareGetHelpRequestsPageSelect(permissions)
   })
 
-  return helpRequest
+  return {
+    ...helpRequest,
+    permissions: getHelpRequestPermissions({
+      user,
+      structure,
+      target: helpRequest
+    })
+  }
 }
 
 export const quickUpdateHelpRequestMutation = createMutation({
