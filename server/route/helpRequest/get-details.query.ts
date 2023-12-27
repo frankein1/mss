@@ -28,7 +28,7 @@ const handler = async ({
 
   const data = getHelpRequestAccessibleData(permissions, helpRequest)
 
-  return data
+  return { data, permissions }
 }
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {

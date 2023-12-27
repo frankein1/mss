@@ -4,7 +4,7 @@
     :followup-types="followupTypes"
     :prescribing-organizations="prescribingOrganizations"
     :instructor-organizations="instructorOrganizations"
-    :beneficiary-id="helpRequest.beneficiaryId"
+    :beneficiary-id="helpRequestData.beneficiaryId"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
     @submit="onSubmit"
@@ -36,24 +36,28 @@
     saveHelpRequest: [helpRequest: EditHelpRequestInput]
   }>()
 
-  const { data: permissions } =
-    await useTrpcClient().permissions.getHelpRequestPermissions.useQuery()
+  const helpRequestData = computed(() => props.helpRequest.data)
+  const permissions = computed(() => props.helpRequest.permissions)
 
   const initialDocumentIds = computed(
-    () => props.helpRequest.documents?.map(d => d.key) || []
+    () => helpRequestData.value.documents?.map(d => d.key) || []
   )
 
   const { handleSubmit } = useForm<EditHelpRequestInput>({
     validationSchema: toTypedSchema(editHelpRequestSchema),
     initialValues: {
-      ...props.helpRequest,
+      ...helpRequestData.value,
       isMinistry: isMinistryAgent,
-      openingDate: props.helpRequest.openingDate,
+      openingDate: helpRequestData.value.openingDate,
       documents: initialDocumentIds.value,
-      externalStructure: props.helpRequest.externalStructure ? 'true' : 'false',
-      askedAmount: prismaDecimalToNumber(props.helpRequest.askedAmount),
-      allocatedAmount: prismaDecimalToNumber(props.helpRequest.allocatedAmount),
-      fullFile: props.helpRequest.fullFile || false
+      externalStructure: helpRequestData.value.externalStructure
+        ? 'true'
+        : 'false',
+      askedAmount: prismaDecimalToNumber(helpRequestData.value.askedAmount),
+      allocatedAmount: prismaDecimalToNumber(
+        helpRequestData.value.allocatedAmount
+      ),
+      fullFile: helpRequestData.value.fullFile || false
     }
   })
 
