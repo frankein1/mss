@@ -12,7 +12,7 @@
       />
       <Meta
         name="format-detection"
-        content="telephone=no"
+        content="telephone=no,date=no,address=no,email=no,url=no"
       />
       <Link
         rel="icon"
