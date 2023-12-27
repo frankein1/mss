@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { HistoryItem, HistoryItemComment } from './types'
+  import { HistoryItemData, HistoryItemComment } from './types'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { AddCommentInput, addCommentSchema } from '~/server/schema'
 
@@ -47,7 +47,7 @@
   const form = ref<HTMLFormElement | null>(null)
 
   const props = defineProps<{
-    history: HistoryItem
+    history: HistoryItemData
   }>()
 
   const emit = defineEmits<{

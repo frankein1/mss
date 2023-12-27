@@ -4,10 +4,8 @@
     :followup-types="followupTypes"
     :prescribing-organizations="prescribingOrganizations"
     :instructor-organizations="instructorOrganizations"
-    :beneficiary-id="helpRequest.beneficiaryId"
-    :past-statuses="pastStatuses"
-    is-editing
-    :can-edit-private-synthesis="canEditPrivateSynthesis"
+    :beneficiary-id="helpRequestData.beneficiaryId"
+    :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
@@ -21,10 +19,10 @@
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
-  import { canEditHelpRequestPrivateSynthesis } from '~/server/security'
-  import { pastStatusesFromStatus } from '~/utils/helpRequest'
   import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+
+  const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = defineProps<{
     isSubmitting: boolean
@@ -34,37 +32,32 @@
     helpRequest: GetHelpRequestDetailsOutput
   }>()
 
-  const { canWithTarget } = useSecurityRule()
-
   const emit = defineEmits<{
     saveHelpRequest: [helpRequest: EditHelpRequestInput]
   }>()
 
-  const pastStatuses = computed(() => {
-    if (!props.helpRequest) {
-      return []
-    }
-    return pastStatusesFromStatus(props.helpRequest.status)
-  })
-
-  const canEditPrivateSynthesis = computed(() =>
-    canWithTarget(canEditHelpRequestPrivateSynthesis, props.helpRequest)
-  )
+  const helpRequestData = computed(() => props.helpRequest.data)
+  const permissions = computed(() => props.helpRequest.permissions)
 
   const initialDocumentIds = computed(
-    () => props.helpRequest.documents?.map(d => d.key) || []
+    () => helpRequestData.value.documents?.map(d => d.key) || []
   )
 
   const { handleSubmit } = useForm<EditHelpRequestInput>({
     validationSchema: toTypedSchema(editHelpRequestSchema),
     initialValues: {
-      ...props.helpRequest,
-      openingDate: props.helpRequest.openingDate,
+      ...helpRequestData.value,
+      isMinistry: isMinistryAgent,
+      openingDate: helpRequestData.value.openingDate,
       documents: initialDocumentIds.value,
-      externalStructure: props.helpRequest.externalStructure ? 'true' : 'false',
-      askedAmount: prismaDecimalToNumber(props.helpRequest.askedAmount),
-      allocatedAmount: prismaDecimalToNumber(props.helpRequest.allocatedAmount),
-      fullFile: props.helpRequest.fullFile || false
+      externalStructure: helpRequestData.value.externalStructure
+        ? 'true'
+        : 'false',
+      askedAmount: prismaDecimalToNumber(helpRequestData.value.askedAmount),
+      allocatedAmount: prismaDecimalToNumber(
+        helpRequestData.value.allocatedAmount
+      ),
+      fullFile: helpRequestData.value.fullFile || false
     }
   })
 

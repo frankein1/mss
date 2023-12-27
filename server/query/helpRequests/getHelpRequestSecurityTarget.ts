@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { HelpRequestRepo } from '~/server/database'
 import { SecurityRuleGrantee } from '~/server/security'
 
-export function getHelpRequestsecurityTarget(
+export function getHelpRequestSecurityTarget(
   user: SecurityRuleGrantee,
   id: string
 ) {
@@ -19,5 +19,5 @@ export function getHelpRequestsecurityTarget(
 }
 
 export type HelpRequestSecurityTarget = Prisma.PromiseReturnType<
-  typeof getHelpRequestsecurityTarget
+  typeof getHelpRequestSecurityTarget
 >

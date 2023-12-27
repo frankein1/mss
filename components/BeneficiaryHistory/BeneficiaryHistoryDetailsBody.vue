@@ -10,27 +10,27 @@
 
     <template v-if="canViewHistoryDetails">
       <BeneficiaryFollowupDetailsBodyMetas
-        v-if="history.isFollowup"
-        :followup="history as FollowupHistoryItem"
+        v-if="historyData.isFollowup"
+        :followup="historyData as FollowupHistoryItem"
       />
       <BeneficiaryHelpRequestDetailsBodyMetas
         v-else
-        :help-request="history"
+        :help-request="historyData"
       />
 
       <BeneficiaryHistoryDetailsBodyDocuments
-        v-if="history.documents?.length"
-        :documents="history.documents"
+        v-if="historyData.documents?.length"
+        :documents="historyData.documents"
       />
 
-      <template v-if="history.synthesis">
+      <template v-if="historyData.synthesis">
         <h3 class="synthesis-title">Compte rendu</h3>
-        <p class="synthesis-content">{{ history.synthesis }}</p>
+        <p class="synthesis-content">{{ historyData.synthesis }}</p>
       </template>
 
-      <template v-if="canViewPrivateSynthesis && history.privateSynthesis">
+      <template v-if="canViewPrivateSynthesis && historyData.privateSynthesis">
         <h3 class="synthesis-title fr-icon-lock-line">Compte rendu privé</h3>
-        <p class="synthesis-content">{{ history.privateSynthesis }}</p>
+        <p class="synthesis-content">{{ historyData.privateSynthesis }}</p>
       </template>
 
       <ul
@@ -66,7 +66,7 @@
 
     <BeneficiaryHistoryComments
       :comments="comments"
-      :history="history"
+      :history="historyData"
       @comment-added="onCommentAdded"
       @comment-edited="onCommentEdited"
       @comment-deleted="onCommentDeleted"
@@ -84,13 +84,9 @@
   import { RoutePath } from '~/utils/routing'
   import {
     canEditFollowup,
-    canEditHelpRequest,
     canDeleteFollowup,
-    canDeleteHelpRequest,
-    canViewHelpRequestDetails,
     canViewFollowupDetails,
-    canViewFollowupPrivateSynthesis,
-    canViewHelpRequestPrivateSynthesis
+    canViewFollowupPrivateSynthesis
   } from '~/server/security'
 
   const props = defineProps<{
@@ -102,43 +98,45 @@
     deleted: []
   }>()
 
-  const comments = ref(props.history.comments || [])
+  const historyData = computed(() => props.history.data)
+  const permissions = computed(() => props.history.permissions)
+
+  const comments = ref(historyData.value.comments || [])
 
   const { canWithTarget } = useSecurityRule()
 
   const editLink = computed(() => {
-    const routeWithParams = props.history.isFollowup
+    const routeWithParams = historyData.value.isFollowup
       ? RoutePath.AppBeneficiaryFollowupEdit
       : RoutePath.AppBeneficiaryHelpRequestEdit
-    return routeWithParams(props.history.beneficiaryId, props.history.id)
+    return routeWithParams(
+      historyData.value.beneficiaryId,
+      historyData.value.id
+    )
   })
 
-  const canEditRule = computed(() =>
-    props.history.isFollowup ? canEditFollowup : canEditHelpRequest
-  )
-
   const canEdit = computed(() =>
-    canWithTarget(canEditRule.value, props.history)
-  )
-
-  const canDeleteRule = computed(() =>
-    props.history.isFollowup ? canDeleteFollowup : canDeleteHelpRequest
+    historyData.value.isFollowup
+      ? canWithTarget(canEditFollowup, historyData.value)
+      : permissions.value?.edit
   )
 
   const canDelete = computed(() =>
-    canWithTarget(canDeleteRule.value, props.history)
+    historyData.value.isFollowup
+      ? canWithTarget(canDeleteFollowup, historyData.value)
+      : permissions.value?.delete
   )
 
   const canViewHistoryDetails = computed(() =>
-    props.history.isFollowup
-      ? canWithTarget(canViewFollowupDetails, props.history)
-      : canWithTarget(canViewHelpRequestDetails, props.history.beneficiary)
+    historyData.value.isFollowup
+      ? canWithTarget(canViewFollowupDetails, historyData.value)
+      : permissions.value?.get.details
   )
 
   const canViewPrivateSynthesis = computed(() =>
-    props.history.isFollowup
-      ? canWithTarget(canViewFollowupPrivateSynthesis, props.history)
-      : canWithTarget(canViewHelpRequestPrivateSynthesis, props.history)
+    historyData.value.isFollowup
+      ? canWithTarget(canViewFollowupPrivateSynthesis, historyData.value)
+      : permissions.value?.get.privateSynthesis
   )
 
   function onCommentAdded(comment: HistoryItemComment) {
@@ -159,13 +157,13 @@
 
   function onDelete() {
     useModal().open({
-      title: props.history.isFollowup
+      title: historyData.value.isFollowup
         ? "Supprimer la synthèse d'entretien"
         : "Supprimer l'instruction de dossier",
       contentComponent: BeneficiaryHistoryDeleteForm,
       contentComponentProps: {
-        historyItemId: props.history.id,
-        isFollowup: props.history.isFollowup
+        historyItemId: historyData.value.id,
+        isFollowup: historyData.value.isFollowup
       },
       contentComponentEvents: { deleted: onHistoryItemDeleted }
     })
