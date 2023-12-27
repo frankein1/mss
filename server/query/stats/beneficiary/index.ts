@@ -12,3 +12,4 @@ export { getMinistereDepartementServiceAcStatsQuery } from './getMinistereDepart
 export { getMinistereCategorieStatsQuery } from './getMinistereCategorieStatsQuery'
 export { getCityStatsQuery } from './getCityStatsQuery'
 export { getDepartmentStatsQuery } from './getDepartmentStatsQuery'
+export { getMinistereInterpellationStatsQuery } from './getMinistereInterpellationStatsQuery'

@@ -23,6 +23,7 @@ import {
   getHistoryCountsQuery,
   getInstructorOrganizationStatsQ,
   getMinistereCategorieStatsQ,
+  getMinistereInterpellationStatsQ,
   getMinistereDepartementServiceAcStatsQ,
   getMinistereStructureStatsQ,
   getMobilityStatsQ,
@@ -108,6 +109,9 @@ export const statRouter = router({
   getMinistereCategorie: protectedProcedure
     .input(getMinistereCategorieStatsQ.inputValidation)
     .query(getMinistereCategorieStatsQ.execute),
+  getMinistereInterpellation: protectedProcedure
+    .input(getMinistereInterpellationStatsQ.inputValidation)
+    .query(getMinistereInterpellationStatsQ.execute),
   getMinistereDepartementServiceAc: protectedProcedure
     .input(getMinistereDepartementServiceAcStatsQ.inputValidation)
     .query(getMinistereDepartementServiceAcStatsQ.execute),
