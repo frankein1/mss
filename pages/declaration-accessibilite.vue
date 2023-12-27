@@ -52,16 +52,22 @@
         <NuxtLink
           to="https://formulaire.defenseurdesdroits.fr/"
           target="_blank"
-          >Défenseur des droits</NuxtLink
+          rel="noopener external"
+          title="Défenseur des droits - nouvelle fenêtre"
         >
+          Défenseur des droits
+        </NuxtLink>
       </li>
       <li>
         Contacter
         <NuxtLink
           to="https://www.defenseurdesdroits.fr/saisir/delegues"
           target="_blank"
-          >le délégué du Défenseur des droits dans votre région</NuxtLink
+          rel="noopener external"
+          title="Le délégué du Défenseur des droits dans votre région - nouvelle fenêtre"
         >
+          le délégué du Défenseur des droits dans votre région
+        </NuxtLink>
       </li>
       <li>
         Envoyer un courrier par la poste (gratuit, ne pas mettre de
@@ -77,7 +83,10 @@
       <NuxtLink
         to="https://betagouv.github.io/a11y-generateur-declaration/#create"
         target="_blank"
-        >Générateur de Déclaration d'Accessibilité de BetaGouv</NuxtLink
+        rel="noopener external"
+        title="Générateur de Déclaration d'Accessibilité de BetaGouv - nouvelle fenêtre"
+      >
+        Générateur de Déclaration d'Accessibilité de BetaGouv </NuxtLink
       >.
     </p>
   </div>

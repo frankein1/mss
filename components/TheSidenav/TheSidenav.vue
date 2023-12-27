@@ -88,6 +88,8 @@
               class="fr-footer__bottom-link"
               :to="sourceCode"
               target="_blank"
+              rel="noopener external"
+              title="Code source de la version - nouvelle fenêtre"
             >
               Version {{ version }}
             </NuxtLink>

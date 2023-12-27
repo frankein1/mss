@@ -10,8 +10,9 @@
           <NuxtLink
             class="fr-footer__brand-link"
             to="https://agence-cohesion-territoires.gouv.fr/"
-            title="Site Web de l'Agence Nationale de la Cohésion des Territoires"
+            title="Site Web de l'Agence Nationale de la Cohésion des Territoires - nouvelle fenêtre"
             target="_blank"
+            rel="noopener external"
           >
             <img
               class="fr-footer__logo"
@@ -27,6 +28,8 @@
                 class="fr-footer__content-link"
                 to="https://legifrance.gouv.fr"
                 target="_blank"
+                rel="noopener external"
+                title="legifrance.gouv.fr - nouvelle fenêtre"
               >
                 legifrance.gouv.fr
               </NuxtLink>
@@ -36,6 +39,8 @@
                 class="fr-footer__content-link"
                 to="https://gouvernement.fr"
                 target="_blank"
+                rel="noopener external"
+                title="gouvernement.fr - nouvelle fenêtre"
               >
                 gouvernement.fr
               </NuxtLink>
@@ -45,6 +50,8 @@
                 class="fr-footer__content-link"
                 to="https://service-public.fr"
                 target="_blank"
+                rel="noopener external"
+                title="service-public.fr - nouvelle fenêtre"
               >
                 service-public.fr
               </NuxtLink>
@@ -54,6 +61,8 @@
                 class="fr-footer__content-link"
                 to="https://data.gouv.fr"
                 target="_blank"
+                rel="noopener external"
+                title="data.gouv.fr - nouvelle fenêtre"
               >
                 data.gouv.fr
               </NuxtLink>
@@ -68,6 +77,8 @@
               class="fr-footer__bottom-link"
               to="https://stock.adobe.com/fr/"
               target="_blank"
+              rel="noopener external"
+              title="Crédits photos : Adobe Stock - nouvelle fenêtre"
             >
               Crédits photos : Adobe Stock
             </NuxtLink>
@@ -76,24 +87,25 @@
             <NuxtLink
               class="fr-footer__bottom-link"
               :to="RoutePath.DeclarationAccessibilite()"
-              target="_self"
             >
-              Accessibilité: non conforme
+              Accessibilité : non conforme
             </NuxtLink>
           </li>
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
               :to="RoutePath.MentionsLegales()"
-              target="_self"
-              >Mentions légales</NuxtLink
             >
+              Mentions légales
+            </NuxtLink>
           </li>
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
               :to="sourceCode"
               target="_blank"
+              rel="noopener external"
+              title="Code source de la version - nouvelle fenêtre"
             >
               Version {{ version }}
             </NuxtLink>
@@ -113,6 +125,8 @@
             <NuxtLink
               to="https://github.com/etalab/licence-ouverte/blob/master/LO.md"
               target="_blank"
+              rel="noopener external"
+              title="licence etalab-2.0 - nouvelle fenêtre"
             >
               licence etalab-2.0
             </NuxtLink>
