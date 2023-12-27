@@ -1,6 +1,6 @@
 <template>
   <h3 class="fr-col-12 fr-h5 fr-mb-0">
-    Informations sur le dossier d'instruction
+    {{ headline }}
   </h3>
 
   <div class="fr-col-12">
@@ -125,4 +125,15 @@
   const isFinancialSupport = computed(
     () => subject.value === HelpRequestSubject.Financial
   )
+
+  const headline = computed(() => {
+    switch (subject.value) {
+      case HelpRequestSubject.Financial:
+        return "Informations sur l'aide financière"
+      case HelpRequestSubject.Housing:
+        return 'Informations sur la demande de logement'
+      default:
+        return "Informations sur le dossier d'instruction"
+    }
+  })
 </script>
