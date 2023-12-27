@@ -30,7 +30,6 @@
               :to="`${editLink}`"
               class="fr-btn fr-btn--secondary"
               title="Modifier"
-              target="_self"
             >
               Modifier
             </NuxtLink>

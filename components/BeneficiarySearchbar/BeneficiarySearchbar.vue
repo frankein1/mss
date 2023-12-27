@@ -11,7 +11,6 @@
           :to="
             RoutePath.AppBeneficiary(beneficiary.id, { originPage: routeName })
           "
-          target="_self"
           class="fr-btn fr-btn--tertiary-no-outline result"
         >
           {{ formatBeneficiarySearchDisplayName(beneficiary) }}
@@ -21,7 +20,6 @@
     <NuxtLink
       :to="RoutePath.AppBeneficiariesAdd()"
       class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line add-beneficiary-btn"
-      target="_self"
       @click="onAccessBeneficiaryAdd"
     >
       Ajouter un·e bénéficiaire

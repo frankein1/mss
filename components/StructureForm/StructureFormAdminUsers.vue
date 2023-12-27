@@ -40,7 +40,6 @@
             v-slot="{ navigate }"
             custom
             :to="RoutePath.AdminUser(user.id)"
-            target="_self"
           >
             <tr
               class="clickable-row"
@@ -86,7 +85,6 @@
         query: { structureId }
       }"
       class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-user-add-line"
-      target="_self"
     >
       Ajouter un utilisateur
     </NuxtLink>

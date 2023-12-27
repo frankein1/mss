@@ -45,7 +45,6 @@
             <NuxtLink
               :to="routeWithParams(userActivity.objectId)"
               class="fr-link"
-              target="_self"
             >
               Voir la fiche
             </NuxtLink>

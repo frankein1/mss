@@ -3,7 +3,6 @@
     v-slot="{ navigate }"
     custom
     :to="RoutePath.AppBeneficiary(props.beneficiary.id)"
-    target="_self"
   >
     <tr
       class="clickable-row"

@@ -29,7 +29,6 @@
         <NuxtLink
           v-if="menu.to"
           :to="menu.to"
-          target="_self"
           :class="menuClass(menu.icon)"
           @focus="expanded = true"
         >
@@ -39,7 +38,6 @@
         <a
           v-else-if="menu.href"
           :href="menu.href"
-          target="_self"
           :class="menuClass(menu.icon)"
           @focus="expanded = true"
         >

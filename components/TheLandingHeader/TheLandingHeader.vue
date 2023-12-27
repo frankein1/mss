@@ -11,7 +11,6 @@
               <div class="fr-header__logo">
                 <NuxtLink
                   :to="RoutePath.Index()"
-                  target="_self"
                   title="Accueil - Mon Suivi Social"
                 >
                   <p class="fr-logo">
@@ -55,7 +54,6 @@
                   <NuxtLink
                     class="fr-btn register-btn fr-icon-add-line"
                     :to="RoutePath.Register()"
-                    target="_self"
                   >
                     Créer un espace
                   </NuxtLink>
@@ -64,7 +62,6 @@
                   <NuxtLink
                     class="fr-btn fr-btn--tertiary fr-icon-lock-line"
                     :to="RoutePath.AuthLogin()"
-                    target="_self"
                   >
                     Se connecter à son espace
                   </NuxtLink>

@@ -3,7 +3,6 @@
     <NuxtLink
       class="fr-link"
       :to="itemLink"
-      target="_self"
     >
       {{ itemTitle }}
     </NuxtLink>
