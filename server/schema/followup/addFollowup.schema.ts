@@ -11,7 +11,8 @@ import {
   withEmptyValueOptionalNativeEnum,
   stringConstraint,
   numeroPegaseContraint,
-  dateOrEmpty
+  dateOrEmpty,
+  openText
 } from '../helpers.schema'
 import {
   errorMessages,
@@ -31,10 +32,8 @@ export const addFollowupSchema = z.object({
   medium: requiredNativeEnum(FollowupMedium),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   date: z.coerce.date(errorMessages),
-  synthesis: stringConstraint.max(6000, maxStringLengthMessage(6000)).nullish(),
-  privateSynthesis: stringConstraint
-    .max(1000, maxStringLengthMessage(1000))
-    .nullish(),
+  synthesis: openText(6000).nullish(),
+  privateSynthesis: openText(1000).nullish(),
   status: requiredNativeEnum(FollowupStatus),
   helpRequested: z.boolean().default(false),
   place: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
