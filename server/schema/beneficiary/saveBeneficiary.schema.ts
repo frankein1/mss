@@ -35,7 +35,8 @@ import {
   siretConstraint,
   numeroPegaseContraint,
   amountNumber,
-  dateOrEmpty
+  dateOrEmpty,
+  openText
 } from '../helpers.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
@@ -71,9 +72,7 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   accommodationName: stringConstraint
     .max(50, maxStringLengthMessage(50))
     .nullish(),
-  accommodationAdditionalInformation: stringConstraint
-    .max(200, maxStringLengthMessage(200))
-    .nullish(),
+  accommodationAdditionalInformation: openText(200).nullish(),
   zipcode: stringOrEmpty(z.string().min(5, validZipcode)),
   city: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   region: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
@@ -90,9 +89,7 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
   phone2: stringOrEmpty(phoneConstraint),
   email: emailOrEmpty(),
   mobility: withEmptyValueOptionalNativeEnum(BeneficiaryMobility),
-  additionalInformation: stringConstraint
-    .max(1500, maxStringLengthMessage(1500))
-    .nullish()
+  additionalInformation: openText(1500).nullish()
 })
 
 export type SaveBeneficiaryGeneralInformationInput = z.infer<
@@ -130,9 +127,7 @@ export type SaveBeneficiaryEntourageInput = z.infer<
 export const saveBeneficiaryHealthSchema = z.object({
   gir: withEmptyValueOptionalNativeEnum(BeneficiaryGir),
   doctor: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
-  healthAdditionalInformation: stringConstraint
-    .max(200, maxStringLengthMessage(200))
-    .nullish(),
+  healthAdditionalInformation: openText(200).nullish(),
   socialSecurityNumber: stringOrEmpty(socialSecurityNumberConstraint),
   insurance: stringConstraint.max(100, maxStringLengthMessage(100)).nullish()
 })
