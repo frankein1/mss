@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest)"
+      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequestData)"
     />
     <PageTitle
       :title="title"
@@ -67,7 +67,9 @@
     id: helpRequestId
   })
 
-  const beneficiary = computed(() => helpRequest.value?.beneficiary || null)
+  const helpRequestData = computed(() => helpRequest.value?.data || null)
+
+  const beneficiary = computed(() => helpRequestData.value?.beneficiary || null)
 
   const title = computed(() =>
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)

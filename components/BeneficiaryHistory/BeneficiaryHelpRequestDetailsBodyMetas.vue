@@ -85,7 +85,7 @@
 
 <script setup lang="ts">
   import { HelpRequestStatus } from '@prisma/client'
-  import { HistoryItem } from './types'
+  import { HistoryItemData } from './types'
   import {
     helpRequestRefusalReasonLabels,
     paymentMethodLabels
@@ -98,7 +98,7 @@
   const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = defineProps<{
-    helpRequest: HistoryItem
+    helpRequest: HistoryItemData
   }>()
 
   const instructorOrganization = computed(() => {

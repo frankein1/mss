@@ -11,7 +11,6 @@
       required
       no-label
       labelled-by="status-col"
-      :disabled-options="pastStatuses"
     />
   </form>
 </template>
@@ -22,7 +21,6 @@
     QuickEditHelpRequestStatusInput,
     quickEditHelpRequestStatusSchema
   } from '~/server/schema'
-  import { pastStatusesFromStatus } from '~/utils/helpRequest'
   import { helpRequestFieldLabels } from '~/client/labels'
 
   const snackbar = useSnackbar()
@@ -43,10 +41,6 @@
       status: props.helpRequest.status
     }
   })
-
-  const pastStatuses = computed(() =>
-    pastStatusesFromStatus(props.helpRequest.status)
-  )
 
   const onUpdateStatus = handleSubmit(helpRequest => {
     useTrpcMutation({

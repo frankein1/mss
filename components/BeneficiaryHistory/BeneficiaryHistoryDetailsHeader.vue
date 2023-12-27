@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
   import { FollowupStatus, HelpRequestStatus } from '@prisma/client'
-  import type { HistoryItem } from './types'
+  import type { HistoryItemData } from './types'
   import { followupStatusLabels } from '~/client/options/followup'
   import { followupStatusClasses } from '~/client/classes/followup'
   import { helpRequestStatusClasses } from '~/client/classes/helpRequest'
@@ -78,7 +78,7 @@
 
   const props = withDefaults(
     defineProps<{
-      history: HistoryItem
+      history: HistoryItemData
       collapseId: string
       expanded?: boolean
       hasUnreadNotifications?: boolean
