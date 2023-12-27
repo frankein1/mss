@@ -45,9 +45,8 @@
             <NuxtLink
               :to="routeWithParams(userActivity.objectId)"
               class="fr-link"
+              >Voir la fiche</NuxtLink
             >
-              Voir la fiche
-            </NuxtLink>
           </td>
         </tr>
       </tbody>

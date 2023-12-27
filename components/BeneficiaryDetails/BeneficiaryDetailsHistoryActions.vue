@@ -34,9 +34,8 @@
           title="Accéder à l'outil de simulation de droits sociaux mesdroitssociaux.gouv.fr - nouvelle fenêtre"
           target="_blank"
           rel="noopener external"
+          >Simulation de droits sociaux</NuxtLink
         >
-          Simulation de droits sociaux
-        </NuxtLink>
       </li>
     </ul>
   </div>
