@@ -205,6 +205,7 @@ function getGeneral(
     zipcode: beneficiary.zipcode,
     city: beneficiary.city,
     region: beneficiary.region,
+    department: beneficiary.department,
     noPhone: beneficiary.noPhone,
     phone1: beneficiary.phone1,
     phone2: beneficiary.phone2,
