@@ -80,7 +80,10 @@
               Accessibilité: non conforme
             </NuxtLink>
           </li>
-          <li class="fr-footer__bottom-item">
+          <li
+            v-if="version"
+            class="fr-footer__bottom-item"
+          >
             <NuxtLink
               class="fr-footer__bottom-link"
               :to="sourceCode"
@@ -211,6 +214,14 @@
   .fr-footer__bottom-list {
     text-align: center;
     margin-top: auto;
+  }
+
+  .fr-footer__bottom-item {
+    display: inline-block;
+  }
+
+  .fr-footer__bottom-item::before {
+    display: none;
   }
 
   .fr-collapse {
