@@ -18,19 +18,27 @@ export default defineNuxtPlugin(async nuxtApp => {
       getHeader(nuxtApp.ssrContext.event, 'x-nitro-prerender') !== undefined
   }
 
-  const authState = useAuthState()
+  const { user } = useAuthState()
   // Only fetch session if it was not yet initialized server-side
-  if (!authState.isAuthenticated() && !nitroPrerender) {
+  if (!user.value && !nitroPrerender) {
     await getSession()
+  }
+
+  // Listen for when the page is visible, if the user switches tabs
+  // and makes our tab visible again, re-fetch the session
+  const visibilityHandler = () => {
+    getSession()
   }
 
   let refreshTokenIntervalTimer: NodeJS.Timeout
 
   nuxtApp.hook('app:mounted', () => {
+    document.addEventListener('visibilitychange', visibilityHandler, false)
+
     const intervalTime = minutesToMillis(tokenValidationInMinutes / 2)
 
     refreshTokenIntervalTimer = setInterval(() => {
-      if (authState.isAuthenticated()) {
+      if (user.value) {
         refreshToken()
       }
     }, intervalTime)
@@ -38,9 +46,14 @@ export default defineNuxtPlugin(async nuxtApp => {
 
   const _unmount = nuxtApp.vueApp.unmount
   nuxtApp.vueApp.unmount = function () {
+    // Clear visibility handler
+    document.removeEventListener('visibilitychange', visibilityHandler, false)
+
     if (refreshTokenIntervalTimer) {
       clearInterval(refreshTokenIntervalTimer)
     }
+
+    user.value = null
 
     _unmount()
   }
