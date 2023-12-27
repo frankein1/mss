@@ -118,7 +118,7 @@
   }>()
 
   const { data: permissions } =
-    await useTrpcClient().permissions.getHelpRequestEditionPermissions.useQuery()
+    await useTrpcClient().permissions.getHelpRequestPermissions.useQuery()
 
   const helpRequestPath = computed(() =>
     RoutePath.AppBeneficiary(props.helpRequest.beneficiary.id, {

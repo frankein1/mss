@@ -87,7 +87,7 @@
   } = await trpcClient.helpRequest.getHelpRequests.useQuery(queryInput)
 
   const { data: permissions } =
-    await trpcClient.permissions.getHelpRequestEditionPermissions.useQuery()
+    await trpcClient.permissions.getHelpRequestPermissions.useQuery()
 
   const helpRequestsCount = computed(
     () => helpRequestsRequest.value?.count || 0

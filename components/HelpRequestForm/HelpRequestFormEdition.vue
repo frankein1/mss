@@ -37,7 +37,7 @@
   }>()
 
   const { data: permissions } =
-    await useTrpcClient().permissions.getHelpRequestEditionPermissions.useQuery()
+    await useTrpcClient().permissions.getHelpRequestPermissions.useQuery()
 
   const initialDocumentIds = computed(
     () => props.helpRequest.documents?.map(d => d.key) || []

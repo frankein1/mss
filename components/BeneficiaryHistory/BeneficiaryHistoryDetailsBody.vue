@@ -99,7 +99,7 @@
   }>()
 
   const { data: helpRequestPermissions } =
-    await useTrpcClient().permissions.getHelpRequestEditionPermissions.useQuery(
+    await useTrpcClient().permissions.getHelpRequestPermissions.useQuery(
       props.history.isFollowup ? undefined : { id: props.history.id }
     )
 

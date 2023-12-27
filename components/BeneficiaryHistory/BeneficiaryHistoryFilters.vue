@@ -71,7 +71,7 @@
   })
 
   const { data: permissions } =
-    await useTrpcClient().permissions.getHelpRequestEditionPermissions.useQuery()
+    await useTrpcClient().permissions.getHelpRequestPermissions.useQuery()
 
   const {
     data: examinationDateOptions,

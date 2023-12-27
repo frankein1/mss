@@ -21,7 +21,7 @@ const handler = async ({
   return getHelpRequestPermissions({ user, structure, target })
 }
 
-export const getHelpRequestEditionPermissionsQuery = createQuery({
+export const getHelpRequestPermissionsQuery = createQuery({
   inputValidation: emptySchema.or(idSchema),
   securityCheck: AllowSecurityCheck,
   handler

@@ -1,6 +1,6 @@
 import {
   getBeneficiaryCreationPermissionsQuery,
-  getHelpRequestEditionPermissionsQuery
+  getHelpRequestPermissionsQuery
 } from '~/server/route/permissions'
 import { protectedProcedure, router } from '~/server/trpc'
 
@@ -8,7 +8,7 @@ export const permissionsRouter = router({
   getBeneficiaryCreationPermissions: protectedProcedure
     .input(getBeneficiaryCreationPermissionsQuery.inputValidation)
     .query(getBeneficiaryCreationPermissionsQuery.execute),
-  getHelpRequestEditionPermissions: protectedProcedure
-    .input(getHelpRequestEditionPermissionsQuery.inputValidation)
-    .query(getHelpRequestEditionPermissionsQuery.execute)
+  getHelpRequestPermissions: protectedProcedure
+    .input(getHelpRequestPermissionsQuery.inputValidation)
+    .query(getHelpRequestPermissionsQuery.execute)
 })
