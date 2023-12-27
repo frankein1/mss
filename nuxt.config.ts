@@ -195,15 +195,14 @@ export default defineNuxtConfig({
     removeLoggers: false,
     headers: {
       contentSecurityPolicy: {
-        // FIXME: Missing sentry
+        // FIXME: Use runtime config once it is allowed by nuxt-security - See https://github.com/Baroshem/nuxt-security/pull/233
         'connect-src': [
           "'self'",
           'https://api-adresse.data.gouv.fr',
           'https://geo.api.gouv.fr',
-          import.meta.env.NUXT_PUBLIC_MATOMO_HOST ||
-            'https://toujours.pas.de.matomo',
-          import.meta.env.NUXT_PUBLIC_SENTRY_HOST ||
-            'https://toujours.pas.de.sentry'
+          'https://matomo.dev.incubateur.anct.gouv.fr',
+          'https://matomo.incubateur.anct.gouv.fr',
+          'https://sentry.incubateur.net'
         ]
       },
       crossOriginEmbedderPolicy: false
