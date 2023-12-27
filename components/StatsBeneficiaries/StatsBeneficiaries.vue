@@ -114,6 +114,12 @@
             :filters="filters"
           />
         </div>
+        <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
+          <StatsBeneficiariesMinistereInterpellation
+            :beneficiary-count="beneficiaryCount"
+            :filters="filters"
+          />
+        </div>
       </template>
     </template>
   </div>
