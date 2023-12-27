@@ -186,6 +186,7 @@
 
   .fr-sidemenu__link[aria-current] {
     background-color: $link-highlight-color;
+    color: #fff;
   }
 
   .fr-sidemenu__link[aria-current]::before {
