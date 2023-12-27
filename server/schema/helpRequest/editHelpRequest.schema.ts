@@ -6,6 +6,9 @@ export const editHelpRequestSchema = createHelpRequestSchemaBase
   .extend({
     id: z.string().uuid()
   })
+  .omit({
+    subject: true
+  })
   .refine(val => !val.isMinistry || val.ministre, {
     message: requiredErrorMessage,
     path: ['ministre']

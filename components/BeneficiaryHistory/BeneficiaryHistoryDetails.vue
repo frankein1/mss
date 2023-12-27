@@ -7,7 +7,7 @@
     tabindex="0"
   >
     <BeneficiaryHistoryDetailsHeader
-      :history="history"
+      :history="historyData"
       :collapse-id="collapseId"
       :expanded="expanded"
       :has-unread-notifications="hasUnreadNotifications"
@@ -37,15 +37,16 @@
 
   const expanded = ref(false)
 
-  const historyId = computed(() => props.history.id)
+  const historyData = computed(() => props.history.data)
+  const historyId = computed(() => historyData.value.id)
   const collapseId = computed(() => `collapse-${historyId.value}`)
 
   const typeClass = computed(() =>
-    props.history.isFollowup ? 'followup-details' : 'help-request-details'
+    historyData.value.isFollowup ? 'followup-details' : 'help-request-details'
   )
 
   const hasUnreadNotifications = computed(
-    () => !!props.history.hasUnreadNotifications
+    () => !!historyData.value.hasUnreadNotifications
   )
 
   onMounted(() => {

@@ -1,4 +1,8 @@
-import { UserActivityType } from '@prisma/client'
+import {
+  UserActivityType,
+  HelpRequestSubject,
+  HelpRequestStatus
+} from '@prisma/client'
 import { prepareGetHelpRequestsPageSelect } from './helper'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -6,44 +10,116 @@ import {
   QuickEditHelpRequestInput,
   quickEditHelpRequestSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canEditHelpRequest } from '~/server/security'
+import {
+  SecurityRuleGrantee,
+  getHelpRequestPermissions
+} from '~/server/security'
 import { HelpRequestRepo } from '~/server/database'
 import { prepareDateFields } from '~/utils/prisma'
+import {
+  getStructureByUser,
+  getHelpRequestWithRelations,
+  HelpRequestWithRelations
+} from '~/server/query'
+
+function prepareData(
+  target: HelpRequestWithRelations,
+  { id: _id, ...data }: QuickEditHelpRequestInput
+) {
+  const isFinancial = target.subject === HelpRequestSubject.Financial
+  if (isFinancial && ('allocatedAmount' in data || 'paymentMethod' in data)) {
+    return data
+  }
+
+  if ('paymentDate' in data) {
+    return prepareDateFields(data, ['paymentDate'])
+  }
+
+  if ('status' in data) {
+    const status = data.status
+    let _data = {}
+    _data = { ..._data, status }
+    if (
+      status !== HelpRequestStatus.Accepted &&
+      status !== HelpRequestStatus.Refused
+    ) {
+      _data = { ..._data, decisionDate: null }
+    }
+    if (status !== HelpRequestStatus.Accepted) {
+      _data = { ..._data, handlingDate: null, allocatedAmount: null }
+    }
+    if (status !== HelpRequestStatus.Refused) {
+      _data = { ..._data, refusalReason: null }
+    }
+    return _data
+  }
+
+  return undefined
+}
 
 const securityCheck = async (
   user: SecurityRuleGrantee,
   input: QuickEditHelpRequestInput
 ) => {
-  const target = await HelpRequestRepo.findUniqueOrThrow(user, {
-    where: { id: input.id },
-    include: {
-      beneficiary: {
-        include: {
-          referents: true
+  const [target, structure] = await Promise.all([
+    HelpRequestRepo.findUniqueOrThrow(user, {
+      where: { id: input.id },
+      include: {
+        beneficiary: {
+          include: {
+            referents: true
+          }
         }
       }
-    }
-  })
-  return canEditHelpRequest(user, target)
+    }),
+    getStructureByUser(user)
+  ])
+  const permissions = getHelpRequestPermissions({ user, structure, target })
+  return permissions.edit
 }
 
 const handler = async ({
-  input: { id, ...rest },
-  ctx: { user }
+  input,
+  ctx: { user, structure }
 }: {
   input: QuickEditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const data =
-    'paymentDate' in rest ? prepareDateFields(rest, ['paymentDate']) : rest
+  const target = await getHelpRequestWithRelations(user, input.id)
+
+  const data = prepareData(target, input)
+  const permissions = getHelpRequestPermissions({ user, structure })
+
+  if (!data) {
+    const helpRequest = await HelpRequestRepo.findUniqueOrThrow(user, {
+      where: { id: input.id },
+      select: prepareGetHelpRequestsPageSelect(permissions)
+    })
+
+    return {
+      ...helpRequest,
+      permissions: getHelpRequestPermissions({
+        user,
+        structure,
+        target: helpRequest
+      })
+    }
+  }
 
   const helpRequest = await HelpRequestRepo.prisma.update({
-    where: { id },
+    where: { id: input.id },
     data,
-    select: prepareGetHelpRequestsPageSelect(user)
+    select: prepareGetHelpRequestsPageSelect(permissions)
   })
 
-  return helpRequest
+  return {
+    ...helpRequest,
+    permissions: getHelpRequestPermissions({
+      user,
+      structure,
+      target: helpRequest
+    })
+  }
 }
 
 export const quickUpdateHelpRequestMutation = createMutation({
