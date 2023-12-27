@@ -51,7 +51,6 @@
           <NuxtLink
             :to="editLink"
             class="fr-btn fr-btn--secondary fr-icon-edit-line"
-            target="_self"
           >
             Modifier
           </NuxtLink>

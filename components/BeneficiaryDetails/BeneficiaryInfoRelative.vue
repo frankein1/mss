@@ -5,7 +5,6 @@
         v-if="relative.linkedBeneficiary"
         class="fr-link fr-icon-links-line fr-link--icon-left"
         :to="RoutePath.AppBeneficiary(relative.linkedBeneficiary.id)"
-        target="_self"
         >{{ name }}</NuxtLink
       >
       <template v-else>

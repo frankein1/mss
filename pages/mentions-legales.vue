@@ -25,6 +25,8 @@
       <NuxtLink
         to="https://www.scaleway.com/fr/contact/"
         target="_blank"
+        rel="noopener external"
+        title="Contact de Scaleway - nouvelle fenêtre"
         >https://www.scaleway.com/fr/contact/</NuxtLink
       ><br />
       Téléphone :
@@ -50,6 +52,8 @@
       <NuxtLink
         to="http://references.modernisation.gouv.fr/accessibilite-numerique"
         target="_blank"
+        rel="noopener external"
+        title="Politique d'accessibilité numérique de l'État - nouvelle fenêtre"
         >http://references.modernisation.gouv.fr/accessibilite-numerique</NuxtLink
       >
     </p>

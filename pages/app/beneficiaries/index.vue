@@ -10,7 +10,6 @@
       <NuxtLink
         :to="RoutePath.AppBeneficiariesAdd()"
         class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line action"
-        target="_self"
       >
         Créer un·e bénéficiaire
       </NuxtLink>

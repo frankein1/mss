@@ -3,10 +3,8 @@
     <NuxtLink
       class="fr-link"
       :to="itemLink"
-      target="_self"
+      >{{ itemTitle }}</NuxtLink
     >
-      {{ itemTitle }}
-    </NuxtLink>
   </h3>
   <span
     :class="[

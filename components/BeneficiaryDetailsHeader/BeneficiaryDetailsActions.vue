@@ -15,7 +15,6 @@
       <NuxtLink
         :to="`${RoutePath.AppBeneficiaryPrint(beneficiaryId)}`"
         class="fr-btn fr-btn--secondary fr-icon-printer-line"
-        target="_self"
       >
         Imprimer
       </NuxtLink>
@@ -24,7 +23,6 @@
       <NuxtLink
         :to="`${editRoute}`"
         class="fr-btn fr-btn--icon-left fr-icon-edit-line edit-btn"
-        target="_self"
       >
         Modifier les informations
       </NuxtLink>

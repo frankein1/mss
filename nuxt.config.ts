@@ -38,6 +38,7 @@ export default defineNuxtConfig({
   css: [
     // DSFR STYLES
     '@gouvfr/dsfr/dist/core/core.min.css',
+    '@gouvfr/dsfr/dist/dsfr.print.css',
     '@gouvfr/dsfr/dist/component/accordion/accordion.min.css',
     '@gouvfr/dsfr/dist/component/alert/alert.min.css',
     '@gouvfr/dsfr/dist/component/badge/badge.min.css',

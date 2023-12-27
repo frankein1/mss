@@ -48,7 +48,6 @@
               <NuxtLink
                 v-if="allowEditStructure"
                 :to="RoutePath.AppStructureEdit()"
-                target="_self"
               >
                 Personnaliser les objets des instructions de ma structure.
               </NuxtLink>

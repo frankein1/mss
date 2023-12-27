@@ -17,7 +17,6 @@
               <NuxtLink
                 class="fr-btn fr-icon-add-line"
                 :to="RoutePath.Register()"
-                target="_self"
               >
                 Créer un espace
               </NuxtLink>
@@ -96,7 +95,6 @@
           <NuxtLink
             class="fr-btn"
             :to="RoutePath.Register()"
-            target="_self"
           >
             Enregistrer sa structure
           </NuxtLink>

@@ -22,7 +22,6 @@
       <li>
         <NuxtLink
           :to="RoutePath.AuthLogout()"
-          target="_self"
           class="fr-btn fr-btn--secondary fr-icon-logout-box-r-line"
         >
           Déconnexion

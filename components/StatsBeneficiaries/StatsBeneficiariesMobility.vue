@@ -19,9 +19,7 @@
       />
       <p v-else>
         Commencez à
-        <NuxtLink
-          :to="RoutePath.AppBeneficiariesAdd()"
-          target="_self"
+        <NuxtLink :to="RoutePath.AppBeneficiariesAdd()"
           >créer des fiches de bénéficiaires</NuxtLink
         >
         pour voir apparaître les statistiques de la répartition des données

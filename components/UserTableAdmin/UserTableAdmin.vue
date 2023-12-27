@@ -32,7 +32,6 @@
             v-slot="{ navigate }"
             custom
             :to="RoutePath.AdminUser(user.id)"
-            target="_self"
           >
             <tr
               class="clickable-row"

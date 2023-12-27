@@ -46,7 +46,6 @@
                     v-if="menu.route === currentRoute"
                     class="fr-sidemenu__link"
                     :href="`${menu.path}#${target.hash}`"
-                    target="_self"
                     :aria-current="
                       target.hash === activeHash ? true : undefined
                     "
