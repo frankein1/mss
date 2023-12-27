@@ -7,7 +7,7 @@
   <div>
     <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryPrint(beneficiary)"
-      class="no-print"
+      class="fr-no-print"
     />
     <AtomAlert
       v-if="error"
