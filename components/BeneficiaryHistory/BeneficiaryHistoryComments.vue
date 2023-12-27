@@ -18,12 +18,16 @@
 </template>
 
 <script setup lang="ts">
-  import { HistoryItem, HistoryItemComment, HistoryItemComments } from './types'
+  import {
+    HistoryItemData,
+    HistoryItemComment,
+    HistoryItemComments
+  } from './types'
   import { canAddComment as canAddCommentsRule } from '~/server/security'
 
   const props = defineProps<{
     comments: HistoryItemComments
-    history: HistoryItem
+    history: HistoryItemData
   }>()
 
   const emit = defineEmits<{

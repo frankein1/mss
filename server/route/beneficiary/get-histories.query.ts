@@ -6,7 +6,8 @@ import { ProtectedAppContext } from '~/server/trpc'
 import {
   getBeneficiaryHistoryPermissions,
   getDocumentPermissions,
-  SecurityRuleGrantee
+  SecurityRuleGrantee,
+  getHelpRequestPermissions
 } from '~/server/security'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { BeneficiaryHistoryRepo } from '~/server/database'
@@ -183,15 +184,26 @@ function flattenHistories(
       })
     }))
 
+    const historyPermissions = data.isFollowup
+      ? undefined
+      : getHelpRequestPermissions({
+          user,
+          structure,
+          target: data
+        })
+
     return {
-      ...data,
-      documents: documentsWithPermissions,
-      comments: followup?.comments || helpRequest?.comments,
-      hasUnreadNotifications: !!(
-        followup?._count.notifications || helpRequest?._count.notifications
-      ),
-      followUpTypes:
-        followup?.types || (helpRequest ? [helpRequest.type] : undefined)
+      data: {
+        ...data,
+        documents: documentsWithPermissions,
+        comments: followup?.comments || helpRequest?.comments,
+        hasUnreadNotifications: !!(
+          followup?._count.notifications || helpRequest?._count.notifications
+        ),
+        followUpTypes:
+          followup?.types || (helpRequest ? [helpRequest.type] : undefined)
+      },
+      permissions: historyPermissions
     }
   })
 }
