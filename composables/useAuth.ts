@@ -16,7 +16,10 @@ export function useAuth() {
   }
 
   async function getSession() {
-    const sessionUser = await $fetch<JwtUser>('/api/auth/get-session')
+    const headers = useRequestHeaders(['cookie'])
+    const sessionUser = await $fetch<JwtUser>('/api/auth/get-session', {
+      headers
+    })
     if (sessionUser) {
       state.user.value = sessionUser
     }
