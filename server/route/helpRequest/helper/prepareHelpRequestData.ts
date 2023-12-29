@@ -21,10 +21,17 @@ import { HelpRequestWithRelations } from '~/server/query'
 
 function prepareInstructorOrganization(
   instructorOrganizationId: string | null | undefined,
-  user: SecurityRuleGrantee
+  user: SecurityRuleGrantee,
+  isExternalStructure: boolean,
+  hasInstructorOrganizationAlreadySelected = false
 ) {
-  if (!instructorOrganizationId) {
+  if (!isExternalStructure) {
     return undefined
+  }
+  if (!instructorOrganizationId) {
+    return hasInstructorOrganizationAlreadySelected
+      ? { disconnect: true }
+      : undefined
   }
   if (isNewOption(instructorOrganizationId)) {
     return {
@@ -61,7 +68,7 @@ function prepareHelpRequestData(
   input: Omit<
     | CreateHelpRequestInput
     | Omit<EditHelpRequestInput, 'id' | 'beneficiaryId' | 'subject'>,
-    'isMinistry' | 'documents'
+    'isMinistry' | 'documents' | 'instructorOrganizationId'
   >,
   { user, structure }: ProtectedAppContext,
   subject: HelpRequestSubject
@@ -69,7 +76,6 @@ function prepareHelpRequestData(
   const {
     typeId,
     prescribingOrganizationId,
-    instructorOrganizationId,
     externalStructure,
     ministre,
     numeroPegase,
@@ -129,9 +135,6 @@ function prepareHelpRequestData(
     decisionDate: isAccepted || isRefused ? decisionDate : null,
     handlingDate: isAccepted ? handlingDate : null,
     refusalReason: isRefused ? refusalReason : null,
-    instructorOrganization: isExternalStructure
-      ? prepareInstructorOrganization(instructorOrganizationId, user)
-      : { disconnect: true },
     dispatchDate: isExternalStructure ? dispatchDate : null,
     examinationDate: !isExternalStructure ? examinationDate : null,
     askedAmount: isFinancial ? askedAmount : null,
@@ -151,6 +154,7 @@ export function prepareHelpRequestCreateData(
     beneficiaryId,
     subject,
     documents,
+    instructorOrganizationId,
     ...input
   }: CreateHelpRequestInput,
   ctx: ProtectedAppContext,
@@ -164,7 +168,12 @@ export function prepareHelpRequestCreateData(
     structure: connect(ctx.structure.id),
     subject,
     notifications: prepareNewHistoryElementNotification(beneficiary, ctx.user),
-    documents: prepareDocumentsMutations(documents)
+    documents: prepareDocumentsMutations(documents),
+    instructorOrganization: prepareInstructorOrganization(
+      instructorOrganizationId,
+      ctx.user,
+      input.externalStructure === 'true'
+    )
   }
 }
 
@@ -175,6 +184,7 @@ export function prepareHelpRequestUpdateData(
     id: _id,
     isMinistry: _isMinistry,
     beneficiaryId: _beneficiaryId,
+    instructorOrganizationId,
     ...input
   }: EditHelpRequestInput,
   ctx: ProtectedAppContext,
@@ -183,6 +193,12 @@ export function prepareHelpRequestUpdateData(
   const data = prepareHelpRequestData(input, ctx, target.subject)
   return {
     ...data,
-    documents: prepareDocumentsMutations(documents, target.documents)
+    documents: prepareDocumentsMutations(documents, target.documents),
+    instructorOrganization: prepareInstructorOrganization(
+      instructorOrganizationId,
+      ctx.user,
+      input.externalStructure === 'true',
+      target.instructorOrganizationId !== null
+    )
   }
 }
