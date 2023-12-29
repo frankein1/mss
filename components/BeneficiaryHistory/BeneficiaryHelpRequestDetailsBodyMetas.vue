@@ -1,25 +1,35 @@
 <template>
   <ul class="body-metas information-list">
     <li v-if="helpRequest.reason">
-      <span class="information-label">Motif :</span>
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.reason }} :</span
+      >
       {{ helpRequestReasonLabels[helpRequest.reason] }}
     </li>
     <template v-if="isMinistryAgent">
       <li v-if="helpRequest.numeroPegase">
-        <span class="information-label">Numéro Pégase :</span>
+        <span class="information-label"
+          >{{ helpRequestFieldLabels.numeroPegase }} :</span
+        >
         {{ helpRequest.numeroPegase }}
       </li>
       <li v-if="helpRequest.ministre">
-        <span class="information-label">Ministre :</span>
+        <span class="information-label"
+          >{{ helpRequestFieldLabels.ministre }} :</span
+        >
         {{ ministerLabels[helpRequest.ministre] }}
       </li>
     </template>
     <li v-if="helpRequest.dueDate">
-      <span class="information-label">Date d'échéance :</span>
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.dueDate }} :</span
+      >
       {{ formatDate(helpRequest.dueDate) }}
     </li>
     <li v-if="helpRequest.prescribingOrganization?.name">
-      <span class="information-label">Organisme prescripteur :</span>
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.prescribingOrganizationId }} :</span
+      >
       {{ helpRequest.prescribingOrganization.name }}
     </li>
     <li v-if="instructorOrganization">
@@ -27,7 +37,9 @@
       {{ instructorOrganization }}
     </li>
     <li v-if="helpRequest.askedAmount">
-      <span class="information-label">Montant demandé :</span>
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.askedAmount }} :</span
+      >
       {{ euros(helpRequest.askedAmount) }}
     </li>
     <li
@@ -37,29 +49,41 @@
       Ce dossier est complet
     </li>
     <li v-if="helpRequest.dispatchDate">
-      <span class="information-label">Date d'envoi du dossier :</span>
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.dispatchDate }} :</span
+      >
       {{ formatDate(helpRequest.dispatchDate) }}
     </li>
     <li v-if="helpRequest.examinationDate">
-      <span class="information-label"> Date de passage en commission : </span>
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.examinationDate }} :</span
+      >
       {{ formatDate(helpRequest.examinationDate) }}
     </li>
     <li v-if="helpRequest.decisionDate">
-      <span class="information-label">Date de la décision :</span>
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.decisionDate }} :</span
+      >
       {{ formatDate(helpRequest.decisionDate) }}
     </li>
     <template v-if="helpRequest.status === HelpRequestStatus.Accepted">
       <li v-if="allocatedAmount">
-        <span class="information-label">Montant attribué :</span>
+        <span class="information-label"
+          >{{ helpRequestFieldLabels.allocatedAmount }} :</span
+        >
         {{ allocatedAmount }}
       </li>
       <li v-if="helpRequest.handlingDate">
-        <span class="information-label">Date de fin de prise en charge :</span>
+        <span class="information-label"
+          >{{ helpRequestFieldLabels.handlingDate }} :</span
+        >
         {{ formatDate(helpRequest.handlingDate) }}
       </li>
     </template>
     <li v-if="hasRefusalReason">
-      <span class="information-label">Motif du refus :</span>
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.refusalReason }} :</span
+      >
       {{ helpRequest.refusalReason }}
     </li>
   </ul>
@@ -75,6 +99,7 @@
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'
   import { ministerLabels } from '~/client/options/ministry'
+  import { helpRequestFieldLabels } from '~/client/labels'
 
   const isMinistryAgent = useAuthState().isMinistryAgent()
 
