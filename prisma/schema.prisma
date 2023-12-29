@@ -369,6 +369,10 @@ enum HelpRequestRefusalReason {
   IrregularSituation
   InadequateFamilyComposition
   ExpiredRequest
+  MissedAppointment
+  AlreadyExistingHelpRequest
+  Reoriented
+  Debt
   Other
 }
 
