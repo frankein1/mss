@@ -6,7 +6,11 @@
       class="large-textarea"
       name="synthesis"
       :label="helpRequestFieldLabels.synthesis"
-    />
+    >
+      <template #hint>
+        {{ SENSITIVE_DATA_HINT }}
+      </template>
+    </VeeTextarea>
   </div>
 
   <div
