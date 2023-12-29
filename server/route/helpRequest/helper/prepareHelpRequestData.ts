@@ -120,8 +120,8 @@ function prepareHelpRequestData(
     externalStructure: isExternalStructure,
     prescribingOrganization,
     isRefundable:
-      isRefundable === null || isRefundable === undefined
-        ? isRefundable
+      !isFinancial || isRefundable === null || isRefundable === undefined
+        ? null
         : isRefundable === 'true'
   }
 

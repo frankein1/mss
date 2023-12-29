@@ -63,14 +63,14 @@
       </div>
 
       <div class="fr-col-12 fr-col-lg-6">
-      <VeeInput
-        name="handlingDate"
-        :label="helpRequestFieldLabels.handlingDate"
-        type="date"
-      />
-    </div>
+        <VeeInput
+          name="handlingDate"
+          :label="helpRequestFieldLabels.handlingDate"
+          type="date"
+        />
+      </div>
 
-      <template v-if="isFinancialSupport">
+      <template v-if="isFinancialSupport && !isExternalSupport">
         <div class="fr-col-12 fr-col-lg-6">
           <VeeSelect
             name="paymentMethod"
