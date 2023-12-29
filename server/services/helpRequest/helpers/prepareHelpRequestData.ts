@@ -22,6 +22,7 @@ import { HelpRequestWithRelations } from '~/server/query'
 function prepareInstructorOrganization(
   instructorOrganizationId: string | null | undefined,
   user: SecurityRuleGrantee,
+  structureId: string,
   isExternalStructure: boolean,
   hasInstructorOrganizationAlreadySelected = false
 ) {
@@ -37,7 +38,7 @@ function prepareInstructorOrganization(
     return {
       create: {
         name: newOptionToLabel(instructorOrganizationId),
-        structureId: user.structureId,
+        structureId,
         createdById: user.id
       }
     }
@@ -47,7 +48,8 @@ function prepareInstructorOrganization(
 
 function preparePrescribingOrganization(
   prescribingOrganizationId: string | null | undefined,
-  user: SecurityRuleGrantee
+  user: SecurityRuleGrantee,
+  structureId: string
 ) {
   if (!prescribingOrganizationId) {
     return undefined
@@ -55,8 +57,8 @@ function preparePrescribingOrganization(
   if (isNewOption(prescribingOrganizationId)) {
     return {
       create: {
-        name: newOptionToLabel(prescribingOrganizationId || ''),
-        structureId: user.structureId || '',
+        name: newOptionToLabel(prescribingOrganizationId),
+        structureId,
         createdById: user.id
       }
     }
@@ -70,7 +72,7 @@ function prepareHelpRequestData(
     | Omit<EditHelpRequestInput, 'id' | 'beneficiaryId' | 'subject'>,
     'isMinistry' | 'documents' | 'instructorOrganizationId'
   >,
-  { user, structure }: ProtectedAppContext,
+  { user, structure }: Omit<ProtectedAppContext, 'event'>,
   subject: HelpRequestSubject
 ) {
   const {
@@ -102,7 +104,8 @@ function prepareHelpRequestData(
 
   const prescribingOrganization = preparePrescribingOrganization(
     prescribingOrganizationId,
-    user
+    user,
+    structure.id
   )
   const isExternalStructure = externalStructure === 'true'
   const isFinancial = subject === HelpRequestSubject.Financial
@@ -133,7 +136,7 @@ function prepareHelpRequestData(
   if (permissions.set.numeroPegase) {
     data = { ...data, numeroPegase }
   }
-  if (refusalReason) {
+  if (isRefused && refusalReason) {
     data = { ...data, refusalReasonOther: null }
   }
 
@@ -165,7 +168,7 @@ export function prepareHelpRequestCreateData(
     instructorOrganizationId,
     ...input
   }: CreateHelpRequestInput,
-  ctx: ProtectedAppContext,
+  ctx: Omit<ProtectedAppContext, 'event'>,
   beneficiary: Pick<Beneficiary, 'id'> & { referents: { id: string }[] }
 ): Prisma.HelpRequestCreateInput {
   const data = prepareHelpRequestData(input, ctx, subject)
@@ -180,6 +183,7 @@ export function prepareHelpRequestCreateData(
     instructorOrganization: prepareInstructorOrganization(
       instructorOrganizationId,
       ctx.user,
+      ctx.structure.id,
       input.externalStructure === 'true'
     )
   }
@@ -195,7 +199,7 @@ export function prepareHelpRequestUpdateData(
     instructorOrganizationId,
     ...input
   }: EditHelpRequestInput,
-  ctx: ProtectedAppContext,
+  ctx: Omit<ProtectedAppContext, 'event'>,
   target: HelpRequestWithRelations
 ): Prisma.HelpRequestUpdateInput {
   const data = prepareHelpRequestData(input, ctx, target.subject)
@@ -205,6 +209,7 @@ export function prepareHelpRequestUpdateData(
     instructorOrganization: prepareInstructorOrganization(
       instructorOrganizationId,
       ctx.user,
+      ctx.structure.id,
       input.externalStructure === 'true',
       target.instructorOrganizationId !== null
     )
