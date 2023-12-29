@@ -25,10 +25,23 @@
 
   <template v-if="hasSetExternalStructure">
     <div
+      v-if="isFinancialSupport"
+      class="fr-col-12 fr-col-lg-6"
+      :class="{
+        'fr-col-offset-lg-6--right': !isAnswered
+      }"
+    >
+      <VeeCurrencyInput
+        name="askedAmount"
+        :label="helpRequestFieldLabels.askedAmount"
+      />
+    </div>
+
+    <div
       v-if="isAnswered"
       class="fr-co-12 fr-col-lg-6"
       :class="{
-        'fr-col-offset-lg-6--right': status === HelpRequestStatus.Refused
+        'fr-col-offset-lg-6--right': isRefused && !isFinancialSupport
       }"
     >
       <VeeInput
@@ -38,10 +51,18 @@
       />
     </div>
 
-    <div
-      v-if="status === HelpRequestStatus.Accepted"
-      class="fr-col-12 fr-col-lg-6"
-    >
+    <template v-if="isAccepted">
+      <div
+        v-if="isFinancialSupport"
+        class="fr-co-12 fr-col-lg-6"
+      >
+        <VeeCurrencyInput
+          name="allocatedAmount"
+          :label="helpRequestFieldLabels.allocatedAmount"
+        />
+      </div>
+
+      <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         name="handlingDate"
         :label="helpRequestFieldLabels.handlingDate"
@@ -49,8 +70,27 @@
       />
     </div>
 
+      <template v-if="isFinancialSupport">
+        <div class="fr-col-12 fr-col-lg-6">
+          <VeeSelect
+            name="paymentMethod"
+            :label="helpRequestFieldLabels.paymentMethod"
+            :options="withEmptyValue(paymentMethodOptions)"
+          />
+        </div>
+
+        <div class="fr-col-12 fr-col-lg-6">
+          <VeeInput
+            name="paymentDate"
+            :label="helpRequestFieldLabels.paymentDate"
+            type="date"
+          />
+        </div>
+      </template>
+    </template>
+
     <div
-      v-if="status === HelpRequestStatus.Refused"
+      v-if="isRefused"
       class="fr-col-12"
     >
       <VeeSelect
@@ -69,43 +109,6 @@
       hint="Notification le jour de l'échéance et à J-30."
     />
   </div>
-
-  <!-- TODO: Rework financial part -->
-  <template v-if="hasSetExternalStructure && isFinancialSupport">
-    <div>
-      <VeeCurrencyInput
-        name="askedAmount"
-        :label="helpRequestFieldLabels.askedAmount"
-      />
-    </div>
-
-    <template v-if="status === HelpRequestStatus.Accepted">
-      <div>
-        <VeeCurrencyInput
-          name="allocatedAmount"
-          :label="helpRequestFieldLabels.allocatedAmount"
-        />
-      </div>
-
-      <template v-if="!isExternalSupport">
-        <div>
-          <VeeSelect
-            name="paymentMethod"
-            :label="helpRequestFieldLabels.paymentMethod"
-            :options="withEmptyValue(paymentMethodOptions)"
-          />
-        </div>
-
-        <div>
-          <VeeInput
-            name="paymentDate"
-            :label="helpRequestFieldLabels.paymentDate"
-            type="date"
-          />
-        </div>
-      </template>
-    </template>
-  </template>
 </template>
 
 <script setup lang="ts">
@@ -128,11 +131,9 @@
 
   const { value: subject } = useField<HelpRequestSubject>('subject')
 
-  const isAnswered = computed(
-    () =>
-      props.status === HelpRequestStatus.Accepted ||
-      props.status === HelpRequestStatus.Refused
-  )
+  const isAccepted = computed(() => props.status === HelpRequestStatus.Accepted)
+  const isRefused = computed(() => props.status === HelpRequestStatus.Refused)
+  const isAnswered = computed(() => isAccepted.value || isRefused.value)
 
   const isFinancialSupport = computed(
     () => subject.value === HelpRequestSubject.Financial
