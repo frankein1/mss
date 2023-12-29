@@ -75,3 +75,10 @@ export const helpRequestRefusalReasonLabels: {
 export const helpRequestRefusalReasonOptions = labelsToOptions(
   helpRequestRefusalReasonLabels
 )
+
+export const isRefundableLabels = {
+  false: 'Non remboursable',
+  true: 'Remboursable'
+}
+
+export const isRefundableOptions = labelsToOptions(isRefundableLabels)

@@ -30,6 +30,12 @@
       <span class="information-label">Instruction :</span>
       {{ instructorOrganization }}
     </li>
+    <li v-if="helpRequest.isRefundable !== null">
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.isRefundable }} :</span
+      >
+      {{ isRefundableLabels[helpRequest.isRefundable ? 'true' : 'false'] }}
+    </li>
     <li v-if="helpRequest.askedAmount">
       <span class="information-label"
         >{{ helpRequestFieldLabels.askedAmount }} :</span
@@ -88,7 +94,8 @@
   import { HistoryItemData } from './types'
   import {
     helpRequestRefusalReasonLabels,
-    paymentMethodLabels
+    paymentMethodLabels,
+    isRefundableLabels
   } from '~/client/options/helpRequest'
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'

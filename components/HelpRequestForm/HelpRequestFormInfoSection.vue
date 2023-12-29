@@ -12,6 +12,17 @@
     />
   </div>
 
+  <div
+    v-if="isFinancialSupport"
+    class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right"
+  >
+    <VeeSelect
+      name="isRefundable"
+      :label="helpRequestFieldLabels.isRefundable"
+      :options="withEmptyValue(isRefundableOptions)"
+    />
+  </div>
+
   <template v-if="hasSetExternalStructure">
     <div
       v-if="isAnswered"
@@ -102,7 +113,8 @@
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import {
     paymentMethodOptions,
-    helpRequestRefusalReasonOptions
+    helpRequestRefusalReasonOptions,
+    isRefundableOptions
   } from '~/client/options/helpRequest'
   import { withEmptyValue } from '~/utils/options'
 

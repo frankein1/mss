@@ -83,8 +83,16 @@ export const withEmptyValueOptionalNativeEnum = <T extends z.EnumLike>(
     z.nativeEnum(nativeEnum).nullish()
   )
 
-export const kindOfBooleanSchema = () =>
-  z.enum(['true', 'false'], { required_error: requiredErrorMessage })
+export const kindOfBooleanSchema = (required = false) => {
+  if (required) {
+    return z.enum(['true', 'false'], { required_error: requiredErrorMessage })
+  }
+
+  return z.preprocess(
+    arg => (arg === '' ? null : arg),
+    z.enum(['true', 'false']).nullish()
+  )
+}
 
 export const amountNumber = z.preprocess(
   v => (typeof v === 'string' ? v.replace(',', '.') : v),

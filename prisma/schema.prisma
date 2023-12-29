@@ -400,6 +400,7 @@ model HelpRequest {
   financialSupport  Boolean?          @map("financial_support")
   externalStructure Boolean?          @map("external_structure")
   status            HelpRequestStatus
+  isRefundable      Boolean?          @map("is_refundable")
 
   askedAmount Decimal? @map("asked_amount")
 
@@ -1586,6 +1587,8 @@ view BeneficiaryHistory {
   allocatedAmount    Decimal?                  @map("allocated_amount")
   paymentMethod      PaymentMethod?            @map("payment_method")
   paymentDate        DateTime?                 @map("payment_date") @db.Date
+  subject            HelpRequestSubject?
+  isRefundable       Boolean?                  @map("is_refundable")
 
   instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
   instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])

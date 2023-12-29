@@ -89,6 +89,7 @@ function prepareHelpRequestData(
     allocatedAmount,
     paymentMethod,
     paymentDate,
+    isRefundable,
     ...otherData
   } = prepareDateFields(input, [
     'decisionDate',
@@ -117,7 +118,11 @@ function prepareHelpRequestData(
     status,
     ...otherData,
     externalStructure: isExternalStructure,
-    prescribingOrganization
+    prescribingOrganization,
+    isRefundable:
+      isRefundable === null || isRefundable === undefined
+        ? isRefundable
+        : isRefundable === 'true'
   }
 
   const permissions = getHelpRequestPermissions({ user, structure })
