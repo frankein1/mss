@@ -133,6 +133,9 @@ function prepareHelpRequestData(
   if (permissions.set.numeroPegase) {
     data = { ...data, numeroPegase }
   }
+  if (refusalReason) {
+    data = { ...data, refusalReasonOther: null }
+  }
 
   // It is required to enforce setting undefined when conditional field is not available to allow overriding in edit mode
   data = {
