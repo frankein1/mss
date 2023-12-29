@@ -23,11 +23,13 @@ import {
   getHistoryCountsQuery,
   getInstructorOrganizationStatsQ,
   getMinistereCategorieStatsQ,
+  getMinistereInterpellationStatsQ,
   getMinistereDepartementServiceAcStatsQ,
   getMinistereStructureStatsQ,
   getMobilityStatsQ,
   getRegionStatsQ,
-  getCityStatsQ
+  getCityStatsQ,
+  getDepartmentStatsQ
 } from '~/server/route/stat'
 import { protectedProcedure, router } from '~/server/trpc'
 
@@ -89,6 +91,9 @@ export const statRouter = router({
   getCityStats: protectedProcedure
     .input(getCityStatsQ.inputValidation)
     .query(getCityStatsQ.execute),
+  getDepartmentStats: protectedProcedure
+    .input(getDepartmentStatsQ.inputValidation)
+    .query(getDepartmentStatsQ.execute),
   getRegionStats: protectedProcedure
     .input(getRegionStatsQ.inputValidation)
     .query(getRegionStatsQ.execute),
@@ -104,6 +109,9 @@ export const statRouter = router({
   getMinistereCategorie: protectedProcedure
     .input(getMinistereCategorieStatsQ.inputValidation)
     .query(getMinistereCategorieStatsQ.execute),
+  getMinistereInterpellation: protectedProcedure
+    .input(getMinistereInterpellationStatsQ.inputValidation)
+    .query(getMinistereInterpellationStatsQ.execute),
   getMinistereDepartementServiceAc: protectedProcedure
     .input(getMinistereDepartementServiceAcStatsQ.inputValidation)
     .query(getMinistereDepartementServiceAcStatsQ.execute),
