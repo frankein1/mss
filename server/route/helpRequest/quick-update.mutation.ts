@@ -54,7 +54,7 @@ function prepareData(
     return _data
   }
 
-  return undefined
+  return {}
 }
 
 const securityCheck = async (
@@ -88,28 +88,11 @@ const handler = async ({
   const target = await getHelpRequestWithRelations(user, input.id)
 
   const data = prepareData(target, input)
-  const permissions = getHelpRequestPermissions({ user, structure })
-
-  if (!data) {
-    const helpRequest = await HelpRequestRepo.findUniqueOrThrow(user, {
-      where: { id: input.id },
-      select: prepareGetHelpRequestsPageSelect(permissions)
-    })
-
-    return {
-      ...helpRequest,
-      permissions: getHelpRequestPermissions({
-        user,
-        structure,
-        target: helpRequest
-      })
-    }
-  }
 
   const helpRequest = await HelpRequestRepo.prisma.update({
     where: { id: input.id },
     data,
-    select: prepareGetHelpRequestsPageSelect(permissions)
+    select: prepareGetHelpRequestsPageSelect({ user, structure })
   })
 
   return {
