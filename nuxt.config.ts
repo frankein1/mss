@@ -94,7 +94,7 @@ export default defineNuxtConfig({
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
-    // Adds sourcemaps for Sentry (may not been working until releases and auth token are used)
+    // Adds sourcemaps for Sentry (may not work)
     build: {
       sourcemap: true
     },

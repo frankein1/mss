@@ -103,6 +103,9 @@ devDependencies:
   '@nuxtjs/eslint-config-typescript':
     specifier: ^12.1.0
     version: 12.1.0(eslint@8.56.0)(typescript@5.3.3)
+  '@sentry/node':
+    specifier: ^7.91.0
+    version: 7.91.0
   '@types/jsonwebtoken':
     specifier: ^9.0.5
     version: 9.0.5
@@ -2447,7 +2450,6 @@ packages:
       '@sentry/core': 7.91.0
       '@sentry/types': 7.91.0
       '@sentry/utils': 7.91.0
-    dev: false
 
   /@sentry/browser@7.91.0:
     resolution: {integrity: sha512-lJv3x/xekzC/biiyAsVCioq2XnKNOZhI6jY3ZzLJZClYV8eKRi7D3KCsHRvMiCdGak1d/6sVp8F4NYY+YiWy1Q==}
@@ -2467,7 +2469,19 @@ packages:
     dependencies:
       '@sentry/types': 7.91.0
       '@sentry/utils': 7.91.0
-    dev: false
+
+  /@sentry/node@7.91.0:
+    resolution: {integrity: sha512-hTIfSQxD7L+AKIqyjoq8CWBRkEQrrMZmA3GSZgPI5JFWBHgO0HBo5TH/8TU81oEJh6kqqHAl2ObMhmcnaFqlzg==}
+    engines: {node: '>=8'}
+    dependencies:
+      '@sentry-internal/tracing': 7.91.0
+      '@sentry/core': 7.91.0
+      '@sentry/types': 7.91.0
+      '@sentry/utils': 7.91.0
+      https-proxy-agent: 5.0.1
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
 
   /@sentry/replay@7.91.0:
     resolution: {integrity: sha512-XwbesnLLNtaVXKtDoyBB96GxJuhGi9zy3a662Ba/McmumCnkXrMQYpQPh08U7MgkTyDRgjDwm7PXDhiKpcb03g==}
@@ -2482,14 +2496,12 @@ packages:
   /@sentry/types@7.91.0:
     resolution: {integrity: sha512-bcQnb7J3P3equbCUc+sPuHog2Y47yGD2sCkzmnZBjvBT0Z1B4f36fI/5WjyZhTjLSiOdg3F2otwvikbMjmBDew==}
     engines: {node: '>=8'}
-    dev: false
 
   /@sentry/utils@7.91.0:
     resolution: {integrity: sha512-fvxjrEbk6T6Otu++Ax9ntlQ0sGRiwSC179w68aC3u26Wr30FAIRKqHTCCdc2jyWk7Gd9uWRT/cq+g8NG/8BfSg==}
     engines: {node: '>=8'}
     dependencies:
       '@sentry/types': 7.91.0
-    dev: false
 
   /@sentry/vue@7.91.0(vue@3.3.13):
     resolution: {integrity: sha512-i/8e6Bb4QGVtoo45n7LF6MUcfo7mCEfJBa4SYYg15LyC0ev5ewJpo82jdAacmnUEkZ7qn0Zipv+M64a+3mx0cw==}
