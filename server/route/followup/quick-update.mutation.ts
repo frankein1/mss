@@ -6,8 +6,9 @@ import {
   QuickEditFollowupInput,
   quickEditFollowupSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canEditFollowup } from '~/server/security'
+import { SecurityRuleGrantee } from '~/server/security'
 import { FollowupRepo } from '~/server/database'
+import { FollowupService } from '~/server/services'
 
 const handler = async ({
   input: { id, ...rest },
@@ -31,17 +32,8 @@ const securityCheck = async (
   user: SecurityRuleGrantee,
   input: QuickEditFollowupInput
 ) => {
-  const target = await FollowupRepo.findUniqueOrThrow(user, {
-    where: { id: input.id },
-    include: {
-      beneficiary: {
-        include: {
-          referents: true
-        }
-      }
-    }
-  })
-  return canEditFollowup(user, target)
+  const permissions = await FollowupService.getUpdatePermission(user, input.id)
+  return permissions.edit
 }
 
 export const quickUpdateFollowupMutation = createMutation({

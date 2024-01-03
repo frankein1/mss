@@ -1,6 +1,5 @@
 import {
   beneficiaryFieldLabels,
-  followupFieldLabels,
   helpRequestFieldLabels
 } from '~/client/labels'
 
@@ -8,32 +7,6 @@ export const EXPORT_DEFAULT_FONT = {
   name: 'Calibri',
   size: 12
 }
-
-export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
-  'status',
-  'date',
-  'beneficiaryId',
-  'numeroPegase',
-  'ministre',
-  'types',
-  'medium',
-  'prescribingOrganizationId',
-  'firstFollowup',
-  'synthesis',
-  'redirected',
-  'structureName',
-  'classified',
-  'documents',
-  'dueDate',
-  'forwardedToJustice',
-  'helpRequested',
-  // 'interventions',
-  'place',
-  // 'signalements',
-  'thirdPersonName',
-  'updated',
-  'createdById'
-]
 
 export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)[] =
   [

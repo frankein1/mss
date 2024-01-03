@@ -53,18 +53,14 @@
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
-  import {
-    canViewFollowupDetails as canViewFollowupDetailsRule,
-    canEditFollowup
-  } from '~/server/security'
+  import { FollowupPermissions } from '~/server/security'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
     followup: FollowupItem
+    permissions: FollowupPermissions
   }>()
-
-  const { canWithTarget } = useSecurityRule()
 
   const followupPath = computed(() =>
     RoutePath.AppBeneficiary(props.followup.beneficiary.id, {
@@ -79,11 +75,7 @@
     props.followup.types.map(({ name }) => name).join(', ')
   )
 
-  const canViewFollowupDetails = computed(() =>
-    canWithTarget(canViewFollowupDetailsRule, props.followup)
-  )
+  const canViewFollowupDetails = computed(() => props.permissions.get.details)
 
-  const canQuickEditFollowup = computed(() =>
-    canWithTarget(canEditFollowup, props.followup)
-  )
+  const canQuickEditFollowup = computed(() => props.permissions.edit)
 </script>

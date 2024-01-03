@@ -1,11 +1,27 @@
-import {
-  canViewFollowupDetails,
-  canViewFollowupPrivateSynthesis
-} from '~/server/security'
-import { FollowupWithRelations } from '~/server/query/followups'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { Prisma } from '@prisma/client'
+import { FollowupRepo } from '~/server/database'
+import { SecurityRuleGrantee, getFollowupPermissions } from '~/server/security'
 
-function getFollowupMeta(followup: NonNullable<FollowupWithRelations>) {
+export function get({ user, id }: { user: SecurityRuleGrantee; id: string }) {
+  return FollowupRepo.findUniqueOrThrow(user, {
+    where: { id },
+    include: {
+      beneficiary: {
+        include: {
+          referents: true
+        }
+      },
+      documents: true,
+      types: true,
+      prescribingOrganization: true,
+      createdBy: true
+    }
+  })
+}
+
+export type FollowupTree = Prisma.PromiseReturnType<typeof get>
+
+function getMeta(followup: NonNullable<FollowupTree>) {
   return {
     id: followup.id,
     structureId: followup.structureId,
@@ -23,14 +39,7 @@ function getFollowupMeta(followup: NonNullable<FollowupWithRelations>) {
   }
 }
 
-function getFollowupDetails(
-  user: SecurityRuleGrantee,
-  followup: NonNullable<FollowupWithRelations>
-) {
-  if (!canViewFollowupDetails(user, followup)) {
-    return {}
-  }
-
+function getDetails(followup: NonNullable<FollowupTree>) {
   return {
     medium: followup.medium,
     classified: followup.classified,
@@ -51,26 +60,20 @@ function getFollowupDetails(
   }
 }
 
-function getFollowupPrivateSynthesis(
+export function filter(
   user: SecurityRuleGrantee,
-  followup: NonNullable<FollowupWithRelations>
+  followup: NonNullable<FollowupTree>
 ) {
-  if (!canViewFollowupPrivateSynthesis(user, followup)) {
-    return {}
-  }
-
-  return {
-    privateSynthesis: followup.privateSynthesis
-  }
-}
-
-export function getFollowupAccessibleData(
-  user: SecurityRuleGrantee,
-  followup: NonNullable<FollowupWithRelations>
-) {
-  const meta = getFollowupMeta(followup)
-  const details = getFollowupDetails(user, followup)
-  const privateSynthesis = getFollowupPrivateSynthesis(user, followup)
+  const permissions = getFollowupPermissions({
+    user,
+    beneficiary: followup.beneficiary,
+    followup
+  })
+  const meta = getMeta(followup)
+  const details = permissions.get.details ? getDetails(followup) : {}
+  const privateSynthesis = permissions.set.privateSynthesis
+    ? followup.privateSynthesis
+    : {}
 
   return {
     ...meta,
