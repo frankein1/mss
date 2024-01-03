@@ -3,16 +3,16 @@ import { BeneficiaryRepo, DraftRepo } from '~/server/database'
 import { CreateBeneficiaryInput, SaveDraftInput } from '~/server/schema'
 import { prepareDateFields } from '~/utils/prisma'
 import { generateFileNumber } from '~/utils/generateFileNumber'
-import { ProtectedAppContext } from '~/server/trpc'
+import { SecurityRuleContext } from '~/server/security/rules/types'
 
 type CreateParams =
   | {
-      ctx: Omit<ProtectedAppContext, 'event'>
+      ctx: SecurityRuleContext
       input: CreateBeneficiaryInput
       draftId?: undefined
     }
   | {
-      ctx: Omit<ProtectedAppContext, 'event'>
+      ctx: SecurityRuleContext
       input: SaveDraftInput
       draftId: string
     }

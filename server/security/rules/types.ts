@@ -1,9 +1,16 @@
-import { User, UserRole } from '@prisma/client'
+import { Structure, User, UserRole } from '@prisma/client'
+
+export type SecurityRuleStructure = Pick<Structure, 'id' | 'type'>
 
 export type SecurityRuleGrantee = Pick<
   User,
   'id' | 'status' | 'role' | 'structureId'
 >
+
+export type SecurityRuleContext = {
+  user: SecurityRuleGrantee
+  structure: SecurityRuleStructure
+}
 
 export type SecurityTargetWithStructure = {
   structureId: string | null

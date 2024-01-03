@@ -10,7 +10,6 @@ import {
   prepareDateFields,
   prepareDocumentsMutations
 } from '~/utils/prisma'
-import { ProtectedAppContext } from '~/server/trpc'
 import {
   getHelpRequestPermissions,
   SecurityRuleGrantee
@@ -18,6 +17,7 @@ import {
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { prepareNewHistoryElementNotification } from '~/utils/notification'
 import { HelpRequestWithRelations } from '~/server/query'
+import { SecurityRuleContext } from '~/server/security/rules/types'
 
 function prepareInstructorOrganization(
   instructorOrganizationId: string | null | undefined,
@@ -72,7 +72,7 @@ function prepareHelpRequestData(
     | Omit<EditHelpRequestInput, 'id' | 'beneficiaryId' | 'subject'>,
     'isMinistry' | 'documents' | 'instructorOrganizationId'
   >,
-  { user, structure }: Omit<ProtectedAppContext, 'event'>,
+  { user, structure }: SecurityRuleContext,
   subject: HelpRequestSubject
 ) {
   const {
@@ -168,7 +168,7 @@ export function prepareHelpRequestCreateData(
     instructorOrganizationId,
     ...input
   }: CreateHelpRequestInput,
-  ctx: Omit<ProtectedAppContext, 'event'>,
+  ctx: SecurityRuleContext,
   beneficiary: Pick<Beneficiary, 'id'> & { referents: { id: string }[] }
 ): Prisma.HelpRequestCreateInput {
   const data = prepareHelpRequestData(input, ctx, subject)
@@ -199,7 +199,7 @@ export function prepareHelpRequestUpdateData(
     instructorOrganizationId,
     ...input
   }: EditHelpRequestInput,
-  ctx: Omit<ProtectedAppContext, 'event'>,
+  ctx: SecurityRuleContext,
   target: HelpRequestWithRelations
 ): Prisma.HelpRequestUpdateInput {
   const data = prepareHelpRequestData(input, ctx, target.subject)

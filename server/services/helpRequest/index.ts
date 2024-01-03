@@ -1,5 +1,7 @@
-import { set } from './set.service'
+import { create } from './create.service'
+import { update } from './update.service'
 
 export const HelpRequestService = {
-  set
+  create,
+  update
 }

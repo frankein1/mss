@@ -1,5 +1,4 @@
 import { Prisma } from '@prisma/client'
-import { ProtectedAppContext } from '~/server/trpc'
 import {
   SaveDraftInput,
   SaveBeneficiaryGeneralInformationInput,
@@ -13,9 +12,10 @@ import { getBeneficiaryPermissions } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 import { prepareDateFields } from '~/utils/prisma'
+import { SecurityRuleContext } from '~/server/security/rules/types'
 
 export function prepareDataFromDraft(
-  { user, structure }: Omit<ProtectedAppContext, 'event'>,
+  { user, structure }: SecurityRuleContext,
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {

@@ -11,21 +11,15 @@ import {
 } from '~/server/security'
 import { getStructureByUser } from '~/server/query'
 import { HelpRequestService, BeneficiaryService } from '~/server/services'
-import { BeneficiaryRepo } from '~/server/database/repository'
 
-const handler = async ({
+const handler = ({
   input,
   ctx
 }: {
   input: CreateHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: input.beneficiaryId },
-    select: { id: true, referents: true }
-  })
-
-  return HelpRequestService.set({ ctx, input, beneficiary })
+  return HelpRequestService.create({ ctx, input })
 }
 
 const securityCheck = async (

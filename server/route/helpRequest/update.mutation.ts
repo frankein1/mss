@@ -9,25 +9,20 @@ import {
   getHelpRequestPermissions
 } from '~/server/security'
 import {
-  getHelpRequestWithRelations,
   getHelpRequestSecurityTarget,
   getStructureByUser
 } from '~/server/query'
 import { isNewOption } from '~/utils/options'
 import { HelpRequestService } from '~/server/services'
 
-const handler = async ({
+const handler = ({
   input,
   ctx
 }: {
   input: EditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const { user } = ctx
-
-  const target = await getHelpRequestWithRelations(user, input.id)
-
-  return HelpRequestService.set({ ctx, input, target })
+  return HelpRequestService.update({ ctx, input })
 }
 
 const securityCheck = async (
