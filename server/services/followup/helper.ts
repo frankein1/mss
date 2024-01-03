@@ -1,11 +1,18 @@
-import type { Prisma } from '@prisma/client'
-import type { FollowupFilterInput } from '~/server/schema'
+import { FollowupType, Prisma } from '@prisma/client'
+import { FollowupFilterInput } from '~/server/schema'
 
-/**
- * Prepare filters for followups from client-side to filters for Prisma query
- * @param filters The inferred type of the filters zod schema for followups
- * @returns The prisma where input for followups
- */
+export function prepareFollowupTypesMutations(
+  inputTypes: string[],
+  targetTypes?: FollowupType[]
+) {
+  return {
+    connect: inputTypes.map(id => ({ id })),
+    disconnect: targetTypes
+      ?.filter(({ id }) => !inputTypes.includes(id))
+      .map(({ id }) => ({ id }))
+  }
+}
+
 export function prepareFollowupFilters(filters: FollowupFilterInput) {
   const formattedFilters: Prisma.FollowupWhereInput = {}
 

@@ -81,12 +81,6 @@
   } from './types'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import { RoutePath } from '~/utils/routing'
-  import {
-    canEditFollowup,
-    canDeleteFollowup,
-    canViewFollowupDetails,
-    canViewFollowupPrivateSynthesis
-  } from '~/server/security'
 
   const props = defineProps<{
     history: HistoryItem
@@ -102,8 +96,6 @@
 
   const comments = ref(historyData.value.comments || [])
 
-  const { canWithTarget } = useSecurityRule()
-
   const editLink = computed(() => {
     const routeWithParams = historyData.value.isFollowup
       ? RoutePath.AppBeneficiaryFollowupEdit
@@ -114,28 +106,14 @@
     )
   })
 
-  const canEdit = computed(() =>
-    historyData.value.isFollowup
-      ? canWithTarget(canEditFollowup, historyData.value)
-      : permissions.value?.edit
-  )
+  const canEdit = computed(() => permissions.value?.edit)
 
-  const canDelete = computed(() =>
-    historyData.value.isFollowup
-      ? canWithTarget(canDeleteFollowup, historyData.value)
-      : permissions.value?.delete
-  )
+  const canDelete = computed(() => permissions.value?.delete)
 
-  const canViewHistoryDetails = computed(() =>
-    historyData.value.isFollowup
-      ? canWithTarget(canViewFollowupDetails, historyData.value)
-      : permissions.value?.get.details
-  )
+  const canViewHistoryDetails = computed(() => permissions.value?.get.details)
 
-  const canViewPrivateSynthesis = computed(() =>
-    historyData.value.isFollowup
-      ? canWithTarget(canViewFollowupPrivateSynthesis, historyData.value)
-      : permissions.value?.get.privateSynthesis
+  const canViewPrivateSynthesis = computed(
+    () => permissions.value?.get.privateSynthesis
   )
 
   function onCommentAdded(comment: HistoryItemComment) {

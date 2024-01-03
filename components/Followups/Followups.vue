@@ -29,13 +29,13 @@
       <FollowupsTable
         v-show="!pending"
         v-model:sort="orderBy"
-        :followups="followups"
+        :items="pageItems"
         :pending="pending"
       />
       <AtomPagination
         v-show="!pending"
         class="fr-mt-4w fr-px-5v"
-        :page="page"
+        :page="pageNumber"
         :per-page="perPage"
         :total-pages="totalPages"
         @change-page="updatePagination($event)"
@@ -62,40 +62,38 @@
 
   const filters = ref<FollowupFilterInput>(filtersState.followup.value || {})
   const orderBy = ref<FollowupSort[]>([{ date: SortOrder.Desc }])
-  const page = ref(1)
+  const pageNumber = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
   const isDownloading = ref(false)
 
-  const { updatePagination } = usePagination(page, perPage, filters)
+  const { updatePagination } = usePagination(pageNumber, perPage, filters)
 
   const queryInput = computed(() => ({
     orderBy: orderBy.value,
     filters: filters.value,
-    page: page.value,
+    page: pageNumber.value,
     perPage: perPage.value
   }))
 
   const {
-    data: followupsRequest,
+    data: pageData,
     pending,
     error
-  } = await trpcClient.followup.getFollowups.useQuery(queryInput)
+  } = await trpcClient.followup.getPage.useQuery(queryInput)
 
-  const followupsCount = computed(() => followupsRequest.value?.count || 0)
+  const followupsCount = computed(() => pageData.value?.count || 0)
 
-  const followups = computed(() => followupsRequest.value?.followups || [])
+  const pageItems = computed(() => pageData.value?.items || [])
 
-  const totalPages = computed(() => followupsRequest.value?.totalPages || 0)
+  const totalPages = computed(() => pageData.value?.totalPages || 0)
 
   async function exportFollowups() {
     isDownloading.value = true
     try {
-      const exportedFollowups = await trpcClient.followup.exportFollowups.query(
-        {
-          orderBy: orderBy.value,
-          filters: filters.value
-        }
-      )
+      const exportedFollowups = await trpcClient.followup.getExport.query({
+        orderBy: orderBy.value,
+        filters: filters.value
+      })
       if (!exportedFollowups.data) {
         throw new Error('no data')
       }

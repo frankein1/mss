@@ -17,11 +17,11 @@
         class="fr-mx-auto"
       />
       <FollowupFormEdition
-        v-else-if="followup && followupTypes && prescribingOrganizations"
+        v-else-if="followupData && followupTypes && prescribingOrganizations"
         :is-submitting="isSubmitting"
         :followup-types="followupTypes"
         :prescribing-organizations="prescribingOrganizations"
-        :followup="followup"
+        :data="followupData"
         @save-followup="onUpdateFollowup"
       />
     </main>
@@ -44,13 +44,14 @@
   const followupId = route.params.fid as string
 
   const {
-    data: followup,
+    data: followupData,
     pending: followupPending,
     error: followupError
-  } = await trpcClient.followup.getFollowupDetails.useQuery({
+  } = await trpcClient.followup.getOne.useQuery({
     id: followupId
   })
 
+  const followup = computed(() => followupData.value?.followup || null)
   const beneficiary = computed(() => followup.value?.beneficiary || null)
 
   const title = computed(() =>

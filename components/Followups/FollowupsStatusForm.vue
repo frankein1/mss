@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-  import { FollowupItem } from '~/server/trpc/routers'
+  import { FollowupPageItem } from './types'
   import { followupStatusOptions } from '~/client/options/followup'
   import {
     QuickEditFollowupInput,
@@ -27,14 +27,14 @@
   const snackbar = useSnackbar()
 
   const props = defineProps<{
-    followup: FollowupItem
+    data: FollowupPageItem
   }>()
 
   const { handleSubmit } = useForm<QuickEditFollowupInput>({
     validationSchema: toTypedSchema(quickEditFollowupSchema),
     initialValues: {
-      id: props.followup.id,
-      status: props.followup.status
+      id: props.data.followup.id,
+      status: props.data.followup.status
     }
   })
 
