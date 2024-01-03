@@ -20,7 +20,6 @@
     // FollowupSignalement
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { canEditFollowupPrivateSynthesis } from '~/server/security'
   import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
   import { GetFollowupDetailsOutput } from '~/server/trpc/routers'
 
@@ -28,7 +27,7 @@
     isSubmitting: boolean
     followupTypes: Array<FollowupType>
     prescribingOrganizations: Array<PrescribingOrganization>
-    followup: GetFollowupDetailsOutput
+    followup: GetFollowupDetailsOutput,
   }>()
 
   const emit = defineEmits<{

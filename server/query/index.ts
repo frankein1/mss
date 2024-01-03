@@ -1,5 +1,4 @@
 export * from './documents'
-export * from './followups'
 export * from './helpRequests'
 export * from './userActivity'
 export * from './structure'

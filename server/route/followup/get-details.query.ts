@@ -1,11 +1,8 @@
-import { getFollowupAccessibleData } from './helper/getFollowupAccessibleData'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { canViewFollowup } from '~/server/security'
-import { getFollowupWithRelations } from '~/server/query'
 import { IdInput, idSchema } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { FollowupRepo } from '~/server/database'
+import { FollowupService } from '~/server/services'
 
 const handler = async ({
   input: { id },
@@ -14,25 +11,14 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const followup = await getFollowupWithRelations(user, id)
+  const followup = await FollowupService.get({ user, id })
 
-  const data = getFollowupAccessibleData(user, followup)
-
-  return data
+  return followup
 }
 
 const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const followup = await FollowupRepo.findUniqueOrThrow(user, {
-    where: { id: input.id },
-    include: {
-      beneficiary: {
-        include: {
-          referents: true
-        }
-      }
-    }
-  })
-  return canViewFollowup(user, followup.beneficiary)
+  const permissions = await FollowupService.getUpdatePermission(user, input.id)
+  return permissions.view
 }
 
 export const getFollowupDetailsQuery = createQuery({
