@@ -1,8 +1,12 @@
-import { HelpRequestPermissions } from '~/server/security'
+import { getHelpRequestPermissions } from '~/server/security'
+import { ProtectedAppContext } from '~/server/trpc'
 
-export function prepareGetHelpRequestsPageSelect(
-  permissions: HelpRequestPermissions
-) {
+export function prepareGetHelpRequestsPageSelect({
+  user,
+  structure
+}: Omit<ProtectedAppContext, 'event'>) {
+  const permissions = getHelpRequestPermissions({ user, structure })
+
   return {
     id: true,
     status: true,

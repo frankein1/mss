@@ -40,12 +40,10 @@ const handler = async ({
     orderBy.unshift({ externalStructure: SortOrder.Desc })
   }
 
-  const permissions = getHelpRequestPermissions({ user, structure })
-
   const [helpRequests, count] = await Promise.all([
     HelpRequestRepo.findMany(user, {
       where,
-      select: prepareGetHelpRequestsPageSelect(permissions),
+      select: prepareGetHelpRequestsPageSelect({ user, structure }),
       take,
       skip,
       orderBy: input.orderBy

@@ -1,5 +1,4 @@
 import { UserActivityType } from '@prisma/client'
-import { prepareHelpRequestCreateData } from './helper'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -10,9 +9,9 @@ import {
   SecurityRuleGrantee,
   getBeneficiaryPermissions
 } from '~/server/security'
-import { markFollowupTypeAsUsed, getStructureByUser } from '~/server/query'
-import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
-import { BeneficiaryService } from '~/server/services'
+import { getStructureByUser } from '~/server/query'
+import { HelpRequestService, BeneficiaryService } from '~/server/services'
+import { BeneficiaryRepo } from '~/server/database/repository'
 
 const handler = async ({
   input,
@@ -21,30 +20,12 @@ const handler = async ({
   input: CreateHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  const { user } = ctx
-
-  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(user, {
+  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.beneficiaryId },
     select: { id: true, referents: true }
   })
 
-  const data = prepareHelpRequestCreateData(input, ctx, beneficiary)
-
-  const helpRequest = await HelpRequestRepo.prisma.create({
-    data,
-    include: {
-      beneficiary: {
-        select: {
-          id: true,
-          fileNumber: true
-        }
-      }
-    }
-  })
-
-  await markFollowupTypeAsUsed([input.typeId])
-
-  return { helpRequest }
+  return HelpRequestService.set({ ctx, input, beneficiary })
 }
 
 const securityCheck = async (
