@@ -11,7 +11,7 @@
       <td>
         <FollowupsStatusForm
           v-if="canQuickEditFollowup"
-          :followup="followup"
+          :data="data"
           @click.stop
         />
         <span
@@ -28,11 +28,7 @@
       </td>
       <td class="followup-types-data">{{ followUpTypes }}</td>
       <td>
-        {{
-          canViewFollowupDetails && followup.dueDate
-            ? formatDate(followup.dueDate)
-            : undefined
-        }}
+        {{ followup.dueDate ? formatDate(followup.dueDate) : undefined }}
       </td>
       <td>
         <template v-if="followup.createdBy">
@@ -45,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupItem } from '~/server/trpc/routers'
+  import { FollowupPageItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { followupStatusOptions } from '~/client/options/followup'
@@ -53,37 +49,28 @@
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
-  import {
-    canViewFollowupDetails as canViewFollowupDetailsRule,
-    canEditFollowup
-  } from '~/server/security'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
-    followup: FollowupItem
+    data: FollowupPageItem
   }>()
 
-  const { canWithTarget } = useSecurityRule()
+  const followup = computed(() => props.data.followup)
+  const permissions = computed(() => props.data.permissions)
 
   const followupPath = computed(() =>
-    RoutePath.AppBeneficiary(props.followup.beneficiary.id, {
+    RoutePath.AppBeneficiary(followup.value.beneficiary.id, {
       tab: BeneficiaryTab.History,
-      item: props.followup.id,
+      item: followup.value.id,
       originPage: Route.AppHistory,
       originTab: HistoryTab.Followups
     })
   )
 
   const followUpTypes = computed(() =>
-    props.followup.types.map(({ name }) => name).join(', ')
+    followup.value.types.map(({ name }) => name).join(', ')
   )
 
-  const canViewFollowupDetails = computed(() =>
-    canWithTarget(canViewFollowupDetailsRule, props.followup)
-  )
-
-  const canQuickEditFollowup = computed(() =>
-    canWithTarget(canEditFollowup, props.followup)
-  )
+  const canQuickEditFollowup = computed(() => permissions.value.edit)
 </script>

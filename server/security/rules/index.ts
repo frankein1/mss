@@ -3,16 +3,23 @@ import type {
   SecurityTargetWithStructure,
   SecurityTargetWithReferents,
   SecurityRule,
+  SecurityRuleContext,
   SecurityTargetWithCreator
 } from './types'
-import { hasAllowedRole, isReferent } from './helpers'
-export { hasAllowedRole, isReferent }
+import {
+  hasAllowedRole,
+  isReferent,
+  isCreator,
+  isInSameStructureAs
+} from './helpers'
+export { hasAllowedRole, isReferent, isCreator, isInSameStructureAs }
 
 export * from './comment'
 
 export type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
+  SecurityRuleContext,
   SecurityTargetWithReferents,
   SecurityRule,
   SecurityTargetWithCreator
@@ -37,18 +44,6 @@ export {
   canViewDocument,
   canSetDocumentAsConfidential
 } from './document'
-
-export {
-  canCreateFollowup,
-  canDeleteFollowup,
-  canEditFollowup,
-  canEditFollowupPrivateSynthesis,
-  canListBeneficiaryFollowups,
-  canViewFollowup,
-  canViewFollowupPrivateSynthesis,
-  canViewFollowupDetails,
-  canViewAnyFollowupDetails
-} from './followup'
 
 export { canViewStats, canViewStatsByReferent } from './stats'
 

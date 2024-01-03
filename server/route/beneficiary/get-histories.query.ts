@@ -7,7 +7,8 @@ import {
   getBeneficiaryHistoryPermissions,
   getDocumentPermissions,
   SecurityRuleGrantee,
-  getHelpRequestPermissions
+  getHelpRequestPermissions,
+  getFollowupPermissions
 } from '~/server/security'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { BeneficiaryHistoryRepo } from '~/server/database'
@@ -185,7 +186,11 @@ function flattenHistories(
     }))
 
     const historyPermissions = data.isFollowup
-      ? undefined
+      ? getFollowupPermissions({
+          user,
+          beneficiary: data.beneficiary,
+          followup: data
+        })
       : getHelpRequestPermissions({
           user,
           structure,

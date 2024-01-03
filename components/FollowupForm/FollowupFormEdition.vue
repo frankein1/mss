@@ -20,25 +20,25 @@
     // FollowupSignalement
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { canEditFollowupPrivateSynthesis } from '~/server/security'
+  import { FollowupPageItem } from './types'
   import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
-  import { GetFollowupDetailsOutput } from '~/server/trpc/routers'
 
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: Array<FollowupType>
     prescribingOrganizations: Array<PrescribingOrganization>
-    followup: GetFollowupDetailsOutput
+    data: FollowupPageItem
   }>()
 
   const emit = defineEmits<{
     saveFollowup: [followup: EditFollowupInput]
   }>()
 
-  const { canWithTarget } = useSecurityRule()
+  const followup = computed(() => props.data.followup)
+  const permissions = computed(() => props.data.permissions)
 
   const initialFollowUpTypeIds = computed(
-    () => props.followup.types.map(f => f.id) || []
+    () => props.data.followup.types.map(f => f.id) || []
   )
 
   // const initialInterventions = computed<{
@@ -47,7 +47,7 @@
   //   Object.fromEntries(
   //     Object.values(FollowupIntervention).map(key => [
   //       key,
-  //       props.followup.interventions?.includes(key)
+  //       followup.value.interventions?.includes(key)
   //     ])
   //   )
   // )
@@ -58,30 +58,30 @@
   //   Object.fromEntries(
   //     Object.values(FollowupSignalement).map(key => [
   //       key,
-  //       props.followup.signalements?.includes(key)
+  //       followup.value.signalements?.includes(key)
   //     ])
   //   )
   // )
 
-  const canSetPrivateSynthesis = computed(() =>
-    canWithTarget(canEditFollowupPrivateSynthesis, props.followup)
+  const canSetPrivateSynthesis = computed(
+    () => permissions.value.set.privateSynthesis
   )
 
   const initialDocumentIds = computed(
-    () => props.followup.documents?.map(d => d.key) || []
+    () => followup.value.documents?.map(d => d.key) || []
   )
 
   const { handleSubmit, values } = useForm<EditFollowupInput>({
     validationSchema: toTypedSchema(editFollowupSchema),
     initialValues: {
-      ...props.followup,
+      ...followup.value,
       types: initialFollowUpTypeIds.value,
       documents: initialDocumentIds.value,
-      helpRequested: props.followup.helpRequested || false,
-      redirected: props.followup.redirected || false,
-      firstFollowup: props.followup.firstFollowup || false,
-      classified: props.followup.classified || false,
-      forwardedToJustice: props.followup.forwardedToJustice || false
+      helpRequested: followup.value.helpRequested || false,
+      redirected: followup.value.redirected || false,
+      firstFollowup: followup.value.firstFollowup || false,
+      classified: followup.value.classified || false,
+      forwardedToJustice: followup.value.forwardedToJustice || false
       // ...initialInterventions.value,
       // ...initialSignalements.value
     }

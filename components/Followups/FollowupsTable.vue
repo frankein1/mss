@@ -47,9 +47,9 @@
         </thead>
         <tbody>
           <FollowupsRow
-            v-for="followup in followups"
-            :key="followup.id"
-            :followup="followup"
+            v-for="item in items"
+            :key="item.followup.id"
+            :data="item"
           />
         </tbody>
       </table>
@@ -58,12 +58,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { GetFollowupsOutput } from '~/server/trpc/routers'
+  import { FollowupPageItems } from './types'
   import { FollowupSort } from '~/types/table'
   import { followupFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
-    followups: GetFollowupsOutput
+    items: FollowupPageItems
     sort: FollowupSort[]
     pending: boolean
   }>()
