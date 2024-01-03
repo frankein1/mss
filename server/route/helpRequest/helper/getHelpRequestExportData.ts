@@ -3,9 +3,10 @@ import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBenefici
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
-  helpRequestReasonLabels,
+  helpRequestRefusalReasonLabels,
   helpRequestStatusLabels,
-  paymentMethodLabels
+  paymentMethodLabels,
+  helpRequestSubjectLabels
 } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
 import { getHelpRequestAccessibleData } from '~/server/route/helpRequest/helper/getHelpRequestAccessibleData'
@@ -25,6 +26,7 @@ export function getHelpRequestExportData(
 ) {
   return {
     beneficiaryId: formatBeneficiaryDisplayName(helpRequest.beneficiary),
+    subject: helpRequestSubjectLabels[helpRequest.subject],
     prescribingOrganizationId: helpRequest.prescribingOrganization?.name || '',
     externalStructure: getExternalStructure(helpRequest.externalStructure),
     instructorOrganizationId: helpRequest.instructorOrganization?.name || '',
@@ -32,7 +34,6 @@ export function getHelpRequestExportData(
     typeId: helpRequest.type.name,
     documents:
       helpRequest.documents?.map(document => document.name).join(', ') || '',
-    financialSupport: getBooleanOrEmpty(helpRequest.financialSupport),
     status: helpRequestStatusLabels[helpRequest.status],
     askedAmount: helpRequest.askedAmount?.toString() || '',
     examinationDate: formatDate(helpRequest.examinationDate, 'DD-MM-YYYY'),
@@ -43,14 +44,15 @@ export function getHelpRequestExportData(
       : '',
     paymentDate: formatDate(helpRequest.paymentDate, 'DD-MM-YYYY'),
     handlingDate: formatDate(helpRequest.handlingDate, 'DD-MM-YYYY'),
-    refusalReason: helpRequest.refusalReason || '',
+    refusalReason:
+      helpRequest.refusalReasonOther ||
+      (helpRequest.refusalReason
+        ? helpRequestRefusalReasonLabels[helpRequest.refusalReason]
+        : ''),
     dispatchDate: formatDate(helpRequest.dispatchDate, 'DD-MM-YYYY'),
     synthesis: helpRequest.synthesis || '',
     dueDate: formatDate(helpRequest.dueDate, 'DD-MM-YYYY'),
     fullFile: getBooleanOrEmpty(helpRequest.fullFile),
-    reason: helpRequest.reason
-      ? helpRequestReasonLabels[helpRequest.reason]
-      : '',
     updated: formatDate(helpRequest.updated, 'DD-MM-YYYY HH:mm'),
     ministre: helpRequest.ministre ? ministerLabels[helpRequest.ministre] : '',
     numeroPegase: helpRequest.numeroPegase || '',

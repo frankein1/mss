@@ -1,11 +1,12 @@
 <template>
   <div
     class="pagetitle__container"
-    :class="{ 'fr-mb-3w': !noMargin }"
+    :class="{ 'fr-mb-4w': !noMargin }"
   >
     <div
       v-if="icon"
-      class="pagetitle__icon fr-mr-2w"
+      class="pagetitle__icon fr-mr-4w"
+      :class="[iconColorClass, iconBackgroundClass]"
     >
       <span
         :class="[icon]"
@@ -14,9 +15,20 @@
     </div>
     <div class="pagetitle__titles">
       <h1 class="pagetitle__title fr-mb-0">{{ title }}</h1>
+      <h2
+        v-if="subtitle"
+        class="pagetitle__subtitle fr-h4 fr-mt-2w fr-mb-0"
+      >
+        <AtomPictogram
+          v-if="subtitlePictoPath"
+          :path="subtitlePictoPath"
+          class="fr-mr-1w"
+        />
+        {{ subtitle }}
+      </h2>
       <div
-        v-if="hasSubtitle"
-        class="pagetitle__subtitle fr-mt-1w"
+        v-if="hasSlot"
+        class="pagetitle__slot fr-mt-2w"
       >
         <slot></slot>
       </div>
@@ -30,18 +42,30 @@
       title: string
       noMargin?: boolean
       icon?: string
+      iconColorClass?: string
+      iconBackgroundClass?: string
+      subtitle?: string
+      subtitlePictoPath?: string
     }>(),
-    { noMargin: false, icon: '' }
+    {
+      noMargin: false,
+      icon: '',
+      iconColorClass: '',
+      iconBackgroundClass: '',
+      subtitle: '',
+      subtitlePictoPath: ''
+    }
   )
 
   const slots = useSlots()
 
-  const hasSubtitle = computed(() => slots.default)
+  const hasSlot = computed(() => slots.default)
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .pagetitle__container {
     display: flex;
+    align-items: center;
   }
 
   .pagetitle__icon {
@@ -51,7 +75,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 1.5rem;
+    padding: 1.75rem;
+    height: fit-content;
+    width: fit-content;
 
     span::before {
       --icon-size: 2rem;
@@ -64,11 +90,21 @@
     justify-content: center;
   }
 
-  .pagetitle__title {
+  .pagetitle__title,
+  .pagetitle__subtitle {
     color: var(--blue-france-sun-113-625);
   }
 
   .pagetitle__subtitle {
+    display: inline-flex;
+
+    > .fr-artwork {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+
+  .pagetitle__slot {
     font-size: small;
   }
 

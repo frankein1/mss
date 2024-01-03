@@ -3,39 +3,43 @@
     <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryHelpRequestAdd(beneficiary, subject)"
     />
-    <PageTitle :title="title" />
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12">
-        <main
-          ref="formContainer"
-          class="main-container fr-p-5w"
-        >
-          <AtomAlert
-            v-if="fetchError"
-            :alert-type="AlertType.Error"
-            :message="fetchError"
-          />
+    <PageTitle
+      :title="title"
+      icon="fr-icon-questionnaire-fill"
+      icon-color-class="color-purple-glycine"
+      icon-background-class="bg-purple-glycine"
+      :subtitle="subtitle"
+      :subtitle-picto-path="subtitlePictoPath"
+    >
+      <RequiredFields />
+    </PageTitle>
+    <main
+      ref="formContainer"
+      class="feature-section"
+    >
+      <AtomAlert
+        v-if="fetchError"
+        :alert-type="AlertType.Error"
+        :message="fetchError"
+      />
 
-          <AtomLoader
-            v-if="pending"
-            class="fr-mx-auto"
-          />
-          <HelpRequestFormCreation
-            v-else-if="
-              followupTypes &&
-              prescribingOrganizations &&
-              instructorOrganizations
-            "
-            :is-submitting="isSubmitting"
-            :followup-types="followupTypes"
-            :beneficiary-id="beneficiaryId"
-            :prescribing-organizations="prescribingOrganizations"
-            :instructor-organizations="instructorOrganizations"
-            @save-help-request="onAddHelpRequest"
-          />
-        </main>
-      </div>
-    </div>
+      <AtomLoader
+        v-if="pending"
+        class="fr-mx-auto"
+      />
+      <HelpRequestFormCreation
+        v-else-if="
+          followupTypes && prescribingOrganizations && instructorOrganizations
+        "
+        :is-submitting="isSubmitting"
+        :followup-types="followupTypes"
+        :beneficiary-id="beneficiaryId"
+        :prescribing-organizations="prescribingOrganizations"
+        :instructor-organizations="instructorOrganizations"
+        :subject="subject"
+        @save-help-request="onAddHelpRequest"
+      />
+    </main>
   </PageContainer>
 </template>
 
@@ -45,6 +49,8 @@
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema'
+  import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
+  import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -54,7 +60,14 @@
   const formContainer = ref<HTMLElement | null>(null)
 
   const beneficiaryId = route.params.id as string
-  const subject = route.params.subject as HelpRequestSubject
+  const subject = toFirstLetterUpperCase(
+    route.params.subject as string
+  ) as HelpRequestSubject
+  const isFinancial = subject === HelpRequestSubject.Financial
+  const subtitle = isFinancial ? 'Aide financière' : undefined
+  const subtitlePictoPath = isFinancial
+    ? helpRequestSubjectPictos[subject]
+    : undefined
 
   const { data: beneficiary, error: beneficiaryError } =
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({

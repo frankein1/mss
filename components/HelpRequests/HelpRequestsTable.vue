@@ -21,7 +21,7 @@
             </th>
             <th scope="col">Objet d'accompagnement</th>
             <TableSortableHeader
-              v-if="canViewAnyHelpRequestDetails"
+              v-if="permissions?.get.anyDueDate"
               :label="helpRequestFieldLabels.dueDate"
               numeric
               @update:sort="onSort({ dueDate: $event })"
@@ -30,35 +30,52 @@
               :label="helpRequestFieldLabels.beneficiaryId"
               @update:sort="onSort({ beneficiary: { usualName: $event } })"
             />
-            <template v-if="canViewAnyHelpRequestDetails">
-              <TableSortableHeader
-                :label="helpRequestFieldLabels.instructorOrganizationId"
-                @update:sort="
-                  onSort({ instructorOrganization: { name: $event } })
-                "
-              />
-              <th scope="col">{{ helpRequestFieldLabels.examinationDate }}</th>
-              <th scope="col">{{ helpRequestFieldLabels.askedAmount }}</th>
-              <th
-                id="allocated-amount-col"
-                scope="col"
-              >
-                {{ helpRequestFieldLabels.allocatedAmount }}
-              </th>
-              <th
-                id="payment-method-col"
-                scope="col"
-              >
-                {{ helpRequestFieldLabels.paymentMethod }}
-              </th>
-              <th
-                id="payment-date-col"
-                scope="col"
-              >
-                {{ helpRequestFieldLabels.paymentDate }}
-              </th>
-              <th scope="col">{{ helpRequestFieldLabels.handlingDate }}</th>
-            </template>
+            <TableSortableHeader
+              v-if="permissions?.get.anyInstructorOrganization"
+              :label="helpRequestFieldLabels.instructorOrganizationId"
+              @update:sort="
+                onSort({ instructorOrganization: { name: $event } })
+              "
+            />
+            <th
+              v-if="permissions?.get.anyExaminationDate"
+              scope="col"
+            >
+              {{ helpRequestFieldLabels.examinationDate }}
+            </th>
+            <th
+              v-if="permissions?.get.anyAskedAmount"
+              scope="col"
+            >
+              {{ helpRequestFieldLabels.askedAmount }}
+            </th>
+            <th
+              v-if="permissions?.get.anyAllocatedAmount"
+              id="allocated-amount-col"
+              scope="col"
+            >
+              {{ helpRequestFieldLabels.allocatedAmount }}
+            </th>
+            <th
+              v-if="permissions?.get.anyPaymentMethod"
+              id="payment-method-col"
+              scope="col"
+            >
+              {{ helpRequestFieldLabels.paymentMethod }}
+            </th>
+            <th
+              v-if="permissions?.get.anyPaymentDate"
+              id="payment-date-col"
+              scope="col"
+            >
+              {{ helpRequestFieldLabels.paymentDate }}
+            </th>
+            <th
+              v-if="permissions?.get.anyHandlingDate"
+              scope="col"
+            >
+              {{ helpRequestFieldLabels.handlingDate }}
+            </th>
             <th scope="col">Agent</th>
             <th scope="col">N° de dossier</th>
           </tr>
@@ -68,6 +85,7 @@
             v-for="helpRequest in helpRequests"
             :key="helpRequest.id"
             :help-request="helpRequest"
+            :general-permissions="permissions"
             @updated="emit('helpRequestUpdated', $event)"
           />
         </tbody>
@@ -80,15 +98,14 @@
   import type { HelpRequests, HelpRequestItem } from './types'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { HelpRequestSort } from '~/types/table'
-  import { canViewAnyHelpRequestDetails as canViewAnyHelpRequestDetailsRule } from '~/server/security'
+  import { HelpRequestPermissions } from '~/server/security'
 
   const props = defineProps<{
     helpRequests: HelpRequests
     sort: HelpRequestSort[]
     pending: boolean
+    permissions: HelpRequestPermissions | null
   }>()
-
-  const { can } = useSecurityRule()
 
   const emit = defineEmits<{
     'update:sort': [sort: HelpRequestSort[]]
@@ -99,9 +116,5 @@
     toRef(() => props.sort),
     toRef(() => props.pending),
     emit
-  )
-
-  const canViewAnyHelpRequestDetails = computed(() =>
-    can(canViewAnyHelpRequestDetailsRule)
   )
 </script>

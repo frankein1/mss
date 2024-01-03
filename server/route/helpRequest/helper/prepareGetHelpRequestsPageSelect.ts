@@ -1,20 +1,21 @@
-import { canViewAnyHelpRequestDetails } from '~/server/security'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { HelpRequestPermissions } from '~/server/security'
 
-export function prepareGetHelpRequestsPageSelect(user: SecurityRuleGrantee) {
+export function prepareGetHelpRequestsPageSelect(
+  permissions: HelpRequestPermissions
+) {
   return {
     id: true,
     status: true,
     type: { select: { id: true, name: true } },
-    dueDate: canViewAnyHelpRequestDetails(user),
+    dueDate: permissions.get.anyDueDate,
     externalStructure: true,
     examinationDate: true,
-    askedAmount: true,
-    allocatedAmount: canViewAnyHelpRequestDetails(user),
-    paymentMethod: canViewAnyHelpRequestDetails(user),
-    paymentDate: canViewAnyHelpRequestDetails(user),
-    handlingDate: canViewAnyHelpRequestDetails(user),
-    financialSupport: true,
+    askedAmount: permissions.get.anyAskedAmount,
+    allocatedAmount: permissions.get.anyAllocatedAmount,
+    paymentMethod: permissions.get.anyPaymentMethod,
+    paymentDate: permissions.get.anyPaymentDate,
+    handlingDate: permissions.get.anyHandlingDate,
+    subject: true,
     createdById: true,
     beneficiary: {
       select: {
@@ -36,10 +37,8 @@ export function prepareGetHelpRequestsPageSelect(user: SecurityRuleGrantee) {
         lastName: true
       }
     },
-    instructorOrganization: canViewAnyHelpRequestDetails(user)
-      ? {
-          select: { name: true }
-        }
+    instructorOrganization: permissions.get.anyInstructorOrganization
+      ? { select: { name: true } }
       : false,
     structureId: true
   }

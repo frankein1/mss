@@ -10,7 +10,7 @@
     >
       <td>
         <HelpRequestsStatusForm
-          v-if="canQuickEditHelpRequest"
+          v-if="props.helpRequest.permissions"
           :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
@@ -24,7 +24,7 @@
         </span>
       </td>
       <td>{{ helpRequest.type.name }}</td>
-      <td v-if="canViewHelpRequestDetails">
+      <td v-if="generalPermissions?.get.anyDueDate">
         <template v-if="helpRequest.dueDate">
           {{ formatDate(helpRequest.dueDate) }}
         </template>
@@ -32,57 +32,57 @@
       <td>
         {{ formatBeneficiaryDisplayName(helpRequest.beneficiary) }}
       </td>
-      <template v-if="canViewHelpRequestDetails">
-        <td>{{ instructorOrganization }}</td>
-        <td>
-          <template v-if="helpRequest.examinationDate">
-            {{ formatDate(helpRequest.examinationDate) }}
-          </template>
-        </td>
-        <td>
-          <template v-if="helpRequest.askedAmount">
-            {{ euros(helpRequest.askedAmount) }}
-          </template>
-        </td>
-        <td v-if="canViewHelpRequestDetails">
-          <HelpRequestsAllocatedAmountForm
-            v-if="canEditAllocatedAmount"
-            :help-request="helpRequest"
-            @click.stop
-            @updated="emit('updated', $event)"
-          />
-          <template v-else-if="helpRequest.allocatedAmount">
-            {{ euros(helpRequest.allocatedAmount) }}
-          </template>
-        </td>
-        <td v-if="canViewHelpRequestDetails">
-          <HelpRequestsPaymentMethodForm
-            v-if="canEditPaymentMethod"
-            :help-request="helpRequest"
-            @click.stop
-            @updated="emit('updated', $event)"
-          />
-          <template v-else-if="helpRequest.paymentMethod">
-            {{ paymentMethodOptions.get(helpRequest.paymentMethod) }}
-          </template>
-        </td>
-        <td v-if="canViewHelpRequestDetails">
-          <HelpRequestsPaymentDateForm
-            v-if="canEditPaymentDate"
-            :help-request="helpRequest"
-            @click.stop
-            @updated="emit('updated', $event)"
-          />
-          <template v-else-if="helpRequest.paymentDate">
-            {{ formatDate(helpRequest.paymentDate) }}
-          </template>
-        </td>
-        <td v-if="canViewHelpRequestDetails">
-          <template v-if="helpRequest.handlingDate">{{
-            formatDate(helpRequest.handlingDate)
-          }}</template>
-        </td>
-      </template>
+      <td v-if="generalPermissions?.get.anyInstructorOrganization">
+        {{ instructorOrganization }}
+      </td>
+      <td v-if="generalPermissions?.get.anyExaminationDate">
+        <template v-if="helpRequest.examinationDate">
+          {{ formatDate(helpRequest.examinationDate) }}
+        </template>
+      </td>
+      <td v-if="generalPermissions?.get.anyAskedAmount">
+        <template v-if="helpRequest.askedAmount">
+          {{ euros(helpRequest.askedAmount) }}
+        </template>
+      </td>
+      <td v-if="generalPermissions?.get.anyAllocatedAmount">
+        <HelpRequestsAllocatedAmountForm
+          v-if="canEditAllocatedAmount"
+          :help-request="helpRequest"
+          @click.stop
+          @updated="emit('updated', $event)"
+        />
+        <template v-else-if="helpRequest.allocatedAmount">
+          {{ euros(helpRequest.allocatedAmount) }}
+        </template>
+      </td>
+      <td v-if="generalPermissions?.get.anyPaymentMethod">
+        <HelpRequestsPaymentMethodForm
+          v-if="canEditPaymentMethod"
+          :help-request="helpRequest"
+          @click.stop
+          @updated="emit('updated', $event)"
+        />
+        <template v-else-if="helpRequest.paymentMethod">
+          {{ paymentMethodOptions.get(helpRequest.paymentMethod) }}
+        </template>
+      </td>
+      <td v-if="generalPermissions?.get.anyPaymentDate">
+        <HelpRequestsPaymentDateForm
+          v-if="canEditPaymentDate"
+          :help-request="helpRequest"
+          @click.stop
+          @updated="emit('updated', $event)"
+        />
+        <template v-else-if="helpRequest.paymentDate">
+          {{ formatDate(helpRequest.paymentDate) }}
+        </template>
+      </td>
+      <td v-if="generalPermissions?.get.anyHandlingDate">
+        <template v-if="helpRequest.handlingDate">{{
+          formatDate(helpRequest.handlingDate)
+        }}</template>
+      </td>
       <td>
         <template v-if="helpRequest.createdBy">
           {{ formatUserDisplayName(helpRequest.createdBy) }}
@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { HelpRequestStatus } from '@prisma/client'
+  import { HelpRequestSubject, HelpRequestStatus } from '@prisma/client'
   import { HelpRequestItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -104,19 +104,16 @@
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
-  import {
-    canViewHelpRequestDetails as canViewHelpRequestDetailsRule,
-    canEditHelpRequest
-  } from '~/server/security'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
+  import { HelpRequestPermissions } from '~/server/security'
 
   const props = defineProps<{
     helpRequest: HelpRequestItem
+    generalPermissions: HelpRequestPermissions | null
   }>()
 
   const { helpRequestStatusOptions } = useHelpRequestStatus()
-  const { canWithTarget } = useSecurityRule()
 
   const emit = defineEmits<{
     updated: [helpRequest: HelpRequestItem]
@@ -137,40 +134,32 @@
       : 'Interne'
   )
 
-  const canViewHelpRequestDetails = computed(() =>
-    canWithTarget(canViewHelpRequestDetailsRule, props.helpRequest.beneficiary)
+  const isFinancialSupport = computed(
+    () => props.helpRequest.subject === HelpRequestSubject.Financial
   )
-
-  const canQuickEditHelpRequest = computed(() =>
-    canWithTarget(canEditHelpRequest, props.helpRequest)
-  )
-
-  const isAcceptedHelpRequest = computed(
-    () => props.helpRequest.status === HelpRequestStatus.Accepted
-  )
-
-  const isFinancialSupport = computed(() => props.helpRequest.financialSupport)
 
   const isExternalSupport = computed(() => props.helpRequest.externalStructure)
 
   const canEditAllocatedAmount = computed(
     () =>
-      canQuickEditHelpRequest.value &&
-      isAcceptedHelpRequest.value &&
-      isFinancialSupport.value
+      props.helpRequest.permissions.edit &&
+      isFinancialSupport.value &&
+      props.helpRequest.status === HelpRequestStatus.Accepted
   )
 
   const canEditPaymentMethod = computed(
     () =>
-      canQuickEditHelpRequest.value &&
-      isAcceptedHelpRequest.value &&
+      props.helpRequest.permissions.edit &&
+      isFinancialSupport.value &&
+      props.helpRequest.status === HelpRequestStatus.Accepted &&
       !isExternalSupport.value
   )
 
   const canEditPaymentDate = computed(
     () =>
-      canQuickEditHelpRequest.value &&
-      isAcceptedHelpRequest.value &&
+      props.helpRequest.permissions.edit &&
+      isFinancialSupport.value &&
+      props.helpRequest.status === HelpRequestStatus.Accepted &&
       !isExternalSupport.value
   )
 </script>

@@ -2,8 +2,7 @@
   <div
     class="fr-input-group"
     :class="{
-      'fr-input-group--error': error,
-      'fr-input-group--disabled': readonly
+      'fr-input-group--error': error
     }"
   >
     <label
@@ -38,7 +37,6 @@
         :type="type"
         :aria-describedby="ariaDescribedby"
         :aria-labelledby="labelledBy"
-        :readonly="readonly"
         :value="bindedValue"
         @input="onInput"
         @change="onChange"
@@ -72,7 +70,6 @@
         | 'tel'
         | 'email'
         | 'social-security-number'
-      readonly?: boolean
       hint?: string
       placeholder?: string
       noLabel?: boolean
@@ -82,7 +79,6 @@
     }>(),
     {
       type: 'text',
-      readonly: false,
       hint: undefined,
       placeholder: undefined,
       noLabel: false,

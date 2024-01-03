@@ -28,7 +28,7 @@
         <ul class="history-list">
           <BeneficiaryHistoryDetails
             v-for="history in histories"
-            :key="history.id"
+            :key="history.data.id"
             :history="history"
             @deleted="onHistoryItemDeleted"
           />

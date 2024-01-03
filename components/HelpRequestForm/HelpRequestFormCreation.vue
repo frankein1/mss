@@ -5,9 +5,6 @@
     :prescribing-organizations="prescribingOrganizations"
     :instructor-organizations="instructorOrganizations"
     :beneficiary-id="beneficiaryId"
-    :status="values.status"
-    :external-structure="values.externalStructure"
-    :financial-support="values.financialSupport"
     :caught-errors="caughtErrors"
     @submit="onSubmit"
   />
@@ -18,7 +15,8 @@
     FollowupType,
     HelpRequestStatus,
     InstructorOrganization,
-    PrescribingOrganization
+    PrescribingOrganization,
+    HelpRequestSubject
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
@@ -26,24 +24,29 @@
     createHelpRequestSchema
   } from '~/server/schema'
 
+  const isMinistryAgent = useAuthState().isMinistryAgent()
+
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: FollowupType[]
     prescribingOrganizations: PrescribingOrganization[]
     instructorOrganizations: InstructorOrganization[]
     beneficiaryId: string
+    subject: HelpRequestSubject
   }>()
 
   const emit = defineEmits<{
     saveHelpRequest: [helpRequest: CreateHelpRequestInput]
   }>()
 
-  const { handleSubmit, values } = useForm<CreateHelpRequestInput>({
+  const { handleSubmit } = useForm<CreateHelpRequestInput>({
     validationSchema: toTypedSchema(createHelpRequestSchema),
     initialValues: {
+      isMinistry: isMinistryAgent,
       beneficiaryId: props.beneficiaryId,
       openingDate: new Date(),
-      status: HelpRequestStatus.WaitingAdditionalInformation
+      status: HelpRequestStatus.WaitingAdditionalInformation,
+      subject: props.subject
     }
   })
 

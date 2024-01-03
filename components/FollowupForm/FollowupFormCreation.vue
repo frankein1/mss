@@ -20,6 +20,8 @@
   import { toTypedSchema } from '@vee-validate/zod'
   import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 
+  const isMinistryAgent = useAuthState().isMinistryAgent()
+
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: Array<FollowupType>
@@ -34,6 +36,7 @@
   const { handleSubmit, values } = useForm<AddFollowupInput>({
     validationSchema: toTypedSchema(addFollowupSchema),
     initialValues: {
+      isMinistry: isMinistryAgent,
       beneficiaryId: props.beneficiaryId,
       date: new Date(),
       status: FollowupStatus.Done,

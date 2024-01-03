@@ -29,7 +29,6 @@
     followupStatusOptions
   } from '~/client/options/followup'
   import { typeSuiviOptions } from '~/client/options/history'
-  import { canViewAnyHelpRequestDetails } from '~/server/security'
   import { formatDate } from '~/utils/formatDate'
   import {
     EventCategory,
@@ -48,8 +47,6 @@
   const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
-
-  const { can } = useSecurityRule()
 
   const emit = defineEmits<{
     filter: [filters: BeneficiaryHistoryFilterInput]
@@ -72,6 +69,9 @@
     transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
     queryKey: 'config.getStructureFollowupTypes.options'
   })
+
+  const { data: permissions } =
+    await useTrpcClient().permissions.getHelpRequestPermissions.useQuery()
 
   const {
     data: examinationDateOptions,
@@ -148,7 +148,7 @@
       }
     ]
 
-    if (can(canViewAnyHelpRequestDetails)) {
+    if (permissions.value?.get.anyExaminationDate) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -206,7 +206,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!can(canViewAnyHelpRequestDetails)) {
+    if (!permissions.value?.get.anyExaminationDate) {
       return new Map()
     }
 

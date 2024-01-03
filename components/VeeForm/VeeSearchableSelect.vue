@@ -3,7 +3,6 @@
     class="fr-select-group searchable-select"
     :class="{
       'fr-select-group--error': error,
-      'fr-select-group--disabled': readonly,
       'multiple': multiple
     }"
   >
@@ -39,7 +38,6 @@
       :aria-activedescendant="activeOptionValue"
       :aria-describedby="ariaDescribedby"
       role="combobox"
-      :disabled="readonly"
       @input="onSearch"
       @focus="onInputFocus"
       @keydown="onInputKeyDown"
@@ -50,7 +48,6 @@
       ref="hiddenInput"
       :name="name"
       :value="currentValue"
-      :readonly="readonly"
       class="fr-sr-only"
       tabindex="-1"
     />
@@ -147,14 +144,12 @@
       hint?: boolean
       multiple?: boolean
       canCreateNewOption?: boolean
-      readonly?: boolean
     }>(),
     {
       required: false,
       hint: false,
       multiple: false,
-      canCreateNewOption: false,
-      readonly: false
+      canCreateNewOption: false
     }
   )
 
@@ -288,12 +283,7 @@
      * Flag to set focus on next render completion, when menu was blurred on click on option
      */
     callFocus
-  } = useExpandMenu(
-    combobox,
-    optionValues,
-    optionRefs,
-    computed(() => props.readonly)
-  )
+  } = useExpandMenu(combobox, optionValues, optionRefs)
 
   // FIXME: Somehow, the watcher is not reacting to options changes
   useWatchSelectOptions(() => props.options, selectedValues, changedValues)

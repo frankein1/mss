@@ -1,8 +1,8 @@
 import {
-  HelpRequestReason,
   HelpRequestStatus,
   PaymentMethod,
-  HelpRequestSubject
+  HelpRequestSubject,
+  HelpRequestRefusalReason
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
@@ -25,11 +25,6 @@ export const ministryHelpRequestStatusLabels: {
   [HelpRequestStatus.Accepted]: 'Traité'
 }
 
-export const financialSupportOptions = new Map([
-  ['true', 'Oui'],
-  ['false', 'Non']
-])
-
 export const externalOrganisationOptions = new Map([
   ['false', 'En interne'],
   ['true', 'Par une organisation extérieure']
@@ -45,35 +40,74 @@ export const paymentMethodLabels: { [key in PaymentMethod]: string } = {
 
 export const paymentMethodOptions = labelsToOptions(paymentMethodLabels)
 
-export const helpRequestReasonLabels: { [key in HelpRequestReason]: string } = {
-  [HelpRequestReason.Food]: 'Alimentation',
-  [HelpRequestReason.Energy]: 'Énergie',
-  [HelpRequestReason.Housing]: 'Logement',
-  [HelpRequestReason.Other]: 'Autre'
+export const helpRequestSubjectLabels: { [key in HelpRequestSubject]: string } =
+  {
+    [HelpRequestSubject.Housing]: 'Une demande de logement',
+    [HelpRequestSubject.Financial]: 'Une aide financière',
+    [HelpRequestSubject.Other]: 'Autre'
+  }
+
+export const helpRequestSubjectPictos: { [key in HelpRequestSubject]: string } =
+  {
+    [HelpRequestSubject.Housing]: '~/assets/pictograms/building.svg',
+    [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
+    [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
+  }
+
+export const helpRequestSubjectOptions = labelsToOptions(
+  helpRequestSubjectLabels,
+  helpRequestSubjectPictos
+)
+
+const baseRefusalReasonLabels = {
+  [HelpRequestRefusalReason.ResourcesOutOfScale]: 'Ressources hors barème',
+  [HelpRequestRefusalReason.ShortDeadline]: 'Délai trop court',
+  [HelpRequestRefusalReason.IncompleteFile]: 'Dossier incomplet',
+  [HelpRequestRefusalReason.IrregularSituation]: 'En situation irrégulière'
 }
 
-export const helpRequestReasonOptions = labelsToOptions(helpRequestReasonLabels)
+const otherOrFinancialHelpRequestRefusalReasonLabels = {
+  ...baseRefusalReasonLabels,
+  [HelpRequestRefusalReason.MissedAppointment]: 'Absence au rendez-vous',
+  [HelpRequestRefusalReason.AlreadyExistingHelpRequest]:
+    "Instruction déjà en cours auprès d'un autre organisme",
+  [HelpRequestRefusalReason.Reoriented]:
+    "Réorientation auprès d'un autre organisme",
+  [HelpRequestRefusalReason.Debt]: 'Endettement',
+  [HelpRequestRefusalReason.Other]: 'Autre'
+}
 
-export const helpRequestSubjectOptions = new Map<
-  HelpRequestSubject,
-  { label: string; picto: string }
->([
-  [
-    HelpRequestSubject.Housing,
-    {
-      label: 'Une demande de logement',
-      picto: '~/assets/pictograms/building.svg'
-    }
-  ],
-  [
-    HelpRequestSubject.Financial,
-    {
-      label: 'Une aide financière',
-      picto: '~/assets/pictograms/tax-stamp.svg'
-    }
-  ],
-  [
-    HelpRequestSubject.Other,
-    { label: 'Autre', picto: '~/assets/pictograms/document.svg' }
-  ]
-])
+const housingHelpRequestRefusalReasonLabels = {
+  ...baseRefusalReasonLabels,
+  [HelpRequestRefusalReason.InadequateFamilyComposition]:
+    'Composition familiale inadaptée au type de logement',
+  [HelpRequestRefusalReason.ExpiredRequest]: 'Demande expirée',
+  [HelpRequestRefusalReason.Other]: 'Autre'
+}
+
+export const helpRequestRefusalReasonLabels: {
+  [key in HelpRequestRefusalReason]: string
+} = {
+  ...otherOrFinancialHelpRequestRefusalReasonLabels,
+  ...housingHelpRequestRefusalReasonLabels
+}
+
+const otherOrFinancialHelpRequestRefusalReasonOptions = labelsToOptions(
+  otherOrFinancialHelpRequestRefusalReasonLabels
+)
+
+const housingHelpRequestRefusalReasonOptions = labelsToOptions(
+  housingHelpRequestRefusalReasonLabels
+)
+
+export const helpRequestRefusalReasonOptions = (subject: HelpRequestSubject) =>
+  subject === HelpRequestSubject.Housing
+    ? housingHelpRequestRefusalReasonOptions
+    : otherOrFinancialHelpRequestRefusalReasonOptions
+
+export const isRefundableLabels = {
+  false: 'Non remboursable',
+  true: 'Remboursable'
+}
+
+export const isRefundableOptions = labelsToOptions(isRefundableLabels)

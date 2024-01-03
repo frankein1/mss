@@ -1,11 +1,5 @@
 <template>
   <ul class="body-metas information-list">
-    <li v-if="helpRequest.reason">
-      <span class="information-label"
-        >{{ helpRequestFieldLabels.reason }} :</span
-      >
-      {{ helpRequestReasonLabels[helpRequest.reason] }}
-    </li>
     <template v-if="isMinistryAgent">
       <li v-if="helpRequest.numeroPegase">
         <span class="information-label"
@@ -35,6 +29,12 @@
     <li v-if="instructorOrganization">
       <span class="information-label">Instruction :</span>
       {{ instructorOrganization }}
+    </li>
+    <li v-if="helpRequest.isRefundable !== null">
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.isRefundable }} :</span
+      >
+      {{ isRefundableLabels[helpRequest.isRefundable ? 'true' : 'false'] }}
     </li>
     <li v-if="helpRequest.askedAmount">
       <span class="information-label"
@@ -84,17 +84,18 @@
       <span class="information-label"
         >{{ helpRequestFieldLabels.refusalReason }} :</span
       >
-      {{ helpRequest.refusalReason }}
+      {{ refusalReason }}
     </li>
   </ul>
 </template>
 
 <script setup lang="ts">
   import { HelpRequestStatus } from '@prisma/client'
-  import { HistoryItem } from './types'
+  import { HistoryItemData } from './types'
   import {
-    helpRequestReasonLabels,
-    paymentMethodLabels
+    helpRequestRefusalReasonLabels,
+    paymentMethodLabels,
+    isRefundableLabels
   } from '~/client/options/helpRequest'
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'
@@ -104,7 +105,7 @@
   const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = defineProps<{
-    helpRequest: HistoryItem
+    helpRequest: HistoryItemData
   }>()
 
   const instructorOrganization = computed(() => {
@@ -140,10 +141,18 @@
     return allocatedAmount
   })
 
+  const refusalReason = computed(() => {
+    const { refusalReason, refusalReasonOther } = props.helpRequest
+    return (
+      refusalReasonOther ||
+      (refusalReason ? helpRequestRefusalReasonLabels[refusalReason] : '')
+    )
+  })
+
   const hasRefusalReason = computed(
     () =>
       props.helpRequest.status === HelpRequestStatus.Refused &&
-      props.helpRequest.refusalReason
+      refusalReason.value
   )
 </script>
 

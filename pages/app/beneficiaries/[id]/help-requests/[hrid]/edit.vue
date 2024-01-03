@@ -1,42 +1,45 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest)"
+      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequestData)"
     />
-    <PageTitle :title="title" />
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12">
-        <main
-          ref="formContainer"
-          class="main-container fr-p-5w"
-        >
-          <AtomAlert
-            v-if="fetchError"
-            :alert-type="AlertType.Error"
-            :message="fetchError"
-          />
+    <PageTitle
+      :title="title"
+      icon="fr-icon-questionnaire-fill"
+      icon-color-class="color-purple-glycine"
+      icon-background-class="bg-purple-glycine"
+    >
+      <RequiredFields />
+    </PageTitle>
+    <main
+      ref="formContainer"
+      class="feature-section"
+    >
+      <AtomAlert
+        v-if="fetchError"
+        :alert-type="AlertType.Error"
+        :message="fetchError"
+      />
 
-          <AtomLoader
-            v-if="pending"
-            class="fr-mx-auto"
-          />
-          <HelpRequestFormEdition
-            v-else-if="
-              helpRequest &&
-              followupTypes &&
-              prescribingOrganizations &&
-              instructorOrganizations
-            "
-            :is-submitting="isSubmitting"
-            :followup-types="followupTypes"
-            :help-request="helpRequest"
-            :prescribing-organizations="prescribingOrganizations"
-            :instructor-organizations="instructorOrganizations"
-            @save-help-request="onUpdateHelpRequest"
-          />
-        </main>
-      </div>
-    </div>
+      <AtomLoader
+        v-if="pending"
+        class="fr-mx-auto"
+      />
+      <HelpRequestFormEdition
+        v-else-if="
+          helpRequest &&
+          followupTypes &&
+          prescribingOrganizations &&
+          instructorOrganizations
+        "
+        :is-submitting="isSubmitting"
+        :followup-types="followupTypes"
+        :help-request="helpRequest"
+        :prescribing-organizations="prescribingOrganizations"
+        :instructor-organizations="instructorOrganizations"
+        @save-help-request="onUpdateHelpRequest"
+      />
+    </main>
   </PageContainer>
 </template>
 
@@ -64,7 +67,9 @@
     id: helpRequestId
   })
 
-  const beneficiary = computed(() => helpRequest.value?.beneficiary || null)
+  const helpRequestData = computed(() => helpRequest.value?.data || null)
+
+  const beneficiary = computed(() => helpRequestData.value?.beneficiary || null)
 
   const title = computed(() =>
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
