@@ -1,12 +1,11 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
-  SecurityRuleGrantee,
   getBeneficiaryPermissions,
-  BeneficiaryPermissions
+  BeneficiaryPermissions,
+  SecurityRuleContext
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import { getStructureByUser } from '~/server/query'
 import {
   UpdateBeneficiaryGeneralInformationInput,
   updateBeneficiaryGeneralInformationSchema
@@ -16,36 +15,34 @@ import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
-  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
-    user,
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+    ctx.user,
     input.id
   )
-  const structure = await getStructureByUser(user)
   const permissions = getBeneficiaryPermissions({
-    user,
-    structure,
-    target
+    ctx,
+    beneficiary
   })
   return permissions.edit.general
 }
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx
 }: {
   input: UpdateBeneficiaryGeneralInformationInput
   ctx: ProtectedAppContext
 }) => {
   const { id, referents } = input
   const target = await BeneficiaryService.getBeneficiarySecurityTarget(
-    user,
+    ctx.user,
     input.id
   )
 
-  const permissions = getBeneficiaryPermissions({ user, structure, target })
+  const permissions = getBeneficiaryPermissions({ ctx, beneficiary: target })
   const filteredData = filterInput({ input, permissions })
   const data = prepareDateFields(filteredData, ['birthDate', 'deathDate'])
 

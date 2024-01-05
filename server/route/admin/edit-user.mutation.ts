@@ -1,7 +1,6 @@
 import { UserRepo } from '~/server/database'
 import { createMutation } from '~/server/route'
 import { AdminEditUserInput, adminEditUserSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { AdminContext } from '~/server/trpc'
 
 const adminHandler = async ({
@@ -23,6 +22,5 @@ const adminHandler = async ({
 
 export const editAdminUserMutation = createMutation({
   inputValidation: adminEditUserSchema,
-  securityCheck: AllowSecurityCheck,
   adminHandler
 })

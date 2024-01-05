@@ -1,8 +1,10 @@
 import { StructureType } from '@prisma/client'
 import {
+  SecurityRuleContext,
   SecurityRuleGrantee,
   SecurityTargetWithReferents,
-  SecurityTargetWithStructure
+  SecurityTargetWithStructure,
+  canListDocuments
 } from '../rules'
 import { isInSameStructureAs, isReferentFor } from '../rules/helpers'
 
@@ -20,6 +22,7 @@ export type BeneficiaryPermissions = {
     health: boolean
     occupationIncome: boolean
     externalOrganisations: boolean
+    documents: boolean
   }
   get: {
     accommodationZone: boolean
@@ -41,6 +44,7 @@ export type BeneficiaryPermissions = {
 
   create: {
     helpRequest: boolean
+    document: boolean
   }
   delete: {
     beneficiary: boolean
@@ -48,29 +52,24 @@ export type BeneficiaryPermissions = {
 }
 
 export const getBeneficiaryPermissions = ({
-  user,
-  target,
-  structure
+  ctx,
+  beneficiary
 }: {
-  user: SecurityRuleGrantee
-  target?: SecurityTargetWithStructure & SecurityTargetWithReferents
-  structure: { type: StructureType }
+  ctx: SecurityRuleContext
+  beneficiary?: SecurityTargetWithStructure & SecurityTargetWithReferents
 }) => {
   let permissions: BeneficiaryPermissions
-  if (!target) {
-    permissions = getCreatePermissions({ structure })
+  if (!beneficiary) {
+    permissions = getCreatePermissions({ ctx })
   } else {
-    permissions = getEditPermissions({ user, target, structure })
+    permissions = getEditPermissions({ ctx, beneficiary })
   }
 
   return permissions
 }
 
-function getCreatePermissions({
-  structure
-}: {
-  structure: { type: StructureType }
-}) {
+function getCreatePermissions({ ctx }: { ctx: SecurityRuleContext }) {
+  const { structure } = ctx
   const isMinistryAgent = structure.type === StructureType.Ministere
   const isEFS = structure.type === StructureType.EFS
   return {
@@ -86,7 +85,8 @@ function getCreatePermissions({
       relatives: false,
       health: false,
       occupationIncome: false,
-      externalOrganisations: false
+      externalOrganisations: false,
+      documents: false
     },
     get: {
       accommodationZone: isMinistryAgent,
@@ -107,7 +107,8 @@ function getCreatePermissions({
     },
 
     create: {
-      helpRequest: false
+      helpRequest: false,
+      document: false
     },
     delete: {
       beneficiary: false
@@ -116,24 +117,23 @@ function getCreatePermissions({
 }
 
 function getEditPermissions({
-  user,
-  target,
-  structure
+  ctx,
+  beneficiary
 }: {
-  user: SecurityRuleGrantee
-  target: SecurityTargetWithStructure & SecurityTargetWithReferents
-  structure: { type: StructureType }
+  ctx: SecurityRuleContext
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 }) {
+  const { user, structure } = ctx
   const isMinistryAgent = structure.type === StructureType.Ministere
-  const viewOrEditRelatives = accessRelatives(user, structure.type, target)
-  const viewOrEditHealth = accessHealth(user, structure.type, target)
+  const viewOrEditRelatives = accessRelatives(user, structure.type, beneficiary)
+  const viewOrEditHealth = accessHealth(user, structure.type, beneficiary)
   const viewOrEditOccupationIncome = accessOccupationIncome(
     user,
     structure.type,
-    target
+    beneficiary
   )
-  const viewOrEditExtOrganisations = accessExtOrganisations(user, target)
-  const viewOrEditGeneral = accessGeneral(user, target)
+  const viewOrEditExtOrganisations = accessExtOrganisations(user, beneficiary)
+  const viewOrEditGeneral = accessGeneral(user, beneficiary)
   return {
     edit: {
       general: viewOrEditGeneral,
@@ -152,7 +152,7 @@ function getEditPermissions({
     },
     set: {
       accommodationZone: isMinistryAgent,
-      referents: setReferents(user, target),
+      referents: setReferents(user, beneficiary),
       nir: hasAccessNir(structure.type),
       numeroPegase: isMinistryAgent,
       ministereCategorie: isMinistryAgent,
@@ -164,16 +164,29 @@ function getEditPermissions({
       relatives: viewOrEditRelatives,
       health: viewOrEditHealth,
       occupationIncome: viewOrEditOccupationIncome,
-      externalOrganisations: viewOrEditExtOrganisations
+      externalOrganisations: viewOrEditExtOrganisations,
+      documents: canListDocuments(user, beneficiary)
     },
     create: {
-      helpRequest: isHelpRequestCreatable(user, target)
+      helpRequest: isHelpRequestCreatable(user, beneficiary),
+      document: canAddDocument(user, beneficiary)
     },
     delete: {
-      beneficiary: isDeletable(user, target)
+      beneficiary: isDeletable(user, beneficiary)
     }
   }
 }
+
+const canAddDocument = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) || isReferentFor(grantee, beneficiary)
 
 function hasAccessNir(type: StructureType) {
   return type === StructureType.Ccas || type === StructureType.Cias

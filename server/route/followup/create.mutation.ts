@@ -3,7 +3,7 @@ import { createMutation as createMutationFn } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 import {
-  SecurityRuleGrantee,
+  SecurityRuleContext,
   canCreatePrescribingOrganization
 } from '~/server/security'
 import { isNewOption } from '~/utils/options'
@@ -21,11 +21,11 @@ const handler = ({
 }
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: AddFollowupInput
 ) => {
   const permissions = await FollowupService.getCreatePermission(
-    user,
+    ctx.user,
     input.beneficiaryId
   )
 
@@ -34,7 +34,7 @@ const securityCheck = async (
   }
   if (
     isNewOption(input.prescribingOrganizationId) &&
-    !canCreatePrescribingOrganization(user)
+    !canCreatePrescribingOrganization(ctx.user)
   ) {
     return false
   }

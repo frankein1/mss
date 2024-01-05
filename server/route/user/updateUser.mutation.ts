@@ -3,7 +3,7 @@ import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { UserEditionInput, editUserSchema } from '~/server/schema'
 import {
-  SecurityRuleGrantee,
+  SecurityRuleContext,
   canEditUser,
   canEditUserRole
 } from '~/server/security'
@@ -26,16 +26,18 @@ const handler = async ({
 }
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: UserEditionInput
 ) => {
-  const target = await UserRepo.findUniqueOrThrow(user, {
+  const target = await UserRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.id }
   })
   if ('role' in input) {
-    return canEditUserRole(user, target, input) && canEditUser(user, target)
+    return (
+      canEditUserRole(ctx.user, target, input) && canEditUser(ctx.user, target)
+    )
   }
-  return canEditUser(user, target)
+  return canEditUser(ctx.user, target)
 }
 
 export const updateUserMutation = createMutation({

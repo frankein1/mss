@@ -4,7 +4,6 @@ import {
   AdminEditStructureInput,
   adminEditStructureSchema
 } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { editFollowupTypes } from '~/server/query/structure'
 
 const adminHandler = async ({ input }: { input: AdminEditStructureInput }) => {
@@ -41,6 +40,5 @@ const adminHandler = async ({ input }: { input: AdminEditStructureInput }) => {
 
 export const editAdminStructureMutation = createMutation({
   inputValidation: adminEditStructureSchema,
-  securityCheck: AllowSecurityCheck,
   adminHandler
 })

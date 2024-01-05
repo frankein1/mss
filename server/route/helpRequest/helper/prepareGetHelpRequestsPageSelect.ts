@@ -1,11 +1,10 @@
-import { getHelpRequestPermissions } from '~/server/security'
-import { ProtectedAppContext } from '~/server/trpc'
+import {
+  SecurityRuleContext,
+  getHelpRequestPermissions
+} from '~/server/security'
 
-export function prepareGetHelpRequestsPageSelect({
-  user,
-  structure
-}: Omit<ProtectedAppContext, 'event'>) {
-  const permissions = getHelpRequestPermissions({ user, structure })
+export function prepareGetHelpRequestsPageSelect(ctx: SecurityRuleContext) {
+  const permissions = getHelpRequestPermissions({ ctx })
 
   return {
     id: true,

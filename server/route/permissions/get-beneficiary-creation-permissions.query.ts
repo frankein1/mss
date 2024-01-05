@@ -7,8 +7,7 @@ import { getBeneficiaryPermissions } from '~/server/security'
 const handler = ({ ctx }: { ctx: ProtectedAppContext }) => {
   return Promise.resolve(
     getBeneficiaryPermissions({
-      user: ctx.user,
-      structure: ctx.structure
+      ctx
     })
   )
 }

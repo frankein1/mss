@@ -3,7 +3,6 @@ import {
   AdminCreateStructureInput,
   adminCreateStructureSchema
 } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { AdminContext } from '~/server/trpc'
 import { StructureRepo } from '~/server/database'
 import { createEmail } from '~/server/query'
@@ -40,6 +39,5 @@ const adminHandler = async ({
 
 export const createAdminStructureMutation = createMutation({
   inputValidation: adminCreateStructureSchema,
-  securityCheck: AllowSecurityCheck,
   adminHandler
 })

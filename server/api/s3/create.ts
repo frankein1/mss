@@ -1,17 +1,18 @@
 import { defineEventHandler, readMultipartFormData } from 'h3'
-import { Document, NotificationType } from '@prisma/client'
+import { Document, NotificationType, StructureType } from '@prisma/client'
 import { v4 } from 'uuid'
 import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { uploadFile } from '~/server/lib/s3'
 import { forbiddenError, invalidError } from '~/server/trpc'
-import { canAddDocument, canViewDocument } from '~/server/security'
 import { JwtUser } from '~/types/user'
 import { MultiPartData } from '~/server/lib/s3/types'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import {
   BeneficiaryService,
-  BeneficiarySecurityTarget
+  BeneficiarySecurityTarget,
+  DocumentService
 } from '~/server/services'
+import { getDocumentPermissions } from '~/server/security'
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth
@@ -43,7 +44,26 @@ export default defineEventHandler(async event => {
     throw invalidError('No beneficiary')
   }
 
-  if (!canAddDocument(user, beneficiary)) {
+  const structureType = user.structureType
+
+  if (!structureType) {
+    throw invalidError('No structure type')
+  }
+
+  const ctx = {
+    user,
+    structure: {
+      id: user.structureId,
+      type: structureType
+    }
+  }
+
+  const permissions = await DocumentService.getCreatePermissions(
+    ctx,
+    input.beneficiaryId
+  )
+
+  if (!permissions.view) {
     throw forbiddenError()
   }
 
@@ -56,12 +76,16 @@ export default defineEventHandler(async event => {
   const key = await uploadFile(file)
 
   const document = await addDocument(key, input, user)
-  await addNotification(document, beneficiary)
+  await addNotification(ctx.structure, document, beneficiary)
 
   return send(event, document.key)
 })
 
 async function addNotification(
+  structure: {
+    id: string
+    type: StructureType
+  },
   document: Document,
   beneficiary: NonNullable<BeneficiarySecurityTarget>
 ) {
@@ -70,10 +94,12 @@ async function addNotification(
   }
   const notifications = []
   for (const referent of beneficiary.referents) {
-    if (
-      document.createdById !== referent.id &&
-      canViewDocument(referent, beneficiary, document)
-    ) {
+    const ctx = {
+      user: referent,
+      structure
+    }
+    const permissions = getDocumentPermissions({ ctx, beneficiary, document })
+    if (document.createdById !== referent.id && permissions.view) {
       notifications.push({
         recipientId: referent.id,
         beneficiaryId: beneficiary.id,

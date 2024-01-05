@@ -1,7 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { SecurityRuleGrantee } from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { FollowupService } from '~/server/services'
 
@@ -14,8 +14,11 @@ const handler = async ({
   await FollowupService.remove(id)
 }
 
-const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const permissions = await FollowupService.getUpdatePermission(user, input.id)
+const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
+  const permissions = await FollowupService.getUpdatePermission(
+    ctx.user,
+    input.id
+  )
   return permissions.delete
 }
 

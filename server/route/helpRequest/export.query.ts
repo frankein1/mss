@@ -10,8 +10,8 @@ import {
 } from '~/server/schema'
 import {
   canExportHistory,
-  SecurityRuleGrantee,
-  getHelpRequestPermissions
+  getHelpRequestPermissions,
+  SecurityRuleContext
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
@@ -22,11 +22,12 @@ import { HelpRequestRepo } from '~/server/database'
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx
 }: {
   input: ExportHelpRequestsInput
   ctx: ProtectedAppContext
 }) => {
+  const { user } = ctx
   const columns = HELP_REQUEST_EXPORTED_FIELDS.map(key => ({
     key,
     header: helpRequestFieldLabels[key]
@@ -53,8 +54,7 @@ const handler = async ({
 
   const rows = dataRequest.reduce((helpRequests: RowType[], helpRequest) => {
     const permissions = getHelpRequestPermissions({
-      user,
-      structure,
+      ctx,
       target: helpRequest
     })
 
@@ -74,10 +74,10 @@ const handler = async ({
 }
 
 const securityCheck = (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   _input: ExportHelpRequestsInput
 ) => {
-  return canExportHistory(user)
+  return canExportHistory(ctx.user)
 }
 
 export const exportHelpRequestQuery = createQuery({

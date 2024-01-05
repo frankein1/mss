@@ -20,11 +20,13 @@ type GetHelpRequestsOrderBy = Array<
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx
 }: {
   input: GetHelpRequestsInput
   ctx: ProtectedAppContext
 }) => {
+  const { user, structure } = ctx
+
   const { take, skip } = takeAndSkipFromPagination({
     perPage: input.perPage,
     page: input.page
@@ -55,7 +57,7 @@ const handler = async ({
   const totalPages = getTotalPages({ count, perPage: input.perPage })
   const helpRequestsWithPermissions = helpRequests.map(hr => ({
     ...hr,
-    permissions: getHelpRequestPermissions({ user, structure, target: hr })
+    permissions: getHelpRequestPermissions({ ctx, target: hr })
   }))
 
   return {

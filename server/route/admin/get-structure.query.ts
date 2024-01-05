@@ -1,6 +1,5 @@
 import { createQuery } from '~/server/route'
 import { AdminContext } from '~/server/trpc'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { idSchema } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 
@@ -43,6 +42,5 @@ const adminHandler = async ({
 
 export const getAdminStructureQuery = createQuery({
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
   adminHandler
 })

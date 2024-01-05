@@ -2,20 +2,20 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { EditCommentInput, editCommentSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { SecurityRuleContext } from '~/server/security/rules/types'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { canEditComment } from '~/server/security/rules/comment'
 import { CommentRepo } from '~/server/database'
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: EditCommentInput
 ) => {
   const { commentId: id } = input
-  const comment = await CommentRepo.findUniqueOrThrow(user, {
+  const comment = await CommentRepo.findUniqueOrThrow(ctx.user, {
     where: { id }
   })
-  return canEditComment(user, comment)
+  return canEditComment(ctx.user, comment)
 }
 
 const handler = async ({

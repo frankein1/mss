@@ -1,42 +1,36 @@
-import { Prisma, StructureType } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { columnsSelection, filter, find } from './helpers'
 import { BeneficiaryRepo } from '~/server/database'
-import { SecurityRuleGrantee } from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 
 export async function findBeneficiaries({
-  user,
-  structure,
+  ctx,
   where,
   orderBy
 }: {
-  user: SecurityRuleGrantee
-  structure: { type: StructureType }
+  ctx: SecurityRuleContext
   where: Prisma.BeneficiaryWhereInput
   orderBy:
     | Prisma.BeneficiaryOrderByWithRelationAndSearchRelevanceInput
     | Prisma.BeneficiaryOrderByWithRelationAndSearchRelevanceInput[]
 }) {
   const beneficiaries =
-    (await BeneficiaryRepo.findMany(user, {
+    (await BeneficiaryRepo.findMany(ctx.user, {
       include: columnsSelection,
       where,
       orderBy
     })) || []
 
-  return beneficiaries.map(beneficiary =>
-    filter({ user, beneficiary, structure })
-  )
+  return beneficiaries.map(beneficiary => filter({ ctx, beneficiary }))
 }
 
 export async function findBeneficiary({
-  user,
-  structure,
+  ctx,
   id
 }: {
-  user: SecurityRuleGrantee
-  structure: { type: StructureType }
+  ctx: SecurityRuleContext
   id: string
 }) {
-  const beneficiary = await find(user, id)
-  return filter({ user, beneficiary, structure })
+  const beneficiary = await find(ctx.user, id)
+  return filter({ ctx, beneficiary })
 }

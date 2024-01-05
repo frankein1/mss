@@ -1,6 +1,5 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { emptySchema } from '~/server/schema'
 import { StructureRepo, UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc'
@@ -16,6 +15,5 @@ export type AdminOverviewOutput = Prisma.PromiseReturnType<typeof adminHandler>
 
 export const getAdminOverviewQuery = createQuery({
   inputValidation: emptySchema,
-  securityCheck: AllowSecurityCheck,
   adminHandler
 })

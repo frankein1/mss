@@ -8,7 +8,8 @@ import {
   getDocumentPermissions,
   SecurityRuleGrantee,
   getHelpRequestPermissions,
-  getFollowupPermissions
+  getFollowupPermissions,
+  SecurityRuleContext
 } from '~/server/security'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { BeneficiaryHistoryRepo } from '~/server/database'
@@ -18,14 +19,17 @@ import {
 } from '~/server/services'
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: GetHistoryInput
 ) => {
   const target = await BeneficiaryService.getBeneficiarySecurityTarget(
-    user,
+    ctx.user,
     input.beneficiaryId
   )
-  const permissions = getBeneficiaryHistoryPermissions({ user, target })
+  const permissions = getBeneficiaryHistoryPermissions({
+    user: ctx.user,
+    target
+  })
   return permissions.view
 }
 
@@ -167,19 +171,19 @@ type Histories = Prisma.PromiseReturnType<typeof getHistories>
 
 function flattenHistories(
   histories: Histories,
-  { user, structure }: ProtectedAppContext,
+  ctx: ProtectedAppContext,
   beneficiary: BeneficiarySecurityTarget
 ) {
   return histories.map(history => {
     const { followup, helpRequest, ...data } = history
+    const { user } = ctx
 
     const documents = followup?.documents || helpRequest?.documents
 
     const documentsWithPermissions = documents?.map(document => ({
       document,
       permissions: getDocumentPermissions({
-        user,
-        structure,
+        ctx,
         beneficiary,
         document
       })
@@ -192,8 +196,7 @@ function flattenHistories(
           followup: data
         })
       : getHelpRequestPermissions({
-          user,
-          structure,
+          ctx,
           target: data
         })
 

@@ -1,6 +1,6 @@
 import { createQuery } from '~/server/route'
 import { ExportFollowupsInput, exportFollowupsSchema } from '~/server/schema'
-import { canExportHistory, SecurityRuleGrantee } from '~/server/security'
+import { canExportHistory, SecurityRuleContext } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { FollowupService } from '~/server/services'
@@ -21,10 +21,10 @@ const handler = async ({
 }
 
 const securityCheck = (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   _input: ExportFollowupsInput
 ) => {
-  return canExportHistory(user)
+  return canExportHistory(ctx.user)
 }
 
 export const getExport = createQuery({

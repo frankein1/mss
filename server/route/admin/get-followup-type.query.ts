@@ -1,7 +1,6 @@
 import { createQuery } from '~/server/route'
 import { AdminContext } from '~/server/trpc'
 import { GetFollowupTypeInput, getFollowupTypeSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { FollowupTypeRepo } from '~/server/database'
 
 const adminHandler = async ({
@@ -22,6 +21,5 @@ const adminHandler = async ({
 
 export const getAdminFollowupTypeQuery = createQuery({
   adminHandler,
-  inputValidation: getFollowupTypeSchema,
-  securityCheck: AllowSecurityCheck
+  inputValidation: getFollowupTypeSchema
 })
