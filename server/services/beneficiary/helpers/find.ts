@@ -1,7 +1,8 @@
-import { Prisma, StructureType } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
 import {
   BeneficiaryPermissions,
+  SecurityRuleContext,
   SecurityRuleGrantee,
   getBeneficiaryPermissions
 } from '~/server/security'
@@ -68,18 +69,15 @@ export async function find(user: SecurityRuleGrantee, id: string) {
 }
 
 export const filter = ({
-  user,
-  structure,
+  ctx,
   beneficiary
 }: {
-  user: SecurityRuleGrantee
-  structure: { type: StructureType }
+  ctx: SecurityRuleContext
   beneficiary: FindOutput
 }) => {
   const permissions = getBeneficiaryPermissions({
-    user,
-    target: beneficiary,
-    structure
+    ctx,
+    beneficiary
   })
 
   const general = getGeneral(beneficiary, permissions)

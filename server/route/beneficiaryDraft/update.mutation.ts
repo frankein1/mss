@@ -5,20 +5,20 @@ import {
   UpdateBeneficiaryDraftInput,
   updateBeneficiaryDraftSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import type { BeneficiaryDraft } from '~/types/beneficiary'
 import { DraftRepo } from '~/server/database'
 import { isCreator } from '~/server/security/rules/helpers'
 
 const securityCheck = async (
-  grantee: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: UpdateBeneficiaryDraftInput
 ) => {
-  const beneficiaryDraft = (await DraftRepo.findUniqueOrThrow(grantee, {
+  const beneficiaryDraft = (await DraftRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.id }
   })) as BeneficiaryDraft
 
-  return isCreator(grantee, beneficiaryDraft)
+  return isCreator(ctx.user, beneficiaryDraft)
 }
 
 const handler = async ({

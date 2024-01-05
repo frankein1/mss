@@ -2,28 +2,20 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { DeleteDocumentInput, deleteDocumentSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
-import { SecurityRuleGrantee, canDeleteDocument } from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { deleteUploadedFile } from '~/server/lib/s3'
 import { DocumentRepo } from '~/server/database'
+import { DocumentService } from '~/server/services'
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: DeleteDocumentInput
 ) => {
-  const document = await DocumentRepo.findUniqueOrThrow(user, {
-    where: { key: input.documentKey },
-    include: {
-      beneficiary: {
-        select: {
-          id: true,
-          structureId: true,
-          referents: { select: { id: true } }
-        }
-      }
-    }
-  })
-
-  return canDeleteDocument(user, document.beneficiary)
+  const { permissions } = await DocumentService.getUpdatePermissions(
+    ctx,
+    input.documentKey
+  )
+  return permissions.delete
 }
 
 const handler = async ({

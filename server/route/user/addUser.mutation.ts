@@ -1,18 +1,15 @@
 import { TRPCError } from '@trpc/server'
 import { createMutation } from '~/server/route'
 import { UserCreationInput, createUserSchema } from '~/server/schema'
-import { SecurityRuleGrantee, canCreateUser } from '~/server/security'
+import { SecurityRuleContext, canCreateUser } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createEmail } from '~/server/query'
 import { getUserCreationEmailContent } from '~/server/email'
 import { UserRepo } from '~/server/database'
 import { cleanEmail } from '~/utils/user'
 
-const securityCheck = (
-  user: SecurityRuleGrantee,
-  _input: UserCreationInput
-) => {
-  return canCreateUser(user)
+const securityCheck = (ctx: SecurityRuleContext, _input: UserCreationInput) => {
+  return canCreateUser(ctx.user)
 }
 
 const handler = async ({

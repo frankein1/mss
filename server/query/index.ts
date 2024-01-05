@@ -1,4 +1,3 @@
-export * from './documents'
 export * from './helpRequests'
 export * from './userActivity'
 export * from './structure'

@@ -11,13 +11,12 @@ import {
   quickEditHelpRequestSchema
 } from '~/server/schema'
 import {
-  SecurityRuleGrantee,
+  SecurityRuleContext,
   getHelpRequestPermissions
 } from '~/server/security'
 import { HelpRequestRepo } from '~/server/database'
 import { prepareDateFields } from '~/utils/prisma'
 import {
-  getStructureByUser,
   getHelpRequestWithRelations,
   HelpRequestWithRelations
 } from '~/server/query'
@@ -58,33 +57,31 @@ function prepareData(
 }
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: QuickEditHelpRequestInput
 ) => {
-  const [target, structure] = await Promise.all([
-    HelpRequestRepo.findUniqueOrThrow(user, {
-      where: { id: input.id },
-      include: {
-        beneficiary: {
-          include: {
-            referents: true
-          }
+  const target = await HelpRequestRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: input.id },
+    include: {
+      beneficiary: {
+        include: {
+          referents: true
         }
       }
-    }),
-    getStructureByUser(user)
-  ])
-  const permissions = getHelpRequestPermissions({ user, structure, target })
+    }
+  })
+  const permissions = getHelpRequestPermissions({ ctx, target })
   return permissions.edit
 }
 
 const handler = async ({
   input,
-  ctx: { user, structure }
+  ctx
 }: {
   input: QuickEditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
+  const { user, structure } = ctx
   const target = await getHelpRequestWithRelations(user, input.id)
 
   const data = prepareData(target, input)
@@ -98,8 +95,7 @@ const handler = async ({
   return {
     ...helpRequest,
     permissions: getHelpRequestPermissions({
-      user,
-      structure,
+      ctx,
       target: helpRequest
     })
   }

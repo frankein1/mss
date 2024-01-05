@@ -5,7 +5,7 @@ import {
   QuickEditFollowupInput,
   quickEditFollowupSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { FollowupService } from '~/server/services'
 import { FollowupRepo } from '~/server/database'
 
@@ -24,10 +24,13 @@ const handler = async ({
 }
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: QuickEditFollowupInput
 ) => {
-  const permissions = await FollowupService.getUpdatePermission(user, input.id)
+  const permissions = await FollowupService.getUpdatePermission(
+    ctx.user,
+    input.id
+  )
   return permissions.edit
 }
 

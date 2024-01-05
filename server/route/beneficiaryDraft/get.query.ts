@@ -1,17 +1,17 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { IdInput, idSchema } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security/rules/types'
+import { SecurityRuleContext } from '~/server/security/rules/types'
 import { DraftRepo } from '~/server/database'
 import { isCreator } from '~/server/security/rules/helpers'
 import { getBeneficiaryPermissions } from '~/server/security'
 import { BeneficiaryDraft } from '~/types/beneficiary'
 
-const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const draft = await DraftRepo.findUniqueOrThrow(user, {
+const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
+  const draft = await DraftRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.id }
   })
-  return isCreator(user, draft)
+  return isCreator(ctx.user, draft)
 }
 
 const handler = async ({
@@ -21,14 +21,13 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const { user, structure } = ctx
+  const { user } = ctx
   const draft = (await DraftRepo.findUniqueOrThrow(user, {
     where: { id }
   })) as BeneficiaryDraft
 
   const permissions = getBeneficiaryPermissions({
-    user,
-    structure
+    ctx
   })
 
   return {

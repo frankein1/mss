@@ -2,12 +2,12 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
+  SecurityRuleContext,
   SecurityRuleGrantee,
   getHelpRequestPermissions
 } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { HelpRequestRepo } from '~/server/database'
-import { getStructureByUser } from '~/server/query'
 
 function getHelpRequest(user: SecurityRuleGrantee, id: string) {
   return HelpRequestRepo.findUniqueOrThrow(user, {
@@ -31,12 +31,9 @@ const handler = async ({
   await HelpRequestRepo.prisma.delete({ where: { id } })
 }
 
-const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const [target, structure] = await Promise.all([
-    getHelpRequest(user, input.id),
-    getStructureByUser(user)
-  ])
-  const permissions = getHelpRequestPermissions({ user, target, structure })
+const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
+  const target = await getHelpRequest(ctx.user, input.id)
+  const permissions = getHelpRequestPermissions({ ctx, target })
   return permissions.delete
 }
 

@@ -2,7 +2,6 @@ import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { notfoundError, AdminContext } from '~/server/trpc'
 import { idSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { UserRepo } from '~/server/database'
 
 const adminHandler = async ({
@@ -25,6 +24,5 @@ export type AdminUserOutput = Prisma.PromiseReturnType<typeof adminHandler>
 
 export const getAdminUserQuery = createQuery({
   inputValidation: idSchema,
-  securityCheck: AllowSecurityCheck,
   adminHandler
 })

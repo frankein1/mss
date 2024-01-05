@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
-  SecurityRuleGrantee,
+  SecurityRuleContext,
   canListDocuments,
   getDocumentPermissions
 } from '~/server/security'
@@ -32,15 +32,15 @@ function prepareBeneficiaryDocumentsFilters(
 }
 
 const securityCheck = async (
-  grantee: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: GetDocumentsInput
 ) => {
   const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
-    grantee,
+    ctx.user,
     input.beneficiaryId
   )
 
-  return canListDocuments(grantee, beneficiary)
+  return canListDocuments(ctx.user, beneficiary)
 }
 
 const handler = async ({
@@ -50,7 +50,7 @@ const handler = async ({
   input: GetDocumentsInput
   ctx: ProtectedAppContext
 }) => {
-  const { user, structure } = ctx
+  const { user } = ctx
 
   const { take, skip } =
     page && perPage
@@ -95,8 +95,7 @@ const handler = async ({
   const documentsWithPermissions = documents.map(document => ({
     document,
     permissions: getDocumentPermissions({
-      user,
-      structure,
+      ctx,
       beneficiary,
       document
     })

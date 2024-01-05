@@ -37,16 +37,11 @@ export type SecurityTargetWithCreator =
     }
   | { createdBy: { id: string } | null }
 
-export type SecurityRule<
-  Grantee extends SecurityRuleGrantee = SecurityRuleGrantee,
-  Input = unknown
-> = (grantee: Grantee, input: Input) => boolean | Promise<Boolean>
+export type SecurityRule<Input = unknown> = (
+  ctx: SecurityRuleContext,
+  input: Input
+) => boolean | Promise<Boolean>
 
-export const AllowSecurityCheck = <
-  Grantee extends SecurityRuleGrantee = SecurityRuleGrantee
->(
-  _grantee: Grantee,
-  _input: any
-) => {
+export const AllowSecurityCheck = (_ctx: SecurityRuleContext, _input: any) => {
   return true
 }
