@@ -4,7 +4,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
 import {
   SecurityRuleContext,
-  canCreatePrescribingOrganization
+  getAppContextPermissions
 } from '~/server/security'
 
 import { isNewOption } from '~/utils/options'
@@ -32,9 +32,11 @@ const securityCheck = async (
   if (!permissions.edit) {
     return false
   }
+
+  const appPermissions = getAppContextPermissions(ctx)
   if (
     isNewOption(input.prescribingOrganizationId) &&
-    !canCreatePrescribingOrganization(ctx.user)
+    !appPermissions.create.prescribingOrganization
   ) {
     return false
   }

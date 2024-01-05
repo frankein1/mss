@@ -1,7 +1,10 @@
 import { TRPCError } from '@trpc/server'
 import { createMutation } from '~/server/route'
 import { UserCreationInput, createUserSchema } from '~/server/schema'
-import { SecurityRuleContext, canCreateUser } from '~/server/security'
+import {
+  SecurityRuleContext,
+  getAppContextPermissions
+} from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createEmail } from '~/server/query'
 import { getUserCreationEmailContent } from '~/server/email'
@@ -9,7 +12,7 @@ import { UserRepo } from '~/server/database'
 import { cleanEmail } from '~/utils/user'
 
 const securityCheck = (ctx: SecurityRuleContext, _input: UserCreationInput) => {
-  return canCreateUser(ctx.user)
+  return getAppContextPermissions(ctx).create.user
 }
 
 const handler = async ({

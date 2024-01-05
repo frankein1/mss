@@ -18,7 +18,7 @@
           {{ helpRequestsCount }} instruction(s) de dossier
         </p>
         <ExportDataButton
-          v-if="can(canExportHistory)"
+          v-if="application.export.history"
           :is-downloading="isDownloading"
           @export="exportHelpRequests"
         />
@@ -51,7 +51,6 @@
   import { HelpRequestFilterInput } from '~/server/schema'
   import { HelpRequestSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
-  import { canExportHistory } from '~/server/security'
   import {
     REQUEST_LIMIT_DEFAULT,
     FAILED_DOWNLOAD_ERROR_MESSAGE
@@ -61,7 +60,7 @@
 
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
-  const { can } = useSecurityRule()
+  const { application } = usePermissions()
 
   const filters = ref<HelpRequestFilterInput>(
     filtersState.helpRequest.value || {}

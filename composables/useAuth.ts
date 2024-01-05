@@ -1,14 +1,21 @@
 import { useAuthState } from './useAuthState'
+import { AppContextPermissions } from '~/server/security'
 import { JwtUser } from '~/types/user'
 
 export function useAuth() {
   const state = useAuthState()
+  const { application, reset } = usePermissions()
 
-  function login(user: JwtUser) {
-    state.user.value = user
+  function login(params: {
+    user: JwtUser
+    permissions: AppContextPermissions
+  }) {
+    state.user.value = params.user
+    application.value = params.permissions
   }
   function logout() {
     state.user.value = null
+    reset()
   }
 
   function refreshToken() {

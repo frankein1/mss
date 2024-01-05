@@ -97,13 +97,13 @@
 </template>
 
 <script setup>
-  import { canViewStats } from '~/server/security'
   import { RoutePath } from '~/utils/routing'
 
   const homePage = useHomePage()
   const authState = useAuthState()
 
   const { version, sourceCode } = useClientVersion()
+  const { application } = usePermissions()
 
   const menuItems = computed(() => {
     const items = []
@@ -144,7 +144,7 @@
         label: 'Accompagnements',
         icon: 'fr-icon-inbox-archive-line'
       })
-      if (useSecurityRule().can(canViewStats)) {
+      if (application.view.stats) {
         items.push({
           to: RoutePath.AppStats(),
           label: 'Statistiques',

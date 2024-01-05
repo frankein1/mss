@@ -39,7 +39,7 @@
     >
       <template #hint>
         <NuxtLink
-          v-if="allowEditStructure"
+          v-if="application.edit.structure"
           :to="RoutePath.AppStructureEdit()"
           class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
           >Je personnalise les objets d’accompagnement de ma structure
@@ -57,7 +57,7 @@
       :label="helpRequestFieldLabels.prescribingOrganizationId"
       name="prescribingOrganizationId"
       :options="withEmptyValue(prescribingOrganizationOptions)"
-      :can-create-new-option="canCreatePrescribingOrganization"
+      :can-create-new-option="application.create.prescribingOrganization"
     />
   </div>
 
@@ -83,7 +83,7 @@
       :label="helpRequestFieldLabels.instructorOrganizationId"
       name="instructorOrganizationId"
       :options="instructorOrganizationOptions"
-      :can-create-new-option="canCreateInstructorOrganization"
+      :can-create-new-option="application.create.instructorOrganization"
     />
   </div>
 
@@ -114,16 +114,12 @@
   } from '@prisma/client'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { ministerOptions } from '~/client/options/ministry'
-  import {
-    canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
-    canEditStructure as canEditStructureRule,
-    canCreateInstructorOrganization as canCreateInstructorOrganizationRule
-  } from '~/server/security'
   import { RoutePath } from '~/utils/routing'
   import { externalOrganisationOptions } from '~/client/options/helpRequest'
+  import { usePermissions } from '~/composables/usePermissions'
 
   const isMinistryAgent = useAuthState().isMinistryAgent()
-  const { can } = useSecurityRule()
+  const { application } = usePermissions()
 
   const props = defineProps<{
     followupTypes: FollowupType[]
@@ -154,14 +150,4 @@
       }))
     return toOptions(instructorOrganizationsWithStringId, 'id', 'name')
   })
-
-  const allowEditStructure = computed(() => can(canEditStructureRule))
-
-  const canCreatePrescribingOrganization = computed(() =>
-    can(canCreatePrescribingOrganizationRule)
-  )
-
-  const canCreateInstructorOrganization = computed(() =>
-    can(canCreateInstructorOrganizationRule)
-  )
 </script>

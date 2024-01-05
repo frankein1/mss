@@ -18,7 +18,7 @@
           {{ followupsCount }} synthèse(s) d'entretien
         </p>
         <ExportDataButton
-          v-if="can(canExportHistory)"
+          v-if="application.export.history"
           :is-downloading="isDownloading"
           @export="exportFollowups"
         />
@@ -51,14 +51,13 @@
     REQUEST_LIMIT_DEFAULT
   } from '~/utils/constants'
   import type { FollowupFilterInput } from '~/server/schema'
-  import { canExportHistory } from '~/server/security'
   import { FollowupSort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
+  import { usePermissions } from '~/composables/usePermissions'
 
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
-  const { can } = useSecurityRule()
 
   const filters = ref<FollowupFilterInput>(filtersState.followup.value || {})
   const orderBy = ref<FollowupSort[]>([{ date: SortOrder.Desc }])
@@ -67,6 +66,8 @@
   const isDownloading = ref(false)
 
   const { updatePagination } = usePagination(pageNumber, perPage, filters)
+
+  const { application } = usePermissions()
 
   const queryInput = computed(() => ({
     orderBy: orderBy.value,

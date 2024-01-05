@@ -9,6 +9,10 @@ import { cookieOptions } from '~/utils/cookie'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { UserRepo } from '~/server/database'
+import {
+  getAdminContextPermissions,
+  getAppContextPermissions
+} from '~/server/security'
 
 const handler = async ({
   ctx: { user, event }
@@ -33,6 +37,12 @@ const handler = async ({
       }
     },
     include: {
+      structure: {
+        select: {
+          id: true,
+          type: true
+        }
+      },
       CGUHistory: {
         orderBy: {
           date: 'desc'
@@ -61,6 +71,8 @@ const handler = async ({
 
   const { user: savedUser } = payload
 
+  const { structure } = updatedUser
+
   const newUser = {
     ...savedUser,
     CGUHistoryVersion: updatedUser.CGUHistory[0].version
@@ -77,7 +89,14 @@ const handler = async ({
     cookieOptions({ expiresInMinutes: tokenValidationInMinutes })
   )
 
-  return newUser
+  let permissions
+  if (structure) {
+    permissions = getAppContextPermissions({ user, structure })
+  } else {
+    permissions = getAdminContextPermissions()
+  }
+
+  return { user: newUser, permissions }
 }
 
 export const acceptCGUMutation = createMutation({

@@ -18,7 +18,7 @@
             En savoir plus sur les rôles et habilitations
           </button>
           <RoleTable id="roles-details" />
-          <template v-if="canCreateUser">
+          <template v-if="application.create.user">
             <hr />
             <UserForm @users-refresh="usersRefresh" />
           </template>
@@ -30,13 +30,12 @@
 
 <script lang="ts" setup>
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
-  import { canCreateUser as canCreateUserRule } from '~/server/security'
 
   const title = RouteTitle.AppUsers()
 
   useHead({ title })
 
-  const { can } = useSecurityRule()
+  const { application } = usePermissions()
   const trpcClient = useTrpcClient()
 
   const {
@@ -45,6 +44,4 @@
     refresh: usersRefresh,
     error: usersError
   } = await trpcClient.user.getUsers.useQuery()
-
-  const canCreateUser = can(canCreateUserRule)
 </script>
