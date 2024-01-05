@@ -55,8 +55,8 @@
   const onSubmit = handleSubmit(() => {
     useTrpcMutation({
       mutation: () => trpcClient.user.acceptCGU.mutate(),
-      onSuccess: user => {
-        auth.login(user)
+      onSuccess: data => {
+        auth.login(data)
         navigateTo(RoutePath.AppOverview())
       },
       onFailure: () => {

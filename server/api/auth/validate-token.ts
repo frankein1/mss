@@ -2,6 +2,7 @@ import { UserActivityType } from '@prisma/client'
 import { signJwt } from '~/server/lib/jwt'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UserRepo } from '~/server/database'
+import { getAppContextPermissions } from '~/server/security'
 import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
 
@@ -94,5 +95,10 @@ export default defineEventHandler(async event => {
     objectId: user.id
   })
 
-  return { user: jwtUser }
+  const permissions = getAppContextPermissions({ user, structure })
+
+  return {
+    user: jwtUser,
+    permissions
+  }
 })

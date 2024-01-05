@@ -9,7 +9,7 @@ import {
   exportHelpRequestsSchema
 } from '~/server/schema'
 import {
-  canExportHistory,
+  getAppContextPermissions,
   getHelpRequestPermissions,
   SecurityRuleContext
 } from '~/server/security'
@@ -77,7 +77,7 @@ const securityCheck = (
   ctx: SecurityRuleContext,
   _input: ExportHelpRequestsInput
 ) => {
-  return canExportHistory(ctx.user)
+  return getAppContextPermissions(ctx).export.history
 }
 
 export const exportHelpRequestQuery = createQuery({

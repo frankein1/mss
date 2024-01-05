@@ -1,6 +1,9 @@
 import { createQuery } from '~/server/route'
 import { ExportFollowupsInput, exportFollowupsSchema } from '~/server/schema'
-import { canExportHistory, SecurityRuleContext } from '~/server/security'
+import {
+  SecurityRuleContext,
+  getAppContextPermissions
+} from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
 import { FollowupService } from '~/server/services'
@@ -24,7 +27,7 @@ const securityCheck = (
   ctx: SecurityRuleContext,
   _input: ExportFollowupsInput
 ) => {
-  return canExportHistory(ctx.user)
+  return getAppContextPermissions(ctx).export.history
 }
 
 export const getExport = createQuery({

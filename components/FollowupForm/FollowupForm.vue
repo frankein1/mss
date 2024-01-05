@@ -80,7 +80,7 @@
         >
           <template #hint>
             <NuxtLink
-              v-if="allowEditStructure"
+              v-if="application.edit.structure"
               :to="RoutePath.AppStructureEdit()"
               class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
             >
@@ -99,7 +99,7 @@
           :label="followupFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
           :options="withEmptyValue(prescribingOrganizationOptions)"
-          :can-create-new-option="canCreatePrescribingOrganization"
+          :can-create-new-option="application.create.prescribingOrganization"
         />
       </div>
 
@@ -301,13 +301,10 @@
   } from '~/client/options/followup'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
-  import {
-    canCreatePrescribingOrganization as canCreatePrescribingOrganizationRule,
-    canEditStructure
-  } from '~/server/security'
   import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
+  import { usePermissions } from '~/composables/usePermissions'
 
   const isMinistryAgent = useAuthState().isMinistryAgent()
 
@@ -325,7 +322,7 @@
     { canSetPrivateSynthesis: true }
   )
 
-  const { can } = useSecurityRule()
+  const { application } = usePermissions()
 
   const emit = defineEmits<{
     submit: [payload: Event]
@@ -351,10 +348,4 @@
       }))
     return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
   })
-
-  const allowEditStructure = computed(() => can(canEditStructure))
-
-  const canCreatePrescribingOrganization = computed(() =>
-    can(canCreatePrescribingOrganizationRule)
-  )
 </script>

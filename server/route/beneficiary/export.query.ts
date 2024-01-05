@@ -5,7 +5,10 @@ import {
   ExportBeneficiariesInput,
   exportBeneficiariesSchema
 } from '~/server/schema'
-import { canExportBeneficiaries, SecurityRuleContext } from '~/server/security'
+import {
+  SecurityRuleContext,
+  getAppContextPermissions
+} from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
@@ -46,7 +49,7 @@ const securityCheck = (
   ctx: SecurityRuleContext,
   _input: ExportBeneficiariesInput
 ) => {
-  return canExportBeneficiaries(ctx.user)
+  return getAppContextPermissions(ctx).export.beneficiaries
 }
 
 const handler = async ({

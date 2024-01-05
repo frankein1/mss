@@ -1,5 +1,6 @@
 import { UserRepo } from '~/server/database'
 import { signJwt } from '~/server/lib/jwt'
+import { getAppContextPermissions } from '~/server/security'
 import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
 
@@ -69,5 +70,8 @@ export default defineEventHandler(async event => {
     newSessionToken,
     cookieOptions({ expiresInMinutes: tokenValidationInMinutes })
   )
-  return jwtUser
+
+  const permissions = getAppContextPermissions({ user, structure })
+
+  return { user: jwtUser, permissions }
 })

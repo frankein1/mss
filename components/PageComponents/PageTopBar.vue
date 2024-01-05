@@ -21,12 +21,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { canEditStructure, canListUsers } from '~/server/security'
   import { RoutePath } from '~/utils/routing'
 
   const { isAuthenticated, getUserName } = useAuthState()
 
-  const { can } = useSecurityRule()
+  const { application } = usePermissions()
 
   const menus = computed(() => {
     const menus = []
@@ -36,14 +35,14 @@
       to: RoutePath.AppAccount(),
       icon: 'fr-icon-user-line'
     })
-    if (can(canListUsers)) {
+    if (application.value.view.users) {
       menus.push({
         label: 'Utilisateurs',
         to: RoutePath.AppUsers(),
         icon: 'fr-icon-team-line'
       })
     }
-    if (can(canEditStructure)) {
+    if (application.value.edit.structure) {
       menus.push({
         label: 'Structure',
         to: RoutePath.AppStructureEdit(),
