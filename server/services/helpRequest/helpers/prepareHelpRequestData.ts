@@ -72,7 +72,7 @@ function prepareHelpRequestData(
     | Omit<EditHelpRequestInput, 'id' | 'beneficiaryId' | 'subject'>,
     'isMinistry' | 'documents' | 'instructorOrganizationId'
   >,
-  { user, structure }: SecurityRuleContext,
+  ctx: SecurityRuleContext,
   subject: HelpRequestSubject
 ) {
   const {
@@ -102,6 +102,8 @@ function prepareHelpRequestData(
     'paymentDate'
   ])
 
+  const { user, structure } = ctx
+
   const prescribingOrganization = preparePrescribingOrganization(
     prescribingOrganizationId,
     user,
@@ -128,7 +130,7 @@ function prepareHelpRequestData(
         : isRefundable === 'true'
   }
 
-  const permissions = getHelpRequestPermissions({ user, structure })
+  const permissions = getHelpRequestPermissions({ ctx })
 
   if (permissions.set.ministre) {
     data = { ...data, ministre }

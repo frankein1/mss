@@ -6,19 +6,19 @@ import { getHelpRequestPermissions } from '~/server/security'
 import { getHelpRequestSecurityTarget } from '~/server/query'
 
 const handler = async ({
-  ctx: { user, structure },
+  ctx,
   input
 }: {
   ctx: ProtectedAppContext
   input?: IdInput
 }) => {
   if (!input) {
-    return getHelpRequestPermissions({ user, structure })
+    return getHelpRequestPermissions({ ctx })
   }
 
-  const target = await getHelpRequestSecurityTarget(user, input.id)
+  const target = await getHelpRequestSecurityTarget(ctx.user, input.id)
 
-  return getHelpRequestPermissions({ user, structure, target })
+  return getHelpRequestPermissions({ ctx, target })
 }
 
 export const getHelpRequestPermissionsQuery = createQuery({

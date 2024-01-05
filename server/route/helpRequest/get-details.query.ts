@@ -2,7 +2,7 @@ import { getHelpRequestAccessibleData } from './helper'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
-  SecurityRuleGrantee,
+  SecurityRuleContext,
   getHelpRequestPermissions
 } from '~/server/security'
 import {
@@ -10,19 +10,18 @@ import {
   getHelpRequestSecurityTarget
 } from '~/server/query/helpRequests'
 import { IdInput, idSchema } from '~/server/schema'
-import { getStructureByUser } from '~/server/query'
 
 const handler = async ({
   input: { id },
-  ctx: { user, structure }
+  ctx
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
+  const { user } = ctx
   const helpRequest = await getHelpRequestWithRelations(user, id)
   const permissions = getHelpRequestPermissions({
-    user,
-    structure,
+    ctx,
     target: helpRequest
   })
 
@@ -31,12 +30,9 @@ const handler = async ({
   return { data, permissions }
 }
 
-const securityCheck = async (user: SecurityRuleGrantee, input: IdInput) => {
-  const [target, structure] = await Promise.all([
-    getHelpRequestSecurityTarget(user, input.id),
-    getStructureByUser(user)
-  ])
-  const permissions = getHelpRequestPermissions({ user, structure, target })
+const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
+  const target = await getHelpRequestSecurityTarget(ctx.user, input.id)
+  const permissions = getHelpRequestPermissions({ ctx, target })
   return permissions.view
 }
 

@@ -3,7 +3,6 @@ import { createMutation } from '~/server/route'
 import { createEmail } from '~/server/query'
 import { AdminCreateUserInput, adminCreateUserSchema } from '~/server/schema'
 import { getUserCreationEmailContent } from '~/server/email'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { UserRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc'
 import { cleanEmail } from '~/utils/user'
@@ -46,6 +45,5 @@ const adminHandler = async ({
 
 export const createAdminUserMutation = createMutation({
   inputValidation: adminCreateUserSchema,
-  securityCheck: AllowSecurityCheck,
   adminHandler
 })

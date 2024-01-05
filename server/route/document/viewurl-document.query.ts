@@ -2,29 +2,21 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { CreateViewUrlInput, createViewUrlSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
-import { SecurityRuleGrantee, canViewDocument } from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { createSignedGetUrl, createContentUrl } from '~/server/lib/s3'
 import { DocumentRepo } from '~/server/database'
+import { DocumentService } from '~/server/services'
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: CreateViewUrlInput
 ) => {
-  const { key } = input
-  const document = await DocumentRepo.findUniqueOrThrow(user, {
-    where: { key },
-    include: {
-      beneficiary: {
-        select: {
-          id: true,
-          structureId: true,
-          referents: { select: { id: true } }
-        }
-      }
-    }
-  })
+  const { permissions } = await DocumentService.getUpdatePermissions(
+    ctx,
+    input.key
+  )
 
-  return canViewDocument(user, document.beneficiary, document)
+  return permissions.view
 }
 
 const handler = async ({

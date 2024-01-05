@@ -3,7 +3,8 @@ import {
   SecurityRuleGrantee,
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,
-  SecurityTargetWithCreator
+  SecurityTargetWithCreator,
+  SecurityRuleContext
 } from '../rules'
 import {
   isInSameStructureAs,
@@ -38,17 +39,16 @@ export type HelpRequestPermissions = {
 }
 
 export const getHelpRequestPermissions = ({
-  user,
-  target,
-  structure
+  ctx,
+  target
 }: {
-  user: SecurityRuleGrantee
+  ctx: SecurityRuleContext
   target?: SecurityTargetWithCreator &
     SecurityTargetWithStructure & {
       beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
     }
-  structure: { type: StructureType }
 }) => {
+  const { user, structure } = ctx
   let permissions: HelpRequestPermissions
   if (!target) {
     permissions = getCreatePermissions({ structure })

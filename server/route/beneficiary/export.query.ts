@@ -5,7 +5,7 @@ import {
   ExportBeneficiariesInput,
   exportBeneficiariesSchema
 } from '~/server/schema'
-import { canExportBeneficiaries, SecurityRuleGrantee } from '~/server/security'
+import { canExportBeneficiaries, SecurityRuleContext } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { RowType } from '~/types/export'
 import { BENEFICIARY_EXPORTED_FIELDS } from '~/utils/constants/export'
@@ -43,10 +43,10 @@ import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
 import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = (
-  grantee: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   _input: ExportBeneficiariesInput
 ) => {
-  return canExportBeneficiaries(grantee)
+  return canExportBeneficiaries(ctx.user)
 }
 
 const handler = async ({
@@ -66,8 +66,7 @@ const handler = async ({
   }
 
   const dataRequest = await BeneficiaryService.findBeneficiaries({
-    user: ctx.user,
-    structure: ctx.structure,
+    ctx,
     where,
     orderBy: input.orderBy
   })

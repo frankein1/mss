@@ -1,50 +1,39 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
-import { getDocumentSecurityTarget } from '~/server/query'
-import {
-  SecurityRuleGrantee,
-  canEditDocument,
-  canSetDocumentAsConfidential
-} from '~/server/security'
-import { ProtectedAppContext, forbiddenError } from '~/server/trpc'
+import { SecurityRuleContext } from '~/server/security'
+import { ProtectedAppContext } from '~/server/trpc'
 import { DocumentRepo } from '~/server/database'
-import { BeneficiaryService } from '~/server/services'
+import { DocumentService } from '~/server/services'
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: EditDocumentInput
 ) => {
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
-    user,
-    input.beneficiaryId
+  const { permissions, document } = await DocumentService.getUpdatePermissions(
+    ctx,
+    input.key
   )
-  const document = await getDocumentSecurityTarget(user, input.key)
-  return canEditDocument(user, beneficiary, document)
+  if (!permissions.edit) {
+    return false
+  }
+  if (
+    input.confidential !== document.confidential &&
+    !permissions.set.confidential
+  ) {
+    return false
+  }
+  return true
 }
 
 const handler = async ({
-  ctx: { user },
+  ctx: _ctx,
   input
 }: {
   ctx: ProtectedAppContext
   input: EditDocumentInput
 }) => {
-  const { key, beneficiaryId, ...data } = input
-
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
-    user,
-    beneficiaryId
-  )
-
-  const document = await getDocumentSecurityTarget(user, key)
-
-  if (
-    data.confidential !== document.confidential &&
-    !canSetDocumentAsConfidential(user, beneficiary, document)
-  ) {
-    throw forbiddenError()
-  }
+  const { key, beneficiaryId: _beneficiaryId, ...data } = input
 
   const updatedDocument = await DocumentRepo.prisma.update({
     where: { key },

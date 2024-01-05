@@ -5,6 +5,7 @@ import {
   UserActivityObject,
   UserActivityType
 } from '@prisma/client'
+import { isAdmin } from '../security/rules/helpers'
 import { forbiddenError } from '~/server/trpc'
 import { addUserActivity } from '~/server/query'
 import { SecurityRule, SecurityRuleGrantee } from '~/server/security'
@@ -53,7 +54,7 @@ export type CreateRouteOptions<
   Input = z.infer<Validation>
 > = {
   inputValidation: Validation
-  securityCheck: SecurityRule<Grantee, Input>
+  securityCheck?: SecurityRule<Input>
   auditLog?: {
     key: string
     target: UserActivityObject
@@ -107,7 +108,10 @@ export const createRoute = <
     if (!handler) {
       throw forbiddenError('Use handler function to handler the request')
     }
-    const canAccess = await securityCheck(ctx.user, input)
+    if (!securityCheck) {
+      throw forbiddenError('security check is required!')
+    }
+    const canAccess = await securityCheck(ctx, input)
     if (!canAccess) {
       throw forbiddenError(
         `${
@@ -136,7 +140,7 @@ export const createRoute = <
     return routeResult
   }
 
-  const executeAsAdmin = async ({
+  const executeAsAdmin = ({
     ctx,
     input
   }: {
@@ -146,8 +150,7 @@ export const createRoute = <
     if (!adminHandler) {
       throw forbiddenError('Use adminHandler function to handle the request')
     }
-    const canAccess = await securityCheck(ctx.user, input)
-    if (!canAccess) {
+    if (!isAdmin(ctx.user)) {
       throw forbiddenError(
         `${
           ctx.user.id
