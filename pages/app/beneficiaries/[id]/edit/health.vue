@@ -22,7 +22,7 @@
       class="fr-p-3v"
     >
       <div
-        v-if="displayInfo"
+        v-if="application.view.healthInfo"
         class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-pb-3w"
       >
         <div class="fr-notice fr-notice--info">
@@ -61,14 +61,12 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
   import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
-  import { canViewHealthInfo } from '~/server/security'
 
   const trpcClient = useTrpcClient()
 
   const isSubmitting = ref(false)
 
-  const { canWithStructureType } = useSecurityRule()
-  const displayInfo = canWithStructureType(canViewHealthInfo)
+  const { application } = usePermissions()
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string

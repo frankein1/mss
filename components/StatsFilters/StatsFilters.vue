@@ -17,10 +17,9 @@
   import type { Options } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import { canViewStatsByReferent } from '~/server/security'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
 
-  const { can } = useSecurityRule()
+  const { application } = usePermissions()
 
   const props = defineProps<{
     followupTypeOptions: Options
@@ -61,7 +60,7 @@
         type: FilterType.SelectMultiple
       })
     }
-    if (can(canViewStatsByReferent)) {
+    if (application.value.view.statsByReferent) {
       filters.push({
         name: 'referent',
         label: 'Référent',

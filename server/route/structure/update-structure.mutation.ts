@@ -4,7 +4,10 @@ import {
   EditCurrentUserStructureInput,
   editCurrentUserStructureSchema
 } from '~/server/schema'
-import { SecurityRuleContext, canEditStructure } from '~/server/security'
+import {
+  SecurityRuleContext,
+  getAppContextPermissions
+} from '~/server/security'
 import { editFollowupTypes } from '~/server/query/structure'
 import { StructureRepo, FollowupTypeRepo } from '~/server/database'
 
@@ -45,7 +48,7 @@ const securityCheck = (
   ctx: SecurityRuleContext,
   _input: EditCurrentUserStructureInput
 ) => {
-  return canEditStructure(ctx.user)
+  return getAppContextPermissions(ctx).edit.structure
 }
 
 export const editCurrentUserStructureMutation = createMutation({

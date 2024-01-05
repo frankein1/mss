@@ -4,8 +4,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
 import {
   SecurityRuleContext,
-  canCreateInstructorOrganization,
-  canCreatePrescribingOrganization,
+  getAppContextPermissions,
   getHelpRequestPermissions
 } from '~/server/security'
 import { getHelpRequestSecurityTarget } from '~/server/query'
@@ -32,18 +31,20 @@ const securityCheck = async (
     return false
   }
 
+  const appPermissions = getAppContextPermissions(ctx)
+
   const { prescribingOrganizationId, instructorOrganizationId } = input
-  const { user, structure } = ctx
+  const { structure } = ctx
 
   if (
     isNewOption(prescribingOrganizationId) &&
-    !canCreatePrescribingOrganization(user)
+    !appPermissions.create.prescribingOrganization
   ) {
     return false
   }
   if (
     isNewOption(instructorOrganizationId) &&
-    !canCreateInstructorOrganization(user)
+    !appPermissions.create.instructorOrganization
   ) {
     return false
   }

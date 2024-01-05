@@ -32,7 +32,7 @@
       onResponse({ response }) {
         const { _data: data } = response
         if (data) {
-          auth.login(data.user)
+          auth.login(data)
           navigateTo(redirectUrl)
         }
       }

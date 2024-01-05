@@ -1,14 +1,21 @@
 import { useAuthState } from './useAuthState'
+import { AppContextPermissions } from '~/server/security'
 import { JwtUser } from '~/types/user'
 
 export function useAuth() {
   const state = useAuthState()
+  const { application, reset } = usePermissions()
 
-  function login(user: JwtUser) {
-    state.user.value = user
+  function login(params: {
+    user: JwtUser
+    permissions: AppContextPermissions
+  }) {
+    state.user.value = params.user
+    application.value = params.permissions
   }
   function logout() {
     state.user.value = null
+    reset()
   }
 
   function refreshToken() {
@@ -17,11 +24,15 @@ export function useAuth() {
 
   async function getSession() {
     const headers = useRequestHeaders(['cookie'])
-    const sessionUser = await $fetch<JwtUser>('/api/auth/get-session', {
+    const session = await $fetch<{
+      user: JwtUser
+      permissions: AppContextPermissions
+    }>('/api/auth/get-session', {
       headers
     })
-    if (sessionUser) {
-      state.user.value = sessionUser
+    if (session) {
+      state.user.value = session.user
+      application.value = session.permissions
     }
   }
 
