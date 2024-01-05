@@ -36,14 +36,7 @@ export {
 
 export * from './structure'
 
-export {
-  canAddDocument,
-  canDeleteDocument,
-  canEditDocument,
-  canListDocuments,
-  canViewDocument,
-  canSetDocumentAsConfidential
-} from './document'
+export { canListDocuments } from './document'
 
 export { canViewStats, canViewStatsByReferent } from './stats'
 

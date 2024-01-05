@@ -104,13 +104,15 @@ describe('BeneficiaryService.findBeneficiary', () => {
     } as any)
 
     const beneficiary = await BeneficiaryService.findBeneficiary({
-      user: {
-        id: 'user-1',
-        role: UserRole.StructureManager,
-        status: UserStatus.Active,
-        structureId: 'structure-1'
+      ctx: {
+        user: {
+          id: 'user-1',
+          role: UserRole.StructureManager,
+          status: UserStatus.Active,
+          structureId: 'structure-1'
+        },
+        structure: { id: 'structure-1', type: StructureType.Ccas }
       },
-      structure: { type: StructureType.Ccas },
       id: 'beneficiary-1'
     })
 
@@ -248,13 +250,15 @@ describe('BeneficiaryService.findBeneficiary', () => {
     } as any)
 
     const beneficiary = await BeneficiaryService.findBeneficiary({
-      user: {
-        id: 'user-1',
-        role: UserRole.StructureManager,
-        status: UserStatus.Active,
-        structureId: 'structure-1'
+      ctx: {
+        user: {
+          id: 'user-1',
+          role: UserRole.StructureManager,
+          status: UserStatus.Active,
+          structureId: 'structure-1'
+        },
+        structure: { id: 'structure-1', type: StructureType.Ccas }
       },
-      structure: { type: StructureType.Ccas },
       id: 'beneficiary-1'
     })
 
@@ -390,13 +394,15 @@ describe('BeneficiaryService.findBeneficiary', () => {
     } as any)
 
     const beneficiary = await BeneficiaryService.findBeneficiary({
-      user: {
-        id: 'user-1',
-        role: UserRole.StructureManager,
-        status: UserStatus.Active,
-        structureId: 'structure-1'
+      ctx: {
+        user: {
+          id: 'user-1',
+          role: UserRole.StructureManager,
+          status: UserStatus.Active,
+          structureId: 'structure-1'
+        },
+        structure: { id: 'structure-1', type: StructureType.Ccas }
       },
-      structure: { type: StructureType.Ccas },
       id: 'beneficiary-1'
     })
 

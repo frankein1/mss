@@ -1,7 +1,6 @@
 import { EmailStatus } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { AdminSendEmailInput, adminSendEmailSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { EmailRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc'
 
@@ -31,6 +30,5 @@ const adminHandler = async ({
 
 export const sendEmailQuery = createQuery({
   inputValidation: adminSendEmailSchema,
-  securityCheck: AllowSecurityCheck,
   adminHandler
 })

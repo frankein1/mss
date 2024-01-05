@@ -6,10 +6,9 @@ import {
   createHelpRequestSchema
 } from '~/server/schema'
 import {
-  SecurityRuleGrantee,
+  SecurityRuleContext,
   getBeneficiaryPermissions
 } from '~/server/security'
-import { getStructureByUser } from '~/server/query'
 import { HelpRequestService, BeneficiaryService } from '~/server/services'
 
 const handler = ({
@@ -23,14 +22,14 @@ const handler = ({
 }
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: CreateHelpRequestInput
 ) => {
-  const [target, structure] = await Promise.all([
-    BeneficiaryService.getBeneficiarySecurityTarget(user, input.beneficiaryId),
-    getStructureByUser(user)
-  ])
-  const permissions = getBeneficiaryPermissions({ user, structure, target })
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+    ctx.user,
+    input.beneficiaryId
+  )
+  const permissions = getBeneficiaryPermissions({ ctx, beneficiary })
   return permissions.create.helpRequest
 }
 

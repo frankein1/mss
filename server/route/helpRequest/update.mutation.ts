@@ -3,15 +3,12 @@ import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
 import {
-  SecurityRuleGrantee,
+  SecurityRuleContext,
   canCreateInstructorOrganization,
   canCreatePrescribingOrganization,
   getHelpRequestPermissions
 } from '~/server/security'
-import {
-  getHelpRequestSecurityTarget,
-  getStructureByUser
-} from '~/server/query'
+import { getHelpRequestSecurityTarget } from '~/server/query'
 import { isNewOption } from '~/utils/options'
 import { HelpRequestService } from '~/server/services'
 
@@ -26,19 +23,17 @@ const handler = ({
 }
 
 const securityCheck = async (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: EditHelpRequestInput
 ) => {
-  const [target, structure] = await Promise.all([
-    getHelpRequestSecurityTarget(user, input.id),
-    getStructureByUser(user)
-  ])
-  const permissions = getHelpRequestPermissions({ user, target, structure })
+  const target = await getHelpRequestSecurityTarget(ctx.user, input.id)
+  const permissions = getHelpRequestPermissions({ ctx, target })
   if (!permissions.edit) {
     return false
   }
 
   const { prescribingOrganizationId, instructorOrganizationId } = input
+  const { user, structure } = ctx
 
   if (
     isNewOption(prescribingOrganizationId) &&
@@ -57,10 +52,9 @@ const securityCheck = async (
     return false
   }
 
-  const { type } = await getStructureByUser(user)
   if (
     (input.numeroPegase || input.ministre) &&
-    type !== StructureType.Ministere
+    structure.type !== StructureType.Ministere
   ) {
     return false
   }

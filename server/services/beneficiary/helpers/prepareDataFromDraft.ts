@@ -15,10 +15,11 @@ import { prepareDateFields } from '~/utils/prisma'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 
 export function prepareDataFromDraft(
-  { user, structure }: SecurityRuleContext,
+  ctx: SecurityRuleContext,
   input: SaveDraftInput,
   beneficiaryDraft: BeneficiaryDraft
 ) {
+  const { user } = ctx
   const {
     general,
     taxHousehold,
@@ -48,7 +49,7 @@ export function prepareDataFromDraft(
     createdById: user.id
   } as Prisma.BeneficiaryUncheckedCreateInput
 
-  const permissions = getBeneficiaryPermissions({ user, structure })
+  const permissions = getBeneficiaryPermissions({ ctx })
 
   if ((taxHousehold || entourage) && permissions.edit.relatives) {
     if (taxHousehold) {

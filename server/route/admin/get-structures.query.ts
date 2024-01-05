@@ -4,7 +4,6 @@ import {
   AdminGetStructuresInput,
   adminGetStructuresSchema
 } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { StructureRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc'
 
@@ -74,6 +73,5 @@ export type AdminStructuresOutput = Prisma.PromiseReturnType<
 
 export const getAdminStructuresQuery = createQuery({
   inputValidation: adminGetStructuresSchema,
-  securityCheck: AllowSecurityCheck,
   adminHandler
 })

@@ -1,6 +1,7 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
+  SecurityRuleContext,
   SecurityRuleGrantee,
   getBeneficiaryPermissions
 } from '~/server/security'
@@ -11,7 +12,6 @@ import {
   updateBeneficiaryEntourageSchema
 } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
-import { getStructureByUser } from '~/server/query'
 import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 
@@ -35,18 +35,16 @@ function getBeneficiarySecurityTargetWithEntourage(
 }
 
 const securityCheck = async (
-  grantee: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   input: UpdateBeneficiaryDraftInput
 ) => {
-  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
-    grantee,
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+    ctx.user,
     input.id
   )
-  const structure = await getStructureByUser(grantee)
   const permissions = getBeneficiaryPermissions({
-    user: grantee,
-    structure,
-    target
+    ctx,
+    beneficiary
   })
   return permissions.edit.relatives
 }

@@ -4,7 +4,7 @@ import {
   EditCurrentUserStructureInput,
   editCurrentUserStructureSchema
 } from '~/server/schema'
-import { SecurityRuleGrantee, canEditStructure } from '~/server/security'
+import { SecurityRuleContext, canEditStructure } from '~/server/security'
 import { editFollowupTypes } from '~/server/query/structure'
 import { StructureRepo, FollowupTypeRepo } from '~/server/database'
 
@@ -42,10 +42,10 @@ const handler = async ({
 }
 
 const securityCheck = (
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   _input: EditCurrentUserStructureInput
 ) => {
-  return canEditStructure(user)
+  return canEditStructure(ctx.user)
 }
 
 export const editCurrentUserStructureMutation = createMutation({
