@@ -6,7 +6,8 @@ import {
   SaveBeneficiaryEntourageInput,
   SaveBeneficiaryHealthInput,
   SaveBeneficiaryOccupationInput,
-  SaveBeneficiaryExternalOrganisationsInput
+  SaveBeneficiaryExternalOrganisationsInput,
+  BeneficiaryFilterInput
 } from '~/server/schema'
 import { getBeneficiaryPermissions } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
@@ -132,4 +133,59 @@ function getDataFromSources(
     occupation,
     externalOrganisations
   }
+}
+
+export function prepareBeneficiarySearchConditions(query: string) {
+  const tokens = query.trim().replace(/%/g, '').split(/\s+/g)
+
+  const fields = ['firstName', 'birthName', 'usualName', 'fileNumber'] as const
+
+  const searchConditions = tokens.map(token => ({
+    OR: fields.map(field => ({
+      [field]: {
+        contains: token,
+        mode: 'insensitive'
+      }
+    }))
+  }))
+
+  return { AND: searchConditions }
+}
+
+export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
+  const formattedFilters: Prisma.BeneficiaryWhereInput = {}
+
+  if (filters.search) {
+    const searchConditions = prepareBeneficiarySearchConditions(filters.search)
+    formattedFilters.AND = searchConditions.AND
+  }
+
+  if (filters.followupTypes) {
+    const typesListFilter: Prisma.FollowupTypeWhereInput = {
+      id: { in: filters.followupTypes }
+    }
+
+    formattedFilters.OR = [
+      { followups: { some: { types: { some: typesListFilter } } } },
+      { helpRequests: { some: { type: typesListFilter } } }
+    ]
+  }
+
+  if (filters.referents) {
+    formattedFilters.referents = { some: { id: { in: filters.referents } } }
+  }
+
+  if (filters.status) {
+    formattedFilters.status = filters.status
+  }
+
+  if (filters.ageGroup) {
+    const dateRange = ageGroupToDateRange(filters.ageGroup)
+    formattedFilters.birthDate = {
+      gte: dateRange.lower?.toDate(),
+      lte: dateRange.upper?.toDate()
+    }
+  }
+
+  return formattedFilters
 }

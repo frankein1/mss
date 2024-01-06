@@ -1,4 +1,4 @@
-import { getBeneficiarySecurityTarget } from '../beneficiary/getSecurityTarget.service'
+import { BeneficiaryService } from '../beneficiary'
 import { DocumentRepo } from '~/server/database'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
 
@@ -33,7 +33,7 @@ export async function getCreatePermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string
 ) {
-  const beneficiary = await getBeneficiarySecurityTarget(
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     ctx.user,
     beneficiaryId
   )

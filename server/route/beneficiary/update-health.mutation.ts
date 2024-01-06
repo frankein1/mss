@@ -17,14 +17,10 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryHealthInput
 ) => {
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
-    ctx.user,
+  const permissions = await BeneficiaryService.getUpdatePermission(
+    ctx,
     input.id
   )
-  const permissions = getBeneficiaryPermissions({
-    ctx,
-    beneficiary
-  })
   return permissions.edit.health
 }
 
