@@ -6,9 +6,8 @@ import {
   SecurityRuleGrantee,
   getBeneficiaryPermissions
 } from '~/server/security'
-import { isObjectEmpty } from '~/utils/isObjectEmpty'
 
-export const columnsSelection = {
+export const include = {
   referents: {
     select: {
       id: true,
@@ -57,29 +56,56 @@ export const columnsSelection = {
   }
 }
 
-type FindOutput = Prisma.PromiseReturnType<typeof find>
-
-export async function find(user: SecurityRuleGrantee, id: string) {
-  return await BeneficiaryRepo.findUniqueOrThrow(user, {
+function findOne(user: SecurityRuleGrantee, id: string) {
+  return BeneficiaryRepo.findUniqueOrThrow(user, {
     where: {
       id
     },
-    include: columnsSelection
+    include
   })
 }
 
-export const filter = ({
-  ctx,
-  beneficiary
-}: {
-  ctx: SecurityRuleContext
-  beneficiary: FindOutput
-}) => {
+type BeneficiaryOutput = Prisma.PromiseReturnType<typeof findOne>
+
+export async function getOne(ctx: SecurityRuleContext, id: string) {
+  const beneficiary = await findOne(ctx.user, id)
   const permissions = getBeneficiaryPermissions({
     ctx,
     beneficiary
   })
+  return {
+    beneficiary: filter(permissions, beneficiary),
+    permissions
+  }
+}
 
+export async function getPage(
+  ctx: SecurityRuleContext,
+  args: Omit<Prisma.BeneficiaryFindManyArgs, 'select' | 'include'>
+) {
+  const beneficiaries = await BeneficiaryRepo.findMany(ctx.user, {
+    where: args.where,
+    include,
+    take: args.take,
+    skip: args.skip,
+    orderBy: args.orderBy
+  })
+  return beneficiaries.map(beneficiary => {
+    const permissions = getBeneficiaryPermissions({
+      ctx,
+      beneficiary
+    })
+    return {
+      beneficiary: filter(permissions, beneficiary),
+      permissions
+    }
+  })
+}
+
+const filter = (
+  permissions: BeneficiaryPermissions,
+  beneficiary: BeneficiaryOutput
+) => {
   const general = getGeneral(beneficiary, permissions)
 
   const { view } = permissions
@@ -126,7 +152,7 @@ export const filter = ({
   }
 }
 
-function getHistory(beneficiary: FindOutput) {
+function getHistory(beneficiary: BeneficiaryOutput) {
   return {
     historyTotal:
       beneficiary._count.followups + beneficiary._count.helpRequests,
@@ -138,7 +164,7 @@ function getHistory(beneficiary: FindOutput) {
 }
 
 function getGeneral(
-  beneficiary: FindOutput,
+  beneficiary: BeneficiaryOutput,
   permissions: BeneficiaryPermissions
 ) {
   const { get } = permissions
@@ -177,12 +203,12 @@ function getGeneral(
   return general
 }
 
-function getEntourages(beneficiary: FindOutput) {
+function getEntourages(beneficiary: BeneficiaryOutput) {
   const { relatives } = beneficiary
   return (relatives || []).filter(relative => !relative.hosted)
 }
 
-function getTaxHouseholds(beneficiary: FindOutput) {
+function getTaxHouseholds(beneficiary: BeneficiaryOutput) {
   const {
     relatives,
     familySituation,
@@ -203,7 +229,7 @@ function getTaxHouseholds(beneficiary: FindOutput) {
 }
 
 function getHealth(
-  beneficiary: FindOutput,
+  beneficiary: BeneficiaryOutput,
   permissions: BeneficiaryPermissions
 ) {
   const { get } = permissions
@@ -217,7 +243,7 @@ function getHealth(
 }
 
 function getOccupationIncome(
-  beneficiary: FindOutput,
+  beneficiary: BeneficiaryOutput,
   permissions: BeneficiaryPermissions
 ) {
   const { get } = permissions
@@ -252,7 +278,7 @@ function getOccupationIncome(
   }
 }
 
-function getExternalOrganisations(beneficiary: FindOutput) {
+function getExternalOrganisations(beneficiary: BeneficiaryOutput) {
   return {
     protectionMeasure: beneficiary.protectionMeasure,
     representative: beneficiary.representative,

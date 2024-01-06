@@ -43,7 +43,7 @@
             <BeneficiaryTable
               v-show="!pending"
               v-model:sort="orderBy"
-              :beneficiaries="beneficiaries"
+              :items="items"
               :pending="pending"
             />
             <AtomPagination
@@ -103,20 +103,16 @@
   }))
 
   const {
-    data: beneficiariesRequest,
+    data: pageData,
     pending,
     error
-  } = await trpcClient.beneficiary.getBeneficiaries.useQuery(queryInput)
+  } = await trpcClient.beneficiary.getPage.useQuery(queryInput)
 
-  const beneficiariesCount = computed(
-    () => beneficiariesRequest.value?.count || 0
-  )
+  const beneficiariesCount = computed(() => pageData.value?.count || 0)
 
-  const beneficiaries = computed(
-    () => beneficiariesRequest.value?.beneficiaries || []
-  )
+  const items = computed(() => pageData.value?.items || [])
 
-  const totalPages = computed(() => beneficiariesRequest.value?.totalPages || 0)
+  const totalPages = computed(() => pageData.value?.totalPages || 0)
 
   async function exportBeneficiaries() {
     isDownloading.value = true

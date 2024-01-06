@@ -4,7 +4,6 @@ import { GetHistoryInput, getHistorySchema } from '~/server/schema'
 import { TypeSuivi } from '~/types/history'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
-  getBeneficiaryHistoryPermissions,
   getDocumentPermissions,
   SecurityRuleGrantee,
   getHelpRequestPermissions,
@@ -14,23 +13,19 @@ import {
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { BeneficiaryHistoryRepo } from '~/server/database'
 import {
-  BeneficiaryService,
-  BeneficiarySecurityTarget
+  BeneficiarySecurityTarget,
+  BeneficiaryService
 } from '~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: GetHistoryInput
 ) => {
-  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
-    ctx.user,
+  const permissions = await BeneficiaryService.getUpdatePermission(
+    ctx,
     input.beneficiaryId
   )
-  const permissions = getBeneficiaryHistoryPermissions({
-    user: ctx.user,
-    target
-  })
-  return permissions.view
+  return permissions.view.history
 }
 
 type HistoryFilters = GetHistoryInput['filters']
