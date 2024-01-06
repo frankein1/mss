@@ -2,28 +2,26 @@
   <NuxtLink
     v-slot="{ navigate }"
     custom
-    :to="RoutePath.AppBeneficiary(props.beneficiary.id)"
+    :to="RoutePath.AppBeneficiary(beneficiary.id)"
   >
     <tr
       class="clickable-row"
       @click="navigate"
     >
       <td>{{ formatTableValue(lastName) }}</td>
-      <td>{{ formatTableValue(nameOrEmpty(beneficiary.firstName)) }}</td>
+      <td>{{ formatTableValue(nameOrEmpty(general.firstName)) }}</td>
       <td>
         {{
           formatTableValue(
-            beneficiary.birthDate
-              ? formatDate(beneficiary.birthDate)
-              : undefined
+            general.birthDate ? formatDate(general.birthDate) : undefined
           )
         }}
       </td>
-      <td>{{ formatTableValue(beneficiary.phone1) }}</td>
+      <td>{{ formatTableValue(general.phone1) }}</td>
       <td class="address-data">
-        <template v-if="beneficiary.street || addressCodeAndCity">
-          {{ beneficiary.street }}
-          <br v-if="beneficiary.street" />
+        <template v-if="general.street || addressCodeAndCity">
+          {{ general.street }}
+          <br v-if="general.street" />
           {{ addressCodeAndCity }}
         </template>
         <template v-else>{{ EMPTY_TABLE_CELL }}</template>
@@ -39,7 +37,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { BeneficiaryItem } from './types'
+  import type { BeneficiaryPageItem } from './types'
   import { EMPTY_TABLE_CELL } from '~/utils/constants'
   import { formatDate } from '~/utils/formatDate'
   import { nameOrEmpty } from '~/utils/nameOrEmpty'
@@ -47,27 +45,29 @@
   import { formatTableValue } from '~/utils/table'
 
   const props = defineProps<{
-    beneficiary: BeneficiaryItem
+    item: BeneficiaryPageItem
   }>()
 
+  const beneficiary = computed(() => props.item.beneficiary)
+  const general = computed(() => beneficiary.value.general)
+  const history = computed(() => beneficiary.value.history)
+
   const addressCodeAndCity = computed(() =>
-    [props.beneficiary.zipcode, props.beneficiary.city]
-      .filter(v => !!v)
-      .join(' ')
+    [general.value.zipcode, general.value.city].filter(v => !!v).join(' ')
   )
 
   const followUpTypes = computed(() =>
-    props.beneficiary.followupTypes.map(({ name }) => name).join(', ')
+    history.value.types.map(({ name }) => name).join(', ')
   )
 
   const lastName = computed(() => {
-    if (props.beneficiary.usualName) {
-      return props.beneficiary.usualName.toUpperCase()
+    if (general.value.usualName) {
+      return general.value.usualName.toUpperCase()
     }
-    if (props.beneficiary.birthName) {
-      return `(${props.beneficiary.birthName.toUpperCase()})`
+    if (general.value.birthName) {
+      return `(${general.value.birthName.toUpperCase()})`
     }
-    return nameOrEmpty(props.beneficiary.usualName)
+    return nameOrEmpty(general.value.usualName)
   })
 </script>
 

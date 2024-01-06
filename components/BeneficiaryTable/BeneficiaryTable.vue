@@ -35,9 +35,9 @@
         </thead>
         <tbody>
           <BeneficiaryRow
-            v-for="beneficiary in beneficiaries"
-            :key="beneficiary.id"
-            :beneficiary="beneficiary"
+            v-for="item in items"
+            :key="item.beneficiary.id"
+            :item="item"
           />
         </tbody>
       </table>
@@ -46,12 +46,12 @@
 </template>
 
 <script setup lang="ts">
-  import { GetBeneficiaries } from './types'
+  import { BeneficiaryPageItems } from './types'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import type { BeneficiarySort } from '~/types/table'
 
   const props = defineProps<{
-    beneficiaries: GetBeneficiaries
+    items: BeneficiaryPageItems
     pending: boolean
     sort: BeneficiarySort[]
   }>()

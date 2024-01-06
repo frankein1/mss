@@ -11,7 +11,7 @@ const handler = async ({
   input: GetFollowupsInput
   ctx: ProtectedAppContext
 }) => {
-  return await FollowupService.page({ input, ctx })
+  return await FollowupService.getPage({ input, ctx })
 }
 
 export const getPage = createQuery({
