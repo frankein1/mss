@@ -15,9 +15,9 @@ import {
   SecurityRuleGrantee
 } from '~/server/security'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
-import { prepareNewHistoryElementNotification } from '~/utils/notification'
 import { HelpRequestWithRelations } from '~/server/query'
 import { SecurityRuleContext } from '~/server/security/rules/types'
+import { prepareNewHistoryElementNotification } from '~/server/services/helper'
 
 function prepareInstructorOrganization(
   instructorOrganizationId: string | null | undefined,

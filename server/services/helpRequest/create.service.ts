@@ -1,4 +1,4 @@
-import { prepareHelpRequestCreateData } from './helpers'
+import { prepareHelpRequestCreateData } from './helper'
 import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
 import { CreateHelpRequestInput } from '~/server/schema'
 import { markFollowupTypeAsUsed } from '~/server/query'
