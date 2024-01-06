@@ -2,7 +2,7 @@
   <NuxtLink
     v-slot="{ navigate }"
     custom
-    :to="RoutePath.AppBeneficiary(props.beneficiary.id)"
+    :to="RoutePath.AppBeneficiary(beneficiary.id)"
   >
     <tr
       class="clickable-row"
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts" setup>
-  import type { BeneficiaryItem } from './types'
+  import type { BeneficiaryPageItem } from './types'
   import { EMPTY_TABLE_CELL } from '~/utils/constants'
   import { formatDate } from '~/utils/formatDate'
   import { nameOrEmpty } from '~/utils/nameOrEmpty'
@@ -47,27 +47,29 @@
   import { formatTableValue } from '~/utils/table'
 
   const props = defineProps<{
-    beneficiary: BeneficiaryItem
+    item: BeneficiaryPageItem
   }>()
 
+  const beneficiary = computed(() => props.item.beneficiary)
+
   const addressCodeAndCity = computed(() =>
-    [props.beneficiary.zipcode, props.beneficiary.city]
+    [beneficiary.value.zipcode, beneficiary.value.city]
       .filter(v => !!v)
       .join(' ')
   )
 
   const followUpTypes = computed(() =>
-    props.beneficiary.followupTypes.map(({ name }) => name).join(', ')
+    beneficiary.value.followupTypes.map(({ name }) => name).join(', ')
   )
 
   const lastName = computed(() => {
-    if (props.beneficiary.usualName) {
-      return props.beneficiary.usualName.toUpperCase()
+    if (beneficiary.value.usualName) {
+      return beneficiary.value.usualName.toUpperCase()
     }
-    if (props.beneficiary.birthName) {
-      return `(${props.beneficiary.birthName.toUpperCase()})`
+    if (beneficiary.value.birthName) {
+      return `(${beneficiary.value.birthName.toUpperCase()})`
     }
-    return nameOrEmpty(props.beneficiary.usualName)
+    return nameOrEmpty(beneficiary.value.usualName)
   })
 </script>
 

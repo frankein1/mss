@@ -6,7 +6,7 @@ import {
   getFollowupPermissions
 } from '~/server/security'
 
-export const querySelect = {
+export const select = {
   id: true,
   status: true,
   date: true,
@@ -73,7 +73,7 @@ export async function getPage(
 ) {
   const followups = await FollowupRepo.findMany(user, {
     where: args.where,
-    select: querySelect,
+    select,
     take: args.take,
     skip: args.skip,
     orderBy: args.orderBy
@@ -95,7 +95,7 @@ export async function getPage(
 export async function getOne(user: SecurityRuleGrantee, id: string) {
   const followup = await FollowupRepo.findUniqueOrThrow(user, {
     where: { id },
-    select: querySelect
+    select
   })
   const permissions = getFollowupPermissions({
     user,

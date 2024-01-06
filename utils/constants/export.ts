@@ -1,4 +1,4 @@
-import { beneficiaryFieldLabels, helpRequestFieldLabels } from '~/client/labels'
+import { helpRequestFieldLabels } from '~/client/labels'
 
 export const EXPORT_DEFAULT_FONT = {
   name: 'Calibri',
@@ -35,62 +35,4 @@ export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)
     'createdById'
   ]
 
-export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[] =
-  [
-    'usualName',
-    'birthName',
-    'firstName',
-    'birthDate',
-    'status',
-    'deathDate',
-    'gender',
-    'nationality',
-    'caregiver',
-    'accommodationMode',
-    'accommodationName',
-    'accommodationAdditionalInformation',
-    'street',
-    'addressComplement',
-    'zipcode',
-    'city',
-    'region',
-    'department',
-    'accommodationZone',
-    'phone1',
-    'phone2',
-    'email',
-    'mobility',
-    'familySituation',
-    'minorChildren',
-    'majorChildren',
-    'taxHouseholds',
-    'ministereCategorie',
-    'ministereDepartementServiceAc',
-    'ministereStructure',
-    'socioProfessionalCategory',
-    'occupation',
-    'employer',
-    'employerSiret',
-    'mainIncomeSource',
-    'mainIncomeAmount',
-    'partnerMainIncomeSource',
-    'partnerMainIncomeAmount',
-    'majorChildrenMainIncomeSource',
-    'majorChildrenMainIncomeAmount',
-    'unemploymentNumber',
-    'pensionOrganisations',
-    'otherPensionOrganisations',
-    'cafNumber',
-    'bank',
-    'funeralContract',
-    'additionalInformation',
-    'numeroPegase',
-    'entourages',
-    'documents',
-    'historyTotal',
-    'types',
-    'referents',
-    'aidantConnectAuthorized',
-    'updated',
-    'fileNumber'
-  ]
+

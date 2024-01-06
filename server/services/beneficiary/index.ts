@@ -1,17 +1,21 @@
-import { Prisma } from '@prisma/client'
 import { create } from './create.service'
-import { getBeneficiarySecurityTarget } from './getSecurityTarget.service'
-import { findBeneficiaries, findBeneficiary } from './find.service'
+import { get } from './get.service'
+import { getPage } from './getPage.service'
+import { getPageDocuments } from './getPageDocuments.service'
 import { updateTaxHousehold } from './updateTaxHousehold.service'
+import { exportBeneficiaries } from './export.service'
+import { search } from './search.service'
+import { getCreatePermission, getUpdatePermission } from './permission.service'
 
 export const BeneficiaryService = {
   create,
-  getBeneficiarySecurityTarget,
-  findBeneficiary,
-  findBeneficiaries,
-  updateTaxHousehold
+  getCreatePermission,
+  getUpdatePermission,
+  get,
+  getPage,
+  getPageDocuments,
+  updateTaxHousehold,
+  exportBeneficiaries,
+  search
 }
 
-export type BeneficiarySecurityTarget = Prisma.PromiseReturnType<
-  typeof getBeneficiarySecurityTarget
->

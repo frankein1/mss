@@ -295,7 +295,7 @@ const isHelpRequestCreatable = (
     'Instructor'
   ]) || isReferentFor(grantee, beneficiary)
 
-export const canListDocuments = (
+const canListDocuments = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>

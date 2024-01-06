@@ -1,6 +1,6 @@
 import { RouterOutput } from '~/server/trpc/routers'
 
-type GetBeneficiariesOutput = RouterOutput['beneficiary']['getBeneficiaries']
+type BeneficiaryPage = RouterOutput['beneficiary']['getPage']
 
-export type GetBeneficiaries = GetBeneficiariesOutput['beneficiaries']
-export type BeneficiaryItem = GetBeneficiaries[0]
+export type BeneficiaryPageItems = BeneficiaryPage['items']
+export type BeneficiaryPageItem = BeneficiaryPageItems[0]
