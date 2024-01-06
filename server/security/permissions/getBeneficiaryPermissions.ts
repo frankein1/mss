@@ -22,6 +22,7 @@ export type BeneficiaryPermissions = {
     occupationIncome: boolean
     externalOrganisations: boolean
     documents: boolean
+    history: boolean
   }
   get: {
     accommodationZone: boolean
@@ -85,7 +86,8 @@ function getCreatePermissions({ ctx }: { ctx: SecurityRuleContext }) {
       health: false,
       occupationIncome: false,
       externalOrganisations: false,
-      documents: false
+      documents: false,
+      history: false
     },
     get: {
       accommodationZone: isMinistryAgent,
@@ -164,7 +166,8 @@ function getEditPermissions({
       health: viewOrEditHealth,
       occupationIncome: viewOrEditOccupationIncome,
       externalOrganisations: viewOrEditExtOrganisations,
-      documents: canListDocuments(user, beneficiary)
+      documents: canListDocuments(user, beneficiary),
+      history: accessHistory(user, beneficiary)
     },
     create: {
       helpRequest: isHelpRequestCreatable(user, beneficiary),
@@ -295,7 +298,18 @@ const isHelpRequestCreatable = (
     'Instructor'
   ]) || isReferentFor(grantee, beneficiary)
 
-export const canListDocuments = (
+const canListDocuments = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) || isReferentFor(grantee, beneficiary)
+
+const accessHistory = (
   grantee: SecurityRuleGrantee,
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 ): boolean =>

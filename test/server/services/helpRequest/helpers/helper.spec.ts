@@ -9,7 +9,7 @@ import {
 import {
   prepareHelpRequestCreateData,
   prepareHelpRequestUpdateData
-} from '~/server/services/helpRequest/helpers'
+} from '~/server/services/helpRequest/helper'
 import { NEW_OPTION_PREFIX } from '~/utils/options'
 
 describe('prepareHelpRequestCreateData', () => {
