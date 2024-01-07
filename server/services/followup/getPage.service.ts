@@ -1,11 +1,11 @@
-import { getPage } from './queries'
+import { getPage as getPageFn } from './queries'
 import { prepareFollowupFilters } from './helper'
 import { FollowupRepo } from '~/server/database'
 import { GetFollowupsInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
 
-export async function page({
+export async function getPage({
   input,
   ctx
 }: {
@@ -21,7 +21,7 @@ export async function page({
   const where = prepareFollowupFilters(input.filters)
 
   const [items, count] = await Promise.all([
-    getPage(user, { where, take, skip, orderBy: input.orderBy }),
+    getPageFn(user, { where, take, skip, orderBy: input.orderBy }),
     FollowupRepo.count(user, {
       where
     })

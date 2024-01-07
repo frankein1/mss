@@ -1,4 +1,4 @@
-import { prepareHelpRequestUpdateData } from './helpers'
+import { prepareHelpRequestUpdateData } from './helper'
 import { HelpRequestRepo } from '~/server/database'
 import { markFollowupTypeAsUsed } from '~/server/query'
 import { getHelpRequestWithRelations } from '~/server/query/helpRequests'

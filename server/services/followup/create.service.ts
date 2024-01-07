@@ -9,7 +9,7 @@ import {
   prepareDateFields
 } from '~/utils/prisma'
 import { markFollowupTypeAsUsed } from '~/server/query'
-import { prepareNewHistoryElementNotification } from '~/utils/notification'
+import { prepareNewHistoryElementNotification } from '~/server/services/helper'
 
 type CreateParams = {
   ctx: SecurityRuleContext

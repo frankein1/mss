@@ -1,9 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import {
-  SecurityRuleContext,
-  getBeneficiaryPermissions
-} from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   UpdateBeneficiaryTaxHouseholdInput,
@@ -15,14 +12,10 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryTaxHouseholdInput
 ) => {
-  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
-    ctx.user,
+  const permissions = await BeneficiaryService.getUpdatePermission(
+    ctx,
     input.id
   )
-  const permissions = getBeneficiaryPermissions({
-    ctx,
-    beneficiary: target
-  })
   return permissions.edit.relatives
 }
 
