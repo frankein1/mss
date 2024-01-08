@@ -27,7 +27,7 @@ export const ministryHelpRequestStatusLabels: {
 
 export const externalOrganisationOptions = new Map([
   ['false', 'En interne'],
-  ['true', 'Par une organisation extérieure']
+  ['true', 'En externe']
 ])
 
 export const paymentMethodLabels: { [key in PaymentMethod]: string } = {
