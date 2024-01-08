@@ -445,6 +445,49 @@ model HelpRequest {
   @@map("help_request")
 }
 
+enum AskedHousing {
+  // Parc Social
+  ParcSocial
+  // Parc privé
+  ParcPrive
+  // Hébergement temporaire
+  HebergementTemporaire
+}
+
+enum HousingReason {
+  // Violences
+  Violences
+  // Divorce ou séparation
+  DivorceSeparation
+  // Rapprochement familial
+  RapprochementFamilial
+  // Mutation
+  Mutation
+  // Expulsion
+  Expulsion
+  // Logement insalubre
+  LogementInsalubre
+  // Logement non décent
+  LogementNonDecent
+  // Logement repris ou mis en vente
+  LogementReprisVente
+  // Logement inadapté
+  LogementInadapte
+  // Logement trop cher
+  LogementTropCher
+  // Logement bientôt démoli
+  LogementBientotDemoli
+  // Localisation du logement
+  Localisation
+  // Sans logement ou logement temporaire
+  SansLogementOuTemporaire
+}
+
+enum HousingType {
+  Maison
+  Appartement
+}
+
 model HousingHelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
@@ -489,6 +532,18 @@ model HousingHelpRequest {
   ministre      Minister?
   numeroPegase  String?        @map("numero_pegase")
   notifications Notification[]
+
+  isFirst                           Boolean        @map("is_first")
+  firstOpeningDate                  DateTime?      @map("first_opening_date") @db.Date
+  askedHousing                      AskedHousing?  @map("asked_housing")
+  reason                            HousingReason?
+  uniqueId                          String?        @map("unique_id")
+  taxHouseholdAdditionalInformation String?        @map("tax_household_additional_information")
+  maxRent                           Decimal?       @map("max_rent")
+  maxCharges                        Decimal?       @map("max_charges")
+  housingType                       HousingType?   @map("housing_type")
+  roomCount                         Decimal?       @map("room_count")
+  isPmr                             Boolean?       @map("is_pmr")
 
   @@map("housing_help_request")
 }
