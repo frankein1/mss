@@ -285,6 +285,8 @@ model SocialSupport {
   housingHelpRequestId String?             @map("housing_help_request_id") @db.Uuid
   housingHelpRequest   HousingHelpRequest? @relation(fields: [housingHelpRequestId], references: [id])
 
+  // TODO: Rajouter les champs du tableau Accompagnements > Instructions de dossier
+
   @@map("social_support")
 }
 
