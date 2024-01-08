@@ -64,10 +64,22 @@
     route.params.subject as string
   ) as HelpRequestSubject
   const isFinancial = subject === HelpRequestSubject.Financial
-  const subtitle = isFinancial ? 'Aide financière' : undefined
-  const subtitlePictoPath = isFinancial
-    ? helpRequestSubjectPictos[subject]
-    : undefined
+  const isHousing = subject === HelpRequestSubject.Housing
+
+  const getSubtitle = () => {
+    if (isFinancial) {
+      return 'Aide financière'
+    }
+    if (isHousing) {
+      return 'Demande de logement'
+    }
+    return undefined
+  }
+
+  const subtitle = getSubtitle()
+
+  const subtitlePictoPath =
+    isFinancial || isHousing ? helpRequestSubjectPictos[subject] : undefined
 
   const { data: beneficiary, error: beneficiaryError } =
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({

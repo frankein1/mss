@@ -8,6 +8,8 @@
       icon="fr-icon-questionnaire-fill"
       icon-color-class="color-purple-glycine"
       icon-background-class="bg-purple-glycine"
+      :subtitle="subtitle"
+      :subtitle-picto-path="subtitlePictoPath"
     >
       <RequiredFields />
     </PageTitle>
@@ -44,10 +46,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { HelpRequestSubject } from '@prisma/client'
   import { EditHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -118,6 +122,25 @@
     }
     return ''
   })
+
+  const subject = computed(() => helpRequest.value?.data.subject)
+
+  const subtitle = computed(() => {
+    if (subject.value === HelpRequestSubject.Financial) {
+      return 'Aide financière'
+    }
+    if (subject.value === HelpRequestSubject.Housing) {
+      return 'Demande de logement'
+    }
+    return undefined
+  })
+
+  const subtitlePictoPath = computed(() =>
+    subject.value === HelpRequestSubject.Financial ||
+    subject.value === HelpRequestSubject.Housing
+      ? helpRequestSubjectPictos[subject.value]
+      : undefined
+  )
 
   function onUpdateHelpRequest(helpRequest: EditHelpRequestInput) {
     useTrpcMutation({
