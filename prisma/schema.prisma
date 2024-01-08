@@ -61,14 +61,15 @@ model User {
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  structure                  Structure?     @relation(fields: [structureId], references: [id])
-  structureId                String?        @map("structure_id") @db.Uuid
-  createdFollowups           Followup[]     @relation(name: "created_followups")
-  createdHelpRequests        HelpRequest[]  @relation(name: "created_help_requests")
+  structure                  Structure?           @relation(fields: [structureId], references: [id])
+  structureId                String?              @map("structure_id") @db.Uuid
+  createdFollowups           Followup[]           @relation(name: "created_followups")
+  createdHelpRequests        HelpRequest[]        @relation(name: "created_help_requests")
+  createdHousingHelpRequests HousingHelpRequest[] @relation(name: "created_housing_help_requests")
   createdDocuments           Document[]
   createdFollowupTypes       FollowupType[]
-  receivedNotifications      Notification[] @relation(name: "received_notifications")
-  itemCreatedByNotifications Notification[] @relation(name: "item_created_by_notifications")
+  receivedNotifications      Notification[]       @relation(name: "received_notifications")
+  itemCreatedByNotifications Notification[]       @relation(name: "item_created_by_notifications")
 
   createdBeneficiaries  Beneficiary[] @relation(name: "created_beneficiaries")
   archivedBeneficiaries Beneficiary[] @relation(name: "archived_beneficiaries")
@@ -109,6 +110,7 @@ model Structure {
   followupTypes            FollowupType[]
   users                    User[]
   helpRequests             HelpRequest[]
+  housingHelpRequests      HousingHelpRequest[]
   followups                Followup[]
   prescribingOrganizations PrescribingOrganization[]
 
@@ -147,12 +149,13 @@ model Document {
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
-  created       DateTime?      @default(now())
-  createdBy     User           @relation(fields: [createdById], references: [id])
-  createdById   String         @map("created_by_id") @db.Uuid
-  followups     Followup[]     @relation("document_to_followup")
-  helpRequests  HelpRequest[]  @relation("document_to_help_request")
-  notifications Notification[]
+  created             DateTime?            @default(now())
+  createdBy           User                 @relation(fields: [createdById], references: [id])
+  createdById         String               @map("created_by_id") @db.Uuid
+  followups           Followup[]           @relation("document_to_followup")
+  helpRequests        HelpRequest[]        @relation("document_to_help_request")
+  housingHelpRequests HousingHelpRequest[] @relation("document_to_housing_help_request")
+  notifications       Notification[]
 
   @@map("document")
 }
@@ -442,6 +445,54 @@ model HelpRequest {
   subject HelpRequestSubject
 
   @@map("help_request")
+}
+
+model HousingHelpRequest {
+  id String @id @default(uuid()) @db.Uuid
+
+  structure   Structure @relation(fields: [structureId], references: [id])
+  structureId String    @map("structure_id") @db.Uuid
+
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  beneficiaryId String      @map("beneficiary_id") @db.Uuid
+
+  createdById String @map("created_by_id") @db.Uuid
+  createdBy   User   @relation(name: "created_housing_help_requests", fields: [createdById], references: [id])
+
+  instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
+  instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
+
+  openingDate DateTime @default(now()) @map("opening_date") @db.Date
+
+  documents Document[] @relation("document_to_housing_help_request")
+
+  externalStructure Boolean?          @map("external_structure")
+  status            HelpRequestStatus
+
+  examinationDate DateTime? @map("examination_date") @db.Date
+  decisionDate    DateTime? @map("decision_date") @db.Date
+
+  refusalReason HelpRequestRefusalReason? @map("refusal_reason")
+  dispatchDate  DateTime?                 @map("dispatch_date") @db.Date
+
+  synthesis String?
+
+  privateSynthesis String? @map("private_synthesis")
+
+  dueDate DateTime? @map("due_date") @db.Date
+
+  fullFile Boolean? @map("full_file")
+
+  comments Comment[]
+
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
+
+  ministre      Minister?
+  numeroPegase  String?        @map("numero_pegase")
+  notifications Notification[]
+
+  @@map("housing_help_request")
 }
 
 enum BeneficiaryStatus {
@@ -1305,6 +1356,7 @@ model Beneficiary {
   linkedRelatives      BeneficiaryRelative[] @relation("linkedBeneficiary")
   notifications        Notification[]
   beneficiaryHistories BeneficiaryHistory[]
+  housingHelpRequest   HousingHelpRequest[]
 
   @@map("beneficiary")
 }
@@ -1380,6 +1432,9 @@ model Comment {
   followup   Followup? @relation(fields: [followupId], references: [id], onDelete: Cascade)
   followupId String?   @map("followup_id") @db.Uuid
 
+  housingHelpRequest   HousingHelpRequest? @relation(fields: [housingHelpRequestId], references: [id])
+  housingHelpRequestId String?             @db.Uuid
+
   notification Notification[]
 
   @@map("comment")
@@ -1421,6 +1476,7 @@ model InstructorOrganization {
   structure            Structure?           @relation(fields: [structureId], references: [id])
   structureId          String?              @map("structure_id") @db.Uuid
   helpRequests         HelpRequest[]
+  housingHelpRequests  HousingHelpRequest[]
   beneficiaryHistories BeneficiaryHistory[]
 
   @@map("instructor_organization")
@@ -1451,6 +1507,9 @@ model Notification {
 
   followup   Followup? @relation(fields: [followupId], references: [id], onDelete: Cascade)
   followupId String?   @map("followup_id") @db.Uuid
+
+  housingHelpRequest   HousingHelpRequest? @relation(fields: [housingHelpRequestId], references: [id])
+  housingHelpRequestId String?             @db.Uuid
 
   itemCreatedBy   User?   @relation("item_created_by_notifications", fields: [itemCreatedById], references: [id])
   itemCreatedById String? @map("item_created_by_id") @db.Uuid
