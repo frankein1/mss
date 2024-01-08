@@ -357,8 +357,6 @@ enum HelpRequestReason {
 }
 
 enum HelpRequestSubject {
-  // Demande de logement
-  Housing
   // Aide financière
   Financial
   // Autre
