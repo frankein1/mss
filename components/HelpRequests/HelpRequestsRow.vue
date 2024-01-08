@@ -10,8 +10,8 @@
     >
       <td>
         <HelpRequestsStatusForm
-          v-if="props.helpRequest.permissions"
-          :help-request="helpRequest"
+          v-if="permissions"
+          :item="item"
           @click.stop
           @updated="emit('updated', $event)"
         />
@@ -24,7 +24,7 @@
         </span>
       </td>
       <td>{{ helpRequest.type.name }}</td>
-      <td v-if="generalPermissions?.get.anyDueDate">
+      <td v-if="application.helpRequest.get.anyDueDate">
         <template v-if="helpRequest.dueDate">
           {{ formatDate(helpRequest.dueDate) }}
         </template>
@@ -32,23 +32,23 @@
       <td>
         {{ formatBeneficiaryDisplayName(helpRequest.beneficiary) }}
       </td>
-      <td v-if="generalPermissions?.get.anyInstructorOrganization">
+      <td v-if="application.helpRequest.get.anyInstructorOrganization">
         {{ instructorOrganization }}
       </td>
-      <td v-if="generalPermissions?.get.anyExaminationDate">
+      <td v-if="application.helpRequest.get.anyExaminationDate">
         <template v-if="helpRequest.examinationDate">
           {{ formatDate(helpRequest.examinationDate) }}
         </template>
       </td>
-      <td v-if="generalPermissions?.get.anyAskedAmount">
+      <td v-if="application.helpRequest.get.anyAskedAmount">
         <template v-if="helpRequest.askedAmount">
           {{ euros(helpRequest.askedAmount) }}
         </template>
       </td>
-      <td v-if="generalPermissions?.get.anyAllocatedAmount">
+      <td v-if="application.helpRequest.get.anyAllocatedAmount">
         <HelpRequestsAllocatedAmountForm
           v-if="canEditAllocatedAmount"
-          :help-request="helpRequest"
+          :item="item"
           @click.stop
           @updated="emit('updated', $event)"
         />
@@ -56,10 +56,10 @@
           {{ euros(helpRequest.allocatedAmount) }}
         </template>
       </td>
-      <td v-if="generalPermissions?.get.anyPaymentMethod">
+      <td v-if="application.helpRequest.get.anyPaymentMethod">
         <HelpRequestsPaymentMethodForm
           v-if="canEditPaymentMethod"
-          :help-request="helpRequest"
+          :item="item"
           @click.stop
           @updated="emit('updated', $event)"
         />
@@ -67,10 +67,10 @@
           {{ paymentMethodOptions.get(helpRequest.paymentMethod) }}
         </template>
       </td>
-      <td v-if="generalPermissions?.get.anyPaymentDate">
+      <td v-if="application.helpRequest.get.anyPaymentDate">
         <HelpRequestsPaymentDateForm
           v-if="canEditPaymentDate"
-          :help-request="helpRequest"
+          :item="item"
           @click.stop
           @updated="emit('updated', $event)"
         />
@@ -78,7 +78,7 @@
           {{ formatDate(helpRequest.paymentDate) }}
         </template>
       </td>
-      <td v-if="generalPermissions?.get.anyHandlingDate">
+      <td v-if="application.helpRequest.get.anyHandlingDate">
         <template v-if="helpRequest.handlingDate">{{
           formatDate(helpRequest.handlingDate)
         }}</template>
@@ -95,7 +95,7 @@
 
 <script lang="ts" setup>
   import { HelpRequestSubject, HelpRequestStatus } from '@prisma/client'
-  import { HelpRequestItem } from './types'
+  import { HelpRequestPageItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { paymentMethodOptions } from '~/client/options/helpRequest'
@@ -106,60 +106,62 @@
   import { formatDate } from '~/utils/formatDate'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
-  import { HelpRequestPermissions } from '~/server/security'
 
   const props = defineProps<{
-    helpRequest: HelpRequestItem
-    generalPermissions: HelpRequestPermissions | null
+    item: HelpRequestPageItem
   }>()
 
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const emit = defineEmits<{
-    updated: [helpRequest: HelpRequestItem]
+    updated: [item: HelpRequestPageItem]
   }>()
 
+  const helpRequest = computed(() => props.item.helpRequest)
+  const permissions = computed(() => props.item.permissions)
+  const { application } = usePermissions()
+
   const helpRequestPath = computed(() =>
-    RoutePath.AppBeneficiary(props.helpRequest.beneficiary.id, {
+    RoutePath.AppBeneficiary(helpRequest.value.beneficiary.id, {
       tab: BeneficiaryTab.History,
-      item: props.helpRequest.id,
+      item: helpRequest.value.id,
       originPage: Route.AppHistory,
       originTab: HistoryTab.HelpRequests
     })
   )
 
   const instructorOrganization = computed(() =>
-    props.helpRequest.externalStructure
-      ? props.helpRequest.instructorOrganization?.name || ''
+    helpRequest.value.externalStructure
+      ? helpRequest.value.instructorOrganization?.name || ''
       : 'Interne'
   )
 
   const isFinancialSupport = computed(
-    () => props.helpRequest.subject === HelpRequestSubject.Financial
+    () => helpRequest.value.subject === HelpRequestSubject.Financial
   )
 
-  const isExternalSupport = computed(() => props.helpRequest.externalStructure)
+  const isExternalSupport = computed(() => helpRequest.value.externalStructure)
 
   const canEditAllocatedAmount = computed(
     () =>
-      props.helpRequest.permissions.edit &&
+      props.item.permissions.edit &&
       isFinancialSupport.value &&
-      props.helpRequest.status === HelpRequestStatus.Accepted
+      helpRequest.value.status === HelpRequestStatus.Accepted
   )
 
   const canEditPaymentMethod = computed(
     () =>
-      props.helpRequest.permissions.edit &&
+      props.item.permissions.edit &&
       isFinancialSupport.value &&
-      props.helpRequest.status === HelpRequestStatus.Accepted &&
+      helpRequest.value.status === HelpRequestStatus.Accepted &&
       !isExternalSupport.value
   )
 
   const canEditPaymentDate = computed(
     () =>
-      props.helpRequest.permissions.edit &&
+      props.item.permissions.edit &&
       isFinancialSupport.value &&
-      props.helpRequest.status === HelpRequestStatus.Accepted &&
+      helpRequest.value.status === HelpRequestStatus.Accepted &&
       !isExternalSupport.value
   )
 </script>

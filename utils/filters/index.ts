@@ -1,6 +1,5 @@
 export {
   prepareBeneficiaryStatFilters,
-  prepareHelpRequestStatFilters,
-  prepareFollowupStatFilters
+  prepareFollowupStatFilters,
+  prepareHelpRequestStatFilters
 } from './prepareStatFilters'
-export { prepareHelpRequestFilters } from './prepareHelpRequestFilters'

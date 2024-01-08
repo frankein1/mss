@@ -70,8 +70,7 @@
     queryKey: 'config.getStructureFollowupTypes.options'
   })
 
-  const { data: permissions } =
-    await useTrpcClient().permissions.getHelpRequestPermissions.useQuery()
+  const { application } = usePermissions()
 
   const {
     data: examinationDateOptions,
@@ -148,7 +147,7 @@
       }
     ]
 
-    if (permissions.value?.get.anyExaminationDate) {
+    if (application.value.helpRequest.get.anyExaminationDate) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -206,7 +205,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!permissions.value?.get.anyExaminationDate) {
+    if (!application.value.helpRequest.get.anyExaminationDate) {
       return new Map()
     }
 

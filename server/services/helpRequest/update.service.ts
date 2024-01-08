@@ -1,7 +1,6 @@
 import { prepareHelpRequestUpdateData } from './helper'
 import { HelpRequestRepo } from '~/server/database'
 import { markFollowupTypeAsUsed } from '~/server/query'
-import { getHelpRequestWithRelations } from '~/server/query/helpRequests'
 import { EditHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 
@@ -11,7 +10,14 @@ type UpdateParams = {
 }
 
 export async function update({ input, ctx }: UpdateParams) {
-  const target = await getHelpRequestWithRelations(ctx.user, input.id)
+  const target = await HelpRequestRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: input.id },
+    select: {
+      instructorOrganizationId: true,
+      subject: true,
+      documents: true
+    }
+  })
 
   const data = prepareHelpRequestUpdateData(input, ctx, target)
 

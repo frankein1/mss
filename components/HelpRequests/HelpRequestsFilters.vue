@@ -25,7 +25,6 @@
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
-  import { HelpRequestPermissions } from '~/server/security'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options/ministry'
@@ -38,11 +37,11 @@
   const filtersState = useFilters()
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
-  const props = defineProps<{ permissions: HelpRequestPermissions | null }>()
-
   const emit = defineEmits<{
     filter: [filters: HelpRequestFilterInput]
   }>()
+
+  const { application } = usePermissions()
 
   const {
     data: agentOptions,
@@ -119,7 +118,7 @@
       }
     ]
 
-    if (props.permissions?.get.anyExaminationDate) {
+    if (application.value.helpRequest.get.anyExaminationDate) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -191,7 +190,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!props.permissions?.get.anyExaminationDate) {
+    if (!application.value.helpRequest.get.anyExaminationDate) {
       return new Map()
     }
 

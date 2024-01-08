@@ -38,9 +38,6 @@ export type AppRouter = typeof appRouter
 export type RouterOutput = inferRouterOutputs<AppRouter>
 export type ErrorOutput = TRPCClientError<AppRouter>
 
-export type GetHelpRequestDetailsOutput =
-  RouterOutput['helpRequest']['getHelpRequestDetails']
-
 export type GetExaminationDatesConfigOutput =
   RouterOutput['config']['getExaminationDates']
 

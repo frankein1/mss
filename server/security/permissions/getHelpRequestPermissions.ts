@@ -6,12 +6,7 @@ import {
   SecurityTargetWithCreator,
   SecurityRuleContext
 } from '../rules'
-import {
-  isInSameStructureAs,
-  isReferentFor,
-  isCreator,
-  hasAllowedRole
-} from '../rules/helpers'
+import { isInSameStructureAs, isReferentFor, isCreator } from '../rules/helpers'
 
 export type HelpRequestPermissions = {
   edit: boolean
@@ -21,14 +16,6 @@ export type HelpRequestPermissions = {
     numeroPegase: boolean
     ministre: boolean
     privateSynthesis: boolean
-    anyDueDate: boolean
-    anyAllocatedAmount: boolean
-    anyPaymentMethod: boolean
-    anyPaymentDate: boolean
-    anyHandlingDate: boolean
-    anyInstructorOrganization: boolean
-    anyExaminationDate: boolean
-    anyAskedAmount: boolean
   }
   set: {
     numeroPegase: boolean
@@ -40,30 +27,32 @@ export type HelpRequestPermissions = {
 
 export const getHelpRequestPermissions = ({
   ctx,
-  target
+  beneficiary,
+  helpRequest
 }: {
   ctx: SecurityRuleContext
-  target?: SecurityTargetWithCreator &
-    SecurityTargetWithStructure & {
-      beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-    }
+  beneficiary?: SecurityTargetWithStructure & SecurityTargetWithReferents
+  helpRequest?: SecurityTargetWithCreator & SecurityTargetWithStructure
 }) => {
-  const { user, structure } = ctx
   let permissions: HelpRequestPermissions
-  if (!target) {
-    permissions = getCreatePermissions({ structure })
+  if (!helpRequest && !beneficiary) {
+    permissions = getCreatePermissions({ ctx })
+  }
+  if (!helpRequest || !beneficiary) {
+    throw new Error('help and beneficiary required')
   } else {
-    permissions = getEditPermissions({ user, target, structure })
+    permissions = getEditPermissions({ ctx, beneficiary, helpRequest })
   }
 
   return permissions
 }
 
 function getCreatePermissions({
-  structure
+  ctx
 }: {
-  structure: { type: StructureType }
+  ctx: SecurityRuleContext
 }): HelpRequestPermissions {
+  const { structure } = ctx
   const isMinistryAgent = structure.type === StructureType.Ministere
   return {
     edit: true,
@@ -72,15 +61,7 @@ function getCreatePermissions({
       details: true,
       numeroPegase: isMinistryAgent,
       ministre: isMinistryAgent,
-      privateSynthesis: true,
-      anyDueDate: true,
-      anyAllocatedAmount: true,
-      anyPaymentMethod: true,
-      anyPaymentDate: true,
-      anyHandlingDate: true,
-      anyInstructorOrganization: true,
-      anyExaminationDate: true,
-      anyAskedAmount: true
+      privateSynthesis: true
     },
     set: {
       numeroPegase: isMinistryAgent,
@@ -92,42 +73,32 @@ function getCreatePermissions({
 }
 
 function getEditPermissions({
-  user,
-  target,
-  structure
+  ctx,
+  beneficiary,
+  helpRequest
 }: {
-  user: SecurityRuleGrantee
-  target: SecurityTargetWithCreator &
-    SecurityTargetWithStructure & {
-      beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-    }
-  structure: { type: StructureType }
+  ctx: SecurityRuleContext
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
 }): HelpRequestPermissions {
+  const { user, structure } = ctx
   const isMinistryAgent = structure.type === StructureType.Ministere
-  const getAnyDataOfAny = accessAnyDataOfAny(user)
+
   return {
-    edit: isEditable(user, target),
-    view: access(user, target.beneficiary),
+    edit: isEditable(user, helpRequest),
+    view: access(user, beneficiary),
     get: {
-      details: accessDetails(user, target.beneficiary),
+      details: accessDetails(user, beneficiary),
       numeroPegase: isMinistryAgent,
       ministre: isMinistryAgent,
-      privateSynthesis: accessPrivateSynthesis(user, target),
-      anyDueDate: getAnyDataOfAny,
-      anyAllocatedAmount: getAnyDataOfAny,
-      anyPaymentMethod: getAnyDataOfAny,
-      anyPaymentDate: getAnyDataOfAny,
-      anyHandlingDate: getAnyDataOfAny,
-      anyInstructorOrganization: getAnyDataOfAny,
-      anyExaminationDate: getAnyDataOfAny,
-      anyAskedAmount: getAnyDataOfAny
+      privateSynthesis: accessPrivateSynthesis(user, helpRequest)
     },
     set: {
       numeroPegase: isMinistryAgent,
       ministre: isMinistryAgent,
-      privateSynthesis: isPrivateSynthesisEditable(user, target)
+      privateSynthesis: isPrivateSynthesisEditable(user, helpRequest)
     },
-    delete: isDeletable(user, target)
+    delete: isDeletable(user, helpRequest)
   }
 }
 
@@ -151,14 +122,6 @@ const accessDetails = (
     'SocialWorker',
     'Instructor'
   ]) || isReferentFor(grantee, beneficiary)
-
-const accessAnyDataOfAny = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
 
 const accessPrivateSynthesis = (
   grantee: SecurityRuleGrantee,

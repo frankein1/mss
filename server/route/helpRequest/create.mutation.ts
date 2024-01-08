@@ -33,7 +33,7 @@ const securityCheck = async (
   return permissions.create.helpRequest
 }
 
-export const createHelpRequestMutation = createMutation({
+export const create = createMutation({
   handler,
   inputValidation: createHelpRequestSchema,
   securityCheck,

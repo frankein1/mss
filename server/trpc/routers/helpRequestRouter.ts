@@ -1,34 +1,26 @@
-import {
-  createHelpRequestMutation,
-  deleteHelpRequestMutation,
-  exportHelpRequestQuery,
-  getHelpRequestDetailsQuery,
-  getHelpRequestsQuery,
-  quickUpdateHelpRequestMutation,
-  updateHelpRequestMutation
-} from '~/server/route/helpRequest'
+import { helpRequestRoutes as routes } from '~/server/route'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const helpRequestRouter = router({
   add: protectedProcedure
-    .input(createHelpRequestMutation.inputValidation)
-    .mutation(createHelpRequestMutation.execute),
-  getHelpRequests: protectedProcedure
-    .input(getHelpRequestsQuery.inputValidation)
-    .query(getHelpRequestsQuery.execute),
+    .input(routes.create.inputValidation)
+    .mutation(routes.create.execute),
+  getOne: protectedProcedure
+    .input(routes.getOne.inputValidation)
+    .query(routes.getOne.execute),
   exportHelpRequests: protectedProcedure
-    .input(exportHelpRequestQuery.inputValidation)
-    .query(exportHelpRequestQuery.execute),
-  getHelpRequestDetails: protectedProcedure
-    .input(getHelpRequestDetailsQuery.inputValidation)
-    .query(getHelpRequestDetailsQuery.execute),
+    .input(routes.exportHelpRequests.inputValidation)
+    .query(routes.exportHelpRequests.execute),
+  getPage: protectedProcedure
+    .input(routes.getPage.inputValidation)
+    .query(routes.getPage.execute),
   quickUpdate: protectedProcedure
-    .input(quickUpdateHelpRequestMutation.inputValidation)
-    .mutation(quickUpdateHelpRequestMutation.execute),
+    .input(routes.quickUpdate.inputValidation)
+    .mutation(routes.quickUpdate.execute),
   update: protectedProcedure
-    .input(updateHelpRequestMutation.inputValidation)
-    .mutation(updateHelpRequestMutation.execute),
+    .input(routes.update.inputValidation)
+    .mutation(routes.update.execute),
   delete: protectedProcedure
-    .input(deleteHelpRequestMutation.inputValidation)
-    .mutation(deleteHelpRequestMutation.execute)
+    .input(routes.remove.inputValidation)
+    .mutation(routes.remove.execute)
 })

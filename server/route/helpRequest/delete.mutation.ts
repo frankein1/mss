@@ -1,26 +1,10 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import {
-  SecurityRuleContext,
-  SecurityRuleGrantee,
-  getHelpRequestPermissions
-} from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { HelpRequestRepo } from '~/server/database'
-
-function getHelpRequest(user: SecurityRuleGrantee, id: string) {
-  return HelpRequestRepo.findUniqueOrThrow(user, {
-    where: { id },
-    include: {
-      beneficiary: {
-        include: {
-          referents: true
-        }
-      }
-    }
-  })
-}
+import { HelpRequestService } from '~/server/services'
 
 const handler = async ({
   input: { id }
@@ -32,12 +16,14 @@ const handler = async ({
 }
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
-  const target = await getHelpRequest(ctx.user, input.id)
-  const permissions = getHelpRequestPermissions({ ctx, target })
+  const permissions = await HelpRequestService.getUpdatePermission(
+    ctx,
+    input.id
+  )
   return permissions.delete
 }
 
-export const deleteHelpRequestMutation = createMutation({
+export const remove = createMutation({
   inputValidation: idSchema,
   securityCheck,
   handler,
