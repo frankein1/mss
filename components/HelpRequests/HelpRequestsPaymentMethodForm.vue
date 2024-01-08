@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestItem } from './types'
+  import { HelpRequestPageItem } from './types'
   import { paymentMethodOptions } from '~/client/options/helpRequest'
   import {
     QuickEditHelpRequestPaymentMethodInput,
@@ -27,18 +27,18 @@
   const snackbar = useSnackbar()
 
   const props = defineProps<{
-    helpRequest: HelpRequestItem
+    item: HelpRequestPageItem
   }>()
 
   const emit = defineEmits<{
-    updated: [helpRequest: HelpRequestItem]
+    updated: [item: HelpRequestPageItem]
   }>()
 
   const { handleSubmit } = useForm<QuickEditHelpRequestPaymentMethodInput>({
     validationSchema: toTypedSchema(quickEditHelpRequestPaymentMethodSchema),
     initialValues: {
-      id: props.helpRequest.id,
-      paymentMethod: props.helpRequest.paymentMethod
+      id: props.item.helpRequest.id,
+      paymentMethod: props.item.helpRequest.paymentMethod
     }
   })
 
@@ -46,11 +46,11 @@
     useTrpcMutation({
       mutation: () =>
         useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
-      onSuccess: updatedHelpRequest => {
+      onSuccess: item => {
         snackbar.success(
           "Le mode de paiment de l'instruction de dossier a été modifié."
         )
-        emit('updated', updatedHelpRequest)
+        emit('updated', item)
       },
       onFailure: () => {
         snackbar.error(

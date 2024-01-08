@@ -9,7 +9,6 @@
     <template v-else>
       <HelpRequestsFilters
         class="fr-px-5v"
-        :permissions="permissions"
         @filter="filters = $event"
       />
       <hr />
@@ -29,9 +28,8 @@
       <HelpRequestsTable
         v-show="!pending"
         v-model:sort="orderBy"
-        :help-requests="helpRequests"
+        :items="items"
         :pending="pending"
-        :permissions="permissions"
         @help-request-updated="onHelpRequestUpdated"
       />
       <AtomPagination
@@ -47,7 +45,6 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestItem } from './types'
   import { HelpRequestFilterInput } from '~/server/schema'
   import { HelpRequestSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
@@ -80,32 +77,20 @@
   }))
 
   const {
-    data: helpRequestsRequest,
+    data: pageData,
     pending,
-    error
-  } = await trpcClient.helpRequest.getHelpRequests.useQuery(queryInput)
+    error,
+    refresh
+  } = await trpcClient.helpRequest.getPage.useQuery(queryInput)
 
-  const { data: permissions } =
-    await trpcClient.permissions.getHelpRequestPermissions.useQuery()
+  const helpRequestsCount = computed(() => pageData.value?.count || 0)
 
-  const helpRequestsCount = computed(
-    () => helpRequestsRequest.value?.count || 0
-  )
+  const items = computed(() => pageData.value?.items || [])
 
-  const helpRequests = computed(
-    () => helpRequestsRequest.value?.helpRequests || []
-  )
+  const totalPages = computed(() => pageData.value?.totalPages || 0)
 
-  const totalPages = computed(() => helpRequestsRequest.value?.totalPages || 0)
-
-  function onHelpRequestUpdated(updatedHelpRequest: HelpRequestItem) {
-    if (!helpRequestsRequest.value) {
-      return
-    }
-    helpRequestsRequest.value.helpRequests =
-      helpRequestsRequest.value.helpRequests.map(h =>
-        h.id === updatedHelpRequest.id ? updatedHelpRequest : h
-      )
+  function onHelpRequestUpdated() {
+    refresh()
   }
 
   async function exportHelpRequests() {

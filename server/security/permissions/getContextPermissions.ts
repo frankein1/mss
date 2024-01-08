@@ -26,6 +26,18 @@ export type AppContextPermissions = {
     statsByReferent: boolean
     healthInfo: boolean
   }
+  helpRequest: {
+    get: {
+      anyDueDate: boolean
+      anyAllocatedAmount: boolean
+      anyPaymentMethod: boolean
+      anyPaymentDate: boolean
+      anyHandlingDate: boolean
+      anyInstructorOrganization: boolean
+      anyExaminationDate: boolean
+      anyAskedAmount: boolean
+    }
+  }
 }
 
 export function getAppContextPermissions({
@@ -61,6 +73,18 @@ function getAdminContextPermissions(): AppContextPermissions {
       stats: false,
       statsByReferent: false,
       healthInfo: false
+    },
+    helpRequest: {
+      get: {
+        anyDueDate: false,
+        anyAllocatedAmount: false,
+        anyPaymentMethod: false,
+        anyPaymentDate: false,
+        anyHandlingDate: false,
+        anyInstructorOrganization: false,
+        anyExaminationDate: false,
+        anyAskedAmount: false
+      }
     }
   }
 }
@@ -68,6 +92,7 @@ function getAdminContextPermissions(): AppContextPermissions {
 function getUserContextPermissions(
   ctx: SecurityRuleContext
 ): AppContextPermissions {
+  const getAnyDataOfAny = accessAnyDataOfAny(ctx.user)
   return {
     export: {
       history: canExportHistory(ctx.user),
@@ -87,9 +112,29 @@ function getUserContextPermissions(
       stats: canViewStats(ctx.user),
       statsByReferent: canViewStatsByReferent(ctx.user),
       healthInfo: canViewHealthInfo(ctx.structure.type)
+    },
+    helpRequest: {
+      get: {
+        anyDueDate: getAnyDataOfAny,
+        anyAllocatedAmount: getAnyDataOfAny,
+        anyPaymentMethod: getAnyDataOfAny,
+        anyPaymentDate: getAnyDataOfAny,
+        anyHandlingDate: getAnyDataOfAny,
+        anyInstructorOrganization: getAnyDataOfAny,
+        anyExaminationDate: getAnyDataOfAny,
+        anyAskedAmount: getAnyDataOfAny
+      }
     }
   }
 }
+
+const accessAnyDataOfAny = (grantee: SecurityRuleGrantee): boolean =>
+  hasAllowedRole(grantee, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'Referent'
+  ])
 
 const canViewHealthInfo = (structureType: StructureType): boolean => {
   return (

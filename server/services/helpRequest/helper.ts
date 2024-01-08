@@ -2,9 +2,15 @@ import {
   Prisma,
   HelpRequestStatus,
   HelpRequestSubject,
-  Beneficiary
+  Beneficiary,
+  HelpRequest,
+  Document
 } from '@prisma/client'
-import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
+import {
+  CreateHelpRequestInput,
+  EditHelpRequestInput,
+  HelpRequestFilterInput
+} from '~/server/schema'
 import {
   connect,
   prepareDateFields,
@@ -15,7 +21,6 @@ import {
   SecurityRuleGrantee
 } from '~/server/security'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
-import { HelpRequestWithRelations } from '~/server/query'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareNewHistoryElementNotification } from '~/server/services/helper'
 
@@ -190,20 +195,14 @@ export function prepareHelpRequestCreateData(
     )
   }
 }
-
 export function prepareHelpRequestUpdateData(
-  {
-    documents,
-    // Following fields are ignored in edition
-    id: _id,
-    isMinistry: _isMinistry,
-    beneficiaryId: _beneficiaryId,
-    instructorOrganizationId,
-    ...input
-  }: EditHelpRequestInput,
+  input: EditHelpRequestInput,
   ctx: SecurityRuleContext,
-  target: HelpRequestWithRelations
+  target: Pick<HelpRequest, 'subject' | 'instructorOrganizationId'> & {
+    documents: Document[]
+  }
 ): Prisma.HelpRequestUpdateInput {
+  const { documents, instructorOrganizationId } = input
   const data = prepareHelpRequestData(input, ctx, target.subject)
   return {
     ...data,
@@ -216,4 +215,41 @@ export function prepareHelpRequestUpdateData(
       target.instructorOrganizationId !== null
     )
   }
+}
+
+export function prepareHelpRequestFilters(filters: HelpRequestFilterInput) {
+  const formattedFilters: Prisma.HelpRequestWhereInput = {}
+
+  if (filters.status) {
+    formattedFilters.status = filters.status
+  }
+
+  if (filters.followupTypes) {
+    formattedFilters.type = { id: { in: filters.followupTypes } }
+  }
+
+  if (filters.examinationDate) {
+    formattedFilters.examinationDate = filters.examinationDate
+  }
+
+  if (filters.handlingDate !== undefined) {
+    formattedFilters.handlingDate =
+      filters.handlingDate === 'true' ? { not: null } : null
+  }
+
+  if (filters.externalStructure !== undefined) {
+    formattedFilters.externalStructure = filters.externalStructure === 'true'
+  }
+
+  if (filters.referents) {
+    formattedFilters.beneficiary = {
+      referents: { some: { id: { in: filters.referents } } }
+    }
+  }
+
+  if (filters.ministre) {
+    formattedFilters.ministre = { in: filters.ministre }
+  }
+
+  return formattedFilters
 }

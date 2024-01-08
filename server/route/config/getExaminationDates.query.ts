@@ -2,7 +2,7 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   SecurityRuleContext,
-  getHelpRequestPermissions
+  getAppContextPermissions
 } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
 import { HelpRequestRepo, HelpRequestConstraints } from '~/server/database'
@@ -43,8 +43,11 @@ const securityCheck = (
   ctx: SecurityRuleContext,
   _input: IdInput | undefined
 ) => {
-  const permissions = getHelpRequestPermissions({ ctx })
-  return permissions.get.anyExaminationDate
+  const permissions = getAppContextPermissions({
+    user: ctx.user,
+    structure: ctx.structure
+  })
+  return permissions.helpRequest.get.anyExaminationDate
 }
 
 export const getExaminationDatesQuery = createQuery({

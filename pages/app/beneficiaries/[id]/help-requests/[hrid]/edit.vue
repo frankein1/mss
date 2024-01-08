@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequestData)"
+      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest)"
     />
     <PageTitle
       :title="title"
@@ -27,14 +27,14 @@
       />
       <HelpRequestFormEdition
         v-else-if="
-          helpRequest &&
+          helpRequestData &&
           followupTypes &&
           prescribingOrganizations &&
           instructorOrganizations
         "
         :is-submitting="isSubmitting"
         :followup-types="followupTypes"
-        :help-request="helpRequest"
+        :data="helpRequestData"
         :prescribing-organizations="prescribingOrganizations"
         :instructor-organizations="instructorOrganizations"
         @save-help-request="onUpdateHelpRequest"
@@ -60,16 +60,16 @@
   const beneficiaryId = route.params.id as string
 
   const {
-    data: helpRequest,
+    data: helpRequestData,
     pending: helpRequestPending,
     error: helpRequestError
-  } = await trpcClient.helpRequest.getHelpRequestDetails.useQuery({
+  } = await trpcClient.helpRequest.getOne.useQuery({
     id: helpRequestId
   })
 
-  const helpRequestData = computed(() => helpRequest.value?.data || null)
+  const helpRequest = computed(() => helpRequestData.value?.helpRequest || null)
 
-  const beneficiary = computed(() => helpRequestData.value?.beneficiary || null)
+  const beneficiary = computed(() => helpRequest.value?.beneficiary || null)
 
   const title = computed(() =>
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)

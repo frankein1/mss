@@ -1,7 +1,7 @@
 import { RouterOutput } from '~/server/trpc/routers'
 
-export type GetHelpRequestsOutput =
-  RouterOutput['helpRequest']['getHelpRequests']
+type HelpRequestPage = RouterOutput['helpRequest']['getPage']
 
-export type HelpRequests = GetHelpRequestsOutput['helpRequests']
-export type HelpRequestItem = HelpRequests[0]
+export type HelpRequestPageItems = HelpRequestPage['items']
+export type HelpRequestPageItem = HelpRequestPageItems[0]
+export type HelpRequestPageItemData = HelpRequestPageItem['helpRequest']
