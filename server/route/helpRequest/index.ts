@@ -1,7 +1,17 @@
-export * from './create.mutation'
-export * from './delete.mutation'
-export * from './export.query'
-export * from './get-details.query'
-export * from './get-page.query'
-export * from './quick-update.mutation'
-export * from './update.mutation'
+import { create } from './create.mutation'
+import { remove } from './delete.mutation'
+import { exportHelpRequests } from './export.query'
+import { getOne } from './getOne.query'
+import { getPage } from './getPage.query'
+import { quickUpdate } from './quickUpdate.mutation'
+import { update } from './update.mutation'
+
+export const helpRequestRoutes = {
+  create,
+  remove,
+  exportHelpRequests,
+  getOne,
+  getPage,
+  quickUpdate,
+  update
+}

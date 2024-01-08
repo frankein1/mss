@@ -18,8 +18,8 @@
     PrescribingOrganization
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
+  import { HelpRequestPageItem } from './types'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
-  import { GetHelpRequestDetailsOutput } from '~/server/trpc/routers'
   import { prismaDecimalToNumber } from '~/utils/prisma'
 
   const isMinistryAgent = useAuthState().isMinistryAgent()
@@ -29,15 +29,15 @@
     followupTypes: FollowupType[]
     prescribingOrganizations: PrescribingOrganization[]
     instructorOrganizations: InstructorOrganization[]
-    helpRequest: GetHelpRequestDetailsOutput
+    data: HelpRequestPageItem
   }>()
 
   const emit = defineEmits<{
     saveHelpRequest: [helpRequest: EditHelpRequestInput]
   }>()
 
-  const helpRequestData = computed(() => props.helpRequest.data)
-  const permissions = computed(() => props.helpRequest.permissions)
+  const helpRequestData = computed(() => props.data.helpRequest)
+  const permissions = computed(() => props.data.permissions)
 
   const initialDocumentIds = computed(
     () => helpRequestData.value.documents?.map(d => d.key) || []

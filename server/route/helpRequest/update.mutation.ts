@@ -4,10 +4,8 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
 import {
   SecurityRuleContext,
-  getAppContextPermissions,
-  getHelpRequestPermissions
+  getAppContextPermissions
 } from '~/server/security'
-import { getHelpRequestSecurityTarget } from '~/server/query'
 import { isNewOption } from '~/utils/options'
 import { HelpRequestService } from '~/server/services'
 
@@ -25,8 +23,10 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: EditHelpRequestInput
 ) => {
-  const target = await getHelpRequestSecurityTarget(ctx.user, input.id)
-  const permissions = getHelpRequestPermissions({ ctx, target })
+  const permissions = await HelpRequestService.getUpdatePermission(
+    ctx,
+    input.id
+  )
   if (!permissions.edit) {
     return false
   }
@@ -63,7 +63,7 @@ const securityCheck = async (
   return true
 }
 
-export const updateHelpRequestMutation = createMutation({
+export const update = createMutation({
   securityCheck,
   inputValidation: editHelpRequestSchema,
   handler,

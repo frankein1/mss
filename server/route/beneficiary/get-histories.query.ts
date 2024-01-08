@@ -192,7 +192,8 @@ function flattenHistories(
         })
       : getHelpRequestPermissions({
           ctx,
-          target: data
+          beneficiary: data.beneficiary,
+          helpRequest: data
         })
 
     return {

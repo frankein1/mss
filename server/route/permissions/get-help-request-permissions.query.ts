@@ -3,7 +3,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema, idSchema, IdInput } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { getHelpRequestPermissions } from '~/server/security'
-import { getHelpRequestSecurityTarget } from '~/server/query'
+import { HelpRequestService } from '~/server/services'
 
 const handler = async ({
   ctx,
@@ -16,9 +16,11 @@ const handler = async ({
     return getHelpRequestPermissions({ ctx })
   }
 
-  const target = await getHelpRequestSecurityTarget(ctx.user, input.id)
-
-  return getHelpRequestPermissions({ ctx, target })
+  const permissions = await HelpRequestService.getUpdatePermission(
+    ctx,
+    input.id
+  )
+  return permissions
 }
 
 export const getHelpRequestPermissionsQuery = createQuery({

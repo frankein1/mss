@@ -21,7 +21,7 @@
             </th>
             <th scope="col">Objet d'accompagnement</th>
             <TableSortableHeader
-              v-if="permissions?.get.anyDueDate"
+              v-if="application.helpRequest.get.anyDueDate"
               :label="helpRequestFieldLabels.dueDate"
               numeric
               @update:sort="onSort({ dueDate: $event })"
@@ -31,47 +31,47 @@
               @update:sort="onSort({ beneficiary: { usualName: $event } })"
             />
             <TableSortableHeader
-              v-if="permissions?.get.anyInstructorOrganization"
+              v-if="application.helpRequest.get.anyInstructorOrganization"
               :label="helpRequestFieldLabels.instructorOrganizationId"
               @update:sort="
                 onSort({ instructorOrganization: { name: $event } })
               "
             />
             <th
-              v-if="permissions?.get.anyExaminationDate"
+              v-if="application.helpRequest.get.anyExaminationDate"
               scope="col"
             >
               {{ helpRequestFieldLabels.examinationDate }}
             </th>
             <th
-              v-if="permissions?.get.anyAskedAmount"
+              v-if="application.helpRequest.get.anyAskedAmount"
               scope="col"
             >
               {{ helpRequestFieldLabels.askedAmount }}
             </th>
             <th
-              v-if="permissions?.get.anyAllocatedAmount"
+              v-if="application.helpRequest.get.anyAllocatedAmount"
               id="allocated-amount-col"
               scope="col"
             >
               {{ helpRequestFieldLabels.allocatedAmount }}
             </th>
             <th
-              v-if="permissions?.get.anyPaymentMethod"
+              v-if="application.helpRequest.get.anyPaymentMethod"
               id="payment-method-col"
               scope="col"
             >
               {{ helpRequestFieldLabels.paymentMethod }}
             </th>
             <th
-              v-if="permissions?.get.anyPaymentDate"
+              v-if="application.helpRequest.get.anyPaymentDate"
               id="payment-date-col"
               scope="col"
             >
               {{ helpRequestFieldLabels.paymentDate }}
             </th>
             <th
-              v-if="permissions?.get.anyHandlingDate"
+              v-if="application.helpRequest.get.anyHandlingDate"
               scope="col"
             >
               {{ helpRequestFieldLabels.handlingDate }}
@@ -82,10 +82,9 @@
         </thead>
         <tbody>
           <HelpRequestsRow
-            v-for="helpRequest in helpRequests"
-            :key="helpRequest.id"
-            :help-request="helpRequest"
-            :general-permissions="permissions"
+            v-for="item in items"
+            :key="item.helpRequest.id"
+            :item="item"
             @updated="emit('helpRequestUpdated', $event)"
           />
         </tbody>
@@ -95,22 +94,22 @@
 </template>
 
 <script setup lang="ts">
-  import type { HelpRequests, HelpRequestItem } from './types'
+  import type { HelpRequestPageItems, HelpRequestPageItem } from './types'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { HelpRequestSort } from '~/types/table'
-  import { HelpRequestPermissions } from '~/server/security'
 
   const props = defineProps<{
-    helpRequests: HelpRequests
+    items: HelpRequestPageItems
     sort: HelpRequestSort[]
     pending: boolean
-    permissions: HelpRequestPermissions | null
   }>()
 
   const emit = defineEmits<{
     'update:sort': [sort: HelpRequestSort[]]
-    'helpRequestUpdated': [helpRequest: HelpRequestItem]
+    'helpRequestUpdated': [helpRequest: HelpRequestPageItem]
   }>()
+
+  const { application } = usePermissions()
 
   const { onSort, tableContainer } = useTable<HelpRequestSort>(
     toRef(() => props.sort),
