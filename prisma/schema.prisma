@@ -61,15 +61,13 @@ model User {
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  structure                  Structure?           @relation(fields: [structureId], references: [id])
-  structureId                String?              @map("structure_id") @db.Uuid
-  createdFollowups           Followup[]           @relation(name: "created_followups")
-  createdHelpRequests        HelpRequest[]        @relation(name: "created_help_requests")
-  createdHousingHelpRequests HousingHelpRequest[] @relation(name: "created_housing_help_requests")
+  structure                  Structure?      @relation(fields: [structureId], references: [id])
+  structureId                String?         @map("structure_id") @db.Uuid
+  createdSocialSupports      SocialSupport[] @relation(name: "created_social_supports")
   createdDocuments           Document[]
   createdFollowupTypes       FollowupType[]
-  receivedNotifications      Notification[]       @relation(name: "received_notifications")
-  itemCreatedByNotifications Notification[]       @relation(name: "item_created_by_notifications")
+  receivedNotifications      Notification[]  @relation(name: "received_notifications")
+  itemCreatedByNotifications Notification[]  @relation(name: "item_created_by_notifications")
 
   createdBeneficiaries  Beneficiary[] @relation(name: "created_beneficiaries")
   archivedBeneficiaries Beneficiary[] @relation(name: "archived_beneficiaries")
@@ -109,9 +107,7 @@ model Structure {
   siret                    String?
   followupTypes            FollowupType[]
   users                    User[]
-  helpRequests             HelpRequest[]
-  housingHelpRequests      HousingHelpRequest[]
-  followups                Followup[]
+  socialSupports           SocialSupport[]
   prescribingOrganizations PrescribingOrganization[]
 
   beneficiaries Beneficiary[]
@@ -149,13 +145,11 @@ model Document {
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
-  created             DateTime?            @default(now())
-  createdBy           User                 @relation(fields: [createdById], references: [id])
-  createdById         String               @map("created_by_id") @db.Uuid
-  followups           Followup[]           @relation("document_to_followup")
-  helpRequests        HelpRequest[]        @relation("document_to_help_request")
-  housingHelpRequests HousingHelpRequest[] @relation("document_to_housing_help_request")
-  notifications       Notification[]
+  created        DateTime?       @default(now())
+  createdBy      User            @relation(fields: [createdById], references: [id])
+  createdById    String          @map("created_by_id") @db.Uuid
+  socialSupports SocialSupport[] @relation("document_to_social_support")
+  notifications  Notification[]
 
   @@map("document")
 }
@@ -223,14 +217,77 @@ model FollowupType {
   createdBy   User?     @relation(fields: [createdById], references: [id])
   createdById String?   @map("created_by_id") @db.Uuid
 
-  followups    Followup[]    @relation("followup_to_followup_type")
-  helpRequests HelpRequest[]
+  // FIXME: Peut-être que du coup on n'aura plus besoin de `used` ?
+  socialSupports SocialSupport[] @relation("social_support_to_followup_type")
 
   ownedByStructure   Structure @relation(fields: [ownedByStructureId], references: [id])
   ownedByStructureId String    @map("owned_by_structured_id") @db.Uuid // FIXME: owned_by_structure**d**_id
 
   @@unique([name, ownedByStructureId])
   @@map("followup_type")
+}
+
+enum SocialSupportStatus {
+  // Help request status
+  WaitingAdditionalInformation
+  InvestigationOngoing
+  Accepted
+  Refused
+  Adjourned
+  ClosedByBeneficiary
+  ClosedByAgent
+  Dismissed
+
+  // Followup status
+  Todo
+  InProgress
+  Done
+}
+
+model SocialSupport {
+  id String @id @default(uuid()) @db.Uuid
+
+  structure   Structure @relation(fields: [structureId], references: [id])
+  structureId String    @map("structure_id") @db.Uuid
+
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  beneficiaryId String      @map("beneficiary_id") @db.Uuid
+
+  createdById String @map("created_by_id") @db.Uuid
+  createdBy   User   @relation(name: "created_social_supports", fields: [createdById], references: [id])
+
+  types FollowupType[] @relation("social_support_to_followup_type")
+
+  date DateTime @default(now()) @db.Date
+
+  documents     Document[]     @relation("document_to_social_support")
+  comments      Comment[]
+  notifications Notification[]
+
+  synthesis        String?
+  privateSynthesis String? @map("private_synthesis")
+
+  ministre     Minister?
+  numeroPegase String?   @map("numero_pegase")
+
+  status SocialSupportStatus
+
+  // Followup specific fields
+  redirected Boolean?
+
+  // FIXME: Comment ça se passe pour ça ? On duplique l'information dans l'enfant ?
+  created DateTime? @default(now())
+  // FIXME: Idem. On décorrèle la mise à jour entre le social support et l'enfant ?
+  updated DateTime? @updatedAt
+
+  followupId           String?             @map("followup_id") @db.Uuid
+  followup             Followup?           @relation(fields: [followupId], references: [id])
+  helpRequestId        String?             @map("help_request_id") @db.Uuid
+  helpRequest          HelpRequest?        @relation(fields: [helpRequestId], references: [id])
+  housingHelpRequestId String?             @map("housing_help_request_id") @db.Uuid
+  housingHelpRequest   HousingHelpRequest? @relation(fields: [housingHelpRequestId], references: [id])
+
+  @@map("social_support")
 }
 
 enum FollowupMedium {
@@ -254,12 +311,6 @@ enum FollowupMedium {
   ThirdParty
 }
 
-enum FollowupStatus {
-  Todo
-  InProgress
-  Done
-}
-
 enum FollowupIntervention {
   DeetsSiao
   Prefecture
@@ -277,63 +328,27 @@ enum FollowupSignalement {
 model Followup {
   id String @id @default(uuid()) @db.Uuid
 
-  structure   Structure @relation(fields: [structureId], references: [id])
-  structureId String    @map("structure_id") @db.Uuid
-
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
-  beneficiaryId String      @map("beneficiary_id") @db.Uuid
-
-  createdById String @map("created_by_id") @db.Uuid
-  createdBy   User   @relation(name: "created_followups", fields: [createdById], references: [id])
-
   prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
   prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
 
   medium FollowupMedium
-  date   DateTime       @default(now()) @db.Date
-
-  types     FollowupType[] @relation("followup_to_followup_type")
-  documents Document[]     @relation("document_to_followup")
-
-  synthesis String?
-
-  status           FollowupStatus
-  privateSynthesis String?        @map("private_synthesis")
 
   helpRequested      Boolean?  @map("help_requested")
   place              String?
-  redirected         Boolean?
   structureName      String?   @map("structure_name")
   dueDate            DateTime? @map("due_date") @db.Date
   thirdPersonName    String?   @map("third_person_name")
   classified         Boolean?
   firstFollowup      Boolean?  @map("first_followup")
   forwardedToJustice Boolean?  @map("forwarded_to_justice")
-  ministre           Minister?
-  numeroPegase       String?   @map("numero_pegase")
 
   interventions FollowupIntervention[]
   signalements  FollowupSignalement[]
 
-  comments Comment[]
-
-  created              DateTime?            @default(now())
-  updated              DateTime?            @updatedAt
-  notifications        Notification[]
   beneficiaryHistories BeneficiaryHistory[]
+  SocialSupport        SocialSupport[]
 
   @@map("followup")
-}
-
-enum HelpRequestStatus {
-  WaitingAdditionalInformation
-  InvestigationOngoing
-  Accepted
-  Refused
-  Adjourned
-  ClosedByBeneficiary
-  ClosedByAgent
-  Dismissed
 }
 
 enum PaymentMethod {
@@ -380,32 +395,15 @@ enum HelpRequestRefusalReason {
 model HelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
-  structure   Structure @relation(fields: [structureId], references: [id])
-  structureId String    @map("structure_id") @db.Uuid
-
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
-  beneficiaryId String      @map("beneficiary_id") @db.Uuid
-
-  createdById String @map("created_by_id") @db.Uuid
-  createdBy   User   @relation(name: "created_help_requests", fields: [createdById], references: [id])
-
   prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
   prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
 
   instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
   instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
 
-  openingDate DateTime @default(now()) @map("opening_date") @db.Date
-
-  type   FollowupType @relation(fields: [typeId], references: [id])
-  typeId String       @map("type_id") @db.Uuid
-
-  documents Document[] @relation("document_to_help_request")
-
-  financialSupport  Boolean?          @map("financial_support")
-  externalStructure Boolean?          @map("external_structure")
-  status            HelpRequestStatus
-  isRefundable      Boolean?          @map("is_refundable")
+  financialSupport  Boolean? @map("financial_support")
+  externalStructure Boolean? @map("external_structure")
+  isRefundable      Boolean? @map("is_refundable")
 
   askedAmount Decimal? @map("asked_amount")
 
@@ -421,26 +419,15 @@ model HelpRequest {
   refusalReasonOther String?                   @map("refusal_reason_other")
   dispatchDate       DateTime?                 @map("dispatch_date") @db.Date
 
-  synthesis String?
-
-  privateSynthesis String? @map("private_synthesis")
-
   dueDate DateTime? @map("due_date") @db.Date
 
   fullFile Boolean?           @map("full_file")
   reason   HelpRequestReason?
 
-  comments Comment[]
-
-  created DateTime? @default(now())
-  updated DateTime? @updatedAt
-
-  ministre             Minister?
-  numeroPegase         String?              @map("numero_pegase")
-  notifications        Notification[]
   beneficiaryHistories BeneficiaryHistory[]
 
-  subject HelpRequestSubject
+  subject       HelpRequestSubject
+  SocialSupport SocialSupport[]
 
   @@map("help_request")
 }
@@ -491,24 +478,10 @@ enum HousingType {
 model HousingHelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
-  structure   Structure @relation(fields: [structureId], references: [id])
-  structureId String    @map("structure_id") @db.Uuid
-
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
-  beneficiaryId String      @map("beneficiary_id") @db.Uuid
-
-  createdById String @map("created_by_id") @db.Uuid
-  createdBy   User   @relation(name: "created_housing_help_requests", fields: [createdById], references: [id])
-
   instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
   instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
 
-  openingDate DateTime @default(now()) @map("opening_date") @db.Date
-
-  documents Document[] @relation("document_to_housing_help_request")
-
-  externalStructure Boolean?          @map("external_structure")
-  status            HelpRequestStatus
+  externalStructure Boolean? @map("external_structure")
 
   examinationDate DateTime? @map("examination_date") @db.Date
   decisionDate    DateTime? @map("decision_date") @db.Date
@@ -516,34 +489,22 @@ model HousingHelpRequest {
   refusalReason HelpRequestRefusalReason? @map("refusal_reason")
   dispatchDate  DateTime?                 @map("dispatch_date") @db.Date
 
-  synthesis String?
-
-  privateSynthesis String? @map("private_synthesis")
-
   dueDate DateTime? @map("due_date") @db.Date
 
   fullFile Boolean? @map("full_file")
 
-  comments Comment[]
-
-  created DateTime? @default(now())
-  updated DateTime? @updatedAt
-
-  ministre      Minister?
-  numeroPegase  String?        @map("numero_pegase")
-  notifications Notification[]
-
-  isFirst                           Boolean        @map("is_first")
-  firstOpeningDate                  DateTime?      @map("first_opening_date") @db.Date
-  askedHousing                      AskedHousing?  @map("asked_housing")
+  isFirst                           Boolean         @map("is_first")
+  firstOpeningDate                  DateTime?       @map("first_opening_date") @db.Date
+  askedHousing                      AskedHousing?   @map("asked_housing")
   reason                            HousingReason?
-  uniqueId                          String?        @map("unique_id")
-  taxHouseholdAdditionalInformation String?        @map("tax_household_additional_information")
-  maxRent                           Decimal?       @map("max_rent")
-  maxCharges                        Decimal?       @map("max_charges")
-  housingType                       HousingType?   @map("housing_type")
-  roomCount                         Decimal?       @map("room_count")
-  isPmr                             Boolean?       @map("is_pmr")
+  uniqueId                          String?         @map("unique_id")
+  taxHouseholdAdditionalInformation String?         @map("tax_household_additional_information")
+  maxRent                           Decimal?        @map("max_rent")
+  maxCharges                        Decimal?        @map("max_charges")
+  housingType                       HousingType?    @map("housing_type")
+  roomCount                         Decimal?        @map("room_count")
+  isPmr                             Boolean?        @map("is_pmr")
+  SocialSupport                     SocialSupport[]
 
   @@map("housing_help_request")
 }
@@ -1398,9 +1359,8 @@ model Beneficiary {
   numeroPegase          String?                       @map("numero_pegase")
   accommodationZone     BeneficiaryAccommodationZone? @map("accommodation_zone")
 
-  documents    Document[]
-  followups    Followup[]
-  helpRequests HelpRequest[]
+  documents      Document[]
+  socialSupports SocialSupport[]
 
   created DateTime? @default(now())
   updated DateTime? @updatedAt
@@ -1409,7 +1369,6 @@ model Beneficiary {
   linkedRelatives      BeneficiaryRelative[] @relation("linkedBeneficiary")
   notifications        Notification[]
   beneficiaryHistories BeneficiaryHistory[]
-  housingHelpRequest   HousingHelpRequest[]
 
   @@map("beneficiary")
 }
@@ -1479,14 +1438,8 @@ model Comment {
 
   content String
 
-  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id], onDelete: Cascade)
-  helpRequestId String?      @map("help_request_id") @db.Uuid
-
-  followup   Followup? @relation(fields: [followupId], references: [id], onDelete: Cascade)
-  followupId String?   @map("followup_id") @db.Uuid
-
-  housingHelpRequest   HousingHelpRequest? @relation(fields: [housingHelpRequestId], references: [id])
-  housingHelpRequestId String?             @db.Uuid
+  socialSupport   SocialSupport? @relation(fields: [socialSupportId], references: [id])
+  socialSupportId String?        @db.Uuid
 
   notification Notification[]
 
@@ -1555,14 +1508,8 @@ model Notification {
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
-  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id], onDelete: Cascade)
-  helpRequestId String?      @map("help_request_id") @db.Uuid
-
-  followup   Followup? @relation(fields: [followupId], references: [id], onDelete: Cascade)
-  followupId String?   @map("followup_id") @db.Uuid
-
-  housingHelpRequest   HousingHelpRequest? @relation(fields: [housingHelpRequestId], references: [id])
-  housingHelpRequestId String?             @db.Uuid
+  socialSupport   SocialSupport? @relation(fields: [socialSupportId], references: [id])
+  socialSupportId String?        @db.Uuid
 
   itemCreatedBy   User?   @relation("item_created_by_notifications", fields: [itemCreatedById], references: [id])
   itemCreatedById String? @map("item_created_by_id") @db.Uuid
