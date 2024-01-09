@@ -317,13 +317,21 @@ FROM _document_to_followup d_ff
     INNER JOIN followup ff ON ff.id = d_ff."B"
     INNER JOIN social_support ss ON ss.id = ff.social_support_id;
 
-UPDATE "comment"
-SET social_support_id = followup_id
-WHERE followup_id IS NOT NULL;
+UPDATE "comment" c
+SET social_support_id = (
+        SELECT social_support_id
+        FROM followup fu
+        WHERE fu.id = c.followup_id
+    )
+WHERE c.followup_id IS NOT NULL;
 
-UPDATE notification
-SET social_support_id = followup_id
-WHERE followup_id IS NOT NULL;
+UPDATE notification n
+SET social_support_id = (
+        SELECT social_support_id
+        FROM followup fu
+        WHERE fu.id = n.followup_id
+    )
+WHERE n.followup_id IS NOT NULL;
 
 /**
  *****************************
@@ -383,13 +391,21 @@ FROM _document_to_help_request d_hr
     INNER JOIN help_request hr ON hr.id = d_hr."B"
     INNER JOIN social_support ss ON ss.id = hr.social_support_id;
 
-UPDATE "comment"
-SET social_support_id = help_request_id
-WHERE help_request_id IS NOT NULL;
+UPDATE "comment" c
+SET social_support_id = (
+        SELECT social_support_id
+        FROM help_request hr
+        WHERE hr.id = c.help_request_id
+    )
+WHERE c.help_request_id IS NOT NULL;
 
-UPDATE notification
-SET social_support_id = help_request_id
-WHERE help_request_id IS NOT NULL;
+UPDATE notification n
+SET social_support_id = (
+        SELECT social_support_id
+        FROM help_request hr
+        WHERE hr.id = n.help_request_id
+    )
+WHERE n.help_request_id IS NOT NULL;
 
 /**
  ************************
@@ -410,6 +426,15 @@ SET NOT NULL;
 ALTER TABLE "help_request"
 ALTER COLUMN "social_support_id"
 SET NOT NULL;
+
+/**
+ ***********************************
+ * REMOVE VIEWS *
+ ***********************************
+ */
+DROP VIEW "view_beneficiary_history";
+
+DROP VIEW "view_beneficiary_types";
 
 /**
  ***************************************
