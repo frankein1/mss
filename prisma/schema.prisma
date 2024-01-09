@@ -244,7 +244,7 @@ enum SocialSupportStatus {
 model SocialSupport {
   id String @id @default(uuid()) @db.Uuid
 
-  structure   Structure @relation(fields: [structureId], references: [id])
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
@@ -1432,8 +1432,8 @@ model Comment {
 
   content String
 
-  socialSupport   SocialSupport? @relation(fields: [socialSupportId], references: [id])
-  socialSupportId String?        @db.Uuid
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id])
+  socialSupportId String        @map("social_support_id") @db.Uuid
 
   notification Notification[]
 
@@ -1501,7 +1501,7 @@ model Notification {
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
   socialSupport   SocialSupport? @relation(fields: [socialSupportId], references: [id])
-  socialSupportId String?        @db.Uuid
+  socialSupportId String?        @map("social_support_id") @db.Uuid
 
   itemCreatedBy   User?   @relation("item_created_by_notifications", fields: [itemCreatedById], references: [id])
   itemCreatedById String? @map("item_created_by_id") @db.Uuid
