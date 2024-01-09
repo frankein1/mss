@@ -63,7 +63,7 @@ export default defineEventHandler(async event => {
     input.beneficiaryId
   )
 
-  if (!permissions.view) {
+  if (!permissions.create) {
     throw forbiddenError()
   }
 
