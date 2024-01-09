@@ -52,7 +52,8 @@ const handler = async ({
           beneficiaryId: input.beneficiaryId,
           followupId: input.isFollowup ? input.historyId : undefined,
           helpRequestId: !input.isFollowup ? input.historyId : undefined,
-          type: NotificationType.NewComment
+          type: NotificationType.NewComment,
+          itemCreatedById: user.id
         }
       }
     },
