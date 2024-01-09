@@ -2,13 +2,14 @@ import { Prisma } from '@prisma/client'
 import {
   fixtureStructure,
   fixturesBeneficiaries,
-  fixturesFollowupTypes
+  fixturesFollowupTypes,
+  fixturesUsers
 } from './'
 
 export const fixturesFollowups = [
   {
     id: 'e20b26f8-52fd-4620-8959-4cbb4623fb05',
-    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
+    createdById: fixturesUsers[1].id,
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[0].id,
@@ -23,7 +24,7 @@ export const fixturesFollowups = [
   },
   {
     id: '8f8a083f-f04f-4977-9e07-8b88135c7210',
-    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
+    createdById: fixturesUsers[1].id,
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[0].id,
@@ -35,12 +36,11 @@ export const fixturesFollowups = [
   },
   {
     id: '07e809c3-4b6e-4152-bde3-357c501c981f',
-    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
+    createdById: fixturesUsers[1].id,
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[2].id,
     medium: 'Videoconference',
-
     types: {
       connect: [
         { id: fixturesFollowupTypes[2].id },
@@ -51,12 +51,11 @@ export const fixturesFollowups = [
   },
   {
     id: 'b811a9d7-ada7-42ca-b809-926caaebaf52',
-    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
+    createdById: fixturesUsers[1].id,
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[1].id,
     medium: 'UnplannedInPerson',
-
     types: {
       connect: [{ id: fixturesFollowupTypes[2].id }]
     },
@@ -64,12 +63,11 @@ export const fixturesFollowups = [
   },
   {
     id: 'b15eba7c-d00d-4de6-a227-75361066c322',
-    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
+    createdById: fixturesUsers[1].id,
     status: 'InProgress',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[2].id,
     medium: 'PlannedInPerson',
-
     types: {
       connect: [
         { id: fixturesFollowupTypes[3].id },
@@ -80,15 +78,56 @@ export const fixturesFollowups = [
   },
   {
     id: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
-    createdById: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
+    createdById: fixturesUsers[1].id,
     status: 'InProgress',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[3].id,
     medium: 'PhoneCall',
-
     types: {
       connect: [{ id: fixturesFollowupTypes[4].id }]
     },
-    date: new Date('2022-10-25')
+    date: new Date('2022-10-25'),
+    comments: {
+      create: {
+        id: '24d14db7-c0ac-4924-86ae-c786efba3afc',
+        createdById: fixturesUsers[4].id,
+        content:
+          'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur nisl erat, facilisis eget congue eget, fermentum vitae ante. Maecenas bibendum quis dui luctus molestie. Fusce sollicitudin dolor eget libero tempus semper. Praesent non urna libero. Vivamus vitae ex magna. Ut semper, sem vitae tincidunt finibus, nisl tortor blandit massa, vel rutrum est felis quis metus. In hac habitasse platea dictumst. Ut eget sapien sodales, varius lorem ut, posuere est. Quisque fermentum, erat a luctus vehicula, lorem quam cursus lorem, sed mollis augue felis et urna.',
+        notification: {
+          create: {
+            id: '3a39f0ae-17c0-4616-9e76-523faad59cfc',
+            recipientId: fixturesUsers[1].id,
+            beneficiaryId: fixturesBeneficiaries[3].id,
+            followupId: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
+            type: 'NewComment',
+            itemCreatedById: fixturesUsers[4].id
+          }
+        }
+      }
+    },
+    documents: {
+      create: {
+        key: '97042692-54df-42ce-b755-ac40aef20f88',
+        mimeType: 'application/pdf',
+        name: 'Agir-pour-lenvironnement-Rapport-nucleaire.pdf',
+        filenameDisk: 'b3d7eb72-e957-4a18-a2ce-6ec75a2f19e8.pdf',
+        filenameDownload: 'Agir-pour-lenvironnement-Rapport-nucleaire.pdf',
+        type: 'Cerfa',
+        size: 887560,
+        tags: ['BudgetRessources'],
+        confidential: false,
+        beneficiaryId: fixturesBeneficiaries[3].id,
+        createdById: fixturesUsers[4].id,
+        notifications: {
+          create: {
+            id: '907300c8-105d-421a-9ee5-a0599f0822e6',
+            recipientId: fixturesUsers[0].id,
+            beneficiaryId: fixturesBeneficiaries[3].id,
+            type: 'NewDocument',
+            itemCreatedById: fixturesUsers[4].id
+          }
+        }
+      }
+    }
   }
 ] satisfies Prisma.FollowupUncheckedCreateInput[]

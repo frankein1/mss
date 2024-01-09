@@ -48,6 +48,7 @@ export const fixturesUsers = [
     structureId: fixtureStructure.id
   },
   {
+    id: '6c89f7a9-105e-438f-9b56-917fb394a511',
     firstName: 'Admin',
     lastName: 'MSS',
     email: 'admin@mss.gouv.fr',
