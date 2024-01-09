@@ -95,11 +95,20 @@
       formData.append('file', file)
       formData.append('input', input)
 
-      const key = await $fetch<string>('/api/s3/create', {
-        method: 'POST',
-        body: formData
-      })
-      emit('newDocument', key)
+      try {
+        const key = await $fetch<string>('/api/s3/create', {
+          method: 'POST',
+          body: formData
+        })
+        emit('newDocument', key)
+      } catch {
+        useSnackbar().error(
+          "L'ajout du document a échoué.",
+          () => form.value?.querySelector('select')?.focus()
+        )
+      } finally {
+        isSubmitting.value = false
+      }
     }
   )
 
