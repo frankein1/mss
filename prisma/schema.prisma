@@ -215,7 +215,6 @@ model FollowupType {
   createdBy   User?     @relation(fields: [createdById], references: [id])
   createdById String?   @map("created_by_id") @db.Uuid
 
-  // FIXME: Peut-être que du coup on n'aura plus besoin de `used` ?
   socialSupports SocialSupport[] @relation("social_support_to_followup_type")
 
   ownedByStructure   Structure @relation(fields: [ownedByStructureId], references: [id])
@@ -270,22 +269,12 @@ model SocialSupport {
 
   status SocialSupportStatus
 
-  // Followup specific fields
-  redirected Boolean?
-
-  // FIXME: Comment ça se passe pour ça ? On duplique l'information dans l'enfant ?
   created DateTime? @default(now())
-  // FIXME: Idem. On décorrèle la mise à jour entre le social support et l'enfant ?
   updated DateTime? @updatedAt
 
-  followupId           String?             @map("followup_id") @db.Uuid
-  followup             Followup?           @relation(fields: [followupId], references: [id])
-  helpRequestId        String?             @map("help_request_id") @db.Uuid
-  helpRequest          HelpRequest?        @relation(fields: [helpRequestId], references: [id])
-  housingHelpRequestId String?             @map("housing_help_request_id") @db.Uuid
-  housingHelpRequest   HousingHelpRequest? @relation(fields: [housingHelpRequestId], references: [id])
-
-  // TODO: Rajouter les champs du tableau Accompagnements > Instructions de dossier
+  followup           Followup?
+  helpRequest        HelpRequest?
+  housingHelpRequest HousingHelpRequest?
 
   @@map("social_support")
 }
@@ -326,7 +315,8 @@ enum FollowupSignalement {
 }
 
 model Followup {
-  id String @id @default(uuid()) @db.Uuid
+  id      String    @id @default(uuid()) @db.Uuid
+  updated DateTime? @updatedAt
 
   prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
   prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
@@ -341,11 +331,13 @@ model Followup {
   classified         Boolean?
   firstFollowup      Boolean?  @map("first_followup")
   forwardedToJustice Boolean?  @map("forwarded_to_justice")
+  redirected         Boolean?
 
   interventions FollowupIntervention[]
   signalements  FollowupSignalement[]
 
-  socialSupport SocialSupport[]
+  socialSupportId String        @unique @map("social_support_id") @db.Uuid
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id])
 
   @@map("followup")
 }
@@ -392,7 +384,8 @@ enum HelpRequestRefusalReason {
 }
 
 model HelpRequest {
-  id String @id @default(uuid()) @db.Uuid
+  id      String    @id @default(uuid()) @db.Uuid
+  updated DateTime? @updatedAt
 
   prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
   prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
@@ -423,8 +416,10 @@ model HelpRequest {
   fullFile Boolean?           @map("full_file")
   reason   HelpRequestReason?
 
-  subject       HelpRequestSubject
-  SocialSupport SocialSupport[]
+  subject HelpRequestSubject
+
+  socialSupportId String        @unique @map("social_support_id") @db.Uuid
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id])
 
   @@map("help_request")
 }
@@ -473,7 +468,8 @@ enum HousingType {
 }
 
 model HousingHelpRequest {
-  id String @id @default(uuid()) @db.Uuid
+  id      String    @id @default(uuid()) @db.Uuid
+  updated DateTime? @updatedAt
 
   instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
   instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
@@ -490,18 +486,20 @@ model HousingHelpRequest {
 
   fullFile Boolean? @map("full_file")
 
-  isFirst                           Boolean         @map("is_first")
-  firstOpeningDate                  DateTime?       @map("first_opening_date") @db.Date
-  askedHousing                      AskedHousing?   @map("asked_housing")
+  isFirst                           Boolean        @map("is_first")
+  firstOpeningDate                  DateTime?      @map("first_opening_date") @db.Date
+  askedHousing                      AskedHousing?  @map("asked_housing")
   reason                            HousingReason?
-  uniqueId                          String?         @map("unique_id")
-  taxHouseholdAdditionalInformation String?         @map("tax_household_additional_information")
-  maxRent                           Decimal?        @map("max_rent")
-  maxCharges                        Decimal?        @map("max_charges")
-  housingType                       HousingType?    @map("housing_type")
-  roomCount                         Decimal?        @map("room_count")
-  isPmr                             Boolean?        @map("is_pmr")
-  SocialSupport                     SocialSupport[]
+  uniqueId                          String?        @map("unique_id")
+  taxHouseholdAdditionalInformation String?        @map("tax_household_additional_information")
+  maxRent                           Decimal?       @map("max_rent")
+  maxCharges                        Decimal?       @map("max_charges")
+  housingType                       HousingType?   @map("housing_type")
+  roomCount                         Decimal?       @map("room_count")
+  isPmr                             Boolean?       @map("is_pmr")
+
+  socialSupportId String        @unique @map("social_support_id") @db.Uuid
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id])
 
   @@map("housing_help_request")
 }
