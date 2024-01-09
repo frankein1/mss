@@ -23,6 +23,8 @@
   import { FollowupPageItem } from './types'
   import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
 
+  const isMinistryAgent = useAuthState().isMinistryAgent()
+
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: Array<FollowupType>
@@ -81,7 +83,8 @@
       redirected: followup.value.redirected || false,
       firstFollowup: followup.value.firstFollowup || false,
       classified: followup.value.classified || false,
-      forwardedToJustice: followup.value.forwardedToJustice || false
+      forwardedToJustice: followup.value.forwardedToJustice || false,
+      isMinistry: isMinistryAgent
       // ...initialInterventions.value,
       // ...initialSignalements.value
     }
