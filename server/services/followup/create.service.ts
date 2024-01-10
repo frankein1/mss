@@ -92,38 +92,49 @@ export const create = async ({ ctx, input }: CreateParams) => {
 
   const fu = await FollowupRepo.prisma.create({
     data: {
-      structure: connect(structure.id),
-      beneficiary: connect(beneficiaryId),
-      createdBy: connect(user.id),
-      // signalements,
-      // interventions,
+      socialSupport: {
+        create: {
+          status,
+          date,
+          structure: connect(structure.id),
+          beneficiary: connect(beneficiaryId),
+          createdBy: connect(user.id),
+          types: prepareFollowupTypesMutations(types),
+          documents: prepareDocumentsMutations(documents),
+          notifications: prepareNewHistoryElementNotification(
+            beneficiary,
+            user
+          ),
+          ministre,
+          numeroPegase,
+          synthesis,
+          privateSynthesis
+        }
+      },
       prescribingOrganization,
-      types: prepareFollowupTypesMutations(types),
-      documents: prepareDocumentsMutations(documents),
       redirected,
       structureName: redirected ? structureName : null,
       medium,
       place: medium === FollowupMedium.ExternalAppointment ? place : null,
       thirdPersonName:
         medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
-      ministre,
-      date,
-      synthesis,
-      privateSynthesis,
-      status,
       helpRequested,
       dueDate,
       firstFollowup,
-      numeroPegase,
       classified,
-      forwardedToJustice,
-      notifications: prepareNewHistoryElementNotification(beneficiary, user)
+      forwardedToJustice
+      // signalements,
+      // interventions,
     },
     include: {
-      beneficiary: {
-        select: {
-          id: true,
-          fileNumber: true
+      socialSupport: {
+        include: {
+          beneficiary: {
+            select: {
+              id: true,
+              fileNumber: true
+            }
+          }
         }
       }
     }

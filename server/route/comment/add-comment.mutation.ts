@@ -29,29 +29,29 @@ const handler = async ({
   if (input.isFollowup) {
     history = await FollowupRepo.findUniqueOrThrow(user, {
       where: { id: input.historyId },
-      select: { createdById: true }
+      select: { socialSupport: { select: { id: true, createdById: true } } }
     })
   } else {
     history = await HelpRequestRepo.findUniqueOrThrow(user, {
       where: { id: input.historyId },
-      select: { createdById: true }
+      select: { socialSupport: { select: { id: true, createdById: true } } }
     })
   }
 
-  const { createdById } = history
+  const {
+    socialSupport: { createdById, id }
+  } = history
 
   return CommentRepo.prisma.create({
     data: {
       content: input.content,
       createdById: user.id,
-      followupId: input.isFollowup ? input.historyId : undefined,
-      helpRequestId: !input.isFollowup ? input.historyId : undefined,
+      socialSupportId: id,
       notification: {
         create: {
           recipientId: createdById,
           beneficiaryId: input.beneficiaryId,
-          followupId: input.isFollowup ? input.historyId : undefined,
-          helpRequestId: !input.isFollowup ? input.historyId : undefined,
+          socialSupportId: id,
           type: NotificationType.NewComment,
           itemCreatedById: user.id
         }

@@ -6,20 +6,20 @@ import { SecurityRuleGrantee } from '~/server/security'
 
 // READ
 
-function findMany<T extends Prisma.BeneficiaryHistoryFindManyArgs>(
+function findMany<T extends Prisma.SocialSupportFindManyArgs>(
   user: SecurityRuleGrantee,
-  params: Prisma.SelectSubset<T, Prisma.BeneficiaryHistoryFindManyArgs>
+  params: Prisma.SelectSubset<T, Prisma.SocialSupportFindManyArgs>
 ) {
   appendConstraints(user, params, BeneficiaryHistoryConstraints.get)
-  return prismaClient.beneficiaryHistory.findMany(params)
+  return prismaClient.socialSupport.findMany(params)
 }
 
 function count(
   user: SecurityRuleGrantee,
-  params: Prisma.BeneficiaryHistoryCountArgs
+  params: Prisma.SocialSupportCountArgs
 ) {
   appendConstraints(user, params, BeneficiaryHistoryConstraints.get)
-  return prismaClient.beneficiaryHistory.count(params)
+  return prismaClient.socialSupport.count(params)
 }
 
 export const BeneficiaryHistoryRepo = {

@@ -15,9 +15,9 @@ export function prepareFollowupTypesMutations(
 
 export function prepareFollowupFilters(filters: FollowupFilterInput) {
   const formattedFilters: Prisma.FollowupWhereInput = {}
-
+  formattedFilters.socialSupport = {}
   if (filters.status) {
-    formattedFilters.status = filters.status
+    formattedFilters.socialSupport.status = filters.status
   }
 
   if (filters.medium) {
@@ -25,17 +25,19 @@ export function prepareFollowupFilters(filters: FollowupFilterInput) {
   }
 
   if (filters.followupTypes) {
-    formattedFilters.types = { some: { id: { in: filters.followupTypes } } }
+    formattedFilters.socialSupport.types = {
+      some: { id: { in: filters.followupTypes } }
+    }
   }
 
   if (filters.referents) {
-    formattedFilters.beneficiary = {
+    formattedFilters.socialSupport.beneficiary = {
       referents: { some: { id: { in: filters.referents } } }
     }
   }
 
   if (filters.ministre) {
-    formattedFilters.ministre = { in: filters.ministre }
+    formattedFilters.socialSupport.ministre = { in: filters.ministre }
   }
 
   return formattedFilters

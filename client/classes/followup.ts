@@ -1,9 +1,9 @@
-import { FollowupStatus } from '@prisma/client'
+import { SocialSupportStatus } from '@prisma/client'
 
-export const followupStatusClasses: { [key in FollowupStatus]: string } = {
-  [FollowupStatus.Todo]: 'fr-badge--info',
-  [FollowupStatus.InProgress]:
+export const followupStatusClasses = {
+  [SocialSupportStatus.Todo]: 'fr-badge--info',
+  [SocialSupportStatus.InProgress]:
     'fr-badge--orange-terre-battue fr-badge--icon-left fr-icon-time-line',
-  [FollowupStatus.Done]:
+  [SocialSupportStatus.Done]:
     'fr-badge--success fr-badge--icon-left fr-icon-check-line'
 }

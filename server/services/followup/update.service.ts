@@ -90,34 +90,42 @@ export const update = async ({ ctx, input }: UpdateParams) => {
       id
     },
     data: {
-      // signalements,
-      // interventions,
+      socialSupport: {
+        update: {
+          documents: prepareDocumentsMutations(documents),
+          types: prepareFollowupTypesMutations(types),
+          ministre,
+          date,
+          synthesis,
+          privateSynthesis,
+          status,
+          numeroPegase
+        }
+      },
       prescribingOrganization,
-      types: prepareFollowupTypesMutations(types),
-      documents: prepareDocumentsMutations(documents),
       redirected,
       structureName: redirected ? structureName : null,
       medium,
       place: medium === FollowupMedium.ExternalAppointment ? place : null,
       thirdPersonName:
         medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
-      ministre,
-      date,
-      synthesis,
-      privateSynthesis,
-      status,
       helpRequested,
       dueDate,
       firstFollowup,
-      numeroPegase,
       classified,
-      forwardedToJustice
+      forwardedToJustice,
+      // signalements,
+      // interventions,
     },
     include: {
-      beneficiary: {
+      socialSupport: {
         select: {
-          id: true,
-          fileNumber: true
+          beneficiary: {
+            select: {
+              id: true,
+              fileNumber: true
+            }
+          }
         }
       }
     }

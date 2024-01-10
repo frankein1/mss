@@ -154,6 +154,7 @@ export function prepareBeneficiarySearchConditions(query: string) {
 
 export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
+  formattedFilters.socialSupports = {}
 
   if (filters.search) {
     const searchConditions = prepareBeneficiarySearchConditions(filters.search)
@@ -165,10 +166,9 @@ export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
       id: { in: filters.followupTypes }
     }
 
-    formattedFilters.OR = [
-      { followups: { some: { types: { some: typesListFilter } } } },
-      { helpRequests: { some: { type: typesListFilter } } }
-    ]
+    formattedFilters.socialSupports = {
+      some: { types: { some: typesListFilter } }
+    }
   }
 
   if (filters.referents) {

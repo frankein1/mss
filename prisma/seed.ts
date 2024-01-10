@@ -67,9 +67,12 @@ function loadFixturesFollowups() {
 function loadFixturesHelpRequests() {
   console.log('📇 Help requests...')
 
-  return prismaClient.helpRequest.createMany({
-    data: fixturesHelpRequests,
-    skipDuplicates: true
+  return fixturesHelpRequests.map(({ id, ...data }) => {
+    return prismaClient.helpRequest.upsert({
+      create: { id, ...data },
+      where: { id },
+      update: {}
+    })
   })
 }
 
@@ -80,7 +83,7 @@ function loadFixtures() {
     loadFixturesUsers(),
     ...loadFixturesBeneficiaries(),
     ...loadFixturesFollowups(),
-    loadFixturesHelpRequests()
+    ...loadFixturesHelpRequests()
   ]
 }
 

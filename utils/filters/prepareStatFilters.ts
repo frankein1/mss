@@ -1,4 +1,4 @@
-import { Prisma } from '~/server/prisma/prismaClient'
+import { Prisma } from '@prisma/client'
 import { StatFilterInput } from '~/server/schema'
 
 function prepareDateFilters(filters: StatFilterInput) {
@@ -9,29 +9,23 @@ function prepareDateFilters(filters: StatFilterInput) {
 }
 
 export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
-  const followupsFilters: { [k: string]: {} } = {}
-  const helpRequestsFilters: { [k: string]: {} } = {}
+  const socialSupportFilters: { [k: string]: {} } = {}
 
   if (filters.fromDate || filters.toDate) {
-    followupsFilters.created = helpRequestsFilters.created =
-      prepareDateFilters(filters)
+    socialSupportFilters.created = prepareDateFilters(filters)
   }
 
   if (filters.followupTypes) {
     const typesListFilter = {
       id: { in: filters.followupTypes }
     }
-    followupsFilters.types = { some: typesListFilter }
-    helpRequestsFilters.type = typesListFilter
+    socialSupportFilters.types = { some: typesListFilter }
   }
 
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
   if (filters.fromDate || filters.toDate || filters.followupTypes) {
-    formattedFilters.OR = [
-      { followups: { some: followupsFilters } },
-      { helpRequests: { some: helpRequestsFilters } }
-    ]
+    formattedFilters.socialSupports = socialSupportFilters
   }
 
   if (filters.cities) {
@@ -50,61 +44,63 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
 }
 
 export function prepareHelpRequestStatFilters(filters: StatFilterInput) {
-  const formattedFilters: Prisma.HelpRequestWhereInput = {}
+  const socialSupport: Prisma.SocialSupportWhereInput = {}
 
   if (filters.fromDate || filters.toDate) {
-    formattedFilters.created = prepareDateFilters(filters)
+    socialSupport.created = prepareDateFilters(filters)
   }
 
   if (filters.followupTypes) {
-    formattedFilters.type = { id: { in: filters.followupTypes } }
+    socialSupport.types = { some: { id: { in: filters.followupTypes } } }
   }
 
   if (filters.cities) {
-    formattedFilters.beneficiary = { city: { in: filters.cities } }
+    socialSupport.beneficiary = { city: { in: filters.cities } }
   }
 
   if (filters.referent) {
-    formattedFilters.createdBy = { id: filters.referent }
+    socialSupport.createdBy = { id: filters.referent }
   }
 
   if (filters.beneficiaryStatus) {
-    if (formattedFilters.beneficiary) {
-      formattedFilters.beneficiary.status = filters.beneficiaryStatus
+    if (socialSupport.beneficiary) {
+      socialSupport.beneficiary.status = filters.beneficiaryStatus
     } else {
-      formattedFilters.beneficiary = { status: filters.beneficiaryStatus }
+      socialSupport.beneficiary = { status: filters.beneficiaryStatus }
     }
   }
 
-  return formattedFilters
+  return {
+    socialSupport
+  }
 }
 
 export function prepareFollowupStatFilters(filters: StatFilterInput) {
-  const formattedFilters: Prisma.FollowupWhereInput = {}
+  const socialSupport: Prisma.SocialSupportWhereInput = {}
 
   if (filters.fromDate || filters.toDate) {
-    formattedFilters.created = prepareDateFilters(filters)
+    socialSupport.created = prepareDateFilters(filters)
   }
 
   if (filters.followupTypes) {
-    formattedFilters.types = { some: { id: { in: filters.followupTypes } } }
+    socialSupport.types = { some: { id: { in: filters.followupTypes } } }
   }
 
   if (filters.cities) {
-    formattedFilters.beneficiary = { city: { in: filters.cities } }
+    socialSupport.beneficiary = { city: { in: filters.cities } }
   }
 
   if (filters.referent) {
-    formattedFilters.createdBy = { id: filters.referent }
+    socialSupport.createdBy = { id: filters.referent }
   }
 
   if (filters.beneficiaryStatus) {
-    if (formattedFilters.beneficiary) {
-      formattedFilters.beneficiary.status = filters.beneficiaryStatus
+    if (socialSupport.beneficiary) {
+      socialSupport.beneficiary.status = filters.beneficiaryStatus
     } else {
-      formattedFilters.beneficiary = { status: filters.beneficiaryStatus }
+      socialSupport.beneficiary = { status: filters.beneficiaryStatus }
     }
   }
 
-  return formattedFilters
+  return { socialSupport }
 }

@@ -2,8 +2,7 @@ import { z } from 'zod'
 import dayjs from 'dayjs'
 import {
   BeneficiaryStatus,
-  FollowupStatus,
-  HelpRequestStatus,
+  SocialSupportStatus,
   FollowupMedium,
   Minister,
   UserRole,
@@ -56,7 +55,7 @@ type BeneficiaryDocumentFilterInput = z.infer<
 >
 
 const followupFilterSchema = z.object({
-  status: z.nativeEnum(FollowupStatus).nullish(),
+  status: z.nativeEnum(SocialSupportStatus).nullish(),
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
   referents: z.array(z.string().uuid()).nullish(),
@@ -66,7 +65,7 @@ const followupFilterSchema = z.object({
 type FollowupFilterInput = z.infer<typeof followupFilterSchema>
 
 const helpRequestFilterSchema = z.object({
-  status: z.nativeEnum(HelpRequestStatus).nullish(),
+  status: z.nativeEnum(SocialSupportStatus).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
   referents: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
@@ -78,7 +77,7 @@ const helpRequestFilterSchema = z.object({
 type HelpRequestFilterInput = z.infer<typeof helpRequestFilterSchema>
 
 const beneficiaryHistoryFilterSchema = z.object({
-  status: z.nativeEnum({ ...FollowupStatus, ...HelpRequestStatus }).nullish(),
+  status: z.nativeEnum(SocialSupportStatus).nullish(),
   typeSuivi: z.nativeEnum(TypeSuivi).nullish(),
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),

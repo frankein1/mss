@@ -1,7 +1,6 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { GetHistoryInput, getHistorySchema } from '~/server/schema'
-import { TypeSuivi } from '~/types/history'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   getDocumentPermissions,
@@ -37,7 +36,9 @@ const createdBySelect = {
 }
 
 function prepareHistoryFilters(filters: HistoryFilters, beneficiaryId: string) {
-  const formattedFilters: Prisma.BeneficiaryHistoryWhereInput = {}
+  const formattedFilters: Prisma.SocialSupportWhereInput = {}
+  formattedFilters.followup = {}
+  formattedFilters.helpRequest = {}
 
   if (filters.referents) {
     formattedFilters.beneficiary = {
@@ -55,29 +56,31 @@ function prepareHistoryFilters(filters: HistoryFilters, beneficiaryId: string) {
   }
 
   if (filters.medium) {
-    formattedFilters.medium = { in: filters.medium }
+    formattedFilters.followup.medium = { in: filters.medium }
   }
 
   if (filters.examinationDate) {
-    formattedFilters.examinationDate = filters.examinationDate
+    formattedFilters.helpRequest.examinationDate = filters.examinationDate
   }
 
   if (filters.externalStructure !== undefined) {
-    formattedFilters.externalStructure = filters.externalStructure === 'true'
+    formattedFilters.helpRequest.externalStructure =
+      filters.externalStructure === 'true'
   }
 
   if (filters.handlingDate !== undefined) {
-    formattedFilters.handlingDate =
+    formattedFilters.helpRequest.handlingDate =
       filters.handlingDate === 'true' ? { not: null } : null
   }
 
   if (filters.followupTypes) {
-    formattedFilters.typeIds = { hasSome: filters.followupTypes }
+    formattedFilters.types = { some: { id: { in: filters.followupTypes } } }
   }
 
-  if (filters.typeSuivi) {
-    formattedFilters.isFollowup = filters.typeSuivi === TypeSuivi.Followup
-  }
+  // FIX: faut-il rajouter un type de social support ?
+  // if (filters.typeSuivi) {
+  //   formattedFilters.isFollowup = filters.typeSuivi === TypeSuivi.Followup
+  // }
 
   return formattedFilters
 }
@@ -99,64 +102,36 @@ function getHistories(
           referents: true
         }
       },
-      prescribingOrganization: {
+      documents: {
         select: {
-          name: true
+          key: true,
+          name: true,
+          createdById: true,
+          confidential: true
         }
       },
-      instructorOrganization: {
+      comments: {
+        orderBy: { created: 'asc' },
+        include: COMMENT_RELATIONS_INCLUDE
+      },
+      helpRequest: {
         select: {
-          name: true
+          id: true
         }
       },
       followup: {
-        include: {
-          documents: {
-            select: {
-              key: true,
-              name: true,
-              createdById: true,
-              confidential: true
-            }
-          },
-          comments: {
-            orderBy: { created: 'asc' },
-            include: COMMENT_RELATIONS_INCLUDE
-          },
-          _count: {
-            select: {
-              notifications: {
-                where: { read: false, recipientId: user.id }
-              }
-            }
-          },
-          types: true
+        select: {
+          id: true
         }
       },
-      helpRequest: {
-        include: {
-          documents: {
-            select: {
-              key: true,
-              name: true,
-              createdById: true,
-              confidential: true
-            }
-          },
-          comments: {
-            orderBy: { created: 'asc' },
-            include: COMMENT_RELATIONS_INCLUDE
-          },
-          _count: {
-            select: {
-              notifications: {
-                where: { read: false, recipientId: user.id }
-              }
-            }
-          },
-          type: true
+      _count: {
+        select: {
+          notifications: {
+            where: { read: false, recipientId: user.id }
+          }
         }
-      }
+      },
+      types: true
     },
     orderBy: { date: 'desc' }
   })
@@ -170,10 +145,8 @@ function flattenHistories(
   beneficiary: BeneficiarySecurityTarget
 ) {
   return histories.map(history => {
-    const { followup, helpRequest, ...data } = history
+    const { followup, types, documents, comments, _count, ...data } = history
     const { user } = ctx
-
-    const documents = followup?.documents || helpRequest?.documents
 
     const documentsWithPermissions = documents?.map(document => ({
       document,
@@ -184,27 +157,24 @@ function flattenHistories(
       })
     }))
 
-    const historyPermissions = data.isFollowup
+    const historyPermissions = followup
       ? getFollowupPermissions({
           user,
           beneficiary: data.beneficiary,
-          followup: data
+          socialSupport: history
         })
       : getHelpRequestPermissions({
           ctx,
-          target: { beneficiary: data.beneficiary, helpRequest: data }
+          target: { beneficiary: data.beneficiary, socialSupport: history }
         })
 
     return {
       data: {
         ...data,
         documents: documentsWithPermissions,
-        comments: followup?.comments || helpRequest?.comments,
-        hasUnreadNotifications: !!(
-          followup?._count.notifications || helpRequest?._count.notifications
-        ),
-        followUpTypes:
-          followup?.types || (helpRequest ? [helpRequest.type] : undefined)
+        comments,
+        hasUnreadNotifications: !!_count.notifications,
+        followUpTypes: types
       },
       permissions: historyPermissions
     }

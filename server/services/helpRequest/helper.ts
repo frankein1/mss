@@ -1,33 +1,16 @@
-import {
-  Prisma,
-  HelpRequestStatus,
-  HelpRequestSubject,
-  Beneficiary,
-  HelpRequest,
-  Document
-} from '@prisma/client'
+import { HelpRequestSubject, Prisma, SocialSupportStatus } from '@prisma/client'
 import {
   CreateHelpRequestInput,
   EditHelpRequestInput,
   HelpRequestFilterInput
 } from '~/server/schema'
-import {
-  connect,
-  prepareDateFields,
-  prepareDocumentsMutations
-} from '~/utils/prisma'
-import {
-  getHelpRequestPermissions,
-  SecurityRuleGrantee
-} from '~/server/security'
+import { connect } from '~/utils/prisma'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { SecurityRuleContext } from '~/server/security/rules/types'
-import { prepareNewHistoryElementNotification } from '~/server/services/helper'
 
-function prepareInstructorOrganization(
+export function prepareInstructorOrganization(
   instructorOrganizationId: string | null | undefined,
-  user: SecurityRuleGrantee,
-  structureId: string,
+  ctx: SecurityRuleContext,
   isExternalStructure: boolean,
   hasInstructorOrganizationAlreadySelected = false
 ) {
@@ -43,18 +26,17 @@ function prepareInstructorOrganization(
     return {
       create: {
         name: newOptionToLabel(instructorOrganizationId),
-        structureId,
-        createdById: user.id
+        structureId: ctx.structure.id,
+        createdById: ctx.user.id
       }
     }
   }
   return connect(instructorOrganizationId)
 }
 
-function preparePrescribingOrganization(
+export function preparePrescribingOrganization(
   prescribingOrganizationId: string | null | undefined,
-  user: SecurityRuleGrantee,
-  structureId: string
+  ctx: SecurityRuleContext
 ) {
   if (!prescribingOrganizationId) {
     return undefined
@@ -63,169 +45,26 @@ function preparePrescribingOrganization(
     return {
       create: {
         name: newOptionToLabel(prescribingOrganizationId),
-        structureId,
-        createdById: user.id
+        structureId: ctx.structure.id,
+        createdById: ctx.user.id
       }
     }
   }
   return connect(prescribingOrganizationId)
 }
 
-function prepareHelpRequestData(
-  input: Omit<
-    | CreateHelpRequestInput
-    | Omit<EditHelpRequestInput, 'id' | 'beneficiaryId' | 'subject'>,
-    'isMinistry' | 'documents' | 'instructorOrganizationId'
-  >,
-  ctx: SecurityRuleContext,
-  subject: HelpRequestSubject
-) {
-  const {
-    typeId,
-    prescribingOrganizationId,
-    externalStructure,
-    ministre,
-    numeroPegase,
-    dispatchDate,
-    examinationDate,
-    decisionDate,
-    status,
-    handlingDate,
-    refusalReason,
-    askedAmount,
-    allocatedAmount,
-    paymentMethod,
-    paymentDate,
-    isRefundable,
-    ...otherData
-  } = prepareDateFields(input, [
-    'decisionDate',
-    'dispatchDate',
-    'dueDate',
-    'examinationDate',
-    'handlingDate',
-    'paymentDate'
-  ])
-
-  const { user, structure } = ctx
-
-  const prescribingOrganization = preparePrescribingOrganization(
-    prescribingOrganizationId,
-    user,
-    structure.id
-  )
-  const isExternalStructure = externalStructure === 'true'
-  const isFinancial = subject === HelpRequestSubject.Financial
-  const isAccepted = status === HelpRequestStatus.Accepted
-  const isRefused = status === HelpRequestStatus.Refused
-
-  let data: Omit<
-    Prisma.HelpRequestCreateInput,
-    'createdBy' | 'beneficiary' | 'structure' | 'subject' | 'documents'
-  > &
-    Omit<Prisma.HelpRequestUpdateInput, 'id'> = {
-    type: connect(typeId),
-    status,
-    ...otherData,
-    externalStructure: isExternalStructure,
-    prescribingOrganization,
-    isRefundable:
-      !isFinancial || isRefundable === null || isRefundable === undefined
-        ? null
-        : isRefundable === 'true'
-  }
-
-  const permissions = getHelpRequestPermissions({ ctx })
-
-  if (permissions.set.ministre) {
-    data = { ...data, ministre }
-  }
-  if (permissions.set.numeroPegase) {
-    data = { ...data, numeroPegase }
-  }
-  if (isRefused && refusalReason) {
-    data = { ...data, refusalReasonOther: null }
-  }
-
-  // It is required to enforce setting undefined when conditional field is not available to allow overriding in edit mode
-  data = {
-    ...data,
-    decisionDate: isAccepted || isRefused ? decisionDate : null,
-    handlingDate: isAccepted ? handlingDate : null,
-    refusalReason: isRefused ? refusalReason : null,
-    dispatchDate: isExternalStructure ? dispatchDate : null,
-    examinationDate: !isExternalStructure ? examinationDate : null,
-    askedAmount: isFinancial ? askedAmount : null,
-    allocatedAmount: isFinancial && isAccepted ? allocatedAmount : null,
-    paymentMethod:
-      isFinancial && isAccepted && !isExternalStructure ? paymentMethod : null,
-    paymentDate:
-      isFinancial && isAccepted && !isExternalStructure ? paymentDate : null
-  }
-
-  return data
-}
-
-export function prepareHelpRequestCreateData(
-  {
-    isMinistry: _isMinistry, // This field is ignored as only used for schema validation
-    beneficiaryId,
-    subject,
-    documents,
-    instructorOrganizationId,
-    ...input
-  }: CreateHelpRequestInput,
-  ctx: SecurityRuleContext,
-  beneficiary: Pick<Beneficiary, 'id'> & { referents: { id: string }[] }
-): Prisma.HelpRequestCreateInput {
-  const data = prepareHelpRequestData(input, ctx, subject)
-  return {
-    ...data,
-    createdBy: connect(ctx.user.id),
-    beneficiary: connect(beneficiaryId),
-    structure: connect(ctx.structure.id),
-    subject,
-    notifications: prepareNewHistoryElementNotification(beneficiary, ctx.user),
-    documents: prepareDocumentsMutations(documents),
-    instructorOrganization: prepareInstructorOrganization(
-      instructorOrganizationId,
-      ctx.user,
-      ctx.structure.id,
-      input.externalStructure === 'true'
-    )
-  }
-}
-export function prepareHelpRequestUpdateData(
-  input: EditHelpRequestInput,
-  ctx: SecurityRuleContext,
-  target: Pick<HelpRequest, 'subject' | 'instructorOrganizationId'> & {
-    documents: Document[]
-  }
-): Prisma.HelpRequestUpdateInput {
-  const { documents, instructorOrganizationId } = input
-  const data = prepareHelpRequestData(input, ctx, target.subject)
-  return {
-    ...data,
-    documents: prepareDocumentsMutations(documents, target.documents),
-    instructorOrganization: prepareInstructorOrganization(
-      instructorOrganizationId,
-      ctx.user,
-      ctx.structure.id,
-      input.externalStructure === 'true',
-      target.instructorOrganizationId !== null
-    )
-  }
-}
-
-export function prepareHelpRequestFilters(filters: HelpRequestFilterInput) {
+export function prepareFilters(filters: HelpRequestFilterInput) {
   const formattedFilters: Prisma.HelpRequestWhereInput = {}
+  formattedFilters.socialSupport = {}
 
   if (filters.status) {
-    formattedFilters.status = filters.status
+    formattedFilters.socialSupport.status = filters.status
   }
 
   if (filters.followupTypes) {
-    formattedFilters.type = { id: { in: filters.followupTypes } }
+    formattedFilters.socialSupport.types = {
+      some: { id: { in: filters.followupTypes } }
+    }
   }
 
   if (filters.examinationDate) {
@@ -242,14 +81,82 @@ export function prepareHelpRequestFilters(filters: HelpRequestFilterInput) {
   }
 
   if (filters.referents) {
-    formattedFilters.beneficiary = {
-      referents: { some: { id: { in: filters.referents } } }
+    formattedFilters.socialSupport = {
+      beneficiary: {
+        referents: { some: { id: { in: filters.referents } } }
+      }
     }
   }
 
   if (filters.ministre) {
-    formattedFilters.ministre = { in: filters.ministre }
+    formattedFilters.socialSupport = { ministre: { in: filters.ministre } }
   }
 
   return formattedFilters
+}
+
+export function cleanUpdateInput({
+  input,
+  subject
+}: {
+  input: EditHelpRequestInput
+  subject: HelpRequestSubject
+}) {
+  return cleanInput({ input, subject })
+}
+
+export function cleanCreateInput(input: CreateHelpRequestInput) {
+  const { subject, ...data } = input
+  return cleanInput({ input: data, subject })
+}
+
+function cleanInput({
+  input,
+  subject
+}: {
+  input: Omit<EditHelpRequestInput, 'id'>
+  subject: HelpRequestSubject
+}) {
+  const {
+    status,
+    handlingDate,
+    refusalReason,
+    dispatchDate,
+    decisionDate,
+    examinationDate,
+    askedAmount,
+    allocatedAmount,
+    paymentMethod,
+    paymentDate,
+    externalStructure,
+    isRefundable,
+    ...data
+  } = input
+
+  const isExternalStructure = externalStructure === 'true'
+  const isFinancial = subject === HelpRequestSubject.Financial
+  const isAccepted = status === SocialSupportStatus.Accepted
+  const isRefused = status === SocialSupportStatus.Refused
+
+  return {
+    ...data,
+    status,
+    subject,
+    externalStructure: isExternalStructure,
+    decisionDate: isAccepted || isRefused ? decisionDate : null,
+    handlingDate: isAccepted ? handlingDate : null,
+    refusalReason: isRefused ? refusalReason : null,
+    dispatchDate: isExternalStructure ? dispatchDate : null,
+    examinationDate: !isExternalStructure ? examinationDate : null,
+    askedAmount: isFinancial ? askedAmount : null,
+    allocatedAmount: isFinancial && isAccepted ? allocatedAmount : null,
+    paymentMethod:
+      isFinancial && isAccepted && !isExternalStructure ? paymentMethod : null,
+    paymentDate:
+      isFinancial && isAccepted && !isExternalStructure ? paymentDate : null,
+    isRefundable:
+      !isFinancial || isRefundable === null || isRefundable === undefined
+        ? null
+        : isRefundable === 'true'
+  }
 }

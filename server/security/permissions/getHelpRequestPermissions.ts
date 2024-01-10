@@ -32,7 +32,7 @@ export const getHelpRequestPermissions = ({
   ctx: SecurityRuleContext
   target?: {
     beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-    helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
+    socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
   }
 }) => {
   let permissions: HelpRequestPermissions
@@ -42,7 +42,7 @@ export const getHelpRequestPermissions = ({
     permissions = getEditPermissions({
       ctx,
       beneficiary: target.beneficiary,
-      helpRequest: target.helpRequest
+      socialSupport: target.socialSupport
     })
   }
 
@@ -77,30 +77,30 @@ function getCreatePermissions({
 function getEditPermissions({
   ctx,
   beneficiary,
-  helpRequest
+  socialSupport
 }: {
   ctx: SecurityRuleContext
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
+  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 }): HelpRequestPermissions {
   const { user, structure } = ctx
   const isMinistryAgent = structure.type === StructureType.Ministere
 
   return {
-    edit: isEditable(user, helpRequest),
+    edit: isEditable(user, socialSupport),
     view: access(user, beneficiary),
     get: {
       details: accessDetails(user, beneficiary),
       numeroPegase: isMinistryAgent,
       ministre: isMinistryAgent,
-      privateSynthesis: accessPrivateSynthesis(user, helpRequest)
+      privateSynthesis: accessPrivateSynthesis(user, socialSupport)
     },
     set: {
       numeroPegase: isMinistryAgent,
       ministre: isMinistryAgent,
-      privateSynthesis: isPrivateSynthesisEditable(user, helpRequest)
+      privateSynthesis: isPrivateSynthesisEditable(user, socialSupport)
     },
-    delete: isDeletable(user, helpRequest)
+    delete: isDeletable(user, socialSupport)
   }
 }
 
@@ -127,45 +127,45 @@ const accessDetails = (
 
 const accessPrivateSynthesis = (
   grantee: SecurityRuleGrantee,
-  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
+  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 ): boolean =>
-  isInSameStructureAs(grantee, helpRequest, [
+  isInSameStructureAs(grantee, socialSupport, [
     'StructureManager',
     'SocialWorker',
     'Instructor',
     'ReceptionAgent'
-  ]) && isCreator(grantee, helpRequest)
+  ]) && isCreator(grantee, socialSupport)
 
 const isEditable = (
   grantee: SecurityRuleGrantee,
-  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
+  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 ): boolean =>
-  isInSameStructureAs(grantee, helpRequest, ['StructureManager']) ||
-  (isInSameStructureAs(grantee, helpRequest, [
+  isInSameStructureAs(grantee, socialSupport, ['StructureManager']) ||
+  (isInSameStructureAs(grantee, socialSupport, [
     'SocialWorker',
     'Instructor',
     'Referent'
   ]) &&
-    isCreator(grantee, helpRequest))
+    isCreator(grantee, socialSupport))
 
 const isPrivateSynthesisEditable = (
   grantee: SecurityRuleGrantee,
-  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
+  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 ): boolean =>
-  isInSameStructureAs(grantee, helpRequest, [
+  isInSameStructureAs(grantee, socialSupport, [
     'StructureManager',
     'SocialWorker',
     'Instructor',
     'Referent'
-  ]) && isCreator(grantee, helpRequest)
+  ]) && isCreator(grantee, socialSupport)
 
 const isDeletable = (
   grantee: SecurityRuleGrantee,
-  helpRequest: SecurityTargetWithCreator & SecurityTargetWithStructure
+  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 ): boolean =>
-  isInSameStructureAs(grantee, helpRequest, [
+  isInSameStructureAs(grantee, socialSupport, [
     'StructureManager',
     'SocialWorker'
   ]) ||
-  (isInSameStructureAs(grantee, helpRequest, ['Instructor']) &&
-    isCreator(grantee, helpRequest))
+  (isInSameStructureAs(grantee, socialSupport, ['Instructor']) &&
+    isCreator(grantee, socialSupport))

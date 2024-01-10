@@ -1,8 +1,7 @@
-import { HelpRequestStatus, HelpRequestSubject } from '@prisma/client'
+import { SocialSupportStatus, HelpRequestSubject } from '@prisma/client'
 import { HelpRequestRepo } from '~/server/database'
 import { QuickEditHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
-import { prepareDateFields } from '~/utils/prisma'
 
 export async function quickUpdate(
   ctx: SecurityRuleContext,
@@ -35,24 +34,20 @@ function prepareData(
     return data
   }
 
-  if ('paymentDate' in data) {
-    return prepareDateFields(data, ['paymentDate'])
-  }
-
   if ('status' in data) {
     const status = data.status
     let _data = {}
     _data = { ..._data, status }
     if (
-      status !== HelpRequestStatus.Accepted &&
-      status !== HelpRequestStatus.Refused
+      status !== SocialSupportStatus.Accepted &&
+      status !== SocialSupportStatus.Refused
     ) {
       _data = { ..._data, decisionDate: null }
     }
-    if (status !== HelpRequestStatus.Accepted) {
+    if (status !== SocialSupportStatus.Accepted) {
       _data = { ..._data, handlingDate: null, allocatedAmount: null }
     }
-    if (status !== HelpRequestStatus.Refused) {
+    if (status !== SocialSupportStatus.Refused) {
       _data = { ..._data, refusalReason: null }
     }
     return _data

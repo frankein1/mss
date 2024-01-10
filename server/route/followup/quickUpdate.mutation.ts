@@ -10,15 +10,22 @@ import { FollowupService } from '~/server/services'
 import { FollowupRepo } from '~/server/database'
 
 const handler = async ({
-  input: { id, ...rest },
+  input,
   ctx: { user }
 }: {
   input: QuickEditFollowupInput
   ctx: ProtectedAppContext
 }) => {
+  const { id, status } = input
   await FollowupRepo.prisma.update({
     where: { id },
-    data: rest
+    data: {
+      socialSupport: {
+        update: {
+          status
+        }
+      }
+    }
   })
   return FollowupService.get({ user, id })
 }
