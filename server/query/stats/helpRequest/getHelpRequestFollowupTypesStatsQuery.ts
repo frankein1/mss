@@ -1,15 +1,24 @@
-import { FollowupTypeRepo, HelpRequestConstraints } from '~/server/database'
+import { SocialSupportType } from '@prisma/client'
+import { prepareSocialSupportStatFilters } from '../helpers'
+import {
+  BeneficiaryHistoryConstraints,
+  FollowupTypeRepo
+} from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { prepareHelpRequestStatFilters } from '~/utils/filters'
 import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 
 export async function getHelpRequestFollowupTypesStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const helpRequestWhere = { where: prepareHelpRequestStatFilters(input) }
-  appendConstraints(user, helpRequestWhere, HelpRequestConstraints.get)
+  const helpRequestWhere = {
+    where: {
+      ...prepareSocialSupportStatFilters(input),
+      socialSupportType: SocialSupportType.HelpRequestOther
+    }
+  }
+  appendConstraints(user, helpRequestWhere, BeneficiaryHistoryConstraints.get)
 
   return await FollowupTypeRepo.findMany(user, {
     select: {
@@ -17,10 +26,10 @@ export async function getHelpRequestFollowupTypesStatsQuery(
       name: true,
       _count: {
         select: {
-          helpRequests: helpRequestWhere
+          socialSupports: helpRequestWhere
         }
       }
     },
-    orderBy: [{ helpRequests: { _count: 'desc' } }]
+    orderBy: [{ socialSupports: { _count: 'desc' } }]
   })
 }

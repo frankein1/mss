@@ -1,15 +1,15 @@
 import { Prisma } from '@prisma/client'
+import { prepareSocialSupportStatFilters } from '../helpers'
 import { FollowupRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { prepareFollowupStatFilters } from '~/utils/filters'
 
 export async function getFollowupCountQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
   const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareFollowupStatFilters(input)
+    prepareSocialSupportStatFilters(input)
 
   const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
     preparedBeneficiaryFilters
@@ -20,9 +20,11 @@ export async function getFollowupCountQuery(
 
   return await FollowupRepo.count(user, {
     where: {
-      structureId: user.structureId || '',
-      ...preparedFilters,
-      beneficiary: beneficiaryFilters
+      socialSupport: {
+        structureId: user.structureId || '',
+        ...preparedFilters,
+        beneficiary: beneficiaryFilters
+      }
     }
   })
 }

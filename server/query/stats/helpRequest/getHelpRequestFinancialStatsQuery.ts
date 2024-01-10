@@ -6,7 +6,7 @@ import {
 } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security'
-import { prepareHelpRequestStatFilters } from '~/utils/filters'
+import { prepareSocialSupportStatFilters } from '../helpers'
 import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 
 function getFinancialHelpRequestCount(
@@ -43,7 +43,9 @@ async function getFinancialHelpRequestTotalAmount(
   } = await HelpRequestRepo.aggregate(user, {
     where: {
       subject: HelpRequestSubject.Financial,
-      status: 'Accepted',
+      socialSupport: {
+        status: 'Accepted'
+      },
       allocatedAmount: { gt: 0 },
       ...filters
     },

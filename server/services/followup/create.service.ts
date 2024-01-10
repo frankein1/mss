@@ -1,4 +1,4 @@
-import { FollowupMedium } from '@prisma/client'
+import { FollowupMedium, SocialSupportType } from '@prisma/client'
 import { prepareFollowupTypesMutations } from './helper'
 import { BeneficiaryRepo, FollowupRepo } from '~/server/database'
 import { AddFollowupInput } from '~/server/schema'
@@ -95,6 +95,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
       socialSupport: {
         create: {
           status,
+          socialSupportType: SocialSupportType.Followup,
           date,
           structure: connect(structure.id),
           beneficiary: connect(beneficiaryId),

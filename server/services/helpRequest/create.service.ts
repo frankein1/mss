@@ -1,3 +1,4 @@
+import { SocialSupportType } from '@prisma/client'
 import { prepareNewHistoryElementNotification } from '../helper'
 import {
   cleanCreateInput,
@@ -75,6 +76,7 @@ export async function create({ input, ctx }: CreateParams) {
       socialSupport: {
         create: {
           status,
+          socialSupportType: SocialSupportType.HelpRequestOther,
           createdById: ctx.user.id,
           beneficiaryId,
           structureId: ctx.structure.id,

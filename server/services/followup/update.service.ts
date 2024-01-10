@@ -113,7 +113,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
       dueDate,
       firstFollowup,
       classified,
-      forwardedToJustice,
+      forwardedToJustice
       // signalements,
       // interventions,
     },

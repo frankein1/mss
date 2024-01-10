@@ -1,16 +1,18 @@
 import { Prisma } from '@prisma/client'
+import {
+  preparePrescribingOrganizationStats,
+  prepareSocialSupportStatFilters
+} from '../helpers'
 import { HelpRequestRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { prepareHelpRequestStatFilters } from '~/utils/filters'
-import { preparePrescribingOrganizationStats } from '~/utils/stats'
 
 export async function getHelpRequestPrescribingOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
   const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareHelpRequestStatFilters(input)
+    prepareSocialSupportStatFilters(input)
 
   const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
     preparedBeneficiaryFilters
@@ -21,8 +23,10 @@ export async function getHelpRequestPrescribingOrganizationStatsQuery(
 
   const helpRequests = await HelpRequestRepo.findMany(user, {
     where: {
-      ...preparedFilters,
-      beneficiary: beneficiaryFilters
+      socialSupport: {
+        ...preparedFilters,
+        beneficiary: beneficiaryFilters
+      }
     },
     select: {
       prescribingOrganization: {

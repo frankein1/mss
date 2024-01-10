@@ -24,5 +24,9 @@ function count(
 
 export const BeneficiaryHistoryRepo = {
   findMany,
-  count
+  count,
+  prisma: {
+    groupBy: prismaClient.socialSupport.groupBy,
+    findMany: prismaClient.socialSupport.findMany
+  }
 }

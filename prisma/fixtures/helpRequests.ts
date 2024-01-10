@@ -1,4 +1,4 @@
-import { Prisma, HelpRequestSubject } from '@prisma/client'
+import { Prisma, HelpRequestSubject, SocialSupportType } from '@prisma/client'
 import {
   fixtureStructure,
   fixturesBeneficiaries,
@@ -14,6 +14,7 @@ export const fixturesHelpRequests = [
     socialSupport: {
       create: {
         createdById: '9840ff03-0fef-4967-b533-66d81c25b44a',
+        socialSupportType: SocialSupportType.HelpRequestOther,
         status: 'Accepted',
         structureId: fixtureStructure.id,
         beneficiaryId: fixturesBeneficiaries[0].id,
@@ -30,6 +31,7 @@ export const fixturesHelpRequests = [
     socialSupport: {
       create: {
         createdById: '9840ff03-0fef-4967-b533-66d81c25b44a',
+        socialSupportType: SocialSupportType.HelpRequestOther,
         status: 'InvestigationOngoing',
         structureId: fixtureStructure.id,
         beneficiaryId: fixturesBeneficiaries[2].id,

@@ -1,3 +1,4 @@
+import { SocialSupportType } from '@prisma/client'
 import {
   cleanUpdateInput,
   prepareInstructorOrganization,
@@ -83,6 +84,7 @@ export async function update({ input, ctx }: UpdateParams) {
       socialSupport: {
         create: {
           status,
+          socialSupportType: SocialSupportType.HelpRequestOther,
           createdById: ctx.user.id,
           beneficiaryId,
           structureId: ctx.structure.id,
@@ -96,7 +98,8 @@ export async function update({ input, ctx }: UpdateParams) {
           documents: prepareDocumentsMutations(
             documents,
             target.socialSupport.documents
-          )        }
+          )
+        }
       }
     },
     include: {

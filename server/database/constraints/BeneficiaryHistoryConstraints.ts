@@ -7,10 +7,10 @@ const get = (user: SecurityRuleGrantee) => {
   if (isAdmin(user)) {
     return where
   }
-  Object.assign<
-    Prisma.SocialSupportWhereInput,
-    Prisma.SocialSupportWhereInput
-  >(where, { structureId: user.structureId || undefined })
+  Object.assign<Prisma.SocialSupportWhereInput, Prisma.SocialSupportWhereInput>(
+    where,
+    { structureId: user.structureId || undefined }
+  )
 
   if (isReferent(user)) {
     Object.assign<

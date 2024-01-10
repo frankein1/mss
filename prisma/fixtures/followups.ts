@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, SocialSupportType } from '@prisma/client'
 import {
   fixtureStructure,
   fixturesBeneficiaries,
@@ -13,6 +13,7 @@ export const fixturesFollowups = [
     socialSupport: {
       create: {
         date: new Date('2022-10-20'),
+        socialSupportType: SocialSupportType.Followup,
         createdById: fixturesUsers[1].id,
         status: 'Done',
         beneficiaryId: fixturesBeneficiaries[0].id,
@@ -32,6 +33,7 @@ export const fixturesFollowups = [
     socialSupport: {
       create: {
         createdById: fixturesUsers[1].id,
+        socialSupportType: SocialSupportType.Followup,
         status: 'Done',
         structureId: fixtureStructure.id,
         beneficiaryId: fixturesBeneficiaries[0].id,
@@ -48,6 +50,7 @@ export const fixturesFollowups = [
     socialSupport: {
       create: {
         createdById: fixturesUsers[1].id,
+        socialSupportType: SocialSupportType.Followup,
         status: 'Done',
         structureId: fixtureStructure.id,
         beneficiaryId: fixturesBeneficiaries[2].id,
@@ -67,6 +70,7 @@ export const fixturesFollowups = [
     socialSupport: {
       create: {
         createdById: fixturesUsers[1].id,
+        socialSupportType: SocialSupportType.Followup,
         status: 'Done',
         structureId: fixtureStructure.id,
         beneficiaryId: fixturesBeneficiaries[1].id,
@@ -83,6 +87,7 @@ export const fixturesFollowups = [
     socialSupport: {
       create: {
         createdById: fixturesUsers[1].id,
+        socialSupportType: SocialSupportType.Followup,
         status: 'InProgress',
         structureId: fixtureStructure.id,
         beneficiaryId: fixturesBeneficiaries[2].id,
@@ -102,6 +107,7 @@ export const fixturesFollowups = [
     socialSupport: {
       create: {
         id: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
+        socialSupportType: SocialSupportType.Followup,
         date: new Date('2022-10-25'),
         createdById: fixturesUsers[1].id,
         status: 'InProgress',

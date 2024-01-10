@@ -1,16 +1,18 @@
 import { Prisma } from '@prisma/client'
+import {
+  prepareSocialSupportStatFilters,
+  preparePrescribingOrganizationStats
+} from '../helpers'
 import { FollowupRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { prepareFollowupStatFilters } from '~/utils/filters'
-import { preparePrescribingOrganizationStats } from '~/utils/stats'
 
 export async function getFollowupPrescribingOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
   const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareFollowupStatFilters(input)
+    prepareSocialSupportStatFilters(input)
 
   const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
     preparedBeneficiaryFilters
@@ -21,8 +23,10 @@ export async function getFollowupPrescribingOrganizationStatsQuery(
 
   const followups = await FollowupRepo.findMany(user, {
     where: {
-      ...preparedFilters,
-      beneficiary: beneficiaryFilters
+      socialSupport: {
+        ...preparedFilters,
+        beneficiary: beneficiaryFilters
+      }
     },
     select: {
       prescribingOrganization: {

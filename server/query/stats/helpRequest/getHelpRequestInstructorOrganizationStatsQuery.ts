@@ -1,17 +1,17 @@
-import { Prisma } from '@prisma/client'
-import { HelpRequestRepo } from '~/server/database'
+import { Prisma, SocialSupportType } from '@prisma/client'
+import { prepareSocialSupportStatFilters } from '../helpers'
+import { BeneficiaryHistoryRepo } from '~/server/database'
 import { STATS_NULL_LABEL } from '~/client/options/stat'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
-import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
 export async function getHelpRequestInstructorOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
   const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareHelpRequestStatFilters(input)
+    prepareSocialSupportStatFilters(input)
 
   const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
     preparedBeneficiaryFilters
@@ -20,16 +20,21 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
         }
       : {}
 
-  const helpRequests = await HelpRequestRepo.findMany(user, {
+  const helpRequests = await BeneficiaryHistoryRepo.findMany(user, {
     where: {
       ...preparedFilters,
-      beneficiary: beneficiaryFilters
+      beneficiary: beneficiaryFilters,
+      socialSupportType: SocialSupportType.HelpRequestOther
     },
     select: {
-      instructorOrganization: {
+      helpRequest: {
         select: {
-          id: true,
-          name: true
+          instructorOrganization: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
         }
       }
     }
@@ -45,15 +50,16 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
       },
       historyItem
     ) => {
+      const { helpRequest } = historyItem
       const instructorOrganizationId =
-        historyItem.instructorOrganization?.id || STATS_NULL_KEY
+        helpRequest?.instructorOrganization?.id || STATS_NULL_KEY
       if (instructorOrganizationId in instructorOrganizations) {
         instructorOrganizations[instructorOrganizationId]._count++
       } else {
         instructorOrganizations[instructorOrganizationId] = {
           instructorOrganizationId,
           instructorOrganization:
-            historyItem.instructorOrganization?.name || STATS_NULL_LABEL,
+            helpRequest?.instructorOrganization?.name || STATS_NULL_LABEL,
           _count: 1
         }
       }

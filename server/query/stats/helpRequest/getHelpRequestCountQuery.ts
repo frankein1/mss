@@ -1,15 +1,15 @@
-import { Prisma } from '@prisma/client'
-import { HelpRequestRepo } from '~/server/database'
+import { Prisma, SocialSupportType } from '@prisma/client'
+import { prepareSocialSupportStatFilters } from '../helpers'
+import { BeneficiaryHistoryRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { prepareHelpRequestStatFilters } from '~/utils/filters'
 
 export async function getHelpRequestCountQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
   const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareHelpRequestStatFilters(input)
+    prepareSocialSupportStatFilters(input)
 
   const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
     preparedBeneficiaryFilters
@@ -18,9 +18,10 @@ export async function getHelpRequestCountQuery(
         }
       : {}
 
-  return await HelpRequestRepo.count(user, {
+  return await BeneficiaryHistoryRepo.count(user, {
     where: {
       ...preparedFilters,
+      socialSupportType: SocialSupportType.HelpRequestOther,
       beneficiary: beneficiaryFilters
     }
   })

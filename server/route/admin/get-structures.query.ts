@@ -56,7 +56,7 @@ const adminHandler = async ({
         select: {
           beneficiaries: true,
           users: true,
-          socialSupports: true,
+          socialSupports: true
         }
       }
     },

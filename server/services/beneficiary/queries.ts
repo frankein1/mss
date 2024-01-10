@@ -159,9 +159,8 @@ const filter = (
 
 function getHistory(beneficiary: BeneficiaryOutput) {
   return {
-    historyTotal:
-      beneficiary._count.socialSupports,
-    types: beneficiary.socialSupports.map(ss => (ss.types)).flat()
+    historyTotal: beneficiary._count.socialSupports,
+    types: beneficiary.socialSupports.map(ss => ss.types).flat()
   }
 }
 

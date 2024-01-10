@@ -13,30 +13,14 @@ export async function getMinistereInterpellationStatsQuery(
     {
       where: {
         ...prepareBeneficiaryStatFilters(input),
-        OR: [
-          {
-            helpRequests: {
-              some: {
-                ministre: { not: null }
-              }
-            }
-          },
-          {
-            followups: {
-              some: {
-                ministre: { not: null }
-              }
-            }
-          }
-        ]
-      },
-      select: {
-        helpRequests: {
-          where: {
+        socialSupports: {
+          some: {
             ministre: { not: null }
           }
-        },
-        followups: {
+        }
+      },
+      select: {
+        socialSupports: {
           where: {
             ministre: { not: null }
           }
@@ -49,10 +33,7 @@ export async function getMinistereInterpellationStatsQuery(
 
   beneficiariesWithMinistreHistory
     .map(beneficiary => [
-      ...new Set([
-        ...beneficiary.followups.map(followup => followup.ministre),
-        ...beneficiary.helpRequests.map(helpRequest => helpRequest.ministre)
-      ])
+      ...new Set([...beneficiary.socialSupports.map(ss => ss.ministre)])
     ])
     .forEach(interpellations =>
       interpellations.forEach(interpellation => {

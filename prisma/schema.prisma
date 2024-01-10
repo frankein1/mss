@@ -241,11 +241,19 @@ enum SocialSupportStatus {
   Done
 }
 
+enum SocialSupportType {
+  Followup
+  HelpRequestHousing
+  HelpRequestOther
+}
+
 model SocialSupport {
   id String @id @default(uuid()) @db.Uuid
 
   structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
+
+  socialSupportType SocialSupportType @map("social_support_type")
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
