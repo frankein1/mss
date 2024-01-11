@@ -24,7 +24,6 @@
  - You are about to drop the column `status` on the `help_request` table. All the data in the column will be lost.
  - You are about to drop the column `structure_id` on the `help_request` table. All the data in the column will be lost.
  - You are about to drop the column `synthesis` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `type_id` on the `help_request` table. All the data in the column will be lost.
  - You are about to drop the column `followup_id` on the `notification` table. All the data in the column will be lost.
  - You are about to drop the column `help_request_id` on the `notification` table. All the data in the column will be lost.
  - You are about to drop the `_document_to_followup` table. If the table is not empty, all the data it contains will be lost.
@@ -507,9 +506,6 @@ ALTER TABLE "help_request" DROP CONSTRAINT "help_request_created_by_id_fkey";
 ALTER TABLE "help_request" DROP CONSTRAINT "help_request_structure_id_fkey";
 
 -- DropForeignKey
-ALTER TABLE "help_request" DROP CONSTRAINT "help_request_type_id_fkey";
-
--- DropForeignKey
 ALTER TABLE "notification" DROP CONSTRAINT "notification_followup_id_fkey";
 
 -- DropForeignKey
@@ -541,8 +537,7 @@ ALTER TABLE "help_request" DROP COLUMN "beneficiary_id",
     DROP COLUMN "private_synthesis",
     DROP COLUMN "status",
     DROP COLUMN "structure_id",
-    DROP COLUMN "synthesis",
-    DROP COLUMN "type_id";
+    DROP COLUMN "synthesis";
 
 -- AlterTable
 ALTER TABLE "notification" DROP COLUMN "followup_id",
