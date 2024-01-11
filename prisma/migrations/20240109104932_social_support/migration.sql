@@ -14,6 +14,7 @@
  - You are about to drop the column `status` on the `followup` table. All the data in the column will be lost.
  - You are about to drop the column `structure_id` on the `followup` table. All the data in the column will be lost.
  - You are about to drop the column `synthesis` on the `followup` table. All the data in the column will be lost.
+ - You are about to drop the column `due_date` on the `followup` table. All the data in the column will be lost.
  - You are about to drop the column `beneficiary_id` on the `help_request` table. All the data in the column will be lost.
  - You are about to drop the column `created` on the `help_request` table. All the data in the column will be lost.
  - You are about to drop the column `created_by_id` on the `help_request` table. All the data in the column will be lost.
@@ -24,6 +25,7 @@
  - You are about to drop the column `status` on the `help_request` table. All the data in the column will be lost.
  - You are about to drop the column `structure_id` on the `help_request` table. All the data in the column will be lost.
  - You are about to drop the column `synthesis` on the `help_request` table. All the data in the column will be lost.
+ - You are about to drop the column `due_date` on the `help_request` table. All the data in the column will be lost.
  - You are about to drop the column `followup_id` on the `notification` table. All the data in the column will be lost.
  - You are about to drop the column `help_request_id` on the `notification` table. All the data in the column will be lost.
  - You are about to drop the `_document_to_followup` table. If the table is not empty, all the data it contains will be lost.
@@ -109,6 +111,7 @@ CREATE TABLE "social_support" (
     "created" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated" TIMESTAMP(3),
     "social_support_type" "SocialSupportType" NOT NULL,
+    "due_date" DATE,
     "tmp_followup_id" UUID,
     "tmp_help_request_id" UUID,
     CONSTRAINT "social_support_pkey" PRIMARY KEY ("id")
@@ -124,7 +127,6 @@ CREATE TABLE "housing_help_request" (
     "decision_date" DATE,
     "refusal_reason" "HelpRequestRefusalReason",
     "dispatch_date" DATE,
-    "due_date" DATE,
     "full_file" BOOLEAN,
     "is_first" BOOLEAN NOT NULL,
     "first_opening_date" DATE,
@@ -287,6 +289,7 @@ WITH followup_social_support AS (
             "created",
             "updated",
             "social_support_type",
+            "due_date",
             "tmp_followup_id"
         )
     SELECT gen_random_uuid() AS "id",
@@ -302,6 +305,7 @@ WITH followup_social_support AS (
         "created",
         "updated",
         'Followup'::"SocialSupportType",
+        "due_date",
         "id"
     FROM "followup"
     RETURNING "id",
@@ -364,6 +368,7 @@ WITH help_request_social_support AS (
             "created",
             "updated",
             "social_support_type",
+            "due_date",
             "tmp_help_request_id"
         )
     SELECT gen_random_uuid() AS "id",
@@ -379,6 +384,7 @@ WITH help_request_social_support AS (
         "created",
         "updated",
         'HelpRequest'::"SocialSupportType",
+        "due_date",
         "id"
     FROM "help_request"
     RETURNING "id",
@@ -543,7 +549,8 @@ ALTER TABLE "followup" DROP COLUMN "beneficiary_id",
     DROP COLUMN "private_synthesis",
     DROP COLUMN "status",
     DROP COLUMN "structure_id",
-    DROP COLUMN "synthesis";
+    DROP COLUMN "synthesis",
+    DROP COLUMN "due_date";
 
 -- AlterTable
 ALTER TABLE "help_request" DROP COLUMN "beneficiary_id",
@@ -555,7 +562,8 @@ ALTER TABLE "help_request" DROP COLUMN "beneficiary_id",
     DROP COLUMN "private_synthesis",
     DROP COLUMN "status",
     DROP COLUMN "structure_id",
-    DROP COLUMN "synthesis";
+    DROP COLUMN "synthesis",
+    DROP COLUMN "due_date";
 
 -- AlterTable
 ALTER TABLE "notification" DROP COLUMN "followup_id",
