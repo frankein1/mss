@@ -216,6 +216,7 @@ model FollowupType {
   createdById String?   @map("created_by_id") @db.Uuid
 
   socialSupports SocialSupport[] @relation("social_support_to_followup_type")
+  helpRequests   HelpRequest[]
 
   ownedByStructure   Structure @relation(fields: [ownedByStructureId], references: [id])
   ownedByStructureId String    @map("owned_by_structured_id") @db.Uuid // FIXME: owned_by_structure**d**_id
@@ -392,6 +393,9 @@ model HelpRequest {
 
   instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
   instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
+
+  type   FollowupType @relation(fields: [typeId], references: [id])
+  typeId String       @map("type_id") @db.Uuid
 
   financialSupport  Boolean? @map("financial_support")
   externalStructure Boolean? @map("external_structure")
