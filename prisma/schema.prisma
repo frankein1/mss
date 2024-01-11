@@ -242,6 +242,12 @@ enum SocialSupportStatus {
   Done
 }
 
+enum SocialSupportType {
+  Followup
+  HelpRequestHousing
+  HelpRequest
+}
+
 model SocialSupport {
   id String @id @default(uuid()) @db.Uuid
 
@@ -273,6 +279,7 @@ model SocialSupport {
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
+  socialSupportType  SocialSupportType   @map("social_support_type")
   followup           Followup?
   helpRequest        HelpRequest?
   housingHelpRequest HousingHelpRequest?
