@@ -17,7 +17,7 @@
         <span
           v-else
           class="fr-badge"
-          :class="[followupStatusClasses[followup.status]]"
+          :class="[socialSupportStatusClasses[followup.status]]"
         >
           {{ followupStatusOptions.get(followup.status) }}
         </span>
@@ -45,7 +45,7 @@
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { followupStatusOptions } from '~/client/options/followup'
-  import { followupStatusClasses } from '~/client/classes/followup'
+  import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'

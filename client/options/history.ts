@@ -1,3 +1,5 @@
+import { helpRequestStatusLabels } from './helpRequest'
+import { followupStatusLabels } from './followup'
 import { labelsToOptions } from '~/utils/options'
 import type { FieldLabels } from '~/types/fieldLabels'
 import { TypeSuivi } from '~/types/history'
@@ -8,3 +10,8 @@ export const typeSuiviLabels: FieldLabels<typeof TypeSuivi> = {
 }
 
 export const typeSuiviOptions = labelsToOptions(typeSuiviLabels)
+
+export const socialSupportStatusLabels = {
+  ...followupStatusLabels,
+  ...helpRequestStatusLabels
+}

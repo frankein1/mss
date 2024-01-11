@@ -1,28 +1,26 @@
 import {
-  HelpRequestStatus,
+  SocialSupportStatus,
   PaymentMethod,
   HelpRequestSubject,
   HelpRequestRefusalReason
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
-export const helpRequestStatusLabels: { [key in HelpRequestStatus]: string } = {
-  [HelpRequestStatus.WaitingAdditionalInformation]:
+export const helpRequestStatusLabels = {
+  [SocialSupportStatus.WaitingAdditionalInformation]:
     'En attente de justificatifs',
-  [HelpRequestStatus.InvestigationOngoing]: "En cours d'instruction",
-  [HelpRequestStatus.Accepted]: 'Accepté',
-  [HelpRequestStatus.Refused]: 'Refusé',
-  [HelpRequestStatus.Adjourned]: 'Ajourné',
-  [HelpRequestStatus.ClosedByBeneficiary]: 'Clôturé par le bénéficiaire',
-  [HelpRequestStatus.ClosedByAgent]: "Clôturé par l'agent",
-  [HelpRequestStatus.Dismissed]: 'Classé sans suite'
+  [SocialSupportStatus.InvestigationOngoing]: "En cours d'instruction",
+  [SocialSupportStatus.Accepted]: 'Accepté',
+  [SocialSupportStatus.Refused]: 'Refusé',
+  [SocialSupportStatus.Adjourned]: 'Ajourné',
+  [SocialSupportStatus.ClosedByBeneficiary]: 'Clôturé par le bénéficiaire',
+  [SocialSupportStatus.ClosedByAgent]: "Clôturé par l'agent",
+  [SocialSupportStatus.Dismissed]: 'Classé sans suite'
 }
 
-export const ministryHelpRequestStatusLabels: {
-  [key in HelpRequestStatus]: string
-} = {
+export const ministryHelpRequestStatusLabels = {
   ...helpRequestStatusLabels,
-  [HelpRequestStatus.Accepted]: 'Traité'
+  [SocialSupportStatus.Accepted]: 'Traité'
 }
 
 export const externalOrganisationOptions = new Map([
@@ -40,19 +38,23 @@ export const paymentMethodLabels: { [key in PaymentMethod]: string } = {
 
 export const paymentMethodOptions = labelsToOptions(paymentMethodLabels)
 
-export const helpRequestSubjectLabels: { [key in HelpRequestSubject]: string } =
-  {
-    [HelpRequestSubject.Housing]: 'Une demande de logement',
-    [HelpRequestSubject.Financial]: 'Une aide financière',
-    [HelpRequestSubject.Other]: 'Autre'
-  }
+type ExtendedHelpRequestSubject = keyof typeof HelpRequestSubject | 'Housing'
 
-export const helpRequestSubjectPictos: { [key in HelpRequestSubject]: string } =
-  {
-    [HelpRequestSubject.Housing]: '~/assets/pictograms/building.svg',
-    [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
-    [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
-  }
+export const helpRequestSubjectLabels: {
+  [key in ExtendedHelpRequestSubject]: string
+} = {
+  Housing: 'Une demande de logement',
+  [HelpRequestSubject.Financial]: 'Une aide financière',
+  [HelpRequestSubject.Other]: 'Autre'
+}
+
+export const helpRequestSubjectPictos: {
+  [key in ExtendedHelpRequestSubject]: string
+} = {
+  Housing: '~/assets/pictograms/building.svg',
+  [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
+  [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
+}
 
 export const helpRequestSubjectOptions = labelsToOptions(
   helpRequestSubjectLabels,
@@ -66,7 +68,7 @@ const baseRefusalReasonLabels = {
   [HelpRequestRefusalReason.IrregularSituation]: 'En situation irrégulière'
 }
 
-const otherOrFinancialHelpRequestRefusalReasonLabels = {
+export const helpRequestRefusalReasonLabels = {
   ...baseRefusalReasonLabels,
   [HelpRequestRefusalReason.MissedAppointment]: 'Absence au rendez-vous',
   [HelpRequestRefusalReason.AlreadyExistingHelpRequest]:
@@ -77,7 +79,7 @@ const otherOrFinancialHelpRequestRefusalReasonLabels = {
   [HelpRequestRefusalReason.Other]: 'Autre'
 }
 
-const housingHelpRequestRefusalReasonLabels = {
+export const housingHelpRequestRefusalReasonLabels = {
   ...baseRefusalReasonLabels,
   [HelpRequestRefusalReason.InadequateFamilyComposition]:
     'Composition familiale inadaptée au type de logement',
@@ -85,25 +87,13 @@ const housingHelpRequestRefusalReasonLabels = {
   [HelpRequestRefusalReason.Other]: 'Autre'
 }
 
-export const helpRequestRefusalReasonLabels: {
-  [key in HelpRequestRefusalReason]: string
-} = {
-  ...otherOrFinancialHelpRequestRefusalReasonLabels,
-  ...housingHelpRequestRefusalReasonLabels
-}
-
-const otherOrFinancialHelpRequestRefusalReasonOptions = labelsToOptions(
-  otherOrFinancialHelpRequestRefusalReasonLabels
+export const helpRequestRefusalReasonOptions = labelsToOptions(
+  helpRequestRefusalReasonLabels
 )
 
-const housingHelpRequestRefusalReasonOptions = labelsToOptions(
+export const housingHelpRequestRefusalReasonOptions = labelsToOptions(
   housingHelpRequestRefusalReasonLabels
 )
-
-export const helpRequestRefusalReasonOptions = (subject: HelpRequestSubject) =>
-  subject === HelpRequestSubject.Housing
-    ? housingHelpRequestRefusalReasonOptions
-    : otherOrFinancialHelpRequestRefusalReasonOptions
 
 export const isRefundableLabels = {
   true: 'Remboursable',

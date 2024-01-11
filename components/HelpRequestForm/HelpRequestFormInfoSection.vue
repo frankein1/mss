@@ -96,7 +96,7 @@
       <VeeSelect
         name="refusalReason"
         :label="helpRequestFieldLabels.refusalReason"
-        :options="refusalReasonOptions"
+        :options="withEmptyValue(helpRequestRefusalReasonOptions)"
       />
     </div>
   </template>
@@ -137,10 +137,6 @@
 
   const isFinancialSupport = computed(
     () => subject.value === HelpRequestSubject.Financial
-  )
-
-  const refusalReasonOptions = computed(() =>
-    withEmptyValue(helpRequestRefusalReasonOptions(subject.value))
   )
 
   const headline = computed(() => {

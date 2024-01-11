@@ -31,7 +31,7 @@
         <li>
           <p
             class="fr-badge"
-            :class="[statusClass]"
+            :class="[socialSupportStatusClasses[props.history.status]]"
           >
             {{ statusLabel }}
           </p>
@@ -64,11 +64,9 @@
 </template>
 
 <script setup lang="ts">
-  import { FollowupStatus, HelpRequestStatus } from '@prisma/client'
   import type { HistoryItemData } from './types'
   import { followupStatusLabels } from '~/client/options/followup'
-  import { followupStatusClasses } from '~/client/classes/followup'
-  import { helpRequestStatusClasses } from '~/client/classes/helpRequest'
+  import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
 
@@ -99,13 +97,6 @@
     return helpRequestStatusLabels.value[
       props.history.status as HelpRequestStatus
     ]
-  })
-
-  const statusClass = computed(() => {
-    if (props.history.isFollowup) {
-      return followupStatusClasses[props.history.status as FollowupStatus]
-    }
-    return helpRequestStatusClasses[props.history.status as HelpRequestStatus]
   })
 
   const redirectedLabel = computed(() => {

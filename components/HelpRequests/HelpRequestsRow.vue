@@ -18,7 +18,7 @@
         <span
           v-else
           class="fr-badge"
-          :class="[helpRequestStatusClasses[helpRequest.status]]"
+          :class="[socialSupportStatusClasses[helpRequest.status]]"
         >
           {{ helpRequestStatusOptions.get(helpRequest.status) }}
         </span>
@@ -94,12 +94,12 @@
 </template>
 
 <script lang="ts" setup>
-  import { HelpRequestSubject, HelpRequestStatus } from '@prisma/client'
+  import { HelpRequestSubject, SocialSupportStatus } from '@prisma/client'
   import { HelpRequestPageItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { paymentMethodOptions } from '~/client/options/helpRequest'
-  import { helpRequestStatusClasses } from '~/client/classes/helpRequest'
+  import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { euros } from '~/utils/euros'
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { formatUserDisplayName } from '~/utils/user'
@@ -146,14 +146,14 @@
     () =>
       props.item.permissions.edit &&
       isFinancialSupport.value &&
-      helpRequest.value.status === HelpRequestStatus.Accepted
+      helpRequest.value.status === SocialSupportStatus.Accepted
   )
 
   const canEditPaymentMethod = computed(
     () =>
       props.item.permissions.edit &&
       isFinancialSupport.value &&
-      helpRequest.value.status === HelpRequestStatus.Accepted &&
+      helpRequest.value.status === SocialSupportStatus.Accepted &&
       !isExternalSupport.value
   )
 
@@ -161,7 +161,7 @@
     () =>
       props.item.permissions.edit &&
       isFinancialSupport.value &&
-      helpRequest.value.status === HelpRequestStatus.Accepted &&
+      helpRequest.value.status === SocialSupportStatus.Accepted &&
       !isExternalSupport.value
   )
 </script>
