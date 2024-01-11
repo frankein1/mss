@@ -56,6 +56,13 @@ CREATE TYPE "SocialSupportStatus" AS ENUM (
 );
 
 -- CreateEnum
+CREATE TYPE "SocialSupportType" AS ENUM (
+    'Followup',
+    'HelpRequestHousing',
+    'HelpRequest'
+);
+
+-- CreateEnum
 CREATE TYPE "AskedHousing" AS ENUM (
     'ParcSocial',
     'ParcPrive',
@@ -101,6 +108,7 @@ CREATE TABLE "social_support" (
     "status" "SocialSupportStatus" NOT NULL,
     "created" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated" TIMESTAMP(3),
+    "social_support_type" "SocialSupportType" NOT NULL,
     CONSTRAINT "social_support_pkey" PRIMARY KEY ("id")
 );
 
@@ -274,7 +282,8 @@ INSERT INTO "social_support" (
         "numero_pegase",
         "status",
         "created",
-        "updated"
+        "updated",
+        "social_support_type"
     )
 SELECT gen_random_uuid() AS "id",
     "structure_id",
@@ -287,7 +296,8 @@ SELECT gen_random_uuid() AS "id",
     "numero_pegase",
     "status"::text::"SocialSupportStatus",
     "created",
-    "updated"
+    "updated",
+    'Followup'::"SocialSupportType"
 FROM "followup";
 
 UPDATE "followup" fu
@@ -349,7 +359,8 @@ INSERT INTO "social_support" (
         "numero_pegase",
         "status",
         "created",
-        "updated"
+        "updated",
+        "social_support_type"
     )
 SELECT gen_random_uuid() AS "id",
     "structure_id",
@@ -362,7 +373,8 @@ SELECT gen_random_uuid() AS "id",
     "numero_pegase",
     "status"::text::"SocialSupportStatus",
     "created",
-    "updated"
+    "updated",
+    'HelpRequest'::"SocialSupportType"
 FROM "help_request";
 
 UPDATE "help_request" hr
