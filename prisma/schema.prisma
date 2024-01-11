@@ -274,7 +274,8 @@ model SocialSupport {
   ministre     Minister?
   numeroPegase String?   @map("numero_pegase")
 
-  status SocialSupportStatus
+  status  SocialSupportStatus
+  dueDate DateTime?           @map("due_date") @db.Date
 
   created DateTime? @default(now())
   updated DateTime? @updatedAt
@@ -331,14 +332,13 @@ model Followup {
 
   medium FollowupMedium
 
-  helpRequested      Boolean?  @map("help_requested")
+  helpRequested      Boolean? @map("help_requested")
   place              String?
-  structureName      String?   @map("structure_name")
-  dueDate            DateTime? @map("due_date") @db.Date
-  thirdPersonName    String?   @map("third_person_name")
+  structureName      String?  @map("structure_name")
+  thirdPersonName    String?  @map("third_person_name")
   classified         Boolean?
-  firstFollowup      Boolean?  @map("first_followup")
-  forwardedToJustice Boolean?  @map("forwarded_to_justice")
+  firstFollowup      Boolean? @map("first_followup")
+  forwardedToJustice Boolean? @map("forwarded_to_justice")
   redirected         Boolean?
 
   interventions FollowupIntervention[]
@@ -422,8 +422,6 @@ model HelpRequest {
   refusalReasonOther String?                   @map("refusal_reason_other")
   dispatchDate       DateTime?                 @map("dispatch_date") @db.Date
 
-  dueDate DateTime? @map("due_date") @db.Date
-
   fullFile Boolean?           @map("full_file")
   reason   HelpRequestReason?
 
@@ -492,8 +490,6 @@ model HousingHelpRequest {
 
   refusalReason HelpRequestRefusalReason? @map("refusal_reason")
   dispatchDate  DateTime?                 @map("dispatch_date") @db.Date
-
-  dueDate DateTime? @map("due_date") @db.Date
 
   fullFile Boolean? @map("full_file")
 
