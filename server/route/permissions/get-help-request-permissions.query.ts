@@ -1,30 +1,30 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { emptySchema, idSchema, IdInput } from '~/server/schema'
+import {
+  idSchema,
+  IdInput,
+  beneficiaryIdSchema,
+  BeneficiaryIdInput
+} from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { getHelpRequestPermissions } from '~/server/security'
 import { HelpRequestService } from '~/server/services'
 
-const handler = async ({
+const handler = ({
   ctx,
   input
 }: {
   ctx: ProtectedAppContext
-  input?: IdInput
+  input: IdInput | BeneficiaryIdInput
 }) => {
-  if (!input) {
-    return getHelpRequestPermissions({ ctx })
+  if ('beneficiaryId' in input) {
+    return HelpRequestService.getCreatePermission(ctx, input.beneficiaryId)
   }
 
-  const permissions = await HelpRequestService.getUpdatePermission(
-    ctx,
-    input.id
-  )
-  return permissions
+  return HelpRequestService.getUpdatePermission(ctx, input.id)
 }
 
 export const getHelpRequestPermissionsQuery = createQuery({
-  inputValidation: emptySchema.or(idSchema),
+  inputValidation: beneficiaryIdSchema.or(idSchema),
   securityCheck: AllowSecurityCheck,
   handler
 })
