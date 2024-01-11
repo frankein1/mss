@@ -109,6 +109,8 @@ CREATE TABLE "social_support" (
     "created" TIMESTAMP(3) DEFAULT CURRENT_TIMESTAMP,
     "updated" TIMESTAMP(3),
     "social_support_type" "SocialSupportType" NOT NULL,
+    "tmp_followup_id" UUID,
+    "tmp_help_request_id" UUID,
     CONSTRAINT "social_support_pkey" PRIMARY KEY ("id")
 );
 
@@ -270,8 +272,24 @@ CREATE EXTENSION pgcrypto;
  * MIGRATE FOLLOWUP DATA *
  *************************
  */
-INSERT INTO "social_support" (
-        "id",
+WITH followup_social_support AS (
+    INSERT INTO "social_support" (
+            "id",
+            "structure_id",
+            "beneficiary_id",
+            "created_by_id",
+            "date",
+            "synthesis",
+            "private_synthesis",
+            "ministre",
+            "numero_pegase",
+            "status",
+            "created",
+            "updated",
+            "social_support_type",
+            "tmp_followup_id"
+        )
+    SELECT gen_random_uuid() AS "id",
         "structure_id",
         "beneficiary_id",
         "created_by_id",
@@ -280,36 +298,20 @@ INSERT INTO "social_support" (
         "private_synthesis",
         "ministre",
         "numero_pegase",
-        "status",
+        "status"::text::"SocialSupportStatus",
         "created",
         "updated",
-        "social_support_type"
-    )
-SELECT gen_random_uuid() AS "id",
-    "structure_id",
-    "beneficiary_id",
-    "created_by_id",
-    "date",
-    "synthesis",
-    "private_synthesis",
-    "ministre",
-    "numero_pegase",
-    "status"::text::"SocialSupportStatus",
-    "created",
-    "updated",
-    'Followup'::"SocialSupportType"
-FROM "followup";
-
+        'Followup'::"SocialSupportType",
+        "id"
+    FROM "followup"
+    RETURNING "id",
+        "tmp_followup_id"
+)
 UPDATE "followup" fu
 SET "social_support_id" = (
         SELECT id
-        FROM "social_support" ss
-        WHERE fu."structure_id" = ss."structure_id"
-            AND fu."beneficiary_id" = ss."beneficiary_id"
-            AND fu."created_by_id" = ss."created_by_id"
-            AND fu."date" = ss."date"
-            AND fu."created" = ss."created"
-            AND fu."updated" = ss."updated"
+        FROM followup_social_support fss
+        WHERE fu."id" = fss."tmp_followup_id"
     );
 
 INSERT INTO _social_support_to_followup_type ("A", "B")
@@ -347,46 +349,46 @@ WHERE n.followup_id IS NOT NULL;
  * MIGRATE HELP REQUEST DATA *
  *****************************
  */
-INSERT INTO "social_support" (
-        "id",
+WITH help_request_social_support AS (
+    INSERT INTO "social_support" (
+            "id",
+            "structure_id",
+            "beneficiary_id",
+            "created_by_id",
+            "date",
+            "synthesis",
+            "private_synthesis",
+            "ministre",
+            "numero_pegase",
+            "status",
+            "created",
+            "updated",
+            "social_support_type",
+            "tmp_help_request_id"
+        )
+    SELECT gen_random_uuid() AS "id",
         "structure_id",
         "beneficiary_id",
         "created_by_id",
-        "date",
+        "opening_date",
         "synthesis",
         "private_synthesis",
         "ministre",
         "numero_pegase",
-        "status",
+        "status"::text::"SocialSupportStatus",
         "created",
         "updated",
-        "social_support_type"
-    )
-SELECT gen_random_uuid() AS "id",
-    "structure_id",
-    "beneficiary_id",
-    "created_by_id",
-    "opening_date",
-    "synthesis",
-    "private_synthesis",
-    "ministre",
-    "numero_pegase",
-    "status"::text::"SocialSupportStatus",
-    "created",
-    "updated",
-    'HelpRequest'::"SocialSupportType"
-FROM "help_request";
-
+        'HelpRequest'::"SocialSupportType",
+        "id"
+    FROM "help_request"
+    RETURNING "id",
+        "tmp_help_request_id"
+)
 UPDATE "help_request" hr
 SET "social_support_id" = (
         SELECT id
-        FROM "social_support" ss
-        WHERE hr."structure_id" = ss."structure_id"
-            AND hr."beneficiary_id" = ss."beneficiary_id"
-            AND hr."created_by_id" = ss."created_by_id"
-            AND hr."opening_date" = ss."date"
-            AND hr."created" = ss."created"
-            AND hr."updated" = ss."updated"
+        FROM help_request_social_support hrss
+        WHERE hr."id" = hrss."tmp_help_request_id"
     );
 
 INSERT INTO _social_support_to_followup_type ("A", "B")
@@ -522,6 +524,10 @@ ALTER TABLE "notification" DROP CONSTRAINT "notification_followup_id_fkey";
 
 -- DropForeignKey
 ALTER TABLE "notification" DROP CONSTRAINT "notification_help_request_id_fkey";
+
+-- AlterTable
+ALTER TABLE "social_support" DROP COLUMN "tmp_followup_id",
+    DROP COLUMN "tmp_help_request_id";
 
 -- AlterTable
 ALTER TABLE "comment" DROP COLUMN "followup_id",
