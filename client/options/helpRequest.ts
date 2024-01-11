@@ -106,8 +106,8 @@ export const helpRequestRefusalReasonOptions = (subject: HelpRequestSubject) =>
     : otherOrFinancialHelpRequestRefusalReasonOptions
 
 export const isRefundableLabels = {
-  false: 'Non remboursable',
-  true: 'Remboursable'
+  true: 'Remboursable',
+  false: 'Non remboursable'
 }
 
 export const isRefundableOptions = labelsToOptions(isRefundableLabels)

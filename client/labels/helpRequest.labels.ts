@@ -37,5 +37,5 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   updated: 'Dernière mise à jour',
   createdById: 'Agent',
   subject: "Type d'instruction de dossier",
-  isRefundable: 'Cette aide est...'
+  isRefundable: 'Cette aide est-elle remboursable ?'
 }
