@@ -1,15 +1,21 @@
-import { FollowupConstraints, FollowupTypeRepo } from '~/server/database'
+import { SocialSupportType } from '@prisma/client'
+import { prepareSocialSupportStatFilters } from '../helpers'
+import { SocialSupportConstraints, FollowupTypeRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { prepareFollowupStatFilters } from '~/utils/filters'
 import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 
 export async function getFollowupFollowupTypesStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const followupWhere = { where: prepareFollowupStatFilters(input) }
-  appendConstraints(user, followupWhere, FollowupConstraints.get)
+  const socialSupportWhere = {
+    where: {
+      ...prepareSocialSupportStatFilters(input),
+      socialSupportType: SocialSupportType.Followup
+    }
+  }
+  appendConstraints(user, socialSupportWhere, SocialSupportConstraints.get)
 
   return await FollowupTypeRepo.findMany(user, {
     select: {
@@ -17,10 +23,10 @@ export async function getFollowupFollowupTypesStatsQuery(
       name: true,
       _count: {
         select: {
-          followups: followupWhere
+          socialSupports: socialSupportWhere
         }
       }
     },
-    orderBy: [{ followups: { _count: 'desc' } }]
+    orderBy: [{ socialSupports: { _count: 'desc' } }]
   })
 }

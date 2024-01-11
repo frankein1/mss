@@ -21,7 +21,7 @@ const adminHandler = async ({
       followupTypes: {
         include: {
           _count: {
-            select: { followups: true, helpRequests: true }
+            select: { socialSupports: true }
           }
         }
       }

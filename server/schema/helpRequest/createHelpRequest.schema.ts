@@ -1,6 +1,6 @@
 import {
   HelpRequestRefusalReason,
-  HelpRequestStatus,
+  SocialSupportStatus,
   Minister,
   PaymentMethod,
   HelpRequestSubject
@@ -26,7 +26,7 @@ export const createHelpRequestSchemaBase = z.object({
   typeId: z.string(errorMessages).uuid(),
   documents: z.array(z.string(), errorMessages).default([]),
   externalStructure: kindOfBooleanSchema(true),
-  status: requiredNativeEnum(HelpRequestStatus),
+  status: requiredNativeEnum(SocialSupportStatus),
   askedAmount: amountNumber.nullish(),
   examinationDate: dateOrEmpty,
   decisionDate: dateOrEmpty,

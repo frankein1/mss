@@ -1,7 +1,7 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
-import { prepareFollowupStatFilters } from '~/utils/filters'
+import { prepareSocialSupportStatFilters } from '~/server/query/stats/helpers'
 import {
   getFollowupCountQuery,
   getHelpRequestCountQuery
@@ -22,7 +22,7 @@ const handler = async ({
   const firstFollowups = await FollowupRepo.count(user, {
     where: {
       firstFollowup: true,
-      ...prepareFollowupStatFilters(input)
+      socialSupport: prepareSocialSupportStatFilters(input)
     }
   })
 

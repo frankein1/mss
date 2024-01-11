@@ -6,66 +6,82 @@ import {
   getFollowupPermissions
 } from '~/server/security'
 
-export const select = {
+const select = {
   id: true,
-  status: true,
-  date: true,
-  created: true,
   prescribingOrganization: true,
   updated: true,
   firstFollowup: true,
   redirected: true,
-  dueDate: true,
-  createdById: true,
-  beneficiaryId: true,
   medium: true,
   classified: true,
   forwardedToJustice: true,
   helpRequested: true,
-  privateSynthesis: true,
   thirdPersonName: true,
-  synthesis: true,
   structureName: true,
   prescribingOrganizationId: true,
-  numeroPegase: true,
   place: true,
-  ministre: true,
-  documents: {
-    select: {
-      key: true,
-      name: true,
-      type: true,
-      size: true,
-      tags: true,
-      confidential: true
-    }
-  },
-  types: {
-    select: { id: true, name: true },
-    orderBy: { name: Prisma.SortOrder.asc }
-  },
-  beneficiary: {
+  socialSupport: {
     select: {
       id: true,
-      fileNumber: true,
-      firstName: true,
-      birthName: true,
-      usualName: true,
-      email: true,
-      referents: true,
-      structureId: true
+      structureId: true,
+      status: true,
+      date: true,
+      created: true,
+      createdById: true,
+      beneficiaryId: true,
+      privateSynthesis: true,
+      numeroPegase: true,
+      synthesis: true,
+      ministre: true,
+      dueDate: true,
+      documents: {
+        select: {
+          key: true,
+          name: true,
+          type: true,
+          size: true,
+          tags: true,
+          confidential: true
+        }
+      },
+      types: {
+        select: { id: true, name: true },
+        orderBy: { name: Prisma.SortOrder.asc }
+      },
+      beneficiary: {
+        select: {
+          id: true,
+          fileNumber: true,
+          firstName: true,
+          birthName: true,
+          usualName: true,
+          email: true,
+          referents: true,
+          structureId: true
+        }
+      },
+      createdBy: {
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true
+        }
+      }
     }
-  },
-  createdBy: {
-    select: {
-      id: true,
-      email: true,
-      firstName: true,
-      lastName: true
-    }
-  },
-  structureId: true
+  }
 }
+
+function findOne(user: SecurityRuleGrantee, id: string) {
+  return FollowupRepo.findUniqueOrThrow(user, {
+    where: {
+      id
+    },
+    select
+  })
+}
+
+type FollowupOutput = Prisma.PromiseReturnType<typeof findOne>
 
 export async function getPage(
   user: SecurityRuleGrantee,
@@ -81,12 +97,11 @@ export async function getPage(
   return followups.map(followup => {
     const permissions = getFollowupPermissions({
       user,
-      beneficiary: followup.beneficiary,
-      followup
+      beneficiary: followup.socialSupport.beneficiary,
+      socialSupport: followup.socialSupport
     })
-    filter(permissions, followup)
     return {
-      followup,
+      followup: filter(permissions, followup),
       permissions
     }
   })
@@ -97,29 +112,25 @@ export async function getOne(user: SecurityRuleGrantee, id: string) {
     where: { id },
     select
   })
+  const { socialSupport } = followup
   const permissions = getFollowupPermissions({
     user,
-    beneficiary: followup.beneficiary,
-    followup
+    beneficiary: socialSupport.beneficiary,
+    socialSupport
   })
-  filter(permissions, followup)
   return {
-    followup,
+    followup: filter(permissions, followup),
     permissions
   }
 }
 
-function filter(
-  permissions: FollowupPermissions,
-  data: {
-    dueDate: Date | null
-    privateSynthesis: string | null
-  }
-) {
-  if (!permissions.get.dueDate) {
-    data.dueDate = null
-  }
-  if (!permissions.get.privateSynthesis) {
-    data.privateSynthesis = null
+function filter(permissions: FollowupPermissions, followup: FollowupOutput) {
+  const { socialSupport, ...fuData } = followup
+  const { privateSynthesis, dueDate, ...socialSupportData } = socialSupport
+  return {
+    ...fuData,
+    ...socialSupportData,
+    dueDate: permissions.get.dueDate ? dueDate : null,
+    privateSynthesis: permissions.get.privateSynthesis ? privateSynthesis : null
   }
 }

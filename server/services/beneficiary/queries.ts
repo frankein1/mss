@@ -9,6 +9,16 @@ import {
 import { isObjectEmpty } from '~/utils/isObjectEmpty'
 
 export const include = {
+  socialSupports: {
+    select: {
+      types: {
+        select: {
+          id: true,
+          name: true
+        }
+      }
+    }
+  },
   referents: {
     select: {
       id: true,
@@ -46,14 +56,8 @@ export const include = {
       }
     }
   },
-  followupTypes: {
-    select: {
-      typeId: true,
-      name: true
-    }
-  },
   _count: {
-    select: { helpRequests: true, followups: true }
+    select: { socialSupports: true }
   }
 }
 
@@ -155,12 +159,8 @@ const filter = (
 
 function getHistory(beneficiary: BeneficiaryOutput) {
   return {
-    historyTotal:
-      beneficiary._count.followups + beneficiary._count.helpRequests,
-    types: beneficiary.followupTypes.map(ft => ({
-      id: ft.typeId,
-      name: ft.name
-    }))
+    historyTotal: beneficiary._count.socialSupports,
+    types: beneficiary.socialSupports.map(ss => ss.types).flat()
   }
 }
 

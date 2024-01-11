@@ -9,65 +9,21 @@ import {
 
 export const select = {
   id: true,
-  openingDate: true,
-  created: true,
-  structureId: true,
-  beneficiaryId: true,
-  createdById: true,
-  updated: true,
   fullFile: true,
-  status: true,
   subject: true,
-  typeId: true,
-  type: true,
   allocatedAmount: true,
   askedAmount: true,
   decisionDate: true,
   dispatchDate: true,
-  dueDate: true,
   examinationDate: true,
   externalStructure: true,
   handlingDate: true,
   paymentDate: true,
   paymentMethod: true,
-  prescribingOrganizationId: true,
   refusalReason: true,
-  synthesis: true,
   refusalReasonOther: true,
-  numeroPegase: true,
-  privateSynthesis: true,
-  ministre: true,
+  prescribingOrganizationId: true,
   instructorOrganizationId: true,
-  documents: {
-    select: {
-      key: true,
-      name: true,
-      type: true,
-      size: true,
-      tags: true,
-      confidential: true
-    }
-  },
-  beneficiary: {
-    select: {
-      id: true,
-      fileNumber: true,
-      firstName: true,
-      birthName: true,
-      usualName: true,
-      email: true,
-      referents: true,
-      structureId: true
-    }
-  },
-  createdBy: {
-    select: {
-      id: true,
-      email: true,
-      firstName: true,
-      lastName: true
-    }
-  },
   prescribingOrganization: {
     select: {
       id: true,
@@ -78,6 +34,59 @@ export const select = {
     select: {
       id: true,
       name: true
+    }
+  },
+  socialSupport: {
+    select: {
+      id: true,
+      created: true,
+      structureId: true,
+      beneficiaryId: true,
+      createdById: true,
+      updated: true,
+      status: true,
+      synthesis: true,
+      numeroPegase: true,
+      privateSynthesis: true,
+      ministre: true,
+      dueDate: true,
+      date: true,
+      types: {
+        select: {
+          id: true,
+          name: true
+        }
+      },
+      documents: {
+        select: {
+          key: true,
+          name: true,
+          type: true,
+          size: true,
+          tags: true,
+          confidential: true
+        }
+      },
+      beneficiary: {
+        select: {
+          id: true,
+          fileNumber: true,
+          firstName: true,
+          birthName: true,
+          usualName: true,
+          email: true,
+          referents: true,
+          structureId: true
+        }
+      },
+      createdBy: {
+        select: {
+          id: true,
+          email: true,
+          firstName: true,
+          lastName: true
+        }
+      }
     }
   }
 }
@@ -105,9 +114,12 @@ export async function getPage(
     orderBy: args.orderBy
   })
   return helpRequests.map(helpRequest => {
+    const { socialSupport } = helpRequest
+    const { beneficiary } = socialSupport
     const permissions = getHelpRequestPermissions({
       ctx,
-      target: { beneficiary: helpRequest.beneficiary, helpRequest }
+      beneficiary,
+      socialSupport
     })
     return {
       helpRequest: filter(permissions, helpRequest),
@@ -121,9 +133,12 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
     where: { id },
     select
   })
+  const { socialSupport } = helpRequest
+  const { beneficiary } = socialSupport
   const permissions = getHelpRequestPermissions({
     ctx,
-    target: { beneficiary: helpRequest.beneficiary, helpRequest }
+    beneficiary,
+    socialSupport
   })
   return {
     helpRequest: filter(permissions, helpRequest),
@@ -147,21 +162,24 @@ export function filter(
 }
 
 function getMeta(helpRequest: NonNullable<HelpRequestOutput>) {
+  const { socialSupport } = helpRequest
   return {
     id: helpRequest.id,
-    structureId: helpRequest.structureId,
-    created: helpRequest.created,
-    createdBy: helpRequest.createdBy,
-    createdById: helpRequest.createdById,
-    updated: helpRequest.updated,
-    openingDate: helpRequest.openingDate,
     fullFile: helpRequest.fullFile,
-    status: helpRequest.status,
     subject: helpRequest.subject,
-    typeId: helpRequest.typeId,
-    type: helpRequest.type,
-    beneficiary: helpRequest.beneficiary,
-    beneficiaryId: helpRequest.beneficiaryId
+
+    date: socialSupport.date,
+    structureId: socialSupport.structureId,
+    created: socialSupport.created,
+    createdBy: socialSupport.createdBy,
+    createdById: socialSupport.createdById,
+    updated: socialSupport.updated,
+    status: socialSupport.status,
+
+    typeId: socialSupport.types[0].id,
+    type: socialSupport.types[0],
+    beneficiary: socialSupport.beneficiary,
+    beneficiaryId: socialSupport.beneficiaryId
   }
 }
 
@@ -173,30 +191,33 @@ function getDetails(
     return {}
   }
 
+  const { socialSupport } = helpRequest
+
   return {
     allocatedAmount: helpRequest.allocatedAmount,
     askedAmount: helpRequest.askedAmount,
     decisionDate: helpRequest.decisionDate,
     dispatchDate: helpRequest.dispatchDate,
-    documents: helpRequest.documents,
-    dueDate: helpRequest.dueDate,
+    dueDate: socialSupport.dueDate,
     examinationDate: helpRequest.examinationDate,
     externalStructure: helpRequest.externalStructure,
     handlingDate: helpRequest.handlingDate,
     instructorOrganizationId: helpRequest.instructorOrganizationId,
     instructorOrganization: helpRequest.instructorOrganization,
-    ministre: permissions.get.ministre ? helpRequest.ministre : undefined,
-    numeroPegase: permissions.get.numeroPegase
-      ? helpRequest.numeroPegase
-      : undefined,
+
     paymentDate: helpRequest.paymentDate,
     paymentMethod: helpRequest.paymentMethod,
     prescribingOrganizationId: helpRequest.prescribingOrganizationId,
     prescribingOrganization: helpRequest.prescribingOrganization,
     refusalReason: helpRequest.refusalReason,
-    synthesis: helpRequest.synthesis,
+
     subject: helpRequest.subject,
-    refusalReasonOther: helpRequest.refusalReasonOther
+    refusalReasonOther: helpRequest.refusalReasonOther,
+
+    documents: socialSupport.documents,
+    synthesis: socialSupport.synthesis,
+    ministre: socialSupport.ministre,
+    numeroPegase: socialSupport.numeroPegase
   }
 }
 
@@ -208,7 +229,9 @@ function getPrivateSynthesis(
     return {}
   }
 
+  const { socialSupport } = helpRequest
+
   return {
-    privateSynthesis: helpRequest.privateSynthesis
+    privateSynthesis: socialSupport.privateSynthesis
   }
 }

@@ -1,7 +1,7 @@
+import { prepareBeneficiaryStatFilters } from '../helpers'
 import { BeneficiaryRepo, BeneficiaryConstraints } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { prepareBeneficiaryStatFilters } from '~/utils/filters'
 
 export async function getCityStatsQuery(
   user: SecurityRuleGrantee,

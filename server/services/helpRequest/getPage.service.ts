@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { prepareHelpRequestFilters } from './helper'
+import { prepareFilters } from './helper'
 import { getPage as getPageFn } from './queries'
 import {
   GetHelpRequestsInput,
@@ -29,7 +29,7 @@ export async function getPage({
   })
 
   const where: Prisma.HelpRequestWhereInput = {
-    ...prepareHelpRequestFilters(input.filters)
+    ...prepareFilters(input.filters)
   }
 
   const orderBy: GetHelpRequestsOrderBy = input.orderBy

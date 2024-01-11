@@ -4,7 +4,7 @@ import { AddCommentInput, addCommentSchema } from '~/server/schema'
 import { canAddComment, SecurityRuleContext } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
-import { CommentRepo, FollowupRepo, HelpRequestRepo } from '~/server/database'
+import { CommentRepo, SocialSupportRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
@@ -25,33 +25,21 @@ const handler = async ({
   ctx: ProtectedAppContext
   input: AddCommentInput
 }) => {
-  let history
-  if (input.isFollowup) {
-    history = await FollowupRepo.findUniqueOrThrow(user, {
-      where: { id: input.historyId },
-      select: { createdById: true }
-    })
-  } else {
-    history = await HelpRequestRepo.findUniqueOrThrow(user, {
-      where: { id: input.historyId },
-      select: { createdById: true }
-    })
-  }
-
-  const { createdById } = history
+  const socialSupport = await SocialSupportRepo.findUniqueOrThrow(user, {
+    where: { id: input.socialSupportId },
+    select: { id: true, createdById: true }
+  })
 
   return CommentRepo.prisma.create({
     data: {
       content: input.content,
       createdById: user.id,
-      followupId: input.isFollowup ? input.historyId : undefined,
-      helpRequestId: !input.isFollowup ? input.historyId : undefined,
+      socialSupportId: socialSupport.id,
       notification: {
         create: {
-          recipientId: createdById,
+          recipientId: socialSupport.createdById,
           beneficiaryId: input.beneficiaryId,
-          followupId: input.isFollowup ? input.historyId : undefined,
-          helpRequestId: !input.isFollowup ? input.historyId : undefined,
+          socialSupportId: socialSupport.id,
           type: NotificationType.NewComment,
           itemCreatedById: user.id
         }

@@ -1,8 +1,14 @@
-import { prepareHelpRequestUpdateData } from './helper'
-import { HelpRequestRepo } from '~/server/database'
+import { SocialSupportType } from '@prisma/client'
+import {
+  cleanUpdateInput,
+  prepareInstructorOrganization,
+  preparePrescribingOrganization
+} from './helper'
+import { SocialSupportRepo, HelpRequestRepo } from '~/server/database'
 import { markFollowupTypeAsUsed } from '~/server/query'
 import { EditHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
+import { prepareDocumentsMutations, connect } from '~/utils/prisma'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -15,15 +21,88 @@ export async function update({ input, ctx }: UpdateParams) {
     select: {
       instructorOrganizationId: true,
       subject: true,
-      documents: true
+      socialSupport: {
+        select: {
+          documents: true
+        }
+      }
     }
   })
 
-  const data = prepareHelpRequestUpdateData(input, ctx, target)
+  const {
+    beneficiaryId,
+    numeroPegase,
+    ministre,
+    typeId,
+    documents,
+    externalStructure,
+    status,
+    askedAmount,
+    examinationDate,
+    decisionDate,
+    allocatedAmount,
+    paymentMethod,
+    paymentDate,
+    handlingDate,
+    refusalReason,
+    prescribingOrganizationId,
+    instructorOrganizationId,
+    dispatchDate,
+    synthesis,
+    privateSynthesis,
+    dueDate,
+    fullFile,
+    subject,
+    openingDate
+  } = cleanUpdateInput({ input, subject: target.subject })
 
-  const helpRequest = await HelpRequestRepo.prisma.update({
+  const helpRequest = await SocialSupportRepo.prisma.update({
     where: { id: input.id },
-    data,
+    data: {
+      status,
+      socialSupportType: SocialSupportType.HelpRequest,
+      createdById: ctx.user.id,
+      beneficiaryId,
+      structureId: ctx.structure.id,
+      synthesis,
+      privateSynthesis,
+      ministre,
+      numeroPegase,
+      dueDate,
+      date: openingDate,
+      types: connect(typeId),
+      documents: prepareDocumentsMutations(
+        documents,
+        target.socialSupport.documents
+      ),
+      helpRequest: {
+        create: {
+          askedAmount,
+          examinationDate,
+          decisionDate,
+          allocatedAmount,
+          paymentMethod,
+          paymentDate,
+          handlingDate,
+          refusalReason,
+          dispatchDate,
+          fullFile,
+          subject,
+          externalStructure,
+          type: connect(typeId),
+          prescribingOrganization: preparePrescribingOrganization(
+            prescribingOrganizationId,
+            ctx
+          ),
+          instructorOrganization: prepareInstructorOrganization(
+            instructorOrganizationId,
+            ctx,
+            input.externalStructure === 'true',
+            target.instructorOrganizationId !== null
+          )
+        }
+      }
+    },
     include: {
       beneficiary: {
         select: {
@@ -34,7 +113,7 @@ export async function update({ input, ctx }: UpdateParams) {
     }
   })
 
-  await markFollowupTypeAsUsed([input.typeId])
+  await markFollowupTypeAsUsed([typeId])
 
   return { helpRequest }
 }

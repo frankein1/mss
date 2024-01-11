@@ -7,7 +7,7 @@ import {
 } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { FollowupService } from '~/server/services'
-import { FollowupRepo } from '~/server/database'
+import { SocialSupportRepo } from '~/server/database'
 
 const handler = async ({
   input: { id, ...rest },
@@ -16,7 +16,7 @@ const handler = async ({
   input: QuickEditFollowupInput
   ctx: ProtectedAppContext
 }) => {
-  await FollowupRepo.prisma.update({
+  await SocialSupportRepo.prisma.update({
     where: { id },
     data: rest
   })

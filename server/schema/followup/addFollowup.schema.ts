@@ -1,6 +1,6 @@
 import {
   FollowupMedium,
-  FollowupStatus,
+  SocialSupportStatus,
   Minister
   // FollowupIntervention,
   // FollowupSignalement
@@ -35,7 +35,7 @@ export const addFollowupSchemaBase = z.object({
   date: z.coerce.date(errorMessages),
   synthesis: openText(6000).nullish(),
   privateSynthesis: openText(1000).nullish(),
-  status: requiredNativeEnum(FollowupStatus),
+  status: requiredNativeEnum(SocialSupportStatus),
   helpRequested: z.boolean().default(false),
   place: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   redirected: z.boolean().default(false),

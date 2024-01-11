@@ -1,6 +1,6 @@
 import { FollowupMedium } from '@prisma/client'
 import { prepareFollowupTypesMutations } from './helper'
-import { FollowupRepo } from '~/server/database'
+import { SocialSupportRepo } from '~/server/database'
 import { EditFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import {
@@ -85,33 +85,37 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     }
   }
 
-  const fu = await FollowupRepo.prisma.update({
+  const fu = await SocialSupportRepo.prisma.update({
     where: {
       id
     },
     data: {
-      // signalements,
-      // interventions,
-      prescribingOrganization,
-      types: prepareFollowupTypesMutations(types),
       documents: prepareDocumentsMutations(documents),
-      redirected,
-      structureName: redirected ? structureName : null,
-      medium,
-      place: medium === FollowupMedium.ExternalAppointment ? place : null,
-      thirdPersonName:
-        medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
+      types: prepareFollowupTypesMutations(types),
       ministre,
       date,
       synthesis,
       privateSynthesis,
       status,
-      helpRequested,
-      dueDate,
-      firstFollowup,
       numeroPegase,
-      classified,
-      forwardedToJustice
+      dueDate,
+      followup: {
+        update: {
+          prescribingOrganization,
+          redirected,
+          structureName: redirected ? structureName : null,
+          medium,
+          place: medium === FollowupMedium.ExternalAppointment ? place : null,
+          thirdPersonName:
+            medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
+          helpRequested,
+          firstFollowup,
+          classified,
+          forwardedToJustice
+          // signalements,
+          // interventions,
+        }
+      }
     },
     include: {
       beneficiary: {

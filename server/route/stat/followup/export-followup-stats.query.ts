@@ -46,14 +46,14 @@ const handler = async ({
   followupTypesColumns.push({ key: 'total', header: 'Total' })
 
   const followupTypeCountTotal = followupTypesData
-    .reduce((total, { _count }) => total + _count.followups, 0)
+    .reduce((total, { _count }) => total + _count.socialSupports, 0)
     .toString()
 
   const followupTypesRows = [
     followupTypesData.reduce(
       (row: RowType, { _count, id }) => {
-        if (_count.followups > 0) {
-          row[id] = _count.followups.toString()
+        if (_count.socialSupports > 0) {
+          row[id] = _count.socialSupports.toString()
         }
         return row
       },
@@ -61,8 +61,8 @@ const handler = async ({
     ),
     followupTypesData.reduce(
       (row: RowType, { _count, id }) => {
-        if (_count.followups > 0) {
-          row[id] = `${getPercentage(_count.followups, followupCount)}%`
+        if (_count.socialSupports > 0) {
+          row[id] = `${getPercentage(_count.socialSupports, followupCount)}%`
         }
         return row
       },

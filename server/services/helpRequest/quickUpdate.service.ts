@@ -1,4 +1,4 @@
-import { HelpRequestStatus, HelpRequestSubject } from '@prisma/client'
+import { SocialSupportStatus, HelpRequestSubject, Prisma } from '@prisma/client'
 import { HelpRequestRepo } from '~/server/database'
 import { QuickEditHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
@@ -41,18 +41,18 @@ function prepareData(
 
   if ('status' in data) {
     const status = data.status
-    let _data = {}
-    _data = { ..._data, status }
+    let _data: Prisma.HelpRequestUpdateInput = {}
+    _data = { ..._data, socialSupport: { update: { status } } }
     if (
-      status !== HelpRequestStatus.Accepted &&
-      status !== HelpRequestStatus.Refused
+      status !== SocialSupportStatus.Accepted &&
+      status !== SocialSupportStatus.Refused
     ) {
       _data = { ..._data, decisionDate: null }
     }
-    if (status !== HelpRequestStatus.Accepted) {
+    if (status !== SocialSupportStatus.Accepted) {
       _data = { ..._data, handlingDate: null, allocatedAmount: null }
     }
-    if (status !== HelpRequestStatus.Refused) {
+    if (status !== SocialSupportStatus.Refused) {
       _data = { ..._data, refusalReason: null }
     }
     return _data

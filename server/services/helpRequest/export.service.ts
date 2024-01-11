@@ -1,4 +1,4 @@
-import { prepareHelpRequestFilters } from './helper'
+import { prepareFilters } from './helper'
 import { getPage } from './queries'
 import { helpRequestFieldLabels } from '~/client/labels'
 import { ExportHelpRequestsInput } from '~/server/schema'
@@ -9,17 +9,17 @@ import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBenefici
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
-  helpRequestRefusalReasonLabels,
-  helpRequestStatusLabels,
+  anyRefusalReasonLabels,
   paymentMethodLabels,
   helpRequestSubjectLabels
 } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
+import { socialSupportStatusLabels } from '~/client/options'
 
 export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)[] =
   [
     'status',
-    'openingDate',
+    'date',
     'beneficiaryId',
     'subject',
     'typeId',
@@ -58,7 +58,7 @@ export async function exportHelpRequests({
     header: helpRequestFieldLabels[key]
   }))
 
-  const where = prepareHelpRequestFilters(input.filters)
+  const where = prepareFilters(input.filters)
 
   const helpRequests = await getPage(ctx, {
     where
@@ -77,12 +77,12 @@ export async function exportHelpRequests({
           ),
           instructorOrganizationId:
             helpRequest.instructorOrganization?.name || '',
-          openingDate: formatDate(helpRequest.openingDate, 'DD-MM-YYYY'),
+          date: formatDate(helpRequest.date, 'DD-MM-YYYY'),
           typeId: helpRequest.type.name,
           documents:
             helpRequest.documents?.map(document => document.name).join(', ') ||
             '',
-          status: helpRequestStatusLabels[helpRequest.status],
+          status: socialSupportStatusLabels[helpRequest.status],
           askedAmount: helpRequest.askedAmount?.toString() || '',
           examinationDate: formatDate(
             helpRequest.examinationDate,
@@ -98,7 +98,7 @@ export async function exportHelpRequests({
           refusalReason:
             helpRequest.refusalReasonOther ||
             (helpRequest.refusalReason
-              ? helpRequestRefusalReasonLabels[helpRequest.refusalReason]
+              ? anyRefusalReasonLabels[helpRequest.refusalReason]
               : ''),
           dispatchDate: formatDate(helpRequest.dispatchDate, 'DD-MM-YYYY'),
           synthesis: helpRequest.synthesis || '',

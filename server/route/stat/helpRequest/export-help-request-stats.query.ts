@@ -42,14 +42,14 @@ const handler = async ({
   }))
   const followupTypesRows = [
     followupTypesData.reduce((row: RowType, { _count, id }) => {
-      if (_count.helpRequests > 0) {
-        row[id] = _count.helpRequests.toString()
+      if (_count.socialSupports > 0) {
+        row[id] = _count.socialSupports.toString()
       }
       return row
     }, {}),
     followupTypesData.reduce((row: RowType, { _count, id }) => {
-      if (_count.helpRequests > 0) {
-        row[id] = `${getPercentage(_count.helpRequests, helpRequestCount)}%`
+      if (_count.socialSupports > 0) {
+        row[id] = `${getPercentage(_count.socialSupports, helpRequestCount)}%`
       }
       return row
     }, {}),

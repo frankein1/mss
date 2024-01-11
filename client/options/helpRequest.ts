@@ -68,7 +68,7 @@ const baseRefusalReasonLabels = {
   [HelpRequestRefusalReason.IrregularSituation]: 'En situation irrégulière'
 }
 
-export const helpRequestRefusalReasonLabels = {
+const helpRequestRefusalReasonLabels = {
   ...baseRefusalReasonLabels,
   [HelpRequestRefusalReason.MissedAppointment]: 'Absence au rendez-vous',
   [HelpRequestRefusalReason.AlreadyExistingHelpRequest]:
@@ -79,12 +79,17 @@ export const helpRequestRefusalReasonLabels = {
   [HelpRequestRefusalReason.Other]: 'Autre'
 }
 
-export const housingHelpRequestRefusalReasonLabels = {
+const housingHelpRequestRefusalReasonLabels = {
   ...baseRefusalReasonLabels,
   [HelpRequestRefusalReason.InadequateFamilyComposition]:
     'Composition familiale inadaptée au type de logement',
   [HelpRequestRefusalReason.ExpiredRequest]: 'Demande expirée',
   [HelpRequestRefusalReason.Other]: 'Autre'
+}
+
+export const anyRefusalReasonLabels = {
+  ...helpRequestRefusalReasonLabels,
+  ...housingHelpRequestRefusalReasonLabels
 }
 
 export const helpRequestRefusalReasonOptions = labelsToOptions(

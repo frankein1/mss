@@ -1,37 +1,40 @@
-import { Prisma } from '@prisma/client'
-import { FollowupRepo } from '~/server/database'
+import {
+  prepareSocialSupportStatFilters,
+  preparePrescribingOrganizationStats
+} from '../helpers'
+import { SocialSupportRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { prepareFollowupStatFilters } from '~/utils/filters'
-import { preparePrescribingOrganizationStats } from '~/utils/stats'
 
 export async function getFollowupPrescribingOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareFollowupStatFilters(input)
+  const preparedFilters = prepareSocialSupportStatFilters(input)
 
-  const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
-    preparedBeneficiaryFilters
-      ? {
-          ...preparedBeneficiaryFilters
-        }
-      : {}
-
-  const followups = await FollowupRepo.findMany(user, {
+  const socialSupports = await SocialSupportRepo.findMany(user, {
     where: {
-      ...preparedFilters,
-      beneficiary: beneficiaryFilters
+      socialSupportType: 'Followup',
+      ...preparedFilters
     },
     select: {
-      prescribingOrganization: {
+      followup: {
         select: {
-          id: true,
-          name: true
+          prescribingOrganization: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
         }
       }
     }
   })
+
+  const followups = socialSupports.reduce(
+    (fu, { followup }) => (followup !== null ? [...fu, followup] : fu),
+    [] as Array<Exclude<(typeof socialSupports)[0]['followup'], null>>
+  )
+
   return preparePrescribingOrganizationStats(followups)
 }

@@ -13,9 +13,13 @@ export function getFollowupSecurityTarget(
   return FollowupRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
-      beneficiary: {
+      socialSupport: {
         include: {
-          referents: true
+          beneficiary: {
+            include: {
+              referents: true
+            }
+          }
         }
       }
     }
@@ -26,11 +30,11 @@ export async function getUpdatePermission(
   user: SecurityRuleGrantee,
   id: string
 ): Promise<FollowupPermissions> {
-  const target = await getFollowupSecurityTarget(user, id)
+  const { socialSupport } = await getFollowupSecurityTarget(user, id)
   return getFollowupPermissions({
     user,
-    beneficiary: target.beneficiary,
-    followup: target
+    beneficiary: socialSupport.beneficiary,
+    socialSupport
   })
 }
 

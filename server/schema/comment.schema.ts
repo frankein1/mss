@@ -5,7 +5,7 @@ const addCommentSchema = z.object({
   content: openText(3000),
   beneficiaryId: z.string().uuid(),
   isFollowup: z.boolean(),
-  historyId: z.string().uuid()
+  socialSupportId: z.string().uuid()
 })
 
 type AddCommentInput = z.infer<typeof addCommentSchema>

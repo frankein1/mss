@@ -1,17 +1,15 @@
 import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { GetHistoryInput, getHistorySchema } from '~/server/schema'
-import { TypeSuivi } from '~/types/history'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   getDocumentPermissions,
   SecurityRuleGrantee,
-  getHelpRequestPermissions,
-  getFollowupPermissions,
-  SecurityRuleContext
+  SecurityRuleContext,
+  getSocialSupportPermissions
 } from '~/server/security'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
-import { BeneficiaryHistoryRepo } from '~/server/database'
+import { SocialSupportRepo } from '~/server/database'
 import {
   BeneficiarySecurityTarget,
   BeneficiaryService
@@ -36,8 +34,11 @@ const createdBySelect = {
   email: true
 }
 
-function prepareHistoryFilters(filters: HistoryFilters, beneficiaryId: string) {
-  const formattedFilters: Prisma.BeneficiaryHistoryWhereInput = {}
+function prepareSocialSupportFilters(
+  filters: HistoryFilters,
+  beneficiaryId: string
+) {
+  const formattedFilters: Prisma.SocialSupportWhereInput = {}
 
   if (filters.referents) {
     formattedFilters.beneficiary = {
@@ -55,40 +56,49 @@ function prepareHistoryFilters(filters: HistoryFilters, beneficiaryId: string) {
   }
 
   if (filters.medium) {
-    formattedFilters.medium = { in: filters.medium }
+    formattedFilters.followup = { medium: { in: filters.medium } }
   }
 
   if (filters.examinationDate) {
-    formattedFilters.examinationDate = filters.examinationDate
+    formattedFilters.helpRequest = { examinationDate: filters.examinationDate }
   }
 
   if (filters.externalStructure !== undefined) {
-    formattedFilters.externalStructure = filters.externalStructure === 'true'
+    const isExternalStructure = filters.externalStructure === 'true'
+    if (formattedFilters.helpRequest) {
+      formattedFilters.helpRequest.externalStructure = isExternalStructure
+    } else {
+      formattedFilters.helpRequest = { externalStructure: isExternalStructure }
+    }
   }
 
   if (filters.handlingDate !== undefined) {
-    formattedFilters.handlingDate =
-      filters.handlingDate === 'true' ? { not: null } : null
+    const handlingDate = filters.handlingDate === 'true' ? { not: null } : null
+    if (formattedFilters.helpRequest) {
+      formattedFilters.helpRequest.handlingDate = handlingDate
+    } else {
+      formattedFilters.helpRequest = { handlingDate }
+    }
   }
 
   if (filters.followupTypes) {
-    formattedFilters.typeIds = { hasSome: filters.followupTypes }
+    formattedFilters.types = { some: { id: { in: filters.followupTypes } } }
   }
 
   if (filters.typeSuivi) {
-    formattedFilters.isFollowup = filters.typeSuivi === TypeSuivi.Followup
+    formattedFilters.socialSupportType = filters.typeSuivi
   }
 
   return formattedFilters
 }
 
-function getHistories(
+function getSocialSupports(
   filters: HistoryFilters,
   user: SecurityRuleGrantee,
   beneficiaryId: string
 ) {
-  return BeneficiaryHistoryRepo.findMany(user, {
-    where: prepareHistoryFilters(filters, beneficiaryId),
+  return SocialSupportRepo.findMany(user, {
+    where: prepareSocialSupportFilters(filters, beneficiaryId),
     include: {
       createdBy: {
         select: createdBySelect
@@ -99,81 +109,51 @@ function getHistories(
           referents: true
         }
       },
-      prescribingOrganization: {
+      documents: {
         select: {
-          name: true
+          key: true,
+          name: true,
+          createdById: true,
+          confidential: true
         }
       },
-      instructorOrganization: {
-        select: {
-          name: true
+      comments: {
+        orderBy: { created: 'asc' },
+        include: COMMENT_RELATIONS_INCLUDE
+      },
+      helpRequest: {
+        include: {
+          prescribingOrganization: { select: { name: true } },
+          instructorOrganization: { select: { name: true } }
         }
       },
       followup: {
         include: {
-          documents: {
-            select: {
-              key: true,
-              name: true,
-              createdById: true,
-              confidential: true
-            }
-          },
-          comments: {
-            orderBy: { created: 'asc' },
-            include: COMMENT_RELATIONS_INCLUDE
-          },
-          _count: {
-            select: {
-              notifications: {
-                where: { read: false, recipientId: user.id }
-              }
-            }
-          },
-          types: true
+          prescribingOrganization: { select: { name: true } }
         }
       },
-      helpRequest: {
-        include: {
-          documents: {
-            select: {
-              key: true,
-              name: true,
-              createdById: true,
-              confidential: true
-            }
-          },
-          comments: {
-            orderBy: { created: 'asc' },
-            include: COMMENT_RELATIONS_INCLUDE
-          },
-          _count: {
-            select: {
-              notifications: {
-                where: { read: false, recipientId: user.id }
-              }
-            }
-          },
-          type: true
+      _count: {
+        select: {
+          notifications: {
+            where: { read: false, recipientId: user.id }
+          }
         }
-      }
+      },
+      types: true
     },
     orderBy: { date: 'desc' }
   })
 }
 
-type Histories = Prisma.PromiseReturnType<typeof getHistories>
+type SocialSupports = Prisma.PromiseReturnType<typeof getSocialSupports>
 
-function flattenHistories(
-  histories: Histories,
+function flattenSocialSupports(
+  socialSupports: SocialSupports,
   ctx: ProtectedAppContext,
   beneficiary: BeneficiarySecurityTarget
 ) {
-  return histories.map(history => {
-    const { followup, helpRequest, ...data } = history
-    const { user } = ctx
-
-    const documents = followup?.documents || helpRequest?.documents
+  return socialSupports.map(socialSupport => {
+    const { types, documents, _count, ...data } = socialSupport
 
     const documentsWithPermissions = documents?.map(document => ({
       document,
@@ -184,29 +164,20 @@ function flattenHistories(
       })
     }))
 
-    const historyPermissions = data.isFollowup
-      ? getFollowupPermissions({
-          user,
-          beneficiary: data.beneficiary,
-          followup: data
-        })
-      : getHelpRequestPermissions({
-          ctx,
-          target: { beneficiary: data.beneficiary, helpRequest: data }
-        })
+    const socialSupportPermissions = getSocialSupportPermissions({
+      ctx,
+      beneficiary,
+      socialSupport
+    })
 
     return {
       data: {
         ...data,
         documents: documentsWithPermissions,
-        comments: followup?.comments || helpRequest?.comments,
-        hasUnreadNotifications: !!(
-          followup?._count.notifications || helpRequest?._count.notifications
-        ),
-        followUpTypes:
-          followup?.types || (helpRequest ? [helpRequest.type] : undefined)
+        hasUnreadNotifications: !!_count.notifications,
+        followUpTypes: types
       },
-      permissions: historyPermissions
+      permissions: socialSupportPermissions
     }
   })
 }
@@ -221,12 +192,12 @@ const handler = async ({
   const { beneficiaryId, filters } = input
 
   const [totalCount, histories, beneficiary] = await Promise.all([
-    BeneficiaryHistoryRepo.count(ctx.user, {
+    SocialSupportRepo.count(ctx.user, {
       where: {
         beneficiaryId
       }
     }),
-    getHistories(filters, ctx.user, beneficiaryId),
+    getSocialSupports(filters, ctx.user, beneficiaryId),
     BeneficiaryService.getBeneficiarySecurityTarget(
       ctx.user,
       input.beneficiaryId
@@ -234,7 +205,7 @@ const handler = async ({
   ])
 
   return {
-    histories: flattenHistories(histories, ctx, beneficiary),
+    histories: flattenSocialSupports(histories, ctx, beneficiary),
     totalCount
   }
 }
