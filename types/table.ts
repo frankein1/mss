@@ -15,18 +15,22 @@ export type BeneficiaryDocumentSort = {
 }
 
 export type FollowupSort = {
-  dueDate?: SortOrder
-  date?: SortOrder
-  beneficiary?: {
-    usualName?: SortOrder
+  socialSupport: {
+    dueDate?: SortOrder
+    date?: SortOrder
+    beneficiary?: {
+      usualName?: SortOrder
+    }
   }
 }
 
 export type HelpRequestSort = {
-  dueDate?: SortOrder
-  openingDate?: SortOrder
-  beneficiary?: {
-    usualName?: SortOrder
+  socialSupport?: {
+    dueDate?: SortOrder
+    date?: SortOrder
+    beneficiary?: {
+      usualName?: SortOrder
+    }
   }
   instructorOrganization?: {
     name?: SortOrder

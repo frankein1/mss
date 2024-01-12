@@ -96,7 +96,7 @@
       <VeeSelect
         name="refusalReason"
         :label="helpRequestFieldLabels.refusalReason"
-        :options="refusalReasonOptions"
+        :options="withEmptyValue(helpRequestRefusalReasonOptions)"
       />
     </div>
   </template>
@@ -112,7 +112,7 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestStatus, HelpRequestSubject } from '@prisma/client'
+  import { SocialSupportStatus, HelpRequestSubject } from '@prisma/client'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import {
     paymentMethodOptions,
@@ -124,31 +124,27 @@
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const props = defineProps<{
-    status: HelpRequestStatus
+    status: SocialSupportStatus
     hasSetExternalStructure: boolean
     isExternalSupport: boolean
   }>()
 
   const { value: subject } = useField<HelpRequestSubject>('subject')
 
-  const isAccepted = computed(() => props.status === HelpRequestStatus.Accepted)
-  const isRefused = computed(() => props.status === HelpRequestStatus.Refused)
+  const isAccepted = computed(
+    () => props.status === SocialSupportStatus.Accepted
+  )
+  const isRefused = computed(() => props.status === SocialSupportStatus.Refused)
   const isAnswered = computed(() => isAccepted.value || isRefused.value)
 
   const isFinancialSupport = computed(
     () => subject.value === HelpRequestSubject.Financial
   )
 
-  const refusalReasonOptions = computed(() =>
-    withEmptyValue(helpRequestRefusalReasonOptions(subject.value))
-  )
-
   const headline = computed(() => {
     switch (subject.value) {
       case HelpRequestSubject.Financial:
         return "Informations sur l'aide financière"
-      case HelpRequestSubject.Housing:
-        return 'Informations sur la demande de logement'
       default:
         return "Informations sur le dossier d'instruction"
     }

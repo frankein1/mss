@@ -1,29 +1,18 @@
-import { Prisma } from '@prisma/client'
+import { prepareSocialSupportStatFilters } from '../helpers'
 import { FollowupRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { prepareFollowupStatFilters } from '~/utils/filters'
 
 export async function getFollowupActionsEntreprisesStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareFollowupStatFilters(input)
-
-  const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
-    preparedBeneficiaryFilters
-      ? {
-          ...preparedBeneficiaryFilters
-        }
-      : {}
+  const preparedSocialSupportFilters = prepareSocialSupportStatFilters(input)
 
   const followups = await FollowupRepo.findMany(user, {
     where: {
-      structureId: user.structureId || '',
       OR: [{ redirected: true }, { helpRequested: true }],
-      ...preparedFilters,
-      beneficiary: beneficiaryFilters
+      socialSupport: preparedSocialSupportFilters
     },
     select: {
       redirected: true,

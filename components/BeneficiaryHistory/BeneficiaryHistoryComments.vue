@@ -11,7 +11,7 @@
     <BeneficiaryHistoryCommentAdd
       v-if="canAddComments"
       :class="{ 'fr-mt-1w': comments.length }"
-      :history="history"
+      :social-support="socialSupport"
       @comment-added="emit('commentAdded', $event)"
     />
   </section>
@@ -27,7 +27,7 @@
 
   const props = defineProps<{
     comments: HistoryItemComments
-    history: HistoryItemData
+    socialSupport: HistoryItemData
   }>()
 
   const emit = defineEmits<{
@@ -39,7 +39,7 @@
   const canAddComments = computed(() =>
     useSecurityRule().canWithTarget(
       canAddCommentsRule,
-      props.history.beneficiary
+      props.socialSupport.beneficiary
     )
   )
 </script>

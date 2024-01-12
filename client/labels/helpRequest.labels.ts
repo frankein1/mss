@@ -1,14 +1,13 @@
-import type { HelpRequest } from '@prisma/client'
-import type { FieldLabels } from '~/types/fieldLabels'
+import { HelpRequest, SocialSupport } from '@prisma/client'
+import { FieldLabels } from '~/types/fieldLabels'
 
-type HelpRequestFieldLabels = Omit<
-  HelpRequest,
-  'structureId' | 'created' | 'reason' | 'financialSupport'
-> & {
-  documents: string
-}
+type FollowupFieldLabels = Omit<
+  Omit<HelpRequest, 'reason' | 'financialSupport' | 'socialSupportId'> &
+    Omit<SocialSupport, 'socialSupportType'>,
+  'structureId' | 'created'
+> & { documents: string }
 
-export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
+export const helpRequestFieldLabels: FieldLabels<FollowupFieldLabels> = {
   id: 'Identifiant',
   status: 'Statut',
   dueDate: "Date d'échéance",
@@ -19,7 +18,7 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   paymentMethod: 'Mode de paiement',
   paymentDate: 'Date du paiement',
   handlingDate: 'Date de fin de prise en charge',
-  openingDate: "Date d'ouverture du dossier",
+  date: "Date d'ouverture du dossier",
   numeroPegase: 'Numéro Pégase',
   ministre: 'Ministre',
   typeId: "Objet de l'accompagnement",

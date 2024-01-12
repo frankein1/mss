@@ -48,7 +48,7 @@
     initialValues: {
       ...helpRequestData.value,
       isMinistry: isMinistryAgent,
-      openingDate: helpRequestData.value.openingDate,
+      date: helpRequestData.value.date,
       documents: initialDocumentIds.value,
       externalStructure: helpRequestData.value.externalStructure
         ? 'true'

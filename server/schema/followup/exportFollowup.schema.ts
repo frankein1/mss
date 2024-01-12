@@ -5,8 +5,12 @@ import { followupFilterSchema } from '../filter.schema'
 export const exportFollowupsSchema = z.object({
   orderBy: z.array(
     z.object({
-      date: z.nativeEnum(Prisma.SortOrder).optional(),
-      dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
+      socialSupport: z
+        .object({
+          date: z.nativeEnum(Prisma.SortOrder).optional(),
+          dueDate: z.nativeEnum(Prisma.SortOrder).optional()
+        })
+        .optional(),
       beneficiary: z
         .object({
           usualName: z.nativeEnum(Prisma.SortOrder).optional()

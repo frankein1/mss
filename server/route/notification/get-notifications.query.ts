@@ -35,6 +35,11 @@ const handler = async ({
           birthName: true
         }
       },
+      socialSupport: {
+        select: {
+          socialSupportType: true
+        }
+      },
       itemCreatedBy: {
         select: {
           firstName: true,

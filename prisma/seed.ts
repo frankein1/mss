@@ -5,8 +5,7 @@ import {
   fixturesFollowupTypes,
   fixturesUsers,
   fixturesBeneficiaries,
-  fixturesFollowups,
-  fixturesHelpRequests
+  fixturesSocialSupports
 } from './fixtures'
 
 const prismaClient = new PrismaClient()
@@ -51,25 +50,16 @@ function loadFixturesBeneficiaries() {
   })
 }
 
-function loadFixturesFollowups() {
-  console.log('🤝 Followups...')
+function loadFixturesSocialSupports() {
+  console.log('🤝 Social supports...')
 
   // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
-  return fixturesFollowups.map(({ id, ...data }) => {
-    return prismaClient.followup.upsert({
+  return fixturesSocialSupports.map(({ id, ...data }) => {
+    return prismaClient.socialSupport.upsert({
       create: { id, ...data },
       where: { id },
       update: {}
     })
-  })
-}
-
-function loadFixturesHelpRequests() {
-  console.log('📇 Help requests...')
-
-  return prismaClient.helpRequest.createMany({
-    data: fixturesHelpRequests,
-    skipDuplicates: true
   })
 }
 
@@ -79,8 +69,7 @@ function loadFixtures() {
     loadFixturesFollowupTypes(),
     loadFixturesUsers(),
     ...loadFixturesBeneficiaries(),
-    ...loadFixturesFollowups(),
-    loadFixturesHelpRequests()
+    ...loadFixturesSocialSupports()
   ]
 }
 

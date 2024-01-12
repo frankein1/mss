@@ -1,9 +1,9 @@
-import { NotificationType, HelpRequest, Followup } from '@prisma/client'
+import { NotificationType, SocialSupport } from '@prisma/client'
 import dayjs from 'dayjs'
 import {
-  FollowupRepo,
   HelpRequestRepo,
-  NotificationRepo
+  NotificationRepo,
+  SocialSupportRepo
 } from '~/server/database'
 import { useScheduler } from '#scheduler'
 
@@ -11,24 +11,30 @@ export default defineNitroPlugin(() => {
   startScheduler()
 })
 
-function hasDefinedCreatedBy<T extends { createdById: string | null }>(
-  item: T
-): item is T & { createdById: string } {
+function socialSupportHasDefinedCreatedBy<
+  T extends { createdById: string | null }
+>(item: T): item is T & { createdById: string } {
   return item.createdById !== null
 }
 
-async function createDueFollowupNotifications(
-  dueFollowups: Followup[],
+function hasDefinedCreatedBy<
+  T extends { socialSupport: { createdById: string | null } }
+>(item: T): item is T & { createdById: string } {
+  return item.socialSupport.createdById !== null
+}
+
+async function createDueSocialSupportNotifications(
+  dueSocialSupports: SocialSupport[],
   type: 'DueDateToday' | 'DueDateOneMonth'
 ) {
-  const dueFollowupNotifications = dueFollowups
-    .filter(hasDefinedCreatedBy)
-    .map(({ id, createdById, beneficiaryId }) => ({
-      recipientId: createdById,
-      beneficiaryId,
-      followupId: id,
+  const dueFollowupNotifications = dueSocialSupports
+    .filter(socialSupportHasDefinedCreatedBy)
+    .map(socialSupport => ({
+      recipientId: socialSupport.createdById,
+      beneficiaryId: socialSupport.beneficiaryId,
+      socialSupportId: socialSupport.id,
       type,
-      itemCreatedById: createdById
+      itemCreatedById: socialSupport.createdById
     }))
 
   await NotificationRepo.prisma.createMany({
@@ -36,79 +42,37 @@ async function createDueFollowupNotifications(
   })
 }
 
-async function createDueInAMonthFollowupNotifications() {
-  const dueFollowups = await FollowupRepo.prisma.findMany({
+async function createDueInAMonthSocialSupportNotifications() {
+  const dueSocialSupports = await SocialSupportRepo.prisma.findMany({
     where: {
       dueDate: dayjs().add(1, 'month').toDate()
     }
   })
 
-  await createDueFollowupNotifications(
-    dueFollowups,
+  await createDueSocialSupportNotifications(
+    dueSocialSupports,
     NotificationType.DueDateOneMonth
   )
 }
 
-async function createDueTodayFollowupNotifications() {
-  const dueFollowups = await FollowupRepo.prisma.findMany({
+async function createDueTodaySocialSupportNotifications() {
+  const dueSocialSupports = await SocialSupportRepo.prisma.findMany({
     where: {
       dueDate: new Date()
     }
   })
 
-  await createDueFollowupNotifications(
-    dueFollowups,
-    NotificationType.DueDateToday
-  )
-}
-
-async function createDueHelpRequestNotifications(
-  dueHelpRequests: HelpRequest[],
-  type: 'DueDateToday' | 'DueDateOneMonth'
-) {
-  const dueHelpRequestNotifications = dueHelpRequests
-    .filter(hasDefinedCreatedBy)
-    .map(({ id, createdById, beneficiaryId }) => ({
-      recipientId: createdById,
-      beneficiaryId,
-      helpRequestId: id,
-      type,
-      itemCreatedById: createdById
-    }))
-
-  await NotificationRepo.prisma.createMany({
-    data: dueHelpRequestNotifications
-  })
-}
-
-async function createDueInAMonthHelpRequestNotifications() {
-  const dueHelpRequests = await HelpRequestRepo.prisma.findMany({
-    where: {
-      dueDate: dayjs().add(1, 'month').toDate()
-    }
-  })
-
-  await createDueHelpRequestNotifications(
-    dueHelpRequests,
-    NotificationType.DueDateOneMonth
-  )
-}
-
-async function createDueTodayHelpRequestNotifications() {
-  const dueHelpRequests = await HelpRequestRepo.prisma.findMany({
-    where: {
-      dueDate: new Date()
-    }
-  })
-
-  await createDueHelpRequestNotifications(
-    dueHelpRequests,
+  await createDueSocialSupportNotifications(
+    dueSocialSupports,
     NotificationType.DueDateToday
   )
 }
 
 async function createEndOfSupportHelpRequestNotifications() {
   const endOfSupportHelpRequests = await HelpRequestRepo.prisma.findMany({
+    include: {
+      socialSupport: true
+    },
     where: {
       handlingDate: new Date()
     }
@@ -116,12 +80,12 @@ async function createEndOfSupportHelpRequestNotifications() {
 
   const endOfSupportHelpRequestNotifications = endOfSupportHelpRequests
     .filter(hasDefinedCreatedBy)
-    .map(({ id, createdById, beneficiaryId }) => ({
-      recipientId: createdById,
-      beneficiaryId,
-      helpRequestId: id,
+    .map(({ socialSupport }) => ({
+      recipientId: socialSupport.createdById,
+      beneficiaryId: socialSupport.beneficiaryId,
+      helpRequestId: socialSupport.id,
       type: NotificationType.EndOfSupport,
-      itemCreatedById: createdById
+      itemCreatedById: socialSupport.createdById
     }))
 
   await NotificationRepo.prisma.createMany({
@@ -134,10 +98,8 @@ function startScheduler() {
 
   scheduler
     .run(async () => {
-      await createDueInAMonthFollowupNotifications()
-      await createDueTodayFollowupNotifications()
-      await createDueInAMonthHelpRequestNotifications()
-      await createDueTodayHelpRequestNotifications()
+      await createDueInAMonthSocialSupportNotifications()
+      await createDueTodaySocialSupportNotifications()
       await createEndOfSupportHelpRequestNotifications()
     })
     .dailyAt(1, 0)

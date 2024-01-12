@@ -2,18 +2,18 @@
   <ul class="body-metas information-list">
     <li><span class="information-label">Type :</span> {{ medium }}</li>
     <template v-if="isMinistryAgent">
-      <li v-if="followup.numeroPegase">
+      <li v-if="socialSupport.numeroPegase">
         <span class="information-label">Numéro Pégase :</span>
-        {{ followup.numeroPegase }}
+        {{ socialSupport.numeroPegase }}
       </li>
-      <li v-if="followup.ministre">
+      <li v-if="socialSupport.ministre">
         <span class="information-label">Ministre :</span>
-        {{ ministerLabels[followup.ministre] }}
+        {{ ministerLabels[socialSupport.ministre] }}
       </li>
     </template>
-    <li v-if="followup.dueDate">
+    <li v-if="socialSupport.dueDate">
       <span class="information-label">Date d'échéance :</span>
-      {{ formatDate(followup.dueDate) }}
+      {{ formatDate(socialSupport.dueDate) }}
     </li>
     <li v-if="followup.prescribingOrganization?.name">
       <span class="information-label">Organisme prescripteur :</span>
@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
   import { FollowupMedium } from '@prisma/client'
-  import { FollowupHistoryItem } from './types'
+  import { HistoryItemData, HistoryItemFollowup } from './types'
   import {
     // followupInterventionLabels,
     followupMediumLabels
@@ -70,7 +70,8 @@
   const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = defineProps<{
-    followup: FollowupHistoryItem
+    socialSupport: HistoryItemData
+    followup: HistoryItemFollowup
   }>()
 
   const medium = computed(() => {

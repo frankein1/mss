@@ -13,7 +13,7 @@
 <script lang="ts" setup>
   import {
     FollowupType,
-    HelpRequestStatus,
+    SocialSupportStatus,
     InstructorOrganization,
     PrescribingOrganization,
     HelpRequestSubject
@@ -44,8 +44,8 @@
     initialValues: {
       isMinistry: isMinistryAgent,
       beneficiaryId: props.beneficiaryId,
-      openingDate: new Date(),
-      status: HelpRequestStatus.WaitingAdditionalInformation,
+      date: new Date(),
+      status: SocialSupportStatus.WaitingAdditionalInformation,
       subject: props.subject
     }
   })

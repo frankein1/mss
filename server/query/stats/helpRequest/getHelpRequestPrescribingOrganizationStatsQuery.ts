@@ -1,37 +1,40 @@
-import { Prisma } from '@prisma/client'
-import { HelpRequestRepo } from '~/server/database'
+import {
+  preparePrescribingOrganizationStats,
+  prepareSocialSupportStatFilters
+} from '../helpers'
+import { SocialSupportRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { prepareHelpRequestStatFilters } from '~/utils/filters'
-import { preparePrescribingOrganizationStats } from '~/utils/stats'
 
 export async function getHelpRequestPrescribingOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const { beneficiary: preparedBeneficiaryFilters, ...preparedFilters } =
-    prepareHelpRequestStatFilters(input)
+  const preparedFilters = prepareSocialSupportStatFilters(input)
 
-  const beneficiaryFilters: Prisma.BeneficiaryWhereInput =
-    preparedBeneficiaryFilters
-      ? {
-          ...preparedBeneficiaryFilters
-        }
-      : {}
-
-  const helpRequests = await HelpRequestRepo.findMany(user, {
+  const socialSupports = await SocialSupportRepo.findMany(user, {
     where: {
-      ...preparedFilters,
-      beneficiary: beneficiaryFilters
+      socialSupportType: 'HelpRequest',
+      ...preparedFilters
     },
     select: {
-      prescribingOrganization: {
+      helpRequest: {
         select: {
-          id: true,
-          name: true
+          prescribingOrganization: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
         }
       }
     }
   })
+
+  const helpRequests = socialSupports.reduce(
+    (fu, { helpRequest }) => (helpRequest !== null ? [...fu, helpRequest] : fu),
+    [] as Array<Exclude<(typeof socialSupports)[0]['helpRequest'], null>>
+  )
+
   return preparePrescribingOrganizationStats(helpRequests)
 }

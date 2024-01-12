@@ -17,7 +17,7 @@ export function prepareFollowupFilters(filters: FollowupFilterInput) {
   const formattedFilters: Prisma.FollowupWhereInput = {}
 
   if (filters.status) {
-    formattedFilters.status = filters.status
+    formattedFilters.socialSupport = { status: filters.status }
   }
 
   if (filters.medium) {
@@ -25,17 +25,34 @@ export function prepareFollowupFilters(filters: FollowupFilterInput) {
   }
 
   if (filters.followupTypes) {
-    formattedFilters.types = { some: { id: { in: filters.followupTypes } } }
+    const types = {
+      some: { id: { in: filters.followupTypes } }
+    }
+    if (formattedFilters.socialSupport) {
+      formattedFilters.socialSupport.types = types
+    } else {
+      formattedFilters.socialSupport = { types }
+    }
   }
 
   if (filters.referents) {
-    formattedFilters.beneficiary = {
+    const beneficiary = {
       referents: { some: { id: { in: filters.referents } } }
+    }
+    if (formattedFilters.socialSupport) {
+      formattedFilters.socialSupport.beneficiary = beneficiary
+    } else {
+      formattedFilters.socialSupport = { beneficiary }
     }
   }
 
   if (filters.ministre) {
-    formattedFilters.ministre = { in: filters.ministre }
+    const ministre = { in: filters.ministre }
+    if (formattedFilters.socialSupport) {
+      formattedFilters.socialSupport.ministre = ministre
+    } else {
+      formattedFilters.socialSupport = { ministre }
+    }
   }
 
   return formattedFilters

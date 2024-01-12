@@ -24,7 +24,9 @@ const handler = async ({
   const where = {
     where: {
       examinationDate: { not: null },
-      beneficiary: input?.id ? { id: input?.id } : {}
+      socialSupport: {
+        beneficiary: input?.id ? { id: input?.id } : {}
+      }
     }
   }
 

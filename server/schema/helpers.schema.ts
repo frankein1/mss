@@ -110,3 +110,9 @@ export const openText = (maxLength: number) =>
       v => !v.includes('<') && !v.includes('>'),
       'Les caractères spéciaux < et > ne sont pas acceptés.'
     )
+
+export const beneficiaryIdSchema = z.object({
+  beneficiaryId: z.string().uuid()
+})
+
+export type BeneficiaryIdInput = z.infer<typeof beneficiaryIdSchema>

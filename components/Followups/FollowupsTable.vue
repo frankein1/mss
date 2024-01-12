@@ -23,14 +23,16 @@
               :label="followupFieldLabels.date"
               :sort="dateSort"
               numeric
-              @update:sort="onSort({ date: $event })"
+              @update:sort="onSort({ socialSupport: { date: $event } })"
             />
             <TableSortableHeader
               :label="followupFieldLabels.beneficiaryId"
               @update:sort="
                 onSort({
-                  beneficiary: {
-                    usualName: $event
+                  socialSupport: {
+                    beneficiary: {
+                      usualName: $event
+                    }
                   }
                 })
               "
@@ -39,7 +41,7 @@
             <TableSortableHeader
               :label="followupFieldLabels.dueDate"
               numeric
-              @update:sort="onSort({ dueDate: $event })"
+              @update:sort="onSort({ socialSupport: { dueDate: $event } })"
             />
             <th scope="col">Agent</th>
             <th scope="col">N° de dossier</th>
@@ -78,5 +80,7 @@
     emit
   )
 
-  const dateSort = computed(() => props.sort?.find(s => s.date)?.date)
+  const dateSort = computed(
+    () => props.sort?.find(s => s.socialSupport?.date)?.socialSupport.date
+  )
 </script>

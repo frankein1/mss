@@ -15,7 +15,7 @@
   import {
     FollowupType,
     PrescribingOrganization,
-    FollowupStatus
+    SocialSupportStatus
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
@@ -39,7 +39,7 @@
       isMinistry: isMinistryAgent,
       beneficiaryId: props.beneficiaryId,
       date: new Date(),
-      status: FollowupStatus.Done,
+      status: SocialSupportStatus.Done,
       redirected: false
     }
   })

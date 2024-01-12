@@ -4,14 +4,19 @@ import {
   HelpRequestPermissions,
   getHelpRequestPermissions
 } from '~/server/security/permissions'
+import { BeneficiaryService } from '~/server/services/beneficiary'
 
 function getHelpRequestSecurityTarget(user: SecurityRuleGrantee, id: string) {
   return HelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
-      beneficiary: {
+      socialSupport: {
         include: {
-          referents: true
+          beneficiary: {
+            include: {
+              referents: true
+            }
+          }
         }
       }
     }
@@ -23,18 +28,24 @@ export async function getUpdatePermission(
   id: string
 ): Promise<HelpRequestPermissions> {
   const helpRequest = await getHelpRequestSecurityTarget(ctx.user, id)
+  const { socialSupport } = helpRequest
   return getHelpRequestPermissions({
     ctx,
-    target: { beneficiary: helpRequest.beneficiary, helpRequest }
+    beneficiary: socialSupport.beneficiary,
+    socialSupport
   })
 }
 
-export function getCreatePermission(
-  ctx: SecurityRuleContext
+export async function getCreatePermission(
+  ctx: SecurityRuleContext,
+  beneficiaryId: string
 ): Promise<HelpRequestPermissions> {
-  return Promise.resolve(
-    getHelpRequestPermissions({
-      ctx
-    })
+  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+    ctx.user,
+    beneficiaryId
   )
+  return getHelpRequestPermissions({
+    ctx,
+    beneficiary
+  })
 }

@@ -6,21 +6,26 @@ import {
   fixturesUsers
 } from './'
 
-export const fixturesFollowups = [
+const fixturesFollowupSocialSupports = [
   {
     id: 'e20b26f8-52fd-4620-8959-4cbb4623fb05',
     createdById: fixturesUsers[1].id,
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[0].id,
-    medium: 'PlannedInPerson',
     types: {
       connect: [
         { id: fixturesFollowupTypes[0].id },
         { id: fixturesFollowupTypes[1].id }
       ]
     },
-    date: new Date('2022-10-20')
+    date: new Date('2022-10-20'),
+    socialSupportType: 'Followup',
+    followup: {
+      create: {
+        medium: 'PlannedInPerson'
+      }
+    }
   },
   {
     id: '8f8a083f-f04f-4977-9e07-8b88135c7210',
@@ -28,11 +33,16 @@ export const fixturesFollowups = [
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[0].id,
-    medium: 'PhoneCall',
     types: {
       connect: [{ id: fixturesFollowupTypes[0].id }]
     },
-    date: new Date('2022-10-21')
+    date: new Date('2022-10-21'),
+    socialSupportType: 'Followup',
+    followup: {
+      create: {
+        medium: 'PhoneCall'
+      }
+    }
   },
   {
     id: '07e809c3-4b6e-4152-bde3-357c501c981f',
@@ -40,14 +50,19 @@ export const fixturesFollowups = [
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[2].id,
-    medium: 'Videoconference',
     types: {
       connect: [
         { id: fixturesFollowupTypes[2].id },
         { id: fixturesFollowupTypes[1].id }
       ]
     },
-    date: new Date('2022-10-22')
+    date: new Date('2022-10-22'),
+    socialSupportType: 'Followup',
+    followup: {
+      create: {
+        medium: 'Videoconference'
+      }
+    }
   },
   {
     id: 'b811a9d7-ada7-42ca-b809-926caaebaf52',
@@ -55,11 +70,16 @@ export const fixturesFollowups = [
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[1].id,
-    medium: 'UnplannedInPerson',
     types: {
       connect: [{ id: fixturesFollowupTypes[2].id }]
     },
-    date: new Date('2022-10-23')
+    date: new Date('2022-10-23'),
+    socialSupportType: 'Followup',
+    followup: {
+      create: {
+        medium: 'UnplannedInPerson'
+      }
+    }
   },
   {
     id: 'b15eba7c-d00d-4de6-a227-75361066c322',
@@ -67,14 +87,19 @@ export const fixturesFollowups = [
     status: 'InProgress',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[2].id,
-    medium: 'PlannedInPerson',
     types: {
       connect: [
         { id: fixturesFollowupTypes[3].id },
         { id: fixturesFollowupTypes[4].id }
       ]
     },
-    date: new Date('2022-10-24')
+    date: new Date('2022-10-24'),
+    socialSupportType: 'Followup',
+    followup: {
+      create: {
+        medium: 'PlannedInPerson'
+      }
+    }
   },
   {
     id: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
@@ -82,7 +107,6 @@ export const fixturesFollowups = [
     status: 'InProgress',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[3].id,
-    medium: 'PhoneCall',
     types: {
       connect: [{ id: fixturesFollowupTypes[4].id }]
     },
@@ -98,7 +122,7 @@ export const fixturesFollowups = [
             id: '3a39f0ae-17c0-4616-9e76-523faad59cfc',
             recipientId: fixturesUsers[1].id,
             beneficiaryId: fixturesBeneficiaries[3].id,
-            followupId: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
+            socialSupportId: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
             type: 'NewComment',
             itemCreatedById: fixturesUsers[4].id
           }
@@ -128,6 +152,54 @@ export const fixturesFollowups = [
           }
         }
       }
+    },
+    socialSupportType: 'Followup',
+    followup: {
+      create: {
+        medium: 'PhoneCall'
+      }
     }
   }
-] satisfies Prisma.FollowupUncheckedCreateInput[]
+] satisfies Prisma.SocialSupportUncheckedCreateInput[]
+
+const fixturesHelpRequestSocialSupports = [
+  {
+    id: 'c95126c4-b0b5-4606-82ca-8d95c544fd35',
+    createdById: fixturesUsers[3].id,
+    status: 'Accepted',
+    structureId: fixtureStructure.id,
+    beneficiaryId: fixturesBeneficiaries[0].id,
+    types: { connect: { id: fixturesFollowupTypes[4].id } },
+    socialSupportType: 'HelpRequest',
+    date: new Date('2022-10-26'),
+    helpRequest: {
+      create: {
+        subject: 'Other',
+        externalStructure: false,
+        typeId: fixturesFollowupTypes[4].id
+      }
+    }
+  },
+  {
+    id: '4aad5e90-7a9e-4aeb-90f1-1c986664f47f',
+    createdById: fixturesUsers[3].id,
+    status: 'InvestigationOngoing',
+    structureId: fixtureStructure.id,
+    beneficiaryId: fixturesBeneficiaries[2].id,
+    types: { connect: { id: fixturesFollowupTypes[3].id } },
+    socialSupportType: 'HelpRequest',
+    date: new Date('2022-10-27'),
+    helpRequest: {
+      create: {
+        subject: 'Other',
+        externalStructure: false,
+        typeId: fixturesFollowupTypes[3].id
+      }
+    }
+  }
+] satisfies Prisma.SocialSupportUncheckedCreateInput[]
+
+export const fixturesSocialSupports = [
+  ...fixturesFollowupSocialSupports,
+  ...fixturesHelpRequestSocialSupports
+]

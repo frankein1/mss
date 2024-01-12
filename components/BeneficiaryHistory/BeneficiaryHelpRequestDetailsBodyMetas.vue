@@ -1,24 +1,24 @@
 <template>
   <ul class="body-metas information-list">
     <template v-if="isMinistryAgent">
-      <li v-if="helpRequest.numeroPegase">
+      <li v-if="socialSupport.numeroPegase">
         <span class="information-label"
           >{{ helpRequestFieldLabels.numeroPegase }} :</span
         >
-        {{ helpRequest.numeroPegase }}
+        {{ socialSupport.numeroPegase }}
       </li>
-      <li v-if="helpRequest.ministre">
+      <li v-if="socialSupport.ministre">
         <span class="information-label"
           >{{ helpRequestFieldLabels.ministre }} :</span
         >
-        {{ ministerLabels[helpRequest.ministre] }}
+        {{ ministerLabels[socialSupport.ministre] }}
       </li>
     </template>
-    <li v-if="helpRequest.dueDate">
+    <li v-if="socialSupport.dueDate">
       <span class="information-label"
         >{{ helpRequestFieldLabels.dueDate }} :</span
       >
-      {{ formatDate(helpRequest.dueDate) }}
+      {{ formatDate(socialSupport.dueDate) }}
     </li>
     <li v-if="helpRequest.prescribingOrganization?.name">
       <span class="information-label"
@@ -66,7 +66,7 @@
       >
       {{ formatDate(helpRequest.decisionDate) }}
     </li>
-    <template v-if="helpRequest.status === HelpRequestStatus.Accepted">
+    <template v-if="socialSupport.status === SocialSupportStatus.Accepted">
       <li v-if="allocatedAmount">
         <span class="information-label"
           >{{ helpRequestFieldLabels.allocatedAmount }} :</span
@@ -90,12 +90,12 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestStatus } from '@prisma/client'
-  import { HistoryItemData } from './types'
+  import { SocialSupportStatus } from '@prisma/client'
+  import { HistoryItemData, HistoryItemHelpRequest } from './types'
   import {
-    helpRequestRefusalReasonLabels,
     paymentMethodLabels,
-    isRefundableLabels
+    isRefundableLabels,
+    anyRefusalReasonLabels
   } from '~/client/options/helpRequest'
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'
@@ -105,7 +105,8 @@
   const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = defineProps<{
-    helpRequest: HistoryItemData
+    socialSupport: HistoryItemData
+    helpRequest: HistoryItemHelpRequest
   }>()
 
   const instructorOrganization = computed(() => {
@@ -145,13 +146,13 @@
     const { refusalReason, refusalReasonOther } = props.helpRequest
     return (
       refusalReasonOther ||
-      (refusalReason ? helpRequestRefusalReasonLabels[refusalReason] : '')
+      (refusalReason ? anyRefusalReasonLabels[refusalReason] : '')
     )
   })
 
   const hasRefusalReason = computed(
     () =>
-      props.helpRequest.status === HelpRequestStatus.Refused &&
+      props.socialSupport.status === SocialSupportStatus.Refused &&
       refusalReason.value
   )
 </script>

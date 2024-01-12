@@ -1,6 +1,6 @@
 import {
   getBeneficiaryDetailsQuery,
-  getBeneficiaryHistoriesQuery,
+  getSocialSupports,
   getPage,
   exportBeneficiariesQuery,
   getBeneficiaryDocumentsQuery,
@@ -25,9 +25,9 @@ export const beneficiaryRouter = router({
   getBeneficiaryDetails: protectedProcedure
     .input(getBeneficiaryDetailsQuery.inputValidation)
     .query(getBeneficiaryDetailsQuery.execute),
-  getBeneficiaryHistories: protectedProcedure
-    .input(getBeneficiaryHistoriesQuery.inputValidation)
-    .query(getBeneficiaryHistoriesQuery.execute),
+  getSocialSupports: protectedProcedure
+    .input(getSocialSupports.inputValidation)
+    .query(getSocialSupports.execute),
   getPage: protectedProcedure
     .input(getPage.inputValidation)
     .query(getPage.execute),

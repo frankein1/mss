@@ -2,7 +2,7 @@ import {
   // FollowupIntervention,
   FollowupMedium,
   // FollowupSignalement,
-  FollowupStatus
+  SocialSupportStatus
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
@@ -46,10 +46,10 @@ export const followupMediumLabels: { [key in FollowupMedium]: string } = {
 
 export const followupMediumOptions = labelsToOptions(followupMediumLabels)
 
-export const followupStatusLabels: { [key in FollowupStatus]: string } = {
-  [FollowupStatus.Todo]: 'À traiter',
-  [FollowupStatus.InProgress]: 'En cours',
-  [FollowupStatus.Done]: 'Terminé'
+export const followupStatusLabels = {
+  [SocialSupportStatus.Todo]: 'À traiter',
+  [SocialSupportStatus.InProgress]: 'En cours',
+  [SocialSupportStatus.Done]: 'Terminé'
 }
 
 export const followupStatusOptions = labelsToOptions(followupStatusLabels)

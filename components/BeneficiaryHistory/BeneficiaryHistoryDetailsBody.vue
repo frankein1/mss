@@ -10,27 +10,29 @@
 
     <template v-if="canViewHistoryDetails">
       <BeneficiaryFollowupDetailsBodyMetas
-        v-if="historyData.isFollowup"
-        :followup="historyData as FollowupHistoryItem"
+        v-if="socialSupport.followup"
+        :social-support="socialSupport"
+        :followup="socialSupport.followup"
       />
       <BeneficiaryHelpRequestDetailsBodyMetas
-        v-else
-        :help-request="historyData"
+        v-if="socialSupport.helpRequest"
+        :social-support="socialSupport"
+        :help-request="socialSupport.helpRequest"
       />
 
       <BeneficiaryHistoryDetailsBodyDocuments
-        v-if="historyData.documents?.length"
-        :documents="historyData.documents"
+        v-if="socialSupport.documents?.length"
+        :documents="socialSupport.documents"
       />
 
-      <template v-if="historyData.synthesis">
+      <template v-if="socialSupport.synthesis">
         <h3 class="synthesis-title">Compte rendu</h3>
-        <p class="synthesis-content">{{ historyData.synthesis }}</p>
+        <p class="synthesis-content">{{ socialSupport.synthesis }}</p>
       </template>
 
-      <template v-if="canViewPrivateSynthesis && historyData.privateSynthesis">
+      <template v-if="socialSupport.privateSynthesis">
         <h3 class="synthesis-title fr-icon-lock-line">Compte rendu privé</h3>
-        <p class="synthesis-content">{{ historyData.privateSynthesis }}</p>
+        <p class="synthesis-content">{{ socialSupport.privateSynthesis }}</p>
       </template>
 
       <ul
@@ -65,7 +67,7 @@
 
     <BeneficiaryHistoryComments
       :comments="comments"
-      :history="historyData"
+      :social-support="socialSupport"
       @comment-added="onCommentAdded"
       @comment-edited="onCommentEdited"
       @comment-deleted="onCommentDeleted"
@@ -74,16 +76,12 @@
 </template>
 
 <script setup lang="ts">
-  import type {
-    HistoryItem,
-    HistoryItemComment,
-    FollowupHistoryItem
-  } from './types'
+  import type { HistoryItem, HistoryItemComment } from './types'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
-    history: HistoryItem
+    item: HistoryItem
     collapseId: string
   }>()
 
@@ -91,18 +89,22 @@
     deleted: []
   }>()
 
-  const historyData = computed(() => props.history.data)
-  const permissions = computed(() => props.history.permissions)
+  const socialSupport = computed(() => props.item.data)
+  const permissions = computed(() => props.item.permissions)
 
-  const comments = ref(historyData.value.comments || [])
+  const isFollowup = computed(
+    () => socialSupport.value.socialSupportType === 'Followup'
+  )
+
+  const comments = ref(socialSupport.value.comments || [])
 
   const editLink = computed(() => {
-    const routeWithParams = historyData.value.isFollowup
+    const routeWithParams = isFollowup.value
       ? RoutePath.AppBeneficiaryFollowupEdit
       : RoutePath.AppBeneficiaryHelpRequestEdit
     return routeWithParams(
-      historyData.value.beneficiaryId,
-      historyData.value.id
+      socialSupport.value.beneficiaryId,
+      socialSupport.value.id
     )
   })
 
@@ -111,10 +113,6 @@
   const canDelete = computed(() => permissions.value?.delete)
 
   const canViewHistoryDetails = computed(() => permissions.value?.get.details)
-
-  const canViewPrivateSynthesis = computed(
-    () => permissions.value?.get.privateSynthesis
-  )
 
   function onCommentAdded(comment: HistoryItemComment) {
     comments.value.push(comment)
@@ -134,13 +132,13 @@
 
   function onDelete() {
     useModal().open({
-      title: historyData.value.isFollowup
+      title: isFollowup.value
         ? "Supprimer la synthèse d'entretien"
         : "Supprimer l'instruction de dossier",
       contentComponent: BeneficiaryHistoryDeleteForm,
       contentComponentProps: {
-        historyItemId: historyData.value.id,
-        isFollowup: historyData.value.isFollowup
+        historyItemId: socialSupport.value.id,
+        isFollowup: isFollowup.value
       },
       contentComponentEvents: { deleted: onHistoryItemDeleted }
     })

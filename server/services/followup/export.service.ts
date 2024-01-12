@@ -3,8 +3,8 @@ import { getPage } from './queries'
 import { prepareFollowupFilters } from './helper'
 import {
   followupMediumLabels,
-  followupStatusLabels
-} from '~/client/options/followup'
+  socialSupportStatusLabels
+} from '~/client/options'
 import { ExportFollowupsInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security'
 import { RowType } from '~/types/export'
@@ -65,7 +65,7 @@ export async function exportFollowups({
         followups.push({
           date: formatDate(followup.date, 'DD-MM-YYYY'),
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
-          status: followupStatusLabels[followup.status],
+          status: socialSupportStatusLabels[followup.status],
           redirected: getBooleanOrEmpty(followup.redirected),
           types: followup.types.map(type => type.name).join(', '),
           beneficiaryId: formatBeneficiaryDisplayName(followup.beneficiary),

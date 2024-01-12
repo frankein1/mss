@@ -165,10 +165,9 @@ export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
       id: { in: filters.followupTypes }
     }
 
-    formattedFilters.OR = [
-      { followups: { some: { types: { some: typesListFilter } } } },
-      { helpRequests: { some: { type: typesListFilter } } }
-    ]
+    formattedFilters.socialSupports = {
+      some: { types: { some: typesListFilter } }
+    }
   }
 
   if (filters.referents) {
