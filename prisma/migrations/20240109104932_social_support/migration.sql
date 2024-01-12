@@ -1,42 +1,5 @@
-/*
- Warnings:
- 
- - The values [Housing] on the enum `HelpRequestSubject` will be removed. If these variants are still used in the database, this will fail.
- - You are about to drop the column `followup_id` on the `comment` table. All the data in the column will be lost.
- - You are about to drop the column `help_request_id` on the `comment` table. All the data in the column will be lost.
- - You are about to drop the column `beneficiary_id` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `created` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `created_by_id` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `date` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `ministre` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `numero_pegase` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `private_synthesis` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `status` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `structure_id` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `synthesis` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `due_date` on the `followup` table. All the data in the column will be lost.
- - You are about to drop the column `beneficiary_id` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `created` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `created_by_id` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `ministre` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `numero_pegase` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `opening_date` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `private_synthesis` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `status` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `structure_id` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `synthesis` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `due_date` on the `help_request` table. All the data in the column will be lost.
- - You are about to drop the column `followup_id` on the `notification` table. All the data in the column will be lost.
- - You are about to drop the column `help_request_id` on the `notification` table. All the data in the column will be lost.
- - You are about to drop the `_document_to_followup` table. If the table is not empty, all the data it contains will be lost.
- - You are about to drop the `_document_to_help_request` table. If the table is not empty, all the data it contains will be lost.
- - You are about to drop the `_followup_to_followup_type` table. If the table is not empty, all the data it contains will be lost.
- - A unique constraint covering the columns `[social_support_id]` on the table `followup` will be added. If there are existing duplicate values, this will fail.
- - A unique constraint covering the columns `[social_support_id]` on the table `help_request` will be added. If there are existing duplicate values, this will fail.
- - Added the required column `social_support_id` to the `followup` table without a default value. This is not possible if the table is not empty.
- - Added the required column `social_support_id` to the `help_request` table without a default value. This is not possible if the table is not empty.
- 
- */
+DELETE FROM comment where followup_id is null and help_request_id is null;
+
 /**
  ****************
  * CREATE ENUMS *
@@ -237,8 +200,7 @@ ADD CONSTRAINT "housing_help_request_social_support_id_fkey" FOREIGN KEY ("socia
 
 -- AddForeignKey
 ALTER TABLE "comment"
-ADD CONSTRAINT "comment_social_support_id_fkey" FOREIGN KEY ("social_support_id") REFERENCES "social_support"("id") ON DELETE
-SET NULL ON UPDATE CASCADE;
+ADD CONSTRAINT "comment_social_support_id_fkey" FOREIGN KEY ("social_support_id") REFERENCES "social_support"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "notification"
