@@ -38,20 +38,16 @@ export const paymentMethodLabels: { [key in PaymentMethod]: string } = {
 
 export const paymentMethodOptions = labelsToOptions(paymentMethodLabels)
 
-type ExtendedHelpRequestSubject = keyof typeof HelpRequestSubject | 'Housing'
-
 export const helpRequestSubjectLabels: {
-  [key in ExtendedHelpRequestSubject]: string
+  [key in HelpRequestSubject]: string
 } = {
-  Housing: 'Une demande de logement',
   [HelpRequestSubject.Financial]: 'Une aide financière',
   [HelpRequestSubject.Other]: 'Autre'
 }
 
 export const helpRequestSubjectPictos: {
-  [key in ExtendedHelpRequestSubject]: string
+  [key in HelpRequestSubject]: string
 } = {
-  Housing: '~/assets/pictograms/building.svg',
   [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
   [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
 }
@@ -68,7 +64,7 @@ const baseRefusalReasonLabels = {
   [HelpRequestRefusalReason.IrregularSituation]: 'En situation irrégulière'
 }
 
-const helpRequestRefusalReasonLabels = {
+export const helpRequestRefusalReasonLabels = {
   ...baseRefusalReasonLabels,
   [HelpRequestRefusalReason.MissedAppointment]: 'Absence au rendez-vous',
   [HelpRequestRefusalReason.AlreadyExistingHelpRequest]:

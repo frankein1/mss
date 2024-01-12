@@ -9,17 +9,17 @@
     <div class="history-details__meta">
       <small>{{ historyTypeTitle }}</small>
       <h2 class="history-details__title">
-        <template v-if="history.createdBy">
-          {{ formatUserDisplayName(history.createdBy) }}
+        <template v-if="data.createdBy">
+          {{ formatUserDisplayName(data.createdBy) }}
           <span> · </span>
         </template>
         <span class="history-details__date"
-          >le {{ formatDate(history.date) }}</span
+          >le {{ formatDate(data.date) }}</span
         >
       </h2>
       <ul class="fr-tags-group follow-up-types-tags">
         <li
-          v-for="followUpType in history.followUpTypes"
+          v-for="followUpType in data.followUpTypes"
           :key="followUpType.id"
         >
           <p class="fr-tag">{{ followUpType.name }}</p>
@@ -31,7 +31,7 @@
         <li>
           <p
             class="fr-badge"
-            :class="[socialSupportStatusClasses[props.history.status]]"
+            :class="[socialSupportStatusClasses[props.data.status]]"
           >
             {{ statusLabel }}
           </p>
@@ -65,18 +65,16 @@
 
 <script setup lang="ts">
   import type { HistoryItemData } from './types'
-  import { followupStatusLabels } from '~/client/options/followup'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
+  import { socialSupportStatusLabels } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
 
   const route = useRoute()
 
-  const { helpRequestStatusLabels } = useHelpRequestStatus()
-
   const props = withDefaults(
     defineProps<{
-      history: HistoryItemData
+      data: HistoryItemData
       collapseId: string
       expanded?: boolean
       hasUnreadNotifications?: boolean
@@ -88,43 +86,37 @@
     toggleExpand: []
   }>()
 
+  const isFollowup = computed(() => props.data.socialSupportType === 'Followup')
+
   const collapseBtn = ref<HTMLButtonElement | null>(null)
 
-  const statusLabel = computed(() => {
-    if (props.history.isFollowup) {
-      return followupStatusLabels[props.history.status as FollowupStatus]
-    }
-    return helpRequestStatusLabels.value[
-      props.history.status as HelpRequestStatus
-    ]
-  })
+  const statusLabel = computed(
+    () => socialSupportStatusLabels[props.data.status]
+  )
 
   const redirectedLabel = computed(() => {
-    if (props.history.isFollowup) {
-      if (props.history.redirected) {
-        const label = 'Réorienté'
-        return props.history.structureName
-          ? `${label} : ${props.history.structureName}`
-          : label
-      }
+    const followup = props.data.followup
+    if (!followup) {
+      return ''
     }
-    return ''
+    if (followup.redirected) {
+      const label = 'Réorienté'
+      return followup.structureName
+        ? `${label} : ${followup.structureName}`
+        : label
+    }
   })
 
   const historyTypeIcon = computed(() =>
-    props.history.isFollowup
-      ? 'fr-icon-followup-fill'
-      : 'fr-icon-help-request-fill'
+    isFollowup.value ? 'fr-icon-followup-fill' : 'fr-icon-help-request-fill'
   )
 
   const historyTypeTitle = computed(() =>
-    props.history.isFollowup ? "Synthèse d'entretien" : 'Instruction de dossier'
+    isFollowup.value ? "Synthèse d'entretien" : 'Instruction de dossier'
   )
 
   const historyTypeLabel = computed(() =>
-    props.history.isFollowup
-      ? "la synthèse d'entretien"
-      : "l'instruction de dossier"
+    isFollowup.value ? "la synthèse d'entretien" : "l'instruction de dossier"
   )
 
   const collapseBtnTitle = computed(
@@ -142,7 +134,7 @@
   onMounted(() => {
     // Expand item if selected in URL
     const { item } = route.query
-    if (item === props.history.id && collapseBtn.value) {
+    if (item === props.data.id && collapseBtn.value) {
       collapseBtn.value.click()
       collapseBtn.value.ariaExpanded = 'true'
     }

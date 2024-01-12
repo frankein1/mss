@@ -92,7 +92,7 @@ function prepareSocialSupportFilters(
   return formattedFilters
 }
 
-function getSocialSupports(
+function loadSocialSupports(
   filters: HistoryFilters,
   user: SecurityRuleGrantee,
   beneficiaryId: string
@@ -145,7 +145,7 @@ function getSocialSupports(
   })
 }
 
-type SocialSupports = Prisma.PromiseReturnType<typeof getSocialSupports>
+type SocialSupports = Prisma.PromiseReturnType<typeof loadSocialSupports>
 
 function flattenSocialSupports(
   socialSupports: SocialSupports,
@@ -191,13 +191,13 @@ const handler = async ({
 }) => {
   const { beneficiaryId, filters } = input
 
-  const [totalCount, histories, beneficiary] = await Promise.all([
+  const [totalCount, socialSupports, beneficiary] = await Promise.all([
     SocialSupportRepo.count(ctx.user, {
       where: {
         beneficiaryId
       }
     }),
-    getSocialSupports(filters, ctx.user, beneficiaryId),
+    loadSocialSupports(filters, ctx.user, beneficiaryId),
     BeneficiaryService.getBeneficiarySecurityTarget(
       ctx.user,
       input.beneficiaryId
@@ -205,12 +205,12 @@ const handler = async ({
   ])
 
   return {
-    histories: flattenSocialSupports(histories, ctx, beneficiary),
+    items: flattenSocialSupports(socialSupports, ctx, beneficiary),
     totalCount
   }
 }
 
-export const getBeneficiaryHistoriesQuery = createQuery({
+export const getSocialSupports = createQuery({
   inputValidation: getHistorySchema,
   securityCheck,
   handler

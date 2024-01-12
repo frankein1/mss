@@ -66,7 +66,7 @@
 <script lang="ts" setup>
   import {
     FollowupType,
-    HelpRequestStatus,
+    SocialSupportStatus,
     InstructorOrganization,
     PrescribingOrganization
   } from '@prisma/client'
@@ -100,7 +100,7 @@
     submit: [payload: Event]
   }>()
 
-  const { value: status } = useField<HelpRequestStatus>('status')
+  const { value: status } = useField<SocialSupportStatus>('status')
   const { value: externalStructure } = useField<'true' | 'false' | undefined>(
     'externalStructure'
   )

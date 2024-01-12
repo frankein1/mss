@@ -1,20 +1,20 @@
 <template>
   <li
-    :id="`history-${historyId}`"
+    :id="`history-${socialSupportId}`"
     ref="$el"
     class="beneficiary-history-details-collapse force-focus-visible"
     :class="[typeClass, expanded ? 'expanded' : '']"
     tabindex="0"
   >
     <BeneficiaryHistoryDetailsHeader
-      :history="historyData"
+      :data="itemData"
       :collapse-id="collapseId"
       :expanded="expanded"
       :has-unread-notifications="hasUnreadNotifications"
       @toggle-expand="expanded = !expanded"
     />
     <BeneficiaryHistoryDetailsBody
-      :history="history"
+      :item="item"
       :collapse-id="collapseId"
       @deleted="emit('deleted')"
     />
@@ -25,7 +25,7 @@
   import type { HistoryItem } from './types'
 
   const props = defineProps<{
-    history: HistoryItem
+    item: HistoryItem
   }>()
 
   const emit = defineEmits<{
@@ -37,16 +37,16 @@
 
   const expanded = ref(false)
 
-  const historyData = computed(() => props.history.data)
-  const historyId = computed(() => historyData.value.id)
-  const collapseId = computed(() => `collapse-${historyId.value}`)
+  const itemData = computed(() => props.item.data)
+  const socialSupportId = computed(() => itemData.value.id)
+  const collapseId = computed(() => `collapse-${socialSupportId.value}`)
 
   const typeClass = computed(() =>
-    historyData.value.isFollowup ? 'followup-details' : 'help-request-details'
+    itemData.value.followup ? 'followup-details' : 'help-request-details'
   )
 
   const hasUnreadNotifications = computed(
-    () => !!historyData.value.hasUnreadNotifications
+    () => !!itemData.value.hasUnreadNotifications
   )
 
   onMounted(() => {

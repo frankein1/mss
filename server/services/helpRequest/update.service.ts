@@ -53,7 +53,7 @@ export async function update({ input, ctx }: UpdateParams) {
     dueDate,
     fullFile,
     subject,
-    openingDate
+    date
   } = cleanUpdateInput({ input, subject: target.subject })
 
   const helpRequest = await SocialSupportRepo.prisma.update({
@@ -69,7 +69,7 @@ export async function update({ input, ctx }: UpdateParams) {
       ministre,
       numeroPegase,
       dueDate,
-      date: openingDate,
+      date,
       types: connect(typeId),
       documents: prepareDocumentsMutations(
         documents,

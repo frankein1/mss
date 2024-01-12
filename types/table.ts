@@ -24,7 +24,7 @@ export type FollowupSort = {
 
 export type HelpRequestSort = {
   dueDate?: SortOrder
-  openingDate?: SortOrder
+  date?: SortOrder
   beneficiary?: {
     usualName?: SortOrder
   }

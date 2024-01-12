@@ -27,12 +27,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { SocialSupportStatus } from '@prisma/client'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
-  import { helpRequestStatusColors } from '~/client/colors/helpRequest'
+  import { socialSupportStatusLabels } from '~/client/options'
 
   const trpcClient = useTrpcClient()
-  const { helpRequestStatusLabels } = useHelpRequestStatus()
 
   const props = defineProps<{
     totalCount: number
@@ -49,9 +49,37 @@
     () =>
       statusCounts.value?.map(({ _count, status }) => ({
         key: status,
-        label: helpRequestStatusLabels.value[status],
-        color: helpRequestStatusColors[status],
+        label: socialSupportStatusLabels[status],
+        color: getColor(status),
         count: _count
       })) || []
   )
+
+  function getColor(status: SocialSupportStatus) {
+    if (status === SocialSupportStatus.WaitingAdditionalInformation) {
+      return '#fcc63a'
+    }
+    if (status === SocialSupportStatus.InvestigationOngoing) {
+      return '#7AB1E8'
+    }
+    if (status === SocialSupportStatus.Accepted) {
+      return '#3bea7e'
+    }
+    if (status === SocialSupportStatus.Refused) {
+      return '#FF732C'
+    }
+    if (status === SocialSupportStatus.Adjourned) {
+      return '#6f45f7'
+    }
+    if (status === SocialSupportStatus.ClosedByBeneficiary) {
+      return '#f95c5e'
+    }
+    if (status === SocialSupportStatus.ClosedByAgent) {
+      return '#c9191e'
+    }
+    if (status === SocialSupportStatus.Dismissed) {
+      return '#CE70CC'
+    }
+    return ''
+  }
 </script>

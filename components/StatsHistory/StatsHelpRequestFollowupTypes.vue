@@ -52,7 +52,7 @@
         ?.map(({ id, name, _count }) => ({
           key: id,
           label: name,
-          count: _count.helpRequests,
+          count: _count.socialSupports,
           color: SupportColor.helpRequests
         }))
         .filter(typeCount => typeCount.count > 0) || []

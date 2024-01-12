@@ -5,7 +5,7 @@ import { helpRequestFilterSchema } from '../filter.schema'
 export const exportHelpRequestsSchema = z.object({
   orderBy: z.array(
     z.object({
-      openingDate: z.nativeEnum(Prisma.SortOrder).optional(),
+      date: z.nativeEnum(Prisma.SortOrder).optional(),
       dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
       beneficiary: z
         .object({

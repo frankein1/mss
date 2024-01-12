@@ -47,7 +47,7 @@
   const form = ref<HTMLFormElement | null>(null)
 
   const props = defineProps<{
-    history: HistoryItemData
+    socialSupport: HistoryItemData
   }>()
 
   const emit = defineEmits<{
@@ -59,9 +59,9 @@
   const { handleSubmit } = useForm<AddCommentInput>({
     validationSchema: toTypedSchema(addCommentSchema),
     initialValues: {
-      beneficiaryId: props.history.beneficiaryId,
-      historyId: props.history.id,
-      isFollowup: props.history.isFollowup
+      beneficiaryId: props.socialSupport.beneficiaryId,
+      socialSupportId: props.socialSupport.id,
+      isFollowup: props.socialSupport.socialSupportType === 'Followup'
     }
   })
 

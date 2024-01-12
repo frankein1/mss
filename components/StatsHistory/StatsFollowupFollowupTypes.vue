@@ -50,7 +50,7 @@
         ?.map(({ id, name, _count }) => ({
           key: id,
           label: name,
-          count: _count.followups,
+          count: _count.socialSupports,
           color: SupportColor.followups
         }))
         .filter(typeCount => typeCount.count > 0) || []

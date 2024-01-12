@@ -31,7 +31,11 @@
 </template>
 
 <script setup lang="ts">
-  import { Beneficiary, NotificationType } from '@prisma/client'
+  import {
+    Beneficiary,
+    NotificationType,
+    SocialSupportType
+  } from '@prisma/client'
   import { NotificationItem } from './types'
   import { BeneficiaryTab } from '~~/utils/constants/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
@@ -75,8 +79,8 @@
   }
 
   function getItemId() {
-    const { documentId, helpRequestId, followupId } = props.notification
-    return documentId || helpRequestId || followupId || undefined
+    const { documentId, socialSupportId } = props.notification
+    return documentId || socialSupportId || undefined
   }
 
   const itemLink = computed(() =>
@@ -92,9 +96,11 @@
       const itemCreatedByLabel = props.notification.itemCreatedBy
         ? ` par ${formatUserDisplayName(props.notification.itemCreatedBy)}`
         : ''
-      const itemLabel = props.notification.helpRequestId
-        ? 'Une instruction de dossier'
-        : "Une synthèse d'entretien"
+      const itemLabel =
+        props.notification.socialSupport?.socialSupportType ===
+        SocialSupportType.HelpRequest
+          ? 'Une instruction de dossier'
+          : "Une synthèse d'entretien"
 
       return `${itemLabel} a été ajoutée${itemCreatedByLabel}`
     }

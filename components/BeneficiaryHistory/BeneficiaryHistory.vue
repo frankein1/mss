@@ -2,7 +2,7 @@
   <div>
     <div class="feature-section history-header-section fr-p-3w">
       <BeneficiaryHistoryFilters
-        :results-label="`${histories.length} élément(s) affiché(s) sur ${historyTotal} disponible(s) dans l'historique des accompagnements du bénéficiaire`"
+        :results-label="`${items.length} élément(s) affiché(s) sur ${totalCount} disponible(s) dans l'historique des accompagnements du bénéficiaire`"
         :beneficiary-id="beneficiaryId"
         @filter="filters = $event"
       />
@@ -16,8 +16,8 @@
       :alert-type="AlertType.Error"
       message="L'historique du bénéficiaire n'a pas pu être chargé."
     />
-    <template v-else-if="histories">
-      <template v-if="!histories.length">
+    <template v-else-if="items">
+      <template v-if="!items.length">
         <p v-if="!filters">
           Créez une synthèse d'entretien pour commencer à alimenter l'historique
           du bénéficiaire.
@@ -27,9 +27,9 @@
       <template v-else>
         <ul class="history-list">
           <BeneficiaryHistoryDetails
-            v-for="history in histories"
-            :key="history.data.id"
-            :history="history"
+            v-for="item in items"
+            :key="item.data.id"
+            :item="item"
             @deleted="onHistoryItemDeleted"
           />
         </ul>
@@ -57,13 +57,11 @@
   }))
 
   const { data, pending, error, refresh } =
-    await useTrpcClient().beneficiary.getBeneficiaryHistories.useQuery(
-      queryInput
-    )
+    await useTrpcClient().beneficiary.getSocialSupports.useQuery(queryInput)
 
-  const histories = computed(() => data.value?.histories || [])
+  const items = computed(() => data.value?.items || [])
 
-  const historyTotal = computed(() => data.value?.totalCount || 0)
+  const totalCount = computed(() => data.value?.totalCount || 0)
 
   onMounted(async () => {
     const tab = route.hash.slice(1)

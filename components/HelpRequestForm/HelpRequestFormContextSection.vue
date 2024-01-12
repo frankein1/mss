@@ -3,8 +3,8 @@
 
   <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
     <VeeInput
-      name="openingDate"
-      :label="helpRequestFieldLabels.openingDate"
+      name="date"
+      :label="helpRequestFieldLabels.date"
       type="date"
       required
     />

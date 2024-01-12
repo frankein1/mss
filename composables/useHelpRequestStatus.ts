@@ -4,6 +4,7 @@ import {
 } from '~/client/options/helpRequest'
 import { labelsToOptions } from '~/utils/options'
 
+// TODO: SHOULD BE DELETED - WE CAN NOT HANDLE SPECIFIC LABEL
 export function useHelpRequestStatus() {
   const isMinistryAgent = useAuthState().isMinistryAgent()
 

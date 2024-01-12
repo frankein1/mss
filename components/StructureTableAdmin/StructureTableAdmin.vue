@@ -24,8 +24,7 @@
               numeric
               @update:sort="onSort({ beneficiaries: { _count: $event } })"
             />
-            <th scope="col">Instructions de dossier</th>
-            <th scope="col">Entretiens</th>
+            <th scope="col">Inst. dossier + Entretiens</th>
             <th scope="col">Utilisateurs</th>
             <TableSortableHeader
               label="Dernière activité"
@@ -51,8 +50,7 @@
               <td>{{ structure.zipcode }}</td>
               <td>{{ structure.city }}</td>
               <td>{{ structure._count.beneficiaries }}</td>
-              <td>{{ structure._count.helpRequests }}</td>
-              <td>{{ structure._count.followups }}</td>
+              <td>{{ structure._count.socialSupports }}</td>
               <td>{{ structure._count.users || 0 }}</td>
               <td>
                 <div v-if="structure.userActivities.length">
