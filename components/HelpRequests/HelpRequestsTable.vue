@@ -24,11 +24,15 @@
               v-if="application.helpRequest.get.anyDueDate"
               :label="helpRequestFieldLabels.dueDate"
               numeric
-              @update:sort="onSort({ dueDate: $event })"
+              @update:sort="onSort({ socialSupport: { dueDate: $event } })"
             />
             <TableSortableHeader
               :label="helpRequestFieldLabels.beneficiaryId"
-              @update:sort="onSort({ beneficiary: { usualName: $event } })"
+              @update:sort="
+                onSort({
+                  socialSupport: { beneficiary: { usualName: $event } }
+                })
+              "
             />
             <TableSortableHeader
               v-if="application.helpRequest.get.anyInstructorOrganization"

@@ -62,7 +62,9 @@
   const filters = ref<HelpRequestFilterInput>(
     filtersState.helpRequest.value || {}
   )
-  const orderBy = ref<HelpRequestSort[]>([{ date: SortOrder.Desc }])
+  const orderBy = ref<HelpRequestSort[]>([
+    { socialSupport: { date: SortOrder.Desc } }
+  ])
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
   const isDownloading = ref(false)

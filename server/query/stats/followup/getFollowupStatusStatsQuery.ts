@@ -9,12 +9,17 @@ export async function getFollowupStatusStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const where = { where: prepareSocialSupportStatFilters(input) }
+  const where = {
+    where: {
+      ...prepareSocialSupportStatFilters(input),
+      socialSupportType: SocialSupportType.Followup
+    }
+  }
   appendConstraints(user, where, SocialSupportConstraints.get)
 
   return await SocialSupportRepo.prisma.groupBy({
     by: ['status'],
-    where: { ...where, socialSupportType: SocialSupportType.Followup },
+    ...where,
     _count: true,
     orderBy: { _count: { status: 'desc' } }
   })
