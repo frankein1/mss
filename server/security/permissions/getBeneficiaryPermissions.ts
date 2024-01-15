@@ -61,15 +61,15 @@ export const getBeneficiaryPermissions = ({
 }) => {
   let permissions: BeneficiaryPermissions
   if (!beneficiary) {
-    permissions = getCreatePermissions({ ctx })
+    permissions = getCreationPermissions({ ctx })
   } else {
-    permissions = getEditPermissions({ ctx, beneficiary })
+    permissions = getEditionPermission({ ctx, beneficiary })
   }
 
   return permissions
 }
 
-function getCreatePermissions({ ctx }: { ctx: SecurityRuleContext }) {
+function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
   const { structure } = ctx
   const isMinistryAgent = structure.type === StructureType.Ministere
   const isEFS = structure.type === StructureType.EFS
@@ -119,7 +119,7 @@ function getCreatePermissions({ ctx }: { ctx: SecurityRuleContext }) {
   }
 }
 
-function getEditPermissions({
+function getEditionPermission({
   ctx,
   beneficiary
 }: {
@@ -174,7 +174,7 @@ function getEditPermissions({
     create: {
       helpRequest: isHelpRequestCreatable(user, beneficiary),
       document: canAddDocument(user, beneficiary),
-      followup: canCreateFollowup(user, beneficiary),
+      followup: canCreateFollowup(user, beneficiary)
     },
     delete: {
       beneficiary: isDeletable(user, beneficiary)

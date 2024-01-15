@@ -36,15 +36,15 @@ export const getFollowupPermissions = ({
 }) => {
   let permissions: FollowupPermissions
   if (!socialSupport) {
-    permissions = getCreatePermissions()
+    permissions = getCreationPermissions()
   } else {
-    permissions = getEditPermissions({ user, beneficiary, socialSupport })
+    permissions = getEditionPermission({ user, beneficiary, socialSupport })
   }
 
   return permissions
 }
 
-function getCreatePermissions(): FollowupPermissions {
+function getCreationPermissions(): FollowupPermissions {
   return {
     edit: false,
     view: false,
@@ -60,7 +60,7 @@ function getCreatePermissions(): FollowupPermissions {
   }
 }
 
-function getEditPermissions({
+function getEditionPermission({
   user,
   beneficiary,
   socialSupport

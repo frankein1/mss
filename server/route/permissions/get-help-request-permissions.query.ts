@@ -20,7 +20,7 @@ const handler = ({
     return HelpRequestService.getCreatePermission(ctx, input.beneficiaryId)
   }
 
-  return HelpRequestService.getUpdatePermission(ctx, input.id)
+  return HelpRequestService.getEditionPermission(ctx, input.id)
 }
 
 export const getHelpRequestPermissionsQuery = createQuery({

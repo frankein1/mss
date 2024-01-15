@@ -34,15 +34,15 @@ export const getDocumentPermissions = ({
 }) => {
   let permissions: DocumentPermissions
   if (document) {
-    permissions = getEditPermissions({ ctx, beneficiary, document })
+    permissions = getEditionPermission({ ctx, beneficiary, document })
   } else {
-    permissions = getCreatePermissions()
+    permissions = getCreationPermissions()
   }
 
   return permissions
 }
 
-function getCreatePermissions() {
+function getCreationPermissions() {
   return {
     create: true,
     edit: false,
@@ -54,7 +54,7 @@ function getCreatePermissions() {
   }
 }
 
-function getEditPermissions(params: {
+function getEditionPermission(params: {
   ctx: SecurityRuleContext
   beneficiary: SecurityBeneficiary
   document: SecurityDocument

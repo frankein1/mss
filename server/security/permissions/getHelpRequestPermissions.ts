@@ -36,15 +36,15 @@ export const getHelpRequestPermissions = ({
 }) => {
   let permissions: HelpRequestPermissions
   if (!socialSupport) {
-    permissions = getCreatePermissions({ ctx })
+    permissions = getCreationPermissions({ ctx })
   } else {
-    permissions = getEditPermissions({ ctx, beneficiary, socialSupport })
+    permissions = getEditionPermission({ ctx, beneficiary, socialSupport })
   }
 
   return permissions
 }
 
-function getCreatePermissions({
+function getCreationPermissions({
   ctx
 }: {
   ctx: SecurityRuleContext
@@ -69,7 +69,7 @@ function getCreatePermissions({
   }
 }
 
-function getEditPermissions({
+function getEditionPermission({
   ctx,
   beneficiary,
   socialSupport

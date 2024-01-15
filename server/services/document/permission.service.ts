@@ -2,7 +2,7 @@ import { BeneficiaryService } from '../beneficiary'
 import { DocumentRepo } from '~/server/database'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
 
-export async function getUpdatePermissions(
+export async function getEditionPermissions(
   ctx: SecurityRuleContext,
   key: string
 ) {
@@ -29,7 +29,7 @@ export async function getUpdatePermissions(
   }
 }
 
-export async function getCreatePermissions(
+export async function getCreationPermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string
 ) {

@@ -11,7 +11,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: CreateViewUrlInput
 ) => {
-  const { permissions } = await DocumentService.getUpdatePermissions(
+  const { permissions } = await DocumentService.getEditionPermissions(
     ctx,
     input.key
   )

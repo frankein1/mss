@@ -23,7 +23,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: EditHelpRequestInput
 ) => {
-  const permissions = await HelpRequestService.getUpdatePermission(
+  const permissions = await HelpRequestService.getEditionPermission(
     ctx,
     input.id
   )

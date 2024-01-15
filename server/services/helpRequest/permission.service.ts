@@ -23,7 +23,7 @@ function getHelpRequestSecurityTarget(user: SecurityRuleGrantee, id: string) {
   })
 }
 
-export async function getUpdatePermission(
+export async function getEditionPermission(
   ctx: SecurityRuleContext,
   id: string
 ): Promise<HelpRequestPermissions> {

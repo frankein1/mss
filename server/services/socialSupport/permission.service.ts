@@ -26,7 +26,7 @@ export function getSocialSupportSecurityTarget(
   })
 }
 
-export async function getUpdatePermission(
+export async function getEditionPermission(
   ctx: SecurityRuleContext,
   id: string
 ) {

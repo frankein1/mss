@@ -26,7 +26,7 @@ export function getFollowupSecurityTarget(
   })
 }
 
-export async function getUpdatePermission(
+export async function getEditionPermission(
   user: SecurityRuleGrantee,
   id: string
 ): Promise<FollowupPermissions> {
