@@ -80,7 +80,7 @@ export async function updateTaxHousehold(
 
   const data = {
     ...taxHouseholdDatas,
-    taxHouseholds: prepareTaxHouseholdsUpdates(
+    relatives: prepareTaxHouseholdsUpdates(
       taxHouseholds || [],
       flattenPreviousTaxHouseholds
     )

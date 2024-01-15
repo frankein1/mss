@@ -85,7 +85,7 @@ describe('BeneficiaryService.updateTaxHousehold', () => {
         familySituation: BeneficiaryFamilySituation.CivilUnion,
         majorChildren: 2,
         minorChildren: 0,
-        taxHouseholds: {
+        relatives: {
           create: [],
           update: [
             {
@@ -151,7 +151,7 @@ describe('BeneficiaryService.updateTaxHousehold', () => {
         familySituation: BeneficiaryFamilySituation.CivilUnion,
         majorChildren: 2,
         minorChildren: 0,
-        taxHouseholds: {
+        relatives: {
           create: [],
           update: [
             {
