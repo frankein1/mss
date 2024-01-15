@@ -42,7 +42,9 @@
   const collapseId = computed(() => `collapse-${socialSupportId.value}`)
 
   const typeClass = computed(() =>
-    itemData.value.followup ? 'followup-details' : 'help-request-details'
+    itemData.value.socialSupportType === 'Followup'
+      ? 'followup-details'
+      : 'help-request-details'
   )
 
   const hasUnreadNotifications = computed(

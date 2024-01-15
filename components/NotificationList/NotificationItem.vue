@@ -92,12 +92,15 @@
   )
 
   const itemTitle = computed(() => {
-    if (props.notification.type === NotificationType.NewHistoryElement) {
+    if (
+      props.notification.type === NotificationType.NewHistoryElement &&
+      props.notification.socialSupport
+    ) {
       const itemCreatedByLabel = props.notification.itemCreatedBy
         ? ` par ${formatUserDisplayName(props.notification.itemCreatedBy)}`
         : ''
       const itemLabel =
-        props.notification.socialSupport?.socialSupportType ===
+        props.notification.socialSupport.socialSupportType ===
         SocialSupportType.HelpRequest
           ? 'Une instruction de dossier'
           : "Une synthèse d'entretien"

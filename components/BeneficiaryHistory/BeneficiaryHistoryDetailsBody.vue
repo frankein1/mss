@@ -10,12 +10,15 @@
 
     <template v-if="canViewHistoryDetails">
       <BeneficiaryFollowupDetailsBodyMetas
-        v-if="socialSupport.followup"
+        v-if="isFollowup && socialSupport.followup"
         :social-support="socialSupport"
         :followup="socialSupport.followup"
       />
       <BeneficiaryHelpRequestDetailsBodyMetas
-        v-if="socialSupport.helpRequest"
+        v-else-if="
+          socialSupport.socialSupportType === 'HelpRequest' &&
+          socialSupport.helpRequest
+        "
         :social-support="socialSupport"
         :help-request="socialSupport.helpRequest"
       />
