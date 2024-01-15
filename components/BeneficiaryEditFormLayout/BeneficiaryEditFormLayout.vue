@@ -41,6 +41,7 @@
         :current-route="currentRoute"
         :beneficiary-id="beneficiary.id"
         :origin-tab="originTab"
+        :permissions="permissions"
         @save="saveTarget = $event"
       />
     </main>

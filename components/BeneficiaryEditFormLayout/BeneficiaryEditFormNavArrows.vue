@@ -18,7 +18,7 @@
 
   const props = defineProps<{
     currentRoute: AppBeneficiaryEditRoute
-    permissions?: BeneficiaryPermissions
+    permissions: BeneficiaryPermissions | undefined
     beneficiaryId: string
     originTab: BeneficiaryTab | undefined
   }>()
