@@ -6,13 +6,8 @@ import type {
   SecurityRuleContext,
   SecurityTargetWithCreator
 } from './types'
-import {
-  hasAllowedRole,
-  isReferent,
-  isCreator,
-  isInSameStructureAs
-} from './helpers'
-export { hasAllowedRole, isReferent, isCreator, isInSameStructureAs }
+import { isReferent, isCreator } from './helpers'
+export { isReferent, isCreator }
 
 export type {
   SecurityRuleGrantee,
