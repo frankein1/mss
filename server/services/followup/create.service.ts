@@ -10,6 +10,7 @@ import {
 } from '~/utils/prisma'
 import { markFollowupTypeAsUsed } from '~/server/query'
 import { prepareNewHistoryElementNotification } from '~/server/services/helper'
+import { isNewOption, newOptionToLabel } from '~/utils/options'
 
 type CreateParams = {
   ctx: SecurityRuleContext
