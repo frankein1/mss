@@ -144,7 +144,7 @@
         label: 'Accompagnements',
         icon: 'fr-icon-inbox-archive-line'
       })
-      if (application.value.view.stats) {
+      if (application.value.module.stats) {
         items.push({
           to: RoutePath.AppStats(),
           label: 'Statistiques',

@@ -48,7 +48,7 @@ export function getAppContextPermissions({
   user: SecurityRuleGrantee
   structure: SecurityRuleStructure | null | undefined
 }) {
-  if (structure) {
+  if (structure && user.role !== 'Administrator') {
     return getUserContextPermissions({ user, structure })
   }
   return getAdminContextPermissions()

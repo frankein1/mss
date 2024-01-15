@@ -304,7 +304,6 @@
   import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
-  import { usePermissions } from '~/composables/usePermissions'
 
   const isMinistryAgent = useAuthState().isMinistryAgent()
 

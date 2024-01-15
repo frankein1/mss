@@ -54,7 +54,6 @@
   import { FollowupSort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
-  import { usePermissions } from '~/composables/usePermissions'
 
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()

@@ -116,7 +116,6 @@
   import { ministerOptions } from '~/client/options/ministry'
   import { RoutePath } from '~/utils/routing'
   import { externalOrganisationOptions } from '~/client/options/helpRequest'
-  import { usePermissions } from '~/composables/usePermissions'
 
   const isMinistryAgent = useAuthState().isMinistryAgent()
   const { application } = usePermissions()
