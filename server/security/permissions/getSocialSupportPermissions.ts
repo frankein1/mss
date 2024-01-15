@@ -26,6 +26,6 @@ export function getSocialSupportPermissions({
     Pick<SocialSupport, 'socialSupportType'>
 }): FollowupPermissions | HelpRequestPermissions {
   return socialSupport.socialSupportType === 'Followup'
-    ? getFollowupPermissions({ user: ctx.user, beneficiary, socialSupport })
+    ? getFollowupPermissions({ ctx, beneficiary, socialSupport })
     : getHelpRequestPermissions({ ctx, beneficiary, socialSupport })
 }

@@ -6,19 +6,16 @@ import { FollowupService } from '~/server/services'
 
 const handler = ({
   input: { id },
-  ctx: { user }
+  ctx
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  return FollowupService.get({ user, id })
+  return FollowupService.get({ ctx, id })
 }
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
-  const permissions = await FollowupService.getEditionPermissions(
-    ctx.user,
-    input.id
-  )
+  const permissions = await FollowupService.getEditionPermissions(ctx, input.id)
   return permissions.view
 }
 

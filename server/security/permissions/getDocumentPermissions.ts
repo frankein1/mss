@@ -68,18 +68,15 @@ function getEditionPermissions(params: {
   beneficiary: SecurityBeneficiary
   document: SecurityDocument
 }) {
-  const {
-    ctx: { user },
-    beneficiary,
-    document
-  } = params
+  const { ctx, beneficiary, document } = params
+  const { user } = ctx
 
   if (!isInSameStructure(user, beneficiary)) {
     return FALSY_PERMISSIONS
   }
 
   const creator = isCreator(user, document)
-  const { manager, socialWorker, instructor } = getGranteRole(user)
+  const { manager, socialWorker, instructor } = getGranteRole(ctx)
 
   const isReferent = isReferentFor(user, beneficiary)
 

@@ -89,7 +89,7 @@ function getEditionPermissions({
   const creator = isCreator(user, socialSupport)
   const isReferent = isReferentFor(user, beneficiary)
   const { manager, socialWorker, instructor, receptionAgent } =
-    getGranteRole(user)
+    getGranteRole(ctx)
 
   return {
     edit: manager || creator,

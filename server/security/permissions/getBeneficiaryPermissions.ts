@@ -154,49 +154,54 @@ function getEditionPermissions({
   const isReferent = isReferentFor(user, beneficiary)
 
   const { manager, socialWorker, instructor, receptionAgent } =
-    getGranteRole(user)
-
-  const managerOrWorkerOrInstructorOrAgent =
-    manager || socialWorker || instructor || receptionAgent
-
-  const managerOrWorkerOrInstructor = manager || socialWorker || instructor
-
-  const managerOrWorker = manager || socialWorker
+    getGranteRole(ctx)
 
   const isEFS = structure.type === StructureType.EFS
 
   return {
     edit: {
-      general: isReferent || managerOrWorkerOrInstructorOrAgent,
-      relatives: !isEFS && (isReferent || managerOrWorkerOrInstructor),
-      health: !isEFS && (isReferent || managerOrWorkerOrInstructor),
-      occupationIncome: !isEFS && (isReferent || managerOrWorkerOrInstructor),
-      externalOrganisations: isReferent || managerOrWorkerOrInstructor
+      general:
+        isReferent || manager || socialWorker || instructor || receptionAgent,
+      relatives:
+        !isEFS && (isReferent || manager || socialWorker || instructor),
+      health: !isEFS && (isReferent || manager || socialWorker || instructor),
+      occupationIncome:
+        !isEFS && (isReferent || manager || socialWorker || instructor),
+      externalOrganisations: isReferent || manager || socialWorker || instructor
     },
     get: {
       nir: hasAccessNir(structure.type)
     },
     set: {
-      referents: isReferent || managerOrWorkerOrInstructor,
+      referents: isReferent || manager || socialWorker || instructor,
       nir: hasAccessNir(structure.type)
     },
     view: {
-      general: isReferent || managerOrWorkerOrInstructorOrAgent,
-      relatives: !isEFS && (isReferent || managerOrWorkerOrInstructor),
-      health: !isEFS && (isReferent || managerOrWorkerOrInstructor),
-      occupationIncome: !isEFS && (isReferent || managerOrWorkerOrInstructor),
-      externalOrganisations: isReferent || managerOrWorkerOrInstructor,
-      documents: isReferent || managerOrWorkerOrInstructorOrAgent,
-      history: isReferent || managerOrWorkerOrInstructorOrAgent
+      general:
+        isReferent || manager || socialWorker || instructor || receptionAgent,
+      relatives:
+        !isEFS && (isReferent || manager || socialWorker || instructor),
+      health: !isEFS && (isReferent || manager || socialWorker || instructor),
+      occupationIncome:
+        !isEFS && (isReferent || manager || socialWorker || instructor),
+      externalOrganisations:
+        isReferent || manager || socialWorker || instructor,
+      documents:
+        isReferent || manager || socialWorker || instructor || receptionAgent,
+      history:
+        isReferent || manager || socialWorker || instructor || receptionAgent
     },
     create: {
-      helpRequest: isReferent || managerOrWorkerOrInstructor,
-      document: isReferent || managerOrWorkerOrInstructorOrAgent,
-      followup: isReferent || managerOrWorkerOrInstructorOrAgent,
-      comment: isReferent || managerOrWorkerOrInstructorOrAgent
+      helpRequest: isReferent || manager || socialWorker || instructor,
+      document:
+        isReferent || manager || socialWorker || instructor || receptionAgent,
+      followup:
+        isReferent || manager || socialWorker || instructor || receptionAgent,
+      comment:
+        isReferent || manager || socialWorker || instructor || receptionAgent
     },
     delete: {
-      beneficiary: isReferent || managerOrWorker
+      beneficiary: isReferent || manager || socialWorker
     }
   }
 }

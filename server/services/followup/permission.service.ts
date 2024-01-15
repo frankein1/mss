@@ -1,5 +1,5 @@
 import { FollowupRepo } from '~/server/database'
-import { SecurityRuleGrantee } from '~/server/security'
+import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
 import {
   FollowupPermissions,
   getFollowupPermissions
@@ -27,27 +27,27 @@ export function getFollowupSecurityTarget(
 }
 
 export async function getEditionPermissions(
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   id: string
 ): Promise<FollowupPermissions> {
-  const { socialSupport } = await getFollowupSecurityTarget(user, id)
+  const { socialSupport } = await getFollowupSecurityTarget(ctx.user, id)
   return getFollowupPermissions({
-    user,
+    ctx,
     beneficiary: socialSupport.beneficiary,
     socialSupport
   })
 }
 
 export async function getCreationPermissions(
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   beneficiaryId: string
 ): Promise<FollowupPermissions> {
   const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
-    user,
+    ctx.user,
     beneficiaryId
   )
   return getFollowupPermissions({
-    user,
+    ctx,
     beneficiary
   })
 }

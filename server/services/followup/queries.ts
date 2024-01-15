@@ -2,6 +2,7 @@ import { Prisma } from '@prisma/client'
 import { FollowupRepo } from '~/server/database'
 import {
   FollowupPermissions,
+  SecurityRuleContext,
   SecurityRuleGrantee,
   getFollowupPermissions
 } from '~/server/security'
@@ -84,10 +85,10 @@ function findOne(user: SecurityRuleGrantee, id: string) {
 type FollowupOutput = Prisma.PromiseReturnType<typeof findOne>
 
 export async function getPage(
-  user: SecurityRuleGrantee,
+  ctx: SecurityRuleContext,
   args: Omit<Prisma.FollowupFindManyArgs, 'select' | 'include'>
 ) {
-  const followups = await FollowupRepo.findMany(user, {
+  const followups = await FollowupRepo.findMany(ctx.user, {
     where: args.where,
     select,
     take: args.take,
@@ -96,7 +97,7 @@ export async function getPage(
   })
   return followups.map(followup => {
     const permissions = getFollowupPermissions({
-      user,
+      ctx,
       beneficiary: followup.socialSupport.beneficiary,
       socialSupport: followup.socialSupport
     })
@@ -107,14 +108,14 @@ export async function getPage(
   })
 }
 
-export async function getOne(user: SecurityRuleGrantee, id: string) {
-  const followup = await FollowupRepo.findUniqueOrThrow(user, {
+export async function getOne(ctx: SecurityRuleContext, id: string) {
+  const followup = await FollowupRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
     select
   })
   const { socialSupport } = followup
   const permissions = getFollowupPermissions({
-    user,
+    ctx,
     beneficiary: socialSupport.beneficiary,
     socialSupport
   })

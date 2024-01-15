@@ -1,9 +1,5 @@
 import { StructureType } from '@prisma/client'
-import {
-  SecurityRuleContext,
-  SecurityRuleGrantee,
-  hasAllowedRole
-} from '../rules'
+import { SecurityRuleContext, SecurityRuleGrantee } from '../rules'
 import { SecurityRuleStructure } from '../rules/types'
 import { getGranteRole } from '../rules/helpers'
 
@@ -73,12 +69,14 @@ function getAdminContextPermissions(): AppContextPermissions {
 function getUserContextPermissions(
   ctx: SecurityRuleContext
 ): AppContextPermissions {
-  const { user } = ctx
-  const helpRequestDetail = accessHelpRequestDetails(ctx.user)
-  const isMinistryAgent = ctx.structure.type === StructureType.Ministere
-
-  const { manager, socialWorker, instructor, receptionAgent, referent } =
-    getGranteRole(user)
+  const {
+    manager,
+    socialWorker,
+    instructor,
+    receptionAgent,
+    referent,
+    ministryAgent
+  } = getGranteRole(ctx)
 
   return {
     export: {
@@ -87,74 +85,27 @@ function getUserContextPermissions(
       stats: manager || socialWorker || referent || instructor
     },
     create: {
-      user: canCreateUser(ctx.user),
-      prescribingOrganization: canCreatePrescribingOrganization(ctx.user),
-      instructorOrganization: canCreateInstructorOrganization(ctx.user)
+      user: manager,
+      prescribingOrganization:
+        manager || socialWorker || instructor || referent,
+      instructorOrganization: manager || socialWorker || instructor || referent
     },
     edit: {
-      structure: canEditStructure(ctx.user)
+      structure: manager
     },
     module: {
-      users: canListUsers(ctx.user),
-      stats: canViewStats(ctx.user),
-      statsByReferent: canViewStatsByReferent(ctx.user),
+      users: manager,
+      stats: manager || socialWorker || instructor || referent,
+      statsByReferent: manager,
       health: canViewHealthInfo(ctx.structure.type),
-      ministere: isMinistryAgent,
-      helpRequestDetail
+      ministere: ministryAgent,
+      helpRequestDetail: manager || socialWorker || instructor || referent
     }
   }
 }
-
-const accessHelpRequestDetails = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
 
 const canViewHealthInfo = (structureType: StructureType): boolean => {
   return (
     structureType !== StructureType.Ccas && structureType !== StructureType.Cias
   )
 }
-
-const canCreateUser = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, ['StructureManager'])
-
-const canCreatePrescribingOrganization = (
-  grantee: SecurityRuleGrantee
-): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
-
-const canCreateInstructorOrganization = (
-  grantee: SecurityRuleGrantee
-): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
-
-const canListUsers = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, ['StructureManager'])
-
-const canEditStructure = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, ['StructureManager'])
-
-const canViewStats = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
-
-const canViewStatsByReferent = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, ['StructureManager'])
