@@ -25,21 +25,11 @@ export type BeneficiaryPermissions = {
     history: boolean
   }
   get: {
-    accommodationZone: boolean
     nir: boolean
-    numeroPegase: boolean
-    ministereCategorie: boolean
-    ministereDepartementServiceAc: boolean
-    ministereStructure: boolean
   }
   set: {
-    accommodationZone: boolean
     referents: boolean
     nir: boolean
-    numeroPegase: boolean
-    ministereCategorie: boolean
-    ministereDepartementServiceAc: boolean
-    ministereStructure: boolean
   }
 
   create: {
@@ -71,7 +61,6 @@ export const getBeneficiaryPermissions = ({
 
 function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
   const { structure } = ctx
-  const isMinistryAgent = structure.type === StructureType.Ministere
   const isEFS = structure.type === StructureType.EFS
   return {
     edit: {
@@ -91,21 +80,11 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
       history: false
     },
     get: {
-      accommodationZone: isMinistryAgent,
-      nir: hasAccessNir(structure.type),
-      numeroPegase: isMinistryAgent,
-      ministereCategorie: isMinistryAgent,
-      ministereDepartementServiceAc: isMinistryAgent,
-      ministereStructure: isMinistryAgent
+      nir: hasAccessNir(structure.type)
     },
     set: {
-      accommodationZone: isMinistryAgent,
       referents: true,
-      nir: hasAccessNir(structure.type),
-      numeroPegase: isMinistryAgent,
-      ministereCategorie: isMinistryAgent,
-      ministereDepartementServiceAc: isMinistryAgent,
-      ministereStructure: isMinistryAgent
+      nir: hasAccessNir(structure.type)
     },
 
     create: {

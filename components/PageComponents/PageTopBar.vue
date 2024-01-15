@@ -35,7 +35,7 @@
       to: RoutePath.AppAccount(),
       icon: 'fr-icon-user-line'
     })
-    if (application.value.view.users) {
+    if (application.value.module.users) {
       menus.push({
         label: 'Utilisateurs',
         to: RoutePath.AppUsers(),

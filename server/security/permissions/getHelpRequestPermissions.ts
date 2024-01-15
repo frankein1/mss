@@ -1,4 +1,3 @@
-import { StructureType } from '@prisma/client'
 import {
   SecurityRuleGrantee,
   SecurityTargetWithReferents,
@@ -13,13 +12,9 @@ export type HelpRequestPermissions = {
   view: boolean
   get: {
     details: boolean
-    numeroPegase: boolean
-    ministre: boolean
     privateSynthesis: boolean
   }
   set: {
-    numeroPegase: boolean
-    ministre: boolean
     privateSynthesis: boolean
   }
   delete: boolean
@@ -36,7 +31,7 @@ export const getHelpRequestPermissions = ({
 }) => {
   let permissions: HelpRequestPermissions
   if (!socialSupport) {
-    permissions = getCreationPermissions({ ctx })
+    permissions = getCreatePermissions()
   } else {
     permissions = getEditionPermission({ ctx, beneficiary, socialSupport })
   }
@@ -44,25 +39,15 @@ export const getHelpRequestPermissions = ({
   return permissions
 }
 
-function getCreationPermissions({
-  ctx
-}: {
-  ctx: SecurityRuleContext
-}): HelpRequestPermissions {
-  const { structure } = ctx
-  const isMinistryAgent = structure.type === StructureType.Ministere
+function getCreatePermissions(): HelpRequestPermissions {
   return {
     edit: true,
     view: true,
     get: {
       details: true,
-      numeroPegase: isMinistryAgent,
-      ministre: isMinistryAgent,
       privateSynthesis: true
     },
     set: {
-      numeroPegase: isMinistryAgent,
-      ministre: isMinistryAgent,
       privateSynthesis: true
     },
     delete: true
@@ -78,21 +63,16 @@ function getEditionPermission({
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 }): HelpRequestPermissions {
-  const { user, structure } = ctx
-  const isMinistryAgent = structure.type === StructureType.Ministere
+  const { user } = ctx
 
   return {
     edit: isEditable(user, socialSupport),
     view: access(user, beneficiary),
     get: {
       details: accessDetails(user, beneficiary),
-      numeroPegase: isMinistryAgent,
-      ministre: isMinistryAgent,
       privateSynthesis: accessPrivateSynthesis(user, socialSupport)
     },
     set: {
-      numeroPegase: isMinistryAgent,
-      ministre: isMinistryAgent,
       privateSynthesis: isPrivateSynthesisEditable(user, socialSupport)
     },
     delete: isDeletable(user, socialSupport)

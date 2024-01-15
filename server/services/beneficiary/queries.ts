@@ -1,9 +1,11 @@
 import { Prisma } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
 import {
+  AppContextPermissions,
   BeneficiaryPermissions,
   SecurityRuleContext,
   SecurityRuleGrantee,
+  getAppContextPermissions,
   getBeneficiaryPermissions
 } from '~/server/security'
 import { isObjectEmpty } from '~/utils/isObjectEmpty'
@@ -78,8 +80,9 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
     ctx,
     beneficiary
   })
+  const appPermissions = getAppContextPermissions(ctx)
   return {
-    beneficiary: filter(permissions, beneficiary),
+    beneficiary: filter(permissions, appPermissions, beneficiary),
     permissions
   }
 }
@@ -95,13 +98,14 @@ export async function getPage(
     skip: args.skip,
     orderBy: args.orderBy
   })
+  const appPermissions = getAppContextPermissions(ctx)
   return beneficiaries.map(beneficiary => {
     const permissions = getBeneficiaryPermissions({
       ctx,
       beneficiary
     })
     return {
-      beneficiary: filter(permissions, beneficiary),
+      beneficiary: filter(permissions, appPermissions, beneficiary),
       permissions
     }
   })
@@ -109,9 +113,10 @@ export async function getPage(
 
 const filter = (
   permissions: BeneficiaryPermissions,
+  appPermissions: AppContextPermissions,
   beneficiary: BeneficiaryOutput
 ) => {
-  const general = getGeneral(beneficiary, permissions)
+  const general = getGeneral(beneficiary, appPermissions)
 
   const { view } = permissions
 
@@ -120,7 +125,7 @@ const filter = (
     : undefined
   const health = view.health ? getHealth(beneficiary, permissions) : undefined
   const occupationIncome = view.occupationIncome
-    ? getOccupationIncome(beneficiary, permissions)
+    ? getOccupationIncome(beneficiary, appPermissions)
     : undefined
 
   const entourages = view.relatives ? getEntourages(beneficiary) : undefined
@@ -166,9 +171,9 @@ function getHistory(beneficiary: BeneficiaryOutput) {
 
 function getGeneral(
   beneficiary: BeneficiaryOutput,
-  permissions: BeneficiaryPermissions
+  permissions: AppContextPermissions
 ) {
-  const { get } = permissions
+  const { module } = permissions
   const general = {
     title: beneficiary.title,
     usualName: beneficiary.usualName,
@@ -179,12 +184,10 @@ function getGeneral(
     deathDate: beneficiary.deathDate,
     gender: beneficiary.gender,
     nationality: beneficiary.nationality,
-    numeroPegase: get.numeroPegase ? beneficiary.numeroPegase : null,
+    numeroPegase: module.ministere ? beneficiary.numeroPegase : null,
     accommodationMode: beneficiary.accommodationMode,
     accommodationName: beneficiary.accommodationName,
-    accommodationZone: get.accommodationZone
-      ? beneficiary.accommodationZone
-      : null,
+    accommodationZone: module.ministere ? beneficiary.accommodationZone : null,
     accommodationAdditionalInformation:
       beneficiary.accommodationAdditionalInformation,
     street: beneficiary.street,
@@ -245,9 +248,9 @@ function getHealth(
 
 function getOccupationIncome(
   beneficiary: BeneficiaryOutput,
-  permissions: BeneficiaryPermissions
+  permissions: AppContextPermissions
 ) {
-  const { get } = permissions
+  const { module } = permissions
   return {
     socioProfessionalCategory: beneficiary.socioProfessionalCategory,
     occupation: beneficiary.occupation,
@@ -267,15 +270,13 @@ function getOccupationIncome(
     cafNumber: beneficiary.cafNumber,
     bank: beneficiary.bank,
     funeralContract: beneficiary.funeralContract,
-    ministereCategorie: get.ministereCategorie
+    ministereCategorie: module.ministere
       ? beneficiary.ministereCategorie
       : null,
-    ministereDepartementServiceAc: get.ministereDepartementServiceAc
+    ministereDepartementServiceAc: module.ministere
       ? beneficiary.ministereDepartementServiceAc
       : null,
-    ministereStructure: get.ministereStructure
-      ? beneficiary.ministereStructure
-      : null
+    ministereStructure: module.ministere ? beneficiary.ministereStructure : null
   }
 }
 
