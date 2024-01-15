@@ -1,4 +1,6 @@
-DELETE FROM comment where followup_id is null and help_request_id is null;
+DELETE FROM COMMENT
+WHERE followup_id IS NULL
+    AND help_request_id IS NULL;
 
 /**
  ****************
@@ -200,7 +202,7 @@ ADD CONSTRAINT "housing_help_request_social_support_id_fkey" FOREIGN KEY ("socia
 
 -- AddForeignKey
 ALTER TABLE "comment"
-ADD CONSTRAINT "comment_social_support_id_fkey" FOREIGN KEY ("social_support_id") REFERENCES "social_support"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ADD CONSTRAINT "comment_social_support_id_fkey" FOREIGN KEY ("social_support_id") REFERENCES "social_support"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "notification"
@@ -229,7 +231,7 @@ ADD CONSTRAINT "_social_support_to_followup_type_B_fkey" FOREIGN KEY ("B") REFER
  ****************
  */
 -- Used for gen_random_uuid function
-CREATE EXTENSION pgcrypto;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 /**
  *************************

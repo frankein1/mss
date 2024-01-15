@@ -1438,7 +1438,7 @@ model Comment {
 
   content String
 
-  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id])
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
   socialSupportId String        @map("social_support_id") @db.Uuid
 
   notification Notification[]
