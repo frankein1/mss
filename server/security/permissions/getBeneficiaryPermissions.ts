@@ -108,7 +108,6 @@ function getEditionPermissions({
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 }) {
   const { user, structure } = ctx
-  const isMinistryAgent = structure.type === StructureType.Ministere
   const viewOrEditRelatives = accessRelatives(user, structure.type, beneficiary)
   const viewOrEditHealth = accessHealth(user, structure.type, beneficiary)
   const viewOrEditOccupationIncome = accessOccupationIncome(
@@ -127,21 +126,11 @@ function getEditionPermissions({
       externalOrganisations: viewOrEditExtOrganisations
     },
     get: {
-      accommodationZone: isMinistryAgent,
-      nir: hasAccessNir(structure.type),
-      numeroPegase: isMinistryAgent,
-      ministereCategorie: isMinistryAgent,
-      ministereDepartementServiceAc: isMinistryAgent,
-      ministereStructure: isMinistryAgent
+      nir: hasAccessNir(structure.type)
     },
     set: {
-      accommodationZone: isMinistryAgent,
       referents: setReferents(user, beneficiary),
-      nir: hasAccessNir(structure.type),
-      numeroPegase: isMinistryAgent,
-      ministereCategorie: isMinistryAgent,
-      ministereDepartementServiceAc: isMinistryAgent,
-      ministereStructure: isMinistryAgent
+      nir: hasAccessNir(structure.type)
     },
     view: {
       general: viewOrEditGeneral,

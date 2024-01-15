@@ -9,8 +9,7 @@ import { MultiPartData } from '~/server/lib/s3/types'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import {
   BeneficiaryService,
-  BeneficiarySecurityTarget,
-  DocumentService
+  BeneficiarySecurityTarget
 } from '~/server/services'
 import { getDocumentPermissions } from '~/server/security'
 
@@ -58,7 +57,7 @@ export default defineEventHandler(async event => {
     }
   }
 
-  const permissions = await DocumentService.getCreationPermissions(
+  const permissions = await BeneficiaryService.getEditionPermissions(
     ctx,
     input.beneficiaryId
   )

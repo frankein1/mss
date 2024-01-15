@@ -14,7 +14,6 @@ type SecurityBeneficiary = SecurityTargetWithStructure &
   SecurityTargetWithReferents
 
 export type DocumentPermissions = {
-  create: boolean
   edit: boolean
   view: boolean
   delete: boolean
@@ -44,7 +43,6 @@ export const getDocumentPermissions = ({
 
 function getCreationPermissions() {
   return {
-    create: true,
     edit: false,
     view: false,
     delete: false,
@@ -65,7 +63,6 @@ function getEditionPermissions(params: {
     document
   } = params
   return {
-    create: false,
     edit: canViewOrEditDocument(user, beneficiary, document),
     view: canViewOrEditDocument(user, beneficiary, document),
     delete: canDeleteDocument(user, beneficiary),
