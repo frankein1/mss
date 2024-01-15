@@ -7,7 +7,7 @@ import { exportBeneficiaries } from './export.service'
 import { search } from './search.service'
 import {
   getCreatePermission,
-  getUpdatePermission,
+  getEditionPermission,
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
 } from './permission.service'
@@ -15,7 +15,7 @@ import {
 export const BeneficiaryService = {
   create,
   getCreatePermission,
-  getUpdatePermission,
+  getEditionPermission,
   get,
   getPage,
   getPageDocuments,

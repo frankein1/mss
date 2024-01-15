@@ -24,7 +24,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: AddFollowupInput
 ) => {
-  const permissions = await BeneficiaryService.getUpdatePermission(
+  const permissions = await BeneficiaryService.getEditionPermission(
     ctx,
     input.beneficiaryId
   )

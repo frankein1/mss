@@ -15,7 +15,7 @@ const handler = async ({
 }
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
-  const permissions = await FollowupService.getUpdatePermission(
+  const permissions = await FollowupService.getEditionPermission(
     ctx.user,
     input.id
   )

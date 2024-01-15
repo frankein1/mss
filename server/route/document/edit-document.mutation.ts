@@ -10,7 +10,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: EditDocumentInput
 ) => {
-  const { permissions, document } = await DocumentService.getUpdatePermissions(
+  const { permissions, document } = await DocumentService.getEditionPermissions(
     ctx,
     input.key
   )

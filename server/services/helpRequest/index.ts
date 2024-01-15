@@ -4,14 +4,14 @@ import { get } from './get.service'
 import { getPage } from './getPage.service'
 import { quickUpdate } from './quickUpdate.service'
 import { exportHelpRequests } from './export.service'
-import { getUpdatePermission, getCreatePermission } from './permission.service'
+import { getEditionPermission, getCreatePermission } from './permission.service'
 
 export const HelpRequestService = {
   create,
   update,
   get,
   getPage,
-  getUpdatePermission,
+  getEditionPermission,
   getCreatePermission,
   quickUpdate,
   exportHelpRequests
