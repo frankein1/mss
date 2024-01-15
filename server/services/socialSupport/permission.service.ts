@@ -59,7 +59,7 @@ export async function getCreationPermissions(
   )
   if (socialSupportType === 'Followup') {
     return getFollowupPermissions({
-      user: ctx.user,
+      ctx,
       beneficiary
     })
   }

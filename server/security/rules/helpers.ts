@@ -1,9 +1,11 @@
+import { StructureType } from '@prisma/client'
 import {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
   SecurityTargetWithReferents,
   SecurityTargetWithCreator,
-  AllowedRoles
+  AllowedRoles,
+  SecurityRuleContext
 } from './types'
 
 export const isAdmin = (grantee: SecurityRuleGrantee) => {
@@ -30,13 +32,15 @@ export const isStructureManager = (grantee: SecurityRuleGrantee) => {
   return grantee.role === 'StructureManager'
 }
 
-export const getGranteRole = (grantee: SecurityRuleGrantee) => {
+export const getGranteRole = (ctx: SecurityRuleContext) => {
+  const { user, structure } = ctx
   return {
-    manager: isStructureManager(grantee),
-    socialWorker: isSocialWorker(grantee),
-    referent: isReferent(grantee),
-    receptionAgent: isReceptionAgent(grantee),
-    instructor: isInstructor(grantee)
+    manager: isStructureManager(user),
+    socialWorker: isSocialWorker(user),
+    referent: isReferent(user),
+    receptionAgent: isReceptionAgent(user),
+    instructor: isInstructor(user),
+    ministryAgent: structure.type === StructureType.Ministere
   }
 }
 

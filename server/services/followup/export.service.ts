@@ -6,7 +6,7 @@ import {
   socialSupportStatusLabels
 } from '~/client/options'
 import { ExportFollowupsInput } from '~/server/schema'
-import { SecurityRuleGrantee } from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { ministerLabels } from '~/client/options/ministry'
@@ -42,10 +42,10 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
 ]
 
 export async function exportFollowups({
-  user,
+  ctx,
   input
 }: {
-  user: SecurityRuleGrantee
+  ctx: SecurityRuleContext
   input: ExportFollowupsInput
 }) {
   const columns = FOLLOWUP_EXPORTED_FIELDS.map(key => ({
@@ -57,7 +57,7 @@ export async function exportFollowups({
     ...prepareFollowupFilters(input.filters)
   }
 
-  const dataRequest = await getPage(user, { where, orderBy: input.orderBy })
+  const dataRequest = await getPage(ctx, { where, orderBy: input.orderBy })
 
   const rows = dataRequest.reduce(
     (followups: RowType[], { permissions, followup }) => {

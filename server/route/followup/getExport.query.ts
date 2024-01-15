@@ -10,17 +10,19 @@ import { FollowupService } from '~/server/services'
 
 const handler = async ({
   input,
-  ctx: { user }
+  ctx
 }: {
   input: ExportFollowupsInput
   ctx: ProtectedAppContext
 }) => {
   const { rows, columns } = await FollowupService.exportFollowups({
-    user,
+    ctx,
     input
   })
 
-  return await createExport(user.id, [{ name: 'Entretiens', columns, rows }])
+  return await createExport(ctx.user.id, [
+    { name: 'Entretiens', columns, rows }
+  ])
 }
 
 const securityCheck = (

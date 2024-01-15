@@ -24,10 +24,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: EditFollowupInput
 ) => {
-  const permissions = await FollowupService.getEditionPermissions(
-    ctx.user,
-    input.id
-  )
+  const permissions = await FollowupService.getEditionPermissions(ctx, input.id)
   // CAN EDIT FU
   if (!permissions.edit) {
     return false

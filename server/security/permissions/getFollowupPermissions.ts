@@ -1,8 +1,8 @@
 import {
-  SecurityRuleGrantee,
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,
-  SecurityTargetWithCreator
+  SecurityTargetWithCreator,
+  SecurityRuleContext
 } from '../rules'
 import {
   isReferentFor,
@@ -40,11 +40,11 @@ const FALSY_PERMISSIONS = {
 }
 
 export const getFollowupPermissions = ({
-  user,
+  ctx,
   beneficiary,
   socialSupport
 }: {
-  user: SecurityRuleGrantee
+  ctx: SecurityRuleContext
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport?: SecurityTargetWithCreator & SecurityTargetWithStructure
 }) => {
@@ -52,7 +52,7 @@ export const getFollowupPermissions = ({
   if (!socialSupport) {
     permissions = getCreationPermissions()
   } else {
-    permissions = getEditionPermissions({ user, beneficiary, socialSupport })
+    permissions = getEditionPermissions({ ctx, beneficiary, socialSupport })
   }
 
   return permissions
@@ -75,14 +75,15 @@ function getCreationPermissions(): FollowupPermissions {
 }
 
 function getEditionPermissions({
-  user,
+  ctx,
   beneficiary,
   socialSupport
 }: {
-  user: SecurityRuleGrantee
+  ctx: SecurityRuleContext
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 }): FollowupPermissions {
+  const { user } = ctx
   if (!isInSameStructure(user, beneficiary)) {
     return FALSY_PERMISSIONS
   }
@@ -90,7 +91,7 @@ function getEditionPermissions({
   const creator = isCreator(user, socialSupport)
   const isReferent = isReferentFor(user, beneficiary)
   const { manager, socialWorker, instructor, referent, receptionAgent } =
-    getGranteRole(user)
+    getGranteRole(ctx)
 
   return {
     view: isReferent || manager || socialWorker || instructor || receptionAgent,

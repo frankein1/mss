@@ -21,7 +21,7 @@ export async function getPage({
   const where = prepareFollowupFilters(input.filters)
 
   const [items, count] = await Promise.all([
-    getPageFn(user, { where, take, skip, orderBy: input.orderBy }),
+    getPageFn(ctx, { where, take, skip, orderBy: input.orderBy }),
     FollowupRepo.count(user, {
       where
     })
