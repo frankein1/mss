@@ -1,6 +1,9 @@
-import { getUpdatePermission, getCreatePermission } from './permission.service'
+import {
+  getEditionPermissions,
+  getCreationPermissions
+} from './permission.service'
 
 export const SocialSupportService = {
-  getUpdatePermission,
-  getCreatePermission
+  getEditionPermissions,
+  getCreationPermissions
 }

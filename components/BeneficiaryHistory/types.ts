@@ -1,17 +1,14 @@
 import { RouterOutput } from '~/server/trpc/routers'
 
-type GetHistoryOutput = RouterOutput['beneficiary']['getSocialSupports']
-export type HistoryItem = GetHistoryOutput['items'][0]
-export type HistoryItemData = HistoryItem['data']
-export type HistoryItemFollowup = NonNullable<HistoryItemData['followup']>
-export type HistoryItemHelpRequest = NonNullable<HistoryItemData['helpRequest']>
+type SocialSupportsOutput = RouterOutput['beneficiary']['getSocialSupports']
+export type SocialSupportItem = SocialSupportsOutput['items'][0]
+export type SocialSupportData = SocialSupportItem['data']
 
-export type HistoryItemComments = Exclude<
-  HistoryItemData['comments'],
-  undefined
->
-export type HistoryItemComment = HistoryItemComments[number]
-export type HistoryItemDocuments = Exclude<
-  HistoryItemData['documents'],
-  undefined
->
+export type FollowupData = NonNullable<SocialSupportData['followup']>
+export type HelpRequestData = NonNullable<SocialSupportData['helpRequest']>
+
+export type CommentItems = Exclude<SocialSupportData['comments'], undefined>
+export type CommentItem = CommentItems[number]
+export type CommentData = CommentItem['comment']
+
+export type DocumentItems = Exclude<SocialSupportData['documents'], undefined>

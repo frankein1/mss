@@ -26,7 +26,7 @@ export function getSocialSupportSecurityTarget(
   })
 }
 
-export async function getUpdatePermission(
+export async function getEditionPermissions(
   ctx: SecurityRuleContext,
   id: string
 ) {
@@ -38,17 +38,17 @@ export async function getUpdatePermission(
   })
 }
 
-export async function getCreatePermission(
+export async function getCreationPermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string,
   socialSupportType: 'Followup'
 ): Promise<FollowupPermissions>
-export async function getCreatePermission(
+export async function getCreationPermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string,
   socialSupportType: 'HelpRequest'
 ): Promise<HelpRequestPermissions>
-export async function getCreatePermission(
+export async function getCreationPermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string,
   socialSupportType: SocialSupportType

@@ -14,8 +14,6 @@ import {
 } from './helpers'
 export { hasAllowedRole, isReferent, isCreator, isInSameStructureAs }
 
-export * from './comment'
-
 export type {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,

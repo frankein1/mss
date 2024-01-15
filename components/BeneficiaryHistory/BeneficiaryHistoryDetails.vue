@@ -16,20 +16,23 @@
     <BeneficiaryHistoryDetailsBody
       :item="item"
       :collapse-id="collapseId"
-      @deleted="emit('deleted')"
+      :beneficiary-permissions="beneficiaryPermissions"
+      @refresh="emit('refresh')"
     />
   </li>
 </template>
 
 <script setup lang="ts">
-  import type { HistoryItem } from './types'
+  import type { SocialSupportItem } from './types'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   const props = defineProps<{
-    item: HistoryItem
+    item: SocialSupportItem
+    beneficiaryPermissions: BeneficiaryPermissions
   }>()
 
   const emit = defineEmits<{
-    deleted: []
+    refresh: []
   }>()
 
   const $el = ref<HTMLLIElement | null>(null)

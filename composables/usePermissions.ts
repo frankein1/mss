@@ -17,11 +17,12 @@ export function usePermissions() {
       edit: {
         structure: false
       },
-      view: {
+      module: {
         users: false,
         stats: false,
         statsByReferent: false,
-        healthInfo: false
+        health: false,
+        ministere: false
       },
       helpRequest: {
         get: {
@@ -53,11 +54,12 @@ export function usePermissions() {
       edit: {
         structure: false
       },
-      view: {
+      module: {
         users: false,
         stats: false,
         statsByReferent: false,
-        healthInfo: false
+        health: false,
+        ministere: false
       },
       helpRequest: {
         get: {

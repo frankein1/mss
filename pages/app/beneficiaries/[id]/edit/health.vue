@@ -22,7 +22,7 @@
       class="fr-p-3v"
     >
       <div
-        v-if="application.view.healthInfo"
+        v-if="application.module.health"
         class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-pb-3w"
       >
         <div class="fr-notice fr-notice--info">

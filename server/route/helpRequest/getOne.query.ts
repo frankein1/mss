@@ -15,7 +15,7 @@ const handler = ({
 }
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
-  const permissions = await HelpRequestService.getUpdatePermission(
+  const permissions = await HelpRequestService.getEditionPermissions(
     ctx,
     input.id
   )

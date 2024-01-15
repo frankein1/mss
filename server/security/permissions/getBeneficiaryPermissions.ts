@@ -25,26 +25,18 @@ export type BeneficiaryPermissions = {
     history: boolean
   }
   get: {
-    accommodationZone: boolean
     nir: boolean
-    numeroPegase: boolean
-    ministereCategorie: boolean
-    ministereDepartementServiceAc: boolean
-    ministereStructure: boolean
   }
   set: {
-    accommodationZone: boolean
     referents: boolean
     nir: boolean
-    numeroPegase: boolean
-    ministereCategorie: boolean
-    ministereDepartementServiceAc: boolean
-    ministereStructure: boolean
   }
 
   create: {
     helpRequest: boolean
     document: boolean
+    followup: boolean
+    comment: boolean
   }
   delete: {
     beneficiary: boolean
@@ -60,17 +52,16 @@ export const getBeneficiaryPermissions = ({
 }) => {
   let permissions: BeneficiaryPermissions
   if (!beneficiary) {
-    permissions = getCreatePermissions({ ctx })
+    permissions = getCreationPermissions({ ctx })
   } else {
-    permissions = getEditPermissions({ ctx, beneficiary })
+    permissions = getEditionPermissions({ ctx, beneficiary })
   }
 
   return permissions
 }
 
-function getCreatePermissions({ ctx }: { ctx: SecurityRuleContext }) {
+function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
   const { structure } = ctx
-  const isMinistryAgent = structure.type === StructureType.Ministere
   const isEFS = structure.type === StructureType.EFS
   return {
     edit: {
@@ -90,26 +81,18 @@ function getCreatePermissions({ ctx }: { ctx: SecurityRuleContext }) {
       history: false
     },
     get: {
-      accommodationZone: isMinistryAgent,
-      nir: hasAccessNir(structure.type),
-      numeroPegase: isMinistryAgent,
-      ministereCategorie: isMinistryAgent,
-      ministereDepartementServiceAc: isMinistryAgent,
-      ministereStructure: isMinistryAgent
+      nir: hasAccessNir(structure.type)
     },
     set: {
-      accommodationZone: isMinistryAgent,
       referents: true,
-      nir: hasAccessNir(structure.type),
-      numeroPegase: isMinistryAgent,
-      ministereCategorie: isMinistryAgent,
-      ministereDepartementServiceAc: isMinistryAgent,
-      ministereStructure: isMinistryAgent
+      nir: hasAccessNir(structure.type)
     },
 
     create: {
       helpRequest: false,
-      document: false
+      document: false,
+      followup: false,
+      comment: false
     },
     delete: {
       beneficiary: false
@@ -117,7 +100,7 @@ function getCreatePermissions({ ctx }: { ctx: SecurityRuleContext }) {
   }
 }
 
-function getEditPermissions({
+function getEditionPermissions({
   ctx,
   beneficiary
 }: {
@@ -171,13 +154,37 @@ function getEditPermissions({
     },
     create: {
       helpRequest: isHelpRequestCreatable(user, beneficiary),
-      document: canAddDocument(user, beneficiary)
+      document: canAddDocument(user, beneficiary),
+      followup: canCreateFollowup(user, beneficiary),
+      comment: canAddComment(user, beneficiary)
     },
     delete: {
       beneficiary: isDeletable(user, beneficiary)
     }
   }
 }
+
+const canAddComment = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) || isReferentFor(grantee, beneficiary)
+
+const canCreateFollowup = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) || isReferentFor(grantee, beneficiary)
 
 const canAddDocument = (
   grantee: SecurityRuleGrantee,

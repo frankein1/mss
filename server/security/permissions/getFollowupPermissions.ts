@@ -14,7 +14,6 @@ import {
 export type FollowupPermissions = {
   edit: boolean
   view: boolean
-  create: boolean
   get: {
     details: boolean
     dueDate: boolean
@@ -37,23 +36,16 @@ export const getFollowupPermissions = ({
 }) => {
   let permissions: FollowupPermissions
   if (!socialSupport) {
-    permissions = getCreatePermissions({ user, beneficiary })
+    permissions = getCreationPermissions()
   } else {
-    permissions = getEditPermissions({ user, beneficiary, socialSupport })
+    permissions = getEditionPermissions({ user, beneficiary, socialSupport })
   }
 
   return permissions
 }
 
-function getCreatePermissions({
-  user,
-  beneficiary
-}: {
-  user: SecurityRuleGrantee
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-}): FollowupPermissions {
+function getCreationPermissions(): FollowupPermissions {
   return {
-    create: canCreateFollowup(user, beneficiary),
     edit: false,
     view: false,
     set: {
@@ -68,7 +60,7 @@ function getCreatePermissions({
   }
 }
 
-function getEditPermissions({
+function getEditionPermissions({
   user,
   beneficiary,
   socialSupport
@@ -78,7 +70,6 @@ function getEditPermissions({
   socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 }): FollowupPermissions {
   return {
-    create: false,
     view: canViewFollowup(user, beneficiary),
     edit: canEditFollowup(user, socialSupport),
     set: {
@@ -92,17 +83,6 @@ function getEditPermissions({
     delete: canDeleteFollowup(user, socialSupport)
   }
 }
-
-const canCreateFollowup = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
 
 const accessPrivateSynthesis = (
   grantee: SecurityRuleGrantee,

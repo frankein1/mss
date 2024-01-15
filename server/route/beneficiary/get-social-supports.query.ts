@@ -6,7 +6,8 @@ import {
   getDocumentPermissions,
   SecurityRuleGrantee,
   SecurityRuleContext,
-  getSocialSupportPermissions
+  getSocialSupportPermissions,
+  getCommentPermissions
 } from '~/server/security'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { SocialSupportRepo } from '~/server/database'
@@ -19,7 +20,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: GetHistoryInput
 ) => {
-  const permissions = await BeneficiaryService.getUpdatePermission(
+  const permissions = await BeneficiaryService.getEditionPermissions(
     ctx,
     input.beneficiaryId
   )
@@ -153,7 +154,7 @@ function flattenSocialSupports(
   beneficiary: BeneficiarySecurityTarget
 ) {
   return socialSupports.map(socialSupport => {
-    const { types, documents, _count, ...data } = socialSupport
+    const { types, documents, _count, comments, ...data } = socialSupport
 
     const documentsWithPermissions = documents?.map(document => ({
       document,
@@ -161,6 +162,13 @@ function flattenSocialSupports(
         ctx,
         beneficiary,
         document
+      })
+    }))
+    const commentsWithPermissions = comments?.map(comment => ({
+      comment,
+      permissions: getCommentPermissions({
+        ctx,
+        comment
       })
     }))
 
@@ -173,6 +181,7 @@ function flattenSocialSupports(
     return {
       data: {
         ...data,
+        comments: commentsWithPermissions,
         documents: documentsWithPermissions,
         hasUnreadNotifications: !!_count.notifications,
         followUpTypes: types

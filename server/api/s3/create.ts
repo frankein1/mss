@@ -58,7 +58,7 @@ export default defineEventHandler(async event => {
     }
   }
 
-  const permissions = await DocumentService.getCreatePermissions(
+  const permissions = await DocumentService.getCreationPermissions(
     ctx,
     input.beneficiaryId
   )

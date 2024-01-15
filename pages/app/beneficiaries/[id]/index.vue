@@ -64,7 +64,11 @@
         title="Historique"
         icon="fr-icon-history-line"
       >
-        <BeneficiaryHistory :beneficiary-id="beneficiaryId" />
+        <BeneficiaryHistory
+          v-if="permissions"
+          :beneficiary-id="beneficiaryId"
+          :beneficiary-permissions="permissions"
+        />
       </AtomTab>
     </AtomTabs>
   </PageContainer>

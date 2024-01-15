@@ -1,9 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
-  BeneficiaryPermissions,
+  AppContextPermissions,
   SecurityRuleContext,
-  getBeneficiaryPermissions
+  getAppContextPermissions
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -17,7 +17,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryOccupationInput
 ) => {
-  const permissions = await BeneficiaryService.getUpdatePermission(
+  const permissions = await BeneficiaryService.getEditionPermissions(
     ctx,
     input.id
   )
@@ -31,12 +31,8 @@ const handler = async ({
   input: UpdateBeneficiaryOccupationInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
-    ctx.user,
-    input.id
-  )
-  const permissions = getBeneficiaryPermissions({ ctx, beneficiary: target })
-  const data = filterInput({ input, permissions })
+  const appPermissions = getAppContextPermissions(ctx)
+  const data = filterInput({ input, appPermissions })
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id: input.id },
     data
@@ -61,20 +57,16 @@ export const updateOccupationIncomeMutation = createMutation({
 
 function filterInput({
   input,
-  permissions
+  appPermissions
 }: {
   input: UpdateBeneficiaryOccupationInput
-  permissions: BeneficiaryPermissions
+  appPermissions: AppContextPermissions
 }) {
-  const { set } = permissions
+  const { module } = appPermissions
   const { id: _id, ...data } = input
-  if (!set.ministereCategorie) {
+  if (!module.ministere) {
     delete data.ministereCategorie
-  }
-  if (!set.ministereDepartementServiceAc) {
     delete data.ministereDepartementServiceAc
-  }
-  if (!set.ministereStructure) {
     delete data.ministereStructure
   }
   return data

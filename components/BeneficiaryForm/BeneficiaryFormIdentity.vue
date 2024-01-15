@@ -64,7 +64,7 @@
       />
     </div>
     <div
-      v-if="permissions.set.numeroPegase"
+      v-if="application.module.ministere"
       class="fr-col-12"
     >
       <VeeInput
@@ -84,11 +84,8 @@
     beneficiaryTitleOptions
   } from '~/client/options/beneficiary'
   import { nationalityOptions } from '~/client/options/nationality'
-  import { BeneficiaryPermissions } from '~/server/security'
 
-  defineProps<{
-    permissions: BeneficiaryPermissions
-  }>()
+  const { application } = usePermissions()
 
   const { value: status } = useField<BeneficiaryStatus>('status')
 

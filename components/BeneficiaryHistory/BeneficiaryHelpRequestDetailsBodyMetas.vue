@@ -91,7 +91,7 @@
 
 <script setup lang="ts">
   import { SocialSupportStatus } from '@prisma/client'
-  import { HistoryItemData, HistoryItemHelpRequest } from './types'
+  import { SocialSupportData, HelpRequestData } from './types'
   import {
     paymentMethodLabels,
     isRefundableLabels,
@@ -105,8 +105,8 @@
   const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = defineProps<{
-    socialSupport: HistoryItemData
-    helpRequest: HistoryItemHelpRequest
+    socialSupport: SocialSupportData
+    helpRequest: HelpRequestData
   }>()
 
   const instructorOrganization = computed(() => {

@@ -30,7 +30,8 @@
             v-for="item in items"
             :key="item.data.id"
             :item="item"
-            @deleted="onHistoryItemDeleted"
+            :beneficiary-permissions="beneficiaryPermissions"
+            @refresh="refreshData"
           />
         </ul>
       </template>
@@ -42,11 +43,13 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   const route = useRoute()
 
   const props = defineProps<{
     beneficiaryId: string
+    beneficiaryPermissions: BeneficiaryPermissions
   }>()
 
   const filters = ref({})
@@ -74,7 +77,7 @@
     }
   })
 
-  function onHistoryItemDeleted() {
+  function refreshData() {
     refresh()
   }
 </script>

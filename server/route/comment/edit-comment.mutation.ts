@@ -4,8 +4,8 @@ import { EditCommentInput, editCommentSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
-import { canEditComment } from '~/server/security/rules/comment'
 import { CommentRepo } from '~/server/database'
+import { getCommentPermissions } from '~/server/security'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -15,7 +15,8 @@ const securityCheck = async (
   const comment = await CommentRepo.findUniqueOrThrow(ctx.user, {
     where: { id }
   })
-  return canEditComment(ctx.user, comment)
+  const permissions = getCommentPermissions({ ctx, comment })
+  return permissions.edit
 }
 
 const handler = async ({

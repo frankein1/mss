@@ -27,7 +27,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: QuickEditFollowupInput
 ) => {
-  const permissions = await FollowupService.getUpdatePermission(
+  const permissions = await FollowupService.getEditionPermissions(
     ctx.user,
     input.id
   )

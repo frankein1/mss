@@ -6,7 +6,7 @@ import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
-  const permissions = await BeneficiaryService.getUpdatePermission(
+  const permissions = await BeneficiaryService.getEditionPermissions(
     ctx,
     input.id
   )
