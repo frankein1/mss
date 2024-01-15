@@ -1,4 +1,3 @@
-import { StructureType } from '@prisma/client'
 import { SecurityRuleContext, SecurityRuleGrantee } from '../rules'
 import { SecurityRuleStructure } from '../rules/types'
 import { getGranteRole } from '../rules/helpers'
@@ -75,7 +74,9 @@ function getUserContextPermissions(
     instructor,
     receptionAgent,
     referent,
-    ministryAgent
+    ministryAgent,
+    cias,
+    ccas
   } = getGranteRole(ctx)
 
   return {
@@ -97,15 +98,9 @@ function getUserContextPermissions(
       users: manager,
       stats: manager || socialWorker || instructor || referent,
       statsByReferent: manager,
-      health: canViewHealthInfo(ctx.structure.type),
+      health: cias || ccas,
       ministere: ministryAgent,
       helpRequestDetail: manager || socialWorker || instructor || referent
     }
   }
-}
-
-const canViewHealthInfo = (structureType: StructureType): boolean => {
-  return (
-    structureType !== StructureType.Ccas && structureType !== StructureType.Cias
-  )
 }

@@ -39,7 +39,10 @@ export const getGranteRole = (ctx: SecurityRuleContext) => {
     referent: isReferent(user),
     receptionAgent: isReceptionAgent(user),
     instructor: isInstructor(user),
-    ministryAgent: structure.type === StructureType.Ministere
+    ministryAgent: structure.type === StructureType.Ministere,
+    cias: structure.type === StructureType.Cias,
+    ccas: structure.type === StructureType.Ccas,
+    efs: structure.type === StructureType.EFS
   }
 }
 
