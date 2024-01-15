@@ -62,7 +62,7 @@
         />
       </div>
       <div
-        v-if="permissions.set.numeroPegase"
+        v-if="application.module.ministere"
         class="fr-col-12 fr-col-lg-6"
       >
         <VeeInput
@@ -132,6 +132,8 @@
 
   const complete = ref<boolean>(false)
   const form = ref<HTMLFormElement | null>(null)
+
+  const { application } = usePermissions()
 
   const { handleSubmit } = useForm<CreateBeneficiaryInput>({
     validationSchema: toTypedSchema(createBeneficiarySchema),

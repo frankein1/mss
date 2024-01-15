@@ -2,8 +2,9 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
   getBeneficiaryPermissions,
-  BeneficiaryPermissions,
-  SecurityRuleContext
+  SecurityRuleContext,
+  AppContextPermissions,
+  getAppContextPermissions
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -39,7 +40,8 @@ const handler = async ({
   )
 
   const permissions = getBeneficiaryPermissions({ ctx, beneficiary: target })
-  const filteredData = filterInput({ input, permissions })
+  const appPermissions = getAppContextPermissions(ctx)
+  const filteredData = filterInput({ input, appPermissions })
   const data = prepareDateFields(filteredData, ['birthDate', 'deathDate'])
 
   if (data.noPhone) {
@@ -84,17 +86,15 @@ export const updateGeneralInformationMutation = createMutation({
 
 function filterInput({
   input,
-  permissions
+  appPermissions
 }: {
   input: UpdateBeneficiaryGeneralInformationInput
-  permissions: BeneficiaryPermissions
+  appPermissions: AppContextPermissions
 }) {
-  const { set } = permissions
+  const { module } = appPermissions
   const { id: _id, referents: _referents, ...data } = input
-  if (!set.numeroPegase) {
+  if (!module.ministere) {
     delete data.numeroPegase
-  }
-  if (!set.accommodationZone) {
     delete data.accommodationZone
   }
   return data

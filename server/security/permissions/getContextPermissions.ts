@@ -20,11 +20,12 @@ export type AppContextPermissions = {
   edit: {
     structure: boolean
   }
-  view: {
+  module: {
     users: boolean
     stats: boolean
     statsByReferent: boolean
-    healthInfo: boolean
+    health: boolean
+    ministere: boolean
   }
   helpRequest: {
     get: {
@@ -68,11 +69,12 @@ function getAdminContextPermissions(): AppContextPermissions {
     edit: {
       structure: false
     },
-    view: {
+    module: {
       users: false,
       stats: false,
       statsByReferent: false,
-      healthInfo: false
+      health: false,
+      ministere: false
     },
     helpRequest: {
       get: {
@@ -93,6 +95,7 @@ function getUserContextPermissions(
   ctx: SecurityRuleContext
 ): AppContextPermissions {
   const getAnyDataOfAny = accessAnyDataOfAny(ctx.user)
+  const isMinistryAgent = ctx.structure.type === StructureType.Ministere
   return {
     export: {
       history: canExportHistory(ctx.user),
@@ -107,11 +110,12 @@ function getUserContextPermissions(
     edit: {
       structure: canEditStructure(ctx.user)
     },
-    view: {
+    module: {
       users: canListUsers(ctx.user),
       stats: canViewStats(ctx.user),
       statsByReferent: canViewStatsByReferent(ctx.user),
-      healthInfo: canViewHealthInfo(ctx.structure.type)
+      health: canViewHealthInfo(ctx.structure.type),
+      ministere: isMinistryAgent
     },
     helpRequest: {
       get: {

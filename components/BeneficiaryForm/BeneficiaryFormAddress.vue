@@ -68,7 +68,7 @@
       />
     </div>
     <div
-      v-if="permissions.set.accommodationZone"
+      v-if="application.module.ministere"
       class="fr-col-12"
     >
       <VeeSelect
@@ -96,11 +96,8 @@
     beneficiaryAccommodationModeOptions,
     beneficiaryAccommodationZoneOptions
   } from '~/client/options/beneficiary'
-  import { BeneficiaryPermissions } from '~/server/security'
 
-  defineProps<{
-    permissions: BeneficiaryPermissions
-  }>()
+  const { application } = usePermissions()
 
   const { value: accommodationMode } =
     useField<BeneficiaryAccommodationMode>('accommodationMode')

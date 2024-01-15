@@ -60,7 +60,7 @@
         type: FilterType.SelectMultiple
       })
     }
-    if (application.value.view.statsByReferent) {
+    if (application.value.module.statsByReferent) {
       filters.push({
         name: 'referent',
         label: 'Référent',

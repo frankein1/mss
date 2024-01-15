@@ -8,7 +8,7 @@ import { emptySchema } from '~/server/schema'
 import { UserRepo } from '~/server/database'
 
 const securityCheck = (ctx: SecurityRuleContext) => {
-  return getAppContextPermissions(ctx).view.users
+  return getAppContextPermissions(ctx).module.users
 }
 
 const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
