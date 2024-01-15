@@ -9,6 +9,7 @@ import {
   prepareDateFields
 } from '~/utils/prisma'
 import { markFollowupTypeAsUsed } from '~/server/query'
+import { isNewOption } from '~/utils/options'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
