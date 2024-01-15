@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { HistoryItemData, HistoryItemComment } from './types'
+  import { SocialSupportData, CommentData } from './types'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { AddCommentInput, addCommentSchema } from '~/server/schema'
 
@@ -47,11 +47,11 @@
   const form = ref<HTMLFormElement | null>(null)
 
   const props = defineProps<{
-    socialSupport: HistoryItemData
+    socialSupport: SocialSupportData
   }>()
 
   const emit = defineEmits<{
-    commentAdded: [comment: HistoryItemComment]
+    commentAdded: [comment: CommentData]
   }>()
 
   const isSubmitting = ref(false)

@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
   import { FollowupMedium } from '@prisma/client'
-  import { HistoryItemData, HistoryItemFollowup } from './types'
+  import { SocialSupportData, FollowupData } from './types'
   import {
     // followupInterventionLabels,
     followupMediumLabels
@@ -70,8 +70,8 @@
   const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = defineProps<{
-    socialSupport: HistoryItemData
-    followup: HistoryItemFollowup
+    socialSupport: SocialSupportData
+    followup: FollowupData
   }>()
 
   const medium = computed(() => {

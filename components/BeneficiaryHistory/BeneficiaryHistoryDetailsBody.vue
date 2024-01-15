@@ -63,33 +63,36 @@
       </ul>
 
       <hr
-        v-if="comments.length > 0"
+        v-if="commentItems.length > 0"
         class="fr-pb-3v"
       />
     </template>
 
     <BeneficiaryHistoryComments
-      :comments="comments"
+      :items="commentItems"
       :social-support="socialSupport"
-      @comment-added="onCommentAdded"
-      @comment-edited="onCommentEdited"
-      @comment-deleted="onCommentDeleted"
+      :beneficiary-permissions="beneficiaryPermissions"
+      @comment-added="emit('refresh')"
+      @comment-edited="emit('refresh')"
+      @comment-deleted="emit('refresh')"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { HistoryItem, HistoryItemComment } from './types'
+  import type { SocialSupportItem } from './types'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import { RoutePath } from '~/utils/routing'
+  import { BeneficiaryPermissions } from '~/server/security'
 
   const props = defineProps<{
-    item: HistoryItem
+    item: SocialSupportItem
     collapseId: string
+    beneficiaryPermissions: BeneficiaryPermissions
   }>()
 
   const emit = defineEmits<{
-    deleted: []
+    refresh: []
   }>()
 
   const socialSupport = computed(() => props.item.data)
@@ -99,7 +102,7 @@
     () => socialSupport.value.socialSupportType === 'Followup'
   )
 
-  const comments = ref(socialSupport.value.comments || [])
+  const commentItems = ref(socialSupport.value.comments || [])
 
   const editLink = computed(() => {
     const routeWithParams = isFollowup.value
@@ -117,22 +120,6 @@
 
   const canViewHistoryDetails = computed(() => permissions.value?.get.details)
 
-  function onCommentAdded(comment: HistoryItemComment) {
-    comments.value.push(comment)
-  }
-
-  function onCommentEdited(editedComment: HistoryItemComment) {
-    comments.value = comments.value.map(comment =>
-      comment.id === editedComment.id ? editedComment : comment
-    )
-  }
-
-  function onCommentDeleted(deletedComment: HistoryItemComment) {
-    comments.value = comments.value.filter(
-      comment => comment.id !== deletedComment.id
-    )
-  }
-
   function onDelete() {
     useModal().open({
       title: isFollowup.value
@@ -143,12 +130,12 @@
         historyItemId: socialSupport.value.id,
         isFollowup: isFollowup.value
       },
-      contentComponentEvents: { deleted: onHistoryItemDeleted }
+      contentComponentEvents: { deleted: onSocialSupportItemDeleted }
     })
   }
 
-  function onHistoryItemDeleted() {
-    emit('deleted')
+  function onSocialSupportItemDeleted() {
+    emit('refresh')
     useSnackbar().success("L'accompagnement a été supprimé.")
   }
 </script>

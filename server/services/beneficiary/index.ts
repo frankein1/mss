@@ -6,16 +6,16 @@ import { updateTaxHousehold } from './updateTaxHousehold.service'
 import { exportBeneficiaries } from './export.service'
 import { search } from './search.service'
 import {
-  getCreatePermission,
-  getEditionPermission,
+  getCreationPermissions,
+  getEditionPermissions,
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
 } from './permission.service'
 
 export const BeneficiaryService = {
   create,
-  getCreatePermission,
-  getEditionPermission,
+  getCreationPermissions,
+  getEditionPermissions,
   get,
   getPage,
   getPageDocuments,

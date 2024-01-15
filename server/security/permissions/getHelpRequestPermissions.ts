@@ -31,15 +31,15 @@ export const getHelpRequestPermissions = ({
 }) => {
   let permissions: HelpRequestPermissions
   if (!socialSupport) {
-    permissions = getCreatePermissions()
+    permissions = getCreationPermissions()
   } else {
-    permissions = getEditionPermission({ ctx, beneficiary, socialSupport })
+    permissions = getEditionPermissions({ ctx, beneficiary, socialSupport })
   }
 
   return permissions
 }
 
-function getCreatePermissions(): HelpRequestPermissions {
+function getCreationPermissions(): HelpRequestPermissions {
   return {
     edit: true,
     view: true,
@@ -54,7 +54,7 @@ function getCreatePermissions(): HelpRequestPermissions {
   }
 }
 
-function getEditionPermission({
+function getEditionPermissions({
   ctx,
   beneficiary,
   socialSupport

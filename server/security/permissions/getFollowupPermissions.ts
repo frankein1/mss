@@ -38,7 +38,7 @@ export const getFollowupPermissions = ({
   if (!socialSupport) {
     permissions = getCreationPermissions()
   } else {
-    permissions = getEditionPermission({ user, beneficiary, socialSupport })
+    permissions = getEditionPermissions({ user, beneficiary, socialSupport })
   }
 
   return permissions
@@ -60,7 +60,7 @@ function getCreationPermissions(): FollowupPermissions {
   }
 }
 
-function getEditionPermission({
+function getEditionPermissions({
   user,
   beneficiary,
   socialSupport

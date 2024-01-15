@@ -19,10 +19,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { HistoryItemDocuments } from './types'
+  import { DocumentItems } from './types'
 
   defineProps<{
-    documents: HistoryItemDocuments
+    documents: DocumentItems
   }>()
 
   const onView = (key: string) => {

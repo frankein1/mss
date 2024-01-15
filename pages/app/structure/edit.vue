@@ -28,7 +28,7 @@
           />
 
           <!-- TODO: Add mutation logs -->
-          <!-- <HistoryItem
+          <!-- <SocialSupportItem
             :id="organisationId"
             class="fr-mt-4w"
           /> -->

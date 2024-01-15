@@ -7,7 +7,7 @@
         {{ authorName }}
       </h4>
       <button
-        v-if="!isEditing && canEditComment"
+        v-if="!isEditing && permissions.edit"
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-btn--sm fr-icon-pencil-line"
         @click="isEditing = true"
       >
@@ -37,32 +37,30 @@
 </template>
 
 <script setup lang="ts">
-  import { HistoryItemComment } from './types'
-  import { canEditComment as canEditCommentRule } from '~/server/security/rules/comment'
+  import { CommentItem, CommentData } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
 
   const props = defineProps<{
-    comment: HistoryItemComment
+    item: CommentItem
   }>()
 
   const emit = defineEmits<{
-    commentEdited: [comment: HistoryItemComment]
-    commentDeleted: [comment: HistoryItemComment]
+    commentEdited: [comment: CommentData]
+    commentDeleted: [comment: CommentData]
   }>()
+
+  const comment = computed(() => props.item.comment)
+  const permissions = computed(() => props.item.permissions)
 
   const isEditing = ref(false)
 
-  const canEditComment = computed(() =>
-    useSecurityRule().canWithTarget(canEditCommentRule, props.comment)
-  )
-
   const commentDate = computed(() =>
-    formatDate(props.comment.updated ?? props.comment.created)
+    formatDate(comment.value.updated ?? comment.value.created)
   )
 
   const authorName = computed(() =>
-    formatUserDisplayName(props.comment.createdBy)
+    formatUserDisplayName(comment.value.createdBy)
   )
 </script>
 

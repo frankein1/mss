@@ -26,7 +26,7 @@ export function getFollowupSecurityTarget(
   })
 }
 
-export async function getEditionPermission(
+export async function getEditionPermissions(
   user: SecurityRuleGrantee,
   id: string
 ): Promise<FollowupPermissions> {
@@ -38,7 +38,7 @@ export async function getEditionPermission(
   })
 }
 
-export async function getCreatePermission(
+export async function getCreationPermissions(
   user: SecurityRuleGrantee,
   beneficiaryId: string
 ): Promise<FollowupPermissions> {
