@@ -21,7 +21,7 @@
             </th>
             <th scope="col">Objet d'accompagnement</th>
             <TableSortableHeader
-              v-if="application.helpRequest.get.anyDueDate"
+              v-if="application.module.helpRequestDetail"
               :label="helpRequestFieldLabels.dueDate"
               numeric
               @update:sort="onSort({ socialSupport: { dueDate: $event } })"
@@ -35,47 +35,47 @@
               "
             />
             <TableSortableHeader
-              v-if="application.helpRequest.get.anyInstructorOrganization"
+              v-if="application.module.helpRequestDetail"
               :label="helpRequestFieldLabels.instructorOrganizationId"
               @update:sort="
                 onSort({ instructorOrganization: { name: $event } })
               "
             />
             <th
-              v-if="application.helpRequest.get.anyExaminationDate"
+              v-if="application.module.helpRequestDetail"
               scope="col"
             >
               {{ helpRequestFieldLabels.examinationDate }}
             </th>
             <th
-              v-if="application.helpRequest.get.anyAskedAmount"
+              v-if="application.module.helpRequestDetail"
               scope="col"
             >
               {{ helpRequestFieldLabels.askedAmount }}
             </th>
             <th
-              v-if="application.helpRequest.get.anyAllocatedAmount"
+              v-if="application.module.helpRequestDetail"
               id="allocated-amount-col"
               scope="col"
             >
               {{ helpRequestFieldLabels.allocatedAmount }}
             </th>
             <th
-              v-if="application.helpRequest.get.anyPaymentMethod"
+              v-if="application.module.helpRequestDetail"
               id="payment-method-col"
               scope="col"
             >
               {{ helpRequestFieldLabels.paymentMethod }}
             </th>
             <th
-              v-if="application.helpRequest.get.anyPaymentDate"
+              v-if="application.module.helpRequestDetail"
               id="payment-date-col"
               scope="col"
             >
               {{ helpRequestFieldLabels.paymentDate }}
             </th>
             <th
-              v-if="application.helpRequest.get.anyHandlingDate"
+              v-if="application.module.helpRequestDetail"
               scope="col"
             >
               {{ helpRequestFieldLabels.handlingDate }}

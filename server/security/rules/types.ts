@@ -1,4 +1,4 @@
-import { Structure, User, UserRole } from '@prisma/client'
+import { Structure, User } from '@prisma/client'
 
 export type SecurityRuleStructure = Pick<Structure, 'id' | 'type'>
 
@@ -21,15 +21,6 @@ export type SecurityTargetWithReferents =
       referents: { id: string }[]
     }
   | { referents: string[] }
-
-// Helper type to safely type an array with at least one UserRole
-export type AllowedRoles =
-  | [UserRole]
-  | [UserRole, UserRole]
-  | [UserRole, UserRole, UserRole]
-  | [UserRole, UserRole, UserRole, UserRole]
-  | [UserRole, UserRole, UserRole, UserRole, UserRole]
-  | [UserRole, UserRole, UserRole, UserRole, UserRole, UserRole]
 
 export type SecurityTargetWithCreator =
   | {

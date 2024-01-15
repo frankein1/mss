@@ -11,7 +11,7 @@ import { SocialSupportRepo } from '~/server/database'
 
 const handler = async ({
   input: { id, ...rest },
-  ctx: { user }
+  ctx
 }: {
   input: QuickEditFollowupInput
   ctx: ProtectedAppContext
@@ -20,17 +20,14 @@ const handler = async ({
     where: { id },
     data: rest
   })
-  return FollowupService.get({ user, id })
+  return FollowupService.get({ ctx, id })
 }
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: QuickEditFollowupInput
 ) => {
-  const permissions = await FollowupService.getEditionPermissions(
-    ctx.user,
-    input.id
-  )
+  const permissions = await FollowupService.getEditionPermissions(ctx, input.id)
   return permissions.edit
 }
 

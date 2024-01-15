@@ -1,9 +1,10 @@
+import { StructureType } from '@prisma/client'
 import {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
-  SecurityTargetWithReferents,
   SecurityTargetWithCreator,
-  AllowedRoles
+  SecurityRuleContext,
+  SecurityTargetWithReferents
 } from './types'
 
 export const isAdmin = (grantee: SecurityRuleGrantee) => {
@@ -30,38 +31,25 @@ export const isStructureManager = (grantee: SecurityRuleGrantee) => {
   return grantee.role === 'StructureManager'
 }
 
-export const hasAllowedRole = (
-  grantee: SecurityRuleGrantee,
-  allowedRoles: AllowedRoles
-) => allowedRoles.includes(grantee.role)
-
-export const isInSameStructureAs = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure,
-  allowedRoles: AllowedRoles
-) =>
-  grantee.structureId === target.structureId &&
-  hasAllowedRole(grantee, allowedRoles)
+export const getGranteRole = (ctx: SecurityRuleContext) => {
+  const { user, structure } = ctx
+  return {
+    manager: isStructureManager(user),
+    socialWorker: isSocialWorker(user),
+    referent: isReferent(user),
+    receptionAgent: isReceptionAgent(user),
+    instructor: isInstructor(user),
+    ministryAgent: structure.type === StructureType.Ministere,
+    cias: structure.type === StructureType.Cias,
+    ccas: structure.type === StructureType.Ccas,
+    efs: structure.type === StructureType.EFS
+  }
+}
 
 export const isInSameStructure = (
   grantee: SecurityRuleGrantee,
   target: SecurityTargetWithStructure
 ) => grantee.structureId === target.structureId
-
-export const isReferentFor = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithReferents & SecurityTargetWithStructure
-) =>
-  isInSameStructureAs(grantee, target, ['Referent']) &&
-  isPartOfReferents(grantee, target)
-
-export const isPartOfReferents = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithReferents & SecurityTargetWithStructure
-) =>
-  target.referents.some(r =>
-    typeof r === 'string' ? r === grantee.id : r.id === grantee.id
-  )
 
 export const isCreator = (
   grantee: SecurityRuleGrantee,
@@ -70,3 +58,11 @@ export const isCreator = (
   'createdById' in target
     ? grantee.id === target.createdById
     : grantee.id === target.createdBy?.id
+
+export const isReferentFor = (
+  grantee: SecurityRuleGrantee,
+  target: SecurityTargetWithReferents & SecurityTargetWithStructure
+) =>
+  target.referents.some(r =>
+    typeof r === 'string' ? r === grantee.id : r.id === grantee.id
+  )

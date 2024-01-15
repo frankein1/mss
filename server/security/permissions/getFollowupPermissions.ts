@@ -1,14 +1,14 @@
 import {
-  SecurityRuleGrantee,
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,
-  SecurityTargetWithCreator
+  SecurityTargetWithCreator,
+  SecurityRuleContext
 } from '../rules'
 import {
-  isInSameStructureAs,
   isReferentFor,
   isCreator,
-  hasAllowedRole
+  isInSameStructure,
+  getGranteRole
 } from '../rules/helpers'
 
 export type FollowupPermissions = {
@@ -25,12 +25,26 @@ export type FollowupPermissions = {
   delete: boolean
 }
 
+const FALSY_PERMISSIONS = {
+  edit: false,
+  view: false,
+  get: {
+    details: false,
+    dueDate: false,
+    privateSynthesis: false
+  },
+  set: {
+    privateSynthesis: false
+  },
+  delete: false
+}
+
 export const getFollowupPermissions = ({
-  user,
+  ctx,
   beneficiary,
   socialSupport
 }: {
-  user: SecurityRuleGrantee
+  ctx: SecurityRuleContext
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport?: SecurityTargetWithCreator & SecurityTargetWithStructure
 }) => {
@@ -38,7 +52,7 @@ export const getFollowupPermissions = ({
   if (!socialSupport) {
     permissions = getCreationPermissions()
   } else {
-    permissions = getEditionPermissions({ user, beneficiary, socialSupport })
+    permissions = getEditionPermissions({ ctx, beneficiary, socialSupport })
   }
 
   return permissions
@@ -61,94 +75,35 @@ function getCreationPermissions(): FollowupPermissions {
 }
 
 function getEditionPermissions({
-  user,
+  ctx,
   beneficiary,
   socialSupport
 }: {
-  user: SecurityRuleGrantee
+  ctx: SecurityRuleContext
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 }): FollowupPermissions {
+  const { user } = ctx
+  if (!isInSameStructure(user, beneficiary)) {
+    return FALSY_PERMISSIONS
+  }
+
+  const creator = isCreator(user, socialSupport)
+  const isReferent = isReferentFor(user, beneficiary)
+  const { manager, socialWorker, instructor, referent, receptionAgent } =
+    getGranteRole(ctx)
+
   return {
-    view: canViewFollowup(user, beneficiary),
-    edit: canEditFollowup(user, socialSupport),
+    view: isReferent || manager || socialWorker || instructor || receptionAgent,
+    edit: manager || creator,
     set: {
-      privateSynthesis: accessPrivateSynthesis(user, socialSupport)
+      privateSynthesis: creator
     },
     get: {
-      details: accessDetails(user, socialSupport),
-      dueDate: canViewAnyFollowupDetails(user),
-      privateSynthesis: accessPrivateSynthesis(user, socialSupport)
+      details: manager || socialWorker || instructor || referent || creator,
+      dueDate: manager || socialWorker || instructor || referent,
+      privateSynthesis: creator
     },
-    delete: canDeleteFollowup(user, socialSupport)
+    delete: manager || creator
   }
 }
-
-const accessPrivateSynthesis = (
-  grantee: SecurityRuleGrantee,
-  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, socialSupport, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent',
-    'ReceptionAgent'
-  ]) && isCreator(grantee, socialSupport)
-
-const canEditFollowup = (
-  grantee: SecurityRuleGrantee,
-  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, socialSupport, ['StructureManager']) ||
-  (isInSameStructureAs(grantee, socialSupport, [
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent',
-    'Referent'
-  ]) &&
-    isCreator(grantee, socialSupport))
-
-const canDeleteFollowup = (
-  grantee: SecurityRuleGrantee,
-  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, socialSupport, ['StructureManager']) ||
-  (isInSameStructureAs(grantee, socialSupport, [
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ]) &&
-    isCreator(grantee, socialSupport))
-
-const accessDetails = (
-  grantee: SecurityRuleGrantee,
-  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, socialSupport, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ]) ||
-  (isInSameStructureAs(grantee, socialSupport, ['ReceptionAgent']) &&
-    isCreator(grantee, socialSupport))
-
-const canViewFollowup = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const canViewAnyFollowupDetails = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])

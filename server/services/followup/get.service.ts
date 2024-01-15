@@ -1,12 +1,12 @@
 import { getOne } from './queries'
-import { SecurityRuleGrantee } from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 
 export async function get({
-  user,
+  ctx,
   id
 }: {
-  user: SecurityRuleGrantee
+  ctx: SecurityRuleContext
   id: string
 }) {
-  return await getOne(user, id)
+  return await getOne(ctx, id)
 }

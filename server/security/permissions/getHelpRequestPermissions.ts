@@ -1,11 +1,15 @@
 import {
-  SecurityRuleGrantee,
   SecurityTargetWithReferents,
   SecurityTargetWithStructure,
   SecurityTargetWithCreator,
   SecurityRuleContext
 } from '../rules'
-import { isInSameStructureAs, isReferentFor, isCreator } from '../rules/helpers'
+import {
+  isReferentFor,
+  isCreator,
+  isInSameStructure,
+  getGranteRole
+} from '../rules/helpers'
 
 export type HelpRequestPermissions = {
   edit: boolean
@@ -18,6 +22,19 @@ export type HelpRequestPermissions = {
     privateSynthesis: boolean
   }
   delete: boolean
+}
+
+const FALSY_PERMISSIONS = {
+  edit: false,
+  view: false,
+  get: {
+    details: false,
+    privateSynthesis: false
+  },
+  set: {
+    privateSynthesis: false
+  },
+  delete: false
 }
 
 export const getHelpRequestPermissions = ({
@@ -65,82 +82,25 @@ function getEditionPermissions({
 }): HelpRequestPermissions {
   const { user } = ctx
 
+  if (!isInSameStructure(user, beneficiary)) {
+    return FALSY_PERMISSIONS
+  }
+
+  const creator = isCreator(user, socialSupport)
+  const isReferent = isReferentFor(user, beneficiary)
+  const { manager, socialWorker, instructor, receptionAgent } =
+    getGranteRole(ctx)
+
   return {
-    edit: isEditable(user, socialSupport),
-    view: access(user, beneficiary),
+    edit: manager || creator,
+    view: isReferent || manager || socialWorker || instructor || receptionAgent,
     get: {
-      details: accessDetails(user, beneficiary),
-      privateSynthesis: accessPrivateSynthesis(user, socialSupport)
+      details: manager || socialWorker || instructor || isReferent,
+      privateSynthesis: creator
     },
     set: {
-      privateSynthesis: isPrivateSynthesisEditable(user, socialSupport)
+      privateSynthesis: creator
     },
-    delete: isDeletable(user, socialSupport)
+    delete: manager || socialWorker || (instructor && creator)
   }
 }
-
-const access = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const accessDetails = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const accessPrivateSynthesis = (
-  grantee: SecurityRuleGrantee,
-  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, socialSupport, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) && isCreator(grantee, socialSupport)
-
-const isEditable = (
-  grantee: SecurityRuleGrantee,
-  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, socialSupport, ['StructureManager']) ||
-  (isInSameStructureAs(grantee, socialSupport, [
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ]) &&
-    isCreator(grantee, socialSupport))
-
-const isPrivateSynthesisEditable = (
-  grantee: SecurityRuleGrantee,
-  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, socialSupport, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ]) && isCreator(grantee, socialSupport)
-
-const isDeletable = (
-  grantee: SecurityRuleGrantee,
-  socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
-): boolean =>
-  isInSameStructureAs(grantee, socialSupport, [
-    'StructureManager',
-    'SocialWorker'
-  ]) ||
-  (isInSameStructureAs(grantee, socialSupport, ['Instructor']) &&
-    isCreator(grantee, socialSupport))

@@ -22,19 +22,8 @@ export function usePermissions() {
         stats: false,
         statsByReferent: false,
         health: false,
-        ministere: false
-      },
-      helpRequest: {
-        get: {
-          anyDueDate: false,
-          anyAllocatedAmount: false,
-          anyPaymentMethod: false,
-          anyPaymentDate: false,
-          anyHandlingDate: false,
-          anyInstructorOrganization: false,
-          anyExaminationDate: false,
-          anyAskedAmount: false
-        }
+        ministere: false,
+        helpRequestDetail: false
       }
     })
   )
@@ -59,19 +48,8 @@ export function usePermissions() {
         stats: false,
         statsByReferent: false,
         health: false,
-        ministere: false
-      },
-      helpRequest: {
-        get: {
-          anyDueDate: false,
-          anyAllocatedAmount: false,
-          anyPaymentMethod: false,
-          anyPaymentDate: false,
-          anyHandlingDate: false,
-          anyInstructorOrganization: false,
-          anyExaminationDate: false,
-          anyAskedAmount: false
-        }
+        ministere: false,
+        helpRequestDetail: false
       }
     }
   }

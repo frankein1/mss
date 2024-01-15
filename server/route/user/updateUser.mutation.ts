@@ -1,11 +1,10 @@
-import { UserStatus } from '@prisma/client'
+import { UserRole, UserStatus } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { UserEditionInput, editUserSchema } from '~/server/schema'
 import {
   SecurityRuleContext,
-  canEditUser,
-  canEditUserRole
+  getAppContextPermissions
 } from '~/server/security'
 import { UserRepo } from '~/server/database'
 
@@ -25,19 +24,12 @@ const handler = async ({
   return await UserRepo.prisma.update({ where: { id }, data: rest })
 }
 
-const securityCheck = async (
-  ctx: SecurityRuleContext,
-  input: UserEditionInput
-) => {
-  const target = await UserRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: input.id }
-  })
-  if ('role' in input) {
-    return (
-      canEditUserRole(ctx.user, target, input) && canEditUser(ctx.user, target)
-    )
+const securityCheck = (ctx: SecurityRuleContext, input: UserEditionInput) => {
+  if ('role' in input && input.role === UserRole.Administrator) {
+    return false
   }
-  return canEditUser(ctx.user, target)
+  const permissions = getAppContextPermissions(ctx)
+  return permissions.module.users
 }
 
 export const updateUserMutation = createMutation({

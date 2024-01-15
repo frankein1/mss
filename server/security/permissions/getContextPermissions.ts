@@ -1,10 +1,6 @@
-import { StructureType } from '@prisma/client'
-import {
-  SecurityRuleContext,
-  SecurityRuleGrantee,
-  hasAllowedRole
-} from '../rules'
+import { SecurityRuleContext, SecurityRuleGrantee } from '../rules'
 import { SecurityRuleStructure } from '../rules/types'
+import { getGranteRole } from '../rules/helpers'
 
 export type AppContextPermissions = {
   export: {
@@ -26,18 +22,7 @@ export type AppContextPermissions = {
     statsByReferent: boolean
     health: boolean
     ministere: boolean
-  }
-  helpRequest: {
-    get: {
-      anyDueDate: boolean
-      anyAllocatedAmount: boolean
-      anyPaymentMethod: boolean
-      anyPaymentDate: boolean
-      anyHandlingDate: boolean
-      anyInstructorOrganization: boolean
-      anyExaminationDate: boolean
-      anyAskedAmount: boolean
-    }
+    helpRequestDetail: boolean
   }
 }
 
@@ -74,19 +59,8 @@ function getAdminContextPermissions(): AppContextPermissions {
       stats: false,
       statsByReferent: false,
       health: false,
-      ministere: false
-    },
-    helpRequest: {
-      get: {
-        anyDueDate: false,
-        anyAllocatedAmount: false,
-        anyPaymentMethod: false,
-        anyPaymentDate: false,
-        anyHandlingDate: false,
-        anyInstructorOrganization: false,
-        anyExaminationDate: false,
-        anyAskedAmount: false
-      }
+      ministere: false,
+      helpRequestDetail: false
     }
   }
 }
@@ -94,113 +68,39 @@ function getAdminContextPermissions(): AppContextPermissions {
 function getUserContextPermissions(
   ctx: SecurityRuleContext
 ): AppContextPermissions {
-  const getAnyDataOfAny = accessAnyDataOfAny(ctx.user)
-  const isMinistryAgent = ctx.structure.type === StructureType.Ministere
+  const {
+    manager,
+    socialWorker,
+    instructor,
+    receptionAgent,
+    referent,
+    ministryAgent,
+    cias,
+    ccas
+  } = getGranteRole(ctx)
+
   return {
     export: {
-      history: canExportHistory(ctx.user),
-      beneficiaries: canExportBeneficiaries(ctx.user),
-      stats: canExportStats(ctx.user)
+      history: manager || receptionAgent || instructor || socialWorker,
+      beneficiaries: manager,
+      stats: manager || socialWorker || referent || instructor
     },
     create: {
-      user: canCreateUser(ctx.user),
-      prescribingOrganization: canCreatePrescribingOrganization(ctx.user),
-      instructorOrganization: canCreateInstructorOrganization(ctx.user)
+      user: manager,
+      prescribingOrganization:
+        manager || socialWorker || instructor || referent,
+      instructorOrganization: manager || socialWorker || instructor || referent
     },
     edit: {
-      structure: canEditStructure(ctx.user)
+      structure: manager
     },
     module: {
-      users: canListUsers(ctx.user),
-      stats: canViewStats(ctx.user),
-      statsByReferent: canViewStatsByReferent(ctx.user),
-      health: canViewHealthInfo(ctx.structure.type),
-      ministere: isMinistryAgent
-    },
-    helpRequest: {
-      get: {
-        anyDueDate: getAnyDataOfAny,
-        anyAllocatedAmount: getAnyDataOfAny,
-        anyPaymentMethod: getAnyDataOfAny,
-        anyPaymentDate: getAnyDataOfAny,
-        anyHandlingDate: getAnyDataOfAny,
-        anyInstructorOrganization: getAnyDataOfAny,
-        anyExaminationDate: getAnyDataOfAny,
-        anyAskedAmount: getAnyDataOfAny
-      }
+      users: manager,
+      stats: manager || socialWorker || instructor || referent,
+      statsByReferent: manager,
+      health: cias || ccas,
+      ministere: ministryAgent,
+      helpRequestDetail: manager || socialWorker || instructor || referent
     }
   }
 }
-
-const accessAnyDataOfAny = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
-
-const canViewHealthInfo = (structureType: StructureType): boolean => {
-  return (
-    structureType !== StructureType.Ccas && structureType !== StructureType.Cias
-  )
-}
-
-const canCreateUser = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, ['StructureManager'])
-
-const canCreatePrescribingOrganization = (
-  grantee: SecurityRuleGrantee
-): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
-
-const canCreateInstructorOrganization = (
-  grantee: SecurityRuleGrantee
-): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
-
-const canListUsers = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, ['StructureManager'])
-
-const canEditStructure = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, ['StructureManager'])
-
-const canViewStats = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'Referent'
-  ])
-
-const canViewStatsByReferent = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, ['StructureManager'])
-
-const canExportHistory = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'Referent',
-    'Instructor',
-    'SocialWorker'
-  ])
-
-const canExportBeneficiaries = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, ['StructureManager'])
-
-const canExportStats = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Referent',
-    'Instructor'
-  ])

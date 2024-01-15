@@ -1,25 +1,35 @@
 import { Document } from '@prisma/client'
 import {
   SecurityRuleContext,
-  SecurityRuleGrantee,
-  SecurityTargetWithCreator,
   SecurityTargetWithReferents,
-  SecurityTargetWithStructure,
-  isInSameStructureAs
+  SecurityTargetWithStructure
 } from '../rules'
-import { isCreator, isReferentFor } from '../rules/helpers'
+import {
+  getGranteRole,
+  isCreator,
+  isInSameStructure,
+  isReferentFor
+} from '../rules/helpers'
 
 type SecurityDocument = Pick<Document, 'createdById' | 'confidential'>
 type SecurityBeneficiary = SecurityTargetWithStructure &
   SecurityTargetWithReferents
 
 export type DocumentPermissions = {
-  create: boolean
   edit: boolean
   view: boolean
   delete: boolean
   set: {
     confidential: boolean
+  }
+}
+
+const FALSY_PERMISSIONS = {
+  edit: false,
+  view: false,
+  delete: false,
+  set: {
+    confidential: false
   }
 }
 
@@ -44,7 +54,6 @@ export const getDocumentPermissions = ({
 
 function getCreationPermissions() {
   return {
-    create: true,
     edit: false,
     view: false,
     delete: false,
@@ -59,78 +68,29 @@ function getEditionPermissions(params: {
   beneficiary: SecurityBeneficiary
   document: SecurityDocument
 }) {
-  const {
-    ctx: { user },
-    beneficiary,
-    document
-  } = params
+  const { ctx, beneficiary, document } = params
+  const { user } = ctx
+
+  if (!isInSameStructure(user, beneficiary)) {
+    return FALSY_PERMISSIONS
+  }
+
+  const creator = isCreator(user, document)
+  const { manager, socialWorker, instructor } = getGranteRole(ctx)
+
+  const isReferent = isReferentFor(user, beneficiary)
+
+  const view = document.confidential
+    ? creator
+    : manager || socialWorker || instructor || isReferent || creator
+  const edit = view
+
   return {
-    create: false,
-    edit: canViewOrEditDocument(user, beneficiary, document),
-    view: canViewOrEditDocument(user, beneficiary, document),
-    delete: canDeleteDocument(user, beneficiary),
+    edit,
+    view,
+    delete: isReferent || manager || socialWorker,
     set: {
-      confidential: canSetDocumentAsConfidential(user, beneficiary, document)
+      confidential: creator
     }
   }
 }
-
-const canDeleteDocument = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const canViewConfidentialDocument = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  document: SecurityTargetWithCreator
-): boolean =>
-  (isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) ||
-    isReferentFor(grantee, beneficiary)) &&
-  isCreator(grantee, document)
-
-const canViewNonConfidentialDocument = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  document: SecurityTargetWithCreator
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) ||
-  isReferentFor(grantee, beneficiary) ||
-  (isInSameStructureAs(grantee, beneficiary, ['ReceptionAgent']) &&
-    isCreator(grantee, document))
-
-const canViewOrEditDocument = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  document: SecurityTargetWithCreator & { confidential: boolean }
-): boolean =>
-  document.confidential
-    ? canViewConfidentialDocument(grantee, beneficiary, document)
-    : canViewNonConfidentialDocument(grantee, beneficiary, document)
-
-const canSetDocumentAsConfidential = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents,
-  document: SecurityTargetWithCreator
-): boolean =>
-  (isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) ||
-    isReferentFor(grantee, beneficiary)) &&
-  isCreator(grantee, document)
