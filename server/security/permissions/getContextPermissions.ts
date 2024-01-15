@@ -26,18 +26,7 @@ export type AppContextPermissions = {
     statsByReferent: boolean
     health: boolean
     ministere: boolean
-  }
-  helpRequest: {
-    get: {
-      anyDueDate: boolean
-      anyAllocatedAmount: boolean
-      anyPaymentMethod: boolean
-      anyPaymentDate: boolean
-      anyHandlingDate: boolean
-      anyInstructorOrganization: boolean
-      anyExaminationDate: boolean
-      anyAskedAmount: boolean
-    }
+    helpRequestDetail: boolean
   }
 }
 
@@ -74,19 +63,8 @@ function getAdminContextPermissions(): AppContextPermissions {
       stats: false,
       statsByReferent: false,
       health: false,
-      ministere: false
-    },
-    helpRequest: {
-      get: {
-        anyDueDate: false,
-        anyAllocatedAmount: false,
-        anyPaymentMethod: false,
-        anyPaymentDate: false,
-        anyHandlingDate: false,
-        anyInstructorOrganization: false,
-        anyExaminationDate: false,
-        anyAskedAmount: false
-      }
+      ministere: false,
+      helpRequestDetail: false
     }
   }
 }
@@ -94,7 +72,7 @@ function getAdminContextPermissions(): AppContextPermissions {
 function getUserContextPermissions(
   ctx: SecurityRuleContext
 ): AppContextPermissions {
-  const getAnyDataOfAny = accessAnyDataOfAny(ctx.user)
+  const helpRequestDetail = accessHelpRequestDetails(ctx.user)
   const isMinistryAgent = ctx.structure.type === StructureType.Ministere
   return {
     export: {
@@ -115,24 +93,13 @@ function getUserContextPermissions(
       stats: canViewStats(ctx.user),
       statsByReferent: canViewStatsByReferent(ctx.user),
       health: canViewHealthInfo(ctx.structure.type),
-      ministere: isMinistryAgent
-    },
-    helpRequest: {
-      get: {
-        anyDueDate: getAnyDataOfAny,
-        anyAllocatedAmount: getAnyDataOfAny,
-        anyPaymentMethod: getAnyDataOfAny,
-        anyPaymentDate: getAnyDataOfAny,
-        anyHandlingDate: getAnyDataOfAny,
-        anyInstructorOrganization: getAnyDataOfAny,
-        anyExaminationDate: getAnyDataOfAny,
-        anyAskedAmount: getAnyDataOfAny
-      }
+      ministere: isMinistryAgent,
+      helpRequestDetail
     }
   }
 }
 
-const accessAnyDataOfAny = (grantee: SecurityRuleGrantee): boolean =>
+const accessHelpRequestDetails = (grantee: SecurityRuleGrantee): boolean =>
   hasAllowedRole(grantee, [
     'StructureManager',
     'SocialWorker',

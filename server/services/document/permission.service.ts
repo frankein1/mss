@@ -33,13 +33,9 @@ export async function getCreationPermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string
 ) {
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
-    ctx.user,
+  const permissions = await BeneficiaryService.getEditionPermissions(
+    ctx,
     beneficiaryId
   )
-  const permissions = getDocumentPermissions({
-    ctx,
-    beneficiary
-  })
-  return permissions
+  return permissions.create.document
 }

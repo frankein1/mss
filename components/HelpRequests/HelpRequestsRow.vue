@@ -24,7 +24,7 @@
         </span>
       </td>
       <td>{{ helpRequest.type.name }}</td>
-      <td v-if="application.helpRequest.get.anyDueDate">
+      <td v-if="application.module.helpRequestDetail">
         <template v-if="helpRequest.dueDate">
           {{ formatDate(helpRequest.dueDate) }}
         </template>
@@ -32,20 +32,20 @@
       <td>
         {{ formatBeneficiaryDisplayName(helpRequest.beneficiary) }}
       </td>
-      <td v-if="application.helpRequest.get.anyInstructorOrganization">
+      <td v-if="application.module.helpRequestDetail">
         {{ instructorOrganization }}
       </td>
-      <td v-if="application.helpRequest.get.anyExaminationDate">
+      <td v-if="application.module.helpRequestDetail">
         <template v-if="helpRequest.examinationDate">
           {{ formatDate(helpRequest.examinationDate) }}
         </template>
       </td>
-      <td v-if="application.helpRequest.get.anyAskedAmount">
+      <td v-if="application.module.helpRequestDetail">
         <template v-if="helpRequest.askedAmount">
           {{ euros(helpRequest.askedAmount) }}
         </template>
       </td>
-      <td v-if="application.helpRequest.get.anyAllocatedAmount">
+      <td v-if="application.module.helpRequestDetail">
         <HelpRequestsAllocatedAmountForm
           v-if="canEditAllocatedAmount"
           :item="item"
@@ -56,7 +56,7 @@
           {{ euros(helpRequest.allocatedAmount) }}
         </template>
       </td>
-      <td v-if="application.helpRequest.get.anyPaymentMethod">
+      <td v-if="application.module.helpRequestDetail">
         <HelpRequestsPaymentMethodForm
           v-if="canEditPaymentMethod"
           :item="item"
@@ -67,7 +67,7 @@
           {{ paymentMethodOptions.get(helpRequest.paymentMethod) }}
         </template>
       </td>
-      <td v-if="application.helpRequest.get.anyPaymentDate">
+      <td v-if="application.module.helpRequestDetail">
         <HelpRequestsPaymentDateForm
           v-if="canEditPaymentDate"
           :item="item"
@@ -78,7 +78,7 @@
           {{ formatDate(helpRequest.paymentDate) }}
         </template>
       </td>
-      <td v-if="application.helpRequest.get.anyHandlingDate">
+      <td v-if="application.module.helpRequestDetail">
         <template v-if="helpRequest.handlingDate">{{
           formatDate(helpRequest.handlingDate)
         }}</template>
