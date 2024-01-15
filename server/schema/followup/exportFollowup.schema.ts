@@ -8,12 +8,12 @@ export const exportFollowupsSchema = z.object({
       socialSupport: z
         .object({
           date: z.nativeEnum(Prisma.SortOrder).optional(),
-          dueDate: z.nativeEnum(Prisma.SortOrder).optional()
-        })
-        .optional(),
-      beneficiary: z
-        .object({
-          usualName: z.nativeEnum(Prisma.SortOrder).optional()
+          dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
+          beneficiary: z
+            .object({
+              usualName: z.nativeEnum(Prisma.SortOrder).optional()
+            })
+            .optional()
         })
         .optional()
     })
