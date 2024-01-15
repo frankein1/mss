@@ -8,7 +8,7 @@ import {
 } from '~/server/security'
 import { isNewOption } from '~/utils/options'
 
-import { FollowupService } from '~/server/services'
+import { BeneficiaryService, FollowupService } from '~/server/services'
 
 const handler = ({
   input,
@@ -24,8 +24,8 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: AddFollowupInput
 ) => {
-  const permissions = await FollowupService.getCreatePermission(
-    ctx.user,
+  const permissions = await BeneficiaryService.getUpdatePermission(
+    ctx,
     input.beneficiaryId
   )
 
