@@ -30,6 +30,16 @@ export const isStructureManager = (grantee: SecurityRuleGrantee) => {
   return grantee.role === 'StructureManager'
 }
 
+export const getGranteRole = (grantee: SecurityRuleGrantee) => {
+  return {
+    manager: isStructureManager(grantee),
+    socialWorker: isSocialWorker(grantee),
+    referent: isReferent(grantee),
+    receptionAgent: isReceptionAgent(grantee),
+    instructor: isInstructor(grantee)
+  }
+}
+
 export const hasAllowedRole = (
   grantee: SecurityRuleGrantee,
   allowedRoles: AllowedRoles
@@ -55,7 +65,7 @@ export const isReferentFor = (
   isInSameStructureAs(grantee, target, ['Referent']) &&
   isPartOfReferents(grantee, target)
 
-export const isPartOfReferents = (
+const isPartOfReferents = (
   grantee: SecurityRuleGrantee,
   target: SecurityTargetWithReferents & SecurityTargetWithStructure
 ) =>
