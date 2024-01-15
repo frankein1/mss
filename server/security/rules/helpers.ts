@@ -2,10 +2,9 @@ import { StructureType } from '@prisma/client'
 import {
   SecurityRuleGrantee,
   SecurityTargetWithStructure,
-  SecurityTargetWithReferents,
   SecurityTargetWithCreator,
-  AllowedRoles,
-  SecurityRuleContext
+  SecurityRuleContext,
+  SecurityTargetWithReferents
 } from './types'
 
 export const isAdmin = (grantee: SecurityRuleGrantee) => {
@@ -44,38 +43,10 @@ export const getGranteRole = (ctx: SecurityRuleContext) => {
   }
 }
 
-export const hasAllowedRole = (
-  grantee: SecurityRuleGrantee,
-  allowedRoles: AllowedRoles
-) => allowedRoles.includes(grantee.role)
-
-export const isInSameStructureAs = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithStructure,
-  allowedRoles: AllowedRoles
-) =>
-  grantee.structureId === target.structureId &&
-  hasAllowedRole(grantee, allowedRoles)
-
 export const isInSameStructure = (
   grantee: SecurityRuleGrantee,
   target: SecurityTargetWithStructure
 ) => grantee.structureId === target.structureId
-
-export const isReferentFor = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithReferents & SecurityTargetWithStructure
-) =>
-  isInSameStructureAs(grantee, target, ['Referent']) &&
-  isPartOfReferents(grantee, target)
-
-const isPartOfReferents = (
-  grantee: SecurityRuleGrantee,
-  target: SecurityTargetWithReferents & SecurityTargetWithStructure
-) =>
-  target.referents.some(r =>
-    typeof r === 'string' ? r === grantee.id : r.id === grantee.id
-  )
 
 export const isCreator = (
   grantee: SecurityRuleGrantee,
@@ -84,3 +55,11 @@ export const isCreator = (
   'createdById' in target
     ? grantee.id === target.createdById
     : grantee.id === target.createdBy?.id
+
+export const isReferentFor = (
+  grantee: SecurityRuleGrantee,
+  target: SecurityTargetWithReferents & SecurityTargetWithStructure
+) =>
+  target.referents.some(r =>
+    typeof r === 'string' ? r === grantee.id : r.id === grantee.id
+  )
