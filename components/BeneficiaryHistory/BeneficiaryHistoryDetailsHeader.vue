@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { HistoryItemData } from './types'
+  import type { SocialSupportData } from './types'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { socialSupportStatusLabels } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
@@ -74,7 +74,7 @@
 
   const props = withDefaults(
     defineProps<{
-      data: HistoryItemData
+      data: SocialSupportData
       collapseId: string
       expanded?: boolean
       hasUnreadNotifications?: boolean

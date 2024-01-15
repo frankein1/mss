@@ -36,6 +36,7 @@ export type BeneficiaryPermissions = {
     helpRequest: boolean
     document: boolean
     followup: boolean
+    comment: boolean
   }
   delete: {
     beneficiary: boolean
@@ -53,7 +54,7 @@ export const getBeneficiaryPermissions = ({
   if (!beneficiary) {
     permissions = getCreationPermissions({ ctx })
   } else {
-    permissions = getEditionPermission({ ctx, beneficiary })
+    permissions = getEditionPermissions({ ctx, beneficiary })
   }
 
   return permissions
@@ -90,7 +91,8 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
     create: {
       helpRequest: false,
       document: false,
-      followup: false
+      followup: false,
+      comment: false
     },
     delete: {
       beneficiary: false
@@ -98,7 +100,7 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
   }
 }
 
-function getEditionPermission({
+function getEditionPermissions({
   ctx,
   beneficiary
 }: {
@@ -153,13 +155,25 @@ function getEditionPermission({
     create: {
       helpRequest: isHelpRequestCreatable(user, beneficiary),
       document: canAddDocument(user, beneficiary),
-      followup: canCreateFollowup(user, beneficiary)
+      followup: canCreateFollowup(user, beneficiary),
+      comment: canAddComment(user, beneficiary)
     },
     delete: {
       beneficiary: isDeletable(user, beneficiary)
     }
   }
 }
+
+const canAddComment = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) || isReferentFor(grantee, beneficiary)
 
 const canCreateFollowup = (
   grantee: SecurityRuleGrantee,

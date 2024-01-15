@@ -12,7 +12,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: QuickEditHelpRequestInput
 ) => {
-  const permissions = await HelpRequestService.getEditionPermission(
+  const permissions = await HelpRequestService.getEditionPermissions(
     ctx,
     input.id
   )

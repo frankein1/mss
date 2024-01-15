@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
   import BeneficiaryHistoryCommentDeleteConfirm from './BeneficiaryHistoryCommentDeleteConfirm.vue'
-  import { HistoryItemComment } from './types'
+  import { CommentData } from './types'
   import { EditCommentInput, editCommentSchema } from '~/server/schema'
 
   const trpcClient = useTrpcClient()
@@ -60,12 +60,12 @@
   const form = ref<HTMLFormElement | null>(null)
 
   const props = defineProps<{
-    comment: HistoryItemComment
+    comment: CommentData
   }>()
 
   const emit = defineEmits<{
-    commentEdited: [comment: HistoryItemComment]
-    commentDeleted: [comment: HistoryItemComment]
+    commentEdited: [comment: CommentData]
+    commentDeleted: [comment: CommentData]
     cancel: []
   }>()
 

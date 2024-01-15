@@ -17,10 +17,10 @@ const handler = ({
   input: IdInput | BeneficiaryIdInput
 }) => {
   if ('beneficiaryId' in input) {
-    return HelpRequestService.getCreatePermission(ctx, input.beneficiaryId)
+    return HelpRequestService.getCreationPermissions(ctx, input.beneficiaryId)
   }
 
-  return HelpRequestService.getEditionPermission(ctx, input.id)
+  return HelpRequestService.getEditionPermissions(ctx, input.id)
 }
 
 export const getHelpRequestPermissionsQuery = createQuery({

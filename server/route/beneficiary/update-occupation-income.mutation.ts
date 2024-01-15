@@ -17,7 +17,7 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryOccupationInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermission(
+  const permissions = await BeneficiaryService.getEditionPermissions(
     ctx,
     input.id
   )

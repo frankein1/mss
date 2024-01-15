@@ -27,7 +27,7 @@ export type BeneficiarySecurityTarget = Prisma.PromiseReturnType<
   typeof getBeneficiarySecurityTarget
 >
 
-export async function getEditionPermission(
+export async function getEditionPermissions(
   ctx: SecurityRuleContext,
   id: string
 ): Promise<BeneficiaryPermissions> {
@@ -38,7 +38,7 @@ export async function getEditionPermission(
   })
 }
 
-export function getCreatePermission(
+export function getCreationPermissions(
   ctx: SecurityRuleContext
 ): Promise<BeneficiaryPermissions> {
   return Promise.resolve(

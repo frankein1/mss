@@ -1,16 +1,16 @@
 <template>
   <section>
     <BeneficiaryHistoryComment
-      v-for="comment in comments"
-      :key="comment.id"
+      v-for="item in items"
+      :key="item.comment.id"
       class="fr-mb-1w"
-      :comment="comment"
+      :item="item"
       @comment-edited="emit('commentEdited', $event)"
       @comment-deleted="emit('commentDeleted', $event)"
     />
     <BeneficiaryHistoryCommentAdd
-      v-if="canAddComments"
-      :class="{ 'fr-mt-1w': comments.length }"
+      v-if="beneficiaryPermissions.create.document"
+      :class="{ 'fr-mt-1w': items.length }"
       :social-support="socialSupport"
       @comment-added="emit('commentAdded', $event)"
     />
@@ -18,28 +18,18 @@
 </template>
 
 <script setup lang="ts">
-  import {
-    HistoryItemData,
-    HistoryItemComment,
-    HistoryItemComments
-  } from './types'
-  import { canAddComment as canAddCommentsRule } from '~/server/security'
+  import { SocialSupportData, CommentData, CommentItems } from './types'
+  import { BeneficiaryPermissions } from '~/server/security'
 
-  const props = defineProps<{
-    comments: HistoryItemComments
-    socialSupport: HistoryItemData
+  defineProps<{
+    items: CommentItems
+    socialSupport: SocialSupportData
+    beneficiaryPermissions: BeneficiaryPermissions
   }>()
 
   const emit = defineEmits<{
-    commentAdded: [comment: HistoryItemComment]
-    commentEdited: [comment: HistoryItemComment]
-    commentDeleted: [comment: HistoryItemComment]
+    commentAdded: [comment: CommentData]
+    commentEdited: [comment: CommentData]
+    commentDeleted: [comment: CommentData]
   }>()
-
-  const canAddComments = computed(() =>
-    useSecurityRule().canWithTarget(
-      canAddCommentsRule,
-      props.socialSupport.beneficiary
-    )
-  )
 </script>

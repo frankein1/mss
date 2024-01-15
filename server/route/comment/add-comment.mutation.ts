@@ -1,7 +1,7 @@
 import { NotificationType, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { AddCommentInput, addCommentSchema } from '~/server/schema'
-import { canAddComment, SecurityRuleContext } from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { CommentRepo, SocialSupportRepo } from '~/server/database'
@@ -11,11 +11,11 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: AddCommentInput
 ) => {
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
-    ctx.user,
+  const permissions = await BeneficiaryService.getEditionPermissions(
+    ctx,
     input.beneficiaryId
   )
-  return canAddComment(ctx.user, beneficiary)
+  return permissions.create.comment
 }
 
 const handler = async ({
