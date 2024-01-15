@@ -78,7 +78,7 @@
         mutation: () => trpcClient.beneficiary.create.mutate(beneficiary),
         isSubmitting,
         onSuccess: ({ id }) => {
-          matomo.trackEvent(
+          matomo.value.trackEvent(
             EventCategory.CreateBeneficiary,
             CreateBeneficiaryEventAction.SavePartialForm
           )

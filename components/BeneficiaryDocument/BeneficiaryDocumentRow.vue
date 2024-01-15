@@ -137,7 +137,7 @@
   )
 
   function onView() {
-    matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
+    matomo.value.trackEvent(EventCategory.Document, DocumentEventAction.See)
     useTrpcMutation({
       mutation: () =>
         trpcClient.documents.createViewUrl.mutate({
@@ -153,7 +153,10 @@
   }
 
   function onDownload() {
-    matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
+    matomo.value.trackEvent(
+      EventCategory.Document,
+      DocumentEventAction.Download
+    )
     useTrpcMutation({
       mutation: () =>
         trpcClient.documents.createViewUrl.mutate({
@@ -174,7 +177,7 @@
   }
 
   function onEdit() {
-    matomo.trackEvent(EventCategory.Document, DocumentEventAction.Edit)
+    matomo.value.trackEvent(EventCategory.Document, DocumentEventAction.Edit)
     modal.open({
       title: 'Modifier le document',
       contentComponent: BeneficiaryDocumentEditForm,

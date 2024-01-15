@@ -49,7 +49,7 @@
 
   function onAccessBeneficiaryAdd() {
     const { matomo } = useMatomo()
-    matomo.trackEvent(
+    matomo.value.trackEvent(
       EventCategory.AccessBeneficiaryAdd,
       AccessBeneficiaryAddEventAction.FromOverview
     )

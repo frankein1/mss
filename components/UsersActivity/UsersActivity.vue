@@ -100,7 +100,7 @@
     }
     const isExpanded = expandBtn.value.getAttribute('aria-expanded') === 'true'
     if (!isExpanded) {
-      matomo.trackEvent(
+      matomo.value.trackEvent(
         EventCategory.UsersActivity,
         UserActivityEventAction.ExpandBeneficiaries
       )
