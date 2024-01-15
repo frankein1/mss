@@ -45,6 +45,7 @@ export type BeneficiaryPermissions = {
   create: {
     helpRequest: boolean
     document: boolean
+    followup: boolean
   }
   delete: {
     beneficiary: boolean
@@ -109,7 +110,8 @@ function getCreatePermissions({ ctx }: { ctx: SecurityRuleContext }) {
 
     create: {
       helpRequest: false,
-      document: false
+      document: false,
+      followup: false
     },
     delete: {
       beneficiary: false
@@ -171,13 +173,25 @@ function getEditPermissions({
     },
     create: {
       helpRequest: isHelpRequestCreatable(user, beneficiary),
-      document: canAddDocument(user, beneficiary)
+      document: canAddDocument(user, beneficiary),
+      followup: canCreateFollowup(user, beneficiary),
     },
     delete: {
       beneficiary: isDeletable(user, beneficiary)
     }
   }
 }
+
+const canCreateFollowup = (
+  grantee: SecurityRuleGrantee,
+  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+): boolean =>
+  isInSameStructureAs(grantee, beneficiary, [
+    'StructureManager',
+    'SocialWorker',
+    'Instructor',
+    'ReceptionAgent'
+  ]) || isReferentFor(grantee, beneficiary)
 
 const canAddDocument = (
   grantee: SecurityRuleGrantee,
