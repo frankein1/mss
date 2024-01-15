@@ -1,11 +1,14 @@
 import { StructureType } from '@prisma/client'
 import {
   SecurityRuleContext,
-  SecurityRuleGrantee,
   SecurityTargetWithReferents,
   SecurityTargetWithStructure
 } from '../rules'
-import { isInSameStructureAs, isReferentFor } from '../rules/helpers'
+import {
+  getGranteRole,
+  isInSameStructure,
+  isReferentFor
+} from '../rules/helpers'
 
 export type BeneficiaryPermissions = {
   edit: {
@@ -40,6 +43,41 @@ export type BeneficiaryPermissions = {
   }
   delete: {
     beneficiary: boolean
+  }
+}
+
+const FALSY_PERMISSIONS = {
+  edit: {
+    general: false,
+    relatives: false,
+    health: false,
+    occupationIncome: false,
+    externalOrganisations: false
+  },
+  view: {
+    general: false,
+    relatives: false,
+    health: false,
+    occupationIncome: false,
+    externalOrganisations: false,
+    documents: false,
+    history: false
+  },
+  get: {
+    nir: false
+  },
+  set: {
+    referents: false,
+    nir: false
+  },
+  create: {
+    helpRequest: false,
+    document: false,
+    followup: false,
+    comment: false
+  },
+  delete: {
+    beneficiary: false
   }
 }
 
@@ -108,210 +146,61 @@ function getEditionPermissions({
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 }) {
   const { user, structure } = ctx
-  const viewOrEditRelatives = accessRelatives(user, structure.type, beneficiary)
-  const viewOrEditHealth = accessHealth(user, structure.type, beneficiary)
-  const viewOrEditOccupationIncome = accessOccupationIncome(
-    user,
-    structure.type,
-    beneficiary
-  )
-  const viewOrEditExtOrganisations = accessExtOrganisations(user, beneficiary)
-  const viewOrEditGeneral = accessGeneral(user, beneficiary)
+
+  if (!isInSameStructure(user, beneficiary)) {
+    return FALSY_PERMISSIONS
+  }
+
+  const isReferent = isReferentFor(user, beneficiary)
+
+  const { manager, socialWorker, instructor, receptionAgent } =
+    getGranteRole(user)
+
+  const managerOrWorkerOrInstructorOrAgent =
+    manager || socialWorker || instructor || receptionAgent
+
+  const managerOrWorkerOrInstructor = manager || socialWorker || instructor
+
+  const managerOrWorker = manager || socialWorker
+
+  const isEFS = structure.type === StructureType.EFS
+
   return {
     edit: {
-      general: viewOrEditGeneral,
-      relatives: viewOrEditRelatives,
-      health: viewOrEditHealth,
-      occupationIncome: viewOrEditOccupationIncome,
-      externalOrganisations: viewOrEditExtOrganisations
+      general: isReferent || managerOrWorkerOrInstructorOrAgent,
+      relatives: !isEFS && (isReferent || managerOrWorkerOrInstructor),
+      health: !isEFS && (isReferent || managerOrWorkerOrInstructor),
+      occupationIncome: !isEFS && (isReferent || managerOrWorkerOrInstructor),
+      externalOrganisations: isReferent || managerOrWorkerOrInstructor
     },
     get: {
       nir: hasAccessNir(structure.type)
     },
     set: {
-      referents: setReferents(user, beneficiary),
+      referents: isReferent || managerOrWorkerOrInstructor,
       nir: hasAccessNir(structure.type)
     },
     view: {
-      general: viewOrEditGeneral,
-      relatives: viewOrEditRelatives,
-      health: viewOrEditHealth,
-      occupationIncome: viewOrEditOccupationIncome,
-      externalOrganisations: viewOrEditExtOrganisations,
-      documents: canListDocuments(user, beneficiary),
-      history: accessHistory(user, beneficiary)
+      general: isReferent || managerOrWorkerOrInstructorOrAgent,
+      relatives: !isEFS && (isReferent || managerOrWorkerOrInstructor),
+      health: !isEFS && (isReferent || managerOrWorkerOrInstructor),
+      occupationIncome: !isEFS && (isReferent || managerOrWorkerOrInstructor),
+      externalOrganisations: isReferent || managerOrWorkerOrInstructor,
+      documents: isReferent || managerOrWorkerOrInstructorOrAgent,
+      history: isReferent || managerOrWorkerOrInstructorOrAgent
     },
     create: {
-      helpRequest: isHelpRequestCreatable(user, beneficiary),
-      document: canAddDocument(user, beneficiary),
-      followup: canCreateFollowup(user, beneficiary),
-      comment: canAddComment(user, beneficiary)
+      helpRequest: isReferent || managerOrWorkerOrInstructor,
+      document: isReferent || managerOrWorkerOrInstructorOrAgent,
+      followup: isReferent || managerOrWorkerOrInstructorOrAgent,
+      comment: isReferent || managerOrWorkerOrInstructorOrAgent
     },
     delete: {
-      beneficiary: isDeletable(user, beneficiary)
+      beneficiary: isReferent || managerOrWorker
     }
   }
 }
 
-const canAddComment = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const canCreateFollowup = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const canAddDocument = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
 function hasAccessNir(type: StructureType) {
   return type === StructureType.Ccas || type === StructureType.Cias
 }
-
-function accessGeneral(
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-) {
-  return (
-    isInSameStructureAs(grantee, beneficiary, [
-      'StructureManager',
-      'SocialWorker',
-      'Instructor',
-      'ReceptionAgent'
-    ]) || isReferentFor(grantee, beneficiary)
-  )
-}
-
-function accessOccupationIncome(
-  grantee: SecurityRuleGrantee,
-  structureType: StructureType,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean {
-  if (structureType === StructureType.EFS) {
-    return false
-  }
-  return (
-    isInSameStructureAs(grantee, beneficiary, [
-      'StructureManager',
-      'SocialWorker',
-      'Instructor'
-    ]) || isReferentFor(grantee, beneficiary)
-  )
-}
-
-function accessHealth(
-  grantee: SecurityRuleGrantee,
-  structureType: StructureType,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean {
-  if (structureType === StructureType.EFS) {
-    return false
-  }
-  return (
-    isInSameStructureAs(grantee, beneficiary, [
-      'StructureManager',
-      'SocialWorker',
-      'Instructor'
-    ]) || isReferentFor(grantee, beneficiary)
-  )
-}
-
-const accessRelatives = (
-  grantee: SecurityRuleGrantee,
-  structureType: StructureType,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean => {
-  if (structureType === StructureType.EFS) {
-    return false
-  }
-  return (
-    isInSameStructureAs(grantee, beneficiary, [
-      'StructureManager',
-      'SocialWorker',
-      'Instructor'
-    ]) || isReferentFor(grantee, beneficiary)
-  )
-}
-
-const accessExtOrganisations = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const setReferents = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const isDeletable = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const isHelpRequestCreatable = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const canListDocuments = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)
-
-const accessHistory = (
-  grantee: SecurityRuleGrantee,
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
-): boolean =>
-  isInSameStructureAs(grantee, beneficiary, [
-    'StructureManager',
-    'SocialWorker',
-    'Instructor',
-    'ReceptionAgent'
-  ]) || isReferentFor(grantee, beneficiary)

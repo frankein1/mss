@@ -5,6 +5,7 @@ import {
   hasAllowedRole
 } from '../rules'
 import { SecurityRuleStructure } from '../rules/types'
+import { getGranteRole } from '../rules/helpers'
 
 export type AppContextPermissions = {
   export: {
@@ -72,13 +73,18 @@ function getAdminContextPermissions(): AppContextPermissions {
 function getUserContextPermissions(
   ctx: SecurityRuleContext
 ): AppContextPermissions {
+  const { user } = ctx
   const helpRequestDetail = accessHelpRequestDetails(ctx.user)
   const isMinistryAgent = ctx.structure.type === StructureType.Ministere
+
+  const { manager, socialWorker, instructor, receptionAgent, referent } =
+    getGranteRole(user)
+
   return {
     export: {
-      history: canExportHistory(ctx.user),
-      beneficiaries: canExportBeneficiaries(ctx.user),
-      stats: canExportStats(ctx.user)
+      history: manager || receptionAgent || instructor || socialWorker,
+      beneficiaries: manager,
+      stats: manager || socialWorker || referent || instructor
     },
     create: {
       user: canCreateUser(ctx.user),
@@ -152,22 +158,3 @@ const canViewStats = (grantee: SecurityRuleGrantee): boolean =>
 
 const canViewStatsByReferent = (grantee: SecurityRuleGrantee): boolean =>
   hasAllowedRole(grantee, ['StructureManager'])
-
-const canExportHistory = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'Referent',
-    'Instructor',
-    'SocialWorker'
-  ])
-
-const canExportBeneficiaries = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, ['StructureManager'])
-
-const canExportStats = (grantee: SecurityRuleGrantee): boolean =>
-  hasAllowedRole(grantee, [
-    'StructureManager',
-    'SocialWorker',
-    'Referent',
-    'Instructor'
-  ])
