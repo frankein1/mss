@@ -1,4 +1,3 @@
-import { StructureType } from '@prisma/client'
 import {
   SecurityRuleContext,
   SecurityTargetWithReferents,
@@ -99,14 +98,13 @@ export const getBeneficiaryPermissions = ({
 }
 
 function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
-  const { structure } = ctx
-  const isEFS = structure.type === StructureType.EFS
+  const { efs, cias, ccas } = getGranteRole(ctx)
   return {
     edit: {
       general: true,
-      relatives: !isEFS,
-      health: !isEFS,
-      occupationIncome: !isEFS,
+      relatives: !efs,
+      health: !efs,
+      occupationIncome: !efs,
       externalOrganisations: true
     },
     view: {
@@ -119,11 +117,11 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
       history: false
     },
     get: {
-      nir: hasAccessNir(structure.type)
+      nir: cias || ccas
     },
     set: {
       referents: true,
-      nir: hasAccessNir(structure.type)
+      nir: cias || ccas
     },
 
     create: {
@@ -145,7 +143,7 @@ function getEditionPermissions({
   ctx: SecurityRuleContext
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
 }) {
-  const { user, structure } = ctx
+  const { user } = ctx
 
   if (!isInSameStructure(user, beneficiary)) {
     return FALSY_PERMISSIONS
@@ -153,37 +151,33 @@ function getEditionPermissions({
 
   const isReferent = isReferentFor(user, beneficiary)
 
-  const { manager, socialWorker, instructor, receptionAgent } =
+  const { manager, socialWorker, instructor, receptionAgent, cias, ccas, efs } =
     getGranteRole(ctx)
-
-  const isEFS = structure.type === StructureType.EFS
 
   return {
     edit: {
       general:
         isReferent || manager || socialWorker || instructor || receptionAgent,
-      relatives:
-        !isEFS && (isReferent || manager || socialWorker || instructor),
-      health: !isEFS && (isReferent || manager || socialWorker || instructor),
+      relatives: !efs && (isReferent || manager || socialWorker || instructor),
+      health: !efs && (isReferent || manager || socialWorker || instructor),
       occupationIncome:
-        !isEFS && (isReferent || manager || socialWorker || instructor),
+        !efs && (isReferent || manager || socialWorker || instructor),
       externalOrganisations: isReferent || manager || socialWorker || instructor
     },
     get: {
-      nir: hasAccessNir(structure.type)
+      nir: cias || ccas
     },
     set: {
       referents: isReferent || manager || socialWorker || instructor,
-      nir: hasAccessNir(structure.type)
+      nir: cias || ccas
     },
     view: {
       general:
         isReferent || manager || socialWorker || instructor || receptionAgent,
-      relatives:
-        !isEFS && (isReferent || manager || socialWorker || instructor),
-      health: !isEFS && (isReferent || manager || socialWorker || instructor),
+      relatives: !efs && (isReferent || manager || socialWorker || instructor),
+      health: !efs && (isReferent || manager || socialWorker || instructor),
       occupationIncome:
-        !isEFS && (isReferent || manager || socialWorker || instructor),
+        !efs && (isReferent || manager || socialWorker || instructor),
       externalOrganisations:
         isReferent || manager || socialWorker || instructor,
       documents:
@@ -204,8 +198,4 @@ function getEditionPermissions({
       beneficiary: isReferent || manager || socialWorker
     }
   }
-}
-
-function hasAccessNir(type: StructureType) {
-  return type === StructureType.Ccas || type === StructureType.Cias
 }

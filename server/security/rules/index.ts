@@ -17,5 +17,3 @@ export type {
   SecurityRule,
   SecurityTargetWithCreator
 }
-
-export { canEditUser, canEditUserRole } from './user'
