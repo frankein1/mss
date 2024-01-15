@@ -1,4 +1,6 @@
-DELETE FROM comment where followup_id is null and help_request_id is null;
+DELETE FROM COMMENT
+WHERE followup_id IS NULL
+    AND help_request_id IS NULL;
 
 /**
  ****************
@@ -229,7 +231,7 @@ ADD CONSTRAINT "_social_support_to_followup_type_B_fkey" FOREIGN KEY ("B") REFER
  ****************
  */
 -- Used for gen_random_uuid function
-CREATE EXTENSION pgcrypto;
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 /**
  *************************
