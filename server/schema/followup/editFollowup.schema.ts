@@ -4,7 +4,8 @@ import { requiredErrorMessage } from '~/utils/zod'
 
 export const editFollowupSchema = addFollowupSchemaBase
   .extend({
-    id: z.string().uuid()
+    id: z.string().uuid(),
+    socialSupportId: z.string().uuid()
   })
   .refine(val => !val.isMinistry || val.ministre, {
     message: requiredErrorMessage,

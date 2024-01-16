@@ -19,7 +19,6 @@ type UpdateParams = {
 export const update = async ({ ctx, input }: UpdateParams) => {
   const { user } = ctx
   const {
-    id,
     types,
     documents,
     medium,
@@ -38,7 +37,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     firstFollowup,
     numeroPegase,
     classified,
-    forwardedToJustice
+    forwardedToJustice,
+    socialSupportId
     // ActionLogement,
     // Bailleur,
     // DeetsSiao,
@@ -88,7 +88,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
 
   const fu = await SocialSupportRepo.prisma.update({
     where: {
-      id
+      id: socialSupportId
     },
     data: {
       documents: prepareDocumentsMutations(documents),
