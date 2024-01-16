@@ -134,7 +134,7 @@
         : "Supprimer l'instruction de dossier",
       contentComponent: BeneficiaryHistoryDeleteForm,
       contentComponentProps: {
-        historyItemId: socialSupport.value.id,
+        socialSupportId: socialSupport.value.id,
         isFollowup: isFollowup.value
       },
       contentComponentEvents: { deleted: onSocialSupportItemDeleted }

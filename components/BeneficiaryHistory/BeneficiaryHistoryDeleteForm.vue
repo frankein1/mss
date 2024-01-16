@@ -45,7 +45,7 @@
   const trpcClient = useTrpcClient()
 
   const props = defineProps<{
-    historyItemId: string
+    socialSupportId: string
     isFollowup: boolean
   }>()
 
@@ -55,16 +55,10 @@
 
   function deleteItem() {
     useTrpcMutation({
-      mutation: () => {
-        if (props.isFollowup) {
-          return trpcClient.followup.delete.mutate({
-            id: props.historyItemId
-          })
-        }
-        return trpcClient.helpRequest.delete.mutate({
-          id: props.historyItemId
-        })
-      },
+      mutation: () =>
+        trpcClient.socialSupport.remove.mutate({
+          id: props.socialSupportId
+        }),
       isSubmitting,
       onSuccess: () => {
         emit('deleted')

@@ -14,6 +14,7 @@ import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
 import { usersActivityRouter } from './usersActivity/router'
 import { beneficiaryDraftRouter } from './beneficiaryDraft/router'
+import { socialSupportRouter } from './socialSupport/router'
 import { router } from '~/server/trpc'
 
 export const appRouter = router({
@@ -30,7 +31,8 @@ export const appRouter = router({
   comment: commentRouter,
   usersActivity: usersActivityRouter,
   beneficiaryDraft: beneficiaryDraftRouter,
-  permissions: permissionsRouter
+  permissions: permissionsRouter,
+  socialSupport: socialSupportRouter
 })
 // export type definition of API
 export type AppRouter = typeof appRouter

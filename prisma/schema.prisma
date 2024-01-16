@@ -345,7 +345,7 @@ model Followup {
   signalements  FollowupSignalement[]
 
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
-  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id])
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
 
   @@map("followup")
 }
@@ -428,7 +428,7 @@ model HelpRequest {
   subject HelpRequestSubject
 
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
-  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id])
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
 
   @@map("help_request")
 }
@@ -506,7 +506,7 @@ model HousingHelpRequest {
   isPmr                             Boolean?       @map("is_pmr")
 
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
-  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id])
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
 
   @@map("housing_help_request")
 }
@@ -1506,7 +1506,7 @@ model Notification {
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
-  socialSupport   SocialSupport? @relation(fields: [socialSupportId], references: [id])
+  socialSupport   SocialSupport? @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
   socialSupportId String?        @map("social_support_id") @db.Uuid
 
   itemCreatedBy   User?   @relation("item_created_by_notifications", fields: [itemCreatedById], references: [id])
@@ -1556,6 +1556,7 @@ enum UserActivityObject {
   Notification
   User
   Draft
+  SocialSupport
 }
 
 model UserActivity {
