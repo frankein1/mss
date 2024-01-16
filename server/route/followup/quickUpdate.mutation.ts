@@ -7,20 +7,39 @@ import {
 } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { FollowupService } from '~/server/services'
-import { SocialSupportRepo } from '~/server/database'
+import { FollowupRepo } from '~/server/database'
 
-const handler = async ({
-  input: { id, ...rest },
-  ctx
+const handler = ({
+  input: { id, status },
+  ctx: { user }
 }: {
   input: QuickEditFollowupInput
   ctx: ProtectedAppContext
 }) => {
-  await SocialSupportRepo.prisma.update({
-    where: { id },
-    data: rest
+  return FollowupRepo.update(user, {
+    where: {
+      id
+    },
+    data: {
+      socialSupport: {
+        update: {
+          status
+        }
+      }
+    },
+    include: {
+      socialSupport: {
+        include: {
+          beneficiary: {
+            select: {
+              id: true,
+              fileNumber: true
+            }
+          }
+        }
+      }
+    }
   })
-  return FollowupService.get({ ctx, id })
 }
 
 const securityCheck = async (

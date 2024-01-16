@@ -25,15 +25,23 @@ function count(user: SecurityRuleGrantee, params: Prisma.FollowupCountArgs) {
   return prismaClient.followup.count(params)
 }
 
+function update<T extends Prisma.FollowupUpdateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.FollowupUpdateArgs>
+) {
+  appendConstraints(user, params, FollowupConstraints.update)
+  return prismaClient.followup.update(params)
+}
+
 export const FollowupRepo = {
   findMany,
   findUniqueOrThrow,
   count,
+  update,
   prisma: {
     groupBy: prismaClient.followup.groupBy,
     findMany: prismaClient.followup.findMany,
     create: prismaClient.followup.create,
-    update: prismaClient.followup.update,
     delete: prismaClient.followup.delete
   }
 }

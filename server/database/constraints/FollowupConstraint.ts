@@ -19,5 +19,6 @@ const get = (user: SecurityRuleGrantee) => {
 }
 
 export const FollowupConstraints = {
-  get
+  get,
+  update: get
 }
