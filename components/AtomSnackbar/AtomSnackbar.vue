@@ -3,7 +3,7 @@
     class="snackbar"
     :class="{ 'snackbar-open': open }"
   >
-    <div>
+    <div role="alert">
       <AtomAlert
         v-if="open && alertType"
         :alert-type="alertType"
