@@ -26,6 +26,7 @@
         :status="status"
         :has-set-external-structure="hasSetExternalStructure"
         :is-external-support="isExternalSupport"
+        :subject="subject"
       />
 
       <hr class="helprequestform__divider" />
@@ -68,7 +69,8 @@
     FollowupType,
     SocialSupportStatus,
     InstructorOrganization,
-    PrescribingOrganization
+    PrescribingOrganization,
+    HelpRequestSubject
   } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
@@ -84,6 +86,7 @@
       beneficiaryId: string
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>
+      subject: HelpRequestSubject
     }>(),
     { canEditPrivateSynthesis: true }
   )

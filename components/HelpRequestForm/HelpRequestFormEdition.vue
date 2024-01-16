@@ -7,6 +7,7 @@
     :beneficiary-id="helpRequestData.beneficiaryId"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
+    :subject="helpRequestData.subject"
     @submit="onSubmit"
   />
 </template>

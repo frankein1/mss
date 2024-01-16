@@ -114,7 +114,7 @@ function cleanInput({
   input,
   subject
 }: {
-  input: Omit<EditHelpRequestInput, 'id'>
+  input: Omit<EditHelpRequestInput, 'id' | 'socialSupportId'>
   subject: HelpRequestSubject
 }) {
   const {
