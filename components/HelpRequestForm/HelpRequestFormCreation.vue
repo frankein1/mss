@@ -25,7 +25,7 @@
     createHelpRequestSchema
   } from '~/server/schema'
 
-  const isMinistryAgent = useAuthState().isMinistryAgent()
+  const { application } = usePermissions()
 
   const props = defineProps<{
     isSubmitting: boolean
@@ -43,7 +43,7 @@
   const { handleSubmit } = useForm<CreateHelpRequestInput>({
     validationSchema: toTypedSchema(createHelpRequestSchema),
     initialValues: {
-      isMinistry: isMinistryAgent,
+      isMinistry: application.value.module.ministere,
       beneficiaryId: props.beneficiaryId,
       date: new Date(),
       status: SocialSupportStatus.WaitingAdditionalInformation,

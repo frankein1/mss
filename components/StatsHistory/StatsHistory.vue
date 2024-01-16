@@ -82,7 +82,7 @@
             />
           </div>
           <div
-            v-if="isMinistryAgent"
+            v-if="application.module.ministere"
             class="fr-col-12 fr-col-lg-6"
           >
             <StatsHelpRequestMinistre
@@ -146,7 +146,7 @@
             />
           </div>
           <div
-            v-if="isMinistryAgent"
+            v-if="application.module.ministere"
             class="fr-col-12 fr-col-lg-6"
           >
             <StatsFollowupMinistre
@@ -188,10 +188,7 @@
 
   const trpcClient = useTrpcClient()
 
-  const authState = useAuthState()
   const { application } = usePermissions()
-
-  const isMinistryAgent = authState.isMinistryAgent()
 
   withDefaults(
     defineProps<{

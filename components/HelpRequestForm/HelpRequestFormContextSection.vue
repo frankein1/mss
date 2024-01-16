@@ -10,7 +10,7 @@
     />
   </div>
 
-  <template v-if="isMinistryAgent">
+  <template v-if="application.module.ministere">
     <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         name="numeroPegase"
@@ -117,7 +117,6 @@
   import { RoutePath } from '~/utils/routing'
   import { externalOrganisationOptions } from '~/client/options/helpRequest'
 
-  const isMinistryAgent = useAuthState().isMinistryAgent()
   const { application } = usePermissions()
 
   const props = defineProps<{

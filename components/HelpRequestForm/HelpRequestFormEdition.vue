@@ -23,7 +23,7 @@
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
 
-  const isMinistryAgent = useAuthState().isMinistryAgent()
+  const { application } = usePermissions()
 
   const props = defineProps<{
     isSubmitting: boolean
@@ -48,7 +48,7 @@
     validationSchema: toTypedSchema(editHelpRequestSchema),
     initialValues: {
       ...helpRequestData.value,
-      isMinistry: isMinistryAgent,
+      isMinistry: application.value.module.ministere,
       date: helpRequestData.value.date,
       documents: initialDocumentIds.value,
       externalStructure: helpRequestData.value.externalStructure
