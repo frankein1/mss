@@ -52,7 +52,7 @@
             Supprimer
           </button>
         </li>
-        <li v-if="canEdit">
+        <li v-if="canEdit && editLink">
           <NuxtLink
             :to="editLink"
             class="fr-btn fr-btn--secondary fr-icon-edit-line"
@@ -105,13 +105,20 @@
   const commentItems = ref(socialSupport.value.comments || [])
 
   const editLink = computed(() => {
-    const routeWithParams = isFollowup.value
-      ? RoutePath.AppBeneficiaryFollowupEdit
-      : RoutePath.AppBeneficiaryHelpRequestEdit
-    return routeWithParams(
-      socialSupport.value.beneficiaryId,
-      socialSupport.value.id
-    )
+    if (socialSupport.value.followup) {
+      return RoutePath.AppBeneficiaryFollowupEdit(
+        socialSupport.value.beneficiaryId,
+        socialSupport.value.followup.id
+      )
+    }
+    if (socialSupport.value.helpRequest) {
+      return RoutePath.AppBeneficiaryHelpRequestEdit(
+        socialSupport.value.beneficiaryId,
+        socialSupport.value.helpRequest.id
+      )
+    }
+
+    return null
   })
 
   const canEdit = computed(() => permissions.value?.edit)
