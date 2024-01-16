@@ -63,7 +63,7 @@
       </ul>
 
       <hr
-        v-if="commentItems.length > 0"
+        v-if="beneficiaryPermissions.create.document || commentItems.length > 0"
         class="fr-pb-3v"
       />
     </template>
