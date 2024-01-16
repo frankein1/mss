@@ -12,7 +12,8 @@ import {
   stringConstraint,
   numeroPegaseContraint,
   dateOrEmpty,
-  openText
+  openText,
+  stringOrEmpty
 } from '../helpers.schema'
 import {
   errorMessages,
@@ -47,7 +48,7 @@ export const addFollowupSchemaBase = z.object({
     .max(100, maxStringLengthMessage(100))
     .nullish(),
   firstFollowup: z.boolean().default(false),
-  numeroPegase: numeroPegaseContraint.nullish(),
+  numeroPegase: stringOrEmpty(numeroPegaseContraint),
   prescribingOrganizationId: z.string().nullish(),
   classified: z.boolean().default(false),
   forwardedToJustice: z.boolean().default(false)

@@ -13,7 +13,8 @@ import {
   requiredNativeEnum,
   amountNumber,
   dateOrEmpty,
-  openText
+  openText,
+  stringOrEmpty
 } from '../helpers.schema'
 import { errorMessages, requiredErrorMessage } from '~/utils/zod'
 
@@ -21,7 +22,7 @@ export const createHelpRequestSchemaBase = z.object({
   isMinistry: z.boolean(),
   beneficiaryId: z.string().uuid(),
   date: z.coerce.date(errorMessages),
-  numeroPegase: numeroPegaseContraint.nullish(),
+  numeroPegase: stringOrEmpty(numeroPegaseContraint),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   typeId: z.string(errorMessages).uuid(),
   documents: z.array(z.string(), errorMessages).default([]),
