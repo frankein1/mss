@@ -4,7 +4,8 @@ import { requiredErrorMessage } from '~/utils/zod'
 
 export const editHelpRequestSchema = createHelpRequestSchemaBase
   .extend({
-    id: z.string().uuid()
+    id: z.string().uuid(),
+    socialSupportId: z.string().uuid()
   })
   .omit({
     subject: true

@@ -6,6 +6,7 @@
     :instructor-organizations="instructorOrganizations"
     :beneficiary-id="beneficiaryId"
     :caught-errors="caughtErrors"
+    :subject="subject"
     @submit="onSubmit"
   />
 </template>

@@ -127,9 +127,8 @@
     status: SocialSupportStatus
     hasSetExternalStructure: boolean
     isExternalSupport: boolean
+    subject: HelpRequestSubject
   }>()
-
-  const { value: subject } = useField<HelpRequestSubject>('subject')
 
   const isAccepted = computed(
     () => props.status === SocialSupportStatus.Accepted
@@ -138,11 +137,11 @@
   const isAnswered = computed(() => isAccepted.value || isRefused.value)
 
   const isFinancialSupport = computed(
-    () => subject.value === HelpRequestSubject.Financial
+    () => props.subject === HelpRequestSubject.Financial
   )
 
   const headline = computed(() => {
-    switch (subject.value) {
+    switch (props.subject) {
       case HelpRequestSubject.Financial:
         return "Informations sur l'aide financière"
       default:

@@ -1,4 +1,3 @@
-import { SocialSupportType } from '@prisma/client'
 import {
   cleanUpdateInput,
   prepareInstructorOrganization,
@@ -30,7 +29,6 @@ export async function update({ input, ctx }: UpdateParams) {
   })
 
   const {
-    beneficiaryId,
     numeroPegase,
     ministre,
     typeId,
@@ -57,13 +55,9 @@ export async function update({ input, ctx }: UpdateParams) {
   } = cleanUpdateInput({ input, subject: target.subject })
 
   const helpRequest = await SocialSupportRepo.prisma.update({
-    where: { id: input.id },
+    where: { id: input.socialSupportId },
     data: {
       status,
-      socialSupportType: SocialSupportType.HelpRequest,
-      createdById: ctx.user.id,
-      beneficiaryId,
-      structureId: ctx.structure.id,
       synthesis,
       privateSynthesis,
       ministre,
@@ -76,7 +70,7 @@ export async function update({ input, ctx }: UpdateParams) {
         target.socialSupport.documents
       ),
       helpRequest: {
-        create: {
+        update: {
           askedAmount,
           examinationDate,
           decisionDate,
