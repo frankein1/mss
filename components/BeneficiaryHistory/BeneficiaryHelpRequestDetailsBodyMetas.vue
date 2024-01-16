@@ -1,19 +1,17 @@
 <template>
   <ul class="body-metas information-list">
-    <template v-if="isMinistryAgent">
-      <li v-if="socialSupport.numeroPegase">
-        <span class="information-label"
-          >{{ helpRequestFieldLabels.numeroPegase }} :</span
-        >
-        {{ socialSupport.numeroPegase }}
-      </li>
-      <li v-if="socialSupport.ministre">
-        <span class="information-label"
-          >{{ helpRequestFieldLabels.ministre }} :</span
-        >
-        {{ ministerLabels[socialSupport.ministre] }}
-      </li>
-    </template>
+    <li v-if="socialSupport.numeroPegase">
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.numeroPegase }} :</span
+      >
+      {{ socialSupport.numeroPegase }}
+    </li>
+    <li v-if="socialSupport.ministre">
+      <span class="information-label"
+        >{{ helpRequestFieldLabels.ministre }} :</span
+      >
+      {{ ministerLabels[socialSupport.ministre] }}
+    </li>
     <li v-if="socialSupport.dueDate">
       <span class="information-label"
         >{{ helpRequestFieldLabels.dueDate }} :</span
@@ -101,8 +99,6 @@
   import { formatDate } from '~/utils/formatDate'
   import { ministerLabels } from '~/client/options/ministry'
   import { helpRequestFieldLabels } from '~/client/labels'
-
-  const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = defineProps<{
     socialSupport: SocialSupportData

@@ -1,7 +1,7 @@
 <template>
   <ul class="body-metas information-list">
     <li><span class="information-label">Type :</span> {{ medium }}</li>
-    <template v-if="isMinistryAgent">
+    <template v-if="application.module.ministere">
       <li v-if="socialSupport.numeroPegase">
         <span class="information-label">Numéro Pégase :</span>
         {{ socialSupport.numeroPegase }}
@@ -31,7 +31,7 @@
     >
       Instruction de dossier
     </li>
-    <template v-if="isMinistryAgent">
+    <template v-if="application.module.ministere">
       <li
         v-if="followup.classified"
         class="fr-icon-success-line"
@@ -67,12 +67,12 @@
   import { formatDate } from '~/utils/formatDate'
   import { ministerLabels } from '~/client/options/ministry'
 
-  const isMinistryAgent = useAuthState().isMinistryAgent()
-
   const props = defineProps<{
     socialSupport: SocialSupportData
     followup: FollowupData
   }>()
+
+  const { application } = usePermissions()
 
   const medium = computed(() => {
     const label = followupMediumLabels[props.followup.medium]

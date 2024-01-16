@@ -1,4 +1,4 @@
-import { StructureType, UserRole, UserStatus } from '@prisma/client'
+import { UserRole, UserStatus } from '@prisma/client'
 import { JwtUser } from '~/types/user'
 import { formatUserDisplayName } from '~/utils/user'
 
@@ -40,13 +40,6 @@ export function useAuthState() {
     return status.value === UserStatus.Active
   }
 
-  function isMinistryAgent() {
-    if (!user.value) {
-      return false
-    }
-    return user.value.structureType === StructureType.Ministere
-  }
-
   function hasAcceptedCgu(cguVersion: string) {
     if (!user.value) {
       return false
@@ -60,7 +53,6 @@ export function useAuthState() {
     isReferent,
     isAdmin,
     isActive,
-    isMinistryAgent,
     isStructureManager,
     getUserName,
     getUserId,

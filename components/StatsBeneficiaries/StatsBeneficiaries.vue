@@ -66,7 +66,7 @@
         />
       </div>
       <div
-        v-if="isMinistryAgent()"
+        v-if="application.module.ministere"
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
       >
         <StatsBeneficiariesAccommodationZone
@@ -75,7 +75,7 @@
         />
       </div>
       <div
-        v-if="isMinistryAgent()"
+        v-if="application.module.ministere"
         class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
       >
         <StatsBeneficiariesAccommodationMode
@@ -95,7 +95,7 @@
           :filters="filters"
         />
       </div>
-      <template v-if="isMinistryAgent()">
+      <template v-if="application.module.ministere">
         <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
           <StatsBeneficiariesMinistereStructure
             :beneficiary-count="beneficiaryCount"
@@ -134,7 +134,6 @@
   import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const trpcClient = useTrpcClient()
-  const { isMinistryAgent } = useAuthState()
   const { application } = usePermissions()
 
   withDefaults(
