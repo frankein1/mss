@@ -62,7 +62,7 @@
   const followupPath = computed(() =>
     RoutePath.AppBeneficiary(followup.value.beneficiary.id, {
       tab: BeneficiaryTab.History,
-      item: followup.value.id,
+      item: followup.value.socialSupportId,
       originPage: Route.AppHistory,
       originTab: HistoryTab.Followups
     })

@@ -124,7 +124,7 @@
   const helpRequestPath = computed(() =>
     RoutePath.AppBeneficiary(helpRequest.value.beneficiary.id, {
       tab: BeneficiaryTab.History,
-      item: helpRequest.value.id,
+      item: helpRequest.value.socialSupportId,
       originPage: Route.AppHistory,
       originTab: HistoryTab.HelpRequests
     })
