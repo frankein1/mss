@@ -179,7 +179,8 @@ function getMeta(helpRequest: NonNullable<HelpRequestOutput>) {
     typeId: socialSupport.types[0].id,
     type: socialSupport.types[0],
     beneficiary: socialSupport.beneficiary,
-    beneficiaryId: socialSupport.beneficiaryId
+    beneficiaryId: socialSupport.beneficiaryId,
+    socialSupportId: socialSupport.id
   }
 }
 

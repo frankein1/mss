@@ -127,10 +127,17 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
 
 function filter(permissions: FollowupPermissions, followup: FollowupOutput) {
   const { socialSupport, ...fuData } = followup
-  const { privateSynthesis, dueDate, ...socialSupportData } = socialSupport
+  const {
+    privateSynthesis,
+    dueDate,
+    id: socialSupportId,
+    ...socialSupportData
+  } = socialSupport
+
   return {
     ...fuData,
     ...socialSupportData,
+    socialSupportId,
     dueDate: permissions.get.dueDate ? dueDate : null,
     privateSynthesis: permissions.get.privateSynthesis ? privateSynthesis : null
   }
