@@ -22,7 +22,6 @@ export type AppContextPermissions = {
     statsByReferent: boolean
     health: boolean
     ministere: boolean
-    helpRequestDetail: boolean
   }
 }
 
@@ -59,8 +58,7 @@ function getAdminContextPermissions(): AppContextPermissions {
       stats: false,
       statsByReferent: false,
       health: false,
-      ministere: false,
-      helpRequestDetail: false
+      ministere: false
     }
   }
 }
@@ -99,8 +97,7 @@ function getUserContextPermissions(
       stats: manager || socialWorker || instructor || referent,
       statsByReferent: manager,
       health: cias || ccas,
-      ministere: ministryAgent,
-      helpRequestDetail: manager || socialWorker || instructor || referent
+      ministere: ministryAgent
     }
   }
 }

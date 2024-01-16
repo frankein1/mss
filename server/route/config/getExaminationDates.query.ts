@@ -49,7 +49,7 @@ const securityCheck = (
     user: ctx.user,
     structure: ctx.structure
   })
-  return permissions.module.helpRequestDetail
+  return permissions.module.helpRequest
 }
 
 export const getExaminationDatesQuery = createQuery({

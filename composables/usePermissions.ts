@@ -23,7 +23,7 @@ export function usePermissions() {
         statsByReferent: false,
         health: false,
         ministere: false,
-        helpRequestDetail: false
+        helpRequest: false
       }
     })
   )
@@ -49,7 +49,7 @@ export function usePermissions() {
         statsByReferent: false,
         health: false,
         ministere: false,
-        helpRequestDetail: false
+        helpRequest: false
       }
     }
   }

@@ -147,7 +147,7 @@
       }
     ]
 
-    if (application.value.module.helpRequestDetail) {
+    if (application.value.module.helpRequest) {
       if (examinationDateOptions.value.size) {
         filters.push({
           name: 'examinationDate',
@@ -205,7 +205,7 @@
   })
 
   async function loadExaminationDates() {
-    if (!application.value.module.helpRequestDetail) {
+    if (!application.value.module.helpRequest) {
       return new Map()
     }
 
