@@ -1,8 +1,7 @@
 import { create } from './create.service'
 import { update } from './update.service'
 import { get } from './get.service'
-import { getPage } from './getPage.service'
-import { quickUpdate } from './quickUpdate.service'
+import { getPage, updatePageItem } from './page.service'
 import { exportHelpRequests } from './export.service'
 import {
   getEditionPermissions,
@@ -16,6 +15,6 @@ export const HelpRequestService = {
   getPage,
   getEditionPermissions,
   getCreationPermissions,
-  quickUpdate,
+  updatePageItem,
   exportHelpRequests
 }

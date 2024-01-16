@@ -45,7 +45,7 @@
   const onUpdatePaymentMethod = handleSubmit(helpRequest => {
     useTrpcMutation({
       mutation: () =>
-        useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
+        useTrpcClient().helpRequest.updatePageItem.mutate(helpRequest),
       onSuccess: item => {
         snackbar.success(
           "Le mode de paiment de l'instruction de dossier a été modifié."

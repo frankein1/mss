@@ -19,23 +19,22 @@ const securityCheck = async (
   return permissions.edit
 }
 
-const handler = async ({
+const handler = ({
   input,
   ctx
 }: {
   input: QuickEditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  await HelpRequestService.quickUpdate(ctx, input)
-  return HelpRequestService.get({ ctx, id: input.id })
+  return HelpRequestService.updatePageItem(ctx, input)
 }
 
-export const quickUpdate = createMutation({
+export const updatePageItem = createMutation({
   securityCheck,
   inputValidation: quickEditHelpRequestSchema,
   handler,
   auditLog: {
-    key: 'helpRequest.quickUpdate',
+    key: 'helpRequest.updatePageItem',
     target: 'HelpRequest',
     targetId: ({ input }) => {
       return input.id

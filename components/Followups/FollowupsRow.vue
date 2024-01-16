@@ -10,7 +10,7 @@
     >
       <td>
         <FollowupsStatusForm
-          v-if="canQuickEditFollowup"
+          v-if="permissions.edit"
           :data="data"
           @click.stop
         />
@@ -71,6 +71,4 @@
   const followUpTypes = computed(() =>
     followup.value.types.map(({ name }) => name).join(', ')
   )
-
-  const canQuickEditFollowup = computed(() => permissions.value.edit)
 </script>

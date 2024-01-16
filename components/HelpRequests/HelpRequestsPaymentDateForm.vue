@@ -48,7 +48,7 @@
   const onUpdatePaymentDate = handleSubmit(helpRequest => {
     useTrpcMutation({
       mutation: () =>
-        useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
+        useTrpcClient().helpRequest.updatePageItem.mutate(helpRequest),
       onSuccess: item => {
         snackbar.success(
           "La date de paiement de l'instruction de dossier a été modifié."

@@ -47,7 +47,7 @@
     useDefer(INPUT_DEFER_DURATION, helpRequest => {
       useTrpcMutation({
         mutation: () =>
-          useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
+          useTrpcClient().helpRequest.updatePageItem.mutate(helpRequest),
         onSuccess: item => {
           snackbar.success(
             "Le montant alloué de l'instruction de dossier a été modifié."

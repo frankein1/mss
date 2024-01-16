@@ -4,21 +4,18 @@
     class="fr-collapse beneficiary-history-details-body"
   >
     <hr
-      v-if="canViewHistoryDetails"
+      v-if="permissions.get.details"
       class="fr-mb-1v"
     />
 
-    <template v-if="canViewHistoryDetails">
+    <template v-if="permissions.get.details">
       <BeneficiaryFollowupDetailsBodyMetas
         v-if="isFollowup && socialSupport.followup"
         :social-support="socialSupport"
         :followup="socialSupport.followup"
       />
       <BeneficiaryHelpRequestDetailsBodyMetas
-        v-else-if="
-          socialSupport.socialSupportType === 'HelpRequest' &&
-          socialSupport.helpRequest
-        "
+        v-else-if="socialSupport.helpRequest"
         :social-support="socialSupport"
         :help-request="socialSupport.helpRequest"
       />
@@ -41,7 +38,7 @@
       <ul
         class="fr-btns-group fr-btns-group--sm fr-btns-group--icon-left fr-btns-group--inline fr-btns-group--right"
       >
-        <li v-if="canDelete">
+        <li v-if="permissions.delete">
           <button
             class="fr-btn fr-btn--secondary btn-delete fr-icon-delete-line"
             data-fr-opened="false"
@@ -52,7 +49,7 @@
             Supprimer
           </button>
         </li>
-        <li v-if="canEdit && editLink">
+        <li v-if="permissions.edit && editLink">
           <NuxtLink
             :to="editLink"
             class="fr-btn fr-btn--secondary fr-icon-edit-line"
@@ -120,12 +117,6 @@
 
     return null
   })
-
-  const canEdit = computed(() => permissions.value?.edit)
-
-  const canDelete = computed(() => permissions.value?.delete)
-
-  const canViewHistoryDetails = computed(() => permissions.value?.get.details)
 
   function onDelete() {
     useModal().open({

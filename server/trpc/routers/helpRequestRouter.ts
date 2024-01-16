@@ -14,9 +14,9 @@ export const helpRequestRouter = router({
   getPage: protectedProcedure
     .input(routes.getPage.inputValidation)
     .query(routes.getPage.execute),
-  quickUpdate: protectedProcedure
-    .input(routes.quickUpdate.inputValidation)
-    .mutation(routes.quickUpdate.execute),
+  updatePageItem: protectedProcedure
+    .input(routes.updatePageItem.inputValidation)
+    .mutation(routes.updatePageItem.execute),
   update: protectedProcedure
     .input(routes.update.inputValidation)
     .mutation(routes.update.execute),

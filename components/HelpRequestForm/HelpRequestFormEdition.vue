@@ -18,7 +18,7 @@
     PrescribingOrganization
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { HelpRequestPageItem } from './types'
+  import { HelpRequestEdition } from './types'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
 
@@ -29,7 +29,7 @@
     followupTypes: FollowupType[]
     prescribingOrganizations: PrescribingOrganization[]
     instructorOrganizations: InstructorOrganization[]
-    data: HelpRequestPageItem
+    data: HelpRequestEdition
   }>()
 
   const emit = defineEmits<{

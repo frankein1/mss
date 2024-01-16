@@ -45,7 +45,7 @@
   const onUpdateStatus = handleSubmit(helpRequest => {
     useTrpcMutation({
       mutation: () =>
-        useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
+        useTrpcClient().helpRequest.updatePageItem.mutate(helpRequest),
       onSuccess: item => {
         snackbar.success("Le statut de l'instruction de dossier a été modifié.")
         emit('updated', item)
