@@ -45,6 +45,7 @@
 </template>
 
 <script setup lang="ts">
+  import { HelpRequestPageItem } from './types'
   import { HelpRequestFilterInput } from '~/server/schema'
   import { HelpRequestSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
@@ -81,8 +82,7 @@
   const {
     data: pageData,
     pending,
-    error,
-    refresh
+    error
   } = await trpcClient.helpRequest.getPage.useQuery(queryInput)
 
   const helpRequestsCount = computed(() => pageData.value?.count || 0)
@@ -91,8 +91,16 @@
 
   const totalPages = computed(() => pageData.value?.totalPages || 0)
 
-  function onHelpRequestUpdated() {
-    refresh()
+  function onHelpRequestUpdated(updatedHelpRequest: HelpRequestPageItem) {
+    if (!pageData.value) {
+      return
+    }
+
+    pageData.value.items = pageData.value.items.map(item =>
+      item.helpRequest.id === updatedHelpRequest.helpRequest.id
+        ? updatedHelpRequest
+        : item
+    )
   }
 
   async function exportHelpRequests() {

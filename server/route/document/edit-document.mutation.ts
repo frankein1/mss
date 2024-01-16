@@ -26,8 +26,8 @@ const securityCheck = async (
   return true
 }
 
-const handler = async ({
-  ctx: _ctx,
+const handler = ({
+  ctx: { user },
   input
 }: {
   ctx: ProtectedAppContext
@@ -35,13 +35,19 @@ const handler = async ({
 }) => {
   const { key, beneficiaryId: _beneficiaryId, ...data } = input
 
-  const updatedDocument = await DocumentRepo.prisma.update({
+  return DocumentRepo.prisma.update({
     where: { key },
     data,
-    include: { beneficiary: { select: { id: true, structureId: true } } }
+    include: {
+      _count: {
+        select: {
+          notifications: {
+            where: { read: false, recipientId: user.id }
+          }
+        }
+      }
+    }
   })
-
-  return { document: updatedDocument }
 }
 
 export const editDocumentMutation = createMutation({

@@ -18,7 +18,12 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportData, CommentData, CommentItems } from './types'
+  import {
+    SocialSupportData,
+    CommentData,
+    CommentItem,
+    CommentItems
+  } from './types'
   import { BeneficiaryPermissions } from '~/server/security'
 
   defineProps<{
@@ -28,7 +33,7 @@
   }>()
 
   const emit = defineEmits<{
-    commentAdded: [comment: CommentData]
+    commentAdded: [comment: CommentItem]
     commentEdited: [comment: CommentData]
     commentDeleted: [comment: CommentData]
   }>()

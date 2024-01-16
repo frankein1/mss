@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportData, CommentData } from './types'
+  import { SocialSupportData, CommentItem } from './types'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { AddCommentInput, addCommentSchema } from '~/server/schema'
 
@@ -51,7 +51,7 @@
   }>()
 
   const emit = defineEmits<{
-    commentAdded: [comment: CommentData]
+    commentAdded: [comment: CommentItem]
   }>()
 
   const isSubmitting = ref(false)

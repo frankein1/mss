@@ -17,7 +17,7 @@
       :item="item"
       :collapse-id="collapseId"
       :beneficiary-permissions="beneficiaryPermissions"
-      @refresh="emit('refresh')"
+      @deleted="emit('deleted', socialSupportId)"
     />
   </li>
 </template>
@@ -32,7 +32,7 @@
   }>()
 
   const emit = defineEmits<{
-    refresh: []
+    deleted: [socialSupportId: string]
   }>()
 
   const $el = ref<HTMLLIElement | null>(null)

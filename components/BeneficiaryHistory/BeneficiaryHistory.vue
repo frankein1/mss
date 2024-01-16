@@ -31,7 +31,7 @@
             :key="item.data.id"
             :item="item"
             :beneficiary-permissions="beneficiaryPermissions"
-            @refresh="refreshData"
+            @deleted="onHistoryItemDeleted"
           />
         </ul>
       </template>
@@ -59,7 +59,7 @@
     filters: filters.value
   }))
 
-  const { data, pending, error, refresh } =
+  const { data, pending, error } =
     await useTrpcClient().beneficiary.getSocialSupports.useQuery(queryInput)
 
   const items = computed(() => data.value?.items || [])
@@ -77,8 +77,14 @@
     }
   })
 
-  function refreshData() {
-    refresh()
+  function onHistoryItemDeleted(socialSupportId: string) {
+    if (!data.value) {
+      return
+    }
+    data.value.totalCount--
+    data.value.items = data.value.items.filter(
+      ({ data: { id } }) => id !== socialSupportId
+    )
   }
 </script>
 
