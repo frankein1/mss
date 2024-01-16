@@ -1,6 +1,6 @@
 <template>
   <ul class="body-metas information-list">
-    <template v-if="isMinistryAgent">
+    <template v-if="application.module.ministere">
       <li v-if="socialSupport.numeroPegase">
         <span class="information-label"
           >{{ helpRequestFieldLabels.numeroPegase }} :</span
@@ -102,7 +102,7 @@
   import { ministerLabels } from '~/client/options/ministry'
   import { helpRequestFieldLabels } from '~/client/labels'
 
-  const isMinistryAgent = useAuthState().isMinistryAgent()
+  const { application } = usePermissions()
 
   const props = defineProps<{
     socialSupport: SocialSupportData
