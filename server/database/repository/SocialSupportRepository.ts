@@ -30,10 +30,19 @@ function findUniqueOrThrow<T extends Prisma.SocialSupportFindUniqueOrThrowArgs>(
   return prismaClient.socialSupport.findUniqueOrThrow(params)
 }
 
+function remove(
+  user: SecurityRuleGrantee,
+  params: Prisma.SocialSupportDeleteArgs
+) {
+  appendConstraints(user, params, SocialSupportConstraints.remove)
+  return prismaClient.socialSupport.delete(params)
+}
+
 export const SocialSupportRepo = {
   findMany,
   count,
   findUniqueOrThrow,
+  delete: remove,
   prisma: {
     groupBy: prismaClient.socialSupport.groupBy,
     findMany: prismaClient.socialSupport.findMany,
