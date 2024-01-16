@@ -35,7 +35,8 @@
             :key="item.document.key"
             :document="item.document"
             :permissions="item.permissions"
-            @refresh-documents="emit('refreshDocuments')"
+            @updated="emit('documentUpdated', $event)"
+            @deleted="emit('documentDeleted', item.document.key)"
           />
         </tbody>
       </table>
@@ -44,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-  import { GetDocuments } from './types'
+  import { GetDocuments, GetDocument } from './types'
   import type { BeneficiaryDocumentSort } from '~/types/table'
 
   const props = defineProps<{
@@ -54,8 +55,9 @@
   }>()
 
   const emit = defineEmits<{
-    'refreshDocuments': []
     'update:sort': [sort: BeneficiaryDocumentSort[]]
+    'documentUpdated': [document: GetDocument]
+    'documentDeleted': [documentKey: string]
   }>()
 
   const { onSort, tableContainer } = useTable<BeneficiaryDocumentSort>(

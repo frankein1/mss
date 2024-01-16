@@ -24,7 +24,6 @@
   )
 
   const emit = defineEmits<{
-    refreshDocuments: []
     newDocument: [key: string]
   }>()
 
@@ -40,7 +39,6 @@
   }
 
   function onNewDocument(key: string) {
-    emit('refreshDocuments')
     emit('newDocument', key)
     modal.close()
   }

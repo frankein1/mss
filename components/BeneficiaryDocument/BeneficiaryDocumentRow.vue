@@ -127,7 +127,8 @@
   }>()
 
   const emit = defineEmits<{
-    refreshDocuments: []
+    updated: [document: GetDocument]
+    deleted: []
   }>()
 
   const downloadLink = ref<HTMLLinkElement | null>(null)
@@ -194,8 +195,8 @@
   function onUpdateDocument(values: EditDocumentInput) {
     useTrpcMutation({
       mutation: () => trpcClient.documents.edit.mutate(values),
-      onSuccess: () => {
-        emit('refreshDocuments')
+      onSuccess: document => {
+        emit('updated', document)
         modal.close()
       },
       onFailure: () => {
@@ -215,7 +216,7 @@
           documentKey: props.document.key
         }),
       onSuccess: () => {
-        emit('refreshDocuments')
+        emit('deleted')
       },
       onFailure: () => {
         snackbar.error('La suppression du document a échoué.')

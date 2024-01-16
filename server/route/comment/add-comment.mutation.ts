@@ -1,7 +1,7 @@
 import { NotificationType, UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { AddCommentInput, addCommentSchema } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security'
+import { SecurityRuleContext, getCommentPermissions } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { CommentRepo, SocialSupportRepo } from '~/server/database'
@@ -19,18 +19,19 @@ const securityCheck = async (
 }
 
 const handler = async ({
-  ctx: { user },
+  ctx,
   input
 }: {
   ctx: ProtectedAppContext
   input: AddCommentInput
 }) => {
+  const { user } = ctx
   const socialSupport = await SocialSupportRepo.findUniqueOrThrow(user, {
     where: { id: input.socialSupportId },
     select: { id: true, createdById: true }
   })
 
-  return CommentRepo.prisma.create({
+  const comment = await CommentRepo.prisma.create({
     data: {
       content: input.content,
       createdById: user.id,
@@ -47,6 +48,13 @@ const handler = async ({
     },
     include: COMMENT_RELATIONS_INCLUDE
   })
+
+  const permissions = getCommentPermissions({
+    ctx,
+    comment
+  })
+
+  return { comment, permissions }
 }
 
 export const addCommentMutation = createMutation({
@@ -57,7 +65,7 @@ export const addCommentMutation = createMutation({
     key: 'comment.add',
     target: 'Comment',
     targetId: ({ routeResult }) => {
-      return routeResult.id
+      return routeResult.comment.id
     },
     action: UserActivityType.CREATE
   }

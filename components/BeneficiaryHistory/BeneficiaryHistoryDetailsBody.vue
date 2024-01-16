@@ -72,15 +72,15 @@
       :items="commentItems"
       :social-support="socialSupport"
       :beneficiary-permissions="beneficiaryPermissions"
-      @comment-added="emit('refresh')"
-      @comment-edited="emit('refresh')"
-      @comment-deleted="emit('refresh')"
+      @comment-added="onCommentAdded"
+      @comment-edited="onCommentEdited"
+      @comment-deleted="onCommentDeleted"
     />
   </div>
 </template>
 
 <script setup lang="ts">
-  import type { SocialSupportItem } from './types'
+  import type { SocialSupportItem, CommentData, CommentItem } from './types'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import { RoutePath } from '~/utils/routing'
   import { BeneficiaryPermissions } from '~/server/security'
@@ -92,7 +92,7 @@
   }>()
 
   const emit = defineEmits<{
-    refresh: []
+    deleted: []
   }>()
 
   const socialSupport = computed(() => props.item.data)
@@ -141,8 +141,26 @@
     })
   }
 
+  function onCommentAdded(commentItem: CommentItem) {
+    commentItems.value.push(commentItem)
+  }
+
+  function onCommentEdited(editedComment: CommentData) {
+    commentItems.value = commentItems.value.map(commentItem =>
+      commentItem.comment.id === editedComment.id
+        ? { comment: editedComment, permissions: commentItem.permissions }
+        : commentItem
+    )
+  }
+
+  function onCommentDeleted(deletedComment: CommentData) {
+    commentItems.value = commentItems.value.filter(
+      ({ comment }) => comment.id !== deletedComment.id
+    )
+  }
+
   function onSocialSupportItemDeleted() {
-    emit('refresh')
+    emit('deleted')
     useSnackbar().success("L'accompagnement a été supprimé.")
   }
 </script>

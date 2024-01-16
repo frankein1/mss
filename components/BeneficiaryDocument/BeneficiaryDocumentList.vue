@@ -4,7 +4,7 @@
     <BeneficiaryDocumentAddButton
       class="fr-ml-2w"
       :beneficiary-id="beneficiaryId"
-      @refresh-documents="refresh"
+      @new-document="() => refresh()"
     />
   </div>
   <div class="feature-section fr-mt-2w">
@@ -25,7 +25,8 @@
         v-model:sort="orderBy"
         :documents="documents"
         :pending="pending"
-        @refresh-documents="refresh"
+        @document-updated="onDocumentUpdated"
+        @document-deleted="onDocumentDeleted"
       />
       <AtomPagination
         v-show="!pending"
@@ -41,6 +42,7 @@
 </template>
 
 <script setup lang="ts">
+  import { GetDocument } from './types'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
@@ -87,6 +89,28 @@
       focusAndScrollTo(`#document-${item}`)
     }
   })
+
+  function onDocumentUpdated(updatedDocument: GetDocument) {
+    if (!data.value) {
+      return
+    }
+    data.value.documents = data.value.documents.map(documentItem =>
+      documentItem.document.key === updatedDocument.key
+        ? { document: updatedDocument, permissions: documentItem.permissions }
+        : documentItem
+    )
+  }
+
+  function onDocumentDeleted(documentKey: string) {
+    if (!data.value) {
+      return
+    }
+
+    data.value.count--
+    data.value.documents = data.value.documents.filter(
+      ({ document: { key } }) => key !== documentKey
+    )
+  }
 </script>
 
 <style scoped lang="scss">
