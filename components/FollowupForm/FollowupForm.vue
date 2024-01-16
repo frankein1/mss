@@ -26,7 +26,7 @@
         />
       </div>
 
-      <div v-if="isMinistryAgent">
+      <div v-if="application.module.ministere">
         <VeeInput
           name="numeroPegase"
           :label="followupFieldLabels.numeroPegase"
@@ -43,7 +43,7 @@
         />
       </div>
 
-      <div v-if="isMinistryAgent">
+      <div v-if="application.module.ministere">
         <VeeSelect
           name="ministre"
           :label="followupFieldLabels.ministre"
@@ -193,7 +193,7 @@
             />
           </div>
 
-          <template v-if="isMinistryAgent">
+          <template v-if="application.module.ministere">
             <div class="fr-fieldset__element fr-fieldset__element--inline">
               <VeeCheckbox
                 name="classified"
@@ -304,8 +304,6 @@
   import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
-
-  const isMinistryAgent = useAuthState().isMinistryAgent()
 
   const props = withDefaults(
     defineProps<{
