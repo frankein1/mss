@@ -17,7 +17,7 @@ export async function getHelpRequestFollowupTypesStatsQuery(
   }
   appendConstraints(user, helpRequestWhere, SocialSupportConstraints.get)
 
-  return await FollowupTypeRepo.findMany(user, {
+  const res = await FollowupTypeRepo.findMany(user, {
     select: {
       id: true,
       name: true,
@@ -26,7 +26,7 @@ export async function getHelpRequestFollowupTypesStatsQuery(
           socialSupports: helpRequestWhere
         }
       }
-    },
-    orderBy: [{ socialSupports: { _count: 'desc' } }]
+    }
   })
+  return res.sort((a, b) => b._count.socialSupports - a._count.socialSupports)
 }
