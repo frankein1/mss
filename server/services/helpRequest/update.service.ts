@@ -51,7 +51,8 @@ export async function update({ input, ctx }: UpdateParams) {
     dueDate,
     fullFile,
     subject,
-    date
+    date,
+    isRefundable
   } = cleanUpdateInput({ input, subject: target.subject })
 
   const helpRequest = await SocialSupportRepo.prisma.update({
@@ -83,6 +84,7 @@ export async function update({ input, ctx }: UpdateParams) {
           fullFile,
           subject,
           externalStructure,
+          isRefundable,
           type: connect(typeId),
           prescribingOrganization: preparePrescribingOrganization(
             prescribingOrganizationId,

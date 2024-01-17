@@ -46,7 +46,8 @@ export async function create({ input, ctx }: CreateParams) {
     privateSynthesis,
     dueDate,
     fullFile,
-    subject
+    subject,
+    isRefundable
   } = cleanCreateInput(input)
 
   const helpRequest = await HelpRequestRepo.prisma.create({
@@ -72,6 +73,7 @@ export async function create({ input, ctx }: CreateParams) {
         ctx,
         input.externalStructure === 'true'
       ),
+      isRefundable,
       type: connect(typeId),
       socialSupport: {
         create: {
