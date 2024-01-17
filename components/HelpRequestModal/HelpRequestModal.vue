@@ -4,21 +4,11 @@
     novalidate
     @submit.prevent="onSubmit"
   >
-    <!-- FIXME: For now, housing help request does not exist -->
     <VeeRadioButtons
       name="subject"
       label="L'instruction concerne"
       :options="helpRequestSubjectOptions"
       required
-      :disabled-options="[ExtendedHelpRequestSubject.Housing]"
-      :option-hint-texts="
-        new Map([
-          [
-            ExtendedHelpRequestSubject.Housing,
-            'Le formulaire de demande de logement est en cours de développement et arrivera prochainement.'
-          ]
-        ])
-      "
     />
 
     <ul
@@ -46,7 +36,6 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestSubject } from '@prisma/client'
   import { z } from 'zod'
   import { helpRequestSubjectOptions } from '~/client/options/helpRequest'
   import { RoutePath } from '~/utils/routing'
@@ -60,10 +49,10 @@
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit } = useForm<{ subject: HelpRequestSubject }>({
+  const { handleSubmit } = useForm<{ subject: ExtendedHelpRequestSubject }>({
     validationSchema: toTypedSchema(
       z.object({
-        subject: z.nativeEnum(HelpRequestSubject, {
+        subject: z.nativeEnum(ExtendedHelpRequestSubject, {
           required_error: "Veuillez sélectionner un type d'accompagnement."
         })
       })
