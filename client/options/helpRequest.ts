@@ -5,6 +5,7 @@ import {
   HelpRequestRefusalReason
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
+import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
 
 export const helpRequestStatusLabels = {
   [SocialSupportStatus.WaitingAdditionalInformation]:
@@ -39,15 +40,17 @@ export const paymentMethodLabels: { [key in PaymentMethod]: string } = {
 export const paymentMethodOptions = labelsToOptions(paymentMethodLabels)
 
 export const helpRequestSubjectLabels: {
-  [key in HelpRequestSubject]: string
+  [key in ExtendedHelpRequestSubject]: string
 } = {
+  [ExtendedHelpRequestSubject.Housing]: 'Une demande de logement',
   [HelpRequestSubject.Financial]: 'Une aide financière',
   [HelpRequestSubject.Other]: 'Autre'
 }
 
 export const helpRequestSubjectPictos: {
-  [key in HelpRequestSubject]: string
+  [key in ExtendedHelpRequestSubject]: string
 } = {
+  [ExtendedHelpRequestSubject.Housing]: '~/assets/pictograms/building.svg',
   [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
   [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
 }
