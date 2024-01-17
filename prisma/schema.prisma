@@ -493,9 +493,9 @@ model HousingHelpRequest {
 
   fullFile Boolean? @map("full_file")
 
-  isFirst                           Boolean        @map("is_first")
+  isFirst                           Boolean?       @map("is_first")
   firstOpeningDate                  DateTime?      @map("first_opening_date") @db.Date
-  askedHousing                      AskedHousing?  @map("asked_housing")
+  askedHousing                      AskedHousing[] @map("asked_housing")
   reason                            HousingReason?
   uniqueId                          String?        @map("unique_id")
   taxHouseholdAdditionalInformation String?        @map("tax_household_additional_information")
