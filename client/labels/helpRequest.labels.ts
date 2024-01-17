@@ -1,13 +1,13 @@
 import { HelpRequest, SocialSupport } from '@prisma/client'
 import { FieldLabels } from '~/types/fieldLabels'
 
-type FollowupFieldLabels = Omit<
+type HelpRequestFieldLabels = Omit<
   Omit<HelpRequest, 'reason' | 'financialSupport' | 'socialSupportId'> &
     Omit<SocialSupport, 'socialSupportType'>,
   'structureId' | 'created'
 > & { documents: string }
 
-export const helpRequestFieldLabels: FieldLabels<FollowupFieldLabels> = {
+export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   id: 'Identifiant',
   status: 'Statut',
   dueDate: "Date d'échéance",
