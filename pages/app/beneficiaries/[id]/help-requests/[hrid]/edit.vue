@@ -8,6 +8,8 @@
       icon="fr-icon-questionnaire-fill"
       icon-color-class="color-purple-glycine"
       icon-background-class="bg-purple-glycine"
+      :subtitle="subtitle"
+      :subtitle-picto-path="subtitlePictoPath"
     >
       <RequiredFields />
     </PageTitle>
@@ -48,6 +50,7 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -74,6 +77,20 @@
   const title = computed(() =>
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
   )
+
+  const subtitle = computed(() =>
+    helpRequest.value?.subject === 'Financial' ? 'Aide financière' : undefined
+  )
+
+  const subtitlePictoPath = computed(() => {
+    if (!helpRequest.value) {
+      return undefined
+    }
+    const subject = helpRequest.value.subject
+    return subject === 'Financial'
+      ? helpRequestSubjectPictos[subject]
+      : undefined
+  })
 
   useHead({ title })
 
