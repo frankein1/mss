@@ -19,7 +19,11 @@ import {
   stringOrEmpty,
   stringConstraint
 } from '../helpers.schema'
-import { errorMessages, requiredErrorMessage } from '~/utils/zod'
+import {
+  errorMessages,
+  requiredErrorMessage,
+  maxStringLengthMessage
+} from '~/utils/zod'
 
 export const createHousingHelpRequestSchemaBase = z.object({
   beneficiaryId: z.string().uuid(),

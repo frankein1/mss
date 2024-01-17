@@ -89,15 +89,19 @@
   const props = withDefaults(
     defineProps<{
       isSubmitting: boolean
-      followupTypes: FollowupType[]
-      prescribingOrganizations: PrescribingOrganization[]
+      followupTypes?: FollowupType[]
+      prescribingOrganizations?: PrescribingOrganization[]
       instructorOrganizations: InstructorOrganization[]
       beneficiaryId: string
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>
       subject: ExtendedHelpRequestSubject
     }>(),
-    { canEditPrivateSynthesis: true }
+    {
+      canEditPrivateSynthesis: true,
+      followupTypes: () => [],
+      prescribingOrganizations: () => []
+    }
   )
 
   const form = ref<HTMLFormElement | null>(null)
