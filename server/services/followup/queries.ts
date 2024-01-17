@@ -1,74 +1,27 @@
 import { Prisma } from '@prisma/client'
+import { filterFollowup, filterSocialSupport } from '../helper'
 import { FollowupRepo } from '~/server/database'
 import {
+  AppContextPermissions,
   FollowupPermissions,
   SecurityRuleContext,
   SecurityRuleGrantee,
+  getAppContextPermissions,
   getFollowupPermissions
 } from '~/server/security'
 
-const select = {
-  id: true,
+const include = {
   prescribingOrganization: true,
-  updated: true,
-  firstFollowup: true,
-  redirected: true,
-  medium: true,
-  classified: true,
-  forwardedToJustice: true,
-  helpRequested: true,
-  thirdPersonName: true,
-  structureName: true,
-  prescribingOrganizationId: true,
-  place: true,
   socialSupport: {
-    select: {
-      id: true,
-      structureId: true,
-      status: true,
-      date: true,
-      created: true,
-      createdById: true,
-      beneficiaryId: true,
-      privateSynthesis: true,
-      numeroPegase: true,
-      synthesis: true,
-      ministre: true,
-      dueDate: true,
-      documents: {
-        select: {
-          key: true,
-          name: true,
-          type: true,
-          size: true,
-          tags: true,
-          confidential: true
-        }
-      },
-      types: {
-        select: { id: true, name: true },
-        orderBy: { name: Prisma.SortOrder.asc }
-      },
+    include: {
+      documents: true,
+      types: true,
       beneficiary: {
-        select: {
-          id: true,
-          fileNumber: true,
-          firstName: true,
-          birthName: true,
-          usualName: true,
-          email: true,
-          referents: true,
-          structureId: true
+        include: {
+          referents: true
         }
       },
-      createdBy: {
-        select: {
-          id: true,
-          email: true,
-          firstName: true,
-          lastName: true
-        }
-      }
+      createdBy: true
     }
   }
 }
@@ -78,7 +31,7 @@ function findOne(user: SecurityRuleGrantee, id: string) {
     where: {
       id
     },
-    select
+    include
   })
 }
 
@@ -90,7 +43,7 @@ export async function getPage(
 ) {
   const followups = await FollowupRepo.findMany(ctx.user, {
     where: args.where,
-    select,
+    include,
     take: args.take,
     skip: args.skip,
     orderBy: args.orderBy
@@ -101,8 +54,9 @@ export async function getPage(
       beneficiary: followup.socialSupport.beneficiary,
       socialSupport: followup.socialSupport
     })
+    const appPermissions = getAppContextPermissions(ctx)
     return {
-      followup: filter(permissions, followup),
+      followup: filter(appPermissions, permissions, followup),
       permissions
     }
   })
@@ -111,7 +65,7 @@ export async function getPage(
 export async function getOne(ctx: SecurityRuleContext, id: string) {
   const followup = await FollowupRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
-    select
+    include
   })
   const { socialSupport } = followup
   const permissions = getFollowupPermissions({
@@ -119,26 +73,38 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
     beneficiary: socialSupport.beneficiary,
     socialSupport
   })
+  const appPermissions = getAppContextPermissions(ctx)
   return {
-    followup: filter(permissions, followup),
+    followup: filter(appPermissions, permissions, followup),
     permissions
   }
 }
 
-function filter(permissions: FollowupPermissions, followup: FollowupOutput) {
-  const { socialSupport, ...fuData } = followup
-  const {
-    privateSynthesis,
-    dueDate,
-    id: socialSupportId,
-    ...socialSupportData
-  } = socialSupport
+export function filter(
+  appPermissions: AppContextPermissions,
+  permissions: FollowupPermissions,
+  followup: NonNullable<FollowupOutput>
+) {
+  const { socialSupport } = followup
+  const conditions = {
+    details: permissions.get.details,
+    dueDate: permissions.get.dueDate,
+    minister: appPermissions.module.ministere,
+    privateSynthesis: permissions.get.privateSynthesis
+  }
+  const filteredSocialSupport = filterSocialSupport({
+    socialSupport,
+    conditions
+  })
+  const filteredFollowup = filterFollowup({
+    followup,
+    conditions
+  })
 
   return {
-    ...fuData,
-    ...socialSupportData,
-    socialSupportId,
-    dueDate: permissions.get.dueDate ? dueDate : null,
-    privateSynthesis: permissions.get.privateSynthesis ? privateSynthesis : null
+    ...filteredSocialSupport,
+    ...filteredFollowup,
+    id: followup.id,
+    socialSupportId: socialSupport.id
   }
 }

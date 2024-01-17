@@ -48,6 +48,7 @@
     validationSchema: toTypedSchema(editHelpRequestSchema),
     initialValues: {
       ...helpRequestData.value,
+      isRefundable: helpRequestData.value.isRefundable ? 'true' : 'false',
       isMinistry: application.value.module.ministere,
       date: helpRequestData.value.date,
       documents: initialDocumentIds.value,

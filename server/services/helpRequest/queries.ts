@@ -1,92 +1,28 @@
 import { Prisma } from '@prisma/client'
+import { filterHelpRequest, filterSocialSupport } from '../helper'
 import { HelpRequestRepo } from '~/server/database'
 import {
+  AppContextPermissions,
   HelpRequestPermissions,
   SecurityRuleContext,
   SecurityRuleGrantee,
+  getAppContextPermissions,
   getHelpRequestPermissions
 } from '~/server/security'
 
-export const select = {
-  id: true,
-  fullFile: true,
-  subject: true,
-  allocatedAmount: true,
-  askedAmount: true,
-  decisionDate: true,
-  dispatchDate: true,
-  examinationDate: true,
-  externalStructure: true,
-  handlingDate: true,
-  paymentDate: true,
-  paymentMethod: true,
-  refusalReason: true,
-  refusalReasonOther: true,
-  prescribingOrganizationId: true,
-  instructorOrganizationId: true,
-  prescribingOrganization: {
-    select: {
-      id: true,
-      name: true
-    }
-  },
-  instructorOrganization: {
-    select: {
-      id: true,
-      name: true
-    }
-  },
+export const include = {
+  prescribingOrganization: true,
+  instructorOrganization: true,
   socialSupport: {
-    select: {
-      id: true,
-      created: true,
-      structureId: true,
-      beneficiaryId: true,
-      createdById: true,
-      updated: true,
-      status: true,
-      synthesis: true,
-      numeroPegase: true,
-      privateSynthesis: true,
-      ministre: true,
-      dueDate: true,
-      date: true,
-      types: {
-        select: {
-          id: true,
-          name: true
-        }
-      },
-      documents: {
-        select: {
-          key: true,
-          name: true,
-          type: true,
-          size: true,
-          tags: true,
-          confidential: true
-        }
-      },
+    include: {
+      types: true,
+      documents: true,
       beneficiary: {
-        select: {
-          id: true,
-          fileNumber: true,
-          firstName: true,
-          birthName: true,
-          usualName: true,
-          email: true,
-          referents: true,
-          structureId: true
+        include: {
+          referents: true
         }
       },
-      createdBy: {
-        select: {
-          id: true,
-          email: true,
-          firstName: true,
-          lastName: true
-        }
-      }
+      createdBy: true
     }
   }
 }
@@ -96,7 +32,7 @@ function findOne(user: SecurityRuleGrantee, id: string) {
     where: {
       id
     },
-    select
+    include
   })
 }
 
@@ -108,7 +44,7 @@ export async function getPage(
 ) {
   const helpRequests = await HelpRequestRepo.findMany(ctx.user, {
     where: args.where,
-    select,
+    include,
     take: args.take,
     skip: args.skip,
     orderBy: args.orderBy
@@ -121,8 +57,9 @@ export async function getPage(
       beneficiary,
       socialSupport
     })
+    const appPermissions = getAppContextPermissions(ctx)
     return {
-      helpRequest: filter(permissions, helpRequest),
+      helpRequest: filter(appPermissions, permissions, helpRequest),
       permissions
     }
   })
@@ -131,7 +68,7 @@ export async function getPage(
 export async function getOne(ctx: SecurityRuleContext, id: string) {
   const helpRequest = await HelpRequestRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
-    select
+    include
   })
   const { socialSupport } = helpRequest
   const { beneficiary } = socialSupport
@@ -140,99 +77,44 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
     beneficiary,
     socialSupport
   })
+  const appPermissions = getAppContextPermissions(ctx)
   return {
-    helpRequest: filter(permissions, helpRequest),
+    helpRequest: filter(appPermissions, permissions, helpRequest),
     permissions
   }
 }
 
 export function filter(
+  appPermissions: AppContextPermissions,
   permissions: HelpRequestPermissions,
   helpRequest: NonNullable<HelpRequestOutput>
 ) {
-  const meta = getMeta(helpRequest)
-  const details = getDetails(permissions, helpRequest)
-  const privateSynthesis = getPrivateSynthesis(permissions, helpRequest)
-
-  return {
-    ...meta,
-    ...details,
-    ...privateSynthesis
-  }
-}
-
-function getMeta(helpRequest: NonNullable<HelpRequestOutput>) {
   const { socialSupport } = helpRequest
+  const conditions = {
+    details: permissions.get.details,
+    dueDate: permissions.get.dueDate,
+    minister: appPermissions.module.ministere,
+    privateSynthesis: permissions.get.privateSynthesis
+  }
+  const filteredSocialSupport = filterSocialSupport({
+    socialSupport,
+    conditions
+  })
+  const filteredHelpRequest = filterHelpRequest({
+    helpRequest,
+    conditions
+  })
+
+  const type = filteredSocialSupport.types?.length
+    ? filteredSocialSupport.types[0]
+    : null
+
   return {
+    ...filteredSocialSupport,
+    ...filteredHelpRequest,
+    type,
+    typeId: type?.id,
     id: helpRequest.id,
-    fullFile: helpRequest.fullFile,
-    subject: helpRequest.subject,
-
-    date: socialSupport.date,
-    structureId: socialSupport.structureId,
-    created: socialSupport.created,
-    createdBy: socialSupport.createdBy,
-    createdById: socialSupport.createdById,
-    updated: socialSupport.updated,
-    status: socialSupport.status,
-
-    typeId: socialSupport.types[0].id,
-    type: socialSupport.types[0],
-    beneficiary: socialSupport.beneficiary,
-    beneficiaryId: socialSupport.beneficiaryId,
     socialSupportId: socialSupport.id
-  }
-}
-
-function getDetails(
-  permissions: HelpRequestPermissions,
-  helpRequest: NonNullable<HelpRequestOutput>
-) {
-  if (!permissions.get.details) {
-    return {}
-  }
-
-  const { socialSupport } = helpRequest
-
-  return {
-    allocatedAmount: helpRequest.allocatedAmount,
-    askedAmount: helpRequest.askedAmount,
-    decisionDate: helpRequest.decisionDate,
-    dispatchDate: helpRequest.dispatchDate,
-    dueDate: socialSupport.dueDate,
-    examinationDate: helpRequest.examinationDate,
-    externalStructure: helpRequest.externalStructure,
-    handlingDate: helpRequest.handlingDate,
-    instructorOrganizationId: helpRequest.instructorOrganizationId,
-    instructorOrganization: helpRequest.instructorOrganization,
-
-    paymentDate: helpRequest.paymentDate,
-    paymentMethod: helpRequest.paymentMethod,
-    prescribingOrganizationId: helpRequest.prescribingOrganizationId,
-    prescribingOrganization: helpRequest.prescribingOrganization,
-    refusalReason: helpRequest.refusalReason,
-
-    subject: helpRequest.subject,
-    refusalReasonOther: helpRequest.refusalReasonOther,
-
-    documents: socialSupport.documents,
-    synthesis: socialSupport.synthesis,
-    ministre: socialSupport.ministre,
-    numeroPegase: socialSupport.numeroPegase
-  }
-}
-
-function getPrivateSynthesis(
-  permissions: HelpRequestPermissions,
-  helpRequest: NonNullable<HelpRequestOutput>
-) {
-  if (!permissions.get.privateSynthesis) {
-    return {}
-  }
-
-  const { socialSupport } = helpRequest
-
-  return {
-    privateSynthesis: socialSupport.privateSynthesis
   }
 }

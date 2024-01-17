@@ -19,7 +19,7 @@
       </h2>
       <ul class="fr-tags-group follow-up-types-tags">
         <li
-          v-for="followUpType in data.followUpTypes"
+          v-for="followUpType in data.types"
           :key="followUpType.id"
         >
           <p class="fr-tag">{{ followUpType.name }}</p>

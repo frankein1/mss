@@ -3,7 +3,6 @@ import { createMutation } from '~/server/route'
 import { AddCommentInput, addCommentSchema } from '~/server/schema'
 import { SecurityRuleContext, getCommentPermissions } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
-import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { CommentRepo, SocialSupportRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 
@@ -46,7 +45,9 @@ const handler = async ({
         }
       }
     },
-    include: COMMENT_RELATIONS_INCLUDE
+    include: {
+      createdBy: true
+    }
   })
 
   const permissions = getCommentPermissions({

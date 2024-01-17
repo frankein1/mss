@@ -78,7 +78,7 @@ export async function exportHelpRequests({
           instructorOrganizationId:
             helpRequest.instructorOrganization?.name || '',
           date: formatDate(helpRequest.date, 'DD-MM-YYYY'),
-          typeId: helpRequest.type.name,
+          typeId: helpRequest.type?.name || '',
           documents:
             helpRequest.documents?.map(document => document.name).join(', ') ||
             '',

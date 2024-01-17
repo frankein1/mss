@@ -23,7 +23,7 @@
           {{ helpRequestStatusOptions.get(helpRequest.status) }}
         </span>
       </td>
-      <td>{{ helpRequest.type.name }}</td>
+      <td>{{ helpRequest.type?.name || '' }}</td>
       <td v-if="application.module.helpRequest">
         <template v-if="helpRequest.dueDate">
           {{ formatDate(helpRequest.dueDate) }}

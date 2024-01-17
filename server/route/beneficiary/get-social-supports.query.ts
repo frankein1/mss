@@ -7,14 +7,19 @@ import {
   SecurityRuleGrantee,
   SecurityRuleContext,
   getSocialSupportPermissions,
-  getCommentPermissions
+  getCommentPermissions,
+  getAppContextPermissions
 } from '~/server/security'
-import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { SocialSupportRepo } from '~/server/database'
 import {
   BeneficiarySecurityTarget,
   BeneficiaryService
 } from '~/server/services'
+import {
+  filterHelpRequest,
+  filterSocialSupport,
+  filterFollowup
+} from '~/server/services/helper'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -28,12 +33,6 @@ const securityCheck = async (
 }
 
 type HistoryFilters = GetHistoryInput['filters']
-
-const createdBySelect = {
-  firstName: true,
-  lastName: true,
-  email: true
-}
 
 function prepareSocialSupportFilters(
   filters: HistoryFilters,
@@ -101,36 +100,28 @@ function loadSocialSupports(
   return SocialSupportRepo.findMany(user, {
     where: prepareSocialSupportFilters(filters, beneficiaryId),
     include: {
-      createdBy: {
-        select: createdBySelect
-      },
+      createdBy: true,
       beneficiary: {
-        select: {
-          structureId: true,
+        include: {
           referents: true
         }
       },
-      documents: {
-        select: {
-          key: true,
-          name: true,
-          createdById: true,
-          confidential: true
-        }
-      },
+      documents: true,
       comments: {
         orderBy: { created: 'asc' },
-        include: COMMENT_RELATIONS_INCLUDE
+        include: {
+          createdBy: true
+        }
       },
       helpRequest: {
         include: {
-          prescribingOrganization: { select: { name: true } },
-          instructorOrganization: { select: { name: true } }
+          prescribingOrganization: true,
+          instructorOrganization: true
         }
       },
       followup: {
         include: {
-          prescribingOrganization: { select: { name: true } }
+          prescribingOrganization: true
         }
       },
       _count: {
@@ -148,29 +139,13 @@ function loadSocialSupports(
 
 type SocialSupports = Prisma.PromiseReturnType<typeof loadSocialSupports>
 
-function flattenSocialSupports(
+function formatResult(
   socialSupports: SocialSupports,
   ctx: ProtectedAppContext,
   beneficiary: BeneficiarySecurityTarget
 ) {
   return socialSupports.map(socialSupport => {
-    const { types, documents, _count, comments, ...data } = socialSupport
-
-    const documentsWithPermissions = documents?.map(document => ({
-      document,
-      permissions: getDocumentPermissions({
-        ctx,
-        beneficiary,
-        document
-      })
-    }))
-    const commentsWithPermissions = comments?.map(comment => ({
-      comment,
-      permissions: getCommentPermissions({
-        ctx,
-        comment
-      })
-    }))
+    const { _count } = socialSupport
 
     const socialSupportPermissions = getSocialSupportPermissions({
       ctx,
@@ -178,13 +153,61 @@ function flattenSocialSupports(
       socialSupport
     })
 
+    const appPermissions = getAppContextPermissions(ctx)
+
+    const { followup, helpRequest } = socialSupport
+
+    const conditions = {
+      minister: appPermissions.module.ministere,
+      dueDate: socialSupportPermissions.get.dueDate,
+      details: socialSupportPermissions.get.details,
+      privateSynthesis: socialSupportPermissions.get.privateSynthesis
+    }
+
+    const filteredSocialSupport = filterSocialSupport({
+      socialSupport,
+      conditions
+    })
+    const filteredHelpRequest = helpRequest
+      ? filterHelpRequest({
+          helpRequest,
+          conditions
+        })
+      : null
+
+    const filteredFollowup = followup
+      ? filterFollowup({
+          followup,
+          conditions
+        })
+      : null
+
+    const { documents, comments, ...otherData } = filteredSocialSupport
+
+    const documentItems = documents?.map(document => ({
+      document,
+      permissions: getDocumentPermissions({
+        ctx,
+        beneficiary,
+        document
+      })
+    }))
+    const commentItems = comments?.map(comment => ({
+      comment,
+      permissions: getCommentPermissions({
+        ctx,
+        comment
+      })
+    }))
+
     return {
       data: {
-        ...data,
-        comments: commentsWithPermissions,
-        documents: documentsWithPermissions,
+        ...otherData,
+        comments: commentItems,
+        documents: documentItems,
         hasUnreadNotifications: !!_count.notifications,
-        followUpTypes: types
+        followup: filteredFollowup,
+        helpRequest: filteredHelpRequest
       },
       permissions: socialSupportPermissions
     }
@@ -214,7 +237,7 @@ const handler = async ({
   ])
 
   return {
-    items: flattenSocialSupports(socialSupports, ctx, beneficiary),
+    items: formatResult(socialSupports, ctx, beneficiary),
     totalCount
   }
 }
