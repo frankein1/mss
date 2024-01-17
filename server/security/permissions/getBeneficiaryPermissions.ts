@@ -98,13 +98,13 @@ export const getBeneficiaryPermissions = ({
 }
 
 function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
-  const { efs, cias, ccas } = getGranteRole(ctx)
+  const { efs, cias, ccas, receptionAgent } = getGranteRole(ctx)
   return {
     edit: {
       general: true,
-      relatives: !efs,
-      health: !efs,
-      occupationIncome: !efs,
+      relatives: !efs && !receptionAgent ,
+      health: !efs && !receptionAgent,
+      occupationIncome: !efs && !receptionAgent,
       externalOrganisations: true
     },
     view: {
