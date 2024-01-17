@@ -3,7 +3,6 @@ import { createMutation } from '~/server/route'
 import { EditCommentInput, editCommentSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security/rules/types'
-import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { CommentRepo } from '~/server/database'
 import { getCommentPermissions } from '~/server/security'
 
@@ -32,7 +31,7 @@ const handler = async ({
       content,
       updated: new Date()
     },
-    include: COMMENT_RELATIONS_INCLUDE
+    include: { createdBy: true }
   })
 }
 

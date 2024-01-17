@@ -4,7 +4,6 @@ import { IdInput, idSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { CommentRepo } from '~/server/database'
-import { COMMENT_RELATIONS_INCLUDE } from '~/utils/constants/comment'
 import { getCommentPermissions } from '~/server/security'
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
@@ -26,7 +25,7 @@ const handler = async ({
 }) => {
   return await CommentRepo.prisma.delete({
     where: { id },
-    include: COMMENT_RELATIONS_INCLUDE
+    include: { createdBy: true }
   })
 }
 

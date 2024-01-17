@@ -16,6 +16,7 @@ export type HelpRequestPermissions = {
   view: boolean
   get: {
     details: boolean
+    dueDate: boolean
     privateSynthesis: boolean
   }
   set: {
@@ -29,6 +30,7 @@ const FALSY_PERMISSIONS = {
   view: false,
   get: {
     details: false,
+    dueDate: false,
     privateSynthesis: false
   },
   set: {
@@ -62,6 +64,7 @@ function getCreationPermissions(): HelpRequestPermissions {
     view: true,
     get: {
       details: true,
+      dueDate: true,
       privateSynthesis: true
     },
     set: {
@@ -88,7 +91,7 @@ function getEditionPermissions({
 
   const creator = isCreator(user, socialSupport)
   const isReferent = isReferentFor(user, beneficiary)
-  const { manager, socialWorker, instructor, receptionAgent } =
+  const { manager, socialWorker, instructor, receptionAgent, referent } =
     getGranteRole(ctx)
 
   return {
@@ -96,6 +99,7 @@ function getEditionPermissions({
     view: isReferent || manager || socialWorker || instructor || receptionAgent,
     get: {
       details: manager || socialWorker || instructor || isReferent,
+      dueDate: manager || socialWorker || instructor || referent,
       privateSynthesis: creator
     },
     set: {
