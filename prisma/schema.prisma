@@ -1568,6 +1568,7 @@ enum UserActivityObject {
   User
   Draft
   SocialSupport
+  HousingHelpRequest
 }
 
 model UserActivity {
