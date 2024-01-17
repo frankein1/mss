@@ -1,7 +1,7 @@
-import { HelpRequestSubject } from '@prisma/client'
 import { Route, RoutePath } from './routes'
 import { RouteTitle } from './titles'
 import type { BeneficiaryNames } from '~/types/beneficiary'
+import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
 
 type FlatBeneficiaryNamesWithId = { id: string } & BeneficiaryNames
 
@@ -173,7 +173,7 @@ export const Breadcrumb = {
   // FIXME: BeneficiaryHelpRequestAdd depends on the access to Beneficiary
   [Route.AppBeneficiaryHelpRequestAdd]: (
     beneficiary: BeneficiaryNamesWithId | null,
-    subject: HelpRequestSubject
+    subject: ExtendedHelpRequestSubject
   ) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
