@@ -36,10 +36,10 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestSubject } from '@prisma/client'
   import { z } from 'zod'
   import { helpRequestSubjectOptions } from '~/client/options/helpRequest'
   import { RoutePath } from '~/utils/routing'
+  import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
 
   const modal = useModal()
 
@@ -49,10 +49,10 @@
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit } = useForm<{ subject: HelpRequestSubject }>({
+  const { handleSubmit } = useForm<{ subject: ExtendedHelpRequestSubject }>({
     validationSchema: toTypedSchema(
       z.object({
-        subject: z.nativeEnum(HelpRequestSubject, {
+        subject: z.nativeEnum(ExtendedHelpRequestSubject, {
           required_error: "Veuillez sélectionner un type d'accompagnement."
         })
       })
