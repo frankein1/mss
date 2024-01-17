@@ -9,3 +9,4 @@ export {
 export { helpRequestFieldLabels } from './helpRequest.labels'
 export { relativeFieldLabels } from './relative.labels'
 export { documentFieldLabels } from './document.labels'
+export { housingHelpRequestFieldLabels } from './housingHelpRequest.labels'

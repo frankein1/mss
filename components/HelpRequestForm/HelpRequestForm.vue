@@ -18,6 +18,7 @@
         :instructor-organizations="instructorOrganizations"
         :is-external-support="isExternalSupport"
         :has-set-external-structure="hasSetExternalStructure"
+        :is-housing-support="isHousingSupport"
       />
 
       <hr class="helprequestform__divider" />
@@ -113,6 +114,7 @@
   )
 
   const isExternalSupport = computed(() => externalStructure.value === 'true')
+  const isHousingSupport = computed(() => props.subject === 'Housing')
 </script>
 
 <style scoped lang="scss">
