@@ -22,6 +22,7 @@ export * from './auth'
 export * from './helpRequest'
 export * from './helpers.schema'
 export * from './email'
+export * from './housingHelpRequest'
 
 export {
   createFollowupTypeSchema,
