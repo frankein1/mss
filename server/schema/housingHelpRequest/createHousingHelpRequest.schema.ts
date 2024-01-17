@@ -1,0 +1,75 @@
+import {
+  HelpRequestRefusalReason,
+  SocialSupportStatus,
+  Minister,
+  AskedHousing,
+  HousingReason,
+  HousingType
+} from '@prisma/client'
+import { z } from 'zod'
+import {
+  numeroPegaseContraint,
+  withEmptyValueOptionalNativeEnum,
+  kindOfBooleanSchema,
+  requiredNativeEnum,
+  amountNumber,
+  dateOrEmpty,
+  openText,
+  stringOrEmpty,
+  stringConstraint
+} from '../helpers.schema'
+import {
+  errorMessages,
+  requiredErrorMessage,
+  validIntNumber
+} from '~/utils/zod'
+
+export const createHousingHelpRequestSchemaBase = z.object({
+  beneficiaryId: z.string().uuid(),
+  date: z.coerce.date(errorMessages),
+  documents: z.array(z.string(), errorMessages).default([]),
+  synthesis: openText(6000).nullish(),
+  privateSynthesis: openText(1000).nullish(),
+  isMinistry: z.boolean(),
+  ministre: withEmptyValueOptionalNativeEnum(Minister),
+  numeroPegase: stringOrEmpty(numeroPegaseContraint),
+  status: requiredNativeEnum(SocialSupportStatus),
+  dueDate: dateOrEmpty,
+  instructorOrganizationId: z.string().nullish(),
+  externalStructure: kindOfBooleanSchema(true),
+  examinationDate: dateOrEmpty,
+  decisionDate: dateOrEmpty,
+  refusalReason: withEmptyValueOptionalNativeEnum(HelpRequestRefusalReason),
+  dispatchDate: dateOrEmpty,
+  fullFile: z.boolean().default(false),
+  isFirst: kindOfBooleanSchema(),
+  firstOpeningDate: dateOrEmpty,
+  [AskedHousing.HebergementTemporaire]: z.boolean().default(false),
+  [AskedHousing.ParcPrive]: z.boolean().default(false),
+  [AskedHousing.ParcSocial]: z.boolean().default(false),
+  reason: withEmptyValueOptionalNativeEnum(HousingReason),
+  uniqueId: stringConstraint.max(150, maxStringLengthMessage(50)),
+  taxHouseholdAdditionalInformation: openText(200).nullish(),
+  maxRent: amountNumber.nullish(),
+  maxCharges: amountNumber.nullish(),
+  housingType: withEmptyValueOptionalNativeEnum(HousingType),
+  roomCount: z.coerce
+    .number()
+    .int(validIntNumber)
+    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
+    .nullish(),
+  isPmr: z.boolean().default(false)
+})
+
+export const createHousingHelpRequestSchema =
+  createHousingHelpRequestSchemaBase.refine(
+    val => !val.isMinistry || val.ministre,
+    {
+      message: requiredErrorMessage,
+      path: ['ministre']
+    }
+  )
+
+export type CreateHousingHelpRequestInput = z.infer<
+  typeof createHousingHelpRequestSchema
+>
