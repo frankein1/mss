@@ -120,6 +120,7 @@
     isRefundableOptions
   } from '~/client/options/helpRequest'
   import { withEmptyValue } from '~/utils/options'
+  import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
 
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
@@ -127,7 +128,7 @@
     status: SocialSupportStatus
     hasSetExternalStructure: boolean
     isExternalSupport: boolean
-    subject: HelpRequestSubject
+    subject: ExtendedHelpRequestSubject
   }>()
 
   const isAccepted = computed(
