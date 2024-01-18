@@ -32,6 +32,12 @@
 
       <hr class="helprequestform__divider" />
 
+      <template v-if="subject === ExtendedHelpRequestSubject.Housing">
+        <HelpRequestFormFeatureSection />
+
+        <hr class="helprequestform__divider" />
+      </template>
+
       <HelpRequestFormSynthesisSection
         :can-edit-private-synthesis="canEditPrivateSynthesis"
       />

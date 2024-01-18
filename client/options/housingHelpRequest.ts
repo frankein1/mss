@@ -1,4 +1,9 @@
-import { AskedHousing, HousingReason } from '@prisma/client'
+import {
+  AskedHousing,
+  HousingReason,
+  HousingRoomCount,
+  HousingType
+} from '@prisma/client'
 
 export const isFirstLabels = {
   true: "d'une 1ère demande",
@@ -33,3 +38,21 @@ export const reasonLabels: { [key in HousingReason]: string } = {
 }
 
 export const reasonOptions = labelsToOptions(reasonLabels)
+
+export const housingTypeLabels: { [key in HousingType]: string } = {
+  [HousingType.Appartement]: 'Appartement',
+  [HousingType.Maison]: 'Maison'
+}
+
+export const housingTypeOptions = labelsToOptions(housingTypeLabels)
+
+export const roomCountLabels: { [key in HousingRoomCount]: string } = {
+  [HousingRoomCount.One]: 'Studio',
+  [HousingRoomCount.Two]: '2',
+  [HousingRoomCount.Three]: '3',
+  [HousingRoomCount.Four]: '4',
+  [HousingRoomCount.Five]: '5',
+  [HousingRoomCount.SixAndMore]: '6 ou +'
+}
+
+export const roomCountOptions = labelsToOptions(roomCountLabels)
