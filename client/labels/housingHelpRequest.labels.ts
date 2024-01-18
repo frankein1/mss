@@ -3,9 +3,8 @@ import { FieldLabels } from '~/types/fieldLabels'
 
 type HousingHelpRequestFieldLabels = Omit<
   HousingHelpRequest,
-  | keyof HelpRequest
+  | keyof Omit<HelpRequest, 'reason'>
   | 'isFirst'
-  | 'uniqueId'
   | 'taxHouseholdAdditionalInformation'
   | 'maxRent'
   | 'maxCharges'
@@ -17,5 +16,7 @@ type HousingHelpRequestFieldLabels = Omit<
 export const housingHelpRequestFieldLabels: FieldLabels<HousingHelpRequestFieldLabels> =
   {
     firstOpeningDate: 'Date de la première demande',
-    askedHousing: 'Logement demandé'
+    askedHousing: 'Logement demandé',
+    reason: 'Motif de la demande de logement',
+    uniqueId: 'Numéro unique de suivi'
   }
