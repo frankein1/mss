@@ -86,7 +86,11 @@
           :id="optionValue"
           type="button"
           class="fr-tag"
-          :class="{ 'active-menu-item': index === activeIndex }"
+          :class="{
+            'active-menu-item': index === activeIndex,
+            [`fr-tag--icon-left ${icons[optionValue]}`]:
+              Object.keys(icons).includes(optionValue)
+          }"
           :name="optionValue"
           :aria-pressed="selectedValues.includes(optionValue)"
           :tabindex="optionTabindex"
@@ -127,6 +131,7 @@
       readonly?: boolean
       disabledOptions?: string[]
       hint?: string
+      icons?: Record<string, string>
     }>(),
     {
       labelClass: '',
@@ -136,7 +141,8 @@
       disabled: false,
       readonly: false,
       disabledOptions: () => [],
-      hint: ''
+      hint: '',
+      icons: () => ({})
     }
   )
 
