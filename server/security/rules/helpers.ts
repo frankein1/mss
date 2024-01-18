@@ -62,7 +62,9 @@ export const isCreator = (
 export const isReferentFor = (
   grantee: SecurityRuleGrantee,
   target: SecurityTargetWithReferents & SecurityTargetWithStructure
-) =>
-  target.referents.some(r =>
+) => {
+  const isMember = target.referents.some(r =>
     typeof r === 'string' ? r === grantee.id : r.id === grantee.id
   )
+  return isMember && isReferent(grantee)
+}

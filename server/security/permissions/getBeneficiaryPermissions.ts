@@ -102,7 +102,7 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
   return {
     edit: {
       general: true,
-      relatives: !efs && !receptionAgent ,
+      relatives: !efs && !receptionAgent,
       health: !efs && !receptionAgent,
       occupationIncome: !efs && !receptionAgent,
       externalOrganisations: true
