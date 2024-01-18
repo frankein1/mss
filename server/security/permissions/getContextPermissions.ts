@@ -72,7 +72,6 @@ function getUserContextPermissions(
     manager,
     socialWorker,
     instructor,
-    receptionAgent,
     referent,
     ministryAgent,
     cias,
@@ -81,7 +80,7 @@ function getUserContextPermissions(
 
   return {
     export: {
-      history: manager || receptionAgent || instructor || socialWorker,
+      history: manager || instructor || socialWorker,
       beneficiaries: manager,
       stats: manager || socialWorker || referent || instructor
     },
