@@ -1,5 +1,5 @@
-import type { Ref } from 'vue'
-import type { Options } from '~/utils/options'
+import { Ref } from 'vue'
+import { Options, RichOptions } from '~/utils/options'
 
 /**
  * Add a watcher that watches options.
@@ -9,7 +9,7 @@ import type { Options } from '~/utils/options'
  * @param selectedValues The list of selected values
  */
 export function useWatchSelectOptions(
-  optionsSource: () => Options,
+  optionsSource: () => Options | RichOptions,
   selectedValues: Ref<string[]>,
   changedValues: () => void
 ) {
