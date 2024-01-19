@@ -37,5 +37,7 @@
     { eager: true }
   )
 
+  console.debug(glob)
+
   const imagePath = computed(() => glob[props.path.replace('~', '')]?.default)
 </script>
