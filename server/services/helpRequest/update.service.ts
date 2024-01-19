@@ -93,7 +93,7 @@ export async function update({ input, ctx }: UpdateParams) {
           instructorOrganization: prepareInstructorOrganization(
             instructorOrganizationId,
             ctx,
-            input.externalStructure === 'true',
+            externalStructure,
             target.instructorOrganizationId !== null
           )
         }
