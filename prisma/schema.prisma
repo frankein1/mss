@@ -218,7 +218,7 @@ model FollowupType {
   socialSupports SocialSupport[] @relation("social_support_to_followup_type")
   helpRequests   HelpRequest[]
 
-  ownedByStructure   Structure @relation(fields: [ownedByStructureId], references: [id])
+  ownedByStructure   Structure @relation(fields: [ownedByStructureId], references: [id], onDelete: Cascade)
   ownedByStructureId String    @map("owned_by_structured_id") @db.Uuid // FIXME: owned_by_structure**d**_id
 
   @@unique([name, ownedByStructureId])
