@@ -30,7 +30,6 @@
       name="housingType"
       :label="housingHelpRequestFieldLabels.housingType"
       :options="housingTypeOptions"
-      :icons="housingTypeBadgeClasses"
     />
   </div>
 
@@ -51,7 +50,6 @@
 </template>
 
 <script setup lang="ts">
-  import { housingTypeBadgeClasses } from '~/client/classes/housing'
   import { housingHelpRequestFieldLabels } from '~/client/labels/housingHelpRequest.labels'
   import {
     housingTypeOptions,

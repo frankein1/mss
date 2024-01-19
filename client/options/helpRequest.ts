@@ -57,7 +57,7 @@ export const helpRequestSubjectPictos: {
 
 export const helpRequestSubjectOptions = labelsToOptions(
   helpRequestSubjectLabels,
-  helpRequestSubjectPictos
+  { pictos: helpRequestSubjectPictos }
 )
 
 const baseRefusalReasonLabels = {

@@ -86,17 +86,20 @@
           :id="optionValue"
           type="button"
           class="fr-tag"
-          :class="{
-            'active-menu-item': index === activeIndex,
-            [`fr-tag--icon-left ${icons[optionValue]}`]:
-              Object.keys(icons).includes(optionValue)
-          }"
+          :class="[
+            index === activeIndex ? 'active-menu-item' : '',
+            typeof optionLabel !== 'string' && 'icon' in optionLabel
+              ? `fr-tag--icon-left ${optionLabel.icon}`
+              : ''
+          ]"
           :name="optionValue"
           :aria-pressed="selectedValues.includes(optionValue)"
           :tabindex="optionTabindex"
           :disabled="disabledOptions.includes(optionValue)"
         >
-          {{ optionLabel }}
+          {{
+            typeof optionLabel === 'string' ? optionLabel : optionLabel.label
+          }}
         </button>
       </li>
     </ul>
@@ -116,12 +119,12 @@
 <script setup lang="ts">
   import { useField } from 'vee-validate'
   import { toRef } from 'vue'
-  import type { Options } from '~/utils/options'
+  import { Options, RichOptions, OptionValues } from '~/utils/options'
 
   const props = withDefaults(
     defineProps<{
       label: string
-      options: Options
+      options: Options | RichOptions
       labelClass?: string
       required?: boolean
       name: string
@@ -131,7 +134,6 @@
       readonly?: boolean
       disabledOptions?: string[]
       hint?: string
-      icons?: Record<string, string>
     }>(),
     {
       labelClass: '',
@@ -141,8 +143,7 @@
       disabled: false,
       readonly: false,
       disabledOptions: () => [],
-      hint: '',
-      icons: () => ({})
+      hint: ''
     }
   )
 
@@ -209,7 +210,7 @@
       }
       return aSelected ? -1 : 1
     })
-    return new Map(sortedOptionsAsArray)
+    return new Map<string, OptionValues>(sortedOptionsAsArray)
   })
 
   const optionValues = computed(() => [...orderedOptions.value.keys()])
