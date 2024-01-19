@@ -34,7 +34,7 @@
   import { RoutePath } from '~/utils/routing'
   import { EventCategory, UserActivityEventAction } from '~/types/matomo'
 
-  const { matomo } = useMatomo()
+  const matomo = useMatomo()
 
   const PAGE_SIZE = 5
 
@@ -100,7 +100,7 @@
     }
     const isExpanded = expandBtn.value.getAttribute('aria-expanded') === 'true'
     if (!isExpanded) {
-      matomo.value.trackEvent(
+      matomo.trackEvent(
         EventCategory.UsersActivity,
         UserActivityEventAction.ExpandBeneficiaries
       )

@@ -99,7 +99,7 @@
   import { getRandomId } from '~/utils/random'
   import { INPUT_DEFER_DURATION } from '~/utils/constants'
 
-  const { matomo } = useMatomo()
+  const matomo = useMatomo()
 
   const props = withDefaults(
     defineProps<{
@@ -207,7 +207,7 @@
       emit('filter', selectedFiltersToDataObject(selectedFilters.value))
 
       if (filter.matomoEventCategory && filter.matomoEventAction) {
-        matomo.value.trackEvent(
+        matomo.trackEvent(
           filter.matomoEventCategory,
           filter.matomoEventAction
         )

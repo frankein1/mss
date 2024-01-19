@@ -40,7 +40,7 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
-  const { matomo } = useMatomo()
+  const matomo = useMatomo()
 
   const {
     data: agents,
@@ -78,7 +78,7 @@
         mutation: () => trpcClient.beneficiary.create.mutate(beneficiary),
         isSubmitting,
         onSuccess: ({ id }) => {
-          matomo.value.trackEvent(
+          matomo.trackEvent(
             EventCategory.CreateBeneficiary,
             CreateBeneficiaryEventAction.SavePartialForm
           )

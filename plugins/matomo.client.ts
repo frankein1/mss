@@ -1,4 +1,5 @@
 import VueMatomo from 'vue-matomo'
+import { MatomoApi, EventCategory, EventAction } from '~/types/matomo'
 
 export default defineNuxtPlugin(() => {
   const { public: publicConfig } = useRuntimeConfig()
@@ -18,4 +19,23 @@ export default defineNuxtPlugin(() => {
     trackInitialView: true,
     disableCookies: true
   })
+
+  const matomo = ref<MatomoApi>({
+    trackEvent: () => {}
+  })
+
+  const loadTracker = (tracker: MatomoApi) => {
+    matomo.value = tracker
+  }
+
+  const trackEvent = (category: EventCategory, action: EventAction) => {
+    matomo.value.trackEvent(category, action)
+  }
+
+  return {
+    provide: {
+      loadTracker,
+      trackEvent
+    }
+  }
 })

@@ -117,7 +117,7 @@
   import { DocumentPermissions } from '~/server/security'
 
   const modal = useModal()
-  const { matomo } = useMatomo()
+  const matomo = useMatomo()
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
 
@@ -138,7 +138,7 @@
   )
 
   function onView() {
-    matomo.value.trackEvent(EventCategory.Document, DocumentEventAction.See)
+    matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
     useTrpcMutation({
       mutation: () =>
         trpcClient.documents.createViewUrl.mutate({
@@ -154,10 +154,7 @@
   }
 
   function onDownload() {
-    matomo.value.trackEvent(
-      EventCategory.Document,
-      DocumentEventAction.Download
-    )
+    matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
     useTrpcMutation({
       mutation: () =>
         trpcClient.documents.createViewUrl.mutate({
@@ -178,7 +175,7 @@
   }
 
   function onEdit() {
-    matomo.value.trackEvent(EventCategory.Document, DocumentEventAction.Edit)
+    matomo.trackEvent(EventCategory.Document, DocumentEventAction.Edit)
     modal.open({
       title: 'Modifier le document',
       contentComponent: BeneficiaryDocumentEditForm,

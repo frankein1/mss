@@ -40,7 +40,7 @@
   import { RoutePath, Route } from '~/utils/routing'
 
   const trpcClient = useTrpcClient()
-  const { matomo } = useMatomo()
+  const matomo = useMatomo()
 
   const isSubmitting = ref(false)
 
@@ -90,7 +90,7 @@
         }),
       isSubmitting,
       onSuccess: ({ id }) => {
-        matomo.value.trackEvent(
+        matomo.trackEvent(
           EventCategory.CreateBeneficiary,
           CreateBeneficiaryEventAction.SaveCompleteForm
         )
