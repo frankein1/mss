@@ -4,7 +4,8 @@ import {
   Minister,
   AskedHousing,
   HousingReason,
-  HousingType
+  HousingType,
+  HousingRoomCount
 } from '@prisma/client'
 import { z } from 'zod'
 import {
@@ -18,11 +19,7 @@ import {
   stringOrEmpty,
   stringConstraint
 } from '../helpers.schema'
-import {
-  errorMessages,
-  requiredErrorMessage,
-  validIntNumber
-} from '~/utils/zod'
+import { errorMessages, requiredErrorMessage } from '~/utils/zod'
 
 export const createHousingHelpRequestSchemaBase = z.object({
   beneficiaryId: z.string().uuid(),
@@ -48,16 +45,12 @@ export const createHousingHelpRequestSchemaBase = z.object({
   [AskedHousing.ParcPrive]: z.boolean().default(false),
   [AskedHousing.ParcSocial]: z.boolean().default(false),
   reason: withEmptyValueOptionalNativeEnum(HousingReason),
-  uniqueId: stringConstraint.max(150, maxStringLengthMessage(50)),
+  uniqueId: stringConstraint.max(150, maxStringLengthMessage(50)).nullish(),
   taxHouseholdAdditionalInformation: openText(200).nullish(),
   maxRent: amountNumber.nullish(),
   maxCharges: amountNumber.nullish(),
-  housingType: withEmptyValueOptionalNativeEnum(HousingType),
-  roomCount: z.coerce
-    .number()
-    .int(validIntNumber)
-    .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
-    .nullish(),
+  housingType: z.array(z.nativeEnum(HousingType)),
+  roomCount: z.array(z.nativeEnum(HousingRoomCount)),
   isPmr: z.boolean().default(false)
 })
 

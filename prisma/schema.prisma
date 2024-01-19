@@ -476,6 +476,15 @@ enum HousingType {
   Appartement
 }
 
+enum HousingRoomCount {
+  One
+  Two
+  Three
+  Four
+  Five
+  SixAndMore
+}
+
 model HousingHelpRequest {
   id      String    @id @default(uuid()) @db.Uuid
   updated DateTime? @updatedAt
@@ -493,17 +502,17 @@ model HousingHelpRequest {
 
   fullFile Boolean? @map("full_file")
 
-  isFirst                           Boolean?       @map("is_first")
-  firstOpeningDate                  DateTime?      @map("first_opening_date") @db.Date
-  askedHousing                      AskedHousing[] @map("asked_housing")
+  isFirst                           Boolean?           @map("is_first")
+  firstOpeningDate                  DateTime?          @map("first_opening_date") @db.Date
+  askedHousing                      AskedHousing[]     @map("asked_housing")
   reason                            HousingReason?
-  uniqueId                          String?        @map("unique_id")
-  taxHouseholdAdditionalInformation String?        @map("tax_household_additional_information")
-  maxRent                           Decimal?       @map("max_rent")
-  maxCharges                        Decimal?       @map("max_charges")
-  housingType                       HousingType?   @map("housing_type")
-  roomCount                         Decimal?       @map("room_count")
-  isPmr                             Boolean?       @map("is_pmr")
+  uniqueId                          String?            @map("unique_id")
+  taxHouseholdAdditionalInformation String?            @map("tax_household_additional_information")
+  maxRent                           Decimal?           @map("max_rent")
+  maxCharges                        Decimal?           @map("max_charges")
+  housingType                       HousingType[]      @map("housing_type")
+  roomCount                         HousingRoomCount[] @map("room_count")
+  isPmr                             Boolean?           @map("is_pmr")
 
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
   socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
