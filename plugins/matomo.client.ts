@@ -4,8 +4,25 @@ import { MatomoApi, EventCategory, EventAction } from '~/types/matomo'
 export default defineNuxtPlugin(() => {
   const { public: publicConfig } = useRuntimeConfig()
 
+  const matomo = ref<MatomoApi>({
+    trackEvent: () => {}
+  })
+
+  const loadTracker = (tracker: MatomoApi) => {
+    matomo.value = tracker
+  }
+
+  const trackEvent = (category: EventCategory, action: EventAction) => {
+    matomo.value.trackEvent(category, action)
+  }
+
+  const provide = {
+    loadTracker,
+    trackEvent
+  }
+
   if (!publicConfig.matomo.host || !publicConfig.matomo.siteId) {
-    return
+    return { provide }
   }
 
   const nuxtApp = useNuxtApp()
@@ -20,22 +37,5 @@ export default defineNuxtPlugin(() => {
     disableCookies: true
   })
 
-  const matomo = ref<MatomoApi>({
-    trackEvent: () => {}
-  })
-
-  const loadTracker = (tracker: MatomoApi) => {
-    matomo.value = tracker
-  }
-
-  const trackEvent = (category: EventCategory, action: EventAction) => {
-    matomo.value.trackEvent(category, action)
-  }
-
-  return {
-    provide: {
-      loadTracker,
-      trackEvent
-    }
-  }
+  return { provide }
 })
