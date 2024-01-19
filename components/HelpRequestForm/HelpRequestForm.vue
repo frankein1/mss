@@ -30,13 +30,15 @@
         :subject="subject"
       />
 
-      <hr class="helprequestform__divider" />
+      <HelpRequestFormHousingSection
+        v-if="isHousingSupport"
+        :beneficiary-id="beneficiaryId"
+      />
 
-      <template v-if="subject === ExtendedHelpRequestSubject.Housing">
-        <HelpRequestFormFeatureSection />
-
-        <hr class="helprequestform__divider" />
-      </template>
+      <hr
+        v-else
+        class="helprequestform__divider"
+      />
 
       <HelpRequestFormSynthesisSection
         :can-edit-private-synthesis="canEditPrivateSynthesis"
