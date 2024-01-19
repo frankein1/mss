@@ -22,24 +22,24 @@
           @export="exportHelpRequests"
         />
       </div>
-      <div v-show="pending">
+      <div v-if="pending">
         <AtomLoader class="fr-mx-auto" />
       </div>
-      <HelpRequestsTable
-        v-show="!pending"
-        v-model:sort="orderBy"
-        :items="items"
-        :pending="pending"
-        @help-request-updated="onHelpRequestUpdated"
-      />
-      <AtomPagination
-        v-show="!pending"
-        class="fr-mt-4w fr-px-5v"
-        :page="page"
-        :per-page="perPage"
-        :total-pages="totalPages"
-        @change-page="updatePagination($event)"
-      />
+      <template v-else>
+        <HelpRequestsTable
+          v-model:sort="orderBy"
+          :items="items"
+          :pending="pending"
+          @help-request-updated="onHelpRequestUpdated"
+        />
+        <AtomPagination
+          class="fr-mt-4w fr-px-5v"
+          :page="page"
+          :per-page="perPage"
+          :total-pages="totalPages"
+          @change-page="updatePagination($event)"
+        />
+      </template>
     </template>
   </div>
 </template>

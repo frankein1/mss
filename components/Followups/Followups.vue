@@ -23,23 +23,23 @@
           @export="exportFollowups"
         />
       </div>
-      <div v-show="pending">
+      <div v-if="pending">
         <AtomLoader class="fr-mx-auto" />
       </div>
-      <FollowupsTable
-        v-show="!pending"
-        v-model:sort="orderBy"
-        :items="pageItems"
-        :pending="pending"
-      />
-      <AtomPagination
-        v-show="!pending"
-        class="fr-mt-4w fr-px-5v"
-        :page="pageNumber"
-        :per-page="perPage"
-        :total-pages="totalPages"
-        @change-page="updatePagination($event)"
-      />
+      <template v-else>
+        <FollowupsTable
+          v-model:sort="orderBy"
+          :items="pageItems"
+          :pending="pending"
+        />
+        <AtomPagination
+          class="fr-mt-4w fr-px-5v"
+          :page="pageNumber"
+          :per-page="perPage"
+          :total-pages="totalPages"
+          @change-page="updatePagination($event)"
+        />
+      </template>
     </template>
   </div>
 </template>
