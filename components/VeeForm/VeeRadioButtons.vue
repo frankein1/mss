@@ -41,7 +41,7 @@
           }}
         </label>
         <div
-          v-if="typeof optionLabel !== 'string'"
+          v-if="typeof optionLabel !== 'string' && 'picto' in optionLabel"
           class="fr-radio-rich__img"
         >
           <AtomPictogram :path="optionLabel.picto" />
