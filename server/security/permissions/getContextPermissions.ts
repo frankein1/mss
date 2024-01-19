@@ -80,7 +80,7 @@ function getUserContextPermissions(
 
   return {
     export: {
-      history: manager || instructor || socialWorker,
+      history: manager || socialWorker || referent || instructor,
       beneficiaries: manager,
       stats: manager || socialWorker || referent || instructor
     },
