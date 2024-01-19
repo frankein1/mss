@@ -15,13 +15,12 @@
       :alert-type="AlertType.Error"
       message="La liste des documents n'a pas pu être chargée."
     />
+    <AtomLoader
+      v-else-if="pending"
+      class="fr-mx-auto"
+    />
     <template v-else>
-      <AtomLoader
-        v-show="pending"
-        class="fr-mx-auto"
-      />
       <BeneficiaryDocumentTable
-        v-show="!pending"
         v-model:sort="orderBy"
         :documents="documents"
         :pending="pending"
@@ -29,7 +28,6 @@
         @document-deleted="onDocumentDeleted"
       />
       <AtomPagination
-        v-show="!pending"
         class="fr-mt-4w fr-px-5v"
         :page="page"
         :per-page="perPage"
