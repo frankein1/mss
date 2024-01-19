@@ -32,20 +32,10 @@
   )
 
   // Nuxt/Vite do not handle dynamic assets path. Cheers to danielroe for this workaround - https://github.com/nuxt/nuxt/issues/14766#issuecomment-1397365205
-  const glob = import.meta.glob('~/assets/pictograms/*.svg')
+  const glob: Record<string, { default: string }> = import.meta.glob(
+    '~/assets/pictograms/*.svg',
+    { eager: true }
+  )
 
-  console.debug(glob)
-
-  for (const path in glob) {
-    glob[path]().then(mod => {
-      console.log(path, mod)
-    })
-  }
-
-  const imagePath = computed(() => props.path)
-
-  // const imagePath = computed(async () => {
-  //   const mod = glob[props.path.replace('~', '')]
-  //   const {default} = await mod()
-  // return default})
+  const imagePath = computed(() => glob[props.path.replace('~', '')]?.default)
 </script>
