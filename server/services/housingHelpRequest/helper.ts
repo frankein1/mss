@@ -1,7 +1,47 @@
-import { SocialSupportStatus, AskedHousing } from '@prisma/client'
-import { CreateHousingHelpRequestInput } from '~/server/schema'
+import { Prisma, SocialSupportStatus, AskedHousing } from '@prisma/client'
+import {
+  CreateHousingHelpRequestInput,
+  HelpRequestFilterInput
+} from '~/server/schema'
 
 export const cleanCreateInput = cleanInput
+
+export function prepareFilters(filters: HelpRequestFilterInput) {
+  const formattedFilters: Prisma.HousingHelpRequestWhereInput = {}
+  formattedFilters.socialSupport = {}
+
+  if (filters.status) {
+    formattedFilters.socialSupport.status = filters.status
+  }
+
+  if (filters.followupTypes) {
+    formattedFilters.socialSupport.types = {
+      some: { id: { in: filters.followupTypes } }
+    }
+  }
+
+  if (filters.examinationDate) {
+    formattedFilters.examinationDate = filters.examinationDate
+  }
+
+  if (filters.externalStructure !== undefined) {
+    formattedFilters.externalStructure = filters.externalStructure === 'true'
+  }
+
+  if (filters.referents) {
+    formattedFilters.socialSupport = {
+      beneficiary: {
+        referents: { some: { id: { in: filters.referents } } }
+      }
+    }
+  }
+
+  if (filters.ministre) {
+    formattedFilters.socialSupport = { ministre: { in: filters.ministre } }
+  }
+
+  return formattedFilters
+}
 
 function cleanInput(input: CreateHousingHelpRequestInput) {
   const {

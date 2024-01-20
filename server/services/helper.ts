@@ -5,6 +5,7 @@ import {
   Followup,
   FollowupType,
   HelpRequest,
+  HousingHelpRequest,
   InstructorOrganization,
   NotificationType,
   PrescribingOrganization,
@@ -166,5 +167,56 @@ export function filterHelpRequest({
 
     prescribingOrganization: show(helpRequest.prescribingOrganization, details),
     instructorOrganization: show(helpRequest.instructorOrganization, details)
+  }
+}
+
+export function filterHousingHelpRequest({
+  helpRequest,
+  conditions
+}: {
+  helpRequest: HousingHelpRequest & {
+    instructorOrganization: Partial<InstructorOrganization> | null
+  }
+  conditions: {
+    details: boolean
+    minister: boolean
+    privateSynthesis: boolean
+    dueDate: boolean
+  }
+}) {
+  const { details } = conditions
+  return {
+    id: helpRequest.id,
+    fullFile: helpRequest.fullFile,
+
+    decisionDate: show(helpRequest.decisionDate, details),
+    dispatchDate: show(helpRequest.dispatchDate, details),
+
+    examinationDate: show(helpRequest.examinationDate, details),
+    externalStructure: show(helpRequest.externalStructure, details),
+    instructorOrganizationId: show(
+      helpRequest.instructorOrganizationId,
+      details
+    ),
+
+    refusalReason: show(helpRequest.refusalReason, details),
+
+    instructorOrganization: show(helpRequest.instructorOrganization, details),
+
+    // TODO: Permissions à vérifier
+    isFirst: show(helpRequest.isFirst, details),
+    firstOpeningDate: show(helpRequest.firstOpeningDate, details),
+    askedHousing: show(helpRequest.askedHousing, details),
+    reason: show(helpRequest.reason, details),
+    uniqueId: show(helpRequest.uniqueId, details),
+    taxHouseholdAdditionalInformation: show(
+      helpRequest.taxHouseholdAdditionalInformation,
+      details
+    ),
+    maxRent: show(helpRequest.maxRent, details),
+    maxCharges: show(helpRequest.maxCharges, details),
+    housingType: show(helpRequest.housingType, details),
+    roomCount: show(helpRequest.roomCount, details),
+    isPmr: show(helpRequest.isPmr, details)
   }
 }
