@@ -10,5 +10,8 @@ export const housingHelpRequestRouter = router({
     .query(routes.getOne.execute),
   getPage: protectedProcedure
     .input(routes.getPage.inputValidation)
-    .query(routes.getPage.execute)
+    .query(routes.getPage.execute),
+  update: protectedProcedure
+    .input(routes.update.inputValidation)
+    .mutation(routes.update.execute)
 })

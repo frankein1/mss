@@ -5,6 +5,7 @@ import {
 } from '~/server/schema'
 
 export const cleanCreateInput = cleanInput
+export const cleanUpdateInput = cleanInput
 
 export function prepareFilters(filters: HelpRequestFilterInput) {
   const formattedFilters: Prisma.HousingHelpRequestWhereInput = {}

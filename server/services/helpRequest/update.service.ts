@@ -1,8 +1,5 @@
-import {
-  cleanUpdateInput,
-  prepareInstructorOrganization,
-  preparePrescribingOrganization
-} from './helper'
+import { prepareInstructorOrganization } from '../helper'
+import { cleanUpdateInput, preparePrescribingOrganization } from './helper'
 import { SocialSupportRepo, HelpRequestRepo } from '~/server/database'
 import { markFollowupTypeAsUsed } from '~/server/query'
 import { EditHelpRequestInput } from '~/server/schema'

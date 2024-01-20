@@ -12,7 +12,34 @@ import {
   SocialSupport,
   User
 } from '@prisma/client'
-import { SecurityRuleGrantee } from '../security'
+import { SecurityRuleContext, SecurityRuleGrantee } from '../security'
+import { connect } from '~/utils/prisma'
+
+export function prepareInstructorOrganization(
+  instructorOrganizationId: string | null | undefined,
+  ctx: SecurityRuleContext,
+  isExternalStructure: boolean,
+  hasInstructorOrganizationAlreadySelected = false
+) {
+  if (!isExternalStructure) {
+    return undefined
+  }
+  if (!instructorOrganizationId) {
+    return hasInstructorOrganizationAlreadySelected
+      ? { disconnect: true }
+      : undefined
+  }
+  if (isNewOption(instructorOrganizationId)) {
+    return {
+      create: {
+        name: newOptionToLabel(instructorOrganizationId),
+        structureId: ctx.structure.id,
+        createdById: ctx.user.id
+      }
+    }
+  }
+  return connect(instructorOrganizationId)
+}
 
 export function prepareNewHistoryElementNotification(
   beneficiary: Pick<Beneficiary, 'id'> & { referents: { id: string }[] },
