@@ -13,19 +13,19 @@
 <script lang="ts" setup>
   import { AskedHousing, InstructorOrganization } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import { HousingHelpRequestPageItem } from './types'
   import {
     EditHousingHelpRequestInput,
     editHousingHelpRequestSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { GetHousingHelpRequestOutput } from '~/server/trpc/routers'
 
   const { application } = usePermissions()
 
   const props = defineProps<{
     isSubmitting: boolean
     instructorOrganizations: InstructorOrganization[]
-    data: HousingHelpRequestPageItem
+    data: GetHousingHelpRequestOutput
   }>()
 
   const emit = defineEmits<{

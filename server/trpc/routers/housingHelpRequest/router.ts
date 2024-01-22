@@ -8,9 +8,6 @@ export const housingHelpRequestRouter = router({
   getOne: protectedProcedure
     .input(routes.getOne.inputValidation)
     .query(routes.getOne.execute),
-  getPage: protectedProcedure
-    .input(routes.getPage.inputValidation)
-    .query(routes.getPage.execute),
   update: protectedProcedure
     .input(routes.update.inputValidation)
     .mutation(routes.update.execute)

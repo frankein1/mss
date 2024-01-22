@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security'
@@ -27,3 +28,7 @@ export const getOne = createQuery({
   securityCheck,
   handler
 })
+
+export type GetHousingHelpRequestOutput = Prisma.PromiseReturnType<
+  typeof handler
+>
