@@ -6,6 +6,7 @@ import {
 import {
   getGranteRole,
   isInSameStructure,
+  isMemberOfReferents,
   isReferentFor
 } from '../rules/helpers'
 
@@ -153,6 +154,7 @@ function getEditionPermissions({
   }
 
   const isReferent = isReferentFor(user, beneficiary)
+  const isMember = isMemberOfReferents(user, beneficiary)
 
   const { manager, socialWorker, instructor, receptionAgent, cias, ccas, efs } =
     getGranteRole(ctx)
@@ -162,7 +164,9 @@ function getEditionPermissions({
       general:
         isReferent || manager || socialWorker || instructor || receptionAgent,
       relatives: !efs && (isReferent || manager || socialWorker || instructor),
-      health: !efs && (isReferent || manager || socialWorker || instructor),
+      health:
+        !efs &&
+        (isReferent || ((manager || socialWorker || instructor) && isMember)),
       occupationIncome:
         !efs && (isReferent || manager || socialWorker || instructor),
       externalOrganisations: isReferent || manager || socialWorker || instructor
@@ -178,7 +182,9 @@ function getEditionPermissions({
       general:
         isReferent || manager || socialWorker || instructor || receptionAgent,
       relatives: !efs && (isReferent || manager || socialWorker || instructor),
-      health: !efs && (isReferent || manager || socialWorker || instructor),
+      health:
+        !efs &&
+        (isReferent || ((manager || socialWorker || instructor) && isMember)),
       occupationIncome:
         !efs && (isReferent || manager || socialWorker || instructor),
       externalOrganisations: isReferent || manager || socialWorker || instructor
