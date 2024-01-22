@@ -114,7 +114,8 @@
     if (socialSupport.value.helpRequest) {
       return RoutePath.AppBeneficiaryHelpRequestEdit(
         socialSupport.value.beneficiaryId,
-        socialSupport.value.helpRequest.id
+        socialSupport.value.helpRequest.id,
+        socialSupport.value.helpRequest.subject
       )
     }
 

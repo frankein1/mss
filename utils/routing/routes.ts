@@ -268,8 +268,12 @@ export const RoutePath = {
     )}/${subject.toLocaleLowerCase()}/add`,
   [Route.AppBeneficiaryHelpRequestEdit]: (
     beneficiaryId: string,
-    helpRequestId: string
-  ) => `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/${helpRequestId}/edit`,
+    helpRequestId: string,
+    subject: ExtendedHelpRequestSubject
+  ) =>
+    `${BeneficiaryHelpRequestsRoute(
+      beneficiaryId
+    )}/${subject.toLocaleLowerCase()}/${helpRequestId}/edit`,
   [Route.AppHistory]: () => `${AppRoute}/history`,
 
   // ADMIN

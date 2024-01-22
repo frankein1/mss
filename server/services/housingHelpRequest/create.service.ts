@@ -1,6 +1,8 @@
 import { SocialSupportType } from '@prisma/client'
-import { prepareNewHistoryElementNotification } from '../helper'
-import { prepareInstructorOrganization } from '../helpRequest/helper'
+import {
+  prepareNewHistoryElementNotification,
+  prepareInstructorOrganization
+} from '../helper'
 import { cleanCreateInput } from './helper'
 import { BeneficiaryRepo, HousingHelpRequestRepo } from '~/server/database'
 import { CreateHousingHelpRequestInput } from '~/server/schema'
