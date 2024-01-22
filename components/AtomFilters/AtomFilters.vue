@@ -207,10 +207,7 @@
       emit('filter', selectedFiltersToDataObject(selectedFilters.value))
 
       if (filter.matomoEventCategory && filter.matomoEventAction) {
-        matomo.trackEvent(
-          filter.matomoEventCategory,
-          filter.matomoEventAction
-        )
+        matomo.trackEvent(filter.matomoEventCategory, filter.matomoEventAction)
       }
     }
   )
