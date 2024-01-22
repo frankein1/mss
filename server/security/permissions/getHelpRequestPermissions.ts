@@ -95,7 +95,7 @@ function getEditionPermissions({
     getGranteRole(ctx)
 
   return {
-    edit: manager || creator,
+    edit: manager || (creator && (socialWorker || instructor || referent)),
     view: isReferent || manager || socialWorker || instructor || receptionAgent,
     get: {
       details: manager || socialWorker || instructor || isReferent,

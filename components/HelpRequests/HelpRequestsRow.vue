@@ -10,7 +10,7 @@
     >
       <td>
         <HelpRequestsStatusForm
-          v-if="permissions"
+          v-if="permissions.edit"
           :item="item"
           @click.stop
           @updated="emit('updated', $event)"
