@@ -52,7 +52,7 @@ export async function update({ input, ctx }: UpdateParams) {
     isPmr
   } = cleanUpdateInput(input)
 
-  const helpRequest = await SocialSupportRepo.prisma.update({
+  const helpRequest = await SocialSupportRepo.update(ctx.user, {
     where: { id: input.socialSupportId },
     data: {
       status,

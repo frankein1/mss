@@ -26,33 +26,6 @@ export const include = {
   }
 }
 
-export async function getPage(
-  ctx: SecurityRuleContext,
-  args: Omit<Prisma.HousingHelpRequestFindManyArgs, 'select' | 'include'>
-) {
-  const helpRequests = await HousingHelpRequestRepo.findMany(ctx.user, {
-    where: args.where,
-    include,
-    take: args.take,
-    skip: args.skip,
-    orderBy: args.orderBy
-  })
-  return helpRequests.map(helpRequest => {
-    const { socialSupport } = helpRequest
-    const { beneficiary } = socialSupport
-    const permissions = getHelpRequestPermissions({
-      ctx,
-      beneficiary,
-      socialSupport
-    })
-    const appPermissions = getAppContextPermissions(ctx)
-    return {
-      helpRequest: filter(appPermissions, permissions, helpRequest),
-      permissions
-    }
-  })
-}
-
 function findOne(user: SecurityRuleGrantee, id: string) {
   return HousingHelpRequestRepo.findUniqueOrThrow(user, {
     where: {

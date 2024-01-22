@@ -78,7 +78,7 @@
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
   )
 
-  const subject = computed(() => helpRequest.value?.subject || 'Financial')
+  const subject = computed(() => helpRequest.value?.subject || 'Other')
 
   const subtitle = computed(() =>
     subject.value === 'Financial' ? 'Aide financière' : undefined

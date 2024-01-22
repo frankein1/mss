@@ -86,7 +86,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     }
   }
 
-  const fu = await SocialSupportRepo.prisma.update({
+  const fu = await SocialSupportRepo.update(ctx.user, {
     where: {
       id: socialSupportId
     },

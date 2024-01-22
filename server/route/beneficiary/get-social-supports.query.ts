@@ -181,6 +181,7 @@ function formatResult(
           conditions
         })
       : null
+    // FIXME: FilteredHelpRequest
 
     const { documents, comments, ...otherData } = filteredSocialSupport
 
