@@ -46,7 +46,7 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
   const socialSupport: Prisma.SocialSupportWhereInput = {}
 
   if (filters.fromDate || filters.toDate) {
-    socialSupport.created = prepareDateFilters(filters)
+    socialSupport.date = prepareDateFilters(filters)
   }
 
   if (filters.followupTypes) {
