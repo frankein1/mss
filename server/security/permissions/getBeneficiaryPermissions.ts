@@ -23,9 +23,8 @@ export type BeneficiaryPermissions = {
     health: boolean
     occupationIncome: boolean
     externalOrganisations: boolean
-    documents: boolean
-    history: boolean
   }
+  list: { documents: boolean; history: boolean }
   get: {
     nir: boolean
   }
@@ -58,7 +57,9 @@ const FALSY_PERMISSIONS = {
     relatives: false,
     health: false,
     occupationIncome: false,
-    externalOrganisations: false,
+    externalOrganisations: false
+  },
+  list: {
     documents: false,
     history: false
   },
@@ -112,7 +113,9 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
       relatives: false,
       health: false,
       occupationIncome: false,
-      externalOrganisations: false,
+      externalOrganisations: false
+    },
+    list: {
       documents: false,
       history: false
     },
@@ -178,8 +181,9 @@ function getEditionPermissions({
       health: !efs && (isReferent || manager || socialWorker || instructor),
       occupationIncome:
         !efs && (isReferent || manager || socialWorker || instructor),
-      externalOrganisations:
-        isReferent || manager || socialWorker || instructor,
+      externalOrganisations: isReferent || manager || socialWorker || instructor
+    },
+    list: {
       documents:
         isReferent || manager || socialWorker || instructor || receptionAgent,
       history:
