@@ -205,7 +205,7 @@ function getEditionPermissions({
         isReferent || manager || socialWorker || instructor || receptionAgent
     },
     delete: {
-      beneficiary: isReferent || manager || socialWorker
+      beneficiary: manager || socialWorker
     }
   }
 }

@@ -81,7 +81,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td></td>
             <td></td>
-            <td>* si il est référent</td>
+            <td></td>
           </tr>
           <tr>
             <td>
