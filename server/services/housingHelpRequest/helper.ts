@@ -2,6 +2,7 @@ import { SocialSupportStatus, AskedHousing } from '@prisma/client'
 import { CreateHousingHelpRequestInput } from '~/server/schema'
 
 export const cleanCreateInput = cleanInput
+export const cleanUpdateInput = cleanInput
 
 function cleanInput(input: CreateHousingHelpRequestInput) {
   const {

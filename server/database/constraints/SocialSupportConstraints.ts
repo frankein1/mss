@@ -27,5 +27,6 @@ const get = (user: SecurityRuleGrantee) => {
 
 export const SocialSupportConstraints = {
   get,
-  remove: get
+  remove: get,
+  update: get
 }

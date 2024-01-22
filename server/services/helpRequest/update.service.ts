@@ -1,8 +1,5 @@
-import {
-  cleanUpdateInput,
-  prepareInstructorOrganization,
-  preparePrescribingOrganization
-} from './helper'
+import { prepareInstructorOrganization } from '../helper'
+import { cleanUpdateInput, preparePrescribingOrganization } from './helper'
 import { SocialSupportRepo, HelpRequestRepo } from '~/server/database'
 import { markFollowupTypeAsUsed } from '~/server/query'
 import { EditHelpRequestInput } from '~/server/schema'
@@ -55,7 +52,7 @@ export async function update({ input, ctx }: UpdateParams) {
     isRefundable
   } = cleanUpdateInput({ input, subject: target.subject })
 
-  const helpRequest = await SocialSupportRepo.prisma.update({
+  const helpRequest = await SocialSupportRepo.update(ctx.user, {
     where: { id: input.socialSupportId },
     data: {
       status,

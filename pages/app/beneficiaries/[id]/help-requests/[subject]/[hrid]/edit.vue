@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest)"
+      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest, subject)"
     />
     <PageTitle
       :title="title"
@@ -78,17 +78,18 @@
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
   )
 
+  const subject = computed(() => helpRequest.value?.subject || 'Other')
+
   const subtitle = computed(() =>
-    helpRequest.value?.subject === 'Financial' ? 'Aide financière' : undefined
+    subject.value === 'Financial' ? 'Aide financière' : undefined
   )
 
   const subtitlePictoPath = computed(() => {
     if (!helpRequest.value) {
       return undefined
     }
-    const subject = helpRequest.value.subject
-    return subject === 'Financial'
-      ? helpRequestSubjectPictos[subject]
+    return subject.value === 'Financial'
+      ? helpRequestSubjectPictos[subject.value]
       : undefined
   })
 

@@ -8,32 +8,6 @@ import { connect } from '~/utils/prisma'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 
-export function prepareInstructorOrganization(
-  instructorOrganizationId: string | null | undefined,
-  ctx: SecurityRuleContext,
-  isExternalStructure: boolean,
-  hasInstructorOrganizationAlreadySelected = false
-) {
-  if (!isExternalStructure) {
-    return undefined
-  }
-  if (!instructorOrganizationId) {
-    return hasInstructorOrganizationAlreadySelected
-      ? { disconnect: true }
-      : undefined
-  }
-  if (isNewOption(instructorOrganizationId)) {
-    return {
-      create: {
-        name: newOptionToLabel(instructorOrganizationId),
-        structureId: ctx.structure.id,
-        createdById: ctx.user.id
-      }
-    }
-  }
-  return connect(instructorOrganizationId)
-}
-
 export function preparePrescribingOrganization(
   prescribingOrganizationId: string | null | undefined,
   ctx: SecurityRuleContext

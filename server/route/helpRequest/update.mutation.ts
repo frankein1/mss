@@ -1,4 +1,4 @@
-import { StructureType, UserActivityType } from '@prisma/client'
+import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
@@ -34,7 +34,6 @@ const securityCheck = async (
   const appPermissions = getAppContextPermissions(ctx)
 
   const { prescribingOrganizationId, instructorOrganizationId } = input
-  const { structure } = ctx
 
   if (
     isNewOption(prescribingOrganizationId) &&
@@ -55,7 +54,7 @@ const securityCheck = async (
 
   if (
     (input.numeroPegase || input.ministre) &&
-    structure.type !== StructureType.Ministere
+    !appPermissions.module.ministere
   ) {
     return false
   }

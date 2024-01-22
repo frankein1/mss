@@ -18,7 +18,8 @@ import {
 import {
   filterHelpRequest,
   filterSocialSupport,
-  filterFollowup
+  filterFollowup,
+  filterHousingHelpRequest
 } from '~/server/services/helper'
 
 const securityCheck = async (
@@ -124,6 +125,11 @@ function loadSocialSupports(
           prescribingOrganization: true
         }
       },
+      housingHelpRequest: {
+        include: {
+          instructorOrganization: true
+        }
+      },
       _count: {
         select: {
           notifications: {
@@ -155,7 +161,7 @@ function formatResult(
 
     const appPermissions = getAppContextPermissions(ctx)
 
-    const { followup, helpRequest } = socialSupport
+    const { followup, helpRequest, housingHelpRequest } = socialSupport
 
     const conditions = {
       minister: appPermissions.module.ministere,
@@ -180,6 +186,9 @@ function formatResult(
           followup,
           conditions
         })
+      : null
+    const filteredHousingHelpRequest = housingHelpRequest
+      ? filterHousingHelpRequest({ housingHelpRequest, conditions })
       : null
 
     const { documents, comments, ...otherData } = filteredSocialSupport
@@ -207,7 +216,8 @@ function formatResult(
         documents: documentItems,
         hasUnreadNotifications: !!_count.notifications,
         followup: filteredFollowup,
-        helpRequest: filteredHelpRequest
+        helpRequest: filteredHelpRequest,
+        housingHelpRequest: filteredHousingHelpRequest
       },
       permissions: socialSupportPermissions
     }

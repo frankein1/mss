@@ -29,14 +29,12 @@ export const include = {
 
 function findOne(user: SecurityRuleGrantee, id: string) {
   return HelpRequestRepo.findUniqueOrThrow(user, {
-    where: {
-      id
-    },
+    where: { id },
     include
   })
 }
 
-type HelpRequestOutput = Prisma.PromiseReturnType<typeof findOne>
+type HelpRequestOutput = NonNullable<Prisma.PromiseReturnType<typeof findOne>>
 
 export async function getPage(
   ctx: SecurityRuleContext,
@@ -66,10 +64,7 @@ export async function getPage(
 }
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
-  const helpRequest = await HelpRequestRepo.findUniqueOrThrow(ctx.user, {
-    where: { id },
-    include
-  })
+  const helpRequest = await findOne(ctx.user, id)
   const { socialSupport } = helpRequest
   const { beneficiary } = socialSupport
   const permissions = getHelpRequestPermissions({
@@ -87,7 +82,7 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
 export function filter(
   appPermissions: AppContextPermissions,
   permissions: HelpRequestPermissions,
-  helpRequest: NonNullable<HelpRequestOutput>
+  helpRequest: HelpRequestOutput
 ) {
   const { socialSupport } = helpRequest
   const conditions = {
@@ -96,18 +91,15 @@ export function filter(
     minister: appPermissions.module.ministere,
     privateSynthesis: permissions.get.privateSynthesis
   }
-  const filteredSocialSupport = filterSocialSupport({
+  const { types, ...filteredSocialSupport } = filterSocialSupport({
     socialSupport,
     conditions
   })
+  const type = types.length ? types[0] : null
   const filteredHelpRequest = filterHelpRequest({
     helpRequest,
     conditions
   })
-
-  const type = filteredSocialSupport.types?.length
-    ? filteredSocialSupport.types[0]
-    : null
 
   return {
     ...filteredSocialSupport,
