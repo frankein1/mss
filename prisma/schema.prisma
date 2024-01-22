@@ -910,6 +910,8 @@ enum Minister {
   AuroreBerge
   // Fadila Khattabi (Personnes handicapées)
   FadilaKhattabi
+  // Catherine Vautrin (Travail, Santé et Solidarités)
+  CatherineVautrin
 }
 
 enum BeneficiaryAccommodationZone {

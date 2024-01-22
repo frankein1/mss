@@ -14,7 +14,9 @@ const currentMinisterLabels = {
   [Minister.OlivierDussopt]:
     'Olivier Dussopt (Travail, Plein emploi et Insertion)',
   [Minister.CaroleGrandjean]:
-    'Carole Grandjean (Enseignement, Formation professionnels)'
+    'Carole Grandjean (Enseignement, Formation professionnels)',
+  [Minister.CatherineVautrin]:
+    'Catherine Vautrin (Travail, Santé et Solidarités)'
 }
 
 const currentMinisterOptions = labelsToOptions(currentMinisterLabels)
