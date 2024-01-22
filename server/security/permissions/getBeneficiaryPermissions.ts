@@ -67,7 +67,6 @@ const FALSY_PERMISSIONS = {
     nir: false
   },
   set: {
-    referents: false,
     nir: false
   },
   create: {
@@ -123,7 +122,6 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
       nir: cias || ccas
     },
     set: {
-      referents: true,
       nir: cias || ccas
     },
 
