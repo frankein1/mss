@@ -29,8 +29,11 @@ export async function getEditionPermissions(
   ctx: SecurityRuleContext,
   id: string
 ): Promise<HelpRequestPermissions> {
-  const helpRequest = await getHousingHelpRequestSecurityTarget(ctx.user, id)
-  const { socialSupport } = helpRequest
+  const housingHelpRequest = await getHousingHelpRequestSecurityTarget(
+    ctx.user,
+    id
+  )
+  const { socialSupport } = housingHelpRequest
   return getHelpRequestPermissions({
     ctx,
     beneficiary: socialSupport.beneficiary,

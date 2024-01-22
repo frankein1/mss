@@ -129,22 +129,22 @@ export function filterFollowup({
 }) {
   return {
     // HEADER
-    id: followup?.id,
-    structureName: followup?.structureName,
-    redirected: followup?.redirected,
-    medium: followup?.medium,
+    id: followup.id,
+    structureName: followup.structureName,
+    redirected: followup.redirected,
+    medium: followup.medium,
     // MINISTERE
     classified: show(followup.classified, conditions.minister),
     forwardedToJustice: show(followup.forwardedToJustice, conditions.minister),
     // DETAILS
     prescribingOrganization: show(
-      followup?.prescribingOrganization,
+      followup.prescribingOrganization,
       conditions.details
     ),
-    firstFollowup: show(followup?.firstFollowup, conditions.details),
-    helpRequested: show(followup?.helpRequested, conditions.details),
-    thirdPersonName: show(followup?.thirdPersonName, conditions.details),
-    place: show(followup?.place, conditions.details)
+    firstFollowup: show(followup.firstFollowup, conditions.details),
+    helpRequested: show(followup.helpRequested, conditions.details),
+    thirdPersonName: show(followup.thirdPersonName, conditions.details),
+    place: show(followup.place, conditions.details)
   }
 }
 export function filterHelpRequest({
@@ -198,10 +198,10 @@ export function filterHelpRequest({
 }
 
 export function filterHousingHelpRequest({
-  helpRequest,
+  housingHelpRequest,
   conditions
 }: {
-  helpRequest: HousingHelpRequest & {
+  housingHelpRequest: HousingHelpRequest & {
     instructorOrganization: Partial<InstructorOrganization> | null
   }
   conditions: {
@@ -213,37 +213,39 @@ export function filterHousingHelpRequest({
 }) {
   const { details } = conditions
   return {
-    id: helpRequest.id,
-    fullFile: helpRequest.fullFile,
+    id: housingHelpRequest.id,
+    fullFile: housingHelpRequest.fullFile,
 
-    decisionDate: show(helpRequest.decisionDate, details),
-    dispatchDate: show(helpRequest.dispatchDate, details),
+    decisionDate: show(housingHelpRequest.decisionDate, details),
+    dispatchDate: show(housingHelpRequest.dispatchDate, details),
 
-    examinationDate: show(helpRequest.examinationDate, details),
-    externalStructure: show(helpRequest.externalStructure, details),
+    examinationDate: show(housingHelpRequest.examinationDate, details),
+    externalStructure: show(housingHelpRequest.externalStructure, details),
     instructorOrganizationId: show(
-      helpRequest.instructorOrganizationId,
+      housingHelpRequest.instructorOrganizationId,
       details
     ),
 
-    refusalReason: show(helpRequest.refusalReason, details),
+    refusalReason: show(housingHelpRequest.refusalReason, details),
 
-    instructorOrganization: show(helpRequest.instructorOrganization, details),
+    instructorOrganization: show(
+      housingHelpRequest.instructorOrganization,
+      details
+    ),
 
-    // TODO: Permissions à vérifier
-    isFirst: show(helpRequest.isFirst, details),
-    firstOpeningDate: show(helpRequest.firstOpeningDate, details),
-    askedHousing: show(helpRequest.askedHousing, details),
-    reason: show(helpRequest.reason, details),
-    uniqueId: show(helpRequest.uniqueId, details),
+    isFirst: show(housingHelpRequest.isFirst, details),
+    firstOpeningDate: show(housingHelpRequest.firstOpeningDate, details),
+    askedHousing: show(housingHelpRequest.askedHousing, details),
+    reason: show(housingHelpRequest.reason, details),
+    uniqueId: show(housingHelpRequest.uniqueId, details),
     taxHouseholdAdditionalInformation: show(
-      helpRequest.taxHouseholdAdditionalInformation,
+      housingHelpRequest.taxHouseholdAdditionalInformation,
       details
     ),
-    maxRent: show(helpRequest.maxRent, details),
-    maxCharges: show(helpRequest.maxCharges, details),
-    housingType: show(helpRequest.housingType, details),
-    roomCount: show(helpRequest.roomCount, details),
-    isPmr: show(helpRequest.isPmr, details)
+    maxRent: show(housingHelpRequest.maxRent, details),
+    maxCharges: show(housingHelpRequest.maxCharges, details),
+    housingType: show(housingHelpRequest.housingType, details),
+    roomCount: show(housingHelpRequest.roomCount, details),
+    isPmr: show(housingHelpRequest.isPmr, details)
   }
 }

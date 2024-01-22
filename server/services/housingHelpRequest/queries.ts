@@ -33,11 +33,13 @@ function findOne(user: SecurityRuleGrantee, id: string) {
   })
 }
 
-type HousingHelpRequestOutput = Prisma.PromiseReturnType<typeof findOne>
+type HousingHelpRequestOutput = NonNullable<
+  Prisma.PromiseReturnType<typeof findOne>
+>
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
-  const helpRequest = await findOne(ctx.user, id)
-  const { socialSupport } = helpRequest
+  const housingHelpRequest = await findOne(ctx.user, id)
+  const { socialSupport } = housingHelpRequest
   const { beneficiary } = socialSupport
   const permissions = getHelpRequestPermissions({
     ctx,
@@ -46,7 +48,7 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
   })
   const appPermissions = getAppContextPermissions(ctx)
   return {
-    helpRequest: filter(appPermissions, permissions, helpRequest),
+    helpRequest: filter(appPermissions, permissions, housingHelpRequest),
     permissions
   }
 }
@@ -54,34 +56,28 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
 export function filter(
   appPermissions: AppContextPermissions,
   permissions: HelpRequestPermissions,
-  helpRequest: NonNullable<HousingHelpRequestOutput>
+  housingHelpRequest: HousingHelpRequestOutput
 ) {
-  const { socialSupport } = helpRequest
+  const { socialSupport } = housingHelpRequest
   const conditions = {
     details: permissions.get.details,
     dueDate: permissions.get.dueDate,
     minister: appPermissions.module.ministere,
     privateSynthesis: permissions.get.privateSynthesis
   }
-  const filteredSocialSupport = filterSocialSupport({
+  const { types: _, ...filteredSocialSupport } = filterSocialSupport({
     socialSupport,
     conditions
   })
-  const filteredHelpRequest = filterHousingHelpRequest({
-    helpRequest,
+  const filteredHousingHelpRequest = filterHousingHelpRequest({
+    housingHelpRequest,
     conditions
   })
 
-  const type = filteredSocialSupport.types?.length
-    ? filteredSocialSupport.types[0]
-    : null
-
   return {
     ...filteredSocialSupport,
-    ...filteredHelpRequest,
-    type,
-    typeId: type?.id,
-    id: helpRequest.id,
+    ...filteredHousingHelpRequest,
+    id: housingHelpRequest.id,
     socialSupportId: socialSupport.id
   }
 }

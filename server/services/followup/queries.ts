@@ -33,7 +33,7 @@ function findOne(user: SecurityRuleGrantee, id: string) {
   })
 }
 
-type FollowupOutput = Prisma.PromiseReturnType<typeof findOne>
+type FollowupOutput = NonNullable<Prisma.PromiseReturnType<typeof findOne>>
 
 export async function getPage(
   ctx: SecurityRuleContext,
@@ -78,7 +78,7 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
 export function filter(
   appPermissions: AppContextPermissions,
   permissions: FollowupPermissions,
-  followup: NonNullable<FollowupOutput>
+  followup: FollowupOutput
 ) {
   const { socialSupport } = followup
   const conditions = {
