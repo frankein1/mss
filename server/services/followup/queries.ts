@@ -28,9 +28,7 @@ const include = {
 
 function findOne(user: SecurityRuleGrantee, id: string) {
   return FollowupRepo.findUniqueOrThrow(user, {
-    where: {
-      id
-    },
+    where: { id },
     include
   })
 }
@@ -63,10 +61,7 @@ export async function getPage(
 }
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
-  const followup = await FollowupRepo.findUniqueOrThrow(ctx.user, {
-    where: { id },
-    include
-  })
+  const followup = await findOne(ctx.user, id)
   const { socialSupport } = followup
   const permissions = getFollowupPermissions({
     ctx,

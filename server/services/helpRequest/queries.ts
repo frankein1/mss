@@ -29,9 +29,7 @@ export const include = {
 
 function findOne(user: SecurityRuleGrantee, id: string) {
   return HelpRequestRepo.findUniqueOrThrow(user, {
-    where: {
-      id
-    },
+    where: { id },
     include
   })
 }
@@ -66,10 +64,7 @@ export async function getPage(
 }
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
-  const helpRequest = await HelpRequestRepo.findUniqueOrThrow(ctx.user, {
-    where: { id },
-    include
-  })
+  const helpRequest = await findOne(ctx.user, id)
   const { socialSupport } = helpRequest
   const { beneficiary } = socialSupport
   const permissions = getHelpRequestPermissions({

@@ -28,9 +28,7 @@ export const include = {
 
 function findOne(user: SecurityRuleGrantee, id: string) {
   return HousingHelpRequestRepo.findUniqueOrThrow(user, {
-    where: {
-      id
-    },
+    where: { id },
     include
   })
 }
@@ -38,10 +36,7 @@ function findOne(user: SecurityRuleGrantee, id: string) {
 type HousingHelpRequestOutput = Prisma.PromiseReturnType<typeof findOne>
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
-  const helpRequest = await HousingHelpRequestRepo.findUniqueOrThrow(ctx.user, {
-    where: { id },
-    include
-  })
+  const helpRequest = await findOne(ctx.user, id)
   const { socialSupport } = helpRequest
   const { beneficiary } = socialSupport
   const permissions = getHelpRequestPermissions({
