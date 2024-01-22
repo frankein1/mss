@@ -1,7 +1,9 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest, 'Housing')"
+      :links="
+        Breadcrumb.AppBeneficiaryHelpRequestEdit(housingHelpRequest, 'Housing')
+      "
     />
     <PageTitle
       :title="title"
@@ -28,11 +30,11 @@
         class="fr-mx-auto"
       />
       <HousingHelpRequestFormEdition
-        v-else-if="helpRequestData && instructorOrganizations"
+        v-else-if="housingHelpRequestData && instructorOrganizations"
         :is-submitting="isSubmitting"
-        :data="helpRequestData"
+        :data="housingHelpRequestData"
         :instructor-organizations="instructorOrganizations"
-        @save-help-request="onUpdateHelpRequest"
+        @save-housing-help-request="onUpdateHousingHelpRequest"
       />
     </main>
   </PageContainer>
@@ -52,20 +54,24 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
-  const helpRequestId = route.params.hrid as string
+  const housingHelpRequestId = route.params.hrid as string
   const beneficiaryId = route.params.id as string
 
   const {
-    data: helpRequestData,
-    pending: helpRequestPending,
-    error: helpRequestError
+    data: housingHelpRequestData,
+    pending: housingHelpRequestPending,
+    error: housingHelpRequestError
   } = await trpcClient.housingHelpRequest.getOne.useQuery({
-    id: helpRequestId
+    id: housingHelpRequestId
   })
 
-  const helpRequest = computed(() => helpRequestData.value?.helpRequest || null)
+  const housingHelpRequest = computed(
+    () => housingHelpRequestData.value?.housingHelpRequest || null
+  )
 
-  const beneficiary = computed(() => helpRequest.value?.beneficiary || null)
+  const beneficiary = computed(
+    () => housingHelpRequest.value?.beneficiary || null
+  )
 
   const title = computed(() =>
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
@@ -80,11 +86,12 @@
   } = await trpcClient.config.getInstructorOrganization.useQuery()
 
   const pending = computed(
-    () => helpRequestPending.value || instructorOrganizationsPending.value
+    () =>
+      housingHelpRequestPending.value || instructorOrganizationsPending.value
   )
 
   const fetchError = computed(() => {
-    if (helpRequestError.value) {
+    if (housingHelpRequestError.value) {
       return "L'instruction de dossier n'a pas pu être chargée."
     }
     if (instructorOrganizationsError.value) {
@@ -93,9 +100,12 @@
     return ''
   })
 
-  function onUpdateHelpRequest(helpRequest: EditHousingHelpRequestInput) {
+  function onUpdateHousingHelpRequest(
+    housingHelpRequest: EditHousingHelpRequestInput
+  ) {
     useTrpcMutation({
-      mutation: () => trpcClient.housingHelpRequest.update.mutate(helpRequest),
+      mutation: () =>
+        trpcClient.housingHelpRequest.update.mutate(housingHelpRequest),
       isSubmitting,
       onSuccess: () => {
         navigateTo(
@@ -106,7 +116,7 @@
       },
       onFailure: () => {
         snackbar.error(
-          "La mise à jour de l'instruction a échoué.",
+          "La mise à jour de l'instruction de dossier a échoué.",
           () => formContainer.value?.querySelector('input')?.focus()
         )
       }

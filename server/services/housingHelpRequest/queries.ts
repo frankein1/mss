@@ -48,7 +48,7 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
   })
   const appPermissions = getAppContextPermissions(ctx)
   return {
-    helpRequest: filter(appPermissions, permissions, housingHelpRequest),
+    housingHelpRequest: filter(appPermissions, permissions, housingHelpRequest),
     permissions
   }
 }
