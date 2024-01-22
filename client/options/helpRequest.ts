@@ -47,12 +47,13 @@ export const helpRequestSubjectLabels: {
   [HelpRequestSubject.Other]: 'Autre'
 }
 
+// As pictograms are used as variables, they have to be in the public directory. - See https://www.lichter.io/articles/nuxt3-vue3-dynamic-images/
 export const helpRequestSubjectPictos: {
   [key in ExtendedHelpRequestSubject]: string
 } = {
-  [ExtendedHelpRequestSubject.Housing]: '~/assets/pictograms/building.svg',
-  [HelpRequestSubject.Financial]: '~/assets/pictograms/tax-stamp.svg',
-  [HelpRequestSubject.Other]: '~/assets/pictograms/document.svg'
+  [ExtendedHelpRequestSubject.Housing]: '/pictograms/building.svg',
+  [HelpRequestSubject.Financial]: '/pictograms/tax-stamp.svg',
+  [HelpRequestSubject.Other]: '/pictograms/document.svg'
 }
 
 export const helpRequestSubjectOptions = labelsToOptions(

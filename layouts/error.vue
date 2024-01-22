@@ -33,15 +33,15 @@
               <g transform="translate(40, 60)">
                 <use
                   class="fr-artwork-decorative"
-                  href="~/assets/pictograms/technical-error.svg#artwork-decorative"
+                  href="/pictograms/technical-error.svg#artwork-decorative"
                 ></use>
                 <use
                   class="fr-artwork-minor"
-                  href="~/assets/pictograms/technical-error.svg#artwork-minor"
+                  href="/pictograms/technical-error.svg#artwork-minor"
                 ></use>
                 <use
                   class="fr-artwork-major"
-                  href="~/assets/pictograms/technical-error.svg#artwork-major"
+                  href="/pictograms/technical-error.svg#artwork-major"
                 ></use>
               </g>
             </svg>
