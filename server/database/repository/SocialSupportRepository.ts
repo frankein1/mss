@@ -38,15 +38,23 @@ function remove(
   return prismaClient.socialSupport.delete(params)
 }
 
+function update<T extends Prisma.SocialSupportUpdateArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.SocialSupportUpdateArgs>
+) {
+  appendConstraints(user, params, SocialSupportConstraints.update)
+  return prismaClient.socialSupport.update(params)
+}
+
 export const SocialSupportRepo = {
   findMany,
   count,
   findUniqueOrThrow,
   delete: remove,
+  update,
   prisma: {
     groupBy: prismaClient.socialSupport.groupBy,
     findMany: prismaClient.socialSupport.findMany,
-    update: prismaClient.socialSupport.update,
     create: prismaClient.socialSupport.create
   }
 }
