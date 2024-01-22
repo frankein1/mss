@@ -15,7 +15,6 @@
         :options="referentOptions"
         required
         dropdown
-        :readonly="!permissions.set.referents"
         :disabled-options="disabledReferentOptions"
       />
     </div>

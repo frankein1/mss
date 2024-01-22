@@ -30,7 +30,6 @@ export type BeneficiaryPermissions = {
     nir: boolean
   }
   set: {
-    referents: boolean
     nir: boolean
   }
 
@@ -175,7 +174,6 @@ function getEditionPermissions({
       nir: cias || ccas
     },
     set: {
-      referents: isReferent || manager || socialWorker || instructor,
       nir: cias || ccas
     },
     view: {

@@ -1,7 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
 import {
-  getBeneficiaryPermissions,
   SecurityRuleContext,
   AppContextPermissions,
   getAppContextPermissions
@@ -39,7 +38,6 @@ const handler = async ({
     input.id
   )
 
-  const permissions = getBeneficiaryPermissions({ ctx, beneficiary: target })
   const appPermissions = getAppContextPermissions(ctx)
   const filteredData = filterInput({ input, appPermissions })
   const data = prepareDateFields(filteredData, ['birthDate', 'deathDate'])
@@ -49,15 +47,12 @@ const handler = async ({
     data.phone2 = null
   }
 
-  let referentConnections
-  if (permissions.set.referents) {
-    const { referents: previousReferents } = target
-    const previousReferentIds = previousReferents.map(({ id }) => id)
-    referentConnections = prepareRelationConnections(
-      referents,
-      previousReferentIds
-    )
-  }
+  const { referents: previousReferents } = target
+  const previousReferentIds = previousReferents.map(({ id }) => id)
+  const referentConnections = prepareRelationConnections(
+    referents,
+    previousReferentIds
+  )
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id },
