@@ -17,12 +17,12 @@
       :key="optionValue"
       class="fr-fieldset__element"
       :class="{
-        'fr-fieldset__element--inline': typeof optionLabel === 'string'
+        'fr-fieldset__element--inline': !pictos
       }"
     >
       <div
         class="fr-radio-group"
-        :class="{ 'fr-radio-rich': typeof optionLabel !== 'string' }"
+        :class="{ 'fr-radio-rich': pictos }"
       >
         <input
           :id="optionId(optionValue)"
@@ -36,15 +36,13 @@
           class="fr-label"
           :for="optionId(optionValue)"
         >
-          {{
-            typeof optionLabel === 'string' ? optionLabel : optionLabel.label
-          }}
+          {{ optionLabel }}
         </label>
         <div
-          v-if="typeof optionLabel !== 'string' && 'picto' in optionLabel"
+          v-if="pictos.has(optionValue)"
           class="fr-radio-rich__img"
         >
-          <AtomPictogram :path="optionLabel.picto" />
+          <AtomPictogram :path="pictos.get(optionValue)" />
         </div>
       </div>
     </div>
@@ -61,13 +59,17 @@
 
 <script setup lang="ts">
   import { useField } from 'vee-validate'
-  import type { Options, RichOptions } from '~/utils/options'
+  import type { Options } from '~/utils/options'
 
-  const props = defineProps<{
-    name: string
-    label: string
-    options: Options | RichOptions
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      name: string
+      label: string
+      options: Options
+      pictos?: Options
+    }>(),
+    { pictos: () => new Map<string, string>() }
+  )
 
   // we are using toRefs to create reactive references to `name` and `value` props
   // this is important because vee-validate needs to know if any of these props change

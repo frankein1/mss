@@ -3,49 +3,8 @@ export const NEW_OPTION_PREFIX = `${NEW_OPTION_ID}-`
 
 export type Options = Map<string, string>
 
-type RichOptionValues =
-  | {
-      label: string
-      picto: string
-    }
-  | {
-      label: string
-      icon: string
-    }
-export type RichOptions = Map<string, RichOptionValues>
-
-export type OptionValues = string | RichOptionValues
-
-export function labelsToOptions(labels: Record<string, string>): Options
-export function labelsToOptions(
-  labels: Record<string, string>,
-  params: { pictos: Record<string, string> } | { icons: Record<string, string> }
-): RichOptions
-export function labelsToOptions(
-  labels: Record<string, string>,
-  params?:
-    | { pictos: Record<string, string> }
-    | { icons: Record<string, string> }
-): Options | RichOptions {
-  if (!params) {
-    return new Map(Object.entries(labels))
-  }
-  if ('pictos' in params) {
-    const labelsWithPictos = Object.fromEntries(
-      Object.entries(labels).map(([value, label]) => [
-        value,
-        { label, picto: params.pictos[value] }
-      ])
-    )
-    return new Map(Object.entries(labelsWithPictos))
-  }
-  const labelsWithIcons = Object.fromEntries(
-    Object.entries(labels).map(([value, label]) => [
-      value,
-      { label, icon: params.icons[value] }
-    ])
-  )
-  return new Map(Object.entries(labelsWithIcons))
+export function labelsToOptions(labels: Record<string, string>): Options {
+  return new Map(Object.entries(labels))
 }
 
 export const isNewOption = (value?: string | null) => {

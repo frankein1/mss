@@ -11,7 +11,9 @@
       icon-color-class="color-purple-glycine"
       icon-background-class="bg-purple-glycine"
       subtitle="Demande de logement"
-      :subtitle-picto-path="helpRequestSubjectPictos.Housing"
+      :subtitle-picto-path="
+        helpRequestSubjectPictos.get(ExtendedHelpRequestSubject.Housing)
+      "
     >
       <RequiredFields />
     </PageTitle>
@@ -46,6 +48,7 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
+  import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

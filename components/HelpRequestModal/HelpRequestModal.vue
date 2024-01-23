@@ -8,6 +8,7 @@
       name="subject"
       label="L'instruction concerne"
       :options="helpRequestSubjectOptions"
+      :pictos="helpRequestSubjectPictos"
       required
     />
 
@@ -37,7 +38,10 @@
 
 <script setup lang="ts">
   import { z } from 'zod'
-  import { helpRequestSubjectOptions } from '~/client/options/helpRequest'
+  import {
+    helpRequestSubjectOptions,
+    helpRequestSubjectPictos
+  } from '~/client/options/helpRequest'
   import { RoutePath } from '~/utils/routing'
   import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
 

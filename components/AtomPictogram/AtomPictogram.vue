@@ -1,5 +1,6 @@
 <template>
   <svg
+    v-if="path"
     class="fr-artwork"
     aria-hidden="true"
     viewBox="0 0 80 80"
@@ -24,7 +25,7 @@
 <script setup lang="ts">
   withDefaults(
     defineProps<{
-      path: string
+      path: string | undefined
       length?: string
     }>(),
     { length: '5rem' }
