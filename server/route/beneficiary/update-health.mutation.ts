@@ -1,10 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import {
-  BeneficiaryPermissions,
-  SecurityRuleContext,
-  getBeneficiaryPermissions
-} from '~/server/security'
+import { BeneficiaryPermissions, SecurityRuleContext } from '~/server/security'
 import {
   UpdateBeneficiaryHealthInput,
   updateBeneficiaryHealthSchema
@@ -31,15 +27,10 @@ const handler = async ({
   input: UpdateBeneficiaryHealthInput
   ctx: ProtectedAppContext
 }) => {
-  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
-    ctx.user,
+  const permissions = await BeneficiaryService.getEditionPermissions(
+    ctx,
     input.id
   )
-  const permissions = getBeneficiaryPermissions({
-    ctx,
-    beneficiary: target
-  })
-
   const data = filterInput({ input, permissions })
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({

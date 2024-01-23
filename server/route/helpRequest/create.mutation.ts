@@ -5,10 +5,7 @@ import {
   CreateHelpRequestInput,
   createHelpRequestSchema
 } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getBeneficiaryPermissions
-} from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { HelpRequestService, BeneficiaryService } from '~/server/services'
 
 const handler = ({
@@ -25,11 +22,10 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: CreateHelpRequestInput
 ) => {
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
-    ctx.user,
+  const permissions = await BeneficiaryService.getEditionPermissions(
+    ctx,
     input.beneficiaryId
   )
-  const permissions = getBeneficiaryPermissions({ ctx, beneficiary })
   return permissions.create.helpRequest
 }
 
