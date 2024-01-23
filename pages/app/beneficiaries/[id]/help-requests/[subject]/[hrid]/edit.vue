@@ -89,7 +89,7 @@
       return undefined
     }
     return subject.value === 'Financial'
-      ? helpRequestSubjectPictos[subject.value]
+      ? helpRequestSubjectPictos.get(subject.value)
       : undefined
   })
 

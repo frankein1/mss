@@ -40,21 +40,17 @@ export const reasonLabels: { [key in HousingReason]: string } = {
 
 export const reasonOptions = labelsToOptions(reasonLabels)
 
-export const housingTypeIcons: {
-  [key in HousingType]: string
-} = {
-  [HousingType.Appartement]: 'fr-icon-building-fill',
-  [HousingType.Maison]: 'fr-icon-home-4-fill'
-}
+export const housingTypeIcons = new Map<HousingType, string>([
+  [HousingType.Appartement, 'fr-icon-building-fill'],
+  [HousingType.Maison, 'fr-icon-home-4-fill']
+])
 
 export const housingTypeLabels: { [key in HousingType]: string } = {
   [HousingType.Appartement]: 'Appartement',
   [HousingType.Maison]: 'Maison'
 }
 
-export const housingTypeOptions = labelsToOptions(housingTypeLabels, {
-  icons: housingTypeIcons
-})
+export const housingTypeOptions = labelsToOptions(housingTypeLabels)
 
 export const roomCountLabels: { [key in HousingRoomCount]: string } = {
   [HousingRoomCount.One]: 'Studio',
