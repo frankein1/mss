@@ -51,6 +51,7 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -78,18 +79,22 @@
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
   )
 
-  const subject = computed(() => helpRequest.value?.subject || 'Other')
+  const subject = computed(() =>
+    helpRequest.value?.financialSupport
+      ? HelpRequestSubject.Financial
+      : HelpRequestSubject.Other
+  )
 
   const subtitle = computed(() =>
-    subject.value === 'Financial' ? 'Aide financière' : undefined
+    helpRequest.value?.financialSupport ? 'Aide financière' : undefined
   )
 
   const subtitlePictoPath = computed(() => {
     if (!helpRequest.value) {
       return undefined
     }
-    return subject.value === 'Financial'
-      ? helpRequestSubjectPictos.get(subject.value)
+    return helpRequest.value?.financialSupport
+      ? helpRequestSubjectPictos.get(HelpRequestSubject.Financial)
       : undefined
   })
 

@@ -370,13 +370,6 @@ enum HelpRequestReason {
   Other
 }
 
-enum HelpRequestSubject {
-  // Aide financière
-  Financial
-  // Autre
-  Other
-}
-
 enum HelpRequestRefusalReason {
   ResourcesOutOfScale
   ShortDeadline
@@ -404,8 +397,8 @@ model HelpRequest {
   type   FollowupType @relation(fields: [typeId], references: [id])
   typeId String       @map("type_id") @db.Uuid
 
-  financialSupport  Boolean? @map("financial_support")
-  externalStructure Boolean? @map("external_structure")
+  financialSupport  Boolean  @map("financial_support")
+  externalStructure Boolean  @map("external_structure")
   isRefundable      Boolean? @map("is_refundable")
 
   askedAmount Decimal? @map("asked_amount")
@@ -424,8 +417,6 @@ model HelpRequest {
 
   fullFile Boolean?           @map("full_file")
   reason   HelpRequestReason?
-
-  subject HelpRequestSubject
 
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
   socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)

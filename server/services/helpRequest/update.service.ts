@@ -16,7 +16,7 @@ export async function update({ input, ctx }: UpdateParams) {
     where: { id: input.id },
     select: {
       instructorOrganizationId: true,
-      subject: true,
+      financialSupport: true,
       socialSupport: {
         select: {
           documents: true
@@ -47,10 +47,9 @@ export async function update({ input, ctx }: UpdateParams) {
     privateSynthesis,
     dueDate,
     fullFile,
-    subject,
     date,
     isRefundable
-  } = cleanUpdateInput({ input, subject: target.subject })
+  } = cleanUpdateInput({ input, isFinancial: target.financialSupport })
 
   const helpRequest = await SocialSupportRepo.update(ctx.user, {
     where: { id: input.socialSupportId },
@@ -79,7 +78,6 @@ export async function update({ input, ctx }: UpdateParams) {
           refusalReason,
           dispatchDate,
           fullFile,
-          subject,
           externalStructure,
           isRefundable,
           type: connect(typeId),

@@ -1,4 +1,4 @@
-import { Prisma, HelpRequestSubject } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { prepareSocialSupportStatFilters } from '../helpers'
 import {
   HelpRequestRepo,
@@ -16,7 +16,7 @@ function getFinancialHelpRequestCount(
 ) {
   return SocialSupportRepo.count(user, {
     where: {
-      helpRequest: { subject: HelpRequestSubject.Financial },
+      helpRequest: { financialSupport: true },
       ...filters
     }
   })
@@ -29,7 +29,7 @@ function getInternalFinancialHelpRequestCount(
   return SocialSupportRepo.count(user, {
     where: {
       helpRequest: {
-        subject: HelpRequestSubject.Financial,
+        financialSupport: true,
         externalStructure: false
       },
       ...filters
@@ -45,7 +45,7 @@ async function getFinancialHelpRequestTotalAmount(
     _sum: { allocatedAmount: financialHelpRequestTotalAmount }
   } = await HelpRequestRepo.aggregate(user, {
     where: {
-      subject: HelpRequestSubject.Financial,
+      financialSupport: true,
       externalStructure: false,
       socialSupport: {
         status: 'Accepted',
@@ -69,7 +69,7 @@ async function getFinancialHelpRequestAmountByType(
   const helpRequestAmountByTypeId = await HelpRequestRepo.prisma.groupBy({
     by: ['typeId'],
     where: {
-      subject: HelpRequestSubject.Financial,
+      financialSupport: true,
       socialSupport: {
         status: 'Accepted',
         ...filters

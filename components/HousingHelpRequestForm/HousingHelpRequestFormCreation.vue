@@ -4,7 +4,7 @@
     :instructor-organizations="instructorOrganizations"
     :beneficiary-id="beneficiaryId"
     :caught-errors="caughtErrors"
-    subject="Housing"
+    :subject="HelpRequestSubject.Housing"
     @submit="onSubmit"
   />
 </template>
@@ -16,6 +16,7 @@
     CreateHousingHelpRequestInput,
     createHousingHelpRequestSchema
   } from '~/server/schema'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { application } = usePermissions()
 
