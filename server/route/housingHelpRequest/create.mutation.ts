@@ -5,10 +5,7 @@ import {
   CreateHousingHelpRequestInput,
   createHousingHelpRequestSchema
 } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getBeneficiaryPermissions
-} from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import {
   HousingHelpRequestService,
   BeneficiaryService
@@ -28,11 +25,10 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: CreateHousingHelpRequestInput
 ) => {
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
-    ctx.user,
+  const permissions = await BeneficiaryService.getEditionPermissions(
+    ctx,
     input.beneficiaryId
   )
-  const permissions = getBeneficiaryPermissions({ ctx, beneficiary })
   return permissions.create.helpRequest
 }
 
