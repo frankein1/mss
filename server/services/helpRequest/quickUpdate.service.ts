@@ -1,4 +1,4 @@
-import { SocialSupportStatus, HelpRequestSubject, Prisma } from '@prisma/client'
+import { SocialSupportStatus, Prisma } from '@prisma/client'
 import { HelpRequestRepo } from '~/server/database'
 import { QuickEditHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
@@ -9,16 +9,16 @@ export async function quickUpdate(
   input: QuickEditHelpRequestInput
 ) {
   const { user } = ctx
-  const { subject } = await HelpRequestRepo.findUniqueOrThrow(user, {
+  const { financialSupport } = await HelpRequestRepo.findUniqueOrThrow(user, {
     where: {
       id: input.id
     },
     select: {
-      subject: true
+      financialSupport: true
     }
   })
 
-  const data = prepareData(subject, input)
+  const data = prepareData(financialSupport, input)
 
   await HelpRequestRepo.prisma.update({
     where: { id: input.id },
@@ -27,10 +27,9 @@ export async function quickUpdate(
 }
 
 function prepareData(
-  subject: HelpRequestSubject,
+  isFinancial: boolean,
   { id: _id, ...data }: QuickEditHelpRequestInput
 ) {
-  const isFinancial = subject === HelpRequestSubject.Financial
   if (isFinancial && ('allocatedAmount' in data || 'paymentMethod' in data)) {
     return data
   }

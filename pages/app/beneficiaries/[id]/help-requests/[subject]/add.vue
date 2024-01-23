@@ -36,7 +36,7 @@
         :beneficiary-id="beneficiaryId"
         :prescribing-organizations="prescribingOrganizations"
         :instructor-organizations="instructorOrganizations"
-        :subject="subject"
+        :is-financial="isFinancial"
         @save-help-request="onAddHelpRequest"
       />
     </main>
@@ -44,7 +44,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { HelpRequestSubject } from '@prisma/client'
+  import { HelpRequestSubject } from '~/types/socialSupport'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'

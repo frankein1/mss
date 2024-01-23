@@ -10,8 +10,7 @@ import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
   anyRefusalReasonLabels,
-  paymentMethodLabels,
-  helpRequestSubjectLabels
+  paymentMethodLabels
 } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
 import { socialSupportStatusLabels } from '~/client/options'
@@ -21,7 +20,7 @@ export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)
     'status',
     'date',
     'beneficiaryId',
-    'subject',
+    'financialSupport',
     'typeId',
     'examinationDate',
     'decisionDate',
@@ -69,7 +68,7 @@ export async function exportHelpRequests({
       if (permissions.view) {
         helpRequests.push({
           beneficiaryId: formatBeneficiaryDisplayName(helpRequest.beneficiary),
-          subject: helpRequestSubjectLabels[helpRequest.subject],
+          financialSupport: helpRequest.financialSupport,
           prescribingOrganizationId:
             helpRequest.prescribingOrganization?.name || '',
           externalStructure: getExternalStructure(

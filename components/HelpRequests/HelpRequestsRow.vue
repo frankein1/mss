@@ -94,7 +94,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { HelpRequestSubject, SocialSupportStatus } from '@prisma/client'
+  import { SocialSupportStatus } from '@prisma/client'
   import { HelpRequestPageItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -136,9 +136,7 @@
       : 'Interne'
   )
 
-  const isFinancialSupport = computed(
-    () => helpRequest.value.subject === HelpRequestSubject.Financial
-  )
+  const isFinancialSupport = computed(() => helpRequest.value.financialSupport)
 
   const isExternalSupport = computed(() => helpRequest.value.externalStructure)
 

@@ -43,7 +43,7 @@
     helpRequestSubjectPictos
   } from '~/client/options/helpRequest'
   import { RoutePath } from '~/utils/routing'
-  import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const modal = useModal()
 
@@ -53,10 +53,10 @@
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit } = useForm<{ subject: ExtendedHelpRequestSubject }>({
+  const { handleSubmit } = useForm<{ subject: HelpRequestSubject }>({
     validationSchema: toTypedSchema(
       z.object({
-        subject: z.nativeEnum(ExtendedHelpRequestSubject, {
+        subject: z.nativeEnum(HelpRequestSubject, {
           required_error: "Veuillez sélectionner un type d'accompagnement."
         })
       })

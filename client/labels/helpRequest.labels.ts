@@ -2,7 +2,7 @@ import { HelpRequest, SocialSupport } from '@prisma/client'
 import { FieldLabels } from '~/types/fieldLabels'
 
 type HelpRequestFieldLabels = Omit<
-  Omit<HelpRequest, 'reason' | 'financialSupport' | 'socialSupportId'> &
+  Omit<HelpRequest, 'reason' | 'socialSupportId'> &
     Omit<SocialSupport, 'socialSupportType'>,
   'structureId' | 'created'
 > & { documents: string }
@@ -35,6 +35,6 @@ export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   externalStructure: 'Demande réalisée',
   updated: 'Dernière mise à jour',
   createdById: 'Agent',
-  subject: "Type d'instruction de dossier",
+  financialSupport: 'Aide financière',
   isRefundable: 'Cette aide est-elle remboursable ?'
 }

@@ -1,11 +1,10 @@
 import {
   SocialSupportStatus,
   PaymentMethod,
-  HelpRequestSubject,
   HelpRequestRefusalReason
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
-import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
+import { HelpRequestSubject } from '~/types/socialSupport'
 
 export const helpRequestStatusLabels = {
   [SocialSupportStatus.WaitingAdditionalInformation]:
@@ -40,9 +39,9 @@ export const paymentMethodLabels: { [key in PaymentMethod]: string } = {
 export const paymentMethodOptions = labelsToOptions(paymentMethodLabels)
 
 export const helpRequestSubjectLabels: {
-  [key in ExtendedHelpRequestSubject]: string
+  [key in HelpRequestSubject]: string
 } = {
-  [ExtendedHelpRequestSubject.Housing]: 'Une demande de logement',
+  [HelpRequestSubject.Housing]: 'Une demande de logement',
   [HelpRequestSubject.Financial]: 'Une aide financière',
   [HelpRequestSubject.Other]: 'Autre'
 }
@@ -52,11 +51,8 @@ export const helpRequestSubjectOptions = labelsToOptions(
 )
 
 // As pictograms are used as variables, they have to be in the public directory. - See https://www.lichter.io/articles/nuxt3-vue3-dynamic-images/
-export const helpRequestSubjectPictos = new Map<
-  ExtendedHelpRequestSubject,
-  string
->([
-  [ExtendedHelpRequestSubject.Housing, '/pictograms/building.svg'],
+export const helpRequestSubjectPictos = new Map<HelpRequestSubject, string>([
+  [HelpRequestSubject.Housing, '/pictograms/building.svg'],
   [HelpRequestSubject.Financial, '/pictograms/tax-stamp.svg'],
   [HelpRequestSubject.Other, '/pictograms/document.svg']
 ])

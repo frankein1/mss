@@ -2,8 +2,7 @@ import {
   HelpRequestRefusalReason,
   SocialSupportStatus,
   Minister,
-  PaymentMethod,
-  HelpRequestSubject
+  PaymentMethod
 } from '@prisma/client'
 import { z } from 'zod'
 import {
@@ -43,7 +42,7 @@ export const createHelpRequestSchemaBase = z.object({
   privateSynthesis: openText(1000).nullish(),
   dueDate: dateOrEmpty,
   fullFile: z.boolean().default(false),
-  subject: requiredNativeEnum(HelpRequestSubject),
+  financialSupport: z.boolean(),
   isRefundable: kindOfBooleanSchema()
 })
 

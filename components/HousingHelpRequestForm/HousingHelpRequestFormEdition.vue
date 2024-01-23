@@ -5,7 +5,7 @@
     :beneficiary-id="housingHelpRequestData.beneficiaryId"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
-    subject="Housing"
+    :subject="HelpRequestSubject.Housing"
     @submit="onSubmit"
   />
 </template>
@@ -19,6 +19,7 @@
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { GetHousingHelpRequestOutput } from '~/server/trpc/routers'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { application } = usePermissions()
 

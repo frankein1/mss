@@ -45,7 +45,7 @@ export async function create({ input, ctx }: CreateParams) {
     privateSynthesis,
     dueDate,
     fullFile,
-    subject,
+    financialSupport,
     isRefundable,
     date
   } = cleanCreateInput(input)
@@ -62,7 +62,7 @@ export async function create({ input, ctx }: CreateParams) {
       refusalReason,
       dispatchDate,
       fullFile,
-      subject,
+      financialSupport,
       externalStructure,
       prescribingOrganization: preparePrescribingOrganization(
         prescribingOrganizationId,
