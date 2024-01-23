@@ -88,7 +88,7 @@
     }
     const subject = helpRequest.value.subject
     return subject === 'Financial'
-      ? helpRequestSubjectPictos[subject]
+      ? helpRequestSubjectPictos.get(subject)
       : undefined
   })
 

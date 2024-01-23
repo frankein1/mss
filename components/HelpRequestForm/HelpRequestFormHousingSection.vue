@@ -50,6 +50,7 @@
             name="housingType"
             :label="housingHelpRequestFieldLabels.housingType"
             :options="housingTypeOptions"
+            :icons="housingTypeIcons"
           />
         </div>
 
@@ -74,7 +75,11 @@
 
 <script setup lang="ts">
   import { housingHelpRequestFieldLabels } from '~/client/labels'
-  import { housingTypeOptions, roomCountOptions } from '~/client/options'
+  import {
+    housingTypeOptions,
+    housingTypeIcons,
+    roomCountOptions
+  } from '~/client/options'
 
   defineProps<{
     beneficiaryId: string
