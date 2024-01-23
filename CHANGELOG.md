@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.14.0...v1.14.1) (2024-01-23)
+
+
+### Bug Fixes
+
+* **statistique:** Calcule des aides financières: ([213a9ad](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/213a9ad0d711a371510de70032787d7e130249fc))
+
 ## [1.14.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.12.0...v1.14.0) (2024-01-22)
 
 
