@@ -1,7 +1,7 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest)"
+      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest, subject)"
     />
     <PageTitle
       :title="title"
@@ -51,6 +51,7 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -78,17 +79,22 @@
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
   )
 
+  const subject = computed(() =>
+    helpRequest.value?.financialSupport
+      ? HelpRequestSubject.Financial
+      : HelpRequestSubject.Other
+  )
+
   const subtitle = computed(() =>
-    helpRequest.value?.subject === 'Financial' ? 'Aide financière' : undefined
+    helpRequest.value?.financialSupport ? 'Aide financière' : undefined
   )
 
   const subtitlePictoPath = computed(() => {
     if (!helpRequest.value) {
       return undefined
     }
-    const subject = helpRequest.value.subject
-    return subject === 'Financial'
-      ? helpRequestSubjectPictos[subject]
+    return helpRequest.value?.financialSupport
+      ? helpRequestSubjectPictos.get(HelpRequestSubject.Financial)
       : undefined
   })
 

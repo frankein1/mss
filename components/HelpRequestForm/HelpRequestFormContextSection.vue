@@ -29,37 +29,84 @@
     </div>
   </template>
 
-  <div class="fr-col-12">
-    <VeeSearchableSelect
-      :label="helpRequestFieldLabels.typeId"
-      name="typeId"
-      :options="followUpTypeOptions"
-      required
-      hint
-    >
-      <template #hint>
-        <NuxtLink
-          v-if="application.edit.structure"
-          :to="RoutePath.AppStructureEdit()"
-          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-          >Je personnalise les objets d’accompagnement de ma structure
-        </NuxtLink>
-        <template v-else>
-          Les responsables de votre structure peuvent personnaliser les objets
-          d'accompagnement
-        </template>
-      </template>
-    </VeeSearchableSelect>
-  </div>
+  <template v-if="isHousingSupport">
+    <div class="fr-col-12">
+      <VeeRadioButtons
+        class="fr-mb-0"
+        name="isFirst"
+        label="Il s'agit"
+        :options="isFirstOptions"
+      />
+    </div>
 
-  <div class="fr-col-12">
-    <VeeSearchableSelect
-      :label="helpRequestFieldLabels.prescribingOrganizationId"
-      name="prescribingOrganizationId"
-      :options="withEmptyValue(prescribingOrganizationOptions)"
-      :can-create-new-option="application.create.prescribingOrganization"
-    />
-  </div>
+    <div
+      v-if="isFirst === 'false'"
+      class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right"
+    >
+      <VeeInput
+        name="firstOpeningDate"
+        :label="housingHelpRequestFieldLabels.firstOpeningDate"
+        type="date"
+      />
+    </div>
+
+    <div class="fr-col-12">
+      <fieldset
+        class="fr-fieldset fr-mb-0"
+        aria-labelledby="housing-help-request-asked-housing-legend"
+      >
+        <legend
+          id="housing-help-request-asked-housing-legend"
+          class="fr-fieldset__legend"
+        >
+          {{ housingHelpRequestFieldLabels.askedHousing }}
+        </legend>
+        <div
+          v-for="[value, label] in askedHousingOptions"
+          :key="value"
+          class="fr-fieldset__element fr-fieldset__element--inline"
+        >
+          <VeeCheckbox
+            :name="value"
+            :label="label"
+          />
+        </div>
+      </fieldset>
+    </div>
+  </template>
+  <template v-else>
+    <div class="fr-col-12">
+      <VeeSearchableSelect
+        :label="helpRequestFieldLabels.typeId"
+        name="typeId"
+        :options="followUpTypeOptions"
+        required
+        hint
+      >
+        <template #hint>
+          <NuxtLink
+            v-if="application.edit.structure"
+            :to="RoutePath.AppStructureEdit()"
+            class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+            >Je personnalise les objets d’accompagnement de ma structure
+          </NuxtLink>
+          <template v-else>
+            Les responsables de votre structure peuvent personnaliser les objets
+            d'accompagnement
+          </template>
+        </template>
+      </VeeSearchableSelect>
+    </div>
+
+    <div class="fr-col-12">
+      <VeeSearchableSelect
+        :label="helpRequestFieldLabels.prescribingOrganizationId"
+        name="prescribingOrganizationId"
+        :options="withEmptyValue(prescribingOrganizationOptions)"
+        :can-create-new-option="application.create.prescribingOrganization"
+      />
+    </div>
+  </template>
 
   <div
     class="fr-col-12 fr-col-lg-6"
@@ -112,10 +159,18 @@
     InstructorOrganization,
     PrescribingOrganization
   } from '@prisma/client'
-  import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
-  import { ministerOptions } from '~/client/options/ministry'
+  import {
+    helpRequestFieldLabels,
+    housingHelpRequestFieldLabels
+  } from '~/client/labels'
+  import {
+    ministerOptions,
+    isFirstOptions,
+    externalOrganisationOptions,
+    askedHousingOptions
+  } from '~/client/options'
   import { RoutePath } from '~/utils/routing'
-  import { externalOrganisationOptions } from '~/client/options/helpRequest'
+  import { CreateHousingHelpRequestInput } from '~/server/schema'
 
   const { application } = usePermissions()
 
@@ -125,7 +180,11 @@
     instructorOrganizations: InstructorOrganization[]
     isExternalSupport: boolean
     hasSetExternalStructure: boolean
+    isHousingSupport: boolean
   }>()
+
+  const { value: isFirst } =
+    useField<CreateHousingHelpRequestInput['isFirst']>('isFirst')
 
   const followUpTypeOptions = computed(() =>
     toOptions(props.followupTypes, 'id', 'name')

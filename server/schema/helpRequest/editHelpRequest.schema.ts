@@ -8,7 +8,7 @@ export const editHelpRequestSchema = createHelpRequestSchemaBase
     socialSupportId: z.string().uuid()
   })
   .omit({
-    subject: true
+    financialSupport: true
   })
   .refine(val => !val.isMinistry || val.ministre, {
     message: requiredErrorMessage,

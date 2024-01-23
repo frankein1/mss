@@ -7,7 +7,7 @@
     :beneficiary-id="helpRequestData.beneficiaryId"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
-    :subject="helpRequestData.subject"
+    :subject="subject"
     @submit="onSubmit"
   />
 </template>
@@ -22,6 +22,7 @@
   import { HelpRequestPageItem } from './types'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { application } = usePermissions()
 
@@ -42,6 +43,12 @@
 
   const initialDocumentIds = computed(
     () => helpRequestData.value.documents?.map(d => d.key) || []
+  )
+
+  const subject = computed(() =>
+    helpRequestData.value.financialSupport
+      ? HelpRequestSubject.Financial
+      : HelpRequestSubject.Other
   )
 
   const { handleSubmit } = useForm<EditHelpRequestInput>({

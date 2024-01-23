@@ -174,7 +174,7 @@ const fixturesHelpRequestSocialSupports = [
     date: new Date('2022-10-26'),
     helpRequest: {
       create: {
-        subject: 'Other',
+        financialSupport: false,
         externalStructure: false,
         typeId: fixturesFollowupTypes[4].id
       }
@@ -191,7 +191,7 @@ const fixturesHelpRequestSocialSupports = [
     date: new Date('2022-10-27'),
     helpRequest: {
       create: {
-        subject: 'Other',
+        financialSupport: false,
         externalStructure: false,
         typeId: fixturesFollowupTypes[3].id
       }

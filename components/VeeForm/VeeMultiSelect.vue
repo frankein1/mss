@@ -86,7 +86,12 @@
           :id="optionValue"
           type="button"
           class="fr-tag"
-          :class="{ 'active-menu-item': index === activeIndex }"
+          :class="[
+            index === activeIndex ? 'active-menu-item' : '',
+            icons?.has(optionValue)
+              ? `fr-tag--icon-left ${icons.get(optionValue)}`
+              : ''
+          ]"
           :name="optionValue"
           :aria-pressed="selectedValues.includes(optionValue)"
           :tabindex="optionTabindex"
@@ -112,7 +117,7 @@
 <script setup lang="ts">
   import { useField } from 'vee-validate'
   import { toRef } from 'vue'
-  import type { Options } from '~/utils/options'
+  import { Options } from '~/utils/options'
 
   const props = withDefaults(
     defineProps<{
@@ -127,6 +132,7 @@
       readonly?: boolean
       disabledOptions?: string[]
       hint?: string
+      icons?: Options
     }>(),
     {
       labelClass: '',
@@ -136,7 +142,8 @@
       disabled: false,
       readonly: false,
       disabledOptions: () => [],
-      hint: ''
+      hint: '',
+      icons: undefined
     }
   )
 

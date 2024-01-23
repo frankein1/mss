@@ -5,13 +5,41 @@ import {
   Followup,
   FollowupType,
   HelpRequest,
+  HousingHelpRequest,
   InstructorOrganization,
   NotificationType,
   PrescribingOrganization,
   SocialSupport,
   User
 } from '@prisma/client'
-import { SecurityRuleGrantee } from '../security'
+import { SecurityRuleContext, SecurityRuleGrantee } from '../security'
+import { connect } from '~/utils/prisma'
+
+export function prepareInstructorOrganization(
+  instructorOrganizationId: string | null | undefined,
+  ctx: SecurityRuleContext,
+  isExternalStructure: boolean,
+  hasInstructorOrganizationAlreadySelected = false
+) {
+  if (!isExternalStructure) {
+    return undefined
+  }
+  if (!instructorOrganizationId) {
+    return hasInstructorOrganizationAlreadySelected
+      ? { disconnect: true }
+      : undefined
+  }
+  if (isNewOption(instructorOrganizationId)) {
+    return {
+      create: {
+        name: newOptionToLabel(instructorOrganizationId),
+        structureId: ctx.structure.id,
+        createdById: ctx.user.id
+      }
+    }
+  }
+  return connect(instructorOrganizationId)
+}
 
 export function prepareNewHistoryElementNotification(
   beneficiary: Pick<Beneficiary, 'id'> & { referents: { id: string }[] },
@@ -101,22 +129,22 @@ export function filterFollowup({
 }) {
   return {
     // HEADER
-    id: followup?.id,
-    structureName: followup?.structureName,
-    redirected: followup?.redirected,
-    medium: followup?.medium,
+    id: followup.id,
+    structureName: followup.structureName,
+    redirected: followup.redirected,
+    medium: followup.medium,
     // MINISTERE
     classified: show(followup.classified, conditions.minister),
     forwardedToJustice: show(followup.forwardedToJustice, conditions.minister),
     // DETAILS
     prescribingOrganization: show(
-      followup?.prescribingOrganization,
+      followup.prescribingOrganization,
       conditions.details
     ),
-    firstFollowup: show(followup?.firstFollowup, conditions.details),
-    helpRequested: show(followup?.helpRequested, conditions.details),
-    thirdPersonName: show(followup?.thirdPersonName, conditions.details),
-    place: show(followup?.place, conditions.details)
+    firstFollowup: show(followup.firstFollowup, conditions.details),
+    helpRequested: show(followup.helpRequested, conditions.details),
+    thirdPersonName: show(followup.thirdPersonName, conditions.details),
+    place: show(followup.place, conditions.details)
   }
 }
 export function filterHelpRequest({
@@ -138,7 +166,7 @@ export function filterHelpRequest({
   return {
     id: helpRequest.id,
     fullFile: helpRequest.fullFile,
-    subject: helpRequest.subject,
+    financialSupport: helpRequest.financialSupport,
 
     allocatedAmount: show(helpRequest.allocatedAmount, details),
     askedAmount: show(helpRequest.askedAmount, details),
@@ -166,5 +194,58 @@ export function filterHelpRequest({
 
     prescribingOrganization: show(helpRequest.prescribingOrganization, details),
     instructorOrganization: show(helpRequest.instructorOrganization, details)
+  }
+}
+
+export function filterHousingHelpRequest({
+  housingHelpRequest,
+  conditions
+}: {
+  housingHelpRequest: HousingHelpRequest & {
+    instructorOrganization: Partial<InstructorOrganization> | null
+  }
+  conditions: {
+    details: boolean
+    minister: boolean
+    privateSynthesis: boolean
+    dueDate: boolean
+  }
+}) {
+  const { details } = conditions
+  return {
+    id: housingHelpRequest.id,
+    fullFile: housingHelpRequest.fullFile,
+
+    decisionDate: show(housingHelpRequest.decisionDate, details),
+    dispatchDate: show(housingHelpRequest.dispatchDate, details),
+
+    examinationDate: show(housingHelpRequest.examinationDate, details),
+    externalStructure: show(housingHelpRequest.externalStructure, details),
+    instructorOrganizationId: show(
+      housingHelpRequest.instructorOrganizationId,
+      details
+    ),
+
+    refusalReason: show(housingHelpRequest.refusalReason, details),
+
+    instructorOrganization: show(
+      housingHelpRequest.instructorOrganization,
+      details
+    ),
+
+    isFirst: show(housingHelpRequest.isFirst, details),
+    firstOpeningDate: show(housingHelpRequest.firstOpeningDate, details),
+    askedHousing: show(housingHelpRequest.askedHousing, details),
+    reason: show(housingHelpRequest.reason, details),
+    uniqueId: show(housingHelpRequest.uniqueId, details),
+    taxHouseholdAdditionalInformation: show(
+      housingHelpRequest.taxHouseholdAdditionalInformation,
+      details
+    ),
+    maxRent: show(housingHelpRequest.maxRent, details),
+    maxCharges: show(housingHelpRequest.maxCharges, details),
+    housingType: show(housingHelpRequest.housingType, details),
+    roomCount: show(housingHelpRequest.roomCount, details),
+    isPmr: show(housingHelpRequest.isPmr, details)
   }
 }

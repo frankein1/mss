@@ -18,6 +18,7 @@
         :instructor-organizations="instructorOrganizations"
         :is-external-support="isExternalSupport"
         :has-set-external-structure="hasSetExternalStructure"
+        :is-housing-support="isHousingSupport"
       />
 
       <hr class="helprequestform__divider" />
@@ -29,7 +30,15 @@
         :subject="subject"
       />
 
-      <hr class="helprequestform__divider" />
+      <HelpRequestFormHousingSection
+        v-if="isHousingSupport"
+        :beneficiary-id="beneficiaryId"
+      />
+
+      <hr
+        v-else
+        class="helprequestform__divider"
+      />
 
       <HelpRequestFormSynthesisSection
         :can-edit-private-synthesis="canEditPrivateSynthesis"
@@ -69,26 +78,30 @@
     FollowupType,
     SocialSupportStatus,
     InstructorOrganization,
-    PrescribingOrganization,
-    HelpRequestSubject
+    PrescribingOrganization
   } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
   import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const props = withDefaults(
     defineProps<{
       isSubmitting: boolean
-      followupTypes: FollowupType[]
-      prescribingOrganizations: PrescribingOrganization[]
+      followupTypes?: FollowupType[]
+      prescribingOrganizations?: PrescribingOrganization[]
       instructorOrganizations: InstructorOrganization[]
       beneficiaryId: string
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>
       subject: HelpRequestSubject
     }>(),
-    { canEditPrivateSynthesis: true }
+    {
+      canEditPrivateSynthesis: true,
+      followupTypes: () => [],
+      prescribingOrganizations: () => []
+    }
   )
 
   const form = ref<HTMLFormElement | null>(null)
@@ -113,6 +126,7 @@
   )
 
   const isExternalSupport = computed(() => externalStructure.value === 'true')
+  const isHousingSupport = computed(() => props.subject === 'Housing')
 </script>
 
 <style scoped lang="scss">

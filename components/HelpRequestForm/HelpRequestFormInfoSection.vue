@@ -12,6 +12,24 @@
     />
   </div>
 
+  <template v-if="isHousingSupport">
+    <div class="fr-col-12">
+      <VeeSelect
+        name="reason"
+        :label="housingHelpRequestFieldLabels.reason"
+        :options="withEmptyValue(reasonOptions)"
+      />
+    </div>
+
+    <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+      <VeeInput
+        name="uniqueId"
+        :label="housingHelpRequestFieldLabels.uniqueId"
+        type="text"
+      />
+    </div>
+  </template>
+
   <div
     v-if="isFinancialSupport"
     class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right"
@@ -112,14 +130,17 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportStatus, HelpRequestSubject } from '@prisma/client'
+  import { SocialSupportStatus } from '@prisma/client'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
+  import { housingHelpRequestFieldLabels } from '~/client/labels/housingHelpRequest.labels'
   import {
     paymentMethodOptions,
     helpRequestRefusalReasonOptions,
     isRefundableOptions
   } from '~/client/options/helpRequest'
+  import { reasonOptions } from '~/client/options/housingHelpRequest'
   import { withEmptyValue } from '~/utils/options'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
@@ -140,12 +161,17 @@
     () => props.subject === HelpRequestSubject.Financial
   )
 
+  const isHousingSupport = computed(
+    () => props.subject === HelpRequestSubject.Housing
+  )
+
   const headline = computed(() => {
-    switch (props.subject) {
-      case HelpRequestSubject.Financial:
-        return "Informations sur l'aide financière"
-      default:
-        return "Informations sur le dossier d'instruction"
+    if (isFinancialSupport.value) {
+      return "Informations sur l'aide financière"
     }
+    if (isHousingSupport.value) {
+      return 'Informations sur la demande de logement'
+    }
+    return "Informations sur le dossier d'instruction"
   })
 </script>

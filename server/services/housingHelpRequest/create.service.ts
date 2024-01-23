@@ -1,0 +1,102 @@
+import { SocialSupportType } from '@prisma/client'
+import {
+  prepareNewHistoryElementNotification,
+  prepareInstructorOrganization
+} from '../helper'
+import { cleanCreateInput } from './helper'
+import { BeneficiaryRepo, HousingHelpRequestRepo } from '~/server/database'
+import { CreateHousingHelpRequestInput } from '~/server/schema'
+import { SecurityRuleContext } from '~/server/security/rules/types'
+import { prepareDocumentsMutations } from '~/utils/prisma'
+
+type CreateParams = {
+  ctx: SecurityRuleContext
+  input: CreateHousingHelpRequestInput
+  target?: undefined
+}
+
+export async function create({ input, ctx }: CreateParams) {
+  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: input.beneficiaryId },
+    select: { id: true, referents: true }
+  })
+
+  const {
+    beneficiaryId,
+    numeroPegase,
+    ministre,
+    documents,
+    externalStructure,
+    status,
+    examinationDate,
+    decisionDate,
+    refusalReason,
+    instructorOrganizationId,
+    dispatchDate,
+    synthesis,
+    privateSynthesis,
+    dueDate,
+    fullFile,
+    date,
+    housingType,
+    isPmr,
+    roomCount,
+    firstOpeningDate,
+    isFirst,
+    maxCharges,
+    maxRent,
+    reason,
+    taxHouseholdAdditionalInformation,
+    uniqueId,
+    askedHousing
+  } = cleanCreateInput(input)
+
+  const { id } = await HousingHelpRequestRepo.prisma.create({
+    data: {
+      examinationDate,
+      decisionDate,
+      refusalReason,
+      dispatchDate,
+      fullFile,
+      externalStructure,
+      housingType,
+      isPmr,
+      roomCount,
+      firstOpeningDate,
+      isFirst,
+      maxCharges,
+      maxRent,
+      reason,
+      taxHouseholdAdditionalInformation,
+      uniqueId,
+      askedHousing,
+      instructorOrganization: prepareInstructorOrganization(
+        instructorOrganizationId,
+        ctx,
+        externalStructure
+      ),
+      socialSupport: {
+        create: {
+          status,
+          socialSupportType: SocialSupportType.HelpRequestHousing,
+          createdById: ctx.user.id,
+          beneficiaryId,
+          structureId: ctx.structure.id,
+          synthesis,
+          privateSynthesis,
+          ministre,
+          numeroPegase,
+          dueDate,
+          date,
+          documents: prepareDocumentsMutations(documents),
+          notifications: prepareNewHistoryElementNotification(
+            beneficiary,
+            ctx.user
+          )
+        }
+      }
+    }
+  })
+
+  return { id }
+}

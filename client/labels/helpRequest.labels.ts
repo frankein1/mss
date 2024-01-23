@@ -1,13 +1,13 @@
 import { HelpRequest, SocialSupport } from '@prisma/client'
 import { FieldLabels } from '~/types/fieldLabels'
 
-type FollowupFieldLabels = Omit<
-  Omit<HelpRequest, 'reason' | 'financialSupport' | 'socialSupportId'> &
+type HelpRequestFieldLabels = Omit<
+  Omit<HelpRequest, 'reason' | 'socialSupportId'> &
     Omit<SocialSupport, 'socialSupportType'>,
   'structureId' | 'created'
 > & { documents: string }
 
-export const helpRequestFieldLabels: FieldLabels<FollowupFieldLabels> = {
+export const helpRequestFieldLabels: FieldLabels<HelpRequestFieldLabels> = {
   id: 'Identifiant',
   status: 'Statut',
   dueDate: "Date d'échéance",
@@ -35,6 +35,6 @@ export const helpRequestFieldLabels: FieldLabels<FollowupFieldLabels> = {
   externalStructure: 'Demande réalisée',
   updated: 'Dernière mise à jour',
   createdById: 'Agent',
-  subject: "Type d'instruction de dossier",
+  financialSupport: 'Aide financière',
   isRefundable: 'Cette aide est-elle remboursable ?'
 }

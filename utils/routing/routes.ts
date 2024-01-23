@@ -1,6 +1,6 @@
-import { HelpRequestSubject } from '@prisma/client'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
+import { HelpRequestSubject } from '~/types/socialSupport'
 
 export enum Route {
   Index = 'Index',
@@ -268,8 +268,12 @@ export const RoutePath = {
     )}/${subject.toLocaleLowerCase()}/add`,
   [Route.AppBeneficiaryHelpRequestEdit]: (
     beneficiaryId: string,
-    helpRequestId: string
-  ) => `${BeneficiaryHelpRequestsRoute(beneficiaryId)}/${helpRequestId}/edit`,
+    helpRequestId: string,
+    subject: HelpRequestSubject
+  ) =>
+    `${BeneficiaryHelpRequestsRoute(
+      beneficiaryId
+    )}/${subject.toLocaleLowerCase()}/${helpRequestId}/edit`,
   [Route.AppHistory]: () => `${AppRoute}/history`,
 
   // ADMIN

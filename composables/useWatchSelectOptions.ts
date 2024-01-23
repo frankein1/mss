@@ -1,5 +1,5 @@
-import type { Ref } from 'vue'
-import type { Options } from '~/utils/options'
+import { Ref } from 'vue'
+import { Options } from '~/utils/options'
 
 /**
  * Add a watcher that watches options.

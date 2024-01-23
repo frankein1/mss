@@ -1,8 +1,5 @@
-import {
-  cleanUpdateInput,
-  prepareInstructorOrganization,
-  preparePrescribingOrganization
-} from './helper'
+import { prepareInstructorOrganization } from '../helper'
+import { cleanUpdateInput, preparePrescribingOrganization } from './helper'
 import { SocialSupportRepo, HelpRequestRepo } from '~/server/database'
 import { markFollowupTypeAsUsed } from '~/server/query'
 import { EditHelpRequestInput } from '~/server/schema'
@@ -19,7 +16,7 @@ export async function update({ input, ctx }: UpdateParams) {
     where: { id: input.id },
     select: {
       instructorOrganizationId: true,
-      subject: true,
+      financialSupport: true,
       socialSupport: {
         select: {
           documents: true
@@ -50,12 +47,11 @@ export async function update({ input, ctx }: UpdateParams) {
     privateSynthesis,
     dueDate,
     fullFile,
-    subject,
     date,
     isRefundable
-  } = cleanUpdateInput({ input, subject: target.subject })
+  } = cleanUpdateInput({ input, isFinancial: target.financialSupport })
 
-  const helpRequest = await SocialSupportRepo.prisma.update({
+  const helpRequest = await SocialSupportRepo.update(ctx.user, {
     where: { id: input.socialSupportId },
     data: {
       status,
@@ -82,7 +78,6 @@ export async function update({ input, ctx }: UpdateParams) {
           refusalReason,
           dispatchDate,
           fullFile,
-          subject,
           externalStructure,
           isRefundable,
           type: connect(typeId),

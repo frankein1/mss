@@ -84,6 +84,7 @@
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import { RoutePath } from '~/utils/routing'
   import { BeneficiaryPermissions } from '~/server/security'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const props = defineProps<{
     item: SocialSupportItem
@@ -112,9 +113,13 @@
       )
     }
     if (socialSupport.value.helpRequest) {
+      const subject = socialSupport.value.helpRequest.financialSupport
+        ? HelpRequestSubject.Financial
+        : HelpRequestSubject.Other
       return RoutePath.AppBeneficiaryHelpRequestEdit(
         socialSupport.value.beneficiaryId,
-        socialSupport.value.helpRequest.id
+        socialSupport.value.helpRequest.id,
+        subject
       )
     }
 

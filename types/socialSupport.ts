@@ -1,8 +1,5 @@
-import { HelpRequestSubject } from '@prisma/client'
-
-export const ExtendedHelpRequestSubject = {
-  ...HelpRequestSubject,
-  Housing: 'Housing' as const
+export enum HelpRequestSubject {
+  Housing = 'Housing',
+  Financial = 'Financial',
+  Other = 'Other'
 }
-
-export type ExtendedHelpRequestSubject = keyof typeof ExtendedHelpRequestSubject

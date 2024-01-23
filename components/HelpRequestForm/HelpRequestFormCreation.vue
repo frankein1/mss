@@ -16,14 +16,14 @@
     FollowupType,
     SocialSupportStatus,
     InstructorOrganization,
-    PrescribingOrganization,
-    HelpRequestSubject
+    PrescribingOrganization
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
     CreateHelpRequestInput,
     createHelpRequestSchema
   } from '~/server/schema'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { application } = usePermissions()
 
@@ -33,12 +33,16 @@
     prescribingOrganizations: PrescribingOrganization[]
     instructorOrganizations: InstructorOrganization[]
     beneficiaryId: string
-    subject: HelpRequestSubject
+    isFinancial: boolean
   }>()
 
   const emit = defineEmits<{
     saveHelpRequest: [helpRequest: CreateHelpRequestInput]
   }>()
+
+  const subject = computed(() =>
+    props.isFinancial ? HelpRequestSubject.Financial : HelpRequestSubject.Other
+  )
 
   const { handleSubmit } = useForm<CreateHelpRequestInput>({
     validationSchema: toTypedSchema(createHelpRequestSchema),
@@ -47,7 +51,7 @@
       beneficiaryId: props.beneficiaryId,
       date: new Date(),
       status: SocialSupportStatus.WaitingAdditionalInformation,
-      subject: props.subject
+      financialSupport: props.isFinancial
     }
   })
 
