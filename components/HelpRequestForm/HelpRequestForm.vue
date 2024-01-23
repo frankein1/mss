@@ -84,7 +84,7 @@
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
   import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
-  import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const props = withDefaults(
     defineProps<{
@@ -95,7 +95,7 @@
       beneficiaryId: string
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>
-      subject: ExtendedHelpRequestSubject
+      subject: HelpRequestSubject
     }>(),
     {
       canEditPrivateSynthesis: true,

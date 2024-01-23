@@ -2,7 +2,10 @@
   <PageContainer>
     <DsfrBreadcrumb
       :links="
-        Breadcrumb.AppBeneficiaryHelpRequestEdit(housingHelpRequest, 'Housing')
+        Breadcrumb.AppBeneficiaryHelpRequestEdit(
+          housingHelpRequest,
+          HelpRequestSubject.Housing
+        )
       "
     />
     <PageTitle
@@ -12,7 +15,7 @@
       icon-background-class="bg-purple-glycine"
       subtitle="Demande de logement"
       :subtitle-picto-path="
-        helpRequestSubjectPictos.get(ExtendedHelpRequestSubject.Housing)
+        helpRequestSubjectPictos.get(HelpRequestSubject.Housing)
       "
     >
       <RequiredFields />
@@ -48,7 +51,7 @@
   import { AlertType } from '~~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
-  import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

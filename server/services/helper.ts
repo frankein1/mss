@@ -166,7 +166,7 @@ export function filterHelpRequest({
   return {
     id: helpRequest.id,
     fullFile: helpRequest.fullFile,
-    subject: helpRequest.subject,
+    financialSupport: helpRequest.financialSupport,
 
     allocatedAmount: show(helpRequest.allocatedAmount, details),
     askedAmount: show(helpRequest.askedAmount, details),

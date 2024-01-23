@@ -1,6 +1,6 @@
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
-import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
+import { HelpRequestSubject } from '~/types/socialSupport'
 
 export enum Route {
   Index = 'Index',
@@ -261,7 +261,7 @@ export const RoutePath = {
   ) => `${BeneficiaryFollowupsRoute(beneficiaryId)}/${followupId}/edit`,
   [Route.AppBeneficiaryHelpRequestAdd]: (
     beneficiaryId: string,
-    subject: ExtendedHelpRequestSubject
+    subject: HelpRequestSubject
   ) =>
     `${BeneficiaryHelpRequestsRoute(
       beneficiaryId
@@ -269,7 +269,7 @@ export const RoutePath = {
   [Route.AppBeneficiaryHelpRequestEdit]: (
     beneficiaryId: string,
     helpRequestId: string,
-    subject: ExtendedHelpRequestSubject
+    subject: HelpRequestSubject
   ) =>
     `${BeneficiaryHelpRequestsRoute(
       beneficiaryId

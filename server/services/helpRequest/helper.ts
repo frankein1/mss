@@ -1,4 +1,4 @@
-import { HelpRequestSubject, Prisma, SocialSupportStatus } from '@prisma/client'
+import { Prisma, SocialSupportStatus } from '@prisma/client'
 import {
   CreateHelpRequestInput,
   EditHelpRequestInput,
@@ -71,25 +71,28 @@ export function prepareFilters(filters: HelpRequestFilterInput) {
 
 export function cleanUpdateInput({
   input,
-  subject
+  isFinancial
 }: {
   input: EditHelpRequestInput
-  subject: HelpRequestSubject
+  isFinancial: boolean
 }) {
-  return cleanInput({ input, subject })
+  return cleanInput({
+    input,
+    isFinancial
+  })
 }
 
 export function cleanCreateInput(input: CreateHelpRequestInput) {
-  const { subject, ...data } = input
-  return cleanInput({ input: data, subject })
+  const { financialSupport, ...data } = input
+  return cleanInput({ input: data, isFinancial: financialSupport })
 }
 
 function cleanInput({
   input,
-  subject
+  isFinancial
 }: {
   input: Omit<EditHelpRequestInput, 'id' | 'socialSupportId'>
-  subject: HelpRequestSubject
+  isFinancial: boolean
 }) {
   const {
     status,
@@ -108,14 +111,13 @@ function cleanInput({
   } = input
 
   const isExternalStructure = externalStructure === 'true'
-  const isFinancial = subject === HelpRequestSubject.Financial
   const isAccepted = status === SocialSupportStatus.Accepted
   const isRefused = status === SocialSupportStatus.Refused
 
   return {
     ...data,
     status,
-    subject,
+    financialSupport: isFinancial,
     externalStructure: isExternalStructure,
     decisionDate: isAccepted || isRefused ? decisionDate : null,
     handlingDate: isAccepted ? handlingDate : null,

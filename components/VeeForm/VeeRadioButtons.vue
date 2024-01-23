@@ -39,7 +39,7 @@
           {{ optionLabel }}
         </label>
         <div
-          v-if="pictos.has(optionValue)"
+          v-if="pictos?.has(optionValue)"
           class="fr-radio-rich__img"
         >
           <AtomPictogram :path="pictos.get(optionValue)" />
@@ -68,7 +68,7 @@
       options: Options
       pictos?: Options
     }>(),
-    { pictos: () => new Map<string, string>() }
+    { pictos: undefined }
   )
 
   // we are using toRefs to create reactive references to `name` and `value` props

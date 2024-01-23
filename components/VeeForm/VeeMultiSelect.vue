@@ -88,7 +88,7 @@
           class="fr-tag"
           :class="[
             index === activeIndex ? 'active-menu-item' : '',
-            icons.has(optionValue)
+            icons?.has(optionValue)
               ? `fr-tag--icon-left ${icons.get(optionValue)}`
               : ''
           ]"
@@ -143,7 +143,7 @@
       readonly: false,
       disabledOptions: () => [],
       hint: '',
-      icons: () => new Map<string, string>()
+      icons: undefined
     }
   )
 

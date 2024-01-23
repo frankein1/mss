@@ -140,7 +140,7 @@
   } from '~/client/options/helpRequest'
   import { reasonOptions } from '~/client/options/housingHelpRequest'
   import { withEmptyValue } from '~/utils/options'
-  import { ExtendedHelpRequestSubject } from '~/types/socialSupport'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
@@ -148,7 +148,7 @@
     status: SocialSupportStatus
     hasSetExternalStructure: boolean
     isExternalSupport: boolean
-    subject: ExtendedHelpRequestSubject
+    subject: HelpRequestSubject
   }>()
 
   const isAccepted = computed(
@@ -158,21 +158,20 @@
   const isAnswered = computed(() => isAccepted.value || isRefused.value)
 
   const isFinancialSupport = computed(
-    () => props.subject === ExtendedHelpRequestSubject.Financial
+    () => props.subject === HelpRequestSubject.Financial
   )
 
   const isHousingSupport = computed(
-    () => props.subject === ExtendedHelpRequestSubject.Housing
+    () => props.subject === HelpRequestSubject.Housing
   )
 
   const headline = computed(() => {
-    switch (props.subject) {
-      case ExtendedHelpRequestSubject.Financial:
-        return "Informations sur l'aide financière"
-      case ExtendedHelpRequestSubject.Housing:
-        return 'Informations sur la demande de logement'
-      default:
-        return "Informations sur le dossier d'instruction"
+    if (isFinancialSupport.value) {
+      return "Informations sur l'aide financière"
     }
+    if (isHousingSupport.value) {
+      return 'Informations sur la demande de logement'
+    }
+    return "Informations sur le dossier d'instruction"
   })
 </script>
