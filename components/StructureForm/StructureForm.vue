@@ -25,7 +25,7 @@
 
     <StructureFormAdminUsers
       v-if="adminView && users"
-      structure-id="structure.id"
+      :structure-id="structure.id"
       :users="users"
     />
 
