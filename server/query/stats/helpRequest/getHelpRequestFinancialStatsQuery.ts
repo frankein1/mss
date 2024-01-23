@@ -46,6 +46,7 @@ async function getFinancialHelpRequestTotalAmount(
   } = await HelpRequestRepo.aggregate(user, {
     where: {
       subject: HelpRequestSubject.Financial,
+      externalStructure: false,
       socialSupport: {
         status: 'Accepted',
         ...filters
