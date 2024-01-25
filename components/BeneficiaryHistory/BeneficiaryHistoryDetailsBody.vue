@@ -130,6 +130,13 @@
         subject
       )
     }
+    if (socialSupport.value.housingHelpRequest) {
+      return RoutePath.AppBeneficiaryHelpRequestEdit(
+        socialSupport.value.beneficiaryId,
+        socialSupport.value.housingHelpRequest.id,
+        HelpRequestSubject.Housing
+      )
+    }
 
     return null
   })
