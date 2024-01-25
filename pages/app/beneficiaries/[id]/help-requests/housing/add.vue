@@ -15,7 +15,7 @@
       icon-background-class="bg-purple-glycine"
       subtitle="Demande de logement"
       :subtitle-picto-path="
-        helpRequestSubjectPictos.get(HelpRequestSubject.Housing)
+        helpRequestSubjectPictos.Housing
       "
     >
       <RequiredFields />

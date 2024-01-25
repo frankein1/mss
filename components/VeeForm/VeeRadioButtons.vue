@@ -39,10 +39,10 @@
           {{ optionLabel }}
         </label>
         <div
-          v-if="pictos?.has(optionValue)"
+          v-if="pictos && optionValue in pictos"
           class="fr-radio-rich__img"
         >
-          <AtomPictogram :path="pictos.get(optionValue)" />
+          <AtomPictogram :path="pictos[optionValue]" />
         </div>
       </div>
     </div>
@@ -66,7 +66,7 @@
       name: string
       label: string
       options: Options
-      pictos?: Options
+      pictos?: { [key: string]: string }
     }>(),
     { pictos: undefined }
   )

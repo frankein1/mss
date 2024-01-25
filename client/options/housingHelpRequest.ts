@@ -40,10 +40,10 @@ export const reasonLabels: { [key in HousingReason]: string } = {
 
 export const reasonOptions = labelsToOptions(reasonLabels)
 
-export const housingTypeIcons = new Map<HousingType, string>([
-  [HousingType.Appartement, 'fr-icon-building-fill'],
-  [HousingType.Maison, 'fr-icon-home-4-fill']
-])
+export const housingTypeIcons: { [key in HousingType]: string } = {
+  [HousingType.Appartement]: 'fr-icon-building-fill',
+  [HousingType.Maison]: 'fr-icon-home-4-fill'
+}
 
 export const housingTypeLabels: { [key in HousingType]: string } = {
   [HousingType.Appartement]: 'Appartement',

@@ -88,8 +88,8 @@
           class="fr-tag"
           :class="[
             index === activeIndex ? 'active-menu-item' : '',
-            icons?.has(optionValue)
-              ? `fr-tag--icon-left ${icons.get(optionValue)}`
+            icons && optionValue in icons
+              ? `fr-tag--icon-left ${icons[optionValue]}`
               : ''
           ]"
           :name="optionValue"
@@ -132,7 +132,7 @@
       readonly?: boolean
       disabledOptions?: string[]
       hint?: string
-      icons?: Options
+      icons?: { [key: string]: string }
     }>(),
     {
       labelClass: '',

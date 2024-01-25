@@ -66,7 +66,7 @@
   const isFinancial = subject === HelpRequestSubject.Financial
   const subtitle = isFinancial ? 'Aide financière' : undefined
   const subtitlePictoPath = isFinancial
-    ? helpRequestSubjectPictos.get(subject)
+    ? helpRequestSubjectPictos.Financial
     : undefined
 
   const { data: beneficiary, error: beneficiaryError } =

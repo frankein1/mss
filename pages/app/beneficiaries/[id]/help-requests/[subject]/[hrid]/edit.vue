@@ -94,7 +94,7 @@
       return undefined
     }
     return helpRequest.value?.financialSupport
-      ? helpRequestSubjectPictos.get(HelpRequestSubject.Financial)
+      ? helpRequestSubjectPictos.Financial
       : undefined
   })
 
