@@ -300,6 +300,10 @@
     .filters:not(.full-width-filters) {
       grid-template-columns: repeat(2, 1fr);
 
+      .radio {
+        grid-column: span 2;
+      }
+
       // For collapsable filters
       &::before {
         grid-column: 2;
@@ -318,6 +322,10 @@
       // For collapsable filters
       &::before {
         grid-column: 6;
+      }
+
+      .radio {
+        grid-column: span 6;
       }
 
       > * {

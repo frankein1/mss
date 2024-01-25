@@ -13,6 +13,7 @@ type FilterPropBase = {
 
 export type SelectFilterProp = FilterPropBase & {
   options: Options
+  pictos?: Options
 }
 
 export type SelectOneFilterProp = SelectFilterProp & {
@@ -31,11 +32,16 @@ export type SearchFilterProp = FilterPropBase & {
   type: FilterType.Search
 }
 
+export type RadioFilterProp = SelectFilterProp & {
+  type: FilterType.Radio
+}
+
 export type FilterProp =
   | DateFilterProp
   | SelectOneFilterProp
   | SelectMultipleFilterProp
   | SearchFilterProp
+  | RadioFilterProp
 
 export type SelectedFilter = {
   filterLabel: string
