@@ -24,10 +24,19 @@
     @change-value="emit('changeFilter', $event)"
   />
   <VeeSelect
-    v-else
+    v-else-if="filter.type === FilterType.SelectOne"
     :name="filter.name"
     :label="filter.label"
     :options="filter.options"
+    @change-value="emit('changeFilter', $event)"
+  />
+  <VeeRadioButtons
+    v-else
+    class="radio"
+    :name="filter.name"
+    :label="filter.label"
+    :options="filter.options"
+    :pictos="filter.pictos"
     @change-value="emit('changeFilter', $event)"
   />
 </template>

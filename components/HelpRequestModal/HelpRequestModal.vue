@@ -9,6 +9,7 @@
       label="L'instruction concerne"
       :options="helpRequestSubjectOptions"
       :pictos="helpRequestSubjectPictos"
+      :inline="false"
       required
     />
 
