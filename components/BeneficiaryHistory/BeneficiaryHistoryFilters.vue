@@ -114,20 +114,31 @@
 
     const filters: FilterProp[] = [
       {
+        name: 'typeSuivi',
+        label: "Type d'accompagnement",
+        options: withEmptyValue(typeSuiviOptions, 'Tous les accompagnements'),
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction: BeneficiaryHistoryFilterEventAction.TypeSuivi,
+        alwaysExpanded: true
+      },
+      {
         name: 'status',
         label: followupFieldLabels.status,
         options: withEmptyValue(statusOptions, 'Tous les statuts'),
         type: FilterType.SelectOne,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-        matomoEventAction: FollowupFilterEventAction.Status
+        matomoEventAction: FollowupFilterEventAction.Status,
+        alwaysExpanded: true
       },
       {
-        name: 'typeSuivi',
-        label: "Type d'accompagnement",
-        options: withEmptyValue(typeSuiviOptions, 'Tous les suivis'),
-        type: FilterType.SelectOne,
+        name: 'followupTypes',
+        label: "Objet de l'accompagnement",
+        options: followupTypeOptions.value,
+        type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-        matomoEventAction: BeneficiaryHistoryFilterEventAction.TypeSuivi
+        matomoEventAction: BeneficiaryHistoryFilterEventAction.FollowupType,
+        alwaysExpanded: true
       },
       {
         name: 'medium',
@@ -136,14 +147,6 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction: FollowupFilterEventAction.Medium
-      },
-      {
-        name: 'followupTypes',
-        label: "Objet de l'accompagnement",
-        options: followupTypeOptions.value,
-        type: FilterType.SelectMultiple,
-        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-        matomoEventAction: BeneficiaryHistoryFilterEventAction.FollowupType
       }
     ]
 
