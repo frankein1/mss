@@ -7,7 +7,14 @@
       <span :class="historyTypeIcon"></span>
     </div>
     <div class="history-details__meta">
-      <small>{{ historyTypeTitle }}</small>
+      <p class="fr-mb-0 fr-text--xs history-details__type-title">
+        <AtomPictogram
+          v-if="helpRequestPicto"
+          :path="helpRequestPicto"
+          length="2rem"
+        />
+        {{ historyTypeTitle }}
+      </p>
       <h2 class="history-details__title">
         <template v-if="data.createdBy">
           {{ formatUserDisplayName(data.createdBy) }}
@@ -66,7 +73,10 @@
 <script setup lang="ts">
   import type { SocialSupportData } from '~/server/trpc/routers'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
-  import { socialSupportStatusLabels } from '~/client/options'
+  import {
+    socialSupportStatusLabels,
+    helpRequestSubjectPictos
+  } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
 
@@ -111,9 +121,37 @@
     isFollowup.value ? 'fr-icon-followup-fill' : 'fr-icon-help-request-fill'
   )
 
-  const historyTypeTitle = computed(() =>
-    isFollowup.value ? "Synthèse d'entretien" : 'Instruction de dossier'
-  )
+  const helpRequestPicto = computed(() => {
+    if (props.data.helpRequest) {
+      return props.data.helpRequest.financialSupport
+        ? helpRequestSubjectPictos.Financial
+        : helpRequestSubjectPictos.Other
+    }
+
+    if (props.data.socialSupportType === 'HelpRequestHousing') {
+      return helpRequestSubjectPictos.Housing
+    }
+
+    return undefined
+  })
+
+  const historyTypeTitle = computed(() => {
+    if (isFollowup.value) {
+      return "Synthèse d'entretien"
+    }
+
+    const helpRequestTitle = 'Instruction de dossier'
+
+    if (props.data.socialSupportType === 'HelpRequestHousing') {
+      return `${helpRequestTitle} - Demande de logement`
+    }
+
+    if (props.data.helpRequest?.financialSupport) {
+      return `${helpRequestTitle} - Aide financière`
+    }
+
+    return `${helpRequestTitle} - Autre`
+  })
 
   const historyTypeLabel = computed(() =>
     isFollowup.value ? "la synthèse d'entretien" : "l'instruction de dossier"
@@ -171,11 +209,14 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-    gap: 0.6rem;
 
-    small {
-      margin-bottom: -0.5rem;
+    .fr-tags-group {
+      margin-top: 0.6rem;
     }
+  }
+
+  .history-details__type-title > svg {
+    vertical-align: text-bottom;
   }
 
   .beneficiary-history-details-collapse__title {
