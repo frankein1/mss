@@ -252,6 +252,19 @@ const handler = async ({
   }
 }
 
+type SocialSupportsOutput = Prisma.PromiseReturnType<typeof handler>
+export type SocialSupportItem = SocialSupportsOutput['items'][0]
+export type SocialSupportData = SocialSupportItem['data']
+
+export type FollowupData = NonNullable<SocialSupportData['followup']>
+export type HelpRequestData = NonNullable<SocialSupportData['helpRequest']>
+
+export type CommentItems = Exclude<SocialSupportData['comments'], undefined>
+export type CommentItem = CommentItems[number]
+export type CommentData = CommentItem['comment']
+
+export type DocumentItems = Exclude<SocialSupportData['documents'], undefined>
+
 export const getSocialSupports = createQuery({
   inputValidation: getHistorySchema,
   securityCheck,

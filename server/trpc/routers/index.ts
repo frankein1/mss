@@ -48,3 +48,4 @@ export type GetExaminationDatesConfigOutput =
 export * from '~/server/trpc/routers/usersActivity'
 export * from '~/server/trpc/routers/admin'
 export * from '~/server/trpc/routers/housingHelpRequest'
+export * from '~/server/trpc/routers/beneficiary'

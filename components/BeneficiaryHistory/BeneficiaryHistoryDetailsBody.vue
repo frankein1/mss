@@ -80,8 +80,12 @@
 </template>
 
 <script setup lang="ts">
-  import type { SocialSupportItem, CommentData, CommentItem } from './types'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
+  import type {
+    SocialSupportItem,
+    CommentData,
+    CommentItem
+  } from '~/server/trpc/routers'
   import { RoutePath } from '~/utils/routing'
   import { BeneficiaryPermissions } from '~/server/security'
   import { HelpRequestSubject } from '~/types/socialSupport'

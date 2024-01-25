@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { SocialSupportItem } from './types'
+  import type { SocialSupportItem } from '~/server/trpc/routers'
   import { BeneficiaryPermissions } from '~/server/security'
 
   const props = defineProps<{

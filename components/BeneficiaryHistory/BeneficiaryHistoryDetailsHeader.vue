@@ -64,7 +64,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { SocialSupportData } from './types'
+  import type { SocialSupportData } from '~/server/trpc/routers'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { socialSupportStatusLabels } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'

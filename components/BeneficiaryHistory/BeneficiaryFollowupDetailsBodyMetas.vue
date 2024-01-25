@@ -58,7 +58,7 @@
 
 <script setup lang="ts">
   import { FollowupMedium } from '@prisma/client'
-  import { SocialSupportData, FollowupData } from './types'
+  import { SocialSupportData, FollowupData } from '~/server/trpc/routers'
   import {
     // followupInterventionLabels,
     followupMediumLabels

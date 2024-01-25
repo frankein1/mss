@@ -91,7 +91,7 @@
 
 <script setup lang="ts">
   import { SocialSupportStatus } from '@prisma/client'
-  import { SocialSupportData, HelpRequestData } from './types'
+  import { SocialSupportData, HelpRequestData } from '~/server/trpc/routers'
   import {
     paymentMethodLabels,
     isRefundableLabels,

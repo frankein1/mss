@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-  import { CommentItem, CommentData } from './types'
+  import { CommentItem, CommentData } from '~/server/trpc/routers'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
 

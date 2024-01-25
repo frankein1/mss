@@ -51,7 +51,7 @@
 
 <script setup lang="ts">
   import BeneficiaryHistoryCommentDeleteConfirm from './BeneficiaryHistoryCommentDeleteConfirm.vue'
-  import { CommentData } from './types'
+  import { CommentData } from '~/server/trpc/routers'
   import { EditCommentInput, editCommentSchema } from '~/server/schema'
 
   const trpcClient = useTrpcClient()
