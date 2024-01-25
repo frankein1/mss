@@ -13,6 +13,7 @@ import {
   User
 } from '@prisma/client'
 import { SecurityRuleContext, SecurityRuleGrantee } from '../security'
+import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { connect } from '~/utils/prisma'
 
 export function prepareInstructorOrganization(
