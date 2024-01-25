@@ -81,7 +81,10 @@
     PrescribingOrganization
   } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
-  import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
+  import {
+    helpRequestFieldLabels,
+    housingHelpRequestFieldLabels
+  } from '~/client/labels'
   import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
   import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
   import { HelpRequestSubject } from '~/types/socialSupport'
@@ -109,7 +112,7 @@
   const { errors } = useDisplayFormErrors(
     form,
     toRef(() => props.caughtErrors),
-    helpRequestFieldLabels
+    { ...helpRequestFieldLabels, ...housingHelpRequestFieldLabels }
   )
 
   const emit = defineEmits<{

@@ -53,8 +53,8 @@ export const createHousingHelpRequestSchemaBase = z.object({
   taxHouseholdAdditionalInformation: openText(200).nullish(),
   maxRent: amountNumber.nullish(),
   maxCharges: amountNumber.nullish(),
-  housingType: z.array(z.nativeEnum(HousingType)),
-  roomCount: z.array(z.nativeEnum(HousingRoomCount)),
+  housingType: z.array(z.nativeEnum(HousingType)).nullish(),
+  roomCount: z.array(z.nativeEnum(HousingRoomCount)).nullish(),
   isPmr: z.boolean().default(false)
 })
 
