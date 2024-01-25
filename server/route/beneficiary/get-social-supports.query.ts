@@ -258,6 +258,9 @@ export type SocialSupportData = SocialSupportItem['data']
 
 export type FollowupData = NonNullable<SocialSupportData['followup']>
 export type HelpRequestData = NonNullable<SocialSupportData['helpRequest']>
+export type HousingHelpRequestData = NonNullable<
+  SocialSupportData['housingHelpRequest']
+>
 
 export type CommentItems = Exclude<SocialSupportData['comments'], undefined>
 export type CommentItem = CommentItems[number]
