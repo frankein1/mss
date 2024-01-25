@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { prepareSocialSupportStatFilters } from '../helpers'
 import { SocialSupportConstraints, SocialSupportRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
@@ -8,7 +9,12 @@ export async function getHelpRequestMinistreStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const where = { where: prepareSocialSupportStatFilters(input) }
+  const where: { where: Prisma.SocialSupportWhereInput } = {
+    where: {
+      socialSupportType: 'HelpRequest',
+      ...prepareSocialSupportStatFilters(input)
+    }
+  }
   appendConstraints(user, where, SocialSupportConstraints.get)
 
   return await SocialSupportRepo.prisma.groupBy({
