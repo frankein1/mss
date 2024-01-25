@@ -4,6 +4,16 @@ import { CreateHousingHelpRequestInput } from '~/server/schema'
 export const cleanCreateInput = cleanInput
 export const cleanUpdateInput = cleanInput
 
+function cleanIsFirst(isFirst: CreateHousingHelpRequestInput['isFirst']) {
+  if (isFirst === 'true') {
+    return true
+  }
+  if (isFirst === 'false') {
+    return false
+  }
+  return isFirst
+}
+
 function cleanInput(input: CreateHousingHelpRequestInput) {
   const {
     status,
@@ -40,7 +50,7 @@ function cleanInput(input: CreateHousingHelpRequestInput) {
     refusalReason: isRefused ? refusalReason : null,
     dispatchDate: isExternalStructure ? dispatchDate : null,
     examinationDate: !isExternalStructure ? examinationDate : null,
-    isFirst: isFirst === 'true',
+    isFirst: cleanIsFirst(isFirst),
     askedHousing
   }
 }
