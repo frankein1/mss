@@ -2,7 +2,7 @@
   <div>
     <div class="feature-section history-header-section fr-p-3w">
       <BeneficiaryHistoryFilters
-        :results-label="`${items.length} élément(s) affiché(s) sur ${totalCount} disponible(s) dans l'historique des accompagnements du bénéficiaire`"
+        :results-label="resultsLabel"
         :beneficiary-id="beneficiaryId"
         @filter="filters = $event"
       />
@@ -65,6 +65,16 @@
   const items = computed(() => data.value?.items || [])
 
   const totalCount = computed(() => data.value?.totalCount || 0)
+
+  const resultsLabel = computed(() => {
+    const plural = items.value.length > 1 ? 's' : ''
+
+    if (items.value.length === totalCount.value) {
+      return `${items.value.length} accompagnement${plural}`
+    }
+
+    return `${items.value.length} accompagnement${plural} affiché${plural} sur ${totalCount.value}`
+  })
 
   onMounted(async () => {
     const tab = route.hash.slice(1)

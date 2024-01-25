@@ -63,7 +63,7 @@
       <li v-if="!noReset">
         <button
           v-show="hasFilters"
-          class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-left fr-icon-close-circle-line"
+          class="fr-btn fr-btn--tertiary-no-outline fr-icon-close-circle-line"
           type="button"
           @click.prevent="onReset"
         >
@@ -72,11 +72,7 @@
       </li>
       <li v-if="collapsedByDefaultFilters.length">
         <button
-          class="fr-btn fr-btn--tertiary-no-outline fr-btn--icon-right"
-          :class="{
-            'fr-icon-arrow-down-s-line': !expanded,
-            'fr-icon-arrow-up-s-line': expanded
-          }"
+          class="fr-btn fr-btn--tertiary-no-outline fr-icon-filter-fill"
           aria-expanded="false"
           :aria-controls="COLLAPSED_FILTERS_ID"
           @click="expanded = !expanded"

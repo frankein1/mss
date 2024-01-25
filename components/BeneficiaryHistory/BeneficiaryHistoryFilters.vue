@@ -33,10 +33,9 @@
   import {
     EventCategory,
     BeneficiaryHistoryFilterEventAction,
-    FollowupFilterEventAction,
-    HelpRequestFilterEventAction
+    FollowupFilterEventAction
   } from '~/types/matomo'
-  import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
+  import { followupFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     beneficiaryId: string
@@ -150,48 +149,49 @@
       }
     ]
 
-    if (application.value.module.helpRequest) {
-      if (examinationDateOptions.value.size) {
-        filters.push({
-          name: 'examinationDate',
-          label: helpRequestFieldLabels.examinationDate,
-          options: withEmptyValue(
-            examinationDateOptions.value,
-            'Toutes les commissions'
-          ),
-          type: FilterType.SelectOne,
-          matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-          matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
-        })
-      }
-
-      filters.push(
-        {
-          name: 'handlingDate',
-          label: helpRequestFieldLabels.handlingDate,
-          options: new Map([
-            ['', 'Non sélectionné'],
-            ['true', 'Oui'],
-            ['false', 'Non']
-          ]),
-          type: FilterType.SelectOne,
-          matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-          matomoEventAction: HelpRequestFilterEventAction.HandlingDate
-        },
-        {
-          name: 'externalStructure',
-          label: 'Instruction',
-          options: new Map([
-            ['', 'Toutes les instructions'],
-            ['false', 'Interne'],
-            ['true', 'Organisme externe']
-          ]),
-          type: FilterType.SelectOne,
-          matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-          matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
-        }
-      )
-    }
+    // FIXME: Delete once it is admitted that it is done
+    // if (application.value.module.helpRequest) {
+    //   if (examinationDateOptions.value.size) {
+    //     filters.push({
+    //       name: 'examinationDate',
+    //       label: helpRequestFieldLabels.examinationDate,
+    //       options: withEmptyValue(
+    //         examinationDateOptions.value,
+    //         'Toutes les commissions'
+    //       ),
+    //       type: FilterType.SelectOne,
+    //       matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+    //       matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
+    //     })
+    //   }
+    //
+    //   filters.push(
+    //     {
+    //       name: 'handlingDate',
+    //       label: helpRequestFieldLabels.handlingDate,
+    //       options: new Map([
+    //         ['', 'Non sélectionné'],
+    //         ['true', 'Oui'],
+    //         ['false', 'Non']
+    //       ]),
+    //       type: FilterType.SelectOne,
+    //       matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+    //       matomoEventAction: HelpRequestFilterEventAction.HandlingDate
+    //     },
+    //     {
+    //       name: 'externalStructure',
+    //       label: 'Instruction',
+    //       options: new Map([
+    //         ['', 'Toutes les instructions'],
+    //         ['false', 'Interne'],
+    //         ['true', 'Organisme externe']
+    //       ]),
+    //       type: FilterType.SelectOne,
+    //       matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+    //       matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
+    //     }
+    //   )
+    // }
 
     if (!isReferent) {
       filters.push({
