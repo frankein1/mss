@@ -9,9 +9,12 @@
     />
 
     <template v-if="canViewHistoryDetails">
+      <ul class="information-list">
+        <BeneficiarySocialSupportDetailsBodyMets
+          :social-support="socialSupport"
+        />
       <BeneficiaryFollowupDetailsBodyMetas
         v-if="isFollowup && socialSupport.followup"
-        :social-support="socialSupport"
         :followup="socialSupport.followup"
       />
       <BeneficiaryHelpRequestDetailsBodyMetas
@@ -19,9 +22,10 @@
           socialSupport.socialSupportType === 'HelpRequest' &&
           socialSupport.helpRequest
         "
-        :social-support="socialSupport"
         :help-request="socialSupport.helpRequest"
-      />
+          :status="socialSupport.status"
+        />
+      </ul>
 
       <BeneficiaryHistoryDetailsBodyDocuments
         v-if="socialSupport.documents?.length"
@@ -207,6 +211,12 @@
   .btn-delete {
     box-shadow: inset 0 0 0 1px var(--red-marianne-main-472);
     color: var(--red-marianne-main-472);
+  }
+
+  .information-list {
+    column-gap: 2rem;
+    margin-bottom: 0.5rem;
+    column-count: 2;
   }
 </style>
 
