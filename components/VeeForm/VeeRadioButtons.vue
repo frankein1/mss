@@ -17,7 +17,7 @@
       :key="optionValue"
       class="fr-fieldset__element"
       :class="{
-        'fr-fieldset__element--inline': !pictos
+        'fr-fieldset__element--inline': inline
       }"
     >
       <div
@@ -67,9 +67,14 @@
       label: string
       options: Options
       pictos?: Options
+      inline?: boolean
     }>(),
-    { pictos: undefined }
+    { pictos: undefined, inline: true }
   )
+
+  const emit = defineEmits<{
+    changeValue: [value: string]
+  }>()
 
   // we are using toRefs to create reactive references to `name` and `value` props
   // this is important because vee-validate needs to know if any of these props change
@@ -98,6 +103,7 @@
 
   function onChange(event: Event) {
     const input = event.target as HTMLInputElement
+    emit('changeValue', input.value)
     handleChange(input.value)
   }
 </script>

@@ -10,11 +10,17 @@ import {
   EmailStatus,
   SocialSupportType
 } from '@prisma/client'
-import { kindOfBooleanSchema, stringConstraint } from './helpers.schema'
+import {
+  kindOfBooleanSchema,
+  stringConstraint,
+  withEmptyValueOptionalNativeEnum
+} from './helpers.schema'
 import { AgeGroup } from '~/client/options/ageGroup'
 import { maxStringLengthMessage } from '~/utils/zod'
+import { HelpRequestSubject } from '~/types/socialSupport'
 
 const statFilterSchema = z.object({
+  helpRequestSubject: withEmptyValueOptionalNativeEnum(HelpRequestSubject),
   fromDate: z.coerce.date().nullish(),
   toDate: z.coerce
     .date()
