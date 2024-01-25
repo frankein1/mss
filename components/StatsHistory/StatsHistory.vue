@@ -5,6 +5,7 @@
         :followup-type-options="followupTypeOptions"
         :beneficiaries-cities-options="beneficiariesCitiesOptions"
         :agent-options="agentOptions"
+        :is-help-requests-tab="!isFollowupsTabActive"
         @filter="filters = $event"
       />
     </div>
