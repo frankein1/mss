@@ -3,7 +3,6 @@ export type {
   SocialSupportData,
   FollowupData,
   HelpRequestData,
-  HousingHelpRequestData,
   CommentItems,
   CommentItem,
   CommentData,
