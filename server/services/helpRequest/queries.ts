@@ -87,7 +87,6 @@ export function filter(
   const { socialSupport } = helpRequest
   const conditions = {
     details: permissions.get.details,
-    dueDate: permissions.get.dueDate,
     minister: appPermissions.module.ministere,
     privateSynthesis: permissions.get.privateSynthesis
   }

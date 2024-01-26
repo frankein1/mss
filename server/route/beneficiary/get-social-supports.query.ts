@@ -184,7 +184,6 @@ function formatResult(
 
     const conditions = {
       minister: appPermissions.module.ministere,
-      dueDate: socialSupportPermissions.get.dueDate,
       details: socialSupportPermissions.get.details,
       privateSynthesis: socialSupportPermissions.get.privateSynthesis
     }

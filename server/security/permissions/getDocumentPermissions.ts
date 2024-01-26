@@ -24,7 +24,7 @@ export type DocumentPermissions = {
   }
 }
 
-const FALSY_PERMISSIONS = {
+const FALSY_PERMISSIONS: DocumentPermissions = {
   edit: false,
   view: false,
   delete: false,

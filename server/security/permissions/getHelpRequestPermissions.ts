@@ -16,7 +16,6 @@ export type HelpRequestPermissions = {
   view: boolean
   get: {
     details: boolean
-    dueDate: boolean
     privateSynthesis: boolean
   }
   set: {
@@ -25,12 +24,11 @@ export type HelpRequestPermissions = {
   delete: boolean
 }
 
-const FALSY_PERMISSIONS = {
+const FALSY_PERMISSIONS: HelpRequestPermissions = {
   edit: false,
   view: false,
   get: {
     details: false,
-    dueDate: false,
     privateSynthesis: false
   },
   set: {
@@ -64,7 +62,6 @@ function getCreationPermissions(): HelpRequestPermissions {
     view: true,
     get: {
       details: true,
-      dueDate: true,
       privateSynthesis: true
     },
     set: {
@@ -99,7 +96,6 @@ function getEditionPermissions({
     view: isReferent || manager || socialWorker || instructor || receptionAgent,
     get: {
       details: manager || socialWorker || instructor || isReferent,
-      dueDate: manager || socialWorker || instructor || referent,
       privateSynthesis: creator
     },
     set: {

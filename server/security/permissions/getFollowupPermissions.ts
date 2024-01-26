@@ -25,7 +25,7 @@ export type FollowupPermissions = {
   delete: boolean
 }
 
-const FALSY_PERMISSIONS = {
+const FALSY_PERMISSIONS: FollowupPermissions = {
   edit: false,
   view: false,
   get: {

@@ -44,7 +44,7 @@ export type BeneficiaryPermissions = {
   }
 }
 
-const FALSY_PERMISSIONS = {
+const FALSY_PERMISSIONS: BeneficiaryPermissions = {
   edit: {
     general: false,
     relatives: false,

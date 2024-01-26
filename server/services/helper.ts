@@ -79,7 +79,6 @@ export function filterSocialSupport({
     details: boolean
     minister: boolean
     privateSynthesis: boolean
-    dueDate: boolean
   }
 }) {
   return {
@@ -97,7 +96,7 @@ export function filterSocialSupport({
     beneficiary: socialSupport.beneficiary,
     beneficiaryId: socialSupport.beneficiaryId,
 
-    dueDate: show(socialSupport.dueDate, conditions.dueDate),
+    dueDate: show(socialSupport.dueDate, conditions.details),
 
     privateSynthesis: show(
       socialSupport.privateSynthesis,
@@ -125,7 +124,6 @@ export function filterFollowup({
     details: boolean
     minister: boolean
     privateSynthesis: boolean
-    dueDate: boolean
   }
 }) {
   return {
@@ -160,7 +158,6 @@ export function filterHelpRequest({
     details: boolean
     minister: boolean
     privateSynthesis: boolean
-    dueDate: boolean
   }
 }) {
   const { details } = conditions
@@ -209,7 +206,6 @@ export function filterHousingHelpRequest({
     details: boolean
     minister: boolean
     privateSynthesis: boolean
-    dueDate: boolean
   }
 }) {
   const { details } = conditions
