@@ -105,6 +105,6 @@ function getEditionPermissions({
     set: {
       privateSynthesis: creator
     },
-    delete: manager || socialWorker || (instructor && creator)
+    delete: manager || socialWorker || (instructor && creator) || isReferent
   }
 }

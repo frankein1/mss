@@ -7,12 +7,12 @@ import {
   Minister,
   UserRole,
   DocumentType,
-  EmailStatus,
-  SocialSupportType
+  EmailStatus
 } from '@prisma/client'
 import { kindOfBooleanSchema, stringConstraint } from './helpers.schema'
 import { AgeGroup } from '~/client/options/ageGroup'
 import { maxStringLengthMessage } from '~/utils/zod'
+import { TypeSuivi } from '~/client/options/history'
 
 const statFilterSchema = z.object({
   fromDate: z.coerce.date().nullish(),
@@ -78,7 +78,7 @@ type HelpRequestFilterInput = z.infer<typeof helpRequestFilterSchema>
 
 const beneficiaryHistoryFilterSchema = z.object({
   status: z.nativeEnum(SocialSupportStatus).nullish(),
-  typeSuivi: z.nativeEnum(SocialSupportType).nullish(),
+  typeSuivi: z.nativeEnum(TypeSuivi).nullish(),
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),

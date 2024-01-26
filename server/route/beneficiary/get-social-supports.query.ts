@@ -21,6 +21,7 @@ import {
   filterFollowup,
   filterHousingHelpRequest
 } from '~/server/services/helper'
+import { TypeSuivi } from '~/client/options/history'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -87,7 +88,25 @@ function prepareSocialSupportFilters(
   }
 
   if (filters.typeSuivi) {
-    formattedFilters.socialSupportType = filters.typeSuivi
+    switch (filters.typeSuivi) {
+      case TypeSuivi.Followup:
+        formattedFilters.socialSupportType = 'Followup'
+        break
+      case TypeSuivi.AllHelpRequest:
+        formattedFilters.socialSupportType = {
+          in: ['HelpRequest', 'HelpRequestHousing']
+        }
+        break
+      case TypeSuivi.HousingHelpRequest:
+        formattedFilters.socialSupportType = 'HelpRequestHousing'
+        break
+      case TypeSuivi.FinancialHelpRequest:
+      case TypeSuivi.OtherHelpRequest:
+        formattedFilters.socialSupportType = 'HelpRequest'
+        formattedFilters.helpRequest = {
+          financialSupport: filters.typeSuivi === TypeSuivi.FinancialHelpRequest
+        }
+    }
   }
 
   return formattedFilters
@@ -258,6 +277,9 @@ export type SocialSupportData = SocialSupportItem['data']
 
 export type FollowupData = NonNullable<SocialSupportData['followup']>
 export type HelpRequestData = NonNullable<SocialSupportData['helpRequest']>
+export type HousingHelpRequestData = NonNullable<
+  SocialSupportData['housingHelpRequest']
+>
 
 export type CommentItems = Exclude<SocialSupportData['comments'], undefined>
 export type CommentItem = CommentItems[number]

@@ -13,16 +13,24 @@
         <BeneficiarySocialSupportDetailsBodyMetas
           :social-support="socialSupport"
         />
-      <BeneficiaryFollowupDetailsBodyMetas
-        v-if="isFollowup && socialSupport.followup"
-        :followup="socialSupport.followup"
-      />
-      <BeneficiaryHelpRequestDetailsBodyMetas
-        v-else-if="
-          socialSupport.socialSupportType === 'HelpRequest' &&
-          socialSupport.helpRequest
-        "
-        :help-request="socialSupport.helpRequest"
+        <BeneficiaryFollowupDetailsBodyMetas
+          v-if="isFollowup && socialSupport.followup"
+          :followup="socialSupport.followup"
+        />
+        <BeneficiaryHelpRequestDetailsBodyMetas
+          v-else-if="
+            socialSupport.socialSupportType === 'HelpRequest' &&
+            socialSupport.helpRequest
+          "
+          :help-request="socialSupport.helpRequest"
+          :status="socialSupport.status"
+        />
+        <BeneficiaryHousingHelpRequestDetailsBodyMetas
+          v-else-if="
+            socialSupport.socialSupportType === 'HelpRequestHousing' &&
+            socialSupport.housingHelpRequest
+          "
+          :housing-help-request="socialSupport.housingHelpRequest"
           :status="socialSupport.status"
         />
       </ul>
@@ -128,6 +136,13 @@
         socialSupport.value.beneficiaryId,
         socialSupport.value.helpRequest.id,
         subject
+      )
+    }
+    if (socialSupport.value.housingHelpRequest) {
+      return RoutePath.AppBeneficiaryHelpRequestEdit(
+        socialSupport.value.beneficiaryId,
+        socialSupport.value.housingHelpRequest.id,
+        HelpRequestSubject.Housing
       )
     }
 
