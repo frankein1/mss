@@ -79,6 +79,13 @@
   const isAdding = ref(false)
   const createdFollowupTypes = ref<string[]>([])
 
+  watch(
+    () => props.optionalTypes,
+    () => {
+      createdFollowupTypes.value = []
+    }
+  )
+
   const optionalTypeOptions = computed(() => {
     const defaultOptionalTypes = Array.from(
       defaultLegallyNotRequiredFollowupTypeOptions
