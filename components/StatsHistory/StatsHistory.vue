@@ -119,14 +119,17 @@
                 :filters="filters"
               />
             </div>
-            <div class="fr-col-12 fr-col-sm-6">
-              <StatsFinancialHelpRequests :filters="filters" />
-            </div>
             <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
               <StatsHistoryInstructorOrganizations
                 :total-count="helpRequestCount"
                 :filters="filters"
               />
+            </div>
+            <div class="fr-col-12 fr-col-sm-6">
+              <StatsFinancialHelpRequests :filters="filters" />
+            </div>
+            <div class="fr-col-12 fr-col-sm-6">
+              <StatsHousingHelpRequests :filters="filters" />
             </div>
           </div>
         </template>
