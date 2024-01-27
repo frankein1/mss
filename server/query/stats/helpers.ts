@@ -1,6 +1,7 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, SocialSupportType } from '@prisma/client'
 import { STATS_NULL_LABEL } from '~/client/options'
 import { StatFilterInput } from '~/server/schema'
+import { HelpRequestSubject } from '~/types/socialSupport'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 
 export function preparePrescribingOrganizationStats(
@@ -66,6 +67,26 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
       socialSupport.beneficiary.status = filters.beneficiaryStatus
     } else {
       socialSupport.beneficiary = { status: filters.beneficiaryStatus }
+    }
+  }
+
+  return socialSupport
+}
+
+export function prepareHelpRequestStatFilters(filters: StatFilterInput) {
+  const socialSupport = prepareSocialSupportStatFilters(filters)
+
+  if (filters.helpRequestSubject === HelpRequestSubject.Housing) {
+    socialSupport.socialSupportType = SocialSupportType.HelpRequestHousing
+  } else if (filters.helpRequestSubject === HelpRequestSubject.Financial) {
+    socialSupport.socialSupportType = SocialSupportType.HelpRequest
+    socialSupport.helpRequest = { financialSupport: true }
+  } else if (filters.helpRequestSubject === HelpRequestSubject.Other) {
+    socialSupport.socialSupportType = SocialSupportType.HelpRequest
+    socialSupport.helpRequest = { financialSupport: false }
+  } else {
+    socialSupport.socialSupportType = {
+      in: [SocialSupportType.HelpRequest, SocialSupportType.HelpRequestHousing]
     }
   }
 
