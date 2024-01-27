@@ -6,3 +6,4 @@ export { getHelpRequestPrescribingOrganizationStatsQuery } from './getHelpReques
 export { getHelpRequestInstructorOrganizationStatsQuery } from './getHelpRequestInstructorOrganizationStatsQuery'
 export { getHelpRequestFinancialStatsQuery } from './getHelpRequestFinancialStatsQuery'
 export { getHelpRequestSubjectStatsQuery } from './getHelpRequestSubjectStatsQuery'
+export { getHelpRequestHousingStatsQuery } from './getHelpRequestHousingStatsQuery'
