@@ -53,7 +53,7 @@
       filters.push({
         name: 'helpRequestSubject',
         label: "Thématique d'instruction :",
-        options: withEmptyValue(helpRequestSubjectOptions, 'Tous'),
+        options: withEmptyValue(helpRequestSubjectOptions, 'Toutes'),
         type: FilterType.Radio,
         alwaysExpanded: true,
         pictos: helpRequestSubjectPictos
@@ -85,8 +85,7 @@
         name: 'cities',
         label: 'Ville',
         options: props.beneficiariesCitiesOptions,
-        type: FilterType.SelectMultiple,
-        alwaysExpanded: true
+        type: FilterType.SelectMultiple
       })
     }
     if (application.value.module.statsByReferent) {
@@ -94,16 +93,14 @@
         name: 'referent',
         label: 'Référent',
         options: props.agentOptions,
-        type: FilterType.SelectOne,
-        alwaysExpanded: true
+        type: FilterType.SelectOne
       })
     }
     filters.push({
       name: 'beneficiaryStatus',
       label: 'Statut du bénéficiaire',
       options: withEmptyValue(beneficiaryStatusOptions),
-      type: FilterType.SelectOne,
-      alwaysExpanded: true
+      type: FilterType.SelectOne
     })
     return filters
   })
