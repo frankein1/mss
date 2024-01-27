@@ -3,6 +3,7 @@ import { Dayjs } from 'dayjs'
 type StatBase = {
   key: string
   label: string
+  picto?: string
 }
 
 export type StatList = StatBase & {
