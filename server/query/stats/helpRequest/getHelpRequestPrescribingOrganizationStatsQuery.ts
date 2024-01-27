@@ -1,6 +1,6 @@
 import {
   preparePrescribingOrganizationStats,
-  prepareSocialSupportStatFilters
+  prepareHelpRequestStatFilters
 } from '../helpers'
 import { SocialSupportRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
@@ -10,13 +10,10 @@ export async function getHelpRequestPrescribingOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const preparedFilters = prepareSocialSupportStatFilters(input)
+  const preparedFilters = prepareHelpRequestStatFilters(input)
 
   const socialSupports = await SocialSupportRepo.findMany(user, {
-    where: {
-      socialSupportType: 'HelpRequest',
-      ...preparedFilters
-    },
+    where: preparedFilters,
     select: {
       helpRequest: {
         select: {
