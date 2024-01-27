@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { prepareSocialSupportStatFilters } from '../helpers'
+import { prepareHelpRequestStatFilters } from '../helpers'
 import {
   HelpRequestRepo,
   FollowupTypeRepo,
@@ -117,7 +117,7 @@ export async function getHelpRequestFinancialStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const filters = { where: prepareSocialSupportStatFilters(input) }
+  const filters = { where: prepareHelpRequestStatFilters(input) }
   appendConstraints(user, filters, SocialSupportConstraints.get)
 
   const [
