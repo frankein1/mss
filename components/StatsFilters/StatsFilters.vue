@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
   import {
-    helpRequestSubjectOptions,
+    helpRequestSubjectStatsOptions,
     helpRequestSubjectPictos
   } from '~/client/options/helpRequest'
   import { FilterType } from '~/utils/constants/filters'
@@ -53,7 +53,7 @@
       filters.push({
         name: 'helpRequestSubject',
         label: "Thématique d'instruction :",
-        options: withEmptyValue(helpRequestSubjectOptions, 'Toutes'),
+        options: withEmptyValue(helpRequestSubjectStatsOptions, 'Toutes'),
         type: FilterType.Radio,
         alwaysExpanded: true,
         pictos: helpRequestSubjectPictos
