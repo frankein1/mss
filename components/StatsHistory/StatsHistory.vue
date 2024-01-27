@@ -77,6 +77,12 @@
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
           <div class="fr-col-12 fr-col-lg-6">
+            <StatsHelpRequestSubject
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-lg-6">
             <StatsHelpRequestFollowupTypes
               :total-count="helpRequestCount"
               :filters="filters"
