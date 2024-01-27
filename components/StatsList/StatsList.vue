@@ -5,7 +5,7 @@
       class="stats-list"
     >
       <li
-        v-for="{ key, label, count, color } in displayedStats"
+        v-for="{ key, label, count, color, picto } in displayedStats"
         :key="key"
         class="stats-entry"
         :class="{
@@ -14,7 +14,14 @@
           'with-color-dot': statsColorDot
         }"
       >
-        <span>{{ label }}</span>
+        <div>
+          <AtomPictogram
+            v-if="picto"
+            :path="picto"
+            length="3rem"
+          />
+          <span>{{ label }}</span>
+        </div>
         <span
           class="fr-text--bold"
           :style="{ color: !statsPercentage ? color : undefined }"
@@ -119,6 +126,9 @@
     > :first-child {
       grid-area: label;
       word-break: break-word;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
     }
 
     > :nth-child(2) {
