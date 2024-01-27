@@ -1,5 +1,4 @@
-import { SocialSupportType } from '@prisma/client'
-import { prepareSocialSupportStatFilters } from '../helpers'
+import { prepareHelpRequestStatFilters } from '../helpers'
 import { SocialSupportRepo } from '~/server/database'
 import { STATS_NULL_LABEL } from '~/client/options/stat'
 import { StatFilterInput } from '~/server/schema'
@@ -10,13 +9,10 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const preparedFilters = prepareSocialSupportStatFilters(input)
+  const preparedFilters = prepareHelpRequestStatFilters(input)
 
   const socialSupports = await SocialSupportRepo.findMany(user, {
-    where: {
-      ...preparedFilters,
-      socialSupportType: SocialSupportType.HelpRequest
-    },
+    where: preparedFilters,
     select: {
       helpRequest: {
         select: {
