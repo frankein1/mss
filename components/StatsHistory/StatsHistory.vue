@@ -76,7 +76,10 @@
           v-else-if="helpRequestCount"
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
-          <div class="fr-col-12 fr-col-lg-6">
+          <div
+            v-if="!filters.helpRequestSubject"
+            class="fr-col-12 fr-col-lg-6"
+          >
             <StatsHelpRequestSubject
               :total-count="helpRequestCount"
               :filters="filters"
