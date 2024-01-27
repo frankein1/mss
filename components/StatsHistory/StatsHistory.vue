@@ -72,56 +72,64 @@
           v-if="pending"
           class="fr-mx-auto"
         />
-        <div
-          v-else-if="helpRequestCount"
-          class="fr-grid-row fr-grid-row--gutters fr-px-2w"
-        >
-          <div
-            v-if="!filters.helpRequestSubject"
-            class="fr-col-12 fr-col-lg-6"
-          >
-            <StatsHelpRequestSubject
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
+        <template v-else-if="helpRequestCount">
+          <div class="fr-alert fr-alert--info fr-mb-3w">
+            <p>
+              Les instructions de dossiers de demande de logement réalisées
+              avant le 31 décembre 2023 sont comptabilisées dans la thématique
+              “Autre”.
+              <NuxtLink :to="`mailto:${supportEmail}`">Contactez-nous</NuxtLink>
+              si vous rencontrez des difficultés.
+            </p>
           </div>
-          <div class="fr-col-12 fr-col-lg-6">
-            <StatsHelpRequestFollowupTypes
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
+          <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
+            <div
+              v-if="!filters.helpRequestSubject"
+              class="fr-col-12 fr-col-lg-6"
+            >
+              <StatsHelpRequestSubject
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div class="fr-col-12 fr-col-lg-6">
+              <StatsHelpRequestFollowupTypes
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div
+              v-if="application.module.ministere"
+              class="fr-col-12 fr-col-lg-6"
+            >
+              <StatsHelpRequestMinistre
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+              <StatsHelpRequestStatus
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+              <StatsHelpRequestPrescribingOrganizations
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div class="fr-col-12 fr-col-sm-6">
+              <StatsFinancialHelpRequests :filters="filters" />
+            </div>
+            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+              <StatsHistoryInstructorOrganizations
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
           </div>
-          <div
-            v-if="application.module.ministere"
-            class="fr-col-12 fr-col-lg-6"
-          >
-            <StatsHelpRequestMinistre
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHelpRequestStatus
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHelpRequestPrescribingOrganizations
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6">
-            <StatsFinancialHelpRequests :filters="filters" />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHistoryInstructorOrganizations
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
-          </div>
-        </div>
+        </template>
       </div>
       <div
         id="followups-panel"
@@ -197,6 +205,12 @@
   import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const trpcClient = useTrpcClient()
+
+  const {
+    public: {
+      email: { from: supportEmail }
+    }
+  } = useRuntimeConfig()
 
   const { application } = usePermissions()
 
@@ -293,6 +307,10 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
+  .fr-alert {
+    background-color: #fff;
+  }
 
   .fr-tabs {
     box-shadow: none;
