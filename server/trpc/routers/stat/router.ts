@@ -30,7 +30,8 @@ import {
   getRegionStatsQ,
   getCityStatsQ,
   getDepartmentStatsQ,
-  getHelpRequestSubjectStatsQ
+  getHelpRequestSubjectStatsQ,
+  getHousingHelpRequestsStatsQ
 } from '~/server/route/stat'
 import { protectedProcedure, router } from '~/server/trpc'
 
@@ -56,6 +57,9 @@ export const statRouter = router({
   getFinancialHelpRequestsStats: protectedProcedure
     .input(getFinancialHelpRequestsStatsQ.inputValidation)
     .query(getFinancialHelpRequestsStatsQ.execute),
+  getHousingHelpRequestsStats: protectedProcedure
+    .input(getHousingHelpRequestsStatsQ.inputValidation)
+    .query(getHousingHelpRequestsStatsQ.execute),
   getFollowupActionsEntreprisesStats: protectedProcedure
     .input(getFollowupActionsEntreprisesStatsQ.inputValidation)
     .query(getFollowupActionsEntreprisesStatsQ.execute),
