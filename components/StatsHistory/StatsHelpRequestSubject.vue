@@ -33,7 +33,10 @@
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~~/utils/constants/alert'
-  import { helpRequestSubjectStatsLabels } from '~/client/options'
+  import {
+    helpRequestSubjectPictos,
+    helpRequestSubjectStatsLabels
+  } from '~/client/options'
   import { HelpRequestSubject } from '~/types/socialSupport'
 
   const trpcClient = useTrpcClient()
@@ -55,7 +58,8 @@
         key: subject,
         label: helpRequestSubjectStatsLabels[subject],
         color: getColor(subject),
-        count: _count
+        count: _count,
+        picto: helpRequestSubjectPictos.get(subject)
       })) || []
   )
 
