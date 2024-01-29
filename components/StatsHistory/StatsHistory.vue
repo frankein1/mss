@@ -89,7 +89,10 @@
                 :filters="filters"
               />
             </div>
-            <div class="fr-col-12 fr-col-lg-6">
+            <div
+              v-if="filters.helpRequestSubject !== HelpRequestSubject.Housing"
+              class="fr-col-12 fr-col-lg-6"
+            >
               <StatsHelpRequestFollowupTypes
                 :total-count="helpRequestCount"
                 :filters="filters"
@@ -110,7 +113,10 @@
                 :filters="filters"
               />
             </div>
-            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+            <div
+              v-if="filters.helpRequestSubject !== HelpRequestSubject.Housing"
+              class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
+            >
               <StatsHelpRequestPrescribingOrganizations
                 :total-count="helpRequestCount"
                 :filters="filters"
@@ -122,7 +128,13 @@
                 :filters="filters"
               />
             </div>
-            <div class="fr-col-12 fr-col-sm-6">
+            <div
+              v-if="
+                !filters.helpRequestSubject ||
+                filters.helpRequestSubject === HelpRequestSubject.Financial
+              "
+              class="fr-col-12 fr-col-sm-6"
+            >
               <StatsFinancialHelpRequests :filters="filters" />
             </div>
             <div
