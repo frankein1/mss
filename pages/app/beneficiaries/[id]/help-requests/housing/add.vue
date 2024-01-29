@@ -14,9 +14,7 @@
       icon-color-class="color-purple-glycine"
       icon-background-class="bg-purple-glycine"
       subtitle="Demande de logement"
-      :subtitle-picto-path="
-        helpRequestSubjectPictos.Housing
-      "
+      :subtitle-picto-path="helpRequestSubjectPictos.Housing"
     >
       <RequiredFields />
     </PageTitle>
