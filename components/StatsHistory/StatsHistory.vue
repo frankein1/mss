@@ -82,7 +82,7 @@
           <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
             <div
               v-if="!filters.helpRequestSubject"
-              class="fr-col-12 fr-col-lg-6"
+              class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
             >
               <StatsHelpRequestSubject
                 :total-count="helpRequestCount"
@@ -98,17 +98,17 @@
                 :filters="filters"
               />
             </div>
+            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+              <StatsHelpRequestStatus
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
             <div
               v-if="application.module.ministere"
               class="fr-col-12 fr-col-lg-6"
             >
               <StatsHelpRequestMinistre
-                :total-count="helpRequestCount"
-                :filters="filters"
-              />
-            </div>
-            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-              <StatsHelpRequestStatus
                 :total-count="helpRequestCount"
                 :filters="filters"
               />
