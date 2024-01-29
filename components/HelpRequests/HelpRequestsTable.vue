@@ -23,13 +23,17 @@
             <TableSortableHeader
               v-if="application.module.helpRequest"
               :label="helpRequestFieldLabels.dueDate"
+              :sort="sort.socialSupport?.dueDate"
               numeric
-              @update:sort="onSort({ socialSupport: { dueDate: $event } })"
+              @update:sort="
+                emit('update:sort', { socialSupport: { dueDate: $event } })
+              "
             />
             <TableSortableHeader
               :label="helpRequestFieldLabels.beneficiaryId"
+              :sort="sort.socialSupport?.beneficiary?.usualName"
               @update:sort="
-                onSort({
+                emit('update:sort', {
                   socialSupport: { beneficiary: { usualName: $event } }
                 })
               "
@@ -37,8 +41,11 @@
             <TableSortableHeader
               v-if="application.module.helpRequest"
               :label="helpRequestFieldLabels.instructorOrganizationId"
+              :sort="sort.instructorOrganization?.name"
               @update:sort="
-                onSort({ instructorOrganization: { name: $event } })
+                emit('update:sort', {
+                  instructorOrganization: { name: $event }
+                })
               "
             />
             <th
@@ -104,20 +111,16 @@
 
   const props = defineProps<{
     items: HelpRequestPageItems
-    sort: HelpRequestSort[]
+    sort: HelpRequestSort
     pending: boolean
   }>()
 
   const emit = defineEmits<{
-    'update:sort': [sort: HelpRequestSort[]]
+    'update:sort': [sort: HelpRequestSort]
     'helpRequestUpdated': [helpRequest: HelpRequestPageItem]
   }>()
 
   const { application } = usePermissions()
 
-  const { onSort, tableContainer } = useTable<HelpRequestSort>(
-    toRef(() => props.sort),
-    toRef(() => props.pending),
-    emit
-  )
+  const { tableContainer } = useTable(toRef(() => props.pending))
 </script>

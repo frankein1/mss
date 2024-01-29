@@ -8,12 +8,10 @@ export const getDocumentsSchema = z
     beneficiaryId: z.string().uuid(),
     filters: beneficiaryDocumentFilterSchema.optional(),
     orderBy: z
-      .array(
-        z.object({
-          name: z.nativeEnum(Prisma.SortOrder).optional(),
-          created: z.nativeEnum(Prisma.SortOrder).optional()
-        })
-      )
+      .object({
+        name: z.nativeEnum(Prisma.SortOrder).optional(),
+        created: z.nativeEnum(Prisma.SortOrder).optional()
+      })
       .optional()
   })
   .merge(optionalPaginatedSchema)

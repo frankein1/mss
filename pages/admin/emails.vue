@@ -38,7 +38,7 @@
 
   const search = ref<string>()
   const filters = ref<EmailAdminFilterInput>({})
-  const orderBy = ref<EmailAdminSort[]>([{ sentDate: SortOrder.Desc }])
+  const orderBy = ref<EmailAdminSort>({ sentDate: SortOrder.Desc })
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
 

@@ -59,9 +59,7 @@
   const trpcClient = useTrpcClient()
 
   const filters = ref<FollowupFilterInput>(filtersState.followup.value || {})
-  const orderBy = ref<FollowupSort[]>([
-    { socialSupport: { date: SortOrder.Desc } }
-  ])
+  const orderBy = ref<FollowupSort>({ socialSupport: { date: SortOrder.Desc } })
   const pageNumber = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
   const isDownloading = ref(false)

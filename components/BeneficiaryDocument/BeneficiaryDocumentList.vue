@@ -54,7 +54,7 @@
   const props = defineProps<{ beneficiaryId: string }>()
 
   const filters = ref<BeneficiaryDocumentFilterInput>({})
-  const orderBy = ref<BeneficiaryDocumentSort[]>([{ created: SortOrder.Desc }])
+  const orderBy = ref<BeneficiaryDocumentSort>({ created: SortOrder.Desc })
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
 

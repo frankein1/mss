@@ -18,9 +18,9 @@
             <th scope="col">Objet</th>
             <th scope="col">Statut</th>
             <TableSortableHeader
-              :sort="sentDateSort"
+              :sort="sort.sentDate"
               label="Date d'envoi"
-              @update:sort="onSort({ sentDate: $event })"
+              @update:sort="emit('update:sort', { sentDate: $event })"
             />
             <th scope="col">Nombre d'essais</th>
             <th scope="col">Actions</th>
@@ -78,23 +78,15 @@
   const props = defineProps<{
     emails: Emails
     pending: boolean
-    sort: EmailAdminSort[]
+    sort: EmailAdminSort
   }>()
 
   const emit = defineEmits<{
-    'update:sort': [sort: EmailAdminSort[]]
+    'update:sort': [sort: EmailAdminSort]
     'refreshEmails': []
   }>()
 
-  const { onSort, tableContainer } = useTable<EmailAdminSort>(
-    toRef(() => props.sort),
-    toRef(() => props.pending),
-    emit
-  )
-
-  const sentDateSort = computed(
-    () => props.sort?.find(s => s.sentDate)?.sentDate
-  )
+  const { tableContainer } = useTable(toRef(() => props.pending))
 
   function onSend(id: string) {
     useTrpcMutation({
