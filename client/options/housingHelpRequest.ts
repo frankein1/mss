@@ -11,6 +11,11 @@ export const isFirstLabels = {
   false: "d'un renouvellement"
 }
 
+export const isFirstStatsLabels = {
+  true: '1ère demande',
+  false: 'Renouvellement'
+}
+
 export const isFirstOptions = labelsToOptions(isFirstLabels)
 
 export const askedHousingLabels: { [key in AskedHousing]: string } = {
