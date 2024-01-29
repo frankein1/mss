@@ -125,7 +125,13 @@
             <div class="fr-col-12 fr-col-sm-6">
               <StatsFinancialHelpRequests :filters="filters" />
             </div>
-            <div class="fr-col-12 fr-col-sm-6">
+            <div
+              v-if="
+                !filters.helpRequestSubject ||
+                filters.helpRequestSubject === HelpRequestSubject.Housing
+              "
+              class="fr-col-12 fr-col-sm-6"
+            >
               <StatsHousingHelpRequests :filters="filters" />
             </div>
           </div>
@@ -203,6 +209,7 @@
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const trpcClient = useTrpcClient()
 
