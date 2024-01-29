@@ -1,5 +1,6 @@
 import { FollowupType, Prisma } from '@prisma/client'
-import { FollowupFilterInput } from '~/server/schema'
+import { FollowupFilterInput, ExportFollowupsInput } from '~/server/schema'
+import { SortOrder } from '~/types/table'
 
 export function prepareFollowupTypesMutations(
   inputTypes: string[],
@@ -13,7 +14,7 @@ export function prepareFollowupTypesMutations(
   }
 }
 
-export function prepareFollowupFilters(filters: FollowupFilterInput) {
+export function prepareFilters(filters: FollowupFilterInput) {
   const formattedFilters: Prisma.FollowupWhereInput = {}
 
   if (filters.status) {
@@ -56,4 +57,14 @@ export function prepareFollowupFilters(filters: FollowupFilterInput) {
   }
 
   return formattedFilters
+}
+
+export function prepareSort(sort: ExportFollowupsInput['orderBy']) {
+  const orderBy: Prisma.FollowupFindManyArgs['orderBy'] = sort
+
+  if (orderBy.find(s => !!s.socialSupport?.date)) {
+    orderBy.push({ socialSupport: { created: SortOrder.Desc } })
+  }
+
+  return orderBy
 }

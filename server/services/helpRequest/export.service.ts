@@ -1,4 +1,4 @@
-import { prepareFilters } from './helper'
+import { prepareFilters, prepareSort } from './helper'
 import { getPage } from './queries'
 import { helpRequestFieldLabels } from '~/client/labels'
 import { ExportHelpRequestsInput } from '~/server/schema'
@@ -58,9 +58,11 @@ export async function exportHelpRequests({
   }))
 
   const where = prepareFilters(input.filters)
+  const orderBy = prepareSort(input.orderBy)
 
   const helpRequests = await getPage(ctx, {
-    where
+    where,
+    orderBy
   })
 
   const rows = helpRequests.reduce(
