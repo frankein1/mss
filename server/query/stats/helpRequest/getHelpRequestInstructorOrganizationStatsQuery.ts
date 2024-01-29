@@ -23,12 +23,30 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
             }
           }
         }
+      },
+      housingHelpRequest: {
+        select: {
+          instructorOrganization: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
+        }
       }
     }
   })
 
   const helpRequests = socialSupports.reduce(
-    (fu, { helpRequest }) => (helpRequest !== null ? [...fu, helpRequest] : fu),
+    (fu, { helpRequest, housingHelpRequest }) => {
+      if (helpRequest) {
+        fu.push(helpRequest)
+      }
+      if (housingHelpRequest) {
+        fu.push(housingHelpRequest)
+      }
+      return fu
+    },
     [] as Array<Exclude<(typeof socialSupports)[0]['helpRequest'], null>>
   )
 
