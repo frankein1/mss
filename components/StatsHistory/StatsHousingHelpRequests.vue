@@ -16,22 +16,26 @@
         réalisées après le 31 décembre 2023 via le formulaire de demande de
         logement.
       </p>
-      <!-- TODO: context stats -->
-      <!-- <StatsList
-        :total-count="totalCount"
-        :stats="prescribingOrganizationStats"
-        /> -->
+      <StatsList
+        :total-count="housingHelpRequestCount"
+        :stats="housingHelpRequestContextStats"
+      />
       <p class="fr-text--bold">Motif des demandes de logement :</p>
-      <!-- TODO: reason stats -->
-      <!-- <StatsList
-        :total-count="totalCount"
-        :stats="prescribingOrganizationStats"
-      /> -->
+      <StatsList
+        :total-count="housingHelpRequestCount"
+        :stats="housingHelpRequestReasonStats"
+      />
     </template>
   </div>
 </template>
 
 <script lang="ts" setup>
+  import { SupportColor } from '~/client/colors'
+  import {
+    isFirstStatsLabels,
+    reasonLabels
+  } from '~/client/options/housingHelpRequest'
+  import { getStatLabel } from '~/client/options/stat'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
 
@@ -44,19 +48,27 @@
   const { data, pending, error } =
     await trpcClient.stat.getHousingHelpRequestsStats.useQuery(props.filters)
 
-  // const financialHelpRequestTotalAmount = computed(
-  //   () => data.value?.financialHelpRequestTotalAmount || 0
-  // )
+  const housingHelpRequestCount = computed(
+    () => data.value?.housingHelpRequestCount || 0
+  )
 
-  // const financialHelpRequestsAmountByType = computed(
-  //   () =>
-  //     data.value?.financialHelpRequestAmountByType.map(
-  //       ({ type, allocatedAmount }) => ({
-  //         key: type.id,
-  //         label: type.name,
-  //         color: '#E4794A',
-  //         count: allocatedAmount
-  //       })
-  //     ) || []
-  // )
+  const housingHelpRequestContextStats = computed(
+    () =>
+      data.value?.housingHelpRequestContextCount.map(({ _count, isFirst }) => ({
+        key: String(isFirst),
+        label: getStatLabel(isFirstStatsLabels, String(isFirst)),
+        color: SupportColor.helpRequests,
+        count: _count
+      })) || []
+  )
+
+  const housingHelpRequestReasonStats = computed(
+    () =>
+      data.value?.housingHelpRequestReasonCount.map(({ _count, reason }) => ({
+        key: String(reason),
+        label: getStatLabel(reasonLabels, String(reason)),
+        color: SupportColor.helpRequests,
+        count: _count
+      })) || []
+  )
 </script>
