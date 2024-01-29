@@ -1,6 +1,5 @@
-import { Prisma } from '@prisma/client'
 import { getPage } from './queries'
-import { prepareFollowupFilters } from './helper'
+import { prepareFilters, prepareSort } from './helper'
 import {
   followupMediumLabels,
   socialSupportStatusLabels
@@ -53,11 +52,10 @@ export async function exportFollowups({
     header: followupFieldLabels[key]
   }))
 
-  const where: Prisma.FollowupWhereInput = {
-    ...prepareFollowupFilters(input.filters)
-  }
+  const where = prepareFilters(input.filters)
+  const orderBy = prepareSort(input.orderBy)
 
-  const dataRequest = await getPage(ctx, { where, orderBy: input.orderBy })
+  const dataRequest = await getPage(ctx, { where, orderBy })
 
   const rows = dataRequest.reduce(
     (followups: RowType[], { permissions, followup }) => {

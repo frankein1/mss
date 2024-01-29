@@ -6,5 +6,3 @@ export const getHelpRequestsSchema =
   exportHelpRequestsSchema.merge(paginatedSchema)
 
 export type GetHelpRequestsInput = z.infer<typeof getHelpRequestsSchema>
-
-export type GetHelpRequestsInputOrderBy = GetHelpRequestsInput['orderBy']

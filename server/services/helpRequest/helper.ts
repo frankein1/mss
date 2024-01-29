@@ -2,11 +2,13 @@ import { Prisma, SocialSupportStatus } from '@prisma/client'
 import {
   CreateHelpRequestInput,
   EditHelpRequestInput,
-  HelpRequestFilterInput
+  HelpRequestFilterInput,
+  ExportHelpRequestsInput
 } from '~/server/schema'
 import { connect } from '~/utils/prisma'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { SecurityRuleContext } from '~/server/security/rules/types'
+import { SortOrder } from '~/types/table'
 
 export function preparePrescribingOrganization(
   prescribingOrganizationId: string | null | undefined,
@@ -135,4 +137,18 @@ function cleanInput({
         ? null
         : isRefundable === 'true'
   }
+}
+
+export function prepareSort(sort: ExportHelpRequestsInput['orderBy']) {
+  const orderBy: Prisma.HelpRequestFindManyArgs['orderBy'] = sort
+
+  if (orderBy.find(s => !!s.socialSupport?.date)) {
+    orderBy.push({ socialSupport: { created: SortOrder.Desc } })
+  }
+
+  if (orderBy.find(s => !!s.instructorOrganization)) {
+    orderBy.unshift({ externalStructure: SortOrder.Desc })
+  }
+
+  return orderBy
 }

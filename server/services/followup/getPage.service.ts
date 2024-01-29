@@ -1,5 +1,5 @@
 import { getPage as getPageFn } from './queries'
-import { prepareFollowupFilters } from './helper'
+import { prepareFilters, prepareSort } from './helper'
 import { FollowupRepo } from '~/server/database'
 import { GetFollowupsInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
@@ -18,10 +18,11 @@ export async function getPage({
     page: input.page
   })
 
-  const where = prepareFollowupFilters(input.filters)
+  const where = prepareFilters(input.filters)
+  const orderBy = prepareSort(input.orderBy)
 
   const [items, count] = await Promise.all([
-    getPageFn(ctx, { where, take, skip, orderBy: input.orderBy }),
+    getPageFn(ctx, { where, take, skip, orderBy }),
     FollowupRepo.count(user, {
       where
     })
