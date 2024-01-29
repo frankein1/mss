@@ -59,7 +59,7 @@
         label: helpRequestSubjectStatsLabels[subject],
         color: getColor(subject),
         count: _count,
-        picto: helpRequestSubjectPictos.get(subject)
+        picto: helpRequestSubjectPictos[subject]
       })) || []
   )
 
