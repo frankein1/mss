@@ -73,15 +73,12 @@
           class="fr-mx-auto"
         />
         <template v-else-if="helpRequestCount">
-          <div class="fr-alert fr-alert--info fr-mb-3w">
-            <p>
-              Les instructions de dossiers de demande de logement réalisées
-              avant le 31 décembre 2023 sont comptabilisées dans la thématique
-              “Autre”.
-              <NuxtLink :to="`mailto:${supportEmail}`">Contactez-nous</NuxtLink>
-              si vous rencontrez des difficultés.
-            </p>
-          </div>
+          <AtomNotice class="fr-mb-3w">
+            Les instructions de dossiers de demande de logement réalisées avant
+            le 31 décembre 2023 sont comptabilisées dans la thématique “Autre”.
+            <NuxtLink :to="`mailto:${supportEmail}`">Contactez-nous</NuxtLink>
+            si vous rencontrez des difficultés.
+          </AtomNotice>
           <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
             <div
               v-if="!filters.helpRequestSubject"

@@ -25,28 +25,25 @@
         v-if="application.module.health"
         class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-pb-3w"
       >
-        <div class="fr-notice fr-notice--info">
-          <div class="fr-container">
-            <div class="fr-notice__body">
-              <p class="fr-notice__title">Attention aux données de santé</p>
-              <p class="notice__content">
-                Vous ne pouvez manipuler des données de santé des bénéficiaires
-                que si votre structure est habilitée à le faire au titre de
-                l'article 9 du RGPD (pour plus d'information voir
-                <a
-                  target="_blank"
-                  href="/notice/20231103_donnees_sante_monsuivisocial.pdf"
-                  rel="noopener external"
-                  title="Notice d'information - nouvelle fenêtre"
-                  >la notice d'information</a
-                >
-                ou référez-vous à votre responsable de structure). Nous vous
-                encourageons également à ne mentionner que les données qui sont
-                strictement nécessaires au suivi des bénéficiaires.
-              </p>
-            </div>
-          </div>
-        </div>
+        <AtomNotice>
+          <template #default> Attention aux données de santé </template>
+
+          <template #content>
+            Vous ne pouvez manipuler des données de santé des bénéficiaires que
+            si votre structure est habilitée à le faire au titre de l'article 9
+            du RGPD (pour plus d'information voir
+            <a
+              target="_blank"
+              href="/notice/20231103_donnees_sante_monsuivisocial.pdf"
+              rel="noopener external"
+              title="Notice d'information - nouvelle fenêtre"
+              >la notice d'information</a
+            >
+            ou référez-vous à votre responsable de structure). Nous vous
+            encourageons également à ne mentionner que les données qui sont
+            strictement nécessaires au suivi des bénéficiaires.
+          </template>
+        </AtomNotice>
       </div>
       <BeneficiaryFormHealth :permissions="permissions" />
     </div>
@@ -123,10 +120,3 @@
     })
   }
 </script>
-
-<style lang="scss" scoped>
-  .notice__content {
-    color: var(--light-text-default-grey, #3a3a3a);
-    font-weight: 400;
-  }
-</style>
