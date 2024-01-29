@@ -158,7 +158,7 @@ function loadSocialSupports(
       },
       types: true
     },
-    orderBy: { date: 'desc' }
+    orderBy: [{ date: 'desc' }, { created: 'desc' }]
   })
 }
 
