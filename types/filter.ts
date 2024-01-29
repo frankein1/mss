@@ -13,7 +13,7 @@ type FilterPropBase = {
 
 export type SelectFilterProp = FilterPropBase & {
   options: Options
-  pictos?: Options
+  pictos?: Record<string, string>
 }
 
 export type SelectOneFilterProp = SelectFilterProp & {
