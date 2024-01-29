@@ -14,9 +14,19 @@ function findUniqueOrThrow<
   return prismaClient.housingHelpRequest.findUniqueOrThrow(params)
 }
 
+function count(
+  user: SecurityRuleGrantee,
+  params: Prisma.HousingHelpRequestCountArgs
+) {
+  appendConstraints(user, params, HousingHelpRequestConstraints.get)
+  return prismaClient.housingHelpRequest.count(params)
+}
+
 export const HousingHelpRequestRepo = {
   findUniqueOrThrow,
+  count,
   prisma: {
-    create: prismaClient.housingHelpRequest.create
+    create: prismaClient.housingHelpRequest.create,
+    groupBy: prismaClient.housingHelpRequest.groupBy
   }
 }
