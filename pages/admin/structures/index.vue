@@ -31,9 +31,9 @@
   const trpcClient = useTrpcClient()
 
   const search = ref<string>()
-  const orderBy = ref<StructureAdminSort[]>([
-    { beneficiaries: { _count: SortOrder.Desc } }
-  ])
+  const orderBy = ref<StructureAdminSort>({
+    beneficiaries: { _count: SortOrder.Desc }
+  })
 
   const queryInput = computed(() => ({
     orderBy: orderBy.value,

@@ -20,16 +20,19 @@
             <th scope="col">Ville</th>
             <TableSortableHeader
               label="Bénéficiaires"
-              :sort="beneficiariesSort"
+              :sort="sort.beneficiaries?._count"
               numeric
-              @update:sort="onSort({ beneficiaries: { _count: $event } })"
+              @update:sort="
+                emit('update:sort', { beneficiaries: { _count: $event } })
+              "
             />
             <th scope="col">Inst. dossier + Entretiens</th>
             <th scope="col">Utilisateurs</th>
             <TableSortableHeader
               label="Dernière activité"
+              :sort="sort.lastActivity"
               numeric
-              @update:sort="onSort({ lastActivity: $event })"
+              @update:sort="emit('update:sort', { lastActivity: $event })"
             />
           </tr>
         </thead>
@@ -81,20 +84,12 @@
   const props = defineProps<{
     structures: Structures
     pending: boolean
-    sort: StructureAdminSort[]
+    sort: StructureAdminSort
   }>()
 
   const emit = defineEmits<{
-    'update:sort': [sort: StructureAdminSort[]]
+    'update:sort': [sort: StructureAdminSort]
   }>()
 
-  const { onSort, tableContainer } = useTable<StructureAdminSort>(
-    toRef(() => props.sort),
-    toRef(() => props.pending),
-    emit
-  )
-
-  const beneficiariesSort = computed(
-    () => props.sort?.find(s => s?.beneficiaries?._count)?.beneficiaries?._count
-  )
+  const { tableContainer } = useTable(toRef(() => props.pending))
 </script>

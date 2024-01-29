@@ -15,7 +15,7 @@ const adminHandler = async ({
   ctx: AdminContext
   input: AdminGetUsersInput
 }) => {
-  let where = prepareUserFilters(input.filters)
+  let where = input.filters ? prepareUserFilters(input.filters) : {}
   if (input.search) {
     where = {
       ...where,

@@ -15,17 +15,21 @@
           <tr>
             <TableSortableHeader
               :label="beneficiaryFieldLabels.usualName"
-              :sort="usualNameSort"
-              @update:sort="onSort({ usualName: $event })"
+              :sort="sort.usualName"
+              @update:sort="emit('update:sort', { usualName: $event })"
             />
             <TableSortableHeader
               :label="beneficiaryFieldLabels.firstName"
-              @update:sort="onSort({ firstName: $event })"
+              :sort="sort.firstName"
+              @update:sort="emit('update:sort', { firstName: $event })"
             />
             <TableSortableHeader
               label="Naissance"
+              :sort="sort.birthDate?.sort"
               @update:sort="
-                onSort({ birthDate: { sort: $event, nulls: 'last' } })
+                emit('update:sort', {
+                  birthDate: { sort: $event, nulls: 'last' }
+                })
               "
             />
             <th scope="col">Téléphone</th>
@@ -53,20 +57,12 @@
   const props = defineProps<{
     items: BeneficiaryPageItems
     pending: boolean
-    sort: BeneficiarySort[]
+    sort: BeneficiarySort
   }>()
 
   const emit = defineEmits<{
-    'update:sort': [sort: BeneficiarySort[]]
+    'update:sort': [sort: BeneficiarySort]
   }>()
 
-  const { onSort, tableContainer } = useTable<BeneficiarySort>(
-    toRef(() => props.sort),
-    toRef(() => props.pending),
-    emit
-  )
-
-  const usualNameSort = computed(
-    () => props.sort?.find(s => s.usualName)?.usualName
-  )
+  const { tableContainer } = useTable(toRef(() => props.pending))
 </script>

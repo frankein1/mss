@@ -21,14 +21,17 @@
             </th>
             <TableSortableHeader
               :label="followupFieldLabels.date"
-              :sort="dateSort"
+              :sort="sort.socialSupport.date"
               numeric
-              @update:sort="onSort({ socialSupport: { date: $event } })"
+              @update:sort="
+                emit('update:sort', { socialSupport: { date: $event } })
+              "
             />
             <TableSortableHeader
               :label="followupFieldLabels.beneficiaryId"
+              :sort="sort.socialSupport.beneficiary?.usualName"
               @update:sort="
-                onSort({
+                emit('update:sort', {
                   socialSupport: {
                     beneficiary: {
                       usualName: $event
@@ -40,8 +43,11 @@
             <th scope="col">Objet de l'accompagnement</th>
             <TableSortableHeader
               :label="followupFieldLabels.dueDate"
+              :sort="sort.socialSupport.dueDate"
               numeric
-              @update:sort="onSort({ socialSupport: { dueDate: $event } })"
+              @update:sort="
+                emit('update:sort', { socialSupport: { dueDate: $event } })
+              "
             />
             <th scope="col">Agent</th>
             <th scope="col">N° de dossier</th>
@@ -66,21 +72,13 @@
 
   const props = defineProps<{
     items: FollowupPageItems
-    sort: FollowupSort[]
+    sort: FollowupSort
     pending: boolean
   }>()
 
   const emit = defineEmits<{
-    'update:sort': [sort: FollowupSort[]]
+    'update:sort': [sort: FollowupSort]
   }>()
 
-  const { onSort, tableContainer } = useTable<FollowupSort>(
-    toRef(() => props.sort),
-    toRef(() => props.pending),
-    emit
-  )
-
-  const dateSort = computed(
-    () => props.sort?.find(s => s.socialSupport?.date)?.socialSupport.date
-  )
+  const { tableContainer } = useTable(toRef(() => props.pending))
 </script>

@@ -140,13 +140,13 @@ function cleanInput({
 }
 
 export function prepareSort(sort: ExportHelpRequestsInput['orderBy']) {
-  const orderBy: Prisma.HelpRequestFindManyArgs['orderBy'] = sort
+  const orderBy: Prisma.HelpRequestFindManyArgs['orderBy'] = [sort]
 
-  if (orderBy.find(s => !!s.socialSupport?.date)) {
+  if (sort.socialSupport?.date) {
     orderBy.push({ socialSupport: { created: SortOrder.Desc } })
   }
 
-  if (orderBy.find(s => !!s.instructorOrganization)) {
+  if (sort.instructorOrganization) {
     orderBy.unshift({ externalStructure: SortOrder.Desc })
   }
 

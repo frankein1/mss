@@ -36,8 +36,8 @@
   const trpcClient = useTrpcClient()
 
   const search = ref<string>()
-  const filters = ref<UserAdminFilterInput>({})
-  const orderBy = ref<UserAdminSort[]>([])
+  const filters = ref<UserAdminFilterInput | undefined>(undefined)
+  const orderBy = ref<UserAdminSort | undefined>(undefined)
 
   const queryInput = computed(() => ({
     search: search.value,

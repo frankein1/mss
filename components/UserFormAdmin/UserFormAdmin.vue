@@ -107,9 +107,7 @@
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { data: structures } = await trpcClient.admin.getStructures.useQuery({
-    orderBy: []
-  })
+  const { data: structures } = await trpcClient.admin.getStructures.useQuery()
 
   const structureOptions = computed(() =>
     structures.value?.structures.length

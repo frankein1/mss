@@ -9,12 +9,12 @@
       >
         <span
           class="fr-icon-arrow-up-s-line"
-          :class="{ 'arrow-enabled': isAscending && innerSort != undefined }"
+          :class="{ 'arrow-enabled': isAscending }"
           aria-hidden="true"
         ></span>
         <span
           class="fr-icon-arrow-down-s-line"
-          :class="{ 'arrow-enabled': !isAscending && innerSort != undefined }"
+          :class="{ 'arrow-enabled': isDescending }"
           aria-hidden="true"
         ></span>
       </button>
@@ -28,10 +28,10 @@
   const props = withDefaults(
     defineProps<{
       label: string
-      sort?: SortOrder
+      sort: SortOrder | undefined
       numeric?: boolean
     }>(),
-    { sort: undefined, numeric: false }
+    { numeric: false }
   )
 
   const emit = defineEmits<{
@@ -40,20 +40,17 @@
 
   const innerSort = ref<SortOrder | undefined>(props.sort)
 
-  const isAscending = computed(
-    () => innerSort.value === undefined || innerSort.value === SortOrder.Asc
-  )
+  const isAscending = computed(() => innerSort.value === SortOrder.Asc)
+  const isDescending = computed(() => innerSort.value === SortOrder.Desc)
 
   const title = computed(() => {
-    const toDescending = innerSort.value === SortOrder.Asc
-
     if (props.numeric) {
-      return toDescending
+      return isDescending.value
         ? 'Trier par ordre décroissant (de 9 à 1)'
         : 'Trier par ordre croissant (de 1 à 9)'
     }
 
-    return toDescending
+    return isDescending.value
       ? 'Trier par ordre antialphabétique (de Z à A)'
       : 'Trier par ordre alphabétique (de A à Z)'
   })
@@ -66,7 +63,7 @@
   )
 
   function onToggle() {
-    if (innerSort.value === undefined || innerSort.value === SortOrder.Desc) {
+    if (!innerSort.value || isDescending.value) {
       innerSort.value = SortOrder.Asc
     } else {
       innerSort.value = SortOrder.Desc
