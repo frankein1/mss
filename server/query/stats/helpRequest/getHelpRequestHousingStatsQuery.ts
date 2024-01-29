@@ -1,10 +1,7 @@
-import { Prisma } from '@prisma/client'
 import { prepareHelpRequestStatFilters } from '../helpers'
 import {
-  HelpRequestRepo,
-  FollowupTypeRepo,
   SocialSupportConstraints,
-  SocialSupportRepo
+  HousingHelpRequestRepo
 } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security'
@@ -22,7 +19,27 @@ export async function getHelpRequestHousingStatsQuery(
     housingHelpRequestContextCount,
     housingHelpRequestReasonCount
   ] = await Promise.all([
-    // TODO: requests
+    HousingHelpRequestRepo.count(user, {
+      where: {
+        socialSupport: filters.where
+      }
+    }),
+    HousingHelpRequestRepo.prisma.groupBy({
+      by: ['isFirst'],
+      where: {
+        socialSupport: filters.where
+      },
+      _count: true,
+      orderBy: { _count: { isFirst: 'desc' } }
+    }),
+    HousingHelpRequestRepo.prisma.groupBy({
+      by: ['reason'],
+      where: {
+        socialSupport: filters.where
+      },
+      _count: true,
+      orderBy: { _count: { reason: 'desc' } }
+    })
   ])
 
   return {
