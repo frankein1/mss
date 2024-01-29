@@ -122,7 +122,7 @@
     }
     let typeHint = ''
     if (props.type === 'tel') {
-      typeHint = 'Format attendu : 01 22 33 44 55'
+      typeHint = 'Formats attendus : 01 22 33 44 55, +33 1 22 33 44 55'
     }
     if (props.type === 'social-security-number') {
       typeHint =
