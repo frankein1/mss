@@ -4,7 +4,6 @@
     ref="$el"
     class="beneficiary-history-details-collapse force-focus-visible"
     :class="[typeClass, expanded ? 'expanded' : '']"
-    tabindex="0"
   >
     <BeneficiaryHistoryDetailsHeader
       :data="itemData"
