@@ -16,14 +16,14 @@
             <th scope="col">Type</th>
             <TableSortableHeader
               label="Nom"
-              :sort="nameSort"
-              @update:sort="onSort({ name: $event })"
+              :sort="sort.name"
+              @update:sort="emit('update:sort', { name: $event })"
             />
             <TableSortableHeader
               label="Date ajout"
-              :sort="dateSort"
+              :sort="sort.created"
               numeric
-              @update:sort="onSort({ created: $event })"
+              @update:sort="emit('update:sort', { created: $event })"
             />
             <th scope="col">Thèmes</th>
             <th scope="col">Actions</th>
@@ -51,21 +51,14 @@
   const props = defineProps<{
     documents: GetDocuments
     pending: boolean
-    sort: BeneficiaryDocumentSort[]
+    sort: BeneficiaryDocumentSort
   }>()
 
   const emit = defineEmits<{
-    'update:sort': [sort: BeneficiaryDocumentSort[]]
+    'update:sort': [sort: BeneficiaryDocumentSort]
     'documentUpdated': [document: GetDocument]
     'documentDeleted': [documentKey: string]
   }>()
 
-  const { onSort, tableContainer } = useTable<BeneficiaryDocumentSort>(
-    toRef(() => props.sort),
-    toRef(() => props.pending),
-    emit
-  )
-
-  const dateSort = computed(() => props.sort?.find(s => s.created)?.created)
-  const nameSort = computed(() => props.sort?.find(s => s.name)?.name)
+  const { tableContainer } = useTable(toRef(() => props.pending))
 </script>

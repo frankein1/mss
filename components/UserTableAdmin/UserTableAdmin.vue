@@ -20,8 +20,9 @@
             <th scope="col">Email</th>
             <TableSortableHeader
               label="Dernière connexion"
+              :sort="sort?.lastAccess"
               numeric
-              @update:sort="onSort({ lastAccess: $event })"
+              @update:sort="emit('update:sort', { lastAccess: $event })"
             />
           </tr>
         </thead>
@@ -60,16 +61,12 @@
   const props = defineProps<{
     users: Users
     pending: boolean
-    sort: UserAdminSort[]
+    sort: UserAdminSort | undefined
   }>()
 
   const emit = defineEmits<{
-    'update:sort': [sort: UserAdminSort[]]
+    'update:sort': [sort: UserAdminSort]
   }>()
 
-  const { onSort, tableContainer } = useTable<UserAdminSort>(
-    toRef(() => props.sort),
-    toRef(() => props.pending),
-    emit
-  )
+  const { tableContainer } = useTable(toRef(() => props.pending))
 </script>

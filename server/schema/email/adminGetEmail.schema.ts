@@ -8,11 +8,9 @@ export const adminGetEmailsSchema = z
   .object({
     search: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
     filters: emailAdminFilterSchema,
-    orderBy: z.array(
-      z.object({
-        sentDate: z.nativeEnum(Prisma.SortOrder).optional()
-      })
-    )
+    orderBy: z.object({
+      sentDate: z.nativeEnum(Prisma.SortOrder).optional()
+    })
   })
   .merge(paginatedSchema)
 

@@ -60,9 +60,9 @@ export function prepareFilters(filters: FollowupFilterInput) {
 }
 
 export function prepareSort(sort: ExportFollowupsInput['orderBy']) {
-  const orderBy: Prisma.FollowupFindManyArgs['orderBy'] = sort
+  const orderBy: Prisma.FollowupFindManyArgs['orderBy'] = [sort]
 
-  if (orderBy.find(s => !!s.socialSupport?.date)) {
+  if (sort.socialSupport?.date) {
     orderBy.push({ socialSupport: { created: SortOrder.Desc } })
   }
 

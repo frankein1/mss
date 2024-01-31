@@ -15,7 +15,7 @@ const adminHandler = async ({
   input: AdminGetStructuresInput
 }) => {
   let where = {}
-  if (input.search) {
+  if (input?.search) {
     where = {
       OR: [
         {
@@ -60,7 +60,7 @@ const adminHandler = async ({
         }
       }
     },
-    orderBy: input.orderBy
+    orderBy: input?.orderBy
   })
 
   return { structures }

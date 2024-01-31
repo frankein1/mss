@@ -88,7 +88,7 @@
   const filters = ref<BeneficiaryFilterInput>(
     filtersState.beneficiary.value || {}
   )
-  const orderBy = ref<BeneficiarySort[]>([{ usualName: SortOrder.Asc }])
+  const orderBy = ref<BeneficiarySort>({ usualName: SortOrder.Asc })
   const page = ref(1)
   const perPage = ref(BENEFICIARIES_REQUEST_LIMIT_DEFAULT)
   const isDownloading = ref(false)
