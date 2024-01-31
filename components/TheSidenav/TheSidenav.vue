@@ -20,14 +20,13 @@
         <div class="fr-sidemenu__title">
           <NuxtLink
             :to="homePage"
-            title="Retour au tableau de bord"
+            title="Tableau de bord - Mon Suivi Social"
           >
             <img
               id="sidemenu-title"
               src="~/assets/img/logo-white.svg"
               class="fr-responsive-img fr-px-1w fr-pt-md-7w fr-px-md-3w"
               alt="Mon Suivi Social"
-              title="Mon Suivi Social"
             />
           </NuxtLink>
         </div>
