@@ -7,7 +7,6 @@ import { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
-import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
 import { beneficiaryFieldLabels } from '~/client/labels'
 import { DocumentRepo } from '~/server/database'
 import {
@@ -251,9 +250,6 @@ function formatRelative(relative: GetBeneficiaryRelative) {
 function formatRelativeName(
   beneficiaryRelative: GetBeneficiaryRelative
 ): string {
-  if (beneficiaryRelative.linkedBeneficiary) {
-    return formatBeneficiaryDisplayName(beneficiaryRelative.linkedBeneficiary)
-  }
   return `${nameOrEmpty(
     beneficiaryRelative.firstName
   )} ${beneficiaryRelative.lastName?.toUpperCase()}`

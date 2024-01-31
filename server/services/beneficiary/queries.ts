@@ -44,18 +44,7 @@ export const include = {
       caregiver: true,
       beneficiaryId: true,
       additionalInformation: true,
-      birthDate: true,
-      linkedBeneficiary: {
-        select: {
-          id: true,
-          firstName: true,
-          email: true,
-          title: true,
-          usualName: true,
-          phone1: true,
-          birthDate: true
-        }
-      }
+      birthDate: true
     }
   },
   _count: {

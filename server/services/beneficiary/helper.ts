@@ -63,11 +63,10 @@ export function prepareDataFromDraft(
     }
 
     const taxHouseholds =
-      taxHousehold?.taxHouseholds?.map(({ linkedBeneficiary, ...e }) => {
+      taxHousehold?.taxHouseholds?.map(e => {
         return {
           ...e,
-          hosted: true,
-          linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null
+          hosted: true
         }
       }) || []
     const entourages =
