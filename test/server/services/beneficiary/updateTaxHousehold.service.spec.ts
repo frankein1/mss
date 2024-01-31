@@ -21,16 +21,12 @@ vi.mock('~/server/database', () => {
             id: 'relative-1',
             caregiver: false,
             hosted: true,
-            linkedBeneficiary: undefined,
             relationship: RelativeRelationship.Sibling
           },
           {
             id: 'relative-4',
             hosted: true,
             caregiver: true,
-            linkedBeneficiary: {
-              id: 'beneficiary-2'
-            },
             relationship: RelativeRelationship.Conjoint
           }
         ]
@@ -71,7 +67,6 @@ describe('BeneficiaryService.updateTaxHousehold', () => {
           {
             id: 'relative-4',
             caregiver: true,
-            linkedBeneficiary: { id: 'beneficiary-2' },
             relationship: RelativeRelationship.Conjoint
           }
         ]
@@ -93,15 +88,13 @@ describe('BeneficiaryService.updateTaxHousehold', () => {
               data: {
                 caregiver: false,
                 relationship: RelativeRelationship.Sibling,
-                hosted: true,
-                linkedBeneficiaryId: null
+                hosted: true
               }
             },
             {
               where: { id: 'relative-4' },
               data: {
                 caregiver: true,
-                linkedBeneficiaryId: 'beneficiary-2',
                 relationship: RelativeRelationship.Conjoint,
                 hosted: true
               }
@@ -136,7 +129,6 @@ describe('BeneficiaryService.updateTaxHousehold', () => {
           {
             id: 'relative-4',
             caregiver: true,
-            linkedBeneficiary: { id: 'beneficiary-2' },
             birthDate: new Date('1997-01-01'),
             relationship: RelativeRelationship.Conjoint
           }
@@ -159,15 +151,13 @@ describe('BeneficiaryService.updateTaxHousehold', () => {
               data: {
                 caregiver: false,
                 relationship: RelativeRelationship.Sibling,
-                hosted: true,
-                linkedBeneficiaryId: null
+                hosted: true
               }
             },
             {
               where: { id: 'relative-4' },
               data: {
                 caregiver: true,
-                linkedBeneficiaryId: 'beneficiary-2',
                 relationship: RelativeRelationship.Conjoint,
                 hosted: true,
                 birthDate: new Date('1997-01-01')

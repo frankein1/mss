@@ -1369,7 +1369,6 @@ model Beneficiary {
   updated DateTime? @updatedAt
 
   relatives       BeneficiaryRelative[] @relation("ownerBeneficiary")
-  linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
   notifications   Notification[]
 
   @@map("beneficiary")
@@ -1417,7 +1416,6 @@ model BeneficiaryRelative {
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], name: "ownerBeneficiary", onDelete: Cascade)
 
   linkedBeneficiaryId String?      @map("beneficiary_link_id") @db.Uuid
-  linkedBeneficiary   Beneficiary? @relation(fields: [linkedBeneficiaryId], references: [id], name: "linkedBeneficiary")
 
   additionalInformation String? @map("additional_information")
 
