@@ -31,14 +31,6 @@ export type CreateOrUpdateEntourageInput = z.infer<
 
 export const createOrUpdateTaxHouseholdSchema = createOrUpdateEntourageSchema
   .extend({
-    linkedBeneficiary: z
-      .object({
-        id: z.string().uuid(),
-        usualName: stringOrEmpty(beneficiaryLastNameSchema),
-        firstName: beneficiaryFirstNameOrEmptySchema,
-        birthName: stringOrEmpty(beneficiaryLastNameSchema)
-      })
-      .nullish(),
     birthDate: dateOrEmpty
   })
   .omit({ city: true })

@@ -1,15 +1,7 @@
 <template>
   <div class="fr-grid-row">
     <div class="fr-col-12 fr-text--bold fr-pb-1w">
-      <NuxtLink
-        v-if="relative.linkedBeneficiary"
-        class="fr-link fr-icon-links-line fr-link--icon-left"
-        :to="RoutePath.AppBeneficiary(relative.linkedBeneficiary.id)"
-        >{{ name }}</NuxtLink
-      >
-      <template v-else>
-        {{ name }}
-      </template>
+      {{ name }}
     </div>
   </div>
   <div class="fr-grid-row">
@@ -57,7 +49,6 @@
 <script setup lang="ts">
   import { GetBeneficiaryRelative } from '~/types/beneficiary'
   import { RelativeRelationshipKeys } from '~/client/options/beneficiary'
-  import { RoutePath } from '~/utils/routing'
   import { relativeFieldLabels } from '~/client/labels/relative.labels'
 
   const props = defineProps<{
@@ -66,30 +57,21 @@
 
   const name = computed(() => {
     const relative = props.relative
-    if (relative.linkedBeneficiary) {
-      return formatBeneficiaryName(relative.linkedBeneficiary)
-    }
     return (relative.firstName || '') + ' ' + (relative.lastName || '')
   })
 
   const email = computed(() => {
     const relative = props.relative
-    return relative.linkedBeneficiary
-      ? relative.linkedBeneficiary.email
-      : relative.email
+    return relative.email
   })
 
   const phone = computed(() => {
     const relative = props.relative
-    return relative.linkedBeneficiary
-      ? relative.linkedBeneficiary.phone1
-      : relative.phone
+    return relative.phone
   })
 
   const birthDate = computed(() => {
     const relative = props.relative
-    return relative.linkedBeneficiary
-      ? relative.linkedBeneficiary.birthDate
-      : relative.birthDate
+    return relative.birthDate
   })
 </script>

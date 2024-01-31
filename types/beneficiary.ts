@@ -139,18 +139,7 @@ export type GetBeneficiaryRelative = Pick<
   | 'beneficiaryId'
   | 'additionalInformation'
   | 'birthDate'
-> & {
-  linkedBeneficiary: Pick<
-    Beneficiary,
-    | 'firstName'
-    | 'email'
-    | 'title'
-    | 'usualName'
-    | 'phone1'
-    | 'birthDate'
-    | 'id'
-  > | null
-}
+>
 
 export type GetBeneficiaryTaxHousehold = Pick<
   Beneficiary,
