@@ -3,7 +3,12 @@ import type { FieldLabels } from '~/types/fieldLabels'
 
 type RelativeFieldLabels = Omit<
   BeneficiaryRelative,
-  'createdById' | 'created' | 'hosted' | 'beneficiaryId' | 'updated'
+  | 'createdById'
+  | 'created'
+  | 'hosted'
+  | 'beneficiaryId'
+  | 'linkedBeneficiaryId'
+  | 'updated'
 >
 
 const relativeFieldLabels: FieldLabels<RelativeFieldLabels> = {
@@ -16,8 +21,7 @@ const relativeFieldLabels: FieldLabels<RelativeFieldLabels> = {
   relationship: 'Statut',
   caregiver: 'Aidant familial',
   additionalInformation: 'Informations complémentaires',
-  city: 'Ville',
-  linkedBeneficiaryId: 'Fiche bénéficiaire liée'
+  city: 'Ville'
 }
 
 export { relativeFieldLabels }
