@@ -73,12 +73,11 @@ model User {
   archivedBeneficiaries Beneficiary[] @relation(name: "archived_beneficiaries")
   referentFor           Beneficiary[] @relation(name: "beneficiary_referents")
 
-  prescribingOrganizations PrescribingOrganization[]
+  createdPartnerOrganizations PartnerOrganization[]
 
-  instructorOrganization InstructorOrganization[]
-  CGUHistory             CGUHistory[]
-  userActivities         UserActivity[]
-  createdDrafts          Draft[]                  @relation(name: "created_drafts")
+  CGUHistory     CGUHistory[]
+  userActivities UserActivity[]
+  createdDrafts  Draft[]        @relation(name: "created_drafts")
 
   @@map("user")
 }
@@ -93,30 +92,29 @@ enum StructureType {
 }
 
 model Structure {
-  id                       String                    @id @default(uuid()) @db.Uuid
-  type                     StructureType
-  name                     String
-  zipcode                  String
-  city                     String
-  address                  String
-  phone                    String
-  email                    String
-  inhabitantsNumber        String?                   @map("inhabitants_number")
-  inseeCode                String?                   @map("insee_code")
-  siret                    String?
-  followupTypes            FollowupType[]
-  users                    User[]
-  socialSupports           SocialSupport[]
-  prescribingOrganizations PrescribingOrganization[]
+  id                   String                @id @default(uuid()) @db.Uuid
+  type                 StructureType
+  name                 String
+  zipcode              String
+  city                 String
+  address              String
+  phone                String
+  email                String
+  inhabitantsNumber    String?               @map("inhabitants_number")
+  inseeCode            String?               @map("insee_code")
+  siret                String?
+  followupTypes        FollowupType[]
+  users                User[]
+  socialSupports       SocialSupport[]
+  partnerOrganizations PartnerOrganization[]
 
   beneficiaries Beneficiary[]
 
-  created                DateTime?                @default(now())
-  updated                DateTime?                @updatedAt
-  instructorOrganization InstructorOrganization[]
-  userActivities         UserActivity[]
-  lastActivity           DateTime?                @map("last_activity")
-  drafts                 Draft[]
+  created        DateTime?      @default(now())
+  updated        DateTime?      @updatedAt
+  userActivities UserActivity[]
+  lastActivity   DateTime?      @map("last_activity")
+  drafts         Draft[]
 
   @@map("structure")
 }
@@ -327,8 +325,8 @@ model Followup {
   id      String    @id @default(uuid()) @db.Uuid
   updated DateTime? @updatedAt
 
-  prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
-  prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
+  prescribingOrganizationId String?              @map("prescribing_organization_id") @db.Uuid
+  prescribingOrganization   PartnerOrganization? @relation("followup_prescribing_organization", fields: [prescribingOrganizationId], references: [id])
 
   medium FollowupMedium
 
@@ -388,11 +386,11 @@ model HelpRequest {
   id      String    @id @default(uuid()) @db.Uuid
   updated DateTime? @updatedAt
 
-  prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
-  prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
+  prescribingOrganizationId String?              @map("prescribing_organization_id") @db.Uuid
+  prescribingOrganization   PartnerOrganization? @relation("help_request_prescribing_organization", fields: [prescribingOrganizationId], references: [id])
 
-  instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
-  instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
+  instructorOrganizationId String?              @map("instructor_organization_id") @db.Uuid
+  instructorOrganization   PartnerOrganization? @relation("help_request_instructor_organization", fields: [instructorOrganizationId], references: [id])
 
   type   FollowupType @relation(fields: [typeId], references: [id])
   typeId String       @map("type_id") @db.Uuid
@@ -480,8 +478,8 @@ model HousingHelpRequest {
   id      String    @id @default(uuid()) @db.Uuid
   updated DateTime? @updatedAt
 
-  instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
-  instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
+  instructorOrganizationId String?              @map("instructor_organization_id") @db.Uuid
+  instructorOrganization   PartnerOrganization? @relation(fields: [instructorOrganizationId], references: [id])
 
   externalStructure Boolean? @map("external_structure")
 
@@ -1446,10 +1444,8 @@ model Comment {
   @@map("comment")
 }
 
-model PrescribingOrganization {
+model PartnerOrganization {
   id String @id @default(uuid()) @db.Uuid
-
-  legacyId Int? @map("legacy_id")
 
   created     DateTime? @default(now())
   createdBy   User?     @relation(fields: [createdById], references: [id])
@@ -1460,30 +1456,12 @@ model PrescribingOrganization {
   structure   Structure @relation(fields: [structureId], references: [id])
   structureId String    @map("structure_id") @db.Uuid
 
-  helpRequests HelpRequest[]
-  followups    Followup[]
+  followup                           Followup[]           @relation("followup_prescribing_organization")
+  helpRequestPrescribingOrganization HelpRequest[]        @relation("help_request_prescribing_organization")
+  helpRequestInstructorOrganization  HelpRequest[]        @relation("help_request_instructor_organization")
+  housingHelpRequest                 HousingHelpRequest[]
 
-  @@map("prescribing_organization")
-}
-
-model InstructorOrganization {
-  id String @id @default(uuid()) @db.Uuid
-
-  legacyId Int? @map("legacy_id")
-
-  created DateTime? @default(now())
-
-  createdBy   User?   @relation(fields: [createdById], references: [id])
-  createdById String? @map("created_by_id") @db.Uuid
-
-  name String
-
-  structure           Structure?           @relation(fields: [structureId], references: [id])
-  structureId         String?              @map("structure_id") @db.Uuid
-  helpRequests        HelpRequest[]
-  housingHelpRequests HousingHelpRequest[]
-
-  @@map("instructor_organization")
+  @@map("partner_organization")
 }
 
 enum NotificationType {
