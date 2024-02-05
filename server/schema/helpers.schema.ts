@@ -101,7 +101,14 @@ export const amountNumber = z.preprocess(
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
 )
 
-export const dateOrEmpty = z.coerce.date().nullish().or(z.literal(''))
+function neutralValuesToNull<T extends z.ZodTypeAny>(zodType: T) {
+  return z.preprocess(
+    (val) => (val === "" || val === undefined ? null : val),
+    zodType
+  );
+}
+
+export const dateOrEmpty = neutralValuesToNull(z.coerce.date().nullish())
 
 export const openText = (maxLength: number) =>
   stringConstraint

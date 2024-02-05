@@ -6,7 +6,6 @@ import { SecurityRuleContext } from '~/server/security'
 import {
   connect,
   prepareDocumentsMutations,
-  prepareDateFields
 } from '~/utils/prisma'
 import { markFollowupTypeAsUsed } from '~/server/query'
 import { prepareNewHistoryElementNotification } from '~/server/services/helper'
@@ -48,7 +47,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     // ChefCabinet,
     // OrganismeMenace,
     // Prefet
-  } = prepareDateFields(input, ['dueDate'])
+  } = input
 
   // const signalementFields = {
   //   ChefCabinet,

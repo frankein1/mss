@@ -1,7 +1,6 @@
 import { prepareDataFromDraft } from './helper'
 import { BeneficiaryRepo, DraftRepo } from '~/server/database'
 import { CreateBeneficiaryInput, SaveDraftInput } from '~/server/schema'
-import { prepareDateFields } from '~/utils/prisma'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 
@@ -30,7 +29,7 @@ async function prepareData({ ctx, input, draftId }: CreateParams) {
         connect: referents.map(referent => ({ id: referent }))
       },
       createdById: ctx.user.id,
-      ...prepareDateFields(data, ['birthDate'])
+      ...data
     }
   }
 

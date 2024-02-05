@@ -53,7 +53,7 @@ function prepareTaxHouseholdsUpdates(
       const { linkedBeneficiary, ...data } = e
       return {
         hosted: true,
-        ...prepareDateFields(data, ['birthDate']),
+        ...data,
         linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null
       }
     })

@@ -6,7 +6,6 @@ import { SecurityRuleContext } from '~/server/security'
 import {
   connect,
   prepareDocumentsMutations,
-  prepareDateFields
 } from '~/utils/prisma'
 import { markFollowupTypeAsUsed } from '~/server/query'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
@@ -47,7 +46,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     // ChefCabinet,
     // OrganismeMenace,
     // Prefet
-  } = prepareDateFields(input, ['dueDate'])
+  } = input
 
   // const interventionFields = {
   //   ActionLogement,
