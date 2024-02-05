@@ -12,7 +12,6 @@ import {
 import { getBeneficiaryPermissions } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { BeneficiaryDraft } from '~/types/beneficiary'
-import { prepareDateFields } from '~/utils/prisma'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { ageGroupToDateRange } from '~/utils/ageGroupToDateRange'
 
@@ -42,7 +41,7 @@ export function prepareDataFromDraft(
   let data = {
     structureId: user.structureId,
     fileNumber,
-    ...prepareDateFields(general, ['birthDate', 'deathDate']),
+    ...general,
     phone1: general.noPhone ? null : general.phone1,
     phone2: general.noPhone ? null : general.phone2,
     referents: {
@@ -66,7 +65,7 @@ export function prepareDataFromDraft(
     const taxHouseholds =
       taxHousehold?.taxHouseholds?.map(({ linkedBeneficiary, ...e }) => {
         return {
-          ...prepareDateFields(e, ['birthDate']),
+          ...e,
           hosted: true,
           linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null
         }

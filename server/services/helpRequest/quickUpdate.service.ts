@@ -2,7 +2,6 @@ import { SocialSupportStatus, Prisma } from '@prisma/client'
 import { HelpRequestRepo } from '~/server/database'
 import { QuickEditHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
-import { prepareDateFields } from '~/utils/prisma'
 
 export async function quickUpdate(
   ctx: SecurityRuleContext,
@@ -35,7 +34,7 @@ function prepareData(
   }
 
   if ('paymentDate' in data) {
-    return prepareDateFields(data, ['paymentDate'])
+    return data
   }
 
   if ('status' in data) {

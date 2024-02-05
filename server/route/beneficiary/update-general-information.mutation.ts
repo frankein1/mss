@@ -10,7 +10,7 @@ import {
   UpdateBeneficiaryGeneralInformationInput,
   updateBeneficiaryGeneralInformationSchema
 } from '~/server/schema'
-import { prepareRelationConnections, prepareDateFields } from '~/utils/prisma'
+import { prepareRelationConnections } from '~/utils/prisma'
 import { BeneficiaryRepo } from '~/server/database'
 import { BeneficiaryService } from '~/server/services'
 
@@ -40,11 +40,10 @@ const handler = async ({
 
   const appPermissions = getAppContextPermissions(ctx)
   const filteredData = filterInput({ input, appPermissions })
-  const data = prepareDateFields(filteredData, ['birthDate', 'deathDate'])
 
-  if (data.noPhone) {
-    data.phone1 = null
-    data.phone2 = null
+  if (filteredData.noPhone) {
+    filteredData.phone1 = null
+    filteredData.phone2 = null
   }
 
   const { referents: previousReferents } = target
@@ -57,7 +56,7 @@ const handler = async ({
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id },
     data: {
-      ...data,
+      ...filteredData,
       referents: referentConnections
     }
   })

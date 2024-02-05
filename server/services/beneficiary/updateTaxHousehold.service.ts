@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
 import { SecurityRuleGrantee } from '~/server/security'
 import { UpdateBeneficiaryTaxHouseholdInput } from '~/server/schema'
-import { prepareRelationUpdates, prepareDateFields } from '~/utils/prisma'
+import { prepareRelationUpdates } from '~/utils/prisma'
 
 function getBeneficiaryWithTaxHousehold(user: SecurityRuleGrantee, id: string) {
   return BeneficiaryRepo.findUniqueOrThrow(user, {
@@ -53,7 +53,7 @@ function prepareTaxHouseholdsUpdates(
       const { linkedBeneficiary, ...data } = e
       return {
         hosted: true,
-        ...prepareDateFields(data, ['birthDate']),
+        ...data,
         linkedBeneficiaryId: linkedBeneficiary ? linkedBeneficiary.id : null
       }
     })
