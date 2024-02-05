@@ -32,7 +32,7 @@
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
   import { AgeGroup, ageGroupLabels } from '~/client/options/ageGroup'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
   import { getStatColor } from '~/client/colors/stats'
   import { getStatLabel } from '~/client/options/stat'

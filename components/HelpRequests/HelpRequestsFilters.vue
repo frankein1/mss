@@ -23,7 +23,7 @@
   import { formatDate } from '~/utils/formatDate'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { HelpRequestFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'

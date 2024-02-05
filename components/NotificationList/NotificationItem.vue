@@ -37,7 +37,7 @@
     SocialSupportType
   } from '@prisma/client'
   import { NotificationItem } from './types'
-  import { BeneficiaryTab } from '~~/utils/constants/beneficiary'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
   import { notificationTypeClasses } from '~/client/classes/notification'
   import { notificationTypeLabels } from '~/client/options/notification'

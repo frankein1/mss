@@ -26,7 +26,7 @@
   } from '~/client/options/followup'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import type { FollowupFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { followupFieldLabels } from '~/client/labels'

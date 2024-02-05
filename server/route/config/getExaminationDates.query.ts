@@ -4,7 +4,7 @@ import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
-import { IdInput, idSchema } from '~/server/schema'
+import { idSchema } from '~/server/schema'
 import { HelpRequestRepo, HelpRequestConstraints } from '~/server/database'
 import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 
@@ -41,16 +41,8 @@ const handler = async ({
   return examinationDates.filter(hasDefinedExaminationDate)
 }
 
-const securityCheck = (
-  ctx: SecurityRuleContext,
-  _input: IdInput | undefined
-) => {
-  const permissions = getAppContextPermissions({
-    user: ctx.user,
-    structure: ctx.structure
-  })
-  return permissions.module.helpRequest
-}
+const securityCheck = (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).module.helpRequest
 
 export const getExaminationDatesQuery = createQuery({
   handler,

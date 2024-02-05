@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
   import { FilterType } from '~/utils/constants/filters'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
   import { ageGroupOptions } from '~/client/options/ageGroup'
   import { toOptions, withEmptyValue } from '~/utils/options'

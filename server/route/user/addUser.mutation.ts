@@ -11,9 +11,8 @@ import { getUserCreationEmailContent } from '~/server/email'
 import { UserRepo } from '~/server/database'
 import { cleanEmail } from '~/utils/user'
 
-const securityCheck = (ctx: SecurityRuleContext, _input: UserCreationInput) => {
-  return getAppContextPermissions(ctx).create.user
-}
+const securityCheck = (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).create.user
 
 const handler = async ({
   ctx: { user },

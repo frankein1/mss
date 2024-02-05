@@ -30,7 +30,7 @@
 
 <script lang="ts" setup>
   import { Gender } from '@prisma/client'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
   import { StatFilterInput } from '~/server/schema'
   import { getStatColor } from '~/client/colors/stats'

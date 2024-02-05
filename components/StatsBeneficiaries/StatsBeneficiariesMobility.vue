@@ -32,7 +32,7 @@
 <script lang="ts" setup>
   import { beneficiaryMobilityLabels } from '~/client/options/beneficiary'
   import { StatFilterInput } from '~/server/schema'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
   import { getStatLabel } from '~/client/options/stat'
 

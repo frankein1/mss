@@ -44,12 +44,8 @@ const handler = async ({
   return updatedStructure
 }
 
-const securityCheck = (
-  ctx: SecurityRuleContext,
-  _input: EditCurrentUserStructureInput
-) => {
-  return getAppContextPermissions(ctx).edit.structure
-}
+const securityCheck = (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).edit.structure
 
 export const editCurrentUserStructureMutation = createMutation({
   handler,

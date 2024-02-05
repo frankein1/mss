@@ -30,7 +30,7 @@
   import { SocialSupportStatus } from '@prisma/client'
   import { socialSupportStatusLabels } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()
 

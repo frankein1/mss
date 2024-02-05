@@ -2,7 +2,13 @@ import { createQuery } from '~/server/route'
 import { getFollowupMinistreStatsQuery } from '~/server/query/stats'
 import { ProtectedAppContext } from '~/server/trpc'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import {
+  SecurityRuleContext,
+  getAppContextPermissions
+} from '~/server/security'
+
+const securityCheck = (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).module.stats
 
 const handler = async ({
   input,
@@ -16,6 +22,6 @@ const handler = async ({
 
 export const getFollowupMinistreStatsQ = createQuery({
   inputValidation: statFilterSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler
 })

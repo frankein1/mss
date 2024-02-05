@@ -25,12 +25,8 @@ const handler = async ({
   ])
 }
 
-const securityCheck = (
-  ctx: SecurityRuleContext,
-  _input: ExportFollowupsInput
-) => {
-  return getAppContextPermissions(ctx).export.history
-}
+const securityCheck = (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).export.history
 
 export const getExport = createQuery({
   inputValidation: exportFollowupsSchema,

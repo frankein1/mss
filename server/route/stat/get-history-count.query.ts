@@ -6,8 +6,14 @@ import {
   getFollowupCountQuery,
   getHelpRequestCountQuery
 } from '~/server/query/stats'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import {
+  SecurityRuleContext,
+  getAppContextPermissions
+} from '~/server/security'
 import { FollowupRepo } from '~/server/database'
+
+const securityCheck = (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).module.stats
 
 const handler = async ({
   input,
@@ -31,6 +37,6 @@ const handler = async ({
 
 export const getHistoryCountsQuery = createQuery({
   inputValidation: statFilterSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler
 })

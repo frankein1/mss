@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts">
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
   import { StatFilterInput } from '~/server/schema'
   import { getStatLabel } from '~/client/options/stat'

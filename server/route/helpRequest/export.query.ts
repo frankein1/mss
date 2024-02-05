@@ -28,12 +28,8 @@ const handler = async ({
   ])
 }
 
-const securityCheck = (
-  ctx: SecurityRuleContext,
-  _input: ExportHelpRequestsInput
-) => {
-  return getAppContextPermissions(ctx).export.history
-}
+const securityCheck = (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).export.history
 
 export const exportHelpRequests = createQuery({
   securityCheck,

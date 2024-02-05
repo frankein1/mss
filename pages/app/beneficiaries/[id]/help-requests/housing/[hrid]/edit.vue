@@ -46,7 +46,7 @@
 <script lang="ts" setup>
   import { EditHousingHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
   import { HelpRequestSubject } from '~/types/socialSupport'

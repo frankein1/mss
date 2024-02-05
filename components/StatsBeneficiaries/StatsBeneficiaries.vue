@@ -126,7 +126,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { Options } from '~/utils/options'
   import { StatFilterInput } from '~/server/schema'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'

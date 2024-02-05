@@ -36,7 +36,13 @@ import {
   ministereDepartmentServiceAcLabels,
   ministereStructureLabels
 } from '~/client/options/ministry'
-import { AllowSecurityCheck } from '~/server/security/rules/types'
+import {
+  SecurityRuleContext,
+  getAppContextPermissions
+} from '~/server/security'
+
+const securityCheck = (ctx: SecurityRuleContext) =>
+  getAppContextPermissions(ctx).export.stats
 
 const handler = async ({
   input,
@@ -233,6 +239,6 @@ const handler = async ({
 
 export const exportBeneficiaryStatsQuery = createQuery({
   inputValidation: statFilterSchema,
-  securityCheck: AllowSecurityCheck,
+  securityCheck,
   handler
 })

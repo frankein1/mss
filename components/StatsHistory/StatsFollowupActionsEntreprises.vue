@@ -22,7 +22,7 @@
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()
 

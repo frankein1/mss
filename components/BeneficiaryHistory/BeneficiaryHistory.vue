@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
   import { BeneficiaryPermissions } from '~/server/security'
