@@ -35,9 +35,8 @@
         navigateTo(RoutePath.AdminStructures())
       },
       onFailure: () => {
-        snackbar.error(
-          "L'ajout de la structure a échoué.",
-          () => formContainer.value?.querySelector('select')?.focus()
+        snackbar.error("L'ajout de la structure a échoué.", () =>
+          formContainer.value?.querySelector('select')?.focus()
         )
       }
     })

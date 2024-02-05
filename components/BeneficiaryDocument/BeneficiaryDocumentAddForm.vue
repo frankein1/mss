@@ -102,9 +102,8 @@
         })
         emit('newDocument', key)
       } catch {
-        useSnackbar().error(
-          "L'ajout du document a échoué.",
-          () => form.value?.querySelector('select')?.focus()
+        useSnackbar().error("L'ajout du document a échoué.", () =>
+          form.value?.querySelector('select')?.focus()
         )
       } finally {
         isSubmitting.value = false

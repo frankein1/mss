@@ -84,18 +84,16 @@
       mutation: () => trpcClient.comment.edit.mutate(values),
       isSubmitting,
       onSuccess: comment => {
-        snackbar.success(
-          'Commentaire modifié.',
-          () => form.value?.querySelector('textarea')?.focus()
+        snackbar.success('Commentaire modifié.', () =>
+          form.value?.querySelector('textarea')?.focus()
         )
         form.value?.reset()
         emit('cancel')
         emit('commentEdited', comment)
       },
       onFailure: () => {
-        snackbar.error(
-          'La modification du commentaire a échoué.',
-          () => form.value?.querySelector('textarea')?.focus()
+        snackbar.error('La modification du commentaire a échoué.', () =>
+          form.value?.querySelector('textarea')?.focus()
         )
       }
     })
