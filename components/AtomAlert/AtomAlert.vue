@@ -64,8 +64,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
-
   .fr-alert {
     background-color: #fff;
   }
