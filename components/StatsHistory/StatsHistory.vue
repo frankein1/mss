@@ -75,7 +75,7 @@
         <template v-else-if="helpRequestCount">
           <AtomNotice class="fr-mb-3w">
             Les instructions de dossiers de demande de logement réalisées avant
-            le 31 décembre 2023 sont comptabilisées dans la thématique “Autre”.
+            le 31 décembre 2023 sont comptabilisées dans la thématique "Autre".
             <NuxtLink :to="`mailto:${supportEmail}`">Contactez-nous</NuxtLink>
             si vous rencontrez des difficultés.
           </AtomNotice>
@@ -215,7 +215,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
   import { Options } from '~/utils/options'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
@@ -326,10 +326,6 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
-
-  .fr-alert {
-    background-color: #fff;
-  }
 
   .fr-tabs {
     box-shadow: none;
