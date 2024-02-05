@@ -20,7 +20,7 @@
         :total-count="housingHelpRequestCount"
         :stats="housingHelpRequestContextStats"
       />
-      <p class="fr-text--bold">Motif des demandes de logement :</p>
+      <p class="fr-text--bold">Motif des demandes de logement</p>
       <StatsList
         :total-count="housingHelpRequestCount"
         :stats="housingHelpRequestReasonStats"
@@ -32,7 +32,7 @@
 <script lang="ts" setup>
   import { SupportColor } from '~/client/colors'
   import {
-    isFirstStatsLabels,
+    isFirstLabels,
     reasonLabels
   } from '~/client/options/housingHelpRequest'
   import { getStatLabel } from '~/client/options/stat'
@@ -56,7 +56,7 @@
     () =>
       data.value?.housingHelpRequestContextCount.map(({ _count, isFirst }) => ({
         key: String(isFirst),
-        label: getStatLabel(isFirstStatsLabels, String(isFirst)),
+        label: getStatLabel(isFirstLabels, String(isFirst)),
         color: SupportColor.helpRequests,
         count: _count
       })) || []

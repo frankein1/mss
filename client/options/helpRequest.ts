@@ -46,6 +46,10 @@ export const helpRequestSubjectLabels: {
   [HelpRequestSubject.Other]: 'Autre'
 }
 
+export const helpRequestSubjectOptions = labelsToOptions(
+  helpRequestSubjectLabels
+)
+
 export const helpRequestSubjectStatsLabels: {
   [key in HelpRequestSubject]: string
 } = {
@@ -53,10 +57,6 @@ export const helpRequestSubjectStatsLabels: {
   [HelpRequestSubject.Financial]: 'Aide financière',
   [HelpRequestSubject.Other]: 'Autre'
 }
-
-export const helpRequestSubjectOptions = labelsToOptions(
-  helpRequestSubjectLabels
-)
 
 export const helpRequestSubjectStatsOptions = labelsToOptions(
   helpRequestSubjectStatsLabels
