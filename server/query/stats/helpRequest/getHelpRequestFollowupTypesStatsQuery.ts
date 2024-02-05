@@ -1,4 +1,4 @@
-import { prepareHelpRequestStatFilters } from '../helpers'
+import { prepareSocialSupportStatFilters } from '../helpers'
 import { SocialSupportConstraints, FollowupTypeRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
@@ -8,10 +8,10 @@ export async function getHelpRequestFollowupTypesStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const helpRequestWhere = {
-    where: prepareHelpRequestStatFilters(input)
+  const socialSupportWhere = {
+    where: prepareSocialSupportStatFilters(input)
   }
-  appendConstraints(user, helpRequestWhere, SocialSupportConstraints.get)
+  appendConstraints(user, socialSupportWhere, SocialSupportConstraints.get)
 
   const res = await FollowupTypeRepo.findMany(user, {
     select: {
@@ -19,7 +19,12 @@ export async function getHelpRequestFollowupTypesStatsQuery(
       name: true,
       _count: {
         select: {
-          socialSupports: helpRequestWhere
+          socialSupports: {
+            where: {
+              ...socialSupportWhere.where,
+              socialSupportType: 'HelpRequest'
+            }
+          }
         }
       }
     }

@@ -1,4 +1,4 @@
-import { Prisma, SocialSupportType } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { STATS_NULL_LABEL } from '~/client/options'
 import { StatFilterInput } from '~/server/schema'
 import { HelpRequestSubject } from '~/types/socialSupport'
@@ -76,18 +76,23 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
 export function prepareHelpRequestStatFilters(filters: StatFilterInput) {
   const socialSupport = prepareSocialSupportStatFilters(filters)
 
-  if (filters.helpRequestSubject === HelpRequestSubject.Housing) {
-    socialSupport.socialSupportType = SocialSupportType.HelpRequestHousing
-  } else if (filters.helpRequestSubject === HelpRequestSubject.Financial) {
-    socialSupport.socialSupportType = SocialSupportType.HelpRequest
-    socialSupport.helpRequest = { financialSupport: true }
-  } else if (filters.helpRequestSubject === HelpRequestSubject.Other) {
-    socialSupport.socialSupportType = SocialSupportType.HelpRequest
-    socialSupport.helpRequest = { financialSupport: false }
-  } else {
-    socialSupport.socialSupportType = {
-      in: [SocialSupportType.HelpRequest, SocialSupportType.HelpRequestHousing]
-    }
+  switch (filters.helpRequestSubject) {
+    case HelpRequestSubject.Housing:
+      socialSupport.socialSupportType = 'HelpRequestHousing'
+      break
+    case HelpRequestSubject.Financial:
+      socialSupport.socialSupportType = 'HelpRequest'
+      socialSupport.helpRequest = { financialSupport: true }
+      break
+    case HelpRequestSubject.Other:
+      socialSupport.socialSupportType = 'HelpRequest'
+      socialSupport.helpRequest = { financialSupport: false }
+      break
+    default:
+      socialSupport.socialSupportType = {
+        in: ['HelpRequest', 'HelpRequestHousing']
+      }
+      break
   }
 
   return socialSupport
