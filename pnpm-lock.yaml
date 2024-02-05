@@ -155,8 +155,8 @@ devDependencies:
     specifier: ^1.5.0
     version: 1.5.0(postcss-html@1.6.0)(stylelint@16.2.1)
   stylelint-config-standard-scss:
-    specifier: ^12.0.0
-    version: 12.0.0(postcss@8.4.33)(stylelint@16.2.1)
+    specifier: ^13.0.0
+    version: 13.0.0(postcss@8.4.33)(stylelint@16.2.1)
   ts-node:
     specifier: ^10.9.2
     version: 10.9.2(@types/node@20.11.16)(typescript@5.3.3)
@@ -9797,12 +9797,12 @@ packages:
       stylelint: 16.2.1(typescript@5.3.3)
     dev: true
 
-  /stylelint-config-standard-scss@12.0.0(postcss@8.4.33)(stylelint@16.2.1):
-    resolution: {integrity: sha512-ATh3EcEOLZq0iwlFaBdIsSavrla0lNtJ7mO7hdE7DgVT6imozRggFSqd4cFcjzVnOLKv/uJT63MmqA1acIflbw==}
+  /stylelint-config-standard-scss@13.0.0(postcss@8.4.33)(stylelint@16.2.1):
+    resolution: {integrity: sha512-WaLvkP689qSYUpJQPCo30TFJSSc3VzvvoWnrgp+7PpVby5o8fRUY1cZcP0sePZfjrFl9T8caGhcKg0GO34VDiQ==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
       postcss: ^8.3.3
-      stylelint: ^16.0.2
+      stylelint: ^16.1.0
     peerDependenciesMeta:
       postcss:
         optional: true
@@ -9810,14 +9810,14 @@ packages:
       postcss: 8.4.33
       stylelint: 16.2.1(typescript@5.3.3)
       stylelint-config-recommended-scss: 14.0.0(postcss@8.4.33)(stylelint@16.2.1)
-      stylelint-config-standard: 35.0.0(stylelint@16.2.1)
+      stylelint-config-standard: 36.0.0(stylelint@16.2.1)
     dev: true
 
-  /stylelint-config-standard@35.0.0(stylelint@16.2.1):
-    resolution: {integrity: sha512-JyQrNZk2BZwVKFauGGxW2U6RuhIfQ4XoHHo+rBzMHcAkLnwI/knpszwXjzxiMgSfcxbZBckM7Vq4LHoANTR85g==}
+  /stylelint-config-standard@36.0.0(stylelint@16.2.1):
+    resolution: {integrity: sha512-3Kjyq4d62bYFp/Aq8PMKDwlgUyPU4nacXsjDLWJdNPRUgpuxALu1KnlAHIj36cdtxViVhXexZij65yM0uNIHug==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
-      stylelint: ^16.0.0
+      stylelint: ^16.1.0
     dependencies:
       stylelint: 16.2.1(typescript@5.3.3)
       stylelint-config-recommended: 14.0.0(stylelint@16.2.1)
@@ -9832,7 +9832,7 @@ packages:
       known-css-properties: 0.29.0
       postcss-media-query-parser: 0.2.3
       postcss-resolve-nested-selector: 0.1.1
-      postcss-selector-parser: 6.0.13
+      postcss-selector-parser: 6.0.15
       postcss-value-parser: 4.2.0
       stylelint: 16.2.1(typescript@5.3.3)
     dev: true
