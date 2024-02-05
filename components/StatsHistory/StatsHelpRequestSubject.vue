@@ -13,7 +13,7 @@
       <h2 class="fr-h5">Thématique d'instruction</h2>
       <p>
         Les instructions de dossiers de demande de logement réalisées avant le
-        31 décembre 2023 sont comptabilisées dans la thématique "Autre"
+        31 décembre 2023 sont comptabilisées dans la thématique "Autre".
       </p>
       <StatsPie
         v-if="subjectStats.length"
@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import {
     helpRequestSubjectPictos,
     helpRequestSubjectStatsLabels

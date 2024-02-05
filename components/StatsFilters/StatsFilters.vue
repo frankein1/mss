@@ -19,7 +19,7 @@
     helpRequestSubjectPictos
   } from '~/client/options/helpRequest'
   import { FilterType } from '~/utils/constants/filters'
-  import { type Options, withEmptyValue } from '~/utils/options'
+  import { Options, withEmptyValue } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
@@ -52,7 +52,7 @@
     if (props.isHelpRequestsTab) {
       filters.push({
         name: 'helpRequestSubject',
-        label: "Thématique d'instruction :",
+        label: "Thématique d'instruction",
         options: withEmptyValue(helpRequestSubjectStatsOptions, 'Toutes'),
         type: FilterType.Radio,
         alwaysExpanded: true,
