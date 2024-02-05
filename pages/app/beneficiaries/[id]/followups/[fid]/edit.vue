@@ -104,9 +104,8 @@
         )
       },
       onFailure: () => {
-        snackbar.error(
-          'La mise à jour de la synthèse a échoué.',
-          () => formContainer.value?.querySelector('input')?.focus()
+        snackbar.error('La mise à jour de la synthèse a échoué.', () =>
+          formContainer.value?.querySelector('input')?.focus()
         )
       }
     })
