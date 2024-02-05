@@ -1,38 +1,33 @@
-import { SocialSupportType } from '@prisma/client'
-import { prepareHelpRequestStatFilters } from '../helpers'
-import { SocialSupportConstraints, SocialSupportRepo } from '~/server/database'
+import { prepareSocialSupportStatFilters } from '../helpers'
+import { SocialSupportRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
 import { HelpRequestSubject } from '~/types/socialSupport'
 
 export async function getHelpRequestSubjectStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const where = {
-    where: prepareHelpRequestStatFilters(input)
-  }
-  appendConstraints(user, where, SocialSupportConstraints.get)
+  const filters = prepareSocialSupportStatFilters(input)
 
   const [housingCount, financialCount, otherCount] = await Promise.all([
     SocialSupportRepo.count(user, {
       where: {
-        ...where.where,
-        socialSupportType: SocialSupportType.HelpRequestHousing
+        ...filters,
+        socialSupportType: 'HelpRequestHousing'
       }
     }),
     SocialSupportRepo.count(user, {
       where: {
-        ...where.where,
-        socialSupportType: SocialSupportType.HelpRequest,
+        ...filters,
+        socialSupportType: 'HelpRequest',
         helpRequest: { financialSupport: true }
       }
     }),
     SocialSupportRepo.count(user, {
       where: {
-        ...where.where,
-        socialSupportType: SocialSupportType.HelpRequest,
+        ...filters,
+        socialSupportType: 'HelpRequest',
         helpRequest: { financialSupport: false }
       }
     })
