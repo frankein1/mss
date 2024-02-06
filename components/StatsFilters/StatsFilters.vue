@@ -44,7 +44,7 @@
         type: FilterType.Date
       }
     ]
-    if (props.followupTypeOptions) {
+    if (props.followupTypeOptions.size) {
       filters.push({
         name: 'followupTypes',
         label: "Type d'accompagnement",
@@ -52,7 +52,7 @@
         type: FilterType.SelectMultiple
       })
     }
-    if (props.beneficiariesCitiesOptions) {
+    if (props.beneficiariesCitiesOptions.size) {
       filters.push({
         name: 'cities',
         label: 'Ville',
