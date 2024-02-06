@@ -104,15 +104,22 @@
       filters: FilterProp[]
       fullWidthFilters?: boolean
       noReset?: boolean
+      /**
+       * Use initial values if the initial values must not persist on form reset
+       * i.e for initial values from application state
+       */
       initialSelectedValues?: FilterValues
       resultsLabel?: string
       noMargin?: boolean
+      /**
+       * Use default values if the initial values have to be set on form reset
+       */
       defaultValues?: FilterValues
     }>(),
     {
       fullWidthFilters: false,
       noReset: false,
-      initialSelectedValues: () => ({}),
+      initialSelectedValues: undefined,
       resultsLabel: undefined,
       defaultValues: undefined
     }
@@ -139,7 +146,7 @@
     resetForm,
     resetField
   } = useForm({
-    initialValues: props.initialSelectedValues
+    initialValues: props.initialSelectedValues || props.defaultValues || {}
   })
 
   const expandBtnLabel = computed(() =>
