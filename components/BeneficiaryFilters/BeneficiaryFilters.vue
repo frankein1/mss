@@ -12,7 +12,7 @@
   <AtomFilters
     v-else-if="beneficiaryFilters"
     :filters="beneficiaryFilters"
-    :initial-selected-values="INITIAL_VALUES"
+    :initial-selected-values="filtersState.beneficiary.value || {}"
     @filter="onFilter"
   />
 </template>
@@ -35,7 +35,6 @@
   }>()
 
   const filtersState = useFilters()
-  const INITIAL_VALUES = filtersState.beneficiary.value || {}
 
   const {
     data: followupTypeOptions,
