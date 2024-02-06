@@ -72,7 +72,7 @@
       type: FilterType.Date,
       alwaysExpanded: true
     })
-    if (props.followupTypeOptions) {
+    if (props.followupTypeOptions.size) {
       filters.push({
         name: 'followupTypes',
         label: "Objet de l'accompagnement",
@@ -81,7 +81,7 @@
         alwaysExpanded: true
       })
     }
-    if (props.beneficiariesCitiesOptions) {
+    if (props.beneficiariesCitiesOptions.size) {
       filters.push({
         name: 'cities',
         label: 'Ville',
