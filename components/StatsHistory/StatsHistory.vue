@@ -139,8 +139,9 @@
             </div>
             <div
               v-if="
-                !filters.helpRequestSubject ||
-                filters.helpRequestSubject === HelpRequestSubject.Housing
+                !filters.followupTypes &&
+                (!filters.helpRequestSubject ||
+                  filters.helpRequestSubject === HelpRequestSubject.Housing)
               "
               class="fr-col-12 fr-col-sm-6"
             >
