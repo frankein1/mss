@@ -11,7 +11,7 @@
     />
     <template v-else-if="followupTypesStats">
       <h2 class="fr-h5">Objets d'accompagnement</h2>
-      <p>
+      <p v-if="!filters.helpRequestSubject">
         Pourcentage calculé sur le nombre total d'instructions de dossier dans
         les thématiques "Aide financière" et "Autre"
       </p>
