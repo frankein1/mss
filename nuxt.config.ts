@@ -30,6 +30,7 @@ export default defineNuxtConfig({
   typescript: {
     tsConfig: {
       compilerOptions: {
+        moduleResolution: 'Node',
         verbatimModuleSyntax: false
       }
     }

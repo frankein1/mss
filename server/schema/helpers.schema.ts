@@ -103,9 +103,9 @@ export const amountNumber = z.preprocess(
 
 function neutralValuesToNull<T extends z.ZodTypeAny>(zodType: T) {
   return z.preprocess(
-    (val) => (val === "" || val === undefined ? null : val),
+    val => (val === '' || val === undefined ? null : val),
     zodType
-  );
+  )
 }
 
 export const dateOrEmpty = neutralValuesToNull(z.coerce.date().nullish())
