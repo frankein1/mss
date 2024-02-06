@@ -114,7 +114,7 @@
       <VeeSelect
         name="refusalReason"
         :label="helpRequestFieldLabels.refusalReason"
-        :options="withEmptyValue(helpRequestRefusalReasonOptions)"
+        :options="withEmptyValue(refusalReasonOptions)"
       />
     </div>
   </template>
@@ -136,6 +136,7 @@
   import {
     paymentMethodOptions,
     helpRequestRefusalReasonOptions,
+    housingHelpRequestRefusalReasonOptions,
     isRefundableOptions
   } from '~/client/options/helpRequest'
   import { reasonOptions } from '~/client/options/housingHelpRequest'
@@ -174,4 +175,10 @@
     }
     return "Informations sur le dossier d'instruction"
   })
+
+  const refusalReasonOptions = computed(() =>
+    isHousingSupport.value
+      ? housingHelpRequestRefusalReasonOptions
+      : helpRequestRefusalReasonOptions
+  )
 </script>
