@@ -11,7 +11,7 @@
     />
     <template v-else-if="prescribingOrganizationStats">
       <h2 class="fr-h5">Organismes prescripteurs</h2>
-      <p>Pourcentage calculé sur le nombre total d'entretiens</p>
+      <p>Pourcentage calculé sur le nombre total de synthèses d'entretien</p>
       <StatsList
         v-if="prescribingOrganizationStats.length"
         :total-count="totalCount"
