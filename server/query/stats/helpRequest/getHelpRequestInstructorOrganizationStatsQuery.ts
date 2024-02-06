@@ -12,7 +12,13 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
   const preparedFilters = prepareHelpRequestStatFilters(input)
 
   const socialSupports = await SocialSupportRepo.findMany(user, {
-    where: preparedFilters,
+    where: {
+      ...preparedFilters,
+      OR: [
+        { helpRequest: { externalStructure: true } },
+        { housingHelpRequest: { externalStructure: true } }
+      ]
+    },
     select: {
       helpRequest: {
         select: {
