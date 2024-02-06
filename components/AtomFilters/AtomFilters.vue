@@ -141,11 +141,7 @@
   const form = ref<HTMLFormElement | null>(null)
   const expanded = ref<boolean>(false)
 
-  const {
-    controlledValues: selectedFilters,
-    resetForm,
-    resetField
-  } = useForm({
+  const { controlledValues: selectedFilters, resetForm } = useForm({
     initialValues: props.initialSelectedValues || props.defaultValues || {}
   })
 
@@ -221,7 +217,6 @@
   function onReset() {
     form.value?.reset()
     resetForm({ values: props.defaultValues || {} })
-    resetField('followupTypes')
   }
 
   function getFilterValueLabel(filter: FilterProp, value: FilterValue) {
