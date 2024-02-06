@@ -94,7 +94,7 @@
               class="fr-col-12 fr-col-lg-6"
             >
               <StatsHelpRequestFollowupTypes
-                :total-count="helpRequestCount"
+                :total-count="financialHelpRequestCount + otherHelpRequestCount"
                 :filters="filters"
               />
             </div>
@@ -118,13 +118,13 @@
               class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
             >
               <StatsHelpRequestPrescribingOrganizations
-                :total-count="helpRequestCount"
+                :total-count="financialHelpRequestCount + otherHelpRequestCount"
                 :filters="filters"
               />
             </div>
             <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
               <StatsHistoryInstructorOrganizations
-                :total-count="helpRequestCount"
+                :total-count="externalHelpRequestCount"
                 :filters="filters"
               />
             </div>
@@ -258,7 +258,19 @@
   } = await trpcClient.stat.getHistoryCounts.useQuery(filters)
 
   const helpRequestCount = computed(
-    () => historyCounts.value?.helpRequests || 0
+    () => historyCounts.value?.helpRequests.total || 0
+  )
+
+  const financialHelpRequestCount = computed(
+    () => historyCounts.value?.helpRequests.Financial || 0
+  )
+
+  const otherHelpRequestCount = computed(
+    () => historyCounts.value?.helpRequests.Other || 0
+  )
+
+  const externalHelpRequestCount = computed(
+    () => historyCounts.value?.helpRequests.external || 0
   )
 
   const followupCount = computed(() => historyCounts.value?.followups || 0)
