@@ -7,7 +7,6 @@
     <AtomFilters
       v-else
       :filters="statsFilters"
-      :initial-selected-values="defaultValues"
       :default-values="defaultValues"
       @filter="emit('filter', $event)"
     />
