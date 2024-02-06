@@ -55,7 +55,8 @@ const handler = async ({
     }, {}),
     followupTypesData.reduce((row: RowType, { _count, id }) => {
       if (_count.socialSupports > 0) {
-        row[id] = `${getPercentage(_count.socialSupports, helpRequestCount)}%`
+        row[id] =
+          `${getPercentage(_count.socialSupports, helpRequestCount.Financial + helpRequestCount.Other)}%`
       }
       return row
     }, {}),
@@ -82,7 +83,7 @@ const handler = async ({
     const helpRequestMinistreRows = getRowsFromData(
       helpRequestMinistreData,
       'ministre',
-      helpRequestCount
+      helpRequestCount.total
     )
     exportData.push({
       name: 'Ministres',
@@ -99,7 +100,7 @@ const handler = async ({
   const helpRequestStatusRows = getRowsFromData(
     helpRequestStatusData,
     'status',
-    helpRequestCount
+    helpRequestCount.total
   )
   exportData.push({
     name: 'Statuts',
@@ -119,7 +120,7 @@ const handler = async ({
   const helpRequestPrescribingOrganizationRows = getRowsFromData(
     helpRequestPrescribingOrganizationData,
     'prescribingOrganizationId',
-    helpRequestCount
+    helpRequestCount.Financial + helpRequestCount.Other
   )
   exportData.push({
     name: 'Organismes prescripteurs',
@@ -172,7 +173,7 @@ const handler = async ({
   const helpRequestInstructorOrganizationRows = getRowsFromData(
     helpRequestInstructorOrganizationData,
     'instructorOrganizationId',
-    helpRequestCount
+    helpRequestCount.external
   )
   exportData.push({
     name: 'Organismes instructeurs',
