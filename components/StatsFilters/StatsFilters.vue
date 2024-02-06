@@ -7,7 +7,8 @@
     <AtomFilters
       v-else
       :filters="statsFilters"
-      :initial-selected-values="initialValues"
+      :initial-selected-values="defaultValues"
+      :default-values="defaultValues"
       @filter="emit('filter', $event)"
     />
   </div>
@@ -40,7 +41,7 @@
     filter: [filters: StatFilterInput]
   }>()
 
-  const initialValues = computed(() => {
+  const defaultValues = computed(() => {
     if (props.isHelpRequestsTab) {
       return { helpRequestSubject: '' }
     }

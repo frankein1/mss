@@ -14,7 +14,7 @@
         v-for="filter in expandedByDefaultFilters"
         :key="filter.name"
         :filter="filter"
-        @change-filter="onChangeFilter($event, filter)"
+        @change-filter="onChangeFilter(filter)"
       />
     </div>
     <div
@@ -29,7 +29,7 @@
         v-for="filter in collapsedByDefaultFilters"
         :key="filter.name"
         :filter="filter"
-        @change-filter="onChangeFilter($event, filter)"
+        @change-filter="onChangeFilter(filter)"
       />
     </div>
   </form>
@@ -90,7 +90,9 @@
   import type {
     FilterProp,
     SelectedFilters,
-    SelectedFilter
+    SelectedFilter,
+    FilterValue,
+    FilterValues
   } from '~/types/filter'
   import { getRandomId } from '~/utils/random'
   import { INPUT_DEFER_DURATION } from '~/utils/constants'
@@ -102,17 +104,17 @@
       filters: FilterProp[]
       fullWidthFilters?: boolean
       noReset?: boolean
-      initialSelectedValues?: {
-        [filterName: string]: string | string[] | Date | null
-      }
+      initialSelectedValues?: FilterValues
       resultsLabel?: string
       noMargin?: boolean
+      defaultValues?: FilterValues
     }>(),
     {
       fullWidthFilters: false,
       noReset: false,
       initialSelectedValues: () => ({}),
-      resultsLabel: undefined
+      resultsLabel: undefined,
+      defaultValues: undefined
     }
   )
 
@@ -124,34 +126,19 @@
     props.filters.filter(filter => filter.alwaysExpanded)
   )
 
-  const initialSelectedFilters = computed<SelectedFilters>(() =>
-    props.filters.reduce((_initialSelectedFilters, filter) => {
-      if (filter.name in props.initialSelectedValues) {
-        const initialSelectedValue = props.initialSelectedValues[filter.name]
-        if (!initialSelectedValue) {
-          return _initialSelectedFilters
-        }
-        const selectedFilter: SelectedFilter = {
-          filterLabel: filter.label,
-          value: getFilterInitialValue(filter, initialSelectedValue),
-          valueLabel: getFilterValueLabel(filter, initialSelectedValue)
-        }
-        return { ..._initialSelectedFilters, [filter.name]: selectedFilter }
-      }
-      return _initialSelectedFilters
-    }, {} as SelectedFilters)
-  )
-
   const emit = defineEmits<{
-    filter: [filter: { [key: string]: string | string[] }]
+    filter: [filter: { [key: string]: FilterValue }]
   }>()
 
   const COLLAPSED_FILTERS_ID = getRandomId('filters-')
   const form = ref<HTMLFormElement | null>(null)
   const expanded = ref<boolean>(false)
-  const selectedFilters = ref<SelectedFilters>(initialSelectedFilters.value)
 
-  useForm({
+  const {
+    controlledValues: selectedFilters,
+    resetForm,
+    resetField
+  } = useForm({
     initialValues: props.initialSelectedValues
   })
 
@@ -160,19 +147,31 @@
   )
 
   const hasFilters = computed<boolean>(
-    () => !!Object.keys(selectedFilters.value).length
+    () => !!Object.values(selectedFilters.value).filter(v => v).length
   )
 
   const collapsedSelectedFilters = computed<SelectedFilters>(() =>
     Object.entries(selectedFilters.value).reduce(
-      (collapsedSelectedFilters, [name, value]) => {
-        const isCollapsed = collapsedByDefaultFilters.value.some(
+      (_collapsedSelectedFilters, [name, value]) => {
+        if (!value) {
+          return _collapsedSelectedFilters
+        }
+
+        const filter = collapsedByDefaultFilters.value.find(
           collapsed => collapsed.name === name
         )
 
-        return isCollapsed
-          ? { ...collapsedSelectedFilters, [name]: value }
-          : collapsedSelectedFilters
+        if (!filter) {
+          return _collapsedSelectedFilters
+        }
+
+        const selectedFilter: SelectedFilter = {
+          filterLabel: filter.label,
+          value: getFilterValue(filter, value),
+          valueLabel: getFilterValueLabel(filter, value)
+        }
+
+        return { ..._collapsedSelectedFilters, [name]: selectedFilter }
       },
       {} as SelectedFilters
     )
@@ -182,59 +181,50 @@
     () => !!Object.keys(collapsedSelectedFilters.value).length
   )
 
-  function getFilterInitialValue(
-    filter: FilterProp,
-    initialSelectedValue: string | string[] | Date
-  ): string | string[] {
-    return filter.type === FilterType.Date
-      ? dayjs(initialSelectedValue as string | Date).format('YYYY-MM-DD')
-      : (initialSelectedValue as string | string[])
-  }
+  const emitableSelectedFilters = computed(() =>
+    Object.entries(selectedFilters.value).reduce(
+      (emitable, [filterName, filterValue]) =>
+        filterValue ? { ...emitable, [filterName]: filterValue } : emitable,
+      {} as { [key: string]: FilterValue }
+    )
+  )
+
+  watch(emitableSelectedFilters, emitable => {
+    emit('filter', emitable)
+  })
 
   const onChangeFilter = useDefer(
     INPUT_DEFER_DURATION,
-    (value: string | string[], filter: FilterProp) => {
-      if (!value || !value.length) {
-        delete selectedFilters.value[filter.name]
-      } else {
-        addFilter(filter, value)
-      }
-
-      emit('filter', selectedFiltersToDataObject(selectedFilters.value))
-
+    (filter: FilterProp) => {
       if (filter.matomoEventCategory && filter.matomoEventAction) {
         matomo.trackEvent(filter.matomoEventCategory, filter.matomoEventAction)
       }
     }
   )
 
-  function addFilter(filter: FilterProp, value: string | string[]) {
-    selectedFilters.value = {
-      ...selectedFilters.value,
-      [filter.name]: {
-        filterLabel: filter.label,
-        value,
-        valueLabel: getFilterValueLabel(filter, value)
-      }
-    }
+  function getFilterValue(
+    filter: FilterProp,
+    value: FilterValue
+  ): string | string[] {
+    return filter.type === FilterType.Date
+      ? dayjs(value as string | Date).format('YYYY-MM-DD')
+      : (value as string | string[])
   }
 
   function onReset() {
     form.value?.reset()
-    selectedFilters.value = {}
-    emit('filter', selectedFiltersToDataObject(selectedFilters.value))
+    resetForm({ values: props.defaultValues || {} })
+    resetField('followupTypes')
   }
 
-  function getFilterValueLabel(
-    filter: FilterProp,
-    value: string | string[] | Date
-  ) {
+  function getFilterValueLabel(filter: FilterProp, value: FilterValue) {
     let valueLabel: string
     if (filter.type === FilterType.Date) {
       valueLabel = dayjs(value as string | Date).format('YYYY-MM-DD')
     } else if (
       filter.type === FilterType.SelectMultiple ||
-      filter.type === FilterType.SelectOne
+      filter.type === FilterType.SelectOne ||
+      filter.type === FilterType.Radio
     ) {
       valueLabel = getSelectedOptionsLabel(filter, value as string | string[])
     } else {
@@ -265,14 +255,6 @@
       return value as string[]
     }
     return [value as string]
-  }
-
-  function selectedFiltersToDataObject(selectedFilters: SelectedFilters) {
-    const dataObject: { [k: string]: string | string[] } = {}
-    Object.entries(selectedFilters).forEach(([name, { value }]) => {
-      dataObject[name] = value
-    })
-    return dataObject
   }
 </script>
 

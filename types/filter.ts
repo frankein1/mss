@@ -52,3 +52,9 @@ export type SelectedFilter = {
 export type SelectedFilters = {
   [name: string]: SelectedFilter
 }
+
+export type FilterValue = string | string[] | Date
+
+export type FilterValues = {
+  [filterName: string]: FilterValue | null | undefined
+}
