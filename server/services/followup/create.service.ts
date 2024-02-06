@@ -3,10 +3,7 @@ import { prepareFollowupTypesMutations } from './helper'
 import { BeneficiaryRepo, SocialSupportRepo } from '~/server/database'
 import { AddFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
-import {
-  connect,
-  prepareDocumentsMutations,
-} from '~/utils/prisma'
+import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { markFollowupTypeAsUsed } from '~/server/query'
 import { prepareNewHistoryElementNotification } from '~/server/services/helper'
 import { isNewOption, newOptionToLabel } from '~/utils/options'
