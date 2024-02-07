@@ -5,6 +5,7 @@
         :followup-type-options="followupTypeOptions"
         :beneficiaries-cities-options="beneficiariesCitiesOptions"
         :agent-options="agentOptions"
+        :is-help-requests-tab="!isFollowupsTabActive"
         @filter="filters = $event"
       />
     </div>
@@ -71,47 +72,83 @@
           v-if="pending"
           class="fr-mx-auto"
         />
-        <div
-          v-else-if="helpRequestCount"
-          class="fr-grid-row fr-grid-row--gutters fr-px-2w"
-        >
-          <div class="fr-col-12 fr-col-lg-6">
-            <StatsHelpRequestFollowupTypes
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
+        <template v-else-if="helpRequestCount">
+          <AtomNotice class="fr-mb-3w">
+            Les instructions de dossiers de demande de logement réalisées avant
+            le 31 décembre 2023 sont comptabilisées dans la thématique "Autre".
+            <NuxtLink :to="`mailto:${supportEmail}`">Contactez-nous</NuxtLink>
+            si vous rencontrez des difficultés.
+          </AtomNotice>
+          <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
+            <div
+              v-if="!filters.helpRequestSubject"
+              class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
+            >
+              <StatsHelpRequestSubject
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div
+              v-if="filters.helpRequestSubject !== HelpRequestSubject.Housing"
+              class="fr-col-12 fr-col-lg-6"
+            >
+              <StatsHelpRequestFollowupTypes
+                :total-count="financialHelpRequestCount + otherHelpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+              <StatsHelpRequestStatus
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div
+              v-if="application.module.ministere"
+              class="fr-col-12 fr-col-lg-6"
+            >
+              <StatsHelpRequestMinistre
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div
+              v-if="filters.helpRequestSubject !== HelpRequestSubject.Housing"
+              class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
+            >
+              <StatsHelpRequestPrescribingOrganizations
+                :total-count="financialHelpRequestCount + otherHelpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+              <StatsHistoryInstructorOrganizations
+                :total-count="externalHelpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div
+              v-if="
+                !filters.helpRequestSubject ||
+                filters.helpRequestSubject === HelpRequestSubject.Financial
+              "
+              class="fr-col-12 fr-col-sm-6"
+            >
+              <StatsFinancialHelpRequests :filters="filters" />
+            </div>
+            <div
+              v-if="
+                !filters.followupTypes &&
+                (!filters.helpRequestSubject ||
+                  filters.helpRequestSubject === HelpRequestSubject.Housing)
+              "
+              class="fr-col-12 fr-col-sm-6"
+            >
+              <StatsHousingHelpRequests :filters="filters" />
+            </div>
           </div>
-          <div
-            v-if="application.module.ministere"
-            class="fr-col-12 fr-col-lg-6"
-          >
-            <StatsHelpRequestMinistre
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHelpRequestStatus
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHelpRequestPrescribingOrganizations
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6">
-            <StatsFinancialHelpRequests :filters="filters" />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsHistoryInstructorOrganizations
-              :total-count="helpRequestCount"
-              :filters="filters"
-            />
-          </div>
-        </div>
+        </template>
       </div>
       <div
         id="followups-panel"
@@ -179,14 +216,21 @@
 </template>
 
 <script lang="ts" setup>
-  import { AlertType } from '~~/utils/constants/alert'
+  import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
   import { Options } from '~/utils/options'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
+  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const trpcClient = useTrpcClient()
+
+  const {
+    public: {
+      email: { from: supportEmail }
+    }
+  } = useRuntimeConfig()
 
   const { application } = usePermissions()
 
@@ -214,7 +258,19 @@
   } = await trpcClient.stat.getHistoryCounts.useQuery(filters)
 
   const helpRequestCount = computed(
-    () => historyCounts.value?.helpRequests || 0
+    () => historyCounts.value?.helpRequests.total || 0
+  )
+
+  const financialHelpRequestCount = computed(
+    () => historyCounts.value?.helpRequests.Financial || 0
+  )
+
+  const otherHelpRequestCount = computed(
+    () => historyCounts.value?.helpRequests.Other || 0
+  )
+
+  const externalHelpRequestCount = computed(
+    () => historyCounts.value?.helpRequests.external || 0
   )
 
   const followupCount = computed(() => historyCounts.value?.followups || 0)

@@ -12,44 +12,47 @@ import { appendConstraints } from '~/server/database/repository/helper/appendCon
 
 function getFinancialHelpRequestCount(
   user: SecurityRuleGrantee,
-  filters: Prisma.SocialSupportWhereInput
+  { where: socialSupportFilters }: { where: Prisma.SocialSupportWhereInput },
+  helpRequestFilters: Prisma.HelpRequestWhereInput
 ) {
   return SocialSupportRepo.count(user, {
     where: {
-      helpRequest: { financialSupport: true },
-      ...filters
+      ...socialSupportFilters,
+      helpRequest: helpRequestFilters
     }
   })
 }
 
 function getInternalFinancialHelpRequestCount(
   user: SecurityRuleGrantee,
-  filters: Prisma.SocialSupportWhereInput
+  { where: socialSupportFilters }: { where: Prisma.SocialSupportWhereInput },
+  helpRequestFilters: Prisma.HelpRequestWhereInput
 ) {
   return SocialSupportRepo.count(user, {
     where: {
+      ...socialSupportFilters,
       helpRequest: {
-        financialSupport: true,
+        ...helpRequestFilters,
         externalStructure: false
-      },
-      ...filters
+      }
     }
   })
 }
 
 async function getFinancialHelpRequestTotalAmount(
   user: SecurityRuleGrantee,
-  filters: Prisma.SocialSupportWhereInput
+  { where: socialSupportFilters }: { where: Prisma.SocialSupportWhereInput },
+  helpRequestFilters: Prisma.HelpRequestWhereInput
 ) {
   const {
     _sum: { allocatedAmount: financialHelpRequestTotalAmount }
   } = await HelpRequestRepo.aggregate(user, {
     where: {
-      financialSupport: true,
+      ...helpRequestFilters,
       externalStructure: false,
       socialSupport: {
         status: 'Accepted',
-        ...filters
+        ...socialSupportFilters
       },
       allocatedAmount: { gt: 0 }
     },
@@ -63,16 +66,17 @@ async function getFinancialHelpRequestTotalAmount(
 
 async function getFinancialHelpRequestAmountByType(
   user: SecurityRuleGrantee,
-  filters: Prisma.SocialSupportWhereInput
+  { where: socialSupportFilters }: { where: Prisma.SocialSupportWhereInput },
+  helpRequestFilters: Prisma.HelpRequestWhereInput
 ) {
   // Prisma does not allow selecting type.id and type.name on a groupBy
   const helpRequestAmountByTypeId = await HelpRequestRepo.prisma.groupBy({
     by: ['typeId'],
     where: {
-      financialSupport: true,
+      ...helpRequestFilters,
       socialSupport: {
         status: 'Accepted',
-        ...filters
+        ...socialSupportFilters
       },
       allocatedAmount: { gt: 0 }
     },
@@ -117,8 +121,11 @@ export async function getHelpRequestFinancialStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const filters = { where: prepareSocialSupportStatFilters(input) }
-  appendConstraints(user, filters, SocialSupportConstraints.get)
+  const socialSupportWhere = { where: prepareSocialSupportStatFilters(input) }
+  appendConstraints(user, socialSupportWhere, SocialSupportConstraints.get)
+  const helpRequestFilters: Prisma.HelpRequestWhereInput = {
+    financialSupport: true
+  }
 
   const [
     financialHelpRequestCount,
@@ -126,10 +133,22 @@ export async function getHelpRequestFinancialStatsQuery(
     financialHelpRequestTotalAmount,
     financialHelpRequestAmountByType
   ] = await Promise.all([
-    getFinancialHelpRequestCount(user, filters.where),
-    getInternalFinancialHelpRequestCount(user, filters.where),
-    getFinancialHelpRequestTotalAmount(user, filters.where),
-    getFinancialHelpRequestAmountByType(user, filters.where)
+    getFinancialHelpRequestCount(user, socialSupportWhere, helpRequestFilters),
+    getInternalFinancialHelpRequestCount(
+      user,
+      socialSupportWhere,
+      helpRequestFilters
+    ),
+    getFinancialHelpRequestTotalAmount(
+      user,
+      socialSupportWhere,
+      helpRequestFilters
+    ),
+    getFinancialHelpRequestAmountByType(
+      user,
+      socialSupportWhere,
+      helpRequestFilters
+    )
   ])
 
   const requestsCounts = {

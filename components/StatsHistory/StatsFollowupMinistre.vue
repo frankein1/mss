@@ -11,7 +11,7 @@
     />
     <template v-else-if="ministreStats">
       <h2 class="fr-h5">Ministres</h2>
-      <p>Pourcentage calculé sur le nombre total d'entretiens</p>
+      <p>Pourcentage calculé sur le nombre total de synthèses d'entretien</p>
       <StatsList
         v-if="ministreStats.length"
         :total-count="totalCount"

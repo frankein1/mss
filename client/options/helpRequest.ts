@@ -50,6 +50,18 @@ export const helpRequestSubjectOptions = labelsToOptions(
   helpRequestSubjectLabels
 )
 
+export const helpRequestSubjectStatsLabels: {
+  [key in HelpRequestSubject]: string
+} = {
+  [HelpRequestSubject.Housing]: 'Demande de logement',
+  [HelpRequestSubject.Financial]: 'Aide financière',
+  [HelpRequestSubject.Other]: 'Autre'
+}
+
+export const helpRequestSubjectStatsOptions = labelsToOptions(
+  helpRequestSubjectStatsLabels
+)
+
 // As pictograms are used as variables, they have to be in the public directory. - See https://www.lichter.io/articles/nuxt3-vue3-dynamic-images/
 export const helpRequestSubjectPictos: {
   [key in HelpRequestSubject]: string

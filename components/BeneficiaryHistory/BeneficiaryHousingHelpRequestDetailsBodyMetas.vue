@@ -6,8 +6,7 @@
     "
     class="fr-icon-success-line"
   >
-    <template v-if="housingHelpRequest.isFirst">1ère demande</template>
-    <template v-else>Renouvellement</template>
+    {{ isFirstLabels[housingHelpRequest.isFirst ? 'true' : 'false'] }}
   </li>
   <li v-if="askedHousing">
     <span class="information-label"
@@ -108,7 +107,8 @@
     askedHousingLabels,
     reasonLabels,
     housingTypeLabels,
-    roomCountLabels
+    roomCountLabels,
+    isFirstLabels
   } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import {

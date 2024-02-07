@@ -5,3 +5,5 @@ export { getHelpRequestStatusStatsQuery } from './getHelpRequestStatusStatsQuery
 export { getHelpRequestPrescribingOrganizationStatsQuery } from './getHelpRequestPrescribingOrganizationStatsQuery'
 export { getHelpRequestInstructorOrganizationStatsQuery } from './getHelpRequestInstructorOrganizationStatsQuery'
 export { getHelpRequestFinancialStatsQuery } from './getHelpRequestFinancialStatsQuery'
+export { getHelpRequestSubjectStatsQuery } from './getHelpRequestSubjectStatsQuery'
+export { getHelpRequestHousingStatsQuery } from './getHelpRequestHousingStatsQuery'

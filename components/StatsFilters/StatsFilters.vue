@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-p-2w">
+  <div class="feature-section">
     <AtomLoader
       v-if="!followupTypeOptions || !beneficiariesCitiesOptions"
       class="fr-mx-auto"
@@ -7,49 +7,77 @@
     <AtomFilters
       v-else
       :filters="statsFilters"
+      :default-values="defaultValues"
       @filter="emit('filter', $event)"
     />
   </div>
 </template>
 
 <script setup lang="ts">
+  import {
+    helpRequestSubjectStatsOptions,
+    helpRequestSubjectPictos
+  } from '~/client/options/helpRequest'
   import { FilterType } from '~/utils/constants/filters'
-  import type { Options } from '~/utils/options'
+  import { Options, withEmptyValue } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
 
   const { application } = usePermissions()
 
-  const props = defineProps<{
-    followupTypeOptions: Options
-    beneficiariesCitiesOptions: Options
-    agentOptions: Options
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      followupTypeOptions: Options
+      beneficiariesCitiesOptions: Options
+      agentOptions: Options
+      isHelpRequestsTab?: boolean
+    }>(),
+    { isHelpRequestsTab: false }
+  )
 
   const emit = defineEmits<{
     filter: [filters: StatFilterInput]
   }>()
 
+  const defaultValues = computed(() => {
+    if (props.isHelpRequestsTab) {
+      return { helpRequestSubject: '' }
+    }
+    return undefined
+  })
+
   const statsFilters = computed(() => {
-    const filters: FilterProp[] = [
-      {
-        name: 'fromDate',
-        label: 'Du',
-        type: FilterType.Date
-      },
-      {
-        name: 'toDate',
-        label: 'Au',
-        type: FilterType.Date
-      }
-    ]
+    const filters: FilterProp[] = []
+    if (props.isHelpRequestsTab) {
+      filters.push({
+        name: 'helpRequestSubject',
+        label: "Thématique d'instruction",
+        options: withEmptyValue(helpRequestSubjectStatsOptions, 'Toutes'),
+        type: FilterType.Radio,
+        alwaysExpanded: true,
+        pictos: helpRequestSubjectPictos
+      })
+    }
+    filters.push({
+      name: 'fromDate',
+      label: 'Du',
+      type: FilterType.Date,
+      alwaysExpanded: true
+    })
+    filters.push({
+      name: 'toDate',
+      label: 'Au',
+      type: FilterType.Date,
+      alwaysExpanded: true
+    })
     if (props.followupTypeOptions.size) {
       filters.push({
         name: 'followupTypes',
-        label: "Type d'accompagnement",
+        label: "Objet de l'accompagnement",
         options: props.followupTypeOptions,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: true
       })
     }
     if (props.beneficiariesCitiesOptions.size) {

@@ -1,5 +1,4 @@
-import { SocialSupportType } from '@prisma/client'
-import { prepareSocialSupportStatFilters } from '../helpers'
+import { prepareHelpRequestStatFilters } from '../helpers'
 import { SocialSupportRepo } from '~/server/database'
 import { STATS_NULL_LABEL } from '~/client/options/stat'
 import { StatFilterInput } from '~/server/schema'
@@ -10,15 +9,28 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const preparedFilters = prepareSocialSupportStatFilters(input)
+  const preparedFilters = prepareHelpRequestStatFilters(input)
 
   const socialSupports = await SocialSupportRepo.findMany(user, {
     where: {
       ...preparedFilters,
-      socialSupportType: SocialSupportType.HelpRequest
+      OR: [
+        { helpRequest: { externalStructure: true } },
+        { housingHelpRequest: { externalStructure: true } }
+      ]
     },
     select: {
       helpRequest: {
+        select: {
+          instructorOrganization: {
+            select: {
+              id: true,
+              name: true
+            }
+          }
+        }
+      },
+      housingHelpRequest: {
         select: {
           instructorOrganization: {
             select: {
@@ -32,7 +44,15 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
   })
 
   const helpRequests = socialSupports.reduce(
-    (fu, { helpRequest }) => (helpRequest !== null ? [...fu, helpRequest] : fu),
+    (fu, { helpRequest, housingHelpRequest }) => {
+      if (helpRequest) {
+        fu.push(helpRequest)
+      }
+      if (housingHelpRequest) {
+        fu.push(housingHelpRequest)
+      }
+      return fu
+    },
     [] as Array<Exclude<(typeof socialSupports)[0]['helpRequest'], null>>
   )
 

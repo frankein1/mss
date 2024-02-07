@@ -7,11 +7,14 @@ import {
 import { labelsToOptions } from '~/utils/options'
 
 export const isFirstLabels = {
-  true: "d'une 1ère demande",
-  false: "d'un renouvellement"
+  true: '1ère demande',
+  false: 'Renouvellement'
 }
 
-export const isFirstOptions = labelsToOptions(isFirstLabels)
+export const isFirstOptions = labelsToOptions({
+  true: "d'une 1ère demande",
+  false: "d'un renouvellement"
+})
 
 export const askedHousingLabels: { [key in AskedHousing]: string } = {
   [AskedHousing.ParcSocial]: 'Parc social',
