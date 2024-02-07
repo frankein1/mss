@@ -30,8 +30,6 @@ export default defineNuxtConfig({
   typescript: {
     tsConfig: {
       compilerOptions: {
-        // https://github.com/wobsoriano/trpc-nuxt/pull/149#issuecomment-1929287947
-        moduleResolution: 'Node',
         verbatimModuleSyntax: false
       }
     }
