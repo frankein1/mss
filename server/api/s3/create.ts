@@ -25,11 +25,17 @@ export default defineEventHandler(async event => {
   }
   const multipartFormData = await readMultipartFormData(event)
   if (!multipartFormData) {
-    throw invalidError()
+    throw createError({
+      statusCode: 400,
+      message: 'multipart form data non présent'
+    })
   }
   const data = getFormData(multipartFormData)
   if (!data) {
-    return
+    throw createError({
+      statusCode: 400,
+      message: 'Aucune donnée présente dans le multipart form data'
+    })
   }
 
   let input
@@ -48,7 +54,10 @@ export default defineEventHandler(async event => {
   )
 
   if (!beneficiary) {
-    throw invalidError('No beneficiary')
+    throw createError({
+      statusCode: 400,
+      message: 'Aucun bénéficiaire avec l\'id ' +  input.beneficiaryId
+    })
   }
 
   const structureType = user.structureType
