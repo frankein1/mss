@@ -29,10 +29,18 @@ export default defineEventHandler(async event => {
   }
   const data = getFormData(multipartFormData)
   if (!data) {
-    throw invalidError('No beneficiary')
+    return
   }
 
-  const input = addDocumentSchema.parse(data)
+  let input
+  try {
+    input = addDocumentSchema.parse(data)
+  } catch (e) {
+    throw createError({
+      statusCode: 400,
+      message: 'Les données entrantes ne sont pas valides'
+    })
+  }
 
   const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     user,
