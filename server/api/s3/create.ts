@@ -25,14 +25,28 @@ export default defineEventHandler(async event => {
   }
   const multipartFormData = await readMultipartFormData(event)
   if (!multipartFormData) {
-    throw invalidError()
+    throw createError({
+      statusCode: 400,
+      message: 'multipart form data non présent'
+    })
   }
   const data = getFormData(multipartFormData)
   if (!data) {
-    throw invalidError('No beneficiary')
+    throw createError({
+      statusCode: 400,
+      message: 'Aucune donnée présente dans le multipart form data'
+    })
   }
 
-  const input = addDocumentSchema.parse(data)
+  let input
+  try {
+    input = addDocumentSchema.parse(data)
+  } catch (e) {
+    throw createError({
+      statusCode: 400,
+      message: 'Les données entrantes ne sont pas valides'
+    })
+  }
 
   const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     user,
@@ -40,7 +54,10 @@ export default defineEventHandler(async event => {
   )
 
   if (!beneficiary) {
-    throw invalidError('No beneficiary')
+    throw createError({
+      statusCode: 400,
+      message: 'Aucun bénéficiaire avec l\'id ' +  input.beneficiaryId
+    })
   }
 
   const structureType = user.structureType
