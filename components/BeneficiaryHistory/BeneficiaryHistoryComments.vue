@@ -23,7 +23,7 @@
     CommentData,
     CommentItem,
     CommentItems
-  } from '~/server/trpc/routers'
+  } from './types'
   import { BeneficiaryPermissions } from '~/server/security'
 
   defineProps<{

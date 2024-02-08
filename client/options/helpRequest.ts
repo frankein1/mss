@@ -1,8 +1,4 @@
-import {
-  SocialSupportStatus,
-  PaymentMethod,
-  FileInstructionRefusalReason
-} from '@prisma/client'
+import { SocialSupportStatus, PaymentMethod } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 import { HelpRequestSubject } from '~/types/socialSupport'
 
@@ -70,45 +66,6 @@ export const helpRequestSubjectPictos: {
   [HelpRequestSubject.Financial]: '/pictograms/tax-stamp.svg',
   [HelpRequestSubject.Other]: '/pictograms/document.svg'
 }
-
-const baseRefusalReasonLabels = {
-  [FileInstructionRefusalReason.ResourcesOutOfScale]: 'Ressources hors barème',
-  [FileInstructionRefusalReason.ShortDeadline]: 'Délai trop court',
-  [FileInstructionRefusalReason.IncompleteFile]: 'Dossier incomplet',
-  [FileInstructionRefusalReason.IrregularSituation]: 'En situation irrégulière'
-}
-
-export const helpRequestRefusalReasonLabels = {
-  ...baseRefusalReasonLabels,
-  [FileInstructionRefusalReason.MissedAppointment]: 'Absence au rendez-vous',
-  [FileInstructionRefusalReason.AlreadyExistingHelpRequest]:
-    "Instruction déjà en cours auprès d'un autre organisme",
-  [FileInstructionRefusalReason.Reoriented]:
-    "Réorientation auprès d'un autre organisme",
-  [FileInstructionRefusalReason.Debt]: 'Endettement',
-  [FileInstructionRefusalReason.Other]: 'Autre'
-}
-
-const housingFileInstructionRefusalReasonLabels = {
-  ...baseRefusalReasonLabels,
-  [FileInstructionRefusalReason.InadequateFamilyComposition]:
-    'Composition familiale inadaptée au type de logement',
-  [FileInstructionRefusalReason.ExpiredRequest]: 'Demande expirée',
-  [FileInstructionRefusalReason.Other]: 'Autre'
-}
-
-export const fileInstructionRefusalReasonLabels = {
-  ...helpRequestRefusalReasonLabels,
-  ...housingFileInstructionRefusalReasonLabels
-}
-
-export const helpRequestRefusalReasonOptions = labelsToOptions(
-  helpRequestRefusalReasonLabels
-)
-
-export const housingFileInstructionRefusalReasonOptions = labelsToOptions(
-  housingFileInstructionRefusalReasonLabels
-)
 
 export const isRefundableLabels = {
   true: 'Remboursable',

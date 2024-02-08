@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportData } from '~/server/trpc/routers'
+  import { SocialSupportData } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { ministerLabels } from '~/client/options/ministry'
   import { helpRequestFieldLabels } from '~/client/labels'
