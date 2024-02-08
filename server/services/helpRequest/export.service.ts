@@ -8,12 +8,14 @@ import { formatUserDisplayName } from '~/utils/user'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
+
+import {} from '~/client/options/ministry'
 import {
+  socialSupportStatusLabels,
   fileInstructionRefusalReasonLabels,
-  paymentMethodLabels
-} from '~/client/options/helpRequest'
-import { ministerLabels } from '~/client/options/ministry'
-import { socialSupportStatusLabels } from '~/client/options'
+  paymentMethodLabels,
+  ministerLabels
+} from '~/client/options'
 
 export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)[] =
   [
@@ -68,28 +70,33 @@ export async function exportHelpRequests({
   const rows = helpRequests.reduce(
     (helpRequests: RowType[], { permissions, helpRequest }) => {
       if (permissions.view) {
+        const { fileInstruction } = helpRequest
+        const { socialSupport } = fileInstruction
+
+        const beneficiary = socialSupport.beneficiary
         helpRequests.push({
-          beneficiaryId: formatBeneficiaryDisplayName(helpRequest.beneficiary),
+          beneficiaryId: formatBeneficiaryDisplayName(beneficiary),
           financialSupport: helpRequest.financialSupport,
           prescribingOrganizationId:
             helpRequest.prescribingOrganization?.name || '',
           externalStructure: getExternalStructure(
-            helpRequest.externalStructure
+            fileInstruction.externalStructure
           ),
           instructorOrganizationId:
-            helpRequest.instructorOrganization?.name || '',
-          date: formatDate(helpRequest.date, 'DD-MM-YYYY'),
+            fileInstruction.instructorOrganization?.name || '',
+          date: formatDate(socialSupport.date, 'DD-MM-YYYY'),
           typeId: helpRequest.type?.name || '',
           documents:
-            helpRequest.documents?.map(document => document.name).join(', ') ||
-            '',
-          status: socialSupportStatusLabels[helpRequest.status],
+            socialSupport.documents
+              ?.map(document => document.name)
+              .join(', ') || '',
+          status: socialSupportStatusLabels[socialSupport.status],
           askedAmount: helpRequest.askedAmount?.toString() || '',
           examinationDate: formatDate(
-            helpRequest.examinationDate,
+            fileInstruction.examinationDate,
             'DD-MM-YYYY'
           ),
-          decisionDate: formatDate(helpRequest.decisionDate, 'DD-MM-YYYY'),
+          decisionDate: formatDate(fileInstruction.decisionDate, 'DD-MM-YYYY'),
           allocatedAmount: helpRequest.allocatedAmount?.toString() || '',
           paymentMethod: helpRequest.paymentMethod
             ? paymentMethodLabels[helpRequest.paymentMethod]
@@ -97,21 +104,23 @@ export async function exportHelpRequests({
           paymentDate: formatDate(helpRequest.paymentDate, 'DD-MM-YYYY'),
           handlingDate: formatDate(helpRequest.handlingDate, 'DD-MM-YYYY'),
           refusalReason:
-            helpRequest.refusalReasonOther ||
-            (helpRequest.refusalReason
-              ? fileInstructionRefusalReasonLabels[helpRequest.refusalReason]
+            fileInstruction.refusalReasonOther ||
+            (fileInstruction.refusalReason
+              ? fileInstructionRefusalReasonLabels[
+                  fileInstruction.refusalReason
+                ]
               : ''),
-          dispatchDate: formatDate(helpRequest.dispatchDate, 'DD-MM-YYYY'),
-          synthesis: helpRequest.synthesis || '',
-          dueDate: formatDate(helpRequest.dueDate, 'DD-MM-YYYY'),
-          fullFile: getBooleanOrEmpty(helpRequest.fullFile),
-          updated: formatDate(helpRequest.updated, 'DD-MM-YYYY HH:mm'),
-          ministre: helpRequest.ministre
-            ? ministerLabels[helpRequest.ministre]
+          dispatchDate: formatDate(fileInstruction.dispatchDate, 'DD-MM-YYYY'),
+          synthesis: socialSupport.synthesis || '',
+          dueDate: formatDate(socialSupport.dueDate, 'DD-MM-YYYY'),
+          fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
+          updated: formatDate(socialSupport.updated, 'DD-MM-YYYY HH:mm'),
+          ministre: socialSupport.ministre
+            ? ministerLabels[socialSupport.ministre]
             : '',
-          numeroPegase: helpRequest.numeroPegase || '',
-          createdById: helpRequest.createdBy
-            ? formatUserDisplayName(helpRequest.createdBy)
+          numeroPegase: socialSupport.numeroPegase || '',
+          createdById: socialSupport.createdBy
+            ? formatUserDisplayName(socialSupport.createdBy)
             : ''
         })
       }

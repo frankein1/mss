@@ -1,5 +1,9 @@
 import { Prisma } from '@prisma/client'
-import { filterHelpRequest, filterSocialSupport } from '../helper'
+import {
+  filterFileInstruction,
+  filterHelpRequest,
+  filterSocialSupport
+} from '../helper'
 import { HelpRequestRepo } from '~/server/database'
 import {
   AppContextPermissions,
@@ -12,17 +16,21 @@ import {
 
 export const include = {
   prescribingOrganization: true,
-  instructorOrganization: true,
-  socialSupport: {
+  fileInstruction: {
     include: {
-      types: true,
-      documents: true,
-      beneficiary: {
+      instructorOrganization: true,
+      socialSupport: {
         include: {
-          referents: true
+          types: true,
+          documents: true,
+          beneficiary: {
+            include: {
+              referents: true
+            }
+          },
+          createdBy: true
         }
-      },
-      createdBy: true
+      }
     }
   }
 }
@@ -48,7 +56,9 @@ export async function getPage(
     orderBy: args.orderBy
   })
   return helpRequests.map(helpRequest => {
-    const { socialSupport } = helpRequest
+    const {
+      fileInstruction: { socialSupport }
+    } = helpRequest
     const { beneficiary } = socialSupport
     const permissions = getHelpRequestPermissions({
       ctx,
@@ -65,7 +75,9 @@ export async function getPage(
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
   const helpRequest = await findOne(ctx.user, id)
-  const { socialSupport } = helpRequest
+  const {
+    fileInstruction: { socialSupport }
+  } = helpRequest
   const { beneficiary } = socialSupport
   const permissions = getHelpRequestPermissions({
     ctx,
@@ -84,7 +96,9 @@ export function filter(
   permissions: HelpRequestPermissions,
   helpRequest: HelpRequestOutput
 ) {
-  const { socialSupport } = helpRequest
+  const { fileInstruction } = helpRequest
+  const { socialSupport } = fileInstruction
+
   const conditions = {
     details: permissions.get.details,
     minister: appPermissions.module.ministere,
@@ -100,12 +114,18 @@ export function filter(
     conditions
   })
 
+  const filteredFileInstruction = filterFileInstruction({
+    fileInstruction,
+    conditions
+  })
+
   return {
-    ...filteredSocialSupport,
     ...filteredHelpRequest,
     type,
     typeId: type?.id,
-    id: helpRequest.id,
-    socialSupportId: socialSupport.id
+    fileInstruction: {
+      ...filteredFileInstruction,
+      socialSupport: filteredSocialSupport
+    }
   }
 }

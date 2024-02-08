@@ -53,47 +53,53 @@ export async function create({ input, ctx }: CreateParams) {
   const helpRequest = await HelpRequestRepo.prisma.create({
     data: {
       askedAmount,
-      examinationDate,
-      decisionDate,
+
       allocatedAmount,
       paymentMethod,
       paymentDate,
       handlingDate,
-      refusalReason,
-      dispatchDate,
-      fullFile,
       financialSupport,
-      externalStructure,
       prescribingOrganization: preparePrescribingOrganization(
         prescribingOrganizationId,
         ctx
       ),
-      instructorOrganization: prepareInstructorOrganization(
-        instructorOrganizationId,
-        ctx,
-        externalStructure
-      ),
+
       isRefundable,
       type: connect(typeId),
-      socialSupport: {
+      fileInstruction: {
         create: {
-          date,
-          status,
-          socialSupportType: SocialSupportType.HelpRequest,
-          createdById: ctx.user.id,
-          beneficiaryId,
-          structureId: ctx.structure.id,
-          synthesis,
-          privateSynthesis,
-          ministre,
-          numeroPegase,
-          types: connect(typeId),
-          dueDate,
-          documents: prepareDocumentsMutations(documents),
-          notifications: prepareNewHistoryElementNotification(
-            beneficiary,
-            ctx.user
-          )
+          externalStructure,
+          examinationDate,
+          decisionDate,
+          refusalReason,
+          dispatchDate,
+          fullFile,
+          instructorOrganization: prepareInstructorOrganization(
+            instructorOrganizationId,
+            ctx,
+            externalStructure
+          ),
+          socialSupport: {
+            create: {
+              date,
+              status,
+              socialSupportType: SocialSupportType.HelpRequest,
+              createdById: ctx.user.id,
+              beneficiaryId,
+              structureId: ctx.structure.id,
+              synthesis,
+              privateSynthesis,
+              ministre,
+              numeroPegase,
+              types: connect(typeId),
+              dueDate,
+              documents: prepareDocumentsMutations(documents),
+              notifications: prepareNewHistoryElementNotification(
+                beneficiary,
+                ctx.user
+              )
+            }
+          }
         }
       }
     }

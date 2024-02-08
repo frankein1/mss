@@ -75,6 +75,8 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
 
 export function prepareHelpRequestStatFilters(filters: StatFilterInput) {
   const socialSupport = prepareSocialSupportStatFilters(filters)
+  socialSupport.fileInstruction = {}
+  socialSupport.fileInstruction.helpRequest = {}
 
   switch (filters.helpRequestSubject) {
     case HelpRequestSubject.Housing:
@@ -82,11 +84,11 @@ export function prepareHelpRequestStatFilters(filters: StatFilterInput) {
       break
     case HelpRequestSubject.Financial:
       socialSupport.socialSupportType = 'HelpRequest'
-      socialSupport.helpRequest = { financialSupport: true }
+      socialSupport.fileInstruction.helpRequest = { financialSupport: true }
       break
     case HelpRequestSubject.Other:
       socialSupport.socialSupportType = 'HelpRequest'
-      socialSupport.helpRequest = { financialSupport: false }
+      socialSupport.fileInstruction.helpRequest = { financialSupport: false }
       break
     default:
       socialSupport.socialSupportType = {

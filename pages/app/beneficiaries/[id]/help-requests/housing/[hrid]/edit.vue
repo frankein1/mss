@@ -74,7 +74,9 @@
   )
 
   const beneficiary = computed(
-    () => housingHelpRequest.value?.beneficiary || null
+    () =>
+      housingHelpRequest.value?.fileInstruction.socialSupport.beneficiary ||
+      null
   )
 
   const title = computed(() =>

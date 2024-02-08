@@ -1,5 +1,9 @@
 import { Prisma } from '@prisma/client'
-import { filterHousingHelpRequest, filterSocialSupport } from '../helper'
+import {
+  filterFileInstruction,
+  filterHousingHelpRequest,
+  filterSocialSupport
+} from '../helper'
 import { HousingHelpRequestRepo } from '~/server/database'
 import {
   AppContextPermissions,
@@ -11,17 +15,21 @@ import {
 } from '~/server/security'
 
 export const include = {
-  instructorOrganization: true,
-  socialSupport: {
+  fileInstruction: {
     include: {
-      types: true,
-      documents: true,
-      beneficiary: {
+      instructorOrganization: true,
+      socialSupport: {
         include: {
-          referents: true
+          types: true,
+          documents: true,
+          beneficiary: {
+            include: {
+              referents: true
+            }
+          },
+          createdBy: true
         }
-      },
-      createdBy: true
+      }
     }
   }
 }
@@ -39,7 +47,9 @@ type HousingHelpRequestOutput = NonNullable<
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
   const housingHelpRequest = await findOne(ctx.user, id)
-  const { socialSupport } = housingHelpRequest
+  const {
+    fileInstruction: { socialSupport }
+  } = housingHelpRequest
   const { beneficiary } = socialSupport
   const permissions = getHelpRequestPermissions({
     ctx,
@@ -58,14 +68,20 @@ export function filter(
   permissions: HelpRequestPermissions,
   housingHelpRequest: HousingHelpRequestOutput
 ) {
-  const { socialSupport } = housingHelpRequest
+  const { fileInstruction } = housingHelpRequest
+  const { socialSupport } = fileInstruction
+
   const conditions = {
     details: permissions.get.details,
     minister: appPermissions.module.ministere,
     privateSynthesis: permissions.get.privateSynthesis
   }
-  const { types: _, ...filteredSocialSupport } = filterSocialSupport({
+  const filteredSocialSupport = filterSocialSupport({
     socialSupport,
+    conditions
+  })
+  const filteredFileInstruction = filterFileInstruction({
+    fileInstruction,
     conditions
   })
   const filteredHousingHelpRequest = filterHousingHelpRequest({
@@ -74,9 +90,10 @@ export function filter(
   })
 
   return {
-    ...filteredSocialSupport,
     ...filteredHousingHelpRequest,
-    id: housingHelpRequest.id,
-    socialSupportId: socialSupport.id
+    fileInstruction: {
+      ...filteredFileInstruction,
+      socialSupport: filteredSocialSupport
+    }
   }
 }

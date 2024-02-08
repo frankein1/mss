@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { formatDate } from '~/utils/formatDate'
+  // import { formatDate } from '~/utils/formatDate'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
@@ -60,17 +60,15 @@
     queryKey: 'config.getStructureFollowupTypes.options'
   })
 
-  const {
-    data: examinationDateOptions,
-    pending: examinationDateOptionsPending,
-    error: examinationDateOptionsError
-  } = await useAsyncData(loadExaminationDates)
+  // const {
+  //   data: examinationDateOptions,
+  //   pending: examinationDateOptionsPending,
+  //   error: examinationDateOptionsError
+  // } = await useAsyncData(loadExaminationDates)
 
   const pending = computed(
-    () =>
-      agentOptionsPending.value ||
-      followupTypeOptionsPending.value ||
-      examinationDateOptionsPending.value
+    () => agentOptionsPending.value || followupTypeOptionsPending.value
+    // || examinationDateOptionsPending.value
   )
 
   const fetchError = computed(() => {
@@ -80,17 +78,17 @@
     if (followupTypeOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
-    if (examinationDateOptionsError.value) {
-      return "La liste des dates de passage en commission n'a pas pu être chargée."
-    }
+    // if (examinationDateOptionsError.value) {
+    //   return "La liste des dates de passage en commission n'a pas pu être chargée."
+    // }
     return ''
   })
 
   const filters = computed(() => {
     if (
       !followupTypeOptions.value ||
-      !agentOptions.value ||
-      !examinationDateOptions.value
+      !agentOptions.value
+      // || !examinationDateOptions.value
     ) {
       return null
     }
@@ -189,20 +187,20 @@
     return filters
   })
 
-  async function loadExaminationDates() {
-    if (!application.value.module.helpRequest) {
-      return new Map()
-    }
+  // async function loadExaminationDates() {
+  //   if (!application.value.module.helpRequest) {
+  //     return new Map()
+  //   }
 
-    const examinationDates = await trpcClient.config.getExaminationDates.query()
+  //   const examinationDates = await trpcClient.config.getExaminationDates.query()
 
-    return new Map(
-      examinationDates.map(({ examinationDate }) => [
-        examinationDate.toString(),
-        formatDate(examinationDate)
-      ])
-    )
-  }
+  //   return new Map(
+  //     examinationDates.map(({ examinationDate }) => [
+  //       examinationDate.toString(),
+  //       formatDate(examinationDate)
+  //     ])
+  //   )
+  // }
 
   function onFilter(filters: HelpRequestFilterInput) {
     filtersState.helpRequest.value = filters

@@ -31,20 +31,21 @@ export function preparePrescribingOrganization(
 
 export function prepareFilters(filters: HelpRequestFilterInput) {
   const formattedFilters: Prisma.HelpRequestWhereInput = {}
-  formattedFilters.socialSupport = {}
+  formattedFilters.fileInstruction = {}
+  formattedFilters.fileInstruction.socialSupport = {}
 
   if (filters.status) {
-    formattedFilters.socialSupport.status = filters.status
+    formattedFilters.fileInstruction.socialSupport.status = filters.status
   }
 
   if (filters.followupTypes) {
-    formattedFilters.socialSupport.types = {
+    formattedFilters.fileInstruction.socialSupport.types = {
       some: { id: { in: filters.followupTypes } }
     }
   }
 
   if (filters.examinationDate) {
-    formattedFilters.examinationDate = filters.examinationDate
+    formattedFilters.fileInstruction.examinationDate = filters.examinationDate
   }
 
   if (filters.handlingDate !== undefined) {
@@ -53,11 +54,12 @@ export function prepareFilters(filters: HelpRequestFilterInput) {
   }
 
   if (filters.externalStructure !== undefined) {
-    formattedFilters.externalStructure = filters.externalStructure === 'true'
+    formattedFilters.fileInstruction.externalStructure =
+      filters.externalStructure === 'true'
   }
 
   if (filters.referents) {
-    formattedFilters.socialSupport = {
+    formattedFilters.fileInstruction.socialSupport = {
       beneficiary: {
         referents: { some: { id: { in: filters.referents } } }
       }
@@ -65,7 +67,9 @@ export function prepareFilters(filters: HelpRequestFilterInput) {
   }
 
   if (filters.ministre) {
-    formattedFilters.socialSupport = { ministre: { in: filters.ministre } }
+    formattedFilters.fileInstruction.socialSupport = {
+      ministre: { in: filters.ministre }
+    }
   }
 
   return formattedFilters
@@ -142,12 +146,14 @@ function cleanInput({
 export function prepareSort(sort: ExportHelpRequestsInput['orderBy']) {
   const orderBy: Prisma.HelpRequestFindManyArgs['orderBy'] = [sort]
 
-  if (sort.socialSupport?.date) {
-    orderBy.push({ socialSupport: { created: SortOrder.Desc } })
+  if (sort.fileInstruction?.socialSupport?.date) {
+    orderBy.push({
+      fileInstruction: { socialSupport: { created: SortOrder.Desc } }
+    })
   }
 
-  if (sort.instructorOrganization) {
-    orderBy.unshift({ externalStructure: SortOrder.Desc })
+  if (sort.fileInstruction?.instructorOrganization) {
+    orderBy.unshift({ fileInstruction: { externalStructure: SortOrder.Desc } })
   }
 
   return orderBy
