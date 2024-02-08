@@ -218,3 +218,7 @@ select:focus:not(:focus-visible) {
 .bg-purple-glycine {
   background-color: var(--background-contrast-purple-glycine) !important;
 }
+
+.fr-accordion__btn::after {
+  --icon-size: 1.5rem;
+}

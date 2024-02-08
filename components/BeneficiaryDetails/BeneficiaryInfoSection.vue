@@ -65,10 +65,6 @@
     padding: 1.5rem 2rem;
     border-radius: 0.5rem;
 
-    &::after {
-      --icon-size: 1.5rem;
-    }
-
     &[aria-expanded='true'] {
       background-color: initial;
       border-bottom: 1px solid var(--border-default-grey);
