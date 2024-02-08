@@ -48,7 +48,7 @@ const securityCheck = async (
     return false
   }
 
-  if (input.privateSynthesis && permissions.set.privateSynthesis) {
+  if (input.privateSynthesis && !permissions.set.privateSynthesis) {
     return false
   }
 
