@@ -22,28 +22,28 @@
     {{ euros(helpRequest.askedAmount) }}
   </li>
   <li
-    v-if="helpRequest.fullFile"
+    v-if="fileInstruction.fullFile"
     class="fr-icon-success-line"
   >
     Ce dossier est complet
   </li>
-  <li v-if="helpRequest.dispatchDate">
+  <li v-if="fileInstruction.dispatchDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.dispatchDate }} :</span
     >
-    {{ formatDate(helpRequest.dispatchDate) }}
+    {{ formatDate(fileInstruction.dispatchDate) }}
   </li>
-  <li v-if="helpRequest.examinationDate">
+  <li v-if="fileInstruction.examinationDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.examinationDate }} :</span
     >
-    {{ formatDate(helpRequest.examinationDate) }}
+    {{ formatDate(fileInstruction.examinationDate) }}
   </li>
-  <li v-if="helpRequest.decisionDate">
+  <li v-if="fileInstruction.decisionDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.decisionDate }} :</span
     >
-    {{ formatDate(helpRequest.decisionDate) }}
+    {{ formatDate(fileInstruction.decisionDate) }}
   </li>
   <template v-if="status === SocialSupportStatus.Accepted">
     <li v-if="allocatedAmount">
@@ -69,24 +69,25 @@
 
 <script setup lang="ts">
   import { SocialSupportStatus } from '@prisma/client'
-  import { HelpRequestData } from '~/server/trpc/routers'
+  import { FileInstructionData, HelpRequestData } from './types'
   import {
     paymentMethodLabels,
     isRefundableLabels,
     fileInstructionRefusalReasonLabels
-  } from '~/client/options/helpRequest'
+  } from '~/client/options'
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'
   import { helpRequestFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
+    fileInstruction: FileInstructionData
     helpRequest: HelpRequestData
     status: SocialSupportStatus
   }>()
 
   const instructorOrganization = computed(() => {
-    return props.helpRequest.externalStructure
-      ? props.helpRequest.instructorOrganization?.name || ''
+    return props.fileInstruction.externalStructure
+      ? props.fileInstruction.instructorOrganization?.name || ''
       : 'Interne'
   })
 
@@ -118,7 +119,7 @@
   })
 
   const refusalReason = computed(() => {
-    const { refusalReason, refusalReasonOther } = props.helpRequest
+    const { refusalReason, refusalReasonOther } = props.fileInstruction
     return (
       refusalReasonOther ||
       (refusalReason ? fileInstructionRefusalReasonLabels[refusalReason] : '')

@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { DocumentItems } from '~/server/trpc/routers'
+  import { DocumentItems } from './types'
 
   defineProps<{
     documents: DocumentItems
