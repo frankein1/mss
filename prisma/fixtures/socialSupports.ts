@@ -172,11 +172,15 @@ const fixturesHelpRequestSocialSupports = [
     types: { connect: { id: fixturesFollowupTypes[4].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-10-26'),
-    helpRequest: {
+    fileInstruction: {
       create: {
-        financialSupport: false,
         externalStructure: false,
-        typeId: fixturesFollowupTypes[4].id
+        helpRequest: {
+          create: {
+            financialSupport: false,
+            typeId: fixturesFollowupTypes[4].id
+          }
+        }
       }
     }
   },
@@ -189,11 +193,15 @@ const fixturesHelpRequestSocialSupports = [
     types: { connect: { id: fixturesFollowupTypes[3].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-10-27'),
-    helpRequest: {
+    fileInstruction: {
       create: {
-        financialSupport: false,
         externalStructure: false,
-        typeId: fixturesFollowupTypes[3].id
+        helpRequest: {
+          create: {
+            financialSupport: false,
+            typeId: fixturesFollowupTypes[3].id
+          }
+        }
       }
     }
   }

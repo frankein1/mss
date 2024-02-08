@@ -9,7 +9,7 @@ import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBenefici
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
-  anyRefusalReasonLabels,
+  fileInstructionRefusalReasonLabels,
   paymentMethodLabels
 } from '~/client/options/helpRequest'
 import { ministerLabels } from '~/client/options/ministry'
@@ -99,7 +99,7 @@ export async function exportHelpRequests({
           refusalReason:
             helpRequest.refusalReasonOther ||
             (helpRequest.refusalReason
-              ? anyRefusalReasonLabels[helpRequest.refusalReason]
+              ? fileInstructionRefusalReasonLabels[helpRequest.refusalReason]
               : ''),
           dispatchDate: formatDate(helpRequest.dispatchDate, 'DD-MM-YYYY'),
           synthesis: helpRequest.synthesis || '',

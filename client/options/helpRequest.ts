@@ -1,7 +1,7 @@
 import {
   SocialSupportStatus,
   PaymentMethod,
-  HelpRequestRefusalReason
+  FileInstructionRefusalReason
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 import { HelpRequestSubject } from '~/types/socialSupport'
@@ -72,42 +72,42 @@ export const helpRequestSubjectPictos: {
 }
 
 const baseRefusalReasonLabels = {
-  [HelpRequestRefusalReason.ResourcesOutOfScale]: 'Ressources hors barème',
-  [HelpRequestRefusalReason.ShortDeadline]: 'Délai trop court',
-  [HelpRequestRefusalReason.IncompleteFile]: 'Dossier incomplet',
-  [HelpRequestRefusalReason.IrregularSituation]: 'En situation irrégulière'
+  [FileInstructionRefusalReason.ResourcesOutOfScale]: 'Ressources hors barème',
+  [FileInstructionRefusalReason.ShortDeadline]: 'Délai trop court',
+  [FileInstructionRefusalReason.IncompleteFile]: 'Dossier incomplet',
+  [FileInstructionRefusalReason.IrregularSituation]: 'En situation irrégulière'
 }
 
 export const helpRequestRefusalReasonLabels = {
   ...baseRefusalReasonLabels,
-  [HelpRequestRefusalReason.MissedAppointment]: 'Absence au rendez-vous',
-  [HelpRequestRefusalReason.AlreadyExistingHelpRequest]:
+  [FileInstructionRefusalReason.MissedAppointment]: 'Absence au rendez-vous',
+  [FileInstructionRefusalReason.AlreadyExistingHelpRequest]:
     "Instruction déjà en cours auprès d'un autre organisme",
-  [HelpRequestRefusalReason.Reoriented]:
+  [FileInstructionRefusalReason.Reoriented]:
     "Réorientation auprès d'un autre organisme",
-  [HelpRequestRefusalReason.Debt]: 'Endettement',
-  [HelpRequestRefusalReason.Other]: 'Autre'
+  [FileInstructionRefusalReason.Debt]: 'Endettement',
+  [FileInstructionRefusalReason.Other]: 'Autre'
 }
 
-const housingHelpRequestRefusalReasonLabels = {
+const housingFileInstructionRefusalReasonLabels = {
   ...baseRefusalReasonLabels,
-  [HelpRequestRefusalReason.InadequateFamilyComposition]:
+  [FileInstructionRefusalReason.InadequateFamilyComposition]:
     'Composition familiale inadaptée au type de logement',
-  [HelpRequestRefusalReason.ExpiredRequest]: 'Demande expirée',
-  [HelpRequestRefusalReason.Other]: 'Autre'
+  [FileInstructionRefusalReason.ExpiredRequest]: 'Demande expirée',
+  [FileInstructionRefusalReason.Other]: 'Autre'
 }
 
-export const anyRefusalReasonLabels = {
+export const fileInstructionRefusalReasonLabels = {
   ...helpRequestRefusalReasonLabels,
-  ...housingHelpRequestRefusalReasonLabels
+  ...housingFileInstructionRefusalReasonLabels
 }
 
 export const helpRequestRefusalReasonOptions = labelsToOptions(
   helpRequestRefusalReasonLabels
 )
 
-export const housingHelpRequestRefusalReasonOptions = labelsToOptions(
-  housingHelpRequestRefusalReasonLabels
+export const housingFileInstructionRefusalReasonOptions = labelsToOptions(
+  housingFileInstructionRefusalReasonLabels
 )
 
 export const isRefundableLabels = {

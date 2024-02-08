@@ -106,7 +106,7 @@
   import { SocialSupportStatus } from '@prisma/client'
   import { HousingHelpRequestData } from '~/server/trpc/routers'
   import {
-    anyRefusalReasonLabels,
+    fileInstructionRefusalReasonLabels,
     askedHousingLabels,
     reasonLabels,
     housingTypeLabels,
@@ -163,7 +163,7 @@
 
   const refusalReason = computed(() => {
     const { refusalReason } = props.housingHelpRequest
-    return refusalReason ? anyRefusalReasonLabels[refusalReason] : ''
+    return refusalReason ? fileInstructionRefusalReasonLabels[refusalReason] : ''
   })
 
   const hasRefusalReason = computed(

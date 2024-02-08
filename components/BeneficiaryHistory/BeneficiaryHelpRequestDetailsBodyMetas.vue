@@ -73,7 +73,7 @@
   import {
     paymentMethodLabels,
     isRefundableLabels,
-    anyRefusalReasonLabels
+    fileInstructionRefusalReasonLabels
   } from '~/client/options/helpRequest'
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'
@@ -121,7 +121,7 @@
     const { refusalReason, refusalReasonOther } = props.helpRequest
     return (
       refusalReasonOther ||
-      (refusalReason ? anyRefusalReasonLabels[refusalReason] : '')
+      (refusalReason ? fileInstructionRefusalReasonLabels[refusalReason] : '')
     )
   })
 

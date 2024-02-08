@@ -136,7 +136,7 @@
   import {
     paymentMethodOptions,
     helpRequestRefusalReasonOptions,
-    housingHelpRequestRefusalReasonOptions,
+    housingFileInstructionRefusalReasonOptions,
     isRefundableOptions
   } from '~/client/options/helpRequest'
   import { reasonOptions } from '~/client/options/housingHelpRequest'
@@ -178,7 +178,7 @@
 
   const refusalReasonOptions = computed(() =>
     isHousingSupport.value
-      ? housingHelpRequestRefusalReasonOptions
+      ? housingFileInstructionRefusalReasonOptions
       : helpRequestRefusalReasonOptions
   )
 </script>
