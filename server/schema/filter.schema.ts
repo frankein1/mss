@@ -39,7 +39,14 @@ const statFilterSchema = z.object({
   beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish()
 })
 
-type StatFilterInput = z.infer<typeof statFilterSchema>
+type StatFilterInput = Omit<
+  z.infer<typeof statFilterSchema>,
+  'helpRequestSubject'
+> & {
+  helpRequestSubject?:
+    | z.infer<typeof statFilterSchema>['helpRequestSubject']
+    | ''
+}
 
 const beneficiaryFilterSchema = z.object({
   search: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),

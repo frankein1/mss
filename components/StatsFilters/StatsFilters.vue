@@ -40,7 +40,7 @@
     filter: [filters: StatFilterInput]
   }>()
 
-  const defaultValues = computed(() => {
+  const defaultValues = computed<StatFilterInput | undefined>(() => {
     if (props.isHelpRequestsTab) {
       return { helpRequestSubject: '' }
     }

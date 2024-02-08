@@ -141,7 +141,11 @@
   const form = ref<HTMLFormElement | null>(null)
   const expanded = ref<boolean>(false)
 
-  const { controlledValues: selectedFilters, resetForm } = useForm({
+  const {
+    controlledValues: selectedFilters,
+    resetForm,
+    setFieldValue
+  } = useForm({
     initialValues: props.initialSelectedValues || props.defaultValues || {}
   })
 
@@ -190,6 +194,42 @@
         filterValue ? { ...emitable, [filterName]: filterValue } : emitable,
       {} as { [key: string]: FilterValue }
     )
+  )
+
+  // Set a newly added filter to its default value (i.e. when changing between history stats tabs)
+  watch(
+    () => props.filters,
+    (newFilters, oldFilters) => {
+      const hasDefaultValues =
+        props.defaultValues &&
+        Object.values(props.defaultValues).filter(
+          v => v !== null && v !== undefined
+        ).length
+
+      if (!hasDefaultValues) {
+        return
+      }
+
+      const addedFilters = newFilters.filter(({ name: newName }) =>
+        oldFilters.every(({ name: oldName }) => oldName !== newName)
+      )
+      if (!addedFilters.length) {
+        return
+      }
+
+      addedFilters.forEach(({ name }) => {
+        if (!props.defaultValues) {
+          return
+        }
+
+        const defaultValue = props.defaultValues[name]
+        if (defaultValue === null || defaultValue === undefined) {
+          return
+        }
+
+        setFieldValue(name, defaultValue)
+      })
+    }
   )
 
   watch(emitableSelectedFilters, emitable => {
