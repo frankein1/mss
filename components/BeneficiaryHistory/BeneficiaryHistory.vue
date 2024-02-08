@@ -2,9 +2,9 @@
   <div>
     <div class="feature-section history-header-section fr-p-3w">
       <BeneficiaryHistoryFilters
+        v-model:values="filters"
         :results-label="resultsLabel"
         :beneficiary-id="beneficiaryId"
-        @filter="filters = $event"
       />
     </div>
     <AtomLoader
@@ -44,6 +44,7 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
   import { BeneficiaryPermissions } from '~/server/security'
+  import { BeneficiaryHistoryFilterInput } from '~/server/schema'
 
   const route = useRoute()
 
@@ -52,7 +53,7 @@
     beneficiaryPermissions: BeneficiaryPermissions
   }>()
 
-  const filters = ref({})
+  const filters = defineModel<BeneficiaryHistoryFilterInput>({ default: {} })
 
   const queryInput = computed(() => ({
     beneficiaryId: props.beneficiaryId,

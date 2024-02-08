@@ -14,7 +14,7 @@
     :filters="filters"
     :results-label="resultsLabel"
     no-margin
-    @filter="onFilter"
+    @filter="emit('update:values', $event)"
   />
 </template>
 
@@ -28,7 +28,7 @@
     followupMediumOptions,
     followupStatusOptions
   } from '~/client/options/followup'
-  import { typeSuiviOptions } from '~/client/options/history'
+  import { typeSuiviOptions, TypeSuivi } from '~/client/options/history'
   import { formatDate } from '~/utils/formatDate'
   import {
     EventCategory,
@@ -40,6 +40,7 @@
   const props = defineProps<{
     beneficiaryId: string
     resultsLabel: string
+    values: BeneficiaryHistoryFilterInput
   }>()
 
   const authState = useAuthState()
@@ -48,7 +49,7 @@
   const { helpRequestStatusOptions } = useHelpRequestStatus()
 
   const emit = defineEmits<{
-    filter: [filters: BeneficiaryHistoryFilterInput]
+    'update:values': [filters: BeneficiaryHistoryFilterInput]
   }>()
 
   const {
@@ -102,6 +103,16 @@
     ...helpRequestStatusOptions.value
   ])
 
+  const typeSuiviValue = computed(() => props.values.typeSuivi)
+
+  const isFilteringHelpRequests = computed(
+    () => !!typeSuiviValue.value && typeSuiviValue.value !== TypeSuivi.Followup
+  )
+
+  const isFilteringHousingHelpRequests = computed(
+    () => typeSuiviValue.value === TypeSuivi.HousingHelpRequest
+  )
+
   const filters = computed(() => {
     if (
       !followupTypeOptions.value ||
@@ -129,8 +140,11 @@
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction: FollowupFilterEventAction.Status,
         alwaysExpanded: true
-      },
-      {
+      }
+    ]
+
+    if (!isFilteringHousingHelpRequests.value) {
+      filters.push({
         name: 'followupTypes',
         label: "Objet de l'accompagnement",
         options: followupTypeOptions.value,
@@ -138,16 +152,19 @@
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction: BeneficiaryHistoryFilterEventAction.FollowupType,
         alwaysExpanded: true
-      },
-      {
+      })
+    }
+
+    if (!isFilteringHelpRequests.value) {
+      filters.push({
         name: 'medium',
         label: followupFieldLabels.medium,
         options: followupMediumOptions,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction: FollowupFilterEventAction.Medium
-      }
-    ]
+      })
+    }
 
     // FIXME: Delete once it is admitted that it is done
     // if (application.value.module.helpRequest) {
@@ -200,7 +217,8 @@
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-        matomoEventAction: FollowupFilterEventAction.Referent
+        matomoEventAction: FollowupFilterEventAction.Referent,
+        alwaysExpanded: isFilteringHousingHelpRequests.value
       })
     }
 
@@ -222,9 +240,5 @@
         formatDate(examinationDate)
       ])
     )
-  }
-
-  function onFilter(filters: BeneficiaryHistoryFilterInput) {
-    emit('filter', filters)
   }
 </script>
