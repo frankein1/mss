@@ -18,7 +18,9 @@ import {
 import {
   filterSocialSupport,
   filterFollowup,
-  filterFileInstruction
+  filterFileInstruction,
+  filterHousingHelpRequest,
+  filterHelpRequest
 } from '~/server/services/helper'
 import { TypeSuivi } from '~/client/options/history'
 
@@ -192,6 +194,22 @@ function formatResult(
         })
       : null
 
+    const helpRequest = fileInstruction?.helpRequest
+    const housingHelpRequest = fileInstruction?.housingHelpRequest
+
+    const filteredHousingHelpRequest = housingHelpRequest
+      ? filterHousingHelpRequest({
+          housingHelpRequest,
+          conditions
+        })
+      : null
+    const filteredHelpRequest = helpRequest
+      ? filterHelpRequest({
+          helpRequest,
+          conditions
+        })
+      : null
+
     const filteredFollowup = followup
       ? filterFollowup({
           followup,
@@ -224,7 +242,11 @@ function formatResult(
         documents: documentItems,
         hasUnreadNotifications: !!_count.notifications,
         followup: filteredFollowup,
-        fileInstruction: filteredFileInstruction
+        fileInstruction: {
+          ...filteredFileInstruction,
+          helpRequest: filteredHelpRequest,
+          housingHelpRequest: filteredHousingHelpRequest
+        }
       },
       permissions: socialSupportPermissions
     }

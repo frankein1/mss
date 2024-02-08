@@ -71,7 +71,11 @@ async function createDueTodaySocialSupportNotifications() {
 async function createEndOfSupportHelpRequestNotifications() {
   const endOfSupportHelpRequests = await HelpRequestRepo.prisma.findMany({
     include: {
-      socialSupport: true
+      fileInstruction: {
+        include: {
+          socialSupport: true
+        }
+      }
     },
     where: {
       handlingDate: new Date()
@@ -79,8 +83,8 @@ async function createEndOfSupportHelpRequestNotifications() {
   })
 
   const endOfSupportHelpRequestNotifications = endOfSupportHelpRequests
-    .filter(hasDefinedCreatedBy)
-    .map(({ socialSupport }) => ({
+    .filter(hr => hasDefinedCreatedBy(hr.fileInstruction))
+    .map(({ fileInstruction: { socialSupport } }) => ({
       recipientId: socialSupport.createdById,
       beneficiaryId: socialSupport.beneficiaryId,
       helpRequestId: socialSupport.id,

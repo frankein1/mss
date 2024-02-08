@@ -153,10 +153,6 @@ export function filterFileInstruction({
 }: {
   fileInstruction: FileInstruction & {
     instructorOrganization: Partial<InstructorOrganization> | null
-    helpRequest: HelpRequest & {
-      prescribingOrganization: Partial<PrescribingOrganization> | null
-    } | null
-    housingHelpRequest?: HousingHelpRequest | null
   }
   conditions: {
     details: boolean
@@ -165,7 +161,6 @@ export function filterFileInstruction({
   }
 }) {
   const { details } = conditions
-  const { helpRequest, housingHelpRequest } = fileInstruction
 
   return {
     id: fileInstruction.id,
@@ -189,13 +184,7 @@ export function filterFileInstruction({
     instructorOrganization: show(
       fileInstruction.instructorOrganization,
       details
-    ),
-    helpRequest: helpRequest
-      ? filterHelpRequest({ helpRequest, conditions })
-      : null,
-    housingHelpRequest: housingHelpRequest
-      ? filterHousingHelpRequest({ housingHelpRequest, conditions })
-      : null
+    )
   }
 }
 

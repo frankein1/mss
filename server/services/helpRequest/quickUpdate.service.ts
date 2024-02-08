@@ -40,18 +40,21 @@ function prepareData(
   if ('status' in data) {
     const status = data.status
     let _data: Prisma.HelpRequestUpdateInput = {}
-    _data = { ..._data, socialSupport: { update: { status } } }
+    _data = {
+      ..._data,
+      fileInstruction: { update: { socialSupport: { update: { status } } } }
+    }
     if (
       status !== SocialSupportStatus.Accepted &&
       status !== SocialSupportStatus.Refused
     ) {
-      _data = { ..._data, decisionDate: null }
+      _data = { ..._data, fileInstruction: { update: { decisionDate: null } } }
     }
     if (status !== SocialSupportStatus.Accepted) {
       _data = { ..._data, handlingDate: null, allocatedAmount: null }
     }
     if (status !== SocialSupportStatus.Refused) {
-      _data = { ..._data, refusalReason: null }
+      _data = { ..._data, fileInstruction: { update: { refusalReason: null } } }
     }
     return _data
   }

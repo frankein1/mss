@@ -1,9 +1,9 @@
 import {
-  HelpRequestRefusalReason,
+  FileInstructionRefusalReason,
   SocialSupportStatus,
   Minister,
   AskedHousing,
-  HousingReason,
+  FileInstructionReason,
   HousingType,
   HousingRoomCount
 } from '@prisma/client'
@@ -40,7 +40,7 @@ export const createHousingHelpRequestSchemaBase = z.object({
   externalStructure: kindOfBooleanSchema(true),
   examinationDate: dateOrEmpty,
   decisionDate: dateOrEmpty,
-  refusalReason: withEmptyValueOptionalNativeEnum(HelpRequestRefusalReason),
+  refusalReason: withEmptyValueOptionalNativeEnum(FileInstructionRefusalReason),
   dispatchDate: dateOrEmpty,
   fullFile: z.boolean().default(false),
   isFirst: kindOfBooleanSchema(),
@@ -48,7 +48,7 @@ export const createHousingHelpRequestSchemaBase = z.object({
   [AskedHousing.HebergementTemporaire]: z.boolean().default(false),
   [AskedHousing.ParcPrive]: z.boolean().default(false),
   [AskedHousing.ParcSocial]: z.boolean().default(false),
-  reason: withEmptyValueOptionalNativeEnum(HousingReason),
+  reason: withEmptyValueOptionalNativeEnum(FileInstructionReason),
   uniqueId: stringConstraint.max(150, maxStringLengthMessage(50)).nullish(),
   taxHouseholdAdditionalInformation: openText(200).nullish(),
   maxRent: amountNumber.nullish(),

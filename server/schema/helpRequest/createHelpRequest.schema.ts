@@ -1,5 +1,5 @@
 import {
-  HelpRequestRefusalReason,
+  FileInstructionRefusalReason,
   SocialSupportStatus,
   Minister,
   PaymentMethod
@@ -34,7 +34,7 @@ export const createHelpRequestSchemaBase = z.object({
   paymentMethod: withEmptyValueOptionalNativeEnum(PaymentMethod),
   paymentDate: dateOrEmpty,
   handlingDate: dateOrEmpty,
-  refusalReason: withEmptyValueOptionalNativeEnum(HelpRequestRefusalReason),
+  refusalReason: withEmptyValueOptionalNativeEnum(FileInstructionRefusalReason),
   prescribingOrganizationId: z.string().nullish(),
   instructorOrganizationId: z.string().nullish(),
   dispatchDate: dateOrEmpty,

@@ -12,11 +12,15 @@ function getHousingHelpRequestSecurityTarget(
   return HousingHelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
-      socialSupport: {
+      fileInstruction: {
         include: {
-          beneficiary: {
+          socialSupport: {
             include: {
-              referents: true
+              beneficiary: {
+                include: {
+                  referents: true
+                }
+              }
             }
           }
         }
@@ -33,7 +37,9 @@ export async function getEditionPermissions(
     ctx.user,
     id
   )
-  const { socialSupport } = housingHelpRequest
+  const {
+    fileInstruction: { socialSupport }
+  } = housingHelpRequest
   return getHelpRequestPermissions({
     ctx,
     beneficiary: socialSupport.beneficiary,

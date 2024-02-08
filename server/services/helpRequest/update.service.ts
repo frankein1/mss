@@ -15,12 +15,16 @@ export async function update({ input, ctx }: UpdateParams) {
   const target = await HelpRequestRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.id },
     select: {
-      instructorOrganizationId: true,
       financialSupport: true,
-      socialSupport: {
+      fileInstruction: {
         select: {
-          types: true,
-          documents: true
+          instructorOrganizationId: true,
+          socialSupport: {
+            select: {
+              types: true,
+              documents: true
+            }
+          }
         }
       }
     }
@@ -64,37 +68,43 @@ export async function update({ input, ctx }: UpdateParams) {
       date,
       types: {
         ...connect(typeId),
-        disconnect: target.socialSupport.types.map(({ id }) => ({ id }))
+        disconnect: target.fileInstruction.socialSupport.types.map(
+          ({ id }) => ({ id })
+        )
       },
       documents: prepareDocumentsMutations(
         documents,
-        target.socialSupport.documents
+        target.fileInstruction.socialSupport.documents
       ),
-      helpRequest: {
+      fileInstruction: {
         update: {
-          askedAmount,
           examinationDate,
           decisionDate,
-          allocatedAmount,
-          paymentMethod,
-          paymentDate,
-          handlingDate,
           refusalReason,
           dispatchDate,
           fullFile,
           externalStructure,
-          isRefundable,
-          type: connect(typeId),
-          prescribingOrganization: preparePrescribingOrganization(
-            prescribingOrganizationId,
-            ctx
-          ),
           instructorOrganization: prepareInstructorOrganization(
             instructorOrganizationId,
             ctx,
             externalStructure,
-            target.instructorOrganizationId !== null
-          )
+            target.fileInstruction.instructorOrganizationId !== null
+          ),
+          helpRequest: {
+            update: {
+              askedAmount,
+              allocatedAmount,
+              paymentMethod,
+              paymentDate,
+              handlingDate,
+              isRefundable,
+              type: connect(typeId),
+              prescribingOrganization: preparePrescribingOrganization(
+                prescribingOrganizationId,
+                ctx
+              )
+            }
+          }
         }
       }
     },

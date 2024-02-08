@@ -10,11 +10,15 @@ function getHelpRequestSecurityTarget(user: SecurityRuleGrantee, id: string) {
   return HelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
-      socialSupport: {
+      fileInstruction: {
         include: {
-          beneficiary: {
+          socialSupport: {
             include: {
-              referents: true
+              beneficiary: {
+                include: {
+                  referents: true
+                }
+              }
             }
           }
         }
@@ -28,7 +32,9 @@ export async function getEditionPermissions(
   id: string
 ): Promise<HelpRequestPermissions> {
   const helpRequest = await getHelpRequestSecurityTarget(ctx.user, id)
-  const { socialSupport } = helpRequest
+  const {
+    fileInstruction: { socialSupport }
+  } = helpRequest
   return getHelpRequestPermissions({
     ctx,
     beneficiary: socialSupport.beneficiary,
