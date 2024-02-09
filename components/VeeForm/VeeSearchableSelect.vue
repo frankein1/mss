@@ -408,6 +408,8 @@
       }
       selectedValues.value.push(activeOptionValue.value)
     }
+
+    changedValues()
   }
 
   /**
