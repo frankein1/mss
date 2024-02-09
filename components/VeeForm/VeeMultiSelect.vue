@@ -330,6 +330,7 @@
     // Keyboard interactions on the expanded listbox
     switch (e.key) {
       case 'Enter':
+        e.preventDefault()
         onSelectActiveOption()
         expanded.value = false
         return
@@ -348,6 +349,7 @@
       return
     }
     selectedValues.value.push(activeOptionValue.value)
+    changedValues()
   }
 
   function onOptionMouseDown() {
