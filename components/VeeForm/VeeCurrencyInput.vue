@@ -31,12 +31,14 @@
       />
     </div>
     <div
-      v-if="error"
       :id="errorId"
       class="fr-messages-group"
       aria-live="polite"
     >
-      <p class="fr-message fr-message--error">
+      <p
+        v-if="error"
+        class="fr-message fr-message--error"
+      >
         {{ error }}
       </p>
     </div>
