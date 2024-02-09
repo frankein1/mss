@@ -12,7 +12,7 @@
     <slot name="detailedMessage"></slot>
     <button
       v-if="closeable"
-      ref="closeBtn"
+      v-autofocus
       class="fr-btn--close fr-btn force-focus-visible"
       @click="emit('close')"
     >
@@ -37,8 +37,6 @@
     close: []
   }>()
 
-  const closeBtn = ref<HTMLButtonElement | null>(null)
-
   const alertClass = computed(() =>
     props.alertType ? `fr-alert--${props.alertType}` : ''
   )
@@ -53,12 +51,6 @@
         return `Attention : ${props.message}`
       default:
         return props.message
-    }
-  })
-
-  onMounted(() => {
-    if (props.closeable) {
-      closeBtn.value?.focus()
     }
   })
 </script>

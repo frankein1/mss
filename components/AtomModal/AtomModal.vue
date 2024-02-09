@@ -12,6 +12,7 @@
           <div class="fr-modal__body">
             <div class="fr-modal__header">
               <button
+                v-autofocus
                 class="fr-btn--close fr-btn"
                 aria-controls="global-modal"
                 title="Fermer"
