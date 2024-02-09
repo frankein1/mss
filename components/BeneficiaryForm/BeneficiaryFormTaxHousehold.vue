@@ -23,6 +23,7 @@
         </label>
         <div class="fr-input-wrap">
           <button
+            v-autofocus
             class="fr-tag force-focus-visible fr-tag--dismiss"
             aria-label="Retirer la fiche bénéficiaire liée"
             type="button"
@@ -36,6 +37,7 @@
     <template v-else>
       <div class="fr-col-12 fr-col-lg-6">
         <VeeAutocomplete
+          v-autofocus="'input'"
           :label="relativeFieldLabels.lastName"
           :name="`taxHouseholds[${index}].lastName`"
           :search-fn="searchBeneficiariesFromLastname"
