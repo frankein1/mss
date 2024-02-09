@@ -2,6 +2,7 @@
   <div class="landing-main-container fr-container fr-my-8w">
     <form
       v-if="!token"
+      ref="form"
       novalidate
       class="login-form"
       @submit.prevent="onSubmit"
@@ -36,6 +37,7 @@
   const { token } = route.query
 
   const isSubmitting = ref(false)
+  const form = ref<HTMLFormElement | null>(null)
 
   const snackbar = useSnackbar()
 
@@ -50,11 +52,15 @@
       body: input,
       onResponse({ response }) {
         if (response._data.success) {
-          snackbar.success('Vous avez reçu un mail !')
+          snackbar.success(
+            "Vous avez reçu le lien d'authentification dans votre boîte mail !"
+          )
         }
       },
       onResponseError() {
-        snackbar.error("Le compte administrateur n'as pas été retrouvé.")
+        snackbar.error("Le compte administrateur n'a pas été retrouvé.", () => {
+          form.value?.querySelector('input')?.focus()
+        })
       }
     })
     isSubmitting.value = false
