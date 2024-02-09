@@ -32,11 +32,13 @@
       @change="handleChange"
     ></textarea>
     <div
-      v-if="error"
       class="fr-messages-group"
       aria-live="polite"
     >
-      <p class="fr-message fr-message--error">
+      <p
+        v-if="error"
+        class="fr-message fr-message--error"
+      >
         {{ error }}
       </p>
     </div>
