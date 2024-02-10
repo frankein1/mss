@@ -21,14 +21,14 @@ export async function getHelpRequestSubjectStatsQuery(
       where: {
         ...filters,
         socialSupportType: 'HelpRequest',
-        helpRequest: { financialSupport: true }
+        fileInstruction: { helpRequest: { financialSupport: true } }
       }
     }),
     SocialSupportRepo.count(user, {
       where: {
         ...filters,
         socialSupportType: 'HelpRequest',
-        helpRequest: { financialSupport: false }
+        fileInstruction: { helpRequest: { financialSupport: false } }
       }
     })
   ])

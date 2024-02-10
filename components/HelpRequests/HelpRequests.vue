@@ -64,7 +64,7 @@
     filtersState.helpRequest.value || {}
   )
   const orderBy = ref<HelpRequestSort>({
-    socialSupport: { date: SortOrder.Desc }
+    fileInstruction: { socialSupport: { date: SortOrder.Desc } }
   })
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)

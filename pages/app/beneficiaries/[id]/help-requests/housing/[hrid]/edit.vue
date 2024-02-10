@@ -1,9 +1,14 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
+      v-if="housingHelpRequest"
       :links="
         Breadcrumb.AppBeneficiaryHelpRequestEdit(
-          housingHelpRequest,
+          {
+            id: housingHelpRequest?.id,
+            beneficiary:
+              housingHelpRequest?.fileInstruction.socialSupport.beneficiary
+          },
           HelpRequestSubject.Housing
         )
       "

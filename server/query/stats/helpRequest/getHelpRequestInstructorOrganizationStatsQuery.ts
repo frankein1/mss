@@ -14,23 +14,10 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
   const socialSupports = await SocialSupportRepo.findMany(user, {
     where: {
       ...preparedFilters,
-      OR: [
-        { helpRequest: { externalStructure: true } },
-        { housingHelpRequest: { externalStructure: true } }
-      ]
+      fileInstruction: { externalStructure: true }
     },
     select: {
-      helpRequest: {
-        select: {
-          instructorOrganization: {
-            select: {
-              id: true,
-              name: true
-            }
-          }
-        }
-      },
-      housingHelpRequest: {
+      fileInstruction: {
         select: {
           instructorOrganization: {
             select: {
@@ -44,16 +31,13 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
   })
 
   const helpRequests = socialSupports.reduce(
-    (fu, { helpRequest, housingHelpRequest }) => {
-      if (helpRequest) {
-        fu.push(helpRequest)
-      }
-      if (housingHelpRequest) {
-        fu.push(housingHelpRequest)
+    (fu, { fileInstruction }) => {
+      if (fileInstruction) {
+        fu.push(fileInstruction)
       }
       return fu
     },
-    [] as Array<Exclude<(typeof socialSupports)[0]['helpRequest'], null>>
+    [] as Array<Exclude<(typeof socialSupports)[0]['fileInstruction'], null>>
   )
 
   const instructorOrganizationStats = helpRequests.reduce(

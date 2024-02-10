@@ -31,10 +31,7 @@
 
 <script lang="ts" setup>
   import { SupportColor } from '~/client/colors'
-  import {
-    isFirstLabels,
-    reasonLabels
-  } from '~/client/options/housingHelpRequest'
+  import { isFirstLabels, fileInstructionReasonLabels } from '~/client/options'
   import { getStatLabel } from '~/client/options/stat'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
@@ -66,7 +63,7 @@
     () =>
       data.value?.housingHelpRequestReasonCount.map(({ _count, reason }) => ({
         key: String(reason),
-        label: getStatLabel(reasonLabels, String(reason)),
+        label: getStatLabel(fileInstructionReasonLabels, String(reason)),
         color: SupportColor.helpRequests,
         count: _count
       })) || []

@@ -23,28 +23,34 @@
             <TableSortableHeader
               v-if="application.module.helpRequest"
               :label="helpRequestFieldLabels.dueDate"
-              :sort="sort.socialSupport?.dueDate"
+              :sort="sort.fileInstruction?.socialSupport?.dueDate"
               numeric
               @update:sort="
-                emit('update:sort', { socialSupport: { dueDate: $event } })
+                emit('update:sort', {
+                  fileInstruction: { socialSupport: { dueDate: $event } }
+                })
               "
             />
             <TableSortableHeader
               :label="helpRequestFieldLabels.beneficiaryId"
-              :sort="sort.socialSupport?.beneficiary?.usualName"
+              :sort="
+                sort.fileInstruction?.socialSupport?.beneficiary?.usualName
+              "
               @update:sort="
                 emit('update:sort', {
-                  socialSupport: { beneficiary: { usualName: $event } }
+                  fileInstruction: {
+                    socialSupport: { beneficiary: { usualName: $event } }
+                  }
                 })
               "
             />
             <TableSortableHeader
               v-if="application.module.helpRequest"
               :label="helpRequestFieldLabels.instructorOrganizationId"
-              :sort="sort.instructorOrganization?.name"
+              :sort="sort.fileInstruction?.instructorOrganization?.name"
               @update:sort="
                 emit('update:sort', {
-                  instructorOrganization: { name: $event }
+                  fileInstruction: { instructorOrganization: { name: $event } }
                 })
               "
             />

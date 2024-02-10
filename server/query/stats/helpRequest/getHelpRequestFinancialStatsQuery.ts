@@ -18,7 +18,7 @@ function getFinancialHelpRequestCount(
   return SocialSupportRepo.count(user, {
     where: {
       ...socialSupportFilters,
-      helpRequest: helpRequestFilters
+      fileInstruction: { helpRequest: helpRequestFilters }
     }
   })
 }
@@ -31,9 +31,11 @@ function getInternalFinancialHelpRequestCount(
   return SocialSupportRepo.count(user, {
     where: {
       ...socialSupportFilters,
-      helpRequest: {
-        ...helpRequestFilters,
-        externalStructure: false
+      fileInstruction: {
+        externalStructure: false,
+        helpRequest: {
+          ...helpRequestFilters
+        }
       }
     }
   })
@@ -49,10 +51,12 @@ async function getFinancialHelpRequestTotalAmount(
   } = await HelpRequestRepo.aggregate(user, {
     where: {
       ...helpRequestFilters,
-      externalStructure: false,
-      socialSupport: {
-        status: 'Accepted',
-        ...socialSupportFilters
+      fileInstruction: {
+        externalStructure: false,
+        socialSupport: {
+          status: 'Accepted',
+          ...socialSupportFilters
+        }
       },
       allocatedAmount: { gt: 0 }
     },
@@ -74,9 +78,11 @@ async function getFinancialHelpRequestAmountByType(
     by: ['typeId'],
     where: {
       ...helpRequestFilters,
-      socialSupport: {
-        status: 'Accepted',
-        ...socialSupportFilters
+      fileInstruction: {
+        socialSupport: {
+          status: 'Accepted',
+          ...socialSupportFilters
+        }
       },
       allocatedAmount: { gt: 0 }
     },

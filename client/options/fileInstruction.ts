@@ -27,9 +27,15 @@ export const helpRequestReasonLabels = {
   [FileInstructionReason.Housing]: 'Hébergemnent',
   [FileInstructionReason.Food]: 'Alimentation',
   [FileInstructionReason.Energy]: 'Energie',
-  [FileInstructionReason.Other]: 'Autre',
+  [FileInstructionReason.Other]: 'Autre'
 }
 
+export const fileInstructionReasonLabels = {
+  ...helpRequestReasonLabels,
+  ...housingHelpRequestReasonLabels
+}
+
+export const helpRequestReasonOptions = labelsToOptions(helpRequestReasonLabels)
 export const housingHelpRequestReasonOptions = labelsToOptions(
   housingHelpRequestReasonLabels
 )
