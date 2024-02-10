@@ -4,7 +4,7 @@
     :followup-types="followupTypes"
     :prescribing-organizations="prescribingOrganizations"
     :instructor-organizations="instructorOrganizations"
-    :beneficiary-id="helpRequestData.beneficiaryId"
+    :beneficiary-id="socialSupport.beneficiary.id"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
     :subject="subject"
@@ -38,15 +38,17 @@
     saveHelpRequest: [helpRequest: EditHelpRequestInput]
   }>()
 
-  const helpRequestData = computed(() => props.data.helpRequest)
+  const helpRequest = computed(() => props.data.helpRequest)
+  const fileInstruction = computed(() => helpRequest.value.fileInstruction)
+  const socialSupport = computed(() => fileInstruction.value.socialSupport)
   const permissions = computed(() => props.data.permissions)
 
   const initialDocumentIds = computed(
-    () => helpRequestData.value.documents?.map(d => d.key) || []
+    () => socialSupport.value.documents?.map(d => d.key) || []
   )
 
   const subject = computed(() =>
-    helpRequestData.value.financialSupport
+    helpRequest.value.financialSupport
       ? HelpRequestSubject.Financial
       : HelpRequestSubject.Other
   )
@@ -54,19 +56,35 @@
   const { handleSubmit } = useForm<EditHelpRequestInput>({
     validationSchema: toTypedSchema(editHelpRequestSchema),
     initialValues: {
-      ...helpRequestData.value,
-      isRefundable: helpRequestData.value.isRefundable ? 'true' : 'false',
+      id: helpRequest.value.id,
+      socialSupportId: socialSupport.value.id,
+      beneficiaryId: socialSupport.value.beneficiary.id,
+      numeroPegase: socialSupport.value.numeroPegase,
+      ministre: socialSupport.value.ministre,
+      typeId: helpRequest.value.typeId,
+      status: socialSupport.value.status,
+      examinationDate: fileInstruction.value.examinationDate,
+      decisionDate: fileInstruction.value.decisionDate,
+      paymentMethod: helpRequest.value.paymentMethod,
+      paymentDate: helpRequest.value.paymentDate,
+      handlingDate: helpRequest.value.handlingDate,
+      refusalReason: fileInstruction.value.refusalReason,
+      prescribingOrganizationId: helpRequest.value.prescribingOrganizationId,
+      instructorOrganizationId: fileInstruction.value.instructorOrganizationId,
+      dispatchDate: fileInstruction.value.dispatchDate,
+      synthesis: socialSupport.value.synthesis,
+      privateSynthesis: socialSupport.value.privateSynthesis,
+      dueDate: socialSupport.value.dueDate,
+      isRefundable: helpRequest.value.isRefundable ? 'true' : 'false',
       isMinistry: application.value.module.ministere,
-      date: helpRequestData.value.date,
+      date: socialSupport.value.date,
       documents: initialDocumentIds.value,
-      externalStructure: helpRequestData.value.externalStructure
+      externalStructure: fileInstruction.value.externalStructure
         ? 'true'
         : 'false',
-      askedAmount: prismaDecimalToNumber(helpRequestData.value.askedAmount),
-      allocatedAmount: prismaDecimalToNumber(
-        helpRequestData.value.allocatedAmount
-      ),
-      fullFile: helpRequestData.value.fullFile || false
+      askedAmount: prismaDecimalToNumber(helpRequest.value.askedAmount),
+      allocatedAmount: prismaDecimalToNumber(helpRequest.value.allocatedAmount),
+      fullFile: fileInstruction.value.fullFile || false
     }
   })
 

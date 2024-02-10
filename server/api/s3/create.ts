@@ -56,7 +56,7 @@ export default defineEventHandler(async event => {
   if (!beneficiary) {
     throw createError({
       statusCode: 400,
-      message: 'Aucun bénéficiaire avec l\'id ' +  input.beneficiaryId
+      message: "Aucun bénéficiaire avec l'id " + input.beneficiaryId
     })
   }
 

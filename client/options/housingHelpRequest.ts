@@ -1,8 +1,4 @@
-import {
-  AskedHousing,
-  HousingRoomCount,
-  HousingType
-} from '@prisma/client'
+import { AskedHousing, HousingRoomCount, HousingType } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
 export const isFirstLabels = {
@@ -22,7 +18,6 @@ export const askedHousingLabels: { [key in AskedHousing]: string } = {
 }
 
 export const askedHousingOptions = labelsToOptions(askedHousingLabels)
-
 
 export const housingTypeIcons: { [key in HousingType]: string } = {
   [HousingType.Appartement]: 'fr-icon-building-fill',

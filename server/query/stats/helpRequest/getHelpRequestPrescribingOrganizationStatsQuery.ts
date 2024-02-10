@@ -15,12 +15,16 @@ export async function getHelpRequestPrescribingOrganizationStatsQuery(
   const socialSupports = await SocialSupportRepo.findMany(user, {
     where: preparedFilters,
     select: {
-      helpRequest: {
+      fileInstruction: {
         select: {
-          prescribingOrganization: {
+          helpRequest: {
             select: {
-              id: true,
-              name: true
+              prescribingOrganization: {
+                select: {
+                  id: true,
+                  name: true
+                }
+              }
             }
           }
         }
@@ -28,10 +32,18 @@ export async function getHelpRequestPrescribingOrganizationStatsQuery(
     }
   })
 
-  const helpRequests = socialSupports.reduce(
-    (fu, { helpRequest }) => (helpRequest !== null ? [...fu, helpRequest] : fu),
-    [] as Array<Exclude<(typeof socialSupports)[0]['helpRequest'], null>>
+  const fileInstructions = socialSupports.reduce(
+    (fu, { fileInstruction }) =>
+      fileInstruction !== null ? [...fu, fileInstruction] : fu,
+    [] as Array<Exclude<(typeof socialSupports)[0]['fileInstruction'], null>>
   )
+
+  const helpRequests = []
+  for (const fi of fileInstructions) {
+    if (fi.helpRequest) {
+      helpRequests.push(fi.helpRequest)
+    }
+  }
 
   return preparePrescribingOrganizationStats(helpRequests)
 }

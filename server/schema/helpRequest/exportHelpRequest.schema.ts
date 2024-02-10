@@ -11,15 +11,17 @@ export const exportHelpRequestsSchema = z.object({
             name: z.nativeEnum(Prisma.SortOrder).optional()
           })
           .optional(),
-        socialSupport: z.object({
-          date: z.nativeEnum(Prisma.SortOrder).optional(),
-          dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
-          beneficiary: z
-            .object({
-              usualName: z.nativeEnum(Prisma.SortOrder).optional()
-            })
-            .optional()
-        })
+        socialSupport: z
+          .object({
+            date: z.nativeEnum(Prisma.SortOrder).optional(),
+            dueDate: z.nativeEnum(Prisma.SortOrder).optional(),
+            beneficiary: z
+              .object({
+                usualName: z.nativeEnum(Prisma.SortOrder).optional()
+              })
+              .optional()
+          })
+          .optional()
       })
       .optional()
   }),

@@ -1,7 +1,16 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest, subject)"
+      v-if="helpRequest"
+      :links="
+        Breadcrumb.AppBeneficiaryHelpRequestEdit(
+          {
+            id: helpRequest.id,
+            beneficiary: helpRequest.fileInstruction.socialSupport.beneficiary
+          },
+          subject
+        )
+      "
     />
     <PageTitle
       :title="title"
@@ -73,7 +82,9 @@
 
   const helpRequest = computed(() => helpRequestData.value?.helpRequest || null)
 
-  const beneficiary = computed(() => helpRequest.value?.beneficiary || null)
+  const beneficiary = computed(
+    () => helpRequest.value?.fileInstruction.socialSupport.beneficiary || null
+  )
 
   const title = computed(() =>
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)

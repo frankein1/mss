@@ -411,7 +411,7 @@ model FileInstruction {
   id      String    @id @default(uuid()) @db.Uuid
   updated DateTime? @updatedAt
 
-  type      FileInstructionType? @map("type")
+  type FileInstructionType? @map("type")
 
   instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
   instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
@@ -427,8 +427,8 @@ model FileInstruction {
   fullFile Boolean?               @map("full_file")
   reason   FileInstructionReason?
 
-  socialSupportId    String              @unique @map("social_support_id") @db.Uuid
-  socialSupport      SocialSupport       @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
+  socialSupportId String        @unique @map("social_support_id") @db.Uuid
+  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
 
   helpRequest        HelpRequest?
   housingHelpRequest HousingHelpRequest?
@@ -458,14 +458,14 @@ model HelpRequest {
   type   FollowupType @relation(fields: [typeId], references: [id])
   typeId String       @map("type_id") @db.Uuid
 
-  financialSupport Boolean @map("financial_support")
-  isRefundable Boolean? @map("is_refundable")
-  askedAmount Decimal? @map("asked_amount")
-  allocatedAmount Decimal? @map("allocated_amount")
+  financialSupport Boolean  @map("financial_support")
+  isRefundable     Boolean? @map("is_refundable")
+  askedAmount      Decimal? @map("asked_amount")
+  allocatedAmount  Decimal? @map("allocated_amount")
 
-  paymentMethod            PaymentMethod?          @map("payment_method")
-  paymentDate              DateTime?               @map("payment_date") @db.Date
-  handlingDate             DateTime?               @map("handling_date") @db.Date
+  paymentMethod PaymentMethod? @map("payment_method")
+  paymentDate   DateTime?      @map("payment_date") @db.Date
+  handlingDate  DateTime?      @map("handling_date") @db.Date
 
   fileInstructionId String          @unique @map("file_instruction_id") @db.Uuid
   fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)
@@ -499,16 +499,16 @@ enum HousingRoomCount {
 model HousingHelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
-  isFirst                           Boolean?                @map("is_first")
-  firstOpeningDate                  DateTime?               @map("first_opening_date") @db.Date
-  askedHousing                      AskedHousing[]          @map("asked_housing")
-  uniqueId                          String?                 @map("unique_id")
-  taxHouseholdAdditionalInformation String?                 @map("tax_household_additional_information")
-  maxRent                           Decimal?                @map("max_rent")
-  maxCharges                        Decimal?                @map("max_charges")
-  housingType                       HousingType[]           @map("housing_type")
-  roomCount                         HousingRoomCount[]      @map("room_count")
-  isPmr                             Boolean?                @map("is_pmr")
+  isFirst                           Boolean?           @map("is_first")
+  firstOpeningDate                  DateTime?          @map("first_opening_date") @db.Date
+  askedHousing                      AskedHousing[]     @map("asked_housing")
+  uniqueId                          String?            @map("unique_id")
+  taxHouseholdAdditionalInformation String?            @map("tax_household_additional_information")
+  maxRent                           Decimal?           @map("max_rent")
+  maxCharges                        Decimal?           @map("max_charges")
+  housingType                       HousingType[]      @map("housing_type")
+  roomCount                         HousingRoomCount[] @map("room_count")
+  isPmr                             Boolean?           @map("is_pmr")
 
   fileInstructionId String          @unique @map("file_instruction_id") @db.Uuid
   fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)
@@ -1485,10 +1485,10 @@ model InstructorOrganization {
 
   name String
 
-  structure           Structure?           @relation(fields: [structureId], references: [id])
-  structureId         String?              @map("structure_id") @db.Uuid
+  structure   Structure? @relation(fields: [structureId], references: [id])
+  structureId String?    @map("structure_id") @db.Uuid
 
-  FileInstruction     FileInstruction[]
+  FileInstruction FileInstruction[]
 
   @@map("instructor_organization")
 }

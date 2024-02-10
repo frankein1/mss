@@ -38,7 +38,7 @@
     validationSchema: toTypedSchema(quickEditHelpRequestStatusSchema),
     initialValues: {
       id: props.item.helpRequest.id,
-      status: props.item.helpRequest.status
+      status: props.item.helpRequest.fileInstruction.socialSupport.status
     }
   })
 

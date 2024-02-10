@@ -186,11 +186,10 @@ export const Breadcrumb = {
 
   // FIXME: BeneficiaryHelpRequestEdit depends on the access to Beneficiary
   [Route.AppBeneficiaryHelpRequestEdit]: (
-    helpRequestId: string,
-    beneficiary: FlatBeneficiaryNamesWithId,
+    helpRequest: { id: string; beneficiary: FlatBeneficiaryNamesWithId } | null,
     subject: HelpRequestSubject
   ) => [
-    ...BeneficiaryBreadcrumb(beneficiary || null),
+    ...BeneficiaryBreadcrumb(helpRequest?.beneficiary || null),
     {
       text: RouteTitle.AppBeneficiaryHelpRequestEdit(
         helpRequest?.beneficiary || null

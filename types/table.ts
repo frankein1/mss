@@ -25,15 +25,17 @@ export type FollowupSort = {
 }
 
 export type HelpRequestSort = {
-  socialSupport?: {
-    dueDate?: SortOrder
-    date?: SortOrder
-    beneficiary?: {
-      usualName?: SortOrder
+  fileInstruction?: {
+    instructorOrganization?: {
+      name?: SortOrder
     }
-  }
-  instructorOrganization?: {
-    name?: SortOrder
+    socialSupport?: {
+      dueDate?: SortOrder
+      date?: SortOrder
+      beneficiary?: {
+        usualName?: SortOrder
+      }
+    }
   }
 }
 

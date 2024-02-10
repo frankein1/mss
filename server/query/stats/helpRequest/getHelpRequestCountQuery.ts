@@ -21,29 +21,20 @@ export async function getHelpRequestCountQuery(
       where: {
         ...filters,
         socialSupportType: 'HelpRequest',
-        helpRequest: { financialSupport: true }
+        fileInstruction: { helpRequest: { financialSupport: true } }
       }
     }),
     SocialSupportRepo.count(user, {
       where: {
         ...filters,
         socialSupportType: 'HelpRequest',
-        helpRequest: { financialSupport: false }
+        fileInstruction: { helpRequest: { financialSupport: false } }
       }
     }),
     SocialSupportRepo.count(user, {
       where: {
         ...filters,
-        OR: [
-          {
-            socialSupportType: 'HelpRequest',
-            helpRequest: { externalStructure: true }
-          },
-          {
-            socialSupportType: 'HelpRequestHousing',
-            housingHelpRequest: { externalStructure: true }
-          }
-        ]
+        fileInstruction: { externalStructure: true }
       }
     })
   ])

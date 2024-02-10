@@ -17,7 +17,7 @@
       <VeeSelect
         name="reason"
         :label="housingHelpRequestFieldLabels.reason"
-        :options="withEmptyValue(reasonOptions)"
+        :options="withEmptyValue(helpRequestReasonOptions)"
       />
     </div>
 
@@ -135,11 +135,11 @@
   import { housingHelpRequestFieldLabels } from '~/client/labels/housingHelpRequest.labels'
   import {
     paymentMethodOptions,
+    helpRequestReasonOptions,
     helpRequestRefusalReasonOptions,
     housingFileInstructionRefusalReasonOptions,
     isRefundableOptions
-  } from '~/client/options/helpRequest'
-  import { reasonOptions } from '~/client/options/housingHelpRequest'
+  } from '~/client/options'
   import { withEmptyValue } from '~/utils/options'
   import { HelpRequestSubject } from '~/types/socialSupport'
 

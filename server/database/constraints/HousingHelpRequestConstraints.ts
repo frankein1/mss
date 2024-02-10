@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { SocialSupportConstraints } from './SocialSupportConstraints'
+import { FileInstructionConstraints } from './FileInstructionConstraints'
 import { SecurityRuleGrantee } from '~/server/security'
 import { isAdmin } from '~/server/security/rules/helpers'
 
@@ -9,7 +9,7 @@ const get = (user: SecurityRuleGrantee) => {
     return where
   }
   Object.assign(where, {
-    socialSupport: SocialSupportConstraints.get(user)
+    fileInstruction: FileInstructionConstraints.get(user)
   })
 
   return where
