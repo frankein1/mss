@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="fr-mb-0">
-      Composition du foyer fiscal renseigné dans le profil :
+      Composition du foyer fiscal renseignée dans le profil :
       <template v-if="!hasTaxHouseholds"
         >aucune information renseignée.</template
       >

@@ -25,33 +25,33 @@
     {{ reasonLabels[housingHelpRequest.reason] }}
   </li>
   <li v-if="housingHelpRequest.uniqueId">
-    <span class="information-label">{{
-      housingHelpRequestFieldLabels.uniqueId
-    }}</span>
+    <span class="information-label"
+      >{{ housingHelpRequestFieldLabels.uniqueId }} :</span
+    >
     {{ housingHelpRequest.uniqueId }}
   </li>
   <li v-if="housingHelpRequest.maxRent">
-    <span class="information-label">{{
-      housingHelpRequestFieldLabels.maxRent
-    }}</span>
+    <span class="information-label"
+      >{{ housingHelpRequestFieldLabels.maxRent }} :</span
+    >
     {{ euros(housingHelpRequest.maxRent) }}
   </li>
   <li v-if="housingHelpRequest.maxCharges">
-    <span class="information-label">{{
-      housingHelpRequestFieldLabels.maxCharges
-    }}</span>
+    <span class="information-label"
+      >{{ housingHelpRequestFieldLabels.maxCharges }} :</span
+    >
     {{ euros(housingHelpRequest.maxCharges) }}
   </li>
   <li v-if="housingType">
-    <span class="information-label">{{
-      housingHelpRequestFieldLabels.housingType
-    }}</span>
+    <span class="information-label"
+      >{{ housingHelpRequestFieldLabels.housingType }} :</span
+    >
     {{ housingType }}
   </li>
   <li v-if="roomCount">
-    <span class="information-label">{{
-      housingHelpRequestFieldLabels.roomCount
-    }}</span>
+    <span class="information-label"
+      >{{ housingHelpRequestFieldLabels.roomCount }} :</span
+    >
     {{ roomCount }}
   </li>
   <li
@@ -61,9 +61,12 @@
     {{ housingHelpRequestFieldLabels.isPmr }}
   </li>
   <li v-if="housingHelpRequest.taxHouseholdAdditionalInformation">
-    <span class="information-label">{{
-      housingHelpRequestFieldLabels.taxHouseholdAdditionalInformation
-    }}</span>
+    <span class="information-label"
+      >{{
+        housingHelpRequestFieldLabels.taxHouseholdAdditionalInformation
+      }}
+      :</span
+    >
     {{ housingHelpRequest.taxHouseholdAdditionalInformation }}
   </li>
   <li
