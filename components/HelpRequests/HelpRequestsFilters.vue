@@ -34,7 +34,7 @@
   const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
-  const { helpRequestStatusOptions } = useSocialSupportStatus()
+  const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     filter: [filters: HelpRequestFilterInput]
@@ -98,7 +98,7 @@
         name: 'status',
         label: helpRequestFieldLabels.status,
         options: withEmptyValue(
-          helpRequestStatusOptions.value,
+          socialSupportStatusOptions.value,
           'Tous les statuts'
         ),
         type: FilterType.SelectOne,

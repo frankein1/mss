@@ -45,7 +45,7 @@
   const authState = useAuthState()
   const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
-  const { helpRequestStatusOptions } = useSocialSupportStatus()
+  const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     filter: [filters: BeneficiaryHistoryFilterInput]
@@ -97,7 +97,7 @@
 
   const statusOptions = new Map([
     ...followupStatusOptions,
-    ...helpRequestStatusOptions.value
+    ...socialSupportStatusOptions.value
   ])
 
   const filters = computed(() => {
