@@ -137,13 +137,11 @@
   import {
     BeneficiarySocioProfessionalCategoryKeys,
     incomeSourceLabels,
-    pensionOrganisationLabels
-  } from '~/client/options/beneficiary'
-  import {
+    pensionOrganisationLabels,
     MinistereStructureKeys,
     MinistereCategorieKeys,
     MinistereDepartmentServiceAcKeys
-  } from '~/client/options/ministry'
+  } from '~/client/options'
   import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 

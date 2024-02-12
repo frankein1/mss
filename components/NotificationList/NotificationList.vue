@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
   import { NotificationType } from '@prisma/client'
-  import { notificationTypeOptions } from '~/client/options/notification'
+  import { notificationTypeOptions } from '~/client/options'
   import { FilterProp } from '~/types/filter'
   import { AlertType } from '~/utils/constants/alert'
   import { FilterType } from '~/utils/constants/filters'

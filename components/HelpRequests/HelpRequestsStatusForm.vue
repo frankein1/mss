@@ -7,7 +7,7 @@
     <VeeSelect
       name="status"
       :label="helpRequestFieldLabels.status"
-      :options="helpRequestStatusOptions"
+      :options="socialSupportStatusOptions"
       required
       no-label
       labelled-by="status-col"
@@ -24,7 +24,7 @@
   import { helpRequestFieldLabels } from '~/client/labels'
 
   const snackbar = useSnackbar()
-  const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const props = defineProps<{
     item: HelpRequestPageItem
@@ -38,7 +38,7 @@
     validationSchema: toTypedSchema(quickEditHelpRequestStatusSchema),
     initialValues: {
       id: props.item.helpRequest.id,
-      status: props.item.helpRequest.status
+      status: props.item.helpRequest.fileInstruction.socialSupport.status
     }
   })
 

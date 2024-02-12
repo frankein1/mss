@@ -40,12 +40,12 @@
 
 <script setup lang="ts">
   import { FollowupMedium } from '@prisma/client'
-  import { FollowupData } from '~/server/trpc/routers'
+  import { FollowupData } from './types'
   import {
     // followupInterventionLabels,
     followupMediumLabels
     // followupSignalementLabels
-  } from '~/client/options/followup'
+  } from '~/client/options'
 
   const props = defineProps<{
     followup: FollowupData

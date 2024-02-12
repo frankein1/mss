@@ -19,7 +19,6 @@ export async function getHelpRequestHousingStatsQuery(
   }
   const socialSupportWhere = { where: socialSupportFilters }
   appendConstraints(user, socialSupportWhere, SocialSupportConstraints.get)
-  const helpRequestFilters = { socialSupport: socialSupportWhere.where }
 
   const [
     housingHelpRequestCount,
@@ -29,13 +28,17 @@ export async function getHelpRequestHousingStatsQuery(
     SocialSupportRepo.count(user, { where: socialSupportFilters }),
     HousingHelpRequestRepo.prisma.groupBy({
       by: ['isFirst'],
-      where: helpRequestFilters,
+      where: {
+        fileInstruction: { socialSupport: socialSupportWhere.where }
+      },
       _count: true,
       orderBy: { _count: { isFirst: 'desc' } }
     }),
     HousingHelpRequestRepo.prisma.groupBy({
       by: ['reason'],
-      where: helpRequestFilters,
+      where: {
+        fileInstruction: { socialSupport: socialSupportWhere.where }
+      },
       _count: true,
       orderBy: { _count: { reason: 'desc' } }
     })

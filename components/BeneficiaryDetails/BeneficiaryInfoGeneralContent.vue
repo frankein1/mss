@@ -123,9 +123,9 @@
   import {
     BeneficiaryAccommodationModeKeys,
     BeneficiaryGenderKeys,
-    BeneficiaryMobilityKeys
-  } from '~/client/options/beneficiary'
-  import { NationalityKeys } from '~/client/options/nationality'
+    BeneficiaryMobilityKeys,
+    NationalityKeys
+  } from '~/client/options'
   import {
     formatAddress,
     formatBeneficiaryBirthInfo,

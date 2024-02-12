@@ -18,26 +18,26 @@
         <span
           v-else
           class="fr-badge"
-          :class="[socialSupportStatusClasses[helpRequest.status]]"
+          :class="[socialSupportStatusClasses[socialSupport.status]]"
         >
-          {{ helpRequestStatusOptions.get(helpRequest.status) }}
+          {{ socialSupportStatusOptions.get(socialSupport.status) }}
         </span>
       </td>
       <td>{{ helpRequest.type?.name || '' }}</td>
       <td v-if="application.module.helpRequest">
-        <template v-if="helpRequest.dueDate">
-          {{ formatDate(helpRequest.dueDate) }}
+        <template v-if="socialSupport.dueDate">
+          {{ formatDate(socialSupport.dueDate) }}
         </template>
       </td>
       <td>
-        {{ formatBeneficiaryDisplayName(helpRequest.beneficiary) }}
+        {{ formatBeneficiaryDisplayName(socialSupport.beneficiary) }}
       </td>
       <td v-if="application.module.helpRequest">
         {{ instructorOrganization }}
       </td>
       <td v-if="application.module.helpRequest">
-        <template v-if="helpRequest.examinationDate">
-          {{ formatDate(helpRequest.examinationDate) }}
+        <template v-if="fileInstruction.examinationDate">
+          {{ formatDate(fileInstruction.examinationDate) }}
         </template>
       </td>
       <td v-if="application.module.helpRequest">
@@ -84,11 +84,11 @@
         }}</template>
       </td>
       <td>
-        <template v-if="helpRequest.createdBy">
-          {{ formatUserDisplayName(helpRequest.createdBy) }}
+        <template v-if="socialSupport.createdBy">
+          {{ formatUserDisplayName(socialSupport.createdBy) }}
         </template>
       </td>
-      <td>{{ readableFileNumber(helpRequest.beneficiary.id) }}</td>
+      <td>{{ readableFileNumber(socialSupport.beneficiary.id) }}</td>
     </tr>
   </NuxtLink>
 </template>
@@ -98,7 +98,7 @@
   import { HelpRequestPageItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { paymentMethodOptions } from '~/client/options/helpRequest'
+  import { paymentMethodOptions } from '~/client/options'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { euros } from '~/utils/euros'
   import { readableFileNumber } from '~/utils/readableFileNumber'
@@ -111,47 +111,52 @@
     item: HelpRequestPageItem
   }>()
 
-  const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     updated: [item: HelpRequestPageItem]
   }>()
 
   const helpRequest = computed(() => props.item.helpRequest)
+  const fileInstruction = computed(() => helpRequest.value.fileInstruction)
+  const socialSupport = computed(() => fileInstruction.value.socialSupport)
+
   const permissions = computed(() => props.item.permissions)
   const { application } = usePermissions()
 
   const helpRequestPath = computed(() =>
-    RoutePath.AppBeneficiary(helpRequest.value.beneficiary.id, {
+    RoutePath.AppBeneficiary(socialSupport.value.beneficiary.id, {
       tab: BeneficiaryTab.History,
-      item: helpRequest.value.socialSupportId,
+      item: socialSupport.value.id,
       originPage: Route.AppHistory,
       originTab: HistoryTab.HelpRequests
     })
   )
 
   const instructorOrganization = computed(() =>
-    helpRequest.value.externalStructure
-      ? helpRequest.value.instructorOrganization?.name || ''
+    fileInstruction.value.externalStructure
+      ? fileInstruction.value.instructorOrganization?.name || ''
       : 'Interne'
   )
 
   const isFinancialSupport = computed(() => helpRequest.value.financialSupport)
 
-  const isExternalSupport = computed(() => helpRequest.value.externalStructure)
+  const isExternalSupport = computed(
+    () => fileInstruction.value.externalStructure
+  )
 
   const canEditAllocatedAmount = computed(
     () =>
       props.item.permissions.edit &&
       isFinancialSupport.value &&
-      helpRequest.value.status === SocialSupportStatus.Accepted
+      socialSupport.value.status === SocialSupportStatus.Accepted
   )
 
   const canEditPaymentMethod = computed(
     () =>
       props.item.permissions.edit &&
       isFinancialSupport.value &&
-      helpRequest.value.status === SocialSupportStatus.Accepted &&
+      socialSupport.value.status === SocialSupportStatus.Accepted &&
       !isExternalSupport.value
   )
 
@@ -159,7 +164,7 @@
     () =>
       props.item.permissions.edit &&
       isFinancialSupport.value &&
-      helpRequest.value.status === SocialSupportStatus.Accepted &&
+      socialSupport.value.status === SocialSupportStatus.Accepted &&
       !isExternalSupport.value
   )
 </script>

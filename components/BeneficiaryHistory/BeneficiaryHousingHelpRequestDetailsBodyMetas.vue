@@ -22,7 +22,7 @@
     <span class="information-label"
       >{{ housingHelpRequestFieldLabels.reason }} :</span
     >
-    {{ reasonLabels[housingHelpRequest.reason] }}
+    {{ housingReasonLabels[housingHelpRequest.reason] }}
   </li>
   <li v-if="housingHelpRequest.uniqueId">
     <span class="information-label"
@@ -70,28 +70,28 @@
     {{ housingHelpRequest.taxHouseholdAdditionalInformation }}
   </li>
   <li
-    v-if="housingHelpRequest.fullFile"
+    v-if="fileInstruction.fullFile"
     class="fr-icon-success-line"
   >
     Ce dossier est complet
   </li>
-  <li v-if="housingHelpRequest.dispatchDate">
+  <li v-if="fileInstruction.dispatchDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.dispatchDate }} :</span
     >
-    {{ formatDate(housingHelpRequest.dispatchDate) }}
+    {{ formatDate(fileInstruction.dispatchDate) }}
   </li>
-  <li v-if="housingHelpRequest.examinationDate">
+  <li v-if="fileInstruction.examinationDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.examinationDate }} :</span
     >
-    {{ formatDate(housingHelpRequest.examinationDate) }}
+    {{ formatDate(fileInstruction.examinationDate) }}
   </li>
-  <li v-if="housingHelpRequest.decisionDate">
+  <li v-if="fileInstruction.decisionDate">
     <span class="information-label"
       >{{ helpRequestFieldLabels.decisionDate }} :</span
     >
-    {{ formatDate(housingHelpRequest.decisionDate) }}
+    {{ formatDate(fileInstruction.decisionDate) }}
   </li>
   <template v-if="status === SocialSupportStatus.Accepted"> </template>
   <li v-if="hasRefusalReason">
@@ -104,11 +104,11 @@
 
 <script setup lang="ts">
   import { SocialSupportStatus } from '@prisma/client'
-  import { HousingHelpRequestData } from '~/server/trpc/routers'
+  import { FileInstructionData, HousingHelpRequestData } from './types'
   import {
-    anyRefusalReasonLabels,
+    fileInstructionRefusalReasonLabels,
     askedHousingLabels,
-    reasonLabels,
+    housingReasonLabels,
     housingTypeLabels,
     roomCountLabels,
     isFirstLabels
@@ -121,6 +121,7 @@
   import { euros } from '~/utils/euros'
 
   const props = defineProps<{
+    fileInstruction: FileInstructionData
     housingHelpRequest: HousingHelpRequestData
     status: SocialSupportStatus
   }>()
@@ -156,14 +157,16 @@
   })
 
   const instructorOrganization = computed(() => {
-    return props.housingHelpRequest.externalStructure
-      ? props.housingHelpRequest.instructorOrganization?.name || ''
+    return props.fileInstruction.externalStructure
+      ? props.fileInstruction.instructorOrganization?.name || ''
       : 'Interne'
   })
 
   const refusalReason = computed(() => {
-    const { refusalReason } = props.housingHelpRequest
-    return refusalReason ? anyRefusalReasonLabels[refusalReason] : ''
+    const { refusalReason } = props.fileInstruction
+    return refusalReason
+      ? fileInstructionRefusalReasonLabels[refusalReason]
+      : ''
   })
 
   const hasRefusalReason = computed(

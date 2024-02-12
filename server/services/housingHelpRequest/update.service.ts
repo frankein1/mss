@@ -14,10 +14,14 @@ export async function update({ input, ctx }: UpdateParams) {
   const target = await HousingHelpRequestRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.id },
     select: {
-      instructorOrganizationId: true,
-      socialSupport: {
+      fileInstruction: {
         select: {
-          documents: true
+          instructorOrganizationId: true,
+          socialSupport: {
+            select: {
+              documents: true
+            }
+          }
         }
       }
     }
@@ -64,21 +68,10 @@ export async function update({ input, ctx }: UpdateParams) {
       date,
       documents: prepareDocumentsMutations(
         documents,
-        target.socialSupport.documents
+        target.fileInstruction.socialSupport.documents
       ),
-      housingHelpRequest: {
+      fileInstruction: {
         update: {
-          isFirst,
-          firstOpeningDate,
-          reason,
-          uniqueId,
-          askedHousing,
-          housingType: housingType || undefined,
-          roomCount: roomCount || undefined,
-          taxHouseholdAdditionalInformation,
-          maxRent,
-          maxCharges,
-          isPmr,
           examinationDate,
           decisionDate,
           refusalReason,
@@ -89,8 +82,23 @@ export async function update({ input, ctx }: UpdateParams) {
             instructorOrganizationId,
             ctx,
             externalStructure,
-            target.instructorOrganizationId !== null
-          )
+            target.fileInstruction.instructorOrganizationId !== null
+          ),
+          housingHelpRequest: {
+            update: {
+              isFirst,
+              firstOpeningDate,
+              reason,
+              uniqueId,
+              askedHousing,
+              housingType: housingType || undefined,
+              roomCount: roomCount || undefined,
+              taxHouseholdAdditionalInformation,
+              maxRent,
+              maxCharges,
+              isPmr
+            }
+          }
         }
       }
     },

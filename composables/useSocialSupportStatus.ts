@@ -1,22 +1,22 @@
 import {
-  helpRequestStatusLabels,
-  ministryHelpRequestStatusLabels
-} from '~/client/options/helpRequest'
+  socialSupportStatusLabels,
+  ministrySocialSupportStatusLabels
+} from '~/client/options'
 import { labelsToOptions } from '~/utils/options'
 
 // TODO: SHOULD BE DELETED - WE CAN NOT HANDLE SPECIFIC LABEL
-export function useHelpRequestStatus() {
+export function useSocialSupportStatus() {
   const { application } = usePermissions()
 
   const statusLabels = computed(() =>
     application.value.module.ministere
-      ? ministryHelpRequestStatusLabels
-      : helpRequestStatusLabels
+      ? ministrySocialSupportStatusLabels
+      : socialSupportStatusLabels
   )
   const statusOptions = computed(() => labelsToOptions(statusLabels.value))
 
   return {
-    helpRequestStatusLabels: statusLabels,
-    helpRequestStatusOptions: statusOptions
+    socialSupportStatusLabels: statusLabels,
+    socialSupportStatusOptions: statusOptions
   }
 }

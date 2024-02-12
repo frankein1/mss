@@ -9,8 +9,8 @@
     <div class="history-details__meta">
       <p class="fr-mb-0 fr-text--xs history-details__type-title">
         <AtomPictogram
-          v-if="helpRequestPicto"
-          :path="helpRequestPicto"
+          v-if="fileInstructionPicto"
+          :path="fileInstructionPicto"
           length="2rem"
         />
         {{ historyTypeTitle }}
@@ -71,11 +71,11 @@
 </template>
 
 <script setup lang="ts">
-  import type { SocialSupportData } from '~/server/trpc/routers'
+  import type { SocialSupportData } from './types'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import {
     socialSupportStatusLabels,
-    helpRequestSubjectPictos
+    fileInstructionTypePictos
   } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
@@ -121,18 +121,22 @@
     isFollowup.value ? 'fr-icon-followup-fill' : 'fr-icon-help-request-fill'
   )
 
-  const helpRequestPicto = computed(() => {
-    if (props.data.helpRequest) {
-      return props.data.helpRequest.financialSupport
-        ? helpRequestSubjectPictos.Financial
-        : helpRequestSubjectPictos.Other
+  const fileInstructionPicto = computed(() => {
+    if (!props.data.fileInstruction) {
+      return undefined
+    }
+    const { type } = props.data.fileInstruction
+    if (type === 'Financial') {
+      return fileInstructionTypePictos.Financial
     }
 
-    if (props.data.socialSupportType === 'HelpRequestHousing') {
-      return helpRequestSubjectPictos.Housing
+    if (type === 'Other') {
+      return fileInstructionTypePictos.Other
     }
 
-    return undefined
+    if (type === 'Housing') {
+      return fileInstructionTypePictos.Housing
+    }
   })
 
   const historyTypeTitle = computed(() => {
@@ -140,13 +144,15 @@
       return "Synthèse d'entretien"
     }
 
+    const fileInstruction = props.data.fileInstruction
+
     const helpRequestTitle = 'Instruction de dossier'
 
-    if (props.data.socialSupportType === 'HelpRequestHousing') {
+    if (fileInstruction?.type === 'Housing') {
       return `${helpRequestTitle} - Demande de logement`
     }
 
-    if (props.data.helpRequest?.financialSupport) {
+    if (fileInstruction?.type === 'Financial') {
       return `${helpRequestTitle} - Aide financière`
     }
 

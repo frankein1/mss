@@ -10,7 +10,7 @@
 <script setup lang="ts">
   import { BeneficiaryStatus } from '@prisma/client'
   import { beneficiaryStatusBadgeClasses } from '~/client/classes/beneficiary'
-  import { beneficiaryStatusDetailedLabels } from '~/client/options/beneficiary'
+  import { beneficiaryStatusDetailedLabels } from '~/client/options'
 
   const props = defineProps<{
     status: BeneficiaryStatus

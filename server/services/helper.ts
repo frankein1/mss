@@ -2,6 +2,7 @@ import {
   Beneficiary,
   Comment,
   Document,
+  FileInstruction,
   Followup,
   FollowupType,
   HelpRequest,
@@ -146,12 +147,11 @@ export function filterFollowup({
     place: show(followup.place, conditions.details)
   }
 }
-export function filterHelpRequest({
-  helpRequest,
+export function filterFileInstruction({
+  fileInstruction,
   conditions
 }: {
-  helpRequest: HelpRequest & {
-    prescribingOrganization: Partial<PrescribingOrganization> | null
+  fileInstruction: FileInstruction & {
     instructorOrganization: Partial<InstructorOrganization> | null
   }
   conditions: {
@@ -161,37 +161,28 @@ export function filterHelpRequest({
   }
 }) {
   const { details } = conditions
+
   return {
-    id: helpRequest.id,
-    fullFile: helpRequest.fullFile,
-    financialSupport: helpRequest.financialSupport,
+    id: fileInstruction.id,
+    type: fileInstruction.type,
+    fullFile: fileInstruction.fullFile,
+    decisionDate: show(fileInstruction.decisionDate, details),
+    dispatchDate: show(fileInstruction.dispatchDate, details),
 
-    allocatedAmount: show(helpRequest.allocatedAmount, details),
-    askedAmount: show(helpRequest.askedAmount, details),
-    decisionDate: show(helpRequest.decisionDate, details),
-    dispatchDate: show(helpRequest.dispatchDate, details),
-    isRefundable: show(helpRequest.isRefundable, details),
-
-    examinationDate: show(helpRequest.examinationDate, details),
-    externalStructure: show(helpRequest.externalStructure, details),
-    handlingDate: show(helpRequest.handlingDate, details),
+    examinationDate: show(fileInstruction.examinationDate, details),
+    externalStructure: show(fileInstruction.externalStructure, details),
     instructorOrganizationId: show(
-      helpRequest.instructorOrganizationId,
+      fileInstruction.instructorOrganizationId,
       details
     ),
 
-    paymentDate: show(helpRequest.paymentDate, details),
-    paymentMethod: show(helpRequest.paymentMethod, details),
-    prescribingOrganizationId: show(
-      helpRequest.prescribingOrganizationId,
+    refusalReason: show(fileInstruction.refusalReason, details),
+    refusalReasonOther: show(fileInstruction.refusalReasonOther, details),
+
+    instructorOrganization: show(
+      fileInstruction.instructorOrganization,
       details
-    ),
-
-    refusalReason: show(helpRequest.refusalReason, details),
-    refusalReasonOther: show(helpRequest.refusalReasonOther, details),
-
-    prescribingOrganization: show(helpRequest.prescribingOrganization, details),
-    instructorOrganization: show(helpRequest.instructorOrganization, details)
+    )
   }
 }
 
@@ -199,9 +190,7 @@ export function filterHousingHelpRequest({
   housingHelpRequest,
   conditions
 }: {
-  housingHelpRequest: HousingHelpRequest & {
-    instructorOrganization: Partial<InstructorOrganization> | null
-  }
+  housingHelpRequest: HousingHelpRequest
   conditions: {
     details: boolean
     minister: boolean
@@ -211,29 +200,10 @@ export function filterHousingHelpRequest({
   const { details } = conditions
   return {
     id: housingHelpRequest.id,
-    fullFile: housingHelpRequest.fullFile,
-
-    decisionDate: show(housingHelpRequest.decisionDate, details),
-    dispatchDate: show(housingHelpRequest.dispatchDate, details),
-
-    examinationDate: show(housingHelpRequest.examinationDate, details),
-    externalStructure: show(housingHelpRequest.externalStructure, details),
-    instructorOrganizationId: show(
-      housingHelpRequest.instructorOrganizationId,
-      details
-    ),
-
-    refusalReason: show(housingHelpRequest.refusalReason, details),
-
-    instructorOrganization: show(
-      housingHelpRequest.instructorOrganization,
-      details
-    ),
-
+    reason: show(housingHelpRequest.reason, details),
     isFirst: show(housingHelpRequest.isFirst, details),
     firstOpeningDate: show(housingHelpRequest.firstOpeningDate, details),
     askedHousing: show(housingHelpRequest.askedHousing, details),
-    reason: show(housingHelpRequest.reason, details),
     uniqueId: show(housingHelpRequest.uniqueId, details),
     taxHouseholdAdditionalInformation: show(
       housingHelpRequest.taxHouseholdAdditionalInformation,
@@ -244,5 +214,40 @@ export function filterHousingHelpRequest({
     housingType: show(housingHelpRequest.housingType, details),
     roomCount: show(housingHelpRequest.roomCount, details),
     isPmr: show(housingHelpRequest.isPmr, details)
+  }
+}
+
+export function filterHelpRequest({
+  helpRequest,
+  conditions
+}: {
+  helpRequest: HelpRequest & {
+    prescribingOrganization: Partial<PrescribingOrganization> | null
+  }
+  conditions: {
+    details: boolean
+    minister: boolean
+    privateSynthesis: boolean
+  }
+}) {
+  const { details } = conditions
+  return {
+    id: helpRequest?.id,
+    financialSupport: helpRequest.financialSupport,
+
+    allocatedAmount: show(helpRequest.allocatedAmount, details),
+    askedAmount: show(helpRequest.askedAmount, details),
+    isRefundable: show(helpRequest.isRefundable, details),
+
+    handlingDate: show(helpRequest.handlingDate, details),
+
+    paymentDate: show(helpRequest.paymentDate, details),
+    paymentMethod: show(helpRequest.paymentMethod, details),
+    prescribingOrganizationId: show(
+      helpRequest.prescribingOrganizationId,
+      details
+    ),
+
+    prescribingOrganization: show(helpRequest.prescribingOrganization, details)
   }
 }

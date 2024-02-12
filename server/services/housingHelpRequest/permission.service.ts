@@ -1,8 +1,8 @@
 import { HousingHelpRequestRepo } from '~/server/database'
 import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
 import {
-  HelpRequestPermissions,
-  getHelpRequestPermissions
+  FileInstructionPermissions,
+  getFileInstructionPermissions
 } from '~/server/security/permissions'
 
 function getHousingHelpRequestSecurityTarget(
@@ -12,11 +12,15 @@ function getHousingHelpRequestSecurityTarget(
   return HousingHelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
-      socialSupport: {
+      fileInstruction: {
         include: {
-          beneficiary: {
+          socialSupport: {
             include: {
-              referents: true
+              beneficiary: {
+                include: {
+                  referents: true
+                }
+              }
             }
           }
         }
@@ -28,13 +32,15 @@ function getHousingHelpRequestSecurityTarget(
 export async function getEditionPermissions(
   ctx: SecurityRuleContext,
   id: string
-): Promise<HelpRequestPermissions> {
+): Promise<FileInstructionPermissions> {
   const housingHelpRequest = await getHousingHelpRequestSecurityTarget(
     ctx.user,
     id
   )
-  const { socialSupport } = housingHelpRequest
-  return getHelpRequestPermissions({
+  const {
+    fileInstruction: { socialSupport }
+  } = housingHelpRequest
+  return getFileInstructionPermissions({
     ctx,
     beneficiary: socialSupport.beneficiary,
     socialSupport

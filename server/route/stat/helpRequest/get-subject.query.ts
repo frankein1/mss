@@ -1,5 +1,5 @@
 import { createQuery } from '~/server/route'
-import { getHelpRequestSubjectStatsQuery } from '~/server/query/stats'
+import { getFileInstructionTypeStatsQuery } from '~/server/query/stats'
 import { ProtectedAppContext } from '~/server/trpc'
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import {
@@ -17,10 +17,10 @@ const handler = async ({
   input: StatFilterInput
   ctx: ProtectedAppContext
 }) => {
-  return await getHelpRequestSubjectStatsQuery(user, input)
+  return await getFileInstructionTypeStatsQuery(user, input)
 }
 
-export const getHelpRequestSubjectStatsQ = createQuery({
+export const getFileInstructionTypeStatsQ = createQuery({
   inputValidation: statFilterSchema,
   securityCheck,
   handler

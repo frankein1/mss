@@ -26,10 +26,10 @@
   import type { FilterProp } from '~/types/filter'
   import {
     followupMediumOptions,
-    followupStatusOptions
-  } from '~/client/options/followup'
-  import { typeSuiviOptions } from '~/client/options/history'
-  import { formatDate } from '~/utils/formatDate'
+    followupStatusOptions,
+    typeSuiviOptions
+  } from '~/client/options'
+  // import { formatDate } from '~/utils/formatDate'
   import {
     EventCategory,
     BeneficiaryHistoryFilterEventAction,
@@ -37,7 +37,7 @@
   } from '~/types/matomo'
   import { followupFieldLabels } from '~/client/labels'
 
-  const props = defineProps<{
+  defineProps<{
     beneficiaryId: string
     resultsLabel: string
   }>()
@@ -45,7 +45,7 @@
   const authState = useAuthState()
   const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
-  const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     filter: [filters: BeneficiaryHistoryFilterInput]
@@ -69,19 +69,17 @@
     queryKey: 'config.getStructureFollowupTypes.options'
   })
 
-  const { application } = usePermissions()
+  // const { application } = usePermissions()
 
-  const {
-    data: examinationDateOptions,
-    pending: examinationDateOptionsPending,
-    error: examinationDateOptionsError
-  } = await useAsyncData(loadExaminationDates)
+  // const {
+  //   data: examinationDateOptions,
+  //   pending: examinationDateOptionsPending,
+  //   error: examinationDateOptionsError
+  // } = await useAsyncData(loadExaminationDates)
 
   const pending = computed(
-    () =>
-      agentOptionsPending.value ||
-      followupTypeOptionsPending.value ||
-      examinationDateOptionsPending.value
+    () => agentOptionsPending.value || followupTypeOptionsPending.value
+    // || examinationDateOptionsPending.value
   )
 
   const fetchError = computed(() => {
@@ -91,21 +89,21 @@
     if (followupTypeOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
-    if (examinationDateOptionsError.value) {
-      return "La liste des dates de passage en commission n'a pas pu être chargée."
-    }
+    // if (examinationDateOptionsError.value) {
+    //   return "La liste des dates de passage en commission n'a pas pu être chargée."
+    // }
     return ''
   })
 
   const statusOptions = new Map([
     ...followupStatusOptions,
-    ...helpRequestStatusOptions.value
+    ...socialSupportStatusOptions.value
   ])
 
   const filters = computed(() => {
     if (
       !followupTypeOptions.value ||
-      !examinationDateOptions.value ||
+      // !examinationDateOptions.value ||
       !agentOptions.value
     ) {
       return null
@@ -207,22 +205,22 @@
     return filters
   })
 
-  async function loadExaminationDates() {
-    if (!application.value.module.helpRequest) {
-      return new Map()
-    }
+  // async function loadExaminationDates() {
+  //   if (!application.value.module.helpRequest) {
+  //     return new Map()
+  //   }
 
-    const examinationDates = await trpcClient.config.getExaminationDates.query({
-      id: props.beneficiaryId
-    })
+  //   const examinationDates = await trpcClient.config.getExaminationDates.query({
+  //     id: props.beneficiaryId
+  //   })
 
-    return new Map(
-      examinationDates.map(({ examinationDate }) => [
-        examinationDate.toString(),
-        formatDate(examinationDate)
-      ])
-    )
-  }
+  //   return new Map(
+  //     examinationDates.map(({ examinationDate }) => [
+  //       examinationDate.toString(),
+  //       formatDate(examinationDate)
+  //     ])
+  //   )
+  // }
 
   function onFilter(filters: BeneficiaryHistoryFilterInput) {
     emit('filter', filters)

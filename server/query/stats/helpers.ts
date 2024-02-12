@@ -1,7 +1,6 @@
-import { Prisma } from '@prisma/client'
+import { FileInstructionType, Prisma } from '@prisma/client'
 import { STATS_NULL_LABEL } from '~/client/options'
 import { StatFilterInput } from '~/server/schema'
-import { HelpRequestSubject } from '~/types/socialSupport'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 
 export function preparePrescribingOrganizationStats(
@@ -75,18 +74,20 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
 
 export function prepareHelpRequestStatFilters(filters: StatFilterInput) {
   const socialSupport = prepareSocialSupportStatFilters(filters)
+  socialSupport.fileInstruction = {}
+  socialSupport.fileInstruction.helpRequest = {}
 
   switch (filters.helpRequestSubject) {
-    case HelpRequestSubject.Housing:
+    case FileInstructionType.Housing:
       socialSupport.socialSupportType = 'HelpRequestHousing'
       break
-    case HelpRequestSubject.Financial:
+    case FileInstructionType.Financial:
       socialSupport.socialSupportType = 'HelpRequest'
-      socialSupport.helpRequest = { financialSupport: true }
+      socialSupport.fileInstruction.helpRequest = { financialSupport: true }
       break
-    case HelpRequestSubject.Other:
+    case FileInstructionType.Other:
       socialSupport.socialSupportType = 'HelpRequest'
-      socialSupport.helpRequest = { financialSupport: false }
+      socialSupport.fileInstruction.helpRequest = { financialSupport: false }
       break
     default:
       socialSupport.socialSupportType = {

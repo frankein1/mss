@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
   import { User } from '@prisma/client'
-  import { nonAdminUserRoleOptions } from '~/client/options/user'
+  import { nonAdminUserRoleOptions } from '~/client/options'
   import { editUserRoleSchema, UserRoleEditionInput } from '~/server/schema'
   import { userFieldLabels } from '~/client/labels'
 

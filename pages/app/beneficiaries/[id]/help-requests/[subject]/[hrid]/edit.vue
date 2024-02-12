@@ -1,7 +1,16 @@
 <template>
   <PageContainer>
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestEdit(helpRequest, subject)"
+      v-if="helpRequest"
+      :links="
+        Breadcrumb.AppBeneficiaryHelpRequestEdit(
+          {
+            id: helpRequest.id,
+            beneficiary: helpRequest.fileInstruction.socialSupport.beneficiary
+          },
+          subject
+        )
+      "
     />
     <PageTitle
       :title="title"
@@ -46,12 +55,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { FileInstructionType } from '@prisma/client'
   import { EditHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
-  import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
-  import { HelpRequestSubject } from '~/types/socialSupport'
+  import { fileInstructionTypePictos } from '~/client/options'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -73,7 +82,9 @@
 
   const helpRequest = computed(() => helpRequestData.value?.helpRequest || null)
 
-  const beneficiary = computed(() => helpRequest.value?.beneficiary || null)
+  const beneficiary = computed(
+    () => helpRequest.value?.fileInstruction.socialSupport.beneficiary || null
+  )
 
   const title = computed(() =>
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
@@ -81,8 +92,8 @@
 
   const subject = computed(() =>
     helpRequest.value?.financialSupport
-      ? HelpRequestSubject.Financial
-      : HelpRequestSubject.Other
+      ? FileInstructionType.Financial
+      : FileInstructionType.Other
   )
 
   const subtitle = computed(() =>
@@ -94,7 +105,7 @@
       return undefined
     }
     return helpRequest.value?.financialSupport
-      ? helpRequestSubjectPictos.Financial
+      ? fileInstructionTypePictos.Financial
       : undefined
   })
 

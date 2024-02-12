@@ -1,8 +1,8 @@
 import { HelpRequestRepo } from '~/server/database'
 import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
 import {
-  HelpRequestPermissions,
-  getHelpRequestPermissions
+  FileInstructionPermissions,
+  getFileInstructionPermissions
 } from '~/server/security/permissions'
 import { BeneficiaryService } from '~/server/services/beneficiary'
 
@@ -10,11 +10,15 @@ function getHelpRequestSecurityTarget(user: SecurityRuleGrantee, id: string) {
   return HelpRequestRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
-      socialSupport: {
+      fileInstruction: {
         include: {
-          beneficiary: {
+          socialSupport: {
             include: {
-              referents: true
+              beneficiary: {
+                include: {
+                  referents: true
+                }
+              }
             }
           }
         }
@@ -26,10 +30,12 @@ function getHelpRequestSecurityTarget(user: SecurityRuleGrantee, id: string) {
 export async function getEditionPermissions(
   ctx: SecurityRuleContext,
   id: string
-): Promise<HelpRequestPermissions> {
+): Promise<FileInstructionPermissions> {
   const helpRequest = await getHelpRequestSecurityTarget(ctx.user, id)
-  const { socialSupport } = helpRequest
-  return getHelpRequestPermissions({
+  const {
+    fileInstruction: { socialSupport }
+  } = helpRequest
+  return getFileInstructionPermissions({
     ctx,
     beneficiary: socialSupport.beneficiary,
     socialSupport
@@ -39,12 +45,12 @@ export async function getEditionPermissions(
 export async function getCreationPermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string
-): Promise<HelpRequestPermissions> {
+): Promise<FileInstructionPermissions> {
   const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     ctx.user,
     beneficiaryId
   )
-  return getHelpRequestPermissions({
+  return getFileInstructionPermissions({
     ctx,
     beneficiary
   })

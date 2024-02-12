@@ -101,7 +101,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { taxHouseHoldRelationshipOptions } from '~/client/options/beneficiary'
+  import { taxHouseHoldRelationshipOptions } from '~/client/options'
   import { CreateOrUpdateTaxHouseholdInput } from '~/server/schema'
   import { BeneficiarySearchResult } from '~/types/beneficiary'
   import { relativeFieldLabels } from '~/client/labels'

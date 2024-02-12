@@ -1,5 +1,5 @@
 import { Beneficiary } from '@prisma/client'
-import { BeneficiaryTitleKeys } from '~/client/options/beneficiary'
+import { BeneficiaryTitleKeys } from '~/client/options'
 
 export function formatBeneficiaryName(
   names: Pick<Beneficiary, 'firstName' | 'usualName' | 'title'>

@@ -44,7 +44,7 @@
   import { FollowupPageItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { followupStatusOptions } from '~/client/options/followup'
+  import { followupStatusOptions } from '~/client/options'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { readableFileNumber } from '~/utils/readableFileNumber'
   import { formatUserDisplayName } from '~/utils/user'

@@ -53,12 +53,7 @@ export async function create({ input, ctx }: CreateParams) {
 
   const { id } = await HousingHelpRequestRepo.prisma.create({
     data: {
-      examinationDate,
-      decisionDate,
-      refusalReason,
-      dispatchDate,
-      fullFile,
-      externalStructure,
+      reason,
       housingType: housingType || undefined,
       isPmr,
       roomCount: roomCount || undefined,
@@ -66,35 +61,45 @@ export async function create({ input, ctx }: CreateParams) {
       isFirst,
       maxCharges,
       maxRent,
-      reason,
+      fileInstruction: {
+        create: {
+          examinationDate,
+          decisionDate,
+          refusalReason,
+          dispatchDate,
+          fullFile,
+          externalStructure,
+          instructorOrganization: prepareInstructorOrganization(
+            instructorOrganizationId,
+            ctx,
+            externalStructure
+          ),
+          socialSupport: {
+            create: {
+              status,
+              socialSupportType: SocialSupportType.HelpRequestHousing,
+              createdById: ctx.user.id,
+              beneficiaryId,
+              structureId: ctx.structure.id,
+              synthesis,
+              privateSynthesis,
+              ministre,
+              numeroPegase,
+              dueDate,
+              date,
+              documents: prepareDocumentsMutations(documents),
+              notifications: prepareNewHistoryElementNotification(
+                beneficiary,
+                ctx.user
+              )
+            }
+          }
+        }
+      },
+
       taxHouseholdAdditionalInformation,
       uniqueId,
-      askedHousing,
-      instructorOrganization: prepareInstructorOrganization(
-        instructorOrganizationId,
-        ctx,
-        externalStructure
-      ),
-      socialSupport: {
-        create: {
-          status,
-          socialSupportType: SocialSupportType.HelpRequestHousing,
-          createdById: ctx.user.id,
-          beneficiaryId,
-          structureId: ctx.structure.id,
-          synthesis,
-          privateSynthesis,
-          ministre,
-          numeroPegase,
-          dueDate,
-          date,
-          documents: prepareDocumentsMutations(documents),
-          notifications: prepareNewHistoryElementNotification(
-            beneficiary,
-            ctx.user
-          )
-        }
-      }
+      askedHousing
     }
   })
 

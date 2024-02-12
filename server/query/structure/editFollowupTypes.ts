@@ -4,7 +4,7 @@ import {
   defaultLegallyRequiredFollowupTypeOptions,
   defaultLegallyNotRequiredFollowupTypeLabels,
   defaultLegallyNotRequiredFollowupTypeOptions
-} from '~/client/options/followupType'
+} from '~/client/options'
 import { FollowupTypeRepo } from '~/server/database'
 import { CreateFollowupTypeInput } from '~/server/schema'
 

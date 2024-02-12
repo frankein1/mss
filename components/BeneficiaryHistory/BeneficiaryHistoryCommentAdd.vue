@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportData, CommentItem } from '~/server/trpc/routers'
+  import { SocialSupportData, CommentItem } from './types'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { AddCommentInput, addCommentSchema } from '~/server/schema'
 

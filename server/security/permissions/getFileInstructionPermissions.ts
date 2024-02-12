@@ -11,7 +11,7 @@ import {
   getGranteRole
 } from '../rules/helpers'
 
-export type HelpRequestPermissions = {
+export type FileInstructionPermissions = {
   edit: boolean
   view: boolean
   get: {
@@ -24,7 +24,7 @@ export type HelpRequestPermissions = {
   delete: boolean
 }
 
-const FALSY_PERMISSIONS: HelpRequestPermissions = {
+const FALSY_PERMISSIONS: FileInstructionPermissions = {
   edit: false,
   view: false,
   get: {
@@ -37,7 +37,7 @@ const FALSY_PERMISSIONS: HelpRequestPermissions = {
   delete: false
 }
 
-export const getHelpRequestPermissions = ({
+export const getFileInstructionPermissions = ({
   ctx,
   beneficiary,
   socialSupport
@@ -46,7 +46,7 @@ export const getHelpRequestPermissions = ({
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport?: SecurityTargetWithCreator & SecurityTargetWithStructure
 }) => {
-  let permissions: HelpRequestPermissions
+  let permissions: FileInstructionPermissions
   if (!socialSupport) {
     permissions = getCreationPermissions()
   } else {
@@ -56,7 +56,7 @@ export const getHelpRequestPermissions = ({
   return permissions
 }
 
-function getCreationPermissions(): HelpRequestPermissions {
+function getCreationPermissions(): FileInstructionPermissions {
   return {
     edit: true,
     view: true,
@@ -79,7 +79,7 @@ function getEditionPermissions({
   ctx: SecurityRuleContext
   beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
-}): HelpRequestPermissions {
+}): FileInstructionPermissions {
   const { user } = ctx
 
   if (!isInSameStructure(user, beneficiary)) {

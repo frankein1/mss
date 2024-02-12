@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
   import { GetBeneficiaryHealth } from '~/types/beneficiary'
-  import { BeneficiaryGirKeys } from '~/client/options/beneficiary'
+  import { BeneficiaryGirKeys } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   defineProps<{

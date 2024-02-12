@@ -14,23 +14,21 @@
           :social-support="socialSupport"
         />
         <BeneficiaryFollowupDetailsBodyMetas
-          v-if="isFollowup && socialSupport.followup"
+          v-if="socialSupport.followup"
           :followup="socialSupport.followup"
         />
         <BeneficiaryHelpRequestDetailsBodyMetas
-          v-else-if="
-            socialSupport.socialSupportType === 'HelpRequest' &&
-            socialSupport.helpRequest
-          "
-          :help-request="socialSupport.helpRequest"
+          v-else-if="socialSupport.fileInstruction?.helpRequest"
+          :file-instruction="socialSupport.fileInstruction"
+          :help-request="socialSupport.fileInstruction.helpRequest"
           :status="socialSupport.status"
         />
         <BeneficiaryHousingHelpRequestDetailsBodyMetas
-          v-else-if="
-            socialSupport.socialSupportType === 'HelpRequestHousing' &&
-            socialSupport.housingHelpRequest
+          v-else-if="socialSupport.fileInstruction?.housingHelpRequest"
+          :file-instruction="socialSupport.fileInstruction"
+          :housing-help-request="
+            socialSupport.fileInstruction.housingHelpRequest
           "
-          :housing-help-request="socialSupport.housingHelpRequest"
           :status="socialSupport.status"
         />
       </ul>
@@ -92,15 +90,11 @@
 </template>
 
 <script setup lang="ts">
+  import { FileInstructionType } from '@prisma/client'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
-  import type {
-    SocialSupportItem,
-    CommentData,
-    CommentItem
-  } from '~/server/trpc/routers'
+  import type { SocialSupportItem, CommentData, CommentItem } from './types'
   import { RoutePath } from '~/utils/routing'
   import { BeneficiaryPermissions } from '~/server/security'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const props = defineProps<{
     item: SocialSupportItem
@@ -128,21 +122,25 @@
         socialSupport.value.followup.id
       )
     }
-    if (socialSupport.value.helpRequest) {
-      const subject = socialSupport.value.helpRequest.financialSupport
-        ? HelpRequestSubject.Financial
-        : HelpRequestSubject.Other
+    const helpRequest = socialSupport.value.fileInstruction?.helpRequest
+    if (helpRequest) {
+      const subject = helpRequest.financialSupport
+        ? FileInstructionType.Financial
+        : FileInstructionType.Other
       return RoutePath.AppBeneficiaryHelpRequestEdit(
         socialSupport.value.beneficiaryId,
-        socialSupport.value.helpRequest.id,
+        helpRequest.id,
         subject
       )
     }
-    if (socialSupport.value.housingHelpRequest) {
+
+    const housingHelpRequest =
+      socialSupport.value.fileInstruction?.housingHelpRequest
+    if (housingHelpRequest) {
       return RoutePath.AppBeneficiaryHelpRequestEdit(
         socialSupport.value.beneficiaryId,
-        socialSupport.value.housingHelpRequest.id,
-        HelpRequestSubject.Housing
+        housingHelpRequest.id,
+        FileInstructionType.Housing
       )
     }
 

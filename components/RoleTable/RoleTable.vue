@@ -293,7 +293,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { NonAdminUserRoleLabels } from '~/client/options/user'
+  import { NonAdminUserRoleLabels } from '~/client/options'
 </script>
 
 <style scoped>

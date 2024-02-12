@@ -1,8 +1,8 @@
+import { FileInstructionType } from '@prisma/client'
 import { prepareSocialSupportStatFilters } from '../helpers'
 import { SocialSupportRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { HelpRequestSubject } from '~/types/socialSupport'
 
 export async function getHelpRequestCountQuery(
   user: SecurityRuleGrantee,
@@ -21,37 +21,28 @@ export async function getHelpRequestCountQuery(
       where: {
         ...filters,
         socialSupportType: 'HelpRequest',
-        helpRequest: { financialSupport: true }
+        fileInstruction: { helpRequest: { financialSupport: true } }
       }
     }),
     SocialSupportRepo.count(user, {
       where: {
         ...filters,
         socialSupportType: 'HelpRequest',
-        helpRequest: { financialSupport: false }
+        fileInstruction: { helpRequest: { financialSupport: false } }
       }
     }),
     SocialSupportRepo.count(user, {
       where: {
         ...filters,
-        OR: [
-          {
-            socialSupportType: 'HelpRequest',
-            helpRequest: { externalStructure: true }
-          },
-          {
-            socialSupportType: 'HelpRequestHousing',
-            housingHelpRequest: { externalStructure: true }
-          }
-        ]
+        fileInstruction: { externalStructure: true }
       }
     })
   ])
 
   return {
     total,
-    [HelpRequestSubject.Financial]: financial,
-    [HelpRequestSubject.Other]: other,
+    [FileInstructionType.Financial]: financial,
+    [FileInstructionType.Other]: other,
     external
   }
 }

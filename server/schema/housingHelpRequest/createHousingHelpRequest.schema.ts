@@ -1,5 +1,5 @@
 import {
-  HelpRequestRefusalReason,
+  FileInstructionRefusalReason,
   SocialSupportStatus,
   Minister,
   AskedHousing,
@@ -40,7 +40,7 @@ export const createHousingHelpRequestSchemaBase = z.object({
   externalStructure: kindOfBooleanSchema(true),
   examinationDate: dateOrEmpty,
   decisionDate: dateOrEmpty,
-  refusalReason: withEmptyValueOptionalNativeEnum(HelpRequestRefusalReason),
+  refusalReason: withEmptyValueOptionalNativeEnum(FileInstructionRefusalReason),
   dispatchDate: dateOrEmpty,
   fullFile: z.boolean().default(false),
   isFirst: kindOfBooleanSchema(),

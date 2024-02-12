@@ -95,7 +95,7 @@
     ThirdPartyAccommodationModes,
     beneficiaryAccommodationModeOptions,
     beneficiaryAccommodationZoneOptions
-  } from '~/client/options/beneficiary'
+  } from '~/client/options'
 
   const { application } = usePermissions()
 

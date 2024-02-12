@@ -280,10 +280,10 @@ model SocialSupport {
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  socialSupportType  SocialSupportType   @map("social_support_type")
-  followup           Followup?
-  helpRequest        HelpRequest?
-  housingHelpRequest HousingHelpRequest?
+  socialSupportType SocialSupportType @map("social_support_type")
+
+  followup        Followup?
+  fileInstruction FileInstruction?
 
   @@map("social_support")
 }
@@ -350,27 +350,7 @@ model Followup {
   @@map("followup")
 }
 
-enum PaymentMethod {
-  // Virement
-  WireTransfer
-  // Carte bancaire
-  CreditCard
-  // Espèces
-  Cash
-  // Chèque
-  Check
-  // Bons alimentaire
-  FoodStamps
-}
-
-enum HelpRequestReason {
-  Energy
-  Food
-  Housing
-  Other
-}
-
-enum HelpRequestRefusalReason {
+enum FileInstructionRefusalReason {
   ResourcesOutOfScale
   ShortDeadline
   IncompleteFile
@@ -384,42 +364,73 @@ enum HelpRequestRefusalReason {
   Other
 }
 
-model HelpRequest {
+enum FileInstructionType {
+  Financial
+  Housing
+  Other
+}
+
+model FileInstruction {
   id      String    @id @default(uuid()) @db.Uuid
   updated DateTime? @updatedAt
 
-  prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
-  prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
+  type FileInstructionType? @map("type")
 
   instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
   instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
 
-  type   FollowupType @relation(fields: [typeId], references: [id])
-  typeId String       @map("type_id") @db.Uuid
+  externalStructure Boolean   @map("external_structure")
+  examinationDate   DateTime? @map("examination_date") @db.Date
+  decisionDate      DateTime? @map("decision_date") @db.Date
 
-  financialSupport  Boolean  @map("financial_support")
-  externalStructure Boolean  @map("external_structure")
-  isRefundable      Boolean? @map("is_refundable")
+  refusalReason      FileInstructionRefusalReason? @map("refusal_reason")
+  refusalReasonOther String?                       @map("refusal_reason_other")
+  dispatchDate       DateTime?                     @map("dispatch_date") @db.Date
 
-  askedAmount Decimal? @map("asked_amount")
-
-  examinationDate DateTime? @map("examination_date") @db.Date
-  decisionDate    DateTime? @map("decision_date") @db.Date
-
-  allocatedAmount Decimal? @map("allocated_amount")
-
-  paymentMethod      PaymentMethod?            @map("payment_method")
-  paymentDate        DateTime?                 @map("payment_date") @db.Date
-  handlingDate       DateTime?                 @map("handling_date") @db.Date
-  refusalReason      HelpRequestRefusalReason? @map("refusal_reason")
-  refusalReasonOther String?                   @map("refusal_reason_other")
-  dispatchDate       DateTime?                 @map("dispatch_date") @db.Date
-
-  fullFile Boolean?           @map("full_file")
-  reason   HelpRequestReason?
+  fullFile Boolean? @map("full_file")
 
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
   socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
+
+  helpRequest        HelpRequest?
+  housingHelpRequest HousingHelpRequest?
+
+  @@map("file_instruction")
+}
+
+enum PaymentMethod {
+  // Virement
+  WireTransfer
+  // Carte bancaire
+  CreditCard
+  // Espèces
+  Cash
+  // Chèque
+  Check
+  // Bons alimentaire
+  FoodStamps
+}
+
+model HelpRequest {
+  id String @id @default(uuid()) @db.Uuid
+
+  prescribingOrganizationId String?                  @map("prescribing_organization_id") @db.Uuid
+  prescribingOrganization   PrescribingOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
+
+  type   FollowupType @relation(fields: [typeId], references: [id])
+  typeId String       @map("type_id") @db.Uuid
+
+  financialSupport Boolean  @map("financial_support")
+  isRefundable     Boolean? @map("is_refundable")
+  askedAmount      Decimal? @map("asked_amount")
+  allocatedAmount  Decimal? @map("allocated_amount")
+
+  paymentMethod PaymentMethod? @map("payment_method")
+  paymentDate   DateTime?      @map("payment_date") @db.Date
+  handlingDate  DateTime?      @map("handling_date") @db.Date
+
+  fileInstructionId String          @unique @map("file_instruction_id") @db.Uuid
+  fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)
 
   @@map("help_request")
 }
@@ -431,6 +442,11 @@ enum AskedHousing {
   ParcPrive
   // Hébergement temporaire
   HebergementTemporaire
+}
+
+enum HousingType {
+  Maison
+  Appartement
 }
 
 enum HousingReason {
@@ -462,11 +478,6 @@ enum HousingReason {
   SansLogementOuTemporaire
 }
 
-enum HousingType {
-  Maison
-  Appartement
-}
-
 enum HousingRoomCount {
   One
   Two
@@ -477,26 +488,11 @@ enum HousingRoomCount {
 }
 
 model HousingHelpRequest {
-  id      String    @id @default(uuid()) @db.Uuid
-  updated DateTime? @updatedAt
-
-  instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
-  instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
-
-  externalStructure Boolean? @map("external_structure")
-
-  examinationDate DateTime? @map("examination_date") @db.Date
-  decisionDate    DateTime? @map("decision_date") @db.Date
-
-  refusalReason HelpRequestRefusalReason? @map("refusal_reason")
-  dispatchDate  DateTime?                 @map("dispatch_date") @db.Date
-
-  fullFile Boolean? @map("full_file")
+  id String @id @default(uuid()) @db.Uuid
 
   isFirst                           Boolean?           @map("is_first")
   firstOpeningDate                  DateTime?          @map("first_opening_date") @db.Date
   askedHousing                      AskedHousing[]     @map("asked_housing")
-  reason                            HousingReason?
   uniqueId                          String?            @map("unique_id")
   taxHouseholdAdditionalInformation String?            @map("tax_household_additional_information")
   maxRent                           Decimal?           @map("max_rent")
@@ -504,9 +500,10 @@ model HousingHelpRequest {
   housingType                       HousingType[]      @map("housing_type")
   roomCount                         HousingRoomCount[] @map("room_count")
   isPmr                             Boolean?           @map("is_pmr")
+  reason                            HousingReason?
 
-  socialSupportId String        @unique @map("social_support_id") @db.Uuid
-  socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
+  fileInstructionId String          @unique @map("file_instruction_id") @db.Uuid
+  fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)
 
   @@map("housing_help_request")
 }
@@ -1480,10 +1477,10 @@ model InstructorOrganization {
 
   name String
 
-  structure           Structure?           @relation(fields: [structureId], references: [id])
-  structureId         String?              @map("structure_id") @db.Uuid
-  helpRequests        HelpRequest[]
-  housingHelpRequests HousingHelpRequest[]
+  structure   Structure? @relation(fields: [structureId], references: [id])
+  structureId String?    @map("structure_id") @db.Uuid
+
+  FileInstruction FileInstruction[]
 
   @@map("instructor_organization")
 }

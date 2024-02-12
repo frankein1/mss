@@ -16,12 +16,13 @@ import {
   BeneficiaryService
 } from '~/server/services'
 import {
-  filterHelpRequest,
   filterSocialSupport,
   filterFollowup,
-  filterHousingHelpRequest
+  filterFileInstruction,
+  filterHousingHelpRequest,
+  filterHelpRequest
 } from '~/server/services/helper'
-import { TypeSuivi } from '~/client/options/history'
+import { TypeSuivi } from '~/client/options'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
@@ -62,25 +63,22 @@ function prepareSocialSupportFilters(
   }
 
   if (filters.examinationDate) {
-    formattedFilters.helpRequest = { examinationDate: filters.examinationDate }
+    formattedFilters.fileInstruction = formattedFilters.fileInstruction || {}
+    formattedFilters.fileInstruction.examinationDate = filters.examinationDate
   }
 
   if (filters.externalStructure !== undefined) {
     const isExternalStructure = filters.externalStructure === 'true'
-    if (formattedFilters.helpRequest) {
-      formattedFilters.helpRequest.externalStructure = isExternalStructure
-    } else {
-      formattedFilters.helpRequest = { externalStructure: isExternalStructure }
-    }
+    formattedFilters.fileInstruction = formattedFilters.fileInstruction || {}
+    formattedFilters.fileInstruction.externalStructure = isExternalStructure
   }
 
   if (filters.handlingDate !== undefined) {
     const handlingDate = filters.handlingDate === 'true' ? { not: null } : null
-    if (formattedFilters.helpRequest) {
-      formattedFilters.helpRequest.handlingDate = handlingDate
-    } else {
-      formattedFilters.helpRequest = { handlingDate }
-    }
+    formattedFilters.fileInstruction = formattedFilters.fileInstruction || {}
+    formattedFilters.fileInstruction.helpRequest =
+      formattedFilters.fileInstruction.helpRequest || {}
+    formattedFilters.fileInstruction.helpRequest.handlingDate = handlingDate
   }
 
   if (filters.followupTypes) {
@@ -103,7 +101,11 @@ function prepareSocialSupportFilters(
       case TypeSuivi.FinancialHelpRequest:
       case TypeSuivi.OtherHelpRequest:
         formattedFilters.socialSupportType = 'HelpRequest'
-        formattedFilters.helpRequest = {
+        formattedFilters.fileInstruction =
+          formattedFilters.fileInstruction || {}
+        formattedFilters.fileInstruction.helpRequest =
+          formattedFilters.fileInstruction.helpRequest || {}
+        formattedFilters.fileInstruction.helpRequest = {
           financialSupport: filters.typeSuivi === TypeSuivi.FinancialHelpRequest
         }
     }
@@ -133,20 +135,20 @@ function loadSocialSupports(
           createdBy: true
         }
       },
-      helpRequest: {
+      fileInstruction: {
         include: {
-          prescribingOrganization: true,
-          instructorOrganization: true
+          instructorOrganization: true,
+          helpRequest: {
+            include: {
+              prescribingOrganization: true
+            }
+          },
+          housingHelpRequest: true
         }
       },
       followup: {
         include: {
           prescribingOrganization: true
-        }
-      },
-      housingHelpRequest: {
-        include: {
-          instructorOrganization: true
         }
       },
       _count: {
@@ -180,7 +182,7 @@ function formatResult(
 
     const appPermissions = getAppContextPermissions(ctx)
 
-    const { followup, helpRequest, housingHelpRequest } = socialSupport
+    const { followup, fileInstruction } = socialSupport
 
     const conditions = {
       minister: appPermissions.module.ministere,
@@ -192,6 +194,22 @@ function formatResult(
       socialSupport,
       conditions
     })
+    const filteredFileInstruction = fileInstruction
+      ? filterFileInstruction({
+          fileInstruction,
+          conditions
+        })
+      : null
+
+    const helpRequest = fileInstruction?.helpRequest
+    const housingHelpRequest = fileInstruction?.housingHelpRequest
+
+    const filteredHousingHelpRequest = housingHelpRequest
+      ? filterHousingHelpRequest({
+          housingHelpRequest,
+          conditions
+        })
+      : null
     const filteredHelpRequest = helpRequest
       ? filterHelpRequest({
           helpRequest,
@@ -204,9 +222,6 @@ function formatResult(
           followup,
           conditions
         })
-      : null
-    const filteredHousingHelpRequest = housingHelpRequest
-      ? filterHousingHelpRequest({ housingHelpRequest, conditions })
       : null
 
     const { documents, comments, ...otherData } = filteredSocialSupport
@@ -234,8 +249,11 @@ function formatResult(
         documents: documentItems,
         hasUnreadNotifications: !!_count.notifications,
         followup: filteredFollowup,
-        helpRequest: filteredHelpRequest,
-        housingHelpRequest: filteredHousingHelpRequest
+        fileInstruction: {
+          ...filteredFileInstruction,
+          helpRequest: filteredHelpRequest,
+          housingHelpRequest: filteredHousingHelpRequest
+        }
       },
       permissions: socialSupportPermissions
     }
@@ -269,22 +287,6 @@ const handler = async ({
     totalCount
   }
 }
-
-type SocialSupportsOutput = Prisma.PromiseReturnType<typeof handler>
-export type SocialSupportItem = SocialSupportsOutput['items'][0]
-export type SocialSupportData = SocialSupportItem['data']
-
-export type FollowupData = NonNullable<SocialSupportData['followup']>
-export type HelpRequestData = NonNullable<SocialSupportData['helpRequest']>
-export type HousingHelpRequestData = NonNullable<
-  SocialSupportData['housingHelpRequest']
->
-
-export type CommentItems = Exclude<SocialSupportData['comments'], undefined>
-export type CommentItem = CommentItems[number]
-export type CommentData = CommentItem['comment']
-
-export type DocumentItems = Exclude<SocialSupportData['documents'], undefined>
 
 export const getSocialSupports = createQuery({
   inputValidation: getHistorySchema,

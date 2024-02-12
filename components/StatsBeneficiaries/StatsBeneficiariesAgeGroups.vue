@@ -31,11 +31,10 @@
 
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
-  import { AgeGroup, ageGroupLabels } from '~/client/options/ageGroup'
+  import { AgeGroup, ageGroupLabels, getStatLabel } from '~/client/options'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
   import { getStatColor } from '~/client/colors/stats'
-  import { getStatLabel } from '~/client/options/stat'
   import { StatsPiePropType } from '~/types/stat'
 
   const AgeGroupColors = {

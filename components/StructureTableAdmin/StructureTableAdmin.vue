@@ -77,7 +77,7 @@
 
 <script setup lang="ts">
   import { Structures } from './types'
-  import { StructureTypeLabels } from '~/client/options/structure'
+  import { StructureTypeLabels } from '~/client/options'
   import type { StructureAdminSort } from '~/types/table'
   import { RoutePath } from '~/utils/routing'
 

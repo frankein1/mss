@@ -2,16 +2,20 @@
   <HelpRequestForm
     :is-submitting="isSubmitting"
     :instructor-organizations="instructorOrganizations"
-    :beneficiary-id="housingHelpRequestData.beneficiaryId"
+    :beneficiary-id="socialSupport.beneficiary.id"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
-    :subject="HelpRequestSubject.Housing"
+    :subject="FileInstructionType.Housing"
     @submit="onSubmit"
   />
 </template>
 
 <script lang="ts" setup>
-  import { AskedHousing, InstructorOrganization } from '@prisma/client'
+  import {
+    AskedHousing,
+    InstructorOrganization,
+    FileInstructionType
+  } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
     EditHousingHelpRequestInput,
@@ -19,7 +23,6 @@
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { GetHousingHelpRequestOutput } from '~/server/trpc/routers'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { application } = usePermissions()
 
@@ -33,44 +36,64 @@
     saveHousingHelpRequest: [housingHelpRequest: EditHousingHelpRequestInput]
   }>()
 
-  const housingHelpRequestData = computed(() => props.data.housingHelpRequest)
+  const housingHelpRequest = computed(() => props.data.housingHelpRequest)
+  const fileInstruction = computed(
+    () => housingHelpRequest.value.fileInstruction
+  )
+  const socialSupport = computed(() => fileInstruction.value.socialSupport)
+
   const permissions = computed(() => props.data.permissions)
 
   const initialDocumentIds = computed(
-    () => housingHelpRequestData.value.documents?.map(d => d.key) || []
+    () => socialSupport.value.documents?.map(d => d.key) || []
   )
 
   const { handleSubmit } = useForm<EditHousingHelpRequestInput>({
     validationSchema: toTypedSchema(editHousingHelpRequestSchema),
     initialValues: {
-      ...housingHelpRequestData.value,
+      id: housingHelpRequest.value.id,
+      socialSupportId: socialSupport.value.id,
+      beneficiaryId: socialSupport.value.beneficiary.id,
+      date: socialSupport.value.date,
       isMinistry: application.value.module.ministere,
-      date: housingHelpRequestData.value.date,
+      synthesis: socialSupport.value.synthesis,
+      privateSynthesis: socialSupport.value.privateSynthesis,
+      ministre: socialSupport.value.ministre,
+      numeroPegase: socialSupport.value.numeroPegase,
+      status: socialSupport.value.status,
+      dueDate: socialSupport.value.dueDate,
       documents: initialDocumentIds.value,
-      externalStructure: housingHelpRequestData.value.externalStructure
+      externalStructure: fileInstruction.value.externalStructure
         ? 'true'
         : 'false',
-      isFirst: housingHelpRequestData.value.isFirst ? 'true' : 'false',
-      fullFile: housingHelpRequestData.value.fullFile || false,
-      isPmr: housingHelpRequestData.value.isPmr || false,
-      maxRent: prismaDecimalToNumber(housingHelpRequestData.value.maxRent),
-      maxCharges: prismaDecimalToNumber(
-        housingHelpRequestData.value.maxCharges
-      ),
+      isFirst: housingHelpRequest.value.isFirst ? 'true' : 'false',
+      fullFile: fileInstruction.value.fullFile || false,
+      isPmr: housingHelpRequest.value.isPmr || false,
+      maxRent: prismaDecimalToNumber(housingHelpRequest.value.maxRent),
+      maxCharges: prismaDecimalToNumber(housingHelpRequest.value.maxCharges),
       [AskedHousing.HebergementTemporaire]:
-        housingHelpRequestData.value.askedHousing?.includes(
+        housingHelpRequest.value.askedHousing?.includes(
           AskedHousing.HebergementTemporaire
         ),
-      [AskedHousing.ParcPrive]:
-        housingHelpRequestData.value.askedHousing?.includes(
-          AskedHousing.ParcPrive
-        ),
+      [AskedHousing.ParcPrive]: housingHelpRequest.value.askedHousing?.includes(
+        AskedHousing.ParcPrive
+      ),
       [AskedHousing.ParcSocial]:
-        housingHelpRequestData.value.askedHousing?.includes(
+        housingHelpRequest.value.askedHousing?.includes(
           AskedHousing.ParcSocial
         ),
-      housingType: housingHelpRequestData.value.housingType || [],
-      roomCount: housingHelpRequestData.value.roomCount || []
+      housingType: housingHelpRequest.value.housingType || [],
+      roomCount: housingHelpRequest.value.roomCount || [],
+      instructorOrganizationId: fileInstruction.value.instructorOrganizationId,
+      examinationDate: fileInstruction.value.examinationDate,
+      decisionDate: fileInstruction.value.decisionDate,
+      refusalReason: fileInstruction.value.refusalReason,
+      dispatchDate: fileInstruction.value.dispatchDate,
+      firstOpeningDate: housingHelpRequest.value.firstOpeningDate,
+      reason: housingHelpRequest.value.reason,
+      uniqueId: housingHelpRequest.value.uniqueId,
+      taxHouseholdAdditionalInformation:
+        housingHelpRequest.value.taxHouseholdAdditionalInformation
     }
   })
 

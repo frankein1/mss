@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
   import { HelpRequestPageItem } from './types'
-  import { paymentMethodOptions } from '~/client/options/helpRequest'
+  import { paymentMethodOptions } from '~/client/options'
   import {
     QuickEditHelpRequestPaymentMethodInput,
     quickEditHelpRequestPaymentMethodSchema

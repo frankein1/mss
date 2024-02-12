@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { beneficiaryGirOptions } from '~/client/options/beneficiary'
+  import { beneficiaryGirOptions } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
   import { BeneficiaryPermissions } from '~/server/security'
 

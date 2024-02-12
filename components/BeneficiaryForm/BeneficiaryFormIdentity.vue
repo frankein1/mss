@@ -81,9 +81,9 @@
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
     beneficiaryGenderOptions,
-    beneficiaryTitleOptions
-  } from '~/client/options/beneficiary'
-  import { nationalityOptions } from '~/client/options/nationality'
+    beneficiaryTitleOptions,
+    nationalityOptions
+  } from '~/client/options'
 
   const { application } = usePermissions()
 
