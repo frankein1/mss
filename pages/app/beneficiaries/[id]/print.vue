@@ -5,10 +5,6 @@
 
 <template>
   <div>
-    <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryPrint(beneficiary)"
-      class="fr-no-print"
-    />
     <AtomAlert
       v-if="error"
       :alert-type="AlertType.Error"
@@ -58,7 +54,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { RouteTitle, RoutePath } from '~/utils/routing'
 
   definePageMeta({
     layout: false
@@ -91,8 +87,17 @@
   )
 
   onMounted(() => {
+    window.addEventListener('afterprint', onAfterPrint)
     window.print()
   })
+
+  onUnmounted(() => {
+    window.removeEventListener('afterprint', onAfterPrint)
+  })
+
+  function onAfterPrint() {
+    navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+  }
 </script>
 
 <style lang="scss" scoped>
