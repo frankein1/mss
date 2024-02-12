@@ -31,44 +31,62 @@ export function preparePrescribingOrganization(
 
 export function prepareFilters(filters: HelpRequestFilterInput) {
   const formattedFilters: Prisma.HelpRequestWhereInput = {}
-  formattedFilters.fileInstruction = {}
-  formattedFilters.fileInstruction.socialSupport = {}
 
-  if (filters.status) {
-    formattedFilters.fileInstruction.socialSupport.status = filters.status
+  const {
+    status,
+    followupTypes,
+    examinationDate,
+    handlingDate,
+    externalStructure,
+    referents,
+    ministre
+  } = filters
+
+  if (handlingDate) {
+    formattedFilters.handlingDate =
+      handlingDate === 'true' ? { not: null } : null
   }
 
-  if (filters.followupTypes) {
-    formattedFilters.fileInstruction.socialSupport.types = {
-      some: { id: { in: filters.followupTypes } }
+  if (examinationDate || externalStructure) {
+    formattedFilters.fileInstruction = formattedFilters.fileInstruction || {}
+
+    if (examinationDate) {
+      formattedFilters.fileInstruction.examinationDate = examinationDate
+    }
+
+    if (externalStructure !== undefined) {
+      formattedFilters.fileInstruction.externalStructure =
+        externalStructure === 'true'
     }
   }
 
-  if (filters.examinationDate) {
-    formattedFilters.fileInstruction.examinationDate = filters.examinationDate
-  }
+  if (status || followupTypes || referents || ministre) {
+    formattedFilters.fileInstruction = formattedFilters.fileInstruction || {}
+    formattedFilters.fileInstruction.socialSupport =
+      formattedFilters.fileInstruction.socialSupport || {}
 
-  if (filters.handlingDate !== undefined) {
-    formattedFilters.handlingDate =
-      filters.handlingDate === 'true' ? { not: null } : null
-  }
+    if (status) {
+      formattedFilters.fileInstruction.socialSupport.status = status
+    }
 
-  if (filters.externalStructure !== undefined) {
-    formattedFilters.fileInstruction.externalStructure =
-      filters.externalStructure === 'true'
-  }
-
-  if (filters.referents) {
-    formattedFilters.fileInstruction.socialSupport = {
-      beneficiary: {
-        referents: { some: { id: { in: filters.referents } } }
+    if (followupTypes) {
+      formattedFilters.fileInstruction.socialSupport.types = {
+        some: { id: { in: followupTypes } }
       }
     }
-  }
 
-  if (filters.ministre) {
-    formattedFilters.fileInstruction.socialSupport = {
-      ministre: { in: filters.ministre }
+    if (referents) {
+      formattedFilters.fileInstruction.socialSupport = {
+        beneficiary: {
+          referents: { some: { id: { in: referents } } }
+        }
+      }
+    }
+
+    if (ministre) {
+      formattedFilters.fileInstruction.socialSupport = {
+        ministre: { in: ministre }
+      }
     }
   }
 

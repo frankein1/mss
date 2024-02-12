@@ -42,8 +42,6 @@ function prepareSocialSupportFilters(
   beneficiaryId: string
 ) {
   const formattedFilters: Prisma.SocialSupportWhereInput = {}
-  formattedFilters.fileInstruction = {}
-  formattedFilters.fileInstruction.helpRequest = {}
 
   if (filters.referents) {
     formattedFilters.beneficiary = {
@@ -65,16 +63,21 @@ function prepareSocialSupportFilters(
   }
 
   if (filters.examinationDate) {
+    formattedFilters.fileInstruction = formattedFilters.fileInstruction || {}
     formattedFilters.fileInstruction.examinationDate = filters.examinationDate
   }
 
   if (filters.externalStructure !== undefined) {
     const isExternalStructure = filters.externalStructure === 'true'
+    formattedFilters.fileInstruction = formattedFilters.fileInstruction || {}
     formattedFilters.fileInstruction.externalStructure = isExternalStructure
   }
 
   if (filters.handlingDate !== undefined) {
     const handlingDate = filters.handlingDate === 'true' ? { not: null } : null
+    formattedFilters.fileInstruction = formattedFilters.fileInstruction || {}
+    formattedFilters.fileInstruction.helpRequest =
+      formattedFilters.fileInstruction.helpRequest || {}
     formattedFilters.fileInstruction.helpRequest.handlingDate = handlingDate
   }
 
@@ -98,6 +101,10 @@ function prepareSocialSupportFilters(
       case TypeSuivi.FinancialHelpRequest:
       case TypeSuivi.OtherHelpRequest:
         formattedFilters.socialSupportType = 'HelpRequest'
+        formattedFilters.fileInstruction =
+          formattedFilters.fileInstruction || {}
+        formattedFilters.fileInstruction.helpRequest =
+          formattedFilters.fileInstruction.helpRequest || {}
         formattedFilters.fileInstruction.helpRequest = {
           financialSupport: filters.typeSuivi === TypeSuivi.FinancialHelpRequest
         }
