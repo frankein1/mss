@@ -73,6 +73,7 @@ function findOne(user: SecurityRuleGrantee, id: string) {
 }
 
 type BeneficiaryOutput = Prisma.PromiseReturnType<typeof findOne>
+type SocialSupportType = BeneficiaryOutput['socialSupports'][0]['types'][0]
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
   const beneficiary = await findOne(ctx.user, id)
@@ -165,8 +166,31 @@ const filter = (
 function getHistory(beneficiary: BeneficiaryOutput) {
   return {
     historyTotal: beneficiary._count.socialSupports,
-    types: beneficiary.socialSupports.map(ss => ss.types).flat()
+    types: getUniqueTypes(beneficiary)
   }
+}
+
+function getUniqueTypes(beneficiary: BeneficiaryOutput) {
+  return beneficiary.socialSupports.reduce((types, ss) => {
+    if (!ss.types.length) {
+      return types
+    }
+
+    const notCollectedTypes: SocialSupportType[] = []
+
+    ss.types.forEach(type => {
+      const isNotInTypes = types.every(t => t.id !== type.id)
+      const isNotInNotCollectedTypes = notCollectedTypes.every(
+        t => t.id !== type.id
+      )
+
+      if (isNotInTypes && isNotInNotCollectedTypes) {
+        notCollectedTypes.push(type)
+      }
+    })
+
+    return [...types, ...notCollectedTypes]
+  }, [] as SocialSupportType[])
 }
 
 function getGeneral(
