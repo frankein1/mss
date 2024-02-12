@@ -1,8 +1,8 @@
 import { HousingHelpRequestRepo } from '~/server/database'
 import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
 import {
-  HelpRequestPermissions,
-  getHelpRequestPermissions
+  FileInstructionPermissions,
+  getFileInstructionPermissions
 } from '~/server/security/permissions'
 
 function getHousingHelpRequestSecurityTarget(
@@ -32,7 +32,7 @@ function getHousingHelpRequestSecurityTarget(
 export async function getEditionPermissions(
   ctx: SecurityRuleContext,
   id: string
-): Promise<HelpRequestPermissions> {
+): Promise<FileInstructionPermissions> {
   const housingHelpRequest = await getHousingHelpRequestSecurityTarget(
     ctx.user,
     id
@@ -40,7 +40,7 @@ export async function getEditionPermissions(
   const {
     fileInstruction: { socialSupport }
   } = housingHelpRequest
-  return getHelpRequestPermissions({
+  return getFileInstructionPermissions({
     ctx,
     beneficiary: socialSupport.beneficiary,
     socialSupport

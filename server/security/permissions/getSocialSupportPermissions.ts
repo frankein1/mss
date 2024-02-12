@@ -10,9 +10,9 @@ import {
   getFollowupPermissions
 } from './getFollowupPermissions'
 import {
-  HelpRequestPermissions,
-  getHelpRequestPermissions
-} from './getHelpRequestPermissions'
+  FileInstructionPermissions,
+  getFileInstructionPermissions
+} from './getFileInstructionPermissions'
 
 export function getSocialSupportPermissions({
   ctx,
@@ -24,8 +24,8 @@ export function getSocialSupportPermissions({
   socialSupport: SecurityTargetWithCreator &
     SecurityTargetWithStructure &
     Pick<SocialSupport, 'socialSupportType'>
-}): FollowupPermissions | HelpRequestPermissions {
+}): FollowupPermissions | FileInstructionPermissions {
   return socialSupport.socialSupportType === 'Followup'
     ? getFollowupPermissions({ ctx, beneficiary, socialSupport })
-    : getHelpRequestPermissions({ ctx, beneficiary, socialSupport })
+    : getFileInstructionPermissions({ ctx, beneficiary, socialSupport })
 }

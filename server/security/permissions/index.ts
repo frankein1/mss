@@ -1,6 +1,6 @@
 export * from './getBeneficiaryPermissions'
 export * from './getDocumentPermissions'
-export * from './getHelpRequestPermissions'
+export * from './getFileInstructionPermissions'
 export * from './getFollowupPermissions'
 export * from './getContextPermissions'
 export * from './getSocialSupportPermissions'

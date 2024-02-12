@@ -23,7 +23,7 @@ const handler = ({
   return HelpRequestService.getEditionPermissions(ctx, input.id)
 }
 
-export const getHelpRequestPermissionsQuery = createQuery({
+export const getFileInstructionPermissionsQuery = createQuery({
   inputValidation: beneficiaryIdSchema.or(idSchema),
   securityCheck: AllowSecurityCheck,
   handler

@@ -4,9 +4,9 @@ import { SecurityRuleGrantee, SecurityRuleContext } from '~/server/security'
 import {
   FollowupPermissions,
   getFollowupPermissions,
-  getHelpRequestPermissions,
+  getFileInstructionPermissions,
   getSocialSupportPermissions,
-  HelpRequestPermissions
+  FileInstructionPermissions
 } from '~/server/security/permissions'
 import { BeneficiaryService } from '~/server/services/beneficiary'
 
@@ -43,16 +43,18 @@ export async function getCreationPermissions(
   beneficiaryId: string,
   socialSupportType: 'Followup'
 ): Promise<FollowupPermissions>
+
 export async function getCreationPermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string,
   socialSupportType: 'HelpRequest'
-): Promise<HelpRequestPermissions>
+): Promise<FileInstructionPermissions>
+
 export async function getCreationPermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string,
   socialSupportType: SocialSupportType
-): Promise<FollowupPermissions | HelpRequestPermissions> {
+): Promise<FollowupPermissions | FileInstructionPermissions> {
   const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
     ctx.user,
     beneficiaryId
@@ -63,5 +65,5 @@ export async function getCreationPermissions(
       beneficiary
     })
   }
-  return getHelpRequestPermissions({ ctx, beneficiary })
+  return getFileInstructionPermissions({ ctx, beneficiary })
 }
