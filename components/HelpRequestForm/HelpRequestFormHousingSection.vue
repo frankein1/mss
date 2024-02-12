@@ -111,8 +111,4 @@
     margin: 0 -1.75rem;
     padding-top: 0;
   }
-
-  .fr-col-12 .fr-fieldset {
-    margin-bottom: -0.5rem;
-  }
 </style>

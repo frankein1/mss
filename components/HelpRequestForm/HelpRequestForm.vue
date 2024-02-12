@@ -137,4 +137,8 @@
     width: calc(100% - 1.5rem);
     margin: 0.75rem 0 -0.75rem;
   }
+
+  :deep(.fr-col-12 .fr-fieldset) {
+    margin-bottom: -1rem;
+  }
 </style>

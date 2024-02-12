@@ -32,7 +32,6 @@
   <template v-if="isHousingSupport">
     <div class="fr-col-12">
       <VeeRadioButtons
-        class="fr-mb-0"
         name="isFirst"
         label="Il s'agit"
         :options="isFirstOptions"
@@ -52,7 +51,7 @@
 
     <div class="fr-col-12">
       <fieldset
-        class="fr-fieldset fr-mb-0"
+        class="fr-fieldset"
         aria-labelledby="housing-help-request-asked-housing-legend"
       >
         <legend

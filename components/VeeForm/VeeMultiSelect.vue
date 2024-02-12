@@ -382,6 +382,10 @@
 <style lang="scss" scoped>
   .fr-fieldset__element {
     margin-bottom: 0;
+
+    &.fr-tags-group .fr-tag {
+      margin-bottom: 1rem;
+    }
   }
 
   .fr-fieldset__legend {
