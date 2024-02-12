@@ -17,6 +17,6 @@ export function useSocialSupportStatus() {
 
   return {
     socialSupportStatusLabels: statusLabels,
-    helpRequestStatusOptions: statusOptions
+    socialSupportStatusOptions: statusOptions
   }
 }

@@ -20,7 +20,7 @@
           class="fr-badge"
           :class="[socialSupportStatusClasses[socialSupport.status]]"
         >
-          {{ helpRequestStatusOptions.get(socialSupport.status) }}
+          {{ socialSupportStatusOptions.get(socialSupport.status) }}
         </span>
       </td>
       <td>{{ helpRequest.type?.name || '' }}</td>
@@ -111,7 +111,7 @@
     item: HelpRequestPageItem
   }>()
 
-  const { helpRequestStatusOptions } = useSocialSupportStatus()
+  const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     updated: [item: HelpRequestPageItem]
