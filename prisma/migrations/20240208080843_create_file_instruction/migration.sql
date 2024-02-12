@@ -2,7 +2,6 @@
 
 -- CreateEnum
 CREATE TYPE "FileInstructionRefusalReason" AS ENUM ('ResourcesOutOfScale', 'ShortDeadline', 'IncompleteFile', 'IrregularSituation', 'InadequateFamilyComposition', 'ExpiredRequest', 'MissedAppointment', 'AlreadyExistingHelpRequest', 'Reoriented', 'Debt', 'Other');
-CREATE TYPE "FileInstructionReason" AS ENUM ('Energy', 'Food', 'Housing', 'Other', 'Violences', 'DivorceSeparation', 'RapprochementFamilial', 'Mutation', 'Expulsion', 'LogementInsalubre', 'LogementNonDecent', 'LogementReprisVente', 'LogementInadapte', 'LogementTropCher', 'LogementBientotDemoli', 'Localisation', 'SansLogementOuTemporaire');
 CREATE TYPE "FileInstructionType" AS ENUM ('Financial', 'Housing', 'Other');
 
 -- CreateTable
@@ -18,7 +17,6 @@ CREATE TABLE "file_instruction" (
     "refusal_reason_other" TEXT,
     "dispatch_date" DATE,
     "full_file" BOOLEAN,
-    "reason" "FileInstructionReason",
     "social_support_id" UUID NOT NULL,
 
     CONSTRAINT "file_instruction_pkey" PRIMARY KEY ("id")
@@ -34,8 +32,8 @@ CREATE UNIQUE INDEX "file_instruction_social_support_id_key" ON "file_instructio
 
 -- HELP REQUEST - START
 
-INSERT INTO file_instruction (id, "type",  updated, instructor_organization_id, external_structure, examination_date, decision_date, refusal_reason, refusal_reason_other, dispatch_date, full_file, reason, social_support_id)
-  SELECT gen_random_uuid(), 'Other', updated, instructor_organization_id, external_structure, examination_date, decision_date, CAST(refusal_reason::TEXT AS "FileInstructionRefusalReason"), refusal_reason_other, dispatch_date, full_file, CAST(reason::TEXT AS "FileInstructionReason"), social_support_id FROM help_request;
+INSERT INTO file_instruction (id, "type",  updated, instructor_organization_id, external_structure, examination_date, decision_date, refusal_reason, refusal_reason_other, dispatch_date, full_file, social_support_id)
+  SELECT gen_random_uuid(), 'Other', updated, instructor_organization_id, external_structure, examination_date, decision_date, CAST(refusal_reason::TEXT AS "FileInstructionRefusalReason"), refusal_reason_other, dispatch_date, full_file, social_support_id FROM help_request;
 
 ALTER TABLE "help_request" ADD COLUMN "file_instruction_id" UUID NULL;
 
@@ -89,7 +87,8 @@ DROP COLUMN "reason",
 DROP COLUMN "refusal_reason",
 DROP COLUMN "social_support_id",
 DROP COLUMN "updated",
-ADD COLUMN  "file_instruction_id" UUID NOT NULL;
+ADD COLUMN  "file_instruction_id" UUID NOT NULL,
+ADD COLUMN  "reason" "HousingReason";
 
 -- CreateIndex
 CREATE UNIQUE INDEX "housing_help_request_file_instruction_id_key" ON "housing_help_request"("file_instruction_id");
@@ -100,7 +99,6 @@ ALTER TABLE "housing_help_request" ADD CONSTRAINT "housing_help_request_file_ins
 -- HOUSING - END
 
 -- DropEnum
-DROP TYPE "HousingReason";
 DROP TYPE "HelpRequestReason";
 DROP TYPE "HelpRequestRefusalReason";
 

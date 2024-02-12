@@ -1,4 +1,9 @@
-import { AskedHousing, HousingRoomCount, HousingType } from '@prisma/client'
+import {
+  AskedHousing,
+  HousingReason,
+  HousingRoomCount,
+  HousingType
+} from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
 export const isFirstLabels = {
@@ -41,3 +46,22 @@ export const roomCountLabels: { [key in HousingRoomCount]: string } = {
 }
 
 export const roomCountOptions = labelsToOptions(roomCountLabels)
+
+export const housingReasonLabels = {
+  [HousingReason.Violences]: 'Violences',
+  [HousingReason.DivorceSeparation]: 'Divorce ou séparation',
+  [HousingReason.RapprochementFamilial]: 'Rapprochement familial',
+  [HousingReason.Mutation]: 'Mutation',
+  [HousingReason.Expulsion]: 'Expulsion',
+  [HousingReason.LogementInsalubre]: 'Logement insalubre',
+  [HousingReason.LogementNonDecent]: 'Logement non décent',
+  [HousingReason.LogementReprisVente]: 'Logement repris ou mis en vente',
+  [HousingReason.LogementInadapte]: 'Logement inadapté',
+  [HousingReason.LogementTropCher]: 'Logement trop cher',
+  [HousingReason.LogementBientotDemoli]: 'Logement bientôt démoli',
+  [HousingReason.Localisation]: 'Localisation du logement',
+  [HousingReason.SansLogementOuTemporaire]:
+    'Sans logement ou logement temporaire'
+}
+
+export const housingReasonOptions = labelsToOptions(housingReasonLabels)

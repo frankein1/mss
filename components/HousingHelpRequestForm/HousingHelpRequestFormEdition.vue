@@ -90,7 +90,7 @@
       refusalReason: fileInstruction.value.refusalReason,
       dispatchDate: fileInstruction.value.dispatchDate,
       firstOpeningDate: housingHelpRequest.value.firstOpeningDate,
-      reason: fileInstruction.value.reason,
+      reason: housingHelpRequest.value.reason,
       uniqueId: housingHelpRequest.value.uniqueId,
       taxHouseholdAdditionalInformation:
         housingHelpRequest.value.taxHouseholdAdditionalInformation

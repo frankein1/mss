@@ -351,7 +351,6 @@ model Followup {
 }
 
 enum FileInstructionRefusalReason {
-  // HELP REQUEST
   ResourcesOutOfScale
   ShortDeadline
   IncompleteFile
@@ -363,42 +362,6 @@ enum FileInstructionRefusalReason {
   Reoriented
   Debt
   Other
-}
-
-enum FileInstructionReason {
-  // HELP REQUEST
-  Energy
-  Food
-  Housing
-  Other
-
-  //HOUSING
-  // Violences
-  Violences
-  // Divorce ou séparation
-  DivorceSeparation
-  // Rapprochement familial
-  RapprochementFamilial
-  // Mutation
-  Mutation
-  // Expulsion
-  Expulsion
-  // Logement insalubre
-  LogementInsalubre
-  // Logement non décent
-  LogementNonDecent
-  // Logement repris ou mis en vente
-  LogementReprisVente
-  // Logement inadapté
-  LogementInadapte
-  // Logement trop cher
-  LogementTropCher
-  // Logement bientôt démoli
-  LogementBientotDemoli
-  // Localisation du logement
-  Localisation
-  // Sans logement ou logement temporaire
-  SansLogementOuTemporaire
 }
 
 enum FileInstructionType {
@@ -424,8 +387,7 @@ model FileInstruction {
   refusalReasonOther String?                       @map("refusal_reason_other")
   dispatchDate       DateTime?                     @map("dispatch_date") @db.Date
 
-  fullFile Boolean?               @map("full_file")
-  reason   FileInstructionReason?
+  fullFile Boolean? @map("full_file")
 
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
   socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
@@ -487,6 +449,35 @@ enum HousingType {
   Appartement
 }
 
+enum HousingReason {
+  // Violences
+  Violences
+  // Divorce ou séparation
+  DivorceSeparation
+  // Rapprochement familial
+  RapprochementFamilial
+  // Mutation
+  Mutation
+  // Expulsion
+  Expulsion
+  // Logement insalubre
+  LogementInsalubre
+  // Logement non décent
+  LogementNonDecent
+  // Logement repris ou mis en vente
+  LogementReprisVente
+  // Logement inadapté
+  LogementInadapte
+  // Logement trop cher
+  LogementTropCher
+  // Logement bientôt démoli
+  LogementBientotDemoli
+  // Localisation du logement
+  Localisation
+  // Sans logement ou logement temporaire
+  SansLogementOuTemporaire
+}
+
 enum HousingRoomCount {
   One
   Two
@@ -509,6 +500,7 @@ model HousingHelpRequest {
   housingType                       HousingType[]      @map("housing_type")
   roomCount                         HousingRoomCount[] @map("room_count")
   isPmr                             Boolean?           @map("is_pmr")
+  reason                            HousingReason?
 
   fileInstructionId String          @unique @map("file_instruction_id") @db.Uuid
   fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)

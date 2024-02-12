@@ -53,6 +53,7 @@ export async function create({ input, ctx }: CreateParams) {
 
   const { id } = await HousingHelpRequestRepo.prisma.create({
     data: {
+      reason,
       housingType: housingType || undefined,
       isPmr,
       roomCount: roomCount || undefined,
@@ -62,7 +63,6 @@ export async function create({ input, ctx }: CreateParams) {
       maxRent,
       fileInstruction: {
         create: {
-          reason,
           examinationDate,
           decisionDate,
           refusalReason,

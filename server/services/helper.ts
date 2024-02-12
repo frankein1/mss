@@ -176,8 +176,6 @@ export function filterFileInstruction({
       details
     ),
 
-    reason: show(fileInstruction.reason, details),
-
     refusalReason: show(fileInstruction.refusalReason, details),
     refusalReasonOther: show(fileInstruction.refusalReasonOther, details),
 
@@ -202,7 +200,7 @@ export function filterHousingHelpRequest({
   const { details } = conditions
   return {
     id: housingHelpRequest.id,
-
+    reason: show(housingHelpRequest.reason, details),
     isFirst: show(housingHelpRequest.isFirst, details),
     firstOpeningDate: show(housingHelpRequest.firstOpeningDate, details),
     askedHousing: show(housingHelpRequest.askedHousing, details),
