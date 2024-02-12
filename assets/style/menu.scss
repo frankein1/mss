@@ -37,7 +37,8 @@
 }
 
 .active-menu-item {
-  outline-style: solid;
+  outline: #0a76f6 solid 2px;
+  outline-offset: 2px;
 }
 
 .fr-grid-row--gutters > [class*=' fr-col-'].searchable-select .menu,

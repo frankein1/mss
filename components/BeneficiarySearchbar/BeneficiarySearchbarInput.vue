@@ -168,8 +168,4 @@
   .menu-item:last-child > * {
     border-radius: 0 0 0.5rem 0.5rem;
   }
-
-  .active-menu-item {
-    outline-style: solid;
-  }
 </style>
