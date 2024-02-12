@@ -1,6 +1,7 @@
 import { SocialSupportStatus } from '@prisma/client'
 import { followupStatusLabels } from './followup'
 import { FieldLabels } from '~/types/fieldLabels'
+import { labelsToOptions } from '~/utils/options'
 
 export enum TypeSuivi {
   Followup = 'Followup',
