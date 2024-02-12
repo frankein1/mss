@@ -1,6 +1,6 @@
+import { FileInstructionType } from '@prisma/client'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
-import { HelpRequestSubject } from '~/types/socialSupport'
 
 export enum Route {
   Index = 'Index',
@@ -261,7 +261,7 @@ export const RoutePath = {
   ) => `${BeneficiaryFollowupsRoute(beneficiaryId)}/${followupId}/edit`,
   [Route.AppBeneficiaryHelpRequestAdd]: (
     beneficiaryId: string,
-    subject: HelpRequestSubject
+    subject: FileInstructionType
   ) =>
     `${BeneficiaryHelpRequestsRoute(
       beneficiaryId
@@ -269,7 +269,7 @@ export const RoutePath = {
   [Route.AppBeneficiaryHelpRequestEdit]: (
     beneficiaryId: string,
     helpRequestId: string,
-    subject: HelpRequestSubject
+    subject: FileInstructionType
   ) =>
     `${BeneficiaryHelpRequestsRoute(
       beneficiaryId

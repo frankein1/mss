@@ -30,11 +30,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { beneficiarySocioProfessionalCategoryLabels } from '~/client/options/beneficiary'
+  import {
+    beneficiarySocioProfessionalCategoryLabels,
+    getStatLabel
+  } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
-  import { getStatLabel } from '~/client/options/stat'
 
   const trpcClient = useTrpcClient()
 

@@ -31,8 +31,11 @@
 
 <script lang="ts" setup>
   import { SupportColor } from '~/client/colors'
-  import { isFirstLabels, fileInstructionReasonLabels } from '~/client/options'
-  import { getStatLabel } from '~/client/options/stat'
+  import {
+    isFirstLabels,
+    fileInstructionReasonLabels,
+    getStatLabel
+  } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
 

@@ -33,7 +33,7 @@
   import {
     defaultLegallyNotRequiredFollowupTypeLabels,
     defaultLegallyRequiredFollowupTypeLabels
-  } from '~/client/options/followupType'
+  } from '~/client/options'
 
   const props = defineProps<{
     structureId: string

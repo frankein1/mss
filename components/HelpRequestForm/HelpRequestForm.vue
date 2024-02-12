@@ -78,7 +78,8 @@
     FollowupType,
     SocialSupportStatus,
     InstructorOrganization,
-    PrescribingOrganization
+    PrescribingOrganization,
+    FileInstructionType
   } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
   import {
@@ -87,7 +88,6 @@
   } from '~/client/labels'
   import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
   import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const props = withDefaults(
     defineProps<{
@@ -98,7 +98,7 @@
       beneficiaryId: string
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>
-      subject: HelpRequestSubject
+      subject: FileInstructionType
     }>(),
     {
       canEditPrivateSynthesis: true,

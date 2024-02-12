@@ -62,7 +62,7 @@
   import {
     defaultLegallyRequiredFollowupTypeOptions,
     defaultLegallyNotRequiredFollowupTypeOptions
-  } from '~/client/options/followupType'
+  } from '~/client/options'
 
   const props = withDefaults(
     defineProps<{

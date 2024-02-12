@@ -30,7 +30,7 @@
 <script setup lang="ts">
   import { UserStatus } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
+  import { beneficiaryStatusOptions } from '~/client/options'
   import { SaveBeneficiaryGeneralInformationInput } from '~/server/schema'
   import { BeneficiaryReferent } from '~/types/beneficiary'
   import { BeneficiaryPermissions } from '~/server/security'

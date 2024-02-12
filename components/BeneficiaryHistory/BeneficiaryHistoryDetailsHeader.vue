@@ -75,7 +75,7 @@
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import {
     socialSupportStatusLabels,
-    helpRequestSubjectPictos
+    fileInstructionTypePictos
   } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
@@ -127,15 +127,15 @@
     }
     const { type } = props.data.fileInstruction
     if (type === 'Financial') {
-      return helpRequestSubjectPictos.Financial
+      return fileInstructionTypePictos.Financial
     }
 
     if (type === 'Other') {
-      return helpRequestSubjectPictos.Other
+      return fileInstructionTypePictos.Other
     }
 
     if (type === 'Housing') {
-      return helpRequestSubjectPictos.Housing
+      return fileInstructionTypePictos.Housing
     }
   })
 

@@ -72,7 +72,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { entourageRelationshipOptions } from '~/client/options/beneficiary'
+  import { entourageRelationshipOptions } from '~/client/options'
   import { relativeFieldLabels } from '~/client/labels'
 
   defineProps<{

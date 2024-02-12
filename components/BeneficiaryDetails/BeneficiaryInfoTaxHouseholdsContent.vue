@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryFamilySituationKeys } from '~/client/options/beneficiary'
+  import { BeneficiaryFamilySituationKeys } from '~/client/options'
   import type { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 

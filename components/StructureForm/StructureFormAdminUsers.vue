@@ -95,7 +95,7 @@
   import { UserStatus } from '@prisma/client'
   import type { UsersStructureType } from './types'
   import { userFieldLabels } from '~/client/labels'
-  import { NonAdminUserRoleLabels } from '~/client/options/user'
+  import { NonAdminUserRoleLabels } from '~/client/options'
   import { RoutePath } from '~/utils/routing'
   import type { NonAdminUserRole } from '~/types/user'
 

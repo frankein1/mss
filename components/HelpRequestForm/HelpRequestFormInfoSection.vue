@@ -130,7 +130,7 @@
 </template>
 
 <script setup lang="ts">
-  import { SocialSupportStatus } from '@prisma/client'
+  import { SocialSupportStatus, FileInstructionType } from '@prisma/client'
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { housingHelpRequestFieldLabels } from '~/client/labels/housingHelpRequest.labels'
   import {
@@ -141,15 +141,14 @@
     isRefundableOptions
   } from '~/client/options'
   import { withEmptyValue } from '~/utils/options'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
-  const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { helpRequestStatusOptions } = useSocialSupportStatus()
 
   const props = defineProps<{
     status: SocialSupportStatus
     hasSetExternalStructure: boolean
     isExternalSupport: boolean
-    subject: HelpRequestSubject
+    subject: FileInstructionType
   }>()
 
   const isAccepted = computed(
@@ -159,11 +158,11 @@
   const isAnswered = computed(() => isAccepted.value || isRefused.value)
 
   const isFinancialSupport = computed(
-    () => props.subject === HelpRequestSubject.Financial
+    () => props.subject === FileInstructionType.Financial
   )
 
   const isHousingSupport = computed(
-    () => props.subject === HelpRequestSubject.Housing
+    () => props.subject === FileInstructionType.Housing
   )
 
   const headline = computed(() => {

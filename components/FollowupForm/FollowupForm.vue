@@ -292,13 +292,13 @@
     FollowupMedium
   } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
-  import { ministerOptions } from '~/client/options/ministry'
   import {
+    ministerOptions,
     followupStatusOptions,
     followupMediumOptions
     // followupInterventionOptions,
     // followupSignalementOptions
-  } from '~/client/options/followup'
+  } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
   import { RoutePath } from '~/utils/routing'

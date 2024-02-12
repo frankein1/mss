@@ -82,7 +82,7 @@
   import { TRPCClientErrorBase } from '@trpc/client'
   import { DefaultErrorShape } from '@trpc/server'
   import { AlertType } from '~/utils/constants/alert'
-  import { NonAdminUserRoleLabels } from '~/client/options/user'
+  import { NonAdminUserRoleLabels } from '~/client/options'
   import { userFieldLabels } from '~/client/labels'
   import type { NonAdminUserRole } from '~/types/user'
   import { useAuthState } from '~/composables/useAuthState'

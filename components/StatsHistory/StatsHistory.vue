@@ -84,13 +84,13 @@
               v-if="!filters.helpRequestSubject"
               class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
             >
-              <StatsHelpRequestSubject
+              <StatsFileInstructionType
                 :total-count="helpRequestCount"
                 :filters="filters"
               />
             </div>
             <div
-              v-if="filters.helpRequestSubject !== HelpRequestSubject.Housing"
+              v-if="filters.helpRequestSubject !== FileInstructionType.Housing"
               class="fr-col-12 fr-col-lg-6"
             >
               <StatsHelpRequestFollowupTypes
@@ -114,7 +114,7 @@
               />
             </div>
             <div
-              v-if="filters.helpRequestSubject !== HelpRequestSubject.Housing"
+              v-if="filters.helpRequestSubject !== FileInstructionType.Housing"
               class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
             >
               <StatsHelpRequestPrescribingOrganizations
@@ -131,7 +131,7 @@
             <div
               v-if="
                 !filters.helpRequestSubject ||
-                filters.helpRequestSubject === HelpRequestSubject.Financial
+                filters.helpRequestSubject === FileInstructionType.Financial
               "
               class="fr-col-12 fr-col-sm-6"
             >
@@ -141,7 +141,7 @@
               v-if="
                 !filters.followupTypes &&
                 (!filters.helpRequestSubject ||
-                  filters.helpRequestSubject === HelpRequestSubject.Housing)
+                  filters.helpRequestSubject === FileInstructionType.Housing)
               "
               class="fr-col-12 fr-col-sm-6"
             >
@@ -216,13 +216,13 @@
 </template>
 
 <script lang="ts" setup>
+  import { FileInstructionType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
   import { Options } from '~/utils/options'
   import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const trpcClient = useTrpcClient()
 

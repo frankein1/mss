@@ -16,13 +16,13 @@
   import {
     FollowupType,
     InstructorOrganization,
-    PrescribingOrganization
+    PrescribingOrganization,
+    FileInstructionType
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { HelpRequestPageItem } from './types'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { application } = usePermissions()
 
@@ -49,8 +49,8 @@
 
   const subject = computed(() =>
     helpRequest.value.financialSupport
-      ? HelpRequestSubject.Financial
-      : HelpRequestSubject.Other
+      ? FileInstructionType.Financial
+      : FileInstructionType.Other
   )
 
   const { handleSubmit } = useForm<EditHelpRequestInput>({

@@ -7,10 +7,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    documentTypeOptions,
-    documentTagOptions
-  } from '~/client/options/document'
+  import { documentTypeOptions, documentTagOptions } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import { withEmptyValue } from '~/utils/options'
   import type { BeneficiaryDocumentFilterInput } from '~/server/schema'

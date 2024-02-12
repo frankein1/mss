@@ -1,6 +1,7 @@
 import {
   FileInstructionReason,
-  FileInstructionRefusalReason
+  FileInstructionRefusalReason,
+  FileInstructionType
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
@@ -85,3 +86,36 @@ export const helpRequestRefusalReasonOptions = labelsToOptions(
 export const housingFileInstructionRefusalReasonOptions = labelsToOptions(
   housingFileInstructionRefusalReasonLabels
 )
+
+export const fileInstructionTypeLabels: {
+  [key in FileInstructionType]: string
+} = {
+  [FileInstructionType.Housing]: 'Une demande de logement',
+  [FileInstructionType.Financial]: 'Une aide financière',
+  [FileInstructionType.Other]: 'Autre'
+}
+
+export const fileInstructionTypeOptions = labelsToOptions(
+  fileInstructionTypeLabels
+)
+
+export const fileInstructionTypeStatsLabels: {
+  [key in FileInstructionType]: string
+} = {
+  [FileInstructionType.Housing]: 'Demande de logement',
+  [FileInstructionType.Financial]: 'Aide financière',
+  [FileInstructionType.Other]: 'Autre'
+}
+
+export const fileInstructionTypeStatsOptions = labelsToOptions(
+  fileInstructionTypeStatsLabels
+)
+
+// As pictograms are used as variables, they have to be in the public directory. - See https://www.lichter.io/articles/nuxt3-vue3-dynamic-images/
+export const fileInstructionTypePictos: {
+  [key in FileInstructionType]: string
+} = {
+  [FileInstructionType.Housing]: '/pictograms/building.svg',
+  [FileInstructionType.Financial]: '/pictograms/tax-stamp.svg',
+  [FileInstructionType.Other]: '/pictograms/document.svg'
+}

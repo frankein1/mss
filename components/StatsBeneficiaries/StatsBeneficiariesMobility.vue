@@ -30,11 +30,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { beneficiaryMobilityLabels } from '~/client/options/beneficiary'
+  import { beneficiaryMobilityLabels, getStatLabel } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
-  import { getStatLabel } from '~/client/options/stat'
 
   const trpcClient = useTrpcClient()
 

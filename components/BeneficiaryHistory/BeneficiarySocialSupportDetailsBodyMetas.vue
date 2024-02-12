@@ -22,7 +22,7 @@
 <script setup lang="ts">
   import { SocialSupportData } from './types'
   import { formatDate } from '~/utils/formatDate'
-  import { ministerLabels } from '~/client/options/ministry'
+  import { ministerLabels } from '~/client/options'
   import { helpRequestFieldLabels } from '~/client/labels'
 
   defineProps<{

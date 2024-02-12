@@ -49,7 +49,7 @@
   import { TRPCClientError } from '@trpc/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { withEmptyValue } from '~/utils/options'
-  import { nonAdminUserRoleOptions } from '~/client/options/user'
+  import { nonAdminUserRoleOptions } from '~/client/options'
   import { userFieldLabels } from '~/client/labels'
   import { UserCreationInput, createUserSchema } from '~/server/schema'
   import { getUserCreationMessage } from '~/utils/user'

@@ -44,10 +44,7 @@
 
 <script setup lang="ts">
   import { GetDocument } from './types'
-  import {
-    documentTagOptions,
-    documentTypeOptions
-  } from '~/client/options/document'
+  import { documentTagOptions, documentTypeOptions } from '~/client/options'
   import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
   import { documentFieldLabels } from '~/client/labels'
   import { DocumentPermissions } from '~/server/security'

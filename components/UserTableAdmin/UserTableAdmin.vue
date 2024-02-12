@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
   import { Users } from './types'
-  import { UserRoleLabels } from '~/client/options/user'
+  import { UserRoleLabels } from '~/client/options'
   import type { UserAdminSort } from '~/types/table'
   import { formatUserDisplayName } from '~/utils/user'
   import { RoutePath } from '~/utils/routing'

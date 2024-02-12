@@ -49,10 +49,7 @@
     UploadBrowserDocumentInput,
     uploadBrowserDocumentSchema
   } from '~/server/schema'
-  import {
-    documentTypeOptions,
-    documentTagOptions
-  } from '~/client/options/document'
+  import { documentTypeOptions, documentTagOptions } from '~/client/options'
   import { documentFieldLabels } from '~/client/labels'
 
   const props = defineProps<{

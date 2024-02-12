@@ -427,18 +427,18 @@ DROP VIEW "view_beneficiary_types";
 -- AlterEnum
 BEGIN;
 
-CREATE TYPE "HelpRequestSubject_new" AS ENUM ('Financial', 'Other');
+CREATE TYPE "FileInstructionType_new" AS ENUM ('Financial', 'Other');
 
 ALTER TABLE "help_request"
-ALTER COLUMN "subject" TYPE "HelpRequestSubject_new" USING ("subject"::text::"HelpRequestSubject_new");
+ALTER COLUMN "subject" TYPE "FileInstructionType_new" USING ("subject"::text::"FileInstructionType_new");
 
-ALTER TYPE "HelpRequestSubject"
-RENAME TO "HelpRequestSubject_old";
+ALTER TYPE "FileInstructionType"
+RENAME TO "FileInstructionType_old";
 
-ALTER TYPE "HelpRequestSubject_new"
-RENAME TO "HelpRequestSubject";
+ALTER TYPE "FileInstructionType_new"
+RENAME TO "FileInstructionType";
 
-DROP TYPE "HelpRequestSubject_old";
+DROP TYPE "FileInstructionType_old";
 
 COMMIT;
 

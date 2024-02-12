@@ -59,7 +59,7 @@
   import { formatDate } from '~/utils/formatDate'
   import { RoutePath } from '~/utils/routing'
   import { formatUserDisplayName } from '~/utils/user'
-  import { userActivityTypeLabels } from '~/client/options/userActivity'
+  import { userActivityTypeLabels } from '~/client/options'
 
   withDefaults(
     defineProps<{

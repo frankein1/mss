@@ -27,14 +27,14 @@
   import { HelpRequestFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
-  import { ministerOptions } from '~/client/options/ministry'
+  import { ministerOptions } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
   const authState = useAuthState()
   const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
-  const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { helpRequestStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     filter: [filters: HelpRequestFilterInput]

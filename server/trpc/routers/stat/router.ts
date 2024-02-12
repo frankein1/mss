@@ -30,7 +30,7 @@ import {
   getRegionStatsQ,
   getCityStatsQ,
   getDepartmentStatsQ,
-  getHelpRequestSubjectStatsQ,
+  getFileInstructionTypeStatsQ,
   getHousingHelpRequestsStatsQ
 } from '~/server/route/stat'
 import { protectedProcedure, router } from '~/server/trpc'
@@ -87,9 +87,9 @@ export const statRouter = router({
   getHelpRequestStatusStats: protectedProcedure
     .input(getHelpRequestStatusStatsQ.inputValidation)
     .query(getHelpRequestStatusStatsQ.execute),
-  getHelpRequestSubjectStats: protectedProcedure
-    .input(getHelpRequestSubjectStatsQ.inputValidation)
-    .query(getHelpRequestSubjectStatsQ.execute),
+  getFileInstructionTypeStats: protectedProcedure
+    .input(getFileInstructionTypeStatsQ.inputValidation)
+    .query(getFileInstructionTypeStatsQ.execute),
   getHistoryCounts: protectedProcedure
     .input(getHistoryCountsQuery.inputValidation)
     .query(getHistoryCountsQuery.execute),

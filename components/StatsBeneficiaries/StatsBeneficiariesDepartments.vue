@@ -33,7 +33,7 @@
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
-  import { STATS_NULL_LABEL } from '~/client/options/stat'
+  import { STATS_NULL_LABEL } from '~/client/options'
 
   const trpcClient = useTrpcClient()
 

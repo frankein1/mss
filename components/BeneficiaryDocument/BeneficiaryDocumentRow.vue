@@ -110,10 +110,7 @@
   import { EditDocumentInput } from '~/server/schema'
   import { DocumentTag } from '~/types/document'
   import { DocumentEventAction, EventCategory } from '~/types/matomo'
-  import {
-    documentTypeLabels,
-    documentTagLabels
-  } from '~/client/options/document'
+  import { documentTypeLabels, documentTagLabels } from '~/client/options'
   import { DocumentPermissions } from '~/server/security'
 
   const modal = useModal()

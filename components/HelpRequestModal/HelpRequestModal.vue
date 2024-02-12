@@ -7,8 +7,8 @@
     <VeeRadioButtons
       name="subject"
       label="L'instruction concerne"
-      :options="helpRequestSubjectOptions"
-      :pictos="helpRequestSubjectPictos"
+      :options="fileInstructionTypeOptions"
+      :pictos="fileInstructionTypePictos"
       :inline="false"
       required
     />
@@ -39,12 +39,12 @@
 
 <script setup lang="ts">
   import { z } from 'zod'
+  import { FileInstructionType } from '@prisma/client'
   import {
-    helpRequestSubjectOptions,
-    helpRequestSubjectPictos
-  } from '~/client/options/helpRequest'
+    fileInstructionTypeOptions,
+    fileInstructionTypePictos
+  } from '~/client/options'
   import { RoutePath } from '~/utils/routing'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const modal = useModal()
 
@@ -54,10 +54,10 @@
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit } = useForm<{ subject: HelpRequestSubject }>({
+  const { handleSubmit } = useForm<{ subject: FileInstructionType }>({
     validationSchema: toTypedSchema(
       z.object({
-        subject: z.nativeEnum(HelpRequestSubject, {
+        subject: z.nativeEnum(FileInstructionType, {
           required_error: "Veuillez sélectionner un type d'accompagnement."
         })
       })

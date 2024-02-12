@@ -39,6 +39,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { structureTypeOptions } from '~/client/options/structure'
+  import { structureTypeOptions } from '~/client/options'
   import { adminStructureFieldLabels } from '~/client/labels'
 </script>

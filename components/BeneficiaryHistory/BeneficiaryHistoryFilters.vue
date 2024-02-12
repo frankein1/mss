@@ -26,9 +26,9 @@
   import type { FilterProp } from '~/types/filter'
   import {
     followupMediumOptions,
-    followupStatusOptions
-  } from '~/client/options/followup'
-  import { typeSuiviOptions } from '~/client/options/history'
+    followupStatusOptions,
+    typeSuiviOptions
+  } from '~/client/options'
   // import { formatDate } from '~/utils/formatDate'
   import {
     EventCategory,
@@ -45,7 +45,7 @@
   const authState = useAuthState()
   const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
-  const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { helpRequestStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     filter: [filters: BeneficiaryHistoryFilterInput]

@@ -22,7 +22,7 @@ import {
   filterHousingHelpRequest,
   filterHelpRequest
 } from '~/server/services/helper'
-import { TypeSuivi } from '~/client/options/history'
+import { TypeSuivi } from '~/client/options'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

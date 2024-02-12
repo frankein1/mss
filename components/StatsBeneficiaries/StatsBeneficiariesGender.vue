@@ -34,8 +34,7 @@
   import { RoutePath } from '~/utils/routing'
   import { StatFilterInput } from '~/server/schema'
   import { getStatColor } from '~/client/colors/stats'
-  import { getStatLabel } from '~/client/options/stat'
-  import { beneficiaryGenderLabels } from '~/client/options/beneficiary'
+  import { getStatLabel, beneficiaryGenderLabels } from '~/client/options'
   import { StatsPiePropType } from '~/types/stat'
 
   const GenderColor = {
