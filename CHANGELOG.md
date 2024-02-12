@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.14.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.14.1...v1.14.2) (2024-02-12)
+
+
+### Bug Fixes
+
+* **stats:** Corrige un bug qui empêche de filtrer les statistiques entre deux dates ou en fonction d'un objet d'accompagnement ([d98fc0e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d98fc0e509f2fa1219584709a5f7d93f0454d47c))
+
 ### [1.14.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.14.0...v1.14.1) (2024-01-23)
 
 
