@@ -1,4 +1,4 @@
-import { FileInstructionType, SocialSupportType } from '@prisma/client'
+import { SocialSupportType } from '@prisma/client'
 import { prepareSocialSupportStatFilters } from '../helpers'
 import {
   SocialSupportConstraints,
@@ -8,7 +8,6 @@ import {
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security'
 import { appendConstraints } from '~/server/database/repository/helper/appendConstraints'
-import { FileInstructionRepo } from '~/server/database/repository/FileInstructionRepository'
 
 export async function getHelpRequestHousingStatsQuery(
   user: SecurityRuleGrantee,
@@ -35,11 +34,10 @@ export async function getHelpRequestHousingStatsQuery(
       _count: true,
       orderBy: { _count: { isFirst: 'desc' } }
     }),
-    FileInstructionRepo.prisma.groupBy({
+    HousingHelpRequestRepo.prisma.groupBy({
       by: ['reason'],
       where: {
-        type: FileInstructionType.Housing,
-        socialSupport: socialSupportWhere.where
+        fileInstruction: { socialSupport: socialSupportWhere.where }
       },
       _count: true,
       orderBy: { _count: { reason: 'desc' } }

@@ -30,4 +30,4 @@ SET NOT NULL,
 SET NOT NULL;
 
 -- DropEnum
-DROP TYPE "FileInstructionType";
+DROP TYPE "HelpRequestSubject";

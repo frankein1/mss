@@ -18,11 +18,11 @@
     <span class="information-label">Instruction :</span>
     {{ instructorOrganization }}
   </li>
-  <li v-if="fileInstruction.reason">
+  <li v-if="housingHelpRequest.reason">
     <span class="information-label"
       >{{ housingHelpRequestFieldLabels.reason }} :</span
     >
-    {{ reasonLabels[fileInstruction.reason] }}
+    {{ housingReasonLabels[housingHelpRequest.reason] }}
   </li>
   <li v-if="housingHelpRequest.uniqueId">
     <span class="information-label"
@@ -108,7 +108,7 @@
   import {
     fileInstructionRefusalReasonLabels,
     askedHousingLabels,
-    reasonLabels,
+    housingReasonLabels,
     housingTypeLabels,
     roomCountLabels,
     isFirstLabels

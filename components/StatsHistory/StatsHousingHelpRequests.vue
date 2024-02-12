@@ -33,7 +33,7 @@
   import { SupportColor } from '~/client/colors'
   import {
     isFirstLabels,
-    fileInstructionReasonLabels,
+    housingReasonLabels,
     getStatLabel
   } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
@@ -66,7 +66,7 @@
     () =>
       data.value?.housingHelpRequestReasonCount.map(({ _count, reason }) => ({
         key: String(reason),
-        label: getStatLabel(fileInstructionReasonLabels, String(reason)),
+        label: getStatLabel(housingReasonLabels, String(reason)),
         color: SupportColor.helpRequests,
         count: _count
       })) || []

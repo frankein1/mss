@@ -1,52 +1,8 @@
 import {
-  FileInstructionReason,
   FileInstructionRefusalReason,
   FileInstructionType
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
-
-export const housingHelpRequestReasonLabels = {
-  [FileInstructionReason.Violences]: 'Violences',
-  [FileInstructionReason.DivorceSeparation]: 'Divorce ou séparation',
-  [FileInstructionReason.RapprochementFamilial]: 'Rapprochement familial',
-  [FileInstructionReason.Mutation]: 'Mutation',
-  [FileInstructionReason.Expulsion]: 'Expulsion',
-  [FileInstructionReason.LogementInsalubre]: 'Logement insalubre',
-  [FileInstructionReason.LogementNonDecent]: 'Logement non décent',
-  [FileInstructionReason.LogementReprisVente]:
-    'Logement repris ou mis en vente',
-  [FileInstructionReason.LogementInadapte]: 'Logement inadapté',
-  [FileInstructionReason.LogementTropCher]: 'Logement trop cher',
-  [FileInstructionReason.LogementBientotDemoli]: 'Logement bientôt démoli',
-  [FileInstructionReason.Localisation]: 'Localisation du logement',
-  [FileInstructionReason.SansLogementOuTemporaire]:
-    'Sans logement ou logement temporaire'
-}
-
-export const helpRequestReasonLabels = {
-  [FileInstructionReason.Violences]: 'Violences',
-  [FileInstructionReason.Housing]: 'Hébergemnent',
-  [FileInstructionReason.Food]: 'Alimentation',
-  [FileInstructionReason.Energy]: 'Energie',
-  [FileInstructionReason.Other]: 'Autre'
-}
-
-export const fileInstructionReasonLabels = {
-  ...helpRequestReasonLabels,
-  ...housingHelpRequestReasonLabels
-}
-
-export const helpRequestReasonOptions = labelsToOptions(helpRequestReasonLabels)
-export const housingHelpRequestReasonOptions = labelsToOptions(
-  housingHelpRequestReasonLabels
-)
-
-export const reasonLabels = {
-  ...housingHelpRequestReasonLabels,
-  ...helpRequestReasonLabels
-}
-
-export const reasonOptions = labelsToOptions(reasonLabels)
 
 const baseRefusalReasonLabels = {
   [FileInstructionRefusalReason.ResourcesOutOfScale]: 'Ressources hors barème',

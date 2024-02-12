@@ -72,7 +72,6 @@ export async function update({ input, ctx }: UpdateParams) {
       ),
       fileInstruction: {
         update: {
-          reason,
           examinationDate,
           decisionDate,
           refusalReason,
@@ -89,7 +88,7 @@ export async function update({ input, ctx }: UpdateParams) {
             update: {
               isFirst,
               firstOpeningDate,
-
+              reason,
               uniqueId,
               askedHousing,
               housingType: housingType || undefined,
