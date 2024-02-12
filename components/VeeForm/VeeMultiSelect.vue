@@ -71,7 +71,7 @@
       :aria-labelledby="labelId"
     >
       <li
-        v-for="([optionValue, optionLabel], index) in orderedOptions"
+        v-for="([optionValue, optionLabel], index) in options"
         :ref="el => setOptionRef(el, optionValue)"
         :key="optionValue"
         role="option"
@@ -200,20 +200,7 @@
    */
   const optionTabindex = computed(() => (props.dropdown ? '-1' : undefined))
 
-  const orderedOptions = computed(() => {
-    const optionsAsArray = [...props.options.entries()]
-    const sortedOptionsAsArray = optionsAsArray.sort(([aKey], [bKey]) => {
-      const aSelected = selectedValues.value.includes(aKey)
-      const bSelected = selectedValues.value.includes(bKey)
-      if (aSelected === bSelected) {
-        return 0
-      }
-      return aSelected ? -1 : 1
-    })
-    return new Map(sortedOptionsAsArray)
-  })
-
-  const optionValues = computed(() => [...orderedOptions.value.keys()])
+  const optionValues = computed(() => [...props.options.keys()])
 
   const {
     /**
