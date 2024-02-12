@@ -73,7 +73,7 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
 }
 
 export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
-  const socialSupportFilters: { [k: string]: {} } = {}
+  const socialSupportFilters: Prisma.SocialSupportWhereInput = {}
 
   if (filters.fromDate || filters.toDate) {
     socialSupportFilters.created = prepareDateFilters(filters)
@@ -89,7 +89,7 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
   if (filters.fromDate || filters.toDate || filters.followupTypes) {
-    formattedFilters.socialSupports = socialSupportFilters
+    formattedFilters.socialSupports = { some: socialSupportFilters }
   }
 
   if (filters.cities) {
