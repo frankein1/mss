@@ -7,11 +7,11 @@ import {
 import { HousingHelpRequestRepo } from '~/server/database'
 import {
   AppContextPermissions,
-  HelpRequestPermissions,
+  FileInstructionPermissions,
   SecurityRuleContext,
   SecurityRuleGrantee,
   getAppContextPermissions,
-  getHelpRequestPermissions
+  getFileInstructionPermissions
 } from '~/server/security'
 
 export const include = {
@@ -51,7 +51,7 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
     fileInstruction: { socialSupport }
   } = housingHelpRequest
   const { beneficiary } = socialSupport
-  const permissions = getHelpRequestPermissions({
+  const permissions = getFileInstructionPermissions({
     ctx,
     beneficiary,
     socialSupport
@@ -65,7 +65,7 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
 
 export function filter(
   appPermissions: AppContextPermissions,
-  permissions: HelpRequestPermissions,
+  permissions: FileInstructionPermissions,
   housingHelpRequest: HousingHelpRequestOutput
 ) {
   const { fileInstruction } = housingHelpRequest
