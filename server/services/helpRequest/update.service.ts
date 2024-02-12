@@ -19,6 +19,7 @@ export async function update({ input, ctx }: UpdateParams) {
       financialSupport: true,
       socialSupport: {
         select: {
+          types: true,
           documents: true
         }
       }
@@ -61,7 +62,10 @@ export async function update({ input, ctx }: UpdateParams) {
       numeroPegase,
       dueDate,
       date,
-      types: connect(typeId),
+      types: {
+        ...connect(typeId),
+        disconnect: target.socialSupport.types.map(({ id }) => ({ id }))
+      },
       documents: prepareDocumentsMutations(
         documents,
         target.socialSupport.documents
