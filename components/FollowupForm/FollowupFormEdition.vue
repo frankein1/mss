@@ -86,7 +86,7 @@
       synthesis: followup.value.synthesis,
       privateSynthesis: followup.value.privateSynthesis,
       status: followup.value.status,
-      helpRequested: followup.value.helpRequested,
+      helpRequested: followup.value.helpRequested || false,
       structureName: followup.value.structureName,
       dueDate: followup.value.dueDate,
       thirdPersonName: followup.value.thirdPersonName,
