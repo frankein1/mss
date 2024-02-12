@@ -24,7 +24,7 @@
   import { helpRequestFieldLabels } from '~/client/labels'
 
   const snackbar = useSnackbar()
-  const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { helpRequestStatusOptions } = useSocialSupportStatus()
 
   const props = defineProps<{
     item: HelpRequestPageItem

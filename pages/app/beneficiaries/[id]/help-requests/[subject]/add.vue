@@ -44,13 +44,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { HelpRequestSubject } from '~/types/socialSupport'
+  import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema'
   import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
-  import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
+  import { fileInstructionTypePictos } from '~/client/options'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -62,11 +62,11 @@
   const beneficiaryId = route.params.id as string
   const subject = toFirstLetterUpperCase(
     route.params.subject as string
-  ) as HelpRequestSubject
-  const isFinancial = subject === HelpRequestSubject.Financial
+  ) as FileInstructionType
+  const isFinancial = subject === FileInstructionType.Financial
   const subtitle = isFinancial ? 'Aide financière' : undefined
   const subtitlePictoPath = isFinancial
-    ? helpRequestSubjectPictos.Financial
+    ? fileInstructionTypePictos.Financial
     : undefined
 
   const { data: beneficiary, error: beneficiaryError } =

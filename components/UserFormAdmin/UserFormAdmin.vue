@@ -82,7 +82,7 @@
   import { UserStatus, UserRole } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { userFieldLabels } from '~/client/labels'
-  import { userRoleOptions, userStatusOptions } from '~/client/options/user'
+  import { userRoleOptions, userStatusOptions } from '~/client/options'
   import { AdminUserOutput } from '~/server/trpc/routers'
   import {
     AdminEditUserInput,

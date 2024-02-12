@@ -12,5 +12,5 @@
 
 <script setup lang="ts">
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { beneficiaryMobilityOptions } from '~/client/options/beneficiary'
+  import { beneficiaryMobilityOptions } from '~/client/options'
 </script>

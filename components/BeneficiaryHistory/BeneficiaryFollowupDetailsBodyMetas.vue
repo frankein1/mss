@@ -45,7 +45,7 @@
     // followupInterventionLabels,
     followupMediumLabels
     // followupSignalementLabels
-  } from '~/client/options/followup'
+  } from '~/client/options'
 
   const props = defineProps<{
     followup: FollowupData

@@ -7,20 +7,19 @@ import {
   Minister,
   UserRole,
   DocumentType,
-  EmailStatus
+  EmailStatus,
+  FileInstructionType
 } from '@prisma/client'
 import {
   kindOfBooleanSchema,
   stringConstraint,
   withEmptyValueOptionalNativeEnum
 } from './helpers.schema'
-import { AgeGroup } from '~/client/options/ageGroup'
 import { maxStringLengthMessage } from '~/utils/zod'
-import { TypeSuivi } from '~/client/options/history'
-import { HelpRequestSubject } from '~/types/socialSupport'
+import { TypeSuivi, AgeGroup } from '~/client/options'
 
 const statFilterSchema = z.object({
-  helpRequestSubject: withEmptyValueOptionalNativeEnum(HelpRequestSubject),
+  helpRequestSubject: withEmptyValueOptionalNativeEnum(FileInstructionType),
   fromDate: z.coerce.date().nullish(),
   toDate: z.coerce
     .date()

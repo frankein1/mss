@@ -6,9 +6,14 @@ import {
   beneficiaryAccommodationZoneLabels,
   beneficiaryGenderLabels,
   beneficiaryMobilityLabels,
-  beneficiarySocioProfessionalCategoryLabels
-} from '~/client/options/beneficiary'
-import { familySituationLabels } from '~/client/options/familySituation'
+  beneficiarySocioProfessionalCategoryLabels,
+  familySituationLabels,
+  ageGroupLabels,
+  STATS_NULL_LABEL,
+  ministereCategorieLabels,
+  ministereDepartmentServiceAcLabels,
+  ministereStructureLabels
+} from '~/client/options'
 import {
   getBeneficiaryCountQuery,
   getGenderStatsQuery,
@@ -27,15 +32,8 @@ import {
 import { StatFilterInput, statFilterSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
-import { ageGroupLabels } from '~/client/options/ageGroup'
 import { getColumnsFromLabels } from '~/utils/export/getColumnsFromLabels'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
-import { STATS_NULL_LABEL } from '~/client/options/stat'
-import {
-  ministereCategorieLabels,
-  ministereDepartmentServiceAcLabels,
-  ministereStructureLabels
-} from '~/client/options/ministry'
 import {
   SecurityRuleContext,
   getAppContextPermissions

@@ -98,7 +98,7 @@
   import { HelpRequestPageItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { paymentMethodOptions } from '~/client/options/helpRequest'
+  import { paymentMethodOptions } from '~/client/options'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { euros } from '~/utils/euros'
   import { readableFileNumber } from '~/utils/readableFileNumber'
@@ -111,7 +111,7 @@
     item: HelpRequestPageItem
   }>()
 
-  const { helpRequestStatusOptions } = useHelpRequestStatus()
+  const { helpRequestStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     updated: [item: HelpRequestPageItem]

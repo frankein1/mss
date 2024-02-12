@@ -33,8 +33,10 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
   import { StatFilterInput } from '~/server/schema'
-  import { getStatLabel } from '~/client/options/stat'
-  import { beneficiaryAccommodationZoneLabels } from '~/client/options/beneficiary'
+  import {
+    getStatLabel,
+    beneficiaryAccommodationZoneLabels
+  } from '~/client/options'
 
   const props = defineProps<{
     beneficiaryCount: number

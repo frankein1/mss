@@ -9,7 +9,7 @@
   import { FilterType } from '~/utils/constants/filters'
   import type { UserAdminFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import { userRoleOptions } from '~/client/options/user'
+  import { userRoleOptions } from '~/client/options'
   import { withEmptyValue } from '~/utils/options'
 
   const emit = defineEmits<{

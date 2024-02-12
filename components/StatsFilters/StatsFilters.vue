@@ -15,14 +15,14 @@
 
 <script setup lang="ts">
   import {
-    helpRequestSubjectStatsOptions,
-    helpRequestSubjectPictos
-  } from '~/client/options/helpRequest'
+    fileInstructionTypeStatsOptions,
+    fileInstructionTypePictos,
+    beneficiaryStatusOptions
+  } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import { Options, withEmptyValue } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import { beneficiaryStatusOptions } from '~/client/options/beneficiary'
 
   const { application } = usePermissions()
 
@@ -53,10 +53,10 @@
       filters.push({
         name: 'helpRequestSubject',
         label: "Thématique d'instruction",
-        options: withEmptyValue(helpRequestSubjectStatsOptions, 'Toutes'),
+        options: withEmptyValue(fileInstructionTypeStatsOptions, 'Toutes'),
         type: FilterType.Radio,
         alwaysExpanded: true,
-        pictos: helpRequestSubjectPictos
+        pictos: fileInstructionTypePictos
       })
     }
     filters.push({

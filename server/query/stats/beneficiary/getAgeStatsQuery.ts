@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 import { prepareBeneficiaryStatFilters } from '../helpers'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
-import { AgeGroup } from '~/client/options/ageGroup'
+import { AgeGroup } from '~/client/options'
 import { StatFilterInput } from '~/server/schema'
 import { AgeGroupsFilter } from '~/types/stat'
 import { dateIsBetween, dateIsSameOrBefore, dateIsSameOrAfter } from '~/utils'

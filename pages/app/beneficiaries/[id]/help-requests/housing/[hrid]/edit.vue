@@ -9,7 +9,7 @@
             beneficiary:
               housingHelpRequest?.fileInstruction.socialSupport.beneficiary
           },
-          HelpRequestSubject.Housing
+          FileInstructionType.Housing
         )
       "
     />
@@ -19,7 +19,7 @@
       icon-color-class="color-purple-glycine"
       icon-background-class="bg-purple-glycine"
       subtitle="Demande de logement"
-      :subtitle-picto-path="helpRequestSubjectPictos.Housing"
+      :subtitle-picto-path="fileInstructionTypePictos.Housing"
     >
       <RequiredFields />
     </PageTitle>
@@ -49,12 +49,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { FileInstructionType } from '@prisma/client'
   import { EditHousingHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
-  import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
-  import { HelpRequestSubject } from '~/types/socialSupport'
+  import { fileInstructionTypePictos } from '~/client/options'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

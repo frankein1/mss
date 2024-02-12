@@ -23,15 +23,13 @@ import {
   beneficiaryStatusLabels,
   incomeSourceLabels,
   pensionOrganisationLabels,
-  relativeRelationshipLabels
-} from '~/client/options/beneficiary'
-import {
+  relativeRelationshipLabels,
   ministereCategorieLabels,
   ministereDepartmentServiceAcLabels,
-  ministereStructureLabels
-} from '~/client/options/ministry'
-import { familySituationLabels } from '~/client/options/familySituation'
-import { Nationalities } from '~/client/options/nationality'
+  ministereStructureLabels,
+  familySituationLabels,
+  Nationalities
+} from '~/client/options'
 import { readableFileNumber } from '~/utils/readableFileNumber'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
 

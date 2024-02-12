@@ -1,4 +1,4 @@
-import { STATS_NULL_LABEL } from '~/client/options/stat'
+import { STATS_NULL_LABEL } from '~/client/options'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import type { Options } from '~/utils/options'
 

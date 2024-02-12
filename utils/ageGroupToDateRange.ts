@@ -1,5 +1,5 @@
 import dayjs, { Dayjs } from 'dayjs'
-import { AgeGroup } from '~/client/options/ageGroup'
+import { AgeGroup } from '~/client/options'
 
 export function ageGroupToDateRange(ageGroup: AgeGroup): {
   [key: string]: Dayjs

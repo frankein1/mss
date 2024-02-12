@@ -33,8 +33,10 @@
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
-  import { getStatLabel } from '~/client/options/stat'
-  import { beneficiaryAccommodationModeLabels } from '~/client/options/beneficiary'
+  import {
+    getStatLabel,
+    beneficiaryAccommodationModeLabels
+  } from '~/client/options'
 
   const trpcClient = useTrpcClient()
 

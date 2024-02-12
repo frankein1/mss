@@ -27,8 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ministerLabels } from '~/client/options/ministry'
-  import { getStatLabel } from '~/client/options/stat'
+  import { ministerLabels, getStatLabel } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'

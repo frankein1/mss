@@ -35,8 +35,10 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
   import { StatFilterInput } from '~/server/schema'
-  import { getStatLabel } from '~/client/options/stat'
-  import { ministereDepartmentServiceAcLabels } from '~/client/options/ministry'
+  import {
+    ministereDepartmentServiceAcLabels,
+    getStatLabel
+  } from '~/client/options'
 
   const props = defineProps<{
     beneficiaryCount: number

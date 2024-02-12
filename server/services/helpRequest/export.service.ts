@@ -9,7 +9,6 @@ import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBenefici
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 
-import {} from '~/client/options/ministry'
 import {
   socialSupportStatusLabels,
   fileInstructionRefusalReasonLabels,

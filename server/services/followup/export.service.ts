@@ -2,13 +2,13 @@ import { getPage } from './queries'
 import { prepareFilters, prepareSort } from './helper'
 import {
   followupMediumLabels,
-  socialSupportStatusLabels
+  socialSupportStatusLabels,
+  ministerLabels
 } from '~/client/options'
 import { ExportFollowupsInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
-import { ministerLabels } from '~/client/options/ministry'
 import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'

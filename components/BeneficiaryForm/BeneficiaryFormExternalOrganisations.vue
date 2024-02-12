@@ -52,6 +52,6 @@
   import {
     beneficiaryOrientationTypeOptions,
     beneficiaryProtectionMeasureOptions
-  } from '~/client/options/beneficiary'
+  } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 </script>

@@ -16,14 +16,14 @@
     FollowupType,
     SocialSupportStatus,
     InstructorOrganization,
-    PrescribingOrganization
+    PrescribingOrganization,
+    FileInstructionType
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
     CreateHelpRequestInput,
     createHelpRequestSchema
   } from '~/server/schema'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { application } = usePermissions()
 
@@ -41,7 +41,9 @@
   }>()
 
   const subject = computed(() =>
-    props.isFinancial ? HelpRequestSubject.Financial : HelpRequestSubject.Other
+    props.isFinancial
+      ? FileInstructionType.Financial
+      : FileInstructionType.Other
   )
 
   const { handleSubmit } = useForm<CreateHelpRequestInput>({

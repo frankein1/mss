@@ -1,6 +1,6 @@
 import { prepareHelpRequestStatFilters } from '../helpers'
 import { SocialSupportRepo } from '~/server/database'
-import { STATS_NULL_LABEL } from '~/client/options/stat'
+import { STATS_NULL_LABEL } from '~/client/options'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'

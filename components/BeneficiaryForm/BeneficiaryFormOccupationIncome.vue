@@ -170,13 +170,11 @@
   import {
     beneficiarySocioProfessionalCategoryOptions,
     incomeSourceOptions,
-    pensionOrganisationOptions
-  } from '~/client/options/beneficiary'
-  import {
+    pensionOrganisationOptions,
     ministereDepartmentServiceAcOptions,
     ministereStructureOptions,
     ministereCategorieOptions
-  } from '~/client/options/ministry'
+  } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   const props = defineProps<{

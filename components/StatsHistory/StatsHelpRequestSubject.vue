@@ -31,13 +31,13 @@
 </template>
 
 <script lang="ts" setup>
+  import { FileInstructionType } from '@prisma/client'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import {
-    helpRequestSubjectPictos,
-    helpRequestSubjectStatsLabels
+    fileInstructionTypePictos,
+    fileInstructionTypeStatsLabels
   } from '~/client/options'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const trpcClient = useTrpcClient()
 
@@ -50,27 +50,27 @@
     data: subjectCounts,
     error,
     pending
-  } = await trpcClient.stat.getHelpRequestSubjectStats.useQuery(props.filters)
+  } = await trpcClient.stat.getFileInstructionTypeStats.useQuery(props.filters)
 
   const subjectStats = computed(
     () =>
       subjectCounts.value?.map(({ _count, subject }) => ({
         key: subject,
-        label: helpRequestSubjectStatsLabels[subject],
+        label: fileInstructionTypeStatsLabels[subject],
         color: getColor(subject),
         count: _count,
-        picto: helpRequestSubjectPictos[subject]
+        picto: fileInstructionTypePictos[subject]
       })) || []
   )
 
-  function getColor(subject: HelpRequestSubject) {
-    if (subject === HelpRequestSubject.Housing) {
+  function getColor(subject: FileInstructionType) {
+    if (subject === FileInstructionType.Housing) {
       return '#000091'
     }
-    if (subject === HelpRequestSubject.Financial) {
+    if (subject === FileInstructionType.Financial) {
       return '#009081'
     }
-    if (subject === HelpRequestSubject.Other) {
+    if (subject === FileInstructionType.Other) {
       return '#A558A0'
     }
     return ''

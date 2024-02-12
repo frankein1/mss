@@ -32,5 +32,5 @@
 
 <script setup lang="ts">
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { beneficiaryFamilySituationOptions } from '~/client/options/beneficiary'
+  import { beneficiaryFamilySituationOptions } from '~/client/options'
 </script>

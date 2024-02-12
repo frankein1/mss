@@ -55,12 +55,12 @@
 </template>
 
 <script lang="ts" setup>
+  import { FileInstructionType } from '@prisma/client'
   import { EditHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
-  import { helpRequestSubjectPictos } from '~/client/options/helpRequest'
-  import { HelpRequestSubject } from '~/types/socialSupport'
+  import { fileInstructionTypePictos } from '~/client/options'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -92,8 +92,8 @@
 
   const subject = computed(() =>
     helpRequest.value?.financialSupport
-      ? HelpRequestSubject.Financial
-      : HelpRequestSubject.Other
+      ? FileInstructionType.Financial
+      : FileInstructionType.Other
   )
 
   const subtitle = computed(() =>
@@ -105,7 +105,7 @@
       return undefined
     }
     return helpRequest.value?.financialSupport
-      ? helpRequestSubjectPictos.Financial
+      ? fileInstructionTypePictos.Financial
       : undefined
   })
 

@@ -5,13 +5,17 @@
     :beneficiary-id="socialSupport.beneficiary.id"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
-    :subject="HelpRequestSubject.Housing"
+    :subject="FileInstructionType.Housing"
     @submit="onSubmit"
   />
 </template>
 
 <script lang="ts" setup>
-  import { AskedHousing, InstructorOrganization } from '@prisma/client'
+  import {
+    AskedHousing,
+    InstructorOrganization,
+    FileInstructionType
+  } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
     EditHousingHelpRequestInput,
@@ -19,7 +23,6 @@
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { GetHousingHelpRequestOutput } from '~/server/trpc/routers'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { application } = usePermissions()
 

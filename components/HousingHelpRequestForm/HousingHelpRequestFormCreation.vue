@@ -4,19 +4,22 @@
     :instructor-organizations="instructorOrganizations"
     :beneficiary-id="beneficiaryId"
     :caught-errors="caughtErrors"
-    :subject="HelpRequestSubject.Housing"
+    :subject="FileInstructionType.Housing"
     @submit="onSubmit"
   />
 </template>
 
 <script lang="ts" setup>
-  import { SocialSupportStatus, InstructorOrganization } from '@prisma/client'
+  import {
+    SocialSupportStatus,
+    InstructorOrganization,
+    FileInstructionType
+  } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
     CreateHousingHelpRequestInput,
     createHousingHelpRequestSchema
   } from '~/server/schema'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const { application } = usePermissions()
 

@@ -1,8 +1,8 @@
+import { FileInstructionType } from '@prisma/client'
 import { prepareSocialSupportStatFilters } from '../helpers'
 import { SocialSupportRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
-import { HelpRequestSubject } from '~/types/socialSupport'
 
 export async function getHelpRequestCountQuery(
   user: SecurityRuleGrantee,
@@ -41,8 +41,8 @@ export async function getHelpRequestCountQuery(
 
   return {
     total,
-    [HelpRequestSubject.Financial]: financial,
-    [HelpRequestSubject.Other]: other,
+    [FileInstructionType.Financial]: financial,
+    [FileInstructionType.Other]: other,
     external
   }
 }

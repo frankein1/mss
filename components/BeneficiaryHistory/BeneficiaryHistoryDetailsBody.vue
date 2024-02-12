@@ -90,11 +90,11 @@
 </template>
 
 <script setup lang="ts">
+  import { FileInstructionType } from '@prisma/client'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import type { SocialSupportItem, CommentData, CommentItem } from './types'
   import { RoutePath } from '~/utils/routing'
   import { BeneficiaryPermissions } from '~/server/security'
-  import { HelpRequestSubject } from '~/types/socialSupport'
 
   const props = defineProps<{
     item: SocialSupportItem
@@ -125,8 +125,8 @@
     const helpRequest = socialSupport.value.fileInstruction?.helpRequest
     if (helpRequest) {
       const subject = helpRequest.financialSupport
-        ? HelpRequestSubject.Financial
-        : HelpRequestSubject.Other
+        ? FileInstructionType.Financial
+        : FileInstructionType.Other
       return RoutePath.AppBeneficiaryHelpRequestEdit(
         socialSupport.value.beneficiaryId,
         helpRequest.id,
@@ -140,7 +140,7 @@
       return RoutePath.AppBeneficiaryHelpRequestEdit(
         socialSupport.value.beneficiaryId,
         housingHelpRequest.id,
-        HelpRequestSubject.Housing
+        FileInstructionType.Housing
       )
     }
 

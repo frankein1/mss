@@ -3,9 +3,9 @@ import { getRowsFromData } from '../helper/getRowsFromData'
 import { createQuery } from '~/server/route'
 import {
   followupMediumLabels,
-  followupStatusLabels
-} from '~/client/options/followup'
-import { ministerLabels } from '~/client/options/ministry'
+  followupStatusLabels,
+  ministerLabels
+} from '~/client/options'
 import { RowType, WorksheetType } from '~/types/export'
 import {
   getFollowupActionsEntreprisesStatsQuery,

@@ -5,10 +5,10 @@
 
 */
 -- CreateEnum
-CREATE TYPE "HelpRequestSubject" AS ENUM ('Housing', 'Financial', 'Other');
+CREATE TYPE "FileInstructionType" AS ENUM ('Housing', 'Financial', 'Other');
 
 -- AlterTable
-ALTER TABLE "help_request" ADD COLUMN     "subject" "HelpRequestSubject";
+ALTER TABLE "help_request" ADD COLUMN     "subject" "FileInstructionType";
 
 update help_request set "subject" = 'Financial' where financial_support = true;
 

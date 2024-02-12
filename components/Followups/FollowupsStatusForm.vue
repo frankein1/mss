@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
   import { FollowupPageItem } from './types'
-  import { followupStatusOptions } from '~/client/options/followup'
+  import { followupStatusOptions } from '~/client/options'
   import {
     QuickEditFollowupInput,
     quickEditFollowupSchema
