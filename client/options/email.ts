@@ -1,4 +1,5 @@
 import { EmailStatus } from '@prisma/client'
+import { labelsToOptions } from '~/utils/options'
 
 export const EmailStatusLabels: { [key in EmailStatus]: string } = {
   [EmailStatus.Error]: 'Erreur',
