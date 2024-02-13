@@ -72,6 +72,8 @@
       return null
     }
 
+    const maxAlwaysExpandedNb = 3
+
     const filters: FilterProp[] = [
       {
         name: 'search',
@@ -97,7 +99,7 @@
         label: 'Référent',
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: true,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.Referent
       })
@@ -109,7 +111,7 @@
         label: 'Statut',
         options: withEmptyValue(beneficiaryStatusOptions, 'Tous les statuts'),
         type: FilterType.SelectOne,
-        alwaysExpanded: !hasReferentsFilters,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.Status
       },
@@ -118,6 +120,7 @@
         label: "Tranche d'âge",
         options: withEmptyValue(ageGroupOptions, "Toutes les tranches d'âge"),
         type: FilterType.SelectOne,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.AgeGroup
       }

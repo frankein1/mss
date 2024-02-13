@@ -2,10 +2,10 @@
   <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
     <div class="fr-col-12">
       <StatsFilters
+        v-model:filters="filters"
         :followup-type-options="followupTypeOptions"
         :beneficiaries-cities-options="beneficiariesCitiesOptions"
         :agent-options="agentOptions"
-        @filter="filters = $event"
       />
     </div>
     <div class="fr-col-12 results-container">
