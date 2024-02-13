@@ -23,7 +23,7 @@
       <VeeSelect
         name="ministre"
         :label="helpRequestFieldLabels.ministre"
-        :options="withEmptyValue(ministerOptions)"
+        :options="withEmptyValue(currentMinisterOptions)"
         required
       />
     </div>
@@ -163,7 +163,7 @@
     housingHelpRequestFieldLabels
   } from '~/client/labels'
   import {
-    ministerOptions,
+    currentMinisterOptions,
     isFirstOptions,
     externalOrganisationOptions,
     askedHousingOptions

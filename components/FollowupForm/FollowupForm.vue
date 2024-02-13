@@ -47,7 +47,7 @@
         <VeeSelect
           name="ministre"
           :label="followupFieldLabels.ministre"
-          :options="withEmptyValue(ministerOptions)"
+          :options="withEmptyValue(currentMinisterOptions)"
           required
         />
       </div>
@@ -293,7 +293,7 @@
   } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
   import {
-    ministerOptions,
+    currentMinisterOptions,
     followupStatusOptions,
     followupMediumOptions
     // followupInterventionOptions,

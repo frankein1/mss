@@ -8,7 +8,6 @@ import { buildKeys } from '~/utils/keys/keyBuilder'
 import { labelsToOptions } from '~/utils/options'
 
 const currentMinisterLabels = {
-  [Minister.AurelienRousseau]: 'Aurélien Rousseau (Santé et Prévention)',
   [Minister.AuroreBerge]: 'Aurore Berge (Solidarités et Familles)',
   [Minister.FadilaKhattabi]: 'Fadila Khattabi (Personnes handicapées)',
   [Minister.OlivierDussopt]:
@@ -16,7 +15,11 @@ const currentMinisterLabels = {
   [Minister.CaroleGrandjean]:
     'Carole Grandjean (Enseignement, Formation professionnels)',
   [Minister.CatherineVautrin]:
-    'Catherine Vautrin (Travail, Santé et Solidarités)'
+    'Catherine Vautrin (Travail, Santé et Solidarités)',
+  [Minister.FredericValletoux]:
+    'Frédéric Valletoux (Délégué Santé et Prévention)',
+  [Minister.SarahElHairy]:
+    'Sarah El Haïry (Déléguée Enfance, Jeunesse et Familles)'
 }
 
 const currentMinisterOptions = labelsToOptions(currentMinisterLabels)
@@ -28,7 +31,8 @@ const ministerLabels = {
   [Minister.JeanChristopheCombe]:
     'Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)',
   [Minister.GenevieveDarrieussecq]:
-    'Geneviève Darrieussecq (Personnes handicapées)'
+    'Geneviève Darrieussecq (Personnes handicapées)',
+  [Minister.AurelienRousseau]: 'Aurélien Rousseau (Santé et Prévention)'
 }
 
 const ministerOptions = labelsToOptions(ministerLabels)
