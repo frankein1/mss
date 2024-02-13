@@ -1,8 +1,13 @@
 import { z } from 'zod'
-import { Minister, SocialSupportStatus } from '@prisma/client'
+import {
+  Minister,
+  SocialSupportStatus,
+  FileInstructionType
+} from '@prisma/client'
 import { kindOfBooleanSchema } from '..'
 
 export const fileInstructionFilterSchema = z.object({
+  fileInstructionType: z.nativeEnum(FileInstructionType).nullish(),
   status: z.nativeEnum(SocialSupportStatus).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
   referents: z.array(z.string().uuid()).nullish(),

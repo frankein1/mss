@@ -9,6 +9,7 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
   const formattedFilters: Prisma.FileInstructionWhereInput = {}
 
   const {
+    fileInstructionType,
     status,
     followupTypes,
     examinationDate,
@@ -17,6 +18,10 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     referents,
     ministre
   } = filters
+
+  if (fileInstructionType) {
+    formattedFilters.type = fileInstructionType
+  }
 
   if (handlingDate) {
     formattedFilters.helpRequest = formattedFilters.helpRequest || {}

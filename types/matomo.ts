@@ -31,6 +31,7 @@ export enum FollowupFilterEventAction {
 }
 
 export enum HelpRequestFilterEventAction {
+  FileInstructionType = "Type de dossier d'instruction",
   Status = 'Statut',
   FollowupType = 'Objet de la demande',
   ExaminationDate = 'Date de passage en commission',

@@ -27,7 +27,7 @@
   import { FileInstructionFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
-  import { ministerOptions } from '~/client/options'
+  import { ministerOptions, fileInstructionTypeOptions } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
   const authState = useAuthState()
@@ -95,6 +95,18 @@
 
     const filters: FilterProp[] = [
       {
+        name: 'fileInstructionType',
+        label: "Type d'accompagnement",
+        options: withEmptyValue(
+          fileInstructionTypeOptions,
+          "Tous les dossiers d'instruction"
+        ),
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.FileInstructionType,
+        alwaysExpanded: true
+      },
+      {
         name: 'status',
         label: helpRequestFieldLabels.status,
         options: withEmptyValue(
@@ -103,7 +115,8 @@
         ),
         type: FilterType.SelectOne,
         matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.Status
+        matomoEventAction: HelpRequestFilterEventAction.Status,
+        alwaysExpanded: true
       },
       {
         name: 'followupTypes',
@@ -111,7 +124,8 @@
         options: followupTypeOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.FollowupType
+        matomoEventAction: HelpRequestFilterEventAction.FollowupType,
+        alwaysExpanded: true
       }
     ]
 
