@@ -14,7 +14,7 @@ export async function updateStatus({
     ctx.user,
     {
       where: {
-        id: input.status
+        id: input.id
       },
       select: {
         id: true,
