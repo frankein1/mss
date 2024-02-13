@@ -60,7 +60,7 @@ export function prepareFilters(filters: HelpRequestFilterInput) {
     }
   }
 
-  if (status || followupTypes || referents || ministre) {
+  if (status || followupTypes?.length || referents?.length || ministre) {
     formattedFilters.fileInstruction = formattedFilters.fileInstruction || {}
     formattedFilters.fileInstruction.socialSupport =
       formattedFilters.fileInstruction.socialSupport || {}
@@ -69,13 +69,13 @@ export function prepareFilters(filters: HelpRequestFilterInput) {
       formattedFilters.fileInstruction.socialSupport.status = status
     }
 
-    if (followupTypes) {
+    if (followupTypes?.length) {
       formattedFilters.fileInstruction.socialSupport.types = {
         some: { id: { in: followupTypes } }
       }
     }
 
-    if (referents) {
+    if (referents?.length) {
       formattedFilters.fileInstruction.socialSupport = {
         beneficiary: {
           referents: { some: { id: { in: referents } } }

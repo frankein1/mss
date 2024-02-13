@@ -149,14 +149,20 @@
     expanded.value ? 'Voir moins de filtres' : 'Voir tous les filtres'
   )
 
+  function isSetValue(
+    value: FilterValue | null | undefined
+  ): value is FilterValue {
+    return !!(value && (!Array.isArray(value) || value.length))
+  }
+
   const hasFilters = computed<boolean>(
-    () => !!Object.values(selectedFilters.value).filter(v => v).length
+    () => !!Object.values(selectedFilters.value).filter(isSetValue).length
   )
 
   const collapsedSelectedFilters = computed<SelectedFilters>(() =>
     Object.entries(selectedFilters.value).reduce(
       (_collapsedSelectedFilters, [name, value]) => {
-        if (!value) {
+        if (!isSetValue(value)) {
           return _collapsedSelectedFilters
         }
 
@@ -187,7 +193,9 @@
   const emitableSelectedFilters = computed(() =>
     Object.entries(selectedFilters.value).reduce(
       (emitable, [filterName, filterValue]) =>
-        filterValue ? { ...emitable, [filterName]: filterValue } : emitable,
+        isSetValue(filterValue)
+          ? { ...emitable, [filterName]: filterValue }
+          : emitable,
       {} as { [key: string]: FilterValue }
     )
   )
