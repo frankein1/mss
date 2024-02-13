@@ -98,13 +98,13 @@ export const getBeneficiaryPermissions = ({
 }
 
 function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
-  const { efs, cias, ccas, receptionAgent } = getGranteRole(ctx)
+  const { cias, ccas, receptionAgent } = getGranteRole(ctx)
   return {
     edit: {
       general: true,
-      relatives: !efs && !receptionAgent,
-      health: !efs && !receptionAgent,
-      occupationIncome: !efs && !receptionAgent,
+      relatives: !receptionAgent,
+      health: !receptionAgent,
+      occupationIncome: !receptionAgent,
       externalOrganisations: true
     },
     view: {
@@ -153,19 +153,17 @@ function getEditionPermissions({
   const isReferent = isReferentFor(user, beneficiary)
   const isMember = isMemberOfReferents(user, beneficiary)
 
-  const { manager, socialWorker, instructor, receptionAgent, cias, ccas, efs } =
+  const { manager, socialWorker, instructor, receptionAgent, cias, ccas } =
     getGranteRole(ctx)
 
   return {
     edit: {
       general:
         isReferent || manager || socialWorker || instructor || receptionAgent,
-      relatives: !efs && (isReferent || manager || socialWorker || instructor),
+      relatives: isReferent || manager || socialWorker || instructor,
       health:
-        !efs &&
-        (isReferent || ((manager || socialWorker || instructor) && isMember)),
-      occupationIncome:
-        !efs && (isReferent || manager || socialWorker || instructor),
+        isReferent || ((manager || socialWorker || instructor) && isMember),
+      occupationIncome: isReferent || manager || socialWorker || instructor,
       externalOrganisations: isReferent || manager || socialWorker || instructor
     },
     get: {
@@ -177,12 +175,10 @@ function getEditionPermissions({
     view: {
       general:
         isReferent || manager || socialWorker || instructor || receptionAgent,
-      relatives: !efs && (isReferent || manager || socialWorker || instructor),
+      relatives: isReferent || manager || socialWorker || instructor,
       health:
-        !efs &&
-        (isReferent || ((manager || socialWorker || instructor) && isMember)),
-      occupationIncome:
-        !efs && (isReferent || manager || socialWorker || instructor),
+        isReferent || ((manager || socialWorker || instructor) && isMember),
+      occupationIncome: isReferent || manager || socialWorker || instructor,
       externalOrganisations: isReferent || manager || socialWorker || instructor
     },
     list: {

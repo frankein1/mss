@@ -1,13 +1,12 @@
 import { StructureType } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
-export const StructureTypeLabels: { [key in StructureType]: string } = {
+export const structureTypeLabels: { [key in StructureType]: string } = {
   [StructureType.Ccas]: 'CCAS',
   [StructureType.Cias]: 'CIAS',
   [StructureType.Association]: 'Association',
   [StructureType.Commune]: 'Commune',
-  [StructureType.Ministere]: 'Ministère',
-  [StructureType.EFS]: 'Etablissement France Services'
+  [StructureType.Ministere]: 'Ministère'
 }
 
-export const structureTypeOptions = labelsToOptions(StructureTypeLabels)
+export const structureTypeOptions = labelsToOptions(structureTypeLabels)
