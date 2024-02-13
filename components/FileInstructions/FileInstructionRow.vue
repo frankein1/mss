@@ -10,9 +10,9 @@
     >
       <td>
         <HelpRequestsStatusForm
-          v-if="permissions.edit && item.fileInstruction.helpRequest"
+          v-if="permissions.edit && helpRequest"
           :item="item"
-          :help-request="item.fileInstruction.helpRequest"
+          :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
         />
@@ -48,9 +48,9 @@
       </td>
       <td v-if="application.module.helpRequest">
         <HelpRequestsAllocatedAmountForm
-          v-if="item.fileInstruction.helpRequest && canEditAllocatedAmount"
+          v-if="helpRequest && canEditAllocatedAmount"
           :item="item"
-          :help-request="item.fileInstruction.helpRequest"
+          :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
         />
@@ -60,9 +60,9 @@
       </td>
       <td v-if="application.module.helpRequest">
         <HelpRequestsPaymentMethodForm
-          v-if="item.fileInstruction.helpRequest && canEditPaymentMethod"
+          v-if="helpRequest && canEditPaymentMethod"
           :item="item"
-          :help-request="item.fileInstruction.helpRequest"
+          :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
         />
@@ -72,9 +72,9 @@
       </td>
       <td v-if="application.module.helpRequest">
         <HelpRequestsPaymentDateForm
-          v-if="item.fileInstruction.helpRequest && canEditPaymentDate"
+          v-if="helpRequest && canEditPaymentDate"
           :item="item"
-          :help-request="item.fileInstruction.helpRequest"
+          :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
         />
