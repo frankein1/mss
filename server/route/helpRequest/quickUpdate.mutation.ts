@@ -26,8 +26,7 @@ const handler = async ({
   input: QuickEditHelpRequestInput
   ctx: ProtectedAppContext
 }) => {
-  await HelpRequestService.quickUpdate(ctx, input)
-  return HelpRequestService.get({ ctx, id: input.id })
+  return await HelpRequestService.quickUpdate(ctx, input)
 }
 
 export const quickUpdate = createMutation({

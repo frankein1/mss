@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestPageItem } from './types'
+  import { FileInstructionPageItem, HelpRequestData } from './types'
   import {
     QuickEditHelpRequestPaymentDateInput,
     quickEditHelpRequestPaymentDateSchema
@@ -24,19 +24,20 @@
   const snackbar = useSnackbar()
 
   const props = defineProps<{
-    item: HelpRequestPageItem
+    item: FileInstructionPageItem
+    helpRequest: HelpRequestData
   }>()
 
   const emit = defineEmits<{
-    updated: [item: HelpRequestPageItem]
+    updated: [item: FileInstructionPageItem]
   }>()
 
   const { handleSubmit, values } =
     useForm<QuickEditHelpRequestPaymentDateInput>({
       validationSchema: toTypedSchema(quickEditHelpRequestPaymentDateSchema),
       initialValues: {
-        id: props.item.helpRequest.id,
-        paymentDate: props.item.helpRequest.paymentDate
+        id: props.helpRequest.id,
+        paymentDate: props.helpRequest.paymentDate
       }
     })
 
@@ -49,11 +50,16 @@
     useTrpcMutation({
       mutation: () =>
         useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
-      onSuccess: item => {
+      onSuccess: res => {
         snackbar.success(
           "La date de paiement de l'instruction de dossier a été modifié."
         )
-        emit('updated', item)
+        const item = props.item
+        const helpRequest = item.fileInstruction.helpRequest
+        if (helpRequest) {
+          helpRequest.paymentDate = res.paymentDate
+          emit('updated', item)
+        }
       },
       onFailure: () => {
         snackbar.error(

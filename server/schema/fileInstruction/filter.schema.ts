@@ -1,0 +1,17 @@
+import { z } from 'zod'
+import { Minister, SocialSupportStatus } from '@prisma/client'
+import { kindOfBooleanSchema } from '..'
+
+export const fileInstructionFilterSchema = z.object({
+  status: z.nativeEnum(SocialSupportStatus).nullish(),
+  followupTypes: z.array(z.string().uuid()).nullish(),
+  referents: z.array(z.string().uuid()).nullish(),
+  examinationDate: z.coerce.date().nullish(),
+  handlingDate: kindOfBooleanSchema(),
+  externalStructure: kindOfBooleanSchema(),
+  ministre: z.array(z.nativeEnum(Minister)).nullish()
+})
+
+export type FileInstructionFilterInput = z.infer<
+  typeof fileInstructionFilterSchema
+>

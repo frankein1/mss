@@ -16,10 +16,10 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestPageItem } from './types'
+  import { FileInstructionPageItem } from './types'
   import {
-    QuickEditHelpRequestStatusInput,
-    quickEditHelpRequestStatusSchema
+    EditFileInstructionStatusInput,
+    editFileInstructionStatusSchema
   } from '~/server/schema'
   import { helpRequestFieldLabels } from '~/client/labels'
 
@@ -27,27 +27,31 @@
   const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const props = defineProps<{
-    item: HelpRequestPageItem
+    item: FileInstructionPageItem
   }>()
 
   const emit = defineEmits<{
-    updated: [item: HelpRequestPageItem]
+    updated: [item: FileInstructionPageItem]
   }>()
 
-  const { handleSubmit } = useForm<QuickEditHelpRequestStatusInput>({
-    validationSchema: toTypedSchema(quickEditHelpRequestStatusSchema),
+  const { handleSubmit } = useForm<EditFileInstructionStatusInput>({
+    validationSchema: toTypedSchema(editFileInstructionStatusSchema),
     initialValues: {
-      id: props.item.helpRequest.id,
-      status: props.item.helpRequest.fileInstruction.socialSupport.status
+      id: props.item.fileInstruction.id,
+      status: props.item.fileInstruction.socialSupport.status
     }
   })
 
-  const onUpdateStatus = handleSubmit(helpRequest => {
+  const onUpdateStatus = handleSubmit(fileInstruction => {
     useTrpcMutation({
       mutation: () =>
-        useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
-      onSuccess: item => {
+        useTrpcClient().fileInstruction.updateStatus.mutate(fileInstruction),
+      onSuccess: res => {
         snackbar.success("Le statut de l'instruction de dossier a été modifié.")
+
+        const item = props.item
+        const socialSupport = item.fileInstruction.socialSupport
+        socialSupport.status = res.socialSupport.status
         emit('updated', item)
       },
       onFailure: () => {

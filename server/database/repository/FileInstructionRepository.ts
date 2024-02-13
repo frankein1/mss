@@ -14,19 +14,29 @@ function findUniqueOrThrow<
   return prismaClient.fileInstruction.findUniqueOrThrow(params)
 }
 
-function count(
+function findMany<T extends Prisma.FileInstructionFindManyArgs>(
   user: SecurityRuleGrantee,
-  params: Prisma.HousingHelpRequestCountArgs
+  params: Prisma.SelectSubset<T, Prisma.HelpRequestFindManyArgs>
 ) {
   appendConstraints(user, params, FileInstructionConstraints.get)
-  return prismaClient.housingHelpRequest.count(params)
+  return prismaClient.fileInstruction.findMany(params)
+}
+
+function count(
+  user: SecurityRuleGrantee,
+  params: Prisma.FileInstructionCountArgs
+) {
+  appendConstraints(user, params, FileInstructionConstraints.get)
+  return prismaClient.fileInstruction.count(params)
 }
 
 export const FileInstructionRepo = {
   findUniqueOrThrow,
+  findMany,
   count,
   prisma: {
     create: prismaClient.fileInstruction.create,
+    update: prismaClient.fileInstruction.update,
     groupBy: prismaClient.fileInstruction.groupBy
   }
 }

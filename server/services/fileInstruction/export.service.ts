@@ -1,7 +1,7 @@
 import { prepareFilters, prepareSort } from './helper'
 import { getPage } from './queries'
 import { helpRequestFieldLabels } from '~/client/labels'
-import { ExportHelpRequestsInput } from '~/server/schema'
+import { ExportFileInstructionsInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { RowType } from '~/types/export'
 import { formatUserDisplayName } from '~/utils/user'
@@ -16,44 +16,43 @@ import {
   ministerLabels
 } from '~/client/options'
 
-export const HELP_REQUEST_EXPORTED_FIELDS: (keyof typeof helpRequestFieldLabels)[] =
-  [
-    'status',
-    'date',
-    'beneficiaryId',
-    'financialSupport',
-    'typeId',
-    'examinationDate',
-    'decisionDate',
-    'prescribingOrganizationId',
-    'synthesis',
-    'externalStructure',
-    'dispatchDate',
-    'instructorOrganizationId',
-    'askedAmount',
-    'allocatedAmount',
-    'paymentMethod',
-    'paymentDate',
-    'documents',
-    'handlingDate',
-    'refusalReason',
-    'refusalReasonOther',
-    'dueDate',
-    'fullFile',
-    'updated',
-    'ministre',
-    'numeroPegase',
-    'createdById'
-  ]
+export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
+  'status',
+  'date',
+  'beneficiaryId',
+  'financialSupport',
+  'typeId',
+  'examinationDate',
+  'decisionDate',
+  'prescribingOrganizationId',
+  'synthesis',
+  'externalStructure',
+  'dispatchDate',
+  'instructorOrganizationId',
+  'askedAmount',
+  'allocatedAmount',
+  'paymentMethod',
+  'paymentDate',
+  'documents',
+  'handlingDate',
+  'refusalReason',
+  'refusalReasonOther',
+  'dueDate',
+  'fullFile',
+  'updated',
+  'ministre',
+  'numeroPegase',
+  'createdById'
+]
 
-export async function exportHelpRequests({
+export async function exportFileInstructions({
   ctx,
   input
 }: {
   ctx: SecurityRuleContext
-  input: ExportHelpRequestsInput
+  input: ExportFileInstructionsInput
 }) {
-  const columns = HELP_REQUEST_EXPORTED_FIELDS.map(key => ({
+  const columns = FIELDS.map(key => ({
     key,
     header: helpRequestFieldLabels[key]
   }))
@@ -61,47 +60,49 @@ export async function exportHelpRequests({
   const where = prepareFilters(input.filters)
   const orderBy = prepareSort(input.orderBy)
 
-  const helpRequests = await getPage(ctx, {
+  const fileInstructions = await getPage(ctx, {
     where,
     orderBy
   })
 
-  const rows = helpRequests.reduce(
-    (helpRequests: RowType[], { permissions, helpRequest }) => {
+  const rows = fileInstructions.reduce(
+    (fileInstructions: RowType[], { permissions, fileInstruction }) => {
       if (permissions.view) {
-        const { fileInstruction } = helpRequest
-        const { socialSupport } = fileInstruction
+        const { socialSupport, helpRequest } = fileInstruction
+
+        const typeId =
+          socialSupport?.types?.length > 0 ? socialSupport.types[0].name : ''
 
         const beneficiary = socialSupport.beneficiary
-        helpRequests.push({
+        fileInstructions.push({
           beneficiaryId: formatBeneficiaryDisplayName(beneficiary),
-          financialSupport: helpRequest.financialSupport,
+          financialSupport: helpRequest?.financialSupport || '',
           prescribingOrganizationId:
-            helpRequest.prescribingOrganization?.name || '',
+            helpRequest?.prescribingOrganization?.name || '',
           externalStructure: getExternalStructure(
             fileInstruction.externalStructure
           ),
           instructorOrganizationId:
             fileInstruction.instructorOrganization?.name || '',
           date: formatDate(socialSupport.date, 'DD-MM-YYYY'),
-          typeId: helpRequest.type?.name || '',
+          typeId,
           documents:
             socialSupport.documents
               ?.map(document => document.name)
               .join(', ') || '',
           status: socialSupportStatusLabels[socialSupport.status],
-          askedAmount: helpRequest.askedAmount?.toString() || '',
+          askedAmount: helpRequest?.askedAmount?.toString() || '',
           examinationDate: formatDate(
             fileInstruction.examinationDate,
             'DD-MM-YYYY'
           ),
           decisionDate: formatDate(fileInstruction.decisionDate, 'DD-MM-YYYY'),
-          allocatedAmount: helpRequest.allocatedAmount?.toString() || '',
-          paymentMethod: helpRequest.paymentMethod
+          allocatedAmount: helpRequest?.allocatedAmount?.toString() || '',
+          paymentMethod: helpRequest?.paymentMethod
             ? paymentMethodLabels[helpRequest.paymentMethod]
             : '',
-          paymentDate: formatDate(helpRequest.paymentDate, 'DD-MM-YYYY'),
-          handlingDate: formatDate(helpRequest.handlingDate, 'DD-MM-YYYY'),
+          paymentDate: formatDate(helpRequest?.paymentDate, 'DD-MM-YYYY'),
+          handlingDate: formatDate(helpRequest?.handlingDate, 'DD-MM-YYYY'),
           refusalReason:
             fileInstruction.refusalReasonOther ||
             (fileInstruction.refusalReason
@@ -123,7 +124,7 @@ export async function exportHelpRequests({
             : ''
         })
       }
-      return helpRequests
+      return fileInstructions
     },
     []
   )

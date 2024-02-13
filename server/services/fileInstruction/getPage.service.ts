@@ -1,16 +1,16 @@
-import { prepareFilters, prepareSort } from './helper'
 import { getPage as getPageFn } from './queries'
-import { GetHelpRequestsInput } from '~/server/schema'
+import { prepareFilters, prepareSort } from './helper'
 import { SecurityRuleContext } from '~/server/security'
 import { getTotalPages, takeAndSkipFromPagination } from '~/utils/table'
-import { HelpRequestRepo } from '~/server/database'
+import { FileInstructionPageInput } from '~/server/schema'
+import { FileInstructionRepo } from '~/server/database/repository'
 
 export async function getPage({
   ctx,
   input
 }: {
   ctx: SecurityRuleContext
-  input: GetHelpRequestsInput
+  input: FileInstructionPageInput
 }) {
   const { user } = ctx
 
@@ -24,7 +24,7 @@ export async function getPage({
 
   const [items, count] = await Promise.all([
     getPageFn(ctx, { where, take, skip, orderBy }),
-    HelpRequestRepo.count(user, {
+    FileInstructionRepo.count(user, {
       where
     })
   ])

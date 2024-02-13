@@ -9,7 +9,7 @@
       @click="navigate"
     >
       <td>
-        <HelpRequestsStatusForm
+        <FileInstructionsStatusForm
           v-if="permissions.edit"
           :item="item"
           @click.stop
@@ -23,7 +23,7 @@
           {{ socialSupportStatusOptions.get(socialSupport.status) }}
         </span>
       </td>
-      <td>{{ helpRequest.type?.name || '' }}</td>
+      <td>{{ fileInstructionObject || '' }}</td>
       <td v-if="application.module.helpRequest">
         <template v-if="socialSupport.dueDate">
           {{ formatDate(socialSupport.dueDate) }}
@@ -41,46 +41,49 @@
         </template>
       </td>
       <td v-if="application.module.helpRequest">
-        <template v-if="helpRequest.askedAmount">
-          {{ euros(helpRequest.askedAmount) }}
+        <template v-if="helpRequest?.askedAmount">
+          {{ euros(helpRequest?.askedAmount) }}
         </template>
       </td>
       <td v-if="application.module.helpRequest">
         <HelpRequestsAllocatedAmountForm
-          v-if="canEditAllocatedAmount"
+          v-if="helpRequest && canEditAllocatedAmount"
           :item="item"
+          :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
         />
-        <template v-else-if="helpRequest.allocatedAmount">
-          {{ euros(helpRequest.allocatedAmount) }}
+        <template v-else-if="helpRequest?.allocatedAmount">
+          {{ euros(helpRequest?.allocatedAmount) }}
         </template>
       </td>
       <td v-if="application.module.helpRequest">
         <HelpRequestsPaymentMethodForm
-          v-if="canEditPaymentMethod"
+          v-if="helpRequest && canEditPaymentMethod"
           :item="item"
+          :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
         />
-        <template v-else-if="helpRequest.paymentMethod">
-          {{ paymentMethodOptions.get(helpRequest.paymentMethod) }}
+        <template v-else-if="helpRequest?.paymentMethod">
+          {{ paymentMethodOptions.get(helpRequest?.paymentMethod) }}
         </template>
       </td>
       <td v-if="application.module.helpRequest">
         <HelpRequestsPaymentDateForm
-          v-if="canEditPaymentDate"
+          v-if="helpRequest && canEditPaymentDate"
           :item="item"
+          :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
         />
-        <template v-else-if="helpRequest.paymentDate">
-          {{ formatDate(helpRequest.paymentDate) }}
+        <template v-else-if="helpRequest?.paymentDate">
+          {{ formatDate(helpRequest?.paymentDate) }}
         </template>
       </td>
       <td v-if="application.module.helpRequest">
-        <template v-if="helpRequest.handlingDate">{{
-          formatDate(helpRequest.handlingDate)
+        <template v-if="helpRequest?.handlingDate">{{
+          formatDate(helpRequest?.handlingDate)
         }}</template>
       </td>
       <td>
@@ -94,8 +97,8 @@
 </template>
 
 <script lang="ts" setup>
-  import { SocialSupportStatus } from '@prisma/client'
-  import { HelpRequestPageItem } from './types'
+  import { FileInstructionType, SocialSupportStatus } from '@prisma/client'
+  import { FileInstructionPageItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { paymentMethodOptions } from '~/client/options'
@@ -108,18 +111,25 @@
   import { Route, RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
-    item: HelpRequestPageItem
+    item: FileInstructionPageItem
   }>()
 
   const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
-    updated: [item: HelpRequestPageItem]
+    updated: [item: FileInstructionPageItem]
   }>()
 
-  const helpRequest = computed(() => props.item.helpRequest)
-  const fileInstruction = computed(() => helpRequest.value.fileInstruction)
+  const fileInstruction = computed(() => props.item.fileInstruction)
+  const helpRequest = computed(() => fileInstruction.value.helpRequest)
   const socialSupport = computed(() => fileInstruction.value.socialSupport)
+  const fileInstructionObject = computed(() => {
+    if (fileInstruction.value.type === FileInstructionType.Housing) {
+      return 'Demande de logement'
+    }
+    const types = fileInstruction.value.socialSupport.types
+    return types.length > 0 ? types[0].name : null
+  })
 
   const permissions = computed(() => props.item.permissions)
   const { application } = usePermissions()
@@ -129,7 +139,7 @@
       tab: BeneficiaryTab.History,
       item: socialSupport.value.id,
       originPage: Route.AppHistory,
-      originTab: HistoryTab.HelpRequests
+      originTab: HistoryTab.FileInstructions
     })
   )
 
@@ -139,7 +149,7 @@
       : 'Interne'
   )
 
-  const isFinancialSupport = computed(() => helpRequest.value.financialSupport)
+  const isFinancialSupport = computed(() => helpRequest.value?.financialSupport)
 
   const isExternalSupport = computed(
     () => fileInstruction.value.externalStructure

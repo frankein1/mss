@@ -44,35 +44,6 @@ function findOne(user: SecurityRuleGrantee, id: string) {
 
 type HelpRequestOutput = NonNullable<Prisma.PromiseReturnType<typeof findOne>>
 
-export async function getPage(
-  ctx: SecurityRuleContext,
-  args: Omit<Prisma.HelpRequestFindManyArgs, 'select' | 'include'>
-) {
-  const helpRequests = await HelpRequestRepo.findMany(ctx.user, {
-    where: args.where,
-    include,
-    take: args.take,
-    skip: args.skip,
-    orderBy: args.orderBy
-  })
-  return helpRequests.map(helpRequest => {
-    const {
-      fileInstruction: { socialSupport }
-    } = helpRequest
-    const { beneficiary } = socialSupport
-    const permissions = getFileInstructionPermissions({
-      ctx,
-      beneficiary,
-      socialSupport
-    })
-    const appPermissions = getAppContextPermissions(ctx)
-    return {
-      helpRequest: filter(appPermissions, permissions, helpRequest),
-      permissions
-    }
-  })
-}
-
 export async function getOne(ctx: SecurityRuleContext, id: string) {
   const helpRequest = await findOne(ctx.user, id)
   const {

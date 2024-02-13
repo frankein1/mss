@@ -7,7 +7,8 @@ import { statRouter } from './stat'
 import { permissionsRouter } from './permissions'
 import { userRouter } from './userRouter'
 import { structureRouter } from './structureRouter'
-import { helpRequestRouter } from './helpRequestRouter'
+import { helpRequestRouter } from './helpRequest/router'
+import { fileInstructionRouter } from './fileInstruction/router'
 import { notificationRouter } from './notificationRouter'
 import { adminRouter } from './admin/router'
 import { documentRouter } from './documentRouter'
@@ -28,6 +29,7 @@ export const appRouter = router({
   structure: structureRouter,
   user: userRouter,
   helpRequest: helpRequestRouter,
+  fileInstruction: fileInstructionRouter,
   documents: documentRouter,
   comment: commentRouter,
   usersActivity: usersActivityRouter,

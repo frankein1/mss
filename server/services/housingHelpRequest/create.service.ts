@@ -1,4 +1,4 @@
-import { SocialSupportType } from '@prisma/client'
+import { FileInstructionType, SocialSupportType } from '@prisma/client'
 import {
   prepareNewHistoryElementNotification,
   prepareInstructorOrganization
@@ -63,6 +63,7 @@ export async function create({ input, ctx }: CreateParams) {
       maxRent,
       fileInstruction: {
         create: {
+          type: FileInstructionType.Housing,
           examinationDate,
           decisionDate,
           refusalReason,

@@ -2,11 +2,11 @@ import { SocialSupportStatus } from '@prisma/client'
 import { z } from 'zod'
 import { requiredNativeEnum } from '../helpers.schema'
 
-export const quickEditHelpRequestStatusSchema = z.object({
+export const editFileInstructionStatusSchema = z.object({
   id: z.string().uuid(),
   status: requiredNativeEnum(SocialSupportStatus)
 })
 
-export type QuickEditHelpRequestStatusInput = z.infer<
-  typeof quickEditHelpRequestStatusSchema
+export type EditFileInstructionStatusInput = z.infer<
+  typeof editFileInstructionStatusSchema
 >
