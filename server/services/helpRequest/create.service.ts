@@ -69,8 +69,8 @@ export async function create({ input, ctx }: CreateParams) {
       fileInstruction: {
         create: {
           type: financialSupport
-            ? FileInstructionType.Other
-            : FileInstructionType.Financial,
+            ? FileInstructionType.Financial
+            : FileInstructionType.Other,
           externalStructure,
           examinationDate,
           decisionDate,
