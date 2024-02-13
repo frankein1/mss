@@ -13,7 +13,7 @@
     <AtomFilters
       v-else-if="filters"
       :filters="filters"
-      :initial-selected-values="filtersState.helpRequest.value || {}"
+      :initial-selected-values="filtersState.fileInstruction.value || {}"
       @filter="onFilter"
     />
   </div>
@@ -24,7 +24,7 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
-  import { HelpRequestFilterInput } from '~/server/schema'
+  import { FileInstructionFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { ministerOptions } from '~/client/options'
@@ -37,7 +37,7 @@
   const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
-    filter: [filters: HelpRequestFilterInput]
+    filter: [filters: FileInstructionFilterInput]
   }>()
 
   const { application } = usePermissions()
@@ -202,8 +202,8 @@
   //   )
   // }
 
-  function onFilter(filters: HelpRequestFilterInput) {
-    filtersState.helpRequest.value = filters
+  function onFilter(filters: FileInstructionFilterInput) {
+    filtersState.fileInstruction.value = filters
     emit('filter', filters)
   }
 </script>

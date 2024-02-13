@@ -7,30 +7,30 @@
       message="La liste des instructions de dossier n'a pas pu être chargée."
     />
     <template v-else>
-      <HelpRequestsFilters
+      <FileInstructionsFilters
         class="fr-px-5v"
         @filter="filters = $event"
       />
       <hr />
       <div class="fr-mb-2w fr-mx-5v results-container">
         <p class="fr-hint-text results-count">
-          {{ helpRequestsCount }} instruction(s) de dossier
+          {{ fileInstructionCount }} instruction(s) de dossier
         </p>
         <ExportDataButton
           v-if="application.export.history"
           :is-downloading="isDownloading"
-          @export="exportHelpRequests"
+          @export="exportFileInstructions"
         />
       </div>
       <div v-if="pending">
         <AtomLoader class="fr-mx-auto" />
       </div>
       <template v-else>
-        <HelpRequestsTable
+        <FileInstructionsTable
           v-model:sort="orderBy"
           :items="items"
           :pending="pending"
-          @help-request-updated="onHelpRequestUpdated"
+          @file-instruction-updated="onFileInstructionUpdated"
         />
         <AtomPagination
           class="fr-mt-4w fr-px-5v"
@@ -45,9 +45,9 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestPageItem } from './types'
-  import { HelpRequestFilterInput } from '~/server/schema'
-  import { HelpRequestSort, SortOrder } from '~/types/table'
+  import { FileInstructionPageItem } from './types'
+  import { FileInstructionFilterInput } from '~/server/schema'
+  import { FileInstructionSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
   import {
     REQUEST_LIMIT_DEFAULT,
@@ -60,11 +60,11 @@
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
 
-  const filters = ref<HelpRequestFilterInput>(
-    filtersState.helpRequest.value || {}
+  const filters = ref<FileInstructionFilterInput>(
+    filtersState.fileInstruction.value || {}
   )
-  const orderBy = ref<HelpRequestSort>({
-    fileInstruction: { socialSupport: { date: SortOrder.Desc } }
+  const orderBy = ref<FileInstructionSort>({
+    socialSupport: { date: SortOrder.Desc }
   })
   const page = ref(1)
   const perPage = ref(REQUEST_LIMIT_DEFAULT)
@@ -83,39 +83,41 @@
     data: pageData,
     pending,
     error
-  } = await trpcClient.helpRequest.getPage.useQuery(queryInput)
+  } = await trpcClient.fileInstruction.getPage.useQuery(queryInput)
 
-  const helpRequestsCount = computed(() => pageData.value?.count || 0)
+  const fileInstructionCount = computed(() => pageData.value?.count || 0)
 
   const items = computed(() => pageData.value?.items || [])
 
   const totalPages = computed(() => pageData.value?.totalPages || 0)
 
-  function onHelpRequestUpdated(updatedHelpRequest: HelpRequestPageItem) {
+  function onFileInstructionUpdated(
+    updatedFileInstruction: FileInstructionPageItem
+  ) {
     if (!pageData.value) {
       return
     }
 
     pageData.value.items = pageData.value.items.map(item =>
-      item.helpRequest.id === updatedHelpRequest.helpRequest.id
-        ? updatedHelpRequest
+      item.fileInstruction.id === updatedFileInstruction.fileInstruction.id
+        ? updatedFileInstruction
         : item
     )
   }
 
-  async function exportHelpRequests() {
+  async function exportFileInstructions() {
     isDownloading.value = true
     try {
-      const exportedHelpRequests =
-        await trpcClient.helpRequest.exportHelpRequests.query({
+      const exportedFileInstructions =
+        await trpcClient.fileInstruction.exportFileInstructions.query({
           orderBy: orderBy.value,
           filters: filters.value
         })
-      if (!exportedHelpRequests.data) {
+      if (!exportedFileInstructions.data) {
         throw new Error('no data')
       }
       const downloadLink = document.createElement('a')
-      downloadLink.href = getExportUrl(exportedHelpRequests.data)
+      downloadLink.href = getExportUrl(exportedFileInstructions.data)
       downloadLink.download = getExportFilename('instructions_dosser')
       downloadLink.click()
       downloadLink.remove()

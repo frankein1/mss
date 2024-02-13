@@ -8,12 +8,6 @@ export const helpRequestRouter = router({
   getOne: protectedProcedure
     .input(routes.getOne.inputValidation)
     .query(routes.getOne.execute),
-  exportHelpRequests: protectedProcedure
-    .input(routes.exportHelpRequests.inputValidation)
-    .query(routes.exportHelpRequests.execute),
-  getPage: protectedProcedure
-    .input(routes.getPage.inputValidation)
-    .query(routes.getPage.execute),
   quickUpdate: protectedProcedure
     .input(routes.quickUpdate.inputValidation)
     .mutation(routes.quickUpdate.execute),

@@ -24,17 +24,15 @@ export type FollowupSort = {
   }
 }
 
-export type HelpRequestSort = {
-  fileInstruction?: {
-    instructorOrganization?: {
-      name?: SortOrder
-    }
-    socialSupport?: {
-      dueDate?: SortOrder
-      date?: SortOrder
-      beneficiary?: {
-        usualName?: SortOrder
-      }
+export type FileInstructionSort = {
+  instructorOrganization?: {
+    name?: SortOrder
+  }
+  socialSupport?: {
+    dueDate?: SortOrder
+    date?: SortOrder
+    beneficiary?: {
+      usualName?: SortOrder
     }
   }
 }
@@ -55,7 +53,7 @@ export type EmailAdminSort = {
 export type TableSort =
   | BeneficiarySort
   | FollowupSort
-  | HelpRequestSort
+  | FileInstructionSort
   | StructureAdminSort
   | UserAdminSort
   | BeneficiaryDocumentSort

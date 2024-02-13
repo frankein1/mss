@@ -1,7 +1,7 @@
 import {
   BeneficiaryFilterInput,
   FollowupFilterInput,
-  HelpRequestFilterInput
+  FileInstructionFilterInput
 } from '~/server/schema'
 
 export function useFilters() {
@@ -9,10 +9,9 @@ export function useFilters() {
     'filters:followup',
     () => undefined
   )
-  const helpRequest = useState<HelpRequestFilterInput | undefined | null>(
-    'filters:helpRequest',
-    () => undefined
-  )
+  const fileInstruction = useState<
+    FileInstructionFilterInput | undefined | null
+  >('filters:helpRequest', () => undefined)
 
   const beneficiary = useState<BeneficiaryFilterInput | undefined | null>(
     'filters:beneficiary',
@@ -21,7 +20,7 @@ export function useFilters() {
 
   return {
     followup,
-    helpRequest,
+    fileInstruction,
     beneficiary
   }
 }

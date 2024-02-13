@@ -13,7 +13,7 @@
             <Followups />
           </AtomTab>
           <AtomTab
-            :tab-id="HistoryTab.HelpRequests"
+            :tab-id="HistoryTab.FileInstructions"
             title="Instructions de dossier"
           >
             <HelpRequests />

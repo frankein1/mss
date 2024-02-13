@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-  import { HelpRequestPageItem } from './types'
+  import { FileInstructionPageItem, HelpRequestData } from './types'
   import {
     QuickEditHelpRequestStatusInput,
     quickEditHelpRequestStatusSchema
@@ -27,18 +27,19 @@
   const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const props = defineProps<{
-    item: HelpRequestPageItem
+    item: FileInstructionPageItem
+    helpRequest: HelpRequestData
   }>()
 
   const emit = defineEmits<{
-    updated: [item: HelpRequestPageItem]
+    updated: [item: FileInstructionPageItem]
   }>()
 
   const { handleSubmit } = useForm<QuickEditHelpRequestStatusInput>({
     validationSchema: toTypedSchema(quickEditHelpRequestStatusSchema),
     initialValues: {
-      id: props.item.helpRequest.id,
-      status: props.item.helpRequest.fileInstruction.socialSupport.status
+      id: props.helpRequest.id,
+      status: props.item.fileInstruction.socialSupport.status
     }
   })
 
@@ -46,8 +47,12 @@
     useTrpcMutation({
       mutation: () =>
         useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
-      onSuccess: item => {
+      onSuccess: res => {
         snackbar.success("Le statut de l'instruction de dossier a été modifié.")
+
+        const item = props.item
+        const socialSupport = item.fileInstruction.socialSupport
+        socialSupport.status = res.fileInstruction.socialSupport.status
         emit('updated', item)
       },
       onFailure: () => {

@@ -23,34 +23,28 @@
             <TableSortableHeader
               v-if="application.module.helpRequest"
               :label="helpRequestFieldLabels.dueDate"
-              :sort="sort.fileInstruction?.socialSupport?.dueDate"
+              :sort="sort.socialSupport?.dueDate"
               numeric
               @update:sort="
-                emit('update:sort', {
-                  fileInstruction: { socialSupport: { dueDate: $event } }
-                })
+                emit('update:sort', { socialSupport: { dueDate: $event } })
               "
             />
             <TableSortableHeader
               :label="helpRequestFieldLabels.beneficiaryId"
-              :sort="
-                sort.fileInstruction?.socialSupport?.beneficiary?.usualName
-              "
+              :sort="sort.socialSupport?.beneficiary?.usualName"
               @update:sort="
                 emit('update:sort', {
-                  fileInstruction: {
-                    socialSupport: { beneficiary: { usualName: $event } }
-                  }
+                  socialSupport: { beneficiary: { usualName: $event } }
                 })
               "
             />
             <TableSortableHeader
               v-if="application.module.helpRequest"
               :label="helpRequestFieldLabels.instructorOrganizationId"
-              :sort="sort.fileInstruction?.instructorOrganization?.name"
+              :sort="sort.instructorOrganization?.name"
               @update:sort="
                 emit('update:sort', {
-                  fileInstruction: { instructorOrganization: { name: $event } }
+                  instructorOrganization: { name: $event }
                 })
               "
             />
@@ -98,11 +92,11 @@
           </tr>
         </thead>
         <tbody>
-          <HelpRequestsRow
+          <FileInstructionRow
             v-for="item in items"
-            :key="item.helpRequest.id"
+            :key="item.fileInstruction.id"
             :item="item"
-            @updated="emit('helpRequestUpdated', $event)"
+            @updated="emit('fileInstructionUpdated', $event)"
           />
         </tbody>
       </table>
@@ -111,19 +105,22 @@
 </template>
 
 <script setup lang="ts">
-  import type { HelpRequestPageItems, HelpRequestPageItem } from './types'
+  import type {
+    FileInstructionPageItems,
+    FileInstructionPageItem
+  } from './types'
   import { helpRequestFieldLabels } from '~/client/labels'
-  import type { HelpRequestSort } from '~/types/table'
+  import type { FileInstructionSort } from '~/types/table'
 
   const props = defineProps<{
-    items: HelpRequestPageItems
-    sort: HelpRequestSort
+    items: FileInstructionPageItems
+    sort: FileInstructionSort
     pending: boolean
   }>()
 
   const emit = defineEmits<{
-    'update:sort': [sort: HelpRequestSort]
-    'helpRequestUpdated': [helpRequest: HelpRequestPageItem]
+    'update:sort': [sort: FileInstructionSort]
+    'fileInstructionUpdated': [fileInstruction: FileInstructionPageItem]
   }>()
 
   const { application } = usePermissions()

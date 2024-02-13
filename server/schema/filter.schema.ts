@@ -69,18 +69,6 @@ const followupFilterSchema = z.object({
 
 type FollowupFilterInput = z.infer<typeof followupFilterSchema>
 
-const helpRequestFilterSchema = z.object({
-  status: z.nativeEnum(SocialSupportStatus).nullish(),
-  followupTypes: z.array(z.string().uuid()).nullish(),
-  referents: z.array(z.string().uuid()).nullish(),
-  examinationDate: z.coerce.date().nullish(),
-  handlingDate: kindOfBooleanSchema(),
-  externalStructure: kindOfBooleanSchema(),
-  ministre: z.array(z.nativeEnum(Minister)).nullish()
-})
-
-type HelpRequestFilterInput = z.infer<typeof helpRequestFilterSchema>
-
 const beneficiaryHistoryFilterSchema = z.object({
   status: z.nativeEnum(SocialSupportStatus).nullish(),
   typeSuivi: z.nativeEnum(TypeSuivi).nullish(),
@@ -112,7 +100,6 @@ export {
   statFilterSchema,
   beneficiaryFilterSchema,
   followupFilterSchema,
-  helpRequestFilterSchema,
   beneficiaryHistoryFilterSchema,
   userAdminFilterSchema,
   beneficiaryDocumentFilterSchema,
@@ -123,7 +110,6 @@ export type {
   StatFilterInput,
   BeneficiaryFilterInput,
   FollowupFilterInput,
-  HelpRequestFilterInput,
   BeneficiaryHistoryFilterInput,
   UserAdminFilterInput,
   BeneficiaryDocumentFilterInput,
