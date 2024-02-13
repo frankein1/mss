@@ -29,6 +29,7 @@
     <button
       class="fr-btn search-btn"
       :title="label"
+      tabindex="-1"
     ></button>
 
     <ul

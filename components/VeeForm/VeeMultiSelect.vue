@@ -102,12 +102,14 @@
       </li>
     </ul>
     <div
-      v-if="error"
       :id="errorId"
       class="fr-messages-group"
       aria-live="polite"
     >
-      <p class="fr-message fr-message--error">
+      <p
+        v-if="error"
+        class="fr-message fr-message--error"
+      >
         {{ error }}
       </p>
     </div>
@@ -328,6 +330,7 @@
     // Keyboard interactions on the expanded listbox
     switch (e.key) {
       case 'Enter':
+        e.preventDefault()
         onSelectActiveOption()
         expanded.value = false
         return
@@ -346,6 +349,7 @@
       return
     }
     selectedValues.value.push(activeOptionValue.value)
+    changedValues()
   }
 
   function onOptionMouseDown() {
