@@ -49,7 +49,7 @@
               @click="navigate"
             >
               <td>{{ structure.name }}</td>
-              <td>{{ StructureTypeLabels[structure.type] }}</td>
+              <td>{{ structureTypeLabels[structure.type] }}</td>
               <td>{{ structure.zipcode }}</td>
               <td>{{ structure.city }}</td>
               <td>{{ structure._count.beneficiaries }}</td>
@@ -77,7 +77,7 @@
 
 <script setup lang="ts">
   import { Structures } from './types'
-  import { StructureTypeLabels } from '~/client/options'
+  import { structureTypeLabels } from '~/client/options'
   import type { StructureAdminSort } from '~/types/table'
   import { RoutePath } from '~/utils/routing'
 
