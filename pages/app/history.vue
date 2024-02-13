@@ -16,7 +16,7 @@
             :tab-id="HistoryTab.FileInstructions"
             title="Instructions de dossier"
           >
-            <HelpRequests />
+            <FileInstructions />
           </AtomTab>
         </AtomTabs>
       </div>
