@@ -28,11 +28,7 @@
   import type { FilterProp } from '~/types/filter'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { ministerOptions, fileInstructionTypeOptions } from '~/client/options'
-  import {
-    BeneficiaryHistoryFilterEventAction,
-    EventCategory,
-    HelpRequestFilterEventAction
-  } from '~/types/matomo'
+  import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
   const authState = useAuthState()
   const isReferent = authState.isReferent()
@@ -99,15 +95,15 @@
 
     const filters: FilterProp[] = [
       {
-        name: 'typeSuivi',
+        name: 'fileInstructionType',
         label: "Type d'accompagnement",
         options: withEmptyValue(
           fileInstructionTypeOptions,
           "Tous les dossiers d'instruction"
         ),
         type: FilterType.SelectOne,
-        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-        matomoEventAction: BeneficiaryHistoryFilterEventAction.TypeSuivi,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.FileInstructionType,
         alwaysExpanded: true
       },
       {
