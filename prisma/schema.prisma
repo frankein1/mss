@@ -909,6 +909,10 @@ enum Minister {
   FadilaKhattabi
   // Catherine Vautrin (Travail, Santé et Solidarités)
   CatherineVautrin
+  // Frédéric Valletoux (Délégué Santé et Prévention)
+  FredericValletoux
+  // Sarah El Haïry (Déléguée Enfance, Jeunesse et Familles)
+  SarahElHairy
 }
 
 enum BeneficiaryAccommodationZone {
