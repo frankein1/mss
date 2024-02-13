@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-col-12 fr-col-lg-5 fr-col-offset-lg-7 main-container fr-p-2w">
+  <div class="main-container fr-p-2w">
     <h2 class="fr-text--lg fr-mb-1w">Notifications</h2>
     <hr class="notifications__separator" />
     <AtomAlert

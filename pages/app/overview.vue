@@ -6,7 +6,9 @@
     />
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
-      <NotificationList />
+      <div class="fr-col-12 fr-col-lg-8">
+        <NotificationList />
+      </div>
     </div>
   </PageContainer>
 </template>
