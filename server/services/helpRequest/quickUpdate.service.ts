@@ -19,9 +19,23 @@ export async function quickUpdate(
 
   const data = prepareData(financialSupport, input)
 
-  await HelpRequestRepo.prisma.update({
+  return await HelpRequestRepo.prisma.update({
     where: { id: input.id },
-    data
+    data,
+    select: {
+      allocatedAmount: true,
+      paymentMethod: true,
+      paymentDate: true,
+      fileInstruction: {
+        select: {
+          socialSupport: {
+            select: {
+              status: true
+            }
+          }
+        }
+      }
+    }
   })
 }
 

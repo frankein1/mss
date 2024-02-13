@@ -1,5 +1,23 @@
 import { z } from 'zod'
 
+export * from './beneficiary'
+export * from './beneficiaryDraft'
+export * from './followup'
+export * from './user'
+export * from './structure'
+export * from './auth'
+export * from './helpRequest'
+export * from './helpers.schema'
+export * from './email'
+export * from './housingHelpRequest'
+export * from './fileInstruction'
+export * from './followupType.schema'
+export * from './filter.schema'
+export * from './relative.schema'
+export * from './notification.schema'
+export * from './document.schema'
+export * from './comment.schema'
+
 const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
   switch (issue.code) {
     case 'invalid_date':
@@ -12,82 +30,3 @@ const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
 }
 
 z.setErrorMap(customErrorMap)
-
-export * from './beneficiary'
-export * from './beneficiaryDraft'
-export * from './followup'
-export * from './user'
-export * from './structure'
-export * from './auth'
-export * from './helpRequest'
-export * from './helpers.schema'
-export * from './email'
-export * from './housingHelpRequest'
-
-export {
-  createFollowupTypeSchema,
-  createCustomFollowupTypeSchema
-} from './followupType.schema'
-export type {
-  CreateFollowupTypeInput,
-  CreateCustomFollowupTypeInput
-} from './followupType.schema'
-
-export {
-  statFilterSchema,
-  beneficiaryFilterSchema,
-  followupFilterSchema,
-  helpRequestFilterSchema,
-  beneficiaryHistoryFilterSchema,
-  userAdminFilterSchema,
-  beneficiaryDocumentFilterSchema,
-  emailAdminFilterSchema
-} from './filter.schema'
-export type {
-  StatFilterInput,
-  BeneficiaryFilterInput,
-  FollowupFilterInput,
-  HelpRequestFilterInput,
-  BeneficiaryHistoryFilterInput,
-  UserAdminFilterInput,
-  BeneficiaryDocumentFilterInput,
-  EmailAdminFilterInput
-} from './filter.schema'
-
-export {
-  createOrUpdateEntourageSchema,
-  createOrUpdateTaxHouseholdSchema
-} from './relative.schema'
-export type {
-  CreateOrUpdateEntourageInput,
-  CreateOrUpdateTaxHouseholdInput
-} from './relative.schema'
-
-export {
-  updateNotificationSchema,
-  getNotificationsSchema
-} from './notification.schema'
-export type {
-  UpdateNotificationInput,
-  GetNotificationsInput
-} from './notification.schema'
-
-export {
-  addDocumentSchema,
-  editDocumentSchema,
-  deleteDocumentSchema,
-  createUploadUrlSchema,
-  createViewUrlSchema,
-  uploadBrowserDocumentSchema
-} from './document.schema'
-export type {
-  AddDocumentInput,
-  EditDocumentInput,
-  DeleteDocumentInput,
-  CreateUploadUrlInput,
-  CreateViewUrlInput,
-  UploadBrowserDocumentInput
-} from './document.schema'
-
-export { addCommentSchema, editCommentSchema } from './comment.schema'
-export type { AddCommentInput, EditCommentInput } from './comment.schema'

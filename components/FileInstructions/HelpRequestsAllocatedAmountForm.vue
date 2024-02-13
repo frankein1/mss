@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
   import { Prisma } from '@prisma/client'
-  import { HelpRequestPageItem } from './types'
+  import { FileInstructionPageItem, HelpRequestData } from './types'
   import {
     QuickEditHelpRequestAllocatedAmountInput,
     quickEditHelpRequestAllocatedAmountSchema
@@ -26,19 +26,20 @@
   const snackbar = useSnackbar()
 
   const props = defineProps<{
-    item: HelpRequestPageItem
+    item: FileInstructionPageItem
+    helpRequest: HelpRequestData
   }>()
 
   const emit = defineEmits<{
-    updated: [item: HelpRequestPageItem]
+    updated: [item: FileInstructionPageItem]
   }>()
 
   const { handleSubmit } = useForm<QuickEditHelpRequestAllocatedAmountInput>({
     validationSchema: toTypedSchema(quickEditHelpRequestAllocatedAmountSchema),
     initialValues: {
-      id: props.item.helpRequest.id,
+      id: props.helpRequest.id,
       allocatedAmount: new Prisma.Decimal(
-        props.item.helpRequest.allocatedAmount || 0
+        props.helpRequest.allocatedAmount || 0
       ).toNumber()
     }
   })
@@ -48,11 +49,16 @@
       useTrpcMutation({
         mutation: () =>
           useTrpcClient().helpRequest.quickUpdate.mutate(helpRequest),
-        onSuccess: item => {
+        onSuccess: res => {
           snackbar.success(
             "Le montant alloué de l'instruction de dossier a été modifié."
           )
-          emit('updated', item)
+          const item = props.item
+          const helpRequest = item.fileInstruction.helpRequest
+          if (helpRequest) {
+            helpRequest.allocatedAmount = res.allocatedAmount
+            emit('updated', item)
+          }
         },
         onFailure: () => {
           snackbar.error(

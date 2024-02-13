@@ -1,7 +1,7 @@
 import { createQuery } from '~/server/route'
 import {
-  ExportHelpRequestsInput,
-  exportHelpRequestsSchema
+  ExportFileInstructionsInput,
+  exportFileInstructionsSchema
 } from '~/server/schema'
 import {
   getAppContextPermissions,
@@ -9,19 +9,21 @@ import {
 } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import { createExport } from '~/utils/export/createExport'
-import { HelpRequestService } from '~/server/services'
+import { FileInstructionService } from '~/server/services'
 
 const handler = async ({
   input,
   ctx
 }: {
-  input: ExportHelpRequestsInput
+  input: ExportFileInstructionsInput
   ctx: ProtectedAppContext
 }) => {
-  const { columns, rows } = await HelpRequestService.exportHelpRequests({
-    ctx,
-    input
-  })
+  const { columns, rows } = await FileInstructionService.exportFileInstructions(
+    {
+      ctx,
+      input
+    }
+  )
 
   return await createExport(ctx.user.id, [
     { name: 'Instructions de dossier', columns, rows }
@@ -31,8 +33,8 @@ const handler = async ({
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.history
 
-export const exportHelpRequests = createQuery({
+export const exportFileInstructions = createQuery({
   securityCheck,
   handler,
-  inputValidation: exportHelpRequestsSchema
+  inputValidation: exportFileInstructionsSchema
 })
