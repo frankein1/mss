@@ -8,7 +8,7 @@
       v-else
       :filters="statsFilters"
       :default-values="defaultValues"
-      @filter="emit('filter', $event)"
+      @filter="emit('update:filters', $event)"
     />
   </div>
 </template>
@@ -17,12 +17,14 @@
   import {
     fileInstructionTypeStatsOptions,
     fileInstructionTypePictos,
-    beneficiaryStatusOptions
+    beneficiaryStatusOptions,
+    periodOptions
   } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import { Options, withEmptyValue } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
+  import { StatPeriodFilter } from '~/types/stat'
 
   const { application } = usePermissions()
 
@@ -31,13 +33,14 @@
       followupTypeOptions: Options
       beneficiariesCitiesOptions: Options
       agentOptions: Options
+      filters: StatFilterInput
       isHelpRequestsTab?: boolean
     }>(),
     { isHelpRequestsTab: false }
   )
 
   const emit = defineEmits<{
-    filter: [filters: StatFilterInput]
+    'update:filters': [filters: StatFilterInput]
   }>()
 
   const defaultValues = computed(() => {
@@ -47,10 +50,12 @@
     return undefined
   })
 
+  const maxAlwaysExpandedNb = computed(() => (props.isHelpRequestsTab ? 4 : 3))
+
   const statsFilters = computed(() => {
-    const filters: FilterProp[] = []
+    const statsFilters: FilterProp[] = []
     if (props.isHelpRequestsTab) {
-      filters.push({
+      statsFilters.push({
         name: 'helpRequestSubject',
         label: "Thématique d'instruction",
         options: withEmptyValue(fileInstructionTypeStatsOptions, 'Toutes'),
@@ -59,49 +64,66 @@
         pictos: fileInstructionTypePictos
       })
     }
-    filters.push({
-      name: 'fromDate',
-      label: 'Du',
-      type: FilterType.Date,
+
+    statsFilters.push({
+      name: 'period',
+      label: 'Période',
+      type: FilterType.SelectOne,
+      options: withEmptyValue(periodOptions, ''),
       alwaysExpanded: true
     })
-    filters.push({
-      name: 'toDate',
-      label: 'Au',
-      type: FilterType.Date,
-      alwaysExpanded: true
-    })
+
+    if (props.filters.period === StatPeriodFilter.Custom) {
+      statsFilters.push(
+        {
+          name: 'fromDate',
+          label: 'Du',
+          type: FilterType.Date,
+          alwaysExpanded: true
+        },
+        {
+          name: 'toDate',
+          label: 'Au',
+          type: FilterType.Date,
+          alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
+        }
+      )
+    }
+
     if (props.followupTypeOptions.size) {
-      filters.push({
+      statsFilters.push({
         name: 'followupTypes',
         label: "Objet de l'accompagnement",
         options: props.followupTypeOptions,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: true
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
       })
     }
     if (props.beneficiariesCitiesOptions.size) {
-      filters.push({
+      statsFilters.push({
         name: 'cities',
         label: 'Ville',
         options: props.beneficiariesCitiesOptions,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
       })
     }
     if (application.value.module.statsByReferent) {
-      filters.push({
+      statsFilters.push({
         name: 'referent',
         label: 'Référent',
         options: props.agentOptions,
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
       })
     }
-    filters.push({
+    statsFilters.push({
       name: 'beneficiaryStatus',
       label: 'Statut du bénéficiaire',
       options: withEmptyValue(beneficiaryStatusOptions),
-      type: FilterType.SelectOne
+      type: FilterType.SelectOne,
+      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
     })
-    return filters
+    return statsFilters
   })
 </script>

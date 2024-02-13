@@ -121,6 +121,8 @@
       return null
     }
 
+    const maxAlwaysExpandedNb = 3
+
     const filters: FilterProp[] = [
       {
         name: 'typeSuivi',
@@ -160,6 +162,7 @@
         label: followupFieldLabels.medium,
         options: followupMediumOptions,
         type: FilterType.SelectMultiple,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction: FollowupFilterEventAction.Medium
       })
@@ -217,7 +220,7 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction: FollowupFilterEventAction.Referent,
-        alwaysExpanded: isFilteringHousingHelpRequests.value
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb
       })
     }
 
