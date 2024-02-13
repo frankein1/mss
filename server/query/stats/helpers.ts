@@ -49,11 +49,11 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
     socialSupport.date = prepareDateFilters(filters)
   }
 
-  if (filters.followupTypes) {
+  if (filters.followupTypes?.length) {
     socialSupport.types = { some: { id: { in: filters.followupTypes } } }
   }
 
-  if (filters.cities) {
+  if (filters.cities?.length) {
     socialSupport.beneficiary = { city: { in: filters.cities } }
   }
 
@@ -106,7 +106,7 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
     socialSupportFilters.created = prepareDateFilters(filters)
   }
 
-  if (filters.followupTypes) {
+  if (filters.followupTypes?.length) {
     const typesListFilter = {
       id: { in: filters.followupTypes }
     }
@@ -119,7 +119,7 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
     formattedFilters.socialSupports = { some: socialSupportFilters }
   }
 
-  if (filters.cities) {
+  if (filters.cities?.length) {
     formattedFilters.city = { in: filters.cities }
   }
 

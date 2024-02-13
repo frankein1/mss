@@ -43,7 +43,7 @@ function prepareSocialSupportFilters(
 ) {
   const formattedFilters: Prisma.SocialSupportWhereInput = {}
 
-  if (filters.referents) {
+  if (filters.referents?.length) {
     formattedFilters.beneficiary = {
       id: beneficiaryId,
       referents: {
@@ -81,7 +81,7 @@ function prepareSocialSupportFilters(
     formattedFilters.fileInstruction.helpRequest.handlingDate = handlingDate
   }
 
-  if (filters.followupTypes) {
+  if (filters.followupTypes?.length) {
     formattedFilters.types = { some: { id: { in: filters.followupTypes } } }
   }
 

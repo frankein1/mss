@@ -160,7 +160,7 @@ export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
     formattedFilters.AND = searchConditions.AND
   }
 
-  if (filters.followupTypes) {
+  if (filters.followupTypes?.length) {
     const typesListFilter: Prisma.FollowupTypeWhereInput = {
       id: { in: filters.followupTypes }
     }
@@ -170,7 +170,7 @@ export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
     }
   }
 
-  if (filters.referents) {
+  if (filters.referents?.length) {
     formattedFilters.referents = { some: { id: { in: filters.referents } } }
   }
 

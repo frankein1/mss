@@ -25,7 +25,7 @@ export function prepareFilters(filters: FollowupFilterInput) {
     formattedFilters.medium = { in: filters.medium }
   }
 
-  if (filters.followupTypes) {
+  if (filters.followupTypes?.length) {
     const types = {
       some: { id: { in: filters.followupTypes } }
     }
@@ -36,7 +36,7 @@ export function prepareFilters(filters: FollowupFilterInput) {
     }
   }
 
-  if (filters.referents) {
+  if (filters.referents?.length) {
     const beneficiary = {
       referents: { some: { id: { in: filters.referents } } }
     }
