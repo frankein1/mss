@@ -1,4 +1,4 @@
-import { SocialSupportType } from '@prisma/client'
+import { FileInstructionType, SocialSupportType } from '@prisma/client'
 import {
   prepareNewHistoryElementNotification,
   prepareInstructorOrganization
@@ -68,6 +68,9 @@ export async function create({ input, ctx }: CreateParams) {
       type: connect(typeId),
       fileInstruction: {
         create: {
+          type: financialSupport
+            ? FileInstructionType.Other
+            : FileInstructionType.Financial,
           externalStructure,
           examinationDate,
           decisionDate,

@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { FileInstructionType, Prisma } from '@prisma/client'
 import {
   fixtureStructure,
   fixturesBeneficiaries,
@@ -174,6 +174,7 @@ const fixturesHelpRequestSocialSupports = [
     date: new Date('2022-10-26'),
     fileInstruction: {
       create: {
+        type: FileInstructionType.Other,
         externalStructure: false,
         helpRequest: {
           create: {
@@ -195,6 +196,7 @@ const fixturesHelpRequestSocialSupports = [
     date: new Date('2022-10-27'),
     fileInstruction: {
       create: {
+        type: FileInstructionType.Other,
         externalStructure: false,
         helpRequest: {
           create: {

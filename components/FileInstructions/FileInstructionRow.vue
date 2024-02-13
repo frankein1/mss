@@ -9,10 +9,9 @@
       @click="navigate"
     >
       <td>
-        <HelpRequestsStatusForm
-          v-if="permissions.edit && helpRequest"
+        <FileInstructionsStatusForm
+          v-if="permissions.edit"
           :item="item"
-          :help-request="helpRequest"
           @click.stop
           @updated="emit('updated', $event)"
         />
@@ -24,7 +23,7 @@
           {{ socialSupportStatusOptions.get(socialSupport.status) }}
         </span>
       </td>
-      <td>{{ type?.name || '' }}</td>
+      <td>{{ fileInstructionObject || '' }}</td>
       <td v-if="application.module.helpRequest">
         <template v-if="socialSupport.dueDate">
           {{ formatDate(socialSupport.dueDate) }}
@@ -98,7 +97,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { SocialSupportStatus } from '@prisma/client'
+  import { FileInstructionType, SocialSupportStatus } from '@prisma/client'
   import { FileInstructionPageItem } from './types'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -124,9 +123,12 @@
   const fileInstruction = computed(() => props.item.fileInstruction)
   const helpRequest = computed(() => fileInstruction.value.helpRequest)
   const socialSupport = computed(() => fileInstruction.value.socialSupport)
-  const type = computed(() => {
+  const fileInstructionObject = computed(() => {
+    if (fileInstruction.value.type === FileInstructionType.Housing) {
+      return 'Demande de logement'
+    }
     const types = fileInstruction.value.socialSupport.types
-    return types.length > 0 ? types[0] : null
+    return types.length > 0 ? types[0].name : null
   })
 
   const permissions = computed(() => props.item.permissions)

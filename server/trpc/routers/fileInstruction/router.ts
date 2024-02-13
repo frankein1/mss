@@ -7,5 +7,8 @@ export const fileInstructionRouter = router({
     .query(routes.getPage.execute),
   exportFileInstructions: protectedProcedure
     .input(routes.exportFileInstructions.inputValidation)
-    .query(routes.exportFileInstructions.execute)
+    .query(routes.exportFileInstructions.execute),
+  updateStatus: protectedProcedure
+    .input(routes.updateStatus.inputValidation)
+    .mutation(routes.updateStatus.execute)
 })

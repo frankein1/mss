@@ -32,7 +32,12 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     formattedFilters.externalStructure = externalStructure === 'true'
   }
 
-  if (status || followupTypes?.length || referents?.length || ministre?.length) {
+  if (
+    status ||
+    followupTypes?.length ||
+    referents?.length ||
+    ministre?.length
+  ) {
     formattedFilters.socialSupport = formattedFilters.socialSupport || {}
 
     if (status) {

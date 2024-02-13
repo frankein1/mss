@@ -374,7 +374,7 @@ model FileInstruction {
   id      String    @id @default(uuid()) @db.Uuid
   updated DateTime? @updatedAt
 
-  type FileInstructionType? @map("type")
+  type FileInstructionType @map("type")
 
   instructorOrganizationId String?                 @map("instructor_organization_id") @db.Uuid
   instructorOrganization   InstructorOrganization? @relation(fields: [instructorOrganizationId], references: [id])
