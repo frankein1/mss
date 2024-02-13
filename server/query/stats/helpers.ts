@@ -1,7 +1,9 @@
 import { FileInstructionType, Prisma } from '@prisma/client'
+import dayjs from 'dayjs'
 import { STATS_NULL_LABEL } from '~/client/options'
 import { StatFilterInput } from '~/server/schema'
 import { STATS_NULL_KEY } from '~/utils/constants/stats'
+import { StatPeriodFilter } from '~/types/stat'
 
 export function preparePrescribingOrganizationStats(
   historyItems: {
@@ -45,7 +47,11 @@ export function preparePrescribingOrganizationStats(
 export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
   const socialSupport: Prisma.SocialSupportWhereInput = {}
 
-  if (filters.fromDate || filters.toDate) {
+  if (
+    (filters.period && filters.period !== StatPeriodFilter.Custom) ||
+    (filters.period === StatPeriodFilter.Custom &&
+      (filters.fromDate || filters.toDate))
+  ) {
     socialSupport.date = prepareDateFilters(filters)
   }
 
@@ -102,7 +108,11 @@ export function prepareHelpRequestStatFilters(filters: StatFilterInput) {
 export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
   const socialSupportFilters: Prisma.SocialSupportWhereInput = {}
 
-  if (filters.fromDate || filters.toDate) {
+  if (
+    (filters.period && filters.period !== StatPeriodFilter.Custom) ||
+    (filters.period === StatPeriodFilter.Custom &&
+      (filters.fromDate || filters.toDate))
+  ) {
     socialSupportFilters.created = prepareDateFilters(filters)
   }
 
@@ -135,8 +145,33 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
 }
 
 function prepareDateFilters(filters: StatFilterInput) {
-  return {
-    ...(filters.fromDate && { gte: filters.fromDate }),
-    ...(filters.toDate && { lte: filters.toDate })
+  switch (filters.period) {
+    case StatPeriodFilter.ThisYear:
+      return {
+        gte: dayjs().startOf('year').toDate(),
+        lte: dayjs().endOf('year').toDate()
+      }
+    case StatPeriodFilter.LastYear:
+      return {
+        gte: dayjs().subtract(1, 'year').startOf('year').toDate(),
+        lte: dayjs().subtract(1, 'year').endOf('year').toDate()
+      }
+    case StatPeriodFilter.ThisMonth:
+      return {
+        gte: dayjs().startOf('month').toDate(),
+        lte: dayjs().endOf('month').toDate()
+      }
+    case StatPeriodFilter.LastMonth:
+      return {
+        gte: dayjs().subtract(1, 'month').startOf('month').toDate(),
+        lte: dayjs().subtract(1, 'month').endOf('month').toDate()
+      }
+    case StatPeriodFilter.Custom:
+      return {
+        ...(filters.fromDate && { gte: filters.fromDate }),
+        ...(filters.toDate && { lte: filters.toDate })
+      }
+    default:
+      return undefined
   }
 }

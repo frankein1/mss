@@ -33,8 +33,6 @@ export async function getFileInstructionTypeStatsQuery(
     })
   ])
 
-  console.log({ housingCount, financialCount, otherCount })
-
   return [
     { _count: housingCount, subject: FileInstructionType.Housing },
     { _count: financialCount, subject: FileInstructionType.Financial },

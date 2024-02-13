@@ -34,11 +34,14 @@
     </div>
   </form>
   <div
-    v-if="collapsedByDefaultFilters.length"
+    v-if="!noReset || collapsedByDefaultFilters.length"
     class="filter-summary"
     :class="{ 'filter-summary__no-margin': noMargin }"
   >
-    <div class="filter-left-section">
+    <div
+      v-if="collapsedByDefaultFilters.length"
+      class="filter-left-section"
+    >
       <p v-if="resultsLabel">{{ resultsLabel }}</p>
       <ul
         v-show="!expanded && hasCollapsedSelectedFilters"
@@ -56,10 +59,7 @@
         </li>
       </ul>
     </div>
-    <ul
-      v-if="!noReset || collapsedByDefaultFilters.length"
-      class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg"
-    >
+    <ul class="fr-btns-group fr-btns-group--icon-left fr-btns-group--inline-lg">
       <li v-if="!noReset">
         <button
           v-show="hasFilters"
@@ -323,7 +323,8 @@
     width: 100% !important;
   }
 
-  .fr-select-group:last-child {
+  .fr-select-group:last-child,
+  .fr-input-group:last-child {
     margin-bottom: 1.5rem;
   }
 

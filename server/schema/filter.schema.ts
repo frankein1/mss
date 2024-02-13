@@ -17,9 +17,11 @@ import {
 } from './helpers.schema'
 import { maxStringLengthMessage } from '~/utils/zod'
 import { TypeSuivi, AgeGroup } from '~/client/options'
+import { StatPeriodFilter } from '~/types/stat'
 
 const statFilterSchema = z.object({
   helpRequestSubject: withEmptyValueOptionalNativeEnum(FileInstructionType),
+  period: withEmptyValueOptionalNativeEnum(StatPeriodFilter),
   fromDate: z.coerce.date().nullish(),
   toDate: z.coerce
     .date()
