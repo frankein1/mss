@@ -373,9 +373,6 @@ model FileInstruction {
 
   type FileInstructionType @map("type")
 
-  prescribingOrganizationId String?              @map("prescribing_organization_id") @db.Uuid
-  prescribingOrganization   PartnerOrganization? @relation("file_instruction_prescribing_organization", fields: [prescribingOrganizationId], references: [id])
-
   instructorOrganizationId String?              @map("instructor_organization_id") @db.Uuid
   instructorOrganization   PartnerOrganization? @relation("file_instruction_instructor_organization", fields: [instructorOrganizationId], references: [id])
 
@@ -392,8 +389,10 @@ model FileInstruction {
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
   socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
 
-  helpRequest        HelpRequest?
-  housingHelpRequest HousingHelpRequest?
+  helpRequest           HelpRequest?
+  housingHelpRequest    HousingHelpRequest?
+  PartnerOrganization   PartnerOrganization? @relation(fields: [partnerOrganizationId], references: [id])
+  partnerOrganizationId String?              @db.Uuid
 
   @@map("file_instruction")
 }
@@ -416,6 +415,9 @@ model HelpRequest {
 
   type   FollowupType @relation(fields: [typeId], references: [id])
   typeId String       @map("type_id") @db.Uuid
+
+  prescribingOrganizationId String?              @map("prescribing_organization_id") @db.Uuid
+  prescribingOrganization   PartnerOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
 
   financialSupport Boolean  @map("financial_support")
   isRefundable     Boolean? @map("is_refundable")
@@ -1458,9 +1460,10 @@ model PartnerOrganization {
   structure   Structure @relation(fields: [structureId], references: [id])
   structureId String    @map("structure_id") @db.Uuid
 
-  followup                               Followup[]        @relation("followup_prescribing_organization")
-  fileInstructionPrescribingOrganization FileInstruction[] @relation("file_instruction_prescribing_organization")
-  fileInstructionInstructorOrganization  FileInstruction[] @relation("file_instruction_instructor_organization")
+  followups                              Followup[]        @relation("followup_prescribing_organization")
+  fileInstructionInstructorOrganizations FileInstruction[] @relation("file_instruction_instructor_organization")
+  helpRequests                           HelpRequest[]
+  FileInstruction                        FileInstruction[]
 
   @@map("partner_organization")
 }
