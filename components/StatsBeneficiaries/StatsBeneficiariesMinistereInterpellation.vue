@@ -16,6 +16,7 @@
         :total-count="beneficiaryCount"
         :stats="ministereInterpellationStats"
         stats-bar
+        :stats-percentage="false"
       />
       <p v-else>
         Commencez à
