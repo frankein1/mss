@@ -1,17 +1,15 @@
 <template>
-  <div class="main-container fr-p-2w">
-    <h2 class="fr-text--lg fr-mb-1w">Notifications</h2>
-    <hr class="notifications__separator" />
+  <div class="main-container">
+    <NotificationListHeader />
+    <AtomFilters
+      :filters="notificationFilters"
+      full-width-filters
+      @filter="onFilter"
+    />
     <AtomAlert
       v-if="error"
       :alert-type="AlertType.Error"
       message="Les notifications n'ont pas pu être chargées."
-    />
-    <AtomFilters
-      v-else-if="data?.length || notificationType"
-      :filters="notificationFilters"
-      full-width-filters
-      @filter="onFilter"
     />
     <AtomLoader
       v-if="pending"
