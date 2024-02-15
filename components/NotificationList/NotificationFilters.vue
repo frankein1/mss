@@ -14,7 +14,7 @@
   import { FilterProp } from '~/types/filter'
   import { FilterType } from '~/utils/constants/filters'
   import {
-    notificationTypeOptions,
+    notificationTypeFilterOptions,
     NotificationTypeFilterValue
   } from '~/client/options'
 
@@ -30,7 +30,7 @@
     {
       name: 'type',
       label: 'Type de notification',
-      options: withEmptyValue(notificationTypeOptions, 'Toutes'),
+      options: withEmptyValue(notificationTypeFilterOptions, 'Toutes'),
       type: FilterType.Radio,
       alwaysExpanded: true,
       asTag: true,
