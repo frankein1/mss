@@ -14,7 +14,7 @@ export type { UpdateNotificationInput }
 
 const getNotificationsSchema = z.object({
   onlyUnread: z.boolean(),
-  type: z.nativeEnum(NotificationType).nullish()
+  types: z.array(z.nativeEnum(NotificationType)).nullish()
 })
 
 type GetNotificationsInput = z.infer<typeof getNotificationsSchema>

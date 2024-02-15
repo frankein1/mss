@@ -1,11 +1,7 @@
 <template>
   <div class="main-container">
     <NotificationListHeader />
-    <AtomFilters
-      :filters="notificationFilters"
-      full-width-filters
-      @filter="onFilter"
-    />
+    <NotificationFilters @filter="onFilter" />
     <AtomAlert
       v-if="error"
       :alert-type="AlertType.Error"
@@ -51,26 +47,14 @@
 
 <script setup lang="ts">
   import { NotificationType } from '@prisma/client'
-  import { notificationTypeOptions } from '~/client/options'
-  import { FilterProp } from '~/types/filter'
   import { AlertType } from '~/utils/constants/alert'
-  import { FilterType } from '~/utils/constants/filters'
 
-  const notificationFilters: FilterProp[] = [
-    {
-      name: 'type',
-      label: 'Type',
-      options: withEmptyValue(notificationTypeOptions, 'Tous les types'),
-      type: FilterType.SelectOne
-    }
-  ]
-
-  const notificationType = ref<NotificationType | null>(null)
+  const notificationTypes = ref<NotificationType[] | null>(null)
   const showReadNotifications = ref(false)
 
   const queryInput = computed(() => ({
     onlyUnread: !showReadNotifications.value,
-    type: notificationType.value
+    types: notificationTypes.value
   }))
 
   const {
@@ -86,11 +70,11 @@
       : 'Voir les notifications déjà lues'
   )
 
-  function onFilter(filter: any) {
-    notificationType.value = filter.type
+  function onFilter(filter: { types?: NotificationType[] }) {
+    notificationTypes.value = filter.types || null
   }
 
-  watch(notificationType, () => {
+  watch(notificationTypes, () => {
     notificationsRefresh()
   })
 

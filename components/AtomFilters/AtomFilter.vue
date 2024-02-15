@@ -37,6 +37,8 @@
     :label="filter.label"
     :options="filter.options"
     :pictos="filter.pictos"
+    :as-tag="filter.asTag"
+    :no-label="filter.noLabel"
     @change-value="emit('changeFilter', $event)"
   />
 </template>
