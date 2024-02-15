@@ -60,3 +60,6 @@ export const getNotificationsQuery = createQuery({
   inputValidation: getNotificationsSchema,
   securityCheck: AllowSecurityCheck
 })
+
+type GetNotificationOutput = Prisma.PromiseReturnType<typeof handler>
+export type NotificationItem = GetNotificationOutput[number]['notification']
