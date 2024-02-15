@@ -134,7 +134,7 @@
   )
 
   const emit = defineEmits<{
-    filter: [filter: { [key: string]: FilterValue }]
+    filter: [filter: FilterValues]
   }>()
 
   const COLLAPSED_FILTERS_ID = getRandomId('filters-')
@@ -264,7 +264,9 @@
 
   function onReset() {
     form.value?.reset()
-    resetForm({ values: props.defaultValues || {} })
+    const resetValues = props.defaultValues || {}
+    resetForm({ values: resetValues }, { force: true })
+    emit('filter', resetValues)
   }
 
   function getFilterValueLabel(filter: FilterProp, value: FilterValue) {

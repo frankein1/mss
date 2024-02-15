@@ -11,8 +11,8 @@
       class="fr-mx-auto fr-mb-2w"
     />
     <AtomFilters
-      v-else-if="filters"
-      :filters="filters"
+      v-else-if="fileInstructionsFilters"
+      :filters="fileInstructionsFilters"
       :initial-selected-values="filtersState.fileInstruction.value || {}"
       @filter="onFilter"
     />
@@ -36,8 +36,12 @@
   const filtersState = useFilters()
   const { socialSupportStatusOptions } = useSocialSupportStatus()
 
+  const props = defineProps<{
+    filters: FileInstructionFilterInput
+  }>()
+
   const emit = defineEmits<{
-    filter: [filters: FileInstructionFilterInput]
+    'update:filters': [filters: FileInstructionFilterInput]
   }>()
 
   const { application } = usePermissions()
@@ -84,7 +88,7 @@
     return ''
   })
 
-  const filters = computed(() => {
+  const fileInstructionsFilters = computed(() => {
     if (
       !followupTypeOptions.value ||
       !agentOptions.value
@@ -93,7 +97,9 @@
       return null
     }
 
-    const filters: FilterProp[] = [
+    const maxAlwaysExpandedNb = 3
+
+    const fileInstructionsFilters: FilterProp[] = [
       {
         name: 'fileInstructionType',
         label: "Type d'accompagnement",
@@ -117,8 +123,11 @@
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.Status,
         alwaysExpanded: true
-      },
-      {
+      }
+    ]
+
+    if (props.filters.fileInstructionType !== 'Housing') {
+      fileInstructionsFilters.push({
         name: 'followupTypes',
         label: helpRequestFieldLabels.typeId,
         options: followupTypeOptions.value,
@@ -126,8 +135,8 @@
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.FollowupType,
         alwaysExpanded: true
-      }
-    ]
+      })
+    }
 
     // FIXME: Delete once it is admitted that it is done
     // if (application.value.module.helpRequest) {
@@ -176,19 +185,19 @@
     // }
 
     if (!isReferent) {
-      filters.push({
+      fileInstructionsFilters.push({
         name: 'referents',
         label: 'Référent',
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
-
         matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.Referent
+        matomoEventAction: HelpRequestFilterEventAction.Referent,
+        alwaysExpanded: fileInstructionsFilters.length < maxAlwaysExpandedNb
       })
     }
 
     if (application.value.module.ministere) {
-      filters.push({
+      fileInstructionsFilters.push({
         name: 'ministre',
         label: helpRequestFieldLabels.ministre,
         options: ministerOptions,
@@ -198,7 +207,7 @@
       })
     }
 
-    return filters
+    return fileInstructionsFilters
   })
 
   // async function loadExaminationDates() {
@@ -218,6 +227,6 @@
 
   function onFilter(filters: FileInstructionFilterInput) {
     filtersState.fileInstruction.value = filters
-    emit('filter', filters)
+    emit('update:filters', filters)
   }
 </script>
