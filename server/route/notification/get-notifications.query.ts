@@ -1,4 +1,4 @@
-import { NotificationType } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { GetNotificationsInput, getNotificationsSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -7,21 +7,18 @@ import { NotificationRepo } from '~/server/database'
 
 const handler = async ({
   ctx: { user },
-  input: { onlyUnread, type }
+  input: { onlyUnread, types }
 }: {
   ctx: ProtectedAppContext
   input: GetNotificationsInput
 }) => {
-  const where: {
-    read?: boolean
-    type?: NotificationType
-  } = {}
+  const where: Prisma.NotificationWhereInput = {}
 
   if (onlyUnread) {
     where.read = false
   }
-  if (type) {
-    where.type = type
+  if (types?.length) {
+    where.type = { in: types }
   }
 
   const notifications = await NotificationRepo.findMany(user, {

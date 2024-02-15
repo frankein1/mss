@@ -12,14 +12,13 @@
     />
     <label
       class="fr-toggle__label"
-      :class="{ 'no-label': noLabel }"
       :for="id"
       :data-fr-checked-label="checkedLabel ? 'Activé' : undefined"
       :data-fr-unchecked-label="checkedLabel ? 'Désactivé' : undefined"
     >
       <span
-        v-show="!noLabel"
         class="fr-label"
+        :class="{ 'fr-sr-only': noLabel }"
       >
         {{ label }}
       </span>

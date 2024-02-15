@@ -34,6 +34,8 @@ export type SearchFilterProp = FilterPropBase & {
 
 export type RadioFilterProp = SelectFilterProp & {
   type: FilterType.Radio
+  asTag?: true
+  noLabel?: true
 }
 
 export type FilterProp =
