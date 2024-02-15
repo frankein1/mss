@@ -80,17 +80,17 @@
     switch (props.error.statusCode) {
       case 404:
         return [
-          "Si vous avez tapé l'adresse web dans le navigateur, vérifiez qu'elle est correcte. La page n’est peut-être plus disponible.",
-          'Dans ce cas, pour continuer votre visite vous pouvez consulter notre page d’accueil.',
-          'Sinon, contactez-nous pour que l’on puisse vous rediriger vers la bonne information.'
+          "Si vous avez tapé l'adresse web dans le navigateur, vérifiez qu'elle est correcte. La page n'est peut-être plus disponible.",
+          "Dans ce cas, pour continuer votre visite vous pouvez consulter notre page d'accueil.",
+          "Sinon, contactez-nous pour que l'on puisse vous rediriger vers la bonne information."
         ]
       case 503:
         return [
-          'Merci de réessayer plus tard, vous serez en mesure de réutiliser le service très rapidement. Si vous avez besoin d’une aide immédiate, merci de nous contacter directement.'
+          "Merci de réessayer plus tard, vous serez en mesure de réutiliser le service très rapidement. Si vous avez besoin d'une aide immédiate, merci de nous contacter directement."
         ]
       default:
         return [
-          'Essayez de rafraichir la page, sinon merci de réessayer plus tard. Si vous avez besoin d’une aide immédiate, merci de nous contacter directement.'
+          "Essayez de rafraichir la page, sinon merci de réessayer plus tard. Si vous avez besoin d'une aide immédiate, merci de nous contacter directement."
         ]
     }
   })
