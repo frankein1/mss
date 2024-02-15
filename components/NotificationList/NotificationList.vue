@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container">
+  <div class="feature-section">
     <NotificationListHeader />
     <NotificationFilters @filter="filters = $event" />
     <hr v-if="error || pending || !data?.length" />
@@ -87,6 +87,10 @@
 
 <style lang="scss" scope>
   @use '@gouvfr/dsfr/module/color/mixin/element' as dsfr-color-element;
+
+  .feature-section {
+    padding: 0;
+  }
 
   .notifications__list {
     --ul-start: 0;
