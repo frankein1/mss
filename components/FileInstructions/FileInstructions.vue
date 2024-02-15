@@ -8,8 +8,8 @@
     />
     <template v-else>
       <FileInstructionsFilters
+        v-model:filters="filters"
         class="fr-px-5v"
-        @filter="filters = $event"
       />
       <hr />
       <div class="fr-mb-2w fr-mx-5v results-container">
