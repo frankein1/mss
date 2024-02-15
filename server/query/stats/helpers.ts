@@ -108,11 +108,12 @@ export function prepareHelpRequestStatFilters(filters: StatFilterInput) {
 export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
   const socialSupportFilters: Prisma.SocialSupportWhereInput = {}
 
-  if (
+  const hasDateFilter =
     (filters.period && filters.period !== StatPeriodFilter.Custom) ||
     (filters.period === StatPeriodFilter.Custom &&
       (filters.fromDate || filters.toDate))
-  ) {
+
+  if (hasDateFilter) {
     socialSupportFilters.created = prepareDateFilters(filters)
   }
 
@@ -125,7 +126,7 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
 
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
-  if (filters.fromDate || filters.toDate || filters.followupTypes) {
+  if (hasDateFilter || filters.followupTypes?.length) {
     formattedFilters.socialSupports = { some: socialSupportFilters }
   }
 
