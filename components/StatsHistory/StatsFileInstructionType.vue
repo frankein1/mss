@@ -13,7 +13,7 @@
       <h2 class="fr-h5">Thématique d'instruction</h2>
       <p>
         Les instructions de dossiers de demande de logement réalisées avant le
-        31 décembre 2023 sont comptabilisées dans la thématique "Autre".
+        15 février 2024 sont comptabilisées dans la thématique "Autre".
       </p>
       <StatsPie
         v-if="subjectStats.length"

@@ -13,7 +13,7 @@
       <h2 class="fr-h5">Demandes de logement</h2>
       <p>
         Ces données prennent en compte uniquement les instructions de dossiers
-        réalisées après le 31 décembre 2023 via le formulaire de demande de
+        réalisées après le 15 février 2024 via le formulaire de demande de
         logement.
       </p>
       <StatsList

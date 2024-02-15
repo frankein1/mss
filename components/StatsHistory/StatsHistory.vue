@@ -75,7 +75,7 @@
         <template v-else-if="helpRequestCount">
           <AtomNotice class="fr-mb-3w">
             Les instructions de dossiers de demande de logement réalisées avant
-            le 31 décembre 2023 sont comptabilisées dans la thématique "Autre".
+            le 15 février 2024 sont comptabilisées dans la thématique "Autre".
             <NuxtLink :to="`mailto:${supportEmail}`">Contactez-nous</NuxtLink>
             si vous rencontrez des difficultés.
           </AtomNotice>
