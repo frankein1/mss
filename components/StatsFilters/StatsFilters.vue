@@ -90,7 +90,10 @@
       )
     }
 
-    if (props.followupTypeOptions.size) {
+    if (
+      props.filters.helpRequestSubject !== 'Housing' &&
+      props.followupTypeOptions.size
+    ) {
       statsFilters.push({
         name: 'followupTypes',
         label: "Objet de l'accompagnement",
