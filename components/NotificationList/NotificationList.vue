@@ -8,10 +8,12 @@
       :alert-type="AlertType.Error"
       message="Les notifications n'ont pas pu être chargées."
     />
-    <AtomLoader
+    <div
       v-if="pending"
-      class="fr-mx-auto"
-    />
+      class="notification-list__loader-container"
+    >
+      <AtomLoader class="fr-mx-auto" />
+    </div>
     <template v-else-if="data">
       <ul
         v-if="data.length"
@@ -33,13 +35,7 @@
         v-else
         :notification-type="filters?.type"
       />
-      <hr class="notifications__separator" />
-      <button
-        class="fr-btn fr-btn--sm fr-btn--tertiary notifications__button"
-        @click="onToggleReadNotifications"
-      >
-        {{ toggleReadNotificationsBtnLabel }}
-      </button>
+      <NotificationReadToggle v-model:read="showReadNotifications" />
     </template>
   </div>
 </template>
@@ -84,18 +80,7 @@
     refresh: notificationsRefresh
   } = await useTrpcClient().notification.get.useQuery(queryInput)
 
-  const toggleReadNotificationsBtnLabel = computed(() =>
-    showReadNotifications.value
-      ? 'Voir les notifications non lues'
-      : 'Voir les notifications déjà lues'
-  )
-
   function onToggleReadState() {
-    notificationsRefresh()
-  }
-
-  function onToggleReadNotifications() {
-    showReadNotifications.value = !showReadNotifications.value
     notificationsRefresh()
   }
 </script>
@@ -131,5 +116,9 @@
     grid-template-areas: 'type-icon beneficiary read' 'date type read';
     grid-template-columns: min-content auto min-content;
     padding: 0.5rem;
+  }
+
+  .notification-list__loader-container {
+    padding: 0.5rem 1rem 1.5rem;
   }
 </style>
