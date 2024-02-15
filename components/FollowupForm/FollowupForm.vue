@@ -84,7 +84,7 @@
               :to="RoutePath.AppStructureEdit()"
               class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
             >
-              Je personnalise les objets d’accompagnement de ma structure
+              Je personnalise les objets d'accompagnement de ma structure
             </NuxtLink>
             <template v-else>
               Les responsables de votre structure peuvent personnaliser les

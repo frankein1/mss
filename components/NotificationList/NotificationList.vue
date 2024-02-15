@@ -1,7 +1,8 @@
 <template>
   <div class="main-container">
     <NotificationListHeader />
-    <NotificationFilters @filter="onFilter" />
+    <NotificationFilters @filter="filters = $event" />
+    <hr v-if="error || pending || !data?.length" />
     <AtomAlert
       v-if="error"
       :alert-type="AlertType.Error"
@@ -28,12 +29,10 @@
           />
         </li>
       </ul>
-      <p
+      <NotificationListEmptyState
         v-else
-        class="fr-mb-2w notifications__info"
-      >
-        Aucune notification
-      </p>
+        :notification-type="filters?.type"
+      />
       <hr class="notifications__separator" />
       <button
         class="fr-btn fr-btn--sm fr-btn--tertiary notifications__button"
@@ -48,9 +47,30 @@
 <script setup lang="ts">
   import { NotificationType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
+  import { NotificationTypeFilterValue } from '~/client/options'
 
-  const notificationTypes = ref<NotificationType[] | null>(null)
+  const filters = ref<{ type?: NotificationTypeFilterValue | '' }>({})
   const showReadNotifications = ref(false)
+
+  const notificationTypes = computed<NotificationType[] | null>(() => {
+    switch (filters.value.type) {
+      case NotificationTypeFilterValue.DueDate:
+        return [
+          NotificationType.DueDateOneMonth,
+          NotificationType.DueDateToday,
+          NotificationType.EndOfSupport
+        ]
+      case NotificationTypeFilterValue.NewComment:
+        return [NotificationType.NewComment]
+      case NotificationTypeFilterValue.NewItem:
+        return [
+          NotificationType.NewDocument,
+          NotificationType.NewHistoryElement
+        ]
+      default:
+        return null
+    }
+  })
 
   const queryInput = computed(() => ({
     onlyUnread: !showReadNotifications.value,
@@ -69,14 +89,6 @@
       ? 'Voir les notifications non lues'
       : 'Voir les notifications déjà lues'
   )
-
-  function onFilter(filter: { types?: NotificationType[] }) {
-    notificationTypes.value = filter.types || null
-  }
-
-  watch(notificationTypes, () => {
-    notificationsRefresh()
-  })
 
   function onToggleReadState() {
     notificationsRefresh()
@@ -99,11 +111,6 @@
 
   .notifications__list > *:not(:last-child) {
     margin-bottom: 0.75rem;
-  }
-
-  .notifications__info {
-    color: var(--text-mention-grey);
-    text-align: center;
   }
 
   .notifications__separator {
