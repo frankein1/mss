@@ -11,15 +11,15 @@ s
         Les personnes avec un rôle "responsable de structure" ou "travailleur
         social" peuvent ajouter, modifier ou supprimer des partenaires
       </div>
-      <div class="fr-py-2w partner-search-container">
-        <div class="partner-search-bar">
+      <div class="fr-py-2w partner-row-container">
+        <div class="partner-row-start">
           <VeeSearchInput
             name="search"
             label="Rechercher"
           />
         </div>
         <template v-if="application.module.partner">
-          <div class="partner-search-add">
+          <div class="partner-row-action">
             <button
               data-fr-opened="false"
               aria-controls="global-modal"
@@ -38,11 +38,11 @@ s
           :key="partner.id"
           class="catalog-item fr-p-2w fr-mb-2w"
         >
-          <div class="partner-search-container">
-            <div class="fr-h6 fr-m-0 partner-search-bar">
+          <div class="partner-row-container">
+            <div class="fr-h6 fr-m-0 partner-row-start">
               {{ partner.name }}
             </div>
-            <div class="partner-search-add">
+            <div class="partner-row-action">
               <button
                 class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-pencil-line"
                 data-fr-opened="false"
@@ -186,16 +186,16 @@ s
     color: var(--primary);
   }
 
-  .partner-search-container {
+  .partner-row-container {
     display: flex;
     flex-wrap: wrap;
   }
 
-  .partner-search-bar {
+  .partner-row-start {
     flex: 0 0 calc(66.666% - 12px);
   }
 
-  .partner-search-add {
+  .partner-row-action {
     margin-left: auto;
   }
 
@@ -208,11 +208,9 @@ s
     display: grid;
     grid-template-rows: 1fr auto;
     break-inside: avoid;
-
     border: 1px solid;
     border-color: var(--border-default-grey);
     border-radius: 4px;
-
     background-color: white;
   }
 
