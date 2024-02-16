@@ -74,7 +74,7 @@
     data: partnerOrganizations,
     pending,
     error
-  } = await trpcClient.config.getPartnerOrganizations.useQuery()
+  } = await trpcClient.partner.getAll.useQuery()
 
   function onAddHousingHelpRequest(
     housingHelpRequest: CreateHousingHelpRequestInput

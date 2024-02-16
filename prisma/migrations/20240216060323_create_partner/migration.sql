@@ -7,6 +7,8 @@ ALTER TABLE "instructor_organization" DROP CONSTRAINT "instructor_organization_s
 ALTER TABLE "prescribing_organization" DROP CONSTRAINT "prescribing_organization_created_by_id_fkey";
 ALTER TABLE "prescribing_organization" DROP CONSTRAINT "prescribing_organization_structure_id_fkey";
 
+-- AlterEnum
+ALTER TYPE "UserActivityObject" ADD VALUE 'PartnerOrganization';
 
 -- CreateTable
 CREATE TABLE "partner_organization" (
@@ -17,12 +19,12 @@ CREATE TABLE "partner_organization" (
     "structure_id" UUID NOT NULL,
     "siret" TEXT,
     "address" TEXT,
-    "zipcode" TEXT
+    "zipcode" TEXT,
     "city" TEXT,
     "email" TEXT,
     "phone1" TEXT,
     "phone2" TEXT,
-    "working_hours" TEXT
+    "working_hours" TEXT,
     CONSTRAINT "partner_organization_pkey" PRIMARY KEY ("id")
 );
 

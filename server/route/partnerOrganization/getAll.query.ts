@@ -17,7 +17,7 @@ export const handler = async ({
   })
 }
 
-export const getPartnerOrganizationsQuery = createQuery({
+export const getAll = createQuery({
   handler,
   securityCheck: AllowSecurityCheck,
   inputValidation: emptySchema

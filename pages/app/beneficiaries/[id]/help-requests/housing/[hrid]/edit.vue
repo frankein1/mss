@@ -94,7 +94,7 @@
     data: partnerOrganizations,
     pending: partnerOrganizationsPending,
     error: partnerOrganizationsError
-  } = await trpcClient.config.getPartnerOrganizations.useQuery()
+  } = await trpcClient.partner.getAll.useQuery()
 
   const pending = computed(
     () => housingHelpRequestPending.value || partnerOrganizationsPending.value

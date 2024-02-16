@@ -46,7 +46,7 @@
       menus.push({
         label: 'Partenaires',
         to: RoutePath.AppPartners(),
-        icon: 'fr-icon-team-line'
+        icon: 'fr-icon-music-2-fill'
       })
     }
     if (application.value.edit.structure) {

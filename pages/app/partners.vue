@@ -21,7 +21,11 @@ s
         <template v-if="application.module.partner">
           <div class="partner-search-add">
             <button
+              data-fr-opened="false"
+              aria-controls="global-modal"
+              type="button"
               class="fr-btn fr-btn--icon-left fr-btn--sm fr-btn--secondary fr-icon-add-line"
+              @click="openCreateModal"
             >
               Ajouter
             </button>
@@ -34,9 +38,30 @@ s
           :key="partner.id"
           class="catalog-item fr-p-2w fr-mb-2w"
         >
-          <div class="fr-h6 fr-m-0">
-            {{ partner.name }}
+          <div class="partner-search-container">
+            <div class="fr-h6 fr-m-0 partner-search-bar">
+              {{ partner.name }}
+            </div>
+            <div class="partner-search-add">
+              <button
+                class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-pencil-line"
+                data-fr-opened="false"
+                aria-controls="global-modal"
+                type="button"
+                @click="openEditModal(partner.id)"
+              >
+                Modifier la Organisme partenaire
+              </button>
+            </div>
           </div>
+
+          <div
+            v-if="partner.siret"
+            class="fr-icon-file-text-line partner-info fr-text--sm fr-m-0"
+          >
+            {{ partner.siret }}
+          </div>
+
           <div
             v-if="partner.address || partner.zipcode || partner.city"
             class="fr-icon-map-pin-2-line partner-info fr-text--sm fr-m-0"
@@ -67,6 +92,7 @@ s
             v-if="partner.workingHours"
             class="fr-text--sm fr-m-0 working-hours"
           >
+            <div>Horaires:</div>
             {{ partner.workingHours }}
           </div>
         </div>
@@ -76,6 +102,12 @@ s
 </template>
 
 <script lang="ts" setup>
+  import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
+  import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
+  import {
+    EditPartnerOrganizationInput,
+    AddPartnerOrganizationInput
+  } from '~/server/schema'
   import { Breadcrumb, RouteTitle } from '~/utils/routing'
 
   const title = RouteTitle.AppPartners()
@@ -84,8 +116,69 @@ s
 
   const { application } = usePermissions()
   const trpcClient = useTrpcClient()
+  const modal = useModal()
+  const snackbar = useSnackbar()
 
-  const { data } = await trpcClient.config.getPartnerOrganizations.useQuery()
+  const isSubmitting = ref(false)
+
+  const { data, refresh } = await trpcClient.partner.getAll.useQuery()
+
+  function openEditModal(id: string) {
+    modal.open({
+      title: 'Modifier un organisme partenaire',
+      contentComponent: PartnerOrganizationEdition,
+      contentComponentProps: {
+        id,
+        isSubmitting: isSubmitting.value
+      },
+      contentComponentEvents: { onFinish: onEdit, onCancel }
+    })
+  }
+
+  function openCreateModal() {
+    modal.open({
+      title: 'Ajouter un organisme partenaire',
+      contentComponent: PartnerOrganizationCreation,
+      contentComponentProps: {
+        isSubmitting: isSubmitting.value
+      },
+      contentComponentEvents: { onFinish: onCreate, onCancel }
+    })
+  }
+
+  function onEdit(input: EditPartnerOrganizationInput) {
+    useTrpcMutation({
+      isSubmitting,
+      mutation: () => trpcClient.partner.update.mutate(input),
+      onSuccess: () => {
+        snackbar.success('Organisme partenaire mise à jour')
+        modal.close()
+        refresh()
+      },
+      onFailure: () => {
+        snackbar.error('La mise à jour a échoué')
+      }
+    })
+  }
+
+  function onCreate(input: AddPartnerOrganizationInput) {
+    useTrpcMutation({
+      isSubmitting,
+      mutation: () => trpcClient.partner.create.mutate(input),
+      onSuccess: () => {
+        snackbar.success('Organisme partenaire ajoutée')
+        modal.close()
+        refresh()
+      },
+      onFailure: () => {
+        snackbar.error('L"ajout" a échoué')
+      }
+    })
+  }
+
+  function onCancel() {
+    modal.close()
+  }
 </script>
 
 <style lang="scss">
