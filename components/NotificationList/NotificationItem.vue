@@ -13,7 +13,7 @@
     </h3>
     <div>
       <p class="notificationitem__beneficiary">
-        {{ formatBeneficiaryDisplayName(beneficiary) }}
+        {{ formatBeneficiaryDisplayName(notification.beneficiary) }}
       </p>
       <p class="fr-mb-0">
         <NuxtLink
@@ -49,11 +49,7 @@
 </template>
 
 <script setup lang="ts">
-  import {
-    Beneficiary,
-    NotificationType,
-    SocialSupportType
-  } from '@prisma/client'
+  import { NotificationType, SocialSupportType } from '@prisma/client'
   import dayjs from 'dayjs'
   import { NotificationItem } from '~/server/trpc/routers'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
@@ -66,10 +62,6 @@
 
   const props = defineProps<{
     notification: NotificationItem
-    beneficiary: Pick<
-      Beneficiary,
-      'id' | 'firstName' | 'usualName' | 'birthName'
-    >
   }>()
 
   const emit = defineEmits<{
@@ -171,7 +163,7 @@
   }
 
   const itemLink = computed(() =>
-    RoutePath.AppBeneficiary(props.beneficiary.id, {
+    RoutePath.AppBeneficiary(props.notification.beneficiary.id, {
       tab: getItemTab(),
       item: getItemId(),
       originPage: Route.AppOverview

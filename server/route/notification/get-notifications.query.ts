@@ -54,10 +54,7 @@ const handler = async ({
     }
   })
 
-  return (notifications || []).map(n => {
-    const { beneficiary, ...notificationDatas } = n
-    return { beneficiary, notification: { ...notificationDatas } }
-  })
+  return notifications
 }
 
 export const getNotificationsQuery = createQuery({
@@ -67,4 +64,4 @@ export const getNotificationsQuery = createQuery({
 })
 
 type GetNotificationOutput = Prisma.PromiseReturnType<typeof handler>
-export type NotificationItem = GetNotificationOutput[number]['notification']
+export type NotificationItem = GetNotificationOutput[number]
