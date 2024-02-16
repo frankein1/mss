@@ -33,8 +33,7 @@ async function createDueSocialSupportNotifications(
       recipientId: socialSupport.createdById,
       beneficiaryId: socialSupport.beneficiaryId,
       socialSupportId: socialSupport.id,
-      type,
-      itemCreatedById: socialSupport.createdById
+      type
     }))
 
   await NotificationRepo.prisma.createMany({
@@ -88,8 +87,7 @@ async function createEndOfSupportHelpRequestNotifications() {
       recipientId: socialSupport.createdById,
       beneficiaryId: socialSupport.beneficiaryId,
       helpRequestId: socialSupport.id,
-      type: NotificationType.EndOfSupport,
-      itemCreatedById: socialSupport.createdById
+      type: NotificationType.EndOfSupport
     }))
 
   await NotificationRepo.prisma.createMany({

@@ -42,6 +42,11 @@ const handler = async ({
           firstName: true,
           lastName: true
         }
+      },
+      comment: {
+        select: {
+          content: true
+        }
       }
     },
     orderBy: {

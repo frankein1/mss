@@ -1,7 +1,7 @@
 <template>
   <div
     class="fr-checkbox-group"
-    :class="{ 'fr-checkbox-group--error': error }"
+    :class="{ 'fr-checkbox-group--error': error, 'no-label': noLabel }"
   >
     <input
       :id="id"
@@ -17,10 +17,10 @@
       class="fr-label"
       :for="id"
     >
-      <span :class="{ 'no-label': noLabel }">
-        {{ label }}
+      <span :title="noLabel ? label : undefined">
+        {{ noLabel ? '' : label }}
         <span
-          v-if="required"
+          v-if="required && !noLabel"
           class="color-red"
           >*</span
         >
@@ -81,8 +81,17 @@
   )
 </script>
 
-<style scoped>
-  .no-label {
-    visibility: hidden;
+<style lang="scss" scoped>
+  .fr-checkbox-group.no-label {
+    min-height: 1.5rem;
+
+    .fr-label {
+      margin-left: 1.5rem;
+
+      &::before {
+        margin-right: 0;
+        left: -1.5rem;
+      }
+    }
   }
 </style>
