@@ -17,6 +17,7 @@ import { usersActivityRouter } from './usersActivity/router'
 import { beneficiaryDraftRouter } from './beneficiaryDraft/router'
 import { socialSupportRouter } from './socialSupport/router'
 import { housingHelpRequestRouter } from './housingHelpRequest/router'
+import { partnerRouter } from './partnerRouter/router'
 import { router } from '~/server/trpc'
 
 export const appRouter = router({
@@ -24,6 +25,7 @@ export const appRouter = router({
   beneficiary: beneficiaryRouter,
   notification: notificationRouter,
   config: configRouter,
+  partner: partnerRouter,
   followup: followupRouter,
   stat: statRouter,
   structure: structureRouter,

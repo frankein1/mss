@@ -1,0 +1,224 @@
+s
+<template>
+  <PageContainer>
+    <DsfrBreadcrumb :links="Breadcrumb.AppPartners()" />
+    <PageTitle :title="title" />
+    <main>
+      <div class="fr-h4 partner-subtitle fr-m-0">
+        {{ `${data?.length} organismes partenaires de votre structure` }}
+      </div>
+      <div class="fr-m-0">
+        Les personnes avec un rôle "responsable de structure" ou "travailleur
+        social" peuvent ajouter, modifier ou supprimer des partenaires
+      </div>
+      <div class="fr-py-2w partner-row-container">
+        <div class="partner-row-start">
+          <VeeSearchInput
+            name="search"
+            label="Rechercher"
+          />
+        </div>
+        <template v-if="application.module.partner">
+          <div class="partner-row-action">
+            <button
+              data-fr-opened="false"
+              aria-controls="global-modal"
+              type="button"
+              class="fr-btn fr-btn--icon-left fr-btn--sm fr-btn--secondary fr-icon-add-line"
+              @click="openCreateModal"
+            >
+              Ajouter
+            </button>
+          </div>
+        </template>
+      </div>
+      <div class="catalog">
+        <div
+          v-for="partner in data"
+          :key="partner.id"
+          class="catalog-item fr-p-2w fr-mb-2w"
+        >
+          <div class="partner-row-container">
+            <div class="fr-h6 fr-m-0 partner-row-start">
+              {{ partner.name }}
+            </div>
+            <div class="partner-row-action">
+              <button
+                class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-pencil-line"
+                data-fr-opened="false"
+                aria-controls="global-modal"
+                type="button"
+                @click="openEditModal(partner.id)"
+              >
+                Modifier la Organisme partenaire
+              </button>
+            </div>
+          </div>
+
+          <div
+            v-if="partner.siret"
+            class="fr-icon-file-text-line partner-info fr-text--sm fr-m-0"
+          >
+            {{ partner.siret }}
+          </div>
+
+          <div
+            v-if="partner.address || partner.zipcode || partner.city"
+            class="fr-icon-map-pin-2-line partner-info fr-text--sm fr-m-0"
+          >
+            {{
+              `${partner.address || ''} ${partner.zipcode || ''} ${partner.city || ''}`
+            }}
+          </div>
+          <div
+            v-if="partner.phone1"
+            class="fr-icon-phone-line partner-info fr-text--sm fr-m-0"
+          >
+            {{ partner.phone1 }}
+          </div>
+          <div
+            v-if="partner.phone2"
+            class="fr-icon-phone-line partner-info fr-text--sm fr-m-0"
+          >
+            {{ partner.phone2 }}
+          </div>
+          <div
+            v-if="partner.email"
+            class="fr-icon-mail-line partner-info fr-text--sm fr-m-0"
+          >
+            {{ partner.email }}
+          </div>
+          <div
+            v-if="partner.workingHours"
+            class="fr-text--sm fr-m-0 working-hours"
+          >
+            <div>Horaires:</div>
+            {{ partner.workingHours }}
+          </div>
+        </div>
+      </div>
+    </main>
+  </PageContainer>
+</template>
+
+<script lang="ts" setup>
+  import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
+  import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
+  import {
+    EditPartnerOrganizationInput,
+    AddPartnerOrganizationInput
+  } from '~/server/schema'
+  import { Breadcrumb, RouteTitle } from '~/utils/routing'
+
+  const title = RouteTitle.AppPartners()
+
+  useHead({ title })
+
+  const { application } = usePermissions()
+  const trpcClient = useTrpcClient()
+  const modal = useModal()
+  const snackbar = useSnackbar()
+
+  const isSubmitting = ref(false)
+
+  const { data, refresh } = await trpcClient.partner.getAll.useQuery()
+
+  function openEditModal(id: string) {
+    modal.open({
+      title: 'Modifier un organisme partenaire',
+      contentComponent: PartnerOrganizationEdition,
+      contentComponentProps: {
+        id,
+        isSubmitting: isSubmitting.value
+      },
+      contentComponentEvents: { onFinish: onEdit, onCancel }
+    })
+  }
+
+  function openCreateModal() {
+    modal.open({
+      title: 'Ajouter un organisme partenaire',
+      contentComponent: PartnerOrganizationCreation,
+      contentComponentProps: {
+        isSubmitting: isSubmitting.value
+      },
+      contentComponentEvents: { onFinish: onCreate, onCancel }
+    })
+  }
+
+  function onEdit(input: EditPartnerOrganizationInput) {
+    useTrpcMutation({
+      isSubmitting,
+      mutation: () => trpcClient.partner.update.mutate(input),
+      onSuccess: () => {
+        snackbar.success('Organisme partenaire mise à jour')
+        modal.close()
+        refresh()
+      },
+      onFailure: () => {
+        snackbar.error('La mise à jour a échoué')
+      }
+    })
+  }
+
+  function onCreate(input: AddPartnerOrganizationInput) {
+    useTrpcMutation({
+      isSubmitting,
+      mutation: () => trpcClient.partner.create.mutate(input),
+      onSuccess: () => {
+        snackbar.success('Organisme partenaire ajoutée')
+        modal.close()
+        refresh()
+      },
+      onFailure: () => {
+        snackbar.error('L"ajout" a échoué')
+      }
+    })
+  }
+
+  function onCancel() {
+    modal.close()
+  }
+</script>
+
+<style lang="scss">
+  .partner-subtitle {
+    color: var(--primary);
+  }
+
+  .partner-row-container {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .partner-row-start {
+    flex: 0 0 calc(66.666% - 12px);
+  }
+
+  .partner-row-action {
+    margin-left: auto;
+  }
+
+  .catalog {
+    column-count: 3;
+  }
+
+  .catalog-item {
+    margin: 0;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    break-inside: avoid;
+    border: 1px solid;
+    border-color: var(--border-default-grey);
+    border-radius: 4px;
+    background-color: white;
+  }
+
+  .partner-info {
+    color: var(--text-default-grey);
+  }
+
+  .working-hours {
+    color: var(--text-mention-grey);
+  }
+</style>

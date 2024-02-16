@@ -1,7 +1,7 @@
 <template>
   <HelpRequestForm
     :is-submitting="isSubmitting"
-    :instructor-organizations="instructorOrganizations"
+    :partner-organizations="partnerOrganizations"
     :beneficiary-id="socialSupport.beneficiary.id"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
@@ -13,7 +13,7 @@
 <script lang="ts" setup>
   import {
     AskedHousing,
-    InstructorOrganization,
+    PartnerOrganization,
     FileInstructionType
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
@@ -28,7 +28,7 @@
 
   const props = defineProps<{
     isSubmitting: boolean
-    instructorOrganizations: InstructorOrganization[]
+    partnerOrganizations: PartnerOrganization[]
     data: GetHousingHelpRequestOutput
   }>()
 

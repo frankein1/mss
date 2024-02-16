@@ -9,7 +9,6 @@ import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
-import { isNewOption } from '~/utils/options'
 import { HousingHelpRequestService } from '~/server/services'
 
 const handler = ({
@@ -35,15 +34,6 @@ const securityCheck = async (
   }
 
   const appPermissions = getAppContextPermissions(ctx)
-
-  const { instructorOrganizationId } = input
-
-  if (
-    isNewOption(instructorOrganizationId) &&
-    !appPermissions.create.instructorOrganization
-  ) {
-    return false
-  }
 
   if (input.privateSynthesis && !permissions.set.privateSynthesis) {
     return false

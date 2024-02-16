@@ -7,7 +7,6 @@ import {
   getAppContextPermissions
 } from '~/server/security'
 
-import { isNewOption } from '~/utils/options'
 import { FollowupService } from '~/server/services'
 
 const handler = ({
@@ -31,12 +30,6 @@ const securityCheck = async (
   }
 
   const appPermissions = getAppContextPermissions(ctx)
-  if (
-    isNewOption(input.prescribingOrganizationId) &&
-    !appPermissions.create.prescribingOrganization
-  ) {
-    return false
-  }
 
   // CAN EDIT PRIVATE SYNTHESIS
   if (input.privateSynthesis && !permissions.set.privateSynthesis) {

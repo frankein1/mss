@@ -6,7 +6,6 @@ import { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { markFollowupTypeAsUsed } from '~/server/query'
 import { prepareNewHistoryElementNotification } from '~/server/services/helper'
-import { isNewOption, newOptionToLabel } from '~/utils/options'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -69,17 +68,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
 
   let prescribingOrganization
   if (prescribingOrganizationId) {
-    if (isNewOption(prescribingOrganizationId)) {
-      prescribingOrganization = {
-        create: {
-          name: newOptionToLabel(prescribingOrganizationId || ''),
-          structureId: user.structureId || '',
-          createdById: user.id
-        }
-      }
-    } else {
-      prescribingOrganization = connect(prescribingOrganizationId)
-    }
+    prescribingOrganization = connect(prescribingOrganizationId)
   }
 
   const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(user, {

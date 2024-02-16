@@ -37,17 +37,11 @@
         class="fr-mx-auto"
       />
       <HelpRequestFormEdition
-        v-else-if="
-          helpRequestData &&
-          followupTypes &&
-          prescribingOrganizations &&
-          instructorOrganizations
-        "
+        v-else-if="helpRequestData && followupTypes && partnerOrganizations"
         :is-submitting="isSubmitting"
         :followup-types="followupTypes"
         :data="helpRequestData"
-        :prescribing-organizations="prescribingOrganizations"
-        :instructor-organizations="instructorOrganizations"
+        :partner-organizations="partnerOrganizations"
         @save-help-request="onUpdateHelpRequest"
       />
     </main>
@@ -118,23 +112,16 @@
   } = await trpcClient.config.getStructureFollowupTypes.useQuery()
 
   const {
-    data: prescribingOrganizations,
-    pending: prescribingOrganizationsPending,
-    error: prescribingOrganizationsError
-  } = await trpcClient.config.getPrescribingOrganizations.useQuery()
-
-  const {
-    data: instructorOrganizations,
-    pending: instructorOrganizationsPending,
-    error: instructorOrganizationsError
-  } = await trpcClient.config.getInstructorOrganization.useQuery()
+    data: partnerOrganizations,
+    pending: partnerOrganizationsPending,
+    error: partnerOrganizationsError
+  } = await trpcClient.partner.getAll.useQuery()
 
   const pending = computed(
     () =>
       helpRequestPending.value ||
       followupTypesPending.value ||
-      prescribingOrganizationsPending.value ||
-      instructorOrganizationsPending.value
+      partnerOrganizationsPending.value
   )
 
   const fetchError = computed(() => {
@@ -144,11 +131,8 @@
     if (followupTypesError.value) {
       return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
     }
-    if (prescribingOrganizationsError.value) {
-      return "La liste des organismes prescripteurs de votre structure n'a pas pu être chargée."
-    }
-    if (instructorOrganizationsError.value) {
-      return "La liste des organismes instructeurs de votre structure n'a pas pu être chargée."
+    if (partnerOrganizationsError.value) {
+      return "La liste des organismes partenaires de votre structure n'a pas pu être chargée."
     }
     return ''
   })

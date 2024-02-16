@@ -18,7 +18,7 @@
             En savoir plus sur les rôles et habilitations
           </button>
           <RoleTable id="roles-details" />
-          <template v-if="application.create.user">
+          <template v-if="application.module.users">
             <hr />
             <UserForm @users-refresh="usersRefresh" />
           </template>

@@ -87,8 +87,7 @@ export async function update({ input, ctx }: UpdateParams) {
           instructorOrganization: prepareInstructorOrganization(
             instructorOrganizationId,
             ctx,
-            externalStructure,
-            target.fileInstruction.instructorOrganizationId !== null
+            externalStructure
           ),
           helpRequest: {
             update: {
@@ -100,8 +99,7 @@ export async function update({ input, ctx }: UpdateParams) {
               isRefundable,
               type: connect(typeId),
               prescribingOrganization: preparePrescribingOrganization(
-                prescribingOrganizationId,
-                ctx
+                prescribingOrganizationId
               )
             }
           }

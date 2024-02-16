@@ -2,7 +2,7 @@
   <FollowupForm
     :is-submitting="isSubmitting"
     :followup-types="followupTypes"
-    :prescribing-organizations="prescribingOrganizations"
+    :partner-organizations="partnerOrganizations"
     :beneficiary-id="followup.beneficiaryId"
     :medium="values.medium"
     :is-redirected="values.redirected"
@@ -15,7 +15,7 @@
 <script lang="ts" setup>
   import {
     FollowupType,
-    PrescribingOrganization
+    PartnerOrganization
     // FollowupIntervention,
     // FollowupSignalement
   } from '@prisma/client'
@@ -28,7 +28,7 @@
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: Array<FollowupType>
-    prescribingOrganizations: Array<PrescribingOrganization>
+    partnerOrganizations: Array<PartnerOrganization>
     data: FollowupPageItem
   }>()
 

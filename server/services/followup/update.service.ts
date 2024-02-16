@@ -5,7 +5,6 @@ import { EditFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { markFollowupTypeAsUsed } from '~/server/query'
-import { isNewOption, newOptionToLabel } from '~/utils/options'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -13,7 +12,6 @@ type UpdateParams = {
 }
 
 export const update = async ({ ctx, input }: UpdateParams) => {
-  const { user } = ctx
   const {
     types,
     documents,
@@ -69,17 +67,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
 
   let prescribingOrganization
   if (prescribingOrganizationId) {
-    if (isNewOption(prescribingOrganizationId)) {
-      prescribingOrganization = {
-        create: {
-          name: newOptionToLabel(prescribingOrganizationId || ''),
-          structureId: user.structureId || '',
-          createdById: user.id
-        }
-      }
-    } else {
-      prescribingOrganization = connect(prescribingOrganizationId)
-    }
+    prescribingOrganization = connect(prescribingOrganizationId)
   }
 
   const fu = await SocialSupportRepo.update(ctx.user, {

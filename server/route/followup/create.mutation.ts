@@ -2,11 +2,7 @@ import { UserActivityType } from '@prisma/client'
 import { createMutation as createMutationFn } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
-import { isNewOption } from '~/utils/options'
+import { SecurityRuleContext } from '~/server/security'
 
 import { BeneficiaryService, FollowupService } from '~/server/services'
 
@@ -30,13 +26,6 @@ const securityCheck = async (
   )
 
   if (!permissions.create) {
-    return false
-  }
-  const appPermissions = getAppContextPermissions(ctx)
-  if (
-    isNewOption(input.prescribingOrganizationId) &&
-    !appPermissions.create.prescribingOrganization
-  ) {
     return false
   }
   return true

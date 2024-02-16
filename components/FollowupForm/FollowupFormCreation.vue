@@ -2,7 +2,7 @@
   <FollowupForm
     :is-submitting="isSubmitting"
     :followup-types="followupTypes"
-    :prescribing-organizations="prescribingOrganizations"
+    :partner-organizations="partnerOrganizations"
     :beneficiary-id="beneficiaryId"
     :medium="values.medium"
     :is-redirected="values.redirected"
@@ -14,7 +14,7 @@
 <script lang="ts" setup>
   import {
     FollowupType,
-    PrescribingOrganization,
+    PartnerOrganization,
     SocialSupportStatus
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
@@ -25,7 +25,7 @@
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: Array<FollowupType>
-    prescribingOrganizations: Array<PrescribingOrganization>
+    partnerOrganizations: Array<PartnerOrganization>
     beneficiaryId: string
   }>()
 

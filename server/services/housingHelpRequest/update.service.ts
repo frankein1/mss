@@ -81,8 +81,7 @@ export async function update({ input, ctx }: UpdateParams) {
           instructorOrganization: prepareInstructorOrganization(
             instructorOrganizationId,
             ctx,
-            externalStructure,
-            target.fileInstruction.instructorOrganizationId !== null
+            externalStructure
           ),
           housingHelpRequest: {
             update: {

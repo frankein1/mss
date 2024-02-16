@@ -6,7 +6,6 @@ import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
-import { isNewOption } from '~/utils/options'
 import { HelpRequestService } from '~/server/services'
 
 const handler = ({
@@ -32,21 +31,6 @@ const securityCheck = async (
   }
 
   const appPermissions = getAppContextPermissions(ctx)
-
-  const { prescribingOrganizationId, instructorOrganizationId } = input
-
-  if (
-    isNewOption(prescribingOrganizationId) &&
-    !appPermissions.create.prescribingOrganization
-  ) {
-    return false
-  }
-  if (
-    isNewOption(instructorOrganizationId) &&
-    !appPermissions.create.instructorOrganization
-  ) {
-    return false
-  }
 
   if (input.privateSynthesis && !permissions.set.privateSynthesis) {
     return false
