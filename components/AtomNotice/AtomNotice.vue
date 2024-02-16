@@ -28,7 +28,7 @@
 
 <style scoped>
   .notice__content {
-    color: var(--light-text-default-grey, #3a3a3a);
+    color: var(--text-default-grey);
     font-weight: 400;
   }
 </style>

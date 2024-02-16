@@ -17,25 +17,21 @@
     <template v-else-if="data">
       <ul
         v-if="data.length"
-        class="notifications__list fr-mb-2w"
+        class="notifications__list"
       >
-        <li
+        <NotificationItem
           v-for="item in data"
           :key="item.notification.id"
-          class="notifications__item"
-        >
-          <NotificationItem
-            :notification="item.notification"
-            :beneficiary="item.beneficiary"
-            @toggle-read-state="onToggleReadState"
-          />
-        </li>
+          :notification="item.notification"
+          :beneficiary="item.beneficiary"
+          @toggle-read-state="onToggleReadState(item.notification.id, $event)"
+        />
       </ul>
       <NotificationListEmptyState
         v-else
         :notification-type="filters?.type"
       />
-      <NotificationReadToggle v-model:read="showReadNotifications" />
+      <NotificationListReadToggle v-model:read="showReadNotifications" />
     </template>
   </div>
 </template>
@@ -73,21 +69,27 @@
     types: notificationTypes.value
   }))
 
-  const {
-    data,
-    error,
-    pending,
-    refresh: notificationsRefresh
-  } = await useTrpcClient().notification.get.useQuery(queryInput)
+  const { data, error, pending } =
+    await useTrpcClient().notification.get.useQuery(queryInput)
 
-  function onToggleReadState() {
-    notificationsRefresh()
+  function onToggleReadState(notificationId: string, read: boolean) {
+    if (data.value) {
+      data.value = data.value.map(({ beneficiary, notification }) =>
+        notification.id === notificationId
+          ? { beneficiary, notification: { ...notification, read } }
+          : { beneficiary, notification }
+      )
+
+      if (!showReadNotifications.value && read) {
+        data.value = data.value.filter(
+          ({ notification: { id } }) => id !== notificationId
+        )
+      }
+    }
   }
 </script>
 
-<style lang="scss" scope>
-  @use '@gouvfr/dsfr/module/color/mixin/element' as dsfr-color-element;
-
+<style lang="scss" scoped>
   .feature-section {
     padding: 0;
   }
@@ -96,30 +98,6 @@
     --ul-start: 0;
     --xl-block: 0;
     --ul-type: none;
-  }
-
-  .notifications__list > *:not(:last-child) {
-    margin-bottom: 0.75rem;
-  }
-
-  .notifications__separator {
-    --text-spacing: 0 0 0.5rem;
-  }
-
-  .notifications__button {
-    margin: 0 auto;
-    display: block;
-  }
-
-  .notifications__item {
-    @include dsfr-color-element.box-shadow(default grey, (), all-1-out);
-
-    border-radius: 0.25rem;
-    display: grid;
-    gap: 0.25rem 2rem;
-    grid-template-areas: 'type-icon beneficiary read' 'date type read';
-    grid-template-columns: min-content auto min-content;
-    padding: 0.5rem;
   }
 
   .notification-list__loader-container {

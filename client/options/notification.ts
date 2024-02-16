@@ -1,13 +1,13 @@
 import { NotificationType } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
-export const notificationTypeLabels: { [key in NotificationType]: string } = {
-  [NotificationType.DueDateToday]: "Échéance - Aujourd'hui",
-  [NotificationType.DueDateOneMonth]: 'Échéance - Dans un mois',
-  [NotificationType.EndOfSupport]: 'Fin de prise en charge',
-  [NotificationType.NewComment]: 'Nouveau commentaire',
-  [NotificationType.NewDocument]: 'Nouveau document',
-  [NotificationType.NewHistoryElement]: 'Nouveau suivi'
+export const notificationTypeTitles: { [key in NotificationType]: string } = {
+  [NotificationType.DueDateToday]: 'Échéance',
+  [NotificationType.DueDateOneMonth]: 'Échéance',
+  [NotificationType.EndOfSupport]: 'Échéance',
+  [NotificationType.NewComment]: 'Commentaire',
+  [NotificationType.NewDocument]: 'Document',
+  [NotificationType.NewHistoryElement]: ''
 }
 
 export enum NotificationTypeFilterValue {

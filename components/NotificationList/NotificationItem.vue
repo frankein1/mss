@@ -1,33 +1,51 @@
 <template>
-  <h3 class="notificationitem__type">
-    <NuxtLink
-      class="fr-link"
-      :to="itemLink"
-      >{{ itemTitle }}</NuxtLink
-    >
-  </h3>
-  <span
-    :class="[
-      'notificationitem__icon',
-      notificationTypeClasses[notification.type]
-    ]"
-    aria-hidden="true"
-  ></span>
-  <span class="notificationitem__date">{{
-    formatDate(notification.created)
-  }}</span>
-  <span class="notificationitem__beneficiary">{{
-    formatBeneficiaryDisplayName(beneficiary)
-  }}</span>
-  <button
-    ref="toggleReadButton"
-    class="notificationitem__button fr-btn fr-btn--sm fr-icon-check-line"
-    :class="{ 'fr-btn--tertiary': !isRead }"
-    :title="toggleReadButtonLabel"
-    @click="onToggleRead"
+  <li
+    class="notificationitem"
+    :class="{ notificationitem__read: notification.read }"
   >
-    {{ toggleReadButtonLabel }}
-  </button>
+    <span
+      class="notificationitem__icon"
+      :class="[notificationIcon]"
+      aria-hidden="true"
+    ></span>
+    <h3 class="fr-text--sm fr-mb-0">
+      {{ notificationTitle }}
+    </h3>
+    <div>
+      <p class="notificationitem__beneficiary">
+        {{ formatBeneficiaryDisplayName(beneficiary) }}
+      </p>
+      <p class="fr-mb-0">
+        <NuxtLink
+          class="fr-link"
+          :to="itemLink"
+          >{{ notificationDescription }}</NuxtLink
+        >
+        {{ notificationDescriptionDetail }}
+      </p>
+      <p
+        v-if="notification.comment"
+        class="fr-text--sm notificationitem__comment"
+      >
+        {{ notification.comment.content }}
+      </p>
+    </div>
+    <div class="notificationitem__end">
+      <p class="fr-text--xs notificationitem__date">
+        {{ formatDate(notification.created) }}
+      </p>
+      <form
+        ref="form"
+        class="notificationitem__read-form"
+      >
+        <VeeCheckbox
+          label="Notification lue"
+          name="read"
+          no-label
+        />
+      </form>
+    </div>
+  </li>
 </template>
 
 <script setup lang="ts">
@@ -36,12 +54,15 @@
     NotificationType,
     SocialSupportType
   } from '@prisma/client'
+  import dayjs from 'dayjs'
   import { NotificationItem } from '~/server/trpc/routers'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
   import { notificationTypeClasses } from '~/client/classes/notification'
-  import { notificationTypeLabels } from '~/client/options'
+  import { notificationTypeTitles } from '~/client/options'
   import { formatUserDisplayName } from '~/utils/user'
+  import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
+  import { formatDate } from '~/utils/formatDate'
 
   const props = defineProps<{
     notification: NotificationItem
@@ -52,16 +73,82 @@
   }>()
 
   const emit = defineEmits<{
-    toggleReadState: []
+    toggleReadState: [read: boolean]
   }>()
 
-  const beneficiary = computed(() => props.beneficiary)
+  const form = ref<HTMLFormElement | null>(null)
 
-  const isRead = computed(() => props.notification.read)
+  const { controlledValues } = useForm<{ read: boolean }>({
+    initialValues: { read: !!props.notification.read }
+  })
 
-  const toggleReadButtonLabel = computed(() =>
-    isRead.value ? 'Marquer comme non-lu' : 'Marquer comme lu'
-  )
+  const notificationIcon = computed(() => {
+    if (props.notification.type === 'NewHistoryElement') {
+      if (props.notification.socialSupport?.socialSupportType === 'Followup') {
+        return 'fr-icon-draft-line'
+      }
+      return 'fr-icon-questionnaire-line'
+    }
+    return notificationTypeClasses[props.notification.type]
+  })
+
+  const notificationTitle = computed(() => {
+    if (props.notification.type === 'NewHistoryElement') {
+      if (props.notification.socialSupport?.socialSupportType === 'Followup') {
+        return 'Synthèse'
+      }
+      return 'Instruction'
+    }
+    return notificationTypeTitles[props.notification.type]
+  })
+
+  const notificationDescription = computed(() => {
+    const created = dayjs(props.notification.created)
+    const dateInAMonth = dayjs(props.notification.created).add(1, 'month')
+
+    switch (props.notification.type) {
+      case 'NewHistoryElement':
+        return getNewHistoryElementNotificationDescription(
+          props.notification.socialSupport?.socialSupportType
+        )
+      case 'NewDocument':
+        return 'Nouveau document'
+      case 'NewComment':
+        return 'Nouveau commentaire'
+      case 'DueDateOneMonth':
+        return getDateNotificationDescription(
+          dateInAMonth,
+          'Échéance dans un mois'
+        )
+      case 'DueDateToday':
+        return getDateNotificationDescription(created, 'Échéance')
+      case 'EndOfSupport':
+        return getDateNotificationDescription(created, 'Fin de prise en charge')
+      default:
+        return ''
+    }
+  })
+
+  function getNewHistoryElementNotificationDescription(
+    socialSupportType: SocialSupportType | undefined
+  ) {
+    return socialSupportType === 'Followup'
+      ? "Synthèse d'entretien"
+      : 'Instruction de dossier'
+  }
+
+  function getDateNotificationDescription(date: dayjs.Dayjs, label: string) {
+    if (date.isSame(dayjs(), 'date')) {
+      return `${label} aujourd'hui`
+    }
+    if (date.isSame(dayjs().subtract(1, 'day'), 'date')) {
+      return `${label} hier`
+    }
+    if (date.isAfter(dayjs(), 'date')) {
+      return `${label} le ${formatDate(date.toDate())}`
+    }
+    return `${label} passée le ${formatDate(date.toDate())}`
+  }
 
   function getItemTab() {
     switch (props.notification.type) {
@@ -84,45 +171,58 @@
   }
 
   const itemLink = computed(() =>
-    RoutePath.AppBeneficiary(beneficiary.value.id, {
+    RoutePath.AppBeneficiary(props.beneficiary.id, {
       tab: getItemTab(),
       item: getItemId(),
       originPage: Route.AppOverview
     })
   )
 
-  const itemTitle = computed(() => {
-    if (
-      props.notification.type === NotificationType.NewHistoryElement &&
-      props.notification.socialSupport
-    ) {
-      const itemCreatedByLabel = props.notification.itemCreatedBy
-        ? ` par ${formatUserDisplayName(props.notification.itemCreatedBy)}`
-        : ''
-      const itemLabel =
-        props.notification.socialSupport.socialSupportType ===
-        SocialSupportType.HelpRequest
-          ? 'Une instruction de dossier'
-          : "Une synthèse d'entretien"
+  const notificationDescriptionDetail = computed(() => {
+    const itemCreatedByLabel = props.notification.itemCreatedBy
+      ? formatUserDisplayName(props.notification.itemCreatedBy)
+      : ''
 
-      return `${itemLabel} a été ajoutée${itemCreatedByLabel}`
+    switch (props.notification.type) {
+      case 'NewHistoryElement':
+        return `ajoutée par ${itemCreatedByLabel}`
+      case 'NewDocument':
+      case 'NewComment':
+        return `ajouté par ${itemCreatedByLabel}`
+      case 'DueDateOneMonth':
+      case 'DueDateToday':
+      case 'EndOfSupport':
+        if (
+          props.notification.socialSupport?.socialSupportType === 'Followup'
+        ) {
+          return `sur la synthèse d'entretien`
+        }
+        return "sur l'instruction de dossier"
+      default:
+        return ''
     }
-    return notificationTypeLabels[props.notification.type]
   })
 
-  function onToggleRead() {
+  watch(controlledValues, ({ read }) => {
+    if (read !== props.notification.read) {
+      updateReadState(read)
+    }
+  })
+
+  function updateReadState(read: boolean) {
     useTrpcMutation({
       mutation: () =>
         useTrpcClient().notification.update.mutate({
           id: props.notification.id,
-          read: !isRead.value
+          read
         }),
       onSuccess: () => {
-        emit('toggleReadState')
+        emit('toggleReadState', read)
       },
       onFailure: () => {
         useSnackbar().error(
-          "L'état de la notification n'a pas pu être mis à jour."
+          "L'état de la notification n'a pas pu être mis à jour.",
+          () => form.value?.querySelector('input')?.focus()
         )
       }
     })
@@ -132,33 +232,79 @@
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
 
-  .notificationitem__type {
-    @include dsfr.text-style(sm);
+  .notificationitem {
+    border-top: 1px solid var(--border-default-grey);
+    padding: 1rem 1.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr 3fr min-content;
+    gap: 1rem;
+    align-items: center;
 
-    grid-area: type;
-    margin-bottom: 0;
-    color: var(--primary);
+    &:not(.notificationitem__read) {
+      background-color: var(--background-alt-blue-france);
+    }
   }
 
   .notificationitem__icon {
-    grid-area: type-icon;
-    color: var(--primary);
-  }
+    padding: 0.75rem;
+    border-radius: 50%;
 
-  .notificationitem__date {
-    @include dsfr.text-style(sm);
+    &.fr-icon-file-text-line {
+      background-color: var(--background-alt-yellow-tournesol);
+      color: var(--text-label-yellow-tournesol);
+    }
 
-    grid-area: date;
-    color: var(--primary);
+    &.fr-icon-calendar-event-line {
+      background-color: var(--background-contrast-pink-tuile);
+      color: var(--text-label-pink-tuile);
+    }
+
+    &.fr-icon-message-2-line {
+      background-color: var(--background-contrast-blue-ecume);
+      color: var(--text-label-blue-ecume);
+    }
+
+    &.fr-icon-questionnaire-line {
+      background-color: var(--background-contrast-purple-glycine);
+      color: var(--text-label-purple-glycine);
+    }
+
+    &.fr-icon-draft-line {
+      background-color: var(--background-contrast-green-archipel);
+      color: var(--text-label-green-archipel);
+    }
   }
 
   .notificationitem__beneficiary {
-    grid-area: beneficiary;
     font-weight: 700;
+    margin-bottom: 0;
   }
 
-  .notificationitem__button {
-    grid-area: read;
-    align-self: center;
+  .notificationitem__comment {
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .notificationitem__end {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .notificationitem__comment,
+  .notificationitem__date {
+    color: var(--text-default-grey);
+    margin-bottom: 0;
+  }
+
+  .notificationitem__read-form {
+    align-self: flex-end;
+  }
+
+  .fr-link {
+    font-weight: 700;
   }
 </style>
