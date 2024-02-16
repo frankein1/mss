@@ -14,8 +14,7 @@
     >
       <HelpRequestFormContextSection
         :followup-types="followupTypes"
-        :prescribing-organizations="prescribingOrganizations"
-        :instructor-organizations="instructorOrganizations"
+        :partner-organizations="partnerOrganizations"
         :is-external-support="isExternalSupport"
         :has-set-external-structure="hasSetExternalStructure"
         :is-housing-support="isHousingSupport"
@@ -77,8 +76,7 @@
   import {
     FollowupType,
     SocialSupportStatus,
-    InstructorOrganization,
-    PrescribingOrganization,
+    PartnerOrganization,
     FileInstructionType
   } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
@@ -93,8 +91,7 @@
     defineProps<{
       isSubmitting: boolean
       followupTypes?: FollowupType[]
-      prescribingOrganizations?: PrescribingOrganization[]
-      instructorOrganizations: InstructorOrganization[]
+      partnerOrganizations: PartnerOrganization[]
       beneficiaryId: string
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>

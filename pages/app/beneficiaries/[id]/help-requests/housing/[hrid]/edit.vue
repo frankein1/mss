@@ -38,10 +38,10 @@
         class="fr-mx-auto"
       />
       <HousingHelpRequestFormEdition
-        v-else-if="housingHelpRequestData && instructorOrganizations"
+        v-else-if="housingHelpRequestData && partnerOrganizations"
         :is-submitting="isSubmitting"
         :data="housingHelpRequestData"
-        :instructor-organizations="instructorOrganizations"
+        :partner-organizations="partnerOrganizations"
         @save-housing-help-request="onUpdateHousingHelpRequest"
       />
     </main>
@@ -91,21 +91,20 @@
   useHead({ title })
 
   const {
-    data: instructorOrganizations,
-    pending: instructorOrganizationsPending,
-    error: instructorOrganizationsError
-  } = await trpcClient.config.getInstructorOrganization.useQuery()
+    data: partnerOrganizations,
+    pending: partnerOrganizationsPending,
+    error: partnerOrganizationsError
+  } = await trpcClient.config.getPartnerOrganizations.useQuery()
 
   const pending = computed(
-    () =>
-      housingHelpRequestPending.value || instructorOrganizationsPending.value
+    () => housingHelpRequestPending.value || partnerOrganizationsPending.value
   )
 
   const fetchError = computed(() => {
     if (housingHelpRequestError.value) {
       return "L'instruction de dossier n'a pas pu être chargée."
     }
-    if (instructorOrganizationsError.value) {
+    if (partnerOrganizationsError.value) {
       return "La liste des organismes instructeurs de votre structure n'a pas pu être chargée."
     }
     return ''

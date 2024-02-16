@@ -98,8 +98,7 @@
         <VeeSearchableSelect
           :label="followupFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
-          :options="withEmptyValue(prescribingOrganizationOptions)"
-          :can-create-new-option="application.create.prescribingOrganization"
+          :options="withEmptyValue(partnerOrganizationOptions)"
         />
       </div>
 
@@ -288,7 +287,7 @@
 <script lang="ts" setup>
   import {
     FollowupType,
-    PrescribingOrganization,
+    PartnerOrganization,
     FollowupMedium
   } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
@@ -309,7 +308,7 @@
     defineProps<{
       isSubmitting: boolean
       followupTypes: Array<FollowupType>
-      prescribingOrganizations: Array<PrescribingOrganization>
+      partnerOrganizations: Array<PartnerOrganization>
       beneficiaryId: string
       medium: FollowupMedium
       isRedirected: boolean
@@ -337,12 +336,13 @@
     toOptions(props.followupTypes, 'id', 'name')
   )
 
-  const prescribingOrganizationOptions = computed(() => {
-    const prescribingOrganizationsWithStringId =
-      props.prescribingOrganizations.map(({ id, ...rest }) => ({
+  const partnerOrganizationOptions = computed(() => {
+    const partnerOrganizationsWithStringId = props.partnerOrganizations.map(
+      ({ id, ...rest }) => ({
         id: String(id),
         ...rest
-      }))
-    return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
+      })
+    )
+    return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
   })
 </script>

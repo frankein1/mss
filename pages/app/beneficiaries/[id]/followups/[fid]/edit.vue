@@ -17,10 +17,10 @@
         class="fr-mx-auto"
       />
       <FollowupFormEdition
-        v-else-if="followupData && followupTypes && prescribingOrganizations"
+        v-else-if="followupData && followupTypes && partnerOrganizations"
         :is-submitting="isSubmitting"
         :followup-types="followupTypes"
-        :prescribing-organizations="prescribingOrganizations"
+        :partner-organizations="partnerOrganizations"
         :data="followupData"
         @save-followup="onUpdateFollowup"
       />
@@ -67,16 +67,16 @@
   } = await trpcClient.config.getStructureFollowupTypes.useQuery()
 
   const {
-    data: prescribingOrganizations,
-    pending: prescribingOrganizationsPending,
-    error: prescribingOrganizationsError
-  } = await trpcClient.config.getPrescribingOrganizations.useQuery()
+    data: partnerOrganizations,
+    pending: partnerOrganizationsPending,
+    error: partnerOrganizationsError
+  } = await trpcClient.config.getPartnerOrganizations.useQuery()
 
   const pending = computed(
     () =>
       followupPending.value ||
       followupTypesPending.value ||
-      prescribingOrganizationsPending.value
+      partnerOrganizationsPending.value
   )
 
   const fetchError = computed(() => {
@@ -86,8 +86,8 @@
     if (followupTypesError.value) {
       return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
     }
-    if (prescribingOrganizationsError.value) {
-      return "La liste des organismes prescripteurs de votre structure n'a pas pu être chargée."
+    if (partnerOrganizationsError.value) {
+      return "La liste des organismes partenaires de votre structure n'a pas pu être chargée."
     }
     return ''
   })

@@ -1,24 +1,12 @@
 import { SocialSupportStatus } from '@prisma/client'
 import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
 import { connect } from '~/utils/prisma'
-import { isNewOption, newOptionToLabel } from '~/utils/options'
-import { SecurityRuleContext } from '~/server/security/rules/types'
 
 export function preparePrescribingOrganization(
-  prescribingOrganizationId: string | null | undefined,
-  ctx: SecurityRuleContext
+  prescribingOrganizationId: string | null | undefined
 ) {
   if (!prescribingOrganizationId) {
     return undefined
-  }
-  if (isNewOption(prescribingOrganizationId)) {
-    return {
-      create: {
-        name: newOptionToLabel(prescribingOrganizationId),
-        structureId: ctx.structure.id,
-        createdById: ctx.user.id
-      }
-    }
   }
   return connect(prescribingOrganizationId)
 }

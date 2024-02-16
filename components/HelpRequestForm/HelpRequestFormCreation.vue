@@ -2,8 +2,7 @@
   <HelpRequestForm
     :is-submitting="isSubmitting"
     :followup-types="followupTypes"
-    :prescribing-organizations="prescribingOrganizations"
-    :instructor-organizations="instructorOrganizations"
+    :partner-organizations="partnerOrganizations"
     :beneficiary-id="beneficiaryId"
     :caught-errors="caughtErrors"
     :subject="subject"
@@ -15,8 +14,7 @@
   import {
     FollowupType,
     SocialSupportStatus,
-    InstructorOrganization,
-    PrescribingOrganization,
+    PartnerOrganization,
     FileInstructionType
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
@@ -30,8 +28,7 @@
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: FollowupType[]
-    prescribingOrganizations: PrescribingOrganization[]
-    instructorOrganizations: InstructorOrganization[]
+    partnerOrganizations: PartnerOrganization[]
     beneficiaryId: string
     isFinancial: boolean
   }>()

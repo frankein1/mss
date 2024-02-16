@@ -60,8 +60,7 @@ export async function create({ input, ctx }: CreateParams) {
       handlingDate,
       financialSupport,
       prescribingOrganization: preparePrescribingOrganization(
-        prescribingOrganizationId,
-        ctx
+        prescribingOrganizationId
       ),
 
       isRefundable,

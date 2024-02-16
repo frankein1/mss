@@ -101,8 +101,7 @@
       <VeeSearchableSelect
         :label="helpRequestFieldLabels.prescribingOrganizationId"
         name="prescribingOrganizationId"
-        :options="withEmptyValue(prescribingOrganizationOptions)"
-        :can-create-new-option="application.create.prescribingOrganization"
+        :options="withEmptyValue(partnerOrganizationOptions)"
       />
     </div>
   </template>
@@ -128,8 +127,7 @@
     <VeeSearchableSelect
       :label="helpRequestFieldLabels.instructorOrganizationId"
       name="instructorOrganizationId"
-      :options="instructorOrganizationOptions"
-      :can-create-new-option="application.create.instructorOrganization"
+      :options="partnerOrganizationOptions"
     />
   </div>
 
@@ -153,11 +151,7 @@
 </template>
 
 <script setup lang="ts">
-  import {
-    FollowupType,
-    InstructorOrganization,
-    PrescribingOrganization
-  } from '@prisma/client'
+  import { FollowupType, PartnerOrganization } from '@prisma/client'
   import {
     helpRequestFieldLabels,
     housingHelpRequestFieldLabels
@@ -175,8 +169,7 @@
 
   const props = defineProps<{
     followupTypes: FollowupType[]
-    prescribingOrganizations: PrescribingOrganization[]
-    instructorOrganizations: InstructorOrganization[]
+    partnerOrganizations: PartnerOrganization[]
     isExternalSupport: boolean
     hasSetExternalStructure: boolean
     isHousingSupport: boolean
@@ -189,21 +182,13 @@
     toOptions(props.followupTypes, 'id', 'name')
   )
 
-  const prescribingOrganizationOptions = computed(() => {
-    const prescribingOrganizationsWithStringId =
-      props.prescribingOrganizations.map(({ id, ...rest }) => ({
+  const partnerOrganizationOptions = computed(() => {
+    const partnerOrganizationsWithStringId = props.partnerOrganizations.map(
+      ({ id, ...rest }) => ({
         id: String(id),
         ...rest
-      }))
-    return toOptions(prescribingOrganizationsWithStringId, 'id', 'name')
-  })
-
-  const instructorOrganizationOptions = computed(() => {
-    const instructorOrganizationsWithStringId =
-      props.instructorOrganizations.map(({ id, ...rest }) => ({
-        id: String(id),
-        ...rest
-      }))
-    return toOptions(instructorOrganizationsWithStringId, 'id', 'name')
+      })
+    )
+    return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
   })
 </script>

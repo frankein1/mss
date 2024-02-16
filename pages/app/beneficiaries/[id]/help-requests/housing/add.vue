@@ -33,10 +33,9 @@
         class="fr-mx-auto"
       />
       <HousingHelpRequestFormCreation
-        v-else-if="instructorOrganizations"
         :is-submitting="isSubmitting"
         :beneficiary-id="beneficiaryId"
-        :instructor-organizations="instructorOrganizations"
+        :partner-organizations="partnerOrganizations || []"
         @save-housing-help-request="onAddHousingHelpRequest"
       />
     </main>
@@ -72,10 +71,10 @@
   useHead({ title })
 
   const {
-    data: instructorOrganizations,
+    data: partnerOrganizations,
     pending,
     error
-  } = await trpcClient.config.getInstructorOrganization.useQuery()
+  } = await trpcClient.config.getPartnerOrganizations.useQuery()
 
   function onAddHousingHelpRequest(
     housingHelpRequest: CreateHousingHelpRequestInput

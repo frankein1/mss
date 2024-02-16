@@ -4,8 +4,7 @@ import {
   getAgentsQuery,
   getBeneficiariesCitiesQuery,
   // getExaminationDatesQuery,
-  getInstructorOrganizationQuery,
-  getPrescribingOrganizationsQuery,
+  getPartnerOrganizationsQuery,
   getStructureFollowupTypesQuery
 } from '~/server/route/config'
 
@@ -26,10 +25,7 @@ export const configRouter = router({
     const client = getInclusionConnectClient()
     return client.getEditPasswordUrl()
   }),
-  getPrescribingOrganizations: protectedProcedure
-    .input(getPrescribingOrganizationsQuery.inputValidation)
-    .query(getPrescribingOrganizationsQuery.execute),
-  getInstructorOrganization: protectedProcedure
-    .input(getInstructorOrganizationQuery.inputValidation)
-    .query(getInstructorOrganizationQuery.execute)
+  getPartnerOrganizations: protectedProcedure
+    .input(getPartnerOrganizationsQuery.inputValidation)
+    .query(getPartnerOrganizationsQuery.execute)
 })

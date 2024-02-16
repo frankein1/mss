@@ -7,38 +7,24 @@ import {
   FollowupType,
   HelpRequest,
   HousingHelpRequest,
-  InstructorOrganization,
   NotificationType,
-  PrescribingOrganization,
   SocialSupport,
+  PartnerOrganization,
   User
 } from '@prisma/client'
 import { SecurityRuleContext, SecurityRuleGrantee } from '../security'
-import { isNewOption, newOptionToLabel } from '~/utils/options'
 import { connect } from '~/utils/prisma'
 
 export function prepareInstructorOrganization(
   instructorOrganizationId: string | null | undefined,
   ctx: SecurityRuleContext,
-  isExternalStructure: boolean,
-  hasInstructorOrganizationAlreadySelected = false
+  isExternalStructure: boolean
 ) {
   if (!isExternalStructure) {
     return undefined
   }
   if (!instructorOrganizationId) {
-    return hasInstructorOrganizationAlreadySelected
-      ? { disconnect: true }
-      : undefined
-  }
-  if (isNewOption(instructorOrganizationId)) {
-    return {
-      create: {
-        name: newOptionToLabel(instructorOrganizationId),
-        structureId: ctx.structure.id,
-        createdById: ctx.user.id
-      }
-    }
+    return undefined
   }
   return connect(instructorOrganizationId)
 }
@@ -119,7 +105,7 @@ export function filterFollowup({
   conditions
 }: {
   followup: Followup & {
-    prescribingOrganization: Partial<PrescribingOrganization> | null
+    prescribingOrganization: Partial<PartnerOrganization> | null
   }
   conditions: {
     details: boolean
@@ -152,7 +138,7 @@ export function filterFileInstruction({
   conditions
 }: {
   fileInstruction: FileInstruction & {
-    instructorOrganization: Partial<InstructorOrganization> | null
+    instructorOrganization: Partial<PartnerOrganization> | null
   }
   conditions: {
     details: boolean
@@ -222,7 +208,7 @@ export function filterHelpRequest({
   conditions
 }: {
   helpRequest: HelpRequest & {
-    prescribingOrganization: Partial<PrescribingOrganization> | null
+    prescribingOrganization: Partial<PartnerOrganization> | null
   }
   conditions: {
     details: boolean

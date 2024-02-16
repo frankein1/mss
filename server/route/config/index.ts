@@ -1,6 +1,5 @@
 export * from './getAgents.query'
 export * from './getBeneficiariesCities.query'
 // export * from './getExaminationDates.query'
-export * from './getInstructorOrganization.query'
-export * from './getPrescribingOrganizations.query'
+export * from './getPartnerOrganizations.query'
 export * from './getStructureFollowupTypes.query'
