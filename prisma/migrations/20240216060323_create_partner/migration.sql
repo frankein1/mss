@@ -15,7 +15,14 @@ CREATE TABLE "partner_organization" (
     "created_by_id" UUID,
     "name" TEXT NOT NULL,
     "structure_id" UUID NOT NULL,
-
+    "siret" TEXT,
+    "address" TEXT,
+    "zipcode" TEXT
+    "city" TEXT,
+    "email" TEXT,
+    "phone1" TEXT,
+    "phone2" TEXT,
+    "workingHours" TEXT
     CONSTRAINT "partner_organization_pkey" PRIMARY KEY ("id")
 );
 

@@ -1453,7 +1453,18 @@ model PartnerOrganization {
   createdBy   User?     @relation(fields: [createdById], references: [id])
   createdById String?   @map("created_by_id") @db.Uuid
 
-  name String
+  name  String
+  siret String?
+
+  address String?
+  city    String?
+  zipcode String?
+
+  phone1 String?
+  phone2 String?
+  email  String?
+
+  workingHours String?
 
   structure   Structure @relation(fields: [structureId], references: [id])
   structureId String    @map("structure_id") @db.Uuid
