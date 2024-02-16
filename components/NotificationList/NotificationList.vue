@@ -21,10 +21,9 @@
       >
         <NotificationItem
           v-for="item in data"
-          :key="item.notification.id"
-          :notification="item.notification"
-          :beneficiary="item.beneficiary"
-          @toggle-read-state="onToggleReadState(item.notification.id, $event)"
+          :key="item.id"
+          :notification="item"
+          @toggle-read-state="onToggleReadState(item.id, $event)"
         />
       </ul>
       <NotificationListEmptyState
@@ -74,16 +73,14 @@
 
   function onToggleReadState(notificationId: string, read: boolean) {
     if (data.value) {
-      data.value = data.value.map(({ beneficiary, notification }) =>
+      data.value = data.value.map(notification =>
         notification.id === notificationId
-          ? { beneficiary, notification: { ...notification, read } }
-          : { beneficiary, notification }
+          ? { ...notification, read }
+          : notification
       )
 
       if (!showReadNotifications.value && read) {
-        data.value = data.value.filter(
-          ({ notification: { id } }) => id !== notificationId
-        )
+        data.value = data.value.filter(({ id }) => id !== notificationId)
       }
     }
   }
