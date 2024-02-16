@@ -22,7 +22,7 @@ CREATE TABLE "partner_organization" (
     "email" TEXT,
     "phone1" TEXT,
     "phone2" TEXT,
-    "workingHours" TEXT
+    "working_hours" TEXT
     CONSTRAINT "partner_organization_pkey" PRIMARY KEY ("id")
 );
 

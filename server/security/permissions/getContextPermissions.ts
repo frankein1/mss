@@ -8,10 +8,6 @@ export type AppContextPermissions = {
     history: boolean
     beneficiaries: boolean
   }
-  create: {
-    user: boolean
-    partnerOrganization: boolean
-  }
   edit: {
     structure: boolean
   }
@@ -22,6 +18,7 @@ export type AppContextPermissions = {
     health: boolean
     ministere: boolean
     helpRequest: boolean
+    partner: boolean
   }
 }
 
@@ -45,10 +42,6 @@ function getAdminContextPermissions(): AppContextPermissions {
       beneficiaries: false,
       stats: false
     },
-    create: {
-      user: false,
-      partnerOrganization: false
-    },
     edit: {
       structure: false
     },
@@ -58,7 +51,8 @@ function getAdminContextPermissions(): AppContextPermissions {
       statsByReferent: false,
       health: false,
       ministere: false,
-      helpRequest: false
+      helpRequest: false,
+      partner: false
     }
   }
 }
@@ -82,10 +76,6 @@ function getUserContextPermissions(
       beneficiaries: manager,
       stats: manager || socialWorker || referent || instructor
     },
-    create: {
-      user: manager,
-      partnerOrganization: manager || socialWorker || instructor || referent
-    },
     edit: {
       structure: manager
     },
@@ -95,7 +85,8 @@ function getUserContextPermissions(
       statsByReferent: manager,
       health: cias || ccas,
       ministere: ministryAgent,
-      helpRequest: manager || socialWorker || instructor || referent
+      helpRequest: manager || socialWorker || instructor || referent,
+      partner: manager || socialWorker
     }
   }
 }

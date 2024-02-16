@@ -9,10 +9,6 @@ export function usePermissions() {
         history: false,
         beneficiaries: false
       },
-      create: {
-        user: false,
-        partnerOrganization: false
-      },
       edit: {
         structure: false
       },
@@ -22,7 +18,8 @@ export function usePermissions() {
         statsByReferent: false,
         health: false,
         ministere: false,
-        helpRequest: false
+        helpRequest: false,
+        partner: false
       }
     })
   )
@@ -34,10 +31,6 @@ export function usePermissions() {
         history: false,
         beneficiaries: false
       },
-      create: {
-        user: false,
-        partnerOrganization: false
-      },
       edit: {
         structure: false
       },
@@ -47,7 +40,8 @@ export function usePermissions() {
         statsByReferent: false,
         health: false,
         ministere: false,
-        helpRequest: false
+        helpRequest: false,
+        partner: false
       }
     }
   }

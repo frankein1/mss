@@ -23,6 +23,7 @@ export const RouteTitle = {
   [Route.App]: () => 'Mon espace',
   [Route.AppOverview]: () => 'Tableau de bord',
   [Route.AppUsers]: () => 'Gérer les utilisateurs',
+  [Route.AppPartners]: () => 'Catalogue des partenaires',
   [Route.AppStats]: () => 'Statistiques',
   [Route.AppAccount]: () => 'Mon compte',
   [Route.AppStructureEdit]: () => 'Modifier ma structure',

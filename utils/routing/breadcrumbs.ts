@@ -93,6 +93,11 @@ export const Breadcrumb = {
     { text: RouteTitle.AppUsers(), to: RoutePath.AppUsers() }
   ],
 
+  [Route.AppPartners]: () => [
+    ...OverviewBreadcrumb(),
+    { text: RouteTitle.AppUsers(), to: RoutePath.AppUsers() }
+  ],
+
   [Route.AppStructureEdit]: () => [
     ...OverviewBreadcrumb(),
     { text: RouteTitle.AppStructureEdit(), to: RoutePath.AppStructureEdit() }

@@ -12,7 +12,7 @@ import { UserRepo } from '~/server/database'
 import { cleanEmail } from '~/utils/user'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
-  getAppContextPermissions(ctx).create.user
+  getAppContextPermissions(ctx).module.users
 
 const handler = async ({
   ctx: { user },
