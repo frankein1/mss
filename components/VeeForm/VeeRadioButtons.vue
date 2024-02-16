@@ -129,16 +129,21 @@
 </script>
 
 <style scoped lang="scss">
-  // Allows to display the focus on the input on the button
-  input.fr-sr-only:focus,
-  input.fr-sr-only:focus-visible {
-    & + button.fr-tag {
-      outline: #0a76f6 solid 2px;
-      outline-offset: 2px;
+  button.fr-tag {
+    padding: 0;
+
+    > label {
+      padding: 0.25rem 0.75rem;
+      cursor: pointer;
     }
   }
 
-  button.fr-tag > label {
-    cursor: pointer;
+  // Allows to display the focus on the input on the button
+  input.fr-sr-only:focus,
+  input.fr-sr-only:focus-visible {
+    + button.fr-tag {
+      outline: #0a76f6 solid 2px;
+      outline-offset: 2px;
+    }
   }
 </style>
