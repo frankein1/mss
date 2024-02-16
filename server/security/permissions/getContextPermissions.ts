@@ -10,8 +10,7 @@ export type AppContextPermissions = {
   }
   create: {
     user: boolean
-    prescribingOrganization: boolean
-    instructorOrganization: boolean
+    partnerOrganization: boolean
   }
   edit: {
     structure: boolean
@@ -48,8 +47,7 @@ function getAdminContextPermissions(): AppContextPermissions {
     },
     create: {
       user: false,
-      prescribingOrganization: false,
-      instructorOrganization: false
+      partnerOrganization: false
     },
     edit: {
       structure: false
@@ -86,9 +84,7 @@ function getUserContextPermissions(
     },
     create: {
       user: manager,
-      prescribingOrganization:
-        manager || socialWorker || instructor || referent,
-      instructorOrganization: manager || socialWorker || instructor || referent
+      partnerOrganization: manager || socialWorker || instructor || referent
     },
     edit: {
       structure: manager

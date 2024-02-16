@@ -11,8 +11,7 @@ export function usePermissions() {
       },
       create: {
         user: false,
-        prescribingOrganization: false,
-        instructorOrganization: false
+        partnerOrganization: false
       },
       edit: {
         structure: false
@@ -37,8 +36,7 @@ export function usePermissions() {
       },
       create: {
         user: false,
-        prescribingOrganization: false,
-        instructorOrganization: false
+        partnerOrganization: false,
       },
       edit: {
         structure: false
