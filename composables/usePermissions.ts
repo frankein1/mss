@@ -36,7 +36,7 @@ export function usePermissions() {
       },
       create: {
         user: false,
-        partnerOrganization: false,
+        partnerOrganization: false
       },
       edit: {
         structure: false

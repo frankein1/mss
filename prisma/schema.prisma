@@ -389,10 +389,8 @@ model FileInstruction {
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
   socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
 
-  helpRequest           HelpRequest?
-  housingHelpRequest    HousingHelpRequest?
-  PartnerOrganization   PartnerOrganization? @relation(fields: [partnerOrganizationId], references: [id])
-  partnerOrganizationId String?              @db.Uuid
+  helpRequest        HelpRequest?
+  housingHelpRequest HousingHelpRequest?
 
   @@map("file_instruction")
 }
@@ -417,7 +415,7 @@ model HelpRequest {
   typeId String       @map("type_id") @db.Uuid
 
   prescribingOrganizationId String?              @map("prescribing_organization_id") @db.Uuid
-  prescribingOrganization   PartnerOrganization? @relation(fields: [prescribingOrganizationId], references: [id])
+  prescribingOrganization   PartnerOrganization? @relation("help_request_prescribing_organization", fields: [prescribingOrganizationId], references: [id])
 
   financialSupport Boolean  @map("financial_support")
   isRefundable     Boolean? @map("is_refundable")
@@ -1462,8 +1460,7 @@ model PartnerOrganization {
 
   followups                              Followup[]        @relation("followup_prescribing_organization")
   fileInstructionInstructorOrganizations FileInstruction[] @relation("file_instruction_instructor_organization")
-  helpRequests                           HelpRequest[]
-  FileInstruction                        FileInstruction[]
+  helpRequests                           HelpRequest[]     @relation("help_request_prescribing_organization")
 
   @@map("partner_organization")
 }
