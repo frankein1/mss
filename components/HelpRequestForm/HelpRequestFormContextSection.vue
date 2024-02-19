@@ -102,7 +102,17 @@
         :label="helpRequestFieldLabels.prescribingOrganizationId"
         name="prescribingOrganizationId"
         :options="withEmptyValue(partnerOrganizationOptions)"
-      />
+        hint
+      >
+        <template #hint>
+          <NuxtLink
+            :to="RoutePath.AppPartners()"
+            class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+          >
+            Données issues de l'annuaire de partenaires
+          </NuxtLink>
+        </template>
+      </VeeSearchableSelect>
     </div>
   </template>
 
@@ -128,7 +138,17 @@
       :label="helpRequestFieldLabels.instructorOrganizationId"
       name="instructorOrganizationId"
       :options="partnerOrganizationOptions"
-    />
+      hint
+    >
+      <template #hint>
+        <NuxtLink
+          :to="RoutePath.AppPartners()"
+          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+        >
+          Données issues de l'annuaire de partenaires
+        </NuxtLink>
+      </template>
+    </VeeSearchableSelect>
   </div>
 
   <div
