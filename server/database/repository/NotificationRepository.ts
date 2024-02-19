@@ -14,8 +14,17 @@ function findMany<T extends Prisma.NotificationFindManyArgs>(
   return prismaClient.notification.findMany(params)
 }
 
+function count(
+  user: SecurityRuleGrantee,
+  params: Prisma.NotificationCountArgs
+) {
+  appendConstraints(user, params, NotificationConstraints.get)
+  return prismaClient.notification.count(params)
+}
+
 export const NotificationRepo = {
   findMany,
+  count,
   prisma: {
     create: prismaClient.notification.create,
     createMany: prismaClient.notification.createMany,

@@ -1,113 +1,159 @@
 <template>
-  <div class="fr-col-12 fr-col-lg-5 fr-col-offset-lg-7 main-container fr-p-2w">
-    <h2 class="fr-text--lg fr-mb-1w">Notifications</h2>
-    <hr class="notifications__separator" />
+  <div class="feature-section">
+    <NotificationListHeader />
+    <NotificationFilters @filter="filters = $event" />
+    <hr v-if="error || pending || !notifications.length" />
     <AtomAlert
       v-if="error"
       :alert-type="AlertType.Error"
       message="Les notifications n'ont pas pu être chargées."
     />
-    <AtomFilters
-      v-else-if="data?.length || notificationType"
-      :filters="notificationFilters"
-      full-width-filters
-      @filter="onFilter"
-    />
-    <AtomLoader
+    <div
       v-if="pending"
-      class="fr-mx-auto"
-    />
-    <template v-else-if="data">
+      class="notification-list__loader-container"
+    >
+      <AtomLoader class="fr-mx-auto" />
+    </div>
+    <template v-if="data">
       <ul
-        v-if="data.length"
-        class="notifications__list fr-mb-2w"
+        v-if="notifications.length"
+        class="notifications__list"
       >
-        <li
-          v-for="item in data"
-          :key="item.notification.id"
-          class="notifications__item"
-        >
-          <NotificationItem
-            :notification="item.notification"
-            :beneficiary="item.beneficiary"
-            @toggle-read-state="onToggleReadState"
-          />
-        </li>
+        <NotificationItem
+          v-for="notification in notifications"
+          :key="notification.id"
+          :notification="notification"
+          @toggle-read-state="onToggleReadState(notification.id, $event)"
+        />
       </ul>
-      <p
+      <NotificationListEmptyState
         v-else
-        class="fr-mb-2w notifications__info"
-      >
-        Aucune notification
-      </p>
-      <hr class="notifications__separator" />
-      <button
-        class="fr-btn fr-btn--sm fr-btn--tertiary notifications__button"
-        @click="onToggleReadNotifications"
-      >
-        {{ toggleReadNotificationsBtnLabel }}
-      </button>
+        :notification-type="filters?.type"
+      />
+      <hr />
+      <div class="notification-list__footer">
+        <button
+          v-if="canSeeMore"
+          class="fr-btn fr-btn--tertiary fr-btn--sm"
+          @click="page++"
+        >
+          Voir plus
+        </button>
+        <NotificationListReadToggle
+          v-model:read="showReadNotifications"
+          class="fr-ml-auto"
+        />
+      </div>
     </template>
   </div>
 </template>
 
 <script setup lang="ts">
   import { NotificationType } from '@prisma/client'
-  import { notificationTypeOptions } from '~/client/options'
-  import { FilterProp } from '~/types/filter'
   import { AlertType } from '~/utils/constants/alert'
-  import { FilterType } from '~/utils/constants/filters'
+  import { NotificationTypeFilterValue } from '~/client/options'
+  import { NOTIFICATIONS_REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
 
-  const notificationFilters: FilterProp[] = [
-    {
-      name: 'type',
-      label: 'Type',
-      options: withEmptyValue(notificationTypeOptions, 'Tous les types'),
-      type: FilterType.SelectOne
-    }
-  ]
+  const trpcClient = useTrpcClient()
 
-  const notificationType = ref<NotificationType | null>(null)
+  const filters = ref<{ type?: NotificationTypeFilterValue | '' }>({})
   const showReadNotifications = ref(false)
+  const page = ref(1)
+
+  const notificationTypes = computed<NotificationType[] | null>(() => {
+    switch (filters.value.type) {
+      case NotificationTypeFilterValue.DueDate:
+        return [
+          NotificationType.DueDateOneMonth,
+          NotificationType.DueDateToday,
+          NotificationType.EndOfSupport
+        ]
+      case NotificationTypeFilterValue.NewComment:
+        return [NotificationType.NewComment]
+      case NotificationTypeFilterValue.NewItem:
+        return [
+          NotificationType.NewDocument,
+          NotificationType.NewHistoryElement
+        ]
+      default:
+        return null
+    }
+  })
 
   const queryInput = computed(() => ({
     onlyUnread: !showReadNotifications.value,
-    type: notificationType.value
+    types: notificationTypes.value,
+    perPage: NOTIFICATIONS_REQUEST_LIMIT_DEFAULT,
+    page: 1
   }))
 
-  const {
-    data,
-    error,
-    pending,
-    refresh: notificationsRefresh
-  } = await useTrpcClient().notification.get.useQuery(queryInput)
+  const { data, error, pending } =
+    await trpcClient.notification.get.useQuery(queryInput)
 
-  const toggleReadNotificationsBtnLabel = computed(() =>
-    showReadNotifications.value
-      ? 'Voir les notifications non lues'
-      : 'Voir les notifications déjà lues'
+  const notifications = computed(() => data.value?.notifications || [])
+  const totalCount = computed(() => data.value?.totalCount || 0)
+
+  const canSeeMore = computed(
+    () => notifications.value.length < totalCount.value
   )
 
-  function onFilter(filter: any) {
-    notificationType.value = filter.type
-  }
-
-  watch(notificationType, () => {
-    notificationsRefresh()
+  watch(filters, () => {
+    page.value = 1
   })
 
-  function onToggleReadState() {
-    notificationsRefresh()
+  watch(page, async page => {
+    if (page === 1) {
+      return
+    }
+    const newPage = await loadNotificationPage()
+    if (!data.value) {
+      data.value = newPage
+      return
+    }
+
+    data.value = {
+      ...data.value,
+      notifications: [...data.value.notifications, ...newPage.notifications]
+    }
+  })
+
+  function loadNotificationPage() {
+    return trpcClient.notification.get.query({
+      ...queryInput.value,
+      page: page.value
+    })
   }
 
-  function onToggleReadNotifications() {
-    showReadNotifications.value = !showReadNotifications.value
-    notificationsRefresh()
+  /**
+   * It does not use the refresh function from `useQuery` as multiple pages may have been loaded
+   */
+  function onToggleReadState(notificationId: string, read: boolean) {
+    if (data.value) {
+      data.value = {
+        totalCount: data.value.totalCount,
+        notifications: data.value.notifications.map(notification =>
+          notification.id === notificationId
+            ? { ...notification, read }
+            : notification
+        )
+      }
+
+      if (!showReadNotifications.value && read) {
+        data.value = {
+          totalCount: data.value.totalCount - 1,
+          notifications: data.value.notifications.filter(
+            ({ id }) => id !== notificationId
+          )
+        }
+      }
+    }
   }
 </script>
 
-<style lang="scss" scope>
-  @use '@gouvfr/dsfr/module/color/mixin/element' as dsfr-color-element;
+<style lang="scss" scoped>
+  .feature-section {
+    padding: 0;
+  }
 
   .notifications__list {
     --ul-start: 0;
@@ -115,32 +161,16 @@
     --ul-type: none;
   }
 
-  .notifications__list > *:not(:last-child) {
-    margin-bottom: 0.75rem;
+  .notification-list__loader-container {
+    padding: 0.5rem 1rem 1.5rem;
   }
 
-  .notifications__info {
-    color: var(--text-mention-grey);
-    text-align: center;
-  }
+  .notification-list__footer {
+    padding: 0 1rem 0.5rem;
+    display: flex;
 
-  .notifications__separator {
-    --text-spacing: 0 0 0.5rem;
-  }
-
-  .notifications__button {
-    margin: 0 auto;
-    display: block;
-  }
-
-  .notifications__item {
-    @include dsfr-color-element.box-shadow(default grey, (), all-1-out);
-
-    border-radius: 0.25rem;
-    display: grid;
-    gap: 0.25rem 2rem;
-    grid-template-areas: 'type-icon beneficiary read' 'date type read';
-    grid-template-columns: min-content auto min-content;
-    padding: 0.5rem;
+    > .fr-btn.fr-btn--sm {
+      height: fit-content;
+    }
   }
 </style>

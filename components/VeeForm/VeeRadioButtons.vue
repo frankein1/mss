@@ -9,6 +9,7 @@
     <legend
       :id="legendId"
       class="fr-fieldset__legend--regular fr-fieldset__legend"
+      :class="{ 'fr-sr-only': noLabel }"
     >
       {{ label }}
     </legend>
@@ -30,14 +31,27 @@
           :value="optionValue"
           :name="name"
           :checked="optionValue === value"
+          :class="{ 'fr-sr-only': asTag }"
           @change="onChange"
         />
         <label
+          v-if="!asTag"
           class="fr-label"
           :for="optionId(optionValue)"
         >
           {{ optionLabel }}
         </label>
+        <button
+          v-else
+          class="fr-tag"
+          type="button"
+          :aria-pressed="optionValue === value"
+          tabindex="-1"
+        >
+          <label :for="optionId(optionValue)">
+            {{ optionLabel }}
+          </label>
+        </button>
         <div
           v-if="pictos && optionValue in pictos"
           class="fr-radio-rich__img"
@@ -72,8 +86,10 @@
       options: Options
       pictos?: { [key: string]: string }
       inline?: boolean
+      noLabel?: boolean
+      asTag?: boolean
     }>(),
-    { pictos: undefined, inline: true }
+    { pictos: undefined, inline: true, asTag: false, noLabel: false }
   )
 
   const emit = defineEmits<{
@@ -112,8 +128,22 @@
   }
 </script>
 
-<style scoped>
-  .no-label {
-    visibility: hidden;
+<style scoped lang="scss">
+  button.fr-tag {
+    padding: 0;
+
+    > label {
+      padding: 0.25rem 0.75rem;
+      cursor: pointer;
+    }
+  }
+
+  // Allows to display the focus on the input on the button
+  input.fr-sr-only:focus,
+  input.fr-sr-only:focus-visible {
+    + button.fr-tag {
+      outline: #0a76f6 solid 2px;
+      outline-offset: 2px;
+    }
   }
 </style>
