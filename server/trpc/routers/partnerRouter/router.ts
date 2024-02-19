@@ -14,5 +14,8 @@ export const partnerRouter = router({
     .query(routes.getAll.execute),
   getOne: protectedProcedure
     .input(routes.getOne.inputValidation)
-    .query(routes.getOne.execute)
+    .query(routes.getOne.execute),
+  findBySiret: protectedProcedure
+    .input(routes.findBySiret.inputValidation)
+    .query(routes.findBySiret.execute)
 })

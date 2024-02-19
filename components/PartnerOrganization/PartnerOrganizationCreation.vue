@@ -20,7 +20,7 @@
 
   const emit = defineEmits<{
     onFinish: [partner: AddPartnerOrganizationInput]
-    onCancel: []
+    onCancel: [filter?: string]
   }>()
 
   const { handleSubmit } = useForm<AddPartnerOrganizationInput>({
@@ -35,7 +35,7 @@
     }
   )
 
-  function onCancel() {
-    emit('onCancel')
+  function onCancel(filter?: string) {
+    emit('onCancel', filter)
   }
 </script>

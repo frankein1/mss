@@ -2,7 +2,7 @@
   <PartnerOrganizationForm
     :is-submitting="isSubmitting"
     :caught-errors="caughtErrors"
-    :partner="partner"
+    :partner-id="partner.id"
     @submit="onSubmit"
     @cancel="onCancel"
   />
@@ -22,7 +22,7 @@
 
   const emit = defineEmits<{
     onFinish: [partner: EditPartnerOrganizationInput]
-    onCancel: []
+    onCancel: [filter?: string]
   }>()
 
   const partner = await useTrpcClient().partner.getOne.query({ id: props.id })
@@ -50,7 +50,7 @@
     }
   )
 
-  function onCancel() {
-    emit('onCancel')
+  function onCancel(filter?: string) {
+    emit('onCancel', filter)
   }
 </script>

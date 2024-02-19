@@ -13,11 +13,13 @@ s
       </div>
       <div class="fr-py-2w partner-row-container">
         <div class="partner-row-start">
-          <VeeSearchInput
-            name="filter"
-            label="Rechercher"
-            @on-input="onSearch"
-          />
+          <form ref="form">
+            <VeeSearchInput
+              name="filter"
+              label="Rechercher"
+              @on-input="onSearch"
+            />
+          </form>
         </div>
         <template v-if="application.module.partner">
           <div class="partner-row-action">
@@ -103,6 +105,7 @@ s
 </template>
 
 <script lang="ts" setup>
+  import { z } from 'zod'
   import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
   import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
   import {
@@ -126,16 +129,31 @@ s
 
   const filter = ref('')
 
+  const filterSchema = z.object({
+    filter: z.string()
+  })
+
+  const { setFieldValue } = useForm<{ filter: string }>({
+    validationSchema: toTypedSchema(filterSchema),
+    initialValues: {
+      filter: ''
+    }
+  })
+
   function onSearch(param: string) {
     filter.value = param
   }
+
   const partners = computed(() => {
     const res = [...(data?.value || [])]
     if (!filter.value.length) {
       return res
     }
-    return res.filter(partner =>
-      partner.name.toLowerCase().includes(filter.value.toLowerCase())
+    const filterValue = filter.value.toLowerCase()
+    return res.filter(
+      partner =>
+        partner.name.toLowerCase().includes(filterValue) ||
+        partner.siret?.includes(filterValue)
     )
   })
 
@@ -192,7 +210,11 @@ s
     })
   }
 
-  function onCancel() {
+  function onCancel(filter?: string) {
+    if (filter?.length) {
+      setFieldValue('filter', filter)
+      onSearch(filter)
+    }
     modal.close()
   }
 </script>

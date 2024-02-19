@@ -12,6 +12,14 @@ function findMany<T extends Prisma.PartnerOrganizationFindManyArgs>(
   return prismaClient.partnerOrganization.findMany(params)
 }
 
+function findOne<T extends Prisma.PartnerOrganizationFindUniqueArgs>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.PartnerOrganizationFindUniqueArgs>
+) {
+  appendConstraints(user, params, PartnerOrganizationConstraints.get)
+  return prismaClient.partnerOrganization.findUnique(params)
+}
+
 function findUniqueOrThrow<T extends Prisma.PartnerOrganizationFindUniqueArgs>(
   user: SecurityRuleGrantee,
   params: Prisma.SelectSubset<T, Prisma.PartnerOrganizationFindUniqueArgs>
@@ -22,6 +30,7 @@ function findUniqueOrThrow<T extends Prisma.PartnerOrganizationFindUniqueArgs>(
 
 export const PartnerOrganizationRepo = {
   findMany,
+  findOne,
   findUniqueOrThrow,
   prisma: {
     update: prismaClient.partnerOrganization.update,
