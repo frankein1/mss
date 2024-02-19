@@ -13,10 +13,13 @@ s
       </div>
       <div class="fr-py-2w partner-row-container">
         <div class="partner-row-start">
-          <VeeSearchInput
-            name="search"
-            label="Rechercher"
-          />
+          <form ref="form">
+            <VeeSearchInput
+              name="filter"
+              label="Rechercher"
+              @on-input="onSearch"
+            />
+          </form>
         </div>
         <template v-if="application.module.partner">
           <div class="partner-row-action">
@@ -33,75 +36,20 @@ s
         </template>
       </div>
       <div class="catalog">
-        <div
-          v-for="partner in data"
+        <PartnerOrganizationCard
+          v-for="partner in partners"
           :key="partner.id"
-          class="catalog-item fr-p-2w fr-mb-2w"
-        >
-          <div class="partner-row-container">
-            <div class="fr-h6 fr-m-0 partner-row-start">
-              {{ partner.name }}
-            </div>
-            <div class="partner-row-action">
-              <button
-                class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-pencil-line"
-                data-fr-opened="false"
-                aria-controls="global-modal"
-                type="button"
-                @click="openEditModal(partner.id)"
-              >
-                Modifier la Organisme partenaire
-              </button>
-            </div>
-          </div>
-
-          <div
-            v-if="partner.siret"
-            class="fr-icon-file-text-line partner-info fr-text--sm fr-m-0"
-          >
-            {{ partner.siret }}
-          </div>
-
-          <div
-            v-if="partner.address || partner.zipcode || partner.city"
-            class="fr-icon-map-pin-2-line partner-info fr-text--sm fr-m-0"
-          >
-            {{
-              `${partner.address || ''} ${partner.zipcode || ''} ${partner.city || ''}`
-            }}
-          </div>
-          <div
-            v-if="partner.phone1"
-            class="fr-icon-phone-line partner-info fr-text--sm fr-m-0"
-          >
-            {{ partner.phone1 }}
-          </div>
-          <div
-            v-if="partner.phone2"
-            class="fr-icon-phone-line partner-info fr-text--sm fr-m-0"
-          >
-            {{ partner.phone2 }}
-          </div>
-          <div
-            v-if="partner.email"
-            class="fr-icon-mail-line partner-info fr-text--sm fr-m-0"
-          >
-            {{ partner.email }}
-          </div>
-          <div
-            v-if="partner.workingHours"
-            class="fr-text--sm fr-m-0 working-hours"
-          >
-            <div>Horaires:</div>
-            {{ partner.workingHours }}
-          </div>
-        </div>
+          :partner="partner"
+          class="catalog-item"
+          @edit="edit"
+        />
       </div>
     </main>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
+  import { z } from 'zod'
   import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
   import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
   import {
@@ -123,17 +71,35 @@ s
 
   const { data, refresh } = await trpcClient.partner.getAll.useQuery()
 
-  function openEditModal(id: string) {
-    modal.open({
-      title: 'Modifier un organisme partenaire',
-      contentComponent: PartnerOrganizationEdition,
-      contentComponentProps: {
-        id,
-        isSubmitting: isSubmitting.value
-      },
-      contentComponentEvents: { onFinish: onEdit, onCancel }
-    })
+  const filter = ref('')
+
+  const filterSchema = z.object({
+    filter: z.string()
+  })
+
+  const { setFieldValue } = useForm<{ filter: string }>({
+    validationSchema: toTypedSchema(filterSchema),
+    initialValues: {
+      filter: ''
+    }
+  })
+
+  function onSearch(param: string) {
+    filter.value = param
   }
+
+  const partners = computed(() => {
+    const res = [...(data?.value || [])]
+    if (!filter.value.length) {
+      return res
+    }
+    const filterValue = filter.value.toLowerCase()
+    return res.filter(
+      partner =>
+        partner.name.toLowerCase().includes(filterValue) ||
+        partner.siret?.includes(filterValue)
+    )
+  })
 
   function openCreateModal() {
     modal.open({
@@ -143,6 +109,18 @@ s
         isSubmitting: isSubmitting.value
       },
       contentComponentEvents: { onFinish: onCreate, onCancel }
+    })
+  }
+
+  function edit(id: string) {
+    modal.open({
+      title: 'Modifier un organisme partenaire',
+      contentComponent: PartnerOrganizationEdition,
+      contentComponentProps: {
+        id,
+        isSubmitting: isSubmitting.value
+      },
+      contentComponentEvents: { onFinish: onEdit, onCancel }
     })
   }
 
@@ -176,7 +154,11 @@ s
     })
   }
 
-  function onCancel() {
+  function onCancel(filter?: string) {
+    if (filter?.length) {
+      setFieldValue('filter', filter)
+      onSearch(filter)
+    }
     modal.close()
   }
 </script>
@@ -212,13 +194,5 @@ s
     border-color: var(--border-default-grey);
     border-radius: 4px;
     background-color: white;
-  }
-
-  .partner-info {
-    color: var(--text-default-grey);
-  }
-
-  .working-hours {
-    color: var(--text-mention-grey);
   }
 </style>

@@ -6,15 +6,22 @@
     />
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
-      <div class="fr-col-12 fr-col-lg-8">
+      <div class="fr-col-8 fr-col-lg-6">
         <NotificationList />
+      </div>
+      <div class="fr-col-4 fr-col-lg-2">
+        <NuxtLink :href="RoutePath.AppPartners()">
+          <div class="partner-box fr-px-1w fr-py-2w">
+            <div class="partner-box__title">Partenaires</div>
+          </div>
+        </NuxtLink>
       </div>
     </div>
   </PageContainer>
 </template>
 
 <script setup lang="ts">
-  import { RouteTitle, Route } from '~/utils/routing'
+  import { RouteTitle, Route, RoutePath } from '~/utils/routing'
 
   const title = RouteTitle.AppOverview()
 
@@ -24,3 +31,21 @@
     name: Route.AppOverview
   })
 </script>
+
+<style lang="scss" scoped>
+  @use '~/assets/style/variables' as *;
+
+  .partner-box {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 8px;
+    gap: 8px;
+  }
+
+  .partner-box__title {
+    color: $primary;
+    margin-bottom: 0;
+  }
+</style>

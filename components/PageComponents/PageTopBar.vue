@@ -42,13 +42,6 @@
         icon: 'fr-icon-team-line'
       })
     }
-    if (application.value.module.partner) {
-      menus.push({
-        label: 'Partenaires',
-        to: RoutePath.AppPartners(),
-        icon: 'fr-icon-music-2-fill'
-      })
-    }
     if (application.value.edit.structure) {
       menus.push({
         label: 'Structure',

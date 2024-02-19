@@ -2,6 +2,7 @@
   <PartnerOrganizationForm
     :is-submitting="isSubmitting"
     :caught-errors="caughtErrors"
+    :show-phone-2="false"
     @submit="onSubmit"
     @cancel="onCancel"
   />
@@ -20,7 +21,7 @@
 
   const emit = defineEmits<{
     onFinish: [partner: AddPartnerOrganizationInput]
-    onCancel: []
+    onCancel: [filter?: string]
   }>()
 
   const { handleSubmit } = useForm<AddPartnerOrganizationInput>({
@@ -35,7 +36,7 @@
     }
   )
 
-  function onCancel() {
-    emit('onCancel')
+  function onCancel(filter?: string) {
+    emit('onCancel', filter)
   }
 </script>

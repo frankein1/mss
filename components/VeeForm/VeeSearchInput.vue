@@ -59,6 +59,7 @@
 
   const emit = defineEmits<{
     changeValue: [value: string]
+    onInput: [value: string]
   }>()
 
   // use `toRef` to create reactive references to `name` prop which is passed to `useField`
@@ -83,6 +84,8 @@
     if (error.value) {
       handleChange(event)
     }
+    const value = (event.target as HTMLInputElement).value
+    emit('onInput', value)
   }
 
   function onChange(event: Event) {
