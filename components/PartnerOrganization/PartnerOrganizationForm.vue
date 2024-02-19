@@ -13,7 +13,7 @@
       <div>Renseignez uniquement les champs qui vous sont utiles.</div>
       <div>Les champ avec * sont obligatoires.</div>
     </div>
-    <h3 class="fr-text--md formgroup__title fr-mb-0">
+    <h3 class="fr-text--md formgroup__title fr-mb-2w">
       Informations principales
     </h3>
     <VeeInput
@@ -45,30 +45,52 @@
       </div>
     </template>
 
-    <h3 class="fr-text--md formgroup__title fr-mb-0">Coordonnées</h3>
+    <h3 class="fr-text--md formgroup__title fr-mb-2w">Coordonnées</h3>
     <VeeInput
       name="address"
       :label="partnerOrganizationFieldLabels.address"
       hint="Numéro et voie"
     />
-    <VeeInput
-      name="zipcode"
-      :label="partnerOrganizationFieldLabels.zipcode"
-    />
-    <VeeInput
-      name="city"
-      :label="partnerOrganizationFieldLabels.city"
-    />
-    <VeeInput
-      name="phone1"
-      :label="partnerOrganizationFieldLabels.phone1"
-      hint="Format attendu: 00 00 00 00 00"
-    />
-    <VeeInput
-      name="phone2"
-      :label="partnerOrganizationFieldLabels.phone2"
-      hint="Format attendu: 00 00 00 00 00"
-    />
+    <div class="partner-form-row">
+      <VeeInput
+        class="partner-form-row--zipcode"
+        name="zipcode"
+        :label="partnerOrganizationFieldLabels.zipcode"
+      />
+      <VeeInput
+        class="partner-form-row--city"
+        name="city"
+        :label="partnerOrganizationFieldLabels.city"
+      />
+    </div>
+
+    <div class="partner-form-row">
+      <VeeInput
+        class="partner-form-row--phone1"
+        name="phone1"
+        :label="partnerOrganizationFieldLabels.phone1"
+        hint="Format attendu: 00 00 00 00 00"
+      />
+      <VeeInput
+        v-if="showPhone2"
+        class="partner-form-row--phone2"
+        name="phone2"
+        :label="partnerOrganizationFieldLabels.phone2"
+        hint="Format attendu: 00 00 00 00 00"
+      />
+      <div
+        v-if="!showPhone2"
+        class="partner-form--open-phone fr-mb-2w"
+      >
+        <button
+          class="fr-link fr-icon-file-add-line fr-text--xs fr-ml-2w fr-mb-2w"
+          @click="dislpayPhone2"
+        >
+          + Ajouter un téléphone
+        </button>
+      </div>
+    </div>
+
     <VeeInput
       name="email"
       :label="partnerOrganizationFieldLabels.email"
@@ -109,6 +131,7 @@
 
   const props = defineProps<{
     partnerId?: string
+    showPhone2: boolean
     isSubmitting: boolean
     caughtErrors: FormErrors<
       AddPartnerOrganizationInput | EditPartnerOrganizationInput
@@ -124,7 +147,13 @@
 
   const form = ref<HTMLFormElement | null>(null)
 
+  const showPhone2 = ref(props.showPhone2)
+
   const partnerWithSameSiret = ref<PartnerOrganizationData>()
+
+  function dislpayPhone2() {
+    showPhone2.value = true
+  }
 
   async function onSiretChange(siret: string) {
     const findBySiret = await trpcClient.partner.findBySiret.query({ siret })
@@ -157,6 +186,32 @@
 <style scoped>
   .partner-form-subtitle {
     color: var(--text-title-grey);
+  }
+
+  .partner-form-row {
+    display: flex;
+    gap: 4px;
+  }
+
+  .partner-form-row--zipcode {
+    flex: 0 0 calc(33.333% - 12px);
+  }
+
+  .partner-form-row--city {
+    flex: 1 0 0;
+  }
+
+  .partner-form-row--phone1 {
+    flex: 0 0 calc(50% - 12px);
+  }
+
+  .partner-form-row--phone2 {
+    flex: 1 0 0;
+  }
+
+  .partner-form--open-phone {
+    display: flex;
+    flex-direction: column-reverse;
   }
 
   .button-bar {

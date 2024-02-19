@@ -2,6 +2,7 @@
   <PartnerOrganizationForm
     :is-submitting="isSubmitting"
     :caught-errors="caughtErrors"
+    :show-phone-2="false"
     @submit="onSubmit"
     @cancel="onCancel"
   />

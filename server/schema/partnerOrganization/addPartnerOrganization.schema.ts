@@ -3,19 +3,20 @@ import {
   emailOrEmpty,
   phoneConstraint,
   siretConstraint,
-  stringConstraint
+  stringConstraint,
+  stringOrEmpty
 } from '..'
 
 export const addPartnerOrganizationSchema = z.object({
   name: z.string(),
   siret: siretConstraint,
-  address: stringConstraint.nullable(),
-  zipcode: stringConstraint.nullable(),
-  city: stringConstraint.nullable(),
+  address: stringConstraint.nullish(),
+  zipcode: stringConstraint.nullish(),
+  city: stringConstraint.nullish(),
   email: emailOrEmpty(),
-  phone1: phoneConstraint.nullable(),
-  phone2: phoneConstraint.nullable(),
-  workingHours: stringConstraint.nullable()
+  phone1: stringOrEmpty(phoneConstraint),
+  phone2: stringOrEmpty(phoneConstraint),
+  workingHours: stringConstraint.nullish()
 })
 
 export type AddPartnerOrganizationInput = z.infer<

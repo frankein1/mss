@@ -3,6 +3,7 @@
     :is-submitting="isSubmitting"
     :caught-errors="caughtErrors"
     :partner-id="partner.id"
+    :show-phone-2="!!partner.phone2"
     @submit="onSubmit"
     @cancel="onCancel"
   />
