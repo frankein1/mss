@@ -9,30 +9,30 @@ import { labelsToOptions } from '~/utils/options'
 
 const currentMinisterLabels = {
   [Minister.AuroreBerge]: 'Aurore Berge (Solidarités et Familles)',
-  [Minister.FadilaKhattabi]: 'Fadila Khattabi (Personnes handicapées)',
+  [Minister.FrancoisBraun]: 'François Braun (Santé et Prévention)',
+  [Minister.JeanChristopheCombe]:
+    'Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)',
+  [Minister.GenevieveDarrieussecq]:
+    'Geneviève Darrieussecq (Personnes handicapées)',
   [Minister.OlivierDussopt]:
     'Olivier Dussopt (Travail, Plein emploi et Insertion)',
+  [Minister.SarahElHairy]:
+    'Sarah El Haïry (Déléguée Enfance, Jeunesse et Familles)',
+  [Minister.AgnesFirminLeBodo]: 'Agnès Firmin-Le Bodo (Santé et Prévention)',
   [Minister.CaroleGrandjean]:
     'Carole Grandjean (Enseignement, Formation professionnels)',
-  [Minister.CatherineVautrin]:
-    'Catherine Vautrin (Travail, Santé et Solidarités)',
+  [Minister.FadilaKhattabi]: 'Fadila Khattabi (Personnes handicapées)',
+  [Minister.AurelienRousseau]: 'Aurélien Rousseau (Santé et Prévention)',
   [Minister.FredericValletoux]:
     'Frédéric Valletoux (Délégué Santé et Prévention)',
-  [Minister.SarahElHairy]:
-    'Sarah El Haïry (Déléguée Enfance, Jeunesse et Familles)'
+  [Minister.CatherineVautrin]:
+    'Catherine Vautrin (Travail, Santé et Solidarités)'
 }
 
 const currentMinisterOptions = labelsToOptions(currentMinisterLabels)
 
 const ministerLabels = {
-  ...currentMinisterLabels,
-  [Minister.FrancoisBraun]: 'François Braun (Santé et Prévention)',
-  [Minister.AgnesFirminLeBodo]: 'Agnès Firmin-Le Bodo (Santé et Prévention)',
-  [Minister.JeanChristopheCombe]:
-    'Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)',
-  [Minister.GenevieveDarrieussecq]:
-    'Geneviève Darrieussecq (Personnes handicapées)',
-  [Minister.AurelienRousseau]: 'Aurélien Rousseau (Santé et Prévention)'
+  ...currentMinisterLabels
 }
 
 const ministerOptions = labelsToOptions(ministerLabels)
