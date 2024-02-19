@@ -12,8 +12,7 @@
       <div class="fr-col-4 fr-col-lg-2">
         <NuxtLink :href="RoutePath.AppPartners()">
           <div class="partner-box fr-px-1w fr-py-2w">
-            <div></div>
-            <div class="fr-link">Partenaires</div>
+            <div class="partner-box__title">Partenaires</div>
           </div>
         </NuxtLink>
       </div>
@@ -33,12 +32,20 @@
   })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+  @use '~/assets/style/variables' as *;
+
   .partner-box {
     background-color: white;
     display: flex;
     flex-direction: column;
-    gap: 8px;
     align-items: center;
+    border-radius: 8px;
+    gap: 8px;
+  }
+
+  .partner-box__title {
+    color: $primary;
+    margin-bottom: 0;
   }
 </style>
