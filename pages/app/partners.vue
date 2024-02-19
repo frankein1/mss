@@ -14,8 +14,9 @@ s
       <div class="fr-py-2w partner-row-container">
         <div class="partner-row-start">
           <VeeSearchInput
-            name="search"
+            name="filter"
             label="Rechercher"
+            @on-input="onSearch"
           />
         </div>
         <template v-if="application.module.partner">
@@ -34,7 +35,7 @@ s
       </div>
       <div class="catalog">
         <div
-          v-for="partner in data"
+          v-for="partner in partners"
           :key="partner.id"
           class="catalog-item fr-p-2w fr-mb-2w"
         >
@@ -122,6 +123,21 @@ s
   const isSubmitting = ref(false)
 
   const { data, refresh } = await trpcClient.partner.getAll.useQuery()
+
+  const filter = ref('')
+
+  function onSearch(param: string) {
+    filter.value = param
+  }
+  const partners = computed(() => {
+    const res = [...(data?.value || [])]
+    if (!filter.value.length) {
+      return res
+    }
+    return res.filter(partner =>
+      partner.name.toLowerCase().includes(filter.value.toLowerCase())
+    )
+  })
 
   function openEditModal(id: string) {
     modal.open({
