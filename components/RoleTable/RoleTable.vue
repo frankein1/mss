@@ -286,6 +286,22 @@
             <td></td>
             <td>* les dossiers dont il est référent</td>
           </tr>
+          <tr>
+            <td>Annuaire des partenaires : créer et supprimer un organisme</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Voir et modifier un organisme partenaire</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+          </tr>
         </tbody>
       </table>
     </div>
