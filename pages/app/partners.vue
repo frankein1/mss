@@ -42,6 +42,7 @@ s
           :partner="partner"
           class="partner-catalog-item"
           @edit="edit"
+          @delete="remove"
         />
       </div>
     </main>
@@ -52,6 +53,7 @@ s
   import { z } from 'zod'
   import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
   import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
+  import PartnerOrganizationRemoveAlert from '~/components/PartnerOrganization/PartnerOrganizationRemoveAlert.vue'
   import {
     EditPartnerOrganizationInput,
     AddPartnerOrganizationInput
@@ -109,6 +111,32 @@ s
         isSubmitting: isSubmitting.value
       },
       contentComponentEvents: { onFinish: onCreate, onCancel }
+    })
+  }
+
+  function remove(id: string) {
+    modal.open({
+      title: 'Supprimer un organisme partenaire',
+      contentComponent: PartnerOrganizationRemoveAlert,
+      contentComponentProps: {
+        id
+      },
+      contentComponentEvents: { onFinish: onRemove, onCancel }
+    })
+  }
+
+  function onRemove(id: string) {
+    useTrpcMutation({
+      isSubmitting,
+      mutation: () => trpcClient.partner.remove.mutate({ id }),
+      onSuccess: () => {
+        snackbar.success('Organisme partenaire supprimée')
+        modal.close()
+        refresh()
+      },
+      onFailure: () => {
+        snackbar.error('La suppression a échoué')
+      }
     })
   }
 

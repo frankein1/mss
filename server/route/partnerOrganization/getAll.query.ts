@@ -11,7 +11,8 @@ export const handler = async ({
 }) => {
   return await PartnerOrganizationRepo.findMany(user, {
     where: {
-      structureId: structure.id
+      structureId: structure.id,
+      inactive: false
     },
     orderBy: [{ name: 'asc' }]
   })
