@@ -7,6 +7,15 @@
       <div class="partner-card-header__action">
         <button
           v-if="application.module.partner"
+          class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-delete-line"
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          type="button"
+          @click="emit('delete', partner.id)"
+        >
+          Supprimer l'organisme partenaire
+        </button>
+        <button
           class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-pencil-line"
           data-fr-opened="false"
           aria-controls="global-modal"
@@ -67,6 +76,7 @@
 
   const emit = defineEmits<{
     edit: [id: string]
+    delete: [id: string]
   }>()
 
   const { application } = usePermissions()
@@ -90,6 +100,8 @@
   }
 
   .partner-card-header__action {
+    gap: 0.25rem;
+    display: flex;
     margin-left: auto;
   }
 
