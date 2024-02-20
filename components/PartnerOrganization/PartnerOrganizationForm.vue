@@ -9,7 +9,7 @@
     class="fr-container--fluid"
     @submit.prevent="emit('submit', $event)"
   >
-    <div class="partner-form-subtitle fr-mb-2w">
+    <div class="partner-form__subtitle fr-mb-2w">
       <div>Renseignez uniquement les champs qui vous sont utiles.</div>
       <div>Les champ avec * sont obligatoires.</div>
     </div>
@@ -51,36 +51,36 @@
       :label="partnerOrganizationFieldLabels.address"
       hint="Numéro et voie"
     />
-    <div class="partner-form-row">
+    <div class="partner-form__field">
       <VeeInput
-        class="partner-form-row--zipcode"
+        class="partner-form__zipcode"
         name="zipcode"
         :label="partnerOrganizationFieldLabels.zipcode"
       />
       <VeeInput
-        class="partner-form-row--city"
+        class="partner-form__city"
         name="city"
         :label="partnerOrganizationFieldLabels.city"
       />
     </div>
 
-    <div class="partner-form-row">
+    <div class="partner-form__field">
       <VeeInput
-        class="partner-form-row--phone1"
+        class="partner-form__phone1"
         name="phone1"
         :label="partnerOrganizationFieldLabels.phone1"
         hint="Format attendu: 00 00 00 00 00"
       />
       <VeeInput
         v-if="showPhone2"
-        class="partner-form-row--phone2"
+        class="partner-form__phone2"
         name="phone2"
         :label="partnerOrganizationFieldLabels.phone2"
         hint="Format attendu: 00 00 00 00 00"
       />
       <div
         v-if="!showPhone2"
-        class="partner-form--open-phone fr-mb-2w"
+        class="partner-form__open-phone fr-mb-2w"
       >
         <button
           class="fr-link fr-icon-file-add-line fr-text--xs fr-ml-2w fr-mb-2w"
@@ -100,7 +100,7 @@
       name="workingHours"
       :label="partnerOrganizationFieldLabels.workingHours"
     />
-    <div class="button-bar">
+    <div class="partner-form__button-bar">
       <button
         class="fr-btn fr-btn--secondary fr-mt-3w"
         title="Annuler"
@@ -184,39 +184,39 @@
 </script>
 
 <style scoped>
-  .partner-form-subtitle {
+  .partner-form__subtitle {
     color: var(--text-title-grey);
   }
 
-  .partner-form-row {
+  .partner-form__field {
     display: flex;
-    gap: 4px;
+    gap: 0.25rem;
   }
 
-  .partner-form-row--zipcode {
-    flex: 0 0 calc(33.333% - 12px);
+  .partner-form__zipcode {
+    flex: 0 0 calc(33.333% - 0.75rem);
   }
 
-  .partner-form-row--city {
+  .partner-form__city {
     flex: 1 0 0;
   }
 
-  .partner-form-row--phone1 {
-    flex: 0 0 calc(50% - 12px);
+  .partner-form__phone1 {
+    flex: 0 0 calc(50% - 0.75rem);
   }
 
-  .partner-form-row--phone2 {
+  .partner-form__phone2 {
     flex: 1 0 0;
   }
 
-  .partner-form--open-phone {
+  .partner-form__open-phone {
     display: flex;
     flex-direction: column-reverse;
   }
 
-  .button-bar {
+  .partner-form__button-bar {
     display: flex;
     justify-content: flex-end;
-    gap: 12px;
+    gap: 0.75rem;
   }
 </style>

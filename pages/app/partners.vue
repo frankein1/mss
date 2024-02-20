@@ -11,8 +11,8 @@ s
         Les personnes avec un rôle "responsable de structure" ou "travailleur
         social" peuvent ajouter, modifier ou supprimer des partenaires
       </div>
-      <div class="fr-py-2w partner-row-container">
-        <div class="partner-row-start">
+      <div class="fr-py-2w partner-search-bar">
+        <div class="partner-search-bar__input">
           <form ref="form">
             <VeeSearchInput
               name="filter"
@@ -22,7 +22,7 @@ s
           </form>
         </div>
         <template v-if="application.module.partner">
-          <div class="partner-row-action">
+          <div class="partner-search-bar__action">
             <button
               data-fr-opened="false"
               aria-controls="global-modal"
@@ -35,12 +35,12 @@ s
           </div>
         </template>
       </div>
-      <div class="catalog">
+      <div class="partner-catalog">
         <PartnerOrganizationCard
           v-for="partner in partners"
           :key="partner.id"
           :partner="partner"
-          class="catalog-item"
+          class="partner-catalog-item"
           @edit="edit"
         />
       </div>
@@ -164,35 +164,45 @@ s
 </script>
 
 <style lang="scss">
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
   .partner-subtitle {
     color: var(--primary);
   }
 
-  .partner-row-container {
+  .partner-search-bar {
     display: flex;
     flex-wrap: wrap;
   }
 
-  .partner-row-start {
-    flex: 0 0 calc(66.666% - 12px);
+  .partner-search-bar__input {
+    flex: 0 0 calc(66.666% - 0.75rem);
   }
 
-  .partner-row-action {
+  .partner-search-bar__action {
     margin-left: auto;
   }
 
-  .catalog {
-    column-count: 3;
+  .partner-catalog {
+    column-count: 1;
+
+    @include dsfr-media-query.respond-from('md') {
+      column-count: 2;
+    }
+
+    @include dsfr-media-query.respond-from('lg') {
+      column-count: 3;
+    }
   }
 
-  .catalog-item {
-    margin: 0;
+  .partner-catalog-item {
+    margin: 0 0 1.5rem;
     display: grid;
     grid-template-rows: 1fr auto;
     break-inside: avoid;
     border: 1px solid;
     border-color: var(--border-default-grey);
-    border-radius: 4px;
+    border-radius: 0.25rem;
     background-color: white;
   }
 </style>
