@@ -1,5 +1,4 @@
 import { followupRoutes as routes } from '~/server/route'
-
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const followupRouter = router({
@@ -23,5 +22,8 @@ export const followupRouter = router({
     .query(routes.getOne.execute),
   delete: protectedProcedure
     .input(routes.remove.inputValidation)
-    .mutation(routes.remove.execute)
+    .mutation(routes.remove.execute),
+  getOngoing: protectedProcedure
+    .input(routes.getOngoing.inputValidation)
+    .query(routes.getOngoing.execute)
 })

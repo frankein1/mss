@@ -5,6 +5,7 @@ import { getOne } from './getOne.query'
 import { quickUpdate } from './quickUpdate.mutation'
 import { remove } from './remove.mutation'
 import { update } from './update.mutation'
+import { getOngoing } from './getOngoing.query'
 
 export const followupRoutes = {
   create,
@@ -13,5 +14,6 @@ export const followupRoutes = {
   getOne,
   quickUpdate,
   remove,
-  update
+  update,
+  getOngoing
 }

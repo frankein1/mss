@@ -11,7 +11,7 @@
       </div>
       <div class="fr-col-6 fr-col-lg-4">
         <PartnerOrganizationOverviewCard class="fr-mb-3w" />
-        <OngoingHelpRequests class="fr-mb-3w" />
+        <OngoingFileInstructions class="fr-mb-3w" />
         <OngoingFollowups />
       </div>
     </div>

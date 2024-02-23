@@ -2,8 +2,8 @@
   <div
     class="feature-section ongoing-social-supports"
     :class="[
-      isHelpRequests
-        ? 'ongoing-social-supports__help-requests'
+      isFileInstructions
+        ? 'ongoing-social-supports__file-instructions'
         : 'ongoing-social-supports__followups'
     ]"
   >
@@ -14,21 +14,31 @@
       ></span>
       <h2 class="ongoing-social-supports__title">{{ title }}</h2>
     </div>
+    <AtomAlert
+      v-if="errorMessage"
+      class="fr-mx-auto"
+      :alert-type="AlertType.Error"
+      :message="errorMessage"
+    />
+    <AtomLoader
+      v-else-if="pending"
+      class="fr-mx-auto"
+    />
     <ul
-      v-if="ongoingSocialSupports.length"
+      v-else-if="ongoingCountsWithLabel.length"
       class="ongoing-social-supports__list"
     >
       <li
-        v-for="ongoingSocialSupport in ongoingSocialSupports"
-        :key="ongoingSocialSupport.label"
+        v-for="{ label, count } in ongoingCountsWithLabel"
+        :key="label"
       >
+        <!-- TODO: Link -->
         <NuxtLink
-          :to="RoutePath.AppHistory()"
+          :to="RoutePath.AppHistory(tab)"
           class="fr-link fr-icon-arrow-right-line fr-link--icon-left"
-          >{{ ongoingSocialSupport.label }} ({{
-            ongoingSocialSupport.count
-          }})</NuxtLink
         >
+          {{ label }} ({{ count }})
+        </NuxtLink>
       </li>
     </ul>
     <p
@@ -41,17 +51,43 @@
 </template>
 
 <script setup lang="ts">
+  import { SocialSupportStatus } from '@prisma/client'
   import { RoutePath } from '~/utils/routing'
+  import { socialSupportStatusLabels } from '~/client/options/socialSupport'
+  import { AlertType } from '~/utils/constants/alert'
+  import { HistoryTab } from '~/utils/constants/history'
 
-  defineProps<{
-    isHelpRequests: boolean
+  const props = defineProps<{
+    isFileInstructions: boolean
     title: string
     ongoingSocialSupports: Array<{
-      label: string
-      count: number
-    }>
+      status: SocialSupportStatus
+      _count: number
+    }> | null
     emptyMessage: string
+    pending: boolean
+    errorMessage: string
   }>()
+
+  const ongoingCountsWithLabel = computed(() => {
+    if (!props.ongoingSocialSupports?.length) {
+      return []
+    }
+
+    return props.ongoingSocialSupports.reduce(
+      (oss, { status, _count: count }) => [
+        ...oss,
+        { label: socialSupportStatusLabels[status], count }
+      ],
+      [] as Array<{ label: string; count: number }>
+    )
+  })
+
+  const tab = computed(() =>
+    props.isFileInstructions
+      ? HistoryTab.FileInstructions
+      : HistoryTab.Followups
+  )
 </script>
 
 <style lang="scss">
@@ -88,7 +124,7 @@
     }
   }
 
-  .ongoing-social-supports__help-requests {
+  .ongoing-social-supports__file-instructions {
     .ongoing-social-supports__header {
       background-color: var(--background-alt-purple-glycine);
     }
@@ -122,6 +158,11 @@
     --ul-type: none;
     --ul-start: 0;
     --xl-block: 0;
+    --li-bottom: 1.25rem;
+
+    > :last-child {
+      --li-bottom: 0;
+    }
   }
 
   .ongoing-social-supports__empty {
