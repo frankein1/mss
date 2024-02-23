@@ -10,5 +10,8 @@ export const fileInstructionRouter = router({
     .query(routes.exportFileInstructions.execute),
   updateStatus: protectedProcedure
     .input(routes.updateStatus.inputValidation)
-    .mutation(routes.updateStatus.execute)
+    .mutation(routes.updateStatus.execute),
+  getOngoing: protectedProcedure
+    .input(routes.getOngoing.inputValidation)
+    .query(routes.getOngoing.execute)
 })

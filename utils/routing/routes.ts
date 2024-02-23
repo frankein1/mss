@@ -276,7 +276,10 @@ export const RoutePath = {
     `${BeneficiaryHelpRequestsRoute(
       beneficiaryId
     )}/${subject.toLocaleLowerCase()}/${helpRequestId}/edit`,
-  [Route.AppHistory]: () => `${AppRoute}/history`,
+  [Route.AppHistory]: (tab?: HistoryTab) => {
+    const tabHash = tab ? `#${tab}` : ''
+    return `${AppRoute}/history${tabHash}`
+  },
 
   // ADMIN
   [Route.Admin]: () => `${AdminRoute}`,

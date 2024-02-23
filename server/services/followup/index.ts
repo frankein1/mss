@@ -8,6 +8,7 @@ import {
   getEditionPermissions,
   getCreationPermissions
 } from './permission.service'
+import { getOngoing } from './getOngoing.service'
 
 export const FollowupService = {
   update,
@@ -17,5 +18,6 @@ export const FollowupService = {
   getPage,
   exportFollowups,
   getEditionPermissions,
-  getCreationPermissions
+  getCreationPermissions,
+  getOngoing
 }
