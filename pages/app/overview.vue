@@ -6,11 +6,10 @@
     />
     <BeneficiarySearchbar />
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
-      <div class="fr-col-8 fr-col-lg-6">
+      <div class="fr-col-6 fr-col-lg-8">
         <NotificationList />
       </div>
-      <div class="fr-col-4 fr-col-lg-2">
-        <PartnerOrganizationOverviewCard />
+      <div class="fr-col-6 fr-col-lg-4">
       </div>
     </div>
   </PageContainer>
