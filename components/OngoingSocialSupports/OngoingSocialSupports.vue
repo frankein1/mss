@@ -25,19 +25,19 @@
       class="fr-mx-auto"
     />
     <ul
-      v-else-if="ongoingCountsWithLabel.length"
+      v-else-if="ongoingSocialSupports?.length"
       class="ongoing-social-supports__list"
     >
       <li
-        v-for="{ label, count } in ongoingCountsWithLabel"
-        :key="label"
+        v-for="{ status, _count } in ongoingSocialSupports"
+        :key="status"
       >
-        <!-- TODO: Link -->
         <NuxtLink
           :to="RoutePath.AppHistory(tab)"
           class="fr-link fr-icon-arrow-right-line fr-link--icon-left"
+          @click="onNavigate(status)"
         >
-          {{ label }} ({{ count }})
+          {{ socialSupportStatusLabels[status] }} ({{ _count }})
         </NuxtLink>
       </li>
     </ul>
@@ -57,6 +57,8 @@
   import { AlertType } from '~/utils/constants/alert'
   import { HistoryTab } from '~/utils/constants/history'
 
+  const filtersState = useFilters()
+
   const props = defineProps<{
     isFileInstructions: boolean
     title: string
@@ -69,25 +71,19 @@
     errorMessage: string
   }>()
 
-  const ongoingCountsWithLabel = computed(() => {
-    if (!props.ongoingSocialSupports?.length) {
-      return []
-    }
-
-    return props.ongoingSocialSupports.reduce(
-      (oss, { status, _count: count }) => [
-        ...oss,
-        { label: socialSupportStatusLabels[status], count }
-      ],
-      [] as Array<{ label: string; count: number }>
-    )
-  })
-
   const tab = computed(() =>
     props.isFileInstructions
       ? HistoryTab.FileInstructions
       : HistoryTab.Followups
   )
+
+  function onNavigate(status: SocialSupportStatus) {
+    if (props.isFileInstructions) {
+      filtersState.fileInstruction.value = { status }
+    } else {
+      filtersState.followup.value = { status }
+    }
+  }
 </script>
 
 <style lang="scss">
