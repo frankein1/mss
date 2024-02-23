@@ -110,7 +110,8 @@
       case 'DueDateOneMonth':
         return getDateNotificationDescription(
           dateInAMonth,
-          'Échéance dans un mois'
+          'Échéance dans un mois',
+          'Échéance'
         )
       case 'DueDateToday':
         return getDateNotificationDescription(created, 'Échéance')
@@ -129,7 +130,11 @@
       : 'Instruction de dossier'
   }
 
-  function getDateNotificationDescription(date: dayjs.Dayjs, label: string) {
+  function getDateNotificationDescription(
+    date: dayjs.Dayjs,
+    label: string,
+    pastLabel?: string
+  ) {
     if (date.isSame(dayjs(), 'date')) {
       return `${label} aujourd'hui`
     }
@@ -139,7 +144,7 @@
     if (date.isAfter(dayjs(), 'date')) {
       return `${label} le ${formatDate(date.toDate())}`
     }
-    return `${label} passée le ${formatDate(date.toDate())}`
+    return `${pastLabel || label} passée le ${formatDate(date.toDate())}`
   }
 
   function getItemTab() {
