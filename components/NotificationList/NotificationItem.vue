@@ -39,7 +39,7 @@
         class="notificationitem__read-form"
       >
         <VeeCheckbox
-          label="Notification lue"
+          :label="toggleLabel"
           name="read"
           no-label
         />
@@ -194,6 +194,10 @@
         return ''
     }
   })
+
+  const toggleLabel = computed(() =>
+    props.notification.read ? 'Marquer comme non lu' : 'Marquer comme lu'
+  )
 
   watch(controlledValues, ({ read }) => {
     if (read !== props.notification.read) {

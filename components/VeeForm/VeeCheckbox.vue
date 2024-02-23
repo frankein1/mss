@@ -16,11 +16,12 @@
     <label
       class="fr-label"
       :for="id"
+      :title="noLabel ? label : undefined"
     >
-      <span :title="noLabel ? label : undefined">
-        {{ noLabel ? '' : label }}
+      <span v-if="!noLabel">
+        {{ label }}
         <span
-          v-if="required && !noLabel"
+          v-if="required"
           class="color-red"
           >*</span
         >
