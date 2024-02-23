@@ -1,31 +1,19 @@
-import { BeneficiaryStatus } from '@prisma/client'
 import { z } from 'zod'
-import {
-  emailOrEmpty,
-  phoneConstraint,
-  requiredNativeEnum,
-  numeroPegaseContraint,
-  stringOrEmpty,
-  dateOrEmpty
-} from '../helpers.schema'
-import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
-import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
-import { requiredErrorMessage } from '~/utils/zod'
+import { saveBeneficiaryGeneralInformationSchema } from './saveBeneficiary.schema'
 
-export const createBeneficiarySchema = z.object({
-  status: requiredNativeEnum(BeneficiaryStatus),
-  referents: z
-    .array(z.string().uuid(), {
-      required_error: requiredErrorMessage
-    })
-    .min(1, requiredErrorMessage),
-  usualName: stringOrEmpty(beneficiaryLastNameSchema),
-  birthName: stringOrEmpty(beneficiaryLastNameSchema),
-  firstName: beneficiaryFirstNameOrEmptySchema,
-  birthDate: dateOrEmpty,
-  phone1: stringOrEmpty(phoneConstraint),
-  email: emailOrEmpty(),
-  numeroPegase: stringOrEmpty(numeroPegaseContraint)
-})
+export const createBeneficiarySchema =
+  saveBeneficiaryGeneralInformationSchema.pick({
+    status: true,
+    referents: true,
+    usualName: true,
+    birthName: true,
+    firstName: true,
+    phone1: true,
+    email: true,
+    numeroPegase: true,
+    street: true,
+    zipcode: true,
+    city: true
+  })
 
 export type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>

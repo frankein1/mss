@@ -61,6 +61,30 @@
           type="email"
         />
       </div>
+      <div class="fr-col-12 fr-col-md-3">
+        <VeeInput
+          name="zipcode"
+          :label="beneficiaryFieldLabels.zipcode"
+          @change-value="setFieldValue('zipcode', $event)"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-md-9">
+        <VeeCityInput
+          name="city"
+          :label="beneficiaryFieldLabels.city"
+          :zip-code="zipcode"
+          @city-selected="onCitySelected"
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeAddressInput
+          name="street"
+          :label="beneficiaryFieldLabels.street"
+          :zip-code="zipcode"
+          hint="Numéro et voie"
+          @address-selected="onAddressSelected"
+        />
+      </div>
       <div
         v-if="application.module.ministere"
         class="fr-col-12 fr-col-lg-6"
@@ -135,12 +159,13 @@
 
   const { application } = usePermissions()
 
-  const { handleSubmit } = useForm<CreateBeneficiaryInput>({
-    validationSchema: toTypedSchema(createBeneficiarySchema),
-    initialValues: {
-      status: BeneficiaryStatus.Active
-    }
-  })
+  const { handleSubmit, setFieldValue, controlledValues } =
+    useForm<CreateBeneficiaryInput>({
+      validationSchema: toTypedSchema(createBeneficiarySchema),
+      initialValues: {
+        status: BeneficiaryStatus.Active
+      }
+    })
 
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
@@ -154,6 +179,13 @@
     caughtErrors,
     beneficiaryFieldLabels
   )
+
+  const zipcode = computed(() => controlledValues.value.zipcode)
+
+  const { onCitySelected, onAddressSelected } = useAddressFields({
+    setCityValue: (value: string) => setFieldValue('city', value),
+    setZipcodeValue: (value: string) => setFieldValue('zipcode', value)
+  })
 </script>
 
 <style scoped>

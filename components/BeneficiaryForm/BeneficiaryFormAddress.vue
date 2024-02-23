@@ -64,7 +64,7 @@
       <VeeRegionInput
         name="region"
         :label="beneficiaryFieldLabels.region"
-        @region-selected="setRegionvalue($event)"
+        @region-selected="setRegionValue($event)"
       />
     </div>
     <div
@@ -82,12 +82,6 @@
 
 <script setup lang="ts">
   import { BeneficiaryAccommodationMode } from '@prisma/client'
-  import {
-    AddressSelected,
-    CitySelected,
-    GeoApiGouvFrRegion,
-    GeoApiGouvFrDepartment
-  } from '../VeeForm/types'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
     HostedAccommodationMode,
@@ -105,7 +99,7 @@
     useField<string>('zipcode')
   const { setValue: setCityValue } = useField<string>('city')
   const { setValue: setDepartmentValue } = useField<string>('department')
-  const { setValue: setRegionvalue } = useField<string>('region')
+  const { setValue: setRegionValue } = useField<string>('region')
 
   const isHosted = computed(() =>
     HostedAccommodationMode.includes(accommodationMode.value)
@@ -124,48 +118,10 @@
     return ''
   })
 
-  function onCitySelected(citySelected: CitySelected) {
-    updateAddressInformation(citySelected)
-  }
-
-  function onAddressSelected(address: AddressSelected) {
-    updateAddressInformation(address)
-  }
-
-  async function updateAddressInformation(
-    selection: CitySelected | AddressSelected
-  ) {
-    if ('codeRegion' in selection && selection.codeRegion) {
-      setRegionvalue(await codeRegionToRegionName(selection.codeRegion))
-    }
-    if ('region' in selection && selection.region) {
-      setRegionvalue(selection.region)
-    }
-    if ('codeDepartement' in selection && selection.codeDepartement) {
-      setDepartmentValue(
-        await codeDepartementToDepartmentName(selection.codeDepartement)
-      )
-    }
-    if ('departement' in selection && selection.departement) {
-      setDepartmentValue(selection.departement)
-    }
-    setZipcodeValue(selection.zipCode)
-    setCityValue(selection.city)
-  }
-
-  async function codeRegionToRegionName(codeRegion: string) {
-    const { nom } = await $fetch<GeoApiGouvFrRegion>(
-      `https://geo.api.gouv.fr/regions/${codeRegion}`
-    )
-
-    return nom
-  }
-
-  async function codeDepartementToDepartmentName(codeDepartement: string) {
-    const { nom } = await $fetch<GeoApiGouvFrDepartment>(
-      `https://geo.api.gouv.fr/departements/${codeDepartement}`
-    )
-
-    return nom
-  }
+  const { onCitySelected, onAddressSelected } = useAddressFields({
+    setCityValue,
+    setZipcodeValue,
+    setRegionValue,
+    setDepartmentValue
+  })
 </script>
