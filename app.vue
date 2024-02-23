@@ -52,7 +52,13 @@
     },
     titleTemplate: pageTitle => {
       return pageTitle ? `${pageTitle} | Mon Suivi Social` : 'Mon Suivi Social'
-    }
+    },
+    link: [
+      { rel: 'icon', href: '/favicon.ico', sizes: '32x32' },
+      { rel: 'icon', href: '/favicon.svg', type: 'image/svg+xml' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-favicon.png' },
+      { rel: 'manifest', href: '/manifest.webmanifest' }
+    ]
   })
 
   const matomoScriptSrc = `${publicConfig.matomo.host}/${MATOMO_SCRIPT_FILENAME}`
