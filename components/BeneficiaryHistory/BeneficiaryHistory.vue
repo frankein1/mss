@@ -41,12 +41,8 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
   import { BeneficiaryPermissions } from '~/server/security'
   import { BeneficiaryHistoryFilterInput } from '~/server/schema'
-
-  const route = useRoute()
 
   const props = defineProps<{
     beneficiaryId: string
@@ -75,17 +71,6 @@
     }
 
     return `${items.value.length} accompagnement${plural} affiché${plural} sur ${totalCount.value}`
-  })
-
-  onMounted(async () => {
-    const tab = route.hash.slice(1)
-    const { item } = route.query
-
-    if (tab === BeneficiaryTab.History && item) {
-      await nextTick()
-
-      focusAndScrollTo(`#history-${item}`)
-    }
   })
 
   function onHistoryItemDeleted(socialSupportId: string) {

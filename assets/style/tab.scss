@@ -7,8 +7,3 @@ $tab-border-bottom-size: 3px;
 :root {
   --tabs-panel-min-height: 30rem;
 }
-
-// Fix an empty tab blinking and allow to focus element between tabs
-.fr-tabs__panel:not(.fr-tabs__panel--selected) {
-  visibility: initial;
-}

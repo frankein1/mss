@@ -42,13 +42,10 @@
 <script setup lang="ts">
   import { GetDocument } from './types'
   import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { focusAndScrollTo } from '~/utils/focusAnScrollTo'
   import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
   import { BeneficiaryDocumentSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
 
-  const route = useRoute()
   const trpcClient = useTrpcClient()
 
   const props = defineProps<{ beneficiaryId: string }>()
@@ -76,17 +73,6 @@
   const totalPages = computed(() => data.value?.totalPages || 0)
 
   const documentsCount = computed(() => data.value?.count || 0)
-
-  onMounted(async () => {
-    const tab = route.hash.slice(1)
-    const { item } = route.query
-
-    if (tab === BeneficiaryTab.Documents && item) {
-      await nextTick()
-
-      focusAndScrollTo(`#document-${item}`)
-    }
-  })
 
   function onDocumentUpdated(updatedDocument: GetDocument) {
     if (!data.value) {
