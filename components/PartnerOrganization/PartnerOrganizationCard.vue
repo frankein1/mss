@@ -48,7 +48,7 @@
       </button>
       <button
         v-if="application.module.partner"
-        class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-delete-line"
+        class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-delete-line partner-card__action-bar__delete"
         data-fr-opened="false"
         aria-controls="global-modal"
         type="button"
@@ -85,8 +85,11 @@
 
   .partner-card__action-bar {
     display: flex;
-    flex-wrap: wrap;
-    flex-direction: row-reverse;
+    flex-flow: row-reverse wrap;
+  }
+
+  .partner-card__action-bar__delete {
+    color: red
   }
 
   .partner-card-content__info {
@@ -94,7 +97,7 @@
     margin-bottom: 0;
 
     &::before {
-      padding-right: 0.5rem;
+      margin-right: 0.5rem;
     }
   }
 
@@ -102,4 +105,7 @@
     color: var(--text-mention-grey);
     margin-bottom: 0;
   }
+
+  
 </style>
+
