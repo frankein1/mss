@@ -24,6 +24,10 @@
 <script setup lang="ts">
   import type { SocialSupportItem } from './types'
   import { BeneficiaryPermissions } from '~/server/security'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { focusAndScrollTo } from '~/utils/focusAndScrollTo'
+
+  const route = useRoute()
 
   const props = defineProps<{
     item: SocialSupportItem
@@ -54,6 +58,17 @@
   )
 
   onMounted(() => {
+    const tab = route.hash.slice(1)
+    const { item } = route.query
+
+    if (
+      $el.value &&
+      tab === BeneficiaryTab.History &&
+      item === socialSupportId.value
+    ) {
+      focusAndScrollTo($el.value)
+    }
+
     collapseContainer.value =
       $el.value?.querySelector<HTMLDivElement>(`#${collapseId.value}`) || null
 
