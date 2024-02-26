@@ -4,7 +4,7 @@
     class="partner-box__link"
   >
     <div class="feature-section partner-box">
-      <AtomPictogram path="/pictograms/notification.svg" />
+      <AtomPictogram path="/pictograms/annuaire.svg" />
       <div class="partner-box__title fr-h6">Partenaires</div>
     </div>
   </NuxtLink>
