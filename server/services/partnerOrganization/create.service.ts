@@ -10,7 +10,7 @@ export async function create({
   input: AddPartnerOrganizationInput
 }) {
   const res = await PartnerOrganizationRepo.prisma.create({
-    data: { ...input, structureId: ctx.structure.id },
+    data: { ...input, createdById: ctx.user.id, structureId: ctx.structure.id },
     select: {
       id: true,
       name: true

@@ -1466,6 +1466,8 @@ model PartnerOrganization {
 
   workingHours String? @map("working_hours")
 
+  inactive Boolean @default(false)
+
   structure   Structure @relation(fields: [structureId], references: [id])
   structureId String    @map("structure_id") @db.Uuid
 

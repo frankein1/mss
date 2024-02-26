@@ -36,7 +36,7 @@ export const create = createMutation({
   inputValidation: addPartnerOrganizationSchema,
   securityCheck,
   auditLog: {
-    key: 'partner.update',
+    key: 'partner.create',
     target: 'PartnerOrganization',
     targetId: ({ routeResult }) => {
       return routeResult.id

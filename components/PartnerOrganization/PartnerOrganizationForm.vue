@@ -31,7 +31,9 @@
     <template v-if="partnerWithSameSiret">
       <div class="fr-alert fr-alert--error fr-mb-2w">
         <h3 class="fr-alert__title">
-          Un organisme existe déjà avec ce numéro de SIRET
+          {{
+            `Un organisme ${partnerWithSameSiret.inactive ? 'inactif' : ''} existe déjà avec ce numéro de SIRET`
+          }}
         </h3>
         <p>
           <a
@@ -142,7 +144,8 @@
 
   const emit = defineEmits<{
     submit: [payload: Event]
-    cancel: [filter?: string]
+    cancel: []
+    open: [partner: PartnerOrganizationData]
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
@@ -174,8 +177,9 @@
 
   function goToPartnerWithSameSiret() {
     const sameSiret = partnerWithSameSiret.value
-    const siretValue = sameSiret?.siret
-    emit('cancel', siretValue || undefined)
+    if (sameSiret) {
+      emit('open', sameSiret)
+    }
   }
 
   function onCancel() {

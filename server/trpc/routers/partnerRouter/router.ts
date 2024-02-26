@@ -9,6 +9,9 @@ export const partnerRouter = router({
   update: protectedProcedure
     .input(routes.update.inputValidation)
     .mutation(routes.update.execute),
+  makeActive: protectedProcedure
+    .input(routes.makeActive.inputValidation)
+    .mutation(routes.makeActive.execute),
   getAll: protectedProcedure
     .input(routes.getAll.inputValidation)
     .query(routes.getAll.execute),
@@ -17,5 +20,8 @@ export const partnerRouter = router({
     .query(routes.getOne.execute),
   findBySiret: protectedProcedure
     .input(routes.findBySiret.inputValidation)
-    .query(routes.findBySiret.execute)
+    .query(routes.findBySiret.execute),
+  remove: protectedProcedure
+    .input(routes.remove.inputValidation)
+    .mutation(routes.remove.execute)
 })

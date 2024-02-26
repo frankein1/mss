@@ -5,12 +5,9 @@ import {
   EditPartnerOrganizationInput,
   editPartnerOrganizationSchema
 } from '~/server/schema'
-import {
-  SecurityRuleContext,
-  getAppContextPermissions
-} from '~/server/security'
 
 import { PartnerOrganizationService } from '~/server/services'
+import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = ({
   input,
@@ -22,19 +19,10 @@ const handler = ({
   return PartnerOrganizationService.update({ input, ctx })
 }
 
-const securityCheck = (
-  ctx: SecurityRuleContext,
-  _input: EditPartnerOrganizationInput
-) => {
-  const appPermissions = getAppContextPermissions(ctx)
-
-  return appPermissions.module.partner
-}
-
 export const update = createMutation({
   handler,
   inputValidation: editPartnerOrganizationSchema,
-  securityCheck,
+  securityCheck: AllowSecurityCheck,
   auditLog: {
     key: 'partner.update',
     target: 'PartnerOrganization',

@@ -9,7 +9,7 @@ s
       </div>
       <div class="fr-m-0">
         Les personnes avec un rôle "responsable de structure" ou "travailleur
-        social" peuvent ajouter, modifier ou supprimer des partenaires
+        social" peuvent ajouter ou supprimer des partenaires
       </div>
       <div class="fr-py-2w partner-search-bar">
         <div class="partner-search-bar__input">
@@ -27,7 +27,7 @@ s
               data-fr-opened="false"
               aria-controls="global-modal"
               type="button"
-              class="fr-btn fr-btn--icon-left fr-btn--sm fr-btn--secondary fr-icon-add-line"
+              class="fr-btn fr-btn--icon-left fr-btn--md fr-btn--secondary fr-icon-add-line"
               @click="openCreateModal"
             >
               Ajouter
@@ -41,7 +41,8 @@ s
           :key="partner.id"
           :partner="partner"
           class="partner-catalog-item"
-          @edit="edit"
+          @edit="openEditModal"
+          @delete="openRemoveModal"
         />
       </div>
     </main>
@@ -52,6 +53,8 @@ s
   import { z } from 'zod'
   import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
   import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
+  import PartnerOrganizationRemoveAlert from '~/components/PartnerOrganization/PartnerOrganizationRemoveAlert.vue'
+  import { PartnerOrganizationData } from '~/components/PartnerOrganization/types'
   import {
     EditPartnerOrganizationInput,
     AddPartnerOrganizationInput
@@ -108,11 +111,15 @@ s
       contentComponentProps: {
         isSubmitting: isSubmitting.value
       },
-      contentComponentEvents: { onFinish: onCreate, onCancel }
+      contentComponentEvents: {
+        finish: finishCreation,
+        cancel,
+        open: showPartner
+      }
     })
   }
 
-  function edit(id: string) {
+  function openEditModal(id: string) {
     modal.open({
       title: 'Modifier un organisme partenaire',
       contentComponent: PartnerOrganizationEdition,
@@ -120,16 +127,46 @@ s
         id,
         isSubmitting: isSubmitting.value
       },
-      contentComponentEvents: { onFinish: onEdit, onCancel }
+      contentComponentEvents: {
+        finish: finishEdition,
+        cancel,
+        open: showPartner
+      }
     })
   }
 
-  function onEdit(input: EditPartnerOrganizationInput) {
+  function openRemoveModal(partner: PartnerOrganizationData) {
+    modal.open({
+      title: 'Supprimer un organisme partenaire',
+      contentComponent: PartnerOrganizationRemoveAlert,
+      contentComponentProps: {
+        partner
+      },
+      contentComponentEvents: { finish: finishDeletion, cancel }
+    })
+  }
+
+  function finishDeletion(id: string) {
+    useTrpcMutation({
+      isSubmitting,
+      mutation: () => trpcClient.partner.remove.mutate({ id }),
+      onSuccess: () => {
+        snackbar.success('Organisme partenaire supprimée')
+        modal.close()
+        refresh()
+      },
+      onFailure: () => {
+        snackbar.error('La suppression a échoué')
+      }
+    })
+  }
+
+  function finishEdition(input: EditPartnerOrganizationInput) {
     useTrpcMutation({
       isSubmitting,
       mutation: () => trpcClient.partner.update.mutate(input),
       onSuccess: () => {
-        snackbar.success('Organisme partenaire mise à jour')
+        snackbar.success('Organisme partenaire mis à jour')
         modal.close()
         refresh()
       },
@@ -139,12 +176,12 @@ s
     })
   }
 
-  function onCreate(input: AddPartnerOrganizationInput) {
+  function finishCreation(input: AddPartnerOrganizationInput) {
     useTrpcMutation({
       isSubmitting,
       mutation: () => trpcClient.partner.create.mutate(input),
       onSuccess: () => {
-        snackbar.success('Organisme partenaire ajoutée')
+        snackbar.success('Organisme partenaire ajouté')
         modal.close()
         refresh()
       },
@@ -154,12 +191,19 @@ s
     })
   }
 
-  function onCancel(filter?: string) {
-    if (filter?.length) {
-      setFieldValue('filter', filter)
-      onSearch(filter)
-    }
+  function cancel() {
     modal.close()
+  }
+
+  async function showPartner(partner: PartnerOrganizationData) {
+    modal.close()
+    if (partner.inactive) {
+      await trpcClient.partner.makeActive.mutate({ id: partner.id })
+      refresh()
+    }
+    const filter = partner.siret || partner.name
+    setFieldValue('filter', filter)
+    onSearch(filter)
   }
 </script>
 
@@ -181,6 +225,10 @@ s
 
   .partner-search-bar__action {
     margin-left: auto;
+  }
+
+  .partner__show-button {
+    visibility: hidden;
   }
 
   .partner-catalog {
