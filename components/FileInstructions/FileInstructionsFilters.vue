@@ -20,7 +20,7 @@
 </template>
 
 <script lang="ts" setup>
-  // import { formatDate } from '~/utils/formatDate'
+  import { formatDate } from '~/utils/formatDate'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
@@ -64,15 +64,17 @@
     queryKey: 'config.getStructureFollowupTypes.options'
   })
 
-  // const {
-  //   data: examinationDateOptions,
-  //   pending: examinationDateOptionsPending,
-  //   error: examinationDateOptionsError
-  // } = await useAsyncData(loadExaminationDates)
+  const {
+    data: examinationDateOptions,
+    pending: examinationDateOptionsPending,
+    error: examinationDateOptionsError
+  } = await useAsyncData(loadExaminationDates)
 
   const pending = computed(
-    () => agentOptionsPending.value || followupTypeOptionsPending.value
-    // || examinationDateOptionsPending.value
+    () =>
+      agentOptionsPending.value ||
+      followupTypeOptionsPending.value ||
+      examinationDateOptionsPending.value
   )
 
   const fetchError = computed(() => {
@@ -82,17 +84,17 @@
     if (followupTypeOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
-    // if (examinationDateOptionsError.value) {
-    //   return "La liste des dates de passage en commission n'a pas pu être chargée."
-    // }
+    if (examinationDateOptionsError.value) {
+      return "La liste des dates de passage en commission n'a pas pu être chargée."
+    }
     return ''
   })
 
   const fileInstructionsFilters = computed(() => {
     if (
       !followupTypeOptions.value ||
-      !agentOptions.value
-      // || !examinationDateOptions.value
+      !agentOptions.value ||
+      !examinationDateOptions.value
     ) {
       return null
     }
@@ -138,51 +140,51 @@
       })
     }
 
-    // FIXME: Delete once it is admitted that it is done
-    // if (application.value.module.helpRequest) {
-    //   if (examinationDateOptions.value.size) {
-    //     filters.push({
-    //       name: 'examinationDate',
-    //       label: helpRequestFieldLabels.examinationDate,
-    //       options: withEmptyValue(
-    //         examinationDateOptions.value,
-    //         'Toutes les commissions'
-    //       ),
-    //       type: FilterType.SelectOne,
-    //       matomoEventCategory: EventCategory.HelpRequestFilter,
-    //       matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
-    //     })
-    //   }
-    //
-    //   filters.push(
-    //     {
-    //       name: 'handlingDate',
-    //       label: 'Fin de prise en charge',
-    //       options: new Map([
-    //         ['', 'Non sélectionné'],
-    //         ['true', 'Oui'],
-    //         ['false', 'Non']
-    //       ]),
-    //       type: FilterType.SelectOne,
-    //
-    //       matomoEventCategory: EventCategory.HelpRequestFilter,
-    //       matomoEventAction: HelpRequestFilterEventAction.HandlingDate
-    //     },
-    //     {
-    //       name: 'externalStructure',
-    //       label: 'Instruction',
-    //       options: new Map([
-    //         ['', 'Toutes les instructions'],
-    //         ['false', 'Interne'],
-    //         ['true', 'Organisme externe']
-    //       ]),
-    //       type: FilterType.SelectOne,
-    //
-    //       matomoEventCategory: EventCategory.HelpRequestFilter,
-    //       matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
-    //     }
-    //   )
-    // }
+    if (application.value.module.helpRequest) {
+      if (examinationDateOptions.value.size) {
+        fileInstructionsFilters.push({
+          name: 'examinationDate',
+          label: helpRequestFieldLabels.examinationDate,
+          options: withEmptyValue(
+            examinationDateOptions.value,
+            'Toutes les commissions'
+          ),
+          type: FilterType.SelectOne,
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
+        })
+      }
+
+      // FIXME: Delete once it is admitted that it is done
+      //   filters.push(
+      //     {
+      //       name: 'handlingDate',
+      //       label: 'Fin de prise en charge',
+      //       options: new Map([
+      //         ['', 'Non sélectionné'],
+      //         ['true', 'Oui'],
+      //         ['false', 'Non']
+      //       ]),
+      //       type: FilterType.SelectOne,
+      //
+      //       matomoEventCategory: EventCategory.HelpRequestFilter,
+      //       matomoEventAction: HelpRequestFilterEventAction.HandlingDate
+      //     },
+      //     {
+      //       name: 'externalStructure',
+      //       label: 'Instruction',
+      //       options: new Map([
+      //         ['', 'Toutes les instructions'],
+      //         ['false', 'Interne'],
+      //         ['true', 'Organisme externe']
+      //       ]),
+      //       type: FilterType.SelectOne,
+      //
+      //       matomoEventCategory: EventCategory.HelpRequestFilter,
+      //       matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
+      //     }
+      //   )
+    }
 
     if (!isReferent) {
       fileInstructionsFilters.push({
@@ -210,20 +212,20 @@
     return fileInstructionsFilters
   })
 
-  // async function loadExaminationDates() {
-  //   if (!application.value.module.helpRequest) {
-  //     return new Map()
-  //   }
+  async function loadExaminationDates() {
+    if (!application.value.module.helpRequest) {
+      return new Map()
+    }
 
-  //   const examinationDates = await trpcClient.config.getExaminationDates.query()
+    const examinationDates = await trpcClient.config.getExaminationDates.query()
 
-  //   return new Map(
-  //     examinationDates.map(({ examinationDate }) => [
-  //       examinationDate.toString(),
-  //       formatDate(examinationDate)
-  //     ])
-  //   )
-  // }
+    return new Map(
+      examinationDates.map(({ examinationDate }) => [
+        examinationDate.toString(),
+        formatDate(examinationDate)
+      ])
+    )
+  }
 
   function onFilter(filters: FileInstructionFilterInput) {
     filtersState.fileInstruction.value = filters

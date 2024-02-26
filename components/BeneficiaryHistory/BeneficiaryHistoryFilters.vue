@@ -30,13 +30,14 @@
     typeSuiviOptions,
     TypeSuivi
   } from '~/client/options'
-  // import { formatDate } from '~/utils/formatDate'
+  import { formatDate } from '~/utils/formatDate'
   import {
     EventCategory,
     BeneficiaryHistoryFilterEventAction,
-    FollowupFilterEventAction
+    FollowupFilterEventAction,
+    HelpRequestFilterEventAction
   } from '~/types/matomo'
-  import { followupFieldLabels } from '~/client/labels'
+  import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     beneficiaryId: string
@@ -71,17 +72,19 @@
     queryKey: 'config.getStructureFollowupTypes.options'
   })
 
-  // const { application } = usePermissions()
+  const { application } = usePermissions()
 
-  // const {
-  //   data: examinationDateOptions,
-  //   pending: examinationDateOptionsPending,
-  //   error: examinationDateOptionsError
-  // } = await useAsyncData(loadExaminationDates)
+  const {
+    data: examinationDateOptions,
+    pending: examinationDateOptionsPending,
+    error: examinationDateOptionsError
+  } = await useAsyncData(loadExaminationDates)
 
   const pending = computed(
-    () => agentOptionsPending.value || followupTypeOptionsPending.value
-    // || examinationDateOptionsPending.value
+    () =>
+      agentOptionsPending.value ||
+      followupTypeOptionsPending.value ||
+      examinationDateOptionsPending.value
   )
 
   const fetchError = computed(() => {
@@ -91,9 +94,9 @@
     if (followupTypeOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
-    // if (examinationDateOptionsError.value) {
-    //   return "La liste des dates de passage en commission n'a pas pu être chargée."
-    // }
+    if (examinationDateOptionsError.value) {
+      return "La liste des dates de passage en commission n'a pas pu être chargée."
+    }
     return ''
   })
 
@@ -115,7 +118,7 @@
   const filters = computed(() => {
     if (
       !followupTypeOptions.value ||
-      // !examinationDateOptions.value ||
+      !examinationDateOptions.value ||
       !agentOptions.value
     ) {
       return null
@@ -168,22 +171,22 @@
       })
     }
 
+    if (application.value.module.helpRequest) {
+      if (examinationDateOptions.value.size) {
+        filters.push({
+          name: 'examinationDate',
+          label: helpRequestFieldLabels.examinationDate,
+          options: withEmptyValue(
+            examinationDateOptions.value,
+            'Toutes les commissions'
+          ),
+          type: FilterType.SelectOne,
+          matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+          matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
+        })
+      }
+
     // FIXME: Delete once it is admitted that it is done
-    // if (application.value.module.helpRequest) {
-    //   if (examinationDateOptions.value.size) {
-    //     filters.push({
-    //       name: 'examinationDate',
-    //       label: helpRequestFieldLabels.examinationDate,
-    //       options: withEmptyValue(
-    //         examinationDateOptions.value,
-    //         'Toutes les commissions'
-    //       ),
-    //       type: FilterType.SelectOne,
-    //       matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-    //       matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
-    //     })
-    //   }
-    //
     //   filters.push(
     //     {
     //       name: 'handlingDate',
@@ -210,7 +213,7 @@
     //       matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
     //     }
     //   )
-    // }
+    }
 
     if (!isReferent) {
       filters.push({
@@ -227,20 +230,20 @@
     return filters
   })
 
-  // async function loadExaminationDates() {
-  //   if (!application.value.module.helpRequest) {
-  //     return new Map()
-  //   }
+  async function loadExaminationDates() {
+    if (!application.value.module.helpRequest) {
+      return new Map()
+    }
 
-  //   const examinationDates = await trpcClient.config.getExaminationDates.query({
-  //     id: props.beneficiaryId
-  //   })
+    const examinationDates = await trpcClient.config.getExaminationDates.query({
+      id: props.beneficiaryId
+    })
 
-  //   return new Map(
-  //     examinationDates.map(({ examinationDate }) => [
-  //       examinationDate.toString(),
-  //       formatDate(examinationDate)
-  //     ])
-  //   )
-  // }
+    return new Map(
+      examinationDates.map(({ examinationDate }) => [
+        examinationDate.toString(),
+        formatDate(examinationDate)
+      ])
+    )
+  }
 </script>
