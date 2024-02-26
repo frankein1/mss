@@ -16,7 +16,7 @@
           Supprimer l'organisme partenaire
         </button>
         <button
-          class="fr-btn fr-btn--sm fr-btn--secondary fr-icon-pencil-line"
+          class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-pencil-line"
           data-fr-opened="false"
           aria-controls="global-modal"
           type="button"
@@ -26,13 +26,6 @@
         </button>
       </div>
     </div>
-    <div
-      v-if="partner.siret"
-      class="fr-icon-file-text-line partner-card-content__info fr-text--sm"
-    >
-      {{ partner.siret }}
-    </div>
-
     <div
       v-if="partner.address || partner.zipcode || partner.city"
       class="fr-icon-map-pin-2-line partner-card-content__info fr-text--sm"

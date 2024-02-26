@@ -27,7 +27,7 @@ s
               data-fr-opened="false"
               aria-controls="global-modal"
               type="button"
-              class="fr-btn fr-btn--icon-left fr-btn--sm fr-btn--secondary fr-icon-add-line"
+              class="fr-btn fr-btn--icon-left fr-btn--md fr-btn--secondary fr-icon-add-line"
               @click="openCreateModal"
             >
               Ajouter
