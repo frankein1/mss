@@ -17,42 +17,44 @@
         </button>
       </div>
     </div>
-    <div v-if="partner.siret">
-      <span class="fr-icon-file-text-line" />
-      <span class="partner-card-content__info fr-text--sm">
-        {{ partner.siret }}
-      </span>
+    <div
+      v-if="partner.siret"
+      class="fr-icon-file-text-line partner-card-content__info fr-text--sm"
+    >
+      {{ partner.siret }}
     </div>
 
-    <div v-if="partner.address || partner.zipcode || partner.city">
-      <span class="fr-icon-map-pin-2-line" />
-      <span class="partner-card-content__info fr-text--sm">{{
+    <div
+      v-if="partner.address || partner.zipcode || partner.city"
+      class="fr-icon-map-pin-2-line partner-card-content__info fr-text--sm"
+    >
+      {{
         `${partner.address || ''} ${partner.zipcode || ''} ${partner.city || ''}`
-      }}</span>
+      }}
     </div>
-    <div v-if="partner.phone1">
-      <span class="fr-icon-phone-line" />
-      <span class="partner-card-content__info fr-text--sm">
-        {{ partner.phone1 }}
-      </span>
+    <div
+      v-if="partner.phone1"
+      class="fr-icon-phone-line partner-card-content__info fr-text--sm"
+    >
+      {{ partner.phone1 }}
     </div>
-    <div v-if="partner.phone2">
-      <span class="fr-icon-phone-line" />
-      <span class="partner-card-content__info fr-text--sm">
-        {{ partner.phone2 }}
-      </span>
+    <div
+      v-if="partner.phone2"
+      class="fr-icon-phone-line partner-card-content__info fr-text--sm"
+    >
+      {{ partner.phone2 }}
     </div>
-    <div v-if="partner.email">
-      <span class="fr-icon-mail-line" />
-      <span class="partner-card-content__info fr-text--sm">
-        {{ partner.email }}
-      </span>
+    <div
+      v-if="partner.email"
+      class="fr-icon-mail-line partner-card-content__info fr-text--sm"
+    >
+      {{ partner.email }}
     </div>
     <div
       v-if="partner.workingHours"
       class="partner-card-content__info partner-card-content__working-hours fr-text--sm fr-m-0"
     >
-      <div>Horaires:</div>
+      <div>Horaires :</div>
       {{ partner.workingHours }}
     </div>
   </div>
@@ -96,7 +98,10 @@
   .partner-card-content__info {
     color: var(--text-default-grey);
     margin-bottom: 0;
-    padding-left: 0.25rem;
+
+    &::before {
+      padding-right: 0.5rem;
+    }
   }
 
   .partner-card-content__working-hours {
