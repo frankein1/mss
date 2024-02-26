@@ -27,14 +27,12 @@ export const fixturesFollowupTypes = [
     id: 'afb7eded-3693-4dd9-97a5-d7c57d8118d4',
     name: 'Aides financières non remboursables',
     legallyRequired: false,
-    default: 'AidesFinancieresNonRemboursables',
     ownedByStructureId: fixtureStructure.id
   },
   {
     id: '3d9c5e6d-4b10-4358-8bad-3eb1b1922c51',
     name: 'Aides financières remboursables',
     legallyRequired: false,
-    default: 'AidesFinancieresRemboursables',
     ownedByStructureId: fixtureStructure.id
   },
   {
