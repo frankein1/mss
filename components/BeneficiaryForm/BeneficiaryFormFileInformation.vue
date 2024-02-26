@@ -18,7 +18,10 @@
         :disabled-options="disabledReferentOptions"
       />
     </div>
-    <div class="fr-col-12">
+    <div
+      v-if="!noAidantConnectAuthorized"
+      class="fr-col-12"
+    >
       <VeeToggle
         :label="beneficiaryFieldLabels.aidantConnectAuthorized"
         name="aidantConnectAuthorized"
@@ -40,9 +43,11 @@
       agents: BeneficiaryReferent[]
       beneficiary?: SaveBeneficiaryGeneralInformationInput
       permissions: BeneficiaryPermissions
+      noAidantConnectAuthorized?: boolean
     }>(),
     {
-      beneficiary: undefined
+      beneficiary: undefined,
+      noAidantConnectAuthorized: false
     }
   )
 
