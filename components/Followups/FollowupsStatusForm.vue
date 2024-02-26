@@ -23,6 +23,7 @@
     quickEditFollowupSchema
   } from '~/server/schema'
   import { followupFieldLabels } from '~/client/labels'
+  import { EventCategory, HistoryQuickEditEventAction } from '~/types/matomo'
 
   const snackbar = useSnackbar()
 
@@ -43,6 +44,10 @@
       mutation: () => useTrpcClient().followup.quickUpdate.mutate(followup),
       onSuccess: () => {
         snackbar.success("Le statut de la synthèse d'entretien a été modifié.")
+        useMatomo().trackEvent(
+          EventCategory.HistoryQuickEdit,
+          HistoryQuickEditEventAction.FollowupStatus
+        )
       },
       onFailure: () => {
         snackbar.error(

@@ -23,6 +23,7 @@
   } from '~/server/schema'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { withEmptyValue } from '~/utils/options'
+  import { EventCategory, HistoryQuickEditEventAction } from '~/types/matomo'
 
   const snackbar = useSnackbar()
 
@@ -51,6 +52,12 @@
         snackbar.success(
           "Le mode de paiment de l'instruction de dossier a été modifié."
         )
+
+        useMatomo().trackEvent(
+          EventCategory.HistoryQuickEdit,
+          HistoryQuickEditEventAction.HelpRequestPaymentMethod
+        )
+
         const item = props.item
         const helpRequest = item.fileInstruction.helpRequest
         if (helpRequest) {

@@ -6,7 +6,8 @@ export enum EventCategory {
   Document = 'Document',
   CreateBeneficiary = 'Créer un bénéficiaire',
   UsersActivity = 'Historique des changements',
-  AccessBeneficiaryAdd = 'Accès à Créer un bénéficiaire'
+  AccessBeneficiaryAdd = 'Accès à Créer un bénéficiaire',
+  HistoryQuickEdit = 'Modification dans tableau Accompagnements'
 }
 
 export enum BeneficiaryFilterEventAction {
@@ -61,6 +62,14 @@ export enum AccessBeneficiaryAddEventAction {
   FromOverview = 'Depuis Tableau de bord'
 }
 
+export enum HistoryQuickEditEventAction {
+  FollowupStatus = 'Statut Entretien',
+  FileInstructionStatus = 'Statut Instruction de dossier',
+  HelpRequestAllocatedAmount = 'Montant alloué Aide financière',
+  HelpRequestPaymentMethod = 'Mode de paiement Aide financière',
+  HelpRequestPaymentDate = 'Date de paiement Aide financière'
+}
+
 export type EventAction =
   | BeneficiaryFilterEventAction
   | BeneficiaryHistoryFilterEventAction
@@ -70,6 +79,7 @@ export type EventAction =
   | CreateBeneficiaryEventAction
   | UserActivityEventAction
   | AccessBeneficiaryAddEventAction
+  | HistoryQuickEditEventAction
 
 export type MatomoApi = {
   trackEvent: (category: EventCategory, action: EventAction) => void

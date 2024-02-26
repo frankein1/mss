@@ -22,6 +22,7 @@
   } from '~/server/schema'
   import { helpRequestFieldLabels } from '~/client/labels'
   import { INPUT_DEFER_DURATION } from '~/utils/constants'
+  import { EventCategory, HistoryQuickEditEventAction } from '~/types/matomo'
 
   const snackbar = useSnackbar()
 
@@ -53,6 +54,12 @@
           snackbar.success(
             "Le montant alloué de l'instruction de dossier a été modifié."
           )
+
+          useMatomo().trackEvent(
+            EventCategory.HistoryQuickEdit,
+            HistoryQuickEditEventAction.HelpRequestAllocatedAmount
+          )
+
           const item = props.item
           const helpRequest = item.fileInstruction.helpRequest
           if (helpRequest) {

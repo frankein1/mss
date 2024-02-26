@@ -20,6 +20,7 @@
     quickEditHelpRequestPaymentDateSchema
   } from '~/server/schema'
   import { helpRequestFieldLabels } from '~/client/labels'
+  import { EventCategory, HistoryQuickEditEventAction } from '~/types/matomo'
 
   const snackbar = useSnackbar()
 
@@ -54,6 +55,12 @@
         snackbar.success(
           "La date de paiement de l'instruction de dossier a été modifié."
         )
+
+        useMatomo().trackEvent(
+          EventCategory.HistoryQuickEdit,
+          HistoryQuickEditEventAction.HelpRequestPaymentDate
+        )
+
         const item = props.item
         const helpRequest = item.fileInstruction.helpRequest
         if (helpRequest) {

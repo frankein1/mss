@@ -22,6 +22,7 @@
     editFileInstructionStatusSchema
   } from '~/server/schema'
   import { helpRequestFieldLabels } from '~/client/labels'
+  import { EventCategory, HistoryQuickEditEventAction } from '~/types/matomo'
 
   const snackbar = useSnackbar()
   const { socialSupportStatusOptions } = useSocialSupportStatus()
@@ -52,6 +53,12 @@
         const item = props.item
         const socialSupport = item.fileInstruction.socialSupport
         socialSupport.status = res.socialSupport.status
+
+        useMatomo().trackEvent(
+          EventCategory.HistoryQuickEdit,
+          HistoryQuickEditEventAction.FileInstructionStatus
+        )
+
         emit('updated', item)
       },
       onFailure: () => {
