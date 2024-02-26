@@ -50,6 +50,7 @@ s
 </template>
 
 <script lang="ts" setup>
+  import { z } from 'zod'
   import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
   import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
   import PartnerOrganizationRemoveAlert from '~/components/PartnerOrganization/PartnerOrganizationRemoveAlert.vue'
@@ -74,6 +75,17 @@ s
   const { data, refresh } = await trpcClient.partner.getAll.useQuery()
 
   const filter = ref('')
+
+  const filterSchema = z.object({
+    filter: z.string()
+  })
+
+  const { setFieldValue } = useForm<{ filter: string }>({
+    validationSchema: toTypedSchema(filterSchema),
+    initialValues: {
+      filter: ''
+    }
+  })
 
   function onSearch(param: string) {
     filter.value = param
@@ -184,11 +196,14 @@ s
   }
 
   async function showPartner(partner: PartnerOrganizationData) {
+    modal.close()
     if (partner.inactive) {
       await trpcClient.partner.makeActive.mutate({ id: partner.id })
       refresh()
     }
-    setFieldValue()
+    const filter = partner.siret || partner.name
+    setFieldValue('filter', filter)
+    onSearch(filter)
   }
 </script>
 

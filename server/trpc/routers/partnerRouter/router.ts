@@ -9,6 +9,9 @@ export const partnerRouter = router({
   update: protectedProcedure
     .input(routes.update.inputValidation)
     .mutation(routes.update.execute),
+  makeActive: protectedProcedure
+    .input(routes.makeActive.inputValidation)
+    .mutation(routes.makeActive.execute),
   getAll: protectedProcedure
     .input(routes.getAll.inputValidation)
     .query(routes.getAll.execute),
