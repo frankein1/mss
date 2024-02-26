@@ -11,7 +11,7 @@
           data-fr-opened="false"
           aria-controls="global-modal"
           type="button"
-          @click="emit('delete', partner.id)"
+          @click="emit('delete', partner)"
         >
           Supprimer l'organisme partenaire
         </button>
@@ -71,7 +71,7 @@
 
   const emit = defineEmits<{
     edit: [id: string]
-    delete: [id: string]
+    delete: [partner: PartnerOrganizationData]
   }>()
 
   const { application } = usePermissions()

@@ -24,7 +24,7 @@
   const emit = defineEmits<{
     finish: [partner: AddPartnerOrganizationInput]
     cancel: []
-    open: [partnerId: string]
+    open: [partner: PartnerOrganizationData]
   }>()
 
   const { handleSubmit } = useForm<AddPartnerOrganizationInput>({
@@ -44,6 +44,6 @@
   }
 
   function onOpen(partner: PartnerOrganizationData) {
-    emit('open', partner.id)
+    emit('open', partner)
   }
 </script>

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <div></div>
+    <div class="fr-m-2w">
+      Veuillez confirmer la suppression de l'organisme partenaire
+      {{ partner.name }}.
+    </div>
     <div class="button-bar">
       <button
         class="fr-btn fr-btn--secondary"
@@ -23,20 +26,22 @@
 </template>
 
 <script lang="ts" setup>
+  import { PartnerOrganizationData } from './types'
+
   const props = defineProps<{
-    id: string
+    partner: PartnerOrganizationData
   }>()
 
   const emit = defineEmits<{
-    onFinish: [id: string]
-    onCancel: []
+    finish: [id: string]
+    cancel: []
   }>()
 
   function onCancel() {
-    emit('onCancel')
+    emit('cancel')
   }
   function onFinish() {
-    emit('onFinish', props.id)
+    emit('finish', props.partner.id)
   }
 </script>
 

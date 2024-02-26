@@ -9,7 +9,7 @@ s
       </div>
       <div class="fr-m-0">
         Les personnes avec un rôle "responsable de structure" ou "travailleur
-        social" peuvent ajouter, modifier ou supprimer des partenaires
+        social" peuvent ajouter ou supprimer des partenaires
       </div>
       <div class="fr-py-2w partner-search-bar">
         <div class="partner-search-bar__input">
@@ -20,12 +20,6 @@ s
               @on-input="onSearch"
             />
           </form>
-          <button
-            id="openModalBtn"
-            data-fr-opened="false"
-            aria-controls="global-modal"
-            type="button"
-          ></button>
         </div>
         <template v-if="application.module.partner">
           <div class="partner-search-bar__action">
@@ -59,6 +53,7 @@ s
   import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
   import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
   import PartnerOrganizationRemoveAlert from '~/components/PartnerOrganization/PartnerOrganizationRemoveAlert.vue'
+  import { PartnerOrganizationData } from '~/components/PartnerOrganization/types'
   import {
     EditPartnerOrganizationInput,
     AddPartnerOrganizationInput
@@ -75,8 +70,6 @@ s
   const snackbar = useSnackbar()
 
   const isSubmitting = ref(false)
-
-  const openModalBtn = ref<HTMLButtonElement>()
 
   const { data, refresh } = await trpcClient.partner.getAll.useQuery()
 
@@ -106,18 +99,38 @@ s
       contentComponentProps: {
         isSubmitting: isSubmitting.value
       },
-      contentComponentEvents: { finish: finishCreation, cancel, open: onOpen }
+      contentComponentEvents: {
+        finish: finishCreation,
+        cancel,
+        open: showPartner
+      }
     })
   }
 
-  function openRemoveModal(id: string) {
+  function openEditModal(id: string) {
+    modal.open({
+      title: 'Modifier un organisme partenaire',
+      contentComponent: PartnerOrganizationEdition,
+      contentComponentProps: {
+        id,
+        isSubmitting: isSubmitting.value
+      },
+      contentComponentEvents: {
+        finish: finishEdition,
+        cancel,
+        open: showPartner
+      }
+    })
+  }
+
+  function openRemoveModal(partner: PartnerOrganizationData) {
     modal.open({
       title: 'Supprimer un organisme partenaire',
       contentComponent: PartnerOrganizationRemoveAlert,
       contentComponentProps: {
-        id
+        partner
       },
-      contentComponentEvents: { finish: finishDeletion, cancel, open: onOpen }
+      contentComponentEvents: { finish: finishDeletion, cancel }
     })
   }
 
@@ -136,28 +149,12 @@ s
     })
   }
 
-  function openEditModal(id: string) {
-    modal.open({
-      title: 'Modifier un organisme partenaire',
-      contentComponent: PartnerOrganizationEdition,
-      contentComponentProps: {
-        id,
-        isSubmitting: isSubmitting.value
-      },
-      contentComponentEvents: {
-        finish: finishEdition,
-        cancel,
-        open: onOpen
-      }
-    })
-  }
-
   function finishEdition(input: EditPartnerOrganizationInput) {
     useTrpcMutation({
       isSubmitting,
       mutation: () => trpcClient.partner.update.mutate(input),
       onSuccess: () => {
-        snackbar.success('Organisme partenaire mise à jour')
+        snackbar.success('Organisme partenaire mis à jour')
         modal.close()
         refresh()
       },
@@ -172,7 +169,7 @@ s
       isSubmitting,
       mutation: () => trpcClient.partner.create.mutate(input),
       onSuccess: () => {
-        snackbar.success('Organisme partenaire ajoutée')
+        snackbar.success('Organisme partenaire ajouté')
         modal.close()
         refresh()
       },
@@ -186,9 +183,12 @@ s
     modal.close()
   }
 
-  function onOpen(_partnerId: string) {
-    modal.close()
-    openModalBtn?.value?.click()
+  async function showPartner(partner: PartnerOrganizationData) {
+    if (partner.inactive) {
+      await trpcClient.partner.makeActive.mutate({ id: partner.id })
+      refresh()
+    }
+    setFieldValue()
   }
 </script>
 
@@ -210,6 +210,10 @@ s
 
   .partner-search-bar__action {
     margin-left: auto;
+  }
+
+  .partner__show-button {
+    visibility: hidden;
   }
 
   .partner-catalog {

@@ -26,7 +26,7 @@
   const emit = defineEmits<{
     finish: [partner: EditPartnerOrganizationInput]
     cancel: []
-    open: [partnerId: string]
+    open: [partner: PartnerOrganizationData]
   }>()
 
   const partner = await useTrpcClient().partner.getOne.query({ id: props.id })
@@ -59,6 +59,6 @@
   }
 
   function onOpen(partner: PartnerOrganizationData) {
-    emit('open', partner.id)
+    emit('open', partner)
   }
 </script>
