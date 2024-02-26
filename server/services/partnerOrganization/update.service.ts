@@ -13,7 +13,7 @@ export async function update({
     where: {
       id: input.id
     },
-    data: input,
+    data: { ...input, inactive: false },
     select: {
       id: true,
       name: true

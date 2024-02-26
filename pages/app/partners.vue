@@ -20,6 +20,12 @@ s
               @on-input="onSearch"
             />
           </form>
+          <button
+            id="openModalBtn"
+            data-fr-opened="false"
+            aria-controls="global-modal"
+            type="button"
+          ></button>
         </div>
         <template v-if="application.module.partner">
           <div class="partner-search-bar__action">
@@ -41,8 +47,8 @@ s
           :key="partner.id"
           :partner="partner"
           class="partner-catalog-item"
-          @edit="edit"
-          @delete="remove"
+          @edit="openEditModal"
+          @delete="openRemoveModal"
         />
       </div>
     </main>
@@ -50,7 +56,6 @@ s
 </template>
 
 <script lang="ts" setup>
-  import { z } from 'zod'
   import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
   import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
   import PartnerOrganizationRemoveAlert from '~/components/PartnerOrganization/PartnerOrganizationRemoveAlert.vue'
@@ -71,20 +76,11 @@ s
 
   const isSubmitting = ref(false)
 
+  const openModalBtn = ref<HTMLButtonElement>()
+
   const { data, refresh } = await trpcClient.partner.getAll.useQuery()
 
   const filter = ref('')
-
-  const filterSchema = z.object({
-    filter: z.string()
-  })
-
-  const { setFieldValue } = useForm<{ filter: string }>({
-    validationSchema: toTypedSchema(filterSchema),
-    initialValues: {
-      filter: ''
-    }
-  })
 
   function onSearch(param: string) {
     filter.value = param
@@ -110,22 +106,22 @@ s
       contentComponentProps: {
         isSubmitting: isSubmitting.value
       },
-      contentComponentEvents: { onFinish: onCreate, onCancel }
+      contentComponentEvents: { finish: finishCreation, cancel, open: onOpen }
     })
   }
 
-  function remove(id: string) {
+  function openRemoveModal(id: string) {
     modal.open({
       title: 'Supprimer un organisme partenaire',
       contentComponent: PartnerOrganizationRemoveAlert,
       contentComponentProps: {
         id
       },
-      contentComponentEvents: { onFinish: onRemove, onCancel }
+      contentComponentEvents: { finish: finishDeletion, cancel, open: onOpen }
     })
   }
 
-  function onRemove(id: string) {
+  function finishDeletion(id: string) {
     useTrpcMutation({
       isSubmitting,
       mutation: () => trpcClient.partner.remove.mutate({ id }),
@@ -140,7 +136,7 @@ s
     })
   }
 
-  function edit(id: string) {
+  function openEditModal(id: string) {
     modal.open({
       title: 'Modifier un organisme partenaire',
       contentComponent: PartnerOrganizationEdition,
@@ -148,11 +144,15 @@ s
         id,
         isSubmitting: isSubmitting.value
       },
-      contentComponentEvents: { onFinish: onEdit, onCancel }
+      contentComponentEvents: {
+        finish: finishEdition,
+        cancel,
+        open: onOpen
+      }
     })
   }
 
-  function onEdit(input: EditPartnerOrganizationInput) {
+  function finishEdition(input: EditPartnerOrganizationInput) {
     useTrpcMutation({
       isSubmitting,
       mutation: () => trpcClient.partner.update.mutate(input),
@@ -167,7 +167,7 @@ s
     })
   }
 
-  function onCreate(input: AddPartnerOrganizationInput) {
+  function finishCreation(input: AddPartnerOrganizationInput) {
     useTrpcMutation({
       isSubmitting,
       mutation: () => trpcClient.partner.create.mutate(input),
@@ -182,12 +182,13 @@ s
     })
   }
 
-  function onCancel(filter?: string) {
-    if (filter?.length) {
-      setFieldValue('filter', filter)
-      onSearch(filter)
-    }
+  function cancel() {
     modal.close()
+  }
+
+  function onOpen(_partnerId: string) {
+    modal.close()
+    openModalBtn?.value?.click()
   }
 </script>
 

@@ -23,7 +23,8 @@ export const handler = async ({
       zipcode: true,
       phone1: true,
       phone2: true,
-      workingHours: true
+      workingHours: true,
+      inactive: true
     }
   })
 }

@@ -6,11 +6,13 @@
     :show-phone-2="!!partner.phone2"
     @submit="onSubmit"
     @cancel="onCancel"
+    @open="onOpen"
   />
 </template>
 
 <script lang="ts" setup>
   import { toTypedSchema } from '@vee-validate/zod'
+  import { PartnerOrganizationData } from './types'
   import {
     EditPartnerOrganizationInput,
     editPartnerOrganizationSchema
@@ -22,8 +24,9 @@
   }>()
 
   const emit = defineEmits<{
-    onFinish: [partner: EditPartnerOrganizationInput]
-    onCancel: [filter?: string]
+    finish: [partner: EditPartnerOrganizationInput]
+    cancel: []
+    open: [partnerId: string]
   }>()
 
   const partner = await useTrpcClient().partner.getOne.query({ id: props.id })
@@ -47,11 +50,15 @@
   const { caughtErrors, onSubmit } = useCatchFormErrors(
     handleSubmit,
     values => {
-      emit('onFinish', values)
+      emit('finish', values)
     }
   )
 
-  function onCancel(filter?: string) {
-    emit('onCancel', filter)
+  function onCancel() {
+    emit('cancel')
+  }
+
+  function onOpen(partner: PartnerOrganizationData) {
+    emit('open', partner.id)
   }
 </script>

@@ -5,11 +5,13 @@
     :show-phone-2="false"
     @submit="onSubmit"
     @cancel="onCancel"
+    @open="onOpen"
   />
 </template>
 
 <script lang="ts" setup>
   import { toTypedSchema } from '@vee-validate/zod'
+  import { PartnerOrganizationData } from './types'
   import {
     AddPartnerOrganizationInput,
     addPartnerOrganizationSchema
@@ -20,8 +22,9 @@
   }>()
 
   const emit = defineEmits<{
-    onFinish: [partner: AddPartnerOrganizationInput]
-    onCancel: [filter?: string]
+    finish: [partner: AddPartnerOrganizationInput]
+    cancel: []
+    open: [partnerId: string]
   }>()
 
   const { handleSubmit } = useForm<AddPartnerOrganizationInput>({
@@ -32,11 +35,15 @@
   const { caughtErrors, onSubmit } = useCatchFormErrors(
     handleSubmit,
     values => {
-      emit('onFinish', values)
+      emit('finish', values)
     }
   )
 
-  function onCancel(filter?: string) {
-    emit('onCancel', filter)
+  function onCancel() {
+    emit('cancel')
+  }
+
+  function onOpen(partner: PartnerOrganizationData) {
+    emit('open', partner.id)
   }
 </script>
