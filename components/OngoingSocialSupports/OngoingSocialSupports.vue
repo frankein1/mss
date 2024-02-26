@@ -53,11 +53,11 @@
 <script setup lang="ts">
   import { SocialSupportStatus } from '@prisma/client'
   import { RoutePath } from '~/utils/routing'
-  import { socialSupportStatusLabels } from '~/client/options/socialSupport'
   import { AlertType } from '~/utils/constants/alert'
   import { HistoryTab } from '~/utils/constants/history'
 
   const filtersState = useFilters()
+  const { socialSupportStatusLabels } = useSocialSupportStatus()
 
   const props = defineProps<{
     isFileInstructions: boolean

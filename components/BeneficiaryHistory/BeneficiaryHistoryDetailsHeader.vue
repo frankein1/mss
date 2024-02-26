@@ -73,14 +73,12 @@
 <script setup lang="ts">
   import type { SocialSupportData } from './types'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
-  import {
-    socialSupportStatusLabels,
-    fileInstructionTypePictos
-  } from '~/client/options'
+  import { fileInstructionTypePictos } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
 
   const route = useRoute()
+  const { socialSupportStatusLabels } = useSocialSupportStatus()
 
   const props = withDefaults(
     defineProps<{
@@ -101,7 +99,7 @@
   const collapseBtn = ref<HTMLButtonElement | null>(null)
 
   const statusLabel = computed(
-    () => socialSupportStatusLabels[props.data.status]
+    () => socialSupportStatusLabels.value[props.data.status]
   )
 
   const redirectedLabel = computed(() => {

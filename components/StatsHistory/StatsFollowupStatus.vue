@@ -28,11 +28,11 @@
 
 <script lang="ts" setup>
   import { SocialSupportStatus } from '@prisma/client'
-  import { socialSupportStatusLabels } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()
+  const { socialSupportStatusLabels } = useSocialSupportStatus()
 
   const props = defineProps<{
     totalCount: number
@@ -49,7 +49,7 @@
     () =>
       statusCounts.value?.map(({ _count, status }) => ({
         key: status,
-        label: socialSupportStatusLabels[status],
+        label: socialSupportStatusLabels.value[status],
         color: getColor(status),
         count: _count
       })) || []

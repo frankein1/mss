@@ -33,12 +33,16 @@ const fileInstructionStatusLabels = {
   [SocialSupportStatus.Dismissed]: 'Classé sans suite'
 }
 
-export const ministrySocialSupportStatusLabels = {
-  ...fileInstructionStatusLabels,
-  [SocialSupportStatus.Accepted]: 'Traité'
-}
-
-export const socialSupportStatusLabels = {
+export const socialSupportStatusLabels: {
+  [key in SocialSupportStatus]: string
+} = {
   ...followupStatusLabels,
   ...fileInstructionStatusLabels
+}
+
+export const ministrySocialSupportStatusLabels: {
+  [key in SocialSupportStatus]: string
+} = {
+  ...socialSupportStatusLabels,
+  [SocialSupportStatus.Accepted]: 'Traité'
 }
