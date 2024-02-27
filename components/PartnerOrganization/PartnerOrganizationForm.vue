@@ -47,6 +47,8 @@
       </div>
     </template>
 
+    <hr class="fr-mt-3w" />
+
     <h3 class="fr-text--md formgroup__title fr-mb-2w">Coordonnées</h3>
     <VeeInput
       name="address"
@@ -71,14 +73,14 @@
         class="partner-form__phone1"
         name="phone1"
         :label="partnerOrganizationFieldLabels.phone1"
-        hint="Format attendu: 00 00 00 00 00"
+        type="tel"
       />
       <VeeInput
         v-if="showPhone2"
         class="partner-form__phone2"
         name="phone2"
         :label="partnerOrganizationFieldLabels.phone2"
-        hint="Format attendu: 00 00 00 00 00"
+        type="tel"
       />
       <div
         v-if="!showPhone2"

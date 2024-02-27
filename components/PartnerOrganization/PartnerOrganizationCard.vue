@@ -38,7 +38,7 @@
     </div>
     <div class="partner-card__action-bar">
       <button
-        class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-pencil-line"
+        class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
         data-fr-opened="false"
         aria-controls="global-modal"
         type="button"
@@ -48,7 +48,7 @@
       </button>
       <button
         v-if="application.module.partner"
-        class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-delete-line partner-card__action-bar__delete"
+        class="fr-btn fr-btn--tertiary-no-outline fr-icon-delete-line partner-card__action-bar__delete"
         data-fr-opened="false"
         aria-controls="global-modal"
         type="button"
@@ -79,7 +79,7 @@
   .partner-card {
     display: flex;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 0.25rem;
     padding: 1.5rem;
   }
 
@@ -89,7 +89,7 @@
   }
 
   .partner-card__action-bar__delete {
-    color: red
+    color: red;
   }
 
   .partner-card-content__info {
@@ -105,7 +105,4 @@
     color: var(--text-mention-grey);
     margin-bottom: 0;
   }
-
-  
 </style>
-
