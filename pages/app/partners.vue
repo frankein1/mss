@@ -7,9 +7,15 @@ s
       <div class="fr-h4 partner-subtitle fr-m-0">
         {{ `${data?.length} organismes partenaires de votre structure` }}
       </div>
-      <div class="fr-m-0">
+      <div class="fr-mb-1w">
         Les personnes avec un rôle "responsable de structure" ou "travailleur
         social" peuvent ajouter ou supprimer des partenaires
+      </div>
+      <div class="fr-m-0 fr-text--xs">
+        Ces informations étant partagées avec l'ensemble des utilisateurs, il
+        est fortement recommandé de ne stocker que les informations utiles à
+        l'activité de votre structure et informer les contacts qui se trouvent
+        dans cet annuaire.
       </div>
       <div class="fr-py-2w partner-search-bar">
         <div class="partner-search-bar__input">
@@ -137,7 +143,7 @@ s
 
   function openRemoveModal(partner: PartnerOrganizationData) {
     modal.open({
-      title: 'Supprimer un organisme partenaire',
+      title: `Etes-vous sûr·e de supprimer l’organisme partenaire ${partner.name}?`,
       contentComponent: PartnerOrganizationRemoveAlert,
       contentComponentProps: {
         partner
@@ -151,7 +157,7 @@ s
       isSubmitting,
       mutation: () => trpcClient.partner.remove.mutate({ id }),
       onSuccess: () => {
-        snackbar.success('Organisme partenaire supprimée')
+        snackbar.success('Organisme partenaire supprimé')
         modal.close()
         refresh()
       },
