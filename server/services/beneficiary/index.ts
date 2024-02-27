@@ -11,6 +11,7 @@ import {
   getBeneficiarySecurityTarget,
   BeneficiarySecurityTarget
 } from './permission.service'
+import { getSimilar } from './getSimilar.service'
 
 export const BeneficiaryService = {
   create,
@@ -22,7 +23,8 @@ export const BeneficiaryService = {
   updateTaxHousehold,
   exportBeneficiaries,
   search,
-  getBeneficiarySecurityTarget
+  getBeneficiarySecurityTarget,
+  getSimilar
 }
 
 export type { BeneficiarySecurityTarget }

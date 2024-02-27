@@ -1,5 +1,5 @@
 <template>
-  <BeneficiaryFormLeave />
+  <OpenModalHack />
   <form
     ref="form"
     novalidate
