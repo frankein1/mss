@@ -47,8 +47,7 @@ export const defaultLegallyNotRequiredFollowupTypeLabels: {
   [DefaultFollowupType.DossierFSL]: 'Dossier FSL',
   [DefaultFollowupType.AideChauffage]: 'Aide chauffage',
   [DefaultFollowupType.AideImpayesEnergieFluides]:
-    "Aide aux impayés d'énergie et fluides",
-  [DefaultFollowupType.Other]: 'Autre'
+    "Aide aux impayés d'énergie et fluides"
 }
 
 export const defaultLegallyNotRequiredFollowupTypeOptions = labelsToOptions(
