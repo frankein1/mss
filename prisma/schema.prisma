@@ -196,8 +196,6 @@ enum DefaultFollowupType {
   CAP
   // Inclusion numérique
   InclusionNumerique
-  // Autre
-  Other
   // Plan alerte et protection des personnes
   PlanAlerteEtUrgence
   // Soutien administratif
