@@ -1,5 +1,5 @@
 <template>
-  <BeneficiaryFormLeave />
+  <OpenModalHack />
   <form
     v-if="beneficiary"
     ref="form"

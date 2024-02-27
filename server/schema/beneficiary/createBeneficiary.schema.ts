@@ -13,7 +13,8 @@ export const createBeneficiarySchema =
     numeroPegase: true,
     street: true,
     zipcode: true,
-    city: true
+    city: true,
+    birthDate: true
   })
 
 export type CreateBeneficiaryInput = z.infer<typeof createBeneficiarySchema>
