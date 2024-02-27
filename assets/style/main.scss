@@ -222,3 +222,7 @@ select:focus:not(:focus-visible) {
 .fr-accordion__btn::after {
   --icon-size: 1.5rem;
 }
+
+.fr-artwork .fr-artwork-major {
+  --artwork-major-blue-france: var(--primary);
+}
