@@ -186,33 +186,33 @@
         })
       }
 
-    // FIXME: Delete once it is admitted that it is done
-    //   filters.push(
-    //     {
-    //       name: 'handlingDate',
-    //       label: helpRequestFieldLabels.handlingDate,
-    //       options: new Map([
-    //         ['', 'Non sélectionné'],
-    //         ['true', 'Oui'],
-    //         ['false', 'Non']
-    //       ]),
-    //       type: FilterType.SelectOne,
-    //       matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-    //       matomoEventAction: HelpRequestFilterEventAction.HandlingDate
-    //     },
-    //     {
-    //       name: 'externalStructure',
-    //       label: 'Instruction',
-    //       options: new Map([
-    //         ['', 'Toutes les instructions'],
-    //         ['false', 'Interne'],
-    //         ['true', 'Organisme externe']
-    //       ]),
-    //       type: FilterType.SelectOne,
-    //       matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-    //       matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
-    //     }
-    //   )
+      // FIXME: Delete once it is admitted that it is done
+      //   filters.push(
+      //     {
+      //       name: 'handlingDate',
+      //       label: helpRequestFieldLabels.handlingDate,
+      //       options: new Map([
+      //         ['', 'Non sélectionné'],
+      //         ['true', 'Oui'],
+      //         ['false', 'Non']
+      //       ]),
+      //       type: FilterType.SelectOne,
+      //       matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+      //       matomoEventAction: HelpRequestFilterEventAction.HandlingDate
+      //     },
+      //     {
+      //       name: 'externalStructure',
+      //       label: 'Instruction',
+      //       options: new Map([
+      //         ['', 'Toutes les instructions'],
+      //         ['false', 'Interne'],
+      //         ['true', 'Organisme externe']
+      //       ]),
+      //       type: FilterType.SelectOne,
+      //       matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+      //       matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
+      //     }
+      //   )
     }
 
     if (!isReferent) {

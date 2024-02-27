@@ -89,7 +89,7 @@
   }
 
   .partner-card__action-bar__delete {
-    color: red
+    color: red;
   }
 
   .partner-card-content__info {
@@ -105,7 +105,4 @@
     color: var(--text-mention-grey);
     margin-bottom: 0;
   }
-
-  
 </style>
-
