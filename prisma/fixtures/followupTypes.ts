@@ -58,7 +58,6 @@ export const fixturesFollowupTypes = [
     id: '143d99a5-423d-4095-a567-9b28e4eb00ba',
     name: 'Autre',
     legallyRequired: false,
-    default: 'Other',
     ownedByStructureId: fixtureStructure.id
   },
   {

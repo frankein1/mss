@@ -11,7 +11,8 @@ UPDATE followup_type
 SET "default" = NULL
 WHERE "default" IN (
     'AidesFinancieresNonRemboursables',
-    'AidesFinancieresRemboursables'
+    'AidesFinancieresRemboursables',
+    'Other'
   );
 
 CREATE TYPE "DefaultFollowupType_new" AS ENUM (
@@ -38,7 +39,6 @@ CREATE TYPE "DefaultFollowupType_new" AS ENUM (
   'AnimationsSeniors',
   'CAP',
   'InclusionNumerique',
-  'Other',
   'PlanAlerteEtUrgence',
   'SoutienAdministratif',
   'SoutienCreationActivite'
