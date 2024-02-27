@@ -36,6 +36,7 @@ export const BeneficiaryRepo = {
     groupBy: prismaClient.beneficiary.groupBy,
     create: prismaClient.beneficiary.create,
     update: prismaClient.beneficiary.update,
-    delete: prismaClient.beneficiary.delete
+    delete: prismaClient.beneficiary.delete,
+    findMany: prismaClient.beneficiary.findMany
   }
 }
