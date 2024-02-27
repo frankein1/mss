@@ -16,7 +16,18 @@ export const addPartnerOrganizationSchema = z.object({
   email: emailOrEmpty(),
   phone1: stringOrEmpty(phoneConstraint),
   phone2: stringOrEmpty(phoneConstraint),
-  workingHours: stringConstraint.nullish()
+  workingHours: stringConstraint.nullish(),
+  contacts: z
+    .array(
+      z.object({
+        id: stringConstraint.nullish(),
+        name: stringConstraint,
+        email: stringConstraint,
+        phone: stringConstraint.nullish(),
+        deleted: z.boolean()
+      })
+    )
+    .nullish()
 })
 
 export type AddPartnerOrganizationInput = z.infer<

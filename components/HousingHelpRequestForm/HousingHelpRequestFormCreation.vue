@@ -25,7 +25,7 @@
 
   const props = defineProps<{
     isSubmitting: boolean
-    partnerOrganizations: PartnerOrganization[]
+    partnerOrganizations: Pick<PartnerOrganization, 'id' | 'name'>[]
     beneficiaryId: string
   }>()
 

@@ -14,21 +14,21 @@
 
 <script lang="ts" setup>
   import {
-    FollowupType,
-    PartnerOrganization
+    FollowupType
     // FollowupIntervention,
     // FollowupSignalement
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { FollowupPageItem } from './types'
   import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
+  import { PartnerOrganizationIdName } from '~/types/partner'
 
   const { application } = usePermissions()
 
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: Array<FollowupType>
-    partnerOrganizations: Array<PartnerOrganization>
+    partnerOrganizations: Array<PartnerOrganizationIdName>
     data: FollowupPageItem
   }>()
 

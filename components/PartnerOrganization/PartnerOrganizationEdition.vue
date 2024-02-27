@@ -43,7 +43,14 @@
       address: partner.address,
       city: partner.city,
       zipcode: partner.zipcode,
-      workingHours: partner.workingHours
+      workingHours: partner.workingHours,
+      contacts: (partner.contacts || []).map(({ id, name, email, phone }) => ({
+        id,
+        name,
+        email,
+        phone,
+        deleted: false
+      }))
     }
   })
 

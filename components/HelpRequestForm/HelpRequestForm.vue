@@ -76,7 +76,6 @@
   import {
     FollowupType,
     SocialSupportStatus,
-    PartnerOrganization,
     FileInstructionType
   } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
@@ -86,12 +85,13 @@
   } from '~/client/labels'
   import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
   import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
+  import { PartnerOrganizationIdName } from '~/types/partner'
 
   const props = withDefaults(
     defineProps<{
       isSubmitting: boolean
       followupTypes?: FollowupType[]
-      partnerOrganizations: PartnerOrganization[]
+      partnerOrganizations: PartnerOrganizationIdName[]
       beneficiaryId: string
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>

@@ -36,6 +36,20 @@
       <div>Horaires :</div>
       {{ partner.workingHours }}
     </div>
+    <div
+      v-for="(contact, idx) in partner.contacts"
+      :key="contact.id"
+      :index="idx"
+      class="fr-pt-1w"
+    >
+      <hr
+        class="fr-m-0 fr-p-0 fr-pt-1w partner-card-content__contact__separator"
+      />
+      <div class="fr-text--md fr-text--bold fr-m-0">{{ contact.name }}</div>
+      <div class="fr-text--sm fr-m-0">{{ contact.phone }}</div>
+      <div class="fr-text--sm fr-m-0">{{ contact.email }}</div>
+    </div>
+
     <div class="partner-card__action-bar">
       <button
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-pencil-line"
@@ -104,5 +118,9 @@
   .partner-card-content__working-hours {
     color: var(--text-mention-grey);
     margin-bottom: 0;
+  }
+
+  .partner-card-content__contact__separator {
+    width: 3rem;
   }
 </style>

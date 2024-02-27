@@ -12,22 +12,19 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    FollowupType,
-    PartnerOrganization,
-    FileInstructionType
-  } from '@prisma/client'
+  import { FollowupType, FileInstructionType } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { HelpRequestPageItem } from './types'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { PartnerOrganizationIdName } from '~/types/partner'
 
   const { application } = usePermissions()
 
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: FollowupType[]
-    partnerOrganizations: PartnerOrganization[]
+    partnerOrganizations: PartnerOrganizationIdName[]
     data: HelpRequestPageItem
   }>()
 

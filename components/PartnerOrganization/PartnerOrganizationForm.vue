@@ -16,94 +16,132 @@
     <h3 class="fr-text--md formgroup__title fr-mb-2w">
       Informations principales
     </h3>
-    <VeeInput
-      name="name"
-      :label="partnerOrganizationFieldLabels.name"
-      required
-    />
-    <VeeInput
-      name="siret"
-      :label="partnerOrganizationFieldLabels.siret"
-      hint="Format attendu : 01234567890123"
-      required
-      @change-value="onSiretChange"
-    />
-    <template v-if="partnerWithSameSiret">
-      <div class="fr-alert fr-alert--error fr-mb-2w">
-        <h3 class="fr-alert__title">
-          {{
-            `Un organisme ${partnerWithSameSiret.inactive ? 'inactif' : ''} existe déjà avec ce numéro de SIRET`
-          }}
-        </h3>
-        <p>
-          <a
-            href="#"
-            target="_self"
-            @click="goToPartnerWithSameSiret"
-          >
-            {{ `${partnerWithSameSiret.name} ${partnerWithSameSiret.siret}` }}
-          </a>
-        </p>
+
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12">
+        <VeeInput
+          name="name"
+          :label="partnerOrganizationFieldLabels.name"
+          required
+        />
       </div>
-    </template>
+      <div class="fr-col-12">
+        <VeeInput
+          name="siret"
+          :label="partnerOrganizationFieldLabels.siret"
+          hint="Format attendu : 01234567890123"
+          required
+          @change-value="onSiretChange"
+        />
+        <template v-if="partnerWithSameSiret">
+          <div class="fr-alert fr-alert--error fr-mb-2w">
+            <h3 class="fr-alert__title">
+              {{
+                `Un organisme ${partnerWithSameSiret.inactive ? 'inactif' : ''} existe déjà avec ce numéro de SIRET`
+              }}
+            </h3>
+            <p>
+              <a
+                href="#"
+                target="_self"
+                @click="goToPartnerWithSameSiret"
+              >
+                {{
+                  `${partnerWithSameSiret.name} ${partnerWithSameSiret.siret}`
+                }}
+              </a>
+            </p>
+          </div>
+        </template>
+      </div>
+    </div>
 
     <hr class="fr-mt-3w" />
 
-    <h3 class="fr-text--md formgroup__title fr-mb-2w">Coordonnées</h3>
-    <VeeInput
-      name="address"
-      :label="partnerOrganizationFieldLabels.address"
-      hint="Numéro et voie"
-    />
-    <div class="partner-form__field">
-      <VeeInput
-        class="partner-form__zipcode"
-        name="zipcode"
-        :label="partnerOrganizationFieldLabels.zipcode"
-      />
-      <VeeInput
-        class="partner-form__city"
-        name="city"
-        :label="partnerOrganizationFieldLabels.city"
-      />
-    </div>
+    <h3 class="fr-text--md formgroup__title">Coordonnées</h3>
 
-    <div class="partner-form__field">
-      <VeeInput
-        class="partner-form__phone1"
-        name="phone1"
-        :label="partnerOrganizationFieldLabels.phone1"
-        type="tel"
-      />
-      <VeeInput
-        v-if="showPhone2"
-        class="partner-form__phone2"
-        name="phone2"
-        :label="partnerOrganizationFieldLabels.phone2"
-        type="tel"
-      />
+    <div class="fr-grid-row fr-grid-row--gutters">
+      <div class="fr-col-12">
+        <VeeInput
+          name="address"
+          :label="partnerOrganizationFieldLabels.address"
+          hint="Numéro et voie"
+        />
+      </div>
+
+      <div class="fr-col-4">
+        <VeeInput
+          name="zipcode"
+          :label="partnerOrganizationFieldLabels.zipcode"
+        />
+      </div>
+      <div class="fr-col-8">
+        <VeeInput
+          name="city"
+          :label="partnerOrganizationFieldLabels.city"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          name="phone1"
+          :label="partnerOrganizationFieldLabels.phone1"
+          type="tel"
+        />
+      </div>
       <div
-        v-if="!showPhone2"
-        class="partner-form__open-phone fr-mb-2w"
+        v-if="showPhone2"
+        class="fr-col-6"
+      >
+        <VeeInput
+          name="phone2"
+          :label="partnerOrganizationFieldLabels.phone2"
+          type="tel"
+        />
+      </div>
+      <div
+        v-else
+        class="fr-col-6 partner-form__open-phone"
       >
         <button
-          class="fr-link fr-icon-file-add-line fr-text--xs fr-ml-2w fr-mb-2w"
+          class="fr-link fr-icon-file-add-line fr-text--xs fr-mb-1w"
           @click="dislpayPhone2"
         >
           + Ajouter un téléphone
         </button>
       </div>
+
+      <div class="fr-col-12">
+        <VeeInput
+          name="email"
+          :label="partnerOrganizationFieldLabels.email"
+          hint="Format attendu : nom@domaine.fr"
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeTextarea
+          name="workingHours"
+          :label="partnerOrganizationFieldLabels.workingHours"
+        />
+      </div>
     </div>
 
-    <VeeInput
-      name="email"
-      :label="partnerOrganizationFieldLabels.email"
-      hint="Format attendu : nom@domaine.fr"
+    <hr class="fr-mt-3w" />
+
+    <PartnerOrganizationContactForm
+      v-for="(field, idx) in fields"
+      :key="field.key"
+      :index="idx"
     />
-    <VeeTextarea
-      name="workingHours"
-      :label="partnerOrganizationFieldLabels.workingHours"
-    />
+
+    <button
+      class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-add-circle-line"
+      type="button"
+      @click="push({ deleted: false })"
+    >
+      Ajouter une personne
+    </button>
+
     <div class="partner-form__button-bar">
       <button
         class="fr-btn fr-btn--secondary fr-mt-3w"
@@ -151,10 +189,10 @@
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
-
   const showPhone2 = ref(props.showPhone2)
-
   const partnerWithSameSiret = ref<PartnerOrganizationData>()
+
+  const { fields, push } = useFieldArray('contacts')
 
   function dislpayPhone2() {
     showPhone2.value = true
@@ -194,30 +232,10 @@
     color: var(--text-title-grey);
   }
 
-  .partner-form__field {
-    display: flex;
-    gap: 0.25rem;
-  }
-
-  .partner-form__zipcode {
-    flex: 0 0 calc(33.333% - 0.75rem);
-  }
-
-  .partner-form__city {
-    flex: 1 0 0;
-  }
-
-  .partner-form__phone1 {
-    flex: 0 0 calc(50% - 0.75rem);
-  }
-
-  .partner-form__phone2 {
-    flex: 1 0 0;
-  }
-
   .partner-form__open-phone {
     display: flex;
     flex-direction: column-reverse;
+    align-items: start;
   }
 
   .partner-form__button-bar {

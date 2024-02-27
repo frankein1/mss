@@ -295,11 +295,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    FollowupType,
-    PartnerOrganization,
-    FollowupMedium
-  } from '@prisma/client'
+  import { FollowupType, FollowupMedium } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
   import {
     currentMinisterOptions,
@@ -313,12 +309,13 @@
   import { RoutePath } from '~/utils/routing'
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
+  import { PartnerOrganizationIdName } from '~/types/partner'
 
   const props = withDefaults(
     defineProps<{
       isSubmitting: boolean
       followupTypes: Array<FollowupType>
-      partnerOrganizations: Array<PartnerOrganization>
+      partnerOrganizations: Array<PartnerOrganizationIdName>
       beneficiaryId: string
       medium: FollowupMedium
       isRedirected: boolean

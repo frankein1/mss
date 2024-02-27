@@ -14,6 +14,9 @@ export const handler = async ({
       structureId: structure.id,
       inactive: false
     },
+    include: {
+      contacts: true
+    },
     orderBy: [{ name: 'asc' }]
   })
 }

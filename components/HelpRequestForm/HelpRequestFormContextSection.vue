@@ -171,7 +171,7 @@
 </template>
 
 <script setup lang="ts">
-  import { FollowupType, PartnerOrganization } from '@prisma/client'
+  import { FollowupType } from '@prisma/client'
   import {
     helpRequestFieldLabels,
     housingHelpRequestFieldLabels
@@ -184,12 +184,13 @@
   } from '~/client/options'
   import { RoutePath } from '~/utils/routing'
   import { CreateHousingHelpRequestInput } from '~/server/schema'
+  import { PartnerOrganizationIdName } from '~/types/partner'
 
   const { application } = usePermissions()
 
   const props = defineProps<{
     followupTypes: FollowupType[]
-    partnerOrganizations: PartnerOrganization[]
+    partnerOrganizations: PartnerOrganizationIdName[]
     isExternalSupport: boolean
     hasSetExternalStructure: boolean
     isHousingSupport: boolean

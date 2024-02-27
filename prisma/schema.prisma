@@ -1471,12 +1471,26 @@ model PartnerOrganization {
   structure   Structure @relation(fields: [structureId], references: [id])
   structureId String    @map("structure_id") @db.Uuid
 
-  followups                              Followup[]        @relation("followup_prescribing_organization")
-  fileInstructionInstructorOrganizations FileInstruction[] @relation("file_instruction_instructor_organization")
-  helpRequests                           HelpRequest[]     @relation("help_request_prescribing_organization")
+  contacts                               PartnerOrganizationContact[]
+  followups                              Followup[]                   @relation("followup_prescribing_organization")
+  fileInstructionInstructorOrganizations FileInstruction[]            @relation("file_instruction_instructor_organization")
+  helpRequests                           HelpRequest[]                @relation("help_request_prescribing_organization")
 
   @@unique([structureId, siret])
   @@map("partner_organization")
+}
+
+model PartnerOrganizationContact {
+  id String @id @default(uuid()) @db.Uuid
+
+  name  String  @map("name")
+  phone String? @map("phone")
+  email String  @map("email")
+
+  partner   PartnerOrganization @relation(fields: [partnerId], references: [id])
+  partnerId String              @map("partner_id") @db.Uuid
+
+  @@map("partner_organization_contact")
 }
 
 enum NotificationType {

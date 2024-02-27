@@ -11,11 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    AskedHousing,
-    PartnerOrganization,
-    FileInstructionType
-  } from '@prisma/client'
+  import { AskedHousing, FileInstructionType } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
     EditHousingHelpRequestInput,
@@ -23,12 +19,13 @@
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { GetHousingHelpRequestOutput } from '~/server/trpc/routers'
+  import { PartnerOrganizationIdName } from '~/types/partner'
 
   const { application } = usePermissions()
 
   const props = defineProps<{
     isSubmitting: boolean
-    partnerOrganizations: PartnerOrganization[]
+    partnerOrganizations: PartnerOrganizationIdName[]
     data: GetHousingHelpRequestOutput
   }>()
 

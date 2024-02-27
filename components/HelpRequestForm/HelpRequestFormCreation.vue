@@ -14,7 +14,6 @@
   import {
     FollowupType,
     SocialSupportStatus,
-    PartnerOrganization,
     FileInstructionType
   } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
@@ -22,13 +21,14 @@
     CreateHelpRequestInput,
     createHelpRequestSchema
   } from '~/server/schema'
+  import { PartnerOrganizationIdName } from '~/types/partner'
 
   const { application } = usePermissions()
 
   const props = defineProps<{
     isSubmitting: boolean
     followupTypes: FollowupType[]
-    partnerOrganizations: PartnerOrganization[]
+    partnerOrganizations: PartnerOrganizationIdName[]
     beneficiaryId: string
     isFinancial: boolean
   }>()
