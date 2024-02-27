@@ -7,33 +7,38 @@ export const fixturesFollowupTypes = [
     name: 'Inclusion numérique',
     legallyRequired: false,
     default: 'InclusionNumerique',
-    ownedByStructureId: fixtureStructure.id
+    ownedByStructureId: fixtureStructure.id,
+    used: true
   },
   {
     id: '6a493607-7a32-43d1-a529-5b15ba34839f',
     name: 'Domiciliation',
     legallyRequired: true,
     default: 'Domiciliation',
-    ownedByStructureId: fixtureStructure.id
+    ownedByStructureId: fixtureStructure.id,
+    used: true
   },
   {
     id: '1975ce96-dc1e-4af1-a3e7-119652569908',
     name: 'Aide sociale',
     legallyRequired: true,
     default: 'AideSociale',
-    ownedByStructureId: fixtureStructure.id
+    ownedByStructureId: fixtureStructure.id,
+    used: true
   },
   {
     id: 'afb7eded-3693-4dd9-97a5-d7c57d8118d4',
     name: 'Aides financières non remboursables',
     legallyRequired: false,
-    ownedByStructureId: fixtureStructure.id
+    ownedByStructureId: fixtureStructure.id,
+    used: true
   },
   {
     id: '3d9c5e6d-4b10-4358-8bad-3eb1b1922c51',
     name: 'Aides financières remboursables',
     legallyRequired: false,
-    ownedByStructureId: fixtureStructure.id
+    ownedByStructureId: fixtureStructure.id,
+    used: true
   },
   {
     id: 'a097282c-cf97-48f6-9932-832bb5b913b4',
