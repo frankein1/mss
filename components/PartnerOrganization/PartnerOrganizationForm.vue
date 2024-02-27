@@ -235,7 +235,7 @@
   .partner-form__open-phone {
     display: flex;
     flex-direction: column-reverse;
-    align-items: start;
+    align-items: flex-start;
   }
 
   .partner-form__button-bar {
