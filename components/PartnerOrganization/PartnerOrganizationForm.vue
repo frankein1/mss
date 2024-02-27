@@ -47,6 +47,8 @@
       </div>
     </template>
 
+    <hr class="fr-mt-3w" />
+
     <h3 class="fr-text--md formgroup__title fr-mb-2w">Coordonnées</h3>
     <VeeInput
       name="address"
