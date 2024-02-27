@@ -244,9 +244,8 @@ s
   }
 
   .partner-catalog-item {
-    margin: 0 0 1.5rem;
+    margin: 0 0 1rem;
     display: grid;
-    grid-template-rows: 1fr auto;
     break-inside: avoid;
     border: 1px solid;
     border-color: var(--border-default-grey);
