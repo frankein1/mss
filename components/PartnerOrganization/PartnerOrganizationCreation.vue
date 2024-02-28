@@ -5,7 +5,7 @@
     :show-phone-2="false"
     @submit="onSubmit"
     @cancel="onCancel"
-    @open="onOpen"
+    @restore="onRestore"
   />
 </template>
 
@@ -24,7 +24,7 @@
   const emit = defineEmits<{
     finish: [partner: AddPartnerOrganizationInput]
     cancel: []
-    open: [partner: PartnerOrganizationData]
+    restore: [partner: PartnerOrganizationData]
   }>()
 
   const { handleSubmit } = useForm<AddPartnerOrganizationInput>({
@@ -43,7 +43,7 @@
     emit('cancel')
   }
 
-  function onOpen(partner: PartnerOrganizationData) {
-    emit('open', partner)
+  function onRestore(partner: PartnerOrganizationData) {
+    emit('restore', partner)
   }
 </script>

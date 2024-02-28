@@ -6,7 +6,7 @@
     :show-phone-2="!!partner.phone2"
     @submit="onSubmit"
     @cancel="onCancel"
-    @open="onOpen"
+    @restore="onRestore"
   />
 </template>
 
@@ -26,7 +26,7 @@
   const emit = defineEmits<{
     finish: [partner: EditPartnerOrganizationInput]
     cancel: []
-    open: [partner: PartnerOrganizationData]
+    restore: [partner: PartnerOrganizationData]
   }>()
 
   const partner = await useTrpcClient().partner.getOne.query({ id: props.id })
@@ -65,7 +65,7 @@
     emit('cancel')
   }
 
-  function onOpen(partner: PartnerOrganizationData) {
-    emit('open', partner)
+  function onRestore(partner: PartnerOrganizationData) {
+    emit('restore', partner)
   }
 </script>

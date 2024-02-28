@@ -86,7 +86,7 @@ s
     filter: z.string()
   })
 
-  const { setFieldValue } = useForm<{ filter: string }>({
+  useForm<{ filter: string }>({
     validationSchema: toTypedSchema(filterSchema),
     initialValues: {
       filter: ''
@@ -120,7 +120,7 @@ s
       contentComponentEvents: {
         finish: finishCreation,
         cancel,
-        open: showPartner
+        restore: restorePartner
       }
     })
   }
@@ -136,7 +136,7 @@ s
       contentComponentEvents: {
         finish: finishEdition,
         cancel,
-        open: showPartner
+        restore: restorePartner
       }
     })
   }
@@ -201,15 +201,10 @@ s
     modal.close()
   }
 
-  async function showPartner(partner: PartnerOrganizationData) {
+  async function restorePartner(partner: PartnerOrganizationData) {
     modal.close()
-    if (partner.inactive) {
-      await trpcClient.partner.makeActive.mutate({ id: partner.id })
-      refresh()
-    }
-    const filter = partner.siret || partner.name
-    setFieldValue('filter', filter)
-    onSearch(filter)
+    await trpcClient.partner.makeActive.mutate({ id: partner.id })
+    refresh()
   }
 </script>
 
