@@ -1,4 +1,6 @@
 import {
+  fileInstructionStatusLabels,
+  ministryFileInstructionStatusLabels,
   socialSupportStatusLabels,
   ministrySocialSupportStatusLabels
 } from '~/client/options'
@@ -8,15 +10,29 @@ import { labelsToOptions } from '~/utils/options'
 export function useSocialSupportStatus() {
   const { application } = usePermissions()
 
-  const statusLabels = computed(() =>
+  const _fileInstructionStatusLabels = computed(() =>
+    application.value.module.ministere
+      ? ministryFileInstructionStatusLabels
+      : fileInstructionStatusLabels
+  )
+
+  const _fileInstructionStatusOptions = computed(() =>
+    labelsToOptions(_fileInstructionStatusLabels.value)
+  )
+
+  const _socialSupportStatusLabels = computed(() =>
     application.value.module.ministere
       ? ministrySocialSupportStatusLabels
       : socialSupportStatusLabels
   )
-  const statusOptions = computed(() => labelsToOptions(statusLabels.value))
+  const _socialSupportStatusOptions = computed(() =>
+    labelsToOptions(_socialSupportStatusLabels.value)
+  )
 
   return {
-    socialSupportStatusLabels: statusLabels,
-    socialSupportStatusOptions: statusOptions
+    fileInstructionStatusLabels: _fileInstructionStatusLabels,
+    fileInstructionStatusOptions: _fileInstructionStatusOptions,
+    socialSupportStatusLabels: _socialSupportStatusLabels,
+    socialSupportStatusOptions: _socialSupportStatusOptions
   }
 }

@@ -7,7 +7,7 @@
     <VeeSelect
       name="status"
       :label="helpRequestFieldLabels.status"
-      :options="socialSupportStatusOptions"
+      :options="fileInstructionStatusOptions"
       required
       no-label
       labelled-by="status-col"
@@ -25,7 +25,7 @@
   import { EventCategory, HistoryQuickEditEventAction } from '~/types/matomo'
 
   const snackbar = useSnackbar()
-  const { socialSupportStatusOptions } = useSocialSupportStatus()
+  const { fileInstructionStatusOptions } = useSocialSupportStatus()
 
   const props = defineProps<{
     item: FileInstructionPageItem
