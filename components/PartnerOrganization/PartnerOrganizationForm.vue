@@ -31,7 +31,7 @@
           :label="partnerOrganizationFieldLabels.siret"
           hint="Format attendu : 01234567890123"
           required
-          @change-value="onSiretChange"
+          @change-input="onSiretChange"
         />
         <template v-if="partnerWithSameSiret">
           <div class="fr-alert fr-alert--error fr-mb-2w">
@@ -41,124 +41,130 @@
               }}
             </h3>
             <p>
+              {{
+                `${partnerWithSameSiret.name} - ${partnerWithSameSiret.siret}`
+              }}
+            </p>
+            <p v-if="partnerWithSameSiret.inactive">
               <a
                 href="#"
                 target="_self"
-                @click="goToPartnerWithSameSiret"
+                @click="restorePartner"
               >
-                {{
-                  `${partnerWithSameSiret.name} ${partnerWithSameSiret.siret}`
-                }}
-              </a>
+                Cliquez ici pour le restaurer </a
+              >ou modifier le SIRET.
             </p>
           </div>
         </template>
       </div>
     </div>
 
-    <hr class="fr-mt-3w" />
+    <template v-if="!partnerWithSameSiret">
+      <hr class="fr-mt-3w" />
 
-    <h3 class="fr-text--md formgroup__title">Coordonnées</h3>
+      <h3 class="fr-text--md formgroup__title">Coordonnées</h3>
 
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12">
-        <VeeInput
-          name="address"
-          :label="partnerOrganizationFieldLabels.address"
-          hint="Numéro et voie"
-        />
-      </div>
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-12">
+          <VeeInput
+            name="address"
+            :label="partnerOrganizationFieldLabels.address"
+            hint="Numéro et voie"
+          />
+        </div>
 
-      <div class="fr-col-4">
-        <VeeInput
-          name="zipcode"
-          :label="partnerOrganizationFieldLabels.zipcode"
-        />
-      </div>
-      <div class="fr-col-8">
-        <VeeInput
-          name="city"
-          :label="partnerOrganizationFieldLabels.city"
-        />
-      </div>
+        <div class="fr-col-4">
+          <VeeInput
+            name="zipcode"
+            :label="partnerOrganizationFieldLabels.zipcode"
+          />
+        </div>
+        <div class="fr-col-8">
+          <VeeInput
+            name="city"
+            :label="partnerOrganizationFieldLabels.city"
+          />
+        </div>
 
-      <div class="fr-col-6">
-        <VeeInput
-          name="phone1"
-          :label="partnerOrganizationFieldLabels.phone1"
-          type="tel"
-        />
-      </div>
-      <div
-        v-if="showPhone2"
-        class="fr-col-6"
-      >
-        <VeeInput
-          name="phone2"
-          :label="partnerOrganizationFieldLabels.phone2"
-          type="tel"
-        />
-      </div>
-      <div
-        v-else
-        class="fr-col-6 partner-form__open-phone"
-      >
-        <button
-          class="fr-link fr-icon-file-add-line fr-text--xs fr-mb-1w"
-          @click="dislpayPhone2"
+        <div class="fr-col-6">
+          <VeeInput
+            name="phone1"
+            :label="partnerOrganizationFieldLabels.phone1"
+            type="tel"
+          />
+        </div>
+        <div
+          v-if="showPhone2"
+          class="fr-col-6"
         >
-          + Ajouter un téléphone
+          <VeeInput
+            name="phone2"
+            :label="partnerOrganizationFieldLabels.phone2"
+            type="tel"
+          />
+        </div>
+        <div
+          v-else
+          class="fr-col-6 partner-form__open-phone"
+        >
+          <button
+            class="fr-link fr-icon-file-add-line fr-text--xs fr-mb-1w"
+            @click="dislpayPhone2"
+          >
+            + Ajouter un téléphone
+          </button>
+        </div>
+
+        <div class="fr-col-12">
+          <VeeInput
+            name="email"
+            :label="partnerOrganizationFieldLabels.email"
+            hint="Format attendu : nom@domaine.fr"
+          />
+        </div>
+        <div class="fr-col-12">
+          <VeeTextarea
+            name="workingHours"
+            :label="partnerOrganizationFieldLabels.workingHours"
+          />
+        </div>
+      </div>
+
+      <hr class="fr-mt-3w" />
+
+      <PartnerOrganizationContactForm
+        v-for="(field, idx) in fields"
+        :key="field.key"
+        :index="idx"
+      />
+
+      <button
+        class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-add-circle-line"
+        type="button"
+        @click="push({ deleted: false })"
+      >
+        Ajouter une personne
+      </button>
+    </template>
+    <template v-if="!partnerWithSameSiret">
+      <div class="partner-form__button-bar">
+        <button
+          class="fr-btn fr-btn--secondary fr-mt-3w"
+          title="Annuler"
+          @click="onCancel"
+        >
+          Annuler
+        </button>
+        <button
+          class="fr-btn fr-mt-3w"
+          title="Valider"
+          type="submit"
+          :submitting="isSubmitting"
+        >
+          Valider
         </button>
       </div>
-
-      <div class="fr-col-12">
-        <VeeInput
-          name="email"
-          :label="partnerOrganizationFieldLabels.email"
-          hint="Format attendu : nom@domaine.fr"
-        />
-      </div>
-      <div class="fr-col-12">
-        <VeeTextarea
-          name="workingHours"
-          :label="partnerOrganizationFieldLabels.workingHours"
-        />
-      </div>
-    </div>
-
-    <hr class="fr-mt-3w" />
-
-    <PartnerOrganizationContactForm
-      v-for="(field, idx) in fields"
-      :key="field.key"
-      :index="idx"
-    />
-
-    <button
-      class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-add-circle-line"
-      type="button"
-      @click="push({ deleted: false })"
-    >
-      Ajouter une personne
-    </button>
-
-    <div class="partner-form__button-bar">
-      <button
-        class="fr-btn fr-btn--secondary fr-mt-3w"
-        title="Annuler"
-        @click="onCancel"
-      >
-        Annuler
-      </button>
-      <button
-        class="fr-btn fr-mt-3w"
-        title="Valider"
-        type="submit"
-        :submitting="isSubmitting"
-      >
-        Valider
-      </button>
-    </div>
+    </template>
   </form>
 </template>
 
@@ -168,7 +174,8 @@
   import { partnerOrganizationFieldLabels } from '~/client/labels'
   import {
     AddPartnerOrganizationInput,
-    EditPartnerOrganizationInput
+    EditPartnerOrganizationInput,
+    siretSchema
   } from '~/server/schema'
 
   const props = defineProps<{
@@ -185,7 +192,7 @@
   const emit = defineEmits<{
     submit: [payload: Event]
     cancel: []
-    open: [partner: PartnerOrganizationData]
+    restore: [partner: PartnerOrganizationData]
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
@@ -198,14 +205,21 @@
     showPhone2.value = true
   }
 
-  async function onSiretChange(siret: string) {
-    const findBySiret = await trpcClient.partner.findBySiret.query({ siret })
-    if (!findBySiret) {
-      partnerWithSameSiret.value = undefined
-    } else if (props.partnerId && findBySiret.id === props.partnerId) {
-      partnerWithSameSiret.value = undefined
+  async function onSiretChange(input: string) {
+    const { success } = siretSchema.safeParse({ siret: input })
+    if (success) {
+      const findBySiret = await trpcClient.partner.findBySiret.query({
+        siret: input
+      })
+      if (!findBySiret) {
+        partnerWithSameSiret.value = undefined
+      } else if (props.partnerId && findBySiret.id === props.partnerId) {
+        partnerWithSameSiret.value = undefined
+      } else {
+        partnerWithSameSiret.value = findBySiret
+      }
     } else {
-      partnerWithSameSiret.value = findBySiret
+      partnerWithSameSiret.value = undefined
     }
   }
 
@@ -215,10 +229,10 @@
     partnerOrganizationFieldLabels
   )
 
-  function goToPartnerWithSameSiret() {
+  function restorePartner() {
     const sameSiret = partnerWithSameSiret.value
     if (sameSiret) {
-      emit('open', sameSiret)
+      emit('restore', sameSiret)
     }
   }
 

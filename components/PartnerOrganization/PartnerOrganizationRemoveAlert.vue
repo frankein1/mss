@@ -52,6 +52,7 @@
     flex-direction: column;
     gap: 1rem;
   }
+
   .button-bar {
     display: flex;
     flex-direction: row-reverse;
