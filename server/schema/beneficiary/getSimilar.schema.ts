@@ -3,7 +3,7 @@ import { dateOrEmpty } from '../helpers.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
 
-export const getSimilarBeneficiariesSchema = z
+export const getSimilarBeneficiarySchema = z
   .object({
     usualName: beneficiaryLastNameSchema,
     firstName: beneficiaryFirstNameOrEmptySchema,
@@ -14,6 +14,6 @@ export const getSimilarBeneficiariesSchema = z
       usualName && (firstName || birthDate)
   )
 
-export type GetSimilarBeneficiariesInput = z.infer<
-  typeof getSimilarBeneficiariesSchema
+export type GetSimilarBeneficiaryInput = z.infer<
+  typeof getSimilarBeneficiarySchema
 >

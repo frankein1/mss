@@ -16,7 +16,7 @@ import {
   saveDraftMutation,
   updateTaxHouseholdMutation,
   getBeneficiaryTaxHouseholdsQuery,
-  getSimilarBeneficiariesQuery
+  getSimilarBeneficiaryQuery
 } from '~/server/route/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
 
@@ -46,8 +46,8 @@ export const beneficiaryRouter = router({
     .input(getBeneficiaryTaxHouseholdsQuery.inputValidation)
     .query(getBeneficiaryTaxHouseholdsQuery.execute),
   getSimilar: protectedProcedure
-    .input(getSimilarBeneficiariesQuery.inputValidation)
-    .query(getSimilarBeneficiariesQuery.execute),
+    .input(getSimilarBeneficiaryQuery.inputValidation)
+    .query(getSimilarBeneficiaryQuery.execute),
 
   delete: protectedProcedure
     .input(deleteBeneficiaryMutation.inputValidation)
