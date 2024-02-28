@@ -7,7 +7,7 @@
     <VeeSelect
       name="status"
       :label="helpRequestFieldLabels.status"
-      :options="socialSupportStatusOptions"
+      :options="fileInstructionStatusOptions"
       required
     />
   </div>
@@ -142,7 +142,7 @@
   } from '~/client/options'
   import { withEmptyValue } from '~/utils/options'
 
-  const { socialSupportStatusOptions } = useSocialSupportStatus()
+  const { fileInstructionStatusOptions } = useSocialSupportStatus()
 
   const props = defineProps<{
     status: SocialSupportStatus

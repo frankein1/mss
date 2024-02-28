@@ -21,7 +21,7 @@ const typeSuiviLabels: FieldLabels<typeof TypeSuivi> = {
 
 export const typeSuiviOptions = labelsToOptions(typeSuiviLabels)
 
-const fileInstructionStatusLabels = {
+export const fileInstructionStatusLabels = {
   [SocialSupportStatus.WaitingAdditionalInformation]:
     'En attente de justificatifs',
   [SocialSupportStatus.InvestigationOngoing]: "En cours d'instruction",
@@ -31,6 +31,11 @@ const fileInstructionStatusLabels = {
   [SocialSupportStatus.ClosedByBeneficiary]: 'Clôturé par le bénéficiaire',
   [SocialSupportStatus.ClosedByAgent]: "Clôturé par l'agent",
   [SocialSupportStatus.Dismissed]: 'Classé sans suite'
+}
+
+export const ministryFileInstructionStatusLabels = {
+  ...fileInstructionStatusLabels,
+  [SocialSupportStatus.Accepted]: 'Traité'
 }
 
 export const socialSupportStatusLabels: {
@@ -43,6 +48,6 @@ export const socialSupportStatusLabels: {
 export const ministrySocialSupportStatusLabels: {
   [key in SocialSupportStatus]: string
 } = {
-  ...socialSupportStatusLabels,
-  [SocialSupportStatus.Accepted]: 'Traité'
+  ...followupStatusLabels,
+  ...ministryFileInstructionStatusLabels
 }
