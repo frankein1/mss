@@ -150,7 +150,11 @@ model Document {
 }
 
 enum DefaultFollowupType {
-  // Aide médicale d'État
+  // Aide chauffage
+  AideChauffage
+  // Aide aux impayés d'énergie et fluides
+  AideImpayesEnergieFluides
+  // Aide médicale d'État - AME
   AideMedicaleDEtat
   // Aide sociale
   AideSociale
@@ -164,6 +168,8 @@ enum DefaultFollowupType {
   DemandeDAidesMenageres
   // Domiciliation
   Domiciliation
+  // Dossier FSL
+  DossierFSL
   // Entrée en établissement pour personnes handicapées
   EntreeEnEtablissementPourPersonnesHandicapees
   // Entrée en famille d'accueil
@@ -174,7 +180,7 @@ enum DefaultFollowupType {
   ObligationAlimentaire
   // PUMA
   Puma
-  // Revenu de solidarité active
+  // Revenu de solidarité active - RSA
   RevenuDeSolidariteActive
   // Accompagnement social
   AccompagnementSocial
@@ -182,22 +188,20 @@ enum DefaultFollowupType {
   AideAlimentaire
   // Aide au transport
   AideAuTransport
-  // Aides financières non remboursables
-  AidesFinancieresNonRemboursables
-  // Aides financières remboursables
-  AidesFinancieresRemboursables
   // Animations familles
   AnimationsFamilles
   // Animations seniors
   AnimationsSeniors
+  // CAP
+  CAP
   // Inclusion numérique
   InclusionNumerique
-  // Autre
-  Other
-  // Plan alerte et urgence
+  // Plan alerte et protection des personnes
   PlanAlerteEtUrgence
   // Soutien administratif
   SoutienAdministratif
+  // Soutien à la création d'activité
+  SoutienCreationActivite
 }
 
 model FollowupType {
