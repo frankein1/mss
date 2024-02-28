@@ -164,6 +164,7 @@
   const complete = ref<boolean>(false)
   const form = ref<HTMLFormElement | null>(null)
   const similarBeneficiaries = ref<SimilarBeneficiaries>([])
+  const isNavigatingWithFormActions = ref(false)
 
   const { application } = usePermissions()
 
@@ -175,9 +176,24 @@
       }
     })
 
+  // It does not use useForm meta as the dirty state of the referents field is ignored
+  const isFormDirty = computed(() =>
+    Object.entries(controlledValues.value).reduce((isDirty, [key, value]) => {
+      if (key === 'status' || key === 'referents') {
+        return isDirty
+      }
+      return isDirty || value !== undefined
+    }, false)
+  )
+
+  useLeaveBeneficiaryFormConfirmation(isNavigatingWithFormActions, {
+    isFormDirty
+  })
+
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
+      isNavigatingWithFormActions.value = true
       if (similarBeneficiaries.value.length) {
         useBeneficiaryFormSimilarModal(similarBeneficiaries.value, () =>
           emit('saveBeneficiary', values, complete.value)
