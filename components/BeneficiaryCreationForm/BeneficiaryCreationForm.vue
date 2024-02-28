@@ -45,7 +45,7 @@
         />
       </div>
       <BeneficiaryFormSimilarAlert
-        v-model:similar-beneficiaries="similarBeneficiaries"
+        v-model:similar-beneficiary="similarBeneficiary"
         :usual-name="controlledValues.usualName"
         :first-name="controlledValues.firstName"
         :birth-date="controlledValues.birthDate"
@@ -149,7 +149,7 @@
   } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { BeneficiaryPermissions } from '~/server/security'
-  import { SimilarBeneficiaries } from '~/server/trpc/routers'
+  import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   defineProps<{
     isSubmitting: boolean
@@ -163,7 +163,7 @@
 
   const complete = ref<boolean>(false)
   const form = ref<HTMLFormElement | null>(null)
-  const similarBeneficiaries = ref<SimilarBeneficiaries>([])
+  const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
   const isNavigatingWithFormActions = ref(false)
 
   const { application } = usePermissions()
@@ -194,8 +194,8 @@
     handleSubmit,
     values => {
       isNavigatingWithFormActions.value = true
-      if (similarBeneficiaries.value.length) {
-        useBeneficiaryFormSimilarModal(similarBeneficiaries.value, () =>
+      if (similarBeneficiary.value) {
+        useBeneficiaryFormSimilarModal(similarBeneficiary.value, () =>
           emit('saveBeneficiary', values, complete.value)
         )
         return

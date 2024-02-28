@@ -1,1 +1,1 @@
-export type { SimilarBeneficiaries } from '~/server/route/beneficiary'
+export type { SimilarBeneficiary } from '~/server/route/beneficiary'

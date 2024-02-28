@@ -11,10 +11,8 @@
     <BeneficiaryFormIdentity
       id="identity"
       :permissions="permissions"
-      :similar-beneficiaries="similarBeneficiaries"
-      @update:similar-beneficiaries="
-        emit('update:similarBeneficiaries', $event)
-      "
+      :similar-beneficiary="similarBeneficiary"
+      @update:similar-beneficiaries="emit('update:similarBeneficiary', $event)"
     />
     <BeneficiaryFormContactDetails id="contact-details" />
     <BeneficiaryFormAddress
@@ -30,19 +28,19 @@
   import { SaveBeneficiaryGeneralInformationInput } from '~/server/schema'
   import { BeneficiaryReferent } from '~/types/beneficiary'
   import { BeneficiaryPermissions } from '~/server/security'
-  import { SimilarBeneficiaries } from '~/server/trpc/routers'
+  import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   withDefaults(
     defineProps<{
       beneficiary?: SaveBeneficiaryGeneralInformationInput
       agents: BeneficiaryReferent[]
       permissions: BeneficiaryPermissions
-      similarBeneficiaries?: SimilarBeneficiaries
+      similarBeneficiary?: SimilarBeneficiary
     }>(),
-    { beneficiary: undefined, similarBeneficiaries: undefined }
+    { beneficiary: undefined, similarBeneficiary: undefined }
   )
 
   const emit = defineEmits<{
-    'update:similarBeneficiaries': [SimilarBeneficiaries]
+    'update:similarBeneficiary': [SimilarBeneficiary]
   }>()
 </script>
