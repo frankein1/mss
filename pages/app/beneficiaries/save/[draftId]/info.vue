@@ -21,6 +21,7 @@
     />
     <BeneficiaryFormGeneralInformation
       v-else-if="beneficiary && permissions && agents?.length"
+      v-model:similar-beneficiaries="similarBeneficiaries"
       :permissions="permissions"
       :beneficiary="beneficiary"
       :agents="agents"
@@ -29,6 +30,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { SimilarBeneficiaries } from '~/server/route'
   import {
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
@@ -45,6 +47,7 @@
   const route = useRoute()
   const snackbar = useSnackbar()
   const draftId = route.params.draftId as string
+  const similarBeneficiaries = ref<SimilarBeneficiaries>([])
 
   const {
     data: agents,
@@ -92,6 +95,17 @@
     beneficiary: SaveBeneficiaryGeneralInformationInput,
     target: string | undefined
   ) {
+    if (similarBeneficiaries.value.length) {
+      useBeneficiaryFormSimilarModal(similarBeneficiaries.value, () => {
+        if (target) {
+          saveDraft(beneficiary, target)
+        } else {
+          saveBeneficiary(beneficiary)
+        }
+      })
+      return
+    }
+
     if (target) {
       saveDraft(beneficiary, target)
     } else {

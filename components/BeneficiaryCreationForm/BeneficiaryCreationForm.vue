@@ -44,9 +44,11 @@
           type="date"
         />
       </div>
-      <BeneficiaryCreationFormSimilarAlert
-        v-if="similarBeneficiaries.length"
-        :similar-beneficiaries="similarBeneficiaries"
+      <BeneficiaryFormSimilarAlert
+        v-model:similar-beneficiaries="similarBeneficiaries"
+        :usual-name="controlledValues.usualName"
+        :first-name="controlledValues.firstName"
+        :birth-date="controlledValues.birthDate"
       />
       <h3 class="fr-col-12 fr-text--md formgroup__title fr-mb-0 fr-mt-1w">
         Coordonnées
@@ -140,13 +142,10 @@
 <script setup lang="ts">
   import { BeneficiaryStatus } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
-  import BeneficiaryCreationFormSimilarModal from './BeneficiaryCreationFormSimilarModal.vue'
   import { BeneficiaryReferent } from '~/types/beneficiary'
   import {
     CreateBeneficiaryInput,
-    createBeneficiarySchema,
-    getSimilarBeneficiariesSchema,
-    GetSimilarBeneficiariesInput
+    createBeneficiarySchema
   } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { BeneficiaryPermissions } from '~/server/security'
@@ -180,18 +179,9 @@
     handleSubmit,
     values => {
       if (similarBeneficiaries.value.length) {
-        useModal().open({
-          title:
-            'Attention, un·e bénéficiaire est déjà enregistré·e sous cette identité.',
-          contentComponent: BeneficiaryCreationFormSimilarModal,
-          contentComponentProps: {
-            similarBeneficiaries: similarBeneficiaries.value
-          },
-          contentComponentEvents: {
-            create: () => emit('saveBeneficiary', values, complete.value)
-          },
-          triggerOpen: true
-        })
+        useBeneficiaryFormSimilarModal(similarBeneficiaries.value, () =>
+          emit('saveBeneficiary', values, complete.value)
+        )
         return
       }
 
@@ -206,36 +196,6 @@
   )
 
   const zipcode = computed(() => controlledValues.value.zipcode)
-
-  function isSimilarInputValid(input: {
-    usualName: string | null | undefined
-    firstName?: string | null | undefined
-    birthDate?: Date | null | undefined
-  }): input is GetSimilarBeneficiariesInput {
-    return getSimilarBeneficiariesSchema.safeParse({
-      usualName: input.usualName,
-      firstName: input.firstName,
-      birthDate: input.birthDate
-    }).success
-  }
-
-  watch(
-    [
-      () => controlledValues.value.usualName,
-      () => controlledValues.value.firstName,
-      () => controlledValues.value.birthDate
-    ],
-    async ([usualName, firstName, birthDate]) => {
-      const input = { usualName, firstName, birthDate }
-      if (!isSimilarInputValid(input)) {
-        similarBeneficiaries.value = []
-        return
-      }
-
-      similarBeneficiaries.value =
-        await useTrpcClient().beneficiary.getSimilar.query(input)
-    }
-  )
 
   const { onCitySelected, onAddressSelected } = useAddressFields({
     setCityValue: (value: string) => setFieldValue('city', value),
