@@ -40,14 +40,12 @@
       />
     </div>
     <BeneficiaryFormSimilarAlert
-      v-if="similarBeneficiaries"
-      :similar-beneficiaries="similarBeneficiaries"
+      v-if="similarBeneficiary"
+      :similar-beneficiary="similarBeneficiary"
       :usual-name="usualName"
       :first-name="firstName"
       :birth-date="birthDate"
-      @update:similar-beneficiaries="
-        emit('update:similarBeneficiaries', $event)
-      "
+      @update:similar-beneficiaries="emit('update:similarBeneficiary', $event)"
     />
     <div
       v-if="isDeceased"
@@ -94,19 +92,19 @@
     beneficiaryTitleOptions,
     nationalityOptions
   } from '~/client/options'
-  import { SimilarBeneficiaries } from '~/server/trpc/routers'
+  import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   const { application } = usePermissions()
 
   withDefaults(
     defineProps<{
-      similarBeneficiaries?: SimilarBeneficiaries
+      similarBeneficiary?: SimilarBeneficiary
     }>(),
-    { similarBeneficiaries: undefined }
+    { similarBeneficiary: undefined }
   )
 
   const emit = defineEmits<{
-    'update:similarBeneficiaries': [SimilarBeneficiaries]
+    'update:similarBeneficiary': [SimilarBeneficiary]
   }>()
 
   const { value: status } = useField<BeneficiaryStatus>('status')
