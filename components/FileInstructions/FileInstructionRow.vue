@@ -127,8 +127,8 @@
     if (fileInstruction.value.type === FileInstructionType.Housing) {
       return 'Demande de logement'
     }
-    const types = fileInstruction.value.socialSupport.types
-    return types.length > 0 ? types[0].name : null
+    const subjects = fileInstruction.value.socialSupport.subjects
+    return subjects.length > 0 ? subjects[0].name : null
   })
 
   const permissions = computed(() => props.item.permissions)

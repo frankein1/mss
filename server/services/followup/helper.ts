@@ -1,21 +1,22 @@
-import { FollowupType, Prisma } from '@prisma/client'
+import { SocialSupportSubject, Prisma } from '@prisma/client'
 import { FollowupFilterInput, ExportFollowupsInput } from '~/server/schema'
 import { SortOrder } from '~/types/table'
 
-export function prepareFollowupTypesMutations(
-  inputTypes: string[],
-  targetTypes?: FollowupType[]
+export function prepareSocialSupportSubjectsMutations(
+  inputSubjects: string[],
+  targetSubjects?: SocialSupportSubject[]
 ) {
   return {
-    connect: inputTypes.map(id => ({ id })),
-    disconnect: targetTypes
-      ?.filter(({ id }) => !inputTypes.includes(id))
+    connect: inputSubjects.map(id => ({ id })),
+    disconnect: targetSubjects
+      ?.filter(({ id }) => !inputSubjects.includes(id))
       .map(({ id }) => ({ id }))
   }
 }
 
 export function prepareFilters(filters: FollowupFilterInput) {
-  const { status, medium, followupTypes, createdById, ministre } = filters
+  const { status, medium, socialSupportSubjects, createdById, ministre } =
+    filters
 
   const formattedFilters: Prisma.FollowupWhereInput = {}
 
@@ -23,16 +24,16 @@ export function prepareFilters(filters: FollowupFilterInput) {
     formattedFilters.medium = { in: medium }
   }
 
-  if (status || followupTypes?.length || createdById || ministre) {
+  if (status || socialSupportSubjects?.length || createdById || ministre) {
     formattedFilters.socialSupport = {}
 
     if (status) {
       formattedFilters.socialSupport.status = status
     }
 
-    if (followupTypes?.length) {
-      formattedFilters.socialSupport.types = {
-        some: { id: { in: followupTypes } }
+    if (socialSupportSubjects?.length) {
+      formattedFilters.socialSupport.subjects = {
+        some: { id: { in: socialSupportSubjects } }
       }
     }
 

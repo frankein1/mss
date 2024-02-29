@@ -6,11 +6,13 @@
     <BeneficiaryInfoHeader :beneficiary="beneficiary" />
   </BeneficiaryInfoSection>
   <BeneficiaryInfoSection
-    v-if="followupTypes.length"
-    id="followupTypes"
+    v-if="socialSupportSubjects.length"
+    id="socialSupportSubjects"
     title=""
   >
-    <BeneficiaryInfoFollowupTypes :followup-types="followupTypes" />
+    <BeneficiaryInfoSocialSupportSubjects
+      :social-support-subjects="socialSupportSubjects"
+    />
   </BeneficiaryInfoSection>
 
   <BeneficiaryInfoGeneral
@@ -51,10 +53,10 @@
 
 <script lang="ts" setup>
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
-  import { FollowupTypeIdAndName } from '~/types/followupType'
+  import { SocialSupportSubjectIdAndName } from '~/types/socialSupportSubject'
 
   defineProps<{
     beneficiary: GetBeneficiaryOutput
-    followupTypes: FollowupTypeIdAndName[]
+    socialSupportSubjects: SocialSupportSubjectIdAndName[]
   }>()
 </script>

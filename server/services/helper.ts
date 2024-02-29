@@ -4,7 +4,7 @@ import {
   Document,
   FileInstruction,
   Followup,
-  FollowupType,
+  SocialSupportSubject,
   HelpRequest,
   HousingHelpRequest,
   NotificationType,
@@ -58,7 +58,7 @@ export function filterSocialSupport({
   socialSupport: SocialSupport & {
     beneficiary: Beneficiary
     createdBy: User
-    types: FollowupType[]
+    subjects: SocialSupportSubject[]
     documents?: Document[]
     comments?: (Comment & { createdBy: User })[]
   }
@@ -78,7 +78,7 @@ export function filterSocialSupport({
     createdById: socialSupport.createdById,
     updated: socialSupport.updated,
     status: socialSupport.status,
-    types: socialSupport.types,
+    subjects: socialSupport.subjects,
 
     beneficiary: socialSupport.beneficiary,
     beneficiaryId: socialSupport.beneficiaryId,

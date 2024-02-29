@@ -1,7 +1,7 @@
 <template>
   <HelpRequestForm
     :is-submitting="isSubmitting"
-    :followup-types="followupTypes"
+    :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
     :beneficiary-id="socialSupport.beneficiary.id"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupType, FileInstructionType } from '@prisma/client'
+  import { SocialSupportSubject, FileInstructionType } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { HelpRequestPageItem } from './types'
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
@@ -23,7 +23,7 @@
 
   const props = defineProps<{
     isSubmitting: boolean
-    followupTypes: FollowupType[]
+    socialSupportSubjects: SocialSupportSubject[]
     partnerOrganizations: PartnerOrganizationIdName[]
     data: HelpRequestPageItem
   }>()
@@ -55,7 +55,7 @@
       beneficiaryId: socialSupport.value.beneficiary.id,
       numeroPegase: socialSupport.value.numeroPegase,
       ministre: socialSupport.value.ministre,
-      typeId: helpRequest.value.typeId,
+      subjectId: helpRequest.value.subjectId,
       status: socialSupport.value.status,
       examinationDate: fileInstruction.value.examinationDate,
       decisionDate: fileInstruction.value.decisionDate,

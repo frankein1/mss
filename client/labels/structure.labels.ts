@@ -12,8 +12,8 @@ export const structureFieldLabels: FieldLabels<EditCurrentUserStructureInput> =
     address: 'Adresse',
     phone: 'Téléphone',
     email: 'Email',
-    legallyRequiredFollowupTypes: 'Aides légales',
-    legallyNotRequiredFollowupTypes: 'Aides facultatives'
+    legallyRequiredSocialSupportSubjects: 'Aides légales',
+    legallyNotRequiredSocialSupportSubjects: 'Aides facultatives'
   }
 
 export const adminStructureFieldLabels: FieldLabels<

@@ -13,6 +13,6 @@ const get = (user: SecurityRuleGrantee) => {
   return where
 }
 
-export const FollowupTypeConstraints = {
+export const SocialSupportSubjectConstraints = {
   get
 }

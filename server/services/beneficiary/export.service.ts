@@ -86,7 +86,7 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'entourages',
     'documents',
     'historyTotal',
-    'types',
+    'subjects',
     'referents',
     'aidantConnectAuthorized',
     'updated',
@@ -232,7 +232,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
       (taxHouseholds?.taxHouseholds || []).map(formatRelative).join(', ') || '',
     documents: documents.map(document => document.name).join(', '),
     historyTotal: history.historyTotal.toString(),
-    types: history.types.map(({ name }) => name).join(', ')
+    subjects: history.subjects.map(({ name }) => name).join(', ')
   }
 }
 

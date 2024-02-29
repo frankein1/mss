@@ -1,10 +1,10 @@
 import { FollowupMedium } from '@prisma/client'
-import { prepareFollowupTypesMutations } from './helper'
+import { prepareSocialSupportSubjectsMutations } from './helper'
 import { SocialSupportRepo } from '~/server/database'
 import { EditFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
-import { markFollowupTypeAsUsed } from '~/server/query'
+import { markSocialSupportSubjectAsUsed } from '~/server/query'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -16,12 +16,12 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     where: { id: input.socialSupportId },
     select: {
       documents: true,
-      types: true
+      subjects: true
     }
   })
 
   const {
-    types,
+    subjects,
     documents,
     medium,
     place,
@@ -55,7 +55,10 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     },
     data: {
       documents: prepareDocumentsMutations(documents, target.documents),
-      types: prepareFollowupTypesMutations(types, target.types),
+      subjects: prepareSocialSupportSubjectsMutations(
+        subjects,
+        target.subjects
+      ),
       ministre,
       date,
       synthesis,
@@ -90,7 +93,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     }
   })
 
-  await markFollowupTypeAsUsed(types)
+  await markSocialSupportSubjectAsUsed(subjects)
 
   return fu
 }
