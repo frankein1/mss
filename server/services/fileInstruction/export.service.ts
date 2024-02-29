@@ -21,7 +21,7 @@ export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'date',
   'beneficiaryId',
   'financialSupport',
-  'typeId',
+  'subjectId',
   'examinationDate',
   'decisionDate',
   'prescribingOrganizationId',
@@ -70,8 +70,10 @@ export async function exportFileInstructions({
       if (permissions.view) {
         const { socialSupport, helpRequest } = fileInstruction
 
-        const typeId =
-          socialSupport?.types?.length > 0 ? socialSupport.types[0].name : ''
+        const subjectId =
+          socialSupport?.subjects?.length > 0
+            ? socialSupport.subjects[0].name
+            : ''
 
         const beneficiary = socialSupport.beneficiary
         fileInstructions.push({
@@ -85,7 +87,7 @@ export async function exportFileInstructions({
           instructorOrganizationId:
             fileInstruction.instructorOrganization?.name || '',
           date: formatDate(socialSupport.date, 'DD-MM-YYYY'),
-          typeId,
+          subjectId,
           documents:
             socialSupport.documents
               ?.map(document => document.name)

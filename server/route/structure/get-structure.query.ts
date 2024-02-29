@@ -12,22 +12,24 @@ const handler = async ({
 }: {
   ctx: ProtectedAppContext
 }) => {
-  const { followupTypes, ...structure } = await StructureRepo.findUniqueOrThrow(
-    user,
-    {
+  const { socialSupportSubjects, ...structure } =
+    await StructureRepo.findUniqueOrThrow(user, {
       where: { id },
       include: {
-        followupTypes: {
+        socialSupportSubjects: {
           orderBy: {
             name: 'asc'
           }
         }
       }
-    }
+    })
+  const optionalSubjects = socialSupportSubjects.filter(
+    ({ legallyRequired }) => !legallyRequired
   )
-  const optionalTypes = followupTypes.filter(type => !type.legallyRequired)
-  const requiredTypes = followupTypes.filter(type => type.legallyRequired)
-  return { structure, optionalTypes, requiredTypes }
+  const requiredSubjects = socialSupportSubjects.filter(
+    ({ legallyRequired }) => legallyRequired
+  )
+  return { structure, optionalSubjects, requiredSubjects }
 }
 
 export const getCurrentUserStructureQuery = createQuery({

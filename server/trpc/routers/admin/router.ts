@@ -12,7 +12,7 @@ import {
   editAdminUserMutation,
   getAdminEmailsQuery,
   sendEmailQuery,
-  getAdminFollowupTypeQuery
+  getAdminSocialSupportSubjectQuery
 } from '~/server/route/admin'
 
 export const adminRouter = router({
@@ -49,7 +49,7 @@ export const adminRouter = router({
   getOverview: adminProcedure
     .input(getAdminOverviewQuery.inputValidation)
     .query(getAdminOverviewQuery.executeAsAdmin),
-  getFollowupType: adminProcedure
-    .input(getAdminFollowupTypeQuery.inputValidation)
-    .query(getAdminFollowupTypeQuery.executeAsAdmin)
+  getSocialSupportSubject: adminProcedure
+    .input(getAdminSocialSupportSubjectQuery.inputValidation)
+    .query(getAdminSocialSupportSubjectQuery.executeAsAdmin)
 })

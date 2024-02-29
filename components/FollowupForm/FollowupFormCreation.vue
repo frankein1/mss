@@ -1,7 +1,7 @@
 <template>
   <FollowupForm
     :is-submitting="isSubmitting"
-    :followup-types="followupTypes"
+    :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
     :beneficiary-id="beneficiaryId"
     :medium="values.medium"
@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupType, SocialSupportStatus } from '@prisma/client'
+  import { SocialSupportSubject, SocialSupportStatus } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
@@ -21,7 +21,7 @@
 
   const props = defineProps<{
     isSubmitting: boolean
-    followupTypes: Array<FollowupType>
+    socialSupportSubjects: Array<SocialSupportSubject>
     partnerOrganizations: Array<PartnerOrganizationIdName>
     beneficiaryId: string
   }>()

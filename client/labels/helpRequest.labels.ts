@@ -12,7 +12,7 @@ export const helpRequestFieldLabels = {
   date: "Date d'ouverture du dossier",
   numeroPegase: 'Numéro Pégase',
   ministre: 'Ministre',
-  typeId: "Objet de l'accompagnement",
+  subjectId: "Objet de l'accompagnement",
   prescribingOrganizationId: 'Organisme prescripteur',
   fullFile: 'Ce dossier est complet',
   instructorOrganizationId: 'Organisme instructeur',

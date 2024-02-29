@@ -1,5 +1,5 @@
 export { getFollowupCountQuery } from './getFollowupCountQuery'
-export { getFollowupFollowupTypesStatsQuery } from './getFollowupFollowupTypesStatsQuery'
+export { getFollowupSubjectsStatsQuery } from './getFollowupSubjectsStatsQuery'
 export { getFollowupMediumStatsQuery } from './getFollowupMediumStatsQuery'
 export { getFollowupMinistreStatsQuery } from './getFollowupMinistreStatsQuery'
 export { getFollowupStatusStatsQuery } from './getFollowupStatusStatsQuery'
