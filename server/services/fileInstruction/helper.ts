@@ -24,7 +24,7 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
   }
 
   if (handlingDate) {
-    formattedFilters.helpRequest = formattedFilters.helpRequest || {}
+    formattedFilters.helpRequest = {}
     formattedFilters.helpRequest.handlingDate =
       handlingDate === 'true' ? { not: null } : null
   }
@@ -38,7 +38,7 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
   }
 
   if (status || followupTypes?.length || createdById || ministre?.length) {
-    formattedFilters.socialSupport = formattedFilters.socialSupport || {}
+    formattedFilters.socialSupport = {}
 
     if (status) {
       formattedFilters.socialSupport.status = status
@@ -51,13 +51,11 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     }
 
     if (createdById) {
-      formattedFilters.socialSupport = { createdById }
+      formattedFilters.socialSupport.createdById = { in: createdById }
     }
 
     if (ministre?.length) {
-      formattedFilters.socialSupport = {
-        ministre: { in: ministre }
-      }
+      formattedFilters.socialSupport.ministre = { in: ministre }
     }
   }
 

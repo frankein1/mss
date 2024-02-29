@@ -83,11 +83,15 @@
       filtersState.fileInstruction.value = {
         status,
         createdById: authState.getUserId.value
+          ? [authState.getUserId.value]
+          : undefined
       }
     } else {
       filtersState.followup.value = {
         status,
         createdById: authState.getUserId.value
+          ? [authState.getUserId.value]
+          : undefined
       }
     }
   }

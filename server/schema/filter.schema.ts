@@ -72,7 +72,7 @@ const followupFilterSchema = z.object({
   status: z.nativeEnum(SocialSupportStatus).nullish(),
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   followupTypes: z.array(z.string().uuid()).nullish(),
-  createdById: z.string().uuid().nullish(),
+  createdById: z.array(z.string().uuid()).nullish(),
   ministre: z.array(z.nativeEnum(Minister)).nullish()
 })
 

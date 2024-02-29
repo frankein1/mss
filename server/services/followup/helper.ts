@@ -37,7 +37,7 @@ export function prepareFilters(filters: FollowupFilterInput) {
     }
 
     if (createdById) {
-      formattedFilters.socialSupport.createdById = createdById
+      formattedFilters.socialSupport.createdById = { in: createdById }
     }
 
     if (ministre) {
