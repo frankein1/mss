@@ -10,7 +10,7 @@ import { RowType, WorksheetType } from '~/types/export'
 import {
   getFollowupActionsEntreprisesStatsQuery,
   getFollowupCountQuery,
-  getFollowupFollowupTypesStatsQuery,
+  getFollowupSubjectsStatsQuery,
   getFollowupMediumStatsQuery,
   getFollowupMinistreStatsQuery,
   getFollowupPrescribingOrganizationStatsQuery,
@@ -41,31 +41,28 @@ const handler = async ({
 
   const followupCount = await getFollowupCountQuery(user, input)
 
-  const followupTypesData = await getFollowupFollowupTypesStatsQuery(
-    user,
-    input
-  )
-  const followupTypesColumns = followupTypesData.map(({ id, name }) => ({
+  const subjectsData = await getFollowupSubjectsStatsQuery(user, input)
+  const subjectsColumns = subjectsData.map(({ id, name }) => ({
     key: id,
     header: name
   }))
-  followupTypesColumns.push({ key: 'total', header: 'Total' })
+  subjectsColumns.push({ key: 'total', header: 'Total' })
 
-  const followupTypeCountTotal = followupTypesData
+  const subjectCountTotal = subjectsData
     .reduce((total, { _count }) => total + _count.socialSupports, 0)
     .toString()
 
-  const followupTypesRows = [
-    followupTypesData.reduce(
+  const subjectsRows = [
+    subjectsData.reduce(
       (row: RowType, { _count, id }) => {
         if (_count.socialSupports > 0) {
           row[id] = _count.socialSupports.toString()
         }
         return row
       },
-      { total: followupTypeCountTotal }
+      { total: subjectCountTotal }
     ),
-    followupTypesData.reduce(
+    subjectsData.reduce(
       (row: RowType, { _count, id }) => {
         if (_count.socialSupports > 0) {
           row[id] = `${getPercentage(_count.socialSupports, followupCount)}%`
@@ -80,8 +77,8 @@ const handler = async ({
   ]
   exportData.push({
     name: "Objets d'accompagnement",
-    columns: followupTypesColumns,
-    rows: followupTypesRows
+    columns: subjectsColumns,
+    rows: subjectsRows
   })
 
   const followupMediumData = await getFollowupMediumStatsQuery(user, input)

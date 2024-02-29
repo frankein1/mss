@@ -1,1 +1,1 @@
-export * from './editFollowupTypes'
+export * from './editSocialSupportSubjects'

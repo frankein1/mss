@@ -1,10 +1,10 @@
 import { FollowupMedium, SocialSupportType } from '@prisma/client'
-import { prepareFollowupTypesMutations } from './helper'
+import { prepareSocialSupportSubjectsMutations } from './helper'
 import { BeneficiaryRepo, SocialSupportRepo } from '~/server/database'
 import { AddFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
-import { markFollowupTypeAsUsed } from '~/server/query'
+import { markSocialSupportSubjectAsUsed } from '~/server/query'
 import { prepareNewHistoryElementNotification } from '~/server/services/helper'
 
 type CreateParams = {
@@ -16,7 +16,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
   const { structure, user } = ctx
   const {
     beneficiaryId,
-    types,
+    subjects,
     documents,
     medium,
     place,
@@ -85,7 +85,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
       structure: connect(structure.id),
       beneficiary: connect(beneficiaryId),
       createdBy: connect(user.id),
-      types: prepareFollowupTypesMutations(types),
+      subjects: prepareSocialSupportSubjectsMutations(subjects),
       documents: prepareDocumentsMutations(documents),
       notifications: prepareNewHistoryElementNotification(beneficiary, user),
       ministre,
@@ -122,7 +122,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     }
   })
 
-  await markFollowupTypeAsUsed(types)
+  await markSocialSupportSubjectAsUsed(subjects)
 
   return fu
 }

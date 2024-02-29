@@ -1,6 +1,6 @@
 export { beneficiaryFieldLabels } from './beneficiary.labels'
 export { userFieldLabels } from './user.labels'
-export { followupTypeFieldLabels } from './followup-type.labels'
+export { socialSupportSubjectFieldLabels } from './social-support-subject.labels'
 export { followupFieldLabels } from './followup.labels'
 export {
   structureFieldLabels,

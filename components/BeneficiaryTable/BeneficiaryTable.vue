@@ -34,7 +34,7 @@
             />
             <th scope="col">Téléphone</th>
             <th scope="col">Adresse</th>
-            <th scope="col">{{ beneficiaryFieldLabels.types }}</th>
+            <th scope="col">{{ beneficiaryFieldLabels.subjects }}</th>
           </tr>
         </thead>
         <tbody>

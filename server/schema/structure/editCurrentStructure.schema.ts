@@ -1,38 +1,40 @@
 import { z } from 'zod'
-import { DefaultFollowupType } from '@prisma/client'
+import { DefaultSocialSupportSubject } from '@prisma/client'
 import { editStructureSchema } from './editStructure.schema'
 
 export const editCurrentUserStructureSchema = editStructureSchema
   .omit({
     structureId: true,
-    followupTypes: true
+    socialSupportSubjects: true
   })
   .extend({
-    legallyRequiredFollowupTypes: z.array(z.nativeEnum(DefaultFollowupType)),
-    legallyNotRequiredFollowupTypes: z.array(
+    legallyRequiredSocialSupportSubjects: z.array(
+      z.nativeEnum(DefaultSocialSupportSubject)
+    ),
+    legallyNotRequiredSocialSupportSubjects: z.array(
       z.union([
         z.string().uuid(),
-        z.nativeEnum(DefaultFollowupType),
+        z.nativeEnum(DefaultSocialSupportSubject),
         z.string()
       ])
     )
   })
   .refine(
     val =>
-      val.legallyRequiredFollowupTypes.length ||
-      val.legallyNotRequiredFollowupTypes.length,
+      val.legallyRequiredSocialSupportSubjects.length ||
+      val.legallyNotRequiredSocialSupportSubjects.length,
     {
       message: 'Veuillez sélectionner au moins une aide légale ou facultative.',
-      path: ['legallyRequiredFollowupTypes']
+      path: ['legallyRequiredSocialSupportSubjects']
     }
   )
   .refine(
     val =>
-      val.legallyRequiredFollowupTypes.length ||
-      val.legallyNotRequiredFollowupTypes.length,
+      val.legallyRequiredSocialSupportSubjects.length ||
+      val.legallyNotRequiredSocialSupportSubjects.length,
     {
       message: 'Veuillez sélectionner au moins une aide légale ou facultative.',
-      path: ['legallyNotRequiredFollowupTypes']
+      path: ['legallyNotRequiredSocialSupportSubjects']
     }
   )
 

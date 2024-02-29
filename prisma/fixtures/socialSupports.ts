@@ -2,7 +2,7 @@ import { FileInstructionType, Prisma } from '@prisma/client'
 import {
   fixtureStructure,
   fixturesBeneficiaries,
-  fixturesFollowupTypes,
+  fixturesSocialSupportSubjects,
   fixturesUsers
 } from './'
 
@@ -13,10 +13,10 @@ const fixturesFollowupSocialSupports = [
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[0].id,
-    types: {
+    subjects: {
       connect: [
-        { id: fixturesFollowupTypes[0].id },
-        { id: fixturesFollowupTypes[1].id }
+        { id: fixturesSocialSupportSubjects[0].id },
+        { id: fixturesSocialSupportSubjects[1].id }
       ]
     },
     date: new Date('2022-10-20'),
@@ -33,8 +33,8 @@ const fixturesFollowupSocialSupports = [
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[0].id,
-    types: {
-      connect: [{ id: fixturesFollowupTypes[0].id }]
+    subjects: {
+      connect: [{ id: fixturesSocialSupportSubjects[0].id }]
     },
     date: new Date('2022-10-21'),
     socialSupportType: 'Followup',
@@ -50,10 +50,10 @@ const fixturesFollowupSocialSupports = [
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[2].id,
-    types: {
+    subjects: {
       connect: [
-        { id: fixturesFollowupTypes[2].id },
-        { id: fixturesFollowupTypes[1].id }
+        { id: fixturesSocialSupportSubjects[2].id },
+        { id: fixturesSocialSupportSubjects[1].id }
       ]
     },
     date: new Date('2022-10-22'),
@@ -70,8 +70,8 @@ const fixturesFollowupSocialSupports = [
     status: 'Done',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[1].id,
-    types: {
-      connect: [{ id: fixturesFollowupTypes[2].id }]
+    subjects: {
+      connect: [{ id: fixturesSocialSupportSubjects[2].id }]
     },
     date: new Date('2022-10-23'),
     socialSupportType: 'Followup',
@@ -87,10 +87,10 @@ const fixturesFollowupSocialSupports = [
     status: 'InProgress',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[2].id,
-    types: {
+    subjects: {
       connect: [
-        { id: fixturesFollowupTypes[3].id },
-        { id: fixturesFollowupTypes[4].id }
+        { id: fixturesSocialSupportSubjects[3].id },
+        { id: fixturesSocialSupportSubjects[4].id }
       ]
     },
     date: new Date('2022-10-24'),
@@ -107,8 +107,8 @@ const fixturesFollowupSocialSupports = [
     status: 'InProgress',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[3].id,
-    types: {
-      connect: [{ id: fixturesFollowupTypes[4].id }]
+    subjects: {
+      connect: [{ id: fixturesSocialSupportSubjects[4].id }]
     },
     date: new Date('2022-10-25'),
     comments: {
@@ -169,7 +169,7 @@ const fixturesHelpRequestSocialSupports = [
     status: 'Accepted',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[0].id,
-    types: { connect: { id: fixturesFollowupTypes[4].id } },
+    subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-10-26'),
     fileInstruction: {
@@ -179,7 +179,7 @@ const fixturesHelpRequestSocialSupports = [
         helpRequest: {
           create: {
             financialSupport: false,
-            typeId: fixturesFollowupTypes[4].id
+            subjectId: fixturesSocialSupportSubjects[4].id
           }
         }
       }
@@ -191,7 +191,7 @@ const fixturesHelpRequestSocialSupports = [
     status: 'InvestigationOngoing',
     structureId: fixtureStructure.id,
     beneficiaryId: fixturesBeneficiaries[2].id,
-    types: { connect: { id: fixturesFollowupTypes[3].id } },
+    subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-10-27'),
     fileInstruction: {
@@ -201,7 +201,7 @@ const fixturesHelpRequestSocialSupports = [
         helpRequest: {
           create: {
             financialSupport: false,
-            typeId: fixturesFollowupTypes[3].id
+            subjectId: fixturesSocialSupportSubjects[3].id
           }
         }
       }

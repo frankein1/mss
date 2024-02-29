@@ -3,11 +3,11 @@
     <div class="fr-col-12 fr-pb-2w fr-text--bold">Accompagnements</div>
     <ul class="fr-tags-group">
       <li
-        v-for="type in followupTypes"
-        :key="type.id"
+        v-for="subject in socialSupportSubjects"
+        :key="subject.id"
       >
         <p class="fr-tag">
-          {{ type.name }}
+          {{ subject.name }}
         </p>
       </li>
     </ul>
@@ -15,9 +15,9 @@
 </template>
 
 <script setup lang="ts">
-  import type { FollowupTypeIdAndName } from '~/types/followupType'
+  import type { SocialSupportSubjectIdAndName } from '~/types/socialSupportSubject'
 
   defineProps<{
-    followupTypes: FollowupTypeIdAndName[]
+    socialSupportSubjects: SocialSupportSubjectIdAndName[]
   }>()
 </script>

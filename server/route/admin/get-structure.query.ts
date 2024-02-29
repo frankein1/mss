@@ -10,11 +10,11 @@ const adminHandler = async ({
   ctx: AdminContext
   input: { id: string }
 }) => {
-  const { followupTypes, users, ...structure } =
+  const { socialSupportSubjects, users, ...structure } =
     await StructureRepo.findUniqueOrThrow(user, {
       where: { id },
       include: {
-        followupTypes: {
+        socialSupportSubjects: {
           orderBy: {
             name: 'asc'
           }
@@ -35,9 +35,13 @@ const adminHandler = async ({
         }
       }
     })
-  const optionalTypes = followupTypes.filter(type => !type.legallyRequired)
-  const requiredTypes = followupTypes.filter(type => type.legallyRequired)
-  return { structure, users, optionalTypes, requiredTypes }
+  const optionalSubjects = socialSupportSubjects.filter(
+    ({ legallyRequired }) => !legallyRequired
+  )
+  const requiredSubjects = socialSupportSubjects.filter(
+    ({ legallyRequired }) => legallyRequired
+  )
+  return { structure, users, optionalSubjects, requiredSubjects }
 }
 
 export const getAdminStructureQuery = createQuery({

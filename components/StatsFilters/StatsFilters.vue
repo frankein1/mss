@@ -1,7 +1,7 @@
 <template>
   <div class="feature-section">
     <AtomLoader
-      v-if="!followupTypeOptions || !beneficiariesCitiesOptions"
+      v-if="!socialSupportSubjectOptions || !beneficiariesCitiesOptions"
       class="fr-mx-auto"
     />
     <AtomFilters
@@ -30,7 +30,7 @@
 
   const props = withDefaults(
     defineProps<{
-      followupTypeOptions: Options
+      socialSupportSubjectOptions: Options
       beneficiariesCitiesOptions: Options
       agentOptions: Options
       filters: StatFilterInput
@@ -92,12 +92,12 @@
 
     if (
       props.filters.helpRequestSubject !== 'Housing' &&
-      props.followupTypeOptions.size
+      props.socialSupportSubjectOptions.size
     ) {
       statsFilters.push({
-        name: 'followupTypes',
+        name: 'socialSupportSubjects',
         label: "Objet de l'accompagnement",
-        options: props.followupTypeOptions,
+        options: props.socialSupportSubjectOptions,
         type: FilterType.SelectMultiple,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
       })

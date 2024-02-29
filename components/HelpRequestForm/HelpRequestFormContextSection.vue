@@ -76,9 +76,9 @@
   <template v-else>
     <div class="fr-col-12">
       <VeeSearchableSelect
-        :label="helpRequestFieldLabels.typeId"
-        name="typeId"
-        :options="followUpTypeOptions"
+        :label="helpRequestFieldLabels.subjectId"
+        name="subjectId"
+        :options="socialSupportSubjectOptions"
         required
         hint
       >
@@ -171,7 +171,7 @@
 </template>
 
 <script setup lang="ts">
-  import { FollowupType } from '@prisma/client'
+  import { SocialSupportSubject } from '@prisma/client'
   import {
     helpRequestFieldLabels,
     housingHelpRequestFieldLabels
@@ -189,7 +189,7 @@
   const { application } = usePermissions()
 
   const props = defineProps<{
-    followupTypes: FollowupType[]
+    socialSupportSubjects: SocialSupportSubject[]
     partnerOrganizations: PartnerOrganizationIdName[]
     isExternalSupport: boolean
     hasSetExternalStructure: boolean
@@ -199,8 +199,8 @@
   const { value: isFirst } =
     useField<CreateHousingHelpRequestInput['isFirst']>('isFirst')
 
-  const followUpTypeOptions = computed(() =>
-    toOptions(props.followupTypes, 'id', 'name')
+  const socialSupportSubjectOptions = computed(() =>
+    toOptions(props.socialSupportSubjects, 'id', 'name')
   )
 
   const partnerOrganizationOptions = computed(() => {
