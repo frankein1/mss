@@ -36,13 +36,17 @@
   const filtersState = useFilters()
 
   const {
-    data: followupTypeOptions,
-    pending: followupTypeOptionsPending,
-    error: followupTypeOptionsError
-  } = await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
-    transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
-    queryKey: 'config.getStructureFollowupTypes.options'
-  })
+    data: socialSupportSubjectOptions,
+    pending: socialSupportSubjectOptionsPending,
+    error: socialSupportSubjectOptionsError
+  } = await trpcClient.config.getStructureSocialSupportSubjects.useQuery(
+    undefined,
+    {
+      transform: socialSupportSubjects =>
+        toOptions(socialSupportSubjects, 'id', 'name'),
+      queryKey: 'config.getStructureSocialSupportSubjects.options'
+    }
+  )
 
   const {
     data: agentOptions,
@@ -54,11 +58,11 @@
   })
 
   const pending = computed(
-    () => followupTypeOptionsPending.value || agentOptionsPending.value
+    () => socialSupportSubjectOptionsPending.value || agentOptionsPending.value
   )
 
   const fetchError = computed(() => {
-    if (followupTypeOptionsError.value) {
+    if (socialSupportSubjectOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
     if (agentOptionsError.value) {
@@ -68,7 +72,7 @@
   })
 
   const beneficiaryFilters = computed(() => {
-    if (!followupTypeOptions.value || !agentOptions.value) {
+    if (!socialSupportSubjectOptions.value || !agentOptions.value) {
       return null
     }
 
@@ -83,13 +87,13 @@
         alwaysExpanded: true
       },
       {
-        name: 'followupTypes',
+        name: 'socialSupportSubjects',
         label: "Objet d'accompagnement",
-        options: followupTypeOptions.value,
+        options: socialSupportSubjectOptions.value,
         type: FilterType.SelectMultiple,
         alwaysExpanded: true,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
-        matomoEventAction: BeneficiaryFilterEventAction.FollowupType
+        matomoEventAction: BeneficiaryFilterEventAction.SocialSupportSubject
       }
     ]
 

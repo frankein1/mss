@@ -1,9 +1,9 @@
 import { protectedProcedure, router } from '~/server/trpc'
 import {
   editCurrentUserStructureMutation,
-  getCurrentUserStructureQuery
+  getCurrentUserStructureQuery,
+  getStructureSocialSupportSubjectQuery
 } from '~/server/route/structure'
-import { getStructureFollowupTypeQuery } from '~/server/route/structure/get-followup-type.query'
 
 export const structureRouter = router({
   getCurrentUserStructure: protectedProcedure
@@ -12,7 +12,7 @@ export const structureRouter = router({
   editCurrentUserStructure: protectedProcedure
     .input(editCurrentUserStructureMutation.inputValidation)
     .mutation(editCurrentUserStructureMutation.execute),
-  getFollowupType: protectedProcedure
-    .input(getStructureFollowupTypeQuery.inputValidation)
-    .query(getStructureFollowupTypeQuery.execute)
+  getSocialSupportSubject: protectedProcedure
+    .input(getStructureSocialSupportSubjectQuery.inputValidation)
+    .query(getStructureSocialSupportSubjectQuery.execute)
 })

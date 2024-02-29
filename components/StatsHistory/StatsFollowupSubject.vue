@@ -9,13 +9,13 @@
       :alert-type="AlertType.Error"
       :message="`Les statistiques de la répartion des objets d'accompagnement n'ont pas pu être chargées.`"
     />
-    <template v-else-if="followupTypesStats">
+    <template v-else-if="subjectsStats">
       <h2 class="fr-h5">Objets d'accompagnement</h2>
       <p>Pourcentage calculé sur le nombre total de synthèses d'entretien</p>
       <StatsList
-        v-if="followupTypesStats.length"
+        v-if="subjectsStats.length"
         :total-count="totalCount"
-        :stats="followupTypesStats"
+        :stats="subjectsStats"
       />
       <p v-else>
         Commencez à créer des synthèses d'entretien dans les fiches de
@@ -39,14 +39,14 @@
   }>()
 
   const {
-    data: followupTypesCounts,
+    data: subjectCounts,
     error,
     pending
-  } = await trpcClient.stat.getFollowupFollowupTypeStats.useQuery(props.filters)
+  } = await trpcClient.stat.getFollowupSubjectStats.useQuery(props.filters)
 
-  const followupTypesStats = computed(
+  const subjectsStats = computed(
     () =>
-      followupTypesCounts.value
+      subjectCounts.value
         ?.map(({ id, name, _count }) => ({
           key: id,
           label: name,
