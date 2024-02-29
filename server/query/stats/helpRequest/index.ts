@@ -1,4 +1,4 @@
-export { getHelpRequestFollowupTypesStatsQuery } from './getHelpRequestFollowupTypesStatsQuery'
+export { getHelpRequestSubjectsStatsQuery } from './getHelpRequestSubjectsStatsQuery'
 export { getHelpRequestCountQuery } from './getHelpRequestCountQuery'
 export { getHelpRequestMinistreStatsQuery } from './getHelpRequestMinistreStatsQuery'
 export { getHelpRequestStatusStatsQuery } from './getHelpRequestStatusStatsQuery'

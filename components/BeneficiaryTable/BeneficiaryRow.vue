@@ -27,10 +27,10 @@
         <template v-else>{{ EMPTY_TABLE_CELL }}</template>
       </td>
       <td
-        class="followup-types-data"
-        :title="formatTableValue(followUpTypes)"
+        class="social-support-subjects-data"
+        :title="formatTableValue(socialSupportSubjects)"
       >
-        <span>{{ formatTableValue(followUpTypes) }}</span>
+        <span>{{ formatTableValue(socialSupportSubjects) }}</span>
       </td>
     </tr>
   </NuxtLink>
@@ -56,8 +56,8 @@
     [general.value.zipcode, general.value.city].filter(v => !!v).join(' ')
   )
 
-  const followUpTypes = computed(() =>
-    history.value.types.map(({ name }) => name).join(', ')
+  const socialSupportSubjects = computed(() =>
+    history.value.subjects.map(({ name }) => name).join(', ')
   )
 
   const lastName = computed(() => {
@@ -73,11 +73,11 @@
 
 <style lang="scss" scoped>
   .address-data,
-  .followup-types-data {
+  .social-support-subjects-data {
     max-width: 15rem;
   }
 
-  .followup-types-data > * {
+  .social-support-subjects-data > * {
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 2; /* number of lines to show */

@@ -11,7 +11,7 @@ export enum EventCategory {
 }
 
 export enum BeneficiaryFilterEventAction {
-  FollowupType = "Type d'accompagnement",
+  SocialSupportSubject = "Type d'accompagnement",
   Referent = 'Référent',
   City = 'Ville',
   Status = 'Statut',
@@ -20,13 +20,13 @@ export enum BeneficiaryFilterEventAction {
 
 export enum BeneficiaryHistoryFilterEventAction {
   TypeSuivi = 'Type de suivi',
-  FollowupType = "Type d'accompagnement"
+  SocialSupportSubject = "Type d'accompagnement"
 }
 
 export enum FollowupFilterEventAction {
   Status = 'Statut',
   Medium = "Type d'entretien",
-  FollowupType = "Objet de l'entretien",
+  SocialSupportSubject = "Objet de l'entretien",
   Referent = 'Référent',
   Ministre = 'Ministre'
 }
@@ -34,7 +34,7 @@ export enum FollowupFilterEventAction {
 export enum HelpRequestFilterEventAction {
   FileInstructionType = "Type de dossier d'instruction",
   Status = 'Statut',
-  FollowupType = 'Objet de la demande',
+  SocialSupportSubject = 'Objet de la demande',
   ExaminationDate = 'Date de passage en commission',
   HandlingDate = 'Fin de prise en charge',
   ExternalStructure = 'Instruction',

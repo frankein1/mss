@@ -11,7 +11,7 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
   const {
     fileInstructionType,
     status,
-    followupTypes,
+    socialSupportSubjects,
     examinationDate,
     handlingDate,
     externalStructure,
@@ -39,7 +39,7 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
 
   if (
     status ||
-    followupTypes?.length ||
+    socialSupportSubjects?.length ||
     referents?.length ||
     ministre?.length
   ) {
@@ -49,9 +49,9 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
       formattedFilters.socialSupport.status = status
     }
 
-    if (followupTypes?.length) {
-      formattedFilters.socialSupport.types = {
-        some: { id: { in: followupTypes } }
+    if (socialSupportSubjects?.length) {
+      formattedFilters.socialSupport.subjects = {
+        some: { id: { in: socialSupportSubjects } }
       }
     }
 

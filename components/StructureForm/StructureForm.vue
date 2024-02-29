@@ -16,10 +16,10 @@
       :set-field-value="setFieldValue"
     />
 
-    <StructureFormFollowupTypes
+    <StructureFormSocialSupportSubjects
       :structure-id="structure.id"
-      :required-types="requiredTypes"
-      :optional-types="optionalTypes"
+      :required-subjects="requiredSubjects"
+      :optional-subjects="optionalSubjects"
       :admin-view="adminView"
     />
 
@@ -41,7 +41,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupType } from '@prisma/client'
+  import {
+    SocialSupportSubject,
+    DefaultSocialSupportSubject
+  } from '@prisma/client'
   import { StructureFormType, UsersStructureType } from './types'
   import type {
     AdminEditStructureInput,
@@ -52,13 +55,12 @@
     adminEditStructureSchema
   } from '~/server/schema'
   import { structureFieldLabels } from '~/client/labels'
-  import { DefaultFollowupType } from '~/server/prisma/prismaClient'
 
   const props = withDefaults(
     defineProps<{
       structure: StructureFormType
-      optionalTypes: FollowupType[]
-      requiredTypes: FollowupType[]
+      optionalSubjects: SocialSupportSubject[]
+      requiredSubjects: SocialSupportSubject[]
       users?: UsersStructureType
       isSubmitting: boolean
       adminView?: boolean
@@ -75,12 +77,16 @@
     ]
   }>()
 
-  const requiredTypeIds = computed(() =>
-    props.requiredTypes.map(({ id, default: defaultKey }) => defaultKey || id)
+  const requiredSubjectIds = computed(() =>
+    props.requiredSubjects.map(
+      ({ id, default: defaultKey }) => defaultKey || id
+    )
   )
 
-  const optionalTypeIds = computed(() =>
-    props.optionalTypes.map(({ id, default: defaultKey }) => defaultKey || id)
+  const optionalSubjectIds = computed(() =>
+    props.optionalSubjects.map(
+      ({ id, default: defaultKey }) => defaultKey || id
+    )
   )
 
   const form = ref<HTMLFormElement | null>(null)
@@ -105,10 +111,10 @@
       address: props.structure.address,
       phone: props.structure.phone,
       email: props.structure.email,
-      legallyRequiredFollowupTypes:
-        requiredTypeIds.value as DefaultFollowupType[],
-      legallyNotRequiredFollowupTypes:
-        optionalTypeIds.value as DefaultFollowupType[]
+      legallyRequiredSocialSupportSubjects:
+        requiredSubjectIds.value as DefaultSocialSupportSubject[],
+      legallyNotRequiredSocialSupportSubjects:
+        optionalSubjectIds.value as DefaultSocialSupportSubject[]
     }
   })
 

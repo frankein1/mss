@@ -18,7 +18,7 @@ export const include = {
   instructorOrganization: true,
   socialSupport: {
     include: {
-      types: true,
+      subjects: true,
       documents: true,
       beneficiary: {
         include: {

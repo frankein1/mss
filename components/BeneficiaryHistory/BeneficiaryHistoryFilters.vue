@@ -64,13 +64,17 @@
   })
 
   const {
-    data: followupTypeOptions,
-    pending: followupTypeOptionsPending,
-    error: followupTypeOptionsError
-  } = await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
-    transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
-    queryKey: 'config.getStructureFollowupTypes.options'
-  })
+    data: socialSupportSubjectOptions,
+    pending: socialSupportSubjectOptionsPending,
+    error: socialSupportSubjectOptionsError
+  } = await trpcClient.config.getStructureSocialSupportSubjects.useQuery(
+    undefined,
+    {
+      transform: socialSupportSubjects =>
+        toOptions(socialSupportSubjects, 'id', 'name'),
+      queryKey: 'config.getStructureSocialSupportSubjects.options'
+    }
+  )
 
   const { application } = usePermissions()
 
@@ -83,7 +87,7 @@
   const pending = computed(
     () =>
       agentOptionsPending.value ||
-      followupTypeOptionsPending.value ||
+      socialSupportSubjectOptionsPending.value ||
       examinationDateOptionsPending.value
   )
 
@@ -91,7 +95,7 @@
     if (agentOptionsError.value) {
       return "La liste des agents n'a pas pu être chargée."
     }
-    if (followupTypeOptionsError.value) {
+    if (socialSupportSubjectOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
     if (examinationDateOptionsError.value) {
@@ -117,7 +121,7 @@
 
   const filters = computed(() => {
     if (
-      !followupTypeOptions.value ||
+      !socialSupportSubjectOptions.value ||
       !examinationDateOptions.value ||
       !agentOptions.value
     ) {
@@ -149,12 +153,13 @@
 
     if (!isFilteringHousingHelpRequests.value) {
       filters.push({
-        name: 'followupTypes',
+        name: 'socialSupportSubjects',
         label: "Objet de l'accompagnement",
-        options: followupTypeOptions.value,
+        options: socialSupportSubjectOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-        matomoEventAction: BeneficiaryHistoryFilterEventAction.FollowupType,
+        matomoEventAction:
+          BeneficiaryHistoryFilterEventAction.SocialSupportSubject,
         alwaysExpanded: true
       })
     }

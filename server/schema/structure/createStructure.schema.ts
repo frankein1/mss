@@ -1,4 +1,4 @@
-import { DefaultFollowupType, StructureType } from '@prisma/client'
+import { DefaultSocialSupportSubject, StructureType } from '@prisma/client'
 import { z } from 'zod'
 import {
   requiredNativeEnum,
@@ -30,11 +30,11 @@ export const createStructureSchema = z.object({
     .min(2, minStringLengthMessage(2)),
   phone: phoneConstraint,
   email: z.string(errorMessages).email(validEmailMessage),
-  followupTypes: z
+  socialSupportSubjects: z
     .array(
       z.union([
         z.string().uuid(),
-        z.nativeEnum(DefaultFollowupType),
+        z.nativeEnum(DefaultSocialSupportSubject),
         z.string()
       ])
     )

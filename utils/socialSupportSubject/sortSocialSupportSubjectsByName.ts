@@ -1,8 +1,8 @@
-import { FollowupTypeIdAndName } from '~/types/followupType'
+import { SocialSupportSubjectIdAndName } from '~/types/socialSupportSubject'
 
-export function sortFollowupTypesByName(
-  a: FollowupTypeIdAndName,
-  b: FollowupTypeIdAndName
+export function sortSocialSupportSubjectsByName(
+  a: SocialSupportSubjectIdAndName,
+  b: SocialSupportSubjectIdAndName
 ) {
   const insensitiveAName = a.name.toLowerCase()
   const insensitiveBName = b.name.toLowerCase()

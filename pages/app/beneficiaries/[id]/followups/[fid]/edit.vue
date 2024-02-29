@@ -17,9 +17,11 @@
         class="fr-mx-auto"
       />
       <FollowupFormEdition
-        v-else-if="followupData && followupTypes && partnerOrganizations"
+        v-else-if="
+          followupData && socialSupportSubjects && partnerOrganizations
+        "
         :is-submitting="isSubmitting"
-        :followup-types="followupTypes"
+        :social-support-subjects="socialSupportSubjects"
         :partner-organizations="partnerOrganizations"
         :data="followupData"
         @save-followup="onUpdateFollowup"
@@ -61,10 +63,10 @@
   useHead({ title })
 
   const {
-    data: followupTypes,
-    pending: followupTypesPending,
-    error: followupTypesError
-  } = await trpcClient.config.getStructureFollowupTypes.useQuery()
+    data: socialSupportSubjects,
+    pending: socialSupportSubjectsPending,
+    error: socialSupportSubjectsError
+  } = await trpcClient.config.getStructureSocialSupportSubjects.useQuery()
 
   const {
     data: partnerOrganizations,
@@ -75,7 +77,7 @@
   const pending = computed(
     () =>
       followupPending.value ||
-      followupTypesPending.value ||
+      socialSupportSubjectsPending.value ||
       partnerOrganizationsPending.value
   )
 
@@ -83,7 +85,7 @@
     if (followupError.value) {
       return "La synthèse de l'entretien n'a pas pu être chargée."
     }
-    if (followupTypesError.value) {
+    if (socialSupportSubjectsError.value) {
       return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
     }
     if (partnerOrganizationsError.value) {
