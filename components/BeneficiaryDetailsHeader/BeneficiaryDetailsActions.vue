@@ -2,7 +2,7 @@
   <ul class="fr-btns-group fr-btns-group--inline">
     <li v-if="permissions?.delete.beneficiary">
       <button
-        class="fr-btn fr-btn--secondary lete-line btn-delete-action"
+        class="fr-btn fr-btn--secondary fr-icon-delete-line btn-delete-action"
         data-fr-opened="false"
         aria-controls="global-modal"
         type="button"
