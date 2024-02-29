@@ -11,6 +11,7 @@ export function getOngoing({ ctx: { user } }: { ctx: SecurityRuleContext }) {
     where: {
       socialSupportType: 'Followup',
       status: { in: ['Todo', 'InProgress'] },
+      createdById: user.id,
       ...constraints
     },
     _count: true

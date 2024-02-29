@@ -108,12 +108,12 @@
 
     if (!isReferent) {
       filters.push({
-        name: 'referents',
-        label: 'Référent',
+        name: 'createdById',
+        label: 'Agent',
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,
-        matomoEventAction: FollowupFilterEventAction.Referent
+        matomoEventAction: FollowupFilterEventAction.Agent
       })
     }
 

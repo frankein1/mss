@@ -11,6 +11,7 @@ export function getOngoing({ ctx: { user } }: { ctx: SecurityRuleContext }) {
     where: {
       socialSupportType: { in: ['HelpRequest', 'HelpRequestHousing'] },
       status: { in: ['WaitingAdditionalInformation', 'InvestigationOngoing'] },
+      createdById: user.id,
       ...constraints
     },
     _count: true
