@@ -6,14 +6,14 @@ type FollowupFieldLabels = Omit<
     Omit<SocialSupport, 'socialSupportType'>,
   'created' | 'structureId'
 > & {
-  types: string
+  subjects: string
   documents: string
 }
 
 export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
   id: 'Identifiant',
   beneficiaryId: 'Bénéficiaire',
-  types: "Objet(s) de l'accompagnement",
+  subjects: "Objet(s) de l'accompagnement",
   medium: "Type d'entretien",
   documents: 'Documents',
   status: 'Statut',

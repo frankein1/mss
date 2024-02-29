@@ -1,30 +1,31 @@
-import { StructureRepo, FollowupTypeRepo } from '~/server/database'
+import { StructureRepo, SocialSupportSubjectRepo } from '~/server/database'
 import { createMutation } from '~/server/route'
 import {
   AdminEditStructureInput,
   adminEditStructureSchema
 } from '~/server/schema'
-import { editFollowupTypes } from '~/server/query/structure'
+import { editSocialSupportSubjects } from '~/server/query/structure'
 
 const adminHandler = async ({ input }: { input: AdminEditStructureInput }) => {
   const {
-    legallyRequiredFollowupTypes,
-    legallyNotRequiredFollowupTypes,
+    legallyRequiredSocialSupportSubjects,
+    legallyNotRequiredSocialSupportSubjects,
     structureId,
     ...structure
   } = input
 
-  const currentFollowupTypes = await FollowupTypeRepo.prisma.findMany({
-    where: {
-      ownedByStructureId: structureId
-    }
-  })
+  const currentSocialSupportSubjects =
+    await SocialSupportSubjectRepo.prisma.findMany({
+      where: {
+        ownedByStructureId: structureId
+      }
+    })
 
-  await editFollowupTypes(
+  await editSocialSupportSubjects(
     structureId,
-    currentFollowupTypes,
-    legallyRequiredFollowupTypes,
-    legallyNotRequiredFollowupTypes
+    currentSocialSupportSubjects,
+    legallyRequiredSocialSupportSubjects,
+    legallyNotRequiredSocialSupportSubjects
   )
 
   const updatedStructure = await StructureRepo.prisma.update({

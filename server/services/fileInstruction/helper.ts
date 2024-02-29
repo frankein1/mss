@@ -11,7 +11,7 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
   const {
     fileInstructionType,
     status,
-    followupTypes,
+    socialSupportSubjects,
     examinationDate,
     handlingDate,
     externalStructure,
@@ -24,9 +24,9 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
   }
 
   if (handlingDate) {
-    formattedFilters.helpRequest = {}
-    formattedFilters.helpRequest.handlingDate =
-      handlingDate === 'true' ? { not: null } : null
+    formattedFilters.helpRequest = {
+      handlingDate: handlingDate === 'true' ? { not: null } : null
+    }
   }
 
   if (examinationDate) {
@@ -37,16 +37,21 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     formattedFilters.externalStructure = externalStructure === 'true'
   }
 
-  if (status || followupTypes?.length || createdById || ministre?.length) {
+  if (
+    status ||
+    socialSupportSubjects?.length ||
+    createdById ||
+    ministre?.length
+  ) {
     formattedFilters.socialSupport = {}
 
     if (status) {
       formattedFilters.socialSupport.status = status
     }
 
-    if (followupTypes?.length) {
-      formattedFilters.socialSupport.types = {
-        some: { id: { in: followupTypes } }
+    if (socialSupportSubjects?.length) {
+      formattedFilters.socialSupport.subjects = {
+        some: { id: { in: socialSupportSubjects } }
       }
     }
 

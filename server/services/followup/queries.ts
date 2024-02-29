@@ -15,7 +15,7 @@ const include = {
   socialSupport: {
     include: {
       documents: true,
-      types: true,
+      subjects: true,
       beneficiary: {
         include: {
           referents: true

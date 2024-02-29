@@ -1,7 +1,7 @@
 <template>
   <HelpRequestForm
     :is-submitting="isSubmitting"
-    :followup-types="followupTypes"
+    :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
     :beneficiary-id="beneficiaryId"
     :caught-errors="caughtErrors"
@@ -12,7 +12,7 @@
 
 <script lang="ts" setup>
   import {
-    FollowupType,
+    SocialSupportSubject,
     SocialSupportStatus,
     FileInstructionType
   } from '@prisma/client'
@@ -27,7 +27,7 @@
 
   const props = defineProps<{
     isSubmitting: boolean
-    followupTypes: FollowupType[]
+    socialSupportSubjects: SocialSupportSubject[]
     partnerOrganizations: PartnerOrganizationIdName[]
     beneficiaryId: string
     isFinancial: boolean

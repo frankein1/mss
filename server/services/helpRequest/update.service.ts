@@ -1,7 +1,7 @@
 import { prepareInstructorOrganization } from '../helper'
 import { cleanUpdateInput, preparePrescribingOrganization } from './helper'
 import { SocialSupportRepo, HelpRequestRepo } from '~/server/database'
-import { markFollowupTypeAsUsed } from '~/server/query'
+import { markSocialSupportSubjectAsUsed } from '~/server/query'
 import { EditHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareDocumentsMutations, connect } from '~/utils/prisma'
@@ -21,7 +21,7 @@ export async function update({ input, ctx }: UpdateParams) {
           instructorOrganizationId: true,
           socialSupport: {
             select: {
-              types: true,
+              subjects: true,
               documents: true
             }
           }
@@ -33,7 +33,7 @@ export async function update({ input, ctx }: UpdateParams) {
   const {
     numeroPegase,
     ministre,
-    typeId,
+    subjectId,
     documents,
     externalStructure,
     status,
@@ -66,9 +66,9 @@ export async function update({ input, ctx }: UpdateParams) {
       numeroPegase,
       dueDate,
       date,
-      types: {
-        ...connect(typeId),
-        disconnect: target.fileInstruction.socialSupport.types.map(
+      subjects: {
+        ...connect(subjectId),
+        disconnect: target.fileInstruction.socialSupport.subjects.map(
           ({ id }) => ({ id })
         )
       },
@@ -97,7 +97,7 @@ export async function update({ input, ctx }: UpdateParams) {
               paymentDate,
               handlingDate,
               isRefundable,
-              type: connect(typeId),
+              subject: connect(subjectId),
               prescribingOrganization: preparePrescribingOrganization(
                 prescribingOrganizationId
               )
@@ -116,7 +116,7 @@ export async function update({ input, ctx }: UpdateParams) {
     }
   })
 
-  await markFollowupTypeAsUsed([typeId])
+  await markSocialSupportSubjectAsUsed([subjectId])
 
   return { helpRequest }
 }

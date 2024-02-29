@@ -10,13 +10,13 @@ import {
   getFamilyStatsQ,
   getFinancialHelpRequestsStatsQ,
   getFollowupActionsEntreprisesStatsQ,
-  getFollowupFollowupTypesStatsQ,
+  getFollowupSubjectsStatsQ,
   getFollowupMediumStatsQ,
   getFollowupMinistreStatsQ,
   getFollowupPrescribingOrganizationStatsQ,
   getFollowupStatusStatsQ,
   getGenderStatsQ,
-  getHelpRequestFollowupTypesStatsQ,
+  getHelpRequestSubjectsStatsQ,
   getHelpRequestMinistreStatsQ,
   getHelpRequestPrescribingOrganizationStatsQ,
   getHelpRequestStatusStatsQ,
@@ -105,12 +105,12 @@ export const statRouter = router({
   getRegionStats: protectedProcedure
     .input(getRegionStatsQ.inputValidation)
     .query(getRegionStatsQ.execute),
-  getFollowupFollowupTypeStats: protectedProcedure
-    .input(getFollowupFollowupTypesStatsQ.inputValidation)
-    .query(getFollowupFollowupTypesStatsQ.execute),
-  getHelpRequestFollowupTypeStats: protectedProcedure
-    .input(getHelpRequestFollowupTypesStatsQ.inputValidation)
-    .query(getHelpRequestFollowupTypesStatsQ.execute),
+  getFollowupSubjectStats: protectedProcedure
+    .input(getFollowupSubjectsStatsQ.inputValidation)
+    .query(getFollowupSubjectsStatsQ.execute),
+  getHelpRequestSubjectStats: protectedProcedure
+    .input(getHelpRequestSubjectsStatsQ.inputValidation)
+    .query(getHelpRequestSubjectsStatsQ.execute),
   getMinistereStructure: protectedProcedure
     .input(getMinistereStructureStatsQ.inputValidation)
     .query(getMinistereStructureStatsQ.execute),
