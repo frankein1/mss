@@ -15,44 +15,33 @@ export function prepareFollowupTypesMutations(
 }
 
 export function prepareFilters(filters: FollowupFilterInput) {
+  const { status, medium, followupTypes, createdById, ministre } = filters
+
   const formattedFilters: Prisma.FollowupWhereInput = {}
 
-  if (filters.status) {
-    formattedFilters.socialSupport = { status: filters.status }
+  if (medium) {
+    formattedFilters.medium = { in: medium }
   }
 
-  if (filters.medium) {
-    formattedFilters.medium = { in: filters.medium }
-  }
+  if (status || followupTypes?.length || createdById || ministre) {
+    formattedFilters.socialSupport = {}
 
-  if (filters.followupTypes?.length) {
-    const types = {
-      some: { id: { in: filters.followupTypes } }
+    if (status) {
+      formattedFilters.socialSupport.status = status
     }
-    if (formattedFilters.socialSupport) {
-      formattedFilters.socialSupport.types = types
-    } else {
-      formattedFilters.socialSupport = { types }
-    }
-  }
 
-  if (filters.referents?.length) {
-    const beneficiary = {
-      referents: { some: { id: { in: filters.referents } } }
+    if (followupTypes?.length) {
+      formattedFilters.socialSupport.types = {
+        some: { id: { in: followupTypes } }
+      }
     }
-    if (formattedFilters.socialSupport) {
-      formattedFilters.socialSupport.beneficiary = beneficiary
-    } else {
-      formattedFilters.socialSupport = { beneficiary }
-    }
-  }
 
-  if (filters.ministre) {
-    const ministre = { in: filters.ministre }
-    if (formattedFilters.socialSupport) {
-      formattedFilters.socialSupport.ministre = ministre
-    } else {
-      formattedFilters.socialSupport = { ministre }
+    if (createdById) {
+      formattedFilters.socialSupport.createdById = createdById
+    }
+
+    if (ministre) {
+      formattedFilters.socialSupport.ministre = { in: ministre }
     }
   }
 

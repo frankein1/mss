@@ -95,5 +95,5 @@
 
   const authState = useAuthState()
 
-  const authUserId = authState.getUserId()
+  const authUserId = authState.getUserId
 </script>

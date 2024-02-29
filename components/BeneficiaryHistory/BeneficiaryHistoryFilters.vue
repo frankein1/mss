@@ -222,7 +222,7 @@
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-        matomoEventAction: FollowupFilterEventAction.Referent,
+        matomoEventAction: BeneficiaryHistoryFilterEventAction.Referent,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb
       })
     }

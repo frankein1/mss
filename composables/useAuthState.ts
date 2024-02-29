@@ -20,9 +20,7 @@ export function useAuthState() {
     return user.value ? formatUserDisplayName(user.value) : ''
   }
 
-  function getUserId() {
-    return user.value ? user.value.id : undefined
-  }
+  const getUserId = computed(() => (user.value ? user.value.id : undefined))
 
   function isAuthenticated() {
     return !!user.value

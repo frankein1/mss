@@ -15,7 +15,7 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     examinationDate,
     handlingDate,
     externalStructure,
-    referents,
+    createdById,
     ministre
   } = filters
 
@@ -37,12 +37,7 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     formattedFilters.externalStructure = externalStructure === 'true'
   }
 
-  if (
-    status ||
-    followupTypes?.length ||
-    referents?.length ||
-    ministre?.length
-  ) {
+  if (status || followupTypes?.length || createdById || ministre?.length) {
     formattedFilters.socialSupport = formattedFilters.socialSupport || {}
 
     if (status) {
@@ -55,12 +50,8 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
       }
     }
 
-    if (referents?.length) {
-      formattedFilters.socialSupport = {
-        beneficiary: {
-          referents: { some: { id: { in: referents } } }
-        }
-      }
+    if (createdById) {
+      formattedFilters.socialSupport = { createdById }
     }
 
     if (ministre?.length) {

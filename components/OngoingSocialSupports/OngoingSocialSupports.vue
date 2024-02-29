@@ -58,6 +58,7 @@
 
   const filtersState = useFilters()
   const { socialSupportStatusLabels } = useSocialSupportStatus()
+  const authState = useAuthState()
 
   const props = defineProps<{
     isFileInstructions: boolean
@@ -79,9 +80,15 @@
 
   function onNavigate(status: SocialSupportStatus) {
     if (props.isFileInstructions) {
-      filtersState.fileInstruction.value = { status }
+      filtersState.fileInstruction.value = {
+        status,
+        createdById: authState.getUserId.value
+      }
     } else {
-      filtersState.followup.value = { status }
+      filtersState.followup.value = {
+        status,
+        createdById: authState.getUserId.value
+      }
     }
   }
 </script>

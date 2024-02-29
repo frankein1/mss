@@ -188,12 +188,12 @@
 
     if (!isReferent) {
       fileInstructionsFilters.push({
-        name: 'referents',
-        label: 'Référent',
+        name: 'createdById',
+        label: 'Agent',
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.Referent,
+        matomoEventAction: HelpRequestFilterEventAction.Agent,
         alwaysExpanded: fileInstructionsFilters.length < maxAlwaysExpandedNb
       })
     }
