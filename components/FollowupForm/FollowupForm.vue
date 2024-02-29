@@ -71,9 +71,9 @@
 
       <div>
         <VeeSearchableSelect
-          :label="followupFieldLabels.types"
-          name="types"
-          :options="followupTypeOptions"
+          :label="followupFieldLabels.subjects"
+          name="subjects"
+          :options="socialSupportSubjectOptions"
           required
           hint
           multiple
@@ -255,7 +255,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupType, FollowupMedium } from '@prisma/client'
+  import { SocialSupportSubject, FollowupMedium } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
   import {
     currentMinisterOptions,
@@ -273,7 +273,7 @@
   const props = withDefaults(
     defineProps<{
       isSubmitting: boolean
-      followupTypes: Array<FollowupType>
+      socialSupportSubjects: Array<SocialSupportSubject>
       partnerOrganizations: Array<PartnerOrganizationIdName>
       beneficiaryId: string
       medium: FollowupMedium
@@ -298,8 +298,8 @@
     followupFieldLabels
   )
 
-  const followupTypeOptions = computed(() =>
-    toOptions(props.followupTypes, 'id', 'name')
+  const socialSupportSubjectOptions = computed(() =>
+    toOptions(props.socialSupportSubjects, 'id', 'name')
   )
 
   const partnerOrganizationOptions = computed(() => {

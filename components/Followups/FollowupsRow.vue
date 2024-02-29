@@ -26,7 +26,7 @@
       <td>
         {{ formatBeneficiaryDisplayName(followup.beneficiary) }}
       </td>
-      <td class="followup-types-data">{{ followUpTypes }}</td>
+      <td class="social-support-subjects-data">{{ socialSupportSubjects }}</td>
       <td>
         {{ followup.dueDate ? formatDate(followup.dueDate) : undefined }}
       </td>
@@ -68,8 +68,8 @@
     })
   )
 
-  const followUpTypes = computed(() =>
-    followup.value.types.map(({ name }) => name).join(', ')
+  const socialSupportSubjects = computed(() =>
+    followup.value.subjects.map(({ name }) => name).join(', ')
   )
 
   const canQuickEditFollowup = computed(() => permissions.value.edit)

@@ -13,7 +13,7 @@ import { isObjectEmpty } from '~/utils/isObjectEmpty'
 export const include = {
   socialSupports: {
     select: {
-      types: {
+      subjects: {
         select: {
           id: true,
           name: true
@@ -73,7 +73,8 @@ function findOne(user: SecurityRuleGrantee, id: string) {
 }
 
 type BeneficiaryOutput = Prisma.PromiseReturnType<typeof findOne>
-type SocialSupportType = BeneficiaryOutput['socialSupports'][0]['types'][0]
+type SocialSupportSubjects =
+  BeneficiaryOutput['socialSupports'][0]['subjects'][0]
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
   const beneficiary = await findOne(ctx.user, id)
@@ -166,31 +167,31 @@ const filter = (
 function getHistory(beneficiary: BeneficiaryOutput) {
   return {
     historyTotal: beneficiary._count.socialSupports,
-    types: getUniqueTypes(beneficiary)
+    subjects: getUniqueSubjects(beneficiary)
   }
 }
 
-function getUniqueTypes(beneficiary: BeneficiaryOutput) {
-  return beneficiary.socialSupports.reduce((types, ss) => {
-    if (!ss.types.length) {
-      return types
+function getUniqueSubjects(beneficiary: BeneficiaryOutput) {
+  return beneficiary.socialSupports.reduce((subjects, ss) => {
+    if (!ss.subjects.length) {
+      return subjects
     }
 
-    const notCollectedTypes: SocialSupportType[] = []
+    const notCollectedSubjects: SocialSupportSubjects[] = []
 
-    ss.types.forEach(type => {
-      const isNotInTypes = types.every(t => t.id !== type.id)
-      const isNotInNotCollectedTypes = notCollectedTypes.every(
-        t => t.id !== type.id
+    ss.subjects.forEach(subject => {
+      const isNotInSubjects = subjects.every(t => t.id !== subject.id)
+      const isNotInNotCollectedSubjects = notCollectedSubjects.every(
+        t => t.id !== subject.id
       )
 
-      if (isNotInTypes && isNotInNotCollectedTypes) {
-        notCollectedTypes.push(type)
+      if (isNotInSubjects && isNotInNotCollectedSubjects) {
+        notCollectedSubjects.push(subject)
       }
     })
 
-    return [...types, ...notCollectedTypes]
-  }, [] as SocialSupportType[])
+    return [...subjects, ...notCollectedSubjects]
+  }, [] as SocialSupportSubjects[])
 }
 
 function getGeneral(

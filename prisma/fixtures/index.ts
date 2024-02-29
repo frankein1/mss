@@ -1,5 +1,5 @@
 export { fixtureStructure } from './structures'
-export { fixturesFollowupTypes } from './followupTypes'
+export { fixturesSocialSupportSubjects } from './socialSupportSubjects'
 export { fixturesUsers } from './users'
 export { fixturesBeneficiaries } from './beneficiaries'
 export { fixturesSocialSupports } from './socialSupports'

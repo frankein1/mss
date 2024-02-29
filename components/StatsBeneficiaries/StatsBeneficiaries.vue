@@ -3,7 +3,7 @@
     <div class="fr-col-12">
       <StatsFilters
         v-model:filters="filters"
-        :followup-type-options="followupTypeOptions"
+        :social-support-subject-options="socialSupportSubjectOptions"
         :beneficiaries-cities-options="beneficiariesCitiesOptions"
         :agent-options="agentOptions"
       />
@@ -138,12 +138,12 @@
 
   withDefaults(
     defineProps<{
-      followupTypeOptions?: Options
+      socialSupportSubjectOptions?: Options
       beneficiariesCitiesOptions?: Options
       agentOptions?: Options
     }>(),
     {
-      followupTypeOptions: () => new Map<string, string>(),
+      socialSupportSubjectOptions: () => new Map<string, string>(),
       beneficiariesCitiesOptions: () => new Map<string, string>(),
       agentOptions: () => new Map<string, string>()
     }

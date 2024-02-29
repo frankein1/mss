@@ -8,8 +8,8 @@ import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
-import { editFollowupTypes } from '~/server/query/structure'
-import { StructureRepo, FollowupTypeRepo } from '~/server/database'
+import { editSocialSupportSubjects } from '~/server/query/structure'
+import { StructureRepo, SocialSupportSubjectRepo } from '~/server/database'
 
 const handler = async ({
   ctx: { structure: userStructure, user },
@@ -19,18 +19,21 @@ const handler = async ({
   input: EditCurrentUserStructureInput
 }) => {
   const {
-    legallyRequiredFollowupTypes,
-    legallyNotRequiredFollowupTypes,
+    legallyRequiredSocialSupportSubjects,
+    legallyNotRequiredSocialSupportSubjects,
     ...structure
   } = input
 
-  const currentFollowupTypes = await FollowupTypeRepo.findMany(user, {})
+  const currentSocialSupportSubjects = await SocialSupportSubjectRepo.findMany(
+    user,
+    {}
+  )
 
-  await editFollowupTypes(
+  await editSocialSupportSubjects(
     userStructure.id,
-    currentFollowupTypes,
-    legallyRequiredFollowupTypes,
-    legallyNotRequiredFollowupTypes
+    currentSocialSupportSubjects,
+    legallyRequiredSocialSupportSubjects,
+    legallyNotRequiredSocialSupportSubjects
   )
 
   const updatedStructure = await StructureRepo.prisma.update({

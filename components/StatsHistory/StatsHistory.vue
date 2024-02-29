@@ -3,7 +3,7 @@
     <div class="fr-col-12">
       <StatsFilters
         v-model:filters="filters"
-        :followup-type-options="followupTypeOptions"
+        :social-support-subject-options="socialSupportSubjectOptions"
         :beneficiaries-cities-options="beneficiariesCitiesOptions"
         :agent-options="agentOptions"
         :is-help-requests-tab="!isFollowupsTabActive"
@@ -93,7 +93,7 @@
               v-if="filters.helpRequestSubject !== FileInstructionType.Housing"
               class="fr-col-12 fr-col-lg-6"
             >
-              <StatsHelpRequestFollowupTypes
+              <StatsHelpRequestSubject
                 :total-count="financialHelpRequestCount + otherHelpRequestCount"
                 :filters="filters"
               />
@@ -139,7 +139,7 @@
             </div>
             <div
               v-if="
-                !filters.followupTypes &&
+                !filters.socialSupportSubjects &&
                 (!filters.helpRequestSubject ||
                   filters.helpRequestSubject === FileInstructionType.Housing)
               "
@@ -171,7 +171,7 @@
           class="fr-grid-row fr-grid-row--gutters fr-px-2w"
         >
           <div class="fr-col-12 fr-col-lg-6">
-            <StatsFollowupFollowupTypes
+            <StatsFollowupSubject
               :total-count="followupCount"
               :filters="filters"
             />
@@ -236,12 +236,12 @@
 
   withDefaults(
     defineProps<{
-      followupTypeOptions?: Options
+      socialSupportSubjectOptions?: Options
       beneficiariesCitiesOptions?: Options
       agentOptions?: Options
     }>(),
     {
-      followupTypeOptions: () => new Map<string, string>(),
+      socialSupportSubjectOptions: () => new Map<string, string>(),
       beneficiariesCitiesOptions: () => new Map<string, string>(),
       agentOptions: () => new Map<string, string>()
     }

@@ -160,13 +160,13 @@ export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
     formattedFilters.AND = searchConditions.AND
   }
 
-  if (filters.followupTypes?.length) {
-    const typesListFilter: Prisma.FollowupTypeWhereInput = {
-      id: { in: filters.followupTypes }
+  if (filters.socialSupportSubjects?.length) {
+    const subjectsListFilter: Prisma.SocialSupportSubjectWhereInput = {
+      id: { in: filters.socialSupportSubjects }
     }
 
     formattedFilters.socialSupports = {
-      some: { types: { some: typesListFilter } }
+      some: { subjects: { some: subjectsListFilter } }
     }
   }
 

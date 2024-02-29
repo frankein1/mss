@@ -18,7 +18,7 @@ const adminHandler = async ({
   const createdStructure = await StructureRepo.prisma.create({
     data: input,
     include: {
-      followupTypes: {
+      socialSupportSubjects: {
         include: {
           _count: {
             select: { socialSupports: true }

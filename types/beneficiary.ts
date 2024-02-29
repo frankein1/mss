@@ -5,7 +5,7 @@ import type {
   User,
   UserStatus
 } from '@prisma/client'
-import { FollowupTypeIdAndName } from './followupType'
+import { SocialSupportSubjectIdAndName } from './socialSupportSubject'
 import {
   SaveBeneficiaryEntourageInput,
   SaveBeneficiaryExternalOrganisationsInput,
@@ -185,6 +185,6 @@ export type GetBeneficiaryOutput = Pick<
   taxHouseholds: GetBeneficiaryTaxHousehold | undefined
   history: {
     historyTotal: number
-    types: FollowupTypeIdAndName[]
+    subjects: SocialSupportSubjectIdAndName[]
   }
 }
