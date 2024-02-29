@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client'
-import { fixtureStructure } from './'
+import { fixtureStructure } from '.'
 
-export const fixturesFollowupTypes = [
+export const fixturesSocialSupportSubjects = [
   {
     id: '30790553-9df4-478b-a6a0-bef6945bfbaf',
     name: 'Inclusion numérique',
@@ -91,4 +91,4 @@ export const fixturesFollowupTypes = [
     legallyRequired: false,
     ownedByStructureId: fixtureStructure.id
   }
-] satisfies Prisma.FollowupTypeCreateManyInput[]
+] satisfies Prisma.SocialSupportSubjectCreateManyInput[]

@@ -28,9 +28,9 @@
         class="fr-mx-auto"
       />
       <HelpRequestFormCreation
-        v-else-if="followupTypes && partnerOrganizations"
+        v-else-if="socialSupportSubjects && partnerOrganizations"
         :is-submitting="isSubmitting"
-        :followup-types="followupTypes"
+        :social-support-subjects="socialSupportSubjects"
         :beneficiary-id="beneficiaryId"
         :partner-organizations="partnerOrganizations"
         :is-financial="isFinancial"
@@ -78,10 +78,10 @@
   useHead({ title })
 
   const {
-    data: followupTypes,
-    pending: followupTypesPending,
-    error: followupTypesError
-  } = await trpcClient.config.getStructureFollowupTypes.useQuery()
+    data: socialSupportSubjects,
+    pending: socialSupportSubjectsPending,
+    error: socialSupportSubjectsError
+  } = await trpcClient.config.getStructureSocialSupportSubjects.useQuery()
 
   const {
     data: partnerOrganizations,
@@ -90,14 +90,15 @@
   } = await trpcClient.partner.getAll.useQuery()
 
   const pending = computed(
-    () => followupTypesPending.value || partnerOrganizationsPending.value
+    () =>
+      socialSupportSubjectsPending.value || partnerOrganizationsPending.value
   )
 
   const fetchError = computed(() => {
     if (beneficiaryError.value) {
       return "Les informations du bénéficiaire n'ont pas pu être chargées."
     }
-    if (followupTypesError.value) {
+    if (socialSupportSubjectsError.value) {
       return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
     }
     if (partnerOrganizationsError.value) {

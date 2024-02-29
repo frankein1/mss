@@ -81,8 +81,10 @@ function prepareSocialSupportFilters(
     formattedFilters.fileInstruction.helpRequest.handlingDate = handlingDate
   }
 
-  if (filters.followupTypes?.length) {
-    formattedFilters.types = { some: { id: { in: filters.followupTypes } } }
+  if (filters.socialSupportSubjects?.length) {
+    formattedFilters.subjects = {
+      some: { id: { in: filters.socialSupportSubjects } }
+    }
   }
 
   if (filters.typeSuivi) {
@@ -158,7 +160,7 @@ function loadSocialSupports(
           }
         }
       },
-      types: true
+      subjects: true
     },
     orderBy: [{ date: 'desc' }, { created: 'desc' }]
   })

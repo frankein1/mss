@@ -24,7 +24,7 @@ import {
 export const addFollowupSchemaBase = z.object({
   isMinistry: z.boolean(),
   beneficiaryId: z.string().uuid(),
-  types: z
+  subjects: z
     .array(z.string().uuid(), {
       ...errorMessages,
       required_error: requiredErrorMessage

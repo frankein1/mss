@@ -9,16 +9,16 @@
       :alert-type="AlertType.Error"
       :message="`Les statistiques de la répartion des objets d'accompagnement n'ont pas pu être chargées.`"
     />
-    <template v-else-if="followupTypesStats">
+    <template v-else-if="subjectStats">
       <h2 class="fr-h5">Objets d'accompagnement</h2>
       <p v-if="!filters.helpRequestSubject">
         Pourcentage calculé sur le nombre total d'instructions de dossier dans
         les thématiques "Aide financière" et "Autre"
       </p>
       <StatsList
-        v-if="followupTypesStats.length"
+        v-if="subjectStats.length"
         :total-count="totalCount"
-        :stats="followupTypesStats"
+        :stats="subjectStats"
       />
       <p v-else>
         Commencez à créer des instructions de dossier dans les fiches de
@@ -42,16 +42,14 @@
   }>()
 
   const {
-    data: followupTypesCounts,
+    data: subjectCounts,
     error,
     pending
-  } = await trpcClient.stat.getHelpRequestFollowupTypeStats.useQuery(
-    props.filters
-  )
+  } = await trpcClient.stat.getHelpRequestSubjectStats.useQuery(props.filters)
 
-  const followupTypesStats = computed(
+  const subjectStats = computed(
     () =>
-      followupTypesCounts.value
+      subjectCounts.value
         ?.map(({ id, name, _count }) => ({
           key: id,
           label: name,

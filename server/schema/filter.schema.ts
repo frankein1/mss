@@ -32,7 +32,7 @@ const statFilterSchema = z.object({
       }
       return dayjs(v).hour(23).minute(59).second(59).toDate()
     }),
-  followupTypes: z.array(z.string().uuid()).nullish(),
+  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   cities: z
     .array(stringConstraint.max(50, maxStringLengthMessage(50)))
     .nullish(),
@@ -51,7 +51,7 @@ type StatFilterInput = Omit<
 
 const beneficiaryFilterSchema = z.object({
   search: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
-  followupTypes: z.array(z.string().uuid()).nullish(),
+  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   referents: z.array(z.string().uuid()).nullish(),
   status: z.nativeEnum(BeneficiaryStatus).nullish(),
   ageGroup: z.nativeEnum(AgeGroup).nullish()
@@ -71,7 +71,7 @@ type BeneficiaryDocumentFilterInput = z.infer<
 const followupFilterSchema = z.object({
   status: z.nativeEnum(SocialSupportStatus).nullish(),
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
-  followupTypes: z.array(z.string().uuid()).nullish(),
+  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   createdById: z.string().uuid().nullish(),
   ministre: z.array(z.nativeEnum(Minister)).nullish()
 })
@@ -82,7 +82,7 @@ const beneficiaryHistoryFilterSchema = z.object({
   status: z.nativeEnum(SocialSupportStatus).nullish(),
   typeSuivi: z.nativeEnum(TypeSuivi).nullish(),
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
-  followupTypes: z.array(z.string().uuid()).nullish(),
+  socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
   handlingDate: kindOfBooleanSchema(),
   externalStructure: kindOfBooleanSchema(),

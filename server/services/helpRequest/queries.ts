@@ -21,7 +21,7 @@ export const include = {
       instructorOrganization: true,
       socialSupport: {
         include: {
-          types: true,
+          subjects: true,
           documents: true,
           beneficiary: {
             include: {
@@ -75,11 +75,11 @@ export function filter(
     minister: appPermissions.module.ministere,
     privateSynthesis: permissions.get.privateSynthesis
   }
-  const { types, ...filteredSocialSupport } = filterSocialSupport({
+  const { subjects, ...filteredSocialSupport } = filterSocialSupport({
     socialSupport,
     conditions
   })
-  const type = types.length ? types[0] : null
+  const socialSupportSubject = subjects.length ? subjects[0] : null
   const filteredHelpRequest = filterHelpRequest({
     helpRequest,
     conditions
@@ -92,8 +92,8 @@ export function filter(
 
   return {
     ...filteredHelpRequest,
-    type,
-    typeId: type?.id,
+    subject: socialSupportSubject,
+    subjectId: socialSupportSubject?.id,
     fileInstruction: {
       ...filteredFileInstruction,
       socialSupport: filteredSocialSupport

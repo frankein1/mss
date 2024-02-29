@@ -22,9 +22,9 @@
       />
       <BeneficiaryDetailsStatus :status="beneficiary.status" />
       <BeneficiaryInfoHeader :beneficiary="beneficiary" />
-      <template v-if="followupTypes.length">
+      <template v-if="socialSupportSubjects.length">
         <p class="fr-text--bold">Accompagnements</p>
-        <p>{{ followupTypes }}</p>
+        <p>{{ socialSupportSubjects }}</p>
       </template>
       <BeneficiaryInfoGeneralContent :general="beneficiary.general" />
       <BeneficiaryInfoTaxHouseholdsContent
@@ -82,8 +82,10 @@
     title: RouteTitle.AppBeneficiaryPrint(beneficiary.value?.general || null)
   })
 
-  const followupTypes = computed(() =>
-    (data.value?.beneficiary.history.types || []).map(t => t.name).join(', ')
+  const socialSupportSubjects = computed(() =>
+    (data.value?.beneficiary.history.subjects || [])
+      .map(({ name }) => name)
+      .join(', ')
   )
 
   onMounted(() => {

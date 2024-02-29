@@ -13,7 +13,7 @@
       class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-grid-row--center"
     >
       <HelpRequestFormContextSection
-        :followup-types="followupTypes"
+        :social-support-subjects="socialSupportSubjects"
         :partner-organizations="partnerOrganizations"
         :is-external-support="isExternalSupport"
         :has-set-external-structure="hasSetExternalStructure"
@@ -74,7 +74,7 @@
 
 <script lang="ts" setup>
   import {
-    FollowupType,
+    SocialSupportSubject,
     SocialSupportStatus,
     FileInstructionType
   } from '@prisma/client'
@@ -90,7 +90,7 @@
   const props = withDefaults(
     defineProps<{
       isSubmitting: boolean
-      followupTypes?: FollowupType[]
+      socialSupportSubjects?: SocialSupportSubject[]
       partnerOrganizations: PartnerOrganizationIdName[]
       beneficiaryId: string
       canEditPrivateSynthesis?: boolean
@@ -99,7 +99,7 @@
     }>(),
     {
       canEditPrivateSynthesis: true,
-      followupTypes: () => [],
+      socialSupportSubjects: () => [],
       prescribingOrganizations: () => []
     }
   )

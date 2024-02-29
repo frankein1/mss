@@ -37,9 +37,11 @@
         class="fr-mx-auto"
       />
       <HelpRequestFormEdition
-        v-else-if="helpRequestData && followupTypes && partnerOrganizations"
+        v-else-if="
+          helpRequestData && socialSupportSubjects && partnerOrganizations
+        "
         :is-submitting="isSubmitting"
-        :followup-types="followupTypes"
+        :social-support-subjects="socialSupportSubjects"
         :data="helpRequestData"
         :partner-organizations="partnerOrganizations"
         @save-help-request="onUpdateHelpRequest"
@@ -106,10 +108,10 @@
   useHead({ title })
 
   const {
-    data: followupTypes,
-    pending: followupTypesPending,
-    error: followupTypesError
-  } = await trpcClient.config.getStructureFollowupTypes.useQuery()
+    data: socialSupportSubjects,
+    pending: socialSupportSubjectsPending,
+    error: socialSupportSubjectsError
+  } = await trpcClient.config.getStructureSocialSupportSubjects.useQuery()
 
   const {
     data: partnerOrganizations,
@@ -120,7 +122,7 @@
   const pending = computed(
     () =>
       helpRequestPending.value ||
-      followupTypesPending.value ||
+      socialSupportSubjectsPending.value ||
       partnerOrganizationsPending.value
   )
 
@@ -128,7 +130,7 @@
     if (helpRequestError.value) {
       return "L'instruction de dossier n'a pas pu être chargée."
     }
-    if (followupTypesError.value) {
+    if (socialSupportSubjectsError.value) {
       return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
     }
     if (partnerOrganizationsError.value) {

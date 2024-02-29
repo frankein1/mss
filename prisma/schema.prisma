@@ -61,13 +61,13 @@ model User {
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  structure                  Structure?      @relation(fields: [structureId], references: [id])
-  structureId                String?         @map("structure_id") @db.Uuid
-  createdSocialSupports      SocialSupport[] @relation(name: "created_social_supports")
-  createdDocuments           Document[]
-  createdFollowupTypes       FollowupType[]
-  receivedNotifications      Notification[]  @relation(name: "received_notifications")
-  itemCreatedByNotifications Notification[]  @relation(name: "item_created_by_notifications")
+  structure                    Structure?             @relation(fields: [structureId], references: [id])
+  structureId                  String?                @map("structure_id") @db.Uuid
+  createdSocialSupports        SocialSupport[]        @relation(name: "created_social_supports")
+  createdDocuments             Document[]
+  createdSocialSupportSubjects SocialSupportSubject[]
+  receivedNotifications        Notification[]         @relation(name: "received_notifications")
+  itemCreatedByNotifications   Notification[]         @relation(name: "item_created_by_notifications")
 
   createdBeneficiaries  Beneficiary[] @relation(name: "created_beneficiaries")
   archivedBeneficiaries Beneficiary[] @relation(name: "archived_beneficiaries")
@@ -91,21 +91,21 @@ enum StructureType {
 }
 
 model Structure {
-  id                   String                @id @default(uuid()) @db.Uuid
-  type                 StructureType
-  name                 String
-  zipcode              String
-  city                 String
-  address              String
-  phone                String
-  email                String
-  inhabitantsNumber    String?               @map("inhabitants_number")
-  inseeCode            String?               @map("insee_code")
-  siret                String?
-  followupTypes        FollowupType[]
-  users                User[]
-  socialSupports       SocialSupport[]
-  partnerOrganizations PartnerOrganization[]
+  id                    String                 @id @default(uuid()) @db.Uuid
+  type                  StructureType
+  name                  String
+  zipcode               String
+  city                  String
+  address               String
+  phone                 String
+  email                 String
+  inhabitantsNumber     String?                @map("inhabitants_number")
+  inseeCode             String?                @map("insee_code")
+  siret                 String?
+  socialSupportSubjects SocialSupportSubject[]
+  users                 User[]
+  socialSupports        SocialSupport[]
+  partnerOrganizations  PartnerOrganization[]
 
   beneficiaries Beneficiary[]
 
@@ -149,7 +149,7 @@ model Document {
   @@map("document")
 }
 
-enum DefaultFollowupType {
+enum DefaultSocialSupportSubject {
   // Aide chauffage
   AideChauffage
   // Aide aux impayés d'énergie et fluides
@@ -202,15 +202,17 @@ enum DefaultFollowupType {
   SoutienAdministratif
   // Soutien à la création d'activité
   SoutienCreationActivite
+
+  @@map("DefaultFollowupType")
 }
 
-model FollowupType {
-  id              String               @id @default(uuid()) @db.Uuid
+model SocialSupportSubject {
+  id              String                       @id @default(uuid()) @db.Uuid
   name            String
-  legallyRequired Boolean              @map("legally_required")
-  default         DefaultFollowupType?
-  legacyId        String?              @map("legacy_id") @db.Uuid // FIXME: What is the purpose of this ?
-  used            Boolean              @default(false)
+  legallyRequired Boolean                      @map("legally_required")
+  default         DefaultSocialSupportSubject?
+  legacyId        String?                      @map("legacy_id") @db.Uuid // FIXME: What is the purpose of this ?
+  used            Boolean                      @default(false)
 
   created     DateTime? @default(now())
   createdBy   User?     @relation(fields: [createdById], references: [id])
@@ -261,7 +263,7 @@ model SocialSupport {
   createdById String @map("created_by_id") @db.Uuid
   createdBy   User   @relation(name: "created_social_supports", fields: [createdById], references: [id])
 
-  types FollowupType[] @relation("social_support_to_followup_type")
+  subjects SocialSupportSubject[] @relation("social_support_to_followup_type")
 
   date DateTime @default(now()) @db.Date
 
@@ -415,8 +417,8 @@ enum PaymentMethod {
 model HelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
-  type   FollowupType @relation(fields: [typeId], references: [id])
-  typeId String       @map("type_id") @db.Uuid
+  subject   SocialSupportSubject @relation(fields: [subjectId], references: [id])
+  subjectId String               @map("type_id") @db.Uuid
 
   prescribingOrganizationId String?              @map("prescribing_organization_id") @db.Uuid
   prescribingOrganization   PartnerOrganization? @relation("help_request_prescribing_organization", fields: [prescribingOrganizationId], references: [id])

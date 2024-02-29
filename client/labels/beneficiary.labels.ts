@@ -8,7 +8,7 @@ type BeneficiaryFieldLabels = Omit<
     entourages: string
     taxHouseholds: string
     historyTotal: string
-    types: string
+    subjects: string
   },
   'createdById' | 'archivedById' | 'archived' | 'created'
 >
@@ -91,7 +91,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   entourages: 'Entourage',
   taxHouseholds: 'Foyer fiscal',
   historyTotal: 'Nombre de suivis',
-  types: "Objets d'accompagnement"
+  subjects: "Objets d'accompagnement"
 }
 
 export { beneficiaryFieldLabels }
