@@ -34,7 +34,8 @@ export const create = async ({ ctx, input }: CreateParams) => {
     firstFollowup,
     numeroPegase,
     classified,
-    forwardedToJustice
+    forwardedToJustice,
+    duration
     // ActionLogement,
     // Bailleur,
     // DeetsSiao,
@@ -104,7 +105,8 @@ export const create = async ({ ctx, input }: CreateParams) => {
           helpRequested,
           firstFollowup,
           classified,
-          forwardedToJustice
+          forwardedToJustice,
+          duration
           // signalements,
           // interventions,
         }

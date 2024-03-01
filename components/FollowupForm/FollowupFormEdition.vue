@@ -98,7 +98,8 @@
       firstFollowup: followup.value.firstFollowup || false,
       classified: followup.value.classified || false,
       forwardedToJustice: followup.value.forwardedToJustice || false,
-      isMinistry: application.value.module.ministere
+      isMinistry: application.value.module.ministere,
+      duration: followup.value.duration
       // ...initialInterventions.value,
       // ...initialSignalements.value
     }
