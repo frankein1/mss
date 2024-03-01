@@ -1,20 +1,26 @@
 <template>
   <li><span class="information-label">Type :</span> {{ medium }}</li>
   <li v-if="followup.prescribingOrganization?.name">
-    <span class="information-label">Organisme prescripteur :</span>
+    <span class="information-label"
+      >{{ followupFieldLabels.prescribingOrganizationId }} :</span
+    >
     {{ followup.prescribingOrganization.name }}
   </li>
   <li
     v-if="followup.firstFollowup"
     class="fr-icon-success-line"
   >
-    1<sup>er</sup> entretien
+    {{ followupFieldLabels.firstFollowup }}
+  </li>
+  <li v-if="followup.duration">
+    <span class="information-label">{{ followupFieldLabels.duration }} :</span>
+    {{ followupDurationLabels[followup.duration] }}
   </li>
   <li
     v-if="followup.helpRequested"
     class="fr-icon-success-line"
   >
-    Instruction de dossier
+    {{ followupFieldLabels.helpRequested }}
   </li>
   <li
     v-if="followup.classified"
@@ -26,7 +32,7 @@
     v-if="followup.forwardedToJustice"
     class="fr-icon-success-line"
   >
-    Transmis à la justice
+    {{ followupFieldLabels.forwardedToJustice }}
   </li>
   <!-- <li v-if="interventions">
         <span class="information-label">Interventions :</span>
@@ -43,9 +49,11 @@
   import { FollowupData } from './types'
   import {
     // followupInterventionLabels,
-    followupMediumLabels
-    // followupSignalementLabels
+    followupMediumLabels,
+    // followupSignalementLabels,
+    followupDurationLabels
   } from '~/client/options'
+  import { followupFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     followup: FollowupData

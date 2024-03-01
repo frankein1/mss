@@ -2,7 +2,8 @@ import {
   // FollowupIntervention,
   FollowupMedium,
   // FollowupSignalement,
-  SocialSupportStatus
+  SocialSupportStatus,
+  FollowupDuration
 } from '@prisma/client'
 import { labelsToOptions } from '~/utils/options'
 
@@ -53,3 +54,13 @@ export const followupStatusLabels = {
 }
 
 export const followupStatusOptions = labelsToOptions(followupStatusLabels)
+
+export const followupDurationLabels = {
+  [FollowupDuration.Quarter]: '15 min',
+  [FollowupDuration.Half]: '30 min',
+  [FollowupDuration.ThreeQuarter]: '45 min',
+  [FollowupDuration.Hour]: '1 heure',
+  [FollowupDuration.MoreThanHour]: '+ de 1 heure'
+}
+
+export const followupDurationOptions = labelsToOptions(followupDurationLabels)

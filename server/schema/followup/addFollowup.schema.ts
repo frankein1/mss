@@ -1,7 +1,8 @@
 import {
   FollowupMedium,
   SocialSupportStatus,
-  Minister
+  Minister,
+  FollowupDuration
   // FollowupIntervention,
   // FollowupSignalement
 } from '@prisma/client'
@@ -51,7 +52,8 @@ export const addFollowupSchemaBase = z.object({
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   prescribingOrganizationId: z.string().nullish(),
   classified: z.boolean().default(false),
-  forwardedToJustice: z.boolean().default(false)
+  forwardedToJustice: z.boolean().default(false),
+  duration: withEmptyValueOptionalNativeEnum(FollowupDuration)
   // [FollowupIntervention.DeetsSiao]: z.boolean().default(false),
   // [FollowupIntervention.Prefecture]: z.boolean().default(false),
   // [FollowupIntervention.Bailleur]: z.boolean().default(false),

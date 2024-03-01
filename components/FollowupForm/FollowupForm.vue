@@ -129,6 +129,14 @@
         />
       </div>
 
+      <div>
+        <VeeSelect
+          name="duration"
+          :label="followupFieldLabels.duration"
+          :options="withEmptyValue(followupDurationOptions)"
+        />
+      </div>
+
       <div class="fr-col-12">
         <VeeTextarea
           class="large-textarea"
@@ -300,7 +308,8 @@
   import {
     currentMinisterOptions,
     followupStatusOptions,
-    followupMediumOptions
+    followupMediumOptions,
+    followupDurationOptions
     // followupInterventionOptions,
     // followupSignalementOptions
   } from '~/client/options'

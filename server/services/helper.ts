@@ -130,7 +130,8 @@ export function filterFollowup({
     firstFollowup: show(followup.firstFollowup, conditions.details),
     helpRequested: show(followup.helpRequested, conditions.details),
     thirdPersonName: show(followup.thirdPersonName, conditions.details),
-    place: show(followup.place, conditions.details)
+    place: show(followup.place, conditions.details),
+    duration: show(followup.duration, conditions.details)
   }
 }
 export function filterFileInstruction({

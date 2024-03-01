@@ -32,7 +32,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     numeroPegase,
     classified,
     forwardedToJustice,
-    socialSupportId
+    socialSupportId,
+    duration
     // ActionLogement,
     // Bailleur,
     // DeetsSiao,
@@ -96,7 +97,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
           helpRequested,
           firstFollowup,
           classified,
-          forwardedToJustice
+          forwardedToJustice,
+          duration
           // signalements,
           // interventions,
         }

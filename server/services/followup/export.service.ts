@@ -3,7 +3,8 @@ import { prepareFilters, prepareSort } from './helper'
 import {
   followupMediumLabels,
   socialSupportStatusLabels,
-  ministerLabels
+  ministerLabels,
+  followupDurationLabels
 } from '~/client/options'
 import { ExportFollowupsInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
@@ -37,7 +38,8 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   // 'signalements',
   'thirdPersonName',
   'updated',
-  'createdById'
+  'createdById',
+  'duration'
 ]
 
 export async function exportFollowups({
@@ -95,6 +97,9 @@ export async function exportFollowups({
           updated: formatDate(followup.updated, 'DD-MM-YYYY HH:mm'),
           createdById: followup.createdBy
             ? formatUserDisplayName(followup.createdBy)
+            : '',
+          duration: followup.duration
+            ? followupDurationLabels[followup.duration]
             : ''
         })
       }
