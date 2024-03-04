@@ -12,6 +12,14 @@ type UpdateParams = {
 }
 
 export const update = async ({ ctx, input }: UpdateParams) => {
+  const target = await SocialSupportRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: input.socialSupportId },
+    select: {
+      documents: true,
+      types: true
+    }
+  })
+
   const {
     types,
     documents,
@@ -76,8 +84,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
       id: socialSupportId
     },
     data: {
-      documents: prepareDocumentsMutations(documents),
-      types: prepareFollowupTypesMutations(types),
+      documents: prepareDocumentsMutations(documents, target.documents),
+      types: prepareFollowupTypesMutations(types, target.types),
       ministre,
       date,
       synthesis,
