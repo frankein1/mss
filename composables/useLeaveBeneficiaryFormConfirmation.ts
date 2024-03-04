@@ -1,9 +1,11 @@
 import BeneficiaryLeaveForm from '~/components/BeneficiaryLeaveForm/BeneficiaryLeaveForm.vue'
 
-export function useLeaveBeneficiaryFormConfirmation(
-  isNavigatingWithFormActions: Ref<boolean>,
-  options?: { onLeave?: () => void; isFormDirty?: Ref<boolean> }
-) {
+export function useLeaveBeneficiaryFormConfirmation(options?: {
+  onLeave?: () => void
+  isFormDirty?: Ref<boolean>
+}) {
+  const isNavigatingWithFormActions = ref(false)
+
   onBeforeRouteLeave((_, __, next) => {
     if (
       isNavigatingWithFormActions.value ||
@@ -27,4 +29,6 @@ export function useLeaveBeneficiaryFormConfirmation(
       triggerOpen: true
     })
   })
+
+  return { isNavigatingWithFormActions }
 }

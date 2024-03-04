@@ -81,7 +81,6 @@
   const saveTarget = ref<string | undefined>(undefined)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
-  const isNavigatingWithFormActions = ref(false)
 
   const breadcrumbLinks = computed(() => Breadcrumb.AppBeneficiariesAdd())
 
@@ -107,7 +106,7 @@
     ...relativeFieldLabels
   } as FieldLabels<Partial<T>>)
 
-  useLeaveBeneficiaryFormConfirmation(isNavigatingWithFormActions, {
+  const { isNavigatingWithFormActions } = useLeaveBeneficiaryFormConfirmation({
     onLeave: () =>
       useTrpcMutation({
         mutation: () =>

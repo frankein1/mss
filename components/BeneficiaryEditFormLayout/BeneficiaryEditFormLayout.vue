@@ -99,7 +99,6 @@
   const saveTarget = ref<string | undefined>(undefined)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
-  const isNavigatingWithFormActions = ref(false)
 
   const breadcrumbLinks = computed(() =>
     Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
@@ -128,7 +127,7 @@
 
   const isFormDirty = computed(() => meta.value.dirty)
 
-  useLeaveBeneficiaryFormConfirmation(isNavigatingWithFormActions, {
+  const { isNavigatingWithFormActions } = useLeaveBeneficiaryFormConfirmation({
     isFormDirty
   })
 

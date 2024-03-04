@@ -164,7 +164,6 @@
   const complete = ref<boolean>(false)
   const form = ref<HTMLFormElement | null>(null)
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
-  const isNavigatingWithFormActions = ref(false)
 
   const { application } = usePermissions()
 
@@ -186,7 +185,7 @@
     }, false)
   )
 
-  useLeaveBeneficiaryFormConfirmation(isNavigatingWithFormActions, {
+  const { isNavigatingWithFormActions } = useLeaveBeneficiaryFormConfirmation({
     isFormDirty
   })
 
