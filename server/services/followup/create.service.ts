@@ -36,36 +36,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     classified,
     forwardedToJustice,
     duration
-    // ActionLogement,
-    // Bailleur,
-    // DeetsSiao,
-    // Prefecture,
-    // SecoursMedecinTraitant,
-    // ChefCabinet,
-    // OrganismeMenace,
-    // Prefet
   } = input
-
-  // const signalementFields = {
-  //   ChefCabinet,
-  //   OrganismeMenace,
-  //   Prefet
-  // }
-  // const signalements = Object.entries(signalementFields)
-  //   .filter(([_key, value]) => !!value)
-  //   .map(([key, _value]) => key as FollowupSignalement)
-
-  // const interventionFields = {
-  //   ActionLogement,
-  //   Bailleur,
-  //   DeetsSiao,
-  //   Prefecture,
-  //   SecoursMedecinTraitant
-  // }
-
-  // const interventions = Object.entries(interventionFields)
-  //   .filter(([_key, value]) => !!value)
-  //   .map(([key, _value]) => key as FollowupIntervention)
 
   let prescribingOrganization
   if (prescribingOrganizationId) {
@@ -107,8 +78,6 @@ export const create = async ({ ctx, input }: CreateParams) => {
           classified,
           forwardedToJustice,
           duration
-          // signalements,
-          // interventions,
         }
       }
     },

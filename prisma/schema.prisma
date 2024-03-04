@@ -310,20 +310,6 @@ enum FollowupMedium {
   ThirdParty
 }
 
-enum FollowupIntervention {
-  DeetsSiao
-  Prefecture
-  Bailleur
-  ActionLogement
-  SecoursMedecinTraitant
-}
-
-enum FollowupSignalement {
-  ChefCabinet
-  Prefet
-  OrganismeMenace
-}
-
 enum FollowupDuration {
   Quarter
   Half
@@ -350,9 +336,6 @@ model Followup {
   forwardedToJustice Boolean?          @map("forwarded_to_justice")
   redirected         Boolean?
   duration           FollowupDuration?
-
-  interventions FollowupIntervention[]
-  signalements  FollowupSignalement[]
 
   socialSupportId String        @unique @map("social_support_id") @db.Uuid
   socialSupport   SocialSupport @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
