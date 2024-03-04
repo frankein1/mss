@@ -41,6 +41,11 @@ export const numeroPegaseContraint = z
 
 export const stringConstraint = z.string(errorMessages).trim()
 
+export const requiredStringConstraint = stringConstraint.min(
+  2,
+  'Veuillez renseigner ce champ.'
+)
+
 export const cafNumberConstraint = stringConstraint.max(
   8,
   maxStringLengthMessage(8)

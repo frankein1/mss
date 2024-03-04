@@ -2,13 +2,14 @@ import { z } from 'zod'
 import {
   emailOrEmpty,
   phoneConstraint,
+  requiredStringConstraint,
   siretConstraint,
   stringConstraint,
   stringOrEmpty
 } from '..'
 
 export const addPartnerOrganizationSchema = z.object({
-  name: z.string(),
+  name: requiredStringConstraint,
   siret: siretConstraint,
   address: stringConstraint.nullish(),
   zipcode: stringConstraint.nullish(),
@@ -21,7 +22,7 @@ export const addPartnerOrganizationSchema = z.object({
     .array(
       z.object({
         id: stringConstraint,
-        name: stringConstraint,
+        name: requiredStringConstraint,
         email: stringConstraint.nullish(),
         phone: stringConstraint.nullish()
       })
