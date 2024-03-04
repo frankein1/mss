@@ -39,6 +39,14 @@
         :label="beneficiaryFieldLabels.birthPlace"
       />
     </div>
+    <BeneficiaryFormSimilarAlert
+      v-if="similarBeneficiary"
+      :similar-beneficiary="similarBeneficiary"
+      :usual-name="usualName"
+      :first-name="firstName"
+      :birth-date="birthDate"
+      @update:similar-beneficiaries="emit('update:similarBeneficiary', $event)"
+    />
     <div
       v-if="isDeceased"
       class="fr-col-12"
@@ -84,10 +92,25 @@
     beneficiaryTitleOptions,
     nationalityOptions
   } from '~/client/options'
+  import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   const { application } = usePermissions()
 
+  withDefaults(
+    defineProps<{
+      similarBeneficiary?: SimilarBeneficiary
+    }>(),
+    { similarBeneficiary: undefined }
+  )
+
+  const emit = defineEmits<{
+    'update:similarBeneficiary': [SimilarBeneficiary]
+  }>()
+
   const { value: status } = useField<BeneficiaryStatus>('status')
+  const { value: usualName } = useField<string | null | undefined>('usualName')
+  const { value: firstName } = useField<string | null | undefined>('firstName')
+  const { value: birthDate } = useField<Date | null | undefined>('birthDate')
 
   const isDeceased = computed(() => status.value === BeneficiaryStatus.Deceased)
 </script>

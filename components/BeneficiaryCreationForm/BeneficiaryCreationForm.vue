@@ -44,6 +44,12 @@
           type="date"
         />
       </div>
+      <BeneficiaryFormSimilarAlert
+        v-model:similar-beneficiary="similarBeneficiary"
+        :usual-name="controlledValues.usualName"
+        :first-name="controlledValues.firstName"
+        :birth-date="controlledValues.birthDate"
+      />
       <h3 class="fr-col-12 fr-text--md formgroup__title fr-mb-0 fr-mt-1w">
         Coordonnées
       </h3>
@@ -143,6 +149,7 @@
   } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { BeneficiaryPermissions } from '~/server/security'
+  import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   defineProps<{
     isSubmitting: boolean
@@ -156,6 +163,8 @@
 
   const complete = ref<boolean>(false)
   const form = ref<HTMLFormElement | null>(null)
+  const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
+  const isNavigatingWithFormActions = ref(false)
 
   const { application } = usePermissions()
 
@@ -167,9 +176,31 @@
       }
     })
 
+  // It does not use useForm meta as the dirty state of the referents field is ignored
+  const isFormDirty = computed(() =>
+    Object.entries(controlledValues.value).reduce((isDirty, [key, value]) => {
+      if (key === 'status' || key === 'referents') {
+        return isDirty
+      }
+      return isDirty || value !== undefined
+    }, false)
+  )
+
+  useLeaveBeneficiaryFormConfirmation(isNavigatingWithFormActions, {
+    isFormDirty
+  })
+
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
+      isNavigatingWithFormActions.value = true
+      if (similarBeneficiary.value) {
+        useBeneficiaryFormSimilarModal(similarBeneficiary.value, () =>
+          emit('saveBeneficiary', values, complete.value)
+        )
+        return
+      }
+
       emit('saveBeneficiary', values, complete.value)
     }
   )
