@@ -89,7 +89,7 @@
   const { application } = usePermissions()
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
   .partner-card {
     display: flex;
     flex-direction: column;

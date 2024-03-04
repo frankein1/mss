@@ -136,12 +136,13 @@
         v-for="(field, idx) in fields"
         :key="field.key"
         :index="idx"
+        @remove="remove(idx)"
       />
 
       <button
         class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-add-circle-line"
         type="button"
-        @click="push({ deleted: false })"
+        @click="push({ id: v4() })"
       >
         Ajouter une personne
       </button>
@@ -170,6 +171,7 @@
 
 <script lang="ts" setup>
   import type { FormErrors } from 'vee-validate'
+  import { v4 } from 'uuid'
   import { PartnerOrganizationData } from './types'
   import { partnerOrganizationFieldLabels } from '~/client/labels'
   import {
@@ -199,7 +201,7 @@
   const showPhone2 = ref(props.showPhone2)
   const partnerWithSameSiret = ref<PartnerOrganizationData>()
 
-  const { fields, push } = useFieldArray('contacts')
+  const { fields, push, remove } = useFieldArray('contacts')
 
   function dislpayPhone2() {
     showPhone2.value = true

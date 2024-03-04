@@ -1481,7 +1481,7 @@ model PartnerOrganizationContact {
 
   name  String  @map("name")
   phone String? @map("phone")
-  email String  @map("email")
+  email String? @map("email")
 
   partner   PartnerOrganization @relation(fields: [partnerId], references: [id])
   partnerId String              @map("partner_id") @db.Uuid

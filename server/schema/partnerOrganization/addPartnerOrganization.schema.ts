@@ -20,11 +20,10 @@ export const addPartnerOrganizationSchema = z.object({
   contacts: z
     .array(
       z.object({
-        id: stringConstraint.nullish(),
+        id: stringConstraint,
         name: stringConstraint,
-        email: stringConstraint,
-        phone: stringConstraint.nullish(),
-        deleted: z.boolean()
+        email: stringConstraint.nullish(),
+        phone: stringConstraint.nullish()
       })
     )
     .nullish()
