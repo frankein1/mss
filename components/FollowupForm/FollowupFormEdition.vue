@@ -73,7 +73,7 @@
     () => followup.value.documents?.map(d => d.key) || []
   )
 
-  const { handleSubmit, values } = useForm<EditFollowupInput>({
+  const { handleSubmit, values, meta } = useForm<EditFollowupInput>({
     validationSchema: toTypedSchema(editFollowupSchema),
     initialValues: {
       id: followup.value.id,
@@ -105,9 +105,16 @@
     }
   })
 
+  const isFormDirty = computed(() => meta.value.dirty)
+
+  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
+    isFormDirty
+  })
+
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
+      isNavigatingWithFormActions.value = true
       emit('saveFollowup', values)
     }
   )

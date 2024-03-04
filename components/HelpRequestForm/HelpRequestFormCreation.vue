@@ -43,7 +43,7 @@
       : FileInstructionType.Other
   )
 
-  const { handleSubmit } = useForm<CreateHelpRequestInput>({
+  const { handleSubmit, meta } = useForm<CreateHelpRequestInput>({
     validationSchema: toTypedSchema(createHelpRequestSchema),
     initialValues: {
       isMinistry: application.value.module.ministere,
@@ -54,9 +54,16 @@
     }
   })
 
+  const isFormDirty = computed(() => meta.value.dirty)
+
+  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
+    isFormDirty
+  })
+
   const { caughtErrors, onSubmit } = useCatchFormErrors<CreateHelpRequestInput>(
     handleSubmit,
     values => {
+      isNavigatingWithFormActions.value = true
       emit('saveHelpRequest', values)
     }
   )
