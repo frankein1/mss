@@ -34,7 +34,7 @@
   const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
-  const { socialSupportStatusOptions } = useSocialSupportStatus()
+  const { fileInstructionStatusOptions } = useSocialSupportStatus()
 
   const props = defineProps<{
     filters: FileInstructionFilterInput
@@ -118,7 +118,7 @@
         name: 'status',
         label: helpRequestFieldLabels.status,
         options: withEmptyValue(
-          socialSupportStatusOptions.value,
+          fileInstructionStatusOptions.value,
           'Tous les statuts'
         ),
         type: FilterType.SelectOne,
