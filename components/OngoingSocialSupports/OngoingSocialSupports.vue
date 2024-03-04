@@ -55,6 +55,18 @@
   import { RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
   import { HistoryTab } from '~/utils/constants/history'
+  import { EventCategory, OverviewToHistoryEventAction } from '~/types/matomo'
+
+  type OngoingSocialSupportStatus = Exclude<
+    SocialSupportStatus,
+    | 'Accepted'
+    | 'Refused'
+    | 'Adjourned'
+    | 'ClosedByBeneficiary'
+    | 'ClosedByAgent'
+    | 'Dismissed'
+    | 'Done'
+  >
 
   const filtersState = useFilters()
   const { socialSupportStatusLabels } = useSocialSupportStatus()
@@ -64,7 +76,7 @@
     isFileInstructions: boolean
     title: string
     ongoingSocialSupports: Array<{
-      status: SocialSupportStatus
+      status: OngoingSocialSupportStatus
       _count: number
     }> | null
     emptyMessage: string
@@ -78,7 +90,12 @@
       : HistoryTab.Followups
   )
 
-  function onNavigate(status: SocialSupportStatus) {
+  function onNavigate(status: OngoingSocialSupportStatus) {
+    useMatomo().trackEvent(
+      EventCategory.OverviewToHistory,
+      OverviewToHistoryEventAction[status]
+    )
+
     if (props.isFileInstructions) {
       filtersState.fileInstruction.value = {
         status,

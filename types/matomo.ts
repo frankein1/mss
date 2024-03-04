@@ -8,7 +8,8 @@ export enum EventCategory {
   UsersActivity = 'Historique des changements',
   AccessBeneficiaryAdd = 'Accès à Créer un bénéficiaire',
   HistoryQuickEdit = 'Modification dans tableau Accompagnements',
-  ExportHistory = 'Export des accompagnements'
+  ExportHistory = 'Export des accompagnements',
+  OverviewToHistory = 'Accès Tableau de bord > Accompagnements'
 }
 
 export enum BeneficiaryFilterEventAction {
@@ -77,6 +78,13 @@ export enum ExportHistoryEventAction {
   FileInstructions = "Export Dossiers d'instruction"
 }
 
+export enum OverviewToHistoryEventAction {
+  Todo = "Synthèses d'entretien - À traiter",
+  InProgress = "Synthèses d'entretien - En cours",
+  WaitingAdditionalInformation = "Dossiers d'instruction - En attente de justificatifs",
+  InvestigationOngoing = "Dossiers d'instruction - En cours d'instruction"
+}
+
 export type EventAction =
   | BeneficiaryFilterEventAction
   | BeneficiaryHistoryFilterEventAction
@@ -88,6 +96,7 @@ export type EventAction =
   | AccessBeneficiaryAddEventAction
   | HistoryQuickEditEventAction
   | ExportHistoryEventAction
+  | OverviewToHistoryEventAction
 
 export type MatomoApi = {
   trackEvent: (category: EventCategory, action: EventAction) => void
