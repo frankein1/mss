@@ -54,6 +54,7 @@
   import { FollowupSort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
+  import { EventCategory, ExportHistoryEventAction } from '~/types/matomo'
 
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
@@ -89,6 +90,11 @@
 
   async function exportFollowups() {
     isDownloading.value = true
+    useMatomo().trackEvent(
+      EventCategory.ExportHistory,
+      ExportHistoryEventAction.Followups
+    )
+
     try {
       const exportedFollowups = await trpcClient.followup.getExport.query({
         orderBy: orderBy.value,

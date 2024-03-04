@@ -55,6 +55,7 @@
   } from '~/utils/constants'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
+  import { EventCategory, ExportHistoryEventAction } from '~/types/matomo'
 
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
@@ -107,6 +108,11 @@
 
   async function exportFileInstructions() {
     isDownloading.value = true
+    useMatomo().trackEvent(
+      EventCategory.ExportHistory,
+      ExportHistoryEventAction.FileInstructions
+    )
+
     try {
       const exportedFileInstructions =
         await trpcClient.fileInstruction.exportFileInstructions.query({
