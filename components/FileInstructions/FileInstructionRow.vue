@@ -20,7 +20,7 @@
           class="fr-badge"
           :class="[socialSupportStatusClasses[socialSupport.status]]"
         >
-          {{ socialSupportStatusOptions.get(socialSupport.status) }}
+          {{ socialSupportStatusLabels[socialSupport.status] }}
         </span>
       </td>
       <td>{{ fileInstructionObject || '' }}</td>
@@ -114,7 +114,7 @@
     item: FileInstructionPageItem
   }>()
 
-  const { socialSupportStatusOptions } = useSocialSupportStatus()
+  const { socialSupportStatusLabels } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     updated: [item: FileInstructionPageItem]
