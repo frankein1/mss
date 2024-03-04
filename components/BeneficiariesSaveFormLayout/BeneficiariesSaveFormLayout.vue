@@ -106,7 +106,7 @@
     ...relativeFieldLabels
   } as FieldLabels<Partial<T>>)
 
-  const { isNavigatingWithFormActions } = useLeaveBeneficiaryFormConfirmation({
+  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
     onLeave: () =>
       useTrpcMutation({
         mutation: () =>

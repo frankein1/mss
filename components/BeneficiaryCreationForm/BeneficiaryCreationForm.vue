@@ -185,7 +185,7 @@
     }, false)
   )
 
-  const { isNavigatingWithFormActions } = useLeaveBeneficiaryFormConfirmation({
+  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
     isFormDirty
   })
 

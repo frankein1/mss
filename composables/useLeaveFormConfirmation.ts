@@ -1,6 +1,6 @@
-import BeneficiaryLeaveForm from '~/components/BeneficiaryLeaveForm/BeneficiaryLeaveForm.vue'
+import LeaveFormModal from '~/components/LeaveFormModal/LeaveFormModal.vue'
 
-export function useLeaveBeneficiaryFormConfirmation(options?: {
+export function useLeaveFormConfirmation(options?: {
   onLeave?: () => void
   isFormDirty?: Ref<boolean>
 }) {
@@ -16,7 +16,7 @@ export function useLeaveBeneficiaryFormConfirmation(options?: {
 
     useModal().open({
       title: 'Attention les informations seront perdues',
-      contentComponent: BeneficiaryLeaveForm,
+      contentComponent: LeaveFormModal,
       contentComponentEvents: {
         cancel: () => next(false),
         leave: () => {

@@ -127,7 +127,7 @@
 
   const isFormDirty = computed(() => meta.value.dirty)
 
-  const { isNavigatingWithFormActions } = useLeaveBeneficiaryFormConfirmation({
+  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
     isFormDirty
   })
 
