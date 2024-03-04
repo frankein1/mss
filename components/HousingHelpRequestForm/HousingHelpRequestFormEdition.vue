@@ -45,7 +45,7 @@
     () => socialSupport.value.documents?.map(d => d.key) || []
   )
 
-  const { handleSubmit } = useForm<EditHousingHelpRequestInput>({
+  const { handleSubmit, meta } = useForm<EditHousingHelpRequestInput>({
     validationSchema: toTypedSchema(editHousingHelpRequestSchema),
     initialValues: {
       id: housingHelpRequest.value.id,
@@ -94,8 +94,15 @@
     }
   })
 
+  const isFormDirty = computed(() => meta.value.dirty)
+
+  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
+    isFormDirty
+  })
+
   const { caughtErrors, onSubmit } =
     useCatchFormErrors<EditHousingHelpRequestInput>(handleSubmit, values => {
+      isNavigatingWithFormActions.value = true
       emit('saveHousingHelpRequest', values)
     })
 </script>
