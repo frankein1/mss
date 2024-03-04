@@ -30,8 +30,6 @@
   import { ministerOptions, fileInstructionTypeOptions } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
-  const authState = useAuthState()
-  const isReferent = authState.isReferent()
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
   const { fileInstructionStatusOptions } = useSocialSupportStatus()
@@ -186,17 +184,15 @@
       //   )
     }
 
-    if (!isReferent) {
-      fileInstructionsFilters.push({
-        name: 'createdById',
-        label: 'Agent',
-        options: agentOptions.value,
-        type: FilterType.SelectMultiple,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.Agent,
-        alwaysExpanded: fileInstructionsFilters.length < maxAlwaysExpandedNb
-      })
-    }
+    fileInstructionsFilters.push({
+      name: 'createdById',
+      label: 'Agent',
+      options: agentOptions.value,
+      type: FilterType.SelectMultiple,
+      matomoEventCategory: EventCategory.HelpRequestFilter,
+      matomoEventAction: HelpRequestFilterEventAction.Agent,
+      alwaysExpanded: fileInstructionsFilters.length < maxAlwaysExpandedNb
+    })
 
     if (application.value.module.ministere) {
       fileInstructionsFilters.push({

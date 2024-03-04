@@ -35,7 +35,6 @@
 
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
-  const isReferent = useAuthState().isReferent()
   const { application } = usePermissions()
 
   const emit = defineEmits<{
@@ -103,19 +102,16 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,
         matomoEventAction: FollowupFilterEventAction.FollowupType
-      }
-    ]
-
-    if (!isReferent) {
-      filters.push({
+      },
+      {
         name: 'createdById',
         label: 'Agent',
         options: agentOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,
         matomoEventAction: FollowupFilterEventAction.Agent
-      })
-    }
+      }
+    ]
 
     if (application.value.module.ministere) {
       filters.push({
