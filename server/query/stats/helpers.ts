@@ -78,9 +78,14 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
   return socialSupport
 }
 
-export function prepareHelpRequestStatFilters(filters: StatFilterInput) {
+export function prepareHelpRequestStatFilters(
+  filters: StatFilterInput,
+  externalStructure?: boolean
+) {
   const socialSupport = prepareSocialSupportStatFilters(filters)
-  socialSupport.fileInstruction = {}
+  socialSupport.fileInstruction = externalStructure
+    ? { externalStructure: true }
+    : {}
   socialSupport.fileInstruction.helpRequest = {}
 
   switch (filters.helpRequestSubject) {

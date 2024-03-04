@@ -9,13 +9,10 @@ export async function getHelpRequestInstructorOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const preparedFilters = prepareHelpRequestStatFilters(input)
+  const preparedFilters = prepareHelpRequestStatFilters(input, true)
 
   const socialSupports = await SocialSupportRepo.findMany(user, {
-    where: {
-      ...preparedFilters,
-      fileInstruction: { externalStructure: true }
-    },
+    where: preparedFilters,
     select: {
       fileInstruction: {
         select: {
