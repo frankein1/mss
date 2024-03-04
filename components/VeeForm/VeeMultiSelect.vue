@@ -384,6 +384,10 @@
 </script>
 
 <style lang="scss" scoped>
+  .fr-fieldset {
+    margin-bottom: 0;
+  }
+
   .fr-fieldset__element {
     margin-bottom: 0;
 

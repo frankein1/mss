@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-px-3w fr-py-2w">
+  <div class="fr-px-3w fr-pt-2w">
     <AtomFilters
       :filters="notificationFilters"
       full-width-filters
