@@ -16,7 +16,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     where: { id: input.socialSupportId },
     select: {
       documents: true,
-      types: true
+      subjects: true
     }
   })
 
