@@ -1,16 +1,20 @@
 <template>
   <div class="fr-grid-row fr-grid-row--gutters">
-    <div class="fr-col-8">
-      <h3 class="fr-h4 fr-mb-0">Contact {{ index + 1 }}</h3>
-    </div>
-    <div class="fr-col-4">
-      <button
-        class="fr-btn fr-btn--sm fr-btn--tertiary-no-outline fr-icon-delete-line contact-title__delete"
-        type="button"
-        @click="emit('remove', index)"
-      >
-        Supprimer ce contact
-      </button>
+    <div class="fr-col-12">
+      <div class="contact-title">
+        <div class="fr-text--lg fr-text--bold fr-mb-0">
+          Personne {{ index + 1 }}
+        </div>
+        <div>
+          <button
+            class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-delete-line"
+            type="button"
+            @click="emit('remove', index)"
+          >
+            Supprimer
+          </button>
+        </div>
+      </div>
     </div>
     <div class="fr-col-12">
       <VeeInput
@@ -51,7 +55,9 @@
 </script>
 
 <style lang="scss" scoped>
-  .contact-title__delete {
-    color: red;
+  .contact-title {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 0 0 0;
   }
 </style>
