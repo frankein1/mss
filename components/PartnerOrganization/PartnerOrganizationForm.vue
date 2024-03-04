@@ -108,7 +108,7 @@
           class="fr-col-6 partner-form__open-phone"
         >
           <button
-            class="fr-link fr-icon-file-add-line fr-text--xs fr-mb-1w"
+            class="fr-link fr-icon-file-add-line fr-text--sm fr-mb-1w"
             @click="dislpayPhone2"
           >
             + Ajouter un téléphone
