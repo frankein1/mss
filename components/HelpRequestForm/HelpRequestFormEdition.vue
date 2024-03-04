@@ -47,7 +47,7 @@
       : FileInstructionType.Other
   )
 
-  const { handleSubmit } = useForm<EditHelpRequestInput>({
+  const { handleSubmit, meta } = useForm<EditHelpRequestInput>({
     validationSchema: toTypedSchema(editHelpRequestSchema),
     initialValues: {
       id: helpRequest.value.id,
@@ -82,9 +82,16 @@
     }
   })
 
+  const isFormDirty = computed(() => meta.value.dirty)
+
+  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
+    isFormDirty
+  })
+
   const { caughtErrors, onSubmit } = useCatchFormErrors<EditHelpRequestInput>(
     handleSubmit,
     values => {
+      isNavigatingWithFormActions.value = true
       emit('saveHelpRequest', values)
     }
   )

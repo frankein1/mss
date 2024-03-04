@@ -33,7 +33,7 @@
     saveHousingHelpRequest: [housingHelpRequest: CreateHousingHelpRequestInput]
   }>()
 
-  const { handleSubmit } = useForm<CreateHousingHelpRequestInput>({
+  const { handleSubmit, meta } = useForm<CreateHousingHelpRequestInput>({
     validationSchema: toTypedSchema(createHousingHelpRequestSchema),
     initialValues: {
       isMinistry: application.value.module.ministere,
@@ -43,8 +43,15 @@
     }
   })
 
+  const isFormDirty = computed(() => meta.value.dirty)
+
+  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
+    isFormDirty
+  })
+
   const { caughtErrors, onSubmit } =
     useCatchFormErrors<CreateHousingHelpRequestInput>(handleSubmit, values => {
+      isNavigatingWithFormActions.value = true
       emit('saveHousingHelpRequest', values)
     })
 </script>
