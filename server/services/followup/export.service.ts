@@ -33,9 +33,7 @@ export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'dueDate',
   'forwardedToJustice',
   'helpRequested',
-  // 'interventions',
   'place',
-  // 'signalements',
   'thirdPersonName',
   'updated',
   'createdById',
@@ -76,21 +74,11 @@ export async function exportFollowups({
           dueDate: formatDate(followup.dueDate, 'DD-MM-YYYY'),
           forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
           helpRequested: getBooleanOrEmpty(followup.helpRequested),
-          // interventions: followup.interventions
-          //   ? followup.interventions
-          //       .map(intervention => followupInterventionLabels[intervention])
-          //       .join(', ')
-          //   : '',
           ministre: followup.ministre ? ministerLabels[followup.ministre] : '',
           numeroPegase: followup.numeroPegase || '',
           place: followup.place || '',
           prescribingOrganizationId:
             followup.prescribingOrganization?.name || '',
-          // signalements: followup.signalements
-          //   ? followup.signalements
-          //       .map(signalement => followupSignalementLabels[signalement])
-          //       .join(', ')
-          //   : '',
           structureName: followup.structureName || '',
           synthesis: followup.synthesis || '',
           thirdPersonName: followup.thirdPersonName || '',

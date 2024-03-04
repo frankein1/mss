@@ -34,23 +34,13 @@
   >
     {{ followupFieldLabels.forwardedToJustice }}
   </li>
-  <!-- <li v-if="interventions">
-        <span class="information-label">Interventions :</span>
-        {{ interventions }}
-      </li>
-      <li v-if="signalements">
-        <span class="information-label">Signalements :</span>
-        {{ signalements }}
-      </li> -->
 </template>
 
 <script setup lang="ts">
   import { FollowupMedium } from '@prisma/client'
   import { FollowupData } from './types'
   import {
-    // followupInterventionLabels,
     followupMediumLabels,
-    // followupSignalementLabels,
     followupDurationLabels
   } from '~/client/options'
   import { followupFieldLabels } from '~/client/labels'
@@ -73,16 +63,4 @@
       props.followup.place || props.followup.thirdPersonName
     }`
   })
-
-  // const interventions = computed(() =>
-  //   props.followup.interventions
-  //     .map(i => followupInterventionLabels[i])
-  //     .join(', ')
-  // )
-
-  // const signalements = computed(() =>
-  //   props.followup.signalements
-  //     .map(s => followupSignalementLabels[s])
-  //     .join(', ')
-  // )
 </script>

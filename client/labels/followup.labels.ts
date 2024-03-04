@@ -2,8 +2,7 @@ import { Followup, SocialSupport } from '@prisma/client'
 import { FieldLabels } from '~/types/fieldLabels'
 
 type FollowupFieldLabels = Omit<
-  Omit<Followup, 'interventions' | 'signalements' | 'socialSupportId'> &
-    Omit<SocialSupport, 'socialSupportType'>,
+  Omit<Followup, 'socialSupportId'> & Omit<SocialSupport, 'socialSupportType'>,
   'created' | 'structureId'
 > & {
   types: string
@@ -31,8 +30,6 @@ export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
   forwardedToJustice: 'Transmis à la justice',
   ministre: 'Ministre',
   numeroPegase: 'Numéro Pégase',
-  // interventions: 'Interventions',
-  // signalements: 'Signalements',
   prescribingOrganizationId: 'Organisme prescripteur',
   updated: 'Dernière mise à jour',
   createdById: 'Agent',

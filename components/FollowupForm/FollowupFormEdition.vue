@@ -13,11 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    FollowupType
-    // FollowupIntervention,
-    // FollowupSignalement
-  } from '@prisma/client'
+  import { FollowupType } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { FollowupPageItem } from './types'
   import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
@@ -42,28 +38,6 @@
   const initialFollowUpTypeIds = computed(
     () => props.data.followup.types.map(f => f.id) || []
   )
-
-  // const initialInterventions = computed<{
-  //   [k in FollowupIntervention]?: boolean
-  // }>(() =>
-  //   Object.fromEntries(
-  //     Object.values(FollowupIntervention).map(key => [
-  //       key,
-  //       followup.value.interventions?.includes(key)
-  //     ])
-  //   )
-  // )
-
-  // const initialSignalements = computed<{
-  //   [k in FollowupSignalement]?: boolean
-  // }>(() =>
-  //   Object.fromEntries(
-  //     Object.values(FollowupSignalement).map(key => [
-  //       key,
-  //       followup.value.signalements?.includes(key)
-  //     ])
-  //   )
-  // )
 
   const canSetPrivateSynthesis = computed(
     () => permissions.value.set.privateSynthesis
@@ -100,8 +74,6 @@
       forwardedToJustice: followup.value.forwardedToJustice || false,
       isMinistry: application.value.module.ministere,
       duration: followup.value.duration
-      // ...initialInterventions.value,
-      // ...initialSignalements.value
     }
   })
 

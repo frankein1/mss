@@ -224,54 +224,6 @@
                 :label="followupFieldLabels.forwardedToJustice"
               />
             </div>
-
-            <!-- <div class="fr-fieldset__element fr-mb-0">
-              <fieldset
-                class="fr-fieldset fr-mb-0"
-                aria-labelledby="followup-interventions-legend"
-              >
-                <legend
-                  id="followup-interventions-legend"
-                  class="fr-fieldset__legend"
-                >
-                  {{ followupFieldLabels.interventions }}
-                </legend>
-                <div
-                  v-for="[value, label] in followupInterventionOptions"
-                  :key="value"
-                  class="fr-fieldset__element fr-fieldset__element--inline"
-                >
-                  <VeeCheckbox
-                    :name="value"
-                    :label="label"
-                  />
-                </div>
-              </fieldset>
-            </div>
-          -->
-            <!-- <div class="fr-fieldset__element fr-mb-0">
-              <fieldset
-                class="fr-fieldset fr-mb-0"
-                aria-labelledby="followup-signalements-legend"
-              >
-                 <legend
-                  id="followup-signalements-legend"
-                  class="fr-fieldset__legend"
-                >
-                  {{ followupFieldLabels.signalements }}
-                </legend>
-                <div
-                  v-for="[value, label] in followupSignalementOptions"
-                  :key="value"
-                  class="fr-fieldset__element fr-fieldset__element--inline"
-                >
-                  <VeeCheckbox
-                    :name="value"
-                    :label="label"
-                  />
-                </div>
-              </fieldset>
-            </div> -->
           </template>
         </fieldset>
       </div>
@@ -310,8 +262,6 @@
     followupStatusOptions,
     followupMediumOptions,
     followupDurationOptions
-    // followupInterventionOptions,
-    // followupSignalementOptions
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'

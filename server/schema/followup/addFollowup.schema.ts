@@ -3,8 +3,6 @@ import {
   SocialSupportStatus,
   Minister,
   FollowupDuration
-  // FollowupIntervention,
-  // FollowupSignalement
 } from '@prisma/client'
 import { z } from 'zod'
 import {
@@ -54,14 +52,6 @@ export const addFollowupSchemaBase = z.object({
   classified: z.boolean().default(false),
   forwardedToJustice: z.boolean().default(false),
   duration: withEmptyValueOptionalNativeEnum(FollowupDuration)
-  // [FollowupIntervention.DeetsSiao]: z.boolean().default(false),
-  // [FollowupIntervention.Prefecture]: z.boolean().default(false),
-  // [FollowupIntervention.Bailleur]: z.boolean().default(false),
-  // [FollowupIntervention.ActionLogement]: z.boolean().default(false),
-  // [FollowupIntervention.SecoursMedecinTraitant]: z.boolean().default(false),
-  // [FollowupSignalement.ChefCabinet]: z.boolean().default(false),
-  // [FollowupSignalement.Prefet]: z.boolean().default(false),
-  // [FollowupSignalement.OrganismeMenace]: z.boolean().default(false)
 })
 
 export const addFollowupSchema = addFollowupSchemaBase.refine(
