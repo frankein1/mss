@@ -1,5 +1,5 @@
 import { prepareInstructorOrganization } from '../helper'
-import { cleanUpdateInput, preparePrescribingOrganization } from './helper'
+import { cleanUpdateInput } from './helper'
 import { SocialSupportRepo, HelpRequestRepo } from '~/server/database'
 import { markSocialSupportSubjectAsUsed } from '~/server/query'
 import { EditHelpRequestInput } from '~/server/schema'
@@ -97,10 +97,8 @@ export async function update({ input, ctx }: UpdateParams) {
               paymentDate,
               handlingDate,
               isRefundable,
-              subject: connect(subjectId),
-              prescribingOrganization: preparePrescribingOrganization(
-                prescribingOrganizationId
-              )
+              subjectId,
+              prescribingOrganizationId: prescribingOrganizationId || null
             }
           }
         }

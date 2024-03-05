@@ -3,7 +3,7 @@ import {
   prepareNewHistoryElementNotification,
   prepareInstructorOrganization
 } from '../helper'
-import { cleanCreateInput, preparePrescribingOrganization } from './helper'
+import { cleanCreateInput } from './helper'
 import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
 import { CreateHelpRequestInput } from '~/server/schema'
 import { markSocialSupportSubjectAsUsed } from '~/server/query'
@@ -59,10 +59,9 @@ export async function create({ input, ctx }: CreateParams) {
       paymentDate,
       handlingDate,
       financialSupport,
-      prescribingOrganization: preparePrescribingOrganization(
-        prescribingOrganizationId
-      ),
-
+      prescribingOrganization: prescribingOrganizationId
+        ? connect(prescribingOrganizationId)
+        : undefined,
       isRefundable,
       subject: connect(subjectId),
       fileInstruction: {

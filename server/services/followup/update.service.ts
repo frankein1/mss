@@ -3,7 +3,7 @@ import { prepareSocialSupportSubjectsMutations } from './helper'
 import { SocialSupportRepo } from '~/server/database'
 import { EditFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
-import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import { prepareDocumentsMutations } from '~/utils/prisma'
 import { markSocialSupportSubjectAsUsed } from '~/server/query'
 
 type UpdateParams = {
@@ -44,11 +44,6 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     duration
   } = input
 
-  let prescribingOrganization
-  if (prescribingOrganizationId) {
-    prescribingOrganization = connect(prescribingOrganizationId)
-  }
-
   const fu = await SocialSupportRepo.update(ctx.user, {
     where: {
       id: socialSupportId
@@ -68,7 +63,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
       dueDate,
       followup: {
         update: {
-          prescribingOrganization,
+          prescribingOrganizationId: prescribingOrganizationId || null,
           redirected,
           structureName: redirected ? structureName : null,
           medium,

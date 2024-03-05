@@ -1,15 +1,5 @@
 import { SocialSupportStatus } from '@prisma/client'
 import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
-import { connect } from '~/utils/prisma'
-
-export function preparePrescribingOrganization(
-  prescribingOrganizationId: string | null | undefined
-) {
-  if (!prescribingOrganizationId) {
-    return undefined
-  }
-  return connect(prescribingOrganizationId)
-}
 
 export function cleanUpdateInput({
   input,
