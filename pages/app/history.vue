@@ -9,6 +9,7 @@
             :tab-id="HistoryTab.Followups"
             title="Entretiens"
             selected
+            icon="fr-icon-draft-fill"
           >
             <Followups />
           </AtomTab>
