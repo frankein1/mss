@@ -11,9 +11,6 @@ export const followupRouter = router({
   getExport: protectedProcedure
     .input(routes.getExport.inputValidation)
     .query(routes.getExport.execute),
-  quickUpdate: protectedProcedure
-    .input(routes.quickUpdate.inputValidation)
-    .mutation(routes.quickUpdate.execute),
   update: protectedProcedure
     .input(routes.update.inputValidation)
     .mutation(routes.update.execute),

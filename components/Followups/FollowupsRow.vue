@@ -9,14 +9,8 @@
       @click="navigate"
     >
       <td>
-        <FollowupsStatusForm
-          v-if="canQuickEditFollowup"
-          :data="data"
-          @click.stop
-        />
         <span
-          v-else
-          class="fr-badge"
+          class="fr-badge fr-badge--sm"
           :class="[socialSupportStatusClasses[followup.status]]"
         >
           {{ followupStatusOptions.get(followup.status) }}
@@ -55,7 +49,6 @@
   }>()
 
   const followup = computed(() => props.data.followup)
-  const permissions = computed(() => props.data.permissions)
 
   const followupPath = computed(() =>
     RoutePath.AppBeneficiary(followup.value.beneficiary.id, {
@@ -69,6 +62,4 @@
   const socialSupportSubjects = computed(() =>
     followup.value.subjects.map(({ name }) => name).join(', ')
   )
-
-  const canQuickEditFollowup = computed(() => permissions.value.edit)
 </script>
