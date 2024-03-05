@@ -1,40 +1,38 @@
 <template>
-  <NuxtLink
-    v-slot="{ navigate }"
-    custom
-    :to="followupPath"
-  >
-    <tr
-      class="clickable-row"
-      @click="navigate"
-    >
-      <td>
-        <span
-          class="fr-badge fr-badge--sm"
-          :class="[socialSupportStatusClasses[followup.status]]"
-        >
-          {{ followupStatusOptions.get(followup.status) }}
-        </span>
-      </td>
-      <td>{{ formatDate(followup.date) }}</td>
-      <td>
-        {{ formatBeneficiaryDisplayName(followup.beneficiary, true) }}
-      </td>
-      <td class="social-support-subjects-data">
-        <span :title="socialSupportSubjects">
-          {{ socialSupportSubjects }}
-        </span>
-      </td>
-      <td>
-        {{ followup.dueDate ? formatDate(followup.dueDate) : undefined }}
-      </td>
-      <td>
-        <template v-if="followup.createdBy">
-          {{ formatUserDisplayName(followup.createdBy) }}
-        </template>
-      </td>
-    </tr>
-  </NuxtLink>
+  <tr class="clickable-row">
+    <td>
+      <span
+        class="fr-badge fr-badge--sm"
+        :class="[socialSupportStatusClasses[followup.status]]"
+      >
+        {{ followupStatusOptions.get(followup.status) }}
+      </span>
+    </td>
+    <td>
+      <NuxtLink
+        :to="followupPath"
+        class="table-row-link"
+      >
+        {{ formatDate(followup.date) }}
+      </NuxtLink>
+    </td>
+    <td>
+      {{ formatBeneficiaryDisplayName(followup.beneficiary, true) }}
+    </td>
+    <td class="social-support-subjects-data">
+      <span :title="socialSupportSubjects">
+        {{ socialSupportSubjects }}
+      </span>
+    </td>
+    <td>
+      {{ followup.dueDate ? formatDate(followup.dueDate) : undefined }}
+    </td>
+    <td>
+      <template v-if="followup.createdBy">
+        {{ formatUserDisplayName(followup.createdBy) }}
+      </template>
+    </td>
+  </tr>
 </template>
 
 <script lang="ts" setup>
