@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupPageItems } from './types'
+  import { FollowupPageItems } from '~/server/trpc/routers'
   import { FollowupSort } from '~/types/table'
   import { followupFieldLabels } from '~/client/labels'
 

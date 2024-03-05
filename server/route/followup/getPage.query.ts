@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { GetFollowupsInput, getFollowupsSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
@@ -19,3 +20,7 @@ export const getPage = createQuery({
   securityCheck: AllowSecurityCheck,
   handler
 })
+
+type FollowupPage = Prisma.PromiseReturnType<typeof handler>
+export type FollowupPageItems = FollowupPage['items']
+export type FollowupPageItem = FollowupPageItems[0]
