@@ -105,18 +105,6 @@
 
     const fileInstructionsFilters: FilterProp[] = [
       {
-        name: 'fileInstructionType',
-        label: "Type d'accompagnement",
-        options: withEmptyValue(
-          fileInstructionTypeOptions,
-          "Tous les dossiers d'instruction"
-        ),
-        type: FilterType.SelectOne,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.FileInstructionType,
-        alwaysExpanded: true
-      },
-      {
         name: 'status',
         label: helpRequestFieldLabels.status,
         options: withEmptyValue(
@@ -126,6 +114,18 @@
         type: FilterType.SelectOne,
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.Status,
+        alwaysExpanded: true
+      },
+      {
+        name: 'fileInstructionType',
+        label: "Thématique d'accompagnement",
+        options: withEmptyValue(
+          fileInstructionTypeOptions,
+          'Tous les dossiers'
+        ),
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.FileInstructionType,
         alwaysExpanded: true
       }
     ]
@@ -142,6 +142,16 @@
       })
     }
 
+    fileInstructionsFilters.push({
+      name: 'createdById',
+      label: 'Agent',
+      options: agentOptions.value,
+      type: FilterType.SelectMultiple,
+      matomoEventCategory: EventCategory.HelpRequestFilter,
+      matomoEventAction: HelpRequestFilterEventAction.Agent,
+      alwaysExpanded: fileInstructionsFilters.length < maxAlwaysExpandedNb
+    })
+
     if (application.value.module.helpRequest) {
       if (examinationDateOptions.value.size) {
         fileInstructionsFilters.push({
@@ -156,47 +166,7 @@
           matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
         })
       }
-
-      // FIXME: Delete once it is admitted that it is done
-      //   filters.push(
-      //     {
-      //       name: 'handlingDate',
-      //       label: 'Fin de prise en charge',
-      //       options: new Map([
-      //         ['', 'Non sélectionné'],
-      //         ['true', 'Oui'],
-      //         ['false', 'Non']
-      //       ]),
-      //       type: FilterType.SelectOne,
-      //
-      //       matomoEventCategory: EventCategory.HelpRequestFilter,
-      //       matomoEventAction: HelpRequestFilterEventAction.HandlingDate
-      //     },
-      //     {
-      //       name: 'externalStructure',
-      //       label: 'Instruction',
-      //       options: new Map([
-      //         ['', 'Toutes les instructions'],
-      //         ['false', 'Interne'],
-      //         ['true', 'Organisme externe']
-      //       ]),
-      //       type: FilterType.SelectOne,
-      //
-      //       matomoEventCategory: EventCategory.HelpRequestFilter,
-      //       matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
-      //     }
-      //   )
     }
-
-    fileInstructionsFilters.push({
-      name: 'createdById',
-      label: 'Agent',
-      options: agentOptions.value,
-      type: FilterType.SelectMultiple,
-      matomoEventCategory: EventCategory.HelpRequestFilter,
-      matomoEventAction: HelpRequestFilterEventAction.Agent,
-      alwaysExpanded: fileInstructionsFilters.length < maxAlwaysExpandedNb
-    })
 
     if (application.value.module.ministere) {
       fileInstructionsFilters.push({

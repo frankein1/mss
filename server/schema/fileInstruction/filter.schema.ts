@@ -4,7 +4,6 @@ import {
   SocialSupportStatus,
   FileInstructionType
 } from '@prisma/client'
-import { kindOfBooleanSchema } from '..'
 
 export const fileInstructionFilterSchema = z.object({
   fileInstructionType: z.nativeEnum(FileInstructionType).nullish(),
@@ -12,8 +11,6 @@ export const fileInstructionFilterSchema = z.object({
   socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   createdById: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
-  handlingDate: kindOfBooleanSchema(),
-  externalStructure: kindOfBooleanSchema(),
   ministre: z.array(z.nativeEnum(Minister)).nullish()
 })
 

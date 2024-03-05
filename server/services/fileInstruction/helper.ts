@@ -13,8 +13,6 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     status,
     socialSupportSubjects,
     examinationDate,
-    handlingDate,
-    externalStructure,
     createdById,
     ministre
   } = filters
@@ -23,18 +21,8 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     formattedFilters.type = fileInstructionType
   }
 
-  if (handlingDate) {
-    formattedFilters.helpRequest = {
-      handlingDate: handlingDate === 'true' ? { not: null } : null
-    }
-  }
-
   if (examinationDate) {
     formattedFilters.examinationDate = examinationDate
-  }
-
-  if (externalStructure !== undefined) {
-    formattedFilters.externalStructure = externalStructure === 'true'
   }
 
   if (
