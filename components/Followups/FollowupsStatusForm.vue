@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-  import { FollowupPageItem } from './types'
+  import { FollowupPageItem } from '~/server/trpc/routers'
   import { followupStatusOptions } from '~/client/options'
   import {
     QuickEditFollowupInput,

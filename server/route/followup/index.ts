@@ -17,3 +17,5 @@ export const followupRoutes = {
   update,
   getOngoing
 }
+
+export type { FollowupPageItems, FollowupPageItem } from './getPage.query'

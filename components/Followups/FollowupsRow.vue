@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupPageItem } from './types'
+  import { FollowupPageItem } from '~/server/trpc/routers'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { followupStatusOptions } from '~/client/options'
