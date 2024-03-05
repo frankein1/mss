@@ -35,7 +35,6 @@
           {{ formatUserDisplayName(followup.createdBy) }}
         </template>
       </td>
-      <td>{{ readableFileNumber(followup.beneficiary.id) }}</td>
     </tr>
   </NuxtLink>
 </template>
@@ -46,7 +45,6 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { followupStatusOptions } from '~/client/options'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
-  import { readableFileNumber } from '~/utils/readableFileNumber'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
