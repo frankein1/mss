@@ -66,7 +66,6 @@ export enum AccessBeneficiaryAddEventAction {
 }
 
 export enum HistoryQuickEditEventAction {
-  FollowupStatus = 'Statut Entretien',
   FileInstructionStatus = 'Statut Instruction de dossier',
   HelpRequestAllocatedAmount = 'Montant alloué Aide financière',
   HelpRequestPaymentMethod = 'Mode de paiement Aide financière',
