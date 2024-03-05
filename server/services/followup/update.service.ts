@@ -1,10 +1,11 @@
 import { FollowupMedium } from '@prisma/client'
 import { prepareSocialSupportSubjectsMutations } from './helper'
-import { SocialSupportRepo } from '~/server/database'
+import { FollowupRepo, SocialSupportRepo } from '~/server/database'
 import { EditFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { prepareDocumentsMutations } from '~/utils/prisma'
 import { markSocialSupportSubjectAsUsed } from '~/server/query'
+import { prismaClient } from '~/server/prisma'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -44,10 +45,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     duration
   } = input
 
-  const fu = await SocialSupportRepo.update(ctx.user, {
-    where: {
-      id: socialSupportId
-    },
+  const updateSocialSupport = SocialSupportRepo.update(ctx.user, {
+    where: { id: socialSupportId },
     data: {
       documents: prepareDocumentsMutations(documents, target.documents),
       subjects: prepareSocialSupportSubjectsMutations(
@@ -60,23 +59,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
       privateSynthesis,
       status,
       numeroPegase,
-      dueDate,
-      followup: {
-        update: {
-          prescribingOrganizationId: prescribingOrganizationId || null,
-          redirected,
-          structureName: redirected ? structureName : null,
-          medium,
-          place: medium === FollowupMedium.ExternalAppointment ? place : null,
-          thirdPersonName:
-            medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
-          helpRequested,
-          firstFollowup,
-          classified,
-          forwardedToJustice,
-          duration
-        }
-      }
+      dueDate
     },
     include: {
       beneficiary: {
@@ -88,7 +71,31 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     }
   })
 
-  await markSocialSupportSubjectAsUsed(subjects)
+  const updateFollowup = FollowupRepo.update(ctx.user, {
+    where: { id: input.id },
+    data: {
+      prescribingOrganizationId: prescribingOrganizationId || null,
+      redirected,
+      structureName: redirected ? structureName : null,
+      medium,
+      place: medium === FollowupMedium.ExternalAppointment ? place : null,
+      thirdPersonName:
+        medium === FollowupMedium.ThirdParty ? thirdPersonName : null,
+      helpRequested,
+      firstFollowup,
+      classified,
+      forwardedToJustice,
+      duration
+    }
+  })
 
-  return fu
+  const updateSocialSupportSubject = markSocialSupportSubjectAsUsed(subjects)
+
+  const [socialSupportResult] = await prismaClient.$transaction([
+    updateSocialSupport,
+    updateFollowup,
+    updateSocialSupportSubject
+  ])
+
+  return socialSupportResult
 }
