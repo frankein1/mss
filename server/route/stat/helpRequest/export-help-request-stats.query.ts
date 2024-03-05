@@ -6,7 +6,7 @@ import { RowType } from '~/types/export'
 import {
   getHelpRequestCountQuery,
   getHelpRequestFinancialStatsQuery,
-  getHelpRequestFollowupTypesStatsQuery,
+  getHelpRequestSubjectsStatsQuery,
   getHelpRequestInstructorOrganizationStatsQuery,
   getHelpRequestMinistreStatsQuery,
   getHelpRequestPrescribingOrganizationStatsQuery,
@@ -37,22 +37,19 @@ const handler = async ({
 
   const helpRequestCount = await getHelpRequestCountQuery(user, input)
 
-  const followupTypesData = await getHelpRequestFollowupTypesStatsQuery(
-    user,
-    input
-  )
-  const followupTypesColumns = followupTypesData.map(({ id, name }) => ({
+  const subjectsData = await getHelpRequestSubjectsStatsQuery(user, input)
+  const subjectsColumns = subjectsData.map(({ id, name }) => ({
     key: id,
     header: name
   }))
-  const followupTypesRows = [
-    followupTypesData.reduce((row: RowType, { _count, id }) => {
+  const subjectsRows = [
+    subjectsData.reduce((row: RowType, { _count, id }) => {
       if (_count.socialSupports > 0) {
         row[id] = _count.socialSupports.toString()
       }
       return row
     }, {}),
-    followupTypesData.reduce((row: RowType, { _count, id }) => {
+    subjectsData.reduce((row: RowType, { _count, id }) => {
       if (_count.socialSupports > 0) {
         row[id] =
           `${getPercentage(_count.socialSupports, helpRequestCount.Financial + helpRequestCount.Other)}%`
@@ -65,8 +62,8 @@ const handler = async ({
   ]
   exportData.push({
     name: "Objet d'accompagnement",
-    columns: followupTypesColumns,
-    rows: followupTypesRows
+    columns: subjectsColumns,
+    rows: subjectsRows
   })
 
   const userStructure = await StructureRepo.findUniqueOrThrow(user, {

@@ -2,7 +2,7 @@
 import { PrismaClient } from '@prisma/client'
 import {
   fixtureStructure,
-  fixturesFollowupTypes,
+  fixturesSocialSupportSubjects,
   fixturesUsers,
   fixturesBeneficiaries,
   fixturesSocialSupports
@@ -19,11 +19,11 @@ function loadFixtureStructure() {
   })
 }
 
-function loadFixturesFollowupTypes() {
-  console.log('🔷 Follow-up types...')
+function loadFixturesSocialSupportSubjects() {
+  console.log('🔷 Social support subjects...')
 
-  return prismaClient.followupType.createMany({
-    data: fixturesFollowupTypes,
+  return prismaClient.socialSupportSubject.createMany({
+    data: fixturesSocialSupportSubjects,
     skipDuplicates: true
   })
 }
@@ -66,7 +66,7 @@ function loadFixturesSocialSupports() {
 function loadFixtures() {
   return [
     loadFixtureStructure(),
-    loadFixturesFollowupTypes(),
+    loadFixturesSocialSupportSubjects(),
     loadFixturesUsers(),
     ...loadFixturesBeneficiaries(),
     ...loadFixturesSocialSupports()

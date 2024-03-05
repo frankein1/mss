@@ -24,12 +24,12 @@
           >le {{ formatDate(data.date) }}</span
         >
       </h2>
-      <ul class="fr-tags-group follow-up-types-tags">
+      <ul class="fr-tags-group social-support-subjects-tags">
         <li
-          v-for="followUpType in data.types"
-          :key="followUpType.id"
+          v-for="socialSupportSubject in data.subjects"
+          :key="socialSupportSubject.id"
         >
-          <p class="fr-tag">{{ followUpType.name }}</p>
+          <p class="fr-tag">{{ socialSupportSubject.name }}</p>
         </li>
       </ul>
     </div>
@@ -258,7 +258,7 @@
     justify-content: flex-end;
   }
 
-  .follow-up-types-tags {
+  .social-support-subjects-tags {
     margin-bottom: -0.8rem;
   }
 

@@ -37,7 +37,7 @@
         />
         <BeneficiaryInfo
           :beneficiary="beneficiary"
-          :followup-types="followupTypes"
+          :social-support-subjects="socialSupportSubjects"
         />
       </AtomTab>
       <AtomTab
@@ -103,8 +103,8 @@
 
   useHead({ title })
 
-  const followupTypes = computed(
-    () => data.value?.beneficiary.history.types || []
+  const socialSupportSubjects = computed(
+    () => data.value?.beneficiary.history.subjects || []
   )
 
   const backLink = computed(() => {

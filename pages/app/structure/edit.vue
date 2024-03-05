@@ -21,8 +21,8 @@
           <StructureForm
             v-if="data"
             :structure="data.structure"
-            :optional-types="data.optionalTypes"
-            :required-types="data.requiredTypes"
+            :optional-subjects="data.optionalSubjects"
+            :required-subjects="data.requiredSubjects"
             :is-submitting="isSubmitting"
             @update-structure="onUpdateStructure"
           />

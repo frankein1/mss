@@ -1,7 +1,7 @@
 <template>
   <FollowupForm
     :is-submitting="isSubmitting"
-    :followup-types="followupTypes"
+    :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
     :beneficiary-id="followup.beneficiaryId"
     :medium="values.medium"
@@ -13,7 +13,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FollowupType } from '@prisma/client'
+  import { SocialSupportSubject } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { FollowupPageItem } from './types'
   import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
@@ -23,7 +23,7 @@
 
   const props = defineProps<{
     isSubmitting: boolean
-    followupTypes: Array<FollowupType>
+    socialSupportSubjects: Array<SocialSupportSubject>
     partnerOrganizations: Array<PartnerOrganizationIdName>
     data: FollowupPageItem
   }>()
@@ -35,8 +35,8 @@
   const followup = computed(() => props.data.followup)
   const permissions = computed(() => props.data.permissions)
 
-  const initialFollowUpTypeIds = computed(
-    () => props.data.followup.types.map(f => f.id) || []
+  const initialSocialSupportSubjectIds = computed(
+    () => props.data.followup.subjects.map(({ id }) => id) || []
   )
 
   const canSetPrivateSynthesis = computed(
@@ -66,7 +66,7 @@
       thirdPersonName: followup.value.thirdPersonName,
       place: followup.value.place,
       prescribingOrganizationId: followup.value.prescribingOrganization?.id,
-      types: initialFollowUpTypeIds.value,
+      subjects: initialSocialSupportSubjectIds.value,
       documents: initialDocumentIds.value,
       redirected: followup.value.redirected || false,
       firstFollowup: followup.value.firstFollowup || false,

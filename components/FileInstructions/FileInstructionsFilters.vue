@@ -54,13 +54,17 @@
   })
 
   const {
-    data: followupTypeOptions,
-    pending: followupTypeOptionsPending,
-    error: followupTypeOptionsError
-  } = await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
-    transform: followUpTypes => toOptions(followUpTypes, 'id', 'name'),
-    queryKey: 'config.getStructureFollowupTypes.options'
-  })
+    data: socialSupportSubjectOptions,
+    pending: socialSupportSubjectOptionsPending,
+    error: socialSupportSubjectOptionsError
+  } = await trpcClient.config.getStructureSocialSupportSubjects.useQuery(
+    undefined,
+    {
+      transform: socialSupportSubjects =>
+        toOptions(socialSupportSubjects, 'id', 'name'),
+      queryKey: 'config.getStructureSocialSupportSubjects.options'
+    }
+  )
 
   const {
     data: examinationDateOptions,
@@ -71,7 +75,7 @@
   const pending = computed(
     () =>
       agentOptionsPending.value ||
-      followupTypeOptionsPending.value ||
+      socialSupportSubjectOptionsPending.value ||
       examinationDateOptionsPending.value
   )
 
@@ -79,7 +83,7 @@
     if (agentOptionsError.value) {
       return "La liste des agents n'a pas pu être chargée."
     }
-    if (followupTypeOptionsError.value) {
+    if (socialSupportSubjectOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
     if (examinationDateOptionsError.value) {
@@ -90,7 +94,7 @@
 
   const fileInstructionsFilters = computed(() => {
     if (
-      !followupTypeOptions.value ||
+      !socialSupportSubjectOptions.value ||
       !agentOptions.value ||
       !examinationDateOptions.value
     ) {
@@ -128,12 +132,12 @@
 
     if (props.filters.fileInstructionType !== 'Housing') {
       fileInstructionsFilters.push({
-        name: 'followupTypes',
-        label: helpRequestFieldLabels.typeId,
-        options: followupTypeOptions.value,
+        name: 'socialSupportSubjects',
+        label: helpRequestFieldLabels.subjectId,
+        options: socialSupportSubjectOptions.value,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.FollowupType,
+        matomoEventAction: HelpRequestFilterEventAction.SocialSupportSubject,
         alwaysExpanded: true
       })
     }

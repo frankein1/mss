@@ -16,11 +16,11 @@
             />
             <StatsBeneficiaries
               v-if="
-                followupTypesOptions &&
+                socialSupportSubjectOptions &&
                 beneficiariesCitiesOptions &&
                 agentsOptions
               "
-              :followup-type-options="followupTypesOptions"
+              :social-support-subject-options="socialSupportSubjectOptions"
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
@@ -36,11 +36,11 @@
             />
             <StatsHistory
               v-if="
-                followupTypesOptions &&
+                socialSupportSubjectOptions &&
                 beneficiariesCitiesOptions &&
                 agentsOptions
               "
-              :followup-type-options="followupTypesOptions"
+              :social-support-subject-options="socialSupportSubjectOptions"
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
@@ -63,11 +63,17 @@
 
   const trpcClient = useTrpcClient()
 
-  const { data: followupTypesOptions, error: followupTypesOptionsError } =
-    await trpcClient.config.getStructureFollowupTypes.useQuery(undefined, {
-      transform: followupTypes => toOptions(followupTypes, 'id', 'name'),
-      queryKey: 'config.getStructureFollowupTypes.options'
-    })
+  const {
+    data: socialSupportSubjectOptions,
+    error: socialSupportSubjectOptionsError
+  } = await trpcClient.config.getStructureSocialSupportSubjects.useQuery(
+    undefined,
+    {
+      transform: socialSupportSubject =>
+        toOptions(socialSupportSubject, 'id', 'name'),
+      queryKey: 'config.getStructureSocialSupportSubjects.options'
+    }
+  )
 
   const {
     data: beneficiariesCitiesOptions,
@@ -86,7 +92,7 @@
     })
 
   const fetchError = computed(() => {
-    if (followupTypesOptionsError.value) {
+    if (socialSupportSubjectOptionsError.value) {
       return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
     if (beneficiariesCitiesOptionsError.value) {

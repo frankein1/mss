@@ -55,8 +55,10 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
     socialSupport.date = prepareDateFilters(filters)
   }
 
-  if (filters.followupTypes?.length) {
-    socialSupport.types = { some: { id: { in: filters.followupTypes } } }
+  if (filters.socialSupportSubjects?.length) {
+    socialSupport.subjects = {
+      some: { id: { in: filters.socialSupportSubjects } }
+    }
   }
 
   if (filters.cities?.length) {
@@ -122,16 +124,16 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
     socialSupportFilters.created = prepareDateFilters(filters)
   }
 
-  if (filters.followupTypes?.length) {
+  if (filters.socialSupportSubjects?.length) {
     const typesListFilter = {
-      id: { in: filters.followupTypes }
+      id: { in: filters.socialSupportSubjects }
     }
-    socialSupportFilters.types = { some: typesListFilter }
+    socialSupportFilters.subjects = { some: typesListFilter }
   }
 
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
-  if (hasDateFilter || filters.followupTypes?.length) {
+  if (hasDateFilter || filters.socialSupportSubjects?.length) {
     formattedFilters.socialSupports = { some: socialSupportFilters }
   }
 

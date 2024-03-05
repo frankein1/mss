@@ -2,7 +2,7 @@ import { Prisma } from '@prisma/client'
 import { prepareSocialSupportStatFilters } from '../helpers'
 import {
   HelpRequestRepo,
-  FollowupTypeRepo,
+  SocialSupportSubjectRepo,
   SocialSupportConstraints,
   SocialSupportRepo
 } from '~/server/database'
@@ -68,14 +68,14 @@ async function getFinancialHelpRequestTotalAmount(
   return financialHelpRequestTotalAmount?.toNumber() || 0
 }
 
-async function getFinancialHelpRequestAmountByType(
+async function getFinancialHelpRequestAmountBySubject(
   user: SecurityRuleGrantee,
   { where: socialSupportFilters }: { where: Prisma.SocialSupportWhereInput },
   helpRequestFilters: Prisma.HelpRequestWhereInput
 ) {
-  // Prisma does not allow selecting type.id and type.name on a groupBy
-  const helpRequestAmountByTypeId = await HelpRequestRepo.prisma.groupBy({
-    by: ['typeId'],
+  // Prisma does not allow selecting subject.id and subject.name on a groupBy
+  const helpRequestAmountBySubjectId = await HelpRequestRepo.prisma.groupBy({
+    by: ['subjectId'],
     where: {
       ...helpRequestFilters,
       fileInstruction: {
@@ -91,29 +91,29 @@ async function getFinancialHelpRequestAmountByType(
     }
   })
 
-  // Raw query to join followup types with allocated amount can not be used due to the conditional filters
-  const followupTypes = await FollowupTypeRepo.findMany(user, {
+  // Raw query to join social support subjects with allocated amount can not be used due to the conditional filters
+  const socialSupportSubjects = await SocialSupportSubjectRepo.findMany(user, {
     where: {
       id: {
-        in: helpRequestAmountByTypeId.map(({ typeId }) => typeId)
+        in: helpRequestAmountBySubjectId.map(({ subjectId }) => subjectId)
       }
     },
     select: { id: true, name: true }
   })
 
-  return helpRequestAmountByTypeId.reduce(
-    (helpRequestAmountByType, helpRequestAmount) => {
-      const followupType = followupTypes.find(
-        ({ id }) => id === helpRequestAmount.typeId
+  return helpRequestAmountBySubjectId.reduce(
+    (helpRequestAmountBySubject, helpRequestAmount) => {
+      const socialSupportSubject = socialSupportSubjects.find(
+        ({ id }) => id === helpRequestAmount.subjectId
       )
-      if (!followupType) {
+      if (!socialSupportSubject) {
         // This case should not occur, but it exists for type-safety
-        return helpRequestAmountByType
+        return helpRequestAmountBySubject
       }
       return [
-        ...helpRequestAmountByType,
+        ...helpRequestAmountBySubject,
         {
-          type: followupType,
+          type: socialSupportSubject,
           allocatedAmount:
             helpRequestAmount._sum.allocatedAmount?.toNumber() || 0
         }
@@ -150,7 +150,7 @@ export async function getHelpRequestFinancialStatsQuery(
       socialSupportWhere,
       helpRequestFilters
     ),
-    getFinancialHelpRequestAmountByType(
+    getFinancialHelpRequestAmountBySubject(
       user,
       socialSupportWhere,
       helpRequestFilters

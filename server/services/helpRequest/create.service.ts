@@ -6,7 +6,7 @@ import {
 import { cleanCreateInput, preparePrescribingOrganization } from './helper'
 import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
 import { CreateHelpRequestInput } from '~/server/schema'
-import { markFollowupTypeAsUsed } from '~/server/query'
+import { markSocialSupportSubjectAsUsed } from '~/server/query'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareDocumentsMutations, connect } from '~/utils/prisma'
 
@@ -26,7 +26,7 @@ export async function create({ input, ctx }: CreateParams) {
     beneficiaryId,
     numeroPegase,
     ministre,
-    typeId,
+    subjectId,
     documents,
     externalStructure,
     status,
@@ -64,7 +64,7 @@ export async function create({ input, ctx }: CreateParams) {
       ),
 
       isRefundable,
-      type: connect(typeId),
+      subject: connect(subjectId),
       fileInstruction: {
         create: {
           type: financialSupport
@@ -93,7 +93,7 @@ export async function create({ input, ctx }: CreateParams) {
               privateSynthesis,
               ministre,
               numeroPegase,
-              types: connect(typeId),
+              subjects: connect(subjectId),
               dueDate,
               documents: prepareDocumentsMutations(documents),
               notifications: prepareNewHistoryElementNotification(
@@ -107,7 +107,7 @@ export async function create({ input, ctx }: CreateParams) {
     }
   })
 
-  await markFollowupTypeAsUsed([input.typeId])
+  await markSocialSupportSubjectAsUsed([input.subjectId])
 
   return { helpRequest }
 }
