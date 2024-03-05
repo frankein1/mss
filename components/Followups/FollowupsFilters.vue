@@ -89,7 +89,26 @@
         options: withEmptyValue(followupStatusOptions, 'Tous les statuts'),
         type: FilterType.SelectOne,
         matomoEventCategory: EventCategory.FollowupFilter,
-        matomoEventAction: FollowupFilterEventAction.Status
+        matomoEventAction: FollowupFilterEventAction.Status,
+        alwaysExpanded: true
+      },
+      {
+        name: 'socialSupportSubjects',
+        label: "Objet de l'accompagnement",
+        options: socialSupportSubjectOptions.value,
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.FollowupFilter,
+        matomoEventAction: FollowupFilterEventAction.SocialSupportSubject,
+        alwaysExpanded: true
+      },
+      {
+        name: 'createdById',
+        label: 'Agent',
+        options: agentOptions.value,
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.FollowupFilter,
+        matomoEventAction: FollowupFilterEventAction.Agent,
+        alwaysExpanded: true
       },
       {
         name: 'medium',
@@ -98,22 +117,6 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,
         matomoEventAction: FollowupFilterEventAction.Medium
-      },
-      {
-        name: 'socialSupportSubjects',
-        label: "Objet de l'accompagnement",
-        options: socialSupportSubjectOptions.value,
-        type: FilterType.SelectMultiple,
-        matomoEventCategory: EventCategory.FollowupFilter,
-        matomoEventAction: FollowupFilterEventAction.SocialSupportSubject
-      },
-      {
-        name: 'createdById',
-        label: 'Agent',
-        options: agentOptions.value,
-        type: FilterType.SelectMultiple,
-        matomoEventCategory: EventCategory.FollowupFilter,
-        matomoEventAction: FollowupFilterEventAction.Agent
       }
     ]
 
