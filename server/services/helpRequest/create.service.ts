@@ -1,8 +1,5 @@
 import { FileInstructionType, SocialSupportType } from '@prisma/client'
-import {
-  prepareNewHistoryElementNotification,
-  prepareInstructorOrganization
-} from '../helper'
+import { prepareNewHistoryElementNotification } from '../helper'
 import { cleanCreateInput } from './helper'
 import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
 import { CreateHelpRequestInput } from '~/server/schema'
@@ -75,11 +72,9 @@ export async function create({ input, ctx }: CreateParams) {
           refusalReason,
           dispatchDate,
           fullFile,
-          instructorOrganization: prepareInstructorOrganization(
-            instructorOrganizationId,
-            ctx,
-            externalStructure
-          ),
+          instructorOrganization: instructorOrganizationId
+            ? connect(instructorOrganizationId)
+            : undefined,
           socialSupport: {
             create: {
               date,

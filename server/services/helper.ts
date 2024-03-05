@@ -12,22 +12,7 @@ import {
   PartnerOrganization,
   User
 } from '@prisma/client'
-import { SecurityRuleContext, SecurityRuleGrantee } from '../security'
-import { connect } from '~/utils/prisma'
-
-export function prepareInstructorOrganization(
-  instructorOrganizationId: string | null | undefined,
-  ctx: SecurityRuleContext,
-  isExternalStructure: boolean
-) {
-  if (!isExternalStructure) {
-    return undefined
-  }
-  if (!instructorOrganizationId) {
-    return undefined
-  }
-  return connect(instructorOrganizationId)
-}
+import { SecurityRuleGrantee } from '../security'
 
 export function prepareNewHistoryElementNotification(
   beneficiary: Pick<Beneficiary, 'id'> & { referents: { id: string }[] },

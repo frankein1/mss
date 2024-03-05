@@ -1,9 +1,8 @@
-import { prepareInstructorOrganization } from '../helper'
 import { cleanUpdateInput } from './helper'
 import { SocialSupportRepo, HousingHelpRequestRepo } from '~/server/database'
 import { EditHousingHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
-import { prepareDocumentsMutations } from '~/utils/prisma'
+import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -78,11 +77,9 @@ export async function update({ input, ctx }: UpdateParams) {
           dispatchDate,
           fullFile,
           externalStructure,
-          instructorOrganization: prepareInstructorOrganization(
-            instructorOrganizationId,
-            ctx,
-            externalStructure
-          ),
+          instructorOrganization: instructorOrganizationId
+            ? connect(instructorOrganizationId)
+            : undefined,
           housingHelpRequest: {
             update: {
               isFirst,

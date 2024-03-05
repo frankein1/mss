@@ -1,13 +1,10 @@
 import { FileInstructionType, SocialSupportType } from '@prisma/client'
-import {
-  prepareNewHistoryElementNotification,
-  prepareInstructorOrganization
-} from '../helper'
+import { prepareNewHistoryElementNotification } from '../helper'
 import { cleanCreateInput } from './helper'
 import { BeneficiaryRepo, HousingHelpRequestRepo } from '~/server/database'
 import { CreateHousingHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
-import { prepareDocumentsMutations } from '~/utils/prisma'
+import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -70,11 +67,9 @@ export async function create({ input, ctx }: CreateParams) {
           dispatchDate,
           fullFile,
           externalStructure,
-          instructorOrganization: prepareInstructorOrganization(
-            instructorOrganizationId,
-            ctx,
-            externalStructure
-          ),
+          instructorOrganization: instructorOrganizationId
+            ? connect(instructorOrganizationId)
+            : undefined,
           socialSupport: {
             create: {
               status,

@@ -39,6 +39,7 @@ function cleanInput({
     paymentDate,
     externalStructure,
     isRefundable,
+    instructorOrganizationId,
     ...data
   } = input
 
@@ -51,6 +52,9 @@ function cleanInput({
     status,
     financialSupport: isFinancial,
     externalStructure: isExternalStructure,
+    instructorOrganizationId: isExternalStructure
+      ? instructorOrganizationId
+      : null,
     decisionDate: isAccepted || isRefused ? decisionDate : null,
     handlingDate: isAccepted ? handlingDate : null,
     refusalReason: isRefused ? refusalReason : null,
