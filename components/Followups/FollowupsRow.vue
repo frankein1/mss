@@ -18,7 +18,7 @@
       </td>
       <td>{{ formatDate(followup.date) }}</td>
       <td>
-        {{ formatBeneficiaryDisplayName(followup.beneficiary) }}
+        {{ formatBeneficiaryDisplayName(followup.beneficiary, true) }}
       </td>
       <td class="social-support-subjects-data">{{ socialSupportSubjects }}</td>
       <td>

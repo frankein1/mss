@@ -2,7 +2,8 @@ import { nameOrEmpty } from '~/utils/nameOrEmpty'
 import type { BeneficiaryNames } from '~/types/beneficiary'
 
 export function formatBeneficiaryDisplayName(
-  beneficiary: BeneficiaryNames
+  beneficiary: BeneficiaryNames,
+  lastNameFirst?: boolean
 ): string {
   let lastname = ''
   if (beneficiary.usualName) {
@@ -10,7 +11,8 @@ export function formatBeneficiaryDisplayName(
   } else if (beneficiary.birthName) {
     lastname = `(${beneficiary.birthName})`
   }
-  return `${nameOrEmpty(beneficiary.firstName)} ${nameOrEmpty(
-    lastname.toUpperCase()
-  )}`
+  if (lastNameFirst) {
+    return `${nameOrEmpty(lastname.toUpperCase())} ${nameOrEmpty(beneficiary.firstName)}`
+  }
+  return `${nameOrEmpty(beneficiary.firstName)} ${nameOrEmpty(lastname.toUpperCase())}`
 }
