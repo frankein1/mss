@@ -34,7 +34,7 @@
           :pending="pending"
         />
         <AtomPagination
-          class="fr-mt-4w fr-px-5v"
+          class="fr-mt-4w"
           :page="pageNumber"
           :per-page="perPage"
           :total-pages="totalPages"
