@@ -250,6 +250,7 @@ select:focus:not(:focus-visible) {
     outline-width: 0;
   }
 
+  // Make the whole table role clickable to navigate on the cell link
   &::before {
     content: '';
     display: block;
