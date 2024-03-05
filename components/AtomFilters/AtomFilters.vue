@@ -343,10 +343,6 @@
       &::before {
         grid-column: 2;
       }
-
-      > *:first-child:last-child {
-        grid-column: span 2;
-      }
     }
   }
 
@@ -365,20 +361,6 @@
 
       > * {
         grid-column: span 2;
-      }
-
-      > *:first-child {
-        &:last-child {
-          grid-column: span 6;
-        }
-
-        &:nth-last-child(2) {
-          grid-column: span 3;
-        }
-      }
-
-      > *:last-child:nth-child(2) {
-        grid-column: span 3;
       }
     }
   }
