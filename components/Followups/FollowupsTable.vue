@@ -5,7 +5,7 @@
     tabindex="0"
   >
     <div
-      class="fr-table fr-table--bordered fr-mb-0 fr-pt-0 fr-table--no-caption"
+      class="fr-table fr-table--bordered fr-mb-0 fr-pt-0 fr-table--no-caption fr-table--no-scroll"
     >
       <table>
         <caption>

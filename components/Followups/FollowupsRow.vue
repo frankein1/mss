@@ -20,7 +20,11 @@
       <td>
         {{ formatBeneficiaryDisplayName(followup.beneficiary, true) }}
       </td>
-      <td class="social-support-subjects-data">{{ socialSupportSubjects }}</td>
+      <td class="social-support-subjects-data">
+        <span :title="socialSupportSubjects">
+          {{ socialSupportSubjects }}
+        </span>
+      </td>
       <td>
         {{ followup.dueDate ? formatDate(followup.dueDate) : undefined }}
       </td>

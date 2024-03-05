@@ -44,10 +44,6 @@ body,
   box-shadow: $shadow-light;
 }
 
-.fr-table table {
-  display: table;
-}
-
 .bg-color-white {
   background-color: white;
 }
@@ -60,11 +56,25 @@ body,
   overflow-x: auto;
 
   .fr-table {
-    width: max-content;
-    min-width: 100%;
+    &:not(.fr-table--no-scroll) {
+      width: max-content;
+      min-width: 100%;
+
+      table {
+        display: table;
+      }
+    }
 
     tbody {
       background-color: white;
+
+      tr .fr-badge {
+        width: max-content;
+      }
+
+      td:not(.social-support-subjects-data, .address-data) {
+        white-space: nowrap;
+      }
     }
 
     thead,
@@ -186,8 +196,12 @@ select:focus:not(:focus-visible) {
   }
 }
 
-.social-support-subjects-data {
-  max-width: 25rem;
+.social-support-subjects-data > span {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .bg-color-grey-light {
