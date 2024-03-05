@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="feature-section history-header-section">
+    <div class="feature-section fr-mb-4w">
       <BeneficiaryHistoryFilters
         v-model:values="filters"
         :results-label="resultsLabel"
@@ -86,10 +86,6 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
-
-  .history-header-section {
-    margin-bottom: 2rem;
-  }
 
   .history-list {
     @include dsfr.disable-list-style;
