@@ -50,7 +50,6 @@
               "
             />
             <th scope="col">Agent</th>
-            <th scope="col">N° de dossier</th>
           </tr>
         </thead>
         <tbody>
