@@ -27,6 +27,7 @@ export const HousingHelpRequestRepo = {
   count,
   prisma: {
     create: prismaClient.housingHelpRequest.create,
+    update: prismaClient.housingHelpRequest.update,
     groupBy: prismaClient.housingHelpRequest.groupBy
   }
 }

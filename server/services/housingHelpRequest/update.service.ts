@@ -1,8 +1,13 @@
 import { cleanUpdateInput } from './helper'
-import { SocialSupportRepo, HousingHelpRequestRepo } from '~/server/database'
+import {
+  SocialSupportRepo,
+  HousingHelpRequestRepo,
+  FileInstructionRepo
+} from '~/server/database'
 import { EditHousingHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
-import { connect, prepareDocumentsMutations } from '~/utils/prisma'
+import { prepareDocumentsMutations } from '~/utils/prisma'
+import { prismaClient } from '~/server/prisma'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -55,7 +60,7 @@ export async function update({ input, ctx }: UpdateParams) {
     isPmr
   } = cleanUpdateInput(input)
 
-  const helpRequest = await SocialSupportRepo.update(ctx.user, {
+  const updateSocialSupport = SocialSupportRepo.update(ctx.user, {
     where: { id: input.socialSupportId },
     data: {
       status,
@@ -68,35 +73,7 @@ export async function update({ input, ctx }: UpdateParams) {
       documents: prepareDocumentsMutations(
         documents,
         target.fileInstruction.socialSupport.documents
-      ),
-      fileInstruction: {
-        update: {
-          examinationDate,
-          decisionDate,
-          refusalReason,
-          dispatchDate,
-          fullFile,
-          externalStructure,
-          instructorOrganization: instructorOrganizationId
-            ? connect(instructorOrganizationId)
-            : undefined,
-          housingHelpRequest: {
-            update: {
-              isFirst,
-              firstOpeningDate,
-              reason,
-              uniqueId,
-              askedHousing,
-              housingType: housingType || undefined,
-              roomCount: roomCount || undefined,
-              taxHouseholdAdditionalInformation,
-              maxRent,
-              maxCharges,
-              isPmr
-            }
-          }
-        }
-      }
+      )
     },
     include: {
       beneficiary: {
@@ -108,5 +85,43 @@ export async function update({ input, ctx }: UpdateParams) {
     }
   })
 
-  return { helpRequest }
+  const updateFileInstruction = FileInstructionRepo.prisma.update({
+    where: {
+      socialSupportId: input.socialSupportId
+    },
+    data: {
+      examinationDate,
+      decisionDate,
+      refusalReason,
+      dispatchDate,
+      fullFile,
+      externalStructure,
+      instructorOrganizationId: instructorOrganizationId || undefined
+    }
+  })
+
+  const updateHousingHelpRequest = HousingHelpRequestRepo.prisma.update({
+    where: { id: input.id },
+    data: {
+      isFirst,
+      firstOpeningDate,
+      reason,
+      uniqueId,
+      askedHousing,
+      housingType: housingType || undefined,
+      roomCount: roomCount || undefined,
+      taxHouseholdAdditionalInformation,
+      maxRent,
+      maxCharges,
+      isPmr
+    }
+  })
+
+  const [socialSupportResult] = await prismaClient.$transaction([
+    updateSocialSupport,
+    updateFileInstruction,
+    updateHousingHelpRequest
+  ])
+
+  return { helpRequest: socialSupportResult }
 }

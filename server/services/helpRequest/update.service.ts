@@ -1,9 +1,14 @@
 import { cleanUpdateInput } from './helper'
-import { SocialSupportRepo, HelpRequestRepo } from '~/server/database'
+import {
+  SocialSupportRepo,
+  HelpRequestRepo,
+  FileInstructionRepo
+} from '~/server/database'
 import { markSocialSupportSubjectAsUsed } from '~/server/query'
 import { EditHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareDocumentsMutations, connect } from '~/utils/prisma'
+import { prismaClient } from '~/server/prisma'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -55,7 +60,7 @@ export async function update({ input, ctx }: UpdateParams) {
     isRefundable
   } = cleanUpdateInput({ input, isFinancial: target.financialSupport })
 
-  const helpRequest = await SocialSupportRepo.update(ctx.user, {
+  const updateSocialSupport = SocialSupportRepo.update(ctx.user, {
     where: { id: input.socialSupportId },
     data: {
       status,
@@ -74,32 +79,7 @@ export async function update({ input, ctx }: UpdateParams) {
       documents: prepareDocumentsMutations(
         documents,
         target.fileInstruction.socialSupport.documents
-      ),
-      fileInstruction: {
-        update: {
-          examinationDate,
-          decisionDate,
-          refusalReason,
-          dispatchDate,
-          fullFile,
-          externalStructure,
-          instructorOrganization: instructorOrganizationId
-            ? connect(instructorOrganizationId)
-            : undefined,
-          helpRequest: {
-            update: {
-              askedAmount,
-              allocatedAmount,
-              paymentMethod,
-              paymentDate,
-              handlingDate,
-              isRefundable,
-              subjectId,
-              prescribingOrganizationId: prescribingOrganizationId || null
-            }
-          }
-        }
-      }
+      )
     },
     include: {
       beneficiary: {
@@ -111,7 +91,43 @@ export async function update({ input, ctx }: UpdateParams) {
     }
   })
 
-  await markSocialSupportSubjectAsUsed([subjectId])
+  const updateFileInstruction = FileInstructionRepo.prisma.update({
+    where: {
+      socialSupportId: input.socialSupportId
+    },
+    data: {
+      examinationDate,
+      decisionDate,
+      refusalReason,
+      dispatchDate,
+      fullFile,
+      externalStructure,
+      instructorOrganizationId: instructorOrganizationId || null
+    }
+  })
 
-  return { helpRequest }
+  const updateHelpRequest = HelpRequestRepo.prisma.update({
+    where: { id: input.id },
+    data: {
+      askedAmount,
+      allocatedAmount,
+      paymentMethod,
+      paymentDate,
+      handlingDate,
+      isRefundable,
+      subjectId,
+      prescribingOrganizationId: prescribingOrganizationId || null
+    }
+  })
+
+  const updateSocialSupportSubject = markSocialSupportSubjectAsUsed([subjectId])
+
+  const [socialSupportResult] = await prismaClient.$transaction([
+    updateSocialSupport,
+    updateFileInstruction,
+    updateHelpRequest,
+    updateSocialSupportSubject
+  ])
+
+  return { helpRequest: socialSupportResult }
 }
