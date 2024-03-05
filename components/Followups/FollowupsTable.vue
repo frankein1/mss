@@ -20,7 +20,7 @@
               {{ followupFieldLabels.status }}
             </th>
             <TableSortableHeader
-              :label="followupFieldLabels.date"
+              label="Date saisie"
               :sort="sort.socialSupport.date"
               numeric
               @update:sort="
@@ -40,9 +40,9 @@
                 })
               "
             />
-            <th scope="col">Objet de l'accompagnement</th>
+            <th scope="col">Objet</th>
             <TableSortableHeader
-              :label="followupFieldLabels.dueDate"
+              label="Échéance"
               :sort="sort.socialSupport.dueDate"
               numeric
               @update:sort="
