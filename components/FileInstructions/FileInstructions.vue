@@ -31,7 +31,6 @@
           v-model:sort="orderBy"
           :items="items"
           :pending="pending"
-          @file-instruction-updated="onFileInstructionUpdated"
         />
         <AtomPagination
           class="fr-mt-4w"
@@ -46,7 +45,6 @@
 </template>
 
 <script setup lang="ts">
-  import { FileInstructionPageItem } from '~/server/trpc/routers'
   import { FileInstructionFilterInput } from '~/server/schema'
   import { FileInstructionSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
@@ -92,20 +90,6 @@
   const items = computed(() => pageData.value?.items || [])
 
   const totalPages = computed(() => pageData.value?.totalPages || 0)
-
-  function onFileInstructionUpdated(
-    updatedFileInstruction: FileInstructionPageItem
-  ) {
-    if (!pageData.value) {
-      return
-    }
-
-    pageData.value.items = pageData.value.items.map(item =>
-      item.fileInstruction.id === updatedFileInstruction.fileInstruction.id
-        ? updatedFileInstruction
-        : item
-    )
-  }
 
   async function exportFileInstructions() {
     isDownloading.value = true
