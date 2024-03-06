@@ -20,7 +20,15 @@
       <td>
         {{ formatBeneficiaryDisplayName(socialSupport.beneficiary, true) }}
       </td>
-      <td class="social-support-subjects-data">{{ fileInstructionObject }}</td>
+      <td
+        v-if="fileInstructionTypeFilter !== 'Housing'"
+        class="social-support-subjects-data"
+      >
+        {{ fileInstructionObject }}
+      </td>
+      <td v-else>
+        {{ roomCounts }}
+      </td>
       <td>
         <template v-if="socialSupport.createdBy">
           {{ formatUserDisplayName(socialSupport.createdBy) }}
@@ -45,9 +53,12 @@
   import { formatDate } from '~/utils/formatDate'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
+  import { FileInstructionFilterInput } from '~/server/schema'
+  import { roomCountLabels } from '~/client/options'
 
   const props = defineProps<{
     fileInstruction: FileInstruction
+    fileInstructionTypeFilter: FileInstructionFilterInput['fileInstructionType']
   }>()
 
   const { socialSupportStatusLabels } = useSocialSupportStatus()
@@ -69,4 +80,14 @@
       originTab: HistoryTab.FileInstructions
     })
   )
+
+  const roomCounts = computed(() => {
+    if (!props.fileInstruction.housingHelpRequest?.roomCount) {
+      return ''
+    }
+
+    return props.fileInstruction.housingHelpRequest.roomCount
+      .map(roomCount => roomCountLabels[roomCount])
+      .join(', ')
+  })
 </script>

@@ -14,7 +14,8 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     socialSupportSubjects,
     examinationDate,
     createdById,
-    ministre
+    ministre,
+    roomCount
   } = filters
 
   if (fileInstructionType) {
@@ -50,6 +51,10 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     if (ministre?.length) {
       formattedFilters.socialSupport.ministre = { in: ministre }
     }
+  }
+
+  if (roomCount) {
+    formattedFilters.housingHelpRequest = { roomCount: { has: roomCount } }
   }
 
   return formattedFilters

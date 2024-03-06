@@ -36,7 +36,13 @@
                 })
               "
             />
-            <th scope="col">Objet</th>
+            <th scope="col">
+              {{
+                fileInstructionTypeFilter !== 'Housing'
+                  ? 'Objet'
+                  : 'Nombre de pièces'
+              }}
+            </th>
             <th scope="col">Agent</th>
             <th scope="col">Échéance</th>
           </tr>
@@ -46,6 +52,7 @@
             v-for="item in items"
             :key="item.id"
             :file-instruction="item"
+            :file-instruction-type-filter="fileInstructionTypeFilter"
           />
         </tbody>
       </table>
@@ -57,11 +64,13 @@
   import type { FileInstructions } from '~/server/trpc/routers'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { FileInstructionSort } from '~/types/table'
+  import { FileInstructionFilterInput } from '~/server/schema'
 
   const props = defineProps<{
     items: FileInstructions
     sort: FileInstructionSort
     pending: boolean
+    fileInstructionTypeFilter: FileInstructionFilterInput['fileInstructionType']
   }>()
 
   const emit = defineEmits<{
