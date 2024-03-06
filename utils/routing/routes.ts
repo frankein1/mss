@@ -9,7 +9,7 @@ export enum Route {
   MentionsLegales = 'MentionsLegales',
   CGUManager = 'CGUManager',
   CGUUser = 'CGUUser',
-  Env = 'Env',
+  Statistiques = 'Statistiques',
 
   // ERROR
   ErrorDisabledAccount = 'ErrorDisabledAccount',
@@ -161,6 +161,7 @@ export const RoutePath = {
   [Route.MentionsLegales]: () => '/mentions-legales',
   [Route.CGUManager]: () => `${CGURoute}/manager`,
   [Route.CGUUser]: () => `${CGURoute}/user`,
+  [Route.Statistiques]: () => `/statistiques`,
 
   // ERROR
   [Route.ErrorDisabledAccount]: () => `${ErrorRoute}/disabled-account`,

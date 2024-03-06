@@ -7,6 +7,7 @@ export const RouteTitle = {
   [Route.DeclarationAccessibilite]: () => "Déclaration d'accessibilité",
   [Route.MentionsLegales]: () => 'Mentions légales',
   [Route.Register]: () => 'Enregistrer ma structure',
+  [Route.Statistiques]: () => "Statistiques d'utilisation",
 
   // AUTH
   [Route.AuthAdmin]: () => "Se connecter à l'espace d'administration",
