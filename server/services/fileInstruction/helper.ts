@@ -62,9 +62,5 @@ export function prepareSort(sort: ExportFileInstructionsInput['orderBy']) {
     orderBy.push({ socialSupport: { created: SortOrder.Desc } })
   }
 
-  if (sort.instructorOrganization) {
-    orderBy.unshift({ externalStructure: SortOrder.Desc })
-  }
-
   return orderBy
 }

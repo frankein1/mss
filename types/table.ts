@@ -25,11 +25,7 @@ export type FollowupSort = {
 }
 
 export type FileInstructionSort = {
-  instructorOrganization?: {
-    name?: SortOrder
-  }
   socialSupport?: {
-    dueDate?: SortOrder
     date?: SortOrder
     beneficiary?: {
       usualName?: SortOrder

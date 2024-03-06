@@ -19,14 +19,12 @@
             >
               {{ helpRequestFieldLabels.status }}
             </th>
-            <th scope="col">Objet d'accompagnement</th>
             <TableSortableHeader
-              v-if="application.module.helpRequest"
-              :label="helpRequestFieldLabels.dueDate"
-              :sort="sort.socialSupport?.dueDate"
+              label="Ouverture dossier"
+              :sort="sort.socialSupport?.date"
               numeric
               @update:sort="
-                emit('update:sort', { socialSupport: { dueDate: $event } })
+                emit('update:sort', { socialSupport: { date: $event } })
               "
             />
             <TableSortableHeader
@@ -38,57 +36,9 @@
                 })
               "
             />
-            <TableSortableHeader
-              v-if="application.module.helpRequest"
-              :label="helpRequestFieldLabels.instructorOrganizationId"
-              :sort="sort.instructorOrganization?.name"
-              @update:sort="
-                emit('update:sort', {
-                  instructorOrganization: { name: $event }
-                })
-              "
-            />
-            <th
-              v-if="application.module.helpRequest"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.examinationDate }}
-            </th>
-            <th
-              v-if="application.module.helpRequest"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.askedAmount }}
-            </th>
-            <th
-              v-if="application.module.helpRequest"
-              id="allocated-amount-col"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.allocatedAmount }}
-            </th>
-            <th
-              v-if="application.module.helpRequest"
-              id="payment-method-col"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.paymentMethod }}
-            </th>
-            <th
-              v-if="application.module.helpRequest"
-              id="payment-date-col"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.paymentDate }}
-            </th>
-            <th
-              v-if="application.module.helpRequest"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.handlingDate }}
-            </th>
+            <th scope="col">Objet</th>
             <th scope="col">Agent</th>
-            <th scope="col">N° de dossier</th>
+            <th scope="col">Échéance</th>
           </tr>
         </thead>
         <tbody>
@@ -122,8 +72,6 @@
     'update:sort': [sort: FileInstructionSort]
     'fileInstructionUpdated': [fileInstruction: FileInstructionPageItem]
   }>()
-
-  const { application } = usePermissions()
 
   const { tableContainer } = useTable(toRef(() => props.pending))
 </script>

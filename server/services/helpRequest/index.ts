@@ -1,7 +1,6 @@
 import { create } from './create.service'
 import { update } from './update.service'
 import { get } from './get.service'
-import { quickUpdate } from './quickUpdate.service'
 import {
   getEditionPermissions,
   getCreationPermissions
@@ -12,6 +11,5 @@ export const HelpRequestService = {
   update,
   get,
   getEditionPermissions,
-  getCreationPermissions,
-  quickUpdate
+  getCreationPermissions
 }
