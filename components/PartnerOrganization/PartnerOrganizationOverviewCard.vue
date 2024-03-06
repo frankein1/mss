@@ -26,7 +26,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 1.5rem;
     gap: 0.5rem;
   }
 

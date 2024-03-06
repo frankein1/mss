@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="feature-section history-header-section fr-p-3w">
+    <div class="feature-section history-header-section">
       <BeneficiaryHistoryFilters
         v-model:values="filters"
         :results-label="resultsLabel"

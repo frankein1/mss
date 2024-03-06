@@ -117,10 +117,6 @@
 <style lang="scss">
   $section-padding: 1.5rem;
 
-  .ongoing-social-supports {
-    padding: $section-padding;
-  }
-
   .ongoing-social-supports__header {
     margin: -#{$section-padding} -#{$section-padding} 0;
     padding: $section-padding $section-padding 1rem;

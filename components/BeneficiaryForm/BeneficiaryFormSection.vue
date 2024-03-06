@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fr-grid-row fr-grid-row--center fr-grid-row--bottom fr-grid-row--gutters feature-section fr-mb-3w"
+    class="fr-grid-row fr-grid-row--center fr-grid-row--bottom fr-grid-row--gutters feature-section fr-p-7v fr-mb-3w"
   >
     <div
       v-if="sectionTitle"

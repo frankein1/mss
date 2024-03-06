@@ -20,7 +20,7 @@
     </PageTitle>
     <main
       ref="formContainer"
-      class="feature-section"
+      class="feature-section fr-p-5w"
     >
       <AtomAlert
         v-if="error"

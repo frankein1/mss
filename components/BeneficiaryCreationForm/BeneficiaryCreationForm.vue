@@ -15,7 +15,9 @@
       no-aidant-connect-authorized
     />
 
-    <div class="fr-grid-row fr-grid-row--gutters feature-section fr-mb-7v">
+    <div
+      class="fr-grid-row fr-grid-row--gutters feature-section fr-p-7v fr-mb-7v"
+    >
       <h3 class="fr-col-12 fr-text--md formgroup__title fr-mb-0">
         Identité du bénéficiaire
       </h3>

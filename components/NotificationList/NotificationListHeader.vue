@@ -53,7 +53,7 @@
   @use '~/assets/style/variables' as *;
 
   .notification-list-header__container {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem;
     display: flex;
     align-items: center;
 

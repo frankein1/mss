@@ -19,7 +19,7 @@
         <div class="feature-section">
           <BeneficiaryFilters @filter="filters = $event" />
         </div>
-        <main class="feature-section fr-py-3w fr-mt-2w">
+        <main class="feature-section fr-mt-2w">
           <AtomAlert
             v-if="error"
             class="fr-mx-5v"

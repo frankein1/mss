@@ -56,13 +56,17 @@
     content: none;
   }
 
+  .feature-section {
+    padding: 2.5rem;
+  }
+
   .fr-accordion.feature-section {
     padding: 0;
   }
 
   .fr-accordion__btn {
     color: var(--text-title-blue-france);
-    padding: 1.5rem 2rem;
+    padding: 1.5rem 2.5rem;
     border-radius: 0.5rem;
 
     &[aria-expanded='true'] {
@@ -72,8 +76,8 @@
     }
   }
 
-  .fr-accordion .fr-collapse > * {
-    padding: 1rem;
+  .fr-accordion .fr-collapse {
+    padding: 2.75rem;
   }
 
   .fr-accordion .fr-collapse--expanded {
