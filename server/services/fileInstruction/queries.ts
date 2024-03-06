@@ -14,6 +14,7 @@ import {
 } from '~/server/security'
 import { FileInstructionRepo } from '~/server/database/repository/FileInstructionRepository'
 
+// TODO: To simplify and in followup too ?
 export const include = {
   instructorOrganization: true,
   socialSupport: {
@@ -35,6 +36,7 @@ export const include = {
   }
 }
 
+// TODO: To delete and in followup too ?
 function findOne(user: SecurityRuleGrantee, id: string) {
   return FileInstructionRepo.findUniqueOrThrow(user, {
     where: { id },

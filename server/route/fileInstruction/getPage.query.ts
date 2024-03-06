@@ -28,9 +28,3 @@ type FileInstructionPage = Prisma.PromiseReturnType<typeof handler>
 
 export type FileInstructionPageItems = FileInstructionPage['items']
 export type FileInstructionPageItem = FileInstructionPageItems[0]
-
-type FileInstructionPageItemData = FileInstructionPageItem['fileInstruction']
-
-export type HelpRequestData = NonNullable<
-  FileInstructionPageItemData['helpRequest']
->

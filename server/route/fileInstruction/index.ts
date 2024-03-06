@@ -12,6 +12,5 @@ export const fileInstructionRoutes = {
 
 export type {
   FileInstructionPageItem,
-  FileInstructionPageItems,
-  HelpRequestData
+  FileInstructionPageItems
 } from './getPage.query'
