@@ -20,7 +20,7 @@
       <td>
         {{ formatBeneficiaryDisplayName(socialSupport.beneficiary, true) }}
       </td>
-      <td>{{ fileInstructionObject }}</td>
+      <td class="social-support-subjects-data">{{ fileInstructionObject }}</td>
       <td>
         <template v-if="socialSupport.createdBy">
           {{ formatUserDisplayName(socialSupport.createdBy) }}
