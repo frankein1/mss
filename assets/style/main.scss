@@ -226,3 +226,7 @@ select:focus:not(:focus-visible) {
 .fr-artwork .fr-artwork-major {
   --artwork-major-blue-france: var(--primary);
 }
+
+.fr-container.fr-container--no-max {
+  max-width: initial;
+}

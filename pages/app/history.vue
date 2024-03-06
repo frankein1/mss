@@ -1,5 +1,5 @@
 <template>
-  <PageContainer>
+  <PageContainer no-max-width>
     <DsfrBreadcrumb :links="Breadcrumb.AppHistory()" />
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
