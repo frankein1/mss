@@ -102,6 +102,14 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
+              :to="RoutePath.Statistiques()"
+            >
+              Statistiques
+            </NuxtLink>
+          </li>
+          <li class="fr-footer__bottom-item">
+            <NuxtLink
+              class="fr-footer__bottom-link"
               :to="sourceCode"
               target="_blank"
               rel="noopener external"

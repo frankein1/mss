@@ -187,6 +187,9 @@ export default defineNuxtConfig({
         tracesSampleRate: parseFloat(
           process.env.SENTRY_TRACE_SAMPLE_RATE || '1.0'
         )
+      },
+      metabase: {
+        publicUrl: process.env.METABASE_PUBLIC_URL
       }
     }
   },
