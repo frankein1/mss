@@ -1,3 +1,4 @@
+import { Prisma } from '@prisma/client'
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
@@ -22,3 +23,14 @@ export const getPage = createQuery({
   securityCheck: AllowSecurityCheck,
   handler
 })
+
+type FileInstructionPage = Prisma.PromiseReturnType<typeof handler>
+
+export type FileInstructionPageItems = FileInstructionPage['items']
+export type FileInstructionPageItem = FileInstructionPageItems[0]
+
+type FileInstructionPageItemData = FileInstructionPageItem['fileInstruction']
+
+export type HelpRequestData = NonNullable<
+  FileInstructionPageItemData['helpRequest']
+>

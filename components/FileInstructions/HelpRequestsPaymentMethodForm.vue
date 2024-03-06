@@ -15,7 +15,10 @@
 </template>
 
 <script setup lang="ts">
-  import { FileInstructionPageItem, HelpRequestData } from './types'
+  import {
+    FileInstructionPageItem,
+    HelpRequestData
+  } from '~/server/trpc/routers'
   import { paymentMethodOptions } from '~/client/options'
   import {
     QuickEditHelpRequestPaymentMethodInput,

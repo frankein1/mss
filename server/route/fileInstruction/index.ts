@@ -9,3 +9,9 @@ export const fileInstructionRoutes = {
   updateStatus,
   getOngoing
 }
+
+export type {
+  FileInstructionPageItem,
+  FileInstructionPageItems,
+  HelpRequestData
+} from './getPage.query'

@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-  import { FileInstructionPageItem } from './types'
+  import { FileInstructionPageItem } from '~/server/trpc/routers'
   import {
     EditFileInstructionStatusInput,
     editFileInstructionStatusSchema

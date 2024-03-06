@@ -15,7 +15,10 @@
 
 <script setup lang="ts">
   import { Prisma } from '@prisma/client'
-  import { FileInstructionPageItem, HelpRequestData } from './types'
+  import {
+    FileInstructionPageItem,
+    HelpRequestData
+  } from '~/server/trpc/routers'
   import {
     QuickEditHelpRequestAllocatedAmountInput,
     quickEditHelpRequestAllocatedAmountSchema

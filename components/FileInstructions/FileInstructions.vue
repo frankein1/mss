@@ -45,7 +45,7 @@
 </template>
 
 <script setup lang="ts">
-  import { FileInstructionPageItem } from './types'
+  import { FileInstructionPageItem } from '~/server/trpc/routers'
   import { FileInstructionFilterInput } from '~/server/schema'
   import { FileInstructionSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'

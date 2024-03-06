@@ -98,7 +98,7 @@
 
 <script lang="ts" setup>
   import { FileInstructionType, SocialSupportStatus } from '@prisma/client'
-  import { FileInstructionPageItem } from './types'
+  import { FileInstructionPageItem } from '~/server/trpc/routers'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { paymentMethodOptions } from '~/client/options'

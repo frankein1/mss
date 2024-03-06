@@ -108,7 +108,7 @@
   import type {
     FileInstructionPageItems,
     FileInstructionPageItem
-  } from './types'
+  } from '~/server/trpc/routers'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { FileInstructionSort } from '~/types/table'
 
