@@ -11,7 +11,7 @@
   </div>
   <template v-else>
     <div class="feature-section fr-mb-3w">
-      <FollowupsFilters @filter="filters = $event" />
+      <FollowupsFilters v-model:filters="filters" />
     </div>
     <div class="feature-section">
       <div class="fr-mb-2w results-container">
