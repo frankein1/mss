@@ -13,10 +13,7 @@
         </caption>
         <thead>
           <tr>
-            <th
-              id="status-col"
-              scope="col"
-            >
+            <th scope="col">
               {{ followupFieldLabels.status }}
             </th>
             <TableSortableHeader

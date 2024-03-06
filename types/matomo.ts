@@ -66,10 +66,7 @@ export enum AccessBeneficiaryAddEventAction {
 }
 
 export enum HistoryQuickEditEventAction {
-  FileInstructionStatus = 'Statut Instruction de dossier',
-  HelpRequestAllocatedAmount = 'Montant alloué Aide financière',
-  HelpRequestPaymentMethod = 'Mode de paiement Aide financière',
-  HelpRequestPaymentDate = 'Date de paiement Aide financière'
+  FileInstructionStatus = 'Statut Instruction de dossier'
 }
 
 export enum ExportHistoryEventAction {
