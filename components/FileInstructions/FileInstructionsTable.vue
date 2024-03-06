@@ -44,8 +44,8 @@
         <tbody>
           <FileInstructionRow
             v-for="item in items"
-            :key="item.fileInstruction.id"
-            :item="item"
+            :key="item.id"
+            :file-instruction="item"
           />
         </tbody>
       </table>
@@ -54,12 +54,12 @@
 </template>
 
 <script setup lang="ts">
-  import type { FileInstructionPageItems } from '~/server/trpc/routers'
+  import type { FileInstructions } from '~/server/trpc/routers'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { FileInstructionSort } from '~/types/table'
 
   const props = defineProps<{
-    items: FileInstructionPageItems
+    items: FileInstructions
     sort: FileInstructionSort
     pending: boolean
   }>()

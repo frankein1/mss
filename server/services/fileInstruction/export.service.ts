@@ -2,13 +2,15 @@ import { prepareFilters, prepareSort } from './helper'
 import { getPage } from './queries'
 import { helpRequestFieldLabels } from '~/client/labels'
 import { ExportFileInstructionsInput } from '~/server/schema'
-import { SecurityRuleContext } from '~/server/security'
+import {
+  SecurityRuleContext,
+  getFileInstructionPermissions
+} from '~/server/security'
 import { RowType } from '~/types/export'
 import { formatUserDisplayName } from '~/utils/user'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
-
 import {
   socialSupportStatusLabels,
   fileInstructionRefusalReasonLabels,
@@ -66,17 +68,25 @@ export async function exportFileInstructions({
   })
 
   const rows = fileInstructions.reduce(
-    (fileInstructions: RowType[], { permissions, fileInstruction }) => {
-      if (permissions.view) {
-        const { socialSupport, helpRequest } = fileInstruction
+    (fileInstructions: RowType[], fileInstruction) => {
+      const { socialSupport, helpRequest } = fileInstruction
+      const { beneficiary } = socialSupport
+      const permissions = getFileInstructionPermissions({
+        ctx,
+        beneficiary,
+        socialSupport
+      })
+      if (!permissions.view) {
+        return fileInstructions
+      }
+      const subjectId =
+        socialSupport?.subjects?.length > 0
+          ? socialSupport.subjects[0].name
+          : ''
 
-        const subjectId =
-          socialSupport?.subjects?.length > 0
-            ? socialSupport.subjects[0].name
-            : ''
-
-        const beneficiary = socialSupport.beneficiary
-        fileInstructions.push({
+      return [
+        ...fileInstructions,
+        {
           beneficiaryId: formatBeneficiaryDisplayName(beneficiary),
           financialSupport: helpRequest?.financialSupport || '',
           prescribingOrganizationId:
@@ -124,9 +134,8 @@ export async function exportFileInstructions({
           createdById: socialSupport.createdBy
             ? formatUserDisplayName(socialSupport.createdBy)
             : ''
-        })
-      }
-      return fileInstructions
+        }
+      ]
     },
     []
   )

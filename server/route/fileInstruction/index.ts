@@ -8,7 +8,4 @@ export const fileInstructionRoutes = {
   getOngoing
 }
 
-export type {
-  FileInstructionPageItem,
-  FileInstructionPageItems
-} from './getPage.query'
+export type { FileInstruction, FileInstructions } from './getPage.query'
