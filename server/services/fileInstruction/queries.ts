@@ -2,7 +2,8 @@ import { Prisma } from '@prisma/client'
 import {
   filterFileInstruction,
   filterHelpRequest,
-  filterSocialSupport
+  filterSocialSupport,
+  filterHousingHelpRequest
 } from '../helper'
 import {
   AppContextPermissions,
@@ -38,7 +39,8 @@ function findMany(
         include: {
           prescribingOrganization: true
         }
-      }
+      },
+      housingHelpRequest: true
     },
     take: args.take,
     skip: args.skip,
@@ -73,7 +75,7 @@ export function filter(
   permissions: FileInstructionPermissions,
   fileInstruction: FileInstructionOutput
 ) {
-  const { socialSupport, helpRequest } = fileInstruction
+  const { socialSupport, helpRequest, housingHelpRequest } = fileInstruction
 
   const conditions = {
     details: permissions.get.details,
@@ -91,6 +93,13 @@ export function filter(
       conditions
     })
   }
+  let filteredHousingHelpRequest = null
+  if (housingHelpRequest) {
+    filteredHousingHelpRequest = filterHousingHelpRequest({
+      housingHelpRequest,
+      conditions
+    })
+  }
 
   const filteredFileInstruction = filterFileInstruction({
     fileInstruction,
@@ -100,6 +109,7 @@ export function filter(
   return {
     ...filteredFileInstruction,
     socialSupport: filteredSocialSupport,
-    helpRequest: filteredHelpRequest || null
+    helpRequest: filteredHelpRequest,
+    housingHelpRequest: filteredHousingHelpRequest
   }
 }

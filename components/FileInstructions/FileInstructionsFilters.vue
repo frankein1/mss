@@ -26,8 +26,15 @@
   import { AlertType } from '~/utils/constants/alert'
   import { FileInstructionFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import { helpRequestFieldLabels } from '~/client/labels'
-  import { ministerOptions, fileInstructionTypeOptions } from '~/client/options'
+  import {
+    helpRequestFieldLabels,
+    housingHelpRequestFieldLabels
+  } from '~/client/labels'
+  import {
+    ministerOptions,
+    fileInstructionTypeOptions,
+    roomCountOptions
+  } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
@@ -140,6 +147,17 @@
         matomoEventAction: HelpRequestFilterEventAction.SocialSupportSubject,
         alwaysExpanded: true
       })
+    } else {
+      fileInstructionsFilters.push({
+        name: 'roomCount',
+        label: housingHelpRequestFieldLabels.roomCount,
+        options: roomCountOptions,
+        type: FilterType.Radio,
+        asTag: true,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.RoomCount,
+        alwaysExpanded: true
+      })
     }
 
     fileInstructionsFilters.push({
@@ -152,20 +170,21 @@
       alwaysExpanded: fileInstructionsFilters.length < maxAlwaysExpandedNb
     })
 
-    if (application.value.module.helpRequest) {
-      if (examinationDateOptions.value.size) {
-        fileInstructionsFilters.push({
-          name: 'examinationDate',
-          label: helpRequestFieldLabels.examinationDate,
-          options: withEmptyValue(
-            examinationDateOptions.value,
-            'Toutes les commissions'
-          ),
-          type: FilterType.SelectOne,
-          matomoEventCategory: EventCategory.HelpRequestFilter,
-          matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
-        })
-      }
+    if (
+      application.value.module.helpRequest &&
+      examinationDateOptions.value.size
+    ) {
+      fileInstructionsFilters.push({
+        name: 'examinationDate',
+        label: helpRequestFieldLabels.examinationDate,
+        options: withEmptyValue(
+          examinationDateOptions.value,
+          'Toutes les commissions'
+        ),
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
+      })
     }
 
     if (application.value.module.ministere) {

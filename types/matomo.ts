@@ -38,10 +38,9 @@ export enum HelpRequestFilterEventAction {
   Status = 'Statut',
   SocialSupportSubject = 'Objet de la demande',
   ExaminationDate = 'Date de passage en commission',
-  HandlingDate = 'Fin de prise en charge',
-  ExternalStructure = 'Instruction',
   Agent = 'Agent',
-  Ministre = 'Ministre'
+  Ministre = 'Ministre',
+  RoomCount = 'Nombre de pièces'
 }
 
 export enum DocumentEventAction {

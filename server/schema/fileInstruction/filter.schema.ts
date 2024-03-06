@@ -2,7 +2,8 @@ import { z } from 'zod'
 import {
   Minister,
   SocialSupportStatus,
-  FileInstructionType
+  FileInstructionType,
+  HousingRoomCount
 } from '@prisma/client'
 
 export const fileInstructionFilterSchema = z.object({
@@ -11,7 +12,8 @@ export const fileInstructionFilterSchema = z.object({
   socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   createdById: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
-  ministre: z.array(z.nativeEnum(Minister)).nullish()
+  ministre: z.array(z.nativeEnum(Minister)).nullish(),
+  roomCount: z.nativeEnum(HousingRoomCount).nullish()
 })
 
 export type FileInstructionFilterInput = z.infer<

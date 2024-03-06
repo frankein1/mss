@@ -335,7 +335,7 @@
     .filters:not(.full-width-filters) {
       grid-template-columns: repeat(2, 1fr);
 
-      .radio {
+      .filter-radio:not(.filter-radio--as-tag) {
         grid-column: span 2;
       }
 
@@ -355,7 +355,7 @@
         grid-column: 6;
       }
 
-      .radio {
+      .filter-radio:not(.filter-radio--as-tag) {
         grid-column: span 6;
       }
 

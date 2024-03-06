@@ -31,6 +31,7 @@
           v-model:sort="orderBy"
           :items="items"
           :pending="pending"
+          :file-instruction-type-filter="filters.fileInstructionType"
         />
         <AtomPagination
           class="fr-mt-4w"
