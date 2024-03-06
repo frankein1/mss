@@ -37,7 +37,7 @@
 
 <script lang="ts" setup>
   import { FileInstructionType } from '@prisma/client'
-  import { FileInstructionPageItem } from '~/server/trpc/routers'
+  import { FileInstruction } from '~/server/trpc/routers'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
@@ -47,18 +47,17 @@
   import { Route, RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
-    item: FileInstructionPageItem
+    fileInstruction: FileInstruction
   }>()
 
   const { socialSupportStatusLabels } = useSocialSupportStatus()
 
-  const fileInstruction = computed(() => props.item.fileInstruction)
-  const socialSupport = computed(() => fileInstruction.value.socialSupport)
+  const socialSupport = computed(() => props.fileInstruction.socialSupport)
   const fileInstructionObject = computed(() => {
-    if (fileInstruction.value.type === FileInstructionType.Housing) {
+    if (props.fileInstruction.type === FileInstructionType.Housing) {
       return 'Demande de logement'
     }
-    const subjects = fileInstruction.value.socialSupport.subjects
+    const subjects = props.fileInstruction.socialSupport.subjects
     return subjects.length > 0 ? subjects[0].name : ''
   })
 
