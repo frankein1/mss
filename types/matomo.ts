@@ -7,7 +7,6 @@ export enum EventCategory {
   CreateBeneficiary = 'Créer un bénéficiaire',
   UsersActivity = 'Historique des changements',
   AccessBeneficiaryAdd = 'Accès à Créer un bénéficiaire',
-  HistoryQuickEdit = 'Modification dans tableau Accompagnements',
   ExportHistory = 'Export des accompagnements',
   OverviewToHistory = 'Accès Tableau de bord > Accompagnements'
 }
@@ -65,10 +64,6 @@ export enum AccessBeneficiaryAddEventAction {
   FromOverview = 'Depuis Tableau de bord'
 }
 
-export enum HistoryQuickEditEventAction {
-  FileInstructionStatus = 'Statut Instruction de dossier'
-}
-
 export enum ExportHistoryEventAction {
   Followups = "Export Synthèses d'entretien",
   FileInstructions = "Export Dossiers d'instruction"
@@ -90,7 +85,6 @@ export type EventAction =
   | CreateBeneficiaryEventAction
   | UserActivityEventAction
   | AccessBeneficiaryAddEventAction
-  | HistoryQuickEditEventAction
   | ExportHistoryEventAction
   | OverviewToHistoryEventAction
 
