@@ -9,15 +9,8 @@
       @click="navigate"
     >
       <td>
-        <FileInstructionsStatusForm
-          v-if="permissions.edit"
-          :item="item"
-          @click.stop
-          @updated="emit('updated', $event)"
-        />
         <span
-          v-else
-          class="fr-badge"
+          class="fr-badge fr-badge--sm"
           :class="[socialSupportStatusClasses[socialSupport.status]]"
         >
           {{ socialSupportStatusLabels[socialSupport.status] }}
@@ -59,10 +52,6 @@
 
   const { socialSupportStatusLabels } = useSocialSupportStatus()
 
-  const emit = defineEmits<{
-    updated: [item: FileInstructionPageItem]
-  }>()
-
   const fileInstruction = computed(() => props.item.fileInstruction)
   const socialSupport = computed(() => fileInstruction.value.socialSupport)
   const fileInstructionObject = computed(() => {
@@ -72,8 +61,6 @@
     const subjects = fileInstruction.value.socialSupport.subjects
     return subjects.length > 0 ? subjects[0].name : ''
   })
-
-  const permissions = computed(() => props.item.permissions)
 
   const helpRequestPath = computed(() =>
     RoutePath.AppBeneficiary(socialSupport.value.beneficiary.id, {

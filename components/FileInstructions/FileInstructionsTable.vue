@@ -46,7 +46,6 @@
             v-for="item in items"
             :key="item.fileInstruction.id"
             :item="item"
-            @updated="emit('fileInstructionUpdated', $event)"
           />
         </tbody>
       </table>
@@ -55,10 +54,7 @@
 </template>
 
 <script setup lang="ts">
-  import type {
-    FileInstructionPageItems,
-    FileInstructionPageItem
-  } from '~/server/trpc/routers'
+  import type { FileInstructionPageItems } from '~/server/trpc/routers'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { FileInstructionSort } from '~/types/table'
 
@@ -70,7 +66,6 @@
 
   const emit = defineEmits<{
     'update:sort': [sort: FileInstructionSort]
-    'fileInstructionUpdated': [fileInstruction: FileInstructionPageItem]
   }>()
 
   const { tableContainer } = useTable(toRef(() => props.pending))

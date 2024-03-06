@@ -8,9 +8,6 @@ export const fileInstructionRouter = router({
   exportFileInstructions: protectedProcedure
     .input(routes.exportFileInstructions.inputValidation)
     .query(routes.exportFileInstructions.execute),
-  updateStatus: protectedProcedure
-    .input(routes.updateStatus.inputValidation)
-    .mutation(routes.updateStatus.execute),
   getOngoing: protectedProcedure
     .input(routes.getOngoing.inputValidation)
     .query(routes.getOngoing.execute)
