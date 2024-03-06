@@ -1269,7 +1269,7 @@ model Draft {
 model Beneficiary {
   id String @id @default(uuid()) @db.Uuid
 
-  structure   Structure @relation(fields: [structureId], references: [id])
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
 
   createdById String? @map("created_by_id") @db.Uuid
