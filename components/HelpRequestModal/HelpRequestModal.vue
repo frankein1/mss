@@ -11,6 +11,7 @@
       :pictos="fileInstructionTypePictos"
       :inline="false"
       required
+      rich
     />
 
     <ul
