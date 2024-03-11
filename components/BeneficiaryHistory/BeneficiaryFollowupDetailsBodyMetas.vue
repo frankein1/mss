@@ -6,12 +6,6 @@
     >
     {{ followup.prescribingOrganization.name }}
   </li>
-  <li
-    v-if="followup.firstFollowup"
-    class="fr-icon-success-line"
-  >
-    {{ followupFieldLabels.firstFollowup }}
-  </li>
   <li v-if="followup.duration">
     <span class="information-label">{{ followupFieldLabels.duration }} :</span>
     {{ followupDurationLabels[followup.duration] }}
