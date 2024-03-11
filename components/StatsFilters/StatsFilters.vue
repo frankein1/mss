@@ -61,8 +61,7 @@
         options: withEmptyValue(fileInstructionTypeFilterOptions, 'Toutes'),
         type: FilterType.Radio,
         alwaysExpanded: true,
-        pictos: fileInstructionTypePictos,
-        rich: true
+        pictos: fileInstructionTypePictos
       })
     }
 
