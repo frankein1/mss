@@ -9,6 +9,7 @@
             :tab-id="HistoryTab.Followups"
             title="Entretiens"
             selected
+            icon="fr-icon-draft-fill"
           >
             <Followups />
           </AtomTab>
@@ -48,10 +49,5 @@
 
   #help-requests-tab[aria-selected='true'] {
     border-color: var(--color-help-request);
-  }
-
-  :deep(.table-container) {
-    /* 21.5rem seems to come up out of the box. It corresponds to the total height of elements existing above and under the table */
-    max-height: calc(100vh - 23.5rem);
   }
 </style>

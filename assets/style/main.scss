@@ -44,10 +44,6 @@ body,
   box-shadow: $shadow-light;
 }
 
-.fr-table table {
-  display: table;
-}
-
 .bg-color-white {
   background-color: white;
 }
@@ -60,11 +56,25 @@ body,
   overflow-x: auto;
 
   .fr-table {
-    width: max-content;
-    min-width: 100%;
+    &:not(.fr-table--no-scroll) {
+      width: max-content;
+      min-width: 100%;
+
+      table {
+        display: table;
+      }
+    }
 
     tbody {
       background-color: white;
+
+      tr .fr-badge {
+        width: max-content;
+      }
+
+      td:not(.social-support-subjects-data, .address-data) {
+        white-space: nowrap;
+      }
     }
 
     thead,
@@ -74,6 +84,7 @@ body,
 
     .clickable-row {
       cursor: pointer;
+      position: relative;
 
       &:hover {
         background-color: var(--background-default-grey-hover);
@@ -186,8 +197,12 @@ select:focus:not(:focus-visible) {
   }
 }
 
-.social-support-subjects-data {
-  max-width: 25rem;
+.social-support-subjects-data > span {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* number of lines to show */
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
 }
 
 .bg-color-grey-light {
@@ -229,4 +244,27 @@ select:focus:not(:focus-visible) {
 
 .fr-container.fr-container--no-max {
   max-width: initial;
+}
+
+.table-row-link {
+  --underline-img: none;
+
+  &:focus-visible,
+  &:focus {
+    outline-width: 0;
+  }
+
+  // Make the whole table role clickable to navigate on the cell link
+  &::before {
+    content: '';
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    outline-offset: 2px;
+    outline-style: inherit;
+    outline-color: inherit;
+    outline-width: 2px;
+  }
 }

@@ -1,39 +1,37 @@
 <template>
-  <NuxtLink
-    v-slot="{ navigate }"
-    custom
-    :to="RoutePath.AppBeneficiary(beneficiary.id)"
-  >
-    <tr
-      class="clickable-row"
-      @click="navigate"
-    >
-      <td>{{ formatTableValue(lastName) }}</td>
-      <td>{{ formatTableValue(nameOrEmpty(general.firstName)) }}</td>
-      <td>
-        {{
-          formatTableValue(
-            general.birthDate ? formatDate(general.birthDate) : undefined
-          )
-        }}
-      </td>
-      <td>{{ formatTableValue(general.phone1) }}</td>
-      <td class="address-data">
-        <template v-if="general.street || addressCodeAndCity">
-          {{ general.street }}
-          <br v-if="general.street" />
-          {{ addressCodeAndCity }}
-        </template>
-        <template v-else>{{ EMPTY_TABLE_CELL }}</template>
-      </td>
-      <td
-        class="social-support-subjects-data"
-        :title="formatTableValue(socialSupportSubjects)"
+  <tr class="clickable-row">
+    <td>
+      <NuxtLink
+        class="table-row-link"
+        :to="RoutePath.AppBeneficiary(beneficiary.id)"
       >
-        <span>{{ formatTableValue(socialSupportSubjects) }}</span>
-      </td>
-    </tr>
-  </NuxtLink>
+        {{ formatTableValue(lastName) }}
+      </NuxtLink>
+    </td>
+    <td>{{ formatTableValue(nameOrEmpty(general.firstName)) }}</td>
+    <td>
+      {{
+        formatTableValue(
+          general.birthDate ? formatDate(general.birthDate) : undefined
+        )
+      }}
+    </td>
+    <td>{{ formatTableValue(general.phone1) }}</td>
+    <td class="address-data">
+      <template v-if="general.street || addressCodeAndCity">
+        {{ general.street }}
+        <br v-if="general.street" />
+        {{ addressCodeAndCity }}
+      </template>
+      <template v-else>{{ EMPTY_TABLE_CELL }}</template>
+    </td>
+    <td
+      class="social-support-subjects-data"
+      :title="formatTableValue(socialSupportSubjects)"
+    >
+      <span>{{ formatTableValue(socialSupportSubjects) }}</span>
+    </td>
+  </tr>
 </template>
 
 <script lang="ts" setup>
@@ -75,13 +73,5 @@
   .address-data,
   .social-support-subjects-data {
     max-width: 15rem;
-  }
-
-  .social-support-subjects-data > * {
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2; /* number of lines to show */
-    line-clamp: 2;
-    -webkit-box-orient: vertical;
   }
 </style>

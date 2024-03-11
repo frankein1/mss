@@ -5,7 +5,7 @@
     tabindex="0"
   >
     <div
-      class="fr-table fr-table--bordered fr-mb-0 fr-pt-0 fr-table--no-caption"
+      class="fr-table fr-table--bordered fr-mb-0 fr-pt-0 fr-table--no-caption fr-table--no-scroll"
     >
       <table>
         <caption>
@@ -20,7 +20,7 @@
               {{ followupFieldLabels.status }}
             </th>
             <TableSortableHeader
-              :label="followupFieldLabels.date"
+              label="Date saisie"
               :sort="sort.socialSupport.date"
               numeric
               @update:sort="
@@ -40,9 +40,9 @@
                 })
               "
             />
-            <th scope="col">Objet de l'accompagnement</th>
+            <th scope="col">Objet</th>
             <TableSortableHeader
-              :label="followupFieldLabels.dueDate"
+              label="Échéance"
               :sort="sort.socialSupport.dueDate"
               numeric
               @update:sort="
@@ -50,7 +50,6 @@
               "
             />
             <th scope="col">Agent</th>
-            <th scope="col">N° de dossier</th>
           </tr>
         </thead>
         <tbody>

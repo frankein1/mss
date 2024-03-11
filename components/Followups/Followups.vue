@@ -1,19 +1,20 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <div class="feature-section">
+  <div
+    v-if="error"
+    class="feature-section"
+  >
     <AtomAlert
-      v-if="error"
-      class="fr-mx-4w"
       :alert-type="AlertType.Error"
       message="La liste des synthèses d'entretien n'a pas pu être chargée."
     />
-    <template v-else>
-      <FollowupsFilters
-        class="fr-px-5v"
-        @filter="filters = $event"
-      />
-      <hr />
-      <div class="fr-mb-2w fr-mx-5v results-container">
+  </div>
+  <template v-else>
+    <div class="feature-section fr-mb-3w">
+      <FollowupsFilters @filter="filters = $event" />
+    </div>
+    <div class="feature-section">
+      <div class="fr-mb-2w results-container">
         <p class="fr-hint-text results-count">
           {{ followupsCount }} synthèse(s) d'entretien
         </p>
@@ -33,15 +34,15 @@
           :pending="pending"
         />
         <AtomPagination
-          class="fr-mt-4w fr-px-5v"
+          class="fr-mt-4w"
           :page="pageNumber"
           :per-page="perPage"
           :total-pages="totalPages"
           @change-page="updatePagination($event)"
         />
       </template>
-    </template>
-  </div>
+    </div>
+  </template>
 </template>
 
 <script setup lang="ts">

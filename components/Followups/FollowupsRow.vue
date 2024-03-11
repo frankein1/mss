@@ -1,43 +1,38 @@
 <template>
-  <NuxtLink
-    v-slot="{ navigate }"
-    custom
-    :to="followupPath"
-  >
-    <tr
-      class="clickable-row"
-      @click="navigate"
-    >
-      <td>
-        <FollowupsStatusForm
-          v-if="canQuickEditFollowup"
-          :data="data"
-          @click.stop
-        />
-        <span
-          v-else
-          class="fr-badge"
-          :class="[socialSupportStatusClasses[followup.status]]"
-        >
-          {{ followupStatusOptions.get(followup.status) }}
-        </span>
-      </td>
-      <td>{{ formatDate(followup.date) }}</td>
-      <td>
-        {{ formatBeneficiaryDisplayName(followup.beneficiary) }}
-      </td>
-      <td class="social-support-subjects-data">{{ socialSupportSubjects }}</td>
-      <td>
-        {{ followup.dueDate ? formatDate(followup.dueDate) : undefined }}
-      </td>
-      <td>
-        <template v-if="followup.createdBy">
-          {{ formatUserDisplayName(followup.createdBy) }}
-        </template>
-      </td>
-      <td>{{ readableFileNumber(followup.beneficiary.id) }}</td>
-    </tr>
-  </NuxtLink>
+  <tr class="clickable-row">
+    <td>
+      <span
+        class="fr-badge fr-badge--sm"
+        :class="[socialSupportStatusClasses[followup.status]]"
+      >
+        {{ followupStatusOptions.get(followup.status) }}
+      </span>
+    </td>
+    <td>
+      <NuxtLink
+        :to="followupPath"
+        class="table-row-link"
+      >
+        {{ formatDate(followup.date) }}
+      </NuxtLink>
+    </td>
+    <td>
+      {{ formatBeneficiaryDisplayName(followup.beneficiary, true) }}
+    </td>
+    <td class="social-support-subjects-data">
+      <span :title="socialSupportSubjects">
+        {{ socialSupportSubjects }}
+      </span>
+    </td>
+    <td>
+      {{ followup.dueDate ? formatDate(followup.dueDate) : undefined }}
+    </td>
+    <td>
+      <template v-if="followup.createdBy">
+        {{ formatUserDisplayName(followup.createdBy) }}
+      </template>
+    </td>
+  </tr>
 </template>
 
 <script lang="ts" setup>
@@ -46,7 +41,6 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { followupStatusOptions } from '~/client/options'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
-  import { readableFileNumber } from '~/utils/readableFileNumber'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
@@ -57,7 +51,6 @@
   }>()
 
   const followup = computed(() => props.data.followup)
-  const permissions = computed(() => props.data.permissions)
 
   const followupPath = computed(() =>
     RoutePath.AppBeneficiary(followup.value.beneficiary.id, {
@@ -71,6 +64,4 @@
   const socialSupportSubjects = computed(() =>
     followup.value.subjects.map(({ name }) => name).join(', ')
   )
-
-  const canQuickEditFollowup = computed(() => permissions.value.edit)
 </script>
