@@ -84,6 +84,8 @@
         structureId,
         referents,
         aidantConnectAuthorized,
+        vulnerablePerson,
+        vulnerablePersonType,
         status,
         general
       }
@@ -95,6 +97,8 @@
       structureId,
       referents: referents.map(referent => referent.id),
       aidantConnectAuthorized,
+      vulnerablePerson,
+      vulnerablePersonType,
       status,
       ...general,
       birthDate: general.birthDate ? new Date(general.birthDate) : undefined,

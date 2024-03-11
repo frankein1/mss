@@ -12,7 +12,6 @@
     <BeneficiaryFormFileInformation
       :agents="agents"
       :permissions="permissions"
-      no-aidant-connect-authorized
     />
 
     <div
