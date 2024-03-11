@@ -1,35 +1,27 @@
 <template>
   <tr>
-    <td>{{ documentTypeLabels[document.type] }}</td>
+    <td class="type-data">{{ documentTypeLabels[document.type] }}</td>
     <td>
-      <div class="name-column">
-        <span
-          class="name-container"
-          :class="{
-            'name-container-1-badge':
-              document.confidential || hasUnreadNotifications,
-            'name-container-2-badges':
-              document.confidential && hasUnreadNotifications
-          }"
-          :title="document.name"
-          >{{ document.name }}</span
-        >
-        <span
-          v-if="document.confidential"
-          class="fr-badge fr-badge--warning fr-ml-1w"
-          >CONFIDENTIEL</span
-        >
-        <span
-          v-if="hasUnreadNotifications"
-          class="fr-badge fr-badge--new fr-badge--no-icon fr-ml-1w"
-        >
-          <span class="fr-icon-notification-3-fill fr-icon--sm fr-mr-1v"></span>
-          NOUVEAU
-        </span>
-      </div>
+      <span
+        class="name-container"
+        :title="document.name"
+        >{{ document.name }}</span
+      >
+      <span
+        v-if="document.confidential"
+        class="fr-badge fr-badge--warning fr-ml-1w"
+        >CONFIDENTIEL</span
+      >
+      <span
+        v-if="hasUnreadNotifications"
+        class="fr-badge fr-badge--new fr-badge--no-icon fr-ml-1w"
+      >
+        <span class="fr-icon-notification-3-fill fr-icon--sm fr-mr-1v"></span>
+        NOUVEAU
+      </span>
     </td>
     <td>{{ formatDate(document.created) }}</td>
-    <td>
+    <td class="tags-data">
       <span
         v-if="document.tags.length"
         class="fr-tag"
@@ -220,24 +212,22 @@
 </script>
 
 <style lang="scss" scoped>
-  .name-column {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
+  .name-container {
+    word-break: break-word;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
   }
 
-  .name-container {
+  .type-data,
+  .tags-data {
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+  }
 
-    &.name-container-1-badge {
-      max-width: 180px;
-    }
-
-    &.name-container-2-badges {
-      max-width: 60px;
-    }
+  .fr-btns-group.fr-btns-group--inline {
+    flex-wrap: initial;
   }
 
   .fr-btns-group .fr-btn {
