@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
   import {
-    fileInstructionTypeStatsOptions,
+    fileInstructionTypeFilterOptions,
     fileInstructionTypePictos,
     beneficiaryStatusOptions,
     periodOptions
@@ -58,10 +58,11 @@
       statsFilters.push({
         name: 'helpRequestSubject',
         label: "Thématique d'instruction",
-        options: withEmptyValue(fileInstructionTypeStatsOptions, 'Toutes'),
+        options: withEmptyValue(fileInstructionTypeFilterOptions, 'Toutes'),
         type: FilterType.Radio,
         alwaysExpanded: true,
-        pictos: fileInstructionTypePictos
+        pictos: fileInstructionTypePictos,
+        rich: true
       })
     }
 

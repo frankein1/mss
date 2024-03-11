@@ -55,7 +55,7 @@ export const fileInstructionTypeOptions = labelsToOptions(
   fileInstructionTypeLabels
 )
 
-export const fileInstructionTypeStatsLabels: {
+export const fileInstructionTypeFilterLabels: {
   [key in FileInstructionType]: string
 } = {
   [FileInstructionType.Housing]: 'Demande de logement',
@@ -63,8 +63,8 @@ export const fileInstructionTypeStatsLabels: {
   [FileInstructionType.Other]: 'Autre'
 }
 
-export const fileInstructionTypeStatsOptions = labelsToOptions(
-  fileInstructionTypeStatsLabels
+export const fileInstructionTypeFilterOptions = labelsToOptions(
+  fileInstructionTypeFilterLabels
 )
 
 // As pictograms are used as variables, they have to be in the public directory. - See https://www.lichter.io/articles/nuxt3-vue3-dynamic-images/

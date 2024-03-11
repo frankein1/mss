@@ -40,6 +40,7 @@
     :pictos="filter.pictos"
     :as-tag="filter.asTag"
     :no-label="filter.noLabel"
+    :rich="filter.rich"
     @change-value="emit('changeFilter', $event)"
   />
 </template>
