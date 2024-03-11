@@ -4,6 +4,7 @@
       :agents="agents"
       :beneficiary="beneficiary"
       :permissions="permissions"
+      full
     />
     <h2 class="title-blue fr-grid-row fr-grid-row--gutters fr-mb-6v fr-mt-3w">
       Informations générales

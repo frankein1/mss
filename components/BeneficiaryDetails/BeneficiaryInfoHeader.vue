@@ -15,6 +15,12 @@
           Mandat Aidant Connect
         </div>
       </div>
+      <div
+        v-if="beneficiary.vulnerablePerson"
+        class="fr-col-6"
+      >
+        <div class="fr-icon-success-line field-value">Personne vulnérable</div>
+      </div>
     </div>
 
     <template v-if="hasCoordinatesInformations(beneficiary.general)">

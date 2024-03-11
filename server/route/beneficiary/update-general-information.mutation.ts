@@ -39,7 +39,7 @@ const handler = async ({
   )
 
   const appPermissions = getAppContextPermissions(ctx)
-  const filteredData = filterInput({ input, appPermissions })
+  const filteredData = filterInput({ input, appPermissions }) // replace by cleanInput
 
   if (filteredData.noPhone) {
     filteredData.phone1 = null
@@ -78,6 +78,7 @@ export const updateGeneralInformationMutation = createMutation({
   }
 })
 
+// TODO remove
 function filterInput({
   input,
   appPermissions

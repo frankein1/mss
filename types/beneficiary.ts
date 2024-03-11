@@ -171,6 +171,8 @@ export type GetBeneficiaryOutput = Pick<
   | 'status'
   | 'archivedById'
   | 'aidantConnectAuthorized'
+  | 'vulnerablePerson'
+  | 'vulnerablePersonType'
 > & {
   referents: Pick<
     User,
