@@ -77,7 +77,7 @@
   }
 
   .fr-accordion .fr-collapse {
-    padding: 2.75rem;
+    padding: 0 2.75rem;
   }
 
   .fr-accordion .fr-collapse--expanded {
