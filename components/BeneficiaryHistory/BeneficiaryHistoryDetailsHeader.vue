@@ -53,6 +53,11 @@
             <span class="fr-icon-notification-3-fill fr-icon--sm"></span>
           </p>
         </li>
+        <li v-if="data.followup?.firstFollowup">
+          <p class="fr-badge fr-badge--info fr-badge--no-icon">
+            {{ followupFieldLabels.firstFollowup }}
+          </p>
+        </li>
       </ul>
       <button
         ref="collapseBtn"
@@ -76,6 +81,7 @@
   import { fileInstructionTypePictos } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
+  import { followupFieldLabels } from '~/client/labels'
 
   const route = useRoute()
   const { socialSupportStatusLabels } = useSocialSupportStatus()
