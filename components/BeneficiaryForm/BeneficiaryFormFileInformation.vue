@@ -19,12 +19,33 @@
       />
     </div>
     <div
-      v-if="!noAidantConnectAuthorized"
+      v-if="full"
       class="fr-col-12"
     >
       <VeeToggle
         :label="beneficiaryFieldLabels.aidantConnectAuthorized"
         name="aidantConnectAuthorized"
+      />
+    </div>
+
+    <div
+      v-if="full"
+      class="fr-col-12"
+    >
+      <VeeToggle
+        :label="beneficiaryFieldLabels.vulnerablePerson"
+        name="vulnerablePerson"
+      />
+    </div>
+
+    <div
+      v-if="vulnerablePerson"
+      class="fr-col-12"
+    >
+      <VeeSelect
+        name="vulnerablePersonType"
+        :label="beneficiaryFieldLabels.vulnerablePersonType"
+        :options="beneficiaryVulnerablePersonTypeOptions"
       />
     </div>
   </BeneficiaryFormSection>
@@ -33,7 +54,10 @@
 <script setup lang="ts">
   import { UserStatus } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { beneficiaryStatusOptions } from '~/client/options'
+  import {
+    beneficiaryStatusOptions,
+    beneficiaryVulnerablePersonTypeOptions
+  } from '~/client/options'
   import { SaveBeneficiaryGeneralInformationInput } from '~/server/schema'
   import { BeneficiaryReferent } from '~/types/beneficiary'
   import { BeneficiaryPermissions } from '~/server/security'
@@ -43,11 +67,11 @@
       agents: BeneficiaryReferent[]
       beneficiary?: SaveBeneficiaryGeneralInformationInput
       permissions: BeneficiaryPermissions
-      noAidantConnectAuthorized?: boolean
+      full?: boolean
     }>(),
     {
       beneficiary: undefined,
-      noAidantConnectAuthorized: false
+      full: false
     }
   )
 
@@ -67,4 +91,6 @@
       []
     )
   )
+
+  const { value: vulnerablePerson } = useField<boolean>('vulnerablePerson')
 </script>

@@ -150,6 +150,8 @@ const filter = (
     archivedById: beneficiary.archivedById,
     archived: beneficiary.archived,
     aidantConnectAuthorized: beneficiary.aidantConnectAuthorized,
+    vulnerablePerson: beneficiary.vulnerablePerson,
+    vulnerablePersonType: beneficiary.vulnerablePersonType,
     general,
     externalOrganisations: !isObjectEmpty(externalOrganisations)
       ? externalOrganisations

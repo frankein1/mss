@@ -818,6 +818,13 @@ enum BeneficiarySocioProfessionalCategory {
   Other
 }
 
+enum BeneficiaryVulnerablePersonType {
+  PersonneIsolee
+  PlanAlerteEtUrgence
+  PlanCommunalSauvegarde
+  Other
+}
+
 enum IncomeSource {
   //RSA
   Rsa
@@ -1284,35 +1291,37 @@ model Beneficiary {
   aidantConnectAuthorized Boolean @default(false) @map("aidant_connect_authorized")
 
   // General information
-  fileNumber                         String                        @unique @map("file_number")
+  fileNumber                         String                           @unique @map("file_number")
   status                             BeneficiaryStatus
   title                              BeneficiaryTitle?
-  usualName                          String?                       @map("usual_name")
-  birthName                          String?                       @map("birth_name")
-  firstName                          String?                       @map("first_name")
-  birthDate                          DateTime?                     @map("birth_date") @db.Date
-  birthPlace                         String?                       @map("birth_place")
-  deathDate                          DateTime?                     @map("death_date") @db.Date
+  usualName                          String?                          @map("usual_name")
+  birthName                          String?                          @map("birth_name")
+  firstName                          String?                          @map("first_name")
+  birthDate                          DateTime?                        @map("birth_date") @db.Date
+  birthPlace                         String?                          @map("birth_place")
+  deathDate                          DateTime?                        @map("death_date") @db.Date
   gender                             Gender?
   nationality                        Nationality?
-  accommodationMode                  BeneficiaryAccommodationMode? @map("accommodation_mode")
-  accommodationName                  String?                       @map("accommodation_name")
-  accommodationAdditionalInformation String?                       @map("accommodation_additional_information")
+  accommodationMode                  BeneficiaryAccommodationMode?    @map("accommodation_mode")
+  accommodationName                  String?                          @map("accommodation_name")
+  accommodationAdditionalInformation String?                          @map("accommodation_additional_information")
   street                             String?
-  addressComplement                  String?                       @map("address_complement")
+  addressComplement                  String?                          @map("address_complement")
   zipcode                            String?
   city                               String?
   department                         String?
   region                             String?
-  noPhone                            Boolean                       @default(false) @map("no_phone")
+  noPhone                            Boolean                          @default(false) @map("no_phone")
   phone1                             String?
   phone2                             String?
   email                              String?
-  familySituation                    BeneficiaryFamilySituation?   @map("family_situation")
-  caregiver                          Boolean                       @default(false)
-  minorChildren                      Int?                          @map("minor_children")
-  majorChildren                      Int?                          @map("major_children")
+  familySituation                    BeneficiaryFamilySituation?      @map("family_situation")
+  caregiver                          Boolean                          @default(false)
+  minorChildren                      Int?                             @map("minor_children")
+  majorChildren                      Int?                             @map("major_children")
   mobility                           BeneficiaryMobility?
+  vulnerablePerson                   Boolean                          @default(false) @map("vulnerable_person")
+  vulnerablePersonType               BeneficiaryVulnerablePersonType? @map("vulnerable_person_type")
 
   ministereCategorie            BeneficiaryMinistereCategorie?            @map("ministere_categorie")
   ministereDepartementServiceAc BeneficiaryMinistereDepartementServiceAc? @map("ministere_departement_service_ac")
