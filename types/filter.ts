@@ -13,7 +13,6 @@ type FilterPropBase = {
 
 export type SelectFilterProp = FilterPropBase & {
   options: Options
-  pictos?: Record<string, string>
 }
 
 export type SelectOneFilterProp = SelectFilterProp & {
@@ -34,8 +33,10 @@ export type SearchFilterProp = FilterPropBase & {
 
 export type RadioFilterProp = SelectFilterProp & {
   type: FilterType.Radio
-  asTag?: true
-  noLabel?: true
+  asTag?: boolean
+  noLabel?: boolean
+  pictos?: Record<string, string>
+  rich?: boolean
 }
 
 export type FilterProp =

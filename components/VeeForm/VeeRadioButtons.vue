@@ -23,7 +23,10 @@
     >
       <div
         class="fr-radio-group"
-        :class="{ 'fr-radio-rich': pictos }"
+        :class="{
+          'fr-radio-rich': rich || pictos,
+          'fr-radio-rich--only-pictos': !rich && pictos
+        }"
       >
         <input
           :id="optionId(optionValue)"
@@ -88,8 +91,15 @@
       inline?: boolean
       noLabel?: boolean
       asTag?: boolean
+      rich?: boolean
     }>(),
-    { pictos: undefined, inline: true, asTag: false, noLabel: false }
+    {
+      pictos: undefined,
+      inline: true,
+      asTag: false,
+      noLabel: false,
+      rich: false
+    }
   )
 
   const emit = defineEmits<{
@@ -144,6 +154,50 @@
     + button.fr-tag {
       outline: #0a76f6 solid 2px;
       outline-offset: 2px;
+    }
+  }
+
+  .fr-radio-rich--only-pictos.fr-radio-rich input[type='radio'] {
+    left: 0;
+
+    + label {
+      background-image: radial-gradient(
+        transparent 6px,
+        var(--border-action-high-blue-france) 7px,
+        transparent 8px
+      );
+      background-position:
+        0 50%,
+        0 50%;
+      background-repeat: no-repeat, no-repeat;
+      background-size:
+        1.125rem 1.125rem,
+        1.125rem 1.125rem;
+      padding: 0.5rem 0.5rem 0.5rem 1.5rem;
+      min-height: 3rem;
+    }
+
+    &:checked + label {
+      background-image: radial-gradient(
+          transparent 6px,
+          var(--border-active-blue-france) 7px,
+          transparent 8px
+        ),
+        radial-gradient(
+          var(--background-active-blue-france) 3px,
+          transparent 4px
+        );
+    }
+
+    ~ .fr-radio-rich__img {
+      background: none;
+      width: 3rem;
+      min-width: 3rem;
+
+      svg {
+        max-height: 2.5rem;
+        max-width: 2.5rem;
+      }
     }
   }
 </style>
