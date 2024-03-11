@@ -36,7 +36,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import {
     fileInstructionTypePictos,
-    fileInstructionTypeStatsLabels
+    fileInstructionTypeFilterLabels
   } from '~/client/options'
 
   const trpcClient = useTrpcClient()
@@ -56,7 +56,7 @@
     () =>
       subjectCounts.value?.map(({ _count, subject }) => ({
         key: subject,
-        label: fileInstructionTypeStatsLabels[subject],
+        label: fileInstructionTypeFilterLabels[subject],
         color: getColor(subject),
         count: _count,
         picto: fileInstructionTypePictos[subject]

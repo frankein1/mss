@@ -32,8 +32,9 @@
   } from '~/client/labels'
   import {
     ministerOptions,
-    fileInstructionTypeOptions,
-    roomCountOptions
+    fileInstructionTypeFilterOptions,
+    roomCountOptions,
+    fileInstructionTypePictos
   } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
@@ -108,32 +109,16 @@
       return null
     }
 
-    const maxAlwaysExpandedNb = 3
-
     const fileInstructionsFilters: FilterProp[] = [
-      {
-        name: 'status',
-        label: helpRequestFieldLabels.status,
-        options: withEmptyValue(
-          fileInstructionStatusOptions.value,
-          'Tous les statuts'
-        ),
-        type: FilterType.SelectOne,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.Status,
-        alwaysExpanded: true
-      },
       {
         name: 'fileInstructionType',
         label: "Thématique d'accompagnement",
-        options: withEmptyValue(
-          fileInstructionTypeOptions,
-          'Tous les dossiers'
-        ),
-        type: FilterType.SelectOne,
+        options: withEmptyValue(fileInstructionTypeFilterOptions, 'Toutes'),
+        type: FilterType.Radio,
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.FileInstructionType,
-        alwaysExpanded: true
+        alwaysExpanded: true,
+        pictos: fileInstructionTypePictos
       }
     ]
 
@@ -160,15 +145,29 @@
       })
     }
 
-    fileInstructionsFilters.push({
-      name: 'createdById',
-      label: 'Agent',
-      options: agentOptions.value,
-      type: FilterType.SelectMultiple,
-      matomoEventCategory: EventCategory.HelpRequestFilter,
-      matomoEventAction: HelpRequestFilterEventAction.Agent,
-      alwaysExpanded: fileInstructionsFilters.length < maxAlwaysExpandedNb
-    })
+    fileInstructionsFilters.push(
+      {
+        name: 'status',
+        label: helpRequestFieldLabels.status,
+        options: withEmptyValue(
+          fileInstructionStatusOptions.value,
+          'Tous les statuts'
+        ),
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.Status,
+        alwaysExpanded: true
+      },
+      {
+        name: 'createdById',
+        label: 'Agent',
+        options: agentOptions.value,
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.Agent,
+        alwaysExpanded: true
+      }
+    )
 
     if (
       application.value.module.helpRequest &&
