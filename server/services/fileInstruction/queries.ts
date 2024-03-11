@@ -2,7 +2,8 @@ import { Prisma } from '@prisma/client'
 import {
   filterFileInstruction,
   filterHelpRequest,
-  filterSocialSupport
+  filterSocialSupport,
+  filterHousingHelpRequest
 } from '../helper'
 import {
   AppContextPermissions,
@@ -14,49 +15,48 @@ import {
 } from '~/server/security'
 import { FileInstructionRepo } from '~/server/database/repository/FileInstructionRepository'
 
-export const include = {
-  instructorOrganization: true,
-  socialSupport: {
+function findMany(
+  user: SecurityRuleGrantee,
+  args: Omit<Prisma.FileInstructionFindManyArgs, 'select' | 'include'>
+) {
+  return FileInstructionRepo.findMany(user, {
+    where: args.where,
     include: {
-      subjects: true,
-      documents: true,
-      beneficiary: {
+      instructorOrganization: true,
+      socialSupport: {
         include: {
-          referents: true
+          subjects: true,
+          documents: true,
+          beneficiary: {
+            include: {
+              referents: true
+            }
+          },
+          createdBy: true
         }
       },
-      createdBy: true
-    }
-  },
-  helpRequest: {
-    include: {
-      prescribingOrganization: true
-    }
-  }
-}
-
-function findOne(user: SecurityRuleGrantee, id: string) {
-  return FileInstructionRepo.findUniqueOrThrow(user, {
-    where: { id },
-    include
+      helpRequest: {
+        include: {
+          prescribingOrganization: true
+        }
+      },
+      housingHelpRequest: true
+    },
+    take: args.take,
+    skip: args.skip,
+    orderBy: args.orderBy
   })
 }
 
 type FileInstructionOutput = NonNullable<
-  Prisma.PromiseReturnType<typeof findOne>
->
+  Prisma.PromiseReturnType<typeof findMany>
+>[0]
 
 export async function getPage(
   ctx: SecurityRuleContext,
   args: Omit<Prisma.FileInstructionFindManyArgs, 'select' | 'include'>
 ) {
-  const fileInstructions = await FileInstructionRepo.findMany(ctx.user, {
-    where: args.where,
-    include,
-    take: args.take,
-    skip: args.skip,
-    orderBy: args.orderBy
-  })
+  const fileInstructions = await findMany(ctx.user, args)
   return fileInstructions.map(fileInstruction => {
     const { socialSupport } = fileInstruction
     const { beneficiary } = socialSupport
@@ -66,10 +66,7 @@ export async function getPage(
       socialSupport
     })
     const appPermissions = getAppContextPermissions(ctx)
-    return {
-      fileInstruction: filter(appPermissions, permissions, fileInstruction),
-      permissions
-    }
+    return filter(appPermissions, permissions, fileInstruction)
   })
 }
 
@@ -78,7 +75,7 @@ export function filter(
   permissions: FileInstructionPermissions,
   fileInstruction: FileInstructionOutput
 ) {
-  const { socialSupport, helpRequest } = fileInstruction
+  const { socialSupport, helpRequest, housingHelpRequest } = fileInstruction
 
   const conditions = {
     details: permissions.get.details,
@@ -96,6 +93,13 @@ export function filter(
       conditions
     })
   }
+  let filteredHousingHelpRequest = null
+  if (housingHelpRequest) {
+    filteredHousingHelpRequest = filterHousingHelpRequest({
+      housingHelpRequest,
+      conditions
+    })
+  }
 
   const filteredFileInstruction = filterFileInstruction({
     fileInstruction,
@@ -105,6 +109,7 @@ export function filter(
   return {
     ...filteredFileInstruction,
     socialSupport: filteredSocialSupport,
-    helpRequest: filteredHelpRequest || null
+    helpRequest: filteredHelpRequest,
+    housingHelpRequest: filteredHousingHelpRequest
   }
 }

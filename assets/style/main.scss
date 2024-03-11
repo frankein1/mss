@@ -56,13 +56,13 @@ body,
   overflow-x: auto;
 
   .fr-table {
-    &:not(.fr-table--no-scroll) {
+    &:not(.fr-table--no-scroll, .fr-table--avoid-scroll) {
       width: max-content;
       min-width: 100%;
+    }
 
-      table {
-        display: table;
-      }
+    table {
+      display: table;
     }
 
     tbody {
@@ -70,10 +70,6 @@ body,
 
       tr .fr-badge {
         width: max-content;
-      }
-
-      td:not(.social-support-subjects-data, .address-data) {
-        white-space: nowrap;
       }
     }
 

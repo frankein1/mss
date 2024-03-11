@@ -7,7 +7,6 @@ export enum EventCategory {
   CreateBeneficiary = 'Créer un bénéficiaire',
   UsersActivity = 'Historique des changements',
   AccessBeneficiaryAdd = 'Accès à Créer un bénéficiaire',
-  HistoryQuickEdit = 'Modification dans tableau Accompagnements',
   ExportHistory = 'Export des accompagnements',
   OverviewToHistory = 'Accès Tableau de bord > Accompagnements'
 }
@@ -39,10 +38,9 @@ export enum HelpRequestFilterEventAction {
   Status = 'Statut',
   SocialSupportSubject = 'Objet de la demande',
   ExaminationDate = 'Date de passage en commission',
-  HandlingDate = 'Fin de prise en charge',
-  ExternalStructure = 'Instruction',
   Agent = 'Agent',
-  Ministre = 'Ministre'
+  Ministre = 'Ministre',
+  RoomCount = 'Nombre de pièces'
 }
 
 export enum DocumentEventAction {
@@ -63,13 +61,6 @@ export enum UserActivityEventAction {
 
 export enum AccessBeneficiaryAddEventAction {
   FromOverview = 'Depuis Tableau de bord'
-}
-
-export enum HistoryQuickEditEventAction {
-  FileInstructionStatus = 'Statut Instruction de dossier',
-  HelpRequestAllocatedAmount = 'Montant alloué Aide financière',
-  HelpRequestPaymentMethod = 'Mode de paiement Aide financière',
-  HelpRequestPaymentDate = 'Date de paiement Aide financière'
 }
 
 export enum ExportHistoryEventAction {
@@ -93,7 +84,6 @@ export type EventAction =
   | CreateBeneficiaryEventAction
   | UserActivityEventAction
   | AccessBeneficiaryAddEventAction
-  | HistoryQuickEditEventAction
   | ExportHistoryEventAction
   | OverviewToHistoryEventAction
 

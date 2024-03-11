@@ -15,7 +15,8 @@
           </AtomTab>
           <AtomTab
             :tab-id="HistoryTab.FileInstructions"
-            title="Instructions de dossier"
+            title="Dossiers d'instruction"
+            icon="fr-icon-questionnaire-fill"
           >
             <FileInstructions />
           </AtomTab>

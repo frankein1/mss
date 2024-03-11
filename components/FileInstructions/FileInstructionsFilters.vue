@@ -26,8 +26,15 @@
   import { AlertType } from '~/utils/constants/alert'
   import { FileInstructionFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import { helpRequestFieldLabels } from '~/client/labels'
-  import { ministerOptions, fileInstructionTypeOptions } from '~/client/options'
+  import {
+    helpRequestFieldLabels,
+    housingHelpRequestFieldLabels
+  } from '~/client/labels'
+  import {
+    ministerOptions,
+    fileInstructionTypeOptions,
+    roomCountOptions
+  } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
   const trpcClient = useTrpcClient()
@@ -105,18 +112,6 @@
 
     const fileInstructionsFilters: FilterProp[] = [
       {
-        name: 'fileInstructionType',
-        label: "Type d'accompagnement",
-        options: withEmptyValue(
-          fileInstructionTypeOptions,
-          "Tous les dossiers d'instruction"
-        ),
-        type: FilterType.SelectOne,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.FileInstructionType,
-        alwaysExpanded: true
-      },
-      {
         name: 'status',
         label: helpRequestFieldLabels.status,
         options: withEmptyValue(
@@ -126,6 +121,18 @@
         type: FilterType.SelectOne,
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.Status,
+        alwaysExpanded: true
+      },
+      {
+        name: 'fileInstructionType',
+        label: "Thématique d'accompagnement",
+        options: withEmptyValue(
+          fileInstructionTypeOptions,
+          'Tous les dossiers'
+        ),
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.FileInstructionType,
         alwaysExpanded: true
       }
     ]
@@ -140,52 +147,17 @@
         matomoEventAction: HelpRequestFilterEventAction.SocialSupportSubject,
         alwaysExpanded: true
       })
-    }
-
-    if (application.value.module.helpRequest) {
-      if (examinationDateOptions.value.size) {
-        fileInstructionsFilters.push({
-          name: 'examinationDate',
-          label: helpRequestFieldLabels.examinationDate,
-          options: withEmptyValue(
-            examinationDateOptions.value,
-            'Toutes les commissions'
-          ),
-          type: FilterType.SelectOne,
-          matomoEventCategory: EventCategory.HelpRequestFilter,
-          matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
-        })
-      }
-
-      // FIXME: Delete once it is admitted that it is done
-      //   filters.push(
-      //     {
-      //       name: 'handlingDate',
-      //       label: 'Fin de prise en charge',
-      //       options: new Map([
-      //         ['', 'Non sélectionné'],
-      //         ['true', 'Oui'],
-      //         ['false', 'Non']
-      //       ]),
-      //       type: FilterType.SelectOne,
-      //
-      //       matomoEventCategory: EventCategory.HelpRequestFilter,
-      //       matomoEventAction: HelpRequestFilterEventAction.HandlingDate
-      //     },
-      //     {
-      //       name: 'externalStructure',
-      //       label: 'Instruction',
-      //       options: new Map([
-      //         ['', 'Toutes les instructions'],
-      //         ['false', 'Interne'],
-      //         ['true', 'Organisme externe']
-      //       ]),
-      //       type: FilterType.SelectOne,
-      //
-      //       matomoEventCategory: EventCategory.HelpRequestFilter,
-      //       matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
-      //     }
-      //   )
+    } else {
+      fileInstructionsFilters.push({
+        name: 'roomCount',
+        label: housingHelpRequestFieldLabels.roomCount,
+        options: roomCountOptions,
+        type: FilterType.Radio,
+        asTag: true,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.RoomCount,
+        alwaysExpanded: true
+      })
     }
 
     fileInstructionsFilters.push({
@@ -197,6 +169,23 @@
       matomoEventAction: HelpRequestFilterEventAction.Agent,
       alwaysExpanded: fileInstructionsFilters.length < maxAlwaysExpandedNb
     })
+
+    if (
+      application.value.module.helpRequest &&
+      examinationDateOptions.value.size
+    ) {
+      fileInstructionsFilters.push({
+        name: 'examinationDate',
+        label: helpRequestFieldLabels.examinationDate,
+        options: withEmptyValue(
+          examinationDateOptions.value,
+          'Toutes les commissions'
+        ),
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
+      })
+    }
 
     if (application.value.module.ministere) {
       fileInstructionsFilters.push({

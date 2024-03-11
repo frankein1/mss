@@ -5,7 +5,7 @@
     tabindex="0"
   >
     <div
-      class="fr-table fr-table--bordered fr-mb-0 fr-pt-0 fr-table--no-caption fr-table--no-scroll"
+      class="fr-table fr-table--bordered fr-mb-0 fr-pt-0 fr-table--no-caption fr-table--avoid-scroll"
     >
       <table>
         <caption>
@@ -13,10 +13,7 @@
         </caption>
         <thead>
           <tr>
-            <th
-              id="status-col"
-              scope="col"
-            >
+            <th scope="col">
               {{ followupFieldLabels.status }}
             </th>
             <TableSortableHeader

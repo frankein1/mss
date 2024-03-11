@@ -1,5 +1,4 @@
 export type {
-  FileInstructionPageItem,
-  FileInstructionPageItems,
-  HelpRequestData
+  FileInstruction,
+  FileInstructions
 } from '~/server/route/fileInstruction'

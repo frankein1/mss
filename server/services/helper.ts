@@ -41,7 +41,7 @@ export function filterSocialSupport({
   conditions
 }: {
   socialSupport: SocialSupport & {
-    beneficiary: Beneficiary
+    beneficiary: Beneficiary & { referents: User[] }
     createdBy: User
     subjects: SocialSupportSubject[]
     documents?: Document[]

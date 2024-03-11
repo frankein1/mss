@@ -32,7 +32,8 @@
   />
   <VeeRadioButtons
     v-else
-    class="radio"
+    class="filter-radio"
+    :class="{ 'filter-radio--as-tag': filter.asTag }"
     :name="filter.name"
     :label="filter.label"
     :options="filter.options"

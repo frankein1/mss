@@ -13,28 +13,17 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     status,
     socialSupportSubjects,
     examinationDate,
-    handlingDate,
-    externalStructure,
     createdById,
-    ministre
+    ministre,
+    roomCount
   } = filters
 
   if (fileInstructionType) {
     formattedFilters.type = fileInstructionType
   }
 
-  if (handlingDate) {
-    formattedFilters.helpRequest = {
-      handlingDate: handlingDate === 'true' ? { not: null } : null
-    }
-  }
-
   if (examinationDate) {
     formattedFilters.examinationDate = examinationDate
-  }
-
-  if (externalStructure !== undefined) {
-    formattedFilters.externalStructure = externalStructure === 'true'
   }
 
   if (
@@ -64,6 +53,10 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     }
   }
 
+  if (roomCount) {
+    formattedFilters.housingHelpRequest = { roomCount: { has: roomCount } }
+  }
+
   return formattedFilters
 }
 
@@ -72,10 +65,6 @@ export function prepareSort(sort: ExportFileInstructionsInput['orderBy']) {
 
   if (sort.socialSupport?.date) {
     orderBy.push({ socialSupport: { created: SortOrder.Desc } })
-  }
-
-  if (sort.instructorOrganization) {
-    orderBy.unshift({ externalStructure: SortOrder.Desc })
   }
 
   return orderBy

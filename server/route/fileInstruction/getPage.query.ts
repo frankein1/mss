@@ -26,11 +26,5 @@ export const getPage = createQuery({
 
 type FileInstructionPage = Prisma.PromiseReturnType<typeof handler>
 
-export type FileInstructionPageItems = FileInstructionPage['items']
-export type FileInstructionPageItem = FileInstructionPageItems[0]
-
-type FileInstructionPageItemData = FileInstructionPageItem['fileInstruction']
-
-export type HelpRequestData = NonNullable<
-  FileInstructionPageItemData['helpRequest']
->
+export type FileInstructions = FileInstructionPage['items']
+export type FileInstruction = FileInstructions[0]

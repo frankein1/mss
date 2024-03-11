@@ -5,7 +5,7 @@
     tabindex="0"
   >
     <div
-      class="fr-table fr-table--bordered fr-mb-0 fr-pt-0 fr-table--no-caption"
+      class="fr-table fr-table--bordered fr-mb-0 fr-pt-0 fr-table--no-caption fr-table--avoid-scroll"
     >
       <table>
         <caption>
@@ -19,14 +19,12 @@
             >
               {{ helpRequestFieldLabels.status }}
             </th>
-            <th scope="col">Objet d'accompagnement</th>
             <TableSortableHeader
-              v-if="application.module.helpRequest"
-              :label="helpRequestFieldLabels.dueDate"
-              :sort="sort.socialSupport?.dueDate"
+              label="Ouverture dossier"
+              :sort="sort.socialSupport?.date"
               numeric
               @update:sort="
-                emit('update:sort', { socialSupport: { dueDate: $event } })
+                emit('update:sort', { socialSupport: { date: $event } })
               "
             />
             <TableSortableHeader
@@ -38,65 +36,23 @@
                 })
               "
             />
-            <TableSortableHeader
-              v-if="application.module.helpRequest"
-              :label="helpRequestFieldLabels.instructorOrganizationId"
-              :sort="sort.instructorOrganization?.name"
-              @update:sort="
-                emit('update:sort', {
-                  instructorOrganization: { name: $event }
-                })
-              "
-            />
-            <th
-              v-if="application.module.helpRequest"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.examinationDate }}
-            </th>
-            <th
-              v-if="application.module.helpRequest"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.askedAmount }}
-            </th>
-            <th
-              v-if="application.module.helpRequest"
-              id="allocated-amount-col"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.allocatedAmount }}
-            </th>
-            <th
-              v-if="application.module.helpRequest"
-              id="payment-method-col"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.paymentMethod }}
-            </th>
-            <th
-              v-if="application.module.helpRequest"
-              id="payment-date-col"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.paymentDate }}
-            </th>
-            <th
-              v-if="application.module.helpRequest"
-              scope="col"
-            >
-              {{ helpRequestFieldLabels.handlingDate }}
+            <th scope="col">
+              {{
+                fileInstructionTypeFilter !== 'Housing'
+                  ? 'Objet'
+                  : 'Nombre de pièces'
+              }}
             </th>
             <th scope="col">Agent</th>
-            <th scope="col">N° de dossier</th>
+            <th scope="col">Échéance</th>
           </tr>
         </thead>
         <tbody>
           <FileInstructionRow
             v-for="item in items"
-            :key="item.fileInstruction.id"
-            :item="item"
-            @updated="emit('fileInstructionUpdated', $event)"
+            :key="item.id"
+            :file-instruction="item"
+            :file-instruction-type-filter="fileInstructionTypeFilter"
           />
         </tbody>
       </table>
@@ -105,25 +61,21 @@
 </template>
 
 <script setup lang="ts">
-  import type {
-    FileInstructionPageItems,
-    FileInstructionPageItem
-  } from '~/server/trpc/routers'
+  import type { FileInstructions } from '~/server/trpc/routers'
   import { helpRequestFieldLabels } from '~/client/labels'
   import type { FileInstructionSort } from '~/types/table'
+  import { FileInstructionFilterInput } from '~/server/schema'
 
   const props = defineProps<{
-    items: FileInstructionPageItems
+    items: FileInstructions
     sort: FileInstructionSort
     pending: boolean
+    fileInstructionTypeFilter: FileInstructionFilterInput['fileInstructionType']
   }>()
 
   const emit = defineEmits<{
     'update:sort': [sort: FileInstructionSort]
-    'fileInstructionUpdated': [fileInstruction: FileInstructionPageItem]
   }>()
-
-  const { application } = usePermissions()
 
   const { tableContainer } = useTable(toRef(() => props.pending))
 </script>
