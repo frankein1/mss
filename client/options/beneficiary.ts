@@ -13,7 +13,6 @@ import {
   IncomeSource,
   RelativeRelationship,
   BeneficiaryPensionOrganisation,
-  BeneficiaryVulnerablePersonType
 } from '@prisma/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 import { labelsToOptions } from '~/utils/options'
@@ -58,25 +57,6 @@ export const beneficiaryStatusDetailedLabels: {
 }
 
 export const beneficiaryStatusOptions = labelsToOptions(beneficiaryStatusLabels)
-
-export const beneficiaryVulnerablePersonTypeLabels: {
-  [key in BeneficiaryVulnerablePersonType]: string
-} = {
-  [BeneficiaryVulnerablePersonType.PersonneIsolee]: 'Personne isolée',
-  [BeneficiaryVulnerablePersonType.PlanAlerteEtUrgence]:
-    "Plan d'alerte et d'urgence",
-  [BeneficiaryVulnerablePersonType.PlanCommunalSauvegarde]:
-    'Plan communal de sauvegarde',
-  [BeneficiaryVulnerablePersonType.Other]: 'Autre'
-}
-
-export const BeneficiaryVulnerablePersonTypeKeys = buildKeys(
-  beneficiaryVulnerablePersonTypeLabels
-)
-
-export const beneficiaryVulnerablePersonTypeOptions = labelsToOptions(
-  beneficiaryVulnerablePersonTypeLabels
-)
 
 export const beneficiaryTitleLabels: { [key in BeneficiaryTitle]: string } = {
   [BeneficiaryTitle.Miss]: 'Mme.',

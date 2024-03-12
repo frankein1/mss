@@ -93,7 +93,6 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   historyTotal: 'Nombre de suivis',
   subjects: "Objets d'accompagnement",
   vulnerablePerson: 'Personne vulnérable',
-  vulnerablePersonType: 'Précisez le type de vulnérabilité'
 }
 
 export { beneficiaryFieldLabels }

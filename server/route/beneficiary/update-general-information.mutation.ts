@@ -22,10 +22,6 @@ const securityCheck = async (
 }
 
 function cleanInput(input: UpdateBeneficiaryGeneralInformationInput) {
-  if (!input.vulnerablePerson) {
-    input.vulnerablePersonType = null
-  }
-
   if (input.noPhone) {
     input.phone1 = null
     input.phone2 = null
