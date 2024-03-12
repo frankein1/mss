@@ -12,7 +12,7 @@ import {
   Gender,
   IncomeSource,
   RelativeRelationship,
-  BeneficiaryPensionOrganisation,
+  BeneficiaryPensionOrganisation
 } from '@prisma/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 import { labelsToOptions } from '~/utils/options'

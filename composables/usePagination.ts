@@ -1,7 +1,9 @@
 export function usePagination(
   page: Ref<number>,
   perPage: Ref<number>,
-  filters?: Ref<Record<string, string | string[] | Date | null>>
+  filters?: Ref<
+    Record<string, string | string[] | Date | boolean | undefined | null>
+  >
 ) {
   if (filters) {
     watch(filters, () => {
