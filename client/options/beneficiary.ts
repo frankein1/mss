@@ -59,14 +59,24 @@ export const beneficiaryStatusDetailedLabels: {
 
 export const beneficiaryStatusOptions = labelsToOptions(beneficiaryStatusLabels)
 
-export const beneficiaryVulnerablePersonTypeLabels: { [key in BeneficiaryVulnerablePersonType]: string } = {
+export const beneficiaryVulnerablePersonTypeLabels: {
+  [key in BeneficiaryVulnerablePersonType]: string
+} = {
   [BeneficiaryVulnerablePersonType.PersonneIsolee]: 'Personne isolée',
-  [BeneficiaryVulnerablePersonType.PlanAlerteEtUrgence]: 'Plan d\'alerte et d\'urgence',
-  [BeneficiaryVulnerablePersonType.PlanCommunalSauvegarde]: 'Plan communal de sauvegarde',
+  [BeneficiaryVulnerablePersonType.PlanAlerteEtUrgence]:
+    "Plan d'alerte et d'urgence",
+  [BeneficiaryVulnerablePersonType.PlanCommunalSauvegarde]:
+    'Plan communal de sauvegarde',
   [BeneficiaryVulnerablePersonType.Other]: 'Autre'
 }
 
-export const beneficiaryVulnerablePersonTypeOptions = labelsToOptions(beneficiaryVulnerablePersonTypeLabels)
+export const BeneficiaryVulnerablePersonTypeKeys = buildKeys(
+  beneficiaryVulnerablePersonTypeLabels
+)
+
+export const beneficiaryVulnerablePersonTypeOptions = labelsToOptions(
+  beneficiaryVulnerablePersonTypeLabels
+)
 
 export const beneficiaryTitleLabels: { [key in BeneficiaryTitle]: string } = {
   [BeneficiaryTitle.Miss]: 'Mme.',
