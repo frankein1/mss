@@ -20,7 +20,11 @@
 <script lang="ts" setup>
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
-  import { beneficiaryStatusOptions, ageGroupOptions } from '~/client/options'
+  import {
+    beneficiaryStatusOptions,
+    ageGroupOptions,
+    yesNoOptions
+  } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import type { BeneficiaryFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
@@ -127,6 +131,15 @@
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.AgeGroup
+      },
+      {
+        name: 'vulnerablePerson',
+        label: 'Personne vulnérable',
+        options: withEmptyValue(yesNoOptions, 'Tous les bénéficiaires'),
+        type: FilterType.SelectOne,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb,
+        matomoEventCategory: EventCategory.BeneficiaryFilter,
+        matomoEventAction: BeneficiaryFilterEventAction.VulnerablePerson
       }
     )
 

@@ -1,25 +1,26 @@
 <template>
   <div class="fr-container">
     <div class="fr-grid-row">
-      <div class="fr-col-12">
+      <div class="fr-col-6">
         <BeneficiaryInfoLabel
           label="Agent(s) référent(s)"
           :value="referentNames"
         />
       </div>
-      <div
-        v-if="beneficiary.aidantConnectAuthorized"
-        class="fr-col-6"
-      >
-        <div class="fr-icon-success-line field-value">
-          Mandat Aidant Connect
+      <div class="fr-col-6 beneficiaryinfoheader__section">
+        <div v-if="beneficiary.aidantConnectAuthorized">
+          <div class="fr-icon-success-line field-value">
+            Mandat Aidant Connect
+          </div>
         </div>
-      </div>
-      <div
-        v-if="beneficiary.vulnerablePerson"
-        class="fr-col-6"
-      >
-        <div class="fr-icon-success-line field-value">Personne vulnérable</div>
+        <div
+          v-if="beneficiary.vulnerablePerson"
+          :class="{ 'fr-mt-3v': beneficiary.aidantConnectAuthorized }"
+        >
+          <div class="fr-icon-success-line field-value">
+            Personne vulnérable
+          </div>
+        </div>
       </div>
     </div>
 
@@ -97,3 +98,11 @@
     return undefined
   })
 </script>
+
+<style scoped>
+  .beneficiaryinfoheader__section {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+</style>
