@@ -27,6 +27,7 @@ export const RouteTitle = {
   [Route.AppPartners]: () => 'Annuaire des partenaires',
   [Route.AppStats]: () => 'Statistiques',
   [Route.AppAccount]: () => 'Mon compte',
+  [Route.AppStructure]: () => 'Configurer votre structure',
   [Route.AppStructureEdit]: () => 'Modifier ma structure',
   [Route.AppBeneficiaries]: () => 'Bénéficiaires',
   [Route.AppBeneficiariesSaveInfo]: () => 'Informations bénéficiaire',
