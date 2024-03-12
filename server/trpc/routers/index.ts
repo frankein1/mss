@@ -14,7 +14,6 @@ import { adminRouter } from './admin/router'
 import { documentRouter } from './documentRouter'
 import { commentRouter } from './commentRouter'
 import { usersActivityRouter } from './usersActivity/router'
-import { beneficiaryDraftRouter } from './beneficiaryDraft/router'
 import { socialSupportRouter } from './socialSupport/router'
 import { housingHelpRequestRouter } from './housingHelpRequest/router'
 import { partnerRouter } from './partnerRouter/router'
@@ -35,7 +34,6 @@ export const appRouter = router({
   documents: documentRouter,
   comment: commentRouter,
   usersActivity: usersActivityRouter,
-  beneficiaryDraft: beneficiaryDraftRouter,
   permissions: permissionsRouter,
   socialSupport: socialSupportRouter,
   housingHelpRequest: housingHelpRequestRouter

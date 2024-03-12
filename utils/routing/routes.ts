@@ -31,13 +31,6 @@ export enum Route {
   AppStructureEdit = 'AppStructureEdit',
   AppBeneficiaries = 'AppBeneficiaries',
   AppBeneficiariesAdd = 'AppBeneficiariesAdd',
-  AppBeneficiariesSave = 'AppBeneficiariesSave',
-  AppBeneficiariesSaveInfo = 'AppBeneficiariesSaveInfo',
-  AppBeneficiariesSaveTaxHousehold = 'AppBeneficiariesSaveTaxHousehold',
-  AppBeneficiariesSaveEntourage = 'AppBeneficiariesSaveEntourage',
-  AppBeneficiariesSaveHealth = 'AppBeneficiariesSaveHealth',
-  AppBeneficiariesSaveOccupation = 'AppBeneficiariesSaveOccupation',
-  AppBeneficiariesSaveExternalOrganisations = 'AppBeneficiariesSaveExternalOrganisations',
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
@@ -66,14 +59,6 @@ export enum Route {
   AdminEmails = 'AdminEmails'
 }
 
-export type AppBeneficiariesSaveRoute =
-  | (typeof Route)['AppBeneficiariesSaveInfo']
-  | (typeof Route)['AppBeneficiariesSaveTaxHousehold']
-  | (typeof Route)['AppBeneficiariesSaveEntourage']
-  | (typeof Route)['AppBeneficiariesSaveHealth']
-  | (typeof Route)['AppBeneficiariesSaveOccupation']
-  | (typeof Route)['AppBeneficiariesSaveExternalOrganisations']
-
 export type AppBeneficiaryEditRoute =
   | (typeof Route)['AppBeneficiaryEditInfo']
   | (typeof Route)['AppBeneficiaryEditTaxHousehold']
@@ -89,9 +74,6 @@ const CGURoute = '/cgu'
 const ErrorRoute = '/error'
 
 const BeneficiariesRoute = `${AppRoute}/beneficiaries`
-
-const BeneficiarySaveRoute = (draftId: string) =>
-  `${BeneficiariesRoute}/save/${draftId}`
 
 const BeneficiaryRoute = (
   beneficiaryId: string | undefined,
@@ -187,20 +169,6 @@ export const RoutePath = {
   [Route.AppStructureEdit]: () => `${AppRoute}/structure/edit`,
   [Route.AppBeneficiaries]: () => BeneficiariesRoute,
   [Route.AppBeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
-  [Route.AppBeneficiariesSave]: (draftId: string) =>
-    `${BeneficiarySaveRoute(draftId)}`,
-  [Route.AppBeneficiariesSaveInfo]: (draftId: string) =>
-    `${BeneficiarySaveRoute(draftId)}/info`,
-  [Route.AppBeneficiariesSaveTaxHousehold]: (draftId: string) =>
-    `${BeneficiarySaveRoute(draftId)}/tax-household`,
-  [Route.AppBeneficiariesSaveEntourage]: (draftId: string) =>
-    `${BeneficiarySaveRoute(draftId)}/entourage`,
-  [Route.AppBeneficiariesSaveHealth]: (draftId: string) =>
-    `${BeneficiarySaveRoute(draftId)}/health`,
-  [Route.AppBeneficiariesSaveOccupation]: (draftId: string) =>
-    `${BeneficiarySaveRoute(draftId)}/occupation`,
-  [Route.AppBeneficiariesSaveExternalOrganisations]: (draftId: string) =>
-    `${BeneficiarySaveRoute(draftId)}/external-organisations`,
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,

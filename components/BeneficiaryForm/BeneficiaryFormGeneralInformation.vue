@@ -26,14 +26,16 @@
 </template>
 
 <script setup lang="ts">
-  import { SaveBeneficiaryGeneralInformationInput } from '~/server/schema'
-  import { BeneficiaryReferent } from '~/types/beneficiary'
+  import {
+    BeneficiaryReferent,
+    BeneficiaryFileInformation
+  } from '~/types/beneficiary'
   import { BeneficiaryPermissions } from '~/server/security'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   withDefaults(
     defineProps<{
-      beneficiary?: SaveBeneficiaryGeneralInformationInput
+      beneficiary?: BeneficiaryFileInformation
       agents: BeneficiaryReferent[]
       permissions: BeneficiaryPermissions
       similarBeneficiary?: SimilarBeneficiary

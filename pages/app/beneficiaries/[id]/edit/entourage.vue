@@ -1,8 +1,8 @@
 <template>
   <BeneficiaryEditFormLayout
+    :beneficiary="beneficiary?.identity || null"
     :schema="saveBeneficiaryEntourageSchema"
     :is-submitting="isSubmitting"
-    :beneficiary="beneficiary"
     :permissions="permissions"
     :current-route="Route.AppBeneficiaryEditEntourage"
     @save="onSaveBeneficiary"
@@ -33,7 +33,6 @@
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
-  import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
 
   const trpcClient = useTrpcClient()
 
@@ -49,26 +48,9 @@
 
   const permissions = computed(() => data.value?.permissions)
 
-  const beneficiary = computed(() => {
-    if (!data.value) {
-      return null
-    }
-
-    const {
-      beneficiary: { id, structureId, referents, general, entourages }
-    } = data.value
-
-    // Names and id are required for building the breadcrumb in the layout
-    return {
-      id,
-      structureId,
-      referents,
-      firstName: general.firstName,
-      usualName: general.usualName,
-      birthName: general.birthName,
-      entourages
-    } as SaveBeneficiaryEntourageInput & MinimalBeneficiaryForFormLayout
-  })
+  const beneficiary = computed(() =>
+    data.value ? data.value.beneficiary : null
+  )
 
   function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryEntourageInput,

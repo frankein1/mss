@@ -1,9 +1,9 @@
 <template>
   <BeneficiaryEditFormLayout
+    :beneficiary="beneficiary?.identity || null"
     :schema="saveBeneficiaryOccupationSchema"
     :permissions="permissions"
     :is-submitting="isSubmitting"
-    :beneficiary="beneficiary"
     :current-route="Route.AppBeneficiaryEditOccupation"
     @save="onSaveBeneficiary"
   >
@@ -38,8 +38,6 @@
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
-  import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
-  import { prismaDecimalToNumber } from '~/utils/prisma'
 
   definePageMeta({
     name: Route.AppBeneficiaryEditOccupation
@@ -59,6 +57,10 @@
 
   const permissions = computed(() => data.value?.permissions)
 
+  const beneficiary = computed(() =>
+    data.value ? data.value.beneficiary : null
+  )
+
   const familySituation = computed(
     () => data.value?.beneficiary.taxHouseholds?.familySituation
   )
@@ -69,46 +71,6 @@
   const taxHouseholdMembers = computed(
     () => data.value?.beneficiary.taxHouseholds?.taxHouseholds || []
   )
-
-  const beneficiary = computed(() => {
-    if (!data.value) {
-      return null
-    }
-
-    const {
-      beneficiary: { id, structureId, referents, general, occupationIncome }
-    } = data.value
-
-    // Names and id are required for building the breadcrumb in the layout
-    return {
-      id,
-      structureId,
-      referents,
-      firstName: general.firstName,
-      usualName: general.usualName,
-      birthName: general.birthName,
-      ...occupationIncome,
-      mainIncomeSource: occupationIncome?.mainIncomeSource || [],
-      mainIncomeAmount: prismaDecimalToNumber(
-        occupationIncome?.mainIncomeAmount
-      ),
-      partnerMainIncomeSource: occupationIncome?.partnerMainIncomeSource || [],
-      partnerMainIncomeAmount: prismaDecimalToNumber(
-        occupationIncome?.partnerMainIncomeAmount
-      ),
-      majorChildrenMainIncomeSource:
-        occupationIncome?.majorChildrenMainIncomeSource || [],
-      majorChildrenMainIncomeAmount: prismaDecimalToNumber(
-        occupationIncome?.majorChildrenMainIncomeAmount
-      ),
-      otherMembersMainIncomeSource:
-        occupationIncome?.otherMembersMainIncomeSource || [],
-      otherMembersMainIncomeAmount: prismaDecimalToNumber(
-        occupationIncome?.otherMembersMainIncomeAmount
-      ),
-      pensionOrganisations: occupationIncome?.pensionOrganisations || []
-    } as SaveBeneficiaryOccupationInput & MinimalBeneficiaryForFormLayout
-  })
 
   function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryOccupationInput,

@@ -29,13 +29,6 @@ export const RouteTitle = {
   [Route.AppAccount]: () => 'Mon compte',
   [Route.AppStructureEdit]: () => 'Modifier ma structure',
   [Route.AppBeneficiaries]: () => 'Bénéficiaires',
-  [Route.AppBeneficiariesSaveInfo]: () => 'Informations bénéficiaire',
-  [Route.AppBeneficiariesSaveTaxHousehold]: () => 'Foyer fiscal',
-  [Route.AppBeneficiariesSaveEntourage]: () => 'Entourage',
-  [Route.AppBeneficiariesSaveHealth]: () => 'Santé',
-  [Route.AppBeneficiariesSaveOccupation]: () => 'Activité/Revenu',
-  [Route.AppBeneficiariesSaveExternalOrganisations]: () =>
-    'Structures extérieures',
   [Route.AppBeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
   [Route.AppBeneficiary]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? formatBeneficiaryDisplayName(beneficiary) : '',

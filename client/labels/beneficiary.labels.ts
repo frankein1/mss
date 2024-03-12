@@ -10,7 +10,7 @@ type BeneficiaryFieldLabels = Omit<
     historyTotal: string
     subjects: string
   },
-  'createdById' | 'archivedById' | 'archived' | 'created'
+  'createdById' | 'archivedById' | 'archived' | 'created' | 'draft'
 >
 
 const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {

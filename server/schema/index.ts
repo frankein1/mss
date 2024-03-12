@@ -1,7 +1,6 @@
 import { z } from 'zod'
 
 export * from './beneficiary'
-export * from './beneficiaryDraft'
 export * from './followup'
 export * from './user'
 export * from './structure'

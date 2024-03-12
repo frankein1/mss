@@ -1,9 +1,9 @@
 <template>
   <BeneficiaryEditFormLayout
+    :beneficiary="beneficiary?.identity || null"
     :schema="saveBeneficiaryGeneralInformationSchema"
     :permissions="permissions"
     :is-submitting="isSubmitting"
-    :beneficiary="beneficiary"
     title-icon="fr-icon-user-line"
     :current-route="Route.AppBeneficiaryEditInfo"
     @save="onSaveBeneficiary"
@@ -32,7 +32,6 @@
     SaveBeneficiaryGeneralInformationInput,
     saveBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
-  import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
 
@@ -63,6 +62,10 @@
 
   const permissions = computed(() => data.value?.permissions)
 
+  const beneficiary = computed(() =>
+    data.value ? data.value.beneficiary : null
+  )
+
   const fetchError = computed(() => {
     if (beneficiaryError.value) {
       return "Les informations du bénéficiaires n'ont pas pu être chargées."
@@ -71,38 +74,6 @@
       return "La liste des agents référents n'a pas pu être chargée."
     }
     return ''
-  })
-
-  const beneficiary = computed(() => {
-    if (!data.value) {
-      return null
-    }
-
-    const {
-      beneficiary: {
-        id,
-        structureId,
-        referents,
-        aidantConnectAuthorized,
-        vulnerablePerson,
-        status,
-        general
-      }
-    } = data.value
-
-    // Id is required for building the breadcrumb in the layout
-    return {
-      id,
-      structureId,
-      referents: referents.map(referent => referent.id),
-      aidantConnectAuthorized,
-      vulnerablePerson,
-      status,
-      ...general,
-      birthDate: general.birthDate ? new Date(general.birthDate) : undefined,
-      deathDate: general.deathDate ? new Date(general.deathDate) : undefined
-    } as SaveBeneficiaryGeneralInformationInput &
-      MinimalBeneficiaryForFormLayout
   })
 
   function onSaveBeneficiary(

@@ -58,37 +58,22 @@
 
   function onCreateBeneficiary(
     beneficiary: CreateBeneficiaryInput,
-    complete: boolean
+    _complete: boolean
   ) {
-    if (complete) {
-      useTrpcMutation({
-        mutation: () => trpcClient.beneficiaryDraft.create.mutate(beneficiary),
-        isSubmitting,
-        onSuccess: ({ id }) => {
-          navigateTo(RoutePath.AppBeneficiariesSaveInfo(id))
-        },
-        onFailure: () => {
-          snackbar.error(
-            'La création du brouillon de la fiche bénéficiaire a échoué.'
-          )
-        }
-      })
-    } else {
-      useTrpcMutation({
-        mutation: () => trpcClient.beneficiary.create.mutate(beneficiary),
-        isSubmitting,
-        onSuccess: ({ id }) => {
-          matomo.trackEvent(
-            EventCategory.CreateBeneficiary,
-            CreateBeneficiaryEventAction.SavePartialForm
-          )
-          navigateTo(RoutePath.AppBeneficiary(id))
-        },
-        onFailure: () => {
-          snackbar.error('La création de la fiche bénéficiaire a échoué.')
-        }
-      })
-    }
+    useTrpcMutation({
+      mutation: () => trpcClient.beneficiary.create.mutate(beneficiary),
+      isSubmitting,
+      onSuccess: ({ id }) => {
+        matomo.trackEvent(
+          EventCategory.CreateBeneficiary,
+          CreateBeneficiaryEventAction.SavePartialForm
+        )
+        navigateTo(RoutePath.AppBeneficiary(id))
+      },
+      onFailure: () => {
+        snackbar.error('La création de la fiche bénéficiaire a échoué.')
+      }
+    })
   }
 </script>
 
