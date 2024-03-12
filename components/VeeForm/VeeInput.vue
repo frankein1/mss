@@ -153,7 +153,7 @@
      * Checking data allows to prevent adding a whitespace when removing the whitespace
      */
     if (props.type === 'tel' && typeof value === 'string') {
-      return value.replace(/\d{2}(?=(\d{1,2}){1,4}$)/g, '$& ')
+      return formatPhone(value)
     }
 
     /**
@@ -161,22 +161,44 @@
      * Checking data allows to prevent adding a whitespace when removing the whitespace
      */
     if (props.type === 'social-security-number' && typeof value === 'string') {
-      const WHITESPACE_POSITIONS = [1, 4, 7, 10, 14, 18]
-
-      const formattedValue = WHITESPACE_POSITIONS.reduce(
-        (val, pos) => {
-          if (val.length > pos) {
-            return `${val.slice(0, pos)} ${val.slice(pos)}`
-          }
-          return val
-        },
-        value.replace(/\s/g, '')
-      )
-
-      return formattedValue
+      return formatSocialSecurityNumber(value)
     }
 
     return value
+  }
+
+  function formatPhone(value: string) {
+    if (
+      value.match(
+        /(^(\+33 [1-9]|0[1-9])( \d\d){4}$)|(^(\+\d\d(?<!\+33)) ?[1-9]( ?\d){6,14}$)/g
+      )
+    ) {
+      return value
+    }
+
+    let telValue = value.replace(/ /g, '')
+
+    if (telValue.match(/^\+33([1-9])((\d){8})$/g)) {
+      telValue = telValue.replace(/^\+33([1-9])((\d){8})$/g, '+33 $1 $2')
+    }
+
+    return telValue.replace(/\d{2}(?=(\d{1,2}){1,4}$)/g, '$& ')
+  }
+
+  function formatSocialSecurityNumber(value: string) {
+    const WHITESPACE_POSITIONS = [1, 4, 7, 10, 14, 18]
+
+    const formattedValue = WHITESPACE_POSITIONS.reduce(
+      (val, pos) => {
+        if (val.length > pos) {
+          return `${val.slice(0, pos)} ${val.slice(pos)}`
+        }
+        return val
+      },
+      value.replace(/\s/g, '')
+    )
+
+    return formattedValue
   }
 
   // Allow to remove the displayed error while the user is typing

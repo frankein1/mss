@@ -67,7 +67,7 @@ export const socialSecurityNumberConstraint = z
   )
 
 export const phoneConstraint = stringConstraint.regex(
-  /^(\+\d\d|0) ?[1-9]( ?\d){6,14}$/,
+  /(^(\+33|0) ?[1-9]( ?\d){8}$)|(^(\+\d\d(?<!\+33)) ?[1-9]( ?\d){6,14}$)/,
   'Veuillez renseigner un numéro de téléphone valide.'
 )
 
