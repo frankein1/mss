@@ -1,7 +1,7 @@
 <template>
   <div class="fr-container">
     <div class="fr-grid-row">
-      <div class="fr-col-6">
+      <div class="fr-col-12">
         <BeneficiaryInfoLabel
           label="Agent(s) référent(s)"
           :value="referentNames"
@@ -20,13 +20,6 @@
         class="fr-col-6"
       >
         <div class="fr-icon-success-line field-value">Personne vulnérable</div>
-        <div class="field-value">
-          {{
-            BeneficiaryVulnerablePersonTypeKeys.value(
-              beneficiary.vulnerablePersonType
-            )
-          }}
-        </div>
       </div>
     </div>
 
@@ -79,7 +72,6 @@
     hasPhoneOrAddress,
     hasEmailOrAddressComplement
   } from '~/utils/beneficiary'
-  import { BeneficiaryVulnerablePersonTypeKeys } from '~/client/options'
 
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput

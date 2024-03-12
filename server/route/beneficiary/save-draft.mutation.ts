@@ -11,10 +11,6 @@ function cleanInput(input: SaveDraftInput) {
     return input
   }
 
-  if (!input.general.vulnerablePerson) {
-    input.general.vulnerablePersonType = null
-  }
-
   if (input.general.noPhone) {
     input.general.phone1 = null
     input.general.phone2 = null
