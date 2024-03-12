@@ -1,9 +1,9 @@
 <template>
   <BeneficiaryEditFormLayout
+    :beneficiary="beneficiary?.identity || null"
     :schema="saveBeneficiaryTaxHouseholdSchema"
     :permissions="permissions"
     :is-submitting="isSubmitting"
-    :beneficiary="beneficiary"
     :current-route="Route.AppBeneficiaryEditTaxHousehold"
     @save="onSaveBeneficiary"
   >
@@ -32,7 +32,6 @@
     saveBeneficiaryTaxHouseholdSchema,
     SaveBeneficiaryTaxHouseholdInput
   } from '~/server/schema'
-  import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
 
@@ -50,26 +49,9 @@
 
   const permissions = computed(() => data.value?.permissions)
 
-  const beneficiary = computed(() => {
-    if (!data.value) {
-      return null
-    }
-
-    const {
-      beneficiary: { id, structureId, referents, general, taxHouseholds }
-    } = data.value
-
-    // Names and id are required for building the breadcrumb in the layout
-    return {
-      id,
-      structureId,
-      referents,
-      firstName: general.firstName,
-      usualName: general.usualName,
-      birthName: general.birthName,
-      ...taxHouseholds
-    } as SaveBeneficiaryTaxHouseholdInput & MinimalBeneficiaryForFormLayout
-  })
+  const beneficiary = computed(() =>
+    data.value ? data.value.beneficiary : null
+  )
 
   function onSaveBeneficiary(
     beneficiary: SaveBeneficiaryTaxHouseholdInput,

@@ -44,14 +44,16 @@
   import { UserStatus } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusOptions } from '~/client/options'
-  import { SaveBeneficiaryGeneralInformationInput } from '~/server/schema'
-  import { BeneficiaryReferent } from '~/types/beneficiary'
+  import {
+    BeneficiaryFileInformation,
+    BeneficiaryReferent
+  } from '~/types/beneficiary'
   import { BeneficiaryPermissions } from '~/server/security'
 
   const props = withDefaults(
     defineProps<{
       agents: BeneficiaryReferent[]
-      beneficiary?: SaveBeneficiaryGeneralInformationInput
+      beneficiary?: BeneficiaryFileInformation
       permissions: BeneficiaryPermissions
       full?: boolean
     }>(),
@@ -68,7 +70,7 @@
       (disabledOptions: string[], agent: BeneficiaryReferent) => {
         const disabledAgent = agent.status !== UserStatus.Active
         const agentIsBeneficiaryReferent = (
-          props.beneficiary?.referents || []
+          props.beneficiary?.referents.map(r => r.id) || []
         ).includes(agent.id)
         return disabledAgent && !agentIsBeneficiaryReferent
           ? [...disabledOptions, agent.id]

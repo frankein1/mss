@@ -13,7 +13,6 @@ import {
   updateHealthMutation,
   updateOccupationIncomeMutation,
   updateExternalOrganisationsMutation,
-  saveDraftMutation,
   updateTaxHouseholdMutation,
   getBeneficiaryTaxHouseholdsQuery,
   getSimilarBeneficiaryQuery
@@ -72,8 +71,5 @@ export const beneficiaryRouter = router({
     .mutation(updateExternalOrganisationsMutation.execute),
   create: protectedProcedure
     .input(createBeneficiaryMutation.inputValidation)
-    .mutation(createBeneficiaryMutation.execute),
-  saveDraft: protectedProcedure
-    .input(saveDraftMutation.inputValidation)
-    .mutation(saveDraftMutation.execute)
+    .mutation(createBeneficiaryMutation.execute)
 })

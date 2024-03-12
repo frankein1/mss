@@ -3,7 +3,6 @@ import { createMutation } from '~/server/route'
 import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
-  UpdateBeneficiaryDraftInput,
   UpdateBeneficiaryEntourageInput,
   updateBeneficiaryEntourageSchema
 } from '~/server/schema'
@@ -32,7 +31,7 @@ function getBeneficiarySecurityTargetWithEntourage(
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
-  input: UpdateBeneficiaryDraftInput
+  input: UpdateBeneficiaryEntourageInput
 ) => {
   const permissions = await BeneficiaryService.getEditionPermissions(
     ctx,

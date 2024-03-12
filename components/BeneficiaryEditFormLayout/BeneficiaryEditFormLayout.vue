@@ -57,7 +57,7 @@
 
 <script setup lang="ts" generic="T extends ZodSchema">
   import { ZodSchema, z } from 'zod'
-  import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
+  import { BeneficiarySearchResult } from '~/types/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     Breadcrumb,
@@ -80,7 +80,7 @@
 
   const props = withDefaults(
     defineProps<{
-      beneficiary: MinimalBeneficiaryForFormLayout | null
+      beneficiary: (BeneficiarySearchResult & { draft: boolean }) | null
       permissions: BeneficiaryPermissions | undefined
       schema: T
       isSubmitting: boolean
@@ -100,9 +100,12 @@
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
 
-  const breadcrumbLinks = computed(() =>
-    Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
-  )
+  const breadcrumbLinks = computed(() => {
+    if (props.beneficiary?.draft) {
+      return Breadcrumb.AppBeneficiariesAdd()
+    }
+    return Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
+  })
 
   const title = computed(() => RouteTitle[props.currentRoute]())
 
