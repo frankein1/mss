@@ -13,7 +13,6 @@ import {
   BeneficiarySocioProfessionalCategory,
   BeneficiaryStatus,
   BeneficiaryTitle,
-  BeneficiaryVulnerablePersonType,
   Gender,
   IncomeSource,
   Nationality
@@ -57,9 +56,6 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
     .min(1, requiredErrorMessage),
   aidantConnectAuthorized: z.boolean().default(false),
   vulnerablePerson: z.boolean().default(false),
-  vulnerablePersonType: withEmptyValueOptionalNativeEnum(
-    BeneficiaryVulnerablePersonType
-  ),
   status: requiredNativeEnum(BeneficiaryStatus),
   title: withEmptyValueOptionalNativeEnum(BeneficiaryTitle),
   firstName: beneficiaryFirstNameOrEmptySchema,
