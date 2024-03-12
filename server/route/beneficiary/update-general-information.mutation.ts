@@ -1,10 +1,6 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import {
-  SecurityRuleContext,
-  AppContextPermissions,
-  getAppContextPermissions
-} from '~/server/security'
+import { SecurityRuleContext } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
   UpdateBeneficiaryGeneralInformationInput,
@@ -25,6 +21,15 @@ const securityCheck = async (
   return permissions.edit.general
 }
 
+function cleanInput(input: UpdateBeneficiaryGeneralInformationInput) {
+  if (input.noPhone) {
+    input.phone1 = null
+    input.phone2 = null
+  }
+
+  return input
+}
+
 const handler = async ({
   input,
   ctx
@@ -38,13 +43,7 @@ const handler = async ({
     input.id
   )
 
-  const appPermissions = getAppContextPermissions(ctx)
-  const filteredData = filterInput({ input, appPermissions })
-
-  if (filteredData.noPhone) {
-    filteredData.phone1 = null
-    filteredData.phone2 = null
-  }
+  const cleaned = cleanInput(input)
 
   const { referents: previousReferents } = target
   const previousReferentIds = previousReferents.map(({ id }) => id)
@@ -56,7 +55,7 @@ const handler = async ({
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id },
     data: {
-      ...filteredData,
+      ...cleaned,
       referents: referentConnections
     }
   })
@@ -77,19 +76,3 @@ export const updateGeneralInformationMutation = createMutation({
     action: UserActivityType.UPDATE
   }
 })
-
-function filterInput({
-  input,
-  appPermissions
-}: {
-  input: UpdateBeneficiaryGeneralInformationInput
-  appPermissions: AppContextPermissions
-}) {
-  const { module } = appPermissions
-  const { id: _id, referents: _referents, ...data } = input
-  if (!module.ministere) {
-    delete data.numeroPegase
-    delete data.accommodationZone
-  }
-  return data
-}

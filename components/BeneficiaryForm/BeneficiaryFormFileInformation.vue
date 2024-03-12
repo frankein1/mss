@@ -19,12 +19,22 @@
       />
     </div>
     <div
-      v-if="!noAidantConnectAuthorized"
-      class="fr-col-12"
+      v-if="full"
+      class="fr-col-6"
     >
-      <VeeToggle
+      <VeeCheckbox
         :label="beneficiaryFieldLabels.aidantConnectAuthorized"
         name="aidantConnectAuthorized"
+      />
+    </div>
+
+    <div
+      v-if="full"
+      class="fr-col-6"
+    >
+      <VeeCheckbox
+        :label="beneficiaryFieldLabels.vulnerablePerson"
+        name="vulnerablePerson"
       />
     </div>
   </BeneficiaryFormSection>
@@ -43,11 +53,11 @@
       agents: BeneficiaryReferent[]
       beneficiary?: SaveBeneficiaryGeneralInformationInput
       permissions: BeneficiaryPermissions
-      noAidantConnectAuthorized?: boolean
+      full?: boolean
     }>(),
     {
       beneficiary: undefined,
-      noAidantConnectAuthorized: false
+      full: false
     }
   )
 

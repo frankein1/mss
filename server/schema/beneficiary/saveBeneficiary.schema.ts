@@ -55,6 +55,7 @@ export const saveBeneficiaryGeneralInformationSchema = z.object({
     })
     .min(1, requiredErrorMessage),
   aidantConnectAuthorized: z.boolean().default(false),
+  vulnerablePerson: z.boolean().default(false),
   status: requiredNativeEnum(BeneficiaryStatus),
   title: withEmptyValueOptionalNativeEnum(BeneficiaryTitle),
   firstName: beneficiaryFirstNameOrEmptySchema,

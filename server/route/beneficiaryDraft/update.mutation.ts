@@ -21,21 +21,28 @@ const securityCheck = async (
   return isCreator(ctx.user, beneficiaryDraft)
 }
 
+function cleanInput(input: UpdateBeneficiaryDraftInput) {
+  if (!input.general) {
+    return input
+  }
+
+  if (input.general.noPhone) {
+    input.general.phone1 = null
+    input.general.phone2 = null
+  }
+
+  return input
+}
+
 const handler = async ({
-  input: {
-    id: draftId,
-    general,
-    taxHousehold,
-    entourage,
-    health,
-    occupation,
-    externalOrganisations
-  },
+  input,
   ctx: { user }
 }: {
   input: UpdateBeneficiaryDraftInput
   ctx: ProtectedAppContext
 }) => {
+  const { id: draftId } = input
+
   const beneficiaryDraft = (await DraftRepo.findUniqueOrThrow(user, {
     where: { id: draftId }
   })) as BeneficiaryDraft
@@ -43,6 +50,15 @@ const handler = async ({
   if (!beneficiaryDraft?.content) {
     throw forbiddenError()
   }
+
+  const {
+    general,
+    taxHousehold,
+    entourage,
+    health,
+    occupation,
+    externalOrganisations
+  } = cleanInput(input)
 
   const updatedBeneficiaryDraft = await DraftRepo.prisma.update({
     where: { id: draftId },
