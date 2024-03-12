@@ -7,7 +7,7 @@ import {
   SaveBeneficiaryHealthInput,
   SaveBeneficiaryOccupationInput,
   SaveBeneficiaryExternalOrganisationsInput,
-  BeneficiaryFilterInput
+  BeneficiaryFilterServerInput
 } from '~/server/schema'
 import { getBeneficiaryPermissions } from '~/server/security'
 import { generateFileNumber } from '~/utils/generateFileNumber'
@@ -152,7 +152,9 @@ export function prepareBeneficiarySearchConditions(query: string) {
   return { AND: searchConditions }
 }
 
-export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
+export function prepareBeneficiaryFilters(
+  filters: BeneficiaryFilterServerInput
+) {
   const formattedFilters: Prisma.BeneficiaryWhereInput = {}
 
   if (filters.search) {
@@ -184,6 +186,10 @@ export function prepareBeneficiaryFilters(filters: BeneficiaryFilterInput) {
       gte: dateRange.lower?.toDate(),
       lte: dateRange.upper?.toDate()
     }
+  }
+
+  if (filters.vulnerablePerson !== undefined) {
+    formattedFilters.vulnerablePerson = filters.vulnerablePerson
   }
 
   return formattedFilters

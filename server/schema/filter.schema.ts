@@ -54,10 +54,15 @@ const beneficiaryFilterSchema = z.object({
   socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   referents: z.array(z.string().uuid()).nullish(),
   status: z.nativeEnum(BeneficiaryStatus).nullish(),
-  ageGroup: z.nativeEnum(AgeGroup).nullish()
+  ageGroup: z.nativeEnum(AgeGroup).nullish(),
+  vulnerablePerson: z
+    .string()
+    .nullish()
+    .transform(val => (val ? val === 'true' : undefined))
 })
 
-type BeneficiaryFilterInput = z.infer<typeof beneficiaryFilterSchema>
+type BeneficiaryFilterInput = z.input<typeof beneficiaryFilterSchema>
+type BeneficiaryFilterServerInput = z.output<typeof beneficiaryFilterSchema>
 
 const beneficiaryDocumentFilterSchema = z.object({
   type: z.nativeEnum(DocumentType).nullish(),
@@ -118,6 +123,7 @@ export {
 export type {
   StatFilterInput,
   BeneficiaryFilterInput,
+  BeneficiaryFilterServerInput,
   FollowupFilterInput,
   BeneficiaryHistoryFilterInput,
   UserAdminFilterInput,
