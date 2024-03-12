@@ -18,7 +18,7 @@
       :for="id"
       :title="noLabel ? label : undefined"
     >
-      <span v-if="!noLabel">
+      <span :class="{ 'fr-sr-only': noLabel }">
         {{ label }}
         <span
           v-if="required"
