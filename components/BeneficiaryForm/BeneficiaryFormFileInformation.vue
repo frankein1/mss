@@ -45,7 +45,7 @@
       <VeeSelect
         name="vulnerablePersonType"
         :label="beneficiaryFieldLabels.vulnerablePersonType"
-        :options="beneficiaryVulnerablePersonTypeOptions"
+        :options="withEmptyValue(beneficiaryVulnerablePersonTypeOptions)"
       />
     </div>
   </BeneficiaryFormSection>

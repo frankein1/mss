@@ -6,6 +6,23 @@ import { DraftRepo } from '~/server/database'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryService } from '~/server/services'
 
+function cleanInput(input: SaveDraftInput) {
+  if (!input.general) {
+    return input
+  }
+
+  if (!input.general.vulnerablePerson) {
+    input.general.vulnerablePersonType = null
+  }
+
+  if (input.general.noPhone) {
+    input.general.phone1 = null
+    input.general.phone2 = null
+  }
+
+  return input
+}
+
 const handler = async ({
   input,
   ctx
@@ -19,7 +36,7 @@ const handler = async ({
 
   return await BeneficiaryService.create({
     ctx,
-    input,
+    input: cleanInput(input),
     draftId: beneficiaryDraft.id
   })
 }
