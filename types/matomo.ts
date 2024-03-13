@@ -17,7 +17,7 @@ export enum BeneficiaryFilterEventAction {
   City = 'Ville',
   Status = 'Statut',
   AgeGroup = "Tranche d'âge",
-  VulnerablePerson = 'Personne Vulnérable'
+  VulnerablePerson = 'Registre des personnes vulnérables'
 }
 
 export enum BeneficiaryHistoryFilterEventAction {

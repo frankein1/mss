@@ -92,7 +92,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   taxHouseholds: 'Foyer fiscal',
   historyTotal: 'Nombre de suivis',
   subjects: "Objets d'accompagnement",
-  vulnerablePerson: 'Personne vulnérable'
+  vulnerablePerson: 'Registre des personnes vulnérables'
 }
 
 export { beneficiaryFieldLabels }

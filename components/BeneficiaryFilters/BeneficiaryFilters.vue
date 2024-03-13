@@ -134,7 +134,7 @@
       },
       {
         name: 'vulnerablePerson',
-        label: 'Personne vulnérable',
+        label: 'Registre des personnes vulnérables',
         options: withEmptyValue(yesNoOptions, 'Tous les bénéficiaires'),
         type: FilterType.SelectOne,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
