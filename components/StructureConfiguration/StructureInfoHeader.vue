@@ -62,9 +62,9 @@
 </template>
 
 <script setup lang="ts">
+  import { StructureConfigurationOutput } from './types'
   import { RoutePath } from '~/utils/routing'
-  import { structureFieldLabels } from '~/client/labels/structure.labels'
-  import { StructureConfigurationOutput } from '~/components/StructureConfiguration/types'
+  import { structureFieldLabels } from '~/client/labels'
 
   defineProps<{
     structure: StructureConfigurationOutput
