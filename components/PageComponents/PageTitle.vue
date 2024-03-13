@@ -92,7 +92,7 @@
 
   .pagetitle__title,
   .pagetitle__subtitle {
-    color: var(--blue-france-sun-113-625);
+    color: var(--primary);
   }
 
   .pagetitle__subtitle {
