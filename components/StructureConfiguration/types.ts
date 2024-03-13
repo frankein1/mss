@@ -1,4 +1,4 @@
 import { RouterOutput } from '~/server/trpc/routers'
 
-export type StructureConfigurationOutput =
+export type StructureConfigurationInfo =
   RouterOutput['structure']['getCurrentUserStructure']['structure']

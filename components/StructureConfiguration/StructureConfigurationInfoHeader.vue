@@ -50,25 +50,30 @@
 
     <div class="fr-grid-row fr-grid-row--right">
       <div>
-        <NuxtLink
-          :to="`${RoutePath.AppStructureEdit()}`"
+        <button
           class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line"
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          title="Modifier"
+          aria-label="Modifier"
+          @click="emit('edit')"
         >
           Modifier
-        </NuxtLink>
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-  import { StructureConfigurationOutput } from './types'
-  import { RoutePath } from '~/utils/routing'
+  import { StructureConfigurationInfo } from './types'
   import { structureFieldLabels } from '~/client/labels'
 
   defineProps<{
-    structure: StructureConfigurationOutput
+    structure: StructureConfigurationInfo
   }>()
+
+  const emit = defineEmits<{ edit: [] }>()
 </script>
 
 <style scoped>
