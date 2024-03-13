@@ -65,7 +65,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiarySearchResult } from '~/types/beneficiary'
+  import { BeneficiaryIdentification } from '~/types/beneficiary'
   import { UNKNOWN_ERROR_MESSAGE } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
 
@@ -75,7 +75,7 @@
     searchFn: (search: string) => Promise<any[]>
   }>()
 
-  const results = ref<BeneficiarySearchResult[]>([])
+  const results = ref<BeneficiaryIdentification[]>([])
   const timeout = ref<NodeJS.Timeout | null>(null)
   const error = ref<string>('')
 

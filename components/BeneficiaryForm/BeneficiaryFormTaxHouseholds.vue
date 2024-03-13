@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
   import { CreateOrUpdateTaxHouseholdInput } from '~/server/schema'
-  import { BeneficiarySearchResult } from '~/types/beneficiary'
+  import { BeneficiaryIdentification } from '~/types/beneficiary'
 
   defineProps<{
     currentBeneficiaryId?: string
@@ -27,7 +27,7 @@
 
   function updateBeneficiary(
     index: number,
-    beneficiary: BeneficiarySearchResult | null
+    beneficiary: BeneficiaryIdentification | null
   ) {
     const field = fields.value[index]
     update(index, {

@@ -1,8 +1,10 @@
 <template>
   <BeneficiaryEditFormLayout
-    :beneficiary="beneficiary?.identity || null"
+    :draft="draft"
+    :beneficiary-identification="beneficiaryIdentification"
+    :binded-values="bindedValues"
     :permissions="permissions"
-    :schema="saveBeneficiaryHealthSchema"
+    :schema="updateBeneficiaryHealthSchema"
     :is-submitting="isSubmitting"
     :current-route="Route.AppBeneficiaryEditHealth"
     @save="onSaveBeneficiary"
@@ -18,7 +20,7 @@
       class="fr-mx-auto"
     />
     <div
-      v-else-if="beneficiary && permissions"
+      v-else-if="bindedValues && permissions"
       class="fr-p-3v"
     >
       <div
@@ -52,8 +54,8 @@
 
 <script lang="ts" setup>
   import {
-    saveBeneficiaryHealthSchema,
-    SaveBeneficiaryHealthInput
+    updateBeneficiaryHealthSchema,
+    UpdateBeneficiaryHealthInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
@@ -74,12 +76,43 @@
 
   const permissions = computed(() => data.value?.permissions)
 
-  const beneficiary = computed(() =>
-    data.value ? data.value.beneficiary : null
+  const bindedValues = computed(() => {
+    if (!data.value) {
+      return null
+    }
+
+    const {
+      beneficiary: { id, structureId, health }
+    } = data.value
+
+    return {
+      id,
+      structureId,
+      ...health
+    }
+  })
+  const draft = computed(() => {
+    if (!data.value) {
+      return true
+    }
+
+    return data.value.beneficiary.draft
+  })
+
+  const beneficiaryIdentification = computed(() =>
+    data.value
+      ? {
+          id: data.value.beneficiary.id,
+          firstName: data.value.beneficiary.general.firstName,
+          birthName: data.value.beneficiary.general.birthName,
+          usualName: data.value.beneficiary.general.usualName,
+          birthDate: data.value.beneficiary.general.birthDate
+        }
+      : null
   )
 
   function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryHealthInput,
+    beneficiary: UpdateBeneficiaryHealthInput,
     target: string | undefined
   ) {
     if (!data.value) {
@@ -87,11 +120,7 @@
     }
 
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.beneficiary.updateHealth.mutate({
-          id: beneficiaryId,
-          ...beneficiary
-        }),
+      mutation: () => trpcClient.beneficiary.updateHealth.mutate(beneficiary),
       isSubmitting,
       onSuccess: () => {
         navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))

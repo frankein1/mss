@@ -12,13 +12,13 @@ export type BeneficiaryReferent = {
   status: UserStatus
 }
 
-export type BeneficiarySearchResult = Pick<
-  Beneficiary,
-  'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
->
-
 export type BeneficiaryNames = Partial<
   Pick<Beneficiary, 'firstName' | 'usualName' | 'birthName'>
+>
+
+export type BeneficiaryIdentification = Pick<
+  Beneficiary,
+  'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
 >
 
 export type GetBeneficiaryHealth = Pick<

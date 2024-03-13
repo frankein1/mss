@@ -27,6 +27,7 @@ const handler = async ({
       firstName: true,
       usualName: true,
       birthName: true,
+      birthDate: true,
       referents: true,
       structureId: true
     }

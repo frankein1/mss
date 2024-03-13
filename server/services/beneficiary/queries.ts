@@ -141,6 +141,7 @@ const filter = (
     id: beneficiary.id,
     fileNumber: beneficiary.fileNumber,
     status: beneficiary.status,
+    draft: beneficiary.draft,
     referents: beneficiary.referents,
     structureId: beneficiary.structureId,
     additionalInformation: beneficiary.additionalInformation,
@@ -151,14 +152,6 @@ const filter = (
     archived: beneficiary.archived,
     aidantConnectAuthorized: beneficiary.aidantConnectAuthorized,
     vulnerablePerson: beneficiary.vulnerablePerson,
-    identity: {
-      id: beneficiary.id,
-      draft: beneficiary.draft,
-      usualName: beneficiary.usualName,
-      birthName: beneficiary.birthName,
-      firstName: beneficiary.firstName,
-      birthDate: beneficiary.birthDate
-    },
     general,
     externalOrganisations: !isObjectEmpty(externalOrganisations)
       ? externalOrganisations

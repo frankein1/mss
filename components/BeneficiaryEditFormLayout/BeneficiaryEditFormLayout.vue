@@ -1,7 +1,7 @@
 <template>
   <OpenModalHack />
   <form
-    v-if="beneficiary"
+    v-if="beneficiaryIdentification"
     ref="form"
     novalidate
     class="fr-grid-row"
@@ -11,8 +11,7 @@
       class="beneficiaryformlayout__navigation fr-col-3"
       :permissions="permissions"
       :current-route="currentRoute"
-      :security-target="beneficiary"
-      :beneficiary-id="beneficiary.id"
+      :beneficiary-id="beneficiaryIdentification.id"
       :origin-tab="originTab"
       :beneficiary-form-layout-main-container="
         beneficiaryFormLayoutMainContainer
@@ -39,7 +38,7 @@
       <slot></slot>
       <BeneficiaryEditFormNavArrows
         :current-route="currentRoute"
-        :beneficiary-id="beneficiary.id"
+        :beneficiary-id="beneficiaryIdentification.id"
         :origin-tab="originTab"
         :permissions="permissions"
         @save="saveTarget = $event"
@@ -57,7 +56,6 @@
 
 <script setup lang="ts" generic="T extends ZodSchema">
   import { ZodSchema, z } from 'zod'
-  import { BeneficiarySearchResult } from '~/types/beneficiary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     Breadcrumb,
@@ -68,6 +66,7 @@
   import { beneficiaryFieldLabels, relativeFieldLabels } from '~/client/labels'
   import { BeneficiaryPermissions } from '~/server/security'
   import type { FieldLabels } from '~/types/fieldLabels'
+  import { BeneficiaryIdentification } from '~/types/beneficiary'
 
   type SubmitType = z.infer<T>
 
@@ -80,7 +79,9 @@
 
   const props = withDefaults(
     defineProps<{
-      beneficiary: (BeneficiarySearchResult & { draft: boolean }) | null
+      draft: boolean
+      beneficiaryIdentification: BeneficiaryIdentification | null
+      bindedValues: z.infer<T> | null
       permissions: BeneficiaryPermissions | undefined
       schema: T
       isSubmitting: boolean
@@ -101,10 +102,10 @@
   const form = ref<HTMLFormElement | null>(null)
 
   const breadcrumbLinks = computed(() => {
-    if (props.beneficiary?.draft) {
+    if (props.draft) {
       return Breadcrumb.AppBeneficiariesAdd()
     }
-    return Breadcrumb.AppBeneficiaryEdit(props.beneficiary)
+    return Breadcrumb.AppBeneficiaryEdit(props.beneficiaryIdentification)
   })
 
   const title = computed(() => RouteTitle[props.currentRoute]())
@@ -125,7 +126,7 @@
 
   const { handleSubmit, meta } = useForm<SubmitType>({
     validationSchema: toTypedSchema(props.schema),
-    initialValues: props.beneficiary as SubmitType
+    initialValues: props.bindedValues as SubmitType
   })
 
   const isFormDirty = computed(() => meta.value.dirty)
@@ -148,11 +149,13 @@
   } as FieldLabels<Partial<T>>)
 
   function onCancel() {
-    if (!props.beneficiary) {
+    if (!props.draft) {
       navigateTo(RoutePath.AppBeneficiaries())
-    } else {
+    } else if (props.beneficiaryIdentification) {
       navigateTo(
-        RoutePath.AppBeneficiary(props.beneficiary.id, { tab: originTab })
+        RoutePath.AppBeneficiary(props.beneficiaryIdentification.id, {
+          tab: originTab
+        })
       )
     }
   }

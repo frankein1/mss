@@ -8,24 +8,21 @@ type CreateParams = {
   input: CreateBeneficiaryInput
 }
 
-function prepareData({ ctx, input }: CreateParams) {
-  const { referents, ...data } = input
+export async function create(params: CreateParams) {
+  const { ctx, input } = params
+  const { referents, ...restOfInput } = input
 
   const fileNumber = generateFileNumber()
 
-  return {
+  const data = {
     structureId: ctx.structure.id,
     fileNumber,
     referents: {
       connect: referents.map(referent => ({ id: referent }))
     },
     createdById: ctx.user.id,
-    ...data
+    ...restOfInput
   }
-}
-
-export async function create(params: CreateParams) {
-  const data = await prepareData(params)
 
   const { id } = await BeneficiaryRepo.prisma.create({ data })
 

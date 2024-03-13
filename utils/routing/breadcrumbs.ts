@@ -1,25 +1,16 @@
 import { FileInstructionType } from '@prisma/client'
 import { Route, RoutePath } from './routes'
 import { RouteTitle } from './titles'
-import type { BeneficiaryNames } from '~/types/beneficiary'
-
-type FlatBeneficiaryNamesWithId = { id: string } & BeneficiaryNames
-
-type GeneralBeneficiaryNamesWithId = { id: string; general: BeneficiaryNames }
-
-type BeneficiaryNamesWithId =
-  | FlatBeneficiaryNamesWithId
-  | GeneralBeneficiaryNamesWithId
+import type {
+  BeneficiaryIdentification,
+  BeneficiaryNames
+} from '~/types/beneficiary'
 
 const beneficiaryNamesWithIdToBeneficiaryNames = (
-  beneficiary: BeneficiaryNamesWithId | null
+  beneficiary: BeneficiaryNames | null
 ) => {
   if (!beneficiary) {
     return null
-  }
-
-  if ('general' in beneficiary) {
-    return beneficiary.general
   }
 
   return beneficiary
@@ -49,7 +40,7 @@ const HistoryBreadcrumb = () => [
 ]
 
 const BeneficiaryBreadcrumb = (
-  beneficiary: BeneficiaryNamesWithId | null,
+  beneficiary: BeneficiaryIdentification | null,
   originPage?:
     | Route.AppOverview
     | Route.AppBeneficiaries
@@ -121,7 +112,7 @@ export const Breadcrumb = {
 
   // FIXME: Beneficiary can be accessed from Overview, Beneficiaries, Stats and History
   [Route.AppBeneficiary]: (
-    beneficiary: BeneficiaryNamesWithId | null,
+    beneficiary: BeneficiaryIdentification | null,
     originPage?:
       | Route.AppOverview
       | Route.AppBeneficiaries
@@ -130,7 +121,9 @@ export const Breadcrumb = {
   ) => BeneficiaryBreadcrumb(beneficiary, originPage),
 
   // FIXME: BeneficiaryEdit depends on the access to Beneficiary
-  [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNamesWithId | null) => [
+  [Route.AppBeneficiaryEdit]: (
+    beneficiary: BeneficiaryIdentification | null
+  ) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
       text: RouteTitle.AppBeneficiaryEdit(
@@ -141,7 +134,9 @@ export const Breadcrumb = {
   ],
 
   // FIXME: BeneficiaryPrint depends on the access to Beneficiary
-  [Route.AppBeneficiaryPrint]: (beneficiary: BeneficiaryNamesWithId | null) => [
+  [Route.AppBeneficiaryPrint]: (
+    beneficiary: BeneficiaryIdentification | null
+  ) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
       text: RouteTitle.AppBeneficiaryPrint(
@@ -153,7 +148,7 @@ export const Breadcrumb = {
 
   // FIXME: BeneficiaryFollowupAdd depends on the access to Beneficiary
   [Route.AppBeneficiaryFollowupAdd]: (
-    beneficiary: BeneficiaryNamesWithId | null
+    beneficiary: BeneficiaryIdentification | null
   ) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
@@ -166,7 +161,7 @@ export const Breadcrumb = {
 
   // FIXME: BeneficiaryFollowupEdit depends on the access to Beneficiary
   [Route.AppBeneficiaryFollowupEdit]: (
-    followup: { id: string; beneficiary: FlatBeneficiaryNamesWithId } | null
+    followup: { id: string; beneficiary: BeneficiaryIdentification } | null
   ) => [
     ...BeneficiaryBreadcrumb(followup?.beneficiary || null),
     {
@@ -182,7 +177,7 @@ export const Breadcrumb = {
 
   // FIXME: BeneficiaryHelpRequestAdd depends on the access to Beneficiary
   [Route.AppBeneficiaryHelpRequestAdd]: (
-    beneficiary: BeneficiaryNamesWithId | null,
+    beneficiary: BeneficiaryIdentification | null,
     subject: FileInstructionType
   ) => [
     ...BeneficiaryBreadcrumb(beneficiary),
@@ -196,7 +191,7 @@ export const Breadcrumb = {
 
   // FIXME: BeneficiaryHelpRequestEdit depends on the access to Beneficiary
   [Route.AppBeneficiaryHelpRequestEdit]: (
-    helpRequest: { id: string; beneficiary: FlatBeneficiaryNamesWithId } | null,
+    helpRequest: { id: string; beneficiary: BeneficiaryIdentification } | null,
     subject: FileInstructionType
   ) => [
     ...BeneficiaryBreadcrumb(helpRequest?.beneficiary || null),

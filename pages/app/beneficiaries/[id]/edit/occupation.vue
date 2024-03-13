@@ -1,7 +1,9 @@
 <template>
   <BeneficiaryEditFormLayout
-    :beneficiary="beneficiary?.identity || null"
-    :schema="saveBeneficiaryOccupationSchema"
+    :draft="draft"
+    :beneficiary-identification="beneficiaryIdentification"
+    :schema="updateBeneficiaryOccupationSchema"
+    :binded-values="bindedValues"
     :permissions="permissions"
     :is-submitting="isSubmitting"
     :current-route="Route.AppBeneficiaryEditOccupation"
@@ -18,7 +20,7 @@
       class="fr-mx-auto"
     />
     <div
-      v-else-if="beneficiary && permissions"
+      v-else-if="bindedValues && permissions"
       class="fr-p-3v"
     >
       <BeneficiaryFormOccupationIncome
@@ -33,10 +35,11 @@
 
 <script lang="ts" setup>
   import {
-    saveBeneficiaryOccupationSchema,
-    SaveBeneficiaryOccupationInput
+    updateBeneficiaryOccupationSchema,
+    UpdateBeneficiaryOccupationInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
+  import { prismaDecimalToNumber } from '~/utils/prisma'
   import { RoutePath, Route } from '~/utils/routing'
 
   definePageMeta({
@@ -57,8 +60,58 @@
 
   const permissions = computed(() => data.value?.permissions)
 
-  const beneficiary = computed(() =>
-    data.value ? data.value.beneficiary : null
+  const bindedValues = computed(() => {
+    if (!data.value) {
+      return null
+    }
+
+    const {
+      beneficiary: { id, structureId, occupationIncome }
+    } = data.value
+
+    return {
+      id,
+      structureId,
+      ...occupationIncome,
+      mainIncomeSource: occupationIncome?.mainIncomeSource || [],
+      mainIncomeAmount: prismaDecimalToNumber(
+        occupationIncome?.mainIncomeAmount
+      ),
+      partnerMainIncomeSource: occupationIncome?.partnerMainIncomeSource || [],
+      partnerMainIncomeAmount: prismaDecimalToNumber(
+        occupationIncome?.partnerMainIncomeAmount
+      ),
+      majorChildrenMainIncomeSource:
+        occupationIncome?.majorChildrenMainIncomeSource || [],
+      majorChildrenMainIncomeAmount: prismaDecimalToNumber(
+        occupationIncome?.majorChildrenMainIncomeAmount
+      ),
+      otherMembersMainIncomeSource:
+        occupationIncome?.otherMembersMainIncomeSource || [],
+      otherMembersMainIncomeAmount: prismaDecimalToNumber(
+        occupationIncome?.otherMembersMainIncomeAmount
+      ),
+      pensionOrganisations: occupationIncome?.pensionOrganisations || []
+    }
+  })
+  const draft = computed(() => {
+    if (!data.value) {
+      return true
+    }
+
+    return data.value.beneficiary.draft
+  })
+
+  const beneficiaryIdentification = computed(() =>
+    data.value
+      ? {
+          id: data.value.beneficiary.id,
+          firstName: data.value.beneficiary.general.firstName,
+          birthName: data.value.beneficiary.general.birthName,
+          usualName: data.value.beneficiary.general.usualName,
+          birthDate: data.value.beneficiary.general.birthDate
+        }
+      : null
   )
 
   const familySituation = computed(
@@ -73,7 +126,7 @@
   )
 
   function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryOccupationInput,
+    beneficiary: UpdateBeneficiaryOccupationInput,
     target: string | undefined
   ) {
     if (!data.value) {
@@ -82,10 +135,7 @@
 
     useTrpcMutation({
       mutation: () =>
-        trpcClient.beneficiary.updateOccupationIncome.mutate({
-          id: beneficiaryId,
-          ...beneficiary
-        }),
+        trpcClient.beneficiary.updateOccupationIncome.mutate(beneficiary),
       isSubmitting,
       onSuccess: () => {
         navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
