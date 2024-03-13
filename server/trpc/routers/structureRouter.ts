@@ -1,5 +1,6 @@
 import { protectedProcedure, router } from '~/server/trpc'
 import {
+  editCurrentUserStructureInfoMutation,
   editCurrentUserStructureMutation,
   getCurrentUserStructureQuery,
   getStructureSocialSupportSubjectQuery
@@ -9,6 +10,9 @@ export const structureRouter = router({
   getCurrentUserStructure: protectedProcedure
     .input(getCurrentUserStructureQuery.inputValidation)
     .query(getCurrentUserStructureQuery.execute),
+  editCurrentUserStructureInfo: protectedProcedure
+    .input(editCurrentUserStructureInfoMutation.inputValidation)
+    .mutation(editCurrentUserStructureInfoMutation.execute),
   editCurrentUserStructure: protectedProcedure
     .input(editCurrentUserStructureMutation.inputValidation)
     .mutation(editCurrentUserStructureMutation.execute),

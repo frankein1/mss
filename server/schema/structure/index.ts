@@ -1,4 +1,5 @@
 export * from './createStructure.schema'
+export * from './editCurrentStructureInfo.schema'
 export * from './editCurrentStructure.schema'
 export * from './editStructure.schema'
 export * from './adminCreateStructure.schema'
