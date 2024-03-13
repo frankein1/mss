@@ -18,7 +18,7 @@
           :class="{ 'fr-mt-3v': beneficiary.aidantConnectAuthorized }"
         >
           <div class="fr-icon-success-line field-value">
-            Personne vulnérable
+            Registre des personnes vulnérables
           </div>
         </div>
       </div>
