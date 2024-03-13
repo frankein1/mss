@@ -17,12 +17,10 @@
       </div>
 
       <div class="fr-col-12">
-        <VeeAddressInput
+        <VeeInput
           name="address"
           :label="structureFieldLabels.address"
-          :zip-code="zipCode"
           required
-          @address-selected="onAddressSelected"
         />
       </div>
 
@@ -31,16 +29,13 @@
           name="zipcode"
           :label="structureFieldLabels.zipcode"
           required
-          @change-value="zipCode = $event"
         />
       </div>
       <div class="fr-col-8">
-        <VeeCityInput
+        <VeeInput
           name="city"
           :label="structureFieldLabels.city"
-          :zip-code="zipCode"
           required
-          @city-selected="onCitySelected"
         />
       </div>
 
@@ -89,11 +84,6 @@
 <script lang="ts" setup>
   import { structureFieldLabels } from '~/client/labels'
   import type { StructureConfigurationInfo } from '~/components/StructureConfiguration/types'
-
-  import type {
-    CitySelected,
-    AddressSelected
-  } from '~/components/VeeForm/types'
   import {
     EditCurrentUserStructureInfoInput,
     editCurrentUserStructureInfoSchema
@@ -110,42 +100,20 @@
   /** Setup vee validate */
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit, setFieldValue } =
-    useForm<EditCurrentUserStructureInfoInput>({
-      validationSchema: toTypedSchema(editCurrentUserStructureInfoSchema),
-      initialValues: {
-        // structureId: props.structure.id,
-        name: props.structure.name,
-        zipcode: props.structure.zipcode,
-        city: props.structure.city,
-        address: props.structure.address,
-        phone: props.structure.phone,
-        email: props.structure.email
-      }
-    })
+  const { handleSubmit } = useForm<EditCurrentUserStructureInfoInput>({
+    validationSchema: toTypedSchema(editCurrentUserStructureInfoSchema),
+    initialValues: {
+      // structureId: props.structure.id,
+      name: props.structure.name,
+      zipcode: props.structure.zipcode,
+      city: props.structure.city,
+      address: props.structure.address,
+      phone: props.structure.phone,
+      email: props.structure.email
+    }
+  })
 
-  const { onSubmit, caughtErrors } = useCatchFormErrors(handleSubmit, values =>
+  const { onSubmit } = useCatchFormErrors(handleSubmit, values =>
     emit('updateStructureInfo', values)
   )
-
-  useDisplayFormErrors(form, caughtErrors, {})
-
-  /** Manage address */
-  const zipCode = ref(props.structure?.zipcode)
-  const city = ref(props.structure?.city)
-
-  function onCitySelected(citySelected: CitySelected) {
-    updateZipCodeAndCity(citySelected.zipCode, citySelected.city)
-  }
-
-  function onAddressSelected(address: AddressSelected) {
-    updateZipCodeAndCity(address.zipCode, address.city)
-  }
-
-  function updateZipCodeAndCity(_zipCode: string, _city: string) {
-    zipCode.value = _zipCode
-    city.value = _city
-    setFieldValue('zipcode', _zipCode)
-    setFieldValue('city', _city)
-  }
 </script>

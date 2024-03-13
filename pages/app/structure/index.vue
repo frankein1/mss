@@ -68,7 +68,6 @@
         )
       },
       onFailure: () => {
-        // TODO set focus back to previous element
         snackbar.error(
           'La modification des informations de votre structure a échoué.'
         )
