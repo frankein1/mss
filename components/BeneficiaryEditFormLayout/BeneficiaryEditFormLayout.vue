@@ -48,7 +48,7 @@
       class="fr-col-12"
       :is-submitting="isSubmitting"
       :saved="saved"
-      @save="saveTarget = undefined"
+      @save="onSave"
       @cancel="onCancel"
     />
   </form>
@@ -94,10 +94,17 @@
   )
 
   const emit = defineEmits<{
-    save: [beneficiary: SubmitType, target: string | undefined]
+    save: [
+      beneficiary: SubmitType,
+      target: string | undefined,
+      validate: boolean
+    ]
   }>()
 
+  const trpcClient = useTrpcClient()
+
   const saveTarget = ref<string | undefined>(undefined)
+  const validate = ref<boolean>(false)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
 
@@ -129,16 +136,27 @@
     initialValues: props.bindedValues as SubmitType
   })
 
+  function onSave() {
+    saveTarget.value = undefined
+    validate.value = true
+  }
+
   const isFormDirty = computed(() => meta.value.dirty)
 
   const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
-    isFormDirty
+    isFormDirty: props.draft ? ref(true) : isFormDirty,
+    onLeave: async () => {
+      if (props.beneficiaryIdentification && props.draft) {
+        const id = props.beneficiaryIdentification.id
+        await trpcClient.beneficiary.delete.mutate({ id })
+      }
+    }
   })
 
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
-      emit('save', values, saveTarget.value)
+      emit('save', values, saveTarget.value, validate.value)
       isNavigatingWithFormActions.value = true
     }
   )
@@ -148,15 +166,19 @@
     ...relativeFieldLabels
   } as FieldLabels<Partial<T>>)
 
-  function onCancel() {
-    if (!props.draft) {
-      navigateTo(RoutePath.AppBeneficiaries())
-    } else if (props.beneficiaryIdentification) {
-      navigateTo(
-        RoutePath.AppBeneficiary(props.beneficiaryIdentification.id, {
-          tab: originTab
-        })
-      )
+  async function onCancel() {
+    if (props.beneficiaryIdentification) {
+      const id = props.beneficiaryIdentification.id
+      if (props.draft) {
+        await trpcClient.beneficiary.delete.mutate({ id })
+        navigateTo(RoutePath.AppBeneficiaries())
+      } else if (props.beneficiaryIdentification) {
+        navigateTo(
+          RoutePath.AppBeneficiary(id, {
+            tab: originTab
+          })
+        )
+      }
     }
   }
 </script>

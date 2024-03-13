@@ -129,15 +129,29 @@
 
   function onSaveBeneficiary(
     beneficiary: UpdateBeneficiaryGeneralInformationInput,
-    target: string | undefined
+    target: string | undefined,
+    validate: boolean
   ) {
     if (!data.value) {
       return
     }
 
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.beneficiary.updateGeneralInformation.mutate(beneficiary),
+      mutation: () => {
+        const router = trpcClient.beneficiary
+        const validateBeneficiary = router.validate.mutate({
+          id: beneficiaryId
+        })
+        const updateBeneficiary =
+          router.updateGeneralInformation.mutate(beneficiary)
+
+        const res = []
+        if (validate && draft.value) {
+          res.push(validateBeneficiary)
+        }
+        res.push(updateBeneficiary)
+        return Promise.all(res)
+      },
       isSubmitting,
       onSuccess: () => {
         navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
