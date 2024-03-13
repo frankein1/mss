@@ -97,13 +97,11 @@
 
   const modal = useModal()
 
-  /** Setup vee validate */
   const form = ref<HTMLFormElement | null>(null)
 
   const { handleSubmit } = useForm<EditCurrentUserStructureInfoInput>({
     validationSchema: toTypedSchema(editCurrentUserStructureInfoSchema),
     initialValues: {
-      // structureId: props.structure.id,
       name: props.structure.name,
       zipcode: props.structure.zipcode,
       city: props.structure.city,
