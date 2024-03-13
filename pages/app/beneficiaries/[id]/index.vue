@@ -1,7 +1,7 @@
 <template>
   <PageContainer v-if="beneficiary">
     <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiary(beneficiary, originPage)"
+      :links="Breadcrumb.AppBeneficiary(beneficiaryIdentification, originPage)"
     />
 
     <BeneficiaryDetailsHeader
@@ -102,6 +102,18 @@
   const title = RouteTitle.AppBeneficiary(beneficiary.value?.general || null)
 
   useHead({ title })
+
+  const beneficiaryIdentification = computed(() =>
+    beneficiary.value
+      ? {
+          id: beneficiary.value.id,
+          firstName: beneficiary.value.general.firstName,
+          birthName: beneficiary.value.general.birthName,
+          usualName: beneficiary.value.general.usualName,
+          birthDate: beneficiary.value.general.birthDate
+        }
+      : null
+  )
 
   const socialSupportSubjects = computed(
     () => data.value?.beneficiary.history.subjects || []

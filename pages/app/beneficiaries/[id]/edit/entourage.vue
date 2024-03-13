@@ -1,7 +1,9 @@
 <template>
   <BeneficiaryEditFormLayout
-    :beneficiary="beneficiary?.identity || null"
-    :schema="saveBeneficiaryEntourageSchema"
+    :draft="draft"
+    :beneficiary-identification="beneficiaryIdentification"
+    :binded-values="bindedValues"
+    :schema="updateBeneficiaryEntourageSchema"
     :is-submitting="isSubmitting"
     :permissions="permissions"
     :current-route="Route.AppBeneficiaryEditEntourage"
@@ -18,7 +20,7 @@
       class="fr-mx-auto"
     />
     <div
-      v-else-if="beneficiary"
+      v-else-if="bindedValues"
       class="fr-p-3v"
     >
       <BeneficiaryFormEntourages />
@@ -28,8 +30,8 @@
 
 <script lang="ts" setup>
   import {
-    saveBeneficiaryEntourageSchema,
-    SaveBeneficiaryEntourageInput
+    updateBeneficiaryEntourageSchema,
+    UpdateBeneficiaryEntourageInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
@@ -48,12 +50,43 @@
 
   const permissions = computed(() => data.value?.permissions)
 
-  const beneficiary = computed(() =>
-    data.value ? data.value.beneficiary : null
+  const bindedValues = computed(() => {
+    if (!data.value) {
+      return null
+    }
+
+    const {
+      beneficiary: { id, structureId, entourages }
+    } = data.value
+
+    return {
+      id,
+      structureId,
+      entourages
+    }
+  })
+  const draft = computed(() => {
+    if (!data.value) {
+      return true
+    }
+
+    return data.value.beneficiary.draft
+  })
+
+  const beneficiaryIdentification = computed(() =>
+    data.value
+      ? {
+          id: data.value.beneficiary.id,
+          firstName: data.value.beneficiary.general.firstName,
+          birthName: data.value.beneficiary.general.birthName,
+          usualName: data.value.beneficiary.general.usualName,
+          birthDate: data.value.beneficiary.general.birthDate
+        }
+      : null
   )
 
   function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryEntourageInput,
+    beneficiary: UpdateBeneficiaryEntourageInput,
     target: string | undefined
   ) {
     if (!data.value) {
@@ -62,10 +95,7 @@
 
     useTrpcMutation({
       mutation: () =>
-        trpcClient.beneficiary.updateEntourage.mutate({
-          id: beneficiaryId,
-          ...beneficiary
-        }),
+        trpcClient.beneficiary.updateEntourage.mutate(beneficiary),
       isSubmitting,
       onSuccess: () => {
         navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))

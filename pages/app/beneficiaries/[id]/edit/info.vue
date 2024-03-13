@@ -1,7 +1,9 @@
 <template>
   <BeneficiaryEditFormLayout
-    :beneficiary="beneficiary?.identity || null"
-    :schema="saveBeneficiaryGeneralInformationSchema"
+    :draft="draft"
+    :beneficiary-identification="beneficiaryIdentification"
+    :schema="updateBeneficiaryGeneralInformationSchema"
+    :binded-values="bindedValues"
     :permissions="permissions"
     :is-submitting="isSubmitting"
     title-icon="fr-icon-user-line"
@@ -19,9 +21,9 @@
       class="fr-mx-auto"
     />
     <BeneficiaryFormGeneralInformation
-      v-else-if="beneficiary && permissions && agents?.length"
+      v-else-if="bindedValues && permissions && agents?.length"
       :permissions="permissions"
-      :beneficiary="beneficiary"
+      :beneficiary-referent-ids="beneficiaryReferentIds"
       :agents="agents"
     />
   </BeneficiaryEditFormLayout>
@@ -29,8 +31,8 @@
 
 <script lang="ts" setup>
   import {
-    SaveBeneficiaryGeneralInformationInput,
-    saveBeneficiaryGeneralInformationSchema
+    UpdateBeneficiaryGeneralInformationInput,
+    updateBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
@@ -62,8 +64,57 @@
 
   const permissions = computed(() => data.value?.permissions)
 
-  const beneficiary = computed(() =>
-    data.value ? data.value.beneficiary : null
+  const beneficiaryReferentIds = computed(() =>
+    data.value ? data.value.beneficiary.referents.map(r => r.id) : []
+  )
+
+  const bindedValues = computed(() => {
+    if (!data.value) {
+      return null
+    }
+
+    const {
+      beneficiary: {
+        id,
+        structureId,
+        referents,
+        aidantConnectAuthorized,
+        vulnerablePerson,
+        status,
+        general
+      }
+    } = data.value
+
+    return {
+      id,
+      structureId,
+      referents: referents.map(referent => referent.id),
+      aidantConnectAuthorized,
+      vulnerablePerson,
+      status,
+      ...general,
+      birthDate: general.birthDate ? new Date(general.birthDate) : undefined,
+      deathDate: general.deathDate ? new Date(general.deathDate) : undefined
+    }
+  })
+  const draft = computed(() => {
+    if (!data.value) {
+      return true
+    }
+
+    return data.value.beneficiary.draft
+  })
+
+  const beneficiaryIdentification = computed(() =>
+    data.value
+      ? {
+          id: data.value.beneficiary.id,
+          firstName: data.value.beneficiary.general.firstName,
+          birthName: data.value.beneficiary.general.birthName,
+          usualName: data.value.beneficiary.general.usualName,
+          birthDate: data.value.beneficiary.general.birthDate
+        }
+      : null
   )
 
   const fetchError = computed(() => {
@@ -77,22 +128,16 @@
   })
 
   function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryGeneralInformationInput,
+    beneficiary: UpdateBeneficiaryGeneralInformationInput,
     target: string | undefined
   ) {
     if (!data.value) {
       return
     }
 
-    const { structureId } = data.value.beneficiary
-
     useTrpcMutation({
       mutation: () =>
-        trpcClient.beneficiary.updateGeneralInformation.mutate({
-          id: beneficiaryId,
-          structureId,
-          ...beneficiary
-        }),
+        trpcClient.beneficiary.updateGeneralInformation.mutate(beneficiary),
       isSubmitting,
       onSuccess: () => {
         navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))

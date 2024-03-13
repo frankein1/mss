@@ -58,17 +58,26 @@
 
   function onCreateBeneficiary(
     beneficiary: CreateBeneficiaryInput,
-    _complete: boolean
+    draft: boolean
   ) {
     useTrpcMutation({
-      mutation: () => trpcClient.beneficiary.create.mutate(beneficiary),
+      mutation: () =>
+        trpcClient.beneficiary.create.mutate({
+          ...beneficiary,
+          draft
+        }),
       isSubmitting,
       onSuccess: ({ id }) => {
         matomo.trackEvent(
           EventCategory.CreateBeneficiary,
           CreateBeneficiaryEventAction.SavePartialForm
         )
-        navigateTo(RoutePath.AppBeneficiary(id))
+        console.log({ draft, id })
+        if (draft) {
+          navigateTo(RoutePath.AppBeneficiaryEditInfo(id))
+        } else {
+          navigateTo(RoutePath.AppBeneficiary(id))
+        }
       },
       onFailure: () => {
         snackbar.error('La création de la fiche bénéficiaire a échoué.')
