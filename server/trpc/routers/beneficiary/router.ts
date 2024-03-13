@@ -15,7 +15,8 @@ import {
   updateExternalOrganisationsMutation,
   updateTaxHouseholdMutation,
   getBeneficiaryTaxHouseholdsQuery,
-  getSimilarBeneficiaryQuery
+  getSimilarBeneficiaryQuery,
+  validateBeneficiaryMutation
 } from '~/server/route/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
 
@@ -71,5 +72,8 @@ export const beneficiaryRouter = router({
     .mutation(updateExternalOrganisationsMutation.execute),
   create: protectedProcedure
     .input(createBeneficiaryMutation.inputValidation)
-    .mutation(createBeneficiaryMutation.execute)
+    .mutation(createBeneficiaryMutation.execute),
+  validate: protectedProcedure
+    .input(validateBeneficiaryMutation.inputValidation)
+    .mutation(validateBeneficiaryMutation.execute)
 })
