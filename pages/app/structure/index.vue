@@ -1,5 +1,5 @@
 <template>
-  <PageContainer no-max-width>
+  <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppStructure()" />
 
     <PageTitle :title="title" />
