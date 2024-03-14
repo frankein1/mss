@@ -94,21 +94,18 @@
       return
     }
 
+    const router = trpcClient.beneficiary
+    const validateBeneficiary = router.validate.useMutation()
+    const updateBeneficiary = router.updateExternalOrganisations.useMutation()
+
     useTrpcMutation({
       mutation: () => {
-        const router = trpcClient.beneficiary
-        const validateBeneficiary = router.validate.mutate({
-          id: beneficiaryId
-        })
-        const updateBeneficiary =
-          router.updateExternalOrganisations.mutate(beneficiary)
-
-        const res = []
+        const mutations = []
         if (validate && draft.value) {
-          res.push(validateBeneficiary)
+          mutations.push(validateBeneficiary.mutate({ id: beneficiaryId }))
         }
-        res.push(updateBeneficiary)
-        return Promise.all(res)
+        mutations.push(updateBeneficiary.mutate(beneficiary))
+        return Promise.all(mutations)
       },
       isSubmitting,
       onSuccess: () => {

@@ -109,6 +109,7 @@
   const form = ref<HTMLFormElement | null>(null)
 
   const breadcrumbLinks = computed(() => {
+    console.log({ draft: props.draft })
     if (props.draft) {
       return Breadcrumb.AppBeneficiariesAdd()
     }

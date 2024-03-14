@@ -14,7 +14,7 @@ function getBeneficiarySecurityTargetWithEntourage(
   user: SecurityRuleGrantee,
   id: string
 ) {
-  return BeneficiaryRepo.findUniqueOrThrow(user, {
+  return BeneficiaryRepo.findWithNoDraftCondition(user, {
     where: { id },
     select: {
       id: true,

@@ -72,7 +72,6 @@
           EventCategory.CreateBeneficiary,
           CreateBeneficiaryEventAction.SavePartialForm
         )
-        console.log({ draft, id })
         if (draft) {
           navigateTo(RoutePath.AppBeneficiaryEditInfo(id))
         } else {
