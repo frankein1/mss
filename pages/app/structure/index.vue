@@ -15,11 +15,18 @@
       message="Les informations de votre structure n'ont pas pu être chargées."
     />
 
-    <StructureConfigurationInfoHeader
-      v-else-if="data"
-      :structure="data.structure"
-      @edit="onEdit"
-    />
+    <div v-else-if="data">
+      <StructureConfigurationInfo
+        class="fr-mb-5w"
+        :structure="data.structure"
+        @edit="onEdit"
+      />
+
+      <StructureConfigurationSocialSupportSubjects
+        :subjects="data.socialSupportSubjects"
+        :can-edit="application.edit.structure"
+      />
+    </div>
   </PageContainer>
 </template>
 
@@ -36,6 +43,7 @@
   const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
+  const { application } = usePermissions()
 
   const isSubmitting = ref(false)
 
