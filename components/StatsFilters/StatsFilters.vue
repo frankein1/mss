@@ -17,7 +17,7 @@
   import {
     fileInstructionTypeFilterOptions,
     fileInstructionTypePictos,
-    beneficiaryStatusOptions,
+    beneficiaryStatusKeys,
     periodOptions
   } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
@@ -123,7 +123,7 @@
     statsFilters.push({
       name: 'beneficiaryStatus',
       label: 'Statut du bénéficiaire',
-      options: withEmptyValue(beneficiaryStatusOptions),
+      options: withEmptyValue(beneficiaryStatusKeys.options),
       type: FilterType.SelectOne,
       alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
     })

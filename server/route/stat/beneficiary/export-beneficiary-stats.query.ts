@@ -7,12 +7,12 @@ import {
   beneficiaryGenderKeys,
   beneficiaryMobilityKeys,
   beneficiarySocioProfessionalCategoryKeys,
-  familySituationLabels,
+  familySituationKeys,
   ageGroupLabels,
   STATS_NULL_LABEL,
-  ministereCategorieLabels,
-  ministereDepartmentServiceAcLabels,
-  ministereStructureLabels
+  ministereCategorieKeys,
+  ministereDepartmentServiceAcKeys,
+  ministereStructureKeys
 } from '~/client/options'
 import {
   getBeneficiaryCountQuery,
@@ -72,7 +72,7 @@ const handler = async ({
   })
 
   const familyData = await getFamilyStatsQuery(user, input)
-  const familyColumns = getColumnsFromLabels(familySituationLabels)
+  const familyColumns = getColumnsFromLabels(familySituationKeys.byKey)
   const familyRows = getRowsFromData(
     familyData,
     'familySituation',
@@ -181,7 +181,7 @@ const handler = async ({
       input
     )
     const ministereStructureColumns = getColumnsFromLabels(
-      ministereStructureLabels
+      ministereStructureKeys.byKey
     )
     const ministereStructureRows = getRowsFromData(
       ministereStructureData,
@@ -197,7 +197,7 @@ const handler = async ({
     const ministereDepartementData =
       await getMinistereDepartementServiceAcStatsQuery(user, input)
     const ministereDepartementColumns = getColumnsFromLabels(
-      ministereDepartmentServiceAcLabels
+      ministereDepartmentServiceAcKeys.byKey
     )
     const ministereDepartementRows = getRowsFromData(
       ministereDepartementData,
@@ -218,7 +218,7 @@ const handler = async ({
       input
     )
     const ministereCategorieColumns = getColumnsFromLabels(
-      ministereCategorieLabels
+      ministereCategorieKeys.byKey
     )
     const ministereCategorieRows = getRowsFromData(
       ministereCategorieData,

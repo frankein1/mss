@@ -20,14 +20,14 @@ import {
   beneficiaryGenderKeys,
   beneficiaryMobilityKeys,
   beneficiarySocioProfessionalCategoryKeys,
-  beneficiaryStatusLabels,
+  beneficiaryStatusKeys,
   incomeSourceKeys,
-  pensionOrganisationLabels,
+  pensionOrganisationKeys,
   relativeRelationshipLabels,
-  ministereCategorieLabels,
-  ministereDepartmentServiceAcLabels,
-  ministereStructureLabels,
-  familySituationLabels,
+  ministereCategorieKeys,
+  ministereDepartmentServiceAcKeys,
+  ministereStructureKeys,
+  familySituationKeys,
   nationalityKeys
 } from '~/client/options'
 import { readableFileNumber } from '~/utils/readableFileNumber'
@@ -134,7 +134,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
       beneficiary.aidantConnectAuthorized
     ),
     fileNumber: readableFileNumber(beneficiary.id),
-    status: beneficiaryStatusLabels[beneficiary.status],
+    status: beneficiaryStatusKeys.byKey[beneficiary.status],
     usualName: general.usualName || '',
     birthName: general.birthName || '',
     firstName: general.firstName || '',
@@ -160,7 +160,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
     phone2: general.phone2 || '',
     email: general.email || '',
     familySituation: taxHouseholds?.familySituation
-      ? familySituationLabels[taxHouseholds.familySituation]
+      ? familySituationKeys.byKey[taxHouseholds.familySituation]
       : '',
     caregiver: getBooleanOrEmpty(taxHouseholds?.caregiver),
     minorChildren: taxHouseholds?.minorChildren?.toString() || '',
@@ -169,16 +169,16 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
       ? beneficiaryMobilityKeys.byKey[general.mobility]
       : '',
     ministereCategorie: occupationIncome?.ministereCategorie
-      ? ministereCategorieLabels[occupationIncome?.ministereCategorie]
+      ? ministereCategorieKeys.byKey[occupationIncome?.ministereCategorie]
       : '',
     ministereDepartementServiceAc:
       occupationIncome?.ministereDepartementServiceAc
-        ? ministereDepartmentServiceAcLabels[
+        ? ministereDepartmentServiceAcKeys.byKey[
             occupationIncome?.ministereDepartementServiceAc
           ]
         : '',
     ministereStructure: occupationIncome?.ministereStructure
-      ? ministereStructureLabels[occupationIncome?.ministereStructure]
+      ? ministereStructureKeys.byKey[occupationIncome?.ministereStructure]
       : '',
     socioProfessionalCategory: occupationIncome?.socioProfessionalCategory
       ? beneficiarySocioProfessionalCategoryKeys.byKey[
@@ -214,7 +214,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
       ? occupationIncome?.pensionOrganisations
           .map(
             pensionOrganisation =>
-              pensionOrganisationLabels[pensionOrganisation]
+              pensionOrganisationKeys.byKey[pensionOrganisation]
           )
           .join(', ')
       : '',

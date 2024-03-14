@@ -31,7 +31,7 @@
     housingHelpRequestFieldLabels
   } from '~/client/labels'
   import {
-    ministerOptions,
+    ministerKeys,
     fileInstructionTypeFilterOptions,
     roomCountOptions,
     fileInstructionTypePictos
@@ -190,7 +190,7 @@
       fileInstructionsFilters.push({
         name: 'ministre',
         label: helpRequestFieldLabels.ministre,
-        options: ministerOptions,
+        options: ministerKeys.options,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.Ministre

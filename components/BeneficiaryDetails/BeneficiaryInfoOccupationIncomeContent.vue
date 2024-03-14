@@ -112,18 +112,18 @@
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereCategorie"
-      :value="MinistereCategorieKeys.value(occupationIncome.ministereCategorie)"
+      :value="ministereCategorieKeys.value(occupationIncome.ministereCategorie)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereStructure"
-      :value="MinistereStructureKeys.value(occupationIncome.ministereStructure)"
+      :value="ministereStructureKeys.value(occupationIncome.ministereStructure)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
       :value="
-        MinistereDepartmentServiceAcKeys.value(
+        ministereDepartmentServiceAcKeys.value(
           occupationIncome.ministereDepartementServiceAc
         )
       "
@@ -137,10 +137,10 @@
   import {
     beneficiarySocioProfessionalCategoryKeys,
     incomeSourceKeys,
-    pensionOrganisationLabels,
-    MinistereStructureKeys,
-    MinistereCategorieKeys,
-    MinistereDepartmentServiceAcKeys
+    pensionOrganisationKeys,
+    ministereStructureKeys,
+    ministereCategorieKeys,
+    ministereDepartmentServiceAcKeys
   } from '~/client/options'
   import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
@@ -182,7 +182,7 @@
       props.occupationIncome.pensionOrganisations?.filter(
         f => f !== BeneficiaryPensionOrganisation.Other
       ) || [],
-      pensionOrganisationLabels
+      pensionOrganisationKeys.byKey
     )
   )
 

@@ -4,7 +4,7 @@
       <VeeSelect
         name="status"
         :label="beneficiaryFieldLabels.status"
-        :options="beneficiaryStatusOptions"
+        :options="beneficiaryStatusKeys.options"
         required
       />
     </div>
@@ -43,7 +43,7 @@
 <script setup lang="ts">
   import { UserStatus } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { beneficiaryStatusOptions } from '~/client/options'
+  import { beneficiaryStatusKeys } from '~/client/options'
   import { BeneficiaryReferent } from '~/types/beneficiary'
   import { BeneficiaryPermissions } from '~/server/security'
 

@@ -4,7 +4,7 @@ import { createQuery } from '~/server/route'
 import {
   followupMediumLabels,
   followupStatusLabels,
-  ministerLabels
+  ministerKeys
 } from '~/client/options'
 import { RowType, WorksheetType } from '~/types/export'
 import {
@@ -103,7 +103,7 @@ const handler = async ({
       user,
       input
     )
-    const followupMinistreColumns = getColumnsFromLabels(ministerLabels)
+    const followupMinistreColumns = getColumnsFromLabels(ministerKeys.byKey)
     const followupMinistreRows = getRowsFromData(
       followupMinistreData,
       'ministre',

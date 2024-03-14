@@ -32,7 +32,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
   import { StatFilterInput } from '~/server/schema'
-  import { getStatLabel, ministereCategorieLabels } from '~/client/options'
+  import { getStatLabel, ministereCategorieKeys } from '~/client/options'
 
   const props = defineProps<{
     beneficiaryCount: number
@@ -49,7 +49,7 @@
     () =>
       ministereCategorieCounts.value?.map(({ _count, ministereCategorie }) => ({
         key: ministereCategorie || 'null',
-        label: getStatLabel(ministereCategorieLabels, ministereCategorie),
+        label: getStatLabel(ministereCategorieKeys.byKey, ministereCategorie),
         count: _count
       })) || []
   )

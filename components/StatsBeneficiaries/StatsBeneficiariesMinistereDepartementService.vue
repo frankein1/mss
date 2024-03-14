@@ -36,7 +36,7 @@
   import { RoutePath } from '~/utils/routing'
   import { StatFilterInput } from '~/server/schema'
   import {
-    ministereDepartmentServiceAcLabels,
+    ministereDepartmentServiceAcKeys,
     getStatLabel
   } from '~/client/options'
 
@@ -59,7 +59,7 @@
         ({ _count, ministereDepartementServiceAc }) => ({
           key: ministereDepartementServiceAc || 'null',
           label: getStatLabel(
-            ministereDepartmentServiceAcLabels,
+            ministereDepartmentServiceAcKeys.byKey,
             ministereDepartementServiceAc
           ),
           count: _count

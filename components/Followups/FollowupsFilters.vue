@@ -23,7 +23,7 @@
   import {
     followupStatusOptions,
     followupMediumOptions,
-    ministerOptions
+    ministerKeys
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
@@ -124,7 +124,7 @@
       filters.push({
         name: 'ministre',
         label: followupFieldLabels.ministre,
-        options: ministerOptions,
+        options: ministerKeys.options,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,
         matomoEventAction: FollowupFilterEventAction.Ministre

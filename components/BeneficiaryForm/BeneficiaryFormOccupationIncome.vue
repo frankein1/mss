@@ -103,7 +103,7 @@
       <VeeMultiSelect
         name="pensionOrganisations"
         :label="beneficiaryFieldLabels.pensionOrganisations"
-        :options="pensionOrganisationOptions"
+        :options="pensionOrganisationKeys.options"
         label-class="fr-text--regular"
         dropdown
       />
@@ -140,7 +140,7 @@
         v-if="application.module.ministere"
         name="ministereCategorie"
         :label="beneficiaryFieldLabels.ministereCategorie"
-        :options="withEmptyValue(ministereCategorieOptions)"
+        :options="withEmptyValue(ministereCategorieKeys.options)"
       />
     </div>
     <div class="fr-col-12">
@@ -148,7 +148,7 @@
         v-if="application.module.ministere"
         name="ministereDepartementServiceAc"
         :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
-        :options="withEmptyValue(ministereDepartmentServiceAcOptions)"
+        :options="withEmptyValue(ministereDepartmentServiceAcKeys.options)"
       />
     </div>
     <div class="fr-col-12">
@@ -156,7 +156,7 @@
         v-if="application.module.ministere"
         name="ministereStructure"
         :label="beneficiaryFieldLabels.ministereStructure"
-        :options="withEmptyValue(ministereStructureOptions)"
+        :options="withEmptyValue(ministereStructureKeys.options)"
       />
     </div>
   </BeneficiaryFormSection>
@@ -172,10 +172,10 @@
   import {
     beneficiarySocioProfessionalCategoryKeys,
     incomeSourceKeys,
-    pensionOrganisationOptions,
-    ministereDepartmentServiceAcOptions,
-    ministereStructureOptions,
-    ministereCategorieOptions
+    pensionOrganisationKeys,
+    ministereDepartmentServiceAcKeys,
+    ministereStructureKeys,
+    ministereCategorieKeys
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 

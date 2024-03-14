@@ -10,15 +10,12 @@ import {
   BeneficiaryTitle,
   Gender,
   IncomeSource,
-  RelativeRelationship,
-  BeneficiaryPensionOrganisation
+  RelativeRelationship
 } from '@prisma/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 import { labelsToOptions } from '~/utils/options'
 
-export const pensionOrganisationLabels: {
-  [key in BeneficiaryPensionOrganisation]: string
-} = {
+export const pensionOrganisationKeys = buildKeys({
   AgircArrco: 'AGIRC ARRCO',
   Agr: 'AG2R',
   CnavCarsat: 'CNAV/CARSAT',
@@ -34,28 +31,21 @@ export const pensionOrganisationLabels: {
   ProBtp: 'ProBTP',
   RetraiteDesMines: 'Retraite des mines',
   Other: 'Autre(s)'
-}
-export const pensionOrganisationOptions = labelsToOptions(
-  pensionOrganisationLabels
-)
+})
 
-export const beneficiaryStatusLabels: { [key in BeneficiaryStatus]: string } = {
+export const beneficiaryStatusKeys = buildKeys({
   [BeneficiaryStatus.Active]: 'Actif',
   [BeneficiaryStatus.Inactive]: 'Inactif',
   [BeneficiaryStatus.Archived]: 'Archivé',
   [BeneficiaryStatus.Deceased]: 'Décédé·e'
-}
+})
 
-export const beneficiaryStatusDetailedLabels: {
-  [key in BeneficiaryStatus]: string
-} = {
+export const beneficiaryStatusDetailedKeys = buildKeys({
   [BeneficiaryStatus.Active]: 'Dossier actif',
   [BeneficiaryStatus.Inactive]: 'Dossier inactif',
   [BeneficiaryStatus.Archived]: 'Dossier archivé',
   [BeneficiaryStatus.Deceased]: 'Décédé·e'
-}
-
-export const beneficiaryStatusOptions = labelsToOptions(beneficiaryStatusLabels)
+})
 
 export const beneficiaryTitleKeys = buildKeys({
   [BeneficiaryTitle.Miss]: 'Mme.',
@@ -146,6 +136,20 @@ export const beneficiaryProtectionMeasureKeys = buildKeys({
     "Mesure d'accompagnement (Masp/Maj/MJAGBF)",
   [BeneficiaryProtectionMeasure.SauvegardeDeJustice]: 'Sauvegarde de justice',
   [BeneficiaryProtectionMeasure.Tutelle]: 'Tutelle'
+})
+
+export const familySituationKeys = buildKeys({
+  [BeneficiaryFamilySituation.Single]: 'Célibataire',
+  [BeneficiaryFamilySituation.Divorced]: 'Divorcé·e',
+  [BeneficiaryFamilySituation.Cohabitation]: 'En concubinage',
+  [BeneficiaryFamilySituation.CoupleWithChildren]: 'En couple avec enfant(s)',
+  [BeneficiaryFamilySituation.Married]: 'Marié·e',
+  [BeneficiaryFamilySituation.CivilUnion]: 'Pacsé·e',
+  [BeneficiaryFamilySituation.SingleParentWithChildren]:
+    'Parent isolé·e avec enfant(s)',
+  [BeneficiaryFamilySituation.Separated]: 'Séparé·e',
+  [BeneficiaryFamilySituation.Widow]: 'Veuf·ve',
+  [BeneficiaryFamilySituation.Other]: 'Autre'
 })
 
 export const beneficiaryOrientationTypeKeys = buildKeys({

@@ -21,7 +21,7 @@
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
   import {
-    beneficiaryStatusOptions,
+    beneficiaryStatusKeys,
     ageGroupOptions,
     yesNoOptions
   } from '~/client/options'
@@ -117,7 +117,10 @@
       {
         name: 'status',
         label: 'Statut',
-        options: withEmptyValue(beneficiaryStatusOptions, 'Tous les statuts'),
+        options: withEmptyValue(
+          beneficiaryStatusKeys.options,
+          'Tous les statuts'
+        ),
         type: FilterType.SelectOne,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,

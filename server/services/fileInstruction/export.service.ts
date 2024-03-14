@@ -15,7 +15,7 @@ import {
   socialSupportStatusLabels,
   fileInstructionRefusalReasonLabels,
   paymentMethodLabels,
-  ministerLabels
+  ministerKeys
 } from '~/client/options'
 
 export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
@@ -128,7 +128,7 @@ export async function exportFileInstructions({
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
           updated: formatDate(socialSupport.updated, 'DD-MM-YYYY HH:mm'),
           ministre: socialSupport.ministre
-            ? ministerLabels[socialSupport.ministre]
+            ? ministerKeys.byKey[socialSupport.ministre]
             : '',
           numeroPegase: socialSupport.numeroPegase || '',
           createdById: socialSupport.createdBy

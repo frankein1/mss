@@ -1,7 +1,7 @@
 import { StructureType } from '@prisma/client'
 import { getRowsFromData } from '../helper/getRowsFromData'
 import { createQuery } from '~/server/route'
-import { socialSupportStatusLabels, ministerLabels } from '~/client/options'
+import { socialSupportStatusLabels, ministerKeys } from '~/client/options'
 import { RowType } from '~/types/export'
 import {
   getHelpRequestCountQuery,
@@ -75,7 +75,7 @@ const handler = async ({
       user,
       input
     )
-    const helpRequestMinistreColumns = getColumnsFromLabels(ministerLabels)
+    const helpRequestMinistreColumns = getColumnsFromLabels(ministerKeys.byKey)
     const helpRequestMinistreRows = getRowsFromData(
       helpRequestMinistreData,
       'ministre',

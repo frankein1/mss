@@ -10,7 +10,7 @@
 <script setup lang="ts">
   import { BeneficiaryStatus } from '@prisma/client'
   import { beneficiaryStatusBadgeClasses } from '~/client/classes/beneficiary'
-  import { beneficiaryStatusDetailedLabels } from '~/client/options'
+  import { beneficiaryStatusDetailedKeys } from '~/client/options'
 
   const props = defineProps<{
     status: BeneficiaryStatus
@@ -18,7 +18,9 @@
 
   const badgeClass = computed(() => beneficiaryStatusBadgeClasses[props.status])
 
-  const label = computed(() => beneficiaryStatusDetailedLabels[props.status])
+  const label = computed(
+    () => beneficiaryStatusDetailedKeys.byKey[props.status]
+  )
 </script>
 
 <style lang="scss" scoped>

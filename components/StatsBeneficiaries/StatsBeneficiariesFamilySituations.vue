@@ -33,7 +33,7 @@
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
-  import { getStatLabel, familySituationLabels } from '~/client/options'
+  import { getStatLabel, familySituationKeys } from '~/client/options'
 
   const trpcClient = useTrpcClient()
 
@@ -52,7 +52,7 @@
     () =>
       familySituationsCounts.value?.map(({ _count, familySituation }) => ({
         key: familySituation || 'null',
-        label: getStatLabel(familySituationLabels, familySituation),
+        label: getStatLabel(familySituationKeys.byKey, familySituation),
         count: _count
       })) || []
   )

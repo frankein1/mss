@@ -3,7 +3,7 @@ import { prepareFilters, prepareSort } from './helper'
 import {
   followupMediumLabels,
   socialSupportStatusLabels,
-  ministerLabels,
+  ministerKeys,
   followupDurationLabels
 } from '~/client/options'
 import { ExportFollowupsInput } from '~/server/schema'
@@ -74,7 +74,9 @@ export async function exportFollowups({
           dueDate: formatDate(followup.dueDate, 'DD-MM-YYYY'),
           forwardedToJustice: getBooleanOrEmpty(followup.forwardedToJustice),
           helpRequested: getBooleanOrEmpty(followup.helpRequested),
-          ministre: followup.ministre ? ministerLabels[followup.ministre] : '',
+          ministre: followup.ministre
+            ? ministerKeys.byKey[followup.ministre]
+            : '',
           numeroPegase: followup.numeroPegase || '',
           place: followup.place || '',
           prescribingOrganizationId:
