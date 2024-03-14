@@ -7,6 +7,7 @@ import {
   searchBeneficiaryQuery,
   getBeneficiaryMinimalInfoQuery,
   deleteBeneficiaryMutation,
+  deleteBeneficiaryDraftMutation,
   createBeneficiaryMutation,
   updateGeneralInformationMutation,
   updateEntourageMutation,
@@ -52,6 +53,9 @@ export const beneficiaryRouter = router({
   delete: protectedProcedure
     .input(deleteBeneficiaryMutation.inputValidation)
     .mutation(deleteBeneficiaryMutation.execute),
+  deleteDraft: protectedProcedure
+    .input(deleteBeneficiaryDraftMutation.inputValidation)
+    .mutation(deleteBeneficiaryDraftMutation.execute),
   updateGeneralInformation: protectedProcedure
     .input(updateGeneralInformationMutation.inputValidation)
     .mutation(updateGeneralInformationMutation.execute),

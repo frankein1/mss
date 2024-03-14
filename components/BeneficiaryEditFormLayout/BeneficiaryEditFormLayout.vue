@@ -109,7 +109,6 @@
   const form = ref<HTMLFormElement | null>(null)
 
   const breadcrumbLinks = computed(() => {
-    console.log({ draft: props.draft })
     if (props.draft) {
       return Breadcrumb.AppBeneficiariesAdd()
     }
@@ -149,7 +148,7 @@
     onLeave: async () => {
       if (props.beneficiaryIdentification && props.draft) {
         const id = props.beneficiaryIdentification.id
-        await trpcClient.beneficiary.delete.mutate({ id })
+        await trpcClient.beneficiary.deleteDraft.mutate({ id })
       }
     }
   })
@@ -167,11 +166,10 @@
     ...relativeFieldLabels
   } as FieldLabels<Partial<T>>)
 
-  async function onCancel() {
+  function onCancel() {
     if (props.beneficiaryIdentification) {
       const id = props.beneficiaryIdentification.id
       if (props.draft) {
-        await trpcClient.beneficiary.delete.mutate({ id })
         navigateTo(RoutePath.AppBeneficiaries())
       } else if (props.beneficiaryIdentification) {
         navigateTo(
