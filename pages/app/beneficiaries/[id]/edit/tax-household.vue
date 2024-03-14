@@ -1,9 +1,11 @@
 <template>
   <BeneficiaryEditFormLayout
-    :schema="saveBeneficiaryTaxHouseholdSchema"
+    :draft="draft"
+    :beneficiary-identification="beneficiaryIdentification"
+    :binded-values="bindedValues"
+    :schema="updateBeneficiaryTaxHouseholdSchema"
     :permissions="permissions"
     :is-submitting="isSubmitting"
-    :beneficiary="beneficiary"
     :current-route="Route.AppBeneficiaryEditTaxHousehold"
     @save="onSaveBeneficiary"
   >
@@ -18,7 +20,7 @@
       class="fr-mx-auto"
     />
     <div
-      v-else-if="beneficiary"
+      v-else-if="bindedValues"
       class="fr-p-3v"
     >
       <BeneficiaryFormFamilySituation />
@@ -29,10 +31,9 @@
 
 <script lang="ts" setup>
   import {
-    saveBeneficiaryTaxHouseholdSchema,
-    SaveBeneficiaryTaxHouseholdInput
+    updateBeneficiaryTaxHouseholdSchema,
+    UpdateBeneficiaryTaxHouseholdInput
   } from '~/server/schema'
-  import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
 
@@ -50,41 +51,69 @@
 
   const permissions = computed(() => data.value?.permissions)
 
-  const beneficiary = computed(() => {
+  const bindedValues = computed(() => {
     if (!data.value) {
       return null
     }
 
     const {
-      beneficiary: { id, structureId, referents, general, taxHouseholds }
+      beneficiary: { id, structureId, taxHouseholds }
     } = data.value
 
-    // Names and id are required for building the breadcrumb in the layout
+    const members = taxHouseholds?.taxHouseholds || []
+
     return {
       id,
       structureId,
-      referents,
-      firstName: general.firstName,
-      usualName: general.usualName,
-      birthName: general.birthName,
-      ...taxHouseholds
-    } as SaveBeneficiaryTaxHouseholdInput & MinimalBeneficiaryForFormLayout
+      familySituation: taxHouseholds?.familySituation || null,
+      minorChildren: taxHouseholds?.minorChildren || null,
+      majorChildren: taxHouseholds?.majorChildren || null,
+      caregiver: taxHouseholds?.caregiver || false,
+      taxHouseholds: members
+    }
   })
 
+  const draft = computed(() => {
+    if (!data.value) {
+      return true
+    }
+
+    return data.value.beneficiary.draft
+  })
+
+  const beneficiaryIdentification = computed(() =>
+    data.value
+      ? {
+          id: data.value.beneficiary.id,
+          firstName: data.value.beneficiary.general.firstName,
+          birthName: data.value.beneficiary.general.birthName,
+          usualName: data.value.beneficiary.general.usualName,
+          birthDate: data.value.beneficiary.general.birthDate
+        }
+      : null
+  )
+
   function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryTaxHouseholdInput,
-    target: string | undefined
+    beneficiary: UpdateBeneficiaryTaxHouseholdInput,
+    target: string | undefined,
+    validate: boolean
   ) {
     if (!data.value) {
       return
     }
+    const router = trpcClient.beneficiary
+    const validateBeneficiary = router.validate.useMutation()
+    const updateBeneficiary = router.updateTaxHousehold.useMutation()
 
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.beneficiary.updateTaxHousehold.mutate({
-          id: beneficiaryId,
-          ...beneficiary
-        }),
+      mutation: () => {
+        const mutations = []
+        if (validate && draft.value) {
+          mutations.push(validateBeneficiary.mutate({ id: beneficiaryId }))
+        }
+        mutations.push(updateBeneficiary.mutate(beneficiary))
+        return Promise.all(mutations)
+      },
       isSubmitting,
       onSuccess: () => {
         navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))

@@ -1,7 +1,6 @@
 export * from './createRoute'
 export * from './beneficiary'
 export * from './admin'
-export * from './beneficiaryDraft'
 export * from './comment'
 export * from './config'
 export * from './document'

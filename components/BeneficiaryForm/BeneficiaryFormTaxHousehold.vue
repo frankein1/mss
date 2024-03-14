@@ -105,7 +105,7 @@
 <script lang="ts" setup>
   import { taxHouseHoldRelationshipOptions } from '~/client/options'
   import { CreateOrUpdateTaxHouseholdInput } from '~/server/schema'
-  import { BeneficiarySearchResult } from '~/types/beneficiary'
+  import { BeneficiaryIdentification } from '~/types/beneficiary'
   import { relativeFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
@@ -115,7 +115,7 @@
 
   const emit = defineEmits<{
     removeTaxHousehold: []
-    selectBeneficiary: [data: BeneficiarySearchResult | null]
+    selectBeneficiary: [data: BeneficiaryIdentification | null]
   }>()
 
   const { value: linkedBeneficiary } = useField<
@@ -130,8 +130,8 @@
    * list from the last search, the form has to remember last results from both
    * autocomplete inputs in case the user selects one after focusing it back.
    */
-  const lastResultsFromLastname = ref<BeneficiarySearchResult[]>([])
-  const lastResultsFromFirstname = ref<BeneficiarySearchResult[]>([])
+  const lastResultsFromLastname = ref<BeneficiaryIdentification[]>([])
+  const lastResultsFromFirstname = ref<BeneficiaryIdentification[]>([])
 
   const lastResults = computed(() => [
     ...lastResultsFromFirstname.value,
@@ -168,7 +168,7 @@
   }
 
   function beneficiariesToAutocompleteResults(
-    beneficiaries: BeneficiarySearchResult[]
+    beneficiaries: BeneficiaryIdentification[]
   ) {
     const entries: [string, string][] = beneficiaries.map(beneficiary => [
       beneficiary.id,

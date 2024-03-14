@@ -71,21 +71,17 @@
 </template>
 
 <script setup lang="ts">
-  import {
-    RouteTitle,
-    AppBeneficiaryEditRoute,
-    AppBeneficiariesSaveRoute
-  } from '~/utils/routing'
+  import { RouteTitle, AppBeneficiaryEditRoute } from '~/utils/routing'
 
   const SCROLL_DEFER_DURATION = 400
 
   const props = defineProps<{
     menus: Array<{
-      route: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
+      route: AppBeneficiaryEditRoute
       path: string
       targets?: { hash: string; title: string }[]
     }>
-    currentRoute: AppBeneficiaryEditRoute | AppBeneficiariesSaveRoute
+    currentRoute: AppBeneficiaryEditRoute
     beneficiaryFormLayoutMainContainer: HTMLElement | null
   }>()
 

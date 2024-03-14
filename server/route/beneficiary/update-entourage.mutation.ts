@@ -3,7 +3,6 @@ import { createMutation } from '~/server/route'
 import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
-  UpdateBeneficiaryDraftInput,
   UpdateBeneficiaryEntourageInput,
   updateBeneficiaryEntourageSchema
 } from '~/server/schema'
@@ -15,7 +14,7 @@ function getBeneficiarySecurityTargetWithEntourage(
   user: SecurityRuleGrantee,
   id: string
 ) {
-  return BeneficiaryRepo.findUniqueOrThrow(user, {
+  return BeneficiaryRepo.findWithNoDraftCondition(user, {
     where: { id },
     select: {
       id: true,
@@ -32,7 +31,7 @@ function getBeneficiarySecurityTargetWithEntourage(
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
-  input: UpdateBeneficiaryDraftInput
+  input: UpdateBeneficiaryEntourageInput
 ) => {
   const permissions = await BeneficiaryService.getEditionPermissions(
     ctx,

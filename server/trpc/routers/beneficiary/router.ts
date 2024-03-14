@@ -7,16 +7,17 @@ import {
   searchBeneficiaryQuery,
   getBeneficiaryMinimalInfoQuery,
   deleteBeneficiaryMutation,
+  deleteBeneficiaryDraftMutation,
   createBeneficiaryMutation,
   updateGeneralInformationMutation,
   updateEntourageMutation,
   updateHealthMutation,
   updateOccupationIncomeMutation,
   updateExternalOrganisationsMutation,
-  saveDraftMutation,
   updateTaxHouseholdMutation,
   getBeneficiaryTaxHouseholdsQuery,
-  getSimilarBeneficiaryQuery
+  getSimilarBeneficiaryQuery,
+  validateBeneficiaryMutation
 } from '~/server/route/beneficiary'
 import { protectedProcedure, router } from '~/server/trpc'
 
@@ -52,6 +53,9 @@ export const beneficiaryRouter = router({
   delete: protectedProcedure
     .input(deleteBeneficiaryMutation.inputValidation)
     .mutation(deleteBeneficiaryMutation.execute),
+  deleteDraft: protectedProcedure
+    .input(deleteBeneficiaryDraftMutation.inputValidation)
+    .mutation(deleteBeneficiaryDraftMutation.execute),
   updateGeneralInformation: protectedProcedure
     .input(updateGeneralInformationMutation.inputValidation)
     .mutation(updateGeneralInformationMutation.execute),
@@ -73,7 +77,7 @@ export const beneficiaryRouter = router({
   create: protectedProcedure
     .input(createBeneficiaryMutation.inputValidation)
     .mutation(createBeneficiaryMutation.execute),
-  saveDraft: protectedProcedure
-    .input(saveDraftMutation.inputValidation)
-    .mutation(saveDraftMutation.execute)
+  validate: protectedProcedure
+    .input(validateBeneficiaryMutation.inputValidation)
+    .mutation(validateBeneficiaryMutation.execute)
 })

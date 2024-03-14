@@ -1,23 +1,10 @@
 import type {
   Beneficiary,
   BeneficiaryRelative,
-  Draft,
   User,
   UserStatus
 } from '@prisma/client'
 import { SocialSupportSubjectIdAndName } from './socialSupportSubject'
-import {
-  SaveBeneficiaryEntourageInput,
-  SaveBeneficiaryExternalOrganisationsInput,
-  SaveBeneficiaryGeneralInformationInput,
-  SaveBeneficiaryHealthInput,
-  SaveBeneficiaryOccupationInput,
-  SaveBeneficiaryTaxHouseholdInput
-} from '~/server/schema'
-import {
-  SecurityTargetWithReferents,
-  SecurityTargetWithStructure
-} from '~/server/security'
 
 export type BeneficiaryReferent = {
   id: string
@@ -25,29 +12,14 @@ export type BeneficiaryReferent = {
   status: UserStatus
 }
 
-export type BeneficiarySearchResult = Pick<
-  Beneficiary,
-  'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
->
-
 export type BeneficiaryNames = Partial<
   Pick<Beneficiary, 'firstName' | 'usualName' | 'birthName'>
 >
 
-export type BeneficiaryDraft = Draft & {
-  content?: {
-    general?: SaveBeneficiaryGeneralInformationInput
-    taxHousehold?: SaveBeneficiaryTaxHouseholdInput
-    entourage?: SaveBeneficiaryEntourageInput
-    health?: SaveBeneficiaryHealthInput
-    occupation?: SaveBeneficiaryOccupationInput
-    externalOrganisations?: SaveBeneficiaryExternalOrganisationsInput
-  } | null
-}
-
-export type MinimalBeneficiaryForFormLayout = BeneficiaryNames &
-  SecurityTargetWithReferents &
-  SecurityTargetWithStructure & { id: string }
+export type BeneficiaryIdentification = Pick<
+  Beneficiary,
+  'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
+>
 
 export type GetBeneficiaryHealth = Pick<
   Beneficiary,
@@ -159,6 +131,16 @@ export type GetBeneficiaryTaxHousehold = Pick<
   taxHouseholds?: GetBeneficiaryRelative[]
 }
 
+export type BeneficiaryFileInformation = Pick<
+  Beneficiary,
+  'status' | 'aidantConnectAuthorized' | 'vulnerablePerson'
+> & {
+  referents: Pick<
+    User,
+    'id' | 'firstName' | 'lastName' | 'email' | 'role' | 'status'
+  >[]
+}
+
 export type GetBeneficiaryOutput = Pick<
   Beneficiary,
   | 'id'
@@ -170,22 +152,16 @@ export type GetBeneficiaryOutput = Pick<
   | 'updated'
   | 'status'
   | 'archivedById'
-  | 'aidantConnectAuthorized'
-  | 'vulnerablePerson'
-> & {
-  referents: Pick<
-    User,
-    'id' | 'firstName' | 'lastName' | 'email' | 'role' | 'status'
-  >[]
-} & {
-  general: GetBeneficiaryGeneral
-  health: GetBeneficiaryHealth | undefined
-  externalOrganisations: GetBeneficiaryExternalOrganisations | undefined
-  occupationIncome: GetBeneficiaryOccupationIncome | undefined
-  entourages: GetBeneficiaryRelative[] | undefined
-  taxHouseholds: GetBeneficiaryTaxHousehold | undefined
-  history: {
-    historyTotal: number
-    subjects: SocialSupportSubjectIdAndName[]
+> &
+  BeneficiaryFileInformation & {
+    general: GetBeneficiaryGeneral
+    health: GetBeneficiaryHealth | undefined
+    externalOrganisations: GetBeneficiaryExternalOrganisations | undefined
+    occupationIncome: GetBeneficiaryOccupationIncome | undefined
+    entourages: GetBeneficiaryRelative[] | undefined
+    taxHouseholds: GetBeneficiaryTaxHousehold | undefined
+    history: {
+      historyTotal: number
+      subjects: SocialSupportSubjectIdAndName[]
+    }
   }
-}

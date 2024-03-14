@@ -64,7 +64,7 @@ export const include = {
 }
 
 function findOne(user: SecurityRuleGrantee, id: string) {
-  return BeneficiaryRepo.findUniqueOrThrow(user, {
+  return BeneficiaryRepo.findWithNoDraftCondition(user, {
     where: {
       id
     },
@@ -141,6 +141,7 @@ const filter = (
     id: beneficiary.id,
     fileNumber: beneficiary.fileNumber,
     status: beneficiary.status,
+    draft: beneficiary.draft,
     referents: beneficiary.referents,
     structureId: beneficiary.structureId,
     additionalInformation: beneficiary.additionalInformation,

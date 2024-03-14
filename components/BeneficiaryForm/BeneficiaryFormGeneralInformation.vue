@@ -2,7 +2,7 @@
   <div class="fr-p-3v">
     <BeneficiaryFormFileInformation
       :agents="agents"
-      :beneficiary="beneficiary"
+      :beneficiary-referent-ids="beneficiaryReferentIds"
       :permissions="permissions"
       full
     />
@@ -26,14 +26,13 @@
 </template>
 
 <script setup lang="ts">
-  import { SaveBeneficiaryGeneralInformationInput } from '~/server/schema'
   import { BeneficiaryReferent } from '~/types/beneficiary'
   import { BeneficiaryPermissions } from '~/server/security'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   withDefaults(
     defineProps<{
-      beneficiary?: SaveBeneficiaryGeneralInformationInput
+      beneficiaryReferentIds: String[]
       agents: BeneficiaryReferent[]
       permissions: BeneficiaryPermissions
       similarBeneficiary?: SimilarBeneficiary

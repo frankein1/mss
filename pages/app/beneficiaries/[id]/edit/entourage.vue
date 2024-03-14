@@ -1,8 +1,10 @@
 <template>
   <BeneficiaryEditFormLayout
-    :schema="saveBeneficiaryEntourageSchema"
+    :draft="draft"
+    :beneficiary-identification="beneficiaryIdentification"
+    :binded-values="bindedValues"
+    :schema="updateBeneficiaryEntourageSchema"
     :is-submitting="isSubmitting"
-    :beneficiary="beneficiary"
     :permissions="permissions"
     :current-route="Route.AppBeneficiaryEditEntourage"
     @save="onSaveBeneficiary"
@@ -18,7 +20,7 @@
       class="fr-mx-auto"
     />
     <div
-      v-else-if="beneficiary"
+      v-else-if="bindedValues"
       class="fr-p-3v"
     >
       <BeneficiaryFormEntourages />
@@ -28,12 +30,11 @@
 
 <script lang="ts" setup>
   import {
-    saveBeneficiaryEntourageSchema,
-    SaveBeneficiaryEntourageInput
+    updateBeneficiaryEntourageSchema,
+    UpdateBeneficiaryEntourageInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
-  import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
 
   const trpcClient = useTrpcClient()
 
@@ -49,41 +50,63 @@
 
   const permissions = computed(() => data.value?.permissions)
 
-  const beneficiary = computed(() => {
+  const bindedValues = computed(() => {
     if (!data.value) {
       return null
     }
 
     const {
-      beneficiary: { id, structureId, referents, general, entourages }
+      beneficiary: { id, structureId, entourages }
     } = data.value
 
-    // Names and id are required for building the breadcrumb in the layout
     return {
       id,
       structureId,
-      referents,
-      firstName: general.firstName,
-      usualName: general.usualName,
-      birthName: general.birthName,
       entourages
-    } as SaveBeneficiaryEntourageInput & MinimalBeneficiaryForFormLayout
+    }
+  })
+  const draft = computed(() => {
+    if (!data.value) {
+      return true
+    }
+
+    return data.value.beneficiary.draft
   })
 
+  const beneficiaryIdentification = computed(() =>
+    data.value
+      ? {
+          id: data.value.beneficiary.id,
+          firstName: data.value.beneficiary.general.firstName,
+          birthName: data.value.beneficiary.general.birthName,
+          usualName: data.value.beneficiary.general.usualName,
+          birthDate: data.value.beneficiary.general.birthDate
+        }
+      : null
+  )
+
   function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryEntourageInput,
-    target: string | undefined
+    beneficiary: UpdateBeneficiaryEntourageInput,
+    target: string | undefined,
+    validate: boolean
   ) {
     if (!data.value) {
       return
     }
 
+    const router = trpcClient.beneficiary
+    const validateBeneficiary = router.validate.useMutation()
+    const updateBeneficiary = router.updateEntourage.useMutation()
+
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.beneficiary.updateEntourage.mutate({
-          id: beneficiaryId,
-          ...beneficiary
-        }),
+      mutation: () => {
+        const mutations = []
+        if (validate && draft.value) {
+          mutations.push(validateBeneficiary.mutate({ id: beneficiaryId }))
+        }
+        mutations.push(updateBeneficiary.mutate(beneficiary))
+        return Promise.all(mutations)
+      },
       isSubmitting,
       onSuccess: () => {
         navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))

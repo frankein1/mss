@@ -1,9 +1,11 @@
 <template>
   <BeneficiaryEditFormLayout
-    :schema="saveBeneficiaryOccupationSchema"
+    :draft="draft"
+    :beneficiary-identification="beneficiaryIdentification"
+    :schema="updateBeneficiaryOccupationSchema"
+    :binded-values="bindedValues"
     :permissions="permissions"
     :is-submitting="isSubmitting"
-    :beneficiary="beneficiary"
     :current-route="Route.AppBeneficiaryEditOccupation"
     @save="onSaveBeneficiary"
   >
@@ -18,7 +20,7 @@
       class="fr-mx-auto"
     />
     <div
-      v-else-if="beneficiary && permissions"
+      v-else-if="bindedValues && permissions"
       class="fr-p-3v"
     >
       <BeneficiaryFormOccupationIncome
@@ -33,13 +35,12 @@
 
 <script lang="ts" setup>
   import {
-    saveBeneficiaryOccupationSchema,
-    SaveBeneficiaryOccupationInput
+    updateBeneficiaryOccupationSchema,
+    UpdateBeneficiaryOccupationInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, Route } from '~/utils/routing'
-  import type { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { RoutePath, Route } from '~/utils/routing'
 
   definePageMeta({
     name: Route.AppBeneficiaryEditOccupation
@@ -59,34 +60,18 @@
 
   const permissions = computed(() => data.value?.permissions)
 
-  const familySituation = computed(
-    () => data.value?.beneficiary.taxHouseholds?.familySituation
-  )
-  const majorChildren = computed(
-    () => data.value?.beneficiary.taxHouseholds?.majorChildren
-  )
-
-  const taxHouseholdMembers = computed(
-    () => data.value?.beneficiary.taxHouseholds?.taxHouseholds || []
-  )
-
-  const beneficiary = computed(() => {
+  const bindedValues = computed(() => {
     if (!data.value) {
       return null
     }
 
     const {
-      beneficiary: { id, structureId, referents, general, occupationIncome }
+      beneficiary: { id, structureId, occupationIncome }
     } = data.value
 
-    // Names and id are required for building the breadcrumb in the layout
     return {
       id,
       structureId,
-      referents,
-      firstName: general.firstName,
-      usualName: general.usualName,
-      birthName: general.birthName,
       ...occupationIncome,
       mainIncomeSource: occupationIncome?.mainIncomeSource || [],
       mainIncomeAmount: prismaDecimalToNumber(
@@ -107,23 +92,61 @@
         occupationIncome?.otherMembersMainIncomeAmount
       ),
       pensionOrganisations: occupationIncome?.pensionOrganisations || []
-    } as SaveBeneficiaryOccupationInput & MinimalBeneficiaryForFormLayout
+    }
+  })
+  const draft = computed(() => {
+    if (!data.value) {
+      return true
+    }
+
+    return data.value.beneficiary.draft
   })
 
+  const beneficiaryIdentification = computed(() =>
+    data.value
+      ? {
+          id: data.value.beneficiary.id,
+          firstName: data.value.beneficiary.general.firstName,
+          birthName: data.value.beneficiary.general.birthName,
+          usualName: data.value.beneficiary.general.usualName,
+          birthDate: data.value.beneficiary.general.birthDate
+        }
+      : null
+  )
+
+  const familySituation = computed(
+    () => data.value?.beneficiary.taxHouseholds?.familySituation
+  )
+  const majorChildren = computed(
+    () => data.value?.beneficiary.taxHouseholds?.majorChildren
+  )
+
+  const taxHouseholdMembers = computed(
+    () => data.value?.beneficiary.taxHouseholds?.taxHouseholds || []
+  )
+
   function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryOccupationInput,
-    target: string | undefined
+    beneficiary: UpdateBeneficiaryOccupationInput,
+    target: string | undefined,
+    validate: boolean
   ) {
     if (!data.value) {
       return
     }
 
+    const router = trpcClient.beneficiary
+    const validateBeneficiary = router.validate.useMutation()
+    const updateBeneficiary = router.updateOccupationIncome.useMutation()
+
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.beneficiary.updateOccupationIncome.mutate({
-          id: beneficiaryId,
-          ...beneficiary
-        }),
+      mutation: () => {
+        const mutations = []
+        if (validate && draft.value) {
+          mutations.push(validateBeneficiary.mutate({ id: beneficiaryId }))
+        }
+        mutations.push(updateBeneficiary.mutate(beneficiary))
+        return Promise.all(mutations)
+      },
       isSubmitting,
       onSuccess: () => {
         navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))

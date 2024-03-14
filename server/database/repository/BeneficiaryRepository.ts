@@ -22,6 +22,16 @@ function findUniqueOrThrow<T extends Prisma.BeneficiaryFindUniqueOrThrowArgs>(
   return prismaClient.beneficiary.findUniqueOrThrow(params)
 }
 
+function findWithNoDraftCondition<
+  T extends Prisma.BeneficiaryFindUniqueOrThrowArgs
+>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<T, Prisma.BeneficiaryFindUniqueOrThrowArgs>
+) {
+  appendConstraints(user, params, BeneficiaryConstraints.getNoDraftCondition)
+  return prismaClient.beneficiary.findUniqueOrThrow(params)
+}
+
 function count(user: SecurityRuleGrantee, params: Prisma.BeneficiaryCountArgs) {
   appendConstraints(user, params, BeneficiaryConstraints.get)
 
@@ -31,6 +41,7 @@ function count(user: SecurityRuleGrantee, params: Prisma.BeneficiaryCountArgs) {
 export const BeneficiaryRepo = {
   findMany,
   findUniqueOrThrow,
+  findWithNoDraftCondition,
   count,
   prisma: {
     groupBy: prismaClient.beneficiary.groupBy,

@@ -1,9 +1,11 @@
 <template>
   <BeneficiaryEditFormLayout
-    :schema="saveBeneficiaryGeneralInformationSchema"
+    :draft="draft"
+    :beneficiary-identification="beneficiaryIdentification"
+    :schema="updateBeneficiaryGeneralInformationSchema"
+    :binded-values="bindedValues"
     :permissions="permissions"
     :is-submitting="isSubmitting"
-    :beneficiary="beneficiary"
     title-icon="fr-icon-user-line"
     :current-route="Route.AppBeneficiaryEditInfo"
     @save="onSaveBeneficiary"
@@ -19,9 +21,9 @@
       class="fr-mx-auto"
     />
     <BeneficiaryFormGeneralInformation
-      v-else-if="beneficiary && permissions && agents?.length"
+      v-else-if="bindedValues && permissions && agents?.length"
       :permissions="permissions"
-      :beneficiary="beneficiary"
+      :beneficiary-referent-ids="beneficiaryReferentIds"
       :agents="agents"
     />
   </BeneficiaryEditFormLayout>
@@ -29,10 +31,9 @@
 
 <script lang="ts" setup>
   import {
-    SaveBeneficiaryGeneralInformationInput,
-    saveBeneficiaryGeneralInformationSchema
+    UpdateBeneficiaryGeneralInformationInput,
+    updateBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
-  import { MinimalBeneficiaryForFormLayout } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath, Route } from '~/utils/routing'
 
@@ -63,17 +64,11 @@
 
   const permissions = computed(() => data.value?.permissions)
 
-  const fetchError = computed(() => {
-    if (beneficiaryError.value) {
-      return "Les informations du bénéficiaires n'ont pas pu être chargées."
-    }
-    if (agentsError.value) {
-      return "La liste des agents référents n'a pas pu être chargée."
-    }
-    return ''
-  })
+  const beneficiaryReferentIds = computed(() =>
+    data.value ? data.value.beneficiary.referents.map(r => r.id) : []
+  )
 
-  const beneficiary = computed(() => {
+  const bindedValues = computed(() => {
     if (!data.value) {
       return null
     }
@@ -90,7 +85,6 @@
       }
     } = data.value
 
-    // Id is required for building the breadcrumb in the layout
     return {
       id,
       structureId,
@@ -101,27 +95,60 @@
       ...general,
       birthDate: general.birthDate ? new Date(general.birthDate) : undefined,
       deathDate: general.deathDate ? new Date(general.deathDate) : undefined
-    } as SaveBeneficiaryGeneralInformationInput &
-      MinimalBeneficiaryForFormLayout
+    }
+  })
+  const draft = computed(() => {
+    if (!data.value) {
+      return true
+    }
+
+    return data.value.beneficiary.draft
+  })
+
+  const beneficiaryIdentification = computed(() =>
+    data.value
+      ? {
+          id: data.value.beneficiary.id,
+          firstName: data.value.beneficiary.general.firstName,
+          birthName: data.value.beneficiary.general.birthName,
+          usualName: data.value.beneficiary.general.usualName,
+          birthDate: data.value.beneficiary.general.birthDate
+        }
+      : null
+  )
+
+  const fetchError = computed(() => {
+    if (beneficiaryError.value) {
+      return "Les informations du bénéficiaires n'ont pas pu être chargées."
+    }
+    if (agentsError.value) {
+      return "La liste des agents référents n'a pas pu être chargée."
+    }
+    return ''
   })
 
   function onSaveBeneficiary(
-    beneficiary: SaveBeneficiaryGeneralInformationInput,
-    target: string | undefined
+    beneficiary: UpdateBeneficiaryGeneralInformationInput,
+    target: string | undefined,
+    validate: boolean
   ) {
     if (!data.value) {
       return
     }
 
-    const { structureId } = data.value.beneficiary
+    const router = trpcClient.beneficiary
+    const validateBeneficiary = router.validate.useMutation()
+    const updateBeneficiary = router.updateGeneralInformation.useMutation()
 
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.beneficiary.updateGeneralInformation.mutate({
-          id: beneficiaryId,
-          structureId,
-          ...beneficiary
-        }),
+      mutation: () => {
+        const mutations = []
+        if (validate && draft.value) {
+          mutations.push(validateBeneficiary.mutate({ id: beneficiaryId }))
+        }
+        mutations.push(updateBeneficiary.mutate(beneficiary))
+        return Promise.all(mutations)
+      },
       isSubmitting,
       onSuccess: () => {
         navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))

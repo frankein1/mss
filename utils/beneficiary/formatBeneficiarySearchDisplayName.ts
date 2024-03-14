@@ -1,8 +1,8 @@
 import { formatBeneficiaryDisplayName } from './formatBeneficiaryDisplayName'
-import { BeneficiarySearchResult } from '~/types/beneficiary'
+import { BeneficiaryIdentification } from '~/types/beneficiary'
 
 export function formatBeneficiarySearchDisplayName(
-  beneficiary: BeneficiarySearchResult
+  beneficiary: BeneficiaryIdentification
 ): string {
   const name = formatBeneficiaryDisplayName(beneficiary)
   const birthDate = beneficiary.birthDate
