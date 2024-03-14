@@ -4,7 +4,7 @@
       <VeeSelect
         name="gir"
         :label="beneficiaryFieldLabels.gir"
-        :options="withEmptyValue(beneficiaryGirOptions)"
+        :options="withEmptyValue(beneficiaryGirKeys.options)"
       />
     </div>
     <div class="fr-col-12">
@@ -43,7 +43,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { beneficiaryGirOptions } from '~/client/options'
+  import { beneficiaryGirKeys } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
   import { BeneficiaryPermissions } from '~/server/security'
 

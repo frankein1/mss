@@ -4,7 +4,7 @@
       <VeeSelect
         name="mobility"
         :label="beneficiaryFieldLabels.mobility"
-        :options="withEmptyValue(beneficiaryMobilityOptions)"
+        :options="withEmptyValue(beneficiaryMobilityKeys.options)"
       />
     </div>
   </BeneficiaryFormSection>
@@ -12,5 +12,5 @@
 
 <script setup lang="ts">
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { beneficiaryMobilityOptions } from '~/client/options'
+  import { beneficiaryMobilityKeys } from '~/client/options'
 </script>

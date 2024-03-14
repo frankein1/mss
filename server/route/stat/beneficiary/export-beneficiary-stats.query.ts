@@ -2,11 +2,11 @@ import { StructureType } from '@prisma/client'
 import { getRowsFromData } from '../helper/getRowsFromData'
 import { createQuery } from '~/server/route'
 import {
-  beneficiaryAccommodationModeLabels,
-  beneficiaryAccommodationZoneLabels,
-  beneficiaryGenderLabels,
-  beneficiaryMobilityLabels,
-  beneficiarySocioProfessionalCategoryLabels,
+  beneficiaryAccommodationModeKeys,
+  beneficiaryAccommodationZoneKeys,
+  beneficiaryGenderKeys,
+  beneficiaryMobilityKeys,
+  beneficiarySocioProfessionalCategoryKeys,
   familySituationLabels,
   ageGroupLabels,
   STATS_NULL_LABEL,
@@ -54,7 +54,7 @@ const handler = async ({
   const beneficiaryCount = await getBeneficiaryCountQuery(user, input)
 
   const genderData = await getGenderStatsQuery(user, input)
-  const genderColumns = getColumnsFromLabels(beneficiaryGenderLabels)
+  const genderColumns = getColumnsFromLabels(beneficiaryGenderKeys.byKey)
   const genderRows = getRowsFromData(genderData, 'gender', beneficiaryCount)
   exportData.push({
     name: 'Genres',
@@ -113,7 +113,7 @@ const handler = async ({
     input
   )
   const accommodationZoneColumns = getColumnsFromLabels(
-    beneficiaryAccommodationZoneLabels
+    beneficiaryAccommodationZoneKeys.byKey
   )
   const accommodationZoneRows = getRowsFromData(
     accommodationZoneData,
@@ -131,7 +131,7 @@ const handler = async ({
     input
   )
   const accommodationModeColumns = getColumnsFromLabels(
-    beneficiaryAccommodationModeLabels
+    beneficiaryAccommodationModeKeys.byKey
   )
   const accommodationModeRows = getRowsFromData(
     accommodationModeData,
@@ -145,7 +145,7 @@ const handler = async ({
   })
 
   const mobilityData = await getMobilityStatsQuery(user, input)
-  const mobilityColumns = getColumnsFromLabels(beneficiaryMobilityLabels)
+  const mobilityColumns = getColumnsFromLabels(beneficiaryMobilityKeys.byKey)
   const mobilityRows = getRowsFromData(
     mobilityData,
     'mobility',
@@ -159,7 +159,7 @@ const handler = async ({
 
   const CSPData = await getCSPStatsQuery(user, input)
   const CSPColumns = getColumnsFromLabels(
-    beneficiarySocioProfessionalCategoryLabels
+    beneficiarySocioProfessionalCategoryKeys.byKey
   )
   const CSPRows = getRowsFromData(
     CSPData,

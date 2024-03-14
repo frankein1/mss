@@ -5,7 +5,7 @@
         class="fr-mb-0"
         name="title"
         :label="beneficiaryFieldLabels.title"
-        :options="beneficiaryTitleOptions"
+        :options="beneficiaryTitleKeys.options"
       />
     </div>
     <div class="fr-col-12">
@@ -61,14 +61,14 @@
       <VeeSelect
         name="gender"
         :label="beneficiaryFieldLabels.gender"
-        :options="withEmptyValue(beneficiaryGenderOptions)"
+        :options="withEmptyValue(beneficiaryGenderKeys.options)"
       />
     </div>
     <div class="fr-col-12">
       <VeeSelect
         name="nationality"
         :label="beneficiaryFieldLabels.nationality"
-        :options="withEmptyValue(nationalityOptions)"
+        :options="withEmptyValue(nationalityKeys.options)"
       />
     </div>
     <div
@@ -88,9 +88,9 @@
   import { BeneficiaryStatus } from '@prisma/client'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
-    beneficiaryGenderOptions,
-    beneficiaryTitleOptions,
-    nationalityOptions
+    beneficiaryGenderKeys,
+    beneficiaryTitleKeys,
+    nationalityKeys
   } from '~/client/options'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
 

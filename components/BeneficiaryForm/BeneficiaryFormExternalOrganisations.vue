@@ -4,7 +4,7 @@
       <VeeSelect
         name="protectionMeasure"
         :label="beneficiaryFieldLabels.protectionMeasure"
-        :options="withEmptyValue(beneficiaryProtectionMeasureOptions)"
+        :options="withEmptyValue(beneficiaryProtectionMeasureKeys.options)"
       />
     </div>
     <div class="fr-col-12">
@@ -23,7 +23,7 @@
       <VeeSelect
         name="orientationType"
         :label="beneficiaryFieldLabels.orientationType"
-        :options="withEmptyValue(beneficiaryOrientationTypeOptions)"
+        :options="withEmptyValue(beneficiaryOrientationTypeKeys.options)"
       />
     </div>
     <div class="fr-col-12">
@@ -50,8 +50,8 @@
 
 <script setup lang="ts">
   import {
-    beneficiaryOrientationTypeOptions,
-    beneficiaryProtectionMeasureOptions
+    beneficiaryOrientationTypeKeys,
+    beneficiaryProtectionMeasureKeys
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 </script>

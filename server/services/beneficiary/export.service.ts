@@ -15,20 +15,20 @@ import {
   GetBeneficiaryRelative
 } from '~/types/beneficiary'
 import {
-  beneficiaryAccommodationModeLabels,
-  beneficiaryAccommodationZoneLabels,
-  beneficiaryGenderLabels,
-  beneficiaryMobilityLabels,
-  beneficiarySocioProfessionalCategoryLabels,
+  beneficiaryAccommodationModeKeys,
+  beneficiaryAccommodationZoneKeys,
+  beneficiaryGenderKeys,
+  beneficiaryMobilityKeys,
+  beneficiarySocioProfessionalCategoryKeys,
   beneficiaryStatusLabels,
-  incomeSourceLabels,
+  incomeSourceKeys,
   pensionOrganisationLabels,
   relativeRelationshipLabels,
   ministereCategorieLabels,
   ministereDepartmentServiceAcLabels,
   ministereStructureLabels,
   familySituationLabels,
-  Nationalities
+  nationalityKeys
 } from '~/client/options'
 import { readableFileNumber } from '~/utils/readableFileNumber'
 import { nameOrEmpty } from '~/utils/nameOrEmpty'
@@ -140,10 +140,12 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
     firstName: general.firstName || '',
     birthDate: formatDate(general.birthDate, 'DD-MM-YYYY'),
     deathDate: formatDate(general.deathDate, 'DD-MM-YYYY'),
-    gender: general.gender ? beneficiaryGenderLabels[general.gender] : '',
-    nationality: general.nationality ? Nationalities[general.nationality] : '',
+    gender: general.gender ? beneficiaryGenderKeys.byKey[general.gender] : '',
+    nationality: general.nationality
+      ? nationalityKeys.byKey[general.nationality]
+      : '',
     accommodationMode: general.accommodationMode
-      ? beneficiaryAccommodationModeLabels[general.accommodationMode]
+      ? beneficiaryAccommodationModeKeys.byKey[general.accommodationMode]
       : '',
     accommodationName: general.accommodationName || '',
     accommodationAdditionalInformation:
@@ -164,7 +166,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
     minorChildren: taxHouseholds?.minorChildren?.toString() || '',
     majorChildren: taxHouseholds?.majorChildren?.toString() || '',
     mobility: general.mobility
-      ? beneficiaryMobilityLabels[general.mobility]
+      ? beneficiaryMobilityKeys.byKey[general.mobility]
       : '',
     ministereCategorie: occupationIncome?.ministereCategorie
       ? ministereCategorieLabels[occupationIncome?.ministereCategorie]
@@ -179,7 +181,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
       ? ministereStructureLabels[occupationIncome?.ministereStructure]
       : '',
     socioProfessionalCategory: occupationIncome?.socioProfessionalCategory
-      ? beneficiarySocioProfessionalCategoryLabels[
+      ? beneficiarySocioProfessionalCategoryKeys.byKey[
           occupationIncome.socioProfessionalCategory
         ]
       : '',
@@ -188,13 +190,13 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
     employerSiret: occupationIncome?.employerSiret || '',
     mainIncomeSource: occupationIncome?.mainIncomeSource
       ? occupationIncome?.mainIncomeSource
-          .map(incomeSource => incomeSourceLabels[incomeSource])
+          .map(incomeSource => incomeSourceKeys.byKey[incomeSource])
           .join(', ')
       : '',
     mainIncomeAmount: occupationIncome?.mainIncomeAmount?.toString() || '',
     partnerMainIncomeSource: occupationIncome?.partnerMainIncomeSource
       ? occupationIncome?.partnerMainIncomeSource
-          .map(incomeSource => incomeSourceLabels[incomeSource])
+          .map(incomeSource => incomeSourceKeys.byKey[incomeSource])
           .join(', ')
       : '',
     partnerMainIncomeAmount:
@@ -202,7 +204,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
     majorChildrenMainIncomeSource:
       occupationIncome?.majorChildrenMainIncomeSource
         ? occupationIncome?.majorChildrenMainIncomeSource
-            .map(incomeSource => incomeSourceLabels[incomeSource])
+            .map(incomeSource => incomeSourceKeys.byKey[incomeSource])
             .join(', ')
         : '',
     majorChildrenMainIncomeAmount:
@@ -224,7 +226,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
     additionalInformation: general.additionalInformation || '',
     numeroPegase: general.numeroPegase || '',
     accommodationZone: general.accommodationZone
-      ? beneficiaryAccommodationZoneLabels[general.accommodationZone]
+      ? beneficiaryAccommodationZoneKeys.byKey[general.accommodationZone]
       : '',
     updated: formatDate(beneficiary.updated, 'DD-MM-YYYY HH:mm'),
     entourages: beneficiary.entourages?.map(formatRelative).join(', ') || '',

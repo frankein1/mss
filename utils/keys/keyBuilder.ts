@@ -1,11 +1,5 @@
-function buildOptions(map: Record<string, string>) {
-  return Object.keys(map).map(value => {
-    const label = map[value]
-    return {
-      label,
-      value
-    }
-  })
+function buildOptions(labels: Record<string, string>) {
+  return new Map(Object.entries(labels))
 }
 
 function buildKeys(byKey: Record<string, string>) {

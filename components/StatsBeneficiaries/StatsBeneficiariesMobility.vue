@@ -30,7 +30,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { beneficiaryMobilityLabels, getStatLabel } from '~/client/options'
+  import { beneficiaryMobilityKeys, getStatLabel } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
@@ -52,7 +52,7 @@
     () =>
       mobilityCounts.value?.map(({ _count, mobility }) => ({
         key: mobility || 'null',
-        label: getStatLabel(beneficiaryMobilityLabels, mobility),
+        label: getStatLabel(beneficiaryMobilityKeys.byKey, mobility),
         count: _count
       })) || []
   )

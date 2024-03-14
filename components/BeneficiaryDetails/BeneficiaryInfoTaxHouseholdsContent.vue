@@ -6,7 +6,7 @@
     <div class="fr-col-12 fr-pb-1w">
       <BeneficiaryInfoLabel
         :value="
-          BeneficiaryFamilySituationKeys.value(taxHouseholds.familySituation)
+          beneficiaryFamilySituationKeys.value(taxHouseholds.familySituation)
         "
       />
     </div>
@@ -34,7 +34,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryFamilySituationKeys } from '~/client/options'
+  import { beneficiaryFamilySituationKeys } from '~/client/options'
   import type { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 

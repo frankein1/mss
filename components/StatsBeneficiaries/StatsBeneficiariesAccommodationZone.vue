@@ -35,7 +35,7 @@
   import { StatFilterInput } from '~/server/schema'
   import {
     getStatLabel,
-    beneficiaryAccommodationZoneLabels
+    beneficiaryAccommodationZoneKeys
   } from '~/client/options'
 
   const props = defineProps<{
@@ -56,7 +56,7 @@
       accommodationZoneCounts.value?.map(({ _count, accommodationZone }) => ({
         key: accommodationZone || 'null',
         label: getStatLabel(
-          beneficiaryAccommodationZoneLabels,
+          beneficiaryAccommodationZoneKeys.byKey,
           accommodationZone
         ),
         count: _count

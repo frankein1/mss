@@ -4,7 +4,7 @@
       <VeeSelect
         name="accommodationMode"
         :label="beneficiaryFieldLabels.accommodationMode"
-        :options="withEmptyValue(beneficiaryAccommodationModeOptions)"
+        :options="withEmptyValue(beneficiaryAccommodationModeKeys.options)"
       />
     </div>
     <div
@@ -74,7 +74,7 @@
       <VeeSelect
         name="accommodationZone"
         :label="beneficiaryFieldLabels.accommodationZone"
-        :options="withEmptyValue(beneficiaryAccommodationZoneOptions)"
+        :options="withEmptyValue(beneficiaryAccommodationZoneKeys.options)"
       />
     </div>
   </BeneficiaryFormSection>
@@ -87,8 +87,8 @@
     HostedAccommodationMode,
     OrganisationAccommodationModes,
     ThirdPartyAccommodationModes,
-    beneficiaryAccommodationModeOptions,
-    beneficiaryAccommodationZoneOptions
+    beneficiaryAccommodationModeKeys,
+    beneficiaryAccommodationZoneKeys
   } from '~/client/options'
 
   const { application } = usePermissions()

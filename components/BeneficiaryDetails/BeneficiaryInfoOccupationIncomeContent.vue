@@ -3,7 +3,7 @@
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.socioProfessionalCategory"
       :value="
-        BeneficiarySocioProfessionalCategoryKeys.value(
+        beneficiarySocioProfessionalCategoryKeys.value(
           occupationIncome.socioProfessionalCategory
         )
       "
@@ -135,8 +135,8 @@
 <script lang="ts" setup>
   import { BeneficiaryPensionOrganisation } from '@prisma/client'
   import {
-    BeneficiarySocioProfessionalCategoryKeys,
-    incomeSourceLabels,
+    beneficiarySocioProfessionalCategoryKeys,
+    incomeSourceKeys,
     pensionOrganisationLabels,
     MinistereStructureKeys,
     MinistereCategorieKeys,
@@ -152,28 +152,28 @@
   const mainIncomeSource = computed(() =>
     arrayToString(
       props.occupationIncome.mainIncomeSource || [],
-      incomeSourceLabels
+      incomeSourceKeys.byKey
     )
   )
 
   const partnerMainIncomeSource = computed(() =>
     arrayToString(
       props.occupationIncome.partnerMainIncomeSource || [],
-      incomeSourceLabels
+      incomeSourceKeys.byKey
     )
   )
 
   const majorChildrenMainIncomeType = computed(() =>
     arrayToString(
       props.occupationIncome.majorChildrenMainIncomeSource || [],
-      incomeSourceLabels
+      incomeSourceKeys.byKey
     )
   )
 
   const otherMembersMainIncomeType = computed(() =>
     arrayToString(
       props.occupationIncome.otherMembersMainIncomeSource || [],
-      incomeSourceLabels
+      incomeSourceKeys.byKey
     )
   )
 

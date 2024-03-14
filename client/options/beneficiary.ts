@@ -1,5 +1,4 @@
 import {
-  BeneficiaryAccommodationZone,
   BeneficiaryAccommodationMode,
   BeneficiaryFamilySituation,
   BeneficiaryGir,
@@ -58,28 +57,18 @@ export const beneficiaryStatusDetailedLabels: {
 
 export const beneficiaryStatusOptions = labelsToOptions(beneficiaryStatusLabels)
 
-export const beneficiaryTitleLabels: { [key in BeneficiaryTitle]: string } = {
+export const beneficiaryTitleKeys = buildKeys({
   [BeneficiaryTitle.Miss]: 'Mme.',
   [BeneficiaryTitle.Mister]: 'M.'
-}
+})
 
-export const BeneficiaryTitleKeys = buildKeys(beneficiaryTitleLabels)
-
-export const beneficiaryTitleOptions = labelsToOptions(beneficiaryTitleLabels)
-
-export const beneficiaryGenderLabels: { [key in Gender]: string } = {
+export const beneficiaryGenderKeys = buildKeys({
   [Gender.Female]: 'Femme',
   [Gender.Male]: 'Homme',
   [Gender.Other]: 'Autre'
-}
+})
 
-export const BeneficiaryGenderKeys = buildKeys(beneficiaryGenderLabels)
-
-export const beneficiaryGenderOptions = labelsToOptions(beneficiaryGenderLabels)
-
-export const beneficiaryFamilySituationLabels: {
-  [key in BeneficiaryFamilySituation]: string
-} = {
+export const beneficiaryFamilySituationKeys = buildKeys({
   [BeneficiaryFamilySituation.Single]: 'Célibataire',
   [BeneficiaryFamilySituation.Divorced]: 'Divorcé·e',
   [BeneficiaryFamilySituation.Cohabitation]: 'En concubinage',
@@ -91,19 +80,9 @@ export const beneficiaryFamilySituationLabels: {
   [BeneficiaryFamilySituation.Separated]: 'Séparé·e',
   [BeneficiaryFamilySituation.Widow]: 'Veuf·ve',
   [BeneficiaryFamilySituation.Other]: 'Autre'
-}
+})
 
-export const BeneficiaryFamilySituationKeys = buildKeys(
-  beneficiaryFamilySituationLabels
-)
-
-export const beneficiaryFamilySituationOptions = labelsToOptions(
-  beneficiaryFamilySituationLabels
-)
-
-export const beneficiaryMobilityLabels: {
-  [key in BeneficiaryMobility]: string
-} = {
+export const beneficiaryMobilityKeys = buildKeys({
   [BeneficiaryMobility.None]: 'Aucun moyen de transport à disposition',
   [BeneficiaryMobility.Code]: 'Code obtenu',
   [BeneficiaryMobility.PublicTransport]: 'Dépendant des transports en commun',
@@ -115,32 +94,18 @@ export const beneficiaryMobilityLabels: {
   [BeneficiaryMobility.VehicleWithoutPermit]: 'Véhicule sans permis',
   [BeneficiaryMobility.BikeOrEquivalent]: 'Vélo ou trottinette électrique',
   [BeneficiaryMobility.OtherPermit]: 'Autres permis (poids lourds, bus)'
-}
+})
 
-export const BeneficiaryMobilityKeys = buildKeys(beneficiaryMobilityLabels)
-
-export const beneficiaryMobilityOptions = labelsToOptions(
-  beneficiaryMobilityLabels
-)
-
-export const beneficiaryGirLabels: {
-  [key in BeneficiaryGir]: string
-} = {
+export const beneficiaryGirKeys = buildKeys({
   [BeneficiaryGir.Level1]: 'Niveau 1',
   [BeneficiaryGir.Level2]: 'Niveau 2',
   [BeneficiaryGir.Level3]: 'Niveau 3',
   [BeneficiaryGir.Level4]: 'Niveau 4',
   [BeneficiaryGir.Level5]: 'Niveau 5',
   [BeneficiaryGir.Level6]: 'Niveau 6'
-}
+})
 
-export const BeneficiaryGirKeys = buildKeys(beneficiaryGirLabels)
-
-export const beneficiaryGirOptions = labelsToOptions(beneficiaryGirLabels)
-
-export const beneficiarySocioProfessionalCategoryLabels: {
-  [key in BeneficiarySocioProfessionalCategory]: string
-} = {
+export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
   [BeneficiarySocioProfessionalCategory.SickLeave]: 'Arrêt maladie',
   [BeneficiarySocioProfessionalCategory.JobSeeker]: "En recherche d'emploi",
   [BeneficiarySocioProfessionalCategory.Disability]: 'Invalidité',
@@ -150,19 +115,9 @@ export const beneficiarySocioProfessionalCategoryLabels: {
   [BeneficiarySocioProfessionalCategory.NoActivity]:
     'Sans activité (non inscrit à Pôle Emploi)',
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
-}
+})
 
-export const BeneficiarySocioProfessionalCategoryKeys = buildKeys(
-  beneficiarySocioProfessionalCategoryLabels
-)
-
-export const beneficiarySocioProfessionalCategoryOptions = labelsToOptions(
-  beneficiarySocioProfessionalCategoryLabels
-)
-
-export const incomeSourceLabels: {
-  [key in IncomeSource]: string
-} = {
+export const incomeSourceKeys = buildKeys({
   [IncomeSource.Aah]: 'AAH',
   [IncomeSource.Apl]: 'APL',
   [IncomeSource.Aspa]: 'ASPA',
@@ -176,13 +131,9 @@ export const incomeSourceLabels: {
   [IncomeSource.Salaire]: 'Salaire',
   [IncomeSource.Autre]: 'Autre',
   [IncomeSource.PensionAlimentaire]: 'Pension alimentaire'
-}
+})
 
-export const incomeSourceOptions = labelsToOptions(incomeSourceLabels)
-
-export const beneficiaryProtectionMeasureLabels: {
-  [key in BeneficiaryProtectionMeasure]: string
-} = {
+export const beneficiaryProtectionMeasureKeys = buildKeys({
   [BeneficiaryProtectionMeasure.CuratelleSimple]: 'Curatelle simple',
   [BeneficiaryProtectionMeasure.CuratelleRenforcee]: 'Curatelle renforcée',
   [BeneficiaryProtectionMeasure.HabilitationDuConjoint]:
@@ -195,19 +146,9 @@ export const beneficiaryProtectionMeasureLabels: {
     "Mesure d'accompagnement (Masp/Maj/MJAGBF)",
   [BeneficiaryProtectionMeasure.SauvegardeDeJustice]: 'Sauvegarde de justice',
   [BeneficiaryProtectionMeasure.Tutelle]: 'Tutelle'
-}
+})
 
-export const BeneficiaryProtectionMeasureKeys = buildKeys(
-  beneficiaryProtectionMeasureLabels
-)
-
-export const beneficiaryProtectionMeasureOptions = labelsToOptions(
-  beneficiaryProtectionMeasureLabels
-)
-
-export const beneficiaryOrientationTypeLabels: {
-  [key in BeneficiaryOrientationType]: string
-} = {
+export const beneficiaryOrientationTypeKeys = buildKeys({
   [BeneficiaryOrientationType.Association]: 'Orientation Association',
   [BeneficiaryOrientationType.Departement]: 'Orientation Département',
   [BeneficiaryOrientationType.Elu]: 'Orientation Élu',
@@ -215,15 +156,7 @@ export const beneficiaryOrientationTypeLabels: {
   [BeneficiaryOrientationType.Spontanee]: 'Spontanée',
   [BeneficiaryOrientationType.SuiviCabinet]: 'Suivi cabinet',
   [BeneficiaryOrientationType.Autre]: 'Autre'
-}
-
-export const BeneficiaryOrientationTypeKeys = buildKeys(
-  beneficiaryOrientationTypeLabels
-)
-
-export const beneficiaryOrientationTypeOptions = labelsToOptions(
-  beneficiaryOrientationTypeLabels
-)
+})
 
 const commonRelationshipLabels = {
   [RelativeRelationship.Conjoint]: 'Conjoint·e',
@@ -247,7 +180,7 @@ export const relativeRelationshipLabels = {
   ...entourageRelationshipLabels
 }
 
-export const RelativeRelationshipKeys = buildKeys(relativeRelationshipLabels)
+export const relativeRelationshipKeys = buildKeys(relativeRelationshipLabels)
 
 export const taxHouseHoldRelationshipOptions = labelsToOptions(
   commonRelationshipLabels
@@ -258,25 +191,13 @@ export const entourageRelationshipOptions = labelsToOptions({
   ...entourageRelationshipLabels
 })
 
-export const beneficiaryAccommodationZoneLabels: {
-  [key in BeneficiaryAccommodationZone]: string
-} = {
+export const beneficiaryAccommodationZoneKeys = buildKeys({
   France: 'France',
   Europe: 'Europe',
   OutsideEurope: 'Hors Europe'
-}
+})
 
-export const BeneficiaryAccommodationZoneKeys = buildKeys(
-  beneficiaryAccommodationZoneLabels
-)
-
-export const beneficiaryAccommodationZoneOptions = labelsToOptions(
-  beneficiaryAccommodationZoneLabels
-)
-
-export const beneficiaryAccommodationModeLabels: {
-  [key in BeneficiaryAccommodationMode]: string
-} = {
+export const beneficiaryAccommodationModeKeys = buildKeys({
   [BeneficiaryAccommodationMode.NursingHome]: 'EHPAD, résidence senior',
   [BeneficiaryAccommodationMode.EmergencyHousing]:
     'Hébergement de type CHRS, CHU, CPH, CADA...',
@@ -289,15 +210,7 @@ export const beneficiaryAccommodationModeLabels: {
   [BeneficiaryAccommodationMode.Owner]: 'Propriétaire',
   [BeneficiaryAccommodationMode.None]: 'Sans hébergement',
   [BeneficiaryAccommodationMode.Other]: 'Autre type de logement (hôtel...)'
-}
-
-export const BeneficiaryAccommodationModeKeys = buildKeys(
-  beneficiaryAccommodationModeLabels
-)
-
-export const beneficiaryAccommodationModeOptions = labelsToOptions(
-  beneficiaryAccommodationModeLabels
-)
+})
 
 export const OrganisationAccommodationModes: BeneficiaryAccommodationMode[] = [
   BeneficiaryAccommodationMode.EmergencyHousing,

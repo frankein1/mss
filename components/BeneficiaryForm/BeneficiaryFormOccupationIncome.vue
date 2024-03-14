@@ -4,7 +4,9 @@
       <VeeSelect
         name="socioProfessionalCategory"
         :label="beneficiaryFieldLabels.socioProfessionalCategory"
-        :options="withEmptyValue(beneficiarySocioProfessionalCategoryOptions)"
+        :options="
+          withEmptyValue(beneficiarySocioProfessionalCategoryKeys.options)
+        "
       />
     </div>
     <div class="fr-col-12">
@@ -29,7 +31,7 @@
       <VeeMultiSelect
         name="mainIncomeSource"
         :label="beneficiaryFieldLabels.mainIncomeSource"
-        :options="incomeSourceOptions"
+        :options="incomeSourceKeys.options"
         label-class="fr-text--regular"
         dropdown
       />
@@ -45,7 +47,7 @@
         <VeeMultiSelect
           name="partnerMainIncomeSource"
           :label="beneficiaryFieldLabels.partnerMainIncomeSource"
-          :options="incomeSourceOptions"
+          :options="incomeSourceKeys.options"
           label-class="fr-text--regular"
           dropdown
         />
@@ -62,7 +64,7 @@
         <VeeMultiSelect
           name="majorChildrenMainIncomeSource"
           :label="beneficiaryFieldLabels.majorChildrenMainIncomeSource"
-          :options="incomeSourceOptions"
+          :options="incomeSourceKeys.options"
           label-class="fr-text--regular"
           dropdown
         />
@@ -79,7 +81,7 @@
         <VeeMultiSelect
           name="otherMembersMainIncomeSource"
           :label="beneficiaryFieldLabels.otherMembersMainIncomeSource"
-          :options="incomeSourceOptions"
+          :options="incomeSourceKeys.options"
           label-class="fr-text--regular"
           dropdown
         />
@@ -168,8 +170,8 @@
     RelativeRelationship
   } from '@prisma/client'
   import {
-    beneficiarySocioProfessionalCategoryOptions,
-    incomeSourceOptions,
+    beneficiarySocioProfessionalCategoryKeys,
+    incomeSourceKeys,
     pensionOrganisationOptions,
     ministereDepartmentServiceAcOptions,
     ministereStructureOptions,
