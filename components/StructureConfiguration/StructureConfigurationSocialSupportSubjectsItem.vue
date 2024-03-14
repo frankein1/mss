@@ -3,13 +3,16 @@
     <div>{{ label }}</div>
 
     <div class="sss-item__actions">
-      <a
+      <div
         :id="`button-edit-${id}`"
         class="icon fr-icon-pencil-line"
+        data-fr-opened="false"
+        aria-controls="global-modal"
         :aria-describedby="`tooltip-edit-${id}`"
         title="Modifier"
+        aria-label="Modifier"
         @click="$emit('edit')"
-      ></a>
+      ></div>
       <span
         :id="`tooltip-edit-${id}`"
         class="fr-tooltip fr-placement"
@@ -18,13 +21,16 @@
         >Modifier</span
       >
 
-      <a
+      <div
         :id="`button-remove-${id}`"
         class="icon fr-icon-close-circle-line"
+        data-fr-opened="false"
+        aria-controls="global-modal"
         :aria-describedby="`tooltip-remove-${id}`"
         title="Retirer"
+        aria-label="Retirer"
         @click="$emit('remove')"
-      ></a>
+      ></div>
       <span
         :id="`tooltip-remove-${id}`"
         class="fr-tooltip fr-placement"
