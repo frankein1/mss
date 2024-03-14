@@ -16,7 +16,11 @@
           permettront de facilement retrouver vos dossiers.
         </p>
 
-        <div>IMAGE</div>
+        <img
+          src="~/assets/icons/inclusion.svg"
+          class="img"
+          alt=""
+        />
       </div>
     </AtomCallout>
 
@@ -33,8 +37,8 @@
         :key="index"
         :label="item.name"
         :can-edit="canEdit"
-        @edit="() => {}"
-        @remove="() => {}"
+        @edit="editSubject(item.id, item.name)"
+        @remove="removeSubject(item.id, item.name)"
       />
     </div>
 
@@ -51,12 +55,81 @@
 
 <script setup lang="ts">
   import type { StructureConfigurationSocialSupportSubjects } from './types'
+  import StructureConfigurationSubjectModification from './StructureConfigurationSubjectModification.vue'
+  import StructureConfigurationSubjectDeletion from './StructureConfigurationSubjectDeletion.vue'
   import { RoutePath } from '~/utils/routing'
 
   defineProps<{
     subjects: StructureConfigurationSocialSupportSubjects
     canEdit: boolean
   }>()
+
+  const modal = useModal()
+
+  const isSubmittingModification = ref(false)
+  const isSubmittingDeletion = ref(false)
+
+  function editSubject(id: string, name: string) {
+    modal.open({
+      title: "Modifier un objet d'accompagnement",
+      contentComponent: StructureConfigurationSubjectModification,
+      contentComponentProps: {
+        id,
+        name,
+        isSubmitting: isSubmittingModification.value
+      },
+      contentComponentEvents: {
+        update: onUpdateStructureSubject
+      }
+    })
+  }
+
+  function onUpdateStructureSubject(_values: any) {
+    // useTrpcMutation({
+    //   mutation: () =>
+    //     trpcClient.structure.editCurrentUserStructureSubject.mutate(values),
+    //   isSubmitting: isSubmittingModification,
+    //   onSuccess: () => {
+    //     modal.close()
+    //     refresh() // replace by emit refesh
+    //     snackbar.success('Objet d’accompagnement modifié avec succès')
+    //   },
+    //   onFailure: () => {
+    //     snackbar.error(
+    //       "La modification de l'objet d'accompagnement de votre structure a échoué"
+    //     )
+    //   }
+    // })
+  }
+
+  function removeSubject(id: string, name: string) {
+    modal.open({
+      title: `Etes-vous sûr·e de vouloir retirer l’objet “${name}” de vos accompagnements ?`,
+      contentComponent: StructureConfigurationSubjectDeletion,
+      contentComponentProps: { isSubmitting: isSubmittingDeletion.value },
+      contentComponentEvents: {
+        delete: () => onDeleteStructureSubject(id)
+      }
+    })
+  }
+
+  function onDeleteStructureSubject(_id: string) {
+    // useTrpcMutation({
+    //   mutation: () =>
+    //     trpcClient.structure.deleteCurrentUserStructureSubject.mutate(values),
+    //   isSubmitting: isSubmittingModification,
+    //   onSuccess: () => {
+    //     modal.close()
+    //     refresh() // replace by emit refesh
+    //     snackbar.success('Objet d’accompagnement supprimé avec succès')
+    //   },
+    //   onFailure: () => {
+    //     snackbar.error(
+    //       "La modification de l'objet d'accompagnement de votre structure a échoué"
+    //     )
+    //   }
+    // })
+  }
 </script>
 
 <style scoped lang="scss">
@@ -78,9 +151,16 @@
   }
 
   .structure-configuration-sss__items {
+    padding: 1rem 0;
+
     @include dsfr-media-query.respond-from('lg') {
       columns: 2;
       column-gap: 3rem;
     }
+  }
+
+  .img {
+    max-height: 100px;
+    height: auto;
   }
 </style>
