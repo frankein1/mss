@@ -23,13 +23,15 @@ const handler = async ({
         }
       }
     })
+
+  // TODO remove optional & requires
   const optionalSubjects = socialSupportSubjects.filter(
     ({ legallyRequired }) => !legallyRequired
   )
   const requiredSubjects = socialSupportSubjects.filter(
     ({ legallyRequired }) => legallyRequired
   )
-  return { structure, optionalSubjects, requiredSubjects }
+  return { structure, socialSupportSubjects, optionalSubjects, requiredSubjects }
 }
 
 export const getCurrentUserStructureQuery = createQuery({
