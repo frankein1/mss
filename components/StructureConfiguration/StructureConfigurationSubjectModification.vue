@@ -55,21 +55,31 @@
     id: string
     name: string
     isSubmitting: boolean
+    validationFn: (name: string) => Promise<boolean>
   }>()
 
   const emit = defineEmits<{
     update: [values: UpdateSocialSupportSubjectNameInput]
   }>()
 
-  const { handleSubmit } = useForm<UpdateSocialSupportSubjectNameInput>({
-    validationSchema: toTypedSchema(updateSocialSupportSubjectSchema),
-    initialValues: {
-      id: props.id,
-      name: props.name
-    }
-  })
+  const { handleSubmit, setErrors } =
+    useForm<UpdateSocialSupportSubjectNameInput>({
+      validationSchema: toTypedSchema(updateSocialSupportSubjectSchema),
+      initialValues: {
+        id: props.id,
+        name: props.name
+      }
+    })
 
-  const { onSubmit } = useCatchFormErrors(handleSubmit, values =>
+  const onSubmit = handleSubmit(async values => {
+    const validated = await props.validationFn(values.name)
+    if (!validated) {
+      setErrors({
+        name: "Cet objet d'accompagnement existe déjà, modification impossible"
+      })
+      return
+    }
+
     emit('update', values)
-  )
+  })
 </script>
