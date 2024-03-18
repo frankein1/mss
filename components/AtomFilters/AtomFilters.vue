@@ -96,6 +96,7 @@
   } from '~/types/filter'
   import { getRandomId } from '~/utils/random'
   import { INPUT_DEFER_DURATION } from '~/utils/constants'
+  import { getOptionLabel } from '~/utils/options'
 
   const matomo = useMatomo()
 
@@ -296,7 +297,9 @@
       value,
       filter.type === FilterType.SelectMultiple
     )
-    return selectedOptions.map(o => filter.options.get(o) || o).join(', ')
+    return selectedOptions
+      .map(o => getOptionLabel(filter.options, o) || o)
+      .join(', ')
   }
 
   function getSelectedOptions(

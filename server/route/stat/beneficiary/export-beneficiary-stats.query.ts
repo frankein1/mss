@@ -2,17 +2,17 @@ import { StructureType } from '@prisma/client'
 import { getRowsFromData } from '../helper/getRowsFromData'
 import { createQuery } from '~/server/route'
 import {
-  beneficiaryAccommodationModeLabels,
-  beneficiaryAccommodationZoneLabels,
-  beneficiaryGenderLabels,
-  beneficiaryMobilityLabels,
-  beneficiarySocioProfessionalCategoryLabels,
-  familySituationLabels,
-  ageGroupLabels,
+  beneficiaryAccommodationModeKeys,
+  beneficiaryAccommodationZoneKeys,
+  beneficiaryGenderKeys,
+  beneficiaryMobilityKeys,
+  beneficiarySocioProfessionalCategoryKeys,
+  familySituationKeys,
+  ageGroupKeys,
   STATS_NULL_LABEL,
-  ministereCategorieLabels,
-  ministereDepartmentServiceAcLabels,
-  ministereStructureLabels
+  ministereCategorieKeys,
+  ministereDepartmentServiceAcKeys,
+  ministereStructureKeys
 } from '~/client/options'
 import {
   getBeneficiaryCountQuery,
@@ -54,7 +54,7 @@ const handler = async ({
   const beneficiaryCount = await getBeneficiaryCountQuery(user, input)
 
   const genderData = await getGenderStatsQuery(user, input)
-  const genderColumns = getColumnsFromLabels(beneficiaryGenderLabels)
+  const genderColumns = getColumnsFromLabels(beneficiaryGenderKeys.byKey)
   const genderRows = getRowsFromData(genderData, 'gender', beneficiaryCount)
   exportData.push({
     name: 'Genres',
@@ -63,7 +63,7 @@ const handler = async ({
   })
 
   const ageData = await getAgeStatsQuery(user, input)
-  const ageColumns = getColumnsFromLabels(ageGroupLabels)
+  const ageColumns = getColumnsFromLabels(ageGroupKeys.byKey)
   const ageRows = getRowsFromData(ageData, 'ageGroup', beneficiaryCount)
   exportData.push({
     name: "Tranches d'âge",
@@ -72,7 +72,7 @@ const handler = async ({
   })
 
   const familyData = await getFamilyStatsQuery(user, input)
-  const familyColumns = getColumnsFromLabels(familySituationLabels)
+  const familyColumns = getColumnsFromLabels(familySituationKeys.byKey)
   const familyRows = getRowsFromData(
     familyData,
     'familySituation',
@@ -113,7 +113,7 @@ const handler = async ({
     input
   )
   const accommodationZoneColumns = getColumnsFromLabels(
-    beneficiaryAccommodationZoneLabels
+    beneficiaryAccommodationZoneKeys.byKey
   )
   const accommodationZoneRows = getRowsFromData(
     accommodationZoneData,
@@ -131,7 +131,7 @@ const handler = async ({
     input
   )
   const accommodationModeColumns = getColumnsFromLabels(
-    beneficiaryAccommodationModeLabels
+    beneficiaryAccommodationModeKeys.byKey
   )
   const accommodationModeRows = getRowsFromData(
     accommodationModeData,
@@ -145,7 +145,7 @@ const handler = async ({
   })
 
   const mobilityData = await getMobilityStatsQuery(user, input)
-  const mobilityColumns = getColumnsFromLabels(beneficiaryMobilityLabels)
+  const mobilityColumns = getColumnsFromLabels(beneficiaryMobilityKeys.byKey)
   const mobilityRows = getRowsFromData(
     mobilityData,
     'mobility',
@@ -159,7 +159,7 @@ const handler = async ({
 
   const CSPData = await getCSPStatsQuery(user, input)
   const CSPColumns = getColumnsFromLabels(
-    beneficiarySocioProfessionalCategoryLabels
+    beneficiarySocioProfessionalCategoryKeys.byKey
   )
   const CSPRows = getRowsFromData(
     CSPData,
@@ -181,7 +181,7 @@ const handler = async ({
       input
     )
     const ministereStructureColumns = getColumnsFromLabels(
-      ministereStructureLabels
+      ministereStructureKeys.byKey
     )
     const ministereStructureRows = getRowsFromData(
       ministereStructureData,
@@ -197,7 +197,7 @@ const handler = async ({
     const ministereDepartementData =
       await getMinistereDepartementServiceAcStatsQuery(user, input)
     const ministereDepartementColumns = getColumnsFromLabels(
-      ministereDepartmentServiceAcLabels
+      ministereDepartmentServiceAcKeys.byKey
     )
     const ministereDepartementRows = getRowsFromData(
       ministereDepartementData,
@@ -218,7 +218,7 @@ const handler = async ({
       input
     )
     const ministereCategorieColumns = getColumnsFromLabels(
-      ministereCategorieLabels
+      ministereCategorieKeys.byKey
     )
     const ministereCategorieRows = getRowsFromData(
       ministereCategorieData,

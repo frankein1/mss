@@ -40,7 +40,7 @@
             >
               <td>{{ formatUserDisplayName(user) }}</td>
               <td>{{ user.structure?.name || '-' }}</td>
-              <td>{{ UserRoleLabels[user.role] }}</td>
+              <td>{{ userRoleKeys.value(user.role) }}</td>
               <td>{{ user.email }}</td>
               <td>{{ formatDate(user.lastAccess) }}</td>
             </tr>
@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
   import { Users } from './types'
-  import { UserRoleLabels } from '~/client/options'
+  import { userRoleKeys } from '~/client/options'
   import type { UserAdminSort } from '~/types/table'
   import { formatUserDisplayName } from '~/utils/user'
   import { RoutePath } from '~/utils/routing'

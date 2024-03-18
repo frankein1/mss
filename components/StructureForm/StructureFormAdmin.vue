@@ -31,7 +31,7 @@
       <VeeSelect
         name="type"
         :label="adminStructureFieldLabels.type"
-        :options="withEmptyValue(structureTypeOptions)"
+        :options="withEmptyValue(structureTypeKeys.options)"
         required
       />
     </div>
@@ -39,6 +39,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { structureTypeOptions } from '~/client/options'
+  import { structureTypeKeys } from '~/client/options'
   import { adminStructureFieldLabels } from '~/client/labels'
 </script>

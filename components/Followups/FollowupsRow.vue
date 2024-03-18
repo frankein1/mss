@@ -5,7 +5,7 @@
         class="fr-badge fr-badge--sm"
         :class="[socialSupportStatusClasses[followup.status]]"
       >
-        {{ followupStatusOptions.get(followup.status) }}
+        {{ followupStatusKeys.value(followup.status) }}
       </span>
     </td>
     <td>
@@ -39,7 +39,7 @@
   import { FollowupPageItem } from '~/server/trpc/routers'
   import { HistoryTab } from '~/utils/constants/history'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { followupStatusOptions } from '~/client/options'
+  import { followupStatusKeys } from '~/client/options'
   import { socialSupportStatusClasses } from '~/client/classes/socialSupport'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'

@@ -8,7 +8,7 @@
     </p>
     <ul v-if="hasTaxHouseholds">
       <li v-if="familySituation">
-        {{ familySituationLabels[familySituation] }}
+        {{ familySituationKeys.byKey[familySituation] }}
       </li>
       <li v-if="minorChildren">{{ minorChildren }} enfant(s) mineur(s)</li>
       <li v-if="majorChildren">{{ majorChildren }} enfant(s) majeur(s)</li>
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-  import { familySituationLabels } from '~/client/options'
+  import { familySituationKeys } from '~/client/options'
 
   const props = defineProps<{
     beneficiaryId: string

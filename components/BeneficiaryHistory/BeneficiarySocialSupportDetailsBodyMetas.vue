@@ -9,7 +9,7 @@
     <span class="information-label"
       >{{ helpRequestFieldLabels.ministre }} :</span
     >
-    {{ ministerLabels[socialSupport.ministre] }}
+    {{ ministerKeys.byKey[socialSupport.ministre] }}
   </li>
   <li v-if="socialSupport.dueDate">
     <span class="information-label"
@@ -22,7 +22,7 @@
 <script setup lang="ts">
   import { SocialSupportData } from './types'
   import { formatDate } from '~/utils/formatDate'
-  import { ministerLabels } from '~/client/options'
+  import { ministerKeys } from '~/client/options'
   import { helpRequestFieldLabels } from '~/client/labels'
 
   defineProps<{

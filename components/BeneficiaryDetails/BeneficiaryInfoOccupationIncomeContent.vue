@@ -3,7 +3,7 @@
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.socioProfessionalCategory"
       :value="
-        BeneficiarySocioProfessionalCategoryKeys.value(
+        beneficiarySocioProfessionalCategoryKeys.value(
           occupationIncome.socioProfessionalCategory
         )
       "
@@ -112,18 +112,18 @@
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereCategorie"
-      :value="MinistereCategorieKeys.value(occupationIncome.ministereCategorie)"
+      :value="ministereCategorieKeys.value(occupationIncome.ministereCategorie)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereStructure"
-      :value="MinistereStructureKeys.value(occupationIncome.ministereStructure)"
+      :value="ministereStructureKeys.value(occupationIncome.ministereStructure)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
       :value="
-        MinistereDepartmentServiceAcKeys.value(
+        ministereDepartmentServiceAcKeys.value(
           occupationIncome.ministereDepartementServiceAc
         )
       "
@@ -135,12 +135,12 @@
 <script lang="ts" setup>
   import { BeneficiaryPensionOrganisation } from '@prisma/client'
   import {
-    BeneficiarySocioProfessionalCategoryKeys,
-    incomeSourceLabels,
-    pensionOrganisationLabels,
-    MinistereStructureKeys,
-    MinistereCategorieKeys,
-    MinistereDepartmentServiceAcKeys
+    beneficiarySocioProfessionalCategoryKeys,
+    incomeSourceKeys,
+    pensionOrganisationKeys,
+    ministereStructureKeys,
+    ministereCategorieKeys,
+    ministereDepartmentServiceAcKeys
   } from '~/client/options'
   import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
@@ -152,28 +152,28 @@
   const mainIncomeSource = computed(() =>
     arrayToString(
       props.occupationIncome.mainIncomeSource || [],
-      incomeSourceLabels
+      incomeSourceKeys.byKey
     )
   )
 
   const partnerMainIncomeSource = computed(() =>
     arrayToString(
       props.occupationIncome.partnerMainIncomeSource || [],
-      incomeSourceLabels
+      incomeSourceKeys.byKey
     )
   )
 
   const majorChildrenMainIncomeType = computed(() =>
     arrayToString(
       props.occupationIncome.majorChildrenMainIncomeSource || [],
-      incomeSourceLabels
+      incomeSourceKeys.byKey
     )
   )
 
   const otherMembersMainIncomeType = computed(() =>
     arrayToString(
       props.occupationIncome.otherMembersMainIncomeSource || [],
-      incomeSourceLabels
+      incomeSourceKeys.byKey
     )
   )
 
@@ -182,7 +182,7 @@
       props.occupationIncome.pensionOrganisations?.filter(
         f => f !== BeneficiaryPensionOrganisation.Other
       ) || [],
-      pensionOrganisationLabels
+      pensionOrganisationKeys.byKey
     )
   )
 

@@ -38,7 +38,7 @@
         <VeeSelect
           name="medium"
           :label="followupFieldLabels.medium"
-          :options="withEmptyValue(followupMediumOptions)"
+          :options="withEmptyValue(followupMediumKeys.options)"
           required
         />
       </div>
@@ -47,7 +47,7 @@
         <VeeSelect
           name="ministre"
           :label="followupFieldLabels.ministre"
-          :options="withEmptyValue(currentMinisterOptions)"
+          :options="withEmptyValue(ministerKeys.options)"
           required
         />
       </div>
@@ -116,7 +116,7 @@
         <VeeSelect
           name="status"
           :label="followupFieldLabels.status"
-          :options="followupStatusOptions"
+          :options="followupStatusKeys.options"
           required
         />
       </div>
@@ -133,7 +133,7 @@
         <VeeSelect
           name="duration"
           :label="followupFieldLabels.duration"
-          :options="withEmptyValue(followupDurationOptions)"
+          :options="withEmptyValue(followupDurationKeys.options)"
         />
       </div>
 
@@ -258,10 +258,10 @@
   import { SocialSupportSubject, FollowupMedium } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
   import {
-    currentMinisterOptions,
-    followupStatusOptions,
-    followupMediumOptions,
-    followupDurationOptions
+    ministerKeys,
+    followupStatusKeys,
+    followupMediumKeys,
+    followupDurationKeys
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'

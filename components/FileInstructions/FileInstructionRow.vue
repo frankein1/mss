@@ -13,7 +13,7 @@
           class="fr-badge fr-badge--sm"
           :class="[socialSupportStatusClasses[socialSupport.status]]"
         >
-          {{ socialSupportStatusLabels[socialSupport.status] }}
+          {{ socialSupportStatusKeys.value(socialSupport.status) }}
         </span>
       </td>
       <td>{{ formatDate(socialSupport.date) }}</td>
@@ -54,14 +54,14 @@
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
   import { FileInstructionFilterInput } from '~/server/schema'
-  import { roomCountLabels } from '~/client/options'
+  import { roomCountKeys } from '~/client/options'
 
   const props = defineProps<{
     fileInstruction: FileInstruction
     fileInstructionTypeFilter: FileInstructionFilterInput['fileInstructionType']
   }>()
 
-  const { socialSupportStatusLabels } = useSocialSupportStatus()
+  const { socialSupportStatusKeys } = useSocialSupportStatus()
 
   const socialSupport = computed(() => props.fileInstruction.socialSupport)
   const fileInstructionObject = computed(() => {
@@ -87,7 +87,7 @@
     }
 
     return props.fileInstruction.housingHelpRequest.roomCount
-      .map(roomCount => roomCountLabels[roomCount])
+      .map(roomCount => roomCountKeys.value(roomCount))
       .join(', ')
   })
 </script>

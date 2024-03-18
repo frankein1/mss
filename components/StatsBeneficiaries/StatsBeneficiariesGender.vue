@@ -34,7 +34,7 @@
   import { RoutePath } from '~/utils/routing'
   import { StatFilterInput } from '~/server/schema'
   import { getStatColor } from '~/client/colors/stats'
-  import { getStatLabel, beneficiaryGenderLabels } from '~/client/options'
+  import { getStatLabel, beneficiaryGenderKeys } from '~/client/options'
   import { StatsPiePropType } from '~/types/stat'
 
   const GenderColor = {
@@ -60,7 +60,7 @@
     () =>
       (genderCounts.value?.map(({ _count, gender }) => ({
         key: gender,
-        label: getStatLabel(beneficiaryGenderLabels, gender),
+        label: getStatLabel(beneficiaryGenderKeys.byKey, gender),
         color: getStatColor(GenderColor, gender),
         count: _count
       })) || []) as StatsPiePropType

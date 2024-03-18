@@ -35,7 +35,7 @@
   import { RoutePath } from '~/utils/routing'
   import {
     getStatLabel,
-    beneficiaryAccommodationModeLabels
+    beneficiaryAccommodationModeKeys
   } from '~/client/options'
 
   const trpcClient = useTrpcClient()
@@ -56,7 +56,7 @@
       accommodationModesCounts.value?.map(({ _count, accommodationMode }) => ({
         key: accommodationMode || 'null',
         label: getStatLabel(
-          beneficiaryAccommodationModeLabels,
+          beneficiaryAccommodationModeKeys.byKey,
           accommodationMode
         ),
         count: _count

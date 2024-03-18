@@ -1,6 +1,7 @@
 import { UserActivityType } from '@prisma/client'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 
-export const userActivityTypeLabels: { [key in UserActivityType]: string } = {
+export const userActivityTypeKeys = buildKeys({
   [UserActivityType.ARCHIVE]: 'Archivage',
   [UserActivityType.CREATE]: 'Création',
   [UserActivityType.DELETE]: 'Suppression',
@@ -8,4 +9,4 @@ export const userActivityTypeLabels: { [key in UserActivityType]: string } = {
   [UserActivityType.LOGOUT]: 'Déconnexion',
   [UserActivityType.UPDATE]: 'Mise à jour',
   [UserActivityType.VIEW]: 'Accès'
-}
+})

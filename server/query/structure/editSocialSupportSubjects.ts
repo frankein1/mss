@@ -105,13 +105,13 @@ function getSocialSupportSubjectsToCreate(
 function isDefaultLegallyRequiredSocialSupportSubject(
   id: string
 ): id is DefaultSocialSupportSubject {
-  return defaultLegallyRequiredSocialSupportSubjectOptions.has(id)
+  return hasOption(defaultLegallyRequiredSocialSupportSubjectOptions, id)
 }
 
 function isDefaultLegallyNotRequiredSocialSupportSubject(
   id: string
 ): id is DefaultSocialSupportSubject {
-  return defaultLegallyNotRequiredSocialSupportSubjectOptions.has(id)
+  return hasOption(defaultLegallyNotRequiredSocialSupportSubjectOptions, id)
 }
 
 function isAlreadySelected(

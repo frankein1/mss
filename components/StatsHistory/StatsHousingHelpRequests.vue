@@ -32,8 +32,8 @@
 <script lang="ts" setup>
   import { SupportColor } from '~/client/colors'
   import {
-    isFirstLabels,
-    housingReasonLabels,
+    isFirstKeys,
+    housingReasonKeys,
     getStatLabel
   } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
@@ -56,7 +56,7 @@
     () =>
       data.value?.housingHelpRequestContextCount.map(({ _count, isFirst }) => ({
         key: String(isFirst),
-        label: getStatLabel(isFirstLabels, String(isFirst)),
+        label: getStatLabel(isFirstKeys.byKey, String(isFirst)),
         color: SupportColor.helpRequests,
         count: _count
       })) || []
@@ -66,7 +66,7 @@
     () =>
       data.value?.housingHelpRequestReasonCount.map(({ _count, reason }) => ({
         key: String(reason),
-        label: getStatLabel(housingReasonLabels, String(reason)),
+        label: getStatLabel(housingReasonKeys.byKey, String(reason)),
         color: SupportColor.helpRequests,
         count: _count
       })) || []

@@ -49,7 +49,7 @@
           <VeeMultiSelect
             name="housingType"
             :label="housingHelpRequestFieldLabels.housingType"
-            :options="housingTypeOptions"
+            :options="housingTypeKeys.options"
             :icons="housingTypeIcons"
           />
         </div>
@@ -58,7 +58,7 @@
           <VeeMultiSelect
             name="roomCount"
             :label="housingHelpRequestFieldLabels.roomCount"
-            :options="roomCountOptions"
+            :options="roomCountKeys.options"
           />
         </div>
 
@@ -76,9 +76,9 @@
 <script setup lang="ts">
   import { housingHelpRequestFieldLabels } from '~/client/labels'
   import {
-    housingTypeOptions,
+    housingTypeKeys,
     housingTypeIcons,
-    roomCountOptions
+    roomCountKeys
   } from '~/client/options'
 
   defineProps<{

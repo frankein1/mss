@@ -14,7 +14,7 @@
       {{ label }}
     </legend>
     <div
-      v-for="[optionValue, optionLabel] in options"
+      v-for="{ value: optionValue, label: optionLabel } in options"
       :key="optionValue"
       class="fr-fieldset__element"
       :class="{

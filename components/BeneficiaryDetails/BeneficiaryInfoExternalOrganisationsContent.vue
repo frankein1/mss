@@ -3,7 +3,7 @@
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.protectionMeasure"
       :value="
-        BeneficiaryProtectionMeasureKeys.value(
+        beneficiaryProtectionMeasureKeys.value(
           externalOrganisations.protectionMeasure
         )
       "
@@ -24,7 +24,7 @@
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.orientationType"
       :value="
-        BeneficiaryOrientationTypeKeys.value(
+        beneficiaryOrientationTypeKeys.value(
           externalOrganisations.orientationType
         )
       "
@@ -55,8 +55,8 @@
 <script setup lang="ts">
   import type { GetBeneficiaryExternalOrganisations } from '~/types/beneficiary'
   import {
-    BeneficiaryOrientationTypeKeys,
-    BeneficiaryProtectionMeasureKeys
+    beneficiaryOrientationTypeKeys,
+    beneficiaryProtectionMeasureKeys
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 

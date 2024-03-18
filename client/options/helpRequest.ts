@@ -1,24 +1,20 @@
 import { PaymentMethod } from '@prisma/client'
-import { labelsToOptions } from '~/utils/options'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 
-export const externalOrganisationOptions = new Map([
-  ['false', 'En interne'],
-  ['true', 'En externe']
-])
+export const externalOrganisationKeys = buildKeys({
+  false: 'En interne',
+  true: 'En externe'
+})
 
-export const paymentMethodLabels: { [key in PaymentMethod]: string } = {
+export const paymentMethodKeys = buildKeys({
   [PaymentMethod.FoodStamps]: 'Bons alimentaires',
   [PaymentMethod.CreditCard]: 'Carte bancaire',
   [PaymentMethod.Check]: 'Chèque',
   [PaymentMethod.Cash]: 'Espèces',
   [PaymentMethod.WireTransfer]: 'Virement'
-}
+})
 
-export const paymentMethodOptions = labelsToOptions(paymentMethodLabels)
-
-export const isRefundableLabels = {
+export const isRefundableKeys = buildKeys({
   true: 'Remboursable',
   false: 'Non remboursable'
-}
-
-export const isRefundableOptions = labelsToOptions(isRefundableLabels)
+})

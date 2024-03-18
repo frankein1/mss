@@ -37,7 +37,7 @@
           class="fr-link fr-icon-arrow-right-line fr-link--icon-left"
           @click="onNavigate(status)"
         >
-          {{ socialSupportStatusLabels[status] }} ({{ _count }})
+          {{ socialSupportStatusKeys.value(status) }} ({{ _count }})
         </NuxtLink>
       </li>
     </ul>
@@ -69,7 +69,7 @@
   >
 
   const filtersState = useFilters()
-  const { socialSupportStatusLabels } = useSocialSupportStatus()
+  const { socialSupportStatusKeys } = useSocialSupportStatus()
   const authState = useAuthState()
 
   const props = defineProps<{

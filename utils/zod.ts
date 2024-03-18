@@ -1,7 +1,7 @@
 import { Options } from '~/utils/options'
 
 export const zodEnumFromOptions = (options: Options): [string, ...string[]] =>
-  Array.from(options).map(([value]) => value) as [string, ...string[]]
+  Array.from(options).map(o => o.value) as [string, ...string[]]
 
 export const requiredErrorMessage = 'Veuillez renseigner ce champ.'
 

@@ -57,7 +57,7 @@
                   <UserRoleForm :user="user" />
                 </template>
                 <template v-else>{{
-                  NonAdminUserRoleLabels[user.role as NonAdminUserRole]
+                  nonAdminUserRoleKeys.value(user.role as NonAdminUserRole)
                 }}</template>
               </td>
               <td>
@@ -82,7 +82,7 @@
   import { TRPCClientErrorBase } from '@trpc/client'
   import { DefaultErrorShape } from '@trpc/server'
   import { AlertType } from '~/utils/constants/alert'
-  import { NonAdminUserRoleLabels } from '~/client/options'
+  import { nonAdminUserRoleKeys } from '~/client/options'
   import { userFieldLabels } from '~/client/labels'
   import type { NonAdminUserRole } from '~/types/user'
   import { useAuthState } from '~/composables/useAuthState'

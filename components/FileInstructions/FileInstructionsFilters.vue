@@ -31,9 +31,9 @@
     housingHelpRequestFieldLabels
   } from '~/client/labels'
   import {
-    ministerOptions,
-    fileInstructionTypeFilterOptions,
-    roomCountOptions,
+    ministerKeys,
+    fileInstructionTypeFilterKeys,
+    roomCountKeys,
     fileInstructionTypePictos
   } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
@@ -113,7 +113,10 @@
       {
         name: 'fileInstructionType',
         label: "Thématique d'accompagnement",
-        options: withEmptyValue(fileInstructionTypeFilterOptions, 'Toutes'),
+        options: withEmptyValue(
+          fileInstructionTypeFilterKeys.options,
+          'Toutes'
+        ),
         type: FilterType.Radio,
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.FileInstructionType,
@@ -136,7 +139,7 @@
       fileInstructionsFilters.push({
         name: 'roomCount',
         label: housingHelpRequestFieldLabels.roomCount,
-        options: roomCountOptions,
+        options: roomCountKeys.options,
         type: FilterType.Radio,
         asTag: true,
         matomoEventCategory: EventCategory.HelpRequestFilter,
@@ -171,7 +174,7 @@
 
     if (
       application.value.module.helpRequest &&
-      examinationDateOptions.value.size
+      examinationDateOptions.value.length
     ) {
       fileInstructionsFilters.push({
         name: 'examinationDate',
@@ -190,7 +193,7 @@
       fileInstructionsFilters.push({
         name: 'ministre',
         label: helpRequestFieldLabels.ministre,
-        options: ministerOptions,
+        options: ministerKeys.options,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.Ministre
@@ -202,17 +205,15 @@
 
   async function loadExaminationDates() {
     if (!application.value.module.helpRequest) {
-      return new Map()
+      return []
     }
 
     const examinationDates = await trpcClient.config.getExaminationDates.query()
 
-    return new Map(
-      examinationDates.map(({ examinationDate }) => [
-        examinationDate.toString(),
-        formatDate(examinationDate)
-      ])
-    )
+    return examinationDates.map(({ examinationDate }) => ({
+      value: examinationDate.toString(),
+      label: formatDate(examinationDate)
+    }))
   }
 
   function onFilter(filters: FileInstructionFilterInput) {

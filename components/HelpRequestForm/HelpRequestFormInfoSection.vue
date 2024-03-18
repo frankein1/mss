@@ -17,7 +17,7 @@
       <VeeSelect
         name="reason"
         :label="housingHelpRequestFieldLabels.reason"
-        :options="withEmptyValue(housingReasonOptions)"
+        :options="withEmptyValue(housingReasonKeys.options)"
       />
     </div>
 
@@ -37,7 +37,7 @@
     <VeeSelect
       name="isRefundable"
       :label="helpRequestFieldLabels.isRefundable"
-      :options="withEmptyValue(isRefundableOptions)"
+      :options="withEmptyValue(isRefundableKeys.options)"
     />
   </div>
 
@@ -93,7 +93,7 @@
           <VeeSelect
             name="paymentMethod"
             :label="helpRequestFieldLabels.paymentMethod"
-            :options="withEmptyValue(paymentMethodOptions)"
+            :options="withEmptyValue(paymentMethodKeys.options)"
           />
         </div>
 
@@ -114,7 +114,7 @@
       <VeeSelect
         name="refusalReason"
         :label="helpRequestFieldLabels.refusalReason"
-        :options="withEmptyValue(refusalReasonOptions)"
+        :options="withEmptyValue(refusalReasonOptions.options)"
       />
     </div>
   </template>
@@ -134,11 +134,11 @@
   import { helpRequestFieldLabels } from '~/client/labels/helpRequest.labels'
   import { housingHelpRequestFieldLabels } from '~/client/labels/housingHelpRequest.labels'
   import {
-    paymentMethodOptions,
-    housingReasonOptions,
-    helpRequestRefusalReasonOptions,
-    housingFileInstructionRefusalReasonOptions,
-    isRefundableOptions
+    paymentMethodKeys,
+    housingReasonKeys,
+    helpRequestRefusalReasonKeys,
+    housingFileInstructionRefusalReasonKeys,
+    isRefundableKeys
   } from '~/client/options'
   import { withEmptyValue } from '~/utils/options'
 
@@ -177,7 +177,7 @@
 
   const refusalReasonOptions = computed(() =>
     isHousingSupport.value
-      ? housingFileInstructionRefusalReasonOptions
-      : helpRequestRefusalReasonOptions
+      ? housingFileInstructionRefusalReasonKeys
+      : helpRequestRefusalReasonKeys
   )
 </script>

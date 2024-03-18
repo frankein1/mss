@@ -8,7 +8,7 @@
   </li>
   <li v-if="followup.duration">
     <span class="information-label">{{ followupFieldLabels.duration }} :</span>
-    {{ followupDurationLabels[followup.duration] }}
+    {{ followupDurationKeys.value(followup.duration) }}
   </li>
   <li
     v-if="followup.helpRequested"
@@ -33,10 +33,7 @@
 <script setup lang="ts">
   import { FollowupMedium } from '@prisma/client'
   import { FollowupData } from './types'
-  import {
-    followupMediumLabels,
-    followupDurationLabels
-  } from '~/client/options'
+  import { followupMediumKeys, followupDurationKeys } from '~/client/options'
   import { followupFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
@@ -44,7 +41,7 @@
   }>()
 
   const medium = computed(() => {
-    const label = followupMediumLabels[props.followup.medium]
+    const label = followupMediumKeys.value(props.followup.medium)
     if (
       (props.followup.medium !== FollowupMedium.ExternalAppointment ||
         !props.followup.place) &&

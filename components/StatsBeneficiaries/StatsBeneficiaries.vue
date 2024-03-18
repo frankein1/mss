@@ -143,9 +143,9 @@
       agentOptions?: Options
     }>(),
     {
-      socialSupportSubjectOptions: () => new Map<string, string>(),
-      beneficiariesCitiesOptions: () => new Map<string, string>(),
-      agentOptions: () => new Map<string, string>()
+      socialSupportSubjectOptions: () => [],
+      beneficiariesCitiesOptions: () => [],
+      agentOptions: () => []
     }
   )
 

@@ -12,10 +12,10 @@ import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBenefici
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
-  socialSupportStatusLabels,
-  fileInstructionRefusalReasonLabels,
-  paymentMethodLabels,
-  ministerLabels
+  socialSupportStatusKeys,
+  fileInstructionRefusalReasonKeys,
+  paymentMethodKeys,
+  ministerKeys
 } from '~/client/options'
 
 export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
@@ -102,7 +102,7 @@ export async function exportFileInstructions({
             socialSupport.documents
               ?.map(document => document.name)
               .join(', ') || '',
-          status: socialSupportStatusLabels[socialSupport.status],
+          status: socialSupportStatusKeys.value(socialSupport.status) || '',
           askedAmount: helpRequest?.askedAmount?.toString() || '',
           examinationDate: formatDate(
             fileInstruction.examinationDate,
@@ -110,25 +110,23 @@ export async function exportFileInstructions({
           ),
           decisionDate: formatDate(fileInstruction.decisionDate, 'DD-MM-YYYY'),
           allocatedAmount: helpRequest?.allocatedAmount?.toString() || '',
-          paymentMethod: helpRequest?.paymentMethod
-            ? paymentMethodLabels[helpRequest.paymentMethod]
-            : '',
+          paymentMethod:
+            paymentMethodKeys.value(helpRequest?.paymentMethod) || '',
           paymentDate: formatDate(helpRequest?.paymentDate, 'DD-MM-YYYY'),
           handlingDate: formatDate(helpRequest?.handlingDate, 'DD-MM-YYYY'),
           refusalReason:
             fileInstruction.refusalReasonOther ||
-            (fileInstruction.refusalReason
-              ? fileInstructionRefusalReasonLabels[
-                  fileInstruction.refusalReason
-                ]
-              : ''),
+            fileInstructionRefusalReasonKeys.value(
+              fileInstruction.refusalReason
+            ) ||
+            '',
           dispatchDate: formatDate(fileInstruction.dispatchDate, 'DD-MM-YYYY'),
           synthesis: socialSupport.synthesis || '',
           dueDate: formatDate(socialSupport.dueDate, 'DD-MM-YYYY'),
           fullFile: getBooleanOrEmpty(fileInstruction.fullFile),
           updated: formatDate(socialSupport.updated, 'DD-MM-YYYY HH:mm'),
           ministre: socialSupport.ministre
-            ? ministerLabels[socialSupport.ministre]
+            ? ministerKeys.byKey[socialSupport.ministre]
             : '',
           numeroPegase: socialSupport.numeroPegase || '',
           createdById: socialSupport.createdBy

@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
   import {
-    beneficiarySocioProfessionalCategoryLabels,
+    beneficiarySocioProfessionalCategoryKeys,
     getStatLabel
   } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
@@ -56,7 +56,7 @@
       CSPCounts.value?.map(({ _count, socioProfessionalCategory }) => ({
         key: socioProfessionalCategory || 'null',
         label: getStatLabel(
-          beneficiarySocioProfessionalCategoryLabels,
+          beneficiarySocioProfessionalCategoryKeys.byKey,
           socioProfessionalCategory
         ),
         count: _count

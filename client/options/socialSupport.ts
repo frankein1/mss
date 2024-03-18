@@ -1,7 +1,6 @@
 import { SocialSupportStatus } from '@prisma/client'
-import { followupStatusLabels } from './followup'
-import { FieldLabels } from '~/types/fieldLabels'
-import { labelsToOptions } from '~/utils/options'
+import { followupStatusKeys } from './followup'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 
 export enum TypeSuivi {
   Followup = 'Followup',
@@ -11,17 +10,15 @@ export enum TypeSuivi {
   OtherHelpRequest = 'OtherHelpRequest'
 }
 
-const typeSuiviLabels: FieldLabels<typeof TypeSuivi> = {
+export const typeSuiviKeys = buildKeys({
   [TypeSuivi.Followup]: "Synthèses d'entretiens",
   [TypeSuivi.AllHelpRequest]: 'Instructions - toutes',
   [TypeSuivi.HousingHelpRequest]: 'Instructions - demande de logement',
   [TypeSuivi.FinancialHelpRequest]: 'Instructions - aide financière',
   [TypeSuivi.OtherHelpRequest]: 'Instructions - autre'
-}
+})
 
-export const typeSuiviOptions = labelsToOptions(typeSuiviLabels)
-
-export const fileInstructionStatusLabels = {
+export const fileInstructionStatusKeys = buildKeys({
   [SocialSupportStatus.WaitingAdditionalInformation]:
     'En attente de justificatifs',
   [SocialSupportStatus.InvestigationOngoing]: "En cours d'instruction",
@@ -31,23 +28,27 @@ export const fileInstructionStatusLabels = {
   [SocialSupportStatus.ClosedByBeneficiary]: 'Clôturé par le bénéficiaire',
   [SocialSupportStatus.ClosedByAgent]: "Clôturé par l'agent",
   [SocialSupportStatus.Dismissed]: 'Classé sans suite'
+})
+
+export const ministryFileInstructionStatusKeys = buildKeys({
+  [SocialSupportStatus.WaitingAdditionalInformation]:
+    'En attente de justificatifs',
+  [SocialSupportStatus.InvestigationOngoing]: "En cours d'instruction",
+  // TODO: HANDLE LABEL IN DB
+  [SocialSupportStatus.Accepted]: 'Traité',
+  [SocialSupportStatus.Refused]: 'Refusé',
+  [SocialSupportStatus.Adjourned]: 'Ajourné',
+  [SocialSupportStatus.ClosedByBeneficiary]: 'Clôturé par le bénéficiaire',
+  [SocialSupportStatus.ClosedByAgent]: "Clôturé par l'agent",
+  [SocialSupportStatus.Dismissed]: 'Classé sans suite'
+})
+
+export const socialSupportStatusKeys = {
+  ...followupStatusKeys,
+  ...fileInstructionStatusKeys
 }
 
-export const ministryFileInstructionStatusLabels = {
-  ...fileInstructionStatusLabels,
-  [SocialSupportStatus.Accepted]: 'Traité'
-}
-
-export const socialSupportStatusLabels: {
-  [key in SocialSupportStatus]: string
-} = {
-  ...followupStatusLabels,
-  ...fileInstructionStatusLabels
-}
-
-export const ministrySocialSupportStatusLabels: {
-  [key in SocialSupportStatus]: string
-} = {
-  ...followupStatusLabels,
-  ...ministryFileInstructionStatusLabels
+export const ministrySocialSupportStatusKeys = {
+  ...followupStatusKeys,
+  ...ministryFileInstructionStatusKeys
 }

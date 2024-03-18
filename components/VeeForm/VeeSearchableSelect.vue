@@ -63,7 +63,9 @@
       :aria-labelledby="labelId"
     >
       <li
-        v-for="([optionValue, optionLabel], index) in orderedFilteredOptions"
+        v-for="(
+          { value: optionValue, label: optionLabel }, index
+        ) in orderedFilteredOptions"
         :ref="el => setOptionRef(el, optionValue)"
         :key="optionValue"
         :class="{
@@ -135,7 +137,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { NEW_OPTION_PREFIX, NEW_OPTION_ID, Options } from '~/utils/options'
+  import {
+    NEW_OPTION_PREFIX,
+    NEW_OPTION_ID,
+    Options,
+    getOptionValues,
+    getOptionLabels
+  } from '~/utils/options'
 
   const props = withDefaults(
     defineProps<{
@@ -180,13 +188,13 @@
   )
   const labelId = computed(() => `searchable-select-${id.value}-label`)
 
-  const existingOptions = ref<Map<string, string>>(props.options)
-  const filteredOptions = ref<Map<string, string>>(existingOptions.value)
+  const existingOptions = ref<Options>(props.options)
+  const filteredOptions = ref<Options>(existingOptions.value)
   const displayedValue = ref<string>('')
   const combobox = ref<HTMLInputElement | null>(null)
   const selectedValues = ref<string[]>(
     (((props.multiple ? value.value : [value.value]) || []) as string[]).filter(
-      v => props.options.has(v)
+      v => hasOption(props.options, v)
     )
   )
   const hiddenInput = ref<HTMLInputElement | null>(null)
@@ -199,7 +207,7 @@
   const expanded = computed<boolean>(
     () =>
       isFocused.value &&
-      (!!filteredOptions.value.size || props.canCreateNewOption)
+      (!!filteredOptions.value.length || props.canCreateNewOption)
   )
 
   const ariaDescribedby = computed<string | undefined>(() =>
@@ -222,24 +230,26 @@
 
   const selectedValuesLabels = computed<string>(() =>
     selectedValues.value
-      .map(value => existingOptions.value.get(value))
+      .map(value => getOptionLabel(existingOptions.value, value))
       .join(', ')
   )
 
-  const orderedFilteredOptions = computed<Map<string, string>>(() => {
+  const orderedFilteredOptions = computed<Options>(() => {
     if (!props.multiple) {
       return filteredOptions.value
     }
-    const optionsAsArray = [...filteredOptions.value.entries()]
-    const sortedOptionsAsArray = optionsAsArray.sort(([aKey], [bKey]) => {
-      const aSelected = selectedValues.value.includes(aKey)
-      const bSelected = selectedValues.value.includes(bKey)
-      if (aSelected === bSelected) {
-        return 0
+    const optionsAsArray = [...filteredOptions.value]
+    const sortedOptionsAsArray = optionsAsArray.sort(
+      ({ value: aKey }, { value: bKey }) => {
+        const aSelected = selectedValues.value.includes(aKey)
+        const bSelected = selectedValues.value.includes(bKey)
+        if (aSelected === bSelected) {
+          return 0
+        }
+        return aSelected ? -1 : 1
       }
-      return aSelected ? -1 : 1
-    })
-    return new Map(sortedOptionsAsArray)
+    )
+    return sortedOptionsAsArray
   })
 
   const search = computed<string>(() =>
@@ -247,7 +257,7 @@
   )
 
   const searchAlreadyExists = computed<boolean>(() => {
-    return [...orderedFilteredOptions.value.values()].includes(search.value)
+    return getOptionLabels(orderedFilteredOptions.value).includes(search.value)
   })
 
   const createTagIsDisplayed = computed(
@@ -255,7 +265,7 @@
   )
 
   const optionValues = computed<string[]>(() => {
-    const _optionValues = [...orderedFilteredOptions.value.keys()]
+    const _optionValues = [...getOptionValues(orderedFilteredOptions.value)]
     if (createTagIsDisplayed.value) {
       _optionValues.push(NEW_OPTION_ID)
     }
@@ -294,7 +304,7 @@
     () =>
       props.canCreateNewOption &&
       search.value &&
-      activeIndex.value === orderedFilteredOptions.value.size
+      activeIndex.value === orderedFilteredOptions.value.length
   )
 
   /**
@@ -357,11 +367,11 @@
       return
     }
 
-    const filteredOptionsArray = [...existingOptions.value.entries()].filter(
-      ([_, label]) =>
+    const filteredOptionsArray = [...existingOptions.value].filter(
+      ({ label }) =>
         label.toLocaleLowerCase().includes(search.value.toLocaleLowerCase())
     )
-    filteredOptions.value = new Map(filteredOptionsArray)
+    filteredOptions.value = filteredOptionsArray
   }
 
   function onOptionMouseDown() {
@@ -489,7 +499,7 @@
       ' ',
       '_'
     )
-    existingOptions.value.set(newOptionValue, search.value)
+    existingOptions.value.push({ value: newOptionValue, label: search.value })
     optionRefs[newOptionValue] = ref(null)
     if (props.multiple) {
       selectedValues.value.push(newOptionValue)

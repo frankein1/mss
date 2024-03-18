@@ -4,7 +4,9 @@
       <VeeSelect
         name="socioProfessionalCategory"
         :label="beneficiaryFieldLabels.socioProfessionalCategory"
-        :options="withEmptyValue(beneficiarySocioProfessionalCategoryOptions)"
+        :options="
+          withEmptyValue(beneficiarySocioProfessionalCategoryKeys.options)
+        "
       />
     </div>
     <div class="fr-col-12">
@@ -29,7 +31,7 @@
       <VeeMultiSelect
         name="mainIncomeSource"
         :label="beneficiaryFieldLabels.mainIncomeSource"
-        :options="incomeSourceOptions"
+        :options="incomeSourceKeys.options"
         label-class="fr-text--regular"
         dropdown
       />
@@ -45,7 +47,7 @@
         <VeeMultiSelect
           name="partnerMainIncomeSource"
           :label="beneficiaryFieldLabels.partnerMainIncomeSource"
-          :options="incomeSourceOptions"
+          :options="incomeSourceKeys.options"
           label-class="fr-text--regular"
           dropdown
         />
@@ -62,7 +64,7 @@
         <VeeMultiSelect
           name="majorChildrenMainIncomeSource"
           :label="beneficiaryFieldLabels.majorChildrenMainIncomeSource"
-          :options="incomeSourceOptions"
+          :options="incomeSourceKeys.options"
           label-class="fr-text--regular"
           dropdown
         />
@@ -79,7 +81,7 @@
         <VeeMultiSelect
           name="otherMembersMainIncomeSource"
           :label="beneficiaryFieldLabels.otherMembersMainIncomeSource"
-          :options="incomeSourceOptions"
+          :options="incomeSourceKeys.options"
           label-class="fr-text--regular"
           dropdown
         />
@@ -101,7 +103,7 @@
       <VeeMultiSelect
         name="pensionOrganisations"
         :label="beneficiaryFieldLabels.pensionOrganisations"
-        :options="pensionOrganisationOptions"
+        :options="pensionOrganisationKeys.options"
         label-class="fr-text--regular"
         dropdown
       />
@@ -138,7 +140,7 @@
         v-if="application.module.ministere"
         name="ministereCategorie"
         :label="beneficiaryFieldLabels.ministereCategorie"
-        :options="withEmptyValue(ministereCategorieOptions)"
+        :options="withEmptyValue(ministereCategorieKeys.options)"
       />
     </div>
     <div class="fr-col-12">
@@ -146,7 +148,7 @@
         v-if="application.module.ministere"
         name="ministereDepartementServiceAc"
         :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
-        :options="withEmptyValue(ministereDepartmentServiceAcOptions)"
+        :options="withEmptyValue(ministereDepartmentServiceAcKeys.options)"
       />
     </div>
     <div class="fr-col-12">
@@ -154,7 +156,7 @@
         v-if="application.module.ministere"
         name="ministereStructure"
         :label="beneficiaryFieldLabels.ministereStructure"
-        :options="withEmptyValue(ministereStructureOptions)"
+        :options="withEmptyValue(ministereStructureKeys.options)"
       />
     </div>
   </BeneficiaryFormSection>
@@ -168,12 +170,12 @@
     RelativeRelationship
   } from '@prisma/client'
   import {
-    beneficiarySocioProfessionalCategoryOptions,
-    incomeSourceOptions,
-    pensionOrganisationOptions,
-    ministereDepartmentServiceAcOptions,
-    ministereStructureOptions,
-    ministereCategorieOptions
+    beneficiarySocioProfessionalCategoryKeys,
+    incomeSourceKeys,
+    pensionOrganisationKeys,
+    ministereDepartmentServiceAcKeys,
+    ministereStructureKeys,
+    ministereCategorieKeys
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 

@@ -43,8 +43,11 @@
 
   const documents = computed(() => data.value?.documents || [])
 
-  const documentOptions = computed(
-    () => new Map(documents.value?.map(d => [d.document.key, d.document.name]))
+  const documentOptions = computed(() =>
+    documents.value?.map(d => ({
+      value: d.document.key,
+      label: d.document.name
+    }))
   )
 
   function onNewDocument(key: string) {

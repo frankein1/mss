@@ -9,7 +9,7 @@
   import { FilterType } from '~/utils/constants/filters'
   import type { EmailAdminFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import { emailStatusOptions } from '~/client/options'
+  import { emailStatusKeys } from '~/client/options'
   import { withEmptyValue } from '~/utils/options'
 
   const emit = defineEmits<{
@@ -21,7 +21,7 @@
       {
         name: 'status',
         label: 'Statut',
-        options: withEmptyValue(emailStatusOptions, 'Tous les statuts'),
+        options: withEmptyValue(emailStatusKeys.options, 'Tous les statuts'),
         type: FilterType.SelectOne
       }
     ]

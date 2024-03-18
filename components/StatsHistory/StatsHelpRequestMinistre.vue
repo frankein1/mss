@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { ministerLabels, getStatLabel } from '~/client/options'
+  import { ministerKeys, getStatLabel } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
@@ -49,7 +49,7 @@
     () =>
       ministreCounts.value?.map(({ _count, ministre }) => ({
         key: ministre || 'null',
-        label: getStatLabel(ministerLabels, ministre),
+        label: getStatLabel(ministerKeys.byKey, ministre),
         color: SupportColor.helpRequests,
         count: _count
       })) || []

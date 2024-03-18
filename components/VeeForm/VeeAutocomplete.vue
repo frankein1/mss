@@ -65,7 +65,7 @@
       />
       <template v-if="!timeout && !fetchResultsError">
         <li
-          v-for="([resultValue, resultLabel], index) in results"
+          v-for="({ value: resultValue, label: resultLabel }, index) in results"
           :ref="el => setOptionRef(el, resultValue)"
           :key="resultValue"
           class="menu-item"
@@ -127,14 +127,14 @@
   const { id, errorId } = useFormFieldId(name)
   const listboxId = computed(() => `autocomplete-${id.value}-listbox`)
 
-  const results = ref<Options>(new Map<string, string>())
+  const results = ref<Options>([])
   const timeout = ref<NodeJS.Timeout | null>(null)
   const fetchResultsError = ref('')
   const combobox = ref<HTMLInputElement | null>(null)
 
   const optionRefs: { [key: string]: Ref<HTMLElement | null> } = {}
 
-  const resultValues = computed(() => [...results.value.keys()])
+  const resultValues = computed(() => [...results.value.map(o => o.value)])
 
   const {
     /**
@@ -162,7 +162,7 @@
   } = useExpandMenu(combobox, resultValues, optionRefs)
 
   const expanded = computed(
-    () => !!(isFocused.value && (results.value.size || timeout.value))
+    () => !!(isFocused.value && (results.value.length || timeout.value))
   )
 
   const ariaDescribedby = computed(() =>
@@ -176,7 +176,7 @@
         return
       }
       setValue(value)
-      results.value = new Map()
+      results.value = []
     }
   )
 
@@ -188,7 +188,7 @@
       clearTimeout(timeout.value)
       timeout.value = null
     }
-    results.value = new Map()
+    results.value = []
     fetchResultsError.value = ''
 
     if (!search) {
@@ -234,7 +234,8 @@
     if (optionIndex) {
       activeIndex.value = optionIndex
     }
-    setValue(results.value.get(optionValue) || '')
+    const o = getOption(results.value, optionValue)
+    setValue(o?.label || '')
     emit('resultSelected', optionValue)
   }
 

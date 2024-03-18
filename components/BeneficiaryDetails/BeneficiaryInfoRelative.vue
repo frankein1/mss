@@ -15,7 +15,7 @@
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.relationship"
-      :value="RelativeRelationshipKeys.value(relative.relationship)"
+      :value="relativeRelationshipKeys.value(relative.relationship)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
@@ -56,7 +56,7 @@
 
 <script setup lang="ts">
   import { GetBeneficiaryRelative } from '~/types/beneficiary'
-  import { RelativeRelationshipKeys } from '~/client/options'
+  import { relativeRelationshipKeys } from '~/client/options'
   import { RoutePath } from '~/utils/routing'
   import { relativeFieldLabels } from '~/client/labels/relative.labels'
 

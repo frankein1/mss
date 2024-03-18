@@ -1,12 +1,10 @@
-import { STATS_NULL_LABEL } from '~/client/options'
-import { STATS_NULL_KEY } from '~/utils/constants/stats'
 import type { Options } from '~/utils/options'
 
 export function labelOrUnprovided(value: string, options: Options) {
   if (!value) {
     return 'Non renseigné'
   }
-  return options.get(value)
+  return getOptionLabel(options, value)
 }
 
 export function getPercentage(count: number, total: number) {

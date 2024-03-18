@@ -4,7 +4,7 @@
       <VeeSelect
         name="familySituation"
         :label="beneficiaryFieldLabels.familySituation"
-        :options="withEmptyValue(beneficiaryFamilySituationOptions)"
+        :options="withEmptyValue(beneficiaryFamilySituationKeys.options)"
       />
     </div>
     <div class="fr-col-12 fr-col-lg-6">
@@ -32,5 +32,5 @@
 
 <script setup lang="ts">
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { beneficiaryFamilySituationOptions } from '~/client/options'
+  import { beneficiaryFamilySituationKeys } from '~/client/options'
 </script>

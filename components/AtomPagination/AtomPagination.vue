@@ -10,7 +10,7 @@
       <VeeSelect
         label="Résultats par page"
         name="resultsPerPage"
-        :options="REQUEST_LIMIT_OPTIONS"
+        :options="REQUEST_LIMIT_KEYS.options"
         @change-value="changeLimit"
       />
     </form>
@@ -114,10 +114,7 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    REQUEST_LIMIT_OPTIONS,
-    REQUEST_LIMIT_DEFAULT
-  } from '~/utils/constants'
+  import { REQUEST_LIMIT_KEYS } from '~/utils/constants'
 
   const props = withDefaults(
     defineProps<{

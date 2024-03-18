@@ -7,7 +7,7 @@
     <VeeRadioButtons
       name="subject"
       label="L'instruction concerne"
-      :options="fileInstructionTypeOptions"
+      :options="fileInstructionTypeKeys.options"
       :pictos="fileInstructionTypePictos"
       :inline="false"
       required
@@ -42,7 +42,7 @@
   import { z } from 'zod'
   import { FileInstructionType } from '@prisma/client'
   import {
-    fileInstructionTypeOptions,
+    fileInstructionTypeKeys,
     fileInstructionTypePictos
   } from '~/client/options'
   import { RoutePath } from '~/utils/routing'

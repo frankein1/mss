@@ -16,13 +16,13 @@
     <VeeSelect
       :label="documentFieldLabels.type"
       name="type"
-      :options="documentTypeOptions"
+      :options="documentTypeKeys.options"
       required
     />
     <VeeSearchableSelect
       :label="documentFieldLabels.tags"
       name="tags"
-      :options="documentTagOptions"
+      :options="documentTagKeys.options"
       multiple
     />
     <VeeCheckbox
@@ -44,7 +44,7 @@
 
 <script setup lang="ts">
   import { GetDocument } from './types'
-  import { documentTagOptions, documentTypeOptions } from '~/client/options'
+  import { documentTagKeys, documentTypeKeys } from '~/client/options'
   import { EditDocumentInput, editDocumentSchema } from '~/server/schema'
   import { documentFieldLabels } from '~/client/labels'
   import { DocumentPermissions } from '~/server/security'

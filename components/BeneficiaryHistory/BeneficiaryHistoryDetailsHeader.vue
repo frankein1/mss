@@ -84,7 +84,7 @@
   import { followupFieldLabels } from '~/client/labels'
 
   const route = useRoute()
-  const { socialSupportStatusLabels } = useSocialSupportStatus()
+  const { socialSupportStatusKeys } = useSocialSupportStatus()
 
   const props = withDefaults(
     defineProps<{
@@ -104,8 +104,8 @@
 
   const collapseBtn = ref<HTMLButtonElement | null>(null)
 
-  const statusLabel = computed(
-    () => socialSupportStatusLabels.value[props.data.status]
+  const statusLabel = computed(() =>
+    socialSupportStatusKeys.value.value(props.data.status)
   )
 
   const redirectedLabel = computed(() => {

@@ -5,9 +5,8 @@ import {
   BeneficiaryMinistereDepartementServiceAc
 } from '@prisma/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
-import { labelsToOptions } from '~/utils/options'
 
-const currentMinisterLabels = {
+export const ministerKeys = buildKeys({
   [Minister.AuroreBerge]: 'Aurore Berge (Solidarités et Familles)',
   [Minister.FrancoisBraun]: 'François Braun (Santé et Prévention)',
   [Minister.JeanChristopheCombe]:
@@ -27,19 +26,9 @@ const currentMinisterLabels = {
     'Frédéric Valletoux (Délégué Santé et Prévention)',
   [Minister.CatherineVautrin]:
     'Catherine Vautrin (Travail, Santé et Solidarités)'
-}
+})
 
-const currentMinisterOptions = labelsToOptions(currentMinisterLabels)
-
-const ministerLabels = {
-  ...currentMinisterLabels
-}
-
-const ministerOptions = labelsToOptions(ministerLabels)
-
-const ministereDepartmentServiceAcLabels: {
-  [key in BeneficiaryMinistereDepartementServiceAc]: string
-} = {
+export const ministereDepartmentServiceAcKeys = buildKeys({
   [BeneficiaryMinistereDepartementServiceAc.Ain01]: '(01) Ain',
   [BeneficiaryMinistereDepartementServiceAc.Aisne02]: '(02) Aisne',
   [BeneficiaryMinistereDepartementServiceAc.Allier03]: '(03) Allier',
@@ -200,19 +189,9 @@ const ministereDepartmentServiceAcLabels: {
   [BeneficiaryMinistereDepartementServiceAc.SecretariatAuxPersonnesHandicapees]:
     'Secrétariat aux personnes handicapées',
   [BeneficiaryMinistereDepartementServiceAc.Sgmcas]: 'SGMCAS'
-}
+})
 
-export const MinistereDepartmentServiceAcKeys = buildKeys(
-  ministereDepartmentServiceAcLabels
-)
-
-const ministereDepartmentServiceAcOptions = labelsToOptions(
-  ministereDepartmentServiceAcLabels
-)
-
-const ministereStructureLabels: {
-  [key in BeneficiaryMinistereStructure]: string
-} = {
+export const ministereStructureKeys = buildKeys({
   [BeneficiaryMinistereStructure.AdministrationCentrale]:
     'Administration centrale',
   [BeneficiaryMinistereStructure.Ars]: 'ARS',
@@ -226,34 +205,12 @@ const ministereStructureLabels: {
   [BeneficiaryMinistereStructure.Mnc]: 'MNC',
   [BeneficiaryMinistereStructure.Retraites]: 'Retraites',
   [BeneficiaryMinistereStructure.Other]: 'Autre'
-}
+})
 
-export const MinistereStructureKeys = buildKeys(ministereStructureLabels)
-
-const ministereStructureOptions = labelsToOptions(ministereStructureLabels)
-
-const ministereCategorieLabels: {
-  [key in BeneficiaryMinistereCategorie]: string
-} = {
+export const ministereCategorieKeys = buildKeys({
   [BeneficiaryMinistereCategorie.CategorieA]: 'Catégorie A',
   [BeneficiaryMinistereCategorie.CategorieB]: 'Catégorie B',
   [BeneficiaryMinistereCategorie.CategorieC]: 'Catégorie C',
   [BeneficiaryMinistereCategorie.CadreDroitPrive]: 'Cadre droit privé',
   [BeneficiaryMinistereCategorie.NonCadreDroitPrive]: 'Non cadre droit privé'
-}
-
-export const MinistereCategorieKeys = buildKeys(ministereCategorieLabels)
-
-const ministereCategorieOptions = labelsToOptions(ministereCategorieLabels)
-
-export {
-  currentMinisterOptions,
-  ministerLabels,
-  ministerOptions,
-  ministereDepartmentServiceAcLabels,
-  ministereDepartmentServiceAcOptions,
-  ministereStructureLabels,
-  ministereStructureOptions,
-  ministereCategorieLabels,
-  ministereCategorieOptions
-}
+})

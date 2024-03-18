@@ -11,13 +11,13 @@
     <VeeSelect
       :label="documentFieldLabels.type"
       name="type"
-      :options="withEmptyValue(documentTypeOptions)"
+      :options="withEmptyValue(documentTypeKeys.options)"
       required
     />
     <VeeSearchableSelect
       :label="documentFieldLabels.tags"
       name="tags"
-      :options="documentTagOptions"
+      :options="documentTagKeys.options"
       multiple
     />
     <VeeCheckbox
@@ -49,7 +49,7 @@
     UploadBrowserDocumentInput,
     uploadBrowserDocumentSchema
   } from '~/server/schema'
-  import { documentTypeOptions, documentTagOptions } from '~/client/options'
+  import { documentTypeKeys, documentTagKeys } from '~/client/options'
   import { documentFieldLabels } from '~/client/labels'
 
   const props = defineProps<{

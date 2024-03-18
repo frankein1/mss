@@ -21,8 +21,8 @@
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
   import {
-    beneficiaryStatusOptions,
-    ageGroupOptions,
+    beneficiaryStatusKeys,
+    ageGroupKeys,
     yesNoOptions
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
@@ -117,7 +117,10 @@
       {
         name: 'status',
         label: 'Statut',
-        options: withEmptyValue(beneficiaryStatusOptions, 'Tous les statuts'),
+        options: withEmptyValue(
+          beneficiaryStatusKeys.options,
+          'Tous les statuts'
+        ),
         type: FilterType.SelectOne,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
@@ -126,7 +129,10 @@
       {
         name: 'ageGroup',
         label: "Tranche d'âge",
-        options: withEmptyValue(ageGroupOptions, "Toutes les tranches d'âge"),
+        options: withEmptyValue(
+          ageGroupKeys.options,
+          "Toutes les tranches d'âge"
+        ),
         type: FilterType.SelectOne,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,

@@ -2,7 +2,7 @@
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.gir"
-      :value="BeneficiaryGirKeys.value(health.gir)"
+      :value="beneficiaryGirKeys.value(health.gir)"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
@@ -34,7 +34,7 @@
 
 <script lang="ts" setup>
   import { GetBeneficiaryHealth } from '~/types/beneficiary'
-  import { BeneficiaryGirKeys } from '~/client/options'
+  import { beneficiaryGirKeys } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
   defineProps<{

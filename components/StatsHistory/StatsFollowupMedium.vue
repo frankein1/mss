@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { followupMediumLabels } from '~/client/options'
+  import { followupMediumKeys } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
   import { SupportColor } from '~/client/colors/support'
   import { AlertType } from '~/utils/constants/alert'
@@ -48,7 +48,7 @@
     () =>
       followupMediumCounts.value?.map(({ _count, medium }) => ({
         key: medium,
-        label: followupMediumLabels[medium],
+        label: followupMediumKeys.value(medium) || '',
         color: SupportColor.followups,
         count: _count
       })) || []

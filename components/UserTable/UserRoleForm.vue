@@ -7,7 +7,7 @@
     <VeeSelect
       name="role"
       :label="userFieldLabels.role"
-      :options="nonAdminUserRoleOptions"
+      :options="nonAdminUserRoleKeys.options"
       required
       no-label
       labelled-by="role-col"
@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
   import { User } from '@prisma/client'
-  import { nonAdminUserRoleOptions } from '~/client/options'
+  import { nonAdminUserRoleKeys } from '~/client/options'
   import { editUserRoleSchema, UserRoleEditionInput } from '~/server/schema'
   import { userFieldLabels } from '~/client/labels'
 

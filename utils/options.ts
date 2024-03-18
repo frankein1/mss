@@ -1,35 +1,42 @@
 export const NEW_OPTION_ID = 'new-option'
 export const NEW_OPTION_PREFIX = `${NEW_OPTION_ID}-`
 
-export type Options = Map<string, string>
+type OptionType = { value: string; label: string }
+export type Options = Array<OptionType>
 
 export function labelsToOptions(labels: Record<string, string>): Options {
-  return new Map(Object.entries(labels))
+  return Object.entries(labels).map(([value, label]) => ({ label, value }))
 }
 
-export const isNewOption = (value?: string | null) => {
-  return value ? value.startsWith(NEW_OPTION_PREFIX) : false
+export function getOptionValues(options: Options) {
+  return options.map(o => o.value)
 }
 
-export const arrayToOptions = <T extends string>(
-  values: readonly T[] | T[]
-): Options => new Map(values.map(value => [value, value]))
+export function getOptionLabels(options: Options) {
+  return options.map(o => o.label)
+}
+
+export function getOption(options: Options, value: string) {
+  return options.find(o => o.value === value)
+}
+
+export function hasOption(options: Options, value: string) {
+  return !!options.find(o => o.value === value)
+}
+
+export function getOptionLabel(options: Options, value: string) {
+  const option = getOption(options, value)
+  return option ? option.label : value
+}
 
 export function toOptions<V extends string, L extends string>(
   arr: Array<Record<V | L, string>>,
   valueKey: V,
   labelKey: L
 ): Options {
-  return new Map(arr.map(e => [e[valueKey], e[labelKey]]))
+  return arr.map(e => ({ value: e[valueKey], label: e[labelKey] }))
 }
 
-export function withEmptyValue(map: Options, emptyLabel = '') {
-  return new Map([['', emptyLabel], ...map.entries()])
-}
-
-/**
- * Map a created option from a searchable select to the input label
- */
-export function newOptionToLabel(newOption: string) {
-  return newOption.replace(NEW_OPTION_PREFIX, '').replace('_', ' ')
+export function withEmptyValue(options: Options, emptyLabel = '') {
+  return [{ label: emptyLabel, value: '' }, ...options]
 }

@@ -16,7 +16,7 @@
       </div>
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.gender"
-        :value="BeneficiaryGenderKeys.value(general.gender)"
+        :value="beneficiaryGenderKeys.value(general.gender)"
         class="fr-col-6"
       />
     </div>
@@ -28,7 +28,7 @@
       />
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.nationality"
-        :value="NationalityKeys.value(general.nationality)"
+        :value="nationalityKeys.value(general.nationality)"
         class="fr-col-6"
       />
     </div>
@@ -53,7 +53,7 @@
       <BeneficiaryInfoLabel
         :label="beneficiaryFieldLabels.accommodationMode"
         :value="
-          BeneficiaryAccommodationModeKeys.value(general.accommodationMode)
+          beneficiaryAccommodationModeKeys.value(general.accommodationMode)
         "
         class="fr-col-12"
       />
@@ -99,7 +99,7 @@
     </div>
 
     <BeneficiaryInfoLabel
-      :value="BeneficiaryMobilityKeys.value(general.mobility)"
+      :value="beneficiaryMobilityKeys.value(general.mobility)"
       class="fr-col-12"
     />
   </div>
@@ -121,10 +121,10 @@
 <script lang="ts" setup>
   import type { GetBeneficiaryGeneral } from '~/types/beneficiary'
   import {
-    BeneficiaryAccommodationModeKeys,
-    BeneficiaryGenderKeys,
-    BeneficiaryMobilityKeys,
-    NationalityKeys
+    beneficiaryAccommodationModeKeys,
+    beneficiaryGenderKeys,
+    beneficiaryMobilityKeys,
+    nationalityKeys
   } from '~/client/options'
   import {
     formatAddress,

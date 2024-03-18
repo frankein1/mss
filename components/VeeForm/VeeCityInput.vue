@@ -37,7 +37,7 @@
   async function searchCitiesFn(search: string) {
     selectedValue.value = search
     if (search.length < 3) {
-      return new Map()
+      return []
     }
 
     const params: GeoApiGouvFrQueryParams = {
@@ -68,12 +68,10 @@
       })
     })
 
-    return new Map(
-      cities.value.map(({ nom, codePostal }) => [
-        codePostal,
-        `${codePostal} ${nom}`
-      ])
-    )
+    return cities.value.map(({ nom, codePostal }) => ({
+      value: codePostal,
+      label: `${codePostal} ${nom}`
+    }))
   }
 
   function onSelectCity(codePostal: string) {

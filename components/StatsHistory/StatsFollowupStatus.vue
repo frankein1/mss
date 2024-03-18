@@ -32,7 +32,7 @@
   import { AlertType } from '~/utils/constants/alert'
 
   const trpcClient = useTrpcClient()
-  const { socialSupportStatusLabels } = useSocialSupportStatus()
+  const { socialSupportStatusKeys } = useSocialSupportStatus()
 
   const props = defineProps<{
     totalCount: number
@@ -49,7 +49,7 @@
     () =>
       statusCounts.value?.map(({ _count, status }) => ({
         key: status,
-        label: socialSupportStatusLabels.value[status],
+        label: socialSupportStatusKeys.value.value(status) || '',
         color: getColor(status),
         count: _count
       })) || []
