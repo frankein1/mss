@@ -25,6 +25,7 @@
       <StructureConfigurationSocialSupportSubjects
         :subjects="data.socialSupportSubjects"
         :can-edit="application.edit.structure"
+        @refresh="refresh"
       />
     </div>
   </PageContainer>

@@ -45,8 +45,8 @@
 
 <script setup lang="ts">
   import {
-    editCurrentUserStructureSubjectNameSchema,
-    EditCurrentUserStructureSubjectNameInput
+    updateSocialSupportSubjectSchema,
+    UpdateSocialSupportSubjectNameInput
   } from '~/server/schema'
 
   const modal = useModal()
@@ -58,11 +58,11 @@
   }>()
 
   const emit = defineEmits<{
-    update: [values: EditCurrentUserStructureSubjectNameInput]
+    update: [values: UpdateSocialSupportSubjectNameInput]
   }>()
 
-  const { handleSubmit } = useForm<EditCurrentUserStructureSubjectNameInput>({
-    validationSchema: toTypedSchema(editCurrentUserStructureSubjectNameSchema),
+  const { handleSubmit } = useForm<UpdateSocialSupportSubjectNameInput>({
+    validationSchema: toTypedSchema(updateSocialSupportSubjectSchema),
     initialValues: {
       id: props.id,
       name: props.name

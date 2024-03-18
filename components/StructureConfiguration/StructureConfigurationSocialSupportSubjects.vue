@@ -4,7 +4,7 @@
       Objets d’accompagnements proposés par votre structure
     </h2>
 
-    <AtomCallout variant="tonal">
+    <AtomCallout>
       <div class="structure-configuration-sss__note">
         <p class="fr-callout__text">
           Les aides légales et facultatives sélectionnées ci-dessous
@@ -58,13 +58,20 @@
   import StructureConfigurationSubjectModification from './StructureConfigurationSubjectModification.vue'
   import StructureConfigurationSubjectDeletion from './StructureConfigurationSubjectDeletion.vue'
   import { RoutePath } from '~/utils/routing'
+  import { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 
   defineProps<{
     subjects: StructureConfigurationSocialSupportSubjects
     canEdit: boolean
   }>()
 
+  const emits = defineEmits<{
+    refresh: []
+  }>()
+
   const modal = useModal()
+  const trpcClient = useTrpcClient()
+  const snackbar = useSnackbar()
 
   const isSubmittingModification = ref(false)
   const isSubmittingDeletion = ref(false)
@@ -84,22 +91,23 @@
     })
   }
 
-  function onUpdateStructureSubject(_values: any) {
-    // useTrpcMutation({
-    //   mutation: () =>
-    //     trpcClient.structure.editCurrentUserStructureSubject.mutate(values),
-    //   isSubmitting: isSubmittingModification,
-    //   onSuccess: () => {
-    //     modal.close()
-    //     refresh() // replace by emit refesh
-    //     snackbar.success('Objet d’accompagnement modifié avec succès')
-    //   },
-    //   onFailure: () => {
-    //     snackbar.error(
-    //       "La modification de l'objet d'accompagnement de votre structure a échoué"
-    //     )
-    //   }
-    // })
+  function onUpdateStructureSubject(
+    values: UpdateSocialSupportSubjectNameInput
+  ) {
+    useTrpcMutation({
+      mutation: () => trpcClient.socialSupportSubject.update.mutate(values),
+      isSubmitting: isSubmittingModification,
+      onSuccess: () => {
+        modal.close()
+        emits('refresh')
+        snackbar.success('Objet d’accompagnement modifié avec succès')
+      },
+      onFailure: () => {
+        snackbar.error(
+          "La modification de l'objet d'accompagnement de votre structure a échoué"
+        )
+      }
+    })
   }
 
   function removeSubject(id: string, name: string) {
