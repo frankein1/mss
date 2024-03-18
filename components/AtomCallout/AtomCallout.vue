@@ -1,5 +1,5 @@
 <template>
-  <div :class="`fr-callout fr-callout--${variant}`">
+  <div class="fr-callout">
     <div>
       <h3
         v-if="title"
@@ -26,25 +26,22 @@
 </template>
 
 <script setup lang="ts">
-  withDefaults(
-    defineProps<{
-      title?: string
-      button?: {
-        label: string
-        className?: string
-        icon?: string
-        onClick: () => void
-      }
-      variant?: 'tonal' | 'plain'
-    }>(),
-    { title: undefined, button: undefined, variant: 'plain' }
-  )
+  defineProps<{
+    title?: string
+    button?: {
+      label: string
+      className?: string
+      icon?: string
+      onClick: () => void
+    }
+  }>()
 </script>
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
 
   .fr-callout {
+    background-color: var(--background-alt-blue-france);
     display: flex;
     flex-direction: column;
 
@@ -52,14 +49,6 @@
       padding: 1.5rem 2.5rem 1.5rem 2rem;
       flex-direction: row;
       align-items: center;
-    }
-
-    &--tonal {
-      background-color: var(--background-alt-blue-france);
-    }
-
-    &--plain {
-      background-color: #fff;
     }
 
     .fr-btn {
