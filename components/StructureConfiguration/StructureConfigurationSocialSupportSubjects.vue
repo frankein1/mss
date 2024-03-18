@@ -60,8 +60,9 @@
   import { RoutePath } from '~/utils/routing'
   import { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 
-  defineProps<{
+  const props = defineProps<{
     subjects: StructureConfigurationSocialSupportSubjects
+    structureId: string
     canEdit: boolean
   }>()
 
@@ -76,6 +77,15 @@
   const isSubmittingModification = ref(false)
   const isSubmittingDeletion = ref(false)
 
+  const nameCanBeUpdated = async (name: string) => {
+    const subjectWithSameNameExists =
+      await trpcClient.socialSupportSubject.get.query({
+        name: name.trim().toLocaleLowerCase(),
+        structureId: props.structureId
+      })
+    return !subjectWithSameNameExists
+  }
+
   function editSubject(id: string, name: string) {
     modal.open({
       title: "Modifier un objet d'accompagnement",
@@ -83,7 +93,8 @@
       contentComponentProps: {
         id,
         name,
-        isSubmitting: isSubmittingModification.value
+        isSubmitting: isSubmittingModification.value,
+        validationFn: (name: string) => nameCanBeUpdated(name)
       },
       contentComponentEvents: {
         update: onUpdateStructureSubject
