@@ -1,14 +1,14 @@
 import { NotificationType } from '@prisma/client'
-import { labelsToOptions } from '~/utils/options'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 
-export const notificationTypeTitles: { [key in NotificationType]: string } = {
+export const notificationTypeKeys = buildKeys({
   [NotificationType.DueDateToday]: 'Échéance',
   [NotificationType.DueDateOneMonth]: 'Échéance',
   [NotificationType.EndOfSupport]: 'Échéance',
   [NotificationType.NewComment]: 'Commentaire',
   [NotificationType.NewDocument]: 'Document',
   [NotificationType.NewHistoryElement]: ''
-}
+})
 
 export enum NotificationTypeFilterValue {
   DueDate = 'DueDate',
@@ -16,14 +16,8 @@ export enum NotificationTypeFilterValue {
   NewItem = 'NewItem'
 }
 
-export const notificationTypeFilterLabels: {
-  [key in NotificationTypeFilterValue]: string
-} = {
+export const notificationTypeFilterKeys = buildKeys({
   [NotificationTypeFilterValue.DueDate]: 'Échéances',
   [NotificationType.NewComment]: 'Commentaires',
   [NotificationTypeFilterValue.NewItem]: 'Ajouts par un tiers'
-}
-
-export const notificationTypeFilterOptions = labelsToOptions(
-  notificationTypeFilterLabels
-)
+})

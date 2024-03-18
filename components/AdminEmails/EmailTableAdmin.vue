@@ -37,7 +37,7 @@
               <span
                 class="fr-badge"
                 :class="[emailStatusBadgeClasses[email.status]]"
-                >{{ EmailStatusLabels[email.status] }}</span
+                >{{ emailStatusKeys.value(email.status) }}</span
               >
             </td>
             <td>{{ formatDate(email.sentDate, 'DD/MM/YYYY HH:mm') }}</td>
@@ -68,7 +68,7 @@
 <script setup lang="ts">
   import { EmailStatus } from '@prisma/client'
   import { Emails } from './types'
-  import { EmailStatusLabels } from '~/client/options'
+  import { emailStatusKeys } from '~/client/options'
   import type { EmailAdminSort } from '~/types/table'
   import { emailStatusBadgeClasses } from '~/client/classes/email'
 

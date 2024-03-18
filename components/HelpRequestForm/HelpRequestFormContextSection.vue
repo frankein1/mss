@@ -34,7 +34,7 @@
       <VeeRadioButtons
         name="isFirst"
         label="Il s'agit"
-        :options="isFirstOptions"
+        :options="isFirstKeys.options"
       />
     </div>
 
@@ -61,7 +61,7 @@
           {{ housingHelpRequestFieldLabels.askedHousing }}
         </legend>
         <div
-          v-for="[value, label] in askedHousingOptions"
+          v-for="[value, label] in askedHousingKeys.options"
           :key="value"
           class="fr-fieldset__element fr-fieldset__element--inline"
         >
@@ -125,7 +125,7 @@
     <VeeSelect
       label="Le dossier est instruit..."
       name="externalStructure"
-      :options="withEmptyValue(externalOrganisationOptions)"
+      :options="withEmptyValue(externalOrganisationKeys.options)"
       required
     />
   </div>
@@ -178,9 +178,9 @@
   } from '~/client/labels'
   import {
     ministerKeys,
-    isFirstOptions,
-    externalOrganisationOptions,
-    askedHousingOptions
+    isFirstKeys,
+    externalOrganisationKeys,
+    askedHousingKeys
   } from '~/client/options'
   import { RoutePath } from '~/utils/routing'
   import { CreateHousingHelpRequestInput } from '~/server/schema'

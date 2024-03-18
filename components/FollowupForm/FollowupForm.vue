@@ -38,7 +38,7 @@
         <VeeSelect
           name="medium"
           :label="followupFieldLabels.medium"
-          :options="withEmptyValue(followupMediumOptions)"
+          :options="withEmptyValue(followupMediumKeys.options)"
           required
         />
       </div>
@@ -116,7 +116,7 @@
         <VeeSelect
           name="status"
           :label="followupFieldLabels.status"
-          :options="followupStatusOptions"
+          :options="followupStatusKeys.options"
           required
         />
       </div>
@@ -133,7 +133,7 @@
         <VeeSelect
           name="duration"
           :label="followupFieldLabels.duration"
-          :options="withEmptyValue(followupDurationOptions)"
+          :options="withEmptyValue(followupDurationKeys.options)"
         />
       </div>
 
@@ -259,9 +259,9 @@
   import type { FormErrors } from 'vee-validate'
   import {
     ministerKeys,
-    followupStatusOptions,
-    followupMediumOptions,
-    followupDurationOptions
+    followupStatusKeys,
+    followupMediumKeys,
+    followupDurationKeys
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'

@@ -8,7 +8,7 @@ import {
   beneficiaryMobilityKeys,
   beneficiarySocioProfessionalCategoryKeys,
   familySituationKeys,
-  ageGroupLabels,
+  ageGroupKeys,
   STATS_NULL_LABEL,
   ministereCategorieKeys,
   ministereDepartmentServiceAcKeys,
@@ -63,7 +63,7 @@ const handler = async ({
   })
 
   const ageData = await getAgeStatsQuery(user, input)
-  const ageColumns = getColumnsFromLabels(ageGroupLabels)
+  const ageColumns = getColumnsFromLabels(ageGroupKeys.byKey)
   const ageRows = getRowsFromData(ageData, 'ageGroup', beneficiaryCount)
   exportData.push({
     name: "Tranches d'âge",

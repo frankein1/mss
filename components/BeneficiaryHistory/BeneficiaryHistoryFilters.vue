@@ -25,9 +25,9 @@
   import type { BeneficiaryHistoryFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import {
-    followupMediumOptions,
-    followupStatusOptions,
-    typeSuiviOptions,
+    followupMediumKeys,
+    followupStatusKeys,
+    typeSuiviKeys,
     TypeSuivi
   } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
@@ -104,10 +104,10 @@
     return ''
   })
 
-  const statusOptions = new Map([
-    ...followupStatusOptions,
+  const statusOptions = {
+    ...followupStatusKeys.options,
     ...socialSupportStatusOptions.value
-  ])
+  }
 
   const typeSuiviValue = computed(() => props.values.typeSuivi)
 
@@ -134,7 +134,10 @@
       {
         name: 'typeSuivi',
         label: "Type d'accompagnement",
-        options: withEmptyValue(typeSuiviOptions, 'Tous les accompagnements'),
+        options: withEmptyValue(
+          typeSuiviKeys.options,
+          'Tous les accompagnements'
+        ),
         type: FilterType.SelectOne,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction: BeneficiaryHistoryFilterEventAction.TypeSuivi,
@@ -168,7 +171,7 @@
       filters.push({
         name: 'medium',
         label: followupFieldLabels.medium,
-        options: followupMediumOptions,
+        options: followupMediumKeys.options,
         type: FilterType.SelectMultiple,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,

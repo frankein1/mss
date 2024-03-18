@@ -6,7 +6,7 @@
     "
     class="fr-icon-success-line"
   >
-    {{ isFirstLabels[housingHelpRequest.isFirst ? 'true' : 'false'] }}
+    {{ isFirstKeys.value(housingHelpRequest.isFirst ? 'true' : 'false') }}
   </li>
   <li v-if="askedHousing">
     <span class="information-label"
@@ -22,7 +22,7 @@
     <span class="information-label"
       >{{ housingHelpRequestFieldLabels.reason }} :</span
     >
-    {{ housingReasonLabels[housingHelpRequest.reason] }}
+    {{ housingReasonKeys.value(housingHelpRequest.reason) }}
   </li>
   <li v-if="housingHelpRequest.uniqueId">
     <span class="information-label"
@@ -106,12 +106,12 @@
   import { SocialSupportStatus } from '@prisma/client'
   import { FileInstructionData, HousingHelpRequestData } from './types'
   import {
-    fileInstructionRefusalReasonLabels,
-    askedHousingLabels,
-    housingReasonLabels,
-    housingTypeLabels,
-    roomCountLabels,
-    isFirstLabels
+    fileInstructionRefusalReasonKeys,
+    askedHousingKeys,
+    housingReasonKeys,
+    housingTypeKeys,
+    roomCountKeys,
+    isFirstKeys
   } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import {
@@ -132,7 +132,7 @@
     }
 
     return props.housingHelpRequest.askedHousing
-      .map(aH => askedHousingLabels[aH])
+      .map(aH => askedHousingKeys.value(aH))
       .join(', ')
   })
 
@@ -142,7 +142,7 @@
     }
 
     return props.housingHelpRequest.housingType
-      .map(hT => housingTypeLabels[hT])
+      .map(hT => housingTypeKeys.value(hT))
       .join(', ')
   })
 
@@ -152,7 +152,7 @@
     }
 
     return props.housingHelpRequest.roomCount
-      .map(rC => roomCountLabels[rC])
+      .map(rC => roomCountKeys.value(rC))
       .join(', ')
   })
 
@@ -165,7 +165,7 @@
   const refusalReason = computed(() => {
     const { refusalReason } = props.fileInstruction
     return refusalReason
-      ? fileInstructionRefusalReasonLabels[refusalReason]
+      ? fileInstructionRefusalReasonKeys.value(refusalReason)
       : ''
   })
 

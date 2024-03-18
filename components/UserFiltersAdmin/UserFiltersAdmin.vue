@@ -9,7 +9,7 @@
   import { FilterType } from '~/utils/constants/filters'
   import type { UserAdminFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
-  import { userRoleOptions } from '~/client/options'
+  import { userRoleKeys } from '~/client/options'
   import { withEmptyValue } from '~/utils/options'
 
   const emit = defineEmits<{
@@ -21,7 +21,7 @@
       {
         name: 'role',
         label: 'Rôle',
-        options: withEmptyValue(userRoleOptions, 'Tous les rôles'),
+        options: withEmptyValue(userRoleKeys.options, 'Tous les rôles'),
         type: FilterType.SelectOne
       }
     ]

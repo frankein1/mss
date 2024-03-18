@@ -55,7 +55,7 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
   import { notificationTypeClasses } from '~/client/classes/notification'
-  import { notificationTypeTitles } from '~/client/options'
+  import { notificationTypeKeys } from '~/client/options'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { formatDate } from '~/utils/formatDate'
@@ -91,7 +91,7 @@
       }
       return 'Instruction'
     }
-    return notificationTypeTitles[props.notification.type]
+    return notificationTypeKeys.value(props.notification.type)
   })
 
   const notificationDescription = computed(() => {

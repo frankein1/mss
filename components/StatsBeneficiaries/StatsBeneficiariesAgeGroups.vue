@@ -31,7 +31,7 @@
 
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
-  import { AgeGroup, ageGroupLabels, getStatLabel } from '~/client/options'
+  import { AgeGroup, ageGroupKeys, getStatLabel } from '~/client/options'
   import { AlertType } from '~/utils/constants/alert'
   import { RoutePath } from '~/utils/routing'
   import { getStatColor } from '~/client/colors/stats'
@@ -63,7 +63,7 @@
     () =>
       (ageCounts.value?.map(({ _count, ageGroup }) => ({
         key: ageGroup,
-        label: getStatLabel(ageGroupLabels, ageGroup),
+        label: getStatLabel(ageGroupKeys.byKey, ageGroup),
         color: getStatColor(AgeGroupColors, ageGroup),
         count: _count
       })) || []) as StatsPiePropType

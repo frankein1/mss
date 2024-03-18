@@ -1,6 +1,6 @@
 <template>
   <tr>
-    <td class="type-data">{{ documentTypeLabels[document.type] }}</td>
+    <td class="type-data">{{ documentTypeKeys.value(document.type) }}</td>
     <td>
       <span
         class="name-container"
@@ -25,7 +25,7 @@
       <span
         v-if="document.tags.length"
         class="fr-tag"
-        >{{ documentTagLabels[document.tags[0] as DocumentTag] }}</span
+        >{{ documentTagKeys.value(document.tags[0] as DocumentTag) }}</span
       >
       <span
         v-if="document.tags.length > 1"
@@ -33,7 +33,7 @@
         :title="
           document.tags
             .slice(1)
-            .map(t => documentTagLabels[t as DocumentTag])
+            .map(t => documentTagKeys.value(t as DocumentTag))
             .join(', ')
         "
         >+{{ document.tags.length - 1 }}</span
@@ -102,7 +102,7 @@
   import { EditDocumentInput } from '~/server/schema'
   import { DocumentTag } from '~/types/document'
   import { DocumentEventAction, EventCategory } from '~/types/matomo'
-  import { documentTypeLabels, documentTagLabels } from '~/client/options'
+  import { documentTypeKeys, documentTagKeys } from '~/client/options'
   import { DocumentPermissions } from '~/server/security'
 
   const modal = useModal()

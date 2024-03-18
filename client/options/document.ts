@@ -1,6 +1,5 @@
 import { DocumentType } from '@prisma/client'
-import { labelsToOptions } from '~/utils/options'
-import { DocumentTag } from '~/types/document'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 
 // Max size in bytes
 export const documentFileMaxSize = 15_000_000
@@ -19,18 +18,14 @@ export const documentFileAllowedTypes = [
   'application/vnd.oasis.opendocument.text'
 ]
 
-export const documentTypeLabels: {
-  [scope in DocumentType]: string
-} = {
+export const documentTypeKeys = buildKeys({
   [DocumentType.Cerfa]: 'CERFA',
   [DocumentType.HistoriqueCourrier]: 'Historique Courrier',
   [DocumentType.Justificatifs]: 'Justificatifs',
   [DocumentType.Rapports]: 'Rapports'
-}
+})
 
-export const documentTypeOptions = labelsToOptions(documentTypeLabels)
-
-export const documentTagLabels: { [scope in DocumentTag]: string } = {
+export const documentTagKeys = buildKeys({
   BudgetRessources: 'Budget-Ressources',
   Emploi: 'Emploi',
   Impot: 'Impôt',
@@ -41,6 +36,4 @@ export const documentTagLabels: { [scope in DocumentTag]: string } = {
   Retraite: 'Retraite',
   SanteHandicap: 'Santé-Handicap',
   Identite: 'Identité'
-}
-
-export const documentTagOptions = labelsToOptions(documentTagLabels)
+})

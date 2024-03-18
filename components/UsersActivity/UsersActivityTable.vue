@@ -40,7 +40,7 @@
                 : '(inconnu)'
             }}
           </td>
-          <td>{{ userActivityTypeLabels[userActivity.activity] }}</td>
+          <td>{{ userActivityTypeKeys.value(userActivity.activity) }}</td>
           <td v-if="routeWithParams">
             <NuxtLink
               :to="routeWithParams(userActivity.objectId)"
@@ -59,7 +59,7 @@
   import { formatDate } from '~/utils/formatDate'
   import { RoutePath } from '~/utils/routing'
   import { formatUserDisplayName } from '~/utils/user'
-  import { userActivityTypeLabels } from '~/client/options'
+  import { userActivityTypeKeys } from '~/client/options'
 
   withDefaults(
     defineProps<{

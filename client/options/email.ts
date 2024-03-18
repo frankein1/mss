@@ -1,11 +1,9 @@
 import { EmailStatus } from '@prisma/client'
-import { labelsToOptions } from '~/utils/options'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 
-export const EmailStatusLabels: { [key in EmailStatus]: string } = {
+export const emailStatusKeys = buildKeys({
   [EmailStatus.Error]: 'Erreur',
   [EmailStatus.Sending]: "En cours d'envoi",
   [EmailStatus.Sent]: 'Envoyé',
   [EmailStatus.ToSend]: 'À envoyer'
-}
-
-export const emailStatusOptions = labelsToOptions(EmailStatusLabels)
+})

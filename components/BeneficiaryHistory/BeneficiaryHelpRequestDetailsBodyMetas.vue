@@ -13,7 +13,7 @@
     <span class="information-label"
       >{{ helpRequestFieldLabels.isRefundable }} :</span
     >
-    {{ isRefundableLabels[helpRequest.isRefundable ? 'true' : 'false'] }}
+    {{ isRefundableKeys.value(helpRequest.isRefundable ? 'true' : 'false') }}
   </li>
   <li v-if="helpRequest.askedAmount">
     <span class="information-label"
@@ -71,9 +71,9 @@
   import { SocialSupportStatus } from '@prisma/client'
   import { FileInstructionData, HelpRequestData } from './types'
   import {
-    paymentMethodLabels,
-    isRefundableLabels,
-    fileInstructionRefusalReasonLabels
+    paymentMethodKeys,
+    isRefundableKeys,
+    fileInstructionRefusalReasonKeys
   } from '~/client/options'
   import { euros } from '~/utils/euros'
   import { formatDate } from '~/utils/formatDate'
@@ -111,9 +111,9 @@
       }
     }
     if (props.helpRequest.paymentMethod) {
-      allocatedAmount += `${
-        paymentMethodLabels[props.helpRequest.paymentMethod]
-      })`
+      allocatedAmount += `${paymentMethodKeys.value(
+        props.helpRequest.paymentMethod
+      )})`
     }
     return allocatedAmount
   })
@@ -122,7 +122,9 @@
     const { refusalReason, refusalReasonOther } = props.fileInstruction
     return (
       refusalReasonOther ||
-      (refusalReason ? fileInstructionRefusalReasonLabels[refusalReason] : '')
+      (refusalReason
+        ? fileInstructionRefusalReasonKeys.value(refusalReason)
+        : '')
     )
   })
 

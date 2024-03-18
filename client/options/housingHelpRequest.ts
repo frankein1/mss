@@ -4,50 +4,39 @@ import {
   HousingRoomCount,
   HousingType
 } from '@prisma/client'
-import { labelsToOptions } from '~/utils/options'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 
-export const isFirstLabels = {
+export const isFirstKeys = buildKeys({
   true: '1ère demande',
   false: 'Renouvellement'
-}
-
-export const isFirstOptions = labelsToOptions({
-  true: "d'une 1ère demande",
-  false: "d'un renouvellement"
 })
 
-export const askedHousingLabels: { [key in AskedHousing]: string } = {
+export const askedHousingKeys = buildKeys({
   [AskedHousing.ParcSocial]: 'Parc social',
   [AskedHousing.ParcPrive]: 'Parc privé',
   [AskedHousing.HebergementTemporaire]: 'Hébergement temporaire'
-}
+})
 
-export const askedHousingOptions = labelsToOptions(askedHousingLabels)
-
-export const housingTypeIcons: { [key in HousingType]: string } = {
+export const housingTypeIcons = {
   [HousingType.Appartement]: 'fr-icon-building-fill',
   [HousingType.Maison]: 'fr-icon-home-4-fill'
 }
 
-export const housingTypeLabels: { [key in HousingType]: string } = {
+export const housingTypeKeys = buildKeys({
   [HousingType.Appartement]: 'Appartement',
   [HousingType.Maison]: 'Maison'
-}
+})
 
-export const housingTypeOptions = labelsToOptions(housingTypeLabels)
-
-export const roomCountLabels: { [key in HousingRoomCount]: string } = {
+export const roomCountKeys = buildKeys({
   [HousingRoomCount.One]: 'Studio',
   [HousingRoomCount.Two]: '2',
   [HousingRoomCount.Three]: '3',
   [HousingRoomCount.Four]: '4',
   [HousingRoomCount.Five]: '5',
   [HousingRoomCount.SixAndMore]: '6 ou +'
-}
+})
 
-export const roomCountOptions = labelsToOptions(roomCountLabels)
-
-export const housingReasonLabels = {
+export const housingReasonKeys = buildKeys({
   [HousingReason.Violences]: 'Violences',
   [HousingReason.DivorceSeparation]: 'Divorce ou séparation',
   [HousingReason.RapprochementFamilial]: 'Rapprochement familial',
@@ -62,6 +51,4 @@ export const housingReasonLabels = {
   [HousingReason.Localisation]: 'Localisation du logement',
   [HousingReason.SansLogementOuTemporaire]:
     'Sans logement ou logement temporaire'
-}
-
-export const housingReasonOptions = labelsToOptions(housingReasonLabels)
+})

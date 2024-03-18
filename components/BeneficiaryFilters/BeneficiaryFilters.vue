@@ -22,7 +22,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import {
     beneficiaryStatusKeys,
-    ageGroupOptions,
+    ageGroupKeys,
     yesNoOptions
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
@@ -129,7 +129,10 @@
       {
         name: 'ageGroup',
         label: "Tranche d'âge",
-        options: withEmptyValue(ageGroupOptions, "Toutes les tranches d'âge"),
+        options: withEmptyValue(
+          ageGroupKeys.options,
+          "Toutes les tranches d'âge"
+        ),
         type: FilterType.SelectOne,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,

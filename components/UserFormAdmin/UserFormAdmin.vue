@@ -44,7 +44,7 @@
         <VeeSelect
           name="role"
           :label="userFieldLabels.role"
-          :options="withEmptyValue(userRoleOptions)"
+          :options="withEmptyValue(userRoleKeys.options)"
           required
         />
       </div>
@@ -52,7 +52,7 @@
         <VeeSelect
           name="status"
           :label="userFieldLabels.status"
-          :options="userStatusOptions"
+          :options="userStatusKeys.options"
           required
         />
       </div>
@@ -82,7 +82,7 @@
   import { UserStatus, UserRole } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import { userFieldLabels } from '~/client/labels'
-  import { userRoleOptions, userStatusOptions } from '~/client/options'
+  import { userRoleKeys, userStatusKeys } from '~/client/options'
   import { AdminUserOutput } from '~/server/trpc/routers'
   import {
     AdminEditUserInput,

@@ -3,9 +3,9 @@ import {
   SocialSupportStatus,
   FollowupDuration
 } from '@prisma/client'
-import { labelsToOptions } from '~/utils/options'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 
-export const followupMediumLabels: { [key in FollowupMedium]: string } = {
+export const followupMediumKeys = buildKeys({
   [FollowupMedium.UnplannedInPerson]: 'Accueil physique spontané',
   [FollowupMedium.PlannedInPerson]: 'Accueil physique sur rendez-vous',
   [FollowupMedium.PostalMail]: 'Courrier',
@@ -15,24 +15,18 @@ export const followupMediumLabels: { [key in FollowupMedium]: string } = {
   [FollowupMedium.BeneficiaryHouseAppointment]: 'Rendez-vous à domicile',
   [FollowupMedium.ExternalAppointment]: 'Rendez-vous extérieur',
   [FollowupMedium.Videoconference]: 'Visioconférence'
-}
+})
 
-export const followupMediumOptions = labelsToOptions(followupMediumLabels)
-
-export const followupStatusLabels = {
+export const followupStatusKeys = buildKeys({
   [SocialSupportStatus.Todo]: 'À traiter',
   [SocialSupportStatus.InProgress]: 'En cours',
   [SocialSupportStatus.Done]: 'Terminé'
-}
+})
 
-export const followupStatusOptions = labelsToOptions(followupStatusLabels)
-
-export const followupDurationLabels = {
+export const followupDurationKeys = buildKeys({
   [FollowupDuration.Quarter]: '15 min',
   [FollowupDuration.Half]: '30 min',
   [FollowupDuration.ThreeQuarter]: '45 min',
   [FollowupDuration.Hour]: '1 heure',
   [FollowupDuration.MoreThanHour]: '+ de 1 heure'
-}
-
-export const followupDurationOptions = labelsToOptions(followupDurationLabels)
+})

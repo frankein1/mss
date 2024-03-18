@@ -2,8 +2,8 @@ import { StructureType } from '@prisma/client'
 import { getRowsFromData } from '../helper/getRowsFromData'
 import { createQuery } from '~/server/route'
 import {
-  followupMediumLabels,
-  followupStatusLabels,
+  followupMediumKeys,
+  followupStatusKeys,
   ministerKeys
 } from '~/client/options'
 import { RowType, WorksheetType } from '~/types/export'
@@ -82,7 +82,7 @@ const handler = async ({
   })
 
   const followupMediumData = await getFollowupMediumStatsQuery(user, input)
-  const followupMediumColumns = getColumnsFromLabels(followupMediumLabels)
+  const followupMediumColumns = getColumnsFromLabels(followupMediumKeys.byKey)
   const followupMediumRows = getRowsFromData(
     followupMediumData,
     'medium',
@@ -117,7 +117,7 @@ const handler = async ({
   }
 
   const followupStatusData = await getFollowupStatusStatsQuery(user, input)
-  const followupStatusColumns = getColumnsFromLabels(followupStatusLabels)
+  const followupStatusColumns = getColumnsFromLabels(followupStatusKeys.byKey)
   const followupStatusRows = getRowsFromData(
     followupStatusData,
     'status',

@@ -11,11 +11,13 @@
         <thead>
           <tr>
             <th scope="col">Fonctionnalité</th>
-            <th scope="col">{{ NonAdminUserRoleLabels.StructureManager }}</th>
-            <th scope="col">{{ NonAdminUserRoleLabels.SocialWorker }}</th>
-            <th scope="col">{{ NonAdminUserRoleLabels.Instructor }}</th>
-            <th scope="col">{{ NonAdminUserRoleLabels.ReceptionAgent }}</th>
-            <th scope="col">{{ NonAdminUserRoleLabels.Referent }}</th>
+            <th scope="col">
+              {{ nonAdminUserRoleKeys.byKey.StructureManager }}
+            </th>
+            <th scope="col">{{ nonAdminUserRoleKeys.byKey.SocialWorker }}</th>
+            <th scope="col">{{ nonAdminUserRoleKeys.byKey.Instructor }}</th>
+            <th scope="col">{{ nonAdminUserRoleKeys.byKey.ReceptionAgent }}</th>
+            <th scope="col">{{ nonAdminUserRoleKeys.byKey.Referent }}</th>
           </tr>
         </thead>
         <tbody>
@@ -309,7 +311,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { NonAdminUserRoleLabels } from '~/client/options'
+  import { nonAdminUserRoleKeys } from '~/client/options'
 </script>
 
 <style scoped>

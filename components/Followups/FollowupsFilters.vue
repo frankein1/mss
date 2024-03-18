@@ -21,8 +21,8 @@
 
 <script lang="ts" setup>
   import {
-    followupStatusOptions,
-    followupMediumOptions,
+    followupStatusKeys,
+    followupMediumKeys,
     ministerKeys
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
@@ -86,7 +86,7 @@
       {
         name: 'status',
         label: followupFieldLabels.status,
-        options: withEmptyValue(followupStatusOptions, 'Tous les statuts'),
+        options: withEmptyValue(followupStatusKeys.options, 'Tous les statuts'),
         type: FilterType.SelectOne,
         matomoEventCategory: EventCategory.FollowupFilter,
         matomoEventAction: FollowupFilterEventAction.Status,
@@ -113,7 +113,7 @@
       {
         name: 'medium',
         label: followupFieldLabels.medium,
-        options: followupMediumOptions,
+        options: followupMediumKeys.options,
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,
         matomoEventAction: FollowupFilterEventAction.Medium

@@ -1,38 +1,37 @@
 import {
-  fileInstructionStatusLabels,
-  ministryFileInstructionStatusLabels,
-  socialSupportStatusLabels,
-  ministrySocialSupportStatusLabels
+  fileInstructionStatusKeys,
+  ministryFileInstructionStatusKeys,
+  socialSupportStatusKeys,
+  ministrySocialSupportStatusKeys
 } from '~/client/options'
-import { labelsToOptions } from '~/utils/options'
 
 // TODO: SHOULD BE DELETED - WE CAN NOT HANDLE SPECIFIC LABEL
 export function useSocialSupportStatus() {
   const { application } = usePermissions()
 
-  const _fileInstructionStatusLabels = computed(() =>
+  const _fileInstructionStatusKeys = computed(() =>
     application.value.module.ministere
-      ? ministryFileInstructionStatusLabels
-      : fileInstructionStatusLabels
+      ? ministryFileInstructionStatusKeys
+      : fileInstructionStatusKeys
   )
 
-  const _fileInstructionStatusOptions = computed(() =>
-    labelsToOptions(_fileInstructionStatusLabels.value)
+  const _fileInstructionStatusOptions = computed(
+    () => _fileInstructionStatusKeys.value.options
   )
 
-  const _socialSupportStatusLabels = computed(() =>
+  const _socialSupportStatusKeys = computed(() =>
     application.value.module.ministere
-      ? ministrySocialSupportStatusLabels
-      : socialSupportStatusLabels
+      ? ministrySocialSupportStatusKeys
+      : socialSupportStatusKeys
   )
-  const _socialSupportStatusOptions = computed(() =>
-    labelsToOptions(_socialSupportStatusLabels.value)
+  const _socialSupportStatusOptions = computed(
+    () => _socialSupportStatusKeys.value.options
   )
 
   return {
-    fileInstructionStatusLabels: _fileInstructionStatusLabels,
+    fileInstructionStatusKeys: _fileInstructionStatusKeys,
     fileInstructionStatusOptions: _fileInstructionStatusOptions,
-    socialSupportStatusLabels: _socialSupportStatusLabels,
+    socialSupportStatusKeys: _socialSupportStatusKeys,
     socialSupportStatusOptions: _socialSupportStatusOptions
   }
 }

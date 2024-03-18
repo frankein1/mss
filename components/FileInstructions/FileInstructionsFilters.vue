@@ -32,8 +32,8 @@
   } from '~/client/labels'
   import {
     ministerKeys,
-    fileInstructionTypeFilterOptions,
-    roomCountOptions,
+    fileInstructionTypeFilterKeys,
+    roomCountKeys,
     fileInstructionTypePictos
   } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
@@ -113,7 +113,10 @@
       {
         name: 'fileInstructionType',
         label: "Thématique d'accompagnement",
-        options: withEmptyValue(fileInstructionTypeFilterOptions, 'Toutes'),
+        options: withEmptyValue(
+          fileInstructionTypeFilterKeys.options,
+          'Toutes'
+        ),
         type: FilterType.Radio,
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.FileInstructionType,
@@ -136,7 +139,7 @@
       fileInstructionsFilters.push({
         name: 'roomCount',
         label: housingHelpRequestFieldLabels.roomCount,
-        options: roomCountOptions,
+        options: roomCountKeys.options,
         type: FilterType.Radio,
         asTag: true,
         matomoEventCategory: EventCategory.HelpRequestFilter,

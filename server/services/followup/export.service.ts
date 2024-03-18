@@ -1,10 +1,10 @@
 import { getPage } from './queries'
 import { prepareFilters, prepareSort } from './helper'
 import {
-  followupMediumLabels,
-  socialSupportStatusLabels,
+  followupMediumKeys,
+  socialSupportStatusKeys,
   ministerKeys,
-  followupDurationLabels
+  followupDurationKeys
 } from '~/client/options'
 import { ExportFollowupsInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
@@ -63,11 +63,11 @@ export async function exportFollowups({
         followups.push({
           date: formatDate(followup.date, 'DD-MM-YYYY'),
           firstFollowup: getBooleanOrEmpty(followup.firstFollowup),
-          status: socialSupportStatusLabels[followup.status],
+          status: socialSupportStatusKeys.value(followup.status) || '',
           redirected: getBooleanOrEmpty(followup.redirected),
           subjects: followup.subjects.map(({ name }) => name).join(', '),
           beneficiaryId: formatBeneficiaryDisplayName(followup.beneficiary),
-          medium: followup.medium ? followupMediumLabels[followup.medium] : '',
+          medium: followupMediumKeys.value(followup.medium) || '',
           classified: getBooleanOrEmpty(followup.classified),
           documents:
             followup.documents?.map(document => document.name).join(', ') || '',
@@ -88,9 +88,7 @@ export async function exportFollowups({
           createdById: followup.createdBy
             ? formatUserDisplayName(followup.createdBy)
             : '',
-          duration: followup.duration
-            ? followupDurationLabels[followup.duration]
-            : ''
+          duration: followupDurationKeys.value(followup.duration) || ''
         })
       }
       return followups
