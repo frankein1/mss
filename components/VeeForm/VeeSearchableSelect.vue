@@ -230,7 +230,7 @@
 
   const selectedValuesLabels = computed<string>(() =>
     selectedValues.value
-      .map(value => findOptionLabel(existingOptions.value, value))
+      .map(value => getOptionLabel(existingOptions.value, value))
       .join(', ')
   )
 

@@ -194,7 +194,7 @@
    */
   const displayedValue = computed(() =>
     selectedValues.value
-      .map(value => findOptionLabel(props.options, value))
+      .map(value => getOptionLabel(props.options, value))
       .join(', ')
   )
 

@@ -234,7 +234,7 @@
     if (optionIndex) {
       activeIndex.value = optionIndex
     }
-    const o = findOption(results.value, optionValue)
+    const o = getOption(results.value, optionValue)
     setValue(o?.label || '')
     emit('resultSelected', optionValue)
   }

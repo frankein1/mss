@@ -4,7 +4,7 @@ export function labelOrUnprovided(value: string, options: Options) {
   if (!value) {
     return 'Non renseigné'
   }
-  return findOptionLabel(options, value)
+  return getOptionLabel(options, value)
 }
 
 export function getPercentage(count: number, total: number) {
