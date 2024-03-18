@@ -174,7 +174,7 @@
 
     if (
       application.value.module.helpRequest &&
-      examinationDateOptions.value.size
+      examinationDateOptions.value.length
     ) {
       fileInstructionsFilters.push({
         name: 'examinationDate',
@@ -205,17 +205,15 @@
 
   async function loadExaminationDates() {
     if (!application.value.module.helpRequest) {
-      return new Map()
+      return []
     }
 
     const examinationDates = await trpcClient.config.getExaminationDates.query()
 
-    return new Map(
-      examinationDates.map(({ examinationDate }) => [
-        examinationDate.toString(),
-        formatDate(examinationDate)
-      ])
-    )
+    return examinationDates.map(({ examinationDate }) => ({
+      value: examinationDate.toString(),
+      label: formatDate(examinationDate)
+    }))
   }
 
   function onFilter(filters: FileInstructionFilterInput) {

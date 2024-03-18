@@ -29,13 +29,13 @@
       @change="onChange"
     >
       <option
-        v-for="[optionValue, optionLabel] in options"
-        :key="optionValue"
-        :value="optionValue"
-        :selected="optionValue === value"
-        :disabled="disabledOptions.includes(optionValue)"
+        v-for="option in options"
+        :key="option.value"
+        :value="option.value"
+        :selected="option.value === value"
+        :disabled="disabledOptions.includes(option.value)"
       >
-        {{ optionLabel }}
+        {{ option.label }}
       </option>
     </select>
     <input

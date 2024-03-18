@@ -61,7 +61,7 @@
           {{ housingHelpRequestFieldLabels.askedHousing }}
         </legend>
         <div
-          v-for="[value, label] in askedHousingKeys.options"
+          v-for="{ value, label } in askedHousingKeys.options"
           :key="value"
           class="fr-fieldset__element fr-fieldset__element--inline"
         >

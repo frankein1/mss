@@ -89,7 +89,7 @@
   const optionalSubjectOptions = computed(() => {
     const defaultOptionalObjects = Array.from(
       defaultLegallyNotRequiredSocialSupportSubjectOptions
-    ).map(([id, name]) => ({ id, name }))
+    ).map(({ value, label }) => ({ id: value, name: label }))
     const customObjects = props.optionalSubjects
       .filter(oo => !oo.default)
       .map(oo => ({ id: oo.id, name: oo.name }))

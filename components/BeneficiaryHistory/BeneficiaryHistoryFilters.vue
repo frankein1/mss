@@ -180,7 +180,7 @@
     }
 
     if (application.value.module.helpRequest) {
-      if (examinationDateOptions.value.size) {
+      if (examinationDateOptions.value.length) {
         filters.push({
           name: 'examinationDate',
           label: helpRequestFieldLabels.examinationDate,
@@ -240,18 +240,16 @@
 
   async function loadExaminationDates() {
     if (!application.value.module.helpRequest) {
-      return new Map()
+      return []
     }
 
     const examinationDates = await trpcClient.config.getExaminationDates.query({
       id: props.beneficiaryId
     })
 
-    return new Map(
-      examinationDates.map(({ examinationDate }) => [
-        examinationDate.toString(),
-        formatDate(examinationDate)
-      ])
-    )
+    return examinationDates.map(({ examinationDate }) => ({
+      value: examinationDate.toString(),
+      label: formatDate(examinationDate)
+    }))
   }
 </script>

@@ -40,7 +40,7 @@
   async function searchAddressesFn(search: string): Promise<Options> {
     selectedValue.value = search
     if (search.length < 3) {
-      return new Map()
+      return []
     }
 
     const params: BanQueryParams = {
@@ -57,12 +57,10 @@
     )
 
     addresses.value = res.features.map(({ properties }) => properties)
-    return new Map(
-      addresses.value.map(({ id, name, postcode, city }) => [
-        id,
-        `${name}, ${postcode} ${city}`
-      ])
-    )
+    return addresses.value.map(({ id, name, postcode, city }) => ({
+      value: id,
+      label: `${name}, ${postcode} ${city}`
+    }))
   }
 
   function onSelectAddress(addressId: string) {

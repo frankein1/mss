@@ -18,7 +18,7 @@
     fileInstructionTypeFilterKeys,
     fileInstructionTypePictos,
     beneficiaryStatusKeys,
-    periodOptions
+    periodKeys
   } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import { Options, withEmptyValue } from '~/utils/options'
@@ -72,7 +72,7 @@
       name: 'period',
       label: 'Période',
       type: FilterType.SelectOne,
-      options: withEmptyValue(periodOptions, ''),
+      options: withEmptyValue(periodKeys.options, ''),
       alwaysExpanded: true
     })
 
@@ -95,7 +95,7 @@
 
     if (
       props.filters.helpRequestSubject !== 'Housing' &&
-      props.socialSupportSubjectOptions.size
+      props.socialSupportSubjectOptions.length
     ) {
       statsFilters.push({
         name: 'socialSupportSubjects',
@@ -105,7 +105,7 @@
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
       })
     }
-    if (props.beneficiariesCitiesOptions.size) {
+    if (props.beneficiariesCitiesOptions.length) {
       statsFilters.push({
         name: 'cities',
         label: 'Ville',

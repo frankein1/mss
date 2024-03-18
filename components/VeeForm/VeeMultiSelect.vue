@@ -71,7 +71,7 @@
       :aria-labelledby="labelId"
     >
       <li
-        v-for="([optionValue, optionLabel], index) in options"
+        v-for="({ value: optionValue, label: optionLabel }, index) in options"
         :ref="el => setOptionRef(el, optionValue)"
         :key="optionValue"
         role="option"
@@ -173,7 +173,7 @@
   const labelId = computed(() => `multi-select-${id.value}-label`)
 
   const selectedValues = ref<string[]>(
-    (value.value || []).filter(v => props.options.has(v))
+    (value.value || []).filter(v => hasOption(props.options, v))
   )
 
   const hiddenInput = ref<HTMLInputElement | null>(null)
@@ -193,7 +193,9 @@
    * The value displayed in the fake select box
    */
   const displayedValue = computed(() =>
-    selectedValues.value.map(value => props.options.get(value)).join(', ')
+    selectedValues.value
+      .map(value => findOptionLabel(props.options, value))
+      .join(', ')
   )
 
   /**
@@ -202,7 +204,7 @@
    */
   const optionTabindex = computed(() => (props.dropdown ? '-1' : undefined))
 
-  const optionValues = computed(() => [...props.options.keys()])
+  const optionValues = computed(() => [...props.options.map(o => o.value)])
 
   const {
     /**

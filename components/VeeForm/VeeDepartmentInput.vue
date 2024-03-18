@@ -31,7 +31,7 @@
 
   async function searchDepartmentsFn(search: string): Promise<Options> {
     if (search.length < 3) {
-      return new Map()
+      return []
     }
 
     const params = new URLSearchParams({

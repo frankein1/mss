@@ -170,11 +170,10 @@
   function beneficiariesToAutocompleteResults(
     beneficiaries: BeneficiaryIdentification[]
   ) {
-    const entries: [string, string][] = beneficiaries.map(beneficiary => [
-      beneficiary.id,
-      `${formatBeneficiarySearchDisplayName(beneficiary)}`
-    ])
-    return new Map<string, string>(entries)
+    return beneficiaries.map(beneficiary => ({
+      value: beneficiary.id,
+      label: `${formatBeneficiarySearchDisplayName(beneficiary)}`
+    }))
   }
 
   function onSelectBeneficiary(beneficiaryId: string) {

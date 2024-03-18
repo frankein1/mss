@@ -1,5 +1,5 @@
 function buildOptions(labels: Record<string, string>) {
-  return new Map(Object.entries(labels))
+  return Object.entries(labels).map(([value, label]) => ({ label, value }))
 }
 
 function buildKeys(byKey: Record<string, string>) {

@@ -112,7 +112,7 @@
   const structureOptions = computed(() =>
     structures.value?.structures.length
       ? toOptions(structures.value?.structures, 'id', 'name')
-      : new Map<string, string>()
+      : []
   )
 
   const { handleSubmit, values } = useForm<
