@@ -104,10 +104,10 @@
     return ''
   })
 
-  const statusOptions = {
+  const statusOptions = [
     ...followupStatusKeys.options,
     ...socialSupportStatusOptions.value
-  }
+  ]
 
   const typeSuiviValue = computed(() => props.values.typeSuivi)
 
