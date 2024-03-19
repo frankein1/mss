@@ -16,7 +16,7 @@
     />
 
     <div v-else-if="data">
-      <StructureConfigurationInfo
+      <StructureInfo
         class="fr-mb-5w"
         :structure="data.structure"
         @edit="onEdit"
