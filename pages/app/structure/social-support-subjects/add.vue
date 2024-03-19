@@ -35,17 +35,34 @@
       />
 
       <div v-else-if="data">
-        <SocialSupportSubjectsAdd :subjects="data.socialSupportSubjects" />
+        <form
+          ref="form"
+          novalidate
+          @submit.prevent="onSubmit"
+        >
+          <SocialSupportSubjectsSelection
+            :subjects="data.socialSupportSubjects"
+          />
 
-        <SocialSupportSubjectsCustom />
+          <SocialSupportSubjectsCustomCreation />
+
+          <SocialSupportSubjectsAddActions
+            :is-submitting="isSubmitting"
+            @cancel="navigateTo(RoutePath.AppStructure())"
+          />
+        </form>
       </div>
     </main>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
-  import { RouteTitle, Breadcrumb } from '~/utils/routing'
+  import { RouteTitle, RoutePath, Breadcrumb } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
+  import {
+    updateListSocialSupportSubjectSchema,
+    UpdateListSocialSupportSubjectInput
+  } from '~/server/schema'
 
   const title = RouteTitle.AppSocialSupportSubjectAdd()
 
@@ -54,8 +71,35 @@
   const trpcClient = useTrpcClient()
 
   // TODO replace by getting only all sss whatever their status is
-  const { data, pending, error, refresh } =
+  const { data, pending, error } =
     await trpcClient.structure.getCurrentUserStructure.useQuery()
+
+  const form = ref<HTMLFormElement | null>(null)
+  const isSubmitting = ref(false)
+
+  const { handleSubmit, meta } = useForm<UpdateListSocialSupportSubjectInput>({
+    validationSchema: toTypedSchema(updateListSocialSupportSubjectSchema),
+    initialValues: {
+      selected: (data.value?.socialSupportSubjects || []).map(
+        ({ id, inactive, name }) => ({
+          id,
+          active: !inactive,
+          name
+        })
+      ),
+      custom: []
+    }
+  })
+
+  const isFormDirty = computed(() => meta.value.dirty)
+
+  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
+    isFormDirty
+  })
+
+  const onSubmit = handleSubmit(() => {
+    isNavigatingWithFormActions.value = true
+  })
 </script>
 
 <style scoped lang="scss">
