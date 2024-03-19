@@ -1,47 +1,47 @@
 <template>
-  <div class="feature-section bg-color-white structure-configuration-info">
-    <h2 class="fr-h4 structure-configuration-info__title">
+  <div class="feature-section bg-color-white structure-info">
+    <h2 class="fr-h4 structure-info__title">
       Informations sur votre structure
     </h2>
 
-    <div class="fr-grid-row structure-configuration-info__content">
+    <div class="fr-grid-row structure-info__content">
       <div class="fr-col-12">
-        <span class="structure-configuration-info__content__label fr-mr-1w">
+        <span class="structure-info__content__label fr-mr-1w">
           {{ structureFieldLabels.name }} :
         </span>
         <span>{{ structure.name }}</span>
       </div>
 
       <div class="fr-col-12">
-        <span class="structure-configuration-info__content__label fr-mr-1w">
+        <span class="structure-info__content__label fr-mr-1w">
           {{ structureFieldLabels.address }} :
         </span>
         <span>{{ structure.address }}</span>
       </div>
 
       <div class="fr-col-12">
-        <span class="structure-configuration-info__content__label fr-mr-1w">
+        <span class="structure-info__content__label fr-mr-1w">
           {{ structureFieldLabels.zipcode }} :
         </span>
         <span>{{ structure.zipcode }}</span>
       </div>
 
       <div class="fr-col-12">
-        <span class="structure-configuration-info__content__label fr-mr-1w">
+        <span class="structure-info__content__label fr-mr-1w">
           {{ structureFieldLabels.city }} :
         </span>
         <span>{{ structure.city }}</span>
       </div>
 
       <div class="fr-col-12">
-        <span class="structure-configuration-info__content__label fr-mr-1w">
+        <span class="structure-info__content__label fr-mr-1w">
           {{ structureFieldLabels.phone }} :
         </span>
         <span>{{ structure.phone }}</span>
       </div>
 
       <div class="fr-col-12">
-        <span class="structure-configuration-info__content__label fr-mr-1w">
+        <span class="structure-info__content__label fr-mr-1w">
           {{ structureFieldLabels.email }} :
         </span>
         <span>{{ structure.email }}</span>
@@ -66,30 +66,30 @@
 </template>
 
 <script setup lang="ts">
-  import { StructureConfigurationInfo } from './types'
+  import { StructureInfo } from './types'
   import { structureFieldLabels } from '~/client/labels'
 
   defineProps<{
-    structure: StructureConfigurationInfo
+    structure: StructureInfo
   }>()
 
   const emit = defineEmits<{ edit: [] }>()
 </script>
 
 <style scoped lang="css">
-  .structure-configuration-info > div:not(:last-of-type) {
+  .structure-info > div:not(:last-of-type) {
     margin-bottom: 1.5rem;
   }
 
-  .structure-configuration-info__title {
+  .structure-info__title {
     color: var(--primary);
   }
 
-  .structure-configuration-info__content {
+  .structure-info__content {
     gap: 0.5rem;
   }
 
-  .structure-configuration-info__content__label {
+  .structure-info__content__label {
     font-weight: 700;
   }
 </style>

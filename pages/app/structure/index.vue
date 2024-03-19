@@ -16,13 +16,13 @@
     />
 
     <div v-else-if="data">
-      <StructureConfigurationInfo
+      <StructureInfo
         class="fr-mb-5w"
         :structure="data.structure"
         @edit="onEdit"
       />
 
-      <StructureConfigurationSocialSupportSubjects
+      <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
         :structure-id="data.structure.id"
         :can-edit="application.edit.structure"
@@ -33,7 +33,7 @@
 </template>
 
 <script lang="ts" setup>
-  import StructureConfigurationInfoForm from '~/components/StructureConfiguration/StructureConfigurationInfoForm.vue'
+  import StructureInfoForm from '~/components/Structure/StructureInfoForm.vue'
   import { EditCurrentUserStructureInfoInput } from '~/server/schema'
   import { RouteTitle, Breadcrumb } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
@@ -59,7 +59,7 @@
 
     modal.open({
       title: 'Modifier les informations de ma structure',
-      contentComponent: StructureConfigurationInfoForm,
+      contentComponent: StructureInfoForm,
       contentComponentProps: { structure: data.value.structure },
       contentComponentEvents: { updateStructureInfo: onUpdateStructureInfo }
     })

@@ -1,11 +1,11 @@
 <template>
-  <div class="feature-section bg-color-white structure-configuration-sss">
-    <h2 class="fr-h4 structure-configuration-sss__title">
+  <div class="feature-section bg-color-white sss">
+    <h2 class="fr-h4 sss__title">
       Objets d’accompagnements proposés par votre structure
     </h2>
 
     <AtomCallout>
-      <div class="structure-configuration-sss__note">
+      <div class="sss__note">
         <p class="fr-callout__text">
           Les aides légales et facultatives sélectionnées ci-dessous
           correspondent aux
@@ -24,14 +24,12 @@
       </div>
     </AtomCallout>
 
-    <StructureConfigurationSocialSupportSubjectsEmpty
-      v-if="subjects.length === 0"
-    />
+    <SocialSupportSubjectsEmpty v-if="subjects.length === 0" />
     <div
       v-else
-      class="structure-configuration-sss__items"
+      class="sss__items"
     >
-      <StructureConfigurationSocialSupportSubjectsItem
+      <SocialSupportSubjectsItem
         v-for="(item, index) in subjects"
         :id="item.id"
         :key="index"
@@ -54,14 +52,14 @@
 </template>
 
 <script setup lang="ts">
-  import type { StructureConfigurationSocialSupportSubjects } from './types'
-  import StructureConfigurationSubjectModification from './StructureConfigurationSubjectModification.vue'
-  import StructureConfigurationSubjectDeletion from './StructureConfigurationSubjectDeletion.vue'
+  import type { SocialSupportSubjects } from './types'
+  import SocialSupportSubjectEdition from './SocialSupportSubjectEdition.vue'
+  import SocialSupportSubjectDeletion from './SocialSupportSubjectDeletion.vue'
   import { RoutePath } from '~/utils/routing'
   import { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 
   const props = defineProps<{
-    subjects: StructureConfigurationSocialSupportSubjects
+    subjects: SocialSupportSubjects
     structureId: string
     canEdit: boolean
   }>()
@@ -89,7 +87,7 @@
   function editSubject(id: string, name: string) {
     modal.open({
       title: "Modifier un objet d'accompagnement",
-      contentComponent: StructureConfigurationSubjectModification,
+      contentComponent: SocialSupportSubjectEdition,
       contentComponentProps: {
         id,
         name,
@@ -124,7 +122,7 @@
   function removeSubject(id: string, name: string) {
     modal.open({
       title: `Etes-vous sûr·e de vouloir retirer l’objet “${name}” de vos accompagnements ?`,
-      contentComponent: StructureConfigurationSubjectDeletion,
+      contentComponent: SocialSupportSubjectDeletion,
       contentComponentProps: { isSubmitting: isSubmittingDeletion.value },
       contentComponentEvents: {
         delete: () => onDeleteStructureSubject(id)
@@ -154,22 +152,22 @@
 <style scoped lang="scss">
   @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
 
-  .structure-configuration-sss > *:not(:last-of-type) {
+  .sss > *:not(:last-of-type) {
     margin-bottom: 1.5rem;
   }
 
-  .structure-configuration-sss__title {
+  .sss__title {
     color: var(--primary);
   }
 
-  .structure-configuration-sss__note {
+  .sss__note {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
   }
 
-  .structure-configuration-sss__items {
+  .sss__items {
     padding: 1rem 0;
 
     @include dsfr-media-query.respond-from('lg') {

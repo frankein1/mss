@@ -83,13 +83,13 @@
 
 <script lang="ts" setup>
   import { structureFieldLabels } from '~/client/labels'
-  import type { StructureConfigurationInfo } from '~/components/StructureConfiguration/types'
+  import type { StructureInfo } from '~/components/Structure/types'
   import {
     EditCurrentUserStructureInfoInput,
     editCurrentUserStructureInfoSchema
   } from '~/server/schema'
 
-  const props = defineProps<{ structure: StructureConfigurationInfo }>()
+  const props = defineProps<{ structure: StructureInfo }>()
 
   const emit = defineEmits<{
     updateStructureInfo: [values: EditCurrentUserStructureInfoInput]
