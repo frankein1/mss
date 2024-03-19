@@ -31,7 +31,12 @@ const handler = async ({
   const requiredSubjects = socialSupportSubjects.filter(
     ({ legallyRequired }) => legallyRequired
   )
-  return { structure, socialSupportSubjects, optionalSubjects, requiredSubjects }
+  return {
+    structure,
+    socialSupportSubjects,
+    optionalSubjects,
+    requiredSubjects
+  }
 }
 
 export const getCurrentUserStructureQuery = createQuery({

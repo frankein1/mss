@@ -9,9 +9,7 @@ export async function get({
   ctx: SecurityRuleContext
   input: GetSocialSupportSubjectInput
 }) {
-
-  const subjects = await SocialSupportSubjectRepo.findMany(
-    user, {
+  const subjects = await SocialSupportSubjectRepo.findMany(user, {
     where: {
       name: { equals: input.name, mode: 'insensitive' },
       ownedByStructureId: input.structureId

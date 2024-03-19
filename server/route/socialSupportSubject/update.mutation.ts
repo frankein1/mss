@@ -12,7 +12,7 @@ import { SocialSupportSubjectService } from '~/server/services'
 
 const handler = async ({
   input,
-  ctx,
+  ctx
 }: {
   input: UpdateSocialSupportSubjectNameInput
   ctx: ProtectedAppContext

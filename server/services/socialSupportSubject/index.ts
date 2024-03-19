@@ -3,5 +3,5 @@ import { get } from './get.service'
 
 export const SocialSupportSubjectService = {
   get,
-  update,
+  update
 }
