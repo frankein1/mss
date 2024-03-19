@@ -24,14 +24,12 @@
       </div>
     </AtomCallout>
 
-    <StructureConfigurationSocialSupportSubjectsEmpty
-      v-if="subjects.length === 0"
-    />
+    <SocialSupportSubjectsEmpty v-if="subjects.length === 0" />
     <div
       v-else
       class="structure-configuration-sss__items"
     >
-      <StructureConfigurationSocialSupportSubjectsItem
+      <SocialSupportSubjectsItem
         v-for="(item, index) in subjects"
         :id="item.id"
         :key="index"
@@ -55,8 +53,8 @@
 
 <script setup lang="ts">
   import type { SocialSupportSubjects } from './types'
-  import StructureConfigurationSubjectModification from './StructureConfigurationSubjectModification.vue'
-  import StructureConfigurationSubjectDeletion from './StructureConfigurationSubjectDeletion.vue'
+  import SocialSupportSubjectEdition from './SocialSupportSubjectEdition.vue'
+  import SocialSupportSubjectDeletion from './SocialSupportSubjectDeletion.vue'
   import { RoutePath } from '~/utils/routing'
   import { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 
@@ -89,7 +87,7 @@
   function editSubject(id: string, name: string) {
     modal.open({
       title: "Modifier un objet d'accompagnement",
-      contentComponent: StructureConfigurationSubjectModification,
+      contentComponent: SocialSupportSubjectEdition,
       contentComponentProps: {
         id,
         name,
@@ -124,7 +122,7 @@
   function removeSubject(id: string, name: string) {
     modal.open({
       title: `Etes-vous sûr·e de vouloir retirer l’objet “${name}” de vos accompagnements ?`,
-      contentComponent: StructureConfigurationSubjectDeletion,
+      contentComponent: SocialSupportSubjectDeletion,
       contentComponentProps: { isSubmitting: isSubmittingDeletion.value },
       contentComponentEvents: {
         delete: () => onDeleteStructureSubject(id)
