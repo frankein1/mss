@@ -211,6 +211,7 @@ model SocialSupportSubject {
   default         DefaultSocialSupportSubject?
   legacyId        String?                      @map("legacy_id") @db.Uuid // FIXME: What is the purpose of this ?
   used            Boolean                      @default(false)
+  inactive        Boolean                      @default(false)
 
   created     DateTime? @default(now())
   createdBy   User?     @relation(fields: [createdById], references: [id])

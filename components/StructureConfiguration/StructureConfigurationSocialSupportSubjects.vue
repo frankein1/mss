@@ -132,22 +132,22 @@
     })
   }
 
-  function onDeleteStructureSubject(_id: string) {
-    // useTrpcMutation({
-    //   mutation: () =>
-    //     trpcClient.structure.deleteCurrentUserStructureSubject.mutate(values),
-    //   isSubmitting: isSubmittingModification,
-    //   onSuccess: () => {
-    //     modal.close()
-    //     refresh() // replace by emit refesh
-    //     snackbar.success('Objet d’accompagnement supprimé avec succès')
-    //   },
-    //   onFailure: () => {
-    //     snackbar.error(
-    //       "La modification de l'objet d'accompagnement de votre structure a échoué"
-    //     )
-    //   }
-    // })
+  function onDeleteStructureSubject(id: string) {
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.socialSupportSubject.makeInactive.mutate({ id }),
+      isSubmitting: isSubmittingModification,
+      onSuccess: () => {
+        modal.close()
+        emits('refresh')
+        snackbar.success('Objet d’accompagnement désactivé avec succès')
+      },
+      onFailure: () => {
+        snackbar.error(
+          "La modification de l'objet d'accompagnement de votre structure a échoué"
+        )
+      }
+    })
   }
 </script>
 

@@ -7,5 +7,8 @@ export const socialSupportSubjectRouter = router({
     .query(routes.get.execute),
   update: protectedProcedure
     .input(routes.update.inputValidation)
-    .mutation(routes.update.execute)
+    .mutation(routes.update.execute),
+  makeInactive: protectedProcedure
+    .input(routes.makeInactive.inputValidation)
+    .mutation(routes.makeInactive.execute)
 })

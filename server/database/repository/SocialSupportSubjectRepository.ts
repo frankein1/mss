@@ -35,8 +35,26 @@ function findUniqueOrThrow<
   return prismaClient.socialSupportSubject.findUniqueOrThrow(params)
 }
 
+function findWithNoInactiveCondition<
+  T extends Prisma.SocialSupportSubjectFindUniqueOrThrowArgs
+>(
+  user: SecurityRuleGrantee,
+  params: Prisma.SelectSubset<
+    T,
+    Prisma.SocialSupportSubjectFindUniqueOrThrowArgs
+  >
+) {
+  appendConstraints(
+    user,
+    params,
+    SocialSupportSubjectConstraints.getNoInactiveCondition
+  )
+  return prismaClient.socialSupportSubject.findUniqueOrThrow(params)
+}
+
 export const SocialSupportSubjectRepo = {
   findMany,
+  findWithNoInactiveCondition,
   findUniqueOrThrow,
   count,
   prisma: {
