@@ -54,14 +54,14 @@
 </template>
 
 <script setup lang="ts">
-  import type { StructureConfigurationSocialSupportSubjects } from './types'
+  import type { SocialSupportSubjects } from './types'
   import StructureConfigurationSubjectModification from './StructureConfigurationSubjectModification.vue'
   import StructureConfigurationSubjectDeletion from './StructureConfigurationSubjectDeletion.vue'
   import { RoutePath } from '~/utils/routing'
   import { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 
   const props = defineProps<{
-    subjects: StructureConfigurationSocialSupportSubjects
+    subjects: SocialSupportSubjects
     structureId: string
     canEdit: boolean
   }>()

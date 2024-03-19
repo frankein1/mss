@@ -66,11 +66,11 @@
 </template>
 
 <script setup lang="ts">
-  import { StructureConfigurationInfo } from './types'
+  import { StructureInfo } from './types'
   import { structureFieldLabels } from '~/client/labels'
 
   defineProps<{
-    structure: StructureConfigurationInfo
+    structure: StructureInfo
   }>()
 
   const emit = defineEmits<{ edit: [] }>()

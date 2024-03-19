@@ -22,7 +22,7 @@
         @edit="onEdit"
       />
 
-      <StructureConfigurationSocialSupportSubjects
+      <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
         :structure-id="data.structure.id"
         :can-edit="application.edit.structure"
