@@ -1,5 +1,5 @@
 <template>
-  <PageContainer no-max-width>
+  <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppStructure()" />
 
     <PageTitle :title="title" />
@@ -15,11 +15,20 @@
       message="Les informations de votre structure n'ont pas pu être chargées."
     />
 
-    <StructureConfigurationInfoHeader
-      v-else-if="data"
-      :structure="data.structure"
-      @edit="onEdit"
-    />
+    <div v-else-if="data">
+      <StructureConfigurationInfo
+        class="fr-mb-5w"
+        :structure="data.structure"
+        @edit="onEdit"
+      />
+
+      <StructureConfigurationSocialSupportSubjects
+        :subjects="data.socialSupportSubjects"
+        :structure-id="data.structure.id"
+        :can-edit="application.edit.structure"
+        @refresh="refresh"
+      />
+    </div>
   </PageContainer>
 </template>
 
@@ -36,6 +45,7 @@
   const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
+  const { application } = usePermissions()
 
   const isSubmitting = ref(false)
 

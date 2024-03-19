@@ -1,7 +1,10 @@
 <template>
   <div class="fr-callout">
     <div>
-      <h3 class="fr-callout__title fr-text--lg">
+      <h3
+        v-if="title"
+        class="fr-callout__title fr-text--lg"
+      >
         {{ title }}
       </h3>
 
@@ -24,7 +27,7 @@
 
 <script setup lang="ts">
   defineProps<{
-    title: string
+    title?: string
     button?: {
       label: string
       className?: string
@@ -38,7 +41,7 @@
   @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
 
   .fr-callout {
-    background-color: #fff;
+    background-color: var(--background-alt-blue-france);
     display: flex;
     flex-direction: column;
 
