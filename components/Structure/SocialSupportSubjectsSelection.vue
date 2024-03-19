@@ -22,10 +22,9 @@
       <div class="sss-add__items">
         <SocialSupportSubjectAddItem
           v-for="(item, index) in filteredSubjects"
-          :id="item.id"
           :key="index"
           :label="item.name"
-          @toggle="toggleSubject(item.id)"
+          :name="`selected[${index}].active`"
         />
       </div>
     </div>
@@ -54,8 +53,6 @@
         )
     return res
   })
-
-  function toggleSubject(id: string) {}
 </script>
 
 <style scoped lang="scss">

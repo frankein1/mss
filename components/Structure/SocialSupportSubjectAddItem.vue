@@ -2,19 +2,13 @@
   <VeeCheckbox
     class="fr-mb-2w"
     :label="label"
-    :name="`checkbox-add-${id}`"
+    :name="name"
   />
 </template>
 
 <script lang="ts" setup>
   defineProps<{
-    id: string
     label: string
-  }>()
-
-  defineEmits<{
-    toggle: []
+    name: string
   }>()
 </script>
-
-<style></style>
