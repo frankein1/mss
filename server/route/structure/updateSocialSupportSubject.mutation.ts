@@ -1,6 +1,9 @@
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { IdInput, idSchema } from '~/server/schema'
+import {
+  updateSocialSupportSubjectSchema,
+  UpdateSocialSupportSubjectNameInput
+} from '~/server/schema'
 import {
   SecurityRuleContext,
   getAppContextPermissions
@@ -11,17 +14,17 @@ const handler = async ({
   input,
   ctx
 }: {
-  input: IdInput
+  input: UpdateSocialSupportSubjectNameInput
   ctx: ProtectedAppContext
 }) => {
-  return await SocialSupportSubjectService.makeInactive({ input, ctx })
+  return await SocialSupportSubjectService.update({ input, ctx })
 }
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).edit.structure
 
-export const makeInactive = createMutation({
+export const updateSocialSupportSubject = createMutation({
   handler,
-  inputValidation: idSchema,
+  inputValidation: updateSocialSupportSubjectSchema,
   securityCheck
 })

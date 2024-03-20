@@ -23,7 +23,7 @@ const handler = async ({
   return subjects.length > 0 ? subjects[0] : null
 }
 
-export const getStructureSocialSupportSubjectQuery = createQuery({
+export const findSocialSupportSubject = createQuery({
   handler,
   inputValidation: getSocialSupportSubjectSchema,
   securityCheck: AllowSecurityCheck

@@ -17,7 +17,7 @@ const handler = async ({
   return await SocialSupportSubjectService.get({ input, ctx })
 }
 
-export const get = createQuery({
+export const getSocialSupportSubject = createQuery({
   handler,
   inputValidation: getSocialSupportSubjectSchema,
   securityCheck: AllowSecurityCheck

@@ -37,7 +37,7 @@ const handler = async ({
   }
 }
 
-export const getCurrentUserStructureQuery = createQuery({
+export const getStructure = createQuery({
   handler,
   inputValidation: emptySchema,
   securityCheck: AllowSecurityCheck

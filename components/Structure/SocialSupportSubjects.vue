@@ -77,7 +77,7 @@
 
   const nameCanBeUpdated = async (name: string) => {
     const subjectWithSameNameExists =
-      await trpcClient.socialSupportSubject.get.query({
+      await trpcClient.structure.findSocialSupportSubject.query({
         name: name.trim().toLocaleLowerCase(),
         structureId: props.structureId
       })
@@ -104,7 +104,8 @@
     values: UpdateSocialSupportSubjectNameInput
   ) {
     useTrpcMutation({
-      mutation: () => trpcClient.socialSupportSubject.update.mutate(values),
+      mutation: () =>
+        trpcClient.structure.updateSocialSupportSubject.mutate(values),
       isSubmitting: isSubmittingModification,
       onSuccess: () => {
         modal.close()
@@ -133,7 +134,7 @@
   function onDeleteStructureSubject(id: string) {
     useTrpcMutation({
       mutation: () =>
-        trpcClient.socialSupportSubject.makeInactive.mutate({ id }),
+        trpcClient.structure.makeInactiveSocialSupportSubject.mutate({ id }),
       isSubmitting: isSubmittingModification,
       onSuccess: () => {
         modal.close()

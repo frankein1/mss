@@ -40,16 +40,33 @@
           novalidate
           @submit.prevent="onSubmit"
         >
-          <SocialSupportSubjectsSelection
-            :subjects="data.socialSupportSubjects"
-          />
+          <SocialSupportSubjectsSelection :subjects="data" />
 
           <SocialSupportSubjectsCustomCreation />
 
-          <SocialSupportSubjectsAddActions
-            :is-submitting="isSubmitting"
-            @cancel="navigateTo(RoutePath.AppStructure())"
-          />
+          <ul
+            class="fr-btns-group fr-btns-group--inline-md fr-btns-group--right"
+          >
+            <li>
+              <button
+                class="fr-btn fr-btn--secondary"
+                type="button"
+                @click="onCancel"
+              >
+                Annuler
+              </button>
+            </li>
+            <li>
+              <button
+                class="fr-btn submit-btn"
+                type="submit"
+                :submitting="isSubmitting"
+                :disabled="isSubmitting"
+              >
+                Valider
+              </button>
+            </li>
+          </ul>
         </form>
       </div>
     </main>
@@ -57,11 +74,11 @@
 </template>
 
 <script lang="ts" setup>
-  import { RouteTitle, RoutePath, Breadcrumb } from '~/utils/routing'
+  import { RouteTitle, Breadcrumb, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
   import {
-    updateListSocialSupportSubjectSchema,
-    UpdateListSocialSupportSubjectInput
+    updateSocialSupportSubjectsSchema,
+    UpdateSocialSupportSubjectsInput
   } from '~/server/schema'
 
   const title = RouteTitle.AppStructureSocialSupportSubjectAdd()
@@ -69,24 +86,22 @@
   useHead({ title })
 
   const trpcClient = useTrpcClient()
+  const snackbar = useSnackbar()
 
-  // TODO replace by getting only all sss whatever their status is
   const { data, pending, error } =
-    await trpcClient.structure.getCurrentUserStructure.useQuery()
+    await trpcClient.structure.getCreateSocialSupportSubjects.useQuery()
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
 
-  const { handleSubmit, meta } = useForm<UpdateListSocialSupportSubjectInput>({
-    validationSchema: toTypedSchema(updateListSocialSupportSubjectSchema),
+  const { handleSubmit, meta } = useForm<UpdateSocialSupportSubjectsInput>({
+    validationSchema: toTypedSchema(updateSocialSupportSubjectsSchema),
     initialValues: {
-      selected: (data.value?.socialSupportSubjects || []).map(
-        ({ id, inactive, name }) => ({
-          id,
-          active: !inactive,
-          name
-        })
-      ),
+      selected: (data.value || []).map(({ id, inactive, name }) => ({
+        id,
+        active: !inactive,
+        name
+      })),
       custom: []
     }
   })
@@ -97,9 +112,21 @@
     isFormDirty
   })
 
-  const onSubmit = handleSubmit(() => {
+  const onSubmit = handleSubmit(values => {
     isNavigatingWithFormActions.value = true
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.structure.updateSocialSupportSubjects.mutate(values),
+      onSuccess: () => {
+        navigateTo(RoutePath.AppStructure())
+      },
+      onFailure: () => {
+        snackbar.error('La mise a jour a échoué.')
+      }
+    })
   })
+
+  const onCancel = () => {}
 </script>
 
 <style scoped lang="scss">

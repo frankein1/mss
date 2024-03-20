@@ -54,12 +54,12 @@
   const formContainer = ref<HTMLFormElement | null>(null)
 
   const { data, pending, error, refresh } =
-    await trpcClient.structure.getCurrentUserStructure.useQuery()
+    await trpcClient.structure.getStructure.useQuery()
 
   function onUpdateStructure(updatedStructure: EditCurrentUserStructureInput) {
     useTrpcMutation({
       mutation: () =>
-        trpcClient.structure.editCurrentUserStructure.mutate(updatedStructure),
+        trpcClient.structure.updateStructure.mutate(updatedStructure),
       isSubmitting,
       onSuccess: () => {
         refresh()
