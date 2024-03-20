@@ -44,7 +44,8 @@ async function initDefaultSubject(
       data: {
         default: key as DefaultSocialSupportSubject,
         ownedByStructureId: ctx.structure.id,
-        name: socialSupportSubjectKeys.value(key) || key
+        name: socialSupportSubjectKeys.value(key) || key,
+        inactive: true
       }
     })
   }

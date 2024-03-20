@@ -10,7 +10,7 @@ export const updateSocialSupportSubjectsSchema = z.object({
       name: z.string()
     })
   ),
-  custom: z.array(
+  customs: z.array(
     z.object({
       name: stringConstraint
         .max(50, maxStringLengthMessage(50))

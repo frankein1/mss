@@ -1,37 +1,20 @@
 <template>
-  <section class="feature-section fr-accordion">
-    <h3 class="fr-accordion__title">
-      <button
-        class="fr-accordion__btn fr-h4"
-        type="button"
-        aria-expanded="false"
-        aria-controls="accordion-selection"
-      >
-        Sélectionner parmi une suggestion d’objets
-      </button>
-    </h3>
-    <div
-      id="accordion-selection"
-      type="button"
-      class="fr-collapse"
-    >
-      <!-- <VeeSearchInput
+  <!-- <VeeSearchInput
         name="filter"
         label="Rechercher"
         @on-input="onSearch"
       /> -->
 
-      <div class="sss-add__items">
-        <VeeCheckbox
-          v-for="(item, index) in filteredSubjects"
-          :key="index"
-          class="fr-mb-2w"
-          :label="item.name"
-          :name="`selected[${index}].active`"
-        />
-      </div>
-    </div>
-  </section>
+  <div class="sss-add__items">
+    <VeeCheckbox
+      v-for="(item, index) in filteredSubjects"
+      :key="index"
+      class="fr-mb-2w"
+      :label="item.name"
+      :name="`selected[${index}].active`"
+      :disabled="!item.inactive"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>

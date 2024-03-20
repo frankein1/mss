@@ -1,28 +1,35 @@
 <template>
-  <PageContainer>
-    <DsfrBreadcrumb :links="Breadcrumb.AppStructureSocialSupportSubjectAdd()" />
+  <form
+    ref="form"
+    novalidate
+    @submit.prevent="onSubmit"
+  >
+    <main class="fr-container content">
+      <DsfrBreadcrumb
+        :links="Breadcrumb.AppStructureSocialSupportSubjectAdd()"
+      />
 
-    <PageTitle :title="title" />
+      <PageTitle :title="title" />
 
-    <AtomCallout>
-      <div class="note">
-        <p class="fr-callout__text">
-          Choisissez des objets qui correspondent au mieux au fonctionnement de
-          votre structure. Vous trouverez des suggestions d'objets ci-dessous.
-          Vous pouvez également créer des intitulés sur-mesure. Les objets
-          seront utilisés dans les formulaires de suivi, alimenteront vos
-          statistiques et vous permettront de facilement retrouver vos dossiers.
-        </p>
+      <AtomCallout>
+        <div class="note">
+          <p class="fr-callout__text">
+            Choisissez des objets qui correspondent au mieux au fonctionnement
+            de votre structure. Vous trouverez des suggestions d'objets
+            ci-dessous. Vous pouvez également créer des intitulés sur-mesure.
+            Les objets seront utilisés dans les formulaires de suivi,
+            alimenteront vos statistiques et vous permettront de facilement
+            retrouver vos dossiers.
+          </p>
 
-        <img
-          src="~/assets/icons/inclusion.svg"
-          class="img"
-          alt=""
-        />
-      </div>
-    </AtomCallout>
+          <img
+            src="~/assets/icons/inclusion.svg"
+            class="img"
+            alt=""
+          />
+        </div>
+      </AtomCallout>
 
-    <main>
       <AtomLoader
         v-if="pending"
         class="fr-mx-auto"
@@ -35,42 +42,72 @@
       />
 
       <div v-else-if="data">
-        <form
-          ref="form"
-          novalidate
-          @submit.prevent="onSubmit"
-        >
-          <SocialSupportSubjectsSelection :subjects="data" />
-
-          <SocialSupportSubjectsCustomCreation />
-
-          <ul
-            class="fr-btns-group fr-btns-group--inline-md fr-btns-group--right"
-          >
-            <li>
+        <div class="fr-accordions-group">
+          <section class="feature-section fr-accordion">
+            <h3 class="fr-accordion__title">
               <button
-                class="fr-btn fr-btn--secondary"
+                class="fr-accordion__btn fr-h4"
                 type="button"
-                @click="onCancel"
+                aria-expanded="false"
+                aria-controls="accordion-selection"
               >
-                Annuler
+                Sélectionner parmi une suggestion d’objets
               </button>
-            </li>
-            <li>
+            </h3>
+            <div
+              id="accordion-selection"
+              type="button"
+              class="fr-collapse"
+            >
+              <SocialSupportSubjectsSelection :subjects="data" />
+            </div>
+          </section>
+          <section class="feature-section fr-accordion">
+            <h3 class="fr-accordion__title">
               <button
-                class="fr-btn submit-btn"
-                type="submit"
-                :submitting="isSubmitting"
-                :disabled="isSubmitting"
+                class="fr-accordion__btn fr-h4"
+                type="button"
+                aria-expanded="false"
+                aria-controls="accordion-customization"
               >
-                Valider
+                Créer un objet personnalisé
               </button>
-            </li>
-          </ul>
-        </form>
+            </h3>
+
+            <div
+              id="accordion-customization"
+              class="fr-collapse"
+            >
+              <SocialSupportSubjectsCustomCreation />
+            </div>
+          </section>
+        </div>
       </div>
     </main>
-  </PageContainer>
+    <div class="actions-bar">
+      <ul class="fr-btns-group fr-btns-group--inline-md fr-btns-group--right">
+        <li>
+          <button
+            class="fr-btn fr-btn--secondary"
+            type="button"
+            @click="onCancel"
+          >
+            Annuler
+          </button>
+        </li>
+        <li>
+          <button
+            class="fr-btn submit-btn"
+            type="submit"
+            :submitting="isSubmitting"
+            :disabled="isSubmitting"
+          >
+            Valider
+          </button>
+        </li>
+      </ul>
+    </div>
+  </form>
 </template>
 
 <script lang="ts" setup>
@@ -102,7 +139,7 @@
         active: !inactive,
         name
       })),
-      custom: []
+      customs: []
     }
   })
 
@@ -119,6 +156,7 @@
         trpcClient.structure.updateSocialSupportSubjects.mutate(values),
       onSuccess: () => {
         navigateTo(RoutePath.AppStructure())
+        snackbar.success('Objet(s) d’accompagnement(s) ajouté(s) avec succès')
       },
       onFailure: () => {
         snackbar.error('La mise a jour a échoué.')
@@ -126,7 +164,9 @@
     })
   })
 
-  const onCancel = () => {}
+  const onCancel = () => {
+    navigateTo(RoutePath.AppStructure())
+  }
 </script>
 
 <style scoped lang="scss">
@@ -135,5 +175,17 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
+  }
+
+  $actions-bar-height: 9rem;
+
+  .content {
+    height: calc(100vh - #{$actions-bar-height});
+    overflow: scroll;
+  }
+
+  .actions-bar {
+    background-color: white;
+    padding: 1rem 1rem;
   }
 </style>

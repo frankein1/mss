@@ -25,11 +25,11 @@ const handler = async ({
       inactive: !sss.active
     }
   }))
-  const create = input.custom.map(sss => ({
+  const create = input.customs.map(sss => ({
     inactive: false,
-    name: sss.name,
-    legallyRequired: false
+    name: sss.name
   }))
+
   const res = await StructureRepo.prisma.update({
     where: { id: structure.id },
     data: {
