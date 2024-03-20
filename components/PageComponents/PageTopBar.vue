@@ -45,7 +45,7 @@
     if (application.value.edit.structure) {
       menus.push({
         label: 'Structure',
-        to: RoutePath.AppStructureEdit(),
+        to: RoutePath.AppStructure(),
         icon: 'fr-icon-home-4-line'
       })
     }

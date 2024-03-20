@@ -43,7 +43,7 @@
     <div class="fr-grid-row fr-grid-row--right">
       <NuxtLink
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line"
-        :to="RoutePath.AppStructureEdit()"
+        :to="RoutePath.AppStructureSocialSupportSubjectAdd()"
       >
         Ajouter un accompagnement
       </NuxtLink>

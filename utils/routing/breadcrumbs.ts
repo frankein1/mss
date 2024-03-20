@@ -99,11 +99,11 @@ export const Breadcrumb = {
     { text: RouteTitle.AppStructureEdit(), to: RoutePath.AppStructureEdit() }
   ],
 
-  [Route.AppSocialSupportSubjectAdd]: () => [
+  [Route.AppStructureSocialSupportSubjectAdd]: () => [
     ...OverviewBreadcrumb(),
     {
-      text: RouteTitle.AppSocialSupportSubjectAdd(),
-      to: RoutePath.AppSocialSupportSubjectAdd()
+      text: RouteTitle.AppStructureSocialSupportSubjectAdd(),
+      to: RoutePath.AppStructureSocialSupportSubjectAdd()
     }
   ],
 

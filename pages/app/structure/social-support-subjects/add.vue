@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb :links="Breadcrumb.AppSocialSupportSubjectAdd()" />
+    <DsfrBreadcrumb :links="Breadcrumb.AppStructureSocialSupportSubjectAdd()" />
 
     <PageTitle :title="title" />
 
@@ -64,7 +64,7 @@
     UpdateListSocialSupportSubjectInput
   } from '~/server/schema'
 
-  const title = RouteTitle.AppSocialSupportSubjectAdd()
+  const title = RouteTitle.AppStructureSocialSupportSubjectAdd()
 
   useHead({ title })
 
