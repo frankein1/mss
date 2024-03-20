@@ -113,9 +113,7 @@
         snackbar.success('Objet d’accompagnement modifié avec succès')
       },
       onFailure: () => {
-        snackbar.error(
-          "La modification de l'objet d'accompagnement de votre structure a échoué"
-        )
+        snackbar.error("La modification de l'objet d'accompagnement a échoué")
       }
     })
   }
@@ -139,12 +137,10 @@
       onSuccess: () => {
         modal.close()
         emits('refresh')
-        snackbar.success('Objet d’accompagnement désactivé avec succès')
+        snackbar.success('Objet d’accompagnement supprimé avec succès')
       },
       onFailure: () => {
-        snackbar.error(
-          "La modification de l'objet d'accompagnement de votre structure a échoué"
-        )
+        snackbar.error("La suppression de l'objet d'accompagnement a échoué")
       }
     })
   }

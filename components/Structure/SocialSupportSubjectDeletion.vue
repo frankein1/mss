@@ -14,7 +14,7 @@
 
       <div class="fr-col-12">
         <ul
-          class="fr-btns-group fr-btns-group--inline-md fr-btns-group--right fr-mt-3w"
+          class="fr-btns-group fr-btns-group--inline-md fr-btns-group--right fr-mt-2w"
         >
           <li>
             <button
@@ -32,7 +32,7 @@
               :submitting="isSubmitting"
               :disabled="isSubmitting"
             >
-              Modifier
+              Confirmer
             </button>
           </li>
         </ul>

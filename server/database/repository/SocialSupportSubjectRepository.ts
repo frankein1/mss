@@ -14,20 +14,6 @@ function findMany<T extends Prisma.SocialSupportSubjectFindManyArgs>(
   return prismaClient.socialSupportSubject.findMany(params)
 }
 
-function findManyWithNoInactiveCondition<
-  T extends Prisma.SocialSupportSubjectFindManyArgs
->(
-  user: SecurityRuleGrantee,
-  params: Prisma.SelectSubset<T, Prisma.SocialSupportSubjectFindManyArgs>
-) {
-  appendConstraints(
-    user,
-    params,
-    SocialSupportSubjectConstraints.getNoInactiveCondition
-  )
-  return prismaClient.socialSupportSubject.findMany(params)
-}
-
 function count(
   user: SecurityRuleGrantee,
   params: Prisma.SocialSupportSubjectCountArgs
@@ -49,27 +35,8 @@ function findUniqueOrThrow<
   return prismaClient.socialSupportSubject.findUniqueOrThrow(params)
 }
 
-function findWithNoInactiveCondition<
-  T extends Prisma.SocialSupportSubjectFindUniqueOrThrowArgs
->(
-  user: SecurityRuleGrantee,
-  params: Prisma.SelectSubset<
-    T,
-    Prisma.SocialSupportSubjectFindUniqueOrThrowArgs
-  >
-) {
-  appendConstraints(
-    user,
-    params,
-    SocialSupportSubjectConstraints.getNoInactiveCondition
-  )
-  return prismaClient.socialSupportSubject.findFirst(params)
-}
-
 export const SocialSupportSubjectRepo = {
   findMany,
-  findWithNoInactiveCondition,
-  findManyWithNoInactiveCondition,
   findUniqueOrThrow,
   count,
   prisma: {

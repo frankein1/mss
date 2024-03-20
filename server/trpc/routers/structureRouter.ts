@@ -7,7 +7,9 @@ import {
   makeInactiveSocialSupportSubject,
   updateSocialSupportSubject,
   updateSocialSupportSubjects,
-  updateStructureInfo
+  updateStructureInfo,
+  getActiveSocialSupportSubjects,
+  getSocialSupportSubjects
 } from '~/server/route/structure'
 
 export const structureRouter = router({
@@ -34,5 +36,11 @@ export const structureRouter = router({
     .mutation(makeInactiveSocialSupportSubject.execute),
   updateSocialSupportSubject: protectedProcedure
     .input(updateSocialSupportSubject.inputValidation)
-    .mutation(updateSocialSupportSubject.execute)
+    .mutation(updateSocialSupportSubject.execute),
+  getActiveSocialSupportSubjects: protectedProcedure
+    .input(getActiveSocialSupportSubjects.inputValidation)
+    .query(getActiveSocialSupportSubjects.execute),
+  getSocialSupportSubjects: protectedProcedure
+    .input(getSocialSupportSubjects.inputValidation)
+    .query(getSocialSupportSubjects.execute)
 })

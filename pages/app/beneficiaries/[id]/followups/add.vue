@@ -60,7 +60,7 @@
     data: socialSupportSubjects,
     pending: socialSupportSubjectsPending,
     error: socialSupportSubjectsError
-  } = await trpcClient.config.getStructureSocialSupportSubjects.useQuery()
+  } = await trpcClient.structure.getActiveSocialSupportSubjects.useQuery()
 
   const {
     data: partnerOrganizations,

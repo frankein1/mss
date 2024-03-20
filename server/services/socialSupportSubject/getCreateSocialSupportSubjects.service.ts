@@ -13,32 +13,26 @@ export async function getCreateSocialSupportSubjects({
   for (const key of keys) {
     await initDefaultSubject(ctx, key as DefaultSocialSupportSubject)
   }
-  return await SocialSupportSubjectRepo.findManyWithNoInactiveCondition(
-    ctx.user,
-    {
-      orderBy: {
-        name: 'asc'
-      }
+  return await SocialSupportSubjectRepo.findMany(ctx.user, {
+    orderBy: {
+      name: 'asc'
     }
-  )
+  })
 }
 
 async function initDefaultSubject(
   ctx: SecurityRuleContext,
   key: DefaultSocialSupportSubject
 ) {
-  const res = await SocialSupportSubjectRepo.findManyWithNoInactiveCondition(
-    ctx.user,
-    {
-      where: {
-        ownedByStructureId: ctx.structure.id,
-        default: {
-          equals: key as DefaultSocialSupportSubject
-        }
-      },
-      take: 1
-    }
-  )
+  const res = await SocialSupportSubjectRepo.findMany(ctx.user, {
+    where: {
+      ownedByStructureId: ctx.structure.id,
+      default: {
+        equals: key as DefaultSocialSupportSubject
+      }
+    },
+    take: 1
+  })
   if (res.length === 0) {
     await SocialSupportSubjectRepo.prisma.create({
       data: {

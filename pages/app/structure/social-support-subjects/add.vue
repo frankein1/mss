@@ -186,6 +186,6 @@
 
   .actions-bar {
     background-color: white;
-    padding: 1rem 1rem;
+    padding: 1rem;
   }
 </style>

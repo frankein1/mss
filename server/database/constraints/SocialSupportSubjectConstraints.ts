@@ -7,19 +7,6 @@ const get = (user: SecurityRuleGrantee) => {
     return where
   }
   Object.assign(where, {
-    ownedByStructureId: user.structureId,
-    inactive: false
-  })
-
-  return where
-}
-
-const getNoInactiveCondition = (user: SecurityRuleGrantee) => {
-  const where = {}
-  if (isAdmin(user)) {
-    return where
-  }
-  Object.assign(where, {
     ownedByStructureId: user.structureId
   })
 
@@ -27,6 +14,5 @@ const getNoInactiveCondition = (user: SecurityRuleGrantee) => {
 }
 
 export const SocialSupportSubjectConstraints = {
-  get,
-  getNoInactiveCondition
+  get
 }
