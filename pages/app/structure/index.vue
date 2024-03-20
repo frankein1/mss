@@ -50,7 +50,7 @@
   const isSubmitting = ref(false)
 
   const { data, pending, error, refresh } =
-    await trpcClient.structure.getCurrentUserStructure.useQuery()
+    await trpcClient.structure.getStructure.useQuery()
 
   function onEdit() {
     if (!data || !data.value) {
@@ -67,8 +67,7 @@
 
   function onUpdateStructureInfo(values: EditCurrentUserStructureInfoInput) {
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.structure.editCurrentUserStructureInfo.mutate(values),
+      mutation: () => trpcClient.structure.updateStructureInfo.mutate(values),
       isSubmitting,
       onSuccess: () => {
         modal.close()

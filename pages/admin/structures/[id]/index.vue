@@ -21,8 +21,6 @@
             v-else-if="data"
             :structure="data.structure"
             :users="data.users"
-            :optional-subjects="data.optionalSubjects"
-            :required-subjects="data.requiredSubjects"
             :is-submitting="isSubmitting"
             :admin-view="true"
             @update-structure="onUpdateStructure"

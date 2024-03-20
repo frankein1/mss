@@ -99,6 +99,14 @@ export const Breadcrumb = {
     { text: RouteTitle.AppStructureEdit(), to: RoutePath.AppStructureEdit() }
   ],
 
+  [Route.AppStructureSocialSupportSubjectAdd]: () => [
+    ...OverviewBreadcrumb(),
+    {
+      text: RouteTitle.AppStructureSocialSupportSubjectAdd(),
+      to: RoutePath.AppStructureSocialSupportSubjectAdd()
+    }
+  ],
+
   [Route.AppBeneficiaries]: () => BeneficiariesBreadcrumb(),
 
   // FIXME: BeneficiariesAdd can be accessed from Overview, Beneficiaries and Stats

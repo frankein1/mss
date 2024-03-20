@@ -30,6 +30,7 @@ export enum Route {
   AppAccount = 'AppAccount',
   AppStructure = 'AppStructure',
   AppStructureEdit = 'AppStructureEdit',
+  AppStructureSocialSupportSubjectAdd = 'AppStructureSocialSupportSubjectAdd',
   AppBeneficiaries = 'AppBeneficiaries',
   AppBeneficiariesAdd = 'AppBeneficiariesAdd',
   AppBeneficiary = 'AppBeneficiary',
@@ -169,6 +170,8 @@ export const RoutePath = {
   [Route.AppAccount]: () => `${AppRoute}/account`,
   [Route.AppStructure]: () => `${AppRoute}/structure`,
   [Route.AppStructureEdit]: () => `${AppRoute}/structure/edit`,
+  [Route.AppStructureSocialSupportSubjectAdd]: () =>
+    `${AppRoute}/structure/social-support-subjects/add`,
   [Route.AppBeneficiaries]: () => BeneficiariesRoute,
   [Route.AppBeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
   [Route.AppBeneficiary]: BeneficiaryRoute,

@@ -85,7 +85,7 @@
         <template #hint>
           <NuxtLink
             v-if="application.edit.structure"
-            :to="RoutePath.AppStructureEdit()"
+            :to="RoutePath.AppStructure()"
             class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
             >Je personnalise les objets d'accompagnement de ma structure
           </NuxtLink>

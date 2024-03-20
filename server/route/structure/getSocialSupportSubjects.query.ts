@@ -10,7 +10,7 @@ const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
   })
 }
 
-export const getStructureSocialSupportSubjectsQuery = createQuery({
+export const getSocialSupportSubjects = createQuery({
   handler,
   securityCheck: AllowSecurityCheck,
   inputValidation: emptySchema

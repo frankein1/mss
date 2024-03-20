@@ -1,25 +1,15 @@
 import { FieldLabels } from '~/types/fieldLabels'
-import type {
-  EditCurrentUserStructureInput,
-  AdminCreateStructureInput
-} from '~/server/schema'
+import type { AdminCreateStructureInput } from '~/server/schema'
 
-export const structureFieldLabels: FieldLabels<EditCurrentUserStructureInput> =
-  {
-    name: 'Raison sociale',
-    zipcode: 'Code postal',
-    city: 'Ville',
-    address: 'Adresse',
-    phone: 'Téléphone',
-    email: 'Email',
-    legallyRequiredSocialSupportSubjects: 'Aides légales',
-    legallyNotRequiredSocialSupportSubjects: 'Aides facultatives'
-  }
-
-export const adminStructureFieldLabels: FieldLabels<
+export const structureFieldLabels: FieldLabels<
   Required<AdminCreateStructureInput>
 > = {
-  ...structureFieldLabels,
+  name: 'Raison sociale',
+  zipcode: 'Code postal',
+  city: 'Ville',
+  address: 'Adresse',
+  phone: 'Téléphone',
+  email: 'Email',
   type: 'Type',
   inhabitantsNumber: "Nombre d'habitants",
   inseeCode: 'Code INSEE',

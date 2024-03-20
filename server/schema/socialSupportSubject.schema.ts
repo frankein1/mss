@@ -7,7 +7,6 @@ const createSocialSupportSubjectSchema = z.object({
   name: stringConstraint
     .max(100, maxStringLengthMessage(100))
     .min(2, minStringLengthMessage(2)),
-  legallyRequired: z.boolean(),
   default: z.nativeEnum(DefaultSocialSupportSubject).nullish(),
   ownedByStructureId: z.string().uuid()
 })

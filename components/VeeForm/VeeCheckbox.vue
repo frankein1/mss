@@ -11,6 +11,7 @@
       :value="true"
       :aria-describedby="ariaDescribedby"
       :aria-labelledby="labelledBy"
+      :disabled="disabled"
       @input="handleChange"
     />
     <label
@@ -52,11 +53,13 @@
       noLabel?: boolean
       labelledBy?: string
       required?: boolean
+      disabled?: boolean
     }>(),
     {
       noLabel: false,
       labelledBy: undefined,
-      required: false
+      required: false,
+      disabled: false
     }
   )
 

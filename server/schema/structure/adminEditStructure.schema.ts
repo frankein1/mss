@@ -1,4 +1,4 @@
-import { StructureType, DefaultSocialSupportSubject } from '@prisma/client'
+import { StructureType } from '@prisma/client'
 import { z } from 'zod'
 import {
   requiredNativeEnum,
@@ -23,35 +23,5 @@ export const adminEditStructureSchemaBase = editStructureSchema
   })
 
 export const adminEditStructureSchema = adminEditStructureSchemaBase
-  .extend({
-    legallyRequiredSocialSupportSubjects: z.array(
-      z.nativeEnum(DefaultSocialSupportSubject)
-    ),
-    legallyNotRequiredSocialSupportSubjects: z.array(
-      z.union([
-        z.string().uuid(),
-        z.nativeEnum(DefaultSocialSupportSubject),
-        z.string()
-      ])
-    )
-  })
-  .refine(
-    val =>
-      val.legallyRequiredSocialSupportSubjects.length ||
-      val.legallyNotRequiredSocialSupportSubjects.length,
-    {
-      message: 'Veuillez sélectionner au moins une aide légale ou facultative.',
-      path: ['legallyRequiredSocialSupportSubjects']
-    }
-  )
-  .refine(
-    val =>
-      val.legallyRequiredSocialSupportSubjects.length ||
-      val.legallyNotRequiredSocialSupportSubjects.length,
-    {
-      message: 'Veuillez sélectionner au moins une aide légale ou facultative.',
-      path: ['legallyNotRequiredSocialSupportSubjects']
-    }
-  )
 
 export type AdminEditStructureInput = z.infer<typeof adminEditStructureSchema>

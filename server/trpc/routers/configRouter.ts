@@ -3,8 +3,7 @@ import { getInclusionConnectClient } from '~/server/lib'
 import {
   getAgentsQuery,
   getBeneficiariesCitiesQuery,
-  getExaminationDatesQuery,
-  getStructureSocialSupportSubjectsQuery
+  getExaminationDatesQuery
 } from '~/server/route/config'
 
 export const configRouter = router({
@@ -17,9 +16,6 @@ export const configRouter = router({
   getExaminationDates: protectedProcedure
     .input(getExaminationDatesQuery.inputValidation)
     .query(getExaminationDatesQuery.execute),
-  getStructureSocialSupportSubjects: protectedProcedure
-    .input(getStructureSocialSupportSubjectsQuery.inputValidation)
-    .query(getStructureSocialSupportSubjectsQuery.execute),
   getInclusionConnectEditPasswordUrl: protectedProcedure.query(() => {
     const client = getInclusionConnectClient()
     return client.getEditPasswordUrl()

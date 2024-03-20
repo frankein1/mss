@@ -35,13 +35,7 @@ const adminHandler = async ({
         }
       }
     })
-  const optionalSubjects = socialSupportSubjects.filter(
-    ({ legallyRequired }) => !legallyRequired
-  )
-  const requiredSubjects = socialSupportSubjects.filter(
-    ({ legallyRequired }) => legallyRequired
-  )
-  return { structure, users, optionalSubjects, requiredSubjects }
+  return { structure, users, socialSupportSubjects }
 }
 
 export const getAdminStructureQuery = createQuery({

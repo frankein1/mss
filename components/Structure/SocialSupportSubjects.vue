@@ -43,7 +43,7 @@
     <div class="fr-grid-row fr-grid-row--right">
       <NuxtLink
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line"
-        :to="RoutePath.AppStructureEdit()"
+        :to="RoutePath.AppStructureSocialSupportSubjectAdd()"
       >
         Ajouter un accompagnement
       </NuxtLink>
@@ -77,7 +77,7 @@
 
   const nameCanBeUpdated = async (name: string) => {
     const subjectWithSameNameExists =
-      await trpcClient.socialSupportSubject.get.query({
+      await trpcClient.structure.findSocialSupportSubject.query({
         name: name.trim().toLocaleLowerCase(),
         structureId: props.structureId
       })
@@ -104,7 +104,8 @@
     values: UpdateSocialSupportSubjectNameInput
   ) {
     useTrpcMutation({
-      mutation: () => trpcClient.socialSupportSubject.update.mutate(values),
+      mutation: () =>
+        trpcClient.structure.updateSocialSupportSubject.mutate(values),
       isSubmitting: isSubmittingModification,
       onSuccess: () => {
         modal.close()
@@ -112,9 +113,7 @@
         snackbar.success('Objet d’accompagnement modifié avec succès')
       },
       onFailure: () => {
-        snackbar.error(
-          "La modification de l'objet d'accompagnement de votre structure a échoué"
-        )
+        snackbar.error("La modification de l'objet d'accompagnement a échoué")
       }
     })
   }
@@ -133,17 +132,15 @@
   function onDeleteStructureSubject(id: string) {
     useTrpcMutation({
       mutation: () =>
-        trpcClient.socialSupportSubject.makeInactive.mutate({ id }),
+        trpcClient.structure.makeInactiveSocialSupportSubject.mutate({ id }),
       isSubmitting: isSubmittingModification,
       onSuccess: () => {
         modal.close()
         emits('refresh')
-        snackbar.success('Objet d’accompagnement désactivé avec succès')
+        snackbar.success('Objet d’accompagnement supprimé avec succès')
       },
       onFailure: () => {
-        snackbar.error(
-          "La modification de l'objet d'accompagnement de votre structure a échoué"
-        )
+        snackbar.error("La suppression de l'objet d'accompagnement a échoué")
       }
     })
   }

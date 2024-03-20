@@ -1,9 +1,7 @@
 import { DefaultSocialSupportSubject } from '@prisma/client'
-import { labelsToOptions } from '~/utils/options'
+import { buildKeys } from '~/utils/keys/keyBuilder'
 
-export const defaultLegallyRequiredSocialSupportSubjectLabels: {
-  [key in DefaultSocialSupportSubject]?: string
-} = {
+export const socialSupportSubjectKeys = buildKeys({
   [DefaultSocialSupportSubject.AideSociale]: 'Aide sociale',
   [DefaultSocialSupportSubject.AideMedicaleDEtat]: "Aide médicale d'État - AME",
   [DefaultSocialSupportSubject.AllocationDeSolidariteAuxPersonnesAgees]:
@@ -24,15 +22,7 @@ export const defaultLegallyRequiredSocialSupportSubjectLabels: {
   [DefaultSocialSupportSubject.ObligationAlimentaire]: 'Obligation alimentaire',
   [DefaultSocialSupportSubject.Puma]: 'PUMA',
   [DefaultSocialSupportSubject.RevenuDeSolidariteActive]:
-    'Revenu de Solidarité Active - RSA'
-}
-
-export const defaultLegallyRequiredSocialSupportSubjectOptions =
-  labelsToOptions(defaultLegallyRequiredSocialSupportSubjectLabels)
-
-export const defaultLegallyNotRequiredSocialSupportSubjectLabels: {
-  [key in DefaultSocialSupportSubject]?: string
-} = {
+    'Revenu de Solidarité Active - RSA',
   [DefaultSocialSupportSubject.AccompagnementSocial]: 'Accompagnement social',
   [DefaultSocialSupportSubject.AideAlimentaire]: 'Aide alimentaire',
   [DefaultSocialSupportSubject.AideAuTransport]: 'Aide au transport',
@@ -49,7 +39,4 @@ export const defaultLegallyNotRequiredSocialSupportSubjectLabels: {
   [DefaultSocialSupportSubject.AideChauffage]: 'Aide chauffage',
   [DefaultSocialSupportSubject.AideImpayesEnergieFluides]:
     "Aide aux impayés d'énergie et fluides"
-}
-
-export const defaultLegallyNotRequiredSocialSupportSubjectOptions =
-  labelsToOptions(defaultLegallyNotRequiredSocialSupportSubjectLabels)
+})
