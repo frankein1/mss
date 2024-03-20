@@ -27,7 +27,7 @@
 <script lang="ts" setup>
   import type { AdminCreateStructureInput } from '~/server/schema'
   import { adminCreateStructureSchema } from '~/server/schema'
-  import { adminStructureFieldLabels } from '~/client/labels'
+  import { structureFieldLabels } from '~/client/labels'
 
   defineProps<{
     isSubmitting: boolean
@@ -53,6 +53,6 @@
   const { errors } = useDisplayFormErrors(
     form,
     caughtErrors,
-    adminStructureFieldLabels
+    structureFieldLabels
   )
 </script>

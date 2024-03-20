@@ -63,7 +63,7 @@ function findWithNoInactiveCondition<
     params,
     SocialSupportSubjectConstraints.getNoInactiveCondition
   )
-  return prismaClient.socialSupportSubject.findUniqueOrThrow(params)
+  return prismaClient.socialSupportSubject.findFirst(params)
 }
 
 export const SocialSupportSubjectRepo = {

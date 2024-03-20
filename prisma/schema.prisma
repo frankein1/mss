@@ -205,13 +205,11 @@ enum DefaultSocialSupportSubject {
 }
 
 model SocialSupportSubject {
-  id              String                       @id @default(uuid()) @db.Uuid
-  name            String
-  legallyRequired Boolean                      @map("legally_required")
-  default         DefaultSocialSupportSubject?
-  legacyId        String?                      @map("legacy_id") @db.Uuid // FIXME: What is the purpose of this ?
-  used            Boolean                      @default(false)
-  inactive        Boolean                      @default(false)
+  id       String                       @id @default(uuid()) @db.Uuid
+  name     String
+  default  DefaultSocialSupportSubject?
+  used     Boolean                      @default(false)
+  inactive Boolean                      @default(false)
 
   created     DateTime? @default(now())
   createdBy   User?     @relation(fields: [createdById], references: [id])
