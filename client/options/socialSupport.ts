@@ -1,6 +1,6 @@
 import { SocialSupportStatus } from '@prisma/client'
 import { followupStatusKeys } from './followup'
-import { buildKeys } from '~/utils/keys/keyBuilder'
+import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
 
 export enum TypeSuivi {
   Followup = 'Followup',
@@ -43,12 +43,12 @@ export const ministryFileInstructionStatusKeys = buildKeys({
   [SocialSupportStatus.Dismissed]: 'Classé sans suite'
 })
 
-export const socialSupportStatusKeys = {
-  ...followupStatusKeys,
-  ...fileInstructionStatusKeys
-}
+export const socialSupportStatusKeys = mergeKeys(
+  followupStatusKeys,
+  fileInstructionStatusKeys
+)
 
-export const ministrySocialSupportStatusKeys = {
-  ...followupStatusKeys,
-  ...ministryFileInstructionStatusKeys
-}
+export const ministrySocialSupportStatusKeys = mergeKeys(
+  followupStatusKeys,
+  ministryFileInstructionStatusKeys
+)

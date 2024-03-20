@@ -2,7 +2,7 @@ import {
   FileInstructionRefusalReason,
   FileInstructionType
 } from '@prisma/client'
-import { buildKeys } from '~/utils/keys/keyBuilder'
+import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
 
 const baseRefusalReasonKeys = buildKeys({
   [FileInstructionRefusalReason.ResourcesOutOfScale]: 'Ressources hors barème',
@@ -30,10 +30,10 @@ export const housingFileInstructionRefusalReasonKeys = buildKeys({
   [FileInstructionRefusalReason.Other]: 'Autre'
 })
 
-export const fileInstructionRefusalReasonKeys = {
-  ...helpRequestRefusalReasonKeys,
-  ...housingFileInstructionRefusalReasonKeys
-}
+export const fileInstructionRefusalReasonKeys = mergeKeys(
+  helpRequestRefusalReasonKeys,
+  housingFileInstructionRefusalReasonKeys
+)
 
 export const fileInstructionTypeKeys = buildKeys({
   [FileInstructionType.Housing]: 'Une demande de logement',

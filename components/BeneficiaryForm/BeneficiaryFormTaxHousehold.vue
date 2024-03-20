@@ -78,7 +78,7 @@
       <VeeSelect
         :name="`taxHouseholds[${index}].relationship`"
         :label="relativeFieldLabels.relationship"
-        :options="withEmptyValue(taxHouseHoldRelationshipOptions)"
+        :options="withEmptyValue(taxHouseHoldRelationshipKeys.options)"
       />
     </div>
     <div class="fr-col-12">
@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { taxHouseHoldRelationshipOptions } from '~/client/options'
+  import { taxHouseHoldRelationshipKeys } from '~/client/options'
   import { CreateOrUpdateTaxHouseholdInput } from '~/server/schema'
   import { BeneficiaryIdentification } from '~/types/beneficiary'
   import { relativeFieldLabels } from '~/client/labels'

@@ -12,8 +12,7 @@ import {
   IncomeSource,
   RelativeRelationship
 } from '@prisma/client'
-import { buildKeys } from '~/utils/keys/keyBuilder'
-import { labelsToOptions } from '~/utils/options'
+import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
 
 export const pensionOrganisationKeys = buildKeys({
   AgircArrco: 'AGIRC ARRCO',
@@ -162,7 +161,7 @@ export const beneficiaryOrientationTypeKeys = buildKeys({
   [BeneficiaryOrientationType.Autre]: 'Autre'
 })
 
-const commonRelationshipLabels = {
+const commonRelationshipKeys = buildKeys({
   [RelativeRelationship.Conjoint]: 'Conjoint·e',
   [RelativeRelationship.EnfantMajeur]: 'Enfant majeur',
   [RelativeRelationship.EnfantMineur]: 'Enfant mineur',
@@ -171,29 +170,20 @@ const commonRelationshipLabels = {
   [RelativeRelationship.Parent]: 'Parent',
   [RelativeRelationship.Tiers]: 'Tiers',
   [RelativeRelationship.AutreMemberDeLaFamille]: 'Autre membre de la famille'
-}
+})
 
-const entourageRelationshipLabels = {
+const entourageRelationshipKeys = buildKeys({
   [RelativeRelationship.Neighbour]: 'Voisin·e',
   [RelativeRelationship.EntourageProfessionnel]: 'Entourage professionnel',
   [RelativeRelationship.Ami]: 'Ami·e'
-}
+})
 
-export const relativeRelationshipLabels = {
-  ...commonRelationshipLabels,
-  ...entourageRelationshipLabels
-}
-
-export const relativeRelationshipKeys = buildKeys(relativeRelationshipLabels)
-
-export const taxHouseHoldRelationshipOptions = labelsToOptions(
-  commonRelationshipLabels
+export const relativeRelationshipKeys = mergeKeys(
+  commonRelationshipKeys,
+  entourageRelationshipKeys
 )
 
-export const entourageRelationshipOptions = labelsToOptions({
-  ...commonRelationshipLabels,
-  ...entourageRelationshipLabels
-})
+export const taxHouseHoldRelationshipKeys = commonRelationshipKeys
 
 export const beneficiaryAccommodationZoneKeys = buildKeys({
   France: 'France',

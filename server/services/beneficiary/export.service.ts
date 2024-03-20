@@ -23,7 +23,7 @@ import {
   beneficiaryStatusKeys,
   incomeSourceKeys,
   pensionOrganisationKeys,
-  relativeRelationshipLabels,
+  relativeRelationshipKeys,
   ministereCategorieKeys,
   ministereDepartmentServiceAcKeys,
   ministereStructureKeys,
@@ -241,9 +241,9 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
 function formatRelative(relative: GetBeneficiaryRelative) {
   const displayName = formatRelativeName(relative)
   if (relative.relationship) {
-    return `${displayName} (${
-      relativeRelationshipLabels[relative.relationship]
-    })`
+    return `${displayName} (${relativeRelationshipKeys.value(
+      relative.relationship
+    )})`
   }
   return displayName
 }

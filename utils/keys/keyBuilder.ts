@@ -14,4 +14,13 @@ function buildKeys(byKey: Record<string, string>) {
   }
 }
 
-export { buildKeys }
+type Keys = ReturnType<typeof buildKeys>
+
+function mergeKeys(keys1: Keys, keys2: Keys) {
+  const byKey1 = keys1.byKey
+  const byKey2 = keys2.byKey
+  const byKey = { ...byKey1, ...byKey2 }
+  return buildKeys(byKey)
+}
+
+export { buildKeys, mergeKeys }

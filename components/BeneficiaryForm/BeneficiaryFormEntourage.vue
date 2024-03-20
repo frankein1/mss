@@ -48,7 +48,7 @@
       <VeeSelect
         :name="`entourages[${index}].relationship`"
         :label="relativeFieldLabels.relationship"
-        :options="withEmptyValue(entourageRelationshipOptions)"
+        :options="withEmptyValue(relativeRelationshipKeys.options)"
       />
     </div>
     <div class="fr-col-12">
@@ -73,7 +73,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { entourageRelationshipOptions } from '~/client/options'
+  import { relativeRelationshipKeys } from '~/client/options'
   import { relativeFieldLabels } from '~/client/labels'
 
   defineProps<{
