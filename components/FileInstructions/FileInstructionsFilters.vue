@@ -38,13 +38,13 @@
   } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
 
-  const trpcClient = useTrpcClient()
-  const filtersState = useFilters()
-  const { fileInstructionStatusOptions } = useSocialSupportStatus()
-
   const props = defineProps<{
     filters: FileInstructionFilterInput
   }>()
+
+  const trpcClient = useTrpcClient()
+  const filtersState = useFilters()
+  const { fileInstructionStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     'update:filters': [filters: FileInstructionFilterInput]

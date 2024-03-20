@@ -11,8 +11,8 @@
       class="fr-mx-auto fr-mb-2w"
     />
     <AtomFilters
-      v-else-if="filters"
-      :filters="filters"
+      v-else-if="followupFilters"
+      :filters="followupFilters"
       :initial-selected-values="filtersState.followup.value || {}"
       @filter="onFilter"
     />
@@ -33,12 +33,16 @@
   import { followupFieldLabels } from '~/client/labels'
   import { EventCategory, FollowupFilterEventAction } from '~/types/matomo'
 
+  defineProps<{
+    filters: FollowupFilterInput
+  }>()
+
   const trpcClient = useTrpcClient()
   const filtersState = useFilters()
   const { application } = usePermissions()
 
   const emit = defineEmits<{
-    filter: [filters: FollowupFilterInput]
+    'update:filters': [filters: FollowupFilterInput]
   }>()
 
   const {
@@ -77,7 +81,7 @@
     return ''
   })
 
-  const filters = computed(() => {
+  const followupFilters = computed(() => {
     if (!socialSupportSubjectOptions.value || !agentOptions.value) {
       return null
     }
@@ -136,6 +140,6 @@
 
   function onFilter(filters: FollowupFilterInput) {
     filtersState.followup.value = filters
-    emit('filter', filters)
+    emit('update:filters', filters)
   }
 </script>
