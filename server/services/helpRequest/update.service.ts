@@ -60,6 +60,10 @@ export async function update({ input, ctx }: UpdateParams) {
     isRefundable
   } = cleanUpdateInput({ input, isFinancial: target.financialSupport })
 
+  const disconnectSubject = target.fileInstruction.socialSupport.subjects
+    .filter(s => s.id !== subjectId)
+    .map(({ id }) => ({ id }))
+
   const updateSocialSupport = SocialSupportRepo.update(ctx.user, {
     where: { id: input.socialSupportId },
     data: {
@@ -72,9 +76,7 @@ export async function update({ input, ctx }: UpdateParams) {
       date,
       subjects: {
         ...connect(subjectId),
-        disconnect: target.fileInstruction.socialSupport.subjects.map(
-          ({ id }) => ({ id })
-        )
+        disconnect: disconnectSubject
       },
       documents: prepareDocumentsMutations(
         documents,
