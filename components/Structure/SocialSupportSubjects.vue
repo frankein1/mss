@@ -35,6 +35,7 @@
         :key="index"
         :label="item.name"
         :can-edit="canEdit"
+        :is-default="!!item.default"
         @edit="editSubject(item.id, item.name)"
         @remove="removeSubject(item.id, item.name)"
       />

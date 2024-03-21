@@ -5,20 +5,20 @@
     <div class="sss-item__actions">
       <div
         :id="`button-edit-${id}`"
-        class="icon fr-icon-pencil-line"
+        :class="editClass"
         data-fr-opened="false"
-        aria-controls="global-modal"
+        :aria-controls="editAriaControls"
         :aria-describedby="`tooltip-edit-${id}`"
-        title="Modifier"
-        aria-label="Modifier"
-        @click="$emit('edit')"
+        title="editTooltipLabel"
+        aria-label="editTooltipLabel"
+        @click="onEdit"
       ></div>
       <span
         :id="`tooltip-edit-${id}`"
         class="fr-tooltip fr-placement"
         role="tooltip"
         aria-hidden="true"
-        >Modifier</span
+        >{{ editTooltipLabel }}</span
       >
 
       <div
@@ -43,16 +43,40 @@
 </template>
 
 <script setup lang="ts">
-  defineProps<{
+  const props = defineProps<{
     id: string
     label: string
     canEdit: boolean
+    isDefault: boolean
   }>()
 
-  defineEmits<{
+  const emit = defineEmits<{
     edit: []
     remove: []
   }>()
+
+  const editTooltipLabel = computed(() => {
+    if (props.isDefault) {
+      return "Cette objet d'accompagnement n'est pas modifiable"
+    }
+    return 'Modifier'
+  })
+
+  const editClass = computed(() =>
+    props.isDefault
+      ? 'icon fr-icon-questionnaire-line'
+      : 'icon fr-icon-pencil-line'
+  )
+
+  const editAriaControls = computed(() =>
+    props.isDefault ? '' : 'global-modal'
+  )
+
+  const onEdit = () => {
+    if (!props.isDefault) {
+      emit('edit')
+    }
+  }
 </script>
 
 <style scoped>
