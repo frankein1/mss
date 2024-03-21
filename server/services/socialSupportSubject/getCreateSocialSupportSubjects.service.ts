@@ -27,9 +27,16 @@ async function initDefaultSubject(
   const res = await SocialSupportSubjectRepo.findMany(ctx.user, {
     where: {
       ownedByStructureId: ctx.structure.id,
-      default: {
-        equals: key as DefaultSocialSupportSubject
-      }
+      OR: [
+        {
+          default: {
+            equals: key as DefaultSocialSupportSubject
+          }
+        },
+        {
+          name: socialSupportSubjectKeys.value(key) || ''
+        }
+      ]
     },
     take: 1
   })
@@ -40,6 +47,17 @@ async function initDefaultSubject(
         ownedByStructureId: ctx.structure.id,
         name: socialSupportSubjectKeys.value(key) || key,
         inactive: true
+      }
+    })
+  } else {
+    const oa = res[0]
+    await SocialSupportSubjectRepo.prisma.update({
+      where: {
+        id: oa.id
+      },
+      data: {
+        name: socialSupportSubjectKeys.value(key) || key,
+        default: key as DefaultSocialSupportSubject
       }
     })
   }
