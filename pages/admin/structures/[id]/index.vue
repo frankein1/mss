@@ -22,7 +22,6 @@
             :structure="data.structure"
             :users="data.users"
             :is-submitting="isSubmitting"
-            :admin-view="true"
             @update-structure="onUpdateStructure"
           />
         </main>
