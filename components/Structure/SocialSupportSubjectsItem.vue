@@ -57,7 +57,7 @@
 
   const editTooltipLabel = computed(() => {
     if (props.isDefault) {
-      return "Cette objet d'accompagnement n'est pas modifiable"
+      return "Cet objet d'accompagnement n'est pas modifiable"
     }
     return 'Modifier'
   })
