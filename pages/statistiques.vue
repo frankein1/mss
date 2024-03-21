@@ -6,7 +6,7 @@
       :src="`${publicConfig.metabase.publicUrl}#bordered=false&titled=false`"
       frameborder="0"
       width="100%"
-      height="1700"
+      height="2000"
       allowtransparency
     ></iframe>
   </div>
