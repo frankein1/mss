@@ -17,6 +17,9 @@ const handler = async ({
   })
 
   const socialSupportSubjects = await SocialSupportSubjectRepo.findMany(user, {
+    where: {
+      inactive: false
+    },
     orderBy: {
       name: 'asc'
     }
