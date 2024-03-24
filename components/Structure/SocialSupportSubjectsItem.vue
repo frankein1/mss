@@ -2,7 +2,10 @@
   <div class="sss-item">
     <div>{{ label }}</div>
 
-    <div class="sss-item__actions">
+    <div
+      v-if="application.edit.structure"
+      class="sss-item__actions"
+    >
       <div
         :id="`button-edit-${id}`"
         :class="editClass"
@@ -46,7 +49,6 @@
   const props = defineProps<{
     id: string
     label: string
-    canEdit: boolean
     isDefault: boolean
   }>()
 
@@ -54,6 +56,8 @@
     edit: []
     remove: []
   }>()
+
+  const { application } = usePermissions()
 
   const editTooltipLabel = computed(() => {
     if (props.isDefault) {

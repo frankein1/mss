@@ -42,13 +42,11 @@
         icon: 'fr-icon-team-line'
       })
     }
-    if (application.value.edit.structure) {
-      menus.push({
-        label: 'Structure',
-        to: RoutePath.AppStructure(),
-        icon: 'fr-icon-home-4-line'
-      })
-    }
+    menus.push({
+      label: 'Structure',
+      to: RoutePath.AppStructure(),
+      icon: 'fr-icon-home-4-line'
+    })
     if (isAuthenticated()) {
       menus.push({
         label: 'Déconnexion',

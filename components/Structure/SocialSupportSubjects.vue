@@ -34,14 +34,16 @@
         :id="item.id"
         :key="index"
         :label="item.name"
-        :can-edit="canEdit"
         :is-default="!!item.default"
         @edit="editSubject(item.id, item.name)"
         @remove="removeSubject(item.id, item.name)"
       />
     </div>
 
-    <div class="fr-grid-row fr-grid-row--right">
+    <div
+      v-if="application.edit.structure"
+      class="fr-grid-row fr-grid-row--right"
+    >
       <NuxtLink
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line"
         :to="RoutePath.AppStructureSocialSupportSubjectAdd()"
@@ -62,7 +64,6 @@
   const props = defineProps<{
     subjects: SocialSupportSubjects
     structureId: string
-    canEdit: boolean
   }>()
 
   const emits = defineEmits<{
@@ -72,6 +73,8 @@
   const modal = useModal()
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
+
+  const { application } = usePermissions()
 
   const isSubmittingModification = ref(false)
   const isSubmittingDeletion = ref(false)

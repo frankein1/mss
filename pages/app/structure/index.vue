@@ -25,7 +25,6 @@
       <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
         :structure-id="data.structure.id"
-        :can-edit="application.edit.structure"
         @refresh="refresh"
       />
     </div>
@@ -45,7 +44,6 @@
   const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
-  const { application } = usePermissions()
 
   const isSubmitting = ref(false)
 
