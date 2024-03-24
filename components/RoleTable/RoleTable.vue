@@ -304,6 +304,28 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
           </tr>
+          <tr>
+            <td>
+              Personalisation de la structure, ajout et suppression des objects
+              d'accompagnement
+            </td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+            <td class=""></td>
+          </tr>
+          <tr>
+            <td>
+              Vue des informations de la structure et des objets
+              d'accompagnement
+            </td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+          </tr>
         </tbody>
       </table>
     </div>
