@@ -38,6 +38,7 @@
   }>()
 
   const filtersState = useFilters()
+  const { application } = usePermissions()
 
   const {
     data: socialSupportSubjectOptions,
@@ -134,8 +135,11 @@
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.AgeGroup
-      },
-      {
+      }
+    )
+
+    if (application.value.module.vulnerablePerson) {
+      filters.push({
         name: 'vulnerablePerson',
         label: 'Registre des personnes vulnérables',
         options: withEmptyValue(yesNoOptions, 'Tous les bénéficiaires'),
@@ -143,8 +147,8 @@
         alwaysExpanded: filters.length < maxAlwaysExpandedNb,
         matomoEventCategory: EventCategory.BeneficiaryFilter,
         matomoEventAction: BeneficiaryFilterEventAction.VulnerablePerson
-      }
-    )
+      })
+    }
 
     return filters
   })

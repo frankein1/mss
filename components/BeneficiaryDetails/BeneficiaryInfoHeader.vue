@@ -14,7 +14,9 @@
           </div>
         </div>
         <div
-          v-if="beneficiary.vulnerablePerson"
+          v-if="
+            application.module.vulnerablePerson && beneficiary.vulnerablePerson
+          "
           :class="{ 'fr-mt-3v': beneficiary.aidantConnectAuthorized }"
         >
           <div class="fr-icon-success-line field-value">
@@ -77,6 +79,8 @@
   const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
   }>()
+
+  const { application } = usePermissions()
 
   const referentNames = computed(() =>
     props.beneficiary.referents

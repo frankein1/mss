@@ -19,6 +19,7 @@ export type AppContextPermissions = {
     ministere: boolean
     helpRequest: boolean
     partner: boolean
+    vulnerablePerson: boolean
   }
 }
 
@@ -52,7 +53,8 @@ function getAdminContextPermissions(): AppContextPermissions {
       health: false,
       ministere: false,
       helpRequest: false,
-      partner: false
+      partner: false,
+      vulnerablePerson: false
     }
   }
 }
@@ -66,6 +68,7 @@ function getUserContextPermissions(
     instructor,
     referent,
     ministryAgent,
+    ngo,
     cias,
     ccas
   } = getGranteRole(ctx)
@@ -86,7 +89,8 @@ function getUserContextPermissions(
       health: cias || ccas,
       ministere: ministryAgent,
       helpRequest: manager || socialWorker || instructor || referent,
-      partner: manager || socialWorker
+      partner: manager || socialWorker,
+      vulnerablePerson: !ngo && !ministryAgent
     }
   }
 }
