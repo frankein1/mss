@@ -20,7 +20,7 @@
     </div>
     <div
       v-if="full"
-      class="fr-col-6"
+      :class="application.module.vulnerablePerson ? 'fr-col-6' : 'fr-col-12'"
     >
       <VeeCheckbox
         :label="beneficiaryFieldLabels.aidantConnectAuthorized"
@@ -29,8 +29,8 @@
     </div>
 
     <div
-      v-if="full"
-      class="fr-col-6"
+      v-if="application.module.vulnerablePerson && full"
+      :class="application.module.vulnerablePerson ? 'fr-col-6' : ''"
     >
       <VeeCheckbox
         :label="beneficiaryFieldLabels.vulnerablePerson"
@@ -60,6 +60,8 @@
       beneficiaryReferentIds: undefined
     }
   )
+
+  const { application } = usePermissions()
 
   const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
 
