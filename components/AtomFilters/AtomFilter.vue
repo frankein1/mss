@@ -57,3 +57,11 @@
     changeFilter: [value: string | string[]]
   }>()
 </script>
+
+<style lang="scss">
+  .filter-radio--as-tag {
+    .fr-fieldset__element {
+      padding-right: 0;
+    }
+  }
+</style>
