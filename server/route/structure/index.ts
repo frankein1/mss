@@ -1,6 +1,5 @@
 export * from './findSocialSupportSubject.query'
 export * from './getCreateSocialSupportSubjects.query'
-export * from './getSocialSupportSubject.query'
 export * from './getStructure.query'
 export * from './makeInactiveSocialSupportSubject.mutation'
 export * from './updateSocialSupportSubject.mutation'
