@@ -2,6 +2,48 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.17.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.16.1...v1.17.0) (2024-03-25)
+
+
+### Features
+
+* Affiche les pages avec un tableau ou des statistiques sur toute la largeur sur grand écran ([34a9006](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/34a9006b55da5235f023809002ec237fe863f73d))
+* Ajuste les espacements dans l'application ([ca8eaa1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ca8eaa16bd920ebfd98673a7443f544dad9556aa))
+* **beneficiaire:** Gestion du statut de brouillon lors de la création ([8db36fa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8db36fa00ce5865cb081b068967200bf649e4b73))
+* **beneficiary:** Affiche l'âge du bénéficiaire à côté de sa date de naissance ([7c7bf48](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7c7bf48a252e50dd6bd046693b2f5273cb0c19d0)), closes [#365](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/365)
+* **beneficiary:** masquage des personnes vulnérables pour les associations et ministères ([6697354](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6697354669a6ad534d37dac82d227f223b45974f)), closes [#409](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/409)
+* **document:** Coupe le nom du document pour éviter le défilement du tableau ([f8d3bae](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f8d3baef65e21de59738aa9638677e44e8e94621)), closes [#364](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/364)
+* **file-instructions:** Affiche le filtre des thématiques de dossier sous forme de bouttons radio avec pictogramme ([778fb16](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/778fb16e738eebfc633960653ba482c2c3a5b723)), closes [#373](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/373)
+* **habilitation:** ajoute les habilitations de la page structure ([99ce43b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/99ce43b4cf014475e86718496449418e4937d1cb))
+* **history:** Affiche dans l'en-tête des éléments de l'historique du bénéficiaire si c'est son premier rendez-vous ou non ([a693d60](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a693d60a90dee04a7ed121b1a3506e9b65e95c02)), closes [#365](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/365)
+* **history:** Améliore le design du tableau des dossiers d'instruction ([6954c8d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6954c8d069071378b649be7560c8920940335055)), closes [#372](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/372)
+* **history:** Améliore le design du tableau des synthèses d'entretien ([f23e3ec](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f23e3ec5c259e4b25966e095c30d809c8df64767)), closes [#371](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/371)
+* **landing:** Ajoute la page des statistiques publiques ([7bd8fe5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7bd8fe59026cf359244d2a2b8367f71b874a736e)), closes [#351](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/351)
+* Permettre de retirer un sujet d'accompagnement d'une structure ([1e8dfe1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1e8dfe133736a1d0ca29dec5625fa4c4f6a7b0c3))
+* **social-support-subjects:** ajout d'objets d'accompagnements ([dd03f36](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/dd03f360c84233546808bd7ffc7ab0fc9be60ab5))
+* **structure:** Accès à la page structure mode vue ([ca8aa61](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ca8aa618d093f1016700f34e3bd93a6e0e938ff8))
+* **structure:** affichage des accompagnements proposés par la structure ([5f90f25](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5f90f256e52ac1be56e02532d8ed5a1814c11f8c)), closes [#380](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/380)
+* **structure:** affiche le formulaire d'une structure dans l'admin ([ea4b56b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ea4b56bac18c2805bea1eff56178539fe2e965e3))
+* **structure:** Ajout d'un objet - Champ personnalisé ([a727a64](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a727a64f968af68179a02f913d451207a7e576e6))
+* **structure:** ajout de la modale de modification des informations de la structure ([e1f9b84](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e1f9b8406be610ecb7241d6acd202f315da1b2ab)), closes [#382](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/382)
+* **structure:** ajout de la page structure contenant le résumé de ses informations ([66bdbbe](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/66bdbbe9a720d514537bd1833cb3af111a19f48d))
+* **structure:** ne permet pas de modifier un objet du système ([7f4e4e5](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7f4e4e56355f37d2e81587ec05b01ce10ca6b946))
+* **structure:** Non modification objets par défaut ([d2b6737](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d2b6737c00a5772de86af0b452f3f8ed7107746f))
+* Valide et formatte correctement les numéros de téléphone français ([39208b2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/39208b2a3ee6481630aa87c0006ea1aa0c628c4a)), closes [#366](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/366)
+
+
+### Bug Fixes
+
+* **a11y:** Ajoute du contenu au libellé des cases à cochées, même lorsqu'il est masqué ([d7468a4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d7468a4d291d60d972b19c66e81785e994498f11)), closes [#253](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/253)
+* **Accompagnement social:** déselection de l'organisme insctructeur ([0a55a2e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0a55a2e89ff446c64f52aee8c313d4b7a1a5a9f8))
+* **beneficiary:** correction du label désignant les personnes vulnérables ([366a8e7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/366a8e7719da9b951dfe49f0e889f9ba8751e1ba)), closes [#360](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/360)
+* **entretiens:** Filtres non fonctionnels ([691a5cb](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/691a5cbd37b12694598f493b1b228cbb35d94065))
+* **instruction de dossier:** Objet d'accompagnements disparaît ([02f2255](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/02f2255cfbb97821aa703ea791d2bc5344b92079))
+* **structure:** création des os par défaut ([67d3df1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/67d3df10248963f80355e236c551c5f00ef79f4a))
+* **structure:** issue[#381](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/381) ([21156fc](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/21156fc2e5b4632a374c13dd1fb2fae8cc3e949c))
+* **Synthèse:** déselection d'un organisme prescripteur ([1d4f103](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1d4f10310845b7e1e4d697252095cb71188b1eba))
+* **tableau de bord:** Affichage entretien en cours ([5c552e7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5c552e77cd150d56cd0f288883b6ca0bab314f82))
+
 ### [1.16.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.16.0...v1.16.1) (2024-03-04)
 
 
