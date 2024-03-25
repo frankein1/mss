@@ -24,7 +24,6 @@
 
       <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
-        :structure-id="data.structure.id"
         @refresh="refresh"
       />
     </div>

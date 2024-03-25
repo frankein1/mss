@@ -8,7 +8,7 @@ import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { SocialSupportSubjectRepo } from '~/server/database'
 
 const handler = async ({
-  ctx: { user },
+  ctx: { user, structure },
   input
 }: {
   ctx: ProtectedAppContext
@@ -17,7 +17,7 @@ const handler = async ({
   const subjects = await SocialSupportSubjectRepo.findMany(user, {
     where: {
       name: { equals: input.name, mode: 'insensitive' },
-      ownedByStructureId: input.structureId
+      ownedByStructureId: structure.id
     }
   })
   return subjects.length > 0 ? subjects[0] : null

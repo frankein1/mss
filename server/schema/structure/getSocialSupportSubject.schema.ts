@@ -3,8 +3,7 @@ import { z } from 'zod'
 import { stringConstraint } from '../helpers.schema'
 
 export const getSocialSupportSubjectSchema = z.object({
-  name: stringConstraint,
-  structureId: z.string().uuid()
+  name: stringConstraint
 })
 
 export type GetSocialSupportSubjectInput = z.infer<

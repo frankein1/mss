@@ -131,17 +131,26 @@
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
 
-  const { handleSubmit, meta } = useForm<UpdateSocialSupportSubjectsInput>({
-    validationSchema: toTypedSchema(updateSocialSupportSubjectsSchema),
-    initialValues: {
-      selected: (data.value || []).map(({ id, inactive, name }) => ({
-        id,
-        active: !inactive,
-        name
-      })),
-      customs: []
-    }
-  })
+  const { handleSubmit, meta, setErrors } =
+    useForm<UpdateSocialSupportSubjectsInput>({
+      validationSchema: toTypedSchema(updateSocialSupportSubjectsSchema),
+      initialValues: {
+        selected: (data.value || []).map(({ id, inactive, name }) => ({
+          id,
+          active: !inactive,
+          name
+        })),
+        customs: []
+      }
+    })
+
+  const nameCanBeUpdated = async (name: string) => {
+    const subjectWithSameNameExists =
+      await trpcClient.structure.findSocialSupportSubject.query({
+        name: name.trim().toLocaleLowerCase()
+      })
+    return !subjectWithSameNameExists
+  }
 
   const isFormDirty = computed(() => meta.value.dirty)
 
@@ -149,8 +158,21 @@
     isFormDirty
   })
 
-  const onSubmit = handleSubmit(values => {
+  const onSubmit = handleSubmit(async values => {
     isNavigatingWithFormActions.value = true
+    let error = false
+    for (const [index, custom] of values.customs.entries()) {
+      const isValid = await nameCanBeUpdated(custom.name)
+      if (!isValid) {
+        error = true
+        setErrors({
+          [`customs[${index}].name`]: ["Cet objet d'accompagnement existe déjà"]
+        })
+      }
+    }
+    if (error) {
+      return
+    }
     useTrpcMutation({
       mutation: () =>
         trpcClient.structure.updateSocialSupportSubjects.mutate(values),

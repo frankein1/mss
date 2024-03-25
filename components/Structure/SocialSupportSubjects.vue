@@ -61,9 +61,8 @@
   import { RoutePath } from '~/utils/routing'
   import { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 
-  const props = defineProps<{
+  defineProps<{
     subjects: SocialSupportSubjects
-    structureId: string
   }>()
 
   const emits = defineEmits<{
@@ -82,8 +81,7 @@
   const nameCanBeUpdated = async (name: string) => {
     const subjectWithSameNameExists =
       await trpcClient.structure.findSocialSupportSubject.query({
-        name: name.trim().toLocaleLowerCase(),
-        structureId: props.structureId
+        name: name.trim().toLocaleLowerCase()
       })
     return !subjectWithSameNameExists
   }
