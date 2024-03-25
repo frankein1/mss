@@ -12,7 +12,6 @@
         data-fr-opened="false"
         :aria-controls="editAriaControls"
         :aria-describedby="`tooltip-edit-${id}`"
-        title="editTooltipLabel"
         aria-label="editTooltipLabel"
         @click="onEdit"
       ></div>
@@ -30,7 +29,6 @@
         data-fr-opened="false"
         aria-controls="global-modal"
         :aria-describedby="`tooltip-remove-${id}`"
-        title="Retirer"
         aria-label="Retirer"
         @click="$emit('remove')"
       ></div>
@@ -68,7 +66,7 @@
 
   const editClass = computed(() =>
     props.isDefault
-      ? 'icon fr-icon-questionnaire-line'
+      ? 'icon fr-icon-pencil-line edit--disabled'
       : 'icon fr-icon-pencil-line'
   )
 
@@ -83,7 +81,7 @@
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   .sss-item {
     display: flex;
     align-items: center;
@@ -101,5 +99,10 @@
   .icon {
     color: var(--primary);
     cursor: pointer;
+  }
+
+  .edit--disabled {
+    color: var(--text-disabled-grey);
+    cursor: default;
   }
 </style>
