@@ -2,7 +2,6 @@ import { protectedProcedure, router } from '~/server/trpc'
 import {
   findSocialSupportSubject,
   getCreateSocialSupportSubjects,
-  getSocialSupportSubject,
   getStructure,
   makeInactiveSocialSupportSubject,
   updateSocialSupportSubject,
@@ -28,9 +27,6 @@ export const structureRouter = router({
   getCreateSocialSupportSubjects: protectedProcedure
     .input(getCreateSocialSupportSubjects.inputValidation)
     .query(getCreateSocialSupportSubjects.execute),
-  getSocialSupportSubject: protectedProcedure
-    .input(getSocialSupportSubject.inputValidation)
-    .query(getSocialSupportSubject.execute),
   makeInactiveSocialSupportSubject: protectedProcedure
     .input(makeInactiveSocialSupportSubject.inputValidation)
     .mutation(makeInactiveSocialSupportSubject.execute),
