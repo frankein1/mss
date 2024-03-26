@@ -5,7 +5,7 @@ import {
   createAdminUserMutation,
   editAdminStructureMutation,
   getAdminStructuresQuery,
-  getAdminStructureQuery,
+  getStructure,
   getAdminUsersQuery,
   getAdminUserQuery,
   getAdminOverviewQuery,
@@ -22,8 +22,8 @@ export const adminRouter = router({
     .input(getAdminStructuresQuery.inputValidation)
     .query(getAdminStructuresQuery.executeAsAdmin),
   getStructure: adminProcedure
-    .input(getAdminStructureQuery.inputValidation)
-    .query(getAdminStructureQuery.executeAsAdmin),
+    .input(getStructure.inputValidation)
+    .query(getStructure.executeAsAdmin),
   editStructure: adminProcedure
     .input(editAdminStructureMutation.inputValidation)
     .mutation(editAdminStructureMutation.executeAsAdmin),

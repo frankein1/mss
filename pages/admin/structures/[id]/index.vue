@@ -1,65 +1,82 @@
 <template>
   <PageContainer>
-    <PageTitle :title="data?.structure?.name || '-'" />
-    <div class="fr-grid-row fr-grid-row--gutters">
-      <div class="fr-col-12">
-        <main
-          ref="formContainer"
-          class="main-container fr-p-5w"
-        >
-          <AtomAlert
-            v-if="error"
-            :alert-type="AlertType.Error"
-            message="Les informations de la structure n'ont pas pu être chargées."
-          />
+    <PageTitle :title="title" />
 
-          <AtomLoader
-            v-if="pending"
-            class="fr-mx-auto"
-          />
-          <StructureForm
-            v-else-if="data"
-            :structure="data.structure"
-            :users="data.users"
-            :is-submitting="isSubmitting"
-            @update-structure="onUpdateStructure"
-          />
-        </main>
-      </div>
+    <AtomLoader
+      v-if="pending"
+      class="fr-mx-auto"
+    />
+
+    <AtomAlert
+      v-else-if="error"
+      :alert-type="AlertType.Error"
+      message="Les informations de votre structure n'ont pas pu être chargées."
+    />
+
+    <div v-else-if="data">
+      <StructureInfo
+        class="fr-mb-5w"
+        :structure="data.structure"
+        @edit="onEdit"
+      />
+
+      <SocialSupportSubjects
+        :subjects="data.socialSupportSubjects"
+        @refresh="refresh"
+      />
     </div>
   </PageContainer>
 </template>
 
-<script setup lang="ts">
-  import { AdminEditStructureInput } from '~/server/schema'
+<script lang="ts" setup>
+  import StructureInfoForm from '~/components/Structure/StructureInfoForm.vue'
+  import { EditCurrentUserStructureInfoInput } from '~/server/schema'
+  import { RouteTitle } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
 
+  const title = RouteTitle.AppStructure()
+
+  useHead({ title })
+
   const route = useRoute()
-  const structureId = route.params.id as string
   const trpcClient = useTrpcClient()
+  const modal = useModal()
   const snackbar = useSnackbar()
 
   const isSubmitting = ref(false)
-  const formContainer = ref<HTMLFormElement | null>(null)
+
+  const structureId = route.params.id as string
 
   const { data, pending, error, refresh } =
-    await trpcClient.admin.getStructure.useQuery({
-      id: structureId
-    })
+    await trpcClient.admin.getStructure.useQuery({ id: structureId })
 
-  function onUpdateStructure(updatedStructure: AdminEditStructureInput) {
+  function onEdit() {
+    if (!data || !data.value) {
+      return
+    }
+
+    modal.open({
+      title: 'Modifier les informations de ma structure',
+      contentComponent: StructureInfoForm,
+      contentComponentProps: { structure: data.value.structure },
+      contentComponentEvents: { updateStructureInfo: onUpdateStructureInfo }
+    })
+  }
+
+  function onUpdateStructureInfo(values: EditCurrentUserStructureInfoInput) {
     useTrpcMutation({
-      mutation: () => trpcClient.admin.editStructure.mutate(updatedStructure),
+      mutation: () => trpcClient.structure.updateStructureInfo.mutate(values),
       isSubmitting,
       onSuccess: () => {
+        modal.close()
         refresh()
         snackbar.success(
-          'Les informations de la structure ont été mises à jour.'
+          'Les informations de votre structure ont été mises à jour.'
         )
       },
       onFailure: () => {
-        snackbar.error('La mise à jour de la structure a échoué.', () =>
-          formContainer.value?.querySelector('select')?.focus()
+        snackbar.error(
+          'La modification des informations de votre structure a échoué.'
         )
       }
     })
