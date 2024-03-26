@@ -101,7 +101,7 @@
       mutation: () => trpcClient.admin.initSubjects.mutate(),
       isSubmitting,
       onSuccess: () => {
-        snackbar.error('Initialisé')
+        snackbar.success('Initialisé')
       },
       onFailure: () => {
         snackbar.error('Erreur')
