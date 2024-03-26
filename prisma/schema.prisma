@@ -1288,7 +1288,7 @@ model BudgetIncome {
   beneficiaryRelative   BeneficiaryRelative? @relation(fields: [beneficiaryRelativeId], references: [id])
 
   budgetId String @map("budget_id") @db.Uuid
-  budget   Budget @relation(fields: [budgetId], references: [id])
+  budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 
   @@map("budget_income")
 }
@@ -1324,7 +1324,7 @@ model BudgetExpenses {
   loans Decimal?
 
   budgetId String @unique @map("budget_id") @db.Uuid
-  budget   Budget @relation(fields: [budgetId], references: [id])
+  budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 
   @@map("budget_expenses")
 }
@@ -1337,9 +1337,11 @@ model Budget {
   overdraft              Decimal?
   familyQuotient         Decimal? @map("family_quotient")
 
-  beneficiary Beneficiary?
-  incomes     BudgetIncome[]
-  expenses    BudgetExpenses?
+  beneficiaryId String      @unique @map("beneficiary_id") @db.Uuid
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+
+  incomes  BudgetIncome[]
+  expenses BudgetExpenses?
 
   @@map("budget")
 }
@@ -1448,9 +1450,7 @@ model Beneficiary {
   relatives       BeneficiaryRelative[] @relation("ownerBeneficiary")
   linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
   notifications   Notification[]
-
-  budgetId String @unique @map("budget_id") @db.Uuid
-  budget   Budget @relation(fields: [budgetId], references: [id])
+  budget          Budget?
 
   @@map("beneficiary")
 }
