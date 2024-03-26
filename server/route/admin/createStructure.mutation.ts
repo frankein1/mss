@@ -37,7 +37,7 @@ const adminHandler = async ({
   return createdStructure
 }
 
-export const createAdminStructureMutation = createMutation({
+export const createStructure = createMutation({
   inputValidation: adminCreateStructureSchema,
   adminHandler
 })

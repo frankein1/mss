@@ -44,7 +44,7 @@ function getAdminContextPermissions(): AppContextPermissions {
       stats: false
     },
     edit: {
-      structure: false
+      structure: true
     },
     module: {
       users: false,

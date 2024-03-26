@@ -81,9 +81,9 @@
 <script lang="ts" setup>
   import { UserStatus, UserRole } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
+  import { AdminUserOutput } from './types'
   import { userFieldLabels } from '~/client/labels'
   import { userRoleKeys, userStatusKeys } from '~/client/options'
-  import { AdminUserOutput } from '~/server/trpc/routers'
   import {
     AdminEditUserInput,
     AdminCreateUserInput,

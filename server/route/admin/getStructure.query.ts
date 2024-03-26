@@ -11,8 +11,24 @@ const adminHandler = async ({
   ctx: AdminContext
   input: IdInput
 }) => {
-  const structure = await StructureRepo.findUniqueOrThrow(user, {
-    where: { id: input.id }
+  const { users, ...structure } = await StructureRepo.findUniqueOrThrow(user, {
+    where: { id: input.id },
+    include: {
+      users: {
+        select: {
+          id: true,
+          lastName: true,
+          firstName: true,
+          email: true,
+          role: true,
+          aidantConnectAuthorisation: true,
+          status: true
+        },
+        orderBy: {
+          created: 'desc'
+        }
+      }
+    }
   })
 
   const socialSupportSubjects = await SocialSupportSubjectRepo.findMany(user, {
@@ -26,6 +42,7 @@ const adminHandler = async ({
 
   return {
     structure,
+    users,
     socialSupportSubjects
   }
 }

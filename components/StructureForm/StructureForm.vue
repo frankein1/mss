@@ -59,7 +59,7 @@
   const { handleSubmit, setFieldValue } = useForm<AdminEditStructureInput>({
     validationSchema: toTypedSchema(adminEditStructureSchema),
     initialValues: {
-      structureId: props.structure.id,
+      id: props.structure.id,
       type: props.structure.type,
       inhabitantsNumber: props.structure.inhabitantsNumber,
       inseeCode: props.structure.inseeCode,

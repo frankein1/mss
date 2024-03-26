@@ -1,3 +1,3 @@
-import type { AdminStructuresOutput } from '~/server/trpc/routers'
+import { RouterOutput } from '~/server/trpc/routers'
 
-export type Structures = AdminStructuresOutput['structures']
+export type Structures = RouterOutput['admin']['getStructures']['structures']
