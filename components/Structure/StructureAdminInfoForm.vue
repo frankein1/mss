@@ -116,39 +116,35 @@
   import { structureTypeKeys } from '~/client/options'
   import { structureFieldLabels } from '~/client/labels'
   import type { StructureInfo } from '~/components/Structure/types'
-  import {
-    EditStructureAdminInfoInput,
-    editStructureAdminInfoSchema
-  } from '~/server/schema'
+  import { CreateStructureInput, createStructureSchema } from '~/server/schema'
 
-  const props = defineProps<{ structure: StructureInfo }>()
+  const props = defineProps<{ structure?: StructureInfo }>()
 
   const emit = defineEmits<{
-    updateStructureInfo: [values: EditStructureAdminInfoInput]
+    validate: [values: CreateStructureInput]
   }>()
 
   const modal = useModal()
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit } = useForm<EditStructureAdminInfoInput>({
-    validationSchema: toTypedSchema(editStructureAdminInfoSchema),
+  const { handleSubmit } = useForm<CreateStructureInput>({
+    validationSchema: toTypedSchema(createStructureSchema),
     initialValues: {
-      id: props.structure.id,
-      type: props.structure.type,
-      siret: props.structure.siret,
-      inhabitantsNumber: props.structure.inhabitantsNumber,
-      inseeCode: props.structure.inseeCode,
-      name: props.structure.name,
-      zipcode: props.structure.zipcode,
-      city: props.structure.city,
-      address: props.structure.address,
-      phone: props.structure.phone,
-      email: props.structure.email
+      type: props.structure?.type,
+      siret: props.structure?.siret,
+      inhabitantsNumber: props.structure?.inhabitantsNumber,
+      inseeCode: props.structure?.inseeCode,
+      name: props.structure?.name,
+      zipcode: props.structure?.zipcode,
+      city: props.structure?.city,
+      address: props.structure?.address,
+      phone: props.structure?.phone,
+      email: props.structure?.email
     }
   })
 
   const { onSubmit } = useCatchFormErrors(handleSubmit, values =>
-    emit('updateStructureInfo', values)
+    emit('validate', values)
   )
 </script>

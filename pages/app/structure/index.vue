@@ -58,7 +58,7 @@
       title: 'Modifier les informations de ma structure',
       contentComponent: StructureInfoForm,
       contentComponentProps: { structure: data.value.structure },
-      contentComponentEvents: { updateStructureInfo: onUpdateStructureInfo }
+      contentComponentEvents: { validate: onUpdateStructureInfo }
     })
   }
 

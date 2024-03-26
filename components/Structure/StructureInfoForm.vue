@@ -92,7 +92,7 @@
   const props = defineProps<{ structure: StructureInfo }>()
 
   const emit = defineEmits<{
-    updateStructureInfo: [values: EditStructureInfoInput]
+    validate: [values: EditStructureInfoInput]
   }>()
 
   const modal = useModal()
@@ -112,6 +112,6 @@
   })
 
   const { onSubmit } = useCatchFormErrors(handleSubmit, values =>
-    emit('updateStructureInfo', values)
+    emit('validate', values)
   )
 </script>

@@ -19,6 +19,11 @@
         @edit="editAdminInfo"
       />
 
+      <StructureAdminUsers
+        :structure-id="data.structure.id"
+        :users="data.users"
+      ></StructureAdminUsers>
+
       <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
         @refresh="refresh"
@@ -29,7 +34,7 @@
 
 <script lang="ts" setup>
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
-  import { EditStructureAdminInfoInput } from '~/server/schema'
+  import { CreateStructureInput } from '~/server/schema'
   import { RouteTitle } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
 
@@ -58,13 +63,17 @@
       title: 'Modifier les informations de ma structure',
       contentComponent: StructureAdminInfoForm,
       contentComponentProps: { structure: data.value.structure },
-      contentComponentEvents: { updateStructureInfo: updateInfo }
+      contentComponentEvents: { validate: updateInfo }
     })
   }
 
-  function updateInfo(values: EditStructureAdminInfoInput) {
+  function updateInfo(values: CreateStructureInput) {
     useTrpcMutation({
-      mutation: () => trpcClient.admin.updateStructureInfo.mutate(values),
+      mutation: () =>
+        trpcClient.admin.updateStructureInfo.mutate({
+          id: structureId,
+          ...values
+        }),
       isSubmitting,
       onSuccess: () => {
         modal.close()

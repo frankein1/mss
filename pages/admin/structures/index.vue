@@ -1,20 +1,25 @@
 <template>
   <div class="fr-p-2w">
-    <div>
-      <div>
-        <label class="fr-label"> Recherche </label>
+    <div class="fr-grid-row">
+      <div class="fr-col-8">
         <input
           class="fr-input"
           placeholder="nom, code postal"
           @change="onSearch"
         />
       </div>
-      <NuxtLink
-        :to="RoutePath.AdminStructuresAdd()"
-        class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-home-4-line"
-      >
-        Ajouter une structure
-      </NuxtLink>
+      <div class="fr-col-3">
+        <button
+          class="fr-btn fr-btn--secondary"
+          data-fr-opened="false"
+          aria-controls="global-modal"
+          title="Ajouter une structure"
+          aria-label="Ajouter une structure"
+          @click="onCreateStructure"
+        >
+          Ajouter une structure
+        </button>
+      </div>
     </div>
     <StructureTableAdmin
       v-show="!pending"
@@ -25,15 +30,21 @@
   </div>
 </template>
 <script lang="ts" setup>
+  import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
+  import { CreateStructureInput } from '~/server/schema'
   import { StructureAdminSort, SortOrder } from '~/types/table'
   import { RoutePath } from '~/utils/routing'
 
   const trpcClient = useTrpcClient()
 
+  const snackbar = useSnackbar()
+  const modal = useModal()
+
   const search = ref<string>()
   const orderBy = ref<StructureAdminSort>({
     beneficiaries: { _count: SortOrder.Desc }
   })
+  const isSubmitting = ref(false)
 
   const queryInput = computed(() => ({
     orderBy: orderBy.value,
@@ -50,44 +61,27 @@
     const value = input.value.trim()
     search.value = value
   }
+
+  const onCreateStructure = () => {
+    modal.open({
+      title: "Création d'une structure",
+      contentComponent: StructureAdminInfoForm,
+      contentComponentProps: { structure: undefined },
+      contentComponentEvents: { validate: addStructure }
+    })
+  }
+
+  function addStructure(structure: CreateStructureInput) {
+    useTrpcMutation({
+      mutation: () => trpcClient.admin.createStructure.mutate(structure),
+      isSubmitting,
+      onSuccess: ({ id }) => {
+        modal.close()
+        navigateTo(RoutePath.AdminStructure(id))
+      },
+      onFailure: () => {
+        snackbar.error("L'ajout de la structure a échoué.")
+      }
+    })
+  }
 </script>
-
-<style lang="scss" scoped>
-  .structures__row {
-    padding: 1rem;
-    border-bottom: 1px blue solid;
-  }
-
-  .structures__infos {
-    display: flex;
-  }
-
-  .structures__name {
-    width: 200px;
-    padding-left: 0.5rem;
-    overflow-wrap: break-word;
-    font-weight: bold;
-
-    .type {
-      font-size: x-small;
-    }
-  }
-
-  .structures__address {
-    width: 200px;
-    padding-left: 0.5rem;
-    overflow-wrap: break-word;
-  }
-
-  .structures__last {
-    width: 200px;
-    padding-left: 0.5rem;
-    overflow-wrap: break-word;
-  }
-
-  .structures__count {
-    width: 200px;
-    padding-left: 0.5rem;
-    overflow-wrap: break-word;
-  }
-</style>
