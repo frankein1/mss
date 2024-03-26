@@ -34,6 +34,7 @@ const adminHandler = async ({
   }
   const structures = await StructureRepo.findMany(user, {
     where,
+    take: 10,
     select: {
       id: true,
       type: true,
