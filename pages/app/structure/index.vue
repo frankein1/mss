@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
   import StructureInfoForm from '~/components/Structure/StructureInfoForm.vue'
-  import { EditCurrentUserStructureInfoInput } from '~/server/schema'
+  import { EditStructureInfoInput } from '~/server/schema'
   import { RouteTitle, Breadcrumb } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
 
@@ -62,7 +62,7 @@
     })
   }
 
-  function onUpdateStructureInfo(values: EditCurrentUserStructureInfoInput) {
+  function onUpdateStructureInfo(values: EditStructureInfoInput) {
     useTrpcMutation({
       mutation: () => trpcClient.structure.updateStructureInfo.mutate(values),
       isSubmitting,

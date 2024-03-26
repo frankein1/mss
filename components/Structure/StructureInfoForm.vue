@@ -85,22 +85,22 @@
   import { structureFieldLabels } from '~/client/labels'
   import type { StructureInfo } from '~/components/Structure/types'
   import {
-    EditCurrentUserStructureInfoInput,
-    editCurrentUserStructureInfoSchema
+    EditStructureInfoInput,
+    editStructureInfoSchema
   } from '~/server/schema'
 
   const props = defineProps<{ structure: StructureInfo }>()
 
   const emit = defineEmits<{
-    updateStructureInfo: [values: EditCurrentUserStructureInfoInput]
+    updateStructureInfo: [values: EditStructureInfoInput]
   }>()
 
   const modal = useModal()
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit } = useForm<EditCurrentUserStructureInfoInput>({
-    validationSchema: toTypedSchema(editCurrentUserStructureInfoSchema),
+  const { handleSubmit } = useForm<EditStructureInfoInput>({
+    validationSchema: toTypedSchema(editStructureInfoSchema),
     initialValues: {
       name: props.structure.name,
       zipcode: props.structure.zipcode,

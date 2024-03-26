@@ -1,19 +1,16 @@
 import { createMutation } from '~/server/route'
-import {
-  AdminCreateStructureInput,
-  adminCreateStructureSchema
-} from '~/server/schema'
+import { CreateStructureInput, createStructureSchema } from '~/server/schema'
 import { AdminContext } from '~/server/trpc'
 import { StructureRepo } from '~/server/database'
 import { createEmail } from '~/server/query'
 import { getStructureCreationEmailContent } from '~/server/email'
 
 const adminHandler = async ({
-  ctx: { user: _user },
+  ctx: _ctx,
   input
 }: {
   ctx: AdminContext
-  input: AdminCreateStructureInput
+  input: CreateStructureInput
 }) => {
   const createdStructure = await StructureRepo.prisma.create({
     data: input,
@@ -38,6 +35,6 @@ const adminHandler = async ({
 }
 
 export const createStructure = createMutation({
-  inputValidation: adminCreateStructureSchema,
+  inputValidation: createStructureSchema,
   adminHandler
 })

@@ -1,9 +1,4 @@
-import { FieldLabels } from '~/types/fieldLabels'
-import type { AdminCreateStructureInput } from '~/server/schema'
-
-export const structureFieldLabels: FieldLabels<
-  Required<AdminCreateStructureInput>
-> = {
+export const structureFieldLabels = {
   name: 'Raison sociale',
   zipcode: 'Code postal',
   city: 'Ville',

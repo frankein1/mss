@@ -12,12 +12,11 @@
       :alert-type="AlertType.Error"
       message="Les informations de votre structure n'ont pas pu être chargées."
     />
-
     <div v-else-if="data">
-      <StructureInfo
+      <StructureAdminInfo
         class="fr-mb-5w"
         :structure="data.structure"
-        @edit="onEdit"
+        @edit="editAdminInfo"
       />
 
       <SocialSupportSubjects
@@ -29,8 +28,8 @@
 </template>
 
 <script lang="ts" setup>
-  import StructureInfoForm from '~/components/Structure/StructureInfoForm.vue'
-  import { EditCurrentUserStructureInfoInput } from '~/server/schema'
+  import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
+  import { EditStructureAdminInfoInput } from '~/server/schema'
   import { RouteTitle } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
 
@@ -50,22 +49,22 @@
   const { data, pending, error, refresh } =
     await trpcClient.admin.getStructure.useQuery({ id: structureId })
 
-  function onEdit() {
+  function editAdminInfo() {
     if (!data || !data.value) {
       return
     }
 
     modal.open({
       title: 'Modifier les informations de ma structure',
-      contentComponent: StructureInfoForm,
+      contentComponent: StructureAdminInfoForm,
       contentComponentProps: { structure: data.value.structure },
-      contentComponentEvents: { updateStructureInfo: onUpdateStructureInfo }
+      contentComponentEvents: { updateStructureInfo: updateInfo }
     })
   }
 
-  function onUpdateStructureInfo(values: EditCurrentUserStructureInfoInput) {
+  function updateInfo(values: EditStructureAdminInfoInput) {
     useTrpcMutation({
-      mutation: () => trpcClient.structure.updateStructureInfo.mutate(values),
+      mutation: () => trpcClient.admin.updateStructureInfo.mutate(values),
       isSubmitting,
       onSuccess: () => {
         modal.close()

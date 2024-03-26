@@ -1,8 +1,8 @@
 import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import {
-  editCurrentUserStructureInfoSchema,
-  EditCurrentUserStructureInfoInput
+  editStructureInfoSchema,
+  EditStructureInfoInput
 } from '~/server/schema'
 import {
   SecurityRuleContext,
@@ -14,7 +14,7 @@ const handler = async ({
   input,
   ctx: { structure: userStructure }
 }: {
-  input: EditCurrentUserStructureInfoInput
+  input: EditStructureInfoInput
   ctx: ProtectedAppContext
 }) => {
   const updatedStructure = await StructureRepo.prisma.update({
@@ -33,6 +33,6 @@ const securityCheck = (ctx: SecurityRuleContext) =>
 
 export const updateStructureInfo = createMutation({
   handler,
-  inputValidation: editCurrentUserStructureInfoSchema,
+  inputValidation: editStructureInfoSchema,
   securityCheck
 })

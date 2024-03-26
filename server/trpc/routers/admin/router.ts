@@ -32,5 +32,8 @@ export const adminRouter = router({
     .mutation(adminRoutes.sendEmail.executeAsAdmin),
   getOverview: adminProcedure
     .input(adminRoutes.getOverview.inputValidation)
-    .query(adminRoutes.getOverview.executeAsAdmin)
+    .query(adminRoutes.getOverview.executeAsAdmin),
+  updateStructureInfo: adminProcedure
+    .input(adminRoutes.updateStructureInfo.inputValidation)
+    .mutation(adminRoutes.updateStructureInfo.executeAsAdmin)
 })

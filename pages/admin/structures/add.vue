@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-  import { AdminCreateStructureInput } from '~/server/schema'
+  import { CreateStructureInput } from '~/server/schema'
   import { RoutePath } from '~/utils/routing'
 
   const trpcClient = useTrpcClient()
@@ -26,7 +26,7 @@
   const isSubmitting = ref(false)
   const formContainer = ref<HTMLFormElement | null>(null)
 
-  function onAddStructure(structure: AdminCreateStructureInput) {
+  function onAddStructure(structure: CreateStructureInput) {
     useTrpcMutation({
       mutation: () => trpcClient.admin.createStructure.mutate(structure),
       isSubmitting,

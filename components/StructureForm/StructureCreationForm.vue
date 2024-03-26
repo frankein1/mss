@@ -9,10 +9,6 @@
     class="fr-container--fluid"
     @submit.prevent="onUpdateStructure"
   >
-    <StructureFormAdmin />
-
-    <StructureFormInformation :set-field-value="setFieldValue" />
-
     <button
       class="fr-btn fr-btn--lg submit-btn"
       type="submit"
@@ -25,8 +21,8 @@
 </template>
 
 <script lang="ts" setup>
-  import type { AdminCreateStructureInput } from '~/server/schema'
-  import { adminCreateStructureSchema } from '~/server/schema'
+  import type { CreateStructureInput } from '~/server/schema'
+  import { createStructureSchema } from '~/server/schema'
   import { structureFieldLabels } from '~/client/labels'
 
   defineProps<{
@@ -34,13 +30,13 @@
   }>()
 
   const emit = defineEmits<{
-    addStructure: [structure: AdminCreateStructureInput]
+    addStructure: [structure: CreateStructureInput]
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit, setFieldValue } = useForm<AdminCreateStructureInput>({
-    validationSchema: toTypedSchema(adminCreateStructureSchema)
+  const { handleSubmit } = useForm<CreateStructureInput>({
+    validationSchema: toTypedSchema(createStructureSchema)
   })
 
   const { onSubmit: onUpdateStructure, caughtErrors } = useCatchFormErrors(

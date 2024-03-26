@@ -1,10 +1,5 @@
-import { StructureType } from '@prisma/client'
 import { z } from 'zod'
-import {
-  requiredNativeEnum,
-  stringConstraint,
-  phoneConstraint
-} from '../helpers.schema'
+import { stringConstraint, phoneConstraint } from '../helpers.schema'
 import {
   errorMessages,
   minStringLengthMessage,
@@ -13,8 +8,7 @@ import {
   validEmailMessage
 } from '~/utils/zod'
 
-export const createStructureSchema = z.object({
-  type: requiredNativeEnum(StructureType),
+export const editStructureInfoSchema = z.object({
   name: stringConstraint
     .max(50, maxStringLengthMessage(50))
     .min(2, minStringLengthMessage(2)),
@@ -31,13 +25,7 @@ export const createStructureSchema = z.object({
   email: z.string(errorMessages).email(validEmailMessage)
 })
 
-export const editCurrentUserStructureInfoSchema = createStructureSchema.omit({
-  type: true
-})
-
-export type EditCurrentUserStructureInfoInput = z.infer<
-  typeof editCurrentUserStructureInfoSchema
->
+export type EditStructureInfoInput = z.infer<typeof editStructureInfoSchema>
 
 export const getSocialSupportSubjectSchema = z.object({
   name: stringConstraint

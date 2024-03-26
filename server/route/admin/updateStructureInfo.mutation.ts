@@ -1,8 +1,8 @@
 import { createMutation } from '~/server/route'
 import { AdminContext } from '~/server/trpc'
 import {
-  adminEditStructureSchema,
-  AdminEditStructureInput
+  editStructureAdminInfoSchema,
+  EditStructureAdminInfoInput
 } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 
@@ -10,7 +10,7 @@ const adminHandler = async ({
   input,
   ctx: _ctx
 }: {
-  input: AdminEditStructureInput
+  input: EditStructureAdminInfoInput
   ctx: AdminContext
 }) => {
   const updatedStructure = await StructureRepo.prisma.update({
@@ -26,5 +26,5 @@ const adminHandler = async ({
 
 export const updateStructureInfo = createMutation({
   adminHandler,
-  inputValidation: adminEditStructureSchema
+  inputValidation: editStructureAdminInfoSchema
 })
