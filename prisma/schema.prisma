@@ -1249,6 +1249,101 @@ enum BeneficiaryMinistereDepartementServiceAc {
   Sgmcas
 }
 
+enum BudgetIncomeType {
+  Beneficiary
+  BeneficiaryRelative
+}
+
+model BudgetIncome {
+  id String @id @default(uuid()) @db.Uuid
+
+  legacyIncome Decimal? @map("legacy_income")
+
+  // Travail
+  salary        Decimal?
+  primeActivite Decimal? @map("prime_activite")
+
+  // Pensions
+  retirement Decimal?
+  alimony    Decimal?
+  disability Decimal?
+
+  // Allocations
+  unemployment Decimal?
+  ass          Decimal?
+  rsa          Decimal?
+  apl          Decimal?
+  family       Decimal?
+  aah          Decimal?
+  aspa         Decimal?
+
+  // Autre ressources
+  dailyAllowance Decimal? @map("daily_allowance")
+  annuity        Decimal?
+  other          Decimal?
+
+  type BudgetIncomeType
+
+  beneficiaryRelativeId String?              @map("beneficiary_relative_id") @db.Uuid
+  beneficiaryRelative   BeneficiaryRelative? @relation(fields: [beneficiaryRelativeId], references: [id])
+
+  budgetId String @map("budget_id") @db.Uuid
+  budget   Budget @relation(fields: [budgetId], references: [id])
+
+  @@map("budget_income")
+}
+
+model BudgetExpenses {
+  id String @id @default(uuid()) @db.Uuid
+
+  // Logement
+  rent        Decimal?
+  expenses    Decimal?
+  water       Decimal?
+  electricity Decimal?
+  gas         Decimal?
+  fuelOrOther Decimal? @map("fuel_or_other")
+
+  // Impôts
+  housingTax  Decimal? @map("housing_tax")
+  propertyTax Decimal? @map("property_tax")
+  incomeTax   Decimal? @map("income_tax")
+
+  // Autres charges
+  remittedAlimony Decimal? @map("remitted_alimony")
+  healthInsurance Decimal? @map("health_insurance")
+  phoneInternet   Decimal? @map("phone_internet")
+  insurance       Decimal?
+  carInsurance    Decimal? @map("car_insurance")
+  schoolFees      Decimal? @map("school_fees")
+  schoolCanteen   Decimal? @map("school_canteen")
+  other           Decimal?
+
+  // Crédits et dettes
+  debts Decimal?
+  loans Decimal?
+
+  budgetId String @map("budget_id") @db.Uuid
+  budget   Budget @relation(field: [budgetId], references: [id])
+
+  @@map("budget_expenses")
+}
+
+model Budget {
+  id String @id @default(uuid()) @db.Uuid
+
+  remainingAfterExpenses Decimal? @map("remaining_after_expenses")
+  savings                Decimal?
+  overdraft              Decimal?
+  familyQuotient         Decimal? @map("family_quotient")
+
+  beneficiary Beneficiary
+  incomes     BudgetIncome[]
+  expenses    BudgetExpenses
+
+  @@map("budget")
+}
+
 model Beneficiary {
   id String @id @default(uuid()) @db.Uuid
 
@@ -1354,6 +1449,9 @@ model Beneficiary {
   // linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
   notifications Notification[]
 
+  budgetId String @map("budget_id") @db.Uuid
+  budget   Budget @relation(fields: [budgetId], references: [id])
+
   @@map("beneficiary")
 }
 
@@ -1407,6 +1505,8 @@ model BeneficiaryRelative {
 
   created DateTime? @default(now())
   updated DateTime? @updatedAt
+
+  income BudgetIncome?
 
   @@map("beneficiary_relative")
 }
