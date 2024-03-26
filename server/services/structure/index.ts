@@ -1,7 +1,7 @@
 import { updateSocialSupportSubjects } from './updateSocialSupportSubjects.service'
-import { getCreateSocialSupportSubjects } from './getCreateSocialSupportSubjects.service'
+import { getSocialSupportSubjects } from './getSocialSupportSubjects.service'
 
 export const StructureService = {
   updateSocialSupportSubjects,
-  getCreateSocialSupportSubjects
+  getSocialSupportSubjects
 }

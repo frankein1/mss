@@ -3,7 +3,7 @@ import { createQuery } from '~/server/route'
 import { idSchema } from '~/server/schema'
 import { StructureService } from '~/server/services'
 
-export const getCreateSocialSupportSubjects = createQuery({
+export const getSocialSupportSubjects = createQuery({
   adminHandler: async ({ ctx, input }) => {
     const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
       where: {
@@ -14,7 +14,7 @@ export const getCreateSocialSupportSubjects = createQuery({
         type: true
       }
     })
-    return await StructureService.getCreateSocialSupportSubjects({
+    return await StructureService.getSocialSupportSubjects({
       ctx: {
         user: ctx.user,
         structure

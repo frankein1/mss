@@ -14,9 +14,9 @@ export const structureRouter = router({
   updateSocialSupportSubjects: protectedProcedure
     .input(structureRoutes.updateSocialSupportSubjects.inputValidation)
     .mutation(structureRoutes.updateSocialSupportSubjects.execute),
-  getCreateSocialSupportSubjects: protectedProcedure
-    .input(structureRoutes.getCreateSocialSupportSubjects.inputValidation)
-    .query(structureRoutes.getCreateSocialSupportSubjects.execute),
+  getSocialSupportSubjects: protectedProcedure
+    .input(structureRoutes.getSocialSupportSubjects.inputValidation)
+    .query(structureRoutes.getSocialSupportSubjects.execute),
   makeInactiveSocialSupportSubject: protectedProcedure
     .input(structureRoutes.makeInactiveSocialSupportSubject.inputValidation)
     .mutation(structureRoutes.makeInactiveSocialSupportSubject.execute),
@@ -25,8 +25,5 @@ export const structureRouter = router({
     .mutation(structureRoutes.updateStructureSubject.execute),
   getActiveSocialSupportSubjects: protectedProcedure
     .input(structureRoutes.getActiveSocialSupportSubjects.inputValidation)
-    .query(structureRoutes.getActiveSocialSupportSubjects.execute),
-  getSocialSupportSubjects: protectedProcedure
-    .input(structureRoutes.getSocialSupportSubjects.inputValidation)
-    .query(structureRoutes.getSocialSupportSubjects.execute)
+    .query(structureRoutes.getActiveSocialSupportSubjects.execute)
 })

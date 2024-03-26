@@ -102,7 +102,7 @@
   const structureId = route.params.id as string
 
   const { data, pending, error } =
-    await trpcClient.admin.getCreateSocialSupportSubjects.useQuery({
+    await trpcClient.admin.getSocialSupportSubjects.useQuery({
       id: structureId
     })
 

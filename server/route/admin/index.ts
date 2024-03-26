@@ -10,9 +10,10 @@ import { getUsers } from './getUsers.query'
 import { sendEmail } from './sendEmail.query'
 import { updateStructureInfo } from './updateStructureInfo.mutation'
 import { updateSocialSupportSubjects } from './updateSocialSupportSubjects.mutation'
-import { getCreateSocialSupportSubjects } from './getCreateSocialSupportSubjects.query'
+import { getSocialSupportSubjects } from './getSocialSupportSubjects.query'
 import { makeInactiveSocialSupportSubject } from './makeInactiveSocialSupportSubject.mutation'
 import { updateStructureSubject } from './updateSocialSupportSubject.mutation'
+import { initSubjects } from './initSubjects.mutation'
 
 export const adminRoutes = {
   createStructure,
@@ -27,7 +28,8 @@ export const adminRoutes = {
   sendEmail,
   updateStructureInfo,
   updateSocialSupportSubjects,
-  getCreateSocialSupportSubjects,
+  getSocialSupportSubjects,
   makeInactiveSocialSupportSubject,
-  updateStructureSubject
+  updateStructureSubject,
+  initSubjects
 }

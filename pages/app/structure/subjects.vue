@@ -124,7 +124,7 @@
   const snackbar = useSnackbar()
 
   const { data, pending, error } =
-    await trpcClient.structure.getCreateSocialSupportSubjects.useQuery()
+    await trpcClient.structure.getSocialSupportSubjects.useQuery()
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
