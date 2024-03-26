@@ -27,18 +27,6 @@
       :structures="structures"
       :pending="pending"
     />
-    <div class="fr-grid-row">
-      <div class="fr-col-12">
-        <button
-          class="fr-btn fr-btn--secondary"
-          title="Initialisation des OA"
-          aria-label="Initialisation des OA"
-          @click="initSubjects"
-        >
-          Initialisation des objects d'accompagnement
-        </button>
-      </div>
-    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -93,18 +81,6 @@
       },
       onFailure: () => {
         snackbar.error("L'ajout de la structure a échoué.")
-      }
-    })
-  }
-  function initSubjects() {
-    useTrpcMutation({
-      mutation: () => trpcClient.admin.initSubjects.mutate(),
-      isSubmitting,
-      onSuccess: () => {
-        snackbar.success('Initialisé')
-      },
-      onFailure: () => {
-        snackbar.error('Erreur')
       }
     })
   }

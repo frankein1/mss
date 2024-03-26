@@ -47,8 +47,5 @@ export const adminRouter = router({
     .mutation(adminRoutes.makeInactiveSocialSupportSubject.executeAsAdmin),
   updateSocialSupportSubject: adminProcedure
     .input(adminRoutes.updateStructureSubject.inputValidation)
-    .mutation(adminRoutes.updateStructureSubject.executeAsAdmin),
-  initSubjects: adminProcedure
-    .input(adminRoutes.initSubjects.inputValidation)
-    .mutation(adminRoutes.initSubjects.executeAsAdmin)
+    .mutation(adminRoutes.updateStructureSubject.executeAsAdmin)
 })
