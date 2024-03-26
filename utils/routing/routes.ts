@@ -30,7 +30,7 @@ export enum Route {
   AppAccount = 'AppAccount',
   AppStructure = 'AppStructure',
   AppStructureEdit = 'AppStructureEdit',
-  AppStructureSocialSupportSubjectAdd = 'AppStructureSocialSupportSubjectAdd',
+  AppStructureSubjects = 'AppStructureSubjects',
   AppBeneficiaries = 'AppBeneficiaries',
   AppBeneficiariesAdd = 'AppBeneficiariesAdd',
   AppBeneficiary = 'AppBeneficiary',
@@ -54,6 +54,7 @@ export enum Route {
   AdminLogin = 'AdminLogin',
   AdminStructures = 'AdminStructures',
   AdminStructure = 'AdminStructure',
+  AdminStructureSubjects = 'AdminStructureSubjects',
   AdminUsers = 'AdminUsers',
   AdminUsersAdd = 'AdminUsersAdd',
   AdminUser = 'AdminUser',
@@ -169,8 +170,7 @@ export const RoutePath = {
   [Route.AppAccount]: () => `${AppRoute}/account`,
   [Route.AppStructure]: () => `${AppRoute}/structure`,
   [Route.AppStructureEdit]: () => `${AppRoute}/structure/edit`,
-  [Route.AppStructureSocialSupportSubjectAdd]: () =>
-    `${AppRoute}/structure/social-support-subjects/add`,
+  [Route.AppStructureSubjects]: () => `${AppRoute}/structure/subjects`,
   [Route.AppBeneficiaries]: () => BeneficiariesRoute,
   [Route.AppBeneficiariesAdd]: () => `${BeneficiariesRoute}/add`,
   [Route.AppBeneficiary]: BeneficiaryRoute,
@@ -260,6 +260,8 @@ export const RoutePath = {
   [Route.AdminStructures]: () => `${AdminRoute}/structures`,
   [Route.AdminStructure]: (structureId: string) =>
     `${AdminRoute}/structures/${structureId}`,
+  [Route.AdminStructureSubjects]: (structureId: string) =>
+    `${AdminRoute}/structures/${structureId}/subjects`,
   [Route.AdminUsers]: () => `${AdminRoute}/users`,
   [Route.AdminUsersAdd]: () => `${AdminRoute}/users/add`,
   [Route.AdminUser]: (userId: string) => `${AdminRoute}/users/${userId}`,

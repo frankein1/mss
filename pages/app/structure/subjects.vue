@@ -5,9 +5,7 @@
     @submit.prevent="onSubmit"
   >
     <main class="fr-container content">
-      <DsfrBreadcrumb
-        :links="Breadcrumb.AppStructureSocialSupportSubjectAdd()"
-      />
+      <DsfrBreadcrumb :links="Breadcrumb.AppStructureSubjects()" />
 
       <PageTitle :title="title" />
 
@@ -118,7 +116,7 @@
     UpdateSocialSupportSubjectsInput
   } from '~/server/schema'
 
-  const title = RouteTitle.AppStructureSocialSupportSubjectAdd()
+  const title = RouteTitle.AppStructureSubjects()
 
   useHead({ title })
 

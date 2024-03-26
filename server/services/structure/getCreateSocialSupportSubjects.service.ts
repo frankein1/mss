@@ -14,6 +14,9 @@ export async function getCreateSocialSupportSubjects({
     await initDefaultSubject(ctx, key as DefaultSocialSupportSubject)
   }
   return await SocialSupportSubjectRepo.findMany(ctx.user, {
+    where: {
+      ownedByStructureId: ctx.structure.id
+    },
     orderBy: {
       name: 'asc'
     }

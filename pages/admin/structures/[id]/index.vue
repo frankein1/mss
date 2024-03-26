@@ -26,6 +26,7 @@
 
       <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
+        :edit-path="RoutePath.AdminStructureSubjects(structureId)"
         @refresh="refresh"
       />
     </div>
@@ -35,7 +36,7 @@
 <script lang="ts" setup>
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
   import { CreateStructureInput } from '~/server/schema'
-  import { RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
 
   const title = RouteTitle.AppStructure()

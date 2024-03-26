@@ -24,6 +24,7 @@
 
       <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
+        :edit-path="RoutePath.AppStructureSubjects()"
         @refresh="refresh"
       />
     </div>
@@ -33,7 +34,7 @@
 <script lang="ts" setup>
   import StructureInfoForm from '~/components/Structure/StructureInfoForm.vue'
   import { EditStructureInfoInput } from '~/server/schema'
-  import { RouteTitle, Breadcrumb } from '~/utils/routing'
+  import { RouteTitle, Breadcrumb, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
 
   const title = RouteTitle.AppStructure()

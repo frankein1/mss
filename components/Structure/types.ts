@@ -7,3 +7,5 @@ export type SocialSupportSubjects =
   RouterOutput['structure']['getStructure']['socialSupportSubjects']
 
 export type StructureUsers = RouterOutput['admin']['getStructure']['users']
+
+export type Structures = RouterOutput['admin']['getStructures']['structures']

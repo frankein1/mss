@@ -35,5 +35,17 @@ export const adminRouter = router({
     .query(adminRoutes.getOverview.executeAsAdmin),
   updateStructureInfo: adminProcedure
     .input(adminRoutes.updateStructureInfo.inputValidation)
-    .mutation(adminRoutes.updateStructureInfo.executeAsAdmin)
+    .mutation(adminRoutes.updateStructureInfo.executeAsAdmin),
+  updateSocialSupportSubjects: adminProcedure
+    .input(adminRoutes.updateSocialSupportSubjects.inputValidation)
+    .mutation(adminRoutes.updateSocialSupportSubjects.executeAsAdmin),
+  getCreateSocialSupportSubjects: adminProcedure
+    .input(adminRoutes.getCreateSocialSupportSubjects.inputValidation)
+    .query(adminRoutes.getCreateSocialSupportSubjects.executeAsAdmin),
+  makeInactiveSocialSupportSubject: adminProcedure
+    .input(adminRoutes.makeInactiveSocialSupportSubject.inputValidation)
+    .mutation(adminRoutes.makeInactiveSocialSupportSubject.executeAsAdmin),
+  updateSocialSupportSubject: adminProcedure
+    .input(adminRoutes.updateStructureSubject.inputValidation)
+    .mutation(adminRoutes.updateStructureSubject.executeAsAdmin)
 })

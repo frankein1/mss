@@ -22,3 +22,12 @@ export const updateSocialSupportSubjectsSchema = z.object({
 export type UpdateSocialSupportSubjectsInput = z.infer<
   typeof updateSocialSupportSubjectsSchema
 >
+
+export const updateAdminStructureSubjectsSchema =
+  updateSocialSupportSubjectsSchema.extend({
+    structureId: z.string().uuid()
+  })
+
+export type UpdateAdminStructureSubjectsInput = z.infer<
+  typeof updateAdminStructureSubjectsSchema
+>

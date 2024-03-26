@@ -33,6 +33,7 @@ const adminHandler = async ({
 
   const socialSupportSubjects = await SocialSupportSubjectRepo.findMany(user, {
     where: {
+      ownedByStructureId: input.id,
       inactive: false
     },
     orderBy: {
