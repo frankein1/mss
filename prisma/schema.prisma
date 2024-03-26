@@ -1284,7 +1284,7 @@ model BudgetIncome {
 
   type BudgetIncomeType
 
-  beneficiaryRelativeId String?              @map("beneficiary_relative_id") @db.Uuid
+  beneficiaryRelativeId String?              @unique @map("beneficiary_relative_id") @db.Uuid
   beneficiaryRelative   BeneficiaryRelative? @relation(fields: [beneficiaryRelativeId], references: [id])
 
   budgetId String @map("budget_id") @db.Uuid
@@ -1323,8 +1323,8 @@ model BudgetExpenses {
   debts Decimal?
   loans Decimal?
 
-  budgetId String @map("budget_id") @db.Uuid
-  budget   Budget @relation(field: [budgetId], references: [id])
+  budgetId String @unique @map("budget_id") @db.Uuid
+  budget   Budget @relation(fields: [budgetId], references: [id])
 
   @@map("budget_expenses")
 }
@@ -1337,9 +1337,9 @@ model Budget {
   overdraft              Decimal?
   familyQuotient         Decimal? @map("family_quotient")
 
-  beneficiary Beneficiary
+  beneficiary Beneficiary?
   incomes     BudgetIncome[]
-  expenses    BudgetExpenses
+  expenses    BudgetExpenses?
 
   @@map("budget")
 }
@@ -1449,7 +1449,7 @@ model Beneficiary {
   linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
   notifications   Notification[]
 
-  budgetId String @map("budget_id") @db.Uuid
+  budgetId String @unique @map("budget_id") @db.Uuid
   budget   Budget @relation(fields: [budgetId], references: [id])
 
   @@map("beneficiary")
