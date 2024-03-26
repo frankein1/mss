@@ -5,7 +5,7 @@ import { EmailRepo } from '~/server/database'
 import { sendEmail } from '~/server/lib/email'
 import { minutesToMillis } from '~/utils/time'
 
-const SCHEDULER_IN_SECONDS = 10
+const SCHEDULER_IN_SECONDS = 30
 const MAX_EMAIL_RETRY = 3
 const EMAIL_RETRY_DELAY = minutesToMillis(60)
 
