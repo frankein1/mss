@@ -5,7 +5,11 @@ import {
   fixturesSocialSupportSubjects,
   fixturesUsers,
   fixturesBeneficiaries,
-  fixturesSocialSupports
+  fixturesBeneficiaryRelatives,
+  fixturesSocialSupports,
+  fixturesBudgets,
+  fixturesBudgetIncomes,
+  fixturesBudgetExpenses
 } from './fixtures'
 
 const prismaClient = new PrismaClient()
@@ -63,13 +67,53 @@ function loadFixturesSocialSupports() {
   })
 }
 
+function loadFixturesBeneficiaryRelatives() {
+  console.log('🫂 Beneficiary Relatives...')
+
+  return prismaClient.beneficiaryRelative.createMany({
+    data: fixturesBeneficiaryRelatives,
+    skipDuplicates: true
+  })
+}
+
+function loadFixturesBudgets() {
+  console.log('📊 Budgets...')
+
+  return prismaClient.budget.createMany({
+    data: fixturesBudgets,
+    skipDuplicates: true
+  })
+}
+
+function loadFixturesBudgetIncomes() {
+  console.log('💰 Budget Incomes...')
+
+  return prismaClient.budgetIncome.createMany({
+    data: fixturesBudgetIncomes,
+    skipDuplicates: true
+  })
+}
+
+function loadFixturesBudgetExpenses() {
+  console.log('💸 Budget Expenses...')
+
+  return prismaClient.budgetExpenses.createMany({
+    data: fixturesBudgetExpenses,
+    skipDuplicates: true
+  })
+}
+
 function loadFixtures() {
   return [
     loadFixtureStructure(),
     loadFixturesSocialSupportSubjects(),
     loadFixturesUsers(),
     ...loadFixturesBeneficiaries(),
-    ...loadFixturesSocialSupports()
+    ...loadFixturesSocialSupports(),
+    loadFixturesBeneficiaryRelatives(),
+    loadFixturesBudgets(),
+    loadFixturesBudgetIncomes(),
+    loadFixturesBudgetExpenses()
   ]
 }
 
