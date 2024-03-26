@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.18.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.18.0...v1.18.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* **structure:** corrige l'initialisation des objets d'accompagments ([e396d18](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e396d181aca85b4a98edd9226547d4ef2f1e4aed))
+
 ## [1.18.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.17.1...v1.18.0) (2024-03-26)
 
 
