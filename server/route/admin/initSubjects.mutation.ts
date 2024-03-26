@@ -30,19 +30,12 @@ async function initDefaultSubject(
   ctx: SecurityRuleContext,
   key: DefaultSocialSupportSubject
 ) {
+  const name = socialSupportSubjectKeys.value(key) || ''
+  const ownedByStructureId = ctx.structure.id
   const res = await SocialSupportSubjectRepo.findMany(ctx.user, {
     where: {
-      ownedByStructureId: ctx.structure.id,
-      OR: [
-        {
-          default: {
-            equals: key as DefaultSocialSupportSubject
-          }
-        },
-        {
-          name: socialSupportSubjectKeys.value(key) || ''
-        }
-      ]
+      ownedByStructureId,
+      name
     },
     take: 1
   })
@@ -50,20 +43,9 @@ async function initDefaultSubject(
     await SocialSupportSubjectRepo.prisma.create({
       data: {
         default: key as DefaultSocialSupportSubject,
-        ownedByStructureId: ctx.structure.id,
-        name: socialSupportSubjectKeys.value(key) || key,
+        ownedByStructureId,
+        name,
         inactive: true
-      }
-    })
-  } else {
-    const oa = res[0]
-    await SocialSupportSubjectRepo.prisma.update({
-      where: {
-        id: oa.id
-      },
-      data: {
-        name: socialSupportSubjectKeys.value(key) || key,
-        default: key as DefaultSocialSupportSubject
       }
     })
   }
