@@ -34,7 +34,7 @@ const adminHandler = async ({
   }
   const structures = await StructureRepo.findMany(user, {
     where,
-    take: 10,
+    take: 20,
     select: {
       id: true,
       type: true,
@@ -46,22 +46,11 @@ const adminHandler = async ({
       email: true,
       inhabitantsNumber: true,
       inseeCode: true,
-      userActivities: {
-        take: 1,
-        orderBy: {
-          date: 'desc'
-        }
-      },
-      siret: true,
-      _count: {
-        select: {
-          beneficiaries: true,
-          users: true,
-          socialSupports: true
-        }
-      }
+      siret: true
     },
-    orderBy: input?.orderBy
+    orderBy: {
+      name: 'asc'
+    }
   })
 
   return { structures }

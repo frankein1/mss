@@ -23,7 +23,6 @@
     </div>
     <StructureTableAdmin
       v-show="!pending"
-      v-model:sort="orderBy"
       :structures="structures"
       :pending="pending"
     />
@@ -32,7 +31,6 @@
 <script lang="ts" setup>
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
   import { CreateStructureInput } from '~/server/schema'
-  import { StructureAdminSort, SortOrder } from '~/types/table'
   import { RoutePath } from '~/utils/routing'
 
   const trpcClient = useTrpcClient()
@@ -41,13 +39,9 @@
   const modal = useModal()
 
   const search = ref<string>()
-  const orderBy = ref<StructureAdminSort>({
-    beneficiaries: { _count: SortOrder.Desc }
-  })
   const isSubmitting = ref(false)
 
   const queryInput = computed(() => ({
-    orderBy: orderBy.value,
     search: search.value
   }))
 

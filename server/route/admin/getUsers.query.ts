@@ -47,7 +47,11 @@ const adminHandler = async ({
       status: true,
       structure: true
     },
-    orderBy: input.orderBy
+    orderBy: {
+      structure: {
+        name: 'asc'
+      }
+    }
   })
 
   return { users }

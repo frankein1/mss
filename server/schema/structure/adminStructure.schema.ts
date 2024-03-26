@@ -1,4 +1,4 @@
-import { Prisma, StructureType } from '@prisma/client'
+import { StructureType } from '@prisma/client'
 import { z } from 'zod'
 import {
   requiredNativeEnum,
@@ -50,16 +50,6 @@ export type EditStructureAdminInfoInput = z.infer<
 
 export const adminGetStructuresSchema = z
   .object({
-    orderBy: z
-      .object({
-        beneficiaries: z
-          .object({
-            _count: z.nativeEnum(Prisma.SortOrder).optional()
-          })
-          .optional(),
-        lastActivity: z.nativeEnum(Prisma.SortOrder).optional()
-      })
-      .optional(),
     search: stringConstraint.max(50, maxStringLengthMessage(50)).nullish()
   })
   .optional()

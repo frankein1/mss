@@ -1,7 +1,6 @@
 <template>
   <div
     v-if="users?.length"
-    ref="tableContainer"
     class="table-container fr-mt-3w"
     tabindex="0"
   >
@@ -18,12 +17,6 @@
             <th scope="col">Structure</th>
             <th scope="col">Rôle</th>
             <th scope="col">Email</th>
-            <TableSortableHeader
-              label="Dernière connexion"
-              :sort="sort?.lastAccess"
-              numeric
-              @update:sort="emit('update:sort', { lastAccess: $event })"
-            />
           </tr>
         </thead>
         <tbody>
@@ -42,7 +35,6 @@
               <td>{{ user.structure?.name || '-' }}</td>
               <td>{{ userRoleKeys.value(user.role) }}</td>
               <td>{{ user.email }}</td>
-              <td>{{ formatDate(user.lastAccess) }}</td>
             </tr>
           </NuxtLink>
         </tbody>
@@ -54,19 +46,11 @@
 <script setup lang="ts">
   import { AdminUsersOutput } from './types'
   import { userRoleKeys } from '~/client/options'
-  import type { UserAdminSort } from '~/types/table'
   import { formatUserDisplayName } from '~/utils/user'
   import { RoutePath } from '~/utils/routing'
 
-  const props = defineProps<{
+  defineProps<{
     users: AdminUsersOutput
     pending: boolean
-    sort: UserAdminSort | undefined
   }>()
-
-  const emit = defineEmits<{
-    'update:sort': [sort: UserAdminSort]
-  }>()
-
-  const { tableContainer } = useTable(toRef(() => props.pending))
 </script>
