@@ -9,8 +9,7 @@ const get = (user: SecurityRuleGrantee) => {
     return where
   }
   Object.assign(where, {
-    beneficiary: BeneficiaryConstraints.get(user),
-    linkedBeneficiary: BeneficiaryConstraints.get(user)
+    beneficiary: BeneficiaryConstraints.get(user)
   })
 
   return where

@@ -1,15 +1,7 @@
 <template>
   <div class="fr-grid-row">
     <div class="fr-col-12 fr-text--bold fr-pb-1w">
-      <NuxtLink
-        v-if="relative.linkedBeneficiary"
-        class="fr-link fr-icon-links-line fr-link--icon-left"
-        :to="RoutePath.AppBeneficiary(relative.linkedBeneficiary.id)"
-        >{{ name }}</NuxtLink
-      >
-      <template v-else>
-        {{ name }}
-      </template>
+      {{ name }}
     </div>
   </div>
   <div class="fr-grid-row">
@@ -20,19 +12,19 @@
     />
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.birthDate"
-      :value="formatDate(birthDate)"
+      :value="formatDate(relative.birthDate)"
       class="fr-col-6"
     />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.email"
-      :value="email"
+      :value="relative.email"
       class="fr-col-6"
     />
     <BeneficiaryInfoLabel
       :label="relativeFieldLabels.phone"
-      :value="phone"
+      :value="relative.phone"
       class="fr-col-6"
     />
   </div>
@@ -57,8 +49,7 @@
 <script setup lang="ts">
   import { GetBeneficiaryRelative } from '~/types/beneficiary'
   import { relativeRelationshipKeys } from '~/client/options'
-  import { RoutePath } from '~/utils/routing'
-  import { relativeFieldLabels } from '~/client/labels/relative.labels'
+  import { relativeFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
     relative: GetBeneficiaryRelative
@@ -66,30 +57,6 @@
 
   const name = computed(() => {
     const relative = props.relative
-    if (relative.linkedBeneficiary) {
-      return formatBeneficiaryName(relative.linkedBeneficiary)
-    }
     return (relative.firstName || '') + ' ' + (relative.lastName || '')
-  })
-
-  const email = computed(() => {
-    const relative = props.relative
-    return relative.linkedBeneficiary
-      ? relative.linkedBeneficiary.email
-      : relative.email
-  })
-
-  const phone = computed(() => {
-    const relative = props.relative
-    return relative.linkedBeneficiary
-      ? relative.linkedBeneficiary.phone1
-      : relative.phone
-  })
-
-  const birthDate = computed(() => {
-    const relative = props.relative
-    return relative.linkedBeneficiary
-      ? relative.linkedBeneficiary.birthDate
-      : relative.birthDate
   })
 </script>
