@@ -1,9 +1,19 @@
-export * from './findSocialSupportSubject.query'
-export * from './getCreateSocialSupportSubjects.query'
-export * from './getStructure.query'
-export * from './makeInactiveSocialSupportSubject.mutation'
-export * from './updateSocialSupportSubject.mutation'
-export * from './updateSocialSupportSubjects.mutation'
-export * from './updateStructureInfo.mutation'
-export * from './getActiveSocialSupportSubjects.query'
-export * from './getSocialSupportSubjects.query'
+import { findSocialSupportSubject } from './findSocialSupportSubject.query'
+import { getActiveSocialSupportSubjects } from './getActiveSocialSupportSubjects.query'
+import { getSocialSupportSubjects } from './getSocialSupportSubjects.query'
+import { getStructure } from './getStructure.query'
+import { makeInactiveSocialSupportSubject } from './makeInactiveSocialSupportSubject.mutation'
+import { updateStructureInfo } from './updateStructureInfo.mutation'
+import { updateStructureSubject } from './updateSocialSupportSubject.mutation'
+import { updateSocialSupportSubjects } from './updateSocialSupportSubjects.mutation'
+
+export const structureRoutes = {
+  findSocialSupportSubject,
+  getActiveSocialSupportSubjects,
+  getSocialSupportSubjects,
+  getStructure,
+  makeInactiveSocialSupportSubject,
+  updateStructureInfo,
+  updateStructureSubject,
+  updateSocialSupportSubjects
+}

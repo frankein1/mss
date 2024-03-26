@@ -46,7 +46,7 @@
     >
       <NuxtLink
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-add-line"
-        :to="RoutePath.AppStructureSocialSupportSubjectAdd()"
+        :to="editPath"
       >
         Ajouter un accompagnement
       </NuxtLink>
@@ -58,11 +58,11 @@
   import type { SocialSupportSubjects } from './types'
   import SocialSupportSubjectEdition from './SocialSupportSubjectEdition.vue'
   import SocialSupportSubjectDeletion from './SocialSupportSubjectDeletion.vue'
-  import { RoutePath } from '~/utils/routing'
   import { UpdateSocialSupportSubjectNameInput } from '~/server/schema'
 
   defineProps<{
     subjects: SocialSupportSubjects
+    editPath: string
   }>()
 
   const emits = defineEmits<{
@@ -72,6 +72,7 @@
   const modal = useModal()
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
+  const { isAdmin } = useAuthState()
 
   const { application } = usePermissions()
 
@@ -102,12 +103,19 @@
     })
   }
 
+  const updateSubjectMutation = isAdmin()
+    ? trpcClient.admin.updateSocialSupportSubject.useMutation()
+    : trpcClient.structure.updateSocialSupportSubject.useMutation()
+
+  const removeSubjectMutation = isAdmin()
+    ? trpcClient.admin.makeInactiveSocialSupportSubject.useMutation()
+    : trpcClient.structure.makeInactiveSocialSupportSubject.useMutation()
+
   function onUpdateStructureSubject(
     values: UpdateSocialSupportSubjectNameInput
   ) {
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.structure.updateSocialSupportSubject.mutate(values),
+      mutation: () => updateSubjectMutation.mutate(values),
       isSubmitting: isSubmittingModification,
       onSuccess: () => {
         modal.close()
@@ -133,8 +141,7 @@
 
   function onDeleteStructureSubject(id: string) {
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.structure.makeInactiveSocialSupportSubject.mutate({ id }),
+      mutation: () => removeSubjectMutation.mutate({ id }),
       isSubmitting: isSubmittingModification,
       onSuccess: () => {
         modal.close()

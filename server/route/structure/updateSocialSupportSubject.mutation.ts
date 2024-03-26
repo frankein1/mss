@@ -12,18 +12,18 @@ import { SocialSupportSubjectService } from '~/server/services'
 
 const handler = async ({
   input,
-  ctx
+  ctx: _ctx
 }: {
   input: UpdateSocialSupportSubjectNameInput
   ctx: ProtectedAppContext
 }) => {
-  return await SocialSupportSubjectService.update({ input, ctx })
+  return await SocialSupportSubjectService.update({ input })
 }
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).edit.structure
 
-export const updateSocialSupportSubject = createMutation({
+export const updateStructureSubject = createMutation({
   handler,
   inputValidation: updateSocialSupportSubjectSchema,
   securityCheck

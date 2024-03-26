@@ -5,9 +5,7 @@
     @submit.prevent="onSubmit"
   >
     <main class="fr-container content">
-      <DsfrBreadcrumb
-        :links="Breadcrumb.AppStructureSocialSupportSubjectAdd()"
-      />
+      <DsfrBreadcrumb :links="Breadcrumb.AppStructureSubjects()" />
 
       <PageTitle :title="title" />
 
@@ -118,7 +116,7 @@
     UpdateSocialSupportSubjectsInput
   } from '~/server/schema'
 
-  const title = RouteTitle.AppStructureSocialSupportSubjectAdd()
+  const title = RouteTitle.AppStructureSubjects()
 
   useHead({ title })
 
@@ -126,7 +124,7 @@
   const snackbar = useSnackbar()
 
   const { data, pending, error } =
-    await trpcClient.structure.getCreateSocialSupportSubjects.useQuery()
+    await trpcClient.structure.getSocialSupportSubjects.useQuery()
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)

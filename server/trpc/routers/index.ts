@@ -45,7 +45,6 @@ export type RouterOutput = inferRouterOutputs<AppRouter>
 export type ErrorOutput = TRPCClientError<AppRouter>
 
 export * from '~/server/trpc/routers/usersActivity'
-export * from '~/server/trpc/routers/admin'
 export * from '~/server/trpc/routers/housingHelpRequest'
 export * from '~/server/trpc/routers/notification'
 export * from '~/server/trpc/routers/beneficiary'

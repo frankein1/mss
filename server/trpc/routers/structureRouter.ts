@@ -1,42 +1,29 @@
 import { protectedProcedure, router } from '~/server/trpc'
-import {
-  findSocialSupportSubject,
-  getCreateSocialSupportSubjects,
-  getStructure,
-  makeInactiveSocialSupportSubject,
-  updateSocialSupportSubject,
-  updateSocialSupportSubjects,
-  updateStructureInfo,
-  getActiveSocialSupportSubjects,
-  getSocialSupportSubjects
-} from '~/server/route/structure'
+import { structureRoutes } from '~/server/route/structure'
 
 export const structureRouter = router({
   getStructure: protectedProcedure
-    .input(getStructure.inputValidation)
-    .query(getStructure.execute),
+    .input(structureRoutes.getStructure.inputValidation)
+    .query(structureRoutes.getStructure.execute),
   updateStructureInfo: protectedProcedure
-    .input(updateStructureInfo.inputValidation)
-    .mutation(updateStructureInfo.execute),
+    .input(structureRoutes.updateStructureInfo.inputValidation)
+    .mutation(structureRoutes.updateStructureInfo.execute),
   findSocialSupportSubject: protectedProcedure
-    .input(findSocialSupportSubject.inputValidation)
-    .query(findSocialSupportSubject.execute),
+    .input(structureRoutes.findSocialSupportSubject.inputValidation)
+    .query(structureRoutes.findSocialSupportSubject.execute),
   updateSocialSupportSubjects: protectedProcedure
-    .input(updateSocialSupportSubjects.inputValidation)
-    .mutation(updateSocialSupportSubjects.execute),
-  getCreateSocialSupportSubjects: protectedProcedure
-    .input(getCreateSocialSupportSubjects.inputValidation)
-    .query(getCreateSocialSupportSubjects.execute),
-  makeInactiveSocialSupportSubject: protectedProcedure
-    .input(makeInactiveSocialSupportSubject.inputValidation)
-    .mutation(makeInactiveSocialSupportSubject.execute),
-  updateSocialSupportSubject: protectedProcedure
-    .input(updateSocialSupportSubject.inputValidation)
-    .mutation(updateSocialSupportSubject.execute),
-  getActiveSocialSupportSubjects: protectedProcedure
-    .input(getActiveSocialSupportSubjects.inputValidation)
-    .query(getActiveSocialSupportSubjects.execute),
+    .input(structureRoutes.updateSocialSupportSubjects.inputValidation)
+    .mutation(structureRoutes.updateSocialSupportSubjects.execute),
   getSocialSupportSubjects: protectedProcedure
-    .input(getSocialSupportSubjects.inputValidation)
-    .query(getSocialSupportSubjects.execute)
+    .input(structureRoutes.getSocialSupportSubjects.inputValidation)
+    .query(structureRoutes.getSocialSupportSubjects.execute),
+  makeInactiveSocialSupportSubject: protectedProcedure
+    .input(structureRoutes.makeInactiveSocialSupportSubject.inputValidation)
+    .mutation(structureRoutes.makeInactiveSocialSupportSubject.execute),
+  updateSocialSupportSubject: protectedProcedure
+    .input(structureRoutes.updateStructureSubject.inputValidation)
+    .mutation(structureRoutes.updateStructureSubject.execute),
+  getActiveSocialSupportSubjects: protectedProcedure
+    .input(structureRoutes.getActiveSocialSupportSubjects.inputValidation)
+    .query(structureRoutes.getActiveSocialSupportSubjects.execute)
 })

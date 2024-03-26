@@ -29,8 +29,7 @@ export const RouteTitle = {
   [Route.AppAccount]: () => 'Mon compte',
   [Route.AppStructure]: () => 'Configurer votre structure',
   [Route.AppStructureEdit]: () => 'Modifier ma structure',
-  [Route.AppStructureSocialSupportSubjectAdd]: () =>
-    'Ajouter un accompagnement',
+  [Route.AppStructureSubjects]: () => 'Ajouter un accompagnement',
   [Route.AppBeneficiaries]: () => 'Bénéficiaires',
   [Route.AppBeneficiariesAdd]: () => 'Créer un·e bénéficiaire',
   [Route.AppBeneficiary]: (beneficiary: BeneficiaryNames | null) =>

@@ -1,3 +1,3 @@
-import type { AdminUsersOutput } from '~/server/trpc/routers'
+import { RouterOutput } from '~/server/trpc/routers'
 
-export type Users = AdminUsersOutput['users']
+export type AdminUsersOutput = RouterOutput['admin']['getUsers']['users']

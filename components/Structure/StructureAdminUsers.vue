@@ -1,13 +1,8 @@
 <template>
-  <div
-    class="table-container"
-    tabindex="0"
-  >
+  <div class="feature-section bg-color-white">
+    <h2 class="fr-h4">Informations administrateur</h2>
     <div class="fr-table fr-table--bordered">
       <table>
-        <caption>
-          Gérer les utilisateurs
-        </caption>
         <thead>
           <tr>
             <th scope="col">{{ userFieldLabels.lastName }}</th>
@@ -93,7 +88,7 @@
 
 <script lang="ts" setup>
   import { UserStatus } from '@prisma/client'
-  import type { UsersStructureType } from './types'
+  import type { StructureUsers } from './types'
   import { userFieldLabels } from '~/client/labels'
   import { nonAdminUserRoleKeys } from '~/client/options'
   import { RoutePath } from '~/utils/routing'
@@ -101,6 +96,6 @@
 
   defineProps<{
     structureId: string
-    users: UsersStructureType
+    users: StructureUsers
   }>()
 </script>

@@ -24,6 +24,7 @@
 
       <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
+        :edit-path="RoutePath.AppStructureSubjects()"
         @refresh="refresh"
       />
     </div>
@@ -32,8 +33,8 @@
 
 <script lang="ts" setup>
   import StructureInfoForm from '~/components/Structure/StructureInfoForm.vue'
-  import { EditCurrentUserStructureInfoInput } from '~/server/schema'
-  import { RouteTitle, Breadcrumb } from '~/utils/routing'
+  import { EditStructureInfoInput } from '~/server/schema'
+  import { RouteTitle, Breadcrumb, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
 
   const title = RouteTitle.AppStructure()
@@ -58,11 +59,11 @@
       title: 'Modifier les informations de ma structure',
       contentComponent: StructureInfoForm,
       contentComponentProps: { structure: data.value.structure },
-      contentComponentEvents: { updateStructureInfo: onUpdateStructureInfo }
+      contentComponentEvents: { validate: onUpdateStructureInfo }
     })
   }
 
-  function onUpdateStructureInfo(values: EditCurrentUserStructureInfoInput) {
+  function onUpdateStructureInfo(values: EditStructureInfoInput) {
     useTrpcMutation({
       mutation: () => trpcClient.structure.updateStructureInfo.mutate(values),
       isSubmitting,

@@ -69,7 +69,7 @@ function prepareEmailFilters(filters: EmailAdminFilterInput) {
   return formattedFilters
 }
 
-export const getAdminEmailsQuery = createQuery({
+export const getEmails = createQuery({
   inputValidation: adminGetEmailsSchema,
   adminHandler
 })

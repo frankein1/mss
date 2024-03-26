@@ -52,14 +52,14 @@
 </template>
 
 <script setup lang="ts">
-  import { Users } from './types'
+  import { AdminUsersOutput } from './types'
   import { userRoleKeys } from '~/client/options'
   import type { UserAdminSort } from '~/types/table'
   import { formatUserDisplayName } from '~/utils/user'
   import { RoutePath } from '~/utils/routing'
 
   const props = defineProps<{
-    users: Users
+    users: AdminUsersOutput
     pending: boolean
     sort: UserAdminSort | undefined
   }>()

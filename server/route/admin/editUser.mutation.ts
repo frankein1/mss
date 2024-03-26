@@ -20,7 +20,7 @@ const adminHandler = async ({
   return updatedUser
 }
 
-export const editAdminUserMutation = createMutation({
+export const editUser = createMutation({
   inputValidation: adminEditUserSchema,
   adminHandler
 })

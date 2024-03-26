@@ -9,12 +9,12 @@ import { SocialSupportSubjectService } from '~/server/services'
 
 const handler = async ({
   input,
-  ctx
+  ctx: _ctx
 }: {
   input: IdInput
   ctx: ProtectedAppContext
 }) => {
-  return await SocialSupportSubjectService.makeInactive({ input, ctx })
+  return await SocialSupportSubjectService.makeInactive({ input })
 }
 
 const securityCheck = (ctx: SecurityRuleContext) =>

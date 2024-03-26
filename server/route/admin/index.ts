@@ -1,11 +1,35 @@
-export * from './edit-structure.mutation'
-export * from './edit-user.mutation'
-export * from './get-structures.query'
-export * from './get-structure.query'
-export * from './get-users.query'
-export * from './get-user.query'
-export * from './get-overview.query'
-export * from './create-structure.mutation'
-export * from './create-user.mutation'
-export * from './get-emails.query'
-export * from './send-email.query'
+import { createStructure } from './createStructure.mutation'
+import { createUser } from './createUser.mutation'
+import { editUser } from './editUser.mutation'
+import { getEmails } from './getEmails.query'
+import { getOverview } from './getOverview.query'
+import { getStructure } from './getStructure.query'
+import { getStructures } from './getStructures.query'
+import { getUser } from './getUser.query'
+import { getUsers } from './getUsers.query'
+import { sendEmail } from './sendEmail.query'
+import { updateStructureInfo } from './updateStructureInfo.mutation'
+import { updateSocialSupportSubjects } from './updateSocialSupportSubjects.mutation'
+import { getSocialSupportSubjects } from './getSocialSupportSubjects.query'
+import { makeInactiveSocialSupportSubject } from './makeInactiveSocialSupportSubject.mutation'
+import { updateStructureSubject } from './updateSocialSupportSubject.mutation'
+import { initSubjects } from './initSubjects.mutation'
+
+export const adminRoutes = {
+  createStructure,
+  createUser,
+  editUser,
+  getEmails,
+  getOverview,
+  getStructure,
+  getStructures,
+  getUser,
+  getUsers,
+  sendEmail,
+  updateStructureInfo,
+  updateSocialSupportSubjects,
+  getSocialSupportSubjects,
+  makeInactiveSocialSupportSubject,
+  updateStructureSubject,
+  initSubjects
+}

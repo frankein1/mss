@@ -8,44 +8,16 @@ import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
-import { StructureRepo } from '~/server/database'
+import { StructureService } from '~/server/services'
 
-const handler = async ({
+const handler = ({
   input,
-  ctx: { structure }
+  ctx
 }: {
   input: UpdateSocialSupportSubjectsInput
   ctx: ProtectedAppContext
 }) => {
-  const update = input.selected.map(sss => ({
-    where: {
-      id: sss.id
-    },
-    data: {
-      inactive: !sss.active
-    }
-  }))
-  const create = input.customs.map(sss => ({
-    inactive: false,
-    name: sss.name
-  }))
-
-  const res = await StructureRepo.prisma.update({
-    where: { id: structure.id },
-    data: {
-      socialSupportSubjects: {
-        update,
-        createMany: {
-          data: create
-        }
-      }
-    },
-    select: {
-      id: true
-    }
-  })
-
-  return res
+  return StructureService.updateSocialSupportSubjects({ input, ctx })
 }
 
 const securityCheck = (ctx: SecurityRuleContext) =>

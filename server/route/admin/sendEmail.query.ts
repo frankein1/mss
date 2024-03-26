@@ -28,7 +28,7 @@ const adminHandler = async ({
   return { email }
 }
 
-export const sendEmailQuery = createQuery({
+export const sendEmail = createQuery({
   inputValidation: adminSendEmailSchema,
   adminHandler
 })
