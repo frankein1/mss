@@ -9,7 +9,6 @@ import {
   BeneficiaryStatus,
   BeneficiaryTitle,
   Gender,
-  IncomeSource,
   RelativeRelationship
 } from '@prisma/client'
 import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
@@ -107,19 +106,19 @@ export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
 })
 
 export const incomeSourceKeys = buildKeys({
-  [IncomeSource.Aah]: 'AAH',
-  [IncomeSource.Apl]: 'APL',
-  [IncomeSource.Aspa]: 'ASPA',
-  [IncomeSource.IndemnitesJournalieres]: 'Indemnités journalières',
-  [IncomeSource.IndemnitesPoleEmploi]: 'Indemnités Pôle Emploi : ARE/ASS',
-  [IncomeSource.PensionInvalidite]: "Pension d'invalidité",
-  [IncomeSource.PrestationsFamiliales]: 'Prestations familiales',
-  [IncomeSource.PrimeActivite]: "Prime d'activité",
-  [IncomeSource.Retraite]: 'Retraite',
-  [IncomeSource.Rsa]: 'RSA',
-  [IncomeSource.Salaire]: 'Salaire',
-  [IncomeSource.Autre]: 'Autre',
-  [IncomeSource.PensionAlimentaire]: 'Pension alimentaire'
+  Aah: 'AAH',
+  Apl: 'APL',
+  Aspa: 'ASPA',
+  IndemnitesJournalieres: 'Indemnités journalières',
+  IndemnitesPoleEmploi: 'Indemnités Pôle Emploi : ARE/ASS',
+  PensionInvalidite: "Pension d'invalidité",
+  PrestationsFamiliales: 'Prestations familiales',
+  PrimeActivite: "Prime d'activité",
+  Retraite: 'Retraite',
+  Rsa: 'RSA',
+  Salaire: 'Salaire',
+  Autre: 'Autre',
+  PensionAlimentaire: 'Pension alimentaire'
 })
 
 export const beneficiaryProtectionMeasureKeys = buildKeys({

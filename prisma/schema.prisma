@@ -815,35 +815,6 @@ enum BeneficiarySocioProfessionalCategory {
   Other
 }
 
-enum IncomeSource {
-  //RSA
-  Rsa
-  //Prime d'activité
-  PrimeActivite
-  //Prestations familiales
-  PrestationsFamiliales
-  //Indemnités Pôle Emploi
-  IndemnitesPoleEmploi
-  //Salaire
-  Salaire
-  //Retraite
-  Retraite
-  //ASPA
-  Aspa
-  //Pension d'invalidité
-  PensionInvalidite
-  //Indemnités journalières
-  IndemnitesJournalieres
-  //AAH
-  Aah
-  //APL
-  Apl
-  //Autre
-  Autre
-  //Pension alimentaire
-  PensionAlimentaire
-}
-
 enum BeneficiaryProtectionMeasure {
   //Tutelle
   Tutelle
@@ -1312,24 +1283,16 @@ model Beneficiary {
   insurance                   String?
 
   // Occupation
-  socioProfessionalCategory     BeneficiarySocioProfessionalCategory? @map("socio_professional_category")
-  occupation                    String?
-  employer                      String?
-  employerSiret                 String?                               @map("employer_siret")
-  mainIncomeSource              IncomeSource[]                        @map("main_income_source")
-  mainIncomeAmount              Decimal?                              @map("main_income_amount")
-  partnerMainIncomeSource       IncomeSource[]                        @map("partner_main_income_source")
-  partnerMainIncomeAmount       Decimal?                              @map("partner_main_income_amount")
-  majorChildrenMainIncomeSource IncomeSource[]                        @map("major_children_main_income_source")
-  majorChildrenMainIncomeAmount Decimal?                              @map("major_children_main_income_amount")
-  otherMembersMainIncomeSource  IncomeSource[]                        @map("other_members_main_income_source")
-  otherMembersMainIncomeAmount  Decimal?                              @map("other_members_main_income_amount")
-  unemploymentNumber            String?                               @map("unemployment_number")
-  pensionOrganisations          BeneficiaryPensionOrganisation[]      @map("pension_organisations")
-  otherPensionOrganisations     String?                               @map("other_pension_organisations")
-  cafNumber                     String?                               @map("caf_number")
-  bank                          String?
-  funeralContract               String?                               @map("funeral_contract")
+  socioProfessionalCategory BeneficiarySocioProfessionalCategory? @map("socio_professional_category")
+  occupation                String?
+  employer                  String?
+  employerSiret             String?                               @map("employer_siret")
+  unemploymentNumber        String?                               @map("unemployment_number")
+  pensionOrganisations      BeneficiaryPensionOrganisation[]      @map("pension_organisations")
+  otherPensionOrganisations String?                               @map("other_pension_organisations")
+  cafNumber                 String?                               @map("caf_number")
+  bank                      String?
+  funeralContract           String?                               @map("funeral_contract")
 
   // External Structures
   protectionMeasure    BeneficiaryProtectionMeasure? @map("protection_measure")
