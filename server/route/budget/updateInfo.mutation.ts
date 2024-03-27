@@ -21,7 +21,7 @@ export const updateInfo = createMutation({
   handler,
   auditLog: {
     key: 'budget.updateInfo',
-    target: 'Beneficiary',
+    target: 'Budget',
     targetId: ({ input }) => {
       return input.id
     },

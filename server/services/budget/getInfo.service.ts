@@ -1,7 +1,7 @@
 import { SecurityRuleContext } from '~/server/security'
 import { BudgetRepo } from '~/server/database/repository'
 
-export async function get({
+export async function getInfo({
   ctx,
   id
 }: {
