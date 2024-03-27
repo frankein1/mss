@@ -1,5 +1,6 @@
 export * from './createRoute'
 export * from './beneficiary'
+export * from './budget'
 export * from './admin'
 export * from './comment'
 export * from './config'

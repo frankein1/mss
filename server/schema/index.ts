@@ -18,6 +18,7 @@ export * from './relative.schema'
 export * from './notification.schema'
 export * from './document.schema'
 export * from './comment.schema'
+export * from './budget.schema'
 
 const customErrorMap: z.ZodErrorMap = (issue, ctx) => {
   switch (issue.code) {
