@@ -20,7 +20,6 @@ import {
   beneficiaryMobilityKeys,
   beneficiarySocioProfessionalCategoryKeys,
   beneficiaryStatusKeys,
-  incomeSourceKeys,
   pensionOrganisationKeys,
   relativeRelationshipKeys,
   ministereCategorieKeys,
@@ -68,12 +67,6 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'occupation',
     'employer',
     'employerSiret',
-    'mainIncomeSource',
-    'mainIncomeAmount',
-    'partnerMainIncomeSource',
-    'partnerMainIncomeAmount',
-    'majorChildrenMainIncomeSource',
-    'majorChildrenMainIncomeAmount',
     'unemploymentNumber',
     'pensionOrganisations',
     'otherPensionOrganisations',
@@ -187,27 +180,6 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
     occupation: occupationIncome?.occupation || '',
     employer: occupationIncome?.employer || '',
     employerSiret: occupationIncome?.employerSiret || '',
-    mainIncomeSource: occupationIncome?.mainIncomeSource
-      ? occupationIncome?.mainIncomeSource
-          .map(incomeSource => incomeSourceKeys.byKey[incomeSource])
-          .join(', ')
-      : '',
-    mainIncomeAmount: occupationIncome?.mainIncomeAmount?.toString() || '',
-    partnerMainIncomeSource: occupationIncome?.partnerMainIncomeSource
-      ? occupationIncome?.partnerMainIncomeSource
-          .map(incomeSource => incomeSourceKeys.byKey[incomeSource])
-          .join(', ')
-      : '',
-    partnerMainIncomeAmount:
-      occupationIncome?.partnerMainIncomeAmount?.toString() || '',
-    majorChildrenMainIncomeSource:
-      occupationIncome?.majorChildrenMainIncomeSource
-        ? occupationIncome?.majorChildrenMainIncomeSource
-            .map(incomeSource => incomeSourceKeys.byKey[incomeSource])
-            .join(', ')
-        : '',
-    majorChildrenMainIncomeAmount:
-      occupationIncome?.majorChildrenMainIncomeAmount?.toString() || '',
     unemploymentNumber: occupationIncome?.unemploymentNumber || '',
     pensionOrganisations: occupationIncome?.pensionOrganisations
       ? occupationIncome?.pensionOrganisations

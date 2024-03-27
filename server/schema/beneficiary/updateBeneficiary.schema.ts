@@ -14,7 +14,6 @@ import {
   BeneficiaryStatus,
   BeneficiaryTitle,
   Gender,
-  IncomeSource,
   Nationality
 } from '@prisma/client'
 import { z } from 'zod'
@@ -34,7 +33,6 @@ import {
   phoneConstraint,
   siretConstraint,
   numeroPegaseContraint,
-  amountNumber,
   dateOrEmpty,
   openText
 } from '../helpers.schema'
@@ -150,18 +148,6 @@ export const updateBeneficiaryOccupationSchema = z.object({
   occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   employer: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   employerSiret: stringOrEmpty(siretConstraint),
-  mainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
-  mainIncomeAmount: amountNumber.nullish(),
-  partnerMainIncomeSource: z.array(z.nativeEnum(IncomeSource, errorMessages)),
-  partnerMainIncomeAmount: amountNumber.nullish(),
-  majorChildrenMainIncomeSource: z.array(
-    z.nativeEnum(IncomeSource, errorMessages)
-  ),
-  majorChildrenMainIncomeAmount: amountNumber.nullish(),
-  otherMembersMainIncomeSource: z.array(
-    z.nativeEnum(IncomeSource, errorMessages)
-  ),
-  otherMembersMainIncomeAmount: amountNumber.nullish(),
   unemploymentNumber: unemploymentNumberConstraint.nullish(),
   pensionOrganisations: z.array(
     z.nativeEnum(BeneficiaryPensionOrganisation, errorMessages)

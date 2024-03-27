@@ -23,12 +23,7 @@
       v-else-if="bindedValues && permissions"
       class="fr-p-3v"
     >
-      <BeneficiaryFormOccupationIncome
-        :permissions="permissions"
-        :family-situation="familySituation"
-        :major-children="majorChildren"
-        :tax-household-members="taxHouseholdMembers"
-      />
+      <BeneficiaryFormOccupationIncome />
     </div>
   </BeneficiaryEditFormLayout>
 </template>
@@ -39,7 +34,6 @@
     UpdateBeneficiaryOccupationInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { prismaDecimalToNumber } from '~/utils/prisma'
   import { RoutePath, Route } from '~/utils/routing'
 
   definePageMeta({
@@ -73,24 +67,6 @@
       id,
       structureId,
       ...occupationIncome,
-      mainIncomeSource: occupationIncome?.mainIncomeSource || [],
-      mainIncomeAmount: prismaDecimalToNumber(
-        occupationIncome?.mainIncomeAmount
-      ),
-      partnerMainIncomeSource: occupationIncome?.partnerMainIncomeSource || [],
-      partnerMainIncomeAmount: prismaDecimalToNumber(
-        occupationIncome?.partnerMainIncomeAmount
-      ),
-      majorChildrenMainIncomeSource:
-        occupationIncome?.majorChildrenMainIncomeSource || [],
-      majorChildrenMainIncomeAmount: prismaDecimalToNumber(
-        occupationIncome?.majorChildrenMainIncomeAmount
-      ),
-      otherMembersMainIncomeSource:
-        occupationIncome?.otherMembersMainIncomeSource || [],
-      otherMembersMainIncomeAmount: prismaDecimalToNumber(
-        occupationIncome?.otherMembersMainIncomeAmount
-      ),
       pensionOrganisations: occupationIncome?.pensionOrganisations || []
     }
   })
@@ -112,17 +88,6 @@
           birthDate: data.value.beneficiary.general.birthDate
         }
       : null
-  )
-
-  const familySituation = computed(
-    () => data.value?.beneficiary.taxHouseholds?.familySituation
-  )
-  const majorChildren = computed(
-    () => data.value?.beneficiary.taxHouseholds?.majorChildren
-  )
-
-  const taxHouseholdMembers = computed(
-    () => data.value?.beneficiary.taxHouseholds?.taxHouseholds || []
   )
 
   function onSaveBeneficiary(
