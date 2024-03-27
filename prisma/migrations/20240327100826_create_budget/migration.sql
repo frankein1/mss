@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "BudgetIncomeType" AS ENUM ('Beneficiary', 'BeneficiaryRelative');
+CREATE TYPE "BudgetIncomeType" AS ENUM ('Beneficiary', 'HouseholdMember');
 
 -- CreateTable
 CREATE TABLE "budget_income" (

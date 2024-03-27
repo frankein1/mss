@@ -1251,7 +1251,7 @@ enum BeneficiaryMinistereDepartementServiceAc {
 
 enum BudgetIncomeType {
   Beneficiary
-  BeneficiaryRelative
+  HouseholdMember
 }
 
 model BudgetIncome {
