@@ -1,4 +1,4 @@
--- This is an empty migration.INSERT INTO budget (id, beneficiary_id) SELECT gen_random_uuid(), id FROM beneficiary;
+INSERT INTO budget (id, beneficiary_id) SELECT gen_random_uuid(), id FROM beneficiary;
 
 INSERT INTO budget_expenses (id, budget_id)
     SELECT gen_random_uuid(), id FROM budget;
