@@ -1251,7 +1251,7 @@ enum BeneficiaryMinistereDepartementServiceAc {
 
 enum BudgetIncomeType {
   Beneficiary
-  BeneficiaryRelative
+  HouseholdMember
 }
 
 model BudgetIncome {
@@ -1330,14 +1330,14 @@ model BudgetExpenses {
 model Budget {
   id String @id @default(uuid()) @db.Uuid
 
-  legacyMainIncomeSource              IncomeSource[] @map("legacy_main_income_source")
-  legacyMainIncomeAmount              Decimal?       @map("legacy_main_income_amount")
-  legacyPartnerMainIncomeSource       IncomeSource[] @map("legacy_partner_main_income_source")
-  legacyPartnerMainIncomeAmount       Decimal?       @map("legacy_partner_main_income_amount")
-  legacyMajorChildrenMainIncomeSource IncomeSource[] @map("legacy_major_children_main_income_source")
-  legacyMajorChildrenMainIncomeAmount Decimal?       @map("legacy_major_children_main_income_amount")
-  legacyOtherMembersMainIncomeSource  IncomeSource[] @map("legacy_other_members_main_income_source")
-  legacyOtherMembersMainIncomeAmount  Decimal?       @map("legacy_other_members_main_income_amount")
+  legacyMainIncomeSource              String?  @map("legacy_main_income_source")
+  legacyMainIncomeAmount              Decimal? @map("legacy_main_income_amount")
+  legacyPartnerMainIncomeSource       String?  @map("legacy_partner_main_income_source")
+  legacyPartnerMainIncomeAmount       Decimal? @map("legacy_partner_main_income_amount")
+  legacyMajorChildrenMainIncomeSource String?  @map("legacy_major_children_main_income_source")
+  legacyMajorChildrenMainIncomeAmount Decimal? @map("legacy_major_children_main_income_amount")
+  legacyOtherMembersMainIncomeSource  String?  @map("legacy_other_members_main_income_source")
+  legacyOtherMembersMainIncomeAmount  Decimal? @map("legacy_other_members_main_income_amount")
 
   remainingAfterExpenses Decimal? @map("remaining_after_expenses")
   savings                Decimal?

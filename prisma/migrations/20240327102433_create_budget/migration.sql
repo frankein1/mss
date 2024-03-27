@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "BudgetIncomeType" AS ENUM ('Beneficiary', 'BeneficiaryRelative');
+CREATE TYPE "BudgetIncomeType" AS ENUM ('Beneficiary', 'HouseholdMember');
 
 -- CreateTable
 CREATE TABLE "budget_income" (
@@ -56,13 +56,13 @@ CREATE TABLE "budget_expenses" (
 -- CreateTable
 CREATE TABLE "budget" (
     "id" UUID NOT NULL,
-    "legacy_main_income_source" "IncomeSource"[],
+    "legacy_main_income_source" TEXT,
     "legacy_main_income_amount" DECIMAL(65,30),
-    "legacy_partner_main_income_source" "IncomeSource"[],
+    "legacy_partner_main_income_source" TEXT,
     "legacy_partner_main_income_amount" DECIMAL(65,30),
-    "legacy_major_children_main_income_source" "IncomeSource"[],
+    "legacy_major_children_main_income_source" TEXT,
     "legacy_major_children_main_income_amount" DECIMAL(65,30),
-    "legacy_other_members_main_income_source" "IncomeSource"[],
+    "legacy_other_members_main_income_source" TEXT,
     "legacy_other_members_main_income_amount" DECIMAL(65,30),
     "remaining_after_expenses" DECIMAL(65,30),
     "savings" DECIMAL(65,30),
