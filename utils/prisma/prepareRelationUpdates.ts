@@ -1,6 +1,10 @@
-export function prepareRelationUpdates<T extends { id: string }>(
-  updatedRelations: T[],
-  previousRelations: T[],
+type PersistentType = {
+  id: string
+}
+
+export function prepareRelationUpdates(
+  updatedRelations: PersistentType[],
+  previousRelations: PersistentType[],
   isUpdatable: boolean = true
 ) {
   const createRelations = updatedRelations.filter(

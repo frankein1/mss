@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { BudgetIncomeType, Prisma } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
 import { SecurityRuleGrantee } from '~/server/security'
 import { UpdateBeneficiaryTaxHouseholdInput } from '~/server/schema'
@@ -9,6 +9,7 @@ function getBeneficiaryWithTaxHousehold(user: SecurityRuleGrantee, id: string) {
     where: { id },
     select: {
       id: true,
+      budget: { select: { id: true } },
       structureId: true,
       relatives: {
         where: { hosted: true }
@@ -41,13 +42,20 @@ type UpdateBeneficiaryTaxHouseholdInputTaxHouseholds = Exclude<
 
 function prepareTaxHouseholdsUpdates(
   taxHouseholds: UpdateBeneficiaryTaxHouseholdInputTaxHouseholds,
-  previousTaxHouseholds: BeneficiaryTaxHouseholds
+  previousTaxHouseholds: BeneficiaryTaxHouseholds,
+  budgetId: string
 ) {
   const newTaxHouseholds = taxHouseholds
     .filter(filterEmptyTaxHousehold)
     .map(e => {
       return {
         hosted: true,
+        income: {
+          create: {
+            budgetId,
+            type: BudgetIncomeType.HouseholdMember
+          }
+        },
         ...e
       }
     })
@@ -61,14 +69,17 @@ export async function updateTaxHousehold(
 ) {
   const { id: beneficiaryId, taxHouseholds, ...taxHouseholdDatas } = input
 
-  const { relatives: previousTaxHouseholds } =
+  const { relatives: previousTaxHouseholds, budget } =
     await getBeneficiaryWithTaxHousehold(user, beneficiaryId)
+
+  const budgetId = budget?.id || ''
 
   const data = {
     ...taxHouseholdDatas,
     relatives: prepareTaxHouseholdsUpdates(
       taxHouseholds || [],
-      previousTaxHouseholds
+      previousTaxHouseholds,
+      budgetId
     )
   }
 
