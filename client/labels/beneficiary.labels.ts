@@ -57,8 +57,6 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   occupation: 'Profession(s)',
   employer: 'Employeur',
   employerSiret: "SIRET de l'employeur",
-  mainIncomeSource: 'Natures des ressources',
-  mainIncomeAmount: 'Montant des ressources',
   unemploymentNumber: 'N° Pôle Emploi',
   pensionOrganisations: 'Organismes de retraite',
   cafNumber: 'N° CAF',
@@ -71,14 +69,6 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   orientationStructure: "Organisme d'orientation",
   serviceProviders: 'Prestataires',
   involvedPartners: 'Partenaires intervenants',
-  partnerMainIncomeSource: 'Nature des ressources du conjoint',
-  partnerMainIncomeAmount: 'Montant des ressources du conjoint',
-  majorChildrenMainIncomeSource: 'Nature des ressources des enfants majeurs',
-  majorChildrenMainIncomeAmount: 'Montant des ressources des enfants majeurs',
-  otherMembersMainIncomeSource:
-    'Nature des ressources des autres membres du foyer',
-  otherMembersMainIncomeAmount:
-    'Montant des ressources des autres membres du foyer',
   deathDate: 'Date de décès',
   ministereCategorie: 'Catégorie',
   ministereDepartementServiceAc:
