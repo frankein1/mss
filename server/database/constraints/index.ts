@@ -1,4 +1,7 @@
 export * from './BeneficiaryConstraints'
+export * from './BudgetConstraints'
+export * from './BudgetIncomeConstraints'
+export * from './BudgetExpensesConstraints'
 export * from './BeneficiaryRelativeConstraints'
 export * from './DocumentConstraints'
 export * from './FollowupConstraint'

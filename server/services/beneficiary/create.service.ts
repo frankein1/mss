@@ -1,3 +1,4 @@
+import { BudgetIncomeType } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
 import { CreateBeneficiaryInput } from '~/server/schema'
 import { generateFileNumber } from '~/utils/generateFileNumber'
@@ -19,6 +20,18 @@ export async function create(params: CreateParams) {
     fileNumber,
     referents: {
       connect: referents.map(referent => ({ id: referent }))
+    },
+    budget: {
+      create: {
+        expenses: {
+          create: {}
+        },
+        incomes: {
+          create: {
+            type: BudgetIncomeType.Beneficiary
+          }
+        }
+      }
     },
     createdById: ctx.user.id,
     ...restOfInput

@@ -1610,6 +1610,9 @@ enum UserActivityType {
 enum UserActivityObject {
   Comment
   Beneficiary
+  Budget
+  BudgetExpenses
+  BudgetIncome
   HelpRequest
   Followup
   Structure

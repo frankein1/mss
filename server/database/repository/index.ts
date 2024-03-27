@@ -1,4 +1,7 @@
 export * from './BeneficiaryRepository'
+export * from './BudgetRepository'
+export * from './BudgetIncomeRepository'
+export * from './BudgetExpensesRepository'
 export * from './BeneficiaryRelativeRepository'
 export * from './FollowupRepository'
 export * from './SocialSupportSubjectRepository'
