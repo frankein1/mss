@@ -1,12 +1,4 @@
-import type { BeneficiaryRelative } from '@prisma/client'
-import type { FieldLabels } from '~/types/fieldLabels'
-
-type RelativeFieldLabels = Omit<
-  BeneficiaryRelative,
-  'createdById' | 'created' | 'hosted' | 'beneficiaryId' | 'updated'
->
-
-const relativeFieldLabels: FieldLabels<RelativeFieldLabels> = {
+const relativeFieldLabels = {
   id: 'Identifiant',
   lastName: 'Nom',
   firstName: 'Prénom',
@@ -16,8 +8,7 @@ const relativeFieldLabels: FieldLabels<RelativeFieldLabels> = {
   relationship: 'Statut',
   caregiver: 'Aidant familial',
   additionalInformation: 'Informations complémentaires',
-  city: 'Ville',
-  linkedBeneficiaryId: 'Fiche bénéficiaire liée'
+  city: 'Ville'
 }
 
 export { relativeFieldLabels }
