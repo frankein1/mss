@@ -38,13 +38,15 @@ export const RouteTitle = {
     beneficiary
       ? `Imprimer la fiche de ${formatBeneficiaryDisplayName(beneficiary)}`
       : '',
+  [Route.AppBeneficiaryBudgetInfo]: () =>
+    'Modifier les informations générales du budget',
   [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${formatBeneficiaryDisplayName(beneficiary)}` : '',
   [Route.AppBeneficiaryEditInfo]: () => 'Informations bénéficiaire',
   [Route.AppBeneficiaryEditTaxHousehold]: () => 'Foyer fiscal',
   [Route.AppBeneficiaryEditEntourage]: () => 'Entourage',
   [Route.AppBeneficiaryEditHealth]: () => 'Santé',
-  [Route.AppBeneficiaryEditOccupation]: () => 'Activité/Revenu',
+  [Route.AppBeneficiaryEditOccupation]: () => 'Activité',
   [Route.AppBeneficiaryEditExternalOrganisations]: () =>
     'Structures extérieures',
   [Route.AppBeneficiaryFollowupAdd]: (beneficiary: BeneficiaryNames | null) =>

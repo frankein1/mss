@@ -17,7 +17,7 @@
         </p>
 
         <img
-          src="~/assets/icons/inclusion.svg"
+          src="/pictograms/inclusion.svg"
           class="img"
           alt=""
         />
