@@ -10,7 +10,20 @@
       </NuxtLink>
     </div>
 
-    <div class="bgi__content">
+    <AtomLoader
+      v-if="pending"
+      class="fr-mx-auto"
+    />
+    <AtomAlert
+      v-else-if="error"
+      :alert-type="AlertType.Error"
+      :message="`${error}`"
+    />
+
+    <div
+      v-else
+      class="bgi__content"
+    >
       <div class="bgi__content__item">
         <div class="item-icon">
           <span
@@ -19,8 +32,10 @@
           ></span>
         </div>
         <div>
-          <div class="fr-text--lg">Reste à vivre</div>
-          <div class="fr-h6 fr-m-0 fr-m-0 item__amount">-</div>
+          <div class="fr-text--lg fr-m-0">Reste à vivre</div>
+          <div class="fr-h6 fr-m-0 fr-m-0 item__amount">
+            {{ data?.remainingAfterExpenses || '-' }}
+          </div>
         </div>
       </div>
 
@@ -33,8 +48,10 @@
           alt=""
         />
         <div>
-          <div class="fr-text--lg">Epargne</div>
-          <div class="fr-h6 fr-m-0 item__amount">-</div>
+          <div class="fr-text--lg fr-m-0">Epargne</div>
+          <div class="fr-h6 fr-m-0 item__amount">
+            {{ data?.savings || '-' }}
+          </div>
         </div>
       </div>
 
@@ -46,8 +63,10 @@
           aria-hidden="true"
         ></span>
         <div>
-          <div class="fr-text--lg">Découvert</div>
-          <div class="fr-h6 fr-m-0 item__amount">-</div>
+          <div class="fr-text--lg fr-m-0">Découvert</div>
+          <div class="fr-h6 fr-m-0 item__amount">
+            {{ data?.overdraft || '-' }}
+          </div>
         </div>
       </div>
 
@@ -59,8 +78,10 @@
           aria-hidden="true"
         ></span>
         <div>
-          <div class="fr-text--lg">Quotient familial</div>
-          <div class="fr-h6 fr-m-0 item__amount">-</div>
+          <div class="fr-text--lg fr-m-0">Quotient familial</div>
+          <div class="fr-h6 fr-m-0 item__amount">
+            {{ data?.familyQuotient || '-' }}
+          </div>
         </div>
       </div>
     </div>
@@ -69,11 +90,18 @@
 
 <script setup lang="ts">
   import { RoutePath } from '~/utils/routing'
+  import { AlertType } from '~/utils/constants/alert'
 
-  defineProps<{
+  const props = defineProps<{
     beneficiaryId: string
-    // permissions: BeneficiaryPermissions | undefined
+    budgetId: string
   }>()
+
+  const trpcClient = useTrpcClient()
+
+  const { data, pending, error } = await trpcClient.budget.getInfo.useQuery({
+    id: props.budgetId
+  })
 </script>
 
 <style scoped lang="scss">
