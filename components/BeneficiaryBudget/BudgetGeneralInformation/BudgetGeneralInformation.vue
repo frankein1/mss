@@ -2,12 +2,12 @@
   <div class="feature-section bg-color-white">
     <div class="bgi__header">
       <h3 class="fr-h4 fr-m-0">Infos générales</h3>
-      <button
+      <NuxtLink
+        :to="RoutePath.AppBeneficiaryBudgetInfo(beneficiaryId)"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-edit-line"
-        title="Modifier"
       >
         Modifier
-      </button>
+      </NuxtLink>
     </div>
 
     <div class="bgi__content">
@@ -66,6 +66,15 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+  import { RoutePath } from '~/utils/routing'
+
+  defineProps<{
+    beneficiaryId: string
+    // permissions: BeneficiaryPermissions | undefined
+  }>()
+</script>
 
 <style scoped lang="scss">
   .bgi__header {

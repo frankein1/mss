@@ -75,11 +75,7 @@
         title="Budget"
         icon="fr-icon-money-euro-circle-line"
       >
-        <BeneficiaryBudget
-          v-if="permissions"
-          :beneficiary-id="beneficiaryId"
-          :beneficiary-permissions="permissions"
-        />
+        <BeneficiaryBudget :beneficiary-id="beneficiaryId" />
       </AtomTab>
     </AtomTabs>
   </PageContainer>

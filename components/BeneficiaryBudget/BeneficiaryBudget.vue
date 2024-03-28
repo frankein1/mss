@@ -8,10 +8,14 @@
     <h2 class="fr-m-0">Budget mensuel du foyer fiscal</h2>
   </div>
 
-  <BudgetGeneralInformation />
+  <BudgetGeneralInformation :beneficiary-id="beneficiaryId" />
 </template>
 
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  defineProps<{
+    beneficiaryId: string
+  }>()
+</script>
 
 <style scoped>
   .beneficiary-budget--title {
