@@ -3,7 +3,7 @@
     <div class="bgi__header">
       <h3 class="fr-h4 fr-m-0">Infos générales</h3>
       <NuxtLink
-        :to="RoutePath.AppBeneficiaryBudgetInfo(beneficiaryId)"
+        :to="RoutePath.AppBeneficiaryBudgetInfo(beneficiaryId, budgetId)"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-edit-line"
       >
         Modifier
@@ -17,7 +17,7 @@
     <AtomAlert
       v-else-if="error"
       :alert-type="AlertType.Error"
-      :message="`${error}`"
+      message="Les informations générales du budget n'ont pas pu être chargées."
     />
 
     <div
