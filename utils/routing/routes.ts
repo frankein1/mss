@@ -181,7 +181,7 @@ export const RoutePath = {
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
   [Route.AppBeneficiaryBudgetInfo]: (beneficiaryId: string) =>
-    `${BeneficiaryBudgetRoute(beneficiaryId)}/infos`,
+    `${BeneficiaryBudgetRoute(beneficiaryId)}/info`,
   [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
     BeneficiaryEditRoute(beneficiaryId),
   [Route.AppBeneficiaryEditInfo]: (
