@@ -13,6 +13,12 @@
         aria-hidden="true"
       ></span>
     </div>
+    <AtomPictogram
+      v-else-if="pictogramPath"
+      :path="pictogramPath"
+      class="fr-mr-1w"
+    />
+
     <div class="pagetitle__titles">
       <h1 class="pagetitle__title fr-mb-0">{{ title }}</h1>
       <h2
@@ -44,6 +50,7 @@
       icon?: string
       iconColorClass?: string
       iconBackgroundClass?: string
+      pictogramPath?: string
       subtitle?: string
       subtitlePictoPath?: string
     }>(),
@@ -52,6 +59,7 @@
       icon: '',
       iconColorClass: '',
       iconBackgroundClass: '',
+      pictogramPath: '',
       subtitle: '',
       subtitlePictoPath: ''
     }

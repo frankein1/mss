@@ -1,6 +1,6 @@
 <template>
   <BeneficiaryInfoSection
-    title="Activité/Revenu"
+    title="Activité"
     :edit-link="editLink"
   >
     <div class="fr-container">

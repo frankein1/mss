@@ -70,6 +70,17 @@
           :beneficiary-permissions="permissions"
         />
       </AtomTab>
+      <AtomTab
+        :tab-id="BeneficiaryTab.Budget"
+        title="Budget"
+        icon="fr-icon-money-euro-circle-line"
+      >
+        <BeneficiaryBudget
+          v-if="permissions"
+          :beneficiary-id="beneficiaryId"
+          :beneficiary-permissions="permissions"
+        />
+      </AtomTab>
     </AtomTabs>
   </PageContainer>
 </template>
