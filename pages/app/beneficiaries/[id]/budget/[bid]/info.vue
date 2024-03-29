@@ -11,13 +11,14 @@
     message="Le bénéficiaire n'a pas pu être chargé."
   />
 
-  <div v-else-if="beneficiary">
-    <form
-      ref="form"
-      novalidate
-      @submit.prevent="onSubmit"
-    >
-      <main class="fr-container content">
+  <form
+    v-else-if="beneficiary"
+    ref="form"
+    novalidate
+    @submit.prevent="onSubmit"
+  >
+    <main class="content">
+      <div class="fr-container fr-pb-2w">
         <DsfrBreadcrumb
           :links="
             Breadcrumb.AppBeneficiaryBudgetInfo(
@@ -43,47 +44,47 @@
         />
 
         <BudgetGeneralInformationForm v-else-if="budget" />
-      </main>
-
-      <div class="actions-bar bg-color-white">
-        <ul
-          class="fr-btns-group fr-btns-group--lg fr-btns-group--inline-md fr-btns-group--right"
-        >
-          <li>
-            <button
-              class="fr-btn fr-btn--secondary"
-              type="button"
-              @click="() => {}"
-            >
-              Annuler
-            </button>
-          </li>
-
-          <li>
-            <button
-              class="fr-btn submit-btn"
-              type="submit"
-              :submitting="isSubmitting"
-              :disabled="isSubmitting"
-            >
-              Enregistrer
-            </button>
-          </li>
-
-          <li>
-            <button
-              class="fr-btn submit-btn"
-              type="submit"
-              :submitting="isSubmitting"
-              :disabled="isSubmitting"
-            >
-              Enregistrer et quitter
-            </button>
-          </li>
-        </ul>
       </div>
-    </form>
-  </div>
+    </main>
+
+    <div class="actions-bar bg-color-white">
+      <ul
+        class="fr-btns-group fr-btns-group--lg fr-btns-group--inline-md fr-btns-group--right"
+      >
+        <li>
+          <button
+            class="fr-btn fr-btn--secondary"
+            type="button"
+            @click="() => {}"
+          >
+            Annuler
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="fr-btn submit-btn"
+            type="submit"
+            :submitting="isSubmitting"
+            :disabled="isSubmitting"
+          >
+            Enregistrer
+          </button>
+        </li>
+
+        <li>
+          <button
+            class="fr-btn submit-btn"
+            type="submit"
+            :submitting="isSubmitting"
+            :disabled="isSubmitting"
+          >
+            Enregistrer et quitter
+          </button>
+        </li>
+      </ul>
+    </div>
+  </form>
 </template>
 
 <script lang="ts" setup>
@@ -176,14 +177,21 @@
 </script>
 
 <style scoped lang="scss">
-  $actions-bar-height: 9rem;
+  @use '~/assets/style/variables' as *;
+
+  $actions-bar-height: 6.0625rem;
 
   .content {
-    height: calc(100vh - #{$actions-bar-height});
+    height: calc(100vh - #{$actions-bar-height} - #{$top-bar-height});
+    overflow-y: auto;
   }
 
   .actions-bar {
     border-top: 1px solid var(--background-default-grey);
     padding: 1.5rem 2rem;
+  }
+
+  .fr-btns-group .fr-btn {
+    margin-bottom: 0;
   }
 </style>
