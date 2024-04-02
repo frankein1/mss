@@ -139,6 +139,17 @@ export const Breadcrumb = {
     }
   ],
 
+  // FIXME: AppBeneficiaryBudgetExpensesEdit depends on the access to Beneficiary
+  [Route.AppBeneficiaryBudgetExpensesEdit]: (
+    beneficiary: BeneficiaryIdentification | null
+  ) => [
+    ...BeneficiaryBreadcrumb(beneficiary),
+    {
+      text: RouteTitle.AppBeneficiaryBudgetExpensesEdit(),
+      to: RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiary?.id || '')
+    }
+  ],
+
   // FIXME: BeneficiaryEdit depends on the access to Beneficiary
   [Route.AppBeneficiaryEdit]: (
     beneficiary: BeneficiaryIdentification | null

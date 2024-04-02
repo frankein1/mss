@@ -11,6 +11,9 @@
   --rust: #{$rust};
   --rust-light: #{$rust-light};
 
+  /* Typo */
+  --bold: #{$font-weight-bold};
+
   /* DSFR customisation */
   --background-action-high-blue-france: #{$primary};
   --border-action-high-blue-france: #{$primary};
