@@ -38,7 +38,7 @@ export const RouteTitle = {
     beneficiary
       ? `Imprimer la fiche de ${formatBeneficiaryDisplayName(beneficiary)}`
       : '',
-  [Route.AppBeneficiaryBudgetInfo]: () =>
+  [Route.AppBeneficiaryBudgetInfoEdit]: () =>
     'Modifier les informations générales du budget',
   [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${formatBeneficiaryDisplayName(beneficiary)}` : '',
