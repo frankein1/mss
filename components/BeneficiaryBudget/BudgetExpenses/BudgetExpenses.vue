@@ -1,7 +1,9 @@
 <template>
   <div class="budget-expenses-total">
     <h3 class="fr-h6 fr-m-0">Charges du foyer fiscal</h3>
-    <span class="fr-h4 fr-m-0">{{ total || '-' }}</span>
+    <span class="budget-expenses-total__value fr-h4 fr-m-0">{{
+      total || '-'
+    }}</span>
   </div>
 
   <div class="feature-section bg-color-white budget-expenses-details">
@@ -16,7 +18,9 @@
         class="budget-expenses-details__item"
       >
         <span>{{ budgetExpensesKeys.value(category) }}</span>
-        <span>{{ expenses[category as ExpensesKey] }}</span>
+        <span class="budget-expenses-details__item__value">{{
+          expenses[category as ExpensesKey]
+        }}</span>
       </li>
     </ul>
 
@@ -59,7 +63,7 @@
 
 <style scoped>
   .budget-expenses-total {
-    padding: 1rem 1.5rem;
+    padding: 2rem 1.5rem;
     border-radius: 0.5rem;
     display: flex;
     justify-content: space-between;
@@ -71,12 +75,17 @@
     }
   }
 
+  .budget-expenses-total__value::after {
+    content: ' €';
+  }
+
   .budget-expenses-details {
     border-width: 0;
     border-bottom: 0.25rem solid var(--rust);
 
     > ul {
       list-style-type: none;
+      padding-inline-start: unset;
     }
   }
 
@@ -95,6 +104,14 @@
     display: flex;
     justify-content: space-between;
     padding: 0.75rem 0;
+  }
+
+  .budget-expenses-details__item__value {
+    font-weight: var(--bold);
+
+    &:after {
+      content: ' €';
+    }
   }
 
   .budget-expenses-details__action {
