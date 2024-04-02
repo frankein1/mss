@@ -19,6 +19,22 @@
   />
   <div v-else-if="data">
     <BudgetGeneralInformation :budget="data" />
+
+    <div class="fr-container--fluid fr-mt-5w">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-6">
+          <!-- <BudgetIncomes /> -->
+        </div>
+
+        <div class="fr-col-6">
+          <BudgetExpenses
+            v-if="data.expenses"
+            :beneficiary-id="beneficiaryId"
+            :expenses="data.expenses"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
