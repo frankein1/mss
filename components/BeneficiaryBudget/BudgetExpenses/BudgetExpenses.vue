@@ -26,7 +26,7 @@
 
     <div class="budget-expenses-details__action">
       <NuxtLink
-        :to="RoutePath.AppBeneficiaryBudgetExpenses(beneficiaryId)"
+        :to="RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId)"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-edit-line"
         title="Modifier"
       >
@@ -109,7 +109,7 @@
   .budget-expenses-details__item__value {
     font-weight: var(--bold);
 
-    &:after {
+    &::after {
       content: ' €';
     }
   }

@@ -139,20 +139,14 @@ export const Breadcrumb = {
     }
   ],
 
-  // FIXME: AppBeneficiaryBudgetExpenses depends on the access to Beneficiary
-  [Route.AppBeneficiaryBudgetExpenses]: (
-    beneficiary: BeneficiaryIdentification | null,
-    budgetId: string,
-    expensesId: string
+  // FIXME: AppBeneficiaryBudgetExpensesEdit depends on the access to Beneficiary
+  [Route.AppBeneficiaryBudgetExpensesEdit]: (
+    beneficiary: BeneficiaryIdentification | null
   ) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
-      text: RouteTitle.AppBeneficiaryBudgetExpenses(),
-      to: RoutePath.AppBeneficiaryBudgetExpenses(
-        beneficiary?.id || '',
-        budgetId,
-        expensesId
-      )
+      text: RouteTitle.AppBeneficiaryBudgetExpensesEdit(),
+      to: RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiary?.id || '')
     }
   ],
 
