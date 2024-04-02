@@ -35,6 +35,7 @@ export enum Route {
   AppBeneficiariesAdd = 'AppBeneficiariesAdd',
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
+  AppBeneficiaryBudgetInfoEdit = 'AppBeneficiaryBudgetInfoEdit',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
   AppBeneficiaryEditInfo = 'AppBeneficiaryEditInfo',
   AppBeneficiaryEditTaxHousehold = 'AppBeneficiaryEditTaxHousehold',
@@ -102,6 +103,9 @@ const BeneficiaryRoute = (
   }
   return base
 }
+
+const BeneficiaryBudgetRoute = (beneficiaryId: string) =>
+  `${BeneficiaryRoute(beneficiaryId)}/budget`
 
 const BeneficiaryEditRoute = (beneficiaryId: string) =>
   `${BeneficiaryRoute(beneficiaryId)}/edit`
@@ -176,7 +180,8 @@ export const RoutePath = {
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
-
+  [Route.AppBeneficiaryBudgetInfoEdit]: (beneficiaryId: string) =>
+    `${BeneficiaryBudgetRoute(beneficiaryId)}/edit`,
   [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
     BeneficiaryEditRoute(beneficiaryId),
   [Route.AppBeneficiaryEditInfo]: (
@@ -249,6 +254,7 @@ export const RoutePath = {
     `${BeneficiaryHelpRequestsRoute(
       beneficiaryId
     )}/${subject.toLocaleLowerCase()}/${helpRequestId}/edit`,
+
   [Route.AppHistory]: (tab?: HistoryTab) => {
     const tabHash = tab ? `#${tab}` : ''
     return `${AppRoute}/history${tabHash}`

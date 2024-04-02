@@ -1,21 +1,21 @@
 import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
-import { idSchema, IdInput } from '~/server/schema'
+import { getBudgetSchema, GetBudgetInput } from '~/server/schema'
 import { BudgetService } from '~/server/services'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
-  input: { id },
+  input: { beneficiaryId },
   ctx
 }: {
-  input: IdInput
+  input: GetBudgetInput
   ctx: ProtectedAppContext
 }) => {
-  return await BudgetService.getInfo({ ctx, id })
+  return await BudgetService.getInfo({ ctx, beneficiaryId })
 }
 
 export const getInfo = createQuery({
-  inputValidation: idSchema,
+  inputValidation: getBudgetSchema,
   securityCheck: AllowSecurityCheck,
   handler
 })

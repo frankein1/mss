@@ -81,6 +81,7 @@ export default defineNuxtConfig({
     '@gouvfr/dsfr/dist/utility/icons/icons-user/icons-user.min.css',
     '@gouvfr/dsfr/dist/utility/icons/icons-map/icons-map.min.css',
     '@gouvfr/dsfr/dist/utility/icons/icons-device/icons-device.min.css',
+    '@gouvfr/dsfr/dist/utility/icons/icons-finance/icons-finance.min.css',
 
     // GLOBAL STYLES
     '@/assets/style/main.scss',

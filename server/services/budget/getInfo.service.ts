@@ -3,10 +3,12 @@ import { BudgetRepo } from '~/server/database/repository'
 
 export async function getInfo({
   ctx,
-  id
+  beneficiaryId
 }: {
   ctx: SecurityRuleContext
-  id: string
+  beneficiaryId: string
 }) {
-  return await BudgetRepo.findUniqueOrThrow(ctx.user, { where: { id } })
+  return await BudgetRepo.findUniqueOrThrow(ctx.user, {
+    where: { beneficiaryId }
+  })
 }

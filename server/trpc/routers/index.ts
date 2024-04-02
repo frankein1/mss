@@ -1,6 +1,7 @@
 import { TRPCClientError } from '@trpc/client'
 import type { inferRouterOutputs } from '@trpc/server'
 import { beneficiaryRouter } from './beneficiary/router'
+import { budgetRouter } from './budgetRouter'
 import { configRouter } from './configRouter'
 import { followupRouter } from './followup/router'
 import { statRouter } from './stat'
@@ -22,6 +23,7 @@ import { router } from '~/server/trpc'
 export const appRouter = router({
   admin: adminRouter,
   beneficiary: beneficiaryRouter,
+  budget: budgetRouter,
   notification: notificationRouter,
   config: configRouter,
   partner: partnerRouter,

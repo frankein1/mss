@@ -1,6 +1,12 @@
 import { z } from 'zod'
 import { amountNumber } from '.'
 
+export const getBudgetSchema = z.object({
+  beneficiaryId: z.string().uuid()
+})
+
+export type GetBudgetInput = z.infer<typeof getBudgetSchema>
+
 export const updateBudgetInfoSchema = z.object({
   id: z.string().uuid(),
   remainingAfterExpenses: amountNumber.nullish(),
