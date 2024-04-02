@@ -36,6 +36,7 @@ export enum Route {
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
   AppBeneficiaryBudgetInfo = 'AppBeneficiaryBudgetInfo',
+  AppBeneficiaryBudgetExpenses = 'AppBeneficiaryBudgetExpenses',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
   AppBeneficiaryEditInfo = 'AppBeneficiaryEditInfo',
   AppBeneficiaryEditTaxHousehold = 'AppBeneficiaryEditTaxHousehold',
@@ -182,6 +183,12 @@ export const RoutePath = {
     `${BeneficiaryRoute(beneficiaryId)}/print`,
   [Route.AppBeneficiaryBudgetInfo]: (beneficiaryId: string, budgetId: string) =>
     `${BeneficiaryBudgetRoute(beneficiaryId, budgetId)}/info`,
+  [Route.AppBeneficiaryBudgetExpenses]: (
+    beneficiaryId: string,
+    budgetId: string,
+    expensesId: string
+  ) =>
+    `${BeneficiaryBudgetRoute(beneficiaryId, budgetId)}/expenses/${expensesId}`,
   [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
     BeneficiaryEditRoute(beneficiaryId),
   [Route.AppBeneficiaryEditInfo]: (

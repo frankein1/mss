@@ -1,0 +1,29 @@
+import { buildKeys } from '~/utils/keys/keyBuilder'
+
+export const budgetExpensesKeys = buildKeys({
+  rent: 'Loyer',
+  expenses: 'Charges',
+  water: 'Eau',
+  electricity: 'Electricité',
+  gas: 'Gaz',
+  fuelOrOther: 'Fuel (ou autre mode de chauffage)',
+
+  // Impôts
+  housingTax: "Taxe d'habitation",
+  propertyTax: 'Taxe foncière',
+  incomeTax: 'Impôt sur le revenu',
+
+  // Autres charges
+  remittedAlimony: 'Pension alimentaire versée',
+  healthInsurance: 'Mutuelle',
+  phoneInternet: 'Téléphone/internet',
+  insurance: 'Assurance',
+  carInsurance: 'Assurance voiture',
+  schoolFees: 'Frais de garde ou de scolarité',
+  schoolCanteen: 'Cantine',
+  other: 'Autres charges et frais divers',
+
+  // Crédits et dettes
+  debts: 'Dette(s)',
+  loans: 'Crédit(s)'
+})

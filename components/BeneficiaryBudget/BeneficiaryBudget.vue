@@ -22,6 +22,31 @@
       :beneficiary-id="beneficiaryId"
       :budget-id="data.id"
     />
+
+    <div class="fr-container--fluid fr-mt-5w">
+      <div class="fr-grid-row fr-grid-row--gutters">
+        <div class="fr-col-6">
+          <!-- <BudgetIncomes /> -->
+        </div>
+
+        <div class="fr-col-6">
+          <AtomLoader
+            v-if="p"
+            class="fr-mx-auto"
+          />
+          <AtomAlert
+            v-else-if="e"
+            :alert-type="AlertType.Error"
+            :message="`${e}`"
+          />
+          <BudgetExpenses
+            v-else-if="budget && budget.expenses"
+            :beneficiary-id="beneficiaryId"
+            :expenses="budget.expenses"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,6 +60,12 @@
   const { data, pending, error } = await trpcClient.budget.getBudgetId.useQuery(
     { beneficiaryId: props.beneficiaryId }
   )
+
+  const {
+    data: budget,
+    pending: p,
+    error: e
+  } = await trpcClient.budget.getBudget.useQuery({ id: data?.value?.id || '' })
 </script>
 
 <style scoped>

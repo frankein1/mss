@@ -1,5 +1,6 @@
 export * from './ageGroup'
 export * from './beneficiary'
+export * from './budget'
 export * from './document'
 export * from './email'
 export * from './followup'
