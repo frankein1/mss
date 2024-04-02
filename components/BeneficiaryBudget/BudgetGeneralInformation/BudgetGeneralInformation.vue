@@ -3,27 +3,14 @@
     <div class="bgi__header">
       <h3 class="fr-h4 fr-m-0">Infos générales</h3>
       <NuxtLink
-        :to="RoutePath.AppBeneficiaryBudgetInfo(beneficiaryId, budgetId)"
+        :to="RoutePath.AppBeneficiaryBudgetInfoEdit(budget.beneficiaryId)"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-edit-line"
       >
         Modifier
       </NuxtLink>
     </div>
 
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les informations générales du budget n'ont pas pu être chargées."
-    />
-
-    <div
-      v-else
-      class="bgi__content"
-    >
+    <div class="bgi__content">
       <div class="bgi__content__item">
         <div class="item-icon">
           <span
@@ -34,7 +21,7 @@
         <div>
           <div class="fr-text--lg fr-m-0">Reste à vivre</div>
           <div class="fr-h6 fr-m-0 fr-m-0 item__amount">
-            {{ data?.remainingAfterExpenses || '-' }}
+            {{ budget.remainingAfterExpenses || '-' }}
           </div>
         </div>
       </div>
@@ -50,7 +37,7 @@
         <div>
           <div class="fr-text--lg fr-m-0">Epargne</div>
           <div class="fr-h6 fr-m-0 item__amount">
-            {{ data?.savings || '-' }}
+            {{ budget.savings || '-' }}
           </div>
         </div>
       </div>
@@ -65,7 +52,7 @@
         <div>
           <div class="fr-text--lg fr-m-0">Découvert</div>
           <div class="fr-h6 fr-m-0 item__amount">
-            {{ data?.overdraft || '-' }}
+            {{ budget.overdraft || '-' }}
           </div>
         </div>
       </div>
@@ -80,7 +67,7 @@
         <div>
           <div class="fr-text--lg fr-m-0">Quotient familial</div>
           <div class="fr-h6 fr-m-0 item__amount">
-            {{ data?.familyQuotient || '-' }}
+            {{ budget.familyQuotient || '-' }}
           </div>
         </div>
       </div>
@@ -89,19 +76,10 @@
 </template>
 
 <script setup lang="ts">
+  import { Budget } from '@prisma/client'
   import { RoutePath } from '~/utils/routing'
-  import { AlertType } from '~/utils/constants/alert'
 
-  const props = defineProps<{
-    beneficiaryId: string
-    budgetId: string
-  }>()
-
-  const trpcClient = useTrpcClient()
-
-  const { data, pending, error } = await trpcClient.budget.getInfo.useQuery({
-    id: props.budgetId
-  })
+  defineProps<{ budget: Budget }>()
 </script>
 
 <style scoped lang="scss">

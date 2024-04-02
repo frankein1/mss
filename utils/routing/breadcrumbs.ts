@@ -129,14 +129,13 @@ export const Breadcrumb = {
   ) => BeneficiaryBreadcrumb(beneficiary, originPage),
 
   // FIXME: BeneficiaryBudgetInfo depends on the access to Beneficiary
-  [Route.AppBeneficiaryBudgetInfo]: (
-    beneficiary: BeneficiaryIdentification | null,
-    budgetId: string
+  [Route.AppBeneficiaryBudgetInfoEdit]: (
+    beneficiary: BeneficiaryIdentification | null
   ) => [
     ...BeneficiaryBreadcrumb(beneficiary),
     {
-      text: RouteTitle.AppBeneficiaryBudgetInfo(),
-      to: RoutePath.AppBeneficiaryBudgetInfo(beneficiary?.id || '', budgetId)
+      text: RouteTitle.AppBeneficiaryBudgetInfoEdit(),
+      to: RoutePath.AppBeneficiaryBudgetInfoEdit(beneficiary?.id || '')
     }
   ],
 

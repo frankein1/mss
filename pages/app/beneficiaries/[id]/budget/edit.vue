@@ -21,10 +21,7 @@
       <div class="fr-container fr-pb-2w">
         <DsfrBreadcrumb
           :links="
-            Breadcrumb.AppBeneficiaryBudgetInfo(
-              beneficiaryIdentification,
-              budgetId
-            )
+            Breadcrumb.AppBeneficiaryBudgetInfoEdit(beneficiaryIdentification)
           "
         />
         <PageTitle
@@ -99,10 +96,9 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
-  const budgetId = route.params.bid as string
   const beneficiaryId = route.params.id as string
 
-  const title = RouteTitle.AppBeneficiaryBudgetInfo()
+  const title = RouteTitle.AppBeneficiaryBudgetInfoEdit()
 
   useHead({ title })
 
@@ -118,9 +114,7 @@
     data: budget,
     pending,
     error
-  } = await trpcClient.budget.getInfo.useQuery({
-    id: budgetId
-  })
+  } = await trpcClient.budget.getInfo.useQuery({ beneficiaryId })
 
   const beneficiaryIdentification = computed(() =>
     beneficiary.value
@@ -140,7 +134,7 @@
   const { handleSubmit, meta } = useForm<UpdateBudgetInfoInput>({
     validationSchema: toTypedSchema(updateBudgetInfoSchema),
     initialValues: {
-      id: budgetId,
+      id: budget.value?.id || '',
       remainingAfterExpenses: prismaDecimalToNumber(
         budget.value?.remainingAfterExpenses
       ),

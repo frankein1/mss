@@ -18,10 +18,7 @@
     :message="`${error}`"
   />
   <div v-else-if="data">
-    <BudgetGeneralInformation
-      :beneficiary-id="beneficiaryId"
-      :budget-id="data.id"
-    />
+    <BudgetGeneralInformation :budget="data" />
   </div>
 </template>
 
@@ -32,9 +29,9 @@
 
   const trpcClient = useTrpcClient()
 
-  const { data, pending, error } = await trpcClient.budget.getBudgetId.useQuery(
-    { beneficiaryId: props.beneficiaryId }
-  )
+  const { data, pending, error } = await trpcClient.budget.getBudget.useQuery({
+    beneficiaryId: props.beneficiaryId
+  })
 </script>
 
 <style scoped>
