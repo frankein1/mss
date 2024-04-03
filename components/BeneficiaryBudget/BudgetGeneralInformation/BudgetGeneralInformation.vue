@@ -14,7 +14,7 @@
       <div class="bgi__content__item">
         <div class="item-icon">
           <span
-            class="fr-icon-scales-3"
+            class="fr-icon-scales-3-fill"
             aria-hidden="true"
           ></span>
         </div>
