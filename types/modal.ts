@@ -1,8 +1,3 @@
-import BeneficiaryDocumentAddForm from './BeneficiaryDocumentAddForm.vue'
-import BeneficiaryDocumentEditForm from './BeneficiaryDocumentEditForm.vue'
-import BeneficiaryHistoryCommentDeleteConfirm from './BeneficiaryHistoryCommentDeleteConfirm.vue'
-import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
-import ExportDataConfirm from './ExportDataConfirm.vue'
 import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
 import LeaveFormModal from '~/components/LeaveFormModal/LeaveFormModal.vue'
 import HelpRequestModal from '~/components/HelpRequestModal/HelpRequestModal.vue'
@@ -11,6 +6,11 @@ import BeneficiaryFormSimilarModal from '~/components/BeneficiaryFormSimilar/Ben
 import PartnerOrganizationEdition from '~/components/PartnerOrganization/PartnerOrganizationEdition.vue'
 import PartnerOrganizationCreation from '~/components/PartnerOrganization/PartnerOrganizationCreation.vue'
 import PartnerOrganizationRemoveAlert from '~/components/PartnerOrganization/PartnerOrganizationRemoveAlert.vue'
+import BeneficiaryDocumentAddForm from '~/components/BeneficiaryDocument/BeneficiaryDocumentAddForm.vue'
+import BeneficiaryDocumentEditForm from '~/components/BeneficiaryDocument/BeneficiaryDocumentEditForm.vue'
+import BeneficiaryHistoryCommentDeleteConfirm from '~/components/BeneficiaryHistory/BeneficiaryHistoryCommentDeleteConfirm.vue'
+import BeneficiaryHistoryDeleteForm from '~/components/BeneficiaryHistory/BeneficiaryHistoryDeleteForm.vue'
+import ExportDataConfirm from '~/components/ExportData/ExportDataConfirm.vue'
 
 import type { ComponentEmit, ComponentProps } from '~/types/vue'
 
