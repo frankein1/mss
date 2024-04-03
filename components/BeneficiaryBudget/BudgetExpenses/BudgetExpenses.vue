@@ -26,7 +26,9 @@
 
     <div class="budget-expenses-details__action">
       <NuxtLink
-        :to="RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId)"
+        :to="
+          RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
+        "
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-edit-line"
         title="Modifier"
       >

@@ -2,7 +2,6 @@
   <AtomLoader
     v-if="beneficiaryPending"
     class="fr-mx-auto"
-    @submit.prevent="onSubmit"
   />
 
   <AtomAlert
@@ -26,7 +25,7 @@
         />
         <PageTitle
           :title="title"
-          pictogram="/pictograms/money.svg"
+          pictogram-path="/pictograms/money.svg"
         />
 
         <AtomLoader
@@ -92,6 +91,7 @@
     updateBudgetInfoSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+
   const route = useRoute()
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
@@ -163,7 +163,7 @@
       },
       onFailure: () => {
         snackbar.error(
-          'La mise a jour des informations générales du budget a échoué.'
+          'La mise à jour des informations générales du budget a échoué.'
         )
       }
     })

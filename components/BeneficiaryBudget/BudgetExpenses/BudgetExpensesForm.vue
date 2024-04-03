@@ -1,0 +1,184 @@
+<template>
+  <div class="feature-section fr-container fr-p-5w fr-mb-3w">
+    <section class="fr-grid-row fr-grid-row--gutters">
+      <h2 class="fr-h5 fr-m-0 fr-col-12">Logement</h2>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="rent"
+          :label="budgetExpensesKeys.byKey.rent"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="expenses"
+          :label="budgetExpensesKeys.byKey.expenses"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="water"
+          :label="budgetExpensesKeys.byKey.water"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="electricity"
+          :label="budgetExpensesKeys.byKey.electricity"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="gas"
+          :label="budgetExpensesKeys.byKey.gas"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="fuelOrOther"
+          :label="budgetExpensesKeys.byKey.fuelOrOther"
+        />
+      </div>
+    </section>
+
+    <hr class="separator" />
+
+    <section class="fr-grid-row fr-grid-row--gutters">
+      <h2 class="fr-h5 fr-m-0 fr-col-12">Impôts</h2>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="housingTax"
+          :label="budgetExpensesKeys.byKey.housingTax"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="propertyTax"
+          :label="budgetExpensesKeys.byKey.propertyTax"
+        />
+      </div>
+
+      <div class="fr-col-12">
+        <VeeInput
+          type="number"
+          name="incomeTax"
+          :label="budgetExpensesKeys.byKey.incomeTax"
+        />
+      </div>
+    </section>
+
+    <hr class="separator" />
+
+    <section class="fr-grid-row fr-grid-row--gutters">
+      <h2 class="fr-h5 fr-m-0 fr-col-12">Autres charges</h2>
+
+      <div class="fr-col-12">
+        <VeeInput
+          type="number"
+          name="remittedAlimony"
+          :label="budgetExpensesKeys.byKey.remittedAlimony"
+        />
+      </div>
+
+      <div class="fr-col-12">
+        <VeeInput
+          type="number"
+          name="healthInsurance"
+          :label="budgetExpensesKeys.byKey.healthInsurance"
+        />
+      </div>
+
+      <div class="fr-col-12">
+        <VeeInput
+          type="number"
+          name="phoneInternet"
+          :label="budgetExpensesKeys.byKey.phoneInternet"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="insurance"
+          :label="budgetExpensesKeys.byKey.insurance"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="carInsurance"
+          :label="budgetExpensesKeys.byKey.carInsurance"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="schoolFees"
+          :label="budgetExpensesKeys.byKey.schoolFees"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="schoolCanteen"
+          :label="budgetExpensesKeys.byKey.schoolCanteen"
+        />
+      </div>
+
+      <div class="fr-col-12">
+        <VeeInput
+          type="number"
+          name="other"
+          :label="budgetExpensesKeys.byKey.other"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="debts"
+          :label="budgetExpensesKeys.byKey.debts"
+        />
+      </div>
+
+      <div class="fr-col-6">
+        <VeeInput
+          type="number"
+          name="loans"
+          :label="budgetExpensesKeys.byKey.loans"
+        />
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup lang="ts">
+  import { budgetExpensesKeys } from '~/client/options'
+</script>
+
+<style scoped>
+  .separator {
+    height: 0.0625rem;
+    background-color: var(--border-default-grey);
+    padding: 0;
+    margin: 2rem 0;
+  }
+</style>

@@ -105,9 +105,6 @@ const BeneficiaryRoute = (
   return base
 }
 
-const BeneficiaryBudgetRoute = (beneficiaryId: string) =>
-  `${BeneficiaryRoute(beneficiaryId)}/budget`
-
 const BeneficiaryEditRoute = (beneficiaryId: string) =>
   `${BeneficiaryRoute(beneficiaryId)}/edit`
 
@@ -182,9 +179,11 @@ export const RoutePath = {
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
   [Route.AppBeneficiaryBudgetInfoEdit]: (beneficiaryId: string) =>
-    `${BeneficiaryBudgetRoute(beneficiaryId)}/edit`,
-  [Route.AppBeneficiaryBudgetExpensesEdit]: (beneficiaryId: string) =>
-    `${BeneficiaryRoute(beneficiaryId)}/expenses/edit`,
+    `${BeneficiaryRoute(beneficiaryId)}/budget/edit`,
+  [Route.AppBeneficiaryBudgetExpensesEdit]: (
+    beneficiaryId: string,
+    expensesId: string
+  ) => `${BeneficiaryRoute(beneficiaryId)}/expenses/${expensesId}/edit`,
   [Route.AppBeneficiaryEdit]: (beneficiaryId: string) =>
     BeneficiaryEditRoute(beneficiaryId),
   [Route.AppBeneficiaryEditInfo]: (
