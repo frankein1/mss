@@ -98,7 +98,11 @@
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
 
-  const { handleSubmit, meta } = useForm<UpdateBudgetExpensesInput>({
+  const {
+    handleSubmit,
+    meta,
+    values: expensesValues
+  } = useForm<UpdateBudgetExpensesInput>({
     validationSchema: toTypedSchema(updateBudgetExpensesSchema),
     initialValues: {
       id: expenses.value?.id,
@@ -152,7 +156,12 @@
     })
   })
 
-  const total = computed(() => 0)
+  const total = computed(() => {
+    return Object.values(expensesValues).reduce<number>((acc, cur) => {
+      const expense = typeof cur === 'string' ? 0 : cur || 0
+      return acc + expense
+    }, 0)
+  })
 </script>
 
 <style scoped lang="scss">
@@ -175,7 +184,7 @@
     font-weight: var(--bold);
 
     &::after {
-      content: ' €';
+      content: '\00a0€';
     }
   }
 </style>

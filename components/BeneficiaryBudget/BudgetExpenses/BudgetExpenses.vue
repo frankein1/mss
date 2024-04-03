@@ -78,7 +78,7 @@
   }
 
   .budget-expenses-total__value::after {
-    content: ' €';
+    content: '\00a0€';
   }
 
   .budget-expenses-details {
@@ -112,7 +112,7 @@
     font-weight: var(--bold);
 
     &::after {
-      content: ' €';
+      content: '\00a0€';
     }
   }
 

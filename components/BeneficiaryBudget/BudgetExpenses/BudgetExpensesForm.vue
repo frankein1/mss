@@ -4,48 +4,42 @@
       <h2 class="fr-h5 fr-m-0 fr-col-12">Logement</h2>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="rent"
           :label="budgetExpensesKeys.byKey.rent"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="expenses"
           :label="budgetExpensesKeys.byKey.expenses"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="water"
           :label="budgetExpensesKeys.byKey.water"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="electricity"
           :label="budgetExpensesKeys.byKey.electricity"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="gas"
           :label="budgetExpensesKeys.byKey.gas"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="fuelOrOther"
           :label="budgetExpensesKeys.byKey.fuelOrOther"
         />
@@ -58,24 +52,21 @@
       <h2 class="fr-h5 fr-m-0 fr-col-12">Impôts</h2>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="housingTax"
           :label="budgetExpensesKeys.byKey.housingTax"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="propertyTax"
           :label="budgetExpensesKeys.byKey.propertyTax"
         />
       </div>
 
       <div class="fr-col-12">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="incomeTax"
           :label="budgetExpensesKeys.byKey.incomeTax"
         />
@@ -88,80 +79,70 @@
       <h2 class="fr-h5 fr-m-0 fr-col-12">Autres charges</h2>
 
       <div class="fr-col-12">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="remittedAlimony"
           :label="budgetExpensesKeys.byKey.remittedAlimony"
         />
       </div>
 
       <div class="fr-col-12">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="healthInsurance"
           :label="budgetExpensesKeys.byKey.healthInsurance"
         />
       </div>
 
       <div class="fr-col-12">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="phoneInternet"
           :label="budgetExpensesKeys.byKey.phoneInternet"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="insurance"
           :label="budgetExpensesKeys.byKey.insurance"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="carInsurance"
           :label="budgetExpensesKeys.byKey.carInsurance"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="schoolFees"
           :label="budgetExpensesKeys.byKey.schoolFees"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="schoolCanteen"
           :label="budgetExpensesKeys.byKey.schoolCanteen"
         />
       </div>
 
       <div class="fr-col-12">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="other"
           :label="budgetExpensesKeys.byKey.other"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="debts"
           :label="budgetExpensesKeys.byKey.debts"
         />
       </div>
 
       <div class="fr-col-6">
-        <VeeInput
-          type="number"
+        <VeeCurrencyInput
           name="loans"
           :label="budgetExpensesKeys.byKey.loans"
         />
