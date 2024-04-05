@@ -60,7 +60,7 @@
     modal.value ? window.dsfr(modal.value) : undefined
   )
 
-  watch(isOpen, value => {
+  const stopWatch = watch(isOpen, value => {
     if (value) {
       dsfrModal.value.modal.disclose()
       title.value = modalState?.value.props.title || null
@@ -68,5 +68,9 @@
       dsfrModal.value.modal.conceal()
       title.value = null
     }
+  })
+
+  onUnmounted(() => {
+    stopWatch()
   })
 </script>
