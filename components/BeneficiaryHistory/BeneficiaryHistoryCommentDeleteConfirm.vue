@@ -15,10 +15,10 @@
 <script lang="ts" setup>
   const modal = useModal()
 
-  const emit = defineEmits<{ delete: [] }>()
+  const props = defineProps<{ delete: () => {} }>()
 
   function deleteComment() {
-    emit('delete')
+    props.delete()
     modal.close()
   }
 </script>

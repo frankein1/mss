@@ -14,19 +14,15 @@ export function useLeaveFormConfirmation(options?: {
       return next()
     }
 
-    useModal().open({
+    useModal().open(LeaveFormModal, {
       title: 'Attention les informations seront perdues',
-      contentComponent: LeaveFormModal,
-      contentComponentEvents: {
-        cancel: () => next(false),
-        leave: () => {
-          if (options?.onLeave) {
-            options?.onLeave()
-          }
-          next()
+      cancel: () => next(false),
+      leave: () => {
+        if (options?.onLeave) {
+          options?.onLeave()
         }
-      },
-      triggerOpen: true
+        next()
+      }
     })
   })
 

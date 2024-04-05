@@ -32,10 +32,9 @@
   )
 
   function exportConfirm() {
-    modal.open({
+    modal.open(ExportDataConfirm, {
       title: "Confirmer l'export du tableau",
-      contentComponent: ExportDataConfirm,
-      contentComponentEvents: { export: onExport }
+      export: onExport
     })
   }
 
