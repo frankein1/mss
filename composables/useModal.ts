@@ -10,7 +10,13 @@ export const modalInjectionKey: InjectionKey<ShallowRef<ModalState>> =
 function _useModal() {
   const modalState = inject(modalInjectionKey)
 
+  const triggerOpen = ref(false)
   const isOpen = ref(false)
+  const title = ref('')
+
+  function setIsOpen(value: boolean) {
+    isOpen.value = value
+  }
 
   function open<T extends Component>(
     component: T,
@@ -23,14 +29,17 @@ function _useModal() {
       component,
       props: props ?? {}
     }
-    isOpen.value = true
+    triggerOpen.value = !!props?.triggerOpen
+    setIsOpen(true)
+    title.value = props?.title || ''
   }
 
   function close() {
     if (!modalState) {
       return
     }
-    isOpen.value = false
+    setIsOpen(false)
+    title.value = ''
     modalState.value = {
       component: 'div',
       props: {}
@@ -56,7 +65,10 @@ function _useModal() {
   }
 
   return {
+    triggerOpen,
+    setIsOpen,
     isOpen,
+    title,
     open,
     close,
     patch

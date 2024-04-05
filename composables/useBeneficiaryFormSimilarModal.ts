@@ -8,6 +8,7 @@ export function useBeneficiaryFormSimilarModal(
   useModal().open(BeneficiaryFormSimilarModal, {
     title:
       'Attention, un dossier bénéficiaire est déjà enregistré sous cette identité.',
+    triggerOpen: true,
     similarBeneficiary,
     create: createCallback
   })

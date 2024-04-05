@@ -16,6 +16,7 @@ export function useLeaveFormConfirmation(options?: {
 
     useModal().open(LeaveFormModal, {
       title: 'Attention les informations seront perdues',
+      triggerOpen: true,
       cancel: () => next(false),
       leave: () => {
         if (options?.onLeave) {

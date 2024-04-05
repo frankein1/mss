@@ -52,25 +52,32 @@
   const modalState = inject(modalInjectionKey)
 
   const modal = ref<HTMLDialogElement | null>(null)
-  const title = ref<string | null>(null)
 
-  const { isOpen } = useModal()
+  const { isOpen, title, setIsOpen, triggerOpen } = useModal()
 
   const dsfrModal = computed(() =>
     modal.value ? window.dsfr(modal.value) : undefined
   )
 
   const stopWatch = watch(isOpen, value => {
-    if (value) {
-      dsfrModal.value.modal.disclose()
-      title.value = modalState?.value.props.title || null
-    } else {
+    if (!value) {
       dsfrModal.value.modal.conceal()
-      title.value = null
     }
+    if (value && triggerOpen.value) {
+      dsfrModal.value.modal.disclose()
+    }
+  })
+
+  function onClose() {
+    setIsOpen(false)
+  }
+
+  onMounted(() => {
+    modal.value?.addEventListener('dsfr.conceal', onClose)
   })
 
   onUnmounted(() => {
     stopWatch()
+    modal.value?.removeEventListener('dsfr.conceal', onClose)
   })
 </script>
