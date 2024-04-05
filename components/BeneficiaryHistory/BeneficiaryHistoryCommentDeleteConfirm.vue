@@ -15,7 +15,7 @@
 <script lang="ts" setup>
   const modal = useModal()
 
-  const props = defineProps<{ delete: () => {} }>()
+  const props = defineProps<{ delete: () => void }>()
 
   function deleteComment() {
     props.delete()

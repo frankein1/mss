@@ -44,7 +44,7 @@
 <script setup lang="ts">
   const modal = useModal()
 
-  defineProps<{
+  const props = defineProps<{
     isSubmitting: boolean
     delete: () => void
   }>()
