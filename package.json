@@ -60,7 +60,7 @@
     "@types/uuid": "^9.0.8",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
-    "nuxt": "^3.10.1",
+    "nuxt": "^3.11.2",
     "nuxt-scheduler": "^0.1.9",
     "prettier": "3.2.5",
     "prettier-plugin-prisma": "^5.0.0",
