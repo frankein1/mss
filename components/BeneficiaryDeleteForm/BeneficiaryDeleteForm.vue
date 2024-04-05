@@ -27,7 +27,7 @@
         <button
           class="fr-btn btn-delete-action"
           type="submit"
-          submitting="false"
+          :submitting="isSubmitting"
         >
           Supprimer
         </button>
@@ -43,6 +43,7 @@
 
   const props = defineProps<{
     beneficiaryId: string
+
     deleted: () => void
   }>()
 
