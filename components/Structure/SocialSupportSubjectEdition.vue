@@ -55,11 +55,8 @@
     id: string
     name: string
     isSubmitting: boolean
-    validationFn: (name: string) => Promise<boolean>
-  }>()
-
-  const emit = defineEmits<{
-    update: [values: UpdateSocialSupportSubjectNameInput]
+    validate: (name: string) => Promise<boolean>
+    update: (values: UpdateSocialSupportSubjectNameInput) => void
   }>()
 
   const { handleSubmit, setErrors } =
@@ -72,14 +69,13 @@
     })
 
   const onSubmit = handleSubmit(async values => {
-    const validated = await props.validationFn(values.name)
+    const validated = await props.validate(values.name)
     if (!validated) {
       setErrors({
         name: "Cet objet d'accompagnement existe déjà, modification impossible"
       })
       return
     }
-
-    emit('update', values)
+    props.update(values)
   })
 </script>

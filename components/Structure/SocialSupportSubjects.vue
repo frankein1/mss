@@ -88,18 +88,13 @@
   }
 
   function editSubject(id: string, name: string) {
-    modal.open({
+    modal.open(SocialSupportSubjectEdition, {
       title: "Modifier un objet d'accompagnement",
-      contentComponent: SocialSupportSubjectEdition,
-      contentComponentProps: {
-        id,
-        name,
-        isSubmitting: isSubmittingModification.value,
-        validationFn: (name: string) => nameCanBeUpdated(name)
-      },
-      contentComponentEvents: {
-        update: onUpdateStructureSubject
-      }
+      id,
+      name,
+      isSubmitting: isSubmittingModification.value,
+      validate: (name: string) => nameCanBeUpdated(name),
+      update: onUpdateStructureSubject
     })
   }
 
@@ -129,13 +124,10 @@
   }
 
   function removeSubject(id: string, name: string) {
-    modal.open({
+    modal.open(SocialSupportSubjectDeletion, {
       title: `Etes-vous sûr·e de vouloir retirer l’objet “${name}” de vos accompagnements ?`,
-      contentComponent: SocialSupportSubjectDeletion,
-      contentComponentProps: { isSubmitting: isSubmittingDeletion.value },
-      contentComponentEvents: {
-        delete: () => onDeleteStructureSubject(id)
-      }
+      isSubmitting: isSubmittingDeletion.value,
+      delete: () => onDeleteStructureSubject(id)
     })
   }
 

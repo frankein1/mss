@@ -52,10 +52,7 @@
   const props = defineProps<{
     document: GetDocument
     permissions: DocumentPermissions
-  }>()
-
-  const emit = defineEmits<{
-    updateDocument: [values: EditDocumentInput]
+    updateDocument: (values: EditDocumentInput) => void
   }>()
 
   const isSubmitting = ref(false)
@@ -76,7 +73,7 @@
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
-      emit('updateDocument', values)
+      props.updateDocument(values)
     }
   )
 

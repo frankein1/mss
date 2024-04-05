@@ -5,16 +5,10 @@ export function useBeneficiaryFormSimilarModal(
   similarBeneficiary: Exclude<SimilarBeneficiary, undefined>,
   createCallback: () => void
 ) {
-  useModal().open({
+  useModal().open(BeneficiaryFormSimilarModal, {
     title:
       'Attention, un dossier bénéficiaire est déjà enregistré sous cette identité.',
-    contentComponent: BeneficiaryFormSimilarModal,
-    contentComponentProps: {
-      similarBeneficiary
-    },
-    contentComponentEvents: {
-      create: createCallback
-    },
-    triggerOpen: true
+    similarBeneficiary,
+    create: createCallback
   })
 }

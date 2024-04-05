@@ -32,11 +32,11 @@
                 {{ title }}
               </h1>
               <component
-                :is="contentComponent"
-                v-if="contentComponent"
-                v-bind="contentComponentProps"
-                v-on="contentComponentEvents"
-              ></component>
+                :is="modalState.component"
+                v-if="modalState"
+                v-bind="modalState.props"
+                v-model="isOpen"
+              />
             </div>
           </div>
         </div>
@@ -45,66 +45,28 @@
   </dialog>
 </template>
 
-<script lang="ts" setup generic="M extends ModalComponent">
-  import type { ComponentProps, ComponentEmit } from '~/types/vue'
-  import type { ModalComponent, OpenModalEvent } from '~/types/modal'
+<script lang="ts" setup generic="M extends Component">
+  import { inject } from 'vue'
+  import { useModal, modalInjectionKey } from '../../composables/useModal'
 
-  const { $globalEventEmitter } = useNuxtApp()
-  const { setIsOpen } = useModal()
+  const modalState = inject(modalInjectionKey)
 
   const modal = ref<HTMLDialogElement | null>(null)
-  const title = ref('')
-  const contentComponent: Ref<M | null> = shallowRef(null)
-  const contentComponentProps: Ref<ComponentProps<M> | undefined> =
-    ref(undefined)
-  const contentComponentEvents: Ref<ComponentEmit<M> | undefined> =
-    ref(undefined)
+  const title = ref<string | null>(null)
+
+  const { isOpen } = useModal()
 
   const dsfrModal = computed(() =>
     modal.value ? window.dsfr(modal.value) : undefined
   )
 
-  onMounted(() => {
-    modal.value?.addEventListener('dsfr.conceal', onClose)
-    $globalEventEmitter.on('openModal', onOpen)
-    $globalEventEmitter.on('closeModal', close)
-  })
-
-  onUnmounted(() => {
-    modal.value?.removeEventListener('dsfr.conceal', onClose)
-  })
-
-  function onOpen({
-    title: _title,
-    contentComponent: _contentComponent,
-    contentComponentProps: _contentComponentProps,
-    contentComponentEvents: _contentComponentEvents,
-    triggerOpen
-  }: OpenModalEvent<M>) {
-    title.value = _title
-    contentComponent.value = _contentComponent
-    contentComponentProps.value = _contentComponentProps
-    contentComponentEvents.value = _contentComponentEvents
-
-    if (triggerOpen && modal.value) {
+  watch(isOpen, value => {
+    if (value) {
       dsfrModal.value.modal.disclose()
+      title.value = modalState?.value.props.title || null
+    } else {
+      dsfrModal.value.modal.conceal()
+      title.value = null
     }
-    setIsOpen(true)
-  }
-
-  function onClose() {
-    title.value = ''
-    contentComponent.value = null
-    contentComponentProps.value = undefined
-    contentComponentEvents.value = undefined
-    setIsOpen(false)
-  }
-
-  function close() {
-    setIsOpen(false)
-    if (!modal.value) {
-      return
-    }
-    dsfrModal.value.modal.conceal()
-  }
+  })
 </script>

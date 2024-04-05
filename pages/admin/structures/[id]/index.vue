@@ -60,11 +60,10 @@
       return
     }
 
-    modal.open({
+    modal.open(StructureAdminInfoForm, {
       title: 'Modifier les informations de ma structure',
-      contentComponent: StructureAdminInfoForm,
-      contentComponentProps: { structure: data.value.structure },
-      contentComponentEvents: { validate: updateInfo }
+      structure: data.value.structure,
+      validate: updateInfo
     })
   }
 

@@ -31,18 +31,15 @@
 
   const props = defineProps<{
     partner: PartnerOrganizationData
-  }>()
-
-  const emit = defineEmits<{
-    finish: [id: string]
-    cancel: []
+    finish: (id: string) => void
+    cancel: () => void
   }>()
 
   function onCancel() {
-    emit('cancel')
+    props.cancel()
   }
   function onFinish() {
-    emit('finish', props.partner.id)
+    props.finish(props.partner.id)
   }
 </script>
 

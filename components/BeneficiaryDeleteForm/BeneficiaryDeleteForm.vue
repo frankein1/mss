@@ -1,7 +1,7 @@
 <template>
   <form
     novalidate
-    @submit.prevent="deleteItem"
+    @submit.prevent="onSuccess"
   >
     <AtomAlert
       class="fr-mb-2w"
@@ -27,7 +27,7 @@
         <button
           class="fr-btn btn-delete-action"
           type="submit"
-          :submitting="isSubmitting"
+          submitting="false"
         >
           Supprimer
         </button>
@@ -41,28 +41,7 @@
 
   const modal = useModal()
 
-  const props = defineProps<{
-    beneficiaryId: string
+  defineProps<{
+    onSuccess: () => void
   }>()
-
-  const emit = defineEmits<{ deleted: [] }>()
-
-  const isSubmitting = ref(false)
-
-  function deleteItem() {
-    useTrpcMutation({
-      mutation: () =>
-        useTrpcClient().beneficiary.delete.mutate({
-          id: props.beneficiaryId
-        }),
-      isSubmitting,
-      onSuccess: () => {
-        emit('deleted')
-        modal.close()
-      },
-      onFailure: () => {
-        useSnackbar().error('La suppression a échoué.')
-      }
-    })
-  }
 </script>

@@ -28,13 +28,10 @@
   }>()
 
   function onAdd() {
-    modal.open({
+    modal.open(BeneficiaryDocumentAddForm, {
       title: 'Ajouter un document',
-      contentComponent: BeneficiaryDocumentAddForm,
-      contentComponentProps: {
-        beneficiaryId: props.beneficiaryId
-      },
-      contentComponentEvents: { newDocument: onNewDocument }
+      beneficiaryId: props.beneficiaryId,
+      newDocument: onNewDocument
     })
   }
 

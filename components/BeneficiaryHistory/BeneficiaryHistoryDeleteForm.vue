@@ -47,9 +47,8 @@
   const props = defineProps<{
     socialSupportId: string
     isFollowup: boolean
+    deleted: () => void
   }>()
-
-  const emit = defineEmits<{ deleted: [] }>()
 
   const isSubmitting = ref(false)
 
@@ -61,7 +60,7 @@
         }),
       isSubmitting,
       onSuccess: () => {
-        emit('deleted')
+        props.deleted()
         modal.close()
       },
       onFailure: () => {

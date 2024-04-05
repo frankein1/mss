@@ -45,6 +45,8 @@
 
   const emit = defineEmits<{ deleted: [] }>()
 
+  const modal = useModal()
+
   const currentTab = computed(() => {
     const hash = route.hash.slice(1)
     return hash ? (hash as BeneficiaryTab) : undefined
@@ -58,11 +60,23 @@
   )
 
   function onDelete() {
-    useModal().open({
+    useModal().open(BeneficiaryDeleteForm, {
       title: 'Supprimer la fiche bénéficiaire',
-      contentComponent: BeneficiaryDeleteForm,
-      contentComponentProps: { beneficiaryId: props.beneficiaryId },
-      contentComponentEvents: { deleted: () => emit('deleted') }
+      onSuccess: () => {
+        useTrpcMutation({
+          mutation: () =>
+            useTrpcClient().beneficiary.delete.mutate({
+              id: props.beneficiaryId
+            }),
+          onSuccess: () => {
+            emit('deleted')
+            modal.close()
+          },
+          onFailure: () => {
+            useSnackbar().error('La suppression a échoué.')
+          }
+        })
+      }
     })
   }
 </script>

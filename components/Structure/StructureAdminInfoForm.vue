@@ -118,10 +118,9 @@
   import type { StructureInfo } from '~/components/Structure/types'
   import { CreateStructureInput, createStructureSchema } from '~/server/schema'
 
-  const props = defineProps<{ structure?: StructureInfo }>()
-
-  const emit = defineEmits<{
-    validate: [values: CreateStructureInput]
+  const props = defineProps<{
+    structure?: StructureInfo
+    validate: (values: CreateStructureInput) => void
   }>()
 
   const modal = useModal()
@@ -145,6 +144,6 @@
   })
 
   const { onSubmit } = useCatchFormErrors(handleSubmit, values =>
-    emit('validate', values)
+    props.validate(values)
   )
 </script>

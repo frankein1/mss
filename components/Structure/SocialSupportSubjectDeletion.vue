@@ -46,11 +46,10 @@
 
   defineProps<{
     isSubmitting: boolean
+    delete: () => void
   }>()
 
-  const emit = defineEmits<{ delete: [] }>()
-
   function onSubmit() {
-    emit('delete')
+    props.delete()
   }
 </script>

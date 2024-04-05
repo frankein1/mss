@@ -49,10 +49,9 @@
   }>()
 
   function onAddHelpRequest() {
-    useModal().open({
+    useModal().open(HelpRequestModal, {
       title: 'Nouvelle instruction de dossier',
-      contentComponent: HelpRequestModal,
-      contentComponentProps: { beneficiaryId: props.beneficiaryId }
+      beneficiaryId: props.beneficiaryId
     })
   }
 </script>
