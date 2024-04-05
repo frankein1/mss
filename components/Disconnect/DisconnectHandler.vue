@@ -84,10 +84,10 @@
   }
 
   function openDisconnectAlert() {
-    modal.open({
+    modal.open(DisconnectAlert, {
       title: `Vous allez être déconnecté.e dans ${alertThreshold} minutes`,
-      contentComponent: DisconnectAlert,
-      contentComponentEvents: { disconnect, keepConnect }
+      disconnect,
+      keepConnect
     })
   }
 

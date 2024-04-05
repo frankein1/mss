@@ -4,7 +4,7 @@
     <div class="export-btn-container">
       <button
         class="fr-btn"
-        @click="emit('export')"
+        @click="onExport"
       >
         Exporter
       </button>
@@ -13,7 +13,11 @@
 </template>
 
 <script lang="ts" setup>
-  const emit = defineEmits<{ export: [] }>()
+  const props = defineProps<{ export: () => void }>()
+
+  function onExport() {
+    props.export()
+  }
 </script>
 
 <style scoped>

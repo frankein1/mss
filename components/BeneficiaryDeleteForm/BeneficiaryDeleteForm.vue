@@ -43,9 +43,9 @@
 
   const props = defineProps<{
     beneficiaryId: string
-  }>()
 
-  const emit = defineEmits<{ deleted: [] }>()
+    deleted: () => void
+  }>()
 
   const isSubmitting = ref(false)
 
@@ -57,7 +57,7 @@
         }),
       isSubmitting,
       onSuccess: () => {
-        emit('deleted')
+        props.deleted()
         modal.close()
       },
       onFailure: () => {

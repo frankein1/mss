@@ -21,12 +21,9 @@
   const props = defineProps<{
     isSubmitting: boolean
     id: string
-  }>()
-
-  const emit = defineEmits<{
-    finish: [partner: EditPartnerOrganizationInput]
-    cancel: []
-    restore: [partner: PartnerOrganizationData]
+    finish: (partner: EditPartnerOrganizationInput) => void
+    cancel: () => void
+    restore: (partner: PartnerOrganizationData) => void
   }>()
 
   const partner = await useTrpcClient().partner.getOne.query({ id: props.id })
@@ -57,15 +54,15 @@
   const { caughtErrors, onSubmit } = useCatchFormErrors(
     handleSubmit,
     values => {
-      emit('finish', values)
+      props.finish(values)
     }
   )
 
   function onCancel() {
-    emit('cancel')
+    props.cancel()
   }
 
   function onRestore(partner: PartnerOrganizationData) {
-    emit('restore', partner)
+    props.restore(partner)
   }
 </script>

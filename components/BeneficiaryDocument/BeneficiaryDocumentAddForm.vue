@@ -54,15 +54,11 @@
 
   const props = defineProps<{
     beneficiaryId: string
-  }>()
-
-  const emit = defineEmits<{
-    newDocument: [key: string]
+    newDocument: (key: string) => void
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
-  // const submitErrors = ref(null)
 
   const { handleSubmit } = useForm<UploadBrowserDocumentInput>({
     validationSchema: toTypedSchema(uploadBrowserDocumentSchema),
@@ -97,7 +93,7 @@
           method: 'POST',
           body: formData
         })
-        emit('newDocument', key)
+        props.newDocument(key)
       } catch {
         useSnackbar().error("L'ajout du document a échoué.", () =>
           form.value?.querySelector('select')?.focus()

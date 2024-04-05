@@ -57,11 +57,10 @@
   }
 
   const onCreateStructure = () => {
-    modal.open({
+    modal.open(StructureAdminInfoForm, {
       title: "Création d'une structure",
-      contentComponent: StructureAdminInfoForm,
-      contentComponentProps: { structure: undefined },
-      contentComponentEvents: { validate: addStructure }
+      structure: undefined,
+      validate: addStructure
     })
   }
 

@@ -17,14 +17,11 @@
     addPartnerOrganizationSchema
   } from '~/server/schema'
 
-  defineProps<{
+  const props = defineProps<{
     isSubmitting: boolean
-  }>()
-
-  const emit = defineEmits<{
-    finish: [partner: AddPartnerOrganizationInput]
-    cancel: []
-    restore: [partner: PartnerOrganizationData]
+    finish: (partner: AddPartnerOrganizationInput) => void
+    cancel: () => void
+    restore: (partner: PartnerOrganizationData) => void
   }>()
 
   const { handleSubmit } = useForm<AddPartnerOrganizationInput>({
@@ -35,15 +32,15 @@
   const { caughtErrors, onSubmit } = useCatchFormErrors(
     handleSubmit,
     values => {
-      emit('finish', values)
+      props.finish(values)
     }
   )
 
   function onCancel() {
-    emit('cancel')
+    props.cancel()
   }
 
   function onRestore(partner: PartnerOrganizationData) {
-    emit('restore', partner)
+    props.restore(partner)
   }
 </script>

@@ -8,7 +8,7 @@
           class="fr-btn"
           title="Poursuivre la navigation"
           type="button"
-          @click="keepConnect"
+          @click="onKeepConnect"
         >
           Poursuivre la navigation
         </button>
@@ -18,7 +18,7 @@
           class="fr-btn fr-btn--secondary"
           title="Se déconnecter"
           type="button"
-          @click="disconnect"
+          @click="onDisconnect"
         >
           Se déconnecter
         </button>
@@ -30,15 +30,18 @@
 <script setup lang="ts">
   const modal = useModal()
 
-  const emit = defineEmits<{ disconnect: []; keepConnect: [] }>()
+  const props = defineProps<{
+    disconnect: () => void
+    keepConnect: () => void
+  }>()
 
-  function disconnect() {
-    emit('disconnect')
+  function onDisconnect() {
+    props.disconnect()
     modal.close()
   }
 
-  function keepConnect() {
-    emit('keepConnect')
+  function onKeepConnect() {
+    props.keepConnect()
     modal.close()
   }
 </script>

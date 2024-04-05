@@ -89,10 +89,9 @@
     editStructureInfoSchema
   } from '~/server/schema'
 
-  const props = defineProps<{ structure: StructureInfo }>()
-
-  const emit = defineEmits<{
-    validate: [values: EditStructureInfoInput]
+  const props = defineProps<{
+    structure: StructureInfo
+    validate: (values: EditStructureInfoInput) => void
   }>()
 
   const modal = useModal()
@@ -112,6 +111,6 @@
   })
 
   const { onSubmit } = useCatchFormErrors(handleSubmit, values =>
-    emit('validate', values)
+    props.validate(values)
   )
 </script>

@@ -44,13 +44,12 @@
 <script setup lang="ts">
   const modal = useModal()
 
-  defineProps<{
+  const props = defineProps<{
     isSubmitting: boolean
+    delete: () => void
   }>()
 
-  const emit = defineEmits<{ delete: [] }>()
-
   function onSubmit() {
-    emit('delete')
+    props.delete()
   }
 </script>

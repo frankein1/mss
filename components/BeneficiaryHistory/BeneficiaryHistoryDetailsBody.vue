@@ -154,16 +154,13 @@
   const canViewHistoryDetails = computed(() => permissions.value?.get.details)
 
   function onDelete() {
-    useModal().open({
+    useModal().open(BeneficiaryHistoryDeleteForm, {
       title: isFollowup.value
         ? "Supprimer la synthèse d'entretien"
         : "Supprimer l'instruction de dossier",
-      contentComponent: BeneficiaryHistoryDeleteForm,
-      contentComponentProps: {
-        socialSupportId: socialSupport.value.id,
-        isFollowup: isFollowup.value
-      },
-      contentComponentEvents: { deleted: onSocialSupportItemDeleted }
+      socialSupportId: socialSupport.value.id,
+      isFollowup: isFollowup.value,
+      deleted: onSocialSupportItemDeleted
     })
   }
 

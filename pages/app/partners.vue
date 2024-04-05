@@ -111,44 +111,32 @@ s
   })
 
   function openCreateModal() {
-    modal.open({
+    modal.open(PartnerOrganizationCreation, {
       title: 'Ajouter un organisme partenaire',
-      contentComponent: PartnerOrganizationCreation,
-      contentComponentProps: {
-        isSubmitting: isSubmitting.value
-      },
-      contentComponentEvents: {
-        finish: finishCreation,
-        cancel,
-        restore: restorePartner
-      }
+      isSubmitting: isSubmitting.value,
+      finish: finishCreation,
+      cancel,
+      restore: restorePartner
     })
   }
 
   function openEditModal(id: string) {
-    modal.open({
+    modal.open(PartnerOrganizationEdition, {
       title: 'Modifier un organisme partenaire',
-      contentComponent: PartnerOrganizationEdition,
-      contentComponentProps: {
-        id,
-        isSubmitting: isSubmitting.value
-      },
-      contentComponentEvents: {
-        finish: finishEdition,
-        cancel,
-        restore: restorePartner
-      }
+      id,
+      isSubmitting: isSubmitting.value,
+      finish: finishEdition,
+      cancel,
+      restore: restorePartner
     })
   }
 
   function openRemoveModal(partner: PartnerOrganizationData) {
-    modal.open({
+    modal.open(PartnerOrganizationRemoveAlert, {
       title: `Etes-vous sûr·e de supprimer l’organisme partenaire ${partner.name}?`,
-      contentComponent: PartnerOrganizationRemoveAlert,
-      contentComponentProps: {
-        partner
-      },
-      contentComponentEvents: { finish: finishDeletion, cancel }
+      partner,
+      finish: finishDeletion,
+      cancel
     })
   }
 

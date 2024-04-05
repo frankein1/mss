@@ -18,7 +18,7 @@
       </button>
       <button
         class="fr-btn fr-btn--secondary"
-        @click="create"
+        @click="confirmCreation"
       >
         Confirmer la création
       </button>
@@ -32,14 +32,13 @@
 
   const modal = useModal()
 
-  defineProps<{
+  const props = defineProps<{
     similarBeneficiary: Exclude<SimilarBeneficiary, undefined>
+    create: () => void
   }>()
 
-  const emit = defineEmits<{ create: [] }>()
-
-  function create() {
-    emit('create')
+  function confirmCreation() {
+    props.create()
     modal.close()
   }
 </script>

@@ -31,15 +31,15 @@
 <script setup lang="ts">
   const modal = useModal()
 
-  const emit = defineEmits<{ cancel: []; leave: [] }>()
+  const props = defineProps<{ cancel: () => void; leave: () => void }>()
 
   function onCancel() {
     modal.close()
-    emit('cancel')
+    props.cancel()
   }
 
   function onLeave() {
     modal.close()
-    emit('leave')
+    props.leave()
   }
 </script>
