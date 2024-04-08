@@ -1,0 +1,37 @@
+.card {
+  padding: 2rem 1.5rem;
+  border-radius: var(--default-border-radius);
+  display: flex;
+  justify-content: space-between;
+
+  &--rust {
+    background: var(--rust);
+
+    > * {
+      color: white;
+    }
+  }
+
+  &--deep-blue {
+    background: var(--deep-blue);
+
+    > * {
+      color: white;
+    }
+  }
+}
+
+.card-outline {
+  padding: 1.5rem;
+  border-radius: var(--default-border-radius);
+  border-width: 0;
+  background-color: white;
+
+  &--rust {
+    border-bottom: 0.25rem solid var(--rust);
+  }
+
+  &--deep-blue {
+    border-bottom: 0.25rem solid var(--deep-blue);
+  }
+}

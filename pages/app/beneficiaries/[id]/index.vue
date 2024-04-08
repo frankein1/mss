@@ -75,7 +75,20 @@
         title="Budget"
         icon="fr-icon-money-euro-circle-line"
       >
-        <BeneficiaryBudget :beneficiary-id="beneficiaryId" />
+        <AtomLoader
+          v-if="pending"
+          class="fr-mx-auto"
+        />
+        <AtomAlert
+          v-else-if="error"
+          :alert-type="AlertType.Error"
+          message="La fiche bénéficiaire n'a pas pu être chargée."
+        />
+        <BeneficiaryBudget
+          v-else-if="beneficiaryIdentification"
+          :beneficiary-identification="beneficiaryIdentification"
+          :tax-household="beneficiary.taxHouseholds?.taxHouseholds || []"
+        />
       </AtomTab>
     </AtomTabs>
   </PageContainer>
@@ -85,9 +98,10 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
+  import { useBeneficiaryDetails } from '~/composables/useBeneficiaryDetails'
 
   const route = useRoute()
-  const trpcClient = useTrpcClient()
+
   const beneficiaryId = route.params.id as string
   const originPage = route.query.originPage as
     | Route.AppOverview
@@ -97,33 +111,19 @@
   const originTab = route.query.hash as string | undefined
 
   const {
-    data,
-    pending: beneficiaryPending,
-    error: beneficiaryError
-  } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
-    id: beneficiaryId
-  })
+    beneficiary,
+    permissions,
+    beneficiaryIdentification,
+    pending,
+    error
+  } = await useBeneficiaryDetails(beneficiaryId)
 
-  const beneficiary = computed(() => data.value?.beneficiary || null)
-  const permissions = computed(() => data.value?.permissions)
   const title = RouteTitle.AppBeneficiary(beneficiary.value?.general || null)
 
   useHead({ title })
 
-  const beneficiaryIdentification = computed(() =>
-    beneficiary.value
-      ? {
-          id: beneficiary.value.id,
-          firstName: beneficiary.value.general.firstName,
-          birthName: beneficiary.value.general.birthName,
-          usualName: beneficiary.value.general.usualName,
-          birthDate: beneficiary.value.general.birthDate
-        }
-      : null
-  )
-
   const socialSupportSubjects = computed(
-    () => data.value?.beneficiary.history.subjects || []
+    () => beneficiary.value?.history.subjects || []
   )
 
   const backLink = computed(() => {
@@ -133,10 +133,6 @@
     }
     return RoutePath.AppBeneficiaries()
   })
-
-  const pending = computed(() => beneficiaryPending.value)
-
-  const error = computed(() => beneficiaryError.value)
 
   function onBeneficiaryDeleted() {
     navigateTo(backLink.value)
