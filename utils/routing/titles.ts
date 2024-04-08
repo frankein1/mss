@@ -42,6 +42,7 @@ export const RouteTitle = {
     'Modifier les informations générales du budget',
   [Route.AppBeneficiaryBudgetExpensesEdit]: () =>
     'Modifier les charges fixes mensuelles',
+  [Route.AppBeneficiaryBudgetIncomeEdit]: () => 'Modifier les revenus mensuels',
   [Route.AppBeneficiaryEdit]: (beneficiary: BeneficiaryNames | null) =>
     beneficiary ? `Modifier ${formatBeneficiaryDisplayName(beneficiary)}` : '',
   [Route.AppBeneficiaryEditInfo]: () => 'Informations bénéficiaire',
