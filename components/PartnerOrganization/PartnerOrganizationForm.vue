@@ -11,7 +11,7 @@
   >
     <div class="partner-form__subtitle fr-mb-2w">
       <div>Renseignez uniquement les champs qui vous sont utiles.</div>
-      <div>Les champ avec * sont obligatoires.</div>
+      <div>Les champs avec * sont obligatoires.</div>
     </div>
     <h3 class="fr-text--md formgroup__title fr-mb-2w">
       Informations principales
