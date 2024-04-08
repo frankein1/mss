@@ -10,9 +10,13 @@
   --primary-active: #{$primary-active};
   --rust: #{$rust};
   --rust-light: #{$rust-light};
+  --deep-blue: #{$deep-blue};
 
   /* Typo */
   --bold: #{$font-weight-bold};
+
+  /* Default values */
+  --default-border-radius: #{$default-border-radius};
 
   /* DSFR customisation */
   --background-action-high-blue-france: #{$primary};
@@ -268,4 +272,8 @@ select:focus:not(:focus-visible) {
     outline-color: inherit;
     outline-width: 2px;
   }
+}
+
+.euro-symbol::after {
+  content: '\00a0€';
 }

@@ -1,0 +1,16 @@
+ul.list-styled {
+  list-style-type: none;
+  padding-inline-start: unset;
+
+  > *:not(:last-child) {
+    border-bottom: 0.0625rem;
+    border-bottom-style: solid;
+    border-bottom-color: var(--border-default-grey);
+  }
+
+  > li {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+  }
+}

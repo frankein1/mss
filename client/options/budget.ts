@@ -27,3 +27,28 @@ export const budgetExpensesKeys = buildKeys({
   debts: 'Dette(s)',
   loans: 'Crédit(s)'
 })
+
+export const budgetIncomeKeys = buildKeys({
+  // Travail
+  salary: 'Salaire',
+  primeActivitey: "Prime d'activité",
+
+  // Pensions
+  retirement: 'Retraite',
+  alimony: 'Pension alimentaire reçue',
+  disability: "Pension d'invalidité",
+
+  // Allocations
+  unemployment: 'Allocations chômage - ARE',
+  ass: 'Allocation spécifique de solidarité - ASS',
+  rsa: 'Revenu de solidarité active - RSA',
+  apl: 'Allocations logement - APL',
+  family: 'Allocations familiales',
+  aah: 'Allocation adulte handicapé - AAH',
+  aspa: 'Allocation de solidarité aux personnes âgées - ASPA',
+
+  // Autre ressources
+  dailyAllowance: 'Indemnités journalières',
+  annuity: 'Rentes',
+  other: 'Autre'
+})
