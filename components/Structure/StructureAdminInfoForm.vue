@@ -48,10 +48,10 @@
       </div>
 
       <div class="fr-col-12">
-        <VeeInput
+        <VeeAddressInput
           name="address"
           :label="structureFieldLabels.address"
-          required
+          @address-selected="onAddressSelected"
         />
       </div>
 
@@ -127,7 +127,7 @@
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { handleSubmit } = useForm<CreateStructureInput>({
+  const { handleSubmit, setFieldValue } = useForm<CreateStructureInput>({
     validationSchema: toTypedSchema(createStructureSchema),
     initialValues: {
       type: props.structure?.type,
@@ -146,4 +146,9 @@
   const { onSubmit } = useCatchFormErrors(handleSubmit, values =>
     props.validate(values)
   )
+
+  const { onAddressSelected } = useAddressFields({
+    setCityValue: (value: string) => setFieldValue('city', value),
+    setZipcodeValue: (value: string) => setFieldValue('zipcode', value)
+  })
 </script>
