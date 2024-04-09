@@ -11,7 +11,7 @@ const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
     ctx,
     input.id
   )
-  return permissions.delete.beneficiary
+  return permissions.delete
 }
 
 const handler = async ({

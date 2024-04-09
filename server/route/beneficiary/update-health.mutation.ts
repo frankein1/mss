@@ -1,6 +1,9 @@
 import { UserActivityType } from '@prisma/client'
 import { createMutation } from '~/server/route'
-import { BeneficiaryPermissions, SecurityRuleContext } from '~/server/security'
+import {
+  SecurityRuleContext,
+  getAppContextPermissions
+} from '~/server/security'
 import {
   UpdateBeneficiaryHealthInput,
   updateBeneficiaryHealthSchema
@@ -17,25 +20,20 @@ const securityCheck = async (
     ctx,
     input.id
   )
-  return permissions.edit.health
+  const appPermission = getAppContextPermissions(ctx)
+  return appPermission.module.health && permissions.edit.health
 }
 
 const handler = async ({
   input,
-  ctx
+  ctx: _ctx
 }: {
   input: UpdateBeneficiaryHealthInput
   ctx: ProtectedAppContext
 }) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
-    ctx,
-    input.id
-  )
-  const data = filterInput({ input, permissions })
-
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id: input.id },
-    data
+    data: input
   })
 
   return updatedBeneficiary
@@ -54,18 +52,3 @@ export const updateHealthMutation = createMutation({
     action: UserActivityType.UPDATE
   }
 })
-
-function filterInput({
-  input,
-  permissions
-}: {
-  input: UpdateBeneficiaryHealthInput
-  permissions: BeneficiaryPermissions
-}) {
-  const { set } = permissions
-  const { id: _id, ...health } = input
-  if (!set.nir) {
-    delete health.socialSecurityNumber
-  }
-  return health
-}
