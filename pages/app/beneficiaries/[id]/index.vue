@@ -71,6 +71,7 @@
         />
       </AtomTab>
       <AtomTab
+        v-if="application.module.budget"
         :tab-id="BeneficiaryTab.Budget"
         title="Budget"
         icon="fr-icon-money-euro-circle-line"
@@ -117,6 +118,8 @@
     pending,
     error
   } = await useBeneficiaryDetails(beneficiaryId)
+
+  const { application } = usePermissions()
 
   const title = RouteTitle.AppBeneficiary(beneficiary.value?.general || null)
 

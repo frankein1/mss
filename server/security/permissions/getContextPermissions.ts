@@ -20,6 +20,7 @@ export type AppContextPermissions = {
     helpRequest: boolean
     partner: boolean
     vulnerablePerson: boolean
+    budget: boolean
   }
 }
 
@@ -54,7 +55,8 @@ function getAdminContextPermissions(): AppContextPermissions {
       ministere: false,
       helpRequest: false,
       partner: false,
-      vulnerablePerson: false
+      vulnerablePerson: false,
+      budget: false
     }
   }
 }
@@ -68,6 +70,7 @@ function getUserContextPermissions(
     instructor,
     referent,
     ministryAgent,
+    receptionAgent,
     ngo,
     cias,
     ccas
@@ -90,7 +93,8 @@ function getUserContextPermissions(
       ministere: ministryAgent,
       helpRequest: manager || socialWorker || instructor || referent,
       partner: manager || socialWorker,
-      vulnerablePerson: !ngo && !ministryAgent
+      vulnerablePerson: !ngo && !ministryAgent,
+      budget: !receptionAgent
     }
   }
 }

@@ -315,6 +315,14 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
           </tr>
+          <tr>
+            <td>Module budget</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class=""></td>
+            <td class="* les dossiers dont il est référent"></td>
+          </tr>
         </tbody>
       </table>
     </div>
