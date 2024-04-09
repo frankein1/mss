@@ -22,7 +22,7 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   await BeneficiaryRepo.prisma.delete({ where: { id } })
-} 
+}
 
 export const deleteBeneficiaryMutation = createMutation({
   inputValidation: idSchema,

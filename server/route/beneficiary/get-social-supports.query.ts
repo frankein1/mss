@@ -32,7 +32,7 @@ const securityCheck = async (
     ctx,
     input.beneficiaryId
   )
-  return permissions.list.history
+  return permissions.view.history
 }
 
 type HistoryFilters = GetHistoryInput['filters']

@@ -15,7 +15,6 @@
     </div>
     <div class="fr-col-12">
       <VeeInput
-        v-if="permissions.set.nir"
         name="socialSecurityNumber"
         :label="beneficiaryFieldLabels.socialSecurityNumber"
         type="social-security-number"
@@ -45,9 +44,4 @@
 <script lang="ts" setup>
   import { beneficiaryGirKeys } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
-  import { BeneficiaryPermissions } from '~/server/security'
-
-  defineProps<{
-    permissions: BeneficiaryPermissions
-  }>()
 </script>

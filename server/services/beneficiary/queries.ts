@@ -114,7 +114,10 @@ const filter = (
   const externalOrganisations = view.externalOrganisations
     ? getExternalOrganisations(beneficiary)
     : undefined
-  const health = view.health ? getHealth(beneficiary, permissions) : undefined
+  const health =
+    appPermissions.module.health && view.health
+      ? getHealth(beneficiary)
+      : undefined
   const occupationIncome = view.occupationIncome
     ? getOccupationIncome(beneficiary, appPermissions)
     : undefined
@@ -248,16 +251,12 @@ function getTaxHouseholds(beneficiary: BeneficiaryOutput) {
   }
 }
 
-function getHealth(
-  beneficiary: BeneficiaryOutput,
-  permissions: BeneficiaryPermissions
-) {
-  const { get } = permissions
+function getHealth(beneficiary: BeneficiaryOutput) {
   return {
     gir: beneficiary.gir,
     doctor: beneficiary.doctor,
     healthAdditionalInformation: beneficiary.healthAdditionalInformation,
-    socialSecurityNumber: get.nir ? beneficiary.socialSecurityNumber : null,
+    socialSecurityNumber: beneficiary.socialSecurityNumber,
     insurance: beneficiary.insurance
   }
 }
