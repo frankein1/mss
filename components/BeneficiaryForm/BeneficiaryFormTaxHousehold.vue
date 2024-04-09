@@ -4,6 +4,8 @@
       <button
         class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-delete-line"
         type="button"
+        data-fr-opened="false"
+        aria-controls="global-modal"
         @click="emit('removeTaxHousehold')"
       >
         Supprimer ce membre du foyer
