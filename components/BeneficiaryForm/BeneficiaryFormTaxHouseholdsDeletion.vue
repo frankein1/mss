@@ -25,7 +25,7 @@
           </li>
           <li>
             <button
-              class="fr-btn"
+              class="fr-btn btn-delete-action"
               type="submit"
             >
               Supprimer
