@@ -62,6 +62,7 @@
   .filter-radio--as-tag {
     .fr-fieldset__element {
       padding-right: 0;
+      padding-left: 0.25rem;
     }
   }
 </style>
