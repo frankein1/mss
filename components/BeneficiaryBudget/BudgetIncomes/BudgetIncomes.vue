@@ -7,7 +7,7 @@
   <section
     v-for="(income, idxIncome) in incomes"
     :key="idxIncome"
-    class="card-outline card-outline--deep-blue"
+    class="card-outline card-outline--deep-blue fr-mb-2w"
   >
     <div class="budget-income__title">
       <h4 class="fr-text--lead fr-m-0">{{ memberNames[idxIncome] }}</h4>
@@ -42,6 +42,13 @@
       </NuxtLink>
     </div>
   </section>
+
+  <section>
+    <BudgetIncomesAddMember
+      :budget-id="budgetId"
+      :beneficiary-id="beneficiaryIdentification.id"
+    />
+  </section>
 </template>
 
 <script lang="ts" setup>
@@ -60,6 +67,7 @@
   const props = defineProps<{
     beneficiaryIdentification: BeneficiaryIdentification
     householdMembers: Record<string, GetBeneficiaryRelative>
+    budgetId: string
     incomes: BudgetIncome[]
   }>()
 
@@ -101,10 +109,6 @@
 <style scoped lang="scss">
   @use '~/assets/style/card' as *;
   @use '~/assets/style/list' as *;
-
-  .card-outline {
-    margin-bottom: 1rem;
-  }
 
   .budget-income__title {
     display: flex;

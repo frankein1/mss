@@ -38,3 +38,15 @@ export const createOrUpdateTaxHouseholdSchema = createOrUpdateEntourageSchema
 export type CreateOrUpdateTaxHouseholdInput = z.infer<
   typeof createOrUpdateTaxHouseholdSchema
 >
+
+export const createHouseholdMemberSchema = z.object({
+  lastName: stringOrEmpty(beneficiaryLastNameSchema),
+  firstName: beneficiaryFirstNameOrEmptySchema,
+  relationship: withEmptyValueOptionalNativeEnum(RelativeRelationship),
+  beneficiaryId: z.string().uuid(),
+  budgetId: z.string().uuid()
+})
+
+export type CreateHouseholdMemberInput = z.infer<
+  typeof createHouseholdMemberSchema
+>

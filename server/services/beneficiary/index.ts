@@ -12,9 +12,11 @@ import {
   BeneficiarySecurityTarget
 } from './permission.service'
 import { getSimilar } from './getSimilar.service'
+import { createHouseholdMember } from './create-household-member.service'
 
 export const BeneficiaryService = {
   create,
+  createHouseholdMember,
   getCreationPermissions,
   getEditionPermissions,
   get,
