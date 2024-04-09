@@ -11,33 +11,34 @@
       </p>
 
       <div class="fr-col-12">
-        <ul
-          class="fr-btns-group fr-btns-group--inline-md fr-btns-group--right fr-mt-2w"
+        <DsfrButtonGroup
+          equisized
+          inline-layout-when="always"
+          align="right"
         >
           <li>
-            <button
-              class="fr-btn fr-btn--secondary"
+            <DsfrButton
+              label="Annuler"
               type="button"
+              secondary
               @click="modal.close"
-            >
-              Annuler
-            </button>
+            ></DsfrButton>
           </li>
           <li>
-            <button
-              class="fr-btn btn-delete-action"
-              type="submit"
-            >
-              Supprimer
-            </button>
+            <DsfrButton
+              label="Supprimer"
+              class="btn-delete-action"
+            ></DsfrButton>
           </li>
-        </ul>
+        </DsfrButtonGroup>
       </div>
     </div>
   </form>
 </template>
 
 <script setup lang="ts">
+  import { DsfrButton } from '@gouvminint/vue-dsfr'
+
   const modal = useModal()
 
   const props = defineProps<{
