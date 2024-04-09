@@ -55,8 +55,10 @@
       </div>
     </main>
 
-    <BudgetActions
+    <BudgetActionBar
       :is-submitting="isSubmitting"
+      has-secondary-action
+      confirm-secondary-label="Enregistrer"
       @cancel="() => {}"
     />
   </form>

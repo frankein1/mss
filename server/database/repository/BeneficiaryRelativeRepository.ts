@@ -24,6 +24,7 @@ export const BeneficiaryRelativeRepo = {
   findMany,
   update,
   prisma: {
+    create: prismaClient.beneficiaryRelative.create,
     createMany: prismaClient.beneficiaryRelative.createMany
   }
 }

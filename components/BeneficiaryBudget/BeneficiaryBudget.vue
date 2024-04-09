@@ -28,6 +28,7 @@
             :beneficiary-identification="beneficiaryIdentification"
             :household-members="householdMembers"
             :incomes="data.incomes"
+            :budget-id="data.id"
           />
         </div>
 
