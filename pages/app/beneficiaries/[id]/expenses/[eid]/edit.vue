@@ -185,6 +185,7 @@
     color: var(--primary);
     font-weight: var(--bold);
 
+    // TODO use euro-symbol
     &::after {
       content: '\00a0€';
     }
