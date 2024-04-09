@@ -12,7 +12,7 @@ const securityCheck = async (
     ctx,
     input.beneficiaryId
   )
-  return permissions.list.documents
+  return permissions.view.documents
 }
 
 const handler = ({
