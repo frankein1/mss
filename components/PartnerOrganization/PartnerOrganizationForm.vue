@@ -27,12 +27,28 @@
       </div>
       <div class="fr-col-12">
         <VeeInput
+          class="fr-mb-1w"
           name="siret"
           :label="partnerOrganizationFieldLabels.siret"
           hint="Format attendu : 01234567890123"
           required
           @change-input="onSiretChange"
         />
+        <div
+          class="fr-text--xs fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+        >
+          Rdv sur
+          <NuxtLink
+            to="https://annuaire-entreprises.data.gouv.fr/"
+            class="fr-link fr-text--xs"
+            title="Site Web de annuaire entreprise - nouvelle fenêtre"
+            target="_blank"
+            rel="noopener external"
+            >https://annuaire-entreprises.data.gouv.fr/</NuxtLink
+          >
+          ou sur votre moteur de recherche pour trouver le n° de Siret d'un
+          organisme
+        </div>
         <template v-if="partnerWithSameSiret">
           <div class="fr-alert fr-alert--error fr-mb-2w">
             <h3 class="fr-alert__title">
