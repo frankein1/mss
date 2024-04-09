@@ -1,6 +1,6 @@
 <template>
   <ul class="fr-btns-group fr-btns-group--inline">
-    <li v-if="permissions?.delete.beneficiary">
+    <li v-if="permissions?.delete">
       <button
         class="fr-btn fr-btn--secondary fr-icon-delete-line btn-delete-action"
         data-fr-opened="false"

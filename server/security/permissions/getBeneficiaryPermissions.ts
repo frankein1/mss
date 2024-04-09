@@ -39,9 +39,7 @@ export type BeneficiaryPermissions = {
     followup: boolean
     comment: boolean
   }
-  delete: {
-    beneficiary: boolean
-  }
+  delete: boolean
 }
 
 const FALSY_PERMISSIONS: BeneficiaryPermissions = {
@@ -75,9 +73,7 @@ const FALSY_PERMISSIONS: BeneficiaryPermissions = {
     followup: false,
     comment: false
   },
-  delete: {
-    beneficiary: false
-  }
+  delete: false
 }
 
 export const getBeneficiaryPermissions = ({
@@ -102,10 +98,10 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
   return {
     edit: {
       general: true,
+      externalOrganisations: true,
       relatives: !receptionAgent,
       health: !receptionAgent,
-      occupationIncome: !receptionAgent,
-      externalOrganisations: true
+      occupationIncome: !receptionAgent
     },
     view: {
       general: false,
@@ -131,9 +127,7 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
       followup: false,
       comment: false
     },
-    delete: {
-      beneficiary: false
-    }
+    delete: false
   }
 }
 
@@ -196,8 +190,6 @@ function getEditionPermissions({
       comment:
         isReferent || manager || socialWorker || instructor || receptionAgent
     },
-    delete: {
-      beneficiary: manager || socialWorker
-    }
+    delete: manager || socialWorker
   }
 }
