@@ -200,7 +200,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* si créée par lui</td>
             <td>* si créée par lui</td>
-            <td></td>
+            <td>* si créée par lui</td>
             <td>* si il est référent</td>
           </tr>
           <tr>
