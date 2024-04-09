@@ -26,7 +26,7 @@
           <VeeSelect
             name="Statut"
             :label="relativeFieldLabels.relationship"
-            :options="withEmptyValue(taxHouseHoldRelationshipKeys.options)"
+            :options="taxHouseHoldRelationshipKeys.options"
             required
           />
         </div>

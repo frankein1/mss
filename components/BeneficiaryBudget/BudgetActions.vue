@@ -41,7 +41,7 @@
     defineProps<{
       isSubmitting: boolean
       cancelLabel?: string
-      confirmLabel: string
+      confirmLabel?: string
       hasSecondaryAction?: boolean
       confirmSecondaryLabel?: string
     }>(),
