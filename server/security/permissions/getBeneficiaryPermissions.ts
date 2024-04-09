@@ -24,15 +24,9 @@ export type BeneficiaryPermissions = {
     health: boolean
     occupationIncome: boolean
     externalOrganisations: boolean
+    documents: boolean
+    history: boolean
   }
-  list: { documents: boolean; history: boolean }
-  get: {
-    nir: boolean
-  }
-  set: {
-    nir: boolean
-  }
-
   create: {
     helpRequest: boolean
     document: boolean
@@ -55,17 +49,9 @@ const FALSY_PERMISSIONS: BeneficiaryPermissions = {
     relatives: false,
     health: false,
     occupationIncome: false,
-    externalOrganisations: false
-  },
-  list: {
+    externalOrganisations: false,
     documents: false,
     history: false
-  },
-  get: {
-    nir: false
-  },
-  set: {
-    nir: false
   },
   create: {
     helpRequest: false,
@@ -94,7 +80,7 @@ export const getBeneficiaryPermissions = ({
 }
 
 function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
-  const { cias, ccas, receptionAgent } = getGranteRole(ctx)
+  const { receptionAgent } = getGranteRole(ctx)
   return {
     edit: {
       general: true,
@@ -108,19 +94,10 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
       relatives: false,
       health: false,
       occupationIncome: false,
-      externalOrganisations: false
-    },
-    list: {
+      externalOrganisations: false,
       documents: false,
       history: false
     },
-    get: {
-      nir: cias || ccas
-    },
-    set: {
-      nir: cias || ccas
-    },
-
     create: {
       helpRequest: false,
       document: false,
@@ -147,48 +124,38 @@ function getEditionPermissions({
   const isReferent = isReferentFor(user, beneficiary)
   const isMember = isMemberOfReferents(user, beneficiary)
 
-  const { manager, socialWorker, instructor, receptionAgent, cias, ccas } =
+  const { manager, socialWorker, instructor, receptionAgent } =
     getGranteRole(ctx)
+
+  const hasAccessRight =
+    isReferent || manager || socialWorker || instructor || receptionAgent
+  const hasRestrictedRights =
+    isReferent || manager || socialWorker || instructor
+  const hasHealthAccessRight =
+    isReferent || ((manager || socialWorker || instructor) && isMember)
 
   return {
     edit: {
-      general:
-        isReferent || manager || socialWorker || instructor || receptionAgent,
-      relatives: isReferent || manager || socialWorker || instructor,
-      health:
-        isReferent || ((manager || socialWorker || instructor) && isMember),
-      occupationIncome: isReferent || manager || socialWorker || instructor,
-      externalOrganisations: isReferent || manager || socialWorker || instructor
-    },
-    get: {
-      nir: cias || ccas
-    },
-    set: {
-      nir: cias || ccas
+      general: hasAccessRight,
+      relatives: hasRestrictedRights,
+      health: hasHealthAccessRight,
+      occupationIncome: hasRestrictedRights,
+      externalOrganisations: hasRestrictedRights
     },
     view: {
-      general:
-        isReferent || manager || socialWorker || instructor || receptionAgent,
-      relatives: isReferent || manager || socialWorker || instructor,
-      health:
-        isReferent || ((manager || socialWorker || instructor) && isMember),
-      occupationIncome: isReferent || manager || socialWorker || instructor,
-      externalOrganisations: isReferent || manager || socialWorker || instructor
-    },
-    list: {
-      documents:
-        isReferent || manager || socialWorker || instructor || receptionAgent,
-      history:
-        isReferent || manager || socialWorker || instructor || receptionAgent
+      general: hasAccessRight,
+      relatives: hasRestrictedRights,
+      occupationIncome: hasRestrictedRights,
+      health: hasHealthAccessRight,
+      externalOrganisations: hasRestrictedRights,
+      documents: hasAccessRight,
+      history: hasAccessRight
     },
     create: {
-      helpRequest: isReferent || manager || socialWorker || instructor,
-      document:
-        isReferent || manager || socialWorker || instructor || receptionAgent,
-      followup:
-        isReferent || manager || socialWorker || instructor || receptionAgent,
-      comment:
-        isReferent || manager || socialWorker || instructor || receptionAgent
+      helpRequest: hasRestrictedRights,
+      document: hasAccessRight,
+      followup: hasAccessRight,
+      comment: hasAccessRight
     },
     delete: manager || socialWorker
   }
