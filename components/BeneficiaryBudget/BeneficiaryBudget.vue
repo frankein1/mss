@@ -1,10 +1,6 @@
 <template>
   <div class="beneficiary-budget__title">
-    <img
-      src="/pictograms/money.svg"
-      class="img"
-      alt=""
-    />
+    <AtomPictogram path="/pictograms/money.svg" />
     <h2 class="fr-m-0">Budget mensuel du foyer fiscal</h2>
   </div>
 
