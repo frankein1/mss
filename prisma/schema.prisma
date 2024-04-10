@@ -371,6 +371,9 @@ model FileInstruction {
   instructorOrganizationId String?              @map("instructor_organization_id") @db.Uuid
   instructorOrganization   PartnerOrganization? @relation("file_instruction_instructor_organization", fields: [instructorOrganizationId], references: [id])
 
+  instructorOrganizationContactId String?                     @map("instructor_organization_contact_id") @db.Uuid
+  instructorOrganizationContact   PartnerOrganizationContact? @relation("file_instruction_instructor_organization_contact", fields: [instructorOrganizationContactId], references: [id])
+
   externalStructure Boolean   @map("external_structure")
   examinationDate   DateTime? @map("examination_date") @db.Date
   decisionDate      DateTime? @map("decision_date") @db.Date
@@ -411,6 +414,9 @@ model HelpRequest {
 
   prescribingOrganizationId String?              @map("prescribing_organization_id") @db.Uuid
   prescribingOrganization   PartnerOrganization? @relation("help_request_prescribing_organization", fields: [prescribingOrganizationId], references: [id])
+
+  prescribingOrganizationContactId String?              @map("prescribing_organization_contact_id") @db.Uuid
+  prescribingOrganizationContact   PartnerOrganizationContact? @relation("help_request_prescribing_organization_contact", fields: [prescribingOrganizationContactId], references: [id])
 
   financialSupport Boolean  @map("financial_support")
   isRefundable     Boolean? @map("is_refundable")
@@ -1543,6 +1549,9 @@ model PartnerOrganizationContact {
 
   partner   PartnerOrganization @relation(fields: [partnerId], references: [id])
   partnerId String              @map("partner_id") @db.Uuid
+
+  fileInstructionInstructorOrganizationContacts FileInstruction[] @relation("file_instruction_instructor_organization_contact")
+  helpRequestInstructorOrganizationContacts HelpRequest[] @relation("help_request_prescribing_organization_contact")
 
   @@map("partner_organization_contact")
 }

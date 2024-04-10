@@ -10,6 +10,8 @@
     @submit.prevent="emit('submit', $event)"
   >
     <div class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom">
+      <!-- ROW -->
+
       <div class="fr-col-12">
         <VeeCheckbox
           :label="followupFieldLabels.firstFollowup"
@@ -17,7 +19,8 @@
         />
       </div>
 
-      <div>
+      <!-- ROW -->
+      <div class="fr-col-6">
         <VeeInput
           name="date"
           :label="followupFieldLabels.date"
@@ -25,16 +28,29 @@
           required
         />
       </div>
+      <div class="fr-col-6"></div>
 
+      <!-- ROW -->
       <div v-if="application.module.ministere">
-        <VeeInput
-          name="numeroPegase"
-          :label="followupFieldLabels.numeroPegase"
-          hint="Format attendu : A-00-000000"
-        />
+        <div class="fr-col-6">
+          <VeeInput
+            name="numeroPegase"
+            :label="followupFieldLabels.numeroPegase"
+            hint="Format attendu : A-00-000000"
+          />
+        </div>
+        <div class="fr-col-6">
+          <VeeSelect
+            name="ministre"
+            :label="followupFieldLabels.ministre"
+            :options="withEmptyValue(ministerKeys.options)"
+            required
+          />
+        </div>
       </div>
 
-      <div>
+      <!-- ROW -->
+      <div class="fr-col-6">
         <VeeSelect
           name="medium"
           :label="followupFieldLabels.medium"
@@ -42,77 +58,66 @@
           required
         />
       </div>
-
-      <div v-if="application.module.ministere">
+      <div class="fr-col-6">
         <VeeSelect
-          name="ministre"
-          :label="followupFieldLabels.ministre"
-          :options="withEmptyValue(ministerKeys.options)"
-          required
+          name="duration"
+          :label="followupFieldLabels.duration"
+          :options="withEmptyValue(followupDurationKeys.options)"
         />
       </div>
 
-      <div
-        v-if="medium === FollowupMedium.ExternalAppointment"
-        class="fr-col-12 fr-col-lg-8"
-      >
+      <!-- ROW -->
+      <template v-if="medium === FollowupMedium.ExternalAppointment"></template>
+      <div class="fr-col-6">
         <VeeInput
           name="place"
           :label="followupFieldLabels.place"
         />
       </div>
+      <div class="fr-col-6"></div>
 
-      <div v-if="medium === FollowupMedium.ThirdParty">
-        <VeeInput
-          name="thirdPersonName"
-          :label="followupFieldLabels.thirdPersonName"
-        />
-      </div>
+      <!-- ROW -->
+      <template v-if="medium === FollowupMedium.ThirdParty">
+        <div class="fr-col-6">
+          <VeeInput
+            name="thirdPersonName"
+            :label="followupFieldLabels.thirdPersonName"
+          />
+        </div>
+        <div class="fr-col-6"></div>
+      </template>
 
-      <div>
+      <!-- ROW -->
+      <div class="fr-col-12">
         <VeeSearchableSelect
           :label="followupFieldLabels.subjects"
           name="subjects"
           :options="socialSupportSubjectOptions"
           required
-          hint
           multiple
         >
-          <template #hint>
-            <NuxtLink
-              v-if="application.edit.structure"
-              :to="RoutePath.AppStructure()"
-              class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-            >
-              Je personnalise les objets d'accompagnement de ma structure
-            </NuxtLink>
-            <template v-else>
-              Les responsables de votre structure peuvent personnaliser les
-              objets d'accompagnement.
-            </template>
-          </template>
+          <template #hint> </template>
         </VeeSearchableSelect>
       </div>
 
-      <div>
-        <VeeSearchableSelect
-          :label="followupFieldLabels.prescribingOrganizationId"
-          name="prescribingOrganizationId"
-          :options="withEmptyValue(partnerOrganizationOptions)"
-          hint
+      <!-- ROW -->
+      <!-- ROW -->
+      <div class="fr-col-12 fr-mt-0 fr-pt-0">
+        <NuxtLink
+          v-if="application.edit.structure"
+          :to="RoutePath.AppStructure()"
+          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
         >
-          <template #hint>
-            <NuxtLink
-              :to="RoutePath.AppPartners()"
-              class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-            >
-              Données issues de l'annuaire de partenaires
-            </NuxtLink>
-          </template>
-        </VeeSearchableSelect>
+          Je personnalise les objets d'accompagnement de ma structure
+        </NuxtLink>
+        <template v-else>
+          Les responsables de votre structure peuvent personnaliser les objets
+          d'accompagnement.
+        </template>
       </div>
 
-      <div>
+      <!-- ROW -->
+      <div class="fr-col-6">
         <VeeSelect
           name="status"
           :label="followupFieldLabels.status"
@@ -121,7 +126,7 @@
         />
       </div>
 
-      <div>
+      <div class="fr-col-6">
         <VeeInput
           name="dueDate"
           :label="followupFieldLabels.dueDate"
@@ -129,14 +134,35 @@
         />
       </div>
 
-      <div>
+      <!-- ROW -->
+      <div class="fr-col-6">
+        <VeeSearchableSelect
+          :label="followupFieldLabels.prescribingOrganizationId"
+          name="prescribingOrganizationId"
+          :options="withEmptyValue(partnerOrganizationOptions)"
+        >
+        </VeeSearchableSelect>
+      </div>
+      <div class="fr-col-6">
         <VeeSelect
-          name="duration"
-          :label="followupFieldLabels.duration"
+          name="prescribingOrganizationContactId"
+          :label="followupFieldLabels.prescribingOrganizationContactId"
           :options="withEmptyValue(followupDurationKeys.options)"
         />
       </div>
 
+      <!-- ROW -->
+      <div class="fr-col-6 fr-mt-0 fr-pt-0">
+        <NuxtLink
+          :to="RoutePath.AppPartners()"
+          class="fr-link fr-icon-info-fill fr-link--icon-left"
+        >
+          Données issues de l'annuaire de partenaires
+        </NuxtLink>
+      </div>
+      <div class="fr-col-6 fr-mt-0 fr-pt-0"></div>
+
+      <!-- ROW -->
       <div class="fr-col-12">
         <VeeTextarea
           class="large-textarea"
@@ -145,6 +171,7 @@
         />
       </div>
 
+      <!-- ROW -->
       <div
         v-if="canSetPrivateSynthesis"
         class="fr-col-12"
@@ -163,6 +190,7 @@
         </VeeTextarea>
       </div>
 
+      <!-- ROW -->
       <div class="fr-col-12">
         <fieldset
           class="fr-fieldset fr-col-12"
