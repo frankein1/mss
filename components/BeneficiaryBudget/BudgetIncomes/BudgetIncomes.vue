@@ -57,14 +57,14 @@
     taxHouseHoldRelationshipKeys,
     budgetIncomeKeys
   } from '~/client/options'
-  import { IncomeKey, GetIncomeHouseholdMember } from '~/types/budget'
+  import { IncomeKey, GetBudgetIncomeHouseholdMember } from '~/types/budget'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { BeneficiaryIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     beneficiaryIdentification: BeneficiaryIdentification
     budgetId: string
-    incomes: GetIncomeHouseholdMember[]
+    incomes: GetBudgetIncomeHouseholdMember[]
   }>()
 
   const memberNames = computed(() =>

@@ -53,7 +53,7 @@
       iconColorClass?: string
       iconBackgroundClass?: string
       pictogramPath?: string
-      pictogramBackground: boolean
+      pictogramBackground?: boolean
       subtitle?: string
       subtitlePictoPath?: string
     }>(),
