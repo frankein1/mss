@@ -8,5 +8,10 @@ export async function getIncome({
   ctx: SecurityRuleContext
   id: string
 }) {
-  return await BudgetIncomeRepo.findUniqueOrThrow(ctx.user, { where: { id } })
+  return await BudgetIncomeRepo.findUniqueOrThrow(ctx.user, {
+    where: { id },
+    include: {
+      beneficiaryRelative: true
+    }
+  })
 }

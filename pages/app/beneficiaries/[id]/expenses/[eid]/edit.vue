@@ -59,7 +59,7 @@
       :is-submitting="isSubmitting"
       has-secondary-action
       confirm-secondary-label="Enregistrer"
-      @cancel="() => {}"
+      @cancel="onCancel"
     />
   </form>
 </template>
@@ -68,6 +68,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath, Route } from '~/utils/routing'
   import { useBeneficiarySummary } from '~/composables/useBeneficiarySummary'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     UpdateBudgetExpensesInput,
     updateBudgetExpensesSchema
@@ -168,6 +169,15 @@
       return acc + expense
     }, 0)
   })
+
+  function onCancel() {
+    navigateTo(
+      RoutePath.AppBeneficiary(beneficiaryId, {
+        tab: BeneficiaryTab.Budget,
+        originPage: route.name as Route.AppBeneficiaryBudgetExpensesEdit
+      })
+    )
+  }
 </script>
 
 <style scoped lang="scss">

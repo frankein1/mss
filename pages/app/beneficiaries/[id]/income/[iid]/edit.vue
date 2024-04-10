@@ -59,20 +59,22 @@
       :is-submitting="isSubmitting"
       has-secondary-action
       confirm-secondary-label="Enregistrer"
-      @cancel="() => {}"
+      @cancel="onCancel"
     />
   </form>
 </template>
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { Breadcrumb, RouteTitle, RoutePath, Route } from '~/utils/routing'
   import { useBeneficiarySummary } from '~/composables/useBeneficiarySummary'
   import {
     UpdateBudgetIncomeInput,
     updateBudgetIncomeSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { taxHouseHoldRelationshipKeys } from '~/client/options'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
@@ -85,7 +87,9 @@
 
   useHead({ title })
 
-  const subtitle = computed(() => 'de NOM Prénom')
+  definePageMeta({
+    name: Route.AppBeneficiaryBudgetIncomeEdit
+  })
 
   const {
     beneficiaryIdentification,
@@ -98,6 +102,17 @@
     pending,
     error
   } = await trpcClient.budget.getIncome.useQuery({ id: incomeId })
+
+  const subtitle = computed(() => {
+    if (income.value?.type === 'Beneficiary') {
+      return `de ${beneficiaryIdentification.value?.firstName || ''} ${beneficiaryIdentification.value?.usualName || ''}`
+    }
+
+    const member = income.value?.beneficiaryRelative
+    return member && (member.firstName || member.lastName)
+      ? `de ${income.value?.beneficiaryRelative?.firstName || ''} ${income.value?.beneficiaryRelative?.lastName || ''}  - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
+      : `Membre du foyer`
+  })
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
@@ -147,12 +162,10 @@
       mutation: () => trpcClient.budget.updateIncome.mutate(values),
       onSuccess: () => {
         navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
-        snackbar.success(
-          'Les charges mensuelles ont été mises à jour avec succès'
-        )
+        snackbar.success('Les revenus mensuels ont été mis à jour avec succès')
       },
       onFailure: () => {
-        snackbar.error('La mise à jour des charges mensuelles a échoué.')
+        snackbar.error('La mise à jour des revenus mensuels a échoué.')
       }
     })
   })
@@ -163,6 +176,15 @@
       return acc + income
     }, 0)
   })
+
+  function onCancel() {
+    navigateTo(
+      RoutePath.AppBeneficiary(beneficiaryId, {
+        tab: BeneficiaryTab.Budget,
+        originPage: route.name as Route.AppBeneficiaryBudgetIncomeEdit
+      })
+    )
+  }
 </script>
 
 <style scoped lang="scss">

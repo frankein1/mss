@@ -12,7 +12,11 @@ export async function getBudget({
     where: { beneficiaryId },
     include: {
       expenses: true,
-      incomes: true
+      incomes: {
+        include: {
+          beneficiaryRelative: true
+        }
+      }
     }
   })
 }
