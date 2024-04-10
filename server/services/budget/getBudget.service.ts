@@ -8,7 +8,7 @@ export async function getBudget({
   ctx: SecurityRuleContext
   beneficiaryId: string
 }) {
-  return await BudgetRepo.findUniqueOrThrow(ctx.user, {
+  const budget = await BudgetRepo.findUniqueOrThrow(ctx.user, {
     where: { beneficiaryId },
     include: {
       expenses: true,
@@ -19,4 +19,34 @@ export async function getBudget({
       }
     }
   })
+
+  budget.incomes.sort((a, b) => {
+    if (a.type === 'Beneficiary') {
+      return -1
+    }
+    if (b.type === 'Beneficiary') {
+      return 1
+    }
+    if (a.householdMember?.relationship === 'Conjoint') {
+      return -1
+    }
+    if (b.householdMember?.relationship === 'Conjoint') {
+      return 1
+    }
+    if (a.householdMember?.relationship === 'EnfantMajeur') {
+      return -1
+    }
+    if (b.householdMember?.relationship === 'EnfantMajeur') {
+      return 1
+    }
+    if (a.householdMember?.relationship === 'EnfantMineur') {
+      return -1
+    }
+    if (b.householdMember?.relationship === 'EnfantMineur') {
+      return 1
+    }
+    return 0
+  })
+
+  return budget
 }

@@ -110,7 +110,7 @@
 
     const member = income.value?.householdMember
     return member && (member.firstName || member.lastName)
-      ? `de ${income.value?.householdMember?.firstName || ''} ${income.value?.householdMember?.lastName || ''}  - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
+      ? `de ${member.firstName || ''} ${member.lastName || ''}  - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
       : `Membre du foyer`
   })
 
