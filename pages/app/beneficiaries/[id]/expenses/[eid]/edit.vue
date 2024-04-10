@@ -30,6 +30,7 @@
         <PageTitle
           :title="title"
           pictogram-path="/pictograms/money.svg"
+          pictogram-background
           subtitle="du foyer fiscal"
         />
 
