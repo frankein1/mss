@@ -14,7 +14,7 @@ export async function getBudget({
       expenses: true,
       incomes: {
         include: {
-          beneficiaryRelative: true
+          householdMember: true
         }
       }
     }

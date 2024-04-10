@@ -11,7 +11,7 @@ export async function getIncome({
   return await BudgetIncomeRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
     include: {
-      beneficiaryRelative: true
+      householdMember: true
     }
   })
 }

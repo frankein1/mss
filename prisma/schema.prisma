@@ -1253,8 +1253,8 @@ model BudgetIncome {
 
   type BudgetIncomeType
 
-  beneficiaryRelativeId String?              @unique @map("beneficiary_relative_id") @db.Uuid
-  beneficiaryRelative   BeneficiaryRelative? @relation(fields: [beneficiaryRelativeId], references: [id])
+  householdMemberId String?              @unique @map("household_member_id") @db.Uuid
+  householdMember   BeneficiaryRelative? @relation(fields: [householdMemberId], references: [id], onDelete: Cascade)
 
   budgetId String @map("budget_id") @db.Uuid
   budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)

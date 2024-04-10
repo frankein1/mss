@@ -108,9 +108,9 @@
       return `de ${beneficiaryIdentification.value?.firstName || ''} ${beneficiaryIdentification.value?.usualName || ''}`
     }
 
-    const member = income.value?.beneficiaryRelative
+    const member = income.value?.householdMember
     return member && (member.firstName || member.lastName)
-      ? `de ${income.value?.beneficiaryRelative?.firstName || ''} ${income.value?.beneficiaryRelative?.lastName || ''}  - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
+      ? `de ${income.value?.householdMember?.firstName || ''} ${income.value?.householdMember?.lastName || ''}  - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
       : `Membre du foyer`
   })
 
