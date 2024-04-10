@@ -20,7 +20,10 @@
         </div>
         <div>
           <div class="fr-text--lg fr-m-0">Reste à vivre</div>
-          <div class="fr-h6 fr-m-0 fr-m-0 item__amount">
+          <div
+            class="fr-h6 fr-m-0 fr-m-0 item__amount"
+            :class="{ 'euro-symbol': !!budget.remainingAfterExpenses }"
+          >
             {{ budget.remainingAfterExpenses || '-' }}
           </div>
         </div>
@@ -36,7 +39,10 @@
         />
         <div>
           <div class="fr-text--lg fr-m-0">Epargne</div>
-          <div class="fr-h6 fr-m-0 item__amount">
+          <div
+            class="fr-h6 fr-m-0 item__amount"
+            :class="{ 'euro-symbol': !!budget.savings }"
+          >
             {{ budget.savings || '-' }}
           </div>
         </div>
@@ -51,7 +57,10 @@
         ></span>
         <div>
           <div class="fr-text--lg fr-m-0">Découvert</div>
-          <div class="fr-h6 fr-m-0 item__amount">
+          <div
+            class="fr-h6 fr-m-0 item__amount"
+            :class="{ 'euro-symbol': !!budget.overdraft }"
+          >
             {{ budget.overdraft || '-' }}
           </div>
         </div>
@@ -66,7 +75,10 @@
         ></span>
         <div>
           <div class="fr-text--lg fr-m-0">Quotient familial</div>
-          <div class="fr-h6 fr-m-0 item__amount">
+          <div
+            class="fr-h6 fr-m-0 item__amount"
+            :class="{ 'euro-symbol': !!budget.familyQuotient }"
+          >
             {{ budget.familyQuotient || '-' }}
           </div>
         </div>
