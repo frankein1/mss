@@ -77,7 +77,7 @@
         return `Revenus - ${props.beneficiaryIdentification.firstName} ${props.beneficiaryIdentification.usualName}`
       }
 
-      const member = props.householdMembers[income.beneficiaryRelativeId || '']
+      const member = props.householdMembers[income.householdMemberId || '']
       return member && (member.firstName || member.lastName)
         ? `${member.firstName || ''} ${member.lastName || ''} - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
         : `Membre du foyer ${index}`

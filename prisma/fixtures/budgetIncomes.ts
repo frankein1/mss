@@ -11,7 +11,7 @@ export const fixturesBudgetIncomes = [
     id: '0c78fca9-625f-4afd-a8ad-7939ad7b543b',
     type: 'HouseholdMember',
     budgetId: fixturesBudgets[0].id,
-    beneficiaryRelativeId: fixturesBeneficiaryRelatives[0].id
+    householdMemberId: fixturesBeneficiaryRelatives[0].id
   },
   {
     id: '936d7273-267e-427b-8138-46df57427795',
@@ -22,7 +22,7 @@ export const fixturesBudgetIncomes = [
     id: '47c28b3f-98fb-47ab-9620-542736870d41',
     type: 'HouseholdMember',
     budgetId: fixturesBudgets[1].id,
-    beneficiaryRelativeId: fixturesBeneficiaryRelatives[1].id
+    householdMemberId: fixturesBeneficiaryRelatives[1].id
   },
   {
     id: 'ce88cf69-5a3b-42b4-b617-8d68a1f6d2a7',
@@ -73,12 +73,12 @@ export const fixturesBudgetIncomes = [
     id: '27f9272f-70c6-4e53-95f2-b26642b59645',
     type: 'HouseholdMember',
     budgetId: fixturesBudgets[10].id,
-    beneficiaryRelativeId: fixturesBeneficiaryRelatives[2].id
+    householdMemberId: fixturesBeneficiaryRelatives[2].id
   },
   {
     id: 'd43c14e2-8327-40cc-90a0-d9833408d7b5',
     type: 'HouseholdMember',
     budgetId: fixturesBudgets[10].id,
-    beneficiaryRelativeId: fixturesBeneficiaryRelatives[3].id
+    householdMemberId: fixturesBeneficiaryRelatives[3].id
   }
 ] satisfies Prisma.BudgetIncomeUncheckedCreateInput[]
