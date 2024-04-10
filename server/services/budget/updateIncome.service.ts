@@ -1,5 +1,5 @@
 import { SecurityRuleContext } from '~/server/security'
-import { BudgetRepo } from '~/server/database/repository'
+import { BudgetIncomeRepo } from '~/server/database/repository'
 import { UpdateBudgetInfoInput } from '~/server/schema'
 
 export async function updateIncome({
@@ -9,7 +9,7 @@ export async function updateIncome({
   ctx: SecurityRuleContext
   input: UpdateBudgetInfoInput
 }) {
-  return await BudgetRepo.update(ctx.user, {
+  return await BudgetIncomeRepo.update(ctx.user, {
     where: { id: input.id },
     data: input,
     select: { id: true }

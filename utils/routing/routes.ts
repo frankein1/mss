@@ -85,7 +85,12 @@ const BeneficiaryRoute = (
   options?: {
     tab?: BeneficiaryTab
     item?: string
-    originPage?: Route.AppOverview | Route.AppBeneficiaries | Route.AppHistory
+    originPage?:
+      | Route.AppOverview
+      | Route.AppBeneficiaries
+      | Route.AppHistory
+      | Route.AppBeneficiaryBudgetIncomeEdit
+      | Route.AppBeneficiaryBudgetExpensesEdit
     originTab?: HistoryTab
   }
 ) => {

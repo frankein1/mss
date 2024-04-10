@@ -31,7 +31,7 @@ export const budgetExpensesKeys = buildKeys({
 export const budgetIncomeKeys = buildKeys({
   // Travail
   salary: 'Salaire',
-  primeActivitey: "Prime d'activité",
+  primeActivite: "Prime d'activité",
 
   // Pensions
   retirement: 'Retraite',

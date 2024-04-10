@@ -59,15 +59,16 @@
       :is-submitting="isSubmitting"
       has-secondary-action
       confirm-secondary-label="Enregistrer"
-      @cancel="() => {}"
+      @cancel="onCancel"
     />
   </form>
 </template>
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { Breadcrumb, RouteTitle, RoutePath, Route } from '~/utils/routing'
   import { useBeneficiarySummary } from '~/composables/useBeneficiarySummary'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     UpdateBudgetExpensesInput,
     updateBudgetExpensesSchema
@@ -84,6 +85,10 @@
   const title = RouteTitle.AppBeneficiaryBudgetExpensesEdit()
 
   useHead({ title })
+
+  definePageMeta({
+    name: Route.AppBeneficiaryBudgetExpensesEdit
+  })
 
   const {
     beneficiaryIdentification,
@@ -164,6 +169,15 @@
       return acc + expense
     }, 0)
   })
+
+  function onCancel() {
+    navigateTo(
+      RoutePath.AppBeneficiary(beneficiaryId, {
+        tab: BeneficiaryTab.Budget,
+        originPage: route.name as Route.AppBeneficiaryBudgetExpensesEdit
+      })
+    )
+  }
 </script>
 
 <style scoped lang="scss">
@@ -185,6 +199,7 @@
     color: var(--primary);
     font-weight: var(--bold);
 
+    // TODO use euro-symbol
     &::after {
       content: '\00a0€';
     }

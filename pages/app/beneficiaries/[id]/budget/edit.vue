@@ -85,7 +85,7 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { Breadcrumb, RouteTitle, RoutePath, Route } from '~/utils/routing'
   import {
     UpdateBudgetInfoInput,
     updateBudgetInfoSchema
@@ -101,6 +101,10 @@
   const title = RouteTitle.AppBeneficiaryBudgetInfoEdit()
 
   useHead({ title })
+
+  definePageMeta({
+    name: Route.AppBeneficiaryBudgetInfoEdit
+  })
 
   const {
     data: beneficiary,

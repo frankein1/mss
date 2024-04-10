@@ -2,7 +2,7 @@ function buildOptions(labels: Record<string, string>) {
   return Object.entries(labels).map(([value, label]) => ({ label, value }))
 }
 
-function buildKeys(byKey: Record<string, string>) {
+function buildKeys<T extends Record<string, string>>(byKey: T) {
   return {
     byKey,
     keys: Object.keys(byKey),
