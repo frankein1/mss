@@ -49,17 +49,13 @@
 
         <section class="expenses__total">
           <h2 class="fr-h4 fr-m-0">Total :</h2>
-          <span class="fr-h4 fr-m-0 expenses__total__value">{{
-            total || '0'
-          }}</span>
+          <span class="fr-h4 fr-m-0 euro-symbol">{{ total || '0' }}</span>
         </section>
       </div>
     </main>
 
     <BudgetActionBar
       :is-submitting="isSubmitting"
-      has-secondary-action
-      confirm-secondary-label="Enregistrer"
       @cancel="onCancel"
     />
   </form>
@@ -103,12 +99,10 @@
     error
   } = await trpcClient.budget.getExpenses.useQuery({ id: expensesId })
 
-  const form = ref<HTMLFormElement | null>(null)
-  const isSubmitting = ref(false)
-
   const {
     handleSubmit,
     meta,
+    isSubmitting,
     values: expensesValues
   } = useForm<UpdateBudgetExpensesInput>({
     validationSchema: toTypedSchema(updateBudgetExpensesSchema),
@@ -147,13 +141,18 @@
     isFormDirty
   })
 
+  const budgetTabRoute = RoutePath.AppBeneficiary(beneficiaryId, {
+    tab: BeneficiaryTab.Budget,
+    originPage: route.name as Route.AppBeneficiaryBudgetExpensesEdit
+  })
+
   const onSubmit = handleSubmit(async values => {
     isNavigatingWithFormActions.value = true
 
     await useTrpcMutation({
       mutation: () => trpcClient.budget.updateExpenses.mutate(values),
       onSuccess: () => {
-        navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+        navigateTo(budgetTabRoute)
         snackbar.success(
           'Les charges mensuelles ont été mises à jour avec succès'
         )
@@ -172,12 +171,7 @@
   })
 
   function onCancel() {
-    navigateTo(
-      RoutePath.AppBeneficiary(beneficiaryId, {
-        tab: BeneficiaryTab.Budget,
-        originPage: route.name as Route.AppBeneficiaryBudgetExpensesEdit
-      })
-    )
+    navigateTo(budgetTabRoute)
   }
 </script>
 
@@ -199,10 +193,5 @@
   .expenses__total__value {
     color: var(--primary);
     font-weight: var(--bold);
-
-    // TODO use euro-symbol
-    &::after {
-      content: '\00a0€';
-    }
   }
 </style>
