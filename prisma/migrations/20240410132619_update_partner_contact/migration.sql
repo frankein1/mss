@@ -9,3 +9,10 @@ ALTER TABLE "file_instruction" ADD CONSTRAINT "file_instruction_instructor_organ
 
 -- AddForeignKey
 ALTER TABLE "help_request" ADD CONSTRAINT "help_request_prescribing_organization_contact_id_fkey" FOREIGN KEY ("prescribing_organization_contact_id") REFERENCES "partner_organization_contact"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AlterTable
+ALTER TABLE "followup" ADD COLUMN     "prescribing_organization_contact_id" UUID;
+
+-- AddForeignKey
+ALTER TABLE "followup" ADD CONSTRAINT "followup_prescribing_organization_contact_id_fkey" FOREIGN KEY ("prescribing_organization_contact_id") REFERENCES "partner_organization_contact"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+

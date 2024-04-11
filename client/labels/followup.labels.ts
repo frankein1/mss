@@ -20,7 +20,7 @@ export const followupFieldLabels = {
   ministre: 'Ministre',
   numeroPegase: 'Numéro Pégase',
   prescribingOrganizationId: 'Organisme prescripteur',
-  prescribingOrganizationContactId: "Contact de l'organisme",
+  prescribingOrganizationContactId: "Contact de l'organisme prescripteur",
   updated: 'Dernière mise à jour',
   createdById: 'Agent',
   duration: "Durée de l'entretien"

@@ -16,9 +16,11 @@ import {
 
 export const include = {
   prescribingOrganization: true,
+  prescribingOrganizationContact: true,
   fileInstruction: {
     include: {
       instructorOrganization: true,
+      instructorOrganizationContact: true,
       socialSupport: {
         include: {
           subjects: true,

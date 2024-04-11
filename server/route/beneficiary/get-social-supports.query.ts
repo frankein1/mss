@@ -140,9 +140,11 @@ function loadSocialSupports(
       fileInstruction: {
         include: {
           instructorOrganization: true,
+          instructorOrganizationContact: true,
           helpRequest: {
             include: {
-              prescribingOrganization: true
+              prescribingOrganization: true,
+              prescribingOrganizationContact: true
             }
           },
           housingHelpRequest: true
@@ -150,7 +152,8 @@ function loadSocialSupports(
       },
       followup: {
         include: {
-          prescribingOrganization: true
+          prescribingOrganization: true,
+          prescribingOrganizationContact: true
         }
       },
       _count: {

@@ -40,8 +40,11 @@ function cleanInput({
     externalStructure,
     isRefundable,
     instructorOrganizationId,
+    instructorOrganizationContactId,
     ...data
   } = input
+
+  console.log({ instructorOrganizationContactId })
 
   const isExternalStructure = externalStructure === 'true'
   const isAccepted = status === SocialSupportStatus.Accepted
@@ -54,6 +57,9 @@ function cleanInput({
     externalStructure: isExternalStructure,
     instructorOrganizationId: isExternalStructure
       ? instructorOrganizationId
+      : null,
+    instructorOrganizationContactId: instructorOrganizationId
+      ? instructorOrganizationContactId
       : null,
     decisionDate: isAccepted || isRefused ? decisionDate : null,
     handlingDate: isAccepted ? handlingDate : null,

@@ -18,6 +18,7 @@ export const include = {
   fileInstruction: {
     include: {
       instructorOrganization: true,
+      instructorOrganizationContact: true,
       socialSupport: {
         include: {
           subjects: true,

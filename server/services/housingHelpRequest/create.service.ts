@@ -29,6 +29,7 @@ export async function create({ input, ctx }: CreateParams) {
     decisionDate,
     refusalReason,
     instructorOrganizationId,
+    instructorOrganizationContactId,
     dispatchDate,
     synthesis,
     privateSynthesis,
@@ -69,6 +70,9 @@ export async function create({ input, ctx }: CreateParams) {
           externalStructure,
           instructorOrganization: instructorOrganizationId
             ? connect(instructorOrganizationId)
+            : undefined,
+          instructorOrganizationContact: instructorOrganizationContactId
+            ? connect(instructorOrganizationContactId)
             : undefined,
           socialSupport: {
             create: {

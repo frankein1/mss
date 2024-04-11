@@ -12,6 +12,7 @@ import {
 
 const include = {
   prescribingOrganization: true,
+  prescribingOrganizationContact: true,
   socialSupport: {
     include: {
       documents: true,

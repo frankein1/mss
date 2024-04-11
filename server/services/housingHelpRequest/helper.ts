@@ -27,6 +27,7 @@ function cleanInput(input: CreateHousingHelpRequestInput) {
     ParcPrive,
     ParcSocial,
     instructorOrganizationId,
+    instructorOrganizationContactId,
     ...data
   } = input
 
@@ -49,6 +50,9 @@ function cleanInput(input: CreateHousingHelpRequestInput) {
     externalStructure: isExternalStructure,
     instructorOrganizationId: isExternalStructure
       ? instructorOrganizationId
+      : null,
+    instructorOrganizationContactId: instructorOrganizationId
+      ? instructorOrganizationContactId
       : null,
     decisionDate: isAccepted || isRefused ? decisionDate : null,
     refusalReason: isRefused ? refusalReason : null,

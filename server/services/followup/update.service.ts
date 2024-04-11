@@ -30,6 +30,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     structureName,
     thirdPersonName,
     prescribingOrganizationId,
+    prescribingOrganizationContactId,
     ministre,
     date,
     synthesis,
@@ -75,6 +76,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     where: { id: input.id },
     data: {
       prescribingOrganizationId: prescribingOrganizationId || null,
+      prescribingOrganizationContactId:
+        prescribingOrganizationContactId || null,
       redirected,
       structureName: redirected ? structureName : null,
       medium,

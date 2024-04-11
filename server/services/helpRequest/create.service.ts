@@ -36,7 +36,9 @@ export async function create({ input, ctx }: CreateParams) {
     handlingDate,
     refusalReason,
     prescribingOrganizationId,
+    prescribingOrganizationContactId,
     instructorOrganizationId,
+    instructorOrganizationContactId,
     dispatchDate,
     synthesis,
     privateSynthesis,
@@ -59,6 +61,9 @@ export async function create({ input, ctx }: CreateParams) {
       prescribingOrganization: prescribingOrganizationId
         ? connect(prescribingOrganizationId)
         : undefined,
+      prescribingOrganizationContact: prescribingOrganizationContactId
+        ? connect(prescribingOrganizationContactId)
+        : undefined,
       isRefundable,
       subject: connect(subjectId),
       fileInstruction: {
@@ -74,6 +79,9 @@ export async function create({ input, ctx }: CreateParams) {
           fullFile,
           instructorOrganization: instructorOrganizationId
             ? connect(instructorOrganizationId)
+            : undefined,
+          instructorOrganizationContact: instructorOrganizationContactId
+            ? connect(instructorOrganizationContactId)
             : undefined,
           socialSupport: {
             create: {

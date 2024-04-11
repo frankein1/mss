@@ -1,7 +1,7 @@
 <template>
   <h3 class="fr-col-12 fr-h5 fr-mb-0">Contexte du dossier d'instruction</h3>
 
-  <div class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right">
+  <div class="fr-col-12">
     <VeeInput
       name="date"
       :label="helpRequestFieldLabels.date"
@@ -11,7 +11,7 @@
   </div>
 
   <template v-if="application.module.ministere">
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12">
       <VeeInput
         name="numeroPegase"
         :label="helpRequestFieldLabels.numeroPegase"
@@ -19,7 +19,7 @@
       />
     </div>
 
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12">
       <VeeSelect
         name="ministre"
         :label="helpRequestFieldLabels.ministre"
@@ -40,7 +40,7 @@
 
     <div
       v-if="isFirst === 'false'"
-      class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right"
+      class="fr-col-12"
     >
       <VeeInput
         name="firstOpeningDate"
@@ -97,31 +97,38 @@
       </VeeSearchableSelect>
     </div>
 
-    <div class="fr-col-12">
+    <!-- ROW -->
+    <div class="fr-col-6">
       <VeeSearchableSelect
         :label="helpRequestFieldLabels.prescribingOrganizationId"
         name="prescribingOrganizationId"
         :options="withEmptyValue(partnerOrganizationOptions)"
-        hint
-      >
-        <template #hint>
-          <NuxtLink
-            :to="RoutePath.AppPartners()"
-            class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-          >
-            Données issues de l'annuaire de partenaires
-          </NuxtLink>
-        </template>
-      </VeeSearchableSelect>
+        @change-value="onPrescribingOrganization"
+      />
     </div>
+
+    <div class="fr-col-6">
+      <VeeSelect
+        name="prescribingOrganizationContactId"
+        :label="helpRequestFieldLabels.prescribingOrganizationContactId"
+        :options="withEmptyValue(prescribingOrganizationContactOptions)"
+      />
+    </div>
+
+    <!-- ROW -->
+    <div class="fr-col-6 fr-mt-0 fr-pt-0">
+      <NuxtLink
+        :to="RoutePath.AppPartners()"
+        class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+      >
+        Données issues de l'annuaire de partenaires
+      </NuxtLink>
+    </div>
+    <div class="fr-col-6 fr-mt-0 fr-pt-0"></div>
   </template>
 
-  <div
-    class="fr-col-12 fr-col-lg-6"
-    :class="{
-      'fr-col-offset-lg-6--right': !isExternalSupport
-    }"
-  >
+  <!-- ROW -->
+  <div class="fr-col-6">
     <VeeSelect
       label="Le dossier est instruit..."
       name="externalStructure"
@@ -129,31 +136,42 @@
       required
     />
   </div>
+  <div class="fr-col-6"></div>
 
-  <div
-    v-if="isExternalSupport"
-    class="fr-col-12 fr-col-lg-6"
-  >
-    <VeeSearchableSelect
-      :label="helpRequestFieldLabels.instructorOrganizationId"
-      name="instructorOrganizationId"
-      :options="partnerOrganizationOptions"
-      hint
-    >
-      <template #hint>
-        <NuxtLink
-          :to="RoutePath.AppPartners()"
-          class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
-        >
-          Données issues de l'annuaire de partenaires
-        </NuxtLink>
-      </template>
-    </VeeSearchableSelect>
-  </div>
+  <!-- ROW -->
+
+  <template v-if="isExternalSupport">
+    <div class="fr-col-6">
+      <VeeSearchableSelect
+        :label="helpRequestFieldLabels.instructorOrganizationId"
+        name="instructorOrganizationId"
+        :options="partnerOrganizationOptions"
+        @change-value="onInstructorOrganization"
+      />
+    </div>
+    <div class="fr-col-6">
+      <VeeSelect
+        name="instructorOrganizationContactId"
+        :label="helpRequestFieldLabels.instructorOrganizationContactId"
+        :options="withEmptyValue(instructorOrganizationContactOptions)"
+      />
+    </div>
+
+    <!-- ROW -->
+    <div class="fr-col-6 fr-mt-0 fr-pt-0">
+      <NuxtLink
+        :to="RoutePath.AppPartners()"
+        class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
+      >
+        Données issues de l'annuaire de partenaires
+      </NuxtLink>
+    </div>
+    <div class="fr-col-6 fr-mt-0 fr-pt-0"></div>
+  </template>
 
   <div
     v-if="hasSetExternalStructure"
-    class="fr-col-12 fr-col-lg-6 fr-col-offset-lg-6--right"
+    class="fr-col-12"
   >
     <VeeInput
       v-if="isExternalSupport"
@@ -199,6 +217,32 @@
   const { value: isFirst } =
     useField<CreateHousingHelpRequestInput['isFirst']>('isFirst')
 
+  const { value: prescribingOrganizationId } = useField<string | null>(
+    'prescribingOrganizationId'
+  )
+  const { value: instructorOrganizationId } = useField<string | null>(
+    'instructorOrganizationId'
+  )
+
+  const { setValue: setPrescribingOrganizationContactId } = useField<
+    string | null
+  >('prescribingOrganizationContactId')
+  const { setValue: setInstructorOrganizationContactId } = useField<
+    string | null
+  >('instructorOrganizationContactId')
+
+  const onPrescribingOrganization = (id: string[] | string) => {
+    if (!id) {
+      setPrescribingOrganizationContactId(null)
+    }
+  }
+
+  const onInstructorOrganization = (id: string[] | string) => {
+    if (!id) {
+      setInstructorOrganizationContactId(null)
+    }
+  }
+
   const socialSupportSubjectOptions = computed(() =>
     toOptions(props.socialSupportSubjects, 'id', 'name')
   )
@@ -211,5 +255,27 @@
       })
     )
     return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
+  })
+
+  const prescribingOrganizationContactOptions = computed(() => {
+    const partnerId = prescribingOrganizationId.value
+    if (!partnerId) {
+      return []
+    }
+    const partnerOrganization = (props.partnerOrganizations || []).find(
+      partner => partner.id === partnerId
+    )
+    return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
+  })
+
+  const instructorOrganizationContactOptions = computed(() => {
+    const partnerId = instructorOrganizationId.value
+    if (!partnerId) {
+      return []
+    }
+    const partnerOrganization = (props.partnerOrganizations || []).find(
+      partner => partner.id === partnerId
+    )
+    return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
   })
 </script>
