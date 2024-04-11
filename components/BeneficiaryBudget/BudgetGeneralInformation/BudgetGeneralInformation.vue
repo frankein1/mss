@@ -75,10 +75,7 @@
         ></span>
         <div>
           <div class="fr-text--lg fr-m-0">Quotient familial</div>
-          <div
-            class="fr-h6 fr-m-0 item__amount"
-            :class="{ 'euro-symbol': !!budget.familyQuotient }"
-          >
+          <div class="fr-h6 fr-m-0 item__amount">
             {{ budget.familyQuotient || '-' }}
           </div>
         </div>

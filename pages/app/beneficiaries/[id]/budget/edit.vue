@@ -43,43 +43,10 @@
       </div>
     </main>
 
-    <div class="actions-bar bg-color-white">
-      <ul
-        class="fr-btns-group fr-btns-group--lg fr-btns-group--inline-md fr-btns-group--right"
-      >
-        <li>
-          <button
-            class="fr-btn fr-btn--secondary"
-            type="button"
-            @click="() => {}"
-          >
-            Annuler
-          </button>
-        </li>
-
-        <li>
-          <button
-            class="fr-btn submit-btn"
-            type="submit"
-            :submitting="isSubmitting"
-            :disabled="isSubmitting"
-          >
-            Enregistrer
-          </button>
-        </li>
-
-        <li>
-          <button
-            class="fr-btn submit-btn"
-            type="submit"
-            :submitting="isSubmitting"
-            :disabled="isSubmitting"
-          >
-            Enregistrer et quitter
-          </button>
-        </li>
-      </ul>
-    </div>
+    <BudgetActionBar
+      :is-submitting="isSubmitting"
+      @cancel="onCancel"
+    />
   </form>
 </template>
 
@@ -91,6 +58,7 @@
     updateBudgetInfoSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
@@ -154,13 +122,18 @@
     isFormDirty
   })
 
+  const budgetTabRoute = RoutePath.AppBeneficiary(beneficiaryId, {
+    tab: BeneficiaryTab.Budget,
+    originPage: route.name as Route.AppBeneficiaryBudgetInfoEdit
+  })
+
   const onSubmit = handleSubmit(async values => {
     isNavigatingWithFormActions.value = true
 
     await useTrpcMutation({
       mutation: () => trpcClient.budget.updateInfo.mutate(values),
       onSuccess: () => {
-        navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+        navigateTo(budgetTabRoute)
         snackbar.success(
           'Informations générales du budget mises à jour avec succès'
         )
@@ -172,6 +145,10 @@
       }
     })
   })
+
+  function onCancel() {
+    navigateTo(budgetTabRoute)
+  }
 </script>
 
 <style scoped lang="scss">
@@ -182,14 +159,5 @@
   .content {
     height: calc(100vh - #{$actions-bar-height} - #{$top-bar-height});
     overflow-y: auto;
-  }
-
-  .actions-bar {
-    border-top: 1px solid var(--background-default-grey);
-    padding: 1.5rem 2rem;
-  }
-
-  .fr-btns-group .fr-btn {
-    margin-bottom: 0;
   }
 </style>

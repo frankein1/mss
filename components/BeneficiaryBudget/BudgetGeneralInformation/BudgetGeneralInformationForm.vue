@@ -10,13 +10,6 @@
 
       <div class="fr-col-12">
         <VeeCurrencyInput
-          name="overdraft"
-          label="Découvert bancaire"
-        />
-      </div>
-
-      <div class="fr-col-12">
-        <VeeCurrencyInput
           name="savings"
           label="Info épargne"
         />
@@ -24,6 +17,14 @@
 
       <div class="fr-col-12">
         <VeeCurrencyInput
+          name="overdraft"
+          label="Découvert bancaire"
+        />
+      </div>
+
+      <div class="fr-col-12">
+        <VeeInput
+          type="number"
           name="familyQuotient"
           label="Quotient familial"
         />

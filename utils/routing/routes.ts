@@ -89,6 +89,7 @@ const BeneficiaryRoute = (
       | Route.AppOverview
       | Route.AppBeneficiaries
       | Route.AppHistory
+      | Route.AppBeneficiaryBudgetInfoEdit
       | Route.AppBeneficiaryBudgetIncomeEdit
       | Route.AppBeneficiaryBudgetExpensesEdit
     originTab?: HistoryTab
