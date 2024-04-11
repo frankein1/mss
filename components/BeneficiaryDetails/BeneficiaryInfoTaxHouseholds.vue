@@ -4,10 +4,7 @@
     :edit-link="editLink"
   >
     <div class="fr-container">
-      <BeneficiaryInfoTaxHouseholdsContent
-        :beneficiary-id="beneficiaryId"
-        :tax-households="taxHouseholds"
-      />
+      <BeneficiaryInfoTaxHouseholdsContent :tax-households="taxHouseholds" />
     </div>
   </BeneficiaryInfoSection>
 </template>
