@@ -62,17 +62,13 @@
 
         <section class="income__total">
           <h2 class="fr-h4 fr-m-0">Total :</h2>
-          <span class="fr-h4 fr-m-0 income__total__value">{{
-            total || '0'
-          }}</span>
+          <span class="fr-h4 fr-m-0 euro-symbol">{{ total || '0' }}</span>
         </section>
       </div>
     </main>
 
     <BudgetActionBar
       :is-submitting="isSubmitting"
-      has-secondary-action
-      confirm-secondary-label="Enregistrer"
       @cancel="onCancel"
     />
   </form>
@@ -167,12 +163,10 @@
     return null
   })
 
-  const form = ref<HTMLFormElement | null>(null)
-  const isSubmitting = ref(false)
-
   const {
     handleSubmit,
     meta,
+    isSubmitting,
     values: incomeValues
   } = useForm<UpdateBudgetIncomeInput>({
     validationSchema: toTypedSchema(updateBudgetIncomeSchema),
@@ -208,13 +202,18 @@
     isFormDirty
   })
 
+  const budgetTabRoute = RoutePath.AppBeneficiary(beneficiaryId, {
+    tab: BeneficiaryTab.Budget,
+    originPage: route.name as Route.AppBeneficiaryBudgetIncomeEdit
+  })
+
   const onSubmit = handleSubmit(async values => {
     isNavigatingWithFormActions.value = true
 
     await useTrpcMutation({
       mutation: () => trpcClient.budget.updateIncome.mutate(values),
       onSuccess: () => {
-        navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+        navigateTo(budgetTabRoute)
         snackbar.success('Les revenus mensuels ont été mis à jour avec succès')
       },
       onFailure: () => {
@@ -231,12 +230,7 @@
   })
 
   function onCancel() {
-    navigateTo(
-      RoutePath.AppBeneficiary(beneficiaryId, {
-        tab: BeneficiaryTab.Budget,
-        originPage: route.name as Route.AppBeneficiaryBudgetIncomeEdit
-      })
-    )
+    navigateTo(budgetTabRoute)
   }
 </script>
 
@@ -258,10 +252,5 @@
   .income__total__value {
     color: var(--primary);
     font-weight: var(--bold);
-
-    // TODO use euro-symbol
-    &::after {
-      content: '\00a0€';
-    }
   }
 </style>
