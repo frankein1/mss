@@ -44,8 +44,6 @@ function cleanInput({
     ...data
   } = input
 
-  console.log({ instructorOrganizationContactId })
-
   const isExternalStructure = externalStructure === 'true'
   const isAccepted = status === SocialSupportStatus.Accepted
   const isRefused = status === SocialSupportStatus.Refused
