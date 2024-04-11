@@ -19,7 +19,12 @@
     {{ instructorOrganization }}
   </li>
   <li v-if="fileInstruction.instructorOrganizationContact">
-    <span class="information-label">Contact de l'organisme instructeur :</span>
+    <span class="information-label"
+      >{{
+        housingHelpRequestFieldLabels.instructorOrganizationContactId
+      }}
+      :</span
+    >
     {{ fileInstruction.instructorOrganizationContact.name }}
   </li>
   <li v-if="housingHelpRequest.reason">

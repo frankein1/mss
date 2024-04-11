@@ -16,7 +16,9 @@
     {{ instructorOrganization }}
   </li>
   <li v-if="fileInstruction.instructorOrganizationContact?.name">
-    <span class="information-label">Contact de l'organisme instructeur :</span>
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.instructorOrganizationContactId }} :</span
+    >
     {{ fileInstruction.instructorOrganizationContact?.name }}
   </li>
   <li v-if="helpRequest.isRefundable !== null">
