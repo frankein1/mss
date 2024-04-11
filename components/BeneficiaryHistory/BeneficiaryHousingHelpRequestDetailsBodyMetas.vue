@@ -18,6 +18,15 @@
     <span class="information-label">Instruction :</span>
     {{ instructorOrganization }}
   </li>
+  <li v-if="fileInstruction.instructorOrganizationContact">
+    <span class="information-label"
+      >{{
+        housingHelpRequestFieldLabels.instructorOrganizationContactId
+      }}
+      :</span
+    >
+    {{ fileInstruction.instructorOrganizationContact.name }}
+  </li>
   <li v-if="housingHelpRequest.reason">
     <span class="information-label"
       >{{ housingHelpRequestFieldLabels.reason }} :</span

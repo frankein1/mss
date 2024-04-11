@@ -6,6 +6,12 @@
     >
     {{ followup.prescribingOrganization.name }}
   </li>
+  <li v-if="followup.prescribingOrganizationContact?.name">
+    <span class="information-label"
+      >{{ followupFieldLabels.prescribingOrganizationContactId }} :</span
+    >
+    {{ followup.prescribingOrganizationContact.name }}
+  </li>
   <li v-if="followup.duration">
     <span class="information-label">{{ followupFieldLabels.duration }} :</span>
     {{ followupDurationKeys.value(followup.duration) }}

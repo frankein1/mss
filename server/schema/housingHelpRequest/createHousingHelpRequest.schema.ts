@@ -37,6 +37,7 @@ export const createHousingHelpRequestSchemaBase = z.object({
   status: requiredNativeEnum(SocialSupportStatus),
   dueDate: dateOrEmpty,
   instructorOrganizationId: z.string().nullish(),
+  instructorOrganizationContactId: z.string().nullish(),
   externalStructure: kindOfBooleanSchema(true),
   examinationDate: dateOrEmpty,
   decisionDate: dateOrEmpty,

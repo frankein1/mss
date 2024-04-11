@@ -1,15 +1,4 @@
-import { Followup, SocialSupport } from '@prisma/client'
-import { FieldLabels } from '~/types/fieldLabels'
-
-type FollowupFieldLabels = Omit<
-  Omit<Followup, 'socialSupportId'> & Omit<SocialSupport, 'socialSupportType'>,
-  'created' | 'structureId'
-> & {
-  subjects: string
-  documents: string
-}
-
-export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
+export const followupFieldLabels = {
   id: 'Identifiant',
   beneficiaryId: 'Bénéficiaire',
   subjects: "Objet(s) de l'accompagnement",
@@ -31,6 +20,7 @@ export const followupFieldLabels: FieldLabels<FollowupFieldLabels> = {
   ministre: 'Ministre',
   numeroPegase: 'Numéro Pégase',
   prescribingOrganizationId: 'Organisme prescripteur',
+  prescribingOrganizationContactId: "Contact de l'organisme prescripteur",
   updated: 'Dernière mise à jour',
   createdById: 'Agent',
   duration: "Durée de l'entretien"

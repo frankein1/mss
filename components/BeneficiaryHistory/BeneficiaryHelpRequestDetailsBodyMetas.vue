@@ -5,9 +5,21 @@
     >
     {{ helpRequest.prescribingOrganization.name }}
   </li>
+  <li v-if="helpRequest.prescribingOrganizationContact?.name">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.prescribingOrganizationContactId }} :</span
+    >
+    {{ helpRequest.prescribingOrganizationContact.name }}
+  </li>
   <li v-if="instructorOrganization">
     <span class="information-label">Instruction :</span>
     {{ instructorOrganization }}
+  </li>
+  <li v-if="fileInstruction.instructorOrganizationContact?.name">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.instructorOrganizationContactId }} :</span
+    >
+    {{ fileInstruction.instructorOrganizationContact?.name }}
   </li>
   <li v-if="helpRequest.isRefundable !== null">
     <span class="information-label"

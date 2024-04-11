@@ -49,6 +49,7 @@ export const addFollowupSchemaBase = z.object({
   firstFollowup: z.boolean().default(false),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   prescribingOrganizationId: z.string().nullish(),
+  prescribingOrganizationContactId: z.string().nullish(),
   classified: z.boolean().default(false),
   forwardedToJustice: z.boolean().default(false),
   duration: withEmptyValueOptionalNativeEnum(FollowupDuration)
