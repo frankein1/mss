@@ -87,12 +87,10 @@
     updateBudgetIncomeSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import {
-    taxHouseHoldRelationshipKeys,
-    budgetIncomeKeys
-  } from '~/client/options'
+  import { taxHouseHoldRelationshipKeys } from '~/client/options'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { IncomeKey } from '~/types/budget'
+  import { incomeHasBeenFilled } from '~/utils/budget'
+
   const route = useRoute()
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
@@ -131,12 +129,9 @@
       : `Membre du foyer`
   })
 
-  const incomeHasBeenFilled = computed(() => {
-    return budgetIncomeKeys.keys.some(key => {
-      const incomeSource = income.value?.[key as IncomeKey]
-      return incomeSource !== null && incomeSource !== undefined
-    })
-  })
+  const incomeIsFilled = computed(() =>
+    income.value ? incomeHasBeenFilled(income.value) : false
+  )
 
   const legacyResources = computed(() => {
     const budget = income.value?.budget
@@ -144,7 +139,7 @@
       return null
     }
 
-    if (incomeHasBeenFilled.value) {
+    if (incomeIsFilled.value) {
       return null
     }
 

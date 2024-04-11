@@ -1,7 +1,11 @@
 <template>
   <div class="card card--rust fr-mb-2w">
     <h3 class="fr-h6 fr-m-0">Charges du foyer fiscal</h3>
-    <span class="euro-symbol fr-h4 fr-m-0">{{ total || '-' }}</span>
+    <span
+      class="fr-h4 fr-m-0"
+      :class="{ 'euro-symbol': total !== null }"
+      >{{ total !== null ? total : '-' }}</span
+    >
   </div>
 
   <section class="card-outline card-outline--rust">
@@ -39,6 +43,7 @@
   import { budgetExpensesKeys } from '~/client/options'
   import { ExpensesKey, BudgetExpenses } from '~/types/budget'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { expensesHaveBeenFilled } from '~/utils/budget'
 
   const props = defineProps<{
     beneficiaryId: string
@@ -53,6 +58,10 @@
   )
 
   const total = computed(() => {
+    if (!expensesHaveBeenFilled(props.expenses)) {
+      return null
+    }
+
     return nonZeroExpensesKeys.value.reduce((acc, cur) => {
       const expense = prismaDecimalToNumber(props.expenses[cur as ExpensesKey])
       return acc + (expense || 0)

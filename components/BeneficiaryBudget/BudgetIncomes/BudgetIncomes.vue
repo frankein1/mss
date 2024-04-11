@@ -1,7 +1,11 @@
 <template>
   <div class="card card--deep-blue fr-mb-2w">
     <h3 class="fr-h6 fr-m-0">Revenus du foyer fiscal</h3>
-    <span class="euro-symbol fr-h4 fr-m-0">{{ total || '-' }}</span>
+    <span
+      class="fr-h4 fr-m-0"
+      :class="{ 'euro-symbol': total !== null }"
+      >{{ total !== null ? total : '-' }}</span
+    >
   </div>
 
   <section
@@ -11,9 +15,15 @@
   >
     <div class="budget-income__title">
       <h4 class="fr-text--lead fr-m-0">{{ memberNames[idxIncome] }}</h4>
-      <span class="fr-h6 fr-m-0">{{
-        memberTotalIncomes[idxIncome] || '-'
-      }}</span>
+      <span
+        class="fr-h6 fr-m-0"
+        :class="{ 'euro-symbol': memberTotalIncomes[idxIncome] !== null }"
+        >{{
+          memberTotalIncomes[idxIncome] !== null
+            ? memberTotalIncomes[idxIncome]
+            : '-'
+        }}</span
+      >
     </div>
 
     <ul class="list-styled">
@@ -22,7 +32,7 @@
         :key="idxCategory"
       >
         <span>{{ budgetIncomeKeys.value(category) }}</span>
-        <span class="budget-income__item__value">{{
+        <span class="budget-income__item__value euro-symbol">{{
           income[category as IncomeKey]
         }}</span>
       </li>
@@ -60,6 +70,7 @@
   import { IncomeKey, GetBudgetIncomeHouseholdMember } from '~/types/budget'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { BeneficiaryIdentification } from '~/types/beneficiary'
+  import { incomeHasBeenFilled } from '~/utils/budget'
 
   const props = defineProps<{
     beneficiaryIdentification: BeneficiaryIdentification
@@ -89,17 +100,28 @@
   )
 
   const memberTotalIncomes = computed(() =>
-    props.incomes.map((income, index) =>
-      nonZeroIncomeKeys.value[index].reduce((acc, cur) => {
-        const memberIncome = prismaDecimalToNumber(income[cur as IncomeKey])
-        return acc + (memberIncome || 0)
-      }, 0)
-    )
+    props.incomes.map((income, index) => {
+      if (incomeHasBeenFilled(income)) {
+        return nonZeroIncomeKeys.value[index].reduce((acc, cur) => {
+          const memberIncome = prismaDecimalToNumber(income[cur as IncomeKey])
+          return acc + (memberIncome || 0)
+        }, 0)
+      }
+
+      return null
+    })
   )
 
-  const total = computed(() =>
-    memberTotalIncomes.value.reduce((cur, acc) => acc + cur, 0)
-  )
+  const total = computed(() => {
+    if (memberTotalIncomes.value.every(total => total === null)) {
+      return null
+    }
+
+    return memberTotalIncomes.value.reduce(
+      (acc, cur) => (acc !== null && cur !== null ? acc + cur : acc),
+      0
+    )
+  })
 </script>
 
 <style scoped lang="scss">
