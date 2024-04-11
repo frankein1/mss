@@ -2,11 +2,10 @@ type PersistentType = {
   id: string
 }
 
-export function prepareRelationUpdates(
-  updatedRelations: PersistentType[],
-  previousRelations: PersistentType[],
-  isUpdatable: boolean = true
-) {
+export function prepareRelationUpdates<
+  T extends PersistentType,
+  U extends PersistentType
+>(updatedRelations: T[], previousRelations: U[], isUpdatable: boolean = true) {
   const createRelations = updatedRelations.filter(
     ({ id }) => !previousRelations.map(({ id }) => id).includes(id)
   )
