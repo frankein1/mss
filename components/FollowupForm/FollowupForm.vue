@@ -140,6 +140,7 @@
           :label="followupFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
           :options="withEmptyValue(partnerOrganizationOptions)"
+          @change-value="onPartnerOrganization"
         >
         </VeeSearchableSelect>
       </div>
@@ -147,7 +148,7 @@
         <VeeSelect
           name="prescribingOrganizationContactId"
           :label="followupFieldLabels.prescribingOrganizationContactId"
-          :options="withEmptyValue(followupDurationKeys.options)"
+          :options="withEmptyValue(partnerOrganizationContactOptions)"
         />
       </div>
 
@@ -319,6 +320,16 @@
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
+  const selectedPartnerOrganization = ref<string | null>(null)
+
+  const { setValue } = useField('partnerOrganizationContactId')
+
+  const onPartnerOrganization = (id: string[] | string) => {
+    selectedPartnerOrganization.value = '' + id
+    if (!id) {
+      setValue(null)
+    }
+  }
 
   const { errors } = useDisplayFormErrors(
     form,
@@ -338,5 +349,16 @@
       })
     )
     return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
+  })
+
+  const partnerOrganizationContactOptions = computed(() => {
+    const partnerId = selectedPartnerOrganization.value
+    if (!partnerId) {
+      return []
+    }
+    const partnerOrganization = (props.partnerOrganizations || []).find(
+      partner => partner.id === partnerId
+    )
+    return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
   })
 </script>

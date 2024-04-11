@@ -10,22 +10,19 @@
 </template>
 
 <script lang="ts" setup>
-  import {
-    SocialSupportStatus,
-    PartnerOrganization,
-    FileInstructionType
-  } from '@prisma/client'
+  import { SocialSupportStatus, FileInstructionType } from '@prisma/client'
   import { toTypedSchema } from '@vee-validate/zod'
   import {
     CreateHousingHelpRequestInput,
     createHousingHelpRequestSchema
   } from '~/server/schema'
+  import { PartnerOrganizationIdName } from '~/types/partner'
 
   const { application } = usePermissions()
 
   const props = defineProps<{
     isSubmitting: boolean
-    partnerOrganizations: Pick<PartnerOrganization, 'id' | 'name'>[]
+    partnerOrganizations: PartnerOrganizationIdName[]
     beneficiaryId: string
   }>()
 
