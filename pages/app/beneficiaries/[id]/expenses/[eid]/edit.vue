@@ -49,7 +49,9 @@
 
         <section class="expenses__total">
           <h2 class="fr-h4 fr-m-0">Total :</h2>
-          <span class="fr-h4 fr-m-0 euro-symbol">{{ total || '0' }}</span>
+          <span class="fr-h4 fr-m-0 euro-symbol">{{
+            total !== null ? total : '-'
+          }}</span>
         </section>
       </div>
     </main>
@@ -164,10 +166,15 @@
   })
 
   const total = computed(() => {
-    return Object.values(expensesValues).reduce<number>((acc, cur) => {
-      const expense = typeof cur === 'string' ? 0 : cur || 0
-      return acc + expense
-    }, 0)
+    return Object.entries(expensesValues).reduce<number | null>((acc, cur) => {
+      if (cur[1] === null || cur[0] === 'id') {
+        return acc
+      }
+
+      const expense =
+        typeof cur[1] === 'number' ? cur[1] : parseFloat(cur[1]) || 0
+      return acc === null ? expense : acc + expense
+    }, null)
   })
 
   function onCancel() {

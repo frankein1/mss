@@ -223,10 +223,15 @@
   })
 
   const total = computed(() => {
-    return Object.values(incomeValues).reduce<number>((acc, cur) => {
-      const income = typeof cur === 'string' ? 0 : cur || 0
-      return acc + income
-    }, 0)
+    return Object.entries(incomeValues).reduce<number | null>((acc, cur) => {
+      if (cur[1] === null || cur[0] === 'id') {
+        return acc
+      }
+
+      const expense =
+        typeof cur[1] === 'number' ? cur[1] : parseFloat(cur[1]) || 0
+      return acc === null ? expense : acc + expense
+    }, null)
   })
 
   function onCancel() {
