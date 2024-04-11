@@ -24,7 +24,7 @@ type BeneficiaryTaxHouseholds = Array<
   >['relatives'][0]
 >
 
-function filterEmptyTaxHousehold(
+function filterOutEmptyTaxHousehold(
   taxHousehold: Exclude<
     UpdateBeneficiaryTaxHouseholdInput['taxHouseholds'],
     undefined | null
@@ -45,22 +45,29 @@ function prepareTaxHouseholdsUpdates(
   previousTaxHouseholds: BeneficiaryTaxHouseholds,
   budgetId: string
 ) {
-  const newTaxHouseholds = taxHouseholds
-    .filter(filterEmptyTaxHousehold)
-    .map(e => {
-      return {
-        hosted: true,
-        income: {
-          create: {
-            budgetId,
-            type: BudgetIncomeType.HouseholdMember
-          }
-        },
-        ...e
-      }
-    })
+  const nonEmptyTaxHouseholds = taxHouseholds.filter(filterOutEmptyTaxHousehold)
 
-  return prepareRelationUpdates(newTaxHouseholds, previousTaxHouseholds)
+  const relations = prepareRelationUpdates(
+    nonEmptyTaxHouseholds,
+    previousTaxHouseholds
+  )
+
+  // incomes are added only for created household members
+  const create = relations.create.map(relation => ({
+    hosted: true,
+    income: {
+      create: {
+        budgetId,
+        type: BudgetIncomeType.HouseholdMember
+      }
+    },
+    ...relation
+  }))
+
+  return {
+    ...relations,
+    create
+  }
 }
 
 export async function updateTaxHousehold(
