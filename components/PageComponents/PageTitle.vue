@@ -16,7 +16,9 @@
     <AtomPictogram
       v-else-if="pictogramPath"
       :path="pictogramPath"
-      class="fr-mr-1w"
+      length="6rem"
+      class="fr-mr-4w"
+      :class="{ pagetitle__pictogram: pictogramBackground }"
     />
 
     <div class="pagetitle__titles">
@@ -51,6 +53,7 @@
       iconColorClass?: string
       iconBackgroundClass?: string
       pictogramPath?: string
+      pictogramBackground?: boolean
       subtitle?: string
       subtitlePictoPath?: string
     }>(),
@@ -60,6 +63,7 @@
       iconColorClass: '',
       iconBackgroundClass: '',
       pictogramPath: '',
+      pictogramBackground: false,
       subtitle: '',
       subtitlePictoPath: ''
     }
@@ -90,6 +94,11 @@
     span::before {
       --icon-size: 2rem;
     }
+  }
+
+  .pagetitle__pictogram {
+    background-color: var(--primary-light);
+    border-radius: var(--default-border-radius);
   }
 
   .pagetitle__titles {

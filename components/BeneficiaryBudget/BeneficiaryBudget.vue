@@ -22,7 +22,6 @@
           <BudgetIncomes
             v-if="data.incomes"
             :beneficiary-identification="beneficiaryIdentification"
-            :household-members="householdMembers"
             :incomes="data.incomes"
             :budget-id="data.id"
           />
@@ -56,18 +55,6 @@
 
   const { data, pending, error } = await trpcClient.budget.getBudget.useQuery({
     beneficiaryId: props.beneficiaryIdentification.id
-  })
-
-  const householdMembers = computed(() => {
-    return props.taxHousehold.reduce<Record<string, GetBeneficiaryRelative>>(
-      (acc, cur) => {
-        if (cur.hosted) {
-          acc[cur.id] = { ...cur }
-        }
-        return acc
-      },
-      {}
-    )
   })
 </script>
 

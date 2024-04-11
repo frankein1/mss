@@ -30,6 +30,7 @@
         <PageTitle
           :title="title"
           pictogram-path="/pictograms/money.svg"
+          pictogram-background
           :subtitle="subtitle"
         />
 
@@ -44,7 +45,20 @@
           message="Le revenu mensuel n'a pas pu être chargé."
         />
 
-        <BudgetIncomeForm v-else-if="income" />
+        <div v-else-if="income">
+          <AtomAlert
+            v-if="legacyResources"
+            class="fr-mb-4w"
+            :alert-type="AlertType.Warning"
+            message="Veuillez répartir les ressources renseignées via la section “Activité/Revenu” du formulaire bénéficiaire, sinon elles seront perdues :"
+          >
+            <template #detailedMessage>
+              <p class="euro-symbol">{{ legacyResources }}</p>
+            </template>
+          </AtomAlert>
+
+          <BudgetIncomeForm />
+        </div>
 
         <section class="income__total">
           <h2 class="fr-h4 fr-m-0">Total :</h2>
@@ -75,6 +89,7 @@
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { taxHouseHoldRelationshipKeys } from '~/client/options'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { incomeHasBeenFilled } from '~/utils/budget'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
@@ -110,8 +125,46 @@
 
     const member = income.value?.householdMember
     return member && (member.firstName || member.lastName)
-      ? `de ${income.value?.householdMember?.firstName || ''} ${income.value?.householdMember?.lastName || ''}  - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
+      ? `de ${member.firstName || ''} ${member.lastName || ''}  - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
       : `Membre du foyer`
+  })
+
+  const incomeIsFilled = computed(() =>
+    income.value ? incomeHasBeenFilled(income.value) : false
+  )
+
+  const legacyResources = computed(() => {
+    const budget = income.value?.budget
+    if (!budget) {
+      return null
+    }
+
+    if (incomeIsFilled.value) {
+      return null
+    }
+
+    if (income.value?.type === 'Beneficiary') {
+      const amount = prismaDecimalToNumber(budget.legacyMainIncomeAmount)
+      return amount
+        ? `${budget.legacyMainIncomeSource || ''} : ${amount}`
+        : null
+    }
+
+    const relationship = income.value?.householdMember?.relationship
+    if (
+      relationship === 'Conjoint' &&
+      budget.legacyPartnerMainIncomeAmount?.gt(0)
+    ) {
+      return `${budget.legacyPartnerMainIncomeSource || ''} : ${budget.legacyPartnerMainIncomeAmount.toString()}`
+    }
+    if (
+      relationship === 'EnfantMajeur' &&
+      budget.legacyMajorChildrenMainIncomeAmount?.gt(0)
+    ) {
+      return `${budget.legacyMajorChildrenMainIncomeSource || ''} : ${budget.legacyMajorChildrenMainIncomeAmount.toString()}`
+    }
+
+    return null
   })
 
   const form = ref<HTMLFormElement | null>(null)
