@@ -10,7 +10,8 @@ import {
   NotificationType,
   SocialSupport,
   PartnerOrganization,
-  User
+  User,
+  PartnerOrganizationContact
 } from '@prisma/client'
 import { SecurityRuleGrantee } from '../security'
 
@@ -91,6 +92,7 @@ export function filterFollowup({
 }: {
   followup: Followup & {
     prescribingOrganization: Partial<PartnerOrganization> | null
+    prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
   }
   conditions: {
     details: boolean
@@ -112,6 +114,10 @@ export function filterFollowup({
       followup.prescribingOrganization,
       conditions.details
     ),
+    prescribingOrganizationContact: show(
+      followup.prescribingOrganizationContact,
+      conditions.details
+    ),
     firstFollowup: show(followup.firstFollowup, conditions.details),
     helpRequested: show(followup.helpRequested, conditions.details),
     thirdPersonName: show(followup.thirdPersonName, conditions.details),
@@ -125,6 +131,7 @@ export function filterFileInstruction({
 }: {
   fileInstruction: FileInstruction & {
     instructorOrganization: Partial<PartnerOrganization> | null
+    instructorOrganizationContact: Partial<PartnerOrganizationContact> | null
   }
   conditions: {
     details: boolean
@@ -147,12 +154,20 @@ export function filterFileInstruction({
       fileInstruction.instructorOrganizationId,
       details
     ),
+    instructorOrganizationContactId: show(
+      fileInstruction.instructorOrganizationContactId,
+      details
+    ),
 
     refusalReason: show(fileInstruction.refusalReason, details),
     refusalReasonOther: show(fileInstruction.refusalReasonOther, details),
 
     instructorOrganization: show(
       fileInstruction.instructorOrganization,
+      details
+    ),
+    instructorOrganizationContact: show(
+      fileInstruction.instructorOrganizationContact,
       details
     )
   }
@@ -195,6 +210,7 @@ export function filterHelpRequest({
 }: {
   helpRequest: HelpRequest & {
     prescribingOrganization: Partial<PartnerOrganization> | null
+    prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
   }
   conditions: {
     details: boolean
@@ -219,7 +235,15 @@ export function filterHelpRequest({
       helpRequest.prescribingOrganizationId,
       details
     ),
+    prescribingOrganizationContactId: show(
+      helpRequest.prescribingOrganizationContactId,
+      details
+    ),
 
-    prescribingOrganization: show(helpRequest.prescribingOrganization, details)
+    prescribingOrganization: show(helpRequest.prescribingOrganization, details),
+    prescribingOrganizationContact: show(
+      helpRequest.prescribingOrganizationContact,
+      details
+    )
   }
 }

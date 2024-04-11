@@ -82,6 +82,8 @@
       housingType: housingHelpRequest.value.housingType || [],
       roomCount: housingHelpRequest.value.roomCount || [],
       instructorOrganizationId: fileInstruction.value.instructorOrganizationId,
+      instructorOrganizationContactId:
+        fileInstruction.value.instructorOrganizationContactId,
       examinationDate: fileInstruction.value.examinationDate,
       decisionDate: fileInstruction.value.decisionDate,
       refusalReason: fileInstruction.value.refusalReason,

@@ -24,6 +24,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     structureName,
     thirdPersonName,
     prescribingOrganizationId,
+    prescribingOrganizationContactId,
     ministre,
     date,
     synthesis,
@@ -41,6 +42,10 @@ export const create = async ({ ctx, input }: CreateParams) => {
   let prescribingOrganization
   if (prescribingOrganizationId) {
     prescribingOrganization = connect(prescribingOrganizationId)
+  }
+  let prescribingOrganizationContact
+  if (prescribingOrganizationContactId) {
+    prescribingOrganizationContact = connect(prescribingOrganizationContactId)
   }
 
   const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(user, {
@@ -67,6 +72,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
       followup: {
         create: {
           prescribingOrganization,
+          prescribingOrganizationContact,
           redirected,
           structureName: redirected ? structureName : null,
           medium,

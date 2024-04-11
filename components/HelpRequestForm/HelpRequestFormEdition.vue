@@ -64,7 +64,11 @@
       handlingDate: helpRequest.value.handlingDate,
       refusalReason: fileInstruction.value.refusalReason,
       prescribingOrganizationId: helpRequest.value.prescribingOrganizationId,
+      prescribingOrganizationContactId:
+        helpRequest.value.prescribingOrganizationContactId,
       instructorOrganizationId: fileInstruction.value.instructorOrganizationId,
+      instructorOrganizationContactId:
+        fileInstruction.value.instructorOrganizationContactId,
       dispatchDate: fileInstruction.value.dispatchDate,
       synthesis: socialSupport.value.synthesis,
       privateSynthesis: socialSupport.value.privateSynthesis,

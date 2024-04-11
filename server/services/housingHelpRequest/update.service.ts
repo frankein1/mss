@@ -41,6 +41,7 @@ export async function update({ input, ctx }: UpdateParams) {
     decisionDate,
     refusalReason,
     instructorOrganizationId,
+    instructorOrganizationContactId,
     dispatchDate,
     synthesis,
     privateSynthesis,
@@ -96,7 +97,9 @@ export async function update({ input, ctx }: UpdateParams) {
       dispatchDate,
       fullFile,
       externalStructure,
-      instructorOrganizationId: instructorOrganizationId || undefined
+      instructorOrganizationId: instructorOrganizationId || undefined,
+      instructorOrganizationContactId:
+        instructorOrganizationContactId || undefined
     }
   })
 

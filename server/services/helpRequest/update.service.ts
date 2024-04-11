@@ -50,7 +50,9 @@ export async function update({ input, ctx }: UpdateParams) {
     handlingDate,
     refusalReason,
     prescribingOrganizationId,
+    prescribingOrganizationContactId,
     instructorOrganizationId,
+    instructorOrganizationContactId,
     dispatchDate,
     synthesis,
     privateSynthesis,
@@ -104,7 +106,8 @@ export async function update({ input, ctx }: UpdateParams) {
       dispatchDate,
       fullFile,
       externalStructure,
-      instructorOrganizationId: instructorOrganizationId || null
+      instructorOrganizationId: instructorOrganizationId || null,
+      instructorOrganizationContactId: instructorOrganizationContactId || null
     }
   })
 
@@ -118,7 +121,8 @@ export async function update({ input, ctx }: UpdateParams) {
       handlingDate,
       isRefundable,
       subjectId,
-      prescribingOrganizationId: prescribingOrganizationId || null
+      prescribingOrganizationId: prescribingOrganizationId || null,
+      prescribingOrganizationContactId: prescribingOrganizationContactId || null
     }
   })
 

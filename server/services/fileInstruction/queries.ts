@@ -23,6 +23,7 @@ function findMany(
     where: args.where,
     include: {
       instructorOrganization: true,
+      instructorOrganizationContact: true,
       socialSupport: {
         include: {
           subjects: true,
@@ -37,7 +38,8 @@ function findMany(
       },
       helpRequest: {
         include: {
-          prescribingOrganization: true
+          prescribingOrganization: true,
+          prescribingOrganizationContact: true
         }
       },
       housingHelpRequest: true

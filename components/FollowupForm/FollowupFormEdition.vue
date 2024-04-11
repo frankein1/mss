@@ -66,6 +66,8 @@
       thirdPersonName: followup.value.thirdPersonName,
       place: followup.value.place,
       prescribingOrganizationId: followup.value.prescribingOrganization?.id,
+      prescribingOrganizationContactId:
+        followup.value.prescribingOrganizationContact?.id,
       subjects: initialSocialSupportSubjectIds.value,
       documents: initialDocumentIds.value,
       redirected: followup.value.redirected || false,
