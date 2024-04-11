@@ -24,9 +24,9 @@
 
         <div class="fr-col-12">
           <VeeSelect
-            name="Statut"
+            name="relationship"
             :label="relativeFieldLabels.relationship"
-            :options="taxHouseHoldRelationshipKeys.options"
+            :options="withEmptyValue(taxHouseHoldRelationshipKeys.options)"
             required
           />
         </div>
@@ -37,7 +37,7 @@
       class="fr-mt-6w"
       :is-submitting="isSubmitting"
       confirm-label="Valider"
-      @cancel="modal.close()"
+      @cancel="modal.close"
     />
   </form>
 </template>
@@ -54,15 +54,13 @@
   const props = defineProps<{
     beneficiaryId: string
     budgetId: string
+    isSubmitting: boolean
     add: (values: CreateHouseholdMemberInput) => void
   }>()
 
   const modal = useModal()
 
-  const form = ref<HTMLFormElement | null>(null)
-  const isSubmitting = ref(false)
-
-  const { handleSubmit, meta } = useForm<CreateHouseholdMemberInput>({
+  const { handleSubmit } = useForm<CreateHouseholdMemberInput>({
     validationSchema: toTypedSchema(createHouseholdMemberSchema),
     initialValues: {
       beneficiaryId: props.beneficiaryId,
@@ -70,14 +68,7 @@
     }
   })
 
-  const isFormDirty = computed(() => meta.value.dirty)
-
-  const { isNavigatingWithFormActions } = useLeaveFormConfirmation({
-    isFormDirty
-  })
-
   const onSubmit = handleSubmit(values => {
-    isNavigatingWithFormActions.value = true
     props.add(values)
   })
 </script>

@@ -150,7 +150,6 @@
 
     if (income.value?.type === 'Beneficiary') {
       const amount = prismaDecimalToNumber(budget.legacyMainIncomeAmount)
-      console.log(amount)
       return amount
         ? `${budget.legacyMainIncomeSource || ''} : ${amount}`
         : null

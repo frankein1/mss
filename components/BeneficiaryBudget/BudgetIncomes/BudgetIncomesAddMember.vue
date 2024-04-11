@@ -25,14 +25,16 @@
   const props = defineProps<{ beneficiaryId: string; budgetId: string }>()
 
   const modal = useModal()
-  const isSubmitting = ref(false)
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
+
+  const isSubmitting = ref(false)
 
   function onAddMember() {
     modal.open(BudgetIncomesAddMemberForm, {
       title: 'Ajouter les revenus d’un membre du foyer fiscal',
       beneficiaryId: props.beneficiaryId,
+      isSubmitting: isSubmitting.value,
       budgetId: props.budgetId,
       add: addMember
     })
@@ -51,6 +53,7 @@
             `${incomeId}`
           )
         )
+        snackbar.success('Membre du foyer créé avec succès.')
       },
       onFailure: () => {
         snackbar.error('La création du membre du foyer a échoué.')
