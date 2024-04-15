@@ -18,6 +18,7 @@
       class="actions"
       :beneficiary-id="beneficiary.id"
       :permissions="permissions"
+      @toggle-delete="emit('toggleDelete')"
       @deleted="emit('deleted')"
     />
   </div>
@@ -33,7 +34,7 @@
     permissions: BeneficiaryPermissions | undefined
   }>()
 
-  const emit = defineEmits<{ deleted: [] }>()
+  const emit = defineEmits<{ toggleDelete: []; deleted: [] }>()
 </script>
 
 <style lang="scss">

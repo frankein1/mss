@@ -43,7 +43,7 @@
     permissions: BeneficiaryPermissions | undefined
   }>()
 
-  const emit = defineEmits<{ deleted: [] }>()
+  const emit = defineEmits<{ toggleDelete: []; deleted: [] }>()
 
   const currentTab = computed(() => {
     const hash = route.hash.slice(1)
@@ -58,9 +58,11 @@
   )
 
   function onDelete() {
+    emit('toggleDelete')
     useModal().open(BeneficiaryDeleteForm, {
       title: 'Supprimer la fiche bénéficiaire',
       beneficiaryId: props.beneficiaryId,
+      cancel: () => emit('toggleDelete'),
       deleted: () => {
         emit('deleted')
       }
