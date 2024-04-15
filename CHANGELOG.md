@@ -2,6 +2,37 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.19.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.18.2...v1.19.0) (2024-04-15)
+
+
+### Features
+
+* **annuaire:** gestion du contact pour les organismes prescripteurs et instructeurs ([afa1abe](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/afa1abe8dbddec098cab5cbca0479df325bdb529))
+* **budget:** Affichage des revenus ([f72cb2e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f72cb2ee8494995e3ae40f93f28119e18c318554)), closes [#415](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/415)
+* **budget:** ajout d'un membre au foyer ([40ade29](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/40ade29db6fc06785fde4c0883cccd0146ed4524)), closes [#415](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/415)
+* **budget:** ajout de la permission d'accès au budget ([d9fb3c1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d9fb3c1a6d0daac6cd6056ab32e4daefce519202))
+* **budget:** Ajout des couches techniques coté serveur ([7b56152](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7b561520cfc4cad6d7159d733d0f69f10bb7fcb0))
+* **budget:** ajout des formulaires de revenus ([d951a36](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d951a3667fdf65424c2b1abc36073481af1c6e8d)), closes [#417](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/417)
+* **budget:** ajout vue et modification des infos générales ([3508085](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/35080855ae70b946aeedc40436c2eaa23c0421be)), closes [#413](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/413)
+* **budget:** correctifs sur les infos générales ([4f78961](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4f789616e0a5465e5ba974c54b7cd79fbe71b9b6)), closes [#440](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/440)
+* **budget:** création du modèle de données ([70c4322](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/70c4322c05585fbba40e896f298e82923af6a28c)), closes [#411](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/411)
+* **budget:** migration des données ([fe2cc08](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fe2cc082d7391a328b62e27e639e9b308f90f3f7))
+* **budget:** modification des charges fixes mensuelles ([9c52f6c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9c52f6c7df19ed833ce5e951abaf9b0270a0e279)), closes [#414](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/414)
+* **budget:** suppression d'un membre du foyer ([33214b0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/33214b072cb16a485f305ba5a2f7a03559f9b69e))
+* **budget:** vue des charges fixes mensuelles ([2131320](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2131320b301c089846c43d7f97dca59e2825f2c9)), closes [#414](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/414)
+* **dependance:** mise à jour de trpc-nuxt et nuxt-security ([f9d9c86](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f9d9c866842cf44c46ca31926cdc1a6fc9b7797e))
+* **dependance:** mises à jour des versions mineures des librairies ([aae030a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/aae030a230a54828e9c4c63ecf6f7815f0e31b4b))
+
+
+### Bug Fixes
+
+* **budget:** clarifier message bandeau d'info anciens revenus ([0f7a094](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0f7a0946975ffdf06915162b6a4f3877671d6550)), closes [#446](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/446)
+* **budget:** correctifs de finalisation de la fonctionnalité ([995907e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/995907e199cfc472c8eb766e9d041d41e5368a14)), closes [#417](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/417)
+* **budget:** création de revenus uniquement pour les nouveaux membres du foyer ([d9be33f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d9be33f7c644a28149b50ebf8288e58bcf5e67cc)), closes [#441](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/441)
+* **budget:** le total dans les formulaires de revenus et de charges est réactif ([ab103d3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ab103d3147854965d9c4ed7fbd41eedf84f8e9cc)), closes [#417](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/417)
+* **budget:** renommage de la colonne BudgetIncome.beneficiaryRelative en BudgetIncome.householdMember ([8e92cf3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8e92cf3b827be3766d945d48f3ba5b1b705688ec)), closes [#434](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/434)
+* **budget:** supression du bouton secondaire Enregistrer dans la barre d'action ([1a7657d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1a7657def05cbe4d67759eefad009e09ee9c877d)), closes [#439](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/439)
+
 ### [1.18.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.18.1...v1.18.2) (2024-03-26)
 
 ### [1.18.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.18.0...v1.18.1) (2024-03-26)
