@@ -18,7 +18,7 @@
         <button
           class="fr-btn fr-btn--secondary"
           type="button"
-          @click="modal.close"
+          @click="cancelAndClose"
         >
           Annuler
         </button>
@@ -43,11 +43,16 @@
 
   const props = defineProps<{
     beneficiaryId: string
-
+    cancel: () => void
     deleted: () => void
   }>()
 
   const isSubmitting = ref(false)
+
+  function cancelAndClose() {
+    props.cancel()
+    modal.close()
+  }
 
   function deleteItem() {
     useTrpcMutation({
@@ -61,6 +66,7 @@
         modal.close()
       },
       onFailure: () => {
+        props.cancel()
         useSnackbar().error('La suppression a échoué.')
       }
     })

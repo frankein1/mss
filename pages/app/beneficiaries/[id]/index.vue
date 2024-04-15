@@ -8,6 +8,7 @@
       :beneficiary="beneficiary"
       :title="title"
       :permissions="permissions"
+      @toggle-delete="toggleDelete"
       @deleted="onBeneficiaryDeleted"
     />
 
@@ -19,7 +20,14 @@
     />
     <hr />
 
-    <AtomTabs tab-list-name="Détails de la fiche bénéficiaire">
+    <AtomLoader
+      v-if="isDeleting"
+      class="loading-state"
+    />
+    <AtomTabs
+      v-else
+      tab-list-name="Détails de la fiche bénéficiaire"
+    >
       <AtomTab
         :tab-id="BeneficiaryTab.Details"
         title="Informations"
@@ -64,8 +72,17 @@
         title="Historique"
         icon="fr-icon-history-line"
       >
+        <AtomLoader
+          v-if="pending"
+          class="fr-mx-auto"
+        />
+        <AtomAlert
+          v-else-if="error"
+          :alert-type="AlertType.Error"
+          message="La fiche bénéficiaire n'a pas pu être chargée."
+        />
         <BeneficiaryHistory
-          v-if="permissions"
+          v-else-if="permissions"
           :beneficiary-id="beneficiaryId"
           :beneficiary-permissions="permissions"
         />
@@ -137,8 +154,30 @@
     return RoutePath.AppBeneficiaries()
   })
 
+  /** Deleting status is used temporarily to hide the tab BeneficiaryHistory
+   * when the beneficiary is deleted.
+   * 1. because the filters for BeneficiaryHistory are reactive
+   * the deletion triggers a new fetch of beneficiary.getSocialSupports
+   * 2. The API call is performed in batch mode and fails
+   * 3. The whole batch calls which includes call for loading /app/beneficiaries fails
+   * 4. No filter can be displayed on the page /app/beneficiaries
+   * See [#427](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/issues/427)
+   */
+  const isDeleting = ref(false)
+
+  function toggleDelete() {
+    isDeleting.value = !isDeleting.value
+  }
+
   function onBeneficiaryDeleted() {
     navigateTo(backLink.value)
     useSnackbar().success('Le bénéficiaire a été supprimé.')
   }
 </script>
+
+<style scoped>
+  .loading-state {
+    width: 100%;
+    margin: 0 auto;
+  }
+</style>
