@@ -6,7 +6,7 @@
     <div
       v-if="icon"
       class="pagetitle__icon fr-mr-4w"
-      :class="[iconColorClass, iconBackgroundClass]"
+      :class="`pagetitle__icon--${iconVariant}`"
     >
       <span
         :class="[icon]"
@@ -50,8 +50,7 @@
       title: string
       noMargin?: boolean
       icon?: string
-      iconColorClass?: string
-      iconBackgroundClass?: string
+      iconVariant: 'primary' | 'purple' | 'green'
       pictogramPath?: string
       pictogramBackground?: boolean
       subtitle?: string
@@ -60,8 +59,7 @@
     {
       noMargin: false,
       icon: '',
-      iconColorClass: '',
-      iconBackgroundClass: '',
+      iconVariant: 'primary',
       pictogramPath: '',
       pictogramBackground: false,
       subtitle: '',
@@ -93,6 +91,21 @@
 
     span::before {
       --icon-size: 2rem;
+    }
+
+    &--primary {
+      color: var(--primary);
+      background-color: var(--primary-light);
+    }
+
+    &--purple {
+      color: var(--text-label-purple-glycine);
+      background-color: var(--background-contrast-purple-glycine);
+    }
+
+    &--green {
+      color: var(--text-label-green-archipel);
+      background-color: var(--background-contrast-green-archipel);
     }
   }
 
