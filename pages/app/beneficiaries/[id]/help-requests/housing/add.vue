@@ -11,8 +11,7 @@
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
-      icon-color-class="color-purple-glycine"
-      icon-background-class="bg-purple-glycine"
+      icon-variant="purple"
       subtitle="Demande de logement"
       :subtitle-picto-path="fileInstructionTypePictos.Housing"
     >

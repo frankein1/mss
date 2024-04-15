@@ -231,14 +231,6 @@ select:focus:not(:focus-visible) {
   }
 }
 
-.color-purple-glycine {
-  color: var(--text-label-purple-glycine) !important;
-}
-
-.bg-purple-glycine {
-  background-color: var(--background-contrast-purple-glycine) !important;
-}
-
 .fr-accordion__btn::after {
   --icon-size: 1.5rem;
 }

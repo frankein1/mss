@@ -3,7 +3,14 @@
     <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryFollowupAdd(beneficiary)"
     />
-    <PageTitle :title="title" />
+    <PageTitle
+      :title="title"
+      icon="fr-icon-questionnaire-fill"
+      icon-variant="green"
+    >
+      <RequiredFields />
+    </PageTitle>
+
     <main
       ref="formContainer"
       class="feature-section fr-p-5w"

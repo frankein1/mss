@@ -11,7 +11,6 @@
   >
     <div class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom">
       <!-- ROW -->
-
       <div class="fr-col-12">
         <VeeCheckbox
           :label="followupFieldLabels.firstFollowup"
@@ -28,10 +27,17 @@
           required
         />
       </div>
-      <div class="fr-col-6"></div>
+
+      <div class="fr-col-6">
+        <VeeSelect
+          name="duration"
+          :label="followupFieldLabels.duration"
+          :options="withEmptyValue(followupDurationKeys.options)"
+        />
+      </div>
 
       <!-- ROW -->
-      <div v-if="application.module.ministere">
+      <template v-if="application.module.ministere">
         <div class="fr-col-6">
           <VeeInput
             name="numeroPegase"
@@ -39,6 +45,7 @@
             hint="Format attendu : A-00-000000"
           />
         </div>
+
         <div class="fr-col-6">
           <VeeSelect
             name="ministre"
@@ -47,7 +54,7 @@
             required
           />
         </div>
-      </div>
+      </template>
 
       <!-- ROW -->
       <div class="fr-col-6">
@@ -58,34 +65,29 @@
           required
         />
       </div>
-      <div class="fr-col-6">
-        <VeeSelect
-          name="duration"
-          :label="followupFieldLabels.duration"
-          :options="withEmptyValue(followupDurationKeys.options)"
-        />
-      </div>
 
-      <!-- ROW -->
-      <template v-if="medium === FollowupMedium.ExternalAppointment"></template>
-      <div class="fr-col-6">
+      <div
+        v-if="medium === FollowupMedium.ExternalAppointment"
+        class="fr-col-6"
+      >
         <VeeInput
           name="place"
           :label="followupFieldLabels.place"
         />
       </div>
-      <div class="fr-col-6"></div>
-
-      <!-- ROW -->
-      <template v-if="medium === FollowupMedium.ThirdParty">
-        <div class="fr-col-6">
-          <VeeInput
-            name="thirdPersonName"
-            :label="followupFieldLabels.thirdPersonName"
-          />
-        </div>
-        <div class="fr-col-6"></div>
-      </template>
+      <div
+        v-else-if="medium === FollowupMedium.ThirdParty"
+        class="fr-col-6"
+      >
+        <VeeInput
+          name="thirdPersonName"
+          :label="followupFieldLabels.thirdPersonName"
+        />
+      </div>
+      <div
+        v-else
+        class="fr-col-6"
+      ></div>
 
       <!-- ROW -->
       <div class="fr-col-12">
