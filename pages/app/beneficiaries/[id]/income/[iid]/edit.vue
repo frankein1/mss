@@ -50,7 +50,7 @@
             v-if="legacyResources"
             class="fr-mb-4w"
             :alert-type="AlertType.Warning"
-            message="Veuillez répartir les ressources renseignées via la section “Activité/Revenu” du formulaire bénéficiaire, sinon elles seront perdues :"
+            message="Veuillez répartir les ressources précedemment renseignées via l'ancienne section “Activité/Revenu” du formulaire bénéficiaire, sinon elles seront perdues :"
           >
             <template #detailedMessage>
               <p class="euro-symbol">{{ legacyResources }}</p>
@@ -83,7 +83,10 @@
     updateBudgetIncomeSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { taxHouseHoldRelationshipKeys } from '~/client/options'
+  import {
+    taxHouseHoldRelationshipKeys,
+    incomeSourceKeys
+  } from '~/client/options'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { incomeHasBeenFilled } from '~/utils/budget'
 
@@ -129,6 +132,19 @@
     income.value ? incomeHasBeenFilled(income.value) : false
   )
 
+  /** Convert legacy income source (e.g. "Aah,PrimeActivite") into readable labels */
+  function formatIncomeSource(incomeSource: string | null) {
+    const sources = incomeSource
+      ? incomeSource.replace(/[{}]/g, '').split(',')
+      : []
+    return sources
+      .map(
+        source =>
+          incomeSourceKeys.byKey[source as keyof typeof incomeSourceKeys.byKey]
+      )
+      .join(', ')
+  }
+
   const legacyResources = computed(() => {
     const budget = income.value?.budget
     if (!budget) {
@@ -142,7 +158,7 @@
     if (income.value?.type === 'Beneficiary') {
       const amount = prismaDecimalToNumber(budget.legacyMainIncomeAmount)
       return amount
-        ? `${budget.legacyMainIncomeSource || ''} : ${amount}`
+        ? `${formatIncomeSource(budget.legacyMainIncomeSource)} : ${amount}`
         : null
     }
 
@@ -151,13 +167,13 @@
       relationship === 'Conjoint' &&
       budget.legacyPartnerMainIncomeAmount?.gt(0)
     ) {
-      return `${budget.legacyPartnerMainIncomeSource || ''} : ${budget.legacyPartnerMainIncomeAmount.toString()}`
+      return `${formatIncomeSource(budget.legacyPartnerMainIncomeSource)} : ${budget.legacyPartnerMainIncomeAmount.toString()}`
     }
     if (
       relationship === 'EnfantMajeur' &&
       budget.legacyMajorChildrenMainIncomeAmount?.gt(0)
     ) {
-      return `${budget.legacyMajorChildrenMainIncomeSource || ''} : ${budget.legacyMajorChildrenMainIncomeAmount.toString()}`
+      return `${formatIncomeSource(budget.legacyMajorChildrenMainIncomeSource)} : ${budget.legacyMajorChildrenMainIncomeAmount.toString()}`
     }
 
     return null

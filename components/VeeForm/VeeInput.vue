@@ -238,3 +238,10 @@
     setValue(formatValue(value))
   }
 </script>
+
+<style scoped>
+  .fr-input[type='number'] {
+    text-align: right;
+    padding-right: 0.7rem;
+  }
+</style>

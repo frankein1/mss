@@ -123,7 +123,7 @@
 
   .fr-input {
     text-align: right;
-    padding-right: 25px;
+    padding-right: 1.5rem;
   }
 
   .fr-input-group--disabled .fr-input-wrap::before {
