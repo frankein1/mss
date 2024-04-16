@@ -149,6 +149,7 @@
       <div class="fr-col-6">
         <VeeSelect
           name="prescribingOrganizationContactId"
+          :disabled="organizationContactIsDisabled"
           :label="followupFieldLabels.prescribingOrganizationContactId"
           :options="withEmptyValue(prescribingOrganizationContactOptions)"
         />
@@ -355,6 +356,27 @@
       })
     )
     return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
+  })
+
+  const selectedPartnerOrganization = computed(() => {
+    const partnerId = prescribingOrganizationId.value
+    if (!partnerId) {
+      return null
+    }
+
+    return (props.partnerOrganizations || []).find(
+      partner => partner.id === partnerId
+    )
+  })
+
+  const organizationContactIsDisabled = computed(() => {
+    if (!selectedPartnerOrganization.value) {
+      return true
+    }
+    if ((selectedPartnerOrganization.value.contacts || []).length === 0) {
+      return true
+    }
+    return false
   })
 
   const prescribingOrganizationContactOptions = computed(() => {

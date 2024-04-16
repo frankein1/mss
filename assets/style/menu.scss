@@ -24,6 +24,10 @@
   padding: 4px; // As the overflow is set to scroll, menu item outline needs this extra padding
 }
 
+.menu-item {
+  min-height: 2.5rem;
+}
+
 .menu-item:last-child {
   border-radius: 0 0 0.5rem 0.5rem;
 }
