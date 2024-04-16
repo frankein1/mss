@@ -1,5 +1,5 @@
 <template>
-  <div class="landing-main-container fr-container fr-my-8w">
+  <div class="landing-main-container fr-container fr-mt-5w">
     <article>
       <h1>Veuillez lire et accepter les CGU</h1>
       <p>
