@@ -69,30 +69,30 @@
         :label="beneficiaryFieldLabels.funeralContract"
       />
     </div>
-    <div class="fr-col-12">
-      <VeeSelect
-        v-if="application.module.ministere"
-        name="ministereCategorie"
-        :label="beneficiaryFieldLabels.ministereCategorie"
-        :options="withEmptyValue(ministereCategorieKeys.options)"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeSearchableSelect
-        v-if="application.module.ministere"
-        name="ministereDepartementServiceAc"
-        :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
-        :options="withEmptyValue(ministereDepartmentServiceAcKeys.options)"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeSelect
-        v-if="application.module.ministere"
-        name="ministereStructure"
-        :label="beneficiaryFieldLabels.ministereStructure"
-        :options="withEmptyValue(ministereStructureKeys.options)"
-      />
-    </div>
+
+    <template v-if="application.module.ministere">
+      <div class="fr-col-12">
+        <VeeSelect
+          name="ministereCategorie"
+          :label="beneficiaryFieldLabels.ministereCategorie"
+          :options="withEmptyValue(ministereCategorieKeys.options)"
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeSearchableSelect
+          name="ministereDepartementServiceAc"
+          :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
+          :options="withEmptyValue(ministereDepartmentServiceAcKeys.options)"
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeSelect
+          name="ministereStructure"
+          :label="beneficiaryFieldLabels.ministereStructure"
+          :options="withEmptyValue(ministereStructureKeys.options)"
+        />
+      </div>
+    </template>
 
     <AtomCallout class="callout-container">
       <div class="budget-redirection">
