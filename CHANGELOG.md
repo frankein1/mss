@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.19.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.19.0...v1.19.1) (2024-04-16)
+
+
+### Bug Fixes
+
+* **annuaire:** affichage conditionnel des contacts des organismes prescripteurs ([6076a67](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6076a67b8e42d1a8b133dfc96353355e21546f34)), closes [#383](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/383)
+* **beneficiaire:** amélioration de l'UI de la section activité du formulaire bénéficiaire ([d1e705d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d1e705dd103ea1b030b2aa82e7f160c58d5c4c3c)), closes [#165](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/165)
+* **beneficiaire:** chargement des filtres de la page bénéficiaire apprès suppression ([1a016a9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1a016a945c07a2b15a588cd590fe22816ae01b6a)), closes [#427](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/427)
+* **budget:** encart d'information sur le nouveau budget ([c052ac4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c052ac424c5ad58617fc5451093e3c33e62f3607))
+
 ## [1.19.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.18.2...v1.19.0) (2024-04-15)
 
 
