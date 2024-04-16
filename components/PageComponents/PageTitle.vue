@@ -50,7 +50,7 @@
       title: string
       noMargin?: boolean
       icon?: string
-      iconVariant: 'primary' | 'purple' | 'green'
+      iconVariant?: 'primary' | 'purple' | 'green'
       pictogramPath?: string
       pictogramBackground?: boolean
       subtitle?: string
