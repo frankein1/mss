@@ -109,7 +109,7 @@
 
   .bgi__content__item {
     display: flex;
-    align-items: center;
+    align-items: start;
     gap: 1.25rem;
 
     .item__amount {

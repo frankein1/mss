@@ -93,6 +93,21 @@
         :options="withEmptyValue(ministereStructureKeys.options)"
       />
     </div>
+
+    <AtomCallout class="callout-container">
+      <div class="budget-redirection">
+        <div>
+          <p>
+            Pour détailler les
+            <strong
+              >ressources du bénéficiaire et des membres de son foyer</strong
+            >, rendez-vous dans l’onglet “Budget” du dossier bénéficiaire.
+          </p>
+        </div>
+
+        <AtomPictogram path="/pictograms/money.svg"></AtomPictogram>
+      </div>
+    </AtomCallout>
   </BeneficiaryFormSection>
 </template>
 
@@ -119,3 +134,16 @@
     )
   )
 </script>
+
+<style scoped>
+  .callout-container {
+    margin-top: 2.5rem;
+  }
+
+  .budget-redirection {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+</style>

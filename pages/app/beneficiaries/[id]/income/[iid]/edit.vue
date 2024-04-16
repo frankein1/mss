@@ -158,25 +158,34 @@
     if (income.value?.type === 'Beneficiary') {
       const amount = prismaDecimalToNumber(budget.legacyMainIncomeAmount)
       return amount
-        ? `${formatIncomeSource(budget.legacyMainIncomeSource)} : ${amount}`
+        ? `${formatIncomeSource(budget.legacyMainIncomeSource) || budget.legacyMainIncomeSource} : ${amount}`
         : null
     }
 
     const relationship = income.value?.householdMember?.relationship
-    if (
-      relationship === 'Conjoint' &&
-      budget.legacyPartnerMainIncomeAmount?.gt(0)
-    ) {
-      return `${formatIncomeSource(budget.legacyPartnerMainIncomeSource)} : ${budget.legacyPartnerMainIncomeAmount.toString()}`
-    }
-    if (
-      relationship === 'EnfantMajeur' &&
-      budget.legacyMajorChildrenMainIncomeAmount?.gt(0)
-    ) {
-      return `${formatIncomeSource(budget.legacyMajorChildrenMainIncomeSource)} : ${budget.legacyMajorChildrenMainIncomeAmount.toString()}`
+    if (relationship === 'Conjoint') {
+      const amount = prismaDecimalToNumber(budget.legacyPartnerMainIncomeAmount)
+      return amount
+        ? `${formatIncomeSource(budget.legacyPartnerMainIncomeSource) || budget.legacyPartnerMainIncomeSource} : ${amount}`
+        : null
     }
 
-    return null
+    if (relationship === 'EnfantMajeur') {
+      const amount = prismaDecimalToNumber(
+        budget.legacyMajorChildrenMainIncomeAmount
+      )
+      return amount
+        ? `${formatIncomeSource(budget.legacyMajorChildrenMainIncomeSource) || budget.legacyMajorChildrenMainIncomeSource} : ${amount}`
+        : null
+    }
+
+    const amount = prismaDecimalToNumber(
+      budget.legacyOtherMembersMainIncomeAmount
+    )
+
+    return amount
+      ? `${formatIncomeSource(budget.legacyOtherMembersMainIncomeSource) || budget.legacyOtherMembersMainIncomeSource} : ${amount}`
+      : null
   })
 
   const {
