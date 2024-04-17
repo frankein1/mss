@@ -8,6 +8,7 @@ import { signJwt, verifyJwt } from '~/server/lib/jwt'
 import { cookieOptions } from '~/utils/cookie'
 import { JwtUser } from '~/types/user'
 import { getAppContextPermissions } from '~/server/security'
+import { includeOrderedCGUHistory } from '~/server/query'
 
 function getUserFromAuthToken(event: ProtectedAppContext['event']) {
   const {
@@ -61,11 +62,7 @@ async function updateUserWithCGUVersion(id: string) {
           type: true
         }
       },
-      CGUHistory: {
-        orderBy: {
-          date: 'desc'
-        }
-      }
+      ...includeOrderedCGUHistory()
     }
   })
 }

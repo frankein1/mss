@@ -3,6 +3,7 @@ import { signJwt } from '~/server/lib/jwt'
 import { getAppContextPermissions } from '~/server/security'
 import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
+import { includeOrderedCGUHistory } from '~/server/query'
 
 export default defineEventHandler(async event => {
   const authUser = event.context.auth?.user as JwtUser
@@ -19,7 +20,7 @@ export default defineEventHandler(async event => {
       id: authUser.id
     },
     include: {
-      CGUHistory: true,
+      ...includeOrderedCGUHistory(),
       structure: {
         select: {
           id: true,

@@ -5,6 +5,7 @@ import { UserRepo } from '~/server/database'
 import { getAppContextPermissions } from '~/server/security'
 import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
+import { includeOrderedCGUHistory } from '~/server/query'
 
 export default defineEventHandler(async event => {
   const { token } = await readBody(event)
@@ -24,7 +25,7 @@ export default defineEventHandler(async event => {
       }
     },
     include: {
-      CGUHistory: true,
+      ...includeOrderedCGUHistory(),
       structure: { select: { id: true, type: true } }
     }
   })
