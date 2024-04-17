@@ -1,6 +1,6 @@
 <template>
   <div class="landing-main-container fr-container fr-mt-5w">
-    <article>
+    <article v-if="!$route.query.readonly">
       <h1>Veuillez lire et accepter les CGU</h1>
       <p>
         Afin de pouvoir utiliser Mon Suivi Social, merci de lire et accepter les
@@ -348,7 +348,7 @@
         tribunaux compétents du ressort de la juridiction de Paris.
       </p>
     </article>
-    <CGUAcceptForm />
+    <CGUAcceptForm v-if="!$route.query.readonly" />
   </div>
 </template>
 

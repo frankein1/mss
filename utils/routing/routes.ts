@@ -147,13 +147,30 @@ const beneficiaryEditRoute = (
   return params.size ? `${route}?${params}` : route
 }
 
+type CGURouteOptions = {
+  readonly: boolean
+}
+
+const getCGURoute = (route: string, options?: CGURouteOptions) => {
+  if (options?.readonly) {
+    const params = new URLSearchParams()
+    params.append('readonly', 'true')
+
+    return `${route}?${params}`
+  }
+
+  return route
+}
+
 export const RoutePath = {
   [Route.Index]: () => '/',
   [Route.Register]: () => '/register',
   [Route.DeclarationAccessibilite]: () => '/declaration-accessibilite',
   [Route.MentionsLegales]: () => '/mentions-legales',
-  [Route.CGUManager]: () => `${CGURoute}/manager`,
-  [Route.CGUUser]: () => `${CGURoute}/user`,
+  [Route.CGUManager]: (options?: CGURouteOptions) =>
+    getCGURoute(`${CGURoute}/manager`, options),
+  [Route.CGUUser]: (options?: CGURouteOptions) =>
+    getCGURoute(`${CGURoute}/user`, options),
   [Route.Statistiques]: () => `/statistiques`,
 
   // ERROR
