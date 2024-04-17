@@ -17,7 +17,7 @@
         id="fr-sidemenu-wrapper"
         class="fr-collapse"
       >
-        <div class="fr-sidemenu__title">
+        <div class="fr-sidemenu__title fr-py-1w fr-px-2w">
           <NuxtLink
             :to="homePage"
             title="Tableau de bord - Mon Suivi Social"
@@ -25,7 +25,7 @@
             <img
               id="sidemenu-title"
               src="~/assets/img/logo-white.svg"
-              class="fr-responsive-img fr-px-1w fr-pt-md-7w fr-px-md-3w"
+              class="fr-responsive-img"
               alt="Mon Suivi Social"
             />
           </NuxtLink>
@@ -49,7 +49,7 @@
                 @click="navigate"
               >
                 <span
-                  class="fr-mr-1v"
+                  class="fr-mr-1w"
                   :class="[menuItem.icon]"
                   aria-hidden="true"
                 ></span>
@@ -57,9 +57,12 @@
               </a>
             </li>
           </NuxtLink>
-          <li v-if="!authState.isAdmin()">
+          <li
+            v-if="!authState.isAdmin()"
+            class="fr-mt-3w fr-mr-1w"
+          >
             <NuxtLink
-              class="fr-btn btn-primary-on-primary fr-mt-3w fr-mx-1w fr-icon-user-add-line fr-btn--icon-left"
+              class="fr-btn btn-primary-on-primary fr-icon-user-add-line fr-btn--icon-left"
               :to="RoutePath.AppBeneficiariesAdd()"
             >
               Créer un·e bénéficiaire
@@ -70,6 +73,20 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
+              target="_blank"
+              :to="
+                authState.isStructureManager()
+                  ? RoutePath.CGUManager({ readonly: true })
+                  : RoutePath.CGUUser({ readonly: true })
+              "
+            >
+              CGU
+            </NuxtLink>
+          </li>
+          <li class="fr-footer__bottom-item">
+            <NuxtLink
+              class="fr-footer__bottom-link"
+              target="_blank"
               :to="RoutePath.DeclarationAccessibilite()"
             >
               Accessibilité: non conforme
@@ -141,13 +158,13 @@
       items.push({
         to: RoutePath.AppHistory(),
         label: 'Accompagnements',
-        icon: 'fr-icon-inbox-archive-line'
+        icon: 'fr-icon-folder-2-line'
       })
       if (application.value.module.stats) {
         items.push({
           to: RoutePath.AppStats(),
           label: 'Statistiques',
-          icon: 'fr-icon-pie-chart-2-line'
+          icon: 'fr-icon-line-chart-line'
         })
       }
     }
@@ -159,8 +176,6 @@
 <style lang="scss" scoped>
   @use '~/assets/style/variables' as *;
 
-  $link-highlight-color: #7a7edf;
-
   .fr-sidemenu {
     background-color: $primary;
   }
@@ -169,38 +184,46 @@
     box-shadow: none;
   }
 
+  .fr-sidemenu__list {
+    margin-left: 0.5rem;
+  }
+
   .fr-sidemenu__link {
     color: #fff;
+    font-weight: $font-weight-normal;
+    word-break: break-word;
+    padding: 0.75rem;
   }
 
   @media (hover: hover) and (pointer: fine) {
     .fr-sidemenu__link[href]:hover {
-      background-color: $link-highlight-color;
+      background-color: inherit;
+      font-weight: $font-weight-bold;
     }
 
     .fr-sidemenu__link[href]:active {
-      background-color: #7a7ddfd1;
+      font-weight: $font-weight-bold;
     }
   }
 
   .fr-sidemenu__link[aria-current] {
-    background-color: $link-highlight-color;
     color: #fff;
+    font-weight: $font-weight-bold;
   }
 
   .fr-sidemenu__link[aria-current]::before {
     background-color: #fff;
-    opacity: 0.4;
     top: 0;
     bottom: 0;
+    margin: 0.75rem 0;
   }
 
   .fr-sidemenu__link::before {
-    margin-right: 8px;
+    margin-right: 0.5rem;
   }
 
   .fr-responsive-img {
-    max-width: 250px;
+    max-height: 3.5rem;
   }
 
   .fr-footer__bottom-link {
@@ -212,10 +235,7 @@
   .fr-footer__bottom-list {
     text-align: center;
     margin-top: auto;
-  }
-
-  .fr-footer__bottom-item {
-    display: inline-block;
+    margin-bottom: 1rem;
   }
 
   .fr-footer__bottom-item::before {

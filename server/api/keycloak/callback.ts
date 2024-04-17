@@ -10,6 +10,7 @@ import { RoutePath } from '~/utils/routing'
 import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
+import { includeOrderedCGUHistory } from '~/server/query'
 
 const config = useRuntimeConfig()
 const { auth } = config
@@ -138,11 +139,7 @@ async function getUser(email: string) {
     where: { email: cleanEmail(email) },
     include: {
       structure: true,
-      CGUHistory: {
-        orderBy: {
-          date: 'desc'
-        }
-      }
+      ...includeOrderedCGUHistory()
     }
   })
 }
