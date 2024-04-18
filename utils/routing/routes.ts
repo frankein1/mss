@@ -9,6 +9,7 @@ export enum Route {
   MentionsLegales = 'MentionsLegales',
   CGUManager = 'CGUManager',
   CGUUser = 'CGUUser',
+  PolitiqueConfidentialite = 'PolitiqueConfidentialite',
   Statistiques = 'Statistiques',
 
   // ERROR
@@ -171,6 +172,7 @@ export const RoutePath = {
     getCGURoute(`${CGURoute}/manager`, options),
   [Route.CGUUser]: (options?: CGURouteOptions) =>
     getCGURoute(`${CGURoute}/user`, options),
+  [Route.PolitiqueConfidentialite]: () => '/politique-confidentialite',
   [Route.Statistiques]: () => `/statistiques`,
 
   // ERROR

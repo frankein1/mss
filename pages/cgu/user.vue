@@ -22,7 +22,8 @@
         Après la création d’un compte, la plateforme est ouverte aux agents des
         ministères sociaux, des Centres Communaux d’Action Sociale (CCAS), des
         Centres intercommunaux d'Action sociale (CIAS), des communes et des
-        structures d’accompagnement social 1.
+        structures d’accompagnement social
+        <a href="#structure-definition">[1]</a>.
       </p>
       <h2 id="article2objet">Article 2 - Objet</h2>
       <p>
@@ -162,6 +163,7 @@
         <a
           href="https://outline.incubateur.anct.gouv.fr/s/623675f2-869e-44da-ae7e-8d9b1decbe15"
           target="_blank"
+          rel="noopener external"
           >de ce lien</a
         >.
       </p>
@@ -337,6 +339,13 @@
         auxquels les présentes CGU pourrait donner lieu tant sur sa validité que
         sur son interprétation, son exécution ou sa réalisation, sera soumis aux
         tribunaux compétents du ressort de la juridiction de Paris.
+      </p>
+      <p>
+        <a name="structure-definition">[1]</a> Structure proposant un
+        accompagnement se caractérisant par une relation, individuelle ou
+        collective, entre un accompagnant et un ou plusieurs accompagnés, avec
+        pour finalité l’amélioration de la situation de la ou des personnes
+        accompagnées.
       </p>
     </article>
     <CGUAcceptForm v-if="!$route.query.readonly" />
