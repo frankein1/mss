@@ -85,6 +85,14 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
+              :to="RoutePath.PolitiqueConfidentialite()"
+            >
+              Politique de confidentialité
+            </NuxtLink>
+          </li>
+          <li class="fr-footer__bottom-item">
+            <NuxtLink
+              class="fr-footer__bottom-link"
               :to="RoutePath.DeclarationAccessibilite()"
             >
               Accessibilité: non conforme
