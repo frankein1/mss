@@ -73,7 +73,6 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              target="_blank"
               :to="
                 authState.isStructureManager()
                   ? RoutePath.CGUManager({ readonly: true })
@@ -86,7 +85,6 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              target="_blank"
               :to="RoutePath.DeclarationAccessibilite()"
             >
               Accessibilité: non conforme
@@ -236,6 +234,10 @@
     text-align: center;
     margin-top: auto;
     margin-bottom: 1rem;
+  }
+
+  .fr-footer__bottom-item {
+    display: inherit;
   }
 
   .fr-footer__bottom-item::before {

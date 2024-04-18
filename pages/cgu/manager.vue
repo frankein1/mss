@@ -19,12 +19,7 @@
         «&nbsp;CGU&nbsp;») fixent et définissent les conditions d’accès et
         d’utilisation de la plateforme «&nbsp;Mon Suivi Social&nbsp;».
       </p>
-      <p>
-        <strong
-          >L’accès à la plateforme doit être précédé de leur
-          acceptation.</strong
-        >
-      </p>
+      <p>L’accès à la plateforme doit être précédé de leur acceptation.</p>
       <h2 id="article1champdapplication">Article 1 - Champ d’application</h2>
       <p>
         Après la création d’un compte, la plateforme est ouverte aux agents des
@@ -54,10 +49,8 @@
         <li>la production de statistiques.</li>
       </ul>
       <p>
-        <strong
-          >Toute utilisation de la plateforme qui n’est pas conforme à l’objet
-          des présentes CGU est strictement interdite.</strong
-        >
+        Toute utilisation de la plateforme qui n’est pas conforme à l’objet des
+        présentes CGU est strictement interdite.
       </p>
       <h2 id="nbsparticle3dfinitions">&nbsp;Article 3 - Définitions</h2>
       <ul>
@@ -209,11 +202,9 @@
         médecin traitant, informations médico-sociales.
       </p>
       <p>
-        <strong
-          >Le responsable de structure devra indiquer lors de sa demande de
-          création de compte si la structure est habilitée ou non à traiter ces
-          données.</strong
-        >
+        Le responsable de structure devra indiquer lors de sa demande de
+        création de compte si la structure est habilitée ou non à traiter ces
+        données.
       </p>
       <p>
         Au sein des CCAS et des CIAS, seuls certains profils peuvent accéder aux
@@ -581,13 +572,10 @@
           réaliser les audits et les inspections auprès de l’ANCT&nbsp;;
         </li>
         <li>
-          <strong
-            >mettre en œuvre le cadre juridique en vigueur, notamment les
-            différents textes encadrant le traitement, rédiger l’ensemble de la
-            documentation produite dans le cadre de la mise en conformité du
-            traitement avec le RGPD et tenir le registre des
-            traitements&nbsp;;</strong
-          >
+          mettre en œuvre le cadre juridique en vigueur, notamment les
+          différents textes encadrant le traitement, rédiger l’ensemble de la
+          documentation produite dans le cadre de la mise en conformité du
+          traitement avec le RGPD et tenir le registre des traitements&nbsp;;
         </li>
         <li>
           veiller à ce que les personnes autorisées à traiter les données à
