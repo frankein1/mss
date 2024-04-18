@@ -9,7 +9,9 @@ import {
   fixturesSocialSupports,
   fixturesBudgets,
   fixturesBudgetIncomes,
-  fixturesBudgetExpenses
+  fixturesBudgetExpenses,
+  fixturePartnerOrganizations,
+  fixturePartnerOrganizationContacts
 } from './fixtures'
 
 const prismaClient = new PrismaClient()
@@ -103,6 +105,24 @@ function loadFixturesBudgetExpenses() {
   })
 }
 
+function loadFixturesPartnerOrganizations() {
+  console.log('🏙️ Partner Organizations...')
+
+  return prismaClient.partnerOrganization.createMany({
+    data: fixturePartnerOrganizations,
+    skipDuplicates: true
+  })
+}
+
+function loadFixturesPartnerOrganizationContacts() {
+  console.log('🕴️ Partner Organization Contacts...')
+
+  return prismaClient.partnerOrganizationContact.createMany({
+    data: fixturePartnerOrganizationContacts,
+    skipDuplicates: true
+  })
+}
+
 function loadFixtures() {
   return [
     loadFixtureStructure(),
@@ -113,7 +133,9 @@ function loadFixtures() {
     loadFixturesBeneficiaryRelatives(),
     loadFixturesBudgets(),
     loadFixturesBudgetIncomes(),
-    loadFixturesBudgetExpenses()
+    loadFixturesBudgetExpenses(),
+    loadFixturesPartnerOrganizations(),
+    loadFixturesPartnerOrganizationContacts()
   ]
 }
 
