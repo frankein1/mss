@@ -138,18 +138,16 @@
 
       <!-- ROW -->
       <div class="fr-col-6">
-        <VeeSearchableSelect
+        <VeeSelect
           :label="followupFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
           :options="withEmptyValue(partnerOrganizationOptions)"
-          @change-value="onPrescribingOrganization"
         >
-        </VeeSearchableSelect>
+        </VeeSelect>
       </div>
       <div class="fr-col-6">
         <VeeSelect
           name="prescribingOrganizationContactId"
-          :disabled="organizationContactIsDisabled"
           :label="followupFieldLabels.prescribingOrganizationContactId"
           :options="withEmptyValue(prescribingOrganizationContactOptions)"
         />
@@ -324,19 +322,19 @@
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { value: prescribingOrganizationId } = useField<string | null>(
-    'prescribingOrganizationId'
-  )
+  const { value: prescribingOrganizationId, setValue: setOrganization } =
+    useField<string | null>('prescribingOrganizationId')
 
-  const { setValue: setPrescribingOrganizationContactId } = useField<
-    string | null
-  >('prescribingOrganizationContactId')
+  const {
+    value: prescribingOrganizationContactId
+    // resetField: resetPrescribingOrganizationContactId
+  } = useField<string | null>('prescribingOrganizationContactId')
 
-  const onPrescribingOrganization = (id: string[] | string) => {
-    if (!id) {
-      setPrescribingOrganizationContactId(null)
-    }
-  }
+  // const onPrescribingOrganization = (id: string[] | string) => {
+  //   if (!id) {
+  //     resetPrescribingOrganizationContactId()
+  //   }
+  // }
 
   const { errors } = useDisplayFormErrors(
     form,
@@ -358,35 +356,75 @@
     return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
   })
 
-  const selectedPartnerOrganization = computed(() => {
-    const partnerId = prescribingOrganizationId.value
-    if (!partnerId) {
-      return null
-    }
-
-    return (props.partnerOrganizations || []).find(
-      partner => partner.id === partnerId
-    )
-  })
-
-  const organizationContactIsDisabled = computed(() => {
-    if (!selectedPartnerOrganization.value) {
-      return true
-    }
-    if ((selectedPartnerOrganization.value.contacts || []).length === 0) {
-      return true
-    }
-    return false
+  const allContacts = computed(() => {
+    return (props.partnerOrganizations || [])
+      .map(partner => partner.contacts || [])
+      .flat()
   })
 
   const prescribingOrganizationContactOptions = computed(() => {
     const partnerId = prescribingOrganizationId.value
     if (!partnerId) {
-      return []
+      // Si aucun organisme sélectionné retourne tous les contacts de la structure
+      return toOptions(allContacts.value, 'id', 'name')
     }
     const partnerOrganization = (props.partnerOrganizations || []).find(
       partner => partner.id === partnerId
     )
     return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
+  })
+
+  // const contactIsFilledFirst = computed(() => {
+  //   console.log(
+  //     'in contact is filled first',
+  //     prescribingOrganizationContactId.value,
+  //     prescribingOrganizationId.value
+  //   )
+  //   return (
+  //     !!prescribingOrganizationContactId.value &&
+  //     !prescribingOrganizationId.value
+  //   )
+  // })
+
+  // const onPrescribingOrganizationContact = (id: string[] | string) => {
+  //   console.log('onPrescribingOrganizationContact', id)
+  //   console.log('check contact is filled first', contactIsFilledFirst.value)
+  //   if (id) {
+  //     const contact = allContacts.value.find(contact => contact.id === id)
+  //     console.log(contact?.partnerId, prescribingOrganizationId.value)
+  //     prescribingOrganizationId.value = contact?.partnerId || null
+  //   }
+  // }
+
+  watch(prescribingOrganizationId, () => {
+    // console.log(
+    //   'watching prescribingOrganizationId',
+    //   prescribingOrganizationId.value,
+    //   !prescribingOrganizationId.value
+    // )
+    // if (!prescribingOrganizationId.value) {
+    //   prescribingOrganizationContactId.value = null
+    // }
+  })
+
+  watch(prescribingOrganizationContactId, () => {
+    console.log(
+      'watching prescribingOrganizationContactId',
+      prescribingOrganizationContactId.value
+    )
+
+    if (prescribingOrganizationContactId.value) {
+      const associatedOrganization = allContacts.value.find(
+        contact => contact.id === prescribingOrganizationContactId.value
+      )
+      console.log('associatedOrganization', associatedOrganization)
+      if (associatedOrganization && associatedOrganization.id) {
+        console.log(
+          'associatedOrganization prescribingOrganizationId',
+          associatedOrganization.partnerId
+        )
+        setOrganization(associatedOrganization.partnerId)
+      }
+    }
   })
 </script>

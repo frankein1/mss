@@ -4,5 +4,7 @@ export type PartnerOrganizationIdName = Pick<
   PartnerOrganization,
   'id' | 'name'
 > & {
-  contacts: Pick<PartnerOrganizationContact, 'id' | 'name'>[] | null
+  contacts:
+    | Pick<PartnerOrganizationContact, 'id' | 'name' | 'partnerId'>[]
+    | null
 }
