@@ -16,3 +16,17 @@ $form-height-lg: calc(8.5rem + 1rem);
 
   overflow-y: scroll;
 }
+
+.cgu-container .fr-table {
+  p {
+    font-size: inherit;
+    margin-bottom: 0.3rem;
+  }
+}
+
+.confidentialite-container .fr-table {
+  p {
+    font-size: inherit;
+    margin-bottom: 0.3rem;
+  }
+}

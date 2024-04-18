@@ -26,7 +26,7 @@
         ministères sociaux, des Centres Communaux d’Action Sociale (CCAS), des
         Centres intercommunaux d’Action sociale (CIAS), des communes et des
         structures d’accompagnement social
-        <a href="#structure-definition">1</a>.
+        <a href="#structure-definition">[1]</a>.
       </p>
       <h2 id="article2objet">Article 2 – Objet</h2>
       <p>
@@ -189,6 +189,7 @@
         <a
           href="https://outline.incubateur.anct.gouv.fr/s/623675f2-869e-44da-ae7e-8d9b1decbe15"
           target="_blank"
+          rel="noopener external"
           >de ce lien</a
         >.
       </p>

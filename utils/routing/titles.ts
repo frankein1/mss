@@ -6,6 +6,7 @@ export const RouteTitle = {
   [Route.CGUManager]: () => "Conditions générales d'utilisation",
   [Route.DeclarationAccessibilite]: () => "Déclaration d'accessibilité",
   [Route.MentionsLegales]: () => 'Mentions légales',
+  [Route.PolitiqueConfidentialite]: () => 'Politique de confidentialité',
   [Route.Register]: () => 'Enregistrer ma structure',
   [Route.Statistiques]: () => "Statistiques d'utilisation",
 
