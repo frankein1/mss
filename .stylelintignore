@@ -2,3 +2,5 @@ node_modules
 .nuxt
 coverage
 .output
+/playwright-report/
+/blob-report/

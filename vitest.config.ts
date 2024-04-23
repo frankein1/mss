@@ -1,9 +1,14 @@
 import path from 'path'
+import { defineConfig, configDefaults } from 'vitest/config'
 
-export default {
+export default defineConfig({
   resolve: {
     alias: {
-      '~': path.resolve(__dirname)
+      '~': path.resolve(__dirname),
+      '#imports': path.resolve(__dirname, './.nuxt/imports.d.ts')
     }
+  },
+  test: {
+    exclude: [...configDefaults.exclude, 'e2e/**']
   }
-}
+})
