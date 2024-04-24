@@ -25,8 +25,10 @@
     documents: DocumentItems
   }>()
 
+  const { open } = useDownload()
+
   const onView = async (key: string) => {
-    const data = await useFetch(`/api/s3/download?key=${key}`)
-    console.log({ data })
+    const data = await $fetch<Blob>(`/api/s3/download?key=${key}`)
+    open(data)
   }
 </script>
