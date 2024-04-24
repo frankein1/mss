@@ -138,12 +138,13 @@
 
       <!-- ROW -->
       <div class="fr-col-6">
-        <VeeSelect
+        <VeeSearchableSelect
+          ref="selectPrescribingOrganizationId"
           :label="followupFieldLabels.prescribingOrganizationId"
           name="prescribingOrganizationId"
           :options="withEmptyValue(partnerOrganizationOptions)"
         >
-        </VeeSelect>
+        </VeeSearchableSelect>
       </div>
       <div class="fr-col-6">
         <VeeSelect
@@ -287,6 +288,7 @@
 <script lang="ts" setup>
   import { SocialSupportSubject, FollowupMedium } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
+  import VeeSearchableSelect from '../VeeForm/VeeSearchableSelect.vue'
   import {
     ministerKeys,
     followupStatusKeys,
@@ -322,19 +324,13 @@
 
   const form = ref<HTMLFormElement | null>(null)
 
-  const { value: prescribingOrganizationId, setValue: setOrganization } =
-    useField<string | null>('prescribingOrganizationId')
+  const { value: prescribingOrganizationId } = useField<string | null>(
+    'prescribingOrganizationId'
+  )
 
-  const {
-    value: prescribingOrganizationContactId
-    // resetField: resetPrescribingOrganizationContactId
-  } = useField<string | null>('prescribingOrganizationContactId')
-
-  // const onPrescribingOrganization = (id: string[] | string) => {
-  //   if (!id) {
-  //     resetPrescribingOrganizationContactId()
-  //   }
-  // }
+  const { value: prescribingOrganizationContactId } = useField<string | null>(
+    'prescribingOrganizationContactId'
+  )
 
   const { errors } = useDisplayFormErrors(
     form,
@@ -374,46 +370,34 @@
     return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
   })
 
-  // const contactIsFilledFirst = computed(() => {
-  //   console.log(
-  //     'in contact is filled first',
-  //     prescribingOrganizationContactId.value,
-  //     prescribingOrganizationId.value
-  //   )
-  //   return (
-  //     !!prescribingOrganizationContactId.value &&
-  //     !prescribingOrganizationId.value
-  //   )
-  // })
-
-  // const onPrescribingOrganizationContact = (id: string[] | string) => {
-  //   console.log('onPrescribingOrganizationContact', id)
-  //   console.log('check contact is filled first', contactIsFilledFirst.value)
-  //   if (id) {
-  //     const contact = allContacts.value.find(contact => contact.id === id)
-  //     console.log(contact?.partnerId, prescribingOrganizationId.value)
-  //     prescribingOrganizationId.value = contact?.partnerId || null
-  //   }
-  // }
-
   watch(prescribingOrganizationId, () => {
-    // console.log(
-    //   'watching prescribingOrganizationId',
-    //   prescribingOrganizationId.value,
-    //   !prescribingOrganizationId.value
-    // )
-    // if (!prescribingOrganizationId.value) {
-    //   prescribingOrganizationContactId.value = null
-    // }
+    const organizationContacthasBeenSelected =
+      !!prescribingOrganizationContactId.value
+    console.log(
+      'watching prescribingOrganizationId',
+      prescribingOrganizationId.value,
+      organizationContacthasBeenSelected
+    )
+    if (!prescribingOrganizationId.value) {
+      prescribingOrganizationContactId.value = null
+    }
   })
+
+  const selectPrescribingOrganizationId = ref<
+    typeof VeeSearchableSelect | null
+  >(null)
 
   watch(prescribingOrganizationContactId, () => {
     console.log(
       'watching prescribingOrganizationContactId',
       prescribingOrganizationContactId.value
     )
+    const noOrganizationHasBeenSelected = !prescribingOrganizationId.value
 
-    if (prescribingOrganizationContactId.value) {
+    if (
+      prescribingOrganizationContactId.value &&
+      noOrganizationHasBeenSelected
+    ) {
       const associatedOrganization = allContacts.value.find(
         contact => contact.id === prescribingOrganizationContactId.value
       )
@@ -423,7 +407,9 @@
           'associatedOrganization prescribingOrganizationId',
           associatedOrganization.partnerId
         )
-        setOrganization(associatedOrganization.partnerId)
+        selectPrescribingOrganizationId.value?.selectValue(
+          associatedOrganization.partnerId
+        )
       }
     }
   })

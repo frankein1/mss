@@ -220,7 +220,11 @@
   const currentValue = computed<string>(() => selectedValues.value.join(','))
 
   const selectValue = (value: string) => {
-    selectedValues.value.push(value)
+    if (props.multiple) {
+      selectedValues.value.push(value)
+    } else {
+      selectedValues.value = [value]
+    }
     changedValues()
   }
 
@@ -429,6 +433,7 @@
    * @param optionIndex Optional - The option index to set as active when selecting from mouse click
    */
   function onToggleOption(value: string, optionIndex?: number) {
+    console.log('on toggle option')
     if (optionIndex) {
       activeIndex.value = optionIndex
     }
@@ -454,6 +459,7 @@
   }
 
   function setDisplayedValueToSelected() {
+    console.log('set displayed value to selected')
     displayedValue.value = selectedValuesLabels.value
 
     // Add trailing comma and space for a better user experience
