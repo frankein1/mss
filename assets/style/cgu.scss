@@ -8,10 +8,15 @@ $form-height: 12rem;
 $form-height-lg: calc(8.5rem + 1rem);
 
 .cgu-container {
-  max-height: calc(100vh - $header-height - $container-margin - $intro-height - $form-height );
+  max-height: calc(
+    100vh - $header-height - $container-margin - $intro-height - $form-height
+  );
 
   @include dsfr-media-query.respond-from('lg') {
-    max-height: calc(100vh - $header-height-lg - $container-margin - $intro-height - $form-height-lg );
+    max-height: calc(
+      100vh - $header-height-lg - $container-margin - $intro-height -
+        $form-height-lg
+    );
   }
 
   overflow-y: scroll;

@@ -25,20 +25,8 @@
     documents: DocumentItems
   }>()
 
-  const onView = (key: string) => {
-    if (process.client) {
-      useTrpcMutation({
-        mutation: () =>
-          useTrpcClient().documents.createViewUrl.mutate({
-            key
-          }),
-        onSuccess: ({ url }) => {
-          window.open(url, '_blank')?.focus()
-        },
-        onFailure: () => {
-          useSnackbar().error('Le chargement du document a échoué.')
-        }
-      })
-    }
+  const onView = async (key: string) => {
+    const data = await useFetch(`/api/s3/download?key=${key}`)
+    console.log({ data })
   }
 </script>
