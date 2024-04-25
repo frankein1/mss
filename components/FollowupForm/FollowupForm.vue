@@ -149,6 +149,7 @@
       <div class="fr-col-6">
         <VeeSelect
           name="prescribingOrganizationContactId"
+          :disabled="organizationContactIsDisabled"
           :label="followupFieldLabels.prescribingOrganizationContactId"
           :options="withEmptyValue(prescribingOrganizationContactOptions)"
         />
@@ -368,6 +369,10 @@
       partner => partner.id === partnerId
     )
     return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
+  })
+
+  const organizationContactIsDisabled = computed(() => {
+    return prescribingOrganizationContactOptions.value.length === 0
   })
 
   watch(prescribingOrganizationId, () => {
