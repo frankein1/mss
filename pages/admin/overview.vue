@@ -26,6 +26,14 @@
           </div>
         </div>
       </div>
+      <div class="fr-col-12">
+        <button
+          class="fr-btn fr-btn--secondary"
+          @click="migrate"
+        >
+          Migration des documents
+        </button>
+      </div>
     </div>
   </PageContainer>
 </template>
@@ -38,4 +46,8 @@
   })
 
   const data = await useTrpcClient().admin.getOverview.query()
+
+  function migrate() {
+    $fetch(`/api/s3/s3ToDb`)
+  }
 </script>

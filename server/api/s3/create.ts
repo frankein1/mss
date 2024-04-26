@@ -4,13 +4,19 @@ import { v4 } from 'uuid'
 import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { forbiddenError, invalidError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
-import { MultiPartData } from '~/server/lib/s3/types'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import {
   BeneficiaryService,
   BeneficiarySecurityTarget
 } from '~/server/services'
 import { getDocumentPermissions } from '~/server/security'
+
+export interface MultiPartData {
+  data: Buffer
+  name?: string
+  filename?: string
+  type?: string
+}
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth

@@ -144,6 +144,8 @@ model Document {
   socialSupports SocialSupport[] @relation("document_to_social_support")
   notifications  Notification[]
 
+  migrated Boolean @default(false)
+
   documentContent DocumentContent?
 
   @@map("document")

@@ -12,3 +12,7 @@ CREATE UNIQUE INDEX "document_content_document_key_key" ON "document_content"("d
 
 -- AddForeignKey
 ALTER TABLE "document_content" ADD CONSTRAINT "document_content_document_key_fkey" FOREIGN KEY ("document_key") REFERENCES "document"("key") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AlterTable
+ALTER TABLE "document" ADD COLUMN     "migrated" BOOLEAN NOT NULL DEFAULT false;
+
