@@ -3,7 +3,6 @@ import { createMutation } from '~/server/route'
 import { CreateViewUrlInput, createViewUrlSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security'
-import { createSignedGetUrl, createContentUrl } from '~/server/lib/s3'
 import { DocumentRepo } from '~/server/database'
 import { DocumentService } from '~/server/services'
 
@@ -28,24 +27,15 @@ const handler = async ({
 }) => {
   const { key } = input
   const document = await DocumentRepo.findUniqueOrThrow(user, {
-    where: { key }
-  })
-
-  const { s3 } = useRuntimeConfig()
-
-  const { url } = await createSignedGetUrl({
-    key: document.filenameDisk,
-    bucket: s3.bucket
-  })
-
-  const { url: downloadUrl } = await createContentUrl({
-    key: document.filenameDisk,
-    bucket: s3.bucket
+    where: { key },
+    include: {
+      documentContent: true
+    }
   })
 
   return {
-    url,
-    downloadUrl
+    content: document.documentContent?.content,
+    name: document.name
   }
 }
 

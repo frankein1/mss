@@ -126,41 +126,22 @@
     () => !!props.document._count.notifications
   )
 
-  function onView() {
+  const { download, open } = useDownload()
+
+  async function onView() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
-    useTrpcMutation({
-      mutation: () =>
-        trpcClient.documents.createViewUrl.mutate({
-          key: props.document.key
-        }),
-      onSuccess: ({ url }) => {
-        window.open(url, '_blank')?.focus()
-      },
-      onFailure: () => {
-        snackbar.error('Le chargement du document a échoué.')
-      }
-    })
+    const data = await $fetch<Blob>(
+      `/api/document/download?key=${props.document.key}`
+    )
+    open(data)
   }
 
-  function onDownload() {
+  async function onDownload() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
-    useTrpcMutation({
-      mutation: () =>
-        trpcClient.documents.createViewUrl.mutate({
-          key: props.document.key
-        }),
-      onSuccess: ({ downloadUrl }) => {
-        const link = downloadLink.value
-        if (link) {
-          link.href = downloadUrl
-          link.type = props.document.type
-          link.click()
-        }
-      },
-      onFailure: () => {
-        snackbar.error('Le chargement du document a échoué.')
-      }
-    })
+    const data = await $fetch<Blob>(
+      `/api/document/download?key=${props.document.key}`
+    )
+    download(data, props.document.name)
   }
 
   function onEdit() {

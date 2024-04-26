@@ -144,7 +144,23 @@ model Document {
   socialSupports SocialSupport[] @relation("document_to_social_support")
   notifications  Notification[]
 
+  migrated Boolean @default(false)
+
+  documentContent DocumentContent?
+
   @@map("document")
+}
+
+model DocumentContent {
+  id String @id @default(uuid())
+
+  documentKey String   @map("document_key")
+  document    Document @relation(fields: [documentKey], references: [key], onDelete: Cascade)
+
+  content Bytes
+
+  @@unique([documentKey])
+  @@map("document_content")
 }
 
 enum DefaultSocialSupportSubject {

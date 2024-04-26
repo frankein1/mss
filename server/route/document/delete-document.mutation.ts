@@ -3,7 +3,6 @@ import { createMutation } from '~/server/route'
 import { DeleteDocumentInput, deleteDocumentSchema } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security'
-import { deleteUploadedFile } from '~/server/lib/s3'
 import { DocumentRepo } from '~/server/database'
 import { DocumentService } from '~/server/services'
 
@@ -19,21 +18,12 @@ const securityCheck = async (
 }
 
 const handler = async ({
-  ctx: { user },
   input
 }: {
   ctx: ProtectedAppContext
   input: DeleteDocumentInput
 }) => {
   const { documentKey } = input
-
-  const document = await DocumentRepo.findUniqueOrThrow(user, {
-    where: { key: documentKey }
-  })
-
-  await deleteUploadedFile({ key: document.filenameDisk }).catch(error => {
-    throw error
-  })
 
   await DocumentRepo.prisma.delete({
     where: { key: documentKey }

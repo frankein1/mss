@@ -2,16 +2,21 @@ import { defineEventHandler, readMultipartFormData } from 'h3'
 import { Document, NotificationType, StructureType } from '@prisma/client'
 import { v4 } from 'uuid'
 import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
-import { uploadFile } from '~/server/lib/s3'
 import { forbiddenError, invalidError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
-import { MultiPartData } from '~/server/lib/s3/types'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import {
   BeneficiaryService,
   BeneficiarySecurityTarget
 } from '~/server/services'
 import { getDocumentPermissions } from '~/server/security'
+
+export interface MultiPartData {
+  data: Buffer
+  name?: string
+  filename?: string
+  type?: string
+}
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth
@@ -89,9 +94,7 @@ export default defineEventHandler(async event => {
 
   const file = multipartFormData[0]
 
-  const key = await uploadFile(file)
-
-  const document = await addDocument(key, input, user)
+  const document = await addDocument(input, user, file)
   await addNotification(ctx.structure, document, beneficiary)
 
   return send(event, document.key)
@@ -129,24 +132,30 @@ async function addNotification(
 }
 
 async function addDocument(
-  key: string,
   input: AddDocumentInput,
-  user: JwtUser
+  user: JwtUser,
+  multipartFormData: MultiPartData
 ) {
+  const key = v4()
   const { type, beneficiaryId, confidential, tags, file } = input
   const document = await DocumentRepo.prisma.create({
     data: {
-      key: v4(),
+      key,
       name: file.name,
-      filenameDisk: key,
       beneficiaryId,
+      filenameDisk: key,
       mimeType: file.mimeType,
       confidential,
       tags,
       createdById: user.id,
       type,
       size: file.size,
-      filenameDownload: file.name
+      filenameDownload: file.name,
+      documentContent: {
+        create: {
+          content: multipartFormData.data
+        }
+      }
     }
   })
 

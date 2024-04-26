@@ -25,20 +25,10 @@
     documents: DocumentItems
   }>()
 
-  const onView = (key: string) => {
-    if (process.client) {
-      useTrpcMutation({
-        mutation: () =>
-          useTrpcClient().documents.createViewUrl.mutate({
-            key
-          }),
-        onSuccess: ({ url }) => {
-          window.open(url, '_blank')?.focus()
-        },
-        onFailure: () => {
-          useSnackbar().error('Le chargement du document a échoué.')
-        }
-      })
-    }
+  const { open } = useDownload()
+
+  const onView = async (key: string) => {
+    const data = await $fetch<Blob>(`/api/document/download?key=${key}`)
+    open(data)
   }
 </script>

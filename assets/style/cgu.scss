@@ -1,17 +1,21 @@
 @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
 
 $header-height: 9.0313rem;
-$header-height-lg: 7.2813rem;
+$header-h-lg: 7.2813rem;
 $container-margin: 2.5rem;
 $intro-height: calc(6rem + 1.5rem);
 $form-height: 12rem;
-$form-height-lg: calc(8.5rem + 1rem);
+$form-h-lg: calc(8.5rem + 1rem);
 
 .cgu-container {
-  max-height: calc(100vh - $header-height - $container-margin - $intro-height - $form-height );
+  max-height: calc(
+    100vh - $header-height - $container-margin - $intro-height - $form-height
+  );
 
   @include dsfr-media-query.respond-from('lg') {
-    max-height: calc(100vh - $header-height-lg - $container-margin - $intro-height - $form-height-lg );
+    max-height: calc(
+      100vh - $header-h-lg - $container-margin - $intro-height - $form-h-lg
+    );
   }
 
   overflow-y: scroll;

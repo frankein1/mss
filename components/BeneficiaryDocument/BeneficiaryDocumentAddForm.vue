@@ -89,7 +89,7 @@
       formData.append('input', input)
 
       try {
-        const key = await $fetch<string>('/api/s3/create', {
+        const key = await $fetch<string>('/api/document/upload', {
           method: 'POST',
           body: formData
         })
