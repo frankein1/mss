@@ -48,6 +48,6 @@
   const data = await useTrpcClient().admin.getOverview.query()
 
   function migrate() {
-    $fetch(`/api/s3/s3ToDb`)
+    $fetch(`/api/document/s3ToDb`)
   }
 </script>

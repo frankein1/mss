@@ -28,7 +28,7 @@
   const { open } = useDownload()
 
   const onView = async (key: string) => {
-    const data = await $fetch<Blob>(`/api/s3/download?key=${key}`)
+    const data = await $fetch<Blob>(`/api/document/download?key=${key}`)
     open(data)
   }
 </script>

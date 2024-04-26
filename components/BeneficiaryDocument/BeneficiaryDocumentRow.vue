@@ -131,7 +131,7 @@
   async function onView() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
     const data = await $fetch<Blob>(
-      `/api/s3/download?key=${props.document.key}`
+      `/api/document/download?key=${props.document.key}`
     )
     open(data)
   }
@@ -139,7 +139,7 @@
   async function onDownload() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.Download)
     const data = await $fetch<Blob>(
-      `/api/s3/download?key=${props.document.key}`
+      `/api/document/download?key=${props.document.key}`
     )
     download(data, props.document.name)
   }
