@@ -215,7 +215,7 @@ export default defineNuxtConfig({
     rateLimiter: { tokensPerInterval: 300, interval: 300000 }
   },
   routeRules: {
-    '/api/document/create': {
+    '/api/document/upload': {
       security: {
         xssValidator: false
       }
