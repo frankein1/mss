@@ -12,6 +12,7 @@ import {
   BeneficiaryProtectionMeasure,
   BeneficiarySocioProfessionalCategory,
   BeneficiaryStatus,
+  BeneficiaryStudyLevel,
   BeneficiaryTitle,
   Gender,
   Nationality
@@ -146,6 +147,7 @@ export const updateBeneficiaryOccupationSchema = z.object({
     BeneficiarySocioProfessionalCategory
   ),
   occupation: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+  studyLevel: withEmptyValueOptionalNativeEnum(BeneficiaryStudyLevel),
   employer: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
   employerSiret: stringOrEmpty(siretConstraint),
   unemploymentNumber: unemploymentNumberConstraint.nullish(),

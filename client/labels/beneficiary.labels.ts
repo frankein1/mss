@@ -55,6 +55,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   insurance: 'Mutuelle',
   socioProfessionalCategory: 'Catégorie socio-professionnelle',
   occupation: 'Profession(s)',
+  studyLevel: "Niveau d'étude",
   employer: 'Employeur',
   employerSiret: "SIRET de l'employeur",
   unemploymentNumber: 'N° Pôle Emploi',

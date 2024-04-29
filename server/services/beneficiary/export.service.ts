@@ -178,6 +178,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
         ]
       : '',
     occupation: occupationIncome?.occupation || '',
+    studyLevel: occupationIncome?.studyLevel || '',
     employer: occupationIncome?.employer || '',
     employerSiret: occupationIncome?.employerSiret || '',
     unemploymentNumber: occupationIncome?.unemploymentNumber || '',
@@ -192,8 +193,8 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
     otherPensionOrganisations:
       occupationIncome?.otherPensionOrganisations || '',
     cafNumber: occupationIncome?.cafNumber || '',
-    bank: occupationIncome?.bank || '',
-    funeralContract: occupationIncome?.funeralContract || '',
+    // bank: occupationIncome?.bank || '',
+    // funeralContract: occupationIncome?.funeralContract || '',
     additionalInformation: general.additionalInformation || '',
     numeroPegase: general.numeroPegase || '',
     accommodationZone: general.accommodationZone
