@@ -36,7 +36,9 @@ export default defineEventHandler(event => {
       try {
         await migrateFile(key, filenameDisk, config.s3.bucket)
         counter++
-        console.log(`${counter}/${ids.length} documents migrated`)
+        if (counter % 50 === 0) {
+          console.log(`${counter}/${ids.length} documents migrated`)
+        }
       } catch (e) {
         console.log(`Error with key ${key}, filenameDisk ${filenameDisk}`)
       }

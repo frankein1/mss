@@ -1,5 +1,6 @@
 // https://github.com/prisma/prisma/issues/12504#issuecomment-1372635653
 import { createRequire } from 'module'
+import { MAX_UPLOAD_SIZE_BYTES } from './utils/constants'
 
 const prismaClientPath = createRequire(import.meta.url).resolve(
   '@prisma/client'
@@ -212,7 +213,14 @@ export default defineNuxtConfig({
           : false,
       crossOriginEmbedderPolicy: false
     },
-    rateLimiter: { tokensPerInterval: 300, interval: 300000 }
+    rateLimiter: { tokensPerInterval: 300, interval: 300000 },
+    requestSizeLimiter: {
+      // 1M
+      maxRequestSizeInBytes: 1048576,
+      // 20M
+      maxUploadFileRequestInBytes: MAX_UPLOAD_SIZE_BYTES,
+      throwError: false
+    }
   },
   routeRules: {
     '/api/document/upload': {

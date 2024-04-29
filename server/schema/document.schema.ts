@@ -10,6 +10,7 @@ import {
   requiredErrorMessage
 } from '~/utils/zod'
 import { formatByteSize } from '~/utils/formatByteSize'
+import { MAX_UPLOAD_SIZE_BYTES } from '~/utils/constants'
 
 const documentSizeValidationErrorMessage = `La taille du document doit être inférieure à ${formatByteSize(
   documentFileMaxSize
@@ -29,7 +30,12 @@ export const uploadBrowserDocumentSchema = z.object({
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),
   confidential: z.boolean().default(false),
-  file: z.instanceof(File, { message: requiredErrorMessage })
+  file: z
+    .instanceof(File, { message: requiredErrorMessage })
+    .refine(
+      file => file.size <= MAX_UPLOAD_SIZE_BYTES,
+      `Le taille du fichier ne doit pas dépasser 20MB.`
+    )
 })
 
 export const addDocumentSchema = z.object({
