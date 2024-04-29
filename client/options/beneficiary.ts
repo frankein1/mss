@@ -8,6 +8,7 @@ import {
   BeneficiarySocioProfessionalCategory,
   BeneficiaryStatus,
   BeneficiaryTitle,
+  BeneficiaryStudyLevel,
   Gender,
   RelativeRelationship
 } from '@prisma/client'
@@ -95,7 +96,9 @@ export const beneficiaryGirKeys = buildKeys({
 
 export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
   [BeneficiarySocioProfessionalCategory.SickLeave]: 'Arrêt maladie',
+  [BeneficiarySocioProfessionalCategory.Entrepreneur]: "Chef.fe d'entreprise",
   [BeneficiarySocioProfessionalCategory.JobSeeker]: "En recherche d'emploi",
+  [BeneficiarySocioProfessionalCategory.Freelance]: 'Indépendant.e',
   [BeneficiarySocioProfessionalCategory.Disability]: 'Invalidité',
   [BeneficiarySocioProfessionalCategory.Housewife]: 'Mère au foyer',
   [BeneficiarySocioProfessionalCategory.Retired]: 'Retraité',
@@ -103,6 +106,16 @@ export const beneficiarySocioProfessionalCategoryKeys = buildKeys({
   [BeneficiarySocioProfessionalCategory.NoActivity]:
     'Sans activité (non inscrit à Pôle Emploi)',
   [BeneficiarySocioProfessionalCategory.Other]: 'Autre'
+})
+
+export const beneficiaryStudyLevelKeys = buildKeys({
+  [BeneficiaryStudyLevel.Brevet]: 'Brevet',
+  [BeneficiaryStudyLevel.CAP]: 'CAP',
+  [BeneficiaryStudyLevel.Bac]: 'Bac',
+  [BeneficiaryStudyLevel.BacPlus2]: 'Bac + 2',
+  [BeneficiaryStudyLevel.Licence]: 'Licence',
+  [BeneficiaryStudyLevel.Master]: 'Master',
+  [BeneficiaryStudyLevel.Doctorat]: 'Doctorat'
 })
 
 export const incomeSourceKeys = buildKeys({
