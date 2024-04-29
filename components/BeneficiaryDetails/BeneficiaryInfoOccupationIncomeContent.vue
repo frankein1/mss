@@ -17,6 +17,13 @@
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
+      :label="beneficiaryFieldLabels.studyLevel"
+      :value="occupationIncome.studyLevel"
+      class="fr-col-6"
+    />
+  </div>
+  <div class="fr-grid-row">
+    <BeneficiaryInfoLabel
       :label="beneficiaryFieldLabels.employer"
       :value="occupationIncome.employer"
       class="fr-col-6"
@@ -44,18 +51,6 @@
       :label="beneficiaryFieldLabels.pensionOrganisations"
       :value="pensionOrganisations"
       class="fr-col-6"
-    />
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.bank"
-      :value="occupationIncome.bank"
-      class="fr-col-6"
-    />
-  </div>
-  <div class="fr-grid-row">
-    <BeneficiaryInfoLabel
-      :label="beneficiaryFieldLabels.funeralContract"
-      :value="occupationIncome.funeralContract"
-      class="fr-col-12"
     />
   </div>
 

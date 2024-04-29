@@ -838,6 +838,18 @@ enum BeneficiarySocioProfessionalCategory {
   Housewife
   NoActivity
   Other
+  Freelance
+  Entrepreneur
+}
+
+enum BeneficiaryStudyLevel {
+  Brevet
+  CAP
+  Bac
+  BacPlus2
+  Licence
+  Master
+  Doctorat
 }
 
 enum BeneficiaryProtectionMeasure {
@@ -1413,6 +1425,7 @@ model Beneficiary {
 
   // Occupation
   socioProfessionalCategory BeneficiarySocioProfessionalCategory? @map("socio_professional_category")
+  studyLevel                BeneficiaryStudyLevel?                @map("study_level")
   occupation                String?
   employer                  String?
   employerSiret             String?                               @map("employer_siret")
