@@ -212,7 +212,14 @@ export default defineNuxtConfig({
           : false,
       crossOriginEmbedderPolicy: false
     },
-    rateLimiter: { tokensPerInterval: 300, interval: 300000 }
+    rateLimiter: { tokensPerInterval: 300, interval: 300000 },
+    requestSizeLimiter: {
+      // 1M
+      maxRequestSizeInBytes: 1048576,
+      // 20M
+      maxUploadFileRequestInBytes: 20971520,
+      throwError: false
+    }
   },
   routeRules: {
     '/api/document/upload': {
