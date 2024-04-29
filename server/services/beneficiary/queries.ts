@@ -269,14 +269,15 @@ function getOccupationIncome(
   return {
     socioProfessionalCategory: beneficiary.socioProfessionalCategory,
     occupation: beneficiary.occupation,
+    studyLevel: beneficiary.studyLevel,
     employer: beneficiary.employer,
     employerSiret: beneficiary.employerSiret,
     unemploymentNumber: beneficiary.unemploymentNumber,
     pensionOrganisations: beneficiary.pensionOrganisations,
     otherPensionOrganisations: beneficiary.otherPensionOrganisations,
     cafNumber: beneficiary.cafNumber,
-    bank: beneficiary.bank,
-    funeralContract: beneficiary.funeralContract,
+    // bank: beneficiary.bank,
+    // funeralContract: beneficiary.funeralContract,
     ministereCategorie: module.ministere
       ? beneficiary.ministereCategorie
       : null,

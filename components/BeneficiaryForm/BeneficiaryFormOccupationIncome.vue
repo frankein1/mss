@@ -15,6 +15,12 @@
         :label="beneficiaryFieldLabels.occupation"
       />
     </div>
+    <div class="fr-col-12">
+      <VeeInput
+        name="studyLevel"
+        :label="beneficiaryFieldLabels.studyLevel"
+      />
+    </div>
     <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         name="employer"
@@ -55,18 +61,6 @@
       <VeeInput
         name="cafNumber"
         :label="beneficiaryFieldLabels.cafNumber"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeInput
-        name="bank"
-        :label="beneficiaryFieldLabels.bank"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeInput
-        name="funeralContract"
-        :label="beneficiaryFieldLabels.funeralContract"
       />
     </div>
 
