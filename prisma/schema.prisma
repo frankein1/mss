@@ -1696,15 +1696,17 @@ model Email {
   @@map("email")
 }
 
-model SocialInclusionOrganization {
-  id String @id @default(uuid()) @db.Uuid
+model DataInclusionStructure {
+  id   String @id @default(uuid()) @db.Uuid
+  name String
 
-  version           @db.Uuid
+  created DateTime  @default(now())
   updated DateTime?
+  version String?
 
-  name  String
-  siret String?
-  rna   String?
+  siret    String?
+  rna      String?
+  isBranch Boolean @map("is_branch")
 
   address           String?
   addressComplement String? @map("address_complement")
@@ -1716,154 +1718,30 @@ model SocialInclusionOrganization {
   website      String?
   workingHours String? @map("working_hours")
 
-  type SocialInclusionOrganizationType?
+  type   String?
+  topics String[]
 
-  @@map("social_inclusion_organization")
+  @@map("data_inclusion_structure")
 }
 
-enum SocialInclusionOrganizationType {
-  // Structures porteuses d’ateliers et chantiers d’insertion (ACI)
-  ACI
-  // SIAE — Atelier chantier d’insertion premières heures en chantier
-  ACIPHC
-  // Agence nationale pour la formation professionnelle des adultes (AFPA)
-  AFPA
-  // Associations intermédiaires (AI)
-  AI
-  // Aide sociale à l’enfance (ASE)
-  ASE
-  // Associations
-  ASSO
-  // Associations de chômeurs
-  ASSO_CHOMEUR
-  // Autre
-  Autre
-  // Crèche à vocation d'insertion professionnelle
-  AVIP
-  // Bibliothèque / Médiathèque
-  BIB
-  // CAARUD - Centre d'accueil et d'accompagnement à la réduction de risques pour usagers de drogues
-  CAARUD
-  // Centres d’accueil de demandeurs d’asile (CADA)
-  CADA
-  // Caisses d’allocation familiale (CAF)
-  CAF
-  // Cap Emploi
-  CAP_EMPLOI
-  // Centres d’adaptation à la vie active (CAVA)
-  CAVA
-  // Communautés de Commune
-  CC
-  // Centres communaux d’action sociale (CCAS)
-  CCAS
-  // Chambres consulaires (CCI, CMA, CA)
-  CCONS
-  // Conseils Départementaux (CD)
-  CD
-  // Centres d’hébergement et de réinsertion sociale (CHRS)
-  CHRS
-  // Centres d’hébergement d’urgence (CHU)
-  CHU
-  // Centres intercommunaux d’action sociale (CIAS)
-  CIAS
-  // Centres d’information sur les droits des femmes et des familles (CIDFF)
-  CIDFF
-  // Cité des métiers
-  CITMET
-  // Centres provisoires d’hébergement (CPH)
-  CPH
-  // Centre social
-  CS
-  // CSAPA - Centre de soins, d'accompagnement et de prévention en addictologie
-  CSAPA
-  // Directions de l’Economie, de l’Emploi, du Travail et des Solidarités (DEETS)
-  DEETS
-  // Services sociaux du Conseil départemental
-  DEPT
-  // Délégation interministérielles à la prévention et à la lutte contre la pauvreté
-  DIPLP
-  // E2C - École de la deuxième chance
-  E2C
-  // Entreprise adaptée (EA)
-  EA
-  // Entreprise Adaptée (EATT)
-  EATT
-  // Entreprises d’insertion (EI)
-  EI
-  // Entreprises d’insertion par le travail indépendant (EITI)
-  EITI
-  // Intercommunalité (EPCI)
-  EPCI
-  // EPIDE - Établissement pour l'insertion dans l'emploi
-  EPIDE
-  // Entreprise de l'Économie Sociale et Solidaire
-  ESS
-  // Entreprises de travail temporaire d’insertion (ETTI)
-  ETTI
-  // Fédérations d’acteurs de l’insertion et de la solidarité
-  FAIS
-  // Groupements d’employeurs pour l’insertion et la qualification (GEIQ)
-  GEIQ
-  // HUDA - Hébergement d'urgence pour demandeurs d'asile
-  HUDA
-  // Maison de l'emploi
-  MDE
-  // Maison de l'emploi et de la formation
-  MDEF
-  // Maison Départementale des Personnes Handicapées
-  MDPH
-  // Maison Départementale des Solidarités
-  MDS
-  // Maison des jeunes et de la culture
-  MJC
-  // Mission Locale
-  ML
-  // Maison de quartier
-  MQ
-  // Mutualité Sociale Agricole
-  MSA
-  // Municipalités
-  MUNI
-  // Structures agréées Organisme d’accueil communautaire et d’activité solidaire (OACAS)
-  OACAS
-  // Organisation délégataire d'un CD
-  ODC
-  // Organisme de formations
-  OF
-  // Opérateur d'intermédiation locative
-  OIL
-  // Organisation porteuse de la clause sociale
-  OPCS
-  // Point d'Accès au Droit
-  PAD
-  // Pôle emploi
-  PE
-  // Pension de famille / résidence accueil
-  PENSION
-  // Points et bureaux information jeunesse (PIJ/BIJ)
-  PIJ_BIJ
-  // Point Information Médiation Multi Services (PIMMS)
-  PIMMS
-  // Protection judiciaire de la jeunesse (PJJ)
-  PJJ
-  // Plans locaux pour l’insertion et l’emploi (PLIE)
-  PLIE
-  // Préfecture, Sous-Préfecture
-  PREF
-  // Service ou club de prévention
-  PREVENTION
-  // Région
-  REG
-  // Réseau France Services
-  RFS
-  // Résidence sociale / FJT - Foyer de Jeunes Travailleurs
-  RS_FJT
-  // Services et clubs de prévention
-  SCP
-  // Services pénitentiaires d’insertion et de probation (SPIP)
-  SPIP
-  // Tiers lieu & coworking
-  TIERS_LIEUX
-  // Union Départementale d’Aide aux Familles (UDAF)
-  UDAF
+enum JobStatus {
+  Created
+  Ongoing
+  Failure
+  Success
+}
+
+model JobResult {
+  id     String    @id @default(uuid()) @db.Uuid
+  name   String
+  status JobStatus @default(Created)
+
+  startDate         DateTime  @default(now()) @map("start_date")
+  endDate           DateTime? @map("end_date")
+  durationInSeconds Decimal?
+
+  errors Json?
+  result Json?
+
+  @@map("job_result")
 }
