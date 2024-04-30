@@ -1710,7 +1710,7 @@ model Email {
 }
 
 model DataInclusionStructure {
-  id   String @id @default(uuid()) @db.Uuid
+  id   Int    @id
   name String
 
   created DateTime  @default(now())

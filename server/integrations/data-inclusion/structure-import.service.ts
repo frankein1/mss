@@ -1,33 +1,12 @@
-import { JobResult } from './types'
 import {
   getStructureStatusInDB,
   createStructure,
   updateStructure,
   createJob,
   updateJob
-} from './structure-import.query'
-import { dataInclusionStructureServerSchema } from '~/server/schema'
-
-const STRUCTURE_DOWNLOAD_URL_JSON =
-  'https://www.data.gouv.fr/fr/datasets/r/4fc64287-e869-4550-8fb9-b1e0b7809ffa'
-
-async function downloadStructures() {
-  const res = await fetch(STRUCTURE_DOWNLOAD_URL_JSON, {
-    headers: { 'Content-Type': 'application/json' }
-  })
-
-  if (res.ok) {
-    const data = await res.json()
-
-    return { data, headers: res.headers, error: null }
-  }
-
-  return {
-    data: null,
-    headers: res.headers,
-    error: { status: res.status, msg: res.statusText }
-  }
-}
+} from '~/server/query/data-inclusion'
+import { JobResult, dataInclusionStructureServerSchema } from '~/server/schema'
+import { downloadStructures } from '~/server/lib/data-inclusion'
 
 async function importStructures(job: JobResult) {
   const res = await downloadStructures()
@@ -61,7 +40,7 @@ async function importStructures(job: JobResult) {
       job.errors.push({
         category: 'structure-import-format',
         status: null,
-        error: `Format error for input: ${validated.error}`
+        error: `structure ${input.id}: ${validated.error.toString()}`
       })
 
       continue
@@ -137,8 +116,7 @@ async function handleStructuresImport(iscron = false) {
   job.durationInSeconds = durationInSeconds
   job.status = job.errors.length > 0 ? 'Failure' : 'Success'
 
-  console.info(JSON.stringify(job, undefined, 2))
-  await updateJob({
+  return await updateJob({
     id: job.id,
     status: job.status,
     endDate: job.endDate,

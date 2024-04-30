@@ -3,7 +3,7 @@ CREATE TYPE "JobStatus" AS ENUM ('Created', 'Ongoing', 'Failure', 'Success');
 
 -- CreateTable
 CREATE TABLE "data_inclusion_structure" (
-    "id" UUID NOT NULL,
+    "id" INTEGER NOT NULL,
     "name" TEXT NOT NULL,
     "created" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updated" TIMESTAMP(3),
