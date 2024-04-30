@@ -5,8 +5,8 @@ export const dataInclusionStructureApiSchema = z.object({
   siret: z.string().nullable(),
   rna: z.string().nullable(),
   nom: z.string(),
-  commune: z.string(),
-  code_postal: z.string(),
+  commune: z.string().nullable(),
+  code_postal: z.string().nullable(),
   // code_insee: z.string(),
   adresse: z.string().nullable(),
   complement_adresse: z.string().nullable(),
@@ -35,7 +35,7 @@ export type DataInclusionStructureApiInput = z.infer<
 
 export const dataInclusionStructureServerSchema =
   dataInclusionStructureApiSchema.transform(v => ({
-    id: parseInt(v.id),
+    id: v.id,
     siret: v.siret,
     rna: v.rna,
     name: v.nom,

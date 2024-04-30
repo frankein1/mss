@@ -15,7 +15,7 @@ beforeEach(async () => {
 test.skip('Structure import job should create structures when they do not exist', async () => {
   const job = await DataInclusionHandler.handleStructuresImport()
 
-  expect(job.result.nToImport).toBe(10)
+  expect(job.result.nTotal).toBe(10)
   expect(job.result.nImported).toBe(10)
   expect(job.result.nCreated).toBe(10)
   expect(job.status).toBe('Success')
@@ -24,7 +24,7 @@ test.skip('Structure import job should create structures when they do not exist'
 test.skip('Structure import job should update structure when it exists already but is obsolete', async () => {
   await createStructure(
     {
-      id: 1,
+      id: '1',
       siret: '1234567890',
       rna: null,
       name: 'structure to be updated',
@@ -46,7 +46,7 @@ test.skip('Structure import job should update structure when it exists already b
 
   const job = await DataInclusionHandler.handleStructuresImport()
 
-  expect(job.result.nToImport).toBe(10)
+  expect(job.result.nTotal).toBe(10)
   expect(job.result.nImported).toBe(10)
   expect(job.result.nCreated).toBe(9)
   expect(job.result.nUpdated).toBe(1)
