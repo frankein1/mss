@@ -10,6 +10,7 @@ import {
   BeneficiarySecurityTarget
 } from '~/server/services'
 import { getDocumentPermissions } from '~/server/security'
+import { notificationTypeKeys } from '~/client/options'
 
 export interface MultiPartData {
   data: Buffer
@@ -124,7 +125,9 @@ async function addNotification(
         beneficiaryId: beneficiary.id,
         documentId: document.key,
         type: NotificationType.NewDocument,
-        itemCreatedById: document.createdById
+        itemCreatedById: document.createdById,
+        title: notificationTypeKeys.byKey[NotificationType.NewDocument],
+        description: 'Nouveau document'
       })
     }
   }
