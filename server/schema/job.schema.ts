@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { JobStatus } from '@prisma/client'
 
 export const dataInclusionStructureImportResultSchema = z.object({
-  nToImport: z.number(),
+  nTotal: z.number(),
   nImported: z.number(),
   nCreated: z.number(),
   nUpdated: z.number()

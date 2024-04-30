@@ -22,7 +22,7 @@ async function importStructures(job: JobResult) {
   }
 
   if (Array.isArray(res.data)) {
-    job.result.nToImport = res.data.length
+    job.result.nTotal = res.data.length
   } else {
     job.errors.push({
       category: 'structure-import-download',
@@ -48,10 +48,24 @@ async function importStructures(job: JobResult) {
 
     const structure = validated.data
 
-    const { exists, shouldBeUpdated } = await getStructureStatusInDB(
-      structure.id,
-      structure.updated
-    )
+    let exists: boolean
+    let shouldBeUpdated: boolean
+
+    try {
+      const status = await getStructureStatusInDB(
+        structure.id,
+        structure.updated
+      )
+      exists = status.exists
+      shouldBeUpdated = status.shouldBeUpdated || false
+    } catch (err: unknown) {
+      job.errors.push({
+        category: 'structure-import-other',
+        status: null,
+        error: `could not check update status for id ${structure.id}, name ${structure.name}: ${err}`
+      })
+      continue
+    }
 
     const version = res.headers.get('location') || 'unknown'
 
@@ -92,7 +106,7 @@ async function handleStructuresImport(iscron = false) {
       : 'data-inclusion-structure-import',
     errors: [],
     result: {
-      nToImport: 0,
+      nTotal: 0,
       nImported: 0,
       nCreated: 0,
       nUpdated: 0

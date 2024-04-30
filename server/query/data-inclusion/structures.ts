@@ -8,7 +8,7 @@ import {
 import { DataInclusionStructureRepo, JobResultRepo } from '~/server/database'
 import { prismaDecimalToNumber } from '~/utils/prisma'
 
-export async function getStructureStatusInDB(id: number, updateDate: Date) {
+export async function getStructureStatusInDB(id: string, updateDate: Date) {
   const structure = await DataInclusionStructureRepo.prisma.findFirst({
     where: { id }
   })
@@ -17,7 +17,7 @@ export async function getStructureStatusInDB(id: number, updateDate: Date) {
   const shouldBeUpdated =
     exists &&
     structure.updated &&
-    structure.updated.getTime() !== updateDate.getTime()
+    structure.updated.getTime() < updateDate.getTime()
 
   return { exists, shouldBeUpdated }
 }
