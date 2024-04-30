@@ -33,7 +33,15 @@ async function createDueSocialSupportNotifications(
       recipientId: socialSupport.createdById,
       beneficiaryId: socialSupport.beneficiaryId,
       socialSupportId: socialSupport.id,
-      type
+      type,
+      title:
+        socialSupport.socialSupportType === 'Followup'
+          ? 'Synthèse'
+          : 'Instruction',
+      description:
+        socialSupport.socialSupportType === 'Followup'
+          ? "Synthèse d'entretien"
+          : 'Instruction de dossier'
     }))
 
   await NotificationRepo.prisma.createMany({

@@ -12,11 +12,15 @@
       {{ notificationTitle }}
     </h3>
     <div>
-      <p class="notificationitem__beneficiary">
+      <p
+        v-if="notification.beneficiary"
+        class="notificationitem__beneficiary"
+      >
         {{ formatBeneficiaryDisplayName(notification.beneficiary) }}
       </p>
       <p class="fr-mb-0">
         <NuxtLink
+          v-if="itemLink"
           class="fr-link"
           :to="itemLink"
           >{{ notificationDescription }}</NuxtLink
@@ -85,13 +89,7 @@
   })
 
   const notificationTitle = computed(() => {
-    if (props.notification.type === 'NewHistoryElement') {
-      if (props.notification.socialSupport?.socialSupportType === 'Followup') {
-        return 'Synthèse'
-      }
-      return 'Instruction'
-    }
-    return notificationTypeKeys.value(props.notification.type)
+    return props.notification.title
   })
 
   const notificationDescription = computed(() => {
@@ -99,14 +97,6 @@
     const dateInAMonth = dayjs(props.notification.created).add(1, 'month')
 
     switch (props.notification.type) {
-      case 'NewHistoryElement':
-        return getNewHistoryElementNotificationDescription(
-          props.notification.socialSupport?.socialSupportType
-        )
-      case 'NewDocument':
-        return 'Nouveau document'
-      case 'NewComment':
-        return 'Nouveau commentaire'
       case 'DueDateOneMonth':
         return getDateNotificationDescription(
           dateInAMonth,
@@ -118,17 +108,9 @@
       case 'EndOfSupport':
         return getDateNotificationDescription(created, 'Fin de prise en charge')
       default:
-        return ''
+        return props.notification.description
     }
   })
-
-  function getNewHistoryElementNotificationDescription(
-    socialSupportType: SocialSupportType | undefined
-  ) {
-    return socialSupportType === 'Followup'
-      ? "Synthèse d'entretien"
-      : 'Instruction de dossier'
-  }
 
   function getDateNotificationDescription(
     date: dayjs.Dayjs,
@@ -167,13 +149,16 @@
     return documentId || socialSupportId || undefined
   }
 
-  const itemLink = computed(() =>
-    RoutePath.AppBeneficiary(props.notification.beneficiary.id, {
-      tab: getItemTab(),
-      item: getItemId(),
-      originPage: Route.AppOverview
-    })
-  )
+  const itemLink = computed(() => {
+    if (props.notification.beneficiary) {
+      return RoutePath.AppBeneficiary(props.notification.beneficiary.id, {
+        tab: getItemTab(),
+        item: getItemId(),
+        originPage: Route.AppOverview
+      })
+    }
+    return null
+  })
 
   const notificationDescriptionDetail = computed(() => {
     const itemCreatedByLabel = props.notification.itemCreatedBy
