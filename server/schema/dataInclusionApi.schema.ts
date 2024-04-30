@@ -53,6 +53,6 @@ export const dataInclusionStructureServerSchema =
     topics: v.thematiques
   }))
 
-export type dataInclusionStructureServerInput = z.infer<
+export type DataInclusionStructureServerInput = z.infer<
   typeof dataInclusionStructureServerSchema
 >
