@@ -46,3 +46,14 @@ export interface UpdateJobDataInclusionStructureInput {
   errors: JobStructureImportError[]
   result: JobStructureImportResult
 }
+
+export interface JobResult {
+  id: string
+  name: string
+  status: JobStatus
+  startDate: Date
+  endDate: Date | null
+  durationInSeconds: number | null
+  errors: JobStructureImportError[]
+  result: JobStructureImportResult
+}

@@ -1,13 +1,14 @@
-import { JobResult } from './types'
-import { DataInclusionStructureRepo, JobResultRepo } from '~/server/database'
+import { JobResult as PrismaJobResult } from '@prisma/client'
 import {
+  JobResult,
   DataInclusionStructureServerInput,
   CreateJobDataInclusionStructureInput,
   UpdateJobDataInclusionStructureInput
 } from '~/server/schema'
+import { DataInclusionStructureRepo, JobResultRepo } from '~/server/database'
 import { prismaDecimalToNumber } from '~/utils/prisma'
 
-export async function getStructureStatusInDB(id: string, updateDate: Date) {
+export async function getStructureStatusInDB(id: number, updateDate: Date) {
   const structure = await DataInclusionStructureRepo.prisma.findFirst({
     where: { id }
   })
@@ -46,20 +47,25 @@ export async function updateStructure(
   })
 }
 
+const jobConverter = (job: PrismaJobResult) =>
+  ({
+    ...job,
+    durationInSeconds: prismaDecimalToNumber(job.durationInSeconds) || null,
+    errors: job.errors || [],
+    result: job.result
+  }) as JobResult
+
 export async function createJob(job: CreateJobDataInclusionStructureInput) {
   const res = await JobResultRepo.prisma.create({ data: job })
 
-  return {
-    ...res,
-    durationInSeconds: prismaDecimalToNumber(res.durationInSeconds) || null,
-    errors: res.errors || [],
-    result: res.result
-  } as JobResult
+  return jobConverter(res)
 }
 
 export async function updateJob(job: UpdateJobDataInclusionStructureInput) {
-  return await JobResultRepo.prisma.update({
+  const res = await JobResultRepo.prisma.update({
     data: job,
     where: { id: job.id }
   })
+
+  return jobConverter(res)
 }
