@@ -150,6 +150,11 @@
         label: 'Emails',
         icon: 'fr-icon-mail-line'
       })
+      items.push({
+        to: RoutePath.AdminIntegrations(),
+        label: 'Integrations',
+        icon: 'fr-icon-discuss-line'
+      })
     } else {
       items.push({
         to: RoutePath.AppOverview(),
