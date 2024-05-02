@@ -1628,7 +1628,6 @@ model Notification {
 
   title       String  @map("title")
   description String? @map("description")
-  detail      String? @map("detail")
 
   read Boolean? @default(false)
 
