@@ -28,6 +28,7 @@
 
     <VeeInputFile
       label="Ajouter un fichier"
+      hint="Taille maximum: 20Mo"
       name="file"
       accept="application/pdf, image/*, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel, application/vnd.oasis.opendocument.spreadsheet, application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document, application/vnd.oasis.opendocument.text"
       required
