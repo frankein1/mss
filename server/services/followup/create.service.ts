@@ -1,11 +1,14 @@
-import { FollowupMedium, SocialSupportType } from '@prisma/client'
+import {
+  FollowupMedium,
+  NotificationType,
+  SocialSupportType
+} from '@prisma/client'
 import { prepareSocialSupportSubjectsMutations } from './helper'
 import { BeneficiaryRepo, SocialSupportRepo } from '~/server/database'
 import { AddFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { markSocialSupportSubjectAsUsed } from '~/server/query'
-import { prepareNewHistoryElementNotification } from '~/server/services/helper'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -63,7 +66,20 @@ export const create = async ({ ctx, input }: CreateParams) => {
       createdBy: connect(user.id),
       subjects: prepareSocialSupportSubjectsMutations(subjects),
       documents: prepareDocumentsMutations(documents),
-      notifications: prepareNewHistoryElementNotification(beneficiary, user),
+      notifications: {
+        createMany: {
+          data: beneficiary.referents
+            .filter(referent => referent.id !== user.id)
+            .map(referent => ({
+              beneficiaryId: beneficiary.id,
+              recipientId: referent.id,
+              type: NotificationType.NewHistoryElement,
+              itemCreatedById: user.id,
+              title: 'Synthèse',
+              description: "Synthèse d'entretien"
+            }))
+        }
+      },
       ministre,
       numeroPegase,
       synthesis,

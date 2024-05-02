@@ -52,7 +52,9 @@ function prepareNotifications(
       beneficiaryId,
       socialSupportId: socialSupport.id,
       type: NotificationType.NewComment,
-      itemCreatedById: userId
+      itemCreatedById: userId,
+      title: 'Commentaire',
+      description: 'Nouveau commentaire'
     })
   })
 

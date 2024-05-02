@@ -124,7 +124,8 @@ const fixturesFollowupSocialSupports = [
             beneficiaryId: fixturesBeneficiaries[3].id,
             socialSupportId: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
             type: 'NewComment',
-            itemCreatedById: fixturesUsers[4].id
+            itemCreatedById: fixturesUsers[4].id,
+            title: 'Nouveau commentaire'
           }
         }
       }
@@ -148,7 +149,8 @@ const fixturesFollowupSocialSupports = [
             recipientId: fixturesUsers[0].id,
             beneficiaryId: fixturesBeneficiaries[3].id,
             type: 'NewDocument',
-            itemCreatedById: fixturesUsers[4].id
+            itemCreatedById: fixturesUsers[4].id,
+            title: 'Nouveau document'
           }
         }
       }

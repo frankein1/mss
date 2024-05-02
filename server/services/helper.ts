@@ -7,31 +7,11 @@ import {
   SocialSupportSubject,
   HelpRequest,
   HousingHelpRequest,
-  NotificationType,
   SocialSupport,
   PartnerOrganization,
   User,
   PartnerOrganizationContact
 } from '@prisma/client'
-import { SecurityRuleGrantee } from '../security'
-
-export function prepareNewHistoryElementNotification(
-  beneficiary: Pick<Beneficiary, 'id'> & { referents: { id: string }[] },
-  user: SecurityRuleGrantee
-) {
-  return {
-    createMany: {
-      data: beneficiary.referents
-        .filter(referent => referent.id !== user.id)
-        .map(referent => ({
-          beneficiaryId: beneficiary.id,
-          recipientId: referent.id,
-          type: NotificationType.NewHistoryElement,
-          itemCreatedById: user.id
-        }))
-    }
-  }
-}
 
 function show<T>(val: T, condition: boolean): T | null {
   return condition ? val : null

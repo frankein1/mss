@@ -1,5 +1,8 @@
-import { FileInstructionType, SocialSupportType } from '@prisma/client'
-import { prepareNewHistoryElementNotification } from '../helper'
+import {
+  FileInstructionType,
+  NotificationType,
+  SocialSupportType
+} from '@prisma/client'
 import { cleanCreateInput } from './helper'
 import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
 import { CreateHelpRequestInput } from '~/server/schema'
@@ -98,10 +101,20 @@ export async function create({ input, ctx }: CreateParams) {
               subjects: connect(subjectId),
               dueDate,
               documents: prepareDocumentsMutations(documents),
-              notifications: prepareNewHistoryElementNotification(
-                beneficiary,
-                ctx.user
-              )
+              notifications: {
+                createMany: {
+                  data: beneficiary.referents
+                    .filter(referent => referent.id !== ctx.user.id)
+                    .map(referent => ({
+                      beneficiaryId: beneficiary.id,
+                      recipientId: referent.id,
+                      type: NotificationType.NewHistoryElement,
+                      itemCreatedById: ctx.user.id,
+                      title: 'Instruction',
+                      description: 'Instruction de dossier'
+                    }))
+                }
+              }
             }
           }
         }

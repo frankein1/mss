@@ -53,13 +53,12 @@
 </template>
 
 <script setup lang="ts">
-  import { NotificationType, SocialSupportType } from '@prisma/client'
+  import { NotificationType } from '@prisma/client'
   import dayjs from 'dayjs'
   import { NotificationItem } from '~/server/trpc/routers'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
   import { notificationTypeClasses } from '~/client/classes/notification'
-  import { notificationTypeKeys } from '~/client/options'
   import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { formatDate } from '~/utils/formatDate'

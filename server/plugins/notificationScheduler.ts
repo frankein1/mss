@@ -6,6 +6,7 @@ import {
   SocialSupportRepo
 } from '~/server/database'
 import { useScheduler } from '#scheduler'
+import { notificationTypeKeys } from '~/client/options'
 
 export default defineNitroPlugin(() => {
   startScheduler()
@@ -95,7 +96,8 @@ async function createEndOfSupportHelpRequestNotifications() {
       recipientId: socialSupport.createdById,
       beneficiaryId: socialSupport.beneficiaryId,
       helpRequestId: socialSupport.id,
-      type: NotificationType.EndOfSupport
+      type: NotificationType.EndOfSupport,
+      title: notificationTypeKeys.byKey[NotificationType.EndOfSupport]
     }))
 
   await NotificationRepo.prisma.createMany({
