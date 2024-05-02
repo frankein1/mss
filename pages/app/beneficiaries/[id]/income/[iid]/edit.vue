@@ -62,7 +62,9 @@
 
         <section class="income__total">
           <h2 class="fr-h4 fr-m-0">Total :</h2>
-          <span class="fr-h4 fr-m-0 euro-symbol">{{ total || '0' }}</span>
+          <span class="fr-h4 fr-m-0 euro-symbol">{{
+            euros(total) || '0'
+          }}</span>
         </section>
       </div>
     </main>
@@ -89,6 +91,7 @@
   } from '~/client/options'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { incomeHasBeenFilled } from '~/utils/budget'
+  import { euros } from '~/utils/euros'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
