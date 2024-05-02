@@ -24,7 +24,7 @@
             class="fr-h6 fr-m-0 fr-m-0 item__amount"
             :class="{ 'euro-symbol': !!budget.remainingAfterExpenses }"
           >
-            {{ budget.remainingAfterExpenses || '-' }}
+            {{ euros(budget.remainingAfterExpenses) || '-' }}
           </div>
         </div>
       </div>
@@ -43,7 +43,7 @@
             class="fr-h6 fr-m-0 item__amount"
             :class="{ 'euro-symbol': !!budget.savings }"
           >
-            {{ budget.savings || '-' }}
+            {{ euros(budget.savings) || '-' }}
           </div>
         </div>
       </div>
@@ -61,7 +61,7 @@
             class="fr-h6 fr-m-0 item__amount"
             :class="{ 'euro-symbol': !!budget.overdraft }"
           >
-            {{ budget.overdraft || '-' }}
+            {{ euros(budget.overdraft) || '-' }}
           </div>
         </div>
       </div>
@@ -87,6 +87,7 @@
 <script setup lang="ts">
   import { Budget } from '@prisma/client'
   import { RoutePath } from '~/utils/routing'
+  import { euros } from '~/utils/euros'
 
   defineProps<{ budget: Budget }>()
 </script>

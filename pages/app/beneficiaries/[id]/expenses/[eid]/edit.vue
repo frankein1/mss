@@ -50,7 +50,7 @@
         <section class="expenses__total">
           <h2 class="fr-h4 fr-m-0">Total :</h2>
           <span class="fr-h4 fr-m-0 euro-symbol">{{
-            total !== null ? total : '-'
+            total !== null ? euros(total) : '-'
           }}</span>
         </section>
       </div>
@@ -73,6 +73,7 @@
     updateBudgetExpensesSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { euros } from '~/utils/euros'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()

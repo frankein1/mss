@@ -1,12 +1,23 @@
 import type { Prisma } from '@prisma/client'
 
-export function euros(price: Prisma.Decimal | number | undefined | null) {
+export function euros(
+  price: Prisma.Decimal | number | string | undefined | null
+) {
   if (!price) {
     return ''
   }
-  const [integerPart, decimalPart] = price.toString().split('.')
-  const firstDigit = decimalPart?.length > 0 ? decimalPart[0] : '0'
-  const secondDigit = decimalPart?.length > 1 ? decimalPart[1] : '0'
 
-  return `${integerPart},${firstDigit}${secondDigit} €`
+  const p = typeof price === 'string' ? parseFloat(price) : price
+
+  if (typeof p === 'number' && isNaN(p)) {
+    return ''
+  }
+
+  const [integerPart, decimalPart] = p.toFixed(2).toString().split('.')
+
+  if (!decimalPart || decimalPart.length === 0 || decimalPart === '00') {
+    return integerPart
+  }
+
+  return `${integerPart},${decimalPart[0]}${decimalPart.length > 1 ? decimalPart[1] : '0'}`
 }

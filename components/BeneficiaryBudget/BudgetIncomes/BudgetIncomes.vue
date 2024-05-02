@@ -4,7 +4,7 @@
     <span
       class="fr-h4 fr-m-0"
       :class="{ 'euro-symbol': total !== null }"
-      >{{ total !== null ? total : '-' }}</span
+      >{{ total !== null ? euros(total) : '-' }}</span
     >
   </div>
 
@@ -20,7 +20,7 @@
         :class="{ 'euro-symbol': memberTotalIncomes[idxIncome] !== null }"
         >{{
           memberTotalIncomes[idxIncome] !== null
-            ? memberTotalIncomes[idxIncome]
+            ? euros(memberTotalIncomes[idxIncome])
             : '-'
         }}</span
       >
@@ -33,7 +33,7 @@
       >
         <span>{{ budgetIncomeKeys.value(category) }}</span>
         <span class="budget-income__item__value euro-symbol">{{
-          income[category as IncomeKey]
+          euros(income[category as IncomeKey])
         }}</span>
       </li>
     </ul>
@@ -71,6 +71,7 @@
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { BeneficiaryIdentification } from '~/types/beneficiary'
   import { incomeHasBeenFilled } from '~/utils/budget'
+  import { euros } from '~/utils/euros'
 
   const props = defineProps<{
     beneficiaryIdentification: BeneficiaryIdentification

@@ -43,13 +43,17 @@
     <span class="information-label"
       >{{ housingHelpRequestFieldLabels.maxRent }} :</span
     >
-    {{ euros(housingHelpRequest.maxRent) }}
+    <span class="euro-symbol fr-ml-1v">{{
+      euros(housingHelpRequest.maxRent)
+    }}</span>
   </li>
   <li v-if="housingHelpRequest.maxCharges">
     <span class="information-label"
       >{{ housingHelpRequestFieldLabels.maxCharges }} :</span
     >
-    {{ euros(housingHelpRequest.maxCharges) }}
+    <span class="euro-symbol fr-ml-1v">{{
+      euros(housingHelpRequest.maxCharges)
+    }}</span>
   </li>
   <li v-if="housingType">
     <span class="information-label"

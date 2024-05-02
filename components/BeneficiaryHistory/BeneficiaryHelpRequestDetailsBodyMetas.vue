@@ -31,7 +31,9 @@
     <span class="information-label"
       >{{ helpRequestFieldLabels.askedAmount }} :</span
     >
-    {{ euros(helpRequest.askedAmount) }}
+    <span class="euro-symbol fr-ml-1v">{{
+      euros(helpRequest.askedAmount)
+    }}</span>
   </li>
   <li
     v-if="fileInstruction.fullFile"
