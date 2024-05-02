@@ -1,7 +1,11 @@
 <template>
   <div class="landing-main-container fr-container fr-my-8w">
     <h1>{{ RouteTitle.DeclarationAccessibilite() }}</h1>
-    <p>Établie le <span>17 mai 2022</span>.</p>
+    <p>
+      Établie le <span>17 mai 2022</span>.
+      <br />
+      Mise à jour le <span>07 mai 2024</span>.
+    </p>
     <p>
       <span>Agence National de la Cohésion des Territoires</span> s'engage à
       rendre son service accessible, conformément à l'article 47 de la loi n°
