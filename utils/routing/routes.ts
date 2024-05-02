@@ -62,7 +62,8 @@ export enum Route {
   AdminUsers = 'AdminUsers',
   AdminUsersAdd = 'AdminUsersAdd',
   AdminUser = 'AdminUser',
-  AdminEmails = 'AdminEmails'
+  AdminEmails = 'AdminEmails',
+  AdminIntegrations = 'AdminIntegrations'
 }
 
 export type AppBeneficiaryEditRoute =
@@ -303,5 +304,6 @@ export const RoutePath = {
   [Route.AdminUsers]: () => `${AdminRoute}/users`,
   [Route.AdminUsersAdd]: () => `${AdminRoute}/users/add`,
   [Route.AdminUser]: (userId: string) => `${AdminRoute}/users/${userId}`,
-  [Route.AdminEmails]: () => `${AdminRoute}/emails`
+  [Route.AdminEmails]: () => `${AdminRoute}/emails`,
+  [Route.AdminIntegrations]: () => `${AdminRoute}/integrations`
 }
