@@ -1708,3 +1708,53 @@ model Email {
 
   @@map("email")
 }
+
+model DataInclusionStructure {
+  id   String @id
+  name String
+
+  created DateTime  @default(now())
+  updated DateTime?
+  version String?
+
+  siret    String?
+  rna      String?
+  isBranch Boolean @map("is_branch")
+
+  address           String?
+  addressComplement String? @map("address_complement")
+  city              String?
+  zipcode           String?
+
+  phone        String?
+  email        String?
+  website      String?
+  workingHours String? @map("working_hours")
+
+  type   String?
+  topics String[]
+
+  @@map("data_inclusion_structure")
+}
+
+enum JobStatus {
+  Created
+  Ongoing
+  Failure
+  Success
+}
+
+model JobResult {
+  id     String    @id @default(uuid()) @db.Uuid
+  name   String
+  status JobStatus @default(Created)
+
+  startDate         DateTime  @default(now()) @map("start_date")
+  endDate           DateTime? @map("end_date")
+  durationInSeconds Decimal?
+
+  errors Json?
+  result Json?
+
+  @@map("job_result")
+}
