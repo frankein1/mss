@@ -23,6 +23,25 @@
         >RGAA</abbr
       >. <span>Le site n'a encore pas été audité.</span>
     </p>
+    <h2>Stratégie et plan d'action</h2>
+    <p>
+      La stratégie d'accessibilité suit
+      <a
+        href="https://beta.gouv.fr/accessibilite/schema-pluriannuel"
+        target="_blank"
+        rel="noopener external"
+        >le schéma pluriannuel 2024-2027 publié par Beta gouv</a
+      >
+      .
+    </p>
+    <p>Le plan d'action 2024 :</p>
+    <ul>
+      <li>Plateforme intégralement navigable au clavier</li>
+      <li>Amélioration de la hiérarchie des titres</li>
+      <li>Plateforme navigable en zoom 200%</li>
+      <li>Lien d'évitements</li>
+      <li>Améliorer l'accessibilité des formulaires</li>
+    </ul>
     <h2>Amélioration et contact</h2>
     <p>
       Si vous n'arrivez pas à accéder à un contenu ou à un service, vous pouvez
