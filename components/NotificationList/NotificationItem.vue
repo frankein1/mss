@@ -187,8 +187,8 @@
     }
 
     &.fr-icon-settings-5-line {
-      background-color: rgba(249, 246, 242, 1);
-      color: rgba(106, 97, 86, 1);
+      background-color: rgb(249, 246, 242);
+      color: rgb(106, 97, 86);
     }
   }
 
