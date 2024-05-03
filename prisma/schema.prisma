@@ -107,6 +107,7 @@ model Structure {
   partnerOrganizations  PartnerOrganization[]
 
   beneficiaries Beneficiary[]
+  notifications Notification[]
 
   created        DateTime?      @default(now())
   updated        DateTime?      @updatedAt
@@ -1592,10 +1593,12 @@ model PartnerOrganizationContact {
 enum NotificationType {
   NewDocument
   NewComment
-  DueDateToday      @map("DueDate")
+  DueDateToday              @map("DueDate")
   DueDateOneMonth
   EndOfSupport
-  NewHistoryElement
+  NewFileInstructionElement
+  NewFollowupElement
+  NewSocialSupportSubject
 }
 
 model Notification {
@@ -1603,11 +1606,16 @@ model Notification {
 
   created DateTime? @default(now())
 
+  detail String?
+
   recipient   User   @relation("received_notifications", fields: [recipientId], references: [id], onDelete: Cascade)
   recipientId String @map("recipient_id") @db.Uuid
 
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
-  beneficiaryId String      @map("beneficiary_id") @db.Uuid
+  structure   Structure? @relation(fields: [structureId], references: [id], onDelete: Cascade)
+  structureId String?    @map("structure_id") @db.Uuid
+
+  beneficiary   Beneficiary? @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  beneficiaryId String?      @map("beneficiary_id") @db.Uuid
 
   socialSupport   SocialSupport? @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
   socialSupportId String?        @map("social_support_id") @db.Uuid

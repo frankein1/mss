@@ -9,25 +9,29 @@
       aria-hidden="true"
     ></span>
     <h3 class="fr-text--sm fr-mb-0">
-      {{ notificationTitle }}
+      {{ notification.title }}
     </h3>
     <div>
-      <p class="notificationitem__beneficiary">
+      <p
+        v-if="notification.beneficiary"
+        class="notificationitem__beneficiary"
+      >
         {{ formatBeneficiaryDisplayName(notification.beneficiary) }}
       </p>
       <p class="fr-mb-0">
         <NuxtLink
+          v-if="itemLink"
           class="fr-link"
           :to="itemLink"
-          >{{ notificationDescription }}</NuxtLink
+          >{{ notification.description }}</NuxtLink
         >
-        {{ notificationDescriptionDetail }}
+        {{ notification.descriptionHint }}
       </p>
       <p
-        v-if="notification.comment"
+        v-if="notification.detail"
         class="fr-text--sm notificationitem__comment"
       >
-        {{ notification.comment.content }}
+        {{ notification.detail }}
       </p>
     </div>
     <div class="notificationitem__end">
@@ -49,14 +53,11 @@
 </template>
 
 <script setup lang="ts">
-  import { NotificationType, SocialSupportType } from '@prisma/client'
-  import dayjs from 'dayjs'
+  import { NotificationType } from '@prisma/client'
   import { NotificationItem } from '~/server/trpc/routers'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
   import { notificationTypeClasses } from '~/client/classes/notification'
-  import { notificationTypeKeys } from '~/client/options'
-  import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { formatDate } from '~/utils/formatDate'
 
@@ -75,77 +76,8 @@
   })
 
   const notificationIcon = computed(() => {
-    if (props.notification.type === 'NewHistoryElement') {
-      if (props.notification.socialSupport?.socialSupportType === 'Followup') {
-        return 'fr-icon-draft-line'
-      }
-      return 'fr-icon-questionnaire-line'
-    }
     return notificationTypeClasses[props.notification.type]
   })
-
-  const notificationTitle = computed(() => {
-    if (props.notification.type === 'NewHistoryElement') {
-      if (props.notification.socialSupport?.socialSupportType === 'Followup') {
-        return 'Synthèse'
-      }
-      return 'Instruction'
-    }
-    return notificationTypeKeys.value(props.notification.type)
-  })
-
-  const notificationDescription = computed(() => {
-    const created = dayjs(props.notification.created)
-    const dateInAMonth = dayjs(props.notification.created).add(1, 'month')
-
-    switch (props.notification.type) {
-      case 'NewHistoryElement':
-        return getNewHistoryElementNotificationDescription(
-          props.notification.socialSupport?.socialSupportType
-        )
-      case 'NewDocument':
-        return 'Nouveau document'
-      case 'NewComment':
-        return 'Nouveau commentaire'
-      case 'DueDateOneMonth':
-        return getDateNotificationDescription(
-          dateInAMonth,
-          'Échéance dans un mois',
-          'Échéance'
-        )
-      case 'DueDateToday':
-        return getDateNotificationDescription(created, 'Échéance')
-      case 'EndOfSupport':
-        return getDateNotificationDescription(created, 'Fin de prise en charge')
-      default:
-        return ''
-    }
-  })
-
-  function getNewHistoryElementNotificationDescription(
-    socialSupportType: SocialSupportType | undefined
-  ) {
-    return socialSupportType === 'Followup'
-      ? "Synthèse d'entretien"
-      : 'Instruction de dossier'
-  }
-
-  function getDateNotificationDescription(
-    date: dayjs.Dayjs,
-    label: string,
-    pastLabel?: string
-  ) {
-    if (date.isSame(dayjs(), 'date')) {
-      return `${label} aujourd'hui`
-    }
-    if (date.isSame(dayjs().subtract(1, 'day'), 'date')) {
-      return `${label} hier`
-    }
-    if (date.isAfter(dayjs(), 'date')) {
-      return `${label} le ${formatDate(date.toDate())}`
-    }
-    return `${pastLabel || label} passée le ${formatDate(date.toDate())}`
-  }
 
   function getItemTab() {
     switch (props.notification.type) {
@@ -155,7 +87,8 @@
       case NotificationType.DueDateOneMonth:
       case NotificationType.EndOfSupport:
       case NotificationType.NewComment:
-      case NotificationType.NewHistoryElement:
+      case NotificationType.NewFollowupElement:
+      case NotificationType.NewFileInstructionElement:
         return BeneficiaryTab.History
       default:
         return BeneficiaryTab.Details
@@ -167,37 +100,15 @@
     return documentId || socialSupportId || undefined
   }
 
-  const itemLink = computed(() =>
-    RoutePath.AppBeneficiary(props.notification.beneficiary.id, {
-      tab: getItemTab(),
-      item: getItemId(),
-      originPage: Route.AppOverview
-    })
-  )
-
-  const notificationDescriptionDetail = computed(() => {
-    const itemCreatedByLabel = props.notification.itemCreatedBy
-      ? formatUserDisplayName(props.notification.itemCreatedBy)
-      : ''
-
-    switch (props.notification.type) {
-      case 'NewHistoryElement':
-        return `ajoutée par ${itemCreatedByLabel}`
-      case 'NewDocument':
-      case 'NewComment':
-        return `ajouté par ${itemCreatedByLabel}`
-      case 'DueDateOneMonth':
-      case 'DueDateToday':
-      case 'EndOfSupport':
-        if (
-          props.notification.socialSupport?.socialSupportType === 'Followup'
-        ) {
-          return `sur la synthèse d'entretien`
-        }
-        return "sur l'instruction de dossier"
-      default:
-        return ''
+  const itemLink = computed(() => {
+    if (props.notification.beneficiary) {
+      return RoutePath.AppBeneficiary(props.notification.beneficiary.id, {
+        tab: getItemTab(),
+        item: getItemId(),
+        originPage: Route.AppOverview
+      })
     }
+    return RoutePath.AppStructure()
   })
 
   const toggleLabel = computed(() =>
@@ -273,6 +184,11 @@
     &.fr-icon-draft-line {
       background-color: var(--background-contrast-green-archipel);
       color: var(--text-label-green-archipel);
+    }
+
+    &.fr-icon-settings-5-line {
+      background-color: var(--beige-gris-galet-975);
+      color: var(--beige-gris-galet-sun-407);
     }
   }
 

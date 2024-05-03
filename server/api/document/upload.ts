@@ -1,5 +1,5 @@
 import { defineEventHandler, readMultipartFormData } from 'h3'
-import { Document, NotificationType, StructureType } from '@prisma/client'
+import { Document, NotificationType } from '@prisma/client'
 import { v4 } from 'uuid'
 import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { forbiddenError, invalidError } from '~/server/trpc'
@@ -9,7 +9,7 @@ import {
   BeneficiaryService,
   BeneficiarySecurityTarget
 } from '~/server/services'
-import { getDocumentPermissions } from '~/server/security'
+import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
 
 export interface MultiPartData {
   data: Buffer
@@ -95,29 +95,32 @@ export default defineEventHandler(async event => {
   const file = multipartFormData[0]
 
   const document = await addDocument(input, user, file)
-  await addNotification(ctx.structure, document, beneficiary)
+  await addNotification(ctx, document, beneficiary)
 
   return send(event, document.key)
 })
 
 async function addNotification(
-  structure: {
-    id: string
-    type: StructureType
-  },
+  ctx: SecurityRuleContext,
   document: Document,
   beneficiary: NonNullable<BeneficiarySecurityTarget>
 ) {
   if (document.confidential) {
     return
   }
+
   const notifications = []
   for (const referent of beneficiary.referents) {
-    const ctx = {
+    const permissionCtx = {
       user: referent,
-      structure
+      structure: ctx.structure
     }
-    const permissions = getDocumentPermissions({ ctx, beneficiary, document })
+    const permissions = getDocumentPermissions({
+      ctx: permissionCtx,
+      beneficiary,
+      document
+    })
+
     if (document.createdById !== referent.id && permissions.view) {
       notifications.push({
         recipientId: referent.id,
