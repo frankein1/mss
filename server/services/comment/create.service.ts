@@ -1,5 +1,4 @@
 import { NotificationType, Prisma } from '@prisma/client'
-import { notificationTypeKeys } from '~/client/options'
 import { CommentRepo, SocialSupportRepo } from '~/server/database'
 import { AddCommentInput } from '~/server/schema'
 import { getCommentPermissions, SecurityRuleGrantee } from '~/server/security'
@@ -35,10 +34,7 @@ function prepareNotifications(
       recipientId: socialSupport.createdById,
       beneficiaryId,
       socialSupportId: socialSupport.id,
-      type: NotificationType.NewComment,
-      itemCreatedById: userId,
-      title: notificationTypeKeys.byKey[NotificationType.NewComment],
-      description: 'Nouveau commentaire'
+      type: NotificationType.NewComment
     })
   }
 
@@ -52,9 +48,7 @@ function prepareNotifications(
       beneficiaryId,
       socialSupportId: socialSupport.id,
       type: NotificationType.NewComment,
-      itemCreatedById: userId,
-      title: 'Commentaire',
-      description: 'Nouveau commentaire'
+      itemCreatedById: userId
     })
   })
 

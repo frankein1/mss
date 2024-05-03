@@ -1,4 +1,5 @@
-import { StructureRepo } from '~/server/database'
+import { NotificationType } from '@prisma/client'
+import { NotificationRepo, StructureRepo } from '~/server/database'
 import { UpdateSocialSupportSubjectsInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 
@@ -33,9 +34,25 @@ export const updateSocialSupportSubjects = async ({
       }
     },
     select: {
-      id: true
+      id: true,
+      users: {
+        select: {
+          id: true
+        }
+      }
     }
   })
 
-  return res
+  const { id, users } = res
+
+  const notifications = users.map(recipient => ({
+    recipientId: recipient.id,
+    type: NotificationType.NewSocialSupportSubject,
+    itemCreatedById: ctx.user.id,
+    detail: create.map(object => object.name).join(', ')
+  }))
+
+  NotificationRepo.prisma.createMany({ data: notifications })
+
+  return { id }
 }

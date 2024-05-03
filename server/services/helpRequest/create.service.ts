@@ -108,10 +108,8 @@ export async function create({ input, ctx }: CreateParams) {
                     .map(referent => ({
                       beneficiaryId: beneficiary.id,
                       recipientId: referent.id,
-                      type: NotificationType.NewHistoryElement,
-                      itemCreatedById: ctx.user.id,
-                      title: 'Instruction',
-                      description: 'Instruction de dossier'
+                      type: NotificationType.NewFileInstructionElement,
+                      itemCreatedById: ctx.user.id
                     }))
                 }
               }
