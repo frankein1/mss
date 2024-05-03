@@ -108,7 +108,7 @@
         originPage: Route.AppOverview
       })
     }
-    return null
+    return RoutePath.AppStructure()
   })
 
   const toggleLabel = computed(() =>

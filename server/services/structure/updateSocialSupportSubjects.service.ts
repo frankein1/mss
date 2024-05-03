@@ -23,6 +23,22 @@ export const updateSocialSupportSubjects = async ({
     name: sss.name
   }))
 
+  const previous = await StructureRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: ctx.structure.id },
+    select: {
+      socialSupportSubjects: {
+        select: {
+          name: true,
+          inactive: true
+        }
+      }
+    }
+  })
+
+  const previousNames = previous.socialSupportSubjects
+    .filter(s => !s.inactive)
+    .map(s => s.name)
+
   const res = await StructureRepo.prisma.update({
     where: { id: ctx.structure.id },
     data: {
@@ -45,14 +61,19 @@ export const updateSocialSupportSubjects = async ({
 
   const { id, users } = res
 
+  const objects = create.map(object => object.name)
+  objects.push(...input.selected.filter(s => s.active).map(s => s.name))
+
+  const newObjects = objects.filter(object => !previousNames.includes(object))
+
   const notifications = users.map(recipient => ({
     recipientId: recipient.id,
     type: NotificationType.NewSocialSupportSubject,
     itemCreatedById: ctx.user.id,
-    detail: create.map(object => object.name).join(', ')
+    detail: newObjects.join(', ')
   }))
 
-  NotificationRepo.prisma.createMany({ data: notifications })
+  await NotificationRepo.prisma.createMany({ data: notifications })
 
   return { id }
 }
