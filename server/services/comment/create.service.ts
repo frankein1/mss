@@ -34,7 +34,8 @@ function prepareNotifications(
       recipientId: socialSupport.createdById,
       beneficiaryId,
       socialSupportId: socialSupport.id,
-      type: NotificationType.NewComment
+      type: NotificationType.NewComment,
+      itemCreatedById: userId
     })
   }
 
