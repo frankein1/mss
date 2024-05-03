@@ -6,7 +6,6 @@ import {
   SocialSupportRepo
 } from '~/server/database'
 import { useScheduler } from '#scheduler'
-import { notificationTypeKeys } from '~/client/options'
 
 export default defineNitroPlugin(() => {
   startScheduler()
@@ -34,12 +33,7 @@ async function createDueSocialSupportNotifications(
       recipientId: socialSupport.createdById,
       beneficiaryId: socialSupport.beneficiaryId,
       socialSupportId: socialSupport.id,
-      type,
-      title: notificationTypeKeys.byKey[type],
-      descriptionHint:
-        socialSupport.socialSupportType === 'Followup'
-          ? "sur la synthèse d'entretien"
-          : "sur l'instruction de dossier"
+      type
     }))
 
   await NotificationRepo.prisma.createMany({
