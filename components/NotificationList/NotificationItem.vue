@@ -9,7 +9,7 @@
       aria-hidden="true"
     ></span>
     <h3 class="fr-text--sm fr-mb-0">
-      {{ notificationTitle }}
+      {{ notification.title }}
     </h3>
     <div>
       <p
@@ -23,15 +23,15 @@
           v-if="itemLink"
           class="fr-link"
           :to="itemLink"
-          >{{ notificationDescription }}</NuxtLink
+          >{{ notification.description }}</NuxtLink
         >
-        {{ notificationDescriptionDetail }}
+        {{ notification.descriptionHint }}
       </p>
       <p
-        v-if="notification.comment"
+        v-if="notification.detail"
         class="fr-text--sm notificationitem__comment"
       >
-        {{ notification.comment.content }}
+        {{ notification.detail }}
       </p>
     </div>
     <div class="notificationitem__end">
@@ -54,12 +54,10 @@
 
 <script setup lang="ts">
   import { NotificationType } from '@prisma/client'
-  import dayjs from 'dayjs'
   import { NotificationItem } from '~/server/trpc/routers'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { Route, RoutePath } from '~/utils/routing'
   import { notificationTypeClasses } from '~/client/classes/notification'
-  import { formatUserDisplayName } from '~/utils/user'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { formatDate } from '~/utils/formatDate'
 
@@ -78,55 +76,8 @@
   })
 
   const notificationIcon = computed(() => {
-    if (props.notification.type === 'NewHistoryElement') {
-      if (props.notification.socialSupport?.socialSupportType === 'Followup') {
-        return 'fr-icon-draft-line'
-      }
-      return 'fr-icon-questionnaire-line'
-    }
     return notificationTypeClasses[props.notification.type]
   })
-
-  const notificationTitle = computed(() => {
-    return props.notification.title
-  })
-
-  const notificationDescription = computed(() => {
-    const created = dayjs(props.notification.created)
-    const dateInAMonth = dayjs(props.notification.created).add(1, 'month')
-
-    switch (props.notification.type) {
-      case 'DueDateOneMonth':
-        return getDateNotificationDescription(
-          dateInAMonth,
-          'Échéance dans un mois',
-          'Échéance'
-        )
-      case 'DueDateToday':
-        return getDateNotificationDescription(created, 'Échéance')
-      case 'EndOfSupport':
-        return getDateNotificationDescription(created, 'Fin de prise en charge')
-      default:
-        return props.notification.description
-    }
-  })
-
-  function getDateNotificationDescription(
-    date: dayjs.Dayjs,
-    label: string,
-    pastLabel?: string
-  ) {
-    if (date.isSame(dayjs(), 'date')) {
-      return `${label} aujourd'hui`
-    }
-    if (date.isSame(dayjs().subtract(1, 'day'), 'date')) {
-      return `${label} hier`
-    }
-    if (date.isAfter(dayjs(), 'date')) {
-      return `${label} le ${formatDate(date.toDate())}`
-    }
-    return `${pastLabel || label} passée le ${formatDate(date.toDate())}`
-  }
 
   function getItemTab() {
     switch (props.notification.type) {
@@ -136,7 +87,8 @@
       case NotificationType.DueDateOneMonth:
       case NotificationType.EndOfSupport:
       case NotificationType.NewComment:
-      case NotificationType.NewHistoryElement:
+      case NotificationType.NewFollowupElement:
+      case NotificationType.NewFileInstructionElement:
         return BeneficiaryTab.History
       default:
         return BeneficiaryTab.Details
@@ -157,31 +109,6 @@
       })
     }
     return null
-  })
-
-  const notificationDescriptionDetail = computed(() => {
-    const itemCreatedByLabel = props.notification.itemCreatedBy
-      ? formatUserDisplayName(props.notification.itemCreatedBy)
-      : ''
-
-    switch (props.notification.type) {
-      case 'NewHistoryElement':
-        return `ajoutée par ${itemCreatedByLabel}`
-      case 'NewDocument':
-      case 'NewComment':
-        return `ajouté par ${itemCreatedByLabel}`
-      case 'DueDateOneMonth':
-      case 'DueDateToday':
-      case 'EndOfSupport':
-        if (
-          props.notification.socialSupport?.socialSupportType === 'Followup'
-        ) {
-          return `sur la synthèse d'entretien`
-        }
-        return "sur l'instruction de dossier"
-      default:
-        return ''
-    }
   })
 
   const toggleLabel = computed(() =>

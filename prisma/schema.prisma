@@ -1593,10 +1593,11 @@ model PartnerOrganizationContact {
 enum NotificationType {
   NewDocument
   NewComment
-  DueDateToday            @map("DueDate")
+  DueDateToday              @map("DueDate")
   DueDateOneMonth
   EndOfSupport
-  NewHistoryElement
+  NewFileInstructionElement
+  NewFollowupElement
   NewSocialSupportSubject
 }
 
@@ -1604,6 +1605,8 @@ model Notification {
   id String @id @default(uuid()) @db.Uuid
 
   created DateTime? @default(now())
+
+  detail String?
 
   recipient   User   @relation("received_notifications", fields: [recipientId], references: [id], onDelete: Cascade)
   recipientId String @map("recipient_id") @db.Uuid
@@ -1625,9 +1628,6 @@ model Notification {
 
   comment   Comment? @relation(fields: [commentId], references: [id], onDelete: Cascade)
   commentId String?  @map("comment_id") @db.Uuid
-
-  title       String  @map("title")
-  description String? @map("description")
 
   read Boolean? @default(false)
 

@@ -73,7 +73,9 @@
       case NotificationTypeFilterValue.NewItem:
         return [
           NotificationType.NewDocument,
-          NotificationType.NewHistoryElement
+          NotificationType.NewSocialSupportSubject,
+          NotificationType.NewFollowupElement,
+          NotificationType.NewFileInstructionElement
         ]
       default:
         return null

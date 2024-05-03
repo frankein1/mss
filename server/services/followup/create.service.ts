@@ -73,10 +73,8 @@ export const create = async ({ ctx, input }: CreateParams) => {
             .map(referent => ({
               beneficiaryId: beneficiary.id,
               recipientId: referent.id,
-              type: NotificationType.NewHistoryElement,
-              itemCreatedById: user.id,
-              title: 'Synthèse',
-              description: "Synthèse d'entretien"
+              type: NotificationType.NewFollowupElement,
+              itemCreatedById: user.id
             }))
         }
       },

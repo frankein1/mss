@@ -35,14 +35,11 @@ async function createDueSocialSupportNotifications(
       beneficiaryId: socialSupport.beneficiaryId,
       socialSupportId: socialSupport.id,
       type,
-      title:
+      title: notificationTypeKeys.byKey[type],
+      descriptionHint:
         socialSupport.socialSupportType === 'Followup'
-          ? 'Synthèse'
-          : 'Instruction',
-      description:
-        socialSupport.socialSupportType === 'Followup'
-          ? "Synthèse d'entretien"
-          : 'Instruction de dossier'
+          ? "sur la synthèse d'entretien"
+          : "sur l'instruction de dossier"
     }))
 
   await NotificationRepo.prisma.createMany({
@@ -96,8 +93,7 @@ async function createEndOfSupportHelpRequestNotifications() {
       recipientId: socialSupport.createdById,
       beneficiaryId: socialSupport.beneficiaryId,
       helpRequestId: socialSupport.id,
-      type: NotificationType.EndOfSupport,
-      title: notificationTypeKeys.byKey[NotificationType.EndOfSupport]
+      type: NotificationType.EndOfSupport
     }))
 
   await NotificationRepo.prisma.createMany({
