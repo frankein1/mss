@@ -185,6 +185,11 @@
       background-color: var(--background-contrast-green-archipel);
       color: var(--text-label-green-archipel);
     }
+
+    &.fr-icon-settings-5-line {
+      background-color: rgba(249, 246, 242, 1);
+      color: rgba(106, 97, 86, 1);
+    }
   }
 
   .notificationitem__beneficiary {
