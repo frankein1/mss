@@ -47,7 +47,7 @@ export async function updateStructure(
   })
 }
 
-const jobConverter = (job: PrismaJobResult) =>
+export const jobConverter = (job: PrismaJobResult) =>
   ({
     ...job,
     durationInSeconds: prismaDecimalToNumber(job.durationInSeconds) || null,

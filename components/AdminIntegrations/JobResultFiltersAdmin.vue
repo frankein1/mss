@@ -25,7 +25,8 @@
           jobResultStatusKeys.options,
           'Tous les statuts'
         ),
-        type: FilterType.SelectOne
+        type: FilterType.SelectOne,
+        alwaysExpanded: true
       }
     ]
     return filters
