@@ -187,8 +187,8 @@
     }
 
     &.fr-icon-settings-5-line {
-      background-color: rgb(249, 246, 242);
-      color: rgb(106, 97, 86);
+      background-color: var(--beige-gris-galet-975);
+      color: var(--beige-gris-galet-sun-407);
     }
   }
 
