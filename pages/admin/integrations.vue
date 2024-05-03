@@ -14,13 +14,35 @@
           @filter="filters = $event"
         />
 
+        <DsfrButtonGroup
+          inline-layout-when="always"
+          class="fr-btns-group--icon-left"
+        >
+          <li>
+            <DsfrButton
+              label="Mettre à jour les structures"
+              type="button"
+              :disabled="launching"
+              @click="onLaunch"
+            />
+          </li>
+          <li>
+            <DsfrButton
+              label="Rafraîchir le tableau"
+              type="button"
+              secondary
+              :disabled="pending"
+              icon="fr-icon-refresh-line"
+              @click="refresh"
+            />
+          </li>
+        </DsfrButtonGroup>
+
         <JobResultTableAdmin
           v-show="!pending"
           v-model:sort="orderBy"
           :jobs
-          :count
           :pending
-          @refresh-emails="refresh"
         />
 
         <AtomPagination
@@ -42,6 +64,7 @@
   import type { JobResultAdminFilterInput } from '~/server/schema'
 
   const trpcClient = useTrpcClient()
+  const snackbar = useSnackbar()
 
   const filters = ref<JobResultAdminFilterInput>({})
   const orderBy = ref<JobResultAdminSort>({ startDate: SortOrder.Desc })
@@ -62,7 +85,24 @@
 
   const jobs = computed(() => data.value?.jobs || [])
 
-  const count = computed(() => data.value?.count || 0)
-
   const totalPages = computed(() => data.value?.totalPages || 0)
+
+  const launching = ref(false)
+
+  function onLaunch() {
+    useTrpcMutation({
+      mutation: () => trpcClient.admin.launchStructureImport.mutate(),
+      isSubmitting: launching,
+      onSuccess: launched => {
+        if (launched) {
+          snackbar.success("L'import de structure a démarré avec succès")
+        } else {
+          snackbar.info('Un import de structure est déjà en cours')
+        }
+      },
+      onFailure: () => {
+        snackbar.error("Echec de lancement de l'import de structure")
+      }
+    })
+  }
 </script>

@@ -5,6 +5,7 @@ export const JobResultRepo = {
     create: prismaClient.jobResult.create,
     findMany: prismaClient.jobResult.findMany,
     update: prismaClient.jobResult.update,
-    count: prismaClient.jobResult.count
+    count: prismaClient.jobResult.count,
+    findFirst: prismaClient.jobResult.findFirst
   }
 }
