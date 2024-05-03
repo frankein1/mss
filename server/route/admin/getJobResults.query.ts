@@ -18,7 +18,7 @@ const adminHandler = async ({
 
   const totalPages = getTotalPages({ count, perPage: input.perPage })
 
-  return { jobs, count, totalPages }
+  return { jobs, totalPages }
 }
 
 export const getJobResults = createQuery({

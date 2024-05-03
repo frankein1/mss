@@ -53,7 +53,7 @@
             <td>{{ job.result.nImported }}</td>
             <td>{{ job.result.nCreated }}</td>
             <td>{{ job.result.nUpdated }}</td>
-            <td>{{ count }}</td>
+            <td>{{ job.result.nInDatabase }}</td>
             <td>{{ job.errors.length }}</td>
           </tr>
         </tbody>
@@ -70,7 +70,6 @@
 
   const props = defineProps<{
     jobs: JobResult[]
-    count: number
     pending: boolean
     sort: JobResultAdminSort
   }>()

@@ -50,5 +50,8 @@ export const adminRouter = router({
     .mutation(adminRoutes.updateStructureSubject.executeAsAdmin),
   getJobResults: adminProcedure
     .input(adminRoutes.getJobResults.inputValidation)
-    .query(adminRoutes.getJobResults.executeAsAdmin)
+    .query(adminRoutes.getJobResults.executeAsAdmin),
+  launchStructureImport: adminProcedure
+    .input(adminRoutes.launchStructureImport.inputValidation)
+    .mutation(adminRoutes.launchStructureImport.executeAsAdmin)
 })
