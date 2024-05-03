@@ -66,12 +66,14 @@ export const updateSocialSupportSubjects = async ({
 
   const newObjects = objects.filter(object => !previousNames.includes(object))
 
-  const notifications = users.map(recipient => ({
-    recipientId: recipient.id,
-    type: NotificationType.NewSocialSupportSubject,
-    itemCreatedById: ctx.user.id,
-    detail: newObjects.join(', ')
-  }))
+  const notifications = users
+    .filter(u => u.id !== ctx.user.id)
+    .map(recipient => ({
+      recipientId: recipient.id,
+      type: NotificationType.NewSocialSupportSubject,
+      itemCreatedById: ctx.user.id,
+      detail: newObjects.join(', ')
+    }))
 
   await NotificationRepo.prisma.createMany({ data: notifications })
 

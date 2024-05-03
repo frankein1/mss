@@ -8,5 +8,5 @@ export const notificationTypeClasses: { [key in NotificationType]: string } = {
   [NotificationType.NewDocument]: 'fr-icon-file-text-line',
   [NotificationType.NewFollowupElement]: 'fr-icon-draft-line',
   [NotificationType.NewFileInstructionElement]: 'fr-icon-questionnaire-line',
-  [NotificationType.NewSocialSupportSubject]: 'fr-icon-questionnaire-line'
+  [NotificationType.NewSocialSupportSubject]: 'fr-icon-settings-5-line'
 }
