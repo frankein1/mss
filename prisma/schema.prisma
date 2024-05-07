@@ -1566,6 +1566,9 @@ model PartnerOrganization {
   structure   Structure @relation(fields: [structureId], references: [id])
   structureId String    @map("structure_id") @db.Uuid
 
+  dataInclusionStructure DataInclusionStructure? @relation(fields: [dataInclusionId], references: [id])
+  dataInclusionId        String?                 @map("data_inclusion_id")
+
   contacts                               PartnerOrganizationContact[]
   followups                              Followup[]                   @relation("followup_prescribing_organization")
   fileInstructionInstructorOrganizations FileInstruction[]            @relation("file_instruction_instructor_organization")
@@ -1743,6 +1746,8 @@ model DataInclusionStructure {
 
   type   String?
   topics String[]
+
+  PartnerOrganization PartnerOrganization[]
 
   @@map("data_inclusion_structure")
 }
