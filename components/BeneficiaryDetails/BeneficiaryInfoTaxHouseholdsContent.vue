@@ -10,10 +10,22 @@
         "
       />
     </div>
-    <div class="fr-col-6">
+    <div
+      v-if="taxHouseholds.weddingDate"
+      class="fr-col-12 fr-pb-1w"
+    >
       <BeneficiaryInfoLabel
-        :label="beneficiaryFieldLabels.minorChildren"
-        :value="taxHouseholds.minorChildren || '0'"
+        :label="beneficiaryFieldLabels.weddingDate"
+        :value="formatDate(taxHouseholds.weddingDate)"
+      />
+    </div>
+    <div
+      v-if="taxHouseholds.divorceDate"
+      class="fr-col-12 fr-pb-1w"
+    >
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.divorceDate"
+        :value="formatDate(taxHouseholds.divorceDate)"
       />
     </div>
     <div class="fr-col-6">

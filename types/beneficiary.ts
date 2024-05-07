@@ -106,7 +106,12 @@ export type GetBeneficiaryRelative = Pick<
 
 export type GetBeneficiaryTaxHousehold = Pick<
   Beneficiary,
-  'familySituation' | 'minorChildren' | 'majorChildren' | 'caregiver'
+  | 'familySituation'
+  | 'weddingDate'
+  | 'divorceDate'
+  | 'minorChildren'
+  | 'majorChildren'
+  | 'caregiver'
 > & {
   taxHouseholds?: GetBeneficiaryRelative[]
 }

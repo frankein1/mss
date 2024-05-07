@@ -1407,6 +1407,8 @@ model Beneficiary {
   phone2                             String?
   email                              String?
   familySituation                    BeneficiaryFamilySituation?   @map("family_situation")
+  weddingDate                        DateTime?                     @map("wedding_date") @db.Date
+  divorceDate                        DateTime?                     @map("divorce_date") @db.Date
   caregiver                          Boolean                       @default(false)
   minorChildren                      Int?                          @map("minor_children")
   majorChildren                      Int?                          @map("major_children")
