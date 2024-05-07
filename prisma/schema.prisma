@@ -1768,3 +1768,13 @@ model JobResult {
 
   @@map("job_result")
 }
+
+model ApiToken {
+  id             String   @id @default(uuid()) @db.Uuid
+  username       String
+  token          String
+  expirationDate DateTime @map("expiration_date")
+
+  @@unique([token])
+  @@map("api_token")
+}

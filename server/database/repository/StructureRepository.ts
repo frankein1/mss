@@ -33,6 +33,7 @@ export const StructureRepo = {
   findUniqueOrThrow,
   count,
   prisma: {
+    findMany: prismaClient.structure.findMany,
     create: prismaClient.structure.create,
     update: prismaClient.structure.update,
     delete: prismaClient.structure.delete
