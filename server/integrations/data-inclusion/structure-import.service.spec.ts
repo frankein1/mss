@@ -1,5 +1,5 @@
 import { vi, test, expect, beforeEach } from 'vitest'
-import { DataInclusionHandler } from './structure-import.service'
+import { DataInclusionIntegrationHandler } from './structure-import.service'
 import { createStructure } from '~/server/query/data-inclusion'
 import { prismaClient } from '~/server/prisma'
 
@@ -13,7 +13,7 @@ beforeEach(async () => {
 })
 
 test.skip('Structure import job should create structures when they do not exist', async () => {
-  const job = await DataInclusionHandler.handleStructuresImport()
+  const job = await DataInclusionIntegrationHandler.handleStructuresImport()
 
   expect(job.result.nTotal).toBe(10)
   expect(job.result.nImported).toBe(10)
@@ -44,7 +44,7 @@ test.skip('Structure import job should update structure when it exists already b
     'unknown'
   )
 
-  const job = await DataInclusionHandler.handleStructuresImport()
+  const job = await DataInclusionIntegrationHandler.handleStructuresImport()
 
   expect(job.result.nTotal).toBe(10)
   expect(job.result.nImported).toBe(10)
