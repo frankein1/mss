@@ -132,7 +132,7 @@ async function handleStructuresImport(iscron = false) {
   })
 
   try {
-    await DataInclusionService.importStructures(job)
+    await DataInclusionIntegrationService.importStructures(job)
   } catch (err: unknown) {
     job.errors.push({
       category: 'structure-import-other',
@@ -158,10 +158,10 @@ async function handleStructuresImport(iscron = false) {
   })
 }
 
-export const DataInclusionService = {
+export const DataInclusionIntegrationService = {
   importStructures
 }
 
-export const DataInclusionHandler = {
+export const DataInclusionIntegrationHandler = {
   handleStructuresImport
 }
