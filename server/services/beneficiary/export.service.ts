@@ -57,6 +57,8 @@ export const BENEFICIARY_EXPORTED_FIELDS: (keyof typeof beneficiaryFieldLabels)[
     'email',
     'mobility',
     'familySituation',
+    'weddingDate',
+    'divorceDate',
     'minorChildren',
     'majorChildren',
     'taxHouseholds',
@@ -154,6 +156,8 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
     familySituation: taxHouseholds?.familySituation
       ? familySituationKeys.byKey[taxHouseholds.familySituation]
       : '',
+    weddingDate: formatDate(taxHouseholds?.weddingDate, 'DD-MM-YYYY'),
+    divorceDate: formatDate(taxHouseholds?.divorceDate, 'DD-MM-YYYY'),
     caregiver: getBooleanOrEmpty(taxHouseholds?.caregiver),
     minorChildren: taxHouseholds?.minorChildren?.toString() || '',
     majorChildren: taxHouseholds?.majorChildren?.toString() || '',

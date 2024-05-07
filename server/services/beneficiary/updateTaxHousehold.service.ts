@@ -3,6 +3,7 @@ import { BeneficiaryRepo } from '~/server/database'
 import { SecurityRuleGrantee } from '~/server/security'
 import { UpdateBeneficiaryTaxHouseholdInput } from '~/server/schema'
 import { prepareRelationUpdates } from '~/utils/prisma'
+import { isSeparate, isMarried } from '~/utils/beneficiary'
 
 function getBeneficiaryWithTaxHousehold(user: SecurityRuleGrantee, id: string) {
   return BeneficiaryRepo.findWithNoDraftCondition(user, {
@@ -74,7 +75,11 @@ export async function updateTaxHousehold(
   user: SecurityRuleGrantee,
   input: UpdateBeneficiaryTaxHouseholdInput
 ) {
-  const { id: beneficiaryId, taxHouseholds, ...taxHouseholdDatas } = input
+  const {
+    id: beneficiaryId,
+    taxHouseholds,
+    ...taxHouseholdDatas
+  } = cleanInput(input)
 
   const { relatives: previousTaxHouseholds, budget } =
     await getBeneficiaryWithTaxHousehold(user, beneficiaryId)
@@ -96,4 +101,14 @@ export async function updateTaxHousehold(
   })
 
   return updatedBeneficiary
+}
+
+function cleanInput(input: UpdateBeneficiaryTaxHouseholdInput) {
+  if (!isSeparate(input.familySituation)) {
+    input.divorceDate = null
+  }
+  if (!isMarried(input.familySituation)) {
+    input.weddingDate = null
+  }
+  return input
 }

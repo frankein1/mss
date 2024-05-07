@@ -43,6 +43,8 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   phone2: 'Numéro de téléphone',
   email: 'Email',
   familySituation: 'Situation familiale',
+  divorceDate: 'Date de séparation / divorce',
+  weddingDate: 'Date de mariage / pacs',
   minorChildren: "Nombre d'enfant(s) mineur(s)",
   majorChildren: "Nombre d'enfant(s) majeur(s)",
   caregiver: 'Aidant familial',

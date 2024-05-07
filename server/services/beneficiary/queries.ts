@@ -234,6 +234,8 @@ function getEntourages(beneficiary: BeneficiaryOutput) {
 function getTaxHouseholds(beneficiary: BeneficiaryOutput) {
   const {
     relatives,
+    divorceDate,
+    weddingDate,
     familySituation,
     minorChildren,
     majorChildren,
@@ -245,6 +247,8 @@ function getTaxHouseholds(beneficiary: BeneficiaryOutput) {
   return {
     taxHouseholds,
     familySituation,
+    divorceDate,
+    weddingDate,
     minorChildren,
     majorChildren,
     caregiver

@@ -101,6 +101,8 @@ export type UpdateBeneficiaryGeneralInformationInput = z.infer<
 export const updateBeneficiaryTaxHouseholdSchema = z.object({
   id: z.string().uuid(),
   familySituation: withEmptyValueOptionalNativeEnum(BeneficiaryFamilySituation),
+  weddingDate: dateOrEmpty,
+  divorceDate: dateOrEmpty,
   minorChildren: z.coerce
     .number()
     .int(validIntNumber)
