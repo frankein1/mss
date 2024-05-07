@@ -4,6 +4,7 @@ export const DataInclusionStructureRepo = {
   prisma: {
     create: prismaClient.dataInclusionStructure.create,
     findFirst: prismaClient.dataInclusionStructure.findFirst,
-    update: prismaClient.dataInclusionStructure.update
+    update: prismaClient.dataInclusionStructure.update,
+    count: prismaClient.dataInclusionStructure.count
   }
 }

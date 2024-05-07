@@ -13,6 +13,8 @@ import { updateSocialSupportSubjects } from './updateSocialSupportSubjects.mutat
 import { getSocialSupportSubjects } from './getSocialSupportSubjects.query'
 import { makeInactiveSocialSupportSubject } from './makeInactiveSocialSupportSubject.mutation'
 import { updateStructureSubject } from './updateSocialSupportSubject.mutation'
+import { getJobResults } from './getJobResults.query'
+import { launchStructureImport } from './launchStructureImport.mutation'
 
 export const adminRoutes = {
   createStructure,
@@ -29,5 +31,7 @@ export const adminRoutes = {
   updateSocialSupportSubjects,
   getSocialSupportSubjects,
   makeInactiveSocialSupportSubject,
-  updateStructureSubject
+  updateStructureSubject,
+  getJobResults,
+  launchStructureImport
 }

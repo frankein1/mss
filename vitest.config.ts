@@ -1,5 +1,5 @@
 import path from 'path'
-import { defineConfig } from 'vitest/config'
+import { defineConfig, coverageConfigDefaults } from 'vitest/config'
 
 export default defineConfig({
   resolve: {
@@ -8,6 +8,13 @@ export default defineConfig({
     }
   },
   test: {
+    coverage: {
+      exclude: [
+        ...coverageConfigDefaults.exclude,
+        '**/*{.,-}{story}.?(c|m)[jt]s?(x)',
+        'pages/stories.vue'
+      ]
+    },
     // tests will run sequentially, but in the same global context
     // so you must provide isolation yourself
     poolOptions: {

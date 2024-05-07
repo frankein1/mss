@@ -41,6 +41,10 @@ export type EmailAdminSort = {
   sentDate?: SortOrder
 }
 
+export type JobResultAdminSort = {
+  startDate?: SortOrder
+}
+
 export type TableSort =
   | BeneficiarySort
   | FollowupSort

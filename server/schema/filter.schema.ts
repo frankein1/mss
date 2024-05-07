@@ -8,7 +8,8 @@ import {
   UserRole,
   DocumentType,
   EmailStatus,
-  FileInstructionType
+  FileInstructionType,
+  JobStatus
 } from '@prisma/client'
 import {
   kindOfBooleanSchema,
@@ -110,6 +111,12 @@ const emailAdminFilterSchema = z.object({
 
 type EmailAdminFilterInput = z.infer<typeof emailAdminFilterSchema>
 
+const jobResultAdminFilterSchema = z.object({
+  status: z.nativeEnum(JobStatus).nullish()
+})
+
+type JobResultAdminFilterInput = z.infer<typeof jobResultAdminFilterSchema>
+
 export {
   statFilterSchema,
   beneficiaryFilterSchema,
@@ -117,7 +124,8 @@ export {
   beneficiaryHistoryFilterSchema,
   userAdminFilterSchema,
   beneficiaryDocumentFilterSchema,
-  emailAdminFilterSchema
+  emailAdminFilterSchema,
+  jobResultAdminFilterSchema
 }
 
 export type {
@@ -128,5 +136,6 @@ export type {
   BeneficiaryHistoryFilterInput,
   UserAdminFilterInput,
   BeneficiaryDocumentFilterInput,
-  EmailAdminFilterInput
+  EmailAdminFilterInput,
+  JobResultAdminFilterInput
 }

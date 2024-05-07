@@ -2,6 +2,7 @@ import {
   getStructureStatusInDB,
   createStructure,
   updateStructure,
+  countStructures,
   createJob,
   updateJob
 } from '~/server/query/data-inclusion'
@@ -33,7 +34,9 @@ async function importStructures(job: JobResult) {
     return job
   }
 
-  for (const input of res.data) {
+  for (let i = 0; i < res.data.length; i++) {
+    const input = res.data[i]
+
     const validated = dataInclusionStructureServerSchema.safeParse(input)
 
     if (validated.success === false) {
@@ -94,7 +97,21 @@ async function importStructures(job: JobResult) {
         })
       }
     }
+
+    if (i % 1000 === 0) {
+      job.status = 'Ongoing'
+
+      await updateJob({
+        id: job.id,
+        status: job.status,
+        errors: job.errors,
+        result: job.result
+      })
+    }
   }
+
+  const count = await countStructures()
+  job.result.nInDatabase = count
 
   return job
 }
@@ -107,6 +124,7 @@ async function handleStructuresImport(iscron = false) {
     errors: [],
     result: {
       nTotal: 0,
+      nInDatabase: 0,
       nImported: 0,
       nCreated: 0,
       nUpdated: 0

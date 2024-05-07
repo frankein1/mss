@@ -1,8 +1,15 @@
 import { z } from 'zod'
-import { JobStatus } from '@prisma/client'
+import { Prisma, JobStatus } from '@prisma/client'
+import { maxStringLengthMessage } from '~/utils/zod'
+import {
+  paginatedSchema,
+  stringConstraint
+} from '~/server/schema/helpers.schema'
+import { jobResultAdminFilterSchema } from '~/server/schema/filter.schema'
 
 export const dataInclusionStructureImportResultSchema = z.object({
   nTotal: z.number(),
+  nInDatabase: z.number(),
   nImported: z.number(),
   nCreated: z.number(),
   nUpdated: z.number()
@@ -38,14 +45,21 @@ export type CreateJobDataInclusionStructureInput = z.infer<
   typeof createJobDataInclusionStructureSchema
 >
 
-export interface UpdateJobDataInclusionStructureInput {
-  id: string
-  status: JobStatus
-  durationInSeconds: number
-  endDate: Date
-  errors: JobStructureImportError[]
-  result: JobStructureImportResult
-}
+export type UpdateJobDataInclusionStructureInput =
+  | {
+      id: string
+      status: 'Failure' | 'Success'
+      durationInSeconds: number
+      endDate: Date
+      errors: JobStructureImportError[]
+      result: JobStructureImportResult
+    }
+  | {
+      id: string
+      status: 'Ongoing'
+      errors: JobStructureImportError[]
+      result: JobStructureImportResult
+    }
 
 export interface JobResult {
   id: string
@@ -57,3 +71,16 @@ export interface JobResult {
   errors: JobStructureImportError[]
   result: JobStructureImportResult
 }
+
+export const adminGetJobResultsSchema = z
+  .object({
+    name: stringConstraint.max(50, maxStringLengthMessage(50)).nullish(),
+    // search: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
+    filters: jobResultAdminFilterSchema,
+    orderBy: z.object({
+      startDate: z.nativeEnum(Prisma.SortOrder).optional()
+    })
+  })
+  .merge(paginatedSchema)
+
+export type AdminGetJobResultsInput = z.infer<typeof adminGetJobResultsSchema>

@@ -47,7 +47,11 @@ export async function updateStructure(
   })
 }
 
-const jobConverter = (job: PrismaJobResult) =>
+export async function countStructures() {
+  return await DataInclusionStructureRepo.prisma.count()
+}
+
+export const jobConverter = (job: PrismaJobResult) =>
   ({
     ...job,
     durationInSeconds: prismaDecimalToNumber(job.durationInSeconds) || null,
@@ -68,4 +72,10 @@ export async function updateJob(job: UpdateJobDataInclusionStructureInput) {
   })
 
   return jobConverter(res)
+}
+
+export async function getOngoingJob() {
+  return await JobResultRepo.prisma.findFirst({
+    where: { status: 'Ongoing' }
+  })
 }
