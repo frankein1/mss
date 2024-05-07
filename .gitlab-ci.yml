@@ -80,3 +80,14 @@ deploy:demo:uninstall:
     - deploy:production:uninstall
   environment:
     name: demo
+
+.vigigloo:pnpm:test:
+  variables:
+    # setup env variables
+  services:
+    - name: postgres
+      alias: db
+  before_script:
+    - any
+  script:
+    - pnpm run --if-present test --coverage
