@@ -1,4 +1,6 @@
 import { z } from 'zod'
+import { siretConstraint, stringConstraint } from '.'
+import { maxStringLengthMessage, validZipcode } from '~/utils/zod'
 
 export const dataInclusionStructureApiSchema = z.object({
   id: z.string(),
@@ -55,4 +57,15 @@ export const dataInclusionStructureServerSchema =
 
 export type DataInclusionStructureServerInput = z.infer<
   typeof dataInclusionStructureServerSchema
+>
+
+export const searchDataInclusionStructureSchema = z.object({
+  query: z.union([siretConstraint, stringConstraint]),
+  zipcode: stringConstraint
+    .max(10, maxStringLengthMessage(10))
+    .min(5, validZipcode)
+})
+
+export type SearchDataInclusionStructureInput = z.infer<
+  typeof searchDataInclusionStructureSchema
 >

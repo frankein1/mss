@@ -18,12 +18,14 @@ import { usersActivityRouter } from './usersActivity/router'
 import { socialSupportRouter } from './socialSupport/router'
 import { housingHelpRequestRouter } from './housingHelpRequest/router'
 import { partnerRouter } from './partnerRouter/router'
+import { dataInclusionRouter } from './dataInclusionRouter'
 import { router } from '~/server/trpc'
 
 export const appRouter = router({
   admin: adminRouter,
   beneficiary: beneficiaryRouter,
   budget: budgetRouter,
+  dataInclusion: dataInclusionRouter,
   notification: notificationRouter,
   config: configRouter,
   partner: partnerRouter,
