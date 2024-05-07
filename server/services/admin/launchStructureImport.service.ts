@@ -1,5 +1,5 @@
-import { DataInclusionHandler } from '~/server/integrations/data-inclusion/structure-import.service'
+import { DataInclusionIntegrationHandler } from '~/server/integrations/data-inclusion/structure-import.service'
 
 export function launchDataInclusionStructureImport() {
-  return DataInclusionHandler.handleStructuresImport(false)
+  return DataInclusionIntegrationHandler.handleStructuresImport(false)
 }
