@@ -69,6 +69,56 @@ docker:kaniko:build:production:
       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
         DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
 
+.playwright-pnpm:install:
+  variables:
+    CACHE_FALLBACK_KEY: $CI_DEFAULT_BRANCH
+  image: mcr.microsoft.com/playwright:v1.44.0-jammy
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - node_modules/.pnpm
+  before_script:
+    - npm install -g pnpm@8.6.2
+    - pnpm --version
+    - node --version
+    - pnpm install --frozen-lockfile --prefer-offline
+
+.playwright:test:
+  extends: .playwright-pnpm:install
+  stage: test
+  cache:
+    policy: pull
+  artifacts:
+    paths:
+      - playwright/reporter
+    expire_in: 1 week
+  script:
+    - pnpm run --if-present test:e2e
+
+playwright:install:
+  extends: .playwright-pnpm:install
+  stage: .pre
+  interruptible: true
+
+pnpm:test:e2e:
+  extends: .playwright:test
+  needs: ['playwright:install']
+  services:
+    - name: postgres:14.12-alpine
+      alias: database
+      variables:
+        POSTGRES_DB: mss
+        POSTGRES_USER: mss
+        POSTGRES_PASSWORD: password
+        POSTGRES_PORT: 5432
+  variables:
+    DATABASE_URL: postgresql://mss:password@database:5432/mss
+    APP_URL: http://localhost:3000
+  before_script:
+    - pnpm prisma db seed
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "exploration/ci-integration"'
+
 deploy:demo:
   extends:
     - deploy:production
@@ -80,14 +130,3 @@ deploy:demo:uninstall:
     - deploy:production:uninstall
   environment:
     name: demo
-
-.vigigloo:pnpm:test:
-  variables:
-    # setup env variables
-  services:
-    - name: postgres
-      alias: db
-  before_script:
-    - any
-  script:
-    - pnpm run --if-present test --coverage
