@@ -124,6 +124,9 @@ playwright:install:
   extends: .playwright-pnpm:install
   stage: .pre
   interruptible: true
+  script:
+    - pnpm --version
+    - node --version
 
 pnpm:test:e2e:
   extends: .playwright:test
