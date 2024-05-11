@@ -104,8 +104,6 @@ include:
       - node_modules/.pnpm
   before_script:
     - npm install -g pnpm@8.6.2
-    - pnpm --version
-    - node --version
     - pnpm install --frozen-lockfile --prefer-offline
 
 .playwright:test:
@@ -117,8 +115,6 @@ include:
     paths:
       - playwright/reporter
     expire_in: 1 week
-  script:
-    - pnpm run --if-present test:e2e
 
 playwright:install:
   extends: .playwright-pnpm:install
@@ -142,8 +138,9 @@ pnpm:test:e2e:
   variables:
     DATABASE_URL: postgresql://mss:password@database:5432/mss
     APP_URL: http://localhost:3000
-  before_script:
+  script:
     - pnpm prisma db seed
+    - pnpm run --if-present test:e2e
   rules:
     - if: '$CI_COMMIT_BRANCH == "exploration/ci-integration"'
 
