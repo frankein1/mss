@@ -11,6 +11,7 @@ export default defineConfig({
     coverage: {
       exclude: [
         ...coverageConfigDefaults.exclude,
+        'e2e/**',
         '**/*{.,-}{story}.?(c|m)[jt]s?(x)',
         'pages/stories.vue'
       ]
