@@ -1,6 +1,14 @@
 import { test as setup, Page } from '@playwright/test'
 
 async function authenticate(page: Page, username: string, password: string) {
+  // Temp verification for env variables
+  console.log('database url', process.env.DATABASE_URL)
+  console.log('environment', process.env.ENVIRONMENT)
+  console.log('ci', process.env.CI)
+  console.log('app url', process.env.APP_URL)
+  console.log('AUTH_KEYCLOAK_ISSUER_URL', process.env.AUTH_KEYCLOAK_ISSUER_URL)
+  console.log('EMAIL_FROM', process.env.EMAIL_FROM)
+
   await page.goto('/auth/login')
   await page.getByTitle("S'identifier avec InclusionConnect").click()
 
