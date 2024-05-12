@@ -88,7 +88,7 @@ docker:kaniko:build:production:
     policy: pull
   artifacts:
     paths:
-      - playwright/reporter
+      - playwright-report
     expire_in: 1 week
 
 playwright:install:
