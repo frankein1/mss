@@ -14,6 +14,7 @@ import { NotificationRepo } from '~/server/database'
 import { takeAndSkipFromPagination } from '~/utils/table'
 import { notificationTypeKeys } from '~/client/options'
 import { formatUserDisplayName } from '~/utils/user'
+import { formatDate } from '~/utils/formatDate'
 
 const handler = async ({
   ctx: { user },
