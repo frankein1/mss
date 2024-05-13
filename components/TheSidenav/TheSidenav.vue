@@ -70,7 +70,10 @@
           </li>
         </ul>
         <ul class="fr-footer__bottom-list">
-          <li class="fr-footer__bottom-item">
+          <li
+            v-if="false"
+            class="fr-footer__bottom-item"
+          >
             <NuxtLink
               class="fr-footer__bottom-link"
               :to="
@@ -82,7 +85,10 @@
               CGU
             </NuxtLink>
           </li>
-          <li class="fr-footer__bottom-item">
+          <li
+            v-if="false"
+            class="fr-footer__bottom-item"
+          >
             <NuxtLink
               class="fr-footer__bottom-link"
               :to="RoutePath.PolitiqueConfidentialite()"
@@ -251,6 +257,7 @@
 
   .fr-footer__bottom-item {
     display: inherit;
+    margin: 0.5rem 0 0;
   }
 
   .fr-footer__bottom-item::before {
