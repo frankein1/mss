@@ -69,6 +69,12 @@
       minorChildren: taxHouseholds?.minorChildren || null,
       majorChildren: taxHouseholds?.majorChildren || null,
       caregiver: taxHouseholds?.caregiver || false,
+      weddingDate: taxHouseholds?.weddingDate
+        ? new Date(taxHouseholds.weddingDate)
+        : undefined,
+      divorceDate: taxHouseholds?.divorceDate
+        ? new Date(taxHouseholds.divorceDate)
+        : undefined,
       taxHouseholds: members
     }
   })
