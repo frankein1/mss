@@ -12,7 +12,10 @@
   })
 
   definePageMeta({
-    middleware: ['auth', 'cgu']
+    middleware: [
+      'auth'
+      // 'cgu' // FIXME: Enable CGU
+    ]
   })
 
   onMounted(() => {
