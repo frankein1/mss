@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.20.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.19.1...v1.20.0) (2024-05-14)
+
+
+### Features
+
+* **accessibilité:** ajout plan d'action à la déclaration d'accessibilité ([a1d5e1c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a1d5e1cbd3e3a867851a3bf9d32818d8b5ce8304)), closes [#454](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/454)
+* **api:** ouverture API structure et mise en place de la table des secrets ([40c60a1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/40c60a102ef1b6bc6324edaa7c3f7a6448bd2777))
+* **beneficiaire:** ajout des dates de séparation et de divorce ([97336ff](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/97336ff7421be931c97c035b70357262280e0a4b))
+* **beneficiaire:** modification du formulaire d'activité ([6aabf27](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6aabf27dc681b59b55c946f1ee9fd9f2ddd2ea7a))
+* **cgu:** Désactivation de l'acceptation des CGU en attendant le changement d'hébergeur ([5dfbde8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5dfbde88b79aa644e87a4ac2742021290e9d8ff5)), closes [#461](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/461)
+* **cgu:** mise en ligne et activation module validation des CGU ([6f9983e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6f9983e37b71a1dde57d70721b6e9f12bb1aa954)), closes [#100](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/100)
+* **confidentialite:** mise en ligne de la politique de confidentialité ([00dd5fa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/00dd5fa6f53ec88db0debbaccd09e784db85b1b1)), closes [#101](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/101)
+* **data-inclusion:** ajout de la page admin des intégrations avec Data inclusion ([cefaa2b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/cefaa2ba40652607787a743454265056f1086217)), closes [#435](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/435)
+* **data-inclusion:** imports des données de structure de Data Inclusion ([7edb820](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7edb82007d21e2097ce01298c766a0d18c1cdef2)), closes [/gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/merge_requests/532/diffs#70fb162dae8ffe4611163cbf5d2a349cfdc28292](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/merge_requests/532/diffs/issues/70fb162dae8ffe4611163cbf5d2a349cfdc28292) [/gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/merge_requests/532/diffs#70fb162dae8ffe4611163cbf5d2a349cfdc28292_0_37](https://gitlab.com/incubateur-territoires/startups/monsuivisocial//gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/-/merge_requests/532/diffs/issues/70fb162dae8ffe4611163cbf5d2a349cfdc28292_0_37) [#435](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/435)
+* **document:** limite la taille des documents à 20M ([242996c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/242996c3f3b6b05c4afabb9a722773c330a4a426))
+* **document:** Stockage et migration des documents en base de données ([1e76a45](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1e76a45a45a9edc5ed1b8df756a693ddeb8b6d56))
+* **notification:** ajout d'une notification de mise à jour des objets d'accompagnement ([b19fdd2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b19fdd2632b4e2693709909991dd9f9512bea301))
+
+
+### Bug Fixes
+
+* **app:** chargement notifications et synthèse sur tableau de bord défectueux pour agent d'accueil ([27e8bf8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/27e8bf832494080443103518ddccd63261349dd4)), closes [#463](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/463)
+* **beneficiaire:** affichage de la date de séparation dans un champ en cours de modification ([c923cd7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c923cd775caafe7021bab5965ecf600bf3291292)), closes [#432](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/432)
+* **budget:** arrondi des éléments du budget au centime ([7af3df8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7af3df85118fe2c5b10adcd95c3fe237f5cb4c90)), closes [#449](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/449)
+* **cgu:** correctifs UI et typo ([4429097](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4429097f78d18ee0b0b60eae01db118ce1ff619d)), closes [#100](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/100)
+
 ### [1.19.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.19.0...v1.19.1) (2024-04-16)
 
 
