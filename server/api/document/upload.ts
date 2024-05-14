@@ -154,6 +154,7 @@ async function addDocument(
       type,
       size: file.size,
       filenameDownload: file.name,
+      migrated: true,
       documentContent: {
         create: {
           content: multipartFormData.data
