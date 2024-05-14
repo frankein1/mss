@@ -1,5 +1,5 @@
 export default defineEventHandler(event => {
-  if (process.env.NODE_ENV !== 'development') {
+  if (process.env.NODE_ENV !== 'production') {
     const request = getRequestURL(event)
     const headers = getRequestHeaders(event)
 
