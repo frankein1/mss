@@ -16,12 +16,12 @@ const s3 = new S3Client({
   endpoint: `https://${config.s3.host}`
 })
 
-export default defineEventHandler(event => {
+export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth
   if (!user || user.role !== 'Administrator') {
     throw forbiddenError()
   }
-  DocumentRepo.findMany(user, {
+  const ids = await DocumentRepo.findMany(user, {
     where: {
       migrated: false
     },
@@ -29,20 +29,20 @@ export default defineEventHandler(event => {
       key: true,
       filenameDisk: true
     }
-  }).then(async ids => {
-    let counter = 0
-    console.log(`${ids.length}`)
-    for (const { filenameDisk, key } of ids) {
-      try {
-        await migrateFile(key, filenameDisk, config.s3.bucket)
-        counter++
-        console.log(`${counter}/${ids.length} documents migrated`)
-      } catch (e) {
-        console.log(`Error with key ${key}, filenameDisk ${filenameDisk}`)
-      }
-    }
-    console.log('END')
   })
+
+  let counter = 0
+  console.log(`${ids.length}`)
+  for (const { filenameDisk, key } of ids) {
+    try {
+      await migrateFile(key, filenameDisk, config.s3.bucket)
+      counter++
+      console.log(`${counter}/${ids.length} documents migrated`)
+    } catch (e) {
+      console.log(`Error with key ${key}, filenameDisk ${filenameDisk}`)
+    }
+  }
+  console.log('END')
 
   return send(event)
 })
