@@ -31,7 +31,7 @@ export default defineEventHandler(async event => {
       filenameDisk: true
     },
     orderBy: {
-      size: 'desc'
+      size: 'asc'
     }
   })
 
