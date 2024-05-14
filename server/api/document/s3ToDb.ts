@@ -28,7 +28,8 @@ export default defineEventHandler(event => {
     select: {
       key: true,
       filenameDisk: true
-    }
+    },
+    take: 200
   }).then(async ids => {
     let counter = 0
     console.log(`${ids.length}`)
