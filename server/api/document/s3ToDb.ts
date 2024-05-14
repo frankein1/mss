@@ -27,17 +27,21 @@ export default defineEventHandler(async event => {
     },
     select: {
       key: true,
+      size: true,
       filenameDisk: true
+    },
+    orderBy: {
+      size: 'desc'
     }
   })
 
   let counter = 0
   console.log(`${ids.length}`)
-  for (const { filenameDisk, key } of ids) {
+  for (const { filenameDisk, key, size } of ids) {
     try {
       await migrateFile(key, filenameDisk, config.s3.bucket)
+      console.log(`${counter}/${ids.length} - ${size} o`)
       counter++
-      console.log(`${counter}/${ids.length} documents migrated`)
     } catch (e) {
       console.log(`Error with key ${key}, filenameDisk ${filenameDisk}`)
     }
