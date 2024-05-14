@@ -3,6 +3,7 @@ import {
   maxStringLengthMessage,
   minStringLengthMessage,
   validNumber,
+  validDate,
   validEmailMessage,
   requiredErrorMessage,
   errorMessages
@@ -106,11 +107,11 @@ export const amountNumber = z.preprocess(
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
 )
 
-export const dateOrEmpty = z.coerce
-  .date()
+export const dateOrEmpty = z
+  .date({ coerce: true, invalid_type_error: validDate })
   .nullish()
   .refine(date => !date || date.getFullYear() <= 9999, {
-    message: 'Année non conforme'
+    message: validDate
   })
 
 export const openText = (maxLength: number) =>
