@@ -136,13 +136,6 @@ export default defineNuxtConfig({
       keycloakProvider: 'InclusionConnect',
       keycloakLabel: 'keycloak'
     },
-    s3: {
-      bucket: process.env.S3_BUCKET || '',
-      host: process.env.S3_ENDPOINT || 's3.fr-par.scw.cloud',
-      region: process.env.S3_REGION || 'fr-par',
-      key: process.env.S3_KEY || '',
-      secret: process.env.S3_SECRET || ''
-    },
     email: {
       smtpHost: process.env.EMAIL_SMTP_HOST || '',
       smtpPassword: process.env.EMAIL_SMTP_PASSWORD || '',
