@@ -102,6 +102,6 @@ deploy:scalingo-dev:
   extends:
     - .scalingo
   only:
-    - main
+    - scalingo
   script:
-    - git push scalingo-dev $CI_COMMIT_BRANCH:master -f
+    - git push scalingo-dev $CI_COMMIT_BRANCH:main -f
