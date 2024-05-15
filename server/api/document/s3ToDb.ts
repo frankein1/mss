@@ -33,7 +33,7 @@ export default defineEventHandler(event => {
     orderBy: {
       size: 'asc'
     },
-    take: 10
+    take: 50
   }).then(async ids => {
     let counter = 0
     console.log(`${ids.length}`)
