@@ -10,5 +10,7 @@ function removeSpecialCharacters(pattern: string) {
 }
 
 export function formatSearchPattern(pattern: string) {
-  return removeSpecialCharacters(removeDiacritics(pattern.trim())).toLowerCase()
+  return removeSpecialCharacters(
+    removeDiacritics(pattern.trim())
+  ).toLocaleLowerCase()
 }

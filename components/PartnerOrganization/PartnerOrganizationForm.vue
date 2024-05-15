@@ -11,7 +11,7 @@
   >
     <div class="partner-form__subtitle fr-mb-2w">
       <div>Renseignez uniquement les champs qui vous sont utiles.</div>
-      <div>Les champs avec * sont obligatoires.</div>
+      <RequiredFields />
     </div>
     <h3 class="fr-text--md formgroup__title fr-mb-2w">
       Informations principales
@@ -19,20 +19,25 @@
 
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <VeeInput
+        <VeeAutocomplete
           name="name"
           :label="partnerOrganizationFieldLabels.name"
           required
+          :value="selectedName"
+          :search-fn="search => searchDataInclusionStructure(search, 'name')"
+          @result-selected="onStructureSelected"
         />
       </div>
       <div class="fr-col-12">
-        <VeeInput
+        <VeeAutocomplete
           class="fr-mb-1w"
           name="siret"
           :label="partnerOrganizationFieldLabels.siret"
           hint="Format attendu : 01234567890123"
-          required
-          @change-input="onSiretChange"
+          :required="!hasDataInclusionStructure"
+          :value="selectedSiret"
+          :search-fn="search => searchDataInclusionStructure(search, 'siret')"
+          @result-selected="onStructureSelected"
         />
         <div
           class="fr-text--xs fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
@@ -86,6 +91,7 @@
             name="address"
             :label="partnerOrganizationFieldLabels.address"
             hint="Numéro et voie"
+            :disabled="hasDataInclusionStructure"
           />
         </div>
 
@@ -93,12 +99,14 @@
           <VeeInput
             name="zipcode"
             :label="partnerOrganizationFieldLabels.zipcode"
+            :disabled="hasDataInclusionStructure"
           />
         </div>
         <div class="fr-col-8">
           <VeeInput
             name="city"
             :label="partnerOrganizationFieldLabels.city"
+            :disabled="hasDataInclusionStructure"
           />
         </div>
 
@@ -107,6 +115,7 @@
             name="phone1"
             :label="partnerOrganizationFieldLabels.phone1"
             type="tel"
+            :disabled="hasDataInclusionStructure"
           />
         </div>
         <div
@@ -117,6 +126,7 @@
             name="phone2"
             :label="partnerOrganizationFieldLabels.phone2"
             type="tel"
+            :disabled="hasDataInclusionStructure"
           />
         </div>
         <div
@@ -125,7 +135,8 @@
         >
           <button
             class="fr-link fr-icon-file-add-line fr-text--sm fr-mb-1w"
-            @click="dislpayPhone2"
+            :disabled="hasDataInclusionStructure"
+            @click="displayPhone2"
           >
             + Ajouter un téléphone
           </button>
@@ -136,12 +147,14 @@
             name="email"
             :label="partnerOrganizationFieldLabels.email"
             hint="Format attendu : nom@domaine.fr"
+            :disabled="hasDataInclusionStructure"
           />
         </div>
         <div class="fr-col-12">
           <VeeTextarea
             name="workingHours"
             :label="partnerOrganizationFieldLabels.workingHours"
+            :disabled="hasDataInclusionStructure"
           />
         </div>
       </div>
@@ -188,13 +201,14 @@
 <script lang="ts" setup>
   import type { FormErrors } from 'vee-validate'
   import { v4 } from 'uuid'
-  import { PartnerOrganizationData } from './types'
+  import { PartnerOrganizationData, DataInclusionStructure } from './types'
   import { partnerOrganizationFieldLabels } from '~/client/labels'
   import {
     AddPartnerOrganizationInput,
     EditPartnerOrganizationInput,
     siretSchema
   } from '~/server/schema'
+  import { SEARCH_NUMBER_CHARACTERS } from '~/utils/constants'
 
   const props = defineProps<{
     partnerId?: string
@@ -203,6 +217,7 @@
     caughtErrors: FormErrors<
       AddPartnerOrganizationInput | EditPartnerOrganizationInput
     >
+    hasDataInclusionStructure?: boolean
   }>()
 
   const trpcClient = useTrpcClient()
@@ -211,6 +226,7 @@
     submit: [payload: Event]
     cancel: []
     restore: [partner: PartnerOrganizationData]
+    selectStructure: [structure: DataInclusionStructure | null]
   }>()
 
   const form = ref<HTMLFormElement | null>(null)
@@ -219,7 +235,7 @@
 
   const { fields, push, remove } = useFieldArray('contacts')
 
-  function dislpayPhone2() {
+  function displayPhone2() {
     showPhone2.value = true
   }
 
@@ -239,6 +255,8 @@
     } else {
       partnerWithSameSiret.value = undefined
     }
+
+    return !!partnerWithSameSiret.value
   }
 
   const { errors } = useDisplayFormErrors(
@@ -256,6 +274,64 @@
 
   function onCancel() {
     emit('cancel')
+  }
+
+  /** Import Organization from Data Inclusion Structures */
+  const selectedName = ref<string | undefined>(undefined)
+  const selectedSiret = ref<string | undefined>(undefined)
+
+  const structures = ref<DataInclusionStructure[]>([])
+
+  /** Build suggestion list of Data Inclusion structures from same zipcode */
+  async function searchDataInclusionStructure(
+    search: string,
+    field: 'name' | 'siret'
+  ): Promise<Options> {
+    emit('selectStructure', null)
+
+    if (field === 'name') {
+      selectedName.value = search
+    } else {
+      selectedSiret.value = search
+    }
+
+    if (search.length < SEARCH_NUMBER_CHARACTERS) {
+      return []
+    }
+
+    structures.value = await trpcClient.dataInclusion.searchStructures.query({
+      query: search
+    })
+
+    return structures.value.map(({ id, name, siret }) => ({
+      value: id,
+      label: `${name}${siret ? ' - ' + siret : ''}`
+    }))
+  }
+
+  /** Send selected structure information if the Data Inclusion structure
+   * is not already present in the Partner Organizations
+   */
+  async function onStructureSelected(structureId: string) {
+    const structure = structures.value.find(s => s.id === structureId)
+    if (!structure) {
+      selectedName.value = undefined
+      selectedSiret.value = undefined
+      emit('selectStructure', null)
+      return
+    }
+
+    selectedName.value = structure.name
+    selectedSiret.value = structure.siret || undefined
+
+    if (selectedSiret.value) {
+      const hasPartnerWithSameSiret = await onSiretChange(selectedSiret.value)
+      if (hasPartnerWithSameSiret) {
+        return
+      }
+    }
+
+    emit('selectStructure', structure)
   }
 </script>
 

@@ -89,7 +89,7 @@
 
 <script setup lang="ts">
   import { useField } from 'vee-validate'
-  import { UNKNOWN_ERROR_MESSAGE } from '~/utils/constants'
+  import { SEARCH_DEFER_MS, UNKNOWN_ERROR_MESSAGE } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
   import { Options } from '~/utils/options'
 
@@ -203,7 +203,7 @@
       } finally {
         timeout.value = null
       }
-    }, 400)
+    }, SEARCH_DEFER_MS)
   }
 
   function onOptionMouseDown() {

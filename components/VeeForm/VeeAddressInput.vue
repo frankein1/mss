@@ -18,6 +18,7 @@
     AddressSelected
   } from './types'
   import type { Options } from '~/utils/options'
+  import { SEARCH_NUMBER_CHARACTERS } from '~/utils/constants'
 
   const props = withDefaults(
     defineProps<{
@@ -39,7 +40,7 @@
 
   async function searchAddressesFn(search: string): Promise<Options> {
     selectedValue.value = search
-    if (search.length < 3) {
+    if (search.length < SEARCH_NUMBER_CHARACTERS) {
       return []
     }
 

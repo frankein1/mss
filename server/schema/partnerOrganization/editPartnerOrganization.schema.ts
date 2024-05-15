@@ -1,10 +1,17 @@
 import { z } from 'zod'
-import { addPartnerOrganizationSchema } from './addPartnerOrganization.schema'
+import {
+  addDataInclusionPartnerOrganizationSchema,
+  addCustomPartnerOrganizationSchema
+} from './addPartnerOrganization.schema'
 
-export const editPartnerOrganizationSchema =
-  addPartnerOrganizationSchema.extend({
+export const editPartnerOrganizationSchema = z.union([
+  addDataInclusionPartnerOrganizationSchema.extend({
+    id: z.string().uuid()
+  }),
+  addCustomPartnerOrganizationSchema.extend({
     id: z.string().uuid()
   })
+])
 
 export type EditPartnerOrganizationInput = z.infer<
   typeof editPartnerOrganizationSchema

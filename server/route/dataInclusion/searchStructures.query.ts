@@ -9,14 +9,14 @@ import { DataInclusionService } from '~/server/services'
 
 const securityCheck = AllowSecurityCheck
 
-const handler = ({
+const handler = async ({
   input,
   ctx
 }: {
   input: SearchDataInclusionStructureInput
   ctx: ProtectedAppContext
 }) => {
-  return DataInclusionService.searchStructures({ ctx, input })
+  return await DataInclusionService.searchStructures({ ctx, input })
 }
 
 export const searchStructures = createQuery({
