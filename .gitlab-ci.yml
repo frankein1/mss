@@ -99,6 +99,8 @@ deploy:demo:uninstall:
 
 
 deploy:scalingo-dev:
+  stage:
+    - deploy
   extends:
     - .scalingo
   only:
