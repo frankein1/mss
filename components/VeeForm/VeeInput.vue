@@ -35,6 +35,7 @@
         :name="name"
         :placeholder="placeholder"
         :type="type"
+        :disabled
         :aria-describedby="ariaDescribedby"
         :aria-labelledby="labelledBy"
         :value="bindedValue"
@@ -78,6 +79,7 @@
       labelledBy?: string
       required?: boolean
       noHint?: boolean
+      disabled?: boolean
     }>(),
     {
       type: 'text',
@@ -86,7 +88,8 @@
       noLabel: false,
       labelledBy: undefined,
       required: false,
-      noHint: false
+      noHint: false,
+      disabled: false
     }
   )
 

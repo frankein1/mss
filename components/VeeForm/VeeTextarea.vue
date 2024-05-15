@@ -28,6 +28,7 @@
       :value="value"
       :class="{ 'fr-input--error': error }"
       :name="name"
+      :disabled
       @input="onInput"
       @change="handleChange"
     ></textarea>
@@ -56,8 +57,15 @@
       readonly?: boolean
       labelIcon?: string
       noLabel?: boolean
+      disabled?: boolean
     }>(),
-    { required: false, labelIcon: '', readonly: false, noLabel: false }
+    {
+      required: false,
+      labelIcon: '',
+      readonly: false,
+      noLabel: false,
+      disabled: false
+    }
   )
 
   // use `toRef` to create reactive references to `name` prop which is passed to `useField`
