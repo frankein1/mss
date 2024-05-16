@@ -21,7 +21,7 @@ include:
       - /pnpm.auto.yml
 
       # deploy
-      - /helm.development.auto.yml
+      # - /helm.development.auto.yml
       - /helm.production.auto.yml
 
 variables:
