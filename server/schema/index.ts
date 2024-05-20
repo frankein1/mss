@@ -19,7 +19,7 @@ export * from './notification.schema'
 export * from './document.schema'
 export * from './comment.schema'
 export * from './budget.schema'
-export * from './dataInclusionApi.schema'
+export * from './dataInclusion.schema'
 export * from './job.schema'
 
 const customErrorMap: z.ZodErrorMap = (issue, ctx) => {

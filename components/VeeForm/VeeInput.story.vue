@@ -15,6 +15,15 @@
       />
     </div>
 
+    <h4>Champ désactivé</h4>
+    <div id="vee-input-deactivated">
+      <VeeInput
+        label="Champ libre"
+        name="deactivated"
+        disabled
+      />
+    </div>
+
     <h4>Champ libre requis</h4>
     <div id="vee-input-free-required">
       <VeeInput
