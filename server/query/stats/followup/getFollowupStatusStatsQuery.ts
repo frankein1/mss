@@ -1,5 +1,4 @@
-import { SocialSupportType } from '@prisma/client'
-import { prepareSocialSupportStatFilters } from '../helpers'
+import { prepareFollowupStatFilters } from '../helpers'
 import { SocialSupportConstraints, SocialSupportRepo } from '~/server/database'
 import { StatFilterInput } from '~/server/schema'
 import { SecurityRuleGrantee } from '~/server/security/rules/types'
@@ -9,12 +8,7 @@ export async function getFollowupStatusStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const where = {
-    where: {
-      ...prepareSocialSupportStatFilters(input),
-      socialSupportType: SocialSupportType.Followup
-    }
-  }
+  const where = { where: { ...prepareFollowupStatFilters(input) } }
   appendConstraints(user, where, SocialSupportConstraints.get)
 
   return await SocialSupportRepo.prisma.groupBy({

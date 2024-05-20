@@ -103,5 +103,8 @@ export const statRouter = router({
     .query(routes.exportFollowupStatsQuery.execute),
   getHelpRequestBeneficiaryNumber: protectedProcedure
     .input(routes.getHelpRequestBeneficiaryNumberQ.inputValidation)
-    .query(routes.getHelpRequestBeneficiaryNumberQ.execute)
+    .query(routes.getHelpRequestBeneficiaryNumberQ.execute),
+  getFollowupBeneficiaryNumber: protectedProcedure
+    .input(routes.getFollowupBeneficiaryNumberQ.inputValidation)
+    .query(routes.getFollowupBeneficiaryNumberQ.execute)
 })

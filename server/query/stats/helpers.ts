@@ -1,4 +1,4 @@
-import { FileInstructionType, Prisma } from '@prisma/client'
+import { FileInstructionType, SocialSupportType, Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
 import { STATS_NULL_LABEL } from '~/client/options'
 import { StatFilterInput } from '~/server/schema'
@@ -110,6 +110,15 @@ export function prepareHelpRequestStatFilters(
   }
 
   return socialSupport
+}
+
+export function prepareFollowupStatFilters(
+  filters: StatFilterInput
+): Prisma.SocialSupportWhereInput {
+  return {
+    ...prepareSocialSupportStatFilters(filters),
+    socialSupportType: SocialSupportType.Followup
+  }
 }
 
 export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
