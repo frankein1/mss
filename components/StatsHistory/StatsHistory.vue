@@ -198,6 +198,12 @@
             />
           </div>
           <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+            <StatsFollowupBeneficiaryNumber
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
             <StatsFollowupStatus
               :total-count="followupCount"
               :filters="filters"
