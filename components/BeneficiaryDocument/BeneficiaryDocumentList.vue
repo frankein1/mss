@@ -1,5 +1,6 @@
 <template>
-  <div class="feature-section documents-header-section">
+  <BeneficiaryDocumentNotice />
+  <div class="feature-section documents-header-section fr-mt-2w">
     <BeneficiaryDocumentFilters @filter="filters = $event" />
     <BeneficiaryDocumentAddButton
       class="fr-ml-2w"
