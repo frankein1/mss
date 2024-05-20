@@ -72,7 +72,7 @@
     setValues({
       dataInclusionId: structure.id,
       name: structure.name,
-      siret: structure.siret || '',
+      siret: structure.siret || null,
       address: structure.address,
       zipcode: structure.zipcode,
       city: structure.city,
