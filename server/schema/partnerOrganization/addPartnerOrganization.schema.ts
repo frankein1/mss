@@ -32,10 +32,6 @@ export const addCustomPartnerOrganizationSchema = z.object({
   contacts: contactPartnerOrganizationSchema
 })
 
-export type AddCustomPartnerOrganizationInput = z.infer<
-  typeof addCustomPartnerOrganizationSchema
->
-
 export const addDataInclusionPartnerOrganizationSchema =
   addCustomPartnerOrganizationSchema.extend({
     dataInclusionId: requiredStringConstraint,

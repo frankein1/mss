@@ -14,7 +14,8 @@ export const handler = async ({
   const res = await PartnerOrganizationRepo.findMany(ctx.user, {
     where: { siret: input.siret, structureId: ctx.structure.id },
     include: {
-      contacts: true
+      contacts: true,
+      dataInclusionStructure: true
     }
   })
   return res.length ? res[0] : null

@@ -14,7 +14,8 @@ export const handler = async ({
   return await PartnerOrganizationRepo.findUniqueOrThrow(user, {
     where: { id: input.id },
     include: {
-      contacts: true
+      contacts: true,
+      dataInclusionStructure: true
     }
   })
 }
