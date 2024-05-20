@@ -73,12 +73,6 @@
           class="fr-mx-auto"
         />
         <template v-else-if="helpRequestCount">
-          <AtomNotice class="fr-mb-3w">
-            Les instructions de dossiers de demande de logement réalisées avant
-            le 15 février 2024 sont comptabilisées dans la thématique "Autre".
-            <NuxtLink :to="`mailto:${supportEmail}`">Contactez-nous</NuxtLink>
-            si vous rencontrez des difficultés.
-          </AtomNotice>
           <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
             <div
               v-if="!filters.helpRequestSubject"
@@ -225,13 +219,6 @@
   import { getExportFilename } from '~/utils/export/getExportFilename'
 
   const trpcClient = useTrpcClient()
-
-  const {
-    public: {
-      email: { from: supportEmail }
-    }
-  } = useRuntimeConfig()
-
   const { application } = usePermissions()
 
   withDefaults(
