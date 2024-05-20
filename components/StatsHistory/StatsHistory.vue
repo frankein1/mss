@@ -99,6 +99,12 @@
               />
             </div>
             <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+              <StatsHelpRequestBeneficiaryNumber
+                :total-count="helpRequestCount"
+                :filters="filters"
+              />
+            </div>
+            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
               <StatsHelpRequestStatus
                 :total-count="helpRequestCount"
                 :filters="filters"
