@@ -8,7 +8,7 @@
     @submit.prevent="onSubmit"
   >
     <BeneficiaryEditFormNavigation
-      class="beneficiaryformlayout__navigation fr-col-3"
+      class="content beneficiaryformlayout__navigation fr-col-3"
       :permissions="permissions"
       :current-route="currentRoute"
       :beneficiary-id="beneficiaryIdentification.id"
@@ -20,7 +20,7 @@
     />
     <main
       ref="beneficiaryFormLayoutMainContainer"
-      class="beneficiaryformlayout__main fr-col-9 fr-container"
+      class="content fr-col-9 fr-container"
     >
       <DsfrBreadcrumb :links="breadcrumbLinks" />
       <PageTitle
@@ -183,15 +183,6 @@
 </script>
 
 <style lang="scss" scoped>
-  $navbar-height: 3.5rem;
-  $actions-bar-height: 5.5625rem;
-
-  .beneficiaryformlayout__navigation,
-  .beneficiaryformlayout__main {
-    height: calc(100vh - #{$navbar-height} - #{$actions-bar-height});
-    overflow: scroll;
-  }
-
   .beneficiaryformlayout__navigation {
     border-right: 1px solid var(--border-default-grey);
   }

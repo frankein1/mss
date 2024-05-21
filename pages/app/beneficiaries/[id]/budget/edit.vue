@@ -150,14 +150,3 @@
     navigateTo(budgetTabRoute)
   }
 </script>
-
-<style scoped lang="scss">
-  @use '~/assets/style/variables' as *;
-
-  $actions-bar-height: 6.0625rem;
-
-  .content {
-    height: calc(100vh - #{$actions-bar-height} - #{$top-bar-height});
-    overflow-y: auto;
-  }
-</style>

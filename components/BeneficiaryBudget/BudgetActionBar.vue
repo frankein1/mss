@@ -1,5 +1,5 @@
 <template>
-  <div class="actions-bar bg-color-white">
+  <AtomActionsBar>
     <BudgetActions
       :is-submitting="isSubmitting"
       :cancel-label="cancelLabel"
@@ -8,7 +8,7 @@
       :confirm-secondary-label="confirmSecondaryLabel"
       @cancel="$emit('cancel')"
     />
-  </div>
+  </AtomActionsBar>
 </template>
 
 <script setup lang="ts">
@@ -32,14 +32,3 @@
     cancel: []
   }>()
 </script>
-
-<style scoped lang="scss">
-  .actions-bar {
-    border-top: 1px solid var(--background-default-grey);
-    padding: 1.5rem 2rem;
-  }
-
-  // .fr-btns-group .fr-btn {
-  //   margin-bottom: 0;
-  // }
-</style>
