@@ -1,5 +1,5 @@
 import {
-  prepareSocialSupportStatFilters,
+  prepareFollowupStatFilters,
   preparePrescribingOrganizationStats
 } from '../helpers'
 import { SocialSupportRepo } from '~/server/database'
@@ -10,13 +10,8 @@ export async function getFollowupPrescribingOrganizationStatsQuery(
   user: SecurityRuleGrantee,
   input: StatFilterInput
 ) {
-  const preparedFilters = prepareSocialSupportStatFilters(input)
-
   const socialSupports = await SocialSupportRepo.findMany(user, {
-    where: {
-      socialSupportType: 'Followup',
-      ...preparedFilters
-    },
+    where: { ...prepareFollowupStatFilters(input) },
     select: {
       followup: {
         select: {

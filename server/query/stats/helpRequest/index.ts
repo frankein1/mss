@@ -7,3 +7,4 @@ export { getHelpRequestInstructorOrganizationStatsQuery } from './getHelpRequest
 export { getHelpRequestFinancialStatsQuery } from './getHelpRequestFinancialStatsQuery'
 export { getFileInstructionTypeStatsQuery } from './getFileInstructionTypeStatsQuery'
 export { getHelpRequestHousingStatsQuery } from './getHelpRequestHousingStatsQuery'
+export { getHelpRequestBeneficiaryNumberQuery } from './getHelpRequestBeneficiaryNumberQuery'
