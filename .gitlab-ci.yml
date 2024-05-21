@@ -100,7 +100,6 @@ deploy:scalingo-demo:
   stage: deploy
   extends:
     - .scalingo
-  when: manual
   only:
     - tags
   script:
