@@ -47,6 +47,11 @@ body,
   height: 100%;
 }
 
+nav.content, main.content {
+  height: calc(100vh - #{$actions-bar-height} - #{$top-bar-height});
+  overflow-y: auto;
+}
+
 .main-container {
   background-color: #fff;
   border-radius: 1rem;
@@ -137,6 +142,10 @@ body,
   .fr-container {
     padding: 0;
   }
+
+  &.fr-accordion {
+    padding: 0;
+  }
 }
 
 @keyframes rotation {
@@ -224,6 +233,10 @@ select:focus:not(:focus-visible) {
   @include dsfr-media-query.respond-from('lg') {
     padding-inline: 1rem;
   }
+}
+
+.fr-accordion::before {
+  box-shadow: none;
 }
 
 .fr-accordion__btn::after {

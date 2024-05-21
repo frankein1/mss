@@ -4,12 +4,12 @@
     novalidate
     @submit.prevent="onSubmit"
   >
-    <main class="fr-container content">
+    <main class="fr-container content fr-pb-5w">
       <DsfrBreadcrumb :links="Breadcrumb.AppStructureSubjects()" />
 
       <PageTitle :title="title" />
 
-      <AtomCallout>
+      <AtomCallout class="fr-mb-5w">
         <div class="note">
           <p class="fr-callout__text">
             Choisissez des objets qui correspondent au mieux au fonctionnement
@@ -41,7 +41,7 @@
 
       <div v-else-if="data">
         <div class="fr-accordions-group">
-          <section class="feature-section fr-accordion">
+          <section class="feature-section fr-accordion fr-mb-1w">
             <h3 class="fr-accordion__title">
               <button
                 class="fr-accordion__btn fr-h4"
@@ -82,8 +82,10 @@
         </div>
       </div>
     </main>
-    <div class="actions-bar">
-      <ul class="fr-btns-group fr-btns-group--inline-md fr-btns-group--right">
+    <AtomActionsBar>
+      <ul
+        class="fr-btns-group fr-btns-group--lg fr-btns-group--inline-md fr-btns-group--right"
+      >
         <li>
           <button
             class="fr-btn fr-btn--secondary"
@@ -104,7 +106,7 @@
           </button>
         </li>
       </ul>
-    </div>
+    </AtomActionsBar>
   </form>
 </template>
 
@@ -197,15 +199,7 @@
     gap: 1rem;
   }
 
-  $actions-bar-height: 9rem;
-
-  .content {
-    height: calc(100vh - #{$actions-bar-height});
-    overflow: scroll;
-  }
-
-  .actions-bar {
-    background-color: white;
-    padding: 1rem;
+  .fr-accordion__btn {
+    padding: 2rem 2.5rem;
   }
 </style>

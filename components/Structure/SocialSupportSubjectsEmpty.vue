@@ -1,5 +1,5 @@
 <template>
-  <div class="sss-list-empty___container">
+  <div class="sss-list-empty__container">
     <img
       src="~/assets/img/empty-social-subject-list.svg"
       class="fr-responsive-img"
@@ -11,14 +11,14 @@
 
 <style scoped lang="scss">
   .sss-list-empty__container {
-    padding: 4rem;
+    padding: 1rem 0;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
 
     > .fr-responsive-img {
-      margin-bottom: 1rem;
+      margin-bottom: 1.5rem;
       max-width: 15rem;
     }
 
