@@ -6,4 +6,6 @@ coverage
 .stylelintcache
 .env
 .env.prod
+.env.dev
+.env.demo
 .env.build
