@@ -80,12 +80,12 @@ variables:
       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG-migrations
         DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
 
-# docker:kaniko:build:production:
-#   parallel:
-#     matrix:
-#       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
-#       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
-#         DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
+docker:kaniko:build:production:
+  parallel:
+    matrix:
+      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
+      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
+        DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
 
 deploy:scalingo-dev:
   stage: deploy
@@ -102,7 +102,7 @@ deploy:scalingo-demo:
     - .scalingo
   only:
     - tags
-  scsript:
+  script:
     - git push scalingo-demo $CI_COMMIT_BRANCH:main -f
 
 deploy:scalingo-prod:
@@ -110,7 +110,8 @@ deploy:scalingo-prod:
   extends:
     - .scalingo
   when: manual
+  needs: ["deploy:scalingo-demo"]
   only:
     - tags
-  scsript:
+  script:
     - git push scalingo-prod $CI_COMMIT_BRANCH:main -f
