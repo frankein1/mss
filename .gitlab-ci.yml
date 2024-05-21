@@ -45,6 +45,7 @@ variables:
     - git config user.name $GIT_USER_NAME
     - git config user.email $GIT_USER_EMAIL
     - git remote add scalingo-dev $SCALINGO_GIT_REMOTE_DEV || true
+    - git remote add scalingo-demo $SCALINGO_GIT_REMOTE_DEMO || true
     - git fetch origin $CI_COMMIT_BRANCH --unshallow
     - git checkout $CI_COMMIT_BRANCH
 
@@ -85,19 +86,6 @@ docker:kaniko:build:production:
       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
         DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
 
-deploy:demo:
-  extends:
-    - deploy:production
-  environment:
-    name: demo
-    on_stop: deploy:demo:uninstall
-deploy:demo:uninstall:
-  extends:
-    - deploy:production:uninstall
-  environment:
-    name: demo
-
-
 deploy:scalingo-dev:
   stage: deploy
   extends:
@@ -106,3 +94,11 @@ deploy:scalingo-dev:
     - main
   script:
     - git push scalingo-dev $CI_COMMIT_BRANCH:main -f
+
+deploy:scalingo-demo:
+  stage: deploy
+  extends:
+    - .scalingo
+  when: manual
+  script:
+    - git push scalingo-demo $CI_COMMIT_BRANCH:main -f
