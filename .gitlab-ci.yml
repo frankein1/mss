@@ -22,7 +22,7 @@ include:
 
       # deploy
       # - /helm.development.auto.yml
-      - /helm.production.auto.yml
+      # - /helm.production.auto.yml
 
 variables:
   HELM_CHART: nodejs
@@ -46,6 +46,7 @@ variables:
     - git config user.email $GIT_USER_EMAIL
     - git remote add scalingo-dev $SCALINGO_GIT_REMOTE_DEV || true
     - git remote add scalingo-demo $SCALINGO_GIT_REMOTE_DEMO || true
+    - git remote add scalingo-demo $SCALINGO_GIT_REMOTE_PROD || true
     - git fetch origin $CI_COMMIT_BRANCH --unshallow
     - git checkout $CI_COMMIT_BRANCH
 
@@ -53,20 +54,20 @@ variables:
   image:
     name: registry.gitlab.com/vigigloo/tools/pnpm:node-18_pnpm-8.6.2
 
-.vigigloo:helm:deploy:
-  variables:
-    HELM_UPGRADE_EXTRA_ARGS: >-
-      --set "jobs.hooks.postInstall[0].image.repository=${CI_APPLICATION_REPOSITORY}-migrations"
-      --set "jobs.hooks.postInstall[0].image.tag=${CI_APPLICATION_TAG}"
-      --set "jobs.hooks.preUpgrade[0].image.repository=${CI_APPLICATION_REPOSITORY}-migrations"
-      --set "jobs.hooks.preUpgrade[0].image.tag=${CI_APPLICATION_TAG}"
-deploy:production:
-  variables:
-    HELM_UPGRADE_EXTRA_ARGS: >-
-      --set "jobs.hooks.postInstall[0].image.repository=${CI_APPLICATION_REPOSITORY}/migrations"
-      --set "jobs.hooks.postInstall[0].image.tag=${CI_APPLICATION_TAG}"
-      --set "jobs.hooks.preUpgrade[0].image.repository=${CI_APPLICATION_REPOSITORY}/migrations"
-      --set "jobs.hooks.preUpgrade[0].image.tag=${CI_APPLICATION_TAG}"
+# .vigigloo:helm:deploy:
+#   variables:
+#     HELM_UPGRADE_EXTRA_ARGS: >-
+#       --set "jobs.hooks.postInstall[0].image.repository=${CI_APPLICATION_REPOSITORY}-migrations"
+#       --set "jobs.hooks.postInstall[0].image.tag=${CI_APPLICATION_TAG}"
+#       --set "jobs.hooks.preUpgrade[0].image.repository=${CI_APPLICATION_REPOSITORY}-migrations"
+#       --set "jobs.hooks.preUpgrade[0].image.tag=${CI_APPLICATION_TAG}"
+# deploy:production:
+#   variables:
+#     HELM_UPGRADE_EXTRA_ARGS: >-
+#       --set "jobs.hooks.postInstall[0].image.repository=${CI_APPLICATION_REPOSITORY}/migrations"
+#       --set "jobs.hooks.postInstall[0].image.tag=${CI_APPLICATION_TAG}"
+#       --set "jobs.hooks.preUpgrade[0].image.repository=${CI_APPLICATION_REPOSITORY}/migrations"
+#       --set "jobs.hooks.preUpgrade[0].image.tag=${CI_APPLICATION_TAG}"
 
 .vigigloo:docker:kaniko:build:
   variables:
@@ -79,12 +80,12 @@ deploy:production:
       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG-migrations
         DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
 
-docker:kaniko:build:production:
-  parallel:
-    matrix:
-      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
-      - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
-        DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
+# docker:kaniko:build:production:
+#   parallel:
+#     matrix:
+#       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
+#       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
+#         DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
 
 deploy:scalingo-dev:
   stage: deploy
@@ -99,6 +100,17 @@ deploy:scalingo-demo:
   stage: deploy
   extends:
     - .scalingo
-  when: manual
-  script:
+  only:
+    - tags
+  scsript:
     - git push scalingo-demo $CI_COMMIT_BRANCH:main -f
+
+deploy:scalingo-prod:
+  stage: deploy
+  extends:
+    - .scalingo
+  when: manual
+  only:
+    - tags
+  scsript:
+    - git push scalingo-prod $CI_COMMIT_BRANCH:main -f
