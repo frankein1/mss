@@ -48,7 +48,6 @@ variables:
     - git remote add scalingo-demo $SCALINGO_GIT_REMOTE_DEMO || true
     - git remote add scalingo-prod $SCALINGO_GIT_REMOTE_PROD || true
     - git fetch origin $CI_COMMIT_BRANCH --unshallow
-    - git checkout $CI_COMMIT_BRANCH
 
 .vigigloo:pnpm:install:
   image:
@@ -94,6 +93,7 @@ deploy:scalingo-dev:
   only:
     - main
   script:
+    - git checkout $CI_COMMIT_BRANCH
     - git push scalingo-dev $CI_COMMIT_BRANCH:main -f
 
 deploy:scalingo-demo:
@@ -102,17 +102,19 @@ deploy:scalingo-demo:
     - .scalingo
   when: manual
   only:
-    - main
+    - tags
   script:
-    - git push scalingo-demo $CI_COMMIT_BRANCH:main -f
+    - git checkout tags/$CI_COMMIT_TAG latest
+    - git push scalingo-demo latest:main -f
 
 deploy:scalingo-prod:
   stage: deploy
   extends:
     - .scalingo
   when: manual
-  needs: ["deploy:scalingo-demo"]
+  needs: ['deploy:scalingo-demo']
   only:
     - tags
   script:
-    - git push scalingo-prod $CI_COMMIT_BRANCH:main -f
+    - git checkout tags/$CI_COMMIT_TAG latest
+    - git push scalingo-prod latest:main -f
