@@ -100,8 +100,9 @@ deploy:scalingo-demo:
   stage: deploy
   extends:
     - .scalingo
+  when: manual
   only:
-    - tags
+    - main
   script:
     - git push scalingo-demo $CI_COMMIT_BRANCH:main -f
 
