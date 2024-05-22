@@ -28,6 +28,13 @@ export const budgetExpensesKeys = buildKeys({
   loans: 'Crédit(s)'
 })
 
+export const budgetLoansKeys = buildKeys({
+  type: 'Type de crédit',
+  amountTotal: 'Montant total',
+  amountPerMonth: 'Montant mensuel',
+  dueDate: 'Echéance du crédit'
+})
+
 export const budgetIncomeKeys = buildKeys({
   // Travail
   salary: 'Salaire',
