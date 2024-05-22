@@ -168,7 +168,7 @@
 
   const total = computed(() => {
     return Object.entries(expensesValues).reduce<number | null>((acc, cur) => {
-      if (cur[1] === null || cur[0] === 'id') {
+      if (cur[1] === null || cur[0] === 'id' || typeof cur[0] === 'object') {
         return acc
       }
 

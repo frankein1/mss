@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { amountNumber, requiredStringConstraint, dateOrEmpty } from '.'
+import { amountNumber, stringConstraint, dateOrEmpty } from '.'
 
 export const getBudgetSchema = z.object({
   beneficiaryId: z.string().uuid()
@@ -42,12 +42,12 @@ export const updateBudgetExpensesSchema = z.object({
 
   // Crédits et dettes
   debts: amountNumber.nullish(),
-  // loans: amountNumber.nullish()
+  loans: amountNumber.nullish(),
 
   loansDetails: z.array(
     z.object({
       id: z.string().uuid(),
-      type: requiredStringConstraint,
+      type: stringConstraint.nullish(),
       amountTotal: amountNumber.nullish(),
       amountPerMonth: amountNumber.nullish(),
       dueDate: dateOrEmpty
