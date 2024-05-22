@@ -1333,7 +1333,21 @@ model BudgetExpenses {
   budgetId String @unique @map("budget_id") @db.Uuid
   budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 
+  loansDetails BudgetExpensesLoans[]
+
   @@map("budget_expenses")
+}
+
+model BudgetExpensesLoans {
+  id String @id @default(uuid()) @db.Uuid
+
+  type           String?
+  amountTotal    Decimal?  @map("amount_total")
+  amountPerMonth Decimal?  @map("amount_per_month")
+  dueDate        DateTime? @map("due_date")
+
+  expensesId String         @map("expenses_id") @db.Uuid
+  expenses   BudgetExpenses @relation(fields: [expensesId], references: [id], onDelete: Cascade)
 }
 
 model Budget {

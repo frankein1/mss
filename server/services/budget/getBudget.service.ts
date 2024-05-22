@@ -11,7 +11,11 @@ export async function getBudget({
   const budget = await BudgetRepo.findUniqueOrThrow(ctx.user, {
     where: { beneficiaryId },
     include: {
-      expenses: true,
+      expenses: {
+        include: {
+          loansDetails: true
+        }
+      },
       incomes: {
         include: {
           householdMember: true
