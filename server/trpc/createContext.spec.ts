@@ -6,6 +6,16 @@ import { createContext } from './createContext'
 import { JwtUser } from '~/types/user'
 import { fixturesUsers } from '~/prisma/fixtures'
 
+/** Nuxt composables are mocked */
+const mockedRuntimeConfig = {
+  auth: { jwtKey: 'secretJWT' },
+  public: {
+    auth: { cookieKey: 'session_token', tokenValidationInMinutes: 30 },
+    cguVersion: '1.0'
+  }
+}
+vi.stubGlobal('useRuntimeConfig', () => mockedRuntimeConfig)
+
 let app: App
 let request: Agent
 
@@ -22,19 +32,6 @@ beforeEach(() => {
     defineEventHandler(async event => await createContext(event))
   )
 })
-
-/** Nuxt composables are mocked */
-const mocks = vi.hoisted(() => ({ useRuntimeConfig: vi.fn() }))
-vi.mock('#imports', () => ({ useRuntimeConfig: mocks.useRuntimeConfig }))
-
-const mockedRuntimeConfig = {
-  auth: { jwtKey: 'secretJWT' },
-  public: {
-    auth: { cookieKey: 'session_token', tokenValidationInMinutes: 30 },
-    cguVersion: '1.0'
-  }
-}
-mocks.useRuntimeConfig.mockReturnValue(mockedRuntimeConfig)
 
 const jwtUser: JwtUser = {
   ...fixturesUsers[3],
