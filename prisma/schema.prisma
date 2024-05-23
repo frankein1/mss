@@ -1328,12 +1328,11 @@ model BudgetExpenses {
 
   // Crédits et dettes
   debts Decimal?
-  loans Decimal?
 
   budgetId String @unique @map("budget_id") @db.Uuid
   budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 
-  loansDetails BudgetExpensesLoans[]
+  loans BudgetExpensesLoans[]
 
   @@map("budget_expenses")
 }
@@ -1348,6 +1347,8 @@ model BudgetExpensesLoans {
 
   expensesId String         @map("expenses_id") @db.Uuid
   expenses   BudgetExpenses @relation(fields: [expensesId], references: [id], onDelete: Cascade)
+
+  @@map("budget_expenses_loans")
 }
 
 model Budget {
