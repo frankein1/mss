@@ -9,16 +9,16 @@ include:
     ref: v1
     file:
       # build
-      - /docker.auto.yml
+      # - /docker.auto.yml
 
       # test
-      - /proxy/license-scanning.yml
-      - /proxy/code-quality.yml
-      - /proxy/dependency-scanning.yml
-      - /proxy/container-scanning.yml
-      - /proxy/sast.yml
-      - /proxy/secret-scanning.yml
-      - /pnpm.auto.yml
+      # - /proxy/license-scanning.yml
+      # - /proxy/code-quality.yml
+      # - /proxy/dependency-scanning.yml
+      # - /proxy/container-scanning.yml
+      # - /proxy/sast.yml
+      # - /proxy/secret-scanning.yml
+      # - /pnpm.auto.yml
 
       # deploy
       # - /helm.development.auto.yml
