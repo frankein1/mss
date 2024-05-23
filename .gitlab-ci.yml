@@ -9,16 +9,16 @@ include:
     ref: v1
     file:
       # build
-      # - /docker.auto.yml
+      - /docker.auto.yml
 
       # test
-      # - /proxy/license-scanning.yml
-      # - /proxy/code-quality.yml
-      # - /proxy/dependency-scanning.yml
-      # - /proxy/container-scanning.yml
-      # - /proxy/sast.yml
-      # - /proxy/secret-scanning.yml
-      # - /pnpm.auto.yml
+      - /proxy/license-scanning.yml
+      - /proxy/code-quality.yml
+      - /proxy/dependency-scanning.yml
+      - /proxy/container-scanning.yml
+      - /proxy/sast.yml
+      - /proxy/secret-scanning.yml
+      - /pnpm.auto.yml
 
       # deploy
       # - /helm.development.auto.yml
@@ -34,10 +34,13 @@ variables:
 
 # prepare git env to push new code to scalingo
 .scalingo:
-  image: alpine:latest
+  image: ubuntu:latest
   before_script:
+    - apt-get update
+    - apt-get -y install bash curl git openssh-client
+    - curl -O https://cli-dl.scalingo.com/install && bash install
+    - scalingo login --api-token $SCALINGO_API_TOKEN
     - mkdir ~/.ssh
-    - apk add --update git openssh-client
     - eval $(ssh-agent -s)
     - echo "$SCALINGO_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
     - ssh-keyscan $SCALINGO_SSH_HOST $SCALINGO_SSH_HOST_SECNUMCLOUD >> ~/.ssh/known_hosts
@@ -91,10 +94,12 @@ deploy:scalingo-dev:
   stage: deploy
   extends:
     - .scalingo
-  only:
-    - main
+  # only:
+  #   - main
   script:
     - git checkout $CI_COMMIT_BRANCH
+    - scalingo --app anct-monsuivisocial-dev env-set "NUXT_PUBLIC_VERSION_COMMIT_SHA=$CI_COMMIT_SHA"
+    - scalingo --app anct-monsuivisocial-dev env-set "NUXT_PUBLIC_VERSION_CI_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
     - git push scalingo-dev $CI_COMMIT_BRANCH:main -f
 
 deploy:scalingo-demo:
@@ -105,6 +110,8 @@ deploy:scalingo-demo:
     - tags
   script:
     - git checkout tags/$CI_COMMIT_TAG -b latest
+    - scalingo --region osc-secnum-fr1 --app anct-monsuivisocial-demo env-set "NUXT_PUBLIC_VERSION_COMMIT_TAG=$CI_COMMIT_TAG"
+    - scalingo --region osc-secnum-fr1 --app anct-monsuivisocial-demo env-set "NUXT_PUBLIC_VERSION_CI_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
     - git push scalingo-demo latest:main -f
 
 deploy:scalingo-prod:
@@ -117,4 +124,6 @@ deploy:scalingo-prod:
     - tags
   script:
     - git checkout tags/$CI_COMMIT_TAG -b latest
+    - scalingo --region osc-secnum-fr1 --app anct-monsuivisocial-prod env-set "NUXT_PUBLIC_VERSION_COMMIT_TAG=$CI_COMMIT_TAG"
+    - scalingo --region osc-secnum-fr1 --app anct-monsuivisocial-prod env-set "NUXT_PUBLIC_VERSION_CI_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
     - git push scalingo-prod latest:main -f
