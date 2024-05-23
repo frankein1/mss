@@ -8,5 +8,8 @@ export async function getExpenses({
   ctx: SecurityRuleContext
   id: string
 }) {
-  return await BudgetExpensesRepo.findUniqueOrThrow(ctx.user, { where: { id } })
+  return await BudgetExpensesRepo.findUniqueOrThrow(ctx.user, {
+    where: { id },
+    include: { loans: true }
+  })
 }

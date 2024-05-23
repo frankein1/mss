@@ -11,7 +11,7 @@ async function getExpensesWithLoansAndDebts(
     where: { id },
     select: {
       id: true,
-      loansDetails: { select: { id: true } }
+      loans: { select: { id: true } }
     }
   })
 }
@@ -23,9 +23,9 @@ export async function updateExpenses({
   ctx: SecurityRuleContext
   input: UpdateBudgetExpensesInput
 }) {
-  const { loansDetails, ...data } = input
+  const { loans, ...data } = input
 
-  const { loansDetails: previousLoansIds } = await getExpensesWithLoansAndDebts(
+  const { loans: previousLoansIds } = await getExpensesWithLoansAndDebts(
     user,
     input.id
   )
@@ -34,7 +34,7 @@ export async function updateExpenses({
     where: { id: input.id },
     data: {
       ...data,
-      loansDetails: prepareRelationUpdates(loansDetails, previousLoansIds)
+      loans: prepareRelationUpdates(loans, previousLoansIds)
     },
     select: { id: true }
   })

@@ -1,8 +1,8 @@
 <template>
   <section class="fr-grid-row fr-grid-row--gutters">
     <div class="fr-col-11">
-      <VeeCurrencyInput
-        :name="`loansDetails[${index}].type`"
+      <VeeInput
+        :name="`loans[${index}].type`"
         :label="budgetLoansKeys.byKey.type"
       />
     </div>
@@ -21,7 +21,7 @@
 
     <div class="fr-col-4">
       <VeeInput
-        :name="`loansDetails[${index}].dueDate`"
+        :name="`loans[${index}].dueDate`"
         :label="budgetLoansKeys.byKey.dueDate"
         type="date"
       />
@@ -29,14 +29,14 @@
 
     <div class="fr-col-4">
       <VeeCurrencyInput
-        :name="`loansDetails[${index}].amountTotal`"
+        :name="`loans[${index}].amountTotal`"
         :label="budgetLoansKeys.byKey.amountTotal"
       />
     </div>
 
     <div class="fr-col-4">
       <VeeCurrencyInput
-        :name="`loansDetails[${index}].amountPerMonth`"
+        :name="`loans[${index}].amountPerMonth`"
         :label="budgetLoansKeys.byKey.amountPerMonth"
       />
     </div>
