@@ -146,7 +146,7 @@ export default defineNuxtConfig({
     public: {
       logRequest: (process.env.LOG_REQUEST || 'false') === 'true',
       version: {
-        commitSha: process.env.COMMIT_SHA || '',
+        commitSha: process.env.SOURCE_VERSION || '',
         commitRefName: process.env.COMMIT_REF_NAME || '',
         commitTag: process.env.COMMIT_TAG || ''
       },
