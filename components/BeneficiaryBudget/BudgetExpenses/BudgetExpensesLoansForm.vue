@@ -27,7 +27,9 @@
 
 <script setup lang="ts">
   import { v4 } from 'uuid'
-  const { fields, push, remove } = useFieldArray('loansDetails')
+  import { UpdateLoanInput } from '~/server/schema'
+
+  const { fields, push, remove } = useFieldArray<UpdateLoanInput>('loans')
 </script>
 
 <style scoped>

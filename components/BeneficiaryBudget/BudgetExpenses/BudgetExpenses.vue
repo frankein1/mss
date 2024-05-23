@@ -10,7 +10,7 @@
 
   <section class="card-outline card-outline--rust">
     <div class="budget-expenses-details__title">
-      <h4 class="fr-text--lead fr-m-0">Détails des charges</h4>
+      <h4 class="fr-text--lead fr-m-0">Charges principales</h4>
     </div>
 
     <ul class="list-styled">
@@ -39,11 +39,11 @@
 </template>
 
 <script lang="ts" setup>
+  import { ExpensesKey, BudgetExpenses } from '../types'
   import { RoutePath } from '~/utils/routing'
   import { budgetExpensesKeys } from '~/client/options'
-  import { ExpensesKey, BudgetExpenses } from '~/types/budget'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { expensesHaveBeenFilled } from '~/utils/budget'
+  import { mainExpensesHaveBeenFilled } from '~/utils/budget'
   import { euros } from '~/utils/euros'
 
   const props = defineProps<{
@@ -58,8 +58,8 @@
     )
   )
 
-  const total = computed(() => {
-    if (!expensesHaveBeenFilled(props.expenses)) {
+  const mainExpensesTotal = computed(() => {
+    if (!mainExpensesHaveBeenFilled(props.expenses)) {
       return null
     }
 
@@ -67,6 +67,16 @@
       const expense = prismaDecimalToNumber(props.expenses[cur as ExpensesKey])
       return acc + (expense || 0)
     }, 0)
+  })
+
+  const loansTotal = computed(() => 0)
+
+  const total = computed(() => {
+    if (mainExpensesTotal.value === null && loansTotal.value === null) {
+      return null
+    }
+
+    return (mainExpensesTotal.value || 0) + (loansTotal.value || 0)
   })
 </script>
 

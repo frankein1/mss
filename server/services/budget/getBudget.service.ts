@@ -13,7 +13,7 @@ export async function getBudget({
     include: {
       expenses: {
         include: {
-          loansDetails: true
+          loans: true
         }
       },
       incomes: {

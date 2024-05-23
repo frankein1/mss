@@ -134,7 +134,13 @@
 
       // Crédits et dettes
       debts: prismaDecimalToNumber(expenses.value?.debts),
-      loans: prismaDecimalToNumber(expenses.value?.loans)
+      loans: (expenses.value?.loans || []).map(loan => ({
+        id: loan.id,
+        type: loan.type,
+        amountTotal: prismaDecimalToNumber(loan.amountTotal),
+        amountPerMonth: prismaDecimalToNumber(loan.amountPerMonth),
+        dueDate: loan.dueDate
+      }))
     }
   })
 

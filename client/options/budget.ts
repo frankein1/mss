@@ -24,8 +24,8 @@ export const budgetExpensesKeys = buildKeys({
   other: 'Autres charges et frais divers',
 
   // Crédits et dettes
-  debts: 'Dette(s)',
-  loans: 'Crédit(s)'
+  debts: 'Dette(s)'
+  // loans: 'Crédit(s)'
 })
 
 export const budgetLoansKeys = buildKeys({
