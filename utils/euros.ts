@@ -3,7 +3,7 @@ import type { Prisma } from '@prisma/client'
 export function euros(
   price: Prisma.Decimal | number | string | undefined | null
 ) {
-  if (!price) {
+  if (price !== 0 && !price) {
     return ''
   }
 

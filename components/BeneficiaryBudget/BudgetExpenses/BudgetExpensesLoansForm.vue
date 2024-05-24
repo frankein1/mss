@@ -20,7 +20,9 @@
 
     <section class="subtotal fr-h4 fr-mt-3w">
       <span>Sous-total crédit(s)</span>
-      <span class="primary"> total €</span>
+      <span class="primary euro-symbol">
+        {{ total !== null ? euros(total) : '-' }}
+      </span>
     </section>
   </section>
 </template>
@@ -28,6 +30,8 @@
 <script setup lang="ts">
   import { v4 } from 'uuid'
   import { UpdateLoanInput } from '~/server/schema'
+
+  defineProps<{ total: number | null }>()
 
   const { fields, push, remove } = useFieldArray<UpdateLoanInput>('loans')
 </script>
@@ -42,8 +46,7 @@
 
   .subtotal {
     display: flex;
-    justify-content: space-between;
-    align-content: center;
+    place-content: center space-between;
   }
 
   .primary {
