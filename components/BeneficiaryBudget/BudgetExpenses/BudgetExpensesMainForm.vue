@@ -146,13 +146,17 @@
 
     <section class="subtotal fr-h4 fr-mt-3w">
       <span>Sous-total charges principales</span>
-      <span class="primary"> total €</span>
+      <span class="primary euro-symbol">
+        {{ total !== null ? euros(total) : '-' }}
+      </span>
     </section>
   </section>
 </template>
 
 <script setup lang="ts">
   import { budgetExpensesKeys } from '~/client/options'
+
+  defineProps<{ total: number | null }>()
 </script>
 
 <style scoped>
@@ -165,8 +169,7 @@
 
   .subtotal {
     display: flex;
-    justify-content: space-between;
-    align-content: center;
+    place-content: center space-between;
   }
 
   .primary {

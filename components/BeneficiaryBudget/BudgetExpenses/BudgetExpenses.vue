@@ -65,7 +65,12 @@
     }, 0)
   })
 
-  const loansTotal = computed(() => 0)
+  const loansTotal = computed(() =>
+    props.expenses.loans.reduce((acc, cur) => {
+      const amount = prismaDecimalToNumber(cur.amountPerMonth)
+      return acc + (amount || 0)
+    }, 0)
+  )
 
   const total = computed(() => {
     if (mainExpensesTotal.value === null && loansTotal.value === null) {

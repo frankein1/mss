@@ -39,11 +39,16 @@
               <div class="fr-col-12 budget-card__subcategory fr-mb-1v">
                 <span>{{ item.type }}</span>
                 <span class="budget-card__item__value euro-symbol">
-                  {{ euros(item.amountPerMonth) }}
+                  {{
+                    item.amountPerMonth != null
+                      ? euros(item.amountPerMonth)
+                      : '-'
+                  }}
                 </span>
               </div>
 
               <div
+                v-if="item.amountTotal != null"
                 class="fr-col-12 budget-card__subcategory fr-text--xs fr-mb-1v grey"
               >
                 <span>Montant total</span>
@@ -53,6 +58,7 @@
               </div>
 
               <div
+                v-if="item.dueDate"
                 class="fr-col-12 budget-card__subcategory fr-text--xs fr-mb-1v grey"
               >
                 <span>Echéance</span>

@@ -1,7 +1,11 @@
 <template>
   <div>
-    <BudgetExpensesMainForm />
+    <BudgetExpensesMainForm :total="mainTotal" />
 
-    <BudgetExpensesLoansForm />
+    <BudgetExpensesLoansForm :total="loansTotal" />
   </div>
 </template>
+
+<script setup lang="ts">
+  defineProps<{ mainTotal: number | null; loansTotal: number | null }>()
+</script>
