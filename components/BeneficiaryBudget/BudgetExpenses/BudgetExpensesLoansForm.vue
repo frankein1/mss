@@ -13,7 +13,7 @@
       label="Ajouter un crédit"
       type="button"
       icon="fr-icon-add-line"
-      secondary
+      tertiary
       no-outline
       @click="push({ id: v4() })"
     />
