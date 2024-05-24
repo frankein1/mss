@@ -51,7 +51,10 @@ variables:
     - git fetch origin $CI_COMMIT_BRANCH --unshallow
     - scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_SHA=$CI_COMMIT_SHA"
     - scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
-    - scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_TAG=$CI_COMMIT_TAG"
+    - |
+        if [ !-z $CI_COMMIT_TAG ]
+          then scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_TAG=$CI_COMMIT_TAG"
+        fi
 
 .vigigloo:pnpm:install:
   image:
