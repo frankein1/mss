@@ -47,10 +47,11 @@ variables:
     - chmod 644 ~/.ssh/known_hosts
     - git config user.name $GIT_USER_NAME
     - git config user.email $GIT_USER_EMAIL
-    - git remote add scalingo-dev $SCALINGO_GIT_REMOTE_DEV || true
-    - git remote add scalingo-demo $SCALINGO_GIT_REMOTE_DEMO || true
-    - git remote add scalingo-prod $SCALINGO_GIT_REMOTE_PROD || true
+    - git remote add scalingo $SCALINGO_GIT_REMOTE || true
     - git fetch origin $CI_COMMIT_BRANCH --unshallow
+    - scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_SHA=$CI_COMMIT_SHA"
+    - scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
+    - scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_TAG=$CI_COMMIT_TAG"
 
 .vigigloo:pnpm:install:
   image:
@@ -94,36 +95,36 @@ deploy:scalingo-dev:
   stage: deploy
   extends:
     - .scalingo
-  # only:
-  #   - main
+  environment:
+    name: development
+  only:
+    - main
   script:
     - git checkout $CI_COMMIT_BRANCH
-    - scalingo --app anct-monsuivisocial-dev env-set "NUXT_PUBLIC_VERSION_COMMIT_SHA=$CI_COMMIT_SHA"
-    - scalingo --app anct-monsuivisocial-dev env-set "NUXT_PUBLIC_VERSION_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
-    - git push scalingo-dev $CI_COMMIT_BRANCH:main -f
+    - git push scalingo $CI_COMMIT_BRANCH:main -f
 
 deploy:scalingo-demo:
   stage: deploy
   extends:
     - .scalingo
+  environment:
+    name: demo
   only:
     - tags
   script:
     - git checkout tags/$CI_COMMIT_TAG -b latest
-    - scalingo --region osc-secnum-fr1 --app anct-monsuivisocial-demo env-set "NUXT_PUBLIC_VERSION_COMMIT_TAG=$CI_COMMIT_TAG"
-    - scalingo --region osc-secnum-fr1 --app anct-monsuivisocial-demo env-set "NUXT_PUBLIC_VERSION_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
-    - git push scalingo-demo latest:main -f
+    - git push scalingo latest:main -f
 
 deploy:scalingo-prod:
   stage: deploy
   extends:
     - .scalingo
+  environment:
+    name: production
   when: manual
   needs: ['deploy:scalingo-demo']
   only:
     - tags
   script:
     - git checkout tags/$CI_COMMIT_TAG -b latest
-    - scalingo --region osc-secnum-fr1 --app anct-monsuivisocial-prod env-set "NUXT_PUBLIC_VERSION_COMMIT_TAG=$CI_COMMIT_TAG"
-    - scalingo --region osc-secnum-fr1 --app anct-monsuivisocial-prod env-set "NUXT_PUBLIC_VERSION_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
-    - git push scalingo-prod latest:main -f
+    - git push scalingo latest:main -f
