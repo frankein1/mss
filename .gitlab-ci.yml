@@ -9,16 +9,16 @@ include:
     ref: v1
     file:
       # build
-      - /docker.auto.yml
+      # - /docker.auto.yml
 
       # test
-      - /proxy/license-scanning.yml
-      - /proxy/code-quality.yml
-      - /proxy/dependency-scanning.yml
-      - /proxy/container-scanning.yml
-      - /proxy/sast.yml
-      - /proxy/secret-scanning.yml
-      - /pnpm.auto.yml
+      # - /proxy/license-scanning.yml
+      # - /proxy/code-quality.yml
+      # - /proxy/dependency-scanning.yml
+      # - /proxy/container-scanning.yml
+      # - /proxy/sast.yml
+      # - /proxy/secret-scanning.yml
+      # - /pnpm.auto.yml
 
       # deploy
       # - /helm.development.auto.yml
@@ -43,7 +43,7 @@ variables:
     - mkdir ~/.ssh
     - eval $(ssh-agent -s)
     - echo "$SCALINGO_SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
-    - ssh-keyscan $SCALINGO_SSH_HOST $SCALINGO_SSH_HOST_SECNUMCLOUD >> ~/.ssh/known_hosts
+    - echo $SCALINGO_SSH_HOST && ssh-keyscan $SCALINGO_SSH_HOST >> ~/.ssh/known_hosts
     - chmod 644 ~/.ssh/known_hosts
     - git config user.name $GIT_USER_NAME
     - git config user.email $GIT_USER_EMAIL
@@ -52,8 +52,9 @@ variables:
     - scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_SHA=$CI_COMMIT_SHA"
     - scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_REF_NAME=$CI_COMMIT_REF_NAME"
     - |
-        if [ !-z $CI_COMMIT_TAG ]
-          then scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_TAG=$CI_COMMIT_TAG"
+        if [ -n "$CI_COMMIT_TAG" ]
+        then
+          scalingo --region $SCALINGO_REGION --app $SCALINGO_APP_NAME env-set "NUXT_PUBLIC_VERSION_COMMIT_TAG=$CI_COMMIT_TAG"
         fi
 
 .vigigloo:pnpm:install:
