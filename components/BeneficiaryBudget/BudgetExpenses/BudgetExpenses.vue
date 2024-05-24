@@ -8,34 +8,30 @@
     >
   </div>
 
-  <section class="card-outline card-outline--rust">
-    <div class="budget-expenses-details__title">
-      <h4 class="fr-text--lead fr-m-0">Charges principales</h4>
-    </div>
+  <BudgetCard
+    class="fr-mb-2w"
+    color="rust"
+    title="Charges principales"
+    :total="mainExpensesTotal"
+    :keys="nonZeroExpensesKeys"
+    :label-getter="(key: string) => budgetExpensesKeys.value(key)"
+    :value-getter="(key: string) => expenses[key as ExpensesKey]"
+    :edit-route="
+      RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
+    "
+  />
 
-    <ul class="list-styled">
-      <li
-        v-for="(category, index) in nonZeroExpensesKeys"
-        :key="index"
-      >
-        <span>{{ budgetExpensesKeys.value(category) }}</span>
-        <span class="budget-expenses-details__item__value euro-symbol">{{
-          euros(expenses[category as ExpensesKey])
-        }}</span>
-      </li>
-    </ul>
-
-    <div class="budget-expenses-details__action">
-      <NuxtLink
-        :to="
-          RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
-        "
-        class="fr-btn fr-btn--tertiary-no-outline fr-icon-edit-line"
-        title="Modifier"
-      >
-      </NuxtLink>
-    </div>
-  </section>
+  <BudgetCard
+    class="fr-mb-2w"
+    has-subsections
+    color="rust"
+    title="Crédit(s)"
+    :total="loansTotal"
+    :subsection-items="expenses.loans"
+    :edit-route="
+      RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
+    "
+  />
 </template>
 
 <script lang="ts" setup>
@@ -82,23 +78,4 @@
 
 <style scoped lang="scss">
   @use '~/assets/style/card' as *;
-  @use '~/assets/style/list' as *;
-
-  .budget-expenses-details__title {
-    display: flex;
-    justify-content: space-between;
-  }
-
-  .budget-expenses-details__item__value {
-    font-weight: var(--bold);
-  }
-
-  .budget-expenses-details__action {
-    display: flex;
-    justify-content: flex-end;
-
-    > .fr-btn {
-      color: var(--rust);
-    }
-  }
 </style>
