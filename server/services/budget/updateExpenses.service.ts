@@ -11,7 +11,8 @@ async function getExpensesWithLoansAndDebts(
     where: { id },
     select: {
       id: true,
-      loans: { select: { id: true } }
+      loans: { select: { id: true } },
+      debts: { select: { id: true } }
     }
   })
 }
@@ -23,18 +24,17 @@ export async function updateExpenses({
   ctx: SecurityRuleContext
   input: UpdateBudgetExpensesInput
 }) {
-  const { loans, ...data } = input
+  const { loans, debts, ...data } = input
 
-  const { loans: previousLoansIds } = await getExpensesWithLoansAndDebts(
-    user,
-    input.id
-  )
+  const { loans: previousLoansIds, debts: previousDebtsIds } =
+    await getExpensesWithLoansAndDebts(user, input.id)
 
   return await BudgetExpensesRepo.update(user, {
     where: { id: input.id },
     data: {
       ...data,
-      loans: prepareRelationUpdates(loans, previousLoansIds)
+      loans: prepareRelationUpdates(loans, previousLoansIds),
+      debts: prepareRelationUpdates(debts, previousDebtsIds)
     },
     select: { id: true }
   })

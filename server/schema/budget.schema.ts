@@ -17,7 +17,7 @@ export const updateBudgetInfoSchema = z.object({
 
 export type UpdateBudgetInfoInput = z.infer<typeof updateBudgetInfoSchema>
 
-const updateLoanSchema = z.object({
+const updateLoanOrDebtSchema = z.object({
   id: z.string().uuid(),
   type: stringConstraint.nullish(),
   amountTotal: amountNumber.nullish(),
@@ -25,7 +25,7 @@ const updateLoanSchema = z.object({
   dueDate: dateOrEmpty
 })
 
-export type UpdateLoanInput = z.infer<typeof updateLoanSchema>
+export type UpdateLoanOrDebtInput = z.infer<typeof updateLoanOrDebtSchema>
 
 export const updateBudgetExpensesSchema = z.object({
   id: z.string().uuid(),
@@ -51,8 +51,8 @@ export const updateBudgetExpensesSchema = z.object({
   other: amountNumber.nullish(),
 
   // Crédits et dettes
-  debts: amountNumber.nullish(),
-  loans: z.array(updateLoanSchema)
+  loans: z.array(updateLoanOrDebtSchema),
+  debts: z.array(updateLoanOrDebtSchema)
 })
 
 export type UpdateBudgetExpensesInput = z.infer<

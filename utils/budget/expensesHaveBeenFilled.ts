@@ -8,7 +8,3 @@ export function mainExpensesHaveBeenFilled(expenses: BudgetExpenses) {
     return expensesSource !== null && expensesSource !== undefined
   })
 }
-
-export function loansHaveBeenFilled() {
-  return true
-}

@@ -5,7 +5,10 @@ import type {
   Budget
 } from '@prisma/client'
 
-export type ExpensesKey = keyof Omit<BudgetExpenses, 'id' | 'budgetId'>
+export type ExpensesKey = keyof Omit<
+  BudgetExpenses,
+  'id' | 'budgetId' | 'loans' | 'debts'
+>
 export type IncomeKey = keyof Omit<
   BudgetIncome,
   'id' | 'budgetId' | 'type' | 'householdMemberId'

@@ -32,6 +32,18 @@
       RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
     "
   />
+
+  <BudgetCard
+    class="fr-mb-2w"
+    has-subsections
+    color="rust"
+    title="Dette(s)"
+    :total="debtsTotal"
+    :subsection-items="expenses.debts"
+    :edit-route="
+      RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
+    "
+  />
 </template>
 
 <script lang="ts" setup>
@@ -67,6 +79,13 @@
 
   const loansTotal = computed(() =>
     props.expenses.loans.reduce((acc, cur) => {
+      const amount = prismaDecimalToNumber(cur.amountPerMonth)
+      return acc + (amount || 0)
+    }, 0)
+  )
+
+  const debtsTotal = computed(() =>
+    props.expenses.debts.reduce((acc, cur) => {
       const amount = prismaDecimalToNumber(cur.amountPerMonth)
       return acc + (amount || 0)
     }, 0)

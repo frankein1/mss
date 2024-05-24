@@ -29,21 +29,14 @@
 
 <script setup lang="ts">
   import { v4 } from 'uuid'
-  import { UpdateLoanInput } from '~/server/schema'
+  import { UpdateLoanOrDebtInput } from '~/server/schema'
 
   defineProps<{ total: number | null }>()
 
-  const { fields, push, remove } = useFieldArray<UpdateLoanInput>('loans')
+  const { fields, push, remove } = useFieldArray<UpdateLoanOrDebtInput>('loans')
 </script>
 
 <style scoped>
-  .separator {
-    height: 0.0625rem;
-    background-color: var(--border-default-grey);
-    padding: 0;
-    margin: 2rem 0;
-  }
-
   .subtotal {
     display: flex;
     place-content: center space-between;

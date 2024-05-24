@@ -135,13 +135,6 @@
           :label="budgetExpensesKeys.byKey.other"
         />
       </div>
-
-      <div class="fr-col-6">
-        <VeeCurrencyInput
-          name="debts"
-          :label="budgetExpensesKeys.byKey.debts"
-        />
-      </div>
     </section>
 
     <section class="subtotal fr-h4 fr-mt-3w">
