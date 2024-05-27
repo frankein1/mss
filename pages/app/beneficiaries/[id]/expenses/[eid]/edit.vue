@@ -45,7 +45,11 @@
           message="Les charges mensuelles n'ont pas pu être chargées."
         />
 
-        <BudgetExpensesForm v-else-if="expenses" />
+        <BudgetExpensesForm
+          v-else-if="expenses"
+          :main-total="mainExpensesTotal"
+          :loans-total="loansTotal"
+        />
 
         <section class="expenses__total">
           <h2 class="fr-h4 fr-m-0">Total :</h2>
@@ -74,6 +78,8 @@
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { euros } from '~/utils/euros'
+  import { budgetExpensesKeys } from '~/client/options'
+  import { ExpensesKey } from '~/types/budget'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
@@ -134,7 +140,13 @@
 
       // Crédits et dettes
       debts: prismaDecimalToNumber(expenses.value?.debts),
-      loans: prismaDecimalToNumber(expenses.value?.loans)
+      loans: (expenses.value?.loans || []).map(loan => ({
+        id: loan.id,
+        type: loan.type,
+        amountTotal: prismaDecimalToNumber(loan.amountTotal),
+        amountPerMonth: prismaDecimalToNumber(loan.amountPerMonth),
+        dueDate: loan.dueDate
+      }))
     }
   })
 
@@ -166,16 +178,40 @@
     })
   })
 
-  const total = computed(() => {
-    return Object.entries(expensesValues).reduce<number | null>((acc, cur) => {
-      if (cur[1] === null || cur[0] === 'id') {
+  const mainExpensesTotal = computed(() =>
+    budgetExpensesKeys.keys.reduce<number | null>((acc, cur) => {
+      const value = expensesValues[cur as ExpensesKey]
+      const amount = typeof value === 'string' ? parseFloat(value) : value
+
+      if (amount === null || amount === undefined || isNaN(amount)) {
         return acc
       }
 
-      const expense =
-        typeof cur[1] === 'number' ? cur[1] : parseFloat(cur[1]) || 0
+      const expense = amount || 0
       return acc === null ? expense : acc + expense
     }, null)
+  )
+
+  const loansTotal = computed(() =>
+    expensesValues.loans.reduce<number | null>((acc, cur) => {
+      const value = cur.amountPerMonth
+      const amount = typeof value === 'string' ? parseFloat(value) : value
+
+      if (amount === null || amount === undefined || isNaN(amount)) {
+        return acc
+      }
+
+      const loan = amount || 0
+      return acc === null ? loan : acc + loan
+    }, null)
+  )
+
+  const total = computed(() => {
+    if (mainExpensesTotal.value === null && loansTotal.value === null) {
+      return null
+    }
+
+    return (mainExpensesTotal.value || 0) + (loansTotal.value || 0)
   })
 
   function onCancel() {
