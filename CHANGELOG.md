@@ -4,82 +4,16 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### [1.24.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.24.2...v1.24.3) (2024-05-25)
 
-### [1.24.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.24.0...v1.24.2) (2024-05-24)
-
-
 ### Bug Fixes
 
 * **ui:** uniformisation barre d'action & amélioration UI objets accompagnement ([e097315](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e0973150da79a411d1dff2f7b1c53a5dbb93547a)), closes [#470](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/470)
 
-### [1.24.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.24.0...v1.24.1) (2024-05-21)
-
-## [1.24.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.14...v1.24.0) (2024-05-21)
-
+* **statistiques:** retrait du bandeau d'informations ([4754d3d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4754d3d5fee22e1d882c65f6b53b264cc2574d2d)), closes [#467](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/467)
 
 ### Features
 
 * **data-inclusion:** ajout organisme partenaire depuis Data Inclusion ([b760900](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b760900a8915f1029fe5be84b5fd38c2c6a7c305)), closes [#435](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/435)
 * **documents:** mention de confidentialité des informations des bénéficiaires ([3059176](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/305917690f02466ec962fae3f47b346767e48918)), closes [#464](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/464)
-
-
-### Bug Fixes
-
-* **statistiques:** retrait du bandeau d'informations ([4754d3d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4754d3d5fee22e1d882c65f6b53b264cc2574d2d)), closes [#467](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/467)
-
-## [1.23.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.14...v1.23.0) (2024-05-21)
-
-
-### Features
-
-* **data-inclusion:** ajout organisme partenaire depuis Data Inclusion ([b760900](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b760900a8915f1029fe5be84b5fd38c2c6a7c305)), closes [#435](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/435)
-* **documents:** mention de confidentialité des informations des bénéficiaires ([3059176](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/305917690f02466ec962fae3f47b346767e48918)), closes [#464](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/464)
-
-
-### Bug Fixes
-
-* **statistiques:** retrait du bandeau d'informations ([4754d3d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4754d3d5fee22e1d882c65f6b53b264cc2574d2d)), closes [#467](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/467)
-
-## [1.22.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.14...v1.22.0) (2024-05-21)
-
-
-### Features
-
-* **data-inclusion:** ajout organisme partenaire depuis Data Inclusion ([b760900](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b760900a8915f1029fe5be84b5fd38c2c6a7c305)), closes [#435](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/435)
-* **documents:** mention de confidentialité des informations des bénéficiaires ([3059176](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/305917690f02466ec962fae3f47b346767e48918)), closes [#464](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/464)
-
-
-### Bug Fixes
-
-* **statistiques:** retrait du bandeau d'informations ([4754d3d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4754d3d5fee22e1d882c65f6b53b264cc2574d2d)), closes [#467](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/467)
-
-## [1.21.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.14...v1.21.0) (2024-05-21)
-
-
-### Features
-
-* **data-inclusion:** ajout organisme partenaire depuis Data Inclusion ([b760900](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b760900a8915f1029fe5be84b5fd38c2c6a7c305)), closes [#435](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/435)
-* **documents:** mention de confidentialité des informations des bénéficiaires ([3059176](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/305917690f02466ec962fae3f47b346767e48918)), closes [#464](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/464)
-
-
-### Bug Fixes
-
-* **statistiques:** retrait du bandeau d'informations ([4754d3d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4754d3d5fee22e1d882c65f6b53b264cc2574d2d)), closes [#467](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/467)
-
-### [1.20.14](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.13...v1.20.14) (2024-05-15)
-
-### [1.20.13](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.12...v1.20.13) (2024-05-15)
-
-### [1.20.12](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.11...v1.20.12) (2024-05-14)
-
-### [1.20.11](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.10...v1.20.11) (2024-05-14)
-
-### [1.20.10](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.9...v1.20.10) (2024-05-14)
-
-### [1.20.9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.8...v1.20.9) (2024-05-14)
-
-### [1.20.8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.7...v1.20.8) (2024-05-14)
-
-### [1.20.7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.20.5...v1.20.7) (2024-05-14)
 
 ## [1.20.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.19.1...v1.20.0) (2024-05-14)
 
