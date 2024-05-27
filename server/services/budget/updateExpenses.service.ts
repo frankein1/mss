@@ -17,6 +17,14 @@ async function getExpensesWithLoansAndDebts(
   })
 }
 
+function filterOutEmptyElements(
+  element:
+    | UpdateBudgetExpensesInput['loans'][0]
+    | UpdateBudgetExpensesInput['debts'][0]
+) {
+  return Object.entries(element).some(([key, value]) => key !== 'id' && !!value)
+}
+
 export async function updateExpenses({
   ctx: { user },
   input
@@ -33,8 +41,14 @@ export async function updateExpenses({
     where: { id: input.id },
     data: {
       ...data,
-      loans: prepareRelationUpdates(loans, previousLoansIds),
-      debts: prepareRelationUpdates(debts, previousDebtsIds)
+      loans: prepareRelationUpdates(
+        loans.filter(filterOutEmptyElements),
+        previousLoansIds
+      ),
+      debts: prepareRelationUpdates(
+        debts.filter(filterOutEmptyElements),
+        previousDebtsIds
+      )
     },
     select: { id: true }
   })
