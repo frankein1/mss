@@ -5,11 +5,10 @@ import {
   NotificationRepo,
   SocialSupportRepo
 } from '~/server/database'
-import { useScheduler } from '#scheduler'
 
-export default defineNitroPlugin(() => {
-  startScheduler()
-})
+await createDueInAMonthSocialSupportNotifications()
+await createDueTodaySocialSupportNotifications()
+await createEndOfSupportHelpRequestNotifications()
 
 function socialSupportHasDefinedCreatedBy<
   T extends { createdById: string | null }
@@ -93,16 +92,4 @@ async function createEndOfSupportHelpRequestNotifications() {
   await NotificationRepo.prisma.createMany({
     data: endOfSupportHelpRequestNotifications
   })
-}
-
-function startScheduler() {
-  const scheduler = useScheduler()
-
-  scheduler
-    .run(async () => {
-      await createDueInAMonthSocialSupportNotifications()
-      await createDueTodaySocialSupportNotifications()
-      await createEndOfSupportHelpRequestNotifications()
-    })
-    .dailyAt(1, 0)
 }

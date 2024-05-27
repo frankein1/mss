@@ -16,7 +16,8 @@
     "test": "vitest",
     "postinstall": "prisma generate && nuxt prepare",
     "prisma": "prisma",
-    "release": "standard-version"
+    "release": "standard-version",
+    "task:notification": "pnpm ./tasks/notifications"
   },
   "dependencies": {
     "@gouvfr/dsfr": "~1.11.2",
