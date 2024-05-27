@@ -63,7 +63,7 @@
         <section class="income__total">
           <h2 class="fr-h4 fr-m-0">Total :</h2>
           <span class="fr-h4 fr-m-0 euro-symbol">{{
-            euros(total) || '0'
+            total !== null ? euros(total) : '-'
           }}</span>
         </section>
       </div>
@@ -87,11 +87,13 @@
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import {
     taxHouseHoldRelationshipKeys,
-    incomeSourceKeys
+    incomeSourceKeys,
+    budgetIncomeKeys
   } from '~/client/options'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { incomeHasBeenFilled } from '~/utils/budget'
+  import { incomeHasBeenFilled, incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
+  import { IncomeKey } from '~/types/budget'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
@@ -250,17 +252,12 @@
     })
   })
 
-  const total = computed(() => {
-    return Object.entries(incomeValues).reduce<number | null>((acc, cur) => {
-      if (cur[1] === null || cur[0] === 'id') {
-        return acc
-      }
-
-      const expense =
-        typeof cur[1] === 'number' ? cur[1] : parseFloat(cur[1]) || 0
-      return acc === null ? expense : acc + expense
-    }, null)
-  })
+  const total = computed(() =>
+    budgetIncomeKeys.keys.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, incomeValues[cur as IncomeKey]),
+      null
+    )
+  )
 
   function onCancel() {
     navigateTo(budgetTabRoute)

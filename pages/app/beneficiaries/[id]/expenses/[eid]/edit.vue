@@ -79,6 +79,7 @@
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { euros } from '~/utils/euros'
+  import { incrementBudgetTotal } from '~/utils/budget'
   import { budgetExpensesKeys } from '~/client/options'
   import { ExpensesKey } from '~/types/budget'
 
@@ -186,44 +187,23 @@
   })
 
   const mainExpensesTotal = computed(() =>
-    budgetExpensesKeys.keys.reduce<number | null>((acc, cur) => {
-      const value = expensesValues[cur as ExpensesKey]
-      const amount = typeof value === 'string' ? parseFloat(value) : value
-
-      if (amount === null || amount === undefined || isNaN(amount)) {
-        return acc
-      }
-
-      const expense = amount || 0
-      return acc === null ? expense : acc + expense
-    }, null)
+    budgetExpensesKeys.keys.reduce<number | null>(
+      (acc, cur) =>
+        incrementBudgetTotal(acc, expensesValues[cur as ExpensesKey]),
+      null
+    )
   )
-
-  function incrementTotal(
-    acc: number | null,
-    cur: { amountPerMonth?: number | string | null | undefined }
-  ) {
-    const value = cur.amountPerMonth
-    const amount = typeof value === 'string' ? parseFloat(value) : value
-
-    if (amount === null || amount === undefined || isNaN(amount)) {
-      return acc
-    }
-
-    const res = amount || 0
-    return acc === null ? res : acc + res
-  }
 
   const loansTotal = computed(() =>
     expensesValues.loans.reduce<number | null>(
-      (acc, cur) => incrementTotal(acc, cur),
+      (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
       null
     )
   )
 
   const debtsTotal = computed(() =>
     expensesValues.debts.reduce<number | null>(
-      (acc, cur) => incrementTotal(acc, cur),
+      (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
       null
     )
   )

@@ -70,7 +70,7 @@
   import { IncomeKey, GetBudgetIncomeHouseholdMember } from '~/types/budget'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { BeneficiaryIdentification } from '~/types/beneficiary'
-  import { incomeHasBeenFilled } from '~/utils/budget'
+  import { incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
 
   const props = defineProps<{
@@ -101,28 +101,20 @@
   )
 
   const memberTotalIncomes = computed(() =>
-    props.incomes.map((income, index) => {
-      if (incomeHasBeenFilled(income)) {
-        return nonZeroIncomeKeys.value[index].reduce((acc, cur) => {
-          const memberIncome = prismaDecimalToNumber(income[cur as IncomeKey])
-          return acc + (memberIncome || 0)
-        }, 0)
-      }
-
-      return null
-    })
+    props.incomes.map((income, index) =>
+      nonZeroIncomeKeys.value[index].reduce<number | null>(
+        (acc, cur) => incrementBudgetTotal(acc, income[cur as IncomeKey]),
+        null
+      )
+    )
   )
 
-  const total = computed(() => {
-    if (memberTotalIncomes.value.every(total => total === null)) {
-      return null
-    }
-
-    return memberTotalIncomes.value.reduce(
-      (acc, cur) => (acc !== null && cur !== null ? acc + cur : acc),
-      0
+  const total = computed(() =>
+    memberTotalIncomes.value.reduce(
+      (acc, cur) => incrementBudgetTotal(acc, cur),
+      null
     )
-  })
+  )
 </script>
 
 <style scoped lang="scss">
