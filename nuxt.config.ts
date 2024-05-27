@@ -144,7 +144,6 @@ export default defineNuxtConfig({
       smtpUser: process.env.EMAIL_SMTP_USER || ''
     },
     public: {
-      logRequest: (process.env.LOG_REQUEST || 'false') === 'true',
       version: {
         commitSha: process.env.COMMIT_SHA || '',
         commitRefName: process.env.COMMIT_REF_NAME || '',
