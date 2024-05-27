@@ -6,9 +6,13 @@ import {
   SocialSupportRepo
 } from '~/server/database'
 
+// TASKS
+
 await createDueInAMonthSocialSupportNotifications()
 await createDueTodaySocialSupportNotifications()
 await createEndOfSupportHelpRequestNotifications()
+
+// HELPER
 
 function socialSupportHasDefinedCreatedBy<
   T extends { createdById: string | null }
