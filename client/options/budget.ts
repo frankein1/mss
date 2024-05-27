@@ -21,11 +21,7 @@ export const budgetExpensesKeys = buildKeys({
   carInsurance: 'Assurance voiture',
   schoolFees: 'Frais de garde ou de scolarité',
   schoolCanteen: 'Cantine',
-  other: 'Autres charges et frais divers',
-
-  // Crédits et dettes
-  debts: 'Dette(s)'
-  // loans: 'Crédit(s)'
+  other: 'Autres charges et frais divers'
 })
 
 export const budgetLoansKeys = buildKeys({
@@ -33,6 +29,13 @@ export const budgetLoansKeys = buildKeys({
   amountTotal: 'Montant total',
   amountPerMonth: 'Montant mensuel',
   dueDate: 'Echéance du crédit'
+})
+
+export const budgetDebtsKeys = buildKeys({
+  type: 'Type de dette',
+  amountTotal: 'Montant total',
+  amountPerMonth: 'Montant mensuel',
+  dueDate: 'Echéance de la dette'
 })
 
 export const budgetIncomeKeys = buildKeys({

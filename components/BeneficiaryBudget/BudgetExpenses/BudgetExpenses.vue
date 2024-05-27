@@ -32,6 +32,18 @@
       RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
     "
   />
+
+  <BudgetCard
+    class="fr-mb-2w"
+    has-subsections
+    color="rust"
+    title="Dette(s)"
+    :total="debtsTotal"
+    :subsection-items="expenses.debts"
+    :edit-route="
+      RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
+    "
+  />
 </template>
 
 <script lang="ts" setup>
@@ -39,7 +51,7 @@
   import { RoutePath } from '~/utils/routing'
   import { budgetExpensesKeys } from '~/client/options'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { mainExpensesHaveBeenFilled } from '~/utils/budget'
+  import { incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
 
   const props = defineProps<{
@@ -54,30 +66,42 @@
     )
   )
 
-  const mainExpensesTotal = computed(() => {
-    if (!mainExpensesHaveBeenFilled(props.expenses)) {
-      return null
-    }
-
-    return nonZeroExpensesKeys.value.reduce((acc, cur) => {
-      const expense = prismaDecimalToNumber(props.expenses[cur as ExpensesKey])
-      return acc + (expense || 0)
-    }, 0)
-  })
+  const mainExpensesTotal = computed(() =>
+    nonZeroExpensesKeys.value.reduce<number | null>(
+      (acc, cur) =>
+        incrementBudgetTotal(acc, props.expenses[cur as ExpensesKey]),
+      null
+    )
+  )
 
   const loansTotal = computed(() =>
-    props.expenses.loans.reduce((acc, cur) => {
-      const amount = prismaDecimalToNumber(cur.amountPerMonth)
-      return acc + (amount || 0)
-    }, 0)
+    props.expenses.loans.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
+      null
+    )
+  )
+
+  const debtsTotal = computed(() =>
+    props.expenses.debts.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
+      null
+    )
   )
 
   const total = computed(() => {
-    if (mainExpensesTotal.value === null && loansTotal.value === null) {
+    if (
+      mainExpensesTotal.value === null &&
+      loansTotal.value === null &&
+      debtsTotal.value === null
+    ) {
       return null
     }
 
-    return (mainExpensesTotal.value || 0) + (loansTotal.value || 0)
+    return (
+      (mainExpensesTotal.value || 0) +
+      (loansTotal.value || 0) +
+      (debtsTotal.value || 0)
+    )
   })
 </script>
 

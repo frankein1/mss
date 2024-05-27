@@ -11,9 +11,18 @@ async function getExpensesWithLoansAndDebts(
     where: { id },
     select: {
       id: true,
-      loans: { select: { id: true } }
+      loans: { select: { id: true } },
+      debts: { select: { id: true } }
     }
   })
+}
+
+function filterOutEmptyElements(
+  element:
+    | UpdateBudgetExpensesInput['loans'][0]
+    | UpdateBudgetExpensesInput['debts'][0]
+) {
+  return Object.entries(element).some(([key, value]) => key !== 'id' && !!value)
 }
 
 export async function updateExpenses({
@@ -23,18 +32,23 @@ export async function updateExpenses({
   ctx: SecurityRuleContext
   input: UpdateBudgetExpensesInput
 }) {
-  const { loans, ...data } = input
+  const { loans, debts, ...data } = input
 
-  const { loans: previousLoansIds } = await getExpensesWithLoansAndDebts(
-    user,
-    input.id
-  )
+  const { loans: previousLoansIds, debts: previousDebtsIds } =
+    await getExpensesWithLoansAndDebts(user, input.id)
 
   return await BudgetExpensesRepo.update(user, {
     where: { id: input.id },
     data: {
       ...data,
-      loans: prepareRelationUpdates(loans, previousLoansIds)
+      loans: prepareRelationUpdates(
+        loans.filter(filterOutEmptyElements),
+        previousLoansIds
+      ),
+      debts: prepareRelationUpdates(
+        debts.filter(filterOutEmptyElements),
+        previousDebtsIds
+      )
     },
     select: { id: true }
   })

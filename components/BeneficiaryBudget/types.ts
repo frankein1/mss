@@ -7,7 +7,7 @@ export type BudgetIncome = NonNullable<Budget['incomes']>
 
 export type ExpensesKey = keyof Omit<
   BudgetExpenses,
-  'id' | 'budgetId' | 'loans'
+  'id' | 'budgetId' | 'loans' | 'debts'
 >
 export type IncomeKey = keyof Omit<
   BudgetIncome,

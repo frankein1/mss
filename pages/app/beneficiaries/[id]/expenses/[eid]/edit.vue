@@ -49,6 +49,7 @@
           v-else-if="expenses"
           :main-total="mainExpensesTotal"
           :loans-total="loansTotal"
+          :debts-total="debtsTotal"
         />
 
         <section class="expenses__total">
@@ -78,6 +79,7 @@
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { euros } from '~/utils/euros'
+  import { incrementBudgetTotal } from '~/utils/budget'
   import { budgetExpensesKeys } from '~/client/options'
   import { ExpensesKey } from '~/types/budget'
 
@@ -139,13 +141,19 @@
       other: prismaDecimalToNumber(expenses.value?.other),
 
       // Crédits et dettes
-      debts: prismaDecimalToNumber(expenses.value?.debts),
       loans: (expenses.value?.loans || []).map(loan => ({
         id: loan.id,
         type: loan.type,
         amountTotal: prismaDecimalToNumber(loan.amountTotal),
         amountPerMonth: prismaDecimalToNumber(loan.amountPerMonth),
         dueDate: loan.dueDate
+      })),
+      debts: (expenses.value?.debts || []).map(debt => ({
+        id: debt.id,
+        type: debt.type,
+        amountTotal: prismaDecimalToNumber(debt.amountTotal),
+        amountPerMonth: prismaDecimalToNumber(debt.amountPerMonth),
+        dueDate: debt.dueDate
       }))
     }
   })
@@ -179,39 +187,41 @@
   })
 
   const mainExpensesTotal = computed(() =>
-    budgetExpensesKeys.keys.reduce<number | null>((acc, cur) => {
-      const value = expensesValues[cur as ExpensesKey]
-      const amount = typeof value === 'string' ? parseFloat(value) : value
-
-      if (amount === null || amount === undefined || isNaN(amount)) {
-        return acc
-      }
-
-      const expense = amount || 0
-      return acc === null ? expense : acc + expense
-    }, null)
+    budgetExpensesKeys.keys.reduce<number | null>(
+      (acc, cur) =>
+        incrementBudgetTotal(acc, expensesValues[cur as ExpensesKey]),
+      null
+    )
   )
 
   const loansTotal = computed(() =>
-    expensesValues.loans.reduce<number | null>((acc, cur) => {
-      const value = cur.amountPerMonth
-      const amount = typeof value === 'string' ? parseFloat(value) : value
+    expensesValues.loans.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
+      null
+    )
+  )
 
-      if (amount === null || amount === undefined || isNaN(amount)) {
-        return acc
-      }
-
-      const loan = amount || 0
-      return acc === null ? loan : acc + loan
-    }, null)
+  const debtsTotal = computed(() =>
+    expensesValues.debts.reduce<number | null>(
+      (acc, cur) => incrementBudgetTotal(acc, cur.amountPerMonth),
+      null
+    )
   )
 
   const total = computed(() => {
-    if (mainExpensesTotal.value === null && loansTotal.value === null) {
+    if (
+      mainExpensesTotal.value === null &&
+      loansTotal.value === null &&
+      debtsTotal.value === null
+    ) {
       return null
     }
 
-    return (mainExpensesTotal.value || 0) + (loansTotal.value || 0)
+    return (
+      (mainExpensesTotal.value || 0) +
+      (loansTotal.value || 0) +
+      (debtsTotal.value || 0)
+    )
   })
 
   function onCancel() {

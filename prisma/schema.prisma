@@ -1326,13 +1326,12 @@ model BudgetExpenses {
   schoolCanteen   Decimal? @map("school_canteen")
   other           Decimal?
 
-  // Crédits et dettes
-  debts Decimal?
-
   budgetId String @unique @map("budget_id") @db.Uuid
   budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 
+  // Crédits et dettes
   loans BudgetExpensesLoans[]
+  debts BudgetExpensesDebts[]
 
   @@map("budget_expenses")
 }
@@ -1349,6 +1348,20 @@ model BudgetExpensesLoans {
   expenses   BudgetExpenses @relation(fields: [expensesId], references: [id], onDelete: Cascade)
 
   @@map("budget_expenses_loans")
+}
+
+model BudgetExpensesDebts {
+  id String @id @default(uuid()) @db.Uuid
+
+  type           String?
+  amountTotal    Decimal?  @map("amount_total")
+  amountPerMonth Decimal?  @map("amount_per_month")
+  dueDate        DateTime? @map("due_date")
+
+  expensesId String         @map("expenses_id") @db.Uuid
+  expenses   BudgetExpenses @relation(fields: [expensesId], references: [id], onDelete: Cascade)
+
+  @@map("budget_expenses_debts")
 }
 
 model Budget {
