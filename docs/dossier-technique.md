@@ -18,12 +18,12 @@
 
 > Cette fiche a pour vocation de lister l’ensemble des acteurs du projet ainsi que leur rôle dans la rédaction de ce dossier.
 
-| Organisme                  | Nom                   | Rôle                   | Activité  |
-|----------------------------|-----------------------|------------------------|-----------|
-| Mon Suivi Social           | Thomas Glatt          | Lead tech              | Relecture + Rédaction |
-| Mon Suivi Social           | Nayanka Bolnet        | Lead tech              | Relecture + Rédaction |
-| Mon Suivi Social           | Clara Dumont          | Product Manager        | Relecture |
-| Incubateur des territoires | Florian Busi          | Consultant SSI         | Relecture |
+| Organisme                  | Nom            | Rôle            | Activité              |
+| -------------------------- | -------------- | --------------- | --------------------- |
+| Mon Suivi Social           | Thomas Glatt   | Lead tech       | Relecture + Rédaction |
+| Mon Suivi Social           | Nayanka Bolnet | Lead tech       | Relecture + Rédaction |
+| Mon Suivi Social           | Clara Dumont   | Product Manager | Relecture             |
+| Incubateur des territoires | Florian Busi   | Consultant SSI  | Relecture             |
 
 ## Description du projet
 
@@ -37,12 +37,14 @@ Plus d'infos sur la fiche beta : https://beta.gouv.fr/startups/mon-suivi-social.
 
 Le projet est un monolithe [Nuxt](https://nuxt.com/) avec une base Postgres pour les données métier. L'infrastructure est entièrement gérée par Scalingo en PaaS.
 [Nuxt](https://nuxt.com/) peut fonctionner en mode SSR (Server Side Rendering). C'est à dire que le HTML peut être généré soit du coté du serveur, soit du coté du navigateur. On distinguera donc deux parties:
+
 - Nuxt client: code pouvant être executé coté serveur ou coté navigateur
 - Nuxt server: code s'excutant uniquement coté serveur
 
 Le projet est écrit en [Typescript](https://www.typescriptlang.org/).
 
 Les briques structurantes du projet sont:
+
 - l'ORM [Prisma](https://www.prisma.io/)
 - [trpc](https://trpc.io/) permet de typer les API de bout en bout
 
@@ -50,44 +52,44 @@ Les briques structurantes du projet sont:
 
 #### Applications métier sur Scalingo
 
-| Source           | Destination       | Protocole | Port | Localisation      | Interne/URL Externe |
-|------------------|-------------------|-----------|------|-------------------|---------------------|
-| Navigateur       | Nuxt client       | HTTPS     | 443  | Paris/SecNumCloud | Externe             |
-| Nuxt server      | Postgres Scalingo | TCP       | 5432 | Paris/SecNumCloud | Interne             |
-| Nuxt client      | Metabase          | HTTPS     | 443  | Paris/SecNumCloud | Externe             |
-| Metabase         | Postgres Scalingo | TCP       | 5432 | Paris/SecNumCloud | Interne             |
+| Source      | Destination       | Protocole | Port | Localisation      | Interne/URL Externe |
+| ----------- | ----------------- | --------- | ---- | ----------------- | ------------------- |
+| Navigateur  | Nuxt client       | HTTPS     | 443  | Paris/SecNumCloud | Externe             |
+| Nuxt server | Postgres Scalingo | TCP       | 5432 | Paris/SecNumCloud | Interne             |
+| Nuxt client | Metabase          | HTTPS     | 443  | Paris/SecNumCloud | Externe             |
+| Metabase    | Postgres Scalingo | TCP       | 5432 | Paris/SecNumCloud | Interne             |
 
 #### Tooling (error monitoring)
 
-| Source      | Destination | Protocole | Port | Localisation              | Interne/URL Externe                             |
-|-------------|-------------|-----------|------|---------------------------|-------------------------------------------------|
-| Nuxt client | Sentry      | HTTPS     | 443  | Tours, France             | sentry.incubateur.net                           |
-| Nuxt server | Sentry      | HTTPS     | 443  | Tours, France             | sentry.incubateur.net                           |
-| Nuxt client | Matomo      | HTTPS     | 443  | Tours, France             | https://matomo.incubateur.anct.gouv.fr          |
-
+| Source      | Destination | Protocole | Port | Localisation  | Interne/URL Externe                    |
+| ----------- | ----------- | --------- | ---- | ------------- | -------------------------------------- |
+| Nuxt client | Sentry      | HTTPS     | 443  | Tours, France | sentry.incubateur.net                  |
+| Nuxt server | Sentry      | HTTPS     | 443  | Tours, France | sentry.incubateur.net                  |
+| Nuxt client | Matomo      | HTTPS     | 443  | Tours, France | https://matomo.incubateur.anct.gouv.fr |
 
 #### Services externes
 
-| Source                            | Destination                | Protocole     | Port | Localisation        | Interne/URL Externe                 |
-|-----------------------------------|----------------------------|---------------|------|---------------------|-------------------------------------|
-| Nuxt Server                       | Brevo                      | SMTP          | 587  | Paris, France       | smtp-relay.sendinblue.com           |
+| Source      | Destination | Protocole | Port | Localisation  | Interne/URL Externe       |
+| ----------- | ----------- | --------- | ---- | ------------- | ------------------------- |
+| Nuxt Server | Brevo       | SMTP      | 587  | Paris, France | smtp-relay.sendinblue.com |
 
 Note : l'application expose aussi une API `https://monsuivisocial.incubateur.anct.gouv.fr/api/structures` qui retourne les structures utilisatrices du service. Cette API est protégée par un système de token.
 
 #### Fournisseurs d'identité
 
-| Source     | Destination      | Protocole     | Port | Localisation        | Interne/URL Externe            |
-|------------|------------------|---------------|------|---------------------|--------------------------------|
-| Navigateur | InclusionConnect | HTTPS (OAuth) | 443  | France              | connect.inclusion.beta.gouv.fr |
+| Source     | Destination      | Protocole     | Port | Localisation | Interne/URL Externe            |
+| ---------- | ---------------- | ------------- | ---- | ------------ | ------------------------------ |
+| Navigateur | InclusionConnect | HTTPS (OAuth) | 443  | France       | connect.inclusion.beta.gouv.fr |
 
 ### Inventaire des dépendances
 
-| Nom de l’applicatif | Service          | Version   | Commentaires                                                    |
-|---------------------|------------------|-----------|-----------------------------------------------------------------|
-| Serveur web         | Nuxt @ Scalingo  | Nuxt 3    | Voir ci-dessous pour le détail des librairies                   |
-| BDD métier          | PostgreSQL       | `14.11.0` | Stockage des données métier, voir [/prisma/schema.prisma](/prisma/schema.prisma) |
+| Nom de l’applicatif | Service         | Version   | Commentaires                                                                     |
+| ------------------- | --------------- | --------- | -------------------------------------------------------------------------------- |
+| Serveur web         | Nuxt @ Scalingo | Nuxt 3    | Voir ci-dessous pour le détail des librairies                                    |
+| BDD métier          | PostgreSQL      | `14.11.0` | Stockage des données métier, voir [/prisma/schema.prisma](/prisma/schema.prisma) |
 
 La liste des librairies JS est disponible dans :
+
 - [package.json](/package.json) pour la liste des dépendances directes
 - [pnpm-lock.yaml](/pnpm-lock.yaml) pour la liste complète des librairies utilisées directement et indirectement (dépendances
   indirectes), et leurs versions précises
@@ -97,6 +99,7 @@ La liste des librairies JS est disponible dans :
 Notre application est accessible à l'adresse: https://monsuivisocial.incubateur.anct.gouv.fr/
 
 Nous avons actuellement 3 instances :
+
 - `anct-monsuivisocial-prod` : serveur de production pour `https://monsuivisocial.incubateur.anct.gouv.fr`
 - `anct-monsuivisocial-demo` : serveur de demo pour `https://monsuivisocial-demo.dev.incubateur.anct.gouv.fr`
 - `anct-monsuivisocial-dev` : serveur de dev pour `https://monsuivisocial.dev.incubateur.anct.gouv.fr`
@@ -121,11 +124,11 @@ flowchart TD
     monsuivisocial.incubateur.anct.gouv.fr --> anct-monsuivisocial-prod
     monsuivisocial-demo.dev.incubateur.anct.gouv.fr --> anct-monsuivisocial-demo
     monsuivisocial.dev.incubateur.anct.gouv.fr --> anct-monsuivisocial-dev
-    
+
 ```
 
 `anct-monsuivisocial-prod` est notre instance de production actuelle. Elle est représentée fidèlement dans les
-schémas ci-dessous. 
+schémas ci-dessous.
 
 L'instance `anct-monsuivisocial-demo` sert de plateforme de démo, elle est toujours à la même version que la production
 
@@ -183,7 +186,7 @@ C4Container
 
 #### Échanges entre l'app et Metabase
 
-Notre équipe utilise Metabase pour réaliser des statistiques afin de suivre l'utilisation de l'application et produire les statistiques publiques accessibles  à l'adresse `https://monsuivisocial.dev.incubateur.anct.gouv.fr/statistiques`
+Notre équipe utilise Metabase pour réaliser des statistiques afin de suivre l'utilisation de l'application et produire les statistiques publiques accessibles à l'adresse `https://monsuivisocial.dev.incubateur.anct.gouv.fr/statistiques`
 
 ```mermaid
 C4Container
@@ -211,6 +214,7 @@ C4Container
 C'est **Gandi (gandi.net)** qui fournit nos noms de domaine et la gestion DNS.
 
 Nous y gérons les domaines suivants :
+
 - `monsuivisocial.incubateur.anct.gouv.fr` : domaine de production
 - `monsuivisocial-demo.dev.incubateur.anct.gouv.fr` : domaine de démonstration
 - `monsuivisocial.dev.incubateur.anct.gouv.fr` : domaine de developpement
@@ -267,13 +271,14 @@ Nous avons un job de détection de secret `GitLab secrets analyzer v6.0.0` confi
 ### Authentification, contrôle d’accès, habilitations et profils
 
 L'application a 6 types d'utilisateurs :
+
 - Responsable de structure
 - Travailleur social
 - Instructeur
 - Agent d'accueil/CNFS
 - Référent
 - Admin
-  
+
 Les comptes utilisateurs ont une contrainte d'unicité sur les emails.
 
 Les sessions sont déconnectées automatiquement en cas d'inactivité de l'utilisateur. On considère un utilisateur inactif lorsque la souris est immobile.
@@ -281,6 +286,7 @@ Les sessions sont déconnectées automatiquement en cas d'inactivité de l'utili
 #### Les agents
 
 Les agents ont accès à diverses fonctionnalités touchants à :
+
 - l'accès à la liste des bénéficiaires
 - l'accès à la fiche d'un bénéficiaire
 - l'accès aux demandes d'aide d'un bénéficiaire
@@ -306,9 +312,9 @@ Afin de s'y connecter, il faut utiliser se rendre sur la page `https://monsuivis
 #### Logs textuels
 
 Les logs textuels sont écrits dans le système de log de Scalingo. Cela comprend :
+
 - Les logs des commandes de la production (e.g. lancer la console)
 - les changements de variables d'environnements
-
 
 Les logs produits par le routeur de Scalingo contiennent, pour chaque requêtes HTTP :
 
@@ -340,6 +346,7 @@ celui-ci n'est pas utilisé actuellement car sa calibration est difficile.
 
 Des backups de nos bases de données Postgres sont faîtes automatiquement par Scalingo. Ces backups sont
 créés quotidiennement. La politique de retention des backups est la suivante:
+
 - Backups journaliers conservés : 7 jours
 - Backups hebdomadaires conservés : 8 semaines
 - Backups mensuels conservés : 12 mois
@@ -352,6 +359,7 @@ de cluster avec 2 nodes, qui permet un failover automatique en cas de plantage d
 **L'application est conçue pour le suivi des bénéficiaires des CCAS. Nous manipulons donc des données sensibles.**
 
 Parmi les données que nous manipulons, les plus critiques sont :
+
 - les coordonnées des bénéficiaires
 - l'historique des synthèses des entretiens
 - l'historique des demandes d'aide

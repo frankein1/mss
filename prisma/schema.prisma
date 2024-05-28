@@ -10,8 +10,9 @@ datasource db {
 }
 
 generator erd {
-  provider = "prisma-erd-generator"
-  output = "./database-model.svg"
+  provider    = "prisma-erd-generator"
+  output      = "../docs/database-model.svg"
+  ignoreEnums = true
 }
 
 model Account {
