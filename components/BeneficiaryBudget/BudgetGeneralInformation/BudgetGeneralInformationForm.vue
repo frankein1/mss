@@ -73,6 +73,7 @@
   .grey {
     color: var(--text-mention-grey);
   }
+
   .disabled {
     color: var(--text-mention-grey);
   }
