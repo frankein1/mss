@@ -51,6 +51,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { Prisma } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
   import { Breadcrumb, RouteTitle, RoutePath, Route } from '~/utils/routing'
   import {
@@ -103,17 +104,52 @@
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
 
-  const { handleSubmit, meta } = useForm<UpdateBudgetInfoInput>({
-    validationSchema: toTypedSchema(updateBudgetInfoSchema),
-    initialValues: {
-      id: budget.value?.id || '',
-      remainingAfterExpenses: prismaDecimalToNumber(
-        budget.value?.remainingAfterExpenses
-      ),
-      savings: prismaDecimalToNumber(budget.value?.savings),
-      overdraft: prismaDecimalToNumber(budget.value?.overdraft),
-      familyQuotient: prismaDecimalToNumber(budget.value?.familyQuotient)
-    }
+  function getRemainingAfterExpenses(
+    deltaIncomeExpenses: number | null | undefined,
+    nMembers: number | Prisma.Decimal | null | undefined
+  ) {
+    const nm =
+      typeof nMembers === 'number' ? nMembers : prismaDecimalToNumber(nMembers)
+    return deltaIncomeExpenses === null ||
+      deltaIncomeExpenses === undefined ||
+      nm === null ||
+      nm === undefined ||
+      nm === 0
+      ? null
+      : deltaIncomeExpenses / nm
+  }
+
+  const { handleSubmit, meta, setValues, values } =
+    useForm<UpdateBudgetInfoInput>({
+      validationSchema: toTypedSchema(updateBudgetInfoSchema),
+      initialValues: {
+        id: budget.value?.id || '',
+        numberHouseholdMembers: prismaDecimalToNumber(
+          budget.value?.numberHouseholdMembers
+        ),
+        remainingAfterExpenses: getRemainingAfterExpenses(
+          budget.value?.deltaIncomeExpenses,
+          budget.value?.numberHouseholdMembers
+        ),
+        savings: prismaDecimalToNumber(budget.value?.savings),
+        overdraft: prismaDecimalToNumber(budget.value?.overdraft),
+        banqueDeFrance: prismaDecimalToNumber(budget.value?.banqueDeFrance),
+        familyQuotient: prismaDecimalToNumber(budget.value?.familyQuotient)
+      }
+    })
+
+  const numberHouseholdMembers = computed(() => values.numberHouseholdMembers)
+
+  watch(numberHouseholdMembers, () => {
+    const remainingAfterExpenses = getRemainingAfterExpenses(
+      budget.value?.deltaIncomeExpenses,
+      numberHouseholdMembers.value
+    )
+    setValues({
+      remainingAfterExpenses: remainingAfterExpenses
+        ? parseFloat(remainingAfterExpenses.toFixed(2))
+        : null
+    })
   })
 
   const isFormDirty = computed(() => meta.value.dirty)

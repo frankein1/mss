@@ -9,9 +9,11 @@ export async function updateInfo({
   ctx: SecurityRuleContext
   input: UpdateBudgetInfoInput
 }) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { remainingAfterExpenses, ...data } = input
   return await BudgetRepo.update(ctx.user, {
     where: { id: input.id },
-    data: input,
+    data,
     select: { id: true }
   })
 }

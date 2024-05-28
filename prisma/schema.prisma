@@ -1382,10 +1382,12 @@ model Budget {
   legacyOtherMembersMainIncomeSource  String?  @map("legacy_other_members_main_income_source")
   legacyOtherMembersMainIncomeAmount  Decimal? @map("legacy_other_members_main_income_amount")
 
-  remainingAfterExpenses Decimal? @map("remaining_after_expenses")
-  savings                Decimal?
-  overdraft              Decimal?
-  familyQuotient         Decimal? @map("family_quotient")
+  legacyRemainingAfterExpenses Decimal? @map("legacy_remaining_after_expenses")
+  numberHouseholdMembers       Decimal? @map("number_household_members")
+  savings                      Decimal?
+  overdraft                    Decimal?
+  familyQuotient               Decimal? @map("family_quotient")
+  banqueDeFrance               Decimal? @map("banque_de_france")
 
   beneficiaryId String      @unique @map("beneficiary_id") @db.Uuid
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
