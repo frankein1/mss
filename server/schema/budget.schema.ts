@@ -9,9 +9,11 @@ export type GetBudgetInput = z.infer<typeof getBudgetSchema>
 
 export const updateBudgetInfoSchema = z.object({
   id: z.string().uuid(),
+  numberHouseholdMembers: amountNumber.nullish(),
   remainingAfterExpenses: amountNumber.nullish(),
   savings: amountNumber.nullish(),
   overdraft: amountNumber.nullish(),
+  banqueDeFrance: amountNumber.nullish(),
   familyQuotient: amountNumber.nullish()
 })
 

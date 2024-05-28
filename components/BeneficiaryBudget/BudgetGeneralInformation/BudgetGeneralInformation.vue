@@ -20,12 +20,12 @@
         </div>
         <div>
           <div class="fr-text--lg fr-m-0">Reste à vivre</div>
-          <div
+          <!-- <div
             class="fr-h6 fr-m-0 fr-m-0 item__amount"
             :class="{ 'euro-symbol': !!budget.remainingAfterExpenses }"
           >
             {{ euros(budget.remainingAfterExpenses) || '-' }}
-          </div>
+          </div> -->
         </div>
       </div>
 
