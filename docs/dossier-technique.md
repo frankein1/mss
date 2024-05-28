@@ -219,7 +219,7 @@ Nous y gérons les domaines suivants :
 
 Lancer `npx prisma generate` pour obtenir un SVG de l'état actuel des tables Postgres. Le fichier `prisma/schema.prisma` donne aussi une description des tables.
 
-Le dernier fichier commité est [doc/database-model.svg](doc/database-model.svg)
+Le dernier fichier commité est [docs/database-model.svg](docs/database-model.svg)
 
 ## Exigences générales
 
