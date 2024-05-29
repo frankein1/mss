@@ -1,5 +1,7 @@
+import { getDeltaIncomeExpenses } from './helpers'
 import { SecurityRuleContext } from '~/server/security'
 import { BudgetRepo } from '~/server/database/repository'
+import { prismaDecimalToNumber } from '~/utils/prisma'
 
 export async function getBudget({
   ctx,
@@ -25,33 +27,40 @@ export async function getBudget({
     }
   })
 
+  const nMembers = prismaDecimalToNumber(budget.numberHouseholdMembers)
+  const deltaIncomeExpenses = getDeltaIncomeExpenses(
+    budget.incomes,
+    budget.expenses
+  )
+  const remainingAfterExpenses =
+    nMembers === undefined || deltaIncomeExpenses === null
+      ? null
+      : deltaIncomeExpenses / nMembers
+
   budget.incomes.sort((a, b) => {
+    let res = 0
     if (a.type === 'Beneficiary') {
-      return -1
+      res = -1
+    } else if (b.type === 'Beneficiary') {
+      res = 1
+    } else if (a.householdMember?.relationship === 'Conjoint') {
+      res = -1
+    } else if (b.householdMember?.relationship === 'Conjoint') {
+      res = 1
+    } else if (a.householdMember?.relationship === 'EnfantMajeur') {
+      res = -1
+    } else if (b.householdMember?.relationship === 'EnfantMajeur') {
+      res = 1
+    } else if (a.householdMember?.relationship === 'EnfantMineur') {
+      res = -1
+    } else if (b.householdMember?.relationship === 'EnfantMineur') {
+      res = 1
     }
-    if (b.type === 'Beneficiary') {
-      return 1
-    }
-    if (a.householdMember?.relationship === 'Conjoint') {
-      return -1
-    }
-    if (b.householdMember?.relationship === 'Conjoint') {
-      return 1
-    }
-    if (a.householdMember?.relationship === 'EnfantMajeur') {
-      return -1
-    }
-    if (b.householdMember?.relationship === 'EnfantMajeur') {
-      return 1
-    }
-    if (a.householdMember?.relationship === 'EnfantMineur') {
-      return -1
-    }
-    if (b.householdMember?.relationship === 'EnfantMineur') {
-      return 1
-    }
-    return 0
+    return res
   })
 
-  return budget
+  return {
+    ...budget,
+    remainingAfterExpenses
+  }
 }

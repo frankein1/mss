@@ -24,7 +24,7 @@
               class="fr-h6 fr-m-0 item__amount"
               :class="{ 'euro-symbol': !!budget.savings }"
             >
-              {{ euros(budget.savings) || '-' }}
+              {{ budget.savings !== null ? euros(budget.savings) : '-' }}
             </div>
           </div>
         </div>
@@ -59,7 +59,11 @@
               class="fr-h6 fr-m-0 fr-m-0 item__amount"
               :class="{ 'euro-symbol': !!budget.banqueDeFrance }"
             >
-              {{ euros(budget.banqueDeFrance) || '-' }}
+              {{
+                budget.banqueDeFrance !== null
+                  ? euros(budget.banqueDeFrance)
+                  : '-'
+              }}
             </div>
           </div>
         </div>
@@ -95,16 +99,20 @@
 
       <div
         class="fr-h6 fr-m-0 item__amount"
-        :class="{ 'euro-symbol': true }"
+        :class="{ 'euro-symbol': !!budget.remainingAfterExpenses }"
       >
-        {{ euros(213) || '-' }}
+        {{
+          budget.remainingAfterExpenses !== null
+            ? euros(budget.remainingAfterExpenses)
+            : '-'
+        }}
       </div>
     </section>
   </section>
 </template>
 
 <script setup lang="ts">
-  import { Budget } from '@prisma/client'
+  import { Budget } from '../types'
   import { RoutePath } from '~/utils/routing'
   import { euros } from '~/utils/euros'
 
@@ -126,7 +134,7 @@
 
   .bgi__content {
     display: flex;
-    place-content: center space-between;
+    justify-content: space-between;
   }
 
   .bgi__content__item {
@@ -137,6 +145,10 @@
 
   .item__amount {
     color: var(--rust);
+  }
+
+  .bgi__content .item__amount {
+    align-self: center;
   }
 
   .bgi__content__separator {
