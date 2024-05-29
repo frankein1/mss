@@ -1,5 +1,5 @@
 <template>
-  <div class="feature-section bg-color-white">
+  <section class="feature-section bg-color-white">
     <div class="bgi__header">
       <h3 class="fr-h4 fr-m-0">Infos générales</h3>
       <NuxtLink
@@ -10,27 +10,7 @@
       </NuxtLink>
     </div>
 
-    <div class="bgi__content">
-      <div class="bgi__content__item">
-        <div class="item-icon">
-          <span
-            class="fr-icon-scales-3-fill"
-            aria-hidden="true"
-          ></span>
-        </div>
-        <div>
-          <div class="fr-text--lg fr-m-0">Reste à vivre</div>
-          <!-- <div
-            class="fr-h6 fr-m-0 fr-m-0 item__amount"
-            :class="{ 'euro-symbol': !!budget.remainingAfterExpenses }"
-          >
-            {{ euros(budget.remainingAfterExpenses) || '-' }}
-          </div> -->
-        </div>
-      </div>
-
-      <hr class="bgi__content__separator" />
-
+    <section class="bgi__content">
       <div class="bgi__content__item">
         <img
           src="~/assets/icons/pig.svg"
@@ -69,6 +49,25 @@
       <hr class="bgi__content__separator" />
 
       <div class="bgi__content__item">
+        <img
+          src="~/assets/icons/banquefrance.svg"
+          class="item-icon"
+          alt=""
+        />
+        <div>
+          <div class="fr-text--lg fr-m-0">Banque de France</div>
+          <div
+            class="fr-h6 fr-m-0 fr-m-0 item__amount"
+            :class="{ 'euro-symbol': !!budget.banqueDeFrance }"
+          >
+            {{ euros(budget.banqueDeFrance) || '-' }}
+          </div>
+        </div>
+      </div>
+
+      <hr class="bgi__content__separator" />
+
+      <div class="bgi__content__item">
         <span
           class="fr-icon-home-4-line item-icon"
           aria-hidden="true"
@@ -80,8 +79,29 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
+    </section>
+
+    <hr class="separator" />
+
+    <section class="bgi__content">
+      <div class="bgi__content__item">
+        <div class="item-icon item-icon--tertiary">
+          <span
+            class="fr-icon-scales-3-line fr-icon--lg"
+            aria-hidden="true"
+          ></span>
+        </div>
+        <div class="fr-text--lg fr-m-0 bold">Reste à vivre du foyer</div>
+      </div>
+
+      <div
+        class="fr-h6 fr-m-0 item__amount"
+        :class="{ 'euro-symbol': true }"
+      >
+        {{ euros(213) || '-' }}
+      </div>
+    </section>
+  </section>
 </template>
 
 <script setup lang="ts">
@@ -105,17 +125,17 @@
 
   .bgi__content {
     display: flex;
-    justify-content: space-between;
+    place-content: center space-between;
   }
 
   .bgi__content__item {
     display: flex;
-    align-items: start;
+    align-items: center;
     gap: 1.25rem;
+  }
 
-    .item__amount {
-      color: var(--rust);
-    }
+  .item__amount {
+    color: var(--rust);
   }
 
   .bgi__content__separator {
@@ -131,5 +151,23 @@
     color: var(--rust);
     width: 2.5rem;
     height: 2.5rem;
+
+    &--tertiary {
+      padding: 0.3rem;
+      border-radius: unset;
+      background: none;
+    }
+  }
+
+  .separator {
+    height: 0.0625rem;
+    background-color: var(--rust);
+    background-image: none;
+    padding: 0;
+    margin: 1.5rem 0 1rem 0;
+  }
+
+  .bold {
+    font-weight: var(--bold);
   }
 </style>
