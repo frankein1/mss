@@ -13,12 +13,17 @@ export const budgetExpensesKeys = buildKeys({
   propertyTax: 'Taxe foncière',
   incomeTax: 'Impôt sur le revenu',
 
+  // Assurances
+  carInsurance: 'Assurance voiture',
+  homeInsurance: 'Assurance habitation',
+  deathInsurance: 'Assurance décès',
+  retirementInsurance: 'Assurance veillesse',
+  otherInsurance: 'Autres assurances',
+
   // Autres charges
   remittedAlimony: 'Pension alimentaire versée',
   healthInsurance: 'Mutuelle',
   phoneInternet: 'Téléphone/internet',
-  insurance: 'Assurance',
-  carInsurance: 'Assurance voiture',
   schoolFees: 'Frais de garde ou de scolarité',
   schoolCanteen: 'Cantine',
   other: 'Autres charges et frais divers'

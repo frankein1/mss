@@ -3,8 +3,8 @@ import type {
   BudgetIncome,
   BeneficiaryRelative,
   Budget,
-  BudgetExpensesDebts,
-  BudgetExpensesLoans
+  BudgetExpensesDebt,
+  BudgetExpensesLoan
 } from '@prisma/client'
 
 export type ExpensesKey = keyof Omit<
@@ -26,8 +26,8 @@ export type GetBudgetIncomeHouseholdMember = BudgetIncome & {
 }
 
 export type BudgetExpensesWithLoansAndDebts = BudgetExpenses & {
-  loans: BudgetExpensesLoans[]
-  debts: BudgetExpensesDebts[]
+  loans: BudgetExpensesLoan[]
+  debts: BudgetExpensesDebt[]
 }
 
 export { BudgetExpenses, BudgetIncome }

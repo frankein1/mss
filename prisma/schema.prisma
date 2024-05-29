@@ -1322,12 +1322,17 @@ model BudgetExpenses {
   propertyTax Decimal? @map("property_tax")
   incomeTax   Decimal? @map("income_tax")
 
+  // Assurances
+  carInsurance        Decimal? @map("car_insurance")
+  homeInsurance       Decimal? @map("home_insurance")
+  deathInsurance      Decimal? @map("death_insurance")
+  retirementInsurance Decimal? @map("retirement_insurance")
+  otherInsurance      Decimal? @map("other_insurance")
+
   // Autres charges
   remittedAlimony Decimal? @map("remitted_alimony")
   healthInsurance Decimal? @map("health_insurance")
   phoneInternet   Decimal? @map("phone_internet")
-  insurance       Decimal?
-  carInsurance    Decimal? @map("car_insurance")
   schoolFees      Decimal? @map("school_fees")
   schoolCanteen   Decimal? @map("school_canteen")
   other           Decimal?
@@ -1336,13 +1341,13 @@ model BudgetExpenses {
   budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
 
   // Crédits et dettes
-  loans BudgetExpensesLoans[]
-  debts BudgetExpensesDebts[]
+  loans BudgetExpensesLoan[]
+  debts BudgetExpensesDebt[]
 
   @@map("budget_expenses")
 }
 
-model BudgetExpensesLoans {
+model BudgetExpensesLoan {
   id String @id @default(uuid()) @db.Uuid
 
   type           String?
@@ -1353,10 +1358,10 @@ model BudgetExpensesLoans {
   expensesId String         @map("expenses_id") @db.Uuid
   expenses   BudgetExpenses @relation(fields: [expensesId], references: [id], onDelete: Cascade)
 
-  @@map("budget_expenses_loans")
+  @@map("budget_expenses_loan")
 }
 
-model BudgetExpensesDebts {
+model BudgetExpensesDebt {
   id String @id @default(uuid()) @db.Uuid
 
   type           String?
@@ -1367,7 +1372,7 @@ model BudgetExpensesDebts {
   expensesId String         @map("expenses_id") @db.Uuid
   expenses   BudgetExpenses @relation(fields: [expensesId], references: [id], onDelete: Cascade)
 
-  @@map("budget_expenses_debts")
+  @@map("budget_expenses_debt")
 }
 
 model Budget {
