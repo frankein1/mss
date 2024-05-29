@@ -42,12 +42,17 @@ export const updateBudgetExpensesSchema = z.object({
   propertyTax: amountNumber.nullish(),
   incomeTax: amountNumber.nullish(),
 
+  // Assurances
+  carInsurance: amountNumber.nullish(),
+  homeInsurance: amountNumber.nullish(),
+  deathInsurance: amountNumber.nullish(),
+  retirementInsurance: amountNumber.nullish(),
+  otherInsurance: amountNumber.nullish(),
+
   // Autres charges
   remittedAlimony: amountNumber.nullish(),
   healthInsurance: amountNumber.nullish(),
   phoneInternet: amountNumber.nullish(),
-  insurance: amountNumber.nullish(),
-  carInsurance: amountNumber.nullish(),
   schoolFees: amountNumber.nullish(),
   schoolCanteen: amountNumber.nullish(),
   other: amountNumber.nullish(),

@@ -130,12 +130,19 @@
       propertyTax: prismaDecimalToNumber(expenses.value?.propertyTax),
       incomeTax: prismaDecimalToNumber(expenses.value?.incomeTax),
 
+      // Assurances
+      carInsurance: prismaDecimalToNumber(expenses.value?.carInsurance),
+      homeInsurance: prismaDecimalToNumber(expenses.value?.homeInsurance),
+      deathInsurance: prismaDecimalToNumber(expenses.value?.deathInsurance),
+      retirementInsurance: prismaDecimalToNumber(
+        expenses.value?.retirementInsurance
+      ),
+      otherInsurance: prismaDecimalToNumber(expenses.value?.otherInsurance),
+
       // Autres charges
       remittedAlimony: prismaDecimalToNumber(expenses.value?.remittedAlimony),
       healthInsurance: prismaDecimalToNumber(expenses.value?.healthInsurance),
       phoneInternet: prismaDecimalToNumber(expenses.value?.phoneInternet),
-      insurance: prismaDecimalToNumber(expenses.value?.insurance),
-      carInsurance: prismaDecimalToNumber(expenses.value?.carInsurance),
       schoolFees: prismaDecimalToNumber(expenses.value?.schoolFees),
       schoolCanteen: prismaDecimalToNumber(expenses.value?.schoolCanteen),
       other: prismaDecimalToNumber(expenses.value?.other),
