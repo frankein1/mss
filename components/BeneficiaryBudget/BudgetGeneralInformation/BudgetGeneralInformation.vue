@@ -10,72 +10,71 @@
       </NuxtLink>
     </div>
 
-    <section class="bgi__content">
-      <div class="bgi__content__item">
-        <img
-          src="~/assets/icons/pig.svg"
-          class="item-icon"
-          alt=""
-        />
-        <div>
-          <div class="fr-text--lg fr-m-0">Epargne</div>
-          <div
-            class="fr-h6 fr-m-0 item__amount"
-            :class="{ 'euro-symbol': !!budget.savings }"
-          >
-            {{ euros(budget.savings) || '-' }}
+    <section class="fr-container">
+      <div class="fr-grid-row">
+        <div class="fr-col-md-3 fr-col-6 bgi__content__item">
+          <img
+            src="~/assets/icons/pig.svg"
+            class="item-icon"
+            alt=""
+          />
+          <div>
+            <div class="fr-text--lg fr-m-0">Epargne</div>
+            <div
+              class="fr-h6 fr-m-0 item__amount"
+              :class="{ 'euro-symbol': !!budget.savings }"
+            >
+              {{ euros(budget.savings) || '-' }}
+            </div>
           </div>
         </div>
-      </div>
 
-      <hr class="bgi__content__separator" />
-
-      <div class="bgi__content__item">
-        <span
-          class="fr-icon-bank-line item-icon"
-          aria-hidden="true"
-        ></span>
-        <div>
-          <div class="fr-text--lg fr-m-0">Découvert</div>
-          <div
-            class="fr-h6 fr-m-0 item__amount"
-            :class="{ 'euro-symbol': !!budget.overdraft }"
-          >
-            {{ euros(budget.overdraft) || '-' }}
+        <div class="fr-col-md-3 fr-col-6 bgi__content__item">
+          <hr class="bgi__content__separator" />
+          <span
+            class="fr-icon-bank-line item-icon"
+            aria-hidden="true"
+          ></span>
+          <div>
+            <div class="fr-text--lg fr-m-0">Découvert</div>
+            <div
+              class="fr-h6 fr-m-0 item__amount"
+              :class="{ 'euro-symbol': !!budget.overdraft }"
+            >
+              {{ euros(budget.overdraft) || '-' }}
+            </div>
           </div>
         </div>
-      </div>
 
-      <hr class="bgi__content__separator" />
-
-      <div class="bgi__content__item">
-        <img
-          src="~/assets/icons/banquefrance.svg"
-          class="item-icon"
-          alt=""
-        />
-        <div>
-          <div class="fr-text--lg fr-m-0">Banque de France</div>
-          <div
-            class="fr-h6 fr-m-0 fr-m-0 item__amount"
-            :class="{ 'euro-symbol': !!budget.banqueDeFrance }"
-          >
-            {{ euros(budget.banqueDeFrance) || '-' }}
+        <div class="fr-col-md-3 fr-col-6 bgi__content__item">
+          <hr class="bgi__content__separator bgi__content__separator--md" />
+          <img
+            src="~/assets/icons/banquefrance.svg"
+            class="item-icon"
+            alt=""
+          />
+          <div>
+            <div class="fr-text--lg fr-m-0">Banque de France</div>
+            <div
+              class="fr-h6 fr-m-0 fr-m-0 item__amount"
+              :class="{ 'euro-symbol': !!budget.banqueDeFrance }"
+            >
+              {{ euros(budget.banqueDeFrance) || '-' }}
+            </div>
           </div>
         </div>
-      </div>
 
-      <hr class="bgi__content__separator" />
-
-      <div class="bgi__content__item">
-        <span
-          class="fr-icon-home-4-line item-icon"
-          aria-hidden="true"
-        ></span>
-        <div>
-          <div class="fr-text--lg fr-m-0">Quotient familial</div>
-          <div class="fr-h6 fr-m-0 item__amount">
-            {{ budget.familyQuotient || '-' }}
+        <div class="fr-col-md-3 fr-col-6 bgi__content__item">
+          <hr class="bgi__content__separator" />
+          <span
+            class="fr-icon-home-4-line item-icon"
+            aria-hidden="true"
+          ></span>
+          <div>
+            <div class="fr-text--lg fr-m-0">Quotient familial</div>
+            <div class="fr-h6 fr-m-0 item__amount">
+              {{ budget.familyQuotient || '-' }}
+            </div>
           </div>
         </div>
       </div>
@@ -113,6 +112,8 @@
 </script>
 
 <style scoped lang="scss">
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
   .bgi__header {
     display: flex;
     justify-content: space-between;
@@ -142,6 +143,14 @@
     width: 0.0625rem;
     height: 3.125rem;
     background-color: var(--border-default-grey);
+
+    &--md {
+      display: none;
+
+      @include dsfr-media-query.respond-from('md') {
+        display: unset;
+      }
+    }
   }
 
   .item-icon {
@@ -164,7 +173,7 @@
     background-color: var(--rust);
     background-image: none;
     padding: 0;
-    margin: 1.5rem 0 1rem 0;
+    margin: 1.5rem 0 1rem;
   }
 
   .bold {
