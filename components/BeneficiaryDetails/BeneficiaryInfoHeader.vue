@@ -10,7 +10,7 @@
       <div class="fr-col-6 beneficiaryinfoheader__section">
         <div v-if="beneficiary.aidantConnectAuthorized">
           <div class="fr-icon-success-line field-value">
-            Mandat Aidant Connect
+            Mandat Aidants Connect
           </div>
         </div>
         <div
