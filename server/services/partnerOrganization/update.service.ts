@@ -11,6 +11,25 @@ export async function update({
 }) {
   const { contacts, ...data } = input
 
+  const partner =
+    'dataInclusionId' in data
+      ? {
+          dataInclusionId: data.dataInclusionId,
+          name: data.name,
+          ...(data.phone2 && { phone2: data.phone2 }),
+          siret: null,
+          address: null,
+          zipcode: null,
+          city: null,
+          email: null,
+          phone1: null,
+          workingHours: null
+        }
+      : {
+          dataInclusionId: null,
+          ...data
+        }
+
   const previous = await PartnerOrganizationRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.id },
     select: {
@@ -46,7 +65,7 @@ export async function update({
       id: input.id
     },
     data: {
-      ...data,
+      ...partner,
       inactive: false,
       contacts: {
         create: contactsToCreate,

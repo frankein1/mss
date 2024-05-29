@@ -52,7 +52,7 @@
       name: el.name,
       email: el.email,
       phone1: structure ? structure.phone : partner.phone1,
-      ...(structure === null && { phone2: partner.phone2 }),
+      phone2: partner.phone2,
       address: el.address,
       city: el.city,
       zipcode: el.zipcode,
