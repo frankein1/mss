@@ -39,7 +39,23 @@
           message="Les informations générales du budget n'ont pas pu être chargées."
         />
 
-        <BudgetGeneralInformationForm v-else-if="budget" />
+        <template v-else-if="budget">
+          <AtomAlert
+            v-if="budget.legacyRemainingAfterExpenses"
+            class="fr-mb-4w"
+            :alert-type="AlertType.Warning"
+            message="Le reste à vivre a été remplacé par le calcul automatique"
+          >
+            <template #detailedMessage>
+              <p class="euro-symbol">
+                Le montant précédemment renseigné était de
+                {{ budget.legacyRemainingAfterExpenses }}
+              </p>
+            </template>
+          </AtomAlert>
+
+          <BudgetGeneralInformationForm />
+        </template>
       </div>
     </main>
 
