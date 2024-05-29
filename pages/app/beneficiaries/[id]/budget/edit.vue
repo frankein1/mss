@@ -39,7 +39,25 @@
           message="Les informations générales du budget n'ont pas pu être chargées."
         />
 
-        <BudgetGeneralInformationForm v-else-if="budget" />
+        <template v-else-if="budget">
+          <AtomAlert
+            v-if="budget.legacyRemainingAfterExpenses && open"
+            class="fr-mb-4w"
+            closeable
+            :alert-type="AlertType.Warning"
+            message="Le reste à vivre a été remplacé par le calcul automatique"
+            @close="open = false"
+          >
+            <template #detailedMessage>
+              <p class="euro-symbol">
+                Le montant précédemment renseigné était de
+                {{ budget.legacyRemainingAfterExpenses }}
+              </p>
+            </template>
+          </AtomAlert>
+
+          <BudgetGeneralInformationForm />
+        </template>
       </div>
     </main>
 
@@ -185,4 +203,6 @@
   function onCancel() {
     navigateTo(budgetTabRoute)
   }
+
+  const open = ref(true)
 </script>

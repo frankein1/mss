@@ -13,6 +13,7 @@
     <button
       v-if="closeable"
       v-autofocus
+      type="button"
       class="fr-btn--close fr-btn force-focus-visible"
       @click="emit('close')"
     >
