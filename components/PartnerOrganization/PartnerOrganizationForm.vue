@@ -126,7 +126,6 @@
             name="phone2"
             :label="partnerOrganizationFieldLabels.phone2"
             type="tel"
-            :disabled="hasDataInclusionStructure"
           />
         </div>
         <div
@@ -135,7 +134,6 @@
         >
           <button
             class="fr-link fr-icon-file-add-line fr-text--sm fr-mb-1w"
-            :disabled="hasDataInclusionStructure"
             @click="displayPhone2"
           >
             + Ajouter un téléphone
