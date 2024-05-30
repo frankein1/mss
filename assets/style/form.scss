@@ -40,6 +40,14 @@
   &.fr-icon-calendar-line::before {
     color: var(--text-disabled-grey);
   }
+
+  &::before {
+    color: var(--text-disabled-grey);
+  }
+}
+
+.fr-input-group--disabled .fr-label {
+  color: var(--text-disabled-grey);
 }
 
 .fr-select-group > .fr-hint-text {
