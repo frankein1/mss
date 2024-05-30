@@ -2,7 +2,8 @@
   <div
     class="fr-input-group"
     :class="{
-      'fr-input-group--error': error
+      'fr-input-group--error': error,
+      'fr-input-group--disabled': disabled
     }"
   >
     <label
@@ -36,6 +37,7 @@
         :placeholder="placeholder"
         :type="type"
         :disabled
+        :readonly
         :aria-describedby="ariaDescribedby"
         :aria-labelledby="labelledBy"
         :value="bindedValue"
@@ -80,6 +82,7 @@
       required?: boolean
       noHint?: boolean
       disabled?: boolean
+      readonly?: boolean
     }>(),
     {
       type: 'text',
@@ -89,7 +92,8 @@
       labelledBy: undefined,
       required: false,
       noHint: false,
-      disabled: false
+      disabled: false,
+      readonly: false
     }
   )
 
