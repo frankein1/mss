@@ -99,6 +99,11 @@ export const kindOfBooleanSchema = (required = false) => {
   )
 }
 
+export const amountNumberCanBeNegative = z.preprocess(
+  v => (typeof v === 'string' ? v.replace(',', '.') : v),
+  z.coerce.number({ invalid_type_error: validNumber })
+)
+
 export const amountNumber = z.preprocess(
   v => (typeof v === 'string' ? v.replace(',', '.') : v),
   z.coerce

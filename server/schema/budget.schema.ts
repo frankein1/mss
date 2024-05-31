@@ -1,5 +1,10 @@
 import { z } from 'zod'
-import { amountNumber, stringConstraint, dateOrEmpty } from '.'
+import {
+  amountNumber,
+  amountNumberCanBeNegative,
+  stringConstraint,
+  dateOrEmpty
+} from '.'
 
 export const getBudgetSchema = z.object({
   beneficiaryId: z.string().uuid()
@@ -10,7 +15,7 @@ export type GetBudgetInput = z.infer<typeof getBudgetSchema>
 export const updateBudgetInfoSchema = z.object({
   id: z.string().uuid(),
   numberHouseholdMembers: amountNumber.nullish(),
-  remainingAfterExpenses: amountNumber.nullish(),
+  remainingAfterExpenses: amountNumberCanBeNegative.nullish(),
   savings: amountNumber.nullish(),
   overdraft: amountNumber.nullish(),
   banqueDeFrance: amountNumber.nullish(),

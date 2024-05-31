@@ -33,7 +33,10 @@ export async function getBudget({
     budget.expenses
   )
   const remainingAfterExpenses =
-    nMembers === undefined || deltaIncomeExpenses === null
+    nMembers === undefined ||
+    nMembers === 0 ||
+    isNaN(nMembers) ||
+    deltaIncomeExpenses === null
       ? null
       : deltaIncomeExpenses / nMembers
 
