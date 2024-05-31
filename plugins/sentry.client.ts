@@ -17,10 +17,8 @@ export default defineNuxtPlugin(nuxtApp => {
     debug: sentry.debug,
     dsn: sentry.dsn,
     integrations: [
-      new Sentry.BrowserTracing({
-        routingInstrumentation: Sentry.vueRouterInstrumentation(router)
-      }),
-      new Sentry.Replay()
+      Sentry.browserTracingIntegration({ router }),
+      Sentry.replayIntegration()
     ],
 
     // Set tracesSampleRate to 1.0 to capture 100%
