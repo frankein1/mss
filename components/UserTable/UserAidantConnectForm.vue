@@ -42,17 +42,17 @@
       onSuccess: () => {
         if (user.aidantConnectAuthorisation) {
           snackbar.success(
-            `L'habilitation Aidant Connect a été ajoutée à l'utilisateur ${props.user.email}.`
+            `L'habilitation Aidants Connect a été ajoutée à l'utilisateur ${props.user.email}.`
           )
         } else {
           snackbar.success(
-            `L'habilitation Aidant Connect a été retirée de l'utilisateur ${props.user.email}.`
+            `L'habilitation Aidants Connect a été retirée de l'utilisateur ${props.user.email}.`
           )
         }
       },
       onFailure: () => {
         snackbar.error(
-          "La modification de l'habilitation Aidant Connect a échoué."
+          "La modification de l'habilitation Aidants Connect a échoué."
         )
       }
     })
