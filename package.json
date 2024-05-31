@@ -79,7 +79,7 @@
     "h3": "1.11.1"
   },
   "engines": {
-    "pnpm": ">=8.6.2 <9.0.0"
+    "pnpm": ">=8.6.2 <9.1.4"
   },
   "prisma": {
     "seed": "ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
