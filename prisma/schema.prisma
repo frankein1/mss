@@ -1272,6 +1272,9 @@ enum BudgetIncomeType {
 model BudgetIncome {
   id String @id @default(uuid()) @db.Uuid
 
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
+
   // Travail
   salary        Decimal?
   primeActivite Decimal? @map("prime_activite")
@@ -1308,6 +1311,9 @@ model BudgetIncome {
 
 model BudgetExpenses {
   id String @id @default(uuid()) @db.Uuid
+
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
 
   // Logement
   rent        Decimal?
@@ -1350,6 +1356,9 @@ model BudgetExpenses {
 model BudgetExpensesLoan {
   id String @id @default(uuid()) @db.Uuid
 
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
+
   type           String?
   amountTotal    Decimal?  @map("amount_total")
   amountPerMonth Decimal?  @map("amount_per_month")
@@ -1364,6 +1373,9 @@ model BudgetExpensesLoan {
 model BudgetExpensesDebt {
   id String @id @default(uuid()) @db.Uuid
 
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
+
   type           String?
   amountTotal    Decimal?  @map("amount_total")
   amountPerMonth Decimal?  @map("amount_per_month")
@@ -1377,6 +1389,9 @@ model BudgetExpensesDebt {
 
 model Budget {
   id String @id @default(uuid()) @db.Uuid
+
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
 
   legacyMainIncomeSource              String?  @map("legacy_main_income_source")
   legacyMainIncomeAmount              Decimal? @map("legacy_main_income_amount")

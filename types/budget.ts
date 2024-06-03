@@ -9,11 +9,11 @@ import type {
 
 export type ExpensesKey = keyof Omit<
   BudgetExpenses,
-  'id' | 'budgetId' | 'loans' | 'debts'
+  'id' | 'budgetId' | 'loans' | 'debts' | 'created' | 'updated'
 >
 export type IncomeKey = keyof Omit<
   BudgetIncome,
-  'id' | 'budgetId' | 'type' | 'householdMemberId'
+  'id' | 'budgetId' | 'type' | 'householdMemberId' | 'created' | 'updated'
 >
 
 export type GetIncomeHouseholdMemberBudget = BudgetIncome & {

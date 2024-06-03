@@ -10,6 +10,9 @@ export async function getExpenses({
 }) {
   return await BudgetExpensesRepo.findUniqueOrThrow(ctx.user, {
     where: { id },
-    include: { loans: true, debts: true }
+    include: {
+      loans: { orderBy: { created: 'asc' } },
+      debts: { orderBy: { created: 'asc' } }
+    }
   })
 }

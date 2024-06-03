@@ -5,11 +5,4 @@ export type Budget = RouterOutput['budget']['getBudget']
 export type BudgetExpenses = NonNullable<Budget['expenses']>
 export type BudgetIncome = NonNullable<Budget['incomes']>
 
-export type ExpensesKey = keyof Omit<
-  BudgetExpenses,
-  'id' | 'budgetId' | 'loans' | 'debts'
->
-export type IncomeKey = keyof Omit<
-  BudgetIncome,
-  'id' | 'budgetId' | 'type' | 'householdMemberId'
->
+export type { ExpensesKey, IncomeKey } from '~/types/budget'

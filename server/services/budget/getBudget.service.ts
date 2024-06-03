@@ -15,8 +15,8 @@ export async function getBudget({
     include: {
       expenses: {
         include: {
-          loans: true,
-          debts: true
+          loans: { orderBy: { created: 'asc' } },
+          debts: { orderBy: { created: 'asc' } }
         }
       },
       incomes: {
@@ -33,7 +33,10 @@ export async function getBudget({
     budget.expenses
   )
   const remainingAfterExpenses =
-    nMembers === undefined || deltaIncomeExpenses === null
+    nMembers === undefined ||
+    nMembers === 0 ||
+    isNaN(nMembers) ||
+    deltaIncomeExpenses === null
       ? null
       : deltaIncomeExpenses / nMembers
 
