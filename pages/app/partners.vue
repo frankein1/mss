@@ -110,10 +110,18 @@ s
     )
   })
 
+  const existingDataInclusionIds = computed(
+    () =>
+      (data?.value || [])
+        .map(p => p.dataInclusionStructure?.id || null)
+        .filter(id => id !== null) as string[]
+  )
+
   function openCreateModal() {
     modal.open(PartnerOrganizationCreation, {
       title: 'Ajouter un organisme partenaire',
       isSubmitting: isSubmitting.value,
+      existingDataInclusionIds: existingDataInclusionIds.value,
       finish: finishCreation,
       cancel,
       restore: restorePartner
@@ -125,6 +133,7 @@ s
       title: 'Modifier un organisme partenaire',
       id,
       isSubmitting: isSubmitting.value,
+      existingDataInclusionIds: existingDataInclusionIds.value,
       finish: finishEdition,
       cancel,
       restore: restorePartner

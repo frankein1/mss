@@ -53,7 +53,7 @@
 
   const modal = ref<HTMLDialogElement | null>(null)
 
-  const { isOpen, title, setIsOpen, triggerOpen } = useModal()
+  const { isOpen, setIsOpen, title, triggerOpen } = useModal()
 
   const dsfrModal = computed(() =>
     modal.value ? window.dsfr(modal.value) : undefined

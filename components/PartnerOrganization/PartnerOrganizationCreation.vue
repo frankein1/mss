@@ -4,6 +4,7 @@
     :caught-errors="caughtErrors"
     :show-phone2="false"
     :has-data-inclusion-structure="hasDataInclusionStructure"
+    :existing-data-inclusion-ids="existingDataInclusionIds"
     @submit="onSubmit"
     @cancel="onCancel"
     @restore="onRestore"
@@ -22,6 +23,7 @@
 
   const props = defineProps<{
     isSubmitting: boolean
+    existingDataInclusionIds: string[]
     finish: (partner: AddPartnerOrganizationInput) => void
     cancel: () => void
     restore: (partner: PartnerOrganizationData) => void

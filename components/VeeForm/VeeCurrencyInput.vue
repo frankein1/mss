@@ -22,6 +22,7 @@
         :class="{ 'fr-input--error': error }"
         :name="name"
         :disabled
+        :readonly
         placeholder="0.00"
         type="text"
         pattern="[0-9]\d*((\.|,)\d+)?"
@@ -55,8 +56,9 @@
       labelledBy?: string
       name: string
       disabled?: boolean
+      readonly?: boolean
     }>(),
-    { noLabel: false, labelledBy: undefined, disabled: false }
+    { noLabel: false, labelledBy: undefined, disabled: false, readonly: false }
   )
 
   // use `toRef` to create reactive references to `name` prop which is passed to `useField`
@@ -127,15 +129,5 @@
   .fr-input {
     text-align: right;
     padding-right: 1.5rem;
-  }
-
-  .fr-input-group--disabled {
-    > .fr-input-wrap::before {
-      color: var(--text-disabled-grey);
-    }
-
-    > .fr-label {
-      color: var(--text-disabled-grey);
-    }
   }
 </style>

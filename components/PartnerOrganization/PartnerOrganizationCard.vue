@@ -1,21 +1,19 @@
 <template>
   <div class="partner-card">
     <div class="fr-h6 fr-m-0">
-      {{ partner.name }}
+      {{ el.name }}
     </div>
     <div
-      v-if="partner.address || partner.zipcode || partner.city"
+      v-if="el.address || el.zipcode || el.city"
       class="fr-icon-map-pin-2-line partner-card-content__info fr-icon--sm fr-text--sm"
     >
-      {{
-        `${partner.address || ''} ${partner.zipcode || ''} ${partner.city || ''}`
-      }}
+      {{ `${el.address || ''} ${el.zipcode || ''} ${el.city || ''}` }}
     </div>
     <div
-      v-if="partner.phone1"
+      v-if="partner.dataInclusionStructure?.phone || partner.phone1"
       class="fr-icon-phone-line partner-card-content__info fr-icon--sm fr-text--sm"
     >
-      {{ partner.phone1 }}
+      {{ partner.dataInclusionStructure?.phone || partner.phone1 }}
     </div>
     <div
       v-if="partner.phone2"
@@ -24,17 +22,17 @@
       {{ partner.phone2 }}
     </div>
     <div
-      v-if="partner.email"
+      v-if="el.email"
       class="fr-icon-mail-line partner-card-content__info fr-icon--sm fr-text--sm"
     >
-      {{ partner.email }}
+      {{ el.email }}
     </div>
     <div
-      v-if="partner.workingHours"
+      v-if="el.workingHours"
       class="partner-card-content__info partner-card-content__working-hours fr-text--sm fr-m-0"
     >
       <div>Horaires :</div>
-      {{ partner.workingHours }}
+      {{ el.workingHours }}
     </div>
     <div
       v-for="(contact, idx) in partner.contacts"
@@ -77,7 +75,7 @@
 <script lang="ts" setup>
   import type { PartnerOrganizationData } from './types'
 
-  defineProps<{
+  const props = defineProps<{
     partner: PartnerOrganizationData
   }>()
 
@@ -87,6 +85,10 @@
   }>()
 
   const { application } = usePermissions()
+
+  const el = computed(
+    () => props.partner.dataInclusionStructure || props.partner
+  )
 </script>
 
 <style lang="scss" scoped>

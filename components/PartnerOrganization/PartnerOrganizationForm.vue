@@ -216,6 +216,7 @@
       AddPartnerOrganizationInput | EditPartnerOrganizationInput
     >
     hasDataInclusionStructure?: boolean
+    existingDataInclusionIds?: string[]
   }>()
 
   const trpcClient = useTrpcClient()
@@ -284,7 +285,7 @@
   async function searchDataInclusionStructure(
     search: string,
     field: 'name' | 'siret'
-  ): Promise<Options> {
+  ): Promise<OptionsWithDisabled> {
     emit('selectStructure', null)
 
     if (field === 'name') {
@@ -297,13 +298,16 @@
       return []
     }
 
-    structures.value = await trpcClient.dataInclusion.searchStructures.query({
+    const { results } = await trpcClient.dataInclusion.searchStructures.query({
       query: search
     })
 
-    return structures.value.map(({ id, name, siret }) => ({
+    structures.value = results
+
+    return structures.value.map(({ id, name, siret, city }) => ({
       value: id,
-      label: `${name}${siret ? ' - ' + siret : ''}`
+      label: `${name}${city ? ' - ' + city : ''}${siret ? ' - ' + siret : ''}`,
+      disabled: (props.existingDataInclusionIds || []).includes(id)
     }))
   }
 
