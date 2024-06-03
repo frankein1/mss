@@ -4,7 +4,21 @@ import { DataInclusionStructureRepo } from '~/server/database/repository'
 import { SearchDataInclusionStructureInput } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 
-function prepareSearch(query: string, zipcode: string) {
+function getQueryForDepartmentSearch(zipcode: string) {
+  const query = zipcode.substring(0, zipcode.startsWith('97') ? 3 : 2)
+  return {
+    zipcode: {
+      startsWith: query,
+      not: zipcode
+    }
+  }
+}
+
+function prepareSearch(
+  query: string,
+  zipcode: string,
+  scale: 'city' | 'department' | 'country'
+) {
   const where: Prisma.DataInclusionStructureWhereInput = {
     OR: [
       {
@@ -18,11 +32,17 @@ function prepareSearch(query: string, zipcode: string) {
           startsWith: query
         }
       }
-    ],
-    zipcode
+    ]
   }
 
-  return where
+  switch (scale) {
+    case 'department':
+      return { ...where, ...getQueryForDepartmentSearch(zipcode) }
+    case 'country':
+      return where
+    default:
+      return { ...where, zipcode }
+  }
 }
 
 export async function searchStructures({
@@ -37,7 +57,20 @@ export async function searchStructures({
     where: { id: structure.id }
   })
 
-  const where = prepareSearch(input.query, s.zipcode)
+  const city = prepareSearch(input.query, s.zipcode, 'city')
+  const department = prepareSearch(input.query, s.zipcode, 'department')
 
-  return await DataInclusionStructureRepo.findMany(ctx.user, { where })
+  const res = await Promise.all([
+    DataInclusionStructureRepo.findMany(ctx.user, { where: city }),
+    DataInclusionStructureRepo.findMany(ctx.user, { where: department })
+  ])
+
+  if (res[0].length || res[1].length) {
+    return [...res[0], ...res[1]]
+  }
+
+  const country = prepareSearch(input.query, s.zipcode, 'country')
+  return await DataInclusionStructureRepo.findMany(ctx.user, {
+    where: country
+  })
 }
