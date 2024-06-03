@@ -66,11 +66,19 @@ export async function searchStructures({
   ])
 
   if (res[0].length || res[1].length) {
-    return [...res[0], ...res[1]]
+    return {
+      scale: res[0].length ? ('city' as const) : ('department' as const),
+      results: [...res[0], ...res[1]]
+    }
   }
 
   const country = prepareSearch(input.query, s.zipcode, 'country')
-  return await DataInclusionStructureRepo.findMany(ctx.user, {
+  const results = await DataInclusionStructureRepo.findMany(ctx.user, {
     where: country
   })
+
+  return {
+    scale: 'country' as const,
+    results
+  }
 }

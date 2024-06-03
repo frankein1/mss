@@ -297,13 +297,15 @@
       return []
     }
 
-    structures.value = await trpcClient.dataInclusion.searchStructures.query({
+    const { results } = await trpcClient.dataInclusion.searchStructures.query({
       query: search
     })
 
-    return structures.value.map(({ id, name, siret }) => ({
+    structures.value = results
+
+    return structures.value.map(({ id, name, siret, city }) => ({
       value: id,
-      label: `${name}${siret ? ' - ' + siret : ''}`
+      label: `${name}${city ? ' - ' + city : ''}${siret ? ' - ' + siret : ''}`
     }))
   }
 
