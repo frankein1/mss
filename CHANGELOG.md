@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.25.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.24.3...v1.25.0) (2024-06-03)
+
+
+### Features
+
+* **budget:** ajout des catégories de dettes au budget ([d879d42](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d879d423b83bba09d3094a5a3f5c68f5d2c3d166)), closes [#456](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/456)
+* **budget:** ajout du champ banque de France et calcul automatique du reste à vivre ([21eb393](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/21eb393d89f2f168ae5afdc7b3769893050bbc08)), closes [#472](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/472)
+* **budget:** catégorisation des crédits ([060e105](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/060e1057d9765ff1f54b23286880f65f8f092235)), closes [#457](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/457)
+* **budget:** création d'une section assurances dans les charges ([e098051](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e0980515ab70c554441c5b506b56eac73cfe03dd)), closes [#455](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/455)
+* **budget:** maj de la visualisation des informations générales du budget ([d2fe39b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d2fe39b9d59655f1277b4544da20a06962b514b7)), closes [#472](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/472)
+* **data-inclusion:** édition d'une structure importée par Data inclusion ([8408607](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8408607f36127fa36c9e1fcf3c162c234b674539)), closes [#435](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/435)
+* **data-inclusion:** finalisation de la V1 de l'intégration Data Inclusion ([f20feaa](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f20feaa4f53dad5f92717d9cf54446ddf5f935e2)), closes [#435](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/435)
+* **dépendance:** mise à jour de sentry ([3d94db7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3d94db79e5a6156ea410d6f6d314889a608b39e9))
+* **statistiques:** ajout du nombre de bénéficiaires concernés par les accompagnements ([fa19295](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fa192959571564f49a49d6022d7c741b36876b12)), closes [#468](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/468)
+
+
+### Bug Fixes
+
+* **budget:** correctifs budget ([1acca1b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1acca1bf577cede392c8af20b3058b305ec36bc9)), closes [#472](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/472)
+
 ### [1.24.3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.24.2...v1.24.3) (2024-05-25)
 
 ### Bug Fixes
