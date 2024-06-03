@@ -29,7 +29,11 @@
     :total="loansTotal"
     :subsection-items="expenses.loans"
     :edit-route="
-      RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
+      RoutePath.AppBeneficiaryBudgetExpensesEdit(
+        beneficiaryId,
+        expenses.id,
+        BeneficiaryBudgetSection.Loans
+      )
     "
   />
 
@@ -41,7 +45,11 @@
     :total="debtsTotal"
     :subsection-items="expenses.debts"
     :edit-route="
-      RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
+      RoutePath.AppBeneficiaryBudgetExpensesEdit(
+        beneficiaryId,
+        expenses.id,
+        BeneficiaryBudgetSection.Debts
+      )
     "
   />
 </template>
@@ -53,6 +61,7 @@
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
+  import { BeneficiaryBudgetSection } from '~/utils/constants/beneficiary'
 
   const props = defineProps<{
     beneficiaryId: string

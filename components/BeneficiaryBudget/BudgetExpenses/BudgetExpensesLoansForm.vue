@@ -1,5 +1,9 @@
 <template>
-  <section class="feature-section fr-container fr-p-5w fr-mb-3w">
+  <section
+    ref="loansSection"
+    href="#Loans"
+    class="feature-section fr-container fr-p-5w fr-mb-3w"
+  >
     <h2 class="fr-h2 primary">Crédit(s)</h2>
 
     <LoanForm
@@ -30,10 +34,26 @@
 <script setup lang="ts">
   import { v4 } from 'uuid'
   import { UpdateLoanOrDebtInput } from '~/server/schema'
+  import { BeneficiaryBudgetSection } from '~/utils/constants/beneficiary'
 
   defineProps<{ total: number | null }>()
 
+  const route = useRoute()
+
   const { fields, push, remove } = useFieldArray<UpdateLoanOrDebtInput>('loans')
+
+  const loansSection = ref<HTMLElement | null>(null)
+
+  onMounted(() => {
+    const section = route.hash.slice(1)
+
+    console.log('section', section)
+
+    if (loansSection.value && section === BeneficiaryBudgetSection.Loans) {
+      console.log('scroll to loans')
+      // focusAndScrollTo(loansSection.value)
+    }
+  })
 </script>
 
 <style scoped>

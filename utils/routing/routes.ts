@@ -1,5 +1,8 @@
 import { FileInstructionType } from '@prisma/client'
-import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+import {
+  BeneficiaryTab,
+  BeneficiaryBudgetSection
+} from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
 
 export enum Route {
@@ -209,8 +212,12 @@ export const RoutePath = {
     `${BeneficiaryRoute(beneficiaryId)}/budget/edit`,
   [Route.AppBeneficiaryBudgetExpensesEdit]: (
     beneficiaryId: string,
-    expensesId: string
-  ) => `${BeneficiaryRoute(beneficiaryId)}/expenses/${expensesId}/edit`,
+    expensesId: string,
+    section?: BeneficiaryBudgetSection
+  ) => {
+    const sectionHash = section ? `#${section}` : ''
+    return `${BeneficiaryRoute(beneficiaryId)}/expenses/${expensesId}/edit${sectionHash}`
+  },
   [Route.AppBeneficiaryBudgetIncomeEdit]: (
     beneficiaryId: string,
     incomeId: string

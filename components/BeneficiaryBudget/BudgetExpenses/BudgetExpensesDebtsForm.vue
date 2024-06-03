@@ -1,5 +1,13 @@
 <template>
-  <section class="feature-section fr-container fr-p-5w fr-mb-3w">
+  <section
+    ref="debtsSection"
+    class="feature-section fr-container fr-p-5w fr-mb-3w"
+  >
+    <a
+      id="debts"
+      href="#Debts"
+      aria-hidden="true"
+    ></a>
     <h2 class="fr-h2 primary">Dette(s)</h2>
 
     <DebtForm
@@ -29,11 +37,32 @@
 
 <script setup lang="ts">
   import { v4 } from 'uuid'
+  import VueScrollTo from 'vue-scrollto'
   import { UpdateLoanOrDebtInput } from '~/server/schema'
+  import { BeneficiaryBudgetSection } from '~/utils/constants/beneficiary'
 
   defineProps<{ total: number | null }>()
 
+  const route = useRoute()
+
   const { fields, push, remove } = useFieldArray<UpdateLoanOrDebtInput>('debts')
+
+  const debtsSection = ref<HTMLElement | null>(null)
+
+  onMounted(() => {
+    const section = route.hash.slice(1)
+
+    console.log('section', section)
+
+    if (debtsSection.value && section === BeneficiaryBudgetSection.Debts) {
+      console.log('scroll to debts')
+      VueScrollTo.scrollTo(debtsSection.value, 300, {
+        easing: 'linear',
+        offset: -50
+      })
+      // focusAndScrollTo(debtsSection.value)
+    }
+  })
 </script>
 
 <style scoped>

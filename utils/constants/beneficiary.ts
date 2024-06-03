@@ -4,3 +4,9 @@ export enum BeneficiaryTab {
   History = 'History',
   Budget = 'Budget'
 }
+
+export enum BeneficiaryBudgetSection {
+  Main = 'Main',
+  Loans = 'Loans',
+  Debts = 'Debts'
+}
