@@ -65,17 +65,29 @@
       />
       <template v-if="!timeout && !fetchResultsError">
         <li
-          v-for="({ value: resultValue, label: resultLabel }, index) in results"
+          v-for="(
+            {
+              value: resultValue,
+              label: resultLabel,
+              disabled: resultIsDisabled
+            },
+            index
+          ) in results"
           :ref="el => setOptionRef(el, resultValue)"
           :key="resultValue"
           class="menu-item"
           :class="{ 'active-menu-item': index === activeIndex }"
           role="option"
           :aria-selected="value === resultValue"
+          :aria-disabled="resultIsDisabled || false"
           @mousedown="onOptionMouseDown"
           @click="onSelectOption(resultValue, index)"
         >
           {{ resultLabel }}
+          <template v-if="resultIsDisabled">
+            <br />
+            <span class="fr-text--sm">Elément déjà sélectionné</span>
+          </template>
         </li>
       </template>
       <AtomAlert
@@ -91,13 +103,13 @@
   import { useField } from 'vee-validate'
   import { SEARCH_DEFER_MS, UNKNOWN_ERROR_MESSAGE } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
-  import { Options } from '~/utils/options'
+  import { OptionsWithDisabled } from '~/utils/options'
 
   const props = withDefaults(
     defineProps<{
       name: string
       label: string
-      searchFn: (search: string) => Promise<Options>
+      searchFn: (search: string) => Promise<OptionsWithDisabled>
       required?: boolean
       value?: string
       hint?: string
@@ -127,7 +139,7 @@
   const { id, errorId } = useFormFieldId(name)
   const listboxId = computed(() => `autocomplete-${id.value}-listbox`)
 
-  const results = ref<Options>([])
+  const results = ref<OptionsWithDisabled>([])
   const timeout = ref<NodeJS.Timeout | null>(null)
   const fetchResultsError = ref('')
   const combobox = ref<HTMLInputElement | null>(null)

@@ -34,7 +34,6 @@
               <component
                 :is="modalState.component"
                 v-if="modalState"
-                :key="rid"
                 v-bind="modalState.props"
                 v-model="isOpen"
               />
@@ -54,16 +53,13 @@
 
   const modal = ref<HTMLDialogElement | null>(null)
 
-  const { isOpen, title, triggerOpen } = useModal()
+  const { isOpen, setIsOpen, title, triggerOpen } = useModal()
 
   const dsfrModal = computed(() =>
     modal.value ? window.dsfr(modal.value) : undefined
   )
 
-  const rid = ref(getRandomId('modal-'))
-
   const stopWatch = watch(isOpen, value => {
-    rid.value = getRandomId('modal-')
     if (!value) {
       dsfrModal.value.modal.conceal()
     }
@@ -73,7 +69,7 @@
   })
 
   function onClose() {
-    modal.value?.close()
+    setIsOpen(false)
   }
 
   onMounted(() => {

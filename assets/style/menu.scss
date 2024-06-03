@@ -32,12 +32,19 @@
   border-radius: 0 0 0.5rem 0.5rem;
 }
 
-:not(.fr-search-bar) > .menu > .menu-item {
+:not(.fr-search-bar) > .menu > .menu-item:not([aria-disabled='true']) {
   padding: 0.5rem;
   cursor: pointer;
   outline-color: #0a76f6;
   outline-offset: 2px;
   outline-width: 2px;
+}
+
+.menu-item[aria-disabled='true'] {
+  padding: 0.5rem;
+  cursor: not-allowed;
+  pointer-events: none;
+  color: var(--text-disabled-grey);
 }
 
 .active-menu-item {

@@ -4,6 +4,9 @@ export const NEW_OPTION_PREFIX = `${NEW_OPTION_ID}-`
 type OptionType = { value: string; label: string }
 export type Options = Array<OptionType>
 
+type OptionWithDisabled = OptionType & { disabled?: boolean }
+export type OptionsWithDisabled = Array<OptionWithDisabled>
+
 export function labelsToOptions(labels: Record<string, string>): Options {
   return Object.entries(labels).map(([value, label]) => ({ label, value }))
 }
