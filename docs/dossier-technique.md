@@ -293,6 +293,9 @@ Les agents ont accès à diverses fonctionnalités touchants à :
 - l'accès aux synthèses d'entretien d'un bénéficiaire
 - l'accès au budget d'un bénéficiaire
 - la gestion des autres utilisateur de leur structure
+- l'ajout de documents dans une fiche bénéficiaire
+- l'export des données des bénéficiaires
+- l'export des statistiques
 
 Les règles d'accès à ces ressources sont complexes et dépendent de plusieurs niveaux d'accès attribués aux agents.
 
