@@ -1,4 +1,4 @@
-import { prepareSocialSupportStatFilters } from '../helpers'
+import { prepareHelpRequestStatFilters } from '../helpers'
 import {
   SocialSupportConstraints,
   SocialSupportSubjectRepo
@@ -12,7 +12,7 @@ export async function getHelpRequestSubjectsStatsQuery(
   input: StatFilterInput
 ) {
   const socialSupportWhere = {
-    where: prepareSocialSupportStatFilters(input)
+    where: prepareHelpRequestStatFilters(input)
   }
   appendConstraints(user, socialSupportWhere, SocialSupportConstraints.get)
 
