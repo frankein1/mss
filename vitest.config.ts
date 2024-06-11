@@ -1,5 +1,9 @@
 import path from 'path'
-import { defineConfig, coverageConfigDefaults } from 'vitest/config'
+import {
+  defineConfig,
+  configDefaults,
+  coverageConfigDefaults
+} from 'vitest/config'
 
 export default defineConfig({
   resolve: {
@@ -8,6 +12,7 @@ export default defineConfig({
     }
   },
   test: {
+    exclude: [...configDefaults.exclude, 'e2e/**'],
     coverage: {
       exclude: [
         ...coverageConfigDefaults.exclude,
