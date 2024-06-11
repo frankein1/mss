@@ -151,6 +151,26 @@ pnpm:test:e2e:
     - pnpm prisma db seed
     - pnpm run --if-present test:e2e
 
+pnpm:test:
+  extends: .vigigloo:pnpm:test
+  interruptible: true
+  needs: ['pnpm:install']
+  services:
+    - name: postgres:14.12-alpine
+      alias: database
+      variables:
+        POSTGRES_DB: mss
+        POSTGRES_USER: mss
+        POSTGRES_PASSWORD: password
+        POSTGRES_PORT: 5432
+  variables:
+    DATABASE_URL: postgresql://mss:password@database:5432/mss
+    APP_URL: http://localhost:3000
+  script:
+    - pnpm prisma migrate deploy
+    - pnpm prisma db seed
+    - pnpm run --if-present test --coverage
+
 deploy:scalingo-dev:
   stage: deploy
   extends:
