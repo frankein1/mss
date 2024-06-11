@@ -150,8 +150,6 @@ pnpm:test:e2e:
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
     - pnpm run --if-present test:e2e
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "exploration/ci-integration"'
 
 deploy:scalingo-dev:
   stage: deploy
