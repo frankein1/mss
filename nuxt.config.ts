@@ -129,7 +129,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     auth: {
-      jwtKey: process.env.AUTH_JWT_KEY,
+      jwtKey: process.env.AUTH_JWT_KEY || 'secretJWT',
       keycloakIssuer: process.env.AUTH_KEYCLOAK_ISSUER_URL,
       keycloakClientId: process.env.AUTH_KEYCLOAK_CLIENT_ID,
       keycloakClientSecret: process.env.AUTH_KEYCLOAK_CLIENT_SECRET,

@@ -24,7 +24,8 @@ include:
       # - /helm.development.auto.yml
       # - /helm.production.auto.yml
 
-# variables:
+variables:
+  PNPM_VERSION: 9.1.4
 #   HELM_CHART: nodejs
 #   HELM_REPOSITORY: https://gitlab.com/api/v4/projects/29298483/packages/helm/stable
 #   HELM_NAME: app
@@ -59,7 +60,7 @@ include:
 
 .vigigloo:pnpm:install:
   image:
-    name: registry.gitlab.com/vigigloo/tools/pnpm:node-20_pnpm-9.1.4
+    name: registry.gitlab.com/vigigloo/tools/pnpm:node-20_pnpm-${PNPM_VERSION}
 
 # .vigigloo:helm:deploy:
 #   variables:
@@ -103,7 +104,7 @@ include:
     paths:
       - node_modules/.pnpm
   before_script:
-    - npm install -g pnpm@8.6.2
+    - npm install -g pnpm@${PNPM_VERSION}
     - pnpm install --frozen-lockfile --prefer-offline
 
 .playwright:test:
@@ -138,6 +139,13 @@ pnpm:test:e2e:
   variables:
     DATABASE_URL: postgresql://mss:password@database:5432/mss
     APP_URL: http://localhost:3000
+    AUTH_KEYCLOAK_ISSUER_URL: https://recette.connect.inclusion.beta.gouv.fr
+    AUTH_KEYCLOAK_CLIENT_ID: demo
+    AUTH_KEYCLOAK_CLIENT_SECRET: ${E2E_AUTH_KEYCLOAK_CLIENT_SECRET}
+    STRUCTURE_MANAGER_EMAIL: jeanne.responsable@example.com
+    STRUCTURE_MANAGER_PASSWORD: ${E2E_STRUCTURE_MANAGER_PASSWORD}
+    SOCIAL_WORKER_EMAIL: jean.travailleur-social@example.com
+    SOCIAL_WORKER_PASSWORD: ${E2E_SOCIAL_WORKER_PASSWORD}
   script:
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
