@@ -4,11 +4,31 @@ import {
   configDefaults,
   coverageConfigDefaults
 } from 'vitest/config'
+import AutoImport from 'unplugin-auto-import/vite'
+
+export const nuxtAutoimports = {
+  from: '#imports',
+  imports: ['useRuntimeConfig']
+}
 
 export default defineConfig({
+  plugins: [
+    /** Make nuxt auto-imports available for tests */
+    AutoImport({
+      imports: [nuxtAutoimports],
+      dts: './test/auto-imports.d.ts',
+      eslintrc: {
+        enabled: true,
+        filepath: './test/.eslintrc-auto-import.json',
+        globalsPropValue: true
+      },
+      dirs: ['server/utils']
+    })
+  ],
   resolve: {
     alias: {
-      '~': path.resolve(__dirname)
+      '~': path.resolve(__dirname),
+      '#imports': path.resolve(__dirname, './.nuxt/imports.d.ts')
     }
   },
   test: {

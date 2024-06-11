@@ -71,6 +71,27 @@ Si besoin, il est possible d'alimenter la base de donnée avec des données de t
 pnpm prisma db seed
 ```
 
+## Tests
+
+On part d'une base de données vide pour les tests (si besoin on
+supprime son contenu avec `docker compose -f docker-compose.dev.yml down -v`)
+
+```
+pnpm dev:db:start
+pnpm prisma migrate deploy
+pnpm prisma db seed
+pnpm test
+```
+
+### Tests end-to-end
+
+```
+pnpm dev:db:start
+pnpm prisma migrate deploy
+pnpm prisma db seed
+pnpm test:e2e
+```
+
 ## Déploiement
 
 - Construire l'image docker
@@ -110,5 +131,5 @@ L'application de Mon Suivi Social existe sur plusieurs environnements :
   - Lien d'accès : https://monsuivisocial.incubateur.anct.gouv.fr/
   - Mode de déploiement : `pnpm release`
 - développement :
-  - Lien d'accès : https://next.monsuivisocial.dev.incubateur.anct.gouv.fr/
+  - Lien d'accès : https://monsuivisocial.dev.incubateur.anct.gouv.fr/
   - Mode de déploiement : Poussée sur la branche `main`
