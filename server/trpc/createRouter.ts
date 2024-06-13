@@ -10,7 +10,7 @@ const t = initTRPC.context<AppContext>().create({
   transformer: superjson
 })
 
-export const { router } = t
+export const { router, createCallerFactory } = t
 
 /**
  * Unprotected procedure
@@ -94,4 +94,9 @@ export const adminProcedure = t.procedure.use(adminMiddleware)
 export type AdminContext = {
   event: H3Event
   user: SecurityRuleGrantee & { role: (typeof UserRole)['Administrator'] }
+}
+
+/** Server side calls for tests */
+export const test = {
+  createCallerFactory
 }

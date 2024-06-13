@@ -12,23 +12,24 @@ export const nuxtAutoimports = {
 }
 
 export default defineConfig({
-  plugins: [
-    /** Make nuxt auto-imports available for tests */
-    AutoImport({
-      imports: [nuxtAutoimports],
-      dts: './test/auto-imports.d.ts',
-      eslintrc: {
-        enabled: true,
-        filepath: './test/.eslintrc-auto-import.json',
-        globalsPropValue: true
-      },
-      dirs: ['server/utils']
-    })
-  ],
+  // plugins: [
+  //   /** Make nuxt auto-imports available for tests */
+  //   AutoImport({
+  //     imports: [nuxtAutoimports],
+  //     dts: './test/auto-imports.d.ts',
+  //     eslintrc: {
+  //       enabled: true,
+  //       filepath: './test/.eslintrc-auto-import.json',
+  //       globalsPropValue: true
+  //     },
+  //     dirs: ['server/utils']
+  //   })
+  // ],
   resolve: {
     alias: {
-      '~': path.resolve(__dirname),
-      '#imports': path.resolve(__dirname, './.nuxt/imports.d.ts')
+      '~': path.resolve(__dirname)
+      // '#imports': path.resolve(__dirname, './.nuxt/imports.d.ts'),
+      // '#app': path.resolve(__dirname, './.nuxt/imports.d.ts')
     }
   },
   test: {
