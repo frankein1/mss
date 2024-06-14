@@ -84,7 +84,12 @@ export default defineEventHandler(async event => {
     data: {
       accessToken: null,
       accessTokenValidity: null,
-      lastAccess: new Date()
+      lastAccess: new Date(),
+      structure: {
+        update: {
+          lastAccess: new Date()
+        }
+      }
     }
   })
 

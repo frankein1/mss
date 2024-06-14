@@ -119,6 +119,8 @@ model Structure {
   updated        DateTime?      @updatedAt
   userActivities UserActivity[]
   lastActivity   DateTime?      @map("last_activity")
+  lastAccess     DateTime?      @map("last_access")
+  disable        Boolean        @default(false)
 
   @@map("structure")
 }
@@ -435,7 +437,7 @@ enum PaymentMethod {
 model HelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
-  subject   SocialSupportSubject @relation(fields: [subjectId], references: [id])
+  subject   SocialSupportSubject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
   subjectId String               @map("type_id") @db.Uuid
 
   prescribingOrganizationId String?              @map("prescribing_organization_id") @db.Uuid
@@ -1619,7 +1621,7 @@ model PartnerOrganization {
 
   inactive Boolean @default(false)
 
-  structure   Structure @relation(fields: [structureId], references: [id])
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
 
   dataInclusionStructure DataInclusionStructure? @relation(fields: [dataInclusionId], references: [id])
@@ -1641,7 +1643,7 @@ model PartnerOrganizationContact {
   phone String? @map("phone")
   email String? @map("email")
 
-  partner   PartnerOrganization @relation(fields: [partnerId], references: [id])
+  partner   PartnerOrganization @relation(fields: [partnerId], references: [id], onDelete: Cascade)
   partnerId String              @map("partner_id") @db.Uuid
 
   fileInstructionInstructorOrganizationContacts FileInstruction[] @relation("file_instruction_instructor_organization_contact")
