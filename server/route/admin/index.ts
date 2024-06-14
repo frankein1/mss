@@ -15,6 +15,7 @@ import { makeInactiveSocialSupportSubject } from './makeInactiveSocialSupportSub
 import { updateStructureSubject } from './updateSocialSupportSubject.mutation'
 import { getJobResults } from './getJobResults.query'
 import { launchStructureImport } from './launchStructureImport.mutation'
+import { disableStructure } from './disableStructure.mutation'
 
 export const adminRoutes = {
   createStructure,
@@ -33,5 +34,6 @@ export const adminRoutes = {
   makeInactiveSocialSupportSubject,
   updateStructureSubject,
   getJobResults,
-  launchStructureImport
+  launchStructureImport,
+  disableStructure
 }

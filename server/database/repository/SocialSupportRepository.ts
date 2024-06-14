@@ -55,6 +55,7 @@ export const SocialSupportRepo = {
   prisma: {
     groupBy: prismaClient.socialSupport.groupBy,
     findMany: prismaClient.socialSupport.findMany,
+    updateMany: prismaClient.socialSupport.updateMany,
     create: prismaClient.socialSupport.create
   }
 }

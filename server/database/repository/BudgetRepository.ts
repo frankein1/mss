@@ -24,5 +24,8 @@ function update<T extends Prisma.BudgetUpdateArgs>(
 
 export const BudgetRepo = {
   findUniqueOrThrow,
-  update
+  update,
+  prisma: {
+    deleteMany: prismaClient.budget.deleteMany
+  }
 }

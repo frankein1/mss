@@ -22,6 +22,9 @@ export default defineEventHandler(async event => {
       accessToken: token,
       accessTokenValidity: {
         gte: new Date()
+      },
+      structure: {
+        disable: false
       }
     },
     include: {

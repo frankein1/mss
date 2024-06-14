@@ -43,6 +43,7 @@ export const HelpRequestRepo = {
   prisma: {
     groupBy: prismaClient.helpRequest.groupBy,
     findMany: prismaClient.helpRequest.findMany,
+    updateMany: prismaClient.helpRequest.updateMany,
     create: prismaClient.helpRequest.create,
     update: prismaClient.helpRequest.update,
     delete: prismaClient.helpRequest.delete
