@@ -86,7 +86,7 @@ async function createEndOfSupportHelpRequestNotifications() {
     .map(({ fileInstruction: { socialSupport } }) => ({
       recipientId: socialSupport.createdById,
       beneficiaryId: socialSupport.beneficiaryId,
-      helpRequestId: socialSupport.id,
+      socialSupportId: socialSupport.id,
       type: NotificationType.EndOfSupport
     }))
 
