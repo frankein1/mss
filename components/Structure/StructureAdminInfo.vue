@@ -97,8 +97,8 @@
 </template>
 
 <script setup lang="ts">
-  import { canBeDisabled } from '~/utils/structure'
   import { StructureInfo } from './types'
+  import { canBeDisabled } from '~/utils/structure'
   import { structureFieldLabels } from '~/client/labels'
 
   defineProps<{
