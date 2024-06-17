@@ -1,4 +1,4 @@
-import { UserActivityType } from '@prisma/client'
+import { Prisma, UserActivityType } from '@prisma/client'
 import { signJwt } from '~/server/lib/jwt'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UserRepo } from '~/server/database'
@@ -26,7 +26,7 @@ export default defineEventHandler(async event => {
     },
     include: {
       ...includeOrderedCGUHistory(),
-      structure: { select: { id: true, type: true } }
+      structure: { select: { id: true, type: true, disable: true } }
     }
   })
 
@@ -35,6 +35,13 @@ export default defineEventHandler(async event => {
       statusCode: 400,
       message:
         "Votre jeton n'est plus valide. Merci de vous authentifier à nouveau."
+    })
+  }
+
+  if (user.structure && user.structure.disable) {
+    throw createError({
+      statusCode: 400,
+      message: 'Structure désactivée'
     })
   }
 
@@ -70,28 +77,33 @@ export default defineEventHandler(async event => {
 
   const sessionToken = signJwt(jwtUser, jwtKey, tokenValidationInMinutes)
 
+  const data: Prisma.UserUpdateInput = {
+    accessToken: null,
+    accessTokenValidity: null,
+    lastAccess: new Date()
+  }
+
+  if (user.structure) {
+    data.structure = {
+      update: {
+        lastAccess: new Date()
+      }
+    }
+  }
+
+  await UserRepo.prisma.update({
+    where: {
+      id: user.id
+    },
+    data
+  })
+
   setCookie(
     event,
     cookieKey,
     sessionToken,
     cookieOptions({ expiresInMinutes: tokenValidationInMinutes })
   )
-
-  await UserRepo.prisma.update({
-    where: {
-      id: user.id
-    },
-    data: {
-      accessToken: null,
-      accessTokenValidity: null,
-      lastAccess: new Date(),
-      structure: {
-        update: {
-          lastAccess: new Date()
-        }
-      }
-    }
-  })
 
   await addUserActivity({
     key: 'auth.validateToken',

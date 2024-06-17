@@ -37,6 +37,7 @@ export const FileInstructionRepo = {
   prisma: {
     create: prismaClient.fileInstruction.create,
     update: prismaClient.fileInstruction.update,
+    updateMany: prismaClient.fileInstruction.updateMany,
     groupBy: prismaClient.fileInstruction.groupBy
   }
 }
