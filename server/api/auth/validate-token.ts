@@ -6,7 +6,6 @@ import { getAppContextPermissions } from '~/server/security'
 import { JwtUser } from '~/types/user'
 import { cookieOptions } from '~/utils/cookie'
 import { includeOrderedCGUHistory } from '~/server/query'
-import { isAdmin } from '~/server/security/rules/helpers'
 
 export default defineEventHandler(async event => {
   const { token } = await readBody(event)

@@ -15,7 +15,6 @@ import { IdInput, idSchema } from '~/server/schema'
 import { AdminContext } from '~/server/trpc'
 import { canBeDisabled } from '~/utils/structure'
 import { prismaClient } from '~/server/prisma'
-import { Prisma } from '@prisma/client'
 
 const adminHandler = async ({
   ctx,
