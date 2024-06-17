@@ -6,6 +6,7 @@ import {
 } from '~/server/schema'
 import { StructureRepo } from '~/server/database'
 import { AdminContext } from '~/server/trpc'
+import { canBeDisabled } from '~/utils/structure'
 
 const adminHandler = async ({
   ctx: { user },
@@ -17,6 +18,7 @@ const adminHandler = async ({
   let where = {}
   if (input?.search) {
     where = {
+      disable: false,
       OR: [
         {
           name: {
@@ -45,14 +47,22 @@ const adminHandler = async ({
       email: true,
       inhabitantsNumber: true,
       inseeCode: true,
-      siret: true
+      siret: true,
+      disable: true,
+      lastAccess: true
     },
     orderBy: {
-      name: 'asc'
+      lastAccess: 'desc'
     }
   })
 
-  return { structures }
+  return {
+    structures: structures.map(({ lastAccess, ...data }) => ({
+      ...data,
+      lastAccess,
+      canBeDisabled: canBeDisabled({ lastAccess })
+    }))
+  }
 }
 
 export type AdminStructuresOutput = Prisma.PromiseReturnType<
