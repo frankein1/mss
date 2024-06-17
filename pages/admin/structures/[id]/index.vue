@@ -17,6 +17,7 @@
         class="fr-mb-5w"
         :structure="data.structure"
         @edit="editAdminInfo"
+        @disable="disableStructure"
       />
 
       <StructureAdminUsers
@@ -38,6 +39,7 @@
   import { CreateStructureInput } from '~/server/schema'
   import { RoutePath, RouteTitle } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
+  import StructureDisableAlert from '~/components/Structure/StructureDisableAlert.vue'
 
   const title = RouteTitle.AppStructure()
 
@@ -54,6 +56,38 @@
 
   const { data, pending, error, refresh } =
     await trpcClient.admin.getStructure.useQuery({ id: structureId })
+
+  function disableStructure() {
+    if (!data || !data.value) {
+      return
+    }
+
+    modal.open(StructureDisableAlert, {
+      title: 'Désactiver une structure',
+      structure: data.value.structure,
+      finish: onDisable,
+      cancel: onCancel
+    })
+  }
+
+  function onCancel() {
+    modal.close()
+  }
+
+  function onDisable(id: string) {
+    useTrpcMutation({
+      isSubmitting,
+      mutation: () => trpcClient.admin.disableStructure.mutate({ id }),
+      onSuccess: () => {
+        modal.close()
+        snackbar.success('Structure désactivé')
+        navigateTo(RoutePath.AdminStructures())
+      },
+      onFailure: () => {
+        snackbar.error('La désactivation a échoué')
+      }
+    })
+  }
 
   function editAdminInfo() {
     if (!data || !data.value) {

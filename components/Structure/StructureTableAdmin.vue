@@ -17,6 +17,7 @@
             <th scope="col">Type</th>
             <th scope="col">Code postal</th>
             <th scope="col">Ville</th>
+            <th scope="col">Connexion</th>
           </tr>
         </thead>
         <tbody>
@@ -35,6 +36,11 @@
               <td>{{ structureTypeKeys.value(structure.type) }}</td>
               <td>{{ structure.zipcode }}</td>
               <td>{{ structure.city }}</td>
+              <td>
+                <span :class="structure.canBeDisabled ? 'fr-badge--error' : ''">
+                  {{ formatDate(structure.lastAccess) || 'Aucune' }}
+                </span>
+              </td>
             </tr>
           </NuxtLink>
         </tbody>

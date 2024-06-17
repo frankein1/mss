@@ -72,6 +72,16 @@
 
     <div class="fr-grid-row fr-grid-row--right">
       <button
+        class="fr-mr-1w fr-btn btn-delete-action fr-btn--icon-left fr-icon-delete-line"
+        data-fr-opened="false"
+        aria-controls="global-modal"
+        title="Désactiver"
+        aria-label="Désactiver"
+        @click="emit('disable')"
+      >
+        Désactiver
+      </button>
+      <button
         class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line"
         data-fr-opened="false"
         aria-controls="global-modal"
@@ -93,7 +103,7 @@
     structure: StructureInfo
   }>()
 
-  const emit = defineEmits<{ edit: [] }>()
+  const emit = defineEmits<{ edit: []; disable: [] }>()
 </script>
 
 <style scoped lang="css">

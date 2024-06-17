@@ -15,6 +15,7 @@ import { IdInput, idSchema } from '~/server/schema'
 import { AdminContext } from '~/server/trpc'
 import { canBeDisabled } from '~/utils/structure'
 import { prismaClient } from '~/server/prisma'
+import { Prisma } from '@prisma/client'
 
 const adminHandler = async ({
   ctx,
@@ -149,7 +150,7 @@ const adminHandler = async ({
     data: {
       archivedById: ctx.user.id,
       archived: new Date(),
-      fileNumber: '',
+      // fileNumber: prismaClient.beneficiary.fields.id,
       title: null,
       pensionOrganisations: {
         set: []
