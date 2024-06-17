@@ -72,6 +72,7 @@
 
     <div class="fr-grid-row fr-grid-row--right">
       <button
+        v-if="canBeDisabled(structure)"
         class="fr-mr-1w fr-btn btn-delete-action fr-btn--icon-left fr-icon-delete-line"
         data-fr-opened="false"
         aria-controls="global-modal"
@@ -96,6 +97,7 @@
 </template>
 
 <script setup lang="ts">
+  import { canBeDisabled } from '~/utils/structure'
   import { StructureInfo } from './types'
   import { structureFieldLabels } from '~/client/labels'
 
