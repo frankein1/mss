@@ -14,6 +14,7 @@
       <StatsList
         :stats="data.financialHelpRequestCounts"
         :stats-percentage="false"
+        :with-sum="false"
       />
       <p class="fr-text--bold stats-total-amount">
         Montant total des aides délivrées par la structure

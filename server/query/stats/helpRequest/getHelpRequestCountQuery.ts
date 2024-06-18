@@ -20,20 +20,26 @@ export async function getHelpRequestCountQuery(
         }
       }
     }),
-    SocialSupportRepo.count(user, {
-      where: {
-        ...filters,
-        socialSupportType: socialSupportTypeFilter || 'HelpRequest',
-        fileInstruction: { helpRequest: { financialSupport: true } }
-      }
-    }),
-    SocialSupportRepo.count(user, {
-      where: {
-        ...filters,
-        socialSupportType: socialSupportTypeFilter || 'HelpRequest',
-        fileInstruction: { helpRequest: { financialSupport: false } }
-      }
-    }),
+    input.helpRequestSubject === FileInstructionType.Financial ||
+    !input.helpRequestSubject
+      ? SocialSupportRepo.count(user, {
+          where: {
+            ...filters,
+            socialSupportType: socialSupportTypeFilter || 'HelpRequest',
+            fileInstruction: { helpRequest: { financialSupport: true } }
+          }
+        })
+      : 0,
+    input.helpRequestSubject === FileInstructionType.Other ||
+    !input.helpRequestSubject
+      ? SocialSupportRepo.count(user, {
+          where: {
+            ...filters,
+            socialSupportType: socialSupportTypeFilter || 'HelpRequest',
+            fileInstruction: { helpRequest: { financialSupport: false } }
+          }
+        })
+      : 0,
     SocialSupportRepo.count(user, {
       where: {
         ...filters,
