@@ -22,7 +22,10 @@
 
     <h4>Filtres divers visibles sous condition sans réinitialisation</h4>
     <div id="atom-filters-not-visible-no-reset">
-      <AtomFilters :filters="filtersNotVisibleNoReset" />
+      <AtomFilters
+        :filters="filtersNotVisibleNoReset"
+        no-reset
+      />
     </div>
 
     <h4>
