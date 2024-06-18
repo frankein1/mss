@@ -11,7 +11,11 @@
     />
     <template v-else-if="subjectsStats">
       <h2 class="fr-h5">Objets d'accompagnement</h2>
-      <p>Pourcentage calculé sur le nombre total de synthèses d'entretien</p>
+      <p>
+        Pourcentage calculé sur le nombre total de synthèses d'entretien. Les
+        synthèses d'entretiens pouvant avoir plusieurs accompagnements associés,
+        le total des pourcentages peut être supérieur à 100%.
+      </p>
       <StatsList
         v-if="subjectsStats.length"
         :total-count="totalCount"

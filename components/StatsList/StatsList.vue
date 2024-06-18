@@ -53,6 +53,29 @@
           ></div>
         </div>
       </li>
+
+      <li
+        v-if="
+          withSum && (stats.length + 1 <= STATS_COLLAPSED_LIMIT || expandStats)
+        "
+        class="stats-entry fr-text--bold fr-mt-1w"
+        :class="{
+          'with-bar': statsBar,
+          'with-percentage': statsPercentage,
+          'with-color-dot': statsColorDot
+        }"
+      >
+        <span>Total</span>
+
+        <span>
+          {{ toFixed ? sum.toFixed(toFixed) : sum
+          }}<template v-if="unit">{{ unit }}</template>
+        </span>
+
+        <span v-if="statsPercentage">
+          {{ getPercentage(sum || 0, totalCount) }}%
+        </span>
+      </li>
     </ul>
     <button
       v-if="stats.length > STATS_COLLAPSED_LIMIT"
@@ -81,6 +104,7 @@
       totalCount?: number
       unit?: string
       toFixed?: number
+      withSum?: boolean
     }>(),
     {
       statsBar: false,
@@ -88,7 +112,8 @@
       statsColorDot: false,
       totalCount: 0,
       unit: '',
-      toFixed: undefined
+      toFixed: undefined,
+      withSum: true
     }
   )
 
@@ -103,6 +128,12 @@
 
   const expandBtnLabel = computed(() =>
     expandStats.value ? 'Voir moins' : 'Voir plus'
+  )
+
+  const sum = computed(() =>
+    props.withSum
+      ? props.stats.reduce((acc, curr) => acc + curr.count, 0)
+      : undefined
   )
 </script>
 

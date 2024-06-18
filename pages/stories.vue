@@ -23,6 +23,16 @@
       <div class="fr-col-6">
         <VeeSearchableSelectStory />
       </div>
+
+      <h2 class="fr-col-12">Statistiques</h2>
+
+      <div class="fr-col-12">
+        <StatsFiltersStory />
+      </div>
+
+      <div class="fr-col-12">
+        <StatsListStory />
+      </div>
     </div>
   </div>
 </template>
@@ -32,6 +42,8 @@
   import AtomFiltersStory from '~/components/AtomFilters/AtomFilters.story.vue'
   import VeeSearchableSelectStory from '~/components/VeeForm/VeeSearchableSelect.story.vue'
   import VeeInputStory from '~/components/VeeForm/VeeInput.story.vue'
+  import StatsFiltersStory from '~/components/StatsFilters/StatsFilters.story.vue'
+  import StatsListStory from '~/components/StatsList/StatsList.story.vue'
 
   definePageMeta({
     layout: 'landing'
