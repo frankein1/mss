@@ -1,6 +1,15 @@
 import type { Prisma } from '@prisma/client'
 import { fixtureStructure } from './'
 
+export enum FixtureUserRole {
+  Instructor = 0,
+  Referent = 1,
+  ReceptionAgent = 2,
+  SocialWorker = 3,
+  StructureManager = 4,
+  Administrator = 5
+}
+
 export const fixturesUsers = [
   {
     id: '94dea7ab-92e9-479a-9795-e4fdd4ef42af',

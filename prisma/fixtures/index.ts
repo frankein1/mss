@@ -1,6 +1,6 @@
 export { fixtureStructure } from './structures'
 export { fixturesSocialSupportSubjects } from './socialSupportSubjects'
-export { fixturesUsers } from './users'
+export { fixturesUsers, FixtureUserRole } from './users'
 export { fixturesBeneficiaries } from './beneficiaries'
 export { fixturesBeneficiaryRelatives } from './beneficiaryRelatives'
 export { fixturesSocialSupports } from './socialSupports'
