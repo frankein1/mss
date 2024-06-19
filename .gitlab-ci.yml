@@ -95,6 +95,26 @@ variables:
 #       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
 #         DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
 
+pnpm:test:
+  extends: .vigigloo:pnpm:test
+  interruptible: true
+  needs: ['pnpm:install']
+  services:
+    - name: postgres:14.12-alpine
+      alias: database
+      variables:
+        POSTGRES_DB: mss
+        POSTGRES_USER: mss
+        POSTGRES_PASSWORD: password
+        POSTGRES_PORT: 5432
+  variables:
+    DATABASE_URL: postgresql://mss:password@database:5432/mss
+    APP_URL: http://localhost:3000
+  script:
+    - pnpm prisma migrate deploy
+    - pnpm prisma db seed
+    - pnpm run --if-present test --coverage
+
 .playwright-pnpm:install:
   variables:
     CACHE_FALLBACK_KEY: $CI_DEFAULT_BRANCH

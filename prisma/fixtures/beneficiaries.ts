@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { fixtureStructure, fixturesUsers } from './'
+import { fixtureStructure, fixturesUsers, FixtureUserRole } from './'
 
 export const fixturesBeneficiaries = [
   {
@@ -10,7 +10,9 @@ export const fixturesBeneficiaries = [
     usualName: 'TEARLE',
     birthName: 'FIRTH',
     firstName: 'Måns',
-    referents: { connect: [{ id: fixturesUsers[4].id }] }
+    referents: {
+      connect: [{ id: fixturesUsers[FixtureUserRole.StructureManager].id }]
+    }
   },
   {
     id: '31152daf-0fdb-4340-aaf1-cbdab1aa1f1a',
@@ -24,7 +26,10 @@ export const fixturesBeneficiaries = [
     gender: 'Female',
     email: 'jwedderburn7@businesswire.com',
     referents: {
-      connect: [{ id: fixturesUsers[3].id }, { id: fixturesUsers[2].id }]
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.SocialWorker].id },
+        { id: fixturesUsers[FixtureUserRole.ReceptionAgent].id }
+      ]
     }
   },
   {
@@ -38,7 +43,10 @@ export const fixturesBeneficiaries = [
     birthDate: new Date('1987-08-21'),
     email: 'cblankett8@histats.com',
     referents: {
-      connect: [{ id: fixturesUsers[4].id }, { id: fixturesUsers[1].id }]
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.StructureManager].id },
+        { id: fixturesUsers[FixtureUserRole.Referent].id }
+      ]
     }
   },
   {
@@ -47,7 +55,7 @@ export const fixturesBeneficiaries = [
     structureId: fixtureStructure.id,
     status: 'Active',
     referents: {
-      connect: [{ id: fixturesUsers[0].id }]
+      connect: [{ id: fixturesUsers[FixtureUserRole.Instructor].id }]
     }
   },
   {
@@ -62,7 +70,10 @@ export const fixturesBeneficiaries = [
     gender: 'Female',
     email: 'lridewood0@de.vu',
     referents: {
-      connect: [{ id: fixturesUsers[0].id }, { id: fixturesUsers[3].id }]
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.Instructor].id },
+        { id: fixturesUsers[FixtureUserRole.SocialWorker].id }
+      ]
     }
   },
   {
@@ -75,7 +86,10 @@ export const fixturesBeneficiaries = [
     firstName: 'Valérie',
     gender: 'Male',
     referents: {
-      connect: [{ id: fixturesUsers[4].id }, { id: fixturesUsers[1].id }]
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.StructureManager].id },
+        { id: fixturesUsers[FixtureUserRole.Referent].id }
+      ]
     }
   },
   {
@@ -89,7 +103,7 @@ export const fixturesBeneficiaries = [
     gender: 'Female',
     familySituation: 'Divorced',
     referents: {
-      connect: [{ id: fixturesUsers[3].id }]
+      connect: [{ id: fixturesUsers[FixtureUserRole.SocialWorker].id }]
     }
   },
   {
@@ -104,7 +118,7 @@ export const fixturesBeneficiaries = [
     email: 'mpitone3@rambler.ru',
     familySituation: 'CoupleWithChildren',
     referents: {
-      connect: [{ id: fixturesUsers[3].id }]
+      connect: [{ id: fixturesUsers[FixtureUserRole.SocialWorker].id }]
     }
   },
   {
@@ -117,7 +131,10 @@ export const fixturesBeneficiaries = [
     firstName: 'Mélia',
     gender: 'Female',
     referents: {
-      connect: [{ id: fixturesUsers[1].id }, { id: fixturesUsers[2].id }]
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.Referent].id },
+        { id: fixturesUsers[FixtureUserRole.ReceptionAgent].id }
+      ]
     }
   },
   {
@@ -131,7 +148,10 @@ export const fixturesBeneficiaries = [
     gender: 'Male',
     email: 'rsword6@wp.com',
     referents: {
-      connect: [{ id: fixturesUsers[1].id }, { id: fixturesUsers[0].id }]
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.Referent].id },
+        { id: fixturesUsers[FixtureUserRole.Instructor].id }
+      ]
     }
   },
   {
@@ -144,7 +164,10 @@ export const fixturesBeneficiaries = [
     gender: 'Other',
     familySituation: 'Divorced',
     referents: {
-      connect: [{ id: fixturesUsers[4].id }, { id: fixturesUsers[1].id }]
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.StructureManager].id },
+        { id: fixturesUsers[FixtureUserRole.Referent].id }
+      ]
     }
   }
 ] satisfies Prisma.BeneficiaryUncheckedCreateInput[]
