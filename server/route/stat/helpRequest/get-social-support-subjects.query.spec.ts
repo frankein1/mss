@@ -37,7 +37,7 @@ describe('Statistics - File Instructions - Social Support Subjects', () => {
       'Aide sociale': 0,
       'Aide à la culture': 0,
       'Aides financières non remboursables': 1,
-      'Aides financières remboursables': 1,
+      'Aides financières remboursables': 4,
       'Autre': 0,
       'Domiciliation': 0,
       'Inclusion numérique': 0,

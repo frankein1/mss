@@ -43,11 +43,11 @@ const users = {
     role: fixturesUsers[FixtureUserRole.SocialWorker].role,
     status: fixturesUsers[FixtureUserRole.SocialWorker].status
   },
-  administrator: {
-    id: fixturesUsers[FixtureUserRole.Administrator].id,
+  referent: {
+    id: fixturesUsers[FixtureUserRole.Referent].id,
     structure: { id: fixtureStructure.id, type: fixtureStructure.type },
-    role: fixturesUsers[FixtureUserRole.Administrator].role,
-    status: fixturesUsers[FixtureUserRole.Administrator].status
+    role: fixturesUsers[FixtureUserRole.Referent].role,
+    status: fixturesUsers[FixtureUserRole.Referent].status
   }
 }
 
@@ -56,7 +56,7 @@ const trpc = {
   structureManager: createCaller(users.structureManager),
   receptionAgent: createCaller(users.receptionAgent),
   socialWorker: createCaller(users.socialWorker),
-  administrator: createCaller(users.administrator)
+  referent: createCaller(users.referent)
 }
 
 interface Fixtures {
