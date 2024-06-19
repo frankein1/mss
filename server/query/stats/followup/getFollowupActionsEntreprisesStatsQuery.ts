@@ -11,7 +11,6 @@ export async function getFollowupActionsEntreprisesStatsQuery(
 
   const followups = await FollowupRepo.findMany(user, {
     where: {
-      OR: [{ redirected: true }, { helpRequested: true }],
       socialSupport: preparedSocialSupportFilters
     },
     select: {
@@ -30,6 +29,11 @@ export async function getFollowupActionsEntreprisesStatsQuery(
       actionEntrepriseId: 'helpRequested',
       actionEntreprise: 'Instruction',
       _count: 0
+    },
+    noAction: {
+      actionEntrepriseId: 'noAction',
+      actionEntreprise: 'Aucune action renseignée',
+      _count: 0
     }
   }
 
@@ -39,6 +43,10 @@ export async function getFollowupActionsEntreprisesStatsQuery(
     }
     if (followup.helpRequested) {
       followupsActionsEntreprises.helpRequested._count++
+    }
+
+    if (!followup.redirected && !followup.helpRequested) {
+      followupsActionsEntreprises.noAction._count++
     }
   })
 

@@ -55,12 +55,9 @@
       </li>
 
       <li
-        v-if="
-          withSum && (stats.length + 1 <= STATS_COLLAPSED_LIMIT || expandStats)
-        "
+        v-if="withSum && (stats.length < STATS_COLLAPSED_LIMIT || expandStats)"
         class="stats-entry fr-text--bold fr-mt-1w"
         :class="{
-          'with-bar': statsBar,
           'with-percentage': statsPercentage,
           'with-color-dot': statsColorDot
         }"
@@ -78,7 +75,10 @@
       </li>
     </ul>
     <button
-      v-if="stats.length > STATS_COLLAPSED_LIMIT"
+      v-if="
+        (withSum && stats.length >= STATS_COLLAPSED_LIMIT) ||
+        stats.length > STATS_COLLAPSED_LIMIT
+      "
       class="fr-btn fr-btn--secondary"
       :aria-expanded="expandStats"
       :aria-controls="STATS_ID"

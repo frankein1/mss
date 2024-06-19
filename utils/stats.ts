@@ -8,5 +8,5 @@ export function labelOrUnprovided(value: string, options: Options) {
 }
 
 export function getPercentage(count: number, total: number) {
-  return ((count / total) * 100).toFixed(1)
+  return total !== 0 ? ((count / total) * 100).toFixed(1) : '-'
 }

@@ -1,6 +1,20 @@
 import { Prisma } from '@prisma/client'
 import { fixtureStructure, fixturesUsers, FixtureUserRole } from './'
 
+export enum FixtureBeneficiary {
+  TEARLE = 0,
+  PENSON = 1,
+  COURSOR = 2,
+  UNKNOWN = 3,
+  WONFAR = 4,
+  PISCOPO = 5,
+  APFELMANN = 6,
+  BREITLING = 7,
+  HEINIG = 8,
+  PENBERTHY = 9,
+  DOWNER = 10
+}
+
 export const fixturesBeneficiaries = [
   {
     id: 'aad15576-27cc-4a75-98f1-cdcb38808b83',
