@@ -46,7 +46,17 @@ export async function getHelpRequestCountQuery(
         socialSupportType: socialSupportTypeFilter || {
           in: ['HelpRequest', 'HelpRequestHousing']
         },
-        fileInstruction: { externalStructure: true }
+        fileInstruction: {
+          externalStructure: true,
+          ...(!input.helpRequestSubject
+            ? {}
+            : {
+                helpRequest: {
+                  financialSupport:
+                    input.helpRequestSubject === FileInstructionType.Financial
+                }
+              })
+        }
       }
     })
   ])
