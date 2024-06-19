@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.26.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.25.0...v1.26.0) (2024-06-19)
+
+
+### Features
+
+* **admin:** gestion de la désactivation d'une structure ([9fabff8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9fabff8f1a0e71f0bdcede3ed2ab7cd39a1bc422))
+* **cgu:** mise en ligne et activation des CGU et de la politique de confidentialité ([2c24eb6](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2c24eb6dcfb515e8c9a88790190f662d2d5ad1d4)), closes [#100](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/100)
+* **e2e:** ajout de tests d'authentification et intégration à la CI ([d9521d4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d9521d4daa4e885f8d6e88abe964b43790ffe8d3))
+* **statistiques:** ajout des totaux dans les listes statistiques ([956a34a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/956a34a8ffc90c03e3ec89972def4d5a7ef132a5)), closes [#481](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/481)
+* **statistiques:** tests API instructions de dossier - objets d'accompagnement & aides financières ([86c0349](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/86c0349c54b372aecaee378f2d21accbbfe9df23)), closes [#481](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/481)
+* **structure:** gestion de la dernière date de connexion d'une structure ([c8785d1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c8785d1ff281dac6b997728ba28083ad5a260957))
+
+
+### Bug Fixes
+
+* **notification:** corrige la création de notification en tache de fond ([fff0586](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fff058647fb8a9e33de514d6fba6e719325d3aba))
+* **statistiques:** corrections organismes instructeurs et actions entrepriseq & ajout de tests d'API ([e2ae557](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e2ae5576b3f10dffeb424b3fb9a7dd67bf11d3d9)), closes [#481](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/481)
+* **statistiques:** montant total des objets d'accompagnement incorrect ([913592d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/913592de4dc513fd21db456de37ba0ce775697b3)), closes [#481](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/481)
+* **statistiques:** récupération des objets d'accompagnement manquants ([dcc6bec](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/dcc6bec36a963ab6b0137a5d6cf4e89bb3c73914)), closes [#481](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/481)
+* **structure:** gestion de l'affichage du bouton désactiver ([27ceb42](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/27ceb425a7cbd60e95437baba5b5e49100dc246f))
+
 ## [1.25.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.24.3...v1.25.0) (2024-06-03)
 
 
