@@ -11,9 +11,15 @@
     />
     <template v-else-if="followupActionsEntreprisesStats">
       <h2 class="fr-h5">Actions entreprises</h2>
+      <p>
+        Pourcentage calculé sur le nombre total de synthèses d'entretien. Une
+        synthèse d'entretien pouvant donner lieu à plusieurs actions, la somme
+        des pourcentages peut être supérieure à 100%.
+      </p>
       <StatsList
         :total-count="totalCount"
         :stats="followupActionsEntreprisesStats"
+        :with-sum="false"
       />
     </template>
   </div>
