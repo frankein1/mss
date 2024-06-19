@@ -35,7 +35,7 @@ describe('Statistics - File Instructions - Prescribing Organization', () => {
     expect(parseStats(stats)).toEqual({
       'Mairie de Valence': 2,
       'CAF 26': 1,
-      'Non renseigné': 2
+      'Non renseigné': 3
     })
   })
 
@@ -57,6 +57,6 @@ describe('Statistics - File Instructions - Prescribing Organization', () => {
     const stats =
       await trpc.referent.stat.getHelpRequestPrescribingOrganizationStats(input)
 
-    expect(parseStats(stats)).toEqual({ 'Non renseigné': 1 })
+    expect(parseStats(stats)).toEqual({ 'Non renseigné': 2 })
   })
 })

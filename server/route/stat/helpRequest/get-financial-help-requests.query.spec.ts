@@ -44,14 +44,14 @@ describe('Statistics - File Instructions - Financial Help Requests', () => {
 
     expect(parseStats(stats)).toEqual({
       financialHelpRequestAmountByType: {
-        'Aides financières remboursables': 8000
+        'Aides financières remboursables': 8000 // amount for *successful* file instructions
       },
       financialHelpRequestCounts: {
-        "Nombre d'instructions": 3,
-        'Instruites en externe': 2,
+        "Nombre d'instructions": 4,
+        'Instruites en externe': 3,
         'Instruites en interne': 1
       },
-      financialHelpRequestTotalAmount: 2000 // amount for succesful *internal* file instructions
+      financialHelpRequestTotalAmount: 2000 // amount for successful *internal* file instructions
     })
   })
 
@@ -75,8 +75,8 @@ describe('Statistics - File Instructions - Financial Help Requests', () => {
     expect(parseStats(stats)).toEqual({
       financialHelpRequestAmountByType: {},
       financialHelpRequestCounts: {
-        "Nombre d'instructions": 0,
-        'Instruites en externe': 0,
+        "Nombre d'instructions": 1,
+        'Instruites en externe': 1,
         'Instruites en interne': 0
       },
       financialHelpRequestTotalAmount: 0

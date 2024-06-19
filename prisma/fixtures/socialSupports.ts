@@ -305,6 +305,30 @@ const fixturesHelpRequestSocialSupports = [
         }
       }
     }
+  },
+  {
+    id: '8f6da38f-82ff-4121-ae77-45fc707a1acc',
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
+    status: 'InvestigationOngoing',
+    structureId: fixtureStructure.id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id,
+    subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
+    socialSupportType: 'HelpRequest',
+    date: new Date('2023-10-19'),
+    fileInstruction: {
+      create: {
+        type: FileInstructionType.Financial,
+        externalStructure: true,
+        dispatchDate: new Date('2022-10-19'),
+        helpRequest: {
+          create: {
+            financialSupport: true,
+            subjectId: fixturesSocialSupportSubjects[3].id,
+            askedAmount: 1500
+          }
+        }
+      }
+    }
   }
 ] satisfies Prisma.SocialSupportUncheckedCreateInput[]
 
