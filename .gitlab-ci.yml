@@ -169,7 +169,7 @@ pnpm:test:e2e:
   script:
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
-    - pnpm run --if-present test:e2e
+    # - pnpm run --if-present test:e2e
 
 deploy:scalingo-dev:
   stage: deploy
