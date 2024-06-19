@@ -8,7 +8,7 @@
       </p>
     </article>
     <article class="cgu-container">
-      <h1 id="conditionsgnralesdutilisationdemonsuivisocialplateforme">
+      <h1>
         Conditions générales d’utilisation de Mon Suivi Social - Plateforme
       </h1>
       <p>
@@ -17,22 +17,22 @@
         d’utilisation de la plateforme «&nbsp;Mon Suivi Social&nbsp;».
       </p>
       <p>L’accès à la plateforme doit être précédé de leur acceptation.</p>
-      <h2 id="article1champdapplication">Article 1 - Champ d’application</h2>
+      <h2>Article 1 - Champ d’application</h2>
       <p>
-        Après la création d’un compte, la plateforme est ouverte aux agents des
-        ministères sociaux, des Centres Communaux d’Action Sociale (CCAS), des
-        Centres intercommunaux d'Action sociale (CIAS), des communes et des
-        structures d’accompagnement social
+        Après la création d’un compte, la plateforme est ouverte gratuitement
+        aux agents des ministères sociaux, des Centres Communaux d’Action
+        Sociale (CCAS), des Centres intercommunaux d'Action sociale (CIAS), des
+        communes et des structures d’accompagnement social
         <a href="#structure-definition">[1]</a>.
       </p>
-      <h2 id="article2objet">Article 2 - Objet</h2>
+      <h2>Article 2 - Objet</h2>
       <p>
         La plateforme Mon Suivi Social a pour objectif de faciliter le suivi
-        social des bénéficiaires des ministères sociaux, des CCAS, des CIAS, des
+        social des Bénéficiaires des ministères sociaux, des CCAS, des CIAS, des
         communes et des structures d’accompagnement social par la création d’un
         dossier social unique.
       </p>
-      <p>Ce dossier social unique permet notamment :</p>
+      <p>Ce dossier social unique permet notamment&nbsp;:</p>
       <ul>
         <li>
           le suivi des interactions des bénéficiaires dans leur structure&nbsp;;
@@ -47,9 +47,10 @@
       </ul>
       <p>
         Toute utilisation de la plateforme qui n’est pas conforme à l’objet des
-        présentes CGU est strictement interdite.
+        présentes CGU et/ou qui est susceptible d’affecter son fonctionnement
+        est strictement interdite.
       </p>
-      <h2 id="article3dfinitions">Article 3 - Définitions</h2>
+      <h2>Article 3 - Définitions</h2>
       <ul>
         <li>
           Le «&nbsp;Responsable de structure&nbsp;» est la personne référente
@@ -61,14 +62,15 @@
           Suivi Social.
         </li>
         <li>
-          L'«&nbsp;Utilisateur&nbsp;» est toute personne (travailleur social,
-          instructeur, agent d’accueil, référent) d’une structure
+          L'«&nbsp;Utilisateur&nbsp;» est toute personne (notamment travailleur
+          social, instructeur, agent d’accueil, référent) d’une structure
           d’accompagnement social autorisée par le responsable de structure à
           ajouter et gérer des Bénéficiaires.
         </li>
         <li>
-          Le «&nbsp;Bénéficiaire&nbsp;» est toute personne d’une structure qui
-          bénéficie d’un suivi social.
+          Le «&nbsp;Bénéficiaire&nbsp;» est toute personne qui bénéficie d’un
+          suivi social opéré par un ministère, un CCAS, un CIAS, une commune ou
+          une structure d’accompagnement social, par le biais de la plateforme.
         </li>
         <li>
           Les «&nbsp;Services&nbsp;» sont les fonctionnalités offertes par la
@@ -88,10 +90,17 @@
           l’article 4 du RGPD, traite les données à caractère personnel pour le
           compte du responsable de traitement.
         </li>
+        <li>
+          Les «&nbsp;structures d’accompagnement social&nbsp;» sont des
+          structures proposant un accompagnement se caractérisant par une
+          relation, individuelle ou collective, entre un accompagnant et un ou
+          plusieurs accompagnés, avec pour finalité l’amélioration de la
+          situation de la ou des personnes accompagnées. Ces structures mènent
+          des missions d’intérêt général.
+        </li>
       </ul>
-      <h2 id="article4fonctionnalitsouvertesauxutilisateurs">
-        Article 4 - Fonctionnalités ouvertes aux Utilisateurs
-      </h2>
+      <p></p>
+      <h2>Article 4 - Fonctionnalités ouvertes aux Utilisateurs</h2>
       <p>
         L’accès aux Services est conditionné par la création d’un compte dédié.
       </p>
@@ -130,7 +139,7 @@
           des informations nécessaires au traitement de sa demande&nbsp;;
         </li>
         <li>
-          ajouter des documents rattachés au dossier du bénéficiaire&nbsp;;
+          ajouter des documents rattachés au dossier du Bénéficiaire&nbsp;;
         </li>
         <li>créer une synthèse d’entretien avec un Bénéficiaire&nbsp;;</li>
         <li>
@@ -139,11 +148,11 @@
         </li>
         <li>
           accéder à l’historique de l’ensemble des accompagnements conduits par
-          la structure auprès des bénéficiaires&nbsp;;
+          la structure auprès des Bénéficiaires&nbsp;;
         </li>
         <li>
           gérer l’ensemble des Bénéficiaires d’une structure et accéder aux
-          données des bénéficiaires d’une structure&nbsp;;
+          données des Bénéficiaires d’une structure&nbsp;;
         </li>
         <li>
           créer et exporter des rapports de statistiques et d’activités de la
@@ -151,15 +160,14 @@
         </li>
         <li>supprimer un Bénéficiaire&nbsp;;</li>
         <li>
-          modifier les informations d’un bénéficiaire ou relatives au suivi
-          socio-médical d’un bénéficiaire&nbsp;;
+          modifier les informations d’un Bénéficiaire ou relatives au suivi
+          socio-médical d’un Bénéficiaire&nbsp;;
         </li>
         <li>gérer les rendez-vous pris par les Bénéficiaires&nbsp;;</li>
         <li>exporter les données.</li>
       </ul>
       <p>
-        Les habilitations sont indiquées dans le tableau présent en annexe des
-        présentes CGU ou accessibles sous format numérique à partir
+        Les habilitations sont accessibles sous format numérique à partir
         <a
           href="https://outline.incubateur.anct.gouv.fr/s/623675f2-869e-44da-ae7e-8d9b1decbe15"
           target="_blank"
@@ -174,21 +182,21 @@
       <p>
         Les ministères sociaux ou structures d’accompagnement social ne
         justifiant pas d’une base légale conforme à l’article 9 du RGPD ne
-        doivent pas collecter de données de santé comme : Groupe iso-ressources
-        (GIR), médecin traitant, informations médico-sociales.
+        doivent pas collecter de données de santé comme&nbsp;: Groupe
+        iso-ressources (GIR), médecin traitant, informations médico-sociales.
       </p>
       <p>
-        Le responsable de structure devra indiquer lors de sa demande de
+        Le Responsable de structure devra indiquer lors de sa demande de
         création de compte si la structure est habilitée ou non à traiter ces
         données.
       </p>
       <p>
         Au sein des CCAS et des CIAS, seuls certains profils peuvent accéder aux
-        NIR (responsables de structures, travailleurs sociaux et instructeurs
-        uniquement s’ils sont identifiés comme référent du bénéficiaire). Il en
+        NIR (Responsables de structures, travailleurs sociaux et instructeurs
+        uniquement s’ils sont identifiés comme référent du Bénéficiaire). Il en
         est de même des données de santé au sein des structures habilitées à les
-        traiter. Il revient au responsable de structure lors de la création du
-        compte de vérifier que l’utilisateur dispose des habilitations
+        traiter. Il revient au Responsable de structure lors de la création du
+        compte de vérifier que l’Utilisateur dispose des habilitations
         nécessaires pour traiter ces données.
       </p>
       <p>
@@ -196,10 +204,8 @@
         plateforme Inclusion Connect, sous réserve de l’acceptation des CGU de
         cette plateforme.
       </p>
-      <h2 id="article5responsabilits">Article 5 - Responsabilités</h2>
-      <h3 id="51lditeurdelaplateformenbspmonsuivisocialnbsp">
-        5.1 L’éditeur de la plateforme «&nbsp;Mon Suivi Social&nbsp;»
-      </h3>
+      <h2>Article 5 - Responsabilités</h2>
+      <h3>5.1 L’éditeur de la plateforme «&nbsp;Mon Suivi Social&nbsp;»</h3>
       <p>
         Tout événement ayant pour conséquence un dysfonctionnement de la
         plateforme et sous réserve de toute interruption ou modification en cas
@@ -235,11 +241,13 @@
         sur la plateforme et sa responsabilité ne saurait être engagée en cas de
         dommage direct ou indirect résultant de l’utilisation des dites données.
       </p>
-      <h3 id="52lutilisateur">5.2 L’Utilisateur</h3>
+      <h3>5.2 L’Utilisateur</h3>
       <p>
-        L'Utilisateur s’engage à utiliser la plateforme conformément à son
-        objet, à ne pas commercialiser les données reçues et à ne pas les
-        communiquer à des tiers en dehors des cas prévus par la loi.
+        L'Utilisateur s’engage à utiliser la plateforme conformément à sa
+        destination, à utiliser les données reçues dans le cadre prévues par les
+        présentes CGU pour le suivi social des Bénéficiaires, à respecter la
+        confidentialité de ces données, à ne pas les commercialiser et à ne pas
+        les communiquer à des tiers en dehors des cas prévus par la loi.
       </p>
       <p>
         Toute information transmise par l'Utilisateur est de sa seule
@@ -258,9 +266,12 @@
         L’Utilisateur prend toutes mesures permettant d’éviter une utilisation
         détournée ou frauduleuse des données disponibles via la plateforme.
       </p>
-      <h3 id="53droitdinformationdespersonnesconcernes">
-        5.3 Droit d’information des personnes concernées
-      </h3>
+      <h3>5.3 Droit d’information des personnes concernées</h3>
+      <p>
+        Le responsable de traitement s’assure de l’information des bénéficiaires
+        relatif au traitement de données à caractère personnel réalisé,
+        conformément aux obligations du RGPD.
+      </p>
       <p>
         Le Responsable de traitement et l’ANCT s’engagent conjointement à
         garantir l’exercice des droits des personnes ci-après&nbsp;:
@@ -270,7 +281,7 @@
         <li>le droit d’opposition au traitement&nbsp;;</li>
         <li>
           le droit de rectification des données et le cas échéant de suppression
-          des données&nbsp;;
+          des données
         </li>
         <li>le droit à la limitation des données traitées&nbsp;;</li>
         <li>droit au retrait du consentement (pour les cookies).</li>
@@ -310,24 +321,25 @@
         traitement peut être amené à demander la communication d’une preuve
         d’identité.
       </p>
-      <h2 id="article6misejourdesconditionsdutilisation">
-        Article 6 - Mise à jour des conditions d’utilisation
-      </h2>
+      <p>
+        Pour plus d’informations sur le traitement de données à caractère
+        personnel réalisé dans le cadre de Mon Suivi Social, il convient de se
+        référer à la
+        <a
+          href="/politique-confidentialite"
+          target="_blank"
+          >Politique de confidentialité</a
+        >.
+      </p>
+      <h2>Article 6 - Mise à jour des conditions d’utilisation</h2>
       <p>
         Toute modification des CGU réalisée en fonction des modifications
         apportées à la plateforme, de l’évolution de la législation ou pour tout
         autre motif jugé nécessaire, nécessite le consentement de l’Utilisateur.
         Les termes des CGU modifiées doivent être acceptés au moment de la
-        connexion.
+        connexion. &nbsp;
       </p>
-      <h2 id="article7propritintellectuelle">
-        Article 7 - Propriété intellectuelle
-      </h2>
-      <p>
-        Les Utilisateurs de la plateforme n’ont qu’un droit d’utilisation de la
-        plateforme dans les strictes limites des présentes CGU.
-      </p>
-      <h2 id="article8droitapplicable">Article 8 – Droit applicable</h2>
+      <h2>Article 7 – Droit applicable</h2>
       <p>Le présent contrat est régi par le droit français.</p>
       <p>
         En cas de contestation, litiges ou autres différends éventuels sur

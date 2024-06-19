@@ -8,9 +8,7 @@
       </p>
     </article>
     <article class="cgu-container">
-      <h1
-        id="conditionsgnralesdutilisationdemonsuivisocialresponsabledestructuresdaccompagnementsocial"
-      >
+      <h1>
         Conditions générales d’utilisation de Mon Suivi Social – Responsable de
         structures d’accompagnement social
       </h1>
@@ -20,29 +18,29 @@
         d’utilisation de la plateforme «&nbsp;Mon Suivi Social&nbsp;».
       </p>
       <p>L’accès à la plateforme doit être précédé de leur acceptation.</p>
-      <h2 id="article1champdapplication">Article 1 - Champ d’application</h2>
+      <h2>Article 1 – Champ d’application</h2>
       <p>
-        Après la création d’un compte, la plateforme est ouverte aux agents des
-        ministères sociaux, des Centres Communaux d’Action Sociale (CCAS), des
-        Centres intercommunaux d’Action sociale (CIAS), des communes et des
-        structures d’accompagnement social
+        Après la création d’un compte, la plateforme est ouverte gratuitement
+        aux agents des ministères sociaux, des Centres Communaux d’Action
+        Sociale (CCAS), des Centres intercommunaux d’Action sociale (CIAS), des
+        communes et des structures d’accompagnement social
         <a href="#structure-definition">[1]</a>.
       </p>
-      <h2 id="article2objet">Article 2 – Objet</h2>
+      <h2>Article 2 – Objet</h2>
       <p>
         La plateforme Mon Suivi Social a pour objectif de faciliter le suivi
-        social des bénéficiaires des ministères sociaux, des CCAS, des CIAS, des
+        social des Bénéficiaires des ministères sociaux, des CCAS, des CIAS, des
         communes et structures d’accompagnement social par la création d’un
         dossier social unique.
       </p>
       <p>Ce dossier social unique permet notamment&nbsp;:</p>
       <ul>
         <li>
-          le suivi des interactions des bénéficiaires dans leur structure&nbsp;;
+          le suivi des interactions des Bénéficiaires dans leur structure&nbsp;;
         </li>
         <li>
           la centralisation et la sécurisation des dossiers des
-          bénéficiaires&nbsp;;
+          Bénéficiaires&nbsp;;
         </li>
         <li>la recherche d’informations&nbsp;;</li>
         <li>le partage des agendas et la gestion des tâches&nbsp;;</li>
@@ -50,9 +48,10 @@
       </ul>
       <p>
         Toute utilisation de la plateforme qui n’est pas conforme à l’objet des
-        présentes CGU est strictement interdite.
+        présentes CGU et/ou qui est susceptible d’affecter son fonctionnement
+        est strictement interdite.
       </p>
-      <h2 id="nbsparticle3dfinitions">&nbsp;Article 3 - Définitions</h2>
+      <h2>Article 3 – Définitions</h2>
       <ul>
         <li>
           Le «&nbsp;Responsable de structure&nbsp;» est la personne responsable
@@ -64,18 +63,21 @@
           Suivi Social
         </li>
         <li>
-          L'«&nbsp;Utilisateur&nbsp;» est toute personne d’une structure
-          d’accompagnement social autorisé par le responsable de structure à
-          ajouter et gérer des Bénéficiaires.
+          L'«&nbsp;Utilisateur&nbsp;» est toute personne (notamment travailleur
+          social, instructeur, agent d’accueil, référent) autorisé par le
+          Responsable de structure à ajouter et gérer des Bénéficiaires.
         </li>
         <li>
-          Le «&nbsp;Bénéficiaire&nbsp;» est toute personne d’une structure qui
-          bénéficie d’un suivi social de la part d’un agent. Les
-          «&nbsp;Services&nbsp;» sont les fonctionnalités offertes par la
+          Le «&nbsp;Bénéficiaire&nbsp;» est toute personne qui bénéficie d’un
+          suivi social opéré par un ministère, un CCAS, un CIAS, une commune ou
+          une structure d’accompagnement social, par le biais de la plateforme.
+        </li>
+        <li>
+          Les «&nbsp;Services&nbsp;» sont les fonctionnalités offertes par la
           plateforme pour répondre à ses finalités.
         </li>
         <li>
-          Le «&nbsp;responsable de traitement&nbsp;» est la personne qui, au
+          Le «&nbsp;Responsable de traitement&nbsp;» est la personne qui, au
           sens de l’article 4 du règlement (UE) n°2016/679 du Parlement européen
           et du Conseil du 27 avril 2016 relatif à la protection des personnes
           physiques à l’égard du traitement des données à caractère personnel et
@@ -88,8 +90,16 @@
           l’article 4 du RGPD, traite les données à caractère personnel pour le
           compte du responsable de traitement.
         </li>
+        <li>
+          Les «&nbsp;Structures d’accompagnement social&nbsp;» sont des
+          structures proposant un accompagnement se caractérisant par une
+          relation, individuelle ou collective, entre un accompagnant et un ou
+          plusieurs accompagnés, avec pour finalité l’amélioration de la
+          situation de la ou des personnes accompagnées. Ces structures mènent
+          des missions d’intérêt général.
+        </li>
       </ul>
-      <h2 id="article4fonctionnalits">Article 4 – Fonctionnalités</h2>
+      <h2>Article 4 – Fonctionnalités</h2>
       <p>
         L’accès aux Services est conditionné par la création d’un compte dédié.
       </p>
@@ -109,10 +119,10 @@
         leur profil&nbsp;: travailleur social, instructeur, agent d’accueil,
         référent.
       </p>
-      <h3 id="41fonctionnalitsouvertesuniquementauxresponsablesdestructures">
+      <h3>
         4.1 Fonctionnalités ouvertes uniquement aux Responsables de structures
       </h3>
-      <p>Mon Suivi Social permet à tout responsable de structure de&nbsp;:</p>
+      <p>Mon Suivi Social permet à tout Responsable de structure de&nbsp;:</p>
       <ul>
         <li>
           enregistrer et modifier une structure (ministères sociaux, CCAS, CIAS,
@@ -122,31 +132,29 @@
         </li>
         <li>
           créer et modifier des comptes pour les Utilisateurs de la plateforme.
-          Chaque Utilisateur aura un compte individuel et nominatif. Pour
-          accéder aux services de la Plateforme, l’Utilisateur, après son
-          enregistrement par le responsable de structure, devra se connecter à
-          l’aide d’un lien l’invitant à définir un mot de passe. Le nouveau mot
-          de passe doit ensuite être choisi par l’Utilisateur de façon à ce
-          qu’il ne puisse être deviné par un tiers. Cette information doit être
-          sécurisée, conservée et non-cédée&nbsp;;
+          Chaque compte est individuel et nominatif. Pour accéder aux services
+          de la Plateforme, chaque personne habilitée (Utilisateurs et
+          Responsable de structure) devra se connecter à l’aide d’un lien
+          l’invitant à définir un mot de passe. Le nouveau mot de passe doit
+          ensuite être choisi par l’Utilisateur de façon à ce qu’il ne puisse
+          être deviné par un tiers. Cette information doit être sécurisée,
+          conservée et non-cédée&nbsp;;
         </li>
         <li>
           gérer les droits d’accès des Utilisateurs aux différentes
           structures&nbsp;;
         </li>
-        <li>supprimer un bénéficiaire.</li>
+        <li>supprimer un Bénéficiaire.</li>
       </ul>
       <p>
         Le Responsable de structure peut se connecter à Mon Suivi Social via la
         plateforme Inclusion Connect, sous réserve de l’acceptation des CGU de
         cette plateforme.
       </p>
-      <h2
-        id="42fonctionnalitsouvertesauxresponsablesdestructuresetutilisateurs"
-      >
+      <h3>
         4.2 Fonctionnalités ouvertes aux Responsables de structures et
         Utilisateurs
-      </h2>
+      </h3>
       <p>
         «&nbsp;Mon Suivi Social&nbsp;» permet à tout Responsable de structure et
         Utilisateur (selon habilitation) de&nbsp;:
@@ -156,7 +164,9 @@
           ajouter un Bénéficiaire sur l’application en renseignant l’ensemble
           des informations nécessaires au traitement de sa demande&nbsp;;
         </li>
-        <li>ajouter des documents rattachés au dossier du bénéficiaire.</li>
+        <li>
+          ajouter des documents rattachés au dossier du Bénéficiaire&nbsp;;
+        </li>
         <li>créer une synthèse d’entretien avec un Bénéficiaire&nbsp;;</li>
         <li>
           instruire ou aider à la constitution d'une demande d’aide légale ou
@@ -164,11 +174,11 @@
         </li>
         <li>
           accéder à l’historique de l’ensemble des accompagnements conduits par
-          la structure auprès des bénéficiaires&nbsp;;
+          la structure auprès des Bénéficiaires&nbsp;;
         </li>
         <li>
           gérer l’ensemble des Bénéficiaires d’une structure et accéder aux
-          données des bénéficiaires&nbsp;;
+          données des Bénéficiaires&nbsp;;
         </li>
         <li>
           créer et exporter des rapports statistiques et d’activités de la
@@ -176,16 +186,15 @@
         </li>
         <li>gérer les rendez-vous pris par les Bénéficiaires&nbsp;;</li>
         <li>
-          modifier les informations d’un bénéficiaire ou relatives au suivi
-          socio-médical d’un bénéficiaire&nbsp;;
+          modifier les informations d’un Bénéficiaire ou relatives au suivi
+          socio-médical d’un Bénéficiaire&nbsp;;
         </li>
         <li>supprimer un Bénéficiaire&nbsp;;</li>
         <li>gérer les rendez-vous pris par les Bénéficiaires&nbsp;;</li>
         <li>exporter les données.</li>
       </ul>
       <p>
-        Les habilitations sont indiquées dans le tableau présent en annexe des
-        présentes CGU ou accessibles sous format numérique à partir
+        Les habilitations sont accessibles sous format numérique à partir
         <a
           href="https://outline.incubateur.anct.gouv.fr/s/623675f2-869e-44da-ae7e-8d9b1decbe15"
           target="_blank"
@@ -203,26 +212,24 @@
         médecin traitant, informations médico-sociales.
       </p>
       <p>
-        Le responsable de structure devra indiquer lors de sa demande de
+        Le Responsable de structure devra indiquer lors de sa demande de
         création de compte si la structure est habilitée ou non à traiter ces
         données.
       </p>
       <p>
         Au sein des CCAS et des CIAS, seuls certains profils peuvent accéder aux
         NIR (responsables de structures, travailleurs sociaux et instructeurs
-        uniquement s’ils sont identifiés comme référent du bénéficiaire). Il en
+        uniquement s’ils sont identifiés comme référent du Bénéficiaire). Il en
         est de même des données de santé au sein des structures habilitées à les
         traiter.
       </p>
       <p>
-        Il revient au responsable de structure lors de la création du compte de
-        vérifier que l’utilisateur dispose des habilitations nécessaires pour
+        Il revient au Responsable de structure lors de la création du compte de
+        vérifier que l’Utilisateur dispose des habilitations nécessaires pour
         traiter ces données.
       </p>
-      <h2 id="article5responsabilits">Article 5 - Responsabilités</h2>
-      <h3 id="51lditeurdelaplateformenbspmonsuivisocialnbsp">
-        5.1 L’éditeur de la plateforme «&nbsp;Mon Suivi Social&nbsp;»
-      </h3>
+      <h2>Article 5 – Responsabilités</h2>
+      <h3>5.1 L’éditeur de la plateforme «&nbsp;Mon Suivi Social&nbsp;»</h3>
       <p>
         Tout événement ayant pour conséquence un dysfonctionnement de la
         plateforme et sous réserve de toute interruption ou modification en cas
@@ -254,17 +261,21 @@
       <p>
         La responsabilité de l’éditeur ne saurait être engagée en cas
         d’impossibilité d’accès, même temporaire, à la plateforme ou à
-        l’utilisation des services. L’éditeur de la plateforme n’est pas
-        responsable des données se trouvant sur la plateforme et sa
-        responsabilité ne saurait être engagée en cas de dommage direct ou
-        indirect résultant de l’utilisation des dites données.
+        l’utilisation des services.
       </p>
-      <h3 id="52leresponsabledestructure">5.2 Le Responsable de structure</h3>
+      <p>
+        L’éditeur de la plateforme n’est pas responsable des données se trouvant
+        sur la plateforme et sa responsabilité ne saurait être engagée en cas de
+        dommage direct ou indirect résultant de l’utilisation des dites données.
+      </p>
+      <h3>5.2 Le Responsable de structure</h3>
       <p>
         Le Responsable de structure s’engage à utiliser la plateforme
-        conformément à sa destination, à ne pas commercialiser les données
-        reçues et à ne pas les communiquer à des tiers en dehors des cas prévus
-        par la loi.
+        conformément à sa destination, à utiliser les données reçues dans le
+        cadre prévu par les présentes CGU pour le suivi social des
+        Bénéficiaires, à respecter la confidentialité de ces données, à ne pas
+        les communiquer à des tiers en dehors des cas prévus par la loi et à ne
+        pas les commercialiser.
       </p>
       <p>
         Il assure être en mesure d’engager juridiquement la structure. Toute
@@ -287,9 +298,14 @@
         utilisation détournée ou frauduleuse des données disponibles via la
         plateforme.
       </p>
-      <h2
-        id="article6accorddesoustraitancepourletraitementdedonnescaractrepersonnel"
-      >
+      <p>
+        En cas d’atteinte aux droits de la personne résultant de traitements de
+        données à caractère personnel, le Responsable de structure s’expose aux
+        sanctions prévues aux articles 226-16 à 226-24 du code pénal prévoyant
+        des peines pouvant aller jusqu’à cinq ans d’emprisonnement et à 300 000
+        euros d’amende.
+      </p>
+      <h2>
         Article 6 – Accord de sous-traitance pour le traitement de données à
         caractère personnel
       </h2>
@@ -301,27 +317,31 @@
       </p>
       <p>
         L’Agence Nationale de la Cohésion des Territoires a la qualité de
-        Sous-traitant. Les obligations respectives du Responsable de traitement
-        et du Sous-traitant sont précisées en annexe des présentes CGU.
+        Sous-traitant.
       </p>
-      <h2 id="article7misejourdesconditionsdutilisation">
-        Article 7 - Mise à jour des conditions d’utilisation
-      </h2>
+      <p>
+        Les obligations respectives du Responsable de traitement et du
+        Sous-traitant sont précisées en annexe des présentes CGU.
+      </p>
+      <h2>Article 7 – Mise à jour des conditions d’utilisation</h2>
       <p>
         Toute modification des CGU réalisée en fonction des modifications
         apportées à la plateforme, de l’évolution de la législation ou pour tout
         autre motif jugé nécessaire, nécessite le consentement des Responsables
-        de structures et Utilisateurs. Les termes des CGU modifiées doivent être
-        acceptés au moment de la connexion.
+        de structures et Utilisateurs.
       </p>
-      <h2 id="article8propritintellectuelle">
-        Article 8 - Propriété intellectuelle
-      </h2>
       <p>
-        Les Utilisateurs de la plateforme n’ont qu’un droit d’utilisation de la
-        plateforme dans les strictes limites des présentes CGU.
+        Les termes des CGU modifiées doivent être acceptés au moment de la
+        connexion.
       </p>
-      <h2 id="article9droitapplicable">Article 9 - Droit applicable</h2>
+      <p>
+        La présente plateforme est un logiciel «&nbsp;open source&nbsp;»,
+        c’est-à-dire que son code source est librement accessible. L’ANCT
+        autorise les tiers, à titre non exclusif et gratuit, à utiliser, copier,
+        diffuser et modifier le logiciel sans transférer les droits d’auteur qui
+        y sont attachés.
+      </p>
+      <h2>Article 8 – Droit applicable</h2>
       <p>Le présent contrat est régi par le droit français.</p>
       <p>
         En cas de contestation, litiges ou autres différends éventuels sur
@@ -334,9 +354,7 @@
         sur son interprétation, son exécution ou sa réalisation, sera soumis aux
         tribunaux compétents du ressort de la juridiction de Paris.
       </p>
-      <h2 id="annexenbspaccorddesoustraitance">
-        Annexe&nbsp;: Accord de sous-traitance
-      </h2>
+      <h2>Annexe&nbsp;: Accord de sous-traitance</h2>
       <p>
         L’Agence Nationale de Cohésion des Territoires (ANCT), en qualité de
         sous-traitant, est autorisée à traiter pour le compte des ministères
@@ -346,9 +364,7 @@
         et l’hébergement des Services, dans les conditions décrites à la
         présente Annexe.
       </p>
-      <h3 id="descriptiondutraitementdedonnescaractrepersonnel">
-        Description du traitement de données à caractère personnel
-      </h3>
+      <h3>Description du traitement de données à caractère personnel</h3>
       <p>Sont concernées par le traitement les données suivantes&nbsp;:</p>
       <div class="fr-table fr-table--no-caption">
         <table>
@@ -449,7 +465,7 @@
                   épouse, frère / sœur, fils / fille, etc.), numéro de
                   téléphone, le fait de vivre ou non au domicile du
                   bénéficiaire, statut d’aidant familial, date de naissance,
-                  adresse e-mail&nbsp;
+                  adresse e-mail
                 </p>
               </td>
             </tr>
@@ -469,6 +485,7 @@
           </tbody>
         </table>
       </div>
+
       <p>Le traitement de ces données a pour finalité de&nbsp;:</p>
       <ul>
         <li>
@@ -482,7 +499,7 @@
           Instruire, gérer et, le cas échéant, ouvrir les droits et/ou verser
           les prestations sociales légales et facultatives&nbsp;;
         </li>
-        <li>Permettre la prise de rendez-vous des bénéficiaires&nbsp;;</li>
+        <li>Permettre la prise de rendez-vous des Bénéficiaires&nbsp;;</li>
         <li>
           Offrir un accompagnement social et médico-social adapté aux
           difficultés rencontrées ayant notamment pour objet d’élaborer un
@@ -498,10 +515,10 @@
         </li>
       </ul>
       <p>
-        Le traitement de données est réalisé sur le fondement de l’article 6 du
-        RGPD, déterminé par le responsable de traitement. La base légale du
+        Le traitement de données est réalisé sur le fondement&nbsp;de l’article
+        6 du RGPD, déterminé par le Responsable de traitement. La base légale du
         présent traitement peut reposer sur une mission d’intérêt public
-        lorsqu’un ministère, une commune, un CCAS ou un CIAS est responsable de
+        lorsqu’un ministère, une commune, un CCAS ou un CIAS est Responsable de
         traitement, au titre des articles 6-e du RGPD et L. 123-5 du code de
         l’action sociale et des familles notamment. La base légale du présent
         traitement peut reposer sur le consentement au titre de l’article 6-a du
@@ -511,14 +528,17 @@
       <p>
         Spécifiquement, le NIR est traité uniquement par les CCAS ou CIAS sur le
         fondement de l’article L.263-4-1 du code de l’action sociale et des
-        familles.
+        familles et du Décret n°219-341 du 19 avril 2019 relatif à la mise en
+        œuvre de traitements comportant l’usage du numéro d’inscription au
+        répertoire national d’identification des personnes physiques ou
+        nécessitant la consultation de ce répertoire.
       </p>
       <p>
         Le Responsable de traitement doit disposer d’une base légale au sens de
         l’article 9 du RGPD pour traiter des données de santé.
       </p>
       <p>
-        Chaque responsable de traitement devra être en mesure de démontrer sur
+        Chaque Responsable de traitement devra être en mesure de démontrer sur
         quelle base légale repose le présent traitement.
       </p>
       <p>Ces données sont conservées pour une durée de&nbsp;:</p>
@@ -537,9 +557,7 @@
           mois.
         </li>
       </ul>
-      <h3
-        id="obligationsgnralesdesministressociauxcommunesccasciasetdesstructuresdaccompagnementsocialenqualitderesponsabledetraitement"
-      >
+      <h3>
         Obligations générales des ministères sociaux, communes, CCAS, CIAS et
         des structures d’accompagnement social, en qualité de Responsable de
         traitement.
@@ -551,7 +569,7 @@
       </p>
       <ul>
         <li>
-          assurer les missions attachées au responsable de traitement, notamment
+          assurer les missions attachées au Responsable de traitement, notamment
           en définissant les finalités du traitement, les destinataires des
           données ainsi que la durée maximale de leur conservation&nbsp;;
         </li>
@@ -606,7 +624,7 @@
         être utilisées ultérieurement que pour des finalités compatibles aux
         finalités initiales.
       </p>
-      <h3 id="obligationsgnralesdelanct">Obligations générales de l’ANCT</h3>
+      <h3>Obligations générales de l’ANCT</h3>
       <p>En qualité de Sous-traitant, l’ANCT s’engage à&nbsp;:</p>
       <ul>
         <li>
@@ -657,15 +675,34 @@
         social de leurs obligations légales ou conventionnelles au regard du
         présent traitement de données à caractère personnel.
       </p>
-      <h3 id="obligationsrelativesauxsoustraitantsultrieurs">
-        Obligations relatives au(x) sous-traitant(s) ultérieur(s)
-      </h3>
+      <h3>Obligations relatives au(x) sous-traitant(s) ultérieur(s)</h3>
       <p>
-        L’ANCT est autorisée à faire appel à l’entité Scaleway (ci-après le
-        «&nbsp;Sous-traitant Ultérieur&nbsp;») pour mener les activités de
-        traitement relatives aux activités de stockage des données à caractère
-        personnel via un service cloud et de mise à disposition de serveurs.
+        L’ANCT est autorisée à faire appel aux sous-traitants ultérieurs
+        suivants (ci-après les «&nbsp;Sous-traitants Ultérieurs&nbsp;»)&nbsp;:
       </p>
+      <ul>
+        <li>
+          l’entité Scalingo sur Outscale pour mener les activités de traitement
+          relatives aux activités de stockage des données à caractère personnel
+          via un service cloud et de mise à disposition de serveurs&nbsp;;
+        </li>
+        <li>
+          l’entité Tally pour collecter les données relatives au responsable de
+          structure et au Délégué à la protection des données ou au référent
+          protection des données lors de la demande d’ouverture d’un
+          compte&nbsp;;
+        </li>
+        <li>
+          l’entité Brevo, solution d’emailing utilisée pour communiquer avec les
+          responsables de structure et les utilisateurs (uniquement pour les
+          données d’identification des professionnels des structures
+          d’accompagnement).
+        </li>
+        <li>
+          les indépendants de Scopyleft, membres de l’équipe produit Mon Suivi
+          Social.
+        </li>
+      </ul>
       <p>
         En cas de recrutement d’autres Sous-traitants Ultérieurs, l’ANCT
         informera chaque structure utilisant les Services.
@@ -684,9 +721,7 @@
         CIAS et structures d’accompagnement social de l’exécution par le
         Sous-traitant Ultérieur de ses obligations.
       </p>
-      <h3 id="droitdinformationdespersonnesconcernes">
-        Droit d’information des personnes concernées
-      </h3>
+      <h3>Droit d’information des personnes concernées</h3>
       <p>
         Le Responsable de traitement et l’ANCT s’engagent conjointement à
         garantir l’exercice des droits des personnes ci-après&nbsp;:
@@ -696,10 +731,10 @@
         <li>le droit d’opposition au traitement&nbsp;;</li>
         <li>
           le droit de rectification des données et le cas échéant de suppression
-          des données
+          des données&nbsp;;
         </li>
         <li>le droit à la limitation des données traitées&nbsp;;</li>
-        <li>le droit au retrait du consentement (pour les cookies).</li>
+        <li>droit au retrait du consentement (pour les cookies).</li>
       </ul>
       <p>
         L’exercice de ces droits peut être réalisé par voie électronique ou par
@@ -736,9 +771,7 @@
         traitement peut être amené à demander la communication d’une preuve
         d’identité.
       </p>
-      <h3 id="notificationdesviolationsdedonnescaractrepersonnel">
-        Notification des violations de données à caractère personnel
-      </h3>
+      <h3>Notification des violations de données à caractère personnel</h3>
       <p>
         L’ANCT notifie, par courriel, aux ministères sociaux, communes, CCAS,
         CIAS, structures d’accompagnement social toute violation de données à
@@ -749,9 +782,7 @@
         de notifier cette violation à l’autorité de contrôle compétente et aux
         personnes concernées par ladite violation.
       </p>
-      <h3
-        id="aidedelanctdanslecadredurespectparlesministressociauxlescommuneslesccaslesciasetlesstructuresdaccompagnementsocialdeleursobligations"
-      >
+      <h3>
         Aide de l’ANCT dans le cadre du respect par les ministères sociaux, les
         communes, les CCAS, les CIAS et les structures d’accompagnement social
         de leurs obligations
@@ -767,7 +798,7 @@
         d’accompagnement social dans le cas où la réalisation de la consultation
         préalable de l’autorité de contrôle est nécessaire.
       </p>
-      <h3 id="mesuresdescurit">Mesures de sécurité</h3>
+      <h3>Mesures de sécurité</h3>
       <p>
         L’ANCT s’engage à mettre en œuvre les mesures de sécurité suivantes en
         vue d’assurer la confidentialité, l’intégrité et de protégées l’accès
@@ -786,9 +817,7 @@
         responsabilité de l’ANCT, sous réserve de l’absence de négligence grave
         de l’utilisateur de l’application.
       </p>
-      <h3 id="transfertdedonnesendehorsdelunioneuropenne">
-        Transfert de données en dehors de l’Union européenne
-      </h3>
+      <h3>Transfert de données en dehors de l’Union européenne</h3>
       <p>
         L’ANCT s’engage à traiter les données à caractère personnel
         exclusivement sur le territoire d’un Etat membre de l’Union européenne.
@@ -796,12 +825,11 @@
         traitement s’entend au sens du RGPD (consultation, modification,
         transfert, infogérance, hébergement, etc.).
       </p>
-      <h3 id="dlgulaprotectiondesdonnes">
-        Délégué à la protection des données
-      </h3>
+      <h3>Délégué à la protection des données</h3>
       <p>
-        Le responsable de structure communiquera, sur demande, le nom et les
-        coordonnées de leur Délégué à la protection des données.
+        Le Responsable de structure communique le nom, prénom et l’adresse
+        e-mail de leur Délégué à la protection des données ou du référent à la
+        protection des données.
       </p>
       <p>Pour l’ANCT&nbsp;:</p>
       <ul>
