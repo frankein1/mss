@@ -149,7 +149,7 @@ export default defineNuxtConfig({
         commitRefName: process.env.COMMIT_REF_NAME || '',
         commitTag: process.env.COMMIT_TAG || ''
       },
-      cguVersion: '1.0',
+      cguVersion: '1.1',
       appUrl: process.env.APP_URL,
       auth: {
         cookieKey: 'MSS_SESSION_TOKEN',

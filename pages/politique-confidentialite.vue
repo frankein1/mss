@@ -1,10 +1,8 @@
 <template>
   <div class="landing-main-container fr-container fr-mt-5w">
     <article class="confidentialite-container">
-      <h1 id="politiquedecondentialit">
-        Politique de conﬁdentialité - Mon Suivi Social - Plateforme
-      </h1>
-      <h2 id="quinoussommesnbsp">Qui nous sommes&nbsp;?</h2>
+      <h1>Politique de conﬁdentialité - Mon Suivi Social - Plateforme</h1>
+      <h2>Qui nous sommes&nbsp;?</h2>
       <p>
         Au sens de l’article 4 du règlement (UE) n°2016/679 du Parlement
         européen et du Conseil du 27 avril 2016 relatif à la protection des
@@ -28,9 +26,7 @@
           d’accompagnement social en qualité de sous-traitants.
         </li>
       </ul>
-      <h2 id="quellesdonnessommesnousamenstraiternbsp">
-        Quelles données sommes-nous amenés à traiter&nbsp;?
-      </h2>
+      <h2>Quelles données sommes-nous amenés à traiter&nbsp;?</h2>
       <p>
         Nous sommes susceptibles de traiter les données à caractère personnel
         des bénéficiaires suivantes&nbsp;:
@@ -45,8 +41,8 @@
           sociale, nationalité, âge)&nbsp;;
         </li>
         <li>
-          NIR (Numéro d’inscription au répertoire) des bénéficiaires de
-          l’accompagnement social et médico-social&nbsp;;
+          NIR des bénéficiaires de l’accompagnement social et
+          médico-social&nbsp;;
         </li>
         <li>
           Données relatives à la vie personnelle (situation et composition
@@ -71,7 +67,7 @@
         </li>
         <li>
           Données de santé (données relatives à l’évaluation sociale et
-          médico-sociale, champ libre, le Groupe iso-ressources)&nbsp;;
+          médico-sociale, champ libre, le GIR)&nbsp;;
         </li>
         <li>Pièces justificatives collectées dans l’espace document.</li>
         <li>
@@ -117,10 +113,19 @@
         <li>données de contact (adresse e-mail, numéro de téléphone).</li>
       </ul>
       <p>
+        S’agissant du délégué à la protection des données ou du référent
+        protection des données au sein de la structure d’accompagnement
+        social&nbsp;:
+      </p>
+      <ul>
+        <li>données d’état civil (nom, prénom)&nbsp;;</li>
+        <li>données de contact (adresse e-mail).</li>
+      </ul>
+      <p>
         La plateforme collecte également des données de connexion et des
         cookies.
       </p>
-      <h2 id="pourquellesraisonssommesnoussusceptiblesdetraiterdesdonnesnbsp">
+      <h2>
         Pour quelles raisons sommes-nous susceptibles de traiter des
         données&nbsp;?
       </h2>
@@ -157,7 +162,7 @@
           satisfaction.
         </li>
       </ul>
-      <h2 id="sommesnousautorisstraiterdesdonnescaractrepersonnelnbsp">
+      <h2>
         Sommes-nous autorisés à traiter des données à caractère personnel&nbsp;?
       </h2>
       <p>
@@ -181,21 +186,29 @@
       </p>
       <p>
         Lorsque Mon Suivi Social est utilisé par une structure d’accompagnement
-        social de droit privé, le traitement est fondé soit sur les intérêts
-        légitimes poursuivis par la structure d’accompagnement social en tant
-        que responsable de traitement au sens de l’article 6-f du RGPD&nbsp;;
-        soit sur le consentement des personnes concernées par le traitement au
-        sens de l’article 6-a du RGPD.
+        social de droit privé, le traitement est fondé soit&nbsp;sur les
+        intérêts légitimes poursuivis par la structure d’accompagnement social
+        en tant que responsable de traitement au sens de l’article 6-f du
+        RGPD&nbsp;; soit sur le consentement des personnes concernées par le
+        traitement au sens de l’article 6-a du RGPD.
       </p>
       <p>
         Il appartient à chaque structure d’accompagnement social, responsable de
-        traitement, de déterminer ce fondement. Il en est de même pour le
-        traitement des données de santé qui est soumis aux conditions de
-        l’article 9 du RGPD.
+        traitement, de déterminer ce fondement. Chaque responsable de traitement
+        doit être en mesure de démontrer sur quelle base légale repose le
+        présent traitement.
+      </p>
+      <p>
+        Il en est de même pour le traitement des données de santé qui est soumis
+        aux conditions de l’article 9 du RGPD. Il est rappelé que le responsable
+        de traitement ne peut traiter les données de santé que s’il remplit
+        l’une des conditions de l’article 9 du RGPD et qu’il doit être en mesure
+        de démontrer le respect de ces conditions.
       </p>
       <p>
         Spécifiquement, le NIR est traité uniquement par les collectivités
-        territoriales, CCAS et les CIAS sur le fondement du
+        territoriales, CCAS et les CIAS sur le fondement de l’article L. 263-4-1
+        du code de l’action sociale et des familles et du
         <a
           href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000038396526/"
           target="_blank"
@@ -206,10 +219,9 @@
         d’inscription au répertoire national d’identification des personnes
         physiques ou nécessitant la consultation de ce répertoire.
       </p>
-      <h2 id="combiendetempsconservonsnousvosdonnesnbsp">
-        Combien de temps conservons-nous vos données&nbsp;?
-      </h2>
+      <h2>Combien de temps conservons-nous vos données&nbsp;?</h2>
       <p>Les données à caractère personnel sont conservées&nbsp;:</p>
+
       <div class="fr-table fr-table--no-caption">
         <table>
           <thead>
@@ -233,7 +245,7 @@
                   personnelles&nbsp;; Téléphone/Mobile et adresse
                   électronique&nbsp;; Âge&nbsp;; Date et lieu de
                   naissance&nbsp;; Nationalité&nbsp;; Numéro d’identification de
-                  rattachement à un organisme, numéro pégase&nbsp;;
+                  rattachement à un organisme, numéro pégase
                 </p>
                 <p>
                   Données des professionnels des structures
@@ -327,13 +339,13 @@
               <td>
                 <p>
                   2 ans en base active à compter du dernier contact émanant de
-                  la personne ayant fait l’objet de cet accompagnement.
+                  la personne ayant fait l’objet de cet accompagnement
                 </p>
                 <p>
                   Au-delà les données pourront être exportées par les structures
                   pour un archivage intermédiaire (Durée d’Utilité
                   Administrative 10 ans pour les demandes d’aides sociales et
-                  prestations financières).
+                  prestations financières)
                 </p>
               </td>
             </tr>
@@ -369,6 +381,20 @@
               </td>
             </tr>
             <tr>
+              <td>
+                Données relatives au Délégué à la protection des données ou au
+                référent protection des données
+              </td>
+              <td>
+                <p>Données d’état civil&nbsp;: nom, prénom</p>
+                <p>Données de contact&nbsp;: adresse e-mail</p>
+              </td>
+              <td>
+                Ces données sont conservées jusqu’à la fin de l’utilisation de
+                la plateforme Mon Suivi Social par la structure
+              </td>
+            </tr>
+            <tr>
               <td>Données de connexion</td>
               <td>
                 Logs et adresse IP des professionnels des structures
@@ -384,7 +410,8 @@
           </tbody>
         </table>
       </div>
-      <h2 id="scuritetconfidentialit">Sécurité et confidentialité</h2>
+
+      <h2>Sécurité et confidentialité</h2>
       <p>
         Les mesures techniques et organisationnelles de sécurité adoptées pour
         assurer la confidentialité, l’intégrité et protéger l’accès des données
@@ -393,7 +420,7 @@
       <ul>
         <li>Pseudonymisation</li>
         <li>Stockage des données en base de données</li>
-        <li>Authentification par Inclusion Connect</li>
+        <li>Stockage haché et salé des mots de passe en base</li>
         <li>Cloisonnement des données</li>
         <li>Mesures de traçabilité</li>
         <li>Surveillance</li>
@@ -405,7 +432,7 @@
           caractère personnel
         </li>
       </ul>
-      <h2 id="droitdespersonnesconcernes">Droit des personnes concernées</h2>
+      <h2>Droit des personnes concernées</h2>
       <p>
         Vous disposez des droits suivants concernant vos données à caractère
         personnel&nbsp;:
@@ -455,9 +482,8 @@
       </p>
       <p>
         En raison de l’obligation de sécurité et de confidentialité dans le
-        traitement des données à caractère personnel qui incombent aux
-        responsables conjoints de traitement, vous devrez justifier de votre
-        identité.
+        traitement des données à caractère personnel qui incombe au responsable
+        de traitement, vous devrez justifier de votre identité.
       </p>
       <p>
         Pour vous aider dans votre démarche, vous trouverez ici
@@ -473,7 +499,7 @@
         raisonnable qui ne saurait dépasser 1 mois à compter de la réception de
         votre demande.
       </p>
-      <h2 id="destinatairesdesdonnes">Destinataires des données</h2>
+      <h2>Destinataires des données</h2>
       <p>
         Sont destinataires de tout ou partie des données, les personnes
         habilitées suivantes&nbsp;:
@@ -486,13 +512,10 @@
         <li>agents habilités de l’équipe Mon Suivi Social&nbsp;;</li>
         <li>
           agents habilités de l’équipe Inclusion Connect&nbsp;pour les données
-          d’identification des professionnels des structures
-          d’accompagnement&nbsp;;
+          d’identification des professionnels des structures d’accompagnement.
         </li>
       </ul>
-      <h2 id="soustraitantsetsoustraitantsultrieurs">
-        Sous-traitants et sous-traitants ultérieurs
-      </h2>
+      <h2>Sous-traitants et sous-traitants ultérieurs</h2>
       <p>
         L’ANCT en qualité de sous-traitant&nbsp;: conçoit la plateforme, la met
         à disposition techniquement des CCAS et des CIAS, des communes, des
@@ -505,12 +528,10 @@
         territoriales et leurs groupements notamment dans l’accès aux services
         publics, l’accès aux soins, le développement des usages du numérique.
         Elle a pour mission également de favoriser le développement des services
-        numériques dans les territoires.
-      </p>
-      <p>
-        Un accord de sous-traitance est conclu entre les ministères sociaux, les
-        communes, les CCAS, les CIAS ou les structures d’accompagnement social
-        et l’ANCT, disponible à cette adresse [compléter].
+        numériques dans les territoires. Un accord de sous-traitance est conclu
+        entre les ministères sociaux, les communes, les CCAS, les CIAS ou les
+        structures d’accompagnement social et l’ANCT, disponible à cette adresse
+        [compléter].
       </p>
       <p>
         Certaines données sont envoyées par l’ANCT à des sous-traitants
@@ -521,6 +542,7 @@
         ultérieurs de garanties adéquates et du respect de conditions strictes
         de conﬁdentialité, d’usage et de protection des données.
       </p>
+
       <div class="fr-table fr-table--no-caption">
         <table>
           <thead>
@@ -534,25 +556,80 @@
 
           <tbody>
             <tr>
-              <td>Scaleway SAS</td>
+              <td>Scalingo sur Outscale</td>
               <td>Hébergement</td>
               <td>France</td>
               <td>
                 <a
-                  href="https://www-uploads.scaleway.com/DPA_FR_2020_0834d58964.pdf?updated_at=2022-05-19T12:53:21.178Z"
+                  href="https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles"
                   target="_blank"
                   rel="noopener external"
                 >
-                  https://www-uploads.scaleway.com/DPA_FR_2020_0834d58964.pdf?updated_at=2022-05-19T12:53:21.178Z
+                  https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Tally</td>
+              <td>
+                Formulaire de demande de création de compte d’une structure
+                (hébergement uniquement des données relatives au responsable de
+                structure et des données relatives au Délégué à la protection
+                des données ou au référent protection des données
+              </td>
+              <td>
+                Belgique (hébergement), transfert vers les Etats-Unis via les
+                sous-traitants ultérieurs (accord d’adéquation du 10 juillet
+                2023)
+              </td>
+              <td>
+                <a
+                  href="https://tally.so/help/privacy-policy#16dffa65e6cd4597b5e83afde2e65ad2"
+                  target="_blank"
+                  rel="noopener external"
+                >
+                  https://tally.so/help/privacy-policy#16dffa65e6cd4597b5e83afde2e65ad2
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Brevo</td>
+              <td>Emailing</td>
+              <td>
+                Union européenne (hébergement), transfert de données vers les
+                Etats-Unis
+              </td>
+              <td>
+                <a
+                  href="https://www.brevo.com/fr/legal/privacypolicy/"
+                  target="_blank"
+                  rel="noopener external"
+                >
+                  https://www.brevo.com/fr/legal/privacypolicy/
+                </a>
+              </td>
+            </tr>
+            <tr>
+              <td>Scopyleft</td>
+              <td>
+                Indépendants membres de l’équipe produit de Mon Suivi Social
+              </td>
+              <td>France</td>
+              <td>
+                <a
+                  href=""
+                  target="_blank"
+                  rel="noopener external"
+                >
+                  [en attente de retours de l’incubateur]
                 </a>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-      <h2 id="utilisationdetmoinsdeconnexionnbspcookiesnbsp">
-        Utilisation de témoins de connexion («&nbsp;cookies&nbsp;»)
-      </h2>
+
+      <h2>Utilisation de témoins de connexion («&nbsp;cookies&nbsp;»)</h2>
       <p>
         Un cookie est un fichier déposé sur votre terminal lors de la visite de
         la plateforme. Il a pour but de collecter des informations relatives à
@@ -564,10 +641,8 @@
         concernant le traitement des données à caractère personnel et la
         protection de la vie privée dans le secteur des communications
         électroniques, transposée à l’article 82 de la loi n°78-17 du 6 janvier
-        1978 relative à l’informatique, aux fichiers et aux libertés.
-      </p>
-      <p>
-        Les cookies utilisés sur Mon Suivi Social ne sont que des cookies
+        1978 relative à l’informatique, aux fichiers et aux libertés, les
+        cookies utilisés sur Mon Suivi Social ne sont que des cookies
         strictement nécessaires au bon fonctionnement de la plateforme, au sens
         des dernières recommandations de la CNIL à ce sujet.
       </p>
@@ -576,7 +651,7 @@
         qui ne nécessitent pas de bandeau cookies, toujours au sens des
         dernières recommandations de la CNIL à ce sujet.
       </p>
-      <p>Mon Suivi Social n'utilise aucun cookies dits «&nbsp;tiers&nbsp;».</p>
+      <p>Mon Suivi Social n'utilise aucun cookies dits &quot;tiers&quot;.</p>
       <p>Il convient d'indiquer que&nbsp;:</p>
       <ul>
         <li>
