@@ -2,6 +2,8 @@
 import { PrismaClient } from '@prisma/client'
 import {
   fixtureStructure,
+  fixturesPartnerOrganizations,
+  fixturesPartnerOrganizationContacts,
   fixturesSocialSupportSubjects,
   fixturesUsers,
   fixturesBeneficiaries,
@@ -103,12 +105,32 @@ function loadFixturesBudgetExpenses() {
   })
 }
 
+function loadFixturesPartnerOrganizations() {
+  console.log('🏙️ Partner Organizations...')
+
+  return prismaClient.partnerOrganization.createMany({
+    data: fixturesPartnerOrganizations,
+    skipDuplicates: true
+  })
+}
+
+function loadFixturesPartnerOrganizationContacts() {
+  console.log('🕴️ Partner Organization Contacts...')
+
+  return prismaClient.partnerOrganizationContact.createMany({
+    data: fixturesPartnerOrganizationContacts,
+    skipDuplicates: true
+  })
+}
+
 function loadFixtures() {
   return [
     loadFixtureStructure(),
     loadFixturesSocialSupportSubjects(),
     loadFixturesUsers(),
     ...loadFixturesBeneficiaries(),
+    loadFixturesPartnerOrganizations(),
+    loadFixturesPartnerOrganizationContacts(),
     ...loadFixturesSocialSupports(),
     loadFixturesBeneficiaryRelatives(),
     loadFixturesBudgets(),
