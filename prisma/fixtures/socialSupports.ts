@@ -2,9 +2,12 @@ import { FileInstructionType, Prisma } from '@prisma/client'
 import {
   fixtureStructure,
   fixturesBeneficiaries,
+  FixtureBeneficiary,
   fixturesSocialSupportSubjects,
   fixturesUsers,
   FixtureUserRole,
+  fixturesPartnerOrganizations,
+  FixturePartnerOrganization,
   fixturesPartnerOrganizationContacts
 } from './'
 
@@ -14,7 +17,7 @@ const fixturesFollowupSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'Done',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[0].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     subjects: {
       connect: [
         { id: fixturesSocialSupportSubjects[0].id },
@@ -34,7 +37,7 @@ const fixturesFollowupSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'Done',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[0].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     subjects: {
       connect: [{ id: fixturesSocialSupportSubjects[0].id }]
     },
@@ -51,7 +54,7 @@ const fixturesFollowupSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'Done',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[2].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     subjects: {
       connect: [
         { id: fixturesSocialSupportSubjects[2].id },
@@ -71,7 +74,7 @@ const fixturesFollowupSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'Done',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[1].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.PENSON].id,
     subjects: {
       connect: [{ id: fixturesSocialSupportSubjects[2].id }]
     },
@@ -88,7 +91,7 @@ const fixturesFollowupSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'InProgress',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[2].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     subjects: {
       connect: [
         { id: fixturesSocialSupportSubjects[3].id },
@@ -108,7 +111,7 @@ const fixturesFollowupSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'InProgress',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[3].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: {
       connect: [{ id: fixturesSocialSupportSubjects[4].id }]
     },
@@ -170,7 +173,7 @@ const fixturesHelpRequestSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'Accepted',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[0].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-10-26'),
@@ -181,7 +184,11 @@ const fixturesHelpRequestSocialSupports = [
         helpRequest: {
           create: {
             financialSupport: false,
-            subjectId: fixturesSocialSupportSubjects[4].id
+            subjectId: fixturesSocialSupportSubjects[4].id,
+            prescribingOrganizationId:
+              fixturesPartnerOrganizations[
+                FixturePartnerOrganization.MairieValence
+              ].id
           }
         }
       }
@@ -192,7 +199,7 @@ const fixturesHelpRequestSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'InvestigationOngoing',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[2].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-10-27'),
@@ -214,7 +221,7 @@ const fixturesHelpRequestSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'Accepted',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[3].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-10-18'),
@@ -227,7 +234,9 @@ const fixturesHelpRequestSocialSupports = [
             financialSupport: true,
             subjectId: fixturesSocialSupportSubjects[4].id,
             askedAmount: 2000,
-            allocatedAmount: 2000
+            allocatedAmount: 2000,
+            prescribingOrganizationId:
+              fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26].id
           }
         }
       }
@@ -238,7 +247,7 @@ const fixturesHelpRequestSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'Accepted',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[3].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-11-03'),
@@ -268,7 +277,7 @@ const fixturesHelpRequestSocialSupports = [
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'Accepted',
     structureId: fixtureStructure.id,
-    beneficiaryId: fixturesBeneficiaries[3].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-12-09'),
@@ -287,7 +296,11 @@ const fixturesHelpRequestSocialSupports = [
             subjectId: fixturesSocialSupportSubjects[4].id,
             askedAmount: 5000,
             allocatedAmount: 5000,
-            isRefundable: true
+            isRefundable: true,
+            prescribingOrganizationId:
+              fixturesPartnerOrganizations[
+                FixturePartnerOrganization.MairieValence
+              ].id
           }
         }
       }

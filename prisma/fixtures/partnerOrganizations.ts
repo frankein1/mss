@@ -1,6 +1,13 @@
 import { Prisma } from '@prisma/client'
 import { fixtureStructure } from './'
 
+export enum FixturePartnerOrganization {
+  CAF26 = 0,
+  FranceTravail = 1,
+  MairieValence = 2,
+  MasinSolidarited = 3
+}
+
 export const fixturesPartnerOrganizations = [
   {
     id: '16f4c01f-738a-41b0-918c-73ae14e4267c',

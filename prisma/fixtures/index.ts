@@ -1,9 +1,12 @@
 export { fixtureStructure } from './structures'
 export { fixturesSocialSupportSubjects } from './socialSupportSubjects'
 export { fixturesUsers, FixtureUserRole } from './users'
-export { fixturesBeneficiaries } from './beneficiaries'
+export { fixturesBeneficiaries, FixtureBeneficiary } from './beneficiaries'
 export { fixturesBeneficiaryRelatives } from './beneficiaryRelatives'
-export { fixturesPartnerOrganizations } from './partnerOrganizations'
+export {
+  fixturesPartnerOrganizations,
+  FixturePartnerOrganization
+} from './partnerOrganizations'
 export { fixturesPartnerOrganizationContacts } from './partnerOrganizationContacts'
 export { fixturesSocialSupports } from './socialSupports'
 export { fixturesBudgets } from './budgets'
