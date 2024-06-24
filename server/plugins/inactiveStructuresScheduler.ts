@@ -16,8 +16,7 @@ async function inactiveStructuresScheduler() {
 function startScheduler() {
   const scheduler = useScheduler()
 
-  // scheduler.run(inactiveStructuresScheduler).dailyAt(3, 0)
-  scheduler.run(inactiveStructuresScheduler).everySeconds(30)
+  scheduler.run(inactiveStructuresScheduler).dailyAt(3, 0)
 }
 
 async function sendFirstEmail() {
