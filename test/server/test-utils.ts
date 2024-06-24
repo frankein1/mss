@@ -5,7 +5,7 @@ import { appRouter } from '~/server/trpc/routers'
 import { AppContext } from '~/server/trpc'
 import {
   fixturesUsers,
-  fixtureStructure,
+  fixtureStructures,
   FixtureUserRole
 } from '~/prisma/fixtures'
 
@@ -27,25 +27,25 @@ const createCaller = (user: AppContext['user']) => {
 const users = {
   structureManager: {
     id: fixturesUsers[FixtureUserRole.StructureManager].id,
-    structure: { id: fixtureStructure.id, type: fixtureStructure.type },
+    structure: { id: fixtureStructures[0].id, type: fixtureStructures[0].type },
     role: fixturesUsers[FixtureUserRole.StructureManager].role,
     status: fixturesUsers[FixtureUserRole.StructureManager].status
   },
   receptionAgent: {
     id: fixturesUsers[FixtureUserRole.ReceptionAgent].id,
-    structure: { id: fixtureStructure.id, type: fixtureStructure.type },
+    structure: { id: fixtureStructures[0].id, type: fixtureStructures[0].type },
     role: fixturesUsers[FixtureUserRole.ReceptionAgent].role,
     status: fixturesUsers[FixtureUserRole.ReceptionAgent].status
   },
   socialWorker: {
     id: fixturesUsers[FixtureUserRole.SocialWorker].id,
-    structure: { id: fixtureStructure.id, type: fixtureStructure.type },
+    structure: { id: fixtureStructures[0].id, type: fixtureStructures[0].type },
     role: fixturesUsers[FixtureUserRole.SocialWorker].role,
     status: fixturesUsers[FixtureUserRole.SocialWorker].status
   },
   referent: {
     id: fixturesUsers[FixtureUserRole.Referent].id,
-    structure: { id: fixtureStructure.id, type: fixtureStructure.type },
+    structure: { id: fixtureStructures[0].id, type: fixtureStructures[0].type },
     role: fixturesUsers[FixtureUserRole.Referent].role,
     status: fixturesUsers[FixtureUserRole.Referent].status
   }

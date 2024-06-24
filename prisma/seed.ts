@@ -1,11 +1,12 @@
 /* eslint-disable no-console */
 import { PrismaClient } from '@prisma/client'
 import {
-  fixtureStructure,
+  fixtureStructures,
   fixturesPartnerOrganizations,
   fixturesPartnerOrganizationContacts,
   fixturesSocialSupportSubjects,
   fixturesUsers,
+  fixturesCGUHistory,
   fixturesBeneficiaries,
   fixturesBeneficiaryRelatives,
   fixturesSocialSupports,
@@ -20,7 +21,7 @@ function loadFixtureStructure() {
   console.log('🏛 Structure...')
 
   return prismaClient.structure.createMany({
-    data: fixtureStructure,
+    data: fixtureStructures,
     skipDuplicates: true
   })
 }
@@ -39,6 +40,15 @@ function loadFixturesUsers() {
 
   return prismaClient.user.createMany({
     data: fixturesUsers,
+    skipDuplicates: true
+  })
+}
+
+function loadFixturesCGUHistory() {
+  console.log('👩‍⚖️ CGU History for users...')
+
+  return prismaClient.cGUHistory.createMany({
+    data: fixturesCGUHistory,
     skipDuplicates: true
   })
 }
@@ -128,6 +138,7 @@ function loadFixtures() {
     loadFixtureStructure(),
     loadFixturesSocialSupportSubjects(),
     loadFixturesUsers(),
+    loadFixturesCGUHistory(),
     ...loadFixturesBeneficiaries(),
     loadFixturesPartnerOrganizations(),
     loadFixturesPartnerOrganizationContacts(),

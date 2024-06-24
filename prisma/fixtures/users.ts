@@ -1,5 +1,5 @@
 import type { Prisma } from '@prisma/client'
-import { fixtureStructure } from './'
+import { fixtureStructures, FixtureStructure } from './'
 
 export enum FixtureUserRole {
   Instructor = 0,
@@ -7,7 +7,9 @@ export enum FixtureUserRole {
   ReceptionAgent = 2,
   SocialWorker = 3,
   StructureManager = 4,
-  Administrator = 5
+  Administrator = 5,
+  StructureManagerNew = 6,
+  SocialWorkerNew = 7
 }
 
 export const fixturesUsers = [
@@ -18,7 +20,7 @@ export const fixturesUsers = [
     email: 'jeanne.instructeure@example.com',
     role: 'Instructor',
     status: 'Disabled',
-    structureId: fixtureStructure.id
+    structureId: fixtureStructures[FixtureStructure.Test].id
   },
   {
     id: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
@@ -27,7 +29,7 @@ export const fixturesUsers = [
     email: 'jeanne.referente@example.com',
     role: 'Referent',
     status: 'Active',
-    structureId: fixtureStructure.id
+    structureId: fixtureStructures[FixtureStructure.Test].id
   },
   {
     id: '3bce443c-b4ab-459b-9e18-a691375a8e6a',
@@ -36,7 +38,7 @@ export const fixturesUsers = [
     email: 'jean.agent@example.com',
     role: 'ReceptionAgent',
     status: 'Active',
-    structureId: fixtureStructure.id
+    structureId: fixtureStructures[FixtureStructure.Test].id
   },
   {
     id: '9840ff03-0fef-4967-b533-66d81c25b44a',
@@ -45,7 +47,7 @@ export const fixturesUsers = [
     email: 'jean.travailleur-social@example.com',
     role: 'SocialWorker',
     status: 'Active',
-    structureId: fixtureStructure.id
+    structureId: fixtureStructures[FixtureStructure.Test].id
   },
   {
     id: '7e5c1734-35cb-4047-9035-a944961a67a4',
@@ -54,7 +56,7 @@ export const fixturesUsers = [
     email: 'jeanne.responsable@example.com',
     role: 'StructureManager',
     status: 'Active',
-    structureId: fixtureStructure.id
+    structureId: fixtureStructures[FixtureStructure.Test].id
   },
   {
     id: '6c89f7a9-105e-438f-9b56-917fb394a511',
@@ -63,5 +65,62 @@ export const fixturesUsers = [
     email: 'admin@mss.gouv.fr',
     role: 'Administrator',
     status: 'Active'
+  },
+  {
+    id: 'cdeba22a-3ce0-4340-b279-9a2d984da663',
+    firstName: 'Anita',
+    lastName: 'CI-MSS Nouvelle Responsable',
+    email: 'anita.responsable@example.com',
+    role: 'StructureManager',
+    status: 'Active',
+    structureId: fixtureStructures[FixtureStructure.Autun].id
+  },
+  {
+    id: '9ae9301f-466f-4750-8217-136f4a001ee9',
+    firstName: 'Mehdi',
+    lastName: 'CI-MSS Nouveau Travailleur social',
+    email: 'mehdi.travailleur-social@example.com',
+    role: 'SocialWorker',
+    status: 'Active',
+    structureId: fixtureStructures[FixtureStructure.Autun].id
   }
 ] satisfies Prisma.UserCreateManyInput[]
+
+export const fixturesCGUHistory = [
+  {
+    id: '0de485c9-35a2-4086-904f-d92876cafb57',
+    userId: fixturesUsers[FixtureUserRole.Instructor].id,
+    date: new Date('2023-01-01'),
+    version: '1.1'
+  },
+  {
+    id: 'c57ddce1-960f-4fc2-a7cf-465e2ae5d859',
+    userId: fixturesUsers[FixtureUserRole.Referent].id,
+    date: new Date('2023-01-01'),
+    version: '1.1'
+  },
+  {
+    id: '3710f8fe-8646-4514-9de3-7b3bf2879a28',
+    userId: fixturesUsers[FixtureUserRole.ReceptionAgent].id,
+    date: new Date('2023-01-01'),
+    version: '1.1'
+  },
+  {
+    id: 'b22ae2b3-1afd-4d27-980d-d0f3757ad741',
+    userId: fixturesUsers[FixtureUserRole.SocialWorker].id,
+    date: new Date('2023-01-01'),
+    version: '1.1'
+  },
+  {
+    id: '6ee1090a-bc76-421d-9546-24ef0f85098c',
+    userId: fixturesUsers[FixtureUserRole.StructureManager].id,
+    date: new Date('2023-01-01'),
+    version: '1.1'
+  },
+  {
+    id: '7088e777-6f2b-49d8-81c0-99d9862492d3',
+    userId: fixturesUsers[FixtureUserRole.Administrator].id,
+    date: new Date('2023-01-01'),
+    version: '1.1'
+  }
+]
