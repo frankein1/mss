@@ -5,9 +5,9 @@ import {
   BeneficiaryRepo,
   BudgetRepo,
   DocumentRepo,
-  // FileInstructionRepo,
-  // HelpRequestRepo,
-  // HousingHelpRequestRepo,
+  FileInstructionRepo,
+  HelpRequestRepo,
+  HousingHelpRequestRepo,
   NotificationRepo,
   SocialSupportRepo,
   StructureRepo,
@@ -96,71 +96,73 @@ const adminHandler = async ({
     data: {
       synthesis: null,
       privateSynthesis: null,
-      numeroPegase: ''
+      numeroPegase: '',
+      ministre: null,
+      dueDate: null
     }
   })
 
-  // await FileInstructionRepo.prisma.updateMany({
-  //   where: {
-  //     socialSupport: {
-  //       beneficiary: {
-  //         structureId: id
-  //       }
-  //     }
-  //   },
-  //   data: {
-  //     instructorOrganizationId: null,
-  //     instructorOrganizationContactId: null,
-  //     externalStructure: false,
-  //     examinationDate: null,
-  //     decisionDate: null,
-  //     refusalReason: null,
-  //     refusalReasonOther: null,
-  //     dispatchDate: null,
-  //     fullFile: null
-  //   }
-  // })
+  await FileInstructionRepo.prisma.updateMany({
+    where: {
+      socialSupport: {
+        beneficiary: {
+          structureId: id
+        }
+      }
+    },
+    data: {
+      instructorOrganizationId: null,
+      instructorOrganizationContactId: null,
+      externalStructure: false,
+      examinationDate: null,
+      decisionDate: null,
+      refusalReason: null,
+      refusalReasonOther: null,
+      dispatchDate: null,
+      fullFile: null
+    }
+  })
 
-  // await HelpRequestRepo.prisma.updateMany({
-  //   where: {
-  //     fileInstruction: {
-  //       socialSupport: {
-  //         beneficiary: {
-  //           structureId: id
-  //         }
-  //       }
-  //     }
-  //   },
-  //   data: {
-  //     askedAmount: null,
-  //     allocatedAmount: null,
-  //     paymentMethod: null,
-  //     paymentDate: null,
-  //     handlingDate: null
-  //   }
-  // })
+  await HelpRequestRepo.prisma.updateMany({
+    where: {
+      fileInstruction: {
+        socialSupport: {
+          beneficiary: {
+            structureId: id
+          }
+        }
+      }
+    },
+    data: {
+      askedAmount: null,
+      allocatedAmount: null,
+      paymentMethod: null,
+      paymentDate: null,
+      handlingDate: null
+    }
+  })
 
-  // await HousingHelpRequestRepo.prisma.updateMany({
-  //   where: {
-  //     fileInstruction: {
-  //       socialSupport: {
-  //         beneficiary: {
-  //           structureId: id
-  //         }
-  //       }
-  //     }
-  //   },
-  //   data: {
-  //     isFirst: false,
-  //     firstOpeningDate: null,
-  //     uniqueId: null,
-  //     taxHouseholdAdditionalInformation: null,
-  //     maxRent: null,
-  //     maxCharges: null,
-  //     isPmr: null,
-  //     reason: null
-  //   }
-  // })
+  await HousingHelpRequestRepo.prisma.updateMany({
+    where: {
+      fileInstruction: {
+        socialSupport: {
+          beneficiary: {
+            structureId: id
+          }
+        }
+      }
+    },
+    data: {
+      isFirst: false,
+      firstOpeningDate: null,
+      uniqueId: null,
+      taxHouseholdAdditionalInformation: null,
+      maxRent: null,
+      maxCharges: null,
+      isPmr: null,
+      reason: null
+    }
+  })
 
   const updateBeneficiaries = BeneficiaryRepo.prisma.updateMany({
     where: {
@@ -177,7 +179,7 @@ const adminHandler = async ({
       usualName: null,
       birthName: null,
       firstName: null,
-      birthDate: null,
+      // birthDate: null,
       birthPlace: null,
       deathDate: null,
       gender: null,
