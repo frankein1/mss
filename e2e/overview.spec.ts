@@ -1,7 +1,5 @@
 import { test, expect, Page } from '@playwright/test'
 
-test.describe.configure({ mode: 'parallel' })
-
 async function validateHeadings(page: Page) {
   await expect(page).toHaveTitle(/Tableau de bord/)
 
