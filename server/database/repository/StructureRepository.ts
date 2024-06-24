@@ -36,6 +36,7 @@ export const StructureRepo = {
     findMany: prismaClient.structure.findMany,
     create: prismaClient.structure.create,
     update: prismaClient.structure.update,
+    updateMany: prismaClient.structure.updateMany,
     delete: prismaClient.structure.delete
   }
 }

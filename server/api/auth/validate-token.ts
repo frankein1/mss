@@ -26,7 +26,7 @@ export default defineEventHandler(async event => {
     },
     include: {
       ...includeOrderedCGUHistory(),
-      structure: { select: { id: true, type: true, disable: true } }
+      structure: { select: { id: true, type: true, disabled: true } }
     }
   })
 
@@ -38,7 +38,7 @@ export default defineEventHandler(async event => {
     })
   }
 
-  if (user.structure && user.structure.disable) {
+  if (user.structure && user.structure.disabled) {
     throw createError({
       statusCode: 400,
       message: 'Structure désactivée'
@@ -86,7 +86,9 @@ export default defineEventHandler(async event => {
   if (user.structure) {
     data.structure = {
       update: {
-        lastAccess: new Date()
+        lastAccess: new Date(),
+        deactivationAlertEmail: 0,
+        deactivationAlertEmailDate: null
       }
     }
   }
