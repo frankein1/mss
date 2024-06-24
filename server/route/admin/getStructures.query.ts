@@ -53,7 +53,10 @@ const adminHandler = async ({
       lastAccess: true
     },
     orderBy: {
-      lastAccess: 'desc'
+      lastAccess: {
+        sort: 'desc',
+        nulls: 'last'
+      }
     }
   })
 

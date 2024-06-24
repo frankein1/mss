@@ -9,36 +9,36 @@ export default defineNitroPlugin(() => {
 })
 
 async function inactiveStructuresScheduler() {
-  await sendEmail(dayjs().subtract(6, 'month').toDate(), 0)
-  await sendEmail(dayjs().subtract(6, 'month').subtract(2, 'week').toDate(), 1)
+  await sendFirstEmail()
+  await sendSecondEmail()
 }
 
 function startScheduler() {
   const scheduler = useScheduler()
 
-  scheduler.run(inactiveStructuresScheduler).dailyAt(3, 0)
+  // scheduler.run(inactiveStructuresScheduler).dailyAt(3, 0)
+  scheduler.run(inactiveStructuresScheduler).everySeconds(30)
 }
 
-async function sendEmail(date: Date, deactivationAlertEmail: number) {
+async function sendFirstEmail() {
   const inactiveStructures = await StructureRepo.prisma.findMany({
     where: {
-      lastAccess: {
-        lte: date
-      },
-      deactivationAlertEmail
+      OR: [
+        {
+          lastAccess: {
+            lte: dayjs().subtract(6, 'month').toDate()
+          }
+        },
+        {
+          lastAccess: null
+        }
+      ],
+      deactivationAlertEmail: 0
     },
     select: { id: true, users: true }
   })
 
-  const users = inactiveStructures.flatMap(s => s.users)
-
-  for (const user of users) {
-    await createEmail({
-      to: user.email,
-      subject: 'Votre espace de travail sur Mon Suivi Social va être supprimé',
-      ...getInactiveStructureAlert()
-    })
-  }
+  await sendEmail(inactiveStructures.flatMap(s => s.users))
 
   await StructureRepo.prisma.updateMany({
     where: {
@@ -47,7 +47,43 @@ async function sendEmail(date: Date, deactivationAlertEmail: number) {
       }
     },
     data: {
-      deactivationAlertEmail: deactivationAlertEmail + 1
+      deactivationAlertEmailDate: new Date(),
+      deactivationAlertEmail: 1
     }
   })
+}
+
+async function sendSecondEmail() {
+  const inactiveStructures = await StructureRepo.prisma.findMany({
+    where: {
+      deactivationAlertEmailDate: {
+        lte: dayjs().subtract(2, 'week').toDate()
+      },
+      deactivationAlertEmail: 1
+    },
+    select: { id: true, users: true }
+  })
+
+  await sendEmail(inactiveStructures.flatMap(s => s.users))
+
+  await StructureRepo.prisma.updateMany({
+    where: {
+      id: {
+        in: inactiveStructures.map(s => s.id)
+      }
+    },
+    data: {
+      deactivationAlertEmail: 2
+    }
+  })
+}
+
+async function sendEmail(users: { email: string }[]) {
+  for (const user of users) {
+    await createEmail({
+      to: user.email,
+      subject: 'Votre espace de travail sur Mon Suivi Social va être supprimé',
+      ...getInactiveStructureAlert()
+    })
+  }
 }

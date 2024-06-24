@@ -115,13 +115,14 @@ model Structure {
   beneficiaries Beneficiary[]
   notifications Notification[]
 
-  created                DateTime?      @default(now())
-  updated                DateTime?      @updatedAt
-  userActivities         UserActivity[]
-  lastActivity           DateTime?      @map("last_activity")
-  lastAccess             DateTime?      @map("last_access")
-  disabled               Boolean        @default(false)
-  deactivationAlertEmail Int            @default(0) @map("deactivation_alert_email")
+  created                    DateTime?      @default(now())
+  updated                    DateTime?      @updatedAt
+  userActivities             UserActivity[]
+  lastActivity               DateTime?      @map("last_activity")
+  lastAccess                 DateTime?      @map("last_access")
+  disabled                   Boolean        @default(false)
+  deactivationAlertEmail     Int            @default(0) @map("deactivation_alert_email")
+  deactivationAlertEmailDate DateTime?      @map("deactivation_alert_email_date")
 
   @@map("structure")
 }

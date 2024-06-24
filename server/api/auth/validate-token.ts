@@ -87,7 +87,8 @@ export default defineEventHandler(async event => {
     data.structure = {
       update: {
         lastAccess: new Date(),
-        deactivationAlertEmail: 0
+        deactivationAlertEmail: 0,
+        deactivationAlertEmailDate: null
       }
     }
   }
