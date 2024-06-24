@@ -1,3 +1,4 @@
+import { UserRole } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import {
   BeneficiaryRelativeRepo,
@@ -21,7 +22,6 @@ import {
   getDisabledStructureAlert,
   getDisabledStructureAdminAlert
 } from '~/server/email'
-import { UserRole } from '@prisma/client'
 
 const adminHandler = async ({
   ctx,
