@@ -146,6 +146,9 @@ const adminHandler = async ({
   // })
 
   const updateBeneficiaries = BeneficiaryRepo.prisma.updateMany({
+    where: {
+      structureId: id
+    },
     data: {
       archivedById: ctx.user.id,
       archived: new Date(),
