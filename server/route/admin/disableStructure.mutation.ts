@@ -1,3 +1,4 @@
+import { prismaClient } from '~/server/prisma'
 import {
   BeneficiaryRelativeRepo,
   BeneficiaryRepo,
@@ -8,13 +9,19 @@ import {
   // HousingHelpRequestRepo,
   NotificationRepo,
   SocialSupportRepo,
-  StructureRepo
+  StructureRepo,
+  UserRepo
 } from '~/server/database'
 import { createMutation } from '~/server/route'
 import { IdInput, idSchema } from '~/server/schema'
 import { AdminContext } from '~/server/trpc'
 import { canBeDisabled } from '~/utils/structure'
-import { prismaClient } from '~/server/prisma'
+import { createEmail } from '~/server/query'
+import {
+  getDisabledStructureAlert,
+  getDisabledStructureAdminAlert
+} from '~/server/email'
+import { UserRole } from '@prisma/client'
 
 const adminHandler = async ({
   ctx,
@@ -28,6 +35,16 @@ const adminHandler = async ({
   const structure = await StructureRepo.findUniqueOrThrow(ctx.user, {
     where: {
       id
+    },
+    select: {
+      id: true,
+      lastAccess: true,
+      name: true,
+      users: {
+        where: {
+          role: UserRole.StructureManager
+        }
+      }
     }
   })
 
@@ -222,7 +239,7 @@ const adminHandler = async ({
       id
     },
     data: {
-      disable: true
+      disabled: true
     }
   })
 
@@ -235,6 +252,31 @@ const adminHandler = async ({
     updateBeneficiaries,
     updateStructure
   ])
+
+  for (const user of structure.users) {
+    await createEmail({
+      to: user.email,
+      subject: 'Suppression de votre espace de travail sur Mon Suivi Social',
+      ...getDisabledStructureAlert()
+    })
+  }
+
+  const admins = await UserRepo.prisma.findMany({
+    where: {
+      role: UserRole.Administrator
+    },
+    select: {
+      email: true
+    }
+  })
+
+  for (const admin of admins) {
+    await createEmail({
+      to: admin.email,
+      subject: `Suppression de la structure ${structure.name}`,
+      ...getDisabledStructureAdminAlert(structure.name)
+    })
+  }
 
   return {
     name: structure.name,

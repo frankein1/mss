@@ -1,3 +1,6 @@
 export * from './userCreation'
 export * from './welcomeWorkshop'
 export * from './structureCreation'
+export * from './inactiveStructureAlert'
+export * from './disabledStructureAlert'
+export * from './disabledStructureAdminAlert'

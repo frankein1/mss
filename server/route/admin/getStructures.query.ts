@@ -48,7 +48,8 @@ const adminHandler = async ({
       inhabitantsNumber: true,
       inseeCode: true,
       siret: true,
-      disable: true,
+      disabled: true,
+      deactivationAlertEmail: true,
       lastAccess: true
     },
     orderBy: {

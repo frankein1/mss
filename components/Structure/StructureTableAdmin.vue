@@ -40,6 +40,9 @@
                 <span :class="structure.canBeDisabled ? 'fr-badge--error' : ''">
                   {{ formatDate(structure.lastAccess) || 'Aucune' }}
                 </span>
+                <span v-if="structure.canBeDisabled">
+                  ({{ structure.deactivationAlertEmail }})
+                </span>
               </td>
             </tr>
           </NuxtLink>
