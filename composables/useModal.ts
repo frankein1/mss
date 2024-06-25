@@ -40,10 +40,15 @@ function _useModal() {
     }
     setIsOpen(false)
     title.value = ''
-    modalState.value = {
-      component: 'div',
-      props: {}
-    }
+
+    // Closing modal waits for the AtomModal component
+    // to disappear first
+    setTimeout(() => {
+      modalState.value = {
+        component: 'div',
+        props: {}
+      }
+    }, 600)
   }
 
   /**
