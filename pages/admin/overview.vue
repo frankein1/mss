@@ -32,7 +32,7 @@
           class="fr-btn fr-btn--secondary"
           @click="recuperate(false)"
         >
-          Information sur les objets d'accompagnement manquants
+          Information sur les accompagnements avec plusieurs objets
         </button>
       </div>
 
@@ -40,8 +40,8 @@
         v-if="info"
         class="fr-col-12 fr-mb-4w"
       >
-        {{ info.nToRecuperate }} instructions de dossier avec objet
-        d'accompagnement manquant
+        {{ info.nToRecuperate }} instructions de dossier avec plusieurs objets
+        d'accompagnement
         <br />
         {{ info.failure }} instructions de dossier dont la récupération est
         impossible
@@ -52,7 +52,7 @@
           class="fr-btn fr-btn--secondary"
           @click="recuperate(true)"
         >
-          Exécution de la récupération des objets d'accompagnement
+          Exécution de la réparation des instructions de dossier
         </button>
       </div>
     </div>
