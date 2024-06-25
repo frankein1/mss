@@ -20,19 +20,10 @@ function prepareSearch(
   scale: 'city' | 'department' | 'country'
 ) {
   const where: Prisma.DataInclusionStructureWhereInput = {
-    OR: [
-      {
-        name: {
-          contains: query,
-          mode: 'insensitive'
-        }
-      },
-      {
-        siret: {
-          startsWith: query
-        }
-      }
-    ]
+    name: {
+      contains: query,
+      mode: 'insensitive'
+    }
   }
 
   switch (scale) {

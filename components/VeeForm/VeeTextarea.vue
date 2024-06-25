@@ -1,7 +1,10 @@
 <template>
   <div
     class="fr-input-group"
-    :class="{ 'fr-input-group--error': error }"
+    :class="{
+      'fr-input-group--error': error,
+      'fr-input-group--disabled': disabled
+    }"
   >
     <label
       v-if="!noLabel"
