@@ -1,72 +1,29 @@
 import { defineEventHandler, readBody } from 'h3'
+import { Prisma } from '@prisma/client'
 import { SocialSupportRepo } from '~/server/database'
-// import { prismaClient } from '~/server/prisma'
+import { prismaClient } from '~/server/prisma'
 import { forbiddenError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
 
-async function getFileInstructionsWithoutSubject(user: JwtUser) {
-  return await SocialSupportRepo.findMany(user, {
-    where: {
-      socialSupportType: 'HelpRequest',
-      subjects: { none: {} }
-    },
-    select: {
-      id: true,
-      created: true,
-      updated: true,
-      fileInstruction: {
-        select: {
-          id: true,
-          helpRequest: {
-            select: {
-              id: true,
-              subjectId: true
-            }
-          }
-        }
-      }
-    }
-  })
+async function getFileInstructionsWithSeveralSubjects() {
+  return await prismaClient.$queryRaw<
+    Array<{ sid: string; count: number }>
+  >(Prisma.sql`
+WITH with_type AS (select ss.id as sid
+FROM social_support ss
+JOIN _social_support_to_followup_type as sst
+ON ss.id = sst."A"
+WHERE social_support_type = 'HelpRequest'
+),
+counts AS (select sid,count(*) as count
+FROM with_type
+GROUP BY sid
+)
+SELECT sid,count
+FROM counts
+WHERE count > 1;
+`)
 }
-
-type FileInstructionsWithoutSubjects = Awaited<
-  ReturnType<typeof getFileInstructionsWithoutSubject>
->
-
-// async function matchFileInstructionsWithUserActivities(
-//   fileInstructions: FileInstructionsWithoutSubjects
-// ) {
-//   const promises = fileInstructions.map(async fi => {
-//     const linkedUserActivities = await prismaClient.userActivity.findMany({
-//       where: {
-//         objectId: fi.fileInstruction?.helpRequest?.id || ''
-//       },
-//       select: {
-//         date: true,
-//         activity: true,
-//         content: true
-//       },
-//       orderBy: {
-//         date: 'desc'
-//       }
-//     })
-
-//     return linkedUserActivities.map(ua => ({
-//       sid: fi.id,
-//       fid: fi.fileInstruction?.id,
-//       hid: fi.fileInstruction?.helpRequest?.id,
-//       date: ua.date,
-//       activity: ua.activity,
-//       created: fi.created,
-//       updated: fi.updated,
-//       subjectIdFromHelpRequest: fi.fileInstruction?.helpRequest?.subjectId,
-//       typeId: (ua.content as any)?.typeId,
-//       subjectId: (ua.content as any)?.subjectId
-//     }))
-//   })
-
-//   return await Promise.all(promises)
-// }
 
 export default defineEventHandler(async event => {
   const { user }: { user: JwtUser } = event.context.auth
@@ -77,48 +34,62 @@ export default defineEventHandler(async event => {
   const { exec } = await readBody(event)
   // console.log(exec)
 
-  const withoutSubject = await getFileInstructionsWithoutSubject(user)
+  const sevSubject = await getFileInstructionsWithSeveralSubjects()
 
-  // console.log('number of social support without subject', withoutSubject.length)
+  // console.log('number of social support without subject', sevSubject)
 
-  // const instructions =
-  //   await matchFileInstructionsWithUserActivities(withoutSubject)
-
-  // console.log(JSON.stringify(instructions, undefined, 2))
-
-  const notfound: FileInstructionsWithoutSubjects = []
+  const notfound: any[] = []
 
   await Promise.all(
-    withoutSubject.map(async instruction => {
-      // const latestUpdateWithSubjectId = instruction.find(
-      //   ua => ua.typeId || ua.subjectId
-      // )
+    sevSubject.map(async ({ sid }) => {
+      const instruction = await SocialSupportRepo.findUniqueOrThrow(user, {
+        where: { id: sid },
+        select: {
+          subjects: {
+            select: { id: true }
+          },
+          fileInstruction: {
+            select: {
+              helpRequest: {
+                select: {
+                  subjectId: true
+                }
+              }
+            }
+          }
+        }
+      })
 
-      const noSubjectIdToRecuperate =
-        !!instruction.fileInstruction?.helpRequest?.subjectId
+      const hasSubjectId = !!instruction.fileInstruction?.helpRequest?.subjectId
 
-      if (!noSubjectIdToRecuperate) {
+      if (!hasSubjectId) {
         notfound.push(instruction)
         return
       }
 
-      // const subjectId =
-      //   latestUpdateWithSubjectId.subjectId || latestUpdateWithSubjectId.typeId
-
       const subjectId = instruction.fileInstruction?.helpRequest
         ?.subjectId as string
 
+      const subjectsToDisconnect = (instruction.subjects || [])
+        .filter(sub => sub.id !== subjectId)
+        .map(sub => ({ id: sub.id }))
+
       // console.log(
       //   'update',
-      //   JSON.stringify(latestUpdateWithSubjectId, undefined, 2)
+      //   sid,
+      //   subjectId,
+      //   'count',
+      //   count.toString(),
+      //   'to disconnect',
+      //   subjectsToDisconnect
       // )
 
       if (exec) {
         await SocialSupportRepo.update(user, {
-          where: { id: instruction.id },
+          where: { id: sid },
           data: {
             subjects: {
-              connect: { id: subjectId }
+              disconnect: subjectsToDisconnect
             }
           }
         })
@@ -126,12 +97,8 @@ export default defineEventHandler(async event => {
     })
   )
 
-  // if (notfound.length > 0) {
-  //   console.log(JSON.stringify(notfound, undefined, 2))
-  // }
-
   return {
     recuperationFailure: notfound,
-    nToRecuperate: withoutSubject.length
+    nToRecuperate: sevSubject.length
   }
 })
