@@ -1,5 +1,5 @@
 import { z } from 'zod'
-import { siretConstraint, stringConstraint } from '.'
+import { stringConstraint } from '.'
 
 export const dataInclusionStructureApiSchema = z.object({
   id: z.string(),
@@ -59,7 +59,7 @@ export type DataInclusionStructureServerInput = z.infer<
 >
 
 export const searchDataInclusionStructureSchema = z.object({
-  query: z.union([siretConstraint, stringConstraint])
+  query: stringConstraint
 })
 
 export type SearchDataInclusionStructureInput = z.infer<

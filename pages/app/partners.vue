@@ -1,4 +1,3 @@
-s
 <template>
   <PageContainer>
     <DsfrBreadcrumb :links="Breadcrumb.AppPartners()" />

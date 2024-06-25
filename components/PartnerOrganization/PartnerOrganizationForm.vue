@@ -24,20 +24,19 @@
           :label="partnerOrganizationFieldLabels.name"
           required
           :value="selectedName"
-          :search-fn="search => searchDataInclusionStructure(search, 'name')"
+          :search-fn="search => searchDataInclusionStructure(search)"
           @result-selected="onStructureSelected"
         />
       </div>
       <div class="fr-col-12">
-        <VeeAutocomplete
+        <VeeInput
           class="fr-mb-1w"
           name="siret"
           :label="partnerOrganizationFieldLabels.siret"
           hint="Format attendu : 01234567890123"
           :required="!hasDataInclusionStructure"
-          :value="selectedSiret"
-          :search-fn="search => searchDataInclusionStructure(search, 'siret')"
-          @result-selected="onStructureSelected"
+          :disabled="hasDataInclusionStructure"
+          @change-input="onSiretChange"
         />
         <div
           class="fr-text--xs fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
@@ -277,22 +276,16 @@
 
   /** Import Organization from Data Inclusion Structures */
   const selectedName = ref<string | undefined>(undefined)
-  const selectedSiret = ref<string | undefined>(undefined)
 
   const structures = ref<DataInclusionStructure[]>([])
 
   /** Build suggestion list of Data Inclusion structures from same zipcode */
   async function searchDataInclusionStructure(
-    search: string,
-    field: 'name' | 'siret'
+    search: string
   ): Promise<OptionsWithDisabled> {
     emit('selectStructure', null)
 
-    if (field === 'name') {
-      selectedName.value = search
-    } else {
-      selectedSiret.value = search
-    }
+    selectedName.value = search
 
     if (search.length < SEARCH_NUMBER_CHARACTERS) {
       return []
@@ -314,25 +307,15 @@
   /** Send selected structure information if the Data Inclusion structure
    * is not already present in the Partner Organizations
    */
-  async function onStructureSelected(structureId: string) {
+  function onStructureSelected(structureId: string) {
     const structure = structures.value.find(s => s.id === structureId)
     if (!structure) {
       selectedName.value = undefined
-      selectedSiret.value = undefined
       emit('selectStructure', null)
       return
     }
 
     selectedName.value = structure.name
-    selectedSiret.value = structure.siret || undefined
-
-    if (selectedSiret.value) {
-      const hasPartnerWithSameSiret = await onSiretChange(selectedSiret.value)
-      if (hasPartnerWithSameSiret) {
-        return
-      }
-    }
-
     emit('selectStructure', structure)
   }
 </script>
