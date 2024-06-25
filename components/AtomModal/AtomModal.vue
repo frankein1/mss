@@ -16,6 +16,7 @@
                 class="fr-btn--close fr-btn"
                 aria-controls="global-modal"
                 title="Fermer"
+                @click="close"
               >
                 Fermer
               </button>
@@ -53,7 +54,7 @@
 
   const modal = ref<HTMLDialogElement | null>(null)
 
-  const { isOpen, setIsOpen, title, triggerOpen } = useModal()
+  const { isOpen, setIsOpen, title, triggerOpen, close } = useModal()
 
   const dsfrModal = computed(() =>
     modal.value ? window.dsfr(modal.value) : undefined
@@ -70,8 +71,9 @@
 
   function onClose() {
     setIsOpen(false)
+    close()
   }
-
+  // Modal closes and destroy component when concealed
   onMounted(() => {
     modal.value?.addEventListener('dsfr.conceal', onClose)
   })
