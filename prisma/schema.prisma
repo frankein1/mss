@@ -115,6 +115,7 @@ model Structure {
   socialSupports        SocialSupport[]
   partnerOrganizations  PartnerOrganization[]
 
+  familyFiles   FamilyFile[]
   beneficiaries Beneficiary[]
   notifications Notification[]
 
@@ -149,8 +150,8 @@ model Document {
   tags             String[]
   confidential     Boolean
 
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
-  beneficiaryId String      @map("beneficiary_id") @db.Uuid
+  familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
+  familyFileId String     @map("family_file_id") @db.Uuid
 
   created        DateTime?       @default(now())
   createdBy      User            @relation(fields: [createdById], references: [id])
@@ -286,6 +287,9 @@ model SocialSupport {
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
+
+  familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
+  familyFileId String     @map("family_file_id") @db.Uuid
 
   createdById String @map("created_by_id") @db.Uuid
   createdBy   User   @relation(name: "created_social_supports", fields: [createdById], references: [id])
@@ -1316,6 +1320,20 @@ model BudgetIncome {
   @@map("budget_income")
 }
 
+model FamilyFile {
+  id String @id @default(uuid()) @db.Uuid
+
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
+  structureId String    @map("structure_id") @db.Uuid
+
+  budget        Budget?
+  documents     Document[]
+  socialSupport SocialSupport[]
+  beneficiaries Beneficiary[]
+
+  @@map("family_file")
+}
+
 model BudgetExpenses {
   id String @id @default(uuid()) @db.Uuid
 
@@ -1416,8 +1434,8 @@ model Budget {
   familyQuotient               Decimal? @map("family_quotient")
   banqueDeFrance               Decimal? @map("banque_de_france")
 
-  beneficiaryId String      @unique @map("beneficiary_id") @db.Uuid
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  familyFileId String     @unique @map("family_file_id") @db.Uuid
+  familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
 
   incomes  BudgetIncome[]
   expenses BudgetExpenses?
@@ -1430,6 +1448,9 @@ model Beneficiary {
 
   structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
+
+  familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
+  familyFileId String     @map("family_file_id") @db.Uuid
 
   createdById String? @map("created_by_id") @db.Uuid
   createdBy   User?   @relation(name: "created_beneficiaries", fields: [createdById], references: [id])
@@ -1515,16 +1536,13 @@ model Beneficiary {
   numeroPegase          String?                       @map("numero_pegase")
   accommodationZone     BeneficiaryAccommodationZone? @map("accommodation_zone")
 
-  documents      Document[]
-  socialSupports SocialSupport[]
-
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  relatives     BeneficiaryRelative[] @relation("ownerBeneficiary")
+  relatives      BeneficiaryRelative[] @relation("ownerBeneficiary")
   // linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
-  notifications Notification[]
-  budget        Budget?
+  notifications  Notification[]
+  socialSupports SocialSupport[]
 
   @@map("beneficiary")
 }
