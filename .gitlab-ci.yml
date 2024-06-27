@@ -166,10 +166,14 @@ pnpm:test:e2e:
     STRUCTURE_MANAGER_PASSWORD: ${E2E_STRUCTURE_MANAGER_PASSWORD}
     SOCIAL_WORKER_EMAIL: jean.travailleur-social@example.com
     SOCIAL_WORKER_PASSWORD: ${E2E_SOCIAL_WORKER_PASSWORD}
+    STRUCTURE_MANAGER_NEW_USER_EMAIL: anita.responsable@example.com
+    STRUCTURE_MANAGER_NEW_USER_PASSWORD: ${E2E_STRUCTURE_MANAGER_NEW_USER_PASSWORD}
+    SOCIAL_WORKER_NEW_USER_EMAIL: mehdi.travailleur-social@example.com
+    SOCIAL_WORKER_NEW_USER_PASSWORD: ${E2E_SOCIAL_WORKER_NEW_USER_PASSWORD}
   script:
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
-    # - pnpm run --if-present test:e2e
+    - pnpm run --if-present test:e2e
 
 deploy:scalingo-dev:
   stage: deploy
