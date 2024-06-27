@@ -73,6 +73,8 @@ pnpm prisma db seed
 
 ## Tests
 
+La version de pnpm doit être précisée dans `.gitlab-ci.yml`.
+
 On part d'une base de données vide pour les tests (si besoin on
 supprime son contenu avec `docker compose -f docker-compose.dev.yml down -v`)
 
@@ -84,6 +86,8 @@ pnpm test
 ```
 
 ### Tests end-to-end
+
+La version de playwright et de pnpm doit être précisée dans `.gitlab-ci.yml`.
 
 ```
 pnpm dev:db:start
