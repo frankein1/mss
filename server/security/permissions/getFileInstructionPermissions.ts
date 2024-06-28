@@ -39,18 +39,18 @@ const FALSY_PERMISSIONS: FileInstructionPermissions = {
 
 export const getFileInstructionPermissions = ({
   ctx,
-  beneficiary,
+  familyFile,
   socialSupport
 }: {
   ctx: SecurityRuleContext
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+  familyFile: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport?: SecurityTargetWithCreator & SecurityTargetWithStructure
 }) => {
   let permissions: FileInstructionPermissions
   if (!socialSupport) {
     permissions = getCreationPermissions()
   } else {
-    permissions = getEditionPermissions({ ctx, beneficiary, socialSupport })
+    permissions = getEditionPermissions({ ctx, familyFile, socialSupport })
   }
 
   return permissions
@@ -73,21 +73,21 @@ function getCreationPermissions(): FileInstructionPermissions {
 
 function getEditionPermissions({
   ctx,
-  beneficiary,
+  familyFile,
   socialSupport
 }: {
   ctx: SecurityRuleContext
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+  familyFile: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 }): FileInstructionPermissions {
   const { user } = ctx
 
-  if (!isInSameStructure(user, beneficiary)) {
+  if (!isInSameStructure(user, familyFile)) {
     return FALSY_PERMISSIONS
   }
 
   const creator = isCreator(user, socialSupport)
-  const isReferent = isReferentFor(user, beneficiary)
+  const isReferent = isReferentFor(user, familyFile)
   const { manager, socialWorker, instructor, receptionAgent, referent } =
     getGranteRole(ctx)
 

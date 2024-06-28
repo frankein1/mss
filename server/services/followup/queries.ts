@@ -17,7 +17,7 @@ const include = {
     include: {
       documents: true,
       subjects: true,
-      beneficiary: {
+      familyFile: {
         include: {
           referents: true
         }
@@ -50,7 +50,7 @@ export async function getPage(
   return followups.map(followup => {
     const permissions = getFollowupPermissions({
       ctx,
-      beneficiary: followup.socialSupport.beneficiary,
+      familyFile: followup.socialSupport.familyFile,
       socialSupport: followup.socialSupport
     })
     const appPermissions = getAppContextPermissions(ctx)
@@ -66,7 +66,7 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
   const { socialSupport } = followup
   const permissions = getFollowupPermissions({
     ctx,
-    beneficiary: socialSupport.beneficiary,
+    familyFile: socialSupport.familyFile,
     socialSupport
   })
   const appPermissions = getAppContextPermissions(ctx)
