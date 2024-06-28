@@ -174,7 +174,7 @@ export default defineNuxtConfig({
         dsn: process.env.SENTRY_DSN,
         debug: !!process.env.SENTRY_DEBUG,
         tracesSampleRate: parseFloat(
-          process.env.SENTRY_TRACE_SAMPLE_RATE || '1.0'
+          process.env.SENTRY_TRACE_SAMPLE_RATE || '0.1'
         )
       },
       metabase: {
