@@ -66,7 +66,7 @@ export async function exportFollowups({
           status: socialSupportStatusKeys.value(followup.status) || '',
           redirected: getBooleanOrEmpty(followup.redirected),
           subjects: followup.subjects.map(({ name }) => name).join(', '),
-          beneficiaryId: formatBeneficiaryDisplayName(followup.beneficiary),
+          familyFileId: formatBeneficiaryDisplayName(followup.familyFile),
           medium: followupMediumKeys.value(followup.medium) || '',
           classified: getBooleanOrEmpty(followup.classified),
           documents:

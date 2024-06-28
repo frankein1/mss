@@ -16,16 +16,16 @@ import {
 
 export function getSocialSupportPermissions({
   ctx,
-  beneficiary,
+  familyFile,
   socialSupport
 }: {
   ctx: SecurityRuleContext
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+  familyFile: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport: SecurityTargetWithCreator &
     SecurityTargetWithStructure &
     Pick<SocialSupport, 'socialSupportType'>
 }): FollowupPermissions | FileInstructionPermissions {
   return socialSupport.socialSupportType === 'Followup'
-    ? getFollowupPermissions({ ctx, beneficiary, socialSupport })
-    : getFileInstructionPermissions({ ctx, beneficiary, socialSupport })
+    ? getFollowupPermissions({ ctx, familyFile, socialSupport })
+    : getFileInstructionPermissions({ ctx, familyFile, socialSupport })
 }

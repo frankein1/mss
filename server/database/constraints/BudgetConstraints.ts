@@ -8,14 +8,14 @@ const get = (user: SecurityRuleGrantee) => {
     return where
   }
   Object.assign<Prisma.BudgetWhereInput, Prisma.BudgetWhereInput>(where, {
-    beneficiary: {
+    familyFile: {
       structureId: user.structureId || undefined
     }
   })
 
   if (isReferent(user)) {
     Object.assign<Prisma.BudgetWhereInput, Prisma.BudgetWhereInput>(where, {
-      beneficiary: {
+      familyFile: {
         referents: { some: { id: user.id } }
       }
     })

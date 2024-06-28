@@ -4,7 +4,11 @@ import {
   SocialSupportType
 } from '@prisma/client'
 import { prepareSocialSupportSubjectsMutations } from './helper'
-import { BeneficiaryRepo, SocialSupportRepo } from '~/server/database'
+import {
+  BeneficiaryRepo,
+  FamilyFileRepo,
+  SocialSupportRepo
+} from '~/server/database'
 import { AddFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
@@ -18,7 +22,7 @@ type CreateParams = {
 export const create = async ({ ctx, input }: CreateParams) => {
   const { structure, user } = ctx
   const {
-    beneficiaryId,
+    familyFileId,
     subjects,
     documents,
     medium,
@@ -51,8 +55,8 @@ export const create = async ({ ctx, input }: CreateParams) => {
     prescribingOrganizationContact = connect(prescribingOrganizationContactId)
   }
 
-  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(user, {
-    where: { id: beneficiaryId },
+  const familyFile = await FamilyFileRepo.findUniqueOrThrow(user, {
+    where: { id: familyFileId },
     include: { referents: true }
   })
 
@@ -62,16 +66,16 @@ export const create = async ({ ctx, input }: CreateParams) => {
       socialSupportType: SocialSupportType.Followup,
       date,
       structure: connect(structure.id),
-      beneficiary: connect(beneficiaryId),
+      familyFile: connect(familyFileId),
       createdBy: connect(user.id),
       subjects: prepareSocialSupportSubjectsMutations(subjects),
       documents: prepareDocumentsMutations(documents),
       notifications: {
         createMany: {
-          data: beneficiary.referents
+          data: familyFile.referents
             .filter(referent => referent.id !== user.id)
             .map(referent => ({
-              beneficiaryId: beneficiary.id,
+              familyFileId: familyFile.id,
               recipientId: referent.id,
               type: NotificationType.NewFollowupElement,
               itemCreatedById: user.id
@@ -102,10 +106,9 @@ export const create = async ({ ctx, input }: CreateParams) => {
       }
     },
     include: {
-      beneficiary: {
+      familyFile: {
         select: {
-          id: true,
-          fileNumber: true
+          id: true
         }
       }
     }

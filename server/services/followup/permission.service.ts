@@ -15,7 +15,7 @@ export function getFollowupSecurityTarget(
     include: {
       socialSupport: {
         include: {
-          beneficiary: {
+          familyFile: {
             include: {
               referents: true
             }
@@ -33,7 +33,7 @@ export async function getEditionPermissions(
   const { socialSupport } = await getFollowupSecurityTarget(ctx.user, id)
   return getFollowupPermissions({
     ctx,
-    beneficiary: socialSupport.beneficiary,
+    familyFile: socialSupport.familyFile,
     socialSupport
   })
 }
@@ -42,12 +42,12 @@ export async function getCreationPermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string
 ): Promise<FollowupPermissions> {
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+  const familyFile = await BeneficiaryService.getBeneficiarySecurityTarget(
     ctx.user,
     beneficiaryId
   )
   return getFollowupPermissions({
     ctx,
-    beneficiary
+    familyFile
   })
 }
