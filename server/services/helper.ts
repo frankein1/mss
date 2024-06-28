@@ -10,7 +10,8 @@ import {
   SocialSupport,
   PartnerOrganization,
   User,
-  PartnerOrganizationContact
+  PartnerOrganizationContact,
+  FamilyFile
 } from '@prisma/client'
 
 function show<T>(val: T, condition: boolean): T | null {
@@ -22,7 +23,7 @@ export function filterSocialSupport({
   conditions
 }: {
   socialSupport: SocialSupport & {
-    beneficiary: Beneficiary & { referents: User[] }
+    familyFile: FamilyFile & { referents: User[] }
     createdBy: User
     subjects: SocialSupportSubject[]
     documents?: Document[]
@@ -46,8 +47,8 @@ export function filterSocialSupport({
     status: socialSupport.status,
     subjects: socialSupport.subjects,
 
-    beneficiary: socialSupport.beneficiary,
-    beneficiaryId: socialSupport.beneficiaryId,
+    familyFile: socialSupport.familyFile,
+    familyFileId: socialSupport.familyFileId,
 
     dueDate: show(socialSupport.dueDate, conditions.details),
 

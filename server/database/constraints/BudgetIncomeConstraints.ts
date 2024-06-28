@@ -11,7 +11,7 @@ const get = (user: SecurityRuleGrantee) => {
     where,
     {
       budget: {
-        beneficiary: {
+        familyFile: {
           structureId: user.structureId || undefined
         }
       }
@@ -23,7 +23,7 @@ const get = (user: SecurityRuleGrantee) => {
       where,
       {
         budget: {
-          beneficiary: {
+          familyFile: {
             referents: { some: { id: user.id } }
           }
         }

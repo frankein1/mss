@@ -28,7 +28,7 @@ function findMany(
         include: {
           subjects: true,
           documents: true,
-          beneficiary: {
+          familyFile: {
             include: {
               referents: true
             }
@@ -61,10 +61,10 @@ export async function getPage(
   const fileInstructions = await findMany(ctx.user, args)
   return fileInstructions.map(fileInstruction => {
     const { socialSupport } = fileInstruction
-    const { beneficiary } = socialSupport
+    const { familyFile } = socialSupport
     const permissions = getFileInstructionPermissions({
       ctx,
-      beneficiary,
+      familyFile,
       socialSupport
     })
     const appPermissions = getAppContextPermissions(ctx)

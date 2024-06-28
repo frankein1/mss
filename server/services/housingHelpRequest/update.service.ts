@@ -78,10 +78,9 @@ export async function update({ input, ctx }: UpdateParams) {
       )
     },
     include: {
-      beneficiary: {
+      familyFile: {
         select: {
-          id: true,
-          fileNumber: true
+          id: true
         }
       }
     }

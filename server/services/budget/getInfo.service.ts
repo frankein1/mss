@@ -4,13 +4,13 @@ import { BudgetRepo } from '~/server/database/repository'
 
 export async function getInfo({
   ctx,
-  beneficiaryId
+  familyFileId
 }: {
   ctx: SecurityRuleContext
-  beneficiaryId: string
+  familyFileId: string
 }) {
   const infos = await BudgetRepo.findUniqueOrThrow(ctx.user, {
-    where: { beneficiaryId },
+    where: { familyFileId },
     include: {
       incomes: true,
       expenses: {

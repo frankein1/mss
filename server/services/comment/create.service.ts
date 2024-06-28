@@ -13,7 +13,7 @@ function getTargetedSocialSupport(
     select: {
       id: true,
       createdById: true,
-      beneficiary: { select: { referents: { select: { id: true } } } }
+      familyFile: { select: { referents: { select: { id: true } } } }
     }
   })
 }
@@ -39,7 +39,7 @@ function prepareNotifications(
     })
   }
 
-  socialSupport.beneficiary.referents.forEach(({ id: referentId }) => {
+  socialSupport.familyFile.referents.forEach(({ id: referentId }) => {
     if (referentId === userId || referentId === socialSupport.createdById) {
       return
     }
