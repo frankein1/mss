@@ -41,18 +41,18 @@ const FALSY_PERMISSIONS: FollowupPermissions = {
 
 export const getFollowupPermissions = ({
   ctx,
-  beneficiary,
+  familyFile,
   socialSupport
 }: {
   ctx: SecurityRuleContext
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+  familyFile: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport?: SecurityTargetWithCreator & SecurityTargetWithStructure
 }) => {
   let permissions: FollowupPermissions
   if (!socialSupport) {
     permissions = getCreationPermissions()
   } else {
-    permissions = getEditionPermissions({ ctx, beneficiary, socialSupport })
+    permissions = getEditionPermissions({ ctx, familyFile, socialSupport })
   }
 
   return permissions
@@ -76,20 +76,20 @@ function getCreationPermissions(): FollowupPermissions {
 
 function getEditionPermissions({
   ctx,
-  beneficiary,
+  familyFile,
   socialSupport
 }: {
   ctx: SecurityRuleContext
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+  familyFile: SecurityTargetWithStructure & SecurityTargetWithReferents
   socialSupport: SecurityTargetWithCreator & SecurityTargetWithStructure
 }): FollowupPermissions {
   const { user } = ctx
-  if (!isInSameStructure(user, beneficiary)) {
+  if (!isInSameStructure(user, familyFile)) {
     return FALSY_PERMISSIONS
   }
 
   const creator = isCreator(user, socialSupport)
-  const isReferent = isReferentFor(user, beneficiary)
+  const isReferent = isReferentFor(user, familyFile)
   const { manager, socialWorker, instructor, referent, receptionAgent } =
     getGranteRole(ctx)
 

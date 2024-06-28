@@ -4,7 +4,11 @@ import {
   SocialSupportType
 } from '@prisma/client'
 import { cleanCreateInput } from './helper'
-import { BeneficiaryRepo, HousingHelpRequestRepo } from '~/server/database'
+import {
+  BeneficiaryRepo,
+  FamilyFileRepo,
+  HousingHelpRequestRepo
+} from '~/server/database'
 import { CreateHousingHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
@@ -16,13 +20,13 @@ type CreateParams = {
 }
 
 export async function create({ input, ctx }: CreateParams) {
-  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: input.beneficiaryId },
+  const familyFile = await FamilyFileRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: input.familyFileId },
     select: { id: true, referents: true }
   })
 
   const {
-    beneficiaryId,
+    familyFileId,
     numeroPegase,
     ministre,
     documents,
@@ -84,7 +88,7 @@ export async function create({ input, ctx }: CreateParams) {
               status,
               socialSupportType: SocialSupportType.HelpRequestHousing,
               createdById: ctx.user.id,
-              beneficiaryId,
+              familyFileId,
               structureId: ctx.structure.id,
               synthesis,
               privateSynthesis,
@@ -95,10 +99,10 @@ export async function create({ input, ctx }: CreateParams) {
               documents: prepareDocumentsMutations(documents),
               notifications: {
                 createMany: {
-                  data: beneficiary.referents
+                  data: familyFile.referents
                     .filter(referent => referent.id !== ctx.user.id)
                     .map(referent => ({
-                      beneficiaryId: beneficiary.id,
+                      familyFileId: familyFile.id,
                       recipientId: referent.id,
                       type: NotificationType.NewFileInstructionElement,
                       itemCreatedById: ctx.user.id
