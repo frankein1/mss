@@ -8,9 +8,9 @@ Mon Suivi Social est un outil simple d'utilisation et complet pour gérer l'acco
 
 Pour lancer le projet, vous avez besoin de :
 
-- [Node.js](https://nodejs.org/en)
+- [Node.js](https://nodejs.org/en) v20
 - [Docker](https://www.docker.com/)
-- [pnpm](https://pnpm.io/)
+- [pnpm](https://pnpm.io/) voir version dans `/package.json > "engines"`
 
 ## Technologies
 
