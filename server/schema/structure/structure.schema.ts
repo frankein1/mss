@@ -22,7 +22,15 @@ export const editStructureInfoSchema = z.object({
     .max(100, maxStringLengthMessage(100))
     .min(2, minStringLengthMessage(2)),
   phone: phoneConstraint,
-  email: z.string(errorMessages).email(validEmailMessage)
+  email: z.string(errorMessages).email(validEmailMessage),
+  dpoFirstName: stringConstraint
+    .max(50, maxStringLengthMessage(50))
+    .min(2, minStringLengthMessage(2)),
+  dpoLastName: stringConstraint
+    .min(2, minStringLengthMessage(2))
+    .max(50, maxStringLengthMessage(50))
+    .toUpperCase(),
+  dpoEmail: z.string(errorMessages).email(validEmailMessage)
 })
 
 export type EditStructureInfoInput = z.infer<typeof editStructureInfoSchema>
