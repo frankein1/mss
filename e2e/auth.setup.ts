@@ -7,13 +7,13 @@ async function authenticate(
   newUser = false
 ) {
   await page.goto('/auth/login')
-  await page.getByTitle("S'identifier avec InclusionConnect").click()
+  await page.getByRole('link', { name: /inclusionconnect/i }).click()
 
   await page.waitForURL(/connect.inclusion.beta.gouv.fr/)
 
   await page.getByLabel('Adresse e-mail').fill(username)
   await page.getByLabel('Mot de passe').fill(password)
-  await page.getByRole('button', { name: 'Connexion' }).click()
+  await page.getByRole('button', { name: /connexion/i }).click()
 
   // Sometimes login flow sets cookies in the process of several redirects.
   // Wait for the final URL to ensure that the cookies are actually set.
