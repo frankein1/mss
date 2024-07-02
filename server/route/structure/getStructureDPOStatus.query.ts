@@ -18,10 +18,10 @@ const handler = async ({
   })
 
   const dpoIsFilled =
-    structure.dpoEmail && structure.dpoFirstName && structure.dpoLastName
+    !!structure.dpoEmail && !!structure.dpoFirstName && !!structure.dpoLastName
 
   const structurehasBeenCreatedBeforeMay =
-    structure.created &&
+    !!structure.created &&
     structure.created.getTime() < new Date('2024-05-30').getTime()
 
   const isStructureManager = user.role === UserRole.StructureManager
