@@ -107,6 +107,9 @@ model Structure {
   inhabitantsNumber     String?                @map("inhabitants_number")
   inseeCode             String?                @map("insee_code")
   siret                 String?
+  dpoFirstName          String?                @map("dpo_first_name")
+  dpoLastName           String?                @map("dpo_last_name")
+  dpoEmail              String?                @map("dpo_email")
   socialSupportSubjects SocialSupportSubject[]
   users                 User[]
   socialSupports        SocialSupport[]
