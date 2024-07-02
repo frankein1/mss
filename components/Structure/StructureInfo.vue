@@ -47,18 +47,18 @@
         <span>{{ structure.email }}</span>
       </div>
 
-      <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w">
-          {{ structureFieldLabels.dpoFirstName }} :
-        </span>
-        <span>{{ structure.dpoFirstName }}</span>
+      <div class="fr-col-12 fr-mt-1w">
+        <h3
+          class="fr-mb-0 fr-text--lg"
+          :style="{ color: '#3a3a3a' }"
+        >
+          Personne référente à la protection des données (DPO)&nbsp;:
+        </h3>
       </div>
 
       <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w">
-          {{ structureFieldLabels.dpoLastName }} :
-        </span>
-        <span>{{ structure.dpoLastName }}</span>
+        <span class="structure-info__content__label fr-mr-1w"> Nom : </span>
+        <span>{{ structure.dpoFirstName }} {{ structure.dpoLastName }}</span>
       </div>
 
       <div class="fr-col-12">

@@ -88,6 +88,15 @@
         />
       </div>
 
+      <div class="fr-col-12 fr-mt-1w">
+        <h3
+          class="fr-mb-0 fr-text--lg"
+          :style="{ color: '#3a3a3a' }"
+        >
+          Personne référente à la protection des données (DPO)&nbsp;:
+        </h3>
+      </div>
+
       <div class="fr-col-12">
         <VeeInput
           name="dpoFirstName"
