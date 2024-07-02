@@ -8,5 +8,8 @@ export const structureFieldLabels = {
   type: 'Type',
   inhabitantsNumber: "Nombre d'habitants",
   inseeCode: 'Code INSEE',
-  siret: 'SIRET'
+  siret: 'SIRET',
+  dpoFirstName: 'Prénom DPO',
+  dpoLastName: 'Nom DPO',
+  dpoEmail: 'Email DPO'
 }
