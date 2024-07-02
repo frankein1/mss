@@ -53,6 +53,32 @@
           name="email"
           :label="structureFieldLabels.email"
           required
+          type="email"
+        />
+      </div>
+
+      <div class="fr-col-12">
+        <VeeInput
+          name="dpoFirstName"
+          :label="structureFieldLabels.dpoFirstName"
+          required
+        />
+      </div>
+
+      <div class="fr-col-12">
+        <VeeInput
+          name="dpoLastName"
+          :label="structureFieldLabels.dpoLastName"
+          required
+        />
+      </div>
+
+      <div class="fr-col-12">
+        <VeeInput
+          name="dpoEmail"
+          :label="structureFieldLabels.dpoEmail"
+          required
+          type="email"
         />
       </div>
     </fieldset>
@@ -106,7 +132,10 @@
       city: props.structure.city,
       address: props.structure.address,
       phone: props.structure.phone,
-      email: props.structure.email
+      email: props.structure.email,
+      dpoEmail: props.structure.dpoEmail || undefined,
+      dpoFirstName: props.structure.dpoFirstName || undefined,
+      dpoLastName: props.structure.dpoLastName || undefined
     }
   })
 

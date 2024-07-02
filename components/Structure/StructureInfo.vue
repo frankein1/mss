@@ -46,6 +46,27 @@
         </span>
         <span>{{ structure.email }}</span>
       </div>
+
+      <div class="fr-col-12">
+        <span class="structure-info__content__label fr-mr-1w">
+          {{ structureFieldLabels.dpoFirstName }} :
+        </span>
+        <span>{{ structure.dpoFirstName }}</span>
+      </div>
+
+      <div class="fr-col-12">
+        <span class="structure-info__content__label fr-mr-1w">
+          {{ structureFieldLabels.dpoLastName }} :
+        </span>
+        <span>{{ structure.dpoLastName }}</span>
+      </div>
+
+      <div class="fr-col-12">
+        <span class="structure-info__content__label fr-mr-1w">
+          {{ structureFieldLabels.dpoEmail }} :
+        </span>
+        <span>{{ structure.dpoEmail }}</span>
+      </div>
     </div>
 
     <div class="fr-grid-row fr-grid-row--right">
