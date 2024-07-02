@@ -5,6 +5,9 @@ export const structureRouter = router({
   getStructure: protectedProcedure
     .input(structureRoutes.getStructure.inputValidation)
     .query(structureRoutes.getStructure.execute),
+  getStructureDPOStatus: protectedProcedure
+    .input(structureRoutes.getStructureDPOStatus.inputValidation)
+    .query(structureRoutes.getStructureDPOStatus.execute),
   updateStructureInfo: protectedProcedure
     .input(structureRoutes.updateStructureInfo.inputValidation)
     .mutation(structureRoutes.updateStructureInfo.execute),
