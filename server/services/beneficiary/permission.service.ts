@@ -7,7 +7,7 @@ import {
   getFamilyFilePermissions
 } from '~/server/security'
 
-function getBeneficiarySecurityTarget(user: SecurityRuleGrantee, id: string) {
+export function getBeneficiarySecurityTarget(user: SecurityRuleGrantee, id: string) {
   return BeneficiaryRepo.findUniqueOrThrow(user, {
     where: { id },
     select: {
