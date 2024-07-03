@@ -38,16 +38,12 @@ const handler = async ({
     NotificationRepo.findMany(user, {
       where,
       include: {
-        familyFile: {
+        beneficiary: {
           select: {
-            beneficiaries: {
-              select: {
-                id: true,
-                firstName: true,
-                usualName: true,
-                birthName: true
-              }
-            }
+            id: true,
+            firstName: true,
+            usualName: true,
+            birthName: true
           }
         },
         socialSupport: {
@@ -81,7 +77,7 @@ const handler = async ({
     documentId: n.documentId,
     socialSupportId: n.socialSupportId,
     type: n.type,
-    familyFile: n.familyFile,
+    beneficiary: n.beneficiary,
     created: n.created,
     read: n.read,
     title: notificationTypeKeys.byKey[n.type],
