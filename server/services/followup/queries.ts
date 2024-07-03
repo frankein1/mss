@@ -17,10 +17,17 @@ const include = {
     include: {
       documents: true,
       subjects: true,
+      beneficiary: {
+        select: {
+          id: true,
+          usualName: true,
+          firstName: true,
+          birthName: true
+        }
+      },
       familyFile: {
         include: {
-          referents: true,
-          beneficiaries: true
+          referents: true
         }
       },
       createdBy: true
