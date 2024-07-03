@@ -1,6 +1,6 @@
 import { FileInstructionType, Prisma } from '@prisma/client'
 import {
-  fixtureStructure,
+  fixtureStructures,
   fixturesBeneficiaries,
   FixtureBeneficiary,
   fixturesSocialSupportSubjects,
@@ -16,7 +16,7 @@ const fixturesFollowupSocialSupports = [
     id: 'e20b26f8-52fd-4620-8959-4cbb4623fb05',
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'Done',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     subjects: {
       connect: [
@@ -36,7 +36,7 @@ const fixturesFollowupSocialSupports = [
     id: '8f8a083f-f04f-4977-9e07-8b88135c7210',
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'Done',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     subjects: {
       connect: [{ id: fixturesSocialSupportSubjects[0].id }]
@@ -53,7 +53,7 @@ const fixturesFollowupSocialSupports = [
     id: '07e809c3-4b6e-4152-bde3-357c501c981f',
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'Done',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     subjects: {
       connect: [
@@ -73,7 +73,7 @@ const fixturesFollowupSocialSupports = [
     id: 'b811a9d7-ada7-42ca-b809-926caaebaf52',
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'Done',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.PENSON].id,
     subjects: {
       connect: [{ id: fixturesSocialSupportSubjects[2].id }]
@@ -90,7 +90,7 @@ const fixturesFollowupSocialSupports = [
     id: 'b15eba7c-d00d-4de6-a227-75361066c322',
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'InProgress',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     subjects: {
       connect: [
@@ -110,7 +110,7 @@ const fixturesFollowupSocialSupports = [
     id: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
     createdById: fixturesUsers[FixtureUserRole.Referent].id,
     status: 'InProgress',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: {
       connect: [{ id: fixturesSocialSupportSubjects[4].id }]
@@ -172,7 +172,7 @@ const fixturesHelpRequestSocialSupports = [
     id: 'c95126c4-b0b5-4606-82ca-8d95c544fd35',
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'Accepted',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
@@ -198,7 +198,7 @@ const fixturesHelpRequestSocialSupports = [
     id: '4aad5e90-7a9e-4aeb-90f1-1c986664f47f',
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'InvestigationOngoing',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequest',
@@ -220,7 +220,7 @@ const fixturesHelpRequestSocialSupports = [
     id: 'da9acc1f-4927-4794-be6a-12f3b02b5478',
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'Accepted',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
@@ -246,7 +246,7 @@ const fixturesHelpRequestSocialSupports = [
     id: '047f05e4-2ce2-40c5-ab6e-b16fe7a55c24',
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'Accepted',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
@@ -276,7 +276,7 @@ const fixturesHelpRequestSocialSupports = [
     id: '8cc71beb-6c55-4ec4-85bd-80a93cd0e553',
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'Accepted',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
@@ -310,7 +310,7 @@ const fixturesHelpRequestSocialSupports = [
     id: '8f6da38f-82ff-4121-ae77-45fc707a1acc',
     createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
     status: 'InvestigationOngoing',
-    structureId: fixtureStructure.id,
+    structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequest',

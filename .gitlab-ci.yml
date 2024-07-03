@@ -20,18 +20,12 @@ include:
       - /proxy/secret-scanning.yml
       - /pnpm.auto.yml
 
-      # deploy
-      # - /helm.development.auto.yml
-      # - /helm.production.auto.yml
-
 variables:
   PNPM_VERSION: 9.1.4
-#   HELM_CHART: nodejs
-#   HELM_REPOSITORY: https://gitlab.com/api/v4/projects/29298483/packages/helm/stable
-#   HELM_NAME: app
-#   HOST: ${BASE_DOMAIN}
-#   HELM_INGRESS_HOST: ${HOST}
-#   HELM_ENV_VAR_NUXT_PUBLIC_APP_URL: https://${HOST}
+  # A synchroniser avec la version présente dans package.json
+  PLAYWRIGHT_VERSION: 1.45.0
+  #A synchroniser avec la version présente en production
+  POSTGRES_VERSION: 14.12
 
 # prepare git env to push new code to scalingo
 .scalingo:
@@ -62,45 +56,12 @@ variables:
   image:
     name: registry.gitlab.com/vigigloo/tools/pnpm:node-20_pnpm-${PNPM_VERSION}
 
-# .vigigloo:helm:deploy:
-#   variables:
-#     HELM_UPGRADE_EXTRA_ARGS: >-
-#       --set "jobs.hooks.postInstall[0].image.repository=${CI_APPLICATION_REPOSITORY}-migrations"
-#       --set "jobs.hooks.postInstall[0].image.tag=${CI_APPLICATION_TAG}"
-#       --set "jobs.hooks.preUpgrade[0].image.repository=${CI_APPLICATION_REPOSITORY}-migrations"
-#       --set "jobs.hooks.preUpgrade[0].image.tag=${CI_APPLICATION_TAG}"
-# deploy:production:
-#   variables:
-#     HELM_UPGRADE_EXTRA_ARGS: >-
-#       --set "jobs.hooks.postInstall[0].image.repository=${CI_APPLICATION_REPOSITORY}/migrations"
-#       --set "jobs.hooks.postInstall[0].image.tag=${CI_APPLICATION_TAG}"
-#       --set "jobs.hooks.preUpgrade[0].image.repository=${CI_APPLICATION_REPOSITORY}/migrations"
-#       --set "jobs.hooks.preUpgrade[0].image.tag=${CI_APPLICATION_TAG}"
-
-# .vigigloo:docker:kaniko:build:
-#   variables:
-#     DOCKER_BUILD_ARG_COMMIT_SHA: $CI_COMMIT_SHA
-#     DOCKER_BUILD_ARG_COMMIT_REF_NAME: $CI_COMMIT_REF_NAME
-#     DOCKER_BUILD_ARG_COMMIT_TAG: $CI_COMMIT_TAG
-#   parallel:
-#     matrix:
-#       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
-#       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG-migrations
-#         DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
-
-# docker:kaniko:build:production:
-#   parallel:
-#     matrix:
-#       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE
-#       - CI_APPLICATION_REPOSITORY: $CI_REGISTRY_IMAGE/migrations
-#         DOCKERFILE: $CI_PROJECT_DIR/prisma/Dockerfile
-
 pnpm:test:
   extends: .vigigloo:pnpm:test
   interruptible: true
   needs: ['pnpm:install']
   services:
-    - name: postgres:14.12-alpine
+    - name: postgres:${POSTGRES_VERSION}-alpine
       alias: database
       variables:
         POSTGRES_DB: mss
@@ -118,7 +79,7 @@ pnpm:test:
 .playwright-pnpm:install:
   variables:
     CACHE_FALLBACK_KEY: $CI_DEFAULT_BRANCH
-  image: mcr.microsoft.com/playwright:v1.44.0-jammy
+  image: mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-jammy
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
@@ -133,6 +94,7 @@ pnpm:test:
   cache:
     policy: pull
   artifacts:
+    when: always
     paths:
       - playwright-report
     expire_in: 1 week
@@ -149,7 +111,7 @@ pnpm:test:e2e:
   extends: .playwright:test
   needs: ['playwright:install']
   services:
-    - name: postgres:14.12-alpine
+    - name: postgres:${POSTGRES_VERSION}-alpine
       alias: database
       variables:
         POSTGRES_DB: mss
@@ -166,10 +128,14 @@ pnpm:test:e2e:
     STRUCTURE_MANAGER_PASSWORD: ${E2E_STRUCTURE_MANAGER_PASSWORD}
     SOCIAL_WORKER_EMAIL: jean.travailleur-social@example.com
     SOCIAL_WORKER_PASSWORD: ${E2E_SOCIAL_WORKER_PASSWORD}
+    STRUCTURE_MANAGER_NEW_USER_EMAIL: anita.responsable@example.com
+    STRUCTURE_MANAGER_NEW_USER_PASSWORD: ${E2E_STRUCTURE_MANAGER_NEW_USER_PASSWORD}
+    SOCIAL_WORKER_NEW_USER_EMAIL: mehdi.travailleur-social@example.com
+    SOCIAL_WORKER_NEW_USER_PASSWORD: ${E2E_SOCIAL_WORKER_NEW_USER_PASSWORD}
   script:
     - pnpm prisma migrate deploy
     - pnpm prisma db seed
-    # - pnpm run --if-present test:e2e
+    - pnpm run --if-present test:e2e
 
 deploy:scalingo-dev:
   stage: deploy

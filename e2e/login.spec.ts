@@ -11,11 +11,11 @@ test('Home page should allow to login using Inclusion Connect', async ({
 
   await expect(page).toHaveTitle(/Se connecter à ma structure/)
 
-  await page.getByTitle("S'identifier avec InclusionConnect").click()
+  await page.getByRole('link', { name: /inclusionconnect/i }).click()
 
   await expect(page).toHaveURL(
     /connect.inclusion.beta.gouv.fr\/accounts\/login/
   )
 
-  await expect(page.getByRole('heading', { name: 'Connexion' })).toBeVisible()
+  await expect(page.getByRole('heading', { name: /connexion/i })).toBeVisible()
 })
