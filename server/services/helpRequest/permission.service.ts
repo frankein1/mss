@@ -4,7 +4,7 @@ import {
   FileInstructionPermissions,
   getFileInstructionPermissions
 } from '~/server/security/permissions'
-import { BeneficiaryService } from '~/server/services/beneficiary'
+import { FamilyFileService } from '..'
 
 function getHelpRequestSecurityTarget(user: SecurityRuleGrantee, id: string) {
   return HelpRequestRepo.findUniqueOrThrow(user, {
@@ -14,9 +14,10 @@ function getHelpRequestSecurityTarget(user: SecurityRuleGrantee, id: string) {
         include: {
           socialSupport: {
             include: {
-              beneficiary: {
+              familyFile: {
                 include: {
-                  referents: true
+                  referents: true,
+                  beneficiaries: true
                 }
               }
             }
@@ -37,7 +38,7 @@ export async function getEditionPermissions(
   } = helpRequest
   return getFileInstructionPermissions({
     ctx,
-    beneficiary: socialSupport.beneficiary,
+    familyFile: socialSupport.familyFile,
     socialSupport
   })
 }
@@ -46,12 +47,12 @@ export async function getCreationPermissions(
   ctx: SecurityRuleContext,
   beneficiaryId: string
 ): Promise<FileInstructionPermissions> {
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+  const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
     ctx.user,
     beneficiaryId
   )
   return getFileInstructionPermissions({
     ctx,
-    beneficiary
+    familyFile
   })
 }

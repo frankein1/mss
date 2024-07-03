@@ -145,8 +145,4 @@ export type GetBeneficiaryOutput = Pick<
     occupationIncome: GetBeneficiaryOccupationIncome | undefined
     entourages: GetBeneficiaryRelative[] | undefined
     taxHouseholds: GetBeneficiaryTaxHousehold | undefined
-    history: {
-      historyTotal: number
-      subjects: SocialSupportSubjectIdAndName[]
-    }
   }

@@ -63,10 +63,9 @@ export const update = async ({ ctx, input }: UpdateParams) => {
       dueDate
     },
     include: {
-      beneficiary: {
+      familyFile: {
         select: {
-          id: true,
-          fileNumber: true
+          id: true
         }
       }
     }

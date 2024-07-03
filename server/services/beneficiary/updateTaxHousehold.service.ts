@@ -10,7 +10,11 @@ function getBeneficiaryWithTaxHousehold(user: SecurityRuleGrantee, id: string) {
     where: { id },
     select: {
       id: true,
-      budget: { select: { id: true } },
+      familyFile: {
+        select: {
+          budget: { select: { id: true } }
+        }
+      },
       structureId: true,
       relatives: {
         where: { hosted: true }
@@ -81,8 +85,10 @@ export async function updateTaxHousehold(
     ...taxHouseholdDatas
   } = cleanInput(input)
 
-  const { relatives: previousTaxHouseholds, budget } =
-    await getBeneficiaryWithTaxHousehold(user, beneficiaryId)
+  const {
+    relatives: previousTaxHouseholds,
+    familyFile: { budget }
+  } = await getBeneficiaryWithTaxHousehold(user, beneficiaryId)
 
   const budgetId = budget?.id || ''
 

@@ -3,7 +3,7 @@ import { openText } from './helpers.schema'
 
 const addCommentSchema = z.object({
   content: openText(3000),
-  beneficiaryId: z.string().uuid(),
+  familyFileId: z.string().uuid(),
   isFollowup: z.boolean(),
   socialSupportId: z.string().uuid()
 })

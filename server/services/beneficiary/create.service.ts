@@ -16,28 +16,41 @@ export async function create(params: CreateParams) {
   const fileNumber = generateFileNumber()
 
   const data = {
-    structureId: ctx.structure.id,
     fileNumber,
-    referents: {
-      connect: referents.map(referent => ({ id: referent }))
+    structure: {
+      connect: { id: ctx.structure.id }
     },
-    budget: {
+    createdBy: {
+      connect: { id: ctx.user.id }
+    },
+    ...restOfInput,
+    familyFile: {
       create: {
-        expenses: {
-          create: {}
+        structure: {
+          connect: { id: ctx.structure.id }
         },
-        incomes: {
+        referents: {
+          connect: referents.map(referent => ({ id: referent }))
+        },
+        budget: {
           create: {
-            type: BudgetIncomeType.Beneficiary
+            expenses: {
+              create: {}
+            },
+            incomes: {
+              create: {
+                type: BudgetIncomeType.Beneficiary
+              }
+            }
           }
         }
       }
-    },
-    createdById: ctx.user.id,
-    ...restOfInput
+    }
   }
 
-  const { id } = await BeneficiaryRepo.prisma.create({ data })
+  const { id } = await BeneficiaryRepo.prisma.create({
+    data
+  })
 
   return { id }
 }

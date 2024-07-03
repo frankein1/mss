@@ -24,6 +24,7 @@ export async function create({ input, ctx }: CreateParams) {
 
   const {
     familyFileId,
+    beneficiaryId,
     numeroPegase,
     ministre,
     subjectId,
@@ -93,6 +94,7 @@ export async function create({ input, ctx }: CreateParams) {
               socialSupportType: SocialSupportType.HelpRequest,
               createdById: ctx.user.id,
               familyFileId,
+              beneficiaryId,
               structureId: ctx.structure.id,
               synthesis,
               privateSynthesis,

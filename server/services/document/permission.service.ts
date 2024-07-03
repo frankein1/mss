@@ -1,6 +1,7 @@
 import { BeneficiaryService } from '../beneficiary'
 import { DocumentRepo } from '~/server/database'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
+import { FamilyFileService } from '..'
 
 export async function getEditionPermissions(
   ctx: SecurityRuleContext,
@@ -9,7 +10,7 @@ export async function getEditionPermissions(
   const document = await DocumentRepo.findUniqueOrThrow(ctx.user, {
     where: { key },
     include: {
-      beneficiary: {
+      familyFile: {
         select: {
           id: true,
           structureId: true,
@@ -20,7 +21,7 @@ export async function getEditionPermissions(
   })
   const permissions = getDocumentPermissions({
     ctx,
-    beneficiary: document.beneficiary,
+    familyFile: document.familyFile,
     document
   })
   return {
@@ -31,11 +32,11 @@ export async function getEditionPermissions(
 
 export async function getCreationPermissions(
   ctx: SecurityRuleContext,
-  beneficiaryId: string
+  familyFileId: string
 ) {
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    beneficiaryId
+    familyFileId
   )
   return permissions.create.document
 }

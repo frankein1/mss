@@ -5,6 +5,7 @@ ALTER TABLE "beneficiary" ADD COLUMN     "family_file_id" UUID;
 ALTER TABLE "budget" ADD COLUMN     "family_file_id" UUID;
 ALTER TABLE "document" ADD COLUMN     "family_file_id" UUID;
 ALTER TABLE "social_support" ADD COLUMN     "family_file_id" UUID;
+ALTER TABLE "notification" ADD COLUMN     "family_file_id" UUID;
 
 -- CreateTable
 CREATE TABLE "family_file" (
@@ -32,6 +33,8 @@ ALTER TABLE "beneficiary" ADD CONSTRAINT "beneficiary_family_file_id_fkey" FOREI
 ALTER TABLE "family_file" ADD CONSTRAINT "family_file_structure_id_fkey" FOREIGN KEY ("structure_id") REFERENCES "structure"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "_family_file_referents" ADD CONSTRAINT "_family_file_referents_A_fkey" FOREIGN KEY ("A") REFERENCES "family_file"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "_family_file_referents" ADD CONSTRAINT "_family_file_referents_B_fkey" FOREIGN KEY ("B") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "notification" ADD CONSTRAINT "notification_family_file_id_fkey" FOREIGN KEY ("family_file_id") REFERENCES "family_file"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
 
 -- migrate data
 ALTER TABLE family_file ADD beneficiary_id UUID;
@@ -39,7 +42,6 @@ INSERT INTO family_file (id, beneficiary_id, structure_id) SELECT gen_random_uui
 
 UPDATE document d SET family_file_id = (SELECT id FROM family_file ff where ff.beneficiary_id = d.beneficiary_id);
 ALTER TABLE document ALTER family_file_id SET NOT NULL;
-ALTER TABLE document DROP COLUMN beneficiary_id;
 
 UPDATE budget d SET family_file_id = (SELECT id FROM family_file ff where ff.beneficiary_id = d.beneficiary_id);
 ALTER TABLE budget ALTER family_file_id SET NOT NULL;
@@ -47,7 +49,6 @@ ALTER TABLE budget DROP COLUMN beneficiary_id;
 
 UPDATE social_support d SET family_file_id = (SELECT id FROM family_file ff where ff.beneficiary_id = d.beneficiary_id);
 ALTER TABLE social_support ALTER family_file_id SET NOT NULL;
-ALTER TABLE social_support DROP COLUMN beneficiary_id;
 
 UPDATE beneficiary d SET family_file_id = (SELECT id FROM family_file ff where ff.beneficiary_id = d.id);
 ALTER TABLE beneficiary ALTER family_file_id SET NOT NULL;

@@ -5,13 +5,13 @@ import { BudgetService } from '~/server/services'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
 const handler = async ({
-  input: { beneficiaryId },
+  input: { familyFileId },
   ctx
 }: {
   input: GetBudgetInput
   ctx: ProtectedAppContext
 }) => {
-  return await BudgetService.getInfo({ ctx, beneficiaryId })
+  return await BudgetService.getInfo({ ctx, familyFileId })
 }
 
 export const getInfo = createQuery({

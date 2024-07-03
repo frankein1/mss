@@ -77,7 +77,7 @@ model User {
 
   createdBeneficiaries  Beneficiary[] @relation(name: "created_beneficiaries")
   archivedBeneficiaries Beneficiary[] @relation(name: "archived_beneficiaries")
-  referentFor           FamilyFile[] @relation(name: "family_file_referents")
+  referentFor           FamilyFile[]  @relation(name: "family_file_referents")
 
   createdPartnerOrganizations PartnerOrganization[]
 
@@ -149,6 +149,9 @@ model Document {
 
   familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
   familyFileId String     @map("family_file_id") @db.Uuid
+
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
   created        DateTime?       @default(now())
   createdBy      User            @relation(fields: [createdById], references: [id])
@@ -284,6 +287,9 @@ model SocialSupport {
 
   familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
   familyFileId String     @map("family_file_id") @db.Uuid
+
+  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  beneficiaryId String      @map("beneficiary_id") @db.Uuid
 
   createdById String @map("created_by_id") @db.Uuid
   createdBy   User   @relation(name: "created_social_supports", fields: [createdById], references: [id])
@@ -1322,11 +1328,11 @@ model FamilyFile {
 
   referents User[] @relation(name: "family_file_referents")
 
-  budget        Budget?
-  documents     Document[]
-  socialSupport SocialSupport[]
-  beneficiaries Beneficiary[]
-  notifications Notification[]
+  budget         Budget?
+  documents      Document[]
+  socialSupports SocialSupport[]
+  beneficiaries  Beneficiary[]
+  notifications  Notification[]
 
   @@map("family_file")
 }
@@ -1536,7 +1542,8 @@ model Beneficiary {
 
   relatives      BeneficiaryRelative[] @relation("ownerBeneficiary")
   // linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
-  notifications  Notification[]
+  socialSupports SocialSupport[]
+  documents      Document[]
 
   @@map("beneficiary")
 }
@@ -1695,10 +1702,7 @@ model Notification {
   structureId String?    @map("structure_id") @db.Uuid
 
   familyFile   FamilyFile? @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
-  familyFileId String?      @map("family_file_id") @db.Uuid
-
-  beneficiary   Beneficiary? @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
-  beneficiaryId String?      @map("beneficiary_id") @db.Uuid
+  familyFileId String?     @map("family_file_id") @db.Uuid
 
   socialSupport   SocialSupport? @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
   socialSupportId String?        @map("social_support_id") @db.Uuid

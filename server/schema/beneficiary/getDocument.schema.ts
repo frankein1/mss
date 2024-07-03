@@ -5,7 +5,7 @@ import { beneficiaryDocumentFilterSchema } from '../filter.schema'
 
 export const getDocumentsSchema = z
   .object({
-    beneficiaryId: z.string().uuid(),
+    familyFileId: z.string().uuid(),
     filters: beneficiaryDocumentFilterSchema.optional(),
     orderBy: z
       .object({

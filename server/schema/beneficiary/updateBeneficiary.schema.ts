@@ -49,6 +49,7 @@ import {
 
 export const updateBeneficiaryGeneralInformationSchema = z.object({
   id: z.string().uuid(),
+  familyFileId: z.string().uuid(),
   structureId: z.string().uuid(),
   referents: z
     .array(z.string().uuid(), {
@@ -100,6 +101,7 @@ export type UpdateBeneficiaryGeneralInformationInput = z.infer<
 
 export const updateBeneficiaryTaxHouseholdSchema = z.object({
   id: z.string().uuid(),
+  familyFileId: z.string().uuid(),
   familySituation: withEmptyValueOptionalNativeEnum(BeneficiaryFamilySituation),
   weddingDate: dateOrEmpty,
   divorceDate: dateOrEmpty,
@@ -132,6 +134,7 @@ export type UpdateBeneficiaryEntourageInput = z.infer<
 
 export const updateBeneficiaryHealthSchema = z.object({
   id: z.string().uuid(),
+  familyFileId: z.string().uuid(),
   gir: withEmptyValueOptionalNativeEnum(BeneficiaryGir),
   doctor: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   healthAdditionalInformation: openText(200).nullish(),
@@ -145,6 +148,7 @@ export type UpdateBeneficiaryHealthInput = z.infer<
 
 export const updateBeneficiaryOccupationSchema = z.object({
   id: z.string().uuid(),
+  familyFileId: z.string().uuid(),
   socioProfessionalCategory: withEmptyValueOptionalNativeEnum(
     BeneficiarySocioProfessionalCategory
   ),
