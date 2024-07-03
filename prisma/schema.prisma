@@ -1343,7 +1343,6 @@ model FamilyFile {
   documents      Document[]
   socialSupports SocialSupport[]
   beneficiaries  Beneficiary[]
-  notifications  Notification[]
 
   @@map("family_file")
 }
@@ -1555,6 +1554,7 @@ model Beneficiary {
   // linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
   socialSupports SocialSupport[]
   documents      Document[]
+  notifications  Notification[]
 
   @@map("beneficiary")
 }
@@ -1712,8 +1712,8 @@ model Notification {
   structure   Structure? @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String?    @map("structure_id") @db.Uuid
 
-  familyFile   FamilyFile? @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
-  familyFileId String?     @map("family_file_id") @db.Uuid
+  beneficiary   Beneficiary? @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  beneficiaryId String?      @map("beneficiary_id") @db.Uuid
 
   socialSupport   SocialSupport? @relation(fields: [socialSupportId], references: [id], onDelete: Cascade)
   socialSupportId String?        @map("social_support_id") @db.Uuid

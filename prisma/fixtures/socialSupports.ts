@@ -132,7 +132,7 @@ const fixturesFollowupSocialSupports = [
           create: {
             id: '3a39f0ae-17c0-4616-9e76-523faad59cfc',
             recipientId: fixturesUsers[FixtureUserRole.Referent].id,
-            familyFileId: fixturesBeneficiaries[3].id,
+            beneficiaryId: fixturesBeneficiaries[3].id,
             socialSupportId: '19ed2ebb-4e28-433a-9e2d-d97d9098624a',
             type: 'NewComment',
             itemCreatedById: fixturesUsers[FixtureUserRole.StructureManager].id
@@ -158,7 +158,7 @@ const fixturesFollowupSocialSupports = [
           create: {
             id: '907300c8-105d-421a-9ee5-a0599f0822e6',
             recipientId: fixturesUsers[FixtureUserRole.Instructor].id,
-            familyFileId: fixturesBeneficiaries[3].id,
+            beneficiaryId: fixturesBeneficiaries[3].id,
             type: 'NewDocument',
             itemCreatedById: fixturesUsers[FixtureUserRole.StructureManager].id
           }

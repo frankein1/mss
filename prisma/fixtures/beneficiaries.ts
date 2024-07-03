@@ -56,10 +56,7 @@ export const fixturesBeneficiaries = [
     familyFileId: 'e7b0dbe9-9173-47fb-b953-0468b0e50788',
     fileNumber: '174b28a6-0743-477d-9a3f-ba59ec7b9354',
     structureId: fixtureStructures[0].id,
-    status: 'Active',
-    referents: {
-      connect: [{ id: fixturesUsers[FixtureUserRole.Instructor].id }]
-    }
+    status: 'Active'
   },
   {
     id: '6e3922b5-f8c9-47c4-8522-5b4cba529a13',
