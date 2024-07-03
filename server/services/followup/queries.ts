@@ -19,7 +19,8 @@ const include = {
       subjects: true,
       familyFile: {
         include: {
-          referents: true
+          referents: true,
+          beneficiaries: true
         }
       },
       createdBy: true

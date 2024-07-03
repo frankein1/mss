@@ -8,7 +8,7 @@ import {
   getSocialSupportPermissions,
   FileInstructionPermissions
 } from '~/server/security/permissions'
-import { FamilyFileService } from '~/server/services/beneficiary'
+import { FamilyFileService } from '~/server/services'
 
 export function getSocialSupportSecurityTarget(
   user: SecurityRuleGrantee,
@@ -55,7 +55,7 @@ export async function getCreationPermissions(
   familyFileId: string,
   socialSupportType: SocialSupportType
 ): Promise<FollowupPermissions | FileInstructionPermissions> {
-  const familyFile = await FamilyFileService.getSecurityTarget(
+  const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
     ctx.user,
     familyFileId
   )

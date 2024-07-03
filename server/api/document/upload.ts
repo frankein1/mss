@@ -7,7 +7,9 @@ import { JwtUser } from '~/types/user'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import {
   BeneficiaryService,
-  BeneficiarySecurityTarget
+  BeneficiarySecurityTarget,
+  FamilyFileSecurityTarget,
+  FamilyFileService
 } from '~/server/services'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
 
@@ -53,7 +55,7 @@ export default defineEventHandler(async event => {
     })
   }
 
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+  const beneficiary = await FamilyFileService.getFamilyFileSecurityTarget(
     user,
     input.beneficiaryId
   )
@@ -103,28 +105,28 @@ export default defineEventHandler(async event => {
 async function addNotification(
   ctx: SecurityRuleContext,
   document: Document,
-  beneficiary: NonNullable<BeneficiarySecurityTarget>
+  familyFile: NonNullable<FamilyFileSecurityTarget>
 ) {
   if (document.confidential) {
     return
   }
 
   const notifications = []
-  for (const referent of beneficiary.referents) {
+  for (const referent of familyFile.referents) {
     const permissionCtx = {
       user: referent,
       structure: ctx.structure
     }
     const permissions = getDocumentPermissions({
       ctx: permissionCtx,
-      beneficiary,
+      familyFile,
       document
     })
 
     if (document.createdById !== referent.id && permissions.view) {
       notifications.push({
         recipientId: referent.id,
-        beneficiaryId: beneficiary.id,
+        familyFileId: familyFile.id,
         documentId: document.key,
         type: NotificationType.NewDocument,
         itemCreatedById: document.createdById
@@ -140,11 +142,12 @@ async function addDocument(
   multipartFormData: MultiPartData
 ) {
   const key = v4()
-  const { type, beneficiaryId, confidential, tags, file } = input
+  const { type, beneficiaryId, familyFileId, confidential, tags, file } = input
   const document = await DocumentRepo.prisma.create({
     data: {
       key,
       name: file.name,
+      familyFileId,
       beneficiaryId,
       filenameDisk: key,
       mimeType: file.mimeType,

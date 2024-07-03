@@ -13,7 +13,9 @@ import {
 import { SocialSupportRepo } from '~/server/database'
 import {
   BeneficiarySecurityTarget,
-  BeneficiaryService
+  BeneficiaryService,
+  FamilyFileSecurityTarget,
+  FamilyFileService
 } from '~/server/services'
 import {
   filterSocialSupport,
@@ -39,19 +41,19 @@ type HistoryFilters = GetHistoryInput['filters']
 
 function prepareSocialSupportFilters(
   filters: HistoryFilters,
-  beneficiaryId: string
+  familyFileId: string
 ) {
   const formattedFilters: Prisma.SocialSupportWhereInput = {}
 
   if (filters.referents?.length) {
-    formattedFilters.beneficiary = {
-      id: beneficiaryId,
+    formattedFilters.familyFile = {
+      id: familyFileId,
       referents: {
         some: { id: { in: filters.referents } }
       }
     }
   } else {
-    formattedFilters.beneficiary = { id: beneficiaryId }
+    formattedFilters.familyFile = { id: familyFileId }
   }
 
   if (filters.status) {
@@ -125,9 +127,17 @@ function loadSocialSupports(
     where: prepareSocialSupportFilters(filters, beneficiaryId),
     include: {
       createdBy: true,
-      beneficiary: {
+      familyFile: {
         include: {
-          referents: true
+          referents: true,
+          beneficiaries: {
+            select: {
+              id: true,
+              usualName: true,
+              birthName: true,
+              firstName: true
+            }
+          }
         }
       },
       documents: true,
@@ -174,14 +184,14 @@ type SocialSupports = Prisma.PromiseReturnType<typeof loadSocialSupports>
 function formatResult(
   socialSupports: SocialSupports,
   ctx: ProtectedAppContext,
-  beneficiary: BeneficiarySecurityTarget
+  familyFile: FamilyFileSecurityTarget
 ) {
   return socialSupports.map(socialSupport => {
     const { _count } = socialSupport
 
     const socialSupportPermissions = getSocialSupportPermissions({
       ctx,
-      beneficiary,
+      familyFile,
       socialSupport
     })
 
@@ -235,7 +245,7 @@ function formatResult(
       document,
       permissions: getDocumentPermissions({
         ctx,
-        beneficiary,
+        familyFile,
         document
       })
     }))
@@ -274,21 +284,18 @@ const handler = async ({
 }) => {
   const { beneficiaryId, filters } = input
 
-  const [totalCount, socialSupports, beneficiary] = await Promise.all([
+  const [totalCount, socialSupports, familyFile] = await Promise.all([
     SocialSupportRepo.count(ctx.user, {
       where: {
         beneficiaryId
       }
     }),
     loadSocialSupports(filters, ctx.user, beneficiaryId),
-    BeneficiaryService.getBeneficiarySecurityTarget(
-      ctx.user,
-      input.beneficiaryId
-    )
+    FamilyFileService.getFamilyFileSecurityTarget(ctx.user, input.beneficiaryId)
   ])
 
   return {
-    items: formatResult(socialSupports, ctx, beneficiary),
+    items: formatResult(socialSupports, ctx, familyFile),
     totalCount
   }
 }

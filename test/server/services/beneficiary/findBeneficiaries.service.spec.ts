@@ -15,7 +15,7 @@ import {
 } from '@prisma/client'
 // import { BeneficiaryService } from '~/server/services/beneficiary'
 // import { BeneficiaryRepo } from '~/server/database'
-import { getBeneficiaryPermissions } from '~/server/security'
+import { getFamilyFilePermissions } from '~/server/security'
 
 vi.mock('~/server/database', () => {
   return {
@@ -78,7 +78,7 @@ vi.mock('~/server/database', () => {
 
 vi.mock('~/server/security', () => {
   return {
-    getBeneficiaryPermissions: vi.fn()
+    getFamilyFilePermissions: vi.fn()
   }
 })
 
@@ -88,7 +88,7 @@ describe('BeneficiaryService.findBeneficiaries', () => {
   })
 
   it('finds beneficiaries with all permissions', /* async */ () => {
-    vi.mocked(getBeneficiaryPermissions).mockReturnValue({
+    vi.mocked(getFamilyFilePermissions).mockReturnValue({
       get: {
         accommodationZone: true,
         ministereCategorie: true,
@@ -237,7 +237,7 @@ describe('BeneficiaryService.findBeneficiaries', () => {
   })
 
   it('finds a beneficiary without restricted properties', /* async */ () => {
-    vi.mocked(getBeneficiaryPermissions).mockReturnValue({
+    vi.mocked(getFamilyFilePermissions).mockReturnValue({
       get: {
         accommodationZone: false,
         ministereCategorie: false,
@@ -384,7 +384,7 @@ describe('BeneficiaryService.findBeneficiaries', () => {
   })
 
   it('finds a beneficiary without restricted sections', /* async */ () => {
-    vi.mocked(getBeneficiaryPermissions).mockReturnValue({
+    vi.mocked(getFamilyFilePermissions).mockReturnValue({
       get: {
         accommodationZone: true,
         ministereCategorie: true,

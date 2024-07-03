@@ -24,7 +24,7 @@ type TargetedSocialSupport = Prisma.PromiseReturnType<
 
 function prepareNotifications(
   userId: string,
-  beneficiaryId: string,
+  familyFileId: string,
   socialSupport: TargetedSocialSupport
 ) {
   const notifications: Prisma.NotificationCreateManyCommentInput[] = []
@@ -32,7 +32,7 @@ function prepareNotifications(
   if (socialSupport.createdById !== userId) {
     notifications.push({
       recipientId: socialSupport.createdById,
-      beneficiaryId,
+      familyFileId,
       socialSupportId: socialSupport.id,
       type: NotificationType.NewComment,
       itemCreatedById: userId
@@ -46,7 +46,7 @@ function prepareNotifications(
 
     notifications.push({
       recipientId: referentId,
-      beneficiaryId,
+      familyFileId,
       socialSupportId: socialSupport.id,
       type: NotificationType.NewComment,
       itemCreatedById: userId
@@ -71,7 +71,7 @@ export const create = async ({
 
   const notificationsToCreate = prepareNotifications(
     user.id,
-    input.beneficiaryId,
+    input.familyFileId,
     socialSupport
   )
 

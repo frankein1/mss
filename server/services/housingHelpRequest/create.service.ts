@@ -4,11 +4,7 @@ import {
   SocialSupportType
 } from '@prisma/client'
 import { cleanCreateInput } from './helper'
-import {
-  BeneficiaryRepo,
-  FamilyFileRepo,
-  HousingHelpRequestRepo
-} from '~/server/database'
+import { FamilyFileRepo, HousingHelpRequestRepo } from '~/server/database'
 import { CreateHousingHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
@@ -27,6 +23,7 @@ export async function create({ input, ctx }: CreateParams) {
 
   const {
     familyFileId,
+    beneficiaryId,
     numeroPegase,
     ministre,
     documents,
@@ -87,6 +84,7 @@ export async function create({ input, ctx }: CreateParams) {
               socialSupportType: SocialSupportType.HelpRequestHousing,
               createdById: ctx.user.id,
               familyFileId,
+              beneficiaryId,
               structureId: ctx.structure.id,
               synthesis,
               privateSynthesis,

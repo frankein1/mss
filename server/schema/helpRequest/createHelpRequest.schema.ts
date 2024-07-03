@@ -20,6 +20,7 @@ import { errorMessages, requiredErrorMessage } from '~/utils/zod'
 export const createHelpRequestSchemaBase = z.object({
   isMinistry: z.boolean(),
   familyFileId: z.string().uuid(),
+  beneficiaryId: z.string().uuid(),
   date: z.coerce.date(errorMessages),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   ministre: withEmptyValueOptionalNativeEnum(Minister),

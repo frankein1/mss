@@ -1,23 +1,20 @@
 import { Prisma } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
 import {
-  BeneficiaryPermissions,
+  FamilyFilePermissions,
   SecurityRuleContext,
   SecurityRuleGrantee,
-  getBeneficiaryPermissions
+  getFamilyFilePermissions
 } from '~/server/security'
 
-export function getBeneficiarySecurityTarget(
-  user: SecurityRuleGrantee,
-  id: string
-) {
-  return BeneficiaryRepo.findWithNoDraftCondition(user, {
+function getBeneficiarySecurityTarget(user: SecurityRuleGrantee, id: string) {
+  return BeneficiaryRepo.findUniqueOrThrow(user, {
     where: { id },
     select: {
       id: true,
-      structureId: true,
       familyFile: {
         select: {
+          structureId: true,
           referents: {
             select: { id: true, role: true, status: true, structureId: true }
           }
@@ -34,20 +31,10 @@ export type BeneficiarySecurityTarget = Prisma.PromiseReturnType<
 export async function getEditionPermissions(
   ctx: SecurityRuleContext,
   id: string
-): Promise<BeneficiaryPermissions> {
+): Promise<FamilyFilePermissions> {
   const beneficiary = await getBeneficiarySecurityTarget(ctx.user, id)
-  return getBeneficiaryPermissions({
+  return getFamilyFilePermissions({
     ctx,
-    beneficiary
+    familyFile: beneficiary.familyFile
   })
-}
-
-export function getCreationPermissions(
-  ctx: SecurityRuleContext
-): Promise<BeneficiaryPermissions> {
-  return Promise.resolve(
-    getBeneficiaryPermissions({
-      ctx
-    })
-  )
 }

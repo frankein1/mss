@@ -24,5 +24,5 @@ function findUniqueOrThrow<T extends Prisma.FamilyFileFindUniqueOrThrowArgs>(
 
 export const FamilyFileRepo = {
   findMany,
-  findUniqueOrThrow,
+  findUniqueOrThrow
 }

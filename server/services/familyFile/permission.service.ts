@@ -1,10 +1,10 @@
 import { Prisma } from '@prisma/client'
-import { BeneficiaryRepo, FamilyFileRepo } from '~/server/database'
+import { FamilyFileRepo } from '~/server/database'
 import {
-  BeneficiaryPermissions,
+  FamilyFilePermissions,
   SecurityRuleContext,
   SecurityRuleGrantee,
-  getBeneficiaryPermissions
+  getFamilyFilePermissions
 } from '~/server/security'
 
 export function getFamilyFileSecurityTarget(
@@ -30,19 +30,19 @@ export type FamilyFileSecurityTarget = Prisma.PromiseReturnType<
 export async function getEditionPermissions(
   ctx: SecurityRuleContext,
   id: string
-): Promise<BeneficiaryPermissions> {
-  const beneficiary = await getBeneficiarySecurityTarget(ctx.user, id)
-  return getBeneficiaryPermissions({
+): Promise<FamilyFilePermissions> {
+  const familyFile = await getFamilyFileSecurityTarget(ctx.user, id)
+  return getFamilyFilePermissions({
     ctx,
-    beneficiary
+    familyFile
   })
 }
 
 export function getCreationPermissions(
   ctx: SecurityRuleContext
-): Promise<BeneficiaryPermissions> {
+): Promise<FamilyFilePermissions> {
   return Promise.resolve(
-    getBeneficiaryPermissions({
+    getFamilyFilePermissions({
       ctx
     })
   )

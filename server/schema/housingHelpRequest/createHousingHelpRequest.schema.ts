@@ -27,6 +27,7 @@ import {
 
 export const createHousingHelpRequestSchemaBase = z.object({
   familyFileId: z.string().uuid(),
+  beneficiaryId: z.string().uuid(),
   date: z.coerce.date(errorMessages),
   documents: z.array(z.string(), errorMessages).default([]),
   synthesis: openText(6000).nullish(),
