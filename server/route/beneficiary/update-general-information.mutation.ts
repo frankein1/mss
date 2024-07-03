@@ -14,19 +14,15 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
-  const permissions = await FamilyFileService.getEditionPermissions(
+  const permissions = await BeneficiaryService.getEditionPermissions(
     ctx,
-    input.familyFileId
+    input.id
   )
   return permissions.edit.general
 }
 
 function cleanInput(input: UpdateBeneficiaryGeneralInformationInput) {
-  const {
-    familyFileId: _familyFileId,
-    structureId: _structureId,
-    ...data
-  } = input
+  const { structureId: _structureId, ...data } = input
   if (data.noPhone) {
     data.phone1 = null
     data.phone2 = null
@@ -43,14 +39,16 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const { id, referents } = input
-  const target = await FamilyFileService.getFamilyFileSecurityTarget(
+  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
     ctx.user,
-    input.familyFileId
+    input.id
   )
 
   const cleaned = cleanInput(input)
 
-  const { referents: previousReferents } = target
+  const {
+    familyFile: { referents: previousReferents }
+  } = target
   const previousReferentIds = previousReferents.map(({ id }) => id)
   const referentConnections = prepareRelationConnections(
     referents,

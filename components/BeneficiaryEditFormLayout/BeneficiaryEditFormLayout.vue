@@ -64,7 +64,7 @@
     RouteTitle
   } from '~/utils/routing'
   import { beneficiaryFieldLabels, relativeFieldLabels } from '~/client/labels'
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
   import type { FieldLabels } from '~/types/fieldLabels'
   import { BeneficiaryIdentification } from '~/types/beneficiary'
 
@@ -82,7 +82,7 @@
       draft: boolean
       beneficiaryIdentification: BeneficiaryIdentification | null
       bindedValues: z.infer<T> | null
-      permissions: BeneficiaryPermissions | undefined
+      permissions: FamilyFilePermissions | undefined
       schema: T
       isSubmitting: boolean
       titleIcon?: string
