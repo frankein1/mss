@@ -8,26 +8,31 @@ import {
 } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
 import { BeneficiaryRepo } from '~/server/database'
-import { BeneficiaryService } from '~/server/services'
+import { BeneficiaryService, FamilyFileService } from '~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryGeneralInformationInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.id
+    input.familyFileId
   )
   return permissions.edit.general
 }
 
 function cleanInput(input: UpdateBeneficiaryGeneralInformationInput) {
-  if (input.noPhone) {
-    input.phone1 = null
-    input.phone2 = null
+  const {
+    familyFileId: _familyFileId,
+    structureId: _structureId,
+    ...data
+  } = input
+  if (data.noPhone) {
+    data.phone1 = null
+    data.phone2 = null
   }
 
-  return input
+  return data
 }
 
 const handler = async ({
@@ -38,9 +43,9 @@ const handler = async ({
   ctx: ProtectedAppContext
 }) => {
   const { id, referents } = input
-  const target = await BeneficiaryService.getBeneficiarySecurityTarget(
+  const target = await FamilyFileService.getFamilyFileSecurityTarget(
     ctx.user,
-    input.id
+    input.familyFileId
   )
 
   const cleaned = cleanInput(input)
@@ -56,7 +61,13 @@ const handler = async ({
     where: { id },
     data: {
       ...cleaned,
-      referents: referentConnections
+      familyFile: {
+        update: {
+          data: {
+            referents: referentConnections
+          }
+        }
+      }
     }
   })
 

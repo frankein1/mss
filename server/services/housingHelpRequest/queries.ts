@@ -25,6 +25,7 @@ export const include = {
           documents: true,
           familyFile: {
             include: {
+              beneficiaries: true,
               referents: true
             }
           },

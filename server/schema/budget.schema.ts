@@ -7,7 +7,7 @@ import {
 } from '.'
 
 export const getBudgetSchema = z.object({
-  beneficiaryId: z.string().uuid()
+  familyFileId: z.string().uuid()
 })
 
 export type GetBudgetInput = z.infer<typeof getBudgetSchema>

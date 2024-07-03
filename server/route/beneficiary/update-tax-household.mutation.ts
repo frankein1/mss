@@ -6,15 +6,15 @@ import {
   UpdateBeneficiaryTaxHouseholdInput,
   updateBeneficiaryTaxHouseholdSchema
 } from '~/server/schema'
-import { BeneficiaryService } from '~/server/services'
+import { FamilyFileService, BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryTaxHouseholdInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.id
+    input.familyFileId
   )
   return permissions.edit.relatives
 }

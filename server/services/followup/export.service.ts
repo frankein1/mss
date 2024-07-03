@@ -12,7 +12,7 @@ import { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
-import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
+import { formatFamilyFileName } from '~/utils/familyFile'
 import { followupFieldLabels } from '~/client/labels'
 
 export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
@@ -66,7 +66,7 @@ export async function exportFollowups({
           status: socialSupportStatusKeys.value(followup.status) || '',
           redirected: getBooleanOrEmpty(followup.redirected),
           subjects: followup.subjects.map(({ name }) => name).join(', '),
-          familyFileId: formatBeneficiaryDisplayName(followup.familyFile),
+          familyFileId: formatFamilyFileName(followup.familyFile),
           medium: followupMediumKeys.value(followup.medium) || '',
           classified: getBooleanOrEmpty(followup.classified),
           documents:

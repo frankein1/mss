@@ -11,15 +11,15 @@ import {
   updateBeneficiaryOccupationSchema
 } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
-import { BeneficiaryService } from '~/server/services'
+import { FamilyFileService } from '~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryOccupationInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.id
+    input.familyFileId
   )
   return permissions.edit.occupationIncome
 }

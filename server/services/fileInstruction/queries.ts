@@ -30,7 +30,15 @@ function findMany(
           documents: true,
           familyFile: {
             include: {
-              referents: true
+              referents: true,
+              beneficiaries: {
+                select: {
+                  id: true,
+                  usualName: true,
+                  birthName: true,
+                  firstName: true
+                }
+              }
             }
           },
           createdBy: true
