@@ -9,6 +9,8 @@
       <div class="fr-col-12">
         <button
           class="fr-btn"
+          data-fr-opened="false"
+          aria-controls="global-modal"
           @click="openModal"
         >
           Ouvrir modale
@@ -42,8 +44,9 @@
   // TODO: check if user is admin and if DPO is defined
   function openModal() {
     modal.open(DpoRedirectModal, {
-      title: 'xoxoxoxoxoxo',
-      content: 'Compléter les informations de votre structure'
+      title: 'Compléter les informations de votre structure',
+      content:
+        'Conformément aux conditions générales d’utilisation, vous devez renseigner les coordonnées du délégué ou de la personne référente à la protection de données.'
     })
   }
 </script>
