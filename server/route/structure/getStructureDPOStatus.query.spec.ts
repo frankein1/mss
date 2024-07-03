@@ -1,10 +1,10 @@
 import { describe, expect, vi, afterEach, beforeAll, afterAll } from 'vitest'
-import { fixtureStructure } from '~/prisma/fixtures'
+import { fixtureStructures } from '~/prisma/fixtures'
 import { StructureRepo } from '~/server/database'
 import { test } from '~/test/server/test-utils'
 
 let originalStructureCreationDate: Date
-const structureId = fixtureStructure.id
+const structureId = fixtureStructures[0].id
 
 beforeAll(async () => {
   // structure creation date set to before 24-05-30
