@@ -5,7 +5,6 @@ ALTER TABLE "beneficiary" ADD COLUMN     "family_file_id" UUID;
 ALTER TABLE "budget" ADD COLUMN     "family_file_id" UUID;
 ALTER TABLE "document" ADD COLUMN     "family_file_id" UUID;
 ALTER TABLE "social_support" ADD COLUMN     "family_file_id" UUID;
-ALTER TABLE "notification" ADD COLUMN     "family_file_id" UUID;
 
 -- CreateTable
 CREATE TABLE "family_file" (
@@ -33,7 +32,6 @@ ALTER TABLE "beneficiary" ADD CONSTRAINT "beneficiary_family_file_id_fkey" FOREI
 ALTER TABLE "family_file" ADD CONSTRAINT "family_file_structure_id_fkey" FOREIGN KEY ("structure_id") REFERENCES "structure"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "_family_file_referents" ADD CONSTRAINT "_family_file_referents_A_fkey" FOREIGN KEY ("A") REFERENCES "family_file"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 ALTER TABLE "_family_file_referents" ADD CONSTRAINT "_family_file_referents_B_fkey" FOREIGN KEY ("B") REFERENCES "user"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "notification" ADD CONSTRAINT "notification_family_file_id_fkey" FOREIGN KEY ("family_file_id") REFERENCES "family_file"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 
 -- migrate data
