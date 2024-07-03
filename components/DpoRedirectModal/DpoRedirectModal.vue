@@ -11,7 +11,7 @@
     >
       <li>
         <button
-          class="fr-btn fr-btn--secondary"
+          class="fr-btn fr-btn--secondary fr-mb-0"
           type="button"
           @click="cancel"
         >
@@ -20,7 +20,7 @@
       </li>
       <li>
         <button
-          class="fr-btn"
+          class="fr-btn fr-mb-0"
           type="button"
           @click="redirectToStructure"
         >
@@ -38,7 +38,6 @@
   const props = defineProps<{ content: string }>()
 
   const redirectToStructure = () => {
-    modal.close()
     navigateTo({
       path: RoutePath.AppStructure(),
       query: {

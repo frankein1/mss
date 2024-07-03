@@ -68,7 +68,6 @@
         </span>
         <span>{{ structure.email }}</span>
       </div>
-
       <div class="fr-col-12 fr-mt-1w">
         <h3
           class="fr-mb-0 fr-text--lg"
@@ -79,7 +78,9 @@
       </div>
 
       <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w"> Nom : </span>
+        <span class="structure-info__content__label fr-mr-1w">
+          Prénom et nom :
+        </span>
         <span>{{ structure.dpoFirstName }} {{ structure.dpoLastName }}</span>
       </div>
 
