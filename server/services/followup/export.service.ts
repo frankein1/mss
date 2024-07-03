@@ -14,6 +14,7 @@ import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
 import { formatFamilyFileName } from '~/utils/familyFile'
 import { followupFieldLabels } from '~/client/labels'
+import { formatBeneficiaryDisplayName } from '~/utils'
 
 export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'status',
@@ -66,7 +67,7 @@ export async function exportFollowups({
           status: socialSupportStatusKeys.value(followup.status) || '',
           redirected: getBooleanOrEmpty(followup.redirected),
           subjects: followup.subjects.map(({ name }) => name).join(', '),
-          familyFileId: formatFamilyFileName(followup.familyFile),
+          beneficiaryId: formatBeneficiaryDisplayName(followup.beneficiary),
           medium: followupMediumKeys.value(followup.medium) || '',
           classified: getBooleanOrEmpty(followup.classified),
           documents:

@@ -25,10 +25,17 @@ export const include = {
         include: {
           subjects: true,
           documents: true,
+          beneficiary: {
+            select: {
+              id: true,
+              usualName: true,
+              firstName: true,
+              birthName: true
+            }
+          },
           familyFile: {
             include: {
-              referents: true,
-              beneficiaries: true
+              referents: true
             }
           },
           createdBy: true
