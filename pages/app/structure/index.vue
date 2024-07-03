@@ -21,6 +21,7 @@
         :structure="data.structure"
         @edit="onEdit"
       />
+      <OpenModalHack />
 
       <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
@@ -44,6 +45,7 @@
   const trpcClient = useTrpcClient()
   const modal = useModal()
   const snackbar = useSnackbar()
+  const route = useRoute()
 
   const isSubmitting = ref(false)
 
@@ -59,6 +61,16 @@
       title: 'Modifier les informations de ma structure',
       structure: data.value.structure,
       validate: onUpdateStructureInfo
+    })
+  }
+
+  if (route.query.modifyStructure === 'true' && data && data.value) {
+    console.log(data.value.structure)
+    modal.open(StructureInfoForm, {
+      title: 'Modifier les informations de ma structure',
+      structure: data.value.structure,
+      validate: onUpdateStructureInfo,
+      triggerOpen: true
     })
   }
 
