@@ -57,7 +57,7 @@ const adminHandler = async ({
 
   const deleteNotifications = NotificationRepo.prisma.deleteMany({
     where: {
-      beneficiary: {
+      familyFile: {
         structureId: id
       }
     }
@@ -81,7 +81,7 @@ const adminHandler = async ({
 
   const deleteBudget = BudgetRepo.prisma.deleteMany({
     where: {
-      beneficiary: {
+      familyFile: {
         structureId: id
       }
     }

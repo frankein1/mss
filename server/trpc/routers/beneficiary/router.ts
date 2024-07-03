@@ -8,9 +8,6 @@ export const beneficiaryRouter = router({
   getBeneficiaryDetails: protectedProcedure
     .input(routes.getBeneficiaryDetailsQuery.inputValidation)
     .query(routes.getBeneficiaryDetailsQuery.execute),
-  getSocialSupports: protectedProcedure
-    .input(routes.getSocialSupports.inputValidation)
-    .query(routes.getSocialSupports.execute),
   getPage: protectedProcedure
     .input(routes.getPage.inputValidation)
     .query(routes.getPage.execute),

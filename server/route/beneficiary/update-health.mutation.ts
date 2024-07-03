@@ -10,15 +10,15 @@ import {
 } from '~/server/schema'
 import { BeneficiaryRepo } from '~/server/database'
 import { ProtectedAppContext } from '~/server/trpc'
-import { BeneficiaryService } from '~/server/services'
+import { FamilyFileService } from '~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: UpdateBeneficiaryHealthInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.id
+    input.familyFileId
   )
   const appPermission = getAppContextPermissions(ctx)
 

@@ -4,11 +4,7 @@ import {
   SocialSupportType
 } from '@prisma/client'
 import { prepareSocialSupportSubjectsMutations } from './helper'
-import {
-  BeneficiaryRepo,
-  FamilyFileRepo,
-  SocialSupportRepo
-} from '~/server/database'
+import { FamilyFileRepo, SocialSupportRepo } from '~/server/database'
 import { AddFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
@@ -23,6 +19,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
   const { structure, user } = ctx
   const {
     familyFileId,
+    beneficiaryId,
     subjects,
     documents,
     medium,
@@ -67,6 +64,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
       date,
       structure: connect(structure.id),
       familyFile: connect(familyFileId),
+      beneficiary: connect(beneficiaryId),
       createdBy: connect(user.id),
       subjects: prepareSocialSupportSubjectsMutations(subjects),
       documents: prepareDocumentsMutations(documents),

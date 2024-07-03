@@ -5,13 +5,13 @@ import { prismaDecimalToNumber } from '~/utils/prisma'
 
 export async function getBudget({
   ctx,
-  beneficiaryId
+  familyFileId
 }: {
   ctx: SecurityRuleContext
-  beneficiaryId: string
+  familyFileId: string
 }) {
   const budget = await BudgetRepo.findUniqueOrThrow(ctx.user, {
-    where: { beneficiaryId },
+    where: { familyFileId },
     include: {
       expenses: {
         include: {

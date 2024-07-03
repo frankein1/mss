@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getBeneficiarySecurityTarget } from '../familyFile/permission.service'
+import { getFamilyFileSecurityTarget } from '../familyFile/permission.service'
 import { DocumentRepo } from '~/server/database'
 import {
   BeneficiaryDocumentFilterInput,
@@ -32,7 +32,7 @@ export async function getPageDocuments({
   input: GetDocumentsInput
 }) {
   const { user } = ctx
-  const { page, perPage, beneficiaryId, filters, orderBy } = input
+  const { page, perPage, familyFileId, filters, orderBy } = input
 
   const { take, skip } =
     page && perPage
@@ -43,7 +43,7 @@ export async function getPageDocuments({
       : { take: undefined, skip: undefined }
 
   const where: Prisma.DocumentWhereInput = {
-    beneficiaryId,
+    familyFileId,
     ...prepareBeneficiaryDocumentsFilters(filters || {})
   }
 
@@ -69,13 +69,13 @@ export async function getPageDocuments({
   ])
   const totalPages = page && perPage ? getTotalPages({ count, perPage }) : 1
 
-  const beneficiary = await getBeneficiarySecurityTarget(user, beneficiaryId)
+  const familyFile = await getFamilyFileSecurityTarget(user, familyFileId)
 
   const documentsWithPermissions = documents.map(document => ({
     document,
     permissions: getDocumentPermissions({
       ctx,
-      beneficiary,
+      familyFile,
       document
     })
   }))

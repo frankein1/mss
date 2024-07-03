@@ -56,7 +56,9 @@ export async function getSimilar({
   appendConstraints(user, params, BeneficiaryConstraints.get)
 
   // Remove the referent constraint
-  params.where.referents = undefined
+  if (params.where.familyFile) {
+    params.where.familyFile.referents = undefined
+  }
 
   const similarBeneficiaries = await BeneficiaryRepo.prisma.findMany({
     ...params,
@@ -66,16 +68,20 @@ export async function getSimilar({
       usualName: true,
       birthName: true,
       birthDate: true,
-      referents: {
+      familyFile: {
         select: {
-          id: true,
-          firstName: true,
-          lastName: true
-        },
-        where: {
-          status: UserStatus.Active
+          referents: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true
+            }
+          }
         }
       }
+    },
+    where: {
+      status: UserStatus.Active
     }
   })
 
@@ -88,7 +94,7 @@ export async function getSimilar({
   }
 
   const similarWithReferent = similarBeneficiaries.find(s =>
-    isMemberOfReferents(user, s)
+    isMemberOfReferents(user, s.familyFile)
   )
 
   if (similarWithReferent) {
@@ -97,5 +103,8 @@ export async function getSimilar({
 
   const similarBeneficiary = similarBeneficiaries[0]
 
-  return { ...similarBeneficiary, referent: similarBeneficiary.referents[0] }
+  return {
+    ...similarBeneficiary,
+    referent: similarBeneficiary.familyFile.referents[0]
+  }
 }

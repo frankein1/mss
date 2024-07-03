@@ -12,7 +12,7 @@ import {
 } from '../rules/helpers'
 
 type SecurityDocument = Pick<Document, 'createdById' | 'confidential'>
-type SecurityBeneficiary = SecurityTargetWithStructure &
+type SecurityFamilyFile = SecurityTargetWithStructure &
   SecurityTargetWithReferents
 
 export type DocumentPermissions = {
@@ -35,16 +35,16 @@ const FALSY_PERMISSIONS: DocumentPermissions = {
 
 export const getDocumentPermissions = ({
   ctx,
-  beneficiary,
+  familyFile,
   document
 }: {
   ctx: SecurityRuleContext
-  beneficiary: SecurityBeneficiary
+  familyFile: SecurityFamilyFile
   document?: SecurityDocument
 }) => {
   let permissions: DocumentPermissions
   if (document) {
-    permissions = getEditionPermissions({ ctx, beneficiary, document })
+    permissions = getEditionPermissions({ ctx, familyFile, document })
   } else {
     permissions = getCreationPermissions()
   }
@@ -65,20 +65,20 @@ function getCreationPermissions() {
 
 function getEditionPermissions(params: {
   ctx: SecurityRuleContext
-  beneficiary: SecurityBeneficiary
+  familyFile: SecurityFamilyFile
   document: SecurityDocument
 }) {
-  const { ctx, beneficiary, document } = params
+  const { ctx, familyFile, document } = params
   const { user } = ctx
 
-  if (!isInSameStructure(user, beneficiary)) {
+  if (!isInSameStructure(user, familyFile)) {
     return FALSY_PERMISSIONS
   }
 
   const creator = isCreator(user, document)
   const { manager, socialWorker, instructor } = getGranteRole(ctx)
 
-  const isReferent = isReferentFor(user, beneficiary)
+  const isReferent = isReferentFor(user, familyFile)
 
   const view = document.confidential
     ? creator

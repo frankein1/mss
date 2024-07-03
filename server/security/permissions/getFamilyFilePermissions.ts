@@ -11,7 +11,19 @@ import {
 } from '../rules/helpers'
 
 export type FamilyFilePermissions = {
+  edit: {
+    general: boolean
+    relatives: boolean
+    health: boolean
+    occupationIncome: boolean
+    externalOrganisations: boolean
+  }
   view: {
+    general: boolean
+    relatives: boolean
+    health: boolean
+    occupationIncome: boolean
+    externalOrganisations: boolean
     documents: boolean
     history: boolean
   }
@@ -21,10 +33,23 @@ export type FamilyFilePermissions = {
     followup: boolean
     comment: boolean
   }
+  delete: boolean
 }
 
 const FALSY_PERMISSIONS: FamilyFilePermissions = {
+  edit: {
+    general: false,
+    relatives: false,
+    health: false,
+    occupationIncome: false,
+    externalOrganisations: false
+  },
   view: {
+    general: false,
+    relatives: false,
+    health: false,
+    occupationIncome: false,
+    externalOrganisations: false,
     documents: false,
     history: false
   },
@@ -33,7 +58,8 @@ const FALSY_PERMISSIONS: FamilyFilePermissions = {
     document: false,
     followup: false,
     comment: false
-  }
+  },
+  delete: false
 }
 
 export const getFamilyFilePermissions = ({
@@ -54,8 +80,21 @@ export const getFamilyFilePermissions = ({
 }
 
 function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
+  const { receptionAgent } = getGranteRole(ctx)
   return {
+    edit: {
+      general: true,
+      externalOrganisations: true,
+      relatives: !receptionAgent,
+      health: !receptionAgent,
+      occupationIncome: !receptionAgent
+    },
     view: {
+      general: false,
+      relatives: false,
+      health: false,
+      occupationIncome: false,
+      externalOrganisations: false,
       documents: false,
       history: false
     },
@@ -64,7 +103,8 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
       document: false,
       followup: false,
       comment: false
-    }
+    },
+    delete: false
   }
 }
 
@@ -82,6 +122,7 @@ function getEditionPermissions({
   }
 
   const isReferent = isReferentFor(user, familyFile)
+  const isMember = isMemberOfReferents(user, familyFile)
 
   const { manager, socialWorker, instructor, receptionAgent } =
     getGranteRole(ctx)
@@ -90,9 +131,23 @@ function getEditionPermissions({
     isReferent || manager || socialWorker || instructor || receptionAgent
   const hasRestrictedRights =
     isReferent || manager || socialWorker || instructor
+  const hasHealthAccessRight =
+    isReferent || ((manager || socialWorker || instructor) && isMember)
 
   return {
+    edit: {
+      general: hasAccessRight,
+      relatives: hasRestrictedRights,
+      health: hasHealthAccessRight,
+      occupationIncome: hasRestrictedRights,
+      externalOrganisations: hasRestrictedRights
+    },
     view: {
+      general: hasAccessRight,
+      relatives: hasRestrictedRights,
+      occupationIncome: hasRestrictedRights,
+      health: hasHealthAccessRight,
+      externalOrganisations: hasRestrictedRights,
       documents: hasAccessRight,
       history: hasAccessRight
     },
@@ -101,6 +156,7 @@ function getEditionPermissions({
       document: hasAccessRight,
       followup: hasAccessRight,
       comment: hasAccessRight
-    }
+    },
+    delete: manager || socialWorker
   }
 }

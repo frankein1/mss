@@ -25,9 +25,10 @@ export const include = {
         include: {
           subjects: true,
           documents: true,
-          beneficiary: {
+          familyFile: {
             include: {
-              referents: true
+              referents: true,
+              beneficiaries: true
             }
           },
           createdBy: true
@@ -51,10 +52,10 @@ export async function getOne(ctx: SecurityRuleContext, id: string) {
   const {
     fileInstruction: { socialSupport }
   } = helpRequest
-  const { beneficiary } = socialSupport
+  const { familyFile } = socialSupport
   const permissions = getFileInstructionPermissions({
     ctx,
-    beneficiary,
+    familyFile,
     socialSupport
   })
   const appPermissions = getAppContextPermissions(ctx)
