@@ -7,6 +7,7 @@ import { exportBeneficiaries } from './export.service'
 import { search } from './search.service'
 import { getSimilar } from './getSimilar.service'
 import {
+  getBeneficiarySecurityTarget,
   getEditionPermissions,
   BeneficiarySecurityTarget
 } from './permission.service'
@@ -22,7 +23,8 @@ export const BeneficiaryService = {
   exportBeneficiaries,
   search,
   getSimilar,
-  getEditionPermissions
+  getEditionPermissions,
+  getBeneficiarySecurityTarget
 }
 
 export type { BeneficiarySecurityTarget }
