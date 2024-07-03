@@ -129,15 +129,15 @@ function loadSocialSupports(
       createdBy: true,
       familyFile: {
         include: {
-          referents: true,
-          beneficiaries: {
-            select: {
-              id: true,
-              usualName: true,
-              birthName: true,
-              firstName: true
-            }
-          }
+          referents: true
+        }
+      },
+      beneficiary: {
+        select: {
+          id: true,
+          usualName: true,
+          birthName: true,
+          firstName: true
         }
       },
       documents: true,

@@ -17,6 +17,7 @@ import {
   paymentMethodKeys,
   ministerKeys
 } from '~/client/options'
+import { formatBeneficiaryDisplayName } from '~/utils'
 
 export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'status',
@@ -70,7 +71,7 @@ export async function exportFileInstructions({
   const rows = fileInstructions.reduce(
     (fileInstructions: RowType[], fileInstruction) => {
       const { socialSupport, helpRequest } = fileInstruction
-      const { familyFile } = socialSupport
+      const { familyFile, beneficiary } = socialSupport
       const permissions = getFileInstructionPermissions({
         ctx,
         familyFile,
@@ -87,7 +88,7 @@ export async function exportFileInstructions({
       return [
         ...fileInstructions,
         {
-          familyFileId: formatFamilyFileName(familyFile),
+          familyFileId: formatBeneficiaryDisplayName(beneficiary),
           financialSupport: helpRequest?.financialSupport || '',
           prescribingOrganizationId:
             helpRequest?.prescribingOrganization?.name || '',

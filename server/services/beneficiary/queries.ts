@@ -1,4 +1,5 @@
 import { Prisma } from '@prisma/client'
+import { SocialSupportSubjects } from '~/components/Structure/types'
 import { BeneficiaryRepo } from '~/server/database'
 import {
   AppContextPermissions,
@@ -11,19 +12,19 @@ import {
 import { isObjectEmpty } from '~/utils/isObjectEmpty'
 
 export const include = {
+  socialSupports: {
+    select: {
+      subjects: {
+        select: {
+          id: true,
+          name: true
+        }
+      }
+    }
+  },
   familyFile: {
     select: {
       structureId: true,
-      socialSupports: {
-        select: {
-          subjects: {
-            select: {
-              id: true,
-              name: true
-            }
-          }
-        }
-      },
       referents: {
         select: {
           id: true,

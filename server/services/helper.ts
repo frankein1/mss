@@ -26,8 +26,8 @@ export function filterSocialSupport({
   socialSupport: SocialSupport & {
     familyFile: FamilyFile & {
       referents: User[]
-      beneficiaries: BeneficiaryNames[]
     }
+    beneficiary: BeneficiaryNames
     createdBy: User
     subjects: SocialSupportSubject[]
     documents?: Document[]
@@ -53,6 +53,9 @@ export function filterSocialSupport({
 
     familyFile: socialSupport.familyFile,
     familyFileId: socialSupport.familyFileId,
+
+    beneficiary: socialSupport.beneficiary,
+    beneficiaryId: socialSupport.beneficiaryId,
 
     dueDate: show(socialSupport.dueDate, conditions.details),
 
