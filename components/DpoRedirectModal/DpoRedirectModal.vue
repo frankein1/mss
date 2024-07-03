@@ -2,7 +2,7 @@
   <div class="fr-container">
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <p>{{ content }}</p>
+        <p>{{ props.content }}</p>
         <p></p>
       </div>
     </div>
@@ -35,12 +35,16 @@
   import { RoutePath } from '~/utils/routing'
   const modal = useModal()
 
-  const { content } = defineProps<{ content: string }>()
-  console.log(content)
+  const props = defineProps<{ content: string }>()
 
   const redirectToStructure = () => {
-    console.log('redirecting...')
-    navigateTo(RoutePath.AppStructureEdit())
+    modal.close()
+    navigateTo({
+      path: RoutePath.AppStructure(),
+      query: {
+        modifyStructure: 'true'
+      }
+    })
   }
 
   const cancel = () => {
