@@ -57,7 +57,9 @@
       </div>
 
       <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w"> Nom : </span>
+        <span class="structure-info__content__label fr-mr-1w">
+          Prénom et nom :
+        </span>
         <span>{{ structure.dpoFirstName }} {{ structure.dpoLastName }}</span>
       </div>
 

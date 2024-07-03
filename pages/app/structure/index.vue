@@ -65,7 +65,6 @@
   }
 
   if (route.query.modifyStructure === 'true' && data && data.value) {
-    console.log(data.value.structure)
     modal.open(StructureInfoForm, {
       title: 'Modifier les informations de ma structure',
       structure: data.value.structure,
