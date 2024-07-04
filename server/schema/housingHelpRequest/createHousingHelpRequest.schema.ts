@@ -5,7 +5,8 @@ import {
   AskedHousing,
   HousingReason,
   HousingType,
-  HousingRoomCount
+  HousingRoomCount,
+  LowIncomeHousingType
 } from '@prisma/client'
 import { z } from 'zod'
 import {
@@ -56,7 +57,8 @@ export const createHousingHelpRequestSchemaBase = z.object({
   maxCharges: amountNumber.nullish(),
   housingType: z.array(z.nativeEnum(HousingType)).nullish(),
   roomCount: z.array(z.nativeEnum(HousingRoomCount)).nullish(),
-  isPmr: z.boolean().default(false)
+  isPmr: z.boolean().default(false),
+  lowIncomeHousingType: z.array(z.nativeEnum(LowIncomeHousingType)).nullish()
 })
 
 export const createHousingHelpRequestSchema =

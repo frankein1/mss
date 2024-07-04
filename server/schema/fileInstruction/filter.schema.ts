@@ -3,7 +3,8 @@ import {
   Minister,
   SocialSupportStatus,
   FileInstructionType,
-  HousingRoomCount
+  HousingRoomCount,
+  LowIncomeHousingType
 } from '@prisma/client'
 
 export const fileInstructionFilterSchema = z.object({
@@ -13,7 +14,8 @@ export const fileInstructionFilterSchema = z.object({
   createdById: z.array(z.string().uuid()).nullish(),
   examinationDate: z.coerce.date().nullish(),
   ministre: z.array(z.nativeEnum(Minister)).nullish(),
-  roomCount: z.nativeEnum(HousingRoomCount).nullish()
+  roomCount: z.nativeEnum(HousingRoomCount).nullish(),
+  lowIncomeHousingType: z.nativeEnum(LowIncomeHousingType).nullish()
 })
 
 export type FileInstructionFilterInput = z.infer<
