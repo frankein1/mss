@@ -33,15 +33,19 @@
     name: Route.AppOverview
   })
 
-  onMounted(() => {
-    if (route.query.shouldFillDPO === 'true') {
-      console.log('dans le onMounted')
-      modal.open(DpoRedirectModal, {
-        triggerOpen: true,
-        title: 'Compléter les informations de votre structure',
-        content:
-          'Conformément aux conditions générales d’utilisation, vous devez renseigner les coordonnées du délégué ou de la personne référente à la protection de données.'
-      })
+  const unwatch = watch(modal.isReady, () => {
+    if (modal.isReady) {
+      // console.log('modal is ready to use')
+      if (route.query.shouldFillDPO === 'true') {
+        console.log('dans le onMounted')
+        modal.open(DpoRedirectModal, {
+          triggerOpen: true,
+          title: 'Compléter les informations de votre structure',
+          content:
+            'Conformément aux conditions générales d’utilisation, vous devez renseigner les coordonnées du délégué ou de la personne référente à la protection de données.'
+        })
+      }
+      unwatch()
     }
   })
 </script>
