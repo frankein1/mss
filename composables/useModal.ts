@@ -13,10 +13,17 @@ function _useModal() {
   const triggerOpen = ref(false)
   const isOpen = ref(false)
   const title = ref('')
+  const ready = ref(false)
 
   function setIsOpen(value: boolean) {
     isOpen.value = value
   }
+
+  function setReady() {
+    ready.value = true
+  }
+
+  const isReady = computed(() => ready.value)
 
   function open<T extends Component>(
     component: T,
@@ -73,6 +80,8 @@ function _useModal() {
     triggerOpen,
     setIsOpen,
     isOpen,
+    setReady,
+    isReady,
     title,
     open,
     close,

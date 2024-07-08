@@ -68,18 +68,16 @@
         </span>
         <span>{{ structure.email }}</span>
       </div>
-
       <div class="fr-col-12 fr-mt-1w">
-        <h3
-          class="fr-mb-0 fr-text--lg"
-          :style="{ color: '#3a3a3a' }"
-        >
+        <h3 class="fr-mb-0 fr-text--lg grey">
           Personne référente à la protection des données (DPO)&nbsp;:
         </h3>
       </div>
 
       <div class="fr-col-12">
-        <span class="structure-info__content__label fr-mr-1w"> Nom : </span>
+        <span class="structure-info__content__label fr-mr-1w">
+          Prénom et nom :
+        </span>
         <span>{{ structure.dpoFirstName }} {{ structure.dpoLastName }}</span>
       </div>
 
@@ -144,5 +142,9 @@
 
   .structure-info__content__label {
     font-weight: 700;
+  }
+
+  .grey {
+    color: var(--text-default-grey);
   }
 </style>

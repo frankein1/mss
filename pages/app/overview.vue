@@ -15,17 +15,37 @@
         <OngoingFollowups />
       </div>
     </div>
+    <OpenModalHack />
   </PageContainer>
 </template>
 
 <script setup lang="ts">
   import { RouteTitle, Route } from '~/utils/routing'
+  import DpoRedirectModal from '~/components/DpoRedirectModal/DpoRedirectModal.vue'
 
   const title = RouteTitle.AppOverview()
+  const route = useRoute()
+  const modal = useModal()
 
   useHead({ title })
 
   definePageMeta({
     name: Route.AppOverview
+  })
+
+  const unwatch = watch(modal.isReady, () => {
+    if (modal.isReady) {
+      // console.log('modal is ready to use')
+      if (route.query.shouldFillDPO === 'true') {
+        console.log('dans le onMounted')
+        modal.open(DpoRedirectModal, {
+          triggerOpen: true,
+          title: 'Compléter les informations de votre structure',
+          content:
+            'Conformément aux conditions générales d’utilisation, vous devez renseigner les coordonnées du délégué ou de la personne référente à la protection de données.'
+        })
+      }
+      unwatch()
+    }
   })
 </script>

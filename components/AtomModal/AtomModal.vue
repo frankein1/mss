@@ -54,22 +54,38 @@
 
   const modal = ref<HTMLDialogElement | null>(null)
 
-  const { isOpen, setIsOpen, title, triggerOpen, close } = useModal()
+  const { isOpen, setReady, setIsOpen, title, triggerOpen, close } = useModal()
 
-  const dsfrModal = computed(() =>
-    modal.value ? window.dsfr(modal.value) : undefined
-  )
+  // This becomes non null much later in the page loading process
+  // and prevents the modal to be disclosed when using triggerOpen
+  const dsfrModal = computed(() => {
+    // console.log('dsfrModal updated')
+    return modal.value ? window.dsfr(modal.value) : undefined
+  })
+
+  const unwatch = watch(modal, () => {
+    // This is the hack that allows the modal to be set ready when
+    // (I guess) window.dsfr becomes non null
+    if (modal.value) {
+      setTimeout(() => {
+        setReady()
+        unwatch()
+      }, 1000)
+    }
+  })
 
   const stopWatch = watch(isOpen, value => {
     if (!value) {
-      dsfrModal.value.modal.conceal()
+      dsfrModal.value?.modal.conceal()
     }
     if (value && triggerOpen.value) {
-      dsfrModal.value.modal.disclose()
+      // console.log('disclose', dsfrModal.value)
+      dsfrModal.value?.modal.disclose()
     }
   })
 
   function onClose() {
+    // console.log('on close') // this is always called when starting the app ?
     setIsOpen(false)
     close()
   }
