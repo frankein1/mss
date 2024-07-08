@@ -34,6 +34,7 @@
     ministerKeys,
     fileInstructionTypeFilterKeys,
     roomCountKeys,
+    lowIncomeHousingKeys,
     fileInstructionTypePictos
   } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
@@ -133,16 +134,29 @@
         alwaysExpanded: true
       })
     } else {
-      fileInstructionsFilters.push({
-        name: 'roomCount',
-        label: housingHelpRequestFieldLabels.roomCount,
-        options: roomCountKeys.options,
-        type: FilterType.Radio,
-        asTag: true,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.RoomCount,
-        alwaysExpanded: true
-      })
+      fileInstructionsFilters.push(
+        {
+          name: 'roomCount',
+          label: housingHelpRequestFieldLabels.roomCount,
+          options: roomCountKeys.options,
+          type: FilterType.Radio,
+          asTag: true,
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.RoomCount,
+          alwaysExpanded: true
+        },
+        // TODO à adapter selon le filtre
+        {
+          name: 'lowIncomeHousingType',
+          label: housingHelpRequestFieldLabels.lowIncomeHousingType,
+          options: lowIncomeHousingKeys.options,
+          type: FilterType.Radio,
+          asTag: true,
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.LowIncomeHousingType,
+          alwaysExpanded: true
+        }
+      )
     }
 
     fileInstructionsFilters.push(

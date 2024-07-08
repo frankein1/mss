@@ -180,7 +180,8 @@ export function filterHousingHelpRequest({
     maxCharges: show(housingHelpRequest.maxCharges, details),
     housingType: show(housingHelpRequest.housingType, details),
     roomCount: show(housingHelpRequest.roomCount, details),
-    isPmr: show(housingHelpRequest.isPmr, details)
+    isPmr: show(housingHelpRequest.isPmr, details),
+    lowIncomeHousingType: show(housingHelpRequest.lowIncomeHousingType, details)
   }
 }
 

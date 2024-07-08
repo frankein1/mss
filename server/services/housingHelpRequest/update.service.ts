@@ -58,6 +58,7 @@ export async function update({ input, ctx }: UpdateParams) {
     maxCharges,
     housingType,
     roomCount,
+    lowIncomeHousingType,
     isPmr
   } = cleanUpdateInput(input)
 
@@ -113,6 +114,7 @@ export async function update({ input, ctx }: UpdateParams) {
       askedHousing,
       housingType: housingType || undefined,
       roomCount: roomCount || undefined,
+      lowIncomeHousingType: lowIncomeHousingType || undefined,
       taxHouseholdAdditionalInformation,
       maxRent,
       maxCharges,
