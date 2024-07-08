@@ -518,20 +518,28 @@ enum HousingRoomCount {
   SixAndMore
 }
 
+enum LowIncomeHousingType {
+  PLAI
+  PLUS
+  PLS
+  PLI
+}
+
 model HousingHelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
-  isFirst                           Boolean?           @map("is_first")
-  firstOpeningDate                  DateTime?          @map("first_opening_date") @db.Date
-  askedHousing                      AskedHousing[]     @map("asked_housing")
-  uniqueId                          String?            @map("unique_id")
-  taxHouseholdAdditionalInformation String?            @map("tax_household_additional_information")
-  maxRent                           Decimal?           @map("max_rent")
-  maxCharges                        Decimal?           @map("max_charges")
-  housingType                       HousingType[]      @map("housing_type")
-  roomCount                         HousingRoomCount[] @map("room_count")
-  isPmr                             Boolean?           @map("is_pmr")
+  isFirst                           Boolean?               @map("is_first")
+  firstOpeningDate                  DateTime?              @map("first_opening_date") @db.Date
+  askedHousing                      AskedHousing[]         @map("asked_housing")
+  uniqueId                          String?                @map("unique_id")
+  taxHouseholdAdditionalInformation String?                @map("tax_household_additional_information")
+  maxRent                           Decimal?               @map("max_rent")
+  maxCharges                        Decimal?               @map("max_charges")
+  housingType                       HousingType[]          @map("housing_type")
+  roomCount                         HousingRoomCount[]     @map("room_count")
+  isPmr                             Boolean?               @map("is_pmr")
   reason                            HousingReason?
+  lowIncomeHousingType              LowIncomeHousingType[] @map("low_income_housing_type")
 
   fileInstructionId String          @unique @map("file_instruction_id") @db.Uuid
   fileInstruction   FileInstruction @relation(fields: [fileInstructionId], references: [id], onDelete: Cascade)

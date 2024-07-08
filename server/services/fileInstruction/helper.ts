@@ -15,7 +15,8 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     examinationDate,
     createdById,
     ministre,
-    roomCount
+    roomCount,
+    lowIncomeHousingType
   } = filters
 
   if (fileInstructionType) {
@@ -53,8 +54,18 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     }
   }
 
-  if (roomCount) {
-    formattedFilters.housingHelpRequest = { roomCount: { has: roomCount } }
+  if (roomCount || lowIncomeHousingType) {
+    formattedFilters.housingHelpRequest = {}
+
+    if (roomCount) {
+      formattedFilters.housingHelpRequest.roomCount = { has: roomCount }
+    }
+
+    if (lowIncomeHousingType) {
+      formattedFilters.housingHelpRequest.lowIncomeHousingType = {
+        has: lowIncomeHousingType
+      }
+    }
   }
 
   return formattedFilters
