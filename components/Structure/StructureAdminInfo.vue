@@ -143,6 +143,7 @@
   .structure-info__content__label {
     font-weight: 700;
   }
+
   .grey {
     color: var(--text-default-grey);
   }
