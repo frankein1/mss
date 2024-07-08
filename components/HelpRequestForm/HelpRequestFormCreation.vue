@@ -64,6 +64,7 @@
     handleSubmit,
     values => {
       isNavigatingWithFormActions.value = true
+      console.log(values)
       emit('saveHelpRequest', values)
     }
   )

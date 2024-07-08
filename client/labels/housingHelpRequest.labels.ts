@@ -7,6 +7,7 @@ export const housingHelpRequestFieldLabels = {
   maxRent: 'Montant maximum du loyer',
   maxCharges: 'Montant maximum des charges',
   housingType: 'Typologie du logement',
+  lowIncomeHousingType: 'Logement à loyer modéré',
   roomCount: 'Nombre de pièces',
   isPmr: "Besoin d'un logement PMR",
   instructorOrganizationContactId: "Contact de l'organisme instructeur"

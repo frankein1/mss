@@ -59,6 +59,7 @@
   const { data, pending, error } =
     await useTrpcClient().beneficiary.getSocialSupports.useQuery(queryInput)
 
+  console.log(data?.value?.items[0].data.fileInstruction.housingHelpRequest) // apperçu d'un dossier mais fileInstruction.housingHelpRequest.
   const items = computed(() => data.value?.items || [])
 
   const totalCount = computed(() => data.value?.totalCount || 0)

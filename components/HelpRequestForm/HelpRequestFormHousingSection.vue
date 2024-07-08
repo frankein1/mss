@@ -45,7 +45,7 @@
           />
         </div>
 
-        <div class="fr-col-12">
+        <div class="fr-col-12 fr-col-lg-6">
           <VeeMultiSelect
             name="housingType"
             :label="housingHelpRequestFieldLabels.housingType"
@@ -54,11 +54,19 @@
           />
         </div>
 
-        <div class="fr-col-12">
+        <div class="fr-col-12 fr-col-lg-6">
           <VeeMultiSelect
             name="roomCount"
             :label="housingHelpRequestFieldLabels.roomCount"
             :options="roomCountKeys.options"
+          />
+        </div>
+
+        <div class="fr-col-12 fr-col-lg-6 fr-mr-auto">
+          <VeeMultiSelect
+            name="lowIncomeHousingType"
+            :label="housingHelpRequestFieldLabels.lowIncomeHousingType"
+            :options="lowIncomeHousingKeys.options"
           />
         </div>
 
@@ -78,7 +86,8 @@
   import {
     housingTypeKeys,
     housingTypeIcons,
-    roomCountKeys
+    roomCountKeys,
+    lowIncomeHousingKeys
   } from '~/client/options'
 
   defineProps<{
@@ -89,16 +98,35 @@
 <style scoped lang="scss">
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
 
+  .fr-accordion {
+    &:before {
+      bottom: 0;
+      box-shadow:
+        inset 0 1px 0 0 var(--border-default-grey),
+        0 1px 0 0 var(--border-default-grey);
+      content: '';
+      display: block;
+      height: 100%;
+      left: 0;
+      pointer-events: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 100%;
+    }
+  }
+
   .fr-accordion .fr-accordion__title {
-    width: calc(100% + 2rem);
+    width: 100%;
   }
 
   .fr-accordion .fr-accordion__title .fr-accordion__btn {
-    margin-left: -1rem;
-    margin-right: -1rem;
+    padding-left: 0;
+    padding-right: 0;
     color: inherit;
     padding-top: 1.5rem;
     padding-bottom: 1.5rem;
+    width: 100%;
 
     @include dsfr.title-style(h5);
 
