@@ -58,10 +58,7 @@
       </div>
 
       <div class="fr-col-12 fr-mt-1w">
-        <h3
-          class="fr-mb-0 fr-text--lg"
-          :style="{ color: '#3a3a3a' }"
-        >
+        <h3 class="fr-mb-0 fr-text--lg grey">
           Personne référente à la protection des données (DPO)&nbsp;:
         </h3>
       </div>
@@ -152,3 +149,9 @@
     props.validate(values)
   )
 </script>
+
+<style scoped lang="css">
+  .grey {
+    color: var(--text-default-grey);
+  }
+</style>
