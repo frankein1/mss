@@ -1,6 +1,5 @@
 import { exportBeneficiariesQuery } from './export.query'
 import { getBeneficiaryDetailsQuery } from './get-details.query'
-import { getBeneficiaryDocumentsQuery } from './get-documents.query'
 import { getBeneficiaryMinimalInfoQuery } from './get-minimal-info.query'
 import { getPage } from './get-page.query'
 import { searchBeneficiaryQuery } from './search.query'
@@ -21,7 +20,6 @@ import { createTaxHouseholdMemberMutation } from './create-household-member.muta
 export const beneficiaryRoutes = {
   exportBeneficiariesQuery,
   getBeneficiaryDetailsQuery,
-  getBeneficiaryDocumentsQuery,
   getBeneficiaryMinimalInfoQuery,
   getPage,
   searchBeneficiaryQuery,

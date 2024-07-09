@@ -13,17 +13,10 @@ function hasDefinedExaminationDate(h: {
   return h.examinationDate !== null
 }
 
-const handler = async ({
-  input,
-  ctx: { user }
-}: {
-  input: { id: string } | undefined
-  ctx: ProtectedAppContext
-}) => {
+const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
   const examinationDates = await FileInstructionRepo.findMany(user, {
     where: {
-      examinationDate: { not: null },
-      socialSupport: input ? { beneficiaryId: input.id } : undefined
+      examinationDate: { not: null }
     },
     select: { examinationDate: true },
     distinct: 'examinationDate',
@@ -33,10 +26,7 @@ const handler = async ({
   return examinationDates.filter(hasDefinedExaminationDate)
 }
 
-const securityCheck = (
-  ctx: SecurityRuleContext,
-  _input: IdInput | undefined
-) => {
+const securityCheck = (ctx: SecurityRuleContext) => {
   const permissions = getAppContextPermissions({
     user: ctx.user,
     structure: ctx.structure

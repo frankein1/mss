@@ -58,7 +58,6 @@
   import { ZodSchema, z } from 'zod'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
-    Breadcrumb,
     RoutePath,
     AppBeneficiaryEditRoute,
     RouteTitle
@@ -107,13 +106,6 @@
   const validate = ref<boolean>(false)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
-
-  const breadcrumbLinks = computed(() => {
-    if (props.draft) {
-      return Breadcrumb.AppBeneficiariesAdd()
-    }
-    return Breadcrumb.AppBeneficiaryEdit(props.beneficiaryIdentification)
-  })
 
   const title = computed(() => RouteTitle[props.currentRoute]())
 

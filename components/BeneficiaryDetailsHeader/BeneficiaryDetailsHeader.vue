@@ -25,13 +25,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
 
   defineProps<{
     title: string
     beneficiary: GetBeneficiaryOutput
-    permissions: BeneficiaryPermissions | undefined
+    permissions: FamilyFilePermissions | undefined
   }>()
 
   const emit = defineEmits<{ toggleDelete: []; deleted: [] }>()

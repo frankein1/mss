@@ -34,13 +34,13 @@
   import { RoutePath } from '~/utils/routing'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
 
   const route = useRoute()
 
   const props = defineProps<{
     beneficiaryId: string
-    permissions: BeneficiaryPermissions | undefined
+    permissions: FamilyFilePermissions | undefined
   }>()
 
   const emit = defineEmits<{ toggleDelete: []; deleted: [] }>()

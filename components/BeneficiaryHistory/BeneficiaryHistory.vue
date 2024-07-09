@@ -4,7 +4,7 @@
       <BeneficiaryHistoryFilters
         v-model:values="filters"
         :results-label="resultsLabel"
-        :beneficiary-id="beneficiaryId"
+        :family-file-id="familyFileId"
       />
     </div>
     <AtomLoader

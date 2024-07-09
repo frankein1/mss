@@ -4,7 +4,7 @@
     <BeneficiaryDocumentFilters @filter="filters = $event" />
     <BeneficiaryDocumentAddButton
       class="fr-ml-2w"
-      :beneficiary-id="beneficiaryId"
+      :family-file-id="familyFileId"
       @new-document="() => refresh()"
     />
   </div>
@@ -49,7 +49,7 @@
 
   const trpcClient = useTrpcClient()
 
-  const props = defineProps<{ beneficiaryId: string }>()
+  const props = defineProps<{ familyFileId: string }>()
 
   const filters = ref<BeneficiaryDocumentFilterInput>({})
   const orderBy = ref<BeneficiaryDocumentSort>({ created: SortOrder.Desc })
@@ -59,7 +59,7 @@
   const { updatePagination } = usePagination(page, perPage, filters)
 
   const queryInput = computed(() => ({
-    beneficiaryId: props.beneficiaryId,
+    familyFileId: props.familyFileId,
     filters: filters.value,
     orderBy: orderBy.value,
     page: page.value,
@@ -67,7 +67,7 @@
   }))
 
   const { data, error, pending, refresh } =
-    await trpcClient.beneficiary.getBeneficiaryDocuments.useQuery(queryInput)
+    await trpcClient.file.getDocuments.useQuery(queryInput)
 
   const documents = computed(() => data.value?.documents || [])
 
