@@ -29,9 +29,9 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: GetHistoryInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.beneficiaryId
+    input.familyFileId
   )
   return permissions.view.history
 }
@@ -120,10 +120,10 @@ function prepareSocialSupportFilters(
 function loadSocialSupports(
   filters: HistoryFilters,
   user: SecurityRuleGrantee,
-  beneficiaryId: string
+  familyFileId: string
 ) {
   return SocialSupportRepo.findMany(user, {
-    where: prepareSocialSupportFilters(filters, beneficiaryId),
+    where: prepareSocialSupportFilters(filters, familyFileId),
     include: {
       createdBy: true,
       familyFile: {
@@ -283,16 +283,16 @@ const handler = async ({
   input: GetHistoryInput
   ctx: ProtectedAppContext
 }) => {
-  const { beneficiaryId, filters } = input
+  const { familyFileId, filters } = input
 
   const [totalCount, socialSupports, familyFile] = await Promise.all([
     SocialSupportRepo.count(ctx.user, {
       where: {
-        beneficiaryId
+        familyFileId
       }
     }),
-    loadSocialSupports(filters, ctx.user, beneficiaryId),
-    FamilyFileService.getFamilyFileSecurityTarget(ctx.user, input.beneficiaryId)
+    loadSocialSupports(filters, ctx.user, familyFileId),
+    FamilyFileService.getFamilyFileSecurityTarget(ctx.user, input.familyFileId)
   ])
 
   return {

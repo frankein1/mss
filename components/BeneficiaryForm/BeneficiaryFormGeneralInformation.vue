@@ -11,15 +11,11 @@
     </h2>
     <BeneficiaryFormIdentity
       id="identity"
-      :permissions="permissions"
       :similar-beneficiary="similarBeneficiary"
       @update:similar-beneficiaries="emit('update:similarBeneficiary', $event)"
     />
     <BeneficiaryFormContactDetails id="contact-details" />
-    <BeneficiaryFormAddress
-      id="address"
-      :permissions="permissions"
-    />
+    <BeneficiaryFormAddress id="address" />
     <BeneficiaryFormMobility id="mobility" />
     <BeneficiaryFormAdditionalInformation id="additional-information" />
   </div>
@@ -27,14 +23,14 @@
 
 <script setup lang="ts">
   import { BeneficiaryReferent } from '~/types/beneficiary'
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   withDefaults(
     defineProps<{
       beneficiaryReferentIds: String[]
       agents: BeneficiaryReferent[]
-      permissions: BeneficiaryPermissions
+      permissions: FamilyFilePermissions
       similarBeneficiary?: SimilarBeneficiary
     }>(),
     { beneficiary: undefined, similarBeneficiary: undefined }

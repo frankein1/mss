@@ -83,8 +83,8 @@
         />
         <BeneficiaryHistory
           v-else-if="permissions"
-          :beneficiary-id="beneficiaryId"
-          :beneficiary-permissions="permissions"
+          :family-file-id="beneficiary.familyFileId"
+          :family-file-permissions="permissions"
         />
       </AtomTab>
       <AtomTab
