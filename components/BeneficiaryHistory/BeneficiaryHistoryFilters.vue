@@ -40,7 +40,7 @@
   import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
-    beneficiaryId: string
+    familyFileId: string
     resultsLabel: string
     values: FamilyFileHistoryFilterInput
   }>()
@@ -190,34 +190,6 @@
           matomoEventAction: HelpRequestFilterEventAction.ExaminationDate
         })
       }
-
-      // FIXME: Delete once it is admitted that it is done
-      //   filters.push(
-      //     {
-      //       name: 'handlingDate',
-      //       label: helpRequestFieldLabels.handlingDate,
-      //       options: new Map([
-      //         ['', 'Non sélectionné'],
-      //         ['true', 'Oui'],
-      //         ['false', 'Non']
-      //       ]),
-      //       type: FilterType.SelectOne,
-      //       matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-      //       matomoEventAction: HelpRequestFilterEventAction.HandlingDate
-      //     },
-      //     {
-      //       name: 'externalStructure',
-      //       label: 'Instruction',
-      //       options: new Map([
-      //         ['', 'Toutes les instructions'],
-      //         ['false', 'Interne'],
-      //         ['true', 'Organisme externe']
-      //       ]),
-      //       type: FilterType.SelectOne,
-      //       matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
-      //       matomoEventAction: HelpRequestFilterEventAction.ExternalStructure
-      //     }
-      //   )
     }
 
     if (!isReferent) {
@@ -240,12 +212,12 @@
       return []
     }
 
-    const examinationDates = await trpcClient.config.getExaminationDates.query({
-      id: props.beneficiaryId
+    const examinationDates = await trpcClient.file.getExaminationDates.query({
+      id: props.familyFileId
     })
 
     return examinationDates.map(({ examinationDate }) => ({
-      value: examinationDate.toString(),
+      value: examinationDate?.toString() || '',
       label: formatDate(examinationDate)
     }))
   }

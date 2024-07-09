@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     AppBeneficiaryEditRoute,
@@ -18,7 +18,7 @@
 
   const props = defineProps<{
     currentRoute: AppBeneficiaryEditRoute
-    permissions: BeneficiaryPermissions | undefined
+    permissions: FamilyFilePermissions | undefined
     beneficiaryId: string
     originTab: BeneficiaryTab | undefined
   }>()

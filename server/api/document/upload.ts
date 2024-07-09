@@ -55,15 +55,15 @@ export default defineEventHandler(async event => {
     })
   }
 
-  const beneficiary = await FamilyFileService.getFamilyFileSecurityTarget(
+  const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
     user,
-    input.beneficiaryId
+    input.familyFileId
   )
 
-  if (!beneficiary) {
+  if (!familyFile) {
     throw createError({
       statusCode: 400,
-      message: `Aucun bénéficiaire avec l'id ${input.beneficiaryId}`
+      message: `Aucun foyer avec l'id ${input.familyFileId}`
     })
   }
 
@@ -81,9 +81,9 @@ export default defineEventHandler(async event => {
     }
   }
 
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.beneficiaryId
+    input.familyFileId
   )
 
   if (!permissions.create) {
@@ -97,7 +97,7 @@ export default defineEventHandler(async event => {
   const file = multipartFormData[0]
 
   const document = await addDocument(input, user, file)
-  await addNotification(ctx, document, beneficiary)
+  await addNotification(ctx, document, familyFile)
 
   return send(event, document.key)
 })
@@ -142,7 +142,7 @@ async function addDocument(
   multipartFormData: MultiPartData
 ) {
   const key = v4()
-  const { type, beneficiaryId, familyFileId, confidential, tags, file } = input
+  const { type, familyFileId, beneficiaryId, confidential, tags, file } = input
   const document = await DocumentRepo.prisma.create({
     data: {
       key,

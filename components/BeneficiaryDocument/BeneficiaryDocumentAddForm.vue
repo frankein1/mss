@@ -54,7 +54,7 @@
   import { documentFieldLabels } from '~/client/labels'
 
   const props = defineProps<{
-    beneficiaryId: string
+    familyFileId: string
     newDocument: (key: string) => void
   }>()
 
@@ -64,7 +64,7 @@
   const { handleSubmit } = useForm<UploadBrowserDocumentInput>({
     validationSchema: toTypedSchema(uploadBrowserDocumentSchema),
     initialValues: {
-      beneficiaryId: props.beneficiaryId,
+      familyFileId: props.familyFileId,
       tags: [],
       confidential: false
     }

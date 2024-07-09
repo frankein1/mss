@@ -1,7 +1,7 @@
 <template>
   <BeneficiaryDocumentAddButton
     class="fr-mb-3w"
-    :beneficiary-id="beneficiaryId"
+    :family-file-id="familyFileId"
     label="Ajouter un nouveau document"
     @new-document="onNewDocument"
   />
@@ -26,7 +26,7 @@
 
   const props = withDefaults(
     defineProps<{
-      beneficiaryId: string
+      familyFileId: string
       name: string
       snackbarSuccessMessage?: string
     }>(),
@@ -37,8 +37,8 @@
   )
 
   const { data, pending, error, refresh } =
-    await useTrpcClient().beneficiary.getBeneficiaryDocuments.useQuery({
-      beneficiaryId: props.beneficiaryId
+    await useTrpcClient().file.getDocuments.useQuery({
+      familyFileId: props.familyFileId
     })
 
   const documents = computed(() => data.value?.documents || [])

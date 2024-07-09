@@ -64,7 +64,7 @@
         />
         <BeneficiaryDocumentList
           v-else
-          :beneficiary-id="beneficiary.id"
+          :family-file-id="beneficiary.familyFileId"
         />
       </AtomTab>
       <AtomTab

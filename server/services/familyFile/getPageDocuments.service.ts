@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { getFamilyFileSecurityTarget } from '../familyFile/permission.service'
+import { getFamilyFileSecurityTarget } from './permission.service'
 import { DocumentRepo } from '~/server/database'
 import {
   BeneficiaryDocumentFilterInput,

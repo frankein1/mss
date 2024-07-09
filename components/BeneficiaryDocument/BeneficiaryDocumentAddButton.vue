@@ -17,7 +17,7 @@
 
   const props = withDefaults(
     defineProps<{
-      beneficiaryId: string
+      familyFileId: string
       label?: string
     }>(),
     { label: 'Ajouter un document' }
@@ -30,7 +30,7 @@
   function onAdd() {
     modal.open(BeneficiaryDocumentAddForm, {
       title: 'Ajouter un document',
-      beneficiaryId: props.beneficiaryId,
+      familyFileId: props.familyFileId,
       newDocument: onNewDocument
     })
   }

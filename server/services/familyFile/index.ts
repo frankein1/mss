@@ -4,11 +4,13 @@ import {
   getFamilyFileSecurityTarget,
   FamilyFileSecurityTarget
 } from './permission.service'
+import { getPageDocuments } from '../familyFile/getPageDocuments.service'
 
 export const FamilyFileService = {
   getCreationPermissions,
   getEditionPermissions,
-  getFamilyFileSecurityTarget
+  getFamilyFileSecurityTarget,
+  getPageDocuments
 }
 
 export type { FamilyFileSecurityTarget }

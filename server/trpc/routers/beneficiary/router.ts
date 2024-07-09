@@ -17,9 +17,6 @@ export const beneficiaryRouter = router({
   search: protectedProcedure
     .input(routes.searchBeneficiaryQuery.inputValidation)
     .query(routes.searchBeneficiaryQuery.execute),
-  getBeneficiaryDocuments: protectedProcedure
-    .input(routes.getBeneficiaryDocumentsQuery.inputValidation)
-    .query(routes.getBeneficiaryDocumentsQuery.execute),
   getTaxHouseholds: protectedProcedure
     .input(routes.getBeneficiaryTaxHouseholdsQuery.inputValidation)
     .query(routes.getBeneficiaryTaxHouseholdsQuery.execute),
