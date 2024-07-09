@@ -235,7 +235,7 @@
 <style lang="scss">
   .file-instruction-filters {
     .filters {
-      align-items: start; //
+      align-items: start;
     }
   }
 </style>
