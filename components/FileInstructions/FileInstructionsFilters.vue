@@ -124,26 +124,15 @@
     ]
 
     if (props.filters.fileInstructionType !== 'Housing') {
-      fileInstructionsFilters.push(
-        {
-          name: 'socialSupportSubjects',
-          label: helpRequestFieldLabels.subjectId,
-          options: socialSupportSubjectOptions.value,
-          type: FilterType.SelectMultiple,
-          matomoEventCategory: EventCategory.HelpRequestFilter,
-          matomoEventAction: HelpRequestFilterEventAction.SocialSupportSubject,
-          alwaysExpanded: true
-        },
-        {
-          name: 'createdById',
-          label: 'Agent',
-          options: agentOptions.value,
-          type: FilterType.SelectMultiple,
-          matomoEventCategory: EventCategory.HelpRequestFilter,
-          matomoEventAction: HelpRequestFilterEventAction.Agent,
-          alwaysExpanded: true
-        }
-      )
+      fileInstructionsFilters.push({
+        name: 'socialSupportSubjects',
+        label: helpRequestFieldLabels.subjectId,
+        options: socialSupportSubjectOptions.value,
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.SocialSupportSubject,
+        alwaysExpanded: true
+      })
     } else {
       fileInstructionsFilters.push(
         {
@@ -169,18 +158,29 @@
       )
     }
 
-    fileInstructionsFilters.push({
-      name: 'status',
-      label: helpRequestFieldLabels.status,
-      options: withEmptyValue(
-        fileInstructionStatusOptions.value,
-        'Tous les statuts'
-      ),
-      type: FilterType.SelectOne,
-      matomoEventCategory: EventCategory.HelpRequestFilter,
-      matomoEventAction: HelpRequestFilterEventAction.Status,
-      alwaysExpanded: true
-    })
+    fileInstructionsFilters.push(
+      {
+        name: 'status',
+        label: helpRequestFieldLabels.status,
+        options: withEmptyValue(
+          fileInstructionStatusOptions.value,
+          'Tous les statuts'
+        ),
+        type: FilterType.SelectOne,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.Status,
+        alwaysExpanded: true
+      },
+      {
+        name: 'createdById',
+        label: 'Agent',
+        options: agentOptions.value,
+        type: FilterType.SelectMultiple,
+        matomoEventCategory: EventCategory.HelpRequestFilter,
+        matomoEventAction: HelpRequestFilterEventAction.Agent,
+        alwaysExpanded: props.filters.fileInstructionType !== 'Housing'
+      }
+    )
 
     if (
       application.value.module.helpRequest &&
