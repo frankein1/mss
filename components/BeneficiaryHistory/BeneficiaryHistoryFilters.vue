@@ -22,7 +22,7 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
-  import type { BeneficiaryHistoryFilterInput } from '~/server/schema'
+  import type { FamilyFileHistoryFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import {
     followupMediumKeys,
@@ -42,7 +42,7 @@
   const props = defineProps<{
     beneficiaryId: string
     resultsLabel: string
-    values: BeneficiaryHistoryFilterInput
+    values: FamilyFileHistoryFilterInput
   }>()
 
   const authState = useAuthState()
@@ -51,7 +51,7 @@
   const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
-    'update:values': [filters: BeneficiaryHistoryFilterInput]
+    'update:values': [filters: FamilyFileHistoryFilterInput]
   }>()
 
   const {

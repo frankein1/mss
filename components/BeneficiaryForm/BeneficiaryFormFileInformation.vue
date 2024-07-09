@@ -45,13 +45,13 @@
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { beneficiaryStatusKeys } from '~/client/options'
   import { BeneficiaryReferent } from '~/types/beneficiary'
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
 
   const props = withDefaults(
     defineProps<{
       agents: BeneficiaryReferent[]
       beneficiaryReferentIds?: String[]
-      permissions: BeneficiaryPermissions
+      permissions: FamilyFilePermissions
       full?: boolean
     }>(),
     {
