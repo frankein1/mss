@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { fixtureStructures, fixturesUsers, FixtureUserRole } from './'
+import { fixtureStructures } from './'
 
 export enum FixtureBeneficiary {
   TEARLE = 0,

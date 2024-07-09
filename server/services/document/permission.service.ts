@@ -1,7 +1,6 @@
-import { BeneficiaryService } from '../beneficiary'
+import { FamilyFileService } from '..'
 import { DocumentRepo } from '~/server/database'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
-import { FamilyFileService } from '..'
 
 export async function getEditionPermissions(
   ctx: SecurityRuleContext,

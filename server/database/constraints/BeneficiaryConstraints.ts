@@ -13,6 +13,12 @@ const get = (user: SecurityRuleGrantee) => {
     archived: null
   })
 
+  if (isReferent(user)) {
+    Object.assign(where, {
+      familyFile: { referents: { some: { id: user.id } } }
+    })
+  }
+
   return where
 }
 
@@ -25,6 +31,12 @@ const getNoDraftCondition = (user: SecurityRuleGrantee) => {
     structureId: user.structureId,
     archived: null
   })
+
+  if (isReferent(user)) {
+    Object.assign(where, {
+      familyFile: { referents: { some: { id: user.id } } }
+    })
+  }
 
   return where
 }

@@ -1,6 +1,6 @@
 <template>
   <AtomLoader
-    v-if="budget"
+    v-if="pending"
     class="fr-mx-auto"
   />
 
@@ -11,6 +11,7 @@
   />
 
   <form
+    v-else-if="budget"
     ref="form"
     novalidate
     @submit.prevent="onSubmit"
@@ -25,36 +26,23 @@
           pictogram-path="/pictograms/money.svg"
         />
 
-        <AtomLoader
-          v-if="pending"
-          class="fr-mx-auto"
-        />
-
         <AtomAlert
-          v-else-if="error"
-          :alert-type="AlertType.Error"
-          message="Les informations générales du budget n'ont pas pu être chargées."
-        />
+          v-if="budget.legacyRemainingAfterExpenses && open"
+          class="fr-mb-4w"
+          closeable
+          :alert-type="AlertType.Warning"
+          message="Le reste à vivre a été remplacé par le calcul automatique"
+          @close="open = false"
+        >
+          <template #detailedMessage>
+            <p class="euro-symbol">
+              Le montant précédemment renseigné était de
+              {{ budget.legacyRemainingAfterExpenses }}
+            </p>
+          </template>
+        </AtomAlert>
 
-        <template v-else-if="budget">
-          <AtomAlert
-            v-if="budget.legacyRemainingAfterExpenses && open"
-            class="fr-mb-4w"
-            closeable
-            :alert-type="AlertType.Warning"
-            message="Le reste à vivre a été remplacé par le calcul automatique"
-            @close="open = false"
-          >
-            <template #detailedMessage>
-              <p class="euro-symbol">
-                Le montant précédemment renseigné était de
-                {{ budget.legacyRemainingAfterExpenses }}
-              </p>
-            </template>
-          </AtomAlert>
-
-          <BudgetGeneralInformationForm />
-        </template>
+        <BudgetGeneralInformationForm />
       </div>
     </main>
 
@@ -74,7 +62,6 @@
     updateBudgetInfoSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()

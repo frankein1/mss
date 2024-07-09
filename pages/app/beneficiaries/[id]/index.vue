@@ -104,6 +104,7 @@
         />
         <BeneficiaryBudget
           v-else-if="beneficiaryIdentification"
+          :family-file-id="beneficiary.familyFileId"
           :beneficiary-identification="beneficiaryIdentification"
           :tax-household="beneficiary.taxHouseholds?.taxHouseholds || []"
         />

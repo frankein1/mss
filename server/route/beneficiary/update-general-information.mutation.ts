@@ -8,7 +8,7 @@ import {
 } from '~/server/schema'
 import { prepareRelationConnections } from '~/utils/prisma'
 import { BeneficiaryRepo } from '~/server/database'
-import { BeneficiaryService, FamilyFileService } from '~/server/services'
+import { BeneficiaryService } from '~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,

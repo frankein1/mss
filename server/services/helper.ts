@@ -1,5 +1,4 @@
 import {
-  Beneficiary,
   Comment,
   Document,
   FileInstruction,
@@ -13,10 +12,7 @@ import {
   PartnerOrganizationContact,
   FamilyFile
 } from '@prisma/client'
-import {
-  BeneficiaryIdentification,
-  BeneficiaryNames
-} from '~/types/beneficiary'
+import { BeneficiaryIdentification } from '~/types/beneficiary'
 
 function show<T>(val: T, condition: boolean): T | null {
   return condition ? val : null

@@ -3,6 +3,7 @@
     :is-submitting="isSubmitting"
     :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
+    :family-file-id="familyFileId"
     :beneficiary-id="beneficiaryId"
     :caught-errors="caughtErrors"
     :subject="subject"
@@ -30,6 +31,7 @@
     socialSupportSubjects: SocialSupportSubject[]
     partnerOrganizations: PartnerOrganizationIdName[]
     beneficiaryId: string
+    familyFileId: string
     isFinancial: boolean
   }>()
 

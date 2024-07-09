@@ -27,9 +27,10 @@
         class="fr-mx-auto"
       />
       <HelpRequestFormCreation
-        v-else-if="socialSupportSubjects && partnerOrganizations"
+        v-else-if="socialSupportSubjects && partnerOrganizations && beneficiary"
         :is-submitting="isSubmitting"
         :social-support-subjects="socialSupportSubjects"
+        :family-file-id="beneficiary.familyFileId"
         :beneficiary-id="beneficiaryId"
         :partner-organizations="partnerOrganizations"
         :is-financial="isFinancial"

@@ -4,6 +4,7 @@
     :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
     :beneficiary-id="socialSupport.beneficiary.id"
+    :family-file-id="socialSupport.familyFileId"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
     :subject="subject"

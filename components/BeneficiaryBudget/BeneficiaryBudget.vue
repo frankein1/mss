@@ -49,6 +49,7 @@
   } from '~/types/beneficiary'
 
   const props = defineProps<{
+    familyFileId: string
     beneficiaryIdentification: BeneficiaryIdentification
     taxHousehold: GetBeneficiaryRelative[]
   }>()
@@ -56,7 +57,7 @@
   const trpcClient = useTrpcClient()
 
   const { data, pending, error } = await trpcClient.budget.getBudget.useQuery({
-    beneficiaryId: props.beneficiaryIdentification.id
+    familyFileId: props.familyFileId
   })
 </script>
 

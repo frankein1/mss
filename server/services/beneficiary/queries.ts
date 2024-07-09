@@ -1,5 +1,4 @@
 import { Prisma, SocialSupportSubject } from '@prisma/client'
-import { SocialSupportSubjects } from '~/components/Structure/types'
 import { BeneficiaryRepo } from '~/server/database'
 import {
   AppContextPermissions,

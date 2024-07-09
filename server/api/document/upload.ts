@@ -5,12 +5,7 @@ import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { forbiddenError, invalidError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
-import {
-  BeneficiaryService,
-  BeneficiarySecurityTarget,
-  FamilyFileSecurityTarget,
-  FamilyFileService
-} from '~/server/services'
+import { FamilyFileSecurityTarget, FamilyFileService } from '~/server/services'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
 
 export interface MultiPartData {
