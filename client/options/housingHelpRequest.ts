@@ -2,7 +2,8 @@ import {
   AskedHousing,
   HousingReason,
   HousingRoomCount,
-  HousingType
+  HousingType,
+  LowIncomeHousingType
 } from '@prisma/client'
 import { buildKeys } from '~/utils/keys/keyBuilder'
 
@@ -34,6 +35,13 @@ export const roomCountKeys = buildKeys({
   [HousingRoomCount.Four]: '4',
   [HousingRoomCount.Five]: '5',
   [HousingRoomCount.SixAndMore]: '6 ou +'
+})
+
+export const lowIncomeHousingKeys = buildKeys({
+  [LowIncomeHousingType.PLAI]: 'PLAI',
+  [LowIncomeHousingType.PLI]: 'PLI',
+  [LowIncomeHousingType.PLS]: 'PLS',
+  [LowIncomeHousingType.PLUS]: 'PLUS'
 })
 
 export const housingReasonKeys = buildKeys({

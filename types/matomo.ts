@@ -41,7 +41,8 @@ export enum HelpRequestFilterEventAction {
   ExaminationDate = 'Date de passage en commission',
   Agent = 'Agent',
   Ministre = 'Ministre',
-  RoomCount = 'Nombre de pièces'
+  RoomCount = 'Nombre de pièces',
+  LowIncomeHousingType = 'Logement à loyer modéré'
 }
 
 export enum DocumentEventAction {

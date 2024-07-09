@@ -81,6 +81,7 @@
         ),
       housingType: housingHelpRequest.value.housingType || [],
       roomCount: housingHelpRequest.value.roomCount || [],
+      lowIncomeHousingType: housingHelpRequest.value.lowIncomeHousingType || [],
       instructorOrganizationId: fileInstruction.value.instructorOrganizationId,
       instructorOrganizationContactId:
         fileInstruction.value.instructorOrganizationContactId,

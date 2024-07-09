@@ -399,7 +399,7 @@
   }
 
   .fr-fieldset__legend {
-    margin-bottom: 0.5rem;
+    // margin-bottom: 0.5rem;
   }
 
   .fr-select:not(:disabled) {

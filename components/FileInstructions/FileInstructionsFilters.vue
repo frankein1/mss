@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="file-instruction-filters">
     <AtomAlert
       v-if="fetchError"
       class="fr-mb-2w"
@@ -34,6 +34,7 @@
     ministerKeys,
     fileInstructionTypeFilterKeys,
     roomCountKeys,
+    lowIncomeHousingKeys,
     fileInstructionTypePictos
   } from '~/client/options'
   import { EventCategory, HelpRequestFilterEventAction } from '~/types/matomo'
@@ -133,16 +134,28 @@
         alwaysExpanded: true
       })
     } else {
-      fileInstructionsFilters.push({
-        name: 'roomCount',
-        label: housingHelpRequestFieldLabels.roomCount,
-        options: roomCountKeys.options,
-        type: FilterType.Radio,
-        asTag: true,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.RoomCount,
-        alwaysExpanded: true
-      })
+      fileInstructionsFilters.push(
+        {
+          name: 'roomCount',
+          label: housingHelpRequestFieldLabels.roomCount,
+          options: roomCountKeys.options,
+          type: FilterType.Radio,
+          asTag: true,
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.RoomCount,
+          alwaysExpanded: true
+        },
+        {
+          name: 'lowIncomeHousingType',
+          label: housingHelpRequestFieldLabels.lowIncomeHousingType,
+          options: lowIncomeHousingKeys.options,
+          type: FilterType.Radio,
+          asTag: true,
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.LowIncomeHousingType,
+          alwaysExpanded: true
+        }
+      )
     }
 
     fileInstructionsFilters.push(
@@ -165,7 +178,7 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.HelpRequestFilter,
         matomoEventAction: HelpRequestFilterEventAction.Agent,
-        alwaysExpanded: true
+        alwaysExpanded: props.filters.fileInstructionType !== 'Housing'
       }
     )
 
@@ -218,3 +231,11 @@
     emit('update:filters', filters)
   }
 </script>
+
+<style lang="scss">
+  .file-instruction-filters {
+    .filters {
+      align-items: start;
+    }
+  }
+</style>

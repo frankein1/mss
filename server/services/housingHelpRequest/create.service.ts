@@ -42,6 +42,7 @@ export async function create({ input, ctx }: CreateParams) {
     housingType,
     isPmr,
     roomCount,
+    lowIncomeHousingType,
     firstOpeningDate,
     isFirst,
     maxCharges,
@@ -58,6 +59,7 @@ export async function create({ input, ctx }: CreateParams) {
       housingType: housingType || undefined,
       isPmr,
       roomCount: roomCount || undefined,
+      lowIncomeHousingType: lowIncomeHousingType || undefined,
       firstOpeningDate,
       isFirst,
       maxCharges,
@@ -107,7 +109,6 @@ export async function create({ input, ctx }: CreateParams) {
           }
         }
       },
-
       taxHouseholdAdditionalInformation,
       uniqueId,
       askedHousing

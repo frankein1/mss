@@ -35,9 +35,7 @@
 
   const unwatch = watch(modal.isReady, () => {
     if (modal.isReady) {
-      // console.log('modal is ready to use')
       if (route.query.shouldFillDPO === 'true') {
-        console.log('dans le onMounted')
         modal.open(DpoRedirectModal, {
           triggerOpen: true,
           title: 'Compléter les informations de votre structure',
