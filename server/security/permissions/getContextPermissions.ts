@@ -10,6 +10,9 @@ export type AppContextPermissions = {
   }
   edit: {
     structure: boolean
+    health: {
+      nir: boolean
+    }
   }
   module: {
     users: boolean
@@ -45,7 +48,10 @@ function getAdminContextPermissions(): AppContextPermissions {
       stats: false
     },
     edit: {
-      structure: true
+      structure: true,
+      health: {
+        nir: false
+      }
     },
     module: {
       users: false,
@@ -73,7 +79,8 @@ function getUserContextPermissions(
     receptionAgent,
     ngo,
     cias,
-    ccas
+    ccas,
+    city
   } = getGranteRole(ctx)
 
   return {
@@ -83,13 +90,16 @@ function getUserContextPermissions(
       stats: manager || socialWorker || referent || instructor
     },
     edit: {
-      structure: manager
+      structure: manager,
+      health: {
+        nir: cias || ccas || city
+      }
     },
     module: {
       users: manager,
       stats: manager || socialWorker || instructor || referent,
       statsByReferent: manager,
-      health: cias || ccas,
+      health: true,
       ministere: ministryAgent,
       helpRequest: manager || socialWorker || instructor || referent,
       partner: manager || socialWorker,

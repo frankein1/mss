@@ -13,7 +13,10 @@
         :label="beneficiaryFieldLabels.doctor"
       />
     </div>
-    <div class="fr-col-12">
+    <div
+      v-if="application.edit.health.nir"
+      class="fr-col-12"
+    >
       <VeeInput
         name="socialSecurityNumber"
         :label="beneficiaryFieldLabels.socialSecurityNumber"
@@ -44,4 +47,6 @@
 <script lang="ts" setup>
   import { beneficiaryGirKeys } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
+
+  const { application } = usePermissions()
 </script>
