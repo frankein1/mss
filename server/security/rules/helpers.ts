@@ -42,7 +42,8 @@ export const getGranteRole = (ctx: SecurityRuleContext) => {
     ministryAgent: structure.type === StructureType.Ministere,
     ngo: structure.type === StructureType.Association,
     cias: structure.type === StructureType.Cias,
-    ccas: structure.type === StructureType.Ccas
+    ccas: structure.type === StructureType.Ccas,
+    city: structure.type === StructureType.Commune
   }
 }
 

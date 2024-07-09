@@ -24,7 +24,6 @@
       class="fr-p-3v"
     >
       <div
-        v-if="application.module.health"
         class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-pb-3w"
       >
         <AtomNotice>
@@ -63,8 +62,6 @@
   const trpcClient = useTrpcClient()
 
   const isSubmitting = ref(false)
-
-  const { application } = usePermissions()
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string

@@ -116,7 +116,7 @@ const filter = (
     : undefined
   const health =
     appPermissions.module.health && view.health
-      ? getHealth(beneficiary)
+      ? getHealth(beneficiary, appPermissions.edit.health.nir)
       : undefined
   const occupationIncome = view.occupationIncome
     ? getOccupationIncome(beneficiary, appPermissions)
@@ -255,12 +255,12 @@ function getTaxHouseholds(beneficiary: BeneficiaryOutput) {
   }
 }
 
-function getHealth(beneficiary: BeneficiaryOutput) {
+function getHealth(beneficiary: BeneficiaryOutput, canGetNir = false) {
   return {
     gir: beneficiary.gir,
     doctor: beneficiary.doctor,
     healthAdditionalInformation: beneficiary.healthAdditionalInformation,
-    socialSecurityNumber: beneficiary.socialSecurityNumber,
+    ...(canGetNir && { socialSecurityNumber: beneficiary.socialSecurityNumber }),
     insurance: beneficiary.insurance
   }
 }
