@@ -102,19 +102,16 @@
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
 
   .fr-accordion {
-    &:before {
-      bottom: 0;
+    &::before {
       box-shadow:
         inset 0 1px 0 0 var(--border-default-grey),
         0 1px 0 0 var(--border-default-grey);
       content: '';
       display: block;
       height: 100%;
-      left: 0;
       pointer-events: none;
       position: absolute;
-      right: 0;
-      top: 0;
+      inset: 0;
       width: 100%;
     }
   }
@@ -124,11 +121,8 @@
   }
 
   .fr-accordion .fr-accordion__title .fr-accordion__btn {
-    padding-left: 0;
-    padding-right: 0;
     color: inherit;
-    padding-top: 1.5rem;
-    padding-bottom: 1.5rem;
+    padding: 1.5rem 0;
     width: 100%;
 
     @include dsfr.title-style(h5);
