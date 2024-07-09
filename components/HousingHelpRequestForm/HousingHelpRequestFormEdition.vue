@@ -3,6 +3,7 @@
     :is-submitting="isSubmitting"
     :partner-organizations="partnerOrganizations"
     :beneficiary-id="socialSupport.beneficiary.id"
+    :family-file-id="socialSupport.familyFile.id"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
     :subject="FileInstructionType.Housing"

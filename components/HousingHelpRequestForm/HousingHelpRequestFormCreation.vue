@@ -3,6 +3,7 @@
     :is-submitting="isSubmitting"
     :partner-organizations="partnerOrganizations"
     :beneficiary-id="beneficiaryId"
+    :family-file-id="familyFileId"
     :caught-errors="caughtErrors"
     :subject="FileInstructionType.Housing"
     @submit="onSubmit"
@@ -24,6 +25,7 @@
     isSubmitting: boolean
     partnerOrganizations: PartnerOrganizationIdName[]
     beneficiaryId: string
+    familyFileId: string
   }>()
 
   const emit = defineEmits<{

@@ -4,7 +4,7 @@ import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
-import { IdInput, idSchema } from '~/server/schema'
+import { idSchema } from '~/server/schema'
 import { FileInstructionRepo } from '~/server/database'
 
 function hasDefinedExaminationDate(h: {

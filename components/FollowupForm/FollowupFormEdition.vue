@@ -3,7 +3,7 @@
     :is-submitting="isSubmitting"
     :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
-    :beneficiary-id="followup.beneficiaryId"
+    :family-file-id="followup.familyFileId"
     :medium="values.medium"
     :is-redirected="values.redirected"
     :can-set-private-synthesis="canSetPrivateSynthesis"

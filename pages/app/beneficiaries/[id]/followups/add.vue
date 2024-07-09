@@ -26,9 +26,10 @@
         class="fr-mx-auto"
       />
       <FollowupFormCreation
-        v-else-if="socialSupportSubjects && partnerOrganizations"
+        v-else-if="socialSupportSubjects && partnerOrganizations && beneficiary"
         :is-submitting="isSubmitting"
         :social-support-subjects="socialSupportSubjects"
+        :family-file-id="beneficiary.familyFileId"
         :beneficiary-id="beneficiaryId"
         :partner-organizations="partnerOrganizations"
         @save-followup="onAddFollowup"

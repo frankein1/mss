@@ -12,7 +12,6 @@ import { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
-import { formatFamilyFileName } from '~/utils/familyFile'
 import { followupFieldLabels } from '~/client/labels'
 import { formatBeneficiaryDisplayName } from '~/utils'
 

@@ -24,6 +24,7 @@ const handler = async ({
     where: { id },
     select: {
       id: true,
+      familyFileId: true,
       firstName: true,
       usualName: true,
       birthName: true,

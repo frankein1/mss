@@ -32,8 +32,10 @@
         class="fr-mx-auto"
       />
       <HousingHelpRequestFormCreation
+        v-if="beneficiary"
         :is-submitting="isSubmitting"
         :beneficiary-id="beneficiaryId"
+        :family-file-id="beneficiary.familyFileId"
         :partner-organizations="partnerOrganizations || []"
         @save-housing-help-request="onAddHousingHelpRequest"
       />
@@ -42,7 +44,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { RouteTitle, RoutePath } from '~/utils/routing'

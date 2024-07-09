@@ -4,7 +4,6 @@ import type {
   User,
   UserStatus
 } from '@prisma/client'
-import { SocialSupportSubjectIdAndName } from './socialSupportSubject'
 
 export type BeneficiaryReferent = {
   id: string

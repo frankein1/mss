@@ -50,7 +50,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '@prisma/client'
   import { EditHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
@@ -85,11 +84,11 @@
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
   )
 
-  const subject = computed(() =>
-    helpRequest.value?.financialSupport
-      ? FileInstructionType.Financial
-      : FileInstructionType.Other
-  )
+  // const subject = computed(() =>
+  //   helpRequest.value?.financialSupport
+  //     ? FileInstructionType.Financial
+  //     : FileInstructionType.Other
+  // )
 
   const subtitle = computed(() =>
     helpRequest.value?.financialSupport ? 'Aide financière' : undefined

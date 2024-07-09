@@ -1,10 +1,10 @@
+import { FamilyFileService } from '..'
 import { HelpRequestRepo } from '~/server/database'
 import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
 import {
   FileInstructionPermissions,
   getFileInstructionPermissions
 } from '~/server/security/permissions'
-import { FamilyFileService } from '..'
 
 function getHelpRequestSecurityTarget(user: SecurityRuleGrantee, id: string) {
   return HelpRequestRepo.findUniqueOrThrow(user, {

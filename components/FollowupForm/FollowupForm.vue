@@ -263,7 +263,7 @@
 
     <div class="fr-mb-4w">
       <BeneficiaryDocumentsSelect
-        :beneficiary-id="beneficiaryId"
+        :family-file-id="familyFileId"
         name="documents"
         snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez la synthèse d'entretien pour conserver le lien entre les deux."
       />
@@ -307,7 +307,7 @@
       isSubmitting: boolean
       socialSupportSubjects: Array<SocialSupportSubject>
       partnerOrganizations: Array<PartnerOrganizationIdName>
-      beneficiaryId: string
+      familyFileId: string
       medium: FollowupMedium
       isRedirected: boolean
       canSetPrivateSynthesis?: boolean

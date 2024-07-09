@@ -45,7 +45,7 @@
 
       <hr class="helprequestform__divider" />
 
-      <HelpRequestFormDocumentSection :beneficiary-id="beneficiaryId" />
+      <HelpRequestFormDocumentSection :family-file-id="familyFileId" />
 
       <div class="fr-col-12">
         <VeeCheckbox
@@ -93,6 +93,7 @@
       socialSupportSubjects?: SocialSupportSubject[]
       partnerOrganizations: PartnerOrganizationIdName[]
       beneficiaryId: string
+      familyFileId: string
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>
       subject: FileInstructionType

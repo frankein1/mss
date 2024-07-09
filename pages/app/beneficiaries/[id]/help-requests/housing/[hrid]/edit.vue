@@ -48,7 +48,6 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '@prisma/client'
   import { EditHousingHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
