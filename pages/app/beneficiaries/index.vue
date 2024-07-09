@@ -1,6 +1,6 @@
 <template>
   <PageContainer no-max-width>
-    <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaries()" />
+    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaries()" /> -->
     <div class="beneficiaries-header">
       <PageTitle
         class="title"
@@ -71,7 +71,7 @@
   import { BeneficiarySort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
-  import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { Route, RouteTitle, RoutePath } from '~/utils/routing'
 
   const title = RouteTitle.AppBeneficiaries()
 

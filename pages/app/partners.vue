@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb :links="Breadcrumb.AppPartners()" />
+    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppPartners()" /> -->
     <PageTitle :title="title" />
     <main>
       <div class="fr-h4 partner-subtitle fr-m-0">
@@ -64,7 +64,7 @@
     EditPartnerOrganizationInput,
     AddPartnerOrganizationInput
   } from '~/server/schema'
-  import { Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { RouteTitle } from '~/utils/routing'
 
   const title = RouteTitle.AppPartners()
 

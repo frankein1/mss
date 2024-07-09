@@ -38,7 +38,9 @@ function findMany(
               id: true,
               usualName: true,
               firstName: true,
-              birthName: true
+              birthName: true,
+              birthDate: true,
+              birthPlace: true
             }
           },
           createdBy: true

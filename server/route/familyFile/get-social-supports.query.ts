@@ -12,7 +12,6 @@ import {
 } from '~/server/security'
 import { SocialSupportRepo } from '~/server/database'
 import {
-  BeneficiarySecurityTarget,
   BeneficiaryService,
   FamilyFileSecurityTarget,
   FamilyFileService
@@ -137,7 +136,9 @@ function loadSocialSupports(
           id: true,
           usualName: true,
           birthName: true,
-          firstName: true
+          firstName: true,
+          birthDate: true,
+          birthPlace: true
         }
       },
       documents: true,

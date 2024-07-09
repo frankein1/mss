@@ -1,6 +1,6 @@
 import { RouterOutput } from '~/server/trpc/routers'
 
-type SocialSupportsOutput = RouterOutput['beneficiary']['getSocialSupports']
+type SocialSupportsOutput = RouterOutput['file']['getSocialSupports']
 export type SocialSupportItem = SocialSupportsOutput['items'][0]
 export type SocialSupportData = SocialSupportItem['data']
 

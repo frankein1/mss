@@ -1,6 +1,6 @@
 <template>
   <PageContainer no-max-width>
-    <DsfrBreadcrumb :links="Breadcrumb.AppHistory()" />
+    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppHistory()" /> -->
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -28,7 +28,7 @@
 
 <script lang="ts" setup>
   import { HistoryTab } from '~/utils/constants/history'
-  import { Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { RouteTitle } from '~/utils/routing'
 
   const title = RouteTitle.AppHistory()
 

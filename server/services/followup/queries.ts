@@ -22,7 +22,9 @@ const include = {
           id: true,
           usualName: true,
           firstName: true,
-          birthName: true
+          birthName: true,
+          birthPlace: true,
+          birthDate: true
         }
       },
       familyFile: {

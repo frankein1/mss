@@ -18,14 +18,14 @@
   >
     <main class="content">
       <div class="fr-container fr-pb-2w">
-        <DsfrBreadcrumb
+        <!-- <DsfrBreadcrumb
           :links="
             Breadcrumb.AppBeneficiaryBudgetIncomeEdit(
               beneficiaryIdentification,
               incomeId
             )
           "
-        />
+        /> -->
 
         <PageTitle
           :title="title"
@@ -78,7 +78,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle, RoutePath, Route } from '~/utils/routing'
+  import { RouteTitle, RoutePath, Route } from '~/utils/routing'
   import { useBeneficiarySummary } from '~/composables/useBeneficiarySummary'
   import {
     UpdateBudgetIncomeInput,

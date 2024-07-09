@@ -22,7 +22,7 @@
       ref="beneficiaryFormLayoutMainContainer"
       class="content fr-col-9 fr-container"
     >
-      <DsfrBreadcrumb :links="breadcrumbLinks" />
+      <!-- <DsfrBreadcrumb :links="breadcrumbLinks" /> -->
       <PageTitle
         :title="title"
         :icon="titleIcon"

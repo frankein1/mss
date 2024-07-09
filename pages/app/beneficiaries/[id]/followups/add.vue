@@ -1,8 +1,8 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb
+    <!-- <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryFollowupAdd(beneficiary)"
-    />
+    /> -->
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -39,7 +39,7 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { AddFollowupInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
