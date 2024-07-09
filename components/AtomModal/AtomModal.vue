@@ -59,7 +59,6 @@
   // This becomes non null much later in the page loading process
   // and prevents the modal to be disclosed when using triggerOpen
   const dsfrModal = computed(() => {
-    // console.log('dsfrModal updated')
     return modal.value ? window.dsfr(modal.value) : undefined
   })
 
@@ -79,13 +78,11 @@
       dsfrModal.value?.modal.conceal()
     }
     if (value && triggerOpen.value) {
-      // console.log('disclose', dsfrModal.value)
       dsfrModal.value?.modal.disclose()
     }
   })
 
   function onClose() {
-    // console.log('on close') // this is always called when starting the app ?
     setIsOpen(false)
     close()
   }

@@ -36,7 +36,6 @@
         if (data) {
           auth.login(data)
           checkDpoStatus().then(res => {
-            console.log(res)
             const redirectionParams: RouteLocationRaw = {
               path: redirectUrl,
               query: res.shouldFillDPO

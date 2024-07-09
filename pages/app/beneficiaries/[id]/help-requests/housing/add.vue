@@ -78,13 +78,11 @@
   function onAddHousingHelpRequest(
     housingHelpRequest: CreateHousingHelpRequestInput
   ) {
-    console.log(housingHelpRequest.lowIncomeHousingType) // ok lowIncomeHousingType
     useTrpcMutation({
       mutation: () =>
         trpcClient.housingHelpRequest.add.mutate(housingHelpRequest),
       isSubmitting,
-      onSuccess: res => {
-        console.log(res) // return {id: xxxxxx} : id du dossier d'instruction
+      onSuccess: () => {
         navigateTo(
           RoutePath.AppBeneficiary(beneficiaryId, {
             tab: BeneficiaryTab.History

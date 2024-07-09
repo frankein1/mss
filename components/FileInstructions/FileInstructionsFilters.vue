@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="file-instruction-filters">
     <AtomAlert
       v-if="fetchError"
       class="fr-mb-2w"
@@ -124,15 +124,26 @@
     ]
 
     if (props.filters.fileInstructionType !== 'Housing') {
-      fileInstructionsFilters.push({
-        name: 'socialSupportSubjects',
-        label: helpRequestFieldLabels.subjectId,
-        options: socialSupportSubjectOptions.value,
-        type: FilterType.SelectMultiple,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.SocialSupportSubject,
-        alwaysExpanded: true
-      })
+      fileInstructionsFilters.push(
+        {
+          name: 'socialSupportSubjects',
+          label: helpRequestFieldLabels.subjectId,
+          options: socialSupportSubjectOptions.value,
+          type: FilterType.SelectMultiple,
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.SocialSupportSubject,
+          alwaysExpanded: true
+        },
+        {
+          name: 'createdById',
+          label: 'Agent',
+          options: agentOptions.value,
+          type: FilterType.SelectMultiple,
+          matomoEventCategory: EventCategory.HelpRequestFilter,
+          matomoEventAction: HelpRequestFilterEventAction.Agent,
+          alwaysExpanded: true
+        }
+      )
     } else {
       fileInstructionsFilters.push(
         {
@@ -145,7 +156,6 @@
           matomoEventAction: HelpRequestFilterEventAction.RoomCount,
           alwaysExpanded: true
         },
-        // TODO à adapter selon le filtre
         {
           name: 'lowIncomeHousingType',
           label: housingHelpRequestFieldLabels.lowIncomeHousingType,
@@ -159,29 +169,18 @@
       )
     }
 
-    fileInstructionsFilters.push(
-      {
-        name: 'status',
-        label: helpRequestFieldLabels.status,
-        options: withEmptyValue(
-          fileInstructionStatusOptions.value,
-          'Tous les statuts'
-        ),
-        type: FilterType.SelectOne,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.Status,
-        alwaysExpanded: true
-      },
-      {
-        name: 'createdById',
-        label: 'Agent',
-        options: agentOptions.value,
-        type: FilterType.SelectMultiple,
-        matomoEventCategory: EventCategory.HelpRequestFilter,
-        matomoEventAction: HelpRequestFilterEventAction.Agent,
-        alwaysExpanded: true
-      }
-    )
+    fileInstructionsFilters.push({
+      name: 'status',
+      label: helpRequestFieldLabels.status,
+      options: withEmptyValue(
+        fileInstructionStatusOptions.value,
+        'Tous les statuts'
+      ),
+      type: FilterType.SelectOne,
+      matomoEventCategory: EventCategory.HelpRequestFilter,
+      matomoEventAction: HelpRequestFilterEventAction.Status,
+      alwaysExpanded: true
+    })
 
     if (
       application.value.module.helpRequest &&
@@ -232,3 +231,11 @@
     emit('update:filters', filters)
   }
 </script>
+
+<style lang="scss">
+  .file-instruction-filters {
+    .filters {
+      align-items: start; //
+    }
+  }
+</style>

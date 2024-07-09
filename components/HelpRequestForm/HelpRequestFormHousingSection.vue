@@ -51,6 +51,7 @@
             :label="housingHelpRequestFieldLabels.housingType"
             :options="housingTypeKeys.options"
             :icons="housingTypeIcons"
+            label-class="fr-text--regular"
           />
         </div>
 
@@ -59,6 +60,7 @@
             name="roomCount"
             :label="housingHelpRequestFieldLabels.roomCount"
             :options="roomCountKeys.options"
+            label-class="fr-text--regular"
           />
         </div>
 
@@ -67,6 +69,7 @@
             name="lowIncomeHousingType"
             :label="housingHelpRequestFieldLabels.lowIncomeHousingType"
             :options="lowIncomeHousingKeys.options"
+            label-class="fr-text--regular"
           />
         </div>
 
