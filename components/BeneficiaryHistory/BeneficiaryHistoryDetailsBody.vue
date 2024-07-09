@@ -73,7 +73,7 @@
       </ul>
 
       <hr
-        v-if="beneficiaryPermissions.create.document || commentItems.length > 0"
+        v-if="familyFilePermissions.create.document || commentItems.length > 0"
         class="fr-pb-3v"
       />
     </template>
@@ -81,7 +81,7 @@
     <BeneficiaryHistoryComments
       :items="commentItems"
       :social-support="socialSupport"
-      :beneficiary-permissions="beneficiaryPermissions"
+      :family-file-permissions="familyFilePermissions"
       @comment-added="onCommentAdded"
       @comment-edited="onCommentEdited"
       @comment-deleted="onCommentDeleted"
@@ -94,12 +94,12 @@
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import type { SocialSupportItem, CommentData, CommentItem } from './types'
   import { RoutePath } from '~/utils/routing'
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
 
   const props = defineProps<{
     item: SocialSupportItem
     collapseId: string
-    beneficiaryPermissions: BeneficiaryPermissions
+    familyFilePermissions: FamilyFilePermissions
   }>()
 
   const emit = defineEmits<{

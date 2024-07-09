@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, SocialSupportSubject } from '@prisma/client'
 import { SocialSupportSubjects } from '~/components/Structure/types'
 import { BeneficiaryRepo } from '~/server/database'
 import {
@@ -53,6 +53,9 @@ export const include = {
       additionalInformation: true,
       birthDate: true
     }
+  },
+  _count: {
+    select: { socialSupports: true }
   }
 }
 
@@ -129,6 +132,8 @@ const filter = (
     ? getTaxHouseholds(beneficiary)
     : undefined
 
+  const history = getHistory(beneficiary)
+
   return {
     id: beneficiary.id,
     familyFileId: beneficiary.familyFile.structureId,
@@ -154,8 +159,43 @@ const filter = (
       ? occupationIncome
       : undefined,
     taxHouseholds: !isObjectEmpty(taxHouseholds) ? taxHouseholds : undefined,
-    entourages: !isObjectEmpty(entourages) ? entourages : undefined
+    entourages: !isObjectEmpty(entourages) ? entourages : undefined,
+    history
   }
+}
+
+function getHistory(beneficiary: BeneficiaryOutput) {
+  return {
+    historyTotal: beneficiary._count.socialSupports,
+    subjects: getUniqueSubjects(beneficiary)
+  }
+}
+
+function getUniqueSubjects(beneficiary: BeneficiaryOutput) {
+  return beneficiary.socialSupports.reduce(
+    (subjects, ss) => {
+      if (!ss.subjects.length) {
+        return subjects
+      }
+
+      const notCollectedSubjects: Pick<SocialSupportSubject, 'id' | 'name'>[] =
+        []
+
+      ss.subjects.forEach(subject => {
+        const isNotInSubjects = subjects.every(t => t.id !== subject.id)
+        const isNotInNotCollectedSubjects = notCollectedSubjects.every(
+          t => t.id !== subject.id
+        )
+
+        if (isNotInSubjects && isNotInNotCollectedSubjects) {
+          notCollectedSubjects.push(subject)
+        }
+      })
+
+      return [...subjects, ...notCollectedSubjects]
+    },
+    [] as Pick<SocialSupportSubject, 'id' | 'name'>[]
+  )
 }
 
 function getGeneral(

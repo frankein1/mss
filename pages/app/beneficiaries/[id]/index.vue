@@ -1,8 +1,8 @@
 <template>
   <PageContainer v-if="beneficiary">
-    <DsfrBreadcrumb
+    <!-- <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiary(beneficiaryIdentification, originPage)"
-    />
+    /> -->
 
     <BeneficiaryDetailsHeader
       :beneficiary="beneficiary"
@@ -114,7 +114,7 @@
 
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { Route, RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
   import { useBeneficiaryDetails } from '~/composables/useBeneficiaryDetails'
 

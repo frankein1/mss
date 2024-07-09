@@ -13,7 +13,10 @@ import {
   PartnerOrganizationContact,
   FamilyFile
 } from '@prisma/client'
-import { BeneficiaryNames } from '~/types/beneficiary'
+import {
+  BeneficiaryIdentification,
+  BeneficiaryNames
+} from '~/types/beneficiary'
 
 function show<T>(val: T, condition: boolean): T | null {
   return condition ? val : null
@@ -27,7 +30,7 @@ export function filterSocialSupport({
     familyFile: FamilyFile & {
       referents: User[]
     }
-    beneficiary: BeneficiaryNames
+    beneficiary: BeneficiaryIdentification
     createdBy: User
     subjects: SocialSupportSubject[]
     documents?: Document[]

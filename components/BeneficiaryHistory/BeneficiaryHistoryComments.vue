@@ -9,7 +9,7 @@
       @comment-deleted="emit('commentDeleted', $event)"
     />
     <BeneficiaryHistoryCommentAdd
-      v-if="beneficiaryPermissions.create.document"
+      v-if="familyFilePermissions.create.document"
       :class="{ 'fr-mt-1w': items.length }"
       :social-support="socialSupport"
       @comment-added="emit('commentAdded', $event)"
@@ -24,12 +24,12 @@
     CommentItem,
     CommentItems
   } from './types'
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
 
   defineProps<{
     items: CommentItems
     socialSupport: SocialSupportData
-    beneficiaryPermissions: BeneficiaryPermissions
+    familyFilePermissions: FamilyFilePermissions
   }>()
 
   const emit = defineEmits<{

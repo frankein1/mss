@@ -3,7 +3,7 @@
     <div class="bgi__header">
       <h3 class="fr-h4 fr-m-0">Infos générales</h3>
       <NuxtLink
-        :to="RoutePath.AppBeneficiaryBudgetInfoEdit(budget.beneficiaryId)"
+        :to="RoutePath.AppFileBudgetInfoEdit(budget.familyFileId)"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-edit-line"
       >
         Modifier

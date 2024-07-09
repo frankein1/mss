@@ -15,7 +15,7 @@
     <BeneficiaryHistoryDetailsBody
       :item="item"
       :collapse-id="collapseId"
-      :beneficiary-permissions="beneficiaryPermissions"
+      :family-file-permissions="familyFilePermissions"
       @deleted="emit('deleted', socialSupportId)"
     />
   </li>
@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
   import type { SocialSupportItem } from './types'
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { focusAndScrollTo } from '~/utils/focusAndScrollTo'
 
@@ -31,7 +31,7 @@
 
   const props = defineProps<{
     item: SocialSupportItem
-    beneficiaryPermissions: BeneficiaryPermissions
+    familyFilePermissions: FamilyFilePermissions
   }>()
 
   const emit = defineEmits<{

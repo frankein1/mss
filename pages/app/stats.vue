@@ -1,6 +1,6 @@
 <template>
   <PageContainer no-max-width>
-    <DsfrBreadcrumb :links="Breadcrumb.AppStats()" />
+    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppStats()" /> -->
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -55,7 +55,7 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
-  import { Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { RouteTitle } from '~/utils/routing'
 
   const title = RouteTitle.AppStats()
 

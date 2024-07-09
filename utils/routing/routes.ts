@@ -36,7 +36,6 @@ export enum Route {
   AppBeneficiariesAdd = 'AppBeneficiariesAdd',
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
-  AppBeneficiaryBudgetInfoEdit = 'AppBeneficiaryBudgetInfoEdit',
   AppBeneficiaryBudgetExpensesEdit = 'AppBeneficiaryBudgetExpensesEdit',
   AppBeneficiaryBudgetIncomeEdit = 'AppBeneficiaryBudgetIncomeEdit',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
@@ -51,6 +50,10 @@ export enum Route {
   AppBeneficiaryHelpRequestAdd = 'AppBeneficiaryHelpRequestAdd',
   AppBeneficiaryHelpRequestEdit = 'AppBeneficiaryHelpRequestEdit',
   AppHistory = 'AppHistory',
+
+  // FILE
+  AppFile = 'AppFile',
+  AppFileBudgetInfoEdit = 'AppFileBudgetInfoEdit',
 
   // ADMIN
   Admin = 'Admin',
@@ -91,7 +94,7 @@ const BeneficiaryRoute = (
       | Route.AppOverview
       | Route.AppBeneficiaries
       | Route.AppHistory
-      | Route.AppBeneficiaryBudgetInfoEdit
+      | Route.AppFileBudgetInfoEdit
       | Route.AppBeneficiaryBudgetIncomeEdit
       | Route.AppBeneficiaryBudgetExpensesEdit
     originTab?: HistoryTab
@@ -205,8 +208,6 @@ export const RoutePath = {
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
-  [Route.AppBeneficiaryBudgetInfoEdit]: (beneficiaryId: string) =>
-    `${BeneficiaryRoute(beneficiaryId)}/budget/edit`,
   [Route.AppBeneficiaryBudgetExpensesEdit]: (
     beneficiaryId: string,
     expensesId: string
@@ -292,6 +293,11 @@ export const RoutePath = {
     const tabHash = tab ? `#${tab}` : ''
     return `${AppRoute}/history${tabHash}`
   },
+
+  // FAMILY FILE
+  [Route.AppFile]: (familyFileId: string) => `/app/files/${familyFileId}`,
+  [Route.AppFileBudgetInfoEdit]: (familyFileId: string) =>
+    `/app/files/${familyFileId}/budget/edit`,
 
   // ADMIN
   [Route.Admin]: () => `${AdminRoute}`,

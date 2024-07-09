@@ -13,7 +13,7 @@ export type BeneficiaryReferent = {
 }
 
 export type BeneficiaryNames = Partial<
-  Pick<Beneficiary, 'firstName' | 'usualName' | 'birthName'>
+  Pick<Beneficiary, 'id' | 'firstName' | 'usualName' | 'birthName'>
 >
 
 export type BeneficiaryIdentification = Pick<
