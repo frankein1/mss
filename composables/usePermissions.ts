@@ -10,7 +10,8 @@ export function usePermissions() {
         beneficiaries: false
       },
       edit: {
-        structure: false
+        structure: false,
+        health: { nir: false }
       },
       module: {
         users: false,
@@ -34,7 +35,8 @@ export function usePermissions() {
         beneficiaries: false
       },
       edit: {
-        structure: false
+        structure: false,
+        health: { nir: false }
       },
       module: {
         users: false,
