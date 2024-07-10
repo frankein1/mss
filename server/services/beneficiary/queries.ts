@@ -260,7 +260,7 @@ function getHealth(beneficiary: BeneficiaryOutput, canGetNir = false) {
     gir: beneficiary.gir,
     doctor: beneficiary.doctor,
     healthAdditionalInformation: beneficiary.healthAdditionalInformation,
-    ...(canGetNir && { socialSecurityNumber: beneficiary.socialSecurityNumber }),
+    socialSecurityNumber: canGetNir ? beneficiary.socialSecurityNumber : null,
     insurance: beneficiary.insurance
   }
 }
