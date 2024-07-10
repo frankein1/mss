@@ -21,6 +21,8 @@ const securityCheck = async (
     input.id
   )
   const appPermission = getAppContextPermissions(ctx)
+
+  if (input.socialSecurityNumber && !appPermission.edit.health.nir) { return false }
   return appPermission.module.health && permissions.edit.health
 }
 
