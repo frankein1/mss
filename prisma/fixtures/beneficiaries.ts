@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { fixtureStructures, fixturesUsers, FixtureUserRole } from './'
+import { FixtureStructure, fixtureStructures, fixturesUsers, FixtureUserRole } from './'
 
 export enum FixtureBeneficiary {
   TEARLE = 0,
@@ -12,7 +12,8 @@ export enum FixtureBeneficiary {
   BREITLING = 7,
   HEINIG = 8,
   PENBERTHY = 9,
-  DOWNER = 10
+  DOWNER = 10,
+  MARTIN = 11
 }
 
 export const fixturesBeneficiaries = [
@@ -181,6 +182,20 @@ export const fixturesBeneficiaries = [
       connect: [
         { id: fixturesUsers[FixtureUserRole.StructureManager].id },
         { id: fixturesUsers[FixtureUserRole.Referent].id }
+      ]
+    }
+  },
+  {
+    id: '86f82368-7c08-403c-b0f2-d2d39d9ae6c3',
+    fileNumber: '1d371a74-8b62-441d-a8d2-1700d5065a0f',
+    structureId: fixtureStructures[FixtureStructure.Ministère].id,
+    status: 'Active',
+    usualName: 'MARTIN',
+    firstName: 'Martine',
+    gender: 'Female',
+    referents: {
+      connect: [
+        { id: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id },
       ]
     }
   }

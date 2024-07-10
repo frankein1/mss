@@ -9,7 +9,8 @@ export enum FixtureUserRole {
   StructureManager = 4,
   Administrator = 5,
   StructureManagerNew = 6,
-  SocialWorkerNew = 7
+  SocialWorkerNew = 7,
+  StructureManagerMinistere = 8
 }
 
 export const fixturesUsers = [
@@ -83,44 +84,61 @@ export const fixturesUsers = [
     role: 'SocialWorker',
     status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Autun].id
-  }
+  },
+  {
+    id: '6665ad8a-26a9-405c-9cc2-2f369765c096',
+    firstName: 'Laura',
+    lastName: 'CI-MSS Responsable Ministère',
+    email: 'laura.responsable@example.com',
+    role: 'StructureManager',
+    status: 'Active',
+    structureId: fixtureStructures[FixtureStructure.Ministère].id
+  },
 ] satisfies Prisma.UserCreateManyInput[]
+
+const CGU_VERSION = '1.1'
 
 export const fixturesCGUHistory = [
   {
     id: '0de485c9-35a2-4086-904f-d92876cafb57',
     userId: fixturesUsers[FixtureUserRole.Instructor].id,
     date: new Date('2023-01-01'),
-    version: '1.1'
+    version: CGU_VERSION
   },
   {
     id: 'c57ddce1-960f-4fc2-a7cf-465e2ae5d859',
     userId: fixturesUsers[FixtureUserRole.Referent].id,
     date: new Date('2023-01-01'),
-    version: '1.1'
+    version: CGU_VERSION
   },
   {
     id: '3710f8fe-8646-4514-9de3-7b3bf2879a28',
     userId: fixturesUsers[FixtureUserRole.ReceptionAgent].id,
     date: new Date('2023-01-01'),
-    version: '1.1'
+    version: CGU_VERSION
   },
   {
     id: 'b22ae2b3-1afd-4d27-980d-d0f3757ad741',
     userId: fixturesUsers[FixtureUserRole.SocialWorker].id,
     date: new Date('2023-01-01'),
-    version: '1.1'
+    version: CGU_VERSION
   },
   {
     id: '6ee1090a-bc76-421d-9546-24ef0f85098c',
     userId: fixturesUsers[FixtureUserRole.StructureManager].id,
     date: new Date('2023-01-01'),
-    version: '1.1'
+    version: CGU_VERSION
   },
   {
     id: '7088e777-6f2b-49d8-81c0-99d9862492d3',
     userId: fixturesUsers[FixtureUserRole.Administrator].id,
     date: new Date('2023-01-01'),
-    version: '1.1'
+    version: CGU_VERSION
+  },
+  {
+    id: 'bb432162-a268-49a6-b8bd-f4d02be601a6',
+    userId: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id,
+    date: new Date('2023-01-01'),
+    version: CGU_VERSION
   }
 ]
