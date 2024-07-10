@@ -57,3 +57,12 @@ setup('authenticate as Social Worker Mehdi', async ({ page }) => {
   await authenticate(page, username, pwd, newUser)
   await page.context().storageState({ path: workerFile })
 })
+
+setup('authenticate as Structure Manager Ministère Laura', async ({ page }) => {
+  const managerFile = 'playwright/.auth/structure-manager-ministere.json'
+  const username = process.env.STRUCTURE_MANAGER_MINISTERE_EMAIL || ''
+  const pwd = process.env.STRUCTURE_MANAGER_MINISTERE_PASSWORD || ''
+
+  await authenticate(page, username, pwd)
+  await page.context().storageState({ path: managerFile })
+})

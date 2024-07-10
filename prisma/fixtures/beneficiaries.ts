@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { fixtureStructures } from './'
+import { FixtureStructure, fixtureStructures } from './'
 
 export enum FixtureBeneficiary {
   TEARLE = 0,
@@ -12,7 +12,8 @@ export enum FixtureBeneficiary {
   BREITLING = 7,
   HEINIG = 8,
   PENBERTHY = 9,
-  DOWNER = 10
+  DOWNER = 10,
+  MARTIN = 11
 }
 
 export const fixturesBeneficiaries = [
@@ -139,6 +140,16 @@ export const fixturesBeneficiaries = [
     usualName: 'DOWNER',
     firstName: 'Anaé',
     gender: 'Other',
-    familySituation: 'Divorced'
+    familySituation: 'Divorced',
+  },
+  {
+    id: '86f82368-7c08-403c-b0f2-d2d39d9ae6c3',
+    familyFileId: '86f82368-7c08-403c-b0f2-d2d39d9ae6c3',
+    fileNumber: '1d371a74-8b62-441d-a8d2-1700d5065a0f',
+    structureId: fixtureStructures[FixtureStructure.Ministère].id,
+    status: 'Active',
+    usualName: 'MARTIN',
+    firstName: 'Martine',
+    gender: 'Female'
   }
 ] satisfies Prisma.BeneficiaryUncheckedCreateInput[]
