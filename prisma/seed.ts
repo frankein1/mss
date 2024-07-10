@@ -7,6 +7,7 @@ import {
   fixturesSocialSupportSubjects,
   fixturesUsers,
   fixturesCGUHistory,
+  fixturesFamilyFiles,
   fixturesBeneficiaries,
   fixturesBeneficiaryRelatives,
   fixturesSocialSupports,
@@ -50,6 +51,19 @@ function loadFixturesCGUHistory() {
   return prismaClient.cGUHistory.createMany({
     data: fixturesCGUHistory,
     skipDuplicates: true
+  })
+}
+
+function loadFixturesFamilyFiles() {
+  console.log('👥 Beneficiaries...')
+
+  // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
+  return fixturesFamilyFiles.map(({ id, ...data }) => {
+    return prismaClient.familyFile.upsert({
+      create: { id, ...data },
+      where: { id },
+      update: {}
+    })
   })
 }
 
@@ -139,6 +153,7 @@ function loadFixtures() {
     loadFixturesSocialSupportSubjects(),
     loadFixturesUsers(),
     loadFixturesCGUHistory(),
+    ...loadFixturesFamilyFiles(),
     ...loadFixturesBeneficiaries(),
     loadFixturesPartnerOrganizations(),
     loadFixturesPartnerOrganizationContacts(),
