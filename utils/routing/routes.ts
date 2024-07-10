@@ -50,6 +50,7 @@ export enum Route {
   AppBeneficiaryHelpRequestAdd = 'AppBeneficiaryHelpRequestAdd',
   AppBeneficiaryHelpRequestEdit = 'AppBeneficiaryHelpRequestEdit',
   AppHistory = 'AppHistory',
+  AppHistoryPrint = 'AppHistoryPrint',
 
   // FILE
   AppFile = 'AppFile',
@@ -293,6 +294,8 @@ export const RoutePath = {
     const tabHash = tab ? `#${tab}` : ''
     return `${AppRoute}/history${tabHash}`
   },
+  [Route.AppHistoryPrint]: (beneficiaryId: string, historyId: string) =>
+    `${BeneficiaryRoute(beneficiaryId)}/history/${historyId}/print`,
 
   // FAMILY FILE
   [Route.AppFile]: (familyFileId: string) => `/app/files/${familyFileId}`,

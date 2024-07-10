@@ -70,6 +70,15 @@
             Modifier
           </NuxtLink>
         </li>
+        <!-- TODO: ajouter un v-if et regarder si droit d'imprimer -->
+        <li v-if="printLink">
+          <NuxtLink
+            :to="printLink"
+            class="fr-btn fr-btn--secondary fr-icon-printer-line"
+          >
+            Imprimer
+          </NuxtLink>
+        </li>
       </ul>
 
       <hr
@@ -114,6 +123,30 @@
   )
 
   const commentItems = ref(socialSupport.value.comments || [])
+
+  const printLink = computed(() => {
+    if (socialSupport.value.followup) {
+      return RoutePath.AppHistoryPrint(
+        socialSupport.value.beneficiaryId,
+        socialSupport.value.followup.id
+      )
+    }
+    const helpRequest = socialSupport.value.fileInstruction?.helpRequest
+    if (helpRequest?.id) {
+      return RoutePath.AppHistoryPrint(
+        socialSupport.value.beneficiaryId,
+        helpRequest.id
+      )
+    }
+
+    if (socialSupport.value.fileInstruction?.housingHelpRequest) {
+      return RoutePath.AppHistoryPrint(
+        socialSupport.value.beneficiaryId,
+        socialSupport.value.fileInstruction?.housingHelpRequest.id
+      )
+    }
+    return null
+  })
 
   const editLink = computed(() => {
     if (socialSupport.value.followup) {

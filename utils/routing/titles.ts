@@ -79,6 +79,7 @@ export const RouteTitle = {
       : "Modifier l'instruction de dossier d'un·e bénéficiaire",
 
   [Route.AppHistory]: () => 'Accompagnements',
+  [Route.AppHistoryPrint]: () => 'Imprimer la fiche',
 
   // ADMIN
   [Route.Admin]: () => "Mon espace d'administration",
