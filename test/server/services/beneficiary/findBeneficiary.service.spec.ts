@@ -76,7 +76,7 @@ vi.mock('~/server/database', () => {
 
 vi.mock('~/server/security', () => {
   return {
-    getBeneficiaryPermissions: vi.fn()
+    getFamilyFilePermissions: vi.fn()
   }
 })
 
