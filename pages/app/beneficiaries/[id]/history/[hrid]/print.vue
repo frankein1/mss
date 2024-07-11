@@ -65,15 +65,15 @@
   })
   const housingHelpRequest = housingHelpRequestData.value?.housingHelpRequest
   pending = housingHelpRequestPending.value
-  fileInstructionType = housingHelpRequest?.fileInstruction.type // 'Houssing'
+  if (housingHelpRequest) {
+    fileInstructionType = housingHelpRequest?.fileInstruction.type // 'Houssing'
+  }
 
   // Define page title
   useHead({
     // TODO: use dynamic page title
     title: RouteTitle.AppHistoryPrint()
   })
-
-  console.log(housingHelpRequest)
 </script>
 
 <style lang="scss" scoped>
