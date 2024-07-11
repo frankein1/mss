@@ -75,6 +75,7 @@
           <NuxtLink
             :to="printLink"
             class="fr-btn fr-btn--secondary fr-icon-printer-line"
+            @on-click="onPrint"
           >
             Imprimer
           </NuxtLink>
@@ -104,6 +105,7 @@
   import type { SocialSupportItem, CommentData, CommentItem } from './types'
   import { RoutePath } from '~/utils/routing'
   import { BeneficiaryPermissions } from '~/server/security'
+  import { DocumentEventAction, EventCategory } from '~/types/matomo'
 
   const props = defineProps<{
     item: SocialSupportItem
@@ -126,22 +128,15 @@
 
   const printLink = computed(() => {
     if (socialSupport.value.followup) {
-      return RoutePath.AppHistoryPrint(
-        // socialSupport.value.beneficiaryId,
-        socialSupport.value.followup.id
-      )
+      return RoutePath.AppHistoryPrint(socialSupport.value.followup.id)
     }
     const helpRequest = socialSupport.value.fileInstruction?.helpRequest
     if (helpRequest?.id) {
-      return RoutePath.AppHistoryPrint(
-        // socialSupport.value.beneficiaryId,
-        helpRequest.id
-      )
+      return RoutePath.AppHistoryPrint(helpRequest.id)
     }
 
     if (socialSupport.value.fileInstruction?.housingHelpRequest) {
       return RoutePath.AppHistoryPrint(
-        // socialSupport.value.beneficiaryId,
         socialSupport.value.fileInstruction?.housingHelpRequest.id
       )
     }
@@ -195,6 +190,10 @@
       isFollowup: isFollowup.value,
       deleted: onSocialSupportItemDeleted
     })
+  }
+
+  function onPrint() {
+    useMatomo().trackEvent(EventCategory.Document, DocumentEventAction.Print)
   }
 
   function onCommentAdded(commentItem: CommentItem) {

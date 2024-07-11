@@ -73,7 +73,7 @@
         :title="helpRequestFieldLabels.allocatedAmount"
         :content="
           helpRequest.allocatedAmount
-            ? prismaDecimalToNumber(helpRequest.allocatedAmount)
+            ? prismaDecimalToNumber(helpRequest.allocatedAmount) + '&nbsp;€'
             : null
         "
       />
