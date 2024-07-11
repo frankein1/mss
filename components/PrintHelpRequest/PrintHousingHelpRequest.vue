@@ -14,7 +14,9 @@
               .usualName
           "
           :created-date="
-            formatDate(housingHelpRequest.firstOpeningDate, 'DD/MM/YYYY')
+            housingHelpRequest.firstOpeningDate
+              ? formatDate(housingHelpRequest.firstOpeningDate, 'DD/MM/YYYY')
+              : null
           "
           :status="housingHelpRequest.fileInstruction.socialSupport.status"
         />
@@ -61,10 +63,12 @@
           <PrintHelpRequestDetailItem
             title="Date d'envoi du dossier"
             :content="
-              formatDate(
-                housingHelpRequest.fileInstruction.dispatchDate,
-                'DD/MM/YYYY'
-              )
+              housingHelpRequest.fileInstruction.dispatchDate
+                ? formatDate(
+                    housingHelpRequest.fileInstruction.dispatchDate,
+                    'DD/MM/YYYY'
+                  )
+                : null
             "
           />
         </ul>
@@ -79,10 +83,10 @@
             :title="housingHelpRequestFieldLabels.uniqueId"
             :content="housingHelpRequest.uniqueId"
           />
-
-          <hr class="fr-mt-4w" />
-          <h3>Caractéristiques du logement demandé</h3>
-
+        </ul>
+        <hr class="fr-mt-4w" />
+        <h3>Caractéristiques du logement demandé</h3>
+        <ul>
           <PrintHelpRequestDetailItem
             :title="
               housingHelpRequestFieldLabels.taxHouseholdAdditionalInformation
@@ -91,12 +95,19 @@
           />
           <PrintHelpRequestDetailItem
             :title="housingHelpRequestFieldLabels.maxRent"
-            :content="prismaDecimalToNumber(housingHelpRequest.maxRent) + ' €'"
+            :content="
+              housingHelpRequest.maxRent
+                ? prismaDecimalToNumber(housingHelpRequest.maxRent) + '&nbsp;€'
+                : null
+            "
           />
           <PrintHelpRequestDetailItem
             :title="housingHelpRequestFieldLabels.maxCharges"
             :content="
-              prismaDecimalToNumber(housingHelpRequest.maxCharges) + ' €'
+              housingHelpRequest.maxCharges
+                ? prismaDecimalToNumber(housingHelpRequest.maxCharges) +
+                  ' &nbsp;€'
+                : null
             "
           />
           <PrintHelpRequestDetailItem

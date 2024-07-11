@@ -11,7 +11,7 @@
       message="Les informations du bénéficiaire n'ont pas pu être chargées."
     />
     <AtomLoader
-      v-else-if="pending"
+      v-else-if="helpRequestPending || housingHelpRequestPending"
       class="fr-mx-auto"
     />
     <template v-else-if="helpRequest && fileInstructionType">
@@ -30,19 +30,19 @@
 <script setup lang="ts">
   import { FileInstructionType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle, RoutePath } from '~/utils/routing'
+  import { RouteTitle } from '~/utils/routing'
 
   const route = useRoute()
+  const router = useRouter()
+
   const trpcClient = useTrpcClient()
-  const helpRequestId = route.params.hrid as string
-  const beneficiaryId = route.params.id as string
+  const helpRequestId = route.params.id as string
 
   definePageMeta({
     layout: false
   })
 
   let fileInstructionType: FileInstructionType | undefined
-  let pending: boolean = false
 
   // Get helpRequest data
   const {
@@ -53,7 +53,6 @@
     id: helpRequestId
   })
   const helpRequest = helpRequestData.value?.helpRequest
-  pending = helpRequestPending.value
   fileInstructionType = helpRequest?.fileInstruction.type // 'Other' | 'Financial'
 
   // Get housing help request data
@@ -65,7 +64,6 @@
     id: helpRequestId
   })
   const housingHelpRequest = housingHelpRequestData.value?.housingHelpRequest
-  pending = housingHelpRequestPending.value
   if (housingHelpRequest) {
     fileInstructionType = housingHelpRequest?.fileInstruction.type // 'Houssing'
   }
@@ -84,7 +82,7 @@
     window.removeEventListener('afterprint', onAfterPrint)
   })
   function onAfterPrint() {
-    navigateTo(RoutePath.AppBeneficiary(beneficiaryId) + '#History')
+    router.back()
   }
 </script>
 
