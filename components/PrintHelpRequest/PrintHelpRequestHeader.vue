@@ -10,7 +10,7 @@
   >
     Ouverture : {{ createdDate }}
   </p>
-  <AtomBadgesGroup
+  <SocialSupportBadgesGroup
     v-if="status"
     :status="status"
   />

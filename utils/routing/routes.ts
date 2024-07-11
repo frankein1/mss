@@ -293,8 +293,8 @@ export const RoutePath = {
     const tabHash = tab ? `#${tab}` : ''
     return `${AppRoute}/history${tabHash}`
   },
-  [Route.AppHistoryPrint]: (beneficiaryId: string, historyId: string) =>
-    `${BeneficiaryRoute(beneficiaryId)}/history/${historyId}/print`,
+  [Route.AppHistoryPrint]: (historyId: string) =>
+    `${AppRoute}/historyprint/${historyId}/print`,
 
   // ADMIN
   [Route.Admin]: () => `${AdminRoute}`,

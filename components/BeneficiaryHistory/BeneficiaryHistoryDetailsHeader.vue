@@ -34,7 +34,7 @@
       </ul>
     </div>
     <div class="history-details__status">
-      <!-- TODO: use AtomBadgesGroup component -->
+      <!-- TODO: use SocialSupportBadgesGroup component -->
       <ul class="fr-badges-group status-badges">
         <li>
           <p
