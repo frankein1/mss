@@ -8,7 +8,11 @@
       :beneficiary-usualname="
         helpRequest.fileInstruction.socialSupport.beneficiary.usualName
       "
-      :created-date="formatDate(helpRequest.subject?.created, 'DD/MM/YYYY')"
+      :created-date="
+        helpRequest.subject?.created
+          ? formatDate(helpRequest.subject?.created, 'DD/MM/YYYY')
+          : null
+      "
       :status="helpRequest.fileInstruction.socialSupport.status"
     />
   </div>
@@ -47,7 +51,9 @@
       <PrintHelpRequestDetailItem
         :title="helpRequestFieldLabels.dispatchDate"
         :content="
-          formatDate(helpRequest.fileInstruction.dispatchDate, 'DD/MM/YYYY')
+          helpRequest.fileInstruction.dispatchDate
+            ? formatDate(helpRequest.fileInstruction.dispatchDate, 'DD/MM/YYYY')
+            : null
         "
       />
     </ul>
@@ -57,12 +63,18 @@
       <PrintHelpRequestDetailItem
         :title="helpRequestFieldLabels.decisionDate"
         :content="
-          formatDate(helpRequest.fileInstruction.decisionDate, 'DD/MM/YYYY')
+          helpRequest.fileInstruction.decisionDate
+            ? formatDate(helpRequest.fileInstruction.decisionDate, 'DD/MM/YYYY')
+            : null
         "
       />
       <PrintHelpRequestDetailItem
         :title="helpRequestFieldLabels.handlingDate"
-        :content="formatDate(helpRequest.handlingDate, 'DD/MM/YYYY')"
+        :content="
+          helpRequest.handlingDate
+            ? formatDate(helpRequest.handlingDate, 'DD/MM/YYYY')
+            : null
+        "
       />
       <PrintHelpRequestDetailItem
         :title="helpRequestFieldLabels.refusalReasonOther"
@@ -71,10 +83,12 @@
       <PrintHelpRequestDetailItem
         :title="helpRequestFieldLabels.dueDate"
         :content="
-          formatDate(
-            helpRequest.fileInstruction.socialSupport.dueDate,
-            'DD/MM/YYYY'
-          )
+          helpRequest.fileInstruction.socialSupport.dueDate
+            ? formatDate(
+                helpRequest.fileInstruction.socialSupport.dueDate,
+                'DD/MM/YYYY'
+              )
+            : null
         "
       />
       <PrintHelpRequestDetailItem

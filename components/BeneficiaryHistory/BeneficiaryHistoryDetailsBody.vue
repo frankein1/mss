@@ -127,21 +127,21 @@
   const printLink = computed(() => {
     if (socialSupport.value.followup) {
       return RoutePath.AppHistoryPrint(
-        socialSupport.value.beneficiaryId,
+        // socialSupport.value.beneficiaryId,
         socialSupport.value.followup.id
       )
     }
     const helpRequest = socialSupport.value.fileInstruction?.helpRequest
     if (helpRequest?.id) {
       return RoutePath.AppHistoryPrint(
-        socialSupport.value.beneficiaryId,
+        // socialSupport.value.beneficiaryId,
         helpRequest.id
       )
     }
 
     if (socialSupport.value.fileInstruction?.housingHelpRequest) {
       return RoutePath.AppHistoryPrint(
-        socialSupport.value.beneficiaryId,
+        // socialSupport.value.beneficiaryId,
         socialSupport.value.fileInstruction?.housingHelpRequest.id
       )
     }
