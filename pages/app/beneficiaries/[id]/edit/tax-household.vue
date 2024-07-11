@@ -60,8 +60,6 @@
       beneficiary: { id, structureId, taxHouseholds }
     } = data.value
 
-    const members = taxHouseholds?.taxHouseholds || []
-
     return {
       id,
       structureId,
@@ -74,8 +72,7 @@
         : undefined,
       divorceDate: taxHouseholds?.divorceDate
         ? new Date(taxHouseholds.divorceDate)
-        : undefined,
-      taxHouseholds: members
+        : undefined
     }
   })
 

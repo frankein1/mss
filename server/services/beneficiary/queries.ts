@@ -126,7 +126,8 @@ const filter = (
     ? getOccupationIncome(beneficiary, appPermissions)
     : undefined
 
-  const entourages = view.relatives ? getEntourages(beneficiary) : undefined
+  const entourages = view.relatives ? beneficiary.relatives : undefined
+
   const taxHouseholds = view.relatives
     ? getTaxHouseholds(beneficiary)
     : undefined
@@ -235,14 +236,8 @@ function getGeneral(
   return general
 }
 
-function getEntourages(beneficiary: BeneficiaryOutput) {
-  const { relatives } = beneficiary
-  return (relatives || []).filter(relative => !relative.hosted)
-}
-
 function getTaxHouseholds(beneficiary: BeneficiaryOutput) {
   const {
-    relatives,
     divorceDate,
     weddingDate,
     familySituation,
@@ -251,10 +246,7 @@ function getTaxHouseholds(beneficiary: BeneficiaryOutput) {
     caregiver
   } = beneficiary
 
-  const taxHouseholds = (relatives || []).filter(relative => relative.hosted)
-
   return {
-    taxHouseholds,
     familySituation,
     divorceDate,
     weddingDate,

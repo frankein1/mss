@@ -22,7 +22,7 @@ const securityCheck = async (
 }
 
 function cleanInput(input: UpdateBeneficiaryGeneralInformationInput) {
-  const { structureId: _structureId, ...data } = input
+  const { structureId: _structureId, referents: _referents, ...data } = input
   if (data.noPhone) {
     data.phone1 = null
     data.phone2 = null

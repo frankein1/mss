@@ -26,9 +26,7 @@ function getBeneficiarySecurityTargetWithEntourage(
           }
         }
       },
-      relatives: {
-        where: { hosted: false }
-      }
+      relatives: true
     }
   })
 }

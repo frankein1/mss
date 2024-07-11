@@ -111,9 +111,7 @@ export type GetBeneficiaryTaxHousehold = Pick<
   | 'minorChildren'
   | 'majorChildren'
   | 'caregiver'
-> & {
-  taxHouseholds?: GetBeneficiaryRelative[]
-}
+>
 
 export type BeneficiaryFileInformation = Pick<
   Beneficiary,

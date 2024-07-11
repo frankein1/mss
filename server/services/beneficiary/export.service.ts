@@ -206,8 +206,6 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
       : '',
     updated: formatDate(beneficiary.updated, 'DD-MM-YYYY HH:mm'),
     entourages: beneficiary.entourages?.map(formatRelative).join(', ') || '',
-    taxHouseholds:
-      (taxHouseholds?.taxHouseholds || []).map(formatRelative).join(', ') || '',
     documents: documents.map(document => document.name).join(', ')
   }
 }
