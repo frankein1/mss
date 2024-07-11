@@ -30,11 +30,12 @@
 <script setup lang="ts">
   import { FileInstructionType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle } from '~/utils/routing'
+  import { RouteTitle, RoutePath } from '~/utils/routing'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
   const helpRequestId = route.params.hrid as string
+  const beneficiaryId = route.params.id as string
 
   definePageMeta({
     layout: false
@@ -71,9 +72,20 @@
 
   // Define page title
   useHead({
-    // TODO: use dynamic page title
     title: RouteTitle.AppHistoryPrint()
   })
+
+  // Print actions
+  onMounted(() => {
+    window.addEventListener('afterprint', onAfterPrint)
+    window.print()
+  })
+  onUnmounted(() => {
+    window.removeEventListener('afterprint', onAfterPrint)
+  })
+  function onAfterPrint() {
+    navigateTo(RoutePath.AppBeneficiary(beneficiaryId) + '#History')
+  }
 </script>
 
 <style lang="scss" scoped>
