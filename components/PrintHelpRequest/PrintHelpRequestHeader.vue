@@ -1,0 +1,30 @@
+<template>
+  <h1>{{ title }}</h1>
+  <h2 class="fr-mb-1w">
+    Instruction du dossier de
+    {{ beneficiaryFirstname }} {{ beneficiaryUsualname }}
+  </h2>
+  <p
+    v-if="createdDate"
+    class="fr-mb-1w"
+  >
+    Ouverture : {{ createdDate }}
+  </p>
+  <AtomBadgesGroup
+    v-if="status"
+    :status="status"
+  />
+  <hr class="fr-mt-4w" />
+</template>
+
+<script setup lang="ts">
+  import { SocialSupportStatus } from '@prisma/client'
+
+  defineProps<{
+    title: string
+    beneficiaryFirstname: string | null
+    beneficiaryUsualname: string | null
+    createdDate: string | null
+    status: SocialSupportStatus
+  }>()
+</script>

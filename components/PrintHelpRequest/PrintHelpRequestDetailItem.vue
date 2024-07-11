@@ -1,5 +1,5 @@
 <template>
-  <p
+  <li
     v-if="content"
     class="details"
     style="white-space: pre-line"
@@ -7,7 +7,7 @@
     <span class="fr-text--bold">{{ title }} : </span>
     <br v-if="title === 'Compte rendu'" />
     {{ content }}
-  </p>
+  </li>
 </template>
 
 <script lang="ts" setup>

@@ -2,111 +2,122 @@
   <!-- TODO; improve Titles and create a component -->
   <div class="fr-container">
     <div class="fr-grid-column">
-      <div class="fr-col-12">
-        <h1>Demande de logement</h1>
-        <h2>
-          Instruction du dossier de
-          {{
+      <div class="fr-col-12 fr-mt-4w">
+        <PrintHelpRequestHeader
+          title="Demande de logement"
+          :beneficiary-firstname="
             housingHelpRequest.fileInstruction.socialSupport.beneficiary
               .firstName
-          }}
-          {{
+          "
+          :beneficiary-usualname="
             housingHelpRequest.fileInstruction.socialSupport.beneficiary
               .usualName
-          }}
-          <br />Ouverture :
-          {{ formatDate(housingHelpRequest.firstOpeningDate, 'DD/MM/YYYY') }}
-          <br />– Status :
-          {{ housingHelpRequest.fileInstruction.socialSupport.status }}
-        </h2>
-        <PrintHelpRequestDetailItem
-          title="1ère demande ou renouvellement"
-          :content="
-            housingHelpRequest.isFirst ? '1ère demande' : 'renouvellement'
           "
-        />
-        <PrintHelpRequestDetailItem
-          :title="housingHelpRequestFieldLabels.askedHousing"
-          :content="askedHousing"
-        />
-        <PrintHelpRequestDetailItem
-          title="Le dossier est instruit"
-          :content="
-            housingHelpRequest.fileInstruction.externalStructure
-              ? 'en externe'
-              : 'en interne'
+          :created-date="
+            formatDate(housingHelpRequest.firstOpeningDate, 'DD/MM/YYYY')
           "
+          :status="housingHelpRequest.fileInstruction.socialSupport.status"
         />
-        <PrintHelpRequestDetailItem
-          title="En commission le"
-          :content="
-            housingHelpRequest.fileInstruction.examinationDate
-              ? (formatDate(housingHelpRequest.fileInstruction.examinationDate),
-                'DD/MM/YYYY')
-              : null
-          "
-        />
+      </div>
+      <div class="fr-col-12">
+        <ul>
+          <PrintHelpRequestDetailItem
+            title="1ère demande ou renouvellement"
+            :content="
+              housingHelpRequest.isFirst ? '1ère demande' : 'renouvellement'
+            "
+          />
+          <PrintHelpRequestDetailItem
+            :title="housingHelpRequestFieldLabels.askedHousing"
+            :content="askedHousing"
+          />
+          <PrintHelpRequestDetailItem
+            title="Le dossier est instruit"
+            :content="
+              housingHelpRequest.fileInstruction.externalStructure
+                ? 'en externe'
+                : 'en interne'
+            "
+          />
+          <PrintHelpRequestDetailItem
+            title="En commission le"
+            :content="
+              housingHelpRequest.fileInstruction.examinationDate
+                ? (formatDate(
+                    housingHelpRequest.fileInstruction.examinationDate
+                  ),
+                  'DD/MM/YYYY')
+                : null
+            "
+          />
 
-        <PrintHelpRequestDetailItem
-          title="Organisme instructeur"
-          :content="
-            housingHelpRequest.fileInstruction.instructorOrganization?.name
-          "
-        />
+          <PrintHelpRequestDetailItem
+            title="Organisme instructeur"
+            :content="
+              housingHelpRequest.fileInstruction.instructorOrganization?.name
+            "
+          />
 
-        <PrintHelpRequestDetailItem
-          title="Date d'envoi du dossier"
-          :content="
-            formatDate(
-              housingHelpRequest.fileInstruction.dispatchDate,
-              'DD/MM/YYYY'
-            )
-          "
-        />
+          <PrintHelpRequestDetailItem
+            title="Date d'envoi du dossier"
+            :content="
+              formatDate(
+                housingHelpRequest.fileInstruction.dispatchDate,
+                'DD/MM/YYYY'
+              )
+            "
+          />
+        </ul>
         <hr class="fr-mt-4w" />
         <h3>Informations sur la demande de logement</h3>
-        <PrintHelpRequestDetailItem
-          :title="housingHelpRequestFieldLabels.reason"
-          :content="housingHelpRequest.reason"
-        />
-        <PrintHelpRequestDetailItem
-          :title="housingHelpRequestFieldLabels.uniqueId"
-          :content="housingHelpRequest.uniqueId"
-        />
+        <ul>
+          <PrintHelpRequestDetailItem
+            :title="housingHelpRequestFieldLabels.reason"
+            :content="housingHelpRequest.reason"
+          />
+          <PrintHelpRequestDetailItem
+            :title="housingHelpRequestFieldLabels.uniqueId"
+            :content="housingHelpRequest.uniqueId"
+          />
 
-        <hr class="fr-mt-4w" />
-        <h3>Caractéristiques du logement demandé</h3>
+          <hr class="fr-mt-4w" />
+          <h3>Caractéristiques du logement demandé</h3>
 
-        <PrintHelpRequestDetailItem
-          :title="
-            housingHelpRequestFieldLabels.taxHouseholdAdditionalInformation
-          "
-          :content="housingHelpRequest.taxHouseholdAdditionalInformation"
-        />
-        <PrintHelpRequestDetailItem
-          :title="housingHelpRequestFieldLabels.maxRent"
-          :content="prismaDecimalToNumber(housingHelpRequest.maxRent) + ' €'"
-        />
-        <PrintHelpRequestDetailItem
-          :title="housingHelpRequestFieldLabels.maxCharges"
-          :content="prismaDecimalToNumber(housingHelpRequest.maxCharges) + ' €'"
-        />
-        <PrintHelpRequestDetailItem
-          :title="housingHelpRequestFieldLabels.housingType"
-          :content="housingType"
-        />
-        <PrintHelpRequestDetailItem
-          :title="housingHelpRequestFieldLabels.roomCount"
-          :content="roomCount"
-        />
-        <PrintHelpRequestDetailItem
-          :title="housingHelpRequestFieldLabels.isPmr"
-          :content="housingHelpRequest.isPmr ? 'OUI' : null"
-        />
-        <PrintHelpRequestDetailItem
-          title="Compte-rendu"
-          :content="housingHelpRequest.fileInstruction.socialSupport.synthesis"
-        />
+          <PrintHelpRequestDetailItem
+            :title="
+              housingHelpRequestFieldLabels.taxHouseholdAdditionalInformation
+            "
+            :content="housingHelpRequest.taxHouseholdAdditionalInformation"
+          />
+          <PrintHelpRequestDetailItem
+            :title="housingHelpRequestFieldLabels.maxRent"
+            :content="prismaDecimalToNumber(housingHelpRequest.maxRent) + ' €'"
+          />
+          <PrintHelpRequestDetailItem
+            :title="housingHelpRequestFieldLabels.maxCharges"
+            :content="
+              prismaDecimalToNumber(housingHelpRequest.maxCharges) + ' €'
+            "
+          />
+          <PrintHelpRequestDetailItem
+            :title="housingHelpRequestFieldLabels.housingType"
+            :content="housingType"
+          />
+          <PrintHelpRequestDetailItem
+            :title="housingHelpRequestFieldLabels.roomCount"
+            :content="roomCount"
+          />
+          <PrintHelpRequestDetailItem
+            :title="housingHelpRequestFieldLabels.isPmr"
+            :content="housingHelpRequest.isPmr ? 'OUI' : null"
+          />
+          <PrintHelpRequestDetailItem
+            title="Compte-rendu"
+            :content="
+              housingHelpRequest.fileInstruction.socialSupport.synthesis
+            "
+          />
+        </ul>
       </div>
     </div>
   </div>
