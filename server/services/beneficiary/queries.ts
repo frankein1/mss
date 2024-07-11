@@ -135,7 +135,7 @@ const filter = (
 
   return {
     id: beneficiary.id,
-    familyFileId: beneficiary.familyFile.structureId,
+    familyFileId: beneficiary.familyFileId,
     fileNumber: beneficiary.fileNumber,
     status: beneficiary.status,
     draft: beneficiary.draft,
