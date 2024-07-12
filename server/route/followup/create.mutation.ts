@@ -4,7 +4,7 @@ import { ProtectedAppContext } from '~/server/trpc'
 import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 
-import { BeneficiaryService, FollowupService } from '~/server/services'
+import { FamilyFileService, FollowupService } from '~/server/services'
 
 const handler = ({
   input,
@@ -20,9 +20,9 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: AddFollowupInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.beneficiaryId
+    input.familyFileId
   )
 
   if (!permissions.create) {

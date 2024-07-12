@@ -22,6 +22,7 @@ import {
 
 export const addFollowupSchemaBase = z.object({
   isMinistry: z.boolean(),
+  familyFileId: z.string().uuid(),
   beneficiaryId: z.string().uuid(),
   subjects: z
     .array(z.string().uuid(), {

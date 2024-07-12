@@ -2,15 +2,15 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security'
 import { GetDocumentsInput, getDocumentsSchema } from '~/server/schema'
-import { BeneficiaryService } from '~/server/services'
+import { FamilyFileService } from '~/server/services'
 
 const securityCheck = async (
   ctx: SecurityRuleContext,
   input: GetDocumentsInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.beneficiaryId
+    input.familyFileId
   )
   return permissions.view.documents
 }
@@ -22,10 +22,10 @@ const handler = ({
   input: GetDocumentsInput
   ctx: ProtectedAppContext
 }) => {
-  return BeneficiaryService.getPageDocuments({ ctx, input })
+  return FamilyFileService.getPageDocuments({ ctx, input })
 }
 
-export const getBeneficiaryDocumentsQuery = createQuery({
+export const getDocumentsQuery = createQuery({
   inputValidation: getDocumentsSchema,
   securityCheck,
   handler

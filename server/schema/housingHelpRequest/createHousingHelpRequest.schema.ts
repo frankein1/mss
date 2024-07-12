@@ -27,6 +27,7 @@ import {
 } from '~/utils/zod'
 
 export const createHousingHelpRequestSchemaBase = z.object({
+  familyFileId: z.string().uuid(),
   beneficiaryId: z.string().uuid(),
   date: z.coerce.date(errorMessages),
   documents: z.array(z.string(), errorMessages).default([]),

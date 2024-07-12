@@ -77,7 +77,7 @@ model User {
 
   createdBeneficiaries  Beneficiary[] @relation(name: "created_beneficiaries")
   archivedBeneficiaries Beneficiary[] @relation(name: "archived_beneficiaries")
-  referentFor           Beneficiary[] @relation(name: "beneficiary_referents")
+  referentFor           FamilyFile[]  @relation(name: "family_file_referents")
 
   createdPartnerOrganizations PartnerOrganization[]
 
@@ -115,6 +115,7 @@ model Structure {
   socialSupports        SocialSupport[]
   partnerOrganizations  PartnerOrganization[]
 
+  familyFiles   FamilyFile[]
   beneficiaries Beneficiary[]
   notifications Notification[]
 
@@ -148,6 +149,9 @@ model Document {
   size             Int?
   tags             String[]
   confidential     Boolean
+
+  familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
+  familyFileId String     @map("family_file_id") @db.Uuid
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
@@ -283,6 +287,9 @@ model SocialSupport {
 
   structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
+
+  familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
+  familyFileId String     @map("family_file_id") @db.Uuid
 
   beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
   beneficiaryId String      @map("beneficiary_id") @db.Uuid
@@ -1324,6 +1331,22 @@ model BudgetIncome {
   @@map("budget_income")
 }
 
+model FamilyFile {
+  id String @id @default(uuid()) @db.Uuid
+
+  structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
+  structureId String    @map("structure_id") @db.Uuid
+
+  referents User[] @relation(name: "family_file_referents")
+
+  budget         Budget?
+  documents      Document[]
+  socialSupports SocialSupport[]
+  beneficiaries  Beneficiary[]
+
+  @@map("family_file")
+}
+
 model BudgetExpenses {
   id String @id @default(uuid()) @db.Uuid
 
@@ -1424,8 +1447,8 @@ model Budget {
   familyQuotient               Decimal? @map("family_quotient")
   banqueDeFrance               Decimal? @map("banque_de_france")
 
-  beneficiaryId String      @unique @map("beneficiary_id") @db.Uuid
-  beneficiary   Beneficiary @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+  familyFileId String     @unique @map("family_file_id") @db.Uuid
+  familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
 
   incomes  BudgetIncome[]
   expenses BudgetExpenses?
@@ -1439,14 +1462,15 @@ model Beneficiary {
   structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
 
+  familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
+  familyFileId String     @map("family_file_id") @db.Uuid
+
   createdById String? @map("created_by_id") @db.Uuid
   createdBy   User?   @relation(name: "created_beneficiaries", fields: [createdById], references: [id])
 
   archivedBy   User?     @relation(name: "archived_beneficiaries", fields: [archivedById], references: [id])
   archivedById String?   @map("archived_by_id") @db.Uuid
   archived     DateTime?
-
-  referents User[] @relation(name: "beneficiary_referents")
 
   draft Boolean @default(false)
 
@@ -1523,16 +1547,14 @@ model Beneficiary {
   numeroPegase          String?                       @map("numero_pegase")
   accommodationZone     BeneficiaryAccommodationZone? @map("accommodation_zone")
 
-  documents      Document[]
-  socialSupports SocialSupport[]
-
   created DateTime? @default(now())
   updated DateTime? @updatedAt
 
-  relatives     BeneficiaryRelative[] @relation("ownerBeneficiary")
+  relatives      BeneficiaryRelative[] @relation("ownerBeneficiary")
   // linkedRelatives BeneficiaryRelative[] @relation("linkedBeneficiary")
-  notifications Notification[]
-  budget        Budget?
+  socialSupports SocialSupport[]
+  documents      Document[]
+  notifications  Notification[]
 
   @@map("beneficiary")
 }

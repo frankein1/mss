@@ -4,7 +4,7 @@
       <BeneficiaryHistoryFilters
         v-model:values="filters"
         :results-label="resultsLabel"
-        :beneficiary-id="beneficiaryId"
+        :family-file-id="familyFileId"
       />
     </div>
     <AtomLoader
@@ -30,7 +30,7 @@
             v-for="item in items"
             :key="item.data.id"
             :item="item"
-            :beneficiary-permissions="beneficiaryPermissions"
+            :family-file-permissions="familyFilePermissions"
             @deleted="onHistoryItemDeleted"
           />
         </ul>
@@ -41,23 +41,23 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { BeneficiaryPermissions } from '~/server/security'
-  import { BeneficiaryHistoryFilterInput } from '~/server/schema'
+  import { FamilyFilePermissions } from '~/server/security'
+  import { FamilyFileHistoryFilterInput } from '~/server/schema'
 
   const props = defineProps<{
-    beneficiaryId: string
-    beneficiaryPermissions: BeneficiaryPermissions
+    familyFileId: string
+    familyFilePermissions: FamilyFilePermissions
   }>()
 
-  const filters = defineModel<BeneficiaryHistoryFilterInput>({ default: {} })
+  const filters = defineModel<FamilyFileHistoryFilterInput>({ default: {} })
 
   const queryInput = computed(() => ({
-    beneficiaryId: props.beneficiaryId,
+    familyFileId: props.familyFileId,
     filters: filters.value
   }))
 
   const { data, pending, error } =
-    await useTrpcClient().beneficiary.getSocialSupports.useQuery(queryInput)
+    await useTrpcClient().file.getSocialSupports.useQuery(queryInput)
 
   const items = computed(() => data.value?.items || [])
 

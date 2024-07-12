@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb
+    <!-- <DsfrBreadcrumb
       v-if="helpRequest"
       :links="
         Breadcrumb.AppBeneficiaryHelpRequestEdit(
@@ -11,7 +11,7 @@
           subject
         )
       "
-    />
+    /> -->
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -50,11 +50,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '@prisma/client'
   import { EditHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { fileInstructionTypePictos } from '~/client/options'
 
   const snackbar = useSnackbar()
@@ -85,11 +84,11 @@
     RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
   )
 
-  const subject = computed(() =>
-    helpRequest.value?.financialSupport
-      ? FileInstructionType.Financial
-      : FileInstructionType.Other
-  )
+  // const subject = computed(() =>
+  //   helpRequest.value?.financialSupport
+  //     ? FileInstructionType.Financial
+  //     : FileInstructionType.Other
+  // )
 
   const subtitle = computed(() =>
     helpRequest.value?.financialSupport ? 'Aide financière' : undefined

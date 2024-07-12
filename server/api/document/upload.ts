@@ -5,10 +5,7 @@ import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { forbiddenError, invalidError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
-import {
-  BeneficiaryService,
-  BeneficiarySecurityTarget
-} from '~/server/services'
+import { FamilyFileSecurityTarget, FamilyFileService } from '~/server/services'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
 
 export interface MultiPartData {
@@ -53,15 +50,15 @@ export default defineEventHandler(async event => {
     })
   }
 
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+  const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
     user,
-    input.beneficiaryId
+    input.familyFileId
   )
 
-  if (!beneficiary) {
+  if (!familyFile) {
     throw createError({
       statusCode: 400,
-      message: `Aucun bénéficiaire avec l'id ${input.beneficiaryId}`
+      message: `Aucun foyer avec l'id ${input.familyFileId}`
     })
   }
 
@@ -79,9 +76,9 @@ export default defineEventHandler(async event => {
     }
   }
 
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.beneficiaryId
+    input.familyFileId
   )
 
   if (!permissions.create) {
@@ -95,7 +92,7 @@ export default defineEventHandler(async event => {
   const file = multipartFormData[0]
 
   const document = await addDocument(input, user, file)
-  await addNotification(ctx, document, beneficiary)
+  await addNotification(ctx, document, familyFile)
 
   return send(event, document.key)
 })
@@ -103,28 +100,28 @@ export default defineEventHandler(async event => {
 async function addNotification(
   ctx: SecurityRuleContext,
   document: Document,
-  beneficiary: NonNullable<BeneficiarySecurityTarget>
+  familyFile: NonNullable<FamilyFileSecurityTarget>
 ) {
   if (document.confidential) {
     return
   }
 
   const notifications = []
-  for (const referent of beneficiary.referents) {
+  for (const referent of familyFile.referents) {
     const permissionCtx = {
       user: referent,
       structure: ctx.structure
     }
     const permissions = getDocumentPermissions({
       ctx: permissionCtx,
-      beneficiary,
+      familyFile,
       document
     })
 
     if (document.createdById !== referent.id && permissions.view) {
       notifications.push({
         recipientId: referent.id,
-        beneficiaryId: beneficiary.id,
+        familyFileId: familyFile.id,
         documentId: document.key,
         type: NotificationType.NewDocument,
         itemCreatedById: document.createdById
@@ -140,11 +137,12 @@ async function addDocument(
   multipartFormData: MultiPartData
 ) {
   const key = v4()
-  const { type, beneficiaryId, confidential, tags, file } = input
+  const { type, familyFileId, beneficiaryId, confidential, tags, file } = input
   const document = await DocumentRepo.prisma.create({
     data: {
       key,
       name: file.name,
+      familyFileId,
       beneficiaryId,
       filenameDisk: key,
       mimeType: file.mimeType,

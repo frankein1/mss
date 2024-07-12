@@ -1,8 +1,8 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb
+    <!-- <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryFollowupAdd(beneficiary)"
-    />
+    /> -->
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -26,9 +26,10 @@
         class="fr-mx-auto"
       />
       <FollowupFormCreation
-        v-else-if="socialSupportSubjects && partnerOrganizations"
+        v-else-if="socialSupportSubjects && partnerOrganizations && beneficiary"
         :is-submitting="isSubmitting"
         :social-support-subjects="socialSupportSubjects"
+        :family-file-id="beneficiary.familyFileId"
         :beneficiary-id="beneficiaryId"
         :partner-organizations="partnerOrganizations"
         @save-followup="onAddFollowup"
@@ -39,7 +40,7 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { AddFollowupInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 

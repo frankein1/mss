@@ -12,9 +12,6 @@
       </li>
       <li v-if="minorChildren">{{ minorChildren }} enfant(s) mineur(s)</li>
       <li v-if="majorChildren">{{ majorChildren }} enfant(s) majeur(s)</li>
-      <li v-if="otherMembersNb">
-        {{ otherMembersNb }} autre(s) membre(s) du foyer fiscal
-      </li>
     </ul>
   </div>
 </template>
@@ -34,19 +31,7 @@
   const minorChildren = computed(() => data.value?.minorChildren)
   const majorChildren = computed(() => data.value?.majorChildren)
 
-  const otherMembersNb = computed(
-    () =>
-      data.value?.taxHouseholds.filter(
-        t =>
-          t.relationship !== 'EnfantMajeur' && t.relationship !== 'EnfantMineur'
-      ).length
-  )
-
   const hasTaxHouseholds = computed(
-    () =>
-      familySituation.value ||
-      minorChildren.value ||
-      majorChildren.value ||
-      otherMembersNb.value
+    () => familySituation.value || minorChildren.value || majorChildren.value
   )
 </script>

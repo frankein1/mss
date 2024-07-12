@@ -17,7 +17,7 @@ const get = (user: SecurityRuleGrantee) => {
       Prisma.SocialSupportWhereInput,
       Prisma.SocialSupportWhereInput
     >(where, {
-      beneficiary: {
+      familyFile: {
         referents: { some: { id: user.id } }
       }
     })

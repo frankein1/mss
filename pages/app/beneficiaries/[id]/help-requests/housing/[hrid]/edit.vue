@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb
+    <!-- <DsfrBreadcrumb
       v-if="housingHelpRequest"
       :links="
         Breadcrumb.AppBeneficiaryHelpRequestEdit(
@@ -12,7 +12,7 @@
           FileInstructionType.Housing
         )
       "
-    />
+    /> -->
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -48,11 +48,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '@prisma/client'
   import { EditHousingHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { fileInstructionTypePictos } from '~/client/options'
 
   const snackbar = useSnackbar()

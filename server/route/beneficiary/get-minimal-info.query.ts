@@ -24,22 +24,15 @@ const handler = async ({
     where: { id },
     select: {
       id: true,
+      familyFileId: true,
       firstName: true,
       usualName: true,
       birthName: true,
-      birthDate: true,
-      referents: true,
-      structureId: true
+      birthDate: true
     }
   })
 
-  const {
-    referents: _,
-    structureId: __,
-    ...beneficiaryMinimalInfo
-  } = beneficiary
-
-  return beneficiaryMinimalInfo
+  return beneficiary
 }
 
 export const getBeneficiaryMinimalInfoQuery = createQuery({

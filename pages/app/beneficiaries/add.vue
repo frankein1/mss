@@ -1,6 +1,6 @@
 <template>
   <PageContainer class="page-container">
-    <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" />
+    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" /> -->
     <PageTitle
       :title="title"
       icon="fr-icon-user-add-line"
@@ -30,7 +30,7 @@
 <script setup lang="ts">
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { CreateBeneficiaryInput } from '~/server/schema'
-  import { RoutePath, Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
 
   const title = RouteTitle.AppBeneficiariesAdd()

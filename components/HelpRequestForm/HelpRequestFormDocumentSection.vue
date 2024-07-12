@@ -3,7 +3,7 @@
 
   <div class="fr-col-12">
     <BeneficiaryDocumentsSelect
-      :beneficiary-id="beneficiaryId"
+      :family-file-id="familyFileId"
       name="documents"
       snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez l'instruction de dossier pour conserver le lien entre les deux."
     />
@@ -12,6 +12,6 @@
 
 <script setup lang="ts">
   defineProps<{
-    beneficiaryId: string
+    familyFileId: string
   }>()
 </script>

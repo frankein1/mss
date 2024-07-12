@@ -18,6 +18,7 @@ const fixturesFollowupSocialSupports = [
     status: 'Done',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     subjects: {
       connect: [
         { id: fixturesSocialSupportSubjects[0].id },
@@ -38,6 +39,7 @@ const fixturesFollowupSocialSupports = [
     status: 'Done',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     subjects: {
       connect: [{ id: fixturesSocialSupportSubjects[0].id }]
     },
@@ -55,6 +57,7 @@ const fixturesFollowupSocialSupports = [
     status: 'Done',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     subjects: {
       connect: [
         { id: fixturesSocialSupportSubjects[2].id },
@@ -75,6 +78,7 @@ const fixturesFollowupSocialSupports = [
     status: 'Done',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.PENSON].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.PENSON].id,
     subjects: {
       connect: [{ id: fixturesSocialSupportSubjects[2].id }]
     },
@@ -92,6 +96,7 @@ const fixturesFollowupSocialSupports = [
     status: 'InProgress',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     subjects: {
       connect: [
         { id: fixturesSocialSupportSubjects[3].id },
@@ -112,6 +117,7 @@ const fixturesFollowupSocialSupports = [
     status: 'InProgress',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: {
       connect: [{ id: fixturesSocialSupportSubjects[4].id }]
     },
@@ -146,6 +152,7 @@ const fixturesFollowupSocialSupports = [
         tags: ['BudgetRessources'],
         confidential: false,
         beneficiaryId: fixturesBeneficiaries[3].id,
+        familyFileId: fixturesBeneficiaries[3].id,
         createdById: fixturesUsers[FixtureUserRole.StructureManager].id,
         notifications: {
           create: {
@@ -174,6 +181,7 @@ const fixturesHelpRequestSocialSupports = [
     status: 'Accepted',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-10-26'),
@@ -200,6 +208,7 @@ const fixturesHelpRequestSocialSupports = [
     status: 'InvestigationOngoing',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-10-27'),
@@ -222,6 +231,7 @@ const fixturesHelpRequestSocialSupports = [
     status: 'Accepted',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-10-18'),
@@ -248,6 +258,7 @@ const fixturesHelpRequestSocialSupports = [
     status: 'Accepted',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-11-03'),
@@ -278,6 +289,7 @@ const fixturesHelpRequestSocialSupports = [
     status: 'Accepted',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2022-12-09'),
@@ -312,6 +324,7 @@ const fixturesHelpRequestSocialSupports = [
     status: 'InvestigationOngoing',
     structureId: fixtureStructures[0].id,
     beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id,
     subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
     socialSupportType: 'HelpRequest',
     date: new Date('2023-10-19'),

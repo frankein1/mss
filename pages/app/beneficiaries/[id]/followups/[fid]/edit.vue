@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaryFollowupEdit(followup)" />
+    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaryFollowupEdit(followup)" /> -->
     <PageTitle :title="title" />
     <main
       ref="formContainer"
@@ -33,7 +33,7 @@
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RoutePath, RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { EditFollowupInput } from '~/server/schema'
 
   const route = useRoute()

@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb :links="Breadcrumb.AppUsers()" />
+    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppUsers()" /> -->
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -29,7 +29,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { Breadcrumb, RouteTitle } from '~/utils/routing'
+  import { RouteTitle } from '~/utils/routing'
 
   const title = RouteTitle.AppUsers()
 

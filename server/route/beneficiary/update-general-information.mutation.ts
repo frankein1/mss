@@ -22,12 +22,13 @@ const securityCheck = async (
 }
 
 function cleanInput(input: UpdateBeneficiaryGeneralInformationInput) {
-  if (input.noPhone) {
-    input.phone1 = null
-    input.phone2 = null
+  const { structureId: _structureId, referents: _referents, ...data } = input
+  if (data.noPhone) {
+    data.phone1 = null
+    data.phone2 = null
   }
 
-  return input
+  return data
 }
 
 const handler = async ({
@@ -45,7 +46,9 @@ const handler = async ({
 
   const cleaned = cleanInput(input)
 
-  const { referents: previousReferents } = target
+  const {
+    familyFile: { referents: previousReferents }
+  } = target
   const previousReferentIds = previousReferents.map(({ id }) => id)
   const referentConnections = prepareRelationConnections(
     referents,
@@ -56,7 +59,13 @@ const handler = async ({
     where: { id },
     data: {
       ...cleaned,
-      referents: referentConnections
+      familyFile: {
+        update: {
+          data: {
+            referents: referentConnections
+          }
+        }
+      }
     }
   })
 

@@ -4,7 +4,6 @@ import type {
   User,
   UserStatus
 } from '@prisma/client'
-import { SocialSupportSubjectIdAndName } from './socialSupportSubject'
 
 export type BeneficiaryReferent = {
   id: string
@@ -13,7 +12,7 @@ export type BeneficiaryReferent = {
 }
 
 export type BeneficiaryNames = Partial<
-  Pick<Beneficiary, 'firstName' | 'usualName' | 'birthName'>
+  Pick<Beneficiary, 'id' | 'firstName' | 'usualName' | 'birthName'>
 >
 
 export type BeneficiaryIdentification = Pick<
@@ -112,9 +111,7 @@ export type GetBeneficiaryTaxHousehold = Pick<
   | 'minorChildren'
   | 'majorChildren'
   | 'caregiver'
-> & {
-  taxHouseholds?: GetBeneficiaryRelative[]
-}
+>
 
 export type BeneficiaryFileInformation = Pick<
   Beneficiary,
@@ -145,8 +142,4 @@ export type GetBeneficiaryOutput = Pick<
     occupationIncome: GetBeneficiaryOccupationIncome | undefined
     entourages: GetBeneficiaryRelative[] | undefined
     taxHouseholds: GetBeneficiaryTaxHousehold | undefined
-    history: {
-      historyTotal: number
-      subjects: SocialSupportSubjectIdAndName[]
-    }
   }

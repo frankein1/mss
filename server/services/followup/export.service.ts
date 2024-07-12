@@ -12,8 +12,8 @@ import { RowType } from '~/types/export'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatUserDisplayName } from '~/utils/user'
 import { formatDate } from '~/utils/formatDate'
-import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
 import { followupFieldLabels } from '~/client/labels'
+import { formatBeneficiaryDisplayName } from '~/utils'
 
 export const FOLLOWUP_EXPORTED_FIELDS: (keyof typeof followupFieldLabels)[] = [
   'status',

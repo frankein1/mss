@@ -1,12 +1,12 @@
-import { Prisma } from '@prisma/client'
+import { Prisma, SocialSupportSubject } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
 import {
   AppContextPermissions,
-  BeneficiaryPermissions,
+  FamilyFilePermissions,
   SecurityRuleContext,
   SecurityRuleGrantee,
   getAppContextPermissions,
-  getBeneficiaryPermissions
+  getFamilyFilePermissions
 } from '~/server/security'
 import { isObjectEmpty } from '~/utils/isObjectEmpty'
 
@@ -21,16 +21,22 @@ export const include = {
       }
     }
   },
-  referents: {
+  familyFile: {
     select: {
-      id: true,
-      firstName: true,
-      lastName: true,
-      email: true,
-      role: true,
-      status: true
+      structureId: true,
+      referents: {
+        select: {
+          id: true,
+          firstName: true,
+          lastName: true,
+          email: true,
+          role: true,
+          status: true
+        }
+      }
     }
   },
+
   relatives: {
     select: {
       id: true,
@@ -62,14 +68,12 @@ function findOne(user: SecurityRuleGrantee, id: string) {
 }
 
 type BeneficiaryOutput = Prisma.PromiseReturnType<typeof findOne>
-type SocialSupportSubjects =
-  BeneficiaryOutput['socialSupports'][0]['subjects'][0]
 
 export async function getOne(ctx: SecurityRuleContext, id: string) {
   const beneficiary = await findOne(ctx.user, id)
-  const permissions = getBeneficiaryPermissions({
+  const permissions = getFamilyFilePermissions({
     ctx,
-    beneficiary
+    familyFile: beneficiary.familyFile
   })
   const appPermissions = getAppContextPermissions(ctx)
   return {
@@ -91,9 +95,9 @@ export async function getPage(
   })
   const appPermissions = getAppContextPermissions(ctx)
   return beneficiaries.map(beneficiary => {
-    const permissions = getBeneficiaryPermissions({
+    const permissions = getFamilyFilePermissions({
       ctx,
-      beneficiary
+      familyFile: beneficiary.familyFile
     })
     return {
       beneficiary: filter(permissions, appPermissions, beneficiary),
@@ -103,7 +107,7 @@ export async function getPage(
 }
 
 const filter = (
-  permissions: BeneficiaryPermissions,
+  permissions: FamilyFilePermissions,
   appPermissions: AppContextPermissions,
   beneficiary: BeneficiaryOutput
 ) => {
@@ -122,7 +126,8 @@ const filter = (
     ? getOccupationIncome(beneficiary, appPermissions)
     : undefined
 
-  const entourages = view.relatives ? getEntourages(beneficiary) : undefined
+  const entourages = view.relatives ? beneficiary.relatives : undefined
+
   const taxHouseholds = view.relatives
     ? getTaxHouseholds(beneficiary)
     : undefined
@@ -131,10 +136,11 @@ const filter = (
 
   return {
     id: beneficiary.id,
+    familyFileId: beneficiary.familyFileId,
     fileNumber: beneficiary.fileNumber,
     status: beneficiary.status,
     draft: beneficiary.draft,
-    referents: beneficiary.referents,
+    referents: beneficiary.familyFile.referents,
     structureId: beneficiary.structureId,
     additionalInformation: beneficiary.additionalInformation,
     createdById: beneficiary.createdById,
@@ -166,26 +172,30 @@ function getHistory(beneficiary: BeneficiaryOutput) {
 }
 
 function getUniqueSubjects(beneficiary: BeneficiaryOutput) {
-  return beneficiary.socialSupports.reduce((subjects, ss) => {
-    if (!ss.subjects.length) {
-      return subjects
-    }
-
-    const notCollectedSubjects: SocialSupportSubjects[] = []
-
-    ss.subjects.forEach(subject => {
-      const isNotInSubjects = subjects.every(t => t.id !== subject.id)
-      const isNotInNotCollectedSubjects = notCollectedSubjects.every(
-        t => t.id !== subject.id
-      )
-
-      if (isNotInSubjects && isNotInNotCollectedSubjects) {
-        notCollectedSubjects.push(subject)
+  return beneficiary.socialSupports.reduce(
+    (subjects, ss) => {
+      if (!ss.subjects.length) {
+        return subjects
       }
-    })
 
-    return [...subjects, ...notCollectedSubjects]
-  }, [] as SocialSupportSubjects[])
+      const notCollectedSubjects: Pick<SocialSupportSubject, 'id' | 'name'>[] =
+        []
+
+      ss.subjects.forEach(subject => {
+        const isNotInSubjects = subjects.every(t => t.id !== subject.id)
+        const isNotInNotCollectedSubjects = notCollectedSubjects.every(
+          t => t.id !== subject.id
+        )
+
+        if (isNotInSubjects && isNotInNotCollectedSubjects) {
+          notCollectedSubjects.push(subject)
+        }
+      })
+
+      return [...subjects, ...notCollectedSubjects]
+    },
+    [] as Pick<SocialSupportSubject, 'id' | 'name'>[]
+  )
 }
 
 function getGeneral(
@@ -226,14 +236,8 @@ function getGeneral(
   return general
 }
 
-function getEntourages(beneficiary: BeneficiaryOutput) {
-  const { relatives } = beneficiary
-  return (relatives || []).filter(relative => !relative.hosted)
-}
-
 function getTaxHouseholds(beneficiary: BeneficiaryOutput) {
   const {
-    relatives,
     divorceDate,
     weddingDate,
     familySituation,
@@ -242,10 +246,7 @@ function getTaxHouseholds(beneficiary: BeneficiaryOutput) {
     caregiver
   } = beneficiary
 
-  const taxHouseholds = (relatives || []).filter(relative => relative.hosted)
-
   return {
-    taxHouseholds,
     familySituation,
     divorceDate,
     weddingDate,

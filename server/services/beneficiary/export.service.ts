@@ -109,7 +109,7 @@ export async function exportBeneficiaries({
 
   for (const { beneficiary } of dataRequest) {
     const documents = await DocumentRepo.findMany(ctx.user, {
-      where: { beneficiaryId: beneficiary.id }
+      where: { familyFileId: beneficiary.familyFileId }
     })
 
     rows.push(formatData(beneficiary, documents))
@@ -119,7 +119,7 @@ export async function exportBeneficiaries({
 }
 
 function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
-  const { general, occupationIncome, taxHouseholds, history } = beneficiary
+  const { general, occupationIncome, taxHouseholds } = beneficiary
   return {
     referents: beneficiary.referents
       .map(referent => formatUserDisplayName(referent))
@@ -206,11 +206,7 @@ function formatData(beneficiary: GetBeneficiaryOutput, documents: Document[]) {
       : '',
     updated: formatDate(beneficiary.updated, 'DD-MM-YYYY HH:mm'),
     entourages: beneficiary.entourages?.map(formatRelative).join(', ') || '',
-    taxHouseholds:
-      (taxHouseholds?.taxHouseholds || []).map(formatRelative).join(', ') || '',
-    documents: documents.map(document => document.name).join(', '),
-    historyTotal: history.historyTotal.toString(),
-    subjects: history.subjects.map(({ name }) => name).join(', ')
+    documents: documents.map(document => document.name).join(', ')
   }
 }
 

@@ -1,8 +1,8 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb
+    <!-- <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryHelpRequestAdd(beneficiary, subject)"
-    />
+    /> -->
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -27,9 +27,10 @@
         class="fr-mx-auto"
       />
       <HelpRequestFormCreation
-        v-else-if="socialSupportSubjects && partnerOrganizations"
+        v-else-if="socialSupportSubjects && partnerOrganizations && beneficiary"
         :is-submitting="isSubmitting"
         :social-support-subjects="socialSupportSubjects"
+        :family-file-id="beneficiary.familyFileId"
         :beneficiary-id="beneficiaryId"
         :partner-organizations="partnerOrganizations"
         :is-financial="isFinancial"
@@ -43,7 +44,7 @@
   import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema'
   import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
   import { fileInstructionTypePictos } from '~/client/options'

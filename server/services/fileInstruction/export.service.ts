@@ -8,7 +8,6 @@ import {
 } from '~/server/security'
 import { RowType } from '~/types/export'
 import { formatUserDisplayName } from '~/utils/user'
-import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { getBooleanOrEmpty } from '~/utils/export/getBooleanOrEmpty'
 import { formatDate } from '~/utils/formatDate'
 import {
@@ -17,6 +16,7 @@ import {
   paymentMethodKeys,
   ministerKeys
 } from '~/client/options'
+import { formatBeneficiaryDisplayName } from '~/utils'
 
 export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'status',
@@ -70,10 +70,10 @@ export async function exportFileInstructions({
   const rows = fileInstructions.reduce(
     (fileInstructions: RowType[], fileInstruction) => {
       const { socialSupport, helpRequest } = fileInstruction
-      const { beneficiary } = socialSupport
+      const { familyFile, beneficiary } = socialSupport
       const permissions = getFileInstructionPermissions({
         ctx,
-        beneficiary,
+        familyFile,
         socialSupport
       })
       if (!permissions.view) {
@@ -87,7 +87,7 @@ export async function exportFileInstructions({
       return [
         ...fileInstructions,
         {
-          beneficiaryId: formatBeneficiaryDisplayName(beneficiary),
+          familyFileId: formatBeneficiaryDisplayName(beneficiary),
           financialSupport: helpRequest?.financialSupport || '',
           prescribingOrganizationId:
             helpRequest?.prescribingOrganization?.name || '',

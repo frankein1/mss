@@ -21,11 +21,11 @@ const securityCheck = async (
 
 const handler = ({
   input,
-  ctx: { user }
+  ctx: _ctx
 }: {
   input: UpdateBeneficiaryTaxHouseholdInput
   ctx: ProtectedAppContext
-}) => BeneficiaryService.updateTaxHousehold(user, input)
+}) => BeneficiaryService.updateTaxHousehold(input)
 
 export const updateTaxHouseholdMutation = createMutation({
   inputValidation: updateBeneficiaryTaxHouseholdSchema,

@@ -1,63 +1,48 @@
 <template>
   <AtomLoader
-    v-if="beneficiaryPending"
+    v-if="pending"
     class="fr-mx-auto"
   />
 
   <AtomAlert
-    v-else-if="beneficiaryError"
+    v-else-if="error"
     :alert-type="AlertType.Error"
     message="Le bénéficiaire n'a pas pu être chargé."
   />
 
   <form
-    v-else-if="beneficiary"
+    v-else-if="budget"
     ref="form"
     novalidate
     @submit.prevent="onSubmit"
   >
     <main class="content">
       <div class="fr-container fr-pb-2w">
-        <DsfrBreadcrumb
-          :links="
-            Breadcrumb.AppBeneficiaryBudgetInfoEdit(beneficiaryIdentification)
-          "
-        />
+        <!-- <DsfrBreadcrumb
+          :links="Breadcrumb.AppFileBudgetInfoEdit(fileIdentification)"
+        /> -->
         <PageTitle
           :title="title"
           pictogram-path="/pictograms/money.svg"
         />
 
-        <AtomLoader
-          v-if="pending"
-          class="fr-mx-auto"
-        />
-
         <AtomAlert
-          v-else-if="error"
-          :alert-type="AlertType.Error"
-          message="Les informations générales du budget n'ont pas pu être chargées."
-        />
+          v-if="budget.legacyRemainingAfterExpenses && open"
+          class="fr-mb-4w"
+          closeable
+          :alert-type="AlertType.Warning"
+          message="Le reste à vivre a été remplacé par le calcul automatique"
+          @close="open = false"
+        >
+          <template #detailedMessage>
+            <p class="euro-symbol">
+              Le montant précédemment renseigné était de
+              {{ budget.legacyRemainingAfterExpenses }}
+            </p>
+          </template>
+        </AtomAlert>
 
-        <template v-else-if="budget">
-          <AtomAlert
-            v-if="budget.legacyRemainingAfterExpenses && open"
-            class="fr-mb-4w"
-            closeable
-            :alert-type="AlertType.Warning"
-            message="Le reste à vivre a été remplacé par le calcul automatique"
-            @close="open = false"
-          >
-            <template #detailedMessage>
-              <p class="euro-symbol">
-                Le montant précédemment renseigné était de
-                {{ budget.legacyRemainingAfterExpenses }}
-              </p>
-            </template>
-          </AtomAlert>
-
-          <BudgetGeneralInformationForm />
-        </template>
+        <BudgetGeneralInformationForm />
       </div>
     </main>
 
@@ -71,53 +56,52 @@
 <script lang="ts" setup>
   import { Prisma } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle, RoutePath, Route } from '~/utils/routing'
+  import { RouteTitle, RoutePath, Route } from '~/utils/routing'
   import {
     UpdateBudgetInfoInput,
     updateBudgetInfoSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
-  const beneficiaryId = route.params.id as string
+  const familyFileId = route.params.id as string
 
-  const title = RouteTitle.AppBeneficiaryBudgetInfoEdit()
+  const title = RouteTitle.AppFileBudgetInfoEdit()
 
   useHead({ title })
 
   definePageMeta({
-    name: Route.AppBeneficiaryBudgetInfoEdit
+    name: Route.AppFileBudgetInfoEdit
   })
 
-  const {
-    data: beneficiary,
-    pending: beneficiaryPending,
-    error: beneficiaryError
-  } = await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
-    id: beneficiaryId
-  })
+  // const {
+  //   data: file,
+  //   pending: filePending,
+  //   error: fileError
+  // } = await trpcClient.file.getFamilyFileMinimalInfo.useQuery({
+  //   id: familyFileId
+  // })
 
   const {
     data: budget,
     pending,
     error
-  } = await trpcClient.budget.getInfo.useQuery({ beneficiaryId })
+  } = await trpcClient.budget.getInfo.useQuery({ familyFileId })
 
-  const beneficiaryIdentification = computed(() =>
-    beneficiary.value
-      ? {
-          id: beneficiary.value.id,
-          firstName: beneficiary.value.firstName,
-          birthName: beneficiary.value.birthName,
-          usualName: beneficiary.value.usualName,
-          birthDate: beneficiary.value.birthDate
-        }
-      : null
-  )
+  // const fileIdentification = computed(() =>
+  //   file.value
+  //     ? {
+  //         id: file.value.id,
+  //         firstName: file.value.firstName,
+  //         birthName: file.value.birthName,
+  //         usualName: file.value.usualName,
+  //         birthDate: file.value.birthDate
+  //       }
+  //     : null
+  // )
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
@@ -176,10 +160,7 @@
     isFormDirty
   })
 
-  const budgetTabRoute = RoutePath.AppBeneficiary(beneficiaryId, {
-    tab: BeneficiaryTab.Budget,
-    originPage: route.name as Route.AppBeneficiaryBudgetInfoEdit
-  })
+  const budgetTabRoute = RoutePath.AppFile(familyFileId)
 
   const onSubmit = handleSubmit(async values => {
     isNavigatingWithFormActions.value = true

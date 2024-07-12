@@ -84,7 +84,7 @@ const followupFilterSchema = z.object({
 
 type FollowupFilterInput = z.infer<typeof followupFilterSchema>
 
-const beneficiaryHistoryFilterSchema = z.object({
+const familyFileHistoryFilterSchema = z.object({
   status: z.nativeEnum(SocialSupportStatus).nullish(),
   typeSuivi: z.nativeEnum(TypeSuivi).nullish(),
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
@@ -95,8 +95,8 @@ const beneficiaryHistoryFilterSchema = z.object({
   referents: z.array(z.string().uuid()).nullish()
 })
 
-type BeneficiaryHistoryFilterInput = z.infer<
-  typeof beneficiaryHistoryFilterSchema
+type FamilyFileHistoryFilterInput = z.infer<
+  typeof familyFileHistoryFilterSchema
 >
 
 const userAdminFilterSchema = z.object({
@@ -121,7 +121,7 @@ export {
   statFilterSchema,
   beneficiaryFilterSchema,
   followupFilterSchema,
-  beneficiaryHistoryFilterSchema,
+  familyFileHistoryFilterSchema,
   userAdminFilterSchema,
   beneficiaryDocumentFilterSchema,
   emailAdminFilterSchema,
@@ -133,7 +133,7 @@ export type {
   BeneficiaryFilterInput,
   BeneficiaryFilterServerInput,
   FollowupFilterInput,
-  BeneficiaryHistoryFilterInput,
+  FamilyFileHistoryFilterInput,
   UserAdminFilterInput,
   BeneficiaryDocumentFilterInput,
   EmailAdminFilterInput,

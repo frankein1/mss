@@ -17,6 +17,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   id: 'Identifiant',
   fileNumber: 'N° dossier',
   structureId: 'Structure',
+  familyFileId: 'Dossier foyer',
   referents: 'Agent(s) référent(s)',
   aidantConnectAuthorized: 'Mandat Aidants Connect',
   status: 'Statut du dossier',

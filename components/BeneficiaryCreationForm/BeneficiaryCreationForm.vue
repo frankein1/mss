@@ -149,12 +149,12 @@
     createBeneficiarySchema
   } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   defineProps<{
     isSubmitting: boolean
-    permissions: BeneficiaryPermissions
+    permissions: FamilyFilePermissions
     agents: BeneficiaryReferent[]
   }>()
 

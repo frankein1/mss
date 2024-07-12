@@ -4,7 +4,7 @@ import {
   SocialSupportType
 } from '@prisma/client'
 import { cleanCreateInput } from './helper'
-import { BeneficiaryRepo, HelpRequestRepo } from '~/server/database'
+import { FamilyFileRepo, HelpRequestRepo } from '~/server/database'
 import { CreateHelpRequestInput } from '~/server/schema'
 import { markSocialSupportSubjectAsUsed } from '~/server/query'
 import { SecurityRuleContext } from '~/server/security/rules/types'
@@ -17,12 +17,13 @@ type CreateParams = {
 }
 
 export async function create({ input, ctx }: CreateParams) {
-  const beneficiary = await BeneficiaryRepo.findUniqueOrThrow(ctx.user, {
-    where: { id: input.beneficiaryId },
+  const familyFile = await FamilyFileRepo.findUniqueOrThrow(ctx.user, {
+    where: { id: input.familyFileId },
     select: { id: true, referents: true }
   })
 
   const {
+    familyFileId,
     beneficiaryId,
     numeroPegase,
     ministre,
@@ -92,6 +93,7 @@ export async function create({ input, ctx }: CreateParams) {
               status,
               socialSupportType: SocialSupportType.HelpRequest,
               createdById: ctx.user.id,
+              familyFileId,
               beneficiaryId,
               structureId: ctx.structure.id,
               synthesis,
@@ -103,10 +105,10 @@ export async function create({ input, ctx }: CreateParams) {
               documents: prepareDocumentsMutations(documents),
               notifications: {
                 createMany: {
-                  data: beneficiary.referents
+                  data: familyFile.referents
                     .filter(referent => referent.id !== ctx.user.id)
                     .map(referent => ({
-                      beneficiaryId: beneficiary.id,
+                      familyFileId: familyFile.id,
                       recipientId: referent.id,
                       type: NotificationType.NewFileInstructionElement,
                       itemCreatedById: ctx.user.id

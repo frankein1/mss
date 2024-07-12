@@ -1,8 +1,8 @@
 <template>
   <PageContainer v-if="beneficiary">
-    <DsfrBreadcrumb
+    <!-- <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiary(beneficiaryIdentification, originPage)"
-    />
+    /> -->
 
     <BeneficiaryDetailsHeader
       :beneficiary="beneficiary"
@@ -64,7 +64,7 @@
         />
         <BeneficiaryDocumentList
           v-else
-          :beneficiary-id="beneficiary.id"
+          :family-file-id="beneficiary.familyFileId"
         />
       </AtomTab>
       <AtomTab
@@ -83,8 +83,8 @@
         />
         <BeneficiaryHistory
           v-else-if="permissions"
-          :beneficiary-id="beneficiaryId"
-          :beneficiary-permissions="permissions"
+          :family-file-id="beneficiary.familyFileId"
+          :family-file-permissions="permissions"
         />
       </AtomTab>
       <AtomTab
@@ -104,8 +104,8 @@
         />
         <BeneficiaryBudget
           v-else-if="beneficiaryIdentification"
+          :family-file-id="beneficiary.familyFileId"
           :beneficiary-identification="beneficiaryIdentification"
-          :tax-household="beneficiary.taxHouseholds?.taxHouseholds || []"
         />
       </AtomTab>
     </AtomTabs>
@@ -114,7 +114,7 @@
 
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { Route, Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { Route, RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
   import { useBeneficiaryDetails } from '~/composables/useBeneficiaryDetails'
 

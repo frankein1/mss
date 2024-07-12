@@ -151,7 +151,9 @@ export function prepareBeneficiaryStatFilters(filters: StatFilterInput) {
   }
 
   if (filters.referent) {
-    formattedFilters.referents = { some: { id: { equals: filters.referent } } }
+    formattedFilters.familyFile = {
+      referents: { some: { id: { equals: filters.referent } } }
+    }
   }
 
   if (filters.beneficiaryStatus) {

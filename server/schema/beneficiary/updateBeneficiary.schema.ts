@@ -18,10 +18,7 @@ import {
   Nationality
 } from '@prisma/client'
 import { z } from 'zod'
-import {
-  createOrUpdateEntourageSchema,
-  createOrUpdateTaxHouseholdSchema
-} from '../relative.schema'
+import { createOrUpdateEntourageSchema } from '../relative.schema'
 import {
   requiredNativeEnum,
   stringOrEmpty,
@@ -113,8 +110,7 @@ export const updateBeneficiaryTaxHouseholdSchema = z.object({
     .int(validIntNumber)
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
     .nullish(),
-  caregiver: z.boolean().default(false),
-  taxHouseholds: z.array(createOrUpdateTaxHouseholdSchema).nullish()
+  caregiver: z.boolean().default(false)
 })
 
 export type UpdateBeneficiaryTaxHouseholdInput = z.infer<

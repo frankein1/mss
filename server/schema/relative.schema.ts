@@ -12,7 +12,6 @@ import {
   stringConstraint,
   emailOrEmpty,
   stringOrEmpty,
-  dateOrEmpty,
   openText
 } from './helpers.schema'
 import { maxStringLengthMessage } from '~/utils/zod'
@@ -31,16 +30,6 @@ export const createOrUpdateEntourageSchema = z.object({
 
 export type CreateOrUpdateEntourageInput = z.infer<
   typeof createOrUpdateEntourageSchema
->
-
-export const createOrUpdateTaxHouseholdSchema = createOrUpdateEntourageSchema
-  .extend({
-    birthDate: dateOrEmpty
-  })
-  .omit({ city: true })
-
-export type CreateOrUpdateTaxHouseholdInput = z.infer<
-  typeof createOrUpdateTaxHouseholdSchema
 >
 
 export const createHouseholdMemberSchema = z.object({

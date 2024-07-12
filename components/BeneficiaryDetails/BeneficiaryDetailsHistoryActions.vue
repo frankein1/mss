@@ -40,12 +40,12 @@
 
 <script setup lang="ts">
   import { RoutePath } from '~/utils/routing'
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
   import HelpRequestModal from '~/components/HelpRequestModal/HelpRequestModal.vue'
 
   const props = defineProps<{
     beneficiaryId: string
-    permissions: BeneficiaryPermissions | undefined
+    permissions: FamilyFilePermissions | undefined
   }>()
 
   function onAddHelpRequest() {

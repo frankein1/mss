@@ -11,10 +11,7 @@ import {
   getAppContextPermissions
 } from '~/server/security'
 import { SocialSupportRepo } from '~/server/database'
-import {
-  BeneficiarySecurityTarget,
-  BeneficiaryService
-} from '~/server/services'
+import { FamilyFileSecurityTarget, FamilyFileService } from '~/server/services'
 import {
   filterSocialSupport,
   filterFollowup,
@@ -28,9 +25,9 @@ const securityCheck = async (
   ctx: SecurityRuleContext,
   input: GetHistoryInput
 ) => {
-  const permissions = await BeneficiaryService.getEditionPermissions(
+  const permissions = await FamilyFileService.getEditionPermissions(
     ctx,
-    input.beneficiaryId
+    input.familyFileId
   )
   return permissions.view.history
 }
@@ -39,19 +36,19 @@ type HistoryFilters = GetHistoryInput['filters']
 
 function prepareSocialSupportFilters(
   filters: HistoryFilters,
-  beneficiaryId: string
+  familyFileId: string
 ) {
   const formattedFilters: Prisma.SocialSupportWhereInput = {}
 
   if (filters.referents?.length) {
-    formattedFilters.beneficiary = {
-      id: beneficiaryId,
+    formattedFilters.familyFile = {
+      id: familyFileId,
       referents: {
         some: { id: { in: filters.referents } }
       }
     }
   } else {
-    formattedFilters.beneficiary = { id: beneficiaryId }
+    formattedFilters.familyFile = { id: familyFileId }
   }
 
   if (filters.status) {
@@ -119,15 +116,25 @@ function prepareSocialSupportFilters(
 function loadSocialSupports(
   filters: HistoryFilters,
   user: SecurityRuleGrantee,
-  beneficiaryId: string
+  familyFileId: string
 ) {
   return SocialSupportRepo.findMany(user, {
-    where: prepareSocialSupportFilters(filters, beneficiaryId),
+    where: prepareSocialSupportFilters(filters, familyFileId),
     include: {
       createdBy: true,
-      beneficiary: {
+      familyFile: {
         include: {
           referents: true
+        }
+      },
+      beneficiary: {
+        select: {
+          id: true,
+          usualName: true,
+          birthName: true,
+          firstName: true,
+          birthDate: true,
+          birthPlace: true
         }
       },
       documents: true,
@@ -174,14 +181,14 @@ type SocialSupports = Prisma.PromiseReturnType<typeof loadSocialSupports>
 function formatResult(
   socialSupports: SocialSupports,
   ctx: ProtectedAppContext,
-  beneficiary: BeneficiarySecurityTarget
+  familyFile: FamilyFileSecurityTarget
 ) {
   return socialSupports.map(socialSupport => {
     const { _count } = socialSupport
 
     const socialSupportPermissions = getSocialSupportPermissions({
       ctx,
-      beneficiary,
+      familyFile,
       socialSupport
     })
 
@@ -235,7 +242,7 @@ function formatResult(
       document,
       permissions: getDocumentPermissions({
         ctx,
-        beneficiary,
+        familyFile,
         document
       })
     }))
@@ -272,23 +279,20 @@ const handler = async ({
   input: GetHistoryInput
   ctx: ProtectedAppContext
 }) => {
-  const { beneficiaryId, filters } = input
+  const { familyFileId, filters } = input
 
-  const [totalCount, socialSupports, beneficiary] = await Promise.all([
+  const [totalCount, socialSupports, familyFile] = await Promise.all([
     SocialSupportRepo.count(ctx.user, {
       where: {
-        beneficiaryId
+        familyFileId
       }
     }),
-    loadSocialSupports(filters, ctx.user, beneficiaryId),
-    BeneficiaryService.getBeneficiarySecurityTarget(
-      ctx.user,
-      input.beneficiaryId
-    )
+    loadSocialSupports(filters, ctx.user, familyFileId),
+    FamilyFileService.getFamilyFileSecurityTarget(ctx.user, input.familyFileId)
   ])
 
   return {
-    items: formatResult(socialSupports, ctx, beneficiary),
+    items: formatResult(socialSupports, ctx, familyFile),
     totalCount
   }
 }

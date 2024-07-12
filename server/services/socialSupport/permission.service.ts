@@ -8,7 +8,7 @@ import {
   getSocialSupportPermissions,
   FileInstructionPermissions
 } from '~/server/security/permissions'
-import { BeneficiaryService } from '~/server/services/beneficiary'
+import { FamilyFileService } from '~/server/services'
 
 export function getSocialSupportSecurityTarget(
   user: SecurityRuleGrantee,
@@ -17,7 +17,7 @@ export function getSocialSupportSecurityTarget(
   return SocialSupportRepo.findUniqueOrThrow(user, {
     where: { id },
     include: {
-      beneficiary: {
+      familyFile: {
         include: {
           referents: true
         }
@@ -33,7 +33,7 @@ export async function getEditionPermissions(
   const socialSupport = await getSocialSupportSecurityTarget(ctx.user, id)
   return getSocialSupportPermissions({
     ctx,
-    beneficiary: socialSupport.beneficiary,
+    familyFile: socialSupport.familyFile,
     socialSupport
   })
 }
@@ -52,18 +52,18 @@ export async function getCreationPermissions(
 
 export async function getCreationPermissions(
   ctx: SecurityRuleContext,
-  beneficiaryId: string,
+  familyFileId: string,
   socialSupportType: SocialSupportType
 ): Promise<FollowupPermissions | FileInstructionPermissions> {
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+  const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
     ctx.user,
-    beneficiaryId
+    familyFileId
   )
   if (socialSupportType === 'Followup') {
     return getFollowupPermissions({
       ctx,
-      beneficiary
+      familyFile
     })
   }
-  return getFileInstructionPermissions({ ctx, beneficiary })
+  return getFileInstructionPermissions({ ctx, familyFile })
 }

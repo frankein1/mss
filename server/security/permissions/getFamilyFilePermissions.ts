@@ -10,7 +10,7 @@ import {
   isReferentFor
 } from '../rules/helpers'
 
-export type BeneficiaryPermissions = {
+export type FamilyFilePermissions = {
   edit: {
     general: boolean
     relatives: boolean
@@ -36,7 +36,7 @@ export type BeneficiaryPermissions = {
   delete: boolean
 }
 
-const FALSY_PERMISSIONS: BeneficiaryPermissions = {
+const FALSY_PERMISSIONS: FamilyFilePermissions = {
   edit: {
     general: false,
     relatives: false,
@@ -62,18 +62,18 @@ const FALSY_PERMISSIONS: BeneficiaryPermissions = {
   delete: false
 }
 
-export const getBeneficiaryPermissions = ({
+export const getFamilyFilePermissions = ({
   ctx,
-  beneficiary
+  familyFile
 }: {
   ctx: SecurityRuleContext
-  beneficiary?: SecurityTargetWithStructure & SecurityTargetWithReferents
+  familyFile?: SecurityTargetWithStructure & SecurityTargetWithReferents
 }) => {
-  let permissions: BeneficiaryPermissions
-  if (!beneficiary) {
+  let permissions: FamilyFilePermissions
+  if (!familyFile) {
     permissions = getCreationPermissions({ ctx })
   } else {
-    permissions = getEditionPermissions({ ctx, beneficiary })
+    permissions = getEditionPermissions({ ctx, familyFile })
   }
 
   return permissions
@@ -110,19 +110,19 @@ function getCreationPermissions({ ctx }: { ctx: SecurityRuleContext }) {
 
 function getEditionPermissions({
   ctx,
-  beneficiary
+  familyFile
 }: {
   ctx: SecurityRuleContext
-  beneficiary: SecurityTargetWithStructure & SecurityTargetWithReferents
+  familyFile: SecurityTargetWithStructure & SecurityTargetWithReferents
 }) {
   const { user } = ctx
 
-  if (!isInSameStructure(user, beneficiary)) {
+  if (!isInSameStructure(user, familyFile)) {
     return FALSY_PERMISSIONS
   }
 
-  const isReferent = isReferentFor(user, beneficiary)
-  const isMember = isMemberOfReferents(user, beneficiary)
+  const isReferent = isReferentFor(user, familyFile)
+  const isMember = isMemberOfReferents(user, familyFile)
 
   const { manager, socialWorker, instructor, receptionAgent } =
     getGranteRole(ctx)

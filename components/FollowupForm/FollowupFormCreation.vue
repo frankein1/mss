@@ -3,7 +3,7 @@
     :is-submitting="isSubmitting"
     :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
-    :beneficiary-id="beneficiaryId"
+    :family-file-id="familyFileId"
     :medium="values.medium"
     :is-redirected="values.redirected"
     :caught-errors="caughtErrors"
@@ -24,6 +24,7 @@
     socialSupportSubjects: Array<SocialSupportSubject>
     partnerOrganizations: Array<PartnerOrganizationIdName>
     beneficiaryId: string
+    familyFileId: string
   }>()
 
   const emit = defineEmits<{

@@ -4,7 +4,7 @@ import {
   FollowupPermissions,
   getFollowupPermissions
 } from '~/server/security/permissions'
-import { BeneficiaryService } from '~/server/services/beneficiary'
+import { FamilyFileService } from '~/server/services/familyFile'
 
 export function getFollowupSecurityTarget(
   user: SecurityRuleGrantee,
@@ -15,7 +15,7 @@ export function getFollowupSecurityTarget(
     include: {
       socialSupport: {
         include: {
-          beneficiary: {
+          familyFile: {
             include: {
               referents: true
             }
@@ -33,21 +33,21 @@ export async function getEditionPermissions(
   const { socialSupport } = await getFollowupSecurityTarget(ctx.user, id)
   return getFollowupPermissions({
     ctx,
-    beneficiary: socialSupport.beneficiary,
+    familyFile: socialSupport.familyFile,
     socialSupport
   })
 }
 
 export async function getCreationPermissions(
   ctx: SecurityRuleContext,
-  beneficiaryId: string
+  familyFileId: string
 ): Promise<FollowupPermissions> {
-  const beneficiary = await BeneficiaryService.getBeneficiarySecurityTarget(
+  const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
     ctx.user,
-    beneficiaryId
+    familyFileId
   )
   return getFollowupPermissions({
     ctx,
-    beneficiary
+    familyFile
   })
 }

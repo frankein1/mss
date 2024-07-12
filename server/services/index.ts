@@ -1,4 +1,5 @@
 export * from './beneficiary'
+export * from './familyFile'
 export * from './budget'
 export * from './helpRequest'
 export * from './followup'

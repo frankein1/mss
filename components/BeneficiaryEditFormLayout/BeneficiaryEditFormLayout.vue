@@ -22,7 +22,7 @@
       ref="beneficiaryFormLayoutMainContainer"
       class="content fr-col-9 fr-container"
     >
-      <DsfrBreadcrumb :links="breadcrumbLinks" />
+      <!-- <DsfrBreadcrumb :links="breadcrumbLinks" /> -->
       <PageTitle
         :title="title"
         :icon="titleIcon"
@@ -58,13 +58,12 @@
   import { ZodSchema, z } from 'zod'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
-    Breadcrumb,
     RoutePath,
     AppBeneficiaryEditRoute,
     RouteTitle
   } from '~/utils/routing'
   import { beneficiaryFieldLabels, relativeFieldLabels } from '~/client/labels'
-  import { BeneficiaryPermissions } from '~/server/security'
+  import { FamilyFilePermissions } from '~/server/security'
   import type { FieldLabels } from '~/types/fieldLabels'
   import { BeneficiaryIdentification } from '~/types/beneficiary'
 
@@ -82,7 +81,7 @@
       draft: boolean
       beneficiaryIdentification: BeneficiaryIdentification | null
       bindedValues: z.infer<T> | null
-      permissions: BeneficiaryPermissions | undefined
+      permissions: FamilyFilePermissions | undefined
       schema: T
       isSubmitting: boolean
       titleIcon?: string
@@ -107,13 +106,6 @@
   const validate = ref<boolean>(false)
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
-
-  const breadcrumbLinks = computed(() => {
-    if (props.draft) {
-      return Breadcrumb.AppBeneficiariesAdd()
-    }
-    return Breadcrumb.AppBeneficiaryEdit(props.beneficiaryIdentification)
-  })
 
   const title = computed(() => RouteTitle[props.currentRoute]())
 

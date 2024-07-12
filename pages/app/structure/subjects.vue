@@ -5,7 +5,7 @@
     @submit.prevent="onSubmit"
   >
     <main class="fr-container content fr-pb-5w">
-      <DsfrBreadcrumb :links="Breadcrumb.AppStructureSubjects()" />
+      <!-- <DsfrBreadcrumb :links="Breadcrumb.AppStructureSubjects()" /> -->
 
       <PageTitle :title="title" />
 
@@ -111,7 +111,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { RouteTitle, Breadcrumb, RoutePath } from '~/utils/routing'
+  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
   import {
     updateSocialSupportSubjectsSchema,

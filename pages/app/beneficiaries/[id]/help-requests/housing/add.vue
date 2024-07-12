@@ -1,13 +1,13 @@
 <template>
   <PageContainer>
-    <DsfrBreadcrumb
+    <!-- <DsfrBreadcrumb
       :links="
         Breadcrumb.AppBeneficiaryHelpRequestAdd(
           beneficiary,
           FileInstructionType.Housing
         )
       "
-    />
+    /> -->
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -32,8 +32,10 @@
         class="fr-mx-auto"
       />
       <HousingHelpRequestFormCreation
+        v-if="beneficiary"
         :is-submitting="isSubmitting"
         :beneficiary-id="beneficiaryId"
+        :family-file-id="beneficiary.familyFileId"
         :partner-organizations="partnerOrganizations || []"
         @save-housing-help-request="onAddHousingHelpRequest"
       />
@@ -42,10 +44,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHousingHelpRequestInput } from '~/server/schema'
   import { fileInstructionTypePictos } from '~/client/options'
 

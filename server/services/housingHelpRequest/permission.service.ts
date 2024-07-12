@@ -16,7 +16,7 @@ function getHousingHelpRequestSecurityTarget(
         include: {
           socialSupport: {
             include: {
-              beneficiary: {
+              familyFile: {
                 include: {
                   referents: true
                 }
@@ -42,7 +42,7 @@ export async function getEditionPermissions(
   } = housingHelpRequest
   return getFileInstructionPermissions({
     ctx,
-    beneficiary: socialSupport.beneficiary,
+    familyFile: socialSupport.familyFile,
     socialSupport
   })
 }

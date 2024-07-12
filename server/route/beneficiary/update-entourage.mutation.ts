@@ -19,12 +19,14 @@ function getBeneficiarySecurityTargetWithEntourage(
     select: {
       id: true,
       structureId: true,
-      referents: {
-        select: { id: true, role: true, structureId: true }
+      familyFile: {
+        select: {
+          referents: {
+            select: { id: true, role: true, structureId: true }
+          }
+        }
       },
-      relatives: {
-        where: { hosted: false }
-      }
+      relatives: true
     }
   })
 }

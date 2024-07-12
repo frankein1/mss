@@ -8,9 +8,6 @@ export const beneficiaryRouter = router({
   getBeneficiaryDetails: protectedProcedure
     .input(routes.getBeneficiaryDetailsQuery.inputValidation)
     .query(routes.getBeneficiaryDetailsQuery.execute),
-  getSocialSupports: protectedProcedure
-    .input(routes.getSocialSupports.inputValidation)
-    .query(routes.getSocialSupports.execute),
   getPage: protectedProcedure
     .input(routes.getPage.inputValidation)
     .query(routes.getPage.execute),
@@ -20,9 +17,6 @@ export const beneficiaryRouter = router({
   search: protectedProcedure
     .input(routes.searchBeneficiaryQuery.inputValidation)
     .query(routes.searchBeneficiaryQuery.execute),
-  getBeneficiaryDocuments: protectedProcedure
-    .input(routes.getBeneficiaryDocumentsQuery.inputValidation)
-    .query(routes.getBeneficiaryDocumentsQuery.execute),
   getTaxHouseholds: protectedProcedure
     .input(routes.getBeneficiaryTaxHouseholdsQuery.inputValidation)
     .query(routes.getBeneficiaryTaxHouseholdsQuery.execute),
