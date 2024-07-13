@@ -55,7 +55,7 @@ function loadFixturesCGUHistory() {
 }
 
 function loadFixturesFamilyFiles() {
-  console.log('👥 Beneficiaries...')
+  console.log('👨‍👩‍👧‍👧 Family Files...')
 
   // Use upsert instead of createMany as createMany does not allow *-to-many relations to be initialized
   return fixturesFamilyFiles.map(({ id, ...data }) => {

@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import { fixtureStructures, fixturesUsers, FixtureUserRole } from '.'
+import { fixtureStructures, FixtureStructure, fixturesUsers, FixtureUserRole } from '.'
 
 export const fixturesFamilyFiles = [
   {
@@ -102,7 +102,7 @@ export const fixturesFamilyFiles = [
   },
   {
     id: '86f82368-7c08-403c-b0f2-d2d39d9ae6c3',
-    structureId: fixtureStructures[0].id,
+    structureId: fixtureStructures[FixtureStructure.Ministère].id,
     referents: {
       connect: [
         { id: fixturesUsers[FixtureUserRole.StructureManagerMinistere].id },
