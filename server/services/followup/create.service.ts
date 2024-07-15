@@ -73,7 +73,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
           data: familyFile.referents
             .filter(referent => referent.id !== user.id)
             .map(referent => ({
-              familyFileId: familyFile.id,
+              beneficiaryId,
               recipientId: referent.id,
               type: NotificationType.NewFollowupElement,
               itemCreatedById: user.id

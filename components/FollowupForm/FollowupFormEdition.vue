@@ -53,6 +53,7 @@
       id: followup.value.id,
       socialSupportId: followup.value.socialSupportId,
       beneficiaryId: followup.value.beneficiaryId,
+      familyFileId: followup.value.familyFileId,
       medium: followup.value.medium,
       ministre: followup.value.ministre,
       numeroPegase: followup.value.numeroPegase,
