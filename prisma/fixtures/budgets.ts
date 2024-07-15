@@ -49,5 +49,5 @@ export const fixturesBudgets = [
   {
     id: '4c081679-5ca8-480f-8448-fb9631290f12',
     familyFileId: fixturesBeneficiaries[11].id
-  },
+  }
 ] satisfies Prisma.BudgetUncheckedCreateInput[]

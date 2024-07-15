@@ -39,7 +39,6 @@ export const uploadBrowserDocumentSchema = z.object({
 })
 
 export const addDocumentSchema = z.object({
-  beneficiaryId: z.string(errorMessages).uuid(),
   familyFileId: z.string(errorMessages).uuid(),
   type: requiredNativeEnum(DocumentType),
   tags: z.array(z.string()),

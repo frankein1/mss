@@ -44,7 +44,7 @@ test.describe('Ccas Agent accessing beneficiary health form', () => {
 
     await page.waitForURL(beneficiaryUrl(id))
     await page.waitForLoadState('networkidle')
-    const url = page.url();
+    const url = page.url()
 
     expect.soft(url).toBe(`http://localhost:3000${beneficiaryUrl(id)}`)
 
@@ -67,9 +67,10 @@ test.describe('Ccas Agent accessing beneficiary health form', () => {
   })
 })
 
-
 test.describe('Beneficiary Health Form as Ministry Agent', () => {
-  test.use({ storageState: 'playwright/.auth/structure-manager-ministere.json' })
+  test.use({
+    storageState: 'playwright/.auth/structure-manager-ministere.json'
+  })
 
   test('should be able to access health section but not access or modify NIR field when referent of the beneficiary', async ({
     page

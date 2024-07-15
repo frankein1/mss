@@ -140,7 +140,7 @@ export const fixturesBeneficiaries = [
     usualName: 'DOWNER',
     firstName: 'Anaé',
     gender: 'Other',
-    familySituation: 'Divorced',
+    familySituation: 'Divorced'
   },
   {
     id: '86f82368-7c08-403c-b0f2-d2d39d9ae6c3',
