@@ -43,10 +43,11 @@
   import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { Breadcrumb, RouteTitle, RoutePath } from '~/utils/routing'
+  import { Breadcrumb, RouteTitle, RoutePath, Route } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema'
   import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
   import { fileInstructionTypePictos } from '~/client/options'
+  import { HistoryTab } from '~/utils/constants/history'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -110,12 +111,30 @@
     useTrpcMutation({
       mutation: () => trpcClient.helpRequest.add.mutate(helpRequest),
       isSubmitting,
-      onSuccess: () => {
-        navigateTo(
-          RoutePath.AppBeneficiary(beneficiaryId, {
-            tab: BeneficiaryTab.History
-          })
-        )
+      onSuccess: async res => {
+        const fullHelpRequest = await trpcClient.helpRequest.getOne.useQuery({
+          id: res.helpRequest.id
+        })
+        const socialSupportId =
+          fullHelpRequest.data.value?.helpRequest.fileInstruction.socialSupport
+            .id
+
+        if (socialSupportId) {
+          navigateTo(
+            RoutePath.AppBeneficiary(beneficiaryId, {
+              item: socialSupportId,
+              tab: BeneficiaryTab.History,
+              originPage: Route.AppHistory,
+              originTab: HistoryTab.FileInstructions
+            })
+          )
+        } else {
+          navigateTo(
+            RoutePath.AppBeneficiary(beneficiaryId, {
+              tab: BeneficiaryTab.History
+            })
+          )
+        }
       },
       onFailure: () => {
         snackbar.error(
