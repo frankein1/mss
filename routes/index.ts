@@ -31,3 +31,5 @@ export const routes = {
 export const apiRoutes = {
   auth: authApiRoutes
 }
+
+export type { AppBeneficiaryEditRoute } from './beneficiary'

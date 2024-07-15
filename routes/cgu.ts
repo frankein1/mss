@@ -24,4 +24,4 @@ export const routes = {
     title: "Conditions générales d'utilisation",
     path: (options?: CGURouteOptions) => getCGURoute(`/cgu/user`, options)
   }
-}
+} as const
