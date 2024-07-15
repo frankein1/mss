@@ -6,4 +6,4 @@ export const routes = {
     title: 'Statistiques',
     path: () => `${AppRoute}/stats`
   }
-}
+} as const

@@ -12,6 +12,14 @@ type OriginPage =
   | 'AppBeneficiaryBudgetIncomeEdit'
   | 'AppFileBudgetExpensesEdit'
 
+export type AppBeneficiaryEditRoute =
+  | 'AppBeneficiaryEditInfo'
+  | 'AppBeneficiaryEditTaxHousehold'
+  | 'AppBeneficiaryEditEntourage'
+  | 'AppBeneficiaryEditHealth'
+  | 'AppBeneficiaryEditOccupation'
+  | 'AppBeneficiaryEditExternalOrganisations'
+
 function createSuffixUrl(options?: {
   tab?: BeneficiaryTab
   item?: string
@@ -181,4 +189,4 @@ export const routes = {
     title: 'Imprimer la fiche',
     path: (historyId: string) => `${AppRoute}/historyprint/${historyId}/print`
   }
-}
+} as const

@@ -56,4 +56,4 @@ export const routes = {
     title: '',
     path: () => `${AdminRoute}/integrations`
   }
-}
+} as const

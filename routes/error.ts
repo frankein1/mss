@@ -9,4 +9,4 @@ export const routes = {
     title: "Votre compte InclusionConnect n'est pas rattaché",
     path: () => '/error/unknown-user'
   }
-}
+} as const
