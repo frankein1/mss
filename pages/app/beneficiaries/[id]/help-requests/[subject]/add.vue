@@ -45,10 +45,10 @@
   import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema'
   import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
   import { fileInstructionTypePictos } from '~/client/options'
+  import { routes } from '~/routes'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -73,7 +73,9 @@
     })
 
   const title = computed(() =>
-    RouteTitle.AppBeneficiaryHelpRequestAdd(beneficiary.value || null)
+    routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(
+      beneficiary.value || null
+    )
   )
 
   useHead({ title })
@@ -114,7 +116,7 @@
       isSubmitting,
       onSuccess: () => {
         navigateTo(
-          RoutePath.AppBeneficiary(beneficiaryId, {
+          routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
             tab: BeneficiaryTab.History
           })
         )

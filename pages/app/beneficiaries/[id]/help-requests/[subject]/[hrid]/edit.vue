@@ -54,8 +54,8 @@
   import { EditHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { fileInstructionTypePictos } from '~/client/options'
+  import { routes } from '~/routes'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -82,7 +82,7 @@
   )
 
   const title = computed(() =>
-    RouteTitle.AppBeneficiaryHelpRequestEdit(beneficiary.value)
+    routes.helpRequest.AppBeneficiaryHelpRequestEdit.title(beneficiary.value)
   )
 
   // const subject = computed(() =>
@@ -144,7 +144,7 @@
       isSubmitting,
       onSuccess: () => {
         navigateTo(
-          RoutePath.AppBeneficiary(beneficiaryId, {
+          routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
             tab: BeneficiaryTab.History
           })
         )

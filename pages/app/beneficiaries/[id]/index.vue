@@ -115,17 +115,17 @@
 
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { Route, RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
   import { useBeneficiaryDetails } from '~/composables/useBeneficiaryDetails'
+  import { routes } from '~/routes'
 
   const route = useRoute()
 
   const beneficiaryId = route.params.id as string
   const originPage = route.query.originPage as
-    | Route.AppOverview
-    | Route.AppBeneficiaries
-    | Route.AppHistory
+    | typeof routes.user.AppOverview.name
+    | typeof routes.beneficiary.AppBeneficiaries.name
+    | typeof routes.beneficiary.AppHistory.name
     | undefined
   const originTab = route.query.hash as string | undefined
 
@@ -139,7 +139,9 @@
 
   const { application } = usePermissions()
 
-  const title = RouteTitle.AppBeneficiary(beneficiary.value?.general || null)
+  const title = routes.beneficiary.AppBeneficiary.title(
+    beneficiary.value?.general || null
+  )
 
   useHead({ title })
 
@@ -152,7 +154,7 @@
       const tabParam = originTab ? `?tab=${originTab}` : ''
       return `${originPage}${tabParam}`
     }
-    return RoutePath.AppBeneficiaries()
+    return routes.beneficiary.AppBeneficiaries.path()
   })
 
   /** Deleting status is used temporarily to hide the tab BeneficiaryHistory
