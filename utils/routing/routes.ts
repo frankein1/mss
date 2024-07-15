@@ -36,7 +36,6 @@ export enum Route {
   AppBeneficiariesAdd = 'AppBeneficiariesAdd',
   AppBeneficiary = 'AppBeneficiary',
   AppBeneficiaryPrint = 'AppBeneficiaryPrint',
-  AppBeneficiaryBudgetExpensesEdit = 'AppBeneficiaryBudgetExpensesEdit',
   AppBeneficiaryBudgetIncomeEdit = 'AppBeneficiaryBudgetIncomeEdit',
   AppBeneficiaryEdit = 'AppBeneficiaryEdit',
   AppBeneficiaryEditInfo = 'AppBeneficiaryEditInfo',
@@ -54,6 +53,7 @@ export enum Route {
   // FILE
   AppFile = 'AppFile',
   AppFileBudgetInfoEdit = 'AppFileBudgetInfoEdit',
+  AppFileBudgetExpensesEdit = 'AppFileBudgetExpensesEdit',
 
   // ADMIN
   Admin = 'Admin',
@@ -85,6 +85,31 @@ const ErrorRoute = '/error'
 
 const BeneficiariesRoute = `${AppRoute}/beneficiaries`
 
+function createSuffixUrl(options?: {
+  tab?: BeneficiaryTab
+  item?: string
+  originPage?:
+    | Route.AppOverview
+    | Route.AppBeneficiaries
+    | Route.AppHistory
+    | Route.AppFileBudgetInfoEdit
+    | Route.AppBeneficiaryBudgetIncomeEdit
+    | Route.AppFileBudgetExpensesEdit
+  originTab?: HistoryTab
+}) {
+  const hasDefinedOptions = options && Object.values(options).every(o => !!o)
+  if (hasDefinedOptions) {
+    const { tab, ...params } = options
+    const tabHash = tab ? `#${tab}` : ''
+    if (Object.keys(params).length) {
+      const urlParams = new URLSearchParams(params)
+      return `?${urlParams}${tabHash}`
+    }
+    return tabHash
+  }
+  return ''
+}
+
 const BeneficiaryRoute = (
   beneficiaryId: string | undefined,
   options?: {
@@ -96,7 +121,7 @@ const BeneficiaryRoute = (
       | Route.AppHistory
       | Route.AppFileBudgetInfoEdit
       | Route.AppBeneficiaryBudgetIncomeEdit
-      | Route.AppBeneficiaryBudgetExpensesEdit
+      | Route.AppFileBudgetExpensesEdit
     originTab?: HistoryTab
   }
 ) => {
@@ -104,17 +129,8 @@ const BeneficiaryRoute = (
     return ''
   }
   const base = `${BeneficiariesRoute}/${beneficiaryId}`
-  const hasDefinedOptions = options && Object.values(options).every(o => !!o)
-  if (hasDefinedOptions) {
-    const { tab, ...params } = options
-    const tabHash = tab ? `#${tab}` : ''
-    if (Object.keys(params).length) {
-      const urlParams = new URLSearchParams(params)
-      return `${base}?${urlParams}${tabHash}`
-    }
-    return `${base}${tabHash}`
-  }
-  return base
+  const suffix = createSuffixUrl(options)
+  return `${base}${suffix}`
 }
 
 const BeneficiaryEditRoute = (beneficiaryId: string) =>
@@ -208,10 +224,10 @@ export const RoutePath = {
   [Route.AppBeneficiary]: BeneficiaryRoute,
   [Route.AppBeneficiaryPrint]: (beneficiaryId: string) =>
     `${BeneficiaryRoute(beneficiaryId)}/print`,
-  [Route.AppBeneficiaryBudgetExpensesEdit]: (
-    beneficiaryId: string,
-    expensesId: string
-  ) => `${BeneficiaryRoute(beneficiaryId)}/expenses/${expensesId}/edit`,
+  // [Route.AppBeneficiaryBudgetExpensesEdit]: (
+  //   fileId: string,
+  //   expensesId: string
+  // ) => `${FileRoute(fileId)}/expenses/${expensesId}/edit`,
   [Route.AppBeneficiaryBudgetIncomeEdit]: (
     beneficiaryId: string,
     incomeId: string
@@ -298,6 +314,10 @@ export const RoutePath = {
   [Route.AppFile]: (familyFileId: string) => `/app/files/${familyFileId}`,
   [Route.AppFileBudgetInfoEdit]: (familyFileId: string) =>
     `/app/files/${familyFileId}/budget/edit`,
+  [Route.AppFileBudgetExpensesEdit]: (
+    familyFileId: string,
+    expensesId: string
+  ) => `/app/files/${familyFileId}/expenses/${expensesId}/edit`,
 
   // ADMIN
   [Route.Admin]: () => `${AdminRoute}`,

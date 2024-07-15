@@ -17,7 +17,7 @@
     :label-getter="(key: string) => budgetExpensesKeys.value(key)"
     :value-getter="(key: string) => expenses[key as ExpensesKey]"
     :edit-route="
-      RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
+      RoutePath.AppFileBudgetExpensesEdit(beneficiaryId, expenses.id)
     "
   />
 
@@ -29,7 +29,7 @@
     :total="loansTotal"
     :subsection-items="expenses.loans"
     :edit-route="
-      RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
+      RoutePath.AppFileBudgetExpensesEdit(beneficiaryId, expenses.id)
     "
   />
 
@@ -41,7 +41,7 @@
     :total="debtsTotal"
     :subsection-items="expenses.debts"
     :edit-route="
-      RoutePath.AppBeneficiaryBudgetExpensesEdit(beneficiaryId, expenses.id)
+      RoutePath.AppFileBudgetExpensesEdit(beneficiaryId, expenses.id)
     "
   />
 </template>
