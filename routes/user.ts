@@ -16,4 +16,4 @@ export const routes = {
     title: 'Mon compte',
     path: () => `${AppRoute}/account`
   }
-}
+} as const

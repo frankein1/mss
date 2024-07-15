@@ -29,4 +29,4 @@ export const routes = {
     title: "Statistiques d'utilisation",
     path: () => '/statistiques'
   }
-}
+} as const
