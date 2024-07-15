@@ -20,7 +20,7 @@
       <div class="fr-container fr-pb-2w">
         <!-- <DsfrBreadcrumb
           :links="
-            Breadcrumb.AppBeneficiaryBudgetExpensesEdit(
+            Breadcrumb.AppFileBudgetExpensesEdit(
               beneficiaryIdentification,
               expensesId
             )
@@ -90,12 +90,12 @@
   const beneficiaryId = route.params.id as string
   const expensesId = route.params.eid as string
 
-  const title = RouteTitle.AppBeneficiaryBudgetExpensesEdit()
+  const title = RouteTitle.AppFileBudgetExpensesEdit()
 
   useHead({ title })
 
   definePageMeta({
-    name: Route.AppBeneficiaryBudgetExpensesEdit
+    name: Route.AppFileBudgetExpensesEdit
   })
 
   const {
@@ -173,7 +173,7 @@
 
   const budgetTabRoute = RoutePath.AppBeneficiary(beneficiaryId, {
     tab: BeneficiaryTab.Budget,
-    originPage: route.name as Route.AppBeneficiaryBudgetExpensesEdit
+    originPage: route.name as Route.AppFileBudgetExpensesEdit
   })
 
   const onSubmit = handleSubmit(async values => {
