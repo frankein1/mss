@@ -108,7 +108,7 @@ export async function create({ input, ctx }: CreateParams) {
                   data: familyFile.referents
                     .filter(referent => referent.id !== ctx.user.id)
                     .map(referent => ({
-                      familyFileId: familyFile.id,
+                      beneficiaryId,
                       recipientId: referent.id,
                       type: NotificationType.NewFileInstructionElement,
                       itemCreatedById: ctx.user.id

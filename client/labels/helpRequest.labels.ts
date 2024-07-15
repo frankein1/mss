@@ -3,6 +3,7 @@ export const helpRequestFieldLabels = {
   status: 'Statut',
   dueDate: "Date d'échéance",
   beneficiaryId: 'Bénéficiaire',
+  familyFileId: 'Dossier',
   examinationDate: 'Date de passage en commission',
   askedAmount: 'Montant demandé',
   allocatedAmount: 'Montant attribué',

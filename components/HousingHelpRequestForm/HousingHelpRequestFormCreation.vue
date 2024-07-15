@@ -37,6 +37,7 @@
     initialValues: {
       isMinistry: application.value.module.ministere,
       beneficiaryId: props.beneficiaryId,
+      familyFileId: props.familyFileId,
       date: new Date(),
       status: SocialSupportStatus.WaitingAdditionalInformation
     }
