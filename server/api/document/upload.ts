@@ -129,7 +129,7 @@ async function addNotification(
     if (document.createdById !== referent.id && permissions.view) {
       notifications.push({
         recipientId: referent.id,
-        beneficiaryId: beneficiaryId,
+        beneficiaryId,
         documentId: document.key,
         type: NotificationType.NewDocument,
         itemCreatedById: document.createdById
