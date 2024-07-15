@@ -44,8 +44,6 @@ export default defineEventHandler(async event => {
     })
   }
 
-  console.log({ data })
-
   let input
   try {
     input = addDocumentSchema.parse(data)
