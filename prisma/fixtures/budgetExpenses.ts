@@ -45,5 +45,9 @@ export const fixturesBudgetExpenses = [
   {
     id: '85c51414-4caf-441a-b6b1-7c0a3da86a03',
     budgetId: fixturesBudgets[10].id
-  }
+  },
+  {
+    id: 'af7fa502-6a30-46b4-a11c-a27ee518f176',
+    budgetId: fixturesBudgets[11].id
+  },
 ] satisfies Prisma.BudgetExpensesUncheckedCreateInput[]

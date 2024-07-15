@@ -80,5 +80,10 @@ export const fixturesBudgetIncomes = [
     type: 'HouseholdMember',
     budgetId: fixturesBudgets[10].id,
     householdMemberId: fixturesBeneficiaryRelatives[3].id
-  }
+  },
+  {
+    id: '13c43d66-e931-4432-bb71-fc2140352a53',
+    type: 'Beneficiary',
+    budgetId: fixturesBudgets[11].id,
+  },
 ] satisfies Prisma.BudgetIncomeUncheckedCreateInput[]
