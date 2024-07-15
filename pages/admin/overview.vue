@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <PageTitle :title="RouteTitle.AdminOverview()" />
+    <PageTitle :title="routes.admin.AdminOverview.title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-2">
         <div class="fr-card">
@@ -60,10 +60,10 @@
 </template>
 
 <script setup lang="ts">
-  import { Route, RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   definePageMeta({
-    name: Route.AdminOverview
+    name: routes.admin.AdminOverview.name
   })
 
   const data = await useTrpcClient().admin.getOverview.query()

@@ -33,8 +33,8 @@
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { EditFollowupInput } from '~/server/schema'
+  import { routes } from '~/routes'
 
   const route = useRoute()
   const snackbar = useSnackbar()
@@ -57,7 +57,7 @@
   const beneficiary = computed(() => followup.value?.beneficiary || null)
 
   const title = computed(() =>
-    RouteTitle.AppBeneficiaryFollowupEdit(beneficiary.value)
+    routes.followup.AppBeneficiaryFollowupEdit.title(beneficiary.value)
   )
 
   useHead({ title })
@@ -100,7 +100,7 @@
       isSubmitting,
       onSuccess: () => {
         navigateTo(
-          RoutePath.AppBeneficiary(followup.beneficiaryId, {
+          routes.beneficiary.AppBeneficiary.path(followup.beneficiaryId, {
             tab: BeneficiaryTab.History
           })
         )

@@ -8,7 +8,7 @@
         :title="title"
       />
       <NuxtLink
-        :to="RoutePath.AppBeneficiariesAdd()"
+        :to="routes.beneficiary.AppBeneficiariesAdd.path()"
         class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line action"
       >
         Créer un·e bénéficiaire
@@ -71,14 +71,14 @@
   import { BeneficiarySort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
-  import { Route, RouteTitle, RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
 
-  const title = RouteTitle.AppBeneficiaries()
+  const title = routes.beneficiary.AppBeneficiaries.title
 
   useHead({ title })
 
   definePageMeta({
-    name: Route.AppBeneficiaries
+    name: routes.beneficiary.AppBeneficiaries.name
   })
 
   const { application } = usePermissions()

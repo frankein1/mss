@@ -30,7 +30,7 @@
               :type="menu.route === currentRoute ? 'button' : 'submit'"
               @click="menu.route !== currentRoute && emit('save', menu.path)"
             >
-              {{ RouteTitle[menu.route]() }}
+              {{ routes.beneficiary[menu.route].title }}
             </button>
             <div v-if="menu.targets">
               <ul class="fr-sidemenu__list">
@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-  import { RouteTitle, AppBeneficiaryEditRoute } from '~/utils/routing'
+  import { routes, AppBeneficiaryEditRoute } from '~/routes'
 
   const SCROLL_DEFER_DURATION = 400
 
