@@ -21,4 +21,4 @@ export const routes = {
     path: (beneficiaryId: string, followupId: string) =>
       `${BeneficiariesRoute}/${beneficiaryId}/followups/${followupId}/edit`
   }
-}
+} as const

@@ -26,4 +26,4 @@ export const routes = {
     title: 'Ajouter un accompagnement',
     path: () => `${AppRoute}/structure/subjects`
   }
-}
+} as const

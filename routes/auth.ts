@@ -19,7 +19,7 @@ export const routes = {
     title: 'Vous avez été déconnecté·e',
     path: () => '/auth/logout'
   }
-}
+} as const
 
 export const apiRoutes = {
   ApiLogout: {
@@ -28,4 +28,4 @@ export const apiRoutes = {
   ApiSsoCallback: {
     path: () => '/api/keycloak/logout'
   }
-}
+} as const

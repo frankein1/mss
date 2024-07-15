@@ -6,4 +6,4 @@ export const routes = {
     title: 'Dossiers',
     path: (familyFileId: string) => `${FilesRoute}/${familyFileId}`
   }
-}
+} as const

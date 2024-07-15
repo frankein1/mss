@@ -30,4 +30,4 @@ export const routes = {
     ) =>
       `${BeneficiariesRoute}/${beneficiaryId}/help-requests/${subject.toLocaleLowerCase()}/${helpRequestId}/edit`
   }
-}
+} as const
