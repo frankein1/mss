@@ -56,12 +56,12 @@
 <script lang="ts" setup>
   import { Prisma } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle, RoutePath, Route } from '~/utils/routing'
   import {
     UpdateBudgetInfoInput,
     updateBudgetInfoSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
+  import { routes } from '~/routes'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
@@ -69,12 +69,12 @@
 
   const familyFileId = route.params.id as string
 
-  const title = RouteTitle.AppFileBudgetInfoEdit()
+  const title = routes.budget.AppFileBudgetInfoEdit.title
 
   useHead({ title })
 
   definePageMeta({
-    name: Route.AppFileBudgetInfoEdit
+    name: routes.budget.AppFileBudgetInfoEdit.name
   })
 
   // const {
@@ -160,7 +160,7 @@
     isFormDirty
   })
 
-  const budgetTabRoute = RoutePath.AppFile(familyFileId)
+  const budgetTabRoute = routes.file.AppFile.path(familyFileId)
 
   const onSubmit = handleSubmit(async values => {
     isNavigatingWithFormActions.value = true

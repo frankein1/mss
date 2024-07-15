@@ -30,10 +30,10 @@
 <script setup lang="ts">
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { CreateBeneficiaryInput } from '~/server/schema'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
+  import { routes } from '~/routes'
 
-  const title = RouteTitle.AppBeneficiariesAdd()
+  const title = routes.beneficiary.AppBeneficiariesAdd.title
 
   useHead({ title })
 
@@ -73,9 +73,9 @@
           CreateBeneficiaryEventAction.SavePartialForm
         )
         if (draft) {
-          navigateTo(RoutePath.AppBeneficiaryEditInfo(id))
+          navigateTo(routes.beneficiary.AppBeneficiaryEditInfo.path(id))
         } else {
-          navigateTo(RoutePath.AppBeneficiary(id))
+          navigateTo(routes.beneficiary.AppBeneficiary.path(id))
         }
       },
       onFailure: () => {

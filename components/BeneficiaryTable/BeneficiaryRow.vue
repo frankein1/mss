@@ -3,7 +3,7 @@
     <td>
       <NuxtLink
         class="table-row-link"
-        :to="RoutePath.AppBeneficiary(beneficiary.id)"
+        :to="routes.beneficiary.AppBeneficiary.path(beneficiary.id)"
       >
         {{ formatTableValue(lastName) }}
       </NuxtLink>
@@ -39,7 +39,7 @@
   import { EMPTY_TABLE_CELL } from '~/utils/constants'
   import { formatDate } from '~/utils/formatDate'
   import { nameOrEmpty } from '~/utils/nameOrEmpty'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { formatTableValue } from '~/utils/table'
 
   const props = defineProps<{

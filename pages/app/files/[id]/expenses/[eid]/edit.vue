@@ -70,7 +70,6 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle, RoutePath, Route } from '~/utils/routing'
   import { useBeneficiarySummary } from '~/composables/useBeneficiarySummary'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
@@ -82,6 +81,7 @@
   import { incrementBudgetTotal } from '~/utils/budget'
   import { budgetExpensesKeys } from '~/client/options'
   import { ExpensesKey } from '~/types/budget'
+  import { routes } from '~/routes'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
@@ -90,12 +90,12 @@
   const beneficiaryId = route.params.id as string
   const expensesId = route.params.eid as string
 
-  const title = RouteTitle.AppFileBudgetExpensesEdit()
+  const title = routes.budget.AppFileBudgetExpensesEdit.title
 
   useHead({ title })
 
   definePageMeta({
-    name: Route.AppFileBudgetExpensesEdit
+    name: routes.budget.AppFileBudgetExpensesEdit.name
   })
 
   const {
@@ -171,9 +171,10 @@
     isFormDirty
   })
 
-  const budgetTabRoute = RoutePath.AppBeneficiary(beneficiaryId, {
+  const budgetTabRoute = routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
     tab: BeneficiaryTab.Budget,
-    originPage: route.name as Route.AppFileBudgetExpensesEdit
+    originPage:
+      route.name as typeof routes.budget.AppFileBudgetExpensesEdit.name
   })
 
   const onSubmit = handleSubmit(async values => {
