@@ -48,7 +48,8 @@ export enum HelpRequestFilterEventAction {
 export enum DocumentEventAction {
   See = 'Voir',
   Download = 'Télécharger',
-  Edit = 'Modifier'
+  Edit = 'Modifier',
+  Print = 'Imprimer'
 }
 
 export enum CreateBeneficiaryEventAction {

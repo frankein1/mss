@@ -70,6 +70,16 @@
             Modifier
           </NuxtLink>
         </li>
+        <!-- TODO: ajouter un v-if et regarder si droit d'imprimer -->
+        <li v-if="printLink">
+          <NuxtLink
+            :to="printLink"
+            class="fr-btn fr-btn--secondary fr-icon-printer-line"
+            @on-click="onPrint"
+          >
+            Imprimer
+          </NuxtLink>
+        </li>
       </ul>
 
       <hr
@@ -95,6 +105,7 @@
   import type { SocialSupportItem, CommentData, CommentItem } from './types'
   import { RoutePath } from '~/utils/routing'
   import { FamilyFilePermissions } from '~/server/security'
+  import { DocumentEventAction, EventCategory } from '~/types/matomo'
 
   const props = defineProps<{
     item: SocialSupportItem
@@ -114,6 +125,23 @@
   )
 
   const commentItems = ref(socialSupport.value.comments || [])
+
+  const printLink = computed(() => {
+    if (socialSupport.value.followup) {
+      return RoutePath.AppHistoryPrint(socialSupport.value.followup.id)
+    }
+    const helpRequest = socialSupport.value.fileInstruction?.helpRequest
+    if (helpRequest?.id) {
+      return RoutePath.AppHistoryPrint(helpRequest.id)
+    }
+
+    if (socialSupport.value.fileInstruction?.housingHelpRequest) {
+      return RoutePath.AppHistoryPrint(
+        socialSupport.value.fileInstruction?.housingHelpRequest.id
+      )
+    }
+    return null
+  })
 
   const editLink = computed(() => {
     if (socialSupport.value.followup) {
@@ -162,6 +190,10 @@
       isFollowup: isFollowup.value,
       deleted: onSocialSupportItemDeleted
     })
+  }
+
+  function onPrint() {
+    useMatomo().trackEvent(EventCategory.Document, DocumentEventAction.Print)
   }
 
   function onCommentAdded(commentItem: CommentItem) {
