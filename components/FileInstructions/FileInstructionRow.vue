@@ -52,9 +52,9 @@
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
-  import { Route, RoutePath } from '~/utils/routing'
   import { FileInstructionFilterInput } from '~/server/schema'
   import { roomCountKeys } from '~/client/options'
+  import { routes } from '~/routes'
 
   const props = defineProps<{
     fileInstruction: FileInstruction
@@ -73,10 +73,10 @@
   })
 
   const helpRequestPath = computed(() =>
-    RoutePath.AppBeneficiary(socialSupport.value.beneficiary.id, {
+    routes.beneficiary.AppBeneficiary.path(socialSupport.value.beneficiary.id, {
       tab: BeneficiaryTab.History,
       item: socialSupport.value.id,
-      originPage: Route.AppHistory,
+      originPage: routes.beneficiary.AppHistory.name,
       originTab: HistoryTab.FileInstructions
     })
   )

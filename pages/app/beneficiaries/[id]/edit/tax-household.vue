@@ -6,7 +6,7 @@
     :schema="updateBeneficiaryTaxHouseholdSchema"
     :permissions="permissions"
     :is-submitting="isSubmitting"
-    :current-route="Route.AppBeneficiaryEditTaxHousehold"
+    :current-route="routes.beneficiary.AppBeneficiaryEditTaxHousehold.name"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -35,7 +35,7 @@
     UpdateBeneficiaryTaxHouseholdInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, Route } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   const trpcClient = useTrpcClient()
 
@@ -119,7 +119,9 @@
       },
       isSubmitting,
       onSuccess: () => {
-        navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
+        navigateTo(
+          target || routes.beneficiary.AppBeneficiary.path(beneficiaryId)
+        )
       },
       onFailure: () => {
         useSnackbar().error('La mise à jour de la fiche bénéficiaire a échoué.')

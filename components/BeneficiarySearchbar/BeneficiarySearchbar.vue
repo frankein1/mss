@@ -8,9 +8,7 @@
     >
       <template #result="{ result: beneficiary }">
         <NuxtLink
-          :to="
-            RoutePath.AppBeneficiary(beneficiary.id, { originPage: routeName })
-          "
+          :to="r.AppBeneficiary.path(beneficiary.id, { originPage: routeName })"
           class="fr-btn fr-btn--tertiary-no-outline result"
         >
           {{ formatBeneficiarySearchDisplayName(beneficiary) }}
@@ -18,7 +16,7 @@
       </template>
     </BeneficiarySearchbarInput>
     <NuxtLink
-      :to="RoutePath.AppBeneficiariesAdd()"
+      :to="r.AppBeneficiariesAdd.path()"
       class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line add-beneficiary-btn"
       @click="onAccessBeneficiaryAdd"
     >
@@ -28,17 +26,20 @@
 </template>
 
 <script setup lang="ts">
-  import { Route, RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
+
   import {
     AccessBeneficiaryAddEventAction,
     EventCategory
   } from '~/types/matomo'
 
   const route = useRoute()
-  const routeName = route.name as
-    | Route.AppOverview
-    | Route.AppBeneficiaries
-    | undefined
+
+  const r = routes.beneficiary
+  type RouteName =
+    | typeof routes.user.AppOverview.name
+    | typeof r.AppBeneficiaries.name
+  const routeName = route.name as RouteName | undefined
 
   async function searchBeneficiaries(query: string) {
     const beneficiaries = await useTrpcClient().beneficiary.search.query({
