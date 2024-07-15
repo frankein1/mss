@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle, RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   definePageMeta({
     layout: false
@@ -79,7 +79,9 @@
   const beneficiary = computed(() => data.value?.beneficiary || null)
 
   useHead({
-    title: RouteTitle.AppBeneficiaryPrint(beneficiary.value?.general || null)
+    title: routes.beneficiary.AppBeneficiaryPrint.title(
+      beneficiary.value?.general || null
+    )
   })
 
   const socialSupportSubjects = computed(() =>
@@ -98,7 +100,7 @@
   })
 
   function onAfterPrint() {
-    navigateTo(RoutePath.AppBeneficiary(beneficiaryId))
+    navigateTo(routes.beneficiary.AppBeneficiary.path(beneficiaryId))
   }
 </script>
 

@@ -6,7 +6,7 @@
     :binded-values="bindedValues"
     :permissions="permissions"
     :is-submitting="isSubmitting"
-    :current-route="Route.AppBeneficiaryEditOccupation"
+    :current-route="routes.beneficiary.AppBeneficiaryEditOccupation.name"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -34,10 +34,10 @@
     UpdateBeneficiaryOccupationInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, Route } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   definePageMeta({
-    name: Route.AppBeneficiaryEditOccupation
+    name: routes.beneficiary.AppBeneficiaryEditOccupation.name
   })
 
   const trpcClient = useTrpcClient()
@@ -114,7 +114,9 @@
       },
       isSubmitting,
       onSuccess: () => {
-        navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
+        navigateTo(
+          target || routes.beneficiary.AppBeneficiary.path(beneficiaryId)
+        )
       },
       onFailure: () => {
         useSnackbar().error('La mise à jour de la fiche bénéficaire a échoué.')

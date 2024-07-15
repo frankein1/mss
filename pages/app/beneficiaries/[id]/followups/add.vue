@@ -41,9 +41,9 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { AddFollowupInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { routes } from '~/routes'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -60,7 +60,7 @@
     })
 
   const title = computed(() =>
-    RouteTitle.AppBeneficiaryFollowupAdd(beneficiary.value || null)
+    routes.followup.AppBeneficiaryFollowupAdd.title(beneficiary.value || null)
   )
 
   useHead({ title })
@@ -101,7 +101,7 @@
       isSubmitting,
       onSuccess: () => {
         navigateTo(
-          RoutePath.AppBeneficiary(beneficiaryId, {
+          routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
             tab: BeneficiaryTab.History
           })
         )
