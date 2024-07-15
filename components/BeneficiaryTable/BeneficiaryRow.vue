@@ -25,12 +25,12 @@
       </template>
       <template v-else>{{ EMPTY_TABLE_CELL }}</template>
     </td>
-    <!-- <td
+    <td
       class="social-support-subjects-data"
       :title="formatTableValue(socialSupportSubjects)"
     >
       <span>{{ formatTableValue(socialSupportSubjects) }}</span>
-    </td> -->
+    </td>
   </tr>
 </template>
 
@@ -48,15 +48,15 @@
 
   const beneficiary = computed(() => props.item.beneficiary)
   const general = computed(() => beneficiary.value.general)
-  // const history = computed(() => beneficiary.value.history)
+  const history = computed(() => beneficiary.value.history)
 
   const addressCodeAndCity = computed(() =>
     [general.value.zipcode, general.value.city].filter(v => !!v).join(' ')
   )
 
-  // const socialSupportSubjects = computed(() =>
-  //   history.value.subjects.map(({ name }) => name).join(', ')
-  // )
+  const socialSupportSubjects = computed(() =>
+    history.value.subjects.map(({ name }) => name).join(', ')
+  )
 
   const lastName = computed(() => {
     if (general.value.usualName) {
