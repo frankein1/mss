@@ -18,4 +18,4 @@ export const routes = {
     path: (beneficiaryId: string, incomeId: string) =>
       `${BeneficiariesRoute}/${beneficiaryId}/income/${incomeId}/edit`
   }
-}
+} as const
