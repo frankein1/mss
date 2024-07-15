@@ -39,7 +39,7 @@ export default defineConfig({
       name: 'firefox',
       use: { ...devices['Desktop Firefox'] },
       dependencies: ['setup']
-    },
+    }
 
     // {
     //   name: 'webkit',

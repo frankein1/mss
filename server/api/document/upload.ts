@@ -5,7 +5,11 @@ import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { forbiddenError, invalidError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
-import { FamilyFileSecurityTarget, FamilyFileService } from '~/server/services'
+import {
+  BeneficiaryService,
+  FamilyFileSecurityTarget,
+  FamilyFileService
+} from '~/server/services'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
 
 export interface MultiPartData {
@@ -39,6 +43,8 @@ export default defineEventHandler(async event => {
       message: 'Aucune donnée présente dans le multipart form data'
     })
   }
+
+  console.log({ data })
 
   let input
   try {
@@ -106,6 +112,10 @@ async function addNotification(
     return
   }
 
+  const beneficiaryId = await BeneficiaryService.getIdFromFamilyFileId(
+    familyFile.id
+  )
+
   const notifications = []
   for (const referent of familyFile.referents) {
     const permissionCtx = {
@@ -121,7 +131,7 @@ async function addNotification(
     if (document.createdById !== referent.id && permissions.view) {
       notifications.push({
         recipientId: referent.id,
-        familyFileId: familyFile.id,
+        beneficiaryId: beneficiaryId,
         documentId: document.key,
         type: NotificationType.NewDocument,
         itemCreatedById: document.createdById
@@ -137,7 +147,9 @@ async function addDocument(
   multipartFormData: MultiPartData
 ) {
   const key = v4()
-  const { type, familyFileId, beneficiaryId, confidential, tags, file } = input
+  const { type, familyFileId, confidential, tags, file } = input
+  const beneficiaryId =
+    await BeneficiaryService.getIdFromFamilyFileId(familyFileId)
   const document = await DocumentRepo.prisma.create({
     data: {
       key,
