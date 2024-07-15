@@ -36,6 +36,7 @@
     initialValues: {
       isMinistry: application.value.module.ministere,
       beneficiaryId: props.beneficiaryId,
+      familyFileId: props.familyFileId,
       date: new Date(),
       status: SocialSupportStatus.Done,
       redirected: false
@@ -51,6 +52,7 @@
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
+      console.log('in submit')
       isNavigatingWithFormActions.value = true
       emit('saveFollowup', values)
     }
