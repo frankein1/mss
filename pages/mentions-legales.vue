@@ -1,6 +1,6 @@
 <template>
   <div class="landing-main-container fr-container fr-my-8w">
-    <h1>{{ RouteTitle.MentionsLegales() }}</h1>
+    <h1>{{ routes.landing.MentionsLegales.title }}</h1>
     <h2>Éditeur de la Plateforme</h2>
     <p>
       La Plateforme Mon Suivi Social est éditée par l'Incubateur des Territoires
@@ -69,10 +69,10 @@
 </template>
 
 <script setup>
-  import { RouteTitle } from '~/utils/routing/titles'
+  import { routes } from '~/routes'
 
   useHead({
-    title: RouteTitle.MentionsLegales()
+    title: routes.landing.MentionsLegales.title
   })
 
   definePageMeta({

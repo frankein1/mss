@@ -3,10 +3,10 @@
 </template>
 
 <script setup lang="ts">
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   useHead({
-    title: RouteTitle.CGUManager()
+    title: routes.cgu.CGUManager.title
   })
 
   definePageMeta({

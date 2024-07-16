@@ -28,9 +28,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
-  const title = RouteTitle.AppAccount()
+  const title = routes.user.AppAccount.title
 
   useHead({ title })
 

@@ -30,9 +30,9 @@
 </template>
 
 <script lang="ts" setup>
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
-  const title = RouteTitle.AppUsers()
+  const title = routes.structure.AppUsers.title
 
   useHead({ title })
 
