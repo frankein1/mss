@@ -2,38 +2,38 @@
   <div class="fr-container">
     <div class="fr-grid-column">
       <div class="fr-col-12 fr-mt-4w">
-        <PrintFollowUpHeader
+        <PrintFollowupHeader
           title="Entretien"
-          :beneficiary-firstname="followUp.beneficiary.firstName"
-          :beneficiary-usualname="followUp.beneficiary.usualName"
-          :date="followUp.date ? formatDate(followUp.date, 'DD/MM/YYYY') : null"
-          :status="followUp.status"
+          :beneficiary-firstname="followup.beneficiary.firstName"
+          :beneficiary-usualname="followup.beneficiary.usualName"
+          :date="followup.date ? formatDate(followup.date, 'DD/MM/YYYY') : null"
+          :status="followup.status"
         />
       </div>
       <div class="fr-col-12">
         <ul>
           <PrintHelpRequestDetailItem
             title="1 er entretien"
-            :content="followUp.firstFollowup ? 'OUI' : null"
+            :content="followup.firstFollowup ? 'OUI' : null"
           />
 
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.numeroPegase"
-            :content="followUp.numeroPegase"
+            :content="followup.numeroPegase"
           />
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.medium"
-            :content="followupMediumKeys.value(followUp.medium)"
+            :content="followupMediumKeys.value(followup.medium)"
           />
 
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.thirdPersonName"
-            :content="followUp.thirdPersonName"
+            :content="followup.thirdPersonName"
           />
           <PrintHelpRequestDetailItem
             title="Rendez-vous à l'extérieur"
             :content="
-              followUp.medium === FollowupMedium.ExternalAppointment
+              followup.medium === FollowupMedium.ExternalAppointment
                 ? 'OUI'
                 : null
             "
@@ -41,30 +41,39 @@
 
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.ministre"
-            :content="followUp.ministre"
+            :content="followup.ministre"
           />
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.subjects"
-            :content="subjects"
+            :content="followup.subjects.map(({ name }) => name).join(', ')"
           />
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.prescribingOrganizationId"
-            :content="followUp.prescribingOrganization?.name"
+            :content="followup.prescribingOrganization?.name"
           />
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.dueDate"
             :content="
-              followUp.dueDate ? formatDate(followUp.date, 'DD/MM/YYYY') : null
+              followup.dueDate ? formatDate(followup.date, 'DD/MM/YYYY') : null
             "
           />
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.synthesis"
-            :content="followUp.synthesis"
+            :content="followup.synthesis"
           />
-          <PrintHelpRequestDetailItem
-            title="Actions entreprise"
-            content="TODO (si cochées, détailler les case cochées et nom de l'organisme si rempli)"
-          />
+          <li v-if="followup.redirected || followup.helpRequested">
+            <span class="fr-text--bold">Actions entreprises&nbsp;:</span>
+            <ul>
+              <li v-if="followup.redirected">
+                Réorienté après l'entretien<span v-if="followup.structureName"
+                  >&nbsp;: {{ followup.structureName }}</span
+                >
+              </li>
+              <li v-if="followup.helpRequested">
+                {{ followupFieldLabels.helpRequested }}
+              </li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>
@@ -73,15 +82,13 @@
 
 <script setup lang="ts">
   import { FollowupMedium } from '@prisma/client'
-  import { FollowUpOutput } from './types'
-  // import { formatDate } from '~/utils/formatDate'
+  import { FollowupOutput } from './types'
+  import { formatDate } from '~/utils/formatDate'
   import { followupFieldLabels } from '~/client/labels'
   import { followupMediumKeys } from '~/client/options'
 
   const props = defineProps<{
-    followUp: FollowUpOutput
+    followup: FollowupOutput
   }>()
-
-  console.log(props.followUp)
-  const subjects = props.followUp.subjects.map(({ name }) => name).join(', ')
+  console.log(props.followup)
 </script>

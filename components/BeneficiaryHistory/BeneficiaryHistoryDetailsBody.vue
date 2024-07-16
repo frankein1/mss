@@ -70,7 +70,6 @@
             Modifier
           </NuxtLink>
         </li>
-        <!-- TODO: ajouter un v-if et regarder si droit d'imprimer -->
         <li v-if="printLink">
           <NuxtLink
             :to="printLink"
