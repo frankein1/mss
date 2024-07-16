@@ -40,7 +40,6 @@
 <script setup lang="ts">
   import { FileInstructionType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { TypeSuivi } from '~/client/options'
   import {
     HousingHelpRequestOutput,
@@ -48,6 +47,7 @@
     FollowupOutput
   } from '~/components/PrintHelpRequest/types'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { routes } from '~/routes'
 
   const route = useRoute()
 
@@ -59,7 +59,7 @@
   })
   // Define page title
   useHead({
-    title: RouteTitle.AppHistoryPrint()
+    title: routes.beneficiary.AppHistoryPrint.title
   })
 
   const historyType = route.query.type
@@ -151,7 +151,7 @@
   })
   function onAfterPrint() {
     navigateTo(
-      RoutePath.AppBeneficiary(getBeneficiaryId(), {
+      routes.beneficiary.AppBeneficiary.path(getBeneficiaryId(), {
         item: getItemId(),
         tab: BeneficiaryTab.History
       })
