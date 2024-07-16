@@ -5,10 +5,10 @@
     {{ beneficiaryFirstname }} {{ beneficiaryUsualname }}
   </h2>
   <p
-    v-if="createdDate"
+    v-if="date"
     class="fr-mb-1w"
   >
-    Ouverture : {{ createdDate }}
+    Ouverture : {{ date }}
   </p>
   <SocialSupportBadgesGroup
     v-if="status"
@@ -24,7 +24,7 @@
     title: string
     beneficiaryFirstname: string | null
     beneficiaryUsualname: string | null
-    createdDate: string | null
+    date: string | null
     status: SocialSupportStatus
   }>()
 </script>

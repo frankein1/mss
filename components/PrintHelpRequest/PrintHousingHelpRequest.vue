@@ -13,9 +13,11 @@
             housingHelpRequest.fileInstruction.socialSupport.beneficiary
               .usualName
           "
-          :created-date="
-            housingHelpRequest.firstOpeningDate
-              ? formatDate(housingHelpRequest.firstOpeningDate, 'DD/MM/YYYY')
+          :date="
+            housingHelpRequest.fileInstruction.socialSupport.date
+              ? formatDate(
+                  housingHelpRequest.fileInstruction.socialSupport.date
+                )
               : null
           "
           :status="housingHelpRequest.fileInstruction.socialSupport.status"
@@ -42,93 +44,147 @@
             "
           />
           <PrintHelpRequestDetailItem
-            title="En commission le"
+            :title="helpRequestFieldLabels.numeroPegase"
+            :content="
+              housingHelpRequest.fileInstruction.socialSupport.numeroPegase
+            "
+          />
+          <PrintHelpRequestDetailItem
+            :title="helpRequestFieldLabels.ministre"
+            :content="ministre"
+          />
+          <PrintHelpRequestDetailItem
+            :title="helpRequestFieldLabels.examinationDate"
             :content="
               housingHelpRequest.fileInstruction.examinationDate
-                ? (formatDate(
-                    housingHelpRequest.fileInstruction.examinationDate
-                  ),
-                  'DD/MM/YYYY')
+                ? formatDate(housingHelpRequest.fileInstruction.examinationDate)
                 : null
             "
           />
 
           <PrintHelpRequestDetailItem
-            title="Organisme instructeur"
+            :title="helpRequestFieldLabels.instructorOrganizationId"
             :content="
               housingHelpRequest.fileInstruction.instructorOrganization?.name
             "
           />
+          <PrintHelpRequestDetailItem
+            :title="helpRequestFieldLabels.instructorOrganizationContactId"
+            :content="
+              housingHelpRequest.fileInstruction.instructorOrganizationContact
+                ?.name
+            "
+          />
 
           <PrintHelpRequestDetailItem
-            title="Date d'envoi du dossier"
+            :title="helpRequestFieldLabels.dispatchDate"
             :content="
               housingHelpRequest.fileInstruction.dispatchDate
-                ? formatDate(
-                    housingHelpRequest.fileInstruction.dispatchDate,
-                    'DD/MM/YYYY'
-                  )
-                : null
-            "
-          />
-        </ul>
-        <hr class="fr-mt-4w" />
-        <h3>Informations sur la demande de logement</h3>
-        <ul>
-          <PrintHelpRequestDetailItem
-            :title="housingHelpRequestFieldLabels.reason"
-            :content="housingHelpRequest.reason"
-          />
-          <PrintHelpRequestDetailItem
-            :title="housingHelpRequestFieldLabels.uniqueId"
-            :content="housingHelpRequest.uniqueId"
-          />
-        </ul>
-        <hr class="fr-mt-4w" />
-        <h3>Caractéristiques du logement demandé</h3>
-        <ul>
-          <PrintHelpRequestDetailItem
-            :title="
-              housingHelpRequestFieldLabels.taxHouseholdAdditionalInformation
-            "
-            :content="housingHelpRequest.taxHouseholdAdditionalInformation"
-          />
-          <PrintHelpRequestDetailItem
-            :title="housingHelpRequestFieldLabels.maxRent"
-            :content="
-              housingHelpRequest.maxRent
-                ? prismaDecimalToNumber(housingHelpRequest.maxRent) + '&nbsp;€'
+                ? formatDate(housingHelpRequest.fileInstruction.dispatchDate)
                 : null
             "
           />
           <PrintHelpRequestDetailItem
-            :title="housingHelpRequestFieldLabels.maxCharges"
+            :title="helpRequestFieldLabels.refusalReason"
+            :content="refusalReason"
+          />
+          <PrintHelpRequestDetailItem
+            :title="helpRequestFieldLabels.decisionDate"
             :content="
-              housingHelpRequest.maxCharges
-                ? prismaDecimalToNumber(housingHelpRequest.maxCharges) +
-                  ' &nbsp;€'
+              housingHelpRequest.fileInstruction.decisionDate
+                ? formatDate(housingHelpRequest.fileInstruction.decisionDate)
                 : null
             "
           />
           <PrintHelpRequestDetailItem
-            :title="housingHelpRequestFieldLabels.housingType"
-            :content="housingType"
-          />
-          <PrintHelpRequestDetailItem
-            :title="housingHelpRequestFieldLabels.roomCount"
-            :content="roomCount"
-          />
-          <PrintHelpRequestDetailItem
-            :title="housingHelpRequestFieldLabels.isPmr"
-            :content="housingHelpRequest.isPmr ? 'OUI' : null"
-          />
-          <PrintHelpRequestDetailItem
-            title="Compte-rendu"
+            :title="helpRequestFieldLabels.fullFile"
             :content="
-              housingHelpRequest.fileInstruction.socialSupport.synthesis
+              housingHelpRequest.fileInstruction.fullFile ? 'OUI' : null
             "
           />
         </ul>
+        <template v-if="housingReason || housingHelpRequest.uniqueId">
+          <hr class="fr-mt-4w" />
+          <h3>Informations sur la demande de logement</h3>
+          <ul>
+            <PrintHelpRequestDetailItem
+              :title="housingHelpRequestFieldLabels.reason"
+              :content="housingReason"
+            />
+            <PrintHelpRequestDetailItem
+              :title="housingHelpRequestFieldLabels.uniqueId"
+              :content="housingHelpRequest.uniqueId"
+            />
+          </ul>
+        </template>
+
+        <template
+          v-if="
+            housingHelpRequest.taxHouseholdAdditionalInformation ||
+            housingHelpRequest.maxRent ||
+            housingHelpRequest.maxCharges ||
+            housingType ||
+            roomCount ||
+            housingHelpRequest.isPmr ||
+            housingHelpRequest.fileInstruction.socialSupport.synthesis
+          "
+        >
+          <hr class="fr-mt-4w" />
+          <h3>Caractéristiques du logement demandé</h3>
+          <ul>
+            <!-- TODO: request benificiary -->
+            <PrintHelpRequestDetailItem
+              title="Composition du foyer fiscal"
+              content="[INFO RENSEIGNEES DANS LE PROFIL + champs PRECISIONS SUR LA COMPOSITION DI FOYER] (si renseignés)"
+            />
+            <PrintHelpRequestDetailItem
+              :title="
+                housingHelpRequestFieldLabels.taxHouseholdAdditionalInformation
+              "
+              :content="housingHelpRequest.taxHouseholdAdditionalInformation"
+            />
+            <PrintHelpRequestDetailItem
+              :title="housingHelpRequestFieldLabels.maxRent"
+              :content="
+                housingHelpRequest.maxRent
+                  ? prismaDecimalToNumber(housingHelpRequest.maxRent) +
+                    '&nbsp;€'
+                  : null
+              "
+            />
+            <PrintHelpRequestDetailItem
+              :title="housingHelpRequestFieldLabels.maxCharges"
+              :content="
+                housingHelpRequest.maxCharges
+                  ? prismaDecimalToNumber(housingHelpRequest.maxCharges) +
+                    ' &nbsp;€'
+                  : null
+              "
+            />
+            <PrintHelpRequestDetailItem
+              :title="housingHelpRequestFieldLabels.housingType"
+              :content="housingType"
+            />
+            <PrintHelpRequestDetailItem
+              :title="housingHelpRequestFieldLabels.lowIncomeHousingType"
+              :content="lowIncomeHousingType"
+            />
+            <PrintHelpRequestDetailItem
+              :title="housingHelpRequestFieldLabels.roomCount"
+              :content="roomCount"
+            />
+            <PrintHelpRequestDetailItem
+              :title="housingHelpRequestFieldLabels.isPmr"
+              :content="housingHelpRequest.isPmr ? 'OUI' : null"
+            />
+            <PrintHelpRequestDetailItem
+              :title="helpRequestFieldLabels.synthesis"
+              :content="
+                housingHelpRequest.fileInstruction.socialSupport.synthesis
+              "
+            />
+          </ul>
+        </template>
       </div>
     </div>
   </div>
@@ -140,10 +196,17 @@
   import { formatDate } from '~/utils/formatDate'
   import {
     askedHousingKeys,
+    housingReasonKeys,
+    lowIncomeHousingKeys,
     housingTypeKeys,
-    roomCountKeys
+    roomCountKeys,
+    baseRefusalReasonKeys,
+    ministerKeys
   } from '~/client/options'
-  import { housingHelpRequestFieldLabels } from '~/client/labels'
+  import {
+    housingHelpRequestFieldLabels,
+    helpRequestFieldLabels
+  } from '~/client/labels'
 
   const props = defineProps<{
     housingHelpRequest: HousingHelpRequestOutput
@@ -168,6 +231,15 @@
       .map(hT => housingTypeKeys.value(hT))
       .join(', ')
   })
+  const lowIncomeHousingType = computed(() => {
+    if (!props.housingHelpRequest.lowIncomeHousingType?.length) {
+      return undefined
+    }
+
+    return props.housingHelpRequest.lowIncomeHousingType
+      .map(type => lowIncomeHousingKeys.value(type))
+      .join(', ')
+  })
 
   const roomCount = computed(() => {
     if (!props.housingHelpRequest.roomCount?.length) {
@@ -177,5 +249,29 @@
     return props.housingHelpRequest.roomCount
       .map(rC => roomCountKeys.value(rC))
       .join(', ')
+  })
+
+  const housingReason = computed(() => {
+    if (!props.housingHelpRequest.reason) {
+      return null
+    }
+    return housingReasonKeys.value(props.housingHelpRequest.reason)
+  })
+
+  const refusalReason = computed(() => {
+    if (!props.housingHelpRequest.fileInstruction.refusalReason) {
+      return null
+    }
+    return baseRefusalReasonKeys.value(
+      props.housingHelpRequest.fileInstruction.refusalReason
+    )
+  })
+  const ministre = computed(() => {
+    if (!props.housingHelpRequest.fileInstruction.socialSupport.ministre) {
+      return null
+    }
+    return ministerKeys.value(
+      props.housingHelpRequest.fileInstruction.socialSupport.ministre
+    )
   })
 </script>
