@@ -6,23 +6,33 @@
 <template>
   <div>
     <AtomAlert
-      v-if="helpRequestError && housingHelpRequestError"
+      v-if="printInformations?.error"
       :alert-type="AlertType.Error"
       message="Les informations du bénéficiaire n'ont pas pu être chargées."
     />
     <AtomLoader
-      v-else-if="helpRequestPending || housingHelpRequestPending"
+      v-else-if="printInformations?.pending"
       class="fr-mx-auto"
     />
-    <template v-else-if="helpRequest && fileInstructionType">
+    <template
+      v-else-if="
+        printInformations?.helpRequest && printInformations?.fileInstructionType
+      "
+    >
       <PrintHelpRequest
-        :help-request="helpRequest"
-        :file-instruction-type="fileInstructionType"
+        :help-request="printInformations.helpRequest"
+        :file-instruction-type="printInformations.fileInstructionType"
       />
     </template>
 
-    <template v-else-if="housingHelpRequest && fileInstructionType">
-      <PrintHousingHelpRequest :housing-help-request="housingHelpRequest" />
+    <template v-else-if="printInformations?.housingHelpRequest">
+      <PrintHousingHelpRequest
+        :housing-help-request="printInformations.housingHelpRequest"
+      />
+    </template>
+
+    <template v-else-if="printInformations?.followUp">
+      <PrintFollowUp :follow-up="printInformations.followUp" />
     </template>
   </div>
 </template>
@@ -31,9 +41,15 @@
   import { FileInstructionType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
   import { RouteTitle } from '~/utils/routing'
+  import { TypeSuivi } from '~/client/options'
+  import {
+    HousingHelpRequestOutput,
+    HelpRequestOutput,
+    FollowUpOutput
+  } from '~/components/PrintHelpRequest/types'
 
   const route = useRoute()
-  const router = useRouter()
+  // const router = useRouter()
 
   const trpcClient = useTrpcClient()
   const helpRequestId = route.params.id as string
@@ -41,49 +57,64 @@
   definePageMeta({
     layout: false
   })
-
-  let fileInstructionType: FileInstructionType | undefined
-
-  // Get helpRequest data
-  const {
-    data: helpRequestData,
-    pending: helpRequestPending,
-    error: helpRequestError
-  } = await trpcClient.helpRequest.getOne.useQuery({
-    id: helpRequestId
-  })
-  const helpRequest = helpRequestData.value?.helpRequest
-  fileInstructionType = helpRequest?.fileInstruction.type // 'Other' | 'Financial'
-
-  // Get housing help request data
-  const {
-    data: housingHelpRequestData,
-    pending: housingHelpRequestPending,
-    error: housingHelpRequestError
-  } = await trpcClient.housingHelpRequest.getOne.useQuery({
-    id: helpRequestId
-  })
-  const housingHelpRequest = housingHelpRequestData.value?.housingHelpRequest
-  if (housingHelpRequest) {
-    fileInstructionType = housingHelpRequest?.fileInstruction.type // 'Houssing'
-  }
-
   // Define page title
   useHead({
     title: RouteTitle.AppHistoryPrint()
   })
 
-  // Print actions
-  onMounted(() => {
-    window.addEventListener('afterprint', onAfterPrint)
-    window.print()
-  })
-  onUnmounted(() => {
-    window.removeEventListener('afterprint', onAfterPrint)
-  })
-  function onAfterPrint() {
-    router.back()
+  const historyType = route.query.type
+
+  type PrintInformations =
+    | {
+        pending?: any
+        error?: any
+        helpRequest?: HelpRequestOutput
+        housingHelpRequest?: HousingHelpRequestOutput
+        followUp?: FollowUpOutput
+        fileInstructionType?: FileInstructionType
+      }
+    | undefined
+
+  const getPrintInformations = async (): Promise<PrintInformations> => {
+    // Get helpRequest data
+    if (historyType === TypeSuivi.AllHelpRequest) {
+      const { data, pending, error } =
+        await trpcClient.helpRequest.getOne.useQuery({
+          id: helpRequestId
+        })
+      return {
+        pending: pending.value ? pending : undefined,
+        error: error.value ? error : undefined,
+        helpRequest: data.value?.helpRequest,
+        fileInstructionType: data.value?.helpRequest.fileInstruction.type // 'Other' | 'Financial'
+      }
+    }
+
+    if (historyType === TypeSuivi.HousingHelpRequest) {
+      const { data, pending, error } =
+        await trpcClient.housingHelpRequest.getOne.useQuery({
+          id: helpRequestId
+        })
+      return {
+        pending: pending.value ? pending : undefined,
+        error: error.value ? error : undefined,
+        housingHelpRequest: data.value?.housingHelpRequest,
+        fileInstructionType: data.value?.housingHelpRequest.fileInstruction.type // 'Housing'
+      }
+    }
+
+    if (historyType === TypeSuivi.Followup) {
+      const { data, pending, error } =
+        await trpcClient.followup.getOne.useQuery({ id: helpRequestId })
+      return {
+        pending: pending.value ? pending : undefined,
+        error: error.value ? error : undefined,
+        followUp: data.value?.followup
+      }
+    }
   }
+
+  const printInformations = await getPrintInformations()
 </script>
 
 <style lang="scss" scoped>
