@@ -19,7 +19,7 @@
 <script setup lang="ts">
   import { TRPCClientError } from '@trpc/client'
   import { AdminCreateUserInput } from '~/server/schema'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { getUserCreationMessage } from '~/utils/user'
 
   const trpcClient = useTrpcClient()
@@ -34,7 +34,7 @@
       isSubmitting,
       onSuccess: ({ email }) => {
         snackbar.success(getUserCreationMessage(email))
-        navigateTo(RoutePath.AdminUsers())
+        navigateTo(routes.admin.AdminUsers.path())
       },
       onFailure: err => {
         if (err instanceof TRPCClientError && err.data.code === 'CONFLICT') {
