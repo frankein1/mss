@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   const { isAuthenticated, getUserName } = useAuthState()
 
@@ -32,13 +32,13 @@
 
     menus.push({
       label: 'Mon compte',
-      to: RoutePath.AppAccount(),
+      to: routes.user.AppAccount.path(),
       icon: 'fr-icon-user-line'
     })
     if (application.value.module.users) {
       menus.push({
         label: 'Utilisateurs',
-        to: RoutePath.AppUsers(),
+        to: routes.structure.AppUsers.path(),
         icon: 'fr-icon-team-line'
       })
     }
@@ -50,7 +50,7 @@
     if (isAuthenticated()) {
       menus.push({
         label: 'Déconnexion',
-        to: RoutePath.AuthLogout(),
+        to: routes.auth.AuthLogout.path(),
         icon: 'fr-icon-logout-box-r-line'
       })
     }

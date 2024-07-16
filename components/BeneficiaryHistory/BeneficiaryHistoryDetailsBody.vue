@@ -102,10 +102,10 @@
   import { FileInstructionType } from '@prisma/client'
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import type { SocialSupportItem, CommentData, CommentItem } from './types'
-  import { RoutePath } from '~/utils/routing'
   import { FamilyFilePermissions } from '~/server/security'
   import { DocumentEventAction, EventCategory } from '~/types/matomo'
   import { TypeSuivi } from '~/client/options'
+  import { routes } from '~/routes'
 
   const props = defineProps<{
     item: SocialSupportItem
@@ -128,18 +128,21 @@
 
   const printLink = computed(() => {
     if (socialSupport.value.followup) {
-      return RoutePath.AppHistoryPrint(
+      return routes.beneficiary.AppHistoryPrint.path(
         socialSupport.value.followup.id,
         TypeSuivi.Followup
       )
     }
     const helpRequest = socialSupport.value.fileInstruction?.helpRequest
     if (helpRequest?.id) {
-      return RoutePath.AppHistoryPrint(helpRequest.id, TypeSuivi.AllHelpRequest)
+      return routes.beneficiary.AppHistoryPrint.path(
+        helpRequest.id,
+        TypeSuivi.AllHelpRequest
+      )
     }
 
     if (socialSupport.value.fileInstruction?.housingHelpRequest) {
-      return RoutePath.AppHistoryPrint(
+      return routes.beneficiary.AppHistoryPrint.path(
         socialSupport.value.fileInstruction?.housingHelpRequest.id,
         TypeSuivi.HousingHelpRequest
       )
@@ -149,7 +152,7 @@
 
   const editLink = computed(() => {
     if (socialSupport.value.followup) {
-      return RoutePath.AppBeneficiaryFollowupEdit(
+      return routes.followup.AppBeneficiaryFollowupEdit.path(
         socialSupport.value.beneficiaryId,
         socialSupport.value.followup.id
       )
@@ -159,7 +162,7 @@
       const subject = helpRequest.financialSupport
         ? FileInstructionType.Financial
         : FileInstructionType.Other
-      return RoutePath.AppBeneficiaryHelpRequestEdit(
+      return routes.helpRequest.AppBeneficiaryHelpRequestEdit.path(
         socialSupport.value.beneficiaryId,
         helpRequest.id,
         subject
@@ -169,7 +172,7 @@
     const housingHelpRequest =
       socialSupport.value.fileInstruction?.housingHelpRequest
     if (housingHelpRequest) {
-      return RoutePath.AppBeneficiaryHelpRequestEdit(
+      return routes.helpRequest.AppBeneficiaryHelpRequestEdit.path(
         socialSupport.value.beneficiaryId,
         housingHelpRequest.id,
         FileInstructionType.Housing

@@ -11,7 +11,7 @@
 
 <script lang="ts" setup>
   import { GetBeneficiaryHealth } from '~/types/beneficiary'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   const props = defineProps<{
     beneficiaryId: string
@@ -19,6 +19,6 @@
   }>()
 
   const editLink = computed(() =>
-    RoutePath.AppBeneficiaryEditHealth(props.beneficiaryId)
+    routes.beneficiary.AppBeneficiaryEditHealth.path(props.beneficiaryId)
   )
 </script>

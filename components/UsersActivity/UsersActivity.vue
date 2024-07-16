@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
   import { GetBeneficiariesUsersActivityOutput } from '~/server/trpc/routers'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { EventCategory, UserActivityEventAction } from '~/types/matomo'
 
   const matomo = useMatomo()
@@ -45,7 +45,7 @@
      * Used for the mutation logs of a collection
      * It defines the URL base to access the item within the application
      */
-    routeWithParams?: typeof RoutePath.AppBeneficiary
+    routeWithParams?: typeof routes.beneficiary.AppBeneficiary.path
   }>()
 
   const usersActivity = ref<GetBeneficiariesUsersActivityOutput['activity']>([])

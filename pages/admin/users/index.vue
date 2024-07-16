@@ -10,7 +10,7 @@
         />
       </div>
       <NuxtLink
-        :to="RoutePath.AdminUsersAdd()"
+        :to="routes.admin.AdminUsersAdd.path()"
         class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-user-add-line"
       >
         Ajouter un utilisateur
@@ -31,7 +31,7 @@
 <script lang="ts" setup>
   import { UserAdminSort } from '~/types/table'
   import type { UserAdminFilterInput } from '~/server/schema'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   const trpcClient = useTrpcClient()
 

@@ -13,7 +13,7 @@
 
 <script setup lang="ts">
   import { GetBeneficiaryExternalOrganisations } from '~/types/beneficiary'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   const props = defineProps<{
     beneficiaryId: string
@@ -21,6 +21,8 @@
   }>()
 
   const editLink = computed(() =>
-    RoutePath.AppBeneficiaryEditExternalOrganisations(props.beneficiaryId)
+    routes.beneficiary.AppBeneficiaryEditExternalOrganisations.path(
+      props.beneficiaryId
+    )
   )
 </script>

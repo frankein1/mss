@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
   import BudgetIncomesAddMemberForm from './BudgetIncomesAddMemberForm.vue'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { CreateHouseholdMemberInput } from '~/server/schema'
 
   const props = defineProps<{ beneficiaryId: string; budgetId: string }>()
@@ -48,7 +48,7 @@
       onSuccess: ({ incomeId }) => {
         modal.close()
         navigateTo(
-          RoutePath.AppBeneficiaryBudgetIncomeEdit(
+          routes.budget.AppBeneficiaryBudgetIncomeEdit.path(
             props.beneficiaryId,
             `${incomeId}`
           )
