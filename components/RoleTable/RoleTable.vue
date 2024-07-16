@@ -204,6 +204,14 @@
             <td>* si il est référent</td>
           </tr>
           <tr>
+            <td>Imprimer une synthèse d'entretien</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td>* si créée par lui</td>
+            <td>* si créée par lui</td>
+            <td>* si il est référent</td>
+          </tr>
+          <tr>
             <td>Instruction d'un dossier</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
@@ -257,6 +265,14 @@
             <td>* si créée par lui</td>
             <td>* si créée par lui</td>
             <td></td>
+            <td>* si il est référent</td>
+          </tr>
+          <tr>
+            <td>Imprimer une synthèse d'instruction de dossier</td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td>* si créée par lui</td>
+            <td>* si créée par lui</td>
             <td>* si il est référent</td>
           </tr>
           <tr>
