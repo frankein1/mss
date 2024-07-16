@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{ RouteTitle.ErrorDisabledAccount() }}</h1>
+    <h1>{{ routes.error.ErrorDisabledAccount.title }}</h1>
     <p class="fr-text--lead fr-mb-3w">
       Votre accès à Mon Suivi Social a été désactivé.
     </p>
@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   const {
     public: {
@@ -33,7 +33,7 @@
   } = useRuntimeConfig()
 
   useHead({
-    title: RouteTitle.ErrorDisabledAccount()
+    title: routes.error.ErrorDisabledAccount.title
   })
 
   definePageMeta({

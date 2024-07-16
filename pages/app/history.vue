@@ -28,9 +28,9 @@
 
 <script lang="ts" setup>
   import { HistoryTab } from '~/utils/constants/history'
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
-  const title = RouteTitle.AppHistory()
+  const title = routes.beneficiary.AppHistory.title
 
   useHead({ title })
 </script>

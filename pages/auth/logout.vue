@@ -7,10 +7,10 @@
 </template>
 
 <script setup lang="ts">
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   useHead({
-    title: RouteTitle.AuthLogout()
+    title: routes.auth.AuthLogout.title
   })
 
   definePageMeta({

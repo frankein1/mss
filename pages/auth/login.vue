@@ -1,15 +1,15 @@
 <template>
   <main class="landing-main-container fr-container fr-my-8w">
-    <h1 class="login-title fr-h2 fr-mb-5w">{{ RouteTitle.AuthLogin() }}</h1>
+    <h1 class="login-title fr-h2 fr-mb-5w">{{ routes.auth.AuthLogin.title }}</h1>
     <InclusionConnectButton />
   </main>
 </template>
 
 <script lang="ts" setup>
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   useHead({
-    title: RouteTitle.AuthLogin()
+    title: routes.auth.AuthLogin.title
   })
 
   definePageMeta({

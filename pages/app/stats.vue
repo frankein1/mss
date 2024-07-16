@@ -55,9 +55,9 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
-  const title = RouteTitle.AppStats()
+  const title = routes.stats.AppStats.title
 
   useHead({ title })
 

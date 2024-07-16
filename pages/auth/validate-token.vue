@@ -6,7 +6,7 @@
         <div class="fr-grid-row fr-my-5w">
           <div class="fr-col fr-col-lg-8 fr-col-offset-lg-2 text-center">
             <h1 class="fr-text--regular">
-              <span>{{ RouteTitle.AuthValidateToken() }}...</span>
+              <span>{{ routes.auth.AuthValidateToken.title }}...</span>
             </h1>
           </div>
         </div>
@@ -15,10 +15,10 @@
   </main>
 </template>
 <script setup lang="ts">
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   useHead({
-    title: RouteTitle.AuthValidateToken()
+    title: routes.auth.AuthValidateToken.title
   })
 
   definePageMeta({

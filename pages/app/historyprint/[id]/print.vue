@@ -40,13 +40,13 @@
 <script setup lang="ts">
   import { FileInstructionType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle } from '~/utils/routing'
   import { TypeSuivi } from '~/client/options'
   import {
     HousingHelpRequestOutput,
     HelpRequestOutput,
     FollowupOutput
   } from '~/components/PrintHelpRequest/types'
+  import { routes } from '~/routes'
 
   const route = useRoute()
   const router = useRouter()
@@ -59,7 +59,7 @@
   })
   // Define page title
   useHead({
-    title: RouteTitle.AppHistoryPrint()
+    title: routes.beneficiary.AppHistoryPrint.title
   })
 
   const historyType = route.query.type
