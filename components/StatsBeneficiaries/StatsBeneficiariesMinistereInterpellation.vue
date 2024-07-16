@@ -20,7 +20,7 @@
       />
       <p v-else>
         Commencez à
-        <NuxtLink :to="RoutePath.AppBeneficiariesAdd()"
+        <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
           >créer des fiches de bénéficiaires</NuxtLink
         >
         pour voir apparaître les statistiques de la répartition des
@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { StatFilterInput } from '~/server/schema'
   import { getStatLabel, ministerKeys } from '~/client/options'
 

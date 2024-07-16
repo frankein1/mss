@@ -44,7 +44,7 @@
     }
     menus.push({
       label: 'Structure',
-      to: RoutePath.AppStructure(),
+      to: routes.structure.AppStructure.path(),
       icon: 'fr-icon-home-4-line'
     })
     if (isAuthenticated()) {
