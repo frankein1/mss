@@ -106,6 +106,7 @@
   import { RoutePath } from '~/utils/routing'
   import { FamilyFilePermissions } from '~/server/security'
   import { DocumentEventAction, EventCategory } from '~/types/matomo'
+  import { TypeSuivi } from '~/client/options'
 
   const props = defineProps<{
     item: SocialSupportItem
@@ -128,16 +129,20 @@
 
   const printLink = computed(() => {
     if (socialSupport.value.followup) {
-      return RoutePath.AppHistoryPrint(socialSupport.value.followup.id)
+      return RoutePath.AppHistoryPrint(
+        socialSupport.value.followup.id,
+        TypeSuivi.Followup
+      )
     }
     const helpRequest = socialSupport.value.fileInstruction?.helpRequest
     if (helpRequest?.id) {
-      return RoutePath.AppHistoryPrint(helpRequest.id)
+      return RoutePath.AppHistoryPrint(helpRequest.id, TypeSuivi.AllHelpRequest)
     }
 
     if (socialSupport.value.fileInstruction?.housingHelpRequest) {
       return RoutePath.AppHistoryPrint(
-        socialSupport.value.fileInstruction?.housingHelpRequest.id
+        socialSupport.value.fileInstruction?.housingHelpRequest.id,
+        TypeSuivi.HousingHelpRequest
       )
     }
     return null
