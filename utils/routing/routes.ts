@@ -1,4 +1,5 @@
 import { FileInstructionType } from '@prisma/client'
+import { TypeSuivi } from '~/client/options'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
 
@@ -310,8 +311,13 @@ export const RoutePath = {
     const tabHash = tab ? `#${tab}` : ''
     return `${AppRoute}/history${tabHash}`
   },
-  [Route.AppHistoryPrint]: (historyId: string) =>
-    `${AppRoute}/historyprint/${historyId}/print`,
+  [Route.AppHistoryPrint]: (historyId: string, type?: TypeSuivi) => {
+    let routeUrl = `${AppRoute}/historyprint/${historyId}/print`
+    if (type) {
+      routeUrl = routeUrl + `?type=${type}`
+    }
+    return routeUrl
+  },
 
   // FAMILY FILE
   [Route.AppFile]: (familyFileId: string) => `/app/files/${familyFileId}`,
