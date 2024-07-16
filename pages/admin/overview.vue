@@ -26,35 +26,6 @@
           </div>
         </div>
       </div>
-
-      <div class="fr-col-12">
-        <button
-          class="fr-btn fr-btn--secondary"
-          @click="recuperate(false)"
-        >
-          Information sur les accompagnements avec plusieurs objets
-        </button>
-      </div>
-
-      <div
-        v-if="info"
-        class="fr-col-12 fr-mb-4w"
-      >
-        {{ info.nToRecuperate }} instructions de dossier avec plusieurs objets
-        d'accompagnement
-        <br />
-        {{ info.failure }} instructions de dossier dont la récupération est
-        impossible
-      </div>
-
-      <div class="fr-col-12">
-        <button
-          class="fr-btn fr-btn--secondary"
-          @click="recuperate(true)"
-        >
-          Exécution de la réparation des instructions de dossier
-        </button>
-      </div>
     </div>
   </PageContainer>
 </template>
@@ -67,18 +38,4 @@
   })
 
   const data = await useTrpcClient().admin.getOverview.query()
-
-  const info = ref<any>(undefined)
-
-  async function recuperate(exec = false) {
-    const res = await $fetch(`/api/migration/recover-social-support-subjects`, {
-      method: 'POST',
-      body: { exec }
-    })
-
-    info.value = {
-      failure: res.recuperationFailure.length,
-      nToRecuperate: res.nToRecuperate
-    }
-  }
 </script>
