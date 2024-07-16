@@ -125,7 +125,7 @@
     window.removeEventListener('afterprint', onAfterPrint)
   })
   function onAfterPrint() {
-    router.back()
+    navigateTo(router.options.history.state.back?.toString())
   }
 </script>
 
