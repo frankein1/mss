@@ -9,7 +9,6 @@
 <script setup lang="ts">
   import { FamilyFilePermissions } from '~/server/security'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { routes, AppBeneficiaryEditRoute } from '~/routes'
 
   const props = defineProps<{
@@ -39,8 +38,8 @@
     }
 
     return {
-      title: RouteTitle[route](),
-      path: RoutePath[route](props.beneficiaryId, {
+      title: r[route].title,
+      path: r[route].path(props.beneficiaryId, {
         saved: true,
         originTab: props.originTab
       })

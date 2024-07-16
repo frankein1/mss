@@ -1,6 +1,6 @@
 <template>
   <div class="landing-main-container fr-container fr-my-8w">
-    <h1>{{ RouteTitle.Statistiques() }}</h1>
+    <h1>{{ routes.landing.Statistiques.title }}</h1>
     <iframe
       title="Dashboard Metabase"
       :src="`${publicConfig.metabase.publicUrl}#bordered=false&titled=false`"
@@ -13,10 +13,10 @@
 </template>
 
 <script setup>
-  import { RouteTitle } from '~/utils/routing/titles'
+  import { routes } from '~/routes'
 
   useHead({
-    title: RouteTitle.Statistiques()
+    title: routes.landing.Statistiques.title
   })
 
   definePageMeta({

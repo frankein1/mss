@@ -61,10 +61,10 @@
 </template>
 
 <script setup lang="ts">
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   useHead({
-    title: RouteTitle.Register()
+    title: routes.landing.Register.title
   })
 
   definePageMeta({

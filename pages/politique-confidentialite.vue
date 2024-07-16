@@ -704,10 +704,10 @@
 </template>
 
 <script setup>
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   useHead({
-    title: RouteTitle.PolitiqueConfidentialite()
+    title: routes.landing.PolitiqueConfidentialite.title
   })
 
   definePageMeta({
