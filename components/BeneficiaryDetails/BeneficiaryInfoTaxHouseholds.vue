@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
   import type { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   const props = defineProps<{
     beneficiaryId: string
@@ -19,6 +19,6 @@
   }>()
 
   const editLink = computed(() =>
-    RoutePath.AppBeneficiaryEditTaxHousehold(props.beneficiaryId)
+    routes.beneficiary.AppBeneficiaryEditTaxHousehold.path(props.beneficiaryId)
   )
 </script>

@@ -33,7 +33,7 @@
         :key="status"
       >
         <NuxtLink
-          :to="RoutePath.AppHistory(tab)"
+          :to="routes.beneficiary.AppHistory.path(tab)"
           class="fr-link fr-icon-arrow-right-line fr-link--icon-left"
           @click="onNavigate(status)"
         >
@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
   import { SocialSupportStatus } from '@prisma/client'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { AlertType } from '~/utils/constants/alert'
   import { HistoryTab } from '~/utils/constants/history'
   import { EventCategory, OverviewToHistoryEventAction } from '~/types/matomo'

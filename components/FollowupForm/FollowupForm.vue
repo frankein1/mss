@@ -158,7 +158,7 @@
       <!-- ROW -->
       <div class="fr-col-6 fr-mt-0 fr-pt-0">
         <NuxtLink
-          :to="RoutePath.AppPartners()"
+          :to="routes.structure.AppPartners.path()"
           class="fr-link fr-icon-info-fill fr-link--icon-left"
         >
           Données issues de l'annuaire de partenaires
@@ -297,11 +297,10 @@
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
-  import { routes } from '~/routes'
 
   const props = withDefaults(
     defineProps<{

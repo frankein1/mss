@@ -32,7 +32,7 @@
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import {
     getStatLabel,
     beneficiaryAccommodationModeKeys

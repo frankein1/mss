@@ -57,7 +57,7 @@
 <script setup lang="ts">
   import { GetBeneficiariesUsersActivityOutput } from '~/server/trpc/routers'
   import { formatDate } from '~/utils/formatDate'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { formatUserDisplayName } from '~/utils/user'
   import { userActivityTypeKeys } from '~/client/options'
 
@@ -68,7 +68,7 @@
        * Used for the mutation logs of a collection
        * It defines the URL base to access the item within the application
        */
-      routeWithParams?: typeof RoutePath.AppBeneficiary
+      routeWithParams?: typeof routes.beneficiary.AppBeneficiary.path
       hasNextPage: boolean
     }>(),
     { routeWithParams: undefined }

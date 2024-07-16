@@ -33,7 +33,7 @@
   import { StatFilterInput } from '~/server/schema'
   import { AgeGroup, ageGroupKeys, getStatLabel } from '~/client/options'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { getStatColor } from '~/client/colors/stats'
   import { StatsPiePropType } from '~/types/stat'
 
