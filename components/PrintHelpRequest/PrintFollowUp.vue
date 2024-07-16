@@ -87,8 +87,7 @@
   import { followupFieldLabels } from '~/client/labels'
   import { followupMediumKeys } from '~/client/options'
 
-  const props = defineProps<{
+  defineProps<{
     followup: FollowupOutput
   }>()
-  console.log(props.followup)
 </script>
