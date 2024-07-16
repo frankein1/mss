@@ -29,7 +29,8 @@ export const routes = {
   AdminStructureSubjects: {
     name: 'AdminStructureSubjects',
     title: '',
-    path: () => ''
+    path: (structureId: string) =>
+      `${AdminRoute}/structures/${structureId}/subjects`
   },
   AdminUsers: {
     name: 'AdminUsers',

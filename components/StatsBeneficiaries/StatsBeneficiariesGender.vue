@@ -19,7 +19,7 @@
       />
       <p v-else>
         Commencez à
-        <NuxtLink :to="RoutePath.AppBeneficiariesAdd()"
+        <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
           >créer des fiches de bénéficiaires</NuxtLink
         >
         pour voir apparaître les statistiques de la répartition des genres.
@@ -31,7 +31,7 @@
 <script lang="ts" setup>
   import { Gender } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { StatFilterInput } from '~/server/schema'
   import { getStatColor } from '~/client/colors/stats'
   import { getStatLabel, beneficiaryGenderKeys } from '~/client/options'

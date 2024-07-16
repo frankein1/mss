@@ -17,7 +17,7 @@
     :label-getter="(key: string) => budgetExpensesKeys.value(key)"
     :value-getter="(key: string) => expenses[key as ExpensesKey]"
     :edit-route="
-      RoutePath.AppFileBudgetExpensesEdit(beneficiaryId, expenses.id)
+      routes.budget.AppFileBudgetExpensesEdit.path(beneficiaryId, expenses.id)
     "
   />
 
@@ -29,7 +29,7 @@
     :total="loansTotal"
     :subsection-items="expenses.loans"
     :edit-route="
-      RoutePath.AppFileBudgetExpensesEdit(beneficiaryId, expenses.id)
+      routes.budget.AppFileBudgetExpensesEdit.path(beneficiaryId, expenses.id)
     "
   />
 
@@ -41,18 +41,18 @@
     :total="debtsTotal"
     :subsection-items="expenses.debts"
     :edit-route="
-      RoutePath.AppFileBudgetExpensesEdit(beneficiaryId, expenses.id)
+      routes.budget.AppFileBudgetExpensesEdit.path(beneficiaryId, expenses.id)
     "
   />
 </template>
 
 <script lang="ts" setup>
   import { ExpensesKey, BudgetExpenses } from '../types'
-  import { RoutePath } from '~/utils/routing'
   import { budgetExpensesKeys } from '~/client/options'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
+  import { routes } from '~/routes'
 
   const props = defineProps<{
     beneficiaryId: string

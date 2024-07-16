@@ -107,7 +107,7 @@
       <div class="fr-col-12 fr-mt-0 fr-pt-0">
         <NuxtLink
           v-if="application.edit.structure"
-          :to="RoutePath.AppStructure()"
+          :to="routes.structure.AppStructure.path()"
           class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
         >
           Je personnalise les objets d'accompagnement de ma structure
@@ -301,6 +301,7 @@
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
+  import { routes } from '~/routes'
 
   const props = withDefaults(
     defineProps<{
