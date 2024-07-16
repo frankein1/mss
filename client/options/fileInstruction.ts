@@ -4,7 +4,7 @@ import {
 } from '@prisma/client'
 import { buildKeys, mergeKeys } from '~/utils/keys/keyBuilder'
 
-const baseRefusalReasonKeys = buildKeys({
+export const baseRefusalReasonKeys = buildKeys({
   [FileInstructionRefusalReason.ResourcesOutOfScale]: 'Ressources hors barème',
   [FileInstructionRefusalReason.ShortDeadline]: 'Délai trop court',
   [FileInstructionRefusalReason.IncompleteFile]: 'Dossier incomplet',
