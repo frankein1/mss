@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import { StatFilterInput } from '~/server/schema'
   import {
     getStatLabel,

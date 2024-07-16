@@ -26,7 +26,7 @@
             :key="structure.id"
             v-slot="{ navigate }"
             custom
-            :to="RoutePath.AdminStructure(structure.id)"
+            :to="routes.admin.AdminStructure.path(structure.id)"
           >
             <tr
               class="clickable-row"
@@ -55,7 +55,7 @@
 <script setup lang="ts">
   import { Structures } from './types'
   import { structureTypeKeys } from '~/client/options'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   defineProps<{
     structures: Structures

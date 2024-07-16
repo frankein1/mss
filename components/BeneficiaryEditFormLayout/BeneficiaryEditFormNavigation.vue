@@ -9,7 +9,6 @@
 
 <script setup lang="ts">
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { RoutePath } from '~/utils/routing'
   import { FamilyFilePermissions } from '~/server/security'
   import { routes, AppBeneficiaryEditRoute } from '~/routes'
 
@@ -56,7 +55,7 @@
 
   const menus = computed(() => {
     return navigationRoutes.value.map(route => {
-      const path = RoutePath[route](props.beneficiaryId, {
+      const path = r[route].path(props.beneficiaryId, {
         saved: route !== props.currentRoute,
         originTab: props.originTab
       })
