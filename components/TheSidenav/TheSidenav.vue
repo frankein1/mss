@@ -63,7 +63,7 @@
           >
             <NuxtLink
               class="fr-btn btn-primary-on-primary fr-icon-user-add-line fr-btn--icon-left"
-              :to="RoutePath.AppBeneficiariesAdd()"
+              :to="routes.beneficiary.AppBeneficiariesAdd.path()"
             >
               Créer un·e bénéficiaire
             </NuxtLink>
@@ -75,8 +75,8 @@
               class="fr-footer__bottom-link"
               :to="
                 authState.isStructureManager()
-                  ? RoutePath.CGUManager({ readonly: true })
-                  : RoutePath.CGUUser({ readonly: true })
+                  ? routes.cgu.CGUManager.path({ readonly: true })
+                  : routes.cgu.CGUUser.path({ readonly: true })
               "
             >
               CGU
@@ -85,7 +85,7 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              :to="RoutePath.PolitiqueConfidentialite()"
+              :to="routes.landing.PolitiqueConfidentialite.path()"
             >
               Politique de confidentialité
             </NuxtLink>
@@ -93,7 +93,7 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              :to="RoutePath.DeclarationAccessibilite()"
+              :to="routes.landing.DeclarationAccessibilite.path()"
             >
               Accessibilité: non conforme
             </NuxtLink>
@@ -119,7 +119,7 @@
 </template>
 
 <script setup>
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
 
   const homePage = useHomePage()
   const authState = useAuthState()
@@ -131,49 +131,49 @@
     const items = []
     if (authState.isAdmin()) {
       items.push({
-        to: RoutePath.AdminOverview(),
+        to: routes.admin.AdminOverview.path(),
         label: 'Tableau de bord',
         icon: 'fr-icon-home-4-line'
       })
       items.push({
-        to: RoutePath.AdminStructures(),
+        to: routes.admin.AdminStructures.path(),
         label: 'Structures',
         icon: 'fr-icon-home-4-line'
       })
       items.push({
-        to: RoutePath.AdminUsers(),
+        to: routes.admin.AdminUsers.path(),
         label: 'Utilisateurs',
         icon: 'fr-icon-user-line'
       })
       items.push({
-        to: RoutePath.AdminEmails(),
+        to: routes.admin.AdminEmails.path(),
         label: 'Emails',
         icon: 'fr-icon-mail-line'
       })
       items.push({
-        to: RoutePath.AdminIntegrations(),
+        to: routes.admin.AdminIntegrations.path(),
         label: 'Integrations',
         icon: 'fr-icon-discuss-line'
       })
     } else {
       items.push({
-        to: RoutePath.AppOverview(),
+        to: routes.user.AppOverview.path(),
         label: 'Tableau de bord',
         icon: 'fr-icon-home-4-line'
       })
       items.push({
-        to: RoutePath.AppBeneficiaries(),
+        to: routes.beneficiary.AppBeneficiaries.path(),
         label: 'Bénéficiaires',
         icon: 'fr-icon-user-line'
       })
       items.push({
-        to: RoutePath.AppHistory(),
+        to: routes.beneficiary.AppHistory.path(),
         label: 'Accompagnements',
         icon: 'fr-icon-folder-2-line'
       })
       if (application.value.module.stats) {
         items.push({
-          to: RoutePath.AppStats(),
+          to: routes.stats.AppStats.path(),
           label: 'Statistiques',
           icon: 'fr-icon-line-chart-line'
         })
