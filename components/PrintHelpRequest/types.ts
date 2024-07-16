@@ -6,4 +6,4 @@ export type HelpRequestOutput =
 export type HousingHelpRequestOutput =
   RouterOutput['housingHelpRequest']['getOne']['housingHelpRequest']
 
-export type FollowUpOutput = RouterOutput['followup']['getOne']['followup']
+export type FollowupOutput = RouterOutput['followup']['getOne']['followup']

@@ -31,8 +31,8 @@
       />
     </template>
 
-    <template v-else-if="printInformations?.followUp">
-      <PrintFollowUp :follow-up="printInformations.followUp" />
+    <template v-else-if="printInformations?.followup">
+      <PrintFollowup :followup="printInformations.followup" />
     </template>
   </div>
 </template>
@@ -45,11 +45,11 @@
   import {
     HousingHelpRequestOutput,
     HelpRequestOutput,
-    FollowUpOutput
+    FollowupOutput
   } from '~/components/PrintHelpRequest/types'
 
   const route = useRoute()
-  // const router = useRouter()
+  const router = useRouter()
 
   const trpcClient = useTrpcClient()
   const helpRequestId = route.params.id as string
@@ -70,7 +70,7 @@
         error?: any
         helpRequest?: HelpRequestOutput
         housingHelpRequest?: HousingHelpRequestOutput
-        followUp?: FollowUpOutput
+        followup?: FollowupOutput
         fileInstructionType?: FileInstructionType
       }
     | undefined
@@ -109,12 +109,24 @@
       return {
         pending: pending.value ? pending : undefined,
         error: error.value ? error : undefined,
-        followUp: data.value?.followup
+        followup: data.value?.followup
       }
     }
   }
 
   const printInformations = await getPrintInformations()
+
+  // Print actions
+  onMounted(() => {
+    window.addEventListener('afterprint', onAfterPrint)
+    window.print()
+  })
+  onUnmounted(() => {
+    window.removeEventListener('afterprint', onAfterPrint)
+  })
+  function onAfterPrint() {
+    router.back()
+  }
 </script>
 
 <style lang="scss" scoped>
