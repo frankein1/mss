@@ -31,13 +31,8 @@
       />
     </template>
 
-<<<<<<< HEAD
     <template v-else-if="printInformations?.followup">
       <PrintFollowup :followup="printInformations.followup" />
-=======
-    <template v-else-if="printInformations?.followUp">
-      <PrintFollowUp :follow-up="printInformations.followUp" />
->>>>>>> f4a4e063 (feat(historique): imprimer un entretien -wip)
     </template>
   </div>
 </template>
@@ -50,15 +45,11 @@
   import {
     HousingHelpRequestOutput,
     HelpRequestOutput,
-<<<<<<< HEAD
     FollowupOutput
-=======
-    FollowUpOutput
->>>>>>> f4a4e063 (feat(historique): imprimer un entretien -wip)
   } from '~/components/PrintHelpRequest/types'
 
   const route = useRoute()
-  // const router = useRouter()
+  const router = useRouter()
 
   const trpcClient = useTrpcClient()
   const helpRequestId = route.params.id as string
@@ -136,8 +127,6 @@
   function onAfterPrint() {
     navigateTo(router.options.history.state.back?.toString())
   }
-
-  const printInformations = await getPrintInformations()
 </script>
 
 <style lang="scss" scoped>
