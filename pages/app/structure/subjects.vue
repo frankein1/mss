@@ -112,14 +112,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
   import {
     updateSocialSupportSubjectsSchema,
     UpdateSocialSupportSubjectsInput
   } from '~/server/schema'
+  import { routes } from '~/routes'
 
-  const title = RouteTitle.AppStructureSubjects()
+  const title = routes.structure.AppStructureSubjects.title
 
   useHead({ title })
 
@@ -178,7 +178,7 @@
       mutation: () =>
         trpcClient.structure.updateSocialSupportSubjects.mutate(values),
       onSuccess: () => {
-        navigateTo(RoutePath.AppStructure())
+        navigateTo(routes.structure.AppStructure.path())
         snackbar.success('Objet(s) d’accompagnement(s) ajouté(s) avec succès')
       },
       onFailure: () => {
@@ -188,7 +188,7 @@
   })
 
   const onCancel = () => {
-    navigateTo(RoutePath.AppStructure())
+    navigateTo(routes.structure.AppStructure.path())
   }
 </script>
 

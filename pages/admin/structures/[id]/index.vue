@@ -27,7 +27,7 @@
 
       <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
-        :edit-path="RoutePath.AdminStructureSubjects(structureId)"
+        :edit-path="routes.admin.AdminStructureSubjects.path(structureId)"
         @refresh="refresh"
       />
     </div>
@@ -37,11 +37,11 @@
 <script lang="ts" setup>
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
   import { CreateStructureInput } from '~/server/schema'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
   import StructureDisableAlert from '~/components/Structure/StructureDisableAlert.vue'
+  import { routes } from '~/routes'
 
-  const title = RouteTitle.AppStructure()
+  const title = routes.structure.AppStructure.title
 
   useHead({ title })
 
@@ -81,7 +81,7 @@
       onSuccess: () => {
         modal.close()
         snackbar.success('Structure désactivé')
-        navigateTo(RoutePath.AdminStructures())
+        navigateTo(routes.admin.AdminStructures.path())
       },
       onFailure: () => {
         snackbar.error('La désactivation a échoué')
