@@ -10,7 +10,7 @@
             <div class="fr-header__brand-top">
               <div class="fr-header__logo">
                 <NuxtLink
-                  :to="RoutePath.Index()"
+                  :to="routes.landing.Index.path()"
                   title="Accueil - Mon Suivi Social"
                 >
                   <p class="fr-logo">
@@ -53,7 +53,7 @@
                 <li>
                   <NuxtLink
                     class="fr-btn register-btn fr-icon-add-line"
-                    :to="RoutePath.Register()"
+                    :to="routes.landing.Register.path()"
                   >
                     Créer un espace
                   </NuxtLink>
@@ -61,7 +61,7 @@
                 <li>
                   <NuxtLink
                     class="fr-btn fr-btn--tertiary fr-icon-lock-line"
-                    :to="RoutePath.AuthLogin()"
+                    :to="routes.auth.AuthLogin.path()"
                   >
                     Se connecter à son espace
                   </NuxtLink>
@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
 </script>
 
 <style lang="scss" scoped>

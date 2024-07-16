@@ -3,6 +3,7 @@ import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { BeneficiaryNames } from '~/types/beneficiary'
+import { TypeSuivi } from '~/client/options'
 
 type OriginPage =
   | 'AppOverview'
@@ -187,6 +188,12 @@ export const routes = {
   AppHistoryPrint: {
     name: 'AppHistoryPrint',
     title: 'Imprimer la fiche',
-    path: (historyId: string) => `${AppRoute}/historyprint/${historyId}/print`
+    path: (historyId: string, type?: TypeSuivi) => {
+      let routeUrl = `${AppRoute}/historyprint/${historyId}/print`
+      if (type) {
+        routeUrl = routeUrl + `?type=${type}`
+      }
+      return routeUrl
+    }
   }
 } as const

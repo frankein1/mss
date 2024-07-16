@@ -41,7 +41,7 @@
     <div class="budget-income__action">
       <NuxtLink
         :to="
-          RoutePath.AppBeneficiaryBudgetIncomeEdit(
+          routes.budget.AppBeneficiaryBudgetIncomeEdit.path(
             beneficiaryIdentification.id,
             income.id
           )
@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/routes'
   import {
     taxHouseHoldRelationshipKeys,
     budgetIncomeKeys

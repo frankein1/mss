@@ -1,10 +1,10 @@
-import { RoutePath } from '~/utils/routing'
+import { routes } from '~/routes'
 
 export default defineNuxtRouteMiddleware(to => {
   const authState = useAuthState()
   if (!authState.isAuthenticated()) {
     return navigateTo({
-      path: RoutePath.AuthLogin(),
+      path: routes.auth.AuthLogin.path(),
       query: { redirectUrl: to.fullPath }
     })
   }
@@ -13,8 +13,8 @@ export default defineNuxtRouteMiddleware(to => {
   } = useRuntimeConfig()
   if (!authState.hasAcceptedCgu(cguVersion)) {
     if (authState.isStructureManager()) {
-      return navigateTo(RoutePath.CGUManager())
+      return navigateTo(routes.cgu.CGUManager.path())
     }
-    return navigateTo(RoutePath.CGUUser())
+    return navigateTo(routes.cgu.CGUUser.path())
   }
 })
