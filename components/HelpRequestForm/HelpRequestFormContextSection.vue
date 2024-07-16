@@ -85,7 +85,7 @@
         <template #hint>
           <NuxtLink
             v-if="application.edit.structure"
-            :to="RoutePath.AppStructure()"
+            :to="routes.structure.AppStructure.path()"
             class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
             >Je personnalise les objets d'accompagnement de ma structure
           </NuxtLink>
@@ -118,7 +118,7 @@
     <!-- ROW -->
     <div class="fr-col-6 fr-mt-0 fr-pt-0">
       <NuxtLink
-        :to="RoutePath.AppPartners()"
+        :to="routes.structure.AppPartners.path()"
         class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
       >
         Données issues de l'annuaire de partenaires
@@ -160,7 +160,7 @@
     <!-- ROW -->
     <div class="fr-col-6 fr-mt-0 fr-pt-0">
       <NuxtLink
-        :to="RoutePath.AppPartners()"
+        :to="routes.structure.AppPartners.path()"
         class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
       >
         Données issues de l'annuaire de partenaires
@@ -200,9 +200,9 @@
     externalOrganisationKeys,
     askedHousingKeys
   } from '~/client/options'
-  import { RoutePath } from '~/utils/routing'
   import { CreateHousingHelpRequestInput } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
+  import { routes } from '~/routes'
 
   const { application } = usePermissions()
 
