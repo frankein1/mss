@@ -26,6 +26,6 @@ export const apiRoutes = {
     path: () => '/api/keycloak/logout'
   },
   ApiSsoCallback: {
-    path: () => '/api/keycloak/logout'
+    path: () => '/api/keycloak/callback'
   }
 } as const
