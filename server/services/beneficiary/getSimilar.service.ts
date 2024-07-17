@@ -60,6 +60,8 @@ export async function getSimilar({
     params.where.familyFile.referents = undefined
   }
 
+  params.where.status = UserStatus.Active
+
   const similarBeneficiaries = await BeneficiaryRepo.prisma.findMany({
     ...params,
     select: {
@@ -79,9 +81,6 @@ export async function getSimilar({
           }
         }
       }
-    },
-    where: {
-      status: UserStatus.Active
     }
   })
 
