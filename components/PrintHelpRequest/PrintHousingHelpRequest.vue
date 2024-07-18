@@ -1,8 +1,7 @@
 <template>
-  <!-- TODO; improve Titles and create a component -->
   <div class="fr-container">
     <div class="fr-grid-column">
-      <div class="fr-col-12 fr-mt-4w">
+      <div class="fr-col-12">
         <PrintHelpRequestHeader
           title="Demande de logement"
           :beneficiary-firstname="
@@ -26,9 +25,27 @@
       <div class="fr-col-12">
         <ul>
           <PrintHelpRequestDetailItem
+            :title="helpRequestFieldLabels.numeroPegase"
+            :content="
+              housingHelpRequest.fileInstruction.socialSupport.numeroPegase
+            "
+          />
+          <PrintHelpRequestDetailItem
+            :title="helpRequestFieldLabels.ministre"
+            :content="ministre"
+          />
+          <PrintHelpRequestDetailItem
             title="1ère demande ou renouvellement"
             :content="
               housingHelpRequest.isFirst ? '1ère demande' : 'renouvellement'
+            "
+          />
+          <PrintHelpRequestDetailItem
+            :title="housingHelpRequestFieldLabels.firstOpeningDate"
+            :content="
+              housingHelpRequest.firstOpeningDate
+                ? formatDate(housingHelpRequest.firstOpeningDate)
+                : null
             "
           />
           <PrintHelpRequestDetailItem
@@ -44,25 +61,6 @@
             "
           />
           <PrintHelpRequestDetailItem
-            :title="helpRequestFieldLabels.numeroPegase"
-            :content="
-              housingHelpRequest.fileInstruction.socialSupport.numeroPegase
-            "
-          />
-          <PrintHelpRequestDetailItem
-            :title="helpRequestFieldLabels.ministre"
-            :content="ministre"
-          />
-          <PrintHelpRequestDetailItem
-            :title="helpRequestFieldLabels.examinationDate"
-            :content="
-              housingHelpRequest.fileInstruction.examinationDate
-                ? formatDate(housingHelpRequest.fileInstruction.examinationDate)
-                : null
-            "
-          />
-
-          <PrintHelpRequestDetailItem
             :title="helpRequestFieldLabels.instructorOrganizationId"
             :content="
               housingHelpRequest.fileInstruction.instructorOrganization?.name
@@ -75,7 +73,14 @@
                 ?.name
             "
           />
-
+          <PrintHelpRequestDetailItem
+            :title="helpRequestFieldLabels.examinationDate"
+            :content="
+              housingHelpRequest.fileInstruction.examinationDate
+                ? formatDate(housingHelpRequest.fileInstruction.examinationDate)
+                : null
+            "
+          />
           <PrintHelpRequestDetailItem
             :title="helpRequestFieldLabels.dispatchDate"
             :content="
@@ -84,26 +89,16 @@
                 : null
             "
           />
-          <PrintHelpRequestDetailItem
-            :title="helpRequestFieldLabels.refusalReason"
-            :content="refusalReason"
-          />
-          <PrintHelpRequestDetailItem
-            :title="helpRequestFieldLabels.decisionDate"
-            :content="
-              housingHelpRequest.fileInstruction.decisionDate
-                ? formatDate(housingHelpRequest.fileInstruction.decisionDate)
-                : null
-            "
-          />
-          <PrintHelpRequestDetailItem
-            :title="helpRequestFieldLabels.fullFile"
-            :content="
-              housingHelpRequest.fileInstruction.fullFile ? 'OUI' : null
-            "
-          />
         </ul>
-        <template v-if="housingReason || housingHelpRequest.uniqueId">
+        <template
+          v-if="
+            housingReason ||
+            housingHelpRequest.uniqueId ||
+            housingHelpRequest.fileInstruction.decisionDate ||
+            refusalReason ||
+            housingHelpRequest.fileInstruction.socialSupport.dueDate
+          "
+        >
           <hr class="fr-mt-4w" />
           <h3>Informations sur la demande de logement</h3>
           <ul>
@@ -115,9 +110,36 @@
               :title="housingHelpRequestFieldLabels.uniqueId"
               :content="housingHelpRequest.uniqueId"
             />
+            <PrintHelpRequestDetailItem
+              :title="helpRequestFieldLabels.decisionDate"
+              :content="
+                housingHelpRequest.fileInstruction.decisionDate
+                  ? formatDate(housingHelpRequest.fileInstruction.decisionDate)
+                  : null
+              "
+            />
+            <PrintHelpRequestDetailItem
+              :title="helpRequestFieldLabels.refusalReason"
+              :content="refusalReason"
+            />
+            <PrintHelpRequestDetailItem
+              title="Date d'échéance"
+              :content="
+                housingHelpRequest.fileInstruction.socialSupport.dueDate
+                  ? formatDate(
+                      housingHelpRequest.fileInstruction.socialSupport.dueDate
+                    )
+                  : null
+              "
+            />
+            <PrintHelpRequestDetailItem
+              :title="helpRequestFieldLabels.fullFile"
+              :content="
+                housingHelpRequest.fileInstruction.fullFile ? 'OUI' : null
+              "
+            />
           </ul>
         </template>
-
         <template
           v-if="
             housingHelpRequest.taxHouseholdAdditionalInformation ||
@@ -125,18 +147,14 @@
             housingHelpRequest.maxCharges ||
             housingType ||
             roomCount ||
-            housingHelpRequest.isPmr ||
-            housingHelpRequest.fileInstruction.socialSupport.synthesis
+            lowIncomeHousingType ||
+            housingHelpRequest.isPmr
           "
         >
           <hr class="fr-mt-4w" />
           <h3>Caractéristiques du logement demandé</h3>
           <ul>
-            <!-- TODO: request benificiary -->
-            <PrintHelpRequestDetailItem
-              title="Composition du foyer fiscal"
-              content="[INFO RENSEIGNEES DANS LE PROFIL + champs PRECISIONS SUR LA COMPOSITION DI FOYER] (si renseignés)"
-            />
+            <!-- TODO: request benificiary and print Composition du foyer fiscal -->
             <PrintHelpRequestDetailItem
               :title="
                 housingHelpRequestFieldLabels.taxHouseholdAdditionalInformation
@@ -166,17 +184,25 @@
               :content="housingType"
             />
             <PrintHelpRequestDetailItem
-              :title="housingHelpRequestFieldLabels.lowIncomeHousingType"
-              :content="lowIncomeHousingType"
-            />
-            <PrintHelpRequestDetailItem
               :title="housingHelpRequestFieldLabels.roomCount"
               :content="roomCount"
+            />
+            <PrintHelpRequestDetailItem
+              :title="housingHelpRequestFieldLabels.lowIncomeHousingType"
+              :content="lowIncomeHousingType"
             />
             <PrintHelpRequestDetailItem
               :title="housingHelpRequestFieldLabels.isPmr"
               :content="housingHelpRequest.isPmr ? 'OUI' : null"
             />
+          </ul>
+        </template>
+        <template
+          v-if="housingHelpRequest.fileInstruction.socialSupport.synthesis"
+        >
+          <hr class="fr-mt-4w" />
+          <h3>{{ helpRequestFieldLabels.synthesis }}</h3>
+          <ul>
             <PrintHelpRequestDetailItem
               :title="helpRequestFieldLabels.synthesis"
               :content="
