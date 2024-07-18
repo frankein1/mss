@@ -1,5 +1,6 @@
 <template>
   <PageContainer>
+    <AtomBreadcrumb />
     <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaryFollowupEdit(followup)" /> -->
     <PageTitle :title="title" />
     <main

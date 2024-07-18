@@ -18,6 +18,7 @@
   >
     <main class="content">
       <div class="fr-container fr-pb-2w">
+        <AtomBreadcrumb />
         <!-- <DsfrBreadcrumb
           :links="
             Breadcrumb.AppFileBudgetExpensesEdit(

@@ -34,6 +34,12 @@
         :value="taxHouseholds.majorChildren || '0'"
       />
     </div>
+    <div class="fr-col-6">
+      <BeneficiaryInfoLabel
+        :label="beneficiaryFieldLabels.minorChildren"
+        :value="taxHouseholds.minorChildren || '0'"
+      />
+    </div>
   </div>
 </template>
 

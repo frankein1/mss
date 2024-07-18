@@ -1,5 +1,6 @@
 <template>
   <PageContainer no-max-width>
+    <AtomBreadcrumb />
     <!-- <DsfrBreadcrumb :links="Breadcrumb.AppStats()" /> -->
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
