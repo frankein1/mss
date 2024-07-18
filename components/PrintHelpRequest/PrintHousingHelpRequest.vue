@@ -23,7 +23,21 @@
         />
       </div>
       <div class="fr-col-12">
-        <ul>
+        <ul
+          v-if="
+            housingHelpRequest.fileInstruction.socialSupport.numeroPegase ||
+            ministre ||
+            housingHelpRequest.isFirst ||
+            housingHelpRequest.firstOpeningDate ||
+            askedHousing ||
+            housingHelpRequest.fileInstruction.externalStructure ||
+            housingHelpRequest.fileInstruction.instructorOrganization?.name ||
+            housingHelpRequest.fileInstruction.instructorOrganizationContact
+              ?.name ||
+            housingHelpRequest.fileInstruction.examinationDate ||
+            housingHelpRequest.fileInstruction.dispatchDate
+          "
+        >
           <PrintHelpRequestDetailItem
             :title="helpRequestFieldLabels.numeroPegase"
             :content="
