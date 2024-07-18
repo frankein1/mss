@@ -1,7 +1,7 @@
 <template>
   <div class="fr-container">
     <div class="fr-grid-column">
-      <div class="fr-col-12 fr-mt-4w">
+      <div class="fr-col-12">
         <PrintFollowupHeader
           title="Entretien"
           :beneficiary-firstname="followup.beneficiary.firstName"
@@ -13,13 +13,21 @@
       <div class="fr-col-12">
         <ul>
           <PrintHelpRequestDetailItem
-            title="1 er entretien"
+            :title="followupFieldLabels.firstFollowup"
             :content="followup.firstFollowup ? 'OUI' : null"
+          />
+          <PrintHelpRequestDetailItem
+            :title="followupFieldLabels.duration"
+            :content="followupDurationKeys.value(followup.duration)"
           />
 
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.numeroPegase"
             :content="followup.numeroPegase"
+          />
+          <PrintHelpRequestDetailItem
+            :title="followupFieldLabels.ministre"
+            :content="followup.ministre"
           />
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.medium"
@@ -31,17 +39,12 @@
             :content="followup.thirdPersonName"
           />
           <PrintHelpRequestDetailItem
-            title="Rendez-vous à l'extérieur"
+            :title="FollowupMedium.ExternalAppointment"
             :content="
               followup.medium === FollowupMedium.ExternalAppointment
                 ? 'OUI'
                 : null
             "
-          />
-
-          <PrintHelpRequestDetailItem
-            :title="followupFieldLabels.ministre"
-            :content="followup.ministre"
           />
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.subjects"
@@ -52,10 +55,12 @@
             :content="followup.prescribingOrganization?.name"
           />
           <PrintHelpRequestDetailItem
+            :title="followupFieldLabels.prescribingOrganizationContactId"
+            :content="followup.prescribingOrganizationContact?.name"
+          />
+          <PrintHelpRequestDetailItem
             :title="followupFieldLabels.dueDate"
-            :content="
-              followup.dueDate ? formatDate(followup.date, 'DD/MM/YYYY') : null
-            "
+            :content="followup.dueDate ? formatDate(followup.date) : null"
           />
           <PrintHelpRequestDetailItem
             :title="followupFieldLabels.synthesis"
@@ -85,7 +90,7 @@
   import { FollowupOutput } from './types'
   import { formatDate } from '~/utils/formatDate'
   import { followupFieldLabels } from '~/client/labels'
-  import { followupMediumKeys } from '~/client/options'
+  import { followupMediumKeys, followupDurationKeys } from '~/client/options'
 
   defineProps<{
     followup: FollowupOutput
