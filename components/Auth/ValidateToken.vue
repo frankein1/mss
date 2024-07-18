@@ -17,6 +17,8 @@
 
   const route = useRoute()
   const auth = useAuth()
+  const authState = useAuthState()
+
   const token = route.query.token as string
   const redirectUrl =
     (route.query.redirectUrl as string | undefined) || useHomePage()
@@ -31,32 +33,33 @@
     {
       method: 'POST',
       body: JSON.stringify({ token }),
-      onResponse({ response }) {
+      async onResponse({ response }) {
         const { _data: data } = response
         if (data) {
           auth.login(data)
-          checkDpoStatus().then(res => {
-            const redirectionParams: RouteLocationRaw = {
-              path: redirectUrl,
-              query: res.shouldFillDPO
-                ? {
-                    shouldFillDPO: 'true',
-                    compulsory: res.compulsory ? 'true' : 'false'
-                  }
-                : undefined
-            }
-
-            navigateTo(redirectionParams)
-          })
+          const redirect = await checkDpoStatus()
+          navigateTo(redirect)
         }
       }
     }
   )
 
-  const checkDpoStatus = async () => {
-    const structureDPOStatus =
-      await trpcClient.structure.getStructureDPOStatus.query()
-    return structureDPOStatus
+  async function checkDpoStatus(): Promise<RouteLocationRaw> {
+    if (authState.user.value?.role === 'Administrator') {
+      return { path: redirectUrl }
+    }
+
+    const status = await trpcClient.structure.getStructureDPOStatus.query()
+
+    return {
+      path: redirectUrl,
+      query: status.shouldFillDPO
+        ? {
+            shouldFillDPO: 'true',
+            compulsory: status.compulsory ? 'true' : 'false'
+          }
+        : undefined
+    }
   }
 
   const name = computed(() => {
