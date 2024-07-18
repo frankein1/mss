@@ -67,7 +67,7 @@ const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
   bank: 'Banque',
   funeralContract: 'Contrat obsèques',
   protectionMeasure: 'Mesures de protection',
-  representative: 'Nom, prénom, coordonées du mandataire',
+  representative: 'Nom, prénom, coordonnées du mandataire',
   prescribingStructure: 'Organisme prescripteur',
   orientationType: "Mode d'orientation",
   orientationStructure: "Organisme d'orientation",
