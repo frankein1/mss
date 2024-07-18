@@ -144,7 +144,7 @@
 
   .beneficiaries-header {
     display: grid;
-    gap: 0.5rem 0.5rem;
+    gap: 0.5rem;
     grid-template-areas: 'title' 'action';
     grid-template-columns: auto max-content;
     align-items: center;

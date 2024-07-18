@@ -292,7 +292,7 @@
     padding-block: 2.5rem 10rem;
 
     @include dsfr-media-query.respond-from('xl') {
-      padding-block: 2.5rem 2.5rem;
+      padding-block: 2.5rem;
     }
   }
 

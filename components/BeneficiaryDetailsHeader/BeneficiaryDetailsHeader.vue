@@ -40,7 +40,7 @@
 <style lang="scss">
   .beneficiary-details-header {
     display: grid;
-    gap: 0.5rem 0.5rem;
+    gap: 0.5rem;
     grid-template-areas:
       'title actions'
       'metas actions'

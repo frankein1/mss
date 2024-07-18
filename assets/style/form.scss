@@ -68,6 +68,7 @@
 }
 
 // Hide DSFR calendar icon on date input on Firefox as the browser already embed one
+// stylelint-disable-next-line at-rule-no-vendor-prefix
 @-moz-document url-prefix() {
   .fr-input-group .fr-input-wrap.fr-icon-calendar-line {
     &::after,

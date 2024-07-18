@@ -10,7 +10,7 @@ import { SecurityRuleGrantee } from '~/server/security/rules/types'
 import { BeneficiaryRepo, BeneficiaryConstraints } from '~/server/database'
 
 enum NullAgeGroup {
-  null = STATS_NULL_KEY
+  null = 'null'
 }
 
 type AgeGroupOrNull = AgeGroup | NullAgeGroup
