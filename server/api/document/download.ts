@@ -44,7 +44,7 @@ export default defineEventHandler(async event => {
   event.node.res.setHeader('Content-Length', '' + document.size)
   event.node.res.setHeader(
     'Content-Disposition',
-    `attachment; filename="${document.name}"`
+    `attachment; filename="${encodeURIComponent(document.name)}"`
   )
 
   return documentContent.content
