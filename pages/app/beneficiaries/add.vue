@@ -1,5 +1,6 @@
 <template>
   <PageContainer class="page-container">
+    <AtomBreadcrumb />
     <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" /> -->
     <PageTitle
       :title="title"

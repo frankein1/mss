@@ -22,6 +22,7 @@
       ref="beneficiaryFormLayoutMainContainer"
       class="content fr-col-9 fr-container"
     >
+      <AtomBreadcrumb />
       <!-- <DsfrBreadcrumb :links="breadcrumbLinks" /> -->
       <PageTitle
         :title="title"

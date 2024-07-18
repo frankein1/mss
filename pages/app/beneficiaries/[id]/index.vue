@@ -1,5 +1,6 @@
 <template>
   <PageContainer v-if="beneficiary">
+    <AtomBreadcrumb />
     <!-- <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiary(beneficiaryIdentification, originPage)"
     /> -->

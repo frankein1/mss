@@ -1,5 +1,6 @@
 <template>
   <PageContainer>
+    <AtomBreadcrumb />
     <!-- <DsfrBreadcrumb
       :links="Breadcrumb.AppBeneficiaryHelpRequestAdd(beneficiary, subject)"
     /> -->

@@ -1,5 +1,6 @@
 <template>
   <PageContainer no-max-width>
+    <AtomBreadcrumb />
     <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaries()" /> -->
     <div class="beneficiaries-header">
       <PageTitle

@@ -5,6 +5,7 @@
     @submit.prevent="onSubmit"
   >
     <main class="fr-container content fr-pb-5w">
+      <AtomBreadcrumb />
       <!-- <DsfrBreadcrumb :links="Breadcrumb.AppStructureSubjects()" /> -->
 
       <PageTitle :title="title" />
