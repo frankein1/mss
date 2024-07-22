@@ -2,6 +2,50 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.27.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.26.0...v1.27.0) (2024-07-22)
+
+
+### Features
+
+* **api:** ajout d'une api indicateurs des structures ([9aa033b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9aa033be31c71f4d552fa43ba36ff5d4afd396f2))
+* **creation beneficiaire:** ajout d'un bandeau info ([50a50e9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/50a50e9b60b4911d48d88bfb62c90bc27a5dca39))
+* **dependance:** mises à jour des versions majeures des dépendances ([1be5f9b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1be5f9bc656fd79aec50d041a90ae18b42fc7d5d))
+* **dependance:** revert nuxt version ([0f1a7d3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0f1a7d3178a3e185a0566d28ac8b0a08f801c6ee))
+* **Dossier foyer:** Introduction du concept ([00ba156](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/00ba1569e45ea5e5a3bdc710384d18432856c70a))
+* **dossier logement:** ajout des types de HLM ([5264b6f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5264b6f082c943e1e6ab6d87c9a8836f200120b5))
+* **entretien:** impression d'une synthèse d'entretien ([76dc721](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/76dc721eedfb46e487a5d20eaedcabe25b779109)), closes [#358](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/358)
+* **entretiens:** ajout de l'id de dosser dans le formulaire de synthèse d'entretien ([11f600e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/11f600e0baa2e6b8ab6d68068aed21239ec4050a))
+* **historique:** imprimer un dossier d'instruction ([9a51c11](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/9a51c116aa02e8fa0ec4c21f11caa9242df8f854))
+* **instruction-dossier:** ajout de l'id de dossier dans le formulaire d'instruction de dossier ([98c9dd3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/98c9dd39107bc54d033514be42546f9b79c34958))
+* **instruction-dossier:** ajout modèle logement à loyer modéré ([46d0241](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/46d024122b208c284600a2203d3831f8f0155b8b)), closes [#502](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/502)
+* **statistiques:** instructions de dossier ont plus d'un objet d'accompagnement en prod ([e1a5a38](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e1a5a38e22c77c4a888f343bc68c626c20a65a30)), closes [#495](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/495)
+* **structure:** affiche une modale en page d'accueil pour ajout dpo ([debd460](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/debd460d594fa0dc2fbbee5acd19e810212aab7e))
+* **structure:** ajout de dpo au formulaire ([d4ef795](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d4ef795d4252cd728ddedf5ce54c7a6b24e1c341))
+* **structure:** ajout des champs du DPO dans la structure ([66b8de9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/66b8de962e3a98bca16555ecba05c1acd6acdd84)), closes [#500](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/500)
+* **structure:** ajout du point d'entrée API pour le statut de remplissage du DPO ([5f42328](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5f42328f49f3a16cef9d1558ccf053a2fa0a72da)), closes [#500](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/500)
+* **structure:** désactive modale DPO pour les comptes administrateurs ([51882ff](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/51882ff6896b45526f85f24985d70b84f2222cba)), closes [#532](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/532)
+* **structure:** envoi automatique des emails avant désactivation ([b6cd21d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b6cd21d9b37adcec0f91607fd8d93e4dff412e3c))
+
+
+### Bug Fixes
+
+* ajout d'info de version ([ee4109e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ee4109e07742a39aa6aa311105d7826cd281c619))
+* ajout enfant mineur dans bénéficiaire et futur nouveau breadcrumb ([07d4ace](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/07d4ace133eb452a8c2ac7ee9608c83a770971a5)), closes [#525](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/525)
+* **beneficiaire:** amélioration des permissions sur les données de santé ([1f271f9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1f271f98526e7efd1389ed2eb05a5be470271056)), closes [#503](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/503)
+* **beneficiaire:** bénéficiaires similaires et redirection du formulaire simplifié vers complet ([4e5c136](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4e5c136287c6af5935d45ee1062df7a96c81e105)), closes [#525](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/525)
+* **beneficiaires:** rajoute la colonne des objets d'accompagnement ([c803b19](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c803b1963b0a1132f594f80b1a806d437db95015))
+* **beneficiaire:** supression mention champ requis dans le foyer fiscal ([7c75c14](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7c75c14017e5a57ac25a7504c72dcbdc2130831f))
+* **budget:** update routes for budget with new file structure ([7c6965e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7c6965e1ecfcb11404328596153bb97a353593b2)), closes [#498](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/498)
+* **data-inclusion:** suppression des données à la fermeture de la modale ([5406c54](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5406c540dd9a0e3d19c1dc91d33b191c129071ce)), closes [#435](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/435)
+* **data-inclusion:** supression de la recherche par SIRET ([a914141](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a91414115c850f3ecf1fa6132483368e753146b1)), closes [#486](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/486)
+* **document:** encodage du nom des documents dans le header d'accès au contenu ([584cdfe](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/584cdfef1ab8ce714c6ab41b436e2eabaf806ef4)), closes [#525](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/525)
+* **Dossier foyer:** Possibilité de gérer les documents ([9051494](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/90514943816ed48e37bef530cdd1ec66c5da97e7))
+* **Dossier foyer:** redirection de la page foyer vers la page bénéficiaire ([f98d0c3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f98d0c3603d3d41a91cc34f5c1c47e7012511f86))
+* impression de [RETOURS TESTS] ([3fe4e8d](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/3fe4e8d428726a06aa291eacc3524b84b9abb586))
+* ouvre le bon item après avoir imprimé ([94d4ae9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/94d4ae9f07197ecbe1084ede005608ecf04fc8a4))
+* **structure:** change la fréquence d'envoi des emails ([0e48078](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/0e48078c233f3672f09a1a3a93bba09e3760b207))
+* **structure:** désactivation d'une structure ([496d552](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/496d552736199f2a8a9c29ab9cc1ffece77d2f7e))
+
 ## [1.26.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.25.0...v1.26.0) (2024-06-19)
 
 
