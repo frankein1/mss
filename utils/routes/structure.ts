@@ -1,5 +1,4 @@
 import { AppRoute } from './utils'
-import { breadcrumbs as user } from './user'
 
 export const routes = {
   AppUsers: {
@@ -28,25 +27,3 @@ export const routes = {
     path: () => `${AppRoute}/structure/subjects`
   }
 } as const
-
-type Routes = typeof routes
-type RouteName = keyof Routes
-
-function getBread<T extends RouteName>(name: T) {
-  const title = routes[name].title as Routes[T]['title']
-  return [{ text: title, to: routes[name].path() }]
-}
-
-export const breadcrumbs = {
-  AppUsers: () => [...user.AppOverview(), ...getBread('AppUsers')],
-  AppPartners: () => [...user.AppOverview(), ...getBread('AppPartners')],
-  AppStructure: () => [...user.AppOverview(), ...getBread('AppStructure')],
-  AppStructureEdit: () => [
-    ...user.AppOverview(),
-    ...getBread('AppStructureEdit')
-  ],
-  AppStructureSubjects: () => [
-    ...user.AppOverview(),
-    ...getBread('AppStructureSubjects')
-  ]
-}
