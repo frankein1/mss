@@ -53,7 +53,7 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { fileInstructionTypePictos } from '~/client/options'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

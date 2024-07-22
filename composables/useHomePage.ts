@@ -1,5 +1,5 @@
 import { useAuthState } from './useAuthState'
-import { routes } from '~/routes'
+import { routes } from '~/utils/routes'
 
 export function useHomePage() {
   const admin = useAuthState().isAdmin()

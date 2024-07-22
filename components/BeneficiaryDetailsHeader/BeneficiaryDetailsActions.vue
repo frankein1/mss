@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { FamilyFilePermissions } from '~/server/security'

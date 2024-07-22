@@ -37,7 +37,7 @@
   import StructureInfoForm from '~/components/Structure/StructureInfoForm.vue'
   import { EditStructureInfoInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const title = routes.structure.AppStructure.title
 

@@ -31,7 +31,7 @@
 <script lang="ts" setup>
   import { UserAdminSort } from '~/types/table'
   import type { UserAdminFilterInput } from '~/server/schema'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
 

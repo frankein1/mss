@@ -62,7 +62,7 @@
     updateBudgetInfoSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()

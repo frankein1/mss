@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
   import DpoRedirectModal from '~/components/DpoRedirectModal/DpoRedirectModal.vue'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const title = routes.user.AppOverview.title
   const route = useRoute()

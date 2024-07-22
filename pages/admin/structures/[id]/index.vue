@@ -39,7 +39,7 @@
   import { CreateStructureInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import StructureDisableAlert from '~/components/Structure/StructureDisableAlert.vue'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const title = routes.structure.AppStructure.title
 

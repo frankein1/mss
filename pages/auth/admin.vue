@@ -24,7 +24,7 @@
 </template>
 <script setup lang="ts">
   import { AdminLoginInput, adminLoginSchema } from '~/server/schema'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   useHead({
     title: routes.auth.AuthAdmin.title

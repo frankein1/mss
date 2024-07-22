@@ -47,7 +47,7 @@
     FollowupOutput
   } from '~/components/PrintHelpRequest/types'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const route = useRoute()
 

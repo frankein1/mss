@@ -44,7 +44,7 @@
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     data: FollowupPageItem

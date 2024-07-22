@@ -47,7 +47,7 @@
   import { AdminUsersOutput } from './types'
   import { userRoleKeys } from '~/client/options'
   import { formatUserDisplayName } from '~/utils/user'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   defineProps<{
     users: AdminUsersOutput

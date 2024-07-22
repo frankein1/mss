@@ -43,7 +43,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { AddFollowupInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

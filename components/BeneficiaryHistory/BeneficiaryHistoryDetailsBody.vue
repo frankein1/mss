@@ -105,7 +105,7 @@
   import { FamilyFilePermissions } from '~/server/security'
   import { DocumentEventAction, EventCategory } from '~/types/matomo'
   import { TypeSuivi } from '~/client/options'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     item: SocialSupportItem

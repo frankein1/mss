@@ -92,7 +92,7 @@
 </template>
 
 <script setup>
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 </script>
 
 <style lang="scss" scoped>

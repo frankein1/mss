@@ -119,7 +119,7 @@
 </template>
 
 <script setup>
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const homePage = useHomePage()
   const authState = useAuthState()

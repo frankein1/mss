@@ -54,7 +54,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   definePageMeta({
     layout: false

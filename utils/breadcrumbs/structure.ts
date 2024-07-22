@@ -1,5 +1,5 @@
 import { breadcrumbs as user } from './user'
-import { routes } from '~/routes'
+import { routes } from '~/utils/routes'
 
 const r = routes.structure
 type Routes = typeof r

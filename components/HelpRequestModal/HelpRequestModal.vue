@@ -45,7 +45,7 @@
     fileInstructionTypeKeys,
     fileInstructionTypePictos
   } from '~/client/options'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const modal = useModal()
 

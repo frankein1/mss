@@ -146,7 +146,7 @@
 </template>
 
 <script setup>
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const { version, sourceCode } = useClientVersion()
 </script>

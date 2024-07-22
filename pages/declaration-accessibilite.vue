@@ -116,7 +116,7 @@
 </template>
 
 <script setup>
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   useHead({
     title: routes.landing.DeclarationAccessibilite.title

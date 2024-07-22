@@ -65,7 +65,7 @@
     EditPartnerOrganizationInput,
     AddPartnerOrganizationInput
   } from '~/server/schema'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const title = routes.structure.AppPartners.title
 

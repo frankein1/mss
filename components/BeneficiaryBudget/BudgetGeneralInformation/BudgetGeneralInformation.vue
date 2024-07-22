@@ -113,7 +113,7 @@
 
 <script setup lang="ts">
   import { Budget } from '../types'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { euros } from '~/utils/euros'
 
   defineProps<{ budget: Budget }>()

@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { StatFilterInput } from '~/server/schema'
   import { getStatLabel, ministerKeys } from '~/client/options'
 

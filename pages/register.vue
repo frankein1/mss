@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   useHead({
     title: routes.landing.Register.title

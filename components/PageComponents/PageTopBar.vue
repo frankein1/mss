@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const { isAuthenticated, getUserName } = useAuthState()
 

@@ -48,7 +48,7 @@
   import { CreateHelpRequestInput } from '~/server/schema'
   import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
   import { fileInstructionTypePictos } from '~/client/options'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

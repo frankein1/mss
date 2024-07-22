@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { FamilyFilePermissions } from '~/server/security'
   import HelpRequestModal from '~/components/HelpRequestModal/HelpRequestModal.vue'
 

@@ -59,7 +59,7 @@
   import { notificationTypeClasses } from '~/client/classes/notification'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { formatDate } from '~/utils/formatDate'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     notification: NotificationItem

@@ -35,7 +35,7 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { EditFollowupInput } from '~/server/schema'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const route = useRoute()
   const snackbar = useSnackbar()

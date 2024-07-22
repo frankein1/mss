@@ -117,7 +117,7 @@
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { useBeneficiaryDetails } from '~/composables/useBeneficiaryDetails'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const route = useRoute()
 

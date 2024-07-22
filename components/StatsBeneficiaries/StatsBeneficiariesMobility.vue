@@ -33,7 +33,7 @@
   import { beneficiaryMobilityKeys, getStatLabel } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
 

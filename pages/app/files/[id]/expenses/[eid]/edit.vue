@@ -82,7 +82,7 @@
   import { incrementBudgetTotal } from '~/utils/budget'
   import { budgetExpensesKeys } from '~/client/options'
   import { ExpensesKey } from '~/types/budget'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()

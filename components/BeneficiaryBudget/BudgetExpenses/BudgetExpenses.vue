@@ -52,7 +52,7 @@
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     beneficiaryId: string

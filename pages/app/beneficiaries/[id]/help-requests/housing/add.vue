@@ -49,7 +49,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { CreateHousingHelpRequestInput } from '~/server/schema'
   import { fileInstructionTypePictos } from '~/client/options'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

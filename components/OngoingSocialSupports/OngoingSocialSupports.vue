@@ -52,7 +52,7 @@
 
 <script setup lang="ts">
   import { SocialSupportStatus } from '@prisma/client'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
   import { HistoryTab } from '~/utils/constants/history'
   import { EventCategory, OverviewToHistoryEventAction } from '~/types/matomo'
