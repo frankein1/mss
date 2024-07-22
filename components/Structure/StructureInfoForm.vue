@@ -57,35 +57,40 @@
         />
       </div>
 
-      <div class="fr-col-12 fr-mt-1w">
-        <h3 class="fr-mb-0 fr-text--lg grey">
-          Personne référente à la protection des données (DPO)&nbsp;:
-        </h3>
-      </div>
+      <div
+        id="dpo-scroll"
+        clas="fr-col-12 "
+      >
+        <div class="fr-p-3v fr-mt-1w">
+          <h3 class="fr-mb-0 fr-text--lg grey">
+            Personne référente à la protection des données (DPO)&nbsp;:
+          </h3>
+        </div>
 
-      <div class="fr-col-12">
-        <VeeInput
-          name="dpoFirstName"
-          :label="structureFieldLabels.dpoFirstName"
-          required
-        />
-      </div>
+        <div class="fr-p-3v">
+          <VeeInput
+            name="dpoFirstName"
+            :label="structureFieldLabels.dpoFirstName"
+            required
+          />
+        </div>
 
-      <div class="fr-col-12">
-        <VeeInput
-          name="dpoLastName"
-          :label="structureFieldLabels.dpoLastName"
-          required
-        />
-      </div>
+        <div class="fr-p-3v">
+          <VeeInput
+            name="dpoLastName"
+            :label="structureFieldLabels.dpoLastName"
+            required
+          />
+        </div>
 
-      <div class="fr-col-12">
-        <VeeInput
-          name="dpoEmail"
-          :label="structureFieldLabels.dpoEmail"
-          required
-          type="email"
-        />
+        <div class="fr-p-3v">
+          <VeeInput
+            name="dpoEmail"
+            :label="structureFieldLabels.dpoEmail"
+            required
+            type="email"
+          />
+        </div>
       </div>
     </fieldset>
 
@@ -94,7 +99,7 @@
     >
       <li>
         <button
-          class="fr-btn fr-btn--secondary"
+          class="fr-btn fr-btn--secondary fr-mb-0"
           type="button"
           @click="modal.close"
         >
@@ -103,7 +108,7 @@
       </li>
       <li>
         <button
-          class="fr-btn"
+          class="fr-btn fr-mb-0"
           type="submit"
         >
           Valider
@@ -124,6 +129,7 @@
   const props = defineProps<{
     structure: StructureInfo
     validate: (values: EditStructureInfoInput) => void
+    dpoScroll?: boolean
   }>()
 
   const modal = useModal()
@@ -148,6 +154,15 @@
   const { onSubmit } = useCatchFormErrors(handleSubmit, values =>
     props.validate(values)
   )
+  onMounted(() => {
+    const dpoElement = document.getElementById('dpo-scroll')
+    if (dpoElement && props.dpoScroll) {
+      dpoElement.scrollIntoView({
+        block: 'start',
+        inline: 'nearest'
+      })
+    }
+  })
 </script>
 
 <style scoped lang="css">

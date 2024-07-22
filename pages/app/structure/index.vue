@@ -70,7 +70,8 @@
       title: 'Modifier les informations de ma structure',
       structure: data.value.structure,
       validate: onUpdateStructureInfo,
-      triggerOpen: true
+      triggerOpen: true,
+      dpoScroll: true
     })
   }
 
