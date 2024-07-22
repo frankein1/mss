@@ -40,16 +40,16 @@
 <script setup lang="ts">
   import { FileInstructionType } from '@prisma/client'
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle } from '~/utils/routing'
+  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { TypeSuivi } from '~/client/options'
   import {
     HousingHelpRequestOutput,
     HelpRequestOutput,
     FollowupOutput
   } from '~/components/PrintHelpRequest/types'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const route = useRoute()
-  const router = useRouter()
 
   const trpcClient = useTrpcClient()
   const helpRequestId = route.params.id as string
@@ -116,7 +116,32 @@
 
   const printInformations = await getPrintInformations()
 
-  // Print actions
+  const getBeneficiaryId = () => {
+    if (historyType === TypeSuivi.Followup) {
+      return printInformations?.followup?.beneficiaryId
+    }
+    if (historyType === TypeSuivi.AllHelpRequest) {
+      return printInformations?.helpRequest?.fileInstruction.socialSupport
+        .beneficiaryId
+    }
+    if (historyType === TypeSuivi.HousingHelpRequest) {
+      return printInformations?.housingHelpRequest?.fileInstruction
+        .socialSupport.beneficiaryId
+    }
+  }
+  const getItemId = () => {
+    if (historyType === TypeSuivi.Followup) {
+      return printInformations?.followup?.socialSupportId
+    }
+    if (historyType === TypeSuivi.AllHelpRequest) {
+      return printInformations?.helpRequest?.fileInstruction.socialSupport.id
+    }
+    if (historyType === TypeSuivi.HousingHelpRequest) {
+      return printInformations?.housingHelpRequest?.fileInstruction
+        .socialSupport.id
+    }
+  }
+
   onMounted(() => {
     window.addEventListener('afterprint', onAfterPrint)
     window.print()
@@ -125,7 +150,12 @@
     window.removeEventListener('afterprint', onAfterPrint)
   })
   function onAfterPrint() {
-    navigateTo(router.options.history.state.back?.toString())
+    navigateTo(
+      RoutePath.AppBeneficiary(getBeneficiaryId(), {
+        item: getItemId(),
+        tab: BeneficiaryTab.History
+      })
+    )
   }
 </script>
 
