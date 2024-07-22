@@ -23,8 +23,17 @@
       v-else-if="bindedValues"
       class="fr-p-3v"
     >
+      <AtomNotice
+        class="fr-mx-n3v fr-mb-4w"
+        :close-button="true"
+      >
+        <template #default
+          >Si des membres du foyer étaient précédemment renseignés dans la
+          section "foyer fiscal", ils se trouvent désormais dans la section
+          "Entourage".</template
+        >
+      </AtomNotice>
       <BeneficiaryFormFamilySituation />
-      <BeneficiaryFormTaxHouseholds :current-beneficiary-id="beneficiaryId" />
     </div>
   </BeneficiaryEditFormLayout>
 </template>
