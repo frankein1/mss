@@ -28,7 +28,6 @@
         :title="title"
         :icon="titleIcon"
       >
-        <RequiredFields />
       </PageTitle>
 
       <FormErrors
