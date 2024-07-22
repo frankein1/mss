@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
   import { HistoryTab } from '~/utils/constants/history'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const title = routes.beneficiary.AppHistory.title
 

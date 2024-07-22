@@ -180,7 +180,7 @@
 </template>
 
 <script setup lang="ts">
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   definePageMeta({
     layout: 'landing'

@@ -32,7 +32,7 @@
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { CreateBeneficiaryInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const title = routes.beneficiary.AppBeneficiariesAdd.title
 

@@ -19,7 +19,7 @@
 <script setup lang="ts">
   import { TRPCClientError } from '@trpc/client'
   import { AdminCreateUserInput } from '~/server/schema'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { getUserCreationMessage } from '~/utils/user'
 
   const trpcClient = useTrpcClient()

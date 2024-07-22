@@ -57,7 +57,7 @@
 <script setup lang="ts">
   import { GetBeneficiariesUsersActivityOutput } from '~/server/trpc/routers'
   import { formatDate } from '~/utils/formatDate'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { formatUserDisplayName } from '~/utils/user'
   import { userActivityTypeKeys } from '~/client/options'
 

@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
   import { GetBeneficiaryRelative } from '~/types/beneficiary'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     beneficiaryId: string

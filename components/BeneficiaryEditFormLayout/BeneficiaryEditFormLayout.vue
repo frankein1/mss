@@ -62,7 +62,7 @@
   import { FamilyFilePermissions } from '~/server/security'
   import type { FieldLabels } from '~/types/fieldLabels'
   import { BeneficiaryIdentification } from '~/types/beneficiary'
-  import { routes, AppBeneficiaryEditRoute } from '~/routes'
+  import { routes, AppBeneficiaryEditRoute } from '~/utils/routes'
 
   type SubmitType = z.infer<T>
 

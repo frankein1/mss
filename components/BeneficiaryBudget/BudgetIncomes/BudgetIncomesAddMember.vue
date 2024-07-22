@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
   import BudgetIncomesAddMemberForm from './BudgetIncomesAddMemberForm.vue'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { CreateHouseholdMemberInput } from '~/server/schema'
 
   const props = defineProps<{ beneficiaryId: string; budgetId: string }>()

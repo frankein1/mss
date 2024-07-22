@@ -6,7 +6,7 @@ import {
   InclusionConnectClient,
   InclusionConnectToken
 } from '~/server/lib/inclusion-connect.client'
-import { routes } from '~/routes'
+import { routes } from '~/utils/routes'
 import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'

@@ -94,7 +94,7 @@
   import { incomeHasBeenFilled, incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
   import { IncomeKey } from '~/types/budget'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()

@@ -39,7 +39,7 @@
   import { EMPTY_TABLE_CELL } from '~/utils/constants'
   import { formatDate } from '~/utils/formatDate'
   import { nameOrEmpty } from '~/utils/nameOrEmpty'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { formatTableValue } from '~/utils/table'
 
   const props = defineProps<{

@@ -297,7 +297,7 @@
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { SENSITIVE_DATA_HINT } from '~/utils/constants'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'

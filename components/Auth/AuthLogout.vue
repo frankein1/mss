@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-  import { routes, apiRoutes } from '~/routes'
+  import { routes, apiRoutes } from '~/utils/routes'
 
   const props = defineProps<{
     inactive: boolean

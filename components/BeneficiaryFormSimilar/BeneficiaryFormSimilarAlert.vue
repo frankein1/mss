@@ -39,7 +39,7 @@
   import { SimilarBeneficiary } from '~/server/trpc/routers'
   import { AlertType } from '~/utils/constants/alert'
   import { formatBeneficiaryNameAndBirthDate } from '~/utils/beneficiary'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import {
     getSimilarBeneficiarySchema,
     GetSimilarBeneficiaryInput

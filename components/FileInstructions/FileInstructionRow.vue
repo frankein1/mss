@@ -54,7 +54,7 @@
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { FileInstructionFilterInput } from '~/server/schema'
   import { roomCountKeys } from '~/client/options'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     fileInstruction: FileInstruction

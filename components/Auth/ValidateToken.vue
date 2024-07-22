@@ -12,7 +12,7 @@
 <script setup lang="ts">
   import { RouteLocationRaw } from '#vue-router'
   import { JwtUser } from '~/types/user'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { formatUserDisplayName } from '~/utils/user'
 
   const route = useRoute()

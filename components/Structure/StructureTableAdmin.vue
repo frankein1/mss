@@ -55,7 +55,7 @@
 <script setup lang="ts">
   import { Structures } from './types'
   import { structureTypeKeys } from '~/client/options'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   defineProps<{
     structures: Structures

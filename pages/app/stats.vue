@@ -56,7 +56,7 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const title = routes.stats.AppStats.title
 

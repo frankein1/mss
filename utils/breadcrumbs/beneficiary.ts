@@ -1,6 +1,6 @@
 import { breadcrumbs as user } from './user'
 import type { BeneficiaryIdentification } from '~/types/beneficiary'
-import { routes } from '~/routes'
+import { routes } from '~/utils/routes'
 
 const r = routes.beneficiary
 type Routes = typeof r

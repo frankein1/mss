@@ -9,7 +9,7 @@
 </template>
 <script setup lang="ts">
   import DisconnectAlert from './DisconnectAlert.vue'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { minutesToMillis } from '~/utils/time'
 
   type Interval = ReturnType<typeof setInterval>

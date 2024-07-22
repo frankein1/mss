@@ -1,5 +1,5 @@
 import { generators } from 'openid-client'
-import { routes, apiRoutes } from '~/routes'
+import { routes, apiRoutes } from '~/utils/routes'
 
 export type InclusionConnectToken = {
   accessToken: string

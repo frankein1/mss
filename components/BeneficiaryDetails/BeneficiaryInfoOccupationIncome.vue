@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
   import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     beneficiaryId: string

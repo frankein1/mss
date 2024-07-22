@@ -3,7 +3,7 @@ import { v4 } from 'uuid'
 import { createEmail } from '~/server/query'
 import { UserRepo } from '~/server/database'
 import { forbiddenError } from '~/server/trpc'
-import { routes } from '~/routes'
+import { routes } from '~/utils/routes'
 
 async function getUser(email: string) {
   try {

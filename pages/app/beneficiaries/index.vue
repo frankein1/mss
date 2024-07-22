@@ -72,7 +72,7 @@
   import { BeneficiarySort, SortOrder } from '~/types/table'
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
 
   const title = routes.beneficiary.AppBeneficiaries.title
 

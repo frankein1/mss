@@ -31,7 +31,7 @@
 
 <script setup lang="ts">
   import { GetBeneficiariesUsersActivityOutput } from '~/server/trpc/routers'
-  import { routes } from '~/routes'
+  import { routes } from '~/utils/routes'
   import { EventCategory, UserActivityEventAction } from '~/types/matomo'
 
   const matomo = useMatomo()

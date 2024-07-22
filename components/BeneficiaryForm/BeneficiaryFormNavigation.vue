@@ -71,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-  import { routes, AppBeneficiaryEditRoute } from '~/routes'
+  import { routes, AppBeneficiaryEditRoute } from '~/utils/routes'
 
   const SCROLL_DEFER_DURATION = 400
 
