@@ -7,6 +7,7 @@
     :permissions="permissions"
     :is-submitting="isSubmitting"
     :current-route="Route.AppBeneficiaryEditTaxHousehold"
+    :has-required-fields="false"
     @save="onSaveBeneficiary"
   >
     <AtomAlert

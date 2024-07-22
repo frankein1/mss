@@ -28,7 +28,7 @@
         :title="title"
         :icon="titleIcon"
       >
-        <RequiredFields />
+        <RequiredFields v-if="hasRequiredFields" />
       </PageTitle>
 
       <FormErrors
@@ -87,9 +87,11 @@
       isSubmitting: boolean
       titleIcon?: string
       currentRoute: AppBeneficiaryEditRoute
+      hasRequiredFields?: boolean
     }>(),
     {
-      titleIcon: undefined
+      titleIcon: undefined,
+      hasRequiredFields: true
     }
   )
 
