@@ -145,6 +145,6 @@
     })
   }
   const pageTitle = computed(
-    () => routes.beneficiary.AppBeneficiaryEditHealth.name
+    () => routes.beneficiary.AppBeneficiaryEditHealth.title
   )
 </script>

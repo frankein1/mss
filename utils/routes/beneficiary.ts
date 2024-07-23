@@ -134,7 +134,7 @@ export const routes = {
   },
   AppBeneficiaryEditTaxHousehold: {
     name: 'AppBeneficiaryEditTaxHousehold',
-    title: 'Foyer fiscal',
+    title: 'Situation familiale',
     path: (beneficiaryId: string, options?: BeneficiaryEditRouteOptions) =>
       getBeneficiaryEditRoute(
         `${BeneficiariesRoute}/${beneficiaryId}/edit/tax-household`,
