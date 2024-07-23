@@ -1,7 +1,6 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppUsers()" /> -->
+    <AtomBreadcrumb :links="breadcrumbs.structure.AppUsers()" />
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -30,9 +29,10 @@
 </template>
 
 <script lang="ts" setup>
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
-  const title = RouteTitle.AppUsers()
+  const title = routes.structure.AppUsers.title
 
   useHead({ title })
 

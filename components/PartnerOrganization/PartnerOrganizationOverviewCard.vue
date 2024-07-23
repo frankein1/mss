@@ -1,6 +1,6 @@
 <template>
   <NuxtLink
-    :href="RoutePath.AppPartners()"
+    :href="routes.structure.AppPartners.path()"
     class="partner-box__link"
   >
     <div class="feature-section partner-box">
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 </script>
 
 <style lang="scss" scoped>

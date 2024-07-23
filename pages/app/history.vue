@@ -1,7 +1,6 @@
 <template>
   <PageContainer no-max-width>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppHistory()" /> -->
+    <AtomBreadcrumb :links="breadcrumbs.beneficiary.AppHistory()" />
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -29,9 +28,10 @@
 
 <script lang="ts" setup>
   import { HistoryTab } from '~/utils/constants/history'
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
-  const title = RouteTitle.AppHistory()
+  const title = routes.beneficiary.AppHistory.title
 
   useHead({ title })
 </script>

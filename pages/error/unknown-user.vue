@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{ RouteTitle.ErrorUnknownUser() }}</h1>
+    <h1>{{ routes.error.ErrorUnknownUser.title }}</h1>
     <p class="fr-text--lead fr-mb-3w">
       Aucun compte Mon Suivi Social n'est rattaché à votre compte
       InclusionConnect.
@@ -21,7 +21,7 @@
       <li>
         <NuxtLink
           class="fr-btn fr-icon-add-line"
-          :to="RoutePath.Register()"
+          :to="routes.landing.Register.path()"
         >
           Créer un espace
         </NuxtLink>
@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { RouteTitle, RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const {
     public: {
@@ -48,7 +48,7 @@
   } = useRuntimeConfig()
 
   useHead({
-    title: RouteTitle.ErrorUnknownUser()
+    title: routes.error.ErrorUnknownUser.title
   })
 
   definePageMeta({

@@ -6,7 +6,7 @@
     >
       <li>
         <NuxtLink
-          :to="RoutePath.AppBeneficiaryFollowupAdd(beneficiaryId)"
+          :to="routes.followup.AppBeneficiaryFollowupAdd.path(beneficiaryId)"
           class="fr-btn fr-icon-file-add-line followup-btn"
           title="Ajouter une synthèse d'entretien"
         >
@@ -39,7 +39,7 @@
 </template>
 
 <script setup lang="ts">
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
   import { FamilyFilePermissions } from '~/server/security'
   import HelpRequestModal from '~/components/HelpRequestModal/HelpRequestModal.vue'
 

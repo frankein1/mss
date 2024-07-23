@@ -7,7 +7,11 @@
       >
         <template #detailedMessage>
           <template v-if="!similarBeneficiary.referent">
-            <NuxtLink :to="RoutePath.AppBeneficiary(similarBeneficiary.id)">
+            <NuxtLink
+              :to="
+                routes.beneficiary.AppBeneficiary.path(similarBeneficiary.id)
+              "
+            >
               {{ similarBeneficiaryLabel }}
             </NuxtLink>
             <p>
@@ -35,7 +39,7 @@
   import { SimilarBeneficiary } from '~/server/trpc/routers'
   import { AlertType } from '~/utils/constants/alert'
   import { formatBeneficiaryNameAndBirthDate } from '~/utils/beneficiary'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
   import {
     getSimilarBeneficiarySchema,
     GetSimilarBeneficiaryInput

@@ -34,7 +34,7 @@
             :key="user.id"
             v-slot="{ navigate }"
             custom
-            :to="RoutePath.AdminUser(user.id)"
+            :to="routes.admin.AdminUser.path(user.id)"
           >
             <tr
               class="clickable-row"
@@ -76,7 +76,7 @@
     </div>
     <NuxtLink
       :to="{
-        path: RoutePath.AdminUsersAdd(),
+        path: routes.admin.AdminUsersAdd.path(),
         query: { structureId }
       }"
       class="fr-btn fr-mt-2w fr-btn--icon-left fr-icon-user-add-line"
@@ -91,7 +91,7 @@
   import type { StructureUsers } from './types'
   import { userFieldLabels } from '~/client/labels'
   import { nonAdminUserRoleKeys } from '~/client/options'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
   import type { NonAdminUserRole } from '~/types/user'
 
   defineProps<{

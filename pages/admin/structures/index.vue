@@ -31,7 +31,7 @@
 <script lang="ts" setup>
   import StructureAdminInfoForm from '~/components/Structure/StructureAdminInfoForm.vue'
   import { CreateStructureInput } from '~/server/schema'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
 
@@ -70,7 +70,7 @@
       isSubmitting,
       onSuccess: ({ id }) => {
         modal.close()
-        navigateTo(RoutePath.AdminStructure(id))
+        navigateTo(routes.admin.AdminStructure.path(id))
       },
       onFailure: () => {
         snackbar.error("L'ajout de la structure a échoué.")

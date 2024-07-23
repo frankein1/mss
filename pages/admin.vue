@@ -3,12 +3,12 @@
 </template>
 
 <script setup lang="ts">
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const route = useRoute()
 
   useHead({
-    title: RouteTitle.Admin()
+    title: routes.admin.Admin.title
   })
 
   definePageMeta({
@@ -16,8 +16,8 @@
   })
 
   onMounted(() => {
-    if (route.path === RoutePath.Admin()) {
-      navigateTo(RoutePath.AdminStructures())
+    if (route.path === routes.admin.Admin.path()) {
+      navigateTo(routes.admin.AdminStructures.path())
     }
   })
 </script>

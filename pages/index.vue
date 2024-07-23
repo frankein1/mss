@@ -16,7 +16,7 @@
             <li>
               <NuxtLink
                 class="fr-btn fr-icon-add-line"
-                :to="RoutePath.Register()"
+                :to="routes.landing.Register.path()"
               >
                 Créer un espace
               </NuxtLink>
@@ -94,7 +94,7 @@
           </ul>
           <NuxtLink
             class="fr-btn"
-            :to="RoutePath.Register()"
+            :to="routes.landing.Register.path()"
           >
             Enregistrer sa structure
           </NuxtLink>
@@ -180,7 +180,7 @@
 </template>
 
 <script setup lang="ts">
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   definePageMeta({
     layout: 'landing'

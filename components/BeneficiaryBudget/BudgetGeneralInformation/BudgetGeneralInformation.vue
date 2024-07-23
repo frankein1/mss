@@ -3,7 +3,7 @@
     <div class="bgi__header">
       <h3 class="fr-h4 fr-m-0">Infos générales</h3>
       <NuxtLink
-        :to="RoutePath.AppFileBudgetInfoEdit(budget.familyFileId)"
+        :to="routes.budget.AppFileBudgetInfoEdit.path(budget.familyFileId)"
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-edit-line"
       >
         Modifier
@@ -113,7 +113,7 @@
 
 <script setup lang="ts">
   import { Budget } from '../types'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
   import { euros } from '~/utils/euros'
 
   defineProps<{ budget: Budget }>()

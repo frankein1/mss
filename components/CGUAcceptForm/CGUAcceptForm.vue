@@ -21,7 +21,7 @@
     >
       <li>
         <NuxtLink
-          :to="RoutePath.AuthLogout()"
+          :to="routes.auth.AuthLogout.path()"
           class="fr-btn fr-btn--secondary fr-icon-logout-box-r-line"
         >
           Déconnexion
@@ -42,7 +42,7 @@
 <script lang="ts" setup>
   import { toTypedSchema } from '@vee-validate/zod'
   import { AcceptCGUInput, acceptCGUSchema } from '~/server/schema'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
@@ -57,7 +57,7 @@
       mutation: () => trpcClient.user.acceptCGU.mutate(),
       onSuccess: data => {
         auth.login(data)
-        navigateTo(RoutePath.AppOverview())
+        navigateTo(routes.user.AppOverview.path())
       },
       onFailure: () => {
         snackbar.error("L'acceptation des CGU a échoué.")

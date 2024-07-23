@@ -13,7 +13,7 @@
 
 <script lang="ts" setup>
   import type { GetBeneficiaryOccupationIncome } from '~/types/beneficiary'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     beneficiaryId: string
@@ -21,6 +21,6 @@
   }>()
 
   const editLink = computed(() =>
-    RoutePath.AppBeneficiaryEditOccupation(props.beneficiaryId)
+    routes.beneficiary.AppBeneficiaryEditOccupation.path(props.beneficiaryId)
   )
 </script>

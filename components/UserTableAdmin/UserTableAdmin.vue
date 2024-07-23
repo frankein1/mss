@@ -25,7 +25,7 @@
             :key="user.id"
             v-slot="{ navigate }"
             custom
-            :to="RoutePath.AdminUser(user.id)"
+            :to="routes.admin.AdminUser.path(user.id)"
           >
             <tr
               class="clickable-row"
@@ -47,7 +47,7 @@
   import { AdminUsersOutput } from './types'
   import { userRoleKeys } from '~/client/options'
   import { formatUserDisplayName } from '~/utils/user'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   defineProps<{
     users: AdminUsersOutput

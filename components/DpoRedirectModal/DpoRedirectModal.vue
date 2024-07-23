@@ -32,14 +32,14 @@
 </template>
 
 <script setup lang="ts">
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
   const modal = useModal()
 
   const props = defineProps<{ content: string }>()
 
   const redirectToStructure = () => {
     navigateTo({
-      path: RoutePath.AppStructure(),
+      path: routes.structure.AppStructure.path(),
       query: {
         modifyStructure: 'true'
       }

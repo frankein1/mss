@@ -45,7 +45,7 @@
     fileInstructionTypeKeys,
     fileInstructionTypePictos
   } from '~/client/options'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const modal = useModal()
 
@@ -70,7 +70,10 @@
     ({ subject }) => {
       modal.close()
       navigateTo(
-        RoutePath.AppBeneficiaryHelpRequestAdd(props.beneficiaryId, subject)
+        routes.helpRequest.AppBeneficiaryHelpRequestAdd.path(
+          props.beneficiaryId,
+          subject
+        )
       )
     }
   )

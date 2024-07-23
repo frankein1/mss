@@ -86,7 +86,7 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              :to="RoutePath.DeclarationAccessibilite()"
+              :to="routes.landing.DeclarationAccessibilite.path()"
             >
               Accessibilité : non conforme
             </NuxtLink>
@@ -94,7 +94,7 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              :to="RoutePath.MentionsLegales()"
+              :to="routes.landing.MentionsLegales.path()"
             >
               Mentions légales
             </NuxtLink>
@@ -102,7 +102,7 @@
           <li class="fr-footer__bottom-item">
             <NuxtLink
               class="fr-footer__bottom-link"
-              :to="RoutePath.Statistiques()"
+              :to="routes.landing.Statistiques.path()"
             >
               Statistiques
             </NuxtLink>
@@ -146,7 +146,7 @@
 </template>
 
 <script setup>
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const { version, sourceCode } = useClientVersion()
 </script>

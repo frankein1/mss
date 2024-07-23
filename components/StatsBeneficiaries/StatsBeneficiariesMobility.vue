@@ -19,7 +19,7 @@
       />
       <p v-else>
         Commencez à
-        <NuxtLink :to="RoutePath.AppBeneficiariesAdd()"
+        <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
           >créer des fiches de bénéficiaires</NuxtLink
         >
         pour voir apparaître les statistiques de la répartition des données
@@ -33,7 +33,7 @@
   import { beneficiaryMobilityKeys, getStatLabel } from '~/client/options'
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
 

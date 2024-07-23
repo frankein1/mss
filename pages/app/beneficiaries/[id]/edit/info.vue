@@ -7,7 +7,7 @@
     :permissions="permissions"
     :is-submitting="isSubmitting"
     title-icon="fr-icon-user-line"
-    :current-route="Route.AppBeneficiaryEditInfo"
+    :current-route="routes.beneficiary.AppBeneficiaryEditInfo.name"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -35,7 +35,7 @@
     updateBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, Route } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
 
@@ -151,7 +151,9 @@
       },
       isSubmitting,
       onSuccess: () => {
-        navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
+        navigateTo(
+          target || routes.beneficiary.AppBeneficiary.path(beneficiaryId)
+        )
       },
       onFailure: () => {
         useSnackbar().error('La mise à jour de la fiche bénéficiaire a échoué.')

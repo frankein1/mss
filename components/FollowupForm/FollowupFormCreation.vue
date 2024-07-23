@@ -52,7 +52,6 @@
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
     values => {
-      console.log('in submit')
       isNavigatingWithFormActions.value = true
       emit('saveFollowup', values)
     }

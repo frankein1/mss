@@ -6,7 +6,9 @@
     :permissions="permissions"
     :schema="updateBeneficiaryExternalOrganisationsSchema"
     :is-submitting="isSubmitting"
-    :current-route="Route.AppBeneficiaryEditExternalOrganisations"
+    :current-route="
+      routes.beneficiary.AppBeneficiaryEditExternalOrganisations.name
+    "
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -34,7 +36,7 @@
     UpdateBeneficiaryExternalOrganisationsInput
   } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, Route } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
 
@@ -109,7 +111,9 @@
       },
       isSubmitting,
       onSuccess: () => {
-        navigateTo(target || RoutePath.AppBeneficiary(beneficiaryId))
+        navigateTo(
+          target || routes.beneficiary.AppBeneficiary.path(beneficiaryId)
+        )
       },
       onFailure: () => {
         useSnackbar().error('La mise à jour de la fiche bénéficaire a échoué.')

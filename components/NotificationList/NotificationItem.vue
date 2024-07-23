@@ -56,10 +56,10 @@
   import { NotificationType } from '@prisma/client'
   import { NotificationItem } from '~/server/trpc/routers'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { Route, RoutePath } from '~/utils/routing'
   import { notificationTypeClasses } from '~/client/classes/notification'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { formatDate } from '~/utils/formatDate'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     notification: NotificationItem
@@ -102,13 +102,16 @@
 
   const itemLink = computed(() => {
     if (props.notification.beneficiary) {
-      return RoutePath.AppBeneficiary(props.notification.beneficiary.id, {
-        tab: getItemTab(),
-        item: getItemId(),
-        originPage: Route.AppOverview
-      })
+      return routes.beneficiary.AppBeneficiary.path(
+        props.notification.beneficiary.id,
+        {
+          tab: getItemTab(),
+          item: getItemId(),
+          originPage: routes.user.AppOverview.name
+        }
+      )
     }
-    return RoutePath.AppStructure()
+    return routes.structure.AppStructure.path()
   })
 
   const toggleLabel = computed(() =>

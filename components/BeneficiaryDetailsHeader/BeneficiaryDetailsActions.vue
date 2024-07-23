@@ -13,7 +13,7 @@
     </li>
     <li>
       <NuxtLink
-        :to="`${RoutePath.AppBeneficiaryPrint(beneficiaryId)}`"
+        :to="`${routes.beneficiary.AppBeneficiaryPrint.path(beneficiaryId)}`"
         class="fr-btn fr-btn--secondary fr-icon-printer-line"
       >
         Imprimer
@@ -31,7 +31,7 @@
 </template>
 
 <script setup lang="ts">
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { FamilyFilePermissions } from '~/server/security'
@@ -51,7 +51,7 @@
   })
 
   const editRoute = computed(() =>
-    RoutePath.AppBeneficiaryEditInfo(
+    routes.beneficiary.AppBeneficiaryEditInfo.path(
       props.beneficiaryId,
       currentTab.value ? { originTab: currentTab.value } : undefined
     )

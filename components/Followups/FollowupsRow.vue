@@ -44,7 +44,7 @@
   import { formatUserDisplayName } from '~/utils/user'
   import { formatDate } from '~/utils/formatDate'
   import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
-  import { Route, RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     data: FollowupPageItem
@@ -53,10 +53,10 @@
   const followup = computed(() => props.data.followup)
 
   const followupPath = computed(() =>
-    RoutePath.AppBeneficiary(followup.value.beneficiary.id, {
+    routes.beneficiary.AppBeneficiary.path(followup.value.beneficiary.id, {
       tab: BeneficiaryTab.History,
       item: followup.value.socialSupportId,
-      originPage: Route.AppHistory,
+      originPage: routes.beneficiary.AppHistory.name,
       originTab: HistoryTab.Followups
     })
   )

@@ -18,15 +18,14 @@
   >
     <main class="content">
       <div class="fr-container fr-pb-2w">
-        <AtomBreadcrumb />
-        <!-- <DsfrBreadcrumb
+        <AtomBreadcrumb
           :links="
-            Breadcrumb.AppBeneficiaryBudgetIncomeEdit(
+            breadcrumbs.budget.AppBeneficiaryBudgetIncomeEdit(
               beneficiaryIdentification,
               incomeId
             )
           "
-        /> -->
+        />
 
         <PageTitle
           :title="title"
@@ -79,7 +78,6 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle, RoutePath, Route } from '~/utils/routing'
   import { useBeneficiarySummary } from '~/composables/useBeneficiarySummary'
   import {
     UpdateBudgetIncomeInput,
@@ -95,6 +93,8 @@
   import { incomeHasBeenFilled, incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
   import { IncomeKey } from '~/types/budget'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
@@ -103,12 +103,12 @@
   const beneficiaryId = route.params.id as string
   const incomeId = route.params.iid as string
 
-  const title = RouteTitle.AppBeneficiaryBudgetIncomeEdit()
+  const title = routes.budget.AppBeneficiaryBudgetIncomeEdit.title
 
   useHead({ title })
 
   definePageMeta({
-    name: Route.AppBeneficiaryBudgetIncomeEdit
+    name: routes.budget.AppBeneficiaryBudgetIncomeEdit.name
   })
 
   const {
@@ -233,9 +233,10 @@
     isFormDirty
   })
 
-  const budgetTabRoute = RoutePath.AppBeneficiary(beneficiaryId, {
+  const budgetTabRoute = routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
     tab: BeneficiaryTab.Budget,
-    originPage: route.name as Route.AppBeneficiaryBudgetIncomeEdit
+    originPage:
+      route.name as typeof routes.budget.AppBeneficiaryBudgetIncomeEdit.name
   })
 
   const onSubmit = handleSubmit(async values => {

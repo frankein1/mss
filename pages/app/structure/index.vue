@@ -1,7 +1,6 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppStructure()" /> -->
+    <AtomBreadcrumb :links="breadcrumbs.structure.AppStructure()" />
 
     <PageTitle :title="title" />
 
@@ -26,7 +25,7 @@
 
       <SocialSupportSubjects
         :subjects="data.socialSupportSubjects"
-        :edit-path="RoutePath.AppStructureSubjects()"
+        :edit-path="routes.structure.AppStructureSubjects.path()"
         @refresh="refresh"
       />
     </div>
@@ -36,10 +35,11 @@
 <script lang="ts" setup>
   import StructureInfoForm from '~/components/Structure/StructureInfoForm.vue'
   import { EditStructureInfoInput } from '~/server/schema'
-  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
-  const title = RouteTitle.AppStructure()
+  const title = routes.structure.AppStructure.title
 
   useHead({ title })
 

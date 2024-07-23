@@ -1,7 +1,6 @@
 <template>
   <PageContainer class="page-container">
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" /> -->
+    <AtomBreadcrumb :links="breadcrumbs.beneficiary.AppBeneficiariesAdd()" />
     <PageTitle
       :title="title"
       icon="fr-icon-user-add-line"
@@ -31,10 +30,11 @@
 <script setup lang="ts">
   import { CreateBeneficiaryEventAction, EventCategory } from '~/types/matomo'
   import { CreateBeneficiaryInput } from '~/server/schema'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
-  const title = RouteTitle.AppBeneficiariesAdd()
+  const title = routes.beneficiary.AppBeneficiariesAdd.title
 
   useHead({ title })
 
@@ -74,9 +74,9 @@
           CreateBeneficiaryEventAction.SavePartialForm
         )
         if (draft) {
-          navigateTo(RoutePath.AppBeneficiaryEditInfo(id))
+          navigateTo(routes.beneficiary.AppBeneficiaryEditInfo.path(id))
         } else {
-          navigateTo(RoutePath.AppBeneficiary(id))
+          navigateTo(routes.beneficiary.AppBeneficiary.path(id))
         }
       },
       onFailure: () => {

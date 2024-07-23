@@ -87,14 +87,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { RouteTitle, RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
   import { AlertType } from '~/utils/constants/alert'
   import {
     updateSocialSupportSubjectsSchema,
     UpdateSocialSupportSubjectsInput
   } from '~/server/schema'
 
-  const title = RouteTitle.AppStructureSubjects()
+  const title = routes.structure.AppStructureSubjects.title
 
   useHead({ title })
   const route = useRoute()
@@ -128,7 +128,7 @@
           ...values
         }),
       onSuccess: () => {
-        navigateTo(RoutePath.AdminStructure(structureId))
+        navigateTo(routes.admin.AdminStructure.path(structureId))
         snackbar.success('Objet(s) d’accompagnement(s) ajouté(s) avec succès')
       },
       onFailure: () => {
@@ -138,7 +138,7 @@
   })
 
   const onCancel = () => {
-    navigateTo(RoutePath.AdminStructure(structureId))
+    navigateTo(routes.admin.AdminStructure.path(structureId))
   }
 </script>
 

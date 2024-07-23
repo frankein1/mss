@@ -24,10 +24,10 @@
 </template>
 <script setup lang="ts">
   import { AdminLoginInput, adminLoginSchema } from '~/server/schema'
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   useHead({
-    title: RouteTitle.AuthAdmin()
+    title: routes.auth.AuthAdmin.title
   })
 
   definePageMeta({

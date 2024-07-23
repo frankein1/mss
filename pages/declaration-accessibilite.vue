@@ -1,6 +1,6 @@
 <template>
   <div class="landing-main-container fr-container fr-my-8w">
-    <h1>{{ RouteTitle.DeclarationAccessibilite() }}</h1>
+    <h1>{{ routes.landing.DeclarationAccessibilite.title }}</h1>
     <p>
       Établie le <span>17 mai 2022</span>.
       <br />
@@ -116,10 +116,10 @@
 </template>
 
 <script setup>
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   useHead({
-    title: RouteTitle.DeclarationAccessibilite()
+    title: routes.landing.DeclarationAccessibilite.title
   })
 
   definePageMeta({

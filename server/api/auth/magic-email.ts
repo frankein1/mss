@@ -3,7 +3,7 @@ import { v4 } from 'uuid'
 import { createEmail } from '~/server/query'
 import { UserRepo } from '~/server/database'
 import { forbiddenError } from '~/server/trpc'
-import { RoutePath } from '~/utils/routing'
+import { routes } from '~/utils/routes'
 
 async function getUser(email: string) {
   try {
@@ -50,7 +50,7 @@ function getEmailContent(user: User, accessToken: string) {
 
 Veuillez cliquer sur le lien ci-dessous pour accéder à votre espace Administrateur :
 
-${config.public.appUrl}${RoutePath.AuthValidateToken()}?token=${accessToken}
+${config.public.appUrl}${routes.auth.AuthValidateToken.path()}?token=${accessToken}
 
 L'équipe de Mon Suivi Social
 `
@@ -61,7 +61,7 @@ Veuillez cliquer sur le lien ci-dessous pour accéder à votre espace Administra
 <br/><br/>
 <a href="${
     config.public.appUrl
-  }${RoutePath.AuthValidateToken()}?token=${accessToken}">Accéder à mon Mon Suivi Social</a>
+  }${routes.auth.AuthValidateToken.path()}?token=${accessToken}">Accéder à mon Mon Suivi Social</a>
   <br/><br/>
 L'équipe de Mon Suivi Social
 `

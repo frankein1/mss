@@ -6,7 +6,7 @@ import {
   InclusionConnectClient,
   InclusionConnectToken
 } from '~/server/lib/inclusion-connect.client'
-import { RoutePath } from '~/utils/routing'
+import { routes } from '~/utils/routes'
 import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
@@ -43,7 +43,7 @@ export default defineEventHandler(async event => {
   const { appUrl } = config.public
 
   if (!user) {
-    const unknownUserUrl = `${appUrl}${RoutePath.ErrorUnknownUser()}`
+    const unknownUserUrl = `${appUrl}${routes.error.ErrorUnknownUser.path()}`
     return sendRedirect(event, unknownUserUrl)
   }
 
@@ -64,7 +64,7 @@ export default defineEventHandler(async event => {
     }
   })
 
-  let validateTokenUrl = `${appUrl}${RoutePath.AuthValidateToken()}?token=${userAccessToken}`
+  let validateTokenUrl = `${appUrl}${routes.auth.AuthValidateToken.path()}?token=${userAccessToken}`
   if (redirectUrl) {
     validateTokenUrl = `${validateTokenUrl}&redirectUrl=${redirectUrl}`
   }

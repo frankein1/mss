@@ -9,12 +9,7 @@
 <script setup lang="ts">
   import { FamilyFilePermissions } from '~/server/security'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import {
-    AppBeneficiaryEditRoute,
-    Route,
-    RoutePath,
-    RouteTitle
-  } from '~/utils/routing'
+  import { routes, AppBeneficiaryEditRoute } from '~/utils/routes'
 
   const props = defineProps<{
     currentRoute: AppBeneficiaryEditRoute
@@ -35,14 +30,16 @@
 
   const nextPage = computed(() => getPage(navArrows.value.next))
 
+  const r = routes.beneficiary
+
   function getPage(route: AppBeneficiaryEditRoute | undefined) {
     if (!route) {
       return undefined
     }
 
     return {
-      title: RouteTitle[route](),
-      path: RoutePath[route](props.beneficiaryId, {
+      title: r[route].title,
+      path: r[route].path(props.beneficiaryId, {
         saved: true,
         originTab: props.originTab
       })
@@ -50,13 +47,13 @@
   }
 
   const beneficiaryEditRouteAccessPermissions = {
-    [Route.AppBeneficiaryEditInfo]: props.permissions?.edit.general,
-    [Route.AppBeneficiaryEditTaxHousehold]: props.permissions?.edit.relatives,
-    [Route.AppBeneficiaryEditEntourage]: props.permissions?.edit.relatives,
-    [Route.AppBeneficiaryEditHealth]: props.permissions?.edit.health,
-    [Route.AppBeneficiaryEditOccupation]:
+    [r.AppBeneficiaryEditInfo.name]: props.permissions?.edit.general,
+    [r.AppBeneficiaryEditTaxHousehold.name]: props.permissions?.edit.relatives,
+    [r.AppBeneficiaryEditEntourage.name]: props.permissions?.edit.relatives,
+    [r.AppBeneficiaryEditHealth.name]: props.permissions?.edit.health,
+    [r.AppBeneficiaryEditOccupation.name]:
       props.permissions?.edit.occupationIncome,
-    [Route.AppBeneficiaryEditExternalOrganisations]:
+    [r.AppBeneficiaryEditExternalOrganisations.name]:
       props.permissions?.edit.externalOrganisations
   }
 
@@ -66,28 +63,28 @@
       next?: AppBeneficiaryEditRoute
     }
   } = {
-    [Route.AppBeneficiaryEditInfo]: {
+    [r.AppBeneficiaryEditInfo.name]: {
       previous: undefined,
-      next: Route.AppBeneficiaryEditTaxHousehold
+      next: r.AppBeneficiaryEditTaxHousehold.name
     },
-    [Route.AppBeneficiaryEditTaxHousehold]: {
-      previous: Route.AppBeneficiaryEditInfo,
-      next: Route.AppBeneficiaryEditEntourage
+    [r.AppBeneficiaryEditTaxHousehold.name]: {
+      previous: r.AppBeneficiaryEditInfo.name,
+      next: r.AppBeneficiaryEditEntourage.name
     },
-    [Route.AppBeneficiaryEditEntourage]: {
-      previous: Route.AppBeneficiaryEditTaxHousehold,
-      next: Route.AppBeneficiaryEditHealth
+    [r.AppBeneficiaryEditEntourage.name]: {
+      previous: r.AppBeneficiaryEditTaxHousehold.name,
+      next: r.AppBeneficiaryEditHealth.name
     },
-    [Route.AppBeneficiaryEditHealth]: {
-      previous: Route.AppBeneficiaryEditEntourage,
-      next: Route.AppBeneficiaryEditOccupation
+    [r.AppBeneficiaryEditHealth.name]: {
+      previous: r.AppBeneficiaryEditEntourage.name,
+      next: r.AppBeneficiaryEditOccupation.name
     },
-    [Route.AppBeneficiaryEditOccupation]: {
-      previous: Route.AppBeneficiaryEditHealth,
-      next: Route.AppBeneficiaryEditExternalOrganisations
+    [r.AppBeneficiaryEditOccupation.name]: {
+      previous: r.AppBeneficiaryEditHealth.name,
+      next: r.AppBeneficiaryEditExternalOrganisations.name
     },
-    [Route.AppBeneficiaryEditExternalOrganisations]: {
-      previous: Route.AppBeneficiaryEditOccupation,
+    [r.AppBeneficiaryEditExternalOrganisations.name]: {
+      previous: r.AppBeneficiaryEditOccupation.name,
       next: undefined
     }
   }

@@ -9,7 +9,7 @@
 </template>
 <script setup lang="ts">
   import DisconnectAlert from './DisconnectAlert.vue'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
   import { minutesToMillis } from '~/utils/time'
 
   type Interval = ReturnType<typeof setInterval>
@@ -68,7 +68,7 @@
 
   function logout() {
     if (process.client) {
-      navigateTo(RoutePath.AuthLogout() + '?inactive=true')
+      navigateTo(routes.auth.AuthLogout.path() + '?inactive=true')
     }
   }
 

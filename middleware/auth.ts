@@ -1,19 +1,21 @@
-import { RoutePath } from '~/utils/routing'
+import { routes } from '~/utils/routes'
 
 export default defineNuxtRouteMiddleware(to => {
   const authState = useAuthState()
 
-  const isAdminRoute = to.fullPath.startsWith(RoutePath.Admin())
+  const isAdminRoute = to.fullPath.startsWith(routes.admin.Admin.path())
 
   if (!authState.isAuthenticated()) {
     return navigateTo({
-      path: isAdminRoute ? RoutePath.AuthAdmin() : RoutePath.AuthLogin(),
+      path: isAdminRoute
+        ? routes.auth.AuthAdmin.path()
+        : routes.auth.AuthLogin.path(),
       query: { redirectUrl: to.fullPath }
     })
   }
 
   if (!authState.isActive()) {
-    return navigateTo(RoutePath.ErrorDisabledAccount())
+    return navigateTo(routes.error.ErrorDisabledAccount.path())
   }
   if (
     (isAdminRoute && !authState.isAdmin()) ||

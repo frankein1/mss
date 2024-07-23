@@ -1,9 +1,9 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryFollowupAdd(beneficiary)"
-    /> -->
+    <AtomBreadcrumb
+      :links="breadcrumbs.followup.AppBeneficiaryFollowupAdd(beneficiary)"
+    />
+
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -41,9 +41,10 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { AddFollowupInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -60,7 +61,7 @@
     })
 
   const title = computed(() =>
-    RouteTitle.AppBeneficiaryFollowupAdd(beneficiary.value || null)
+    routes.followup.AppBeneficiaryFollowupAdd.title(beneficiary.value || null)
   )
 
   useHead({ title })
@@ -101,7 +102,7 @@
       isSubmitting,
       onSuccess: () => {
         navigateTo(
-          RoutePath.AppBeneficiary(beneficiaryId, {
+          routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
             tab: BeneficiaryTab.History
           })
         )

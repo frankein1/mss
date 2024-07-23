@@ -5,8 +5,7 @@
     @submit.prevent="onSubmit"
   >
     <main class="fr-container content fr-pb-5w">
-      <AtomBreadcrumb />
-      <!-- <DsfrBreadcrumb :links="Breadcrumb.AppStructureSubjects()" /> -->
+      <AtomBreadcrumb :links="breadcrumbs.structure.AppStructureSubjects()" />
 
       <PageTitle :title="title" />
 
@@ -112,14 +111,15 @@
 </template>
 
 <script lang="ts" setup>
-  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { AlertType } from '~/utils/constants/alert'
   import {
     updateSocialSupportSubjectsSchema,
     UpdateSocialSupportSubjectsInput
   } from '~/server/schema'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
-  const title = RouteTitle.AppStructureSubjects()
+  const title = routes.structure.AppStructureSubjects.title
 
   useHead({ title })
 
@@ -178,7 +178,7 @@
       mutation: () =>
         trpcClient.structure.updateSocialSupportSubjects.mutate(values),
       onSuccess: () => {
-        navigateTo(RoutePath.AppStructure())
+        navigateTo(routes.structure.AppStructure.path())
         snackbar.success('Objet(s) d’accompagnement(s) ajouté(s) avec succès')
       },
       onFailure: () => {
@@ -188,7 +188,7 @@
   })
 
   const onCancel = () => {
-    navigateTo(RoutePath.AppStructure())
+    navigateTo(routes.structure.AppStructure.path())
   }
 </script>
 

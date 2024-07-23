@@ -1,7 +1,8 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaryFollowupEdit(followup)" /> -->
+    <AtomBreadcrumb
+      :links="breadcrumbs.followup.AppBeneficiaryFollowupEdit(followup)"
+    />
     <PageTitle :title="title" />
     <main
       ref="formContainer"
@@ -34,8 +35,9 @@
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath, RouteTitle } from '~/utils/routing'
   import { EditFollowupInput } from '~/server/schema'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const route = useRoute()
   const snackbar = useSnackbar()
@@ -58,7 +60,7 @@
   const beneficiary = computed(() => followup.value?.beneficiary || null)
 
   const title = computed(() =>
-    RouteTitle.AppBeneficiaryFollowupEdit(beneficiary.value)
+    routes.followup.AppBeneficiaryFollowupEdit.title(beneficiary.value)
   )
 
   useHead({ title })
@@ -101,7 +103,7 @@
       isSubmitting,
       onSuccess: () => {
         navigateTo(
-          RoutePath.AppBeneficiary(followup.beneficiaryId, {
+          routes.beneficiary.AppBeneficiary.path(followup.beneficiaryId, {
             tab: BeneficiaryTab.History
           })
         )

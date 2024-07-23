@@ -1,7 +1,6 @@
 <template>
   <PageContainer no-max-width>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppStats()" /> -->
+    <AtomBreadcrumb :links="breadcrumbs.stats.AppStats()" />
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -56,9 +55,10 @@
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
-  const title = RouteTitle.AppStats()
+  const title = routes.stats.AppStats.title
 
   useHead({ title })
 

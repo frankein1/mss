@@ -1,11 +1,11 @@
 import { useAuthState } from './useAuthState'
-import { RoutePath } from '~/utils/routing'
+import { routes } from '~/utils/routes'
 
 export function useHomePage() {
   const admin = useAuthState().isAdmin()
   if (admin) {
-    return RoutePath.AdminOverview()
+    return routes.admin.AdminOverview.path()
   }
 
-  return RoutePath.AppOverview()
+  return routes.user.AppOverview.path()
 }

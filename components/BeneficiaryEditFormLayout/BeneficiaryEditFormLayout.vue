@@ -22,8 +22,15 @@
       ref="beneficiaryFormLayoutMainContainer"
       class="content fr-col-9 fr-container"
     >
-      <AtomBreadcrumb />
-      <!-- <DsfrBreadcrumb :links="breadcrumbLinks" /> -->
+      <AtomBreadcrumb
+        :links="
+          draft
+            ? breadcrumbs.beneficiary.AppBeneficiariesAdd()
+            : breadcrumbs.beneficiary.AppBeneficiaryEdit(
+                beneficiaryIdentification
+              )
+        "
+      />
       <PageTitle
         :title="title"
         :icon="titleIcon"
@@ -58,15 +65,12 @@
 <script setup lang="ts" generic="T extends ZodSchema">
   import { ZodSchema, z } from 'zod'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import {
-    RoutePath,
-    AppBeneficiaryEditRoute,
-    RouteTitle
-  } from '~/utils/routing'
   import { beneficiaryFieldLabels, relativeFieldLabels } from '~/client/labels'
   import { FamilyFilePermissions } from '~/server/security'
   import type { FieldLabels } from '~/types/fieldLabels'
   import { BeneficiaryIdentification } from '~/types/beneficiary'
+  import { routes, AppBeneficiaryEditRoute } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   type SubmitType = z.infer<T>
 
@@ -110,7 +114,7 @@
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
 
-  const title = computed(() => RouteTitle[props.currentRoute]())
+  const title = computed(() => routes.beneficiary[props.currentRoute].title)
 
   useHead({ title: title.value })
 
@@ -165,10 +169,10 @@
     if (props.beneficiaryIdentification) {
       const id = props.beneficiaryIdentification.id
       if (props.draft) {
-        navigateTo(RoutePath.AppBeneficiaries())
+        navigateTo(routes.beneficiary.AppBeneficiaries.path())
       } else if (props.beneficiaryIdentification) {
         navigateTo(
-          RoutePath.AppBeneficiary(id, {
+          routes.beneficiary.AppBeneficiary.path(id, {
             tab: originTab
           })
         )

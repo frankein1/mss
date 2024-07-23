@@ -12,7 +12,9 @@
     Erreur lors de la déconnexion
   </h1>
   <div v-else-if="data?.success">
-    <h1 class="logout-title fr-h2 fr-mb-2w">{{ RouteTitle.AuthLogout() }}</h1>
+    <h1 class="logout-title fr-h2 fr-mb-2w">
+      {{ routes.auth.AuthLogout.title }}
+    </h1>
     <div
       v-if="inactive"
       class="fr-grid-row fr-grid-row--gutters logout-inactive"
@@ -31,7 +33,7 @@
 </template>
 
 <script setup lang="ts">
-  import { RoutePath, RouteTitle } from '~/utils/routing'
+  import { routes, apiRoutes } from '~/utils/routes'
 
   const props = defineProps<{
     inactive: boolean
@@ -48,7 +50,7 @@
   const { data, pending, error } = await useFetch<{
     url: string | null
     success: boolean
-  }>(RoutePath.ApiLogout(), {
+  }>(apiRoutes.auth.ApiLogout.path(), {
     method: 'POST',
     body: { inactive: !!props.inactive },
     onResponse({ response }) {

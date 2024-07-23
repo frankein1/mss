@@ -9,8 +9,8 @@
 
 <script setup lang="ts">
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { RoutePath, Route, AppBeneficiaryEditRoute } from '~/utils/routing'
   import { FamilyFilePermissions } from '~/server/security'
+  import { routes, AppBeneficiaryEditRoute } from '~/utils/routes'
 
   const props = defineProps<{
     currentRoute: AppBeneficiaryEditRoute
@@ -24,26 +24,30 @@
     save: [target: string]
   }>()
 
+  const r = routes.beneficiary
+
   const navigationRoutes = computed<AppBeneficiaryEditRoute[]>(() => {
-    const editRoutes: AppBeneficiaryEditRoute[] = [Route.AppBeneficiaryEditInfo]
+    const editRoutes: AppBeneficiaryEditRoute[] = [
+      r.AppBeneficiaryEditInfo.name
+    ]
 
     if (props.permissions?.edit.relatives) {
       editRoutes.push(
-        Route.AppBeneficiaryEditTaxHousehold,
-        Route.AppBeneficiaryEditEntourage
+        r.AppBeneficiaryEditTaxHousehold.name,
+        r.AppBeneficiaryEditEntourage.name
       )
     }
 
     if (props.permissions?.edit.health) {
-      editRoutes.push(Route.AppBeneficiaryEditHealth)
+      editRoutes.push(r.AppBeneficiaryEditHealth.name)
     }
 
     if (props.permissions?.edit.occupationIncome) {
-      editRoutes.push(Route.AppBeneficiaryEditOccupation)
+      editRoutes.push(r.AppBeneficiaryEditOccupation.name)
     }
 
     if (props.permissions?.edit.externalOrganisations) {
-      editRoutes.push(Route.AppBeneficiaryEditExternalOrganisations)
+      editRoutes.push(r.AppBeneficiaryEditExternalOrganisations.name)
     }
 
     return editRoutes
@@ -51,7 +55,7 @@
 
   const menus = computed(() => {
     return navigationRoutes.value.map(route => {
-      const path = RoutePath[route](props.beneficiaryId, {
+      const path = r[route].path(props.beneficiaryId, {
         saved: route !== props.currentRoute,
         originTab: props.originTab
       })
@@ -61,7 +65,7 @@
         path
       }
 
-      if (route === Route.AppBeneficiaryEditInfo) {
+      if (route === r.AppBeneficiaryEditInfo.name) {
         return {
           ...menu,
           targets: [

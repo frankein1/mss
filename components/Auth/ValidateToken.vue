@@ -2,7 +2,7 @@
   <div class="fr-grid-row fr-my-5w">
     <div class="fr-col fr-col-lg-8 fr-col-offset-lg-2 text-center">
       <h1 class="fr-text--regular">
-        <span v-if="pending">{{ RouteTitle.AuthValidateToken() }}...</span>
+        <span v-if="pending">{{ routes.auth.AuthValidateToken.title }}...</span>
         <span v-else-if="data">Bonjour {{ name }} !</span>
         <span v-else-if="error">{{ error }}</span>
       </h1>
@@ -12,7 +12,7 @@
 <script setup lang="ts">
   import { RouteLocationRaw } from '#vue-router'
   import { JwtUser } from '~/types/user'
-  import { RouteTitle } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
   import { formatUserDisplayName } from '~/utils/user'
 
   const route = useRoute()

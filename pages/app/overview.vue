@@ -20,17 +20,17 @@
 </template>
 
 <script setup lang="ts">
-  import { RouteTitle, Route } from '~/utils/routing'
   import DpoRedirectModal from '~/components/DpoRedirectModal/DpoRedirectModal.vue'
+  import { routes } from '~/utils/routes'
 
-  const title = RouteTitle.AppOverview()
+  const title = routes.user.AppOverview.title
   const route = useRoute()
   const modal = useModal()
 
   useHead({ title })
 
   definePageMeta({
-    name: Route.AppOverview
+    name: routes.user.AppOverview.name
   })
 
   const unwatch = watch(modal.isReady, () => {

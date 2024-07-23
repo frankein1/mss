@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
   import { GetBeneficiaryRelative } from '~/types/beneficiary'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
 
   const props = defineProps<{
     beneficiaryId: string
@@ -19,6 +19,6 @@
   }>()
 
   const editLink = computed(() =>
-    RoutePath.AppBeneficiaryEditEntourage(props.beneficiaryId)
+    routes.beneficiary.AppBeneficiaryEditEntourage.path(props.beneficiaryId)
   )
 </script>

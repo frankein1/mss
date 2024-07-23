@@ -1,9 +1,13 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestAdd(beneficiary, subject)"
-    /> -->
+    <AtomBreadcrumb
+      :links="
+        breadcrumbs.helpRequest.AppBeneficiaryHelpRequestAdd(
+          beneficiary,
+          subject
+        )
+      "
+    />
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -45,10 +49,11 @@
   import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { RouteTitle, RoutePath } from '~/utils/routing'
   import { CreateHelpRequestInput } from '~/server/schema'
   import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
   import { fileInstructionTypePictos } from '~/client/options'
+  import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -73,7 +78,9 @@
     })
 
   const title = computed(() =>
-    RouteTitle.AppBeneficiaryHelpRequestAdd(beneficiary.value || null)
+    routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(
+      beneficiary.value || null
+    )
   )
 
   useHead({ title })
@@ -114,7 +121,7 @@
       isSubmitting,
       onSuccess: () => {
         navigateTo(
-          RoutePath.AppBeneficiary(beneficiaryId, {
+          routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
             tab: BeneficiaryTab.History
           })
         )

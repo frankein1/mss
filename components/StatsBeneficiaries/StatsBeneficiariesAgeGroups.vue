@@ -19,7 +19,7 @@
       />
       <p v-else>
         Commencez à
-        <NuxtLink :to="RoutePath.AppBeneficiariesAdd()"
+        <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
           >créer des fiches de bénéficiaires</NuxtLink
         >
         pour voir apparaître les statistiques de la répartition des tranches
@@ -33,7 +33,7 @@
   import { StatFilterInput } from '~/server/schema'
   import { AgeGroup, ageGroupKeys, getStatLabel } from '~/client/options'
   import { AlertType } from '~/utils/constants/alert'
-  import { RoutePath } from '~/utils/routing'
+  import { routes } from '~/utils/routes'
   import { getStatColor } from '~/client/colors/stats'
   import { StatsPiePropType } from '~/types/stat'
 
