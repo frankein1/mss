@@ -13,8 +13,6 @@
       :beneficiary="beneficiary"
       :title="title"
       :permissions="permissions"
-      @toggle-delete="toggleDelete"
-      @deleted="onBeneficiaryDeleted"
     />
 
     <hr />
@@ -51,6 +49,9 @@
         <BeneficiaryInfo
           :beneficiary="beneficiary"
           :social-support-subjects="socialSupportSubjects"
+          :permissions="permissions"
+          @toggle-delete="toggleDelete"
+          @deleted="onBeneficiaryDeleted"
         />
       </AtomTab>
       <AtomTab
