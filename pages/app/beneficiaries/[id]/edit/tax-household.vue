@@ -147,6 +147,6 @@
   }
 
   const pageTitle = computed(
-    () => routes.beneficiary.AppBeneficiaryEditTaxHousehold.name
+    () => routes.beneficiary.AppBeneficiaryEditTaxHousehold.title
   )
 </script>
