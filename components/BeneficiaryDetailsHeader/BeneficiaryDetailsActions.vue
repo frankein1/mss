@@ -6,6 +6,7 @@
         data-fr-opened="false"
         aria-controls="global-modal"
         type="button"
+        title="Supprimer"
         @click="onDelete"
       >
         Supprimer
@@ -15,6 +16,7 @@
       <NuxtLink
         :to="`${routes.beneficiary.AppBeneficiaryPrint.path(beneficiaryId)}`"
         class="fr-btn fr-btn--secondary fr-icon-printer-line"
+        title="Imprimer"
       >
         Imprimer
       </NuxtLink>
@@ -22,9 +24,9 @@
     <li>
       <NuxtLink
         :to="`${editRoute}`"
-        class="fr-btn fr-btn--icon-left fr-icon-edit-line edit-btn"
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line edit-btn"
       >
-        Modifier les informations
+        Modifier
       </NuxtLink>
     </li>
   </ul>

@@ -1,14 +1,12 @@
 <template>
   <div class="fr-p-3v">
+    <h2 class="title-blue fr-mb-6v">Informations générales</h2>
     <BeneficiaryFormFileInformation
       :agents="agents"
       :beneficiary-referent-ids="beneficiaryReferentIds"
       :permissions="permissions"
       full
     />
-    <h2 class="title-blue fr-grid-row fr-grid-row--gutters fr-mb-6v fr-mt-3w">
-      Informations générales
-    </h2>
     <BeneficiaryFormIdentity
       id="identity"
       :similar-beneficiary="similarBeneficiary"
