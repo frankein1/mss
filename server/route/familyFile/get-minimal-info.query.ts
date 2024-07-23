@@ -30,7 +30,8 @@ const handler = async ({
           usualName: true,
           birthName: true,
           birthDate: true
-        }
+        },
+        orderBy: { created: 'asc' }
       }
     }
   })
