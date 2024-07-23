@@ -70,7 +70,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { useBeneficiarySummary } from '~/composables/useBeneficiarySummary'
+  import { useBeneficiaryMinimalInfo } from '~/composables/useBeneficiaryMinimalInfo'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     UpdateBudgetExpensesInput,
@@ -103,7 +103,7 @@
     beneficiaryIdentification,
     pending: beneficiaryPending,
     error: beneficiaryError
-  } = await useBeneficiarySummary(beneficiaryId)
+  } = await useBeneficiaryMinimalInfo(beneficiaryId)
 
   const {
     data: expenses,
