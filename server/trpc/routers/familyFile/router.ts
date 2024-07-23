@@ -2,6 +2,9 @@ import { familyFileRoutes as routes } from '~/server/route'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const fileRouter = router({
+  getFamilyFileMinimalInfo: protectedProcedure
+    .input(routes.getFamilyFileMinimalInfoQuery.inputValidation)
+    .query(routes.getFamilyFileMinimalInfoQuery.execute),
   getSocialSupports: protectedProcedure
     .input(routes.getSocialSupports.inputValidation)
     .query(routes.getSocialSupports.execute),

@@ -1,4 +1,4 @@
-export const useBeneficiarySummary = async (beneficiaryId: string) => {
+export const useBeneficiaryMinimalInfo = async (beneficiaryId: string) => {
   const trpcClient = useTrpcClient()
 
   const {
