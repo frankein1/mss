@@ -7,6 +7,8 @@
     :schema="updateBeneficiaryHealthSchema"
     :is-submitting="isSubmitting"
     :current-route="routes.beneficiary.AppBeneficiaryEditHealth.name"
+    :small-title="true"
+    title-icon="fr-icon-user-line"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -23,6 +25,7 @@
       v-else-if="bindedValues && permissions"
       class="fr-p-3v"
     >
+      <h2 class="title-blue fr-mb-6v">{{ pageTitle }}</h2>
       <div
         class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-pb-3w"
       >
@@ -141,4 +144,7 @@
       }
     })
   }
+  const pageTitle = computed(
+    () => routes.beneficiary.AppBeneficiaryEditHealth.name
+  )
 </script>

@@ -1,4 +1,23 @@
 <template>
+  <div class="fr-grid-row fr-mt-1w">
+    <div class="fr-col-12 fr-col-lg-6">
+      <h2 class="title-blue fr-h4 fr-mb-0">
+        Informations
+        {{
+          beneficiary.general.firstName + ' ' + beneficiary.general.usualName
+        }}
+      </h2>
+    </div>
+    <div class="fr-col-12 fr-col-lg-6 detail-actions">
+      <BeneficiaryDetailsActions
+        class="actions"
+        :beneficiary-id="beneficiary.id"
+        :permissions="permissions"
+        @toggle-delete="emit('toggleDelete')"
+        @deleted="emit('deleted')"
+      />
+    </div>
+  </div>
   <BeneficiaryInfoSection
     id="header"
     title=""
@@ -54,9 +73,29 @@
 <script lang="ts" setup>
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import { SocialSupportSubjectIdAndName } from '~/types/socialSupportSubject'
+  import { FamilyFilePermissions } from '~/server/security'
 
   defineProps<{
     beneficiary: GetBeneficiaryOutput
     socialSupportSubjects: SocialSupportSubjectIdAndName[]
+    permissions: FamilyFilePermissions | undefined
   }>()
+
+  const emit = defineEmits<{ toggleDelete: []; deleted: [] }>()
 </script>
+
+<style lang="scss" scoped>
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
+  .actions {
+    @include dsfr-media-query.respond-from('lg') {
+      justify-content: right;
+    }
+  }
+  .detail-actions {
+    margin-top: 1rem;
+    @include dsfr-media-query.respond-from('lg') {
+      margin-top: 0;
+    }
+  }
+</style>

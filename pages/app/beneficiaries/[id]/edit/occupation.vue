@@ -7,6 +7,8 @@
     :permissions="permissions"
     :is-submitting="isSubmitting"
     :current-route="routes.beneficiary.AppBeneficiaryEditOccupation.name"
+    :small-title="true"
+    title-icon="fr-icon-user-line"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -23,6 +25,7 @@
       v-else-if="bindedValues && permissions"
       class="fr-p-3v"
     >
+      <h2 class="title-blue fr-mb-6v">{{ pageTitle }}</h2>
       <BeneficiaryFormOccupationIncome />
     </div>
   </BeneficiaryEditFormLayout>
@@ -123,4 +126,7 @@
       }
     })
   }
+  const pageTitle = computed(
+    () => routes.beneficiary.AppBeneficiaryEditOccupation.name
+  )
 </script>

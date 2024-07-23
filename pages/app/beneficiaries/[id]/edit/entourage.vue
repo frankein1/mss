@@ -7,6 +7,8 @@
     :is-submitting="isSubmitting"
     :permissions="permissions"
     :current-route="routes.beneficiary.AppBeneficiaryEditEntourage.name"
+    :small-title="true"
+    title-icon="fr-icon-user-line"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -23,6 +25,8 @@
       v-else-if="bindedValues"
       class="fr-p-3v"
     >
+      <!--TODO: mettre dans le composant dessous ? -->
+      <h2 class="title-blue fr-mb-6v">{{ pageTitle }}</h2>
       <BeneficiaryFormEntourages />
     </div>
   </BeneficiaryEditFormLayout>
@@ -118,4 +122,7 @@
       }
     })
   }
+  const pageTitle = computed(
+    () => routes.beneficiary.AppBeneficiaryEditEntourage.name
+  )
 </script>
