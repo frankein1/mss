@@ -118,8 +118,7 @@
 
   const title = computed(
     () =>
-      routes.beneficiary[props.currentRoute].title +
-      ' ' +
+      'Informations ' +
       props.beneficiaryIdentification?.firstName +
       ' ' +
       props.beneficiaryIdentification?.usualName
