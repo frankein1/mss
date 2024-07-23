@@ -1,7 +1,8 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaryFollowupEdit(followup)" /> -->
+    <AtomBreadcrumb
+      :links="breadcrumbs.followup.AppBeneficiaryFollowupEdit(followup)"
+    />
     <PageTitle :title="title" />
     <main
       ref="formContainer"
@@ -36,6 +37,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { EditFollowupInput } from '~/server/schema'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const route = useRoute()
   const snackbar = useSnackbar()

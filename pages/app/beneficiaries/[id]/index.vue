@@ -1,9 +1,13 @@
 <template>
   <PageContainer v-if="beneficiary">
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiary(beneficiaryIdentification, originPage)"
-    /> -->
+    <AtomBreadcrumb
+      :links="
+        breadcrumbs.beneficiary.AppBeneficiary(
+          beneficiaryIdentification,
+          originPage
+        )
+      "
+    />
 
     <BeneficiaryDetailsHeader
       :beneficiary="beneficiary"
@@ -118,6 +122,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { useBeneficiaryDetails } from '~/composables/useBeneficiaryDetails'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const route = useRoute()
 

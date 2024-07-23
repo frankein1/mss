@@ -1,9 +1,13 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryHelpRequestAdd(beneficiary, subject)"
-    /> -->
+    <AtomBreadcrumb
+      :links="
+        breadcrumbs.helpRequest.AppBeneficiaryHelpRequestAdd(
+          beneficiary,
+          subject
+        )
+      "
+    />
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -49,6 +53,7 @@
   import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
   import { fileInstructionTypePictos } from '~/client/options'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

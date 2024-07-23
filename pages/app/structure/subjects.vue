@@ -5,8 +5,7 @@
     @submit.prevent="onSubmit"
   >
     <main class="fr-container content fr-pb-5w">
-      <AtomBreadcrumb />
-      <!-- <DsfrBreadcrumb :links="Breadcrumb.AppStructureSubjects()" /> -->
+      <AtomBreadcrumb :links="breadcrumbs.structure.AppStructureSubjects()" />
 
       <PageTitle :title="title" />
 
@@ -118,6 +117,7 @@
     UpdateSocialSupportSubjectsInput
   } from '~/server/schema'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const title = routes.structure.AppStructureSubjects.title
 

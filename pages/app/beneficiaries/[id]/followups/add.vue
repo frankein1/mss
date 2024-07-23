@@ -1,9 +1,9 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb
-      :links="Breadcrumb.AppBeneficiaryFollowupAdd(beneficiary)"
-    /> -->
+    <AtomBreadcrumb
+      :links="breadcrumbs.followup.AppBeneficiaryFollowupAdd(beneficiary)"
+    />
+
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -44,6 +44,7 @@
   import { AddFollowupInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

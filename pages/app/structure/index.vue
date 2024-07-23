@@ -1,7 +1,6 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppStructure()" /> -->
+    <AtomBreadcrumb :links="breadcrumbs.structure.AppStructure()" />
 
     <PageTitle :title="title" />
 
@@ -38,6 +37,7 @@
   import { EditStructureInfoInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const title = routes.structure.AppStructure.title
 

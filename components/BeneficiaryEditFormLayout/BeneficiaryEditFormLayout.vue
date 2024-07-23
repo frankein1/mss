@@ -22,8 +22,15 @@
       ref="beneficiaryFormLayoutMainContainer"
       class="content fr-col-9 fr-container"
     >
-      <AtomBreadcrumb />
-      <!-- <DsfrBreadcrumb :links="breadcrumbLinks" /> -->
+      <AtomBreadcrumb
+        :links="
+          draft
+            ? breadcrumbs.beneficiary.AppBeneficiariesAdd()
+            : breadcrumbs.beneficiary.AppBeneficiaryEdit(
+                beneficiaryIdentification
+              )
+        "
+      />
       <PageTitle
         :title="title"
         :icon="titleIcon"
@@ -63,6 +70,7 @@
   import type { FieldLabels } from '~/types/fieldLabels'
   import { BeneficiaryIdentification } from '~/types/beneficiary'
   import { routes, AppBeneficiaryEditRoute } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   type SubmitType = z.infer<T>
 

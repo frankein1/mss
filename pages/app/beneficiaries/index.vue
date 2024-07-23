@@ -1,7 +1,6 @@
 <template>
   <PageContainer no-max-width>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiaries()" /> -->
+    <AtomBreadcrumb :links="breadcrumbs.beneficiary.AppBeneficiaries()" />
     <div class="beneficiaries-header">
       <PageTitle
         class="title"
@@ -73,6 +72,7 @@
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const title = routes.beneficiary.AppBeneficiaries.title
 

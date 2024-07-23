@@ -18,15 +18,14 @@
   >
     <main class="content">
       <div class="fr-container fr-pb-2w">
-        <AtomBreadcrumb />
-        <!-- <DsfrBreadcrumb
+        <AtomBreadcrumb
           :links="
-            Breadcrumb.AppFileBudgetExpensesEdit(
+            breadcrumbs.budget.AppFileBudgetExpensesEdit(
               beneficiaryIdentification,
               expensesId
             )
           "
-        /> -->
+        />
 
         <PageTitle
           :title="title"
@@ -83,6 +82,7 @@
   import { budgetExpensesKeys } from '~/client/options'
   import { ExpensesKey } from '~/types/budget'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()

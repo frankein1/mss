@@ -1,10 +1,9 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb
+    <AtomBreadcrumb
       v-if="helpRequest"
       :links="
-        Breadcrumb.AppBeneficiaryHelpRequestEdit(
+        breadcrumbs.helpRequest.AppBeneficiaryHelpRequestEdit(
           {
             id: helpRequest.id,
             beneficiary: helpRequest.fileInstruction.socialSupport.beneficiary
@@ -12,7 +11,8 @@
           subject
         )
       "
-    /> -->
+    />
+
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -51,11 +51,13 @@
 </template>
 
 <script lang="ts" setup>
+  import { FileInstructionType } from '@prisma/client'
   import { EditHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { fileInstructionTypePictos } from '~/client/options'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -85,11 +87,11 @@
     routes.helpRequest.AppBeneficiaryHelpRequestEdit.title(beneficiary.value)
   )
 
-  // const subject = computed(() =>
-  //   helpRequest.value?.financialSupport
-  //     ? FileInstructionType.Financial
-  //     : FileInstructionType.Other
-  // )
+  const subject = computed(() =>
+    helpRequest.value?.financialSupport
+      ? FileInstructionType.Financial
+      : FileInstructionType.Other
+  )
 
   const subtitle = computed(() =>
     helpRequest.value?.financialSupport ? 'Aide financière' : undefined

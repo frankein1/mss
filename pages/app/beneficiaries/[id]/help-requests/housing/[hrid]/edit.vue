@@ -1,10 +1,9 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb
+    <AtomBreadcrumb
       v-if="housingHelpRequest"
       :links="
-        Breadcrumb.AppBeneficiaryHelpRequestEdit(
+        breadcrumbs.helpRequest.AppBeneficiaryHelpRequestEdit(
           {
             id: housingHelpRequest?.id,
             beneficiary:
@@ -13,7 +12,8 @@
           FileInstructionType.Housing
         )
       "
-    /> -->
+    />
+
     <PageTitle
       :title="title"
       icon="fr-icon-questionnaire-fill"
@@ -49,11 +49,13 @@
 </template>
 
 <script lang="ts" setup>
+  import { FileInstructionType } from '@prisma/client'
   import { EditHousingHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import { fileInstructionTypePictos } from '~/client/options'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()

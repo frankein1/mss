@@ -41,14 +41,14 @@ function getBreadForHelpRequestEdit(
 }
 
 export const breadcrumbs = {
-  AppBeneficiaryFollowupAdd: (
+  AppBeneficiaryHelpRequestAdd: (
     beneficiary: BeneficiaryIdentification | null,
     subject: FileInstructionType
   ) => [
     ...ben.AppBeneficiary(beneficiary),
     ...getBreadForHelpRequestAdd(beneficiary, subject)
   ],
-  AppBeneficiaryFollowupEdit: (
+  AppBeneficiaryHelpRequestEdit: (
     helpRequest: HelpRequestEdit | null,
     subject: FileInstructionType
   ) => [

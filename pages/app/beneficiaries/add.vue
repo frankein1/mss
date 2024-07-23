@@ -1,7 +1,6 @@
 <template>
   <PageContainer class="page-container">
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppBeneficiariesAdd()" /> -->
+    <AtomBreadcrumb :links="breadcrumbs.beneficiary.AppBeneficiariesAdd()" />
     <PageTitle
       :title="title"
       icon="fr-icon-user-add-line"
@@ -33,6 +32,7 @@
   import { CreateBeneficiaryInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const title = routes.beneficiary.AppBeneficiariesAdd.title
 

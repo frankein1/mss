@@ -1,7 +1,6 @@
 <template>
   <PageContainer>
-    <AtomBreadcrumb />
-    <!-- <DsfrBreadcrumb :links="Breadcrumb.AppPartners()" /> -->
+    <AtomBreadcrumb :links="breadcrumbs.structure.AppPartners()" />
     <PageTitle :title="title" />
     <main>
       <div class="fr-h4 partner-subtitle fr-m-0">
@@ -66,6 +65,7 @@
     AddPartnerOrganizationInput
   } from '~/server/schema'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
 
   const title = routes.structure.AppPartners.title
 
