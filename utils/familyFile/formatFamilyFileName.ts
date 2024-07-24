@@ -1,9 +1,9 @@
 import { BeneficiaryNames } from '~/types/beneficiary'
 
-export function formatFamilyFileName(familyFile: {
-  beneficiaries: BeneficiaryNames[]
-}): string {
-  return familyFile.beneficiaries
+export function formatFamilyFileName(
+  familyFileIdentification: BeneficiaryNames[]
+): string {
+  return familyFileIdentification
     .map(name => formatBeneficiaryDisplayName(name))
-    .join(' / ')
+    .join(' & ')
 }
