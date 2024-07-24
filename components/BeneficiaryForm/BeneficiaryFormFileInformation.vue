@@ -13,9 +13,8 @@
         name="referents"
         :label="beneficiaryFieldLabels.referents"
         :options="referentOptions"
-        required
-        dropdown
         :disabled-options="disabledReferentOptions"
+        dropdown
       />
     </div>
     <div

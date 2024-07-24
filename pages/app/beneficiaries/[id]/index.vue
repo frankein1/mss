@@ -125,6 +125,7 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
+  import { AddFamilyFileMemberInput } from '~/server/schema'
 
   const route = useRoute()
 
@@ -184,17 +185,43 @@
     useSnackbar().success('Le bénéficiaire a été supprimé.')
   }
 
+  // ADD FAMIL MEMBER
+  const trpcClient = useTrpcClient()
+  const { data } = await trpcClient.config.getAgents.useQuery()
   const modal = useModal()
-  // ADD BENEFICIARY
+  const isSubmitting = ref(false)
+  const snackbar = useSnackbar()
+
   const openAddBeneficiaryModal = (): void => {
-    modal.open(BeneficiaryAddForm, {
-      title: 'Ajouter un membre au dossier',
-      add: onAddBeneficiary
-    })
+    if (data.value != null) {
+      modal.open(BeneficiaryAddForm, {
+        title: 'Ajouter un membre au dossier',
+        agents: data.value,
+        beneficiaryReferentIds: beneficiary.value
+          ? beneficiary.value.referents.map(r => r.id)
+          : [],
+        isSubmitting: isSubmitting.value,
+        add: onAddBeneficiary
+      })
+    }
   }
 
-  const onAddBeneficiary = (beneficiary: any) => {
-    console.log(beneficiary)
+  const onAddBeneficiary = (beneficiary: AddFamilyFileMemberInput) => {
+    console.log('from index', beneficiary)
+
+    // const response = trpcClient.beneficiary.addFamilyFileMember(beneficiary)
+    useTrpcMutation({
+      mutation: () =>
+        trpcClient.beneficiary.addFamilyFileMember.mutate(beneficiary),
+      isSubmitting,
+      onSuccess: ({ id }) => {
+        modal.close()
+        console.log(id)
+      },
+      onFailure: () => {
+        snackbar.error('La création du membre du foyer a échoué.')
+      }
+    })
   }
 </script>
 
