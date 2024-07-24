@@ -23,6 +23,7 @@
             </div>
             <div class="fr-modal__content">
               <h1
+                v-if="title"
                 id="global-modal-title"
                 class="fr-modal__title"
               >
