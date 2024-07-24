@@ -13,6 +13,7 @@ import {
 } from './permission.service'
 import { createHouseholdMember } from './create-household-member.service'
 import { getIdFromFamilyFileId } from './get-id-from-family-file-id.service'
+import { addMemberToFamilyFile } from './addMemberToFamilyFile.service'
 
 // TODO(foyer): SHOULD BE DELETED
 export const BeneficiaryService = {
@@ -26,7 +27,8 @@ export const BeneficiaryService = {
   getSimilar,
   getEditionPermissions,
   getBeneficiarySecurityTarget,
-  getIdFromFamilyFileId
+  getIdFromFamilyFileId,
+  addMemberToFamilyFile
 }
 
 export type { BeneficiarySecurityTarget }

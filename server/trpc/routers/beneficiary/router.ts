@@ -56,5 +56,8 @@ export const beneficiaryRouter = router({
     .mutation(routes.createTaxHouseholdMemberMutation.execute),
   validate: protectedProcedure
     .input(routes.validateBeneficiaryMutation.inputValidation)
-    .mutation(routes.validateBeneficiaryMutation.execute)
+    .mutation(routes.validateBeneficiaryMutation.execute),
+  addFamilyFileMember: protectedProcedure
+    .input(routes.addFamilyFileMemberMutation.inputValidation)
+    .mutation(routes.addFamilyFileMemberMutation.execute)
 })
