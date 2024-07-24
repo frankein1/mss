@@ -1509,6 +1509,7 @@ model Beneficiary {
   majorChildren                      Int?                          @map("major_children")
   mobility                           BeneficiaryMobility?
   vulnerablePerson                   Boolean                       @default(false) @map("vulnerable_person")
+  relationship                       RelativeRelationship?
 
   ministereCategorie            BeneficiaryMinistereCategorie?            @map("ministere_categorie")
   ministereDepartementServiceAc BeneficiaryMinistereDepartementServiceAc? @map("ministere_departement_service_ac")
