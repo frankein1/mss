@@ -20,6 +20,11 @@ export type BeneficiaryIdentification = Pick<
   'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate'
 >
 
+export type BeneficiaryFileIdentification = Pick<
+  Beneficiary,
+  'id' | 'firstName' | 'usualName' | 'birthName' | 'birthDate' | 'relationship'
+>
+
 export type GetBeneficiaryHealth = Pick<
   Beneficiary,
   | 'gir'
