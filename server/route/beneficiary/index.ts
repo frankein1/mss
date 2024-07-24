@@ -1,3 +1,4 @@
+import { addFamilyFileMemberMutation } from './add-family-file-member.mutation'
 import { exportBeneficiariesQuery } from './export.query'
 import { getBeneficiaryDetailsQuery } from './get-details.query'
 import { getBeneficiaryMinimalInfoQuery } from './get-minimal-info.query'
@@ -35,7 +36,8 @@ export const beneficiaryRoutes = {
   deleteBeneficiaryMutation,
   deleteBeneficiaryDraftMutation,
   validateBeneficiaryMutation,
-  createTaxHouseholdMemberMutation
+  createTaxHouseholdMemberMutation,
+  addFamilyFileMemberMutation
 }
 
 export type { SimilarBeneficiary }
