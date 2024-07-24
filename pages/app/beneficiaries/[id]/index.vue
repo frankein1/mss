@@ -14,7 +14,6 @@
       :title="title"
       :permissions="permissions"
     />
-
     <hr />
     <BeneficiaryDetailsHistoryActions
       :beneficiary-id="beneficiary.id"
