@@ -26,7 +26,7 @@
     >
       <AtomNotice
         class="fr-mx-n3v fr-mb-4w"
-        :close-button="true"
+        :close-button="false"
       >
         <template #default
           >Si des membres du foyer étaient précédemment renseignés dans la
