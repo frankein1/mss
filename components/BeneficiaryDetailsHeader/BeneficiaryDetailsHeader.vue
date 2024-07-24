@@ -2,6 +2,9 @@
   <div class="beneficiary-details-header">
     <button
       class="fr-btn fr-btn--icon-left fr-icon-user-add-line edit-btn"
+      data-fr-opened="false"
+      aria-controls="global-modal"
+      type="button"
       @click="onOpenModal"
     >
       Ajouter un membre au dossier
@@ -24,6 +27,7 @@
 </template>
 
 <script lang="ts" setup>
+  import BeneficiaryAddForm from '../BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
 
   defineProps<{
@@ -31,8 +35,13 @@
     beneficiary: GetBeneficiaryOutput
   }>()
 
+  const modal = useModal()
   // TODO: MODALE
-  const onOpenModal = () => console.log('Open Modal')
+  const onOpenModal = () => {
+    modal.open(BeneficiaryAddForm, {
+      title: 'Ajouter un membre au dossier'
+    })
+  }
 </script>
 
 <style lang="scss">

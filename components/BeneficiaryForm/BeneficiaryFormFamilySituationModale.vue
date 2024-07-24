@@ -18,7 +18,7 @@
   <hr />
   <div>
     <p class="fr-text--bold">
-      Un décès, une séparation, un enfant quitte le foyer ?
+      Un décès, une séparation, un enfant quitte le foyer&nbsp;?
     </p>
 
     <div class="content">
