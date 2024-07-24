@@ -34,6 +34,13 @@
 
     <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
+        :name="`entourages[${index}].city`"
+        :label="relativeFieldLabels.city"
+      />
+    </div>
+
+    <div class="fr-col-12 fr-col-lg-6">
+      <VeeInput
         :name="`entourages[${index}].phone`"
         :label="relativeFieldLabels.phone"
         type="tel"
@@ -47,12 +54,7 @@
         type="email"
       />
     </div>
-    <div class="fr-col-12 fr-col-lg-6">
-      <VeeInput
-        :name="`entourages[${index}].city`"
-        :label="relativeFieldLabels.city"
-      />
-    </div>
+
     <div class="fr-col-12">
       <VeeSelect
         :name="`entourages[${index}].relationship`"
