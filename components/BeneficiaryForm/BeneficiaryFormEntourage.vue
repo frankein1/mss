@@ -23,6 +23,15 @@
         :name="`entourages[${index}].firstName`"
       />
     </div>
+
+    <div class="fr-col-12 fr-col-lg-6">
+      <VeeInput
+        :label="relativeFieldLabels.birthDate"
+        :name="`entourages[${index}].birthDate`"
+        type="date"
+      />
+    </div>
+
     <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         :name="`entourages[${index}].phone`"
@@ -38,7 +47,7 @@
         type="email"
       />
     </div>
-    <div class="fr-col-12">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeInput
         :name="`entourages[${index}].city`"
         :label="relativeFieldLabels.city"

@@ -12,7 +12,8 @@ import {
   stringConstraint,
   emailOrEmpty,
   stringOrEmpty,
-  openText
+  openText,
+  dateOrEmpty
 } from './helpers.schema'
 import { maxStringLengthMessage } from '~/utils/zod'
 
@@ -20,6 +21,7 @@ export const createOrUpdateEntourageSchema = z.object({
   id: z.string().uuid(),
   lastName: stringOrEmpty(beneficiaryLastNameSchema),
   firstName: beneficiaryFirstNameOrEmptySchema,
+  birthDate: dateOrEmpty,
   relationship: withEmptyValueOptionalNativeEnum(RelativeRelationship),
   city: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
   email: emailOrEmpty(),
