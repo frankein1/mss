@@ -1,4 +1,6 @@
 import { z } from 'zod'
+import { RelativeRelationship } from '@prisma/client'
+import { withEmptyValueOptionalNativeEnum } from '../helpers.schema'
 import { updateBeneficiaryGeneralInformationSchema } from './updateBeneficiary.schema'
 
 export const addFamilyFileMemberSchema =
@@ -8,13 +10,12 @@ export const addFamilyFileMemberSchema =
       usualName: true,
       firstName: true,
       birthDate: true,
-      status: true,
       referents: true
     })
     .merge(
       z.object({
         familyFileId: z.string().uuid(),
-        draft: z.boolean().default(false)
+        relationship: withEmptyValueOptionalNativeEnum(RelativeRelationship)
       })
     )
 
