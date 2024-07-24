@@ -13,6 +13,7 @@
       :beneficiary="beneficiary"
       :title="title"
       :permissions="permissions"
+      @open-modal="openAddBeneficiaryModal"
     />
     <hr />
     <BeneficiaryDetailsHistoryActions
@@ -123,6 +124,7 @@
   import { useBeneficiaryDetails } from '~/composables/useBeneficiaryDetails'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
+  import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
 
   const route = useRoute()
 
@@ -180,6 +182,19 @@
   function onBeneficiaryDeleted() {
     navigateTo(backLink.value)
     useSnackbar().success('Le bénéficiaire a été supprimé.')
+  }
+
+  const modal = useModal()
+  // ADD BENEFICIARY
+  const openAddBeneficiaryModal = (): void => {
+    modal.open(BeneficiaryAddForm, {
+      title: 'Ajouter un membre au dossier',
+      add: onAddBeneficiary
+    })
+  }
+
+  const onAddBeneficiary = (beneficiary: any) => {
+    console.log(beneficiary)
   }
 </script>
 
