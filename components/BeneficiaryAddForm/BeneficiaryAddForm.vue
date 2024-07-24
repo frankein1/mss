@@ -45,6 +45,11 @@
   const modal = useModal()
   const success = useState('success', () => false)
 
+  defineProps<{
+    onAddBeneficiary: () => void
+    add: (values: any) => void
+  }>()
+
   const onSubmit = () => {
     // ...
     // if request success
