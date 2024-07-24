@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.27.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.27.0...v1.27.1) (2024-07-24)
+
+
+### Bug Fixes
+
+* **beneficiaire:** rajoute le champ date de naissance dans l'entourage puisque fusionné avec foyer fiscal ([e21f177](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e21f177a66acddb9e678c3798d0cf32d2ea963b2)), closes [#541](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/541)
+* **beneficiaire:** réordonnancement des champs dans entourage ([fcb06bc](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fcb06bc26fe38d8de830eed5714789854e6751e3)), closes [#541](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/541)
+* **beneficiaire:** supression du bouton de fermeture de Notice ([ddf3b66](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ddf3b663ad5ee04b708db95267b2e033753e249e))
+
 ## [1.27.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.26.0...v1.27.0) (2024-07-22)
 
 
