@@ -185,7 +185,7 @@
     useSnackbar().success('Le bénéficiaire a été supprimé.')
   }
 
-  // ADD FAMIL MEMBER
+  // ADD FAMILY MEMBER
   const trpcClient = useTrpcClient()
   const { data } = await trpcClient.config.getAgents.useQuery()
   const modal = useModal()
@@ -206,22 +206,33 @@
     }
   }
 
-  const onAddBeneficiary = (beneficiary: AddFamilyFileMemberInput) => {
-    console.log('from index', beneficiary)
-
-    // const response = trpcClient.beneficiary.addFamilyFileMember(beneficiary)
-    useTrpcMutation({
-      mutation: () =>
-        trpcClient.beneficiary.addFamilyFileMember.mutate(beneficiary),
-      isSubmitting,
-      onSuccess: ({ id }) => {
-        modal.close()
-        console.log(id)
-      },
-      onFailure: () => {
-        snackbar.error('La création du membre du foyer a échoué.')
+  const onAddBeneficiary = async (newBeneficiary: AddFamilyFileMemberInput) => {
+    let beneficiaryID
+    if (beneficiary?.value?.familyFileId) {
+      const payload = {
+        familyFileId: beneficiary.value.familyFileId,
+        referents: newBeneficiary.referents,
+        title: newBeneficiary.title,
+        usualName: newBeneficiary.usualName,
+        firstName: newBeneficiary.firstName,
+        birthDate: newBeneficiary.birthDate
+          ? new Date(newBeneficiary.birthDate)
+          : undefined,
+        relationship: newBeneficiary.relationship
       }
-    })
+      await useTrpcMutation({
+        mutation: () =>
+          trpcClient.beneficiary.addFamilyFileMember.mutate(payload),
+        isSubmitting,
+        onSuccess: ({ id }) => {
+          beneficiaryID = id
+        },
+        onFailure: () => {
+          snackbar.error("L'ajout d'un membre au foyer à échoué.")
+        }
+      })
+    }
+    return beneficiaryID
   }
 </script>
 

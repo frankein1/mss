@@ -119,17 +119,19 @@
     agents: BeneficiaryReferent[]
     beneficiaryReferentIds: string[]
     isSubmitting: boolean // TODO
-    add: (values: AddFamilyFileMemberInput) => void
+    add: (values: AddFamilyFileMemberInput) => Promise<string | undefined>
   }>()
 
   const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
 
   const { handleSubmit } = useForm<AddFamilyFileMemberInput>()
 
-  const { onSubmit } = useCatchFormErrors(handleSubmit, values => {
-    // success.value = true
-    // modal.setTitle()
-    return props.add(values)
+  const { onSubmit } = useCatchFormErrors(handleSubmit, async values => {
+    const response = await props.add(values)
+    if (response) {
+      modal.setTitle()
+      success.value = true
+    }
   })
 
   const onClose = () => {
