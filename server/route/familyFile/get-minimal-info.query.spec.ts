@@ -55,7 +55,8 @@ describe('FamilyFile - Get MinimalInfo - StructureManager', () => {
           firstName: 'Måns',
           usualName: 'TEARLE',
           birthName: 'FIRTH',
-          birthDate: null
+          birthDate: null,
+          relationship: null
         }
       ]
     })

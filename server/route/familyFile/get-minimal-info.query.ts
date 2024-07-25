@@ -29,7 +29,8 @@ const handler = async ({
           firstName: true,
           usualName: true,
           birthName: true,
-          birthDate: true
+          birthDate: true,
+          relationship: true
         },
         orderBy: { created: 'asc' }
       }
