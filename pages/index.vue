@@ -267,9 +267,9 @@
   }
 
   .feature-headline {
-    @include dsfr.title-style(h5);
-
     margin-bottom: 1rem;
+
+    @include dsfr.title-style(h5);
   }
 
   .feature p {
@@ -320,17 +320,17 @@
   }
 
   .list-section ul {
-    @include dsfr.disable-list-style;
-
     --li-bottom: 1rem;
 
     width: max-content;
 
-    li {
-      @include dsfr.title-style(h5);
+    @include dsfr.disable-list-style;
 
+    li {
       display: block;
       font-weight: normal;
+
+      @include dsfr.title-style(h5);
     }
 
     li::before {

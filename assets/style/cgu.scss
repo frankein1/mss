@@ -8,6 +8,7 @@ $form-height: 12rem;
 $form-h-lg: calc(8.5rem + 1rem);
 
 .cgu-container {
+  overflow-y: scroll;
   max-height: calc(
     100vh - $header-height - $container-margin - $intro-height - $form-height
   );
@@ -17,8 +18,6 @@ $form-h-lg: calc(8.5rem + 1rem);
       100vh - $header-h-lg - $container-margin - $intro-height - $form-h-lg
     );
   }
-
-  overflow-y: scroll;
 }
 
 .cgu-container .fr-table {

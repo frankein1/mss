@@ -186,11 +186,11 @@ select:focus:not(:focus-visible) {
 }
 
 .landing-subtitle {
-  @include dsfr.title-style(h5);
-
   display: block;
   font-weight: normal;
   text-align: center;
+
+  @include dsfr.title-style(h5);
 }
 
 .landing-video {

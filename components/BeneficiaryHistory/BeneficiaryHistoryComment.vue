@@ -68,23 +68,23 @@
   @use '@gouvfr/dsfr/src/core/index' as dsfr;
 
   .comment-meta {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+
     h4,
     button {
-      @include dsfr.text-style(sm);
-
       color: var(--text-mention-grey);
       margin-bottom: 0.25rem;
       font-weight: 400;
+
+      @include dsfr.text-style(sm);
     }
 
     button {
       box-shadow: none;
     }
-
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 0.5rem;
   }
 
   .comment-body {
