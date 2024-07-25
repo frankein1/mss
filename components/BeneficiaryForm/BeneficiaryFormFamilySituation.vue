@@ -1,5 +1,18 @@
 <template>
-  <BeneficiaryFormSection section-title="Situation familiale">
+  <!--TODO: condition sur cette information -->
+  <!--uniquement pour les dossiers qui avaient de la donnée renseignée dans l'ancienne section "foyer fiscal" -->
+  <AtomNotice
+    class="fr-mx-n3v fr-mb-4w"
+    :close-button="false"
+  >
+    <template #default
+      >Si des membres du foyer étaient précédemment renseignés dans la section
+      "foyer fiscal", ils se trouvent désormais dans la section
+      "Entourage".</template
+    >
+  </AtomNotice>
+
+  <BeneficiaryFormSection>
     <div class="fr-col-12">
       <VeeSelect
         name="familySituation"
@@ -48,6 +61,7 @@
       />
     </div>
   </BeneficiaryFormSection>
+  <BeneficiaryFormCallOut class="fr-mx-n3v fr-mb-4w" />
 </template>
 
 <script setup lang="ts">

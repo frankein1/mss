@@ -7,6 +7,8 @@
     :is-submitting="isSubmitting"
     :permissions="permissions"
     :current-route="routes.beneficiary.AppBeneficiaryEditEntourage.name"
+    :small-title="true"
+    title-icon="fr-icon-user-line"
     @save="onSaveBeneficiary"
   >
     <AtomAlert

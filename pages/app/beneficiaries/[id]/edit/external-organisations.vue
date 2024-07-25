@@ -9,6 +9,8 @@
     :current-route="
       routes.beneficiary.AppBeneficiaryEditExternalOrganisations.name
     "
+    :small-title="true"
+    title-icon="fr-icon-user-line"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -25,6 +27,7 @@
       v-else-if="bindedValues"
       class="fr-p-3v"
     >
+      <h2 class="title-blue fr-mb-6v">{{ pageTitle }}</h2>
       <BeneficiaryFormExternalOrganisations />
     </div>
   </BeneficiaryEditFormLayout>
@@ -120,4 +123,7 @@
       }
     })
   }
+  const pageTitle = computed(
+    () => routes.beneficiary.AppBeneficiaryEditExternalOrganisations.title
+  )
 </script>

@@ -8,6 +8,8 @@
     :is-submitting="isSubmitting"
     :current-route="routes.beneficiary.AppBeneficiaryEditTaxHousehold.name"
     :has-required-fields="false"
+    :small-title="true"
+    title-icon="fr-icon-user-line"
     @save="onSaveBeneficiary"
   >
     <AtomAlert
@@ -24,16 +26,7 @@
       v-else-if="bindedValues"
       class="fr-p-3v"
     >
-      <AtomNotice
-        class="fr-mx-n3v fr-mb-4w"
-        :close-button="false"
-      >
-        <template #default
-          >Si des membres du foyer étaient précédemment renseignés dans la
-          section "foyer fiscal", ils se trouvent désormais dans la section
-          "Entourage".</template
-        >
-      </AtomNotice>
+      <h2 class="title-blue fr-mb-6v">{{ pageTitle }}</h2>
       <BeneficiaryFormFamilySituation />
     </div>
   </BeneficiaryEditFormLayout>
@@ -138,4 +131,8 @@
       }
     })
   }
+
+  const pageTitle = computed(
+    () => routes.beneficiary.AppBeneficiaryEditTaxHousehold.title
+  )
 </script>

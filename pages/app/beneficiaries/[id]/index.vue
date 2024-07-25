@@ -13,10 +13,8 @@
       :beneficiary="beneficiary"
       :title="title"
       :permissions="permissions"
-      @toggle-delete="toggleDelete"
-      @deleted="onBeneficiaryDeleted"
+      @open-modal="openAddBeneficiaryModal"
     />
-
     <hr />
     <BeneficiaryDetailsHistoryActions
       :beneficiary-id="beneficiary.id"
@@ -51,6 +49,9 @@
         <BeneficiaryInfo
           :beneficiary="beneficiary"
           :social-support-subjects="socialSupportSubjects"
+          :permissions="permissions"
+          @toggle-delete="toggleDelete"
+          @deleted="onBeneficiaryDeleted"
         />
       </AtomTab>
       <AtomTab
@@ -123,6 +124,8 @@
   import { useBeneficiaryDetails } from '~/composables/useBeneficiaryDetails'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
+  import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
+  import { AddFamilyFileMemberInput } from '~/server/schema'
 
   const route = useRoute()
 
@@ -180,6 +183,56 @@
   function onBeneficiaryDeleted() {
     navigateTo(backLink.value)
     useSnackbar().success('Le bénéficiaire a été supprimé.')
+  }
+
+  // ADD FAMILY MEMBER
+  const trpcClient = useTrpcClient()
+  const { data } = await trpcClient.config.getAgents.useQuery()
+  const modal = useModal()
+  const isSubmitting = ref(false)
+  const snackbar = useSnackbar()
+
+  const openAddBeneficiaryModal = (): void => {
+    if (data.value != null) {
+      modal.open(BeneficiaryAddForm, {
+        title: 'Ajouter un membre au dossier',
+        agents: data.value,
+        beneficiaryReferentIds: beneficiary.value
+          ? beneficiary.value.referents.map(r => r.id)
+          : [],
+        isSubmitting: isSubmitting.value,
+        add: onAddBeneficiary
+      })
+    }
+  }
+
+  const onAddBeneficiary = async (newBeneficiary: AddFamilyFileMemberInput) => {
+    let beneficiaryID
+    if (beneficiary?.value?.familyFileId) {
+      const payload = {
+        familyFileId: beneficiary.value.familyFileId,
+        referents: newBeneficiary.referents,
+        title: newBeneficiary.title,
+        usualName: newBeneficiary.usualName,
+        firstName: newBeneficiary.firstName,
+        birthDate: newBeneficiary.birthDate
+          ? new Date(newBeneficiary.birthDate)
+          : undefined,
+        relationship: newBeneficiary.relationship
+      }
+      await useTrpcMutation({
+        mutation: () =>
+          trpcClient.beneficiary.addFamilyFileMember.mutate(payload),
+        isSubmitting,
+        onSuccess: ({ id }) => {
+          beneficiaryID = id
+        },
+        onFailure: () => {
+          snackbar.error("L'ajout d'un membre au foyer à échoué.")
+        }
+      })
+    }
+    return beneficiaryID
   }
 </script>
 

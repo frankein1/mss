@@ -32,6 +32,7 @@
         "
       />
       <PageTitle
+        :class="smallTitle ? 'beneficiary-form-title-small' : ''"
         :title="title"
         :icon="titleIcon"
       >
@@ -90,6 +91,7 @@
       schema: T
       isSubmitting: boolean
       titleIcon?: string
+      smallTitle?: boolean
       currentRoute: AppBeneficiaryEditRoute
       hasRequiredFields?: boolean
     }>(),
@@ -114,7 +116,13 @@
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
 
-  const title = computed(() => routes.beneficiary[props.currentRoute].title)
+  const title = computed(
+    () =>
+      'Informations ' +
+      props.beneficiaryIdentification?.firstName +
+      ' ' +
+      props.beneficiaryIdentification?.usualName
+  )
 
   useHead({ title: title.value })
 
@@ -184,5 +192,26 @@
 <style lang="scss" scoped>
   .beneficiaryformlayout__navigation {
     border-right: 1px solid var(--border-default-grey);
+  }
+</style>
+<style lang="scss">
+  .beneficiary-form-title-small {
+    .pagetitle__title {
+      font-size: 1.5rem;
+      line-height: 1.75rem;
+    }
+
+    .pagetitle__slot {
+      margin-top: 0 !important;
+    }
+
+    .pagetitle__icon {
+      padding: 0.75rem;
+      margin-right: 1rem !important;
+
+      span {
+        transform: scale(0.75);
+      }
+    }
   }
 </style>

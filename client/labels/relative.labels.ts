@@ -5,7 +5,7 @@ const relativeFieldLabels = {
   phone: 'Téléphone',
   email: 'Email',
   birthDate: 'Date de naissance',
-  relationship: 'Statut',
+  relationship: 'Lien de la relation',
   caregiver: 'Aidant familial',
   additionalInformation: 'Informations complémentaires',
   city: 'Ville'

@@ -12,7 +12,7 @@ function _useModal() {
 
   const triggerOpen = ref(false)
   const isOpen = ref(false)
-  const title = ref('')
+  const title = ref()
   const ready = ref(false)
 
   function setIsOpen(value: boolean) {
@@ -76,6 +76,10 @@ function _useModal() {
     }
   }
 
+  function setTitle(value?: string) {
+    title.value = value
+  }
+
   return {
     triggerOpen,
     setIsOpen,
@@ -85,7 +89,8 @@ function _useModal() {
     title,
     open,
     close,
-    patch
+    patch,
+    setTitle
   }
 }
 

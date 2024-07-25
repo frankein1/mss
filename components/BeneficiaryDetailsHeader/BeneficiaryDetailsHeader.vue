@@ -1,5 +1,14 @@
 <template>
   <div class="beneficiary-details-header">
+    <button
+      class="fr-btn fr-btn--icon-left fr-icon-user-add-line edit-btn"
+      data-fr-opened="false"
+      aria-controls="global-modal"
+      type="button"
+      @click="$emit('openModal')"
+    >
+      Ajouter un membre au dossier
+    </button>
     <PageTitle
       :title="title"
       no-margin
@@ -14,27 +23,20 @@
       :status="beneficiary.status"
       class="status"
     />
-    <BeneficiaryDetailsActions
-      class="actions"
-      :beneficiary-id="beneficiary.id"
-      :permissions="permissions"
-      @toggle-delete="emit('toggleDelete')"
-      @deleted="emit('deleted')"
-    />
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { FamilyFilePermissions } from '~/server/security'
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
 
   defineProps<{
     title: string
     beneficiary: GetBeneficiaryOutput
-    permissions: FamilyFilePermissions | undefined
   }>()
 
-  const emit = defineEmits<{ toggleDelete: []; deleted: [] }>()
+  defineEmits<{
+    openModal: []
+  }>()
 </script>
 
 <style lang="scss">
@@ -47,6 +49,7 @@
       'status actions';
     grid-template-columns: auto max-content;
     margin-bottom: 1.5rem;
+    align-items: baseline;
   }
 
   .title {
