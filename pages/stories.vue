@@ -33,6 +33,12 @@
       <div class="fr-col-12">
         <StatsListStory />
       </div>
+
+      <h2 class="fr-col-12">Dossier foyer</h2>
+
+      <div class="fr-col-12">
+        <FamilyFileSegmentedControlStory />
+      </div>
     </div>
   </div>
 </template>
@@ -44,6 +50,7 @@
   import VeeInputStory from '~/components/VeeForm/VeeInput.story.vue'
   import StatsFiltersStory from '~/components/StatsFilters/StatsFilters.story.vue'
   import StatsListStory from '~/components/StatsList/StatsList.story.vue'
+  import FamilyFileSegmentedControlStory from '~/components/FamilyFileSegmentedControl/FamilyFileSegmentedControl.story.vue'
 
   definePageMeta({
     layout: 'landing'
