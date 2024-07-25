@@ -200,12 +200,15 @@
       font-size: 1.5rem;
       line-height: 1.75rem;
     }
+
     .pagetitle__slot {
       margin-top: 0 !important;
     }
+
     .pagetitle__icon {
       padding: 0.75rem;
       margin-right: 1rem !important;
+
       span {
         transform: scale(0.75);
       }

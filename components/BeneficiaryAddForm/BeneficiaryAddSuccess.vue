@@ -74,20 +74,24 @@
   .btns-groups {
     justify-content: flex-end;
   }
+
   .success {
     .success-hero {
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+
       p {
         text-align: center;
       }
     }
+
     .success-content {
       display: flex;
       flex-direction: row;
       align-items: flex-start;
+
       .content-icon {
         color: var(--primary);
       }

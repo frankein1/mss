@@ -52,15 +52,19 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+
     .icon {
       display: none;
       padding: 1rem;
+
       @include dsfr-media-query.respond-from('lg') {
         display: block;
       }
     }
+
     .plus-button {
       color: white;
+
       &:hover {
         background-color: var(--primary-hover);
       }
