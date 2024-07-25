@@ -7,8 +7,9 @@
     class="fr-container fr-p-3v"
     @submit.prevent="onSubmit"
   >
-    <div
-      class="form-grid fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-mb-4w"
+    <fieldset
+      class="fr-fieldset form-grid fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-mb-4w"
+      aria-labelledby="add-benefeciary-legend"
     >
       <div class="fr-col-12">
         <p class="fr-text--xs fr-mb-1w"><RequiredFields /></p>
@@ -68,7 +69,7 @@
           type="date"
         />
       </div>
-    </div>
+    </fieldset>
 
     <div class="fr-col-12">
       <ul class="fr-btns-group fr-btns-group--inline-md btns-groups">
@@ -100,7 +101,10 @@
 </template>
 
 <script setup lang="ts">
-  import { AddFamilyFileMemberInput } from '~/server/schema'
+  import {
+    AddFamilyFileMemberInput,
+    addFamilyFileMemberSchema
+  } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
     commonRelationshipKeys,
@@ -109,7 +113,7 @@
   import { BeneficiaryReferent } from '~/types/beneficiary'
 
   // TODO: add formError component
-  // TODO: add formvalidation befor sending to parent (handleSubmit)
+  // TODO: add a spinner on submit btn
 
   const modal = useModal()
   const success = useState('success', () => false)
@@ -119,18 +123,27 @@
     agents: BeneficiaryReferent[]
     beneficiaryReferentIds: string[]
     isSubmitting: boolean // TODO
+    familyFileId: string
     add: (values: AddFamilyFileMemberInput) => Promise<string | undefined>
   }>()
 
   const referentOptions = computed(() => toOptions(props.agents, 'id', 'name'))
 
-  const { handleSubmit } = useForm<AddFamilyFileMemberInput>()
+  const { handleSubmit } = useForm<AddFamilyFileMemberInput>({
+    validationSchema: toTypedSchema(addFamilyFileMemberSchema),
+    initialValues: {
+      familyFileId: props.familyFileId,
+      referents: props.beneficiaryReferentIds
+    }
+  })
 
   const { onSubmit } = useCatchFormErrors(handleSubmit, async values => {
     const response = await props.add(values)
     if (response) {
       modal.setTitle()
       success.value = true
+      // TODO: store the new beneficiary id in a state
+      // to use it on redirection buttons
     }
   })
 
