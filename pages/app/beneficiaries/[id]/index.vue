@@ -198,7 +198,7 @@
   const snackbar = useSnackbar()
 
   const openAddBeneficiaryModal = (): void => {
-    if (data.value != null) {
+    if (data.value != null && beneficiary?.value?.familyFileId) {
       modal.open(BeneficiaryAddForm, {
         title: 'Ajouter un membre au dossier',
         agents: data.value,
@@ -206,6 +206,7 @@
           ? beneficiary.value.referents.map(r => r.id)
           : [],
         isSubmitting: isSubmitting.value,
+        familyFileId: beneficiary.value.familyFileId,
         add: onAddBeneficiary
       })
     }
