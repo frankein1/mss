@@ -91,6 +91,12 @@ export default defineNuxtConfig({
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   vite: {
+    server: {
+      hmr: {
+        // Fix websocket errors cf. https://github.com/nuxt/nuxt/discussions/27779
+        clientPort: 3000
+      }
+    },
     // Adds sourcemaps for Sentry (may not work)
     build: {
       sourcemap: true
