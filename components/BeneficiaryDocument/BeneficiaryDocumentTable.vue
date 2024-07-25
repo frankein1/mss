@@ -14,6 +14,7 @@
         <thead>
           <tr>
             <th scope="col">Type</th>
+            <th scope="col">Bénéficiaire</th>
             <TableSortableHeader
               label="Nom"
               :sort="sort.name"
@@ -35,6 +36,7 @@
             :key="item.document.key"
             :document="item.document"
             :permissions="item.permissions"
+            :family-file-identification="familyFileIdentification"
             @updated="emit('documentUpdated', $event)"
             @deleted="emit('documentDeleted', item.document.key)"
           />
@@ -47,9 +49,11 @@
 <script setup lang="ts">
   import { GetDocuments, GetDocument } from './types'
   import type { BeneficiaryDocumentSort } from '~/types/table'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     documents: GetDocuments
+    familyFileIdentification: BeneficiaryFileIdentification[]
     pending: boolean
     sort: BeneficiaryDocumentSort
   }>()

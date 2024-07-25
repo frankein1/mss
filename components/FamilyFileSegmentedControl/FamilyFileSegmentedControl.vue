@@ -12,7 +12,7 @@
 <script setup lang="ts">
   import { getRandomId } from '~/utils/random'
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
-  import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
+  import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
   const props = withDefaults(
     defineProps<{
@@ -26,13 +26,10 @@
     (e: 'onChange', payload: string): void
   }>()
 
-  function formatName(member: BeneficiaryFileIdentification) {
-    const firstname = member.firstName || 'non renseigné'
-    const lastname = member.usualName || member.birthName || ''
-    return `${toFirstLetterUpperCase(firstname)} ${lastname.substring(0, 1)}.`
-  }
-
   const options = computed(() =>
-    props.members.map(m => ({ label: formatName(m), value: m.id }))
+    props.members.map(m => ({
+      label: formatBeneficiaryShortenedName(m),
+      value: m.id
+    }))
   )
 </script>

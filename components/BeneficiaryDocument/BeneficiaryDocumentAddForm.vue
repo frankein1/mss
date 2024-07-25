@@ -8,6 +8,13 @@
     novalidate
     @submit.prevent="onSubmit"
   >
+    <VeeRadioButtons
+      name="beneficiaryId"
+      label="Ce document appartient à :"
+      :options="beneficiaryOptions"
+      :inline="false"
+      required
+    />
     <VeeSelect
       :label="documentFieldLabels.type"
       name="type"
@@ -52,11 +59,21 @@
   } from '~/server/schema'
   import { documentTypeKeys, documentTagKeys } from '~/client/options'
   import { documentFieldLabels } from '~/client/labels'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
   const props = defineProps<{
     familyFileId: string
+    familyFileIdentification: BeneficiaryFileIdentification[]
     newDocument: (key: string) => void
   }>()
+
+  const beneficiaryOptions = computed(() =>
+    props.familyFileIdentification.map(m => ({
+      label: formatBeneficiaryShortenedName(m),
+      value: m.id
+    }))
+  )
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
@@ -65,6 +82,7 @@
     validationSchema: toTypedSchema(uploadBrowserDocumentSchema),
     initialValues: {
       familyFileId: props.familyFileId,
+      beneficiaryId: props.familyFileIdentification[0].id,
       tags: [],
       confidential: false
     }

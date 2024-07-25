@@ -1,6 +1,9 @@
 <template>
   <tr>
     <td class="type-data">{{ documentTypeKeys.value(document.type) }}</td>
+    <td class="family-member-data">
+      {{ formatBeneficiary(document.beneficiaryId) }}
+    </td>
     <td>
       <span
         class="name-container"
@@ -104,6 +107,8 @@
   import { DocumentEventAction, EventCategory } from '~/types/matomo'
   import { documentTypeKeys, documentTagKeys } from '~/client/options'
   import { DocumentPermissions } from '~/server/security'
+  import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const modal = useModal()
   const matomo = useMatomo()
@@ -112,6 +117,7 @@
 
   const props = defineProps<{
     document: GetDocument
+    familyFileIdentification: BeneficiaryFileIdentification[]
     permissions: DocumentPermissions
   }>()
 
@@ -127,6 +133,16 @@
   )
 
   const { download, open } = useDownload()
+
+  function formatBeneficiary(beneficiaryId: string) {
+    const selected = props.familyFileIdentification.filter(
+      m => m.id === beneficiaryId
+    )
+    if (!selected.length) {
+      return 'Non renseigné'
+    }
+    return formatBeneficiaryShortenedName(selected[0])
+  }
 
   async function onView() {
     matomo.trackEvent(EventCategory.Document, DocumentEventAction.See)
@@ -198,6 +214,7 @@
   }
 
   .type-data,
+  .family-member-data,
   .tags-data {
     white-space: nowrap;
   }

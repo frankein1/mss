@@ -71,6 +71,7 @@
         <BeneficiaryDocumentList
           v-else
           :family-file-id="beneficiary.familyFileId"
+          :family-file-identification="familyFileIdentification || []"
         />
       </AtomTab>
       <AtomTab
@@ -144,6 +145,10 @@
     pending,
     error
   } = await useBeneficiaryDetails(beneficiaryId)
+
+  const familyFileId = beneficiary.value?.familyFileId || ''
+  const { familyFileIdentification } =
+    await useFamilyFileMinimalInfo(familyFileId)
 
   const { application } = usePermissions()
 

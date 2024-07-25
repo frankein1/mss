@@ -5,6 +5,7 @@
     <BeneficiaryDocumentAddButton
       class="fr-ml-2w"
       :family-file-id="familyFileId"
+      :family-file-identification="familyFileIdentification"
       @new-document="() => refresh()"
     />
   </div>
@@ -24,6 +25,7 @@
       <BeneficiaryDocumentTable
         v-model:sort="orderBy"
         :documents="documents"
+        :family-file-identification="familyFileIdentification"
         :pending="pending"
         @document-updated="onDocumentUpdated"
         @document-deleted="onDocumentDeleted"
@@ -46,10 +48,14 @@
   import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
   import { BeneficiaryDocumentSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const trpcClient = useTrpcClient()
 
-  const props = defineProps<{ familyFileId: string }>()
+  const props = defineProps<{
+    familyFileId: string
+    familyFileIdentification: BeneficiaryFileIdentification[]
+  }>()
 
   const filters = ref<BeneficiaryDocumentFilterInput>({})
   const orderBy = ref<BeneficiaryDocumentSort>({ created: SortOrder.Desc })

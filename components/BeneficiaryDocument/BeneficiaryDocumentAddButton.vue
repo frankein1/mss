@@ -12,12 +12,14 @@
 
 <script lang="ts" setup>
   import BeneficiaryDocumentAddForm from './BeneficiaryDocumentAddForm.vue'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const modal = useModal()
 
   const props = withDefaults(
     defineProps<{
       familyFileId: string
+      familyFileIdentification: BeneficiaryFileIdentification[]
       label?: string
     }>(),
     { label: 'Ajouter un document' }
@@ -31,6 +33,7 @@
     modal.open(BeneficiaryDocumentAddForm, {
       title: 'Ajouter un document',
       familyFileId: props.familyFileId,
+      familyFileIdentification: props.familyFileIdentification,
       newDocument: onNewDocument
     })
   }

@@ -145,9 +145,7 @@ async function addDocument(
   multipartFormData: MultiPartData
 ) {
   const key = v4()
-  const { type, familyFileId, confidential, tags, file } = input
-  const beneficiaryId =
-    await BeneficiaryService.getIdFromFamilyFileId(familyFileId)
+  const { type, familyFileId, beneficiaryId, confidential, tags, file } = input
   const document = await DocumentRepo.prisma.create({
     data: {
       key,
