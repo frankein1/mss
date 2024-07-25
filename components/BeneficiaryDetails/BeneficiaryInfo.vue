@@ -92,8 +92,10 @@
       justify-content: right;
     }
   }
+
   .detail-actions {
     margin-top: 1rem;
+
     @include dsfr-media-query.respond-from('lg') {
       margin-top: 0;
     }

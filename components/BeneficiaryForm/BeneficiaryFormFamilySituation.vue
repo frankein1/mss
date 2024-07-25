@@ -3,7 +3,7 @@
   <!--uniquement pour les dossiers qui avaient de la donnée renseignée dans l'ancienne section "foyer fiscal" -->
   <AtomNotice
     class="fr-mx-n3v fr-mb-4w"
-    :close-button="true"
+    :close-button="false"
   >
     <template #default
       >Si des membres du foyer étaient précédemment renseignés dans la section

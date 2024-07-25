@@ -71,10 +71,12 @@
     display: flex;
     flex-direction: row;
     align-items: flex-start;
+
     .content-icon {
       color: var(--primary);
     }
   }
+
   .actions {
     text-align: right;
   }
