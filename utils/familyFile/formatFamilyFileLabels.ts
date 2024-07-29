@@ -24,7 +24,10 @@ export function formatFamilyFileLabels(
 ) {
   const spouses = familyFileIdentification
     .filter(m => m.relationship === 'Conjoint' || !m.relationship)
-    .map(m => `${formatBeneficiaryDisplayName(m)} (${formatAge(m)})`)
+    .map(m => {
+      const age = m.birthDate ? ` (${formatAge(m)})` : ''
+      return `${formatBeneficiaryDisplayName(m)}` + age
+    })
 
   const other = familyFileIdentification
     .filter(m => m.relationship !== 'Conjoint' && m.relationship)
