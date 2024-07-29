@@ -57,6 +57,8 @@
 </script>
 
 <style scoped lang="scss">
+  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
   .beneficiarydetailshistoryactions_container {
     display: flex;
     align-items: center;
@@ -89,10 +91,16 @@
   .mesdroitssociaux-btn-container {
     align-items: center;
     margin-right: 0.5rem;
-    margin-left: auto;
+    margin-left: 0;
+    margin-top: 1rem;
 
     > .fr-link {
       height: fit-content;
+    }
+
+    @include dsfr-media-query.respond-from('lg') {
+      margin-left: auto;
+      margin-top: 0;
     }
   }
 </style>
