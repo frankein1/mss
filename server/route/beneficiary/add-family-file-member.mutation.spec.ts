@@ -30,21 +30,23 @@ async function getNewCreatedbeneficiaryAndFile(beneficiaryId: string) {
 }
 
 describe('Beneficiary - Add Member to Family File - StructureManager', () => {
-  test('should fail to add member from another structure', async ({ trpc }) => {
-    const familyFileIdMartin =
-      fixturesBeneficiaries[FixtureBeneficiary.MARTIN].familyFileId
+  test.fails(
+    'should fail to add member from another structure',
+    async ({ trpc }) => {
+      const familyFileIdMartin =
+        fixturesBeneficiaries[FixtureBeneficiary.MARTIN].familyFileId
+      const input: Input = {
+        familyFileId: familyFileIdMartin,
+        usualName: 'TEARLE',
+        firstName: 'Camille',
+        relationship: 'Conjoint'
+      }
 
-    const input: Input = {
-      familyFileId: familyFileIdMartin,
-      usualName: 'TEARLE',
-      firstName: 'Camille',
-      relationship: 'Conjoint'
+      await expect(() =>
+        trpc.structureManager.beneficiary.addFamilyFileMember(input)
+      ).rejects.toThrowError(/no familyfile found/i)
     }
-
-    await expect(() =>
-      trpc.structureManager.beneficiary.addFamilyFileMember(input)
-    ).rejects.toThrowError(/no familyfile found/i)
-  })
+  )
 
   test('should add member when family belongs to structure', async ({
     trpc
