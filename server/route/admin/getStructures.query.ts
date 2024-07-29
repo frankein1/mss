@@ -15,10 +15,10 @@ const adminHandler = async ({
   ctx: AdminContext
   input: AdminGetStructuresInput
 }) => {
-  let where = {}
+  let where: Prisma.StructureWhereInput = {}
   if (input?.search) {
     where = {
-      disable: false,
+      disabled: false,
       OR: [
         {
           name: {

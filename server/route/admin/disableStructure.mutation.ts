@@ -283,7 +283,7 @@ const adminHandler = async ({
   return {
     name: structure.name,
     id: structure.id,
-    disable: true
+    disabled: true
   }
 }
 
