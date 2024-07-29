@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.27.2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.27.1...v1.27.2) (2024-07-29)
+
+
+### Bug Fixes
+
+* **structure:** désactivation autorisée uniquement pour les structures anciennes ([104db9e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/104db9e6e3b5c9c5a850d65abfcdb26b604c21c4)), closes [#547](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/547)
+
 ### [1.27.1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.27.0...v1.27.1) (2024-07-24)
 
 
