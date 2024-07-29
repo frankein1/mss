@@ -38,6 +38,7 @@ const adminHandler = async ({
     },
     select: {
       id: true,
+      created: true,
       lastAccess: true,
       name: true,
       users: {
@@ -283,7 +284,7 @@ const adminHandler = async ({
   return {
     name: structure.name,
     id: structure.id,
-    disable: true
+    disabled: true
   }
 }
 

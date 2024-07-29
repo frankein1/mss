@@ -15,10 +15,10 @@ const adminHandler = async ({
   ctx: AdminContext
   input: AdminGetStructuresInput
 }) => {
-  let where = {}
+  let where: Prisma.StructureWhereInput = {}
   if (input?.search) {
     where = {
-      disable: false,
+      disabled: false,
       OR: [
         {
           name: {
@@ -38,6 +38,7 @@ const adminHandler = async ({
     where,
     select: {
       id: true,
+      created: true,
       type: true,
       name: true,
       zipcode: true,
@@ -61,10 +62,11 @@ const adminHandler = async ({
   })
 
   return {
-    structures: structures.map(({ lastAccess, ...data }) => ({
+    structures: structures.map(({ lastAccess, created, ...data }) => ({
       ...data,
+      created,
       lastAccess,
-      canBeDisabled: canBeDisabled({ lastAccess })
+      canBeDisabled: canBeDisabled({ lastAccess, created })
     }))
   }
 }
