@@ -9,65 +9,80 @@
     class="fr-container--fluid"
     @submit.prevent="emit('submit', $event)"
   >
-    <div
-      class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-grid-row--center"
-    >
-      <HelpRequestFormContextSection
-        :social-support-subjects="socialSupportSubjects"
-        :partner-organizations="partnerOrganizations"
-        :is-external-support="isExternalSupport"
-        :has-set-external-structure="hasSetExternalStructure"
-        :is-housing-support="isHousingSupport"
-      />
-
-      <hr class="helprequestform__divider" />
-
-      <HelpRequestFormInfoSection
-        :status="status"
-        :has-set-external-structure="hasSetExternalStructure"
-        :is-external-support="isExternalSupport"
-        :subject="subject"
-      />
-
-      <HelpRequestFormHousingSection
-        v-if="isHousingSupport"
-        :beneficiary-id="beneficiaryId"
-      />
-
-      <hr
-        v-else
-        class="helprequestform__divider"
-      />
-
-      <HelpRequestFormSynthesisSection
-        :can-edit-private-synthesis="canEditPrivateSynthesis"
-      />
-
-      <hr class="helprequestform__divider" />
-
-      <HelpRequestFormDocumentSection :family-file-id="familyFileId" />
-
-      <div class="fr-col-12">
-        <VeeCheckbox
-          name="fullFile"
-          :label="helpRequestFieldLabels.fullFile"
+    <section class="feature-section fr-p-5w fr-mb-2w">
+      <div class="fr-grid-row">
+        <VeeRadioButtons
+          class="fr-col-12 fr-mb-0"
+          name="beneficiaryId"
+          label="Bénéficiaire concerné par le suivi :"
+          :options="beneficiaryOptions"
+          :inline="false"
+          required
         />
       </div>
+    </section>
 
-      <ul
-        class="fr-btns-group fr-btns-group--inline fr-btns-group--lg fr-btns-group--right"
+    <div class="feature-section fr-p-5w">
+      <div
+        class="fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-grid-row--center"
       >
-        <li>
-          <button
-            class="fr-btn submit-btn"
-            type="submit"
-            :submitting="isSubmitting"
-            :disabled="isSubmitting"
-          >
-            Enregistrer
-          </button>
-        </li>
-      </ul>
+        <HelpRequestFormContextSection
+          :social-support-subjects="socialSupportSubjects"
+          :partner-organizations="partnerOrganizations"
+          :is-external-support="isExternalSupport"
+          :has-set-external-structure="hasSetExternalStructure"
+          :is-housing-support="isHousingSupport"
+        />
+
+        <hr class="helprequestform__divider" />
+
+        <HelpRequestFormInfoSection
+          :status="status"
+          :has-set-external-structure="hasSetExternalStructure"
+          :is-external-support="isExternalSupport"
+          :subject="subject"
+        />
+
+        <HelpRequestFormHousingSection
+          v-if="isHousingSupport"
+          :beneficiary-id="beneficiaryId"
+        />
+
+        <hr
+          v-else
+          class="helprequestform__divider"
+        />
+
+        <HelpRequestFormSynthesisSection
+          :can-edit-private-synthesis="canEditPrivateSynthesis"
+        />
+
+        <hr class="helprequestform__divider" />
+
+        <HelpRequestFormDocumentSection :family-file-id="familyFileId" />
+
+        <div class="fr-col-12">
+          <VeeCheckbox
+            name="fullFile"
+            :label="helpRequestFieldLabels.fullFile"
+          />
+        </div>
+
+        <ul
+          class="fr-btns-group fr-btns-group--inline fr-btns-group--lg fr-btns-group--right"
+        >
+          <li>
+            <button
+              class="fr-btn submit-btn"
+              type="submit"
+              :submitting="isSubmitting"
+              :disabled="isSubmitting"
+            >
+              Enregistrer
+            </button>
+          </li>
+        </ul>
+      </div>
     </div>
   </form>
 </template>
@@ -86,6 +101,8 @@
   import { CreateHelpRequestInput, EditHelpRequestInput } from '~/server/schema'
   import { useDisplayFormErrors } from '~/composables/useDisplayFormErrors'
   import { PartnerOrganizationIdName } from '~/types/partner'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
   const props = withDefaults(
     defineProps<{
@@ -94,6 +111,7 @@
       partnerOrganizations: PartnerOrganizationIdName[]
       beneficiaryId: string
       familyFileId: string
+      familyFileIdentification: BeneficiaryFileIdentification[]
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>
       subject: FileInstructionType
@@ -128,6 +146,13 @@
 
   const isExternalSupport = computed(() => externalStructure.value === 'true')
   const isHousingSupport = computed(() => props.subject === 'Housing')
+
+  const beneficiaryOptions = computed(() =>
+    props.familyFileIdentification.map(m => ({
+      label: formatBeneficiaryShortenedName(m),
+      value: m.id
+    }))
+  )
 </script>
 
 <style scoped lang="scss">

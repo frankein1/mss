@@ -17,10 +17,7 @@
     >
       <RequiredFields />
     </PageTitle>
-    <main
-      ref="formContainer"
-      class="feature-section fr-p-5w"
-    >
+    <main ref="formContainer">
       <AtomAlert
         v-if="fetchError"
         :alert-type="AlertType.Error"
@@ -36,6 +33,7 @@
         :is-submitting="isSubmitting"
         :social-support-subjects="socialSupportSubjects"
         :family-file-id="beneficiary.familyFileId"
+        :family-file-identification="familyFileIdentification || []"
         :beneficiary-id="beneficiaryId"
         :partner-organizations="partnerOrganizations"
         :is-financial="isFinancial"
@@ -84,6 +82,10 @@
   )
 
   useHead({ title })
+
+  const familyFileId = beneficiary.value?.familyFileId || ''
+  const { familyFileIdentification } =
+    await useFamilyFileMinimalInfo(familyFileId)
 
   const {
     data: socialSupportSubjects,

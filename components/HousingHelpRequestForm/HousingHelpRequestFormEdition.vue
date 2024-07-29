@@ -4,6 +4,7 @@
     :partner-organizations="partnerOrganizations"
     :beneficiary-id="socialSupport.beneficiary.id"
     :family-file-id="socialSupport.familyFile.id"
+    :family-file-identification="familyFileIdentification || []"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
     :subject="FileInstructionType.Housing"
@@ -21,6 +22,7 @@
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { GetHousingHelpRequestOutput } from '~/server/trpc/routers'
   import { PartnerOrganizationIdName } from '~/types/partner'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 
@@ -28,6 +30,7 @@
     isSubmitting: boolean
     partnerOrganizations: PartnerOrganizationIdName[]
     data: GetHousingHelpRequestOutput
+    familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
 
   const emit = defineEmits<{

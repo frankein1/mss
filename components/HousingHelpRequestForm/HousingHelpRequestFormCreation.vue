@@ -4,6 +4,7 @@
     :partner-organizations="partnerOrganizations"
     :beneficiary-id="beneficiaryId"
     :family-file-id="familyFileId"
+    :family-file-identification="familyFileIdentification || []"
     :caught-errors="caughtErrors"
     :subject="FileInstructionType.Housing"
     @submit="onSubmit"
@@ -18,6 +19,7 @@
     createHousingHelpRequestSchema
   } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 
@@ -26,6 +28,7 @@
     partnerOrganizations: PartnerOrganizationIdName[]
     beneficiaryId: string
     familyFileId: string
+    familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
 
   const emit = defineEmits<{

@@ -4,6 +4,7 @@
     :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
     :family-file-id="familyFileId"
+    :family-file-identification="familyFileIdentification || []"
     :beneficiary-id="beneficiaryId"
     :caught-errors="caughtErrors"
     :subject="subject"
@@ -23,6 +24,7 @@
     createHelpRequestSchema
   } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 
@@ -32,6 +34,7 @@
     partnerOrganizations: PartnerOrganizationIdName[]
     beneficiaryId: string
     familyFileId: string
+    familyFileIdentification: BeneficiaryFileIdentification[]
     isFinancial: boolean
   }>()
 
