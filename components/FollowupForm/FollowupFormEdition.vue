@@ -4,6 +4,7 @@
     :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
     :family-file-id="followup.familyFileId"
+    :family-file-identification="familyFileIdentification || []"
     :medium="values.medium"
     :is-redirected="values.redirected"
     :can-set-private-synthesis="canSetPrivateSynthesis"
@@ -18,6 +19,7 @@
   import { FollowupPageItem } from './types'
   import { EditFollowupInput, editFollowupSchema } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 
@@ -26,6 +28,7 @@
     socialSupportSubjects: Array<SocialSupportSubject>
     partnerOrganizations: Array<PartnerOrganizationIdName>
     data: FollowupPageItem
+    familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
 
   const emit = defineEmits<{

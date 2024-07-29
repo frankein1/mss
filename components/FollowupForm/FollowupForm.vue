@@ -10,6 +10,16 @@
     @submit.prevent="emit('submit', $event)"
   >
     <div class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom">
+      <VeeRadioButtons
+        name="beneficiaryId"
+        label="Bénéficiaire(s) concerné(s) par le suivi :"
+        :options="beneficiaryOptions"
+        :inline="false"
+        required
+      />
+    </div>
+
+    <div class="fr-grid-row fr-grid-row--gutters form-grid fr-grid-row--bottom">
       <!-- ROW -->
       <div class="fr-col-12">
         <VeeCheckbox
@@ -264,6 +274,7 @@
     <div class="fr-mb-4w">
       <BeneficiaryDocumentsSelect
         :family-file-id="familyFileId"
+        :family-file-identification="familyFileIdentification"
         name="documents"
         snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez la synthèse d'entretien pour conserver le lien entre les deux."
       />
@@ -301,6 +312,8 @@
   import { followupFieldLabels } from '~/client/labels'
   import { AddFollowupInput, EditFollowupInput } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
   const props = withDefaults(
     defineProps<{
@@ -308,6 +321,7 @@
       socialSupportSubjects: Array<SocialSupportSubject>
       partnerOrganizations: Array<PartnerOrganizationIdName>
       familyFileId: string
+      familyFileIdentification: BeneficiaryFileIdentification[]
       medium: FollowupMedium
       isRedirected: boolean
       canSetPrivateSynthesis?: boolean
@@ -342,6 +356,13 @@
     form,
     toRef(() => props.caughtErrors),
     followupFieldLabels
+  )
+
+  const beneficiaryOptions = computed(() =>
+    props.familyFileIdentification.map(m => ({
+      label: formatBeneficiaryShortenedName(m),
+      value: m.id
+    }))
   )
 
   const socialSupportSubjectOptions = computed(() =>

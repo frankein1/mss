@@ -43,9 +43,11 @@
   import { AlertType } from '~/utils/constants/alert'
   import { FamilyFilePermissions } from '~/server/security'
   import { FamilyFileHistoryFilterInput } from '~/server/schema'
+  // import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     familyFileId: string
+    // familyFileIdentification: BeneficiaryFileIdentification[]
     familyFilePermissions: FamilyFilePermissions
   }>()
 

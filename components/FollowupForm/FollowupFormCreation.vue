@@ -4,6 +4,7 @@
     :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
     :family-file-id="familyFileId"
+    :family-file-identification="familyFileIdentification || []"
     :medium="values.medium"
     :is-redirected="values.redirected"
     :caught-errors="caughtErrors"
@@ -16,6 +17,7 @@
   import { toTypedSchema } from '@vee-validate/zod'
   import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
   import { PartnerOrganizationIdName } from '~/types/partner'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 
@@ -23,8 +25,9 @@
     isSubmitting: boolean
     socialSupportSubjects: Array<SocialSupportSubject>
     partnerOrganizations: Array<PartnerOrganizationIdName>
-    beneficiaryId: string
+    beneficiaryId: string // à garder vu que c'est un champ du formulaire maintennt ?
     familyFileId: string
+    familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
 
   const emit = defineEmits<{
