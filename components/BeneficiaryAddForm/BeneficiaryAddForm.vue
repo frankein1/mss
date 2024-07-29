@@ -92,7 +92,7 @@
 
   <BeneficiaryAddSuccess
     v-else
-    @go-to-beneficiary="goToBeneficiary"
+    @go-to-beneficiary="goToFilePage"
     @go-to-beneficiary-form="goToBeneficiaryForm"
   />
 </template>
@@ -152,11 +152,9 @@
     success.value = false
   }
 
-  const goToBeneficiary = () => {
-    if (newBeneficiaryId.value) {
-      navigateTo(routes.beneficiary.AppBeneficiary.path(newBeneficiaryId.value))
-      onClose()
-    }
+  const goToFilePage = () => {
+    navigateTo(routes.file.AppFile.path(props.familyFileId))
+    onClose()
   }
   const goToBeneficiaryForm = () => {
     if (newBeneficiaryId.value) {

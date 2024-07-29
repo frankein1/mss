@@ -1,16 +1,34 @@
 <template>
-  <AtomLoader class="fr-mx-auto" />
+  <PageContainer v-if="familyFileIdentification">
+    <!-- TODO: add breadcrumb -->
+
+    <FamilyFileDetailsHeader
+      :beneficiaries="familyFileIdentification"
+      :title="title"
+      @open-modal="onOpenModal"
+    />
+  </PageContainer>
 </template>
 
 <script lang="ts" setup>
-  const route = useRoute()
-  const trpcClient = useTrpcClient()
+  import { routes } from '~/utils/routes'
 
+  const route = useRoute()
+
+  // Page settings
   const familyFileId = route.params.id as string
 
-  const data = await trpcClient.file.getBeneficiaryId.query({
-    familyFileId
-  })
+  // Get family informations
+  const { familyFileIdentification, pending, error } =
+    await useFamilyFileMinimalInfo(familyFileId)
 
-  navigateTo(`/app/beneficiaries/${data}`)
+  const title = routes.file.AppFile.title(familyFileIdentification.value)
+
+  const onOpenModal = () => {
+    console.log('modale ouverte')
+  }
+  // Open modal
+
+  console.log(pending.value)
+  console.log(error.value)
 </script>
