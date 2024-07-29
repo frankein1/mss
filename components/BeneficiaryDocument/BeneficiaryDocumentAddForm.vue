@@ -9,6 +9,7 @@
     @submit.prevent="onSubmit"
   >
     <VeeRadioButtons
+      v-if="beneficiaryOptions.length > 0"
       name="beneficiaryId"
       label="Ce document appartient à :"
       :options="beneficiaryOptions"
@@ -62,11 +63,21 @@
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
-  const props = defineProps<{
-    familyFileId: string
-    familyFileIdentification: BeneficiaryFileIdentification[]
-    newDocument: (key: string) => void
-  }>()
+  const props = withDefaults(
+    defineProps<{
+      familyFileId: string
+      familyFileIdentification: BeneficiaryFileIdentification[]
+      beneficiaryId?: string
+      newDocument: (key: string) => void
+    }>(),
+    { familyFileIdentification: () => [], beneficiaryId: undefined }
+  )
+
+  if (!props.beneficiaryId && props.familyFileIdentification.length === 0) {
+    throw new Error(
+      'One of beneficiaryId or familyFileIdentification props is compulsory'
+    )
+  }
 
   const beneficiaryOptions = computed(() =>
     props.familyFileIdentification.map(m => ({
@@ -78,11 +89,14 @@
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
 
+  const initialBeneficiaryId =
+    props.beneficiaryId || props.familyFileIdentification[0].id
+
   const { handleSubmit } = useForm<UploadBrowserDocumentInput>({
     validationSchema: toTypedSchema(uploadBrowserDocumentSchema),
     initialValues: {
       familyFileId: props.familyFileId,
-      beneficiaryId: props.familyFileIdentification[0].id,
+      beneficiaryId: initialBeneficiaryId,
       tags: [],
       confidential: false
     }

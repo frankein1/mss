@@ -2,7 +2,7 @@
   <BeneficiaryDocumentAddButton
     class="fr-mb-3w"
     :family-file-id="familyFileId"
-    :family-file-identification="familyFileIdentification"
+    :beneficiary-id="beneficiaryId"
     label="Ajouter un nouveau document"
     @new-document="onNewDocument"
   />
@@ -20,7 +20,6 @@
 <script lang="ts" setup>
   import { ref } from 'vue'
   import VeeSearchableSelect from '../VeeForm/VeeSearchableSelect.vue'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const selectDocInput = ref<typeof VeeSearchableSelect | null>(null)
 
@@ -29,7 +28,7 @@
   const props = withDefaults(
     defineProps<{
       familyFileId: string
-      familyFileIdentification: BeneficiaryFileIdentification[]
+      beneficiaryId: string
       name: string
       snackbarSuccessMessage?: string
     }>(),

@@ -60,7 +60,10 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
+  // TODO replace route.params by familyFile param
+  // and get beneficiaryId as query (beneficiary will be optional)
   const beneficiaryId = route.params.id as string
+
   const subject = toFirstLetterUpperCase(
     route.params.subject as string
   ) as FileInstructionType
