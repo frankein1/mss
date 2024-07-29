@@ -26,6 +26,7 @@
         :social-support-subjects="socialSupportSubjects"
         :partner-organizations="partnerOrganizations"
         :data="followupData"
+        :family-file-identification="familyFileIdentification || []"
         @save-followup="onUpdateFollowup"
       />
     </main>
@@ -55,6 +56,10 @@
   } = await trpcClient.followup.getOne.useQuery({
     id: followupId
   })
+
+  const familyFileId = followupData.value?.followup.familyFileId || ''
+  const { familyFileIdentification } =
+    await useFamilyFileMinimalInfo(familyFileId)
 
   const followup = computed(() => followupData.value?.followup || null)
   const beneficiary = computed(() => followup.value?.beneficiary || null)

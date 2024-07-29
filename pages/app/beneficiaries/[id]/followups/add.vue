@@ -31,6 +31,7 @@
         :is-submitting="isSubmitting"
         :social-support-subjects="socialSupportSubjects"
         :family-file-id="beneficiary.familyFileId"
+        :family-file-identification="familyFileIdentification || []"
         :beneficiary-id="beneficiaryId"
         :partner-organizations="partnerOrganizations"
         @save-followup="onAddFollowup"
@@ -59,6 +60,10 @@
     await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
       id: beneficiaryId
     })
+
+  const familyFileId = beneficiary.value?.familyFileId || ''
+  const { familyFileIdentification } =
+    await useFamilyFileMinimalInfo(familyFileId)
 
   const title = computed(() =>
     routes.followup.AppBeneficiaryFollowupAdd.title(beneficiary.value || null)
