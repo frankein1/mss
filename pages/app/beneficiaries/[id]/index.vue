@@ -192,19 +192,14 @@
 
   // ADD FAMILY MEMBER
   const trpcClient = useTrpcClient()
-  const { data } = await trpcClient.config.getAgents.useQuery()
   const modal = useModal()
   const isSubmitting = ref(false)
   const snackbar = useSnackbar()
 
   const openAddBeneficiaryModal = (): void => {
-    if (data.value != null && beneficiary?.value?.familyFileId) {
+    if (beneficiary?.value?.familyFileId) {
       modal.open(BeneficiaryAddForm, {
         title: 'Ajouter un membre au dossier',
-        agents: data.value,
-        beneficiaryReferentIds: beneficiary.value
-          ? beneficiary.value.referents.map(r => r.id)
-          : [],
         isSubmitting: isSubmitting.value,
         familyFileId: beneficiary.value.familyFileId,
         add: onAddBeneficiary
@@ -217,7 +212,6 @@
     if (beneficiary?.value?.familyFileId) {
       const payload = {
         familyFileId: beneficiary.value.familyFileId,
-        referents: newBeneficiary.referents,
         title: newBeneficiary.title,
         usualName: newBeneficiary.usualName,
         firstName: newBeneficiary.firstName,
