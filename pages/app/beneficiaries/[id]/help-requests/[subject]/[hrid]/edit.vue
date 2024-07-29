@@ -22,10 +22,7 @@
     >
       <RequiredFields />
     </PageTitle>
-    <main
-      ref="formContainer"
-      class="feature-section fr-p-5w"
-    >
+    <main ref="formContainer">
       <AtomAlert
         v-if="fetchError"
         :alert-type="AlertType.Error"
@@ -43,6 +40,7 @@
         :is-submitting="isSubmitting"
         :social-support-subjects="socialSupportSubjects"
         :data="helpRequestData"
+        :family-file-identification="familyFileIdentification || []"
         :partner-organizations="partnerOrganizations"
         @save-help-request="onUpdateHelpRequest"
       />
@@ -76,6 +74,12 @@
   } = await trpcClient.helpRequest.getOne.useQuery({
     id: helpRequestId
   })
+
+  const familyFileId =
+    helpRequestData.value?.helpRequest.fileInstruction.socialSupport
+      .familyFileId || ''
+  const { familyFileIdentification } =
+    await useFamilyFileMinimalInfo(familyFileId)
 
   const helpRequest = computed(() => helpRequestData.value?.helpRequest || null)
 

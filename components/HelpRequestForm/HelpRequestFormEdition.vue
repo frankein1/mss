@@ -5,6 +5,7 @@
     :partner-organizations="partnerOrganizations"
     :beneficiary-id="socialSupport.beneficiary.id"
     :family-file-id="socialSupport.familyFileId"
+    :family-file-identification="familyFileIdentification || []"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
     :subject="subject"
@@ -19,6 +20,7 @@
   import { EditHelpRequestInput, editHelpRequestSchema } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { PartnerOrganizationIdName } from '~/types/partner'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
 
@@ -27,6 +29,7 @@
     socialSupportSubjects: SocialSupportSubject[]
     partnerOrganizations: PartnerOrganizationIdName[]
     data: HelpRequestPageItem
+    familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
 
   const emit = defineEmits<{

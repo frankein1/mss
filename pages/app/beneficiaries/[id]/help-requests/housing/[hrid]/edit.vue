@@ -23,10 +23,7 @@
     >
       <RequiredFields />
     </PageTitle>
-    <main
-      ref="formContainer"
-      class="feature-section fr-p-5w"
-    >
+    <main ref="formContainer">
       <AtomAlert
         v-if="fetchError"
         :alert-type="AlertType.Error"
@@ -41,6 +38,7 @@
         v-else-if="housingHelpRequestData && partnerOrganizations"
         :is-submitting="isSubmitting"
         :data="housingHelpRequestData"
+        :family-file-identification="familyFileIdentification || []"
         :partner-organizations="partnerOrganizations"
         @save-housing-help-request="onUpdateHousingHelpRequest"
       />
@@ -74,6 +72,12 @@
   } = await trpcClient.housingHelpRequest.getOne.useQuery({
     id: housingHelpRequestId
   })
+
+  const familyFileId =
+    housingHelpRequestData.value?.housingHelpRequest.fileInstruction
+      .socialSupport.familyFileId || ''
+  const { familyFileIdentification } =
+    await useFamilyFileMinimalInfo(familyFileId)
 
   const housingHelpRequest = computed(
     () => housingHelpRequestData.value?.housingHelpRequest || null
