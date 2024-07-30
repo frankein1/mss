@@ -1,11 +1,8 @@
 <template>
   <PageContainer v-if="familyFileIdentification">
-    <!-- TODO: add loader + error components -->
-
     <AtomBreadcrumb
       :links="breadcrumbs.file.AppFile(familyFileId, familyFileIdentification)"
     />
-
     <AtomLoader
       v-if="pending"
       class="loading-state"
@@ -15,25 +12,30 @@
       :alert-type="AlertType.Error"
       message="La fiche foyer n'a pas pu être chargée."
     />
-
     <template v-else>
       <!-- TODO: add permissions on header + actions -->
       <FamilyFileDetailsHeader
+        :permissions="globalPermissions"
         :beneficiaries="familyFileIdentification"
         :title="title"
-        @open-modal="onOpenModal"
+        @open-modal="openAddBeneficiaryModal"
       />
-
       <hr />
-
       <!-- TODO: demander des permissions pour avoir acces au bouton instruction de dossier -->
       <BeneficiaryDetailsHistoryActions
         :beneficiary-id="familyFileIdentification[0].id"
-        :permissions="undefined"
+        :permissions="globalPermissions"
         class="fr-pb-3w"
       />
-
-      <AtomTabs tab-list-name="Détails de la fiche bénéficiaire">
+      <hr />
+      <AtomLoader
+        v-if="isDeleting"
+        class="loading-state"
+      />
+      <AtomTabs
+        v-else-if="selectedBeneficiary"
+        tab-list-name="Détails de la fiche bénéficiaire"
+      >
         <AtomTab
           :tab-id="FamilyFileTab.Details"
           title="Informations"
@@ -55,38 +57,80 @@
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
+          <!-- TODO: permission must come from main user -->
           <BeneficiaryInfo
-            v-else-if="selectedBeneficiary"
+            v-else
             :beneficiary="selectedBeneficiary"
             :social-support-subjects="socialSupportSubjects"
             :permissions="selectedPermissions"
+            :family-file="true"
             @toggle-delete="toggleDelete"
             @deleted="onBeneficiaryDeleted"
+            @split="onSplit"
           />
         </AtomTab>
         <AtomTab
           :tab-id="FamilyFileTab.Documents"
           title="Documents"
-          icon="fr-icon-information-fill"
+          icon="fr-icon-folder-2-line"
           selected
         >
-          <p>Documents</p>
+          <AtomLoader
+            v-if="selectedPending"
+            class="fr-mx-auto"
+          />
+          <AtomAlert
+            v-else-if="selectedError"
+            :alert-type="AlertType.Error"
+            message="La fiche bénéficiaire n'a pas pu être chargée."
+          />
+          <BeneficiaryDocumentList
+            v-else
+            :family-file-id="selectedBeneficiary.familyFileId"
+            :family-file-identification="familyFileIdentification || []"
+          />
         </AtomTab>
         <AtomTab
           :tab-id="FamilyFileTab.History"
           title="Historique"
-          icon="fr-icon-information-fill"
+          icon="fr-icon-history-line"
           selected
         >
-          <p>Historique</p>
+          <AtomLoader
+            v-if="selectedPending"
+            class="fr-mx-auto"
+          />
+          <AtomAlert
+            v-else-if="selectedError"
+            :alert-type="AlertType.Error"
+            message="La fiche bénéficiaire n'a pas pu être chargée."
+          />
+          <BeneficiaryHistory
+            v-else-if="globalPermissions"
+            :family-file-id="selectedBeneficiary.familyFileId"
+            :family-file-permissions="globalPermissions"
+          />
         </AtomTab>
         <AtomTab
           :tab-id="FamilyFileTab.Budget"
           title="Budget"
-          icon="fr-icon-information-fill"
+          icon="fr-icon-money-euro-circle-line"
           selected
         >
-          <p>Budget</p>
+          <AtomLoader
+            v-if="selectedPending"
+            class="fr-mx-auto"
+          />
+          <AtomAlert
+            v-else-if="selectedError"
+            :alert-type="AlertType.Error"
+            message="La fiche bénéficiaire n'a pas pu être chargée."
+          />
+          <BeneficiaryBudget
+            v-else-if="selectedBeneficiary && selectedBeneficiaryIdentification"
+            :family-file-id="selectedBeneficiary.familyFileId"
+            :beneficiary-identification="selectedBeneficiaryIdentification"
+          />
         </AtomTab>
       </AtomTabs>
     </template>
@@ -97,10 +141,21 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { FamilyFilePermissions } from '~/server/security'
-  import { GetBeneficiaryOutput } from '~/types/beneficiary'
+  import {
+    BeneficiaryIdentification,
+    GetBeneficiaryOutput
+  } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
+  import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
+  import { AddFamilyFileMemberInput } from '~/server/schema'
 
   const route = useRoute()
+  const originPage = route.query.originPage as
+    | typeof routes.user.AppOverview.name
+    | typeof routes.beneficiary.AppBeneficiaries.name
+    | typeof routes.beneficiary.AppHistory.name
+    | undefined
+  const originTab = route.query.hash as string | undefined
 
   // states
   const selectedBeneficiary = useState(
@@ -111,8 +166,16 @@
     'selectedPermissions',
     (): FamilyFilePermissions | undefined => undefined
   )
+  const selectedBeneficiaryIdentification = useState(
+    'selectedBeneficiaryIdentification',
+    (): BeneficiaryIdentification | null => null
+  )
   const selectedPending = useState('selectedPending', (): boolean => true)
-  const selectedError = useState('selectedError', (): any | null => null)
+  const selectedError = useState('selectedError', (): any | null => null) // TODO: replace 'any'
+  const globalPermissions = useState(
+    'globalPermissions',
+    (): FamilyFilePermissions | undefined => undefined
+  )
   const socialSupportSubjects = computed(() => []) // TODO: it should be selectedBeneficiary.value?.history.subjects
 
   // Get family informations
@@ -123,21 +186,22 @@
 
   // Get beneficiaryDetails
   const getBeneficiaryDetails = async (id: string): Promise<void> => {
-    const { beneficiary, permissions, pending, error } =
-      await useBeneficiaryDetails(id)
+    const {
+      beneficiary,
+      permissions,
+      beneficiaryIdentification,
+      pending,
+      error
+    } = await useBeneficiaryDetails(id)
     selectedBeneficiary.value = beneficiary.value
     selectedPermissions.value = permissions.value
+    selectedBeneficiaryIdentification.value = beneficiaryIdentification.value
     selectedPending.value = pending.value
     selectedError.value = error.value
   }
 
   if (familyFileIdentification && familyFileIdentification.value?.length) {
     getBeneficiaryDetails(familyFileIdentification.value[0].id)
-  }
-
-  // Open modal
-  const onOpenModal = () => {
-    console.log('modale ouverte')
   }
 
   // Segmented Family
@@ -154,12 +218,73 @@
     Budget = 'Budget'
   }
 
+  // Deleting
+  const isDeleting = ref(false)
   const toggleDelete = () => {
-    console.log('toggle Delete')
+    isDeleting.value = !isDeleting.value
   }
+  const backLink = computed(() => {
+    if (originPage) {
+      const tabParam = originTab ? `?tab=${originTab}` : ''
+      return `${originPage}${tabParam}`
+    }
+    return routes.beneficiary.AppBeneficiaries.path()
+  })
   const onBeneficiaryDeleted = () => {
-    console.log('beneficiary Deleted')
+    navigateTo(backLink.value)
+    useSnackbar().success('Le bénéficiaire a été supprimé.')
+  }
+
+  // Open modal to add beneficiary
+  const isSubmitting = ref(false)
+  const openAddBeneficiaryModal = (): void => {
+    if (familyFileId) {
+      useModal().open(BeneficiaryAddForm, {
+        title: 'Ajouter un membre au dossier',
+        isSubmitting: isSubmitting.value,
+        familyFileId,
+        add: onAddBeneficiary
+      })
+    }
+  }
+  const trpcClient = useTrpcClient()
+  const onAddBeneficiary = async (newBeneficiary: AddFamilyFileMemberInput) => {
+    let beneficiaryID
+    if (familyFileId) {
+      const payload = {
+        familyFileId,
+        title: newBeneficiary.title,
+        usualName: newBeneficiary.usualName,
+        firstName: newBeneficiary.firstName,
+        birthDate: newBeneficiary.birthDate
+          ? new Date(newBeneficiary.birthDate)
+          : undefined,
+        relationship: newBeneficiary.relationship
+      }
+      await useTrpcMutation({
+        mutation: () =>
+          trpcClient.beneficiary.addFamilyFileMember.mutate(payload),
+        isSubmitting,
+        onSuccess: ({ id }) => {
+          beneficiaryID = id
+        },
+        onFailure: () => {
+          useSnackbar().error("L'ajout d'un membre au foyer à échoué.")
+        }
+      })
+    }
+    return beneficiaryID
+  }
+
+  // TODO Split
+  const onSplit = () => {
+    console.log('split dossier')
   }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+  .loading-state {
+    width: 100%;
+    margin: 0 auto;
+  }
+</style>

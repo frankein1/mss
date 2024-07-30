@@ -1,6 +1,6 @@
 <template>
   <div class="fr-grid-row fr-mt-1w">
-    <div class="fr-col-12 fr-col-lg-6">
+    <div class="fr-col-12 fr-col-lg-6 fr-my-2w">
       <h2 class="title fr-h4 fr-mb-0">
         Informations
         {{
@@ -13,8 +13,10 @@
         class="actions"
         :beneficiary-id="beneficiary.id"
         :permissions="permissions"
+        :family-file="familyFile"
         @toggle-delete="emit('toggleDelete')"
         @deleted="emit('deleted')"
+        @split="emit('split')"
       />
     </div>
   </div>
@@ -79,9 +81,10 @@
     beneficiary: GetBeneficiaryOutput
     socialSupportSubjects: SocialSupportSubjectIdAndName[]
     permissions: FamilyFilePermissions | undefined
+    familyFile?: boolean
   }>()
 
-  const emit = defineEmits<{ toggleDelete: []; deleted: [] }>()
+  const emit = defineEmits<{ toggleDelete: []; deleted: []; split: [] }>()
 </script>
 
 <style lang="scss" scoped>
@@ -89,6 +92,7 @@
 
   .title {
     color: var(--primary);
+    align-self: center;
   }
 
   .actions {

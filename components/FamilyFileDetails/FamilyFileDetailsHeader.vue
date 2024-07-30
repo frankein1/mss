@@ -62,13 +62,16 @@
   const prettyNames = computed(() =>
     formatFamilyFileLabels(props.beneficiaries)
   )
-  console.log(prettyNames.value)
 </script>
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
 
   .family-file-details-header {
+    .tag {
+      color: var(--text-action-high-blue-france);
+      background-color: var(--background-action-low-blue-france);
+    }
     .family-members {
       margin-top: 1rem;
       gap: 0.5rem;

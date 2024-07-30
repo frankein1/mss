@@ -132,6 +132,7 @@ export type GetBeneficiaryOutput = Pick<
   Beneficiary,
   | 'id'
   | 'fileNumber'
+  | 'familyFileId'
   | 'structureId'
   | 'additionalInformation'
   | 'createdById'

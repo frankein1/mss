@@ -2,7 +2,7 @@
   <ul class="fr-btns-group fr-btns-group--inline">
     <li v-if="permissions?.delete">
       <button
-        class="fr-btn fr-btn--secondary fr-icon-delete-line btn-delete-action"
+        class="fr-btn fr-btn--secondary fr-icon-delete-line btn-delete-action fr-mb-0"
         data-fr-opened="false"
         aria-controls="global-modal"
         type="button"
@@ -15,16 +15,31 @@
     <li>
       <NuxtLink
         :to="`${routes.beneficiary.AppBeneficiaryPrint.path(beneficiaryId)}`"
-        class="fr-btn fr-btn--secondary fr-icon-printer-line"
+        class="fr-btn fr-btn--secondary fr-icon-printer-line fr-mb-0"
         title="Imprimer"
       >
         Imprimer
       </NuxtLink>
     </li>
+    <li v-if="familyFile">
+      <button
+        class="fr-btn fr-btn--secondary edit-btn fr-mb-0"
+        type="button"
+        title="Dissocier"
+        @click="emit('split')"
+      >
+        <img
+          class="fr-mr-1w"
+          src="~/assets/icons/retirer.svg"
+          alt="Dissocier"
+        />
+        Dissocier du dossier
+      </button>
+    </li>
     <li>
       <NuxtLink
         :to="`${editRoute}`"
-        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line edit-btn"
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line edit-btn fr-mb-0"
       >
         Modifier
       </NuxtLink>
@@ -43,9 +58,10 @@
   const props = defineProps<{
     beneficiaryId: string
     permissions: FamilyFilePermissions | undefined
+    familyFile?: boolean
   }>()
 
-  const emit = defineEmits<{ toggleDelete: []; deleted: [] }>()
+  const emit = defineEmits<{ toggleDelete: []; deleted: []; split: [] }>()
 
   const currentTab = computed(() => {
     const hash = route.hash.slice(1)
