@@ -1,10 +1,13 @@
 <template>
   <DsfrSegmentedSet
+    class="fr-my-2w"
     :title-id="id"
     name="family-file-members"
+    :inline="true"
     label="Fiche :"
-    legende="Fiche :"
+    legend="Fiche :"
     :options
+    :model-value="modelValue"
     @update:model-value="$emit('onChange', $event)"
   />
 </template>
@@ -18,6 +21,7 @@
     defineProps<{
       id?: string
       members: BeneficiaryFileIdentification[]
+      modelValue?: string | number
     }>(),
     { id: getRandomId('seg-control') }
   )

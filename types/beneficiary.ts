@@ -4,6 +4,7 @@ import type {
   User,
   UserStatus
 } from '@prisma/client'
+import { RouterOutput } from '~/server/trpc/routers'
 
 export type BeneficiaryReferent = {
   id: string
@@ -128,10 +129,14 @@ export type BeneficiaryFileInformation = Pick<
   >[]
 }
 
+type BeneficiaryDetails = RouterOutput['beneficiary']['getBeneficiaryDetails']
+type BeneficiaryHistory = BeneficiaryDetails['beneficiary']['history']
+
 export type GetBeneficiaryOutput = Pick<
   Beneficiary,
   | 'id'
   | 'fileNumber'
+  | 'familyFileId'
   | 'structureId'
   | 'additionalInformation'
   | 'createdById'
@@ -147,4 +152,5 @@ export type GetBeneficiaryOutput = Pick<
     occupationIncome: GetBeneficiaryOccupationIncome | undefined
     entourages: GetBeneficiaryRelative[] | undefined
     taxHouseholds: GetBeneficiaryTaxHousehold | undefined
+    history: BeneficiaryHistory | undefined
   }
