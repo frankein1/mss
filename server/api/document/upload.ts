@@ -5,11 +5,7 @@ import { AddDocumentInput, addDocumentSchema } from '~/server/schema'
 import { forbiddenError, invalidError } from '~/server/trpc'
 import { JwtUser } from '~/types/user'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
-import {
-  BeneficiaryService,
-  FamilyFileSecurityTarget,
-  FamilyFileService
-} from '~/server/services'
+import { FamilyFileSecurityTarget, FamilyFileService } from '~/server/services'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
 
 export interface MultiPartData {
@@ -96,7 +92,7 @@ export default defineEventHandler(async event => {
   const file = multipartFormData[0]
 
   const document = await addDocument(input, user, file)
-  await addNotification(ctx, document, familyFile)
+  await addNotification(ctx, document, familyFile, input.beneficiaryId)
 
   return send(event, document.key)
 })
@@ -104,15 +100,12 @@ export default defineEventHandler(async event => {
 async function addNotification(
   ctx: SecurityRuleContext,
   document: Document,
-  familyFile: NonNullable<FamilyFileSecurityTarget>
+  familyFile: NonNullable<FamilyFileSecurityTarget>,
+  beneficiaryId: string
 ) {
   if (document.confidential) {
     return
   }
-
-  const beneficiaryId = await BeneficiaryService.getIdFromFamilyFileId(
-    familyFile.id
-  )
 
   const notifications = []
   for (const referent of familyFile.referents) {

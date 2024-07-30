@@ -4,10 +4,7 @@
       :links="breadcrumbs.followup.AppBeneficiaryFollowupEdit(followup)"
     />
     <PageTitle :title="title" />
-    <main
-      ref="formContainer"
-      class="feature-section fr-p-5w"
-    >
+    <main ref="formContainer">
       <AtomAlert
         v-if="fetchError"
         :alert-type="AlertType.Error"
