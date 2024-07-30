@@ -1,7 +1,7 @@
 <template>
   <div class="fr-grid-row fr-mt-1w">
     <div class="fr-col-12 fr-col-lg-6">
-      <h2 class="title-blue fr-h4 fr-mb-0">
+      <h2 class="title fr-h4 fr-mb-0">
         Informations
         {{
           beneficiary.general.firstName + ' ' + beneficiary.general.usualName
@@ -86,6 +86,10 @@
 
 <style lang="scss" scoped>
   @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
+
+  .title {
+    color: var(--primary);
+  }
 
   .actions {
     @include dsfr-media-query.respond-from('lg') {
