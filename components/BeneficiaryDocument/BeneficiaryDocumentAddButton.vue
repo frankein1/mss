@@ -19,11 +19,22 @@
   const props = withDefaults(
     defineProps<{
       familyFileId: string
-      familyFileIdentification: BeneficiaryFileIdentification[]
+      familyFileIdentification?: BeneficiaryFileIdentification[]
+      beneficiaryId?: string
       label?: string
     }>(),
-    { label: 'Ajouter un document' }
+    {
+      label: 'Ajouter un document',
+      familyFileIdentification: () => [],
+      beneficiaryId: undefined
+    }
   )
+
+  if (!props.beneficiaryId && props.familyFileIdentification.length === 0) {
+    throw new Error(
+      'One of beneficiaryId or familyFileIdentification props is compulsory'
+    )
+  }
 
   const emit = defineEmits<{
     newDocument: [key: string]
@@ -33,6 +44,7 @@
     modal.open(BeneficiaryDocumentAddForm, {
       title: 'Ajouter un document',
       familyFileId: props.familyFileId,
+      ...(props.beneficiaryId && { beneficiaryId: props.beneficiaryId }),
       familyFileIdentification: props.familyFileIdentification,
       newDocument: onNewDocument
     })

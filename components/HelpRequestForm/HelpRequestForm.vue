@@ -45,7 +45,7 @@
 
         <HelpRequestFormHousingSection
           v-if="isHousingSupport"
-          :beneficiary-id="beneficiaryId"
+          :beneficiary-id="beneficiaryId || ''"
         />
 
         <hr
@@ -59,7 +59,10 @@
 
         <hr class="helprequestform__divider" />
 
-        <HelpRequestFormDocumentSection :family-file-id="familyFileId" />
+        <HelpRequestFormDocumentSection
+          :family-file-id="familyFileId"
+          :beneficiary-id="beneficiaryId || ''"
+        />
 
         <div class="fr-col-12">
           <VeeCheckbox
@@ -109,7 +112,6 @@
       isSubmitting: boolean
       socialSupportSubjects?: SocialSupportSubject[]
       partnerOrganizations: PartnerOrganizationIdName[]
-      beneficiaryId: string
       familyFileId: string
       familyFileIdentification: BeneficiaryFileIdentification[]
       canEditPrivateSynthesis?: boolean
@@ -135,6 +137,7 @@
     submit: [payload: Event]
   }>()
 
+  const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
   const { value: status } = useField<SocialSupportStatus>('status')
   const { value: externalStructure } = useField<'true' | 'false' | undefined>(
     'externalStructure'

@@ -12,10 +12,7 @@
       <RequiredFields />
     </PageTitle>
 
-    <main
-      ref="formContainer"
-      class="feature-section fr-p-5w"
-    >
+    <main ref="formContainer">
       <AtomAlert
         v-if="fetchError"
         :alert-type="AlertType.Error"
@@ -54,6 +51,9 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
+  // TODO replace route.params by familyFile param
+  // and get beneficiaryId as query(if not present
+  // will be the first id of file)
   const beneficiaryId = route.params.id as string
 
   const { data: beneficiary, error: beneficiaryError } =
