@@ -72,9 +72,11 @@
       color: var(--text-action-high-blue-france);
       background-color: var(--background-action-low-blue-france);
     }
+
     .family-members {
       margin-top: 1rem;
       gap: 0.5rem;
+
       .user-icon::before {
         height: 1rem;
         width: 1rem;
@@ -82,17 +84,20 @@
         line-height: 1rem;
         transform: translateY(-3px);
       }
+
       &::after {
         content: '·';
         font-weight: 400;
         margin: 0 0.5rem;
       }
+
       &:last-child {
         &::after {
           display: none;
         }
       }
     }
+
     @include dsfr-media-query.respond-from('xl') {
       .btn-wrapper {
         text-align: end;

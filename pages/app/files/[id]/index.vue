@@ -13,18 +13,16 @@
       message="La fiche foyer n'a pas pu être chargée."
     />
     <template v-else>
-      <!-- TODO: add permissions on header + actions -->
       <FamilyFileDetailsHeader
-        :permissions="globalPermissions"
+        :permissions="selectedPermissions"
         :beneficiaries="familyFileIdentification"
         :title="title"
         @open-modal="openAddBeneficiaryModal"
       />
       <hr />
-      <!-- TODO: demander des permissions pour avoir acces au bouton instruction de dossier -->
       <BeneficiaryDetailsHistoryActions
         :beneficiary-id="familyFileIdentification[0].id"
-        :permissions="globalPermissions"
+        :permissions="selectedPermissions"
         class="fr-pb-3w"
       />
       <hr />
@@ -57,7 +55,6 @@
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
-          <!-- TODO: permission must come from main user -->
           <BeneficiaryInfo
             v-else
             :beneficiary="selectedBeneficiary"
@@ -106,9 +103,9 @@
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
           <BeneficiaryHistory
-            v-else-if="globalPermissions"
+            v-else-if="selectedPermissions"
             :family-file-id="selectedBeneficiary.familyFileId"
-            :family-file-permissions="globalPermissions"
+            :family-file-permissions="selectedPermissions"
           />
         </AtomTab>
         <AtomTab
@@ -148,6 +145,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import { AddFamilyFileMemberInput } from '~/server/schema'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const route = useRoute()
   const originPage = route.query.originPage as
@@ -171,12 +169,10 @@
     (): BeneficiaryIdentification | null => null
   )
   const selectedPending = useState('selectedPending', (): boolean => true)
-  const selectedError = useState('selectedError', (): any | null => null) // TODO: replace 'any'
-  const globalPermissions = useState(
-    'globalPermissions',
-    (): FamilyFilePermissions | undefined => undefined
+  const selectedError = useState('selectedError', (): any | null => null) // TODO: find a type for error
+  const socialSupportSubjects = computed(
+    () => selectedBeneficiary?.value?.history?.subjects || []
   )
-  const socialSupportSubjects = computed(() => []) // TODO: it should be selectedBeneficiary.value?.history.subjects
 
   // Get family informations
   const familyFileId = route.params.id as string
@@ -206,9 +202,11 @@
 
   // Segmented Family
   const onChange = (beneficiaryId: string): void => {
-    navigateTo(
-      `/app/files/1143e166-4730-4e94-af3d-b97ba89e407d?beneficiary=${beneficiaryId}#Details`
-    ) // TODO: generate url with appropriate function
+    const navRoute = routes.file.AppFile.path(familyFileId, {
+      tab: BeneficiaryTab.History,
+      beneficiaryId
+    })
+    navigateTo(navRoute)
     getBeneficiaryDetails(beneficiaryId)
   }
   enum FamilyFileTab {

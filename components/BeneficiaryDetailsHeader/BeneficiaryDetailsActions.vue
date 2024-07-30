@@ -23,9 +23,10 @@
     </li>
     <li v-if="familyFile">
       <button
-        class="fr-btn fr-btn--secondary edit-btn fr-mb-0"
+        class="fr-btn fr-btn--secondary fr-mb-0 split-btn"
         type="button"
         title="Dissocier"
+        disabled
         @click="emit('split')"
       >
         <img
@@ -39,7 +40,7 @@
     <li>
       <NuxtLink
         :to="`${editRoute}`"
-        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line edit-btn fr-mb-0"
+        class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-edit-line fr-mb-0 edit-btn"
       >
         Modifier
       </NuxtLink>
@@ -100,5 +101,11 @@
     max-width: 100%;
     overflow: initial;
     padding: 0.5rem 1rem;
+  }
+
+  .split-btn:disabled {
+    img {
+      filter: saturate(0) brightness(1.75);
+    }
   }
 </style>

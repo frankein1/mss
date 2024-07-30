@@ -1,17 +1,15 @@
 <template>
-  <div class="segment fr-my-2w">
-    <span class="fr-mr-2w">Fiche&nbsp;:</span>
-    <DsfrSegmentedSet
-      :title-id="id"
-      name="family-file-members"
-      :inline="true"
-      label="Fiche :"
-      legende="Fiche :"
-      :options
-      :model-value="modelValue"
-      @update:model-value="$emit('onChange', $event)"
-    />
-  </div>
+  <DsfrSegmentedSet
+    class="fr-my-2w"
+    :title-id="id"
+    name="family-file-members"
+    :inline="true"
+    label="Fiche :"
+    legend="Fiche :"
+    :options
+    :model-value="modelValue"
+    @update:model-value="$emit('onChange', $event)"
+  />
 </template>
 
 <script setup lang="ts">
@@ -23,7 +21,7 @@
     defineProps<{
       id?: string
       members: BeneficiaryFileIdentification[]
-      modelValue: string | number
+      modelValue?: string | number
     }>(),
     { id: getRandomId('seg-control') }
   )
@@ -39,12 +37,3 @@
     }))
   )
 </script>
-<style lang="scss" scoped>
-  @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
-  .segment {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: flex-start;
-  }
-</style>
