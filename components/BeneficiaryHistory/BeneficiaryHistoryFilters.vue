@@ -38,6 +38,7 @@
     HelpRequestFilterEventAction
   } from '~/types/matomo'
   import { followupFieldLabels, helpRequestFieldLabels } from '~/client/labels'
+  import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
   const props = defineProps<{
     familyFileId: string
@@ -81,11 +82,18 @@
     error: examinationDateOptionsError
   } = await useAsyncData(loadExaminationDates)
 
+  const {
+    familyFileIdentification,
+    pending: filePending,
+    error: fileError
+  } = await useFamilyFileMinimalInfo(props.familyFileId)
+
   const pending = computed(
     () =>
       agentOptionsPending.value ||
       socialSupportSubjectOptionsPending.value ||
-      examinationDateOptionsPending.value
+      examinationDateOptionsPending.value ||
+      filePending.value
   )
 
   const fetchError = computed(() => {
@@ -97,6 +105,9 @@
     }
     if (examinationDateOptionsError.value) {
       return "La liste des dates de passage en commission n'a pas pu être chargée."
+    }
+    if (fileError.value) {
+      return "La liste des bénéficiaires du foyer n'a pas pu être chargée"
     }
     return ''
   })
@@ -116,11 +127,19 @@
     () => typeSuiviValue.value === TypeSuivi.HousingHelpRequest
   )
 
+  const beneficiaryOptions = computed(() =>
+    (familyFileIdentification.value || []).map(m => ({
+      label: formatBeneficiaryShortenedName(m),
+      value: m.id
+    }))
+  )
+
   const filters = computed(() => {
     if (
       !socialSupportSubjectOptions.value ||
       !examinationDateOptions.value ||
-      !agentOptions.value
+      !agentOptions.value ||
+      !familyFileIdentification.value
     ) {
       return null
     }
@@ -200,6 +219,20 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
         matomoEventAction: BeneficiaryHistoryFilterEventAction.Referent,
+        alwaysExpanded: filters.length < maxAlwaysExpandedNb
+      })
+    }
+
+    if (familyFileIdentification.value.length > 1) {
+      filters.push({
+        name: 'beneficiaryId',
+        label: 'Bénéficiaire concerné :',
+        options: withEmptyValue(beneficiaryOptions.value, 'Tous'),
+        type: FilterType.Radio,
+        asTag: true,
+        matomoEventCategory: EventCategory.BeneficiaryHistoryFilter,
+        matomoEventAction:
+          BeneficiaryHistoryFilterEventAction.InvolvedBeneficiary,
         alwaysExpanded: filters.length < maxAlwaysExpandedNb
       })
     }

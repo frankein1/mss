@@ -110,6 +110,10 @@ function prepareSocialSupportFilters(
     }
   }
 
+  if (filters.beneficiaryId) {
+    formattedFilters.beneficiary = { id: filters.beneficiaryId }
+  }
+
   return formattedFilters
 }
 
