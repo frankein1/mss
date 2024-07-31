@@ -23,7 +23,8 @@ export enum BeneficiaryFilterEventAction {
 export enum BeneficiaryHistoryFilterEventAction {
   TypeSuivi = 'Type de suivi',
   SocialSupportSubject = "Type d'accompagnement",
-  Referent = 'Référent'
+  Referent = 'Référent',
+  InvolvedBeneficiary = 'Bénéficiaire concerné'
 }
 
 export enum FollowupFilterEventAction {

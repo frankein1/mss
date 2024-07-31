@@ -20,9 +20,13 @@
           {{ formatUserDisplayName(data.createdBy) }}
           <span> · </span>
         </template>
-        <span class="history-details__date"
-          >le {{ formatDate(data.date) }}</span
-        >
+        <span class="history-details__date">
+          le {{ formatDate(data.date) }}
+        </span>
+        <span> · </span>
+        <span class="fr-text--regular">
+          suivi {{ formatBeneficiaryDisplayName(data.beneficiary) }}
+        </span>
       </h2>
       <ul class="fr-tags-group social-support-subjects-tags">
         <li
@@ -82,6 +86,7 @@
   import { fileInstructionTypePictos } from '~/client/options'
   import { formatDate } from '~/utils/formatDate'
   import { formatUserDisplayName } from '~/utils/user'
+  import { formatBeneficiaryDisplayName } from '~/utils/beneficiary'
   import { followupFieldLabels } from '~/client/labels'
 
   const route = useRoute()

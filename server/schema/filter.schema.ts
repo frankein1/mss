@@ -92,7 +92,8 @@ const familyFileHistoryFilterSchema = z.object({
   examinationDate: z.coerce.date().nullish(),
   handlingDate: kindOfBooleanSchema(),
   externalStructure: kindOfBooleanSchema(),
-  referents: z.array(z.string().uuid()).nullish()
+  referents: z.array(z.string().uuid()).nullish(),
+  beneficiaryId: z.string().uuid().nullish()
 })
 
 type FamilyFileHistoryFilterInput = z.infer<
