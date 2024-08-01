@@ -1,18 +1,18 @@
 <template>
-  <PageContainer v-if="familyFileIdentification">
+  <AtomLoader
+    v-if="pending"
+    class="loading-state"
+  />
+  <AtomAlert
+    v-else-if="error || !familyFileIdentification"
+    :alert-type="AlertType.Error"
+    message="Le dossier n'a pas pu être chargé."
+  />
+  <PageContainer v-else>
     <AtomBreadcrumb
       :links="breadcrumbs.file.AppFile(familyFileId, familyFileIdentification)"
     />
-    <AtomLoader
-      v-if="pending"
-      class="loading-state"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="La fiche foyer n'a pas pu être chargée."
-    />
-    <template v-else>
+    <div>
       <FamilyFileDetailsHeader
         :permissions="selectedPermissions"
         :beneficiaries="familyFileIdentification"
@@ -130,7 +130,7 @@
           />
         </AtomTab>
       </AtomTabs>
-    </template>
+    </div>
   </PageContainer>
 </template>
 
@@ -145,15 +145,36 @@
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import { AddFamilyFileMemberInput } from '~/server/schema'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const route = useRoute()
+
   const originPage = route.query.originPage as
     | typeof routes.user.AppOverview.name
     | typeof routes.beneficiary.AppBeneficiaries.name
     | typeof routes.beneficiary.AppHistory.name
     | undefined
   const originTab = route.query.hash as string | undefined
+
+  const familyFileId = route.params.id as string
+  const queryBeneficiaryId = route.query.beneficiaryId as string
+
+  const { familyFileIdentification, pending, error } =
+    await useFamilyFileMinimalInfo(familyFileId)
+
+  const title = routes.file.AppFile.title(familyFileIdentification.value)
+  useHead({ title })
+
+  const getBeneficiaryIdOnPageLoad = () => {
+    const defaultBeneficiaryId =
+      familyFileIdentification.value &&
+      familyFileIdentification.value.length > 0
+        ? familyFileIdentification.value[0].id
+        : ''
+
+    return queryBeneficiaryId || defaultBeneficiaryId
+  }
+
+  const beneficiaryId = ref(getBeneficiaryIdOnPageLoad())
 
   // states
   const selectedBeneficiary = useState(
@@ -174,12 +195,6 @@
     () => selectedBeneficiary?.value?.history?.subjects || []
   )
 
-  // Get family informations
-  const familyFileId = route.params.id as string
-  const { familyFileIdentification, pending, error } =
-    await useFamilyFileMinimalInfo(familyFileId)
-  const title = routes.file.AppFile.title(familyFileIdentification.value)
-
   // Get beneficiaryDetails
   const getBeneficiaryDetails = async (id: string): Promise<void> => {
     const {
@@ -197,13 +212,12 @@
   }
 
   if (familyFileIdentification && familyFileIdentification.value?.length) {
-    getBeneficiaryDetails(familyFileIdentification.value[0].id)
+    getBeneficiaryDetails(beneficiaryId.value)
   }
 
   // Segmented Family
   const onChange = (beneficiaryId: string): void => {
     const navRoute = routes.file.AppFile.path(familyFileId, {
-      tab: BeneficiaryTab.History,
       beneficiaryId
     })
     navigateTo(navRoute)

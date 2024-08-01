@@ -3,7 +3,11 @@
     <td>
       <NuxtLink
         class="table-row-link"
-        :to="routes.beneficiary.AppBeneficiary.path(beneficiary.id)"
+        :to="
+          routes.file.AppFile.path(beneficiary.familyFileId, {
+            beneficiaryId: beneficiary.id
+          })
+        "
       >
         {{ formatTableValue(lastName) }}
       </NuxtLink>
