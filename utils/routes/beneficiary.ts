@@ -1,4 +1,4 @@
-import { AppRoute, BeneficiariesRoute } from './utils'
+import { AppRoute, FilesRoute, BeneficiariesRoute } from './utils'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
@@ -97,8 +97,8 @@ export const routes = {
   },
   AppBeneficiariesAdd: {
     name: 'AppBeneficiariesAdd',
-    title: 'Créer un·e bénéficiaire',
-    path: () => `${BeneficiariesRoute}/add`
+    title: 'Créer un dossier',
+    path: () => `${FilesRoute}/add`
   },
   AppBeneficiary: {
     name: 'AppBeneficiary',

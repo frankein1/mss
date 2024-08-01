@@ -1,25 +1,21 @@
 <template>
-  <PageContainer v-if="familyFileIdentification">
+  <AtomAlert
+    v-if="error || !familyFileIdentification"
+    :alert-type="AlertType.Error"
+    message="Le dossier n'a pas pu être chargé."
+  />
+  <PageContainer v-else>
     <AtomBreadcrumb
       :links="breadcrumbs.file.AppFile(familyFileId, familyFileIdentification)"
     />
-    <AtomLoader
-      v-if="pending"
-      class="loading-state"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="La fiche foyer n'a pas pu être chargée."
-    />
-    <template v-else>
+    <div>
       <FamilyFileDetailsHeader
-        :permissions="selectedPermissions"
         :beneficiaries="familyFileIdentification"
         :title="title"
         @open-modal="openAddBeneficiaryModal"
       />
       <hr />
+      <!-- TODO les actions ne doivent plus être liées à un bénéficiaire mais à un dossier -->
       <BeneficiaryDetailsHistoryActions
         :beneficiary-id="familyFileIdentification[0].id"
         :permissions="selectedPermissions"
@@ -32,7 +28,7 @@
       />
       <AtomTabs
         v-else-if="selectedBeneficiary"
-        tab-list-name="Détails de la fiche bénéficiaire"
+        tab-list-name="Détails du dossier foyer"
       >
         <AtomTab
           :tab-id="FamilyFileTab.Details"
@@ -40,18 +36,19 @@
           icon="fr-icon-information-fill"
           selected
         >
+          <!-- TODO ne devrait plus dépendre de beneficiary car initialisé à partir de ffi[0] -->
           <FamilyFileSegmentedControl
             v-if="selectedBeneficiary"
             :members="familyFileIdentification"
             :model-value="selectedBeneficiary.id"
-            @on-change="onChange"
+            @update:model-value="onChange"
           />
           <AtomLoader
             v-if="selectedPending"
             class="fr-mx-auto"
           />
           <AtomAlert
-            v-else-if="selectedError"
+            v-else-if="selectedError || !selectedBeneficiary"
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
@@ -77,7 +74,7 @@
             class="fr-mx-auto"
           />
           <AtomAlert
-            v-else-if="selectedError"
+            v-else-if="selectedError || !selectedBeneficiary"
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
@@ -98,7 +95,7 @@
             class="fr-mx-auto"
           />
           <AtomAlert
-            v-else-if="selectedError"
+            v-else-if="selectedError || !selectedBeneficiary"
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
@@ -119,22 +116,28 @@
             class="fr-mx-auto"
           />
           <AtomAlert
-            v-else-if="selectedError"
+            v-else-if="
+              selectedError ||
+              !selectedBeneficiary ||
+              !selectedBeneficiaryIdentification
+            "
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
+          <!-- TODO beneficiaryIdentification ne devrait plus être nécessaire dans le budget qui dépend maintennant du foyer -->
           <BeneficiaryBudget
-            v-else-if="selectedBeneficiary && selectedBeneficiaryIdentification"
+            v-else
             :family-file-id="selectedBeneficiary.familyFileId"
             :beneficiary-identification="selectedBeneficiaryIdentification"
           />
         </AtomTab>
       </AtomTabs>
-    </template>
+    </div>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
+  import { TRPCClientErrorLike } from '@trpc/client'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { FamilyFilePermissions } from '~/server/security'
@@ -145,9 +148,9 @@
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import { AddFamilyFileMemberInput } from '~/server/schema'
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const route = useRoute()
+
   const originPage = route.query.originPage as
     | typeof routes.user.AppOverview.name
     | typeof routes.beneficiary.AppBeneficiaries.name
@@ -155,30 +158,37 @@
     | undefined
   const originTab = route.query.hash as string | undefined
 
+  const familyFileId = route.params.id as string
+  const queryBeneficiaryId = route.query.beneficiaryId as string
+
+  const { familyFileIdentification, error } =
+    await useFamilyFileMinimalInfo(familyFileId)
+
+  const title = routes.file.AppFile.title(familyFileIdentification.value)
+  useHead({ title })
+
+  const getBeneficiaryIdOnPageLoad = () => {
+    const defaultBeneficiaryId =
+      familyFileIdentification.value &&
+      familyFileIdentification.value.length > 0
+        ? familyFileIdentification.value[0].id
+        : ''
+
+    return queryBeneficiaryId || defaultBeneficiaryId
+  }
+
+  const beneficiaryId = ref(getBeneficiaryIdOnPageLoad())
+
   // states
-  const selectedBeneficiary = useState(
-    'selectedBeneficiary',
-    (): GetBeneficiaryOutput | null => null
-  )
-  const selectedPermissions = useState(
-    'selectedPermissions',
-    (): FamilyFilePermissions | undefined => undefined
-  )
-  const selectedBeneficiaryIdentification = useState(
-    'selectedBeneficiaryIdentification',
-    (): BeneficiaryIdentification | null => null
-  )
-  const selectedPending = useState('selectedPending', (): boolean => true)
-  const selectedError = useState('selectedError', (): any | null => null) // TODO: find a type for error
+  const selectedBeneficiary = ref<GetBeneficiaryOutput | null>(null)
+  const selectedPermissions = ref<FamilyFilePermissions | undefined>(undefined)
+  const selectedBeneficiaryIdentification =
+    ref<BeneficiaryIdentification | null>(null)
+  const selectedPending = ref(true)
+  const selectedError = ref<TRPCClientErrorLike<any> | null>(null)
   const socialSupportSubjects = computed(
     () => selectedBeneficiary?.value?.history?.subjects || []
   )
-
-  // Get family informations
-  const familyFileId = route.params.id as string
-  const { familyFileIdentification, pending, error } =
-    await useFamilyFileMinimalInfo(familyFileId)
-  const title = routes.file.AppFile.title(familyFileIdentification.value)
 
   // Get beneficiaryDetails
   const getBeneficiaryDetails = async (id: string): Promise<void> => {
@@ -197,13 +207,12 @@
   }
 
   if (familyFileIdentification && familyFileIdentification.value?.length) {
-    getBeneficiaryDetails(familyFileIdentification.value[0].id)
+    getBeneficiaryDetails(beneficiaryId.value)
   }
 
   // Segmented Family
   const onChange = (beneficiaryId: string): void => {
     const navRoute = routes.file.AppFile.path(familyFileId, {
-      tab: BeneficiaryTab.History,
       beneficiaryId
     })
     navigateTo(navRoute)

@@ -62,10 +62,10 @@
             class="fr-mt-3w fr-mr-1w"
           >
             <NuxtLink
-              class="fr-btn btn-primary-on-primary fr-icon-user-add-line fr-btn--icon-left"
+              class="full fr-btn btn-primary-on-primary fr-icon-user-add-line fr-btn--icon-left"
               :to="routes.beneficiary.AppBeneficiariesAdd.path()"
             >
-              Créer un·e bénéficiaire
+              Créer un dossier
             </NuxtLink>
           </li>
         </ul>
@@ -186,6 +186,11 @@
 
 <style lang="scss" scoped>
   @use '~/assets/style/variables' as *;
+
+  .full {
+    width: 100%;
+    justify-content: center;
+  }
 
   .fr-sidemenu {
     background-color: $primary;

@@ -3,8 +3,8 @@
     <h3>Family File Segmented Control</h3>
 
     <FamilyFileSegmentedControl
+      v-model="selected"
       :members
-      @on-change="selected = $event"
     />
 
     <div>Selectionné : {{ selected }}</div>
@@ -34,5 +34,5 @@
     }
   ]
 
-  const selected = ref('')
+  const selected = ref(members[1].id)
 </script>
