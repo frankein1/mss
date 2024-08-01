@@ -8,7 +8,7 @@
     legend="Fiche :"
     :options
     :model-value="modelValue"
-    @update:model-value="$emit('onChange', $event)"
+    @update:model-value="onChange"
   />
 </template>
 
@@ -21,13 +21,13 @@
     defineProps<{
       id?: string
       members: BeneficiaryFileIdentification[]
-      modelValue?: string | number
+      modelValue: string | number
     }>(),
     { id: getRandomId('seg-control') }
   )
 
-  defineEmits<{
-    (e: 'onChange', payload: string): void
+  const emit = defineEmits<{
+    (e: 'update:modelValue', payload: string): void
   }>()
 
   const options = computed(() =>
@@ -36,4 +36,12 @@
       value: m.id
     }))
   )
+
+  function onChange($event: string) {
+    if ($event === props.modelValue) {
+      return
+    }
+
+    emit('update:modelValue', $event)
+  }
 </script>

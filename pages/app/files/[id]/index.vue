@@ -1,10 +1,6 @@
 <template>
-  <AtomLoader
-    v-if="pending"
-    class="loading-state"
-  />
   <AtomAlert
-    v-else-if="error || !familyFileIdentification"
+    v-if="error || !familyFileIdentification"
     :alert-type="AlertType.Error"
     message="Le dossier n'a pas pu être chargé."
   />
@@ -14,12 +10,12 @@
     />
     <div>
       <FamilyFileDetailsHeader
-        :permissions="selectedPermissions"
         :beneficiaries="familyFileIdentification"
         :title="title"
         @open-modal="openAddBeneficiaryModal"
       />
       <hr />
+      <!-- TODO les actions ne doivent plus être liées à un bénéficiaire mais à un dossier -->
       <BeneficiaryDetailsHistoryActions
         :beneficiary-id="familyFileIdentification[0].id"
         :permissions="selectedPermissions"
@@ -32,7 +28,7 @@
       />
       <AtomTabs
         v-else-if="selectedBeneficiary"
-        tab-list-name="Détails de la fiche bénéficiaire"
+        tab-list-name="Détails du dossier foyer"
       >
         <AtomTab
           :tab-id="FamilyFileTab.Details"
@@ -40,18 +36,19 @@
           icon="fr-icon-information-fill"
           selected
         >
+          <!-- TODO ne devrait plus dépendre de beneficiary car initialisé à partir de ffi[0] -->
           <FamilyFileSegmentedControl
             v-if="selectedBeneficiary"
             :members="familyFileIdentification"
             :model-value="selectedBeneficiary.id"
-            @on-change="onChange"
+            @update:model-value="onChange"
           />
           <AtomLoader
             v-if="selectedPending"
             class="fr-mx-auto"
           />
           <AtomAlert
-            v-else-if="selectedError"
+            v-else-if="selectedError || !selectedBeneficiary"
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
@@ -77,7 +74,7 @@
             class="fr-mx-auto"
           />
           <AtomAlert
-            v-else-if="selectedError"
+            v-else-if="selectedError || !selectedBeneficiary"
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
@@ -98,7 +95,7 @@
             class="fr-mx-auto"
           />
           <AtomAlert
-            v-else-if="selectedError"
+            v-else-if="selectedError || !selectedBeneficiary"
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
@@ -119,12 +116,17 @@
             class="fr-mx-auto"
           />
           <AtomAlert
-            v-else-if="selectedError"
+            v-else-if="
+              selectedError ||
+              !selectedBeneficiary ||
+              !selectedBeneficiaryIdentification
+            "
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
+          <!-- TODO beneficiaryIdentification ne devrait plus être nécessaire dans le budget qui dépend maintennant du foyer -->
           <BeneficiaryBudget
-            v-else-if="selectedBeneficiary && selectedBeneficiaryIdentification"
+            v-else
             :family-file-id="selectedBeneficiary.familyFileId"
             :beneficiary-identification="selectedBeneficiaryIdentification"
           />
@@ -135,6 +137,7 @@
 </template>
 
 <script lang="ts" setup>
+  import { TRPCClientErrorLike } from '@trpc/client'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { FamilyFilePermissions } from '~/server/security'
@@ -158,7 +161,7 @@
   const familyFileId = route.params.id as string
   const queryBeneficiaryId = route.query.beneficiaryId as string
 
-  const { familyFileIdentification, pending, error } =
+  const { familyFileIdentification, error } =
     await useFamilyFileMinimalInfo(familyFileId)
 
   const title = routes.file.AppFile.title(familyFileIdentification.value)
@@ -177,20 +180,12 @@
   const beneficiaryId = ref(getBeneficiaryIdOnPageLoad())
 
   // states
-  const selectedBeneficiary = useState(
-    'selectedBeneficiary',
-    (): GetBeneficiaryOutput | null => null
-  )
-  const selectedPermissions = useState(
-    'selectedPermissions',
-    (): FamilyFilePermissions | undefined => undefined
-  )
-  const selectedBeneficiaryIdentification = useState(
-    'selectedBeneficiaryIdentification',
-    (): BeneficiaryIdentification | null => null
-  )
-  const selectedPending = useState('selectedPending', (): boolean => true)
-  const selectedError = useState('selectedError', (): any | null => null) // TODO: find a type for error
+  const selectedBeneficiary = ref<GetBeneficiaryOutput | null>(null)
+  const selectedPermissions = ref<FamilyFilePermissions | undefined>(undefined)
+  const selectedBeneficiaryIdentification =
+    ref<BeneficiaryIdentification | null>(null)
+  const selectedPending = ref(true)
+  const selectedError = ref<TRPCClientErrorLike<any> | null>(null)
   const socialSupportSubjects = computed(
     () => selectedBeneficiary?.value?.history?.subjects || []
   )
