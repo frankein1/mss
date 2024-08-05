@@ -25,7 +25,7 @@
     isSubmitting: boolean
     socialSupportSubjects: Array<SocialSupportSubject>
     partnerOrganizations: Array<PartnerOrganizationIdName>
-    beneficiaryId: string // à garder vu que c'est un champ du formulaire maintennt ?
+    beneficiaryId: string
     familyFileId: string
     familyFileIdentification: BeneficiaryFileIdentification[]
   }>()

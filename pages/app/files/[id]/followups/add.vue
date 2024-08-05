@@ -1,9 +1,22 @@
 <template>
   <PageContainer>
     <AtomBreadcrumb
-      :links="breadcrumbs.followup.AppBeneficiaryFollowupEdit(followup)"
+      :links="
+        breadcrumbs.followup.AppFileFollowupAdd(
+          familyFileId,
+          familyFileIdentification
+        )
+      "
     />
-    <PageTitle :title="title" />
+
+    <PageTitle
+      :title="title"
+      icon="fr-icon-questionnaire-fill"
+      icon-variant="green"
+    >
+      <RequiredFields />
+    </PageTitle>
+
     <main ref="formContainer">
       <AtomAlert
         v-if="fetchError"
@@ -15,54 +28,41 @@
         v-if="pending"
         class="fr-mx-auto"
       />
-      <FollowupFormEdition
-        v-else-if="
-          followupData && socialSupportSubjects && partnerOrganizations
-        "
+      <FollowupFormCreation
+        v-else-if="socialSupportSubjects && partnerOrganizations"
         :is-submitting="isSubmitting"
         :social-support-subjects="socialSupportSubjects"
-        :partner-organizations="partnerOrganizations"
-        :data="followupData"
+        :family-file-id="familyFileId"
         :family-file-identification="familyFileIdentification || []"
-        @save-followup="onUpdateFollowup"
+        :beneficiary-id="getBeneficiaryIdOnPageLoad()"
+        :partner-organizations="partnerOrganizations"
+        @save-followup="onAddFollowup"
       />
     </main>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
-  import { EditFollowupInput } from '~/server/schema'
+  import { AddFollowupInput } from '~/server/schema'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 
-  const route = useRoute()
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
+  const route = useRoute()
 
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
-  const followupId = route.params.fid as string
+  const familyFileId = route.params.id as string
 
-  const {
-    data: followupData,
-    pending: followupPending,
-    error: followupError
-  } = await trpcClient.followup.getOne.useQuery({
-    id: followupId
-  })
-
-  const familyFileId = followupData.value?.followup.familyFileId || ''
-  const { familyFileIdentification } =
+  const { familyFileIdentification, getBeneficiaryIdOnPageLoad } =
     await useFamilyFileMinimalInfo(familyFileId)
 
-  const followup = computed(() => followupData.value?.followup || null)
-  const beneficiary = computed(() => followup.value?.beneficiary || null)
-
   const title = computed(() =>
-    routes.followup.AppBeneficiaryFollowupEdit.title(beneficiary.value)
+    routes.followup.AppBeneficiaryFollowupAdd.title(null)
   )
 
   useHead({ title })
@@ -81,15 +81,10 @@
 
   const pending = computed(
     () =>
-      followupPending.value ||
-      socialSupportSubjectsPending.value ||
-      partnerOrganizationsPending.value
+      socialSupportSubjectsPending.value || partnerOrganizationsPending.value
   )
 
   const fetchError = computed(() => {
-    if (followupError.value) {
-      return "La synthèse de l'entretien n'a pas pu être chargée."
-    }
     if (socialSupportSubjectsError.value) {
       return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
     }
@@ -99,19 +94,21 @@
     return ''
   })
 
-  function onUpdateFollowup(followup: EditFollowupInput) {
+  function onAddFollowup(followup: AddFollowupInput) {
     useTrpcMutation({
-      mutation: () => trpcClient.followup.update.mutate(followup),
+      mutation: () => trpcClient.followup.add.mutate(followup),
       isSubmitting,
-      onSuccess: () => {
+      onSuccess: ({ id }) => {
         navigateTo(
-          routes.beneficiary.AppBeneficiary.path(followup.beneficiaryId, {
-            tab: BeneficiaryTab.History
+          routes.file.AppFile.path(followup.familyFileId, {
+            beneficiaryId: followup.beneficiaryId,
+            tab: BeneficiaryTab.History,
+            item: id
           })
         )
       },
       onFailure: () => {
-        snackbar.error('La mise à jour de la synthèse a échoué.', () =>
+        snackbar.error("La création de la synthèse d'entretien a échoué.", () =>
           formContainer.value?.querySelector('input')?.focus()
         )
       }

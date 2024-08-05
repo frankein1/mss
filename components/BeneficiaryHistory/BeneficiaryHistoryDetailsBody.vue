@@ -153,7 +153,7 @@
   const editLink = computed(() => {
     if (socialSupport.value.followup) {
       return routes.followup.AppBeneficiaryFollowupEdit.path(
-        socialSupport.value.beneficiaryId,
+        socialSupport.value.familyFileId,
         socialSupport.value.followup.id
       )
     }

@@ -6,7 +6,7 @@
     >
       <li>
         <NuxtLink
-          :to="routes.followup.AppBeneficiaryFollowupAdd.path(beneficiaryId)"
+          :to="routes.followup.AppBeneficiaryFollowupAdd.path(familyFileId)"
           class="fr-btn fr-icon-file-add-line followup-btn"
           title="Ajouter une synthèse d'entretien"
         >
@@ -44,6 +44,7 @@
   import HelpRequestModal from '~/components/HelpRequestModal/HelpRequestModal.vue'
 
   const props = defineProps<{
+    familyFileId: string
     beneficiaryId: string
     permissions: FamilyFilePermissions | undefined
   }>()

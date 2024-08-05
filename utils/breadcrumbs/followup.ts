@@ -1,6 +1,8 @@
 import { breadcrumbs as ben } from './beneficiary'
+import { breadcrumbs as file } from './file'
 import type { BeneficiaryIdentification } from '~/types/beneficiary'
 import { routes } from '~/utils/routes'
+import { BeneficiaryNames } from '~/types/beneficiary'
 
 const r = routes.followup
 
@@ -13,17 +15,27 @@ function getBreadForFollowupAdd(beneficiary: BeneficiaryIdentification | null) {
   ]
 }
 
+function getBreadForFileFollowupAdd(familyFileId: string) {
+  return [
+    {
+      text: r.AppBeneficiaryFollowupAdd.title(null),
+      to: r.AppBeneficiaryFollowupAdd.path(familyFileId)
+    }
+  ]
+}
+
 interface FollowupEdit {
   id: string
+  familyFileId: string
   beneficiary: BeneficiaryIdentification
 }
 
 function getBreadForFollowupEdit(followup: FollowupEdit | null) {
   return [
     {
-      text: r.AppBeneficiaryFollowupEdit.title(followup?.beneficiary || null),
+      text: r.AppBeneficiaryFollowupEdit.title(null),
       to: r.AppBeneficiaryFollowupEdit.path(
-        followup?.beneficiary.id || '',
+        followup?.familyFileId || '',
         followup?.id || ''
       )
     }
@@ -40,5 +52,19 @@ export const breadcrumbs = {
   AppBeneficiaryFollowupEdit: (followup: FollowupEdit | null) => [
     ...ben.AppBeneficiary(followup?.beneficiary || null),
     ...getBreadForFollowupEdit(followup)
+  ],
+  AppFileFollowupAdd: (
+    familyFileId: string,
+    fileIdentification: BeneficiaryNames[] | null
+  ) => [
+    ...file.AppFile(familyFileId, fileIdentification),
+    ...getBreadForFileFollowupAdd(familyFileId)
+  ],
+  AppFileFollowupEdit: (
+    followup: FollowupEdit | null,
+    fileIdentification: BeneficiaryNames[] | null
+  ) => [
+    ...file.AppFile(followup?.familyFileId || '', fileIdentification),
+    ...getBreadForFileFollowupAdd(followup?.familyFileId || '')
   ]
 }

@@ -15,9 +15,10 @@
         @open-modal="openAddBeneficiaryModal"
       />
       <hr />
-      <!-- TODO les actions ne doivent plus être liées à un bénéficiaire mais à un dossier -->
       <BeneficiaryDetailsHistoryActions
-        :beneficiary-id="familyFileIdentification[0].id"
+        v-if="selectedBeneficiary"
+        :beneficiary-id="selectedBeneficiary.id"
+        :family-file-id="familyFileId"
         :permissions="selectedPermissions"
         class="fr-pb-3w"
       />
@@ -36,9 +37,7 @@
           icon="fr-icon-information-fill"
           selected
         >
-          <!-- TODO ne devrait plus dépendre de beneficiary car initialisé à partir de ffi[0] -->
           <FamilyFileSegmentedControl
-            v-if="selectedBeneficiary"
             :members="familyFileIdentification"
             :model-value="selectedBeneficiary.id"
             @update:model-value="onChange"
@@ -101,7 +100,7 @@
           />
           <BeneficiaryHistory
             v-else-if="selectedPermissions"
-            :family-file-id="selectedBeneficiary.familyFileId"
+            :family-file-id="familyFileId"
             :family-file-permissions="selectedPermissions"
           />
         </AtomTab>
@@ -159,25 +158,12 @@
   const originTab = route.query.hash as string | undefined
 
   const familyFileId = route.params.id as string
-  const queryBeneficiaryId = route.query.beneficiaryId as string
 
-  const { familyFileIdentification, error } =
+  const { familyFileIdentification, error, getBeneficiaryIdOnPageLoad } =
     await useFamilyFileMinimalInfo(familyFileId)
 
   const title = routes.file.AppFile.title(familyFileIdentification.value)
   useHead({ title })
-
-  const getBeneficiaryIdOnPageLoad = () => {
-    const defaultBeneficiaryId =
-      familyFileIdentification.value &&
-      familyFileIdentification.value.length > 0
-        ? familyFileIdentification.value[0].id
-        : ''
-
-    return queryBeneficiaryId || defaultBeneficiaryId
-  }
-
-  const beneficiaryId = ref(getBeneficiaryIdOnPageLoad())
 
   // states
   const selectedBeneficiary = ref<GetBeneficiaryOutput | null>(null)
@@ -207,7 +193,7 @@
   }
 
   if (familyFileIdentification && familyFileIdentification.value?.length) {
-    getBeneficiaryDetails(beneficiaryId.value)
+    getBeneficiaryDetails(getBeneficiaryIdOnPageLoad())
   }
 
   // Segmented Family

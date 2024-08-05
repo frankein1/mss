@@ -1,4 +1,4 @@
-import { BeneficiariesRoute } from './utils'
+import { FilesRoute } from './utils'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { BeneficiaryNames } from '~/types/beneficiary'
 
@@ -9,8 +9,8 @@ export const routes = {
       beneficiary
         ? `Entretien avec ${formatBeneficiaryDisplayName(beneficiary)}`
         : 'Entretien avec un·e bénéficiaire',
-    path: (beneficiaryId: string) =>
-      `${BeneficiariesRoute}/${beneficiaryId}/followups/add`
+    path: (familyFileId: string) =>
+      `${FilesRoute}/${familyFileId}/followups/add`
   },
   AppBeneficiaryFollowupEdit: {
     name: 'AppBeneficiaryFollowupEdit',
@@ -18,7 +18,7 @@ export const routes = {
       beneficiary
         ? `Modifier l'entretien avec ${formatBeneficiaryDisplayName(beneficiary)}`
         : "Modifier l'entretien avec un·e bénéficiaire",
-    path: (beneficiaryId: string, followupId: string) =>
-      `${BeneficiariesRoute}/${beneficiaryId}/followups/${followupId}/edit`
+    path: (familyFileId: string, followupId: string) =>
+      `${FilesRoute}/${familyFileId}/followups/${followupId}/edit`
   }
 } as const
