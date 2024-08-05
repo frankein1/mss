@@ -68,7 +68,7 @@
           draft
         }),
       isSubmitting,
-      onSuccess: ({ id }) => {
+      onSuccess: ({ id, familyFileId }) => {
         matomo.trackEvent(
           EventCategory.CreateBeneficiary,
           CreateBeneficiaryEventAction.SavePartialForm
@@ -76,7 +76,9 @@
         if (draft) {
           navigateTo(routes.beneficiary.AppBeneficiaryEditInfo.path(id))
         } else {
-          navigateTo(routes.beneficiary.AppBeneficiary.path(id))
+          navigateTo(
+            routes.file.AppFile.path(familyFileId, { beneficiaryId: id })
+          )
         }
       },
       onFailure: () => {

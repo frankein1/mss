@@ -48,9 +48,9 @@ export async function create(params: CreateParams) {
     }
   }
 
-  const { id } = await BeneficiaryRepo.prisma.create({
+  const { id, familyFileId } = await BeneficiaryRepo.prisma.create({
     data
   })
 
-  return { id }
+  return { id, familyFileId }
 }

@@ -122,9 +122,11 @@
       },
       isSubmitting,
       onSuccess: () => {
-        navigateTo(
-          target || routes.beneficiary.AppBeneficiary.path(beneficiaryId)
+        const fileRoute = routes.file.AppFile.path(
+          data.value?.beneficiary?.familyFileId || '',
+          { beneficiaryId: data.value?.beneficiary?.id }
         )
+        navigateTo(target || fileRoute)
       },
       onFailure: () => {
         useSnackbar().error('La mise à jour de la fiche bénéficiaire a échoué.')
