@@ -9,6 +9,7 @@
     :is-redirected="values.redirected"
     :can-set-private-synthesis="canSetPrivateSynthesis"
     :caught-errors="caughtErrors"
+    edition-mode
     @submit="onSubmit"
   />
 </template>

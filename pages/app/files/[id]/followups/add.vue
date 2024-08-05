@@ -1,7 +1,12 @@
 <template>
   <PageContainer>
     <AtomBreadcrumb
-      :links="breadcrumbs.followup.AppBeneficiaryFollowupAdd(beneficiary)"
+      :links="
+        breadcrumbs.followup.AppFileFollowupAdd(
+          familyFileId,
+          familyFileIdentification
+        )
+      "
     />
 
     <PageTitle
@@ -24,12 +29,12 @@
         class="fr-mx-auto"
       />
       <FollowupFormCreation
-        v-else-if="socialSupportSubjects && partnerOrganizations && beneficiary"
+        v-else-if="socialSupportSubjects && partnerOrganizations"
         :is-submitting="isSubmitting"
         :social-support-subjects="socialSupportSubjects"
-        :family-file-id="beneficiary.familyFileId"
+        :family-file-id="familyFileId"
         :family-file-identification="familyFileIdentification || []"
-        :beneficiary-id="beneficiaryId"
+        :beneficiary-id="getBeneficiaryIdOnPageLoad()"
         :partner-organizations="partnerOrganizations"
         @save-followup="onAddFollowup"
       />
@@ -51,22 +56,13 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
-  // TODO replace route.params by familyFile param
-  // and get beneficiaryId as query(if not present
-  // will be the first id of file)
-  const beneficiaryId = route.params.id as string
+  const familyFileId = route.params.id as string
 
-  const { data: beneficiary, error: beneficiaryError } =
-    await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
-      id: beneficiaryId
-    })
-
-  const familyFileId = beneficiary.value?.familyFileId || ''
-  const { familyFileIdentification } =
+  const { familyFileIdentification, getBeneficiaryIdOnPageLoad } =
     await useFamilyFileMinimalInfo(familyFileId)
 
   const title = computed(() =>
-    routes.followup.AppBeneficiaryFollowupAdd.title(beneficiary.value || null)
+    routes.followup.AppBeneficiaryFollowupAdd.title(null)
   )
 
   useHead({ title })
@@ -89,9 +85,6 @@
   )
 
   const fetchError = computed(() => {
-    if (beneficiaryError.value) {
-      return "Les informations du bénéficiaire n'ont pas pu être chargées."
-    }
     if (socialSupportSubjectsError.value) {
       return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
     }
@@ -105,10 +98,12 @@
     useTrpcMutation({
       mutation: () => trpcClient.followup.add.mutate(followup),
       isSubmitting,
-      onSuccess: () => {
+      onSuccess: ({ id }) => {
         navigateTo(
-          routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
-            tab: BeneficiaryTab.History
+          routes.file.AppFile.path(followup.familyFileId, {
+            beneficiaryId: followup.beneficiaryId,
+            tab: BeneficiaryTab.History,
+            item: id
           })
         )
       },

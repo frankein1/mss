@@ -20,7 +20,8 @@ test.afterEach(async () => {
 })
 
 const healthUrl = (id: string) => `/app/beneficiaries/${id}/edit/health`
-const beneficiaryUrl = (id: string) => `/app/beneficiaries/${id}`
+const beneficiaryUrl = (familyFileId: string, id: string) =>
+  `/app/files/${familyFileId}?beneficiaryId=${id}`
 
 test.describe('Ccas Agent accessing beneficiary health form', () => {
   test.use({ storageState: 'playwright/.auth/structure-manager.json' })
@@ -29,6 +30,8 @@ test.describe('Ccas Agent accessing beneficiary health form', () => {
     page
   }) => {
     const id = fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id
+    const familyFileId =
+      fixturesBeneficiaries[FixtureBeneficiary.COURSOR].familyFileId
     await page.goto(healthUrl(id))
 
     const healthSection = page.getByRole('button', { name: /santé/i })
@@ -42,11 +45,13 @@ test.describe('Ccas Agent accessing beneficiary health form', () => {
     await nir.fill('2 78 12 98 203 256 45')
     await page.getByRole('button', { name: /enregistrer et quitter/i }).click()
 
-    await page.waitForURL(beneficiaryUrl(id))
+    await page.waitForURL(beneficiaryUrl(familyFileId, id))
     await page.waitForLoadState('networkidle')
     const url = page.url()
 
-    expect.soft(url).toBe(`http://localhost:3000${beneficiaryUrl(id)}`)
+    expect
+      .soft(url)
+      .toBe(`http://localhost:3000${beneficiaryUrl(familyFileId, id)}`)
 
     const panel = page.getByRole('tabpanel', { name: /informations/i })
 

@@ -9,7 +9,10 @@
     class="fr-container--fluid"
     @submit.prevent="emit('submit', $event)"
   >
-    <section class="feature-section fr-p-5w fr-mb-2w">
+    <section
+      v-if="!editionMode"
+      class="feature-section fr-p-5w fr-mb-2w"
+    >
       <div class="fr-grid-row">
         <VeeRadioButtons
           class="fr-col-12 fr-mb-0"
@@ -333,8 +336,9 @@
       isRedirected: boolean
       canSetPrivateSynthesis?: boolean
       caughtErrors: FormErrors<AddFollowupInput | EditFollowupInput>
+      editionMode?: boolean
     }>(),
-    { canSetPrivateSynthesis: true }
+    { canSetPrivateSynthesis: true, editionMode: false }
   )
 
   const { application } = usePermissions()

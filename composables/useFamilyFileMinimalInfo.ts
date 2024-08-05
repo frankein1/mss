@@ -1,5 +1,6 @@
 export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
   const trpcClient = useTrpcClient()
+  const route = useRoute()
 
   const {
     data: familyFile,
@@ -15,9 +16,22 @@ export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
       : null
   )
 
+  const getBeneficiaryIdOnPageLoad = () => {
+    const queryBeneficiaryId = route.query.beneficiaryId as string
+
+    const defaultBeneficiaryId =
+      familyFileIdentification.value &&
+      familyFileIdentification.value.length > 0
+        ? familyFileIdentification.value[0].id
+        : ''
+
+    return queryBeneficiaryId || defaultBeneficiaryId
+  }
+
   return {
     familyFileIdentification,
     pending,
-    error
+    error,
+    getBeneficiaryIdOnPageLoad
   }
 }
