@@ -10,34 +10,27 @@
     />
     <PageTitle :title="title" />
     <main ref="formContainer">
-      <AtomAlert
-        v-if="fetchError"
-        :alert-type="AlertType.Error"
+      <AtomLazyComponent
+        :pending
+        :error="Boolean(fetchError)"
         :message="fetchError"
-      />
-
-      <AtomLoader
-        v-if="pending"
-        class="fr-mx-auto"
-      />
-      <FollowupFormEdition
-        v-else-if="
-          followupData && socialSupportSubjects && partnerOrganizations
-        "
-        :is-submitting="isSubmitting"
-        :social-support-subjects="socialSupportSubjects"
-        :partner-organizations="partnerOrganizations"
-        :data="followupData"
-        :family-file-identification="familyFileIdentification || []"
-        @save-followup="onUpdateFollowup"
-      />
+      >
+        <FollowupFormEdition
+          v-if="followupData && socialSupportSubjects && partnerOrganizations"
+          :is-submitting="isSubmitting"
+          :social-support-subjects="socialSupportSubjects"
+          :partner-organizations="partnerOrganizations"
+          :data="followupData"
+          :family-file-identification="familyFileIdentification || []"
+          @save-followup="onUpdateFollowup"
+        />
+      </AtomLazyComponent>
     </main>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { AlertType } from '~/utils/constants/alert'
   import { EditFollowupInput } from '~/server/schema'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
@@ -110,8 +103,10 @@
       isSubmitting,
       onSuccess: () => {
         navigateTo(
-          routes.beneficiary.AppBeneficiary.path(followup.beneficiaryId, {
-            tab: BeneficiaryTab.History
+          routes.file.AppFile.path(followup.familyFileId, {
+            beneficiaryId: followup.beneficiaryId,
+            tab: BeneficiaryTab.History,
+            item: followup.socialSupportId
           })
         )
       },
