@@ -1,6 +1,7 @@
 <template>
   <BeneficiaryEditFormLayout
-    :draft="draft"
+    :draft
+    :family-file-id="beneficiary?.familyFileId || ''"
     :beneficiary-identification="beneficiaryIdentification"
     :binded-values="bindedValues"
     :schema="updateBeneficiaryEntourageSchema"
@@ -11,22 +12,18 @@
     title-icon="fr-icon-user-line"
     @save="onSaveBeneficiary"
   >
-    <AtomAlert
-      v-if="error"
-      class="fr-mb-2w"
-      :alert-type="AlertType.Error"
+    <AtomLazyComponent
+      :pending
+      :error="Boolean(error)"
       message="Les informations du bénéficiaires n'ont pas pu être chargées."
-    />
-    <AtomLoader
-      v-else-if="pending"
-      class="fr-mx-auto"
-    />
-    <div
-      v-else-if="bindedValues"
-      class="fr-p-3v"
     >
-      <BeneficiaryFormEntourages />
-    </div>
+      <div
+        v-if="bindedValues"
+        class="fr-p-3v"
+      >
+        <BeneficiaryFormEntourages />
+      </div>
+    </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
 </template>
 
@@ -35,7 +32,6 @@
     updateBeneficiaryEntourageSchema,
     UpdateBeneficiaryEntourageInput
   } from '~/server/schema'
-  import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
@@ -45,21 +41,21 @@
   const route = useRoute()
   const beneficiaryId = route.params.id as string
 
-  const { data, pending, error } =
-    await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
-      id: beneficiaryId
-    })
-
-  const permissions = computed(() => data.value?.permissions)
+  const {
+    beneficiary,
+    permissions,
+    draft,
+    beneficiaryIdentification,
+    pending,
+    error
+  } = await useBeneficiaryDetails(beneficiaryId)
 
   const bindedValues = computed(() => {
-    if (!data.value) {
+    if (!beneficiary.value) {
       return null
     }
 
-    const {
-      beneficiary: { id, structureId, entourages }
-    } = data.value
+    const { id, structureId, entourages } = beneficiary.value
 
     return {
       id,
@@ -67,32 +63,13 @@
       entourages
     }
   })
-  const draft = computed(() => {
-    if (!data.value) {
-      return true
-    }
-
-    return data.value.beneficiary.draft
-  })
-
-  const beneficiaryIdentification = computed(() =>
-    data.value
-      ? {
-          id: data.value.beneficiary.id,
-          firstName: data.value.beneficiary.general.firstName,
-          birthName: data.value.beneficiary.general.birthName,
-          usualName: data.value.beneficiary.general.usualName,
-          birthDate: data.value.beneficiary.general.birthDate
-        }
-      : null
-  )
 
   function onSaveBeneficiary(
-    beneficiary: UpdateBeneficiaryEntourageInput,
+    ben: UpdateBeneficiaryEntourageInput,
     target: string | undefined,
     validate: boolean
   ) {
-    if (!data.value) {
+    if (!beneficiary.value) {
       return
     }
 
@@ -106,14 +83,14 @@
         if (validate && draft.value) {
           mutations.push(validateBeneficiary.mutate({ id: beneficiaryId }))
         }
-        mutations.push(updateBeneficiary.mutate(beneficiary))
+        mutations.push(updateBeneficiary.mutate(ben))
         return Promise.all(mutations)
       },
       isSubmitting,
       onSuccess: () => {
         const fileRoute = routes.file.AppFile.path(
-          data.value?.beneficiary?.familyFileId || '',
-          { beneficiaryId: data.value?.beneficiary?.id }
+          beneficiary.value?.familyFileId || '',
+          { beneficiaryId: beneficiary.value?.id }
         )
         navigateTo(target || fileRoute)
       },

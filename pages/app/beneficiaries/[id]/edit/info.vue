@@ -1,6 +1,7 @@
 <template>
   <BeneficiaryEditFormLayout
-    :draft="draft"
+    :draft
+    :family-file-id="beneficiary?.familyFileId || ''"
     :beneficiary-identification="beneficiaryIdentification"
     :schema="updateBeneficiaryGeneralInformationSchema"
     :binded-values="bindedValues"
@@ -10,22 +11,18 @@
     :current-route="routes.beneficiary.AppBeneficiaryEditInfo.name"
     @save="onSaveBeneficiary"
   >
-    <AtomAlert
-      v-if="fetchError"
-      class="fr-mb-2w"
-      :alert-type="AlertType.Error"
+    <AtomLazyComponent
+      :pending
+      :error="Boolean(fetchError)"
       :message="fetchError"
-    />
-    <AtomLoader
-      v-else-if="pending"
-      class="fr-mx-auto"
-    />
-    <BeneficiaryFormGeneralInformation
-      v-else-if="bindedValues && permissions && agents?.length"
-      :permissions="permissions"
-      :beneficiary-referent-ids="beneficiaryReferentIds"
-      :agents="agents"
-    />
+    >
+      <BeneficiaryFormGeneralInformation
+        v-if="bindedValues && permissions && agents?.length"
+        :permissions="permissions"
+        :beneficiary-referent-ids="beneficiaryReferentIds"
+        :agents="agents"
+      />
+    </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
 </template>
 
@@ -34,7 +31,6 @@
     UpdateBeneficiaryGeneralInformationInput,
     updateBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
-  import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
@@ -51,39 +47,36 @@
   } = await trpcClient.config.getAgents.useQuery()
 
   const {
-    data,
+    beneficiary,
+    permissions,
+    draft,
+    beneficiaryIdentification,
     pending: beneficiaryPending,
     error: beneficiaryError
-  } = await trpcClient.beneficiary.getBeneficiaryDetails.useQuery({
-    id: beneficiaryId
-  })
+  } = await useBeneficiaryDetails(beneficiaryId)
 
   const pending = computed(
     () => agentsPending.value || beneficiaryPending.value
   )
 
-  const permissions = computed(() => data.value?.permissions)
-
   const beneficiaryReferentIds = computed(() =>
-    data.value ? data.value.beneficiary.referents.map(r => r.id) : []
+    beneficiary.value ? beneficiary.value.referents.map(r => r.id) : []
   )
 
   const bindedValues = computed(() => {
-    if (!data.value) {
+    if (!beneficiary.value) {
       return null
     }
 
     const {
-      beneficiary: {
-        id,
-        structureId,
-        referents,
-        aidantConnectAuthorized,
-        vulnerablePerson,
-        status,
-        general
-      }
-    } = data.value
+      id,
+      structureId,
+      referents,
+      aidantConnectAuthorized,
+      vulnerablePerson,
+      status,
+      general
+    } = beneficiary.value
 
     return {
       id,
@@ -97,25 +90,6 @@
       deathDate: general.deathDate ? new Date(general.deathDate) : undefined
     }
   })
-  const draft = computed(() => {
-    if (!data.value) {
-      return true
-    }
-
-    return data.value.beneficiary.draft
-  })
-
-  const beneficiaryIdentification = computed(() =>
-    data.value
-      ? {
-          id: data.value.beneficiary.id,
-          firstName: data.value.beneficiary.general.firstName,
-          birthName: data.value.beneficiary.general.birthName,
-          usualName: data.value.beneficiary.general.usualName,
-          birthDate: data.value.beneficiary.general.birthDate
-        }
-      : null
-  )
 
   const fetchError = computed(() => {
     if (beneficiaryError.value) {
@@ -128,11 +102,11 @@
   })
 
   function onSaveBeneficiary(
-    beneficiary: UpdateBeneficiaryGeneralInformationInput,
+    ben: UpdateBeneficiaryGeneralInformationInput,
     target: string | undefined,
     validate: boolean
   ) {
-    if (!data.value) {
+    if (!beneficiary.value) {
       return
     }
 
@@ -146,14 +120,14 @@
         if (validate && draft.value) {
           mutations.push(validateBeneficiary.mutate({ id: beneficiaryId }))
         }
-        mutations.push(updateBeneficiary.mutate(beneficiary))
+        mutations.push(updateBeneficiary.mutate(ben))
         return Promise.all(mutations)
       },
       isSubmitting,
       onSuccess: () => {
         const fileRoute = routes.file.AppFile.path(
-          data.value?.beneficiary?.familyFileId || '',
-          { beneficiaryId: data.value?.beneficiary?.id }
+          beneficiary.value?.familyFileId || '',
+          { beneficiaryId: beneficiary.value?.id }
         )
         navigateTo(target || fileRoute)
       },

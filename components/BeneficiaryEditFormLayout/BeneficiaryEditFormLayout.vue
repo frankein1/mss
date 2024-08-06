@@ -85,6 +85,7 @@
   const props = withDefaults(
     defineProps<{
       draft: boolean
+      familyFileId: string
       beneficiaryIdentification: BeneficiaryIdentification | null
       bindedValues: z.infer<T> | null
       permissions: FamilyFilePermissions | undefined
@@ -180,7 +181,8 @@
         navigateTo(routes.beneficiary.AppBeneficiaries.path())
       } else if (props.beneficiaryIdentification) {
         navigateTo(
-          routes.beneficiary.AppBeneficiary.path(id, {
+          routes.file.AppFile.path(props.familyFileId, {
+            beneficiaryId: id,
             tab: originTab
           })
         )

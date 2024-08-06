@@ -11,7 +11,7 @@
         :to="routes.beneficiary.AppBeneficiariesAdd.path()"
         class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line action"
       >
-        Créer un·e bénéficiaire
+        Créer un·e dossier
       </NuxtLink>
     </div>
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">

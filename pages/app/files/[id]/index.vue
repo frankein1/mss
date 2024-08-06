@@ -38,6 +38,7 @@
           selected
         >
           <FamilyFileSegmentedControl
+            v-if="familyFileIdentification.length > 1"
             :members="familyFileIdentification"
             :model-value="selectedBeneficiary.id"
             @update:model-value="onChange"
@@ -56,7 +57,7 @@
             :beneficiary="selectedBeneficiary"
             :social-support-subjects="socialSupportSubjects"
             :permissions="selectedPermissions"
-            :family-file="true"
+            :family-file="familyFileIdentification.length > 1"
             @toggle-delete="toggleDelete"
             @deleted="onBeneficiaryDeleted"
             @split="onSplit"

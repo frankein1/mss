@@ -22,11 +22,10 @@
       </NuxtLink>
     </li>
     <li v-if="familyFile">
-      <button
-        class="fr-btn fr-btn--secondary fr-mb-0 split-btn"
-        type="button"
-        title="Dissocier"
-        disabled
+      <div
+        class="fr-btn fr-btn--tertiary fr-mb-0"
+        aria-describedby="available-soon-tooltip"
+        title="Dissocier du dossier"
         @click="emit('split')"
       >
         <img
@@ -35,7 +34,15 @@
           alt="Dissocier"
         />
         Dissocier du dossier
-      </button>
+      </div>
+      <span
+        id="available-soon-tooltip"
+        class="fr-tooltip fr-placement"
+        role="tooltip"
+        aria-hidden="true"
+      >
+        Fonctionnalité prochainement disponible
+      </span>
     </li>
     <li>
       <NuxtLink
@@ -103,7 +110,10 @@
     padding: 0.5rem 1rem;
   }
 
-  .split-btn:disabled {
+  div[aria-describedby='available-soon-tooltip'] {
+    color: var(--text-disabled-grey);
+    cursor: not-allowed;
+
     img {
       filter: saturate(0) brightness(1.75);
     }
