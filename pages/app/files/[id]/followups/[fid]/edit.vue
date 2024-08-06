@@ -43,6 +43,7 @@
   const formContainer = ref<HTMLElement | null>(null)
 
   const followupId = route.params.fid as string
+  const familyFileId = route.params.id as string
 
   const {
     data: followupData,
@@ -52,7 +53,6 @@
     id: followupId
   })
 
-  const familyFileId = followupData.value?.followup.familyFileId || ''
   const { familyFileIdentification } =
     await useFamilyFileMinimalInfo(familyFileId)
 

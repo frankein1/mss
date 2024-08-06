@@ -2,8 +2,9 @@
   <PageContainer>
     <AtomBreadcrumb
       :links="
-        breadcrumbs.helpRequest.AppBeneficiaryHelpRequestAdd(
-          beneficiary,
+        breadcrumbs.helpRequest.AppFileHelpRequestAdd(
+          familyFileId,
+          familyFileIdentification,
           subject
         )
       "
@@ -18,27 +19,23 @@
       <RequiredFields />
     </PageTitle>
     <main ref="formContainer">
-      <AtomAlert
-        v-if="fetchError"
-        :alert-type="AlertType.Error"
-        :message="fetchError"
-      />
-
-      <AtomLoader
-        v-if="pending"
-        class="fr-mx-auto"
-      />
-      <HelpRequestFormCreation
-        v-else-if="socialSupportSubjects && partnerOrganizations && beneficiary"
-        :is-submitting="isSubmitting"
-        :social-support-subjects="socialSupportSubjects"
-        :family-file-id="beneficiary.familyFileId"
-        :family-file-identification="familyFileIdentification || []"
-        :beneficiary-id="beneficiaryId"
-        :partner-organizations="partnerOrganizations"
-        :is-financial="isFinancial"
-        @save-help-request="onAddHelpRequest"
-      />
+      <AtomLazyComponent
+        :pending
+        :error="Boolean(fetchError)"
+        message="La liste des organismes instructeurs de votre structure n'a pas pu être chargée."
+      >
+        <HelpRequestFormCreation
+          v-if="socialSupportSubjects && partnerOrganizations"
+          :is-submitting="isSubmitting"
+          :social-support-subjects="socialSupportSubjects"
+          :family-file-id="familyFileId"
+          :family-file-identification="familyFileIdentification || []"
+          :beneficiary-id="getBeneficiaryIdOnPageLoad()"
+          :partner-organizations="partnerOrganizations"
+          :is-financial="isFinancial"
+          @save-help-request="onAddHelpRequest"
+        />
+      </AtomLazyComponent>
     </main>
   </PageContainer>
 </template>
@@ -46,7 +43,6 @@
 <script lang="ts" setup>
   import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { AlertType } from '~/utils/constants/alert'
   import { CreateHelpRequestInput } from '~/server/schema'
   import { toFirstLetterUpperCase } from '~/utils/toFirstLetterUpperCase'
   import { fileInstructionTypePictos } from '~/client/options'
@@ -60,9 +56,7 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
-  // TODO replace route.params by familyFile param
-  // and get beneficiaryId as query (beneficiary will be optional)
-  const beneficiaryId = route.params.id as string
+  const familyFileId = route.params.id as string
 
   const subject = toFirstLetterUpperCase(
     route.params.subject as string
@@ -73,21 +67,13 @@
     ? fileInstructionTypePictos.Financial
     : undefined
 
-  const { data: beneficiary, error: beneficiaryError } =
-    await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
-      id: beneficiaryId
-    })
-
   const title = computed(() =>
-    routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(
-      beneficiary.value || null
-    )
+    routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(null)
   )
 
   useHead({ title })
 
-  const familyFileId = beneficiary.value?.familyFileId || ''
-  const { familyFileIdentification } =
+  const { familyFileIdentification, getBeneficiaryIdOnPageLoad } =
     await useFamilyFileMinimalInfo(familyFileId)
 
   const {
@@ -108,9 +94,6 @@
   )
 
   const fetchError = computed(() => {
-    if (beneficiaryError.value) {
-      return "Les informations du bénéficiaire n'ont pas pu être chargées."
-    }
     if (socialSupportSubjectsError.value) {
       return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
     }
@@ -124,10 +107,12 @@
     useTrpcMutation({
       mutation: () => trpcClient.helpRequest.add.mutate(helpRequest),
       isSubmitting,
-      onSuccess: () => {
+      onSuccess: ({ socialSupportId }) => {
         navigateTo(
-          routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
-            tab: BeneficiaryTab.History
+          routes.file.AppFile.path(helpRequest.familyFileId, {
+            beneficiaryId: helpRequest.beneficiaryId,
+            tab: BeneficiaryTab.History,
+            item: socialSupportId
           })
         )
       },

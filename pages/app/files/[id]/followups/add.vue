@@ -98,12 +98,12 @@
     useTrpcMutation({
       mutation: () => trpcClient.followup.add.mutate(followup),
       isSubmitting,
-      onSuccess: ({ id }) => {
+      onSuccess: ({ fileInstruction }) => {
         navigateTo(
           routes.file.AppFile.path(followup.familyFileId, {
             beneficiaryId: followup.beneficiaryId,
             tab: BeneficiaryTab.History,
-            item: id
+            item: fileInstruction?.socialSupportId
           })
         )
       },

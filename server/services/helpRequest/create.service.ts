@@ -53,7 +53,7 @@ export async function create({ input, ctx }: CreateParams) {
     date
   } = cleanCreateInput(input)
 
-  const helpRequest = await HelpRequestRepo.prisma.create({
+  const { id, fileInstruction } = await HelpRequestRepo.prisma.create({
     data: {
       askedAmount,
 
@@ -119,10 +119,13 @@ export async function create({ input, ctx }: CreateParams) {
           }
         }
       }
+    },
+    include: {
+      fileInstruction: { select: { socialSupportId: true } }
     }
   })
 
   await markSocialSupportSubjectAsUsed([input.subjectId])
 
-  return { helpRequest }
+  return { id, socialSupportId: fileInstruction.socialSupportId }
 }
