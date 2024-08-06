@@ -14,7 +14,7 @@ async function exportContacts() {
   }
 
   const users = await getUsers(job.startDate)
-  if (users.length == 0) {
+  if (users.length === 0) {
     return
   }
 
