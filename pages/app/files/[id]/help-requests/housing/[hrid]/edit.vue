@@ -3,12 +3,14 @@
     <AtomBreadcrumb
       v-if="housingHelpRequest"
       :links="
-        breadcrumbs.helpRequest.AppBeneficiaryHelpRequestEdit(
+        breadcrumbs.helpRequest.AppFileHelpRequestEdit(
           {
             id: housingHelpRequest?.id,
+            familyFileId,
             beneficiary:
               housingHelpRequest?.fileInstruction.socialSupport.beneficiary
           },
+          familyFileIdentification,
           FileInstructionType.Housing
         )
       "
@@ -24,24 +26,20 @@
       <RequiredFields />
     </PageTitle>
     <main ref="formContainer">
-      <AtomAlert
-        v-if="fetchError"
-        :alert-type="AlertType.Error"
+      <AtomLazyComponent
+        :pending
+        :error="Boolean(fetchError)"
         :message="fetchError"
-      />
-
-      <AtomLoader
-        v-if="pending"
-        class="fr-mx-auto"
-      />
-      <HousingHelpRequestFormEdition
-        v-else-if="housingHelpRequestData && partnerOrganizations"
-        :is-submitting="isSubmitting"
-        :data="housingHelpRequestData"
-        :family-file-identification="familyFileIdentification || []"
-        :partner-organizations="partnerOrganizations"
-        @save-housing-help-request="onUpdateHousingHelpRequest"
-      />
+      >
+        <HousingHelpRequestFormEdition
+          v-if="housingHelpRequestData && partnerOrganizations"
+          :is-submitting="isSubmitting"
+          :data="housingHelpRequestData"
+          :family-file-identification="familyFileIdentification || []"
+          :partner-organizations="partnerOrganizations"
+          @save-housing-help-request="onUpdateHousingHelpRequest"
+        />
+      </AtomLazyComponent>
     </main>
   </PageContainer>
 </template>
@@ -50,7 +48,6 @@
   import { FileInstructionType } from '@prisma/client'
   import { EditHousingHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { AlertType } from '~/utils/constants/alert'
   import { fileInstructionTypePictos } from '~/client/options'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
@@ -63,7 +60,7 @@
   const formContainer = ref<HTMLElement | null>(null)
 
   const housingHelpRequestId = route.params.hrid as string
-  const beneficiaryId = route.params.id as string
+  const familyFileId = route.params.id as string
 
   const {
     data: housingHelpRequestData,
@@ -73,9 +70,6 @@
     id: housingHelpRequestId
   })
 
-  const familyFileId =
-    housingHelpRequestData.value?.housingHelpRequest.fileInstruction
-      .socialSupport.familyFileId || ''
   const { familyFileIdentification } =
     await useFamilyFileMinimalInfo(familyFileId)
 
@@ -124,8 +118,10 @@
       isSubmitting,
       onSuccess: () => {
         navigateTo(
-          routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
-            tab: BeneficiaryTab.History
+          routes.file.AppFile.path(housingHelpRequest.familyFileId, {
+            beneficiaryId: housingHelpRequest.beneficiaryId,
+            tab: BeneficiaryTab.History,
+            item: housingHelpRequest.socialSupportId
           })
         )
       },

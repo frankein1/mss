@@ -54,7 +54,7 @@ export async function create({ input, ctx }: CreateParams) {
     askedHousing
   } = cleanCreateInput(input)
 
-  const { id } = await HousingHelpRequestRepo.prisma.create({
+  const { id, fileInstruction } = await HousingHelpRequestRepo.prisma.create({
     data: {
       reason,
       housingType: housingType || undefined,
@@ -114,8 +114,11 @@ export async function create({ input, ctx }: CreateParams) {
       taxHouseholdAdditionalInformation,
       uniqueId,
       askedHousing
+    },
+    include: {
+      fileInstruction: { select: { socialSupportId: true } }
     }
   })
 
-  return { id }
+  return { id, socialSupportId: fileInstruction.socialSupportId }
 }

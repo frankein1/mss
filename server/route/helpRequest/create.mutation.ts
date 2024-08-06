@@ -37,7 +37,7 @@ export const create = createMutation({
     key: 'helpRequest.create',
     target: 'HelpRequest',
     targetId: ({ routeResult }) => {
-      return routeResult.helpRequest.id
+      return routeResult.id
     },
     action: UserActivityType.CREATE
   }

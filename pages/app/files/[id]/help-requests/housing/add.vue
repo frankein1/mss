@@ -2,8 +2,9 @@
   <PageContainer>
     <AtomBreadcrumb
       :links="
-        breadcrumbs.helpRequest.AppBeneficiaryHelpRequestAdd(
-          beneficiary,
+        breadcrumbs.helpRequest.AppFileHelpRequestAdd(
+          familyFileId,
+          familyFileIdentification,
           FileInstructionType.Housing
         )
       "
@@ -19,25 +20,20 @@
       <RequiredFields />
     </PageTitle>
     <main ref="formContainer">
-      <AtomAlert
-        v-if="error"
-        :alert-type="AlertType.Error"
+      <AtomLazyComponent
+        :pending
+        :error="Boolean(error)"
         message="La liste des organismes instructeurs de votre structure n'a pas pu être chargée."
-      />
-
-      <AtomLoader
-        v-if="pending"
-        class="fr-mx-auto"
-      />
-      <HousingHelpRequestFormCreation
-        v-if="beneficiary"
-        :is-submitting="isSubmitting"
-        :beneficiary-id="beneficiaryId"
-        :family-file-id="beneficiary.familyFileId"
-        :family-file-identification="familyFileIdentification || []"
-        :partner-organizations="partnerOrganizations || []"
-        @save-housing-help-request="onAddHousingHelpRequest"
-      />
+      >
+        <HousingHelpRequestFormCreation
+          :beneficiary-id="getBeneficiaryIdOnPageLoad()"
+          :is-submitting="isSubmitting"
+          :family-file-id="familyFileId"
+          :family-file-identification="familyFileIdentification || []"
+          :partner-organizations="partnerOrganizations || []"
+          @save-housing-help-request="onAddHousingHelpRequest"
+        />
+      </AtomLazyComponent>
     </main>
   </PageContainer>
 </template>
@@ -45,7 +41,6 @@
 <script lang="ts" setup>
   import { FileInstructionType } from '@prisma/client'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { AlertType } from '~/utils/constants/alert'
   import { CreateHousingHelpRequestInput } from '~/server/schema'
   import { fileInstructionTypePictos } from '~/client/options'
   import { routes } from '~/utils/routes'
@@ -58,23 +53,15 @@
   const isSubmitting = ref<boolean>(false)
   const formContainer = ref<HTMLElement | null>(null)
 
-  const beneficiaryId = route.params.id as string
-
-  const { data: beneficiary } =
-    await trpcClient.beneficiary.getBeneficiaryMinimalInfo.useQuery({
-      id: beneficiaryId
-    })
+  const familyFileId = route.params.id as string
 
   const title = computed(() =>
-    routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(
-      beneficiary.value || null
-    )
+    routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(null)
   )
 
   useHead({ title })
 
-  const familyFileId = beneficiary.value?.familyFileId || ''
-  const { familyFileIdentification } =
+  const { familyFileIdentification, getBeneficiaryIdOnPageLoad } =
     await useFamilyFileMinimalInfo(familyFileId)
 
   const {
@@ -90,10 +77,12 @@
       mutation: () =>
         trpcClient.housingHelpRequest.add.mutate(housingHelpRequest),
       isSubmitting,
-      onSuccess: () => {
+      onSuccess: ({ socialSupportId }) => {
         navigateTo(
-          routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
-            tab: BeneficiaryTab.History
+          routes.file.AppFile.path(housingHelpRequest.familyFileId, {
+            beneficiaryId: housingHelpRequest.beneficiaryId,
+            tab: BeneficiaryTab.History,
+            item: socialSupportId
           })
         )
       },

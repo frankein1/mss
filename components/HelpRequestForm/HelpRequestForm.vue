@@ -9,7 +9,10 @@
     class="fr-container--fluid"
     @submit.prevent="emit('submit', $event)"
   >
-    <section class="feature-section fr-p-5w fr-mb-2w">
+    <section
+      v-if="!editionMode"
+      class="feature-section fr-p-5w fr-mb-2w"
+    >
       <div class="fr-grid-row">
         <VeeRadioButtons
           class="fr-col-12 fr-mb-0"
@@ -60,7 +63,7 @@
         <hr class="helprequestform__divider" />
 
         <HelpRequestFormDocumentSection
-          :family-file-id="familyFileId"
+          :family-file-id="familyFileId || ''"
           :beneficiary-id="beneficiaryId || ''"
         />
 
@@ -112,16 +115,17 @@
       isSubmitting: boolean
       socialSupportSubjects?: SocialSupportSubject[]
       partnerOrganizations: PartnerOrganizationIdName[]
-      familyFileId: string
       familyFileIdentification: BeneficiaryFileIdentification[]
       canEditPrivateSynthesis?: boolean
       caughtErrors: FormErrors<CreateHelpRequestInput | EditHelpRequestInput>
       subject: FileInstructionType
+      editionMode?: boolean
     }>(),
     {
       canEditPrivateSynthesis: true,
       socialSupportSubjects: () => [],
-      prescribingOrganizations: () => []
+      prescribingOrganizations: () => [],
+      editionMode: false
     }
   )
 
@@ -138,6 +142,7 @@
   }>()
 
   const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
+  const { value: familyFileId } = useField<string | null>('familyFileId')
   const { value: status } = useField<SocialSupportStatus>('status')
   const { value: externalStructure } = useField<'true' | 'false' | undefined>(
     'externalStructure'

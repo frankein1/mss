@@ -108,7 +108,8 @@ export const create = async ({ ctx, input }: CreateParams) => {
         select: {
           id: true
         }
-      }
+      },
+      fileInstruction: { select: { socialSupportId: true } }
     }
   })
 

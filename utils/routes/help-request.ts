@@ -1,7 +1,11 @@
 import { FileInstructionType } from '@prisma/client'
-import { BeneficiariesRoute } from './utils'
+import { FilesRoute, getRouteOptions } from './utils'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { BeneficiaryNames } from '~/types/beneficiary'
+
+export interface HelpRequestAddRouteOptions {
+  beneficiaryId?: string
+}
 
 export const routes = {
   AppBeneficiaryHelpRequestAdd: {
@@ -12,8 +16,12 @@ export const routes = {
             beneficiary
           )}`
         : "Instruction d'un dossier",
-    path: (beneficiaryId: string, subject: FileInstructionType) =>
-      `${BeneficiariesRoute}/${beneficiaryId}/help-requests/${subject.toLocaleLowerCase()}/add`
+    path: (
+      familyFileId: string,
+      subject: FileInstructionType,
+      options?: HelpRequestAddRouteOptions
+    ) =>
+      `${FilesRoute}/${familyFileId}/help-requests/${subject.toLocaleLowerCase()}/add${getRouteOptions(options)}`
   },
   AppBeneficiaryHelpRequestEdit: {
     name: 'AppBeneficiaryHelpRequestEdit',
@@ -24,10 +32,10 @@ export const routes = {
           )}`
         : "Modifier l'instruction de dossier d'un·e bénéficiaire",
     path: (
-      beneficiaryId: string,
+      familyFileId: string,
       helpRequestId: string,
       subject: FileInstructionType
     ) =>
-      `${BeneficiariesRoute}/${beneficiaryId}/help-requests/${subject.toLocaleLowerCase()}/${helpRequestId}/edit`
+      `${FilesRoute}/${familyFileId}/help-requests/${subject.toLocaleLowerCase()}/${helpRequestId}/edit`
   }
 } as const
