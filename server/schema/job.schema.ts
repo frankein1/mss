@@ -26,7 +26,7 @@ export const dataInclusionStructureErrorSchema = z.object({
     'structure-import-create',
     'structure-import-update',
     'structure-import-other',
-    'brevo-export',
+    'brevo-export'
   ]),
   status: z.number().nullable(),
   error: z.string()

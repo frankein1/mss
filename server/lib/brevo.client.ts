@@ -1,8 +1,8 @@
-import brevo from '@getbrevo/brevo'
+import { ContactsApi } from '@getbrevo/brevo'
 
 function getContactsApi() {
   const config = useRuntimeConfig()
-  const contactsApi = new brevo.ContactsApi()
+  const contactsApi = new ContactsApi()
   contactsApi.setApiKey(0, config.brevo.apiKey)
   return contactsApi
 }
