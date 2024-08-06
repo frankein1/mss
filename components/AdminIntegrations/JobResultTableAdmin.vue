@@ -24,10 +24,6 @@
             />
             <th scope="col">Fin de l'exécution</th>
             <th scope="col">Durée en secondes</th>
-            <th scope="col">Importées</th>
-            <th scope="col">Créées</th>
-            <th scope="col">Mises à jour</th>
-            <th scope="col">Total</th>
             <th scope="col">Erreurs</th>
           </tr>
         </thead>
@@ -50,10 +46,6 @@
             <td>{{ formatDate(job.startDate, 'DD/MM/YYYY HH:mm') }}</td>
             <td>{{ formatDate(job.endDate, 'DD/MM/YYYY HH:mm') }}</td>
             <td>{{ job.durationInSeconds }}</td>
-            <td>{{ job.result.nImported }}</td>
-            <td>{{ job.result.nCreated }}</td>
-            <td>{{ job.result.nUpdated }}</td>
-            <td>{{ job.result.nInDatabase }}</td>
             <td>{{ job.errors.length }}</td>
           </tr>
         </tbody>

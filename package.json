@@ -20,6 +20,7 @@
     "release": "standard-version"
   },
   "dependencies": {
+    "@getbrevo/brevo": "^2.2.0",
     "@gouvfr/dsfr": "~1.12.1",
     "@gouvminint/vue-dsfr": "^5.18.2",
     "@prisma/client": "^5.17.0",
