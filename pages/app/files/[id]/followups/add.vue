@@ -18,32 +18,27 @@
     </PageTitle>
 
     <main ref="formContainer">
-      <AtomAlert
-        v-if="fetchError"
-        :alert-type="AlertType.Error"
+      <AtomLazyComponent
+        :pending
+        :error="Boolean(fetchError)"
         :message="fetchError"
-      />
-
-      <AtomLoader
-        v-if="pending"
-        class="fr-mx-auto"
-      />
-      <FollowupFormCreation
-        v-else-if="socialSupportSubjects && partnerOrganizations"
-        :is-submitting="isSubmitting"
-        :social-support-subjects="socialSupportSubjects"
-        :family-file-id="familyFileId"
-        :family-file-identification="familyFileIdentification || []"
-        :beneficiary-id="getBeneficiaryIdOnPageLoad()"
-        :partner-organizations="partnerOrganizations"
-        @save-followup="onAddFollowup"
-      />
+      >
+        <FollowupFormCreation
+          v-if="socialSupportSubjects && partnerOrganizations"
+          :is-submitting="isSubmitting"
+          :social-support-subjects="socialSupportSubjects"
+          :family-file-id="familyFileId"
+          :family-file-identification="familyFileIdentification || []"
+          :beneficiary-id="getBeneficiaryIdOnPageLoad()"
+          :partner-organizations="partnerOrganizations"
+          @save-followup="onAddFollowup"
+        />
+      </AtomLazyComponent>
     </main>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
-  import { AlertType } from '~/utils/constants/alert'
   import { AddFollowupInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { routes } from '~/utils/routes'
