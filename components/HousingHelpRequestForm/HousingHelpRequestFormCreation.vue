@@ -2,8 +2,6 @@
   <HelpRequestForm
     :is-submitting="isSubmitting"
     :partner-organizations="partnerOrganizations"
-    :beneficiary-id="beneficiaryId"
-    :family-file-id="familyFileId"
     :family-file-identification="familyFileIdentification || []"
     :caught-errors="caughtErrors"
     :subject="FileInstructionType.Housing"

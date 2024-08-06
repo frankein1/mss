@@ -50,6 +50,7 @@
   const modal = useModal()
 
   const props = defineProps<{
+    familyFileId: string
     beneficiaryId: string
   }>()
 
@@ -71,8 +72,9 @@
       modal.close()
       navigateTo(
         routes.helpRequest.AppBeneficiaryHelpRequestAdd.path(
-          props.beneficiaryId,
-          subject
+          props.familyFileId,
+          subject,
+          { beneficiaryId: props.beneficiaryId }
         )
       )
     }

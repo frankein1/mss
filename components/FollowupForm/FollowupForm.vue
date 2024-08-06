@@ -282,7 +282,7 @@
 
       <div class="fr-mb-4w">
         <BeneficiaryDocumentsSelect
-          :family-file-id="familyFileId"
+          :family-file-id="familyFileId || ''"
           :beneficiary-id="beneficiaryId || ''"
           name="documents"
           snackbar-success-message="Le document a été ajouté à la fiche bénéficiaire. Enregistrez la synthèse d'entretien pour conserver le lien entre les deux."
@@ -330,7 +330,6 @@
       isSubmitting: boolean
       socialSupportSubjects: Array<SocialSupportSubject>
       partnerOrganizations: Array<PartnerOrganizationIdName>
-      familyFileId: string
       familyFileIdentification: BeneficiaryFileIdentification[]
       medium: FollowupMedium
       isRedirected: boolean
@@ -350,6 +349,8 @@
   const form = ref<HTMLFormElement | null>(null)
 
   const { value: beneficiaryId } = useField<string | null>('beneficiaryId')
+
+  const { value: familyFileId } = useField<string | null>('familyFileId')
 
   const { value: prescribingOrganizationId } = useField<string | null>(
     'prescribingOrganizationId'

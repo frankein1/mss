@@ -1,7 +1,11 @@
 import { FileInstructionType } from '@prisma/client'
-import { FilesRoute } from './utils'
+import { FilesRoute, getRouteOptions } from './utils'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { BeneficiaryNames } from '~/types/beneficiary'
+
+export interface HelpRequestAddRouteOptions {
+  beneficiaryId?: string
+}
 
 export const routes = {
   AppBeneficiaryHelpRequestAdd: {
@@ -12,8 +16,12 @@ export const routes = {
             beneficiary
           )}`
         : "Instruction d'un dossier",
-    path: (familyFileId: string, subject: FileInstructionType) =>
-      `${FilesRoute}/${familyFileId}/help-requests/${subject.toLocaleLowerCase()}/add`
+    path: (
+      familyFileId: string,
+      subject: FileInstructionType,
+      options?: HelpRequestAddRouteOptions
+    ) =>
+      `${FilesRoute}/${familyFileId}/help-requests/${subject.toLocaleLowerCase()}/add${getRouteOptions(options)}`
   },
   AppBeneficiaryHelpRequestEdit: {
     name: 'AppBeneficiaryHelpRequestEdit',

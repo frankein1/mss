@@ -3,12 +3,11 @@
     :is-submitting="isSubmitting"
     :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
-    :beneficiary-id="socialSupport.beneficiary.id"
-    :family-file-id="socialSupport.familyFileId"
     :family-file-identification="familyFileIdentification || []"
     :can-edit-private-synthesis="permissions?.set.privateSynthesis"
     :caught-errors="caughtErrors"
     :subject="subject"
+    edition-mode
     @submit="onSubmit"
   />
 </template>

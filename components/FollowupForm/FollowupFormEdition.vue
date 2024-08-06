@@ -3,7 +3,6 @@
     :is-submitting="isSubmitting"
     :social-support-subjects="socialSupportSubjects"
     :partner-organizations="partnerOrganizations"
-    :family-file-id="followup.familyFileId"
     :family-file-identification="familyFileIdentification || []"
     :medium="values.medium"
     :is-redirected="values.redirected"

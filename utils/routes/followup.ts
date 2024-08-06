@@ -1,6 +1,10 @@
-import { FilesRoute } from './utils'
+import { FilesRoute, getRouteOptions } from './utils'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { BeneficiaryNames } from '~/types/beneficiary'
+
+export interface FollowupAddRouteOptions {
+  beneficiaryId?: string
+}
 
 export const routes = {
   AppBeneficiaryFollowupAdd: {
@@ -9,8 +13,8 @@ export const routes = {
       beneficiary
         ? `Entretien avec ${formatBeneficiaryDisplayName(beneficiary)}`
         : 'Entretien avec un·e bénéficiaire',
-    path: (familyFileId: string) =>
-      `${FilesRoute}/${familyFileId}/followups/add`
+    path: (familyFileId: string, options?: FollowupAddRouteOptions) =>
+      `${FilesRoute}/${familyFileId}/followups/add${getRouteOptions(options)}`
   },
   AppBeneficiaryFollowupEdit: {
     name: 'AppBeneficiaryFollowupEdit',

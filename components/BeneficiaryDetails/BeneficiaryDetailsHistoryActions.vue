@@ -6,7 +6,11 @@
     >
       <li>
         <NuxtLink
-          :to="routes.followup.AppBeneficiaryFollowupAdd.path(familyFileId)"
+          :to="
+            routes.followup.AppBeneficiaryFollowupAdd.path(familyFileId, {
+              beneficiaryId
+            })
+          "
           class="fr-btn fr-icon-file-add-line followup-btn"
           title="Ajouter une synthèse d'entretien"
         >
@@ -52,6 +56,7 @@
   function onAddHelpRequest() {
     useModal().open(HelpRequestModal, {
       title: 'Nouvelle instruction de dossier',
+      familyFileId: props.familyFileId,
       beneficiaryId: props.beneficiaryId
     })
   }
