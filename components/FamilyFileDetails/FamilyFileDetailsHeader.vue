@@ -1,7 +1,10 @@
 <template>
   <div class="family-file-details-header fr-grid-row fr-grid-row--gutters">
     <!-- ROW -->
-    <div class="fr-col-12">
+    <div
+      v-if="beneficiaries.length > 1"
+      class="fr-col-12"
+    >
       <p class="fr-tag fr-icon-group-line fr-tag--icon-left tag">
         Dossier foyer
       </p>

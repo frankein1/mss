@@ -15,6 +15,7 @@
         :options="referentOptions"
         :disabled-options="disabledReferentOptions"
         dropdown
+        required
       />
     </div>
     <div
