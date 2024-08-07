@@ -24,11 +24,16 @@ export const useBeneficiaryDetails = async (beneficiaryId: string) => {
       : null
   )
 
+  const familyIdentification = computed(
+    () => data.value?.familyFileMinimalInfo?.beneficiaries || []
+  )
+
   return {
     beneficiary,
     draft,
     permissions,
     beneficiaryIdentification,
+    familyIdentification,
     pending,
     error
   }

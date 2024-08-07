@@ -1,76 +1,39 @@
 <template>
-  <!--TODO: condition sur cette information -->
-  <!--uniquement pour les dossiers qui avaient de la donnée renseignée dans l'ancienne section "foyer fiscal" -->
-  <AtomNotice
-    class="fr-mx-n3v fr-mb-4w"
-    :close-button="false"
-  >
-    <template #default
-      >Si des membres du foyer étaient précédemment renseignés dans la section
-      "foyer fiscal", ils se trouvent désormais dans la section
-      "Entourage".</template
-    >
-  </AtomNotice>
+  <section class="fr-p-3v">
+    <h2 class="title-blue fr-mb-6v">
+      {{ routes.beneficiary.AppBeneficiaryEditTaxHousehold.title }}
+    </h2>
 
-  <BeneficiaryFormSection>
-    <div class="fr-col-12">
-      <VeeSelect
-        name="familySituation"
-        :label="beneficiaryFieldLabels.familySituation"
-        :options="withEmptyValue(beneficiaryFamilySituationKeys.options)"
-      />
-    </div>
-    <div
-      v-if="showDivorceDate"
-      class="fr-col-12"
+    <AtomNotice class="fr-mx-n3v fr-mb-4w">
+      <template #default>
+        Si des membres du foyer étaient précédemment renseignés dans la section
+        "foyer fiscal", ils se trouvent désormais dans la section "Entourage".
+      </template>
+    </AtomNotice>
+
+    <BeneficiaryFormSection>
+      <BeneficiaryFormFamilySituationInfos />
+    </BeneficiaryFormSection>
+
+    <BeneficiaryFormCallOut
+      v-if="familyIdentification.length <= 1"
+      class="fr-mx-n3v fr-mb-4w"
+    />
+    <BeneficiaryFormSection
+      v-else
+      section-title="Autres bénéficiaires du dossier"
     >
-      <VeeInput
-        name="divorceDate"
-        :label="beneficiaryFieldLabels.divorceDate"
-        type="date"
+      <BeneficiaryFormFamilySituationMembers
+        :family-identification="familyIdentification"
       />
-    </div>
-    <div
-      v-if="showWeddingDate"
-      class="fr-col-12"
-    >
-      <VeeInput
-        name="weddingDate"
-        :label="beneficiaryFieldLabels.weddingDate"
-        type="date"
-      />
-    </div>
-    <div class="fr-col-12 fr-col-lg-6">
-      <VeeInput
-        name="minorChildren"
-        :label="beneficiaryFieldLabels.minorChildren"
-        type="number"
-      />
-    </div>
-    <div class="fr-col-12 fr-col-lg-6">
-      <VeeInput
-        name="majorChildren"
-        :label="beneficiaryFieldLabels.majorChildren"
-        type="number"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeCheckbox
-        label="Ce bénéficiaire est aidant familial"
-        name="caregiver"
-      />
-    </div>
-  </BeneficiaryFormSection>
-  <BeneficiaryFormCallOut class="fr-mx-n3v fr-mb-4w" />
+    </BeneficiaryFormSection>
+  </section>
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryFamilySituation } from '@prisma/client'
-  import { beneficiaryFieldLabels } from '~/client/labels'
-  import { beneficiaryFamilySituationKeys } from '~/client/options'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
-  const { value } = useField<BeneficiaryFamilySituation>('familySituation')
+  import { routes } from '~/utils/routes'
 
-  const showDivorceDate = computed(() => isSeparate(value.value))
-  const showWeddingDate = computed(() => isMarried(value.value))
+  defineProps<{ familyIdentification: BeneficiaryFileIdentification[] }>()
 </script>

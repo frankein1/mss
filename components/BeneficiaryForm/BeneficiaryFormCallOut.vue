@@ -1,5 +1,5 @@
 <template>
-  <div class="mss-callout">
+  <aside class="mss-callout">
     <div class="icon">
       <span
         class="fr-icon-group-line"
@@ -26,7 +26,7 @@
         En savoir plus
       </button>
     </div>
-  </div>
+  </aside>
 </template>
 
 <script setup lang="ts">

@@ -2,6 +2,7 @@
   <BeneficiaryEditFormLayout
     :draft
     :family-file-id="beneficiary?.familyFileId || ''"
+    :family-identification="familyIdentification"
     :beneficiary-identification="beneficiaryIdentification"
     :binded-values="bindedValues"
     :permissions="permissions"
@@ -9,7 +10,7 @@
     :is-submitting="isSubmitting"
     :current-route="routes.beneficiary.AppBeneficiaryEditHealth.name"
     :small-title="true"
-    title-icon="fr-icon-user-line"
+    :title-icon="getFormIcon(familyIdentification.length)"
     @save="onSaveBeneficiary"
   >
     <AtomLazyComponent
@@ -70,6 +71,7 @@
     permissions,
     draft,
     beneficiaryIdentification,
+    familyIdentification,
     pending,
     error
   } = await useBeneficiaryDetails(beneficiaryId)
