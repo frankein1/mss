@@ -56,32 +56,20 @@ const handler = async ({
 
   const { id, entourages } = input
 
-  let data = {}
-
   const { relatives: previousRelatives } = beneficiary
 
   const newEntourages =
-    entourages
-      ?.filter(e =>
-        // Does not save empty relative
-        Object.entries(e).some(([key, value]) => key !== 'id' && !!value)
-      )
-      .map(e => {
-        return {
-          hosted: false,
-          ...e
-        }
-      }) || []
+    entourages?.filter(e =>
+      // Does not save empty relative
+      Object.entries(e).some(([key, value]) => key !== 'id' && !!value)
+    ) || []
 
   const entouragesRelationUpdates = prepareRelationUpdates(
     newEntourages,
     previousRelatives
   )
 
-  data = {
-    ...data,
-    relatives: entouragesRelationUpdates
-  }
+  const data = { relatives: entouragesRelationUpdates }
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
     where: { id },

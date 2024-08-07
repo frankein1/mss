@@ -27,6 +27,7 @@ export const createOrUpdateEntourageSchema = z.object({
   email: emailOrEmpty(),
   phone: stringOrEmpty(phoneConstraint),
   caregiver: z.boolean().default(false),
+  hosted: z.boolean().default(false),
   additionalInformation: openText(200).nullish()
 })
 
