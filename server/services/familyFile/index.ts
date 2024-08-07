@@ -1,4 +1,5 @@
-import { getPageDocuments } from '../familyFile/getPageDocuments.service'
+import { getPageDocuments } from './getPageDocuments.service'
+import { getMinimalInfo } from './getMinimalInfo.service'
 import {
   getCreationPermissions,
   getEditionPermissions,
@@ -10,7 +11,8 @@ export const FamilyFileService = {
   getCreationPermissions,
   getEditionPermissions,
   getFamilyFileSecurityTarget,
-  getPageDocuments
+  getPageDocuments,
+  getMinimalInfo
 }
 
 export type { FamilyFileSecurityTarget }

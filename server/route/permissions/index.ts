@@ -1,2 +1,7 @@
-export * from './get-beneficiary-creation-permissions.query'
-export * from './get-help-request-permissions.query'
+import { getBeneficiaryCreationPermissionsQuery } from './get-beneficiary-creation-permissions.query'
+import { getFileInstructionPermissionsQuery } from './get-help-request-permissions.query'
+
+export const permissionsRoutes = {
+  getBeneficiaryCreationPermissionsQuery,
+  getFileInstructionPermissionsQuery
+}

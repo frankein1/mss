@@ -2,7 +2,7 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
-import { BeneficiaryService } from '~/server/services'
+import { BeneficiaryService, FamilyFileService } from '~/server/services'
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
   const permissions = await BeneficiaryService.getEditionPermissions(
@@ -24,7 +24,15 @@ const handler = async ({
     id: input.id
   })
 
-  return data
+  const familyFileMinimalInfo = await FamilyFileService.getMinimalInfo({
+    ctx,
+    input: { id: data.beneficiary.familyFileId }
+  })
+
+  return {
+    ...data,
+    familyFileMinimalInfo
+  }
 }
 
 export const getBeneficiaryDetailsQuery = createQuery({

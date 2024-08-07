@@ -1,5 +1,5 @@
 <template>
-  <div
+  <section
     class="fr-grid-row fr-grid-row--center fr-grid-row--bottom fr-grid-row--gutters feature-section fr-p-7v fr-mb-3w"
   >
     <div
@@ -7,13 +7,13 @@
       class="fr-col-12"
       :class="{ 'beneficiaryformsection__title-action': hasTitleAction }"
     >
-      <h3 class="fr-h4 beneficiaryformsection__title-headline">
+      <h3 class="fr-h4 beneficiaryformsection__title-headline title-blue">
         {{ sectionTitle }}
       </h3>
       <slot name="titleAction"></slot>
     </div>
     <slot></slot>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

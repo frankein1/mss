@@ -62,6 +62,14 @@
         :options="withEmptyValue(relativeRelationshipKeys.options)"
       />
     </div>
+
+    <div class="fr-col-12">
+      <VeeCheckbox
+        :name="`entourages[${index}].hosted`"
+        :label="relativeFieldLabels.hosted"
+      />
+    </div>
+
     <div class="fr-col-12">
       <VeeCheckbox
         :name="`entourages[${index}].caregiver`"

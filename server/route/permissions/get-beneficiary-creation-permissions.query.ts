@@ -2,15 +2,10 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { emptySchema } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
-import { getFamilyFilePermissions } from '~/server/security'
+import { FamilyFileService } from '~/server/services'
 
-const handler = ({ ctx }: { ctx: ProtectedAppContext }) => {
-  return Promise.resolve(
-    getFamilyFilePermissions({
-      ctx
-    })
-  )
-}
+const handler = ({ ctx }: { ctx: ProtectedAppContext }) =>
+  FamilyFileService.getCreationPermissions(ctx)
 
 export const getBeneficiaryCreationPermissionsQuery = createQuery({
   inputValidation: emptySchema,

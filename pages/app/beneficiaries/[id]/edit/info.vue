@@ -2,12 +2,13 @@
   <BeneficiaryEditFormLayout
     :draft
     :family-file-id="beneficiary?.familyFileId || ''"
+    :family-identification="familyIdentification"
     :beneficiary-identification="beneficiaryIdentification"
     :schema="updateBeneficiaryGeneralInformationSchema"
     :binded-values="bindedValues"
     :permissions="permissions"
     :is-submitting="isSubmitting"
-    title-icon="fr-icon-user-line"
+    :title-icon="getFormIcon(familyIdentification.length)"
     :current-route="routes.beneficiary.AppBeneficiaryEditInfo.name"
     @save="onSaveBeneficiary"
   >
@@ -51,6 +52,7 @@
     permissions,
     draft,
     beneficiaryIdentification,
+    familyIdentification,
     pending: beneficiaryPending,
     error: beneficiaryError
   } = await useBeneficiaryDetails(beneficiaryId)

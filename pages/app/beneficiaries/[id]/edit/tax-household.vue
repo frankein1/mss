@@ -2,6 +2,7 @@
   <BeneficiaryEditFormLayout
     :draft
     :family-file-id="beneficiary?.familyFileId || ''"
+    :family-identification="familyIdentification"
     :beneficiary-identification="beneficiaryIdentification"
     :binded-values="bindedValues"
     :schema="updateBeneficiaryTaxHouseholdSchema"
@@ -10,7 +11,7 @@
     :current-route="routes.beneficiary.AppBeneficiaryEditTaxHousehold.name"
     :has-required-fields="false"
     :small-title="true"
-    title-icon="fr-icon-user-line"
+    :title-icon="getFormIcon(familyIdentification.length)"
     @save="onSaveBeneficiary"
   >
     <AtomLazyComponent
@@ -18,13 +19,9 @@
       :error="Boolean(error)"
       message="Les informations du bénéficiaires n'ont pas pu être chargées."
     >
-      <div
-        v-if="bindedValues"
-        class="fr-p-3v"
-      >
-        <h2 class="title-blue fr-mb-6v">{{ pageTitle }}</h2>
-        <BeneficiaryFormFamilySituation />
-      </div>
+      <BeneficiaryFormFamilySituation
+        :family-identification="familyIdentification"
+      />
     </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
 </template>
@@ -48,6 +45,7 @@
     permissions,
     draft,
     beneficiaryIdentification,
+    familyIdentification,
     pending,
     error
   } = await useBeneficiaryDetails(beneficiaryId)
@@ -109,8 +107,4 @@
       }
     })
   }
-
-  const pageTitle = computed(
-    () => routes.beneficiary.AppBeneficiaryEditTaxHousehold.title
-  )
 </script>

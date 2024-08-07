@@ -29,9 +29,12 @@
 </template>
 
 <script setup lang="ts">
-  defineProps<{
-    closeButton?: boolean
-  }>()
+  withDefaults(
+    defineProps<{
+      closeButton?: boolean
+    }>(),
+    { closeButton: false }
+  )
 
   const slots = useSlots()
   const hasSlot = computed(() => slots.default)
