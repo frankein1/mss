@@ -2,7 +2,6 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { SecurityRuleContext } from '~/server/security'
 import { IdInput, idSchema } from '~/server/schema'
-import { FamilyFileRepo } from '~/server/database'
 import { FamilyFileService } from '~/server/services'
 
 const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
@@ -14,28 +13,13 @@ const securityCheck = async (ctx: SecurityRuleContext, input: IdInput) => {
 }
 
 const handler = async ({
-  input: { id },
-  ctx: { user }
+  input,
+  ctx
 }: {
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  return await FamilyFileRepo.findUniqueOrThrow(user, {
-    where: { id },
-    include: {
-      beneficiaries: {
-        select: {
-          id: true,
-          firstName: true,
-          usualName: true,
-          birthName: true,
-          birthDate: true,
-          relationship: true
-        },
-        orderBy: { created: 'asc' }
-      }
-    }
-  })
+  return await FamilyFileService.getMinimalInfo({ ctx, input })
 }
 
 export const getFamilyFileMinimalInfoQuery = createQuery({
