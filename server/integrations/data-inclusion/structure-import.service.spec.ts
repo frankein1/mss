@@ -1,7 +1,7 @@
 import { vi, test, expect, beforeEach } from 'vitest'
 import { DataInclusionIntegrationHandler } from './structure-import.service'
-import { createStructure } from '~/server/query/data-inclusion'
 import { prismaClient } from '~/server/prisma'
+import { DataInclusionService } from '~/server/services'
 
 vi.mock('~/server/lib/data-inclusion')
 
@@ -22,7 +22,7 @@ test.skip('Structure import job should create structures when they do not exist'
 })
 
 test.skip('Structure import job should update structure when it exists already but is obsolete', async () => {
-  await createStructure(
+  await DataInclusionService.create(
     {
       id: '1',
       siret: '1234567890',
