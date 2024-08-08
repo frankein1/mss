@@ -1,6 +1,6 @@
 <template>
   <PageContainer no-max-width>
-    <AtomBreadcrumb :links="breadcrumbs.beneficiary.AppHistory()" />
+    <AtomBreadcrumb :links="breadcrumbs.file.AppHistory()" />
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -31,7 +31,7 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 
-  const title = routes.beneficiary.AppHistory.title
+  const title = routes.file.AppHistory.title
 
   useHead({ title })
 </script>

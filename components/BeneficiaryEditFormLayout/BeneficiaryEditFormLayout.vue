@@ -25,8 +25,10 @@
       <AtomBreadcrumb
         :links="
           draft
-            ? breadcrumbs.beneficiary.AppBeneficiariesAdd()
-            : breadcrumbs.beneficiary.AppBeneficiaryEdit(
+            ? breadcrumbs.file.AppFileAdd()
+            : breadcrumbs.file.AppFileBeneficiaryEdit(
+                familyFileId,
+                familyIdentification,
                 beneficiaryIdentification
               )
         "

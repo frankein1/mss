@@ -56,7 +56,7 @@
     routes.beneficiary.AppBeneficiary.path(followup.value.beneficiary.id, {
       tab: BeneficiaryTab.History,
       item: followup.value.socialSupportId,
-      originPage: routes.beneficiary.AppHistory.name,
+      originPage: routes.file.AppHistory.name,
       originTab: HistoryTab.Followups
     })
   )

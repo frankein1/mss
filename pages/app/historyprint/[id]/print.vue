@@ -59,7 +59,7 @@
   })
   // Define page title
   useHead({
-    title: routes.beneficiary.AppHistoryPrint.title
+    title: routes.file.AppHistoryPrint.title
   })
 
   const historyType = route.query.type
