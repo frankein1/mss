@@ -2,12 +2,9 @@
   <div class="fr-container--fluid fr-p-2w">
     <div class="fr-grid-row">
       <div class="fr-col-12">
-        <h1>Data Inclusion</h1>
+        <h1>Job</h1>
       </div>
 
-      <div class="fr-col-12">
-        <h2>Import des structures</h2>
-      </div>
       <div class="fr-col-12">
         <JobResultFiltersAdmin
           class="fr-px-5v fr-mt-2w"
@@ -20,10 +17,18 @@
         >
           <li>
             <DsfrButton
-              label="Mettre à jour les structures"
+              label="Data Inclusion > maj structures"
               type="button"
               :disabled="launching"
               @click="onLaunch"
+            />
+          </li>
+          <li>
+            <DsfrButton
+              label="Brevo > export contacts"
+              type="button"
+              :disabled="launching"
+              @click="onBrevoExport"
             />
           </li>
           <li>
@@ -102,6 +107,23 @@
       },
       onFailure: () => {
         snackbar.error("Echec de lancement de l'import de structure")
+      }
+    })
+  }
+
+  function onBrevoExport() {
+    useTrpcMutation({
+      mutation: () => trpcClient.admin.launchBrevoExport.mutate(),
+      isSubmitting: launching,
+      onSuccess: launched => {
+        if (launched) {
+          snackbar.success("L'export des contacts a démarré avec succès")
+        } else {
+          snackbar.info('Un export des contacts est déjà en cours')
+        }
+      },
+      onFailure: () => {
+        snackbar.error("Echec de lancement de l'export des contacts")
       }
     })
   }

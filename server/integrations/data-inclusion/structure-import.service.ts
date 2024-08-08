@@ -1,13 +1,6 @@
-import {
-  getStructureStatusInDB,
-  createStructure,
-  updateStructure,
-  countStructures,
-  createJob,
-  updateJob
-} from '~/server/query/data-inclusion'
 import { JobResult, dataInclusionStructureServerSchema } from '~/server/schema'
 import { downloadStructures } from '~/server/lib/data-inclusion'
+import { DataInclusionService, JobResultService } from '~/server/services'
 
 async function importStructures(job: JobResult) {
   const res = await downloadStructures()
@@ -55,7 +48,7 @@ async function importStructures(job: JobResult) {
     let shouldBeUpdated: boolean
 
     try {
-      const status = await getStructureStatusInDB(
+      const status = await DataInclusionService.getStatus(
         structure.id,
         structure.updated
       )
@@ -74,7 +67,7 @@ async function importStructures(job: JobResult) {
 
     if (!exists) {
       try {
-        await createStructure(structure, version)
+        await DataInclusionService.create(structure, version)
         job.result.nCreated++
         job.result.nImported++
       } catch (err: unknown) {
@@ -86,7 +79,7 @@ async function importStructures(job: JobResult) {
       }
     } else if (shouldBeUpdated) {
       try {
-        await updateStructure(structure, version)
+        await DataInclusionService.update(structure, version)
         job.result.nUpdated++
         job.result.nImported++
       } catch (err: unknown) {
@@ -101,7 +94,7 @@ async function importStructures(job: JobResult) {
     if (i % 1000 === 0) {
       job.status = 'Ongoing'
 
-      await updateJob({
+      await JobResultService.update({
         id: job.id,
         status: job.status,
         errors: job.errors,
@@ -110,14 +103,14 @@ async function importStructures(job: JobResult) {
     }
   }
 
-  const count = await countStructures()
+  const count = await DataInclusionService.count()
   job.result.nInDatabase = count
 
   return job
 }
 
 async function handleStructuresImport(iscron = false) {
-  const job = await createJob({
+  const job = await JobResultService.create({
     name: iscron
       ? 'data-inclusion-structure-import-cron'
       : 'data-inclusion-structure-import',
@@ -148,7 +141,7 @@ async function handleStructuresImport(iscron = false) {
   job.durationInSeconds = durationInSeconds
   job.status = job.errors.length > 0 ? 'Failure' : 'Success'
 
-  return await updateJob({
+  return await JobResultService.update({
     id: job.id,
     status: job.status,
     endDate: job.endDate,

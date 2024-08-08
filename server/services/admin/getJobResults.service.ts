@@ -1,11 +1,11 @@
 import { Prisma } from '@prisma/client'
+import { jobConverter } from '../jobResult/jobConverter'
 import {
   JobResultAdminFilterInput,
   AdminGetJobResultsInput
 } from '~/server/schema'
 import { JobResultRepo } from '~/server/database'
 import { takeAndSkipFromPagination } from '~/utils/table'
-import { jobConverter } from '~/server/query'
 
 function prepareFilters(
   filters: JobResultAdminFilterInput

@@ -1,10 +1,10 @@
 import { FollowupMedium } from '@prisma/client'
+import { SocialSupportSubjectService } from '..'
 import { prepareSocialSupportSubjectsMutations } from './helper'
 import { FollowupRepo, SocialSupportRepo } from '~/server/database'
 import { EditFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { prepareDocumentsMutations } from '~/utils/prisma'
-import { markSocialSupportSubjectAsUsed } from '~/server/query'
 import { prismaClient } from '~/server/prisma'
 
 type UpdateParams = {
@@ -91,7 +91,8 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     }
   })
 
-  const updateSocialSupportSubject = markSocialSupportSubjectAsUsed(subjects)
+  const updateSocialSupportSubject =
+    SocialSupportSubjectService.markUsed(subjects)
 
   const [socialSupportResult] = await prismaClient.$transaction([
     updateSocialSupport,

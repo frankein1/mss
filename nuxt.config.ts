@@ -143,6 +143,9 @@ export default defineNuxtConfig({
       keycloakProvider: 'InclusionConnect',
       keycloakLabel: 'keycloak'
     },
+    brevo: {
+      apiKey: process.env.BREVO_API_KEY || ''
+    },
     email: {
       smtpHost: process.env.EMAIL_SMTP_HOST || '',
       smtpPassword: process.env.EMAIL_SMTP_PASSWORD || '',

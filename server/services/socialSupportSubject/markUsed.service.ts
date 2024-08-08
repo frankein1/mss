@@ -1,6 +1,6 @@
 import { SocialSupportSubjectRepo } from '~/server/database'
 
-export function markSocialSupportSubjectAsUsed(ids: string[]) {
+export function markUsed(ids: string[]) {
   return SocialSupportSubjectRepo.prisma.updateMany({
     where: {
       id: {
