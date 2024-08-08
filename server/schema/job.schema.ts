@@ -12,8 +12,11 @@ export const dataInclusionStructureImportResultSchema = z.object({
   nInDatabase: z.number(),
   nImported: z.number(),
   nCreated: z.number(),
-  nUpdated: z.number()
+  nUpdated: z.number(),
+  processId: z.number().optional()
 })
+
+export const brevoExportResultSchema = z.object({})
 
 export type JobStructureImportResult = z.infer<
   typeof dataInclusionStructureImportResultSchema
@@ -36,21 +39,19 @@ export type JobStructureImportError = z.infer<
   typeof dataInclusionStructureErrorSchema
 >
 
-export const createJobDataInclusionStructureSchema = z.object({
+export const createJobResultSchema = z.object({
   name: z.string(),
   errors: z.array(dataInclusionStructureErrorSchema),
   result: dataInclusionStructureImportResultSchema
 })
 
-export type CreateJobDataInclusionStructureInput = z.infer<
-  typeof createJobDataInclusionStructureSchema
->
+export type CreateJobResultInput = z.infer<typeof createJobResultSchema>
 
-export type UpdateJobDataInclusionStructureInput =
+export type UpdateJobResultInput =
   | {
       id: string
       status: 'Failure' | 'Success'
-      durationInSeconds: number
+      durationInSeconds?: number
       endDate: Date
       errors: JobStructureImportError[]
       result: JobStructureImportResult
