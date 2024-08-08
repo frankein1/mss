@@ -43,7 +43,12 @@ const handler = async ({
             id: true,
             firstName: true,
             usualName: true,
-            birthName: true
+            birthName: true,
+            familyFile: {
+              select: {
+                id: true
+              }
+            }
           }
         },
         socialSupport: {

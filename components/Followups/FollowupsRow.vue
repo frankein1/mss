@@ -53,7 +53,7 @@
   const followup = computed(() => props.data.followup)
 
   const followupPath = computed(() =>
-    routes.beneficiary.AppBeneficiary.path(followup.value.beneficiary.id, {
+    routes.file.AppFile.path(followup.value.familyFile.id, {
       tab: BeneficiaryTab.History,
       item: followup.value.socialSupportId,
       originPage: routes.file.AppHistory.name,
