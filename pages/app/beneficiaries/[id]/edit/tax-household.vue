@@ -20,6 +20,7 @@
       message="Les informations du bénéficiaires n'ont pas pu être chargées."
     >
       <BeneficiaryFormFamilySituation
+        v-if="bindedValues"
         :family-identification="familyIdentification"
       />
     </AtomLazyComponent>

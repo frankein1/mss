@@ -1,109 +1,115 @@
 <template>
-  <BeneficiaryFormSection>
-    <div class="fr-col-12">
-      <VeeSelect
-        name="socioProfessionalCategory"
-        :label="beneficiaryFieldLabels.socioProfessionalCategory"
-        :options="
-          withEmptyValue(beneficiarySocioProfessionalCategoryKeys.options)
-        "
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeInput
-        name="occupation"
-        :label="beneficiaryFieldLabels.occupation"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeSelect
-        name="studyLevel"
-        :label="beneficiaryFieldLabels.studyLevel"
-        :options="withEmptyValue(beneficiaryStudyLevelKeys.options)"
-      />
-    </div>
-    <div class="fr-col-12 fr-col-lg-6">
-      <VeeInput
-        name="employer"
-        :label="beneficiaryFieldLabels.employer"
-      />
-    </div>
-    <div class="fr-col-12 fr-col-lg-6">
-      <VeeInput
-        name="employerSiret"
-        :label="beneficiaryFieldLabels.employerSiret"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeInput
-        name="unemploymentNumber"
-        :label="beneficiaryFieldLabels.unemploymentNumber"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeMultiSelect
-        name="pensionOrganisations"
-        :label="beneficiaryFieldLabels.pensionOrganisations"
-        :options="pensionOrganisationKeys.options"
-        label-class="fr-text--regular"
-        dropdown
-      />
-    </div>
-    <div
-      v-if="hasOtherPensionOrganisations"
-      class="fr-col-12"
-    >
-      <VeeInput
-        name="otherPensionOrganisations"
-        :label="beneficiaryFieldLabels.otherPensionOrganisations"
-      />
-    </div>
-    <div class="fr-col-12">
-      <VeeInput
-        name="cafNumber"
-        :label="beneficiaryFieldLabels.cafNumber"
-      />
-    </div>
+  <section class="fr-p-3v">
+    <h2 class="title-blue fr-mb-6v">
+      {{ routes.beneficiary.AppBeneficiaryEditOccupation.title }}
+    </h2>
 
-    <template v-if="application.module.ministere">
+    <BeneficiaryFormSection>
       <div class="fr-col-12">
         <VeeSelect
-          name="ministereCategorie"
-          :label="beneficiaryFieldLabels.ministereCategorie"
-          :options="withEmptyValue(ministereCategorieKeys.options)"
+          name="socioProfessionalCategory"
+          :label="beneficiaryFieldLabels.socioProfessionalCategory"
+          :options="
+            withEmptyValue(beneficiarySocioProfessionalCategoryKeys.options)
+          "
         />
       </div>
       <div class="fr-col-12">
-        <VeeSearchableSelect
-          name="ministereDepartementServiceAc"
-          :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
-          :options="withEmptyValue(ministereDepartmentServiceAcKeys.options)"
+        <VeeInput
+          name="occupation"
+          :label="beneficiaryFieldLabels.occupation"
         />
       </div>
       <div class="fr-col-12">
         <VeeSelect
-          name="ministereStructure"
-          :label="beneficiaryFieldLabels.ministereStructure"
-          :options="withEmptyValue(ministereStructureKeys.options)"
+          name="studyLevel"
+          :label="beneficiaryFieldLabels.studyLevel"
+          :options="withEmptyValue(beneficiaryStudyLevelKeys.options)"
         />
       </div>
-    </template>
+      <div class="fr-col-12 fr-col-lg-6">
+        <VeeInput
+          name="employer"
+          :label="beneficiaryFieldLabels.employer"
+        />
+      </div>
+      <div class="fr-col-12 fr-col-lg-6">
+        <VeeInput
+          name="employerSiret"
+          :label="beneficiaryFieldLabels.employerSiret"
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeInput
+          name="unemploymentNumber"
+          :label="beneficiaryFieldLabels.unemploymentNumber"
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeMultiSelect
+          name="pensionOrganisations"
+          :label="beneficiaryFieldLabels.pensionOrganisations"
+          :options="pensionOrganisationKeys.options"
+          label-class="fr-text--regular"
+          dropdown
+        />
+      </div>
+      <div
+        v-if="hasOtherPensionOrganisations"
+        class="fr-col-12"
+      >
+        <VeeInput
+          name="otherPensionOrganisations"
+          :label="beneficiaryFieldLabels.otherPensionOrganisations"
+        />
+      </div>
+      <div class="fr-col-12">
+        <VeeInput
+          name="cafNumber"
+          :label="beneficiaryFieldLabels.cafNumber"
+        />
+      </div>
 
-    <AtomCallout class="callout-container">
-      <div class="budget-redirection">
-        <div>
-          <p>
-            Pour détailler les
-            <strong
-              >ressources du bénéficiaire et des membres de son foyer</strong
-            >, rendez-vous dans l’onglet “Budget” du dossier bénéficiaire.
-          </p>
+      <template v-if="application.module.ministere">
+        <div class="fr-col-12">
+          <VeeSelect
+            name="ministereCategorie"
+            :label="beneficiaryFieldLabels.ministereCategorie"
+            :options="withEmptyValue(ministereCategorieKeys.options)"
+          />
         </div>
+        <div class="fr-col-12">
+          <VeeSearchableSelect
+            name="ministereDepartementServiceAc"
+            :label="beneficiaryFieldLabels.ministereDepartementServiceAc"
+            :options="withEmptyValue(ministereDepartmentServiceAcKeys.options)"
+          />
+        </div>
+        <div class="fr-col-12">
+          <VeeSelect
+            name="ministereStructure"
+            :label="beneficiaryFieldLabels.ministereStructure"
+            :options="withEmptyValue(ministereStructureKeys.options)"
+          />
+        </div>
+      </template>
 
-        <AtomPictogram path="/pictograms/money.svg"></AtomPictogram>
-      </div>
-    </AtomCallout>
-  </BeneficiaryFormSection>
+      <AtomCallout class="callout-container">
+        <div class="budget-redirection">
+          <div>
+            <p>
+              Pour détailler les
+              <strong
+                >ressources du bénéficiaire et des membres de son foyer</strong
+              >, rendez-vous dans l’onglet “Budget” du dossier bénéficiaire.
+            </p>
+          </div>
+
+          <AtomPictogram path="/pictograms/money.svg"></AtomPictogram>
+        </div>
+      </AtomCallout>
+    </BeneficiaryFormSection>
+  </section>
 </template>
 
 <script lang="ts" setup>
@@ -117,6 +123,7 @@
     beneficiaryStudyLevelKeys
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
+  import { routes } from '~/utils/routes'
 
   const { application } = usePermissions()
 
