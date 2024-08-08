@@ -1,8 +1,8 @@
 import { jobConverter } from './jobConverter'
 import { JobResultRepo } from '~/server/database'
-import { UpdateJobDataInclusionStructureInput } from '~/server/schema'
+import { UpdateJobResultInput } from '~/server/schema'
 
-export async function updateJob(job: UpdateJobDataInclusionStructureInput) {
+export async function updateJob(job: UpdateJobResultInput) {
   const res = await JobResultRepo.prisma.update({
     data: job,
     where: { id: job.id }

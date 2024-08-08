@@ -1,30 +1,44 @@
 import { JobStatus, Structure, User } from '@prisma/client'
-import { JobResultRepo, UserRepo } from '~/server/database'
+import { UserRepo } from '~/server/database'
 import { brevoClient } from '~/server/lib'
+import { JobResultService } from '~/server/services'
 import { formatDate } from '~/utils/formatDate'
 
 const JOB_NAME = 'brevo-export'
 
 async function exportContacts() {
-  const startDate = new Date()
-
-  const job = await getOrCreateJob()
-  if (job.status === JobStatus.Ongoing) {
+  const ongoing = await JobResultService.getOngoingJob()
+  if (ongoing) {
     return
   }
 
-  const users = await getUsers(job.startDate)
+  const job = await JobResultService.create({
+    name: JOB_NAME,
+    errors: [],
+    result: {
+      nTotal: 0,
+      nInDatabase: 0,
+      nImported: 0,
+      nCreated: 0,
+      nUpdated: 0
+    }
+  })
+
+  let startDate = new Date(0)
+
+  const lastJob = await JobResultService.getLastSuccessfullJob(JOB_NAME)
+  if (lastJob) {
+    startDate = lastJob.startDate
+  }
+
+  const users = await getUsers(startDate)
   if (users.length === 0) {
     return
   }
 
-  await JobResultRepo.prisma.update({
-    where: {
-      id: job.id
-    },
-    data: {
-      status: JobStatus.Ongoing
-    }
+  await JobResultService.update({
+    ...job,
+    status: JobStatus.Ongoing
   })
 
   const jsonBody = buildJson(users)
@@ -40,28 +54,33 @@ async function exportContacts() {
     })
     .then(
       async function (data) {
-        await JobResultRepo.prisma.update({
-          where: {
-            id: job.id
-          },
-          data: {
-            startDate,
-            endDate: new Date(),
-            errors: {},
-            status: JobStatus.Success,
-            result: { processId: data.body.processId }
+        await JobResultService.update({
+          id: job.id,
+          endDate: new Date(),
+          status: JobStatus.Success,
+          errors: [],
+          result: {
+            nTotal: users.length,
+            nInDatabase: 0,
+            nImported: 0,
+            nCreated: 0,
+            nUpdated: 0,
+            processId: data.body.processId
           }
         })
       },
       async function (error) {
-        await JobResultRepo.prisma.update({
-          where: {
-            id: job.id
-          },
-          data: {
-            endDate: null,
-            errors: error.body,
-            status: JobStatus.Failure
+        await JobResultService.update({
+          id: job.id,
+          status: JobStatus.Failure,
+          endDate: new Date(),
+          errors: [{ category: JOB_NAME, error: `${error}`, status: null }],
+          result: {
+            nTotal: 0,
+            nInDatabase: 0,
+            nImported: 0,
+            nCreated: 0,
+            nUpdated: 0
           }
         })
       }
@@ -119,31 +138,4 @@ async function getUsers(date: Date) {
     }
   })
   return users
-}
-
-async function getOrCreateJob() {
-  let job = await JobResultRepo.prisma.findFirst({
-    where: {
-      name: JOB_NAME
-    },
-    select: {
-      id: true,
-      startDate: true,
-      status: true
-    }
-  })
-  if (!job) {
-    job = await JobResultRepo.prisma.create({
-      data: {
-        name: JOB_NAME,
-        startDate: new Date(0)
-      },
-      select: {
-        id: true,
-        startDate: true,
-        status: true
-      }
-    })
-  }
-  return job
 }
