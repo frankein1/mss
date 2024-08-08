@@ -18,36 +18,10 @@
       :error="Boolean(error)"
       message="Les informations du bénéficiaires n'ont pas pu être chargées."
     >
-      <div
+      <BeneficiaryFormHealth
         v-if="bindedValues && permissions"
-        class="fr-p-3v"
-      >
-        <h2 class="title-blue fr-mb-6v">{{ pageTitle }}</h2>
-        <div
-          class="fr-grid-row fr-grid-row--center fr-grid-row--gutters fr-pb-3w"
-        >
-          <AtomNotice>
-            <template #default> Attention aux données de santé </template>
-
-            <template #content>
-              Vous ne pouvez manipuler des données de santé des bénéficiaires
-              que si votre structure est habilitée à le faire au titre de
-              l'article 9 du RGPD (pour plus d'information voir
-              <a
-                target="_blank"
-                href="/notice/20231103_donnees_sante_monsuivisocial.pdf"
-                rel="noopener external"
-                title="Notice d'information - nouvelle fenêtre"
-                >la notice d'information</a
-              >
-              ou référez-vous à votre responsable de structure). Nous vous
-              encourageons également à ne mentionner que les données qui sont
-              strictement nécessaires au suivi des bénéficiaires.
-            </template>
-          </AtomNotice>
-        </div>
-        <BeneficiaryFormHealth :permissions />
-      </div>
+        :permissions
+      />
     </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
 </template>
@@ -125,8 +99,4 @@
       }
     })
   }
-
-  const pageTitle = computed(
-    () => routes.beneficiary.AppBeneficiaryEditHealth.title
-  )
 </script>

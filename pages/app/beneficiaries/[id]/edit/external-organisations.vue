@@ -20,13 +20,7 @@
       :error="Boolean(error)"
       message="Les informations du bénéficiaires n'ont pas pu être chargées."
     >
-      <div
-        v-if="bindedValues"
-        class="fr-p-3v"
-      >
-        <h2 class="title-blue fr-mb-6v">{{ pageTitle }}</h2>
-        <BeneficiaryFormExternalOrganisations />
-      </div>
+      <BeneficiaryFormExternalOrganisations v-if="bindedValues" />
     </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
 </template>
@@ -104,8 +98,4 @@
       }
     })
   }
-
-  const pageTitle = computed(
-    () => routes.beneficiary.AppBeneficiaryEditExternalOrganisations.title
-  )
 </script>

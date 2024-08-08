@@ -18,12 +18,7 @@
       :error="Boolean(error)"
       message="Les informations du bénéficiaires n'ont pas pu être chargées."
     >
-      <div
-        v-if="bindedValues"
-        class="fr-p-3v"
-      >
-        <BeneficiaryFormEntourages />
-      </div>
+      <BeneficiaryFormEntourages v-if="bindedValues" />
     </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
 </template>

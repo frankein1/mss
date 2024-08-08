@@ -18,13 +18,7 @@
       :error="Boolean(error)"
       message="Les informations du bénéficiaires n'ont pas pu être chargées."
     >
-      <div
-        v-if="bindedValues && permissions"
-        class="fr-p-3v"
-      >
-        <h2 class="title-blue fr-mb-6v">{{ pageTitle }}</h2>
-        <BeneficiaryFormOccupationIncome />
-      </div>
+      <BeneficiaryFormOccupationIncome v-if="bindedValues && permissions" />
     </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
 </template>
@@ -107,8 +101,4 @@
       }
     })
   }
-
-  const pageTitle = computed(
-    () => routes.beneficiary.AppBeneficiaryEditOccupation.title
-  )
 </script>
