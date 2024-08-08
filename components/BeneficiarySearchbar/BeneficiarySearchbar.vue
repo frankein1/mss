@@ -8,7 +8,12 @@
     >
       <template #result="{ result: beneficiary }">
         <NuxtLink
-          :to="r.AppBeneficiary.path(beneficiary.id, { originPage: routeName })"
+          :to="
+            r.AppFile.path(beneficiary.familyFileId, {
+              originPage: routeName,
+              beneficiaryId: beneficiary.id
+            })
+          "
           class="fr-btn fr-btn--tertiary-no-outline result"
         >
           {{ formatBeneficiarySearchDisplayName(beneficiary) }}
@@ -16,11 +21,11 @@
       </template>
     </BeneficiarySearchbarInput>
     <NuxtLink
-      :to="r.AppBeneficiariesAdd.path()"
+      :to="r.AppFileAdd.path()"
       class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line add-beneficiary-btn"
       @click="onAccessBeneficiaryAdd"
     >
-      Ajouter un dossier
+      Ajouter un dossier bénéficiaire
     </NuxtLink>
   </div>
 </template>
@@ -35,10 +40,10 @@
 
   const route = useRoute()
 
-  const r = routes.beneficiary
+  const r = routes.file
   type RouteName =
     | typeof routes.user.AppOverview.name
-    | typeof r.AppBeneficiaries.name
+    | typeof routes.beneficiary.AppBeneficiaries.name
   const routeName = route.name as RouteName | undefined
 
   async function searchBeneficiaries(query: string) {
