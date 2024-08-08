@@ -4,11 +4,11 @@ import {
   HelpRequestRepo,
   FileInstructionRepo
 } from '~/server/database'
-import { markSocialSupportSubjectAsUsed } from '~/server/query'
 import { EditHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareDocumentsMutations, connect } from '~/utils/prisma'
 import { prismaClient } from '~/server/prisma'
+import { SocialSupportSubjectService } from '..'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -125,7 +125,9 @@ export async function update({ input, ctx }: UpdateParams) {
     }
   })
 
-  const updateSocialSupportSubject = markSocialSupportSubjectAsUsed([subjectId])
+  const updateSocialSupportSubject = SocialSupportSubjectService.markUsed([
+    subjectId
+  ])
 
   const [socialSupportResult] = await prismaClient.$transaction([
     updateSocialSupport,
