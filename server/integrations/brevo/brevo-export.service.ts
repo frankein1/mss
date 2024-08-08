@@ -43,7 +43,8 @@ async function exportContacts() {
 
   const jsonBody = buildJson(users)
 
-  brevoClient.contactsApi
+  brevoClient
+    .getContactsApi()
     .importContacts({
       jsonBody,
       listIds: [10],

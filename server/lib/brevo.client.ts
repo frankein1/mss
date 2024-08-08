@@ -8,7 +8,7 @@ function getContactsApi() {
 }
 
 const brevoClient = {
-  contactsApi: getContactsApi()
+  getContactsApi
 }
 
 export { brevoClient }
