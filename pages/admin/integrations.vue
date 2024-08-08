@@ -2,12 +2,9 @@
   <div class="fr-container--fluid fr-p-2w">
     <div class="fr-grid-row">
       <div class="fr-col-12">
-        <h1>Data Inclusion</h1>
+        <h1>Job</h1>
       </div>
 
-      <div class="fr-col-12">
-        <h2>Import des structures</h2>
-      </div>
       <div class="fr-col-12">
         <JobResultFiltersAdmin
           class="fr-px-5v fr-mt-2w"
@@ -20,7 +17,7 @@
         >
           <li>
             <DsfrButton
-              label="Mettre à jour les structures"
+              label="Data Inclusion > maj structures"
               type="button"
               :disabled="launching"
               @click="onLaunch"
