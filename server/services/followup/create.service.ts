@@ -8,7 +8,7 @@ import { FamilyFileRepo, SocialSupportRepo } from '~/server/database'
 import { AddFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
-import { markSocialSupportSubjectAsUsed } from '~/server/query'
+import { SocialSupportSubjectService } from '..'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -112,7 +112,7 @@ export const create = async ({ ctx, input }: CreateParams) => {
     }
   })
 
-  await markSocialSupportSubjectAsUsed(subjects)
+  await SocialSupportSubjectService.markUsed(subjects)
 
   return fu
 }

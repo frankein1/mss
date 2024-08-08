@@ -6,9 +6,9 @@ import {
 import { cleanCreateInput } from './helper'
 import { FamilyFileRepo, HelpRequestRepo } from '~/server/database'
 import { CreateHelpRequestInput } from '~/server/schema'
-import { markSocialSupportSubjectAsUsed } from '~/server/query'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareDocumentsMutations, connect } from '~/utils/prisma'
+import { SocialSupportSubjectService } from '..'
 
 type CreateParams = {
   ctx: SecurityRuleContext
@@ -122,7 +122,7 @@ export async function create({ input, ctx }: CreateParams) {
     }
   })
 
-  await markSocialSupportSubjectAsUsed([input.subjectId])
+  await SocialSupportSubjectService.markUsed([input.subjectId])
 
   return { helpRequest }
 }
