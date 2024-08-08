@@ -10,7 +10,7 @@
     >
       <table>
         <caption>
-          Résultats des jobs d'import de structures Data Inclusion
+          Résultats des jobs
         </caption>
 
         <thead>
