@@ -24,6 +24,7 @@ export async function search({
     orderBy: [{ usualName: 'asc' }, { birthName: 'asc' }],
     select: {
       id: true,
+      familyFileId: true,
       usualName: true,
       firstName: true,
       birthName: true,
