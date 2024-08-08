@@ -154,7 +154,7 @@
   const originPage = route.query.originPage as
     | typeof routes.user.AppOverview.name
     | typeof routes.beneficiary.AppBeneficiaries.name
-    | typeof routes.beneficiary.AppHistory.name
+    | typeof routes.file.AppHistory.name
     | undefined
   const originTab = route.query.hash as string | undefined
 

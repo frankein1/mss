@@ -76,7 +76,7 @@
     routes.beneficiary.AppBeneficiary.path(socialSupport.value.beneficiary.id, {
       tab: BeneficiaryTab.History,
       item: socialSupport.value.id,
-      originPage: routes.beneficiary.AppHistory.name,
+      originPage: routes.file.AppHistory.name,
       originTab: HistoryTab.FileInstructions
     })
   )
