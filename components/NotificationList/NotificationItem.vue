@@ -102,8 +102,8 @@
 
   const itemLink = computed(() => {
     if (props.notification.beneficiary) {
-      return routes.beneficiary.AppBeneficiary.path(
-        props.notification.beneficiary.id,
+      return routes.file.AppFile.path(
+        props.notification.beneficiary.familyFile.id,
         {
           tab: getItemTab(),
           item: getItemId(),
