@@ -72,6 +72,7 @@ export async function getSimilar({
       birthDate: true,
       familyFile: {
         select: {
+          id: true,
           referents: {
             select: {
               id: true,

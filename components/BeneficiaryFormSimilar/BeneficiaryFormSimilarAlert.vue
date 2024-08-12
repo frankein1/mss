@@ -9,7 +9,9 @@
           <template v-if="!similarBeneficiary.referent">
             <NuxtLink
               :to="
-                routes.beneficiary.AppBeneficiary.path(similarBeneficiary.id)
+                routes.file.AppFile.path(similarBeneficiary.familyFile.id, {
+                  beneficiaryId: similarBeneficiary.id
+                })
               "
             >
               {{ similarBeneficiaryLabel }}
