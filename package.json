@@ -54,7 +54,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.9.1",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@playwright/test": "^1.45.2",
+    "@playwright/test": "^1.46.0",
     "@sentry/node": "^8.25.0",
     "@types/json-diff": "1.0.3",
     "@types/jsonwebtoken": "^9.0.6",
@@ -76,7 +76,6 @@
     "stylelint": "^16.8.1",
     "stylelint-config-recommended-vue": "^1.5.0",
     "stylelint-config-standard-scss": "^13.1.0",
-    "test@1.46.0": "link:playwright/test@1.46.0",
     "ts-node": "^10.9.2",
     "typescript": "~5.5.4",
     "vitest": "^2.0.5",
