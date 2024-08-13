@@ -2,9 +2,6 @@ import { beneficiaryRoutes as routes } from '~/server/route'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryRouter = router({
-  getBeneficiaryMinimalInfo: protectedProcedure
-    .input(routes.getBeneficiaryMinimalInfoQuery.inputValidation)
-    .query(routes.getBeneficiaryMinimalInfoQuery.execute),
   getBeneficiaryDetails: protectedProcedure
     .input(routes.getBeneficiaryDetailsQuery.inputValidation)
     .query(routes.getBeneficiaryDetailsQuery.execute),

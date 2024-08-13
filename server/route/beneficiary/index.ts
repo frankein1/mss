@@ -1,7 +1,6 @@
 import { addFamilyFileMemberMutation } from './add-family-file-member.mutation'
 import { exportBeneficiariesQuery } from './export.query'
 import { getBeneficiaryDetailsQuery } from './get-details.query'
-import { getBeneficiaryMinimalInfoQuery } from './get-minimal-info.query'
 import { getPage } from './get-page.query'
 import { searchBeneficiaryQuery } from './search.query'
 import { updateEntourageMutation } from './update-entourage.mutation'
@@ -21,7 +20,6 @@ import { createTaxHouseholdMemberMutation } from './create-household-member.muta
 export const beneficiaryRoutes = {
   exportBeneficiariesQuery,
   getBeneficiaryDetailsQuery,
-  getBeneficiaryMinimalInfoQuery,
   getPage,
   searchBeneficiaryQuery,
   getBeneficiaryTaxHouseholdsQuery,
