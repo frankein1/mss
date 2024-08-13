@@ -12,8 +12,8 @@ dependencies:
     specifier: ~1.12.1
     version: 1.12.1(browser-sync@2.29.3)
   '@gouvminint/vue-dsfr':
-    specifier: ^5.18.2
-    version: 5.18.2(oh-vue-icons@1.0.0-rc3)(vue-router@4.4.0)(vue@3.4.32)
+    specifier: ^5.19.2
+    version: 5.19.2(oh-vue-icons@1.0.0-rc3)(vue-router@4.4.0)(vue@3.4.32)
   '@prisma/client':
     specifier: ^5.17.0
     version: 5.17.0(prisma@5.17.0)
@@ -1086,8 +1086,8 @@ packages:
       browser-sync: 2.29.3
     dev: false
 
-  /@gouvminint/vue-dsfr@5.18.2(oh-vue-icons@1.0.0-rc3)(vue-router@4.4.0)(vue@3.4.32):
-    resolution: {integrity: sha512-bkogYJPgb2euqXn+fXDWmIDF3qaxv/ZyTfCWOZynlQ4N4ctGeIT5CSEkvskXzhirXRjM0BuHp7OVaKMuKz+UZg==}
+  /@gouvminint/vue-dsfr@5.19.2(oh-vue-icons@1.0.0-rc3)(vue-router@4.4.0)(vue@3.4.32):
+    resolution: {integrity: sha512-i3VjeeR214auVocijLAliiaoxRpUkC3/49Rxxuo91PCxljluEB5ajMtYTBXQmh0vg2pr9msrgRQo4dUv9ZresA==}
     engines: {node: '>=20.x.x', npm: '>=10.x.x'}
     peerDependencies:
       oh-vue-icons: 1.0.0-rc3
