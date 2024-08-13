@@ -54,7 +54,7 @@
   "devDependencies": {
     "@axe-core/playwright": "^4.9.1",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@playwright/test": "^1.45.2",
+    "@playwright/test": "^1.46.0",
     "@sentry/node": "^8.25.0",
     "@types/json-diff": "1.0.3",
     "@types/jsonwebtoken": "^9.0.6",
