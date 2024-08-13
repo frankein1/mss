@@ -45,7 +45,7 @@
      * Used for the mutation logs of a collection
      * It defines the URL base to access the item within the application
      */
-    routeWithParams?: typeof routes.beneficiary.AppBeneficiary.path
+    routeWithParams?: typeof routes.file.AppFile.path
   }>()
 
   const usersActivity = ref<GetBeneficiariesUsersActivityOutput['activity']>([])

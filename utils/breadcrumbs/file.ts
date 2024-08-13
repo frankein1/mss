@@ -1,27 +1,85 @@
-import { breadcrumbs as ben } from './beneficiary'
+import { breadcrumbs as ben, getBreadWithBeneficiary } from './beneficiary'
+import { breadcrumbs as user } from './user'
 import { routes } from '~/utils/routes'
-import { BeneficiaryNames } from '~/types/beneficiary'
+import {
+  BeneficiaryNames,
+  BeneficiaryIdentification
+} from '~/types/beneficiary'
+import { FamilyFileUrlOptions } from '~/utils/routes/file'
 
 const r = routes.file
+type Routes = typeof r
+
+type OriginPage = 'AppOverview' | 'AppBeneficiaries' | 'AppHistory'
+
+interface FamilyFileBreadcrumbOptions {
+  originPage?: OriginPage
+}
+
+function getBread<T extends 'AppHistory' | 'AppFileAdd'>(name: T) {
+  const title = r[name].title as Routes[T]['title']
+  return [{ text: title, to: r[name].path() }]
+}
 
 function getBreadFamilyFile(
   familyFileId: string,
-  fileIdentification: BeneficiaryNames[] | null
+  familyIdentification: BeneficiaryNames[] | null,
+  options?: FamilyFileUrlOptions
 ) {
   return [
     {
-      text: r.AppFile.title(fileIdentification),
-      to: r.AppFile.path(familyFileId || '')
+      text: r.AppFile.title(familyIdentification),
+      to: r.AppFile.path(familyFileId || '', options)
     }
   ]
 }
 
-export const breadcrumbs = {
-  AppFile: (
+const _b = {
+  AppFileAdd: () => [...user.AppOverview(), ...getBread('AppFileAdd')],
+  AppFileBeneficiaryEdit: (
     familyFileId: string,
-    fileIdentification: BeneficiaryNames[] | null
+    familyIdentification: BeneficiaryNames[] | null,
+    beneficiary: BeneficiaryIdentification | null
   ) => [
     ...ben.AppBeneficiaries(),
-    ...getBreadFamilyFile(familyFileId, fileIdentification)
-  ]
+    ...getBreadFamilyFile(
+      familyFileId,
+      familyIdentification,
+      beneficiary ? { beneficiaryId: beneficiary.id } : undefined
+    ),
+    ...getBreadWithBeneficiary('AppBeneficiaryEdit', beneficiary)
+  ],
+  AppHistory: () => [...user.AppOverview(), ...getBread('AppHistory')]
+}
+
+function getBreadFamilyFileFromOriginPage(
+  familyFileId: string,
+  familyIdentification: BeneficiaryNames[] | null,
+  options?: FamilyFileBreadcrumbOptions
+) {
+  switch (options?.originPage) {
+    case 'AppOverview':
+      return [
+        ...user.AppOverview(),
+        ...getBreadFamilyFile(familyFileId, familyIdentification)
+      ]
+    case 'AppHistory':
+      return [
+        ..._b.AppHistory(),
+        ...getBreadFamilyFile(familyFileId, familyIdentification)
+      ]
+    case 'AppBeneficiaries':
+    default:
+      return [
+        ...ben.AppBeneficiaries(),
+        ...getBreadFamilyFile(familyFileId, familyIdentification)
+      ]
+  }
+}
+
+export const breadcrumbs = {
+  AppFile: getBreadFamilyFileFromOriginPage,
+  AppFileAdd: _b.AppFileAdd,
+  AppFileBeneficiaryEdit: _b.AppFileBeneficiaryEdit,
+  AppHistory: _b.AppHistory
 }

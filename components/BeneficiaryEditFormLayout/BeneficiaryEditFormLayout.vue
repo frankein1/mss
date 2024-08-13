@@ -25,8 +25,10 @@
       <AtomBreadcrumb
         :links="
           draft
-            ? breadcrumbs.beneficiary.AppBeneficiariesAdd()
-            : breadcrumbs.beneficiary.AppBeneficiaryEdit(
+            ? breadcrumbs.file.AppFileAdd()
+            : breadcrumbs.file.AppFileBeneficiaryEdit(
+                familyFileId,
+                familyIdentification,
                 beneficiaryIdentification
               )
         "
@@ -69,7 +71,10 @@
   import { beneficiaryFieldLabels, relativeFieldLabels } from '~/client/labels'
   import { FamilyFilePermissions } from '~/server/security'
   import type { FieldLabels } from '~/types/fieldLabels'
-  import { BeneficiaryIdentification } from '~/types/beneficiary'
+  import {
+    BeneficiaryIdentification,
+    BeneficiaryFileIdentification
+  } from '~/types/beneficiary'
   import { routes, AppBeneficiaryEditRoute } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 
@@ -86,6 +91,7 @@
     defineProps<{
       draft: boolean
       familyFileId: string
+      familyIdentification: BeneficiaryFileIdentification[]
       beneficiaryIdentification: BeneficiaryIdentification | null
       bindedValues: z.infer<T> | null
       permissions: FamilyFilePermissions | undefined
@@ -98,7 +104,8 @@
     }>(),
     {
       titleIcon: undefined,
-      hasRequiredFields: true
+      hasRequiredFields: true,
+      smallTitle: false
     }
   )
 

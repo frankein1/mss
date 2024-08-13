@@ -5,14 +5,14 @@ import { routes } from '~/utils/routes'
 const r = routes.beneficiary
 type Routes = typeof r
 
-function getBread<
-  T extends 'AppBeneficiaries' | 'AppBeneficiariesAdd' | 'AppHistory'
->(name: T) {
+function getBread<T extends 'AppBeneficiaries' | 'AppBeneficiariesAdd'>(
+  name: T
+) {
   const title = r[name].title as Routes[T]['title']
   return [{ text: title, to: r[name].path() }]
 }
 
-function getBreadWithBeneficiary<
+export function getBreadWithBeneficiary<
   T extends 'AppBeneficiaryEdit' | 'AppBeneficiaryPrint'
 >(name: T, beneficiary: BeneficiaryIdentification | null) {
   const title = r[name].title(beneficiary)
@@ -38,7 +38,7 @@ function getBreadBeneficiaryFromOriginPage(
     case 'AppHistory':
       return [
         ...user.AppOverview(),
-        ...getBread('AppHistory'),
+        // ...getBread('AppHistory'),
         ...getBreadBeneficiary(beneficiary)
       ]
     default:
@@ -63,7 +63,7 @@ export const breadcrumbs = {
     beneficiary: BeneficiaryIdentification | null,
     originPage?: 'AppOverview' | 'AppBeneficiaries' | 'AppHistory' | undefined
   ) => getBreadBeneficiaryFromOriginPage(beneficiary, originPage),
-  AppHistory: () => [...user.AppOverview(), ...getBread('AppHistory')],
+  // AppHistory: () => [...user.AppOverview(), ...getBread('AppHistory')],
   AppBeneficiaryEdit: (beneficiary: BeneficiaryIdentification | null) => [
     ...user.AppOverview(),
     ...getBreadBeneficiary(beneficiary),

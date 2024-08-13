@@ -1,9 +1,8 @@
-import { AppRoute, FilesRoute, BeneficiariesRoute } from './utils'
+import { FilesRoute, BeneficiariesRoute } from './utils'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { BeneficiaryNames } from '~/types/beneficiary'
-import { TypeSuivi } from '~/client/options'
 
 type OriginPage =
   | 'AppOverview'
@@ -95,6 +94,7 @@ export const routes = {
     title: 'Bénéficiaires',
     path: () => BeneficiariesRoute
   },
+  // TODO will be obsolete and removed when migrated to file
   AppBeneficiariesAdd: {
     name: 'AppBeneficiariesAdd',
     title: 'Créer un dossier',
@@ -176,24 +176,5 @@ export const routes = {
         `${BeneficiariesRoute}/${beneficiaryId}/edit/external-organisations`,
         options
       )
-  },
-  AppHistory: {
-    name: 'AppHistory',
-    title: 'Accompagnements',
-    path: (tab?: HistoryTab) => {
-      const tabHash = tab ? `#${tab}` : ''
-      return `${AppRoute}/history${tabHash}`
-    }
-  },
-  AppHistoryPrint: {
-    name: 'AppHistoryPrint',
-    title: 'Imprimer la fiche',
-    path: (historyId: string, type?: TypeSuivi) => {
-      let routeUrl = `${AppRoute}/historyprint/${historyId}/print`
-      if (type) {
-        routeUrl = routeUrl + `?type=${type}`
-      }
-      return routeUrl
-    }
   }
 } as const

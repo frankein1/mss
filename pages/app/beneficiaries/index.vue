@@ -8,10 +8,10 @@
         :title="title"
       />
       <NuxtLink
-        :to="routes.beneficiary.AppBeneficiariesAdd.path()"
+        :to="routes.file.AppFileAdd.path()"
         class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line action"
       >
-        Créer un·e dossier
+        Créer un dossier bénéficiaire
       </NuxtLink>
     </div>
     <div class="fr-grid-row fr-grid-row--gutters fr-mt-3w">
