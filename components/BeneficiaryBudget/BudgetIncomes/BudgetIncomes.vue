@@ -41,10 +41,7 @@
     <div class="budget-income__action">
       <NuxtLink
         :to="
-          routes.budget.AppBeneficiaryBudgetIncomeEdit.path(
-            beneficiaryIdentification.id,
-            income.id
-          )
+          routes.budget.AppFileBudgetIncomeEdit.path(familyFileId, income.id)
         "
         class="fr-btn fr-btn--tertiary-no-outline fr-icon-edit-line"
         title="Modifier"
@@ -55,6 +52,7 @@
 
   <section>
     <BudgetIncomesAddMember
+      :family-file-id="familyFileId"
       :budget-id="budgetId"
       :beneficiary-id="beneficiaryIdentification.id"
     />
@@ -74,6 +72,7 @@
   import { euros } from '~/utils/euros'
 
   const props = defineProps<{
+    familyFileId: string
     beneficiaryIdentification: BeneficiaryIdentification
     budgetId: string
     incomes: GetBudgetIncomeHouseholdMember[]

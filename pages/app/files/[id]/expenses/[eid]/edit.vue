@@ -1,17 +1,17 @@
 <template>
   <AtomLoader
-    v-if="beneficiaryPending"
+    v-if="filePending"
     class="fr-mx-auto"
   />
 
   <AtomAlert
-    v-else-if="beneficiaryError"
+    v-else-if="fileError"
     :alert-type="AlertType.Error"
     message="Le bénéficiaire n'a pas pu être chargé."
   />
 
   <form
-    v-else-if="beneficiaryIdentification"
+    v-else-if="familyFileIdentification"
     ref="form"
     novalidate
     @submit.prevent="onSubmit"
@@ -21,7 +21,8 @@
         <AtomBreadcrumb
           :links="
             breadcrumbs.budget.AppFileBudgetExpensesEdit(
-              beneficiaryIdentification,
+              familyFileId,
+              familyFileIdentification,
               expensesId
             )
           "
@@ -70,7 +71,6 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { useBeneficiaryMinimalInfo } from '~/composables/useBeneficiaryMinimalInfo'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     UpdateBudgetExpensesInput,
@@ -88,7 +88,7 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
-  const beneficiaryId = route.params.id as string
+  const familyFileId = route.params.id as string
   const expensesId = route.params.eid as string
 
   const title = routes.budget.AppFileBudgetExpensesEdit.title
@@ -100,10 +100,10 @@
   })
 
   const {
-    beneficiaryIdentification,
-    pending: beneficiaryPending,
-    error: beneficiaryError
-  } = await useBeneficiaryMinimalInfo(beneficiaryId)
+    familyFileIdentification,
+    pending: filePending,
+    error: fileError
+  } = await useFamilyFileMinimalInfo(familyFileId)
 
   const {
     data: expenses,
@@ -172,7 +172,7 @@
     isFormDirty
   })
 
-  const budgetTabRoute = routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
+  const budgetTabRoute = routes.file.AppFile.path(familyFileId, {
     tab: BeneficiaryTab.Budget,
     originPage:
       route.name as typeof routes.budget.AppFileBudgetExpensesEdit.name

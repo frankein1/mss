@@ -1,17 +1,17 @@
 <template>
   <AtomLoader
-    v-if="beneficiaryPending"
+    v-if="filePending"
     class="fr-mx-auto"
   />
 
   <AtomAlert
-    v-else-if="beneficiaryError"
+    v-else-if="fileError"
     :alert-type="AlertType.Error"
     message="Le bénéficiaire n'a pas pu être chargé."
   />
 
   <form
-    v-else-if="beneficiaryIdentification"
+    v-else-if="familyFileIdentification"
     ref="form"
     novalidate
     @submit.prevent="onSubmit"
@@ -20,8 +20,9 @@
       <div class="fr-container fr-pb-2w">
         <AtomBreadcrumb
           :links="
-            breadcrumbs.budget.AppBeneficiaryBudgetIncomeEdit(
-              beneficiaryIdentification,
+            breadcrumbs.budget.AppFileBudgetIncomeEdit(
+              familyFileId,
+              familyFileIdentification,
               incomeId
             )
           "
@@ -78,7 +79,7 @@
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { useBeneficiaryMinimalInfo } from '~/composables/useBeneficiaryMinimalInfo'
+  import { useFamilyFileMinimalInfo } from '~/composables/useFamilyFileMinimalInfo'
   import {
     UpdateBudgetIncomeInput,
     updateBudgetIncomeSchema
@@ -100,22 +101,22 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
-  const beneficiaryId = route.params.id as string
+  const familyFileId = route.params.id as string
   const incomeId = route.params.iid as string
 
-  const title = routes.budget.AppBeneficiaryBudgetIncomeEdit.title
+  const title = routes.budget.AppFileBudgetIncomeEdit.title
 
   useHead({ title })
 
   definePageMeta({
-    name: routes.budget.AppBeneficiaryBudgetIncomeEdit.name
+    name: routes.budget.AppFileBudgetIncomeEdit.name
   })
 
   const {
-    beneficiaryIdentification,
-    pending: beneficiaryPending,
-    error: beneficiaryError
-  } = await useBeneficiaryMinimalInfo(beneficiaryId)
+    familyFileIdentification,
+    pending: filePending,
+    error: fileError
+  } = await useFamilyFileMinimalInfo(familyFileId)
 
   const {
     data: income,
@@ -125,7 +126,9 @@
 
   const subtitle = computed(() => {
     if (income.value?.type === 'Beneficiary') {
-      return `de ${beneficiaryIdentification.value?.firstName || ''} ${beneficiaryIdentification.value?.usualName || ''}`
+      const index = 0
+      const beneficiary = familyFileIdentification.value?.[index]
+      return `de ${beneficiary?.firstName || ''} ${beneficiary?.usualName || ''}`
     }
 
     const member = income.value?.householdMember
@@ -233,10 +236,9 @@
     isFormDirty
   })
 
-  const budgetTabRoute = routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
+  const budgetTabRoute = routes.file.AppFile.path(familyFileId, {
     tab: BeneficiaryTab.Budget,
-    originPage:
-      route.name as typeof routes.budget.AppBeneficiaryBudgetIncomeEdit.name
+    originPage: route.name as typeof routes.budget.AppFileBudgetIncomeEdit.name
   })
 
   const onSubmit = handleSubmit(async values => {
