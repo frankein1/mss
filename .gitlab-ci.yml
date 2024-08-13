@@ -23,7 +23,7 @@ include:
 variables:
   PNPM_VERSION: 9.1.4
   # A synchroniser avec la version présente dans package.json
-  PLAYWRIGHT_VERSION: 1.45.0
+  PLAYWRIGHT_VERSION: 1.46.0
   #A synchroniser avec la version présente en production
   POSTGRES_VERSION: 14.12
 
