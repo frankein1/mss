@@ -22,7 +22,11 @@
   import { routes } from '~/utils/routes'
   import { CreateHouseholdMemberInput } from '~/server/schema'
 
-  const props = defineProps<{ beneficiaryId: string; budgetId: string }>()
+  const props = defineProps<{
+    familyFileId: string
+    beneficiaryId: string
+    budgetId: string
+  }>()
 
   const modal = useModal()
   const snackbar = useSnackbar()
@@ -48,8 +52,8 @@
       onSuccess: ({ incomeId }) => {
         modal.close()
         navigateTo(
-          routes.budget.AppBeneficiaryBudgetIncomeEdit.path(
-            props.beneficiaryId,
+          routes.budget.AppFileBudgetIncomeEdit.path(
+            props.familyFileId,
             `${incomeId}`
           )
         )

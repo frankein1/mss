@@ -22,6 +22,7 @@
           <div class="fr-col-6">
             <BudgetIncomes
               v-if="data.incomes"
+              :family-file-id="familyFileId"
               :beneficiary-identification="beneficiaryIdentification"
               :incomes="data.incomes"
               :budget-id="data.id"

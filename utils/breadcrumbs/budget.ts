@@ -1,42 +1,47 @@
-import { breadcrumbs as ben } from './beneficiary'
-import type { BeneficiaryIdentification } from '~/types/beneficiary'
+import { breadcrumbs as file } from './file'
+import type { BeneficiaryNames } from '~/types/beneficiary'
 import { routes } from '~/utils/routes'
 
 const r = routes.budget
 type Routes = typeof r
 
 function getBread<
-  T extends 'AppFileBudgetExpensesEdit' | 'AppBeneficiaryBudgetIncomeEdit'
->(name: T, beneficiary: BeneficiaryIdentification | null, id: string) {
+  T extends 'AppFileBudgetExpensesEdit' | 'AppFileBudgetIncomeEdit'
+>(name: T, familyFileId: string, id: string) {
   const title = r[name].title as Routes[T]['title']
-  return [{ text: title, to: r[name].path(beneficiary?.id || '', id) }]
+  return [{ text: title, to: r[name].path(familyFileId, id) }]
 }
 
-function getBreadWithBeneficiary<T extends 'AppFileBudgetInfoEdit'>(
+function getBreadWithFileId<T extends 'AppFileBudgetInfoEdit'>(
   name: T,
-  beneficiary: BeneficiaryIdentification | null
+  familyFileId: string
 ) {
   const title = r[name].title as Routes[T]['title']
-  return [{ text: title, to: r[name].path(beneficiary?.id || '') }]
+  return [{ text: title, to: r[name].path(familyFileId) }]
 }
 
 export const breadcrumbs = {
-  AppFileBudgetInfoEdit: (beneficiary: BeneficiaryIdentification | null) => [
-    ...ben.AppBeneficiary(beneficiary),
-    ...getBreadWithBeneficiary('AppFileBudgetInfoEdit', beneficiary)
+  AppFileBudgetInfoEdit: (
+    familyFileId: string,
+    familyIdentification: BeneficiaryNames[] | null
+  ) => [
+    ...file.AppFile(familyFileId, familyIdentification),
+    ...getBreadWithFileId('AppFileBudgetInfoEdit', familyFileId)
   ],
   AppFileBudgetExpensesEdit: (
-    beneficiary: BeneficiaryIdentification | null,
+    familyFileId: string,
+    familyIdentification: BeneficiaryNames[] | null,
     expensesId: string
   ) => [
-    ...ben.AppBeneficiary(beneficiary),
-    ...getBread('AppFileBudgetExpensesEdit', beneficiary, expensesId)
+    ...file.AppFile(familyFileId, familyIdentification),
+    ...getBread('AppFileBudgetExpensesEdit', familyFileId, expensesId)
   ],
-  AppBeneficiaryBudgetIncomeEdit: (
-    beneficiary: BeneficiaryIdentification | null,
+  AppFileBudgetIncomeEdit: (
+    familyFileId: string,
+    familyIdentification: BeneficiaryNames[] | null,
     incomeId: string
   ) => [
-    ...ben.AppBeneficiary(beneficiary),
-    ...getBread('AppFileBudgetExpensesEdit', beneficiary, incomeId)
+    ...file.AppFile(familyFileId, familyIdentification),
+    ...getBread('AppFileBudgetIncomeEdit', familyFileId, incomeId)
   ]
 }

@@ -10,7 +10,7 @@ type OriginPage =
   | 'AppBeneficiaries'
   | 'AppHistory'
   | 'AppFileBudgetInfoEdit'
-  | 'AppBeneficiaryBudgetIncomeEdit'
+  | 'AppFileBudgetIncomeEdit'
   | 'AppFileBudgetExpensesEdit'
 
 // TODO rename item to something clearer
