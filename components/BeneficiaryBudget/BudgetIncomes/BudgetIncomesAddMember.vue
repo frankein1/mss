@@ -20,7 +20,7 @@
 <script setup lang="ts">
   import BudgetIncomesAddMemberForm from './BudgetIncomesAddMemberForm.vue'
   import { routes } from '~/utils/routes'
-  import { CreateHouseholdMemberInput } from '~/server/schema'
+  import { CreateHostedEntourageMemberInput } from '~/server/schema'
 
   const props = defineProps<{
     familyFileId: string
@@ -44,10 +44,10 @@
     })
   }
 
-  function addMember(values: CreateHouseholdMemberInput) {
+  function addMember(values: CreateHostedEntourageMemberInput) {
     useTrpcMutation({
       mutation: () =>
-        trpcClient.beneficiary.createTaxHouseholdMember.mutate(values),
+        trpcClient.beneficiary.createHostedEntourageMember.mutate(values),
       isSubmitting,
       onSuccess: ({ incomeId }) => {
         modal.close()

@@ -48,9 +48,9 @@ export const beneficiaryRouter = router({
   create: protectedProcedure
     .input(routes.createBeneficiaryMutation.inputValidation)
     .mutation(routes.createBeneficiaryMutation.execute),
-  createTaxHouseholdMember: protectedProcedure
-    .input(routes.createTaxHouseholdMemberMutation.inputValidation)
-    .mutation(routes.createTaxHouseholdMemberMutation.execute),
+  createHostedEntourageMember: protectedProcedure
+    .input(routes.createHostedEntourageMemberMutation.inputValidation)
+    .mutation(routes.createHostedEntourageMemberMutation.execute),
   validate: protectedProcedure
     .input(routes.validateBeneficiaryMutation.inputValidation)
     .mutation(routes.validateBeneficiaryMutation.execute),

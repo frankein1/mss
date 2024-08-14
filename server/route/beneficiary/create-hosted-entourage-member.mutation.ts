@@ -3,8 +3,8 @@ import { createMutation } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { BeneficiaryService } from '~/server/services'
 import {
-  CreateHouseholdMemberInput,
-  createHouseholdMemberSchema
+  CreateHostedEntourageMemberInput,
+  createHostedEntourageMemberSchema
 } from '~/server/schema'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 
@@ -14,16 +14,16 @@ const handler = ({
   input,
   ctx: _ctx
 }: {
-  input: CreateHouseholdMemberInput
+  input: CreateHostedEntourageMemberInput
   ctx: ProtectedAppContext
-}) => BeneficiaryService.createHouseholdMember(input)
+}) => BeneficiaryService.createHostedEntourageMember(input)
 
-export const createTaxHouseholdMemberMutation = createMutation({
-  inputValidation: createHouseholdMemberSchema,
+export const createHostedEntourageMemberMutation = createMutation({
+  inputValidation: createHostedEntourageMemberSchema,
   securityCheck,
   handler,
   auditLog: {
-    key: 'beneficiary.createHouseholdMember',
+    key: 'beneficiary.createHostedEntourageMember',
     target: 'Beneficiary',
     targetId: ({ ctx }) => {
       return ctx.user.id

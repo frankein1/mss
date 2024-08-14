@@ -35,7 +35,7 @@ export type CreateOrUpdateEntourageInput = z.infer<
   typeof createOrUpdateEntourageSchema
 >
 
-export const createHouseholdMemberSchema = z.object({
+export const createHostedEntourageMemberSchema = z.object({
   lastName: beneficiaryLastNameSchema,
   firstName: beneficiaryFirstNameSchema,
   relationship: requiredNativeEnum(RelativeRelationship),
@@ -43,6 +43,6 @@ export const createHouseholdMemberSchema = z.object({
   budgetId: z.string().uuid()
 })
 
-export type CreateHouseholdMemberInput = z.infer<
-  typeof createHouseholdMemberSchema
+export type CreateHostedEntourageMemberInput = z.infer<
+  typeof createHostedEntourageMemberSchema
 >

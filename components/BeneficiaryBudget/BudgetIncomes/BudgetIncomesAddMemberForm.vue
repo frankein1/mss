@@ -47,21 +47,21 @@
   import { relativeFieldLabels } from '~/client/labels'
 
   import {
-    CreateHouseholdMemberInput,
-    createHouseholdMemberSchema
+    CreateHostedEntourageMemberInput,
+    createHostedEntourageMemberSchema
   } from '~/server/schema'
 
   const props = defineProps<{
     beneficiaryId: string
     budgetId: string
     isSubmitting: boolean
-    add: (values: CreateHouseholdMemberInput) => void
+    add: (values: CreateHostedEntourageMemberInput) => void
   }>()
 
   const modal = useModal()
 
-  const { handleSubmit } = useForm<CreateHouseholdMemberInput>({
-    validationSchema: toTypedSchema(createHouseholdMemberSchema),
+  const { handleSubmit } = useForm<CreateHostedEntourageMemberInput>({
+    validationSchema: toTypedSchema(createHostedEntourageMemberSchema),
     initialValues: {
       beneficiaryId: props.beneficiaryId,
       budgetId: props.budgetId
