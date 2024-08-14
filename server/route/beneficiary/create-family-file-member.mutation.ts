@@ -3,8 +3,8 @@ import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { BeneficiaryService } from '~/server/services'
 import { createMutation } from '~/server/route'
 import {
-  AddFamilyFileMemberInput,
-  addFamilyFileMemberSchema
+  CreateFamilyFileMemberInput,
+  createFamilyFileMemberSchema
 } from '~/server/schema'
 import { ProtectedAppContext } from '~/server/trpc'
 
@@ -14,17 +14,17 @@ const handler = ({
   input,
   ctx
 }: {
-  input: AddFamilyFileMemberInput
+  input: CreateFamilyFileMemberInput
   ctx: ProtectedAppContext
 }) => {
-  return BeneficiaryService.addMemberToFamilyFile({
+  return BeneficiaryService.createFamilyFileMember({
     ctx,
     input
   })
 }
 
-export const addFamilyFileMemberMutation = createMutation({
-  inputValidation: addFamilyFileMemberSchema,
+export const createFamilyFileMemberMutation = createMutation({
+  inputValidation: createFamilyFileMemberSchema,
   securityCheck,
   handler,
   auditLog: {

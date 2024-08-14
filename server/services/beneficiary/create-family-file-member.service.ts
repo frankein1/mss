@@ -1,16 +1,16 @@
 import { BeneficiaryStatus, Prisma } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
-import { AddFamilyFileMemberInput } from '~/server/schema'
+import { CreateFamilyFileMemberInput } from '~/server/schema'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { connect } from '~/utils/prisma'
 
 type CreateParams = {
   ctx: SecurityRuleContext
-  input: AddFamilyFileMemberInput
+  input: CreateFamilyFileMemberInput
 }
 
-export async function addMemberToFamilyFile(params: CreateParams) {
+export async function createFamilyFileMember(params: CreateParams) {
   const { ctx, input } = params
 
   const { familyFileId, ...restOfInput } = input

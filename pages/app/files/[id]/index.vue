@@ -147,7 +147,7 @@
   } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
-  import { AddFamilyFileMemberInput } from '~/server/schema'
+  import { CreateFamilyFileMemberInput } from '~/server/schema'
 
   const route = useRoute()
 
@@ -242,7 +242,9 @@
     }
   }
   const trpcClient = useTrpcClient()
-  const onAddBeneficiary = async (newBeneficiary: AddFamilyFileMemberInput) => {
+  const onAddBeneficiary = async (
+    newBeneficiary: CreateFamilyFileMemberInput
+  ) => {
     let beneficiaryID
     if (familyFileId) {
       const payload = {
@@ -257,7 +259,7 @@
       }
       await useTrpcMutation({
         mutation: () =>
-          trpcClient.beneficiary.addFamilyFileMember.mutate(payload),
+          trpcClient.beneficiary.createFamilyFileMember.mutate(payload),
         isSubmitting,
         onSuccess: ({ id }) => {
           beneficiaryID = id

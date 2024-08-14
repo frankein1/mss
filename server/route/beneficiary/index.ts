@@ -1,4 +1,4 @@
-import { addFamilyFileMemberMutation } from './add-family-file-member.mutation'
+import { createFamilyFileMemberMutation } from './create-family-file-member.mutation'
 import { exportBeneficiariesQuery } from './export.query'
 import { getBeneficiaryDetailsQuery } from './get-details.query'
 import { getPage } from './get-page.query'
@@ -35,7 +35,7 @@ export const beneficiaryRoutes = {
   deleteBeneficiaryDraftMutation,
   validateBeneficiaryMutation,
   createHostedEntourageMemberMutation,
-  addFamilyFileMemberMutation
+  createFamilyFileMemberMutation
 }
 
 export type { SimilarBeneficiary }

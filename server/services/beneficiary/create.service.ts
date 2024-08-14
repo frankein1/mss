@@ -1,4 +1,4 @@
-import { BudgetIncomeType } from '@prisma/client'
+import { BudgetIncomeType, Prisma } from '@prisma/client'
 import { BeneficiaryRepo } from '~/server/database'
 import { CreateBeneficiaryInput } from '~/server/schema'
 import { generateFileNumber } from '~/utils/generateFileNumber'
@@ -15,7 +15,7 @@ export async function create(params: CreateParams) {
 
   const fileNumber = generateFileNumber()
 
-  const data = {
+  const data: Prisma.BeneficiaryCreateInput = {
     fileNumber,
     structure: {
       connect: { id: ctx.structure.id }
