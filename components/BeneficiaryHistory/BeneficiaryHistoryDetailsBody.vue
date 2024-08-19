@@ -62,14 +62,6 @@
             Supprimer
           </button>
         </li>
-        <li v-if="canEdit && editLink">
-          <NuxtLink
-            :to="editLink"
-            class="fr-btn fr-btn--secondary fr-icon-edit-line"
-          >
-            Modifier
-          </NuxtLink>
-        </li>
         <li v-if="printLink">
           <NuxtLink
             :to="printLink"
@@ -77,6 +69,14 @@
             @on-click="onPrint"
           >
             Imprimer
+          </NuxtLink>
+        </li>
+        <li v-if="canEdit && editLink">
+          <NuxtLink
+            :to="editLink"
+            class="fr-btn fr-btn--secondary fr-icon-edit-line"
+          >
+            Modifier
           </NuxtLink>
         </li>
       </ul>

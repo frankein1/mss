@@ -1,6 +1,6 @@
 <template>
   <div class="fr-grid-row fr-mt-1w">
-    <div class="fr-col-12 fr-col-lg-6 fr-my-2w">
+    <div class="fr-col-12 fr-col-xl-6 fr-my-2w">
       <h2 class="title fr-h4 fr-mb-0">
         Informations
         {{
@@ -8,7 +8,7 @@
         }}
       </h2>
     </div>
-    <div class="fr-col-12 fr-col-lg-6 detail-actions">
+    <div class="fr-col-12 fr-col-xl-6 detail-actions">
       <BeneficiaryDetailsActions
         class="actions"
         :beneficiary-id="beneficiary.id"
@@ -96,7 +96,7 @@
   }
 
   .actions {
-    @include dsfr-media-query.respond-from('lg') {
+    @include dsfr-media-query.respond-from('xl') {
       justify-content: right;
     }
   }
@@ -104,7 +104,7 @@
   .detail-actions {
     margin-top: 1rem;
 
-    @include dsfr-media-query.respond-from('lg') {
+    @include dsfr-media-query.respond-from('xl') {
       margin-top: 0;
     }
   }
