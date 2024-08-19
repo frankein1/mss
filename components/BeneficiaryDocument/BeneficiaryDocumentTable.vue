@@ -14,7 +14,6 @@
         <thead>
           <tr>
             <th scope="col">Type</th>
-            <th scope="col">Bénéficiaire</th>
             <TableSortableHeader
               label="Nom"
               :sort="sort.name"
