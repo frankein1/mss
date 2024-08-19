@@ -1,14 +1,19 @@
 <template>
   <div class="fr-grid-row fr-mt-1w">
+<<<<<<< HEAD
     <div class="fr-col-12 fr-col-lg-6 fr-my-2w">
       <h3 class="title fr-h4 fr-mb-0">
+=======
+    <div class="fr-col-12 fr-col-xl-6 fr-my-2w">
+      <h2 class="title fr-h4 fr-mb-0">
+>>>>>>> 8122a263 (change print and modify btn order)
         Informations
         {{
           beneficiary.general.firstName + ' ' + beneficiary.general.usualName
         }}
       </h3>
     </div>
-    <div class="fr-col-12 fr-col-lg-6 detail-actions">
+    <div class="fr-col-12 fr-col-xl-6 detail-actions">
       <BeneficiaryDetailsActions
         class="actions"
         :beneficiary-id="beneficiary.id"
@@ -95,7 +100,7 @@
   }
 
   .actions {
-    @include dsfr-media-query.respond-from('lg') {
+    @include dsfr-media-query.respond-from('xl') {
       justify-content: right;
     }
   }
@@ -103,7 +108,7 @@
   .detail-actions {
     margin-top: 1rem;
 
-    @include dsfr-media-query.respond-from('lg') {
+    @include dsfr-media-query.respond-from('xl') {
       margin-top: 0;
     }
   }
