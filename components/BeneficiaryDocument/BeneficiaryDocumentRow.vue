@@ -1,23 +1,27 @@
 <template>
   <tr>
     <td class="type-data">{{ documentTypeKeys.value(document.type) }}</td>
-    <td class="family-member-data">
-      {{ formatBeneficiary(document.beneficiaryId) }}
-    </td>
-    <td>
-      <span
-        class="name-container"
-        :title="document.name"
-        >{{ document.name }}</span
-      >
+
+    <td class="name">
+      <p>
+        <span
+          class="name-container"
+          :title="document.name"
+          >{{ document.name }}</span
+        >
+        <br />
+        <span class="name-container">
+          {{ formatBeneficiary(document.beneficiaryId) }}</span
+        >
+      </p>
       <span
         v-if="document.confidential"
-        class="fr-badge fr-badge--warning fr-ml-1w"
+        class="fr-badge fr-badge--warning"
         >CONFIDENTIEL</span
       >
       <span
         v-if="hasUnreadNotifications"
-        class="fr-badge fr-badge--new fr-badge--no-icon fr-ml-1w"
+        class="fr-badge fr-badge--new fr-badge--no-icon"
       >
         <span class="fr-icon-notification-3-fill fr-icon--sm fr-mr-1v"></span>
         NOUVEAU
@@ -204,10 +208,18 @@
 </script>
 
 <style lang="scss" scoped>
+  .name {
+    p {
+      font-size: 0.875rem;
+      line-height: 1rem;
+      margin-bottom: 0.5rem;
+    }
+  }
   .name-container {
     word-break: break-word; // Allows to split dashed or underscored document names
     overflow: hidden;
     display: -webkit-box;
+    height: 1rem;
     -webkit-line-clamp: 1;
     line-clamp: 1;
     -webkit-box-orient: vertical;
@@ -225,5 +237,11 @@
 
   .fr-btns-group .fr-btn {
     margin-bottom: 0;
+  }
+  .name > .fr-badge {
+    margin-left: 0rem;
+  }
+  .name > .fr-badge ~ .fr-badge {
+    margin-left: 0.5rem;
   }
 </style>
