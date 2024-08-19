@@ -4,7 +4,7 @@ import { requiredNativeEnum } from '../helpers.schema'
 import { updateBeneficiaryGeneralInformationSchema } from './updateBeneficiary.schema'
 import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
 
-export const addFamilyFileMemberSchema =
+export const createFamilyFileMemberSchema =
   updateBeneficiaryGeneralInformationSchema
     .pick({
       title: true,
@@ -19,4 +19,6 @@ export const addFamilyFileMemberSchema =
       })
     )
 
-export type AddFamilyFileMemberInput = z.infer<typeof addFamilyFileMemberSchema>
+export type CreateFamilyFileMemberInput = z.infer<
+  typeof createFamilyFileMemberSchema
+>

@@ -1,4 +1,4 @@
-import { BeneficiariesRoute, FilesRoute } from './utils'
+import { FilesRoute } from './utils'
 
 export const routes = {
   AppFileBudgetInfoEdit: {
@@ -12,10 +12,10 @@ export const routes = {
     path: (familyFileId: string, expensesId: string) =>
       `${FilesRoute}/${familyFileId}/expenses/${expensesId}/edit`
   },
-  AppBeneficiaryBudgetIncomeEdit: {
-    name: 'AppBeneficiaryBudgetIncomeEdit',
+  AppFileBudgetIncomeEdit: {
+    name: 'AppFileBudgetIncomeEdit',
     title: 'Modifier les revenus mensuels',
-    path: (beneficiaryId: string, incomeId: string) =>
-      `${BeneficiariesRoute}/${beneficiaryId}/income/${incomeId}/edit`
+    path: (familyFileId: string, incomeId: string) =>
+      `${FilesRoute}/${familyFileId}/income/${incomeId}/edit`
   }
 } as const

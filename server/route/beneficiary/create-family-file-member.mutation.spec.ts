@@ -7,7 +7,7 @@ import { prismaClient } from '~/server/prisma'
 import { AppRouter } from '~/server/trpc/routers'
 
 type Input = inferProcedureInput<
-  AppRouter['beneficiary']['addFamilyFileMember']
+  AppRouter['beneficiary']['createFamilyFileMember']
 >
 
 const familyFileId =
@@ -43,7 +43,7 @@ describe('Beneficiary - Add Member to Family File - StructureManager', () => {
       }
 
       await expect(() =>
-        trpc.structureManager.beneficiary.addFamilyFileMember(input)
+        trpc.structureManager.beneficiary.createFamilyFileMember(input)
       ).rejects.toThrowError(/no familyfile found/i)
     }
   )
@@ -59,7 +59,7 @@ describe('Beneficiary - Add Member to Family File - StructureManager', () => {
     }
 
     const { id } =
-      await trpc.structureManager.beneficiary.addFamilyFileMember(input)
+      await trpc.structureManager.beneficiary.createFamilyFileMember(input)
 
     expect(id).toBeDefined()
 

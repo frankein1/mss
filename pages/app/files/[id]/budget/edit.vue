@@ -1,57 +1,57 @@
 <template>
-  <AtomLoader
-    v-if="pending"
-    class="fr-mx-auto"
-  />
-
-  <AtomAlert
-    v-else-if="error"
-    :alert-type="AlertType.Error"
-    message="Le bénéficiaire n'a pas pu être chargé."
-  />
-
-  <form
-    v-else-if="budget"
-    ref="form"
-    novalidate
-    @submit.prevent="onSubmit"
+  <AtomLazyComponent
+    :pending="filePending || pending"
+    :error="Boolean(fileError || error)"
+    message="Les informations générales du budget n'ont pas pu être chargées."
   >
-    <main class="content">
-      <div class="fr-container fr-pb-2w">
-        <AtomBreadcrumb />
-        <!-- <DsfrBreadcrumb
-          :links="Breadcrumb.AppFileBudgetInfoEdit(fileIdentification)"
-        /> -->
-        <PageTitle
-          :title="title"
-          pictogram-path="/pictograms/money.svg"
-        />
+    <form
+      v-if="familyFileIdentification && budget"
+      ref="form"
+      novalidate
+      @submit.prevent="onSubmit"
+    >
+      <main class="content">
+        <div class="fr-container fr-pb-2w">
+          <AtomBreadcrumb
+            :links="
+              breadcrumbs.budget.AppFileBudgetInfoEdit(
+                familyFileId,
+                familyFileIdentification
+              )
+            "
+          />
 
-        <AtomAlert
-          v-if="budget.legacyRemainingAfterExpenses && open"
-          class="fr-mb-4w"
-          closeable
-          :alert-type="AlertType.Warning"
-          message="Le reste à vivre a été remplacé par le calcul automatique"
-          @close="open = false"
-        >
-          <template #detailedMessage>
-            <p class="euro-symbol">
-              Le montant précédemment renseigné était de
-              {{ budget.legacyRemainingAfterExpenses }}
-            </p>
-          </template>
-        </AtomAlert>
+          <PageTitle
+            :title="title"
+            pictogram-path="/pictograms/money.svg"
+          />
 
-        <BudgetGeneralInformationForm />
-      </div>
-    </main>
+          <AtomAlert
+            v-if="budget.legacyRemainingAfterExpenses && open"
+            class="fr-mb-4w"
+            closeable
+            :alert-type="AlertType.Warning"
+            message="Le reste à vivre a été remplacé par le calcul automatique"
+            @close="open = false"
+          >
+            <template #detailedMessage>
+              <p class="euro-symbol">
+                Le montant précédemment renseigné était de
+                {{ budget.legacyRemainingAfterExpenses }}
+              </p>
+            </template>
+          </AtomAlert>
 
-    <BudgetActionBar
-      :is-submitting="isSubmitting"
-      @cancel="onCancel"
-    />
-  </form>
+          <BudgetGeneralInformationForm />
+        </div>
+      </main>
+
+      <BudgetActionBar
+        :is-submitting="isSubmitting"
+        @cancel="onCancel"
+      />
+    </form>
+  </AtomLazyComponent>
 </template>
 
 <script lang="ts" setup>
@@ -63,6 +63,8 @@
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { routes } from '~/utils/routes'
+  import { breadcrumbs } from '~/utils/breadcrumbs'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
@@ -78,31 +80,17 @@
     name: routes.budget.AppFileBudgetInfoEdit.name
   })
 
-  // const {
-  //   data: file,
-  //   pending: filePending,
-  //   error: fileError
-  // } = await trpcClient.file.getFamilyFileMinimalInfo.useQuery({
-  //   id: familyFileId
-  // })
+  const {
+    familyFileIdentification,
+    pending: filePending,
+    error: fileError
+  } = await useFamilyFileMinimalInfo(familyFileId)
 
   const {
     data: budget,
     pending,
     error
   } = await trpcClient.budget.getInfo.useQuery({ familyFileId })
-
-  // const fileIdentification = computed(() =>
-  //   file.value
-  //     ? {
-  //         id: file.value.id,
-  //         firstName: file.value.firstName,
-  //         birthName: file.value.birthName,
-  //         usualName: file.value.usualName,
-  //         birthDate: file.value.birthDate
-  //       }
-  //     : null
-  // )
 
   const form = ref<HTMLFormElement | null>(null)
   const isSubmitting = ref(false)
@@ -161,7 +149,10 @@
     isFormDirty
   })
 
-  const budgetTabRoute = routes.file.AppFile.path(familyFileId)
+  const budgetTabRoute = routes.file.AppFile.path(familyFileId, {
+    tab: BeneficiaryTab.Budget,
+    originPage: route.name as typeof routes.budget.AppFileBudgetInfoEdit.name
+  })
 
   const onSubmit = handleSubmit(async values => {
     isNavigatingWithFormActions.value = true
@@ -176,7 +167,8 @@
       },
       onFailure: () => {
         snackbar.error(
-          'La mise à jour des informations générales du budget a échoué.'
+          'La mise à jour des informations générales du budget a échoué.',
+          snackbar.focus()
         )
       }
     })

@@ -2,9 +2,6 @@ import { beneficiaryRoutes as routes } from '~/server/route'
 import { protectedProcedure, router } from '~/server/trpc'
 
 export const beneficiaryRouter = router({
-  getBeneficiaryMinimalInfo: protectedProcedure
-    .input(routes.getBeneficiaryMinimalInfoQuery.inputValidation)
-    .query(routes.getBeneficiaryMinimalInfoQuery.execute),
   getBeneficiaryDetails: protectedProcedure
     .input(routes.getBeneficiaryDetailsQuery.inputValidation)
     .query(routes.getBeneficiaryDetailsQuery.execute),
@@ -51,13 +48,13 @@ export const beneficiaryRouter = router({
   create: protectedProcedure
     .input(routes.createBeneficiaryMutation.inputValidation)
     .mutation(routes.createBeneficiaryMutation.execute),
-  createTaxHouseholdMember: protectedProcedure
-    .input(routes.createTaxHouseholdMemberMutation.inputValidation)
-    .mutation(routes.createTaxHouseholdMemberMutation.execute),
+  createHostedEntourageMember: protectedProcedure
+    .input(routes.createHostedEntourageMemberMutation.inputValidation)
+    .mutation(routes.createHostedEntourageMemberMutation.execute),
   validate: protectedProcedure
     .input(routes.validateBeneficiaryMutation.inputValidation)
     .mutation(routes.validateBeneficiaryMutation.execute),
-  addFamilyFileMember: protectedProcedure
-    .input(routes.addFamilyFileMemberMutation.inputValidation)
-    .mutation(routes.addFamilyFileMemberMutation.execute)
+  createFamilyFileMember: protectedProcedure
+    .input(routes.createFamilyFileMemberMutation.inputValidation)
+    .mutation(routes.createFamilyFileMemberMutation.execute)
 })

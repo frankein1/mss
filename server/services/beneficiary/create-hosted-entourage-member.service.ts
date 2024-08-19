@@ -1,8 +1,10 @@
 import { BudgetIncomeType } from '@prisma/client'
 import { BeneficiaryRelativeRepo } from '~/server/database'
-import { CreateHouseholdMemberInput } from '~/server/schema'
+import { CreateHostedEntourageMemberInput } from '~/server/schema'
 
-export async function createHouseholdMember(input: CreateHouseholdMemberInput) {
+export async function createHostedEntourageMember(
+  input: CreateHostedEntourageMemberInput
+) {
   const { budgetId, ...memberData } = input
 
   const member = await BeneficiaryRelativeRepo.prisma.create({

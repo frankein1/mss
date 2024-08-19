@@ -1,76 +1,58 @@
 <template>
-  <AtomLoader
-    v-if="beneficiaryPending"
-    class="fr-mx-auto"
-  />
-
-  <AtomAlert
-    v-else-if="beneficiaryError"
-    :alert-type="AlertType.Error"
-    message="Le bénéficiaire n'a pas pu être chargé."
-  />
-
-  <form
-    v-else-if="beneficiaryIdentification"
-    ref="form"
-    novalidate
-    @submit.prevent="onSubmit"
+  <AtomLazyComponent
+    :pending="filePending || pending"
+    :error="Boolean(fileError || error)"
+    message="Les charges mensuelles n'ont pas pu être chargées."
   >
-    <main class="content">
-      <div class="fr-container fr-pb-2w">
-        <AtomBreadcrumb
-          :links="
-            breadcrumbs.budget.AppFileBudgetExpensesEdit(
-              beneficiaryIdentification,
-              expensesId
-            )
-          "
-        />
+    <form
+      v-if="familyFileIdentification && expenses"
+      ref="form"
+      novalidate
+      @submit.prevent="onSubmit"
+    >
+      <main class="content">
+        <div class="fr-container fr-pb-2w">
+          <AtomBreadcrumb
+            :links="
+              breadcrumbs.budget.AppFileBudgetExpensesEdit(
+                familyFileId,
+                familyFileIdentification,
+                expensesId
+              )
+            "
+          />
 
-        <PageTitle
-          :title="title"
-          pictogram-path="/pictograms/money.svg"
-          pictogram-background
-          subtitle="du foyer fiscal"
-        />
+          <PageTitle
+            :title="title"
+            pictogram-path="/pictograms/money.svg"
+            pictogram-background
+            subtitle="du foyer fiscal"
+          />
 
-        <AtomLoader
-          v-if="pending"
-          class="fr-mx-auto"
-        />
+          <BudgetExpensesForm
+            :main-total="mainExpensesTotal"
+            :loans-total="loansTotal"
+            :debts-total="debtsTotal"
+          />
 
-        <AtomAlert
-          v-else-if="error"
-          :alert-type="AlertType.Error"
-          message="Les charges mensuelles n'ont pas pu être chargées."
-        />
+          <section class="expenses__total">
+            <h2 class="fr-h4 fr-m-0">Total :</h2>
+            <span class="fr-h4 fr-m-0 euro-symbol">{{
+              total !== null ? euros(total) : '-'
+            }}</span>
+          </section>
+        </div>
+      </main>
 
-        <BudgetExpensesForm
-          v-else-if="expenses"
-          :main-total="mainExpensesTotal"
-          :loans-total="loansTotal"
-          :debts-total="debtsTotal"
-        />
-
-        <section class="expenses__total">
-          <h2 class="fr-h4 fr-m-0">Total :</h2>
-          <span class="fr-h4 fr-m-0 euro-symbol">{{
-            total !== null ? euros(total) : '-'
-          }}</span>
-        </section>
-      </div>
-    </main>
-
-    <BudgetActionBar
-      :is-submitting="isSubmitting"
-      @cancel="onCancel"
-    />
-  </form>
+      <BudgetActionBar
+        :is-submitting="isSubmitting"
+        @cancel="onCancel"
+      />
+    </form>
+  </AtomLazyComponent>
 </template>
 
 <script setup lang="ts">
-  import { AlertType } from '~/utils/constants/alert'
-  import { useBeneficiaryMinimalInfo } from '~/composables/useBeneficiaryMinimalInfo'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     UpdateBudgetExpensesInput,
@@ -88,7 +70,7 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
-  const beneficiaryId = route.params.id as string
+  const familyFileId = route.params.id as string
   const expensesId = route.params.eid as string
 
   const title = routes.budget.AppFileBudgetExpensesEdit.title
@@ -100,10 +82,10 @@
   })
 
   const {
-    beneficiaryIdentification,
-    pending: beneficiaryPending,
-    error: beneficiaryError
-  } = await useBeneficiaryMinimalInfo(beneficiaryId)
+    familyFileIdentification,
+    pending: filePending,
+    error: fileError
+  } = await useFamilyFileMinimalInfo(familyFileId)
 
   const {
     data: expenses,
@@ -172,7 +154,7 @@
     isFormDirty
   })
 
-  const budgetTabRoute = routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
+  const budgetTabRoute = routes.file.AppFile.path(familyFileId, {
     tab: BeneficiaryTab.Budget,
     originPage:
       route.name as typeof routes.budget.AppFileBudgetExpensesEdit.name
@@ -190,7 +172,10 @@
         )
       },
       onFailure: () => {
-        snackbar.error('La mise à jour des charges mensuelles a échoué.')
+        snackbar.error(
+          'La mise à jour des charges mensuelles a échoué.',
+          snackbar.focus()
+        )
       }
     })
   })

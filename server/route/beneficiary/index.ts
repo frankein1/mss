@@ -1,7 +1,6 @@
-import { addFamilyFileMemberMutation } from './add-family-file-member.mutation'
+import { createFamilyFileMemberMutation } from './create-family-file-member.mutation'
 import { exportBeneficiariesQuery } from './export.query'
 import { getBeneficiaryDetailsQuery } from './get-details.query'
-import { getBeneficiaryMinimalInfoQuery } from './get-minimal-info.query'
 import { getPage } from './get-page.query'
 import { searchBeneficiaryQuery } from './search.query'
 import { updateEntourageMutation } from './update-entourage.mutation'
@@ -16,12 +15,11 @@ import { deleteBeneficiaryDraftMutation } from './delete-draft.mutation'
 import { getBeneficiaryTaxHouseholdsQuery } from './get-taxhouseholds'
 import { SimilarBeneficiary, getSimilarBeneficiaryQuery } from './get-similar'
 import { validateBeneficiaryMutation } from './validate.mutation'
-import { createTaxHouseholdMemberMutation } from './create-household-member.mutation'
+import { createHostedEntourageMemberMutation } from './create-hosted-entourage-member.mutation'
 
 export const beneficiaryRoutes = {
   exportBeneficiariesQuery,
   getBeneficiaryDetailsQuery,
-  getBeneficiaryMinimalInfoQuery,
   getPage,
   searchBeneficiaryQuery,
   getBeneficiaryTaxHouseholdsQuery,
@@ -36,8 +34,8 @@ export const beneficiaryRoutes = {
   deleteBeneficiaryMutation,
   deleteBeneficiaryDraftMutation,
   validateBeneficiaryMutation,
-  createTaxHouseholdMemberMutation,
-  addFamilyFileMemberMutation
+  createHostedEntourageMemberMutation,
+  createFamilyFileMemberMutation
 }
 
 export type { SimilarBeneficiary }

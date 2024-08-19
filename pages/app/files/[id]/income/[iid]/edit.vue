@@ -1,84 +1,69 @@
 <template>
-  <AtomLoader
-    v-if="beneficiaryPending"
-    class="fr-mx-auto"
-  />
-
-  <AtomAlert
-    v-else-if="beneficiaryError"
-    :alert-type="AlertType.Error"
-    message="Le bénéficiaire n'a pas pu être chargé."
-  />
-
-  <form
-    v-else-if="beneficiaryIdentification"
-    ref="form"
-    novalidate
-    @submit.prevent="onSubmit"
+  <AtomLazyComponent
+    :pending="filePending || pending"
+    :error="Boolean(fileError || error)"
+    message="Le revenu mensuel n'a pas pu être chargé."
   >
-    <main class="content">
-      <div class="fr-container fr-pb-2w">
-        <AtomBreadcrumb
-          :links="
-            breadcrumbs.budget.AppBeneficiaryBudgetIncomeEdit(
-              beneficiaryIdentification,
-              incomeId
-            )
-          "
-        />
+    <form
+      v-if="familyFileIdentification && income"
+      ref="form"
+      novalidate
+      @submit.prevent="onSubmit"
+    >
+      <main class="content">
+        <div class="fr-container fr-pb-2w">
+          <AtomBreadcrumb
+            :links="
+              breadcrumbs.budget.AppFileBudgetIncomeEdit(
+                familyFileId,
+                familyFileIdentification,
+                incomeId
+              )
+            "
+          />
 
-        <PageTitle
-          :title="title"
-          pictogram-path="/pictograms/money.svg"
-          pictogram-background
-          :subtitle="subtitle"
-        />
+          <PageTitle
+            :title="title"
+            pictogram-path="/pictograms/money.svg"
+            pictogram-background
+            :subtitle="subtitle"
+          />
 
-        <AtomLoader
-          v-if="pending"
-          class="fr-mx-auto"
-        />
+          <div>
+            <AtomAlert
+              v-if="legacyResources"
+              class="fr-mb-4w"
+              :alert-type="AlertType.Warning"
+              message="Veuillez répartir les ressources précedemment renseignées via l'ancienne section “Activité/Revenu” du formulaire bénéficiaire, sinon elles seront perdues :"
+            >
+              <template #detailedMessage>
+                <p class="euro-symbol">{{ legacyResources }}</p>
+              </template>
+            </AtomAlert>
 
-        <AtomAlert
-          v-else-if="error"
-          :alert-type="AlertType.Error"
-          message="Le revenu mensuel n'a pas pu être chargé."
-        />
+            <BudgetIncomeForm />
+          </div>
 
-        <div v-else-if="income">
-          <AtomAlert
-            v-if="legacyResources"
-            class="fr-mb-4w"
-            :alert-type="AlertType.Warning"
-            message="Veuillez répartir les ressources précedemment renseignées via l'ancienne section “Activité/Revenu” du formulaire bénéficiaire, sinon elles seront perdues :"
-          >
-            <template #detailedMessage>
-              <p class="euro-symbol">{{ legacyResources }}</p>
-            </template>
-          </AtomAlert>
-
-          <BudgetIncomeForm />
+          <section class="income__total">
+            <h2 class="fr-h4 fr-m-0">Total :</h2>
+            <span class="fr-h4 fr-m-0 euro-symbol">{{
+              total !== null ? euros(total) : '-'
+            }}</span>
+          </section>
         </div>
+      </main>
 
-        <section class="income__total">
-          <h2 class="fr-h4 fr-m-0">Total :</h2>
-          <span class="fr-h4 fr-m-0 euro-symbol">{{
-            total !== null ? euros(total) : '-'
-          }}</span>
-        </section>
-      </div>
-    </main>
-
-    <BudgetActionBar
-      :is-submitting="isSubmitting"
-      @cancel="onCancel"
-    />
-  </form>
+      <BudgetActionBar
+        :is-submitting="isSubmitting"
+        @cancel="onCancel"
+      />
+    </form>
+  </AtomLazyComponent>
 </template>
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
-  import { useBeneficiaryMinimalInfo } from '~/composables/useBeneficiaryMinimalInfo'
+  import { useFamilyFileMinimalInfo } from '~/composables/useFamilyFileMinimalInfo'
   import {
     UpdateBudgetIncomeInput,
     updateBudgetIncomeSchema
@@ -100,22 +85,22 @@
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
-  const beneficiaryId = route.params.id as string
+  const familyFileId = route.params.id as string
   const incomeId = route.params.iid as string
 
-  const title = routes.budget.AppBeneficiaryBudgetIncomeEdit.title
+  const title = routes.budget.AppFileBudgetIncomeEdit.title
 
   useHead({ title })
 
   definePageMeta({
-    name: routes.budget.AppBeneficiaryBudgetIncomeEdit.name
+    name: routes.budget.AppFileBudgetIncomeEdit.name
   })
 
   const {
-    beneficiaryIdentification,
-    pending: beneficiaryPending,
-    error: beneficiaryError
-  } = await useBeneficiaryMinimalInfo(beneficiaryId)
+    familyFileIdentification,
+    pending: filePending,
+    error: fileError
+  } = await useFamilyFileMinimalInfo(familyFileId)
 
   const {
     data: income,
@@ -125,7 +110,9 @@
 
   const subtitle = computed(() => {
     if (income.value?.type === 'Beneficiary') {
-      return `de ${beneficiaryIdentification.value?.firstName || ''} ${beneficiaryIdentification.value?.usualName || ''}`
+      const index = 0
+      const beneficiary = familyFileIdentification.value?.[index]
+      return `de ${beneficiary?.firstName || ''} ${beneficiary?.usualName || ''}`
     }
 
     const member = income.value?.householdMember
@@ -233,10 +220,9 @@
     isFormDirty
   })
 
-  const budgetTabRoute = routes.beneficiary.AppBeneficiary.path(beneficiaryId, {
+  const budgetTabRoute = routes.file.AppFile.path(familyFileId, {
     tab: BeneficiaryTab.Budget,
-    originPage:
-      route.name as typeof routes.budget.AppBeneficiaryBudgetIncomeEdit.name
+    originPage: route.name as typeof routes.budget.AppFileBudgetIncomeEdit.name
   })
 
   const onSubmit = handleSubmit(async values => {
@@ -249,7 +235,10 @@
         snackbar.success('Les revenus mensuels ont été mis à jour avec succès')
       },
       onFailure: () => {
-        snackbar.error('La mise à jour des revenus mensuels a échoué.')
+        snackbar.error(
+          'La mise à jour des revenus mensuels a échoué.',
+          snackbar.focus()
+        )
       }
     })
   })

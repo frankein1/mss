@@ -99,8 +99,8 @@
 
 <script setup lang="ts">
   import {
-    AddFamilyFileMemberInput,
-    addFamilyFileMemberSchema
+    CreateFamilyFileMemberInput,
+    createFamilyFileMemberSchema
   } from '~/server/schema'
   import { beneficiaryFieldLabels } from '~/client/labels'
   import {
@@ -120,11 +120,11 @@
   const props = defineProps<{
     isSubmitting: boolean // TODO
     familyFileId: string
-    add: (values: AddFamilyFileMemberInput) => Promise<string | undefined>
+    add: (values: CreateFamilyFileMemberInput) => Promise<string | undefined>
   }>()
 
-  const { handleSubmit } = useForm<AddFamilyFileMemberInput>({
-    validationSchema: toTypedSchema(addFamilyFileMemberSchema),
+  const { handleSubmit } = useForm<CreateFamilyFileMemberInput>({
+    validationSchema: toTypedSchema(createFamilyFileMemberSchema),
     initialValues: {
       familyFileId: props.familyFileId
     }
