@@ -26,9 +26,11 @@ function getBreadFamilyFile(
   familyIdentification: BeneficiaryNames[] | null,
   options?: FamilyFileUrlOptions
 ) {
+  const paragraph = shortParagraph(r.AppFile.title(familyIdentification))
+
   return [
     {
-      text: r.AppFile.title(familyIdentification),
+      text: paragraph,
       to: r.AppFile.path(familyFileId || '', options)
     }
   ]
@@ -82,4 +84,9 @@ export const breadcrumbs = {
   AppFileAdd: _b.AppFileAdd,
   AppFileBeneficiaryEdit: _b.AppFileBeneficiaryEdit,
   AppHistory: _b.AppHistory
+}
+
+const shortParagraph = (initialParagraph: string, value: number = 5) => {
+  const words = initialParagraph.split(' ', value)
+  return words.length < 5 ? initialParagraph : words.join(' ') + '...'
 }
