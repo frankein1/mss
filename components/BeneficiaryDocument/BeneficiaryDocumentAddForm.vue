@@ -11,14 +11,16 @@
     novalidate
     @submit.prevent="onSubmit"
   >
-    <VeeRadioButtons
-      v-if="beneficiaryOptions.length > 0"
-      name="beneficiaryId"
-      label="Ce document appartient à :"
-      :options="beneficiaryOptions"
-      :inline="false"
-      required
-    />
+    <template v-if="familyFileIdentification.length > 1">
+      <VeeRadioButtons
+        v-if="beneficiaryOptions.length > 0"
+        name="beneficiaryId"
+        label="Ce document appartient à :"
+        :options="beneficiaryOptions"
+        :inline="false"
+        required
+      />
+    </template>
     <VeeSelect
       :label="documentFieldLabels.type"
       name="type"
