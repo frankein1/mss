@@ -116,6 +116,14 @@
 
   const printInformations = await getPrintInformations()
 
+  const getBeneficiaryDetails = async (id: string | undefined) => {
+    if (!id) {
+      return null
+    }
+    const { beneficiary } = await useBeneficiaryDetails(id)
+    return beneficiary
+  }
+
   const getBeneficiaryId = () => {
     if (historyType === TypeSuivi.Followup) {
       return printInformations?.followup?.beneficiaryId
@@ -127,6 +135,19 @@
     if (historyType === TypeSuivi.HousingHelpRequest) {
       return printInformations?.housingHelpRequest?.fileInstruction
         .socialSupport.beneficiaryId
+    }
+  }
+
+  const getFfamilyFileId = async () => {
+    const beneficiary = await getBeneficiaryDetails(getBeneficiaryId())
+    if (historyType === TypeSuivi.Followup) {
+      return printInformations?.followup?.familyFileId
+    }
+    if (
+      historyType === TypeSuivi.AllHelpRequest ||
+      historyType === TypeSuivi.HousingHelpRequest
+    ) {
+      return beneficiary?.value?.familyFileId
     }
   }
   const getItemId = () => {
@@ -149,9 +170,11 @@
   onUnmounted(() => {
     window.removeEventListener('afterprint', onAfterPrint)
   })
-  function onAfterPrint() {
+  async function onAfterPrint() {
+    const familyFileId = await getFfamilyFileId()
     navigateTo(
-      routes.beneficiary.AppBeneficiary.path(getBeneficiaryId(), {
+      routes.file.AppFile.path(familyFileId, {
+        beneficiaryId: getBeneficiaryId(),
         item: getItemId(),
         tab: BeneficiaryTab.History
       })
