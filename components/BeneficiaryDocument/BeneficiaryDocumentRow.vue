@@ -9,10 +9,12 @@
           :title="document.name"
           >{{ document.name }}</span
         >
-        <br />
-        <span class="name-container">
-          {{ formatBeneficiary(document.beneficiaryId) }}</span
-        >
+        <template v-if="familyFileIdentification.length > 1">
+          <br />
+          <span class="name-container">
+            {{ formatBeneficiary(document.beneficiaryId) }}</span
+          >
+        </template>
       </p>
       <span
         v-if="document.confidential"
