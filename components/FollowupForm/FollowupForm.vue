@@ -10,7 +10,7 @@
     @submit.prevent="emit('submit', $event)"
   >
     <section
-      v-if="!editionMode"
+      v-if="!editionMode && familyFileIdentification.length > 1"
       class="feature-section fr-p-5w fr-mb-2w"
     >
       <div class="fr-grid-row">

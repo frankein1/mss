@@ -55,14 +55,23 @@
 
   const familyFileId = route.params.id as string
 
-  const title = computed(() =>
-    routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(null)
-  )
-
-  useHead({ title })
-
   const { familyFileIdentification, getBeneficiaryIdOnPageLoad } =
     await useFamilyFileMinimalInfo(familyFileId)
+
+  const title = computed(() => {
+    if (
+      familyFileIdentification &&
+      familyFileIdentification.value?.length &&
+      familyFileIdentification.value?.length === 1
+    ) {
+      return routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(
+        familyFileIdentification.value[0]
+      )
+    }
+    return routes.helpRequest.AppBeneficiaryHelpRequestAdd.title(null)
+  })
+
+  useHead({ title })
 
   const {
     data: partnerOrganizations,

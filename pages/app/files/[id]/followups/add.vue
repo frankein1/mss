@@ -56,9 +56,18 @@
   const { familyFileIdentification, getBeneficiaryIdOnPageLoad } =
     await useFamilyFileMinimalInfo(familyFileId)
 
-  const title = computed(() =>
-    routes.followup.AppBeneficiaryFollowupAdd.title(null)
-  )
+  const title = computed(() => {
+    if (
+      familyFileIdentification &&
+      familyFileIdentification.value?.length &&
+      familyFileIdentification.value?.length === 1
+    ) {
+      return routes.followup.AppBeneficiaryFollowupAdd.title(
+        familyFileIdentification.value[0]
+      )
+    }
+    return routes.followup.AppBeneficiaryFollowupAdd.title(null)
+  })
 
   useHead({ title })
 
