@@ -100,7 +100,11 @@
   })
 
   function onAfterPrint() {
-    navigateTo(routes.beneficiary.AppBeneficiary.path(beneficiaryId))
+    navigateTo(
+      routes.file.AppFile.path(beneficiary.value?.familyFileId, {
+        beneficiaryId
+      })
+    )
   }
 </script>
 
