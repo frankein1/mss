@@ -217,6 +217,7 @@
       margin-bottom: 0.5rem;
     }
   }
+
   .name-container {
     word-break: break-word; // Allows to split dashed or underscored document names
     overflow: hidden;
@@ -240,9 +241,11 @@
   .fr-btns-group .fr-btn {
     margin-bottom: 0;
   }
+
   .name > .fr-badge {
-    margin-left: 0rem;
+    margin-left: 0;
   }
+
   .name > .fr-badge ~ .fr-badge {
     margin-left: 0.5rem;
   }
