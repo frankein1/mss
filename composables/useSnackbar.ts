@@ -24,6 +24,20 @@ export function useSnackbar() {
     success: openSnackbar(AlertType.Success),
     error: openSnackbar(AlertType.Error),
     info: openSnackbar(AlertType.Info),
-    warning: openSnackbar(AlertType.Warning)
+    warning: openSnackbar(AlertType.Warning),
+    focus: setFocusAfterClose
   }
+}
+
+function setFocusAfterClose(
+  selector: HTMLElement | string = 'form',
+  tag: keyof HTMLElementTagNameMap = 'input'
+) {
+  const el =
+    typeof selector === 'string' ? document.querySelector(selector) : selector
+  if (!el) {
+    return () => {}
+  }
+
+  return () => el.querySelector(tag)?.focus()
 }

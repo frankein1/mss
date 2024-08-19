@@ -1,76 +1,58 @@
 <template>
-  <AtomLoader
-    v-if="filePending"
-    class="fr-mx-auto"
-  />
-
-  <AtomAlert
-    v-else-if="fileError"
-    :alert-type="AlertType.Error"
-    message="Le bénéficiaire n'a pas pu être chargé."
-  />
-
-  <form
-    v-else-if="familyFileIdentification"
-    ref="form"
-    novalidate
-    @submit.prevent="onSubmit"
+  <AtomLazyComponent
+    :pending="filePending || pending"
+    :error="Boolean(fileError || error)"
+    message="Les charges mensuelles n'ont pas pu être chargées."
   >
-    <main class="content">
-      <div class="fr-container fr-pb-2w">
-        <AtomBreadcrumb
-          :links="
-            breadcrumbs.budget.AppFileBudgetExpensesEdit(
-              familyFileId,
-              familyFileIdentification,
-              expensesId
-            )
-          "
-        />
+    <form
+      v-if="familyFileIdentification && expenses"
+      ref="form"
+      novalidate
+      @submit.prevent="onSubmit"
+    >
+      <main class="content">
+        <div class="fr-container fr-pb-2w">
+          <AtomBreadcrumb
+            :links="
+              breadcrumbs.budget.AppFileBudgetExpensesEdit(
+                familyFileId,
+                familyFileIdentification,
+                expensesId
+              )
+            "
+          />
 
-        <PageTitle
-          :title="title"
-          pictogram-path="/pictograms/money.svg"
-          pictogram-background
-          subtitle="du foyer fiscal"
-        />
+          <PageTitle
+            :title="title"
+            pictogram-path="/pictograms/money.svg"
+            pictogram-background
+            subtitle="du foyer fiscal"
+          />
 
-        <AtomLoader
-          v-if="pending"
-          class="fr-mx-auto"
-        />
+          <BudgetExpensesForm
+            :main-total="mainExpensesTotal"
+            :loans-total="loansTotal"
+            :debts-total="debtsTotal"
+          />
 
-        <AtomAlert
-          v-else-if="error"
-          :alert-type="AlertType.Error"
-          message="Les charges mensuelles n'ont pas pu être chargées."
-        />
+          <section class="expenses__total">
+            <h2 class="fr-h4 fr-m-0">Total :</h2>
+            <span class="fr-h4 fr-m-0 euro-symbol">{{
+              total !== null ? euros(total) : '-'
+            }}</span>
+          </section>
+        </div>
+      </main>
 
-        <BudgetExpensesForm
-          v-else-if="expenses"
-          :main-total="mainExpensesTotal"
-          :loans-total="loansTotal"
-          :debts-total="debtsTotal"
-        />
-
-        <section class="expenses__total">
-          <h2 class="fr-h4 fr-m-0">Total :</h2>
-          <span class="fr-h4 fr-m-0 euro-symbol">{{
-            total !== null ? euros(total) : '-'
-          }}</span>
-        </section>
-      </div>
-    </main>
-
-    <BudgetActionBar
-      :is-submitting="isSubmitting"
-      @cancel="onCancel"
-    />
-  </form>
+      <BudgetActionBar
+        :is-submitting="isSubmitting"
+        @cancel="onCancel"
+      />
+    </form>
+  </AtomLazyComponent>
 </template>
 
 <script setup lang="ts">
-  import { AlertType } from '~/utils/constants/alert'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import {
     UpdateBudgetExpensesInput,
@@ -190,7 +172,10 @@
         )
       },
       onFailure: () => {
-        snackbar.error('La mise à jour des charges mensuelles a échoué.')
+        snackbar.error(
+          'La mise à jour des charges mensuelles a échoué.',
+          snackbar.focus()
+        )
       }
     })
   })
