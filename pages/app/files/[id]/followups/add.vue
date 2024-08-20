@@ -93,18 +93,19 @@
     useTrpcMutation({
       mutation: () => trpcClient.followup.add.mutate(followup),
       isSubmitting,
-      onSuccess: ({ fileInstruction }) => {
+      onSuccess: ({ id }) => {
         navigateTo(
           routes.file.AppFile.path(followup.familyFileId, {
             beneficiaryId: followup.beneficiaryId,
             tab: BeneficiaryTab.History,
-            item: fileInstruction?.socialSupportId
+            item: id
           })
         )
       },
       onFailure: () => {
-        snackbar.error("La création de la synthèse d'entretien a échoué.", () =>
-          formContainer.value?.querySelector('input')?.focus()
+        snackbar.error(
+          "La création de la synthèse d'entretien a échoué.",
+          snackbar.focus(formContainer?.value || undefined)
         )
       }
     })

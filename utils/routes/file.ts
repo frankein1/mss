@@ -1,4 +1,4 @@
-import { AppRoute, FilesRoute } from './utils'
+import { AppRoute, FilesRoute, getRouteOptions } from './utils'
 import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
 import { BeneficiaryNames } from '~/types/beneficiary'
@@ -23,24 +23,6 @@ export interface FamilyFileUrlOptions {
   originTab?: HistoryTab
 }
 
-function createSuffixUrl(options?: FamilyFileUrlOptions) {
-  const hasDefinedOptions = options && Object.values(options).every(o => !!o)
-
-  if (hasDefinedOptions) {
-    const { tab, ...params } = options
-    const tabHash = tab ? `#${tab}` : ''
-
-    if (Object.keys(params).length) {
-      const urlParams = new URLSearchParams(params)
-      return `?${urlParams}${tabHash}`
-    }
-
-    return tabHash
-  }
-
-  return ''
-}
-
 function getFamilyFileRoute(
   familyFileId: string | undefined,
   options?: FamilyFileUrlOptions
@@ -50,7 +32,7 @@ function getFamilyFileRoute(
   }
 
   const base = `${FilesRoute}/${familyFileId}`
-  const suffix = createSuffixUrl(options)
+  const suffix = getRouteOptions(options)
 
   return `${base}${suffix}`
 }
