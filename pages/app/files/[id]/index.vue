@@ -125,7 +125,7 @@
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
           <!-- TODO beneficiaryIdentification ne devrait plus être nécessaire dans le budget qui dépend maintennant du foyer -->
-          <BeneficiaryBudget
+          <FamilyFileBudget
             v-else
             :family-file-id="selectedBeneficiary.familyFileId"
             :beneficiary-identification="selectedBeneficiaryIdentification"
