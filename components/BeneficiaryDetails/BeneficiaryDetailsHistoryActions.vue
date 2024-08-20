@@ -88,6 +88,7 @@
 
   .help-request-btn {
     background-color: var(--color-help-request);
+    color: #fff;
 
     &:hover {
       background-color: var(--color-help-request-hover);

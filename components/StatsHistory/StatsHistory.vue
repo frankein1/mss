@@ -378,8 +378,8 @@
   }
 
   #help-requests-tab {
-    color: var(--color-help-request);
-    background-color: var(--color-help-request-light);
+    color: #6e445a;
+    background-color: #fee7fc;
 
     &:hover {
       background-color: var(--color-help-request-light-hover);

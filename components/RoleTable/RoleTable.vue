@@ -379,4 +379,8 @@
   .allowed-action-bg {
     background-color: var(--green-emeraude-main-632);
   }
+
+  .allowed-action-bg::before {
+    color: #000;
+  }
 </style>

@@ -55,7 +55,7 @@
         ({ type, allocatedAmount }) => ({
           key: type.id,
           label: type.name,
-          color: '#E4794A',
+          color: 'var(--color-help-request)',
           count: allocatedAmount
         })
       ) || []
@@ -69,7 +69,7 @@
   }
 
   .stats-total-amount span {
-    color: var(--orange-terre-battue-main-645);
+    color: var(--color-help-request);
     margin-bottom: 0;
   }
 </style>
