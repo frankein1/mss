@@ -23,7 +23,14 @@
           :aria-controls="panelId(tab.tabId)"
           :href="tabHref(tab.tabId)"
         >
-          {{ tab.title }}
+          <div
+            v-if="initiallySelectedIndex === index"
+            role="heading"
+            :area-level="tab.headingLevel"
+          >
+            {{ tab.title }}
+          </div>
+          <div v-else>{{ tab.title }}</div>
         </a>
       </li>
     </ul>
@@ -35,8 +42,9 @@
   import { remToPx } from '~/utils/remToPx'
   import { panelId } from '~/utils/tab'
 
-  defineProps<{
+  const componentProps = defineProps<{
     tabListName: string
+    headingLevel?: 1 | 2 | 3 | 4 | 5 | 6
   }>()
 
   // DSFR handles by itself the update of the selected tab. This ref allows to reinitialise the selected tab
@@ -57,7 +65,10 @@
       .map(({ props }) => ({
         tabId: props?.['tab-id'],
         title: props?.title,
-        icon: props?.icon
+        icon: props?.icon,
+        headingLevel: componentProps.headingLevel
+          ? componentProps.headingLevel
+          : null
       }))
   })
 
@@ -105,13 +116,15 @@
     if (tabIndex === -1) {
       return
     }
-
+    console.log(tabIndex)
     initiallySelectedIndex.value = tabIndex
   }
 
   function tabHref(tabId: string) {
     return `#${tabId}`
   }
+
+  console.log(initiallySelectedIndex.value)
 </script>
 
 <style lang="scss" scoped>

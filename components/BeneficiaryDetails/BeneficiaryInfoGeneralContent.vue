@@ -1,8 +1,8 @@
 <template>
   <div v-if="hasIdentityInformations(general)">
     <div class="fr-grid-row">
-      <div class="fr-col-12 fr-pb-1w fr-text--bold">
-        Identité du bénéficiaire
+      <div class="fr-col-12 fr-pb-1w">
+        <h5 class="fr-text--md">Identité du bénéficiaire</h5>
       </div>
     </div>
     <div class="fr-grid-row">
@@ -95,7 +95,7 @@
     <hr class="fr-col-12 fr-mt-5v" />
 
     <div class="fr-col-12 fr-pb-1w">
-      <div class="fr-text--bold">Mobilité</div>
+      <h5 class="fr-text--md">Mobilité</h5>
     </div>
 
     <BeneficiaryInfoLabel
@@ -109,8 +109,8 @@
     class="fr-grid-row"
   >
     <hr class="fr-col-12 fr-mt-5v" />
-    <div class="fr-col-12 fr-pb-1w fr-text--bold">
-      Informations complémentaires
+    <div class="fr-col-12 fr-pb-1w">
+      <h5 class="fr-text--md">Informations complémentaires</h5>
     </div>
     <div class="field-value fr-col-12">
       {{ general.additionalInformation }}

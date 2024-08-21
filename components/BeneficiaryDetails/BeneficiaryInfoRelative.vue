@@ -1,7 +1,7 @@
 <template>
   <div class="fr-grid-row">
-    <div class="fr-col-12 fr-text--bold fr-pb-1w">
-      {{ name }}
+    <div class="fr-col-12 fr-pb-1w">
+      <h5 class="fr-text--md">{{ name }}</h5>
     </div>
   </div>
   <div class="fr-grid-row">

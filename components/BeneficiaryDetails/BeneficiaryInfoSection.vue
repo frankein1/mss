@@ -11,10 +11,13 @@
         class="fr-accordion__btn fr-h4"
         aria-expanded="true"
         :aria-controls="infoSectionId"
-        role="heading"
-        aria-level="3"
       >
-        {{ title }}
+        <div
+          role="heading"
+          aria-level="4"
+        >
+          {{ title }}
+        </div>
       </button>
     </div>
     <div

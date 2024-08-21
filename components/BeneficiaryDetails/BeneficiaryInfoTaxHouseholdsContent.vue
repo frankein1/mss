@@ -1,7 +1,7 @@
 <template>
   <div class="fr-grid-row">
     <div class="fr-col-12 fr-pb-1w">
-      <div class="fr-text--bold">Situation familiale</div>
+      <h5 class="fr-text--md">Situation familiale</h5>
     </div>
     <div class="fr-col-12 fr-pb-1w">
       <BeneficiaryInfoLabel

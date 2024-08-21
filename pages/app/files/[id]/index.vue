@@ -26,6 +26,7 @@
       <AtomTabs
         v-if="selectedBeneficiary"
         tab-list-name="Détails du dossier foyer"
+        :heading-level="2"
       >
         <AtomTab
           :tab-id="FamilyFileTab.Details"
