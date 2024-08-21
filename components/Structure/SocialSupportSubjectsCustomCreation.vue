@@ -8,9 +8,8 @@
       <div class="fr-col-8">
         <VeeInput
           :name="`customs[${index}].name`"
-          label="Intitulé de l’objet d’accompagnement"
+          label="Intitulé de l’objet d’accompagnement (obligatoire)"
           hint="Choisissez un nom court et clair"
-          required
         />
       </div>
       <div class="fr-col-3 delete-sss">

@@ -22,6 +22,7 @@
             <VeeSearchInput
               name="filter"
               label="Rechercher"
+              :label-visible="false"
               @on-input="onSearch"
             />
           </form>

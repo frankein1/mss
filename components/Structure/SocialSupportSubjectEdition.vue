@@ -8,9 +8,8 @@
       <div class="fr-col-12">
         <VeeInput
           name="name"
-          label="Intitulé de l’objet d’accompagnement"
+          label="Intitulé de l’objet d’accompagnement (obligatoire)"
           hint="Choisissez un nom court et clair"
-          required
         />
       </div>
 

@@ -1,33 +1,36 @@
 <template>
   <div
-    class="fr-input-group fr-search-bar"
+    class="fr-input-group"
     :class="{
       'fr-input-group--error': error
     }"
   >
     <label
-      class="fr-label fr-hidden"
+      class="fr-label"
+      :class="labelVisible ? '' : 'fr-hidden'"
       :for="id"
     >
       {{ label }}
     </label>
-    <input
-      :id="id"
-      ref="input"
-      class="fr-input"
-      :class="{ 'fr-input--error': error }"
-      :name="name"
-      :placeholder="placeholder"
-      type="text"
-      :aria-describedby="ariaDescribedby"
-      :value="value"
-      @input="onInput"
-      @change="onChange"
-    />
-    <div
-      class="fr-btn search-btn"
-      :title="label"
-    ></div>
+    <div class="fr-search-bar">
+      <input
+        :id="id"
+        ref="input"
+        class="fr-input"
+        :class="{ 'fr-input--error': error }"
+        :name="name"
+        :placeholder="placeholder"
+        type="text"
+        :aria-describedby="ariaDescribedby"
+        :value="value"
+        @input="onInput"
+        @change="onChange"
+      />
+      <div
+        class="fr-btn search-btn"
+        :title="label"
+      ></div>
+    </div>
     <div
       :id="errorId"
       class="fr-messages-group"
@@ -51,9 +54,11 @@
       name: string
       label: string
       placeholder?: string
+      labelVisible?: boolean
     }>(),
     {
-      placeholder: undefined
+      placeholder: undefined,
+      labelVisible: false
     }
   )
 
@@ -94,3 +99,9 @@
     handleChange(event)
   }
 </script>
+
+<style lang="scss">
+  .fr-search-bar {
+    margin-top: 0.5rem;
+  }
+</style>

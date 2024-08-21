@@ -5,7 +5,7 @@
     role="search"
   >
     <label
-      class="fr-label"
+      class="fr-label fr-hidden"
       :for="name"
     >
       {{ label }}

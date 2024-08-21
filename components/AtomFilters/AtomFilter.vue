@@ -10,6 +10,7 @@
     v-else-if="filter.type === FilterType.Search"
     :name="filter.name"
     :label="filter.label"
+    :label-visible="true"
     :placeholder="filter.placeholder"
     @change-value="emit('changeFilter', $event)"
   />
@@ -51,6 +52,7 @@
 
   defineProps<{
     filter: FilterProp
+    searchLabelVisible?: boolean
   }>()
 
   const emit = defineEmits<{

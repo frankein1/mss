@@ -7,6 +7,11 @@
     <div class="fr-container">
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">
+          <p class="fr-mb-2w">
+            <RequiredFields />
+          </p>
+        </div>
+        <div class="fr-col-12">
           <VeeInput
             name="lastName"
             :label="relativeFieldLabels.lastName"

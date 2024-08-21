@@ -1,4 +1,7 @@
 <template>
+  <p class="fr-mb-2w">
+    <RequiredFields />
+  </p>
   <form
     ref="form"
     novalidate
