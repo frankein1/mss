@@ -9,9 +9,9 @@
       />
     </div>
     <div class="fr-col-12 results-container">
-      <h2 class="stats-main-title results-count">
+      <h3 class="stats-main-title results-count">
         {{ beneficiaryCountLabel }}
-      </h2>
+      </h3>
       <ExportDataButton
         v-if="application.export.stats"
         :is-downloading="isDownloading"

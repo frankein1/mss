@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des données mobilité n'ont pas pu être chargées."
     />
     <template v-else-if="mobilityStats">
-      <h2 class="fr-h5">Données mobilité</h2>
+      <h4 class="fr-h5">Données mobilité</h4>
       <StatsList
         v-if="mobilityStats.length"
         :total-count="beneficiaryCount"

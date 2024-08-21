@@ -10,7 +10,7 @@
       message="Les statistiques des actions entreprises n'ont pas pu être chargées."
     />
     <template v-else-if="followupActionsEntreprisesStats">
-      <h2 class="fr-h5">Actions entreprises</h2>
+      <h5 class="fr-h5">Actions entreprises</h5>
       <p>
         Pourcentage calculé sur le nombre total de synthèses d'entretien. Une
         synthèse d'entretien pouvant donner lieu à plusieurs actions, la somme

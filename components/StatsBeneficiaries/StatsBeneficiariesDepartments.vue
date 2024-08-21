@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des départements n'ont pas pu être chargées."
     />
     <template v-else-if="departmentsStats">
-      <h2 class="fr-h5">Départements</h2>
+      <h4 class="fr-h5">Départements</h4>
       <StatsList
         v-if="departmentsStats.length"
         :total-count="beneficiaryCount"

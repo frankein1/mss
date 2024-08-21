@@ -1,6 +1,7 @@
 <template>
   <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
-    <div class="fr-col-12">
+    <section class="fr-col-12">
+      <h3 class="fr-sr-only">Filtres</h3>
       <StatsFilters
         v-model:filters="filters"
         :social-support-subject-options="socialSupportSubjectOptions"
@@ -8,99 +9,211 @@
         :agent-options="agentOptions"
         :is-help-requests-tab="!isFollowupsTabActive"
       />
-    </div>
-    <div class="fr-col-12 results-container">
-      <h2 class="stats-main-title results-count">
-        {{ historyCountLabel }}
-      </h2>
-      <ExportDataButton
-        v-if="application.export.stats"
-        :is-downloading="isDownloading"
-        stats
-        @export="exportStats"
-      />
-    </div>
-    <div class="fr-tabs fr-transition-none">
-      <ul
-        class="fr-tabs__list statshistory__tabs-list"
-        :class="{ 'followups-tab-active': isFollowupsTabActive }"
-        role="tablist"
-        aria-label="Accompagnements"
-      >
-        <li role="presentation">
-          <button
-            id="help-requests-tab"
-            class="fr-tabs__tab"
-            tabindex="0"
-            role="tab"
-            aria-selected="true"
-            aria-controls="help-requests-panel"
-            @click="isFollowupsTabActive = false"
-          >
-            {{ helpRequestCountLabel }}
-          </button>
-        </li>
-        <li role="presentation">
-          <button
-            id="followups-tab"
-            class="fr-tabs__tab"
-            tabindex="0"
-            role="tab"
-            aria-selected="false"
-            aria-controls="followups-panel"
-            @click="isFollowupsTabActive = true"
-          >
-            {{ followupCountLabel }}
-            <span>{{ firstFollowupCountLabel }}</span>
-          </button>
-        </li>
-      </ul>
+    </section>
+    <section>
+      <div class="fr-col-12 results-container fr-mb-2w">
+        <h3 class="stats-main-title results-count">
+          {{ historyCountLabel }}
+        </h3>
+        <ExportDataButton
+          v-if="application.export.stats"
+          :is-downloading="isDownloading"
+          stats
+          @export="exportStats"
+        />
+      </div>
+      <div class="fr-tabs fr-transition-none">
+        <ul
+          class="fr-tabs__list statshistory__tabs-list"
+          :class="{ 'followups-tab-active': isFollowupsTabActive }"
+          role="tablist"
+          aria-label="Accompagnements"
+        >
+          <li role="presentation">
+            <button
+              id="help-requests-tab"
+              class="fr-tabs__tab"
+              tabindex="0"
+              role="tab"
+              aria-selected="true"
+              aria-controls="help-requests-panel"
+              @click="isFollowupsTabActive = false"
+            >
+              <div
+                v-if="!isFollowupsTabActive"
+                role="heading"
+                aria-level="4"
+              >
+                {{ helpRequestCountLabel }}
+              </div>
+              <div v-else>
+                {{ helpRequestCountLabel }}
+              </div>
+            </button>
+          </li>
+          <li role="presentation">
+            <button
+              id="followups-tab"
+              class="fr-tabs__tab"
+              tabindex="0"
+              role="tab"
+              aria-selected="false"
+              aria-controls="followups-panel"
+              @click="isFollowupsTabActive = true"
+            >
+              <div
+                v-if="isFollowupsTabActive"
+                role="heading"
+                aria-level="4"
+                :style="{ textAlign: 'left' }"
+              >
+                {{ followupCountLabel }}
 
-      <div
-        id="help-requests-panel"
-        class="fr-tabs__panel fr-tabs__panel--selected fr-px-0"
-        role="tabpanel"
-        aria-labelledby="help-requests-tab"
-        tabindex="0"
-      >
-        <AtomAlert
-          v-if="error"
-          :alert-type="AlertType.Error"
-          message="Le nombre total d'instructions de dossier n'a pas pu être chargé."
-        />
-        <AtomLoader
-          v-if="pending"
-          class="fr-mx-auto"
-        />
-        <template v-else-if="helpRequestCount">
-          <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
-            <div
-              v-if="!filters.helpRequestSubject"
-              class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
-            >
-              <StatsFileInstructionType
-                :total-count="helpRequestCount"
+                <span><br />{{ firstFollowupCountLabel }}</span>
+              </div>
+              <div
+                v-else
+                :style="{ textAlign: 'left' }"
+              >
+                {{ followupCountLabel }}
+
+                <span><br />{{ firstFollowupCountLabel }}</span>
+              </div>
+            </button>
+          </li>
+        </ul>
+
+        <div
+          id="help-requests-panel"
+          class="fr-tabs__panel fr-tabs__panel--selected fr-px-0"
+          role="tabpanel"
+          aria-labelledby="help-requests-tab"
+          tabindex="0"
+        >
+          <AtomAlert
+            v-if="error"
+            :alert-type="AlertType.Error"
+            message="Le nombre total d'instructions de dossier n'a pas pu être chargé."
+          />
+          <AtomLoader
+            v-if="pending"
+            class="fr-mx-auto"
+          />
+          <template v-else-if="helpRequestCount">
+            <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
+              <div
+                v-if="!filters.helpRequestSubject"
+                class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
+              >
+                <StatsFileInstructionType
+                  :total-count="helpRequestCount"
+                  :filters="filters"
+                />
+              </div>
+              <div
+                v-if="
+                  filters.helpRequestSubject !== FileInstructionType.Housing
+                "
+                class="fr-col-12 fr-col-lg-6"
+              >
+                <StatsHelpRequestSubject
+                  :total-count="
+                    financialHelpRequestCount + otherHelpRequestCount
+                  "
+                  :filters="filters"
+                />
+              </div>
+              <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+                <StatsHelpRequestBeneficiaryNumber
+                  :total-count="helpRequestCount"
+                  :filters="filters"
+                />
+              </div>
+              <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+                <StatsHelpRequestStatus
+                  :total-count="helpRequestCount"
+                  :filters="filters"
+                />
+              </div>
+              <div
+                v-if="application.module.ministere"
+                class="fr-col-12 fr-col-lg-6"
+              >
+                <StatsHelpRequestMinistre
+                  :total-count="helpRequestCount"
+                  :filters="filters"
+                />
+              </div>
+              <div
+                v-if="
+                  filters.helpRequestSubject !== FileInstructionType.Housing
+                "
+                class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
+              >
+                <StatsHelpRequestPrescribingOrganizations
+                  :total-count="
+                    financialHelpRequestCount + otherHelpRequestCount
+                  "
+                  :filters="filters"
+                />
+              </div>
+              <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+                <StatsHistoryInstructorOrganizations
+                  :total-count="externalHelpRequestCount"
+                  :filters="filters"
+                />
+              </div>
+              <div
+                v-if="
+                  !filters.helpRequestSubject ||
+                  filters.helpRequestSubject === FileInstructionType.Financial
+                "
+                class="fr-col-12 fr-col-sm-6"
+              >
+                <StatsFinancialHelpRequests :filters="filters" />
+              </div>
+              <div
+                v-if="
+                  !filters.socialSupportSubjects &&
+                  (!filters.helpRequestSubject ||
+                    filters.helpRequestSubject === FileInstructionType.Housing)
+                "
+                class="fr-col-12 fr-col-sm-6"
+              >
+                <StatsHousingHelpRequests :filters="filters" />
+              </div>
+            </div>
+          </template>
+        </div>
+        <div
+          id="followups-panel"
+          class="fr-tabs__panel fr-px-0"
+          role="tabpanel"
+          aria-labelledby="followups-tab"
+          tabindex="0"
+        >
+          <AtomAlert
+            v-if="error"
+            :alert-type="AlertType.Error"
+            message="Le nombre total de synthèses d'entretien n'a pas pu être chargé."
+          />
+          <AtomLoader
+            v-if="pending"
+            class="fr-mx-auto"
+          />
+          <div
+            v-else-if="followupCount"
+            class="fr-grid-row fr-grid-row--gutters fr-px-2w"
+          >
+            <div class="fr-col-12 fr-col-lg-6">
+              <StatsFollowupSubject
+                :total-count="followupCount"
                 :filters="filters"
               />
             </div>
-            <div
-              v-if="filters.helpRequestSubject !== FileInstructionType.Housing"
-              class="fr-col-12 fr-col-lg-6"
-            >
-              <StatsHelpRequestSubject
-                :total-count="financialHelpRequestCount + otherHelpRequestCount"
-                :filters="filters"
-              />
-            </div>
-            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-              <StatsHelpRequestBeneficiaryNumber
-                :total-count="helpRequestCount"
-                :filters="filters"
-              />
-            </div>
-            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-              <StatsHelpRequestStatus
-                :total-count="helpRequestCount"
+            <div class="fr-col-12 fr-col-lg-6">
+              <StatsFollowupMedium
+                :total-count="followupCount"
                 :filters="filters"
               />
             </div>
@@ -108,116 +221,39 @@
               v-if="application.module.ministere"
               class="fr-col-12 fr-col-lg-6"
             >
-              <StatsHelpRequestMinistre
-                :total-count="helpRequestCount"
-                :filters="filters"
-              />
-            </div>
-            <div
-              v-if="filters.helpRequestSubject !== FileInstructionType.Housing"
-              class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
-            >
-              <StatsHelpRequestPrescribingOrganizations
-                :total-count="financialHelpRequestCount + otherHelpRequestCount"
+              <StatsFollowupMinistre
+                :total-count="followupCount"
                 :filters="filters"
               />
             </div>
             <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-              <StatsHistoryInstructorOrganizations
-                :total-count="externalHelpRequestCount"
+              <StatsFollowupBeneficiaryNumber
+                :total-count="followupCount"
                 :filters="filters"
               />
             </div>
-            <div
-              v-if="
-                !filters.helpRequestSubject ||
-                filters.helpRequestSubject === FileInstructionType.Financial
-              "
-              class="fr-col-12 fr-col-sm-6"
-            >
-              <StatsFinancialHelpRequests :filters="filters" />
+            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+              <StatsFollowupStatus
+                :total-count="followupCount"
+                :filters="filters"
+              />
             </div>
-            <div
-              v-if="
-                !filters.socialSupportSubjects &&
-                (!filters.helpRequestSubject ||
-                  filters.helpRequestSubject === FileInstructionType.Housing)
-              "
-              class="fr-col-12 fr-col-sm-6"
-            >
-              <StatsHousingHelpRequests :filters="filters" />
+            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+              <StatsFollowupActionsEntreprises
+                :total-count="followupCount"
+                :filters="filters"
+              />
             </div>
-          </div>
-        </template>
-      </div>
-      <div
-        id="followups-panel"
-        class="fr-tabs__panel fr-px-0"
-        role="tabpanel"
-        aria-labelledby="followups-tab"
-        tabindex="0"
-      >
-        <AtomAlert
-          v-if="error"
-          :alert-type="AlertType.Error"
-          message="Le nombre total de synthèses d'entretien n'a pas pu être chargé."
-        />
-        <AtomLoader
-          v-if="pending"
-          class="fr-mx-auto"
-        />
-        <div
-          v-else-if="followupCount"
-          class="fr-grid-row fr-grid-row--gutters fr-px-2w"
-        >
-          <div class="fr-col-12 fr-col-lg-6">
-            <StatsFollowupSubject
-              :total-count="followupCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-lg-6">
-            <StatsFollowupMedium
-              :total-count="followupCount"
-              :filters="filters"
-            />
-          </div>
-          <div
-            v-if="application.module.ministere"
-            class="fr-col-12 fr-col-lg-6"
-          >
-            <StatsFollowupMinistre
-              :total-count="followupCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsFollowupBeneficiaryNumber
-              :total-count="followupCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsFollowupStatus
-              :total-count="followupCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsFollowupActionsEntreprises
-              :total-count="followupCount"
-              :filters="filters"
-            />
-          </div>
-          <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
-            <StatsFollowupPrescribingOrganizations
-              :total-count="followupCount"
-              :filters="filters"
-            />
+            <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
+              <StatsFollowupPrescribingOrganizations
+                :total-count="followupCount"
+                :filters="filters"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
   </div>
 </template>
 

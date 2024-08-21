@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des situations familiales n'ont pas pu être chargées."
     />
     <template v-else-if="familySituationsStats">
-      <h2 class="fr-h5">Types de situations familiales</h2>
+      <h4 class="fr-h5">Types de situations familiales</h4>
       <StatsList
         v-if="familySituationsStats.length"
         :total-count="beneficiaryCount"

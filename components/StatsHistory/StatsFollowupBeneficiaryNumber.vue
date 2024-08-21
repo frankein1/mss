@@ -10,7 +10,7 @@
       :message="`Les statistiques du nombre de bénéficiaires concernés n'ont pas pu être chargées.`"
     />
     <template v-else-if="beneficiaryCounts !== null">
-      <h2 class="fr-h5">Nombre de bénéficiaires concernés</h2>
+      <h5 class="fr-h5">Nombre de bénéficiaires concernés</h5>
       <StatsNumber
         v-if="beneficiaryCounts"
         :total-count="totalCount"

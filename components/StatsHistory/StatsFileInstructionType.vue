@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des thématiques d'instruction n'ont pas pu être chargées."
     />
     <template v-else-if="subjectStats">
-      <h2 class="fr-h5">Thématique d'instruction</h2>
+      <h5 class="fr-h5">Thématique d'instruction</h5>
       <p>
         Les instructions de dossiers de demande de logement réalisées avant le
         15 février 2024 sont comptabilisées dans la thématique "Autre".

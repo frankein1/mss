@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des types d'entretiens n'ont pas pu être chargées."
     />
     <template v-else-if="followupMediumStats">
-      <h2 class="fr-h5">Types d'entretiens</h2>
+      <h5 class="fr-h5">Types d'entretiens</h5>
       <StatsList
         v-if="followupMediumStats.length"
         :total-count="totalCount"

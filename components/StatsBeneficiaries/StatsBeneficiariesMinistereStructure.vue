@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des structures de rattachement n'ont pas pu être chargées."
     />
     <template v-else-if="ministereStructureStats">
-      <h2 class="fr-h5">Structures de rattachement</h2>
+      <h4 class="fr-h5">Structures de rattachement</h4>
       <StatsList
         v-if="ministereStructureStats.length"
         :total-count="beneficiaryCount"

@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des statuts n'ont pas pu être chargées."
     />
     <template v-else-if="statusStats">
-      <h2 class="fr-h5">Statuts</h2>
+      <h5 class="fr-h5">Statuts</h5>
       <StatsPie
         v-if="statusStats.length"
         pie-label="Répartion des statuts"

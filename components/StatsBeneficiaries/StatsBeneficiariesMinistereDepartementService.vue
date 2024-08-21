@@ -10,9 +10,9 @@
       message="Les statistiques de la répartion des départements ou services de l'administration centrale n'ont pas pu être chargées."
     />
     <template v-else-if="ministereDepartementServiceAcStats">
-      <h2 class="fr-h5">
+      <h4 class="fr-h5">
         Départements ou services de l'administration centrale
-      </h2>
+      </h4>
       <StatsList
         v-if="ministereDepartementServiceAcStats.length"
         :total-count="beneficiaryCount"

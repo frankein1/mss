@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des catégories n'ont pas pu être chargées."
     />
     <template v-else-if="ministereCategorieStats">
-      <h2 class="fr-h5">Catégories</h2>
+      <h4 class="fr-h5">Catégories</h4>
       <StatsList
         v-if="ministereCategorieStats.length"
         :total-count="beneficiaryCount"

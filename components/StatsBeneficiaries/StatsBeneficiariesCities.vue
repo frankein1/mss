@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des villes n'ont pas pu être chargées."
     />
     <template v-else-if="citiesStats">
-      <h2 class="fr-h5">Villes</h2>
+      <h4 class="fr-h5">Villes</h4>
       <StatsList
         v-if="citiesStats.length"
         :total-count="beneficiaryCount"

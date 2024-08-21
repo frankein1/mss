@@ -116,15 +116,12 @@
     if (tabIndex === -1) {
       return
     }
-    console.log(tabIndex)
     initiallySelectedIndex.value = tabIndex
   }
 
   function tabHref(tabId: string) {
     return `#${tabId}`
   }
-
-  console.log(initiallySelectedIndex.value)
 </script>
 
 <style lang="scss" scoped>

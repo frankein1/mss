@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des tranches d'âge n'ont pas pu être chargées."
     />
     <template v-else-if="ageStats">
-      <h2 class="fr-h5">Tranches d'âge</h2>
+      <h4 class="fr-h5">Tranches d'âge</h4>
       <StatsPie
         v-if="ageStats.length"
         pie-label="Répartition des tranches d'âge"

@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des modes d'hébergement n'ont pas pu être chargées."
     />
     <template v-else-if="accommodationModesStats">
-      <h2 class="fr-h5">Modes d'hébergement</h2>
+      <h4 class="fr-h5">Modes d'hébergement</h4>
       <StatsList
         v-if="accommodationModesStats.length"
         :total-count="beneficiaryCount"
