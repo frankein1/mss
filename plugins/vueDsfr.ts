@@ -3,7 +3,9 @@ import {
   DsfrButton,
   DsfrButtonGroup,
   DsfrSegmentedSet,
-  DsfrSegmented
+  DsfrSegmented,
+  DsfrAccordion,
+  DsfrAccordionsGroup
 } from '@gouvminint/vue-dsfr'
 
 export default defineNuxtPlugin(() => {
@@ -13,4 +15,6 @@ export default defineNuxtPlugin(() => {
   nuxtApp.vueApp.component('DsfrButtonGroup', DsfrButtonGroup)
   nuxtApp.vueApp.component('DsfrSegmentedSet', DsfrSegmentedSet)
   nuxtApp.vueApp.component('DsfrSegmented', DsfrSegmented)
+  nuxtApp.vueApp.component('DsfrAccordionsGroup', DsfrAccordionsGroup)
+  nuxtApp.vueApp.component('DsfrAccordion', DsfrAccordion)
 })

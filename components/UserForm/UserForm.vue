@@ -1,4 +1,6 @@
 <template>
+  <h2 class="fr-h4">Ajouter un nouvel utilisateur</h2>
+
   <FormErrors
     v-if="errors.length > 1"
     :errors="errors"
@@ -35,7 +37,7 @@
     </div>
 
     <button
-      class="fr-btn fr-btn--lg submit-btn"
+      class="fr-btn fr-btn--lg"
       type="submit"
       :disabled="isSubmitting"
       :submitting="isSubmitting"
@@ -118,5 +120,9 @@
 
       padding: 0.75rem;
     }
+  }
+
+  h2 {
+    color: var(--primary);
   }
 </style>

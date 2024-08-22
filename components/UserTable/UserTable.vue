@@ -1,5 +1,7 @@
 <template>
   <div class="fr-container fr-p-0">
+    <h2 class="fr-h4">Utilisateurs de votre structure</h2>
+
     <AtomAlert
       v-if="error"
       :alert-type="AlertType.Error"
@@ -97,3 +99,9 @@
 
   const authUserId = authState.getUserId
 </script>
+
+<style scoped>
+  h2 {
+    color: var(--primary);
+  }
+</style>
