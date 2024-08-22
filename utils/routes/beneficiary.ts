@@ -9,7 +9,7 @@ type OriginPage =
   | 'AppBeneficiaries'
   | 'AppHistory'
   | 'AppFileBudgetInfoEdit'
-  | 'AppBeneficiaryBudgetIncomeEdit'
+  | 'AppFileBudgetIncomeEdit'
   | 'AppFileBudgetExpensesEdit'
 
 export type AppBeneficiaryEditRoute =

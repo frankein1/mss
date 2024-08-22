@@ -54,7 +54,7 @@
     <BudgetIncomesAddMember
       :family-file-id="familyFileId"
       :budget-id="budgetId"
-      :beneficiary-id="beneficiaryIdentification.id"
+      :beneficiary-id="beneficiaryId"
     />
   </section>
 </template>
@@ -67,13 +67,12 @@
   } from '~/client/options'
   import { IncomeKey, GetBudgetIncomeHouseholdMember } from '~/types/budget'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { BeneficiaryIdentification } from '~/types/beneficiary'
   import { incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
 
   const props = defineProps<{
     familyFileId: string
-    beneficiaryIdentification: BeneficiaryIdentification
+    beneficiaryId: string
     budgetId: string
     incomes: GetBudgetIncomeHouseholdMember[]
   }>()
@@ -81,7 +80,9 @@
   const memberNames = computed(() =>
     props.incomes.map((income, index) => {
       if (income.type === 'Beneficiary') {
-        return `Revenus - ${props.beneficiaryIdentification.firstName} ${props.beneficiaryIdentification.usualName}`
+        return income.beneficiary
+          ? `Revenus - ${income.beneficiary.firstName} ${income.beneficiary.usualName} - ${taxHouseHoldRelationshipKeys.value(income.beneficiary.relationship) || 'Membre du foyer'}`
+          : `Revenus - Bénéficiaire du foyer ${index}`
       }
 
       const member = income.householdMember

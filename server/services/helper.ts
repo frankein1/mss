@@ -235,3 +235,10 @@ export function filterHelpRequest({
     )
   }
 }
+
+/** Check that at least one entry in element is defined */
+export function filterOutEmptyElements<T extends Record<string, unknown>>(
+  element: T
+) {
+  return Object.entries(element).some(([key, value]) => key !== 'id' && !!value)
+}

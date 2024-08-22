@@ -116,19 +116,14 @@
             class="fr-mx-auto"
           />
           <AtomAlert
-            v-else-if="
-              selectedError ||
-              !selectedBeneficiary ||
-              !selectedBeneficiaryIdentification
-            "
+            v-else-if="selectedError || !selectedBeneficiary"
             :alert-type="AlertType.Error"
             message="La fiche bénéficiaire n'a pas pu être chargée."
           />
-          <!-- TODO beneficiaryIdentification ne devrait plus être nécessaire dans le budget qui dépend maintennant du foyer -->
-          <BeneficiaryBudget
+          <FamilyFileBudget
             v-else
-            :family-file-id="selectedBeneficiary.familyFileId"
-            :beneficiary-identification="selectedBeneficiaryIdentification"
+            :family-file-id="familyFileId"
+            :beneficiary-id="selectedBeneficiary.id"
           />
         </AtomTab>
       </AtomTabs>
@@ -141,10 +136,7 @@
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
   import { FamilyFilePermissions } from '~/server/security'
-  import {
-    BeneficiaryIdentification,
-    GetBeneficiaryOutput
-  } from '~/types/beneficiary'
+  import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import { CreateFamilyFileMemberInput } from '~/server/schema'
@@ -169,8 +161,6 @@
   // states
   const selectedBeneficiary = ref<GetBeneficiaryOutput | null>(null)
   const selectedPermissions = ref<FamilyFilePermissions | undefined>(undefined)
-  const selectedBeneficiaryIdentification =
-    ref<BeneficiaryIdentification | null>(null)
   const selectedPending = ref(true)
   const selectedError = ref<TRPCClientErrorLike<any> | null>(null)
   const socialSupportSubjects = computed(
@@ -179,16 +169,10 @@
 
   // Get beneficiaryDetails
   const getBeneficiaryDetails = async (id: string): Promise<void> => {
-    const {
-      beneficiary,
-      permissions,
-      beneficiaryIdentification,
-      pending,
-      error
-    } = await useBeneficiaryDetails(id)
+    const { beneficiary, permissions, pending, error } =
+      await useBeneficiaryDetails(id)
     selectedBeneficiary.value = beneficiary.value
     selectedPermissions.value = permissions.value
-    selectedBeneficiaryIdentification.value = beneficiaryIdentification.value
     selectedPending.value = pending.value
     selectedError.value = error.value
   }

@@ -1322,6 +1322,9 @@ model BudgetIncome {
 
   type BudgetIncomeType
 
+  beneficiaryId String?      @unique @map("beneficiary_id") @db.Uuid
+  beneficiary   Beneficiary? @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
+
   householdMemberId String?              @unique @map("household_member_id") @db.Uuid
   householdMember   BeneficiaryRelative? @relation(fields: [householdMemberId], references: [id], onDelete: Cascade)
 
@@ -1556,6 +1559,8 @@ model Beneficiary {
   socialSupports SocialSupport[]
   documents      Document[]
   notifications  Notification[]
+
+  income BudgetIncome?
 
   @@map("beneficiary")
 }

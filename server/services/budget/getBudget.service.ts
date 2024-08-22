@@ -21,7 +21,26 @@ export async function getBudget({
       },
       incomes: {
         include: {
-          householdMember: true
+          householdMember: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+              birthDate: true,
+              relationship: true,
+              hosted: true
+            }
+          },
+          beneficiary: {
+            select: {
+              id: true,
+              firstName: true,
+              usualName: true,
+              birthName: true,
+              birthDate: true,
+              relationship: true
+            }
+          }
         }
       }
     }

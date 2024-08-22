@@ -110,9 +110,7 @@
 
   const subtitle = computed(() => {
     if (income.value?.type === 'Beneficiary') {
-      const index = 0
-      const beneficiary = familyFileIdentification.value?.[index]
-      return `de ${beneficiary?.firstName || ''} ${beneficiary?.usualName || ''}`
+      return `de ${income.value.beneficiary?.firstName || ''} ${income.value.beneficiary?.usualName || ''}`
     }
 
     const member = income.value?.householdMember

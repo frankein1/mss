@@ -17,7 +17,7 @@
     :label-getter="(key: string) => budgetExpensesKeys.value(key)"
     :value-getter="(key: string) => expenses[key as ExpensesKey]"
     :edit-route="
-      routes.budget.AppFileBudgetExpensesEdit.path(beneficiaryId, expenses.id)
+      routes.budget.AppFileBudgetExpensesEdit.path(familyFileId, expenses.id)
     "
   />
 
@@ -29,7 +29,7 @@
     :total="loansTotal"
     :subsection-items="expenses.loans"
     :edit-route="
-      routes.budget.AppFileBudgetExpensesEdit.path(beneficiaryId, expenses.id)
+      routes.budget.AppFileBudgetExpensesEdit.path(familyFileId, expenses.id)
     "
   />
 
@@ -41,7 +41,7 @@
     :total="debtsTotal"
     :subsection-items="expenses.debts"
     :edit-route="
-      routes.budget.AppFileBudgetExpensesEdit.path(beneficiaryId, expenses.id)
+      routes.budget.AppFileBudgetExpensesEdit.path(familyFileId, expenses.id)
     "
   />
 </template>
@@ -55,7 +55,7 @@
   import { routes } from '~/utils/routes'
 
   const props = defineProps<{
-    beneficiaryId: string
+    familyFileId: string
     expenses: BudgetExpenses
   }>()
 

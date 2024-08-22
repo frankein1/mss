@@ -14,6 +14,7 @@ import {
 import { createHostedEntourageMember } from './create-hosted-entourage-member.service'
 import { getIdFromFamilyFileId } from './get-id-from-family-file-id.service'
 import { createFamilyFileMember } from './create-family-file-member.service'
+import { updateEntourage } from './update-entourage.service'
 
 // TODO(foyer): SHOULD BE DELETED
 export const BeneficiaryService = {
@@ -28,7 +29,8 @@ export const BeneficiaryService = {
   getEditionPermissions,
   getBeneficiarySecurityTarget,
   getIdFromFamilyFileId,
-  createFamilyFileMember
+  createFamilyFileMember,
+  updateEntourage
 }
 
 export type { BeneficiarySecurityTarget }
