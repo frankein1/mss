@@ -1,5 +1,6 @@
 import { AlertType } from '~/utils/constants/alert'
 import type { OpenSnackbar } from '~/types/snackbar'
+import { setFocusAfterClose } from '~/utils/focusAfterClose'
 
 const DEFAULT_SNACKBAR_DURATION = 5000
 
@@ -27,17 +28,4 @@ export function useSnackbar() {
     warning: openSnackbar(AlertType.Warning),
     focus: setFocusAfterClose
   }
-}
-
-function setFocusAfterClose(
-  selector: HTMLElement | string = 'form',
-  tag: keyof HTMLElementTagNameMap = 'input'
-) {
-  const el =
-    typeof selector === 'string' ? document.querySelector(selector) : selector
-  if (!el) {
-    return () => {}
-  }
-
-  return () => el.querySelector(tag)?.focus()
 }

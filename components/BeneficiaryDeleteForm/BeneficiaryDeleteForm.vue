@@ -44,14 +44,15 @@
   const props = defineProps<{
     beneficiaryId: string
     cancel: () => void
-    deleted: () => void
+    failure: () => void
+    success: () => void
   }>()
 
   const isSubmitting = ref(false)
 
   function cancelAndClose() {
-    props.cancel()
     modal.close()
+    props.cancel()
   }
 
   function deleteItem() {
@@ -62,12 +63,12 @@
         }),
       isSubmitting,
       onSuccess: () => {
-        props.deleted()
         modal.close()
+        props.success()
       },
       onFailure: () => {
-        props.cancel()
-        useSnackbar().error('La suppression a échoué.')
+        modal.close()
+        props.failure()
       }
     })
   }

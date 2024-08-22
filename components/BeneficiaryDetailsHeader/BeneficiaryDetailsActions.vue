@@ -7,7 +7,7 @@
         aria-controls="global-modal"
         type="button"
         title="Supprimer"
-        @click="onDelete"
+        @click="emit('delete')"
       >
         Supprimer
       </button>
@@ -57,7 +57,6 @@
 
 <script setup lang="ts">
   import { routes } from '~/utils/routes'
-  import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { FamilyFilePermissions } from '~/server/security'
 
@@ -69,7 +68,7 @@
     familyFile?: boolean
   }>()
 
-  const emit = defineEmits<{ toggleDelete: []; deleted: []; split: [] }>()
+  const emit = defineEmits<{ delete: []; split: [] }>()
 
   const currentTab = computed(() => {
     const hash = route.hash.slice(1)
@@ -82,18 +81,6 @@
       currentTab.value ? { originTab: currentTab.value } : undefined
     )
   )
-
-  function onDelete() {
-    emit('toggleDelete')
-    useModal().open(BeneficiaryDeleteForm, {
-      title: 'Supprimer la fiche bénéficiaire',
-      beneficiaryId: props.beneficiaryId,
-      cancel: () => emit('toggleDelete'),
-      deleted: () => {
-        emit('deleted')
-      }
-    })
-  }
 </script>
 
 <style lang="scss">
