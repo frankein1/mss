@@ -20,7 +20,7 @@
       </li>
       <li>
         <button
-          class="fr-btn submit-btn"
+          class="fr-btn submit-btn force-focus-visible"
           type="submit"
           :submitting="isSubmitting"
           :disabled="isSubmitting"

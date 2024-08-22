@@ -75,6 +75,10 @@
     const validateBeneficiary = router.validate.useMutation()
     const updateBeneficiary = router.updateEntourage.useMutation()
     const errMessage = 'La mise à jour de la fiche bénéficaire a échoué.'
+    const focusfn = snackbar.focus(
+      '.actions-bar',
+      "button[type='submit']" as FocusHTMLTag
+    )
 
     useTrpcMutation({
       mutation: () => {
@@ -88,7 +92,7 @@
       isSubmitting,
       onSuccess: () => {
         if (updateBeneficiary.error.value) {
-          snackbar.error(errMessage, snackbar.focus('form', 'button'))
+          snackbar.error(errMessage, focusfn)
           return
         }
 
@@ -99,7 +103,7 @@
         navigateTo(target || fileRoute)
       },
       onFailure: () => {
-        snackbar.error(errMessage, snackbar.focus('form', 'button'))
+        snackbar.error(errMessage, focusfn)
       }
     })
   }

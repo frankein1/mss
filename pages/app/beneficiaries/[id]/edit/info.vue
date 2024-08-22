@@ -35,6 +35,7 @@
   import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
+  const snackbar = useSnackbar()
 
   const isSubmitting = ref(false)
 
@@ -115,6 +116,7 @@
     const router = trpcClient.beneficiary
     const validateBeneficiary = router.validate.useMutation()
     const updateBeneficiary = router.updateGeneralInformation.useMutation()
+    const errMessage = 'La mise à jour de la fiche bénéficaire a échoué.'
 
     useTrpcMutation({
       mutation: () => {
@@ -127,6 +129,11 @@
       },
       isSubmitting,
       onSuccess: () => {
+        if (updateBeneficiary.error.value) {
+          snackbar.error(errMessage, snackbar.focus('form', 'select'))
+          return
+        }
+
         const fileRoute = routes.file.AppFile.path(
           beneficiary.value?.familyFileId || '',
           { beneficiaryId: beneficiary.value?.id }
@@ -134,7 +141,7 @@
         navigateTo(target || fileRoute)
       },
       onFailure: () => {
-        useSnackbar().error('La mise à jour de la fiche bénéficiaire a échoué.')
+        snackbar.error(errMessage, snackbar.focus('form', 'select'))
       }
     })
   }
