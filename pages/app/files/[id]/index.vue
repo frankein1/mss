@@ -23,12 +23,8 @@
         class="fr-pb-3w"
       />
       <hr />
-      <AtomLoader
-        v-if="isDeleting"
-        class="loading-state"
-      />
       <AtomTabs
-        v-else-if="selectedBeneficiary"
+        v-if="selectedBeneficiary"
         tab-list-name="Détails du dossier foyer"
       >
         <AtomTab
@@ -58,8 +54,7 @@
             :social-support-subjects="socialSupportSubjects"
             :permissions="selectedPermissions"
             :family-file="familyFileIdentification.length > 1"
-            @toggle-delete="toggleDelete"
-            @deleted="onBeneficiaryDeleted"
+            @delete="openDeleteModal"
             @split="onSplit"
           />
         </AtomTab>
@@ -139,9 +134,11 @@
   import { GetBeneficiaryOutput } from '~/types/beneficiary'
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
+  import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
   import { CreateFamilyFileMemberInput } from '~/server/schema'
 
   const route = useRoute()
+  const snackbar = useSnackbar()
 
   const originPage = route.query.originPage as
     | typeof routes.user.AppOverview.name
@@ -196,11 +193,22 @@
     Budget = 'Budget'
   }
 
-  // Deleting
-  const isDeleting = ref(false)
-  const toggleDelete = () => {
-    isDeleting.value = !isDeleting.value
+  function openDeleteModal() {
+    const fn = setFocusAfterClose('#Details-panel', 'button')
+    useModal().open(BeneficiaryDeleteForm, {
+      title: 'Supprimer la fiche bénéficiaire',
+      beneficiaryId: selectedBeneficiary.value?.id || '',
+      cancel: fn,
+      failure: () => {
+        snackbar.error('La suppression a échoué.', fn)
+      },
+      success: () => {
+        navigateTo(backLink.value)
+        snackbar.success('Le bénéficiaire a été supprimé.')
+      }
+    })
   }
+
   const backLink = computed(() => {
     if (originPage) {
       const tabParam = originTab ? `?tab=${originTab}` : ''
@@ -208,10 +216,6 @@
     }
     return routes.beneficiary.AppBeneficiaries.path()
   })
-  const onBeneficiaryDeleted = () => {
-    navigateTo(backLink.value)
-    useSnackbar().success('Le bénéficiaire a été supprimé.')
-  }
 
   // Open modal to add beneficiary
   const isSubmitting = ref(false)

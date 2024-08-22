@@ -1,6 +1,6 @@
 <template>
   <BeneficiaryInfoSection
-    title="Foyer fiscal"
+    title="Situation Familiale"
     :edit-link="editLink"
   >
     <div class="fr-container">

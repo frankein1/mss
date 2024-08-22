@@ -14,8 +14,7 @@
         :beneficiary-id="beneficiary.id"
         :permissions="permissions"
         :family-file="familyFile"
-        @toggle-delete="emit('toggleDelete')"
-        @deleted="emit('deleted')"
+        @delete="emit('delete')"
         @split="emit('split')"
       />
     </div>
@@ -84,7 +83,7 @@
     familyFile?: boolean
   }>()
 
-  const emit = defineEmits<{ toggleDelete: []; deleted: []; split: [] }>()
+  const emit = defineEmits<{ delete: []; split: [] }>()
 </script>
 
 <style lang="scss" scoped>
