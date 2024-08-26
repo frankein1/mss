@@ -98,7 +98,7 @@
     </div>
 
     <!-- ROW -->
-    <div class="fr-col-6">
+    <div class="fr-col-12 fr-col-md-6">
       <VeeSearchableSelect
         :label="helpRequestFieldLabels.prescribingOrganizationId"
         name="prescribingOrganizationId"
@@ -107,7 +107,7 @@
       />
     </div>
 
-    <div class="fr-col-6">
+    <div class="fr-col-12 fr-col-md-6">
       <VeeSelect
         name="prescribingOrganizationContactId"
         :label="helpRequestFieldLabels.prescribingOrganizationContactId"
@@ -116,7 +116,7 @@
     </div>
 
     <!-- ROW -->
-    <div class="fr-col-6 fr-mt-0 fr-pt-0">
+    <div class="fr-col-12 fr-mt-0 fr-pt-0">
       <NuxtLink
         :to="routes.structure.AppPartners.path()"
         class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
@@ -124,11 +124,10 @@
         Données issues de l'annuaire de partenaires
       </NuxtLink>
     </div>
-    <div class="fr-col-6 fr-mt-0 fr-pt-0"></div>
   </template>
 
   <!-- ROW -->
-  <div class="fr-col-6">
+  <div class="fr-col-12">
     <VeeSelect
       label="Le dossier est instruit..."
       name="externalStructure"
@@ -136,12 +135,11 @@
       required
     />
   </div>
-  <div class="fr-col-6"></div>
 
   <!-- ROW -->
 
   <template v-if="isExternalSupport">
-    <div class="fr-col-6">
+    <div class="fr-col-12 fr-col-md-6">
       <VeeSearchableSelect
         :label="helpRequestFieldLabels.instructorOrganizationId"
         name="instructorOrganizationId"
@@ -149,7 +147,7 @@
         @change-value="onInstructorOrganization"
       />
     </div>
-    <div class="fr-col-6">
+    <div class="fr-col-12 fr-col-md-6">
       <VeeSelect
         name="instructorOrganizationContactId"
         :label="helpRequestFieldLabels.instructorOrganizationContactId"
@@ -158,7 +156,7 @@
     </div>
 
     <!-- ROW -->
-    <div class="fr-col-6 fr-mt-0 fr-pt-0">
+    <div class="fr-col-12 fr-mt-0 fr-pt-0">
       <NuxtLink
         :to="routes.structure.AppPartners.path()"
         class="fr-link fr-icon-info-fill fr-fi--sm fr-link--icon-left"
@@ -166,7 +164,6 @@
         Données issues de l'annuaire de partenaires
       </NuxtLink>
     </div>
-    <div class="fr-col-6 fr-mt-0 fr-pt-0"></div>
   </template>
 
   <div
