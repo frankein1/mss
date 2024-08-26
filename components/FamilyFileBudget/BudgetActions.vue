@@ -14,10 +14,13 @@
 
     <li v-if="hasSecondaryAction">
       <button
-        class="fr-btn submit-btn"
-        type="submit"
+        :class="confirmSecondaryClass"
+        :type="confirmSecondaryType"
         :submitting="isSubmitting"
         :disabled="isSubmitting"
+        data-fr-opened="false"
+        aria-controls="global-modal"
+        @click="$emit('secondaryAction')"
       >
         {{ confirmSecondaryLabel }}
       </button>
@@ -44,17 +47,22 @@
       confirmLabel?: string
       hasSecondaryAction?: boolean
       confirmSecondaryLabel?: string
+      confirmSecondaryClass?: string
+      confirmSecondaryType?: 'button' | 'submit' | 'reset' | undefined
     }>(),
     {
       cancelLabel: 'Annuler',
       confirmLabel: 'Enregistrer et quitter',
       hasSecondaryAction: false,
-      confirmSecondaryLabel: undefined
+      confirmSecondaryLabel: undefined,
+      confirmSecondaryClass: 'fr-btn submit-btn',
+      confirmSecondaryType: 'submit'
     }
   )
 
   defineEmits<{
     cancel: []
+    secondaryAction: []
   }>()
 </script>
 
