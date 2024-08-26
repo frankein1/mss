@@ -10,7 +10,7 @@
       :message="`Les statistiques de la répartion des objets d'accompagnement n'ont pas pu être chargées.`"
     />
     <template v-else-if="subjectsStats">
-      <h2 class="fr-h5">Objets d'accompagnement</h2>
+      <h5 class="fr-h5">Objets d'accompagnement</h5>
       <p>
         Pourcentage calculé sur le nombre total de synthèses d'entretien. Les
         synthèses d'entretiens pouvant avoir plusieurs accompagnements associés,

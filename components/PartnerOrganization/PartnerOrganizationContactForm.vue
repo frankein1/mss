@@ -2,9 +2,9 @@
   <div class="fr-grid-row fr-grid-row--gutters">
     <div class="fr-col-12">
       <div class="contact-title">
-        <div class="fr-text--lg fr-text--bold fr-mb-0">
+        <h2 class="fr-text--lg fr-text--bold fr-mb-0">
           Personne {{ index + 1 }}
-        </div>
+        </h2>
         <div>
           <button
             class="fr-btn fr-btn--secondary fr-btn--sm fr-btn--icon-left fr-icon-delete-line"

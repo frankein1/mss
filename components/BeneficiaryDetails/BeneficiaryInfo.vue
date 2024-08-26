@@ -1,12 +1,12 @@
 <template>
   <div class="fr-grid-row fr-mt-1w">
     <div class="fr-col-12 fr-col-lg-6 fr-my-2w">
-      <h2 class="title fr-h4 fr-mb-0">
+      <h3 class="title fr-h4 fr-mb-0">
         Informations
         {{
           beneficiary.general.firstName + ' ' + beneficiary.general.usualName
         }}
-      </h2>
+      </h3>
     </div>
     <div class="fr-col-12 fr-col-lg-6 detail-actions">
       <BeneficiaryDetailsActions

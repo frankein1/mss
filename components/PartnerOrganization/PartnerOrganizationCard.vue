@@ -1,8 +1,8 @@
 <template>
   <div class="partner-card">
-    <div class="fr-h6 fr-m-0">
+    <h3 class="fr-h6 fr-m-0">
       {{ el.name }}
-    </div>
+    </h3>
     <div
       v-if="el.address || el.zipcode || el.city"
       class="fr-icon-map-pin-2-line partner-card-content__info fr-icon--sm fr-text--sm"

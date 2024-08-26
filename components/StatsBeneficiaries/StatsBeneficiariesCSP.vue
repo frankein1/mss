@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des catégories socio-professionnelles n'ont pas pu être chargées."
     />
     <template v-else-if="CSPStats">
-      <h2 class="fr-h5">Catégories socio-professionnelles</h2>
+      <h4 class="fr-h5">Catégories socio-professionnelles</h4>
       <StatsList
         v-if="CSPStats.length"
         :total-count="beneficiaryCount"

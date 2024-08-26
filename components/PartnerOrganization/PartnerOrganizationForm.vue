@@ -13,9 +13,9 @@
       <div>Renseignez uniquement les champs qui vous sont utiles.</div>
       <RequiredFields />
     </div>
-    <h3 class="fr-text--md formgroup__title fr-mb-2w">
+    <h2 class="fr-text--lg formgroup__title fr-mb-2w">
       Informations principales
-    </h3>
+    </h2>
 
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
@@ -55,11 +55,11 @@
         </div>
         <template v-if="partnerWithSameSiret">
           <div class="fr-alert fr-alert--error fr-mb-2w">
-            <h3 class="fr-alert__title">
+            <p class="fr-alert__title">
               {{
                 `Un organisme ${partnerWithSameSiret.inactive ? 'inactif' : ''} existe déjà avec ce numéro de SIRET`
               }}
-            </h3>
+            </p>
             <p>
               {{
                 `${partnerWithSameSiret.name} - ${partnerWithSameSiret.siret}`
@@ -82,7 +82,7 @@
     <template v-if="!partnerWithSameSiret">
       <hr class="fr-mt-3w" />
 
-      <h3 class="fr-text--md formgroup__title">Coordonnées</h3>
+      <h2 class="fr-text--lg formgroup__title">Coordonnées</h2>
 
       <div class="fr-grid-row fr-grid-row--gutters">
         <div class="fr-col-12">

@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des genres n'ont pas pu être chargées."
     />
     <template v-else-if="genderStats">
-      <h2 class="fr-h5">Genres</h2>
+      <h4 class="fr-h5">Genres</h4>
       <StatsPie
         v-if="genderStats.length"
         pie-label="Répartion des genres"

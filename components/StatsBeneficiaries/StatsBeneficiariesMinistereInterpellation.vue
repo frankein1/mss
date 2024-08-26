@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des interpellations des ministres n'ont pas pu être chargées."
     />
     <template v-else-if="ministereInterpellationStats">
-      <h2 class="fr-h5">Bénéficiaires ayant interpellé chaque ministre</h2>
+      <h4 class="fr-h5">Bénéficiaires ayant interpellé chaque ministre</h4>
       <StatsList
         v-if="ministereInterpellationStats.length"
         :total-count="beneficiaryCount"

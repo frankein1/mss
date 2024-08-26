@@ -1,6 +1,7 @@
 <template>
   <BeneficiaryDocumentNotice />
-  <div class="feature-section documents-header-section fr-mt-2w">
+  <section class="feature-section documents-header-section fr-mt-2w">
+    <h3 class="fr-sr-only">Filtres</h3>
     <BeneficiaryDocumentFilters @filter="filters = $event" />
     <BeneficiaryDocumentAddButton
       class="fr-ml-2w"
@@ -8,8 +9,9 @@
       :family-file-identification="familyFileIdentification"
       @new-document="() => refresh()"
     />
-  </div>
-  <div class="feature-section fr-mt-2w">
+  </section>
+  <section class="feature-section fr-mt-2w">
+    <h3 class="fr-sr-only">Liste des documents</h3>
     <p v-if="documentsCount">{{ documentsCount }} document(s)</p>
     <AtomAlert
       v-if="error"
@@ -39,7 +41,7 @@
         @change-page="updatePagination($event)"
       />
     </template>
-  </div>
+  </section>
 </template>
 
 <script setup lang="ts">

@@ -15,7 +15,8 @@
         />
         {{ historyTypeTitle }}
       </p>
-      <h2 class="history-details__title">
+      <h4 class="history-details__title">
+        <span class="fr-sr-only">{{ historyTypeTitle }} - </span>
         <template v-if="data.createdBy">
           {{ formatUserDisplayName(data.createdBy) }}
           <span> · </span>
@@ -27,7 +28,7 @@
         <span class="fr-text--regular">
           suivi {{ formatBeneficiaryDisplayName(data.beneficiary) }}
         </span>
-      </h2>
+      </h4>
       <ul class="fr-tags-group social-support-subjects-tags">
         <li
           v-for="socialSupportSubject in data.subjects"

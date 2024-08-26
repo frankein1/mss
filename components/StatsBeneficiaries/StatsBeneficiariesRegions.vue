@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des régions n'ont pas pu être chargées."
     />
     <template v-else-if="regionsStats">
-      <h2 class="fr-h5">Régions</h2>
+      <h4 class="fr-h5">Régions</h4>
       <StatsList
         v-if="regionsStats.length"
         :total-count="beneficiaryCount"

@@ -1,12 +1,13 @@
 <template>
   <div>
-    <div class="feature-section fr-mb-4w">
+    <section class="feature-section fr-mb-4w">
+      <h3 class="fr-sr-only">Filtres</h3>
       <BeneficiaryHistoryFilters
         v-model:values="filters"
         :results-label="resultsLabel"
         :family-file-id="familyFileId"
       />
-    </div>
+    </section>
     <AtomLoader
       v-if="pending"
       class="fr-mx-auto"
@@ -25,15 +26,18 @@
         <p v-else>Aucun résultat ne correspond aux filtres sélectionnés.</p>
       </template>
       <template v-else>
-        <ul class="history-list">
-          <BeneficiaryHistoryDetails
-            v-for="item in items"
-            :key="item.data.id"
-            :item="item"
-            :family-file-permissions="familyFilePermissions"
-            @deleted="onHistoryItemDeleted"
-          />
-        </ul>
+        <section>
+          <h3 class="fr-sr-only">Liste des accompagnements</h3>
+          <ul class="history-list">
+            <BeneficiaryHistoryDetails
+              v-for="item in items"
+              :key="item.data.id"
+              :item="item"
+              :family-file-permissions="familyFilePermissions"
+              @deleted="onHistoryItemDeleted"
+            />
+          </ul>
+        </section>
       </template>
     </template>
   </div>

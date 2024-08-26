@@ -1,6 +1,6 @@
 <template>
   <div
-    class="table-container fr-collapse"
+    class="table-container"
     tabindex="0"
   >
     <div class="fr-table fr-table--no-caption stripped-table">

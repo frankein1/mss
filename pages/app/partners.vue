@@ -3,9 +3,9 @@
     <AtomBreadcrumb :links="breadcrumbs.structure.AppPartners()" />
     <PageTitle :title="title" />
     <main>
-      <div class="fr-h4 partner-subtitle fr-m-0">
+      <h2 class="fr-h4 partner-subtitle fr-m-0">
         {{ `${data?.length} organismes partenaires de votre structure` }}
-      </div>
+      </h2>
       <div class="fr-mb-1w">
         Les personnes avec un rôle "responsable de structure" ou "travailleur
         social" peuvent ajouter ou supprimer des partenaires

@@ -4,31 +4,38 @@
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <main class="main-container fr-p-5w">
+        <div class="main-container fr-p-5w">
           <UserTable
             :users="users"
             :pending="usersPending"
             :error="usersError"
           />
-          <button
-            class="fr-btn fr-btn--secondary fr-btn--icon-left fr-icon-question-line fr-mb-3w fr-mt-1w"
-            aria-expanded="false"
-            aria-controls="roles-details"
-          >
-            En savoir plus sur les rôles et habilitations
-          </button>
-          <RoleTable id="roles-details" />
+
+          <DsfrAccordionsGroup>
+            <li>
+              <DsfrAccordion
+                id="accordion-1"
+                title="En savoir plus sur les rôles et habilitations"
+                :expanded-id="undefined"
+              >
+                <RoleTable id="roles-details" />
+              </DsfrAccordion>
+            </li>
+          </DsfrAccordionsGroup>
+        </div>
+
+        <div class="main-container fr-p-5w fr-mt-4w">
           <template v-if="application.module.users">
-            <hr />
             <UserForm @users-refresh="usersRefresh" />
           </template>
-        </main>
+        </div>
       </div>
     </div>
   </PageContainer>
 </template>
 
 <script lang="ts" setup>
+  import type { DsfrAccordionsGroup, DsfrAccordion } from '@gouvminint/vue-dsfr'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
 
@@ -46,3 +53,19 @@
     error: usersError
   } = await trpcClient.user.getUsers.useQuery()
 </script>
+
+<style lang="scss" scoped>
+  @use '~/assets/style/variables' as *;
+
+  .fr-accordion {
+    &::before {
+      box-shadow: none;
+      border: solid var(--border-default-grey);
+      border-width: 1px 0;
+    }
+
+    .fr-accordion__btn {
+      color: $primary;
+    }
+  }
+</style>

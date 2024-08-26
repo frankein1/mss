@@ -1,12 +1,12 @@
 <template>
   <div class="fr-callout">
     <div>
-      <h3
+      <p
         v-if="title"
-        class="fr-callout__title fr-text--lg"
+        class="fr-callout__title fr-text--lg fr-mb-1w"
       >
         {{ title }}
-      </h3>
+      </p>
 
       <slot></slot>
     </div>

@@ -42,7 +42,7 @@
       <div v-else-if="data">
         <div class="fr-accordions-group">
           <section class="feature-section fr-accordion fr-mb-1w">
-            <h3 class="fr-accordion__title">
+            <h2 class="fr-accordion__title">
               <button
                 class="fr-accordion__btn fr-h4"
                 type="button"
@@ -51,7 +51,7 @@
               >
                 Sélectionner parmi une suggestion d’objets
               </button>
-            </h3>
+            </h2>
             <div
               id="accordion-selection"
               type="button"
@@ -61,7 +61,7 @@
             </div>
           </section>
           <section class="feature-section fr-accordion">
-            <h3 class="fr-accordion__title">
+            <h2 class="fr-accordion__title">
               <button
                 class="fr-accordion__btn fr-h4"
                 type="button"
@@ -70,7 +70,7 @@
               >
                 Créer un objet personnalisé
               </button>
-            </h3>
+            </h2>
 
             <div
               id="accordion-customization"

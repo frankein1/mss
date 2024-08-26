@@ -17,9 +17,9 @@
     <div
       class="fr-grid-row fr-grid-row--gutters feature-section fr-p-7v fr-mb-7v"
     >
-      <h3 class="fr-col-12 fr-text--md formgroup__title fr-mb-0">
+      <h2 class="fr-col-12 fr-text--md formgroup__title fr-mb-0">
         Identité du bénéficiaire
-      </h3>
+      </h2>
       <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           name="usualName"
@@ -51,9 +51,9 @@
         :first-name="controlledValues.firstName"
         :birth-date="controlledValues.birthDate"
       />
-      <h3 class="fr-col-12 fr-text--md formgroup__title fr-mb-0 fr-mt-1w">
+      <h2 class="fr-col-12 fr-text--md formgroup__title fr-mb-0 fr-mt-1w">
         Coordonnées
-      </h3>
+      </h2>
       <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           name="phone1"

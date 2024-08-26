@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des organismes prescripteurs n'ont pas pu être chargées."
     />
     <template v-else-if="prescribingOrganizationStats">
-      <h2 class="fr-h5">Organismes prescripteurs</h2>
+      <h5 class="fr-h5">Organismes prescripteurs</h5>
       <p>Pourcentage calculé sur le nombre total de synthèses d'entretien</p>
       <StatsList
         v-if="prescribingOrganizationStats.length"

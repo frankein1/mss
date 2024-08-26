@@ -10,7 +10,7 @@
       message="Les statistiques de la répartion des organismes instructeurs n'ont pas pu être chargées."
     />
     <template v-else-if="instructorOrganizationStats">
-      <h2 class="fr-h5">Organismes instructeurs</h2>
+      <h5 class="fr-h5">Organismes instructeurs</h5>
       <p>
         Pourcentage calculé sur le nombre total de dossiers instruits en externe
       </p>

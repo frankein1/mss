@@ -10,7 +10,7 @@
       message="Les statistiques des demandes de logement n'ont pas pu être chargées."
     />
     <template v-else-if="data">
-      <h2 class="fr-h5">Demandes de logement</h2>
+      <h5 class="fr-h5">Demandes de logement</h5>
       <p>
         Ces données prennent en compte uniquement les instructions de dossiers
         réalisées après le 15 février 2024 via le formulaire de demande de

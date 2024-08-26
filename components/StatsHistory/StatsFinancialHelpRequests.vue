@@ -10,7 +10,7 @@
       message="Les statistiques des aides financières n'ont pas pu être chargées."
     />
     <template v-else-if="data">
-      <h2 class="fr-h5">Aides financières</h2>
+      <h5 class="fr-h5">Aides financières</h5>
       <StatsList
         :stats="data.financialHelpRequestCounts"
         :stats-percentage="false"

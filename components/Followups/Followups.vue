@@ -10,10 +10,13 @@
     />
   </div>
   <template v-else>
-    <div class="feature-section fr-mb-3w">
+    <section class="feature-section fr-mb-3w">
+      <h3 class="fr-sr-only">Filtres</h3>
       <FollowupsFilters v-model:filters="filters" />
-    </div>
-    <div class="feature-section">
+    </section>
+    <section class="feature-section">
+      <h3 class="fr-sr-only">Liste des synthèses d'entretien</h3>
+
       <div class="fr-mb-2w results-container">
         <p class="fr-hint-text results-count">
           {{ followupsCount }} synthèse(s) d'entretien
@@ -41,7 +44,7 @@
           @change-page="updatePagination($event)"
         />
       </template>
-    </div>
+    </section>
   </template>
 </template>
 

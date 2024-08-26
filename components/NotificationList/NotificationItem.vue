@@ -8,9 +8,9 @@
       :class="[notificationIcon]"
       aria-hidden="true"
     ></span>
-    <h3 class="fr-text--sm fr-mb-0">
+    <p class="fr-text--sm fr-text--bold fr-mb-0">
       {{ notification.title }}
-    </h3>
+    </p>
     <div>
       <p
         v-if="notification.beneficiary"
