@@ -153,7 +153,8 @@
   }
 
   const goToFilePage = () => {
-    navigateTo(routes.file.AppFile.path(props.familyFileId))
+    // navigateTo(routes.file.AppFile.path(props.familyFileId))
+    refreshNuxtData()
     onClose()
   }
   const goToBeneficiaryForm = () => {
