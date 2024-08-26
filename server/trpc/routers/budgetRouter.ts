@@ -8,6 +8,9 @@ export const budgetRouter = router({
   updateIncome: protectedProcedure
     .input(budgetRoutes.updateIncome.inputValidation)
     .mutation(budgetRoutes.updateIncome.execute),
+  deleteIncome: protectedProcedure
+    .input(budgetRoutes.deleteIncome.inputValidation)
+    .mutation(budgetRoutes.deleteIncome.execute),
   updateExpenses: protectedProcedure
     .input(budgetRoutes.updateExpenses.inputValidation)
     .mutation(budgetRoutes.updateExpenses.execute),

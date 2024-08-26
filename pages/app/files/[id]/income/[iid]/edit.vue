@@ -56,6 +56,11 @@
       <BudgetActionBar
         :is-submitting="isSubmitting"
         @cancel="onCancel"
+        @delete="onDelete"
+        :has-secondary-action="true"
+        confirm-secondary-label="Supprimer"
+        confirm-secondary-type="button"
+        confirm-secondary-class="fr-btn btn-delete-action fr-btn--secondary"
       />
     </form>
   </AtomLazyComponent>
@@ -80,6 +85,7 @@
   import { IncomeKey } from '~/types/budget'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
+  import BudgetDeleteConfirmation from '~/components/FamilyFileBudget/BudgetDeleteConfirmation.vue'
 
   const route = useRoute()
   const trpcClient = useTrpcClient()
@@ -250,6 +256,32 @@
 
   function onCancel() {
     navigateTo(budgetTabRoute)
+  }
+
+  function onDelete() {
+    useModal().open(BudgetDeleteConfirmation, {
+      title: `Supprimer les revenus ${subtitle.value}`,
+      deleteItem: async () => {
+        await useTrpcMutation({
+          mutation: () =>
+            trpcClient.budget.deleteIncome.mutate({
+              id: income.value?.id || ''
+            }),
+          onSuccess: () => {
+            useModal().close()
+            navigateTo(budgetTabRoute)
+            snackbar.success('Les revenus mensuels ont été supprimés.')
+          },
+          onFailure: () => {
+            snackbar.error(
+              'La suppression des revenus mensuels a échoué.',
+              snackbar.focus()
+            )
+          }
+        })
+      },
+      cancel: () => {}
+    })
   }
 </script>
 

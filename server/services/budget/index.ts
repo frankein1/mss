@@ -1,6 +1,7 @@
 import { updateInfo } from './updateInfo.service'
 import { updateExpenses } from './updateExpenses.service'
 import { updateIncome } from './updateIncome.service'
+import { deleteIncome } from './deleteIncome.service'
 import { getIncome } from './getIncome.service'
 import { getExpenses } from './getExpenses.service'
 import { getInfo } from './getInfo.service'
@@ -10,6 +11,7 @@ export const BudgetService = {
   updateInfo,
   updateExpenses,
   updateIncome,
+  deleteIncome,
   getIncome,
   getExpenses,
   getInfo,
