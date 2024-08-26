@@ -25,7 +25,7 @@
             <BudgetIncomes
               v-if="data.incomes"
               :family-file-id="familyFileId"
-              :beneficiary-identification="beneficiaryIdentification"
+              :beneficiary-id="beneficiaryIdentification.id"
               :incomes="data.incomes"
               :budget-id="data.id"
             />
@@ -35,6 +35,7 @@
             <BudgetExpenses
               v-if="data.expenses"
               :beneficiary-id="beneficiaryIdentification.id"
+              :family-file-id="familyFileId"
               :expenses="data.expenses"
             />
           </div>
