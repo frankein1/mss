@@ -25,7 +25,7 @@
       class="fr-btn fr-btn--lg fr-btn--icon-left fr-icon-user-add-line add-beneficiary-btn"
       @click="onAccessBeneficiaryAdd"
     >
-      Ajouter un dossier bénéficiaire
+      Créer un dossier bénéficiaire
     </NuxtLink>
   </div>
 </template>

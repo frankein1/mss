@@ -4,13 +4,6 @@
       {{ routes.beneficiary.AppBeneficiaryEditTaxHousehold.title }}
     </h2>
 
-    <AtomNotice class="fr-mx-n3v fr-mb-4w">
-      <template #default>
-        Si des membres du foyer étaient précédemment renseignés dans la section
-        "foyer fiscal", ils se trouvent désormais dans la section "Entourage".
-      </template>
-    </AtomNotice>
-
     <BeneficiaryFormSection>
       <BeneficiaryFormFamilySituationInfos />
     </BeneficiaryFormSection>

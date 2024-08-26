@@ -4,7 +4,7 @@
       {{ routes.beneficiary.AppBeneficiaryEditHealth.title }}
     </h2>
 
-    <AtomNotice>
+    <AtomNotice class="fr-mb-4w">
       <template #default> Attention aux données de santé </template>
 
       <template #content>

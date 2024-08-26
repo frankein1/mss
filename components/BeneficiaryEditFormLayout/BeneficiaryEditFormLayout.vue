@@ -124,13 +124,16 @@
   const beneficiaryFormLayoutMainContainer = ref<HTMLElement | null>(null)
   const form = ref<HTMLFormElement | null>(null)
 
-  const title = computed(
-    () =>
-      'Informations ' +
-      props.beneficiaryIdentification?.firstName +
-      ' ' +
-      props.beneficiaryIdentification?.usualName
-  )
+  const title = computed(() => {
+    let title = 'Informations'
+    if (props.beneficiaryIdentification?.firstName) {
+      title = title + ' ' + props.beneficiaryIdentification.firstName
+    }
+    if (props.beneficiaryIdentification?.usualName) {
+      title = title + ' ' + props.beneficiaryIdentification.usualName
+    }
+    return title
+  })
 
   useHead({ title: title.value })
 
