@@ -70,6 +70,24 @@ main.content {
 .table-container {
   overflow-x: auto;
 
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+
+  &::-webkit-scrollbar:vertical {
+    width: 11px;
+  }
+
+  &::-webkit-scrollbar:horizontal {
+    height: 11px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid white; /* should match background, can't be transparent */
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
   .fr-table {
     &:not(.fr-table--no-scroll, .fr-table--avoid-scroll) {
       width: max-content;
