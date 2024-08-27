@@ -5,6 +5,7 @@ export const createBeneficiarySchema = updateBeneficiaryGeneralInformationSchema
   .pick({
     status: true,
     referents: true,
+    title: true,
     usualName: true,
     birthName: true,
     firstName: true,

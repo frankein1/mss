@@ -20,6 +20,14 @@
       <h2 class="fr-col-12 fr-text--md formgroup__title fr-mb-0">
         Identité du bénéficiaire
       </h2>
+      <div class="fr-col-12">
+        <VeeRadioButtons
+          class="fr-mb-0"
+          name="title"
+          :label="beneficiaryFieldLabels.title"
+          :options="beneficiaryTitleKeys.options"
+        />
+      </div>
       <div class="fr-col-12 fr-col-lg-6">
         <VeeInput
           name="usualName"
@@ -151,6 +159,7 @@
   import { beneficiaryFieldLabels } from '~/client/labels'
   import { FamilyFilePermissions } from '~/server/security'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
+  import { beneficiaryTitleKeys } from '~/client/options'
 
   defineProps<{
     isSubmitting: boolean
