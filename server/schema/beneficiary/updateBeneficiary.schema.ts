@@ -60,7 +60,7 @@ export const updateBeneficiaryGeneralInformationSchema = z.object({
   usualName: stringOrEmpty(beneficiaryLastNameSchema),
   birthName: stringOrEmpty(beneficiaryLastNameSchema),
   birthDate: dateOrEmpty,
-  birthPlace: stringConstraint.max(20, maxStringLengthMessage(20)).nullish(),
+  birthPlace: stringConstraint.max(40, maxStringLengthMessage(40)).nullish(),
   deathDate: dateOrEmpty,
   gender: withEmptyValueOptionalNativeEnum(Gender),
   nationality: withEmptyValueOptionalNativeEnum(Nationality),
