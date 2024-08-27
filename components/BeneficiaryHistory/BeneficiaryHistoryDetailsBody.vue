@@ -66,7 +66,6 @@
           <NuxtLink
             :to="printLink"
             class="fr-btn fr-btn--secondary fr-icon-printer-line"
-            @on-click="onPrint"
           >
             Imprimer
           </NuxtLink>
@@ -103,7 +102,6 @@
   import BeneficiaryHistoryDeleteForm from './BeneficiaryHistoryDeleteForm.vue'
   import type { SocialSupportItem, CommentData, CommentItem } from './types'
   import { FamilyFilePermissions } from '~/server/security'
-  import { DocumentEventAction, EventCategory } from '~/types/matomo'
   import { TypeSuivi } from '~/client/options'
   import { routes } from '~/utils/routes'
 
@@ -197,10 +195,6 @@
       isFollowup: isFollowup.value,
       deleted: onSocialSupportItemDeleted
     })
-  }
-
-  function onPrint() {
-    useMatomo().trackEvent(EventCategory.Document, DocumentEventAction.Print)
   }
 
   function onCommentAdded(commentItem: CommentItem) {
