@@ -1325,8 +1325,9 @@ model BudgetIncome {
   beneficiaryId String?      @unique @map("beneficiary_id") @db.Uuid
   beneficiary   Beneficiary? @relation(fields: [beneficiaryId], references: [id], onDelete: Cascade)
 
-  householdMemberId String?              @unique @map("household_member_id") @db.Uuid
-  householdMember   BeneficiaryRelative? @relation(fields: [householdMemberId], references: [id], onDelete: Cascade)
+  lastName     String?               @map("last_name")
+  firstName    String?               @map("first_name")
+  relationship RelativeRelationship?
 
   budgetId String @map("budget_id") @db.Uuid
   budget   Budget @relation(fields: [budgetId], references: [id], onDelete: Cascade)
@@ -1615,8 +1616,6 @@ model BeneficiaryRelative {
 
   created DateTime? @default(now())
   updated DateTime? @updatedAt
-
-  income BudgetIncome?
 
   @@map("beneficiary_relative")
 }

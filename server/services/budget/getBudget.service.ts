@@ -21,16 +21,6 @@ export async function getBudget({
       },
       incomes: {
         include: {
-          householdMember: {
-            select: {
-              id: true,
-              firstName: true,
-              lastName: true,
-              birthDate: true,
-              relationship: true,
-              hosted: true
-            }
-          },
           beneficiary: {
             select: {
               id: true,
@@ -65,17 +55,17 @@ export async function getBudget({
       res = -1
     } else if (b.type === 'Beneficiary') {
       res = 1
-    } else if (a.householdMember?.relationship === 'Conjoint') {
+    } else if (a.relationship === 'Conjoint') {
       res = -1
-    } else if (b.householdMember?.relationship === 'Conjoint') {
+    } else if (b.relationship === 'Conjoint') {
       res = 1
-    } else if (a.householdMember?.relationship === 'EnfantMajeur') {
+    } else if (a.relationship === 'EnfantMajeur') {
       res = -1
-    } else if (b.householdMember?.relationship === 'EnfantMajeur') {
+    } else if (b.relationship === 'EnfantMajeur') {
       res = 1
-    } else if (a.householdMember?.relationship === 'EnfantMineur') {
+    } else if (a.relationship === 'EnfantMineur') {
       res = -1
-    } else if (b.householdMember?.relationship === 'EnfantMineur') {
+    } else if (b.relationship === 'EnfantMineur') {
       res = 1
     }
     return res

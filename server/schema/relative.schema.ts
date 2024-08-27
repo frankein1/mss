@@ -1,12 +1,8 @@
 import { z } from 'zod'
 import { RelativeRelationship } from '@prisma/client'
 import { beneficiaryLastNameSchema } from './beneficiary/beneficiaryLastName.schema'
+import { beneficiaryFirstNameOrEmptySchema } from './beneficiary/beneficiaryFirstName.schema'
 import {
-  beneficiaryFirstNameOrEmptySchema,
-  beneficiaryFirstNameSchema
-} from './beneficiary/beneficiaryFirstName.schema'
-import {
-  requiredNativeEnum,
   withEmptyValueOptionalNativeEnum,
   phoneConstraint,
   stringConstraint,
@@ -33,16 +29,4 @@ export const createOrUpdateEntourageSchema = z.object({
 
 export type CreateOrUpdateEntourageInput = z.infer<
   typeof createOrUpdateEntourageSchema
->
-
-export const createHostedEntourageMemberSchema = z.object({
-  lastName: beneficiaryLastNameSchema,
-  firstName: beneficiaryFirstNameSchema,
-  relationship: requiredNativeEnum(RelativeRelationship),
-  beneficiaryId: z.string().uuid(),
-  budgetId: z.string().uuid()
-})
-
-export type CreateHostedEntourageMemberInput = z.infer<
-  typeof createHostedEntourageMemberSchema
 >

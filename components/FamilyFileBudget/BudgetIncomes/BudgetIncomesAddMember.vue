@@ -20,11 +20,10 @@
 <script setup lang="ts">
   import BudgetIncomesAddMemberForm from './BudgetIncomesAddMemberForm.vue'
   import { routes } from '~/utils/routes'
-  import { CreateHostedEntourageMemberInput } from '~/server/schema'
+  import { CreateBudgetIncomeInput } from '~/server/schema'
 
   const props = defineProps<{
     familyFileId: string
-    beneficiaryId: string
     budgetId: string
   }>()
 
@@ -37,24 +36,22 @@
   function onAddMember() {
     modal.open(BudgetIncomesAddMemberForm, {
       title: 'Ajouter les revenus d’un membre du foyer fiscal',
-      beneficiaryId: props.beneficiaryId,
       isSubmitting: isSubmitting.value,
       budgetId: props.budgetId,
       add: addMember
     })
   }
 
-  function addMember(values: CreateHostedEntourageMemberInput) {
+  function addMember(values: CreateBudgetIncomeInput) {
     useTrpcMutation({
-      mutation: () =>
-        trpcClient.beneficiary.createHostedEntourageMember.mutate(values),
+      mutation: () => trpcClient.budget.createBudgetIncome.mutate(values),
       isSubmitting,
-      onSuccess: ({ incomeId }) => {
+      onSuccess: ({ id }) => {
         modal.close()
         navigateTo(
           routes.budget.AppFileBudgetIncomeEdit.path(
             props.familyFileId,
-            `${incomeId}`
+            `${id}`
           )
         )
         snackbar.success('Membre du foyer créé avec succès.')

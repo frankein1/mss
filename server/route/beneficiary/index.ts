@@ -15,7 +15,6 @@ import { deleteBeneficiaryDraftMutation } from './delete-draft.mutation'
 import { getBeneficiaryTaxHouseholdsQuery } from './get-taxhouseholds'
 import { SimilarBeneficiary, getSimilarBeneficiaryQuery } from './get-similar'
 import { validateBeneficiaryMutation } from './validate.mutation'
-import { createHostedEntourageMemberMutation } from './create-hosted-entourage-member.mutation'
 
 export const beneficiaryRoutes = {
   exportBeneficiariesQuery,
@@ -34,7 +33,6 @@ export const beneficiaryRoutes = {
   deleteBeneficiaryMutation,
   deleteBeneficiaryDraftMutation,
   validateBeneficiaryMutation,
-  createHostedEntourageMemberMutation,
   createFamilyFileMemberMutation
 }
 

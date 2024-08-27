@@ -26,6 +26,7 @@ export const BudgetIncomeRepo = {
   findUniqueOrThrow,
   update,
   prisma: {
+    create: prismaClient.budgetIncome.create,
     delete: prismaClient.budgetIncome.delete
   }
 }

@@ -1,4 +1,4 @@
-import { BudgetIncomeType, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { filterOutEmptyElements } from '../helper'
 import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
 import { UpdateBeneficiaryEntourageInput } from '~/server/schema'
@@ -26,8 +26,7 @@ function getBeneficiarySecurityTargetWithEntourage(
       },
       relatives: {
         select: {
-          id: true,
-          income: { select: { id: true } }
+          id: true
         }
       }
     }
@@ -36,44 +35,11 @@ function getBeneficiarySecurityTargetWithEntourage(
 
 function prepareUpdates(
   newEntourages: UpdateBeneficiaryEntourageInput['entourages'],
-  previousRelatives: { id: string; income: { id: string } | null }[],
-  budgetId: string
+  previousRelatives: { id: string }[]
 ): Prisma.BeneficiaryUpdateInput['relatives'] {
   const filtered = newEntourages?.filter(filterOutEmptyElements) || []
 
-  const relations = prepareRelationUpdates(filtered, previousRelatives)
-
-  // If a created relative is hosted by the beneficiary, an income is created for them
-  const create = relations.create.map(relation => ({
-    ...(relation.hosted && {
-      income: { create: { budgetId, type: BudgetIncomeType.HouseholdMember } }
-    }),
-    ...relation
-  }))
-
-  // If an updated relative is not hosted anymore, their income is deleted if exists
-  const relativeHasIncome = (relativeId: string) => {
-    const relative = previousRelatives.find(prev => prev.id === relativeId)
-    return Boolean(relative?.income?.id)
-  }
-
-  const update = relations.update.map(relation => {
-    const shouldDeleteIncome =
-      relativeHasIncome(relation.where.id) && !relation.data.hosted
-    return {
-      where: relation.where,
-      data: {
-        ...(shouldDeleteIncome && { income: { delete: true } }),
-        ...relation.data
-      }
-    }
-  })
-
-  return {
-    ...relations,
-    create,
-    update
-  }
+  return prepareRelationUpdates(filtered, previousRelatives)
 }
 
 export async function updateEntourage({
@@ -93,11 +59,7 @@ export async function updateEntourage({
   const { relatives: previousRelatives } = beneficiary
 
   const data: Prisma.BeneficiaryUpdateInput = {
-    relatives: prepareUpdates(
-      entourages || [],
-      previousRelatives,
-      beneficiary.familyFile.budget?.id || ''
-    )
+    relatives: prepareUpdates(entourages || [], previousRelatives)
   }
 
   const updatedBeneficiary = await BeneficiaryRepo.prisma.update({
