@@ -2,10 +2,7 @@
   <div class="fr-grid-row fr-mt-1w">
     <div class="fr-col-12 fr-col-lg-6 fr-my-2w">
       <h3 class="title fr-h4 fr-mb-0">
-        Informations
-        {{
-          beneficiary.general.firstName + ' ' + beneficiary.general.usualName
-        }}
+        {{ beneficiaryTitle }}
       </h3>
     </div>
     <div class="fr-col-12 fr-col-xl-6 detail-actions">
@@ -76,7 +73,7 @@
   import { SocialSupportSubjectIdAndName } from '~/types/socialSupportSubject'
   import { FamilyFilePermissions } from '~/server/security'
 
-  defineProps<{
+  const props = defineProps<{
     beneficiary: GetBeneficiaryOutput
     socialSupportSubjects: SocialSupportSubjectIdAndName[]
     permissions: FamilyFilePermissions | undefined
@@ -84,6 +81,17 @@
   }>()
 
   const emit = defineEmits<{ delete: []; split: [] }>()
+
+  const beneficiaryTitle = computed(() => {
+    let title = 'Informations'
+    if (props.beneficiary.general?.firstName) {
+      title = title + ' ' + props.beneficiary.general.firstName
+    }
+    if (props.beneficiary.general?.usualName) {
+      title = title + ' ' + props.beneficiary.general.usualName
+    }
+    return title
+  })
 </script>
 
 <style lang="scss" scoped>

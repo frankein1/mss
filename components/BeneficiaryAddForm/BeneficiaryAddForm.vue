@@ -16,7 +16,7 @@
     >
       <div class="fr-col-12">
         <p class="fr-text--xs fr-mb-1w"><RequiredFields /></p>
-        <p>
+        <p class="fr-mb-1w">
           Les champs suivants sont nécessaires pour ajouter un membre au dossier
           et créer sa fiche. Vous pourrez remplir des informations
           supplémentaires si vous le souhaitez par la suite.
@@ -24,7 +24,7 @@
       </div>
 
       <!-- ROW -->
-      <div class="fr-col-12 fr-mt-2w">
+      <div class="fr-col-12">
         <VeeSelect
           name="relationship"
           required
@@ -107,7 +107,6 @@
     commonRelationshipKeys,
     beneficiaryTitleKeys
   } from '~/client/options'
-  import { routes } from '~/utils/routes'
 
   const modal = useModal()
   const success = useState('success', () => false)
@@ -121,6 +120,8 @@
     isSubmitting: boolean // TODO
     familyFileId: string
     add: (values: CreateFamilyFileMemberInput) => Promise<string | undefined>
+    openBeneficiary: (beneficiaryId: string) => void
+    editBeneficiary: (beneficiaryId: string) => Promise<void>
   }>()
 
   const { handleSubmit } = useForm<CreateFamilyFileMemberInput>({
@@ -153,15 +154,14 @@
   }
 
   const goToFilePage = () => {
-    // navigateTo(routes.file.AppFile.path(props.familyFileId))
-    refreshNuxtData()
-    onClose()
+    if (newBeneficiaryId.value) {
+      props.openBeneficiary(newBeneficiaryId.value)
+      onClose()
+    }
   }
   const goToBeneficiaryForm = () => {
     if (newBeneficiaryId.value) {
-      navigateTo(
-        routes.beneficiary.AppBeneficiaryEditInfo.path(newBeneficiaryId.value)
-      )
+      props.editBeneficiary(newBeneficiaryId.value)
       onClose()
     }
   }

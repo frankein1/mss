@@ -24,10 +24,12 @@
         <span class="history-details__date">
           le {{ formatDate(data.date) }}
         </span>
-        <span> · </span>
-        <span class="fr-text--regular">
-          suivi {{ formatBeneficiaryDisplayName(data.beneficiary) }}
-        </span>
+        <template v-if="!singleBeneficiary">
+          <span> · </span>
+          <span class="fr-text--regular">
+            suivi {{ formatBeneficiaryDisplayName(data.beneficiary) }}
+          </span>
+        </template>
       </h4>
       <ul class="fr-tags-group social-support-subjects-tags">
         <li
@@ -99,8 +101,9 @@
       collapseId: string
       expanded?: boolean
       hasUnreadNotifications?: boolean
+      singleBeneficiary?: boolean
     }>(),
-    { expanded: false, hasUnreadNotifications: false }
+    { expanded: false, hasUnreadNotifications: false, singleBeneficiary: true }
   )
 
   const emit = defineEmits<{

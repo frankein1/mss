@@ -34,6 +34,7 @@
               :key="item.data.id"
               :item="item"
               :family-file-permissions="familyFilePermissions"
+              :single-beneficiary="familyFileIdentification.length === 1"
               @deleted="onHistoryItemDeleted"
             />
           </ul>
@@ -47,11 +48,11 @@
   import { AlertType } from '~/utils/constants/alert'
   import { FamilyFilePermissions } from '~/server/security'
   import { FamilyFileHistoryFilterInput } from '~/server/schema'
-  // import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     familyFileId: string
-    // familyFileIdentification: BeneficiaryFileIdentification[]
+    familyFileIdentification: BeneficiaryFileIdentification[]
     familyFilePermissions: FamilyFilePermissions
   }>()
 

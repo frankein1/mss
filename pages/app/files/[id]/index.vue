@@ -38,7 +38,7 @@
             v-if="familyFileIdentification.length > 1"
             :members="familyFileIdentification"
             :model-value="selectedBeneficiary.id"
-            @update:model-value="onChange"
+            @update:model-value="openBeneficiary"
           />
           <AtomLoader
             v-if="selectedPending"
@@ -99,6 +99,7 @@
             v-else-if="selectedPermissions"
             :family-file-id="familyFileId"
             :family-file-permissions="selectedPermissions"
+            :family-file-identification="familyFileIdentification"
           />
         </AtomTab>
         <AtomTab
@@ -141,17 +142,14 @@
   const route = useRoute()
   const snackbar = useSnackbar()
 
-  const originPage = route.query.originPage as
-    | typeof routes.user.AppOverview.name
-    | typeof routes.beneficiary.AppBeneficiaries.name
-    | typeof routes.file.AppHistory.name
-    | undefined
-  const originTab = route.query.hash as string | undefined
-
   const familyFileId = route.params.id as string
 
-  const { familyFileIdentification, error, getBeneficiaryIdOnPageLoad } =
-    await useFamilyFileMinimalInfo(familyFileId)
+  const {
+    familyFileIdentification,
+    error,
+    getBeneficiaryIdOnPageLoad,
+    refreshFamilyFile
+  } = await useFamilyFileMinimalInfo(familyFileId)
 
   const title = routes.file.AppFile.title(familyFileIdentification.value)
   useHead({ title })
@@ -180,7 +178,7 @@
   }
 
   // Segmented Family
-  const onChange = (beneficiaryId: string): void => {
+  const openBeneficiary = (beneficiaryId: string): void => {
     const navRoute = routes.file.AppFile.path(familyFileId, {
       beneficiaryId
     })
@@ -203,20 +201,22 @@
       failure: () => {
         snackbar.error('La suppression a échoué.', fn)
       },
-      success: () => {
-        navigateTo(backLink.value)
+      success: async () => {
+        if (
+          familyFileIdentification?.value &&
+          familyFileIdentification.value.length === 1
+        ) {
+          await navigateTo(routes.beneficiary.AppBeneficiaries.path())
+        } else {
+          await refreshFamilyFile()
+          if (familyFileIdentification?.value) {
+            openBeneficiary(familyFileIdentification.value[0].id)
+          }
+        }
         snackbar.success('Le bénéficiaire a été supprimé.')
       }
     })
   }
-
-  const backLink = computed(() => {
-    if (originPage) {
-      const tabParam = originTab ? `?tab=${originTab}` : ''
-      return `${originPage}${tabParam}`
-    }
-    return routes.beneficiary.AppBeneficiaries.path()
-  })
 
   // Open modal to add beneficiary
   const isSubmitting = ref(false)
@@ -226,7 +226,15 @@
         title: 'Ajouter un membre au dossier',
         isSubmitting: isSubmitting.value,
         familyFileId,
-        add: onAddBeneficiary
+        add: onAddBeneficiary,
+        openBeneficiary: (newBeneficiaryId: string) => {
+          openBeneficiary(newBeneficiaryId)
+        },
+        editBeneficiary: async (newBeneficiaryId: string) => {
+          await navigateTo(
+            routes.beneficiary.AppBeneficiaryEditInfo.path(newBeneficiaryId)
+          )
+        }
       })
     }
   }
@@ -250,8 +258,9 @@
         mutation: () =>
           trpcClient.beneficiary.createFamilyFileMember.mutate(payload),
         isSubmitting,
-        onSuccess: ({ id }) => {
+        onSuccess: async ({ id }) => {
           beneficiaryID = id
+          await refreshFamilyFile()
         },
         onFailure: () => {
           useSnackbar().error("L'ajout d'un membre au foyer à échoué.")

@@ -10,6 +10,7 @@
       :collapse-id="collapseId"
       :expanded="expanded"
       :has-unread-notifications="hasUnreadNotifications"
+      :single-beneficiary="singleBeneficiary"
       @toggle-expand="expanded = !expanded"
     />
     <BeneficiaryHistoryDetailsBody
@@ -32,6 +33,7 @@
   const props = defineProps<{
     item: SocialSupportItem
     familyFilePermissions: FamilyFilePermissions
+    singleBeneficiary: boolean
   }>()
 
   const emit = defineEmits<{
