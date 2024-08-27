@@ -84,7 +84,7 @@
       names.push(`${firstName} ${lastName}`)
       const relationship = beneficiary?.relationship || income.relationship
       if (relationship) {
-        names.push(relationship)
+        names.push(taxHouseHoldRelationshipKeys.value(relationship))
       }
 
       return names.join(' - ')
