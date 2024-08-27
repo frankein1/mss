@@ -15,8 +15,6 @@ UPDATE "budget_income" bi set "relationship" = (
 );
 
 
-ALTER TABLE "budget_income" DROP CONSTRAINT "budget_income_household_member_id_key";
-DROP INDEX "budget_income_household_member_id_key";
 ALTER TABLE "budget_income" DROP COLUMN "household_member_id";
 
 
