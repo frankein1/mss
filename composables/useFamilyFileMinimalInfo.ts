@@ -5,7 +5,8 @@ export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
   const {
     data: familyFile,
     pending,
-    error
+    error,
+    refresh
   } = await trpcClient.file.getFamilyFileMinimalInfo.useQuery({
     id: familyFileId
   })
@@ -32,6 +33,7 @@ export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
     familyFileIdentification,
     pending,
     error,
+    refreshFamilyFile: refresh,
     getBeneficiaryIdOnPageLoad
   }
 }
