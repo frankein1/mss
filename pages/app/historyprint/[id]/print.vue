@@ -48,6 +48,7 @@
   } from '~/components/PrintHelpRequest/types'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { routes } from '~/utils/routes'
+  import { BeneficiaryHistoryAction, EventCategory } from '~/types/matomo'
 
   const route = useRoute()
 
@@ -75,6 +76,26 @@
       }
     | undefined
 
+  const trackWithMatomo = (historyType: string | undefined) => {
+    const getHistoryAction = (historyType: string | undefined) => {
+      switch (historyType) {
+        case 'Financial':
+          return BeneficiaryHistoryAction.PrintFinancialHelpRequest
+        case 'Housing':
+          return BeneficiaryHistoryAction.PrintHousingHelpRequest
+        case 'Other':
+          return BeneficiaryHistoryAction.PrintOtherHelpRequest
+        case 'Followup':
+          return BeneficiaryHistoryAction.PrintFollowup
+        case TypeSuivi.AllHelpRequest:
+          return BeneficiaryHistoryAction.PrintAllHelpRequest
+        default:
+          return BeneficiaryHistoryAction.Print
+      }
+    }
+    useMatomo().trackEvent(EventCategory.History, getHistoryAction(historyType))
+  }
+
   const getPrintInformations = async (): Promise<PrintInformations> => {
     // Get helpRequest data
     if (historyType === TypeSuivi.AllHelpRequest) {
@@ -82,6 +103,7 @@
         await trpcClient.helpRequest.getOne.useQuery({
           id: helpRequestId
         })
+      trackWithMatomo(data.value?.helpRequest.fileInstruction.type)
       return {
         pending: pending.value ? pending : undefined,
         error: error.value ? error : undefined,
@@ -95,6 +117,7 @@
         await trpcClient.housingHelpRequest.getOne.useQuery({
           id: helpRequestId
         })
+      trackWithMatomo(data.value?.housingHelpRequest.fileInstruction.type)
       return {
         pending: pending.value ? pending : undefined,
         error: error.value ? error : undefined,
@@ -106,6 +129,7 @@
     if (historyType === TypeSuivi.Followup) {
       const { data, pending, error } =
         await trpcClient.followup.getOne.useQuery({ id: helpRequestId })
+      trackWithMatomo(data.value?.followup.socialSupportType)
       return {
         pending: pending.value ? pending : undefined,
         error: error.value ? error : undefined,
