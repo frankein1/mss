@@ -3,10 +3,7 @@
     class="fr-grid-row fr-grid-row--middle"
     :class="{ 'no-limit': noLimitSelection }"
   >
-    <form
-      v-if="!noLimitSelection"
-      class="fr-col-12 fr-col-sm-2"
-    >
+    <form v-if="!noLimitSelection">
       <VeeSelect
         label="Résultats par page"
         name="resultsPerPage"
@@ -46,7 +43,6 @@
         >
           <button
             class="fr-pagination__link page-number"
-            :class="{ 'fr-hidden fr-unhidden-lg': pageNumber > 1 }"
             :aria-current="pageNumber === page ? 'page' : undefined"
             :title="`Page ${pageNumber}`"
             @click="onChangePage(pageNumber)"

@@ -70,6 +70,25 @@ main.content {
 .table-container {
   overflow-x: auto;
 
+  /* stylelint-disable property-no-vendor-prefix */
+  &::-webkit-scrollbar {
+    -webkit-appearance: none;
+  }
+
+  &::-webkit-scrollbar:vertical {
+    width: 11px;
+  }
+
+  &::-webkit-scrollbar:horizontal {
+    height: 11px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    border: 2px solid #fff;
+    background-color: rgba(0 0 0 / 50%);
+  }
+
   .fr-table {
     &:not(.fr-table--no-scroll, .fr-table--avoid-scroll) {
       width: max-content;

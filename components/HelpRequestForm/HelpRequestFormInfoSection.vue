@@ -57,7 +57,7 @@
 
     <div
       v-if="isAnswered"
-      class="fr-co-12 fr-col-lg-6"
+      class="fr-col-12 fr-col-lg-6"
       :class="{
         'fr-col-offset-lg-6--right': isRefused && !isFinancialSupport
       }"
@@ -72,7 +72,7 @@
     <template v-if="isAccepted">
       <div
         v-if="isFinancialSupport"
-        class="fr-co-12 fr-col-lg-6"
+        class="fr-col-12 fr-col-lg-6"
       >
         <VeeCurrencyInput
           name="allocatedAmount"
