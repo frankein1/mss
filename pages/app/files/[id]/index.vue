@@ -119,7 +119,6 @@
           <FamilyFileBudget
             v-else
             :family-file-id="familyFileId"
-            :beneficiary-id="selectedBeneficiary.id"
           />
         </AtomTab>
       </AtomTabs>

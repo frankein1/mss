@@ -19,7 +19,6 @@
               <BudgetIncomes
                 v-if="data.incomes"
                 :family-file-id="familyFileId"
-                :beneficiary-id="beneficiaryId"
                 :incomes="data.incomes"
                 :budget-id="data.id"
               />
@@ -42,7 +41,6 @@
 <script lang="ts" setup>
   const props = defineProps<{
     familyFileId: string
-    beneficiaryId: string
   }>()
 
   const trpcClient = useTrpcClient()

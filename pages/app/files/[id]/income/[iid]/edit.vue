@@ -55,12 +55,12 @@
 
       <BudgetActionBar
         :is-submitting="isSubmitting"
-        @cancel="onCancel"
-        @delete="onDelete"
         :has-secondary-action="true"
         confirm-secondary-label="Supprimer"
         confirm-secondary-type="button"
         confirm-secondary-class="fr-btn btn-delete-action fr-btn--secondary"
+        @cancel="onCancel"
+        @delete="onDelete"
       />
     </form>
   </AtomLazyComponent>
@@ -119,7 +119,8 @@
       return `de ${income.value.beneficiary?.firstName || ''} ${income.value.beneficiary?.usualName || ''}`
     }
 
-    const member = income.value?.householdMember
+    const member = income.value
+
     return member && (member.firstName || member.lastName)
       ? `de ${member.firstName || ''} ${member.lastName || ''}  - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
       : `Membre du foyer`
@@ -159,7 +160,7 @@
         : null
     }
 
-    const relationship = income.value?.householdMember?.relationship
+    const relationship = income.value?.relationship
     if (relationship === 'Conjoint') {
       const amount = prismaDecimalToNumber(budget.legacyPartnerMainIncomeAmount)
       return amount

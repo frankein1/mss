@@ -7,7 +7,6 @@ import type {
   BudgetExpensesLoan
 } from '@prisma/client'
 import { BeneficiaryFileIdentification } from './beneficiary'
-import { BeneficiaryRelativeIdentification } from './relative'
 
 export type ExpensesKey = keyof Omit<
   BudgetExpenses,
@@ -18,10 +17,12 @@ export type IncomeKey = keyof Omit<
   | 'id'
   | 'budgetId'
   | 'type'
-  | 'householdMemberId'
   | 'created'
   | 'updated'
   | 'beneficiaryId'
+  | 'lastName'
+  | 'firstName'
+  | 'relationship'
 >
 
 export type GetIncomeHouseholdMemberBudget = BudgetIncome & {
@@ -30,7 +31,6 @@ export type GetIncomeHouseholdMemberBudget = BudgetIncome & {
 }
 
 export type GetBudgetIncomeHouseholdMember = BudgetIncome & {
-  householdMember: BeneficiaryRelativeIdentification | null
   beneficiary: BeneficiaryFileIdentification | null
 }
 

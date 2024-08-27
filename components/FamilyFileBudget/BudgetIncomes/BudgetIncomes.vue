@@ -54,7 +54,6 @@
     <BudgetIncomesAddMember
       :family-file-id="familyFileId"
       :budget-id="budgetId"
-      :beneficiary-id="beneficiaryId"
     />
   </section>
 </template>
@@ -72,7 +71,6 @@
 
   const props = defineProps<{
     familyFileId: string
-    beneficiaryId: string
     budgetId: string
     incomes: GetBudgetIncomeHouseholdMember[]
   }>()
@@ -85,9 +83,8 @@
           : `Revenus - Bénéficiaire du foyer ${index}`
       }
 
-      const member = income.householdMember
-      return member && (member.firstName || member.lastName)
-        ? `${member.firstName || ''} ${member.lastName || ''} - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
+      return income.firstName || income.lastName
+        ? `${income.firstName || ''} ${income.lastName || ''} - ${taxHouseHoldRelationshipKeys.value(income.relationship) || ''}`
         : `Membre du foyer ${index}`
     })
   )

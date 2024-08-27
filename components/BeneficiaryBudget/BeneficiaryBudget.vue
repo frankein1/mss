@@ -25,7 +25,6 @@
             <BudgetIncomes
               v-if="data.incomes"
               :family-file-id="familyFileId"
-              :beneficiary-id="beneficiaryIdentification.id"
               :incomes="data.incomes"
               :budget-id="data.id"
             />
@@ -34,7 +33,6 @@
           <div class="fr-col-6">
             <BudgetExpenses
               v-if="data.expenses"
-              :beneficiary-id="beneficiaryIdentification.id"
               :family-file-id="familyFileId"
               :expenses="data.expenses"
             />
@@ -47,11 +45,9 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
-  import { BeneficiaryIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     familyFileId: string
-    beneficiaryIdentification: BeneficiaryIdentification
   }>()
 
   const trpcClient = useTrpcClient()

@@ -1,9 +1,13 @@
 import { z } from 'zod'
+import { RelativeRelationship } from '@prisma/client'
+import { beneficiaryLastNameSchema } from './beneficiary/beneficiaryLastName.schema'
+import { beneficiaryFirstNameSchema } from './beneficiary/beneficiaryFirstName.schema'
 import {
   amountNumber,
   amountNumberCanBeNegative,
   stringConstraint,
-  dateOrEmpty
+  dateOrEmpty,
+  requiredNativeEnum
 } from '.'
 
 export const getBudgetSchema = z.object({
@@ -97,3 +101,12 @@ export const updateBudgetIncomeSchema = z.object({
 })
 
 export type UpdateBudgetIncomeInput = z.infer<typeof updateBudgetIncomeSchema>
+
+export const createBudgetIncomeSchema = z.object({
+  lastName: beneficiaryLastNameSchema,
+  firstName: beneficiaryFirstNameSchema,
+  relationship: requiredNativeEnum(RelativeRelationship),
+  budgetId: z.string().uuid()
+})
+
+export type CreateBudgetIncomeInput = z.infer<typeof createBudgetIncomeSchema>
