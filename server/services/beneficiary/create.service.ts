@@ -1,5 +1,5 @@
 import { BudgetIncomeType, Prisma } from '@prisma/client'
-import { BeneficiaryRepo } from '~/server/database'
+import { BeneficiaryRepo, BudgetIncomeRepo } from '~/server/database'
 import { CreateBeneficiaryInput } from '~/server/schema'
 import { generateFileNumber } from '~/utils/generateFileNumber'
 import { SecurityRuleContext } from '~/server/security/rules/types'
@@ -36,11 +36,6 @@ export async function create(params: CreateParams) {
           create: {
             expenses: {
               create: {}
-            },
-            incomes: {
-              create: {
-                type: BudgetIncomeType.Beneficiary
-              }
             }
           }
         }
@@ -48,8 +43,33 @@ export async function create(params: CreateParams) {
     }
   }
 
-  const { id, familyFileId } = await BeneficiaryRepo.prisma.create({
-    data
+  const {
+    id,
+    familyFileId,
+    familyFile: { budget }
+  } = await BeneficiaryRepo.prisma.create({
+    data,
+    select: {
+      id: true,
+      familyFileId: true,
+      familyFile: {
+        select: {
+          budget: {
+            select: {
+              id: true
+            }
+          }
+        }
+      }
+    }
+  })
+
+  await BudgetIncomeRepo.prisma.create({
+    data: {
+      type: BudgetIncomeType.Beneficiary,
+      beneficiaryId: id,
+      budgetId: budget?.id || ''
+    }
   })
 
   return { id, familyFileId }

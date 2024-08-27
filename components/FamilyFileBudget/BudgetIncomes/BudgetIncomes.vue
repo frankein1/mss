@@ -76,16 +76,18 @@
   }>()
 
   const memberNames = computed(() =>
-    props.incomes.map((income, index) => {
-      if (income.type === 'Beneficiary') {
-        return income.beneficiary
-          ? `Revenus - ${income.beneficiary.firstName} ${income.beneficiary.usualName} - ${taxHouseHoldRelationshipKeys.value(income.beneficiary.relationship) || 'Membre du foyer'}`
-          : `Revenus - Bénéficiaire du foyer ${index}`
+    props.incomes.map(income => {
+      const beneficiary = income.beneficiary
+      const names = []
+      const firstName = beneficiary?.firstName || income.firstName || ''
+      const lastName = beneficiary?.usualName || income.lastName || ''
+      names.push(`${firstName} ${lastName}`)
+      const relationship = beneficiary?.relationship || income.relationship
+      if (relationship) {
+        names.push(relationship)
       }
 
-      return income.firstName || income.lastName
-        ? `${income.firstName || ''} ${income.lastName || ''} - ${taxHouseHoldRelationshipKeys.value(income.relationship) || ''}`
-        : `Membre du foyer ${index}`
+      return names.join(' - ')
     })
   )
 
