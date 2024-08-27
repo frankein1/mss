@@ -70,6 +70,7 @@ main.content {
 .table-container {
   overflow-x: auto;
 
+  /* stylelint-disable property-no-vendor-prefix */
   &::-webkit-scrollbar {
     -webkit-appearance: none;
   }
@@ -84,8 +85,8 @@ main.content {
 
   &::-webkit-scrollbar-thumb {
     border-radius: 8px;
-    border: 2px solid white; /* should match background, can't be transparent */
-    background-color: rgba(0, 0, 0, 0.5);
+    border: 2px solid #fff;
+    background-color: rgba(0 0 0 / 50%);
   }
 
   .fr-table {
