@@ -63,7 +63,6 @@
           :tab-id="FamilyFileTab.Documents"
           title="Documents"
           icon="fr-icon-folder-2-line"
-          selected
         >
           <AtomLoader
             v-if="selectedPending"
@@ -84,12 +83,12 @@
           :tab-id="FamilyFileTab.History"
           title="Historique"
           icon="fr-icon-history-line"
-          selected
         >
           <AtomLoader
             v-if="selectedPending"
             class="fr-mx-auto"
           />
+          <h1 v-if="selectedPending">RELOAD</h1>
           <AtomAlert
             v-else-if="selectedError || !selectedBeneficiary"
             :alert-type="AlertType.Error"
@@ -106,7 +105,6 @@
           :tab-id="FamilyFileTab.Budget"
           title="Budget"
           icon="fr-icon-money-euro-circle-line"
-          selected
         >
           <AtomLoader
             v-if="selectedPending"
