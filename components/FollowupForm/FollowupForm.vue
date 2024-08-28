@@ -19,7 +19,7 @@
           name="beneficiaryId"
           label="Bénéficiaire concerné par le suivi :"
           :options="beneficiaryOptions"
-          :inline="false"
+          :inline="true"
           required
         />
       </div>

@@ -16,11 +16,6 @@
         id="help-request-form-housing-section-accordion"
         class="fr-collapse fr-grid-row fr-grid-row--gutters fr-grid-row--bottom fr-grid-row--center"
       >
-        <BeneficiaryTaxHouseholdsSummary
-          :beneficiary-id="beneficiaryId"
-          class="fr-col-12"
-        />
-
         <div class="fr-col-12">
           <VeeInput
             name="taxHouseholdAdditionalInformation"
