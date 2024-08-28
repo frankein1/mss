@@ -17,7 +17,7 @@
         name="beneficiaryId"
         label="Ce document appartient à :"
         :options="beneficiaryOptions"
-        :inline="false"
+        :inline="true"
         required
       />
     </template>
