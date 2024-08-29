@@ -1,9 +1,4 @@
 <template>
-  <div class="label">
-    Les membres du foyer fiscal affichés ici dépendent des informations saisies
-    dans le formulaire du bénéficiaire
-  </div>
-
   <div class="action fr-mt-2w">
     <button
       data-fr-opened="false"
@@ -21,10 +16,12 @@
   import BudgetIncomesAddMemberForm from './BudgetIncomesAddMemberForm.vue'
   import { routes } from '~/utils/routes'
   import { CreateBudgetIncomeInput } from '~/server/schema'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     familyFileId: string
     budgetId: string
+    familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
 
   const modal = useModal()
@@ -35,9 +32,10 @@
 
   function onAddMember() {
     modal.open(BudgetIncomesAddMemberForm, {
-      title: 'Ajouter les revenus d’un membre du foyer fiscal',
+      title: 'Ajouter les revenus d’un membre du foyer',
       isSubmitting: isSubmitting.value,
       budgetId: props.budgetId,
+      familyFileIdentification: props.familyFileIdentification,
       add: addMember
     })
   }

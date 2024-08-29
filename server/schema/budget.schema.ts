@@ -103,10 +103,15 @@ export const updateBudgetIncomeSchema = z.object({
 export type UpdateBudgetIncomeInput = z.infer<typeof updateBudgetIncomeSchema>
 
 export const createBudgetIncomeSchema = z.object({
-  lastName: beneficiaryLastNameSchema,
-  firstName: beneficiaryFirstNameSchema,
-  relationship: requiredNativeEnum(RelativeRelationship),
-  budgetId: z.string().uuid()
+  budgetId: z.string().uuid(),
+  beneficiaryId: z.string().optional(),
+  member: z
+    .object({
+      lastName: beneficiaryLastNameSchema,
+      firstName: beneficiaryFirstNameSchema,
+      relationship: requiredNativeEnum(RelativeRelationship)
+    })
+    .optional()
 })
 
 export type CreateBudgetIncomeInput = z.infer<typeof createBudgetIncomeSchema>
