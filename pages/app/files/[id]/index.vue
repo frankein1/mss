@@ -143,12 +143,8 @@
 
   const familyFileId = route.params.id as string
 
-  const {
-    familyFileIdentification,
-    error,
-    getBeneficiaryIdOnPageLoad,
-    refreshFamilyFile
-  } = await useFamilyFileMinimalInfo(familyFileId)
+  const { familyFileIdentification, error, getBeneficiaryIdOnPageLoad } =
+    await useFamilyFileMinimalInfo(familyFileId)
 
   const title = routes.file.AppFile.title(familyFileIdentification.value)
   useHead({ title })
@@ -207,7 +203,7 @@
         ) {
           await navigateTo(routes.beneficiary.AppBeneficiaries.path())
         } else {
-          await refreshFamilyFile()
+          await refreshNuxtData()
           if (familyFileIdentification?.value) {
             openBeneficiary(familyFileIdentification.value[0].id)
           }
@@ -259,7 +255,7 @@
         isSubmitting,
         onSuccess: async ({ id }) => {
           beneficiaryID = id
-          await refreshFamilyFile()
+          await refreshNuxtData()
         },
         onFailure: () => {
           useSnackbar().error("L'ajout d'un membre au foyer à échoué.")
