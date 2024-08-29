@@ -49,9 +49,14 @@
 
   const trpcClient = useTrpcClient()
 
-  const { data, pending, error } = await trpcClient.budget.getBudget.useQuery({
-    familyFileId: props.familyFileId
-  })
+  const { data, pending, error } = await trpcClient.budget.getBudget.useQuery(
+    {
+      familyFileId: props.familyFileId
+    },
+    {
+      queryKey: 'getBudget'
+    }
+  )
 </script>
 
 <style scoped>

@@ -64,7 +64,9 @@
   }))
 
   const { data, pending, error } =
-    await useTrpcClient().file.getSocialSupports.useQuery(queryInput)
+    await useTrpcClient().file.getSocialSupports.useQuery(queryInput, {
+      queryKey: 'getHistory'
+    })
 
   const items = computed(() => data.value?.items || [])
 

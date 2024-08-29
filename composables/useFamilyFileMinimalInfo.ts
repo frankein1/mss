@@ -7,9 +7,12 @@ export const useFamilyFileMinimalInfo = async (familyFileId: string) => {
     pending,
     error,
     refresh
-  } = await trpcClient.file.getFamilyFileMinimalInfo.useQuery({
-    id: familyFileId
-  })
+  } = await trpcClient.file.getFamilyFileMinimalInfo.useQuery(
+    {
+      id: familyFileId
+    },
+    { queryKey: 'getFamilyFileMinimalInfo' }
+  )
 
   const familyFileIdentification = computed(() =>
     familyFile.value && familyFile.value.beneficiaries

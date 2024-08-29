@@ -75,7 +75,9 @@
   }))
 
   const { data, error, pending, refresh } =
-    await trpcClient.file.getDocuments.useQuery(queryInput)
+    await trpcClient.file.getDocuments.useQuery(queryInput, {
+      queryKey: 'getDocuments'
+    })
 
   const documents = computed(() => data.value?.documents || [])
 

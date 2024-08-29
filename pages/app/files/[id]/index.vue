@@ -144,8 +144,12 @@
 
   const familyFileId = route.params.id as string
 
-  const { familyFileIdentification, error, getBeneficiaryIdOnPageLoad } =
-    await useFamilyFileMinimalInfo(familyFileId)
+  const {
+    familyFileIdentification,
+    error,
+    getBeneficiaryIdOnPageLoad,
+    refreshFamilyFile
+  } = await useFamilyFileMinimalInfo(familyFileId)
 
   const title = routes.file.AppFile.title(familyFileIdentification.value)
   useHead({ title })
@@ -198,16 +202,12 @@
         snackbar.error('La suppression a échoué.', fn)
       },
       success: async () => {
-        if (
-          familyFileIdentification?.value &&
-          familyFileIdentification.value.length === 1
-        ) {
+        await refreshFamilyFile()
+        if (!familyFileIdentification.value?.length) {
           await navigateTo(routes.beneficiary.AppBeneficiaries.path())
         } else {
-          await refreshNuxtData()
-          if (familyFileIdentification?.value) {
-            openBeneficiary(familyFileIdentification.value[0].id)
-          }
+          await openBeneficiary(familyFileIdentification.value[0].id)
+          await refreshNuxtData(['getDocuments', 'getHistory', 'getBudget'])
         }
         snackbar.success('Le bénéficiaire a été supprimé.')
       }
@@ -256,7 +256,12 @@
         isSubmitting,
         onSuccess: async ({ id }) => {
           beneficiaryID = id
-          await refreshNuxtData()
+          await refreshNuxtData([
+            'getFamilyFileMinimalInfo',
+            'getDocuments',
+            'getHistory',
+            'getBudget'
+          ])
         },
         onFailure: () => {
           useSnackbar().error("L'ajout d'un membre au foyer à échoué.")
