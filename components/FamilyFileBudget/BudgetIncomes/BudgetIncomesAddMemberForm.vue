@@ -92,15 +92,15 @@
   const modal = useModal()
 
   const beneficiaryOptions = computed(() => {
-    const temp = props.familyFileIdentification.map(m => ({
+    const options = props.familyFileIdentification.map(m => ({
       label: formatBeneficiaryShortenedName(m),
       value: m.id
     }))
-    temp.push({
+    options.push({
       label: 'Autre',
       value: 'other'
     })
-    return temp
+    return options
   })
 
   const { handleSubmit } = useForm<CreateBudgetIncomeInput>({

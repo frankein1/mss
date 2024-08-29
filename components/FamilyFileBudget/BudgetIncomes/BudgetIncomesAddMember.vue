@@ -54,8 +54,7 @@
         )
         snackbar.success('Membre du foyer créé avec succès.')
       },
-      onFailure: e => {
-        console.log(e)
+      onFailure: () => {
         snackbar.error('La création du membre du foyer a échoué.')
       }
     })
