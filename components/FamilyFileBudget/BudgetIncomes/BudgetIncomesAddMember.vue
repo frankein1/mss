@@ -1,9 +1,4 @@
 <template>
-  <div class="label">
-    Les membres du foyer fiscal affichés ici dépendent des informations saisies
-    dans le formulaire du bénéficiaire
-  </div>
-
   <div class="action fr-mt-2w">
     <button
       data-fr-opened="false"
@@ -37,7 +32,7 @@
 
   function onAddMember() {
     modal.open(BudgetIncomesAddMemberForm, {
-      title: 'Ajouter les revenus d’un membre du foyer fiscal',
+      title: 'Ajouter les revenus d’un membre du foyer',
       isSubmitting: isSubmitting.value,
       budgetId: props.budgetId,
       familyFileIdentification: props.familyFileIdentification,
