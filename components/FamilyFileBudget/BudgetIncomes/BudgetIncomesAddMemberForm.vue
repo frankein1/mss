@@ -97,7 +97,7 @@
       value: m.id
     }))
     temp.push({
-      label: 'Other',
+      label: 'Autre',
       value: 'other'
     })
     return temp

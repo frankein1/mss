@@ -102,16 +102,20 @@ export const updateBudgetIncomeSchema = z.object({
 
 export type UpdateBudgetIncomeInput = z.infer<typeof updateBudgetIncomeSchema>
 
-export const createBudgetIncomeSchema = z.object({
-  member: z
-    .object({
+export const createBudgetIncomeSchema = z
+  .object({
+    budgetId: z.string().uuid(),
+    member: z.object({
       lastName: beneficiaryLastNameSchema,
       firstName: beneficiaryFirstNameSchema,
       relationship: requiredNativeEnum(RelativeRelationship)
     })
-    .optional(),
-  budgetId: z.string().uuid(),
-  benficiaryId: z.string().uuid().optional()
-})
+  })
+  .or(
+    z.object({
+      budgetId: z.string().uuid(),
+      beneficiaryId: z.string()
+    })
+  )
 
 export type CreateBudgetIncomeInput = z.infer<typeof createBudgetIncomeSchema>
