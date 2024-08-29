@@ -61,7 +61,7 @@
 
     <BudgetActions
       class="fr-mt-6w"
-      :is-submitting="isSubmitting || !selectedBeneficiary"
+      :is-submitting="isSubmitting"
       confirm-label="Valider"
       @cancel="modal.close"
     />

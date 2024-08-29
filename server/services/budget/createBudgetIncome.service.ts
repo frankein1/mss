@@ -3,14 +3,14 @@ import { BudgetIncomeRepo } from '~/server/database'
 import { CreateBudgetIncomeInput } from '~/server/schema'
 
 export async function createBudgetIncome(input: CreateBudgetIncomeInput) {
-  const { budgetId, member, benficiaryId } = input
+  const { budgetId, member, beneficiaryId } = input
 
   const data: Prisma.BudgetIncomeUncheckedCreateInput = {
     type: BudgetIncomeType.HouseholdMember,
     budgetId
   }
-  if (benficiaryId) {
-    data.beneficiaryId = benficiaryId
+  if (beneficiaryId && beneficiaryId !== 'other') {
+    data.beneficiaryId = beneficiaryId
   } else if (member) {
     data.firstName = member.firstName
     data.lastName = member.lastName
