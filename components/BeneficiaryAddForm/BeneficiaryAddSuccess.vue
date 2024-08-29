@@ -17,25 +17,10 @@
       </div>
       <div class="content-text">
         <p>
-          <span class="fr-text--bold"
-            >Eléments partagés au sein du dossier&nbsp;:</span
-          >
-          les documents, le budget, les suivis communs.
-        </p>
-      </div>
-    </div>
-
-    <div class="success-content">
-      <div class="content-icon fr-mr-2w">
-        <span
-          class="fr-icon-user-line"
-          aria-hidden="true"
-        ></span>
-      </div>
-      <div class="content-text">
-        <p>
-          <span class="fr-text--bold">Eléments individuels&nbsp;:</span>
-          la fiche informations de chaque bénéficiaire, les suivis individuels.
+          Chaque bénéficiaire conserve ses informations personnelles, ses
+          documents et ses suivis individuels mais ces éléments sont rassemblés
+          au sein d'un seul et même dossier. Le budget lui est commun à tous les
+          membres du dossier
         </p>
       </div>
     </div>
