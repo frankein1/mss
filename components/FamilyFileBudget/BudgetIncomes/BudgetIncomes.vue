@@ -54,6 +54,7 @@
     <BudgetIncomesAddMember
       :family-file-id="familyFileId"
       :budget-id="budgetId"
+      :family-file-identification="filterdFamilifileIdentitfication"
     />
   </section>
 </template>
@@ -68,11 +69,13 @@
   import { prismaDecimalToNumber } from '~/utils/prisma'
   import { incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     familyFileId: string
     budgetId: string
     incomes: GetBudgetIncomeHouseholdMember[]
+    familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
 
   const memberNames = computed(() =>
@@ -90,6 +93,13 @@
       return names.join(' - ')
     })
   )
+
+  const filterdFamilifileIdentitfication = computed(() => {
+    return props.familyFileIdentification.filter(
+      beneficiary =>
+        !props.incomes.some(income => income.beneficiaryId === beneficiary.id)
+    )
+  })
 
   const nonZeroIncomeKeys = computed(() =>
     props.incomes.map(income =>

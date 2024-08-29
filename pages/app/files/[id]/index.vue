@@ -120,6 +120,7 @@
           <FamilyFileBudget
             v-else
             :family-file-id="familyFileId"
+            :family-file-identification="familyFileIdentification"
           />
         </AtomTab>
       </AtomTabs>

@@ -1,16 +1,25 @@
-import { BudgetIncomeType } from '@prisma/client'
+import { BudgetIncomeType, Prisma } from '@prisma/client'
 import { BudgetIncomeRepo } from '~/server/database'
 import { CreateBudgetIncomeInput } from '~/server/schema'
 
 export async function createBudgetIncome(input: CreateBudgetIncomeInput) {
-  const { budgetId, ...memberData } = input
+  const { budgetId, member, benficiaryId } = input
 
+  const data: Prisma.BudgetIncomeUncheckedCreateInput = {
+    type: BudgetIncomeType.HouseholdMember,
+    budgetId
+  }
+  if (benficiaryId) {
+    data.beneficiaryId = benficiaryId
+  } else if (member) {
+    data.firstName = member.firstName
+    data.lastName = member.lastName
+    data.relationship = member.relationship
+  } else {
+    throw new Error('One of beneficiaryId or member props is compulsory')
+  }
   const income = await BudgetIncomeRepo.prisma.create({
-    data: {
-      type: BudgetIncomeType.HouseholdMember,
-      budgetId,
-      ...memberData
-    },
+    data,
     select: { id: true }
   })
 

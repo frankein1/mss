@@ -21,6 +21,7 @@
                 :family-file-id="familyFileId"
                 :incomes="data.incomes"
                 :budget-id="data.id"
+                :family-file-identification="familyFileIdentification"
               />
             </div>
 
@@ -39,8 +40,11 @@
 </template>
 
 <script lang="ts" setup>
+  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+
   const props = defineProps<{
     familyFileId: string
+    familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
 
   const trpcClient = useTrpcClient()
