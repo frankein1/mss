@@ -120,7 +120,6 @@
     isSubmitting: boolean // TODO
     familyFileId: string
     add: (values: CreateFamilyFileMemberInput) => Promise<string | undefined>
-    openBeneficiary: (beneficiaryId: string) => void
     editBeneficiary: (beneficiaryId: string) => Promise<void>
   }>()
 
@@ -154,10 +153,7 @@
   }
 
   const goToFilePage = () => {
-    if (newBeneficiaryId.value) {
-      props.openBeneficiary(newBeneficiaryId.value)
-      onClose()
-    }
+    onClose()
   }
   const goToBeneficiaryForm = () => {
     if (newBeneficiaryId.value) {

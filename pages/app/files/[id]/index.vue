@@ -262,6 +262,7 @@
             'getHistory',
             'getBudget'
           ])
+          await openBeneficiary(id)
         },
         onFailure: () => {
           useSnackbar().error("L'ajout d'un membre au foyer à échoué.")
