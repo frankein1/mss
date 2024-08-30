@@ -61,13 +61,10 @@
 
 <script lang="ts" setup>
   import { routes } from '~/utils/routes'
-  import {
-    taxHouseHoldRelationshipKeys,
-    budgetIncomeKeys
-  } from '~/client/options'
+  import { budgetIncomeKeys } from '~/client/options'
   import { IncomeKey, GetBudgetIncomeHouseholdMember } from '~/types/budget'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import { incrementBudgetTotal } from '~/utils/budget'
+  import { formatBudgetMemberLabel, incrementBudgetTotal } from '~/utils/budget'
   import { euros } from '~/utils/euros'
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
@@ -80,17 +77,7 @@
 
   const memberNames = computed(() =>
     props.incomes.map(income => {
-      const beneficiary = income.beneficiary
-      const names = []
-      const firstName = beneficiary?.firstName || income.firstName || ''
-      const lastName = beneficiary?.usualName || income.lastName || ''
-      names.push(`${firstName} ${lastName}`)
-      const relationship = beneficiary?.relationship || income.relationship
-      if (relationship) {
-        names.push(taxHouseHoldRelationshipKeys.value(relationship))
-      }
-
-      return names.join(' - ')
+      return formatBudgetMemberLabel(income)
     })
   )
 

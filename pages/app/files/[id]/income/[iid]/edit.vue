@@ -74,13 +74,13 @@
     updateBudgetIncomeSchema
   } from '~/server/schema'
   import { prismaDecimalToNumber } from '~/utils/prisma'
-  import {
-    taxHouseHoldRelationshipKeys,
-    incomeSourceKeys,
-    budgetIncomeKeys
-  } from '~/client/options'
+  import { incomeSourceKeys, budgetIncomeKeys } from '~/client/options'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
-  import { incomeHasBeenFilled, incrementBudgetTotal } from '~/utils/budget'
+  import {
+    formatBudgetMemberLabel,
+    incomeHasBeenFilled,
+    incrementBudgetTotal
+  } from '~/utils/budget'
   import { euros } from '~/utils/euros'
   import { IncomeKey } from '~/types/budget'
   import { routes } from '~/utils/routes'
@@ -115,15 +115,7 @@
   } = await trpcClient.budget.getIncome.useQuery({ id: incomeId })
 
   const subtitle = computed(() => {
-    if (income.value?.type === 'Beneficiary') {
-      return `de ${income.value.beneficiary?.firstName || ''} ${income.value.beneficiary?.usualName || ''}`
-    }
-
-    const member = income.value
-
-    return member && (member.firstName || member.lastName)
-      ? `de ${member.firstName || ''} ${member.lastName || ''}  - ${taxHouseHoldRelationshipKeys.value(member.relationship) || 'Membre du foyer'}`
-      : `Membre du foyer`
+    return income.value ? formatBudgetMemberLabel(income.value) : ''
   })
 
   const incomeIsFilled = computed(() =>
