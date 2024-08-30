@@ -25,6 +25,7 @@ export default defineNuxtConfig({
       }
     }
   },
+
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     // DSFR STYLES
@@ -130,6 +131,7 @@ export default defineNuxtConfig({
       }
     }
   },
+
   build: {
     transpile: ['trpc-nuxt']
   },
@@ -207,6 +209,7 @@ export default defineNuxtConfig({
     client: true,
     server: true
   },
+
   security: {
     removeLoggers: false,
     headers: {
@@ -225,11 +228,14 @@ export default defineNuxtConfig({
       throwError: false
     }
   },
+
   routeRules: {
     '/api/document/upload': {
       security: {
         xssValidator: false
       }
     }
-  }
+  },
+
+  compatibilityDate: '2024-08-30'
 })

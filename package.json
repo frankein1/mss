@@ -39,7 +39,7 @@
     "mitt": "^3.0.1",
     "node-fetch-native": "^1.6.4",
     "nodemailer": "^6.9.14",
-    "nuxt-security": "1.2.2",
+    "nuxt-security": "2.0.0-rc.9",
     "openid-client": "^5.6.5",
     "postcss-html": "^1.7.0",
     "prisma": "^5.19.0",
@@ -52,21 +52,21 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@axe-core/playwright": "^4.9.1",
+    "@axe-core/playwright": "^4.10.0",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
-    "@playwright/test": "^1.45.2",
+    "@playwright/test": "^1.46.1",
     "@sentry/node": "^8.27.0",
     "@types/json-diff": "1.0.3",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/lodash.merge": "^4.6.9",
-    "@types/node": "^22.2.0",
+    "@types/node": "^22.5.1",
     "@types/nodemailer": "^6.4.15",
     "@types/uuid": "^10.0.0",
-    "@vueuse/core": "^10.11.1",
+    "@vueuse/core": "^11.0.3",
     "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
-    "nuxt": "^3.11.2",
+    "nuxt": "^3.13.0",
     "nuxt-scheduler": "^0.1.9",
     "prettier": "3.3.3",
     "prettier-plugin-prisma": "^5.0.0",
@@ -79,7 +79,7 @@
     "ts-node": "^10.9.2",
     "typescript": "~5.5.4",
     "vitest": "^2.0.5",
-    "vue-tsc": "^2.0.29"
+    "vue-tsc": "^2.1.2"
   },
   "overrides": {
     "h3": "1.11.1"
