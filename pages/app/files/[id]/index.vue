@@ -223,9 +223,6 @@
         isSubmitting: isSubmitting.value,
         familyFileId,
         add: onAddBeneficiary,
-        openBeneficiary: (newBeneficiaryId: string) => {
-          openBeneficiary(newBeneficiaryId)
-        },
         editBeneficiary: async (newBeneficiaryId: string) => {
           await navigateTo(
             routes.beneficiary.AppBeneficiaryEditInfo.path(newBeneficiaryId)
