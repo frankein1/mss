@@ -39,7 +39,7 @@
     "mitt": "^3.0.1",
     "node-fetch-native": "^1.6.4",
     "nodemailer": "^6.9.14",
-    "nuxt-security": "1.2.2",
+    "nuxt-security": "2.0.0-rc.9",
     "openid-client": "^5.6.5",
     "postcss-html": "^1.7.0",
     "prisma": "^5.19.0",
@@ -79,7 +79,7 @@
     "ts-node": "^10.9.2",
     "typescript": "~5.5.4",
     "vitest": "^2.0.5",
-    "vue-tsc": "^2.0.29"
+    "vue-tsc": "^2.1.2"
   },
   "overrides": {
     "h3": "1.11.1"
