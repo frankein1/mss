@@ -134,7 +134,7 @@
     })
     if (application.value.module.ministere) {
       statsFilters.push({
-        name: 'ministre',
+        name: 'minister',
         label: helpRequestFieldLabels.ministre,
         options: ministerKeys.options,
         type: FilterType.SelectMultiple
