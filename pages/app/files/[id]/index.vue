@@ -1,10 +1,10 @@
 <template>
   <AtomAlert
-    v-if="error || !familyFileIdentification"
+    v-if="error"
     :alert-type="AlertType.Error"
     message="Le dossier n'a pas pu être chargé."
   />
-  <PageContainer v-else>
+  <PageContainer v-else-if="familyFileIdentification">
     <AtomBreadcrumb
       :links="breadcrumbs.file.AppFile(familyFileId, familyFileIdentification)"
     />
@@ -23,8 +23,13 @@
         class="fr-pb-3w"
       />
       <hr />
+      <AtomAlert
+        v-if="selectedError"
+        :alert-type="AlertType.Error"
+        message="Le bénéficiaire n'a pas pu être chargé."
+      />
       <AtomTabs
-        v-if="selectedBeneficiary"
+        v-else-if="selectedBeneficiary"
         tab-list-name="Détails du dossier foyer"
         :heading-level="2"
       >
@@ -40,17 +45,7 @@
             :model-value="selectedBeneficiary.id"
             @update:model-value="openBeneficiary"
           />
-          <AtomLoader
-            v-if="selectedPending"
-            class="fr-mx-auto"
-          />
-          <AtomAlert
-            v-else-if="selectedError || !selectedBeneficiary"
-            :alert-type="AlertType.Error"
-            message="La fiche bénéficiaire n'a pas pu être chargée."
-          />
           <BeneficiaryInfo
-            v-else
             :beneficiary="selectedBeneficiary"
             :social-support-subjects="socialSupportSubjects"
             :permissions="selectedPermissions"
@@ -65,17 +60,7 @@
           icon="fr-icon-folder-2-line"
           selected
         >
-          <AtomLoader
-            v-if="selectedPending"
-            class="fr-mx-auto"
-          />
-          <AtomAlert
-            v-else-if="selectedError || !selectedBeneficiary"
-            :alert-type="AlertType.Error"
-            message="La fiche bénéficiaire n'a pas pu être chargée."
-          />
           <BeneficiaryDocumentList
-            v-else
             :family-file-id="selectedBeneficiary.familyFileId"
             :family-file-identification="familyFileIdentification || []"
           />
@@ -86,17 +71,8 @@
           icon="fr-icon-history-line"
           selected
         >
-          <AtomLoader
-            v-if="selectedPending"
-            class="fr-mx-auto"
-          />
-          <AtomAlert
-            v-else-if="selectedError || !selectedBeneficiary"
-            :alert-type="AlertType.Error"
-            message="La fiche bénéficiaire n'a pas pu être chargée."
-          />
           <BeneficiaryHistory
-            v-else-if="selectedPermissions"
+            v-if="selectedPermissions"
             :family-file-id="familyFileId"
             :family-file-permissions="selectedPermissions"
             :family-file-identification="familyFileIdentification"
@@ -108,17 +84,7 @@
           icon="fr-icon-money-euro-circle-line"
           selected
         >
-          <AtomLoader
-            v-if="selectedPending"
-            class="fr-mx-auto"
-          />
-          <AtomAlert
-            v-else-if="selectedError || !selectedBeneficiary"
-            :alert-type="AlertType.Error"
-            message="La fiche bénéficiaire n'a pas pu être chargée."
-          />
           <FamilyFileBudget
-            v-else
             :family-file-id="familyFileId"
             :family-file-identification="familyFileIdentification"
           />
