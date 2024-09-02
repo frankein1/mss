@@ -4,11 +4,22 @@
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <AtomTabs tab-list-name="Statistiques de la structure">
-          <AtomTab
-            tab-id="Beneficiaires"
-            title="Bénéficiaires"
+        <DsfrTabs
+          ref="tabs"
+          tab-list-name="Statistiques de la structure"
+          :tab-titles="[
+            { title: 'Bénéficiaires' },
+            { title: 'Accompagnements' }
+          ]"
+          :initial-selected-index="initialSelectedIndex"
+          @select-tab="selectTab"
+        >
+          <DsfrTabContent
+            panel-id="beneficiary-tab-content"
+            tab-id="beneficiary-tab"
+            :selected="selectedTabIndex === 0"
           >
+            <h2 class="r-sr-only">Beneficiaires</h2>
             <AtomAlert
               v-if="fetchError"
               :alert-type="AlertType.Error"
@@ -24,11 +35,13 @@
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
-          </AtomTab>
-          <AtomTab
-            tab-id="Accompagnements"
-            title="Accompagnements"
+          </DsfrTabContent>
+          <DsfrTabContent
+            panel-id="history-tab-content"
+            tab-id="history-tab"
+            :selected="selectedTabIndex === 1"
           >
+            <h2 class="r-sr-only">Accompagnements</h2>
             <AtomAlert
               v-if="fetchError"
               :alert-type="AlertType.Error"
@@ -44,8 +57,8 @@
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
-          </AtomTab>
-        </AtomTabs>
+          </DsfrTabContent>
+        </DsfrTabs>
       </div>
     </div>
   </PageContainer>
@@ -101,6 +114,16 @@
     }
     return ''
   })
+
+  // tabs
+  const initialSelectedIndex = 0
+  const selectedTabIndex = ref(initialSelectedIndex)
+  const asc = ref(true)
+
+  const selectTab = (idx: number) => {
+    asc.value = selectedTabIndex.value < idx
+    selectedTabIndex.value = idx
+  }
 </script>
 
 <style scoped>
