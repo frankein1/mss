@@ -8,12 +8,8 @@
         :family-file-id="familyFileId"
       />
     </section>
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
     <AtomAlert
-      v-else-if="error"
+      v-if="error"
       :alert-type="AlertType.Error"
       message="L'historique du bénéficiaire n'a pas pu être chargé."
     />
