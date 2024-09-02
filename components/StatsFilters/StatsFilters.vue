@@ -37,8 +37,9 @@
       agentOptions: Options
       filters: StatFilterInput
       isHelpRequestsTab?: boolean
+      isHistory?: boolean
     }>(),
-    { isHelpRequestsTab: false }
+    { isHelpRequestsTab: false, isHistory: false }
   )
 
   const emit = defineEmits<{
@@ -132,9 +133,9 @@
       type: FilterType.SelectOne,
       alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
     })
-    if (application.value.module.ministere) {
+    if (application.value.module.ministere && props.isHistory) {
       statsFilters.push({
-        name: 'minister',
+        name: 'ministre',
         label: helpRequestFieldLabels.ministre,
         options: ministerKeys.options,
         type: FilterType.SelectMultiple

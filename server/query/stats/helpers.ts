@@ -47,6 +47,10 @@ export function preparePrescribingOrganizationStats(
 export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
   const socialSupport: Prisma.SocialSupportWhereInput = {}
 
+  if (filters.ministre) {
+    socialSupport.ministre = { in: filters.ministre }
+  }
+
   if (
     (filters.period && filters.period !== StatPeriodFilter.Custom) ||
     (filters.period === StatPeriodFilter.Custom &&
