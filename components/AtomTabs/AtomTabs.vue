@@ -13,7 +13,7 @@
         :key="tab.tabId"
         role="presentation"
       >
-        <button
+        <a
           :id="tab.tabId"
           class="fr-tabs__tab"
           :class="[tab.icon ? `fr-tabs__tab--icon-left ${tab.icon}` : '']"
@@ -21,6 +21,7 @@
           role="tab"
           :aria-selected="index === initiallySelectedIndex"
           :aria-controls="panelId(tab.tabId)"
+          :href="tabHref(tab.tabId)"
         >
           <div
             v-if="initiallySelectedIndex === index"
@@ -30,7 +31,7 @@
             {{ tab.title }}
           </div>
           <div v-else>{{ tab.title }}</div>
-        </button>
+        </a>
       </li>
     </ul>
     <slot></slot>
