@@ -38,23 +38,23 @@
             housingHelpRequest.fileInstruction.dispatchDate
           "
         >
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.numeroPegase"
             :content="
               housingHelpRequest.fileInstruction.socialSupport.numeroPegase
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.ministre"
             :content="ministre"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             title="1ère demande ou renouvellement"
             :content="
               housingHelpRequest.isFirst ? '1ère demande' : 'renouvellement'
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="housingHelpRequestFieldLabels.firstOpeningDate"
             :content="
               housingHelpRequest.firstOpeningDate
@@ -62,11 +62,11 @@
                 : null
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="housingHelpRequestFieldLabels.askedHousing"
             :content="askedHousing"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             title="Le dossier est instruit"
             :content="
               housingHelpRequest.fileInstruction.externalStructure
@@ -74,20 +74,20 @@
                 : 'en interne'
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.instructorOrganizationId"
             :content="
               housingHelpRequest.fileInstruction.instructorOrganization?.name
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.instructorOrganizationContactId"
             :content="
               housingHelpRequest.fileInstruction.instructorOrganizationContact
                 ?.name
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.examinationDate"
             :content="
               housingHelpRequest.fileInstruction.examinationDate
@@ -95,7 +95,7 @@
                 : null
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.dispatchDate"
             :content="
               housingHelpRequest.fileInstruction.dispatchDate
@@ -116,15 +116,15 @@
           <hr class="fr-mt-4w" />
           <h3>Informations sur la demande de logement</h3>
           <ul>
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="housingHelpRequestFieldLabels.reason"
               :content="housingReason"
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="housingHelpRequestFieldLabels.uniqueId"
               :content="housingHelpRequest.uniqueId"
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="helpRequestFieldLabels.decisionDate"
               :content="
                 housingHelpRequest.fileInstruction.decisionDate
@@ -132,11 +132,11 @@
                   : null
               "
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="helpRequestFieldLabels.refusalReason"
               :content="refusalReason"
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               title="Date d'échéance"
               :content="
                 housingHelpRequest.fileInstruction.socialSupport.dueDate
@@ -146,7 +146,7 @@
                   : null
               "
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="helpRequestFieldLabels.fullFile"
               :content="
                 housingHelpRequest.fileInstruction.fullFile ? 'OUI' : null
@@ -169,13 +169,13 @@
           <h3>Caractéristiques du logement demandé</h3>
           <ul>
             <!-- TODO: request benificiary and print Composition du foyer fiscal -->
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="
                 housingHelpRequestFieldLabels.taxHouseholdAdditionalInformation
               "
               :content="housingHelpRequest.taxHouseholdAdditionalInformation"
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="housingHelpRequestFieldLabels.maxRent"
               :content="
                 housingHelpRequest.maxRent
@@ -184,7 +184,7 @@
                   : null
               "
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="housingHelpRequestFieldLabels.maxCharges"
               :content="
                 housingHelpRequest.maxCharges
@@ -193,19 +193,19 @@
                   : null
               "
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="housingHelpRequestFieldLabels.housingType"
               :content="housingType"
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="housingHelpRequestFieldLabels.roomCount"
               :content="roomCount"
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="housingHelpRequestFieldLabels.lowIncomeHousingType"
               :content="lowIncomeHousingType"
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="housingHelpRequestFieldLabels.isPmr"
               :content="housingHelpRequest.isPmr ? 'OUI' : null"
             />
@@ -217,7 +217,7 @@
           <hr class="fr-mt-4w" />
           <h3>{{ helpRequestFieldLabels.synthesis }}</h3>
           <ul>
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="helpRequestFieldLabels.synthesis"
               :content="
                 housingHelpRequest.fileInstruction.socialSupport.synthesis

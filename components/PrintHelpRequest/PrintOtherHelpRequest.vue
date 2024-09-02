@@ -35,27 +35,27 @@
             helpRequest.fileInstruction.fullFile
           "
         >
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.numeroPegase"
             :content="helpRequest.fileInstruction.socialSupport.numeroPegase"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.ministre"
             :content="ministre"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.subjectId"
             :content="helpRequest.subject?.name"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.prescribingOrganizationId"
             :content="helpRequest.prescribingOrganization?.name"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.prescribingOrganizationContactId"
             :content="helpRequest.prescribingOrganizationContact?.name"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             title="Le dossier est instruit"
             :content="
               helpRequest.fileInstruction.externalStructure
@@ -63,7 +63,7 @@
                 : 'en interne'
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.examinationDate"
             :content="
               helpRequest.fileInstruction.examinationDate
@@ -71,17 +71,17 @@
                 : null
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.instructorOrganizationId"
             :content="helpRequest.fileInstruction.instructorOrganization?.name"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.instructorOrganizationContactId"
             :content="
               helpRequest.fileInstruction.instructorOrganizationContact?.name
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.dispatchDate"
             :content="
               helpRequest.fileInstruction.dispatchDate
@@ -89,7 +89,7 @@
                 : null
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="helpRequestFieldLabels.fullFile"
             :content="helpRequest.fileInstruction.fullFile ? 'OUI' : null"
           />
@@ -105,7 +105,7 @@
           <hr class="fr-mt-4w" />
           <h3>Information sur le dossier</h3>
           <ul>
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="helpRequestFieldLabels.decisionDate"
               :content="
                 helpRequest.fileInstruction.decisionDate
@@ -113,7 +113,7 @@
                   : null
               "
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="helpRequestFieldLabels.handlingDate"
               :content="
                 helpRequest.handlingDate
@@ -121,11 +121,11 @@
                   : null
               "
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="helpRequestFieldLabels.refusalReasonOther"
               :content="refusalReason"
             />
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="helpRequestFieldLabels.dueDate"
               :content="
                 helpRequest.fileInstruction.socialSupport.dueDate
@@ -147,7 +147,7 @@
           <hr class="fr-mt-4w" />
           <h3>{{ helpRequestFieldLabels.synthesis }}</h3>
           <ul>
-            <PrintHelpRequestDetailItem
+            <PrintDetailItem
               :title="helpRequestFieldLabels.synthesis"
               :content="helpRequest.fileInstruction.socialSupport.synthesis"
             />
