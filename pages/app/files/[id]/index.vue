@@ -23,31 +23,24 @@
         class="fr-pb-3w"
       />
       <hr />
-      <AtomTabs
-        v-if="selectedBeneficiary"
+
+      <DsfrTabs
+        v-if="selectedBeneficiary && selectedPermissions"
         tab-list-name="Détails du dossier foyer"
-        :heading-level="2"
+        :tab-titles="tabTitles"
+        :initial-selected-index="selected"
+        @select-tab="select"
       >
-        <AtomTab
-          :tab-id="FamilyFileTab.Details"
-          title="Informations"
-          icon="fr-icon-information-fill"
-          selected
+        <DsfrTabContent
+          :tab-id="BeneficiaryTab.Details"
+          :selected="selected === 0"
+          :asc="ascendant"
         >
           <FamilyFileSegmentedControl
             v-if="familyFileIdentification.length > 1"
             :members="familyFileIdentification"
             :model-value="selectedBeneficiary.id"
             @update:model-value="openBeneficiary"
-          />
-          <AtomLoader
-            v-if="selectedPending"
-            class="fr-mx-auto"
-          />
-          <AtomAlert
-            v-else-if="selectedError || !selectedBeneficiary"
-            :alert-type="AlertType.Error"
-            message="La fiche bénéficiaire n'a pas pu être chargée."
           />
           <BeneficiaryInfo
             v-else
@@ -58,72 +51,49 @@
             @delete="openDeleteModal"
             @split="onSplit"
           />
-        </AtomTab>
-        <AtomTab
-          :tab-id="FamilyFileTab.Documents"
-          title="Documents"
-          icon="fr-icon-folder-2-line"
-          selected
+        </DsfrTabContent>
+        <DsfrTabContent
+          :tab-id="BeneficiaryTab.Documents"
+          :selected="selected === 1"
+          :asc="ascendant"
         >
-          <AtomLoader
-            v-if="selectedPending"
-            class="fr-mx-auto"
-          />
-          <AtomAlert
-            v-else-if="selectedError || !selectedBeneficiary"
-            :alert-type="AlertType.Error"
-            message="La fiche bénéficiaire n'a pas pu être chargée."
-          />
           <BeneficiaryDocumentList
-            v-else
             :family-file-id="selectedBeneficiary.familyFileId"
             :family-file-identification="familyFileIdentification || []"
           />
-        </AtomTab>
-        <AtomTab
-          :tab-id="FamilyFileTab.History"
-          title="Historique"
-          icon="fr-icon-history-line"
-          selected
+        </DsfrTabContent>
+        <DsfrTabContent
+          :tab-id="BeneficiaryTab.History"
+          :selected="selected === 2"
+          :asc="ascendant"
         >
-          <AtomLoader
-            v-if="selectedPending"
-            class="fr-mx-auto"
-          />
-          <AtomAlert
-            v-else-if="selectedError || !selectedBeneficiary"
-            :alert-type="AlertType.Error"
-            message="La fiche bénéficiaire n'a pas pu être chargée."
-          />
           <BeneficiaryHistory
-            v-else-if="selectedPermissions"
             :family-file-id="familyFileId"
             :family-file-permissions="selectedPermissions"
             :family-file-identification="familyFileIdentification"
           />
-        </AtomTab>
-        <AtomTab
-          :tab-id="FamilyFileTab.Budget"
-          title="Budget"
-          icon="fr-icon-money-euro-circle-line"
-          selected
+        </DsfrTabContent>
+        <DsfrTabContent
+          :tab-id="BeneficiaryTab.Budget"
+          :selected="selected === 3"
+          :asc="ascendant"
         >
-          <AtomLoader
-            v-if="selectedPending"
-            class="fr-mx-auto"
-          />
-          <AtomAlert
-            v-else-if="selectedError || !selectedBeneficiary"
-            :alert-type="AlertType.Error"
-            message="La fiche bénéficiaire n'a pas pu être chargée."
-          />
           <FamilyFileBudget
-            v-else
+            kv-else
             :family-file-id="familyFileId"
             :family-file-identification="familyFileIdentification"
           />
-        </AtomTab>
-      </AtomTabs>
+        </DsfrTabContent>
+      </DsfrTabs>
+      <AtomLoader
+        v-if="selectedPending"
+        class="fr-mx-auto"
+      />
+      <AtomAlert
+        v-else-if="selectedError || !selectedBeneficiary"
+        :alert-type="AlertType.Error"
+        message="La fiche bénéficiaire n'a pas pu être chargée."
+      />
     </div>
   </PageContainer>
 </template>
@@ -138,10 +108,12 @@
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
   import { CreateFamilyFileMemberInput } from '~/server/schema'
+  import { DsfrTabsProps, useTabs } from '@gouvminint/vue-dsfr'
+  import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 
-  const route = useRoute()
   const snackbar = useSnackbar()
 
+  const route = useRoute()
   const familyFileId = route.params.id as string
 
   const {
@@ -153,6 +125,35 @@
 
   const title = routes.file.AppFile.title(familyFileIdentification.value)
   useHead({ title })
+
+  const { ascendant, selected, select } = useTabs(true, currentTab())
+
+  function currentTab() {
+    const hash = route.hash.slice(1)
+    if (!hash) {
+      return 0
+    }
+    return hash ? Object.keys(BeneficiaryTab).indexOf(hash) : undefined
+  }
+
+  const tabTitles: DsfrTabsProps['tabTitles'] = [
+    {
+      title: 'Informations',
+      icon: 'fr-icon-information-fill'
+    },
+    {
+      title: 'Document(s)',
+      icon: 'fr-icon-folder-2-line'
+    },
+    {
+      title: 'Historique',
+      icon: 'fr-icon-history-tab-list-name'
+    },
+    {
+      title: 'Budget',
+      icon: 'fr-icon-money-euro-circle-line'
+    }
+  ]
 
   // states
   const selectedBeneficiary = ref<GetBeneficiaryOutput | null>(null)
@@ -184,12 +185,6 @@
     })
     navigateTo(navRoute)
     getBeneficiaryDetails(beneficiaryId)
-  }
-  enum FamilyFileTab {
-    Details = 'Details',
-    Documents = 'Documents',
-    History = 'History',
-    Budget = 'Budget'
   }
 
   function openDeleteModal() {

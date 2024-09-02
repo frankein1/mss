@@ -62,6 +62,9 @@ export default defineNuxtConfig({
     '@gouvfr/dsfr/dist/component/tooltip/tooltip.min.css',
     '@gouvfr/dsfr/dist/component/notice/notice.min.css',
     '@gouvfr/dsfr/dist/component/segmented/segmented.min.css',
+    '@gouvfr/dsfr/dist/component/tab/tab.min.css',
+
+    '@gouvminint/vue-dsfr/dist/vue-dsfr.css',
 
     // DSFR ICONS
     '@gouvfr/dsfr/dist/utility/icons/icons-buildings/icons-buildings.min.css',
