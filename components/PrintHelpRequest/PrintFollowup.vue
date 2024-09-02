@@ -12,33 +12,33 @@
       </div>
       <div class="fr-col-12">
         <ul>
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.firstFollowup"
             :content="followup.firstFollowup ? 'OUI' : null"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.duration"
             :content="followupDurationKeys.value(followup.duration)"
           />
 
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.numeroPegase"
             :content="followup.numeroPegase"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.ministre"
             :content="followup.ministre"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.medium"
             :content="followupMediumKeys.value(followup.medium)"
           />
 
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.thirdPersonName"
             :content="followup.thirdPersonName"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="FollowupMedium.ExternalAppointment"
             :content="
               followup.medium === FollowupMedium.ExternalAppointment
@@ -46,23 +46,23 @@
                 : null
             "
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.subjects"
             :content="followup.subjects.map(({ name }) => name).join(', ')"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.prescribingOrganizationId"
             :content="followup.prescribingOrganization?.name"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.prescribingOrganizationContactId"
             :content="followup.prescribingOrganizationContact?.name"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.dueDate"
             :content="followup.dueDate ? formatDate(followup.date) : null"
           />
-          <PrintHelpRequestDetailItem
+          <PrintDetailItem
             :title="followupFieldLabels.synthesis"
             :content="followup.synthesis"
           />

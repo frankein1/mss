@@ -9,7 +9,8 @@ export enum EventCategory {
   AccessBeneficiaryAdd = 'Accès à Créer un bénéficiaire',
   ExportHistory = 'Export des accompagnements',
   OverviewToHistory = 'Accès Tableau de bord > Accompagnements',
-  History = 'Historique'
+  History = 'Historique',
+  Beneficiary = 'Beneficiaire'
 }
 
 export enum BeneficiaryFilterEventAction {
@@ -28,6 +29,10 @@ export enum BeneficiaryHistoryAction {
   PrintHousingHelpRequest = 'Imprimer - Instruction de dossier -Demande de logement',
   PrintOtherHelpRequest = 'Imprimer - Instruction de dossier - Autre',
   PrintFollowup = "Imprimer - Synthèse d'entretien"
+}
+
+export enum BeneficiaryAction {
+  Print = 'Imprimer'
 }
 
 export enum BeneficiaryHistoryFilterEventAction {
@@ -100,6 +105,7 @@ export type EventAction =
   | ExportHistoryEventAction
   | OverviewToHistoryEventAction
   | BeneficiaryHistoryAction
+  | BeneficiaryAction
 
 export type MatomoApi = {
   trackEvent: (category: EventCategory, action: EventAction) => void

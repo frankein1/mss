@@ -14,47 +14,74 @@
       v-else-if="pending"
       class="fr-mx-auto"
     />
-    <template v-else-if="beneficiary">
-      <h1>{{ formatBeneficiaryDisplayName(beneficiary.general) }}</h1>
-      <BeneficiaryDetailsMetas
-        :beneficiary-id="beneficiary.id"
-        :general="beneficiary.general"
-      />
-      <BeneficiaryDetailsStatus :status="beneficiary.status" />
-      <BeneficiaryInfoHeader :beneficiary="beneficiary" />
-      <template v-if="socialSupportSubjects.length">
-        <p class="fr-text--bold">Accompagnements</p>
-        <p>{{ socialSupportSubjects }}</p>
-      </template>
-      <BeneficiaryInfoGeneralContent :general="beneficiary.general" />
-      <BeneficiaryInfoTaxHouseholdsContent
-        v-if="beneficiary.taxHouseholds"
-        :beneficiary-id="beneficiaryId"
-        :tax-households="beneficiary.taxHouseholds"
-      />
-      <BeneficiaryInfoEntouragesContent
-        v-if="beneficiary.entourages"
-        :entourages="beneficiary.entourages"
-      />
-      <BeneficiaryInfoHealthContent
-        v-if="beneficiary.health"
-        :health="beneficiary.health"
-      />
-      <BeneficiaryInfoOccupationIncomeContent
-        v-if="beneficiary.occupationIncome"
-        :occupation-income="beneficiary.occupationIncome"
-      />
-      <BeneficiaryInfoExternalOrganisationsContent
-        v-if="beneficiary.externalOrganisations"
-        :external-organisations="beneficiary.externalOrganisations"
-      />
-    </template>
+    <div class="fr-container">
+      <div class="fr-grid-column">
+        <div
+          v-if="beneficiary"
+          class="fr-col-12"
+        >
+          <h1>{{ formatBeneficiaryDisplayName(beneficiary.general) }}</h1>
+          <BeneficiaryDetailsMetas
+            :beneficiary-id="beneficiary.id"
+            :general="beneficiary.general"
+          />
+          <BeneficiaryDetailsStatus :status="beneficiary.status" />
+          <BeneficiaryInfoHeader :beneficiary="beneficiary" />
+          <template v-if="socialSupportSubjects.length">
+            <hr />
+            <p class="fr-text--bold">Accompagnements</p>
+            <p>{{ socialSupportSubjects }}</p>
+          </template>
+          <hr class="fr-mt-2w" />
+          <BeneficiaryInfoGeneralContent :general="beneficiary.general" />
+          <hr class="fr-mt-2w" />
+          <BeneficiaryInfoTaxHouseholdsContent
+            v-if="beneficiary.taxHouseholds"
+            :beneficiary-id="beneficiaryId"
+            :tax-households="beneficiary.taxHouseholds"
+          />
+          <template v-if="beneficiary.entourages?.length">
+            <hr class="entourage" />
+            <p class="fr-text--bold">Entourage</p>
+          </template>
+          <BeneficiaryInfoEntouragesContent
+            v-if="beneficiary.entourages"
+            :entourages="beneficiary.entourages"
+          />
+          <template v-if="beneficiary.health">
+            <hr />
+            <p class="fr-text--bold">Santé</p>
+          </template>
+          <BeneficiaryInfoHealthContent
+            v-if="beneficiary.health"
+            :health="beneficiary.health"
+          />
+          <template v-if="beneficiary.occupationIncome">
+            <hr />
+            <p class="fr-text--bold">Activité</p>
+          </template>
+          <BeneficiaryInfoOccupationIncomeContent
+            v-if="beneficiary.occupationIncome"
+            :occupation-income="beneficiary.occupationIncome"
+          />
+          <template v-if="beneficiary.externalOrganisations">
+            <hr />
+            <p class="fr-text--bold">Structures extérieures</p>
+          </template>
+          <BeneficiaryInfoExternalOrganisationsContent
+            v-if="beneficiary.externalOrganisations"
+            :external-organisations="beneficiary.externalOrganisations"
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
+  import { BeneficiaryAction, EventCategory } from '~/types/matomo'
 
   definePageMeta({
     layout: false
@@ -91,6 +118,7 @@
   )
 
   onMounted(() => {
+    useMatomo().trackEvent(EventCategory.Beneficiary, BeneficiaryAction.Print)
     window.addEventListener('afterprint', onAfterPrint)
     window.print()
   })
