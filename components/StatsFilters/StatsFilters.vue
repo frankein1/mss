@@ -138,9 +138,6 @@
         label: helpRequestFieldLabels.ministre,
         options: ministerKeys.options,
         type: FilterType.SelectMultiple
-        // TODO: matomo
-        // matomoEventCategory: EventCategory.HelpRequestFilter,
-        // matomoEventAction: HelpRequestFilterEventAction.Ministre
       })
     }
     return statsFilters
