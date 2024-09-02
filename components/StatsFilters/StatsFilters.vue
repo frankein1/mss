@@ -18,13 +18,15 @@
     fileInstructionTypeFilterKeys,
     fileInstructionTypePictos,
     beneficiaryStatusKeys,
-    periodKeys
+    periodKeys,
+    ministerKeys
   } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import { Options, withEmptyValue } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { StatPeriodFilter } from '~/types/stat'
+  import { helpRequestFieldLabels } from '~/client/labels'
 
   const { application } = usePermissions()
 
@@ -130,6 +132,17 @@
       type: FilterType.SelectOne,
       alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
     })
+    if (application.value.module.ministere) {
+      statsFilters.push({
+        name: 'ministre',
+        label: helpRequestFieldLabels.ministre,
+        options: ministerKeys.options,
+        type: FilterType.SelectMultiple
+        // TODO: matomo
+        // matomoEventCategory: EventCategory.HelpRequestFilter,
+        // matomoEventAction: HelpRequestFilterEventAction.Ministre
+      })
+    }
     return statsFilters
   })
 </script>
