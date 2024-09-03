@@ -55,6 +55,11 @@
 
   const maxAlwaysExpandedNb = computed(() => (props.isHelpRequestsTab ? 4 : 3))
 
+  const agentOptionsWithEmptyValue = computed(() => [
+    { value: '', label: '' },
+    ...props.agentOptions
+  ])
+
   const statsFilters = computed(() => {
     const statsFilters: FilterProp[] = []
     if (props.isHelpRequestsTab) {
@@ -117,11 +122,11 @@
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
       })
     }
-    if (application.value.module.statsByReferent) {
+    if (application.value.module.statsByReferent && !props.isHistory) {
       statsFilters.push({
         name: 'referent',
         label: 'Référent',
-        options: props.agentOptions,
+        options: agentOptionsWithEmptyValue.value,
         type: FilterType.SelectOne,
         alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
       })
@@ -133,12 +138,22 @@
       type: FilterType.SelectOne,
       alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
     })
+    if (props.isHistory) {
+      statsFilters.push({
+        name: 'createdById',
+        label: 'Agent',
+        options: props.agentOptions,
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
+      })
+    }
     if (application.value.module.ministere && props.isHistory) {
       statsFilters.push({
         name: 'ministre',
         label: helpRequestFieldLabels.ministre,
         options: ministerKeys.options,
-        type: FilterType.SelectMultiple
+        type: FilterType.SelectMultiple,
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
       })
     }
     return statsFilters

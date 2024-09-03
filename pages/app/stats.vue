@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { toOptions, withEmptyValue } from '~/utils/options'
+  import { toOptions } from '~/utils/options'
   import { AlertType } from '~/utils/constants/alert'
   import { hasDefinedCity } from '~/utils/beneficiary/hasDefinedCity'
   import { routes } from '~/utils/routes'
@@ -85,7 +85,7 @@
 
   const { data: agentsOptions, error: agentsOptionsError } =
     await trpcClient.config.getAgents.useQuery(undefined, {
-      transform: agents => withEmptyValue(toOptions(agents, 'id', 'name')),
+      transform: agents => toOptions(agents, 'id', 'name'),
       queryKey: 'config.getAgents.options'
     })
 

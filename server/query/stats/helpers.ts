@@ -51,6 +51,10 @@ export function prepareSocialSupportStatFilters(filters: StatFilterInput) {
     socialSupport.ministre = { in: filters.ministre }
   }
 
+  if (filters.createdById) {
+    socialSupport.createdById = { in: filters.createdById }
+  }
+
   if (
     (filters.period && filters.period !== StatPeriodFilter.Custom) ||
     (filters.period === StatPeriodFilter.Custom &&
