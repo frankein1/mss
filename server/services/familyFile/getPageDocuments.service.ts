@@ -21,6 +21,10 @@ function prepareBeneficiaryDocumentsFilters(
     formattedFilters.type = filters.type
   }
 
+  if (filters.beneficiaryId) {
+    formattedFilters.beneficiaryId = filters.beneficiaryId
+  }
+
   return formattedFilters
 }
 
