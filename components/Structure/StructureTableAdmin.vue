@@ -17,6 +17,7 @@
             <th scope="col">Type</th>
             <th scope="col">Code postal</th>
             <th scope="col">Ville</th>
+            <th scope="col">Création</th>
             <th scope="col">Connexion</th>
           </tr>
         </thead>
@@ -36,6 +37,7 @@
               <td>{{ structureTypeKeys.value(structure.type) }}</td>
               <td>{{ structure.zipcode }}</td>
               <td>{{ structure.city }}</td>
+              <td>{{ formatDate(structure.created) }}</td>
               <td>
                 <span :class="structure.canBeDisabled ? 'fr-badge--error' : ''">
                   {{ formatDate(structure.lastAccess) || 'Aucune' }}
