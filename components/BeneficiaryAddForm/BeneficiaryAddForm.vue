@@ -64,6 +64,12 @@
           type="date"
         />
       </div>
+      <BeneficiaryFormSimilarAlert
+        v-model:similar-beneficiary="similarBeneficiary"
+        :usual-name="controlledValues.usualName"
+        :first-name="controlledValues.firstName"
+        :birth-date="controlledValues.birthDate"
+      />
     </fieldset>
 
     <div class="fr-col-12">
@@ -107,6 +113,7 @@
     commonRelationshipKeys,
     beneficiaryTitleKeys
   } from '~/client/options'
+  import { SimilarBeneficiary } from '~/server/route'
 
   const modal = useModal()
   const success = useState('success', () => false)
@@ -115,6 +122,7 @@
     (): string | undefined => undefined
   )
   const form = ref<HTMLFormElement | null>(null)
+  const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
   const props = defineProps<{
     isSubmitting: boolean // TODO
@@ -123,12 +131,13 @@
     editBeneficiary: (beneficiaryId: string) => Promise<void>
   }>()
 
-  const { handleSubmit } = useForm<CreateFamilyFileMemberInput>({
-    validationSchema: toTypedSchema(createFamilyFileMemberSchema),
-    initialValues: {
-      familyFileId: props.familyFileId
-    }
-  })
+  const { handleSubmit, controlledValues } =
+    useForm<CreateFamilyFileMemberInput>({
+      validationSchema: toTypedSchema(createFamilyFileMemberSchema),
+      initialValues: {
+        familyFileId: props.familyFileId
+      }
+    })
 
   const { onSubmit, caughtErrors } = useCatchFormErrors(
     handleSubmit,
