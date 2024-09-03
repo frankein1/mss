@@ -18,13 +18,15 @@
     fileInstructionTypeFilterKeys,
     fileInstructionTypePictos,
     beneficiaryStatusKeys,
-    periodKeys
+    periodKeys,
+    ministerKeys
   } from '~/client/options'
   import { FilterType } from '~/utils/constants/filters'
   import { Options, withEmptyValue } from '~/utils/options'
   import type { StatFilterInput } from '~/server/schema'
   import type { FilterProp } from '~/types/filter'
   import { StatPeriodFilter } from '~/types/stat'
+  import { helpRequestFieldLabels } from '~/client/labels'
 
   const { application } = usePermissions()
 
@@ -35,8 +37,9 @@
       agentOptions: Options
       filters: StatFilterInput
       isHelpRequestsTab?: boolean
+      isHistory?: boolean
     }>(),
-    { isHelpRequestsTab: false }
+    { isHelpRequestsTab: false, isHistory: false }
   )
 
   const emit = defineEmits<{
@@ -130,6 +133,14 @@
       type: FilterType.SelectOne,
       alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
     })
+    if (application.value.module.ministere && props.isHistory) {
+      statsFilters.push({
+        name: 'ministre',
+        label: helpRequestFieldLabels.ministre,
+        options: ministerKeys.options,
+        type: FilterType.SelectMultiple
+      })
+    }
     return statsFilters
   })
 </script>

@@ -38,6 +38,7 @@ const statFilterSchema = z.object({
     .array(stringConstraint.max(50, maxStringLengthMessage(50)))
     .nullish(),
   referent: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+  ministre: z.array(z.nativeEnum(Minister)).nullish(),
   beneficiaryStatus: z.nativeEnum(BeneficiaryStatus).nullish()
 })
 

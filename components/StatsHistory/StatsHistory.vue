@@ -8,6 +8,7 @@
         :beneficiaries-cities-options="beneficiariesCitiesOptions"
         :agent-options="agentOptions"
         :is-help-requests-tab="!isFollowupsTabActive"
+        :is-history="true"
       />
     </section>
     <section>
