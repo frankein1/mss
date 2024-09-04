@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.29.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.28.0...v1.29.0) (2024-09-04)
+
+
+### Features
+
+* **admin:** ajout de la colonne création de la structure ([b1b567a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b1b567aa83d527bff59420c0dadc0ff3caed3d7c))
+* **brevo:** ajout de données dans l'export ([e18690f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e18690f1dd1bb094838cd0ce1b11f299e23b0fa3))
+* **foyer:** ajout filtre par membre dans onglet documents ([73ccd34](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/73ccd34b3b3a493ae81f4506b423e4595fcee2ce)), closes [#565](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/565)
+* **foyer:** détection de doublon lors de la création d'un membre du foyer ([1776af9](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/1776af9c9532e4bce6f00ad326dceb62463d5c51))
+
+
+### Bug Fixes
+
+* **email:** Vérifie la date de création avant d'envoyer l'email de désactivation ([93a77e3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/93a77e3b3ca12a97d78bb76183cc8b6b68fad597))
+* **stats:** filtre agent ([12c322b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/12c322ba1323c07587485142f859bb14f47cc7c6))
+
 ## [1.28.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.27.0...v1.28.0) (2024-09-03)
 
 
