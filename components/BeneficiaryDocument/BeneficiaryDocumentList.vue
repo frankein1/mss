@@ -1,14 +1,26 @@
 <template>
   <BeneficiaryDocumentNotice />
   <section class="feature-section documents-header-section fr-mt-2w">
-    <h3 class="fr-sr-only">Filtres</h3>
-    <BeneficiaryDocumentFilters @filter="filters = $event" />
-    <BeneficiaryDocumentAddButton
-      class="fr-ml-2w"
-      :family-file-id="familyFileId"
-      :family-file-identification="familyFileIdentification"
-      @new-document="() => refresh()"
-    />
+    <div class="fr-container">
+      <div class="fr-grid-row">
+        <div class="fr-col-12">
+          <h3 class="fr-sr-only">Filtres</h3>
+        </div>
+        <div class="fr-col-12">
+          <BeneficiaryDocumentFilters
+            :family-file-identification="familyFileIdentification"
+            @filter="filters = $event"
+          />
+        </div>
+        <div class="fr-col-12">
+          <BeneficiaryDocumentAddButton
+            :family-file-id="familyFileId"
+            :family-file-identification="familyFileIdentification"
+            @new-document="() => refresh()"
+          />
+        </div>
+      </div>
+    </div>
   </section>
   <section class="feature-section fr-mt-2w">
     <h3 class="fr-sr-only">Liste des documents</h3>

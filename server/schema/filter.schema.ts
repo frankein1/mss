@@ -69,7 +69,8 @@ type BeneficiaryFilterServerInput = z.output<typeof beneficiaryFilterSchema>
 
 const beneficiaryDocumentFilterSchema = z.object({
   type: z.nativeEnum(DocumentType).nullish(),
-  tags: stringConstraint.max(100, maxStringLengthMessage(100)).nullish()
+  tags: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
+  beneficiaryId: z.string().uuid().nullish()
 })
 
 type BeneficiaryDocumentFilterInput = z.infer<
@@ -95,7 +96,7 @@ const familyFileHistoryFilterSchema = z.object({
   handlingDate: kindOfBooleanSchema(),
   externalStructure: kindOfBooleanSchema(),
   referents: z.array(z.string().uuid()).nullish(),
-  beneficiaryId: z.string().uuid().nullish()
+  beneficiaryId: z.string().uuid().nullish() // exemple
 })
 
 type FamilyFileHistoryFilterInput = z.infer<
