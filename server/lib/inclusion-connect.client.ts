@@ -188,7 +188,7 @@ function initClient() {
       issuer: keycloakIssuer,
       clientId: keycloakClientId,
       clientSecret: keycloakClientSecret,
-      redirectUri: `${appUrl}${apiRoutes.auth.ApiSsoCallback.path()}`,
+      redirectUri: `${appUrl}${apiRoutes.inclusionConnect.ApiSsoCallback.path()}`,
       postLogoutRedirectUri: `${appUrl}${routes.auth.AuthLogout.path()}`,
       postPasswordEditRedirectUri: `${appUrl}${routes.user.AppAccount.path()}`
     }

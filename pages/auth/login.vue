@@ -3,7 +3,7 @@
     <h1 class="login-title fr-h2 fr-mb-5w">
       {{ routes.auth.AuthLogin.title }}
     </h1>
-    <InclusionConnectButton />
+    <ProConnectButton />
   </main>
 </template>
 

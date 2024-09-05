@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="fr-pt-6w">
-    <InclusionConnectButton />
+    <ProConnectButton />
   </div>
 </template>
 
@@ -50,7 +50,7 @@
   const { data, pending, error } = await useFetch<{
     url: string | null
     success: boolean
-  }>(apiRoutes.auth.ApiLogout.path(), {
+  }>(apiRoutes.proConnect.ApiLogout.path(), {
     method: 'POST',
     body: { inactive: !!props.inactive },
     onResponse({ response }) {
