@@ -1,7 +1,7 @@
 import { generators } from 'openid-client'
 import { routes, apiRoutes } from '~/utils/routes'
 
-export type InclusionConnectToken = {
+export type ProConnectToken = {
   accessToken: string
   expiresIn: number
   refreshToken: string
@@ -10,15 +10,15 @@ export type InclusionConnectToken = {
   scope: string
 }
 
-export type InclusionConnectTokenResponse = {
-  data?: InclusionConnectToken
+export type ProConnectTokenResponse = {
+  data?: ProConnectToken
   error?: {
     error: string
     description: string
   }
 }
 
-export type InclusionConnectConfig = {
+export type ProConnectConfig = {
   issuer: string
   clientId: string
   clientSecret: string
@@ -42,7 +42,7 @@ export class ProConnectClient {
     redirectUri,
     postLogoutRedirectUri,
     postPasswordEditRedirectUri
-  }: InclusionConnectConfig) {
+  }: ProConnectConfig) {
     this.issuer = issuer
     this.clientId = clientId
     this.clientSecret = clientSecret
@@ -65,7 +65,7 @@ export class ProConnectClient {
   }: {
     code: string
     appRedirectUrl?: string
-  }): Promise<InclusionConnectTokenResponse> {
+  }): Promise<ProConnectTokenResponse> {
     const params = new URLSearchParams({
       grant_type: 'authorization_code',
       redirect_uri: this.getRedirectUri(appRedirectUrl),

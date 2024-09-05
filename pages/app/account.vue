@@ -35,5 +35,5 @@
   useHead({ title })
 
   const data =
-    await useTrpcClient().config.getInclusionConnectEditPasswordUrl.query()
+    await useTrpcClient().config.getProConnectEditPasswordUrl.query()
 </script>

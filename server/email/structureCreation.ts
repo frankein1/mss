@@ -1,7 +1,7 @@
-import { getInclusionConnectClient } from '~/server/lib'
+import { getProConnectClient } from '~/server/lib'
 
 export function getStructureCreationEmailContent() {
-  const client = getInclusionConnectClient()
+  const client = getProConnectClient()
   const registrationUrl = client.getRegistrationUrl()
 
   const text = `Bonjour,

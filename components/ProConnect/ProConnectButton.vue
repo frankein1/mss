@@ -21,7 +21,7 @@
 </template>
 
 <script lang="ts" setup>
-  const SIGNIN_PATH = '/api/keycloak/signin'
+  const SIGNIN_PATH = '/api/proconnect/signin'
 
   const route = useRoute()
 

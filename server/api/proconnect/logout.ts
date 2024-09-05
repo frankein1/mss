@@ -1,5 +1,5 @@
 import { Account, UserActivityType } from '@prisma/client'
-import { getInclusionConnectClient } from '~/server/lib'
+import { getProConnectClient } from '~/server/lib'
 import { prismaClient } from '~/server/prisma'
 import { addUserActivity } from '~/server/query/userActivity/addUserActivity'
 import { UserRepo } from '~/server/database'
@@ -9,7 +9,7 @@ export default defineEventHandler(async event => {
   const { inactive } = getQuery(event)
   const config = useRuntimeConfig()
 
-  const client = getInclusionConnectClient()
+  const client = getProConnectClient()
 
   const { cookieKey } = config.public.auth
 
@@ -40,7 +40,7 @@ export default defineEventHandler(async event => {
   const account = await prismaClient.account.findFirst({
     where: {
       userId: user.id,
-      provider: config.auth.keycloakProvider
+      provider: config.auth.proconnectProvider
     }
   })
   if (!account) {
