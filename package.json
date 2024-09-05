@@ -35,6 +35,8 @@
     "exceljs": "^4.4.0",
     "json-diff": "^1.0.6",
     "jsonwebtoken": "^9.0.2",
+    "lexical": "0.15.0",
+    "lexical-vue": "0.8.4",
     "lodash.merge": "^4.6.2",
     "mitt": "^3.0.1",
     "node-fetch-native": "^1.6.4",

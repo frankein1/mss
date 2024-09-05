@@ -4,6 +4,16 @@
       <h1 class="fr-col-12">Composants UI</h1>
       <p class="fr-col-12">Les composants UI sont testables ci-dessous.</p>
 
+      <h2 class="fr-col-12">Editeur de texte</h2>
+
+      <ClientOnly
+        fallback-tag="span"
+        fallback="Loading comments..."
+      >
+        <AtomEditor
+      /></ClientOnly>
+
+      <!-- Table -->
       <h2 class="fr-col-12">Tables</h2>
 
       <div class="fr-col-6">
