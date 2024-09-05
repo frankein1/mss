@@ -5,13 +5,14 @@
       <p class="fr-col-12">Les composants UI sont testables ci-dessous.</p>
 
       <h2 class="fr-col-12">Editeur de texte</h2>
-
-      <ClientOnly
-        fallback-tag="span"
-        fallback="Loading comments..."
-      >
-        <AtomEditor
-      /></ClientOnly>
+      <div class="fr-col-12">
+        <p>Lexical editor</p>
+        <AtomEditor />
+      </div>
+      <div class="fr-col-12">
+        <p>Quill editor</p>
+        <AtomQuillTextEditor />
+      </div>
 
       <!-- Table -->
       <h2 class="fr-col-12">Tables</h2>

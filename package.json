@@ -30,6 +30,7 @@
     "@vee-validate/nuxt": "^4.13.2",
     "@vee-validate/zod": "^4.13.2",
     "@vitest/coverage-v8": "^2.0.5",
+    "@vueup/vue-quill": "^1.2.0",
     "chart.js": "^4.4.4",
     "dayjs": "^1.11.13",
     "exceljs": "^4.4.0",
