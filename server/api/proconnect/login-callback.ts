@@ -1,11 +1,11 @@
 import { v4 } from 'uuid'
 import { User } from '@prisma/client'
-import { parseInclusionConnectJwt } from '~/server/lib'
+import { parseProConnectJwt } from '~/server/lib'
 import {
-  getInclusionConnectClient,
-  InclusionConnectClient,
-  InclusionConnectToken
-} from '~/server/lib/inclusion-connect.client'
+  getProConnectClient,
+  ProConnectClient,
+  ProConnectToken
+} from '~/server/lib/proconnect.client'
 import { routes } from '~/utils/routes'
 import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
@@ -15,7 +15,7 @@ import { includeOrderedCGUHistory } from '~/server/query'
 const config = useRuntimeConfig()
 const { auth } = config
 
-const { keycloakProvider, keycloakLabel } = auth
+const { proconnectProvider, proconnectLabel } = auth
 
 export default defineEventHandler(async event => {
   const { code, redirectUrl } = getQuery(event)
@@ -23,20 +23,20 @@ export default defineEventHandler(async event => {
   if (!code) {
     throw createError({
       statusCode: 400,
-      message: '[IC] no code returned from InclusionConnect'
+      message: '[IC] no code returned from ProConnect'
     })
   }
 
-  const client = getInclusionConnectClient()
+  const client = getProConnectClient()
 
-  const inclusionConnectToken = await fetchInclusionConnnectToken(
+  const proConnectToken = await fetchProConnnectToken(
     client,
     code as string,
     redirectUrl as string | undefined
   )
 
-  const { idToken } = inclusionConnectToken
-  const { email, sub } = parseInclusionConnectJwt(idToken)
+  const { idToken } = proConnectToken
+  const { email, sub } = parseProConnectJwt(idToken)
 
   const user = await getUser(email.toLowerCase())
 
@@ -51,7 +51,7 @@ export default defineEventHandler(async event => {
   await upsertAccount({
     providerAccountId: sub,
     user,
-    inclusionConnectToken
+    proConnectToken
   })
 
   const userAccessToken = v4()
@@ -72,49 +72,49 @@ export default defineEventHandler(async event => {
   return sendRedirect(event, validateTokenUrl)
 })
 
-async function fetchInclusionConnnectToken(
-  client: InclusionConnectClient,
+async function fetchProConnnectToken(
+  client: ProConnectClient,
   code: string,
   appRedirectUrl: string | undefined
 ) {
-  const inclusionConnectTokenResponse = await client.getToken({
+  const proConnectTokenResponse = await client.getToken({
     code,
     appRedirectUrl
   })
 
-  if (inclusionConnectTokenResponse.error) {
-    throw new Error(`[IC] ${inclusionConnectTokenResponse.error.description}`)
+  if (proConnectTokenResponse.error) {
+    throw new Error(`[IC] ${proConnectTokenResponse.error.description}`)
   }
-  if (!inclusionConnectTokenResponse.data) {
-    throw new Error('[IC] no access token found un inclusion connect response')
+  if (!proConnectTokenResponse.data) {
+    throw new Error('[IC] no access token found un pro connect response')
   }
 
-  return inclusionConnectTokenResponse.data
+  return proConnectTokenResponse.data
 }
 
 async function upsertAccount({
   user,
   providerAccountId,
-  inclusionConnectToken
+  proConnectToken
 }: {
   user: User
   providerAccountId: string
-  inclusionConnectToken: InclusionConnectToken
+  proConnectToken: ProConnectToken
 }) {
   const { accessToken, expiresIn, refreshToken, tokenType, idToken, scope } =
-    inclusionConnectToken
+    proConnectToken
 
   return await prismaClient.account.upsert({
     where: {
       provider_providerAccountId: {
-        provider: keycloakProvider,
+        provider: proconnectProvider,
         providerAccountId
       }
     },
     create: {
       userId: user.id,
-      type: keycloakLabel,
-      provider: keycloakProvider,
+      type: proconnectLabel,
+      provider: proconnectProvider,
       providerAccountId,
       accessToken,
       expiresAt: expiresIn,

@@ -1,7 +1,7 @@
-import { getInclusionConnectClient } from '~/server/lib'
+import { getProConnectClient } from '~/server/lib'
 
 export default defineEventHandler(event => {
-  const client = getInclusionConnectClient()
+  const client = getProConnectClient()
   const { redirectUrl } = getQuery(event)
   return sendRedirect(
     event,
