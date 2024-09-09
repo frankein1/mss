@@ -2,12 +2,10 @@ import { createQuery } from '~/server/route'
 import { ProtectedAppContext } from '~/server/trpc'
 import { AllowSecurityCheck } from '~/server/security/rules/types'
 import { emptySchema } from '~/server/schema'
-import { SocialSupportSubjectRepo } from '~/server/database'
+import { StructureService } from '~/server/services'
 
-const handler = async ({ ctx: { user } }: { ctx: ProtectedAppContext }) => {
-  return await SocialSupportSubjectRepo.findMany(user, {
-    orderBy: [{ name: 'asc' }]
-  })
+const handler = async ({ ctx }: { ctx: ProtectedAppContext }) => {
+  return await StructureService.getSocialSupportSubjects({ ctx })
 }
 
 export const getSocialSupportSubjects = createQuery({

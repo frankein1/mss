@@ -14,7 +14,7 @@ export const getSocialSupportSubjects = createQuery({
         type: true
       }
     })
-    return await StructureService.getSocialSupportSubjects({
+    return await StructureService.getAdminSocialSupportSubjects({
       ctx: {
         user: ctx.user,
         structure

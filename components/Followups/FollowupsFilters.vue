@@ -58,11 +58,14 @@
     data: socialSupportSubjectOptions,
     pending: socialSupportSubjectOptionsPending,
     error: socialSupportSubjectOptionsError
-  } = await trpcClient.structure.getSocialSupportSubjects.useQuery(undefined, {
-    transform: socialSupportSubjects =>
-      toOptions(socialSupportSubjects, 'id', 'name'),
-    queryKey: 'structure.getSocialSupportSubjects.options'
-  })
+  } = await trpcClient.structure.getActiveOrUsedSocialSupportSubjects.useQuery(
+    undefined,
+    {
+      transform: socialSupportSubjects =>
+        toOptions(socialSupportSubjects, 'id', 'name'),
+      queryKey: 'structure.getActiveOrUsedSocialSupportSubjects.options'
+    }
+  )
 
   const pending = computed(
     () => agentOptionsPending.value || socialSupportSubjectOptionsPending.value

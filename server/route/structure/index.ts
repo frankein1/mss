@@ -1,5 +1,7 @@
 import { findSocialSupportSubject } from './findSocialSupportSubject.query'
 import { getActiveSocialSupportSubjects } from './getActiveSocialSupportSubjects.query'
+import { getActiveOrUsedSocialSupportSubjects } from './getActiveOrUsedSocialSupportSubjects.query'
+
 import { getSocialSupportSubjects } from './getSocialSupportSubjects.query'
 import { getStructure } from './getStructure.query'
 import { getStructureDPOStatus } from './getStructureDPOStatus.query'
@@ -11,6 +13,7 @@ import { updateSocialSupportSubjects } from './updateSocialSupportSubjects.mutat
 export const structureRoutes = {
   findSocialSupportSubject,
   getActiveSocialSupportSubjects,
+  getActiveOrUsedSocialSupportSubjects,
   getSocialSupportSubjects,
   getStructure,
   getStructureDPOStatus,

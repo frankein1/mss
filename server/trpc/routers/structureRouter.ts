@@ -28,5 +28,8 @@ export const structureRouter = router({
     .mutation(structureRoutes.updateStructureSubject.execute),
   getActiveSocialSupportSubjects: protectedProcedure
     .input(structureRoutes.getActiveSocialSupportSubjects.inputValidation)
-    .query(structureRoutes.getActiveSocialSupportSubjects.execute)
+    .query(structureRoutes.getActiveSocialSupportSubjects.execute),
+  getActiveOrUsedSocialSupportSubjects: protectedProcedure
+    .input(structureRoutes.getActiveOrUsedSocialSupportSubjects.inputValidation)
+    .query(structureRoutes.getActiveOrUsedSocialSupportSubjects.execute)
 })
