@@ -45,7 +45,7 @@
     }
 
     const params: BanQueryParams = {
-      q: search,
+      q: search.toLocaleLowerCase(),
       limit: 3
     }
     if (props.zipCode) {
