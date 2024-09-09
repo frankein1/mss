@@ -92,7 +92,7 @@
 <script lang="ts" setup>
   import { StatsListPropType } from '~/types/stat'
   import { STATS_COLLAPSED_LIMIT } from '~/utils/constants/stats'
-  import { getRandomId } from '~/utils/random'
+  import { getRandId } from '~/utils/random'
   import { getPercentage } from '~/utils/stats'
 
   const props = withDefaults(
@@ -117,7 +117,7 @@
     }
   )
 
-  const STATS_ID = getRandomId('stats-')
+  const STATS_ID = getRandId('stats-')
   const expandStats = ref<boolean>(false)
 
   const displayedStats = computed(() =>

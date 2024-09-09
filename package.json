@@ -22,7 +22,7 @@
   "dependencies": {
     "@getbrevo/brevo": "^2.2.0",
     "@gouvfr/dsfr": "~1.12.1",
-    "@gouvminint/vue-dsfr": "^5.19.3",
+    "@gouvminint/vue-dsfr": "^6.0.0",
     "@prisma/client": "^5.19.0",
     "@sentry/vue": "^8.27.0",
     "@trpc/client": "^10.45.2",
@@ -79,6 +79,7 @@
     "ts-node": "^10.9.2",
     "typescript": "~5.5.4",
     "vitest": "^2.0.5",
+    "vue-dsfr-nuxt-module": "^2.0.0",
     "vue-tsc": "^2.1.2"
   },
   "overrides": {

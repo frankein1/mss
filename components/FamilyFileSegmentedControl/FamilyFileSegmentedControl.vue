@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-  import { getRandomId } from '~/utils/random'
+  import { getRandId } from '~/utils/random'
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
@@ -23,7 +23,7 @@
       members: BeneficiaryFileIdentification[]
       modelValue: string | number
     }>(),
-    { id: getRandomId('seg-control') }
+    { id: getRandId('seg-control') }
   )
 
   const emit = defineEmits<{

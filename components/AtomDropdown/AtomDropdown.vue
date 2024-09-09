@@ -57,7 +57,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { getRandomId } from '~/utils/random'
+  import { getRandId } from '~/utils/random'
   import type { Menu } from '~/types/menu'
 
   withDefaults(
@@ -70,8 +70,8 @@
     { dropdownBtnClass: '', alignRight: false }
   )
 
-  const MENU_ID = getRandomId('dropdown-menu-')
-  const DROPDOWN_ID = getRandomId('dropdown-')
+  const MENU_ID = getRandId('dropdown-menu-')
+  const DROPDOWN_ID = getRandId('dropdown-')
 
   const expanded = ref(false)
   const dropdownBtn = ref<HTMLButtonElement | null>(null)
