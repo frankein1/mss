@@ -11,7 +11,7 @@
       </div>
       <div class="fr-col-12">
         <p>Quill editor</p>
-        <AtomQuillTextEditor />
+        <!-- <AtomQuillTextEditor /> -->
       </div>
 
       <!-- Table -->

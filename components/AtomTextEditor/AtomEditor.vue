@@ -83,6 +83,8 @@
   const editorConfig: CreateEditorArgs = {
     // The editor theme
     theme: exampleTheme,
+    // editable
+    editable: true,
     // Handling of errors during update
     onError(error) {
       throw error
@@ -125,9 +127,7 @@
             <div class="editor-placeholder">Enter some rich text...</div>
           </template>
         </LexicalRichTextPlugin>
-
         <LexicalListPlugin />
-
         <OnChangePlugin @change="onChange" />
       </div>
     </div>
