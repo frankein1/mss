@@ -1,13 +1,17 @@
 <template>
   <div class="fr-container">
     <div class="fr-grid-row">
-      <div class="fr-col-6">
+      <div class="fr-col-12 fr-col-lg-6">
         <BeneficiaryInfoLabel
           label="Agent(s) référent(s)"
           :value="referentNames"
         />
       </div>
-      <div class="fr-col-6 beneficiaryinfoheader__section">
+      <div class="fr-col-12 fr-col-lg-6">
+        <p class="fr-mb-1w">Dossier N°&nbsp;{{ beneficiary.fileNumber }}</p>
+        <div class="fr-mb-1w">
+          <BeneficiaryDetailsStatus :status="beneficiary.status" />
+        </div>
         <div v-if="beneficiary.aidantConnectAuthorized">
           <div class="fr-icon-success-line field-value">
             Mandat Aidants Connect
