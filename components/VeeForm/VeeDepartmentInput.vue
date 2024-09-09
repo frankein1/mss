@@ -35,7 +35,7 @@
     }
 
     const params = new URLSearchParams({
-      nom: search,
+      nom: search.toLocaleLowerCase(),
       limit: '3'
     })
 

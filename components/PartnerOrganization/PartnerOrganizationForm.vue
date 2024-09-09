@@ -284,7 +284,6 @@
     search: string
   ): Promise<OptionsWithDisabled> {
     emit('selectStructure', null)
-
     selectedName.value = search
 
     if (search.length < SEARCH_NUMBER_CHARACTERS) {
@@ -292,7 +291,7 @@
     }
 
     const { results } = await trpcClient.dataInclusion.searchStructures.query({
-      query: search
+      query: search.toLocaleLowerCase()
     })
 
     structures.value = results
