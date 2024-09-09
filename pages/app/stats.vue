@@ -67,11 +67,14 @@
   const {
     data: socialSupportSubjectOptions,
     error: socialSupportSubjectOptionsError
-  } = await trpcClient.structure.getSocialSupportSubjects.useQuery(undefined, {
-    transform: socialSupportSubject =>
-      toOptions(socialSupportSubject, 'id', 'name'),
-    queryKey: 'structure.getSocialSupportSubjects.options'
-  })
+  } = await trpcClient.structure.getActiveOrUsedSocialSupportSubjects.useQuery(
+    undefined,
+    {
+      transform: socialSupportSubject =>
+        toOptions(socialSupportSubject, 'id', 'name'),
+      queryKey: 'structure.getActiveOrUsedSocialSupportSubjects.options'
+    }
+  )
 
   const {
     data: beneficiariesCitiesOptions,

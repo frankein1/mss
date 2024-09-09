@@ -1,17 +1,13 @@
 import { SocialSupportSubjectRepo } from '~/server/database'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 
+/** Return all subjects whether active or not, used or not */
 export async function getSocialSupportSubjects({
   ctx
 }: {
   ctx: SecurityRuleContext
 }) {
   return await SocialSupportSubjectRepo.findMany(ctx.user, {
-    where: {
-      ownedByStructureId: ctx.structure.id
-    },
-    orderBy: {
-      name: 'asc'
-    }
+    orderBy: { name: 'asc' }
   })
 }
