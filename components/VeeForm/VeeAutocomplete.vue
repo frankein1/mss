@@ -194,7 +194,7 @@
 
   function onSearch(event: Event) {
     const input = event.target as HTMLInputElement
-    const search = input.value.trim().toLocaleLowerCase()
+    const search = input.value.trim()
 
     if (timeout.value) {
       clearTimeout(timeout.value)
