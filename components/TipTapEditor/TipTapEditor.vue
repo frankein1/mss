@@ -66,6 +66,19 @@
       >
         [1]
       </button>
+      <button
+        class="menubar__button"
+        :class="{ 'is-active': editor.isActive('link') }"
+        @click="setLink"
+      >
+        [set link]
+      </button>
+      <button
+        :disabled="!editor.isActive('link')"
+        @click="editor.chain().focus().unsetLink().run()"
+      >
+        Unset link
+      </button>
     </div>
     <editor-content :editor="editor" />
     <p>{{ html }}</p>
@@ -77,6 +90,7 @@
   import { Editor, EditorContent } from '@tiptap/vue-3'
   import StarterKit from '@tiptap/starter-kit'
   import Underline from '@tiptap/extension-underline'
+  import Link from '@tiptap/extension-link'
 
   export default {
     components: {
@@ -95,7 +109,14 @@
     mounted() {
       this.editor = new Editor({
         content: '<p>I’m running Tiptap with Vue.js.</p>',
-        extensions: [StarterKit, Underline]
+        extensions: [
+          StarterKit,
+          Underline,
+          Link.configure({
+            openOnClick: false,
+            defaultProtocol: 'https'
+          })
+        ]
       })
       this.html = this.editor.getHTML()
       this.json = this.editor.getJSON()
@@ -109,6 +130,33 @@
 
     beforeUnmount() {
       this.editor.destroy()
+    },
+
+    methods: {
+      setLink() {
+        // TODO: improve function, by adding 'https://'' prefix when not provided in url
+        const previousUrl = this.editor.getAttributes('link').href
+        const url = window.prompt('URL', previousUrl)
+
+        // cancelled
+        if (url === null) {
+          return
+        }
+
+        // empty
+        if (url === '') {
+          this.editor.chain().focus().extendMarkRange('link').unsetLink().run()
+          return
+        }
+
+        // update link
+        this.editor
+          .chain()
+          .focus()
+          .extendMarkRange('link')
+          .setLink({ href: url })
+          .run()
+      }
     }
   }
 </script>
