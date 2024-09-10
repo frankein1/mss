@@ -51,7 +51,7 @@
             :permissions="selectedPermissions"
             :family-file="familyFileIdentification.length > 1"
             @delete="openDeleteModal"
-            @split="onSplit"
+            @split="openSplitModal"
           />
         </AtomTab>
         <AtomTab
@@ -104,9 +104,12 @@
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
   import { CreateFamilyFileMemberInput } from '~/server/schema'
+  import FamilyFileSplitActionModal from '~/components/FamilyFileSplit/FamilyFileSplitActionModal.vue'
 
   const route = useRoute()
   const snackbar = useSnackbar()
+  const modal = useModal()
+  const trpcClient = useTrpcClient()
 
   const familyFileId = route.params.id as string
 
@@ -160,7 +163,7 @@
 
   function openDeleteModal() {
     const fn = setFocusAfterClose('#Details-panel', 'button')
-    useModal().open(BeneficiaryDeleteForm, {
+    modal.open(BeneficiaryDeleteForm, {
       title: 'Supprimer la fiche bénéficiaire',
       beneficiaryId: selectedBeneficiary.value?.id || '',
       cancel: fn,
@@ -184,7 +187,7 @@
   const isSubmitting = ref(false)
   const openAddBeneficiaryModal = (): void => {
     if (familyFileId) {
-      useModal().open(BeneficiaryAddForm, {
+      modal.open(BeneficiaryAddForm, {
         title: 'Ajouter un membre au dossier',
         isSubmitting: isSubmitting.value,
         familyFileId,
@@ -197,7 +200,7 @@
       })
     }
   }
-  const trpcClient = useTrpcClient()
+
   const onAddBeneficiary = async (
     newBeneficiary: CreateFamilyFileMemberInput
   ) => {
@@ -225,19 +228,46 @@
             'getHistory',
             'getBudget'
           ])
-          await openBeneficiary(id)
+          openBeneficiary(id)
         },
         onFailure: () => {
-          useSnackbar().error("L'ajout d'un membre au foyer à échoué.")
+          snackbar.error("L'ajout d'un membre au foyer à échoué.")
         }
       })
     }
     return beneficiaryID
   }
 
-  // TODO Split
-  const onSplit = () => {
-    console.log('split dossier')
+  const isSubmittingSplit = ref(false)
+  function openSplitModal() {
+    modal.open(FamilyFileSplitActionModal, {
+      title: `Retirer ${formatBeneficiaryDisplayName({
+        firstName: selectedBeneficiary.value?.general.firstName || '',
+        usualName: selectedBeneficiary.value?.general.usualName || '',
+        birthName: selectedBeneficiary.value?.general.birthName || ''
+      })} du dossier foyer`,
+      isSubmitting: isSubmittingSplit.value,
+      split: onSplitFamilyFile
+    })
+  }
+
+  async function onSplitFamilyFile() {
+    await useTrpcMutation({
+      mutation: () =>
+        trpcClient.file.split.mutate({
+          id: selectedBeneficiary.value?.id || ''
+        }),
+      isSubmitting: isSubmittingSplit,
+      onSuccess: () => {
+        modal.close()
+      },
+      onFailure: () => {
+        snackbar.error(
+          'La dissociation du membre du foyer a échoué',
+          snackbar.focus()
+        )
+      }
+    })
   }
 </script>
 
