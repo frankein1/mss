@@ -19,6 +19,7 @@ import {
 import { maxStringLengthMessage } from '~/utils/zod'
 import { TypeSuivi, AgeGroup } from '~/client/options'
 import { StatPeriodFilter } from '~/types/stat'
+import { FollowupPeriodFilter } from '~/types/followup'
 
 const statFilterSchema = z.object({
   helpRequestSubject: withEmptyValueOptionalNativeEnum(FileInstructionType),
@@ -82,6 +83,17 @@ const followupFilterSchema = z.object({
   medium: z.array(z.nativeEnum(FollowupMedium)).nullish(),
   socialSupportSubjects: z.array(z.string().uuid()).nullish(),
   createdById: z.array(z.string().uuid()).nullish(),
+  period: withEmptyValueOptionalNativeEnum(FollowupPeriodFilter),
+  fromDate: z.coerce.date().nullish(),
+  toDate: z.coerce
+    .date()
+    .nullish()
+    .transform(v => {
+      if (v === undefined || v === null) {
+        return v
+      }
+      return dayjs(v).hour(23).minute(59).second(59).toDate()
+    }),
   ministre: z.array(z.nativeEnum(Minister)).nullish()
 })
 

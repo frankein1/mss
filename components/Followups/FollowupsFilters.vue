@@ -23,7 +23,8 @@
   import {
     followupStatusKeys,
     followupMediumKeys,
-    ministerKeys
+    ministerKeys,
+    periodKeys
   } from '~/client/options'
   import { toOptions, withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
@@ -32,8 +33,9 @@
   import type { FilterProp } from '~/types/filter'
   import { followupFieldLabels } from '~/client/labels'
   import { EventCategory, FollowupFilterEventAction } from '~/types/matomo'
+  import { FollowupPeriodFilter } from '~/types/followup'
 
-  defineProps<{
+  const props = defineProps<{
     filters: FollowupFilterInput
   }>()
 
@@ -121,8 +123,31 @@
         type: FilterType.SelectMultiple,
         matomoEventCategory: EventCategory.FollowupFilter,
         matomoEventAction: FollowupFilterEventAction.Medium
+      },
+      {
+        name: 'period',
+        label: 'Période',
+        type: FilterType.SelectOne,
+        options: withEmptyValue(periodKeys.options, ''),
+        matomoEventCategory: EventCategory.FollowupFilter,
+        matomoEventAction: FollowupFilterEventAction.Period
       }
     ]
+
+    if (props.filters.period === FollowupPeriodFilter.Custom) {
+      filters.push(
+        {
+          name: 'fromDate',
+          label: 'Du',
+          type: FilterType.Date
+        },
+        {
+          name: 'toDate',
+          label: 'Au',
+          type: FilterType.Date
+        }
+      )
+    }
 
     if (application.value.module.ministere) {
       filters.push({

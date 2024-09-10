@@ -1,5 +1,7 @@
+import dayjs from 'dayjs'
 import { SocialSupportSubject, Prisma } from '@prisma/client'
 import { FollowupFilterInput, ExportFollowupsInput } from '~/server/schema'
+import { FollowupPeriodFilter } from '~/types/followup'
 import { SortOrder } from '~/types/table'
 
 export function prepareSocialSupportSubjectsMutations(
@@ -15,8 +17,16 @@ export function prepareSocialSupportSubjectsMutations(
 }
 
 export function prepareFilters(filters: FollowupFilterInput) {
-  const { status, medium, socialSupportSubjects, createdById, ministre } =
-    filters
+  const {
+    status,
+    medium,
+    socialSupportSubjects,
+    createdById,
+    ministre,
+    period,
+    fromDate,
+    toDate
+  } = filters
 
   const formattedFilters: Prisma.FollowupWhereInput = {}
 
@@ -24,7 +34,13 @@ export function prepareFilters(filters: FollowupFilterInput) {
     formattedFilters.medium = { in: medium }
   }
 
-  if (status || socialSupportSubjects?.length || createdById || ministre) {
+  if (
+    status ||
+    socialSupportSubjects?.length ||
+    createdById ||
+    ministre ||
+    period
+  ) {
     formattedFilters.socialSupport = {}
 
     if (status) {
@@ -44,6 +60,13 @@ export function prepareFilters(filters: FollowupFilterInput) {
     if (ministre) {
       formattedFilters.socialSupport.ministre = { in: ministre }
     }
+
+    if (
+      (period && period !== FollowupPeriodFilter.Custom) ||
+      (period === FollowupPeriodFilter.Custom && (fromDate || toDate))
+    ) {
+      formattedFilters.socialSupport.date = prepareDateFilters(filters)
+    }
   }
 
   return formattedFilters
@@ -57,4 +80,36 @@ export function prepareSort(sort: ExportFollowupsInput['orderBy']) {
   }
 
   return orderBy
+}
+
+function prepareDateFilters(filters: FollowupFilterInput) {
+  switch (filters.period) {
+    case FollowupPeriodFilter.ThisYear:
+      return {
+        gte: dayjs().startOf('year').toDate(),
+        lte: dayjs().endOf('year').toDate()
+      }
+    case FollowupPeriodFilter.LastYear:
+      return {
+        gte: dayjs().subtract(1, 'year').startOf('year').toDate(),
+        lte: dayjs().subtract(1, 'year').endOf('year').toDate()
+      }
+    case FollowupPeriodFilter.ThisMonth:
+      return {
+        gte: dayjs().startOf('month').toDate(),
+        lte: dayjs().endOf('month').toDate()
+      }
+    case FollowupPeriodFilter.LastMonth:
+      return {
+        gte: dayjs().subtract(1, 'month').startOf('month').toDate(),
+        lte: dayjs().subtract(1, 'month').endOf('month').toDate()
+      }
+    case FollowupPeriodFilter.Custom:
+      return {
+        ...(filters.fromDate && { gte: filters.fromDate }),
+        ...(filters.toDate && { lte: filters.toDate })
+      }
+    default:
+      return undefined
+  }
 }

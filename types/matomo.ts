@@ -47,6 +47,7 @@ export enum FollowupFilterEventAction {
   Medium = "Type d'entretien",
   SocialSupportSubject = "Objet de l'entretien",
   Agent = 'Agent',
+  Period = 'Période',
   Ministre = 'Ministre'
 }
 
