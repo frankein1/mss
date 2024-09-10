@@ -5,13 +5,20 @@
       <p class="fr-col-12">Les composants UI sont testables ci-dessous.</p>
 
       <h2 class="fr-col-12">Editeur de texte</h2>
-      <div class="fr-col-12">
+
+      <!-- <div class="fr-col-12">
         <p>Lexical editor</p>
-        <AtomEditor />
+        <AtomEditor /> 
       </div>
+
       <div class="fr-col-12">
-        <p>Quill editor</p>
-        <!-- <AtomQuillTextEditor /> -->
+        <p>Quill editor</p> 
+        <AtomQuillTextEditor /> 
+      </div> -->
+
+      <div class="fr-col-12">
+        <p>TipTap editor</p>
+        <TipTapEditor />
       </div>
 
       <!-- Table -->
@@ -62,6 +69,7 @@
   import StatsFiltersStory from '~/components/StatsFilters/StatsFilters.story.vue'
   import StatsListStory from '~/components/StatsList/StatsList.story.vue'
   import FamilyFileSegmentedControlStory from '~/components/FamilyFileSegmentedControl/FamilyFileSegmentedControl.story.vue'
+  import TipTapEditor from '~/components/TipTapEditor/TipTapEditor.vue'
 
   definePageMeta({
     layout: 'landing'
