@@ -23,18 +23,6 @@ async function getBeneficiary(ctx: SecurityRuleContext, beneficiaryId: string) {
           referents: {
             select: { id: true }
           }
-        },
-        include: {
-          budget: {
-            include: {
-              expenses: {
-                include: {
-                  loans: true,
-                  debts: true
-                }
-              }
-            }
-          }
         }
       }
     }
@@ -76,43 +64,47 @@ export async function split({
         expenses: {
           create: {}
         },
-        incomes: {
-          connect: { id: beneficiary.income?.id }
-        }
+        ...(beneficiary.income && {
+          incomes: {
+            connect: [{ id: beneficiary.income.id }]
+          }
+        })
       }
     }
   }
 
-  const migrateBeneficiaryToNewFamilyFile = FamilyFileRepo.prisma.create({
-    data,
-    select: {
-      id: true,
-      budget: {
-        select: {
-          id: true,
-          expenses: {
-            select: { id: true }
+  const migrateBeneficiaryToNewFamilyFile = () =>
+    FamilyFileRepo.prisma.create({
+      data,
+      select: {
+        id: true,
+        budget: {
+          select: {
+            id: true,
+            expenses: {
+              select: { id: true }
+            }
           }
         }
       }
-    }
-  })
+    })
 
-  const logBeneficiaryMigration = BeneficiaryRepo.prisma.update({
-    where: { id },
-    data: {
-      previousFamilyFile: {
-        connect: { id: beneficiary.familyFile.id }
-      },
-      splitFromFileBy: {
-        connect: { id: ctx.user.id }
+  const logBeneficiaryMigration = () =>
+    BeneficiaryRepo.prisma.update({
+      where: { id },
+      data: {
+        previousFamilyFile: {
+          connect: { id: beneficiary.familyFile.id }
+        },
+        splitFromFileBy: {
+          connect: { id: ctx.user.id }
+        }
       }
-    }
-  })
+    })
 
   const [res, _] = await Promise.all([
-    migrateBeneficiaryToNewFamilyFile,
-    logBeneficiaryMigration
+    migrateBeneficiaryToNewFamilyFile(),
+    logBeneficiaryMigration()
   ])
 
   return res
