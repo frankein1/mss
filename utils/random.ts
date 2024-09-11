@@ -6,7 +6,7 @@ const RANDOM_ID_LENGTH = 5
  * @param prefix The prefix of the ID to generate
  * @returns The generated random ID
  */
-export function getRandomId(prefix: string) {
+export function getRandId(prefix: string) {
   const randomString = Array.from({ length: RANDOM_ID_LENGTH })
     .map(() => ALPHANUM[Math.floor(Math.random() * ALPHANUM.length)])
     .join('')

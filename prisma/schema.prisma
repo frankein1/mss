@@ -75,9 +75,10 @@ model User {
   receivedNotifications        Notification[]         @relation(name: "received_notifications")
   itemCreatedByNotifications   Notification[]         @relation(name: "item_created_by_notifications")
 
-  createdBeneficiaries  Beneficiary[] @relation(name: "created_beneficiaries")
-  archivedBeneficiaries Beneficiary[] @relation(name: "archived_beneficiaries")
-  referentFor           FamilyFile[]  @relation(name: "family_file_referents")
+  createdBeneficiaries       Beneficiary[] @relation(name: "created_beneficiaries")
+  archivedBeneficiaries      Beneficiary[] @relation(name: "archived_beneficiaries")
+  referentFor                FamilyFile[]  @relation(name: "family_file_referents")
+  splitFromFileBeneficiaries Beneficiary[] @relation(name: "split_from_file_beneficiaries")
 
   createdPartnerOrganizations PartnerOrganization[]
 
@@ -1343,10 +1344,11 @@ model FamilyFile {
 
   referents User[] @relation(name: "family_file_referents")
 
-  budget         Budget?
-  documents      Document[]
-  socialSupports SocialSupport[]
-  beneficiaries  Beneficiary[]
+  budget                Budget?
+  documents             Document[]
+  socialSupports        SocialSupport[]
+  beneficiaries         Beneficiary[]   @relation(name: "beneficiaries")
+  previousBeneficiaries Beneficiary[]   @relation(name: "previous_beneficiaries")
 
   @@map("family_file")
 }
@@ -1466,8 +1468,11 @@ model Beneficiary {
   structure   Structure @relation(fields: [structureId], references: [id], onDelete: Cascade)
   structureId String    @map("structure_id") @db.Uuid
 
-  familyFile   FamilyFile @relation(fields: [familyFileId], references: [id], onDelete: Cascade)
+  familyFile   FamilyFile @relation(name: "beneficiaries", fields: [familyFileId], references: [id], onDelete: Cascade)
   familyFileId String     @map("family_file_id") @db.Uuid
+
+  previousFamilyFile   FamilyFile? @relation(name: "previous_beneficiaries", fields: [previousFamilyFileId], references: [id])
+  previousFamilyFileId String?     @map("previous_family_file_id") @db.Uuid
 
   createdById String? @map("created_by_id") @db.Uuid
   createdBy   User?   @relation(name: "created_beneficiaries", fields: [createdById], references: [id])
@@ -1475,6 +1480,9 @@ model Beneficiary {
   archivedBy   User?     @relation(name: "archived_beneficiaries", fields: [archivedById], references: [id])
   archivedById String?   @map("archived_by_id") @db.Uuid
   archived     DateTime?
+
+  splitFromFileBy   User?   @relation(name: "split_from_file_beneficiaries", fields: [splitFromFileById], references: [id])
+  splitFromFileById String? @map("split_from_file_by_id") @db.Uuid
 
   draft Boolean @default(false)
 
@@ -1763,6 +1771,7 @@ enum UserActivityType {
 enum UserActivityObject {
   Comment
   Beneficiary
+  FamilyFile
   Budget
   BudgetExpenses
   BudgetIncome

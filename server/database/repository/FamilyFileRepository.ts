@@ -26,6 +26,7 @@ export const FamilyFileRepo = {
   findMany,
   findUniqueOrThrow,
   prisma: {
-    update: prismaClient.familyFile.update
+    update: prismaClient.familyFile.update,
+    create: prismaClient.familyFile.create
   }
 }

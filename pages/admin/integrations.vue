@@ -38,7 +38,7 @@
               secondary
               :disabled="pending"
               icon="fr-icon-refresh-line"
-              @click="refresh"
+              @click="() => refresh"
             />
           </li>
         </DsfrButtonGroup>

@@ -51,7 +51,7 @@
             :permissions="selectedPermissions"
             :family-file="familyFileIdentification.length > 1"
             @delete="openDeleteModal"
-            @split="onSplit"
+            @split="openSplitModal"
           />
         </AtomTab>
         <AtomTab
@@ -103,10 +103,16 @@
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
-  import { CreateFamilyFileMemberInput } from '~/server/schema'
+  import {
+    CreateFamilyFileMemberInput,
+    UpdateBeneficiaryTaxHouseholdInput
+  } from '~/server/schema'
+  import FamilyFileSplitActionModal from '~/components/FamilyFileSplit/FamilyFileSplitActionModal.vue'
 
   const route = useRoute()
   const snackbar = useSnackbar()
+  const modal = useModal()
+  const trpcClient = useTrpcClient()
 
   const familyFileId = route.params.id as string
 
@@ -160,7 +166,7 @@
 
   function openDeleteModal() {
     const fn = setFocusAfterClose('#Details-panel', 'button')
-    useModal().open(BeneficiaryDeleteForm, {
+    modal.open(BeneficiaryDeleteForm, {
       title: 'Supprimer la fiche bénéficiaire',
       beneficiaryId: selectedBeneficiary.value?.id || '',
       cancel: fn,
@@ -184,7 +190,7 @@
   const isSubmitting = ref(false)
   const openAddBeneficiaryModal = (): void => {
     if (familyFileId) {
-      useModal().open(BeneficiaryAddForm, {
+      modal.open(BeneficiaryAddForm, {
         title: 'Ajouter un membre au dossier',
         isSubmitting: isSubmitting.value,
         familyFileId,
@@ -197,7 +203,7 @@
       })
     }
   }
-  const trpcClient = useTrpcClient()
+
   const onAddBeneficiary = async (
     newBeneficiary: CreateFamilyFileMemberInput
   ) => {
@@ -225,25 +231,41 @@
             'getHistory',
             'getBudget'
           ])
-          await openBeneficiary(id)
+          openBeneficiary(id)
         },
         onFailure: () => {
-          useSnackbar().error("L'ajout d'un membre au foyer à échoué.")
+          snackbar.error("L'ajout d'un membre au foyer à échoué.")
         }
       })
     }
     return beneficiaryID
   }
 
-  // TODO Split
-  const onSplit = () => {
-    console.log('split dossier')
+  /** Split the selected beneficiary from family file */
+  function openSplitModal() {
+    if (
+      !selectedBeneficiary.value?.id ||
+      !selectedBeneficiary.value?.general ||
+      !selectedBeneficiary.value?.taxHouseholds
+    ) {
+      snackbar.error('Bénéficiaire inconnu')
+      return
+    }
+
+    const id = selectedBeneficiary.value.id
+    const beneficiaryName = formatBeneficiaryDisplayName({
+      firstName: selectedBeneficiary.value.general.firstName || '',
+      usualName: selectedBeneficiary.value.general.usualName || '',
+      birthName: selectedBeneficiary.value.general.birthName || ''
+    })
+
+    modal.open(FamilyFileSplitActionModal, {
+      id,
+      beneficiaryName,
+      household: selectedBeneficiary.value.taxHouseholds,
+      mutationSplit: () => trpcClient.file.split.mutate({ id }),
+      mutationFamilySituation: (values: UpdateBeneficiaryTaxHouseholdInput) =>
+        trpcClient.beneficiary.updateTaxHousehold.mutate(values)
+    })
   }
 </script>
-
-<style scoped>
-  .loading-state {
-    width: 100%;
-    margin: 0 auto;
-  }
-</style>

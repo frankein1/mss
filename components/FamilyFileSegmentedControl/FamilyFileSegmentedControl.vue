@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts">
-  import { getRandomId } from '~/utils/random'
+  import { getRandId } from '~/utils/random'
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
 
@@ -21,9 +21,9 @@
     defineProps<{
       id?: string
       members: BeneficiaryFileIdentification[]
-      modelValue: string | number
+      modelValue: string
     }>(),
-    { id: getRandomId('seg-control') }
+    { id: getRandId('seg-control') }
   )
 
   const emit = defineEmits<{
@@ -37,11 +37,11 @@
     }))
   )
 
-  function onChange($event: string) {
+  function onChange($event: string | number) {
     if ($event === props.modelValue) {
       return
     }
 
-    emit('update:modelValue', $event)
+    emit('update:modelValue', $event as string)
   }
 </script>

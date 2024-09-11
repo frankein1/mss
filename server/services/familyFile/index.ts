@@ -6,13 +6,15 @@ import {
   getFamilyFileSecurityTarget,
   FamilyFileSecurityTarget
 } from './permission.service'
+import { split } from './split.service'
 
 export const FamilyFileService = {
   getCreationPermissions,
   getEditionPermissions,
   getFamilyFileSecurityTarget,
   getPageDocuments,
-  getMinimalInfo
+  getMinimalInfo,
+  split
 }
 
 export type { FamilyFileSecurityTarget }

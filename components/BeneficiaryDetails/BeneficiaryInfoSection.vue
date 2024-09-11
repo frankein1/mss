@@ -46,14 +46,14 @@
 </template>
 
 <script setup lang="ts">
-  import { getRandomId } from '~/utils/random'
+  import { getRandId } from '~/utils/random'
 
   defineProps<{
     title?: string
     editLink?: string
   }>()
 
-  const infoSectionId = computed(() => getRandomId('beneficiary-info-section-'))
+  const infoSectionId = computed(() => getRandId('beneficiary-info-section-'))
 </script>
 
 <style scoped lang="scss">
