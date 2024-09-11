@@ -21,7 +21,7 @@
     defineProps<{
       id?: string
       members: BeneficiaryFileIdentification[]
-      modelValue: string | number
+      modelValue: string
     }>(),
     { id: getRandId('seg-control') }
   )
@@ -37,11 +37,11 @@
     }))
   )
 
-  function onChange($event: string) {
+  function onChange($event: string | number) {
     if ($event === props.modelValue) {
       return
     }
 
-    emit('update:modelValue', $event)
+    emit('update:modelValue', $event as string)
   }
 </script>

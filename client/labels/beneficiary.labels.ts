@@ -11,7 +11,13 @@ type BeneficiaryFieldLabels = Omit<
     subjects: string
     relationship: string
   },
-  'createdById' | 'archivedById' | 'archived' | 'created' | 'draft'
+  | 'createdById'
+  | 'archivedById'
+  | 'archived'
+  | 'created'
+  | 'draft'
+  | 'previousFamilyFileId'
+  | 'splitFromFileById'
 >
 
 const beneficiaryFieldLabels: FieldLabels<BeneficiaryFieldLabels> = {
