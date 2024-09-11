@@ -50,6 +50,7 @@
 
   const props = defineProps<{
     similarBeneficiary: SimilarBeneficiary
+    birthName: string | null | undefined
     usualName: string | null | undefined
     firstName: string | null | undefined
     birthDate: Date | null | undefined
@@ -60,21 +61,28 @@
   }>()
 
   function isSimilarInputValid(input: {
-    usualName: string | null | undefined
+    usualName?: string | null | undefined
+    birthName?: string | null | undefined
     firstName?: string | null | undefined
     birthDate?: Date | null | undefined
   }): input is GetSimilarBeneficiaryInput {
     return getSimilarBeneficiarySchema.safeParse({
       usualName: input.usualName,
+      birthName: input.birthName,
       firstName: input.firstName,
       birthDate: input.birthDate
     }).success
   }
 
   watch(
-    [() => props.usualName, () => props.firstName, () => props.birthDate],
-    async ([usualName, firstName, birthDate]) => {
-      const input = { usualName, firstName, birthDate }
+    [
+      () => props.usualName,
+      () => props.birthName,
+      () => props.firstName,
+      () => props.birthDate
+    ],
+    async ([usualName, birthName, firstName, birthDate]) => {
+      const input = { usualName, birthName, firstName, birthDate }
       if (!isSimilarInputValid(input)) {
         emit('update:similarBeneficiary', undefined)
         return
