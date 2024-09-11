@@ -1,4 +1,4 @@
-import { stringConstraint } from '../helpers.schema'
+import { stringConstraint, stringOrEmpty } from '../helpers.schema'
 import { minStringLengthMessage, maxStringLengthMessage } from '~/utils/zod'
 
 const beneficiaryLastNameSchema = stringConstraint
@@ -6,4 +6,8 @@ const beneficiaryLastNameSchema = stringConstraint
   .max(50, maxStringLengthMessage(50))
   .toUpperCase()
 
-export { beneficiaryLastNameSchema }
+const beneficiaryLastNameOrEmptySchema = stringOrEmpty(
+  beneficiaryLastNameSchema
+)
+
+export { beneficiaryLastNameSchema, beneficiaryLastNameOrEmptySchema }

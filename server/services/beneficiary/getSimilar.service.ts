@@ -12,6 +12,7 @@ import {
 function prepareSimilarFilter({
   firstName,
   usualName,
+  birthName,
   birthDate
 }: GetSimilarBeneficiaryInput): Prisma.BeneficiaryWhereInput {
   const usualNameComp: Prisma.BeneficiaryWhereInput['usualName'] = {
@@ -22,6 +23,10 @@ function prepareSimilarFilter({
     equals: firstName,
     mode: 'insensitive'
   }
+  const birthNameComp: Prisma.BeneficiaryWhereInput['birthName'] = {
+    equals: birthName,
+    mode: 'insensitive'
+  }
   const usualNameAndBirthDateComp = {
     usualName: usualNameComp,
     birthDate
@@ -30,15 +35,73 @@ function prepareSimilarFilter({
     usualName: usualNameComp,
     firstName: firstNameComp
   }
+  const birthNameAndBirthDateComp = {
+    birthName: birthNameComp,
+    birthDate
+  }
+  const birthNameAndFirstNameComp = {
+    birthName: birthNameComp,
+    firstName: firstNameComp
+  }
+  const birthNameAndUsualNameComp = {
+    birthName: birthNameComp,
+    usualName: usualNameComp
+  }
+
+  if ((!usualName || usualName === '') && (!birthName || birthName === '')) {
+    throw new Error('Should receive at least usualName or birthName')
+  }
+
+  if (usualName && birthName) {
+    if (!firstName) {
+      return {
+        OR: [
+          usualNameAndBirthDateComp,
+          birthNameAndUsualNameComp,
+          birthNameAndBirthDateComp
+        ]
+      }
+    }
+    if (!birthDate) {
+      return {
+        OR: [
+          usualNameAndFirstNameComp,
+          birthNameAndUsualNameComp,
+          birthNameAndFirstNameComp
+        ]
+      }
+    }
+    return {
+      OR: [
+        usualNameAndBirthDateComp,
+        usualNameAndFirstNameComp,
+        birthNameAndBirthDateComp,
+        birthNameAndFirstNameComp,
+        birthNameAndUsualNameComp
+      ]
+    }
+  }
+
+  if (usualName) {
+    if (!firstName) {
+      return usualNameAndBirthDateComp
+    }
+    if (!birthDate) {
+      return usualNameAndFirstNameComp
+    }
+    return {
+      OR: [usualNameAndBirthDateComp, usualNameAndFirstNameComp]
+    }
+  }
 
   if (!firstName) {
-    return usualNameAndBirthDateComp
+    return birthNameAndBirthDateComp
   }
   if (!birthDate) {
-    return usualNameAndFirstNameComp
+    return birthNameAndFirstNameComp
   }
   return {
-    OR: [usualNameAndBirthDateComp, usualNameAndFirstNameComp]
+    OR: [birthNameAndBirthDateComp, birthNameAndFirstNameComp]
   }
 }
 

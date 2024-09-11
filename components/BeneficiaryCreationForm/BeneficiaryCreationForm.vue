@@ -56,6 +56,7 @@
       <BeneficiaryFormSimilarAlert
         v-model:similar-beneficiary="similarBeneficiary"
         :usual-name="controlledValues.usualName"
+        :birth-name="controlledValues.birthName"
         :first-name="controlledValues.firstName"
         :birth-date="controlledValues.birthDate"
       />
