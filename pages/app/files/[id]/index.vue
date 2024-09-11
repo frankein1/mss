@@ -103,7 +103,10 @@
   import { AlertType } from '~/utils/constants/alert'
   import BeneficiaryAddForm from '~/components/BeneficiaryAddForm/BeneficiaryAddForm.vue'
   import BeneficiaryDeleteForm from '~/components/BeneficiaryDeleteForm/BeneficiaryDeleteForm.vue'
-  import { CreateFamilyFileMemberInput } from '~/server/schema'
+  import {
+    CreateFamilyFileMemberInput,
+    UpdateBeneficiaryTaxHouseholdInput
+  } from '~/server/schema'
   import FamilyFileSplitActionModal from '~/components/FamilyFileSplit/FamilyFileSplitActionModal.vue'
 
   const route = useRoute()
@@ -238,42 +241,31 @@
     return beneficiaryID
   }
 
-  const isSubmittingSplit = ref(false)
+  /** Split the selected beneficiary from family file */
   function openSplitModal() {
-    modal.open(FamilyFileSplitActionModal, {
-      title: `Retirer ${formatBeneficiaryDisplayName({
-        firstName: selectedBeneficiary.value?.general.firstName || '',
-        usualName: selectedBeneficiary.value?.general.usualName || '',
-        birthName: selectedBeneficiary.value?.general.birthName || ''
-      })} du dossier foyer`,
-      isSubmitting: isSubmittingSplit.value,
-      split: onSplitFamilyFile
-    })
-  }
+    if (
+      !selectedBeneficiary.value?.id ||
+      !selectedBeneficiary.value?.general ||
+      !selectedBeneficiary.value?.taxHouseholds
+    ) {
+      snackbar.error('Bénéficiaire inconnu')
+      return
+    }
 
-  async function onSplitFamilyFile() {
-    await useTrpcMutation({
-      mutation: () =>
-        trpcClient.file.split.mutate({
-          id: selectedBeneficiary.value?.id || ''
-        }),
-      isSubmitting: isSubmittingSplit,
-      onSuccess: () => {
-        modal.close()
-      },
-      onFailure: () => {
-        snackbar.error(
-          'La dissociation du membre du foyer a échoué',
-          snackbar.focus()
-        )
-      }
+    const id = selectedBeneficiary.value.id
+    const beneficiaryName = formatBeneficiaryDisplayName({
+      firstName: selectedBeneficiary.value.general.firstName || '',
+      usualName: selectedBeneficiary.value.general.usualName || '',
+      birthName: selectedBeneficiary.value.general.birthName || ''
+    })
+
+    modal.open(FamilyFileSplitActionModal, {
+      id,
+      beneficiaryName,
+      household: selectedBeneficiary.value.taxHouseholds,
+      mutationSplit: () => trpcClient.file.split.mutate({ id }),
+      mutationFamilySituation: (values: UpdateBeneficiaryTaxHouseholdInput) =>
+        trpcClient.beneficiary.updateTaxHousehold.mutate(values)
     })
   }
 </script>
-
-<style scoped>
-  .loading-state {
-    width: 100%;
-    margin: 0 auto;
-  }
-</style>

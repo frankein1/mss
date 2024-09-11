@@ -14,7 +14,7 @@ const handler = async ({
   input: IdInput
   ctx: ProtectedAppContext
 }) => {
-  await FamilyFileService.split({ input, ctx })
+  return await FamilyFileService.split({ input, ctx })
 }
 
 export const split = createMutation({
