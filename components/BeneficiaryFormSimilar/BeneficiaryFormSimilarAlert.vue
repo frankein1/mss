@@ -50,7 +50,7 @@
 
   const props = defineProps<{
     similarBeneficiary: SimilarBeneficiary
-    birthName: string | null | undefined
+    birthName?: string | null | undefined
     usualName: string | null | undefined
     firstName: string | null | undefined
     birthDate: Date | null | undefined
