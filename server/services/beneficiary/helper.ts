@@ -30,20 +30,23 @@ export function prepareBeneficiaryFilters(
   }
 
   if (filters.socialSupportSubjects?.length) {
+    if (!formattedFilters.familyFile) {
+      formattedFilters.familyFile = {} as Prisma.FamilyFileWhereInput
+    }
+
     const subjectsListFilter: Prisma.SocialSupportSubjectWhereInput = {
       id: { in: filters.socialSupportSubjects }
     }
-    const familyFile: Prisma.FamilyFileWhereInput = {}
-    formattedFilters.familyFile = familyFile
 
-    familyFile.socialSupports = {
+    formattedFilters.familyFile.socialSupports = {
       some: { subjects: { some: subjectsListFilter } }
     }
   }
 
   if (filters.referents?.length) {
-    const familyFile: Prisma.FamilyFileWhereInput = {}
-    formattedFilters.familyFile = familyFile
+    if (!formattedFilters.familyFile) {
+      formattedFilters.familyFile = {} as Prisma.FamilyFileWhereInput
+    }
 
     formattedFilters.familyFile.referents = {
       some: { id: { in: filters.referents } }
