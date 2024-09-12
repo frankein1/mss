@@ -1,6 +1,5 @@
 import { v4 } from 'uuid'
 import { User } from '@prisma/client'
-import { parseProConnectJwt } from '~/server/lib'
 import {
   getProConnectClient,
   ProConnectClient,
@@ -27,6 +26,8 @@ export default defineEventHandler(async event => {
     })
   }
 
+  // TODO: Vérifier que le champ state récupéré en query parameter correspond bien au state généré précédemment et stocké dans la session du navigateur.
+
   const client = getProConnectClient()
 
   const proConnectToken = await fetchProConnnectToken(
@@ -35,10 +36,27 @@ export default defineEventHandler(async event => {
     redirectUrl as string | undefined
   )
 
-  const { idToken } = proConnectToken
-  const { email, sub } = parseProConnectJwt(idToken)
+  const token = proConnectToken
+  const { accessToken } = token
 
-  const user = await getUser(email.toLowerCase())
+  // TODO: Vérification de l'id_token et du nonce
+
+  // TODO: Stockage du id_token
+
+  const { email, sub } = await fetchUserInfo(client, accessToken)
+
+  // TODO: Le endpoint user_info_endpoint renvoie un JWT, signé avec l'algorithme spécifié à AgentConnect lors de l'enregistrement du FS (RS256, ES256 ou HS256).
+  // Vérifier que le JWT est bien signé avec cet algorithme.
+  // Une fois en possession des informations de votre utilisateur, vous pouvez gérer comme vous le souhaitez sa session.
+
+  const account = await getAccount({ sub })
+
+  let user: User | null = null
+  if (account) {
+    user = account.user
+  } else {
+    user = await getUser(email)
+  }
 
   const { appUrl } = config.public
 
@@ -53,6 +71,10 @@ export default defineEventHandler(async event => {
     user,
     proConnectToken
   })
+
+  if (user.email !== email) {
+    updateEmail(user.id, email)
+  }
 
   const userAccessToken = v4()
 
@@ -72,6 +94,13 @@ export default defineEventHandler(async event => {
   return sendRedirect(event, validateTokenUrl)
 })
 
+async function fetchUserInfo(client: ProConnectClient, accessToken: string) {
+  const response = await client.getUserInfo({
+    accessToken
+  })
+  return response
+}
+
 async function fetchProConnnectToken(
   client: ProConnectClient,
   code: string,
@@ -90,6 +119,29 @@ async function fetchProConnnectToken(
   }
 
   return proConnectTokenResponse.data
+}
+
+async function updateEmail(userId: string, email: string) {
+  return await prismaClient.user.update({
+    where: { id: userId },
+    data: {
+      email
+    }
+  })
+}
+
+async function getAccount({ sub }: { sub: string }) {
+  return await prismaClient.account.findUnique({
+    where: {
+      provider_providerAccountId: {
+        provider: proconnectProvider,
+        providerAccountId: sub
+      }
+    },
+    select: {
+      user: true
+    }
+  })
 }
 
 async function upsertAccount({

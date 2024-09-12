@@ -40,7 +40,6 @@
     "node-fetch-native": "^1.6.4",
     "nodemailer": "^6.9.14",
     "nuxt-security": "2.0.0-rc.9",
-    "openid-client": "^5.6.5",
     "postcss-html": "^1.7.0",
     "prisma": "^5.19.0",
     "superjson": "^2.2.1",

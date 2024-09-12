@@ -1,4 +1,5 @@
-import { generators } from 'openid-client'
+import { JwtPayload, decode } from 'jsonwebtoken'
+import { v4 } from 'uuid'
 import { routes, apiRoutes } from '~/utils/routes'
 
 export type ProConnectToken = {
@@ -25,6 +26,14 @@ export type ProConnectConfig = {
   redirectUri: string
   postLogoutRedirectUri: string
   postPasswordEditRedirectUri: string
+}
+
+export type ProConnectUserInfo = JwtPayload & {
+  email: string
+  sub: string
+  aud: string
+  exp: number
+  iat: number
 }
 
 export class ProConnectClient {
@@ -75,7 +84,7 @@ export class ProConnectClient {
     })
 
     try {
-      const response = await fetch(`${this.issuer}/token/`, {
+      const response = await fetch(`${this.issuer}/token`, {
         method: 'post',
         body: params,
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' }
@@ -121,19 +130,43 @@ export class ProConnectClient {
     }
   }
 
+  public async getUserInfo({
+    accessToken
+  }: {
+    accessToken: string
+  }): Promise<ProConnectUserInfo> {
+    const response = await fetch(`${this.issuer}/userinfo`, {
+      method: 'post',
+      headers: { Authorization: `Bearer ${accessToken}` }
+    })
+
+    const jwt = await response.text()
+    const userinfo = decode(jwt, {
+      json: true
+    })
+    if (!userinfo) {
+      throw new Error('user info is null')
+    }
+    if (!userinfo.email) {
+      throw new Error('user info email is null')
+    }
+    if (!userinfo.sub) {
+      throw new Error('user info sub is null')
+    }
+    return userinfo as ProConnectUserInfo
+  }
+
   public getSigninUrl(appRedirectUrl?: string) {
-    const codeVerifier = generators.codeVerifier()
-    const codeChallenge = generators.codeChallenge(codeVerifier)
+    const nonce = v4()
+    const state = v4()
 
     const params = new URLSearchParams({
       client_id: this.clientId,
       scope: 'openid profile email',
       response_type: 'code',
       redirect_uri: this.getRedirectUri(appRedirectUrl),
-      state: codeChallenge,
-      nonce: codeChallenge
-      // code_challenge: codeChallenge,
-      // code_challenge_method: 'S256'
+      state,
+      nonce
     })
     return `${this.issuer}/authorize?${params}`
   }
