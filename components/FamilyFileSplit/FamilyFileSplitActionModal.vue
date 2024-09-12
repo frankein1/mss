@@ -87,7 +87,7 @@
   } from '~/server/schema'
   import { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
   import { routes } from '~/utils/routes'
-
+  import { BeneficiaryAction, EventCategory } from '~/types/matomo'
   const props = defineProps<{
     id: string
     beneficiaryName: string
@@ -100,6 +100,7 @@
 
   const modal = useModal()
   const snackbar = useSnackbar()
+  const matomo = useMatomo()
 
   const steps = [
     `Dissocier ${props.beneficiaryName} du dossier`,
@@ -111,6 +112,8 @@
   /** Step 1 : Split beneficiary from family file */
   const isSubmittingSplit = ref(false)
   async function split() {
+    matomo.trackEvent(EventCategory.Beneficiary, BeneficiaryAction.Split)
+
     await useTrpcMutation({
       mutation: props.mutationSplit,
       isSubmitting: isSubmittingSplit,
