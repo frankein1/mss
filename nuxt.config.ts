@@ -148,7 +148,12 @@ export default defineNuxtConfig({
       keycloakClientId: process.env.AUTH_KEYCLOAK_CLIENT_ID,
       keycloakClientSecret: process.env.AUTH_KEYCLOAK_CLIENT_SECRET,
       keycloakProvider: 'InclusionConnect',
-      keycloakLabel: 'keycloak'
+      keycloakLabel: 'keycloak',
+      proconnectIssuer: process.env.AUTH_PROCONNECT_ISSUER_URL,
+      proconnectClientId: process.env.AUTH_PROCONNECT_CLIENT_ID,
+      proconnectClientSecret: process.env.AUTH_PROCONNECT_CLIENT_SECRET,
+      proconnectProvider: 'ProConnect',
+      proconnectLabel: 'proconnect'
     },
     brevo: {
       apiKey: process.env.BREVO_API_KEY || ''
@@ -161,6 +166,7 @@ export default defineNuxtConfig({
       smtpUser: process.env.EMAIL_SMTP_USER || ''
     },
     public: {
+      ssoIssuer: process.env.SSO_ISSUER || 'inclusionconnect',
       version: {
         commitSha: process.env.COMMIT_SHA || '',
         commitRefName: process.env.COMMIT_REF_NAME || '',

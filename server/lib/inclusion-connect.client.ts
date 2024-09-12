@@ -1,4 +1,4 @@
-import { generators } from 'openid-client'
+import { v4 } from 'uuid'
 import { routes, apiRoutes } from '~/utils/routes'
 
 export type InclusionConnectToken = {
@@ -122,18 +122,16 @@ export class InclusionConnectClient {
   }
 
   public getSigninUrl(appRedirectUrl?: string) {
-    const codeVerifier = generators.codeVerifier()
-    const codeChallenge = generators.codeChallenge(codeVerifier)
+    const state = v4()
+    const nonce = v4()
 
     const params = new URLSearchParams({
       client_id: this.clientId,
       scope: 'openid profile email',
       response_type: 'code',
       redirect_uri: this.getRedirectUri(appRedirectUrl),
-      state: codeChallenge,
-      nonce: codeChallenge
-      // code_challenge: codeChallenge,
-      // code_challenge_method: 'S256'
+      state,
+      nonce
     })
     return `${this.issuer}/auth/authorize/?${params}`
   }
@@ -188,7 +186,7 @@ function initClient() {
       issuer: keycloakIssuer,
       clientId: keycloakClientId,
       clientSecret: keycloakClientSecret,
-      redirectUri: `${appUrl}${apiRoutes.auth.ApiSsoCallback.path()}`,
+      redirectUri: `${appUrl}${apiRoutes.inclusionConnect.ApiSsoCallback.path()}`,
       postLogoutRedirectUri: `${appUrl}${routes.auth.AuthLogout.path()}`,
       postPasswordEditRedirectUri: `${appUrl}${routes.user.AppAccount.path()}`
     }

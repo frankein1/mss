@@ -1,5 +1,5 @@
 import { protectedProcedure, router } from '~/server/trpc'
-import { getInclusionConnectClient } from '~/server/lib'
+import { getProConnectClient } from '~/server/lib'
 import {
   getAgentsQuery,
   getBeneficiariesCitiesQuery,
@@ -16,8 +16,8 @@ export const configRouter = router({
   getExaminationDates: protectedProcedure
     .input(getExaminationDatesQuery.inputValidation)
     .query(getExaminationDatesQuery.execute),
-  getInclusionConnectEditPasswordUrl: protectedProcedure.query(() => {
-    const client = getInclusionConnectClient()
+  getProConnectEditPasswordUrl: protectedProcedure.query(() => {
+    const client = getProConnectClient()
     return client.getEditPasswordUrl()
   })
 })
