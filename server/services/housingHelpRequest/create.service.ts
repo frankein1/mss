@@ -34,6 +34,8 @@ export async function create({ input, ctx }: CreateParams) {
     refusalReason,
     instructorOrganizationId,
     instructorOrganizationContactId,
+    prescribingOrganizationId,
+    prescribingOrganizationContactId,
     dispatchDate,
     synthesis,
     privateSynthesis,
