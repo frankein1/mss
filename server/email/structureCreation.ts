@@ -1,8 +1,20 @@
-import { getProConnectClient } from '~/server/lib'
+import { getProConnectClient, getInclusionConnectClient } from '~/server/lib'
+import { isProConnectActive } from '~/utils/isProConnectActive'
 
 export function getStructureCreationEmailContent() {
-  const client = getProConnectClient()
-  const registrationUrl = client.getRegistrationUrl()
+  const {
+    public: {
+      email: { from },
+      ssoIssuer
+    }
+  } = useRuntimeConfig()
+
+  const client = getInclusionConnectClient()
+  let registrationUrl = client.getRegistrationUrl()
+
+  if (isProConnectActive(ssoIssuer)) {
+    registrationUrl = getProConnectClient().getRegistrationUrl()
+  }
 
   const text = `Bonjour,
 

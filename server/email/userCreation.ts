@@ -1,15 +1,21 @@
 import { User } from '@prisma/client'
-import { getProConnectClient } from '~/server/lib'
+import { getInclusionConnectClient, getProConnectClient } from '~/server/lib'
+import { isProConnectActive } from '~/utils/isProConnectActive'
 
 export function getUserCreationEmailContent(user: User) {
   const {
     public: {
-      email: { from }
+      email: { from },
+      ssoIssuer
     }
   } = useRuntimeConfig()
 
-  const client = getProConnectClient()
-  const registrationUrl = client.getRegistrationUrl()
+  const client = getInclusionConnectClient()
+  let registrationUrl = client.getRegistrationUrl()
+
+  if (isProConnectActive(ssoIssuer)) {
+    registrationUrl = getProConnectClient().getRegistrationUrl()
+  }
 
   const text = `Bonjour,
 

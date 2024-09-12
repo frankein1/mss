@@ -165,6 +165,7 @@ export class ProConnectClient {
       scope: 'openid profile email',
       response_type: 'code',
       redirect_uri: this.getRedirectUri(appRedirectUrl),
+      acr_values: 'eidas1',
       state,
       nonce
     })
