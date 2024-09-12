@@ -537,6 +537,12 @@ enum LowIncomeHousingType {
 model HousingHelpRequest {
   id String @id @default(uuid()) @db.Uuid
 
+  prescribingOrganizationId String?              @map("prescribing_organization_id") @db.Uuid
+  prescribingOrganization   PartnerOrganization? @relation("housing_help_request_prescribing_organization", fields: [prescribingOrganizationId], references: [id])
+
+  prescribingOrganizationContactId String?                     @map("prescribing_organization_contact_id") @db.Uuid
+  prescribingOrganizationContact   PartnerOrganizationContact? @relation("housing_help_request_prescribing_organization_contact", fields: [prescribingOrganizationContactId], references: [id])
+
   isFirst                           Boolean?               @map("is_first")
   firstOpeningDate                  DateTime?              @map("first_opening_date") @db.Date
   askedHousing                      AskedHousing[]         @map("asked_housing")
@@ -1678,8 +1684,10 @@ model PartnerOrganization {
 
   contacts                               PartnerOrganizationContact[]
   followups                              Followup[]                   @relation("followup_prescribing_organization")
+  // TODO rename?
   fileInstructionInstructorOrganizations FileInstruction[]            @relation("file_instruction_instructor_organization")
   helpRequests                           HelpRequest[]                @relation("help_request_prescribing_organization")
+  housingHelpRequestsPrescribed          HousingHelpRequest[]         @relation("housing_help_request_prescribing_organization")
 
   @@unique([structureId, siret])
   @@map("partner_organization")
@@ -1695,9 +1703,11 @@ model PartnerOrganizationContact {
   partner   PartnerOrganization @relation(fields: [partnerId], references: [id], onDelete: Cascade)
   partnerId String              @map("partner_id") @db.Uuid
 
-  fileInstructionInstructorOrganizationContacts FileInstruction[] @relation("file_instruction_instructor_organization_contact")
-  helpRequestInstructorOrganizationContacts     HelpRequest[]     @relation("help_request_prescribing_organization_contact")
-  followupPrescribingOrganizationContacts       Followup[]        @relation("followup_prescribing_organization_contact")
+  // TODO rename?
+  fileInstructionInstructorOrganizationContacts FileInstruction[]    @relation("file_instruction_instructor_organization_contact")
+  helpRequestInstructorOrganizationContacts     HelpRequest[]        @relation("help_request_prescribing_organization_contact")
+  followupPrescribingOrganizationContacts       Followup[]           @relation("followup_prescribing_organization_contact")
+  housingHelpRequestsPrescribed                 HousingHelpRequest[] @relation("housing_help_request_prescribing_organization_contact")
 
   @@map("partner_organization_contact")
 }
