@@ -17,12 +17,18 @@ const { auth } = config
 const { proconnectProvider, proconnectLabel } = auth
 
 export default defineEventHandler(async event => {
-  const { code, redirectUrl } = getQuery(event)
+  const { code, redirectUrl, state } = getQuery(event)
 
   if (!code) {
     throw createError({
       statusCode: 400,
       message: '[IC] no code returned from ProConnect'
+    })
+  }
+  if (!state) {
+    throw createError({
+      statusCode: 400,
+      message: '[IC] no state returned from ProConnect'
     })
   }
 
@@ -69,7 +75,8 @@ export default defineEventHandler(async event => {
   await upsertAccount({
     providerAccountId: sub,
     user,
-    proConnectToken
+    proConnectToken,
+    state: state as string
   })
 
   if (user.email !== email) {
@@ -147,11 +154,13 @@ async function getAccount({ sub }: { sub: string }) {
 async function upsertAccount({
   user,
   providerAccountId,
-  proConnectToken
+  proConnectToken,
+  state
 }: {
   user: User
   providerAccountId: string
   proConnectToken: ProConnectToken
+  state: string
 }) {
   const { accessToken, expiresIn, refreshToken, tokenType, idToken, scope } =
     proConnectToken
@@ -173,7 +182,8 @@ async function upsertAccount({
       refreshToken,
       tokenType,
       idToken,
-      scope
+      scope,
+      sessionState: state
     },
     update: {
       accessToken,
@@ -181,7 +191,8 @@ async function upsertAccount({
       refreshToken,
       tokenType,
       idToken,
-      scope
+      scope,
+      sessionState: state
     }
   })
 }
