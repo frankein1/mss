@@ -139,7 +139,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     auth: {
       jwtKey: process.env.AUTH_JWT_KEY || 'secretJWT',
-      ssoIssuer: process.env.AUTH_SSO_ISSUER || 'inclusionconnect',
       keycloakIssuer: process.env.AUTH_KEYCLOAK_ISSUER_URL,
       keycloakClientId: process.env.AUTH_KEYCLOAK_CLIENT_ID,
       keycloakClientSecret: process.env.AUTH_KEYCLOAK_CLIENT_SECRET,
@@ -162,6 +161,7 @@ export default defineNuxtConfig({
       smtpUser: process.env.EMAIL_SMTP_USER || ''
     },
     public: {
+      ssoIssuer: process.env.SSO_ISSUER || 'inclusionconnect',
       version: {
         commitSha: process.env.COMMIT_SHA || '',
         commitRefName: process.env.COMMIT_REF_NAME || '',
