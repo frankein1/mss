@@ -49,7 +49,11 @@ export default defineEventHandler(async event => {
 
   await updateAccount(account)
 
-  const url = client.getLogoutUrl(account.idToken || '', !!inactive)
+  const url = client.getLogoutUrl({
+    idToken: account.idToken || '',
+    state: account.sessionState || '',
+    inactive: !!inactive
+  })
   return { success: true, url }
 })
 
