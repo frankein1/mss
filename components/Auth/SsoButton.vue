@@ -8,5 +8,5 @@
     public: { ssoIssuer }
   } = useRuntimeConfig()
 
-  const isProConnect = ssoIssuer === 'proconnect'
+  const isProConnect = isProConnectActive(ssoIssuer)
 </script>
