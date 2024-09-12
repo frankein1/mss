@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  dbtest:
+    image: postgres:12.14-alpine
+    container_name: monsuivisocial_pg_test
+    env_file:
+      - .env.local.test
+    environment:
+      - POSTGRES_DB=$DB_DATABASE
+      - POSTGRES_USER=$DB_USER
+      - POSTGRES_PASSWORD=$DB_PASSWORD
+    ports:
+      - '$DB_PORT:5432'
+    volumes:
+      - monsuivisocial_pgdata_test:/var/lib/postgresql/data
+    networks:
+      - monsuivisocial_network_test
+
+volumes:
+  monsuivisocial_pgdata_test:
+    name: monsuivisocial_pgdata_test
+
+networks:
+  monsuivisocial_network_test:
+    external: false
+    name: monsuivisocial_network_test

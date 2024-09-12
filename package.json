@@ -14,7 +14,10 @@
     "lint": "npm run lint:typecheck && npm run lint:js && npm run lint:style && npm run lint:prettier",
     "lintfix": "prettier --write --list-different {.,**/*.prisma} && npm run lint:js -- --fix && npm run lint:style -- --fix",
     "test": "vitest",
+    "test:db:start": "docker compose -p testmss --env-file .env.local.test -f docker-compose.test.local.yml up -d",
+    "test:db:stop": "docker compose -p testmss --env-file .env.local.test -f docker-compose.test.local.yml down -v",
     "test:e2e": "playwright test",
+    "test:prisma": "dotenvx run -f .env.local.test -- prisma",
     "postinstall": "DISABLE_ERD=true prisma generate && nuxt prepare",
     "prisma": "prisma",
     "release": "commit-and-tag-version"
@@ -52,6 +55,7 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
+    "@dotenvx/dotenvx": "^1.14.0",
     "@nuxtjs/eslint-config-typescript": "^12.1.0",
     "@playwright/test": "^1.46.1",
     "@sentry/node": "^8.27.0",
@@ -63,7 +67,6 @@
     "@types/uuid": "^10.0.0",
     "@vueuse/core": "^11.0.3",
     "commit-and-tag-version": "^12.4.3",
-    "dotenv": "^16.4.5",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "nuxt": "^3.13.0",

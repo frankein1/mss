@@ -4,6 +4,9 @@ import {
   configDefaults,
   coverageConfigDefaults
 } from 'vitest/config'
+import { config as dotenvConfig } from '@dotenvx/dotenvx'
+
+dotenvConfig(process.env.CI ? {} : { path: './env.local.test' })
 
 export default defineConfig({
   resolve: {
