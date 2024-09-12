@@ -48,9 +48,7 @@
     }
   } = useRuntimeConfig()
 
-  const isProConnect = ssoIssuer === 'proconnect'
-
-  const url = isProConnect
+  const url = isProConnectActive(ssoIssuer)
     ? apiRoutes.proConnect.ApiLogout.path()
     : apiRoutes.inclusionConnect.ApiLogout.path()
 

@@ -47,8 +47,6 @@ export default defineEventHandler(async event => {
 
   // TODO: Vérification de l'id_token et du nonce
 
-  // TODO: Stockage du id_token
-
   const { email, sub } = await fetchUserInfo(client, accessToken)
 
   // TODO: Le endpoint user_info_endpoint renvoie un JWT, signé avec l'algorithme spécifié à AgentConnect lors de l'enregistrement du FS (RS256, ES256 ou HS256).
