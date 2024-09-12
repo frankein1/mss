@@ -72,7 +72,26 @@
         </div>
       </fieldset>
     </div>
+
+    <!-- ROW -->
+    <div class="fr-col-12 fr-col-md-6">
+      <VeeSearchableSelect
+        :label="helpRequestFieldLabels.prescribingOrganizationId"
+        name="prescribingOrganizationId"
+        :options="withEmptyValue(partnerOrganizationOptions)"
+        @change-value="onPrescribingOrganization"
+      />
+    </div>
+
+    <div class="fr-col-12 fr-col-md-6">
+      <VeeSelect
+        name="prescribingOrganizationContactId"
+        :label="helpRequestFieldLabels.prescribingOrganizationContactId"
+        :options="withEmptyValue(prescribingOrganizationContactOptions)"
+      />
+    </div>
   </template>
+
   <template v-else>
     <div class="fr-col-12">
       <VeeSearchableSelect
