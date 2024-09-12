@@ -273,25 +273,21 @@
     return toOptions(partnerOrganizationsWithStringId, 'id', 'name')
   })
 
-  const prescribingOrganizationContactOptions = computed(() => {
-    const partnerId = prescribingOrganizationId.value
-    if (!partnerId) {
+  const getContacts = (id: string | null) => {
+    if (!id) {
       return []
     }
     const partnerOrganization = (props.partnerOrganizations || []).find(
-      partner => partner.id === partnerId
+      partner => partner.id === id
     )
     return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
-  })
+  }
 
-  const instructorOrganizationContactOptions = computed(() => {
-    const partnerId = instructorOrganizationId.value
-    if (!partnerId) {
-      return []
-    }
-    const partnerOrganization = (props.partnerOrganizations || []).find(
-      partner => partner.id === partnerId
-    )
-    return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
-  })
+  const prescribingOrganizationContactOptions = computed(() =>
+    getContacts(prescribingOrganizationId.value)
+  )
+
+  const instructorOrganizationContactOptions = computed(() =>
+    getContacts(instructorOrganizationId.value)
+  )
 </script>
