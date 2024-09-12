@@ -11,11 +11,17 @@
           >Voulez-vous retirer {{ beneficiaryName }} du dossier foyer ?</strong
         >
         <br />
-        Ses informations, ses documents, ses revenus ainsi que ses suivis seront
+        Ses informations, ses documents, ses suivis ainsi que ses revenus seront
         retirés du dossier actuel et formeront un nouveau dossier indépendant.
       </p>
 
-      <p>Attention cette opération ne pourra pas être annulée.</p>
+      <p class="color-red fr-text--bold">
+        <span
+          class="fr-icon-warning-line"
+          aria-hidden="true"
+        ></span>
+        Attention cette opération ne pourra pas être annulée.
+      </p>
 
       <DsfrButtonGroup
         equisized
@@ -33,7 +39,7 @@
 
         <li>
           <DsfrButton
-            label="Confirmer"
+            label="Confirmer la dissociation"
             type="submit"
             :submitting="isSubmittingSplit"
             :readonly="isSubmittingSplit"
@@ -147,7 +153,7 @@
       isSubmitting: isSubmittingSituation,
       onSuccess: ({ familyFileId, id }) => {
         snackbar.success(
-          `${props.beneficiaryName} a bien été retirée du dossier. Pensez à mettre à jour le statut du dossier, les agents référents et le budget si nécessaire.`
+          `${props.beneficiaryName} a bien été retiré du dossier. Pensez à mettre à jour le statut du dossier, les agents référents et le budget si nécessaire.`
         )
         navigateTo(
           routes.file.AppFile.path(familyFileId, { beneficiaryId: id })
