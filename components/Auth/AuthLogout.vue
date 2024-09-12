@@ -28,7 +28,7 @@
     </div>
   </div>
   <div class="fr-pt-6w">
-    <InclusionConnectButton />
+    <SsoButton />
   </div>
 </template>
 
@@ -43,14 +43,19 @@
 
   const {
     public: {
+      ssoIssuer,
       disconnect: { threshold }
     }
   } = useRuntimeConfig()
 
+  const url = isProConnectActive(ssoIssuer)
+    ? apiRoutes.proConnect.ApiLogout.path()
+    : apiRoutes.inclusionConnect.ApiLogout.path()
+
   const { data, pending, error } = await useFetch<{
     url: string | null
     success: boolean
-  }>(apiRoutes.auth.ApiLogout.path(), {
+  }>(url, {
     method: 'POST',
     body: { inactive: !!props.inactive },
     onResponse({ response }) {
