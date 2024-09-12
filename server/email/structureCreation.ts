@@ -3,10 +3,7 @@ import { isProConnectActive } from '~/utils/isProConnectActive'
 
 export function getStructureCreationEmailContent() {
   const {
-    public: {
-      email: { from },
-      ssoIssuer
-    }
+    public: { ssoIssuer }
   } = useRuntimeConfig()
 
   const client = getInclusionConnectClient()
