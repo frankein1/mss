@@ -28,7 +28,8 @@
     </div>
   </div>
   <div class="fr-pt-6w">
-    <ProConnectButton />
+    <ProConnectButton v-if="isProConnect" />
+    <InclusionConnectButton v-else />
   </div>
 </template>
 
@@ -44,13 +45,20 @@
   const {
     public: {
       disconnect: { threshold }
-    }
+    },
+    auth: { ssoIssuer }
   } = useRuntimeConfig()
+
+  const isProConnect = ssoIssuer === 'proconnect'
+
+  const url = isProConnect
+    ? apiRoutes.proConnect.ApiLogout.path()
+    : apiRoutes.inclusionConnect.ApiLogout.path()
 
   const { data, pending, error } = await useFetch<{
     url: string | null
     success: boolean
-  }>(apiRoutes.proConnect.ApiLogout.path(), {
+  }>(url, {
     method: 'POST',
     body: { inactive: !!props.inactive },
     onResponse({ response }) {
