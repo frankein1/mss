@@ -28,8 +28,7 @@
     </div>
   </div>
   <div class="fr-pt-6w">
-    <ProConnectButton v-if="isProConnect" />
-    <InclusionConnectButton v-else />
+    <SsoButton />
   </div>
 </template>
 
@@ -44,9 +43,9 @@
 
   const {
     public: {
+      ssoIssuer,
       disconnect: { threshold }
-    },
-    auth: { ssoIssuer }
+    }
   } = useRuntimeConfig()
 
   const isProConnect = ssoIssuer === 'proconnect'
