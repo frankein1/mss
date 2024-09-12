@@ -6,7 +6,7 @@ import {
 } from '~/server/database'
 import { EditHousingHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
-import { prepareDocumentsMutations } from '~/utils/prisma'
+import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { prismaClient } from '~/server/prisma'
 
 type UpdateParams = {
@@ -40,6 +40,8 @@ export async function update({ input, ctx }: UpdateParams) {
     examinationDate,
     decisionDate,
     refusalReason,
+    prescribingOrganizationId,
+    prescribingOrganizationContactId,
     instructorOrganizationId,
     instructorOrganizationContactId,
     dispatchDate,
@@ -117,7 +119,13 @@ export async function update({ input, ctx }: UpdateParams) {
       taxHouseholdAdditionalInformation,
       maxRent,
       maxCharges,
-      isPmr
+      isPmr,
+      prescribingOrganization: prescribingOrganizationId
+        ? connect(prescribingOrganizationId)
+        : undefined,
+      prescribingOrganizationContact: prescribingOrganizationContactId
+        ? connect(prescribingOrganizationContactId)
+        : undefined
     }
   })
 

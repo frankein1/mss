@@ -15,6 +15,8 @@ import {
 } from '~/server/security'
 
 export const include = {
+  prescribingOrganization: true,
+  prescribingOrganizationContact: true,
   fileInstruction: {
     include: {
       instructorOrganization: true,

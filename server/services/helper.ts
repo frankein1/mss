@@ -164,7 +164,10 @@ export function filterHousingHelpRequest({
   housingHelpRequest,
   conditions
 }: {
-  housingHelpRequest: HousingHelpRequest
+  housingHelpRequest: HousingHelpRequest & {
+    prescribingOrganization: Partial<PartnerOrganization> | null
+    prescribingOrganizationContact: Partial<PartnerOrganizationContact> | null
+  }
   conditions: {
     details: boolean
     minister: boolean
@@ -188,7 +191,27 @@ export function filterHousingHelpRequest({
     housingType: show(housingHelpRequest.housingType, details),
     roomCount: show(housingHelpRequest.roomCount, details),
     isPmr: show(housingHelpRequest.isPmr, details),
-    lowIncomeHousingType: show(housingHelpRequest.lowIncomeHousingType, details)
+    lowIncomeHousingType: show(
+      housingHelpRequest.lowIncomeHousingType,
+      details
+    ),
+    prescribingOrganizationId: show(
+      housingHelpRequest.prescribingOrganizationId,
+      details
+    ),
+    prescribingOrganizationContactId: show(
+      housingHelpRequest.prescribingOrganizationContactId,
+      details
+    ),
+
+    prescribingOrganization: show(
+      housingHelpRequest.prescribingOrganization,
+      details
+    ),
+    prescribingOrganizationContact: show(
+      housingHelpRequest.prescribingOrganizationContact,
+      details
+    )
   }
 }
 
