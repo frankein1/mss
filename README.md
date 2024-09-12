@@ -71,28 +71,53 @@ Si besoin, il est possible d'alimenter la base de donnée avec des données de t
 pnpm prisma db seed
 ```
 
-## Tests
+## Tests automatisés.
 
-La version de pnpm doit être précisée dans `.gitlab-ci.yml`.
+Cette section décrit l'exécution des tests en local. Un container postgres spécifique est créé pour permettre la coexistence d'une BDD de developpement et d'une BDD de tests automatisés.
 
-On part d'une base de données vide pour les tests (si besoin on
-supprime son contenu avec `docker compose -f docker-compose.dev.yml down -v`)
+> **❗Important**
+>
+> Afin de permettre aux tests de se dérouler correctement dans la CI, la version de playwright et de pnpm doit être précisée dans `.gitlab-ci.yml`.
+
+### Mise en place
+
+Le ficher de configuration du container de test est `docker-compose.test.local.yml`.
+
+Pour initialiser les variables d'environnement de test
 
 ```
-pnpm dev:db:start
-pnpm prisma migrate deploy
-pnpm prisma db seed
+cp .env.test.sample .env.local.test
+```
+
+Ensuite, remplir les variables d'environnement en prenant soin de renseigner des valeurs différentes de celle de dev pour le port de la base de données et de l'application (variables `DATABASE_URL`, `APP_URL`, `DB_PORT`).
+
+Ajouter les informations de connexion (email, mot de passe) pour les utilisateurs de test pour les test end-to-end.
+
+### Données de test
+
+On part d'une base de données vide pour les tests.
+
+Si besoin on supprime son contenu avec :
+
+```
+pnpm test:db:stop
+```
+
+### Tests d'intégration
+
+```
+pnpm test:db:start
+pnpm test:prisma migrate deploy
+pnpm test:prisma db seed
 pnpm test
 ```
 
 ### Tests end-to-end
 
-La version de playwright et de pnpm doit être précisée dans `.gitlab-ci.yml`.
-
 ```
-pnpm dev:db:start
-pnpm prisma migrate deploy
-pnpm prisma db seed
+pnpm test:db:start
+pnpm test:prisma migrate deploy
+pnpm test:prisma db seed
 pnpm test:e2e
 ```
 

@@ -5,6 +5,7 @@ coverage
 .output
 .stylelintcache
 .env
+.env.local*
 .env.prod
 .env.dev
 .env.demo
