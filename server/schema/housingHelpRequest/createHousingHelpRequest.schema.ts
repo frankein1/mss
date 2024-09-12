@@ -40,6 +40,8 @@ export const createHousingHelpRequestSchemaBase = z.object({
   dueDate: dateOrEmpty,
   instructorOrganizationId: z.string().nullish(),
   instructorOrganizationContactId: z.string().nullish(),
+  prescribingOrganizationId: z.string().nullish(),
+  prescribingOrganizationContactId: z.string().nullish(),
   externalStructure: kindOfBooleanSchema(true),
   examinationDate: dateOrEmpty,
   decisionDate: dateOrEmpty,
