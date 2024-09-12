@@ -11,11 +11,17 @@
           >Voulez-vous retirer {{ beneficiaryName }} du dossier foyer ?</strong
         >
         <br />
-        Ses informations, ses documents, ses revenus ainsi que ses suivis seront
+        Ses informations, ses documents, ses suivis ainsi que ses revenus seront
         retirés du dossier actuel et formeront un nouveau dossier indépendant.
       </p>
 
-      <p>Attention cette opération ne pourra pas être annulée.</p>
+      <p class="color-red fr-text--bold">
+        <span
+          class="fr-icon-warning-line"
+          aria-hidden="true"
+        ></span>
+        Attention cette opération ne pourra pas être annulée.
+      </p>
 
       <DsfrButtonGroup
         equisized
@@ -33,7 +39,7 @@
 
         <li>
           <DsfrButton
-            label="Confirmer"
+            label="Confirmer la dissociation"
             type="submit"
             :submitting="isSubmittingSplit"
             :readonly="isSubmittingSplit"
@@ -87,7 +93,7 @@
   } from '~/server/schema'
   import { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
   import { routes } from '~/utils/routes'
-
+  import { BeneficiaryAction, EventCategory } from '~/types/matomo'
   const props = defineProps<{
     id: string
     beneficiaryName: string
@@ -100,6 +106,7 @@
 
   const modal = useModal()
   const snackbar = useSnackbar()
+  const matomo = useMatomo()
 
   const steps = [
     `Dissocier ${props.beneficiaryName} du dossier`,
@@ -111,6 +118,8 @@
   /** Step 1 : Split beneficiary from family file */
   const isSubmittingSplit = ref(false)
   async function split() {
+    matomo.trackEvent(EventCategory.Beneficiary, BeneficiaryAction.Split)
+
     await useTrpcMutation({
       mutation: props.mutationSplit,
       isSubmitting: isSubmittingSplit,
@@ -144,7 +153,7 @@
       isSubmitting: isSubmittingSituation,
       onSuccess: ({ familyFileId, id }) => {
         snackbar.success(
-          `${props.beneficiaryName} a bien été retirée du dossier. Pensez à mettre à jour le statut du dossier, les agents référents et le budget si nécessaire.`
+          `${props.beneficiaryName} a bien été retiré du dossier. Pensez à mettre à jour le statut du dossier, les agents référents et le budget si nécessaire.`
         )
         navigateTo(
           routes.file.AppFile.path(familyFileId, { beneficiaryId: id })

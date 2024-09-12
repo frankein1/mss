@@ -32,7 +32,8 @@ export enum BeneficiaryHistoryAction {
 }
 
 export enum BeneficiaryAction {
-  Print = 'Imprimer'
+  Print = 'Imprimer',
+  Split = 'Dissocier'
 }
 
 export enum BeneficiaryHistoryFilterEventAction {

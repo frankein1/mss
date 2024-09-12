@@ -93,6 +93,7 @@ export async function split({
     BeneficiaryRepo.prisma.update({
       where: { id },
       data: {
+        relationship: null,
         previousFamilyFile: {
           connect: { id: beneficiary.familyFile.id }
         },
