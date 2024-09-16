@@ -4,6 +4,12 @@
       <h1 class="fr-col-12">Composants UI</h1>
       <p class="fr-col-12">Les composants UI sont testables ci-dessous.</p>
 
+      <h2 class="fr-col-12">Wysiwyg editor</h2>
+
+      <div class="fr-col-12">
+        <AtomTextEditor />
+      </div>
+
       <h2 class="fr-col-12">Tables</h2>
 
       <div class="fr-col-6">
