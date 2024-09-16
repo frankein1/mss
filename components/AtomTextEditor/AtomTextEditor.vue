@@ -13,7 +13,6 @@
             <img
               src="~/assets/icons/editor-T1.svg"
               alt="Titre 1"
-              role="button"
             />
           </button>
         </li>
@@ -27,7 +26,6 @@
             <img
               src="~/assets/icons/editor-T2.svg"
               alt="Titre 2"
-              role="button"
             />
           </button>
         </li>
@@ -41,7 +39,6 @@
             <img
               src="~/assets/icons/editor-T3.svg"
               alt="Titre 3"
-              role="button"
             />
           </button>
         </li>
@@ -58,7 +55,6 @@
             <img
               src="~/assets/icons/editor-bold.svg"
               alt="Gras"
-              role="button"
             />
           </button>
         </li>
@@ -72,7 +68,6 @@
             <img
               src="~/assets/icons/editor-ital.svg"
               alt="Italic"
-              role="button"
             />
           </button>
         </li>
@@ -88,7 +83,6 @@
             <img
               src="~/assets/icons/editor-ul.svg"
               alt="Liste à point"
-              role="button"
             />
           </button>
         </li>
@@ -102,7 +96,6 @@
             <img
               src="~/assets/icons/editor-ol.svg"
               alt="Liste numéroté"
-              role="button"
             />
           </button>
         </li>
@@ -118,7 +111,18 @@
             <img
               src="~/assets/icons/editor-link.svg"
               alt="Lien"
-              role="button"
+            />
+          </button>
+        </li>
+        <li>
+          <button
+            v-if="editor"
+            class="menubar__button"
+            @click="unsetLink"
+          >
+            <img
+              src="~/assets/icons/editor-link.svg"
+              alt="Défaire le lien"
             />
           </button>
         </li>
@@ -128,8 +132,6 @@
       :editor="editor"
       class="tiptap-editor-content fr-input"
     />
-    <p>{{ html }}</p>
-    <p>{{ json }}</p>
   </client-only>
 </template>
 
@@ -139,6 +141,7 @@
   import Underline from '@tiptap/extension-underline'
   import Link from '@tiptap/extension-link'
 
+  // TODO: create object + type for update payload
   const emit = defineEmits<{
     update: [
       html: string | undefined,
@@ -152,7 +155,7 @@
   const rawText = ref<string | undefined>()
 
   const editor = useEditor({
-    content: '<p>I’m running Tiptap with Vue.js.</p>',
+    content: '',
     extensions: [
       StarterKit,
       Underline,
@@ -174,6 +177,13 @@
     }
   })
 
+  const improveUrl = (url: string) => {
+    if (!/^https?:\/\//i.test(url)) {
+      return 'https://' + url
+    }
+    return url // Retourne l'URL sans modification si elle est déjà correcte
+  }
+
   const setLink = () => {
     // TODO: improve function, by adding 'https://'' prefix when not provided in url
     const previousUrl = editor.value?.getAttributes('link').href
@@ -189,17 +199,16 @@
       editor.value?.chain().focus().extendMarkRange('link').unsetLink().run()
       return
     }
-
-    // update link
     editor.value
       ?.chain()
       .focus()
       .extendMarkRange('link')
-      .setLink({ href: url })
+      .setLink({ href: improveUrl(url) })
       .run()
+  }
 
-    // TODO: If link exists, remove it with
-    // editor.value?.chain().focus().unsetLink().run()
+  const unsetLink = () => {
+    editor.value?.chain().focus().unsetLink().run()
   }
 
   onMounted(() => {
@@ -242,6 +251,15 @@
     height: 30rem;
     border-radius: 0;
     padding: 0;
+  }
+  // Button
+  .menubar__button {
+    &:active {
+      background: none;
+    }
+  }
+  .is-active > img {
+    filter: opacity(0.5);
   }
 </style>
 

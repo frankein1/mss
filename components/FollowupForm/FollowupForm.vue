@@ -194,6 +194,10 @@
           />
         </div>
 
+        <div class="fr-col-12">
+          <AtomTextEditor @update="onUpdate" />
+        </div>
+
         <!-- ROW -->
         <div
           v-if="canSetPrivateSynthesis"
@@ -309,7 +313,8 @@
 
 <script lang="ts" setup>
   import { SocialSupportSubject, FollowupMedium } from '@prisma/client'
-  import type { FormErrors } from 'vee-validate'
+  import { type FormErrors } from 'vee-validate'
+  import { JSONContent } from '@tiptap/vue-3'
   import {
     ministerKeys,
     followupStatusKeys,
@@ -364,6 +369,19 @@
     if (!id) {
       setPrescribingOrganizationContactId(null)
     }
+  }
+
+  const { setValue: setSynthesis } = useField<string | undefined>('synthesis')
+
+  const onUpdate = (
+    html: string | undefined,
+    json: JSONContent | undefined,
+    rawText: string | undefined
+  ) => {
+    console.log(html)
+    console.log(json)
+    console.log(rawText)
+    setSynthesis(json?.text)
   }
 
   const { errors } = useDisplayFormErrors(
