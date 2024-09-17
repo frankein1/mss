@@ -67,8 +67,6 @@ export default defineEventHandler(async event => {
     redirectUrl as string | undefined
   )
 
-  console.log({ proConnectToken })
-
   const token = proConnectToken
   const { accessToken, idToken } = token
 
