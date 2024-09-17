@@ -1,5 +1,6 @@
 import { v4 } from 'uuid'
 import { User } from '@prisma/client'
+import { decode } from 'jsonwebtoken'
 import {
   getProConnectClient,
   ProConnectClient,
@@ -10,7 +11,6 @@ import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
 import { includeOrderedCGUHistory } from '~/server/query'
-import { decode } from 'jsonwebtoken'
 
 const config = useRuntimeConfig()
 const { auth } = config

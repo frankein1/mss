@@ -1,6 +1,6 @@
-import { getProConnectClient } from '~/server/lib'
 import { useSession } from 'h3'
 import { v4 } from 'uuid'
+import { getProConnectClient } from '~/server/lib'
 
 export default defineEventHandler(async event => {
   const client = getProConnectClient()
