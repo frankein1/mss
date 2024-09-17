@@ -10,7 +10,7 @@ export default defineEventHandler(async event => {
   })
   const nonce = v4()
   const state = v4()
-  
+
   await session.update(() => ({ nonce, state }))
 
   return sendRedirect(

@@ -33,8 +33,12 @@ export default defineEventHandler(async event => {
     })
   }
 
+  const {
+    auth: { sessionSecret }
+  } = useRuntimeConfig()
+
   const session = await useSession<{ nonce: string; state: string }>(event, {
-    password: 'sessionPasswordsessionPasswordsessionPassword'
+    password: sessionSecret
   })
 
   const { nonce: sessionNonce, state: sessionState } = session.data
