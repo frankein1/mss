@@ -156,10 +156,12 @@ export class ProConnectClient {
     return userinfo as ProConnectUserInfo
   }
 
-  public getSigninUrl(appRedirectUrl?: string) {
-    const nonce = v4()
-    const state = v4()
-
+  public getSigninUrl(args: {
+    appRedirectUrl?: string
+    nonce: string
+    state: string
+  }) {
+    const { nonce, state, appRedirectUrl } = args
     const params = new URLSearchParams({
       client_id: this.clientId,
       scope: 'openid profile email',
