@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.30.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.29.0...v1.30.0) (2024-09-17)
+
+
+### Features
+
+* **sso:** migration de IC vers Pro Connect ([8d1b4c2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8d1b4c27c565b860b6f1d06db79a5d314f07458f)), closes [#485](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/485)
+* **sso:** utilisation de la session ([10d22e4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/10d22e4a2cf709892edca582384d7b68daae46d0))
+* **sso:** utilise le bon client ([78f3666](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/78f36667cd0420f4c96f823086b10924360f09cf))
+
 ## [1.29.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.28.0...v1.29.0) (2024-09-04)
 
 
