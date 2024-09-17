@@ -1,5 +1,6 @@
 import { v4 } from 'uuid'
 import { User } from '@prisma/client'
+import { decode } from 'jsonwebtoken'
 import {
   getProConnectClient,
   ProConnectClient,
@@ -22,13 +23,37 @@ export default defineEventHandler(async event => {
   if (!code) {
     throw createError({
       statusCode: 400,
-      message: '[IC] no code returned from ProConnect'
+      message: '[ProConnect] no code returned from ProConnect'
     })
   }
   if (!state) {
     throw createError({
       statusCode: 400,
-      message: '[IC] no state returned from ProConnect'
+      message: '[ProConnect] no state returned from ProConnect'
+    })
+  }
+
+  const {
+    auth: { sessionSecret }
+  } = useRuntimeConfig()
+
+  const session = await useSession<{ nonce: string; state: string }>(event, {
+    password: sessionSecret
+  })
+
+  const { nonce: sessionNonce, state: sessionState } = session.data
+
+  if (!sessionNonce || !sessionState) {
+    throw createError({
+      statusCode: 400,
+      message: '[ProConnect] state or nonce are not in session'
+    })
+  }
+
+  if (sessionState !== state) {
+    throw createError({
+      statusCode: 400,
+      message: '[ProConnect] `states` must be equal'
     })
   }
 
@@ -43,15 +68,22 @@ export default defineEventHandler(async event => {
   )
 
   const token = proConnectToken
-  const { accessToken } = token
+  const { accessToken, idToken } = token
 
-  // TODO: Vérification de l'id_token et du nonce
+  const payload = decode(idToken, {
+    json: true
+  })
+
+  const nonce = payload?.nonce
+
+  if (sessionNonce !== nonce) {
+    throw createError({
+      statusCode: 400,
+      message: '[ProConnect] `nonces` must be equal'
+    })
+  }
 
   const { email, sub } = await fetchUserInfo(client, accessToken)
-
-  // TODO: Le endpoint user_info_endpoint renvoie un JWT, signé avec l'algorithme spécifié à AgentConnect lors de l'enregistrement du FS (RS256, ES256 ou HS256).
-  // Vérifier que le JWT est bien signé avec cet algorithme.
-  // Une fois en possession des informations de votre utilisateur, vous pouvez gérer comme vous le souhaitez sa session.
 
   const account = await getAccount({ sub })
 
@@ -96,6 +128,8 @@ export default defineEventHandler(async event => {
     validateTokenUrl = `${validateTokenUrl}&redirectUrl=${redirectUrl}`
   }
 
+  await session.clear()
+
   return sendRedirect(event, validateTokenUrl)
 })
 
@@ -117,10 +151,12 @@ async function fetchProConnnectToken(
   })
 
   if (proConnectTokenResponse.error) {
-    throw new Error(`[IC] ${proConnectTokenResponse.error.description}`)
+    throw new Error(`[ProConnect] ${proConnectTokenResponse.error.description}`)
   }
   if (!proConnectTokenResponse.data) {
-    throw new Error('[IC] no access token found un pro connect response')
+    throw new Error(
+      '[ProConnect] no access token found un pro connect response'
+    )
   }
 
   return proConnectTokenResponse.data
