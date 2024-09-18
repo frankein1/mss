@@ -34,6 +34,7 @@
       :disabled
       @input="onInput"
       @change="handleChange"
+      @paste="onPaste"
     ></textarea>
     <div
       class="fr-messages-group"
@@ -76,7 +77,12 @@
   // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
   const name = toRef(() => props.name)
 
-  const { errorMessage: error, value, handleChange } = useField<string>(name)
+  const {
+    errorMessage: error,
+    value,
+    handleChange,
+    setValue
+  } = useField<string>(name)
 
   const slots = useSlots()
 
@@ -86,6 +92,15 @@
   function onInput(event: Event) {
     if (error.value) {
       handleChange(event)
+    }
+  }
+
+  function onPaste(evt: ClipboardEvent) {
+    const data = evt.clipboardData
+    if (data) {
+      const content = data.getData('text')
+      setValue(content.replace('<', '').replace('>', ''))
+      evt.preventDefault()
     }
   }
 </script>
