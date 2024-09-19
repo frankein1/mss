@@ -1712,7 +1712,7 @@ model PartnerOrganizationContact {
 enum NotificationType {
   NewDocument
   NewComment
-  DueDateToday              @map("DueDate")
+  DueDateToday                 @map("DueDate")
   DueDateOneMonth
   EndOfSupport
   NewFileInstructionElement
