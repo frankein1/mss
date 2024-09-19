@@ -136,7 +136,7 @@ export async function update({ input, ctx }: UpdateParams) {
   ])
 
   const transactions = []
-  
+
   transactions.push(updateSocialSupport)
   transactions.push(updateFileInstruction)
   transactions.push(updateHelpRequest)
