@@ -124,8 +124,12 @@ function getDescription(notification: Notification) {
       return 'Nouveau document'
     case 'NewFileInstructionElement':
       return "Nouveau dossier d'instruction"
+    case 'UpdateFileInstructionElement':
+      return "Mise à jour dossier d'instruction"
     case 'NewFollowupElement':
       return 'Nouvelle synthèse'
+    case 'UpdateFollowupElement':
+      return 'Mise à jour synthèse'
     case 'NewSocialSupportSubject':
       return "Ajout d'objet(s) d'accompagnement"
     default:
@@ -157,8 +161,12 @@ function getDescriptionHint(
     case 'NewDocument':
     case 'NewFileInstructionElement':
       return `ajouté par ${userName}`
+    case 'UpdateFileInstructionElement':
+      return `modifiée par ${userName}`
     case 'NewFollowupElement':
       return `ajoutée par ${userName}`
+    case 'UpdateFollowupElement':
+      return `modifiée par ${userName}`
     case 'NewSocialSupportSubject':
       return `ajouté(s) par ${userName}`
     default:

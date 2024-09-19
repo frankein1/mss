@@ -8,7 +8,9 @@ export const notificationTypeKeys = buildKeys({
   [NotificationType.NewComment]: 'Commentaire',
   [NotificationType.NewDocument]: 'Document',
   [NotificationType.NewFileInstructionElement]: 'Instruction',
+  [NotificationType.UpdateFileInstructionElement]: 'Instruction',
   [NotificationType.NewFollowupElement]: 'Synthèse',
+  [NotificationType.UpdateFollowupElement]: 'Synthèse',
   [NotificationType.NewSocialSupportSubject]: 'Configuration'
 })
 

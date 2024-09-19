@@ -137,6 +137,7 @@ export async function update({ input, ctx }: UpdateParams) {
     const createNotification = NotificationRepo.prisma.create({
       data: {
         recipientId: target.fileInstruction.socialSupport.createdById,
+        itemCreatedById: ctx.user.id,
         beneficiaryId: target.fileInstruction.socialSupport.beneficiaryId,
         socialSupportId: target.fileInstruction.socialSupport.id,
         type: NotificationType.UpdateFileInstructionElement
