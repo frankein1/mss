@@ -28,6 +28,7 @@ export function filterSocialSupport({
     }
     beneficiary: BeneficiaryIdentification
     createdBy: User
+    lastUpdatedBy: User | null
     subjects: SocialSupportSubject[]
     documents?: Document[]
     comments?: (Comment & { createdBy: User })[]
@@ -45,6 +46,7 @@ export function filterSocialSupport({
     structureId: socialSupport.structureId,
     created: socialSupport.created,
     createdBy: socialSupport.createdBy,
+    lastUpdatedBy: socialSupport.lastUpdatedBy,
     createdById: socialSupport.createdById,
     updated: socialSupport.updated,
     status: socialSupport.status,

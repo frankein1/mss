@@ -3,12 +3,14 @@ import { cleanUpdateInput } from './helper'
 import {
   SocialSupportRepo,
   HelpRequestRepo,
-  FileInstructionRepo
+  FileInstructionRepo,
+  NotificationRepo
 } from '~/server/database'
 import { EditHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { prepareDocumentsMutations, connect } from '~/utils/prisma'
 import { prismaClient } from '~/server/prisma'
+import { NotificationType } from '@prisma/client'
 
 type UpdateParams = {
   ctx: SecurityRuleContext
@@ -25,6 +27,9 @@ export async function update({ input, ctx }: UpdateParams) {
           instructorOrganizationId: true,
           socialSupport: {
             select: {
+              id: true,
+              beneficiaryId: true,
+              createdById: true,
               subjects: true,
               documents: true
             }
@@ -69,6 +74,7 @@ export async function update({ input, ctx }: UpdateParams) {
   const updateSocialSupport = SocialSupportRepo.update(ctx.user, {
     where: { id: input.socialSupportId },
     data: {
+      lastUpdatedBy: connect(ctx.user.id),
       status,
       synthesis,
       privateSynthesis,
@@ -129,12 +135,26 @@ export async function update({ input, ctx }: UpdateParams) {
     subjectId
   ])
 
-  const [socialSupportResult] = await prismaClient.$transaction([
-    updateSocialSupport,
-    updateFileInstruction,
-    updateHelpRequest,
-    updateSocialSupportSubject
-  ])
+  const transactions = []
+  
+  transactions.push(updateSocialSupport)
+  transactions.push(updateFileInstruction)
+  transactions.push(updateHelpRequest)
+  transactions.push(updateSocialSupportSubject)
+
+  if (ctx.user.id !== target.fileInstruction.socialSupport.createdById) {
+    const createNotification = NotificationRepo.prisma.create({
+      data: {
+        recipientId: target.fileInstruction.socialSupport.createdById,
+        beneficiaryId: target.fileInstruction.socialSupport.beneficiaryId,
+        socialSupportId: target.fileInstruction.socialSupport.id,
+        type: NotificationType.UpdateFileInstructionElement
+      }
+    })
+    transactions.push(createNotification)
+  }
+
+  const [socialSupportResult] = await prismaClient.$transaction(transactions)
 
   return { helpRequest: socialSupportResult }
 }
