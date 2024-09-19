@@ -126,6 +126,7 @@ function loadSocialSupports(
     where: prepareSocialSupportFilters(filters, familyFileId),
     include: {
       createdBy: true,
+      lastUpdatedBy: true,
       familyFile: {
         include: {
           referents: true

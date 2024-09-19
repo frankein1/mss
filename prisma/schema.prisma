@@ -71,6 +71,7 @@ model User {
   structure                    Structure?             @relation(fields: [structureId], references: [id])
   structureId                  String?                @map("structure_id") @db.Uuid
   createdSocialSupports        SocialSupport[]        @relation(name: "created_social_supports")
+  lastUpdatedSocialSupports    SocialSupport[]        @relation(name: "last_updated_social_supports")
   createdDocuments             Document[]
   createdSocialSupportSubjects SocialSupportSubject[]
   receivedNotifications        Notification[]         @relation(name: "received_notifications")
@@ -85,6 +86,7 @@ model User {
 
   CGUHistory     CGUHistory[]
   userActivities UserActivity[]
+  SocialSupport  SocialSupport[]
 
   @@map("user")
 }
@@ -299,6 +301,9 @@ model SocialSupport {
   createdById String @map("created_by_id") @db.Uuid
   createdBy   User   @relation(name: "created_social_supports", fields: [createdById], references: [id])
 
+  lastUpdatedById String? @map("last_updated_by_id") @db.Uuid
+  lastUpdatedBy   User?   @relation(name: "last_updated_social_supports", fields: [lastUpdatedById], references: [id])
+
   subjects SocialSupportSubject[] @relation("social_support_to_followup_type")
 
   date DateTime @default(now()) @db.Date
@@ -323,6 +328,8 @@ model SocialSupport {
 
   followup        Followup?
   fileInstruction FileInstruction?
+  User            User?            @relation(fields: [userId], references: [id])
+  userId          String?          @db.Uuid
 
   @@map("social_support")
 }
@@ -1709,7 +1716,9 @@ enum NotificationType {
   DueDateOneMonth
   EndOfSupport
   NewFileInstructionElement
+  UpdateFileInstructionElement
   NewFollowupElement
+  UpdateFollowupElement
   NewSocialSupportSubject
 }
 
