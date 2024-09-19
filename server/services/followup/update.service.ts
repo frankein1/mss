@@ -112,6 +112,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
     const createNotification = NotificationRepo.prisma.create({
       data: {
         recipientId: target.createdById,
+        itemCreatedById: ctx.user.id,
         beneficiaryId: target.beneficiaryId,
         socialSupportId: target.id,
         type: NotificationType.UpdateFollowupElement
