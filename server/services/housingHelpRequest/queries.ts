@@ -22,6 +22,7 @@ export const include = {
       socialSupport: {
         include: {
           subjects: true,
+          lastUpdatedBy: true,
           documents: true,
           familyFile: {
             include: {

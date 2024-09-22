@@ -1,3 +1,4 @@
+import { NotificationType } from '@prisma/client'
 import { cleanUpdateInput } from './helper'
 import {
   SocialSupportRepo,
@@ -9,7 +10,6 @@ import { EditHousingHelpRequestInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security/rules/types'
 import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { prismaClient } from '~/server/prisma'
-import { NotificationType } from '@prisma/client'
 
 type UpdateParams = {
   ctx: SecurityRuleContext

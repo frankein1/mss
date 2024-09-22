@@ -31,6 +31,13 @@
           </span>
         </template>
       </h4>
+      <div
+        class="fr-text--xs"
+        v-if="data.lastUpdatedBy"
+      >
+        Mis à jour par {{ formatUserDisplayName(data.lastUpdatedBy) }} le
+        {{ formatDate(data.updated) }}
+      </div>
       <ul class="fr-tags-group social-support-subjects-tags">
         <li
           v-for="socialSupportSubject in data.subjects"

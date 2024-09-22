@@ -15,6 +15,7 @@ const include = {
   prescribingOrganizationContact: true,
   socialSupport: {
     include: {
+      lastUpdatedBy: true,
       documents: true,
       subjects: true,
       beneficiary: {
