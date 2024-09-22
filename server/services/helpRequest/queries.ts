@@ -23,6 +23,7 @@ export const include = {
       instructorOrganizationContact: true,
       socialSupport: {
         include: {
+          lastUpdatedBy: true,
           subjects: true,
           documents: true,
           beneficiary: {

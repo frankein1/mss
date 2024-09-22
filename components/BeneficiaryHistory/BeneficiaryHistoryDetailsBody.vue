@@ -10,10 +10,6 @@
 
     <template v-if="canViewHistoryDetails">
       <ul class="information-list">
-        <div v-if="socialSupport.lastUpdatedBy">
-          Modifié par {{ socialSupport.lastUpdatedBy }} le
-          {{ formatDate(socialSupport.updated) }}
-        </div>
         <BeneficiarySocialSupportDetailsBodyMetas
           :social-support="socialSupport"
         />

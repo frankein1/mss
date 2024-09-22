@@ -86,7 +86,6 @@ model User {
 
   CGUHistory     CGUHistory[]
   userActivities UserActivity[]
-  SocialSupport  SocialSupport[]
 
   @@map("user")
 }
@@ -328,8 +327,6 @@ model SocialSupport {
 
   followup        Followup?
   fileInstruction FileInstruction?
-  User            User?            @relation(fields: [userId], references: [id])
-  userId          String?          @db.Uuid
 
   @@map("social_support")
 }
