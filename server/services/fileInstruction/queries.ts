@@ -52,7 +52,12 @@ function findMany(
           prescribingOrganizationContact: true
         }
       },
-      housingHelpRequest: true
+      housingHelpRequest: {
+        include: {
+          prescribingOrganization: true,
+          prescribingOrganizationContact: true
+        }
+      }
     },
     take: args.take,
     skip: args.skip,
