@@ -14,6 +14,18 @@
     >
     {{ askedHousing }}
   </li>
+  <li v-if="housingHelpRequest.prescribingOrganization?.name">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.prescribingOrganizationId }} :</span
+    >
+    {{ housingHelpRequest.prescribingOrganization.name }}
+  </li>
+  <li v-if="housingHelpRequest.prescribingOrganizationContact?.name">
+    <span class="information-label"
+      >{{ helpRequestFieldLabels.prescribingOrganizationContactId }} :</span
+    >
+    {{ housingHelpRequest.prescribingOrganizationContact.name }}
+  </li>
   <li v-if="instructorOrganization">
     <span class="information-label">Instruction :</span>
     {{ instructorOrganization }}
