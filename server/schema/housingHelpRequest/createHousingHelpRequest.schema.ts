@@ -38,6 +38,8 @@ export const createHousingHelpRequestSchemaBase = z.object({
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
   status: requiredNativeEnum(SocialSupportStatus),
   dueDate: dateOrEmpty,
+  prescribingOrganizationId: z.string().nullish(),
+  prescribingOrganizationContactId: z.string().nullish(),
   instructorOrganizationId: z.string().nullish(),
   instructorOrganizationContactId: z.string().nullish(),
   externalStructure: kindOfBooleanSchema(true),

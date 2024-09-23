@@ -32,6 +32,8 @@ export async function create({ input, ctx }: CreateParams) {
     examinationDate,
     decisionDate,
     refusalReason,
+    prescribingOrganizationId,
+    prescribingOrganizationContactId,
     instructorOrganizationId,
     instructorOrganizationContactId,
     dispatchDate,
@@ -65,6 +67,12 @@ export async function create({ input, ctx }: CreateParams) {
       isFirst,
       maxCharges,
       maxRent,
+      prescribingOrganization: prescribingOrganizationId
+        ? connect(prescribingOrganizationId)
+        : undefined,
+      prescribingOrganizationContact: prescribingOrganizationContactId
+        ? connect(prescribingOrganizationContactId)
+        : undefined,
       fileInstruction: {
         create: {
           type: FileInstructionType.Housing,

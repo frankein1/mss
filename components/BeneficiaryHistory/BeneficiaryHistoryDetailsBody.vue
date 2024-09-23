@@ -161,7 +161,7 @@
         ? FileInstructionType.Financial
         : FileInstructionType.Other
       return routes.helpRequest.AppBeneficiaryHelpRequestEdit.path(
-        socialSupport.value.beneficiaryId,
+        socialSupport.value.familyFileId,
         helpRequest.id,
         subject
       )
@@ -171,7 +171,7 @@
       socialSupport.value.fileInstruction?.housingHelpRequest
     if (housingHelpRequest) {
       return routes.helpRequest.AppBeneficiaryHelpRequestEdit.path(
-        socialSupport.value.beneficiaryId,
+        socialSupport.value.familyFileId,
         housingHelpRequest.id,
         FileInstructionType.Housing
       )

@@ -56,7 +56,6 @@ export async function create({ input, ctx }: CreateParams) {
   const { id, fileInstruction } = await HelpRequestRepo.prisma.create({
     data: {
       askedAmount,
-
       allocatedAmount,
       paymentMethod,
       paymentDate,

@@ -158,7 +158,12 @@ function loadSocialSupports(
               prescribingOrganizationContact: true
             }
           },
-          housingHelpRequest: true
+          housingHelpRequest: {
+            include: {
+              prescribingOrganization: true,
+              prescribingOrganizationContact: true
+            }
+          }
         }
       },
       followup: {
