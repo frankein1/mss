@@ -41,7 +41,7 @@
     }
 
     const params: GeoApiGouvFrQueryParams = {
-      nom: search,
+      nom: search.toLocaleLowerCase(),
       limit: 3
     }
     if (props.zipCode) {

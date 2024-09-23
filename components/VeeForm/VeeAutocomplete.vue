@@ -60,10 +60,10 @@
       role="listbox"
     >
       <AtomLoader
-        v-if="timeout"
+        v-if="loading"
         class="fr-mx-auto fr-my-5v"
       />
-      <template v-if="!timeout && !fetchResultsError">
+      <template v-if="!loading && !fetchResultsError">
         <li
           v-for="(
             {
@@ -101,6 +101,7 @@
 
 <script setup lang="ts">
   import { useField } from 'vee-validate'
+  import { useDebounceFn } from '@vueuse/core'
   import { SEARCH_DEFER_MS, UNKNOWN_ERROR_MESSAGE } from '~/utils/constants'
   import { AlertType } from '~/utils/constants/alert'
   import { OptionsWithDisabled } from '~/utils/options'
@@ -140,7 +141,7 @@
   const listboxId = computed(() => `autocomplete-${id.value}-listbox`)
 
   const results = ref<OptionsWithDisabled>([])
-  const timeout = ref<NodeJS.Timeout | null>(null)
+  const loading = ref<boolean>(false)
   const fetchResultsError = ref('')
   const combobox = ref<HTMLInputElement | null>(null)
 
@@ -174,7 +175,7 @@
   } = useExpandMenu(combobox, resultValues, optionRefs)
 
   const expanded = computed(
-    () => !!(isFocused.value && (results.value.length || timeout.value))
+    () => !!(isFocused.value && (results.value.length || loading.value))
   )
 
   const ariaDescribedby = computed(() =>
@@ -194,12 +195,8 @@
 
   function onSearch(event: Event) {
     const input = event.target as HTMLInputElement
-    const search = input.value.trim().toLocaleLowerCase()
+    const search = input.value.trim()
 
-    if (timeout.value) {
-      clearTimeout(timeout.value)
-      timeout.value = null
-    }
     results.value = []
     fetchResultsError.value = ''
 
@@ -207,16 +204,19 @@
       return
     }
 
-    timeout.value = setTimeout(async () => {
-      try {
-        results.value = await props.searchFn(search)
-      } catch {
-        fetchResultsError.value = UNKNOWN_ERROR_MESSAGE
-      } finally {
-        timeout.value = null
-      }
-    }, SEARCH_DEFER_MS)
+    debouncedFn(search)
   }
+
+  const debouncedFn = useDebounceFn(async (search: string) => {
+    try {
+      loading.value = true
+      results.value = await props.searchFn(search)
+    } catch {
+      fetchResultsError.value = UNKNOWN_ERROR_MESSAGE
+    } finally {
+      loading.value = false
+    }
+  }, SEARCH_DEFER_MS)
 
   function onOptionMouseDown() {
     ignoreBlur.value = true
