@@ -178,8 +178,7 @@
         if (!familyFileIdentification.value?.length) {
           await navigateTo(routes.beneficiary.AppBeneficiaries.path())
         } else {
-          await openBeneficiary(familyFileIdentification.value[0].id)
-          await refreshNuxtData(['getDocuments', 'getHistory', 'getBudget'])
+          await reloadData(familyFileIdentification.value[0].id)
         }
         snackbar.success('Le bénéficiaire a été supprimé.')
       }
@@ -225,13 +224,7 @@
         isSubmitting,
         onSuccess: async ({ id }) => {
           beneficiaryID = id
-          await refreshNuxtData([
-            'getFamilyFileMinimalInfo',
-            'getDocuments',
-            'getHistory',
-            'getBudget'
-          ])
-          openBeneficiary(id)
+          await reloadData(id)
         },
         onFailure: () => {
           snackbar.error("L'ajout d'un membre au foyer à échoué.")
@@ -265,7 +258,15 @@
       household: selectedBeneficiary.value.taxHouseholds,
       mutationSplit: () => trpcClient.file.split.mutate({ id }),
       mutationFamilySituation: (values: UpdateBeneficiaryTaxHouseholdInput) =>
-        trpcClient.beneficiary.updateTaxHousehold.mutate(values)
+        trpcClient.beneficiary.updateTaxHousehold.mutate(values),
+      reloadData: () =>
+        reloadData(familyFileIdentification.value?.[0]?.id || '')
     })
+  }
+
+  async function reloadData(id: string) {
+    await refreshFamilyFile()
+    openBeneficiary(id)
+    await refreshNuxtData(['getDocuments', 'getHistory', 'getBudget'])
   }
 </script>

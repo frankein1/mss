@@ -68,7 +68,7 @@
             label="Pas maintenant"
             type="button"
             secondary
-            @click="modal.close"
+            @click="goToInitialFile"
           ></DsfrButton>
         </li>
 
@@ -87,6 +87,7 @@
 
 <script setup lang="ts">
   import type { Beneficiary } from '@prisma/client'
+  import type { SplitOutput } from './types'
   import {
     UpdateBeneficiaryTaxHouseholdInput,
     updateBeneficiaryTaxHouseholdSchema
@@ -98,10 +99,11 @@
     id: string
     beneficiaryName: string
     household: GetBeneficiaryTaxHousehold
-    mutationSplit: () => Promise<unknown>
+    mutationSplit: () => Promise<SplitOutput>
     mutationFamilySituation: (
       values: UpdateBeneficiaryTaxHouseholdInput
     ) => Promise<Beneficiary>
+    reloadData: () => Promise<void>
   }>()
 
   const modal = useModal()
@@ -136,6 +138,11 @@
   }
 
   /** Step 2 : Update Family Situation of the beneficiary */
+  const goToInitialFile = () => {
+    modal.close()
+    props.reloadData()
+  }
+
   const { handleSubmit } = useForm<UpdateBeneficiaryTaxHouseholdInput>({
     validationSchema: toTypedSchema(updateBeneficiaryTaxHouseholdSchema),
     initialValues: {
