@@ -15,6 +15,11 @@
       :value="formatDate(relative.birthDate)"
       class="fr-col-6"
     />
+    <BeneficiaryInfoLabel
+      :label="relativeFieldLabels.city"
+      :value="relative.city"
+      class="fr-col-6"
+    />
   </div>
   <div class="fr-grid-row">
     <BeneficiaryInfoLabel
@@ -31,9 +36,15 @@
   <div class="fr-grid-row">
     <div
       v-if="relative.caregiver"
-      class="field-value fr-icon-success-line fr-pb-2w fr-col-12"
+      class="fr-icon-success-line fr-pb-2w fr-col-lg-6 fr-col-12"
     >
       {{ relativeFieldLabels.caregiver }}
+    </div>
+    <div
+      v-if="relative.hosted"
+      class="fr-icon-success-line fr-pb-2w fr-col-lg-6 fr-col-12"
+    >
+      {{ relativeFieldLabels.hosted }}
     </div>
   </div>
   <div class="fr-grid-row">
@@ -60,3 +71,11 @@
     return (relative.firstName || '') + ' ' + (relative.lastName || '')
   })
 </script>
+
+<style scoped lang="scss">
+  .fr-icon-success-line {
+    &:before {
+      margin-right: 0.35rem;
+    }
+  }
+</style>
