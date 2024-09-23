@@ -32,6 +32,8 @@
             askedHousing ||
             housingHelpRequest.fileInstruction.externalStructure ||
             housingHelpRequest.fileInstruction.instructorOrganization?.name ||
+            housingHelpRequest.prescribingOrganizationContact?.name ||
+            housingHelpRequest.prescribingOrganization?.name ||
             housingHelpRequest.fileInstruction.instructorOrganizationContact
               ?.name ||
             housingHelpRequest.fileInstruction.examinationDate ||
@@ -65,6 +67,14 @@
           <PrintDetailItem
             :title="housingHelpRequestFieldLabels.askedHousing"
             :content="askedHousing"
+          />
+          <PrintDetailItem
+            :title="helpRequestFieldLabels.prescribingOrganizationId"
+            :content="housingHelpRequest.prescribingOrganization?.name"
+          />
+          <PrintDetailItem
+            :title="helpRequestFieldLabels.prescribingOrganizationContactId"
+            :content="housingHelpRequest.prescribingOrganizationContact?.name"
           />
           <PrintDetailItem
             title="Le dossier est instruit"
