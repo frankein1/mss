@@ -8,7 +8,8 @@ import {
   isReferentFor,
   isCreator,
   isInSameStructure,
-  getGranteRole
+  getGranteRole,
+  isMemberOfReferents
 } from '../rules/helpers'
 
 export type FollowupPermissions = {
@@ -93,9 +94,15 @@ function getEditionPermissions({
   const { manager, socialWorker, instructor, referent, receptionAgent } =
     getGranteRole(ctx)
 
+  const isMember = isMemberOfReferents(user, familyFile)
+
   return {
     view: isReferent || manager || socialWorker || instructor || receptionAgent,
-    edit: manager || creator,
+    edit:
+      manager ||
+      (socialWorker && (creator || isMember)) ||
+      (instructor && (creator || isMember)) ||
+      (referent && (creator || isMember)),
     set: {
       privateSynthesis: creator
     },
