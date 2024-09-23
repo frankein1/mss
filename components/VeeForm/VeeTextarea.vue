@@ -99,7 +99,7 @@
     const data = evt.clipboardData
     if (data) {
       const content = data.getData('text')
-      setValue(content.replace('<', '*').replace('>', '*'))
+      setValue(content.replaceAll('<', '*').replaceAll('>', '*'))
       evt.preventDefault()
     }
   }
