@@ -102,7 +102,8 @@ function getEditionPermissions({
       manager ||
       (socialWorker && (creator || isMember)) ||
       (instructor && (creator || isMember)) ||
-      (referent && (creator || isMember)),
+      (referent && (creator || isMember)) ||
+      (receptionAgent && creator),
     set: {
       privateSynthesis: creator
     },
