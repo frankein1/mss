@@ -86,7 +86,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* informations générales</td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Suppression d'une fiche bénéficiaire</td>
@@ -105,7 +105,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Export de la base de données bénéficiaires</td>
@@ -121,7 +121,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Consultation et modification des documents</td>
@@ -129,7 +129,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* si ajoutés par lui</td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Consultation et modification des documents confidentiels</td>
@@ -145,7 +145,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td></td>
             <td></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Création d'une synthèse d'entretien</td>
@@ -153,7 +153,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Aperçu de la synthèse d'entretien</td>
@@ -161,7 +161,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Voir le détail de la synthèse d'entretien</td>
@@ -169,15 +169,15 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* si créée par lui</td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Modifier la synthèse d'entretien</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
+            <td>* s'il est référent ou créateur</td>
+            <td>* s'il est référent ou créateur</td>
             <td>* si créée par lui</td>
-            <td>* si créée par lui</td>
-            <td>* si créée par lui</td>
-            <td>* si créée par lui</td>
+            <td>* s'il est référent ou créateur</td>
           </tr>
           <tr>
             <td>Ajouter un commentaire à la synthèse d'entretien</td>
@@ -185,7 +185,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Voir les commentaires de la synthèse d'entretien</td>
@@ -193,7 +193,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Supprimer une synthèse d'entretien</td>
@@ -201,7 +201,7 @@
             <td>* si créée par lui</td>
             <td>* si créée par lui</td>
             <td>* si créée par lui</td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Imprimer une synthèse d'entretien</td>
@@ -209,7 +209,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* si créée par lui</td>
             <td>* si créée par lui</td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Instruction d'un dossier</td>
@@ -217,7 +217,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Aperçu de l'instruction de dossier</td>
@@ -225,7 +225,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Voir le détail de l'instruction de dossier</td>
@@ -233,15 +233,15 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* si créée par lui</td>
             <td></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Modifier l'instruction de dossier</td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* si créée par lui</td>
-            <td>* si créée par lui</td>
+            <td>* s'il est référent ou créateur</td>
+            <td>* s'il est référent ou créateur</td>
             <td></td>
-            <td>* si créée par lui</td>
+            <td>* s'il est référent ou créateur</td>
           </tr>
           <tr>
             <td>Ajouter un commentaire à l'instruction de dossier</td>
@@ -249,7 +249,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Voir les commentaires de l'instruction de dossier</td>
@@ -257,7 +257,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td class="fr-icon-check-line allowed-action-bg"></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Supprimer l'instruction de dossier</td>
@@ -265,7 +265,7 @@
             <td>* si créée par lui</td>
             <td>* si créée par lui</td>
             <td></td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Imprimer une synthèse d'instruction de dossier</td>
@@ -273,7 +273,7 @@
             <td class="fr-icon-check-line allowed-action-bg"></td>
             <td>* si créée par lui</td>
             <td>* si créée par lui</td>
-            <td>* si il est référent</td>
+            <td>* s'il est référent</td>
           </tr>
           <tr>
             <td>Accès au simulateur de droits sociaux</td>
