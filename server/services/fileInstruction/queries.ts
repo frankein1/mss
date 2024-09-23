@@ -26,6 +26,7 @@ function findMany(
       instructorOrganizationContact: true,
       socialSupport: {
         include: {
+          lastUpdatedBy: true,
           subjects: true,
           documents: true,
           familyFile: {

@@ -71,6 +71,7 @@ model User {
   structure                    Structure?             @relation(fields: [structureId], references: [id])
   structureId                  String?                @map("structure_id") @db.Uuid
   createdSocialSupports        SocialSupport[]        @relation(name: "created_social_supports")
+  lastUpdatedSocialSupports    SocialSupport[]        @relation(name: "last_updated_social_supports")
   createdDocuments             Document[]
   createdSocialSupportSubjects SocialSupportSubject[]
   receivedNotifications        Notification[]         @relation(name: "received_notifications")
@@ -298,6 +299,9 @@ model SocialSupport {
 
   createdById String @map("created_by_id") @db.Uuid
   createdBy   User   @relation(name: "created_social_supports", fields: [createdById], references: [id])
+
+  lastUpdatedById String? @map("last_updated_by_id") @db.Uuid
+  lastUpdatedBy   User?   @relation(name: "last_updated_social_supports", fields: [lastUpdatedById], references: [id])
 
   subjects SocialSupportSubject[] @relation("social_support_to_followup_type")
 
@@ -1713,11 +1717,13 @@ model PartnerOrganizationContact {
 enum NotificationType {
   NewDocument
   NewComment
-  DueDateToday              @map("DueDate")
+  DueDateToday                 @map("DueDate")
   DueDateOneMonth
   EndOfSupport
   NewFileInstructionElement
+  UpdateFileInstructionElement
   NewFollowupElement
+  UpdateFollowupElement
   NewSocialSupportSubject
 }
 

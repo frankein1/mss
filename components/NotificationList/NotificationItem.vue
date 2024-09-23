@@ -88,7 +88,9 @@
       case NotificationType.EndOfSupport:
       case NotificationType.NewComment:
       case NotificationType.NewFollowupElement:
+      case NotificationType.UpdateFollowupElement:
       case NotificationType.NewFileInstructionElement:
+      case NotificationType.UpdateFileInstructionElement:
         return BeneficiaryTab.History
       default:
         return BeneficiaryTab.Details

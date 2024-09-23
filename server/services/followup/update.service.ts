@@ -1,10 +1,14 @@
-import { FollowupMedium } from '@prisma/client'
+import { FollowupMedium, NotificationType } from '@prisma/client'
 import { SocialSupportSubjectService } from '..'
 import { prepareSocialSupportSubjectsMutations } from './helper'
-import { FollowupRepo, SocialSupportRepo } from '~/server/database'
+import {
+  FollowupRepo,
+  NotificationRepo,
+  SocialSupportRepo
+} from '~/server/database'
 import { EditFollowupInput } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
-import { prepareDocumentsMutations } from '~/utils/prisma'
+import { connect, prepareDocumentsMutations } from '~/utils/prisma'
 import { prismaClient } from '~/server/prisma'
 
 type UpdateParams = {
@@ -16,6 +20,9 @@ export const update = async ({ ctx, input }: UpdateParams) => {
   const target = await SocialSupportRepo.findUniqueOrThrow(ctx.user, {
     where: { id: input.socialSupportId },
     select: {
+      id: true,
+      beneficiaryId: true,
+      createdById: true,
       documents: true,
       subjects: true
     }
@@ -49,6 +56,7 @@ export const update = async ({ ctx, input }: UpdateParams) => {
   const updateSocialSupport = SocialSupportRepo.update(ctx.user, {
     where: { id: socialSupportId },
     data: {
+      lastUpdatedBy: connect(ctx.user.id),
       documents: prepareDocumentsMutations(documents, target.documents),
       subjects: prepareSocialSupportSubjectsMutations(
         subjects,
@@ -94,11 +102,26 @@ export const update = async ({ ctx, input }: UpdateParams) => {
   const updateSocialSupportSubject =
     SocialSupportSubjectService.markUsed(subjects)
 
-  const [socialSupportResult] = await prismaClient.$transaction([
-    updateSocialSupport,
-    updateFollowup,
-    updateSocialSupportSubject
-  ])
+  const transactions = []
+
+  transactions.push(updateSocialSupport)
+  transactions.push(updateFollowup)
+  transactions.push(updateSocialSupportSubject)
+
+  if (ctx.user.id !== target.createdById) {
+    const createNotification = NotificationRepo.prisma.create({
+      data: {
+        recipientId: target.createdById,
+        itemCreatedById: ctx.user.id,
+        beneficiaryId: target.beneficiaryId,
+        socialSupportId: target.id,
+        type: NotificationType.UpdateFollowupElement
+      }
+    })
+    transactions.push(createNotification)
+  }
+
+  const [socialSupportResult] = await prismaClient.$transaction(transactions)
 
   return socialSupportResult
 }
