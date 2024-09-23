@@ -30,15 +30,11 @@ export function prepareBeneficiaryFilters(
   }
 
   if (filters.socialSupportSubjects?.length) {
-    if (!formattedFilters.familyFile) {
-      formattedFilters.familyFile = {} as Prisma.FamilyFileWhereInput
-    }
-
     const subjectsListFilter: Prisma.SocialSupportSubjectWhereInput = {
       id: { in: filters.socialSupportSubjects }
     }
 
-    formattedFilters.familyFile.socialSupports = {
+    formattedFilters.socialSupports = {
       some: { subjects: { some: subjectsListFilter } }
     }
   }
