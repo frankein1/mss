@@ -12,7 +12,7 @@ export const ministerKeys = buildKeys({
   [Minister.JeanChristopheCombe]:
     'Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)',
   [Minister.GenevieveDarrieussecq]:
-    'Geneviève Darrieussecq (Personnes handicapées)',
+    'Geneviève Darrieussecq (Ministre de la Santé et de l’accès aux soins)',
   [Minister.OlivierDussopt]:
     'Olivier Dussopt (Travail, Plein emploi et Insertion)',
   [Minister.SarahElHairy]:
@@ -25,7 +25,15 @@ export const ministerKeys = buildKeys({
   [Minister.FredericValletoux]:
     'Frédéric Valletoux (Délégué Santé et Prévention)',
   [Minister.CatherineVautrin]:
-    'Catherine Vautrin (Travail, Santé et Solidarités)'
+    'Catherine Vautrin (Travail, Santé et Solidarités)',
+  [Minister.AgnesCanayer]:
+    'Agnès Canayer (Ministre déléguée chargée de la famille et de la petite enfance)',
+  [Minister.AstridPanosyanBouvet]:
+    'Astrid Panosyan-Bouvet (Ministre du Travail et de l’emploi)',
+  [Minister.PaulChristophe]:
+    'Paul Christophe (Ministre des solidarités, de l’autonomie et de l’égalité entre les femmes et les hommes)',
+  [Minister.SalimaSaa]:
+    'Salima Saa (Secrétaire d’état en charge de l’égalité entre les femmes et les hommes)'
 })
 
 export const ministereDepartmentServiceAcKeys = buildKeys({
