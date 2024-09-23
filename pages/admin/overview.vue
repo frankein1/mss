@@ -26,6 +26,28 @@
           </div>
         </div>
       </div>
+
+      <div class="fr-col-12">
+        <button
+          class="fr-btn fr-btn--secondary"
+          @click="migrate(false)"
+        >
+          Informations sur le nombre de dossiers avec numéro sous forme d'UUID
+        </button>
+      </div>
+
+      <div class="fr-col-12 fr-mb-4w">
+        {{ info }} bénéficiaires avec numéros de dossier incorrect
+      </div>
+
+      <div class="fr-col-12">
+        <button
+          class="fr-btn fr-btn--secondary"
+          @click="migrate(true)"
+        >
+          Migration des numéros de dossier
+        </button>
+      </div>
     </div>
   </PageContainer>
 </template>
@@ -38,4 +60,15 @@
   })
 
   const data = await useTrpcClient().admin.getOverview.query()
+
+  const info = ref<any>(undefined)
+
+  async function migrate(exec = false) {
+    const res = await $fetch(`/api/migrate`, {
+      method: 'POST',
+      body: { exec }
+    })
+
+    info.value = (res as any).length
+  }
 </script>
