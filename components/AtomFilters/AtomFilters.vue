@@ -18,9 +18,8 @@
       />
     </div>
     <div
-      v-if="collapsedByDefaultFilters.length"
-      :id="COLLAPSED_FILTERS_ID"
-      class="fr-collapse filters"
+      v-if="collapsedByDefaultFilters.length && expanded"
+      class="filters"
       :class="{
         'full-width-filters': fullWidthFilters
       }"
@@ -322,6 +321,9 @@
     column-gap: 1rem;
     justify-content: space-between;
     align-items: flex-end;
+
+    // Allow multi-select filter dropdown to be fully-displayed
+    overflow: visible;
   }
 
   .fr-select {
@@ -366,11 +368,6 @@
         grid-column: span 2;
       }
     }
-  }
-
-  .fr-collapse {
-    // Allow multi-select filter dropdown to be fully-displayed
-    overflow: visible;
   }
 
   .filter-summary {
