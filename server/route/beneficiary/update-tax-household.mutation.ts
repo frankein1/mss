@@ -16,7 +16,7 @@ const securityCheck = async (
     ctx,
     input.id
   )
-  return permissions.edit.relatives
+  return permissions.edit.general
 }
 
 const handler = ({

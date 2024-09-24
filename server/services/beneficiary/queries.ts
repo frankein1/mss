@@ -128,9 +128,7 @@ const filter = (
 
   const entourages = view.relatives ? beneficiary.relatives : undefined
 
-  const taxHouseholds = view.relatives
-    ? getTaxHouseholds(beneficiary)
-    : undefined
+  const taxHouseholds = getTaxHouseholds(beneficiary)
 
   const history = getHistory(beneficiary)
 
