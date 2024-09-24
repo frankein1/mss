@@ -28,14 +28,12 @@
 
   const navigationRoutes = computed<AppBeneficiaryEditRoute[]>(() => {
     const editRoutes: AppBeneficiaryEditRoute[] = [
-      r.AppBeneficiaryEditInfo.name
+      r.AppBeneficiaryEditInfo.name,
+      r.AppBeneficiaryEditTaxHousehold.name
     ]
 
     if (props.permissions?.edit.relatives) {
-      editRoutes.push(
-        r.AppBeneficiaryEditTaxHousehold.name,
-        r.AppBeneficiaryEditEntourage.name
-      )
+      editRoutes.push(r.AppBeneficiaryEditEntourage.name)
     }
 
     if (props.permissions?.edit.health) {

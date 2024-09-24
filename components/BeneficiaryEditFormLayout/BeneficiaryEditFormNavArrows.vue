@@ -48,7 +48,7 @@
 
   const beneficiaryEditRouteAccessPermissions = {
     [r.AppBeneficiaryEditInfo.name]: props.permissions?.edit.general,
-    [r.AppBeneficiaryEditTaxHousehold.name]: props.permissions?.edit.relatives,
+    [r.AppBeneficiaryEditTaxHousehold.name]: props.permissions?.edit.general,
     [r.AppBeneficiaryEditEntourage.name]: props.permissions?.edit.relatives,
     [r.AppBeneficiaryEditHealth.name]: props.permissions?.edit.health,
     [r.AppBeneficiaryEditOccupation.name]:
