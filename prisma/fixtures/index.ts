@@ -1,8 +1,8 @@
 export { fixtureStructures, FixtureStructure } from './structures'
 export { fixturesSocialSupportSubjects } from './socialSupportSubjects'
 export { fixturesUsers, fixturesCGUHistory, FixtureUserRole } from './users'
-export { fixturesFamilyFiles } from './familyFiles'
 export { fixturesBeneficiaries, FixtureBeneficiary } from './beneficiaries'
+export { fixturesFamilyFiles } from './familyFiles'
 export { fixturesBeneficiaryRelatives } from './beneficiaryRelatives'
 export {
   fixturesPartnerOrganizations,

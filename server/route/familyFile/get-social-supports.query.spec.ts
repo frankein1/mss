@@ -22,8 +22,8 @@ describe('FamilyFile - Get Social Supports - StructureManager', () => {
     const socialSupports =
       await trpc.structureManager.file.getSocialSupports(input)
 
-    expect(socialSupports.items).toHaveLength(3)
-    expect(socialSupports.totalCount).toBe(3)
+    expect(socialSupports.items).toHaveLength(4)
+    expect(socialSupports.totalCount).toBe(4)
   })
 
   test('should get no result when filtering on referent with no social support created', async ({
@@ -40,6 +40,6 @@ describe('FamilyFile - Get Social Supports - StructureManager', () => {
       await trpc.structureManager.file.getSocialSupports(input)
 
     expect(socialSupports.items).toHaveLength(0)
-    expect(socialSupports.totalCount).toBe(3)
+    expect(socialSupports.totalCount).toBe(4)
   })
 })

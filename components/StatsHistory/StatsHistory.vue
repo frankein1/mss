@@ -145,16 +145,9 @@
                   :filters="filters"
                 />
               </div>
-              <div
-                v-if="
-                  filters.helpRequestSubject !== FileInstructionType.Housing
-                "
-                class="fr-col-12 fr-col-sm-6 fr-col-lg-3"
-              >
+              <div class="fr-col-12 fr-col-sm-6 fr-col-lg-3">
                 <StatsHelpRequestPrescribingOrganizations
-                  :total-count="
-                    financialHelpRequestCount + otherHelpRequestCount
-                  "
+                  :total-count="helpRequestCount"
                   :filters="filters"
                 />
               </div>

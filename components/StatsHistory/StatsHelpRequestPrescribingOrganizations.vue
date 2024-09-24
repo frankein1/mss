@@ -11,10 +11,6 @@
     />
     <template v-else-if="prescribingOrganizationStats">
       <h5 class="fr-h5">Organismes prescripteurs</h5>
-      <p v-if="!filters.helpRequestSubject">
-        Pourcentage calculé sur le nombre total d'instructions de dossier dans
-        les thématiques "Aide financière" et "Autre"
-      </p>
       <StatsList
         v-if="prescribingOrganizationStats.length"
         :total-count="totalCount"

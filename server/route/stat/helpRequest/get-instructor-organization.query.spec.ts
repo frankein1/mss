@@ -30,7 +30,7 @@ describe('Statistics - File Instructions - Instructor Organization', () => {
     const stats =
       await trpc.structureManager.stat.getInstructorOrganizationStats(input)
 
-    expect(parseStats(stats)).toEqual({ 'CAF 26': 2, 'Non renseigné': 1 })
+    expect(parseStats(stats)).toEqual({ 'CAF 26': 4, 'Non renseigné': 2 })
   })
 
   test('should not allow stats computation as a reception agent', async ({
@@ -50,6 +50,6 @@ describe('Statistics - File Instructions - Instructor Organization', () => {
 
     const stats = await trpc.referent.stat.getInstructorOrganizationStats(input)
 
-    expect(parseStats(stats)).toEqual({ 'Non renseigné': 1 })
+    expect(parseStats(stats)).toEqual({ 'Non renseigné': 2 })
   })
 })

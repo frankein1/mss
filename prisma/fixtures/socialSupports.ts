@@ -1,4 +1,12 @@
-import { FileInstructionType, Prisma } from '@prisma/client'
+import {
+  AskedHousing,
+  FileInstructionType,
+  HousingReason,
+  HousingRoomCount,
+  HousingType,
+  LowIncomeHousingType,
+  Prisma
+} from '@prisma/client'
 import {
   fixtureStructures,
   fixturesBeneficiaries,
@@ -345,7 +353,172 @@ const fixturesHelpRequestSocialSupports = [
   }
 ] satisfies Prisma.SocialSupportUncheckedCreateInput[]
 
+const fixturesHousingHelpRequestSocialSupports = [
+  {
+    id: '100d98a0-13e8-4dda-a74c-5cb1aed6a90c',
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
+    status: 'Accepted',
+    structureId: fixtureStructures[0].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.TEARLE].id,
+    subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
+    socialSupportType: 'HelpRequestHousing',
+    date: new Date('2024-10-26'),
+    fileInstruction: {
+      create: {
+        type: FileInstructionType.Housing,
+        externalStructure: false,
+        housingHelpRequest: {
+          create: {
+            isFirst: false,
+            prescribingOrganizationId:
+              fixturesPartnerOrganizations[
+                FixturePartnerOrganization.MairieValence
+              ].id
+          }
+        }
+      }
+    }
+  },
+  {
+    id: '95aba2b3-89ed-427c-bda6-09aa3e433e37',
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
+    status: 'InvestigationOngoing',
+    structureId: fixtureStructures[0].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.COURSOR].id,
+    subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
+    socialSupportType: 'HelpRequestHousing',
+    date: new Date('2022-10-27'),
+    fileInstruction: {
+      create: {
+        type: FileInstructionType.Housing,
+        externalStructure: false,
+        housingHelpRequest: {
+          create: {
+            maxRent: 2000,
+            roomCount: [HousingRoomCount.One, HousingRoomCount.Two],
+            isPmr: true
+          }
+        }
+      }
+    }
+  },
+  {
+    id: '5055463d-f754-4a7e-90f4-263bc5972b31',
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
+    status: 'Accepted',
+    structureId: fixtureStructures[0].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+    subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
+    socialSupportType: 'HelpRequestHousing',
+    date: new Date('2024-10-18'),
+    fileInstruction: {
+      create: {
+        type: FileInstructionType.Housing,
+        externalStructure: false,
+        housingHelpRequest: {
+          create: {
+            askedHousing: [AskedHousing.ParcPrive, AskedHousing.ParcSocial],
+            housingType: [HousingType.Appartement],
+            maxRent: 300,
+            prescribingOrganizationId:
+              fixturesPartnerOrganizations[FixturePartnerOrganization.CAF26].id
+          }
+        }
+      }
+    }
+  },
+  {
+    id: '98942a89-fb50-4576-a304-ccae2f80c9bb',
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
+    status: 'Accepted',
+    structureId: fixtureStructures[0].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+    subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
+    socialSupportType: 'HelpRequestHousing',
+    date: new Date('2024-11-03'),
+    fileInstruction: {
+      create: {
+        type: FileInstructionType.Housing,
+        externalStructure: true,
+        instructorOrganizationId:
+          fixturesPartnerOrganizationContacts[0].partnerId,
+        instructorOrganizationContactId:
+          fixturesPartnerOrganizationContacts[0].id,
+        dispatchDate: new Date('2024-11-03'),
+        housingHelpRequest: {
+          create: {
+            maxRent: 1000,
+            reason: HousingReason.DivorceSeparation,
+            lowIncomeHousingType: [LowIncomeHousingType.PLAI]
+          }
+        }
+      }
+    }
+  },
+  {
+    id: 'e8abf78a-c0d5-4aa0-a52c-11e27b86e741',
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
+    status: 'Accepted',
+    structureId: fixtureStructures[0].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.UNKNOWN].id,
+    subjects: { connect: { id: fixturesSocialSupportSubjects[4].id } },
+    socialSupportType: 'HelpRequestHousing',
+    date: new Date('2024-12-09'),
+    fileInstruction: {
+      create: {
+        type: FileInstructionType.Housing,
+        externalStructure: true,
+        instructorOrganizationId:
+          fixturesPartnerOrganizationContacts[0].partnerId,
+        instructorOrganizationContactId:
+          fixturesPartnerOrganizationContacts[0].id,
+        dispatchDate: new Date('2024-12-21'),
+        housingHelpRequest: {
+          create: {
+            maxCharges: 100,
+            maxRent: 500,
+            prescribingOrganizationId:
+              fixturesPartnerOrganizations[
+                FixturePartnerOrganization.MairieValence
+              ].id
+          }
+        }
+      }
+    }
+  },
+  {
+    id: '2eb3857a-11ac-461b-b351-9041e2e22192',
+    createdById: fixturesUsers[FixtureUserRole.SocialWorker].id,
+    status: 'InvestigationOngoing',
+    structureId: fixtureStructures[0].id,
+    beneficiaryId: fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id,
+    familyFileId: fixturesBeneficiaries[FixtureBeneficiary.PENBERTHY].id,
+    subjects: { connect: { id: fixturesSocialSupportSubjects[3].id } },
+    socialSupportType: 'HelpRequestHousing',
+    date: new Date('2024-10-19'),
+    fileInstruction: {
+      create: {
+        type: FileInstructionType.Housing,
+        externalStructure: true,
+        dispatchDate: new Date('2024-10-19'),
+        housingHelpRequest: {
+          create: {
+            maxRent: 1000,
+            isFirst: true
+          }
+        }
+      }
+    }
+  }
+] satisfies Prisma.SocialSupportUncheckedCreateInput[]
+
 export const fixturesSocialSupports = [
   ...fixturesFollowupSocialSupports,
-  ...fixturesHelpRequestSocialSupports
+  ...fixturesHelpRequestSocialSupports,
+  ...fixturesHousingHelpRequestSocialSupports
 ]
