@@ -26,6 +26,16 @@ export async function getHelpRequestPrescribingOrganizationStatsQuery(
                 }
               }
             }
+          },
+          housingHelpRequest: {
+            select: {
+              prescribingOrganization: {
+                select: {
+                  id: true,
+                  name: true
+                }
+              }
+            }
           }
         }
       }
@@ -38,12 +48,14 @@ export async function getHelpRequestPrescribingOrganizationStatsQuery(
     [] as Array<Exclude<(typeof socialSupports)[0]['fileInstruction'], null>>
   )
 
-  const helpRequests = []
+  const requests = []
   for (const fi of fileInstructions) {
     if (fi.helpRequest) {
-      helpRequests.push(fi.helpRequest)
+      requests.push(fi.helpRequest)
+    } else if (fi.housingHelpRequest) {
+      requests.push(fi.housingHelpRequest)
     }
   }
 
-  return preparePrescribingOrganizationStats(helpRequests)
+  return preparePrescribingOrganizationStats(requests)
 }
