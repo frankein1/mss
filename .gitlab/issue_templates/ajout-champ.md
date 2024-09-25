@@ -31,7 +31,7 @@ _à compléter_
 ## Impacts
 
 - [ ] Impression : ajout du champ à l'impression
-- [ ] Export : ajout du champ à l'export
+- [ ] Export : ajout du champ à l'export (préciser le type d'export): _remplir_
 - [ ] Filtres : ajout du champ dans des filtres (filtre bénéficiaires, filtre accompagnement, filtre statistiques): _remplir_
 - [ ] Statistiques : ajout du champ dans les statistiques (spécifier la carte statistique concernée): _remplir_
 
