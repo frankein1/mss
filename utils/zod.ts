@@ -24,3 +24,5 @@ export const validNumber =
   'Veuillez saisir un nombre valide. Format attendu : 123, 123,45 ou 123.45.'
 
 export const validIntNumber = 'Veuillez entrer un nombre entier.'
+
+export const validYear = 'Veuillez renseigner une année valide.'
