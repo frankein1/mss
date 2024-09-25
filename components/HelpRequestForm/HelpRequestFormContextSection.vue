@@ -33,7 +33,7 @@
     <div class="fr-col-12">
       <VeeRadioButtons
         name="isFirst"
-        label="Il s'agit"
+        :label="helpRequestFieldLabels.isFirst"
         :options="isFirstKeys.options"
       />
     </div>

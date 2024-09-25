@@ -1,5 +1,6 @@
 export const helpRequestFieldLabels = {
   id: 'Identifiant',
+  isFirst: "Il s'agit",
   status: 'Statut',
   dueDate: "Date d'échéance",
   beneficiaryId: 'Bénéficiaire',

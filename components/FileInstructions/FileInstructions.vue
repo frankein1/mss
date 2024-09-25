@@ -114,7 +114,7 @@
       }
       const downloadLink = document.createElement('a')
       downloadLink.href = getExportUrl(exportedFileInstructions.data)
-      downloadLink.download = getExportFilename('instructions_dosser')
+      downloadLink.download = getExportFilename('instructions_dossier')
       downloadLink.click()
       downloadLink.remove()
     } catch {
