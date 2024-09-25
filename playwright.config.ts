@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
 import { config as dotenvConfig } from '@dotenvx/dotenvx'
 
-dotenvConfig(process.env.CI ? {} : { path: './env.local.test' })
+dotenvConfig(process.env.CI ? {} : { path: './.env.local.test' })
 
 /**
  * See https://playwright.dev/docs/test-configuration.

@@ -8,7 +8,7 @@ Mon Suivi Social est un outil simple d'utilisation et complet pour gérer l'acco
 
 Pour lancer le projet, vous avez besoin de :
 
-- [Node.js](https://nodejs.org/en) v20
+- [Node.js](https://nodejs.org/en) v22
 - [Docker](https://www.docker.com/)
 - [pnpm](https://pnpm.io/) voir version dans `/package.json > "engines"`
 
@@ -19,7 +19,7 @@ Le projet utilise les technologies Node.js suivantes :
 - [Nuxt](https://nuxt.com/)
 - [Prisma](https://www.prisma.io/)
 
-## Pour commencer
+## Développement local
 
 - Installez les dépendances Node.js
 
@@ -35,7 +35,7 @@ Le projet utilise les technologies Node.js suivantes :
 
   Puis remplissez le fichier `.env` avec les valeurs manquantes.
 
-  Pour utiliser l'espace documents en local, ajoutez la configuration du stockage S3 de l'environnement de développement à votre fichier `.env`. Ces valeurs sont disponibles dans les variables d'environnement des paramètres _CI/CD_ du [dépôt GitLab](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2).
+  [//]: # (Pour utiliser l'espace documents en local, ajoutez la configuration du stockage S3 de l'environnement de développement à votre fichier `.env`. Ces valeurs sont disponibles dans les variables d'environnement des paramètres _CI/CD_ du [dépôt GitLab](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2).)
 
 - Démarrez la base de données Postgres (utilise Docker)
 
@@ -65,13 +65,13 @@ Il est alors disponible à l'adresse [localhost:3000](http://localhost:3000/).
 
 ### Données de test
 
-Si besoin, il est possible d'alimenter la base de donnée avec des données de test en exécutant :
+Si besoin, il est possible d'alimenter la base de donnée de développement local avec des données de test en exécutant :
 
 ```sh
 pnpm prisma db seed
 ```
 
-## Tests automatisés.
+## Tests automatisés
 
 Cette section décrit l'exécution des tests en local. Un container postgres spécifique est créé pour permettre la coexistence d'une BDD de developpement et d'une BDD de tests automatisés.
 
@@ -121,19 +121,17 @@ pnpm test:prisma db seed
 pnpm test:e2e
 ```
 
+### Intégration continue
+
+Les tests d'intégration et end-to-end sont implémentés dans la CI : étape `pnpm:test` et `pnpm:test:e2e` dans `.gitlab-ci.yml`.
+
+Les variables nécessaires aux tests e2e sont intégrées dans les variables d'environnement de gitlab.
+
 ## Déploiement
 
-- Construire l'image docker
+Le déploiement est effectué grâce à Scalingo. Il est automatique pour les environnement de dev et de démo, manuel pour l'environnement de prod.
 
-  ```sh
-  docker build . -t monsuivisocial
-  ```
-
-- Démarrer l'image docker
-
-  ```sh
-  docker run --rm -p 8080:3000 --env-file .env-list monsuivisocial
-  ```
+La configuration du déploiement est effectuée dans l'étape `.scalingo` dans le fichier `.gitlab-ci.yml`, le déploiement dans les étapes `deploy:scalingo-[dev|demo|prod]`.
 
 ## Antisèche
 
