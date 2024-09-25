@@ -92,7 +92,8 @@ export default defineNuxtConfig({
     '@vee-validate/nuxt',
     'nuxt-scheduler',
     'nuxt-security',
-    'vue-dsfr-nuxt-module'
+    'vue-dsfr-nuxt-module',
+    '@nuxt/eslint'
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
