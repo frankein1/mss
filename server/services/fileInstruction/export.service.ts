@@ -1,6 +1,9 @@
 import { prepareFilters, prepareSort } from './helper'
 import { getPage } from './queries'
-import { helpRequestFieldLabels } from '~/client/labels'
+import {
+  helpRequestFieldLabels,
+  housingHelpRequestFieldLabels
+} from '~/client/labels'
 import { ExportFileInstructionsInput } from '~/server/schema'
 import {
   SecurityRuleContext,
@@ -14,13 +17,19 @@ import {
   socialSupportStatusKeys,
   fileInstructionRefusalReasonKeys,
   paymentMethodKeys,
-  ministerKeys
+  ministerKeys,
+  askedHousingKeys,
+  housingReasonKeys,
+  housingTypeKeys,
+  roomCountKeys,
+  lowIncomeHousingKeys
 } from '~/client/options'
 import { formatBeneficiaryDisplayName } from '~/utils'
 
 export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'status',
   'date',
+  'isFirst',
   'beneficiaryId',
   'financialSupport',
   'subjectId',
@@ -47,6 +56,18 @@ export const FIELDS: (keyof typeof helpRequestFieldLabels)[] = [
   'createdById'
 ]
 
+export const HOUSING_FIELDS: (keyof typeof housingHelpRequestFieldLabels)[] = [
+  'askedHousing',
+  'reason',
+  'taxHouseholdAdditionalInformation',
+  'maxRent',
+  'maxCharges',
+  'housingType',
+  'roomCount',
+  'lowIncomeHousingType',
+  'isPmr'
+]
+
 export async function exportFileInstructions({
   ctx,
   input
@@ -54,10 +75,16 @@ export async function exportFileInstructions({
   ctx: SecurityRuleContext
   input: ExportFileInstructionsInput
 }) {
-  const columns = FIELDS.map(key => ({
-    key,
-    header: helpRequestFieldLabels[key]
-  }))
+  const columns = [
+    ...FIELDS.map(key => ({
+      key,
+      header: helpRequestFieldLabels[key]
+    })),
+    ...HOUSING_FIELDS.map(key => ({
+      key,
+      header: housingHelpRequestFieldLabels[key]
+    }))
+  ]
 
   const where = prepareFilters(input.filters)
   const orderBy = prepareSort(input.orderBy)
@@ -69,7 +96,7 @@ export async function exportFileInstructions({
 
   const rows = fileInstructions.reduce(
     (fileInstructions: RowType[], fileInstruction) => {
-      const { socialSupport, helpRequest } = fileInstruction
+      const { socialSupport, helpRequest, housingHelpRequest } = fileInstruction
       const { familyFile, beneficiary } = socialSupport
       const permissions = getFileInstructionPermissions({
         ctx,
@@ -87,10 +114,12 @@ export async function exportFileInstructions({
       return [
         ...fileInstructions,
         {
-          familyFileId: formatBeneficiaryDisplayName(beneficiary),
-          financialSupport: helpRequest?.financialSupport || '',
+          beneficiaryId: formatBeneficiaryDisplayName(beneficiary),
+          financialSupport: getBooleanOrEmpty(helpRequest?.financialSupport),
           prescribingOrganizationId:
-            helpRequest?.prescribingOrganization?.name || '',
+            helpRequest?.prescribingOrganization?.name ||
+            housingHelpRequest?.prescribingOrganization?.name ||
+            '',
           externalStructure: getExternalStructure(
             fileInstruction.externalStructure
           ),
@@ -103,6 +132,7 @@ export async function exportFileInstructions({
               ?.map(document => document.name)
               .join(', ') || '',
           status: socialSupportStatusKeys.value(socialSupport.status) || '',
+          isFirst: getIsFirst(housingHelpRequest?.isFirst),
           askedAmount: helpRequest?.askedAmount?.toString() || '',
           examinationDate: formatDate(
             fileInstruction.examinationDate,
@@ -131,7 +161,29 @@ export async function exportFileInstructions({
           numeroPegase: socialSupport.numeroPegase || '',
           createdById: socialSupport.createdBy
             ? formatUserDisplayName(socialSupport.createdBy)
-            : ''
+            : '',
+          askedHousing:
+            (housingHelpRequest?.askedHousing || [])
+              .map(ah => askedHousingKeys.value(ah))
+              .join(', ') || '',
+          reason: housingReasonKeys.value(housingHelpRequest?.reason) || '',
+          taxHouseholdAdditionalInformation:
+            housingHelpRequest?.taxHouseholdAdditionalInformation || '',
+          maxRent: housingHelpRequest?.maxRent?.toString() || '',
+          maxCharges: housingHelpRequest?.maxCharges?.toString() || '',
+          housingType:
+            (housingHelpRequest?.housingType || [])
+              .map(ht => housingTypeKeys.value(ht))
+              .join(', ') || '',
+          roomCount:
+            (housingHelpRequest?.roomCount || [])
+              .map(rc => roomCountKeys.value(rc))
+              .join(', ') || '',
+          lowIncomeHousingType:
+            (housingHelpRequest?.lowIncomeHousingType || [])
+              .map(li => lowIncomeHousingKeys.value(li))
+              .join(', ') || '',
+          isPmr: getBooleanOrEmpty(housingHelpRequest?.isPmr)
         }
       ]
     },
@@ -147,6 +199,16 @@ function getExternalStructure(externalStructure: boolean | null | undefined) {
   }
   if (externalStructure === false) {
     return 'Interne'
+  }
+  return ''
+}
+
+function getIsFirst(isFirst: boolean | null | undefined) {
+  if (isFirst === true) {
+    return '1ère demande'
+  }
+  if (isFirst === false) {
+    return 'Renouvellement'
   }
   return ''
 }
