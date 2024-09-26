@@ -90,6 +90,7 @@
     data.value.items = data.value.items.filter(
       ({ data: { id } }) => id !== socialSupportId
     )
+    emit('refresh')
   }
 </script>
 
