@@ -227,7 +227,7 @@ export default defineNuxtConfig({
           : false,
       crossOriginEmbedderPolicy: false
     },
-    rateLimiter: { tokensPerInterval: 300, interval: 300000 },
+    rateLimiter: { tokensPerInterval: 600, interval: 300000 },
     requestSizeLimiter: {
       // 1M
       maxRequestSizeInBytes: 1048576,
