@@ -117,9 +117,16 @@
 
   // functions
   const handleOptionToggle = (option: any) => {
-    // TODO
     console.log(option)
-    selectedOptions.value.push(option)
+
+    const index = selectedOptions.value.findIndex(
+      selectedOption => selectedOption.value === option.value
+    )
+    if (index === -1) {
+      selectedOptions.value.push(option)
+    } else {
+      selectedOptions.value.splice(index, 1)
+    }
   }
   const firstOptionSelected = () => {
     return props.options[0]
