@@ -5,7 +5,7 @@
       <p class="fr-col-12">Les composants UI sont testables ci-dessous.</p>
 
       <h2 class="fr-col-12">Multiselect 2</h2>
-      <FacetFilterToggleStory />
+      <MultiSelectStory />
 
       <h2 class="fr-col-12">Tables</h2>
 
@@ -54,7 +54,7 @@
   import StatsFiltersStory from '~/components/StatsFilters/StatsFilters.story.vue'
   import StatsListStory from '~/components/StatsList/StatsList.story.vue'
   import FamilyFileSegmentedControlStory from '~/components/FamilyFileSegmentedControl/FamilyFileSegmentedControl.story.vue'
-  import FacetFilterToggleStory from '~/components/FacetFilter/FacetFilterToggle.story.vue'
+  import MultiSelectStory from '~/components/MultiSelect/MultiSelect.story.vue'
 
   definePageMeta({
     layout: 'landing'
