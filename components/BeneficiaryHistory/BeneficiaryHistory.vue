@@ -52,6 +52,8 @@
     familyFilePermissions: FamilyFilePermissions
   }>()
 
+  const emit = defineEmits<{ refresh: [] }>()
+
   const filters = defineModel<FamilyFileHistoryFilterInput>({ default: {} })
 
   const queryInput = computed(() => ({
@@ -88,6 +90,7 @@
     data.value.items = data.value.items.filter(
       ({ data: { id } }) => id !== socialSupportId
     )
+    emit('refresh')
   }
 </script>
 

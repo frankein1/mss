@@ -76,6 +76,7 @@
             :family-file-id="familyFileId"
             :family-file-permissions="selectedPermissions"
             :family-file-identification="familyFileIdentification"
+            @refresh="getBeneficiaryDetails(selectedBeneficiary.id)"
           />
         </AtomTab>
         <AtomTab
