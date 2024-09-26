@@ -25,13 +25,13 @@
         <!-- bloc principal -->
         <div class="px-4 pt-4">
           <!-- Champ de recherche -->
-          <FacetSearch
-            ref="facetSearch"
-            v-model="facetQuery"
+          <MultiSelectSearch
+            ref="multiselectSearch"
+            v-model="optionQuery"
             placeholder="Rechercher"
             :aria-labelledby="`label-search-${uuid}`"
             class="fr-mt-3"
-            @update:model-value="handleChangeSearchFacetValues"
+            @update:model-value="handleChangeSearchValues"
           />
 
           <!-- List des items -->
@@ -62,7 +62,7 @@
                   <VeeCheckbox
                     :name="option.value"
                     :label="option.label"
-                    @change="handleFacetToggle(option)"
+                    @change="handleOptionToggle(option)"
                   />
                 </div>
               </fieldset>
@@ -75,7 +75,7 @@
 </template>
 
 <script setup lang="ts">
-  import FacetSearch from './FacetSearch.vue'
+  import MultiSelectSearch from './MultiSelectSearch.vue'
   import type { Options } from '~/utils/options'
 
   const props = withDefaults(
@@ -86,20 +86,20 @@
       optionsClass?: string
       ariaDescribedby?: string
       ariaLabelledBy?: string
-      facetValueResolver?: any
+      optionValueResolver?: any
     }>(),
     {
       optionsClass: '',
       legend: null,
-      facetValueResolver: null,
+      optionValueResolver: null,
       ariaDescribedby: '',
       ariaLabelledBy: ''
     }
   )
 
   const isOpen = ref<boolean>(false)
-  const facetHits = ref<any>(null)
-  const facetQuery = ref<any>(null)
+  const optionsHits = ref<any>(null)
+  const optionQuery = ref<any>(null)
   const selectedOptions = ref<Options>([])
   const uuid = ref<string>('ldjvhekrgjfgeakjvh') // TODO
 
@@ -116,24 +116,21 @@
   })
 
   // functions
-  const handleFacetToggle = (option: any) => {
+  const handleOptionToggle = (option: any) => {
     // TODO
     console.log(option)
     selectedOptions.value.push(option)
   }
-  const firstValueSelected = () => {
+  const firstOptionSelected = () => {
     return props.options[0]
   }
-  const resolveFacetValue = (value: any) => {
-    return props.facetValueResolver ? props.facetValueResolver[value] : value
+  const resolveOptionValue = (value: any) => {
+    return props.optionValueResolver ? props.optionValueResolver[value] : value
   }
-  const deleteFacet = () => {
-    // deleteFilter(props.name) // algolia function
-    isOpen.value = false
-  }
-  const handleChangeSearchFacetValues = (facetQuery: string) => {
-    if (!facetQuery || facetQuery === '') {
-      facetHits.value = null
+
+  const handleChangeSearchValues = (optionQuery: string) => {
+    if (!optionQuery || optionQuery === '') {
+      optionsHits.value = null
     }
   }
   const onClickOutside = (_e: Event) => {
