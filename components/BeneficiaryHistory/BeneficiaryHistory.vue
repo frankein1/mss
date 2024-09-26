@@ -52,6 +52,8 @@
     familyFilePermissions: FamilyFilePermissions
   }>()
 
+  const emit = defineEmits<{ refresh: [] }>()
+
   const filters = defineModel<FamilyFileHistoryFilterInput>({ default: {} })
 
   const queryInput = computed(() => ({
