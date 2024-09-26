@@ -1,6 +1,6 @@
 <template>
   <div class="fr-col-12">
-    <FacetFilterToggle
+    <MultiSelect
       name="Séléctionner des départements"
       legend="départements"
       :options="allValues"
@@ -18,14 +18,14 @@
         <div class="fr-container">
           <div class="fr-grid-row fr-grid-row--gutters">
             <div class="fr-col-4">
-              <FacetFilterToggle
+              <MultiSelect
                 name="Séléctionner des départements"
                 legend="départements"
                 :options="allValues"
               />
             </div>
             <div class="fr-col-8">
-              <FacetFilterToggle
+              <MultiSelect
                 name="Recherche 3"
                 legend="départements"
                 :options="allValues"
