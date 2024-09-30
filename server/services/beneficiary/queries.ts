@@ -106,7 +106,7 @@ export async function getPage(
   })
 }
 
-const filter = (
+export const filter = (
   permissions: FamilyFilePermissions,
   appPermissions: AppContextPermissions,
   beneficiary: BeneficiaryOutput

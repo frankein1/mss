@@ -19,7 +19,7 @@ const handler = async ({
   input: { id: string }
   ctx: ProtectedAppContext
 }) => {
-  const data = await BeneficiaryService.get({
+  const data = await BeneficiaryService.getDetails({
     ctx,
     id: input.id
   })
@@ -28,6 +28,10 @@ const handler = async ({
     ctx,
     input: { id: data.beneficiary.familyFileId }
   })
+
+  // TODO get documents NO missing securitycheck make another endpoint
+  // TODO get SocialSupports
+  // TODO getBudget
 
   return {
     ...data,
