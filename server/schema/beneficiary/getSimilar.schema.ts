@@ -1,17 +1,18 @@
 import { z } from 'zod'
 import { dateOrEmpty } from '../helpers.schema'
 import { beneficiaryFirstNameOrEmptySchema } from './beneficiaryFirstName.schema'
-import { beneficiaryLastNameSchema } from './beneficiaryLastName.schema'
+import { beneficiaryLastNameOrEmptySchema } from './beneficiaryLastName.schema'
 
 export const getSimilarBeneficiarySchema = z
   .object({
-    usualName: beneficiaryLastNameSchema,
+    usualName: beneficiaryLastNameOrEmptySchema,
+    birthName: beneficiaryLastNameOrEmptySchema,
     firstName: beneficiaryFirstNameOrEmptySchema,
     birthDate: dateOrEmpty
   })
   .refine(
-    ({ usualName, firstName, birthDate }) =>
-      usualName && (firstName || birthDate)
+    ({ usualName, birthName, firstName, birthDate }) =>
+      usualName || birthName || firstName || birthDate
   )
 
 export type GetSimilarBeneficiaryInput = z.infer<
