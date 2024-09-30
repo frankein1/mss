@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   db:
-    image: postgres:12.14-alpine
+    image: postgres:14.12-alpine
     container_name: monsuivisocial_pg
     environment:
       - POSTGRES_DB=$DB_DATABASE

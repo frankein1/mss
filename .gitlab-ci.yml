@@ -21,9 +21,10 @@ include:
       - /pnpm.auto.yml
 
 variables:
+  NODE_VERSION: 22
   PNPM_VERSION: 9.1.4
   # A synchroniser avec la version présente dans package.json
-  PLAYWRIGHT_VERSION: 1.46.1
+  PLAYWRIGHT_VERSION: 1.47.2
   #A synchroniser avec la version présente en production
   POSTGRES_VERSION: 14.12
 
@@ -54,7 +55,7 @@ variables:
 
 .vigigloo:pnpm:install:
   image:
-    name: registry.gitlab.com/vigigloo/tools/pnpm:node-20_pnpm-${PNPM_VERSION}
+    name: registry.gitlab.com/vigigloo/tools/pnpm:node-${NODE_VERSION}_pnpm-${PNPM_VERSION}
 
 pnpm:test:
   extends: .vigigloo:pnpm:test
@@ -79,7 +80,7 @@ pnpm:test:
 .playwright-pnpm:install:
   variables:
     CACHE_FALLBACK_KEY: $CI_DEFAULT_BRANCH
-  image: mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-jammy
+  image: mcr.microsoft.com/playwright:v${PLAYWRIGHT_VERSION}-noble
   cache:
     key: $CI_COMMIT_REF_SLUG
     paths:
