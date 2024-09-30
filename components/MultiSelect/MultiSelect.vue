@@ -18,7 +18,7 @@
     <Transition name="fade-in">
       <div
         v-if="isOpen"
-        v-click-outside="onClickOutside"
+        ref="target"
         :class="['multiselect-content', optionsClass]"
         @keydown.esc="isOpen = false"
       >
@@ -77,6 +77,7 @@
 <script setup lang="ts">
   import MultiSelectSearch from './MultiSelectSearch.vue'
   import type { Options } from '~/utils/options'
+  import { onClickOutside } from '@vueuse/core'
 
   const props = withDefaults(
     defineProps<{
@@ -97,17 +98,21 @@
     }
   )
 
+  // Ref
   const isOpen = ref<boolean>(false)
   const optionsHits = ref<any>(null)
   const optionQuery = ref<any>(null)
   const selectedOptions = ref<Options>([])
   const uuid = ref<string>('ldjvhekrgjfgeakjvh') // TODO
+  const name = toRef(() => props.name)
+  const target = ref(null)
+
+  // Emits
+  const emit = defineEmits<{
+    changeValue: [value: string[]]
+  }>()
 
   // Computed
-  const activeValuesCount = () => {
-    return props.options.length
-  }
-
   const selectedOptionInputValue = computed(() => {
     if (selectedOptions.value.length === 0) {
       return null
@@ -115,24 +120,24 @@
     return selectedOptions.value.map(option => option.label).join(', ')
   })
 
-  // functions
+  // Functions
   const handleOptionToggle = (option: any) => {
-    console.log(option)
-
     const index = selectedOptions.value.findIndex(
       selectedOption => selectedOption.value === option.value
     )
     if (index === -1) {
       selectedOptions.value.push(option)
+      emit(
+        'changeValue',
+        selectedOptions.value.map(option => option.value)
+      )
     } else {
       selectedOptions.value.splice(index, 1)
+      emit(
+        'changeValue',
+        selectedOptions.value.map(option => option.value)
+      )
     }
-  }
-  const firstOptionSelected = () => {
-    return props.options[0]
-  }
-  const resolveOptionValue = (value: any) => {
-    return props.optionValueResolver ? props.optionValueResolver[value] : value
   }
 
   const handleChangeSearchValues = (optionQuery: string) => {
@@ -140,9 +145,9 @@
       optionsHits.value = null
     }
   }
-  const onClickOutside = (_e: Event) => {
+  onClickOutside(target, _event => {
     isOpen.value = false
-  }
+  })
 
   onMounted(() => {
     //
