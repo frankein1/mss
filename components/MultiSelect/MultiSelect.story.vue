@@ -22,6 +22,7 @@
                 name="Séléctionner des départements"
                 legend="départements"
                 :options="allValues"
+                @change-value="changeFilter($event)"
               />
             </div>
             <div class="fr-col-8">
@@ -70,4 +71,8 @@
     { value: '19', label: 'Corrèze' },
     { value: '21', label: "Côte-d'Or" }
   ]
+
+  const changeFilter = (event: any) => {
+    console.log(event)
+  }
 </script>
