@@ -26,6 +26,7 @@
         <div class="px-4 pt-4">
           <!-- Champ de recherche -->
           <MultiSelectSearch
+            v-if="isSearchable"
             ref="multiselectSearch"
             v-model="optionQuery"
             placeholder="Rechercher"
@@ -90,13 +91,15 @@
       ariaDescribedby?: string
       ariaLabelledBy?: string
       optionValueResolver?: any
+      isSearchable?: boolean
     }>(),
     {
       optionsClass: '',
       legend: null,
       optionValueResolver: null,
       ariaDescribedby: '',
-      ariaLabelledBy: ''
+      ariaLabelledBy: '',
+      isSearchable: false
     }
   )
 
@@ -105,6 +108,8 @@
   const optionsHits = ref<any>(null)
   const optionQuery = ref<any>(null)
   const selectedOptions = ref<Options>([])
+  const existingOptions = ref<Options>(props.options) // necessary?
+  const filteredOptions = ref<Options>(existingOptions.value)
   const uuid = ref<string>('ldjvhekrgjfgeakjvh') // TODO
   const name = toRef(() => props.name)
   const target = ref(null)
@@ -124,7 +129,7 @@
 
   const displayedOptions: globalThis.ComputedRef<Options> = computed(() => {
     const selectedValues = selectedOptions.value.map(option => option.value)
-    const availableOptions = props.options.filter(
+    const availableOptions = filteredOptions.value.filter(
       option => !selectedValues.includes(option.value)
     )
     return [...selectedOptions.value, ...availableOptions]
@@ -154,7 +159,14 @@
     if (!optionQuery || optionQuery === '') {
       optionsHits.value = null
     }
+
+    const filteredOptionsArray = [...existingOptions.value].filter(
+      ({ label }) =>
+        label.toLocaleLowerCase().includes(optionQuery.toLocaleLowerCase())
+    )
+    filteredOptions.value = filteredOptionsArray
   }
+
   onClickOutside(target, _event => {
     isOpen.value = false
   })
