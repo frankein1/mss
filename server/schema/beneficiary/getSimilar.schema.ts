@@ -12,7 +12,7 @@ export const getSimilarBeneficiarySchema = z
   })
   .refine(
     ({ usualName, birthName, firstName, birthDate }) =>
-      usualName || birthName || firstName || birthDate
+      (usualName || birthName) && (firstName || birthDate)
   )
 
 export type GetSimilarBeneficiaryInput = z.infer<
