@@ -54,8 +54,10 @@
                 <legend class="fr-sr-only">
                   {{ legend }}
                 </legend>
+
+                <!-- Boucle -->
                 <div
-                  v-for="option in options"
+                  v-for="option in displayedOptions"
                   :key="option.value"
                   class="option-item"
                 >
@@ -118,6 +120,14 @@
       return null
     }
     return selectedOptions.value.map(option => option.label).join(', ')
+  })
+
+  const displayedOptions: globalThis.ComputedRef<Options> = computed(() => {
+    const selectedValues = selectedOptions.value.map(option => option.value)
+    const availableOptions = props.options.filter(
+      option => !selectedValues.includes(option.value)
+    )
+    return [...selectedOptions.value, ...availableOptions]
   })
 
   // Functions
