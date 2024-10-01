@@ -22,6 +22,7 @@
         :permissions="permissions"
         :beneficiary-referent-ids="beneficiaryReferentIds"
         :agents="agents"
+        @update="updateSimilarBeneficiary"
       />
     </AtomLazyComponent>
   </BeneficiaryEditFormLayout>
@@ -33,14 +34,22 @@
     updateBeneficiaryGeneralInformationSchema
   } from '~/server/schema'
   import { routes } from '~/utils/routes'
+  import { SimilarBeneficiary } from '~/server/trpc/routers'
 
   const trpcClient = useTrpcClient()
   const snackbar = useSnackbar()
 
   const isSubmitting = ref(false)
+  const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
   const route = useRoute()
   const beneficiaryId = route.params.id as string
+
+  const updateSimilarBeneficiary = (
+    receivedSimilarBeneficiary: SimilarBeneficiary
+  ) => {
+    similarBeneficiary.value = receivedSimilarBeneficiary
+  }
 
   const {
     data: agents,
@@ -104,7 +113,22 @@
     return ''
   })
 
-  function onSaveBeneficiary(
+  const onSaveBeneficiary = (
+    beneficiary: UpdateBeneficiaryGeneralInformationInput,
+    target: string | undefined,
+    validate: boolean
+  ) => {
+    if (similarBeneficiary.value) {
+      useBeneficiaryFormSimilarModal(similarBeneficiary.value, () =>
+        saveBeneficiary(beneficiary, target, validate)
+      )
+      return
+    }
+
+    saveBeneficiary(beneficiary, target, validate)
+  }
+
+  function saveBeneficiary(
     ben: UpdateBeneficiaryGeneralInformationInput,
     target: string | undefined,
     validate: boolean
