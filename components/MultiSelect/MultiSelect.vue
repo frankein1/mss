@@ -30,7 +30,7 @@
             ref="multiselectSearch"
             v-model="optionQuery"
             placeholder="Rechercher"
-            :aria-labelledby="`label-search-${uuid}`"
+            :aria-labelledby="`label-search-${labelSearchId}`"
             class="fr-mt-3"
             @update:model-value="handleChangeSearchValues"
           />
@@ -108,11 +108,11 @@
   const optionsHits = ref<any>(null)
   const optionQuery = ref<any>(null)
   const selectedOptions = ref<Options>([])
-  const existingOptions = ref<Options>(props.options) // necessary?
+  const existingOptions = ref<Options>(props.options)
   const filteredOptions = ref<Options>(existingOptions.value)
-  const uuid = ref<string>('ldjvhekrgjfgeakjvh') // TODO
-  const name = toRef(() => props.name)
   const target = ref(null)
+  const name = toRef(() => props.name)
+  const labelSearchId = useId()
 
   // Emits
   const emit = defineEmits<{
