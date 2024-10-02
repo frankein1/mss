@@ -34,9 +34,13 @@
           </template>
           <hr class="fr-mt-2w" />
           <BeneficiaryInfoGeneralContent :general="beneficiary.general" />
-          <hr class="fr-mt-2w" />
+
+          <hr
+            v-if="hasTaxHouseholds"
+            class="fr-mt-2w"
+          />
           <BeneficiaryInfoTaxHouseholdsContent
-            v-if="beneficiary.taxHouseholds"
+            v-if="hasTaxHouseholds && beneficiary.taxHouseholds"
             :beneficiary-id="beneficiaryId"
             :tax-households="beneficiary.taxHouseholds"
           />
@@ -104,6 +108,18 @@
   const error = computed(() => beneficiaryError.value)
 
   const beneficiary = computed(() => data.value?.beneficiary || null)
+
+  const hasTaxHouseholds = computed(() => {
+    const taxHouseholds = beneficiary.value?.taxHouseholds
+    return !(
+      !taxHouseholds?.caregiver &&
+      !taxHouseholds?.divorceDate &&
+      !taxHouseholds?.familySituation &&
+      !taxHouseholds?.majorChildren &&
+      !taxHouseholds?.minorChildren &&
+      !taxHouseholds?.weddingDate
+    )
+  })
 
   useHead({
     title: routes.beneficiary.AppBeneficiaryPrint.title(
