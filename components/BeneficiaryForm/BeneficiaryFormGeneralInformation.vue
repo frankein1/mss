@@ -10,7 +10,7 @@
     <BeneficiaryFormIdentity
       id="identity"
       :similar-beneficiary="similarBeneficiary"
-      @update="updateSimilarBeneficiary"
+      @update:similar-beneficiary="updateSimilarBeneficiary"
     />
     <BeneficiaryFormContactDetails id="contact-details" />
     <BeneficiaryFormAddress id="address" />
@@ -36,10 +36,10 @@
   )
 
   const emit = defineEmits<{
-    update: [similarBeneficiary: SimilarBeneficiary]
+    'update:similarBeneficiary': [SimilarBeneficiary]
   }>()
 
-  const updateSimilarBeneficiary = (similarBeneficiary: SimilarBeneficiary) => {
-    emit('update', similarBeneficiary)
+  const updateSimilarBeneficiary = () => {
+    emit('update:similarBeneficiary', similarBeneficiary.value)
   }
 </script>
