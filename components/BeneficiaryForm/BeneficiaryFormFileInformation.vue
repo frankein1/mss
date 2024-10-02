@@ -18,6 +18,14 @@
         required
       />
     </div>
+    <div class="fr-col-6">
+      <MultiSelect
+        name="county"
+        legend="Rechercher un département"
+        :is-searchable="false"
+        :options="referentOptions"
+      />
+    </div>
     <div
       v-if="full"
       :class="application.module.vulnerablePerson ? 'fr-col-6' : 'fr-col-12'"
