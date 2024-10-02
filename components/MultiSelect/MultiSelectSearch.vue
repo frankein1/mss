@@ -23,47 +23,59 @@
         :name="name"
         autocomplete="off"
         :aria-labelledby="ariaLabelledby"
-        :aria-label="!ariaLabelledby && ariaLabel"
+        :aria-label="ariaLabel"
         @focus="$emit('focus')"
       />
     </div>
   </div>
 </template>
 
-<script>
-  export default defineNuxtComponent({
-    emits: ['update:modelValue', 'clear', 'focus'],
-    props: {
-      modelValue: { type: [String, Number], default: null },
-      inputId: { type: String, default: 'id-1903' }, // TODO generate unique id
-      name: { type: String, default: 'search' },
-      placeholder: { type: String, default: 'Rechercher' },
-      ariaLabelledby: { type: String, default: null },
-      ariaLabel: { type: String, default: null }
+<script setup lang="ts">
+  const props = withDefaults(
+    defineProps<{
+      modelValue?: string | number
+      inputId?: string
+      name?: string
+      placeholder?: string
+      ariaLabelledby?: string
+      ariaLabel?: string
+    }>(),
+    {
+      modelValue: undefined,
+      inputId: 'id-1903', // TODO generate unique id
+      name: 'search',
+      placeholder: 'Rechercher',
+      ariaLabelledby: undefined,
+      ariaLabel: undefined
+    }
+  )
+
+  // Emits
+  // was emits: ['update:modelValue', 'clear', 'focus'],
+  const emit = defineEmits<{
+    'update:modelValue': [modelValue: any]
+    'clear': []
+    'focus': []
+  }>()
+
+  const isFocus = ref<boolean>(false)
+
+  const inputValue = computed({
+    get() {
+      return props.modelValue
     },
-    data() {
-      return {
-        isFocus: false
-      }
-    },
-    computed: {
-      inputValue: {
-        get() {
-          return this.modelValue
-        },
-        set(newValue) {
-          this.$emit('update:modelValue', newValue)
-        }
-      }
-    },
-    methods: {
-      clear() {
-        this.inputValue = ''
-        this.$refs.input.focus()
-        this.$emit('clear')
-      }
+    set(newValue) {
+      emit('update:modelValue', newValue)
     }
   })
+
+  const clear = () => {
+    inputValue.value = ''
+    emit('clear')
+    // was
+    // this.$refs.input.focus()
+    // this.$emit('clear')
+  }
 </script>
 
 <style lang="scss" scoped>
