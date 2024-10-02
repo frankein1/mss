@@ -5,7 +5,7 @@
       ref="input"
       class="fr-select"
       :name="name"
-      :placeholder="name"
+      :placeholder="legend || ''"
       type="text"
       :value="selectedOptionInputValue"
       readonly
@@ -81,6 +81,7 @@
   import MultiSelectSearch from './MultiSelectSearch.vue'
   import type { Options } from '~/utils/options'
   import { onClickOutside } from '@vueuse/core'
+  import { useField, useForm } from 'vee-validate'
 
   const props = withDefaults(
     defineProps<{
@@ -95,7 +96,7 @@
     }>(),
     {
       optionsClass: '',
-      legend: null,
+      legend: '',
       optionValueResolver: null,
       ariaDescribedby: '',
       ariaLabelledBy: '',
@@ -107,7 +108,7 @@
   const isOpen = ref<boolean>(false)
   const optionsHits = ref<any>(null)
   const optionQuery = ref<any>(null)
-  const selectedOptions = ref<Options>([])
+  // const selectedOptions = ref<Options>([])
   const existingOptions = ref<Options>(props.options)
   const filteredOptions = ref<Options>(existingOptions.value)
   const target = ref(null)
@@ -118,6 +119,25 @@
   const emit = defineEmits<{
     changeValue: [value: string[]]
   }>()
+
+  // Form functions
+  type InitialValue = { [key: string]: boolean }
+
+  const { value: multiselectValue } = useField<InitialValue[]>(name, undefined)
+  const { setValues } = useForm<any>({
+    validationSchema: null
+  })
+
+  const convertToOptions = (initialValues: InitialValue[]): Options => {
+    const initialKeys = initialValues.flatMap(Object.keys)
+    return existingOptions.value.filter(option =>
+      initialKeys.includes(option.value)
+    )
+  }
+  const convertToFormValue = (options: Options) => {
+    return options.map(option => ({ [option.value]: true }))
+  }
+  const selectedOptions = ref<Options>(convertToOptions(multiselectValue.value))
 
   // Computed
   const selectedOptionInputValue = computed(() => {
@@ -153,6 +173,8 @@
         selectedOptions.value.map(option => option.value)
       )
     }
+    console.log(convertToFormValue(selectedOptions.value))
+    setValues(convertToFormValue(selectedOptions.value))
   }
 
   const handleChangeSearchValues = (optionQuery: string) => {
