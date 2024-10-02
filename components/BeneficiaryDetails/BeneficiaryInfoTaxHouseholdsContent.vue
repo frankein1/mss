@@ -28,18 +28,26 @@
         :value="formatDate(taxHouseholds.divorceDate)"
       />
     </div>
-    <div class="fr-col-6">
-      <BeneficiaryInfoLabel
-        :label="beneficiaryFieldLabels.majorChildren"
-        :value="taxHouseholds.majorChildren || '0'"
-      />
-    </div>
-    <div class="fr-col-6">
-      <BeneficiaryInfoLabel
-        :label="beneficiaryFieldLabels.minorChildren"
-        :value="taxHouseholds.minorChildren || '0'"
-      />
-    </div>
+    <template v-if="hasChildren">
+      <div
+        v-if="taxHouseholds.majorChildren && taxHouseholds.majorChildren > 0"
+        class="fr-col-6"
+      >
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.majorChildren"
+          :value="taxHouseholds.majorChildren || '0'"
+        />
+      </div>
+      <div
+        v-if="taxHouseholds.minorChildren && taxHouseholds.minorChildren > 0"
+        class="fr-col-6"
+      >
+        <BeneficiaryInfoLabel
+          :label="beneficiaryFieldLabels.minorChildren"
+          :value="taxHouseholds.minorChildren || '0'"
+        />
+      </div>
+    </template>
   </div>
 </template>
 
@@ -48,7 +56,15 @@
   import type { GetBeneficiaryTaxHousehold } from '~/types/beneficiary'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
 
-  defineProps<{
+  const props = defineProps<{
     taxHouseholds: GetBeneficiaryTaxHousehold
   }>()
+  const hasChildren = computed(() => {
+    return (
+      (props.taxHouseholds.minorChildren &&
+        props.taxHouseholds.minorChildren > 0) ||
+      (props.taxHouseholds.majorChildren &&
+        props.taxHouseholds.majorChildren > 0)
+    )
+  })
 </script>

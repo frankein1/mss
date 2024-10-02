@@ -38,7 +38,7 @@
   />
 
   <BeneficiaryInfoTaxHouseholds
-    v-if="beneficiary.taxHouseholds"
+    v-if="hasTaxHouseholds && beneficiary.taxHouseholds"
     :beneficiary-id="beneficiary.id"
     :tax-households="beneficiary.taxHouseholds"
   />
@@ -91,6 +91,18 @@
       title = title + ' ' + props.beneficiary.general.usualName
     }
     return title
+  })
+
+  const hasTaxHouseholds = computed(() => {
+    const taxHouseholds = props.beneficiary.taxHouseholds
+    return !(
+      !taxHouseholds?.caregiver &&
+      !taxHouseholds?.divorceDate &&
+      !taxHouseholds?.familySituation &&
+      !taxHouseholds?.majorChildren &&
+      !taxHouseholds?.minorChildren &&
+      !taxHouseholds?.weddingDate
+    )
   })
 </script>
 
