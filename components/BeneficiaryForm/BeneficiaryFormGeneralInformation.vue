@@ -10,7 +10,7 @@
     <BeneficiaryFormIdentity
       id="identity"
       :similar-beneficiary="similarBeneficiary"
-      @update:similar-beneficiaries="emit('update:similarBeneficiary', $event)"
+      @update:similar-beneficiary="updateSimilarBeneficiary"
     />
     <BeneficiaryFormContactDetails id="contact-details" />
     <BeneficiaryFormAddress id="address" />
@@ -24,17 +24,22 @@
   import { FamilyFilePermissions } from '~/server/security'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
 
+  const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
+
   withDefaults(
     defineProps<{
       beneficiaryReferentIds: String[]
       agents: BeneficiaryReferent[]
       permissions: FamilyFilePermissions
-      similarBeneficiary?: SimilarBeneficiary
     }>(),
-    { beneficiary: undefined, similarBeneficiary: undefined }
+    {}
   )
 
   const emit = defineEmits<{
     'update:similarBeneficiary': [SimilarBeneficiary]
   }>()
+
+  const updateSimilarBeneficiary = () => {
+    emit('update:similarBeneficiary', similarBeneficiary.value)
+  }
 </script>
