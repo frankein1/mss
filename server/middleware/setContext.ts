@@ -18,7 +18,7 @@ export default defineEventHandler(event => {
   let payload
   try {
     payload = verifyJwt(sessionToken, jwtKey)
-  } catch (err) {
+  } catch {
     deleteCookie(event, cookieKey)
     return
   }
