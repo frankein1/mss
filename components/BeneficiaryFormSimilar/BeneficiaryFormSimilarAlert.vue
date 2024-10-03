@@ -1,5 +1,7 @@
 <template>
-  <template v-if="similarBeneficiary">
+  <template
+    v-if="similarBeneficiary && similarBeneficiary.id != initialBeneficiary?.id"
+  >
     <div class="fr-col-12">
       <AtomAlert
         :alert-type="AlertType.Warning"
@@ -47,6 +49,7 @@
     GetSimilarBeneficiaryInput
   } from '~/server/schema'
   import { formatUserDisplayName } from '~/utils/user'
+  import { BeneficiaryIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     similarBeneficiary: SimilarBeneficiary
@@ -54,7 +57,7 @@
     usualName: string | null | undefined
     firstName: string | null | undefined
     birthDate: Date | null | undefined
-    initialBeneficiary: any
+    initialBeneficiary: BeneficiaryIdentification | null
   }>()
 
   const emit = defineEmits<{
@@ -89,22 +92,7 @@
 
       const input = { usualName, birthName, firstName, birthDate }
 
-      const clean = (value: string | undefined | null) => {
-        if (value == null || value == '') {
-          return null
-        }
-        return value.toLowerCase()
-      }
-
-      const sameValues =
-        clean(input.usualName) == clean(initialBeneficiary.usualName) &&
-        clean(input.firstName) == clean(initialBeneficiary.firstName)
-
       if (!isSimilarInputValid(input)) {
-        emit('update:similarBeneficiary', undefined)
-        return
-      }
-      if (sameValues) {
         emit('update:similarBeneficiary', undefined)
         return
       }
