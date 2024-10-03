@@ -21,7 +21,10 @@
 </template>
 
 <script setup lang="ts">
-  import { BeneficiaryReferent } from '~/types/beneficiary'
+  import {
+    BeneficiaryIdentification,
+    BeneficiaryReferent
+  } from '~/types/beneficiary'
   import { FamilyFilePermissions } from '~/server/security'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
 
@@ -32,7 +35,7 @@
       beneficiaryReferentIds: String[]
       agents: BeneficiaryReferent[]
       permissions: FamilyFilePermissions
-      initialBeneficiary: any
+      initialBeneficiary: BeneficiaryIdentification | null
     }>(),
     {}
   )

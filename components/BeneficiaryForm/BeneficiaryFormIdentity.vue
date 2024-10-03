@@ -94,12 +94,13 @@
     nationalityKeys
   } from '~/client/options'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
+  import { BeneficiaryIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
   const props = defineProps<{
-    initialBeneficiary: any
+    initialBeneficiary: BeneficiaryIdentification | null
   }>()
 
   const emit = defineEmits<{

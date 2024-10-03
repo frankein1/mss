@@ -120,9 +120,9 @@
     validate: boolean
   ) => {
     if (similarBeneficiary.value) {
-      useBeneficiaryFormSimilarModal(similarBeneficiary.value, () =>
+      useBeneficiaryFormSimilarModal(similarBeneficiary.value, () => {
         saveBeneficiary(beneficiary, target, validate)
-      )
+      })
       return
     }
 
