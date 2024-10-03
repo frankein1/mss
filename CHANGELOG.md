@@ -1,6 +1,61 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
+
+## [1.31.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.29.0...v1.31.0) (2024-10-03)
+
+
+### Features
+
+* **accompagnements:** ajout d'un filtre 'période' ([d7cb6a1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d7cb6a1e4ab31b5a5946b6c0fce13cd41312c15f)), closes [#572](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/572)
+* **bénéficiaire:** détection doublon sur nom de naissance ([a3350d3](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a3350d3416907f7cf3af48e764936287d9381f33)), closes [#488](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/488)
+* **bénéficiaire:** les agents d'accueil peuvent voir et modifier la situation familiale ([f4a755f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/f4a755fba969f72631a571335e79f99d853d680f)), closes [#586](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/586)
+* **foyer:** finalisation de la dissociation d'un membre du foyer ([100461b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/100461bd9b8e4808b21252b0d83dd0848a0407e4)), closes [#563](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/563)
+* **foyer:** première version de la dissociation d'un membre du foyer ([b8c282e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b8c282ef594e165cd6e407ceb3597e87f7ae18db)), closes [#563](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/563)
+* **instruction-dossier:** ajout de nouveaux champ dans l'export ([b25ded1](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b25ded1aac9c521ac9933b1aee2fb36cd89e5204)), closes [#552](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/552)
+* **instruction-dossier:** ajout des champs organismes prescripteurs et contacts à la demande de logement ([ce5becd](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ce5becd63258b7348927eb7766077c5eae97df30)), closes [#579](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/579)
+* **ministère:** ajout des ministres sept 24 ([971ae6f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/971ae6f3dc5da2b670cebebb254eb295ca918a6b)), closes [#585](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/585)
+* **role:** mise à jour de la table des roles ([d69da3f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d69da3f645c1eb8b83af3fc2892910c46fd54ffa))
+* **security:** double la limite de requêtes du rate-limiter ([d2ac8dc](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d2ac8dc58cc405902e76c022a126e20ac4dfe6eb))
+* **sso:** migration de IC vers Pro Connect ([2ef79df](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/2ef79df2512bf953a29380d0333511d23c681fd9)), closes [#485](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/485)
+* **sso:** utilisation de la session ([4928f4e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/4928f4e202615a8461238d58037f54b0c7e23817))
+* **sso:** utilise le bon client ([c5c2e21](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c5c2e21709fb1e4f5c30e0f6d568a98b18639218))
+* **suivi:** modification de la permission d'édition pour les synthèses d'entretien ([5024a18](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/5024a186fa5b393a98ecfbc6f3b54445d763c8c4))
+* **suivi:** modification des suivis par les référents ([6aa79da](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/6aa79da458e858eebd8d3cf1c37d4c500b942e1f))
+* **textarea:** remplace < et > sur l'évènement paste par * ([27be9da](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/27be9daaf0d68900718cc1e4107da9c18966c26b))
+
+
+### Bug Fixes
+
+* **add beneficiary form:** détection de doublon sur nom et prénom ([130e847](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/130e847f62af28772b50386b3da37c985d1c01c2)), closes [#488](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/488)
+* **annuaire:** amélioration de l'autocomplete ([1446313](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/14463133fb0f5b37cb96c5cad12a06843eed5355)), closes [#571](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/571)
+* **bénéficiaire:** ajout des valeurs manquantes ([a2b810b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/a2b810bc9d07714bf30700e7fe0c908633d07663))
+* **bénéficiaire:** ajouter la détection de doublon sur le formulaire complet ([630575c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/630575cfa338d8fd451775a72eba59a1acac4833)), closes [#551](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/551)
+* **bénéficiaire:** le filtre sur les objets d'acc. doit être associé au bénéficiaire et non au foyer ([ba70d2f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/ba70d2fa98101b9b6adb6b7fb6b2952f1b895b9b)), closes [#578](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/578)
+* **beneficiaires:** chargement des infos bénéficiaire après suppression d'un accompagnement ([fb7330f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/fb7330f49c6c8226b10f9bed28eb6d1b78ed3f60)), closes [#581](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/581)
+* **bénéficiaires:** filtre objets d'accompagnements inactifs dans les bénéficiaires ([48e0ce7](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/48e0ce703e8aab0b5a581faf6f0dc8662571c188)), closes [#578](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/578)
+* **beneficiary:** améliorations ui ([86a707b](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/86a707be4da96313e9ca7d044cf77f78d04e93f7)), closes [#592](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/592)
+* **beneficiary:** ne pas afficher d'erreur dans formulaire complet si bénéficiaire initial identique ([39a761a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/39a761aa3b41f8faa775446201229f04e9eb085e))
+* **beneficiary:** ne pas afficher les sections 'Situation familiale' vides ([b24b21e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/b24b21e2f76ff091533243f3f315940438d30a83)), closes [#592](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/592)
+* **filters:** ne change pas d'état au changement d'onglet ([c6b443a](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c6b443a7a359c262e68210f4f4813679d8d3adbe)), closes [#574](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/574)
+* **formulaires:** les dates vides à la nav clavier sont transformées en null ([59ceb03](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/59ceb03df247b0a3d9f138e35718b93cb4ce3b93)), closes [#375](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/375)
+* **foyer:** recharge les données du foyer après dissociation ([8516a3c](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8516a3c03179bf4fef5888c08347fa863140f941)), closes [#563](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/563)
+* **foyer:** statut du dossier manquant ([89aa572](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/89aa572726839046bb9012d7240cd763593f3e46)), closes [#576](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/576)
+* limite les années à 4 chiffres dans le champ date ([c7ce5d8](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/c7ce5d8e9dbe79528a76f4653aee69ea74a5dccd)), closes [#375](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/375)
+* missing types ([e91c779](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/e91c77922e1dbecf3e0772e13793a3c87c5f1679))
+* **statistiques:** ajout org. prescripteurs des aides logement dans les stats des accompagnements ([d88cfcb](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/d88cfcbb7ba8fa3324c5ae6fa21b00b5d06ee475)), closes [#579](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/579)
+* **suivi:** supprime des filtres un objet d'accompagnement inactif qui n'a jamais été utilisé ([78f504f](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/78f504f7600e5d08510de05380b9686cde62480f)), closes [#564](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/564)
+* **textarea:** remplace tous les < et > sur l'évènement paste par * ([7b75515](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/7b755157ed3a5d7d1145f708e9da4db64f0f17d8))
+* **ui:** copier coller dans le champ texte libre ne remplace plus le texte présent ([452465e](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/452465e1b76511ec18e3a45ab131f7a3b5cf0037)), closes [#594](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/594)
+
+## [1.30.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.29.0...v1.30.0) (2024-09-17)
+
+
+### Features
+
+* **sso:** migration de IC vers Pro Connect ([8d1b4c2](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/8d1b4c27c565b860b6f1d06db79a5d314f07458f)), closes [#485](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/issues/485)
+* **sso:** utilisation de la session ([10d22e4](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/10d22e4a2cf709892edca582384d7b68daae46d0))
+* **sso:** utilise le bon client ([78f3666](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/commit/78f36667cd0420f4c96f823086b10924360f09cf))
 
 ## [1.29.0](https://gitlab.com/incubateur-territoires/startups/monsuivisocial/monsuivisocial-v2/compare/v1.28.0...v1.29.0) (2024-09-04)
 
