@@ -78,7 +78,6 @@
 </template>
 
 <script setup lang="ts">
-  import MultiSelectSearch from './MultiSelectSearch.vue'
   import type { Options } from '~/utils/options'
   import { onClickOutside } from '@vueuse/core'
   import { useField, useForm } from 'vee-validate'
@@ -121,22 +120,21 @@
   }>()
 
   // Form functions
-  type InitialValue = { [key: string]: boolean }
+  const { value: multiselectValue, handleChange } = useField<string[]>(
+    name,
+    undefined
+  )
 
-  const { value: multiselectValue } = useField<InitialValue[]>(name, undefined)
-  const { setValues } = useForm<any>({
-    validationSchema: null
-  })
-
-  const convertToOptions = (initialValues: InitialValue[]): Options => {
-    const initialKeys = initialValues.flatMap(Object.keys)
+  const convertToOptions = (initialValues: string[]): Options => {
     return existingOptions.value.filter(option =>
-      initialKeys.includes(option.value)
+      initialValues.includes(option.value)
     )
   }
-  const convertToFormValue = (options: Options) => {
-    return options.map(option => ({ [option.value]: true }))
+
+  const convertToFormValue = (options: Options): string[] => {
+    return options.map(option => option.value)
   }
+
   const selectedOptions = ref<Options>(convertToOptions(multiselectValue.value))
 
   // Computed
@@ -157,6 +155,7 @@
 
   // Functions
   const handleOptionToggle = (option: any) => {
+    // TODO: do we need emit?
     const index = selectedOptions.value.findIndex(
       selectedOption => selectedOption.value === option.value
     )
@@ -173,8 +172,7 @@
         selectedOptions.value.map(option => option.value)
       )
     }
-    console.log(convertToFormValue(selectedOptions.value))
-    setValues(convertToFormValue(selectedOptions.value))
+    handleChange(convertToFormValue(selectedOptions.value))
   }
 
   const handleChangeSearchValues = (optionQuery: string) => {
