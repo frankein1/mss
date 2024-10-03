@@ -1,5 +1,4 @@
 <template>
-  {{ firstName }}
   <template v-if="similarBeneficiary">
     <div class="fr-col-12">
       <AtomAlert
@@ -89,30 +88,28 @@
       const initialBeneficiary = props.initialBeneficiary
 
       const input = { usualName, birthName, firstName, birthDate }
-      console.log(props.initialBeneficiary)
-      console.log(input)
 
-      const toLower = (value: string | undefined | null) => {
-        if (value == null) {
+      const clean = (value: string | undefined | null) => {
+        if (value == null || value == '') {
           return null
         }
         return value.toLowerCase()
       }
 
       const sameValues =
-        toLower(input.usualName) == toLower(initialBeneficiary.usualName) ||
-        toLower(input.birthName) == toLower(initialBeneficiary.birthName) ||
-        toLower(input.firstName) == toLower(initialBeneficiary.firstName)
+        clean(input.usualName) == clean(initialBeneficiary.usualName) &&
+        clean(input.firstName) == clean(initialBeneficiary.firstName)
 
-      console.log(sameValues)
-
-      if (!isSimilarInputValid(input) || sameValues) {
+      if (!isSimilarInputValid(input)) {
+        emit('update:similarBeneficiary', undefined)
+        return
+      }
+      if (sameValues) {
         emit('update:similarBeneficiary', undefined)
         return
       }
       const similarBeneficiary =
         await useTrpcClient().beneficiary.getSimilar.query(input)
-      console.log(similarBeneficiary)
       emit('update:similarBeneficiary', similarBeneficiary)
     }
   )
