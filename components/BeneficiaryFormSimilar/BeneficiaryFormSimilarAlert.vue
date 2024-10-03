@@ -1,4 +1,5 @@
 <template>
+  {{ firstName }}
   <template v-if="similarBeneficiary">
     <div class="fr-col-12">
       <AtomAlert
@@ -54,11 +55,14 @@
     usualName: string | null | undefined
     firstName: string | null | undefined
     birthDate: Date | null | undefined
+    initialBeneficiary: any
   }>()
 
   const emit = defineEmits<{
     'update:similarBeneficiary': [SimilarBeneficiary]
   }>()
+
+  const { value: initialFirstName } = useField<any>('firstName')
 
   function isSimilarInputValid(input: {
     usualName?: string | null | undefined
@@ -82,15 +86,33 @@
       () => props.birthDate
     ],
     async ([usualName, birthName, firstName, birthDate]) => {
+      const initialBeneficiary = props.initialBeneficiary
+
       const input = { usualName, birthName, firstName, birthDate }
-      if (!isSimilarInputValid(input)) {
+      console.log(props.initialBeneficiary)
+      console.log(input)
+
+      const toLower = (value: string | undefined | null) => {
+        if (value == null) {
+          return null
+        }
+        return value.toLowerCase()
+      }
+
+      const sameValues =
+        toLower(input.usualName) == toLower(initialBeneficiary.usualName) ||
+        toLower(input.birthName) == toLower(initialBeneficiary.birthName) ||
+        toLower(input.firstName) == toLower(initialBeneficiary.firstName)
+
+      console.log(sameValues)
+
+      if (!isSimilarInputValid(input) || sameValues) {
         emit('update:similarBeneficiary', undefined)
         return
       }
-
       const similarBeneficiary =
         await useTrpcClient().beneficiary.getSimilar.query(input)
-
+      console.log(similarBeneficiary)
       emit('update:similarBeneficiary', similarBeneficiary)
     }
   )
