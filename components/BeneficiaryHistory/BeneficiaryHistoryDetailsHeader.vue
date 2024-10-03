@@ -33,7 +33,7 @@
       </h4>
       <div
         v-if="data.lastUpdatedBy"
-        class="fr-text--xs"
+        class="fr-text--xs fr-mb-1v"
       >
         Mis à jour par {{ formatUserDisplayName(data.lastUpdatedBy) }} le
         {{ formatDate(data.updated) }}
