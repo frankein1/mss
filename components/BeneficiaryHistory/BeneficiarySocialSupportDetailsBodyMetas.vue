@@ -29,3 +29,8 @@
     socialSupport: SocialSupportData
   }>()
 </script>
+<style scoped lang="scss">
+  li {
+    break-inside: avoid-column;
+  }
+</style>

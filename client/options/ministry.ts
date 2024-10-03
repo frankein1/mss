@@ -12,7 +12,9 @@ export const ministerKeys = buildKeys({
   [Minister.JeanChristopheCombe]:
     'Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)',
   [Minister.GenevieveDarrieussecq]:
-    'Geneviève Darrieussecq (Ministre de la Santé et de l’accès aux soins)',
+    'Geneviève Darrieussecq (Personnes handicapées)',
+  [Minister.GenevieveDarrieussecqBarnier1]:
+    'Geneviève Darrieussecq (Ministre de la Santé et de l’Accès aux soins)',
   [Minister.OlivierDussopt]:
     'Olivier Dussopt (Travail, Plein emploi et Insertion)',
   [Minister.SarahElHairy]:
@@ -27,13 +29,15 @@ export const ministerKeys = buildKeys({
   [Minister.CatherineVautrin]:
     'Catherine Vautrin (Travail, Santé et Solidarités)',
   [Minister.AgnesCanayer]:
-    'Agnès Canayer (Ministre déléguée chargée de la famille et de la petite enfance)',
+    'Agnès Canayer (Ministre déléguée, chargée de la Famille et de la Petite Enfance)',
   [Minister.AstridPanosyanBouvet]:
-    'Astrid Panosyan-Bouvet (Ministre du Travail et de l’emploi)',
+    'Astrid Panosyan-Bouvet (Ministre du Travail et de l’Emploi)',
   [Minister.PaulChristophe]:
-    'Paul Christophe (Ministre des solidarités, de l’autonomie et de l’égalité entre les femmes et les hommes)',
+    'Paul Christophe (Ministre des Solidarités, de l’Autonomie et de l’Égalité entre les femmes et les hommes)',
   [Minister.SalimaSaa]:
-    'Salima Saa (Secrétaire d’état en charge de l’égalité entre les femmes et les hommes)'
+    "Salima Saa (Secrétaire d'État, chargée de l'Égalité entre les femmes et les hommes)",
+  [Minister.CharlotteParmentierLecocq]:
+    'Charlotte Parmentier-Lecocq (Ministre déléguée, chargée des Personnes en situation de handicap)'
 })
 
 export const ministereDepartmentServiceAcKeys = buildKeys({

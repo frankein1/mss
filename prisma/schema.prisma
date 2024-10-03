@@ -936,8 +936,10 @@ enum Minister {
   AgnesFirminLeBodo
   // Jean-Christophe Combe (Solidarités, Autonomie et Personnes handicapées)
   JeanChristopheCombe
-  // Geneviève Darrieussecq (Personnes handicapées, Ministre de la Santé et de l’accès aux soins)
+  // Geneviève Darrieussecq (Personnes handicapées)
   GenevieveDarrieussecq
+  // Geneviève Darrieussecq (Ministre de la Santé et de l’Accès aux soins)
+  GenevieveDarrieussecqBarnier1
   // Olivier Dussopt (Travail, Plein emploi et Insertion)
   OlivierDussopt
   // Carole Grandjean (Enseignement, Formation professionnels)
@@ -954,14 +956,16 @@ enum Minister {
   FredericValletoux
   // Sarah El Haïry (Déléguée Enfance, Jeunesse et Familles)
   SarahElHairy
-  // Astrid PANOSYAN-BOUVET (Ministre du Travail et de l’emploi)
+  // Astrid Panosyan-Bouvet (Ministre du Travail et de l’Emploi)
   AstridPanosyanBouvet
-  // Paul CHRISTOPHE (Ministre des solidarités, de l’autonomie et de l’égalité entre les femmes et les hommes)
+  // Paul Christophe (Ministre des Solidarités, de l’Autonomie et de l’Égalité entre les femmes et les hommes)
   PaulChristophe
-  // Agnès CANAYER (Ministre déléguée chargée de la famille et de la petite enfance)
+  // Agnès Canayer (Ministre déléguée, chargée de la Famille et de la Petite Enfance)
   AgnesCanayer
-  // Salima SAA (Secrétaire d’état charge de l’égalité entre les femmes et les hommes)
+  // Salima Saa (Secrétaire d'État, chargée de l'Égalité entre les femmes et les hommes)
   SalimaSaa
+  // Charlotte Parmentier-Lecocq (Ministre déléguée, chargée des Personnes en situation de handicap)
+  CharlotteParmentierLecocq
 }
 
 enum BeneficiaryAccommodationZone {
