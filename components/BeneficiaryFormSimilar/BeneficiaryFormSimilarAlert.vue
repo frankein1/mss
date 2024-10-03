@@ -86,8 +86,6 @@
       () => props.birthDate
     ],
     async ([usualName, birthName, firstName, birthDate]) => {
-      const initialBeneficiary = props.initialBeneficiary
-
       const input = { usualName, birthName, firstName, birthDate }
 
       if (!isSimilarInputValid(input)) {
