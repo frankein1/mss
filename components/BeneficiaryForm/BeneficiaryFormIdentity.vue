@@ -45,6 +45,7 @@
       :first-name="firstName"
       :birth-date="birthDate"
       :birth-name="birthName"
+      :initial-beneficiary="initialBeneficiary"
       @update:similar-beneficiary="updateSimilarBeneficiary"
     />
     <div
@@ -96,6 +97,10 @@
 
   const { application } = usePermissions()
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
+
+  const props = defineProps<{
+    initialBeneficiary: any
+  }>()
 
   const emit = defineEmits<{
     update: [similarBeneficiary: SimilarBeneficiary]

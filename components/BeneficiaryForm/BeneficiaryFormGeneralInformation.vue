@@ -10,6 +10,7 @@
     <BeneficiaryFormIdentity
       id="identity"
       :similar-beneficiary="similarBeneficiary"
+      :initial-beneficiary="initialBeneficiary"
       @update:similar-beneficiary="updateSimilarBeneficiary"
     />
     <BeneficiaryFormContactDetails id="contact-details" />
@@ -31,6 +32,7 @@
       beneficiaryReferentIds: String[]
       agents: BeneficiaryReferent[]
       permissions: FamilyFilePermissions
+      initialBeneficiary: any
     }>(),
     {}
   )

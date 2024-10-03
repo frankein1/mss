@@ -22,6 +22,7 @@
         :permissions="permissions"
         :beneficiary-referent-ids="beneficiaryReferentIds"
         :agents="agents"
+        :initial-beneficiary="beneficiaryIdentification"
         @update="updateSimilarBeneficiary"
       />
     </AtomLazyComponent>
