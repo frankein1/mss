@@ -56,7 +56,7 @@
       >
         <legend
           id="housing-help-request-asked-housing-legend"
-          class="fr-fieldset__legend"
+          class="fr-fieldset__legend fr-fieldset__legend--regular"
         >
           {{ housingHelpRequestFieldLabels.askedHousing }}
         </legend>

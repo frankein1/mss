@@ -160,7 +160,11 @@
       isSubmitting: isSubmittingSituation,
       onSuccess: ({ familyFileId, id }) => {
         snackbar.success(
-          `${props.beneficiaryName} a bien été retiré du dossier. Pensez à mettre à jour le statut du dossier, les agents référents et le budget si nécessaire.`
+          `${props.beneficiaryName} a bien été retiré du dossier. 
+          Pensez à mettre à jour le statut du dossier, les agents référents 
+          et le budget si nécessaire.`,
+          () => {},
+          10000
         )
         navigateTo(
           routes.file.AppFile.path(familyFileId, { beneficiaryId: id })
