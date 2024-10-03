@@ -9,21 +9,13 @@
       />
     </div>
     <div class="fr-col-6">
-      <VeeMultiSelect
-        name="referents"
-        :label="beneficiaryFieldLabels.referents"
-        :options="referentOptions"
-        :disabled-options="disabledReferentOptions"
-        dropdown
-        required
-      />
-    </div>
-    <div class="fr-col-6">
+      <!-- TODO: change legend for label -->
+      <!-- TODO: not searchable -->
       <MultiSelect
-        name="county"
-        legend="Rechercher un département"
-        :is-searchable="false"
+        name="referents"
+        :legend="beneficiaryFieldLabels.referents"
         :options="referentOptions"
+        :is-searchable="true"
       />
     </div>
     <div
