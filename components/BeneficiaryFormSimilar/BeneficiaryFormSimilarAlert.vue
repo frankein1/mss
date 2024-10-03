@@ -57,14 +57,12 @@
     usualName: string | null | undefined
     firstName: string | null | undefined
     birthDate: Date | null | undefined
-    initialBeneficiary: BeneficiaryIdentification | null
+    initialBeneficiary?: BeneficiaryIdentification | null
   }>()
 
   const emit = defineEmits<{
     'update:similarBeneficiary': [SimilarBeneficiary]
   }>()
-
-  const { value: initialFirstName } = useField<any>('firstName')
 
   function isSimilarInputValid(input: {
     usualName?: string | null | undefined
