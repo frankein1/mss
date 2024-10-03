@@ -1,5 +1,7 @@
 <template>
-  <template v-if="similarBeneficiary">
+  <template
+    v-if="similarBeneficiary && similarBeneficiary.id != initialBeneficiary?.id"
+  >
     <div class="fr-col-12">
       <AtomAlert
         :alert-type="AlertType.Warning"
@@ -47,6 +49,7 @@
     GetSimilarBeneficiaryInput
   } from '~/server/schema'
   import { formatUserDisplayName } from '~/utils/user'
+  import { BeneficiaryIdentification } from '~/types/beneficiary'
 
   const props = defineProps<{
     similarBeneficiary: SimilarBeneficiary
@@ -54,6 +57,7 @@
     usualName: string | null | undefined
     firstName: string | null | undefined
     birthDate: Date | null | undefined
+    initialBeneficiary?: BeneficiaryIdentification | null
   }>()
 
   const emit = defineEmits<{
@@ -83,14 +87,13 @@
     ],
     async ([usualName, birthName, firstName, birthDate]) => {
       const input = { usualName, birthName, firstName, birthDate }
+
       if (!isSimilarInputValid(input)) {
         emit('update:similarBeneficiary', undefined)
         return
       }
-
       const similarBeneficiary =
         await useTrpcClient().beneficiary.getSimilar.query(input)
-
       emit('update:similarBeneficiary', similarBeneficiary)
     }
   )

@@ -45,6 +45,7 @@
       :first-name="firstName"
       :birth-date="birthDate"
       :birth-name="birthName"
+      :initial-beneficiary="initialBeneficiary"
       @update:similar-beneficiary="updateSimilarBeneficiary"
     />
     <div
@@ -93,9 +94,14 @@
     nationalityKeys
   } from '~/client/options'
   import { SimilarBeneficiary } from '~/server/trpc/routers'
+  import { BeneficiaryIdentification } from '~/types/beneficiary'
 
   const { application } = usePermissions()
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
+
+  const props = defineProps<{
+    initialBeneficiary: BeneficiaryIdentification | null
+  }>()
 
   const emit = defineEmits<{
     update: [similarBeneficiary: SimilarBeneficiary]

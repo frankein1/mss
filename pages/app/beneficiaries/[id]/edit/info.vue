@@ -22,6 +22,7 @@
         :permissions="permissions"
         :beneficiary-referent-ids="beneficiaryReferentIds"
         :agents="agents"
+        :initial-beneficiary="beneficiaryIdentification"
         @update="updateSimilarBeneficiary"
       />
     </AtomLazyComponent>
@@ -119,9 +120,9 @@
     validate: boolean
   ) => {
     if (similarBeneficiary.value) {
-      useBeneficiaryFormSimilarModal(similarBeneficiary.value, () =>
+      useBeneficiaryFormSimilarModal(similarBeneficiary.value, () => {
         saveBeneficiary(beneficiary, target, validate)
-      )
+      })
       return
     }
 
