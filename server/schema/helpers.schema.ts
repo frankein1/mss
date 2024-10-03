@@ -112,12 +112,20 @@ export const amountNumber = z.preprocess(
     .gte(0, 'Veuillez entrer un nombre supérieur ou égal à 0.')
 )
 
-export const dateOrEmpty = z
-  .date({ coerce: true })
-  .nullish()
-  .refine(date => !date || date.getFullYear() <= 9999, {
-    message: validYear
-  })
+export const dateOrEmpty = z.preprocess(
+  val => (val === '' || val === undefined ? null : val),
+  z
+    .date({ coerce: true })
+    .nullish()
+    .refine(
+      date => {
+        return !date || date.getFullYear() <= 9999
+      },
+      {
+        message: validYear
+      }
+    )
+)
 
 export const openText = (maxLength: number) =>
   stringConstraint
