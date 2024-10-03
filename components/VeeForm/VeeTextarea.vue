@@ -34,7 +34,7 @@
       :disabled
       @input="onInput"
       @change="handleChange"
-      @paste="onPaste"
+      @paste.stop.prevent="onPaste"
     ></textarea>
     <div
       class="fr-messages-group"
@@ -77,6 +77,8 @@
   // https://vee-validate.logaretm.com/v4/guide/composition-api/caveats
   const name = toRef(() => props.name)
 
+  const input = ref<HTMLTextAreaElement | null>(null)
+
   const {
     errorMessage: error,
     value,
@@ -97,11 +99,32 @@
 
   function onPaste(evt: ClipboardEvent) {
     const data = evt.clipboardData
-    if (data) {
-      const content = data.getData('text')
-      setValue(content.replaceAll('<', '*').replaceAll('>', '*'))
-      evt.preventDefault()
+
+    if (!data || !input.value) {
+      return
     }
+
+    // Cursor positions
+    const start = input.value.selectionStart
+    const end = input.value.selectionEnd
+
+    // Input content before and after cursor
+    const inputContent = input.value.value
+    const before = inputContent.substring(0, start)
+    const after = inputContent.substring(end)
+
+    // Sanitized data to paste
+    const topaste = data.getData('text').replace(/[<>]/g, '*')
+
+    // Field update with pasted content
+    const updated = `${before}${topaste}${after}`
+    setValue(updated)
+
+    // Set cursor position to pasted content end
+    input.value.setSelectionRange(
+      start + topaste.length,
+      start + topaste.length
+    )
   }
 </script>
 
