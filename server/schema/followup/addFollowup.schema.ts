@@ -20,6 +20,8 @@ import {
   requiredErrorMessage
 } from '~/utils/zod'
 
+// TODO: etre plus restrictif sur synthesisRichText et privateSynthesisRichText
+// TODO: valider le format du JSON coté client et coté serveur au get et au create/update (voir type tiptap)
 export const addFollowupSchemaBase = z.object({
   isMinistry: z.boolean(),
   familyFileId: z.string().uuid(),
@@ -35,7 +37,9 @@ export const addFollowupSchemaBase = z.object({
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   date: z.coerce.date(errorMessages),
   synthesis: openText(6000).nullish(),
+  synthesisRichText: z.string().nullish(),
   privateSynthesis: openText(1000).nullish(),
+  privateSynthesisRichText: z.string().nullish(),
   status: requiredNativeEnum(SocialSupportStatus),
   helpRequested: z.boolean().default(false),
   place: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),
