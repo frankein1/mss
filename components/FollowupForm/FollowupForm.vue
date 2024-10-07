@@ -310,7 +310,7 @@
 
 <script lang="ts" setup>
   import { SocialSupportSubject, FollowupMedium } from '@prisma/client'
-  import { type FormErrors } from 'vee-validate'
+  import type { FormErrors } from 'vee-validate'
   import { JSONContent } from '@tiptap/vue-3'
   import {
     ministerKeys,
@@ -377,6 +377,7 @@
   ) => {
     console.log(html)
     console.log(json)
+    console.log(JSON.stringify(json))
     console.log(rawText)
     setSynthesis(json?.text)
   }
