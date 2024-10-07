@@ -18,15 +18,11 @@
         :is-searchable="true"
       />
     </div>
+
     <div
       v-if="full"
       :class="application.module.vulnerablePerson ? 'fr-col-6' : 'fr-col-12'"
-    >
-      <VeeCheckbox
-        :label="beneficiaryFieldLabels.aidantConnectAuthorized"
-        name="aidantConnectAuthorized"
-      />
-    </div>
+    ></div>
 
     <div
       v-if="application.module.vulnerablePerson && full"
