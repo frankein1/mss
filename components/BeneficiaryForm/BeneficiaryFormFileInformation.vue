@@ -1,6 +1,6 @@
 <template>
   <BeneficiaryFormSection>
-    <div class="fr-col-6">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeSelect
         name="status"
         :label="beneficiaryFieldLabels.status"
@@ -8,21 +8,24 @@
         required
       />
     </div>
-    <div class="fr-col-6">
-      <!-- TODO: change legend for label -->
-      <!-- TODO: not searchable -->
+    <div class="fr-col-12 fr-col-lg-6">
       <MultiSelect
         name="referents"
         :legend="beneficiaryFieldLabels.referents"
         :options="referentOptions"
-        :is-searchable="true"
+        :disabled-options="disabledReferentOptions"
       />
     </div>
 
     <div
       v-if="full"
       :class="application.module.vulnerablePerson ? 'fr-col-6' : 'fr-col-12'"
-    ></div>
+    >
+      <VeeCheckbox
+        :label="beneficiaryFieldLabels.aidantConnectAuthorized"
+        name="aidantConnectAuthorized"
+      />
+    </div>
 
     <div
       v-if="application.module.vulnerablePerson && full"
