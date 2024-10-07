@@ -314,6 +314,9 @@ model SocialSupport {
   synthesis        String?
   privateSynthesis String? @map("private_synthesis")
 
+  synthesisRichText        String? @map("synthesis_rich_text")
+  privateSynthesisRichText String? @map("private_synthesis_rich_text")
+
   ministre     Minister?
   numeroPegase String?   @map("numero_pegase")
 

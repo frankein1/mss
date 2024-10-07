@@ -64,8 +64,16 @@ export function filterSocialSupport({
       socialSupport.privateSynthesis,
       conditions.privateSynthesis
     ),
+    privateSynthesisRichText: show(
+      socialSupport.privateSynthesisRichText,
+      conditions.privateSynthesis
+    ),
 
     synthesis: show(socialSupport.synthesis, conditions.details),
+    synthesisRichText: show(
+      socialSupport.synthesisRichText,
+      conditions.details
+    ),
 
     documents: show(socialSupport.documents, conditions.details),
     comments: show(socialSupport.comments, conditions.details),
