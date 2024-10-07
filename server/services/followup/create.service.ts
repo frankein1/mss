@@ -32,7 +32,9 @@ export const create = async ({ ctx, input }: CreateParams) => {
     ministre,
     date,
     synthesis,
+    synthesisRichText,
     privateSynthesis,
+    privateSynthesisRichText,
     status,
     helpRequested,
     dueDate,
@@ -83,7 +85,9 @@ export const create = async ({ ctx, input }: CreateParams) => {
       ministre,
       numeroPegase,
       synthesis,
+      synthesisRichText,
       privateSynthesis,
+      privateSynthesisRichText,
       dueDate,
       followup: {
         create: {

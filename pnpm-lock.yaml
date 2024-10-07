@@ -3052,6 +3052,7 @@ packages:
       - supports-color
       - typescript
     dev: true
+
   /@tiptap/core@2.6.6(@tiptap/pm@2.6.6):
     resolution: {integrity: sha512-VO5qTsjt6rwworkuo0s5AqYMfDA0ZwiTiH6FHKFSu2G/6sS7HKcc/LjPq+5Legzps4QYdBDl3W28wGsGuS1GdQ==}
     peerDependencies:
@@ -3314,7 +3315,7 @@ packages:
       '@tiptap/extension-bubble-menu': 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
       '@tiptap/extension-floating-menu': 2.6.6(@tiptap/core@2.6.6)(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
-      vue: 3.4.38(typescript@5.5.4)
+      vue: 3.4.38(typescript@5.6.2)
     dev: false
 
   /@trpc/client@10.45.2(@trpc/server@10.45.2):
