@@ -3036,7 +3036,6 @@ packages:
   /@socket.io/component-emitter@3.1.2:
     resolution: {integrity: sha512-9BCxFwvbGg/RsZK9tjXd8s4UcwR0MWeFQ1XEKIQVVvAGJyINdrqKMcTRyLoK8Rse1GjzLV9cwjWV1olXRWEXVA==}
 
-<<<<<<< HEAD
   /@stylistic/eslint-plugin@2.8.0(eslint@9.11.1)(typescript@5.6.2):
     resolution: {integrity: sha512-Ufvk7hP+bf+pD35R/QfunF793XlSRIC7USr3/EdgduK9j13i2JjmsM0LUz3/foS+jDYp2fzyWZA9N44CPur0Ow==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -3053,7 +3052,6 @@ packages:
       - supports-color
       - typescript
     dev: true
-=======
   /@tiptap/core@2.6.6(@tiptap/pm@2.6.6):
     resolution: {integrity: sha512-VO5qTsjt6rwworkuo0s5AqYMfDA0ZwiTiH6FHKFSu2G/6sS7HKcc/LjPq+5Legzps4QYdBDl3W28wGsGuS1GdQ==}
     peerDependencies:
@@ -3318,7 +3316,6 @@ packages:
       '@tiptap/pm': 2.6.6
       vue: 3.4.38(typescript@5.5.4)
     dev: false
->>>>>>> 228a8fe7 (wip: create rich text editor component)
 
   /@trpc/client@10.45.2(@trpc/server@10.45.2):
     resolution: {integrity: sha512-ykALM5kYWTLn1zYuUOZ2cPWlVfrXhc18HzBDyRhoPYN0jey4iQHEFSEowfnhg1RvYnrAVjNBgHNeSAXjrDbGwg==}
