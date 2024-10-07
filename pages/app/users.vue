@@ -11,16 +11,14 @@
             :error="usersError"
           />
 
-          <DsfrAccordionsGroup>
-            <li>
-              <DsfrAccordion
-                id="accordion-1"
-                title="En savoir plus sur les rôles et habilitations"
-                :expanded-id="undefined"
-              >
-                <RoleTable id="roles-details" />
-              </DsfrAccordion>
-            </li>
+          <DsfrAccordionsGroup class="fr-mt-2w">
+            <DsfrAccordion
+              id="accordion-1"
+              title="En savoir plus sur les rôles et habilitations"
+              :expanded-id="undefined"
+            >
+              <RoleTable id="roles-details" />
+            </DsfrAccordion>
           </DsfrAccordionsGroup>
         </div>
 

@@ -62,19 +62,20 @@
                   :key="option.value"
                   class="option-item"
                 >
-                  <input
+                  <MultiSelectCheckbox
                     :id="option.value"
-                    type="checkbox"
-                    :name="option.value"
-                    :label="option.label"
+                    :option="option"
                     :checked="
                       multiselectValue.find(
                         selected => selected == option.value
                       ) != null
                     "
-                    @change="handleOptionToggle(option)"
+                    :disabled="
+                      disabledOptions.find(item => item === option.value) !=
+                      null
+                    "
+                    @change-value="handleOptionToggle(option)"
                   />
-                  <label :for="option.value">{{ option.label }}</label>
                 </div>
               </fieldset>
             </div>
@@ -94,6 +95,7 @@
     defineProps<{
       name: string
       options: Options
+      disabledOptions: string[]
       legend?: string | null
       optionsClass?: string
       ariaDescribedby?: string
@@ -107,9 +109,12 @@
       optionValueResolver: null,
       ariaDescribedby: '',
       ariaLabelledBy: '',
-      isSearchable: false
+      isSearchable: true
     }
   )
+
+  console.log(props.options)
+  console.log(props.disabledOptions)
 
   // Ref
   const isOpen = ref<boolean>(false)
@@ -162,7 +167,6 @@
 
   // Functions
   const handleOptionToggle = (option: any) => {
-    // TODO: do we need emit?
     const index = selectedOptions.value.findIndex(
       selectedOption => selectedOption.value === option.value
     )
@@ -197,13 +201,6 @@
   onClickOutside(target, _event => {
     isOpen.value = false
   })
-
-  onMounted(() => {
-    //
-  })
-  onBeforeMount(() => {
-    //
-  })
 </script>
 
 <style lang="scss" scoped>
@@ -237,6 +234,7 @@
           display: flex;
           flex-direction: column;
           gap: 0.5rem;
+          padding: 0.5rem;
         }
         .option-item {
           display: flex;
@@ -247,8 +245,6 @@
     }
   }
 
-  // Transition
-  // TODO
   .fade-in-leave-active,
   .fade-in-enter-active {
     transition: all 0.15s ease;
@@ -258,19 +254,5 @@
   .fade-in-leave-to {
     transform: translateY(20px);
     opacity: 0;
-  }
-</style>
-
-<style lang="scss">
-  .option-item {
-    input[type='checkbox'] + label {
-      margin-left: 1rem;
-    }
-    input[type='checkbox'] + label:before {
-      top: 0.3rem;
-      width: 1rem;
-      height: 1rem;
-      left: -1.5rem;
-    }
   }
 </style>
