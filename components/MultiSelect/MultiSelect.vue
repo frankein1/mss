@@ -62,11 +62,19 @@
                   :key="option.value"
                   class="option-item"
                 >
-                  <VeeCheckbox
+                  <input
+                    :id="option.value"
+                    type="checkbox"
                     :name="option.value"
                     :label="option.label"
+                    :checked="
+                      multiselectValue.find(
+                        selected => selected == option.value
+                      ) != null
+                    "
                     @change="handleOptionToggle(option)"
                   />
+                  <label :for="option.value">{{ option.label }}</label>
                 </div>
               </fieldset>
             </div>
@@ -107,7 +115,6 @@
   const isOpen = ref<boolean>(false)
   const optionsHits = ref<any>(null)
   const optionQuery = ref<any>(null)
-  // const selectedOptions = ref<Options>([])
   const existingOptions = ref<Options>(props.options)
   const filteredOptions = ref<Options>(existingOptions.value)
   const target = ref(null)
