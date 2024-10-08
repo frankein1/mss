@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-  import { toOptions, withEmptyValue } from '~/utils/options'
+  import { withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
   import type { FamilyFileHistoryFilterInput } from '~/server/schema'
@@ -55,27 +55,47 @@
     'update:values': [filters: FamilyFileHistoryFilterInput]
   }>()
 
+  const { familyFileIdentification } = inject(
+    getFamilyFileInjectionKey
+  ) as GetFamilyFile
+
+  const { agents, subjects } = inject(
+    getStructureInfoInjectionKey
+  ) as GetStructureInfo
+
   const {
     data: agentOptions,
     pending: agentOptionsPending,
     error: agentOptionsError
-  } = await trpcClient.config.getAgents.useQuery(undefined, {
-    transform: agents => toOptions(agents, 'id', 'name'),
-    queryKey: 'config.getAgents.options'
-  })
+  } = agents
 
   const {
     data: socialSupportSubjectOptions,
     pending: socialSupportSubjectOptionsPending,
     error: socialSupportSubjectOptionsError
-  } = await trpcClient.structure.getActiveOrUsedSocialSupportSubjects.useQuery(
-    undefined,
-    {
-      transform: socialSupportSubjects =>
-        toOptions(socialSupportSubjects, 'id', 'name'),
-      queryKey: 'structure.getActiveOrUsedSocialSupportSubjects.options'
-    }
-  )
+  } = subjects
+
+  // const {
+  //   data: agentOptions,
+  //   pending: agentOptionsPending,
+  //   error: agentOptionsError
+  // } = await trpcClient.config.getAgents.useQuery(undefined, {
+  //   transform: agents => toOptions(agents, 'id', 'name'),
+  //   queryKey: 'config.getAgents.options'
+  // })
+
+  // const {
+  //   data: socialSupportSubjectOptions,
+  //   pending: socialSupportSubjectOptionsPending,
+  //   error: socialSupportSubjectOptionsError
+  // } = await trpcClient.structure.getActiveOrUsedSocialSupportSubjects.useQuery(
+  //   undefined,
+  //   {
+  //     transform: socialSupportSubjects =>
+  //       toOptions(socialSupportSubjects, 'id', 'name'),
+  //     queryKey: 'structure.getActiveOrUsedSocialSupportSubjects.options'
+  //   }
+  // )
 
   const { application } = usePermissions()
 
@@ -85,18 +105,17 @@
     error: examinationDateOptionsError
   } = await useAsyncData(loadExaminationDates)
 
-  const {
-    familyFileIdentification,
-    pending: filePending,
-    error: fileError
-  } = await useFamilyFileMinimalInfo(props.familyFileId)
+  // const {
+  //   familyFileIdentification,
+  //   pending: filePending,
+  //   error: fileError
+  // } = await useFamilyFileMinimalInfo(props.familyFileId)
 
   const pending = computed(
     () =>
       agentOptionsPending.value ||
       socialSupportSubjectOptionsPending.value ||
-      examinationDateOptionsPending.value ||
-      filePending.value
+      examinationDateOptionsPending.value
   )
 
   const fetchError = computed(() => {
@@ -108,9 +127,6 @@
     }
     if (examinationDateOptionsError.value) {
       return "La liste des dates de passage en commission n'a pas pu être chargée."
-    }
-    if (fileError.value) {
-      return "La liste des bénéficiaires du foyer n'a pas pu être chargée"
     }
     return ''
   })
@@ -226,7 +242,7 @@
       })
     }
 
-    if (familyFileIdentification.value.length > 1) {
+    if ((familyFileIdentification.value || []).length > 1) {
       filters.push({
         name: 'beneficiaryId',
         label: 'Bénéficiaire concerné :',
