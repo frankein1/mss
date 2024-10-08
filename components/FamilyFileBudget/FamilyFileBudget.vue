@@ -40,20 +40,16 @@
 
 <script lang="ts" setup>
   // import { BeneficiaryFileIdentification } from '~/types/beneficiary'
-  import {
-    useGetFamilyFile,
-    getFamilyFileInjectionKey
-  } from '~/composables/useGetFamilyFile'
+  import { getFamilyFileInjectionKey } from '~/composables/useGetFamilyFile'
 
-  const props = defineProps<{
+  defineProps<{
     familyFileId: string
     // familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
 
   const { familyFileIdentification, budget } = inject(
-    getFamilyFileInjectionKey,
-    await useGetFamilyFile(props.familyFileId)
-  )
+    getFamilyFileInjectionKey
+  ) as GetFamilyFile
   const { data, error } = budget
 
   // const trpcClient = useTrpcClient()
