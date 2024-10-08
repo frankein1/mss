@@ -6,20 +6,19 @@
     label="Ajouter un nouveau document"
     @new-document="onNewDocument"
   />
-  <VeeSearchableSelect
+  <Multiselect
     v-if="!pending && !error"
     ref="selectDocInput"
-    class="beneficiary-documents-search"
     :name="name"
     label="Sélectionner un ou plusieurs fichiers depuis l'espace bénéficiaire"
     :options="documentOptions"
-    multiple
   />
 </template>
 
 <script lang="ts" setup>
   import { ref } from 'vue'
   import VeeSearchableSelect from '../VeeForm/VeeSearchableSelect.vue'
+  import Multiselect from '~/components/MultiSelect/MultiSelect.vue'
 
   const selectDocInput = ref<typeof VeeSearchableSelect | null>(null)
 

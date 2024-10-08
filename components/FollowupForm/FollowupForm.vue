@@ -110,15 +110,12 @@
 
         <!-- ROW -->
         <div class="fr-col-12">
-          <VeeSearchableSelect
-            :label="followupFieldLabels.subjects"
+          <Multiselect
             name="subjects"
+            :label="followupFieldLabels.subjects"
             :options="socialSupportSubjectOptions"
             required
-            multiple
-          >
-            <template #hint> </template>
-          </VeeSearchableSelect>
+          />
         </div>
 
         <!-- ROW -->
@@ -324,6 +321,7 @@
   import { PartnerOrganizationIdName } from '~/types/partner'
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import Multiselect from '~/components/MultiSelect/MultiSelect.vue'
 
   const props = withDefaults(
     defineProps<{

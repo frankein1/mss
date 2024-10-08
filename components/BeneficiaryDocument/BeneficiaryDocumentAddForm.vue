@@ -27,11 +27,11 @@
       :options="withEmptyValue(documentTypeKeys.options)"
       required
     />
-    <VeeSearchableSelect
-      :label="documentFieldLabels.tags"
+    <Multiselect
+      class="fr-mb-2w"
       name="tags"
+      :label="documentFieldLabels.tags"
       :options="documentTagKeys.options"
-      multiple
     />
     <VeeCheckbox
       class="fr-mb-2w"
@@ -67,6 +67,7 @@
   import { documentFieldLabels } from '~/client/labels'
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import Multiselect from '~/components/MultiSelect/MultiSelect.vue'
 
   const props = withDefaults(
     defineProps<{

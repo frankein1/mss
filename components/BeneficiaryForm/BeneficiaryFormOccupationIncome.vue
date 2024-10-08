@@ -46,12 +46,10 @@
         />
       </div>
       <div class="fr-col-12">
-        <VeeMultiSelect
+        <Multiselect
           name="pensionOrganisations"
           :label="beneficiaryFieldLabels.pensionOrganisations"
           :options="pensionOrganisationKeys.options"
-          label-class="fr-text--regular"
-          dropdown
         />
       </div>
       <div
@@ -124,6 +122,7 @@
   } from '~/client/options'
   import { beneficiaryFieldLabels } from '~/client/labels/beneficiary.labels'
   import { routes } from '~/utils/routes'
+  import Multiselect from '~/components/MultiSelect/MultiSelect.vue'
 
   const { application } = usePermissions()
 
