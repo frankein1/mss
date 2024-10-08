@@ -3,7 +3,7 @@
     <section class="feature-section fr-mb-4w">
       <h3 class="fr-sr-only">Filtres</h3>
       <BeneficiaryHistoryFilters
-        v-model:values="filters"
+        v-model:values="socialSupportsFilters"
         :results-label="resultsLabel"
         :family-file-id="familyFileId"
       />
@@ -15,7 +15,7 @@
     />
     <template v-else-if="items">
       <template v-if="!items.length">
-        <p v-if="!filters">
+        <p v-if="!socialSupportsFilters">
           Créez une synthèse d'entretien pour commencer à alimenter l'historique
           du bénéficiaire.
         </p>
@@ -30,7 +30,9 @@
               :key="item.data.id"
               :item="item"
               :family-file-permissions="familyFilePermissions"
-              :single-beneficiary="familyFileIdentification.length === 1"
+              :single-beneficiary="
+                (familyFileIdentification || []).length === 1
+              "
               @deleted="onHistoryItemDeleted"
             />
           </ul>
@@ -48,26 +50,35 @@
 
   const props = defineProps<{
     familyFileId: string
-    familyFileIdentification: BeneficiaryFileIdentification[]
+    // familyFileIdentification: BeneficiaryFileIdentification[]
     familyFilePermissions: FamilyFilePermissions
   }>()
 
   const emit = defineEmits<{ refresh: [] }>()
 
   // migrate ref to define model here
-  const filters = defineModel<FamilyFileHistoryFilterInput>({ default: {} })
+  // const filters = defineModel<FamilyFileHistoryFilterInput>({ default: {} })
 
-  const queryInput = computed(() => ({
-    familyFileId: props.familyFileId,
-    filters: filters.value
-  }))
+  // const queryInput = computed(() => ({
+  //   familyFileId: props.familyFileId,
+  //   filters: filters.value
+  // }))
 
-  const { data, error } = await useTrpcClient().file.getSocialSupports.useQuery(
-    queryInput,
-    {
-      queryKey: 'getHistory'
-    }
-  )
+  // const { data, error } = await useTrpcClient().file.getSocialSupports.useQuery(
+  //   queryInput,
+  //   {
+  //     queryKey: 'getHistory'
+  //   }
+  // )
+
+  const {
+    familyFileIdentification,
+    socialSupports,
+    socialSupportsFilters,
+    socialSupportsQueryInput
+  } = inject(getFamilyFileInjectionKey) as GetFamilyFile
+
+  const { data, error } = socialSupports
 
   const items = computed(() => data.value?.items || [])
 
