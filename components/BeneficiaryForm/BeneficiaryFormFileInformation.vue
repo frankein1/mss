@@ -11,9 +11,20 @@
     <div class="fr-col-12 fr-col-lg-6">
       <MultiSelect
         name="referents"
-        :legend="beneficiaryFieldLabels.referents"
+        :label="beneficiaryFieldLabels.referents"
         :options="referentOptions"
         :disabled-options="disabledReferentOptions"
+        required
+      />
+    </div>
+    <div class="fr-col-12 fr-col-lg-6">
+      <VeeMultiSelect
+        name="referentsTwo"
+        :label="beneficiaryFieldLabels.referents"
+        :options="referentOptions"
+        :disabled-options="disabledReferentOptions"
+        dropdown
+        required
       />
     </div>
 

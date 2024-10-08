@@ -19,7 +19,7 @@
                 <button type="submit">Valider</button>
                 <MultiSelect
                   name="county"
-                  legend="Rechercher un département"
+                  label="Rechercher un département"
                   is-searchable
                   :options="allValues"
                 />

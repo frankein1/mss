@@ -37,6 +37,7 @@
 <style lang="scss" scoped>
   label {
     margin-left: 0;
+    color: var(--text-label-grey) !important;
   }
 
   label::before {
