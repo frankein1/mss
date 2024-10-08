@@ -2,7 +2,7 @@
   <AtomAlert
     v-if="error"
     :alert-type="AlertType.Error"
-    message="Le dossier n'a pas pu être chargé."
+    :message="error.message"
   />
   <PageContainer v-else-if="familyFileIdentification">
     <AtomBreadcrumb
@@ -62,8 +62,8 @@
         >
           <BeneficiaryDocumentList
             :family-file-id="selectedBeneficiary.familyFileId"
-            :family-file-identification="familyFileIdentification || []"
           />
+          <!-- :family-file-identification="familyFileIdentification || []" -->
         </AtomTab>
         <AtomTab
           :tab-id="FamilyFileTab.History"
@@ -85,10 +85,8 @@
           icon="fr-icon-money-euro-circle-line"
           selected
         >
-          <FamilyFileBudget
-            :family-file-id="familyFileId"
-            :family-file-identification="familyFileIdentification"
-          />
+          <FamilyFileBudget :family-file-id="familyFileId" />
+          <!-- :family-file-identification="familyFileIdentification" -->
         </AtomTab>
       </AtomTabs>
     </div>
@@ -96,6 +94,10 @@
 </template>
 
 <script lang="ts" setup>
+  import {
+    useGetFamilyFile,
+    getFamilyFileInjectionKey
+  } from '~/composables/useGetFamilyFile'
   import { TRPCClientErrorLike } from '@trpc/client'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
@@ -117,12 +119,19 @@
 
   const familyFileId = route.params.id as string
 
-  const {
-    familyFileIdentification,
-    error,
-    getBeneficiaryIdOnPageLoad,
-    refreshFamilyFile
-  } = await useFamilyFileMinimalInfo(familyFileId)
+  const ff = await useGetFamilyFile(familyFileId)
+  const { familyFile, familyFileIdentification, getBeneficiaryIdOnPageLoad } =
+    ff
+  provide(getFamilyFileInjectionKey, ff)
+
+  const { error, refresh: refreshFamilyFile } = familyFile
+
+  // const {
+  //   familyFileIdentification,
+  //   error,
+  //   getBeneficiaryIdOnPageLoad,
+  //   refreshFamilyFile
+  // } = await useFamilyFileMinimalInfo(familyFileId)
 
   const title = routes.file.AppFile.title(familyFileIdentification.value)
   useHead({ title })
