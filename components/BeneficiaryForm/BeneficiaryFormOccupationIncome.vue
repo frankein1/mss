@@ -46,12 +46,10 @@
         />
       </div>
       <div class="fr-col-12">
-        <VeeMultiSelect
+        <MultiSelect
           name="pensionOrganisations"
           :label="beneficiaryFieldLabels.pensionOrganisations"
           :options="pensionOrganisationKeys.options"
-          label-class="fr-text--regular"
-          dropdown
         />
       </div>
       <div

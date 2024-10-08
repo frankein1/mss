@@ -110,15 +110,12 @@
 
         <!-- ROW -->
         <div class="fr-col-12">
-          <VeeSearchableSelect
-            :label="followupFieldLabels.subjects"
+          <MultiSelect
             name="subjects"
+            :label="followupFieldLabels.subjects"
             :options="socialSupportSubjectOptions"
             required
-            multiple
-          >
-            <template #hint> </template>
-          </VeeSearchableSelect>
+          />
         </div>
 
         <!-- ROW -->

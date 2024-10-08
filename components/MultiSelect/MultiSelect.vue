@@ -114,7 +114,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
   import type { Options, OptionType } from '~/utils/options'
   import { onClickOutside } from '@vueuse/core'
   import { useField, useForm } from 'vee-validate'
