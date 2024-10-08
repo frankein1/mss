@@ -55,21 +55,10 @@
 
 <script setup lang="ts">
   import { GetDocument } from './types'
-  // import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
-  // import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
-  // import { BeneficiaryDocumentSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
-  // import { BeneficiaryFileIdentification } from '~/types/beneficiary'
-  import {
-    useGetFamilyFile,
-    getFamilyFileInjectionKey
-  } from '~/composables/useGetFamilyFile'
-
-  // const trpcClient = useTrpcClient()
 
   const props = defineProps<{
     familyFileId: string
-    // familyFileIdentification: BeneficiaryFileIdentification[]
   }>()
 
   const {
@@ -80,32 +69,9 @@
     documentsPage,
     documentsPerPage,
     updateDocumentPagination
-  } = inject(
-    getFamilyFileInjectionKey,
-    await useGetFamilyFile(props.familyFileId)
-  )
+  } = inject(getFamilyFileInjectionKey) as GetFamilyFile
 
   const { data, error, pending, refresh } = docs
-
-  // const filters = ref<BeneficiaryDocumentFilterInput>({})
-  // const orderBy = ref<BeneficiaryDocumentSort>({ created: SortOrder.Desc })
-  // const page = ref(1)
-  // const perPage = ref(REQUEST_LIMIT_DEFAULT)
-
-  // const { updatePagination } = usePagination(page, perPage, filters)
-
-  // const queryInput = computed(() => ({
-  //   familyFileId: props.familyFileId,
-  //   filters: filters.value,
-  //   orderBy: orderBy.value,
-  //   page: page.value,
-  //   perPage: perPage.value
-  // }))
-
-  // const { data, error, pending, refresh } =
-  //   await trpcClient.file.getDocuments.useQuery(queryInput, {
-  //     queryKey: 'getDocuments'
-  //   })
 
   const documents = computed(() => data.value?.documents || [])
 
