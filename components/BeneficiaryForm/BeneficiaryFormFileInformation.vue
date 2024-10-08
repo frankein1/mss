@@ -11,9 +11,10 @@
     <div class="fr-col-12 fr-col-lg-6">
       <MultiSelect
         name="referents"
-        :legend="beneficiaryFieldLabels.referents"
+        :label="beneficiaryFieldLabels.referents"
         :options="referentOptions"
         :disabled-options="disabledReferentOptions"
+        required
       />
     </div>
 

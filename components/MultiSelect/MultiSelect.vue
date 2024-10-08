@@ -1,11 +1,35 @@
 <template>
-  <div class="multiselect">
+  <div
+    class="multiselect"
+    :class="{
+      'fr-select-group--error': error
+    }"
+  >
+    <label
+      :id="labelId"
+      class="fr-label"
+      :for="displayInputId"
+    >
+      {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
+      <span
+        v-if="hint"
+        class="fr-hint-text"
+      >
+        {{ hint }}
+      </span>
+    </label>
     <!-- input sectionnable -->
     <input
+      :id="displayInputId"
       ref="input"
       class="fr-select"
       :name="name"
-      :placeholder="legend || ''"
+      :placeholder="label || ''"
       type="text"
       :value="selectedOptionInputValue"
       readonly
@@ -53,7 +77,7 @@
                 style="min-inline-size: auto"
               >
                 <legend class="fr-sr-only">
-                  {{ legend }}
+                  {{ label }}
                 </legend>
 
                 <!-- Boucle -->
@@ -80,6 +104,18 @@
         </div>
       </div>
     </Transition>
+    <div
+      :id="errorId"
+      class="fr-messages-group"
+      aria-live="polite"
+    >
+      <p
+        v-if="error"
+        class="fr-message fr-message--error"
+      >
+        {{ error }}
+      </p>
+    </div>
   </div>
 </template>
 
@@ -93,21 +129,25 @@
       name: string
       options: Options
       disabledOptions?: string[] | null
-      legend?: string | null
+      label?: string | null
       optionsClass?: string
       ariaDescribedby?: string
       ariaLabelledBy?: string
       optionValueResolver?: any
       isSearchable?: boolean
+      required?: boolean
+      hint?: string
     }>(),
     {
       optionsClass: '',
       disabledOptions: null,
-      legend: '',
+      label: '',
       optionValueResolver: null,
       ariaDescribedby: '',
       ariaLabelledBy: '',
-      isSearchable: true
+      isSearchable: true,
+      required: false,
+      hint: ''
     }
   )
 
@@ -127,10 +167,16 @@
   }>()
 
   // Form functions
-  const { value: multiselectValue, handleChange } = useField<string[]>(
-    name,
-    undefined
-  )
+  const {
+    value: multiselectValue,
+    handleChange,
+    errorMessage: error
+  } = useField<string[]>(name, undefined)
+
+  const { id, errorId } = useFormFieldId(name)
+
+  const displayInputId = computed(() => `multi-select-${id.value}-fake-select`)
+  const labelId = computed(() => `multi-select-${id.value}-label`)
 
   const convertToOptions = (initialValues: string[]): Options => {
     return existingOptions.value.filter(option =>
