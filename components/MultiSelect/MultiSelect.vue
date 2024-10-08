@@ -29,7 +29,6 @@
       ref="input"
       class="fr-select"
       :name="name"
-      :placeholder="label || ''"
       type="text"
       :value="selectedOptionInputValue"
       readonly
