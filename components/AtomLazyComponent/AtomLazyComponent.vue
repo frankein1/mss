@@ -17,7 +17,7 @@
   import { AlertType } from '~/utils/constants/alert'
 
   interface Props {
-    pending: boolean
+    pending?: boolean
     error: boolean
     message: string
   }
