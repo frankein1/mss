@@ -38,7 +38,8 @@
   label {
     margin-left: 0;
   }
-  label:before {
+
+  label::before {
     top: 0.3rem;
     width: 1rem;
     height: 1rem;
@@ -53,7 +54,6 @@
     background-origin: border-box;
     width: 1rem;
     height: 1rem;
-    border-width: 1px;
     border: 1px solid var(--primary);
     flex-shrink: 0;
     padding: 0;
@@ -63,13 +63,14 @@
   }
 
   [type='checkbox']:checked {
-    background-color: currentColor;
+    background-color: currentcolor;
     background-position: 50%;
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: 68% 68%;
     border-color: #0000;
-    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23fff' viewBox='0 0 16 16'%3E%3Cpath d='M12.207 4.793a1 1 0 0 1 0 1.414l-5 5a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L6.5 9.086l4.293-4.293a1 1 0 0 1 1.414 0'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23F5F5FE' width='12' height='9' viewBox='0 0 12 9'%3E%3Cpath d='M4.66674 7.11304L10.7947 0.984375L11.7381 1.92704L4.66674 8.99837L0.424072 4.75571L1.36674 3.81304L4.66674 7.11304Z'/%3E%3C/svg%3E");
   }
+
   [type='checkbox']:disabled {
     border-color: var(--text-disabled-grey);
   }

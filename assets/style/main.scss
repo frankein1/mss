@@ -91,7 +91,6 @@ main.content {
 .table-container {
   overflow-x: auto;
 
-  /* stylelint-disable property-no-vendor-prefix */
   &::-webkit-scrollbar {
     -webkit-appearance: none;
   }

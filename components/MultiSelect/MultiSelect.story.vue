@@ -1,20 +1,5 @@
 <template>
   <div class="fr-col-12">
-    <form
-      ref="form"
-      novalidate
-      @submit.prevent="onSubmit"
-    >
-      <button type="submit">Valider</button>
-      <MultiSelect
-        name="county"
-        legend="Rechercher un département"
-        is-searchable
-        :options="allValues"
-      />
-    </form>
-  </div>
-  <!-- <div class="fr-col-12">
     <h4>Multiselect dans des tabs</h4>
     <AtomTabs tab-list-name="Onglets">
       <AtomTab
@@ -26,20 +11,19 @@
         <div class="fr-container">
           <div class="fr-grid-row fr-grid-row--gutters">
             <div class="fr-col-4">
-              <MultiSelect
-                name="Recherche 2"
-                legend="départements"
-                is-searchable
-                :options="allValues"
-                @change-value="changeFilter($event)"
-              />
-            </div>
-            <div class="fr-col-8">
-              <MultiSelect
-                name="Recherche 3"
-                legend="départements"
-                :options="allValues"
-              />
+              <form
+                ref="form"
+                novalidate
+                @submit.prevent="onSubmit"
+              >
+                <button type="submit">Valider</button>
+                <MultiSelect
+                  name="county"
+                  legend="Rechercher un département"
+                  is-searchable
+                  :options="allValues"
+                />
+              </form>
             </div>
           </div>
         </div>
@@ -52,12 +36,14 @@
         <p>Rien</p>
       </AtomTab>
     </AtomTabs>
-  </div> -->
+  </div>
 </template>
 
 <script setup lang="ts">
   import type { Options } from '~/utils/options'
   import { useField, useForm } from 'vee-validate'
+
+  const form = ref<HTMLFormElement | null>(null)
 
   const allValues: Options = [
     { value: '01', label: 'Ain' },
@@ -161,7 +147,9 @@
     { value: '976', label: 'Mayotte' }
   ]
 
-  const { handleSubmit } = useForm<any>({
+  type InitialValue = { [key: string]: boolean }
+
+  const { handleSubmit } = useForm<{ county: InitialValue[] }>({
     validationSchema: null,
     initialValues: {
       county: [{ '26': true }, { '93': true }]
@@ -171,4 +159,8 @@
   const { onSubmit } = useCatchFormErrors(handleSubmit, values => {
     console.log(values)
   })
+
+  const changeFilter = (values: string[]) => {
+    console.log(values)
+  }
 </script>

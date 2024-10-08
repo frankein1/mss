@@ -83,6 +83,7 @@
     border-radius: 0.25rem 0.25rem 0 0;
     box-shadow: inset 0 -2px 0 0 var(--border-plain-grey);
   }
+
   .fr-input.empty {
     background-image: url('@/assets/icons/search.svg');
     background-position: right 1rem top 50%;

@@ -38,7 +38,7 @@
           <!-- List des items -->
           <div
             ref="scrollContainer"
-            class="scroll-container show-scrollbar"
+            class="scroll-container show-scrollbar custom-scrollbar-gray"
           >
             <div class="content">
               <div
@@ -70,10 +70,7 @@
                         selected => selected == option.value
                       ) != null
                     "
-                    :disabled="
-                      disabledOptions.find(item => item === option.value) !=
-                      null
-                    "
+                    :disabled="isDisabled(disabledOptions, option)"
                     @change-value="handleOptionToggle(option)"
                   />
                 </div>
@@ -95,7 +92,7 @@
     defineProps<{
       name: string
       options: Options
-      disabledOptions: string[]
+      disabledOptions?: string[] | null
       legend?: string | null
       optionsClass?: string
       ariaDescribedby?: string
@@ -105,6 +102,7 @@
     }>(),
     {
       optionsClass: '',
+      disabledOptions: null,
       legend: '',
       optionValueResolver: null,
       ariaDescribedby: '',
@@ -112,9 +110,6 @@
       isSearchable: true
     }
   )
-
-  console.log(props.options)
-  console.log(props.disabledOptions)
 
   // Ref
   const isOpen = ref<boolean>(false)
@@ -198,6 +193,16 @@
     filteredOptions.value = filteredOptionsArray
   }
 
+  const isDisabled = (
+    disabledOptions: string[] | null,
+    option: OptionType
+  ): boolean => {
+    if (disabledOptions == null) {
+      return false
+    }
+    return disabledOptions.find(item => item === option.value) != null
+  }
+
   onClickOutside(target, _event => {
     isOpen.value = false
   })
@@ -206,9 +211,10 @@
 <style lang="scss" scoped>
   .multiselect {
     position: relative;
+
     .multiselect-content {
       min-height: 1.5rem;
-      box-shadow: 0px 4px 12px 0px #00001229;
+      box-shadow: 0 4px 12px 0 #00001229;
       border-width: 1px;
       padding: 1em;
       list-style-type: none;
@@ -217,8 +223,8 @@
       position: absolute;
       width: 100%;
       background: #fff;
-      width: 100%;
     }
+
     .scroll-container {
       overflow-y: auto;
       overscroll-behavior: contain;
@@ -226,6 +232,7 @@
       padding-bottom: 0.75rem;
       margin: 0;
       margin-top: 1rem;
+
       .content {
         fieldset {
           position: relative;
@@ -236,6 +243,7 @@
           gap: 0.5rem;
           padding: 0.5rem;
         }
+
         .option-item {
           display: flex;
           align-items: center;
@@ -243,6 +251,25 @@
         }
       }
     }
+  }
+
+  // scroll-bar
+  $base-width: 8px;
+
+  .custom-scrollbar-gray::-webkit-scrollbar {
+    width: $base-width;
+  }
+
+  .custom-scrollbar-gray::-webkit-scrollbar-track {
+    border-radius: $base-width;
+    border-width: 0;
+    background-color: var(--background-contrast-grey);
+  }
+
+  .custom-scrollbar-gray::-webkit-scrollbar-thumb {
+    border-radius: $base-width;
+    border-width: 0;
+    background-color: var(--background-contrast-grey-active);
   }
 
   .fade-in-leave-active,
