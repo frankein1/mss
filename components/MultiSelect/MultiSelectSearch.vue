@@ -8,12 +8,12 @@
     >
       <label
         class="fr-label"
-        for="inputId"
+        :for="inputId"
       >
         Recherche
       </label>
       <input
-        id="inputId"
+        :id="inputId"
         ref="input"
         v-model="inputValue"
         class="fr-input"
@@ -34,7 +34,6 @@
   const props = withDefaults(
     defineProps<{
       modelValue?: string | number
-      inputId?: string
       name?: string
       placeholder?: string
       ariaLabelledby?: string
@@ -42,7 +41,6 @@
     }>(),
     {
       modelValue: undefined,
-      inputId: 'id-1903', // TODO generate unique id
       name: 'search',
       placeholder: 'Rechercher',
       ariaLabelledby: undefined,
@@ -51,14 +49,12 @@
   )
 
   // Emits
-  // was emits: ['update:modelValue', 'clear', 'focus'],
   const emit = defineEmits<{
     'update:modelValue': [modelValue: any]
-    'clear': []
     'focus': []
   }>()
 
-  const isFocus = ref<boolean>(false)
+  const inputId = useId()
 
   const inputValue = computed({
     get() {
@@ -68,14 +64,6 @@
       emit('update:modelValue', newValue)
     }
   })
-
-  const clear = () => {
-    inputValue.value = ''
-    emit('clear')
-    // was
-    // this.$refs.input.focus()
-    // this.$emit('clear')
-  }
 </script>
 
 <style lang="scss" scoped>

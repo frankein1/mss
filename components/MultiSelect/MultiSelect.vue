@@ -88,11 +88,7 @@
                   <MultiSelectCheckbox
                     :id="option.value"
                     :option="option"
-                    :checked="
-                      multiselectValue.find(
-                        selected => selected == option.value
-                      ) != null
-                    "
+                    :checked="isOptionChecked(multiselectValue, option)"
                     :disabled="isDisabled(disabledOptions, option)"
                     @change-value="handleOptionToggle(option)"
                   />
@@ -119,7 +115,7 @@
 </template>
 
 <script setup lang="ts">
-  import type { Options } from '~/utils/options'
+  import type { Options, OptionType } from '~/utils/options'
   import { onClickOutside } from '@vueuse/core'
   import { useField, useForm } from 'vee-validate'
 
@@ -177,7 +173,10 @@
   const displayInputId = computed(() => `multi-select-${id.value}-fake-select`)
   const labelId = computed(() => `multi-select-${id.value}-label`)
 
-  const convertToOptions = (initialValues: string[]): Options => {
+  const convertToOptions = (initialValues: string[] | null): Options => {
+    if (initialValues == null) {
+      return []
+    }
     return existingOptions.value.filter(option =>
       initialValues.includes(option.value)
     )
@@ -236,6 +235,16 @@
         label.toLocaleLowerCase().includes(optionQuery.toLocaleLowerCase())
     )
     filteredOptions.value = filteredOptionsArray
+  }
+
+  const isOptionChecked = (
+    selectedValues: string[] | null,
+    option: OptionType
+  ) => {
+    if (selectedValues == null) {
+      return false
+    }
+    return selectedValues.find(value => value == option.value) != null
   }
 
   const isDisabled = (
