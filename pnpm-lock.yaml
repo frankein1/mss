@@ -8728,6 +8728,7 @@ snapshots:
   '@tiptap/extension-bubble-menu@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
+      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
       tippy.js: 6.3.7
 
@@ -8757,6 +8758,7 @@ snapshots:
 
   '@tiptap/extension-floating-menu@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
+      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
       tippy.js: 6.3.7
@@ -8790,6 +8792,7 @@ snapshots:
 
   '@tiptap/extension-link@2.6.6(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
+      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
       linkifyjs: 4.1.3
