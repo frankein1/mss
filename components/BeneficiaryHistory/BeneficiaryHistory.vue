@@ -45,38 +45,16 @@
 <script setup lang="ts">
   import { AlertType } from '~/utils/constants/alert'
   import { FamilyFilePermissions } from '~/server/security'
-  import { FamilyFileHistoryFilterInput } from '~/server/schema'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
-  const props = defineProps<{
+  defineProps<{
     familyFileId: string
-    // familyFileIdentification: BeneficiaryFileIdentification[]
     familyFilePermissions: FamilyFilePermissions
   }>()
 
   const emit = defineEmits<{ refresh: [] }>()
 
-  // migrate ref to define model here
-  // const filters = defineModel<FamilyFileHistoryFilterInput>({ default: {} })
-
-  // const queryInput = computed(() => ({
-  //   familyFileId: props.familyFileId,
-  //   filters: filters.value
-  // }))
-
-  // const { data, error } = await useTrpcClient().file.getSocialSupports.useQuery(
-  //   queryInput,
-  //   {
-  //     queryKey: 'getHistory'
-  //   }
-  // )
-
-  const {
-    familyFileIdentification,
-    socialSupports,
-    socialSupportsFilters,
-    socialSupportsQueryInput
-  } = inject(getFamilyFileInjectionKey) as GetFamilyFile
+  const { familyFileIdentification, socialSupports, socialSupportsFilters } =
+    inject(getFamilyFileInjectionKey) as GetFamilyFile
 
   const { data, error } = socialSupports
 

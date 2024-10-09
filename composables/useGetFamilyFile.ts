@@ -1,4 +1,4 @@
-import type { ShallowRef, InjectionKey } from 'vue'
+import type { InjectionKey } from 'vue'
 import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
 import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
 import { BeneficiaryDocumentSort, SortOrder } from '~/types/table'
@@ -6,6 +6,8 @@ import { FamilyFileHistoryFilterInput } from '~/server/schema'
 
 export const useGetFamilyFile = async (familyFileId: string) => {
   const trpcClient = useTrpcClient()
+  const { application } = usePermissions()
+  const route = useRoute()
 
   /** Inputs */
 
@@ -42,22 +44,37 @@ export const useGetFamilyFile = async (familyFileId: string) => {
   /** API call */
 
   // Batch call for family file
-  const [familyFile, documents, socialSupports, budget] = await Promise.all([
-    trpcClient.file.getFamilyFileMinimalInfo.useQuery(
-      { id: familyFileId },
-      { queryKey: 'getFamilyFile.minimalInfo' }
-    ),
-    trpcClient.file.getDocuments.useQuery(documentsQueryInput, {
-      queryKey: 'getFamilyFile.documents'
-    }),
-    trpcClient.file.getSocialSupports.useQuery(socialSupportsQueryInput, {
-      queryKey: 'getFamilyFile.history'
-    }),
-    trpcClient.budget.getBudget.useQuery(
-      { familyFileId },
-      { queryKey: 'getFamilyFile.budget' }
-    )
-  ])
+  const [familyFile, documents, socialSupports, examinationDates, budget] =
+    await Promise.all([
+      trpcClient.file.getFamilyFileMinimalInfo.useQuery(
+        { id: familyFileId },
+        { queryKey: 'getFamilyFile.minimalInfo' }
+      ),
+      trpcClient.file.getDocuments.useQuery(documentsQueryInput, {
+        queryKey: 'getFamilyFile.documents'
+      }),
+      // TODO replace by getSocialSupportsSummary
+      trpcClient.file.getSocialSupports.useQuery(socialSupportsQueryInput, {
+        queryKey: 'getFamilyFile.history'
+      }),
+      application.value.module.helpRequest
+        ? trpcClient.file.getExaminationDates.useQuery(
+            { id: familyFileId },
+            {
+              transform: dates =>
+                dates.map(({ examinationDate: date }) => ({
+                  value: date?.toString() || '',
+                  label: formatDate(date)
+                })),
+              queryKey: 'getFamilyFile.fileInstructions.examinationDates'
+            }
+          )
+        : { data: ref([]), pending: ref(false), error: ref(null) },
+      trpcClient.budget.getBudget.useQuery(
+        { familyFileId },
+        { queryKey: 'getFamilyFile.budget' }
+      )
+    ])
 
   /** Reactive values */
 
@@ -71,8 +88,6 @@ export const useGetFamilyFile = async (familyFileId: string) => {
   /** Utils */
 
   // family file utils
-  const route = useRoute()
-
   const getBeneficiaryIdOnPageLoad = () => {
     const queryBeneficiaryId = route.query.beneficiaryId as string
 
@@ -99,6 +114,7 @@ export const useGetFamilyFile = async (familyFileId: string) => {
     socialSupports,
     socialSupportsFilters,
     socialSupportsQueryInput,
+    examinationDates,
     budget
   }
 }
