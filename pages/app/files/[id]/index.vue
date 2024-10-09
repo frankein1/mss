@@ -64,9 +64,9 @@
             v-if="selectedPermissions"
             :family-file-id="familyFileId"
             :family-file-permissions="selectedPermissions"
-            :family-file-identification="familyFileIdentification"
             @refresh="getBeneficiaryDetails(selectedBeneficiary.id)"
           />
+          <!-- :family-file-identification="familyFileIdentification" -->
         </template>
 
         <template #[tabTitles.at(3)?.panelId]>
@@ -83,6 +83,10 @@
     useGetFamilyFile,
     getFamilyFileInjectionKey
   } from '~/composables/useGetFamilyFile'
+  import {
+    useGetStructureInfo,
+    getStructureInfoInjectionKey
+  } from '~/composables/useGetStructureInfoForBeneficiary'
   import { TRPCClientErrorLike } from '@trpc/client'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
@@ -105,18 +109,14 @@
   const familyFileId = route.params.id as string
 
   const ff = await useGetFamilyFile(familyFileId)
-  const { familyFile, familyFileIdentification, getBeneficiaryIdOnPageLoad } =
-    ff
   provide(getFamilyFileInjectionKey, ff)
 
+  const { familyFile, familyFileIdentification, getBeneficiaryIdOnPageLoad } =
+    ff
   const { error, refresh: refreshFamilyFile } = familyFile
 
-  // const {
-  //   familyFileIdentification,
-  //   error,
-  //   getBeneficiaryIdOnPageLoad,
-  //   refreshFamilyFile
-  // } = await useFamilyFileMinimalInfo(familyFileId)
+  const si = await useGetStructureInfo()
+  provide(getStructureInfoInjectionKey, si)
 
   const title = routes.file.AppFile.title(familyFileIdentification.value)
   useHead({ title })

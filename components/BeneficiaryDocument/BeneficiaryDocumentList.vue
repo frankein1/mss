@@ -57,9 +57,7 @@
   import { GetDocument } from './types'
   import { AlertType } from '~/utils/constants/alert'
 
-  const props = defineProps<{
-    familyFileId: string
-  }>()
+  defineProps<{ familyFileId: string }>()
 
   const {
     familyFileIdentification,
