@@ -122,7 +122,6 @@
         </div>
 
         <!-- ROW -->
-        <!-- ROW -->
         <div class="fr-col-12 fr-mt-0 fr-pt-0">
           <NuxtLink
             v-if="application.edit.structure"
@@ -186,16 +185,21 @@
         <div class="fr-col-6 fr-mt-0 fr-pt-0"></div>
 
         <!-- ROW -->
-        <div class="fr-col-12">
+        <!-- <div class="fr-col-12">
           <VeeTextarea
-            class="large-textarea"
-            name="synthesis"
-            :label="followupFieldLabels.synthesis"
+          class="large-textarea"
+          name="synthesis"
+          :label="followupFieldLabels.synthesis"
           />
-        </div>
+        </div> -->
 
+        <!-- ROW -->
         <div class="fr-col-12">
-          <AtomTextEditor @update="onUpdate" />
+          <!-- TODO: add label -->
+          <AtomTextEditor
+            :initial-value="synthesisRichTextValue"
+            @update="onUpdateSynthesis"
+          />
         </div>
 
         <!-- ROW -->
@@ -203,7 +207,7 @@
           v-if="canSetPrivateSynthesis"
           class="fr-col-12"
         >
-          <VeeTextarea
+          <!-- <VeeTextarea
             name="privateSynthesis"
             :label="followupFieldLabels.privateSynthesis"
             label-icon="fr-icon-lock-line"
@@ -214,7 +218,14 @@
                 SENSITIVE_DATA_HINT
               }}
             </template>
-          </VeeTextarea>
+          </VeeTextarea> -->
+          <!-- TODO: ajouter entête avec template ? -->
+          <p>{{ followupFieldLabels.privateSynthesis }}</p>
+          <AtomTextEditor
+            :max-height="120"
+            :initial-value="privateSynthesisRichTextValue"
+            @update="onUpdatePrivateSynthesis"
+          />
         </div>
 
         <!-- ROW -->
@@ -372,17 +383,30 @@
   }
 
   const { setValue: setSynthesis } = useField<string | undefined>('synthesis')
-
-  const onUpdate = (
+  const { setValue: setSynthesisRichText, value: synthesisRichTextValue } =
+    useField<string | undefined>('synthesisRichText')
+  const onUpdateSynthesis = (
     html: string | undefined,
     json: JSONContent | undefined,
     rawText: string | undefined
   ) => {
-    console.log(html)
-    console.log(json)
-    console.log(JSON.stringify(json))
-    console.log(rawText)
-    setSynthesis(json?.text)
+    setSynthesis(rawText)
+    setSynthesisRichText(JSON.stringify(json))
+  }
+  const { setValue: setPrivateSynthesis } = useField<string | undefined>(
+    'privateSynthesis'
+  )
+  const {
+    setValue: setPrivateSynthesisRichText,
+    value: privateSynthesisRichTextValue
+  } = useField<string | undefined>('privateSynthesisRichText')
+  const onUpdatePrivateSynthesis = (
+    html: string | undefined,
+    json: JSONContent | undefined,
+    rawText: string | undefined
+  ) => {
+    setPrivateSynthesis(rawText)
+    setPrivateSynthesisRichText(JSON.stringify(json))
   }
 
   const { errors } = useDisplayFormErrors(
