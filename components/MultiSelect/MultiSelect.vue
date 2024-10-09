@@ -29,6 +29,7 @@
       ref="input"
       class="fr-select"
       :name="name"
+      :placeholder
       type="text"
       :value="selectedOptionInputValue"
       readonly
@@ -125,6 +126,7 @@
       options: Options
       disabledOptions?: string[] | null
       label?: string | null
+      placeholder?: string
       optionsClass?: string
       ariaDescribedby?: string
       ariaLabelledBy?: string
@@ -137,6 +139,7 @@
       optionsClass: '',
       disabledOptions: null,
       label: '',
+      placeholder: '',
       optionValueResolver: null,
       ariaDescribedby: '',
       ariaLabelledBy: '',
@@ -148,7 +151,6 @@
 
   // Ref
   const isOpen = ref<boolean>(false)
-  const optionsHits = ref<any>(null)
   const optionQuery = ref<any>(null)
   const existingOptions = ref<Options>(props.options)
   const filteredOptions = ref<Options>(existingOptions.value)
@@ -173,7 +175,7 @@
   const displayInputId = computed(() => `multi-select-${id.value}-fake-select`)
   const labelId = computed(() => `multi-select-${id.value}-label`)
 
-  const convertToOptions = (initialValues: string[] | null): Options => {
+  const convertValuesToOptions = (initialValues: string[] | null): Options => {
     if (initialValues == null) {
       return []
     }
@@ -182,18 +184,28 @@
     )
   }
 
-  const convertToFormValue = (options: Options): string[] => {
+  const convertOptionsToValues = (options: Options): string[] => {
     return options.map(option => option.value)
   }
-
-  const selectedOptions = ref<Options>(convertToOptions(multiselectValue.value))
+  const convertValuesToLabels = (initialValues: string[] | null): string[] => {
+    if (initialValues == null) {
+      return []
+    }
+    const options = convertValuesToOptions(initialValues)
+    return options.map(option => option.label)
+  }
 
   // Computed
+  const selectedOptions = computed(() =>
+    convertValuesToOptions(multiselectValue.value)
+  )
+
   const selectedOptionInputValue = computed(() => {
-    if (selectedOptions.value.length === 0) {
+    const labels = convertValuesToLabels(multiselectValue.value)
+    if (labels.length === 0) {
       return null
     }
-    return selectedOptions.value.map(option => option.label).join(', ')
+    return labels.join(', ')
   })
 
   const displayedOptions: globalThis.ComputedRef<Options> = computed(() => {
@@ -222,14 +234,10 @@
         selectedOptions.value.map(option => option.value)
       )
     }
-    handleChange(convertToFormValue(selectedOptions.value))
+    handleChange(convertOptionsToValues(selectedOptions.value))
   }
 
   const handleChangeSearchValues = (optionQuery: string) => {
-    if (!optionQuery || optionQuery === '') {
-      optionsHits.value = null
-    }
-
     const filteredOptionsArray = [...existingOptions.value].filter(
       ({ label }) =>
         label.toLocaleLowerCase().includes(optionQuery.toLocaleLowerCase())

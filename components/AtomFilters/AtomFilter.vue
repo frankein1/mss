@@ -14,14 +14,13 @@
     :placeholder="filter.placeholder"
     @change-value="emit('changeFilter', $event)"
   />
-  <VeeMultiSelect
+  <MultiSelect
     v-else-if="filter.type === FilterType.SelectMultiple"
-    class="multi-select-filters"
+    class="multi-select-filters fr-select-group"
     :name="filter.name"
     :label="filter.label"
     :options="filter.options"
-    :placeholder="filter.label"
-    dropdown
+    :placeholder="filter.placeholder"
     @change-value="emit('changeFilter', $event)"
   />
   <VeeSelect
