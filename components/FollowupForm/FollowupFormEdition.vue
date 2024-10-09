@@ -62,7 +62,9 @@
       numeroPegase: followup.value.numeroPegase,
       date: followup.value.date,
       synthesis: followup.value.synthesis,
+      synthesisRichText: followup.value.synthesisRichText,
       privateSynthesis: followup.value.privateSynthesis,
+      privateSynthesisRichText: followup.value.privateSynthesisRichText,
       status: followup.value.status,
       helpRequested: followup.value.helpRequested || false,
       structureName: followup.value.structureName,
@@ -93,7 +95,6 @@
     handleSubmit,
     values => {
       isNavigatingWithFormActions.value = true
-      console.log(values)
       emit('saveFollowup', values)
     }
   )
