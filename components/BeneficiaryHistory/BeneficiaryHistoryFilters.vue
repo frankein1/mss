@@ -48,14 +48,13 @@
 
   const authState = useAuthState()
   const isReferent = authState.isReferent()
-  const trpcClient = useTrpcClient()
   const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     'update:values': [filters: FamilyFileHistoryFilterInput]
   }>()
 
-  const { familyFileIdentification } = inject(
+  const { familyFileIdentification, examinationDates } = inject(
     getFamilyFileInjectionKey
   ) as GetFamilyFile
 
@@ -75,41 +74,13 @@
     error: socialSupportSubjectOptionsError
   } = subjects
 
-  // const {
-  //   data: agentOptions,
-  //   pending: agentOptionsPending,
-  //   error: agentOptionsError
-  // } = await trpcClient.config.getAgents.useQuery(undefined, {
-  //   transform: agents => toOptions(agents, 'id', 'name'),
-  //   queryKey: 'config.getAgents.options'
-  // })
-
-  // const {
-  //   data: socialSupportSubjectOptions,
-  //   pending: socialSupportSubjectOptionsPending,
-  //   error: socialSupportSubjectOptionsError
-  // } = await trpcClient.structure.getActiveOrUsedSocialSupportSubjects.useQuery(
-  //   undefined,
-  //   {
-  //     transform: socialSupportSubjects =>
-  //       toOptions(socialSupportSubjects, 'id', 'name'),
-  //     queryKey: 'structure.getActiveOrUsedSocialSupportSubjects.options'
-  //   }
-  // )
-
-  const { application } = usePermissions()
-
   const {
     data: examinationDateOptions,
     pending: examinationDateOptionsPending,
     error: examinationDateOptionsError
-  } = await useAsyncData(loadExaminationDates)
+  } = examinationDates
 
-  // const {
-  //   familyFileIdentification,
-  //   pending: filePending,
-  //   error: fileError
-  // } = await useFamilyFileMinimalInfo(props.familyFileId)
+  const { application } = usePermissions()
 
   const pending = computed(
     () =>
@@ -258,19 +229,4 @@
 
     return filters
   })
-
-  async function loadExaminationDates() {
-    if (!application.value.module.helpRequest) {
-      return []
-    }
-
-    const examinationDates = await trpcClient.file.getExaminationDates.query({
-      id: props.familyFileId
-    })
-
-    return examinationDates.map(({ examinationDate }) => ({
-      value: examinationDate?.toString() || '',
-      label: formatDate(examinationDate)
-    }))
-  }
 </script>
