@@ -8,7 +8,9 @@
             v-if="editor"
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-            @click="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+            @click.prevent="
+              editor.chain().focus().toggleHeading({ level: 1 }).run()
+            "
           >
             <img
               src="~/assets/icons/editor-T1.svg"
@@ -21,7 +23,9 @@
             v-if="editor"
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-            @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+            @click.prevent="
+              editor.chain().focus().toggleHeading({ level: 2 }).run()
+            "
           >
             <img
               src="~/assets/icons/editor-T2.svg"
@@ -34,7 +38,9 @@
             v-if="editor"
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-            @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
+            @click.prevent="
+              editor.chain().focus().toggleHeading({ level: 3 }).run()
+            "
           >
             <img
               src="~/assets/icons/editor-T3.svg"
@@ -50,7 +56,7 @@
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('bold') }"
             title="Gras"
-            @click="editor.chain().focus().toggleBold().run()"
+            @click.prevent="editor.chain().focus().toggleBold().run()"
           >
             <img
               src="~/assets/icons/editor-bold.svg"
@@ -63,7 +69,7 @@
             v-if="editor"
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('italic') }"
-            @click="editor.chain().focus().toggleItalic().run()"
+            @click.prevent="editor.chain().focus().toggleItalic().run()"
           >
             <img
               src="~/assets/icons/editor-ital.svg"
@@ -78,7 +84,7 @@
             v-if="editor"
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('bulletList') }"
-            @click="editor.chain().focus().toggleBulletList().run()"
+            @click.prevent="editor.chain().focus().toggleBulletList().run()"
           >
             <img
               src="~/assets/icons/editor-ul.svg"
@@ -91,7 +97,7 @@
             v-if="editor"
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('orderedList') }"
-            @click="editor.chain().focus().toggleOrderedList().run()"
+            @click.prevent="editor.chain().focus().toggleOrderedList().run()"
           >
             <img
               src="~/assets/icons/editor-ol.svg"
@@ -106,7 +112,7 @@
             v-if="editor"
             class="menubar__button"
             :class="{ 'is-active': editor.isActive('link') }"
-            @click="setLink"
+            @click.prevent="setLink"
           >
             <img
               src="~/assets/icons/editor-link.svg"
@@ -118,10 +124,10 @@
           <button
             v-if="editor"
             class="menubar__button"
-            @click="unsetLink"
+            @click.prevent="unsetLink"
           >
             <img
-              src="~/assets/icons/editor-link.svg"
+              src="~/assets/icons/editor-unlink.svg"
               alt="Défaire le lien"
             />
           </button>
@@ -136,12 +142,21 @@
 </template>
 
 <script setup lang="ts">
-  import { EditorContent, JSONContent, useEditor } from '@tiptap/vue-3'
+  import { Content, EditorContent, JSONContent, useEditor } from '@tiptap/vue-3'
   import StarterKit from '@tiptap/starter-kit'
-  import Underline from '@tiptap/extension-underline'
   import Link from '@tiptap/extension-link'
 
-  // TODO: create object + type for update payload
+  const props = withDefaults(
+    defineProps<{
+      maxHeight?: number | null
+      initialValue?: string | null
+    }>(),
+    {
+      maxHeight: null,
+      initialValue: null
+    }
+  )
+
   const emit = defineEmits<{
     update: [
       html: string | undefined,
@@ -154,11 +169,28 @@
   const json = ref<JSONContent | undefined>()
   const rawText = ref<string | undefined>()
 
+  const getHeight = (): string => {
+    if (!props.maxHeight) {
+      return 'min-height: 30rem'
+    }
+    return 'min-height: ' + props.maxHeight + 'px'
+  }
+
+  const goodContent = props.initialValue ? JSON.parse(props.initialValue) : ''
+  const badcontent = { truc: 'kjsvezkvgjh', machin: 'lzhvkf;dbvkefjbv zlkef' }
+
   const editor = useEditor({
-    content: '',
+    content: props.initialValue ? JSON.parse(props.initialValue) : '',
+    enableContentCheck: true,
+    onContentError({ editor, error, disableCollaboration }) {
+      console.log(error)
+    },
     extensions: [
-      StarterKit,
-      Underline,
+      StarterKit.configure({
+        heading: {
+          levels: [1, 2, 3]
+        }
+      }),
       Link.configure({
         openOnClick: false,
         defaultProtocol: 'https'
@@ -166,7 +198,8 @@
     ],
     editorProps: {
       attributes: {
-        class: 'custom-tiptap'
+        class: 'custom-tiptap',
+        style: getHeight()
       }
     },
     onUpdate: () => {
@@ -185,7 +218,6 @@
   }
 
   const setLink = () => {
-    // TODO: improve function, by adding 'https://'' prefix when not provided in url
     const previousUrl = editor.value?.getAttributes('link').href
     const url = window.prompt('URL', previousUrl)
 
@@ -248,12 +280,13 @@
   .tiptap-editor-content {
     min-height: 3.75rem;
     max-height: none;
-    height: 30rem;
     border-radius: 0;
     padding: 0;
   }
   // Button
   .menubar__button {
+    width: 40px; // TODO: convert to em??
+    height: 40px;
     &:active {
       background: none;
     }
@@ -268,6 +301,5 @@
     padding: 0.5rem 1rem;
     min-height: 3.75rem;
     max-height: none;
-    height: 30rem;
   }
 </style>
