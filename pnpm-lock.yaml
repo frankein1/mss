@@ -12,8 +12,8 @@ dependencies:
     specifier: ~1.12.1
     version: 1.12.1(browser-sync@2.29.3)
   '@gouvminint/vue-dsfr':
-    specifier: ^6.0.0
-    version: 6.0.0(@iconify/vue@4.1.2)(browser-sync@2.29.3)(vue-router@4.4.3)(vue@3.4.38)
+    specifier: ^7.0.1
+    version: 7.0.1(@iconify/vue@4.1.2)(browser-sync@2.29.3)(vue-router@4.4.3)(vue@3.4.38)
   '@prisma/client':
     specifier: ^5.19.0
     version: 5.19.0(prisma@5.19.0)
@@ -174,7 +174,7 @@ devDependencies:
     version: 2.1.1(@types/node@22.7.4)(sass@1.77.8)
   vue-dsfr-nuxt-module:
     specifier: ^2.0.0
-    version: 2.0.0(@gouvfr/dsfr@1.12.1)(@gouvminint/vue-dsfr@6.0.0)
+    version: 2.0.0(@gouvfr/dsfr@1.12.1)(@gouvminint/vue-dsfr@7.0.1)
   vue-tsc:
     specifier: ^2.1.2
     version: 2.1.2(typescript@5.6.2)
@@ -1413,8 +1413,8 @@ packages:
     dependencies:
       browser-sync: 2.29.3
 
-  /@gouvminint/vue-dsfr@6.0.0(@iconify/vue@4.1.2)(browser-sync@2.29.3)(vue-router@4.4.3)(vue@3.4.38):
-    resolution: {integrity: sha512-ie+UiBvNmeI5QBB8HLv0gjbXN5DCBPPPi8CSVy3U03n8Dm5b6RjNHGuFxksTjDa5hWN0mPksR51k0R0L5aF/nw==}
+  /@gouvminint/vue-dsfr@7.0.1(@iconify/vue@4.1.2)(browser-sync@2.29.3)(vue-router@4.4.3)(vue@3.4.38):
+    resolution: {integrity: sha512-fZdtVlOB8xl4Tl4Pth/gNvljPXRki5djD2ao4F/yFFekV7iZcWDdlPVw3refEqvlDHoYPSEYCIgkLLPJGZBxiw==}
     engines: {node: '>=20.x.x', npm: '>=10.x.x'}
     peerDependencies:
       '@iconify/vue': ^4.1.2
@@ -1425,6 +1425,7 @@ packages:
       '@iconify/vue': 4.1.2(vue@3.4.38)
       focus-trap: 7.5.4
       focus-trap-vue: 4.0.3(focus-trap@7.5.4)(vue@3.4.38)
+      pnpm: 9.12.1
       vue: 3.4.38(typescript@5.6.2)
       vue-router: 4.4.3(vue@3.4.38)
     transitivePeerDependencies:
@@ -9362,6 +9363,11 @@ packages:
     engines: {node: '>=4'}
     dev: true
 
+  /pnpm@9.12.1:
+    resolution: {integrity: sha512-5aflKkGDoC1ZMQV/eg2/+dXpzjFh4z+miuOSElt5KCqKikcKUd/IoO2GIhRC6y+1cBmwmQ7ST6tRm/DhvFzPxA==}
+    engines: {node: '>=18.12'}
+    hasBin: true
+
   /portscanner@2.2.0:
     resolution: {integrity: sha512-IFroCz/59Lqa2uBvzK3bKDbDDIEaAY8XJ1jFxcLWTqosrsc32//P4VuSB2vZXoHiHqOmx8B5L5hnKOxL/7FlPw==}
     engines: {node: '>=0.4', npm: '>=1.0.0'}
@@ -12007,14 +12013,14 @@ packages:
     resolution: {integrity: sha512-RutnB7X8c5hjq39NceArgXg28WZtZpGc3+J16ljMiYnFhKvd8hITxSWQSQ5bvldxMDU6gG5mkxl1MTQLXckVSQ==}
     dev: true
 
-  /vue-dsfr-nuxt-module@2.0.0(@gouvfr/dsfr@1.12.1)(@gouvminint/vue-dsfr@6.0.0):
+  /vue-dsfr-nuxt-module@2.0.0(@gouvfr/dsfr@1.12.1)(@gouvminint/vue-dsfr@7.0.1):
     resolution: {integrity: sha512-NA1Y8V2eNYTE6uv0pAV8anaWoiMMFv3odZ/KsjqfEzWW07xxfh4F5LIHiSB/8JDgeakGPmSUUyz2EFyK5IGJTw==}
     peerDependencies:
       '@gouvfr/dsfr': ~1.12.0
       '@gouvminint/vue-dsfr': ^6.0.0
     dependencies:
       '@gouvfr/dsfr': 1.12.1(browser-sync@2.29.3)
-      '@gouvminint/vue-dsfr': 6.0.0(@iconify/vue@4.1.2)(browser-sync@2.29.3)(vue-router@4.4.3)(vue@3.4.38)
+      '@gouvminint/vue-dsfr': 7.0.1(@iconify/vue@4.1.2)(browser-sync@2.29.3)(vue-router@4.4.3)(vue@3.4.38)
       '@nuxt/kit': 3.13.0(magicast@0.3.5)
     transitivePeerDependencies:
       - magicast
