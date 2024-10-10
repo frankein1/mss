@@ -28,16 +28,15 @@
         :alert-type="AlertType.Error"
         message="Le bénéficiaire n'a pas pu être chargé."
       />
-      <AtomTabs
+      <AtomNewTabs
         v-else-if="selectedBeneficiary"
         tab-list-name="Détails du dossier foyer"
-        :heading-level="2"
+        :tab-titles="tabTitles"
       >
-        <AtomTab
-          :tab-id="FamilyFileTab.Details"
-          title="Informations"
-          icon="fr-icon-information-fill"
-          selected
+        <DsfrTabContent
+          class="notransition"
+          :panel-id="tabTitles[0].panelId"
+          :tab-id="tabTitles[0].tabId"
         >
           <FamilyFileSegmentedControl
             v-if="familyFileIdentification.length > 1"
@@ -53,23 +52,23 @@
             @delete="openDeleteModal"
             @split="openSplitModal"
           />
-        </AtomTab>
-        <AtomTab
-          :tab-id="FamilyFileTab.Documents"
-          title="Documents"
-          icon="fr-icon-folder-2-line"
-          selected
+        </DsfrTabContent>
+
+        <DsfrTabContent
+          class="notransition"
+          :panel-id="tabTitles[1].panelId"
+          :tab-id="tabTitles[1].tabId"
         >
           <BeneficiaryDocumentList
             :family-file-id="selectedBeneficiary.familyFileId"
             :family-file-identification="familyFileIdentification || []"
           />
-        </AtomTab>
-        <AtomTab
-          :tab-id="FamilyFileTab.History"
-          title="Historique"
-          icon="fr-icon-history-line"
-          selected
+        </DsfrTabContent>
+
+        <DsfrTabContent
+          class="notransition"
+          :panel-id="tabTitles[2].panelId"
+          :tab-id="tabTitles[2].tabId"
         >
           <BeneficiaryHistory
             v-if="selectedPermissions"
@@ -78,19 +77,19 @@
             :family-file-identification="familyFileIdentification"
             @refresh="getBeneficiaryDetails(selectedBeneficiary.id)"
           />
-        </AtomTab>
-        <AtomTab
-          :tab-id="FamilyFileTab.Budget"
-          title="Budget"
-          icon="fr-icon-money-euro-circle-line"
-          selected
+        </DsfrTabContent>
+
+        <DsfrTabContent
+          class="notransition"
+          :panel-id="tabTitles[3].panelId"
+          :tab-id="tabTitles[3].tabId"
         >
           <FamilyFileBudget
             :family-file-id="familyFileId"
             :family-file-identification="familyFileIdentification"
           />
-        </AtomTab>
-      </AtomTabs>
+        </DsfrTabContent>
+      </AtomNewTabs>
     </div>
   </PageContainer>
 </template>
@@ -127,6 +126,41 @@
   const title = routes.file.AppFile.title(familyFileIdentification.value)
   useHead({ title })
 
+  // Tabs
+  enum FamilyFileTab {
+    Details = 'Details',
+    Documents = 'Documents',
+    History = 'History',
+    Budget = 'Budget'
+  }
+
+  const tabTitles = [
+    {
+      tabId: FamilyFileTab.Details,
+      panelId: 'tab-content-0',
+      title: 'Informations',
+      icon: 'fr-icon-information-fill'
+    },
+    {
+      tabId: FamilyFileTab.Documents,
+      panelId: 'tab-content-1',
+      title: 'Documents',
+      icon: 'fr-icon-folder-2-line'
+    },
+    {
+      tabId: FamilyFileTab.History,
+      panelId: 'tab-content-2',
+      title: 'Historique',
+      icon: 'fr-icon-history-line'
+    },
+    {
+      tabId: FamilyFileTab.Budget,
+      panelId: 'tab-content-3',
+      title: 'Budget',
+      icon: 'fr-icon-money-euro-circle-line'
+    }
+  ]
+
   // states
   const selectedBeneficiary = ref<GetBeneficiaryOutput | null>(null)
   const selectedPermissions = ref<FamilyFilePermissions | undefined>(undefined)
@@ -157,12 +191,6 @@
     })
     navigateTo(navRoute)
     getBeneficiaryDetails(beneficiaryId)
-  }
-  enum FamilyFileTab {
-    Details = 'Details',
-    Documents = 'Documents',
-    History = 'History',
-    Budget = 'Budget'
   }
 
   function openDeleteModal() {
