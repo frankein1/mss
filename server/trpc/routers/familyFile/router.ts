@@ -8,6 +8,9 @@ export const fileRouter = router({
   getSocialSupports: protectedProcedure
     .input(routes.getSocialSupports.inputValidation)
     .query(routes.getSocialSupports.execute),
+  getSocialSupportsSummary: protectedProcedure
+    .input(routes.getSocialSupportsSummary.inputValidation)
+    .query(routes.getSocialSupportsSummary.execute),
   getDocuments: protectedProcedure
     .input(routes.getDocumentsQuery.inputValidation)
     .query(routes.getDocumentsQuery.execute),

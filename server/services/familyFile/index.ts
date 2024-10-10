@@ -7,6 +7,7 @@ import {
   FamilyFileSecurityTarget
 } from './permission.service'
 import { split } from './split.service'
+import { getSocialSupportsSummary } from './get-social-supports-summary.service'
 
 export const FamilyFileService = {
   getCreationPermissions,
@@ -14,7 +15,8 @@ export const FamilyFileService = {
   getFamilyFileSecurityTarget,
   getPageDocuments,
   getMinimalInfo,
-  split
+  split,
+  getSocialSupportsSummary
 }
 
 export type { FamilyFileSecurityTarget }
