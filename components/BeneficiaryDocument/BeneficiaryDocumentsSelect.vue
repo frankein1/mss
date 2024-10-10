@@ -6,14 +6,12 @@
     label="Ajouter un nouveau document"
     @new-document="onNewDocument"
   />
-  <VeeSearchableSelect
+  <MultiSelect
     v-if="!pending && !error"
     ref="selectDocInput"
-    class="beneficiary-documents-search"
     :name="name"
     label="Sélectionner un ou plusieurs fichiers depuis l'espace bénéficiaire"
     :options="documentOptions"
-    multiple
   />
 </template>
 

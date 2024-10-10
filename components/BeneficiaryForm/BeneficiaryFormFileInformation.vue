@@ -1,6 +1,6 @@
 <template>
   <BeneficiaryFormSection>
-    <div class="fr-col-6">
+    <div class="fr-col-12 fr-col-lg-6">
       <VeeSelect
         name="status"
         :label="beneficiaryFieldLabels.status"
@@ -8,16 +8,16 @@
         required
       />
     </div>
-    <div class="fr-col-6">
-      <VeeMultiSelect
+    <div class="fr-col-12 fr-col-lg-6">
+      <MultiSelect
         name="referents"
         :label="beneficiaryFieldLabels.referents"
         :options="referentOptions"
         :disabled-options="disabledReferentOptions"
-        dropdown
         required
       />
     </div>
+
     <div
       v-if="full"
       :class="application.module.vulnerablePerson ? 'fr-col-6' : 'fr-col-12'"

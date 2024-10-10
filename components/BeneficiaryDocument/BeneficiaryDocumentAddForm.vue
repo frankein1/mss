@@ -27,11 +27,11 @@
       :options="withEmptyValue(documentTypeKeys.options)"
       required
     />
-    <VeeSearchableSelect
-      :label="documentFieldLabels.tags"
+    <MultiSelect
+      class="fr-mb-2w"
       name="tags"
+      :label="documentFieldLabels.tags"
       :options="documentTagKeys.options"
-      multiple
     />
     <VeeCheckbox
       class="fr-mb-2w"
