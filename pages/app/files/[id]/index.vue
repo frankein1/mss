@@ -28,16 +28,13 @@
         :alert-type="AlertType.Error"
         message="Le bénéficiaire n'a pas pu être chargé."
       />
+
       <AtomNewTabs
         v-else-if="selectedBeneficiary"
         tab-list-name="Détails du dossier foyer"
         :tab-titles="tabTitles"
       >
-        <DsfrTabContent
-          class="notransition"
-          :panel-id="tabTitles[0].panelId"
-          :tab-id="tabTitles[0].tabId"
-        >
+        <template #[tabTitles.at(0)?.panelId]>
           <FamilyFileSegmentedControl
             v-if="familyFileIdentification.length > 1"
             :members="familyFileIdentification"
@@ -52,24 +49,16 @@
             @delete="openDeleteModal"
             @split="openSplitModal"
           />
-        </DsfrTabContent>
+        </template>
 
-        <DsfrTabContent
-          class="notransition"
-          :panel-id="tabTitles[1].panelId"
-          :tab-id="tabTitles[1].tabId"
-        >
+        <template #[tabTitles.at(1)?.panelId]>
           <BeneficiaryDocumentList
             :family-file-id="selectedBeneficiary.familyFileId"
             :family-file-identification="familyFileIdentification || []"
           />
-        </DsfrTabContent>
+        </template>
 
-        <DsfrTabContent
-          class="notransition"
-          :panel-id="tabTitles[2].panelId"
-          :tab-id="tabTitles[2].tabId"
-        >
+        <template #[tabTitles.at(2)?.panelId]>
           <BeneficiaryHistory
             v-if="selectedPermissions"
             :family-file-id="familyFileId"
@@ -77,18 +66,14 @@
             :family-file-identification="familyFileIdentification"
             @refresh="getBeneficiaryDetails(selectedBeneficiary.id)"
           />
-        </DsfrTabContent>
+        </template>
 
-        <DsfrTabContent
-          class="notransition"
-          :panel-id="tabTitles[3].panelId"
-          :tab-id="tabTitles[3].tabId"
-        >
+        <template #[tabTitles.at(3)?.panelId]>
           <FamilyFileBudget
             :family-file-id="familyFileId"
             :family-file-identification="familyFileIdentification"
           />
-        </DsfrTabContent>
+        </template>
       </AtomNewTabs>
     </div>
   </PageContainer>
