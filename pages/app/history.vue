@@ -4,22 +4,16 @@
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <AtomTabs tab-list-name="Accompagnements">
-          <AtomTab
-            :tab-id="HistoryTab.Followups"
-            title="Entretiens"
-            selected
-            icon="fr-icon-draft-fill"
-          >
+        <AtomTabs
+          tab-list-name="Accompagnements"
+          :tab-titles="tabTitles"
+        >
+          <template #[tabTitles.at(0)?.panelId]>
             <Followups />
-          </AtomTab>
-          <AtomTab
-            :tab-id="HistoryTab.FileInstructions"
-            title="Dossiers d'instruction"
-            icon="fr-icon-questionnaire-fill"
-          >
+          </template>
+          <template #[tabTitles.at(1)?.panelId]>
             <FileInstructions />
-          </AtomTab>
+          </template>
         </AtomTabs>
       </div>
     </div>
@@ -34,6 +28,21 @@
   const title = routes.file.AppHistory.title
 
   useHead({ title })
+
+  const tabTitles = [
+    {
+      tabId: HistoryTab.Followups,
+      panelId: 'tab-content-0',
+      title: 'Entretiens',
+      icon: 'fr-icon-draft-fill'
+    },
+    {
+      tabId: HistoryTab.FileInstructions,
+      panelId: 'tab-content-1',
+      title: "Dossiers d'instruction",
+      icon: 'fr-icon-questionnaire-fill'
+    }
+  ]
 </script>
 
 <style scoped>
