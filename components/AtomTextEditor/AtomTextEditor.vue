@@ -188,7 +188,20 @@
     extensions: [
       StarterKit.configure({
         heading: {
-          levels: [1, 2, 3]
+          levels: [1, 2, 3],
+          HTMLAttributes: {
+            class: 'text-editor-heading'
+          }
+        },
+        paragraph: {
+          HTMLAttributes: {
+            class: 'text-editor-paragraph'
+          }
+        },
+        listItem: {
+          HTMLAttributes: {
+            class: 'text-editor-list'
+          }
         }
       }),
       Link.configure({
@@ -301,5 +314,25 @@
     padding: 0.5rem 1rem;
     min-height: 3.75rem;
     max-height: none;
+
+    p.text-editor-paragraph {
+      margin-bottom: 0.75em;
+    }
+    .text-editor-heading {
+      margin-bottom: 0.25em;
+    }
+    h3.text-editor-heading {
+      font-size: 1.125rem;
+    }
+    h2.text-editor-heading {
+      font-size: 1.25rem;
+    }
+    h1.text-editor-heading {
+      font-size: 1.375rem;
+    }
+    .text-editor-list {
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
   }
 </style>
