@@ -29,7 +29,7 @@
         message="Le bénéficiaire n'a pas pu être chargé."
       />
 
-      <AtomNewTabs
+      <AtomTabs
         v-else-if="selectedBeneficiary"
         tab-list-name="Détails du dossier foyer"
         :tab-titles="tabTitles"
@@ -74,7 +74,7 @@
             :family-file-identification="familyFileIdentification"
           />
         </template>
-      </AtomNewTabs>
+      </AtomTabs>
     </div>
   </PageContainer>
 </template>
