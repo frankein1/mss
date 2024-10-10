@@ -18,7 +18,15 @@
       </DsfrTabItem>
     </template>
 
-    <slot />
+    <DsfrTabContent
+      v-for="(tab, index) of tabTitles"
+      :key="index"
+      class="fr-transition-none"
+      :panel-id="tab.panelId"
+      :tab-id="tab.tabId"
+    >
+      <slot :name="tab.panelId" />
+    </DsfrTabContent>
   </DsfrTabs>
 </template>
 
