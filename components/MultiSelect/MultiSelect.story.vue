@@ -1,13 +1,11 @@
 <template>
   <div class="fr-col-12">
     <h4>Multiselect dans des tabs</h4>
-    <AtomTabs tab-list-name="Onglets">
-      <AtomTab
-        tab-id="Onglet 1"
-        title="Onglet 1"
-        selected
-        icon="fr-icon-draft-fill"
-      >
+    <AtomTabs
+      tab-list-name="Onglets"
+      :tab-titles="tabTitles"
+    >
+      <template #tab-content-0>
         <div class="fr-container">
           <div class="fr-grid-row fr-grid-row--gutters">
             <div class="fr-col-4">
@@ -27,23 +25,34 @@
             </div>
           </div>
         </div>
-      </AtomTab>
-      <AtomTab
-        tab-id="Onglet 2"
-        title="Onglet 2"
-        icon="fr-icon-questionnaire-fill"
-      >
+      </template>
+      <template #tab-content-1>
         <p>Rien</p>
-      </AtomTab>
+      </template>
     </AtomTabs>
   </div>
 </template>
 
 <script setup lang="ts">
   import type { Options } from '~/utils/options'
-  import { useField, useForm } from 'vee-validate'
+  import { useForm } from 'vee-validate'
 
   const form = ref<HTMLFormElement | null>(null)
+
+  const tabTitles = [
+    {
+      tabId: 'Onglet 1',
+      panelId: 'tab-content-0',
+      title: 'Onglet 1',
+      icon: 'fr-icon-draft-fill'
+    },
+    {
+      tabId: 'Onglet 2',
+      panelId: 'tab-content-1',
+      title: 'Onglet 2',
+      icon: 'fr-icon-questionnaire-fill'
+    }
+  ]
 
   const allValues: Options = [
     { value: '01', label: 'Ain' },
