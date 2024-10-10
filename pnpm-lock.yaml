@@ -8741,6 +8741,7 @@ snapshots:
   '@tiptap/extension-code-block@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
+      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
 
   '@tiptap/extension-code@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))':
@@ -8754,6 +8755,7 @@ snapshots:
   '@tiptap/extension-dropcursor@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
+      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
 
   '@tiptap/extension-floating-menu@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
@@ -8765,6 +8767,7 @@ snapshots:
 
   '@tiptap/extension-gapcursor@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
+      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
 
@@ -8779,10 +8782,12 @@ snapshots:
   '@tiptap/extension-history@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
+      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
 
   '@tiptap/extension-horizontal-rule@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
+      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
 
