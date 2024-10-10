@@ -61,6 +61,7 @@
     user-select: none;
     vertical-align: middle;
     border-radius: 0.25rem;
+    transform: translate(0, 0.25rem);
   }
 
   [type='checkbox']:checked {

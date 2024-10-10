@@ -118,7 +118,8 @@
 <script lang="ts" setup>
   import type { Options, OptionType } from '~/utils/options'
   import { onClickOutside } from '@vueuse/core'
-  import { useField, useForm } from 'vee-validate'
+  import { useField } from 'vee-validate'
+  import { formatSearchPattern } from '~/utils'
 
   const props = withDefaults(
     defineProps<{
@@ -208,7 +209,7 @@
     return labels.join(', ')
   })
 
-  const displayedOptions: globalThis.ComputedRef<Options> = computed(() => {
+  const displayedOptions: ComputedRef<Options> = computed(() => {
     const selectedValues = selectedOptions.value.map(option => option.value)
     const availableOptions = filteredOptions.value.filter(
       option => !selectedValues.includes(option.value)
@@ -240,7 +241,9 @@
   const handleChangeSearchValues = (optionQuery: string) => {
     const filteredOptionsArray = [...existingOptions.value].filter(
       ({ label }) =>
-        label.toLocaleLowerCase().includes(optionQuery.toLocaleLowerCase())
+        formatSearchPattern(label.toLocaleLowerCase()).includes(
+          formatSearchPattern(optionQuery.toLocaleLowerCase())
+        )
     )
     filteredOptions.value = filteredOptionsArray
   }
@@ -308,7 +311,7 @@
 
         .option-item {
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           gap: 0.75rem;
         }
       }
