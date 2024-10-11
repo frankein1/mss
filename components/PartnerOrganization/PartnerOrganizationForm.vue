@@ -24,7 +24,7 @@
           :label="partnerOrganizationFieldLabels.name"
           required
           :value="selectedName"
-          :search-fn="search => searchDataInclusionStructure(search)"
+          :search-fn="(search: string) => searchDataInclusionStructure(search)"
           @result-selected="onStructureSelected"
         />
       </div>
