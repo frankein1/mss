@@ -122,25 +122,25 @@
   const tabTitles = [
     {
       tabId: FamilyFileTab.Details,
-      panelId: 'tab-content-0',
+      panelId: panelId(FamilyFileTab.Details),
       title: 'Informations',
       icon: 'fr-icon-information-fill'
     },
     {
       tabId: FamilyFileTab.Documents,
-      panelId: 'tab-content-1',
+      panelId: panelId(FamilyFileTab.Documents),
       title: 'Documents',
       icon: 'fr-icon-folder-2-line'
     },
     {
       tabId: FamilyFileTab.History,
-      panelId: 'tab-content-2',
+      panelId: panelId(FamilyFileTab.History),
       title: 'Historique',
       icon: 'fr-icon-history-line'
     },
     {
       tabId: FamilyFileTab.Budget,
-      panelId: 'tab-content-3',
+      panelId: panelId(FamilyFileTab.Budget),
       title: 'Budget',
       icon: 'fr-icon-money-euro-circle-line'
     }

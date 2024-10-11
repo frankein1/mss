@@ -62,12 +62,12 @@
   const tabTitles = [
     {
       tabId: 'Beneficiaires',
-      panelId: 'tab-content-0',
+      panelId: panelId('Beneficiaires'),
       title: 'Beneficiaires'
     },
     {
       tabId: 'Accompagnements',
-      panelId: 'tab-content-1',
+      panelId: panelId('Accompagnements'),
       title: 'Accompagnements'
     }
   ]
