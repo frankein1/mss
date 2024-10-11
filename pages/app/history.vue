@@ -32,13 +32,13 @@
   const tabTitles = [
     {
       tabId: HistoryTab.Followups,
-      panelId: 'tab-content-0',
+      panelId: panelId(HistoryTab.Followups),
       title: 'Entretiens',
       icon: 'fr-icon-draft-fill'
     },
     {
       tabId: HistoryTab.FileInstructions,
-      panelId: 'tab-content-1',
+      panelId: panelId(HistoryTab.FileInstructions),
       title: "Dossiers d'instruction",
       icon: 'fr-icon-questionnaire-fill'
     }

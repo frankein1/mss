@@ -3,7 +3,7 @@
     ref="tabs"
     v-model="activeTab"
     tab-list-name="Détails du dossier foyer"
-    @select-tab="resizetab"
+    @select-tab="onTabChange"
   >
     <template #tab-items>
       <DsfrTabItem
@@ -34,14 +34,28 @@
   import type { DsfrTabsProps } from '@gouvminint/vue-dsfr'
   import { DsfrTabs } from '@gouvminint/vue-dsfr'
 
-  defineProps<Pick<DsfrTabsProps, 'tabListName' | 'tabTitles'>>()
+  const props = defineProps<Pick<DsfrTabsProps, 'tabListName' | 'tabTitles'>>()
 
   const activeTab = ref(0)
   const tabs = ref<InstanceType<typeof DsfrTabs> | null>(null)
 
-  function resizetab() {
+  function onTabChange() {
     if (tabs.value) {
       tabs.value.renderTabs()
     }
+  }
+
+  function setActiveTabFromUrl() {
+    const initialTabName = window.location.hash.slice(1)
+    const initialTabIndex = props.tabTitles.findIndex(
+      el => el.tabId === initialTabName
+    )
+    if (initialTabIndex >= 0) {
+      activeTab.value = initialTabIndex
+    }
+  }
+
+  if (import.meta.client) {
+    setActiveTabFromUrl()
   }
 </script>
