@@ -210,7 +210,7 @@
             :initial-value="privateSynthesisRichTextValue"
             :label="followupFieldLabels.privateSynthesis"
             label-icon="fr-icon-lock-line"
-            :max-height="120"
+            :min-height="120"
             @update="onUpdatePrivateSynthesis"
           >
             <template #hint>
@@ -384,8 +384,8 @@
     json: JSONContent | undefined,
     rawText: string | undefined
   ) => {
-    setSynthesis(sanitizeText(rawText))
-    setSynthesisRichText(sanitizeText(JSON.stringify(json)))
+    setSynthesis(cleanRawText(rawText))
+    setSynthesisRichText(JSON.stringify(json))
   }
   const { setValue: setPrivateSynthesis } = useField<string | undefined>(
     'privateSynthesis'
@@ -394,13 +394,14 @@
     setValue: setPrivateSynthesisRichText,
     value: privateSynthesisRichTextValue
   } = useField<string | undefined>('privateSynthesisRichText')
+
   const onUpdatePrivateSynthesis = (
     html: string | undefined,
     json: JSONContent | undefined,
     rawText: string | undefined
   ) => {
-    setPrivateSynthesis(sanitizeText(rawText))
-    setPrivateSynthesisRichText(sanitizeText(JSON.stringify(json)))
+    setPrivateSynthesis(cleanRawText(rawText))
+    setPrivateSynthesisRichText(JSON.stringify(json))
   }
 
   const { errors } = useDisplayFormErrors(
@@ -462,10 +463,10 @@
     return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
   })
 
-  const sanitizeText = (text: string | undefined): string | undefined => {
-    if (!text) {
+  const cleanRawText = (rawText: string | undefined): string | undefined => {
+    if (!rawText) {
       return undefined
     }
-    return text.replace(/[<>]/g, '*')
+    return rawText.replace(/\n+/g, '\n')
   }
 </script>
