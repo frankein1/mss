@@ -192,8 +192,9 @@
 
         <!-- ROW -->
         <div class="fr-col-12">
-          <!-- TODO: add label -->
           <AtomTextEditor
+            name="synthesis"
+            :label="followupFieldLabels.synthesis"
             :initial-value="synthesisRichTextValue"
             @update="onUpdateSynthesis"
           />
@@ -204,10 +205,13 @@
           v-if="canSetPrivateSynthesis"
           class="fr-col-12"
         >
-          <!-- <VeeTextarea
+          <AtomTextEditor
             name="privateSynthesis"
+            :initial-value="privateSynthesisRichTextValue"
             :label="followupFieldLabels.privateSynthesis"
             label-icon="fr-icon-lock-line"
+            :max-height="120"
+            @update="onUpdatePrivateSynthesis"
           >
             <template #hint>
               Le compte rendu privé est uniquement visible et modifiable par
@@ -215,14 +219,7 @@
                 SENSITIVE_DATA_HINT
               }}
             </template>
-          </VeeTextarea> -->
-          <!-- TODO: ajouter entête avec template ? -->
-          <p>{{ followupFieldLabels.privateSynthesis }}</p>
-          <AtomTextEditor
-            :max-height="120"
-            :initial-value="privateSynthesisRichTextValue"
-            @update="onUpdatePrivateSynthesis"
-          />
+          </AtomTextEditor>
         </div>
 
         <!-- ROW -->
@@ -387,8 +384,8 @@
     json: JSONContent | undefined,
     rawText: string | undefined
   ) => {
-    setSynthesis(rawText)
-    setSynthesisRichText(JSON.stringify(json))
+    setSynthesis(sanitizeText(rawText))
+    setSynthesisRichText(sanitizeText(JSON.stringify(json)))
   }
   const { setValue: setPrivateSynthesis } = useField<string | undefined>(
     'privateSynthesis'
@@ -402,8 +399,8 @@
     json: JSONContent | undefined,
     rawText: string | undefined
   ) => {
-    setPrivateSynthesis(rawText)
-    setPrivateSynthesisRichText(JSON.stringify(json))
+    setPrivateSynthesis(sanitizeText(rawText))
+    setPrivateSynthesisRichText(sanitizeText(JSON.stringify(json)))
   }
 
   const { errors } = useDisplayFormErrors(
@@ -464,4 +461,11 @@
     )
     return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
   })
+
+  const sanitizeText = (text: string | undefined): string | undefined => {
+    if (!text) {
+      return undefined
+    }
+    return text.replace(/[<>]/g, '*')
+  }
 </script>
