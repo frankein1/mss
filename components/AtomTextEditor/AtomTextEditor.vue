@@ -1,144 +1,177 @@
 <template>
-  <client-only>
-    <div class="tiptap-editor-menubar fr-input">
-      <ul role="navigation">
-        <!-- Titles -->
-        <li>
-          <button
-            v-if="editor"
-            class="menubar__button"
-            :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-            @click.prevent="
-              editor.chain().focus().toggleHeading({ level: 1 }).run()
-            "
-          >
-            <img
-              src="~/assets/icons/editor-T1.svg"
-              alt="Titre 1"
-            />
-          </button>
-        </li>
-        <li>
-          <button
-            v-if="editor"
-            class="menubar__button"
-            :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-            @click.prevent="
-              editor.chain().focus().toggleHeading({ level: 2 }).run()
-            "
-          >
-            <img
-              src="~/assets/icons/editor-T2.svg"
-              alt="Titre 2"
-            />
-          </button>
-        </li>
-        <li class="break">
-          <button
-            v-if="editor"
-            class="menubar__button"
-            :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-            @click.prevent="
-              editor.chain().focus().toggleHeading({ level: 3 }).run()
-            "
-          >
-            <img
-              src="~/assets/icons/editor-T3.svg"
-              alt="Titre 3"
-            />
-          </button>
-        </li>
+  <div
+    class="fr-input-group"
+    :class="{
+      'fr-input-group--error': error,
+      'fr-input-group--disabled': disabled
+    }"
+  >
+    <label
+      v-if="label"
+      class="fr-label"
+      :class="[labelIcon]"
+      :for="name"
+    >
+      {{ label }}
+      <span
+        v-if="required"
+        class="color-red"
+        >*</span
+      >
+      <span
+        v-if="hasHint"
+        class="fr-hint-text"
+        ><slot name="hint"></slot
+      ></span>
+    </label>
+    <client-only>
+      <div class="tiptap-editor-menubar fr-input">
+        <ul role="navigation">
+          <!-- Titles -->
+          <li>
+            <button
+              v-if="editor"
+              class="menubar__button"
+              :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
+              @click.prevent="
+                editor.chain().focus().toggleHeading({ level: 1 }).run()
+              "
+            >
+              <img
+                src="~/assets/icons/editor-T1.svg"
+                alt="Titre 1"
+              />
+            </button>
+          </li>
+          <li>
+            <button
+              v-if="editor"
+              class="menubar__button"
+              :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
+              @click.prevent="
+                editor.chain().focus().toggleHeading({ level: 2 }).run()
+              "
+            >
+              <img
+                src="~/assets/icons/editor-T2.svg"
+                alt="Titre 2"
+              />
+            </button>
+          </li>
+          <li class="break">
+            <button
+              v-if="editor"
+              class="menubar__button"
+              :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
+              @click.prevent="
+                editor.chain().focus().toggleHeading({ level: 3 }).run()
+              "
+            >
+              <img
+                src="~/assets/icons/editor-T3.svg"
+                alt="Titre 3"
+              />
+            </button>
+          </li>
 
-        <!-- emphasis -->
-        <li>
-          <button
-            v-if="editor"
-            class="menubar__button"
-            :class="{ 'is-active': editor.isActive('bold') }"
-            title="Gras"
-            @click.prevent="editor.chain().focus().toggleBold().run()"
-          >
-            <img
-              src="~/assets/icons/editor-bold.svg"
-              alt="Gras"
-            />
-          </button>
-        </li>
-        <li class="break">
-          <button
-            v-if="editor"
-            class="menubar__button"
-            :class="{ 'is-active': editor.isActive('italic') }"
-            @click.prevent="editor.chain().focus().toggleItalic().run()"
-          >
-            <img
-              src="~/assets/icons/editor-ital.svg"
-              alt="Italic"
-            />
-          </button>
-        </li>
+          <!-- emphasis -->
+          <li>
+            <button
+              v-if="editor"
+              class="menubar__button"
+              :class="{ 'is-active': editor.isActive('bold') }"
+              title="Gras"
+              @click.prevent="editor.chain().focus().toggleBold().run()"
+            >
+              <img
+                src="~/assets/icons/editor-bold.svg"
+                alt="Gras"
+              />
+            </button>
+          </li>
+          <li class="break">
+            <button
+              v-if="editor"
+              class="menubar__button"
+              :class="{ 'is-active': editor.isActive('italic') }"
+              @click.prevent="editor.chain().focus().toggleItalic().run()"
+            >
+              <img
+                src="~/assets/icons/editor-ital.svg"
+                alt="Italic"
+              />
+            </button>
+          </li>
 
-        <!-- List -->
-        <li>
-          <button
-            v-if="editor"
-            class="menubar__button"
-            :class="{ 'is-active': editor.isActive('bulletList') }"
-            @click.prevent="editor.chain().focus().toggleBulletList().run()"
-          >
-            <img
-              src="~/assets/icons/editor-ul.svg"
-              alt="Liste à point"
-            />
-          </button>
-        </li>
-        <li class="break">
-          <button
-            v-if="editor"
-            class="menubar__button"
-            :class="{ 'is-active': editor.isActive('orderedList') }"
-            @click.prevent="editor.chain().focus().toggleOrderedList().run()"
-          >
-            <img
-              src="~/assets/icons/editor-ol.svg"
-              alt="Liste numéroté"
-            />
-          </button>
-        </li>
+          <!-- List -->
+          <li>
+            <button
+              v-if="editor"
+              class="menubar__button"
+              :class="{ 'is-active': editor.isActive('bulletList') }"
+              @click.prevent="editor.chain().focus().toggleBulletList().run()"
+            >
+              <img
+                src="~/assets/icons/editor-ul.svg"
+                alt="Liste à point"
+              />
+            </button>
+          </li>
+          <li class="break">
+            <button
+              v-if="editor"
+              class="menubar__button"
+              :class="{ 'is-active': editor.isActive('orderedList') }"
+              @click.prevent="editor.chain().focus().toggleOrderedList().run()"
+            >
+              <img
+                src="~/assets/icons/editor-ol.svg"
+                alt="Liste numéroté"
+              />
+            </button>
+          </li>
 
-        <!-- link -->
-        <li>
-          <button
-            v-if="editor"
-            class="menubar__button"
-            :class="{ 'is-active': editor.isActive('link') }"
-            @click.prevent="setLink"
-          >
-            <img
-              src="~/assets/icons/editor-link.svg"
-              alt="Lien"
-            />
-          </button>
-        </li>
-        <li>
-          <button
-            v-if="editor"
-            class="menubar__button"
-            @click.prevent="unsetLink"
-          >
-            <img
-              src="~/assets/icons/editor-unlink.svg"
-              alt="Défaire le lien"
-            />
-          </button>
-        </li>
-      </ul>
-    </div>
-    <EditorContent
-      :editor="editor"
-      class="tiptap-editor-content fr-input"
-    />
-  </client-only>
+          <!-- link -->
+          <li>
+            <button
+              v-if="editor"
+              class="menubar__button"
+              :class="{ 'is-active': editor.isActive('link') }"
+              @click.prevent="setLink"
+            >
+              <img
+                src="~/assets/icons/editor-link.svg"
+                alt="Lien"
+              />
+            </button>
+          </li>
+          <li>
+            <button
+              v-if="editor"
+              class="menubar__button"
+              @click.prevent="unsetLink"
+            >
+              <img
+                src="~/assets/icons/editor-unlink.svg"
+                alt="Défaire le lien"
+              />
+            </button>
+          </li>
+        </ul>
+      </div>
+      <EditorContent
+        ref="input"
+        :editor="editor"
+        class="tiptap-editor-content fr-input"
+      />
+    </client-only>
+    <p
+      v-if="error"
+      class="fr-message fr-message--error fr-mt-1w"
+    >
+      {{ error }}
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -148,12 +181,21 @@
 
   const props = withDefaults(
     defineProps<{
-      maxHeight?: number | null
+      name: string
+      label?: string | null
       initialValue?: string | null
+      disabled?: boolean
+      labelIcon?: string
+      required?: boolean
+      maxHeight?: number | null
     }>(),
     {
-      maxHeight: null,
-      initialValue: null
+      initialValue: null,
+      required: false,
+      disabled: false,
+      label: null,
+      labelIcon: '',
+      maxHeight: null
     }
   )
 
@@ -168,16 +210,19 @@
   const html = ref<string | undefined>('')
   const json = ref<JSONContent | undefined>()
   const rawText = ref<string | undefined>()
+  const hasHint = computed(() => useSlots().hint)
 
+  const { errorMessage: error } = useField<string>(props.name)
+
+  // TODO: pass this height to CSS
+  // ex:
+  // --tabs-panel-min-height: v-bind('tabsPanelMinHeight');
   const getHeight = (): string => {
     if (!props.maxHeight) {
       return 'min-height: 30rem'
     }
     return 'min-height: ' + props.maxHeight + 'px'
   }
-
-  const goodContent = props.initialValue ? JSON.parse(props.initialValue) : ''
-  const badcontent = { truc: 'kjsvezkvgjh', machin: 'lzhvkf;dbvkefjbv zlkef' }
 
   const editor = useEditor({
     content: props.initialValue ? JSON.parse(props.initialValue) : '',
@@ -263,6 +308,9 @@
 </script>
 
 <style lang="scss" scoped>
+  .fr-label::before {
+    margin-right: 0.5rem;
+  }
   .tiptap-editor-menubar {
     box-shadow: inset 0 -1px 0 0 #cecece;
     padding: 0;
@@ -319,16 +367,19 @@
       margin-bottom: 0.75em;
     }
     .text-editor-heading {
-      margin-bottom: 0.25em;
+      margin-bottom: 0.125em;
     }
     h3.text-editor-heading {
       font-size: 1.125rem;
+      line-height: 1.5em;
     }
     h2.text-editor-heading {
-      font-size: 1.25rem;
+      font-size: 1.375rem;
+      line-height: 1.5em;
     }
     h1.text-editor-heading {
-      font-size: 1.375rem;
+      font-size: 1.625rem;
+      line-height: 1.5em;
     }
     .text-editor-list {
       margin-bottom: 0;
