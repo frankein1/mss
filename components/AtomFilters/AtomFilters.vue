@@ -240,8 +240,12 @@
     }
   )
 
-  watch(emitableSelectedFilters, emitable => {
-    emit('filter', emitable)
+  watch(emitableSelectedFilters, (emitable, oldvalue) => {
+    const filterContentHasChanged =
+      JSON.stringify(oldvalue) !== JSON.stringify(emitable)
+    if (filterContentHasChanged) {
+      emit('filter', emitable)
+    }
   })
 
   const onChangeFilter = useDefer(
