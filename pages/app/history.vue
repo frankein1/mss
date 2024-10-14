@@ -7,6 +7,7 @@
         <AtomTabs
           tab-list-name="Accompagnements"
           :tab-titles="tabTitles"
+          :heading-level="2"
         >
           <template #[tabTitles.at(0)?.panelId]>
             <Followups />

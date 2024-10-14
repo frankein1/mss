@@ -33,6 +33,7 @@
         v-else-if="selectedBeneficiary"
         tab-list-name="Détails du dossier foyer"
         :tab-titles="tabTitles"
+        :heading-level="2"
       >
         <template #[tabTitles.at(0)?.panelId]>
           <FamilyFileSegmentedControl

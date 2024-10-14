@@ -14,7 +14,13 @@
         @click="activeTab = index"
       >
         <span :class="`fr-tabs__tab--icon-left ${tab.icon}`"></span>
-        {{ tab.title }}
+        <span
+          v-if="activeTab == index && headingLevel"
+          role="heading"
+          :aria-level="headingLevel"
+          >{{ tab.title }}</span
+        >
+        <template v-else>{{ tab.title }}</template>
       </DsfrTabItem>
     </template>
 
@@ -34,7 +40,14 @@
   import type { DsfrTabsProps } from '@gouvminint/vue-dsfr'
   import { DsfrTabs } from '@gouvminint/vue-dsfr'
 
-  const props = defineProps<Pick<DsfrTabsProps, 'tabListName' | 'tabTitles'>>()
+  const props = withDefaults(
+    defineProps<
+      Pick<DsfrTabsProps, 'tabListName' | 'tabTitles'> & {
+        headingLevel?: 1 | 2 | 3 | 4 | 5 | 6 | null
+      }
+    >(),
+    { headingLevel: null }
+  )
 
   const activeTab = ref(0)
   const tabs = ref<InstanceType<typeof DsfrTabs> | null>(null)
