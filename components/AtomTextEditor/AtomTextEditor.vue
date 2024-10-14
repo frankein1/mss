@@ -187,7 +187,7 @@
       disabled?: boolean
       labelIcon?: string
       required?: boolean
-      maxHeight?: number | null
+      minHeight?: number | null
     }>(),
     {
       initialValue: null,
@@ -195,7 +195,7 @@
       disabled: false,
       label: null,
       labelIcon: '',
-      maxHeight: null
+      minHeight: null
     }
   )
 
@@ -211,24 +211,22 @@
   const json = ref<JSONContent | undefined>()
   const rawText = ref<string | undefined>()
   const hasHint = computed(() => useSlots().hint)
+  const contentHeight = computed(() => getHeight())
 
   const { errorMessage: error } = useField<string>(props.name)
 
-  // TODO: pass this height to CSS
-  // ex:
-  // --tabs-panel-min-height: v-bind('tabsPanelMinHeight');
   const getHeight = (): string => {
-    if (!props.maxHeight) {
-      return 'min-height: 30rem'
+    if (!props.minHeight) {
+      return '30rem'
     }
-    return 'min-height: ' + props.maxHeight + 'px'
+    return props.minHeight + 'px'
   }
 
   const editor = useEditor({
     content: props.initialValue ? JSON.parse(props.initialValue) : '',
     enableContentCheck: true,
     onContentError({ editor, error, disableCollaboration }) {
-      console.log(error)
+      console.error(error)
     },
     extensions: [
       StarterKit.configure({
@@ -256,8 +254,7 @@
     ],
     editorProps: {
       attributes: {
-        class: 'custom-tiptap',
-        style: getHeight()
+        class: 'custom-tiptap'
       }
     },
     onUpdate: () => {
@@ -339,14 +336,14 @@
     }
   }
   .tiptap-editor-content {
-    min-height: 3.75rem;
     max-height: none;
+    min-height: v-bind('contentHeight');
     border-radius: 0;
     padding: 0;
   }
   // Button
   .menubar__button {
-    width: 40px; // TODO: convert to em??
+    width: 40px;
     height: 40px;
     &:active {
       background: none;
