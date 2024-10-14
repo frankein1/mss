@@ -4,11 +4,12 @@
     <PageTitle :title="title" />
     <div class="fr-grid-row fr-grid-row--gutters">
       <div class="fr-col-12">
-        <AtomTabs tab-list-name="Statistiques de la structure">
-          <AtomTab
-            tab-id="Beneficiaires"
-            title="Bénéficiaires"
-          >
+        <AtomTabs
+          tab-list-name="Statistiques de la structure"
+          :tab-titles="tabTitles"
+          :heading-level="2"
+        >
+          <template #[tabTitles.at(0)?.panelId]>
             <AtomAlert
               v-if="fetchError"
               :alert-type="AlertType.Error"
@@ -24,11 +25,8 @@
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
-          </AtomTab>
-          <AtomTab
-            tab-id="Accompagnements"
-            title="Accompagnements"
-          >
+          </template>
+          <template #[tabTitles.at(1)?.panelId]>
             <AtomAlert
               v-if="fetchError"
               :alert-type="AlertType.Error"
@@ -44,7 +42,7 @@
               :beneficiaries-cities-options="beneficiariesCitiesOptions"
               :agent-options="agentsOptions"
             />
-          </AtomTab>
+          </template>
         </AtomTabs>
       </div>
     </div>
@@ -61,6 +59,19 @@
   const title = routes.stats.AppStats.title
 
   useHead({ title })
+
+  const tabTitles = [
+    {
+      tabId: 'Beneficiaires',
+      panelId: panelId('Beneficiaires'),
+      title: 'Bénéficiaires'
+    },
+    {
+      tabId: 'Accompagnements',
+      panelId: panelId('Accompagnements'),
+      title: 'Accompagnements'
+    }
+  ]
 
   const trpcClient = useTrpcClient()
 

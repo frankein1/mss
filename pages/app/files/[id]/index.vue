@@ -28,17 +28,14 @@
         :alert-type="AlertType.Error"
         message="Le bénéficiaire n'a pas pu être chargé."
       />
+
       <AtomTabs
         v-else-if="selectedBeneficiary"
         tab-list-name="Détails du dossier foyer"
+        :tab-titles="tabTitles"
         :heading-level="2"
       >
-        <AtomTab
-          :tab-id="FamilyFileTab.Details"
-          title="Informations"
-          icon="fr-icon-information-fill"
-          selected
-        >
+        <template #[tabTitles.at(0)?.panelId]>
           <FamilyFileSegmentedControl
             v-if="familyFileIdentification.length > 1"
             :members="familyFileIdentification"
@@ -53,24 +50,16 @@
             @delete="openDeleteModal"
             @split="openSplitModal"
           />
-        </AtomTab>
-        <AtomTab
-          :tab-id="FamilyFileTab.Documents"
-          title="Documents"
-          icon="fr-icon-folder-2-line"
-          selected
-        >
+        </template>
+
+        <template #[tabTitles.at(1)?.panelId]>
           <BeneficiaryDocumentList
             :family-file-id="selectedBeneficiary.familyFileId"
             :family-file-identification="familyFileIdentification || []"
           />
-        </AtomTab>
-        <AtomTab
-          :tab-id="FamilyFileTab.History"
-          title="Historique"
-          icon="fr-icon-history-line"
-          selected
-        >
+        </template>
+
+        <template #[tabTitles.at(2)?.panelId]>
           <BeneficiaryHistory
             v-if="selectedPermissions"
             :family-file-id="familyFileId"
@@ -78,18 +67,14 @@
             :family-file-identification="familyFileIdentification"
             @refresh="getBeneficiaryDetails(selectedBeneficiary.id)"
           />
-        </AtomTab>
-        <AtomTab
-          :tab-id="FamilyFileTab.Budget"
-          title="Budget"
-          icon="fr-icon-money-euro-circle-line"
-          selected
-        >
+        </template>
+
+        <template #[tabTitles.at(3)?.panelId]>
           <FamilyFileBudget
             :family-file-id="familyFileId"
             :family-file-identification="familyFileIdentification"
           />
-        </AtomTab>
+        </template>
       </AtomTabs>
     </div>
   </PageContainer>
@@ -127,6 +112,41 @@
   const title = routes.file.AppFile.title(familyFileIdentification.value)
   useHead({ title })
 
+  // Tabs
+  enum FamilyFileTab {
+    Details = 'Details',
+    Documents = 'Documents',
+    History = 'History',
+    Budget = 'Budget'
+  }
+
+  const tabTitles = [
+    {
+      tabId: FamilyFileTab.Details,
+      panelId: panelId(FamilyFileTab.Details),
+      title: 'Informations',
+      icon: 'fr-icon-information-fill'
+    },
+    {
+      tabId: FamilyFileTab.Documents,
+      panelId: panelId(FamilyFileTab.Documents),
+      title: 'Documents',
+      icon: 'fr-icon-folder-2-line'
+    },
+    {
+      tabId: FamilyFileTab.History,
+      panelId: panelId(FamilyFileTab.History),
+      title: 'Historique',
+      icon: 'fr-icon-history-line'
+    },
+    {
+      tabId: FamilyFileTab.Budget,
+      panelId: panelId(FamilyFileTab.Budget),
+      title: 'Budget',
+      icon: 'fr-icon-money-euro-circle-line'
+    }
+  ]
+
   // states
   const selectedBeneficiary = ref<GetBeneficiaryOutput | null>(null)
   const selectedPermissions = ref<FamilyFilePermissions | undefined>(undefined)
@@ -157,12 +177,6 @@
     })
     navigateTo(navRoute)
     getBeneficiaryDetails(beneficiaryId)
-  }
-  enum FamilyFileTab {
-    Details = 'Details',
-    Documents = 'Documents',
-    History = 'History',
-    Budget = 'Budget'
   }
 
   function openDeleteModal() {
