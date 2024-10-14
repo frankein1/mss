@@ -6,7 +6,10 @@
       :tab-titles="tabTitles"
     >
       <template #tab-content-0>
-        <div class="fr-container">
+        <div
+          class="fr-container"
+          style="min-height: 500px"
+        >
           <div class="fr-grid-row fr-grid-row--gutters">
             <div class="fr-col-4">
               <form
