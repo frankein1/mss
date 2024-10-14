@@ -163,6 +163,7 @@
     padding: 0.5rem 1rem;
     min-height: 3.75rem;
     max-height: none;
+    min-height: v-bind('contentHeight');
 
     p.text-editor-paragraph {
       margin-bottom: 0.75em;

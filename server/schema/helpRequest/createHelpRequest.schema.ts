@@ -13,7 +13,8 @@ import {
   amountNumber,
   dateOrEmpty,
   openText,
-  stringOrEmpty
+  stringOrEmpty,
+  openRichText
 } from '../helpers.schema'
 import { errorMessages, requiredErrorMessage } from '~/utils/zod'
 
@@ -42,7 +43,9 @@ export const createHelpRequestSchemaBase = z.object({
   instructorOrganizationContactId: z.string().nullish(),
   dispatchDate: dateOrEmpty,
   synthesis: openText(6000).nullish(),
+  synthesisRichText: openRichText().nullish(),
   privateSynthesis: openText(1000).nullish(),
+  privateSynthesisRichText: openRichText().nullish(),
   dueDate: dateOrEmpty,
   fullFile: z.boolean().default(false),
   financialSupport: z.boolean(),
