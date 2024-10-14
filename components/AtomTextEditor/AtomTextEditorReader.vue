@@ -17,14 +17,16 @@
   const props = withDefaults(
     defineProps<{
       value: string | null
+      rawText?: string
     }>(),
     {
-      value: null
+      value: null,
+      rawText: ''
     }
   )
 
   const editor = useEditor({
-    content: props.value ? JSON.parse(props.value) : '',
+    content: props.value ? JSON.parse(props.value) : props.rawText,
     enableContentCheck: true,
     onContentError({ error }) {
       console.error(error)
