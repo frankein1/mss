@@ -135,6 +135,13 @@ export const openText = (maxLength: number) =>
       'Les caractères spéciaux < et > ne sont pas acceptés.'
     )
 
+export const openRichText = () => {
+  return stringConstraint.refine(
+    text => !text.includes('<') && !text.includes('>'),
+    'Les caractères spéciaux < et > ne sont pas acceptés.'
+  )
+}
+
 export const beneficiaryIdSchema = z.object({
   beneficiaryId: z.string().uuid()
 })

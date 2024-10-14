@@ -26,138 +26,7 @@
     </label>
     <client-only>
       <div class="tiptap-editor-menubar fr-input">
-        <ul role="navigation">
-          <!-- Titles -->
-          <li>
-            <button
-              v-if="editor"
-              class="menubar__button"
-              :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }"
-              @click.prevent="
-                editor.chain().focus().toggleHeading({ level: 1 }).run()
-              "
-            >
-              <img
-                src="~/assets/icons/editor-T1.svg"
-                alt="Titre 1"
-              />
-            </button>
-          </li>
-          <li>
-            <button
-              v-if="editor"
-              class="menubar__button"
-              :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }"
-              @click.prevent="
-                editor.chain().focus().toggleHeading({ level: 2 }).run()
-              "
-            >
-              <img
-                src="~/assets/icons/editor-T2.svg"
-                alt="Titre 2"
-              />
-            </button>
-          </li>
-          <li class="break">
-            <button
-              v-if="editor"
-              class="menubar__button"
-              :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }"
-              @click.prevent="
-                editor.chain().focus().toggleHeading({ level: 3 }).run()
-              "
-            >
-              <img
-                src="~/assets/icons/editor-T3.svg"
-                alt="Titre 3"
-              />
-            </button>
-          </li>
-
-          <!-- emphasis -->
-          <li>
-            <button
-              v-if="editor"
-              class="menubar__button"
-              :class="{ 'is-active': editor.isActive('bold') }"
-              title="Gras"
-              @click.prevent="editor.chain().focus().toggleBold().run()"
-            >
-              <img
-                src="~/assets/icons/editor-bold.svg"
-                alt="Gras"
-              />
-            </button>
-          </li>
-          <li class="break">
-            <button
-              v-if="editor"
-              class="menubar__button"
-              :class="{ 'is-active': editor.isActive('italic') }"
-              @click.prevent="editor.chain().focus().toggleItalic().run()"
-            >
-              <img
-                src="~/assets/icons/editor-ital.svg"
-                alt="Italic"
-              />
-            </button>
-          </li>
-
-          <!-- List -->
-          <li>
-            <button
-              v-if="editor"
-              class="menubar__button"
-              :class="{ 'is-active': editor.isActive('bulletList') }"
-              @click.prevent="editor.chain().focus().toggleBulletList().run()"
-            >
-              <img
-                src="~/assets/icons/editor-ul.svg"
-                alt="Liste à point"
-              />
-            </button>
-          </li>
-          <li class="break">
-            <button
-              v-if="editor"
-              class="menubar__button"
-              :class="{ 'is-active': editor.isActive('orderedList') }"
-              @click.prevent="editor.chain().focus().toggleOrderedList().run()"
-            >
-              <img
-                src="~/assets/icons/editor-ol.svg"
-                alt="Liste numéroté"
-              />
-            </button>
-          </li>
-
-          <!-- link -->
-          <li>
-            <button
-              v-if="editor"
-              class="menubar__button"
-              :class="{ 'is-active': editor.isActive('link') }"
-              @click.prevent="setLink"
-            >
-              <img
-                src="~/assets/icons/editor-link.svg"
-                alt="Lien"
-              />
-            </button>
-          </li>
-          <li>
-            <button
-              v-if="editor"
-              class="menubar__button"
-              @click.prevent="unsetLink"
-            >
-              <img
-                src="~/assets/icons/editor-unlink.svg"
-                alt="Défaire le lien"
-              />
-            </button>
-          </li>
-        </ul>
+        <AtomTextEditorMenubar :editor="editor" />
       </div>
       <EditorContent
         ref="input"
@@ -265,39 +134,6 @@
     }
   })
 
-  const improveUrl = (url: string) => {
-    if (!/^https?:\/\//i.test(url)) {
-      return 'https://' + url
-    }
-    return url // Retourne l'URL sans modification si elle est déjà correcte
-  }
-
-  const setLink = () => {
-    const previousUrl = editor.value?.getAttributes('link').href
-    const url = window.prompt('URL', previousUrl)
-
-    // cancelled
-    if (url === null) {
-      return
-    }
-
-    // empty
-    if (url === '') {
-      editor.value?.chain().focus().extendMarkRange('link').unsetLink().run()
-      return
-    }
-    editor.value
-      ?.chain()
-      .focus()
-      .extendMarkRange('link')
-      .setLink({ href: improveUrl(url) })
-      .run()
-  }
-
-  const unsetLink = () => {
-    editor.value?.chain().focus().unsetLink().run()
-  }
-
   onMounted(() => {
     html.value = editor.value?.getHTML()
     json.value = editor.value?.getJSON()
@@ -308,49 +144,17 @@
   .fr-label::before {
     margin-right: 0.5rem;
   }
+
   .tiptap-editor-menubar {
     box-shadow: inset 0 -1px 0 0 #cecece;
     padding: 0;
-    ul {
-      padding: 0;
-      display: flex;
-      align-items: center;
-      list-style-type: none;
-      margin: 0;
-      height: 40px;
-      li {
-        height: 40px;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        &.break {
-          border-right: 1px #cecece solid;
-        }
-      }
-    }
-    button {
-      margin: 0 0.5rem;
-      img {
-        margin-top: 2px;
-      }
-    }
   }
+
   .tiptap-editor-content {
     max-height: none;
     min-height: v-bind('contentHeight');
     border-radius: 0;
     padding: 0;
-  }
-  // Button
-  .menubar__button {
-    width: 40px;
-    height: 40px;
-    &:active {
-      background: none;
-    }
-  }
-  .is-active > img {
-    filter: opacity(0.5);
   }
 </style>
 
@@ -363,21 +167,26 @@
     p.text-editor-paragraph {
       margin-bottom: 0.75em;
     }
+
     .text-editor-heading {
       margin-bottom: 0.125em;
     }
+
     h3.text-editor-heading {
       font-size: 1.125rem;
       line-height: 1.5em;
     }
+
     h2.text-editor-heading {
       font-size: 1.375rem;
       line-height: 1.5em;
     }
+
     h1.text-editor-heading {
       font-size: 1.625rem;
       line-height: 1.5em;
     }
+
     .text-editor-list {
       margin-bottom: 0;
       padding-bottom: 0;
