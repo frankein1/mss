@@ -182,20 +182,11 @@
         <div class="fr-col-6 fr-mt-0 fr-pt-0"></div>
 
         <!-- ROW -->
-        <!-- <div class="fr-col-12">
-          <VeeTextarea
-          class="large-textarea"
-          name="synthesis"
-          :label="followupFieldLabels.synthesis"
-          />
-        </div> -->
-
-        <!-- ROW -->
         <div class="fr-col-12">
           <AtomTextEditor
             name="synthesis"
-            :label="followupFieldLabels.synthesis"
             :initial-value="synthesisRichTextValue"
+            :label="followupFieldLabels.synthesis"
             @update="onUpdateSynthesis"
           />
         </div>
@@ -334,6 +325,7 @@
   import { PartnerOrganizationIdName } from '~/types/partner'
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
 
   const props = withDefaults(
     defineProps<{
@@ -384,7 +376,7 @@
     json: JSONContent | undefined,
     rawText: string | undefined
   ) => {
-    setSynthesis(cleanRawText(rawText))
+    setSynthesis(cleanEmptyParagraph(rawText))
     setSynthesisRichText(JSON.stringify(json))
   }
   const { setValue: setPrivateSynthesis } = useField<string | undefined>(
@@ -400,7 +392,7 @@
     json: JSONContent | undefined,
     rawText: string | undefined
   ) => {
-    setPrivateSynthesis(cleanRawText(rawText))
+    setPrivateSynthesis(cleanEmptyParagraph(rawText))
     setPrivateSynthesisRichText(JSON.stringify(json))
   }
 
@@ -462,11 +454,4 @@
     )
     return toOptions(partnerOrganization?.contacts || [], 'id', 'name')
   })
-
-  const cleanRawText = (rawText: string | undefined): string | undefined => {
-    if (!rawText) {
-      return undefined
-    }
-    return rawText.replace(/\n+/g, '\n')
-  }
 </script>

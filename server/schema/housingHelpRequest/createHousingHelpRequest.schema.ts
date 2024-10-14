@@ -18,7 +18,8 @@ import {
   dateOrEmpty,
   openText,
   stringOrEmpty,
-  stringConstraint
+  stringConstraint,
+  openRichText
 } from '../helpers.schema'
 import {
   errorMessages,
@@ -32,7 +33,9 @@ export const createHousingHelpRequestSchemaBase = z.object({
   date: z.coerce.date(errorMessages),
   documents: z.array(z.string(), errorMessages).default([]),
   synthesis: openText(6000).nullish(),
-  privateSynthesis: openText(1000).nullish(),
+  synthesisRichText: openRichText().nullish(),
+  privateSynthesis: openText(6000).nullish(),
+  privateSynthesisRichText: openRichText().nullish(),
   isMinistry: z.boolean(),
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   numeroPegase: stringOrEmpty(numeroPegaseContraint),
