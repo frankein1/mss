@@ -64,7 +64,7 @@
     {
       tabId: 'Beneficiaires',
       panelId: panelId('Beneficiaires'),
-      title: 'Beneficiaires'
+      title: 'Bénéficiaires'
     },
     {
       tabId: 'Accompagnements',
