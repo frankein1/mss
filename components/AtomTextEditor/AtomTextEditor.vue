@@ -43,9 +43,7 @@
 </template>
 
 <script setup lang="ts">
-  import { Content, EditorContent, JSONContent, useEditor } from '@tiptap/vue-3'
-  import StarterKit from '@tiptap/starter-kit'
-  import Link from '@tiptap/extension-link'
+  import { EditorContent, JSONContent, useEditor } from '@tiptap/vue-3'
 
   const props = withDefaults(
     defineProps<{
@@ -96,30 +94,7 @@
     onContentError({ editor, error, disableCollaboration }) {
       console.error(error)
     },
-    extensions: [
-      StarterKit.configure({
-        heading: {
-          levels: [1, 2, 3],
-          HTMLAttributes: {
-            class: 'text-editor-heading'
-          }
-        },
-        paragraph: {
-          HTMLAttributes: {
-            class: 'text-editor-paragraph'
-          }
-        },
-        listItem: {
-          HTMLAttributes: {
-            class: 'text-editor-list'
-          }
-        }
-      }),
-      Link.configure({
-        openOnClick: false,
-        defaultProtocol: 'https'
-      })
-    ],
+    extensions: tiptapExtensions,
     editorProps: {
       attributes: {
         class: 'custom-tiptap'
