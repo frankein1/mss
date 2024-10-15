@@ -39,29 +39,14 @@
 </template>
 
 <script lang="ts" setup>
-  // import { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { getFamilyFileInjectionKey } from '~/composables/useGetFamilyFile'
 
-  defineProps<{
-    familyFileId: string
-    // familyFileIdentification: BeneficiaryFileIdentification[]
-  }>()
+  defineProps<{ familyFileId: string }>()
 
   const { familyFileIdentification, budget } = inject(
     getFamilyFileInjectionKey
   ) as GetFamilyFile
   const { data, error } = budget
-
-  // const trpcClient = useTrpcClient()
-
-  // const { data, pending, error } = await trpcClient.budget.getBudget.useQuery(
-  //   {
-  //     familyFileId: props.familyFileId
-  //   },
-  //   {
-  //     queryKey: 'getBudget'
-  //   }
-  // )
 </script>
 
 <style scoped>

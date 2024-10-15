@@ -56,7 +56,6 @@
           <BeneficiaryDocumentList
             :family-file-id="selectedBeneficiary.familyFileId"
           />
-          <!-- :family-file-identification="familyFileIdentification || []" -->
         </template>
 
         <template #[tabTitles.at(2)?.panelId]>
@@ -66,12 +65,10 @@
             :family-file-permissions="selectedPermissions"
             @refresh="getBeneficiaryDetails(selectedBeneficiary.id)"
           />
-          <!-- :family-file-identification="familyFileIdentification" -->
         </template>
 
         <template #[tabTitles.at(3)?.panelId]>
           <FamilyFileBudget :family-file-id="familyFileId" />
-          <!-- :family-file-identification="familyFileIdentification" -->
         </template>
       </AtomTabs>
     </div>
@@ -291,6 +288,10 @@
   async function reloadData(id: string) {
     await refreshFamilyFile()
     openBeneficiary(id)
-    await refreshNuxtData(['getDocuments', 'getHistory', 'getBudget'])
+    await refreshNuxtData([
+      'getFamilyFile.documents',
+      'getFamilyFile.history',
+      'getFamilyFile.budget'
+    ])
   }
 </script>
