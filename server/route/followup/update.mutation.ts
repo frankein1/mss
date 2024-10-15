@@ -8,6 +8,8 @@ import {
 } from '~/server/security'
 
 import { FollowupService } from '~/server/services'
+import { validateRichTextSchema } from '../helpers'
+import { TRPCError } from '@trpc/server'
 
 const handler = ({
   input,
@@ -16,6 +18,24 @@ const handler = ({
   input: EditFollowupInput
   ctx: ProtectedAppContext
 }) => {
+  if (
+    input.synthesisRichText != null &&
+    !validateRichTextSchema(input.synthesisRichText)
+  ) {
+    throw new TRPCError({
+      code: 'PARSE_ERROR',
+      message: 'Invalid JSON was received by the server'
+    })
+  }
+  if (
+    input.privateSynthesisRichText != null &&
+    !validateRichTextSchema(input.privateSynthesisRichText)
+  ) {
+    throw new TRPCError({
+      code: 'PARSE_ERROR',
+      message: 'Invalid JSON was received by the server'
+    })
+  }
   return FollowupService.update({ input, ctx })
 }
 
