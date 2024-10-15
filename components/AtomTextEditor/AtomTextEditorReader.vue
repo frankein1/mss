@@ -10,14 +10,14 @@
 </template>
 
 <script setup lang="ts">
-  import { Content, EditorContent, JSONContent, useEditor } from '@tiptap/vue-3'
+  import { EditorContent, useEditor } from '@tiptap/vue-3'
   import StarterKit from '@tiptap/starter-kit'
   import Link from '@tiptap/extension-link'
 
   const props = withDefaults(
     defineProps<{
       value: string | null
-      rawText?: string
+      rawText?: string | null
     }>(),
     {
       value: null,
@@ -83,6 +83,7 @@
         counter-reset: li-counter;
         list-style-type: decimal;
         padding-inline-start: 1.5rem;
+
         --ol-content: initial;
 
         & > li {

@@ -222,18 +222,22 @@
           </ul>
         </template>
         <template
-          v-if="housingHelpRequest.fileInstruction.socialSupport.synthesis"
+          v-if="
+            housingHelpRequest.fileInstruction.socialSupport
+              .synthesisRichText ||
+            housingHelpRequest.fileInstruction.socialSupport.synthesis
+          "
         >
           <hr class="fr-mt-4w" />
           <h3>{{ helpRequestFieldLabels.synthesis }}</h3>
-          <ul>
-            <PrintDetailItem
-              :title="helpRequestFieldLabels.synthesis"
-              :content="
-                housingHelpRequest.fileInstruction.socialSupport.synthesis
-              "
-            />
-          </ul>
+          <AtomTextEditorReader
+            :value="
+              housingHelpRequest.fileInstruction.socialSupport.synthesisRichText
+            "
+            :raw-text="
+              housingHelpRequest.fileInstruction.socialSupport.synthesis
+            "
+          />
         </template>
       </div>
     </div>
