@@ -22,7 +22,6 @@ import {
 } from '~/utils/zod'
 
 // TODO: etre plus restrictif sur synthesisRichText et privateSynthesisRichText
-// TODO: valider le format du JSON coté client et coté serveur au get et au create/update (voir type tiptap)
 export const addFollowupSchemaBase = z.object({
   isMinistry: z.boolean(),
   familyFileId: z.string().uuid(),

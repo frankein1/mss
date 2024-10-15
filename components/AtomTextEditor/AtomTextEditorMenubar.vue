@@ -185,12 +185,6 @@
     }
   }
 
-  .is-active {
-    & > img {
-      filter: opacity(0.5);
-    }
-  }
-
   ul {
     padding: 0;
     display: flex;
@@ -216,6 +210,12 @@
 
     img {
       margin-top: 2px;
+    }
+
+    &.is-active {
+      & > img {
+        filter: opacity(0.5);
+      }
     }
   }
 </style>

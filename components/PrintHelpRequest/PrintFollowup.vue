@@ -66,6 +66,18 @@
             :title="followupFieldLabels.synthesis"
             :content="followup.synthesis"
           />
+          <template v-if="followup.synthesisRichText || followup.synthesis">
+            <li class="details">
+              <span class="fr-text--bold"
+                >{{ followupFieldLabels.synthesis }}&nbsp;:</span
+              >
+            </li>
+            <AtomTextEditorReader
+              :value="followup.synthesisRichText"
+              :raw-text="followup.synthesis"
+            />
+          </template>
+
           <li v-if="followup.redirected || followup.helpRequested">
             <span class="fr-text--bold">Actions entreprises&nbsp;:</span>
             <ul>
