@@ -18,12 +18,12 @@
 
 > Cette fiche a pour vocation de lister l’ensemble des acteurs du projet ainsi que leur rôle dans la rédaction de ce dossier.
 
-| Organisme                  | Nom            | Rôle            | Activité              |
-| -------------------------- | -------------- | --------------- | --------------------- |
-| Mon Suivi Social           | Thomas Glatt   | Lead tech       | Relecture + Rédaction |
-| Mon Suivi Social           | Nayanka Bolnet | Lead tech       | Relecture + Rédaction |
-| Mon Suivi Social           | Clara Dumont   | Product Manager | Relecture             |
-| Incubateur des territoires | Florian Busi   | Consultant SSI  | Relecture             |
+| Organisme                  | Nom               | Rôle            | Activité              |
+| -------------------------- | ----------------- | --------------- | --------------------- |
+| Mon Suivi Social           | Nayanka Bolnet    | Lead tech       | Relecture + Rédaction |
+| Mon Suivi Social           | Laetitia Langlois | Développeuse    | Relecture + Rédaction |
+| Mon Suivi Social           | Clara Dumont      | Product Manager | Relecture             |
+| Incubateur des territoires | Florian Busi      | Consultant SSI  | Relecture             |
 
 ## Description du projet
 
@@ -73,7 +73,12 @@ Les briques structurantes du projet sont:
 | ----------- | ----------- | --------- | ---- | ------------- | ------------------------- |
 | Nuxt Server | Brevo       | SMTP      | 587  | Paris, France | smtp-relay.sendinblue.com |
 
-Note : l'application expose aussi une API `https://monsuivisocial.incubateur.anct.gouv.fr/api/structures` qui retourne les structures utilisatrices du service. Cette API est protégée par un système de token.
+Note : l'application expose aussi une API avec deux points d'entrée :
+
+- `https://monsuivisocial.incubateur.anct.gouv.fr/api/structures` qui retourne les structures utilisatrices du service,
+- `https://monsuivisocial.incubateur.anct.gouv.fr/api/indicateurs` qui retourne la distribution des utilisateurs et du nombre de suivis par structure.
+
+Cette API est protégée par un système de token.
 
 #### Fournisseurs d'identité
 
@@ -86,7 +91,7 @@ Note : l'application expose aussi une API `https://monsuivisocial.incubateur.anc
 | Nom de l’applicatif | Service         | Version   | Commentaires                                                                     |
 | ------------------- | --------------- | --------- | -------------------------------------------------------------------------------- |
 | Serveur web         | Nuxt @ Scalingo | Nuxt 3    | Voir ci-dessous pour le détail des librairies                                    |
-| BDD métier          | PostgreSQL      | `14.11.0` | Stockage des données métier, voir [/prisma/schema.prisma](/prisma/schema.prisma) |
+| BDD métier          | PostgreSQL      | `14.12.0` | Stockage des données métier, voir [/prisma/schema.prisma](/prisma/schema.prisma) |
 
 La liste des librairies JS est disponible dans :
 
