@@ -5,6 +5,8 @@ import { AddFollowupInput, addFollowupSchema } from '~/server/schema'
 import { SecurityRuleContext } from '~/server/security'
 
 import { FamilyFileService, FollowupService } from '~/server/services'
+import { TRPCError } from '@trpc/server'
+import { validateRichTextSchema } from '../helpers'
 
 const handler = ({
   input,
@@ -13,6 +15,24 @@ const handler = ({
   input: AddFollowupInput
   ctx: ProtectedAppContext
 }) => {
+  if (
+    input.synthesisRichText != null &&
+    !validateRichTextSchema(input.synthesisRichText)
+  ) {
+    throw new TRPCError({
+      code: 'PARSE_ERROR',
+      message: 'Invalid JSON was received by the server'
+    })
+  }
+  if (
+    input.privateSynthesisRichText != null &&
+    !validateRichTextSchema(input.privateSynthesisRichText)
+  ) {
+    throw new TRPCError({
+      code: 'PARSE_ERROR',
+      message: 'Invalid JSON was received by the server'
+    })
+  }
   return FollowupService.create({ ctx, input })
 }
 
