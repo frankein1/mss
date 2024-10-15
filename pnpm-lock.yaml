@@ -23,6 +23,21 @@ importers:
       '@sentry/vue':
         specifier: ^8.27.0
         version: 8.27.0(vue@3.4.38(typescript@5.6.2))
+      '@tiptap/core':
+        specifier: 2.8.0
+        version: 2.8.0(@tiptap/pm@2.6.6)
+      '@tiptap/extension-link':
+        specifier: 2.6.6
+        version: 2.6.6(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)
+      '@tiptap/pm':
+        specifier: 2.6.6
+        version: 2.6.6
+      '@tiptap/starter-kit':
+        specifier: 2.6.6
+        version: 2.6.6(@tiptap/extension-text-style@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6)))
+      '@tiptap/vue-3':
+        specifier: 2.6.6
+        version: 2.6.6(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)(vue@3.4.38(typescript@5.6.2))
       '@trpc/client':
         specifier: ^10.45.2
         version: 10.45.2(@trpc/server@10.45.2)
@@ -4447,6 +4462,12 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
+  linkify-it@5.0.0:
+    resolution: {integrity: sha512-5aHCbzQRADcdP+ATqnDuhhJ/MRIqDkZX5pyjFHRRysS8vZ5AbqGEoFIb6pYHPZ+L/OC2Lc+xT8uHVVR5CAK/wQ==}
+
+  linkifyjs@4.1.3:
+    resolution: {integrity: sha512-auMesunaJ8yfkHvK4gfg1K0SaKX/6Wn9g2Aac/NwX+l5VdmFZzo/hdPGxEOETj+ryRa4/fiOPjeeKURSAJx1sg==}
+
   lint-staged@15.2.10:
     resolution: {integrity: sha512-5dY5t743e1byO19P9I4b3x8HJwalIznL5E1FWYnU6OWw33KxNBSLAc6Cy7F2PsFEO8FKnLwjwm5hx7aMF0jzZg==}
     engines: {node: '>=18.12.0'}
@@ -8728,7 +8749,6 @@ snapshots:
   '@tiptap/extension-bubble-menu@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
-      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
       tippy.js: 6.3.7
 
@@ -8740,7 +8760,6 @@ snapshots:
 
   '@tiptap/extension-code-block@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
-      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
 
@@ -8755,19 +8774,16 @@ snapshots:
   '@tiptap/extension-dropcursor@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
-      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
 
   '@tiptap/extension-floating-menu@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
-      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
       tippy.js: 6.3.7
 
   '@tiptap/extension-gapcursor@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
-      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
 
@@ -8782,12 +8798,10 @@ snapshots:
   '@tiptap/extension-history@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
-      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
 
   '@tiptap/extension-horizontal-rule@2.8.0(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
-      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
 
@@ -8797,7 +8811,6 @@ snapshots:
 
   '@tiptap/extension-link@2.6.6(@tiptap/core@2.8.0(@tiptap/pm@2.6.6))(@tiptap/pm@2.6.6)':
     dependencies:
-      '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/core': 2.8.0(@tiptap/pm@2.6.6)
       '@tiptap/pm': 2.6.6
       linkifyjs: 4.1.3
@@ -11997,6 +12010,12 @@ snapshots:
   limiter@1.1.5: {}
 
   lines-and-columns@1.2.4: {}
+
+  linkify-it@5.0.0:
+    dependencies:
+      uc.micro: 2.1.0
+
+  linkifyjs@4.1.3: {}
 
   lint-staged@15.2.10:
     dependencies:
