@@ -167,18 +167,16 @@
         </template>
         <template
           v-if="
-            helpRequest.fileInstruction.socialSupport.synthesis ||
-            helpRequest.fileInstruction.fullFile
+            helpRequest.fileInstruction.socialSupport.synthesisRichText ||
+            helpRequest.fileInstruction.socialSupport.synthesis
           "
         >
           <hr class="fr-mt-4w" />
           <h3>{{ helpRequestFieldLabels.synthesis }}</h3>
-          <ul>
-            <PrintDetailItem
-              :title="helpRequestFieldLabels.synthesis"
-              :content="helpRequest.fileInstruction.socialSupport.synthesis"
-            />
-          </ul>
+          <AtomTextEditorReader
+            :value="helpRequest.fileInstruction.socialSupport.synthesisRichText"
+            :raw-text="helpRequest.fileInstruction.socialSupport.synthesis"
+          />
         </template>
       </div>
     </div>
