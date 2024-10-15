@@ -29,7 +29,6 @@
         <AtomTextEditorMenubar :editor="editor" />
       </div>
       <EditorContent
-        ref="input"
         :editor="editor"
         class="tiptap-editor-content fr-input"
       />
@@ -161,7 +160,6 @@
 <style lang="scss">
   .custom-tiptap {
     padding: 0.5rem 1rem;
-    min-height: 3.75rem;
     max-height: none;
     min-height: v-bind('contentHeight');
 
