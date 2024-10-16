@@ -11,12 +11,11 @@
         Vous ne pouvez manipuler des données de santé des bénéficiaires que si
         votre structure est habilitée à le faire au titre de l'article 9 du RGPD
         (pour plus d'information voir
-        <a
+        <NuxtLink
           target="_blank"
-          href="/notice/20231103_donnees_sante_monsuivisocial.pdf"
-          rel="noopener external"
+          to="/notice/20231103_donnees_sante_monsuivisocial.pdf"
           title="Notice d'information - nouvelle fenêtre"
-          >la notice d'information</a
+          >la notice d'information</NuxtLink
         >
         ou référez-vous à votre responsable de structure). Nous vous
         encourageons également à ne mentionner que les données qui sont

@@ -1,21 +1,24 @@
 <template>
   <div class="proconnect-section">
     <form>
-      <a :href="signinUrl">
+      <NuxtLink
+        :href="signinUrl"
+        external
+      >
         <div class="proconnect-button">
           <span class="proconnect-sr-only">S'identifier avec ProConnect</span>
         </div>
-      </a>
+      </NuxtLink>
     </form>
     <p>
-      <a
+      <NuxtLink
         href="https://proconnect.gouv.fr/"
+        external
         target="_blank"
-        rel="noopener noreferrer"
         title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
       >
         Qu’est-ce que ProConnect ?
-      </a>
+      </NuxtLink>
     </p>
   </div>
 </template>

@@ -42,7 +42,7 @@
               class="fr-sidemenu__item"
               :class="{ 'fr-sidemenu__item--active': isActive }"
             >
-              <a
+              <NuxtLink
                 :href="href"
                 class="fr-sidemenu__link"
                 :aria-current="isActive ? 'page' : undefined"
@@ -54,7 +54,7 @@
                   aria-hidden="true"
                 ></span>
                 {{ menuItem.label }}
-              </a>
+              </NuxtLink>
             </li>
           </NuxtLink>
           <li

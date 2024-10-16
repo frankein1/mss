@@ -15,9 +15,13 @@
           les ministères sociaux, les communes, les Centres communaux d’action
           sociale (CCAS) et les Centre intercommunaux d’action sociale (CIAS)
           ainsi que les structures d’accompagnement social
-          <a href="#structure-definition">[1]</a> sont responsables de
-          traitement puisqu’ils déterminent les finalités et les moyens des
-          traitements de données à caractère personnel&nbsp;;
+          <NuxtLink
+            href="#structure-definition"
+            external
+            >[1]</NuxtLink
+          >
+          sont responsables de traitement puisqu’ils déterminent les finalités
+          et les moyens des traitements de données à caractère personnel&nbsp;;
         </li>
         <li>
           l’Agence Nationale des Collectivités Territoriales (ANCT) traite les
@@ -209,11 +213,11 @@
         Spécifiquement, le NIR est traité uniquement par les collectivités
         territoriales, CCAS et les CIAS sur le fondement de l’article L. 263-4-1
         du code de l’action sociale et des familles et du
-        <a
+        <NuxtLink
           href="https://www.legifrance.gouv.fr/jorf/id/JORFTEXT000038396526/"
           target="_blank"
-          rel="noopener external"
-          >Décret n°219-341 du 19 avril 2019</a
+          external
+          >Décret n°219-341 du 19 avril 2019</NuxtLink
         >
         relatif à la mise en œuvre de traitements comportant l’usage du numéro
         d’inscription au répertoire national d’identification des personnes
@@ -464,8 +468,8 @@
         </li>
         <li>
           par courrier électronique à
-          <a href="mailto:monsuivisocial@anct.gouv.fr"
-            >monsuivisocial@anct.gouv.fr</a
+          <NuxtLink href="mailto:monsuivisocial@anct.gouv.fr"
+            >monsuivisocial@anct.gouv.fr</NuxtLink
           >.
         </li>
       </ul>
@@ -487,11 +491,11 @@
       </p>
       <p>
         Pour vous aider dans votre démarche, vous trouverez ici
-        <a
+        <NuxtLink
           href="https://www.cnil.fr/fr/modele/courrier/exercer-son-droit-dacces"
           target="_blank"
-          rel="noopener external"
-          >https://www.cnil.fr/fr/modele/courrier/exercer-son-droit-dacces</a
+          external
+          >https://www.cnil.fr/fr/modele/courrier/exercer-son-droit-dacces</NuxtLink
         >, un modèle de courrier élaboré par la CNIL.
       </p>
       <p>
@@ -560,13 +564,13 @@
               <td>Hébergement</td>
               <td>France</td>
               <td>
-                <a
+                <NuxtLink
                   href="https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles"
                   target="_blank"
-                  rel="noopener external"
+                  external
                 >
                   https://scalingo.com/fr/contrat-gestion-traitements-donnees-personnelles
-                </a>
+                </NuxtLink>
               </td>
             </tr>
             <tr>
@@ -583,13 +587,13 @@
                 2023)
               </td>
               <td>
-                <a
+                <NuxtLink
                   href="https://tally.so/help/privacy-policy#16dffa65e6cd4597b5e83afde2e65ad2"
                   target="_blank"
-                  rel="noopener external"
+                  external
                 >
                   https://tally.so/help/privacy-policy#16dffa65e6cd4597b5e83afde2e65ad2
-                </a>
+                </NuxtLink>
               </td>
             </tr>
             <tr>
@@ -600,13 +604,13 @@
                 Etats-Unis
               </td>
               <td>
-                <a
+                <NuxtLink
                   href="https://www.brevo.com/fr/legal/privacypolicy/"
                   target="_blank"
-                  rel="noopener external"
+                  external
                 >
                   https://www.brevo.com/fr/legal/privacypolicy/
-                </a>
+                </NuxtLink>
               </td>
             </tr>
             <tr>
@@ -616,13 +620,13 @@
               </td>
               <td>France</td>
               <td>
-                <a
+                <NuxtLink
                   href=""
                   target="_blank"
-                  rel="noopener external"
+                  external
                 >
                   [en attente de retours de l’incubateur]
-                </a>
+                </NuxtLink>
               </td>
             </tr>
           </tbody>
@@ -676,25 +680,25 @@
       </p>
       <ul>
         <li>
-          <a
+          <NuxtLink
             href="https://www.cnil.fr/fr/cookies-traceurs-que-dit-la-loi"
             target="_blank"
-            rel="noopener external"
-            >Cookies &amp; traceurs&nbsp;: que dit la loi ?</a
+            external
+            >Cookies &amp; traceurs&nbsp;: que dit la loi ?</NuxtLink
           >
         </li>
         <li>
-          <a
+          <NuxtLink
             href="https://www.cnil.fr/fr/cookies-les-outils-pour-les-maitriser"
             target="_blank"
-            rel="noopener external"
-            >Cookies&nbsp;: les outils pour les maîtriser</a
+            external
+            >Cookies&nbsp;: les outils pour les maîtriser</NuxtLink
           >
         </li>
       </ul>
       <p>
-        <a name="structure-definition">[1]</a> Structure proposant un
-        accompagnement se caractérisant par une relation, individuelle ou
+        <NuxtLink name="structure-definition">[1]</NuxtLink> Structure proposant
+        un accompagnement se caractérisant par une relation, individuelle ou
         collective, entre un accompagnant et un ou plusieurs accompagnés, avec
         pour finalité l’amélioration de la situation de la ou des personnes
         accompagnées.
