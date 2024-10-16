@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-  import { toOptions, withEmptyValue } from '~/utils/options'
+  import { withEmptyValue } from '~/utils/options'
   import { FilterType } from '~/utils/constants/filters'
   import { AlertType } from '~/utils/constants/alert'
   import type { FamilyFileHistoryFilterInput } from '~/server/schema'
@@ -48,55 +48,45 @@
 
   const authState = useAuthState()
   const isReferent = authState.isReferent()
-  const trpcClient = useTrpcClient()
   const { socialSupportStatusOptions } = useSocialSupportStatus()
 
   const emit = defineEmits<{
     'update:values': [filters: FamilyFileHistoryFilterInput]
   }>()
 
+  const { familyFileIdentification, examinationDates } = inject(
+    getFamilyFileInjectionKey
+  ) as GetFamilyFile
+
+  const { agents, subjects } = inject(
+    getStructureInfoInjectionKey
+  ) as GetStructureInfo
+
   const {
     data: agentOptions,
     pending: agentOptionsPending,
     error: agentOptionsError
-  } = await trpcClient.config.getAgents.useQuery(undefined, {
-    transform: agents => toOptions(agents, 'id', 'name'),
-    queryKey: 'config.getAgents.options'
-  })
+  } = agents
 
   const {
     data: socialSupportSubjectOptions,
     pending: socialSupportSubjectOptionsPending,
     error: socialSupportSubjectOptionsError
-  } = await trpcClient.structure.getActiveOrUsedSocialSupportSubjects.useQuery(
-    undefined,
-    {
-      transform: socialSupportSubjects =>
-        toOptions(socialSupportSubjects, 'id', 'name'),
-      queryKey: 'structure.getActiveOrUsedSocialSupportSubjects.options'
-    }
-  )
-
-  const { application } = usePermissions()
+  } = subjects
 
   const {
     data: examinationDateOptions,
     pending: examinationDateOptionsPending,
     error: examinationDateOptionsError
-  } = await useAsyncData(loadExaminationDates)
+  } = examinationDates
 
-  const {
-    familyFileIdentification,
-    pending: filePending,
-    error: fileError
-  } = await useFamilyFileMinimalInfo(props.familyFileId)
+  const { application } = usePermissions()
 
   const pending = computed(
     () =>
       agentOptionsPending.value ||
       socialSupportSubjectOptionsPending.value ||
-      examinationDateOptionsPending.value ||
-      filePending.value
+      examinationDateOptionsPending.value
   )
 
   const fetchError = computed(() => {
@@ -108,9 +98,6 @@
     }
     if (examinationDateOptionsError.value) {
       return "La liste des dates de passage en commission n'a pas pu être chargée."
-    }
-    if (fileError.value) {
-      return "La liste des bénéficiaires du foyer n'a pas pu être chargée"
     }
     return ''
   })
@@ -226,7 +213,7 @@
       })
     }
 
-    if (familyFileIdentification.value.length > 1) {
+    if ((familyFileIdentification.value || []).length > 1) {
       filters.push({
         name: 'beneficiaryId',
         label: 'Bénéficiaire concerné :',
@@ -242,19 +229,4 @@
 
     return filters
   })
-
-  async function loadExaminationDates() {
-    if (!application.value.module.helpRequest) {
-      return []
-    }
-
-    const examinationDates = await trpcClient.file.getExaminationDates.query({
-      id: props.familyFileId
-    })
-
-    return examinationDates.map(({ examinationDate }) => ({
-      value: examinationDate?.toString() || '',
-      label: formatDate(examinationDate)
-    }))
-  }
 </script>

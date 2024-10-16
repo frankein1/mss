@@ -8,14 +8,14 @@
         </div>
         <div class="fr-col-12">
           <BeneficiaryDocumentFilters
-            :family-file-identification="familyFileIdentification"
-            @filter="filters = $event"
+            :family-file-identification="familyFileIdentification || []"
+            @filter="documentsFilters = $event"
           />
         </div>
         <div class="fr-col-12">
           <BeneficiaryDocumentAddButton
             :family-file-id="familyFileId"
-            :family-file-identification="familyFileIdentification"
+            :family-file-identification="familyFileIdentification || []"
             @new-document="() => refresh()"
           />
         </div>
@@ -31,26 +31,23 @@
       :alert-type="AlertType.Error"
       message="La liste des documents n'a pas pu être chargée."
     />
-    <AtomLoader
-      v-else-if="pending"
-      class="fr-mx-auto"
-    />
-    <template v-else>
+
+    <template v-else-if="docs">
       <BeneficiaryDocumentTable
-        v-model:sort="orderBy"
+        v-model:sort="documentsOrderBy"
         :documents="documents"
-        :family-file-identification="familyFileIdentification"
-        :pending="pending"
+        :family-file-identification="familyFileIdentification || []"
+        :pending
         @document-updated="onDocumentUpdated"
         @document-deleted="onDocumentDeleted"
       />
       <AtomPagination
         class="fr-mt-4w fr-px-5v"
-        :page="page"
-        :per-page="perPage"
+        :page="documentsPage"
+        :per-page="documentsPerPage"
         :total-pages="totalPages"
         no-limit-selection
-        @change-page="updatePagination($event)"
+        @change-page="updateDocumentPagination($event)"
       />
     </template>
   </section>
@@ -58,38 +55,21 @@
 
 <script setup lang="ts">
   import { GetDocument } from './types'
-  import { REQUEST_LIMIT_DEFAULT } from '~/utils/constants'
-  import type { BeneficiaryDocumentFilterInput } from '~/server/schema'
-  import { BeneficiaryDocumentSort, SortOrder } from '~/types/table'
   import { AlertType } from '~/utils/constants/alert'
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
 
-  const trpcClient = useTrpcClient()
+  defineProps<{ familyFileId: string }>()
 
-  const props = defineProps<{
-    familyFileId: string
-    familyFileIdentification: BeneficiaryFileIdentification[]
-  }>()
+  const {
+    familyFileIdentification,
+    documents: docs,
+    documentsFilters,
+    documentsOrderBy,
+    documentsPage,
+    documentsPerPage,
+    updateDocumentPagination
+  } = inject(getFamilyFileInjectionKey) as GetFamilyFile
 
-  const filters = ref<BeneficiaryDocumentFilterInput>({})
-  const orderBy = ref<BeneficiaryDocumentSort>({ created: SortOrder.Desc })
-  const page = ref(1)
-  const perPage = ref(REQUEST_LIMIT_DEFAULT)
-
-  const { updatePagination } = usePagination(page, perPage, filters)
-
-  const queryInput = computed(() => ({
-    familyFileId: props.familyFileId,
-    filters: filters.value,
-    orderBy: orderBy.value,
-    page: page.value,
-    perPage: perPage.value
-  }))
-
-  const { data, error, pending, refresh } =
-    await trpcClient.file.getDocuments.useQuery(queryInput, {
-      queryKey: 'getDocuments'
-    })
+  const { data, error, pending, refresh } = docs
 
   const documents = computed(() => data.value?.documents || [])
 

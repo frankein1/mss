@@ -6,7 +6,6 @@
     </div>
 
     <AtomLazyComponent
-      :pending
       :error="Boolean(error)"
       message="Le budget du foyer n'a pas pu être chargé"
     >
@@ -21,7 +20,7 @@
                 :family-file-id="familyFileId"
                 :incomes="data.incomes"
                 :budget-id="data.id"
-                :family-file-identification="familyFileIdentification"
+                :family-file-identification="familyFileIdentification || []"
               />
             </div>
 
@@ -40,23 +39,14 @@
 </template>
 
 <script lang="ts" setup>
-  import { BeneficiaryFileIdentification } from '~/types/beneficiary'
+  import { getFamilyFileInjectionKey } from '~/composables/useGetFamilyFile'
 
-  const props = defineProps<{
-    familyFileId: string
-    familyFileIdentification: BeneficiaryFileIdentification[]
-  }>()
+  defineProps<{ familyFileId: string }>()
 
-  const trpcClient = useTrpcClient()
-
-  const { data, pending, error } = await trpcClient.budget.getBudget.useQuery(
-    {
-      familyFileId: props.familyFileId
-    },
-    {
-      queryKey: 'getBudget'
-    }
-  )
+  const { familyFileIdentification, budget } = inject(
+    getFamilyFileInjectionKey
+  ) as GetFamilyFile
+  const { data, error } = budget
 </script>
 
 <style scoped>
