@@ -1,6 +1,7 @@
 import { User } from '@prisma/client'
-import { getInclusionConnectClient, getProConnectClient } from '~/server/lib'
+import { getInclusionConnectClient } from '~/server/lib'
 import { isProConnectActive } from '~/utils/isProConnectActive'
+import { apiRoutes } from '~/utils/routes'
 
 const getMailContentFromInclusionConnect = (
   email: string,
@@ -89,13 +90,14 @@ export function getUserCreationEmailContent(
 ) {
   const {
     public: {
+      appUrl,
       email: { from },
       ssoIssuer
     }
   } = useRuntimeConfig()
 
   if (isProConnectActive(ssoIssuer)) {
-    const registrationUrl = getProConnectClient().getRegistrationUrl()
+    const registrationUrl = `${appUrl}${apiRoutes.proConnect.ApiSignIn.path()}`
     return getMailContentFromProConnect(
       user.email,
       user.structure?.siret || 'Siret inconnu',

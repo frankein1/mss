@@ -163,7 +163,7 @@ export class ProConnectClient {
     const { nonce, state, appRedirectUrl } = args
     const params = new URLSearchParams({
       client_id: this.clientId,
-      scope: 'openid profile email',
+      scope: 'openid email siret',
       response_type: 'code',
       redirect_uri: this.getRedirectUri(appRedirectUrl),
       acr_values: 'eidas1',
@@ -194,19 +194,6 @@ export class ProConnectClient {
 
   public getPostLogoutRedirectUri() {
     return this.postLogoutRedirectUri
-  }
-
-  public getRegistrationUrl() {
-    const proconnectRegistration = `${this.issuer}/register/`
-
-    const params = new URLSearchParams({
-      client_id: this.clientId,
-      scope: 'openid profile email',
-      response_type: 'code',
-      redirect_uri: this.redirectUri
-    })
-
-    return `${proconnectRegistration}?${params}`
   }
 
   public getEditPasswordUrl() {
