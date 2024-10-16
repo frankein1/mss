@@ -14,7 +14,7 @@
       <NuxtLink
         href="https://proconnect.gouv.fr"
         target="_blank"
-        title="Qu’est-ce que FranceConnect ? - nouvelle fenêtre"
+        title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
       >
         Qu’est-ce que ProConnect ?
       </NuxtLink>
@@ -29,8 +29,9 @@
 
 <script lang="ts" setup>
   import { AlertType } from '~/utils/constants/alert'
+  import { apiRoutes } from '~/utils/routes'
 
-  const SIGNIN_PATH = '/api/proconnect/signin'
+  const SIGNIN_PATH = apiRoutes.proConnect.ApiSignIn.path()
 
   const route = useRoute()
 
