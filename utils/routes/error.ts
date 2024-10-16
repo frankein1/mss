@@ -6,7 +6,12 @@ export const routes = {
   },
   ErrorUnknownUser: {
     name: 'ErrorUnknownUser',
-    title: "Votre compte InclusionConnect n'est pas rattaché",
+    title: "Votre compte ProConnect n'est pas rattaché",
     path: () => '/error/unknown-user'
+  },
+  ErrorUnknownUserInclusionConnect: {
+    name: 'ErrorUnknownUser',
+    title: "Votre compte InclusionConnect n'est pas rattaché",
+    path: () => '/error/unknown-user-ic'
   }
 } as const
