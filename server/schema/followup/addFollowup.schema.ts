@@ -12,7 +12,8 @@ import {
   numeroPegaseContraint,
   dateOrEmpty,
   openText,
-  stringOrEmpty
+  stringOrEmpty,
+  openRichText
 } from '../helpers.schema'
 import {
   errorMessages,
@@ -20,6 +21,7 @@ import {
   requiredErrorMessage
 } from '~/utils/zod'
 
+// TODO: etre plus restrictif sur synthesisRichText et privateSynthesisRichText
 export const addFollowupSchemaBase = z.object({
   isMinistry: z.boolean(),
   familyFileId: z.string().uuid(),
@@ -35,7 +37,9 @@ export const addFollowupSchemaBase = z.object({
   ministre: withEmptyValueOptionalNativeEnum(Minister),
   date: z.coerce.date(errorMessages),
   synthesis: openText(6000).nullish(),
+  synthesisRichText: openRichText().nullish(),
   privateSynthesis: openText(1000).nullish(),
+  privateSynthesisRichText: openRichText().nullish(),
   status: requiredNativeEnum(SocialSupportStatus),
   helpRequested: z.boolean().default(false),
   place: stringConstraint.max(100, maxStringLengthMessage(100)).nullish(),

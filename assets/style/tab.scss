@@ -23,7 +23,8 @@ $tab-border-bottom-size: 3px;
   border-radius: 0.5rem 0.5rem 0 0;
 }
 
-.fr-tabs__tab[aria-selected='true'],.fr-tabs__tab[aria-selected='true']:not(:disabled) {
+.fr-tabs__tab[aria-selected='true'],
+.fr-tabs__tab[aria-selected='true']:not(:disabled) {
   --text-active-blue-france: var(--primary);
 
   background-image: none;

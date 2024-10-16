@@ -119,7 +119,6 @@
         </div>
 
         <!-- ROW -->
-        <!-- ROW -->
         <div class="fr-col-12 fr-mt-0 fr-pt-0">
           <NuxtLink
             v-if="application.edit.structure"
@@ -184,10 +183,11 @@
 
         <!-- ROW -->
         <div class="fr-col-12">
-          <VeeTextarea
-            class="large-textarea"
+          <AtomTextEditor
             name="synthesis"
+            :initial-value="synthesisRichTextValue"
             :label="followupFieldLabels.synthesis"
+            @update="onUpdateSynthesis"
           />
         </div>
 
@@ -196,10 +196,13 @@
           v-if="canSetPrivateSynthesis"
           class="fr-col-12"
         >
-          <VeeTextarea
+          <AtomTextEditor
             name="privateSynthesis"
+            :initial-value="privateSynthesisRichTextValue"
             :label="followupFieldLabels.privateSynthesis"
             label-icon="fr-icon-lock-line"
+            :min-height="120"
+            @update="onUpdatePrivateSynthesis"
           >
             <template #hint>
               Le compte rendu privé est uniquement visible et modifiable par
@@ -207,7 +210,7 @@
                 SENSITIVE_DATA_HINT
               }}
             </template>
-          </VeeTextarea>
+          </AtomTextEditor>
         </div>
 
         <!-- ROW -->
@@ -307,6 +310,7 @@
 <script lang="ts" setup>
   import { SocialSupportSubject, FollowupMedium } from '@prisma/client'
   import type { FormErrors } from 'vee-validate'
+  import { JSONContent } from '@tiptap/vue-3'
   import {
     ministerKeys,
     followupStatusKeys,
@@ -321,6 +325,7 @@
   import { PartnerOrganizationIdName } from '~/types/partner'
   import { BeneficiaryFileIdentification } from '~/types/beneficiary'
   import { formatBeneficiaryShortenedName } from '~/utils/beneficiary/formatBeneficiaryShortenedName'
+  import { cleanEmptyParagraph } from '~/utils/text/cleanEmptyParagraph'
 
   const props = withDefaults(
     defineProps<{
@@ -361,6 +366,34 @@
     if (!id) {
       setPrescribingOrganizationContactId(null)
     }
+  }
+
+  const { setValue: setSynthesis } = useField<string | undefined>('synthesis')
+  const { setValue: setSynthesisRichText, value: synthesisRichTextValue } =
+    useField<string | undefined>('synthesisRichText')
+  const onUpdateSynthesis = (
+    html: string | undefined,
+    json: JSONContent | undefined,
+    rawText: string | undefined
+  ) => {
+    setSynthesis(cleanEmptyParagraph(rawText))
+    setSynthesisRichText(JSON.stringify(json))
+  }
+  const { setValue: setPrivateSynthesis } = useField<string | undefined>(
+    'privateSynthesis'
+  )
+  const {
+    setValue: setPrivateSynthesisRichText,
+    value: privateSynthesisRichTextValue
+  } = useField<string | undefined>('privateSynthesisRichText')
+
+  const onUpdatePrivateSynthesis = (
+    html: string | undefined,
+    json: JSONContent | undefined,
+    rawText: string | undefined
+  ) => {
+    setPrivateSynthesis(cleanEmptyParagraph(rawText))
+    setPrivateSynthesisRichText(JSON.stringify(json))
   }
 
   const { errors } = useDisplayFormErrors(

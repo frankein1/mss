@@ -40,12 +40,18 @@
 
       <template v-if="socialSupport.synthesis">
         <h3 class="synthesis-title">Compte rendu</h3>
-        <p class="synthesis-content">{{ socialSupport.synthesis }}</p>
+        <AtomTextEditorReader
+          :value="socialSupport.synthesisRichText"
+          :raw-text="socialSupport.synthesis"
+        />
       </template>
 
       <template v-if="socialSupport.privateSynthesis">
         <h3 class="synthesis-title fr-icon-lock-line">Compte rendu privé</h3>
-        <p class="synthesis-content">{{ socialSupport.privateSynthesis }}</p>
+        <AtomTextEditorReader
+          :value="socialSupport.privateSynthesisRichText"
+          :raw-text="socialSupport.privateSynthesis"
+        />
       </template>
 
       <ul
