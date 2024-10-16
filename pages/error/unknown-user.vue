@@ -2,15 +2,14 @@
   <div>
     <h1>{{ routes.error.ErrorUnknownUser.title }}</h1>
     <p class="fr-text--lead fr-mb-3w">
-      Aucun compte Mon Suivi Social n'est rattaché à votre compte
-      InclusionConnect.
+      Aucun compte Mon Suivi Social n'est rattaché à votre compte ProConnect.
     </p>
     <p class="fr-text--sm fr-mb-5w">
-      Vous avez accedé à Mon Suivi Social avec InclusionConnect mais votre
-      compte InclusionConnect est inconnu de nos services.<br />
+      Vous avez accedé à Mon Suivi Social avec ProConnect mais votre compte
+      ProConnect est inconnu de nos services.<br />
       Si votre structure a un espace Mon Suivi Social, veuillez vous rapprocher
       de votre responsable de structure pour qu'un compte Mon Suivi Social
-      rattaché à votre compte InclusionConnect vous soit créé.
+      rattaché à votre compte ProConnect vous soit créé.
       <br />Si votre structure n'a pas d'espace Mon Suivi Social, vous trouverez
       toutes les informations nécessaires pour créer un espace sur notre service
       sur la page <strong>Créer un espace</strong>.<br />
