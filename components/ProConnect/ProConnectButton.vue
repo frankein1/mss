@@ -12,7 +12,7 @@
     </div>
     <p>
       <NuxtLink
-        href="https://proconnect.gouv.fr"
+        href="https://www.proconnect.gouv.fr"
         external
         target="_blank"
         title="Qu’est-ce que ProConnect ? - nouvelle fenêtre"
@@ -23,8 +23,21 @@
     <AtomAlert
       class="fr-mt-6w"
       :alert-type="AlertType.Info"
-      message="Si vous avez des difficultés pour vous authentifier, <a href='mailto:monsuivisocial@anct.gouv.fr'>contactez-nous</a>."
-    />
+      message="Inclusion Connect devient ProConnect"
+    >
+      <template #detailedMessage>
+        <div>
+          <p>
+            Vous pouvez dès maintenant utiliser ProConnect à la place
+            d'Inclusion Connect.
+          </p>
+          <p>
+            Si vous avez des difficultés pour vous authentifier,
+            <a href="mailto:monsuivisocial@anct.gouv.fr">contactez-nous</a>.
+          </p>
+        </div>
+      </template>
+    </AtomAlert>
   </div>
 </template>
 
