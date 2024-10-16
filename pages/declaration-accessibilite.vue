@@ -30,11 +30,11 @@
     <h2>Stratégie et plan d'action</h2>
     <p>
       La stratégie d'accessibilité suit
-      <a
+      <NuxtLink
         href="https://beta.gouv.fr/accessibilite/schema-pluriannuel"
         target="_blank"
-        rel="noopener external"
-        >le schéma pluriannuel 2024-2027 publié par Beta gouv</a
+        external
+        >le schéma pluriannuel 2024-2027 publié par Beta gouv</NuxtLink
       >
       .
     </p>

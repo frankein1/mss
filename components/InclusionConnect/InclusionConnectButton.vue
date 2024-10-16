@@ -1,16 +1,16 @@
 <template>
   <div class="inclusion-connect-section">
-    <!-- NOTE: It is compulsory to use <a> tag here instead of the <NuxtLink> component to prevent Nuxt to consider the API endpoint as a page route -->
-    <a
+    <NuxtLink
       class="inclusion-connect-btn"
       title="S'identifier avec InclusionConnect"
       :href="signinUrl"
+      external
     >
       <span>
         Se connecter avec
         <strong>InclusionConnect</strong>
       </span>
-    </a>
+    </NuxtLink>
 
     <NuxtLink
       class="fr-link--sm"

@@ -23,7 +23,11 @@
         aux agents des ministères sociaux, des Centres Communaux d’Action
         Sociale (CCAS), des Centres intercommunaux d'Action sociale (CIAS), des
         communes et des structures d’accompagnement social
-        <a href="#structure-definition">[1]</a>.
+        <NuxtLink
+          href="#structure-definition"
+          external
+          >[1]</NuxtLink
+        >.
       </p>
       <h2>Article 2 - Objet</h2>
       <p>
@@ -107,10 +111,11 @@
       <p>
         Le Responsable de structure réalise une demande de création de compte
         via le formulaire présent sur
-        <a
+        <NuxtLink
           href="https://monsuivisocial.incubateur.anct.gouv.fr/"
           target="_blank"
-          >https://monsuivisocial.incubateur.anct.gouv.fr/</a
+          external
+          >https://monsuivisocial.incubateur.anct.gouv.fr/</NuxtLink
         >. Le compte est créé après validation par un Administrateur.
       </p>
       <p>
@@ -168,11 +173,11 @@
       </ul>
       <p>
         Les habilitations sont accessibles sous format numérique à partir
-        <a
+        <NuxtLink
           href="https://outline.incubateur.anct.gouv.fr/s/623675f2-869e-44da-ae7e-8d9b1decbe15"
           target="_blank"
-          rel="noopener external"
-          >de ce lien</a
+          external
+          >de ce lien</NuxtLink
         >.
       </p>
       <p>
@@ -299,8 +304,10 @@
         </li>
         <li>
           par courrier électronique à
-          <a href="mailto:monsuivisocial@anct.gouv.fr"
-            >monsuivisocial@anct.gouv.fr</a
+          <NuxtLink
+            href="mailto:monsuivisocial@anct.gouv.fr"
+            external
+            >monsuivisocial@anct.gouv.fr</NuxtLink
           >
         </li>
       </ul>
@@ -325,10 +332,10 @@
         Pour plus d’informations sur le traitement de données à caractère
         personnel réalisé dans le cadre de Mon Suivi Social, il convient de se
         référer à la
-        <a
+        <NuxtLink
           href="/politique-confidentialite"
           target="_blank"
-          >Politique de confidentialité</a
+          >Politique de confidentialité</NuxtLink
         >.
       </p>
       <h2>Article 6 - Mise à jour des conditions d’utilisation</h2>
@@ -353,8 +360,8 @@
         tribunaux compétents du ressort de la juridiction de Paris.
       </p>
       <p>
-        <a name="structure-definition">[1]</a> Structure proposant un
-        accompagnement se caractérisant par une relation, individuelle ou
+        <NuxtLink name="structure-definition">[1]</NuxtLink> Structure proposant
+        un accompagnement se caractérisant par une relation, individuelle ou
         collective, entre un accompagnant et un ou plusieurs accompagnés, avec
         pour finalité l’amélioration de la situation de la ou des personnes
         accompagnées.

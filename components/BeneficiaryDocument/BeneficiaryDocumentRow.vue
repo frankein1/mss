@@ -62,11 +62,11 @@
             </button>
           </li>
           <li>
-            <a
-              ref="downloadLink"
+            <NuxtLink
               target="_blank"
-              :download="document.name"
+              external
               hidden
+              @click="onDownload"
             />
             <button
               class="fr-btn fr-btn--tertiary-no-outline fr-icon-download-line"
@@ -131,8 +131,6 @@
     updated: [document: GetDocument]
     deleted: []
   }>()
-
-  const downloadLink = ref<HTMLLinkElement | null>(null)
 
   const hasUnreadNotifications = computed(
     () => !!props.document._count.notifications

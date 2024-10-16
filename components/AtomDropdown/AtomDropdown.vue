@@ -27,22 +27,14 @@
         :key="menu.label"
       >
         <NuxtLink
-          v-if="menu.to"
-          :to="menu.to"
+          v-if="menu.to || menu.href"
+          :to="menu.to || menu.href"
           :class="menuClass(menu.icon)"
+          :external="menu.href != null"
           @focus="expanded = true"
         >
           {{ menu.label }}
         </NuxtLink>
-        <!-- For server API routes, it directly uses a <a> tag to prevent the navigation to be handled by the Nuxt router -->
-        <a
-          v-else-if="menu.href"
-          :href="menu.href"
-          :class="menuClass(menu.icon)"
-          @focus="expanded = true"
-        >
-          {{ menu.label }}
-        </a>
         <button
           v-else
           :class="menuClass(menu.icon)"

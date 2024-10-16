@@ -66,12 +66,13 @@
               }}
             </p>
             <p v-if="partnerWithSameSiret.inactive">
-              <a
-                href="#"
+              <NuxtLink
+                to="#"
                 target="_self"
+                external
                 @click="restorePartner"
               >
-                Cliquez ici pour le restaurer </a
+                Cliquez ici pour le restaurer </NuxtLink
               >ou modifier le SIRET.
             </p>
           </div>

@@ -24,7 +24,11 @@
         aux agents des ministères sociaux, des Centres Communaux d’Action
         Sociale (CCAS), des Centres intercommunaux d’Action sociale (CIAS), des
         communes et des structures d’accompagnement social
-        <a href="#structure-definition">[1]</a>.
+        <NuxtLink
+          href="#structure-definition"
+          external
+          >[1]</NuxtLink
+        >.
       </p>
       <h2>Article 2 – Objet</h2>
       <p>
@@ -106,10 +110,11 @@
       <p>
         Le Responsable de structure réalise une demande de création de compte
         via le formulaire présent sur
-        <a
+        <NuxtLink
           href="https://monsuivisocial.incubateur.anct.gouv.fr/"
           target="_blank"
-          >https://monsuivisocial.incubateur.anct.gouv.fr/</a
+          external
+          >https://monsuivisocial.incubateur.anct.gouv.fr/</NuxtLink
         >. Le compte est créé après validation par un Administrateur.
       </p>
       <p>
@@ -195,11 +200,11 @@
       </ul>
       <p>
         Les habilitations sont accessibles sous format numérique à partir
-        <a
+        <NuxtLink
           href="https://outline.incubateur.anct.gouv.fr/s/623675f2-869e-44da-ae7e-8d9b1decbe15"
           target="_blank"
-          rel="noopener external"
-          >de ce lien</a
+          external
+          >de ce lien</NuxtLink
         >.
       </p>
       <p>
@@ -749,8 +754,10 @@
         </li>
         <li>
           par courrier électronique à
-          <a href="mailto:monsuivisocial@anct.gouv.fr"
-            >monsuivisocial@anct.gouv.fr</a
+          <NuxtLink
+            href="mailto:monsuivisocial@anct.gouv.fr"
+            external
+            >monsuivisocial@anct.gouv.fr</NuxtLink
           >
         </li>
       </ul>
@@ -834,15 +841,21 @@
       <p>Pour l’ANCT&nbsp;:</p>
       <ul>
         <li>Anne Gaillard</li>
-        <li><a href="mailto:dpo@anct.gouv.fr">dpo@anct.gouv.fr</a></li>
+        <li>
+          <NuxtLink
+            href="mailto:dpo@anct.gouv.fr"
+            external
+            >dpo@anct.gouv.fr</NuxtLink
+          >
+        </li>
         <li>
           Agence Nationale de la Cohésion des Territoires, 20 avenue de Ségur,
           75 334 Paris Cedex 07
         </li>
       </ul>
       <p>
-        <a name="structure-definition">[1]</a> Structure proposant un
-        accompagnement se caractérisant par une relation, individuelle ou
+        <NuxtLink name="structure-definition">[1]</NuxtLink> Structure proposant
+        un accompagnement se caractérisant par une relation, individuelle ou
         collective, entre un accompagnant et un ou plusieurs accompagnés, avec
         pour finalité l’amélioration de la situation de la ou des personnes
         accompagnées.

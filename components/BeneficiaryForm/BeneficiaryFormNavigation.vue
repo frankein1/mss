@@ -42,16 +42,17 @@
                     'fr-sidemenu__item--active': target.hash === activeHash
                   }"
                 >
-                  <a
+                  <NuxtLink
                     v-if="menu.route === currentRoute"
                     class="fr-sidemenu__link"
                     :href="`${menu.path}#${target.hash}`"
                     :aria-current="
                       target.hash === activeHash ? true : undefined
                     "
+                    external
                   >
                     {{ target.title }}
-                  </a>
+                  </NuxtLink>
                   <button
                     v-else
                     class="fr-sidemenu__link"
