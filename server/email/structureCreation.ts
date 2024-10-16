@@ -1,16 +1,17 @@
-import { getProConnectClient, getInclusionConnectClient } from '~/server/lib'
+import { getInclusionConnectClient } from '~/server/lib'
 import { isProConnectActive } from '~/utils/isProConnectActive'
+import { apiRoutes } from '~/utils/routes'
 
 export function getStructureCreationEmailContent() {
   const {
-    public: { ssoIssuer }
+    public: { appUrl, ssoIssuer }
   } = useRuntimeConfig()
 
   const client = getInclusionConnectClient()
   let registrationUrl = client.getRegistrationUrl()
 
   if (isProConnectActive(ssoIssuer)) {
-    registrationUrl = getProConnectClient().getRegistrationUrl()
+    registrationUrl = `${appUrl}${apiRoutes.proConnect.ApiSignIn.path()}`
   }
 
   const text = `Bonjour,
