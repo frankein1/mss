@@ -51,7 +51,7 @@
           </button>
         </li>
         <li v-if="totalPages > 6">
-          <a class="fr-pagination__link"> … </a>
+          <NuxtLink class="fr-pagination__link"> … </NuxtLink>
         </li>
         <li v-if="totalPages > 6 && page > 3 && page <= totalPages - 3">
           <button
@@ -63,7 +63,9 @@
           </button>
         </li>
         <li v-if="totalPages > 6 && page > 3 && page <= totalPages - 3">
-          <a class="fr-pagination__link fr-hidden fr-unhidden-lg"> … </a>
+          <NuxtLink class="fr-pagination__link fr-hidden fr-unhidden-lg">
+            …
+          </NuxtLink>
         </li>
         <li
           v-for="pageOffset in totalPages <= 6 ? 0 : 3"
