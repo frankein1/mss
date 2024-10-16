@@ -1,7 +1,6 @@
 <template>
   <client-only>
     <EditorContent
-      ref="input"
       :editor="editor"
       :editable="false"
       class="tiptap-editor-reader"
@@ -27,6 +26,7 @@
 
   const editor = useEditor({
     content: props.value ? JSON.parse(props.value) : props.rawText,
+    editable: false,
     enableContentCheck: true,
     onContentError({ error }) {
       console.error(error)

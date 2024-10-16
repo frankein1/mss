@@ -135,6 +135,7 @@
 
 <script setup lang="ts">
   import { Editor } from '@tiptap/vue-3'
+  import { sanitizeUrl } from '@braintree/sanitize-url'
 
   const props = defineProps<{
     editor?: Editor
@@ -158,19 +159,12 @@
       ?.chain()
       .focus()
       .extendMarkRange('link')
-      .setLink({ href: improveUrl(url) })
+      .setLink({ href: sanitizeUrl(url) })
       .run()
   }
 
   const unsetLink = () => {
     props.editor?.chain().focus().unsetLink().run()
-  }
-
-  const improveUrl = (url: string) => {
-    if (!/^https?:\/\//i.test(url)) {
-      return 'https://' + url
-    }
-    return url
   }
 </script>
 
