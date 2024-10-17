@@ -43,7 +43,7 @@ export default defineEventHandler(async event => {
   const { appUrl } = config.public
 
   if (!user) {
-    const unknownUserUrl = `${appUrl}${routes.error.ErrorUnknownUser.path()}`
+    const unknownUserUrl = `${appUrl}${routes.error.ErrorUnknownUserInclusionConnect.path()}`
     return sendRedirect(event, unknownUserUrl)
   }
 

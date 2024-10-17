@@ -31,6 +31,9 @@ export const apiInclusionConnectRoutes = {
 } as const
 
 export const apiProConnectRoutes = {
+  ApiSignIn: {
+    path: () => '/api/proconnect/signin'
+  },
   ApiLogout: {
     path: () => '/api/proconnect/logout'
   },

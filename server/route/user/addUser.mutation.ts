@@ -39,6 +39,11 @@ const handler = async ({
       structureId: user.structureId,
       email: userEmail,
       ...data
+    },
+    include: {
+      structure: {
+        select: { siret: true }
+      }
     }
   })
 

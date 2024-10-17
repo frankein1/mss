@@ -31,6 +31,11 @@ const adminHandler = async ({
     data: {
       email: userEmail,
       ...data
+    },
+    include: {
+      structure: {
+        select: { siret: true }
+      }
     }
   })
 
