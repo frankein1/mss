@@ -53,6 +53,7 @@
   import { fileInstructionTypePictos } from '~/client/options'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
+  import { getSocialSupportSubjects } from '~/utils/socialSupportSubject'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -117,45 +118,6 @@
     pending: activeAndInactivSocialSupportSubjectsPending,
     error: activeAndInactivSocialSupportSubjectsError
   } = await trpcClient.structure.getSocialSupportSubjects.useQuery()
-
-  const getSocialSupportSubjects = (
-    activeSocialSupportSubjects: SocialSupportSubject[] | null,
-    activeAndInactivSocialSupportSubjects: SocialSupportSubject[] | null,
-    userSubjectId: string | undefined
-  ): SocialSupportSubject[] | null => {
-    if (
-      userSubjectId == null ||
-      activeAndInactivSocialSupportSubjects == null ||
-      activeSocialSupportSubjects == null
-    ) {
-      return null
-    }
-
-    const allSocialSupportSubjects = activeSocialSupportSubjects || []
-
-    const foundInActive = activeSocialSupportSubjects.find(
-      subject => subject.id === userSubjectId
-    )
-    if (foundInActive != null) {
-      return activeSocialSupportSubjects
-    }
-    const foundInAll = activeAndInactivSocialSupportSubjects.find(
-      subject => subject.id === userSubjectId
-    )
-    if (foundInAll == null) {
-      return activeSocialSupportSubjects
-    }
-    allSocialSupportSubjects.push(foundInAll) // TODO sort by alphabet order
-    return sortAlphabetically(allSocialSupportSubjects)
-  }
-
-  const sortAlphabetically = (
-    socialSupportSujects: SocialSupportSubject[]
-  ): SocialSupportSubject[] => {
-    return socialSupportSujects.sort((a, b) =>
-      a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-    )
-  }
 
   const allSocialSupportSubjects = computed(() =>
     getSocialSupportSubjects(

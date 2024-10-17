@@ -16,9 +16,11 @@
         :message="fetchError"
       >
         <FollowupFormEdition
-          v-if="followupData && socialSupportSubjects && partnerOrganizations"
+          v-if="
+            followupData && allSocialSupportSubjects && partnerOrganizations
+          "
           :is-submitting="isSubmitting"
-          :social-support-subjects="socialSupportSubjects"
+          :social-support-subjects="allSocialSupportSubjects"
           :partner-organizations="partnerOrganizations"
           :data="followupData"
           :family-file-identification="familyFileIdentification || []"
@@ -34,6 +36,7 @@
   import { EditFollowupInput } from '~/server/schema'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
+  import { getSocialSupportSubjectsFromArray } from '~/utils/socialSupportSubject'
 
   const route = useRoute()
   const snackbar = useSnackbar()
@@ -77,10 +80,25 @@
     error: partnerOrganizationsError
   } = await trpcClient.partner.getAll.useQuery()
 
+  const {
+    data: activeAndInactivSocialSupportSubjects,
+    pending: activeAndInactivSocialSupportSubjectsPending,
+    error: activeAndInactivSocialSupportSubjectsError
+  } = await trpcClient.structure.getSocialSupportSubjects.useQuery()
+
+  const allSocialSupportSubjects = computed(() =>
+    getSocialSupportSubjectsFromArray(
+      socialSupportSubjects.value,
+      activeAndInactivSocialSupportSubjects.value,
+      followupData.value?.followup.subjects
+    )
+  )
+
   const pending = computed(
     () =>
       followupPending.value ||
       socialSupportSubjectsPending.value ||
+      activeAndInactivSocialSupportSubjectsPending.value ||
       partnerOrganizationsPending.value
   )
 
@@ -90,6 +108,9 @@
     }
     if (socialSupportSubjectsError.value) {
       return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
+    }
+    if (activeAndInactivSocialSupportSubjectsError.value) {
+      return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
     if (partnerOrganizationsError.value) {
       return "La liste des organismes partenaires de votre structure n'a pas pu être chargée."
