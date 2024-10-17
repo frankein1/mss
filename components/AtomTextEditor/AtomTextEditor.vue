@@ -49,7 +49,8 @@
     defineProps<{
       name: string
       label?: string | null
-      initialValue?: string | null
+      initialValue: string | null
+      initialRawValue?: string | null
       disabled?: boolean
       labelIcon?: string
       required?: boolean
@@ -57,6 +58,7 @@
     }>(),
     {
       initialValue: null,
+      initialRawValue: '',
       required: false,
       disabled: false,
       label: null,
@@ -88,8 +90,17 @@
     return props.minHeight + 'px'
   }
 
+  const displayedValue = computed((): string | JSON => {
+    if (props.initialValue) {
+      return JSON.parse(props.initialValue)
+    }
+    if (props.initialRawValue) {
+      return props.initialRawValue
+    }
+    return ''
+  })
   const editor = useEditor({
-    content: props.initialValue ? JSON.parse(props.initialValue) : '',
+    content: displayedValue.value,
     enableContentCheck: true,
     onContentError({ editor, error, disableCollaboration }) {
       console.error(error)

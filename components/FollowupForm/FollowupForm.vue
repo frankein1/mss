@@ -186,6 +186,7 @@
           <AtomTextEditor
             name="synthesis"
             :initial-value="synthesisRichTextValue"
+            :initial-raw-value="synthesis"
             :label="followupFieldLabels.synthesis"
             @update="onUpdateSynthesis"
           />
@@ -199,6 +200,7 @@
           <AtomTextEditor
             name="privateSynthesis"
             :initial-value="privateSynthesisRichTextValue"
+            :initial-raw-value="privateSynthesis"
             :label="followupFieldLabels.privateSynthesis"
             label-icon="fr-icon-lock-line"
             :min-height="120"
@@ -368,7 +370,9 @@
     }
   }
 
-  const { setValue: setSynthesis } = useField<string | undefined>('synthesis')
+  const { setValue: setSynthesis, value: synthesis } = useField<
+    string | undefined
+  >('synthesis')
   const { setValue: setSynthesisRichText, value: synthesisRichTextValue } =
     useField<string | undefined>('synthesisRichText')
   const onUpdateSynthesis = (
@@ -379,9 +383,9 @@
     setSynthesis(cleanEmptyParagraph(rawText))
     setSynthesisRichText(JSON.stringify(json))
   }
-  const { setValue: setPrivateSynthesis } = useField<string | undefined>(
-    'privateSynthesis'
-  )
+  const { setValue: setPrivateSynthesis, value: privateSynthesis } = useField<
+    string | undefined
+  >('privateSynthesis')
   const {
     setValue: setPrivateSynthesisRichText,
     value: privateSynthesisRichTextValue

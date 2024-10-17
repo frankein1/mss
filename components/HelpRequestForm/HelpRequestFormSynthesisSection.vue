@@ -5,6 +5,7 @@
     <AtomTextEditor
       name="synthesis"
       :initial-value="synthesisRichTextValue"
+      :initial-raw-value="synthesis"
       :label="helpRequestFieldLabels.synthesis"
       @update="onUpdateSynthesis"
     >
@@ -21,6 +22,7 @@
     <AtomTextEditor
       name="privateSynthesis"
       :initial-value="privateSynthesisRichTextValue"
+      :initial-raw-value="privateSynthesis"
       :label="helpRequestFieldLabels.privateSynthesis"
       label-icon="fr-icon-lock-line"
       :min-height="120"
@@ -58,9 +60,9 @@
     setSynthesis(cleanEmptyParagraph(rawText))
     setSynthesisRichText(JSON.stringify(json))
   }
-  const { setValue: setPrivateSynthesis } = useField<string | undefined>(
-    'privateSynthesis'
-  )
+  const { setValue: setPrivateSynthesis, value: privateSynthesis } = useField<
+    string | undefined
+  >('privateSynthesis')
   const {
     setValue: setPrivateSynthesisRichText,
     value: privateSynthesisRichTextValue
