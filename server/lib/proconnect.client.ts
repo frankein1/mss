@@ -155,17 +155,13 @@ export class ProConnectClient {
     return userinfo as ProConnectUserInfo
   }
 
-  public getSigninUrl(args: {
-    appRedirectUrl?: string
-    nonce: string
-    state: string
-  }) {
-    const { nonce, state, appRedirectUrl } = args
+  public getSigninUrl(args: { nonce: string; state: string }) {
+    const { nonce, state } = args
     const params = new URLSearchParams({
       client_id: this.clientId,
       scope: 'openid email siret',
       response_type: 'code',
-      redirect_uri: this.getRedirectUri(appRedirectUrl),
+      redirect_uri: this.redirectUri,
       acr_values: 'eidas1',
       state,
       nonce
