@@ -1,127 +1,129 @@
 <template>
-  <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
-    <div class="fr-col-12">
-      <StatsFilters
-        v-model:filters="filters"
-        :social-support-subject-options="socialSupportSubjectOptions"
-        :beneficiaries-cities-options="beneficiariesCitiesOptions"
-        :agent-options="agentOptions"
+  <div class="fr-container fr-mb-3w">
+    <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
+      <div class="fr-col-12">
+        <StatsFilters
+          v-model:filters="filters"
+          :social-support-subject-options="socialSupportSubjectOptions"
+          :beneficiaries-cities-options="beneficiariesCitiesOptions"
+          :agent-options="agentOptions"
+        />
+      </div>
+      <div class="fr-col-12 results-container">
+        <h3 class="stats-main-title results-count">
+          {{ beneficiaryCountLabel }}
+        </h3>
+        <ExportDataButton
+          v-if="application.export.stats"
+          :is-downloading="isDownloading"
+          stats
+          @export="exportStats"
+        />
+      </div>
+      <AtomAlert
+        v-if="error"
+        :alert-type="AlertType.Error"
+        message="Le nombre total de bénéficiaires n'a pas pu être chargé."
       />
-    </div>
-    <div class="fr-col-12 results-container">
-      <h3 class="stats-main-title results-count">
-        {{ beneficiaryCountLabel }}
-      </h3>
-      <ExportDataButton
-        v-if="application.export.stats"
-        :is-downloading="isDownloading"
-        stats
-        @export="exportStats"
+      <AtomLoader
+        v-if="pending"
+        class="fr-mx-auto"
       />
-    </div>
-    <AtomAlert
-      v-if="error"
-      :alert-type="AlertType.Error"
-      message="Le nombre total de bénéficiaires n'a pas pu être chargé."
-    />
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
-    <template v-else-if="beneficiaryCount">
-      <div class="fr-col-12 fr-col-md-6 fr-col-xl-3">
-        <StatsBeneficiariesGender
-          :beneficiary-count="beneficiaryCount"
-          :filters="filters"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-md-6 fr-col-xl-3">
-        <StatsBeneficiariesAgeGroups
-          :beneficiary-count="beneficiaryCount"
-          :filters="filters"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6">
-        <StatsBeneficiariesFamilySituations
-          :beneficiary-count="beneficiaryCount"
-          :filters="filters"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-        <StatsBeneficiariesCities
-          :beneficiary-count="beneficiaryCount"
-          :filters="filters"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-        <StatsBeneficiariesDepartments
-          :beneficiary-count="beneficiaryCount"
-          :filters="filters"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-        <StatsBeneficiariesRegions
-          :beneficiary-count="beneficiaryCount"
-          :filters="filters"
-        />
-      </div>
-      <div
-        v-if="application.module.ministere"
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-      >
-        <StatsBeneficiariesAccommodationZone
-          :beneficiary-count="beneficiaryCount"
-          :filters="filters"
-        />
-      </div>
-      <div
-        v-if="application.module.ministere"
-        class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
-      >
-        <StatsBeneficiariesAccommodationMode
-          :beneficiary-count="beneficiaryCount"
-          :filters="filters"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-        <StatsBeneficiariesMobility
-          :beneficiary-count="beneficiaryCount"
-          :filters="filters"
-        />
-      </div>
-      <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-        <StatsBeneficiariesCSP
-          :beneficiary-count="beneficiaryCount"
-          :filters="filters"
-        />
-      </div>
-      <template v-if="application.module.ministere">
-        <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-          <StatsBeneficiariesMinistereStructure
+      <template v-else-if="beneficiaryCount">
+        <div class="fr-col-12 fr-col-md-6 fr-col-xl-3">
+          <StatsBeneficiariesGender
+            :beneficiary-count="beneficiaryCount"
+            :filters="filters"
+          />
+        </div>
+        <div class="fr-col-12 fr-col-md-6 fr-col-xl-3">
+          <StatsBeneficiariesAgeGroups
+            :beneficiary-count="beneficiaryCount"
+            :filters="filters"
+          />
+        </div>
+        <div class="fr-col-12 fr-col-lg-6">
+          <StatsBeneficiariesFamilySituations
             :beneficiary-count="beneficiaryCount"
             :filters="filters"
           />
         </div>
         <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-          <StatsBeneficiariesMinistereDepartementService
+          <StatsBeneficiariesCities
             :beneficiary-count="beneficiaryCount"
             :filters="filters"
           />
         </div>
         <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-          <StatsBeneficiariesMinistereCategorie
+          <StatsBeneficiariesDepartments
             :beneficiary-count="beneficiaryCount"
             :filters="filters"
           />
         </div>
         <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
-          <StatsBeneficiariesMinistereInterpellation
+          <StatsBeneficiariesRegions
             :beneficiary-count="beneficiaryCount"
             :filters="filters"
           />
         </div>
+        <div
+          v-if="application.module.ministere"
+          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        >
+          <StatsBeneficiariesAccommodationZone
+            :beneficiary-count="beneficiaryCount"
+            :filters="filters"
+          />
+        </div>
+        <div
+          v-if="application.module.ministere"
+          class="fr-col-12 fr-col-lg-6 fr-col-xl-4"
+        >
+          <StatsBeneficiariesAccommodationMode
+            :beneficiary-count="beneficiaryCount"
+            :filters="filters"
+          />
+        </div>
+        <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
+          <StatsBeneficiariesMobility
+            :beneficiary-count="beneficiaryCount"
+            :filters="filters"
+          />
+        </div>
+        <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
+          <StatsBeneficiariesCSP
+            :beneficiary-count="beneficiaryCount"
+            :filters="filters"
+          />
+        </div>
+        <template v-if="application.module.ministere">
+          <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
+            <StatsBeneficiariesMinistereStructure
+              :beneficiary-count="beneficiaryCount"
+              :filters="filters"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
+            <StatsBeneficiariesMinistereDepartementService
+              :beneficiary-count="beneficiaryCount"
+              :filters="filters"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
+            <StatsBeneficiariesMinistereCategorie
+              :beneficiary-count="beneficiaryCount"
+              :filters="filters"
+            />
+          </div>
+          <div class="fr-col-12 fr-col-lg-6 fr-col-xl-4">
+            <StatsBeneficiariesMinistereInterpellation
+              :beneficiary-count="beneficiaryCount"
+              :filters="filters"
+            />
+          </div>
+        </template>
       </template>
-    </template>
+    </div>
   </div>
 </template>
 

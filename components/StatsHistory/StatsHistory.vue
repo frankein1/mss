@@ -83,10 +83,9 @@
             </button>
           </li>
         </ul>
-
         <div
           id="help-requests-panel"
-          class="fr-tabs__panel fr-tabs__panel--selected fr-px-0"
+          class="fr-tabs__panel fr-tabs__panel--selected fr-container fr-px-0 fr-pb-3w"
           role="tabpanel"
           aria-labelledby="help-requests-tab"
           tabindex="0"
@@ -181,7 +180,7 @@
         </div>
         <div
           id="followups-panel"
-          class="fr-tabs__panel fr-px-0"
+          class="fr-tabs__panel fr-container fr-px-0 fr-pb-3w"
           role="tabpanel"
           aria-labelledby="followups-tab"
           tabindex="0"
