@@ -218,10 +218,10 @@ export type InclusionConnectJwtData = {
   sid: string // '89054e83-e37d-459f-9315-6441e198d054'
   email_verified: boolean // true
   name: string // 'Jean Agent'
-  preferred_username: string // 'jean.agent@example.com'
+  preferred_username: string // 'jean.agent@yopmail.com'
   given_name: string // 'Jean'
   family_name: string // 'Agent'
-  email: string // 'jean.agent@example.com'
+  email: string // 'jean.agent@yopmail.com'
 }
 
 export const parseInclusionConnectJwt = (

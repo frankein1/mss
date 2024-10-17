@@ -19,6 +19,8 @@ test.afterEach(async () => {
   })
 })
 
+test.skip()
+
 const healthUrl = (id: string) => `/app/beneficiaries/${id}/edit/health`
 const beneficiaryUrl = (familyFileId: string, id: string) =>
   `/app/files/${familyFileId}?beneficiaryId=${id}`

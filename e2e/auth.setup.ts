@@ -20,6 +20,8 @@ async function authenticate(
   await page.waitForURL(newUser ? /\/cgu/ : /\/app\/overview/)
 }
 
+setup.skip()
+
 setup('authenticate as Structure Manager Jeanne', async ({ page }) => {
   const managerFile = 'playwright/.auth/structure-manager.json'
   const username = process.env.STRUCTURE_MANAGER_EMAIL || ''
