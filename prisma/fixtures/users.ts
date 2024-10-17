@@ -18,7 +18,7 @@ export const fixturesUsers = [
     id: '94dea7ab-92e9-479a-9795-e4fdd4ef42af',
     firstName: 'Jeanne',
     lastName: 'Instructeur',
-    email: 'jeanne.instructeure@example.com',
+    email: 'jeanne.instructeure@yopmail.com',
     role: 'Instructor',
     status: 'Disabled',
     structureId: fixtureStructures[FixtureStructure.Test].id
@@ -27,7 +27,7 @@ export const fixturesUsers = [
     id: 'ddd586d1-d747-4a54-896d-3e7cf90ea91f',
     firstName: 'Jeanne',
     lastName: 'Référente',
-    email: 'jeanne.referente@example.com',
+    email: 'jeanne.referente@yopmail.com',
     role: 'Referent',
     status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Test].id
@@ -36,7 +36,7 @@ export const fixturesUsers = [
     id: '3bce443c-b4ab-459b-9e18-a691375a8e6a',
     firstName: 'Jean',
     lastName: 'Agent',
-    email: 'jean.agent@example.com',
+    email: 'jean.agent@yopmail.com',
     role: 'ReceptionAgent',
     status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Test].id
@@ -45,7 +45,7 @@ export const fixturesUsers = [
     id: '9840ff03-0fef-4967-b533-66d81c25b44a',
     firstName: 'Jean',
     lastName: 'Travailleur social',
-    email: 'jean.travailleur-social@example.com',
+    email: 'jean.travailleur-social@yopmail.com',
     role: 'SocialWorker',
     status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Test].id
@@ -54,7 +54,7 @@ export const fixturesUsers = [
     id: '7e5c1734-35cb-4047-9035-a944961a67a4',
     firstName: 'Jeanne',
     lastName: 'Responsable',
-    email: 'jeanne.responsable@example.com',
+    email: 'jeanne.responsable@yopmail.com',
     role: 'StructureManager',
     status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Test].id
@@ -71,7 +71,7 @@ export const fixturesUsers = [
     id: 'cdeba22a-3ce0-4340-b279-9a2d984da663',
     firstName: 'Anita',
     lastName: 'CI-MSS Nouvelle Responsable',
-    email: 'anita.responsable@example.com',
+    email: 'anita.responsable@yopmail.com',
     role: 'StructureManager',
     status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Autun].id
@@ -80,7 +80,7 @@ export const fixturesUsers = [
     id: '9ae9301f-466f-4750-8217-136f4a001ee9',
     firstName: 'Mehdi',
     lastName: 'CI-MSS Nouveau Travailleur social',
-    email: 'mehdi.travailleur-social@example.com',
+    email: 'mehdi.travailleur-social@yopmail.com',
     role: 'SocialWorker',
     status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Autun].id
@@ -89,7 +89,7 @@ export const fixturesUsers = [
     id: '6665ad8a-26a9-405c-9cc2-2f369765c096',
     firstName: 'Laura',
     lastName: 'CI-MSS Responsable Ministère',
-    email: 'laura.responsable@example.com',
+    email: 'laura.responsable@yopmail.com',
     role: 'StructureManager',
     status: 'Active',
     structureId: fixtureStructures[FixtureStructure.Ministère].id

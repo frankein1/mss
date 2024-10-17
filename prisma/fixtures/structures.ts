@@ -10,7 +10,7 @@ export const fixtureStructures = [
   {
     id: '8adcd106-c652-4e4c-80df-beb373fae252',
     name: 'CCAS de Test',
-    email: 'ccas-test@example.com',
+    email: 'ccas-test@yopmail.com',
     type: 'Ccas',
     address: '1 rue du Ruisseau',
     city: 'Ennui-sur-Blasé',
@@ -20,7 +20,7 @@ export const fixtureStructures = [
   {
     id: '312b0b1e-d4fe-43e6-b8ca-48012dad4335',
     name: 'CCAS Autun',
-    email: 'ccas-test-autun@example.com',
+    email: 'ccas-test-autun@yopmail.com',
     type: 'Ccas',
     address: '1 rue des érables',
     city: 'Autun',
@@ -30,7 +30,7 @@ export const fixtureStructures = [
   {
     id: '50421089-d230-431c-99ca-0beb177fb0e9',
     name: 'Structure Test Ministère',
-    email: 'ministere-test@example.com',
+    email: 'ministere-test@yopmail.com',
     type: 'Ministere',
     address: '43 rue Test',
     city: 'Paris',
