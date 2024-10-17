@@ -1,17 +1,9 @@
-import { SocialSupportSubjectIdAndName } from '~/types/socialSupportSubject'
+import { SocialSupportSubject } from '@prisma/client'
 
-export function sortSocialSupportSubjectsByName(
-  a: SocialSupportSubjectIdAndName,
-  b: SocialSupportSubjectIdAndName
-) {
-  const insensitiveAName = a.name.toLowerCase()
-  const insensitiveBName = b.name.toLowerCase()
-
-  if (insensitiveAName < insensitiveBName) {
-    return -1
-  }
-  if (insensitiveAName > insensitiveBName) {
-    return 1
-  }
-  return 0
+export const sortSocialSupportSubjectsByName = (
+  socialSupportSujects: SocialSupportSubject[]
+): SocialSupportSubject[] => {
+  return socialSupportSujects.sort((a, b) =>
+    a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+  )
 }

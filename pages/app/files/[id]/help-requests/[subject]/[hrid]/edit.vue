@@ -32,10 +32,10 @@
       >
         <HelpRequestFormEdition
           v-if="
-            helpRequestData && socialSupportSubjects && partnerOrganizations
+            helpRequestData && allSocialSupportSubjects && partnerOrganizations
           "
           :is-submitting="isSubmitting"
-          :social-support-subjects="socialSupportSubjects"
+          :social-support-subjects="allSocialSupportSubjects"
           :data="helpRequestData"
           :family-file-identification="familyFileIdentification || []"
           :partner-organizations="partnerOrganizations"
@@ -47,12 +47,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType } from '@prisma/client'
+  import { FileInstructionType, SocialSupportSubject } from '@prisma/client'
   import { EditHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { fileInstructionTypePictos } from '~/client/options'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
+  import { getSocialSupportSubjects } from '~/utils/socialSupportSubject'
 
   const snackbar = useSnackbar()
   const trpcClient = useTrpcClient()
@@ -113,6 +114,20 @@
   } = await trpcClient.structure.getActiveSocialSupportSubjects.useQuery()
 
   const {
+    data: activeAndInactivSocialSupportSubjects,
+    pending: activeAndInactivSocialSupportSubjectsPending,
+    error: activeAndInactivSocialSupportSubjectsError
+  } = await trpcClient.structure.getSocialSupportSubjects.useQuery()
+
+  const allSocialSupportSubjects = computed(() =>
+    getSocialSupportSubjects(
+      socialSupportSubjects.value,
+      activeAndInactivSocialSupportSubjects.value,
+      helpRequestData.value?.helpRequest.subjectId
+    )
+  )
+
+  const {
     data: partnerOrganizations,
     pending: partnerOrganizationsPending,
     error: partnerOrganizationsError
@@ -122,6 +137,7 @@
     () =>
       helpRequestPending.value ||
       socialSupportSubjectsPending.value ||
+      activeAndInactivSocialSupportSubjectsPending.value ||
       partnerOrganizationsPending.value
   )
 
@@ -131,6 +147,9 @@
     }
     if (socialSupportSubjectsError.value) {
       return "La liste des objets d'accompagnement de votre structure n'a pas pu être chargée."
+    }
+    if (activeAndInactivSocialSupportSubjectsError.value) {
+      return "La liste des objets d'accompagnement n'a pas pu être chargée."
     }
     if (partnerOrganizationsError.value) {
       return "La liste des organismes partenaires de votre structure n'a pas pu être chargée."
