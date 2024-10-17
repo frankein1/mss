@@ -7,6 +7,7 @@ import { JwtUser } from '~/types/user'
 import { DocumentRepo, NotificationRepo } from '~/server/database'
 import { FamilyFileSecurityTarget, FamilyFileService } from '~/server/services'
 import { SecurityRuleContext, getDocumentPermissions } from '~/server/security'
+import { sanitizeFilename } from '~/server/utils/sanitizeFilename'
 
 export interface MultiPartData {
   data: Buffer
@@ -142,7 +143,7 @@ async function addDocument(
   const document = await DocumentRepo.prisma.create({
     data: {
       key,
-      name: file.name,
+      name: sanitizeFilename(file.name),
       familyFileId,
       beneficiaryId,
       filenameDisk: key,
@@ -152,7 +153,7 @@ async function addDocument(
       createdById: user.id,
       type,
       size: file.size,
-      filenameDownload: file.name,
+      filenameDownload: sanitizeFilename(file.name),
       migrated: true,
       documentContent: {
         create: {
