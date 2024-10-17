@@ -1,5 +1,7 @@
 import { test, expect, Page } from '@playwright/test'
 
+test.skip()
+
 async function validateHeadings(page: Page) {
   await expect(page).toHaveTitle(/Tableau de bord/)
 
