@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>{{ routes.error.ErrorUnknownUser.title }}</h1>
+    <h1>{{ routes.error.ErrorUnknownUserInclusionConnect.title }}</h1>
     <p class="fr-text--lead fr-mb-3w">
       Aucun compte Mon Suivi Social n'est rattaché à votre compte
       InclusionConnect.

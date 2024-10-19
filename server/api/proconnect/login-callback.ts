@@ -11,6 +11,7 @@ import { UserRepo } from '~/server/database'
 import { prismaClient } from '~/server/prisma'
 import { cleanEmail } from '~/utils/user/cleanEmail'
 import { includeOrderedCGUHistory } from '~/server/query'
+import { AuthSession } from '~/server/types/session'
 
 const config = useRuntimeConfig()
 const { auth } = config
@@ -18,7 +19,7 @@ const { auth } = config
 const { proconnectProvider, proconnectLabel } = auth
 
 export default defineEventHandler(async event => {
-  const { code, redirectUrl, state } = getQuery(event)
+  const { code, state } = getQuery(event)
 
   if (!code) {
     throw createError({
@@ -37,11 +38,11 @@ export default defineEventHandler(async event => {
     auth: { sessionSecret }
   } = useRuntimeConfig()
 
-  const session = await useSession<{ nonce: string; state: string }>(event, {
+  const session = await useSession<AuthSession>(event, {
     password: sessionSecret
   })
 
-  const { nonce: sessionNonce, state: sessionState } = session.data
+  const { nonce: sessionNonce, state: sessionState, redirectUrl } = session.data
 
   if (!sessionNonce || !sessionState) {
     throw createError({
@@ -56,8 +57,6 @@ export default defineEventHandler(async event => {
       message: '[ProConnect] `states` must be equal'
     })
   }
-
-  // TODO: Vérifier que le champ state récupéré en query parameter correspond bien au state généré précédemment et stocké dans la session du navigateur.
 
   const client = getProConnectClient()
 
