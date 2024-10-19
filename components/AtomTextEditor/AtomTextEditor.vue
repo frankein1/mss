@@ -109,6 +109,9 @@
     editorProps: {
       attributes: {
         class: 'custom-tiptap'
+      },
+      transformPastedText(pasted: string) {
+        return pasted.replace(/[<>]/g, '')
       }
     },
     onUpdate: () => {
