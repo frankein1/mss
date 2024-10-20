@@ -68,15 +68,14 @@ export class ProConnectClient {
   }
 
   public async getToken({
-    code,
-    appRedirectUrl
+    code
   }: {
     code: string
     appRedirectUrl?: string
   }): Promise<ProConnectTokenResponse> {
     const params = new URLSearchParams({
       grant_type: 'authorization_code',
-      redirect_uri: this.getRedirectUri(appRedirectUrl),
+      redirect_uri: this.redirectUri,
       client_id: this.clientId,
       client_secret: this.clientSecret,
       code
