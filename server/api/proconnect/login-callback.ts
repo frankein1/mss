@@ -60,11 +60,7 @@ export default defineEventHandler(async event => {
 
   const client = getProConnectClient()
 
-  const proConnectToken = await fetchProConnnectToken(
-    client,
-    code as string,
-    redirectUrl as string | undefined
-  )
+  const proConnectToken = await fetchProConnnectToken(client, code as string)
 
   const token = proConnectToken
   const { accessToken, idToken } = token
@@ -139,15 +135,8 @@ async function fetchUserInfo(client: ProConnectClient, accessToken: string) {
   return response
 }
 
-async function fetchProConnnectToken(
-  client: ProConnectClient,
-  code: string,
-  appRedirectUrl: string | undefined
-) {
-  const proConnectTokenResponse = await client.getToken({
-    code,
-    appRedirectUrl
-  })
+async function fetchProConnnectToken(client: ProConnectClient, code: string) {
+  const proConnectTokenResponse = await client.getToken({ code })
 
   if (proConnectTokenResponse.error) {
     throw new Error(`[ProConnect] ${proConnectTokenResponse.error.description}`)
