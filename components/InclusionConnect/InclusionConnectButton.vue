@@ -1,5 +1,5 @@
 <template>
-  <div class="inclusion-connect-section">
+  <div>
     <NuxtLink
       class="inclusion-connect-btn"
       title="S'identifier avec InclusionConnect"
@@ -11,30 +11,10 @@
         <strong>InclusionConnect</strong>
       </span>
     </NuxtLink>
-
-    <NuxtLink
-      class="fr-link--sm"
-      to="https://plateforme-inclusion.notion.site/Un-compte-unique-pour-mes-services-num-riques-ded9135197654da590f5dde41d8bb68b"
-      target="_blank"
-      rel="noopener external"
-      title="Qu'est-ce qu'Inclusion Connect ? - nouvelle fenêtre"
-      >En savoir plus</NuxtLink
-    >
-  </div>
-
-  <div class="fr-grid-row fr-grid-row--center fr-mt-6w">
-    <div class="fr-col-12 fr-col-lg-10">
-      <AtomAlert
-        :alert-type="AlertType.Info"
-        message="Si vous avez des difficultés pour vous authentifier, <a href='mailto:monsuivisocial@anct.gouv.fr'>contactez-nous</a>."
-      />
-    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { AlertType } from '~/utils/constants/alert'
-
   const SIGNIN_PATH = '/api/keycloak/signin'
 
   const route = useRoute()

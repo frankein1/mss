@@ -118,7 +118,7 @@ export default defineEventHandler(async event => {
     }
   })
 
-  let validateTokenUrl = `${appUrl}${routes.auth.AuthValidateToken.path()}?token=${userAccessToken}`
+  let validateTokenUrl = `${appUrl}${routes.auth.AuthValidateToken.path()}?token=${userAccessToken}&provider=proconnect`
   if (redirectUrl) {
     validateTokenUrl = `${validateTokenUrl}&redirectUrl=${redirectUrl}`
   }
