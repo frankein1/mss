@@ -168,27 +168,13 @@ export class ProConnectClient {
     return `${this.issuer}/authorize?${params}`
   }
 
-  public getLogoutUrl({
-    state,
-    idToken,
-    inactive
-  }: {
-    state: string
-    idToken: string
-    inactive: boolean
-  }) {
+  public getLogoutUrl({ state, idToken }: { state: string; idToken: string }) {
     const params = new URLSearchParams({
       id_token_hint: idToken,
       state,
-      post_logout_redirect_uri: inactive
-        ? `${this.postLogoutRedirectUri}?inactive`
-        : this.postLogoutRedirectUri
+      post_logout_redirect_uri: this.postLogoutRedirectUri
     })
     return `${this.issuer}/session/end?${params}`
-  }
-
-  public getPostLogoutRedirectUri() {
-    return this.postLogoutRedirectUri
   }
 
   public getEditPasswordUrl() {
