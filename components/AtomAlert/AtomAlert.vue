@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/no-v-text-v-html-on-component -->
 <!-- eslint-disable vue/no-v-html -->
 <template>
   <div
@@ -5,10 +6,11 @@
     :class="[alertClass]"
     role="alert"
   >
-    <p
+    <component
+      :is="titleTag"
       class="fr-alert__title"
       v-html="text"
-    ></p>
+    ></component>
     <slot name="detailedMessage"></slot>
     <button
       v-if="closeable"
@@ -30,8 +32,9 @@
       alertType: AlertType
       closeable?: boolean
       message: string
+      titleTag?: keyof HTMLElementTagNameMap
     }>(),
-    { closeable: false }
+    { closeable: false, titleTag: 'p' }
   )
 
   const emit = defineEmits<{
