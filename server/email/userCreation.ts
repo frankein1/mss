@@ -1,40 +1,5 @@
 import { User } from '@prisma/client'
-import { getInclusionConnectClient } from '~/server/lib'
-import { isProConnectActive } from '~/utils/isProConnectActive'
 import { apiRoutes } from '~/utils/routes'
-
-const getMailContentFromInclusionConnect = (
-  email: string,
-  registrationUrl: string,
-  from: string
-) => ({
-  text: `Bonjour,
-
-Votre responsable de structure ou l'équipe de Mon Suivi Social vous a ouvert des accès à l'application Mon Suivi Social.
-
-Pour s'authentifier, Mon Suivi Social utilise l'outil Inclusion Connect.
-
-Afin d'accéder à l'application, veuillez créer un compte InclusionConnect en utilisant ${email} comme adresse e-mail.
-
-Créer son compte Inclusion Connect : ${registrationUrl}
-
-En cas de difficulté, contactez-nous à ${from}.
-
-L'équipe de Mon Suivi Social`,
-  html: `Bonjour,
-<br/><br/><br/>
-Votre responsable de structure ou l'équipe de Mon Suivi Social vous a ouvert des accès à l'application Mon Suivi Social.
-<br/><br/>
-Pour s'authentifier, Mon Suivi Social utilise l'outil Inclusion Connect.
-<br/><br/>
-Afin d'accéder à l'application, veuillez créer un compte InclusionConnect en utilisant <b>${email}</b> comme adresse e-mail.
-<br/><br/>
-<a href=${registrationUrl}>Créer son compte Inclusion Connect</a>
-<br/><br/>
-En cas de difficulté, contactez-nous à ${from}.
-<br/><br/><br/>
-L'équipe de Mon Suivi Social`
-})
 
 const urlGetStarted =
   'https://mon-suivi-social.gitbook.io/mon-suivi-social/configuration-au-demarrage/se-connecter-a-mon-suivi-social-agents'
@@ -91,21 +56,16 @@ export function getUserCreationEmailContent(
   const {
     public: {
       appUrl,
-      email: { from },
-      ssoIssuer
+      email: { from }
     }
   } = useRuntimeConfig()
 
-  if (isProConnectActive(ssoIssuer)) {
-    const registrationUrl = `${appUrl}${apiRoutes.proConnect.ApiSignIn.path()}`
-    return getMailContentFromProConnect(
-      user.email,
-      user.structure?.siret || 'Siret inconnu',
-      registrationUrl,
-      from
-    )
-  }
+  const registrationUrl = `${appUrl}${apiRoutes.proConnect.ApiSignIn.path()}`
 
-  const registrationUrl = getInclusionConnectClient().getRegistrationUrl()
-  return getMailContentFromInclusionConnect(user.email, registrationUrl, from)
+  return getMailContentFromProConnect(
+    user.email,
+    user.structure?.siret || 'Siret inconnu',
+    registrationUrl,
+    from
+  )
 }

@@ -169,7 +169,6 @@ export default defineNuxtConfig({
       smtpUser: process.env.EMAIL_SMTP_USER || ''
     },
     public: {
-      ssoIssuer: process.env.SSO_ISSUER || 'inclusionconnect',
       version: {
         commitSha: process.env.COMMIT_SHA || '',
         commitRefName: process.env.COMMIT_REF_NAME || '',
