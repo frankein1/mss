@@ -64,7 +64,7 @@ export default defineEventHandler(async event => {
     }
   })
 
-  let validateTokenUrl = `${appUrl}${routes.auth.AuthValidateToken.path()}?token=${userAccessToken}`
+  let validateTokenUrl = `${appUrl}${routes.auth.AuthValidateToken.path()}?token=${userAccessToken}&provider=inclusionconnect`
   if (redirectUrl) {
     validateTokenUrl = `${validateTokenUrl}&redirectUrl=${redirectUrl}`
   }

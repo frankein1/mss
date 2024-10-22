@@ -40,15 +40,15 @@
   }>()
 
   const auth = useAuth()
+  const { provider, isProConnect } = useAuthProvider()
 
   const {
     public: {
-      ssoIssuer,
       disconnect: { threshold }
     }
   } = useRuntimeConfig()
 
-  const url = isProConnectActive(ssoIssuer)
+  const url = isProConnect.value
     ? apiRoutes.proConnect.ApiLogout.path()
     : apiRoutes.inclusionConnect.ApiLogout.path()
 
@@ -65,6 +65,7 @@
       }
       const { success, url } = data
       if (success) {
+        provider.value = undefined
         auth.logout()
       }
       if (url) {

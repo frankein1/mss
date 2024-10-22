@@ -20,29 +20,10 @@
         Qu’est-ce que ProConnect ?
       </NuxtLink>
     </p>
-    <AtomAlert
-      class="fr-mt-6w"
-      :alert-type="AlertType.Info"
-      message="Inclusion Connect devient ProConnect"
-    >
-      <template #detailedMessage>
-        <div>
-          <p>
-            Vous pouvez dès maintenant utiliser ProConnect à la place
-            d'Inclusion Connect.
-          </p>
-          <p>
-            Si vous avez des difficultés pour vous authentifier,
-            <a href="mailto:monsuivisocial@anct.gouv.fr">contactez-nous</a>.
-          </p>
-        </div>
-      </template>
-    </AtomAlert>
   </div>
 </template>
 
 <script lang="ts" setup>
-  import { AlertType } from '~/utils/constants/alert'
   import { apiRoutes } from '~/utils/routes'
 
   const SIGNIN_PATH = apiRoutes.proConnect.ApiSignIn.path()
@@ -60,8 +41,6 @@
 </script>
 
 <style lang="scss" scoped>
-  @use '~/assets/style/variables' as *;
-
   .proconnect-section {
     display: flex;
     flex-direction: column;

@@ -18,13 +18,10 @@ export const configRouter = router({
     .input(getExaminationDatesQuery.inputValidation)
     .query(getExaminationDatesQuery.execute),
   getEditPasswordUrl: protectedProcedure.query(() => {
-    const {
-      public: { ssoIssuer }
-    } = useRuntimeConfig()
-    if (isProConnectActive(ssoIssuer)) {
-      const client = getProConnectClient()
-      return client.getEditPasswordUrl()
-    }
+    const client = getProConnectClient()
+    return client.getEditPasswordUrl()
+  }),
+  getEditPasswordUrlInclusionConnect: protectedProcedure.query(() => {
     const client = getInclusionConnectClient()
     return client.getEditPasswordUrl()
   })

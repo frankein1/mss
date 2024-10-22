@@ -11,6 +11,7 @@
 </template>
 <script setup lang="ts">
   import { RouteLocationRaw } from '#vue-router'
+  import { AuthProvider } from '~/composables/useAuthProvider'
   import { JwtUser } from '~/types/user'
   import { routes } from '~/utils/routes'
   import { formatUserDisplayName } from '~/utils/user'
@@ -22,6 +23,8 @@
   const token = route.query.token as string
   const redirectUrl =
     (route.query.redirectUrl as string | undefined) || useHomePage()
+
+  const { provider } = useAuthProvider()
 
   type ValidateTokenOutput = {
     user: JwtUser
@@ -36,6 +39,7 @@
       async onResponse({ response }) {
         const { _data: data } = response
         if (data) {
+          provider.value = route.query.provider as AuthProvider
           auth.login(data)
           const redirect = await checkDpoStatus()
           navigateTo(redirect)
