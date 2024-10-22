@@ -5,7 +5,6 @@ import {
   getBeneficiariesCitiesQuery,
   getExaminationDatesQuery
 } from '~/server/route/config'
-import { isProConnectActive } from '~/utils/isProConnectActive'
 
 export const configRouter = router({
   getAgents: protectedProcedure
