@@ -111,6 +111,7 @@ function buildJson(users: (User & { structure: Structure | null })[]) {
         NOM: lastName,
         ROLE: role,
         TYPE_STRUCTURE: structure?.type || '',
+        SIRET_STRUCTURE: structure?.siret || '',
         NOM_STRUCTURE: structure?.name || '',
         DERNIERE_CONNEXION_STRUCTURE: formatDate(
           structure?.lastAccess,
