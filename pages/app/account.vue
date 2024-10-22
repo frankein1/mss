@@ -33,6 +33,11 @@
   const title = routes.user.AppAccount.title
 
   useHead({ title })
+  const trpcClient = useTrpcClient()
 
-  const data = await useTrpcClient().config.getEditPasswordUrl.query()
+  const { isProConnect } = useAuthProvider()
+
+  const data = isProConnect.value
+    ? await trpcClient.config.getEditPasswordUrl.query()
+    : await trpcClient.config.getEditPasswordUrlInclusionConnect.query()
 </script>
