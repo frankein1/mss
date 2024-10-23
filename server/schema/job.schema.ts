@@ -7,22 +7,21 @@ import {
 } from '~/server/schema/helpers.schema'
 import { jobResultAdminFilterSchema } from '~/server/schema/filter.schema'
 
-export const dataInclusionStructureImportResultSchema = z.object({
-  nTotal: z.number(),
-  nInDatabase: z.number(),
-  nImported: z.number(),
-  nCreated: z.number(),
-  nUpdated: z.number(),
-  processId: z.number().optional()
+const jobInternalResultSchema = z.object({
+  nImported: z.number().optional(),
+  // Data Inclusion
+  nTotal: z.number().optional(),
+  nInDatabase: z.number().optional(),
+  nCreated: z.number().optional(),
+  nUpdated: z.number().optional(),
+  // Brevo
+  processId: z.number().nullable().optional(),
+  exportStartDate: z.date().nullable().optional()
 })
 
-export const brevoExportResultSchema = z.object({})
+type JobInternalResult = z.infer<typeof jobInternalResultSchema>
 
-export type JobStructureImportResult = z.infer<
-  typeof dataInclusionStructureImportResultSchema
->
-
-export const dataInclusionStructureErrorSchema = z.object({
+const jobErrorSchema = z.object({
   category: z.enum([
     'structure-import-download',
     'structure-import-format',
@@ -35,33 +34,35 @@ export const dataInclusionStructureErrorSchema = z.object({
   error: z.string()
 })
 
-export type JobStructureImportError = z.infer<
-  typeof dataInclusionStructureErrorSchema
->
+type JobError = z.infer<typeof jobErrorSchema>
 
-export const createJobResultSchema = z.object({
-  name: z.string(),
-  errors: z.array(dataInclusionStructureErrorSchema),
-  result: dataInclusionStructureImportResultSchema
+const createJobResultSchema = z.object({
+  name: z.enum([
+    'data-inclusion-structure-import-cron',
+    'data-inclusion-structure-import',
+    'brevo-export'
+  ]),
+  errors: z.array(jobErrorSchema),
+  result: jobInternalResultSchema
 })
 
 export type CreateJobResultInput = z.infer<typeof createJobResultSchema>
 
-export type UpdateJobResultInput =
+export type UpdateJobResultInput = (
   | {
       id: string
       status: 'Failure' | 'Success'
       durationInSeconds?: number
       endDate: Date
-      errors: JobStructureImportError[]
-      result: JobStructureImportResult
     }
   | {
       id: string
       status: 'Ongoing'
-      errors: JobStructureImportError[]
-      result: JobStructureImportResult
     }
+) & {
+  errors: JobError[]
+  result: JobInternalResult
+}
 
 export interface JobResult {
   id: string
@@ -70,8 +71,8 @@ export interface JobResult {
   startDate: Date
   endDate: Date | null
   durationInSeconds: number | null
-  errors: JobStructureImportError[]
-  result: JobStructureImportResult
+  errors: JobError[]
+  result: JobInternalResult
 }
 
 export const adminGetJobResultsSchema = z
