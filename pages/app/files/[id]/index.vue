@@ -2,7 +2,7 @@
   <AtomAlert
     v-if="error"
     :alert-type="AlertType.Error"
-    :message="error.message"
+    message="Le dossier n'a pas pu être chargé."
   />
   <PageContainer v-else-if="familyFileIdentification">
     <AtomBreadcrumb

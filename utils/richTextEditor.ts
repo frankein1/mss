@@ -21,7 +21,6 @@ export const tiptapExtensions = [
     }
   }),
   Link.configure({
-    openOnClick: false,
     defaultProtocol: 'https'
   })
 ]

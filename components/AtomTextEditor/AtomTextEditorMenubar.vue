@@ -159,8 +159,22 @@
       ?.chain()
       .focus()
       .extendMarkRange('link')
-      .setLink({ href: sanitizeUrl(url) })
+      .setLink({ href: formatLink(url) })
       .run()
+  }
+
+  function formatLink(url: string) {
+    let formatted = url
+    const hasHTTPProtocol = /^https?:\/\//i.test(url)
+    const isMail = /[\w-.]+@([\w-]+\.)+[\w-]{2,4}/i.test(url)
+
+    if (!isMail && !hasHTTPProtocol) {
+      formatted = `https://${url}`
+    } else if (isMail) {
+      formatted = `mailto:${url}`
+    }
+
+    return sanitizeUrl(formatted)
   }
 
   const unsetLink = () => {
