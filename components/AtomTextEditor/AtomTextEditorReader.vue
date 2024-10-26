@@ -31,30 +31,7 @@
     onContentError({ error }) {
       console.error(error)
     },
-    extensions: [
-      StarterKit.configure({
-        heading: {
-          levels: [1, 2, 3],
-          HTMLAttributes: {
-            class: 'text-editor-heading'
-          }
-        },
-        paragraph: {
-          HTMLAttributes: {
-            class: 'text-editor-paragraph'
-          }
-        },
-        listItem: {
-          HTMLAttributes: {
-            class: 'text-editor-list'
-          }
-        }
-      }),
-      Link.configure({
-        openOnClick: false,
-        defaultProtocol: 'https'
-      })
-    ],
+    extensions: tiptapExtensions,
     editorProps: {
       attributes: {
         class: 'custom-tiptap'
