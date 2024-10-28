@@ -32,6 +32,9 @@ $tab-border-bottom-size: 3px;
   border-bottom: 3px solid var(--primary);
 }
 
+// Tab height computing does not take into account multiselect dropdown height
+// A min height is necessary to fully display the multiselect in all cases.
 .fr-tabs__panel {
+  min-height: var(--tabs-panel-min-height);
   padding: 1rem 0 0;
 }

@@ -23,7 +23,8 @@
           @export="exportStats"
         />
       </div>
-      <div class="fr-tabs fr-transition-none">
+      <!-- TODO will be migrated to atomtabs with overloaded css -->
+      <div class="fr-tabs">
         <ul
           class="fr-tabs__list statshistory__tabs-list"
           :class="{ 'followups-tab-active': isFollowupsTabActive }"
@@ -85,7 +86,7 @@
         </ul>
         <div
           id="help-requests-panel"
-          class="fr-tabs__panel fr-tabs__panel--selected fr-container fr-px-0 fr-pb-3w"
+          class="fr-tabs__panel fr-tabs__panel--selected fr-container--fluid fr-px-0 fr-pb-3w"
           role="tabpanel"
           aria-labelledby="help-requests-tab"
           tabindex="0"
@@ -180,7 +181,7 @@
         </div>
         <div
           id="followups-panel"
-          class="fr-tabs__panel fr-container fr-px-0 fr-pb-3w"
+          class="fr-tabs__panel fr-container--fluid fr-px-0 fr-pb-3w"
           role="tabpanel"
           aria-labelledby="followups-tab"
           tabindex="0"
@@ -369,6 +370,7 @@
   @use '@gouvfr/dsfr/module/media-query' as dsfr-media-query;
 
   .fr-tabs {
+    transition: none !important;
     box-shadow: none;
 
     &::before {
@@ -386,8 +388,10 @@
     }
   }
 
+  // Min height is overloaded from tab.scss
   .fr-tabs__panel {
-    min-height: 0;
+    min-height: 17rem;
+    transition: none !important;
   }
 
   #help-requests-tab,

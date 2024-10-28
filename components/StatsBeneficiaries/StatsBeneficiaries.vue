@@ -1,5 +1,5 @@
 <template>
-  <div class="fr-container fr-mb-3w">
+  <div class="fr-container--fluid fr-mb-3w">
     <div class="fr-grid-row fr-grid-row--gutters fr-px-2w">
       <div class="fr-col-12">
         <StatsFilters
