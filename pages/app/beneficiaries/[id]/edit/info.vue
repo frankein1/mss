@@ -119,7 +119,10 @@
     target: string | undefined,
     validate: boolean
   ) => {
-    if (similarBeneficiary.value) {
+    if (
+      similarBeneficiary.value &&
+      beneficiaryIdentification.value?.id !== similarBeneficiary.value.id
+    ) {
       useBeneficiaryFormSimilarModal(similarBeneficiary.value, () => {
         saveBeneficiary(beneficiary, target, validate)
       })
