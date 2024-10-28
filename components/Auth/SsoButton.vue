@@ -55,8 +55,8 @@
               >retrouvez la FAQ de ProConnect</NuxtLink
             >
             ou
-            <a href="mailto:support@monsuivisocial.incubateur.anct.gouv.fr"
-              >contactez-nous</a
+            <NuxtLink to="mailto:support@monsuivisocial.incubateur.anct.gouv.fr"
+              >contactez-nous</NuxtLink
             >.
           </p>
         </section>

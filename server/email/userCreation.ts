@@ -35,12 +35,12 @@ Pour s'authentifier, Mon Suivi Social utilise l'outil ProConnect.
 Afin d'accéder à l'application :
 <br/><br/>
 <ol>
-<li><a href=${registrationUrl}>Créer son compte ProConnect</a> en utilisant ${email} comme adresse e-mail ;</li>
+<li><a href=${registrationUrl} rel="noopener noreferrer">Créer son compte ProConnect</a> en utilisant ${email} comme adresse e-mail ;</li>
 <li>Renseignez votre n° de Siret. Celui transmis par votre responsable est le : ${siret} ;</li>
 <li>Vérifiez votre adresse mail puis connectez-vous à Mon suivi Social !</li>
 </ol>
 <br/><br/>
-N’hésitez pas à parcourir notre <a href=${urlGetStarted}>guide d’utilisation</a> en cas de difficulté : tous les détails s’y trouvent pour vous connecter pas à pas !
+N’hésitez pas à parcourir notre <a href=${urlGetStarted} rel="noopener noreferrer">guide d’utilisation</a> en cas de difficulté : tous les détails s’y trouvent pour vous connecter pas à pas !
 Vous pouvez également nous contacter à l’adresse : ${from}.
 <br/><br/><br/>
 L'équipe de Mon Suivi Social`

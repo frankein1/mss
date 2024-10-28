@@ -61,7 +61,7 @@ Veuillez cliquer sur le lien ci-dessous pour accéder à votre espace Administra
 <br/><br/>
 <a href="${
     config.public.appUrl
-  }${routes.auth.AuthValidateToken.path()}?token=${accessToken}&provider=admin">Accéder à mon Mon Suivi Social</a>
+  }${routes.auth.AuthValidateToken.path()}?token=${accessToken}&provider=admin" rel="noopener noreferrer">Accéder à mon Mon Suivi Social</a>
   <br/><br/>
 L'équipe de Mon Suivi Social
 `
