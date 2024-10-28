@@ -27,6 +27,10 @@ async function importStructures(job: JobResult) {
     return job
   }
 
+  job.result.nCreated = 0
+  job.result.nUpdated = 0
+  job.result.nImported = 0
+
   for (let i = 0; i < res.data.length; i++) {
     const input = res.data[i]
 
