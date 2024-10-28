@@ -6,7 +6,7 @@ import { formatDate } from '~/utils/formatDate'
 
 const JOB_NAME = 'brevo-export'
 
-async function exportContacts() {
+async function exportContacts(all: boolean) {
   const ongoing = await JobResultService.getOngoingJob()
   if (ongoing) {
     return
@@ -15,24 +15,26 @@ async function exportContacts() {
   const job = await JobResultService.create({
     name: JOB_NAME,
     errors: [],
-    result: {
-      nTotal: 0,
-      nInDatabase: 0,
-      nImported: 0,
-      nCreated: 0,
-      nUpdated: 0
-    }
+    result: { exportStartDate: null, nImported: 0, processId: null }
   })
 
+  // Export all data except if a former successful job exists AND it is specified to export only new data
   let startDate = new Date(0)
 
-  const lastJob = await JobResultService.getLastSuccessfullJob(JOB_NAME)
-  if (lastJob) {
+  const lastJob = await JobResultService.getLastSuccessfulJob(JOB_NAME)
+  if (lastJob && !all) {
     startDate = lastJob.startDate
   }
 
   const users = await getUsers(startDate)
   if (users.length === 0) {
+    await JobResultService.update({
+      id: job.id,
+      endDate: new Date(),
+      status: JobStatus.Success,
+      errors: [],
+      result: { exportStartDate: startDate, nImported: 0, processId: null }
+    })
     return
   }
 
@@ -61,11 +63,8 @@ async function exportContacts() {
           status: JobStatus.Success,
           errors: [],
           result: {
-            nTotal: users.length,
-            nInDatabase: 0,
-            nImported: 0,
-            nCreated: 0,
-            nUpdated: 0,
+            exportStartDate: startDate,
+            nImported: users.length,
             processId: data.body.processId
           }
         })
@@ -76,13 +75,7 @@ async function exportContacts() {
           status: JobStatus.Failure,
           endDate: new Date(),
           errors: [{ category: JOB_NAME, error: `${error}`, status: null }],
-          result: {
-            nTotal: 0,
-            nInDatabase: 0,
-            nImported: 0,
-            nCreated: 0,
-            nUpdated: 0
-          }
+          result: { nImported: 0, exportStartDate: startDate, processId: null }
         })
       }
     )
@@ -111,6 +104,7 @@ function buildJson(users: (User & { structure: Structure | null })[]) {
         NOM: lastName,
         ROLE: role,
         TYPE_STRUCTURE: structure?.type || '',
+        SIRET_STRUCTURE: structure?.siret || '',
         NOM_STRUCTURE: structure?.name || '',
         DERNIERE_CONNEXION_STRUCTURE: formatDate(
           structure?.lastAccess,

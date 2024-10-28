@@ -17,7 +17,7 @@
         >
           <li>
             <DsfrButton
-              label="Data Inclusion > maj structures"
+              label="Data Inclusion > maj des structures"
               type="button"
               :disabled="launching"
               @click="onLaunch"
@@ -25,10 +25,18 @@
           </li>
           <li>
             <DsfrButton
-              label="Brevo > export contacts"
+              label="Brevo > export des contacts"
               type="button"
               :disabled="launching"
-              @click="onBrevoExport"
+              @click="onBrevoExport(false)"
+            />
+          </li>
+          <li>
+            <DsfrButton
+              label="Brevo > mise à jour de tous les contacts"
+              type="button"
+              :disabled="launching"
+              @click="onBrevoExport(true)"
             />
           </li>
           <li>
@@ -111,9 +119,9 @@
     })
   }
 
-  function onBrevoExport() {
+  function onBrevoExport(all = false) {
     useTrpcMutation({
-      mutation: () => trpcClient.admin.launchBrevoExport.mutate(),
+      mutation: () => trpcClient.admin.launchBrevoExport.mutate({ all }),
       isSubmitting: launching,
       onSuccess: launched => {
         if (launched) {

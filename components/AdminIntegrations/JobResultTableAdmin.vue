@@ -15,7 +15,8 @@
 
         <thead>
           <tr>
-            <th scope="col">Lancement automatique</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Lancement automatisé</th>
             <th scope="col">Statut</th>
             <TableSortableHeader
               :sort="sort.startDate"
@@ -24,6 +25,7 @@
             />
             <th scope="col">Fin de l'exécution</th>
             <th scope="col">Durée en secondes</th>
+            <th scope="col">Date début import</th>
             <th scope="col">Importées</th>
             <th scope="col">Créées</th>
             <th scope="col">Mises à jour</th>
@@ -38,6 +40,9 @@
             :key="job.id"
           >
             <td>
+              {{ job.name }}
+            </td>
+            <td>
               {{ (job.name.match('cron')?.length || 0) > 0 ? 'Oui' : 'Non' }}
             </td>
             <td>
@@ -50,6 +55,9 @@
             <td>{{ formatDate(job.startDate, 'DD/MM/YYYY HH:mm') }}</td>
             <td>{{ formatDate(job.endDate, 'DD/MM/YYYY HH:mm') }}</td>
             <td>{{ job.durationInSeconds }}</td>
+            <td>
+              {{ formatDate(job.result.exportStartDate, 'DD/MM/YYYY HH:mm') }}
+            </td>
             <td>{{ job.result.nImported }}</td>
             <td>{{ job.result.nCreated }}</td>
             <td>{{ job.result.nUpdated }}</td>
