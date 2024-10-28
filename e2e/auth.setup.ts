@@ -7,20 +7,26 @@ async function authenticate(
   newUser = false
 ) {
   await page.goto('/auth/login')
-  await page.getByRole('link', { name: /inclusionconnect/i }).click()
+  await page
+    .getByRole('link', { name: /s'identifier avec proconnect/i })
+    .click()
 
-  await page.waitForURL(/connect.inclusion.beta.gouv.fr/)
+  await page.waitForURL(/fca.integ01.dev-agentconnect.fr/, {
+    waitUntil: 'networkidle'
+  })
+  await page.getByLabel('Email professionnel').fill(username)
+  await page.getByRole('button', { name: /^continuer$/i }).click()
 
-  await page.getByLabel('Adresse e-mail').fill(username)
-  await page.getByLabel('Mot de passe').fill(password)
-  await page.getByRole('button', { name: /connexion/i }).click()
+  await page.waitForURL(/moncomptepro.beta.gouv.fr/)
+  await page.getByLabel('Renseignez votre mot de passe').fill(password)
+  await page.getByRole('button', { name: /identifier/i }).click()
 
   // Sometimes login flow sets cookies in the process of several redirects.
   // Wait for the final URL to ensure that the cookies are actually set.
   await page.waitForURL(newUser ? /\/cgu/ : /\/app\/overview/)
 }
 
-setup.skip()
+// setup.skip()
 
 setup('authenticate as Structure Manager Jeanne', async ({ page }) => {
   const managerFile = 'playwright/.auth/structure-manager.json'
@@ -31,7 +37,7 @@ setup('authenticate as Structure Manager Jeanne', async ({ page }) => {
   await page.context().storageState({ path: managerFile })
 })
 
-setup('authenticate as Social Worker Jean', async ({ page }) => {
+setup.skip('authenticate as Social Worker Jean', async ({ page }) => {
   const workerFile = 'playwright/.auth/social-worker.json'
   const username = process.env.SOCIAL_WORKER_EMAIL || ''
   const pwd = process.env.SOCIAL_WORKER_PASSWORD || ''
@@ -40,7 +46,7 @@ setup('authenticate as Social Worker Jean', async ({ page }) => {
   await page.context().storageState({ path: workerFile })
 })
 
-setup('authenticate as Structure Manager Anita', async ({ page }) => {
+setup.skip('authenticate as Structure Manager Anita', async ({ page }) => {
   const managerFile = 'playwright/.auth/structure-manager-new-user.json'
   const username = process.env.STRUCTURE_MANAGER_NEW_USER_EMAIL || ''
   const pwd = process.env.STRUCTURE_MANAGER_NEW_USER_PASSWORD || ''
@@ -50,7 +56,7 @@ setup('authenticate as Structure Manager Anita', async ({ page }) => {
   await page.context().storageState({ path: managerFile })
 })
 
-setup('authenticate as Social Worker Mehdi', async ({ page }) => {
+setup.skip('authenticate as Social Worker Mehdi', async ({ page }) => {
   const workerFile = 'playwright/.auth/social-worker-new-user.json'
   const username = process.env.SOCIAL_WORKER_NEW_USER_EMAIL || ''
   const pwd = process.env.SOCIAL_WORKER_NEW_USER_PASSWORD || ''
@@ -60,11 +66,14 @@ setup('authenticate as Social Worker Mehdi', async ({ page }) => {
   await page.context().storageState({ path: workerFile })
 })
 
-setup('authenticate as Structure Manager Ministère Laura', async ({ page }) => {
-  const managerFile = 'playwright/.auth/structure-manager-ministere.json'
-  const username = process.env.STRUCTURE_MANAGER_MINISTERE_EMAIL || ''
-  const pwd = process.env.STRUCTURE_MANAGER_MINISTERE_PASSWORD || ''
+setup.skip(
+  'authenticate as Structure Manager Ministère Laura',
+  async ({ page }) => {
+    const managerFile = 'playwright/.auth/structure-manager-ministere.json'
+    const username = process.env.STRUCTURE_MANAGER_MINISTERE_EMAIL || ''
+    const pwd = process.env.STRUCTURE_MANAGER_MINISTERE_PASSWORD || ''
 
-  await authenticate(page, username, pwd)
-  await page.context().storageState({ path: managerFile })
-})
+    await authenticate(page, username, pwd)
+    await page.context().storageState({ path: managerFile })
+  }
+)
