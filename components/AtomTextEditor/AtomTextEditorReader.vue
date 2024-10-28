@@ -1,17 +1,13 @@
 <template>
-  <client-only>
-    <EditorContent
-      :editor="editor"
-      :editable="false"
-      class="tiptap-editor-reader"
-    />
-  </client-only>
+  <EditorContent
+    :editor="editor"
+    :editable="false"
+    class="tiptap-editor-reader"
+  />
 </template>
 
 <script setup lang="ts">
   import { EditorContent, useEditor } from '@tiptap/vue-3'
-  import StarterKit from '@tiptap/starter-kit'
-  import Link from '@tiptap/extension-link'
 
   const props = withDefaults(
     defineProps<{
