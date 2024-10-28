@@ -1,20 +1,29 @@
-import { emptySchema } from '~/server/schema'
+import {
+  exportBrevoContactsSchema,
+  ExportBrevoContactsInput
+} from '~/server/schema'
 import { AdminContext } from '~/server/trpc'
 import { AdminService, JobResultService } from '~/server/services'
 import { createMutation } from '~/server/route'
 
-const adminHandler = async ({ ctx: _ctx }: { ctx: AdminContext }) => {
+const adminHandler = async ({
+  ctx: _ctx,
+  input
+}: {
+  ctx: AdminContext
+  input: ExportBrevoContactsInput
+}) => {
   const ongoingJob = await JobResultService.getOngoingJob()
   if (ongoingJob) {
     return false
   }
 
-  AdminService.launchBrevoExport()
+  AdminService.launchBrevoExport(input.all)
 
   return true
 }
 
 export const launchBrevoExport = createMutation({
-  inputValidation: emptySchema,
+  inputValidation: exportBrevoContactsSchema,
   adminHandler
 })
