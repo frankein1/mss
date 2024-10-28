@@ -176,7 +176,7 @@
           <AtomTextEditorReader
             :value="helpRequest.fileInstruction.socialSupport.synthesisRichText"
             :raw-text="helpRequest.fileInstruction.socialSupport.synthesis"
-            @vue:mounted="onUpdated"
+            @on-updated="onUpdated"
           />
         </template>
       </div>

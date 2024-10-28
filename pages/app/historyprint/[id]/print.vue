@@ -194,6 +194,7 @@
 
   const onUpdated = () => {
     window.print()
+    window.addEventListener('afterprint', onAfterPrint)
   }
 
   onMounted(() => {

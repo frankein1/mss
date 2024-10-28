@@ -71,7 +71,7 @@
             <AtomTextEditorReader
               :value="followup.synthesisRichText"
               :raw-text="followup.synthesis"
-              @vue:mounted="onUpdated"
+              @on-updated="onUpdated"
             />
           </template>
 

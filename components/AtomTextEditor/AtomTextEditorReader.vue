@@ -20,6 +20,10 @@
     }
   )
 
+  const emit = defineEmits<{
+    onUpdated: []
+  }>()
+
   const editor = useEditor({
     content: props.value ? JSON.parse(props.value) : props.rawText,
     editable: false,
@@ -32,6 +36,9 @@
       attributes: {
         class: 'custom-tiptap'
       }
+    },
+    onCreate() {
+      emit('onUpdated')
     }
   })
 </script>

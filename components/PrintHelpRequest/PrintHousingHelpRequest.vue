@@ -237,7 +237,7 @@
             :raw-text="
               housingHelpRequest.fileInstruction.socialSupport.synthesis
             "
-            @vue:mounted="onUpdated"
+            @on-updated="onUpdated"
           />
         </template>
       </div>
