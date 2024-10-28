@@ -5,13 +5,19 @@
         v-if="fileInstructionType === 'Financial'"
         class="fr-col-12"
       >
-        <PrintFinancialHelpRequest :help-request="helpRequest" />
+        <PrintFinancialHelpRequest
+          :help-request="helpRequest"
+          @on-updated="onUpdated"
+        />
       </div>
       <div
         v-else-if="fileInstructionType === 'Other'"
         class="fr-col-12"
       >
-        <PrintOtherHelpRequest :help-request="helpRequest" />
+        <PrintOtherHelpRequest
+          :help-request="helpRequest"
+          @on-updated="onUpdated"
+        />
       </div>
     </div>
   </div>
@@ -27,4 +33,11 @@
     helpRequest: HelpRequestOutput
     fileInstructionType: FileInstructionType
   }>()
+
+  const emit = defineEmits<{
+    onUpdated: []
+  }>()
+  const onUpdated = () => {
+    emit('onUpdated')
+  }
 </script>

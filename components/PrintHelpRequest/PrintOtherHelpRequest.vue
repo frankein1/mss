@@ -149,6 +149,7 @@
           <AtomTextEditorReader
             :value="helpRequest.fileInstruction.socialSupport.synthesisRichText"
             :raw-text="helpRequest.fileInstruction.socialSupport.synthesis"
+            @vue:updated="onUpdated"
           />
         </template>
       </div>
@@ -165,6 +166,13 @@
   const props = defineProps<{
     helpRequest: HelpRequestOutput
   }>()
+  const emit = defineEmits<{
+    onUpdated: []
+  }>()
+  const onUpdated = () => {
+    emit('onUpdated')
+  }
+
   const refusalReason = computed(() => {
     if (!props.helpRequest.fileInstruction.refusalReason) {
       return null

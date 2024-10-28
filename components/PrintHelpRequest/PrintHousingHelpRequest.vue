@@ -237,6 +237,7 @@
             :raw-text="
               housingHelpRequest.fileInstruction.socialSupport.synthesis
             "
+            @vue:updated="onUpdated"
           />
         </template>
       </div>
@@ -266,6 +267,12 @@
     housingHelpRequest: HousingHelpRequestOutput
   }>()
 
+  const emit = defineEmits<{
+    onUpdated: []
+  }>()
+  const onUpdated = () => {
+    emit('onUpdated')
+  }
   const askedHousing = computed(() => {
     if (!props.housingHelpRequest.askedHousing?.length) {
       return undefined

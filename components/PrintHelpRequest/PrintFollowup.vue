@@ -62,10 +62,6 @@
             :title="followupFieldLabels.dueDate"
             :content="followup.dueDate ? formatDate(followup.date) : null"
           />
-          <PrintDetailItem
-            :title="followupFieldLabels.synthesis"
-            :content="followup.synthesis"
-          />
           <template v-if="followup.synthesisRichText || followup.synthesis">
             <li class="details">
               <span class="fr-text--bold"
@@ -75,6 +71,7 @@
             <AtomTextEditorReader
               :value="followup.synthesisRichText"
               :raw-text="followup.synthesis"
+              @vue:updated="onUpdated"
             />
           </template>
 
@@ -107,4 +104,10 @@
   defineProps<{
     followup: FollowupOutput
   }>()
+  const emit = defineEmits<{
+    onUpdated: []
+  }>()
+  const onUpdated = () => {
+    emit('onUpdated')
+  }
 </script>

@@ -22,17 +22,22 @@
       <PrintHelpRequest
         :help-request="printInformations.helpRequest"
         :file-instruction-type="printInformations.fileInstructionType"
+        @on-updated="onUpdated"
       />
     </template>
 
     <template v-else-if="printInformations?.housingHelpRequest">
       <PrintHousingHelpRequest
         :housing-help-request="printInformations.housingHelpRequest"
+        @on-updated="onUpdated"
       />
     </template>
 
     <template v-else-if="printInformations?.followup">
-      <PrintFollowup :followup="printInformations.followup" />
+      <PrintFollowup
+        :followup="printInformations.followup"
+        @on-updated="onUpdated"
+      />
     </template>
   </div>
 </template>
@@ -187,9 +192,12 @@
     }
   }
 
+  const onUpdated = () => {
+    window.print()
+  }
+
   onMounted(() => {
     window.addEventListener('afterprint', onAfterPrint)
-    window.print()
   })
   onUnmounted(() => {
     window.removeEventListener('afterprint', onAfterPrint)
