@@ -213,16 +213,20 @@
     }
   }
 
-  button {
-    margin: 0 0.5rem;
+  button,
+  .menubar__button {
+    margin: 0;
+    width: 46px;
 
     img {
       margin-top: 2px;
     }
 
     &.is-active {
+      background-color: var(--primary-active);
+
       & > img {
-        filter: opacity(0.5);
+        filter: invert(1);
       }
     }
   }
