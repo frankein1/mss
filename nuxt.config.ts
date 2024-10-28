@@ -13,7 +13,8 @@ const connectSrcCsp = [
   // FIXME: Use runtime config once it is allowed by nuxt-security - See https://github.com/Baroshem/nuxt-security/pull/233
   'https://matomo.dev.incubateur.anct.gouv.fr',
   'https://matomo.incubateur.anct.gouv.fr',
-  'https://sentry.incubateur.net'
+  'https://sentry.incubateur.net',
+  'https://conversations-widget.brevo.com/'
 ]
 
 export default defineNuxtConfig({
