@@ -15,7 +15,7 @@ L'équipe Mon Suivi Social`
 <br/><br/>
 Suite aux relances effectuées nous vous informons que votre espace de travail sur Mon Suivi Social  a été supprimé ainsi que l'ensemble des informations consignées.
 <br/><br/>
-Certaines données anonymisées alimentent <a href="https://monsuivisocial.dev.incubateur.anct.gouv.fr/statistiques">les statistiques d'usage</a> de Mon Suivi Social.
+Certaines données anonymisées alimentent <a href="https://monsuivisocial.dev.incubateur.anct.gouv.fr/statistiques" rel="noopener noreferrer">les statistiques d'usage</a> de Mon Suivi Social.
 <br/><br/>
 Nous restons à votre disposition pour davantage d'informations.
 <br/><br/>

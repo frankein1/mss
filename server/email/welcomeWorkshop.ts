@@ -21,7 +21,7 @@ Vous avez encore des questions ou des difficultés sur la prise en main de l'out
 <br/><br/>
 Ce sera l'occasion de revoir ensemble les principales fonctionnalités de Mon Suivi Social et de répondre à toutes vos questions.
 <br/><br/>
-Pour y participer, il vous suffit de vous inscrire via ce formulaire : <a href="https://framaforms.org/inscription-webinaire-premiers-pas-sur-mon-suivi-social-1700152784">Inscription webinaire premiers pas</a>.
+Pour y participer, il vous suffit de vous inscrire via ce formulaire : <a href="https://framaforms.org/inscription-webinaire-premiers-pas-sur-mon-suivi-social-1700152784" rel="noopener noreferrer">Inscription webinaire premiers pas</a>.
 <br/><br/>
 A bientôt,
 <br/><br/>
