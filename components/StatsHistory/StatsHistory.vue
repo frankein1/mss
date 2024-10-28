@@ -386,6 +386,8 @@
     }
   }
 
+  // Min height is overloaded from tab.scss since no multiselect component is
+  // used in this panel
   .fr-tabs__panel {
     min-height: 0;
   }
