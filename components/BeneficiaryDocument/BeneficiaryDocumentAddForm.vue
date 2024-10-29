@@ -28,13 +28,13 @@
       required
     />
     <MultiSelect
-      class="fr-mb-2w"
+      class="fr-mb-3w"
       name="tags"
       :label="documentFieldLabels.tags"
       :options="documentTagKeys.options"
     />
     <VeeCheckbox
-      class="fr-mb-2w"
+      class="fr-mb-3w"
       :label="documentFieldLabels.confidential"
       name="confidential"
     />
