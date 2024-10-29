@@ -26,15 +26,18 @@
   const { isAuthenticated, getUserName } = useAuthState()
 
   const { application } = usePermissions()
+  const { isProConnect } = useAuthProvider()
 
   const menus = computed(() => {
     const menus = []
 
-    menus.push({
-      label: 'Mon compte',
-      to: routes.user.AppAccount.path(),
-      icon: 'fr-icon-user-line'
-    })
+    if (!isProConnect.value) {
+      menus.push({
+        label: 'Mon compte',
+        to: routes.user.AppAccount.path(),
+        icon: 'fr-icon-user-line'
+      })
+    }
     if (application.value.module.users) {
       menus.push({
         label: 'Utilisateurs',
