@@ -176,16 +176,6 @@ export class ProConnectClient {
     })
     return `${this.issuer}/session/end?${params}`
   }
-
-  public getEditPasswordUrl() {
-    const proConnectAccountUrlBase = `${this.issuer}/accounts/my-account/`
-
-    const params = new URLSearchParams({
-      referrer: this.clientId,
-      referrer_uri: this.postPasswordEditRedirectUri
-    })
-    return `${proConnectAccountUrlBase}?${params}`
-  }
 }
 
 let client: ProConnectClient
@@ -241,7 +231,7 @@ export type ProConnectJwtData = {
 export const parseProConnectJwt = (token: string): ProConnectJwtData => {
   try {
     return JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString())
-  } catch (e) {
+  } catch {
     throw new Error('token is not parsable')
   }
 }

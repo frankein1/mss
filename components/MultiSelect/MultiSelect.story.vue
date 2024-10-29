@@ -171,8 +171,4 @@
   const { onSubmit } = useCatchFormErrors(handleSubmit, values => {
     console.log(values)
   })
-
-  const changeFilter = (values: string[]) => {
-    console.log(values)
-  }
 </script>

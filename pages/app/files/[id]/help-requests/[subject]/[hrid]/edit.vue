@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { FileInstructionType, SocialSupportSubject } from '@prisma/client'
+  import { FileInstructionType } from '@prisma/client'
   import { EditHelpRequestInput } from '~/server/schema'
   import { BeneficiaryTab } from '~/utils/constants/beneficiary'
   import { fileInstructionTypePictos } from '~/client/options'

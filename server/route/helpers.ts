@@ -9,7 +9,7 @@ export const validateRichTextSchema = (richText: string): boolean => {
     const contentNode = Node.fromJSON(schema, doc)
     contentNode.check()
     return true
-  } catch (e) {
+  } catch {
     return false
   }
 }

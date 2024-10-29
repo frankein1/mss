@@ -104,7 +104,7 @@
   const editor = useEditor({
     content: displayedValue.value,
     enableContentCheck: true,
-    onContentError({ editor, error, disableCollaboration }) {
+    onContentError({ error }) {
       console.error(error)
     },
     extensions: tiptapExtensions,
