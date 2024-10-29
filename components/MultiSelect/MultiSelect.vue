@@ -36,7 +36,9 @@
       :aria-describedby="ariaDescribedby"
       :aria-labelledby="ariaLabelledBy"
       @click="isOpen = !isOpen"
-      @keydown.esc="isOpen = false"
+      @keydown.prevent.space="isOpen = !isOpen"
+      @keydown.prevent.down="isOpen = !isOpen"
+      @keydown.prevent.esc="isOpen = false"
     />
     <!-- dropdown -->
     <Transition name="fade-in">
@@ -44,7 +46,7 @@
         v-if="isOpen"
         ref="target"
         :class="['multiselect-content', optionsClass]"
-        @keydown.esc="isOpen = false"
+        @keydown.prevent.esc="isOpen = false"
       >
         <!-- bloc principal -->
         <div class="px-4 pt-4">

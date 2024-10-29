@@ -7,6 +7,7 @@
     :checked
     :disabled
     @change="onchange(option)"
+    @keydown.prevent.space="onchange(option)"
   />
   <label
     class="fr-label"
