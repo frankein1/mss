@@ -43,6 +43,8 @@
 </template>
 
 <script setup lang="ts">
+  import { Fragment, Slice } from '@tiptap/pm/model'
+  import type { Node } from '@tiptap/pm/model'
   import { EditorContent, JSONContent, useEditor } from '@tiptap/vue-3'
 
   const props = withDefaults(
@@ -110,8 +112,26 @@
       attributes: {
         class: 'custom-tiptap'
       },
+      // Transform plain text pasted
       transformPastedText(pasted: string) {
         return pasted.replace(/[<>]/g, '')
+      },
+      // Transform rich text pasted (from email for instance)
+      transformPasted(slice) {
+        const transformed: Node[] = []
+
+        slice.content.forEach(node => {
+          const updatedNode = removeAngleBrackets(node)
+          if (updatedNode) {
+            transformed.push(updatedNode)
+          }
+        })
+
+        return new Slice(
+          Fragment.fromArray(transformed),
+          slice.openStart,
+          slice.openEnd
+        )
       }
     },
     onUpdate: () => {
@@ -121,6 +141,34 @@
       emit('update', html.value, json.value, rawText.value)
     }
   })
+
+  /** Create a copy of ProseMirror node with modified content
+   * Recursively inspect the Node tree to find text nodes and
+   * remove angle brackets from their content
+   */
+  function removeAngleBrackets(node: Node) {
+    if (node.isText) {
+      if (!node.text) {
+        return null
+      }
+
+      const replaced = node.text.replace(/[<>]/g, '') || ''
+      if (!replaced) {
+        return null
+      }
+
+      return node.type.schema.text(replaced, node.marks)
+    }
+
+    const transformed: Node[] = []
+    node.content.forEach(child => {
+      const updatedChild = removeAngleBrackets(child)
+      if (updatedChild) {
+        transformed.push(updatedChild)
+      }
+    })
+    return node.type.create(node.attrs, transformed, node.marks)
+  }
 
   onMounted(() => {
     html.value = editor.value?.getHTML()
