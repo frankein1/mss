@@ -99,9 +99,7 @@
   const { application } = usePermissions()
   const similarBeneficiary = ref<SimilarBeneficiary>(undefined)
 
-  const props = defineProps<{
-    initialBeneficiary: BeneficiaryIdentification | null
-  }>()
+  defineProps<{ initialBeneficiary: BeneficiaryIdentification | null }>()
 
   const emit = defineEmits<{
     update: [similarBeneficiary: SimilarBeneficiary]

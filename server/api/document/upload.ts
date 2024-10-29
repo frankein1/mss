@@ -44,7 +44,7 @@ export default defineEventHandler(async event => {
   let input
   try {
     input = addDocumentSchema.parse(data)
-  } catch (e) {
+  } catch {
     throw createError({
       statusCode: 400,
       message: 'Les données entrantes ne sont pas valides'

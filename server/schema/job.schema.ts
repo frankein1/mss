@@ -36,6 +36,7 @@ const jobErrorSchema = z.object({
 
 type JobError = z.infer<typeof jobErrorSchema>
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const createJobResultSchema = z.object({
   name: z.enum([
     'data-inclusion-structure-import-cron',

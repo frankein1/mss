@@ -30,7 +30,6 @@
     typeSuiviKeys,
     TypeSuivi
   } from '~/client/options'
-  import { formatDate } from '~/utils/formatDate'
   import {
     EventCategory,
     BeneficiaryHistoryFilterEventAction,
