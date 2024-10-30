@@ -45,7 +45,11 @@
       <div
         v-if="isOpen"
         ref="target"
-        :class="['multiselect-content', optionsClass]"
+        :class="[
+          'multiselect-content',
+          optionsClass,
+          { 'dropdown-relative': !dropdownOver }
+        ]"
         @keydown.prevent.esc="isOpen = false"
       >
         <!-- bloc principal -->
@@ -137,6 +141,7 @@
       isSearchable?: boolean
       required?: boolean
       hint?: string
+      dropdownOver?: boolean
     }>(),
     {
       optionsClass: '',
@@ -148,7 +153,8 @@
       ariaLabelledBy: '',
       isSearchable: true,
       required: false,
-      hint: ''
+      hint: '',
+      dropdownOver: true
     }
   )
 
@@ -290,6 +296,10 @@
       position: absolute;
       width: 100%;
       background: #fff;
+
+      &.dropdown-relative {
+        position: relative;
+      }
     }
 
     .scroll-container {
