@@ -31,6 +31,7 @@
           </NuxtLink>
         </div>
         <ul class="fr-sidemenu__list">
+          <!-- extraneous emits come from custom nuxt-link https://github.com/nuxt/nuxt/pull/28738 fixed in 3.13.1 -->
           <NuxtLink
             v-for="menuItem in menuItems"
             v-slot="{ href, navigate, isActive }"
