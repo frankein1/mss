@@ -3,6 +3,7 @@ import { StructureRepo } from '~/server/database'
 import { useScheduler } from '#scheduler'
 import { createEmail } from '~/server/query'
 import { getInactiveStructureAlert } from '~/server/email'
+import { UserStatus } from '@prisma/client'
 
 export default defineNitroPlugin(() => {
   startScheduler()
@@ -37,7 +38,14 @@ async function sendFirstEmail() {
       ],
       deactivationAlertEmail: 0
     },
-    select: { id: true, users: true }
+    select: {
+      id: true,
+      users: {
+        where: {
+          status: UserStatus.Active
+        }
+      }
+    }
   })
 
   await sendEmail(inactiveStructures.flatMap(s => s.users))
@@ -63,7 +71,14 @@ async function sendSecondEmail() {
       },
       deactivationAlertEmail: 1
     },
-    select: { id: true, users: true }
+    select: {
+      id: true,
+      users: {
+        where: {
+          status: UserStatus.Active
+        }
+      }
+    }
   })
 
   await sendEmail(inactiveStructures.flatMap(s => s.users))

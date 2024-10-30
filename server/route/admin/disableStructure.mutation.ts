@@ -1,4 +1,4 @@
-import { UserRole } from '@prisma/client'
+import { UserRole, UserStatus } from '@prisma/client'
 import { prismaClient } from '~/server/prisma'
 import {
   BeneficiaryRelativeRepo,
@@ -43,7 +43,8 @@ const adminHandler = async ({
       name: true,
       users: {
         where: {
-          role: UserRole.StructureManager
+          role: UserRole.StructureManager,
+          status: UserStatus.Active
         }
       }
     }
