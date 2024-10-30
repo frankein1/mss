@@ -1,32 +1,27 @@
 <template>
-  <div class="main-container fr-p-2w">
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les statistiques de la répartion des structures de rattachement n'ont pas pu être chargées."
-    />
-    <template v-else-if="ministereStructureStats">
-      <h4 class="fr-h5">Structures de rattachement</h4>
-      <StatsList
-        v-if="ministereStructureStats.length"
-        :total-count="beneficiaryCount"
-        :stats="ministereStructureStats"
-        stats-bar
-      />
-      <p v-else>
-        Commencez à
-        <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
-          >créer des fiches de bénéficiaires</NuxtLink
-        >
-        pour voir apparaître les statistiques de la répartition des structures
-        de rattachement.
-      </p>
-    </template>
-  </div>
+  <AtomLoader
+    v-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomAlert
+    v-else-if="error"
+    :alert-type="AlertType.Error"
+    message="Les statistiques de la répartion des structures de rattachement n'ont pas pu être chargées."
+  />
+  <StatsList
+    v-if="ministereStructureStats.length"
+    :total-count="beneficiaryCount"
+    :stats="ministereStructureStats"
+    stats-bar
+  />
+  <p v-else>
+    Commencez à
+    <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
+      >créer des fiches de bénéficiaires</NuxtLink
+    >
+    pour voir apparaître les statistiques de la répartition des structures de
+    rattachement.
+  </p>
 </template>
 
 <script setup lang="ts">

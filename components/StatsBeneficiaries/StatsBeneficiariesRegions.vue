@@ -1,31 +1,27 @@
 <template>
-  <div class="main-container fr-p-2w">
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les statistiques de la répartion des régions n'ont pas pu être chargées."
-    />
-    <template v-else-if="regionsStats">
-      <h4 class="fr-h5">Régions</h4>
-      <StatsList
-        v-if="regionsStats.length"
-        :total-count="beneficiaryCount"
-        :stats="regionsStats"
-        stats-bar
-      />
-      <p v-else>
-        Commencez à
-        <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
-          >créer des fiches de bénéficiaires</NuxtLink
-        >
-        pour voir apparaître les statistiques de la répartition des régions.
-      </p>
-    </template>
-  </div>
+  <AtomLoader
+    v-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomAlert
+    v-else-if="error"
+    :alert-type="AlertType.Error"
+    message="Les statistiques de la répartion des régions n'ont pas pu être chargées."
+  />
+
+  <StatsList
+    v-if="regionsStats.length"
+    :total-count="beneficiaryCount"
+    :stats="regionsStats"
+    stats-bar
+  />
+  <p v-else>
+    Commencez à
+    <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
+      >créer des fiches de bénéficiaires</NuxtLink
+    >
+    pour voir apparaître les statistiques de la répartition des régions.
+  </p>
 </template>
 
 <script lang="ts" setup>
