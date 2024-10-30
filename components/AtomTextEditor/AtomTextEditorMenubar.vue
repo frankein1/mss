@@ -183,16 +183,6 @@
 </script>
 
 <style lang="scss" scoped>
-  // Button
-  .menubar__button {
-    width: 40px;
-    height: 40px;
-
-    &:active {
-      background: none;
-    }
-  }
-
   ul {
     padding: 0;
     display: flex;
@@ -228,6 +218,15 @@
       & > img {
         filter: invert(1);
       }
+    }
+  }
+
+  .menubar__button {
+    width: 40px;
+    height: 40px;
+
+    &:active {
+      background: none;
     }
   }
 </style>
