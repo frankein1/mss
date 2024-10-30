@@ -57,6 +57,15 @@ variables:
   image:
     name: registry.gitlab.com/vigigloo/tools/pnpm:node-${NODE_VERSION}_pnpm-${PNPM_VERSION}
 
+commitlint:
+  stage: test
+  interruptible: true
+  image:
+    name: registry.hub.docker.com/commitlint/commitlint:latest
+    entrypoint: ['']
+  script:
+    - echo "${CI_COMMIT_MESSAGE}" | commitlint
+
 pnpm:test:
   extends: .vigigloo:pnpm:test
   interruptible: true
