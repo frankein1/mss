@@ -1,34 +1,28 @@
 <template>
-  <div class="main-container fr-p-2w">
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les statistiques de la répartion des départements ou services de l'administration centrale n'ont pas pu être chargées."
-    />
-    <template v-else-if="ministereDepartementServiceAcStats">
-      <h4 class="fr-h5">
-        Départements ou services de l'administration centrale
-      </h4>
-      <StatsList
-        v-if="ministereDepartementServiceAcStats.length"
-        :total-count="beneficiaryCount"
-        :stats="ministereDepartementServiceAcStats"
-        stats-bar
-      />
-      <p v-else>
-        Commencez à
-        <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
-          >créer des fiches de bénéficiaires</NuxtLink
-        >
-        pour voir apparaître les statistiques de la répartition des départements
-        ou services de l'administration centrale.
-      </p>
-    </template>
-  </div>
+  <AtomLoader
+    v-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomAlert
+    v-else-if="error"
+    :alert-type="AlertType.Error"
+    message="Les statistiques de la répartion des départements ou services de l'administration centrale n'ont pas pu être chargées."
+  />
+
+  <StatsList
+    v-if="ministereDepartementServiceAcStats.length"
+    :total-count="beneficiaryCount"
+    :stats="ministereDepartementServiceAcStats"
+    stats-bar
+  />
+  <p v-else>
+    Commencez à
+    <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
+      >créer des fiches de bénéficiaires</NuxtLink
+    >
+    pour voir apparaître les statistiques de la répartition des départements ou
+    services de l'administration centrale.
+  </p>
 </template>
 
 <script setup lang="ts">

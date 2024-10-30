@@ -1,31 +1,26 @@
 <template>
-  <div class="main-container fr-p-2w">
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les statistiques de la répartion des catégories n'ont pas pu être chargées."
-    />
-    <template v-else-if="ministereCategorieStats">
-      <h4 class="fr-h5">Catégories</h4>
-      <StatsList
-        v-if="ministereCategorieStats.length"
-        :total-count="beneficiaryCount"
-        :stats="ministereCategorieStats"
-        stats-bar
-      />
-      <p v-else>
-        Commencez à
-        <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
-          >créer des fiches de bénéficiaires</NuxtLink
-        >
-        pour voir apparaître les statistiques de la répartition des catégories.
-      </p>
-    </template>
-  </div>
+  <AtomLoader
+    v-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomAlert
+    v-else-if="error"
+    :alert-type="AlertType.Error"
+    message="Les statistiques de la répartion des catégories n'ont pas pu être chargées."
+  />
+  <StatsList
+    v-if="ministereCategorieStats.length"
+    :total-count="beneficiaryCount"
+    :stats="ministereCategorieStats"
+    stats-bar
+  />
+  <p v-else>
+    Commencez à
+    <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
+      >créer des fiches de bénéficiaires</NuxtLink
+    >
+    pour voir apparaître les statistiques de la répartition des catégories.
+  </p>
 </template>
 
 <script setup lang="ts">
