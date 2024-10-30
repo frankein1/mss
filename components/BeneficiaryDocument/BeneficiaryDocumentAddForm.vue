@@ -32,6 +32,7 @@
       name="tags"
       :label="documentFieldLabels.tags"
       :options="documentTagKeys.options"
+      :dropdown-over="false"
     />
     <VeeCheckbox
       class="fr-mb-3w"
