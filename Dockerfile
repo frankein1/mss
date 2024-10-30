@@ -9,7 +9,7 @@ RUN pnpm run build
 # Temposary fix due to gitlab builds failing inexplicably
 # See https://chat.incubateur.anct.gouv.fr/incubateur/pl/4r9m5p6xyj8o9mhodgmrb89aoo
 # FROM gcr.io/distroless/nodejs20-debian11
-FROM node:22-bullseye-slim
+FROM node:22-bookworm-slim
 ARG COMMIT_SHA=none
 ARG COMMIT_REF_NAME=none
 ARG COMMIT_TAG=none
