@@ -358,11 +358,6 @@
   const buttonFilter = (node: HTMLElement | Node) => {
     return (node as HTMLElement).tagName !== 'BUTTON'
   }
-  const screenshotDefaultOptions = (element: HTMLElement) => ({
-    // hack for Firefox */
-    width: element.getBoundingClientRect().width,
-    height: element.getBoundingClientRect().height
-  })
 
   const extractIds = (config: StatsCardConfig) => {
     return Object.values(config).map(item => item.id)
@@ -385,19 +380,25 @@
     if (nodes.length && nodes.length > 0) {
       nodes.forEach(async (node, i) => {
         try {
-          const blob = await domtoimage.toBlob(node, {
-            ...screenshotDefaultOptions(node),
-            filter: buttonFilter
-          })
-          const url = URL.createObjectURL(blob)
-          const a = document.createElement('a')
-          a.href = url
-          a.download = configNames[i] + '.png'
-          document.body.appendChild(a)
-          a.click()
-          // clean memory
-          document.body.removeChild(a)
-          URL.revokeObjectURL(url)
+          const scale = 1
+          domtoimage
+            .toPng(node, {
+              quality: 0.9,
+              filter: buttonFilter,
+              width: node.clientWidth * scale,
+              height: node.clientHeight * scale,
+              style: {
+                transform: 'scale(' + scale + ')',
+                transformOrigin: 'top left'
+              }
+            })
+            .then(function (dataUrl) {
+              const link = document.createElement('a')
+              link.download = configNames[i] + '.png'
+              link.href = dataUrl
+              link.click()
+              document.body.removeChild(link)
+            })
         } catch (error) {
           console.error(error)
         }
