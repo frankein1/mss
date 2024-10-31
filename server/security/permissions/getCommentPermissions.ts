@@ -9,6 +9,7 @@ export type CommentPermissions = {
   delete: boolean
 }
 
+/** Determine comment mutation permission for a specific comment */
 export const getCommentPermissions = ({
   ctx,
   comment
