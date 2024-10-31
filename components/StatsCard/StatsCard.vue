@@ -18,8 +18,7 @@
         />
       </button>
     </div>
-
-    <slot>Fallback content</slot>
+    <slot>Contenu non chargé</slot>
   </div>
 </template>
 
@@ -38,11 +37,20 @@
     return (node as HTMLElement).tagName !== 'BUTTON'
   }
 
+  const screenshotDefaultOptions = (element: HTMLElement) => ({
+    // hack for Firefox */
+    width: element.getBoundingClientRect().width,
+    height: element.getBoundingClientRect().height
+  })
+
   const copyToCliboard = async () => {
     const node = document.getElementById(props.cardId)
     if (node) {
       try {
-        const blob = await domtoimage.toBlob(node, { filter: buttonFilter })
+        const blob = await domtoimage.toBlob(node, {
+          ...screenshotDefaultOptions(node),
+          filter: buttonFilter
+        })
         navigator.clipboard.write([
           new ClipboardItem({
             'image/png': blob

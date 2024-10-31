@@ -15,9 +15,11 @@
         </h3>
         <AtomDropdown
           label="Exporter les statistiques"
+          icon="fr-icon-download-fill"
           :menus="menus"
           class="topbar__menu"
           dropdown-btn-class="fr-btn--tertiary-no-outline"
+          align-right
         />
       </div>
       <AtomAlert
@@ -212,6 +214,9 @@
   import domtoimage from 'dom-to-image-more'
   import { Menu } from '~/types/menu'
 
+  const pngDownloading = ref<boolean>(false)
+  const excelDownloading = ref<boolean>(false)
+
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
 
@@ -331,18 +336,19 @@
 
   const menus: ComputedRef<Menu[]> = computed(() => {
     // TODO: wait for all componenet to be rendered
+    // TODO: revamp dropdown menu with <VIcon />
     const menus: Menu[] = [
       {
         label: 'En images (.jpg)',
-        icon: 'fr-icon-user-line',
-        callback: () => saveAsPng()
+        icon: 'fr-icon-download-fill',
+        callback: () => saveAsPngs()
       }
     ]
 
     if (application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
-        icon: 'fr-icon-user-line',
+        icon: 'fr-icon-download-fill',
         callback: () => exportStats()
       })
     }
@@ -352,13 +358,23 @@
   const buttonFilter = (node: HTMLElement | Node) => {
     return (node as HTMLElement).tagName !== 'BUTTON'
   }
+  const screenshotDefaultOptions = (element: HTMLElement) => ({
+    // hack for Firefox */
+    width: element.getBoundingClientRect().width,
+    height: element.getBoundingClientRect().height
+  })
 
   const extractIds = (config: StatsCardConfig) => {
     return Object.values(config).map(item => item.id)
   }
+  const extractNames = (config: StatsCardConfig) => {
+    return Object.values(config).map(item => item.name)
+  }
 
-  const saveAsPng = () => {
-    const nodes = extractIds(statsCardConfig)
+  const saveAsPngs = () => {
+    const configIds = extractIds(statsCardConfig)
+    const configNames = extractNames(statsCardConfig)
+    const nodes = configIds
       .map(id => {
         const node = document.getElementById(id)
         if (node) {
@@ -367,15 +383,24 @@
       })
       .filter(node => node != null)
     if (nodes.length && nodes.length > 0) {
-      nodes.forEach((node, i) => {
-        domtoimage
-          .toPng(node, { quality: 0.95, filter: buttonFilter })
-          .then(function (dataUrl) {
-            const link = document.createElement('a')
-            link.download = 'image-' + i + '.png'
-            link.href = dataUrl
-            link.click()
+      nodes.forEach(async (node, i) => {
+        try {
+          const blob = await domtoimage.toBlob(node, {
+            ...screenshotDefaultOptions(node),
+            filter: buttonFilter
           })
+          const url = URL.createObjectURL(blob)
+          const a = document.createElement('a')
+          a.href = url
+          a.download = configNames[i] + '.png'
+          document.body.appendChild(a)
+          a.click()
+          // clean memory
+          document.body.removeChild(a)
+          URL.revokeObjectURL(url)
+        } catch (error) {
+          console.error(error)
+        }
       })
     }
   }
