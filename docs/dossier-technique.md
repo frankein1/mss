@@ -82,9 +82,9 @@ Cette API est protégée par un système de token.
 
 #### Fournisseurs d'identité
 
-| Source     | Destination      | Protocole     | Port | Localisation | Interne/URL Externe            |
-| ---------- | ---------------- | ------------- | ---- | ------------ | ------------------------------ |
-| Navigateur | InclusionConnect | HTTPS (OAuth) | 443  | France       | connect.inclusion.beta.gouv.fr |
+| Source     | Destination | Protocole     | Port | Localisation | Interne/URL Externe       |
+| ---------- | ----------- | ------------- | ---- | ------------ | ------------------------- |
+| Navigateur | ProConnect  | HTTPS (OAuth) | 443  | France       | auth.agentconnect.gouv.fr |
 
 ### Inventaire des dépendances
 
@@ -165,7 +165,7 @@ C4Container
     System_Ext(sentry, "Sentry", "Error monitoring")
 
     System_Ext(metabase, "Metabase", "Statistique publique")
-    System_Ext(brevo, "Brevo", "Emails transactionnels")
+    System_Ext(brevo, "Brevo", "Emails transactionnels et support")
     System_Ext(matomo, "Matomo", "Web analytique")
 
     Rel(web_app, sentry, "HTTPS")
@@ -182,11 +182,11 @@ C4Container
 
     Person(user, "Utilisateur⋅ice", "Agent")
 
-    System_Ext(inclusion_connect, "InclusionConnect", "")
+    System_Ext(proconnect, "ProConnect", "")
 
     Rel(user, web_app, "HTTPS redirect")
 
-    Rel(user, inclusion_connect, "HTTPS redirect")
+    Rel(user, proconnect, "HTTPS redirect")
 ```
 
 #### Échanges entre l'app et Metabase
