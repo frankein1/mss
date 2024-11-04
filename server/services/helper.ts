@@ -58,6 +58,8 @@ export function filterSocialSupport({
     beneficiary: socialSupport.beneficiary,
     beneficiaryId: socialSupport.beneficiaryId,
 
+    comments: socialSupport.comments,
+
     dueDate: show(socialSupport.dueDate, conditions.details),
 
     privateSynthesis: show(
@@ -76,7 +78,6 @@ export function filterSocialSupport({
     ),
 
     documents: show(socialSupport.documents, conditions.details),
-    comments: show(socialSupport.comments, conditions.details),
 
     ministre: show(socialSupport.ministre, conditions.minister),
     numeroPegase: show(socialSupport.numeroPegase, conditions.minister)
