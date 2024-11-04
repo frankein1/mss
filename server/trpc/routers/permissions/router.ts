@@ -4,8 +4,5 @@ import { protectedProcedure, router } from '~/server/trpc'
 export const permissionsRouter = router({
   getBeneficiaryCreationPermissions: protectedProcedure
     .input(routes.getBeneficiaryCreationPermissionsQuery.inputValidation)
-    .query(routes.getBeneficiaryCreationPermissionsQuery.execute),
-  getFileInstructionPermissions: protectedProcedure
-    .input(routes.getFileInstructionPermissionsQuery.inputValidation)
-    .query(routes.getFileInstructionPermissionsQuery.execute)
+    .query(routes.getBeneficiaryCreationPermissionsQuery.execute)
 })
