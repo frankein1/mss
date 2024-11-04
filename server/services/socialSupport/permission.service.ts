@@ -1,14 +1,6 @@
-import { SocialSupportType } from '@prisma/client'
 import { SocialSupportRepo } from '~/server/database'
 import { SecurityRuleGrantee, SecurityRuleContext } from '~/server/security'
-import {
-  FollowupPermissions,
-  getFollowupPermissions,
-  getFileInstructionPermissions,
-  getSocialSupportPermissions,
-  FileInstructionPermissions
-} from '~/server/security/permissions'
-import { FamilyFileService } from '~/server/services'
+import { getSocialSupportPermissions } from '~/server/security/permissions'
 
 export function getSocialSupportSecurityTarget(
   user: SecurityRuleGrantee,
@@ -36,34 +28,4 @@ export async function getEditionPermissions(
     familyFile: socialSupport.familyFile,
     socialSupport
   })
-}
-
-export async function getCreationPermissions(
-  ctx: SecurityRuleContext,
-  beneficiaryId: string,
-  socialSupportType: 'Followup'
-): Promise<FollowupPermissions>
-
-export async function getCreationPermissions(
-  ctx: SecurityRuleContext,
-  beneficiaryId: string,
-  socialSupportType: 'HelpRequest'
-): Promise<FileInstructionPermissions>
-
-export async function getCreationPermissions(
-  ctx: SecurityRuleContext,
-  familyFileId: string,
-  socialSupportType: SocialSupportType
-): Promise<FollowupPermissions | FileInstructionPermissions> {
-  const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
-    ctx.user,
-    familyFileId
-  )
-  if (socialSupportType === 'Followup') {
-    return getFollowupPermissions({
-      ctx,
-      familyFile
-    })
-  }
-  return getFileInstructionPermissions({ ctx, familyFile })
 }

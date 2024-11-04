@@ -1,4 +1,3 @@
-import { FamilyFileService } from '..'
 import { HelpRequestRepo } from '~/server/database'
 import { SecurityRuleContext, SecurityRuleGrantee } from '~/server/security'
 import {
@@ -40,19 +39,5 @@ export async function getEditionPermissions(
     ctx,
     familyFile: socialSupport.familyFile,
     socialSupport
-  })
-}
-
-export async function getCreationPermissions(
-  ctx: SecurityRuleContext,
-  beneficiaryId: string
-): Promise<FileInstructionPermissions> {
-  const familyFile = await FamilyFileService.getFamilyFileSecurityTarget(
-    ctx.user,
-    beneficiaryId
-  )
-  return getFileInstructionPermissions({
-    ctx,
-    familyFile
   })
 }
