@@ -37,6 +37,7 @@
     "@vee-validate/zod": "^4.14.6",
     "chart.js": "^4.4.6",
     "dayjs": "^1.11.13",
+    "dom-to-image-more": "^3.5.0",
     "exceljs": "^4.4.0",
     "json-diff": "^1.0.6",
     "jsonwebtoken": "^9.0.2",

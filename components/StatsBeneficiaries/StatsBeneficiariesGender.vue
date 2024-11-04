@@ -1,31 +1,26 @@
 <template>
-  <div class="main-container fr-p-2w">
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les statistiques de la répartion des genres n'ont pas pu être chargées."
-    />
-    <template v-else-if="genderStats">
-      <h4 class="fr-h5">Genres</h4>
-      <StatsPie
-        v-if="genderStats.length"
-        pie-label="Répartion des genres"
-        :stats="genderStats"
-        :total-count="beneficiaryCount"
-      />
-      <p v-else>
-        Commencez à
-        <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
-          >créer des fiches de bénéficiaires</NuxtLink
-        >
-        pour voir apparaître les statistiques de la répartition des genres.
-      </p>
-    </template>
-  </div>
+  <AtomLoader
+    v-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomAlert
+    v-else-if="error"
+    :alert-type="AlertType.Error"
+    message="Les statistiques de la répartion des genres n'ont pas pu être chargées."
+  />
+  <StatsPie
+    v-if="genderStats.length"
+    pie-label="Répartion des genres"
+    :stats="genderStats"
+    :total-count="beneficiaryCount"
+  />
+  <p v-else>
+    Commencez à
+    <NuxtLink :to="routes.beneficiary.AppBeneficiariesAdd.path()"
+      >créer des fiches de bénéficiaires</NuxtLink
+    >
+    pour voir apparaître les statistiques de la répartition des genres.
+  </p>
 </template>
 
 <script lang="ts" setup>

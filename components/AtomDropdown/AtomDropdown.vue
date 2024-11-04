@@ -16,6 +16,13 @@
       @focus="expanded = true"
       @click.prevent
     >
+      <span
+        v-if="icon"
+        :class="icon"
+        class="fr-mr-1w"
+        aria-hidden="true"
+      ></span>
+
       {{ label }}
     </button>
     <ul
@@ -58,8 +65,9 @@
       menus: Menu[]
       dropdownBtnClass?: string
       alignRight?: boolean
+      icon?: string
     }>(),
-    { dropdownBtnClass: '', alignRight: false }
+    { dropdownBtnClass: '', alignRight: false, icon: undefined }
   )
 
   const MENU_ID = getRandId('dropdown-menu-')
@@ -72,9 +80,8 @@
     dropdownBtn.value?.setAttribute('aria-expanded', `${expanded.value}`)
   })
 
-  function menuClass(icon: string) {
+  function menuClass(icon: string | undefined) {
     const base = 'fr-btn fr-btn--tertiary-no-outline'
-
     return icon ? `${base} fr-btn--icon-left ${icon}` : base
   }
 
@@ -126,5 +133,9 @@
 
   .dropdown-btn {
     border-radius: 2rem;
+
+    span::before {
+      --icon-size: 1.125rem;
+    }
   }
 </style>
