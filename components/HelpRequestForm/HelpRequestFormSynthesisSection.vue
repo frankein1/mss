@@ -4,7 +4,7 @@
   <div class="fr-col-12">
     <AtomTextEditor
       name="synthesis"
-      :initial-value="synthesisRichTextValue"
+      :initial-value="synthesisRichTextValue || null"
       :initial-raw-value="synthesis"
       :label="helpRequestFieldLabels.synthesis"
       @update="onUpdateSynthesis"
@@ -21,7 +21,7 @@
   >
     <AtomTextEditor
       name="privateSynthesis"
-      :initial-value="privateSynthesisRichTextValue"
+      :initial-value="privateSynthesisRichTextValue || null"
       :initial-raw-value="privateSynthesis"
       :label="helpRequestFieldLabels.privateSynthesis"
       label-icon="fr-icon-lock-line"

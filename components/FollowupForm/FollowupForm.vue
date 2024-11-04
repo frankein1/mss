@@ -185,7 +185,7 @@
         <div class="fr-col-12">
           <AtomTextEditor
             name="synthesis"
-            :initial-value="synthesisRichTextValue"
+            :initial-value="synthesisRichTextValue || null"
             :initial-raw-value="synthesis"
             :label="followupFieldLabels.synthesis"
             @update="onUpdateSynthesis"
@@ -199,7 +199,7 @@
         >
           <AtomTextEditor
             name="privateSynthesis"
-            :initial-value="privateSynthesisRichTextValue"
+            :initial-value="privateSynthesisRichTextValue || null"
             :initial-raw-value="privateSynthesis"
             :label="followupFieldLabels.privateSynthesis"
             label-icon="fr-icon-lock-line"

@@ -45,7 +45,7 @@
     "mitt": "^3.0.1",
     "node-fetch-native": "^1.6.4",
     "nodemailer": "^6.9.16",
-    "nuxt-security": "2.0.0-rc.9",
+    "nuxt-security": "2.0.0",
     "postcss-html": "^1.7.0",
     "prisma": "^5.21.1",
     "superjson": "^2.2.1",
@@ -58,8 +58,8 @@
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.10.0",
-    "@nuxt/eslint": "^0.5.7",
-    "@playwright/test": "^1.46.1",
+    "@nuxt/eslint": "^0.6.1",
+    "@playwright/test": "^1.48.2",
     "@sentry/node": "^8.36.0",
     "@types/json-diff": "1.0.3",
     "@types/jsonwebtoken": "^9.0.7",
@@ -74,12 +74,12 @@
     "eslint": "^9.14.0",
     "husky": "^9.1.6",
     "lint-staged": "^15.2.10",
-    "nuxt": "^3.13.0",
+    "nuxt": "^3.14.0",
     "nuxt-scheduler": "^0.1.9",
     "prettier": "3.3.3",
     "prettier-plugin-prisma": "^5.0.0",
     "prisma-erd-generator": "^1.11.2",
-    "sass": "^1.77.8",
+    "sass": "^1.80.6",
     "stylelint": "^16.10.0",
     "stylelint-config-recommended-vue": "^1.5.0",
     "stylelint-config-standard-scss": "^13.1.0",
@@ -87,7 +87,7 @@
     "typescript": "~5.6.3",
     "vitest": "^2.1.4",
     "vue-dsfr-nuxt-module": "^2.0.0",
-    "vue-tsc": "^2.1.2"
+    "vue-tsc": "^2.1.10"
   },
   "overrides": {
     "h3": "1.11.1"
