@@ -6,6 +6,7 @@
     <div class="card-title fr-mb-3w">
       <h4 class="fr-h5 card-title-text fr-mb-0">{{ cardName }}</h4>
       <button
+        ref="copyButton"
         class="fr-btn fr-btn--tertiary-no-outline"
         name="Copier l'image"
         alt="Copier l'image"
@@ -32,6 +33,7 @@
   }>()
 
   const imageCopied = ref<boolean>(false)
+  const copyButton = ref<HTMLElement | null>(null)
 
   const buttonFilter = (node: HTMLElement | Node) => {
     return (node as HTMLElement).tagName !== 'BUTTON'
@@ -60,12 +62,14 @@
         ])
 
         imageCopied.value = true
-        useSnackbar().success("L'image est copié dans votre presse papier.")
+        useSnackbar().success("L'image est copiée dans votre presse papier.")
         setTimeout(() => {
           imageCopied.value = false
         }, 2000)
-      } catch (error) {
-        console.error(error)
+      } catch (_error) {
+        useSnackbar().error("L'image n'a pas pu être copié.", () =>
+          copyButton.value?.focus()
+        )
       }
     }
   }

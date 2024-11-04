@@ -22,6 +22,19 @@
           align-right
         />
       </div>
+      <div class="fr-col-12">
+        <div
+          v-if="!alertClose"
+          class="export-alert"
+        >
+          <AtomAlert
+            :alert-type="AlertType.Success"
+            :message="alertContent"
+            :closeable="true"
+            @close="alertClose = true"
+          />
+        </div>
+      </div>
       <AtomAlert
         v-if="error"
         :alert-type="AlertType.Error"
@@ -214,8 +227,10 @@
   import domtoimage from 'dom-to-image-more'
   import { Menu } from '~/types/menu'
 
-  const pngDownloading = ref<boolean>(false)
-  const excelDownloading = ref<boolean>(false)
+  const alertClose = ref<boolean>(true)
+  const alertContent = ref<string>(
+    'Export en cours... Le téléchargement peut prendre plusieurs secondes avant de démarrer.'
+  )
 
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
@@ -335,20 +350,22 @@
   }
 
   const menus: ComputedRef<Menu[]> = computed(() => {
-    // TODO: wait for all componenet to be rendered
-    // TODO: revamp dropdown menu with <VIcon />
+    // TODO: revamp dropdown menu with new design + use <VIcon />
     const menus: Menu[] = [
       {
-        label: 'En images (.jpg)',
-        icon: 'fr-icon-download-fill',
-        callback: () => saveAsPngs()
+        label: 'En images (.png)',
+        callback: async () => {
+          alertClose.value = false
+          setTimeout(() => {
+            saveAsPngs(statsCardConfig)
+          }, 1000)
+        }
       }
     ]
 
     if (application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
-        icon: 'fr-icon-download-fill',
         callback: () => exportStats()
       })
     }
@@ -366,7 +383,7 @@
     return Object.values(config).map(item => item.name)
   }
 
-  const saveAsPngs = () => {
+  const saveAsPngs = (statsCardConfig: StatsCardConfig) => {
     const configIds = extractIds(statsCardConfig)
     const configNames = extractNames(statsCardConfig)
     const nodes = configIds
@@ -399,10 +416,23 @@
               link.click()
               document.body.removeChild(link)
             })
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (error) {
-          console.error(error)
+          useSnackbar().error("Les images n'ont pas pu être exportées.")
+        } finally {
+          alertClose.value = true
         }
       })
     }
   }
 </script>
+
+<style lang="scss" scoped>
+  .export-alert {
+    z-index: 1500;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    margin: 2rem;
+  }
+</style>

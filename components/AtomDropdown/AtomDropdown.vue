@@ -80,9 +80,8 @@
     dropdownBtn.value?.setAttribute('aria-expanded', `${expanded.value}`)
   })
 
-  function menuClass(icon: string) {
+  function menuClass(icon: string | undefined) {
     const base = 'fr-btn fr-btn--tertiary-no-outline'
-
     return icon ? `${base} fr-btn--icon-left ${icon}` : base
   }
 

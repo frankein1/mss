@@ -1,3 +1,6 @@
+// use dom-to-image type definition from
+// https://github.com/DefinitelyTyped/DefinitelyTyped/blob/master/types/dom-to-image/index.d.ts
+
 declare module 'dom-to-image-more' {
   export interface DomToImage {
     toSvg(node: Node, options?: Options): Promise<string>
