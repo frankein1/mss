@@ -32,7 +32,24 @@
               :alert-type="AlertType.Error"
               :message="fetchError"
             />
-            <StatsHistory
+            <StatsFollowup
+              v-if="
+                socialSupportSubjectOptions &&
+                beneficiariesCitiesOptions &&
+                agentsOptions
+              "
+              :social-support-subject-options="socialSupportSubjectOptions"
+              :beneficiaries-cities-options="beneficiariesCitiesOptions"
+              :agent-options="agentsOptions"
+            />
+          </template>
+          <template #[tabTitles.at(2)?.panelId]>
+            <AtomAlert
+              v-if="fetchError"
+              :alert-type="AlertType.Error"
+              :message="fetchError"
+            />
+            <StatsHelpRequest
               v-if="
                 socialSupportSubjectOptions &&
                 beneficiariesCitiesOptions &&
@@ -67,9 +84,14 @@
       title: 'Bénéficiaires'
     },
     {
-      tabId: 'Accompagnements',
-      panelId: panelId('Accompagnements'),
-      title: 'Accompagnements'
+      tabId: 'Entretiens',
+      panelId: panelId('Entretients'),
+      title: "Synthèses d'entretiens"
+    },
+    {
+      tabId: 'Instructions',
+      panelId: panelId('Instructions'),
+      title: 'Instructions de dossiers'
     }
   ]
 
