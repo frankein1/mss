@@ -1,25 +1,27 @@
 <template>
-  <div
-    :id="cardId"
-    class="main-container fr-p-2w"
-  >
-    <div class="card-title fr-mb-3w">
-      <h4 class="fr-h5 card-title-text fr-mb-0">{{ cardName }}</h4>
-      <button
-        ref="copyButton"
-        class="fr-btn fr-btn--tertiary-no-outline"
-        name="Copier l'image"
-        alt="Copier l'image"
-        @click="copyToCliboard"
-      >
-        <Icon
-          :icon="imageCopied ? 'ri-check-line' : 'ri-file-copy-line'"
-          height="24px"
-          :ssr="true"
-        />
-      </button>
+  <div>
+    <div
+      :id="cardId"
+      class="main-container fr-p-2w"
+    >
+      <div class="card-title fr-mb-3w">
+        <h4 class="fr-h5 card-title-text fr-mb-0">{{ cardName }}</h4>
+        <button
+          ref="copyButton"
+          class="fr-btn fr-btn--tertiary-no-outline"
+          name="Copier l'image"
+          alt="Copier l'image"
+          @click="copyToCliboard"
+        >
+          <Icon
+            :icon="imageCopied ? 'ri-check-line' : 'ri-file-copy-line'"
+            height="24px"
+            :ssr="true"
+          />
+        </button>
+      </div>
+      <slot>Contenu non chargé</slot>
     </div>
-    <slot>Contenu non chargé</slot>
   </div>
 </template>
 

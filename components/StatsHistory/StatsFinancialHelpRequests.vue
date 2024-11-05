@@ -1,35 +1,32 @@
 <template>
-  <div class="main-container fr-p-2w">
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
+  <AtomLoader
+    v-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomAlert
+    v-else-if="error"
+    :alert-type="AlertType.Error"
+    message="Les statistiques des aides financières n'ont pas pu être chargées."
+  />
+  <template v-else-if="data">
+    <StatsList
+      :stats="data.financialHelpRequestCounts"
+      :stats-percentage="false"
+      :with-sum="false"
     />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les statistiques des aides financières n'ont pas pu être chargées."
+    <p class="fr-text--bold stats-total-amount">
+      Montant total des aides délivrées par la structure
+      <span class="fr-h3"
+        >{{ financialHelpRequestTotalAmount.toFixed(2) }}€</span
+      >
+    </p>
+    <StatsList
+      :stats="financialHelpRequestsAmountByType"
+      :stats-percentage="false"
+      unit="€"
+      :to-fixed="2"
     />
-    <template v-else-if="data">
-      <h5 class="fr-h5">Aides financières</h5>
-      <StatsList
-        :stats="data.financialHelpRequestCounts"
-        :stats-percentage="false"
-        :with-sum="false"
-      />
-      <p class="fr-text--bold stats-total-amount">
-        Montant total des aides délivrées par la structure
-        <span class="fr-h3"
-          >{{ financialHelpRequestTotalAmount.toFixed(2) }}€</span
-        >
-      </p>
-      <StatsList
-        :stats="financialHelpRequestsAmountByType"
-        :stats-percentage="false"
-        unit="€"
-        :to-fixed="2"
-      />
-    </template>
-  </div>
+  </template>
 </template>
 
 <script lang="ts" setup>
