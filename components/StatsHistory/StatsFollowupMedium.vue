@@ -1,28 +1,23 @@
 <template>
-  <div class="main-container fr-p-2w">
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les statistiques de la répartion des types d'entretiens n'ont pas pu être chargées."
-    />
-    <template v-else-if="followupMediumStats">
-      <h5 class="fr-h5">Types d'entretiens</h5>
-      <StatsList
-        v-if="followupMediumStats.length"
-        :total-count="totalCount"
-        :stats="followupMediumStats"
-      />
-      <p v-else>
-        Commencez à créer des synthèses d'entretien dans les fiches de
-        bénéficiaires pour voir apparaître les statistiques de la répartition
-        des types d'entretiens.
-      </p>
-    </template>
-  </div>
+  <AtomLoader
+    v-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomAlert
+    v-else-if="error"
+    :alert-type="AlertType.Error"
+    message="Les statistiques de la répartion des types d'entretiens n'ont pas pu être chargées."
+  />
+  <StatsList
+    v-if="followupMediumStats.length"
+    :total-count="totalCount"
+    :stats="followupMediumStats"
+  />
+  <p v-else>
+    Commencez à créer des synthèses d'entretien dans les fiches de bénéficiaires
+    pour voir apparaître les statistiques de la répartition des types
+    d'entretiens.
+  </p>
 </template>
 
 <script lang="ts" setup>

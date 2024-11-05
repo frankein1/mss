@@ -28,3 +28,10 @@ export enum StatPeriodFilter {
   LastMonth = 'LastMonth',
   Custom = 'Custom'
 }
+
+export type StatsCardConfig = {
+  [key: string]: {
+    id: string
+    name: string
+  }
+}
