@@ -7,6 +7,7 @@
       :total-count="totalCount"
       :stats="stats"
       stats-color-dot
+      :not-filled-route="notFilledRoute"
     />
   </div>
 </template>
@@ -21,6 +22,7 @@
     pieLabel: string
     stats: StatsPiePropType
     totalCount: number
+    notFilledRoute?: string
   }>()
 
   const chart = ref<ChartItem>('')
