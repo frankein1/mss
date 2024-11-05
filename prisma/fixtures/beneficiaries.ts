@@ -25,7 +25,14 @@ export const fixturesBeneficiaries = [
     status: 'Archived',
     usualName: 'TEARLE',
     birthName: 'FIRTH',
-    firstName: 'Måns'
+    firstName: 'Måns',
+    city: 'Dijon',
+    zipcode: '21000',
+    street: '10 Rue Berbisey, 21000 Dijon',
+    department: "Côte-d'Or",
+    region: 'Bourgogne-Franche-Comté',
+    mobility: 'BikeOrEquivalent',
+    socioProfessionalCategory: 'Employed'
   },
   {
     id: '31152daf-0fdb-4340-aaf1-cbdab1aa1f1a',
