@@ -27,7 +27,7 @@ describe('Statistics - Beneficiary - Department', () => {
 
     expect(parseStats(stats)).toEqual({
       'Non renseigné': 10,
-      "Côte d'Or": 1
+      "Côte-d'Or": 1
     })
   })
 })
