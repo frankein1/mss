@@ -1,32 +1,29 @@
 <template>
-  <div class="main-container fr-p-2w">
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
+  <AtomLoader
+    v-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomAlert
+    v-else-if="error"
+    :alert-type="AlertType.Error"
+    message="Les statistiques des demandes de logement n'ont pas pu être chargées."
+  />
+  <template v-else-if="data">
+    <p>
+      Ces données prennent en compte uniquement les instructions de dossiers
+      réalisées après le 15 février 2024 via le formulaire de demande de
+      logement.
+    </p>
+    <StatsList
+      :total-count="housingHelpRequestCount"
+      :stats="housingHelpRequestContextStats"
     />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les statistiques des demandes de logement n'ont pas pu être chargées."
+    <p class="fr-text--bold">Motif des demandes de logement</p>
+    <StatsList
+      :total-count="housingHelpRequestCount"
+      :stats="housingHelpRequestReasonStats"
     />
-    <template v-else-if="data">
-      <h5 class="fr-h5">Demandes de logement</h5>
-      <p>
-        Ces données prennent en compte uniquement les instructions de dossiers
-        réalisées après le 15 février 2024 via le formulaire de demande de
-        logement.
-      </p>
-      <StatsList
-        :total-count="housingHelpRequestCount"
-        :stats="housingHelpRequestContextStats"
-      />
-      <p class="fr-text--bold">Motif des demandes de logement</p>
-      <StatsList
-        :total-count="housingHelpRequestCount"
-        :stats="housingHelpRequestReasonStats"
-      />
-    </template>
-  </div>
+  </template>
 </template>
 
 <script lang="ts" setup>

@@ -1,28 +1,23 @@
 <template>
-  <div class="main-container fr-p-2w">
-    <AtomLoader
-      v-if="pending"
-      class="fr-mx-auto"
-    />
-    <AtomAlert
-      v-else-if="error"
-      :alert-type="AlertType.Error"
-      message="Les statistiques de la répartion des organismes prescripteurs n'ont pas pu être chargées."
-    />
-    <template v-else-if="prescribingOrganizationStats">
-      <h5 class="fr-h5">Organismes prescripteurs</h5>
-      <StatsList
-        v-if="prescribingOrganizationStats.length"
-        :total-count="totalCount"
-        :stats="prescribingOrganizationStats"
-      />
-      <p v-else>
-        Commencez à créer des instructions de dossier dans les fiches de
-        bénéficiaires pour voir apparaître les statistiques de la répartition
-        des organismes prescripteurs.
-      </p>
-    </template>
-  </div>
+  <AtomLoader
+    v-if="pending"
+    class="fr-mx-auto"
+  />
+  <AtomAlert
+    v-else-if="error"
+    :alert-type="AlertType.Error"
+    message="Les statistiques de la répartion des organismes prescripteurs n'ont pas pu être chargées."
+  />
+  <StatsList
+    v-if="prescribingOrganizationStats.length"
+    :total-count="totalCount"
+    :stats="prescribingOrganizationStats"
+  />
+  <p v-else>
+    Commencez à créer des instructions de dossier dans les fiches de
+    bénéficiaires pour voir apparaître les statistiques de la répartition des
+    organismes prescripteurs.
+  </p>
 </template>
 
 <script lang="ts" setup>
