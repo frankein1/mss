@@ -10,11 +10,11 @@
       :message="`Les statistiques du nombre de bénéficiaires concernés n'ont pas pu être chargées.`"
     />
     <template v-else-if="beneficiaryCounts !== null">
-      <h5 class="fr-h5">Nombre de bénéficiaires concernés</h5>
-      <StatsNumber
+      <StatsBeneficiaryNumber
         v-if="beneficiaryCounts"
-        :total-count="totalCount"
-        :stats="beneficiaryCounts"
+        :beneficiary-counts="beneficiaryCounts"
+        :files-counts="undefined"
+        :hystory-type="hystoryType"
       />
       <p v-else>
         Commencez à créer des instructions de dossier dans les fiches de
@@ -34,6 +34,7 @@
   const props = defineProps<{
     totalCount: number
     filters: StatFilterInput
+    hystoryType?: 'followup' | 'helprequest'
   }>()
 
   const {

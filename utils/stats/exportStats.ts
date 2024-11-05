@@ -1,6 +1,11 @@
 import { StatsCardConfig } from '~/types/stat'
 import domtoimage from 'dom-to-image-more'
+import { StatFilterInput } from '~/server/schema'
+import { getExportUrl } from '~/utils/export/getExportUrl'
+import { getExportFilename } from '~/utils/export/getExportFilename'
+import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
 
+// Export Cards as image
 const extractIds = (config: StatsCardConfig) => {
   return Object.values(config).map(item => item.id)
 }
@@ -54,5 +59,49 @@ export const saveAsPngs = (
         finallyFn()
       }
     })
+  }
+}
+
+type ExportType =
+  | 'stats_entretiens'
+  | 'stats_instructions_dossier'
+  | 'stats_beneficiaires'
+
+// export as Excel file
+export const exportStats = async (
+  filters: StatFilterInput,
+  exportType: ExportType,
+  client: any,
+  isDownloading: (downloading: boolean) => void
+) => {
+  isDownloading(true)
+  try {
+    let exportedFile: { data: string } | null = null
+    switch (exportType) {
+      case 'stats_entretiens':
+        exportedFile = await client.stat.exportFollowupStats.query(filters)
+        break
+      case 'stats_instructions_dossier':
+        exportedFile = await client.stat.exportHelpRequestStats.query(filters)
+        break
+      case 'stats_beneficiaires':
+        exportedFile = await client.stat.exportBeneficiaryStats.query(filters)
+        break
+    }
+    // const exportedFile = isFollowUp
+    //   ? await client.stat.exportFollowupStats.query(filters)
+    //   : await client.stat.exportHelpRequestStats.query(filters)
+    if (!exportedFile?.data) {
+      throw new Error('no data')
+    }
+    const downloadLink = document.createElement('a')
+    downloadLink.href = getExportUrl(exportedFile.data)
+    downloadLink.download = getExportFilename(exportType)
+    downloadLink.click()
+    downloadLink.remove()
+  } catch {
+    useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
+  } finally {
+    isDownloading(false)
   }
 }

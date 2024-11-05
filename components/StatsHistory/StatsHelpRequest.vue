@@ -49,119 +49,107 @@
           <!-- ROW -->
           <div class="fr-col-12">
             <StatsHelpRequestBeneficiaryNumber
+              hystory-type="helprequest"
               :total-count="helpRequestCount"
               :filters="filters"
             />
           </div>
 
           <!-- ROW -->
-          <div
+          <StatsCard
             v-if="!filters.helpRequestSubject"
             class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="helpRequestCardsConfig.instructionType.id"
+            :card-name="helpRequestCardsConfig.instructionType.name"
           >
-            <StatsCard
-              :card-id="helpRequestCardsConfig.instructionType.id"
-              :card-name="helpRequestCardsConfig.instructionType.name"
-            >
-              <StatsFileInstructionType
-                :total-count="helpRequestCount"
-                :filters="filters"
-              />
-            </StatsCard>
-          </div>
-          <div
+            <StatsFileInstructionType
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
             v-if="filters.helpRequestSubject !== FileInstructionType.Housing"
             class="ffr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="helpRequestCardsConfig.subjects.id"
+            :card-name="helpRequestCardsConfig.subjects.name"
           >
-            <StatsCard
-              :card-id="helpRequestCardsConfig.subjects.id"
-              :card-name="helpRequestCardsConfig.subjects.name"
-            >
-              <StatsHelpRequestSubject
-                :total-count="financialHelpRequestCount + otherHelpRequestCount"
-                :filters="filters"
-              />
-            </StatsCard>
-          </div>
-          <div class="fr-col-12 fr-col-md-6 fr-col-xl-4">
-            <StatsCard
-              :card-id="helpRequestCardsConfig.status.id"
-              :card-name="helpRequestCardsConfig.status.name"
-            >
-              <StatsHelpRequestStatus
-                :total-count="helpRequestCount"
-                :filters="filters"
-              />
-            </StatsCard>
-          </div>
+            <StatsHelpRequestSubject
+              :total-count="financialHelpRequestCount + otherHelpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="helpRequestCardsConfig.status.id"
+            :card-name="helpRequestCardsConfig.status.name"
+          >
+            <StatsHelpRequestStatus
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
 
           <!-- ROW -->
-          <div
+          <StatsCard
             v-if="application.module.ministere"
             class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="helpRequestCardsConfig.ministres.id"
+            :card-name="helpRequestCardsConfig.ministres.name"
           >
-            <StatsCard
-              :card-id="helpRequestCardsConfig.ministres.id"
-              :card-name="helpRequestCardsConfig.ministres.name"
-            >
-              <StatsHelpRequestMinistre
-                :total-count="helpRequestCount"
-                :filters="filters"
-              />
-            </StatsCard>
-          </div>
-          <div class="fr-col-12 fr-col-md-6 fr-col-xl-4">
-            <StatsCard
-              :card-id="helpRequestCardsConfig.prescribingOrganizations.id"
-              :card-name="helpRequestCardsConfig.prescribingOrganizations.name"
-            >
-              <StatsHelpRequestPrescribingOrganizations
-                :total-count="helpRequestCount"
-                :filters="filters"
-            /></StatsCard>
-          </div>
-          <div class="fr-col-12 fr-col-md-6 fr-col-xl-4">
-            <StatsCard
-              :card-id="helpRequestCardsConfig.instructorOrganizations.id"
-              :card-name="helpRequestCardsConfig.instructorOrganizations.name"
-            >
-              <StatsHistoryInstructorOrganizations
-                :total-count="externalHelpRequestCount"
-                :filters="filters"
-              />
-            </StatsCard>
-          </div>
+            <StatsHelpRequestMinistre
+              :total-count="helpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="helpRequestCardsConfig.prescribingOrganizations.id"
+            :card-name="helpRequestCardsConfig.prescribingOrganizations.name"
+          >
+            <StatsHelpRequestPrescribingOrganizations
+              :total-count="helpRequestCount"
+              :filters="filters"
+          /></StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="helpRequestCardsConfig.instructorOrganizations.id"
+            :card-name="helpRequestCardsConfig.instructorOrganizations.name"
+          >
+            <StatsHistoryInstructorOrganizations
+              :total-count="externalHelpRequestCount"
+              :filters="filters"
+            />
+          </StatsCard>
 
           <!-- ROW -->
-          <div
+          <StatsCard
             v-if="
               !filters.helpRequestSubject ||
               filters.helpRequestSubject === FileInstructionType.Financial
             "
             class="fr-col-12 fr-col-sm-6"
+            :card-id="helpRequestCardsConfig.financialHelpRequest.id"
+            :card-name="helpRequestCardsConfig.financialHelpRequest.name"
           >
-            <StatsCard
-              :card-id="helpRequestCardsConfig.financialHelpRequest.id"
-              :card-name="helpRequestCardsConfig.financialHelpRequest.name"
-            >
-              <StatsFinancialHelpRequests :filters="filters" />
-            </StatsCard>
-          </div>
-          <div
+            <StatsFinancialHelpRequests :filters="filters" />
+          </StatsCard>
+
+          <StatsCard
             v-if="
               !filters.socialSupportSubjects &&
               (!filters.helpRequestSubject ||
                 filters.helpRequestSubject === FileInstructionType.Housing)
             "
             class="fr-col-12 fr-col-sm-6"
+            :card-id="helpRequestCardsConfig.housingHelpRequest.id"
+            :card-name="helpRequestCardsConfig.housingHelpRequest.name"
           >
-            <StatsCard
-              :card-id="helpRequestCardsConfig.housingHelpRequest.id"
-              :card-name="helpRequestCardsConfig.housingHelpRequest.name"
-            >
-              <StatsHousingHelpRequests :filters="filters" />
-            </StatsCard>
-          </div>
+            <StatsHousingHelpRequests :filters="filters" />
+          </StatsCard>
         </div>
       </template>
     </section>
@@ -173,12 +161,9 @@
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
   import { Options } from '~/utils/options'
-  import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
-  import { getExportUrl } from '~/utils/export/getExportUrl'
-  import { getExportFilename } from '~/utils/export/getExportFilename'
   import { StatsCardConfig } from '~/types/stat'
   import { Menu } from '~/types/menu'
-  import { saveAsPngs } from '~/utils/stats/exportStatsCard'
+  import { exportStats, saveAsPngs } from '~/utils/stats/exportStats'
 
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
@@ -285,35 +270,22 @@
     if (application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
-        callback: () => exportStats()
+        callback: () => handleExportExcel()
       })
     }
     return menus
   })
 
-  async function exportStats() {
-    isDownloading.value = true
-    try {
-      const exportedFile = isFollowupsTabActive.value
-        ? await trpcClient.stat.exportFollowupStats.query(filters.value)
-        : await trpcClient.stat.exportHelpRequestStats.query(filters.value)
-      if (!exportedFile.data) {
-        throw new Error('no data')
-      }
-      const downloadLink = document.createElement('a')
-      downloadLink.href = getExportUrl(exportedFile.data)
-      downloadLink.download = getExportFilename(
-        isFollowupsTabActive.value
-          ? 'stats_entretiens'
-          : 'stats_instructions_dossier'
-      )
-      downloadLink.click()
-      downloadLink.remove()
-    } catch {
-      useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
-    } finally {
-      isDownloading.value = false
-    }
+  const excelIsDownloading = (downloading: boolean) => {
+    isDownloading.value = downloading
+  }
+  const handleExportExcel = () => {
+    exportStats(
+      filters.value,
+      'stats_instructions_dossier',
+      trpcClient,
+      excelIsDownloading
+    )
   }
 
   const buttonFilter = (node: HTMLElement | Node) => {

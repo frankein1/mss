@@ -58,79 +58,75 @@
           <!-- ROW -->
           <div class="fr-col-12">
             <StatsFollowupBeneficiaryNumber
+              hystory-type="followup"
               :total-count="followupCount"
               :filters="filters"
             />
           </div>
 
           <!-- ROW -->
-          <div class="fr-col-12 fr-col-md-6 fr-col-xl-4">
-            <StatsCard
-              :card-id="followupCardsConfig.subject.id"
-              :card-name="followupCardsConfig.subject.name"
-            >
-              <StatsFollowupSubject
-                :total-count="followupCount"
-                :filters="filters"
-              />
-            </StatsCard>
-          </div>
-          <div class="fr-col-12 fr-col-md-6 fr-col-xl-4">
-            <StatsCard
-              :card-id="followupCardsConfig.medium.id"
-              :card-name="followupCardsConfig.medium.name"
-            >
-              <StatsFollowupMedium
-                :total-count="followupCount"
-                :filters="filters"
-            /></StatsCard>
-          </div>
-          <div
+          <StatsCard
+            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.subject.id"
+            :card-name="followupCardsConfig.subject.name"
+          >
+            <StatsFollowupSubject
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </StatsCard>
+          <StatsCard
+            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.medium.id"
+            :card-name="followupCardsConfig.medium.name"
+          >
+            <StatsFollowupMedium
+              :total-count="followupCount"
+              :filters="filters"
+          /></StatsCard>
+
+          <StatsCard
             v-if="application.module.ministere"
             class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.ministre.id"
+            :card-name="followupCardsConfig.ministre.name"
           >
-            <StatsCard
-              :card-id="followupCardsConfig.ministre.id"
-              :card-name="followupCardsConfig.ministre.name"
-            >
-              <StatsFollowupMinistre
-                :total-count="followupCount"
-                :filters="filters"
-            /></StatsCard>
-          </div>
+            <StatsFollowupMinistre
+              :total-count="followupCount"
+              :filters="filters"
+          /></StatsCard>
 
-          <div class="fr-col-12 fr-col-md-6 fr-col-xl-4">
-            <StatsCard
-              :card-id="followupCardsConfig.status.id"
-              :card-name="followupCardsConfig.status.name"
-            >
-              <StatsFollowupStatus
-                :total-count="followupCount"
-                :filters="filters"
-              />
-            </StatsCard>
-          </div>
-          <div class="fr-col-12 fr-col-md-6 fr-col-xl-4">
-            <StatsCard
-              :card-id="followupCardsConfig.actions.id"
-              :card-name="followupCardsConfig.actions.name"
-            >
-              <StatsFollowupActionsEntreprises
-                :total-count="followupCount"
-                :filters="filters"
-            /></StatsCard>
-          </div>
-          <div class="fr-col-12 fr-col-md-6 fr-col-xl-4">
-            <StatsCard
-              :card-id="followupCardsConfig.prescribingOrganizations.id"
-              :card-name="followupCardsConfig.prescribingOrganizations.name"
-            >
-              <StatsFollowupPrescribingOrganizations
-                :total-count="followupCount"
-                :filters="filters"
-              />
-            </StatsCard>
-          </div>
+          <StatsCard
+            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.status.id"
+            :card-name="followupCardsConfig.status.name"
+          >
+            <StatsFollowupStatus
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.actions.id"
+            :card-name="followupCardsConfig.actions.name"
+          >
+            <StatsFollowupActionsEntreprises
+              :total-count="followupCount"
+              :filters="filters"
+          /></StatsCard>
+
+          <StatsCard
+            class="fr-col-12 fr-col-md-6 fr-col-xl-4"
+            :card-id="followupCardsConfig.prescribingOrganizations.id"
+            :card-name="followupCardsConfig.prescribingOrganizations.name"
+          >
+            <StatsFollowupPrescribingOrganizations
+              :total-count="followupCount"
+              :filters="filters"
+            />
+          </StatsCard>
         </div>
       </template>
     </section>
@@ -141,12 +137,9 @@
   import { AlertType } from '~/utils/constants/alert'
   import { StatFilterInput } from '~/server/schema'
   import { Options } from '~/utils/options'
-  import { FAILED_DOWNLOAD_ERROR_MESSAGE } from '~/utils/constants'
-  import { getExportUrl } from '~/utils/export/getExportUrl'
-  import { getExportFilename } from '~/utils/export/getExportFilename'
   import { StatsCardConfig } from '~/types/stat'
   import { Menu } from '~/types/menu'
-  import { saveAsPngs } from '~/utils/stats/exportStatsCard'
+  import { exportStats, saveAsPngs } from '~/utils/stats/exportStats'
 
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
@@ -238,36 +231,24 @@
     if (application.value.export.stats) {
       menus.push({
         label: 'En tableur (.xlsx)',
-        callback: () => exportStats()
+        callback: () => handleExportExcel()
       })
     }
     return menus
   })
 
-  async function exportStats() {
-    isDownloading.value = true
-    try {
-      const exportedFile = isFollowupsTabActive.value
-        ? await trpcClient.stat.exportFollowupStats.query(filters.value)
-        : await trpcClient.stat.exportHelpRequestStats.query(filters.value)
-      if (!exportedFile.data) {
-        throw new Error('no data')
-      }
-      const downloadLink = document.createElement('a')
-      downloadLink.href = getExportUrl(exportedFile.data)
-      downloadLink.download = getExportFilename(
-        isFollowupsTabActive.value
-          ? 'stats_entretiens'
-          : 'stats_instructions_dossier'
-      )
-      downloadLink.click()
-      downloadLink.remove()
-    } catch {
-      useSnackbar().error(FAILED_DOWNLOAD_ERROR_MESSAGE)
-    } finally {
-      isDownloading.value = false
-    }
+  const excelIsDownloading = (downloading: boolean) => {
+    isDownloading.value = downloading
   }
+  const handleExportExcel = () => {
+    exportStats(
+      filters.value,
+      'stats_entretiens',
+      trpcClient,
+      excelIsDownloading
+    )
+  }
+
   const buttonFilter = (node: HTMLElement | Node) => {
     return (node as HTMLElement).tagName !== 'BUTTON'
   }
