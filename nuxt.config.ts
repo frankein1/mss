@@ -125,7 +125,14 @@ export default defineNuxtConfig({
     css: {
       preprocessorOptions: {
         scss: {
-          includePaths: ['./node_modules', './node_modules/@gouvfr/dsfr']
+          includePaths: ['./node_modules', './node_modules/@gouvfr/dsfr'],
+          // Note: will be migrated to modern-compiled with sass-embedded when dsfr will be migrated to sass 2.0
+          // https://vite.dev/config/shared-options.html#css-preprocessoroptions
+          api: 'legacy',
+          silenceDeprecations: ['legacy-js-api'],
+          // Note: The syntax in sass 2.0 will have to be migrated in dsfr. Warnings are suppressed in the mean time.
+          // See https://sass-lang.com/documentation/breaking-changes/import/
+          quietDeps: true
         }
       }
     },
