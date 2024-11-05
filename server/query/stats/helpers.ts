@@ -1,8 +1,8 @@
 import { FileInstructionType, SocialSupportType, Prisma } from '@prisma/client'
 import dayjs from 'dayjs'
-import { STATS_NULL_LABEL } from '~/client/options'
+import { STATS_NULL_LABEL, STATS_NULL_KEY } from '~/utils/constants/stats'
 import { StatFilterInput } from '~/server/schema'
-import { STATS_NULL_KEY } from '~/utils/constants/stats'
+
 import { StatPeriodFilter } from '~/types/stat'
 
 export function preparePrescribingOrganizationStats(

@@ -27,7 +27,7 @@
 <script lang="ts" setup>
   import { StatFilterInput } from '~/server/schema'
   import { AlertType } from '~/utils/constants/alert'
-  import { STATS_NULL_LABEL } from '~/client/options'
+  import { STATS_NULL_LABEL } from '~/utils/constants/stats'
   import { routes } from '~/utils/routes'
 
   const trpcClient = useTrpcClient()
