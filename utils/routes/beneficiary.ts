@@ -3,6 +3,7 @@ import { BeneficiaryTab } from '~/utils/constants/beneficiary'
 import { HistoryTab } from '~/utils/constants/history'
 import { formatBeneficiaryDisplayName } from '~/utils/beneficiary/formatBeneficiaryDisplayName'
 import { BeneficiaryNames } from '~/types/beneficiary'
+import { FilterBeneficiaryNotFilled } from '../constants/filters'
 
 type OriginPage =
   | 'AppOverview'
@@ -92,7 +93,10 @@ export const routes = {
   AppBeneficiaries: {
     name: 'AppBeneficiaries',
     title: 'Bénéficiaires',
-    path: () => BeneficiariesRoute
+    path: (options?: { notFilled?: FilterBeneficiaryNotFilled }) =>
+      options && options.notFilled
+        ? `${BeneficiariesRoute}?not-filled=${options.notFilled}`
+        : BeneficiariesRoute
   },
   // TODO will be obsolete and removed when migrated to file
   AppBeneficiariesAdd: {

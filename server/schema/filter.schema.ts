@@ -20,6 +20,7 @@ import { maxStringLengthMessage } from '~/utils/zod'
 import { TypeSuivi, AgeGroup } from '~/client/options'
 import { StatPeriodFilter } from '~/types/stat'
 import { FollowupPeriodFilter } from '~/types/followup'
+import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
 const statFilterSchema = z.object({
   helpRequestSubject: withEmptyValueOptionalNativeEnum(FileInstructionType),
@@ -62,7 +63,8 @@ const beneficiaryFilterSchema = z.object({
   vulnerablePerson: z
     .string()
     .nullish()
-    .transform(val => (val ? val === 'true' : undefined))
+    .transform(val => (val ? val === 'true' : undefined)),
+  notFilled: z.nativeEnum(FilterBeneficiaryNotFilled).nullish()
 })
 
 type BeneficiaryFilterInput = z.input<typeof beneficiaryFilterSchema>

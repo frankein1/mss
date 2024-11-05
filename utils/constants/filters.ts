@@ -5,3 +5,16 @@ export enum FilterType {
   Search = 'search',
   Radio = 'radio'
 }
+
+export enum FilterBeneficiaryNotFilled {
+  Gender = 'gender',
+  AgeGroup = 'ageGroup',
+  BeneficiaryFamilySituation = 'familySituation',
+  City = 'city',
+  Department = 'department',
+  Region = 'region',
+  BeneficiaryAccommodationZone = 'accommodationZone',
+  BeneficiaryAccommodationMode = 'accommodationMode',
+  BeneficiaryMobility = 'mobility',
+  BeneficiarySocioProfessionalCategory = 'csp'
+}
