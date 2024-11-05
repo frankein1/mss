@@ -3,6 +3,7 @@
     ref="tabs"
     v-model="activeTab"
     tab-list-name="Détails du dossier foyer"
+    :tab-titles
     @select-tab="onTabChange"
   >
     <template #tab-items>
@@ -37,16 +38,16 @@
 </template>
 
 <script setup lang="ts">
-  import type { DsfrTabsProps } from '@gouvminint/vue-dsfr'
+  import type { DsfrTabItemProps } from '@gouvminint/vue-dsfr'
   import { DsfrTabs } from '@gouvminint/vue-dsfr'
 
   const props = withDefaults(
-    defineProps<
-      Pick<DsfrTabsProps, 'tabListName' | 'tabTitles'> & {
-        headingLevel?: 1 | 2 | 3 | 4 | 5 | 6 | null
-      }
-    >(),
-    { headingLevel: null }
+    defineProps<{
+      tabListName: string
+      tabTitles: (DsfrTabItemProps & { title: string })[]
+      headingLevel?: 1 | 2 | 3 | 4 | 5 | 6 | null
+    }>(),
+    { tabTitles: () => [], headingLevel: null }
   )
 
   const activeTab = ref(0)
