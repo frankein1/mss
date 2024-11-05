@@ -13,6 +13,11 @@
     pie-label="Répartion des genres"
     :stats="genderStats"
     :total-count="beneficiaryCount"
+    :not-filled-route="
+      routes.beneficiary.AppBeneficiaries.path({
+        notFilled: FilterBeneficiaryNotFilled.Gender
+      })
+    "
   />
   <p v-else>
     Commencez à
@@ -31,6 +36,7 @@
   import { getStatColor } from '~/client/colors/stats'
   import { getStatLabel, beneficiaryGenderKeys } from '~/client/options'
   import { StatsPiePropType } from '~/types/stat'
+  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const GenderColor = {
     [Gender.Female]: '#FF8886',
