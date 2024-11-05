@@ -8,7 +8,7 @@
         :social-support-subject-options="socialSupportSubjectOptions"
         :beneficiaries-cities-options="beneficiariesCitiesOptions"
         :agent-options="agentOptions"
-        :is-help-requests-tab="!isFollowupsTabActive"
+        :is-help-request="true"
         :is-history="true"
       />
     </section>
@@ -185,7 +185,6 @@
 
   const isDownloading = ref(false)
   const filters = ref<StatFilterInput>({})
-  const isFollowupsTabActive = ref<boolean>(false)
 
   const {
     data: historyCounts,

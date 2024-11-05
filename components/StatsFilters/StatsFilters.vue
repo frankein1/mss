@@ -36,10 +36,10 @@
       beneficiariesCitiesOptions: Options
       agentOptions: Options
       filters: StatFilterInput
-      isHelpRequestsTab?: boolean
+      isHelpRequest?: boolean
       isHistory?: boolean
     }>(),
-    { isHelpRequestsTab: false, isHistory: false }
+    { isHelpRequest: false, isHistory: false }
   )
 
   const emit = defineEmits<{
@@ -47,13 +47,13 @@
   }>()
 
   const defaultValues = computed<StatFilterInput | undefined>(() => {
-    if (props.isHelpRequestsTab) {
+    if (props.isHelpRequest) {
       return { helpRequestSubject: '' }
     }
     return undefined
   })
 
-  const maxAlwaysExpandedNb = computed(() => (props.isHelpRequestsTab ? 4 : 3))
+  const maxAlwaysExpandedNb = 4
 
   const agentOptionsWithEmptyValue = computed(() => [
     { value: '', label: '' },
@@ -61,9 +61,8 @@
   ])
 
   const statsFilters = computed(() => {
-    const statsFilters: FilterProp[] = []
-    if (props.isHelpRequestsTab) {
-      statsFilters.push({
+    const statsFilters: FilterProp[] = [
+      {
         name: 'helpRequestSubject',
         label: "Thématique d'instruction",
         options: withEmptyValue(
@@ -72,17 +71,17 @@
         ),
         type: FilterType.Radio,
         alwaysExpanded: true,
-        pictos: fileInstructionTypePictos
-      })
-    }
-
-    statsFilters.push({
-      name: 'period',
-      label: 'Période',
-      type: FilterType.SelectOne,
-      options: withEmptyValue(periodKeys.options, ''),
-      alwaysExpanded: true
-    })
+        pictos: fileInstructionTypePictos,
+        disabled: props.isHistory && !props.isHelpRequest
+      },
+      {
+        name: 'period',
+        label: 'Période',
+        type: FilterType.SelectOne,
+        options: withEmptyValue(periodKeys.options, ''),
+        alwaysExpanded: true
+      }
+    ]
 
     if (props.filters.period === StatPeriodFilter.Custom) {
       statsFilters.push(
@@ -96,7 +95,7 @@
           name: 'toDate',
           label: 'Au',
           type: FilterType.Date,
-          alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
+          alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
         }
       )
     }
@@ -110,7 +109,7 @@
         label: "Objet de l'accompagnement",
         options: props.socialSupportSubjectOptions,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
     if (props.beneficiariesCitiesOptions.length) {
@@ -119,7 +118,7 @@
         label: 'Ville',
         options: props.beneficiariesCitiesOptions,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
     if (application.value.module.statsByReferent && !props.isHistory) {
@@ -128,7 +127,7 @@
         label: 'Référent',
         options: agentOptionsWithEmptyValue.value,
         type: FilterType.SelectOne,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
     statsFilters.push({
@@ -136,7 +135,7 @@
       label: 'Statut du bénéficiaire',
       options: withEmptyValue(beneficiaryStatusKeys.options),
       type: FilterType.SelectOne,
-      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
+      alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
     })
     if (props.isHistory) {
       statsFilters.push({
@@ -144,7 +143,7 @@
         label: 'Agent',
         options: props.agentOptions,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
     if (application.value.module.ministere && props.isHistory) {
@@ -153,7 +152,7 @@
         label: helpRequestFieldLabels.ministre,
         options: ministerKeys.options,
         type: FilterType.SelectMultiple,
-        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb.value
+        alwaysExpanded: statsFilters.length < maxAlwaysExpandedNb
       })
     }
     return statsFilters

@@ -9,6 +9,7 @@ type FilterPropBase = {
   alwaysExpanded?: boolean
   matomoEventCategory?: EventCategory
   matomoEventAction?: EventAction
+  disabled?: boolean
 }
 
 export type SelectFilterProp = FilterPropBase & {

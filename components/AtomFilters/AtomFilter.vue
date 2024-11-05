@@ -4,6 +4,7 @@
     :name="filter.name"
     :label="filter.label"
     type="date"
+    :disabled="filter.disabled"
     @change-value="emit('changeFilter', $event)"
   />
   <VeeSearchInput
@@ -12,6 +13,7 @@
     :label="filter.label"
     :label-visible="true"
     :placeholder="filter.placeholder"
+    :disabled="filter.disabled"
     @change-value="emit('changeFilter', $event)"
   />
   <MultiSelect
@@ -21,6 +23,7 @@
     :label="filter.label"
     :options="filter.options"
     :placeholder="filter.placeholder"
+    :disabled="filter.disabled"
     @change-value="emit('changeFilter', $event)"
   />
   <VeeSelect
@@ -28,6 +31,7 @@
     :name="filter.name"
     :label="filter.label"
     :options="filter.options"
+    :disabled="filter.disabled"
     @change-value="emit('changeFilter', $event)"
   />
   <VeeRadioButtons
@@ -41,6 +45,7 @@
     :as-tag="filter.asTag"
     :no-label="filter.noLabel"
     :rich="filter.rich"
+    :disabled="filter.disabled"
     @change-value="emit('changeFilter', $event)"
   />
 </template>
