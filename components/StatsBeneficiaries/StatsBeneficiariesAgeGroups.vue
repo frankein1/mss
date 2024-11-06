@@ -13,6 +13,11 @@
     pie-label="Répartition des tranches d'âge"
     :stats="ageStats"
     :total-count="beneficiaryCount"
+    :not-filled-route="
+      routes.beneficiary.AppBeneficiaries.path({
+        notFilled: FilterBeneficiaryNotFilled.AgeGroup
+      })
+    "
   />
   <p v-else>
     Commencez à
@@ -30,6 +35,7 @@
   import { routes } from '~/utils/routes'
   import { getStatColor } from '~/client/colors/stats'
   import { StatsPiePropType } from '~/types/stat'
+  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const AgeGroupColors = {
     [AgeGroup.Less25]: '#BABAFF',

@@ -14,6 +14,11 @@
     :total-count="beneficiaryCount"
     :stats="familySituationsStats"
     stats-bar
+    :not-filled-route="
+      routes.beneficiary.AppBeneficiaries.path({
+        notFilled: FilterBeneficiaryNotFilled.BeneficiaryFamilySituation
+      })
+    "
   />
   <p v-else>
     Commencez à
@@ -30,6 +35,7 @@
   import { AlertType } from '~/utils/constants/alert'
   import { routes } from '~/utils/routes'
   import { getStatLabel, familySituationKeys } from '~/client/options'
+  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const trpcClient = useTrpcClient()
 
