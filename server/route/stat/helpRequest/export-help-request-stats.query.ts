@@ -22,6 +22,10 @@ import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
+import {
+  getTransposedColumns,
+  transposeRows
+} from '~/utils/export/transposeRows'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
@@ -37,11 +41,13 @@ const handler = async ({
 
   const helpRequestCount = await getHelpRequestCountQuery(user, input)
 
+  // Subject
   const subjectsData = await getHelpRequestSubjectsStatsQuery(user, input)
   const subjectsColumns = subjectsData.map(({ id, name }) => ({
     key: id,
     header: name
   }))
+
   const subjectsRows = [
     subjectsData.reduce((row: RowType, { _count, id }) => {
       if (_count.socialSupports > 0) {
@@ -55,15 +61,34 @@ const handler = async ({
           `${getPercentage(_count.socialSupports, helpRequestCount.Financial + helpRequestCount.Other)}%`
       }
       return row
-    }, {}),
-    [],
-    [],
-    [`${helpRequestCount} dossiers instruits`]
+    }, {})
   ]
+  const transposedSubjectRows = transposeRows(
+    subjectsColumns,
+    subjectsRows,
+    'subject'
+  )
+  transposedSubjectRows.push(
+    {
+      subject: '',
+      Number: '',
+      Percent: ''
+    },
+    {
+      subject: '',
+      Number: '',
+      Percent: ''
+    },
+    {
+      subject: `${helpRequestCount.total} entretiens menés`,
+      Number: '',
+      Percent: ''
+    }
+  )
   exportData.push({
     name: "Objet d'accompagnement",
-    columns: subjectsColumns,
-    rows: subjectsRows
+    columns: getTransposedColumns('subject', "Objet d'accompagnement"),
+    rows: transposedSubjectRows
   })
 
   const userStructure = await StructureRepo.findUniqueOrThrow(user, {
@@ -71,6 +96,7 @@ const handler = async ({
   })
 
   if (userStructure?.type === StructureType.Ministere) {
+    // Ministre
     const helpRequestMinistreData = await getHelpRequestMinistreStatsQuery(
       user,
       input
@@ -83,11 +109,16 @@ const handler = async ({
     )
     exportData.push({
       name: 'Ministres',
-      columns: helpRequestMinistreColumns,
-      rows: helpRequestMinistreRows
+      columns: getTransposedColumns('ministre', 'Ministres'),
+      rows: transposeRows(
+        helpRequestMinistreColumns,
+        helpRequestMinistreRows,
+        'ministre'
+      )
     })
   }
 
+  // Status
   const helpRequestStatusData = await getHelpRequestStatusStatsQuery(
     user,
     input
@@ -102,10 +133,15 @@ const handler = async ({
   )
   exportData.push({
     name: 'Statuts',
-    columns: helpRequestStatusColumns,
-    rows: helpRequestStatusRows
+    columns: getTransposedColumns('status', 'Statuts'),
+    rows: transposeRows(
+      helpRequestStatusColumns,
+      helpRequestStatusRows,
+      'status'
+    )
   })
 
+  // Help request prescribing organizations
   const helpRequestPrescribingOrganizationData =
     await getHelpRequestPrescribingOrganizationStatsQuery(user, input)
   const helpRequestPrescribingOrganizationColumns =
@@ -122,43 +158,67 @@ const handler = async ({
   )
   exportData.push({
     name: 'Organismes prescripteurs',
-    columns: helpRequestPrescribingOrganizationColumns,
-    rows: helpRequestPrescribingOrganizationRows
+    columns: getTransposedColumns(
+      'prescribingOrganizationId',
+      'Organismes prescripteurs'
+    ),
+    rows: transposeRows(
+      helpRequestPrescribingOrganizationColumns,
+      helpRequestPrescribingOrganizationRows,
+      'prescribingOrganizationId'
+    )
   })
 
+  // Financial help request
   const helpRequestFinancialData = await getHelpRequestFinancialStatsQuery(
     user,
     input
   )
-  const helpRequestFinancialColumns = [
-    ...Object.values(helpRequestFinancialData.financialHelpRequestCounts).map(
-      ({ key, label }) => ({ key, header: label })
-    ),
-    {
-      key: 'totalAllocatedAmount',
-      header: 'Montant total des aides délivrées par la structure'
-    },
-    ...helpRequestFinancialData.financialHelpRequestAmountByType.map(
-      ({ type: { id, name } }) => ({ key: id, header: name })
-    )
-  ]
-  const helpRequestFinancialRow: RowType = {}
-  Object.values(helpRequestFinancialData.financialHelpRequestCounts).forEach(
-    ({ key, count }) => (helpRequestFinancialRow[key] = count.toString())
-  )
-  helpRequestFinancialRow.totalAllocatedAmount = `${helpRequestFinancialData.financialHelpRequestTotalAmount.toFixed(
+  const totalInstruction =
+    helpRequestFinancialData.financialHelpRequestCounts.find(
+      item => item.key === 'total'
+    )?.count || 1
+
+  const financialHelpRequestTotalAmount = `${helpRequestFinancialData.financialHelpRequestTotalAmount.toFixed(
     2
   )}€`
-  helpRequestFinancialData.financialHelpRequestAmountByType.forEach(
-    ({ type: { id }, allocatedAmount }) =>
-      (helpRequestFinancialRow[id] = `${allocatedAmount}€`)
+
+  const columns = getTransposedColumns('financial', 'Aide financière')
+
+  const financialRows: RowType[] =
+    helpRequestFinancialData.financialHelpRequestCounts.map(item => {
+      return {
+        financial: item.label,
+        Number: item.count.toString(),
+        Percent: `${getPercentage(item.count, totalInstruction)}%`
+      }
+    })
+
+  financialRows.push(
+    {
+      financial: '',
+      Number: '',
+      Percent: ''
+    },
+    {
+      financial: '',
+      Number: '',
+      Percent: ''
+    },
+    {
+      financial: `Montant total des aides délivrées par la structure ${financialHelpRequestTotalAmount}`,
+      Number: '',
+      Percent: ''
+    }
   )
+
   exportData.push({
     name: 'Aides financières',
-    columns: helpRequestFinancialColumns,
-    rows: [helpRequestFinancialRow]
+    columns: columns,
+    rows: financialRows
   })
 
+  // Instructor organisations
   const helpRequestInstructorOrganizationData =
     await getHelpRequestInstructorOrganizationStatsQuery(user, input)
   const helpRequestInstructorOrganizationColumns =
@@ -175,8 +235,15 @@ const handler = async ({
   )
   exportData.push({
     name: 'Organismes instructeurs',
-    columns: helpRequestInstructorOrganizationColumns,
-    rows: helpRequestInstructorOrganizationRows
+    columns: getTransposedColumns(
+      'instructorOrganizationId',
+      'Organismes instructeurs'
+    ),
+    rows: transposeRows(
+      helpRequestInstructorOrganizationColumns,
+      helpRequestInstructorOrganizationRows,
+      'instructorOrganizationId'
+    )
   })
 
   return await createExport(user.id, exportData)

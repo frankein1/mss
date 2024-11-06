@@ -26,6 +26,10 @@ import {
   SecurityRuleContext,
   getAppContextPermissions
 } from '~/server/security'
+import {
+  getTransposedColumns,
+  transposeRows
+} from '~/utils/export/transposeRows'
 
 const securityCheck = (ctx: SecurityRuleContext) =>
   getAppContextPermissions(ctx).export.stats
@@ -41,6 +45,7 @@ const handler = async ({
 
   const followupCount = await getFollowupCountQuery(user, input)
 
+  // Subjects
   const subjectsData = await getFollowupSubjectsStatsQuery(user, input)
   const subjectsColumns = subjectsData.map(({ id, name }) => ({
     key: id,
@@ -70,17 +75,39 @@ const handler = async ({
         return row
       },
       { total: '100%' }
-    ),
-    [],
-    [],
-    [`${followupCount} entretiens menés`]
+    )
   ]
+
+  const transposedSubjecstRows = transposeRows(
+    subjectsColumns,
+    subjectsRows,
+    'subject'
+  )
+  transposedSubjecstRows.push(
+    {
+      subject: '',
+      Number: '',
+      Percent: ''
+    },
+    {
+      subject: '',
+      Number: '',
+      Percent: ''
+    },
+    {
+      subject: `${followupCount} entretiens menés`,
+      Number: '',
+      Percent: ''
+    }
+  )
+
   exportData.push({
     name: "Objets d'accompagnement",
-    columns: subjectsColumns,
-    rows: subjectsRows
+    columns: getTransposedColumns('subject', "Objets d'accompagnement"),
+    rows: transposedSubjecstRows
   })
 
+  // Followup medium
   const followupMediumData = await getFollowupMediumStatsQuery(user, input)
   const followupMediumColumns = getColumnsFromLabels(followupMediumKeys.byKey)
   const followupMediumRows = getRowsFromData(
@@ -90,8 +117,8 @@ const handler = async ({
   )
   exportData.push({
     name: "Types d'entretiens",
-    columns: followupMediumColumns,
-    rows: followupMediumRows
+    columns: getTransposedColumns('medium', "Types d'entretiens"),
+    rows: transposeRows(followupMediumColumns, followupMediumRows, 'medium')
   })
 
   const userStructure = await StructureRepo.findUniqueOrThrow(user, {
@@ -99,6 +126,7 @@ const handler = async ({
   })
 
   if (userStructure?.type === StructureType.Ministere) {
+    // Ministre
     const followupMinistreData = await getFollowupMinistreStatsQuery(
       user,
       input
@@ -111,11 +139,16 @@ const handler = async ({
     )
     exportData.push({
       name: 'Ministres',
-      columns: followupMinistreColumns,
-      rows: followupMinistreRows
+      columns: getTransposedColumns('ministre', 'Ministres'),
+      rows: transposeRows(
+        followupMinistreColumns,
+        followupMinistreRows,
+        'ministre'
+      )
     })
   }
 
+  // Status
   const followupStatusData = await getFollowupStatusStatsQuery(user, input)
   const followupStatusColumns = getColumnsFromLabels(followupStatusKeys.byKey)
   const followupStatusRows = getRowsFromData(
@@ -125,10 +158,11 @@ const handler = async ({
   )
   exportData.push({
     name: 'Statuts',
-    columns: followupStatusColumns,
-    rows: followupStatusRows
+    columns: getTransposedColumns('status', 'Statuts'),
+    rows: transposeRows(followupStatusColumns, followupStatusRows, 'status')
   })
 
+  // Actions
   const followupActionsEntreprisesData =
     await getFollowupActionsEntreprisesStatsQuery(user, input)
   const followupActionsEntreprisesColumns = followupActionsEntreprisesData.map(
@@ -144,10 +178,15 @@ const handler = async ({
   )
   exportData.push({
     name: 'Actions entreprises',
-    columns: followupActionsEntreprisesColumns,
-    rows: followupActionsEntreprisesRows
+    columns: getTransposedColumns('actionEntrepriseId', 'Actions entreprises'),
+    rows: transposeRows(
+      followupActionsEntreprisesColumns,
+      followupActionsEntreprisesRows,
+      'actionEntrepriseId'
+    )
   })
 
+  // Prescribing Organizations
   const followupPrescribingOrganizationData =
     await getFollowupPrescribingOrganizationStatsQuery(user, input)
   const followupPrescribingOrganizationColumns =
@@ -164,8 +203,15 @@ const handler = async ({
   )
   exportData.push({
     name: 'Organismes prescripteurs',
-    columns: followupPrescribingOrganizationColumns,
-    rows: followupPrescribingOrganizationRows
+    columns: getTransposedColumns(
+      'prescribingOrganizationId',
+      'Organismes prescripteurs'
+    ),
+    rows: transposeRows(
+      followupPrescribingOrganizationColumns,
+      followupPrescribingOrganizationRows,
+      'prescribingOrganizationId'
+    )
   })
 
   return await createExport(user.id, exportData)
