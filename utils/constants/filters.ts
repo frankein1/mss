@@ -3,7 +3,8 @@ export enum FilterType {
   SelectOne = 'selectOne',
   SelectMultiple = 'selectMultiple',
   Search = 'search',
-  Radio = 'radio'
+  Radio = 'radio',
+  NotFilled = 'notFilled'
 }
 
 export enum FilterBeneficiaryNotFilled {

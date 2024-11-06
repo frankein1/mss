@@ -123,7 +123,7 @@
       unit: '',
       toFixed: undefined,
       withSum: true,
-      beneficiariesRouteWithNotFilledQuery: undefined
+      notFilledRoute: undefined
     }
   )
 

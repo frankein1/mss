@@ -35,7 +35,7 @@
     @change-value="emit('changeFilter', $event)"
   />
   <VeeRadioButtons
-    v-else
+    v-else-if="filter.type === FilterType.Radio"
     class="filter-radio"
     :class="{ 'filter-radio--as-tag': filter.asTag }"
     :name="filter.name"
@@ -48,6 +48,15 @@
     :disabled="filter.disabled"
     @change-value="emit('changeFilter', $event)"
   />
+  <VeeSelect
+    v-else
+    style="display: none"
+    :name="filter.name"
+    :label="filter.label"
+    :options="filter.options"
+    :disabled="filter.disabled"
+    @change-value="emit('changeFilter', $event)"
+  ></VeeSelect>
 </template>
 
 <script lang="ts" setup>
