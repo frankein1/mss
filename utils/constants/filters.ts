@@ -8,7 +8,7 @@ export enum FilterType {
 
 export enum FilterBeneficiaryNotFilled {
   Gender = 'gender',
-  AgeGroup = 'ageGroup',
+  AgeGroup = 'birthDate',
   BeneficiaryFamilySituation = 'familySituation',
   City = 'city',
   Department = 'department',
@@ -16,5 +16,5 @@ export enum FilterBeneficiaryNotFilled {
   BeneficiaryAccommodationZone = 'accommodationZone',
   BeneficiaryAccommodationMode = 'accommodationMode',
   BeneficiaryMobility = 'mobility',
-  BeneficiarySocioProfessionalCategory = 'csp'
+  BeneficiarySocioProfessionalCategory = 'socioProfessionalCategory'
 }
