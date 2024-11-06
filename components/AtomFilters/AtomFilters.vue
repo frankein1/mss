@@ -17,20 +17,23 @@
         @change-filter="onChangeFilter(filter)"
       />
     </div>
-    <div
-      v-if="collapsedByDefaultFilters.length && expanded"
-      class="filters"
-      :class="{
-        'full-width-filters': fullWidthFilters
-      }"
-    >
-      <AtomFilter
-        v-for="filter in collapsedByDefaultFilters"
-        :key="filter.name"
-        :filter="filter"
-        @change-filter="onChangeFilter(filter)"
-      />
-    </div>
+    <template v-if="collapsedByDefaultFilters.length">
+      <div
+        v-show="expanded"
+        :id="COLLAPSED_FILTERS_ID"
+        class="filters"
+        :class="{
+          'full-width-filters': fullWidthFilters
+        }"
+      >
+        <AtomFilter
+          v-for="filter in collapsedByDefaultFilters"
+          :key="filter.name"
+          :filter="filter"
+          @change-filter="onChangeFilter(filter)"
+        />
+      </div>
+    </template>
   </form>
   <div
     v-if="!noReset || collapsedByDefaultFilters.length"
