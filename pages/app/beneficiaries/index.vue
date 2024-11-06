@@ -73,6 +73,7 @@
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { routes } from '~/utils/routes'
   import { breadcrumbs } from '~/utils/breadcrumbs'
+  import { FilterBeneficiaryNotFilled } from '~/utils/constants/filters'
 
   const title = routes.beneficiary.AppBeneficiaries.title
 
@@ -82,9 +83,19 @@
     name: routes.beneficiary.AppBeneficiaries.name
   })
 
+  const route = useRoute()
   const { application } = usePermissions()
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
+
+  const notFilled = route.query['not-filled'] as FilterBeneficiaryNotFilled
+  if (notFilled) {
+    if (filtersState.beneficiary.value) {
+      filtersState.beneficiary.value.notFilled = notFilled
+    } else {
+      filtersState.beneficiary.value = { notFilled }
+    }
+  }
 
   const filters = ref<BeneficiaryFilterInput>(
     filtersState.beneficiary.value || {}
