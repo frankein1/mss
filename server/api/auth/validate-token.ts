@@ -55,7 +55,8 @@ export default defineEventHandler(async event => {
     status,
     email,
     CGUHistory,
-    structure
+    structure,
+    firstAccess
   } = user
 
   const CGUHistoryVersion = CGUHistory?.length ? CGUHistory[0].version : null
@@ -80,6 +81,7 @@ export default defineEventHandler(async event => {
   const data: Prisma.UserUpdateInput = {
     accessToken: null,
     accessTokenValidity: null,
+    ...(!firstAccess && { firstAccess: new Date() }),
     lastAccess: new Date()
   }
 
