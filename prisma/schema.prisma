@@ -29,6 +29,9 @@ model Account {
   idToken           String? @map("id_token") @db.Text
   sessionState      String? @map("session_state")
 
+  created DateTime? @default(now())
+  updated DateTime? @updatedAt
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
@@ -61,6 +64,7 @@ model User {
   createdComments Comment[] @relation(name: "created_by")
 
   aidantConnectAuthorisation Boolean?  @default(false) @map("aidant_connect_authorisation")
+  firstAccess                DateTime? @map("first_access")
   lastAccess                 DateTime? @map("last_access")
   accessToken                String?   @map("access_token")
   accessTokenValidity        DateTime? @map("access_token_validity")
