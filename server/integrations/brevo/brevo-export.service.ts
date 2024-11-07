@@ -85,7 +85,13 @@ export const BrevoIntegrationService = {
   exportContacts
 }
 
-function buildJson(users: (User & { structure: Structure | null })[]) {
+function buildJson(
+  users: (User & {
+    structure: (Structure & { _count: { socialSupports: number } }) | null
+  } & {
+    _count: { createdSocialSupports: number }
+  })[]
+) {
   return users.map(
     ({
       email,
@@ -95,7 +101,9 @@ function buildJson(users: (User & { structure: Structure | null })[]) {
       role,
       structure,
       created,
-      lastAccess
+      firstAccess,
+      lastAccess,
+      _count: { createdSocialSupports }
     }) => ({
       email,
       attributes: {
@@ -110,8 +118,12 @@ function buildJson(users: (User & { structure: Structure | null })[]) {
           structure?.lastAccess,
           'DD-MM-YYYY'
         ),
+        STRUCTURE_AVEC_1_SUIVI:
+          (structure?._count.socialSupports || 0) > 0 ? 'Yes' : 'No',
         CREATION_DATE: formatDate(created, 'DD-MM-YYYY'),
-        DERNIERE_CONNEXION: formatDate(lastAccess, 'DD-MM-YYYY')
+        PREMIERE_CONNEXION: formatDate(firstAccess, 'DD-MM-YYYY'),
+        DERNIERE_CONNEXION: formatDate(lastAccess, 'DD-MM-YYYY'),
+        UTILISATEUR_AVEC_1_SUIVI: createdSocialSupports > 0 ? 'Yes' : 'No'
       }
     })
   )
@@ -134,7 +146,20 @@ async function getUsers(date: Date) {
       ]
     },
     include: {
-      structure: true
+      structure: {
+        include: {
+          _count: {
+            select: {
+              socialSupports: true
+            }
+          }
+        }
+      },
+      _count: {
+        select: {
+          createdSocialSupports: true
+        }
+      }
     }
   })
   return users
