@@ -2,7 +2,7 @@
   <div>
     <div
       :id="cardId"
-      class="main-container fr-p-2w"
+      class="feature-section fr-p-2w"
     >
       <div class="card-title fr-mb-3w">
         <h4 class="fr-h5 card-title-text fr-mb-0">{{ cardName }}</h4>
@@ -78,6 +78,10 @@
 </script>
 
 <style scoped lang="scss">
+  .feature-section {
+    height: 100%;
+  }
+
   .card-title {
     display: flex;
     flex-direction: row;

@@ -1,5 +1,5 @@
 <template>
-  <div class="main-container fr-p-2w">
+  <div class="feature-section fr-p-2w">
     <AtomLoader
       v-if="pending"
       class="fr-mx-auto"
@@ -43,7 +43,13 @@
   } = await trpcClient.stat.getFollowupBeneficiaryNumber.useQuery(props.filters)
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .feature-section {
+    background-image: url('../../assets/icons/users-big-teal.svg');
+    background-repeat: no-repeat;
+    background-position: right 2rem bottom -2px;
+  }
+
   h2 {
     word-break: break-word;
   }
