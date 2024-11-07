@@ -19,3 +19,7 @@ export enum FilterBeneficiaryNotFilled {
   BeneficiaryMobility = 'mobility',
   BeneficiarySocioProfessionalCategory = 'socioProfessionalCategory'
 }
+
+export enum FilterFileInstructionNotFilled {
+  PrescribingOrganization = 'prescribingOrganization'
+}

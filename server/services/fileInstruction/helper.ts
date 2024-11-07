@@ -4,6 +4,7 @@ import {
   ExportFileInstructionsInput
 } from '~/server/schema'
 import { SortOrder } from '~/types/table'
+import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
 
 export function prepareFilters(filters: FileInstructionFilterInput) {
   const formattedFilters: Prisma.FileInstructionWhereInput = {}
@@ -16,7 +17,8 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     createdById,
     ministre,
     roomCount,
-    lowIncomeHousingType
+    lowIncomeHousingType,
+    notFilled
   } = filters
 
   if (fileInstructionType) {
@@ -64,6 +66,21 @@ export function prepareFilters(filters: FileInstructionFilterInput) {
     if (lowIncomeHousingType) {
       formattedFilters.housingHelpRequest.lowIncomeHousingType = {
         has: lowIncomeHousingType
+      }
+    }
+  }
+
+  if (notFilled) {
+    // PrescribingOrganization
+    if (notFilled === FilterFileInstructionNotFilled.PrescribingOrganization) {
+      formattedFilters.helpRequest = { prescribingOrganization: null }
+
+      if (formattedFilters.housingHelpRequest) {
+        formattedFilters.housingHelpRequest.prescribingOrganization = null
+      } else {
+        formattedFilters.housingHelpRequest = {
+          prescribingOrganization: null
+        }
       }
     }
   }

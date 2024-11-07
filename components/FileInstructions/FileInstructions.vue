@@ -60,10 +60,21 @@
   import { getExportUrl } from '~/utils/export/getExportUrl'
   import { getExportFilename } from '~/utils/export/getExportFilename'
   import { EventCategory, ExportHistoryEventAction } from '~/types/matomo'
+  import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
 
+  const route = useRoute()
   const filtersState = useFilters()
   const trpcClient = useTrpcClient()
   const { application } = usePermissions()
+
+  const notFilled = route.query['not-filled'] as FilterFileInstructionNotFilled
+  if (notFilled) {
+    if (filtersState.fileInstruction.value) {
+      filtersState.fileInstruction.value.notFilled = notFilled
+    } else {
+      filtersState.fileInstruction.value = { notFilled }
+    }
+  }
 
   const filters = ref<FileInstructionFilterInput>(
     filtersState.fileInstruction.value || {}

@@ -6,6 +6,7 @@ import {
   HousingRoomCount,
   LowIncomeHousingType
 } from '@prisma/client'
+import { FilterFileInstructionNotFilled } from '~/utils/constants/filters'
 
 export const fileInstructionFilterSchema = z.object({
   fileInstructionType: z.nativeEnum(FileInstructionType).nullish(),
@@ -15,7 +16,8 @@ export const fileInstructionFilterSchema = z.object({
   examinationDate: z.coerce.date().nullish(),
   ministre: z.array(z.nativeEnum(Minister)).nullish(),
   roomCount: z.nativeEnum(HousingRoomCount).nullish(),
-  lowIncomeHousingType: z.nativeEnum(LowIncomeHousingType).nullish()
+  lowIncomeHousingType: z.nativeEnum(LowIncomeHousingType).nullish(),
+  notFilled: z.nativeEnum(FilterFileInstructionNotFilled).nullish()
 })
 
 export type FileInstructionFilterInput = z.infer<
