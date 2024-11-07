@@ -118,11 +118,12 @@ function buildJson(
           structure?.lastAccess,
           'DD-MM-YYYY'
         ),
-        STRUCTURE_AVEC_1_SUIVI: (structure?._count.socialSupports || 0) > 0,
+        STRUCTURE_AVEC_1_SUIVI:
+          (structure?._count.socialSupports || 0) > 0 ? 'Yes' : 'No',
         CREATION_DATE: formatDate(created, 'DD-MM-YYYY'),
         PREMIERE_CONNEXION: formatDate(firstAccess, 'DD-MM-YYYY'),
         DERNIERE_CONNEXION: formatDate(lastAccess, 'DD-MM-YYYY'),
-        UTILISATEUR_AVEC_1_SUIVI: createdSocialSupports > 0
+        UTILISATEUR_AVEC_1_SUIVI: createdSocialSupports > 0 ? 'Yes' : 'No'
       }
     })
   )
