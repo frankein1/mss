@@ -276,6 +276,16 @@
     return disabledOptions.find(item => item === option.value) != null
   }
 
+  /** Trigger the selection of an option through the parent component */
+  const triggerSelectValue = (value: string) => {
+    const label = existingOptions.value.find(o => o.value === value)?.label
+    if (label) {
+      handleOptionToggle({ label, value })
+    }
+  }
+
+  defineExpose({ triggerSelectValue })
+
   onClickOutside(target, _event => {
     isOpen.value = false
   })
