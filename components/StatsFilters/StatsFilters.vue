@@ -72,7 +72,7 @@
         type: FilterType.Radio,
         alwaysExpanded: true,
         pictos: fileInstructionTypePictos,
-        disabled: props.isHistory && !props.isHelpRequest
+        disabled: !props.isHelpRequest
       },
       {
         name: 'period',

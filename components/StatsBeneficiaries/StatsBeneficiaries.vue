@@ -12,10 +12,13 @@
       </div>
 
       <!-- Title + Export buttons -->
-      <div class="fr-col-12 results-container">
-        <h3 class="stats-main-title results-count">
-          {{ beneficiaryCountLabel }}
-        </h3>
+      <div class="fr-col-12 header">
+        <div class="header-title">
+          <AtomPictogram path="/pictograms/avatar.svg" />
+          <h3 class="stats-main-title fr-mb-0 fr-ml-1w">
+            {{ beneficiaryCountLabel }}
+          </h3>
+        </div>
         <AtomDropdown
           label="Exporter les statistiques"
           icon="fr-icon-download-fill"
@@ -347,3 +350,17 @@
     saveAsPngs(beneficiariesCardConfig, buttonFilter, closeAlert)
   }
 </script>
+
+<style lang="scss" scoped>
+  .header,
+  .header-title {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    h3 {
+      color: var(--primary);
+    }
+  }
+</style>

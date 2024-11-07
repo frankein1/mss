@@ -9,7 +9,11 @@
   >
     <div class="ongoing-social-supports__header">
       <span
-        class="ongoing-social-supports__icon fr-icon-questionnaire-line"
+        :class="[
+          isFileInstructions
+            ? 'ongoing-social-supports__icon fr-icon-questionnaire-line'
+            : 'ongoing-social-supports__icon fr-icon-draft-line'
+        ]"
         aria-hidden="true"
       ></span>
       <h2 class="ongoing-social-supports__title">{{ title }}</h2>
