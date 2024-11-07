@@ -11,27 +11,14 @@
         />
       </div>
 
-      <!-- Title + Export buttons -->
-      <div class="fr-col-12 header">
-        <div class="header-title">
+      <StatsHeader :menus="menus">
+        <template #icon>
           <AtomPictogram path="/pictograms/avatar.svg" />
-          <h3 class="stats-main-title fr-mb-0 fr-ml-1w">
-            {{ beneficiaryCountLabel }}
-          </h3>
-        </div>
-        <AtomDropdown
-          label="Exporter les statistiques"
-          icon="fr-icon-download-fill"
-          :menus="menus"
-          class="topbar__menu"
-          dropdown-btn-class="fr-btn--tertiary-no-outline"
-          align-right
-        />
-        <StatsExportAlert
-          v-if="!alertClose"
-          @close-alert="alertClose = true"
-        />
-      </div>
+        </template>
+        <template #title>
+          {{ beneficiaryCountLabel }}
+        </template>
+      </StatsHeader>
 
       <!-- Alert + Loader -->
       <AtomAlert
@@ -350,17 +337,3 @@
     saveAsPngs(beneficiariesCardConfig, buttonFilter, closeAlert)
   }
 </script>
-
-<style lang="scss" scoped>
-  .header,
-  .header-title {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-
-    h3 {
-      color: var(--primary);
-    }
-  }
-</style>
